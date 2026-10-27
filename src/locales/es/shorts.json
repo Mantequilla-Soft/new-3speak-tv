@@ -8,7 +8,10 @@
   },
   "stories": {
     "you": "Tú",
-    "storyTitle": "Historia de {{user}}"
+    "storyTitle": "Historia de {{user}}",
+    "streakTitle_one": "Racha de historias de {{count}} día",
+    "streakTitle_many": "Racha de historias de {{count}} días",
+    "streakTitle_other": "Racha de historias de {{count}} días"
   },
   "errors": {
     "votingUnavailable": "No se puede votar en esta publicación",
@@ -115,5 +118,21 @@
     "title": "Esta historia ha caducado",
     "body": "Las historias en 3Speak se ven durante 24 horas.",
     "next": "Siguiente short"
+  },
+  "storyTools": {
+    "seenBy_one": "Vista por {{count}}",
+    "seenBy_many": "Vista por {{count}}",
+    "seenBy_other": "Vista por {{count}}",
+    "seenTitle": "Vista por",
+    "seenNote": "Espectadores con sesión iniciada que tienen activado su historial de reproducciones.",
+    "seenEmpty": "Nadie la ha visto todavía.",
+    "keep": "Conservar como short",
+    "keepHint": "Se queda en tu canal después de las 24 horas",
+    "keepConfirm": "¿Conservarla para siempre?",
+    "keepYes": "Conservarla",
+    "keeping": "Conservando…",
+    "kept": "Conservada. Se queda en tu canal como short.",
+    "keepFailed": "No se pudo conservar esta historia.",
+    "keepWalletPrompt": "Firma para conservar tu historia como short"
   }
 }

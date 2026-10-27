@@ -25,7 +25,9 @@
       "boosts_received": "পাওয়া বুস্ট",
       "boost_amount_received": "পাওয়া পরিমাণ",
       "boosts_given": "দেওয়া বুস্ট",
-      "boost_amount_given": "দেওয়া পরিমাণ"
+      "boost_amount_given": "দেওয়া পরিমাণ",
+      "story_uploads": "স্টোরি",
+      "story_streak": "স্টোরি স্ট্রিক"
     },
     "metricsInSentence": {
       "video_uploads": "ভিডিও",
@@ -40,7 +42,9 @@
       "boosts_received": "পাওয়া বুস্ট",
       "boost_amount_received": "পাওয়া পরিমাণ",
       "boosts_given": "দেওয়া বুস্ট",
-      "boost_amount_given": "দেওয়া পরিমাণ"
+      "boost_amount_given": "দেওয়া পরিমাণ",
+      "story_uploads": "স্টোরি",
+      "story_streak": "স্টোরি স্ট্রিক"
     },
     "blurbs": {
       "video_uploads": "আপলোড করা ভিডিও",
@@ -55,7 +59,9 @@
       "boosts_received": "তাদের স্ট্রিমে পাঠানো বুস্ট",
       "boost_amount_received": "পাওয়া বুস্টের মোট পরিমাণ",
       "boosts_given": "অন্য স্ট্রিমারদের পাঠানো বুস্ট",
-      "boost_amount_given": "দেওয়া বুস্টের মোট পরিমাণ"
+      "boost_amount_given": "দেওয়া বুস্টের মোট পরিমাণ",
+      "story_uploads": "পোস্ট করা স্টোরি",
+      "story_streak": "টানা সবচেয়ে বেশি দিন স্টোরি"
     },
     "blurbsInSentence": {
       "video_uploads": "আপলোড করা ভিডিও",
@@ -70,18 +76,22 @@
       "boosts_received": "তাদের স্ট্রিমে পাঠানো বুস্ট",
       "boost_amount_received": "পাওয়া বুস্টের মোট পরিমাণ",
       "boosts_given": "অন্য স্ট্রিমারদের পাঠানো বুস্ট",
-      "boost_amount_given": "দেওয়া বুস্টের মোট পরিমাণ"
+      "boost_amount_given": "দেওয়া বুস্টের মোট পরিমাণ",
+      "story_uploads": "পোস্ট করা স্টোরি",
+      "story_streak": "টানা সবচেয়ে বেশি দিন স্টোরি"
     },
     "groups": {
       "video": "ভিডিও",
-      "streaming": "স্ট্রিমিং"
+      "streaming": "স্ট্রিমিং",
+      "stories": "স্টোরি"
     },
     "badgeNouns": {
       "video_uploads": "ভিডিও",
       "short_uploads": "শর্টস",
       "video_watch_secs": "দেখা",
       "short_watch_secs": "শর্টস দেখা",
-      "tags_given": "ট্যাগার"
+      "tags_given": "ট্যাগার",
+      "story_streak": "স্ট্রিক"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "সব সময়ের হিসেবে {{what}}-এ #{{rank}} স্থান",

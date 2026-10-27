@@ -25,7 +25,9 @@
       "boosts_received": "Boost ricevuti",
       "boost_amount_received": "Importo ricevuto",
       "boosts_given": "Boost inviati",
-      "boost_amount_given": "Importo inviato"
+      "boost_amount_given": "Importo inviato",
+      "story_uploads": "Storie",
+      "story_streak": "Serie di storie"
     },
     "metricsInSentence": {
       "video_uploads": "video",
@@ -40,7 +42,9 @@
       "boosts_received": "boost ricevuti",
       "boost_amount_received": "importo ricevuto",
       "boosts_given": "boost inviati",
-      "boost_amount_given": "importo inviato"
+      "boost_amount_given": "importo inviato",
+      "story_uploads": "storie",
+      "story_streak": "serie di storie"
     },
     "blurbs": {
       "video_uploads": "Video caricati",
@@ -55,7 +59,9 @@
       "boosts_received": "Boost inviati alle loro dirette",
       "boost_amount_received": "Importo totale dei boost ricevuti",
       "boosts_given": "Boost inviati ad altri streamer",
-      "boost_amount_given": "Importo totale dei boost inviati"
+      "boost_amount_given": "Importo totale dei boost inviati",
+      "story_uploads": "Storie pubblicate",
+      "story_streak": "Più giorni di fila con una storia"
     },
     "blurbsInSentence": {
       "video_uploads": "video caricati",
@@ -70,18 +76,22 @@
       "boosts_received": "boost inviati alle loro dirette",
       "boost_amount_received": "importo totale dei boost ricevuti",
       "boosts_given": "boost inviati ad altri streamer",
-      "boost_amount_given": "importo totale dei boost inviati"
+      "boost_amount_given": "importo totale dei boost inviati",
+      "story_uploads": "storie pubblicate",
+      "story_streak": "più giorni di fila con una storia"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Streaming"
+      "streaming": "Streaming",
+      "stories": "Storie"
     },
     "badgeNouns": {
       "video_uploads": "Video",
       "short_uploads": "Shorts",
       "video_watch_secs": "Visti",
       "short_watch_secs": "Shorts visti",
-      "tags_given": "Tagger"
+      "tags_given": "Tagger",
+      "story_streak": "Serie"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "#{{rank}} in classifica per {{what}} di sempre",

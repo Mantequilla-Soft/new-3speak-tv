@@ -8,7 +8,10 @@
   },
   "stories": {
     "you": "Tu",
-    "storyTitle": "Storia di {{user}}"
+    "storyTitle": "Storia di {{user}}",
+    "streakTitle_one": "Serie di storie di {{count}} giorno",
+    "streakTitle_many": "Serie di storie di {{count}} giorni",
+    "streakTitle_other": "Serie di storie di {{count}} giorni"
   },
   "errors": {
     "votingUnavailable": "Il voto non è disponibile per questo post",
@@ -115,5 +118,21 @@
     "title": "Questa storia è scaduta",
     "body": "Le storie su 3Speak sono visibili per 24 ore.",
     "next": "Short successivo"
+  },
+  "storyTools": {
+    "seenBy_one": "Vista da {{count}}",
+    "seenBy_many": "Vista da {{count}}",
+    "seenBy_other": "Vista da {{count}}",
+    "seenTitle": "Vista da",
+    "seenNote": "Spettatori che hanno effettuato l’accesso e tengono attiva la cronologia delle visualizzazioni.",
+    "seenEmpty": "Non l’ha ancora vista nessuno.",
+    "keep": "Tieni come short",
+    "keepHint": "Resta sul tuo canale dopo le 24 ore",
+    "keepConfirm": "Tenerla per sempre?",
+    "keepYes": "Tienila",
+    "keeping": "Salvataggio…",
+    "kept": "Fatto. Resta sul tuo canale come short.",
+    "keepFailed": "Impossibile tenere questa storia.",
+    "keepWalletPrompt": "Firma per tenere la tua storia come short"
   }
 }

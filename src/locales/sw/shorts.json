@@ -8,7 +8,9 @@
   },
   "stories": {
     "you": "Wewe",
-    "storyTitle": "Hadithi ya {{user}}"
+    "storyTitle": "Hadithi ya {{user}}",
+    "streakTitle_one": "Mfululizo wa hadithi wa siku {{count}}",
+    "streakTitle_other": "Mfululizo wa hadithi wa siku {{count}}"
   },
   "errors": {
     "votingUnavailable": "Kupiga kura hakupatikani kwa chapisho hili",
@@ -113,5 +115,20 @@
     "title": "Hadithi hii imeisha muda",
     "body": "Hadithi kwenye 3Speak huonekana kwa saa 24.",
     "next": "Short inayofuata"
+  },
+  "storyTools": {
+    "seenBy_one": "Imeonwa na {{count}}",
+    "seenBy_other": "Imeonwa na {{count}}",
+    "seenTitle": "Walioiona",
+    "seenNote": "Watazamaji walioingia ambao wameacha historia ya kutazama ikiwa imewashwa.",
+    "seenEmpty": "Bado hakuna aliyeiona.",
+    "keep": "Ibakize kama short",
+    "keepHint": "Inabaki kwenye chaneli yako baada ya saa 24",
+    "keepConfirm": "Ibakize milele?",
+    "keepYes": "Ibakize",
+    "keeping": "Inabakizwa…",
+    "kept": "Imebakizwa. Itabaki kwenye chaneli yako kama short.",
+    "keepFailed": "Imeshindwa kubakiza hadithi hii.",
+    "keepWalletPrompt": "Tia sahihi ili kubakiza hadithi yako kama short"
   }
 }

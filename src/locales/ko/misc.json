@@ -25,7 +25,9 @@
       "boosts_received": "받은 부스트",
       "boost_amount_received": "받은 금액",
       "boosts_given": "보낸 부스트",
-      "boost_amount_given": "보낸 금액"
+      "boost_amount_given": "보낸 금액",
+      "story_uploads": "스토리",
+      "story_streak": "연속 스토리"
     },
     "metricsInSentence": {
       "video_uploads": "동영상",
@@ -40,7 +42,9 @@
       "boosts_received": "받은 부스트",
       "boost_amount_received": "받은 금액",
       "boosts_given": "보낸 부스트",
-      "boost_amount_given": "보낸 금액"
+      "boost_amount_given": "보낸 금액",
+      "story_uploads": "스토리",
+      "story_streak": "연속 스토리"
     },
     "blurbs": {
       "video_uploads": "업로드한 동영상",
@@ -55,7 +59,9 @@
       "boosts_received": "방송에 받은 부스트",
       "boost_amount_received": "받은 부스트 합계 금액",
       "boosts_given": "다른 스트리머에게 보낸 부스트",
-      "boost_amount_given": "보낸 부스트 합계 금액"
+      "boost_amount_given": "보낸 부스트 합계 금액",
+      "story_uploads": "올린 스토리",
+      "story_streak": "스토리를 올린 최장 연속 일수"
     },
     "blurbsInSentence": {
       "video_uploads": "업로드한 동영상",
@@ -70,18 +76,22 @@
       "boosts_received": "방송에 받은 부스트",
       "boost_amount_received": "받은 부스트 합계 금액",
       "boosts_given": "다른 스트리머에게 보낸 부스트",
-      "boost_amount_given": "보낸 부스트 합계 금액"
+      "boost_amount_given": "보낸 부스트 합계 금액",
+      "story_uploads": "올린 스토리",
+      "story_streak": "스토리를 올린 최장 연속 일수"
     },
     "groups": {
       "video": "동영상",
-      "streaming": "스트리밍"
+      "streaming": "스트리밍",
+      "stories": "스토리"
     },
     "badgeNouns": {
       "video_uploads": "동영상",
       "short_uploads": "쇼츠",
       "video_watch_secs": "시청",
       "short_watch_secs": "쇼츠 시청",
-      "tags_given": "태거"
+      "tags_given": "태거",
+      "story_streak": "연속"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "전체 기간 {{what}} 부문 {{rank}}위",

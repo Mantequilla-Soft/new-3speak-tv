@@ -132,7 +132,9 @@
     "browseFiles": "Pilih File",
     "proceed": "Lanjut ke Thumbnail",
     "replace": "Ganti Video",
-    "editVideo": "Edit video ini"
+    "editVideo": "Edit video ini",
+    "asStory": "Posting sebagai story 24 jam",
+    "asStoryHint": "Story tampil paling atas di feed Shorts dan pengikutmu mendapat notifikasi. Selama masih aktif, kamu masih bisa menyimpannya sebagai Shorts."
   },
   "details": {
     "guests": {
@@ -486,5 +488,14 @@
       "noAccount": "Tidak ada akun dengan nama itu.",
       "addButton": "Tambah tautan"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Tambahkan keterangan (opsional)",
+    "moreOptions": "Opsi lainnya",
+    "reach_other": "Sampai ke {{count}} pengikutmu dan tampil paling atas di feed Shorts selama 24 jam.",
+    "reachNoCount": "Sampai ke pengikutmu dan tampil paling atas di feed Shorts selama 24 jam.",
+    "streakOn_other": "Kamu sedang dalam streak story {{count}} hari.",
+    "streakNext_other": "Dengan ini, streak story-mu jadi {{count}} hari.",
+    "streakStart": "Posting story setiap hari untuk membangun streak."
   }
 }

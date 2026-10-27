@@ -116,7 +116,12 @@
     "preparing": "Préparation de la vidéo pour la mise en ligne...",
     "renderUnavailable": "Le service de rendu n'est pas encore disponible. Les données de la timeline ont été envoyées dans la console.",
     "backToEditor": "Retour à l'éditeur",
-    "postError": "Impossible de préparer la vidéo pour la mise en ligne. Essayez plutôt de la télécharger."
+    "postError": "Impossible de préparer la vidéo pour la mise en ligne. Essayez plutôt de la télécharger.",
+    "postAs": "Publier en tant que",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 heures, en tête du fil Shorts",
+    "postAsShort": "Short",
+    "postAsShortHint": "Reste sur votre chaîne"
   },
   "profile": {
     "mustLogin": "Vous devez d'abord vous connecter",

@@ -132,7 +132,9 @@
     "browseFiles": "Vinjari faili",
     "proceed": "Endelea kwenye picha ndogo",
     "replace": "Badilisha video",
-    "editVideo": "Hariri video hii"
+    "editVideo": "Hariri video hii",
+    "asStory": "Chapisha kama hadithi ya saa 24",
+    "asStoryHint": "Inakaa juu kabisa ya mlisho wa Shorts na wafuasi wako hupata arifa. Ikiwa bado hewani, bado unaweza kuibakiza kama short."
   },
   "details": {
     "guests": {
@@ -488,5 +490,17 @@
       "noAccount": "Hakuna akaunti yenye jina hilo.",
       "addButton": "Ongeza kiungo"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Ongeza maelezo (si lazima)",
+    "moreOptions": "Chaguo zaidi",
+    "reach_one": "Inamfikia mfuasi wako {{count}} na inakaa juu ya mlisho wa Shorts kwa saa 24.",
+    "reach_other": "Inawafikia wafuasi wako {{count}} na inakaa juu ya mlisho wa Shorts kwa saa 24.",
+    "reachNoCount": "Inawafikia wafuasi wako na inakaa juu ya mlisho wa Shorts kwa saa 24.",
+    "streakOn_one": "Uko kwenye mfululizo wa hadithi wa siku {{count}}.",
+    "streakOn_other": "Uko kwenye mfululizo wa hadithi wa siku {{count}}.",
+    "streakNext_one": "Kwa hii, mfululizo wako wa hadithi unafika siku {{count}}.",
+    "streakNext_other": "Kwa hii, mfululizo wako wa hadithi unafika siku {{count}}.",
+    "streakStart": "Chapisha hadithi kila siku ili kujenga mfululizo."
   }
 }

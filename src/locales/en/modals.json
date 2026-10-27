@@ -116,7 +116,12 @@
     "preparing": "Preparing video for upload...",
     "renderUnavailable": "Render service not available yet. Timeline data logged to console.",
     "backToEditor": "Back to Editor",
-    "postError": "Failed to prepare video for upload. Please try downloading instead."
+    "postError": "Failed to prepare video for upload. Please try downloading instead.",
+    "postAs": "Post it as",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 hours, leads the Shorts feed",
+    "postAsShort": "Short",
+    "postAsShortHint": "Stays on your channel"
   },
   "profile": {
     "mustLogin": "You must login first",

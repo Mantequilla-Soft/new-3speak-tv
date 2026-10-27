@@ -10,7 +10,8 @@
     "backHome": "Bumalik sa Home",
     "howWasStream": "Kumusta ang stream mo?",
     "connecting": "Kumokonekta sa OpenPods…",
-    "authenticating": "Nag-a-authenticate sa OpenPods…"
+    "authenticating": "Nag-a-authenticate sa OpenPods…",
+    "postStoryAboutIt": "Mag-post ng story tungkol dito"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod ang live ngayon",

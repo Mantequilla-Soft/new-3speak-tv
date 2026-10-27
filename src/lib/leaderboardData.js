@@ -31,14 +31,20 @@ export const METRICS = [
   { id: 'boost_amount_received', labelKey: 'misc.leaderboard.metrics.boost_amount_received', unit: 'amount', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.boost_amount_received' },
   { id: 'boosts_given', labelKey: 'misc.leaderboard.metrics.boosts_given', unit: 'count', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.boosts_given' },
   { id: 'boost_amount_given', labelKey: 'misc.leaderboard.metrics.boost_amount_given', unit: 'amount', group: 'Streaming', blurbKey: 'misc.leaderboard.blurbs.boost_amount_given' },
+  // 24h stories. Written by the leaderboard rollup job; these boards read empty
+  // until it does. `story_streak` is the longest run of days in a row with a
+  // story inside the window.
+  { id: 'story_uploads', labelKey: 'misc.leaderboard.metrics.story_uploads', unit: 'count', group: 'Stories', blurbKey: 'misc.leaderboard.blurbs.story_uploads' },
+  { id: 'story_streak', labelKey: 'misc.leaderboard.metrics.story_streak', unit: 'count', group: 'Stories', blurbKey: 'misc.leaderboard.blurbs.story_streak' },
 ];
 
 // Metric groups, in tab order. Drives the grouped metric selector on the board.
-export const METRIC_GROUPS = ['Video', 'Streaming'];
+export const METRIC_GROUPS = ['Video', 'Streaming', 'Stories'];
 // Group ids above are compared against METRICS[].group; display via these keys.
 export const METRIC_GROUP_LABEL_KEYS = {
   Video: 'misc.leaderboard.groups.video',
   Streaming: 'misc.leaderboard.groups.streaming',
+  Stories: 'misc.leaderboard.groups.stories',
 };
 
 // The metric tabs are the SAME list whether or not a topic is selected — the
@@ -116,6 +122,7 @@ const BADGE_NOUNS = {
   video_watch_secs: 'misc.leaderboard.badgeNouns.video_watch_secs',
   short_watch_secs: 'misc.leaderboard.badgeNouns.short_watch_secs',
   tags_given: 'misc.leaderboard.badgeNouns.tags_given',
+  story_streak: 'misc.leaderboard.badgeNouns.story_streak',
 };
 
 // "Top 100" is too easy to earn to be worth a badge (a few uploads gets you
@@ -138,6 +145,9 @@ const MIN_BADGE_VALUE = {
   boost_amount_received: 10,
   boosts_given: 5,
   boost_amount_given: 10,
+  // New boards: a handful of stories or a 3-day streak before it is a badge.
+  story_uploads: 5,
+  story_streak: 3,
 };
 
 export function badgeLabel(badge) {

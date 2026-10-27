@@ -25,7 +25,9 @@
       "boosts_received": "Otrzymane boosty",
       "boost_amount_received": "Otrzymana kwota",
       "boosts_given": "Wysłane boosty",
-      "boost_amount_given": "Wysłana kwota"
+      "boost_amount_given": "Wysłana kwota",
+      "story_uploads": "Relacje",
+      "story_streak": "Seria relacji"
     },
     "metricsInSentence": {
       "video_uploads": "filmów",
@@ -40,7 +42,9 @@
       "boosts_received": "otrzymanych boostów",
       "boost_amount_received": "otrzymanej kwoty",
       "boosts_given": "wysłanych boostów",
-      "boost_amount_given": "wysłanej kwoty"
+      "boost_amount_given": "wysłanej kwoty",
+      "story_uploads": "relacje",
+      "story_streak": "seria relacji"
     },
     "blurbs": {
       "video_uploads": "Przesłane filmy",
@@ -55,7 +59,9 @@
       "boosts_received": "Boosty wysłane na ich transmisje",
       "boost_amount_received": "Łączna kwota otrzymanych boostów",
       "boosts_given": "Boosty wysłane innym streamerom",
-      "boost_amount_given": "Łączna kwota wysłanych boostów"
+      "boost_amount_given": "Łączna kwota wysłanych boostów",
+      "story_uploads": "Opublikowane relacje",
+      "story_streak": "Najwięcej dni z rzędu z relacją"
     },
     "blurbsInSentence": {
       "video_uploads": "przesłane filmy",
@@ -70,18 +76,22 @@
       "boosts_received": "boosty wysłane na ich transmisje",
       "boost_amount_received": "łączna kwota otrzymanych boostów",
       "boosts_given": "boosty wysłane innym streamerom",
-      "boost_amount_given": "łączna kwota wysłanych boostów"
+      "boost_amount_given": "łączna kwota wysłanych boostów",
+      "story_uploads": "opublikowane relacje",
+      "story_streak": "najwięcej dni z rzędu z relacją"
     },
     "groups": {
       "video": "Wideo",
-      "streaming": "Transmisje"
+      "streaming": "Transmisje",
+      "stories": "Relacje"
     },
     "badgeNouns": {
       "video_uploads": "Filmy",
       "short_uploads": "Shorts",
       "video_watch_secs": "Oglądalność",
       "short_watch_secs": "Oglądalność Shorts",
-      "tags_given": "Tagujący"
+      "tags_given": "Tagujący",
+      "story_streak": "Seria"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Miejsce #{{rank}} pod względem {{what}} (cały czas)",

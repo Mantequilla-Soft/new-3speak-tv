@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { MdOndemandVideo, MdVisibility, MdTimer, MdLocalOffer, MdRocketLaunch } from 'react-icons/md';
+import { MdOndemandVideo, MdVisibility, MdTimer, MdLocalOffer, MdRocketLaunch, MdAccessTime, MdLocalFireDepartment } from 'react-icons/md';
 import ShortsIcon from '../icons/ShortsIcon';
 import { usePremiumBadge } from '../../hooks/usePremiumStatus';
 import {
@@ -19,6 +19,8 @@ const BADGE_ICONS = {
   video_watch_secs: MdVisibility,
   short_watch_secs: MdTimer,
   tags_given: MdLocalOffer,
+  story_uploads: MdAccessTime,
+  story_streak: MdLocalFireDepartment,
 };
 
 /**

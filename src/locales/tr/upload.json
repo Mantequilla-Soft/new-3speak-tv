@@ -132,7 +132,9 @@
     "browseFiles": "Dosyalara Göz At",
     "proceed": "Küçük Resimlere Geç",
     "replace": "Videoyu Değiştir",
-    "editVideo": "Bu videoyu düzenle"
+    "editVideo": "Bu videoyu düzenle",
+    "asStory": "24 saatlik hikâye olarak paylaş",
+    "asStoryHint": "Shorts akışının başında yer alır ve takipçilerin bildirim alır. Yayındayken onu hâlâ Shorts olarak tutabilirsin."
   },
   "details": {
     "guests": {
@@ -488,5 +490,17 @@
       "noAccount": "Bu isimde bir hesap yok.",
       "addButton": "Bağlantı ekle"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Açıklama ekle (isteğe bağlı)",
+    "moreOptions": "Diğer seçenekler",
+    "reach_one": "{{count}} takipçine ulaşır ve 24 saat boyunca Shorts akışının başında yer alır.",
+    "reach_other": "{{count}} takipçine ulaşır ve 24 saat boyunca Shorts akışının başında yer alır.",
+    "reachNoCount": "Takipçilerine ulaşır ve 24 saat boyunca Shorts akışının başında yer alır.",
+    "streakOn_one": "{{count}} günlük hikâye serisindesin.",
+    "streakOn_other": "{{count}} günlük hikâye serisindesin.",
+    "streakNext_one": "Bununla hikâye serin {{count}} güne çıkıyor.",
+    "streakNext_other": "Bununla hikâye serin {{count}} güne çıkıyor.",
+    "streakStart": "Seri oluşturmak için her gün bir hikâye paylaş."
   }
 }

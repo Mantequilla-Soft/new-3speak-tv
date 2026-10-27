@@ -26,6 +26,10 @@ import { useTranslation } from 'react-i18next';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../utils/addToBlog';
 import { timelineMeta, applyTimelineToDescription } from '../utils/videoTimeline';
 import { registerStory } from '../lib/stories';
+import { dataUrlToBlob } from '../utils/videoThumbnails';
+
+// The body of a story posted without a caption (see publishToEmbed).
+const STORY_FALLBACK_CAPTION = 'My 24-hour story on 3Speak.';
 import { withShortHeading, shortHeading } from '../utils/shortTitle';
 
 // Every toast from this module is headed "Upload"; the message becomes the
@@ -148,6 +152,16 @@ export function EmbedUploadProvider({ children }) {
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
+  // The quick story flow skips the thumbnail step: the first generated frame is
+  // the cover. False when there is no frame, so the caller can fall back to the step.
+  const pickFirstThumbnail = useCallback((thumbs) => {
+    const first = thumbs?.[0];
+    if (!first) return false;
+    setSelectedIndex(0);
+    setSelectedThumbnail(first);
+    setThumbnailFile(dataUrlToBlob(first));
+    return true;
+  }, []);
 
   // Details state
   const [title, setTitle] = useState('');
@@ -1470,7 +1484,11 @@ export function EmbedUploadProvider({ children }) {
       toast.error(t('upload.details.errors.titleRequired'));
       return;
     }
-    if (!description?.trim()) {
+    // A story may go out without a caption (the quick story flow posts in two
+    // taps); its post still needs a body, so it gets a plain one. English, like
+    // everything sent to Hive.
+    const caption = description?.trim() ? description : (isStory && fromStories ? STORY_FALLBACK_CAPTION : description);
+    if (!caption?.trim()) {
       toast.error(t('upload.details.errors.descriptionRequired'));
       return;
     }
@@ -1521,7 +1539,7 @@ export function EmbedUploadProvider({ children }) {
       // link endpoint expects.
       // Permlink slug source: longform videos use the title; shorts have no
       // title, so they keep using the first words of the description (caption).
-      const slugSource = ((fromStories ? (title || description) : title) || description || '').trim();
+      const slugSource = ((fromStories ? (title || caption) : title) || caption || '').trim();
       const slug = slugSource
         ? slugSource.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 27).replace(/-+$/, '')
         : '';
@@ -1687,8 +1705,8 @@ export function EmbedUploadProvider({ children }) {
       const timelineDuration = Number(videoDuration) || 0;
       const timeline = fromStories ? {} : timelineMeta(chapters, timelineLinks, { duration: timelineDuration });
       const publishDescription = fromStories
-        ? description
-        : applyTimelineToDescription(description, timeline, { author: assetOwner, permlink: hivePermlink });
+        ? caption
+        : applyTimelineToDescription(caption, timeline, { author: assetOwner, permlink: hivePermlink });
 
       // Build body: embed URL (video first) + description + credit to original author.
       // A short's optional title goes on top as a `## Title` heading: shorts are
@@ -2254,6 +2272,7 @@ export function EmbedUploadProvider({ children }) {
     selectedThumbnail, setSelectedThumbnail,
     thumbnailFile, setThumbnailFile,
     selectedIndex, setSelectedIndex,
+    pickFirstThumbnail,
     // Details
     title, setTitle,
     description, setDescription,

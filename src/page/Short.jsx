@@ -131,6 +131,7 @@ import PromoteModal from '../components/Promote/PromoteModal';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 import { markStorySeen, useInvalidateStories, useStoryClock } from '../lib/stories';
+import StoryOwnerTools from '../components/StoryOwnerTools/StoryOwnerTools';
 
 import { soundLabel } from '../utils/soundCredits';
 // Every toast from this module is headed "Shorts"; the message becomes the
@@ -3862,6 +3863,18 @@ const VideoShort = () => {
                 <span className="shortsStoryBadge">
                   {t('nav.notifications.stories.type')} · {t('nav.notifications.stories.hoursLeft', { count: storyHoursLeft })}
                 </span>
+              )}
+              {/* The poster's own live story: who saw it, and keeping it as a short. */}
+              {storyHoursLeft > 0 && user && currentVideo.author === user && currentVideo.hivePermlink && (
+                <StoryOwnerTools
+                  author={currentVideo.author}
+                  hivePermlink={currentVideo.hivePermlink}
+                  onKept={() => {
+                    // Now an ordinary short: the badge and these tools go, it stays.
+                    const kept = currentVideo;
+                    setVideos((list) => list.map((v) => (v === kept ? { ...v, storyExpiresAt: null } : v)));
+                  }}
+                />
               )}
               {/* The creator's `## Title` (utils/shortTitle.js), above the caption. */}
               {currentVideo.heading && <p className="captionTitle">{currentVideo.heading}</p>}

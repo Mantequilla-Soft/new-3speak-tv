@@ -8,7 +8,10 @@
   },
   "stories": {
     "you": "Vous",
-    "storyTitle": "Story de {{user}}"
+    "storyTitle": "Story de {{user}}",
+    "streakTitle_one": "Série de stories de {{count}} jour",
+    "streakTitle_many": "Série de stories de {{count}} jours",
+    "streakTitle_other": "Série de stories de {{count}} jours"
   },
   "errors": {
     "votingUnavailable": "Le vote n'est pas disponible pour cette publication",
@@ -115,5 +118,21 @@
     "title": "Cette story a expiré",
     "body": "Les stories sur 3Speak sont visibles pendant 24 heures.",
     "next": "Short suivant"
+  },
+  "storyTools": {
+    "seenBy_one": "Vue par {{count}}",
+    "seenBy_many": "Vue par {{count}}",
+    "seenBy_other": "Vue par {{count}}",
+    "seenTitle": "Vue par",
+    "seenNote": "Spectateurs connectés qui gardent leur historique de visionnage activé.",
+    "seenEmpty": "Personne ne l’a encore vue.",
+    "keep": "Garder comme Short",
+    "keepHint": "Elle reste sur votre chaîne après les 24 heures",
+    "keepConfirm": "La garder pour de bon ?",
+    "keepYes": "La garder",
+    "keeping": "Enregistrement…",
+    "kept": "Gardée. Elle reste sur votre chaîne comme Short.",
+    "keepFailed": "Impossible de garder cette story.",
+    "keepWalletPrompt": "Signez pour garder votre story comme Short"
   }
 }

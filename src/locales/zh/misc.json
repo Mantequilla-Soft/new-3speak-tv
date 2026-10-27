@@ -25,7 +25,9 @@
       "boosts_received": "收到的助力",
       "boost_amount_received": "收到的金额",
       "boosts_given": "送出的助力",
-      "boost_amount_given": "送出的金额"
+      "boost_amount_given": "送出的金额",
+      "story_uploads": "快拍",
+      "story_streak": "快拍连续天数"
     },
     "metricsInSentence": {
       "video_uploads": "视频",
@@ -40,7 +42,9 @@
       "boosts_received": "收到的助力",
       "boost_amount_received": "收到的金额",
       "boosts_given": "送出的助力",
-      "boost_amount_given": "送出的金额"
+      "boost_amount_given": "送出的金额",
+      "story_uploads": "快拍",
+      "story_streak": "快拍连续天数"
     },
     "blurbs": {
       "video_uploads": "上传的视频",
@@ -55,7 +59,9 @@
       "boosts_received": "其直播收到的助力",
       "boost_amount_received": "收到的助力总金额",
       "boosts_given": "送给其他主播的助力",
-      "boost_amount_given": "送出的助力总金额"
+      "boost_amount_given": "送出的助力总金额",
+      "story_uploads": "发布的快拍",
+      "story_streak": "连续发布快拍的最多天数"
     },
     "blurbsInSentence": {
       "video_uploads": "上传的视频",
@@ -70,18 +76,22 @@
       "boosts_received": "其直播收到的助力",
       "boost_amount_received": "收到的助力总金额",
       "boosts_given": "送给其他主播的助力",
-      "boost_amount_given": "送出的助力总金额"
+      "boost_amount_given": "送出的助力总金额",
+      "story_uploads": "发布的快拍",
+      "story_streak": "连续发布快拍的最多天数"
     },
     "groups": {
       "video": "视频",
-      "streaming": "直播"
+      "streaming": "直播",
+      "stories": "快拍"
     },
     "badgeNouns": {
       "video_uploads": "视频",
       "short_uploads": "短视频",
       "video_watch_secs": "观看",
       "short_watch_secs": "短视频观看",
-      "tags_given": "标签达人"
+      "tags_given": "标签达人",
+      "story_streak": "连续"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "{{what}} 历史总榜第 {{rank}} 名",

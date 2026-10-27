@@ -132,7 +132,9 @@
     "browseFiles": "Mag-browse ng Files",
     "proceed": "Tumuloy sa Thumbnails",
     "replace": "Palitan ang Video",
-    "editVideo": "I-edit ang video na ito"
+    "editVideo": "I-edit ang video na ito",
+    "asStory": "I-post bilang 24-oras na story",
+    "asStoryHint": "Nasa unahan ito ng Shorts feed at makakatanggap ng notification ang mga follower mo. Habang live pa, puwede mo pa itong itago bilang Short."
   },
   "details": {
     "guests": {
@@ -488,5 +490,17 @@
       "noAccount": "Walang account na may ganyang pangalan.",
       "addButton": "Idagdag ang link"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Magdagdag ng caption (opsyonal)",
+    "moreOptions": "Iba pang opsyon",
+    "reach_one": "Aabot sa {{count}} mong follower at nasa unahan ng Shorts feed sa loob ng 24 oras.",
+    "reach_other": "Aabot sa {{count}} mong follower at nasa unahan ng Shorts feed sa loob ng 24 oras.",
+    "reachNoCount": "Aabot sa mga follower mo at nasa unahan ng Shorts feed sa loob ng 24 oras.",
+    "streakOn_one": "Nasa {{count}}-araw na story streak ka.",
+    "streakOn_other": "Nasa {{count}}-araw na story streak ka.",
+    "streakNext_one": "Dahil dito, magiging {{count}}-araw ang story streak mo.",
+    "streakNext_other": "Dahil dito, magiging {{count}}-araw ang story streak mo.",
+    "streakStart": "Mag-post ng story araw-araw para makabuo ng streak."
   }
 }

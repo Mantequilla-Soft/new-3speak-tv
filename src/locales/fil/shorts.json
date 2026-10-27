@@ -8,7 +8,9 @@
   },
   "stories": {
     "you": "Ikaw",
-    "storyTitle": "Story ni {{user}}"
+    "storyTitle": "Story ni {{user}}",
+    "streakTitle_one": "{{count}}-araw na story streak",
+    "streakTitle_other": "{{count}}-araw na story streak"
   },
   "errors": {
     "votingUnavailable": "Hindi available ang voting sa post na ito",
@@ -113,5 +115,20 @@
     "title": "Nag-expire na ang story na ito",
     "body": "Nakikita ang mga story sa 3Speak sa loob ng 24 oras.",
     "next": "Susunod na short"
+  },
+  "storyTools": {
+    "seenBy_one": "Nakita ng {{count}}",
+    "seenBy_other": "Nakita ng {{count}}",
+    "seenTitle": "Nakakita",
+    "seenNote": "Mga naka-sign-in na manonood na naka-on ang watch history.",
+    "seenEmpty": "Wala pang nakakakita.",
+    "keep": "Itago bilang Short",
+    "keepHint": "Mananatili sa channel mo pagkalipas ng 24 oras",
+    "keepConfirm": "Itago na ito nang tuluyan?",
+    "keepYes": "Itago",
+    "keeping": "Itinatago…",
+    "kept": "Naitago na. Mananatili ito sa channel mo bilang Short.",
+    "keepFailed": "Hindi naitago ang story na ito.",
+    "keepWalletPrompt": "Pumirma para itago ang story mo bilang Short"
   }
 }

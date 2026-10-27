@@ -132,7 +132,9 @@
     "browseFiles": "Bestanden bekijken",
     "proceed": "Verder naar thumbnails",
     "replace": "Video vervangen",
-    "editVideo": "Deze video bewerken"
+    "editVideo": "Deze video bewerken",
+    "asStory": "Plaatsen als story van 24 uur",
+    "asStoryHint": "Hij staat bovenaan de Shorts-feed en je volgers krijgen een melding. Zolang hij live is, kun je hem nog als Short houden."
   },
   "details": {
     "guests": {
@@ -488,5 +490,17 @@
       "noAccount": "Er is geen account met die naam.",
       "addButton": "Link toevoegen"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Bijschrift toevoegen (optioneel)",
+    "moreOptions": "Meer opties",
+    "reach_one": "Bereikt je {{count}} volger en staat 24 uur bovenaan de Shorts-feed.",
+    "reach_other": "Bereikt je {{count}} volgers en staat 24 uur bovenaan de Shorts-feed.",
+    "reachNoCount": "Bereikt je volgers en staat 24 uur bovenaan de Shorts-feed.",
+    "streakOn_one": "Je zit op een storyreeks van {{count}} dag.",
+    "streakOn_other": "Je zit op een storyreeks van {{count}} dagen.",
+    "streakNext_one": "Hiermee wordt je storyreeks {{count}} dag.",
+    "streakNext_other": "Hiermee wordt je storyreeks {{count}} dagen.",
+    "streakStart": "Plaats elke dag een story om een reeks op te bouwen."
   }
 }

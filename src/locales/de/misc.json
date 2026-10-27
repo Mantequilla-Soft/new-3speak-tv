@@ -25,7 +25,9 @@
       "boosts_received": "Erhaltene Boosts",
       "boost_amount_received": "Erhaltener Betrag",
       "boosts_given": "Vergebene Boosts",
-      "boost_amount_given": "Vergebener Betrag"
+      "boost_amount_given": "Vergebener Betrag",
+      "story_uploads": "Storys",
+      "story_streak": "Story-Serie"
     },
     "metricsInSentence": {
       "video_uploads": "Videos",
@@ -40,7 +42,9 @@
       "boosts_received": "Erhaltene Boosts",
       "boost_amount_received": "Erhaltener Betrag",
       "boosts_given": "Vergebene Boosts",
-      "boost_amount_given": "Vergebener Betrag"
+      "boost_amount_given": "Vergebener Betrag",
+      "story_uploads": "Storys",
+      "story_streak": "Story-Serie"
     },
     "blurbs": {
       "video_uploads": "Hochgeladene Videos",
@@ -55,7 +59,9 @@
       "boosts_received": "Boosts an ihre Streams",
       "boost_amount_received": "Summe der erhaltenen Boosts",
       "boosts_given": "Boosts, die sie an andere Streamer gesendet haben",
-      "boost_amount_given": "Summe der vergebenen Boosts"
+      "boost_amount_given": "Summe der vergebenen Boosts",
+      "story_uploads": "Gepostete Storys",
+      "story_streak": "Die meisten Tage am Stück mit einer Story"
     },
     "blurbsInSentence": {
       "video_uploads": "Hochgeladene Videos",
@@ -70,18 +76,22 @@
       "boosts_received": "Boosts an ihre Streams",
       "boost_amount_received": "Summe der erhaltenen Boosts",
       "boosts_given": "Boosts, die sie an andere Streamer gesendet haben",
-      "boost_amount_given": "Summe der vergebenen Boosts"
+      "boost_amount_given": "Summe der vergebenen Boosts",
+      "story_uploads": "gepostete Storys",
+      "story_streak": "die meisten Tage am Stück mit einer Story"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Streaming"
+      "streaming": "Streaming",
+      "stories": "Storys"
     },
     "badgeNouns": {
       "video_uploads": "Videos",
       "short_uploads": "Shorts",
       "video_watch_secs": "Angesehen",
       "short_watch_secs": "Shorts angesehen",
-      "tags_given": "Tagger"
+      "tags_given": "Tagger",
+      "story_streak": "Serie"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Platz {{rank}} bei „{{what}}“ über den gesamten Zeitraum",

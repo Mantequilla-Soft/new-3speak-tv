@@ -8,7 +8,9 @@
   },
   "stories": {
     "you": "Du",
-    "storyTitle": "Story von {{user}}"
+    "storyTitle": "Story von {{user}}",
+    "streakTitle_one": "Story-Serie: {{count}} Tag",
+    "streakTitle_other": "Story-Serie: {{count}} Tage"
   },
   "errors": {
     "votingUnavailable": "Voten ist für diesen Post nicht verfügbar",
@@ -113,5 +115,20 @@
     "title": "Diese Story ist abgelaufen",
     "body": "Storys sind auf 3Speak 24 Stunden lang zu sehen.",
     "next": "Nächster Short"
+  },
+  "storyTools": {
+    "seenBy_one": "Gesehen von {{count}}",
+    "seenBy_other": "Gesehen von {{count}}",
+    "seenTitle": "Gesehen von",
+    "seenNote": "Angemeldete Zuschauer, die ihren Wiedergabeverlauf eingeschaltet haben.",
+    "seenEmpty": "Noch hat sie niemand gesehen.",
+    "keep": "Als Short behalten",
+    "keepHint": "Bleibt nach den 24 Stunden auf deinem Kanal",
+    "keepConfirm": "Für immer behalten?",
+    "keepYes": "Behalten",
+    "keeping": "Wird behalten…",
+    "kept": "Behalten. Sie bleibt als Short auf deinem Kanal.",
+    "keepFailed": "Diese Story konnte nicht behalten werden.",
+    "keepWalletPrompt": "Signiere, um deine Story als Short zu behalten"
   }
 }

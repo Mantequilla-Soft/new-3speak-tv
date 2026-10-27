@@ -132,7 +132,9 @@
     "browseFiles": "浏览文件",
     "proceed": "下一步：缩略图",
     "replace": "更换视频",
-    "editVideo": "编辑此视频"
+    "editVideo": "编辑此视频",
+    "asStory": "作为 24 小时快拍发布",
+    "asStoryHint": "它会排在短视频信息流的最前面，你的关注者也会收到通知。快拍有效期间，你仍可将其保留为短视频。"
   },
   "details": {
     "guests": {
@@ -486,5 +488,14 @@
       "noAccount": "没有这个名字的账号。",
       "addButton": "添加链接"
     }
+  },
+  "story": {
+    "captionPlaceholder": "添加说明（可选）",
+    "moreOptions": "更多选项",
+    "reach_other": "将推送给你的 {{count}} 位关注者，并在 24 小时内排在短视频信息流最前面。",
+    "reachNoCount": "将推送给你的关注者，并在 24 小时内排在短视频信息流最前面。",
+    "streakOn_other": "你已连续 {{count}} 天发布快拍。",
+    "streakNext_other": "发布这条后，你将连续 {{count}} 天发布快拍。",
+    "streakStart": "每天发布一条快拍，打造连续记录。"
   }
 }

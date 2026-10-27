@@ -25,7 +25,9 @@
       "boosts_received": "Boosts zilizopokelewa",
       "boost_amount_received": "Kiasi kilichopokelewa",
       "boosts_given": "Boosts zilizotolewa",
-      "boost_amount_given": "Kiasi kilichotolewa"
+      "boost_amount_given": "Kiasi kilichotolewa",
+      "story_uploads": "Hadithi",
+      "story_streak": "Mfululizo wa hadithi"
     },
     "metricsInSentence": {
       "video_uploads": "video",
@@ -40,7 +42,9 @@
       "boosts_received": "boosts zilizopokelewa",
       "boost_amount_received": "kiasi kilichopokelewa",
       "boosts_given": "boosts zilizotolewa",
-      "boost_amount_given": "kiasi kilichotolewa"
+      "boost_amount_given": "kiasi kilichotolewa",
+      "story_uploads": "hadithi",
+      "story_streak": "mfululizo wa hadithi"
     },
     "blurbs": {
       "video_uploads": "Video zilizopakiwa",
@@ -55,7 +59,9 @@
       "boosts_received": "Boosts zilizotumwa kwa mitiririko yao",
       "boost_amount_received": "Jumla ya kiasi cha boosts zilizopokelewa",
       "boosts_given": "Boosts walizotuma kwa watiririshaji wengine",
-      "boost_amount_given": "Jumla ya kiasi cha boosts walizotoa"
+      "boost_amount_given": "Jumla ya kiasi cha boosts walizotoa",
+      "story_uploads": "Hadithi zilizochapishwa",
+      "story_streak": "Siku nyingi zaidi mfululizo zenye hadithi"
     },
     "blurbsInSentence": {
       "video_uploads": "video zilizopakiwa",
@@ -70,18 +76,22 @@
       "boosts_received": "boosts zilizotumwa kwa mitiririko yao",
       "boost_amount_received": "jumla ya kiasi cha boosts zilizopokelewa",
       "boosts_given": "boosts walizotuma kwa watiririshaji wengine",
-      "boost_amount_given": "jumla ya kiasi cha boosts walizotoa"
+      "boost_amount_given": "jumla ya kiasi cha boosts walizotoa",
+      "story_uploads": "hadithi zilizochapishwa",
+      "story_streak": "siku nyingi zaidi mfululizo zenye hadithi"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Utiririshaji"
+      "streaming": "Utiririshaji",
+      "stories": "Hadithi"
     },
     "badgeNouns": {
       "video_uploads": "Video",
       "short_uploads": "Shorts",
       "video_watch_secs": "Zilizotazamwa",
       "short_watch_secs": "Shorts zilizotazamwa",
-      "tags_given": "Mweka lebo"
+      "tags_given": "Mweka lebo",
+      "story_streak": "Mfululizo"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Nafasi ya #{{rank}} kwa {{what}} katika muda wote",

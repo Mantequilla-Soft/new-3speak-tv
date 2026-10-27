@@ -132,7 +132,9 @@
     "browseFiles": "Przeglądaj pliki",
     "proceed": "Przejdź do miniatur",
     "replace": "Zastąp film",
-    "editVideo": "Edytuj ten film"
+    "editVideo": "Edytuj ten film",
+    "asStory": "Opublikuj jako relację na 24 godz.",
+    "asStoryHint": "Trafia na początek kanału Shorts, a obserwujący dostają powiadomienie. Dopóki trwa, możesz ją jeszcze zachować jako shorta."
   },
   "details": {
     "guests": {
@@ -492,5 +494,23 @@
       "noAccount": "Nie ma konta o tej nazwie.",
       "addButton": "Dodaj link"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Dodaj opis (opcjonalnie)",
+    "moreOptions": "Więcej opcji",
+    "reach_one": "Trafia do {{count}} obserwującego i przez 24 godziny jest na początku kanału Shorts.",
+    "reach_few": "Trafia do {{count}} obserwujących i przez 24 godziny jest na początku kanału Shorts.",
+    "reach_many": "Trafia do {{count}} obserwujących i przez 24 godziny jest na początku kanału Shorts.",
+    "reach_other": "Trafia do {{count}} obserwujących i przez 24 godziny jest na początku kanału Shorts.",
+    "reachNoCount": "Trafia do obserwujących i przez 24 godziny jest na początku kanału Shorts.",
+    "streakOn_one": "Masz serię relacji: {{count}} dzień z rzędu.",
+    "streakOn_few": "Masz serię relacji: {{count}} dni z rzędu.",
+    "streakOn_many": "Masz serię relacji: {{count}} dni z rzędu.",
+    "streakOn_other": "Masz serię relacji: {{count}} dnia z rzędu.",
+    "streakNext_one": "Dzięki tej relacji seria wyniesie {{count}} dzień z rzędu.",
+    "streakNext_few": "Dzięki tej relacji seria wyniesie {{count}} dni z rzędu.",
+    "streakNext_many": "Dzięki tej relacji seria wyniesie {{count}} dni z rzędu.",
+    "streakNext_other": "Dzięki tej relacji seria wyniesie {{count}} dnia z rzędu.",
+    "streakStart": "Dodawaj relację codziennie, by zbudować serię."
   }
 }

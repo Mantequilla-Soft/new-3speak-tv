@@ -8,7 +8,8 @@
   },
   "stories": {
     "you": "Bạn",
-    "storyTitle": "Tin của {{user}}"
+    "storyTitle": "Tin của {{user}}",
+    "streakTitle_other": "Chuỗi đăng tin {{count}} ngày"
   },
   "errors": {
     "votingUnavailable": "Không thể vote cho bài đăng này",
@@ -111,5 +112,19 @@
     "title": "Tin này đã hết hạn",
     "body": "Tin trên 3Speak hiển thị trong 24 giờ.",
     "next": "Short tiếp theo"
+  },
+  "storyTools": {
+    "seenBy_other": "{{count}} người đã xem",
+    "seenTitle": "Người đã xem",
+    "seenNote": "Người xem đã đăng nhập và bật lịch sử xem.",
+    "seenEmpty": "Chưa có ai xem.",
+    "keep": "Giữ thành Shorts",
+    "keepHint": "Vẫn ở trên kênh của bạn sau 24 giờ",
+    "keepConfirm": "Giữ lại vĩnh viễn?",
+    "keepYes": "Giữ lại",
+    "keeping": "Đang giữ…",
+    "kept": "Đã giữ. Tin sẽ ở lại kênh của bạn dưới dạng Shorts.",
+    "keepFailed": "Không thể giữ tin này.",
+    "keepWalletPrompt": "Ký để giữ tin của bạn thành Shorts"
   }
 }

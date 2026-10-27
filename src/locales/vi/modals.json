@@ -116,7 +116,12 @@
     "preparing": "Đang chuẩn bị video để tải lên...",
     "renderUnavailable": "Dịch vụ kết xuất chưa khả dụng. Dữ liệu dòng thời gian đã được ghi vào console.",
     "backToEditor": "Quay lại trình chỉnh sửa",
-    "postError": "Không thể chuẩn bị video để tải lên. Vui lòng thử tải xuống thay thế."
+    "postError": "Không thể chuẩn bị video để tải lên. Vui lòng thử tải xuống thay thế.",
+    "postAs": "Đăng dưới dạng",
+    "postAsStory": "Tin",
+    "postAsStoryHint": "24 giờ, đứng đầu bảng tin Shorts",
+    "postAsShort": "Shorts",
+    "postAsShortHint": "Ở lại trên kênh của bạn"
   },
   "profile": {
     "mustLogin": "Bạn cần đăng nhập trước",

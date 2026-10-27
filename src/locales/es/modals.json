@@ -116,7 +116,12 @@
     "preparing": "Preparando el video para subirlo...",
     "renderUnavailable": "El servicio de renderizado aún no está disponible. Los datos de la línea de tiempo se registraron en la consola.",
     "backToEditor": "Volver al editor",
-    "postError": "No se pudo preparar el video para subirlo. Prueba descargarlo en su lugar."
+    "postError": "No se pudo preparar el video para subirlo. Prueba descargarlo en su lugar.",
+    "postAs": "Publicarlo como",
+    "postAsStory": "Historia",
+    "postAsStoryHint": "24 horas, encabeza el feed de Shorts",
+    "postAsShort": "Short",
+    "postAsShortHint": "Se queda en tu canal"
   },
   "profile": {
     "mustLogin": "Primero debes iniciar sesión",

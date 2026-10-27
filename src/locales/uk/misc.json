@@ -25,7 +25,9 @@
       "boosts_received": "Отримані бусти",
       "boost_amount_received": "Отримана сума",
       "boosts_given": "Надіслані бусти",
-      "boost_amount_given": "Надіслана сума"
+      "boost_amount_given": "Надіслана сума",
+      "story_uploads": "Історії",
+      "story_streak": "Серія історій"
     },
     "metricsInSentence": {
       "video_uploads": "відео",
@@ -40,7 +42,9 @@
       "boosts_received": "отримані бусти",
       "boost_amount_received": "отримана сума",
       "boosts_given": "надіслані бусти",
-      "boost_amount_given": "надіслана сума"
+      "boost_amount_given": "надіслана сума",
+      "story_uploads": "історії",
+      "story_streak": "серія історій"
     },
     "blurbs": {
       "video_uploads": "Завантажені відео",
@@ -55,7 +59,9 @@
       "boosts_received": "Бусти, надіслані на їхні трансляції",
       "boost_amount_received": "Загальна сума отриманих бустів",
       "boosts_given": "Бусти, які вони надіслали іншим стрімерам",
-      "boost_amount_given": "Загальна сума бустів, які вони надіслали"
+      "boost_amount_given": "Загальна сума бустів, які вони надіслали",
+      "story_uploads": "Опубліковані історії",
+      "story_streak": "Найбільше днів поспіль з історією"
     },
     "blurbsInSentence": {
       "video_uploads": "завантажені відео",
@@ -70,18 +76,22 @@
       "boosts_received": "бусти, надіслані на їхні трансляції",
       "boost_amount_received": "загальна сума отриманих бустів",
       "boosts_given": "бусти, надіслані іншим стрімерам",
-      "boost_amount_given": "загальна сума надісланих бустів"
+      "boost_amount_given": "загальна сума надісланих бустів",
+      "story_uploads": "опубліковані історії",
+      "story_streak": "найбільше днів поспіль з історією"
     },
     "groups": {
       "video": "Відео",
-      "streaming": "Трансляції"
+      "streaming": "Трансляції",
+      "stories": "Історії"
     },
     "badgeNouns": {
       "video_uploads": "Відео",
       "short_uploads": "Shorts",
       "video_watch_secs": "Перегляди",
       "short_watch_secs": "Перегляди Shorts",
-      "tags_given": "Теги"
+      "tags_given": "Теги",
+      "story_streak": "Серія"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "№{{rank}} за показником «{{what}}» за весь час",

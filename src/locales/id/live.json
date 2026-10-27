@@ -10,7 +10,8 @@
     "backHome": "Kembali ke Beranda",
     "howWasStream": "Bagaimana siaranmu?",
     "connecting": "Menghubungkan ke OpenPods…",
-    "authenticating": "Mengautentikasi dengan OpenPods…"
+    "authenticating": "Mengautentikasi dengan OpenPods…",
+    "postStoryAboutIt": "Posting story tentang ini"
   },
   "strip": {
     "liveNow_other": "<n>{{count}}</n> OpenPods sedang live",

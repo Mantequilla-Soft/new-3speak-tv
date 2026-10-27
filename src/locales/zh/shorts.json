@@ -8,7 +8,8 @@
   },
   "stories": {
     "you": "你",
-    "storyTitle": "{{user}} 的快拍"
+    "storyTitle": "{{user}} 的快拍",
+    "streakTitle_other": "连续 {{count}} 天发布快拍"
   },
   "errors": {
     "votingUnavailable": "此帖子暂不支持点赞",
@@ -111,5 +112,19 @@
     "title": "此快拍已过期",
     "body": "3Speak 上的快拍展示 24 小时。",
     "next": "下一个短视频"
+  },
+  "storyTools": {
+    "seenBy_other": "{{count}} 人看过",
+    "seenTitle": "看过的人",
+    "seenNote": "已登录且开启了观看记录的观众。",
+    "seenEmpty": "还没有人看过。",
+    "keep": "保留为短视频",
+    "keepHint": "24 小时后仍留在你的频道",
+    "keepConfirm": "要永久保留吗？",
+    "keepYes": "保留",
+    "keeping": "正在保留…",
+    "kept": "已保留。它将作为短视频留在你的频道。",
+    "keepFailed": "无法保留这条快拍。",
+    "keepWalletPrompt": "签名以将快拍保留为短视频"
   }
 }

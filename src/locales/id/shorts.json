@@ -8,7 +8,8 @@
   },
   "stories": {
     "you": "Kamu",
-    "storyTitle": "Story {{user}}"
+    "storyTitle": "Story {{user}}",
+    "streakTitle_other": "Streak story {{count}} hari"
   },
   "errors": {
     "votingUnavailable": "Vote tidak tersedia untuk postingan ini",
@@ -111,5 +112,19 @@
     "title": "Story ini sudah kedaluwarsa",
     "body": "Story di 3Speak tayang selama 24 jam.",
     "next": "Short berikutnya"
+  },
+  "storyTools": {
+    "seenBy_other": "Dilihat oleh {{count}}",
+    "seenTitle": "Dilihat oleh",
+    "seenNote": "Penonton yang login dan mengaktifkan riwayat tontonan.",
+    "seenEmpty": "Belum ada yang melihatnya.",
+    "keep": "Simpan sebagai Shorts",
+    "keepHint": "Tetap ada di channel-mu setelah 24 jam",
+    "keepConfirm": "Simpan selamanya?",
+    "keepYes": "Simpan",
+    "keeping": "Menyimpan…",
+    "kept": "Tersimpan. Story ini tetap di channel-mu sebagai Shorts.",
+    "keepFailed": "Tidak dapat menyimpan story ini.",
+    "keepWalletPrompt": "Tanda tangani untuk menyimpan story-mu sebagai Shorts"
   }
 }

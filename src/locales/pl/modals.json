@@ -116,7 +116,12 @@
     "preparing": "Przygotowywanie filmu do przesłania...",
     "renderUnavailable": "Usługa renderowania nie jest jeszcze dostępna. Dane osi czasu zapisano w konsoli.",
     "backToEditor": "Wróć do edytora",
-    "postError": "Nie udało się przygotować filmu do przesłania. Spróbuj go zamiast tego pobrać."
+    "postError": "Nie udało się przygotować filmu do przesłania. Spróbuj go zamiast tego pobrać.",
+    "postAs": "Opublikuj jako",
+    "postAsStory": "Relacja",
+    "postAsStoryHint": "24 godziny, na początku kanału Shorts",
+    "postAsShort": "Short",
+    "postAsShortHint": "Zostaje na Twoim kanale"
   },
   "profile": {
     "mustLogin": "Najpierw musisz się zalogować",

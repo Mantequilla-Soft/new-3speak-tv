@@ -132,7 +132,9 @@
     "browseFiles": "Browse Files",
     "proceed": "Proceed to Thumbnails",
     "replace": "Replace Video",
-    "editVideo": "Edit this video"
+    "editVideo": "Edit this video",
+    "asStory": "Post as a 24h story",
+    "asStoryHint": "It leads the Shorts feed and your followers get a notification. While it is live you can still keep it as a short."
   },
   "details": {
     "guests": {
@@ -488,5 +490,17 @@
       "noAccount": "There is no account with that name.",
       "addButton": "Add link"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Add a caption (optional)",
+    "moreOptions": "More options",
+    "reach_one": "Goes to your {{count}} follower and leads the Shorts feed for 24 hours.",
+    "reach_other": "Goes to your {{count}} followers and leads the Shorts feed for 24 hours.",
+    "reachNoCount": "Goes to your followers and leads the Shorts feed for 24 hours.",
+    "streakOn_one": "You are on a {{count}}-day story streak.",
+    "streakOn_other": "You are on a {{count}}-day story streak.",
+    "streakNext_one": "This makes it a {{count}}-day story streak.",
+    "streakNext_other": "This makes it a {{count}}-day story streak.",
+    "streakStart": "Post a story every day to build a streak."
   }
 }

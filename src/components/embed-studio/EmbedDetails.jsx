@@ -248,7 +248,8 @@ function EmbedDetails() {
       return;
     }
 
-    if (!description?.trim()) {
+    // A story may go without a caption (publishToEmbed gives it a plain one).
+    if (!description?.trim() && !(isStory && fromStories)) {
       toast.error(t("upload.details.errors.descriptionRequired"));
       return;
     }

@@ -132,7 +132,9 @@
     "browseFiles": "Procurar arquivos",
     "proceed": "Ir para as miniaturas",
     "replace": "Substituir vídeo",
-    "editVideo": "Editar este vídeo"
+    "editVideo": "Editar este vídeo",
+    "asStory": "Publicar como story de 24 h",
+    "asStoryHint": "Ele aparece no topo do feed de Shorts e seus seguidores recebem uma notificação. Enquanto estiver no ar, você ainda pode mantê-lo como Short."
   },
   "details": {
     "guests": {
@@ -490,5 +492,20 @@
       "noAccount": "Não existe nenhuma conta com esse nome.",
       "addButton": "Adicionar link"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Adicione uma legenda (opcional)",
+    "moreOptions": "Mais opções",
+    "reach_one": "Chega ao seu {{count}} seguidor e fica no topo do feed de Shorts por 24 horas.",
+    "reach_many": "Chega aos seus {{count}} seguidores e fica no topo do feed de Shorts por 24 horas.",
+    "reach_other": "Chega aos seus {{count}} seguidores e fica no topo do feed de Shorts por 24 horas.",
+    "reachNoCount": "Chega aos seus seguidores e fica no topo do feed de Shorts por 24 horas.",
+    "streakOn_one": "Você está numa sequência de stories de {{count}} dia.",
+    "streakOn_many": "Você está numa sequência de stories de {{count}} dias.",
+    "streakOn_other": "Você está numa sequência de stories de {{count}} dias.",
+    "streakNext_one": "Com este, sua sequência de stories chega a {{count}} dia.",
+    "streakNext_many": "Com este, sua sequência de stories chega a {{count}} dias.",
+    "streakNext_other": "Com este, sua sequência de stories chega a {{count}} dias.",
+    "streakStart": "Publique um story todo dia para criar uma sequência."
   }
 }

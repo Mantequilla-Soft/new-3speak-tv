@@ -7,6 +7,15 @@ import axios from 'axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { STORIES_URL } from '../utils/config';
 import { useAppStore } from './store';
+import {
+  signMessageWithAioha,
+  getCurrentProvider,
+  isManteAuthLogin,
+  establishWalletSession,
+  KeyTypes,
+  Providers,
+} from '../hive-api/aioha';
+import { t } from '../i18n';
 
 // ─── Seen, on this device ───────────────────────────────────────────────────
 // The checker answers "seen" from watch_history, which is only written while the
@@ -67,7 +76,10 @@ function useSeenVersion() {
 
 // ─── The stories row ────────────────────────────────────────────────────────
 
-/** Creators with a live story, unseen first: [{ username, story_count, unseen_count, latest_at, followed }]. */
+/**
+ * Creators with a live story, unseen first: [{ username, story_count, unseen_count,
+ * latest_at, followed, streak }]. `streak` is days in a row with a story.
+ */
 export function useStoryCreators() {
   const { user, showNsfw } = useAppStore();
   const { data, isLoading } = useQuery({
@@ -84,6 +96,7 @@ export function useStoryCreators() {
   return {
     storyCreators: data?.creators || [],
     currentUserHasStory: !!data?.currentUserHasStory,
+    currentUserStreak: Number(data?.currentUserStreak) || 0,
     isLoading,
   };
 }
@@ -177,4 +190,106 @@ export async function registerStory(author, permlink, { attempts = 6, delayMs = 
     await new Promise((r) => setTimeout(r, delayMs));
   }
   throw lastError || new Error('register failed');
+}
+
+// ─── The poster's own tools ─────────────────────────────────────────────────
+
+/** A streak worth showing: one day is just a story. */
+export const STREAK_MIN = 2;
+
+/**
+ * The user's story streak: { streak, postedToday }. A streak counts days in a row
+ * with a story and survives until a day passes with none, so `postedToday` false
+ * with a streak means today's story keeps it going.
+ */
+export function useStoryStreak(user) {
+  const { data } = useQuery({
+    queryKey: ['story-streak', user],
+    enabled: !!user,
+    queryFn: async () => (await axios.get(`${STORIES_URL}/streak/${encodeURIComponent(user)}`)).data,
+    staleTime: 60 * 1000,
+  });
+  return { streak: Number(data?.streak) || 0, postedToday: !!data?.postedToday };
+}
+
+/**
+ * Who watched a story: { count, viewers: [{ username, at }] }, newest first.
+ * Read from watch history, so only signed-in viewers who keep it on are listed.
+ */
+export function useStorySeenBy(author, hivePermlink, enabled = true) {
+  const { data, isLoading } = useQuery({
+    queryKey: ['story-seen', author, hivePermlink],
+    enabled: !!author && !!hivePermlink && enabled,
+    queryFn: async () => (await axios.get(`${STORIES_URL}/seen`, { params: { author, permlink: hivePermlink } })).data,
+    staleTime: 30 * 1000,
+    refetchInterval: 60 * 1000,
+  });
+  return { count: Number(data?.count) || 0, viewers: data?.viewers || [], isLoading };
+}
+
+// Must match keepMessage() in 3speakchecks/routes/stories.js and the signer in
+// server/index.cjs exactly.
+const keepMessage = (author, permlink, timestamp) =>
+  ['3speak-stories', 'keep', author, permlink, String(timestamp)].join('|');
+
+const THREESPEAK_API = import.meta.env.VITE_THREESPEAK_API || '/api';
+const SIGN_CAPABLE_PROVIDERS = new Set([Providers.Keychain, Providers.HiveAuth, Providers.PeakVault, Providers.Ledger]);
+const canSignLocally = () => !isManteAuthLogin() && SIGN_CAPABLE_PROVIDERS.has(getCurrentProvider());
+
+// Signing follows the comment pins (lib/commentPins.js): @threespeak signs under
+// the grant most authors gave it, and a wallet that can sign does it itself when
+// that grant is missing.
+async function signKeepViaThreespeak(account, permlink) {
+  const provider = getCurrentProvider();
+  const isWallet = !!provider && provider !== Providers.HiveSigner && !isManteAuthLogin();
+  const doPost = async () => {
+    const headers = { 'Content-Type': 'application/json' };
+    if (provider === Providers.HiveSigner) {
+      const token = localStorage.getItem('hivesignerToken');
+      if (token) headers.Authorization = `Bearer ${token}`;
+    }
+    const r = await fetch(`${THREESPEAK_API}/stories/keep-signature`, {
+      method: 'POST', headers, credentials: 'include',
+      body: JSON.stringify({ permlink, username: account }),
+    });
+    return { r, d: await r.json().catch(() => ({})) };
+  };
+  let { r, d } = await doPost();
+  if (isWallet && r.status === 401 && d?.reason === 'not_signed_in_as' && await establishWalletSession(account)) {
+    ({ r, d } = await doPost());
+  }
+  if (!r.ok || !d.signature) throw new Error(d.error || t('shorts.storyTools.keepFailed'));
+  if (d.username && String(d.username).toLowerCase() !== String(account).toLowerCase()) {
+    throw new Error(t('shorts.storyTools.keepFailed'));
+  }
+  return { signature: d.signature, timestamp: d.timestamp };
+}
+
+async function signKeepLocally(account, permlink) {
+  const timestamp = Date.now();
+  const res = await signMessageWithAioha(keepMessage(account, permlink, timestamp), KeyTypes.Posting, t('shorts.storyTools.keepWalletPrompt'));
+  if (!res?.success || !res.result) throw new Error(t('shorts.storyTools.keepFailed'));
+  return { signature: res.result, timestamp };
+}
+
+/**
+ * Turn the author's own live story into an ordinary short that stays. Takes the
+ * HIVE permlink. Only a live story can be kept; the checker refuses an expired one.
+ */
+export async function keepStoryAsShort(author, hivePermlink) {
+  let signed;
+  try {
+    signed = await signKeepViaThreespeak(author, hivePermlink);
+  } catch (err) {
+    if (!canSignLocally()) throw err;
+    signed = await signKeepLocally(author, hivePermlink);
+  }
+  const res = await fetch(`${STORIES_URL}/keep`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ author, permlink: hivePermlink, ...signed }),
+  });
+  const d = await res.json().catch(() => ({}));
+  if (!res.ok || !d.success) throw new Error(d.error || t('shorts.storyTools.keepFailed'));
+  return d.kept;
 }

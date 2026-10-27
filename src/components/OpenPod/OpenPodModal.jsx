@@ -14,6 +14,7 @@ import { firePendingAnnouncement, getAnnounceConfig } from '../../utils/openpodA
 import { publishStreamVod } from '../../utils/streamVod';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { defaultEndpoint, findRoomEndpoint } from '../../utils/hangoutsEndpoints';
+import { storiesEnabledFor } from '../../utils/config';
 import AnnounceOptions from '../openpods/AnnounceOptions';
 import './OpenPodModal.scss';
 
@@ -219,6 +220,16 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
                     ? t('live.modal.recordingProcessing')
                     : t('live.modal.thanksForLive')}
               </p>
+              {/* The host's own stream just ended: the moment to tell followers how
+                  it went, as a 24h story recorded right now. */}
+              {streamEnded && storiesEnabledFor(username) && (
+                <button
+                  className="openpod-ended__btn openpod-ended__btn--story"
+                  onClick={() => { navigate('/embed-studio?from=story'); onClose(); }}
+                >
+                  {t('live.modal.postStoryAboutIt')}
+                </button>
+              )}
               <div className="openpod-ended__actions">
                 {/* navigate('/') BEFORE onClose: OpenPods' URL-cleanup effect
                     fires on room-close but now only rewrites to /openpods when

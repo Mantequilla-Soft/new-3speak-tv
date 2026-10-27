@@ -10,7 +10,8 @@
     "backHome": "На главную",
     "howWasStream": "Как прошёл ваш эфир?",
     "connecting": "Подключение к OpenPods…",
-    "authenticating": "Авторизация в OpenPods…"
+    "authenticating": "Авторизация в OpenPods…",
+    "postStoryAboutIt": "Опубликовать историю об этом"
   },
   "strip": {
     "liveNow_one": "Сейчас в эфире <n>{{count}}</n> OpenPod",

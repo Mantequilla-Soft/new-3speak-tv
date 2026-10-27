@@ -8,7 +8,8 @@
   },
   "stories": {
     "you": "나",
-    "storyTitle": "{{user}}님의 스토리"
+    "storyTitle": "{{user}}님의 스토리",
+    "streakTitle_other": "{{count}}일 연속 스토리"
   },
   "errors": {
     "votingUnavailable": "이 게시물에는 투표할 수 없어요",
@@ -111,5 +112,19 @@
     "title": "이 스토리는 만료되었어요",
     "body": "3Speak의 스토리는 24시간 동안 공개돼요.",
     "next": "다음 쇼츠"
+  },
+  "storyTools": {
+    "seenBy_other": "{{count}}명이 봄",
+    "seenTitle": "본 사람",
+    "seenNote": "로그인했고 시청 기록을 켜 둔 시청자예요.",
+    "seenEmpty": "아직 아무도 보지 않았어요.",
+    "keep": "쇼츠로 남기기",
+    "keepHint": "24시간이 지나도 채널에 남아요",
+    "keepConfirm": "계속 남겨 둘까요?",
+    "keepYes": "남기기",
+    "keeping": "남기는 중…",
+    "kept": "남겼어요. 채널에 쇼츠로 계속 남아요.",
+    "keepFailed": "이 스토리를 남기지 못했어요.",
+    "keepWalletPrompt": "스토리를 쇼츠로 남기려면 서명하세요"
   }
 }

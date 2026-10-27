@@ -116,7 +116,12 @@
     "preparing": "Preparazione del video per il caricamento...",
     "renderUnavailable": "Servizio di rendering non ancora disponibile. Dati della timeline registrati nella console.",
     "backToEditor": "Torna all'editor",
-    "postError": "Impossibile preparare il video per il caricamento. Prova invece a scaricarlo."
+    "postError": "Impossibile preparare il video per il caricamento. Prova invece a scaricarlo.",
+    "postAs": "Pubblica come",
+    "postAsStory": "Storia",
+    "postAsStoryHint": "24 ore, in cima al feed Shorts",
+    "postAsShort": "Short",
+    "postAsShortHint": "Resta sul tuo canale"
   },
   "profile": {
     "mustLogin": "Prima devi accedere",

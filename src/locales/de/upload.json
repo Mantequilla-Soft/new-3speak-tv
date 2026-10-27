@@ -132,7 +132,9 @@
     "browseFiles": "Dateien durchsuchen",
     "proceed": "Weiter zu den Thumbnails",
     "replace": "Video ersetzen",
-    "editVideo": "Dieses Video bearbeiten"
+    "editVideo": "Dieses Video bearbeiten",
+    "asStory": "Als 24-Stunden-Story posten",
+    "asStoryHint": "Sie steht ganz oben im Shorts-Feed und deine Follower werden benachrichtigt. Solange sie läuft, kannst du sie noch als Short behalten."
   },
   "details": {
     "guests": {
@@ -488,5 +490,17 @@
       "noAccount": "Es gibt kein Konto mit diesem Namen.",
       "addButton": "Link hinzufügen"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Bildunterschrift hinzufügen (optional)",
+    "moreOptions": "Weitere Optionen",
+    "reach_one": "Erreicht deinen {{count}} Follower und steht 24 Stunden lang ganz oben im Shorts-Feed.",
+    "reach_other": "Erreicht deine {{count}} Follower und steht 24 Stunden lang ganz oben im Shorts-Feed.",
+    "reachNoCount": "Erreicht deine Follower und steht 24 Stunden lang ganz oben im Shorts-Feed.",
+    "streakOn_one": "Du hast eine Story-Serie von {{count}} Tag.",
+    "streakOn_other": "Du hast eine Story-Serie von {{count}} Tagen.",
+    "streakNext_one": "Damit wird es eine Story-Serie von {{count}} Tag.",
+    "streakNext_other": "Damit wird es eine Story-Serie von {{count}} Tagen.",
+    "streakStart": "Poste jeden Tag eine Story, um eine Serie aufzubauen."
   }
 }

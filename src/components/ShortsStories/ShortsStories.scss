@@ -72,6 +72,12 @@
         border-width: 1.5px;
       }
 
+      .streak-badge {
+        height: 15px;
+        font-size: 9px;
+        border-width: 1.5px;
+      }
+
       .add-badge {
         width: 16px;
         height: 16px;
@@ -281,6 +287,30 @@
       border-radius: 50%;
       object-fit: cover;
       background: var(--bg-tertiary);
+    }
+
+    // A story streak (days in a row), opposite the count / add badge.
+    .streak-badge {
+      position: absolute;
+      bottom: -2px;
+      left: -2px;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      height: 18px;
+      padding: 0 5px 0 3px;
+      border-radius: 9px;
+      border: 2px solid var(--bg-primary);
+      background: var(--card-bg, var(--bg-secondary));
+      color: var(--text-primary);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+
+      svg {
+        color: var(--accent-primary);
+        font-size: 11px;
+      }
     }
 
     .count-badge {

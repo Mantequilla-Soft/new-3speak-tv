@@ -8,7 +8,9 @@
   },
   "stories": {
     "you": "Jij",
-    "storyTitle": "Story van {{user}}"
+    "storyTitle": "Story van {{user}}",
+    "streakTitle_one": "Storyreeks van {{count}} dag",
+    "streakTitle_other": "Storyreeks van {{count}} dagen"
   },
   "errors": {
     "votingUnavailable": "Voten is niet mogelijk voor deze post",
@@ -113,5 +115,20 @@
     "title": "Deze story is verlopen",
     "body": "Story's op 3Speak zijn 24 uur te zien.",
     "next": "Volgende short"
+  },
+  "storyTools": {
+    "seenBy_one": "Gezien door {{count}}",
+    "seenBy_other": "Gezien door {{count}}",
+    "seenTitle": "Gezien door",
+    "seenNote": "Ingelogde kijkers die hun kijkgeschiedenis aan hebben staan.",
+    "seenEmpty": "Nog niemand heeft hem gezien.",
+    "keep": "Bewaren als Short",
+    "keepHint": "Blijft na de 24 uur op je kanaal",
+    "keepConfirm": "Voorgoed bewaren?",
+    "keepYes": "Bewaren",
+    "keeping": "Bewaren…",
+    "kept": "Bewaard. Hij blijft als Short op je kanaal.",
+    "keepFailed": "Deze story kon niet worden bewaard.",
+    "keepWalletPrompt": "Onderteken om je story als Short te bewaren"
   }
 }

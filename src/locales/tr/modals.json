@@ -116,7 +116,12 @@
     "preparing": "Video yüklemeye hazırlanıyor...",
     "renderUnavailable": "İşleme servisi henüz kullanılamıyor. Zaman çizelgesi verisi konsola yazıldı.",
     "backToEditor": "Düzenleyiciye Dön",
-    "postError": "Video yüklemeye hazırlanamadı. Lütfen bunun yerine indirmeyi dene."
+    "postError": "Video yüklemeye hazırlanamadı. Lütfen bunun yerine indirmeyi dene.",
+    "postAs": "Şu olarak paylaş",
+    "postAsStory": "Hikâye",
+    "postAsStoryHint": "24 saat, Shorts akışının başında",
+    "postAsShort": "Shorts",
+    "postAsShortHint": "Kanalında kalır"
   },
   "profile": {
     "mustLogin": "Önce giriş yapmalısın",

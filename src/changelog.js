@@ -7,6 +7,21 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.30',
+    date: '2026-10-27',
+    summary: 'Story streaks: post a story every day and a flame with your streak count shows on your avatar in the stories row.',
+  },
+  {
+    version: '1.80.29',
+    date: '2026-10-27',
+    summary: 'Your live story now shows who has seen it, and Keep as short turns it into a short that stays on your channel.',
+  },
+  {
+    version: '1.80.28',
+    date: '2026-10-27',
+    summary: 'Stories now post in two taps: pick or record a clip, then post. Start one from the + on your avatar, the shorts uploader or the editor.',
+  },
+  {
     version: '1.80.26',
     date: '2026-10-27',
     summary:

@@ -157,8 +157,8 @@ function EmbedCameraRecord() {
   const location = useLocation();
   const user = useAppStore((s) => s.user);
   const {
-    fromStories, setFromStories, setIsStory, setVideoFile, setPrevVideoFile,
-    setVideoDuration, setGeneratedThumbnail, setVideoMode,
+    fromStories, setFromStories, isStory, setIsStory, setVideoFile, setPrevVideoFile,
+    setVideoDuration, setGeneratedThumbnail, setVideoMode, pickFirstThumbnail,
   } = useEmbedUpload();
 
   useEffect(() => {
@@ -791,8 +791,9 @@ function EmbedCameraRecord() {
     setPrevVideoFile(file);
     setVideoDuration(duration);
     setVideoMode(fromStories ? 'shorts' : 'longform');
-    navigate('/embed-studio/thumbnail');
-  }, [recordedBlob, mimeType, fileExt, fromStories, navigate, setGeneratedThumbnail, setVideoFile, setPrevVideoFile, setVideoDuration, setVideoMode, stopStream]);
+    // A story goes straight to Post (see EmbedVideoUploadStep1).
+    navigate(isStory && pickFirstThumbnail(thumbs) ? '/embed-studio/preview' : '/embed-studio/thumbnail');
+  }, [recordedBlob, mimeType, fileExt, fromStories, isStory, pickFirstThumbnail, navigate, setGeneratedThumbnail, setVideoFile, setPrevVideoFile, setVideoDuration, setVideoMode, stopStream]);
 
   const requestClose = () => setConfirmClose(true);
   const doClose = () => {

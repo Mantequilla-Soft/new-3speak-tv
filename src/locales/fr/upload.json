@@ -132,7 +132,9 @@
     "browseFiles": "Parcourir les fichiers",
     "proceed": "Passer aux miniatures",
     "replace": "Remplacer la vidéo",
-    "editVideo": "Modifier cette vidéo"
+    "editVideo": "Modifier cette vidéo",
+    "asStory": "Publier en story de 24 h",
+    "asStoryHint": "Elle passe en tête du fil Shorts et vos abonnés reçoivent une notification. Tant qu’elle est en ligne, vous pouvez encore la garder comme Short."
   },
   "details": {
     "guests": {
@@ -490,5 +492,20 @@
       "noAccount": "Aucun compte ne porte ce nom.",
       "addButton": "Ajouter le lien"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Ajouter une légende (facultatif)",
+    "moreOptions": "Plus d’options",
+    "reach_one": "Atteint votre {{count}} abonné et passe en tête du fil Shorts pendant 24 heures.",
+    "reach_many": "Atteint vos {{count}} abonnés et passe en tête du fil Shorts pendant 24 heures.",
+    "reach_other": "Atteint vos {{count}} abonnés et passe en tête du fil Shorts pendant 24 heures.",
+    "reachNoCount": "Atteint vos abonnés et passe en tête du fil Shorts pendant 24 heures.",
+    "streakOn_one": "Vous êtes sur une série de stories de {{count}} jour.",
+    "streakOn_many": "Vous êtes sur une série de stories de {{count}} jours.",
+    "streakOn_other": "Vous êtes sur une série de stories de {{count}} jours.",
+    "streakNext_one": "Avec celle-ci, votre série de stories passe à {{count}} jour.",
+    "streakNext_many": "Avec celle-ci, votre série de stories passe à {{count}} jours.",
+    "streakNext_other": "Avec celle-ci, votre série de stories passe à {{count}} jours.",
+    "streakStart": "Publiez une story chaque jour pour créer une série."
   }
 }

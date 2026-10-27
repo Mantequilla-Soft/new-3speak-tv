@@ -25,7 +25,9 @@
       "boosts_received": "Boost diterima",
       "boost_amount_received": "Jumlah diterima",
       "boosts_given": "Boost diberikan",
-      "boost_amount_given": "Jumlah diberikan"
+      "boost_amount_given": "Jumlah diberikan",
+      "story_uploads": "Story",
+      "story_streak": "Streak story"
     },
     "metricsInSentence": {
       "video_uploads": "video",
@@ -40,7 +42,9 @@
       "boosts_received": "boost diterima",
       "boost_amount_received": "jumlah diterima",
       "boosts_given": "boost diberikan",
-      "boost_amount_given": "jumlah diberikan"
+      "boost_amount_given": "jumlah diberikan",
+      "story_uploads": "story",
+      "story_streak": "streak story"
     },
     "blurbs": {
       "video_uploads": "Video diunggah",
@@ -55,7 +59,9 @@
       "boosts_received": "Boost yang dikirim ke siaran mereka",
       "boost_amount_received": "Total jumlah boost yang diterima",
       "boosts_given": "Boost yang mereka kirim ke streamer lain",
-      "boost_amount_given": "Total jumlah boost yang mereka berikan"
+      "boost_amount_given": "Total jumlah boost yang mereka berikan",
+      "story_uploads": "Story yang diposting",
+      "story_streak": "Hari berturut-turut terbanyak dengan story"
     },
     "blurbsInSentence": {
       "video_uploads": "video diunggah",
@@ -70,18 +76,22 @@
       "boosts_received": "boost yang dikirim ke siaran mereka",
       "boost_amount_received": "total jumlah boost yang diterima",
       "boosts_given": "boost yang mereka kirim ke streamer lain",
-      "boost_amount_given": "total jumlah boost yang mereka berikan"
+      "boost_amount_given": "total jumlah boost yang mereka berikan",
+      "story_uploads": "story yang diposting",
+      "story_streak": "hari berturut-turut terbanyak dengan story"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Streaming"
+      "streaming": "Streaming",
+      "stories": "Story"
     },
     "badgeNouns": {
       "video_uploads": "Video",
       "short_uploads": "Shorts",
       "video_watch_secs": "Ditonton",
       "short_watch_secs": "Shorts Ditonton",
-      "tags_given": "Pemberi Tag"
+      "tags_given": "Pemberi Tag",
+      "story_streak": "Streak"
     },
     "badgeLabel": "{{noun}} {{tier}}",
     "badgeTitleAllTime": "Peringkat #{{rank}} untuk {{what}} sepanjang waktu",

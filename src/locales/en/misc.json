@@ -25,7 +25,9 @@
       "boosts_received": "Boosts received",
       "boost_amount_received": "Amount received",
       "boosts_given": "Boosts given",
-      "boost_amount_given": "Amount given"
+      "boost_amount_given": "Amount given",
+      "story_uploads": "Stories",
+      "story_streak": "Story streak"
     },
     "metricsInSentence": {
       "video_uploads": "videos",
@@ -40,7 +42,9 @@
       "boosts_received": "boosts received",
       "boost_amount_received": "amount received",
       "boosts_given": "boosts given",
-      "boost_amount_given": "amount given"
+      "boost_amount_given": "amount given",
+      "story_uploads": "stories",
+      "story_streak": "story streak"
     },
     "blurbs": {
       "video_uploads": "Videos uploaded",
@@ -55,7 +59,9 @@
       "boosts_received": "Boosts sent to their streams",
       "boost_amount_received": "Summed amount of boosts received",
       "boosts_given": "Boosts they sent to other streamers",
-      "boost_amount_given": "Summed amount of boosts they gave"
+      "boost_amount_given": "Summed amount of boosts they gave",
+      "story_uploads": "Stories posted",
+      "story_streak": "Most days in a row with a story"
     },
     "blurbsInSentence": {
       "video_uploads": "videos uploaded",
@@ -70,18 +76,22 @@
       "boosts_received": "boosts sent to their streams",
       "boost_amount_received": "summed amount of boosts received",
       "boosts_given": "boosts they sent to other streamers",
-      "boost_amount_given": "summed amount of boosts they gave"
+      "boost_amount_given": "summed amount of boosts they gave",
+      "story_uploads": "stories posted",
+      "story_streak": "most days in a row with a story"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Streaming"
+      "streaming": "Streaming",
+      "stories": "Stories"
     },
     "badgeNouns": {
       "video_uploads": "Videos",
       "short_uploads": "Shorts",
       "video_watch_secs": "Watched",
       "short_watch_secs": "Shorts Watched",
-      "tags_given": "Tagger"
+      "tags_given": "Tagger",
+      "story_streak": "Streak"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Ranked #{{rank}} for {{what}} over all time",

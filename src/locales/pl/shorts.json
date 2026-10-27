@@ -8,7 +8,11 @@
   },
   "stories": {
     "you": "Ty",
-    "storyTitle": "Relacja {{user}}"
+    "storyTitle": "Relacja {{user}}",
+    "streakTitle_one": "Seria relacji: {{count}} dzień",
+    "streakTitle_few": "Seria relacji: {{count}} dni",
+    "streakTitle_many": "Seria relacji: {{count}} dni",
+    "streakTitle_other": "Seria relacji: {{count}} dnia"
   },
   "errors": {
     "votingUnavailable": "Głosowanie nie jest dostępne dla tego posta",
@@ -117,5 +121,22 @@
     "title": "Ta relacja wygasła",
     "body": "Relacje na 3Speak są widoczne przez 24 godziny.",
     "next": "Następny short"
+  },
+  "storyTools": {
+    "seenBy_one": "Wyświetlenia: {{count}}",
+    "seenBy_few": "Wyświetlenia: {{count}}",
+    "seenBy_many": "Wyświetlenia: {{count}}",
+    "seenBy_other": "Wyświetlenia: {{count}}",
+    "seenTitle": "Kto obejrzał",
+    "seenNote": "Zalogowani widzowie, którzy mają włączoną historię oglądania.",
+    "seenEmpty": "Nikt jej jeszcze nie obejrzał.",
+    "keep": "Zachowaj jako shorta",
+    "keepHint": "Zostanie na Twoim kanale po 24 godzinach",
+    "keepConfirm": "Zachować ją na stałe?",
+    "keepYes": "Zachowaj",
+    "keeping": "Zachowywanie…",
+    "kept": "Zachowano. Zostaje na Twoim kanale jako short.",
+    "keepFailed": "Nie udało się zachować tej relacji.",
+    "keepWalletPrompt": "Podpisz, aby zachować relację jako shorta"
   }
 }

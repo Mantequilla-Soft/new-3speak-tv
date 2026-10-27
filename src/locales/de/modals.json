@@ -116,7 +116,12 @@
     "preparing": "Video wird für den Upload vorbereitet...",
     "renderUnavailable": "Der Render-Dienst ist noch nicht verfügbar. Die Timeline-Daten wurden in der Konsole ausgegeben.",
     "backToEditor": "Zurück zum Editor",
-    "postError": "Das Video konnte nicht für den Upload vorbereitet werden. Bitte lade es stattdessen herunter."
+    "postError": "Das Video konnte nicht für den Upload vorbereitet werden. Bitte lade es stattdessen herunter.",
+    "postAs": "Posten als",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 Stunden, ganz oben im Shorts-Feed",
+    "postAsShort": "Short",
+    "postAsShortHint": "Bleibt auf deinem Kanal"
   },
   "profile": {
     "mustLogin": "Du musst dich zuerst anmelden",

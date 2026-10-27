@@ -8,7 +8,8 @@
   },
   "stories": {
     "you": "あなた",
-    "storyTitle": "{{user}}さんのストーリー"
+    "storyTitle": "{{user}}さんのストーリー",
+    "streakTitle_other": "{{count}}日連続ストーリー"
   },
   "errors": {
     "votingUnavailable": "この投稿には投票できません",
@@ -111,5 +112,19 @@
     "title": "このストーリーは期限切れです",
     "body": "3Speakのストーリーは24時間公開されます。",
     "next": "次のショート"
+  },
+  "storyTools": {
+    "seenBy_other": "{{count}}人が閲覧",
+    "seenTitle": "閲覧したユーザー",
+    "seenNote": "ログイン中で、視聴履歴をオンにしている視聴者です。",
+    "seenEmpty": "まだ誰も見ていません。",
+    "keep": "ショートとして残す",
+    "keepHint": "24時間後もチャンネルに残ります",
+    "keepConfirm": "ずっと残しますか？",
+    "keepYes": "残す",
+    "keeping": "保存中…",
+    "kept": "残しました。ショートとしてチャンネルに残ります。",
+    "keepFailed": "このストーリーを残せませんでした。",
+    "keepWalletPrompt": "ストーリーをショートとして残すには署名してください"
   }
 }

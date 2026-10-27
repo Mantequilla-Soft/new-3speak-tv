@@ -132,7 +132,9 @@
     "browseFiles": "Sfoglia file",
     "proceed": "Vai alle miniature",
     "replace": "Sostituisci video",
-    "editVideo": "Modifica questo video"
+    "editVideo": "Modifica questo video",
+    "asStory": "Pubblica come storia di 24 ore",
+    "asStoryHint": "Va in cima al feed Shorts e i tuoi follower ricevono una notifica. Finché è attiva puoi ancora tenerla come short."
   },
   "details": {
     "guests": {
@@ -490,5 +492,20 @@
       "noAccount": "Non esiste un account con questo nome.",
       "addButton": "Aggiungi link"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Aggiungi una didascalia (facoltativa)",
+    "moreOptions": "Altre opzioni",
+    "reach_one": "Raggiunge il tuo {{count}} follower e resta in cima al feed Shorts per 24 ore.",
+    "reach_many": "Raggiunge i tuoi {{count}} follower e resta in cima al feed Shorts per 24 ore.",
+    "reach_other": "Raggiunge i tuoi {{count}} follower e resta in cima al feed Shorts per 24 ore.",
+    "reachNoCount": "Raggiunge i tuoi follower e resta in cima al feed Shorts per 24 ore.",
+    "streakOn_one": "Sei a una serie di storie di {{count}} giorno.",
+    "streakOn_many": "Sei a una serie di storie di {{count}} giorni.",
+    "streakOn_other": "Sei a una serie di storie di {{count}} giorni.",
+    "streakNext_one": "Con questa la tua serie di storie arriva a {{count}} giorno.",
+    "streakNext_many": "Con questa la tua serie di storie arriva a {{count}} giorni.",
+    "streakNext_other": "Con questa la tua serie di storie arriva a {{count}} giorni.",
+    "streakStart": "Pubblica una storia ogni giorno per creare una serie."
   }
 }

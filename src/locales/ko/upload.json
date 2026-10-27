@@ -132,7 +132,9 @@
     "browseFiles": "파일 찾아보기",
     "proceed": "썸네일로 이동",
     "replace": "동영상 교체",
-    "editVideo": "이 동영상 편집"
+    "editVideo": "이 동영상 편집",
+    "asStory": "24시간 스토리로 올리기",
+    "asStoryHint": "쇼츠 피드 맨 앞에 표시되고 팔로워에게 알림이 가요. 게시 중에는 쇼츠로 남겨 둘 수도 있어요."
   },
   "details": {
     "guests": {
@@ -486,5 +488,14 @@
       "noAccount": "그 이름의 계정이 없습니다.",
       "addButton": "링크 추가"
     }
+  },
+  "story": {
+    "captionPlaceholder": "설명 추가 (선택)",
+    "moreOptions": "옵션 더보기",
+    "reach_other": "팔로워 {{count}}명에게 전달되고 24시간 동안 쇼츠 피드 맨 앞에 표시돼요.",
+    "reachNoCount": "팔로워에게 전달되고 24시간 동안 쇼츠 피드 맨 앞에 표시돼요.",
+    "streakOn_other": "{{count}}일 연속 스토리를 올리고 있어요.",
+    "streakNext_other": "이번 스토리로 {{count}}일 연속이 돼요.",
+    "streakStart": "매일 스토리를 올려 연속 기록을 쌓아 보세요."
   }
 }

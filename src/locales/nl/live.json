@@ -10,7 +10,8 @@
     "backHome": "Terug naar Home",
     "howWasStream": "Hoe ging je stream?",
     "connecting": "Verbinden met OpenPods…",
-    "authenticating": "Aanmelden bij OpenPods…"
+    "authenticating": "Aanmelden bij OpenPods…",
+    "postStoryAboutIt": "Plaats er een story over"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod nu live",

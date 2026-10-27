@@ -25,7 +25,9 @@
       "boosts_received": "Impulsos recibidos",
       "boost_amount_received": "Monto recibido",
       "boosts_given": "Impulsos dados",
-      "boost_amount_given": "Monto dado"
+      "boost_amount_given": "Monto dado",
+      "story_uploads": "Historias",
+      "story_streak": "Racha de historias"
     },
     "metricsInSentence": {
       "video_uploads": "videos",
@@ -40,7 +42,9 @@
       "boosts_received": "impulsos recibidos",
       "boost_amount_received": "monto recibido",
       "boosts_given": "impulsos dados",
-      "boost_amount_given": "monto dado"
+      "boost_amount_given": "monto dado",
+      "story_uploads": "historias",
+      "story_streak": "racha de historias"
     },
     "blurbs": {
       "video_uploads": "Videos subidos",
@@ -55,7 +59,9 @@
       "boosts_received": "Impulsos enviados a sus transmisiones",
       "boost_amount_received": "Suma de los impulsos recibidos",
       "boosts_given": "Impulsos que enviaron a otros streamers",
-      "boost_amount_given": "Suma de los impulsos que dieron"
+      "boost_amount_given": "Suma de los impulsos que dieron",
+      "story_uploads": "Historias publicadas",
+      "story_streak": "Más días seguidos con una historia"
     },
     "blurbsInSentence": {
       "video_uploads": "videos subidos",
@@ -70,18 +76,22 @@
       "boosts_received": "impulsos enviados a sus transmisiones",
       "boost_amount_received": "suma de los impulsos recibidos",
       "boosts_given": "impulsos que enviaron a otros streamers",
-      "boost_amount_given": "suma de los impulsos que dieron"
+      "boost_amount_given": "suma de los impulsos que dieron",
+      "story_uploads": "historias publicadas",
+      "story_streak": "más días seguidos con una historia"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Transmisión"
+      "streaming": "Transmisión",
+      "stories": "Historias"
     },
     "badgeNouns": {
       "video_uploads": "Videos",
       "short_uploads": "Shorts",
       "video_watch_secs": "Visto",
       "short_watch_secs": "Shorts vistos",
-      "tags_given": "Etiquetador"
+      "tags_given": "Etiquetador",
+      "story_streak": "Racha"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Puesto #{{rank}} en {{what}} de todos los tiempos",

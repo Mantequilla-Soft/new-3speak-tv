@@ -1,0 +1,167 @@
+@use "../../mixins.scss" as *;
+
+// Sits in the shorts caption, over the video: light text on the dark scrim.
+.storyOwnerTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    svg {
+      font-size: 0.9rem;
+    }
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    // No red fills anywhere: the confirm is an outline in the accent.
+    &--primary {
+      border-color: var(--accent-primary);
+    }
+  }
+
+  &__confirm {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #fff;
+  }
+}
+
+// "Seen by": a centred card on desktop, a bottom sheet on phones.
+.storySeenOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.7);
+
+  @include respond(phone) {
+    align-items: flex-end;
+    padding: 0;
+  }
+}
+
+.storySeenSheet {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg, var(--bg-primary));
+  color: var(--text-primary);
+
+  @include respond(phone) {
+    max-width: 100%;
+    max-height: 75vh;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    animation: story-seen-slide-up 0.25s ease forwards;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+  }
+
+  &__close {
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  &__note,
+  &__empty {
+    margin: 6px 0 10px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 0;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+
+  &__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  &__when {
+    flex: none;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+}
+
+@keyframes story-seen-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

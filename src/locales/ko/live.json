@@ -10,7 +10,8 @@
     "backHome": "홈으로 돌아가기",
     "howWasStream": "방송은 어떠셨나요?",
     "connecting": "OpenPods에 연결하는 중…",
-    "authenticating": "OpenPods 인증 중…"
+    "authenticating": "OpenPods 인증 중…",
+    "postStoryAboutIt": "이 방송에 대한 스토리 올리기"
   },
   "strip": {
     "liveNow_other": "지금 <n>{{count}}</n>개의 OpenPod 라이브 중",

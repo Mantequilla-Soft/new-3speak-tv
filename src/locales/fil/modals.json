@@ -116,7 +116,12 @@
     "preparing": "Inihahanda ang video para i-upload...",
     "renderUnavailable": "Hindi pa available ang render service. Naka-log sa console ang timeline data.",
     "backToEditor": "Bumalik sa Editor",
-    "postError": "Hindi maihanda ang video para i-upload. Subukang i-download na lang."
+    "postError": "Hindi maihanda ang video para i-upload. Subukang i-download na lang.",
+    "postAs": "I-post bilang",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 oras, nasa unahan ng Shorts feed",
+    "postAsShort": "Short",
+    "postAsShortHint": "Mananatili sa channel mo"
   },
   "profile": {
     "mustLogin": "Kailangan mo munang mag-log in",

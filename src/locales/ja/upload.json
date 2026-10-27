@@ -132,7 +132,9 @@
     "browseFiles": "ファイルを選択",
     "proceed": "サムネイルへ進む",
     "replace": "動画を差し替え",
-    "editVideo": "この動画を編集"
+    "editVideo": "この動画を編集",
+    "asStory": "24時間ストーリーとして投稿",
+    "asStoryHint": "ショートフィードの先頭に表示され、フォロワーに通知が届きます。公開中ならショートとして残すこともできます。"
   },
   "details": {
     "guests": {
@@ -486,5 +488,14 @@
       "noAccount": "その名前のアカウントはありません。",
       "addButton": "リンクを追加"
     }
+  },
+  "story": {
+    "captionPlaceholder": "キャプションを追加（任意）",
+    "moreOptions": "その他のオプション",
+    "reach_other": "{{count}}人のフォロワーに届き、24時間ショートフィードの先頭に表示されます。",
+    "reachNoCount": "フォロワーに届き、24時間ショートフィードの先頭に表示されます。",
+    "streakOn_other": "{{count}}日連続でストーリーを投稿中です。",
+    "streakNext_other": "これで{{count}}日連続のストーリーになります。",
+    "streakStart": "毎日ストーリーを投稿して連続記録を作りましょう。"
   }
 }

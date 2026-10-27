@@ -140,6 +140,46 @@
     color: #e94560;
   }
 
+  // Short or story, after the editor's "Post to 3Speak" (outline buttons: no red fills).
+  .post-target {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .post-target__btn {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 180px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid rgb(227, 19, 55);
+    background: transparent;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+
+    small {
+      opacity: 0.75;
+      font-size: 0.75rem;
+    }
+
+    &:hover {
+      background: rgba(227, 19, 55, 0.08);
+    }
+  }
+
+  .post-target__back {
+    border: none;
+    background: none;
+    color: #fff;
+    opacity: 0.75;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
   .render-btn {
     padding: 0.5rem 1.5rem;
     border: none;

@@ -25,7 +25,9 @@
       "boosts_received": "Natanggap na boosts",
       "boost_amount_received": "Halagang natanggap",
       "boosts_given": "Ibinigay na boosts",
-      "boost_amount_given": "Halagang ibinigay"
+      "boost_amount_given": "Halagang ibinigay",
+      "story_uploads": "Mga story",
+      "story_streak": "Story streak"
     },
     "metricsInSentence": {
       "video_uploads": "video",
@@ -40,7 +42,9 @@
       "boosts_received": "natanggap na boosts",
       "boost_amount_received": "halagang natanggap",
       "boosts_given": "ibinigay na boosts",
-      "boost_amount_given": "halagang ibinigay"
+      "boost_amount_given": "halagang ibinigay",
+      "story_uploads": "mga story",
+      "story_streak": "story streak"
     },
     "blurbs": {
       "video_uploads": "Mga video na in-upload",
@@ -55,7 +59,9 @@
       "boosts_received": "Mga boost na ipinadala sa kanilang stream",
       "boost_amount_received": "Kabuuang halaga ng natanggap na boosts",
       "boosts_given": "Mga boost na ipinadala nila sa ibang streamer",
-      "boost_amount_given": "Kabuuang halaga ng mga boost na ibinigay nila"
+      "boost_amount_given": "Kabuuang halaga ng mga boost na ibinigay nila",
+      "story_uploads": "Mga na-post na story",
+      "story_streak": "Pinakamaraming sunod-sunod na araw na may story"
     },
     "blurbsInSentence": {
       "video_uploads": "mga video na in-upload",
@@ -70,18 +76,22 @@
       "boosts_received": "mga boost na ipinadala sa kanilang stream",
       "boost_amount_received": "kabuuang halaga ng natanggap na boosts",
       "boosts_given": "mga boost na ipinadala nila sa ibang streamer",
-      "boost_amount_given": "kabuuang halaga ng mga boost na ibinigay nila"
+      "boost_amount_given": "kabuuang halaga ng mga boost na ibinigay nila",
+      "story_uploads": "mga na-post na story",
+      "story_streak": "pinakamaraming sunod-sunod na araw na may story"
     },
     "groups": {
       "video": "Video",
-      "streaming": "Streaming"
+      "streaming": "Streaming",
+      "stories": "Mga story"
     },
     "badgeNouns": {
       "video_uploads": "Videos",
       "short_uploads": "Shorts",
       "video_watch_secs": "Napanood",
       "short_watch_secs": "Shorts na Napanood",
-      "tags_given": "Tagger"
+      "tags_given": "Tagger",
+      "story_streak": "Streak"
     },
     "badgeLabel": "{{tier}} {{noun}}",
     "badgeTitleAllTime": "Rank #{{rank}} sa {{what}} sa lahat ng panahon",

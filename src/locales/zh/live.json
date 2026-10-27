@@ -10,7 +10,8 @@
     "backHome": "返回首页",
     "howWasStream": "这次直播体验如何？",
     "connecting": "正在连接 OpenPods…",
-    "authenticating": "正在通过 OpenPods 验证…"
+    "authenticating": "正在通过 OpenPods 验证…",
+    "postStoryAboutIt": "发布一条相关快拍"
   },
   "strip": {
     "liveNow_other": "<n>{{count}}</n> 个 OpenPod 正在直播",

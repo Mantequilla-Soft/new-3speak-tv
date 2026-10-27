@@ -10,7 +10,8 @@
     "backHome": "Zurück zur Startseite",
     "howWasStream": "Wie war dein Stream?",
     "connecting": "Verbindung zu OpenPods wird hergestellt…",
-    "authenticating": "Anmeldung bei OpenPods…"
+    "authenticating": "Anmeldung bei OpenPods…",
+    "postStoryAboutIt": "Eine Story darüber posten"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod jetzt live",

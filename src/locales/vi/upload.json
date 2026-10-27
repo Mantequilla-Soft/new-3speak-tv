@@ -132,7 +132,9 @@
     "browseFiles": "Duyệt tệp",
     "proceed": "Tiếp tục đến hình thu nhỏ",
     "replace": "Thay video",
-    "editVideo": "Chỉnh sửa video này"
+    "editVideo": "Chỉnh sửa video này",
+    "asStory": "Đăng thành tin 24 giờ",
+    "asStoryHint": "Tin sẽ đứng đầu bảng tin Shorts và người theo dõi bạn sẽ nhận thông báo. Khi tin còn hiển thị, bạn vẫn có thể giữ lại thành Shorts."
   },
   "details": {
     "guests": {
@@ -486,5 +488,14 @@
       "noAccount": "Không có tài khoản nào với tên đó.",
       "addButton": "Thêm liên kết"
     }
+  },
+  "story": {
+    "captionPlaceholder": "Thêm chú thích (không bắt buộc)",
+    "moreOptions": "Tùy chọn khác",
+    "reach_other": "Đến với {{count}} người theo dõi của bạn và đứng đầu bảng tin Shorts trong 24 giờ.",
+    "reachNoCount": "Đến với người theo dõi của bạn và đứng đầu bảng tin Shorts trong 24 giờ.",
+    "streakOn_other": "Bạn đang có chuỗi đăng tin {{count}} ngày.",
+    "streakNext_other": "Tin này đưa chuỗi đăng tin của bạn lên {{count}} ngày.",
+    "streakStart": "Đăng một tin mỗi ngày để tạo chuỗi."
   }
 }

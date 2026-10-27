@@ -10,7 +10,8 @@
     "backHome": "ホームに戻る",
     "howWasStream": "配信はいかがでしたか？",
     "connecting": "OpenPods に接続中…",
-    "authenticating": "OpenPods で認証中…"
+    "authenticating": "OpenPods で認証中…",
+    "postStoryAboutIt": "この配信についてストーリーを投稿"
   },
   "strip": {
     "liveNow_other": "<n>{{count}}</n> 件の OpenPod が配信中",

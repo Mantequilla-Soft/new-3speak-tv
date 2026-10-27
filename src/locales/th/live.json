@@ -10,7 +10,8 @@
     "backHome": "กลับหน้าแรก",
     "howWasStream": "ไลฟ์ของคุณเป็นอย่างไรบ้าง?",
     "connecting": "กำลังเชื่อมต่อกับ OpenPods…",
-    "authenticating": "กำลังยืนยันตัวตนกับ OpenPods…"
+    "authenticating": "กำลังยืนยันตัวตนกับ OpenPods…",
+    "postStoryAboutIt": "โพสต์สตอรี่เกี่ยวกับเรื่องนี้"
   },
   "strip": {
     "liveNow_other": "OpenPods ไลฟ์อยู่ตอนนี้ <n>{{count}}</n> รายการ",

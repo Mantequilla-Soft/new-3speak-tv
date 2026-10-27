@@ -116,7 +116,12 @@
     "preparing": "Menyiapkan video untuk diunggah...",
     "renderUnavailable": "Layanan render belum tersedia. Data timeline dicatat ke konsol.",
     "backToEditor": "Kembali ke Editor",
-    "postError": "Gagal menyiapkan video untuk diunggah. Silakan coba unduh saja."
+    "postError": "Gagal menyiapkan video untuk diunggah. Silakan coba unduh saja.",
+    "postAs": "Posting sebagai",
+    "postAsStory": "Story",
+    "postAsStoryHint": "24 jam, paling atas di feed Shorts",
+    "postAsShort": "Shorts",
+    "postAsShortHint": "Tetap ada di channel-mu"
   },
   "profile": {
     "mustLogin": "Kamu harus masuk dulu",

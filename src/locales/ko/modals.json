@@ -116,7 +116,12 @@
     "preparing": "업로드할 동영상 준비 중...",
     "renderUnavailable": "렌더링 서비스를 아직 사용할 수 없어요. 타임라인 데이터를 콘솔에 기록했어요.",
     "backToEditor": "편집기로 돌아가기",
-    "postError": "업로드할 동영상을 준비하지 못했어요. 대신 다운로드해 보세요."
+    "postError": "업로드할 동영상을 준비하지 못했어요. 대신 다운로드해 보세요.",
+    "postAs": "게시 형식",
+    "postAsStory": "스토리",
+    "postAsStoryHint": "24시간, 쇼츠 피드 맨 앞",
+    "postAsShort": "쇼츠",
+    "postAsShortHint": "채널에 계속 남아요"
   },
   "profile": {
     "mustLogin": "먼저 로그인해야 해요",
