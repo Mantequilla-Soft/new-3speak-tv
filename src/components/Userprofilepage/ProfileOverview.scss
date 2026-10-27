@@ -19,6 +19,17 @@
     min-width: 0;
   }
 
+  // The creator put the links column on the left (profile layout).
+  @media screen and (min-width: 1025px) {
+    &--links-left {
+      flex-direction: row-reverse;
+
+      .profile-links-panel--collapsed { justify-content: flex-start; }
+      .plp-handle svg,
+      .plp-hide svg { transform: scaleX(-1); }
+    }
+  }
+
   .pov-section {
     margin-bottom: 2rem;
 
@@ -165,4 +176,93 @@
     .snap-list > * { width: 280px; }
     .card-container--shorts > * { width: 156px; }
   }
+
+  // ── Grid sections ─────────────────────────────────────────────────────────
+  // A section the creator set to "grid" wraps into rows instead of scrolling
+  // sideways. Same tile kinds, sized by the column instead of a fixed width.
+  .pov-section--grid {
+    .card-container,
+    .playlist-card-container,
+    .audio-tile-grid,
+    .snap-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0.9rem 0.75rem;
+      overflow: visible;
+      scroll-snap-type: none;
+      padding-bottom: 0;
+
+      > * { width: auto; min-width: 0; }
+    }
+
+    .card-container--shorts { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .playlist-card-container { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+    .audio-tile-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+    .snap-list { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); align-items: start; }
+
+    @include mix.respond(phone) {
+      .card-container { grid-template-columns: 1fr; }
+      .card-container--shorts,
+      .playlist-card-container,
+      .audio-tile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .snap-list { grid-template-columns: 1fr; }
+    }
+  }
 }
+
+// ── The 12-column grid ──────────────────────────────────────────────────────
+// Sections carry a span (lib/profileLayoutGrid.js); narrower ones share a row.
+// Phones and tablets keep one column: every section takes the full row there.
+.pov-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 1.25rem;
+  align-items: start;
+
+  > * { min-width: 0; }
+
+  @media screen and (max-width: 767px) {
+    > * { grid-column: 1 / -1 !important; }   // beats the inline span
+  }
+}
+
+// A section with nothing to show must not hold columns open in its row.
+.pov-slot:empty,
+.pov-slot:has(> .pov-playlist-rail:only-child:empty),
+.pov-slot:has(.pov-section--audio .profile-empty) {
+  display: none;
+}
+
+// Edit mode: sections above the dock guide's layer.
+.pov-grid--editing {
+  position: relative;
+
+  > .ple-frame,
+  > .ple-free { position: relative; z-index: 1; }
+}
+
+// A section that fills its column's height (the links page beside the
+// trailer; see .pov-col--fill).
+.pov-slot--fill {
+  display: flex;
+  flex-direction: column;
+}
+
+// A column of the grid: one or more sections stacked (lib/profileLayoutGrid.js).
+.pov-col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+// A lone links page beside other columns: the column takes the row's height
+// and the section inside fills it.
+.pov-col--fill {
+  align-self: stretch;
+
+  > .pov-slot--fill { flex: 1 1 auto; }
+}
+
+.pov-grid--editing > .pov-col { position: relative; z-index: 1; }
+// The column with an open properties popover goes above the later ones.
+.pov-grid--editing > .pov-col:has(.ple-frame.is-open) { z-index: 30; }

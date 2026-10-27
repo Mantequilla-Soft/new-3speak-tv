@@ -274,5 +274,112 @@
     "unhiddenToast": "Tip kembali ditampilkan di profilmu",
     "hideFailed": "Tidak bisa mengubah tip ini. Silakan coba lagi.",
     "hideWalletPrompt": "Tanda tangani untuk mengubah tip mana yang tampil di profilmu"
+  },
+  "layout": {
+    "customize": "Sesuaikan profil",
+    "title": "Sesuaikan profilmu",
+    "hint": "Seret bagian lewat pegangannya: ke samping bagian lain untuk kolom baru, ke atas atau bawah sebuah bagian untuk menumpuknya, atau ke garis di antara baris untuk baris baru. Tarik tepi kanannya untuk mengubah lebar, dan gunakan roda gigi untuk propertinya.",
+    "mobileHint": "Ini profilmu di ponsel: satu kolom. Seret bagian ke atas atau bawah, sembunyikan, atau ubah propertinya. Sampai kamu mengubah sesuatu di sini, ponsel mengikuti tata letak desktop.",
+    "save": "Simpan tata letak",
+    "saving": "Menyimpan…",
+    "reset": "Kembalikan ke bawaan",
+    "undo": "Urungkan",
+    "redo": "Ulangi",
+    "undoTitle": "Urungkan (Ctrl+Z)",
+    "redoTitle": "Ulangi (Ctrl+Shift+Z)",
+    "matchDesktop": "Samakan dengan desktop",
+    "deviceDesktop": "Desktop",
+    "deviceMobile": "Ponsel",
+    "saved": "Tata letak profil disimpan",
+    "saveFailed": "Tidak dapat menyimpan tata letak: {{error}}",
+    "signInNeeded": "Silakan masuk lagi untuk menyimpan tata letak",
+    "drag": "Seret untuk mengurutkan",
+    "dropHere": "Lepaskan di sini",
+    "newRow": "Baris baru",
+    "resize": "Seret untuk mengubah lebar",
+    "dockHold": "tahan untuk kolom setinggi penuh",
+    "dockLeft": "Lepaskan: kolom kiri setinggi penuh",
+    "dockRight": "Lepaskan: kolom kanan setinggi penuh",
+    "moveUp": "Naikkan",
+    "moveDown": "Turunkan",
+    "show": "Tampilkan bagian ini",
+    "hide": "Sembunyikan bagian ini",
+    "settings": "Pengaturan bagian",
+    "remove": "Hapus bagian ini",
+    "hiddenBadge": "Tersembunyi",
+    "hiddenTitle": "Bagian tersembunyi",
+    "noSettings": "Bagian ini tidak punya pengaturan.",
+    "emptySection": "Belum ada yang bisa ditampilkan. Pengunjung baru melihat bagian ini setelah ada kontennya.",
+    "linksNote": "Hanya tampil di layar lebar. \"Di halaman\" menempatkannya di kisi bersama bagian lain; kamu juga bisa menyeretnya ke sana lewat pegangannya.",
+    "addPlaylist": "Tambahkan playlist sebagai bagian tersendiri",
+    "playlistMissing": "Playlist tidak ditemukan (dihapus atau privat)",
+    "fields": {
+      "playlist": "Playlist",
+      "heading": "Judul",
+      "count_other": "Tampilkan {{count}} item",
+      "playlists_other": "Tampilkan {{count}} playlist",
+      "size": "Ukuran video",
+      "size_sm": "Kecil",
+      "size_md": "Sedang",
+      "size_lg": "Besar",
+      "size_full": "Lebar penuh",
+      "showInfo": "Tampilkan judul & deskripsi",
+      "showSnap": "Tampilkan postingan komunitas terbaru",
+      "view": "Tata letak",
+      "viewRow": "Baris",
+      "viewGrid": "Kisi",
+      "side": "Posisi",
+      "sideLeft": "Kiri",
+      "sideRight": "Kanan",
+      "sideNone": "Di halaman"
+    },
+    "types": {
+      "trailer": "Trailer kanal",
+      "live": "Sedang live",
+      "audioPlaylists": "Album & playlist audio",
+      "playlistRails": "Isi playlist",
+      "playlist": "Playlist",
+      "links": "Halaman tautan"
+    },
+    "tour": {
+      "open": "Tur singkat",
+      "stepOf": "Langkah {{n}} dari {{total}}",
+      "skip": "Lewati",
+      "back": "Kembali",
+      "next": "Lanjut",
+      "done": "Ayo mulai",
+      "intro": {
+        "title": "Jadikan kanalmu milikmu",
+        "body": "Ikhtisarmu sekarang adalah editornya: susun seperti yang harus dilihat pengunjung. Tidak ada yang berubah bagi mereka sampai kamu menekan Simpan."
+      },
+      "move": {
+        "title": "Pindahkan bagian",
+        "body": "Pegang bagian di gagangnya lalu lepas di atas bagian lain. Tepi kiri atau kanan menaruhnya di samping, tepi atas atau bawah menumpuknya di kolom itu, dan garis di antara baris memulai baris baru."
+      },
+      "resize": {
+        "title": "Ubah lebar",
+        "body": "Tarik gagang di tepi kanan sebuah bagian. Lebarnya berubah bertahap, jadi bagian yang bersebelahan selalu sejajar."
+      },
+      "props": {
+        "title": "Properti bagian",
+        "body": "Roda gigi membuka properti bagian: berapa banyak entri, baris atau grid, judulnya, dan untuk trailer ukuran video serta apa yang ada di sampingnya."
+      },
+      "hide": {
+        "title": "Tampilkan dan sembunyikan",
+        "body": "Ikon mata menyembunyikan bagian. Bagian tersembunyi menunggu di baki di bawah halaman; klik salah satunya untuk mengembalikannya."
+      },
+      "links": {
+        "title": "Halaman tautanmu",
+        "body": "Seret halaman tautanmu ke halaman seperti bagian lain. Tahan sebentar di ujung kiri atau kanan halaman agar menjadi kolom setinggi penuh di sisi itu."
+      },
+      "mobile": {
+        "title": "Di ponsel juga",
+        "body": "Pindah ke Ponsel di bilah untuk mengatur tampilan profilmu di ponsel: satu kolom, dengan urutanmu sendiri. Sampai kamu mengubah sesuatu di sana, ponsel mengikuti tata letak desktop."
+      },
+      "save": {
+        "title": "Simpan kalau sudah pas",
+        "body": "Simpan tata letak menerbitkannya. Urungkan dan Ulangi melangkah maju mundur di antara perubahanmu (Ctrl+Z juga bisa), Batal membuangnya, dan Kembalikan ke bawaan memulihkan halaman standar. Tanda ? di samping judul membuka tur ini lagi."
+      }
+    }
   }
 }

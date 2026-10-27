@@ -308,5 +308,116 @@
     "unhiddenToast": "La mancia è di nuovo visibile sul tuo profilo",
     "hideFailed": "Impossibile modificare questa mancia. Riprova.",
     "hideWalletPrompt": "Firma per scegliere quali mance mostrare sul tuo profilo"
+  },
+  "layout": {
+    "customize": "Personalizza profilo",
+    "title": "Personalizza il tuo profilo",
+    "hint": "Trascina una sezione dalla maniglia: accanto a un'altra per una nuova colonna, sopra o sotto una per impilarla, oppure su una linea tra le righe per una nuova riga. Tira il bordo destro per cambiare la larghezza e usa l'ingranaggio per le proprietà.",
+    "mobileHint": "Ecco il tuo profilo sugli smartphone: una sola colonna. Trascina le sezioni su o giù, nascondile o cambiane le proprietà. Finché non cambi qualcosa qui, gli smartphone seguono il layout desktop.",
+    "save": "Salva layout",
+    "saving": "Salvataggio…",
+    "reset": "Ripristina predefinito",
+    "undo": "Annulla",
+    "redo": "Ripristina",
+    "undoTitle": "Annulla (Ctrl+Z)",
+    "redoTitle": "Ripristina (Ctrl+Maiusc+Z)",
+    "matchDesktop": "Come su desktop",
+    "deviceDesktop": "Desktop",
+    "deviceMobile": "Mobile",
+    "saved": "Layout del profilo salvato",
+    "saveFailed": "Impossibile salvare il layout: {{error}}",
+    "signInNeeded": "Accedi di nuovo per salvare il layout",
+    "drag": "Trascina per riordinare",
+    "dropHere": "Rilascia qui",
+    "newRow": "Nuova riga",
+    "resize": "Trascina per cambiare la larghezza",
+    "dockHold": "tieni premuto per una colonna a tutta altezza",
+    "dockLeft": "Rilascia: colonna sinistra a tutta altezza",
+    "dockRight": "Rilascia: colonna destra a tutta altezza",
+    "moveUp": "Sposta su",
+    "moveDown": "Sposta giù",
+    "show": "Mostra questa sezione",
+    "hide": "Nascondi questa sezione",
+    "settings": "Impostazioni della sezione",
+    "remove": "Rimuovi questa sezione",
+    "hiddenBadge": "Nascosta",
+    "hiddenTitle": "Sezioni nascoste",
+    "noSettings": "Questa sezione non ha impostazioni.",
+    "emptySection": "Ancora niente da mostrare. I visitatori vedranno questa sezione solo quando avrà dei contenuti.",
+    "linksNote": "Visibile solo sugli schermi larghi. \"Nella pagina\" la mette nella griglia con le altre sezioni; puoi anche trascinarla lì dalla maniglia.",
+    "addPlaylist": "Aggiungi una playlist come sezione a sé",
+    "playlistMissing": "Playlist non trovata (eliminata o privata)",
+    "fields": {
+      "playlist": "Playlist",
+      "heading": "Titolo",
+      "count_one": "Mostra {{count}} elemento",
+      "count_many": "Mostra {{count}} elementi",
+      "count_other": "Mostra {{count}} elementi",
+      "playlists_one": "Mostra {{count}} playlist",
+      "playlists_many": "Mostra {{count}} playlist",
+      "playlists_other": "Mostra {{count}} playlist",
+      "size": "Dimensione del video",
+      "size_sm": "Piccolo",
+      "size_md": "Medio",
+      "size_lg": "Grande",
+      "size_full": "Larghezza piena",
+      "showInfo": "Mostra titolo e descrizione",
+      "showSnap": "Mostra l'ultimo post della community",
+      "view": "Layout",
+      "viewRow": "Riga",
+      "viewGrid": "Griglia",
+      "side": "Posizione",
+      "sideLeft": "Sinistra",
+      "sideRight": "Destra",
+      "sideNone": "Nella pagina"
+    },
+    "types": {
+      "trailer": "Trailer del canale",
+      "live": "In diretta ora",
+      "audioPlaylists": "Album e playlist audio",
+      "playlistRails": "Contenuto delle playlist",
+      "playlist": "Playlist",
+      "links": "Pagina dei link"
+    },
+    "tour": {
+      "open": "Tour veloce",
+      "stepOf": "Passo {{n}} di {{total}}",
+      "skip": "Salta",
+      "back": "Indietro",
+      "next": "Avanti",
+      "done": "Andiamo",
+      "intro": {
+        "title": "Rendi tuo il tuo canale",
+        "body": "La tua Panoramica ora è l'editor: sistemala come vuoi che la vedano i visitatori. Per loro non cambia nulla finché non premi Salva."
+      },
+      "move": {
+        "title": "Sposta le sezioni",
+        "body": "Afferra una sezione dalla maniglia e rilasciala su un'altra. Il bordo sinistro o destro la mette accanto, il bordo in alto o in basso la impila in quella colonna, e le linee tra le righe creano una nuova riga."
+      },
+      "resize": {
+        "title": "Cambia la larghezza",
+        "body": "Trascina la maniglia sul bordo destro di una sezione. La larghezza cambia a scatti, così le sezioni vicine restano sempre allineate."
+      },
+      "props": {
+        "title": "Proprietà della sezione",
+        "body": "L'ingranaggio apre le proprietà di una sezione: quante voci, riga o griglia, il titolo e, per il trailer, la dimensione del video e cosa gli sta accanto."
+      },
+      "hide": {
+        "title": "Mostra e nascondi",
+        "body": "L'occhio nasconde una sezione. Le sezioni nascoste aspettano in un vassoio sotto la pagina; cliccane una per riportarla."
+      },
+      "links": {
+        "title": "La tua pagina link",
+        "body": "Trascina la tua pagina link nella pagina come qualsiasi altra sezione. Tienila un attimo all'estrema sinistra o destra per farla diventare una colonna a tutta altezza su quel lato."
+      },
+      "mobile": {
+        "title": "Anche sul telefono",
+        "body": "Passa a Mobile nella barra per decidere come appare il tuo profilo sui telefoni: una colonna, nel tuo ordine. Finché non cambi qualcosa lì, i telefoni seguono il layout desktop."
+      },
+      "save": {
+        "title": "Salva quando ti piace",
+        "body": "Salva layout lo pubblica. Annulla e Ripristina scorrono tra le modifiche (funziona anche Ctrl+Z), Annulla in basso le scarta e Ripristina predefinito riporta la pagina standard. Il ? accanto al titolo riapre questo tour."
+      }
+    }
   }
 }

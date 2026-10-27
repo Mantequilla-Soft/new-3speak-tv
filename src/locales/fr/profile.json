@@ -308,5 +308,116 @@
     "unhiddenToast": "Le pourboire est de nouveau visible sur ton profil",
     "hideFailed": "Impossible de modifier ce pourboire. Réessaie.",
     "hideWalletPrompt": "Signe pour choisir les pourboires affichés sur ton profil"
+  },
+  "layout": {
+    "customize": "Personnaliser le profil",
+    "title": "Personnalisez votre profil",
+    "hint": "Faites glisser une section par sa poignée : à côté d'une autre pour une nouvelle colonne, au-dessus ou en dessous d'une autre pour l'empiler, ou sur une ligne entre les rangées pour une nouvelle rangée. Tirez son bord droit pour changer la largeur et utilisez l'engrenage pour ses propriétés.",
+    "mobileHint": "Voici votre profil sur téléphone : une seule colonne. Déplacez les sections vers le haut ou le bas, masquez-les ou changez leurs propriétés. Tant que vous ne changez rien ici, les téléphones suivent votre mise en page ordinateur.",
+    "save": "Enregistrer la mise en page",
+    "saving": "Enregistrement…",
+    "reset": "Rétablir par défaut",
+    "undo": "Annuler",
+    "redo": "Rétablir",
+    "undoTitle": "Annuler (Ctrl+Z)",
+    "redoTitle": "Rétablir (Ctrl+Maj+Z)",
+    "matchDesktop": "Comme sur ordinateur",
+    "deviceDesktop": "Ordinateur",
+    "deviceMobile": "Mobile",
+    "saved": "Mise en page du profil enregistrée",
+    "saveFailed": "Impossible d'enregistrer votre mise en page : {{error}}",
+    "signInNeeded": "Reconnectez-vous pour enregistrer votre mise en page",
+    "drag": "Glisser pour réorganiser",
+    "dropHere": "Déposer ici",
+    "newRow": "Nouvelle ligne",
+    "resize": "Glisser pour changer la largeur",
+    "dockHold": "maintenez pour une colonne pleine hauteur",
+    "dockLeft": "Relâchez : colonne gauche pleine hauteur",
+    "dockRight": "Relâchez : colonne droite pleine hauteur",
+    "moveUp": "Monter",
+    "moveDown": "Descendre",
+    "show": "Afficher cette section",
+    "hide": "Masquer cette section",
+    "settings": "Réglages de la section",
+    "remove": "Retirer cette section",
+    "hiddenBadge": "Masquée",
+    "hiddenTitle": "Sections masquées",
+    "noSettings": "Cette section n'a pas de réglages.",
+    "emptySection": "Rien à afficher pour l'instant. Les visiteurs ne verront cette section que lorsqu'elle aura du contenu.",
+    "linksNote": "Affichée uniquement sur les grands écrans. « Dans la page » la place dans la grille avec les autres sections ; vous pouvez aussi l'y faire glisser par sa poignée.",
+    "addPlaylist": "Ajouter une playlist comme section à part",
+    "playlistMissing": "Playlist introuvable (supprimée ou privée)",
+    "fields": {
+      "playlist": "Playlist",
+      "heading": "Titre",
+      "count_one": "Afficher {{count}} élément",
+      "count_many": "Afficher {{count}} éléments",
+      "count_other": "Afficher {{count}} éléments",
+      "playlists_one": "Afficher {{count}} playlist",
+      "playlists_many": "Afficher {{count}} playlists",
+      "playlists_other": "Afficher {{count}} playlists",
+      "size": "Taille de la vidéo",
+      "size_sm": "Petite",
+      "size_md": "Moyenne",
+      "size_lg": "Grande",
+      "size_full": "Pleine largeur",
+      "showInfo": "Afficher le titre et la description",
+      "showSnap": "Afficher la dernière publication de la communauté",
+      "view": "Disposition",
+      "viewRow": "Ligne",
+      "viewGrid": "Grille",
+      "side": "Position",
+      "sideLeft": "Gauche",
+      "sideRight": "Droite",
+      "sideNone": "Dans la page"
+    },
+    "types": {
+      "trailer": "Bande-annonce de la chaîne",
+      "live": "En direct",
+      "audioPlaylists": "Albums et playlists audio",
+      "playlistRails": "Contenu des playlists",
+      "playlist": "Playlist",
+      "links": "Page de liens"
+    },
+    "tour": {
+      "open": "Visite rapide",
+      "stepOf": "Étape {{n}} sur {{total}}",
+      "skip": "Passer",
+      "back": "Retour",
+      "next": "Suivant",
+      "done": "C'est parti",
+      "intro": {
+        "title": "Ta chaîne, à ta façon",
+        "body": "Ta Vue d'ensemble est maintenant l'éditeur : organise-la comme les visiteurs doivent la voir. Rien ne change pour eux tant que tu n'as pas enregistré."
+      },
+      "move": {
+        "title": "Déplacer des sections",
+        "body": "Attrape une section par sa poignée et dépose-la sur une autre. Le bord gauche ou droit la place à côté, le bord haut ou bas l'empile dans cette colonne, et les lignes entre les rangées créent une nouvelle rangée."
+      },
+      "resize": {
+        "title": "Changer la largeur",
+        "body": "Tire la poignée sur le bord droit d'une section. La largeur change par paliers, pour que les sections voisines restent toujours alignées."
+      },
+      "props": {
+        "title": "Propriétés de la section",
+        "body": "La roue dentée ouvre les propriétés d'une section : nombre d'éléments, ligne ou grille, son titre et, pour la bande-annonce, la taille de la vidéo et ce qui l'accompagne."
+      },
+      "hide": {
+        "title": "Afficher et masquer",
+        "body": "L'œil masque une section. Les sections masquées attendent dans un tiroir sous la page ; clique sur l'une d'elles pour la remettre."
+      },
+      "links": {
+        "title": "Ta page de liens",
+        "body": "Glisse ta page de liens dans la page comme n'importe quelle section. Maintiens-la un instant tout à gauche ou tout à droite pour en faire une colonne pleine hauteur de ce côté."
+      },
+      "mobile": {
+        "title": "Sur mobile aussi",
+        "body": "Passe sur Mobile dans la barre pour choisir l'apparence de ton profil sur téléphone : une colonne, dans ton propre ordre. Tant que tu n'y changes rien, les téléphones suivent ta mise en page ordinateur."
+      },
+      "save": {
+        "title": "Enregistre quand ça te plaît",
+        "body": "Enregistrer la mise en page la publie. Annuler et Rétablir parcourent tes modifications (Ctrl+Z marche aussi), Annuler en bas les abandonne, et Rétablir par défaut remet la page standard. Le ? à côté du titre rouvre cette visite."
+      }
+    }
   }
 }

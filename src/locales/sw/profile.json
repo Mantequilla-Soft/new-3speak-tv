@@ -291,5 +291,114 @@
     "unhiddenToast": "Tip inaonekana tena kwenye wasifu wako",
     "hideFailed": "Imeshindikana kubadilisha tip hii. Tafadhali jaribu tena.",
     "hideWalletPrompt": "Saini ili kubadilisha tip zipi zinaonekana kwenye wasifu wako"
+  },
+  "layout": {
+    "customize": "Badilisha wasifu",
+    "title": "Badilisha wasifu wako",
+    "hint": "Buruta sehemu kwa mshiko wake: kando ya nyingine kwa safu wima mpya, juu au chini ya moja ili kuzipanga, au kwenye mstari kati ya safu kwa safu mpya. Vuta ukingo wake wa kulia kubadilisha upana, na tumia gia kwa sifa zake.",
+    "mobileHint": "Hivi ndivyo wasifu wako unavyoonekana kwenye simu: safu wima moja. Buruta sehemu juu au chini, zifiche, au badilisha sifa zake. Hadi ubadilishe kitu hapa, simu zitafuata mpangilio wa kompyuta.",
+    "save": "Hifadhi mpangilio",
+    "saving": "Inahifadhi…",
+    "reset": "Rudisha chaguo-msingi",
+    "undo": "Tendua",
+    "redo": "Rudia",
+    "undoTitle": "Tendua (Ctrl+Z)",
+    "redoTitle": "Rudia (Ctrl+Shift+Z)",
+    "matchDesktop": "Sawa na kompyuta",
+    "deviceDesktop": "Kompyuta",
+    "deviceMobile": "Simu",
+    "saved": "Mpangilio wa wasifu umehifadhiwa",
+    "saveFailed": "Imeshindwa kuhifadhi mpangilio wako: {{error}}",
+    "signInNeeded": "Tafadhali ingia tena ili kuhifadhi mpangilio wako",
+    "drag": "Buruta kupanga upya",
+    "dropHere": "Weka hapa",
+    "newRow": "Safu mpya",
+    "resize": "Buruta kubadilisha upana",
+    "dockHold": "shikilia kupata safu wima ya urefu kamili",
+    "dockLeft": "Achilia: safu wima ya kushoto ya urefu kamili",
+    "dockRight": "Achilia: safu wima ya kulia ya urefu kamili",
+    "moveUp": "Sogeza juu",
+    "moveDown": "Sogeza chini",
+    "show": "Onyesha sehemu hii",
+    "hide": "Ficha sehemu hii",
+    "settings": "Mipangilio ya sehemu",
+    "remove": "Ondoa sehemu hii",
+    "hiddenBadge": "Imefichwa",
+    "hiddenTitle": "Sehemu zilizofichwa",
+    "noSettings": "Sehemu hii haina mipangilio.",
+    "emptySection": "Hakuna cha kuonyesha bado. Wageni wataona sehemu hii pale tu itakapokuwa na maudhui.",
+    "linksNote": "Huonyeshwa kwenye skrini pana pekee. \"Ndani ya ukurasa\" huiweka kwenye gridi pamoja na sehemu nyingine; unaweza pia kuiburuta huko kwa mshiko wake.",
+    "addPlaylist": "Ongeza orodha ya kucheza kama sehemu yake",
+    "playlistMissing": "Orodha ya kucheza haikupatikana (imefutwa au ni ya faragha)",
+    "fields": {
+      "playlist": "Orodha ya kucheza",
+      "heading": "Kichwa",
+      "count_one": "Onyesha kipengee {{count}}",
+      "count_other": "Onyesha vipengee {{count}}",
+      "playlists_one": "Onyesha orodha {{count}}",
+      "playlists_other": "Onyesha orodha {{count}}",
+      "size": "Ukubwa wa video",
+      "size_sm": "Ndogo",
+      "size_md": "Wastani",
+      "size_lg": "Kubwa",
+      "size_full": "Upana kamili",
+      "showInfo": "Onyesha kichwa na maelezo",
+      "showSnap": "Onyesha chapisho jipya la jumuiya",
+      "view": "Mpangilio",
+      "viewRow": "Safu",
+      "viewGrid": "Gridi",
+      "side": "Mahali",
+      "sideLeft": "Kushoto",
+      "sideRight": "Kulia",
+      "sideNone": "Ndani ya ukurasa"
+    },
+    "types": {
+      "trailer": "Trela ya chaneli",
+      "live": "Mubashara sasa",
+      "audioPlaylists": "Albamu na orodha za sauti",
+      "playlistRails": "Yaliyomo kwenye orodha",
+      "playlist": "Orodha ya kucheza",
+      "links": "Ukurasa wa viungo"
+    },
+    "tour": {
+      "open": "Ziara fupi",
+      "stepOf": "Hatua {{n}} kati ya {{total}}",
+      "skip": "Ruka",
+      "back": "Rudi",
+      "next": "Endelea",
+      "done": "Twende",
+      "intro": {
+        "title": "Fanya chaneli iwe yako",
+        "body": "Muhtasari wako sasa ndio kihariri: upange jinsi wageni wanavyopaswa kuuona. Hakuna kinachobadilika kwao hadi ubonyeze Hifadhi."
+      },
+      "move": {
+        "title": "Hamisha sehemu",
+        "body": "Shika sehemu kwa kishikio chake na uiachie juu ya nyingine. Ukingo wa kushoto au kulia unaiweka kando yake, ukingo wa juu au chini unaipanga kwenye safu hiyo wima, na mistari kati ya safu inaanzisha safu mpya."
+      },
+      "resize": {
+        "title": "Badilisha upana",
+        "body": "Vuta kishikio kwenye ukingo wa kulia wa sehemu. Upana hubadilika kwa hatua, hivyo sehemu zilizo kando kwa kando hupangika sawa daima."
+      },
+      "props": {
+        "title": "Sifa za sehemu",
+        "body": "Gia hufungua sifa za sehemu: idadi ya vipengee, mstari au gridi, kichwa chake, na kwa trela ukubwa wa video na kinachokaa kando yake."
+      },
+      "hide": {
+        "title": "Onyesha na ficha",
+        "body": "Jicho huficha sehemu. Sehemu zilizofichwa husubiri kwenye trei chini ya ukurasa; bofya moja kuirudisha."
+      },
+      "links": {
+        "title": "Ukurasa wako wa viungo",
+        "body": "Buruta ukurasa wako wa viungo ndani ya ukurasa kama sehemu nyingine yoyote. Ushikilie kidogo kushoto kabisa au kulia kabisa ili uwe safu wima ya urefu kamili upande huo."
+      },
+      "mobile": {
+        "title": "Kwenye simu pia",
+        "body": "Badili kuwa Simu kwenye upau ili kupanga jinsi wasifu wako unavyoonekana kwenye simu: safu moja, kwa mpangilio wako. Hadi ubadilishe kitu hapo, simu hufuata mpangilio wa kompyuta."
+      },
+      "save": {
+        "title": "Hifadhi ukiridhika",
+        "body": "Hifadhi mpangilio huuchapisha. Tendua na Rudia hupitia mabadiliko yako mbele na nyuma (Ctrl+Z pia hufanya kazi), Ghairi huyaondoa, na Rudisha chaguo-msingi hurudisha ukurasa wa kawaida. Alama ? kando ya kichwa hufungua ziara hii tena."
+      }
+    }
   }
 }

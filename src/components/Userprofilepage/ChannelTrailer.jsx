@@ -26,6 +26,10 @@ import './ChannelTrailer.scss';
  * without a gesture; an unmute control sits on top so sound is one click away.
  * Renders nothing at all when the creator hasn't set one, so profiles without a
  * trailer don't carry an empty frame.
+ *
+ * The creator's profile layout (lib/profileLayout.js) sets the player `size`
+ * (sm/md/lg/full) and can switch off the text column (`showInfo`) and the
+ * community note beside it (`showSnap`).
  */
 export function useChannelTrailer(username) {
   return useQuery({
@@ -40,7 +44,9 @@ export function useChannelTrailer(username) {
   });
 }
 
-export default function ChannelTrailer({ username, isOwnProfile = false, onOpenCommunityTab }) {
+export default function ChannelTrailer({
+  username, isOwnProfile = false, onOpenCommunityTab, size = 'md', showInfo = true, showSnap = true,
+}) {
   const { t } = useTranslation();
   const { data: trailer } = useChannelTrailer(username);
   const [attached, setAttached] = useState(false);
@@ -65,12 +71,12 @@ export default function ChannelTrailer({ username, isOwnProfile = false, onOpenC
   // profile already makes for the Community tab count, so it's a cache hit.
   const { data: snapData } = useQuery({
     queryKey: ['community-snaps-count', username],
-    enabled: !!username,
+    enabled: !!username && showSnap,
     staleTime: 60 * 1000,
     retry: 1,
     queryFn: () => fetchSnaps(username, 1, 1),
   });
-  const latestSnap = snapData?.snaps?.[0] || null;
+  const latestSnap = showSnap ? snapData?.snaps?.[0] || null : null;
 
   const { ref: sdkVideoRef, state: playerState, player, load: loadVideo } = usePlayer({
     apiBase: getPlayerUrl(),
@@ -181,8 +187,10 @@ export default function ChannelTrailer({ username, isOwnProfile = false, onOpenC
   const description = bodyToPlaintext(post?.body || '');
 
 
+  // Just the player (text and note off, or no note to show): it fills its
+  // section, so the section's width in the profile grid sizes the video.
   return (
-    <div className="channel-trailer-row">
+    <div className={`channel-trailer-row channel-trailer-row--${size}${!showInfo && !latestSnap ? ' channel-trailer-row--bare' : ''}`}>
       <div className="channel-trailer">
         <video ref={videoRef} playsInline controls muted autoPlay />
         {muted && (
@@ -195,16 +203,17 @@ export default function ChannelTrailer({ username, isOwnProfile = false, onOpenC
       {/* Text column, clipped to the player's height — however long the post is,
           the pair stays one tidy block instead of the words running past the
           video. Anything cut off is one click away on the watch page. */}
-      <div className="channel-trailer-meta">
-        {post?.title ? (
-          <Link className="ct-title" to={`/@${author}/${permlink}`}>{post.title}</Link>
-        ) : null}
-        {(views != null || post?.created_at) ? (
-          <div className="ct-sub">
-            {views != null ? <span>{t('profile.trailer.views', { count: views, num: fmtViews(views) })}</span> : null}
-            {views != null && post?.created_at ? <span className="ct-dot">·</span> : null}
-            {post?.created_at ? <TimeAgo date={post.created_at} /> : null}
-          </div>
+      {showInfo ? (
+        <div className="channel-trailer-meta">
+          {post?.title ? (
+            <Link className="ct-title" to={`/@${author}/${permlink}`}>{post.title}</Link>
+          ) : null}
+          {(views != null || post?.created_at) ? (
+            <div className="ct-sub">
+              {views != null ? <span>{t('profile.trailer.views', { count: views, num: fmtViews(views) })}</span> : null}
+              {views != null && post?.created_at ? <span className="ct-dot">·</span> : null}
+              {post?.created_at ? <TimeAgo date={post.created_at} /> : null}
+            </div>
         ) : null}
         {description ? <p className="ct-desc">{description}</p> : null}
         {/* The description clips (CSS mask-fade) at the player's height, so a
@@ -214,6 +223,7 @@ export default function ChannelTrailer({ username, isOwnProfile = false, onOpenC
           <Link className="ct-readmore" to={`/@${author}/${permlink}`}>{t('profile.trailer.readMore')}</Link>
         ) : null}
       </div>
+      ) : null}
 
       {/* Newest community note fills the other half beside the player. Desktop
           only (hidden on phones via CSS). Wrapped in .community-snaps so the

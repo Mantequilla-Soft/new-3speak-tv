@@ -53,7 +53,8 @@ import ProfileOverview from "../components/Userprofilepage/ProfileOverview";
 import ProfileEmptyState from "../components/Userprofilepage/ProfileEmptyState";
 import ModalHeader from "../components/ModalHeader/ModalHeader";
 import ProfileEditModal from "../components/WelcomePrompt/ProfileEditModal";
-import { FiEdit2 } from "react-icons/fi";
+import { FiEdit2, FiLayout } from "react-icons/fi";
+import { requestLayoutEdit } from "../lib/profileLayout";
 import { useTranslation } from "react-i18next";
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -576,6 +577,14 @@ function ProfilePage() {
               title={t('profile.page.editTitle')}
             >
               <FiEdit2 className="icon" /> {t('common.actions.edit')}
+            </button>
+            {/* Edit mode for the Overview's layout (ProfileOverview). */}
+            <button
+              className="btn btn-secondary"
+              onClick={() => { selectTab('overview'); requestLayoutEdit(); }}
+              title={t('profile.layout.customize')}
+            >
+              <FiLayout className="icon" /> {t('profile.layout.customize')}
             </button>
 
             {/* Follower pill removed — the count in the stat line under the bio

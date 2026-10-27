@@ -81,11 +81,19 @@ function applyHostTheme(frame) {
  * Collapsed, the column shrinks to a chevron that nudges sideways on a loop, so
  * a visitor still notices this profile HAS a links page (a folded-away panel
  * that gave no sign of itself would simply be lost).
+ *
+ * `inGrid`: the creator placed it IN the Overview grid (profile layout) rather
+ * than as the side column. It then sizes to its grid cell and does not fold
+ * away: it is a section like the others, and the creator chose to show it.
+ * `fill`: it shares its grid row, and stretches to that row's height (beside
+ * a trailer, it is as tall as the trailer).
  */
-export default function ProfileLinksPanel({ username, isOwnProfile = false, onOpenTab }) {
+export default function ProfileLinksPanel({ username, isOwnProfile = false, onOpenTab, inGrid = false, fill = false }) {
   const { t } = useTranslation();
   const [state, setState] = useState({ loading: true, exists: false });
-  const [collapsed, setCollapsed] = useState(readCollapsed);
+  const [collapsedPref, setCollapsed] = useState(readCollapsed);
+  const collapsed = collapsedPref && !inGrid;
+  const mod = (inGrid ? ' profile-links-panel--in-grid' : '') + (inGrid && fill ? ' profile-links-panel--fill' : '');
   const frameRef = useRef(null);
 
   const themeFrame = useCallback(() => applyHostTheme(frameRef.current), []);
@@ -121,7 +129,7 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
   if (!state.exists) {
     if (!isOwnProfile) return null;
     return (
-      <aside className="profile-links-panel profile-links-panel--empty">
+      <aside className={`profile-links-panel profile-links-panel--empty${mod}`}>
         <div className="plp-inner">
           <p className="plp-hint">{t('profile.links.emptyHint')}</p>
           <button type="button" className="plp-btn" onClick={() => onOpenTab?.('links')}>{t('profile.links.add')}</button>
@@ -147,18 +155,20 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
   }
 
   return (
-    <aside className="profile-links-panel">
+    <aside className={`profile-links-panel${mod}`}>
       <div className="plp-inner">
         {/* Sits in the frame's top-left corner, over the page it folds away. */}
-        <button
-          type="button"
-          className="plp-hide"
-          onClick={() => setFolded(true)}
-          title={t('profile.links.hide')}
-          aria-label={t('profile.links.hide')}
-        >
-          <FiChevronRight size={16} />
-        </button>
+        {!inGrid ? (
+          <button
+            type="button"
+            className="plp-hide"
+            onClick={() => setFolded(true)}
+            title={t('profile.links.hide')}
+            aria-label={t('profile.links.hide')}
+          >
+            <FiChevronRight size={16} />
+          </button>
+        ) : null}
 
         {/* Its twin in the opposite corner, on your own profile only. */}
         {isOwnProfile ? (

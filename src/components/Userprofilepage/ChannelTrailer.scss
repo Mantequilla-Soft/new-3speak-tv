@@ -244,3 +244,35 @@
     .cte-btn { text-align: center; }
   }
 }
+
+// ── Player size (the creator's profile layout) ─────────────────────────────
+// md is the default above. Every size keeps the player as the reference for
+// the side columns, except full width, where the text and the community note
+// share the row underneath it instead.
+.channel-trailer-row--sm { --ct-player-w: 480px; }
+.channel-trailer-row--lg { --ct-player-w: 900px; }
+
+.channel-trailer-row--full {
+  .channel-trailer { width: 100%; }
+
+  .channel-trailer-meta,
+  .channel-trailer-snap {
+    width: calc((100% - var(--ct-gap)) / 2);
+    height: auto;
+    max-height: 13rem;
+  }
+
+  &:not(:has(.channel-trailer-snap)) .channel-trailer-meta { width: 100%; }
+
+  @include mix.respond(phone) {
+    .channel-trailer-meta,
+    .channel-trailer-snap { width: 100%; }
+  }
+}
+
+// Only the player: it fills its section (the profile grid sets the width).
+.channel-trailer-row--bare {
+  margin-bottom: 0.75rem;
+
+  .channel-trailer { width: 100%; }
+}

@@ -1,0 +1,432 @@
+@use "../../mixins.scss" as mix;
+
+// The edit-mode tour (ProfileLayoutTour.jsx): centred on desktop, a bottom
+// sheet on phones.
+.plt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.55);
+
+  @include mix.respond(phone) {
+    align-items: flex-end;
+    padding: 0;
+  }
+}
+
+.plt-dialog {
+  position: relative;
+  width: min(460px, 100%);
+  max-height: 88vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.1rem 1.2rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  outline: none;
+
+  @include mix.respond(phone) {
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    animation: plt-up 0.22s ease-out;
+  }
+}
+
+@keyframes plt-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.plt-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+
+  &:hover { background: var(--bg-hover); color: var(--text-primary); }
+}
+
+.plt-text {
+  margin-top: 0.9rem;
+
+  .plt-count {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-primary, #e53935);
+  }
+
+  h3 {
+    margin: 0.2rem 0 0.4rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    min-height: 4.2em;   // steps of different length don't make the dialog jump
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+}
+
+.plt-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.plt-dots {
+  display: flex;
+  gap: 0.35rem;
+
+  button {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.active {
+      width: 22px;
+      background: var(--accent-primary, #e53935);
+    }
+  }
+}
+
+.plt-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+// Outline only: no 3Speak button has a solid red fill.
+.plt-btn {
+  padding: 0.45rem 1.05rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { color: var(--text-primary); border-color: var(--text-secondary); background: var(--bg-hover); }
+
+  &--primary {
+    color: var(--accent-primary, #e53935);
+    border-color: var(--accent-primary, #e53935);
+
+    &:hover {
+      color: var(--accent-primary, #e53935);
+      border-color: var(--accent-primary, #e53935);
+      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+    }
+  }
+}
+
+// ── the pictures ────────────────────────────────────────────────────────────
+// A tiny page: two blocks side by side (a, b), one full row below (c), an
+// extra piece per step, and a pointer.
+.plt-pic {
+  --accent: var(--accent-primary, #e53935);
+  --line: color-mix(in srgb, var(--text-primary) 35%, transparent);
+  position: relative;
+  height: 150px;
+  margin-top: 0.4rem;
+  border-radius: 12px;
+  background: var(--bg-primary, rgba(0, 0, 0, 0.2));
+  overflow: hidden;
+
+  > * { position: absolute; }
+}
+
+.plt-block {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+  transition: none;
+
+  // the grip
+  i {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 10px;
+    background-image: radial-gradient(var(--line) 1.2px, transparent 1.3px);
+    background-size: 4px 4px;
+  }
+}
+
+.plt-a { left: 14px; top: 14px; width: calc(40% - 18px); height: 56px; }
+.plt-b { left: calc(40% + 2px); top: 14px; right: 14px; height: 56px; }
+.plt-c { left: 14px; right: 14px; top: 80px; height: 56px; }
+
+.plt-extra { display: none; }
+
+// A pointer: a dot with a ring.
+.plt-cursor {
+  display: none;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+// intro: the blocks light up one after another.
+.plt-pic--intro .plt-block {
+  animation: plt-glow 2.4s ease-in-out infinite;
+}
+.plt-pic--intro .plt-b { animation-delay: 0.4s; }
+.plt-pic--intro .plt-c { animation-delay: 0.8s; }
+
+@keyframes plt-glow {
+  0%, 100% { border-color: var(--line); }
+  30% { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+}
+
+// move: the full row (c) is picked up by its grip and dropped beside a.
+.plt-pic--move {
+  .plt-b { display: none; }
+  .plt-c { animation: plt-move-c 3.2s ease-in-out infinite; }
+  .plt-cursor { display: block; animation: plt-move-cursor 3.2s ease-in-out infinite; }
+}
+
+@keyframes plt-move-c {
+  0%, 15% { left: 14px; top: 80px; width: calc(100% - 28px); border-color: var(--line); }
+  25% { border-color: var(--accent); }
+  60%, 100% { left: calc(40% + 2px); top: 14px; width: calc(60% - 16px); border-color: var(--line); }
+}
+
+@keyframes plt-move-cursor {
+  0%, 15% { left: 24px; top: 91px; }
+  60%, 100% { left: calc(40% + 12px); top: 25px; }
+}
+
+// resize: a's right edge is pulled out, b gives way.
+.plt-pic--resize {
+  .plt-a { animation: plt-resize-a 3s ease-in-out infinite; }
+  .plt-b { animation: plt-resize-b 3s ease-in-out infinite; }
+  .plt-cursor { display: block; top: 42px; animation: plt-resize-cursor 3s ease-in-out infinite; }
+}
+
+@keyframes plt-resize-a {
+  0%, 15% { width: calc(40% - 18px); }
+  55%, 75% { width: calc(60% - 18px); border-color: var(--accent); }
+  100% { width: calc(40% - 18px); }
+}
+
+@keyframes plt-resize-b {
+  0%, 15% { left: calc(40% + 2px); }
+  55%, 75% { left: calc(60% + 2px); }
+  100% { left: calc(40% + 2px); }
+}
+
+@keyframes plt-resize-cursor {
+  0%, 15% { left: calc(40% - 4px); }
+  55%, 75% { left: calc(60% - 4px); }
+  100% { left: calc(40% - 4px); }
+}
+
+// props: the gear on a opens a small panel of settings.
+.plt-pic--props {
+  .plt-a::after {
+    content: '⚙';
+    position: absolute;
+    top: 3px;
+    right: 7px;
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .plt-extra {
+    display: block;
+    left: calc(40% - 90px);
+    top: 40px;
+    width: 120px;
+    height: 78px;
+    z-index: 2;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background:
+      linear-gradient(var(--line), var(--line)) 10px 14px / 60% 4px no-repeat,
+      linear-gradient(var(--line), var(--line)) 10px 30px / 80% 4px no-repeat,
+      linear-gradient(var(--accent), var(--accent)) 10px 48px / 35% 10px no-repeat,
+      linear-gradient(var(--line), var(--line)) 50% 48px / 35% 10px no-repeat,
+      var(--bg-secondary);
+    transform-origin: top right;
+    animation: plt-pop 3s ease-in-out infinite;
+  }
+}
+
+@keyframes plt-pop {
+  0%, 20% { opacity: 0; transform: scale(0.6); }
+  35%, 85% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.6); }
+}
+
+// hide: c fades out and turns into a chip in the tray below.
+.plt-pic--hide {
+  .plt-c { animation: plt-hide-c 3s ease-in-out infinite; }
+
+  .plt-extra {
+    display: block;
+    left: 14px;
+    bottom: 10px;
+    width: 70px;
+    height: 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    animation: plt-hide-chip 3s ease-in-out infinite;
+  }
+}
+
+@keyframes plt-hide-c {
+  0%, 20% { opacity: 1; transform: scale(1); }
+  50%, 100% { opacity: 0; transform: scale(0.4) translate(-60%, 30%); }
+}
+
+@keyframes plt-hide-chip {
+  0%, 45% { opacity: 0; }
+  60%, 100% { opacity: 1; }
+}
+
+// links: the links page is held at the left edge until the bar fills, then
+// becomes a full-height column there and the blocks move over.
+.plt-pic--links {
+  .plt-extra {
+    display: block;
+    z-index: 2;
+    width: 54px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background:
+      repeating-linear-gradient(to bottom, transparent 0 10px, var(--line) 10px 13px) 8px 10px / 38px calc(100% - 20px) no-repeat,
+      color-mix(in srgb, var(--accent) 10%, var(--bg-secondary));
+    animation: plt-links-col 3.6s ease-in-out infinite;
+  }
+
+  .plt-a,
+  .plt-c { animation: plt-links-shift 3.6s ease-in-out infinite; }
+
+  // The hold bar.
+  &::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 14px;
+    bottom: 14px;
+    width: 4px;
+    border-radius: 999px;
+    background: var(--accent);
+    transform-origin: top;
+    animation: plt-links-bar 3.6s linear infinite;
+  }
+}
+
+@keyframes plt-links-col {
+  0% { left: 60%; top: 30px; height: 50px; opacity: 0.9; }
+  30%, 55% { left: 18px; top: 30px; height: 50px; }
+  70%, 100% { left: 14px; top: 14px; height: calc(100% - 28px); }
+}
+
+@keyframes plt-links-shift {
+  0%, 55% { margin-left: 0; }
+  70%, 100% { margin-left: 62px; }
+}
+
+@keyframes plt-links-bar {
+  0%, 30% { transform: scaleY(0); opacity: 1; }
+  55% { transform: scaleY(1); opacity: 1; }
+  65%, 100% { transform: scaleY(1); opacity: 0; }
+}
+
+// save: the Save button pulses.
+.plt-pic--save .plt-extra {
+  display: block;
+  right: 18px;
+  bottom: 14px;
+  z-index: 2;
+  padding: 4px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  animation: plt-pulse 1.6s ease-in-out infinite;
+
+  &::before { content: '✓'; }
+}
+
+@keyframes plt-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent); }
+  50% { box-shadow: 0 0 0 8px transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plt-pic *,
+  .plt-pic::after { animation: none !important; }
+}
+
+// mobile: the page folds into a phone, one block under the other, and two of
+// them swap places.
+.plt-pic--mobile {
+
+  .plt-extra {
+    display: block;
+    left: 50%;
+    top: 8px;
+    width: 78px;
+    height: 134px;
+    margin-left: -39px;
+    border: 2px solid var(--line);
+    border-radius: 16px;
+  }
+
+  .plt-block { left: calc(50% - 30px); width: 60px; height: 30px; }
+  .plt-a { top: 22px; }
+  .plt-b { top: 58px; animation: plt-mobile-b 3s ease-in-out infinite; }
+  .plt-c { top: 94px; animation: plt-mobile-c 3s ease-in-out infinite; }
+}
+
+@keyframes plt-mobile-b {
+  0%, 25% { top: 58px; }
+  55%, 100% { top: 94px; border-color: var(--accent); }
+}
+
+@keyframes plt-mobile-c {
+  0%, 25% { top: 94px; }
+  55%, 100% { top: 58px; }
+}

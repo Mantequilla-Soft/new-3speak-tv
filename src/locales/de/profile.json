@@ -291,5 +291,114 @@
     "unhiddenToast": "Tipp wird in deinem Profil wieder angezeigt",
     "hideFailed": "Dieser Tipp konnte nicht geändert werden. Bitte versuch es nochmal.",
     "hideWalletPrompt": "Signiere, um zu ändern, welche Tipps in deinem Profil erscheinen"
+  },
+  "layout": {
+    "customize": "Profil anpassen",
+    "title": "Profil anpassen",
+    "hint": "Zieh einen Bereich am Griff: neben einen anderen für eine neue Spalte, über oder unter einen, um ihn zu stapeln, oder auf eine Linie zwischen den Reihen für eine neue Reihe. Zieh am rechten Rand, um die Breite zu ändern, und nutze das Zahnrad für die Eigenschaften.",
+    "mobileHint": "So sieht dein Profil auf Handys aus: eine Spalte. Zieh Bereiche nach oben oder unten, blende sie aus oder ändere ihre Eigenschaften. Bis du hier etwas änderst, folgen Handys deinem Desktop-Layout.",
+    "save": "Layout speichern",
+    "saving": "Wird gespeichert…",
+    "reset": "Auf Standard zurücksetzen",
+    "undo": "Rückgängig",
+    "redo": "Wiederholen",
+    "undoTitle": "Rückgängig (Strg+Z)",
+    "redoTitle": "Wiederholen (Strg+Umschalt+Z)",
+    "matchDesktop": "Wie Desktop",
+    "deviceDesktop": "Desktop",
+    "deviceMobile": "Mobil",
+    "saved": "Profil-Layout gespeichert",
+    "saveFailed": "Layout konnte nicht gespeichert werden: {{error}}",
+    "signInNeeded": "Bitte melde dich erneut an, um dein Layout zu speichern",
+    "drag": "Zum Sortieren ziehen",
+    "dropHere": "Hier ablegen",
+    "newRow": "Neue Reihe",
+    "resize": "Ziehen, um die Breite zu ändern",
+    "dockHold": "halten für eine Spalte in voller Höhe",
+    "dockLeft": "Loslassen: linke Spalte in voller Höhe",
+    "dockRight": "Loslassen: rechte Spalte in voller Höhe",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "show": "Bereich anzeigen",
+    "hide": "Bereich ausblenden",
+    "settings": "Bereichseinstellungen",
+    "remove": "Bereich entfernen",
+    "hiddenBadge": "Ausgeblendet",
+    "hiddenTitle": "Ausgeblendete Bereiche",
+    "noSettings": "Dieser Bereich hat keine Einstellungen.",
+    "emptySection": "Hier gibt es noch nichts zu zeigen. Besucher sehen diesen Bereich erst, wenn er Inhalte hat.",
+    "linksNote": "Nur auf breiten Bildschirmen sichtbar. „In der Seite“ setzt sie mit den anderen Bereichen ins Raster; du kannst sie auch am Griff dorthin ziehen.",
+    "addPlaylist": "Playlist als eigenen Bereich hinzufügen",
+    "playlistMissing": "Playlist nicht gefunden (gelöscht oder privat)",
+    "fields": {
+      "playlist": "Playlist",
+      "heading": "Überschrift",
+      "count_one": "{{count}} Eintrag anzeigen",
+      "count_other": "{{count}} Einträge anzeigen",
+      "playlists_one": "{{count}} Playlist anzeigen",
+      "playlists_other": "{{count}} Playlists anzeigen",
+      "size": "Videogröße",
+      "size_sm": "Klein",
+      "size_md": "Mittel",
+      "size_lg": "Groß",
+      "size_full": "Volle Breite",
+      "showInfo": "Titel & Beschreibung anzeigen",
+      "showSnap": "Neuesten Community-Beitrag anzeigen",
+      "view": "Darstellung",
+      "viewRow": "Reihe",
+      "viewGrid": "Raster",
+      "side": "Position",
+      "sideLeft": "Links",
+      "sideRight": "Rechts",
+      "sideNone": "In der Seite"
+    },
+    "types": {
+      "trailer": "Kanal-Trailer",
+      "live": "Jetzt live",
+      "audioPlaylists": "Alben & Audio-Playlists",
+      "playlistRails": "Playlist-Inhalte",
+      "playlist": "Playlist",
+      "links": "Link-Seite"
+    },
+    "tour": {
+      "open": "Kurze Tour",
+      "stepOf": "Schritt {{n}} von {{total}}",
+      "skip": "Überspringen",
+      "back": "Zurück",
+      "next": "Weiter",
+      "done": "Los geht's",
+      "intro": {
+        "title": "Mach deinen Kanal zu deinem",
+        "body": "Deine Übersicht ist jetzt der Editor: ordne sie so an, wie Besucher sie sehen sollen. Für sie ändert sich nichts, bis du auf Speichern tippst."
+      },
+      "move": {
+        "title": "Bereiche verschieben",
+        "body": "Pack einen Bereich am Griff und lass ihn auf einem anderen los. Der linke oder rechte Rand setzt ihn daneben, der obere oder untere Rand stapelt ihn in dieser Spalte, und die Linien zwischen den Zeilen beginnen eine neue Zeile."
+      },
+      "resize": {
+        "title": "Breite ändern",
+        "body": "Zieh am Griff am rechten Rand eines Bereichs. Die Breite ändert sich in Stufen, damit nebeneinanderliegende Bereiche immer bündig sind."
+      },
+      "props": {
+        "title": "Bereichseinstellungen",
+        "body": "Das Zahnrad öffnet die Einstellungen eines Bereichs: wie viele Einträge, Zeile oder Raster, die Überschrift und beim Trailer die Videogröße und was daneben steht."
+      },
+      "hide": {
+        "title": "Ein- und ausblenden",
+        "body": "Das Auge blendet einen Bereich aus. Ausgeblendete Bereiche warten in einer Ablage unter der Seite; klick einen an, um ihn zurückzuholen."
+      },
+      "links": {
+        "title": "Deine Linkseite",
+        "body": "Zieh deine Linkseite wie jeden anderen Bereich in die Seite. Halte sie kurz ganz links oder rechts auf der Seite, um sie zu einer Spalte über die ganze Höhe auf dieser Seite zu machen."
+      },
+      "mobile": {
+        "title": "Auch für Handys",
+        "body": "Wechsle in der Leiste zu Mobil, um festzulegen, wie dein Profil auf Handys aussieht: eine Spalte, in deiner eigenen Reihenfolge. Bis du dort etwas änderst, folgen Handys deinem Desktop-Layout."
+      },
+      "save": {
+        "title": "Speichern, wenn alles passt",
+        "body": "Layout speichern veröffentlicht es. Rückgängig und Wiederholen springen durch deine Änderungen (Strg+Z geht auch), Abbrechen verwirft sie, und Auf Standard zurücksetzen bringt die normale Seite zurück. Das ? neben dem Titel öffnet diese Tour wieder."
+      }
+    }
   }
 }

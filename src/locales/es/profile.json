@@ -308,5 +308,116 @@
     "unhiddenToast": "La propina vuelve a mostrarse en tu perfil",
     "hideFailed": "No se pudo cambiar esta propina. Inténtalo de nuevo.",
     "hideWalletPrompt": "Firma para cambiar qué propinas se muestran en tu perfil"
+  },
+  "layout": {
+    "customize": "Personalizar perfil",
+    "title": "Personaliza tu perfil",
+    "hint": "Arrastra una sección por su asa: junto a otra para una nueva columna, encima o debajo de una para apilarla, o sobre una línea entre filas para una fila nueva. Tira de su borde derecho para cambiar el ancho y usa el engranaje para sus propiedades.",
+    "mobileHint": "Así se ve tu perfil en los móviles: una sola columna. Arrastra las secciones arriba o abajo, ocúltalas o cambia sus propiedades. Hasta que cambies algo aquí, los móviles siguen el diseño de escritorio.",
+    "save": "Guardar diseño",
+    "saving": "Guardando…",
+    "reset": "Restablecer",
+    "undo": "Deshacer",
+    "redo": "Rehacer",
+    "undoTitle": "Deshacer (Ctrl+Z)",
+    "redoTitle": "Rehacer (Ctrl+Mayús+Z)",
+    "matchDesktop": "Igual que escritorio",
+    "deviceDesktop": "Escritorio",
+    "deviceMobile": "Móvil",
+    "saved": "Diseño del perfil guardado",
+    "saveFailed": "No se pudo guardar tu diseño: {{error}}",
+    "signInNeeded": "Vuelve a iniciar sesión para guardar tu diseño",
+    "drag": "Arrastra para reordenar",
+    "dropHere": "Suelta aquí",
+    "newRow": "Nueva fila",
+    "resize": "Arrastra para cambiar el ancho",
+    "dockHold": "mantén para una columna de altura completa",
+    "dockLeft": "Suelta: columna izquierda de altura completa",
+    "dockRight": "Suelta: columna derecha de altura completa",
+    "moveUp": "Subir",
+    "moveDown": "Bajar",
+    "show": "Mostrar esta sección",
+    "hide": "Ocultar esta sección",
+    "settings": "Ajustes de la sección",
+    "remove": "Quitar esta sección",
+    "hiddenBadge": "Oculta",
+    "hiddenTitle": "Secciones ocultas",
+    "noSettings": "Esta sección no tiene ajustes.",
+    "emptySection": "Aún no hay nada que mostrar. Los visitantes solo verán esta sección cuando tenga contenido.",
+    "linksNote": "Solo se muestra en pantallas anchas. «En la página» la coloca en la cuadrícula con las demás secciones; también puedes arrastrarla allí por su asa.",
+    "addPlaylist": "Añadir una lista como sección propia",
+    "playlistMissing": "Lista no encontrada (eliminada o privada)",
+    "fields": {
+      "playlist": "Lista",
+      "heading": "Título",
+      "count_one": "Mostrar {{count}} elemento",
+      "count_many": "Mostrar {{count}} elementos",
+      "count_other": "Mostrar {{count}} elementos",
+      "playlists_one": "Mostrar {{count}} lista",
+      "playlists_many": "Mostrar {{count}} listas",
+      "playlists_other": "Mostrar {{count}} listas",
+      "size": "Tamaño del video",
+      "size_sm": "Pequeño",
+      "size_md": "Mediano",
+      "size_lg": "Grande",
+      "size_full": "Ancho completo",
+      "showInfo": "Mostrar título y descripción",
+      "showSnap": "Mostrar la última publicación de la comunidad",
+      "view": "Diseño",
+      "viewRow": "Fila",
+      "viewGrid": "Cuadrícula",
+      "side": "Posición",
+      "sideLeft": "Izquierda",
+      "sideRight": "Derecha",
+      "sideNone": "En la página"
+    },
+    "types": {
+      "trailer": "Tráiler del canal",
+      "live": "En directo",
+      "audioPlaylists": "Álbumes y listas de audio",
+      "playlistRails": "Contenido de las listas",
+      "playlist": "Lista",
+      "links": "Página de enlaces"
+    },
+    "tour": {
+      "open": "Recorrido rápido",
+      "stepOf": "Paso {{n}} de {{total}}",
+      "skip": "Omitir",
+      "back": "Atrás",
+      "next": "Siguiente",
+      "done": "¡Vamos!",
+      "intro": {
+        "title": "Haz tuyo tu canal",
+        "body": "Tu Resumen ahora es el editor: ordénalo como quieres que lo vean los visitantes. Para ellos no cambia nada hasta que pulses Guardar."
+      },
+      "move": {
+        "title": "Mueve secciones",
+        "body": "Toma una sección por su asa y suéltala sobre otra. El borde izquierdo o derecho la coloca al lado, el borde superior o inferior la apila en esa columna, y las líneas entre filas crean una fila nueva."
+      },
+      "resize": {
+        "title": "Cambia el ancho",
+        "body": "Arrastra el asa del borde derecho de una sección. El ancho cambia por pasos, así las secciones contiguas siempre quedan alineadas."
+      },
+      "props": {
+        "title": "Propiedades de la sección",
+        "body": "El engranaje abre las propiedades de una sección: cuántas entradas, fila o cuadrícula, su título y, en el tráiler, el tamaño del video y lo que va a su lado."
+      },
+      "hide": {
+        "title": "Mostrar y ocultar",
+        "body": "El ojo oculta una sección. Las secciones ocultas esperan en una bandeja bajo la página; haz clic en una para recuperarla."
+      },
+      "links": {
+        "title": "Tu página de enlaces",
+        "body": "Arrastra tu página de enlaces a la página como cualquier otra sección. Mantenla un momento en el extremo izquierdo o derecho para convertirla en una columna de altura completa en ese lado."
+      },
+      "mobile": {
+        "title": "También en el móvil",
+        "body": "Cambia a Móvil en la barra para decidir cómo se ve tu perfil en teléfonos: una columna, en tu propio orden. Hasta que cambies algo ahí, los teléfonos siguen tu diseño de escritorio."
+      },
+      "save": {
+        "title": "Guarda cuando te guste",
+        "body": "Guardar diseño lo publica. Deshacer y Rehacer recorren tus cambios (Ctrl+Z también funciona), Cancelar los descarta y Restablecer devuelve la página estándar. El ? junto al título vuelve a abrir este recorrido."
+      }
+    }
   }
 }

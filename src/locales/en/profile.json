@@ -291,5 +291,114 @@
     "unhiddenToast": "Tip shown on your profile again",
     "hideFailed": "Could not change this tip. Please try again.",
     "hideWalletPrompt": "Sign to change which tips show on your profile"
+  },
+  "layout": {
+    "customize": "Customize profile",
+    "title": "Customize your profile",
+    "hint": "Drag a section by its grip: beside another for a new column, above or below one to stack it, or onto a line between rows for a new row. Pull its right edge to change the width, and use the gear for its properties.",
+    "mobileHint": "This is your profile on phones: one column. Drag sections up or down, hide them, or change their properties. Until you change something here, phones follow your desktop layout.",
+    "save": "Save layout",
+    "saving": "Saving…",
+    "reset": "Reset to default",
+    "undo": "Undo",
+    "redo": "Redo",
+    "undoTitle": "Undo (Ctrl+Z)",
+    "redoTitle": "Redo (Ctrl+Shift+Z)",
+    "matchDesktop": "Match desktop",
+    "deviceDesktop": "Desktop",
+    "deviceMobile": "Mobile",
+    "saved": "Profile layout saved",
+    "saveFailed": "Could not save your layout: {{error}}",
+    "signInNeeded": "Please sign in again to save your layout",
+    "drag": "Drag to reorder",
+    "dropHere": "Drop here",
+    "newRow": "New row",
+    "resize": "Drag to change the width",
+    "dockHold": "hold for a full-height column",
+    "dockLeft": "Release: full-height left column",
+    "dockRight": "Release: full-height right column",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "show": "Show this section",
+    "hide": "Hide this section",
+    "settings": "Section settings",
+    "remove": "Remove this section",
+    "hiddenBadge": "Hidden",
+    "hiddenTitle": "Hidden sections",
+    "noSettings": "This section has no settings.",
+    "emptySection": "Nothing to show here yet. Visitors only see this section once it has content.",
+    "linksNote": "Only shown on wide screens. \"In the page\" puts it in the grid with the other sections; you can also drag it there by its grip.",
+    "addPlaylist": "Add a playlist as its own section",
+    "playlistMissing": "Playlist not found (deleted or private)",
+    "fields": {
+      "playlist": "Playlist",
+      "heading": "Heading",
+      "count_one": "Show {{count}} entry",
+      "count_other": "Show {{count}} entries",
+      "playlists_one": "Show {{count}} playlist",
+      "playlists_other": "Show {{count}} playlists",
+      "size": "Video size",
+      "size_sm": "Small",
+      "size_md": "Medium",
+      "size_lg": "Large",
+      "size_full": "Full width",
+      "showInfo": "Show title & description",
+      "showSnap": "Show latest community post",
+      "view": "Layout",
+      "viewRow": "Row",
+      "viewGrid": "Grid",
+      "side": "Position",
+      "sideLeft": "Left",
+      "sideRight": "Right",
+      "sideNone": "In the page"
+    },
+    "types": {
+      "trailer": "Channel trailer",
+      "live": "Live now",
+      "audioPlaylists": "Albums & audio playlists",
+      "playlistRails": "Playlist contents",
+      "playlist": "Playlist",
+      "links": "Links page"
+    },
+    "tour": {
+      "open": "Quick tour",
+      "stepOf": "Step {{n}} of {{total}}",
+      "skip": "Skip",
+      "back": "Back",
+      "next": "Next",
+      "done": "Let's go",
+      "intro": {
+        "title": "Make your channel yours",
+        "body": "Your Overview is now the editor: arrange it the way visitors should see it. Nothing changes for them until you press Save."
+      },
+      "move": {
+        "title": "Move sections",
+        "body": "Grab a section by its grip and drop it on another. The left or right edge puts it beside that section, the top or bottom edge stacks it in that column, and the lines between rows start a new row."
+      },
+      "resize": {
+        "title": "Change the width",
+        "body": "Pull the handle on a section's right edge. The width moves in steps, so sections next to each other always line up."
+      },
+      "props": {
+        "title": "Section properties",
+        "body": "The gear opens a section's properties: how many entries, row or grid, its heading, and for the trailer the video size and what sits next to it."
+      },
+      "hide": {
+        "title": "Show and hide",
+        "body": "The eye hides a section. Hidden sections wait in a tray under the page; click one to bring it back."
+      },
+      "links": {
+        "title": "Your links page",
+        "body": "Drag your links page into the page like any other section. Hold it at the far left or right of the page for a moment to make it a full-height column on that side."
+      },
+      "mobile": {
+        "title": "Phones too",
+        "body": "Switch to Mobile in the bar to arrange how your profile looks on phones: one column, in your own order. Until you change something there, phones follow your desktop layout."
+      },
+      "save": {
+        "title": "Save when you're happy",
+        "body": "Save layout publishes it. Undo and redo step back and forth through your changes (Ctrl+Z works too), Cancel drops them, and Reset to default brings back the standard page. The ? next to the title opens this tour again."
+      }
+    }
   }
 }
