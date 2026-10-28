@@ -100,7 +100,7 @@ the entry price everybody judges you on.
 | Video spot | 0.25 | 3.75 | 19.61 | 67.54 | 171.84 |
 | Player banner | 0.12 | 1.80 | 9.41 | 32.42 | 82.49 |
 | Pre-upload spot | 0.35 | 5.25 | 27.45 | 94.56 | 240.58 |
-| Shorts spot | 0.20 | 3.00 | 15.68 | 54.03 | 137.48 |
+| Shorts spot | 0.16 | 2.40 | 12.55 | 43.23 | 109.98 |
 | Ticker | 0.04 | 0.60 | 3.14 | 10.81 | 27.49 |
 
 These are the standard rates. Advertisers who registered during the launch window (until
