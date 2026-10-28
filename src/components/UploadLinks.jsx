@@ -87,7 +87,7 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
         <ShortsIcon className={iconClass} outlineWidth={30} /> {text('verticalShort')}
       </Link>
       {/* 24h story: a vertical short that leaves the stories row after a day.
-          Closed trial for now (storiesEnabledFor); the checker enforces it too. */}
+          Any Hive account (storiesEnabledFor); the checker enforces it too. */}
       {storiesEnabledFor(user) && (
         <Link to="/embed-studio?from=story" className={linkClass} title={t('misc.uploadLinks.story')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=story'))}>
           <MdAccessTime className={iconClass} /> {text('story')}
