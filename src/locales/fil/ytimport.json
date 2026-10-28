@@ -29,7 +29,8 @@
     "generic": "Nabigo ang pag-import.",
     "blocked": "Hindi pinayagan ng YouTube ang aming server na i-download ang video na ito ngayon.",
     "notVideo": "Hindi video ang file na iyon.",
-    "tooLongForShort": "Mas mahaba sa {{minutes}} minuto ang video na ito, masyadong mahaba para sa isang Short. I-import na lang ito bilang regular na video."
+    "tooLongForShort": "Mas mahaba sa {{minutes}} minuto ang video na ito, masyadong mahaba para sa isang Short. I-import na lang ito bilang regular na video.",
+    "proxyPaused": "Pansamantalang naka-pause ang pag-import mula sa YouTube. Subukan ulit mamaya."
   },
   "entry": "I-import ang mga video",
   "types": {
@@ -45,8 +46,10 @@
   "limits": "Limitado ang mga import sa mga video na hanggang {{minutes}} minuto ang haba at hanggang {{height}}p.",
   "tooLong": "Lampas {{minutes}} min",
   "onSite": "Nasa 3Speak na",
+  "inBatch": "Naghihintay sa batch",
   "viewPost": "Tingnan ang post",
-  "premiumHint": "Sa 3Speak Premium, maaari kang mag-import hanggang {{height}}p.",
+  "premiumHint": "Sa 3Speak Pro, maaari kang mag-import hanggang {{height}}p.",
+  "getPro": "Kumuha ng 3Speak Pro",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +95,14 @@
     "clear": "I-clear",
     "importSelected": "I-import ang napili ({{count}})",
     "busy": "Inaasikaso pa ang nauna mong batch",
-    "formTitle": "I-import ang {{count}} video",
-    "formIntro": "Ang mga pamagat, paglalarawan, tag at thumbnail ay kinukuha sa bawat video. Ang mga setting na ito ay para sa lahat.",
-    "community": "Komunidad",
-    "rewards": "Mga gantimpala",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "Tanggihan ang gantimpala"
+    "steps": {
+      "content": "Nilalaman",
+      "settings": "Mga setting"
     },
-    "beneficiaries": "Mga dagdag na beneficiary",
-    "accountPlaceholder": "Hive account",
-    "remove": "Alisin",
-    "addBeneficiary": "Magdagdag ng beneficiary",
-    "lockedNote": "Idinadagdag ng 3Speak ang karaniwang bahagi nito: 10% sa @threespeakfund at 1% para sa encoding (hindi kasama ang mga 3Speak Premium member).",
-    "nsfw": "Markahan bilang NSFW (pang-adult na content)",
-    "ads": "Magpakita ng ads sa mga video na ito",
+    "formTitle": "I-import ang {{count}} video",
+    "contentIntro": "Ang mga pamagat, paglalarawan, tag at thumbnail ay kinukuha sa bawat video.",
+    "settingsIntro": "Ang mga setting na ito ay para sa lahat ng video na pinili mo.",
+    "shortsNote": "Laging napupunta ang Shorts sa Shorts feed: ang community, blog at ads ay para lang sa mga regular na video.",
     "spacing": "Ini-import ang bawat video sa aming server at saka ipino-post nang hiwalay, may pagitang {{minutes}} minuto. Lalabas ang una ilang minuto matapos itong maging handa. Puwede mo nang isara ang page na ito.",
     "grantNeeded": "Para makapag-post habang wala ka, kailangan ng 3Speak ng pahintulot na mag-post para sa account mo. Puwede mo itong alisin anumang oras sa Hive wallet mo.",
     "grantButton": "Payagan ang 3Speak na mag-post para sa akin",

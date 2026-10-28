@@ -29,7 +29,8 @@
     "generic": "De import is mislukt.",
     "blocked": "YouTube liet onze server deze video nu niet downloaden.",
     "notVideo": "Dat bestand is geen video.",
-    "tooLongForShort": "Deze video is langer dan {{minutes}} minuten, te lang voor een Short. Importeer hem in plaats daarvan als gewone video."
+    "tooLongForShort": "Deze video is langer dan {{minutes}} minuten, te lang voor een Short. Importeer hem in plaats daarvan als gewone video.",
+    "proxyPaused": "YouTube-imports zijn even gepauzeerd. Probeer het later opnieuw."
   },
   "entry": "Video's importeren",
   "types": {
@@ -45,8 +46,10 @@
   "limits": "Imports zijn beperkt tot video's van maximaal {{minutes}} minuten, in maximaal {{height}}p.",
   "tooLong": "Meer dan {{minutes}} min",
   "onSite": "Al op 3Speak",
+  "inBatch": "Wacht in een batch",
   "viewPost": "Bekijk bericht",
-  "premiumHint": "Met 3Speak Premium kun je tot {{height}}p importeren.",
+  "premiumHint": "Met 3Speak Pro kun je tot {{height}}p importeren.",
+  "getPro": "Neem 3Speak Pro",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +95,14 @@
     "clear": "Wissen",
     "importSelected": "Selectie importeren ({{count}})",
     "busy": "Je vorige bulkimport loopt nog",
-    "formTitle": "{{count}} video's importeren",
-    "formIntro": "Titels, beschrijvingen, tags en thumbnails komen uit elke video. Deze instellingen gelden voor allemaal.",
-    "community": "Community",
-    "rewards": "Beloningen",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "Beloningen weigeren"
+    "steps": {
+      "content": "Inhoud",
+      "settings": "Instellingen"
     },
-    "beneficiaries": "Extra begunstigden",
-    "accountPlaceholder": "Hive-account",
-    "remove": "Verwijderen",
-    "addBeneficiary": "Begunstigde toevoegen",
-    "lockedNote": "3Speak rekent zijn gebruikelijke deel erbij: 10% voor @threespeakfund en 1% voor encoding (3Speak Premium-leden betalen dit niet).",
-    "nsfw": "Markeren als NSFW (inhoud voor volwassenen)",
-    "ads": "Advertenties tonen bij deze video's",
+    "formTitle": "{{count}} video's importeren",
+    "contentIntro": "Titels, beschrijvingen, tags en thumbnails komen uit elke video.",
+    "settingsIntro": "Deze instellingen gelden voor alle gekozen video's.",
+    "shortsNote": "Shorts komen altijd in de Shorts-feed: community, blog en advertenties gelden alleen voor de gewone video’s.",
     "spacing": "Elke video wordt op onze server geïmporteerd en daarna apart gepubliceerd, {{minutes}} minuten na elkaar. De eerste gaat een paar minuten na het klaarzetten online. Je kunt deze pagina sluiten.",
     "grantNeeded": "Om te publiceren terwijl je weg bent, heeft 3Speak toestemming nodig om voor je account te posten. Je kunt die altijd weer intrekken in je Hive-wallet.",
     "grantButton": "3Speak laten publiceren voor mij",

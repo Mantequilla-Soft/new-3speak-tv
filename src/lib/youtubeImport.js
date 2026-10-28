@@ -169,5 +169,13 @@ export function handOffToStudio(file, video, thumbnailDataUrl, mode = 'longform'
   };
 }
 
+/** 754 → "12:34", 3754 → "1:02:34". */
+export function fmtDuration(s) {
+  if (!s) return '';
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  const mm = h ? String(m).padStart(2, '0') : String(m);
+  return `${h ? `${h}:` : ''}${mm}:${String(sec).padStart(2, '0')}`;
+}
+
 export const youtubeStudioUrl = (videoId) => `https://studio.youtube.com/video/${videoId}/edit`;
 export const youtubeWatchUrl = (videoId) => `https://www.youtube.com/watch?v=${videoId}`;

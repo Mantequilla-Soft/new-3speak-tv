@@ -29,7 +29,8 @@
     "generic": "Impor gagal.",
     "blocked": "YouTube tidak mengizinkan server kami mengunduh video ini saat ini.",
     "notVideo": "File itu bukan video.",
-    "tooLongForShort": "Video ini berdurasi lebih dari {{minutes}} menit, terlalu panjang untuk sebuah Short. Impor sebagai video biasa saja."
+    "tooLongForShort": "Video ini berdurasi lebih dari {{minutes}} menit, terlalu panjang untuk sebuah Short. Impor sebagai video biasa saja.",
+    "proxyPaused": "Impor dari YouTube sedang dijeda untuk sementara. Coba lagi nanti."
   },
   "entry": "Impor video",
   "types": {
@@ -45,8 +46,10 @@
   "limits": "Impor dibatasi untuk video hingga {{minutes}} menit, dengan resolusi hingga {{height}}p.",
   "tooLong": "Lebih dari {{minutes}} mnt",
   "onSite": "Sudah ada di 3Speak",
+  "inBatch": "Menunggu dalam impor massal",
   "viewPost": "Lihat postingan",
-  "premiumHint": "Dengan 3Speak Premium, Anda dapat mengimpor hingga {{height}}p.",
+  "premiumHint": "Dengan 3Speak Pro, Anda dapat mengimpor hingga {{height}}p.",
+  "getPro": "Dapatkan 3Speak Pro",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +95,14 @@
     "clear": "Hapus pilihan",
     "importSelected": "Impor yang dipilih ({{count}})",
     "busy": "Impor massal sebelumnya masih berjalan",
-    "formTitle": "Impor {{count}} video",
-    "formIntro": "Judul, deskripsi, tag, dan thumbnail diambil dari tiap video. Pengaturan ini berlaku untuk semuanya.",
-    "community": "Komunitas",
-    "rewards": "Imbalan",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "Tolak imbalan"
+    "steps": {
+      "content": "Konten",
+      "settings": "Pengaturan"
     },
-    "beneficiaries": "Penerima tambahan",
-    "accountPlaceholder": "Akun Hive",
-    "remove": "Hapus",
-    "addBeneficiary": "Tambah penerima",
-    "lockedNote": "3Speak menambahkan bagian biasanya: 10% untuk @threespeakfund dan 1% untuk encoding (anggota 3Speak Premium tidak dikenakan).",
-    "nsfw": "Tandai sebagai NSFW (konten dewasa)",
-    "ads": "Tampilkan iklan di video ini",
+    "formTitle": "Impor {{count}} video",
+    "contentIntro": "Judul, deskripsi, tag, dan thumbnail diambil dari tiap video.",
+    "settingsIntro": "Pengaturan ini berlaku untuk semua video yang Anda pilih.",
+    "shortsNote": "Shorts selalu masuk ke feed Shorts: pengaturan komunitas, blog, dan iklan hanya berlaku untuk video biasa.",
     "spacing": "Setiap video diimpor di server kami lalu diterbitkan satu per satu, berjarak {{minutes}} menit. Yang pertama terbit beberapa menit setelah siap. Kamu bisa menutup halaman ini.",
     "grantNeeded": "Agar bisa menerbitkan saat kamu tidak ada, 3Speak perlu izin untuk memposting atas nama akunmu. Kamu bisa mencabutnya kapan saja di dompet Hive-mu.",
     "grantButton": "Izinkan 3Speak menerbitkan untukku",

@@ -13,10 +13,14 @@
 //                    entry builders take.
 //   import-channels  one doc per channel list, _id "<platform>:<channelId>:<type>":
 //                    { status: loading|complete|failed, cursor, count, startedAt, completedAt }
+//   import-records   one doc per video a creator published from an import,
+//                    _id "<user>|<sourceId>": { user, sourceId, platform, permlink, at }
+//                    (the importer's ✓ "already on 3Speak" mark and duplicate check)
 // Not tied to preview/prod: the same channel is the same data everywhere.
 
 const LIB = 'import-library'
 const CHANNELS = 'import-channels'
+const RECORDS = 'import-records'
 
 function createLibrary({ uri, dbName }) {
   let db = null
@@ -28,6 +32,7 @@ function createLibrary({ uri, dbName }) {
       await client.connect()
       db = client.db(dbName || undefined)
       await db.collection(LIB).createIndex({ platform: 1, channelId: 1, type: 1, publishedAt: -1 }, { name: 'list' }).catch(() => {})
+      await db.collection(RECORDS).createIndex({ user: 1 }, { name: 'user' }).catch(() => {})
       const n = await db.collection(LIB).estimatedDocumentCount().catch(() => 0)
       console.log(`[import-library] ready (${n} videos kept)`)
       return true
@@ -150,7 +155,26 @@ function createLibrary({ uri, dbName }) {
   }
   const isLoading = (platform, channelId, type) => crawling.has(channelKey(platform, channelId, type))
 
-  return { ready, putVideos, patchVideo, getVideo, listVideos, getChannel, ensureChannel, isLoading }
+  // ── Published imports ───────────────────────────────────────────────────────
+  /** This source is now this post. False when there is no Mongo (caller keeps its own). */
+  async function recordImport(user, sourceId, permlink) {
+    if (!(await ready)) return false
+    const platform = /^[a-z]+:/.test(sourceId) ? sourceId.split(':')[0] : 'youtube'
+    await db.collection(RECORDS).updateOne(
+      { _id: `${user}|${sourceId}` },
+      { $set: { user, sourceId, platform, permlink, at: new Date() } },
+      { upsert: true },
+    )
+    return true
+  }
+  /** source id → permlink for one creator, or null when there is no Mongo. */
+  async function importedFor(user) {
+    if (!(await ready)) return null
+    const docs = await db.collection(RECORDS).find({ user }, { projection: { sourceId: 1, permlink: 1 } }).toArray()
+    return Object.fromEntries(docs.map((d) => [d.sourceId, d.permlink]))
+  }
+
+  return { ready, putVideos, patchVideo, getVideo, listVideos, getChannel, ensureChannel, isLoading, recordImport, importedFor }
 }
 
 module.exports = { createLibrary }

@@ -29,7 +29,8 @@
     "generic": "A importação falhou.",
     "blocked": "O YouTube não permitiu que nosso servidor baixasse este vídeo agora.",
     "notVideo": "Esse arquivo não é um vídeo.",
-    "tooLongForShort": "Este vídeo tem mais de {{minutes}} minutos, longo demais para um Short. Importe-o como um vídeo normal."
+    "tooLongForShort": "Este vídeo tem mais de {{minutes}} minutos, longo demais para um Short. Importe-o como um vídeo normal.",
+    "proxyPaused": "As importações do YouTube estão pausadas por um tempo. Tente novamente mais tarde."
   },
   "entry": "Importar vídeos",
   "types": {
@@ -45,8 +46,10 @@
   "limits": "As importações são limitadas a vídeos de até {{minutes}} minutos, em até {{height}}p.",
   "tooLong": "Mais de {{minutes}} min",
   "onSite": "Já está no 3Speak",
+  "inBatch": "Aguardando em um lote",
   "viewPost": "Ver publicação",
-  "premiumHint": "Com o 3Speak Premium, você pode importar em até {{height}}p.",
+  "premiumHint": "Com o 3Speak Pro, você pode importar em até {{height}}p.",
+  "getPro": "Assine o 3Speak Pro",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +95,14 @@
     "clear": "Limpar",
     "importSelected": "Importar seleção ({{count}})",
     "busy": "Seu lote anterior ainda está sendo importado",
-    "formTitle": "Importar {{count}} vídeos",
-    "formIntro": "Títulos, descrições, tags e miniaturas vêm de cada vídeo. Estas configurações valem para todos.",
-    "community": "Comunidade",
-    "rewards": "Recompensas",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "Recusar recompensas"
+    "steps": {
+      "content": "Conteúdo",
+      "settings": "Configurações"
     },
-    "beneficiaries": "Beneficiários extras",
-    "accountPlaceholder": "Conta Hive",
-    "remove": "Remover",
-    "addBeneficiary": "Adicionar beneficiário",
-    "lockedNote": "O 3Speak acrescenta a parte de sempre: 10% para @threespeakfund e 1% pela codificação (membros 3Speak Premium não pagam).",
-    "nsfw": "Marcar como NSFW (conteúdo adulto)",
-    "ads": "Mostrar anúncios nestes vídeos",
+    "formTitle": "Importar {{count}} vídeos",
+    "contentIntro": "Títulos, descrições, tags e miniaturas vêm de cada vídeo.",
+    "settingsIntro": "Estas configurações valem para todos os vídeos escolhidos.",
+    "shortsNote": "Os Shorts vão sempre para o feed de Shorts: a comunidade, o blog e os anúncios só se aplicam aos vídeos normais.",
     "spacing": "Cada vídeo é importado no nosso servidor e depois publicado separadamente, com {{minutes}} minutos de intervalo. O primeiro sai alguns minutos depois de ficar pronto. Você pode fechar esta página.",
     "grantNeeded": "Para publicar enquanto você está fora, o 3Speak precisa de permissão para postar pela sua conta. Você pode removê-la quando quiser na sua carteira Hive.",
     "grantButton": "Permitir que o 3Speak publique por mim",

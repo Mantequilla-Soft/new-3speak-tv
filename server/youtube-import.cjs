@@ -75,6 +75,12 @@ const PIP_BIN = path.join(path.dirname(YTDLP_BIN), 'pip')
 // Without a placeholder the proxy is used as-is and a blocked attempt is not retried
 // (it would leave from the same IP again).
 const PROXY_ROTATES = /\{session\}|\{port:\d+-\d+\}/.test(YTDLP_PROXY)
+// Remaining proxy traffic (proxy-traffic.cjs): set when the routes are mounted.
+// Near zero, downloads that need the proxy pause instead of failing through it.
+let traffic = null
+const PROXY_PAUSED_MESSAGE = 'YouTube imports are paused for a while. Please try again later.'
+/** Whether a source downloads through the proxy: YouTube always, BitChute/Rumble without a direct file. */
+const needsProxy = (src) => !!YTDLP_PROXY && (src.platform === 'youtube' || ((src.platform === 'bitchute' || src.platform === 'rumble') && !src.direct))
 function proxyForAttempt() {
   if (!YTDLP_PROXY) return ''
   const session = crypto.randomBytes(6).toString('hex')
@@ -148,18 +154,23 @@ function alertDiscord({ title, color, user, platform, videoId, url, code, messag
     .catch((e) => console.warn(`[yt-import] Discord alert failed: ${e.message}`))
 }
 // ── What has already been published from an import ──────────────────────────
-// user → { "<youtube id>" | "tiktok:<id>" | "instagram:<shortcode>": { permlink, at } }, written by the
-// uploader after a successful publish, read by the grid for its ✓ mark. A small
-// JSON file is plenty at POC scale; written via temp file + rename.
+// Kept in Mongo `import-records` (import-library.cjs): one doc per creator and
+// source ("<youtube id>" | "tiktok:<id>" | "instagram:<shortcode>" | …), written by
+// the uploader after a publish and by the batch when it schedules a post. Read by
+// the grid for its ✓ mark and by the batch to never post a video twice. Not tied
+// to preview/prod: a post from either is on Hive all the same. Without Mongo, a
+// JSON file on this server stands in (temp file + rename).
 const IMPORTS_FILE = process.env.YT_IMPORT_STORE || path.join(__dirname, 'data', 'yt-imports.json')
 const SOURCE_RE = /^(?:[A-Za-z0-9_-]{11}|tiktok:\d{8,25}|instagram:[A-Za-z0-9_-]{5,40}|bitchute:[A-Za-z0-9_-]{6,20}|rumble:v[a-z0-9]{3,15})$/
+let library = null // set when the routes are mounted
 let importsStore = null
 function loadImports() {
   if (importsStore) return importsStore
   try { importsStore = JSON.parse(fs.readFileSync(IMPORTS_FILE, 'utf8')) || {} } catch { importsStore = {} }
   return importsStore
 }
-function recordImport(user, source, permlink) {
+async function recordImport(user, source, permlink) {
+  if (library && await library.recordImport(user, source, permlink)) return
   const store = loadImports()
   store[user] = { ...(store[user] || {}), [source]: { permlink, at: new Date().toISOString() } }
   fs.mkdirSync(path.dirname(IMPORTS_FILE), { recursive: true })
@@ -167,9 +178,22 @@ function recordImport(user, source, permlink) {
   fs.writeFileSync(tmp, JSON.stringify(store, null, 1))
   fs.renameSync(tmp, IMPORTS_FILE)
 }
-function importedFor(user) {
+async function importedFor(user) {
+  const fromMongo = library ? await library.importedFor(user) : null
+  if (fromMongo) return fromMongo
   const mine = loadImports()[user] || {}
   return Object.fromEntries(Object.entries(mine).map(([src, v]) => [src, v.permlink]))
+}
+/**
+ * What the importer marks: `imported` (on 3Speak) and `inBatch` (a batch still has
+ * to publish it). A batch records its post when it schedules it, so until the slot
+ * has passed such a video is only "in a batch": its post does not exist yet.
+ */
+async function knownImports(user) {
+  const inBatch = require('./import-batch.cjs').batchSourcesFor(user)
+  const imported = await importedFor(user)
+  for (const src of Object.keys(inBatch)) delete imported[src]
+  return { imported, inBatch }
 }
 
 const ALERT_RED = 0xe53935
@@ -780,6 +804,14 @@ async function directTikTokDownload(job) {
 }
 
 function runAttempt(job) {
+  // Every yt-dlp run without the TikTok session goes through the proxy.
+  if (traffic?.paused && YTDLP_PROXY && !(job.platform === 'tiktok' && tiktokSession())) {
+    job.status = 'failed'
+    job.errorCode = 'proxy_paused'
+    job.error = PROXY_PAUSED_MESSAGE
+    console.warn(`[yt-import] @${job.user} ${job.videoId} not started: proxy traffic paused`)
+    return
+  }
   const dir = path.join(WORK_DIR, job.id)
   // A failed attempt can leave .part fragments; start every attempt clean.
   fs.rmSync(dir, { recursive: true, force: true })
@@ -956,7 +988,7 @@ function sweep() {
  * (butrauth session, wallet session cookie, or HiveSigner bearer) or null.
  */
 function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPostingGrant }) {
-  const library = require('./import-library.cjs').createLibrary({
+  library = require('./import-library.cjs').createLibrary({
     uri: process.env.IMPORT_LIBRARY_MONGODB_URI || process.env.MONGODB_URI || '',
     dbName: process.env.IMPORT_LIBRARY_DATABASE_NAME || process.env.DATABASE_NAME || '',
   })
@@ -968,6 +1000,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
   setInterval(sweep, 10 * 60 * 1000).unref()
   setTimeout(maybeUpdateYtdlp, 60 * 1000).unref()
   setInterval(maybeUpdateYtdlp, 30 * 60 * 1000).unref()
+  traffic = require('./proxy-traffic.cjs').createProxyTraffic(YTDLP_PROXY)
 
   const mw = limiter ? [limiter] : []
 
@@ -989,6 +1022,8 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
         apiConfigured: !!YT_API_KEY,
         downloader: fs.existsSync(YTDLP_BIN),
         proxyConfigured: !!YTDLP_PROXY || !!YTDLP_COOKIES,
+        // Out of proxy traffic: YouTube downloads are paused (proxy-traffic.cjs).
+        proxyPaused: traffic.paused,
         instagramReady: igReady,
         // The sources this server imports from (IMPORT_SOURCE_<NAME>).
         sources: enabledSources(),
@@ -998,8 +1033,9 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
           baseHeight: MAX_HEIGHT,
           premiumHeight: MAX_HEIGHT_PREMIUM,
         },
-        // source id → 3Speak permlink, for the ✓ "On 3Speak" mark
-        imported: importedFor(user),
+        // source id → 3Speak permlink, for the ✓ "On 3Speak" mark; and the ones a
+        // batch still has to publish.
+        ...(await knownImports(user)),
       })
     } catch (e) { fail(res, e) }
   })
@@ -1011,7 +1047,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     const permlink = String(req.body?.permlink || '')
     if (!SOURCE_RE.test(source) || !/^[a-z0-9-]{1,255}$/.test(permlink)) return res.status(400).json({ error: 'invalid source or permlink' })
     try {
-      recordImport(user, source, permlink)
+      await recordImport(user, source, permlink)
       console.log(`[yt-import] @${user} published ${source} as ${permlink}`)
       res.json({ ok: true })
     } catch (e) {
@@ -1346,6 +1382,9 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     if (!entry && !VIDEO_ID_RE.test(videoId)) return res.status(400).json({ error: 'invalid video id' })
     if (!fs.existsSync(YTDLP_BIN)) return res.status(503).json({ error: 'Downloader is not installed on this server', errorCode: 'no_downloader' })
     if (ytdlpUpdating) return res.status(503).json({ error: 'The importer is updating itself, try again in a minute', errorCode: 'busy' })
+    if (needsProxy(entry || { platform: 'youtube' }) && await traffic.pausedNow()) {
+      return res.status(503).json({ error: PROXY_PAUSED_MESSAGE, errorCode: 'proxy_paused' })
+    }
     try {
       let video
       if (entry) {
@@ -1501,11 +1540,13 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
       startDownload: startBatchDownload,
       getJob: (id) => jobs.get(id),
       removeJob,
-      canStartDownload: () => !ytdlpUpdating && runningCount() < MAX_CONCURRENT,
+      // A proxied source waits (stays queued) while the proxy traffic is paused.
+      canStartDownload: (src) => !ytdlpUpdating && runningCount() < MAX_CONCURRENT && !(src && needsProxy(src) && traffic.paused),
       startsToday: (user) => (userStarts.get(user) || []).filter((t) => Date.now() - t < 24 * 3600 * 1000).length,
       maxPerDay: MAX_JOBS_PER_DAY,
       isPremium,
       recordImport,
+      knownImports,
       uploadImage,
       hasPostingGrant,
       alert: alertDiscord,

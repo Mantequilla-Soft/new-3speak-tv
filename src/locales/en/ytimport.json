@@ -29,7 +29,8 @@
     "generic": "The import failed.",
     "blocked": "YouTube did not let our server download this video right now.",
     "notVideo": "That file is not a video.",
-    "tooLongForShort": "This video is longer than {{minutes}} minutes, too long for a Short. Import it as a regular video instead."
+    "tooLongForShort": "This video is longer than {{minutes}} minutes, too long for a Short. Import it as a regular video instead.",
+    "proxyPaused": "YouTube imports are paused for a while. Please try again later."
   },
   "entry": "Import videos",
   "types": {
@@ -45,8 +46,10 @@
   "limits": "Imports are limited to videos up to {{minutes}} minutes, in up to {{height}}p.",
   "tooLong": "Over {{minutes}} min",
   "onSite": "Already on 3Speak",
+  "inBatch": "Waiting in a batch",
   "viewPost": "View post",
-  "premiumHint": "With 3Speak Premium you can import in up to {{height}}p.",
+  "premiumHint": "With 3Speak Pro you can import in up to {{height}}p.",
+  "getPro": "Get 3Speak Pro",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +95,14 @@
     "clear": "Clear",
     "importSelected": "Import selected ({{count}})",
     "busy": "Your previous batch is still being imported",
-    "formTitle": "Import {{count}} videos",
-    "formIntro": "Titles, descriptions, tags and thumbnails come from each video. These settings apply to all of them.",
-    "community": "Community",
-    "rewards": "Rewards",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "Decline rewards"
+    "steps": {
+      "content": "Content",
+      "settings": "Settings"
     },
-    "beneficiaries": "Extra beneficiaries",
-    "accountPlaceholder": "Hive account",
-    "remove": "Remove",
-    "addBeneficiary": "Add beneficiary",
-    "lockedNote": "3Speak adds its usual share on top: 10% to @threespeakfund and 1% for encoding (3Speak Premium members skip these).",
-    "nsfw": "Mark as NSFW (adult content)",
-    "ads": "Show ads on these videos",
+    "formTitle": "Import {{count}} videos",
+    "contentIntro": "Titles, descriptions, tags and thumbnails come from each video.",
+    "settingsIntro": "These settings apply to all the videos you picked.",
+    "shortsNote": "Shorts always go to the Shorts feed: the community, blog and ad settings only apply to the regular videos.",
     "spacing": "Each video is imported on our server and then published on its own, {{minutes}} minutes apart. The first goes out a few minutes after it is ready. You can close this page.",
     "grantNeeded": "To publish while you are away, 3Speak needs permission to post for your account. You can remove it any time in your Hive wallet.",
     "grantButton": "Allow 3Speak to publish for me",

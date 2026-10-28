@@ -15,6 +15,7 @@
       font-size: 24px;
       margin: 0 0 4px;
     }
+    .yt-import__muted { font-size: 15px; line-height: 1.45; }
   }
   &__logo { color: #ff0000; }
 
@@ -25,11 +26,34 @@
   }
   &__note { color: var(--text-secondary, #666); }
   &__limits {
-    font-size: 13px;
+    font-size: 15px;
+    line-height: 1.45;
     color: var(--text-secondary, #666);
     margin: -8px 0 16px;
   }
+  // "Get 3Speak Pro" at the end of the limits line: a small pill, crown beside
+  // the label. Doubled with __btn, which is declared further down and would
+  // otherwise win with its inline-block and padding.
+  &__pro.yt-import__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 10px;
+    padding: 4px 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    white-space: nowrap;
+    vertical-align: middle;
+    svg { flex-shrink: 0; color: #f5b300; }
+  }
   &__error { color: #e53935; font-size: 14px; }
+  &__paused {
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    border: 1px solid rgba(251, 140, 0, 0.6);
+    border-radius: 10px;
+    font-size: 14px;
+  }
   &__center { display: flex; justify-content: center; padding: 20px 0; }
 
   &__empty {
@@ -252,7 +276,10 @@
     position: relative;
     img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; display: block; }
   }
-  // Already published on 3Speak from an import.
+  // Already published on 3Speak from an import (green ✓), or waiting in a batch
+  // (clock, neutral).
+  &__done--waiting.yt-import__done { background: #616161; }
+  &__on-site--waiting.yt-import__on-site { color: var(--text-secondary, #666); }
   &__done {
     position: absolute;
     right: 6px;
@@ -366,7 +393,7 @@
   &__overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); }
   &__sheet {
     position: relative;
-    width: min(560px, calc(100vw - 32px));
+    width: min(680px, calc(100vw - 32px));
     max-height: calc(100vh - 48px);
     overflow-y: auto;
     padding: 20px;
@@ -390,43 +417,38 @@
     margin: 12px 0;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    li { display: flex; align-items: center; gap: 10px; font-size: 14px; min-width: 0; }
-    img { width: 56px; height: 32px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
-    span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    gap: 10px;
+    li { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    img { width: 96px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: rgba(127, 127, 127, 0.2); }
+    div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .yt-import__muted { font-size: 12px; }
   }
-  &__field { margin: 14px 0; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
-  &__label { font-weight: 600; }
-  &__avatar { width: 20px; height: 20px; border-radius: 50%; vertical-align: middle; margin-right: 4px; }
-  &__choices { display: flex; flex-wrap: wrap; gap: 8px; }
-  &__choice {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 18px;
-    border: 1px solid var(--border-color, #ccc);
-    cursor: pointer;
-    font-size: 14px;
-    input { margin: 0; }
-    &.is-on { border-color: #e53935; color: #e53935; }
+  &__picked-title { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  // The upload wizard's settings tiles (EmbedDetails.scss). Three across in the
+  // dialog instead of four, two on phones; one more class than the wizard's
+  // tripled selector so these win.
+  &__tiles.advance-option.advance-option.advance-option {
+    margin: 14px 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    @include mix.respond(phone) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    &.is-busy { pointer-events: none; opacity: 0.6; }
   }
-  &__bene {
+  // The checkbox's base shape lives in StudioPage.scss, scoped to the wizard page.
+  // Likewise the tile's text column (title over description) and the community
+  // value's avatar-beside-name row.
+  &__tiles .beneficiary-wrap .wrap {
     display: flex;
-    align-items: center;
-    gap: 6px;
-    input {
-      padding: 6px 8px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color, #ccc);
-      background: var(--bg-primary, #fff);
-      color: var(--text-primary, #000);
-      font-size: 14px;
-      &[type='text'] { width: 160px; }
-      &[type='number'] { width: 64px; }
-    }
+    flex-direction: column;
+    color: var(--text-secondary, #555);
   }
-  &__check { display: flex; align-items: center; gap: 8px; margin: 8px 0; cursor: pointer; }
+  &__tiles .community-value .wrap { flex-direction: row; color: inherit; }
+  &__tiles .toggle-switch {
+    position: relative;
+    display: inline-block;
+    input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .toggle-track { display: block; position: relative; }
+    .toggle-thumb { position: absolute; }
+  }
   &__small { font-size: 13px; margin: 6px 0 0; }
   &__grant {
     margin: 14px 0;
