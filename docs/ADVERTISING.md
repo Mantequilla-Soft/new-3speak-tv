@@ -7,8 +7,9 @@ verify. No third-party ad network, no tracking scripts, no data sold.
 This document explains how it works: what an advertiser buys, what a creator earns,
 what a viewer gets, and exactly how each number is calculated.
 
-> **Status:** the system is built and running in a closed beta. Rates, splits and
-> formats below are what the code does today. See [Where things stand](#where-things-stand).
+> **Status:** open to every advertiser and every channel since September 16, 2026. Rates,
+> splits and formats below are what the code does today (last checked October 28, 2026).
+> See [Where things stand](#where-things-stand).
 
 ---
 
@@ -17,9 +18,9 @@ what a viewer gets, and exactly how each number is calculated.
 <table>
 <tr><th align="left">If you are a…</th><th align="left">Here is the short version</th></tr>
 <tr><td><b>Viewer</b></td><td>You can opt in to <b>earn a share of ad revenue for videos you watch</b>, paid in real HBD or HIVE to your Hive account. Viewers take <b>10% of all ad revenue</b>. <b>3Speak Pro subscribers see no ads and still earn</b>. Nothing is tracked unless you opt in, and opting out deletes what was kept.</td></tr>
-<tr><td><b>Creator</b></td><td>Ads on your videos pay <b>you</b>, not a network. Creators take <b>50% of all ad revenue</b>, and you can choose to route part of your share to your community. You can switch ads off on your videos entirely. You are never shown an ad on your own video.</td></tr>
+<tr><td><b>Creator</b></td><td>Ads on your videos pay <b>you</b>, not a network. Creators take <b>50% of all ad revenue</b>, and you can choose to route part of your share to your community. You choose, for your whole channel or per video: all ads, <b>banners and tickers only</b> (no ad breaks), or no ads at all. You are never shown an ad on your own video.</td></tr>
 <tr><td><b>Advertiser</b></td><td>You buy a spot for a number of seconds, over a number of days, at a published rate. No auction, no CPM, no minimum spend beyond the format price. Pay in HBD or HIVE with one transfer. Longer bookings, called flights, cost meaningfully less per day.</td></tr>
-<tr><td><b>Investor</b></td><td>3Speak retains <b>40%</b> of gross ad revenue. Revenue recognition is pro rata by time, not by delivery, so a 30-day flight books across the periods it runs in. Payouts are in the same asset the advertiser paid with, so the platform carries no currency risk on the revenue share. Every distribution is on chain and auditable.</td></tr>
+<tr><td><b>Investor</b></td><td>3Speak retains <b>35%</b> of gross ad revenue, or <b>33%</b> on campaigns whose advertiser was referred by a user. The other platform-side shares are 5% to the encoders that process the videos and 2% to the referrer. Revenue recognition is pro rata by time, not by delivery, so a 30-day flight books across the periods it runs in. Payouts are in the same asset the advertiser paid with, so the platform carries no currency risk on the revenue share. Every distribution is on chain and auditable.</td></tr>
 <tr><td><b>Engineer</b></td><td>Server-side ad stitching into HLS, epoch-anchored settlement periods, idempotent claim-then-send payouts with per-asset legs, and a measurement path that never proxies video bytes. Start at <a href="#how-the-code-is-laid-out">How the code is laid out</a>.</td></tr>
 </table>
 
@@ -33,7 +34,9 @@ flowchart LR
     P --> POOL{"Revenue for the<br/>period it ran in"}
     POOL -->|50%| C["Creator<br/>whose video carried it"]
     POOL -->|10%| V["Viewers<br/>who watched"]
-    POOL -->|40%| T["3Speak"]
+    POOL -->|5%| E["Encoders<br/>who process the videos"]
+    POOL -->|2%, if referred| RF["Whoever referred<br/>the advertiser"]
+    POOL -->|33 to 35%| T["3Speak"]
     C -.->|creator's own choice,<br/>0 to 50 points| CM["Their community"]
     C --> OUT1["on-chain transfer"]
     V --> OUT2["on-chain transfer"]
@@ -46,18 +49,24 @@ flowchart LR
 ```
 
 **The split is on gross revenue, not on what is left after costs.** Creator 50, viewer 10,
-3Speak 40, and those are the three shares of every HBD an advertiser spends.
+encoders 5, referrer 2 (only when the advertiser was referred), and 3Speak keeps the rest:
+35, or 33 on a referred campaign.
 
-The creator's 50 does not move when a viewer opts in. Viewer rewards are funded entirely
-out of what 3Speak would otherwise keep: without them the platform would retain 50, and
-with them it retains 40. Nobody is paid out of a creator's share but the creator and the
-community they chose.
+The creator's 50 does not move when anybody else is added. Viewer rewards, the encoders'
+share and the referrer's share are all funded out of what 3Speak would otherwise keep.
+Nobody is paid out of a creator's share but the creator and the community they chose.
+
+- **Encoders** are the nodes that transcode uploads into playable video. Their share is
+  paid every period as one transfer to `@encoder.pay`, in the asset the advertisers paid.
+- **Referrers**: anyone who brought an advertiser to 3Speak with a `?ref=` link receives
+  2% of every campaign that advertiser runs, for as long as they advertise. It is computed
+  per campaign, from that campaign's own revenue.
 
 ---
 
 ## What an advertiser buys
 
-Four formats. Every one is priced the same way: **per second of ad, per day it runs.**
+Five formats. Every one is priced the same way: **per second of ad, per day it runs.**
 
 | Format | Where it appears | You supply | Max length |
 |---|---|---|---|
@@ -65,6 +74,7 @@ Four formats. Every one is priced the same way: **per second of ad, per day it r
 | **Player banner** (`video_banner`) | Burned into the player over the video, for a set window | An image, or a video at least as long as the window | 20s |
 | **Pre-upload spot** (`upload_gate`) | Before a creator publishes a video, in the upload studio | A video | 30s |
 | **Shorts spot** (`shorts_roll`) | As an item in the shorts feed | A video | 30s |
+| **Ticker** (`video_ticker`) | A line of text crawling under the video, with your name and a link | A message (up to 140 characters) and a link | 20s on screen |
 
 There is no CPM and no auction. A position is flat tenancy: you book it for a window and
 it is yours, shared with at most two other advertisers who take turns. Bidding rewards
@@ -91,6 +101,11 @@ the entry price everybody judges you on.
 | Player banner | 0.12 | 1.80 | 9.41 | 32.42 | 82.49 |
 | Pre-upload spot | 0.35 | 5.25 | 27.45 | 94.56 | 240.58 |
 | Shorts spot | 0.20 | 3.00 | 15.68 | 54.03 | 137.48 |
+| Ticker | 0.04 | 0.60 | 3.14 | 10.81 | 27.49 |
+
+These are the standard rates. Advertisers who registered during the launch window (until
+November 1, 2026) keep half of these rates for a year. The booking page on
+[3speak.tv/advertise](https://3speak.tv/advertise) always shows the price you will pay.
 
 **What the curve is worth to you**, as a discount on the daily rate:
 
@@ -104,8 +119,19 @@ Two things that do **not** curve:
 - **Spot length stays linear.** A 20 second spot costs exactly twice a 10 second one, at
   any flight length. Length is airtime on every single play, so it is charged in full.
 
-Flights run from **1 to 90 days**. An optional production fee (currently 100 HBD) covers
-3Speak making the ad video for you, if you do not have one.
+Flights run from **1 to 90 days**.
+
+**No ad yet? We make it.** Production is optional and priced by what you need:
+
+| What we make | For | Price |
+|---|---|---|
+| Static banner | Player banner | 5 HBD flat |
+| Animated banner | Player banner | 10 HBD per started 5 seconds |
+| AI commercial | Video, pre-upload and Shorts spots | 25 HBD per started 5 seconds |
+| Presenter commercial | Video, pre-upload and Shorts spots | 40 HBD per started 5 seconds |
+
+The seconds are the length you booked, so a 15-second AI commercial is 75 HBD. A ticker
+needs no production: you write the line yourself.
 
 **A banner's seconds are seconds on screen.** For a spot, the booked length is how long
 the ad plays. For a banner it is how long the banner sits in the frame, and a banner can
@@ -201,12 +227,17 @@ measurement honest without paying to move an advertiser's video twice.
 
 - they subscribe to **3Speak Pro** (the ad-free tier, which still earns: see
   [Pro subscribers earn too](#pro-subscribers-earn-too)),
-- the creator has **switched ads off** on their channel,
+- the creator has **switched ads off** on their channel or on that video (a creator who
+  chose banners and tickers only gets no video or Shorts spots),
 - they are the **author of the video** they are watching (creators replay their own
   uploads constantly to check them, and every replay would otherwise bill an advertiser
   and pay the creator),
-- they have already seen that campaign within the frequency cap window (30 minutes for
-  a spot, and a shorter one for banners).
+- they have already seen that campaign within the frequency cap window (15 minutes for
+  a spot, 10 for a banner, 5 for a ticker),
+- their address has already been shown an ad on that video today (one per address, per
+  video, per day),
+- they are a known crawler or bot. Crawlers may read every page, but nothing they play is
+  recorded or counted.
 
 ---
 
@@ -281,6 +312,16 @@ flowchart TD
 your share = viewer pool x (your qualifying seconds / everyone's qualifying seconds)
 ```
 
+- **75% means 75% of the video actually played.** It is unique coverage of the timeline,
+  so seeking to the end counts as one second, not as the whole video.
+- **At most 20 minutes count per video.** A ten-hour upload on a loop is worth the same as
+  a twenty-minute one.
+- **Seconds are content seconds**, corrected for playback speed, so playing at half speed
+  does not double anything.
+- **Creators do not earn as viewers on their own videos.**
+- **Watching on 3speak.tv counts**, and so does watching in partner apps that sign who is
+  watching. A plain embed on another site does not know who you are, so it cannot pay you.
+
 **Rewatching a video earns nothing.** There is exactly one record per viewer per video,
 ever, and it keeps the *best* coverage you ever reached rather than adding viewings up. This is the
 core anti-fraud rule for viewer rewards, and it is not theoretical: when we measured it,
@@ -317,8 +358,9 @@ memo. If you can receive HIVE, you can receive this.
 
 The switches are in **Settings**:
 
-- **Creators** choose whether ads run on their videos at all, and what share of their
-  half goes to their community.
+- **Creators** choose whether ads run on their videos (all ads, banners and tickers only,
+  or none, for the channel or per video) and what share of their half goes to their
+  community.
 - **Viewers** choose whether to earn rewards. Switching it off deletes what was stored.
 
 Both are signed with your Hive key, so nobody can change your settings but you.
@@ -410,10 +452,11 @@ Things that are **not** fully solved, stated plainly:
 
 - **Impression measurement is client observed.** As with every ad system that does not
   proxy video, a determined party can drive the measurement endpoints directly. Pacing
-  makes each fake impression cost real wall-clock time, and the frequency cap limits
-  repetition, but neither makes it impossible. Today the exposure is small because ads
-  serve on a short allowlist of channels. It becomes a real concern the day that list
-  opens up, and per-network rate limiting is the next step.
+  makes each fake impression cost real wall-clock time, the frequency cap and the
+  one-ad-per-address-per-video-per-day rule limit repetition, a creator watching signed
+  out from their own network is not served, and known crawlers are never counted. None of
+  that makes it impossible, and since ads opened to every channel in September it is a
+  live concern rather than a theoretical one.
 - **The pre-upload gate is enforced in the browser.** The publish endpoint does not yet
   verify a signed receipt proving the spot was watched.
 - **Viewer settlement scans all unpaid rows.** Correct, but it will need a bounded query
@@ -429,7 +472,12 @@ Things that are **not** fully solved, stated plainly:
 | Creator payouts, community splits | Built, running |
 | Viewer rewards | Built, opt-in live, paying |
 | Pre-upload gate | Built, client enforced only |
-| Public launch | Closed beta on an allowlist |
+| Public launch | Open to every advertiser and every channel since September 16, 2026 |
+| Formats | Video, banner, pre-upload, Shorts and ticker spots all bookable |
+| Banners and tickers only (no ad breaks) | Live, per channel and per video |
+| Encoder share (5%) and referrer share (2%) | Running |
+| Ad production | Live, four tiers |
+| Creators promoting their own video as an ad | Beta |
 | Third-party ad networks | Researched, not adopted |
 
 ---
@@ -444,6 +492,8 @@ For anyone picking this up. The advertising system spans two services.
 | Booking, payment verification, refunds | `routes/adCampaigns.js` |
 | Advertiser records, creator and viewer preferences | `routes/advertise.js` |
 | Settlement and payouts | `services/adPayouts.js` |
+| Referrer share | `services/adReferrals.js` |
+| Creators promoting their own video (beta) | `routes/adSelfPromo.js` |
 | Price, formats, campaign state machine | `utils/adModel.js`, `utils/adFormats.js` |
 | Who may be shown an ad | `utils/adEligibility.js` |
 | Banner burn-in | `services/adBurner.js` |
