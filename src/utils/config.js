@@ -261,11 +261,11 @@ const ALWAYS_ON_TEST_USERS = ['badadib', 'meno', 'tibfox', 'coolmole'];
 const isTestUser = (user) => !!user && ALWAYS_ON_TEST_USERS.includes(String(user).toLowerCase());
 const openpodsEnabledFor = (user) => ENABLE_OPENPODS || isTestUser(user);
 
-// Posting a story (the "Story" entry in the share menu) is a closed trial. Keep in
-// step with STORIES_ALLOWED_OWNERS on the checker, which enforces it. Watching
-// stories and their notifications are open to everyone.
-const STORY_POSTERS = ['badadib', 'meno', 'tibfox'];
-const storiesEnabledFor = (user) => !!user && STORY_POSTERS.includes(String(user).toLowerCase());
+// Posting a story (the "Story" entry in the share menu) is open to every Hive
+// account. Warm-up uploaders have no `user` (only an incubation handle) and stay
+// out: the checker reads the story post back from Hive before starting its 24h.
+// STORIES_ALLOWED_OWNERS on the checker (empty = everyone) still enforces it.
+const storiesEnabledFor = (user) => !!user;
 
 // The "New here" rail: creators who have no Hive account yet, surfaced in the
 // home feed. OFF by default while the warm-up is still being tested -- the whole

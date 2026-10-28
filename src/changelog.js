@@ -7,6 +7,11 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.36',
+    date: '2026-10-28',
+    summary: 'Everyone can now post a 24-hour Story: tap your own avatar in the stories row or pick Story in the Upload menu.',
+  },
+  {
     version: '1.80.35',
     date: '2026-10-27',
     summary: 'Approving actions with your active key now works smoothly after switching between Butter Auth and your wallet.',
