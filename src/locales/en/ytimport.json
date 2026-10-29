@@ -115,6 +115,7 @@
     "start": "Start import",
     "starting": "Starting…",
     "statusTitle": "Your batch import",
+    "canLeave": "You can close this page now. Your videos are imported and published on our server, also while you are away.",
     "stop": "Stop the rest",
     "short": "Short",
     "status": {

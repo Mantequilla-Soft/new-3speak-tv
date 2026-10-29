@@ -330,6 +330,11 @@ export function BatchStatus({ batch, user, onChange }) {
           </button>
         )}
       </div>
+      {/* Everything happens on the server (import-batch.cjs), so say so: people
+          otherwise keep the tab open for hours. */}
+      {stoppable && (
+        <p className="yt-batch-status__leave"><FaCheck aria-hidden="true" /> {t('ytimport.batch.canLeave')}</p>
+      )}
       <ul>
         {batch.items.map((it) => (
           <li key={it.sourceId} className={`yt-batch-status__item is-${it.status}`}>

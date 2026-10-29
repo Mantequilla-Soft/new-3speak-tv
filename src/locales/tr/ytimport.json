@@ -115,6 +115,7 @@
     "start": "İçe aktarmayı başlat",
     "starting": "Başlatılıyor…",
     "statusTitle": "Toplu içe aktarman",
+    "canLeave": "Bu sayfayı artık kapatabilirsin. Videoların sen yokken de sunucumuzda içe aktarılıp yayınlanır.",
     "stop": "Kalanları durdur",
     "short": "Short",
     "status": {

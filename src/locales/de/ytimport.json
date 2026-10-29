@@ -115,6 +115,7 @@
     "start": "Import starten",
     "starting": "Wird gestartet…",
     "statusTitle": "Dein Sammelimport",
+    "canLeave": "Du kannst diese Seite jetzt schließen. Deine Videos werden auf unserem Server importiert und veröffentlicht, auch während du weg bist.",
     "stop": "Den Rest stoppen",
     "short": "Short",
     "status": {

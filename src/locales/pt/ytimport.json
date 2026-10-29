@@ -115,6 +115,7 @@
     "start": "Iniciar importação",
     "starting": "Iniciando…",
     "statusTitle": "Sua importação em lote",
+    "canLeave": "Você já pode fechar esta página. Seus vídeos são importados e publicados no nosso servidor, mesmo enquanto você estiver fora.",
     "stop": "Parar o resto",
     "short": "Short",
     "status": {

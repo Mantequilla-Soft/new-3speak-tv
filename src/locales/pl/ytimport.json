@@ -115,6 +115,7 @@
     "start": "Rozpocznij import",
     "starting": "Uruchamianie…",
     "statusTitle": "Twój import zbiorczy",
+    "canLeave": "Możesz już zamknąć tę stronę. Twoje filmy są importowane i publikowane na naszym serwerze, także pod twoją nieobecność.",
     "stop": "Zatrzymaj resztę",
     "short": "Short",
     "status": {

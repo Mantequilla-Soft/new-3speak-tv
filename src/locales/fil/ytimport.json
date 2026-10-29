@@ -115,6 +115,7 @@
     "start": "Simulan ang import",
     "starting": "Sinisimulan…",
     "statusTitle": "Ang batch import mo",
+    "canLeave": "Puwede mo nang isara ang page na ito. Ini-import at ipinu-publish ang mga video mo sa server namin, kahit wala ka.",
     "stop": "Itigil ang natitira",
     "short": "Short",
     "status": {

@@ -1628,6 +1628,29 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     return job
   }
 
+  // Thumbnails of batch posts: @threespeak on images.hive.blog first, like the
+  // upload wizard (src/utils/uploadThumbnail.js), then the 3Speak image server when
+  // that refuses. @threespeak's images.hive.blog quota does run out (429
+  // qouta_exceeded), and a post without a thumbnail is a broken post.
+  const IMAGE_SERVER_URL = (process.env.IMAGE_SERVER_URL || '').replace(/\/$/, '')
+  const IMAGE_SERVER_KEY = process.env.IMAGE_SERVER_KEY || ''
+  async function uploadImageWithFallback(buf, type) {
+    try {
+      return await uploadImage(buf, type)
+    } catch (e) {
+      if (!IMAGE_SERVER_URL || !IMAGE_SERVER_KEY) throw e
+      console.warn(`[yt-import] @threespeak image upload failed (${e.message}), using ${IMAGE_SERVER_URL}`)
+      const form = new FormData()
+      form.append('image', new Blob([buf], { type }), `thumbnail.${(type.split('/')[1] || 'jpg').replace('jpeg', 'jpg')}`)
+      const r = await fetch(`${IMAGE_SERVER_URL}/upload`, {
+        method: 'POST', headers: { Authorization: `Bearer ${IMAGE_SERVER_KEY}` }, body: form, signal: AbortSignal.timeout(30000),
+      })
+      const d = await r.json().catch(() => ({}))
+      if (!r.ok || !d.success || !d.url) throw new Error(`3Speak image server: ${d.error?.name || d.error || `HTTP ${r.status}`}`)
+      return d.url
+    }
+  }
+
   if (uploadImage && hasPostingGrant) {
     require('./import-batch.cjs').mountImportBatch(app, {
       auth, mw, resolveSource,
@@ -1647,7 +1670,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
       isPremium,
       recordImport,
       knownImports,
-      uploadImage,
+      uploadImage: uploadImageWithFallback,
       hasPostingGrant,
       alert: alertDiscord,
       coverFor,

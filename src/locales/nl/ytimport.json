@@ -115,6 +115,7 @@
     "start": "Import starten",
     "starting": "Bezig met starten…",
     "statusTitle": "Je bulkimport",
+    "canLeave": "Je kunt deze pagina nu sluiten. Je video’s worden op onze server geïmporteerd en gepubliceerd, ook als je weg bent.",
     "stop": "De rest stoppen",
     "short": "Short",
     "status": {

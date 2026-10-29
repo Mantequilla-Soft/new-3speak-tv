@@ -115,6 +115,7 @@
     "start": "Lancer l'import",
     "starting": "Démarrage…",
     "statusTitle": "Ton import groupé",
+    "canLeave": "Vous pouvez fermer cette page. Vos vidéos sont importées et publiées sur notre serveur, même en votre absence.",
     "stop": "Arrêter le reste",
     "short": "Short",
     "status": {

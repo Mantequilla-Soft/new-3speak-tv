@@ -115,6 +115,7 @@
     "start": "Avvia importazione",
     "starting": "Avvio…",
     "statusTitle": "La tua importazione multipla",
+    "canLeave": "Ora puoi chiudere questa pagina. I tuoi video vengono importati e pubblicati sul nostro server, anche mentre non ci sei.",
     "stop": "Ferma il resto",
     "short": "Short",
     "status": {
