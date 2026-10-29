@@ -27,6 +27,8 @@ import threeSpeakLogo from '../assets/image/3S_mark.svg';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 import StoryNotifications from '../components/nav/StoryNotifications';
 import { useStoryNotifications } from '../lib/stories';
+import PodcastNotifications from '../components/nav/PodcastNotifications';
+import { usePodcastNotifications } from '../lib/podcasts';
 import './Notifications.scss';
 import { useTranslation } from 'react-i18next';
 
@@ -107,6 +109,7 @@ function Notifications() {
     isUnread,
   } = useHiveNotifications(authenticated ? user : null, { limit: 50 });
   const { stories } = useStoryNotifications(authenticated ? user : null);
+  const { episodes: podcastEpisodes } = usePodcastNotifications(authenticated ? user : null);
 
   // Monthly state declared early so mergedNotifications can reference it
   const [monthNotifs, setMonthNotifs] = useState([]);
@@ -381,6 +384,9 @@ function Notifications() {
 
       {/* ─── 24h stories from followed accounts (injected, not on chain) ─────── */}
       <StoryNotifications stories={stories} variant="page" />
+
+      {/* ─── New episodes of followed outside podcasts (injected, not on chain) ── */}
+      <PodcastNotifications episodes={podcastEpisodes} user={user} variant="page" />
 
       {/* ─── Activity Summary (tabbed) ─────── */}
       {authenticated && user && (

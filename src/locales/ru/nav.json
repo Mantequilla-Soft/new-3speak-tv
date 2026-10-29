@@ -94,6 +94,11 @@
       "ariaUnseen_few": "Уведомления, {{count}} новые истории",
       "ariaUnseen_many": "Уведомления, {{count}} новых историй",
       "ariaUnseen_other": "Уведомления, {{count}} новой истории"
+    },
+    "podcasts": {
+      "heading": "Новые выпуски подкастов, на которые вы подписаны",
+      "newEpisode": "Новый выпуск «{{show}}»",
+      "type": "Подкаст"
     }
   },
   "search": {

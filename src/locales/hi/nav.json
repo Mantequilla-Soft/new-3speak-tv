@@ -86,6 +86,11 @@
       "hoursLeft_other": "{{count}} घंटे बाकी",
       "ariaUnseen_one": "सूचनाएँ, {{count}} नई स्टोरी",
       "ariaUnseen_other": "सूचनाएँ, {{count}} नई स्टोरी"
+    },
+    "podcasts": {
+      "heading": "आप जिन पॉडकास्ट को फ़ॉलो करते हैं उनके नए एपिसोड",
+      "newEpisode": "{{show}} का नया एपिसोड",
+      "type": "पॉडकास्ट"
     }
   },
   "search": {

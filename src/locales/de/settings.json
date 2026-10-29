@@ -68,6 +68,10 @@
         "title": "Neues Audio",
         "desc": "Wenn ein Creator, dem du folgst, einen Track oder eine Folge hochlädt."
       },
+      "podcasts": {
+        "title": "Neue Podcast-Folgen",
+        "desc": "Wenn ein externer Podcast, dem du auf 3Speak folgst, eine Folge veröffentlicht."
+      },
       "replies": {
         "title": "Antworten",
         "desc": "Wenn jemand auf deinen Post oder Kommentar antwortet."

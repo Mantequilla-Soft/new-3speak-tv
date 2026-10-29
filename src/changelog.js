@@ -7,6 +7,41 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.47',
+    date: '2026-10-29',
+    summary: 'Support podcasters in sats right from an episode whenever their feed accepts Lightning tips.',
+  },
+  {
+    version: '1.80.46',
+    date: '2026-10-29',
+    summary: 'Get notified when a podcast you follow releases a new episode, in the bell and as a push message.',
+  },
+  {
+    version: '1.80.45',
+    date: '2026-10-29',
+    summary: "Click a podcast episode's title to open its own page with the full show notes.",
+  },
+  {
+    version: '1.80.44',
+    date: '2026-10-29',
+    summary: 'Podcast episodes remember where you stopped and show how much you heard, with filters for unheard episodes and date ranges.',
+  },
+  {
+    version: '1.80.43',
+    date: '2026-10-29',
+    summary: 'Bring your podcasts along: import or export your list as an OPML file under Audio → External.',
+  },
+  {
+    version: '1.80.42',
+    date: '2026-10-29',
+    summary: 'See which podcasts are most followed and recently followed on 3Speak, right under Audio → External.',
+  },
+  {
+    version: '1.80.41',
+    date: '2026-10-29',
+    summary: 'New External filter on the Audio page (/audio): follow any podcast by search or RSS feed and play its episodes right here.',
+  },
+  {
     version: '1.80.40',
     date: '2026-10-29',
     summary: 'Older video thumbnails that showed as broken pictures load again.',

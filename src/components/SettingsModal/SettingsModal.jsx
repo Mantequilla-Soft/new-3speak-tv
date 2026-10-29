@@ -483,6 +483,7 @@ const KIND_COPY = {
   videos: { titleKey: 'settings.notifications.kinds.videos.title', descKey: 'settings.notifications.kinds.videos.desc' },
   shorts: { titleKey: 'settings.notifications.kinds.shorts.title', descKey: 'settings.notifications.kinds.shorts.desc' },
   audio: { titleKey: 'settings.notifications.kinds.audio.title', descKey: 'settings.notifications.kinds.audio.desc' },
+  podcasts: { titleKey: 'settings.notifications.kinds.podcasts.title', descKey: 'settings.notifications.kinds.podcasts.desc' },
   replies: { titleKey: 'settings.notifications.kinds.replies.title', descKey: 'settings.notifications.kinds.replies.desc' },
   mentions: { titleKey: 'settings.notifications.kinds.mentions.title', descKey: 'settings.notifications.kinds.mentions.desc' },
   follows: { titleKey: 'settings.notifications.kinds.follows.title', descKey: 'settings.notifications.kinds.follows.desc' },
@@ -493,7 +494,7 @@ const KIND_COPY = {
 // The two groups answer different questions: what other people published, and
 // what happened to you.
 const KIND_GROUPS = [
-  { labelKey: 'settings.notifications.groups.creators', kinds: ['videos', 'shorts', 'audio'] },
+  { labelKey: 'settings.notifications.groups.creators', kinds: ['videos', 'shorts', 'audio', 'podcasts'] },
   { labelKey: 'settings.notifications.groups.aboutYou', kinds: ['replies', 'mentions', 'follows', 'votes', 'reblogs'] },
 ];
 

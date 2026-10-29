@@ -68,6 +68,10 @@
         "title": "Nowe audio",
         "desc": "Gdy obserwowany twórca prześle utwór lub odcinek."
       },
+      "podcasts": {
+        "title": "Nowe odcinki podcastów",
+        "desc": "Gdy zewnętrzny podcast obserwowany na 3Speak opublikuje odcinek."
+      },
       "replies": {
         "title": "Odpowiedzi",
         "desc": "Gdy ktoś odpowie na twój post lub komentarz."

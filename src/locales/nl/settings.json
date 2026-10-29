@@ -68,6 +68,10 @@
         "title": "Nieuwe audio",
         "desc": "Als een maker die je volgt een track of aflevering uploadt."
       },
+      "podcasts": {
+        "title": "Nieuwe podcastafleveringen",
+        "desc": "Als een externe podcast die je op 3Speak volgt een aflevering publiceert."
+      },
       "replies": {
         "title": "Reacties",
         "desc": "Als iemand reageert op je post of reactie."

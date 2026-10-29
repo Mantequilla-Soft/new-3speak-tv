@@ -68,6 +68,10 @@
         "title": "Nuovi audio",
         "desc": "Quando un creator che segui carica una traccia o un episodio."
       },
+      "podcasts": {
+        "title": "Nuovi episodi dei podcast",
+        "desc": "Quando un podcast esterno che segui su 3Speak pubblica un episodio."
+      },
       "replies": {
         "title": "Risposte",
         "desc": "Quando qualcuno risponde a un tuo post o commento."

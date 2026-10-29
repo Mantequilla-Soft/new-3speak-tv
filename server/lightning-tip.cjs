@@ -110,9 +110,81 @@ function v4vCredits(rows) {
   return out
 }
 
+// ─── Any Lightning address (outside podcasts' value blocks) ─────────────────
+// The Podcasts tab tips the Lightning addresses a show lists in its RSS feed
+// (podcast:valueRecipient type="lnaddress"), which can live on any host. The
+// address is typed by whoever runs that feed, so the LNURL-pay lookup is made
+// like any other fetch of an outside URL here: https only, default port, and the
+// address the socket actually connects to must be public (checked in `lookup`, so
+// a DNS answer that changes between check and connect changes nothing).
+const https = require('https')
+const dns = require('dns')
+const net = require('net')
+const os = require('os')
+
+const LNADDRESS_RE = /^([a-z0-9._+-]{1,64})@([a-z0-9-]+(?:\.[a-z0-9-]+)+)$/i
+const blockedIps = new net.BlockList()
+for (const [a, p] of [['0.0.0.0', 8], ['10.0.0.0', 8], ['100.64.0.0', 10], ['127.0.0.0', 8], ['169.254.0.0', 16],
+  ['172.16.0.0', 12], ['192.0.0.0', 24], ['192.168.0.0', 16], ['198.18.0.0', 15], ['224.0.0.0', 4], ['240.0.0.0', 4]]) {
+  blockedIps.addSubnet(a, p, 'ipv4')
+}
+for (const [a, p] of [['::', 128], ['::1', 128], ['fc00::', 7], ['fe80::', 10], ['ff00::', 8]]) blockedIps.addSubnet(a, p, 'ipv6')
+for (const list of Object.values(os.networkInterfaces())) {
+  for (const i of list || []) {
+    try { blockedIps.addAddress(i.address.split('%')[0], i.family === 'IPv6' || i.family === 6 ? 'ipv6' : 'ipv4') } catch {}
+  }
+}
+function isBlockedIp(ip) {
+  const fam = net.isIP(ip)
+  if (!fam) return true
+  if (fam === 6) {
+    const m = ip.toLowerCase().match(/^(?:::ffff:|64:ff9b::)(\d+\.\d+\.\d+\.\d+)$/)
+    if (m) return isBlockedIp(m[1])
+    if (/^(::ffff:|64:ff9b:|2002:)/i.test(ip)) return true
+    return blockedIps.check(ip, 'ipv6')
+  }
+  return blockedIps.check(ip, 'ipv4')
+}
+function publicLookup(hostname, options, cb) {
+  dns.lookup(hostname, { all: true, verbatim: true }, (err, addrs) => {
+    if (err) return cb(err)
+    if (!addrs.length || addrs.some((a) => isBlockedIp(a.address))) return cb(new Error(`blocked address for ${hostname}`))
+    if (options && options.all) return cb(null, addrs)
+    cb(null, addrs[0].address, addrs[0].family)
+  })
+}
+
+// GET JSON from an outside https URL, no redirects, small body, short deadline.
+function getPublicJson(rawUrl) {
+  return new Promise((resolve, reject) => {
+    let u
+    try { u = new URL(rawUrl) } catch { return reject(new Error('bad url')) }
+    if (u.protocol !== 'https:' || (u.port && u.port !== '443') || u.username || net.isIP(u.hostname.replace(/^\[|\]$/g, ''))) {
+      return reject(new Error('url not allowed'))
+    }
+    const req = https.get(u, { lookup: publicLookup, headers: { Accept: 'application/json', 'User-Agent': '3SpeakTips/1.0' }, timeout: REQUEST_TIMEOUT_MS }, (res) => {
+      if (res.statusCode !== 200) { res.resume(); return reject(new Error(`HTTP ${res.statusCode}`)) }
+      let size = 0
+      const chunks = []
+      res.on('data', (c) => {
+        size += c.length
+        if (size > 64 * 1024) { req.destroy(new Error('response too large')); return }
+        chunks.push(c)
+      })
+      res.on('end', () => {
+        try { resolve(JSON.parse(Buffer.concat(chunks).toString('utf8'))) } catch { reject(new Error('not JSON')) }
+      })
+      res.on('error', reject)
+    })
+    req.on('timeout', () => req.destroy(new Error('timeout')))
+    req.on('error', reject)
+  })
+}
+
 function mountLightningTip(app, { client, limiter }) {
   const pending = new Map() // hash → time the invoice was made
   const paid = new Map()    // hash → time it was seen paid
+  const verifyUrls = new Map() // hash → { url, at }: LUD-21 verify URL of an outside address's invoice
   let lastSeen = -1         // highest @v4vapp history index already read
   let timer = null
 
@@ -120,6 +192,7 @@ function mountLightningTip(app, { client, limiter }) {
     const now = Date.now()
     for (const [h, at] of pending) if (now - at > PENDING_TTL_MS) pending.delete(h)
     for (const [h, at] of paid) if (now - at > PAID_TTL_MS) paid.delete(h)
+    for (const [h, v] of verifyUrls) if (now - v.at > PENDING_TTL_MS) verifyUrls.delete(h)
   }
 
   async function pollOnce() {
@@ -214,6 +287,54 @@ function mountLightningTip(app, { client, limiter }) {
     }
   })
 
+  // GET /api/lightning/address-invoice?address=<name@host>&sats=<n>&comment=<text>
+  // → { pr, sats, hash, verifiable }. LNURL-pay (LUD-16) against any Lightning
+  // address, for the outside podcasts' value blocks. When the host gives a LUD-21
+  // verify URL, /api/lightning/status/<hash> can tell the page it was paid.
+  app.get('/api/lightning/address-invoice', limiter, async (req, res) => {
+    const m = LNADDRESS_RE.exec(String(req.query.address || '').trim().toLowerCase())
+    const sats = Number(req.query.sats)
+    const comment = String(req.query.comment || '').trim()
+    if (!m) return res.status(400).json({ error: 'bad_address' })
+    if (!Number.isInteger(sats) || sats < MIN_SATS || sats > MAX_SATS) return res.status(400).json({ error: 'bad_amount' })
+    const [, name, host] = m
+    try {
+      const pay = await getPublicJson(`https://${host}/.well-known/lnurlp/${encodeURIComponent(name)}`)
+      if (pay?.tag !== 'payRequest' || typeof pay.callback !== 'string') throw new Error('not a payRequest')
+      const msats = sats * 1000
+      if (msats < Number(pay.minSendable) || msats > Number(pay.maxSendable)) {
+        return res.status(400).json({
+          error: 'amount_out_of_range',
+          min: Math.ceil(Number(pay.minSendable) / 1000),
+          max: Math.floor(Number(pay.maxSendable) / 1000),
+        })
+      }
+      const cb = new URL(pay.callback)
+      cb.searchParams.set('amount', String(msats))
+      const allowed = Math.min(Number(pay.commentAllowed) || 0, MAX_COMMENT)
+      if (comment && allowed > 0) cb.searchParams.set('comment', comment.slice(0, allowed))
+      const inv = await getPublicJson(cb.toString())
+      if (inv?.status === 'ERROR' || typeof inv?.pr !== 'string') throw new Error(inv?.reason || 'no invoice')
+      if (bolt11Msats(inv.pr) !== msats) throw new Error('invoice amount mismatch')
+      const hash = bolt11PaymentHash(inv.pr)
+      let verifiable = false
+      if (hash && typeof inv.verify === 'string') {
+        try {
+          const v = new URL(inv.verify)
+          if (v.protocol === 'https:') {
+            verifyUrls.set(hash, { url: v.toString(), at: Date.now() })
+            verifiable = true
+          }
+        } catch {}
+      }
+      res.set('Cache-Control', 'no-store')
+      res.json({ pr: inv.pr, sats, hash, verifiable })
+    } catch (err) {
+      console.warn(`[lightning-tip] invoice for ${name}@${host} (${sats} sats) failed:`, err.message)
+      res.status(502).json({ error: 'invoice_failed' })
+    }
+  })
+
   // GET /api/lightning/status/<hash> → { paid }. Unknown or expired hashes are
   // simply not paid; the page stops asking when the viewer closes the window.
   app.get('/api/lightning/status/:hash', limiter, (req, res) => {
@@ -222,8 +343,18 @@ function mountLightningTip(app, { client, limiter }) {
     res.set('Cache-Control', 'no-store')
     if (paid.has(hash)) return res.json({ paid: true })
     if (pending.has(hash)) ensurePolling()
+    const v = verifyUrls.get(hash)
+    if (v) {
+      if (Date.now() - v.at > PENDING_TTL_MS) { verifyUrls.delete(hash); return res.json({ paid: false }) }
+      return getPublicJson(v.url)
+        .then((r) => {
+          if (r?.settled === true) { verifyUrls.delete(hash); paid.set(hash, Date.now()) }
+          res.json({ paid: r?.settled === true })
+        })
+        .catch(() => res.json({ paid: false }))
+    }
     res.json({ paid: false })
   })
 }
 
-module.exports = { mountLightningTip, bolt11Msats, bolt11PaymentHash, v4vCredits }
+module.exports = { mountLightningTip, bolt11Msats, bolt11PaymentHash, v4vCredits, isBlockedIp, getPublicJson }

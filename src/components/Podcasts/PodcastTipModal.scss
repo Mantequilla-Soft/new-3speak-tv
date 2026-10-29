@@ -1,0 +1,64 @@
+// The parts of the podcast tip window TipModal.scss has no use for: who gets what
+// (split preview and results) and the show's own funding links.
+.podcast-tip-modal {
+  // Up to three buttons here (cancel, browser wallet, QR code): let them wrap on phones.
+  .actions { flex-wrap: wrap; }
+
+  .podcast-tip-split,
+  .podcast-tip-funding {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .podcast-tip-split-label {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .podcast-tip-split ul,
+  .podcast-tip-results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+
+      span:first-child {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .podcast-tip-results li.ok { color: var(--text-primary); }
+  .podcast-tip-results li.failed { color: var(--text-muted); }
+
+  .podcast-tip-thanks {
+    margin: 0 0 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .podcast-tip-funding {
+    padding-top: 0;
+
+    a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      overflow-wrap: anywhere;
+
+      &:hover { text-decoration: underline; }
+    }
+  }
+}

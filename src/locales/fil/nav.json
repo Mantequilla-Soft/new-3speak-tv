@@ -86,6 +86,11 @@
       "hoursLeft_other": "{{count}}h na lang",
       "ariaUnseen_one": "Mga notification, {{count}} bagong story",
       "ariaUnseen_other": "Mga notification, {{count}} bagong story"
+    },
+    "podcasts": {
+      "heading": "Mga bagong episode ng mga podcast na fina-follow mo",
+      "newEpisode": "Bagong episode ng {{show}}",
+      "type": "Podcast"
     }
   },
   "search": {

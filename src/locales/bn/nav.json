@@ -86,6 +86,11 @@
       "hoursLeft_other": "আর {{count}} ঘণ্টা",
       "ariaUnseen_one": "নোটিফিকেশন, {{count}}টি নতুন স্টোরি",
       "ariaUnseen_other": "নোটিফিকেশন, {{count}}টি নতুন স্টোরি"
+    },
+    "podcasts": {
+      "heading": "আপনার ফলো করা পডকাস্টের নতুন এপিসোড",
+      "newEpisode": "{{show}}-এর নতুন এপিসোড",
+      "type": "পডকাস্ট"
     }
   },
   "search": {

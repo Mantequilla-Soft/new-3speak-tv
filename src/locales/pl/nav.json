@@ -94,6 +94,11 @@
       "ariaUnseen_few": "Powiadomienia, {{count}} nowe relacje",
       "ariaUnseen_many": "Powiadomienia, {{count}} nowych relacji",
       "ariaUnseen_other": "Powiadomienia, {{count}} nowej relacji"
+    },
+    "podcasts": {
+      "heading": "Nowe odcinki obserwowanych podcastów",
+      "newEpisode": "Nowy odcinek: {{show}}",
+      "type": "Podcast"
     }
   },
   "search": {

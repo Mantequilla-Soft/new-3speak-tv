@@ -82,6 +82,11 @@
       "type": "Story",
       "hoursLeft_other": "{{count}} jam lagi",
       "ariaUnseen_other": "Notifikasi, {{count}} story baru"
+    },
+    "podcasts": {
+      "heading": "Episode baru dari podcast yang kamu ikuti",
+      "newEpisode": "Episode baru {{show}}",
+      "type": "Podcast"
     }
   },
   "search": {

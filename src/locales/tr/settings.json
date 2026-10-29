@@ -68,6 +68,10 @@
         "title": "Yeni ses",
         "desc": "Takip ettiğin bir içerik üreticisi bir parça veya bölüm yüklediğinde."
       },
+      "podcasts": {
+        "title": "Yeni podcast bölümleri",
+        "desc": "3Speak'te takip ettiğin harici bir podcast yeni bölüm yayınladığında."
+      },
       "replies": {
         "title": "Yanıtlar",
         "desc": "Biri gönderine veya yorumuna yanıt verdiğinde."

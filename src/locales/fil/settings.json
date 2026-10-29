@@ -68,6 +68,10 @@
         "title": "Bagong audio",
         "desc": "Kapag nag-upload ng track o episode ang isang creator na fina-follow mo."
       },
+      "podcasts": {
+        "title": "Mga bagong episode ng podcast",
+        "desc": "Kapag naglabas ng episode ang isang panlabas na podcast na fina-follow mo sa 3Speak."
+      },
       "replies": {
         "title": "Mga Reply",
         "desc": "Kapag may nag-reply sa post o comment mo."

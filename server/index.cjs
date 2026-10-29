@@ -2204,6 +2204,34 @@ app.post('/api/announcements/read-signature', signChallengeLimiter, async (req, 
   }
 })
 
+// POST /api/podcasts/signature { action, payload }: vouches that this session is the
+// listener changing their own outside-podcast list (follow, unfollow, notify on/off).
+// Same evidence and the same `~handle` rule as the announcement vouches above; the
+// checker (routes/podcasts.js) accepts a vouch there because the list is 3Speak's
+// own off-chain data, never a Hive operation or money. Keep podcastMessage() in
+// lockstep with the checker and src/lib/podcasts.js.
+const PODCAST_VOUCH_PAYLOAD = {
+  subscribe: /^[0-9a-f]{64}$/,          // sha256 of the URLs, one per line
+  unsubscribe: /^[0-9a-f]{24}$/,        // feed id
+  notify: /^[0-9a-f]{24}:(?:on|off)$/,  // feed id + switch
+  progress: /^session$/,                // listening progress, reused for up to a day
+}
+app.post('/api/podcasts/signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    const action = typeof req.body?.action === 'string' ? req.body.action : ''
+    const payload = typeof req.body?.payload === 'string' ? req.body.payload : ''
+    const shape = PODCAST_VOUCH_PAYLOAD[action]
+    if (!shape || !shape.test(payload)) return res.status(400).json({ error: 'Invalid request' })
+    const hiveUsername = await resolveAnnouncementUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Not signed in', reason: 'not_signed_in_as' })
+    return res.json({ success: true, username: hiveUsername, ...signVouch(['3speak-podcasts', `${action}-vouch`, hiveUsername, payload]) })
+  } catch (err) {
+    console.error('Podcast signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
 // POST /api/announcements/reply-signature: proves who wrote a reply. Without it the
 // checker still takes the reply, it just stores the name as a claim.
 app.post('/api/announcements/reply-signature', signChallengeLimiter, async (req, res) => {

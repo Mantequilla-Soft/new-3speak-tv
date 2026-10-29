@@ -82,6 +82,11 @@
       "type": "ストーリー",
       "hoursLeft_other": "残り{{count}}時間",
       "ariaUnseen_other": "通知、新しいストーリー{{count}}件"
+    },
+    "podcasts": {
+      "heading": "フォロー中のポッドキャストの新しいエピソード",
+      "newEpisode": "{{show}} の新しいエピソード",
+      "type": "ポッドキャスト"
     }
   },
   "search": {

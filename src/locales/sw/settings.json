@@ -68,6 +68,10 @@
         "title": "Sauti mpya",
         "desc": "Mtayarishaji unayemfuata anapopakia wimbo au kipindi."
       },
+      "podcasts": {
+        "title": "Vipindi vipya vya podikasti",
+        "desc": "Podikasti ya nje unayoifuata kwenye 3Speak inapochapisha kipindi."
+      },
       "replies": {
         "title": "Majibu",
         "desc": "Mtu anapojibu chapisho au maoni yako."

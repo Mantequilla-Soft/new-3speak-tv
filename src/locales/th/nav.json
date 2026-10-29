@@ -82,6 +82,11 @@
       "type": "สตอรี่",
       "hoursLeft_other": "เหลือ {{count}} ชม.",
       "ariaUnseen_other": "การแจ้งเตือน, สตอรี่ใหม่ {{count}} รายการ"
+    },
+    "podcasts": {
+      "heading": "ตอนใหม่ของพอดแคสต์ที่คุณติดตาม",
+      "newEpisode": "ตอนใหม่ของ {{show}}",
+      "type": "พอดแคสต์"
     }
   },
   "search": {

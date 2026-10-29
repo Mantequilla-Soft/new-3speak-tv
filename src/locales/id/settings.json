@@ -68,6 +68,10 @@
         "title": "Audio baru",
         "desc": "Saat kreator yang kamu ikuti mengunggah lagu atau episode."
       },
+      "podcasts": {
+        "title": "Episode podcast baru",
+        "desc": "Saat podcast eksternal yang kamu ikuti di 3Speak menerbitkan episode."
+      },
       "replies": {
         "title": "Balasan",
         "desc": "Saat seseorang membalas postingan atau komentarmu."
