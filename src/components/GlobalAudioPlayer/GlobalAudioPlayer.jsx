@@ -436,6 +436,30 @@ function GlobalAudioPlayer() {
     if (i > 0) audioPlay(list[i - 1]);
   }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
 
+  // Publish how far the player's top edge sits above the viewport bottom as
+  // --audio-np-clearance, so fixed elements (Feedback FAB) can stay above it.
+  // ResizeObserver catches expand/collapse; the var is removed when it closes.
+  const npRef = useRef(null);
+  const hasNowPlaying = !!audioCurrent;
+  useEffect(() => {
+    const el = npRef.current;
+    const root = document.documentElement;
+    if (!hasNowPlaying || !el) return;
+    const update = () => {
+      const top = el.getBoundingClientRect().top;
+      root.style.setProperty('--audio-np-clearance', `${Math.max(0, Math.round(window.innerHeight - top))}px`);
+    };
+    update();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    window.addEventListener('resize', update);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener('resize', update);
+      root.style.removeProperty('--audio-np-clearance');
+    };
+  }, [hasNowPlaying]);
+
   if (!audioCurrent) {
     return <audio ref={audioRef} preload="metadata" style={{ display: 'none' }} />;
   }
@@ -446,7 +470,7 @@ function GlobalAudioPlayer() {
     <>
       <audio ref={audioRef} preload="metadata" />
 
-      <div className={`audio-now-playing${audioExpanded ? ' audio-np-expanded' : ''}`}>
+      <div ref={npRef} className={`audio-now-playing${audioExpanded ? ' audio-np-expanded' : ''}`}>
         <div className="audio-np-progress" onClick={handleSeek}>
           <div className="audio-np-progress-fill" style={{ width: audioDuration ? `${(audioCurrentTime / audioDuration) * 100}%` : '0%' }} />
         </div>
