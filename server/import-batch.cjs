@@ -237,8 +237,14 @@ function frameFromFile(file, outFile, at = 1) {
 
 // Thumbnail bytes: the source's own cover for regular videos and for Instagram /
 // TikTok (portrait already); a frame from the file for YouTube Shorts (their
-// thumbnails are 16:9) or when the cover cannot be fetched.
-async function thumbnailBytes(source, file, isShort, workDir) {
+// thumbnails are 16:9) or when the cover cannot be fetched. `keptCover` = the
+// importer's kept cover image (import-covers), tried first: the cover links of
+// those platforms are signed and die.
+async function thumbnailBytes(source, file, isShort, workDir, keptCover) {
+  if (source.platform !== 'youtube' && keptCover) {
+    const kept = await keptCover(source.sourceId).catch(() => null)
+    if (kept?.buf?.length > 2000) return kept
+  }
   const tryUrls = []
   if (source.platform === 'youtube') {
     if (!isShort) for (const n of ['maxresdefault', 'sddefault', 'hqdefault']) tryUrls.push(`https://i.ytimg.com/vi/${source.sourceId}/${n}.jpg`)
@@ -374,7 +380,8 @@ async function checkerStatuses(user) {
  *   isPremium(user), recordImport(user, sourceId, permlink) → Promise,
  *   knownImports(user) → { imported: {sourceId: permlink}, inBatch: {sourceId: …} },
  *   uploadImage(buf, type) → url, hasPostingGrant(user) → bool,
- *   alert({title, color, user, platform, videoId, url, code, message, fields})
+ *   alert({title, color, user, platform, videoId, url, code, message, fields}),
+ *   coverFor(sourceId) → { buf, type } | null (kept cover image)
  */
 function mountImportBatch(app, deps) {
   const { auth, mw } = deps
@@ -483,7 +490,7 @@ function mountImportBatch(app, deps) {
       it.status = 'uploading'; it.progress = 50; save(b)
       let thumbnailUrl = null
       try {
-        const t = await thumbnailBytes(it.source, job.file, isShort, workDir)
+        const t = await thumbnailBytes(it.source, job.file, isShort, workDir, deps.coverFor)
         if (t) thumbnailUrl = await deps.uploadImage(t.buf, t.type)
       } catch (e) { console.warn(`[import-batch] @${user} ${it.source.sourceId} thumbnail skipped: ${e.message}`) }
       it.thumbnailUrl = thumbnailUrl

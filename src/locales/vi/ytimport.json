@@ -50,6 +50,10 @@
   "viewPost": "Xem bài đăng",
   "premiumHint": "Với 3Speak Pro, bạn có thể nhập video lên đến {{height}}p.",
   "getPro": "Nâng cấp lên 3Speak Pro",
+  "refresh": "Làm mới danh sách",
+  "refreshing": "Đang làm mới…",
+  "refreshHint": "Tìm video mới và video vừa được công khai trên mọi tài khoản đã liên kết",
+  "refreshTooSoon": "Danh sách vừa được làm mới. Bạn có thể làm mới lại sau vài phút.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

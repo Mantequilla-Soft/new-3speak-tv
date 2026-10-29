@@ -2,8 +2,9 @@
 // Owner's call 2026-10-05: when a creator opens a channel on /youtube-import, the
 // whole channel is read ONCE (the first page right away, the rest in the
 // background) and kept; after that the page only reads from here, no platform is
-// asked again, and nothing is ever deleted. Updating channels is a later, separate
-// step. Details found afterwards (a Rumble description, an Instagram caption, a
+// asked again, and nothing is ever deleted. The creator can ask for a channel to
+// be read again ("Refresh list", `refreshChannels`): new and newly public videos
+// are added, nothing is removed. Details found afterwards (a Rumble description, an Instagram caption, a
 // pasted link) are merged into the same records.
 //
 // Mongo, database `threespeak` (same replica set as `import-batches`):
@@ -16,11 +17,16 @@
 //   import-records   one doc per video a creator published from an import,
 //                    _id "<user>|<sourceId>": { user, sourceId, platform, permlink, at }
 //                    (the importer's ✓ "already on 3Speak" mark and duplicate check)
+//   import-covers    the cover IMAGE of a TikTok / Instagram / BitChute / Rumble
+//                    video, _id "<platform>:<id>": { type, data, at }. Their cover
+//                    links are signed and die (Instagram's within hours), so the
+//                    bytes are kept instead, like every other detail here.
 // Not tied to preview/prod: the same channel is the same data everywhere.
 
 const LIB = 'import-library'
 const CHANNELS = 'import-channels'
 const RECORDS = 'import-records'
+const COVERS = 'import-covers'
 
 function createLibrary({ uri, dbName }) {
   let db = null
@@ -155,6 +161,43 @@ function createLibrary({ uri, dbName }) {
   }
   const isLoading = (platform, channelId, type) => crawling.has(channelKey(platform, channelId, type))
 
+  // "Refresh list": the next visit reads these channel lists again from the top
+  // (ensureChannel crawls anything not complete). The whole list, not just the
+  // newest page: a video made public later keeps its old place in the channel.
+  // `lists` = [{ platform, channelIds, types }], all of a creator's platforms at
+  // once. At most once per `minGapMs`; returns { retryAfterS } when too soon.
+  async function refreshChannels(lists, { minGapMs = 5 * 60 * 1000 } = {}) {
+    if (!(await ready)) return {}
+    const ids = lists.flatMap(({ platform, channelIds, types }) => channelIds.flatMap((c) => types.map((t) => channelKey(platform, c, t))))
+    const docs = await db.collection(CHANNELS).find({ _id: { $in: ids } }, { projection: { refreshedAt: 1 } }).toArray()
+    const last = Math.max(0, ...docs.map((d) => (d.refreshedAt ? d.refreshedAt.getTime() : 0)))
+    if (Date.now() - last < minGapMs) return { retryAfterS: Math.ceil((last + minGapMs - Date.now()) / 1000) }
+    const idle = ids.filter((id) => !crawling.has(id))
+    if (idle.length) {
+      await db.collection(CHANNELS).updateMany(
+        { _id: { $in: idle } },
+        { $set: { status: 'refresh', cursor: null, count: 0, refreshedAt: new Date(), updatedAt: new Date() } },
+      )
+    }
+    return {}
+  }
+
+  // ── Cover images ────────────────────────────────────────────────────────────
+  async function getCover(key) {
+    if (!(await ready)) return null
+    const d = await db.collection(COVERS).findOne({ _id: key })
+    return d ? { buf: Buffer.from(d.data.buffer), type: d.type } : null
+  }
+  async function hasCovers(keys) {
+    if (!(await ready) || !keys.length) return new Set()
+    const docs = await db.collection(COVERS).find({ _id: { $in: keys } }, { projection: { _id: 1 } }).toArray()
+    return new Set(docs.map((d) => d._id))
+  }
+  async function putCover(key, buf, type) {
+    if (!(await ready)) return
+    await db.collection(COVERS).updateOne({ _id: key }, { $set: { type, data: buf, at: new Date() } }, { upsert: true })
+  }
+
   // ── Published imports ───────────────────────────────────────────────────────
   /** This source is now this post. False when there is no Mongo (caller keeps its own). */
   async function recordImport(user, sourceId, permlink) {
@@ -174,7 +217,7 @@ function createLibrary({ uri, dbName }) {
     return Object.fromEntries(docs.map((d) => [d.sourceId, d.permlink]))
   }
 
-  return { ready, putVideos, patchVideo, getVideo, listVideos, getChannel, ensureChannel, isLoading, recordImport, importedFor }
+  return { ready, putVideos, patchVideo, getVideo, listVideos, getChannel, ensureChannel, isLoading, refreshChannels, recordImport, importedFor, getCover, hasCovers, putCover }
 }
 
 module.exports = { createLibrary }

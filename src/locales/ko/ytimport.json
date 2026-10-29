@@ -50,6 +50,10 @@
   "viewPost": "게시물 보기",
   "premiumHint": "3Speak Pro을 이용하면 최대 {{height}}p까지 가져올 수 있습니다.",
   "getPro": "3Speak Pro 시작하기",
+  "refresh": "목록 새로고침",
+  "refreshing": "새로고침 중…",
+  "refreshHint": "연결된 모든 계정에서 새 동영상과 새로 공개된 동영상을 찾아요",
+  "refreshTooSoon": "방금 목록을 새로고침했어요. 몇 분 후에 다시 할 수 있어요.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

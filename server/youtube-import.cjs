@@ -396,7 +396,7 @@ function tiktokEntry(user, ev) {
     description: ev.caption,
     tags: [],
     publishedAt: ev.createTime ? new Date(ev.createTime * 1000).toISOString() : null,
-    thumbnail: ev.cover ? `/api/yt-import/thumb-token/${token}` : '',
+    thumbnail: ev.cover ? coverPath(`tiktok:${ev.id}`) : '',
     duration: ev.duration,
     tooLong: ev.duration > MAX_DURATION_S,
     privacy: 'public',
@@ -518,9 +518,10 @@ async function instagramMedia(shortcode, { forDownload = false } = {}) {
   return m && m.code === shortcode ? shapeIg(m) : null
 }
 
-// The newest videos of a profile, from its reels tab.
-async function instagramLatest(handle) {
-  const d = await igBrowser(`/reels/${encodeURIComponent(handle)}`)
+// The newest videos of a profile, from its reels tab. `fresh`: a list at most 10
+// minutes old (the service keeps lists forever, and their cover links die).
+async function instagramLatest(handle, { fresh = false } = {}) {
+  const d = await igBrowser(`/reels/${encodeURIComponent(handle)}${fresh ? '?maxAge=600' : ''}`)
   return (d?.videos || []).map(shapeIg)
 }
 
@@ -537,7 +538,7 @@ function instagramEntry(user, ev) {
     description: ev.caption,
     tags: [],
     publishedAt: ev.createTime ? new Date(ev.createTime * 1000).toISOString() : null,
-    thumbnail: ev.cover ? `/api/yt-import/thumb-token/${token}` : '',
+    thumbnail: ev.cover ? coverPath(`instagram:${ev.shortcode}`) : '',
     duration: ev.duration,
     tooLong: ev.duration > MAX_DURATION_S,
     privacy: 'public',
@@ -565,7 +566,7 @@ function platformEntry(user, platform, ev) {
     description,
     tags: ev.tags || [],
     publishedAt: ev.createTime ? new Date(ev.createTime).toISOString() : null,
-    thumbnail: ev.cover ? `/api/yt-import/thumb-token/${token}` : '',
+    thumbnail: ev.cover ? coverPath(`${platform}:${ev.id}`) : '',
     duration: Math.round(ev.duration || 0),
     tooLong: ev.duration > MAX_DURATION_S,
     privacy: 'public',
@@ -591,6 +592,9 @@ async function mapLimit(items, limit, fn) {
 
 /** token → { user, platform, videoKey, sourceUrl, thumbUrl, video, createdAt }: links a user looked up and owns */
 const resolved = new Map()
+// A cover's address on this server: stable (no token), served from the kept
+// image (import-covers), so it survives restarts and dead CDN links.
+const coverPath = (key) => `/api/yt-import/cover/${encodeURIComponent(key)}`
 
 // ISO-8601 duration (PT1H2M3S) → seconds
 function isoDuration(d) {
@@ -1068,6 +1072,26 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     return { evs, total, hasMore: (page + 1) * PAGE < total || loading, loading }
   }
 
+  // "Refresh lists": read all of the creator's linked channels again on the next
+  // visit, every platform at once (new and newly public videos). Once per 5
+  // minutes; the YouTube API has a daily quota.
+  app.post('/api/yt-import/refresh', ...mw, async (req, res) => {
+    const user = await auth(req, res); if (!user) return
+    try {
+      const links = await verifiedLinks(user)
+      const lists = ['youtube', 'tiktok', 'instagram', 'bitchute', 'rumble']
+        .filter((p) => sourceEnabled(p) && links[p]?.length)
+        .map((p) => ({ platform: p, channelIds: links[p], types: p === 'youtube' ? Object.keys(TYPE_PLAYLIST_PREFIX) : ['all'] }))
+      if (!lists.length) return res.status(403).json({ error: 'Link and verify an account on your profile first', errorCode: 'no_link' })
+      const { retryAfterS } = await library.refreshChannels(lists)
+      if (retryAfterS) {
+        return res.status(429).json({ error: 'Your lists were just refreshed, try again in a few minutes', errorCode: 'refresh_too_soon', retryAfterS })
+      }
+      console.log(`[yt-import] @${user} refreshes their lists (${lists.map((l) => l.platform).join(', ')})`)
+      res.json({ ok: true, platforms: lists.map((l) => l.platform) })
+    } catch (e) { fail(res, e) }
+  })
+
   // One page of a YouTube upload playlist (50 ids → details); cursor = pageToken.
   async function ytPage(channelId, type, cursor, max = 50) {
     const playlistId = TYPE_PLAYLIST_PREFIX[type] + channelId.slice(2)
@@ -1200,6 +1224,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
         .filter((ev) => ev && links.tiktok.includes(ev.author))
         .map((ev) => tiktokEntry(user, ev))
         .sort(byDateDesc)
+      warmCovers(videos.map((v) => v.id))
       res.json({ handles: links.tiktok, videos })
     } catch (e) { fail(res, e) }
   })
@@ -1302,6 +1327,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
         rumble.warmDescriptions(evs.filter((ev) => !ev.description), (id, pageInfo) => library.patchVideo('rumble', id, { description: pageInfo.description }))
       }
       const videos = evs.map((ev) => platformEntry(user, platform, ev)).sort(byDateDesc)
+      warmCovers(videos.map((v) => v.id))
       res.json({ channels, videos, page, hasMore })
     } catch (e) { sendError(res, e) }
   }
@@ -1344,7 +1370,8 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
       const links = await verifiedLinks(user)
       if (!links.instagram.length) return res.status(403).json({ error: 'Link and verify your Instagram account on your profile first', errorCode: 'no_link' })
       const kept = await Promise.all(links.instagram.map((h) => library.ensureChannel('instagram', h, 'all', {
-        fetchPage: async () => ({ evs: await instagramLatest(h), next: null }),
+        // Only runs when the library reads the channel (first visit, "Refresh lists").
+        fetchPage: async () => ({ evs: await instagramLatest(h, { fresh: true }), next: null }),
         store: igStore(h),
       })))
       let evs = []
@@ -1354,11 +1381,84 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
         .filter((ev) => links.instagram.includes(ev.author))
         .map((ev) => instagramEntry(user, ev))
         .sort(byDateDesc)
+      warmCovers(videos.map((v) => v.id))
       res.json({ handles: links.instagram, videos })
     } catch (e) { res.status(e.status || 500).json({ error: e.status ? e.message : 'Something went wrong', errorCode: e.code || undefined }) }
   })
 
   // Thumbnail of a looked-up TikTok / Instagram video (signed CDN URL kept server side).
+  // ── Covers (TikTok / Instagram / BitChute / Rumble) ─────────────────────────
+  // Kept as images in the library (import-covers): saved the first time a list
+  // shows them, while their signed links still work. A missing one is fetched from
+  // the kept link, or, when that died, from a fresh one (TikTok's embed, the
+  // Instagram browser service), which the library then keeps too.
+  const COVER_KEY_RE = /^(tiktok|instagram|bitchute|rumble):[A-Za-z0-9_-]{3,40}$/
+  const COVER_HOST_RE = /^https:\/\/[^/]*(tiktokcdn|tiktokcdn-eu|tiktokcdn-us|ibyteimg|byteimg|cdninstagram|fbcdn|bitchute|rumble|rmbl)\.(com|net|cloud|ws)\//i
+  async function fetchCover(url) {
+    if (!url || !COVER_HOST_RE.test(url)) return null
+    const r = await fetch(url, { headers: { 'User-Agent': BROWSER_UA }, signal: AbortSignal.timeout(8000) }).catch(() => null)
+    const type = (r?.headers.get('content-type') || '').split(';')[0]
+    if (!r?.ok || !type.startsWith('image/')) return null
+    const buf = Buffer.from(await r.arrayBuffer())
+    return buf.length > 0 && buf.length < 3 * 1024 * 1024 ? { buf, type } : null
+  }
+  async function freshCoverUrl(platform, id) {
+    if (platform === 'tiktok') return (await tiktokEmbedVideo(id))?.cover || null
+    if (platform === 'instagram' && INSTAGRAM_ENABLED) return (await instagramMedia(id))?.cover || null
+    return null
+  }
+  const coverInflight = new Map()
+  function coverFor(key) {
+    if (coverInflight.has(key)) return coverInflight.get(key)
+    const p = (async () => {
+      const kept = await library.getCover(key).catch(() => null)
+      if (kept) return kept
+      const [, platform, id] = key.match(/^([a-z]+):(.+)$/)
+      let url = (await library.getVideo(platform, id).catch(() => null))?.cover
+      // Without Mongo the link is only in the list the page was given.
+      if (!url) for (const e of resolved.values()) if (e.video?.id === key) { url = e.thumbUrl; break }
+      let got = await fetchCover(url)
+      if (!got) {
+        const fresh = await freshCoverUrl(platform, id).catch(() => null)
+        got = await fetchCover(fresh)
+        if (got) library.patchVideo(platform, id, { cover: fresh }).catch(() => {})
+      }
+      if (got) await library.putCover(key, got.buf, got.type).catch(() => {})
+      return got
+    })().finally(() => coverInflight.delete(key))
+    coverInflight.set(key, p)
+    return p
+  }
+  // After a list is served: keep its covers now, while the links are fresh. One
+  // at a time, in the background; the ones already kept are skipped.
+  const coverQueue = []
+  let coverRunning = false
+  async function warmCovers(keys) {
+    const want = keys.filter((k) => COVER_KEY_RE.test(k) && !coverQueue.includes(k))
+    const have = await library.hasCovers(want).catch(() => new Set())
+    coverQueue.push(...want.filter((k) => !have.has(k)))
+    if (coverRunning) return
+    coverRunning = true
+    try {
+      while (coverQueue.length) {
+        await coverFor(coverQueue[0]).catch(() => null)
+        coverQueue.shift()
+        await new Promise((r) => setTimeout(r, 300))
+      }
+    } finally { coverRunning = false }
+  }
+  app.get('/api/yt-import/cover/:key', ...mw, async (req, res) => {
+    const key = String(req.params.key || '')
+    if (!COVER_KEY_RE.test(key)) return res.status(400).end()
+    try {
+      const got = await coverFor(key)
+      if (!got) return res.status(404).end()
+      res.set('Content-Type', got.type)
+      res.set('Cache-Control', 'public, max-age=86400')
+      res.send(got.buf)
+    } catch { res.status(404).end() }
+  })
+
   app.get('/api/yt-import/thumb-token/:token', ...mw, async (req, res) => {
     const entry = resolved.get(String(req.params.token || ''))
     if (!entry?.thumbUrl || !/^https:\/\/[^/]*(tiktokcdn|tiktokcdn-eu|tiktokcdn-us|ibyteimg|byteimg|cdninstagram|fbcdn|bitchute|rumble|rmbl)\.(com|net|cloud|ws)\//i.test(entry.thumbUrl)) return res.status(404).end()
@@ -1550,6 +1650,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
       uploadImage,
       hasPostingGrant,
       alert: alertDiscord,
+      coverFor,
     })
   }
 }

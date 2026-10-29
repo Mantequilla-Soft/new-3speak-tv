@@ -50,6 +50,10 @@
   "viewPost": "Ver publicação",
   "premiumHint": "Com o 3Speak Pro, você pode importar em até {{height}}p.",
   "getPro": "Assine o 3Speak Pro",
+  "refresh": "Atualizar listas",
+  "refreshing": "Atualizando…",
+  "refreshHint": "Procurar vídeos novos ou que ficaram públicos em todas as suas contas vinculadas",
+  "refreshTooSoon": "Suas listas acabaram de ser atualizadas. Você pode atualizar de novo em alguns minutos.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

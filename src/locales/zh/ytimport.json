@@ -50,6 +50,10 @@
   "viewPost": "查看帖子",
   "premiumHint": "使用 3Speak Pro，你可以导入最高 {{height}}p 的视频。",
   "getPro": "获取 3Speak Pro",
+  "refresh": "刷新列表",
+  "refreshing": "正在刷新…",
+  "refreshHint": "在所有已关联账号中查找新视频和刚公开的视频",
+  "refreshTooSoon": "列表刚刚刷新过，几分钟后可以再次刷新。",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

@@ -50,6 +50,10 @@
   "viewPost": "পোস্ট দেখুন",
   "premiumHint": "3Speak Pro থাকলে আপনি সর্বোচ্চ {{height}}p পর্যন্ত ইমপোর্ট করতে পারবেন।",
   "getPro": "3Speak Pro নিন",
+  "refresh": "তালিকা রিফ্রেশ করুন",
+  "refreshing": "রিফ্রেশ হচ্ছে…",
+  "refreshHint": "আপনার সব লিঙ্ক করা অ্যাকাউন্টে নতুন ও সদ্য পাবলিক হওয়া ভিডিও খুঁজুন",
+  "refreshTooSoon": "আপনার তালিকা এইমাত্র রিফ্রেশ হয়েছে। কয়েক মিনিট পরে আবার করতে পারবেন।",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

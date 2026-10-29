@@ -52,6 +52,9 @@ async function call(path, { method = 'GET', body, raw = false } = {}) {
 
 export const getImportStatus = () => call('/status');
 
+// Read all linked channels again (new and newly public videos). 429 refresh_too_soon within 5 min.
+export const refreshImportLists = () => call('/refresh', { method: 'POST', body: {} });
+
 export const listChannelVideos = ({ channel, type, pageToken } = {}) => {
   const qs = new URLSearchParams();
   if (channel) qs.set('channel', channel);

@@ -50,6 +50,10 @@
   "viewPost": "Bekijk bericht",
   "premiumHint": "Met 3Speak Pro kun je tot {{height}}p importeren.",
   "getPro": "Neem 3Speak Pro",
+  "refresh": "Lijsten vernieuwen",
+  "refreshing": "Vernieuwen…",
+  "refreshHint": "Zoek naar nieuwe en pas openbaar gemaakte video’s op al je gekoppelde accounts",
+  "refreshTooSoon": "Je lijsten zijn net vernieuwd. Over een paar minuten kan het weer.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

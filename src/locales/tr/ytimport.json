@@ -50,6 +50,10 @@
   "viewPost": "Gönderiyi gör",
   "premiumHint": "3Speak Pro ile en fazla {{height}}p çözünürlüğe kadar içe aktarabilirsiniz.",
   "getPro": "3Speak Pro’ya geç",
+  "refresh": "Listeleri yenile",
+  "refreshing": "Yenileniyor…",
+  "refreshHint": "Bağlı tüm hesaplarında yeni ve yeni herkese açılan videoları ara",
+  "refreshTooSoon": "Listelerin az önce yenilendi. Birkaç dakika sonra tekrar yenileyebilirsin.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

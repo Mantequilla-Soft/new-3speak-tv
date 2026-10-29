@@ -50,6 +50,10 @@
   "viewPost": "Lihat postingan",
   "premiumHint": "Dengan 3Speak Pro, Anda dapat mengimpor hingga {{height}}p.",
   "getPro": "Dapatkan 3Speak Pro",
+  "refresh": "Segarkan daftar",
+  "refreshing": "Menyegarkan…",
+  "refreshHint": "Cari video baru dan yang baru dipublikasikan di semua akun tertautmu",
+  "refreshTooSoon": "Daftarmu baru saja disegarkan. Kamu bisa menyegarkan lagi dalam beberapa menit.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

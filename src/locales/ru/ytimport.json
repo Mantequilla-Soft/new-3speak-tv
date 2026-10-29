@@ -50,6 +50,10 @@
   "viewPost": "Открыть пост",
   "premiumHint": "С 3Speak Pro вы можете импортировать видео с разрешением до {{height}}p.",
   "getPro": "Оформить 3Speak Pro",
+  "refresh": "Обновить списки",
+  "refreshing": "Обновление…",
+  "refreshHint": "Найти новые и недавно открытые видео во всех привязанных аккаунтах",
+  "refreshTooSoon": "Списки только что обновлены. Повторить можно через несколько минут.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

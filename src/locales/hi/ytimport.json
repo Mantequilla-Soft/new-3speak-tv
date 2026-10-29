@@ -50,6 +50,10 @@
   "viewPost": "पोस्ट देखें",
   "premiumHint": "3Speak Pro के साथ आप {{height}}p तक इम्पोर्ट कर सकते हैं।",
   "getPro": "3Speak Pro लें",
+  "refresh": "सूचियाँ रीफ़्रेश करें",
+  "refreshing": "रीफ़्रेश हो रहा है…",
+  "refreshHint": "अपने सभी जुड़े खातों पर नए और हाल ही में सार्वजनिक हुए वीडियो खोजें",
+  "refreshTooSoon": "आपकी सूचियाँ अभी रीफ़्रेश हुई हैं। कुछ मिनट बाद फिर से रीफ़्रेश कर सकते हैं।",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

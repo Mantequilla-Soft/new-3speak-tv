@@ -111,12 +111,29 @@
   }
 
   // Platform switch (YouTube / TikTok): pills, the active one red OUTLINE.
+  // Platform tabs on the left, "Refresh lists" on the right (below on phones).
+  &__toolbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
   &__platforms {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
     flex-wrap: wrap;
   }
+  &__refresh.yt-import__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    white-space: nowrap;
+    &.is-busy svg { animation: yt-import-spin 1s linear infinite; }
+  }
+  &__refresh-note { margin: -8px 0 16px; }
   &__platform {
     display: inline-flex;
     align-items: center;
@@ -274,6 +291,8 @@
   }
   &__thumb {
     position: relative;
+    border-radius: 8px;
+    background: rgba(127, 127, 127, 0.15);
     img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; display: block; }
   }
   // Already published on 3Speak from an import (green ✓), or waiting in a batch
@@ -486,3 +505,5 @@
     .yt-import__bar { max-width: 320px; }
   }
 }
+
+@keyframes yt-import-spin { to { transform: rotate(360deg); } }

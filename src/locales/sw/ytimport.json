@@ -50,6 +50,10 @@
   "viewPost": "Tazama chapisho",
   "premiumHint": "Ukiwa na 3Speak Pro, unaweza kuleta video hadi {{height}}p.",
   "getPro": "Pata 3Speak Pro",
+  "refresh": "Onyesha upya orodha",
+  "refreshing": "Inaonyesha upya…",
+  "refreshHint": "Tafuta video mpya na zilizowekwa hadharani hivi karibuni kwenye akaunti zako zote zilizounganishwa",
+  "refreshTooSoon": "Orodha zako zimeonyeshwa upya sasa hivi. Unaweza kujaribu tena baada ya dakika chache.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

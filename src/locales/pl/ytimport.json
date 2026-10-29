@@ -50,6 +50,10 @@
   "viewPost": "Zobacz wpis",
   "premiumHint": "Dzięki 3Speak Pro zaimportujesz filmy w rozdzielczości do {{height}}p.",
   "getPro": "Wybierz 3Speak Pro",
+  "refresh": "Odśwież listy",
+  "refreshing": "Odświeżanie…",
+  "refreshHint": "Szukaj nowych i niedawno upublicznionych filmów na wszystkich połączonych kontach",
+  "refreshTooSoon": "Listy zostały właśnie odświeżone. Spróbuj ponownie za kilka minut.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

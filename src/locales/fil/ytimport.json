@@ -50,6 +50,10 @@
   "viewPost": "Tingnan ang post",
   "premiumHint": "Sa 3Speak Pro, maaari kang mag-import hanggang {{height}}p.",
   "getPro": "Kumuha ng 3Speak Pro",
+  "refresh": "I-refresh ang mga listahan",
+  "refreshing": "Nire-refresh…",
+  "refreshHint": "Hanapin ang mga bago at bagong pampublikong video sa lahat ng naka-link mong account",
+  "refreshTooSoon": "Kaka-refresh lang ng mga listahan mo. Puwede ulit sa loob ng ilang minuto.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

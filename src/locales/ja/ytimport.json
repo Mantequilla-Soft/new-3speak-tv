@@ -50,6 +50,10 @@
   "viewPost": "投稿を見る",
   "premiumHint": "3Speak Proなら、{{height}}pまでインポートできます。",
   "getPro": "3Speak Proを利用する",
+  "refresh": "リストを更新",
+  "refreshing": "更新中…",
+  "refreshHint": "連携したすべてのアカウントで新しい動画や公開されたばかりの動画を探します",
+  "refreshTooSoon": "リストは更新されたばかりです。数分後にもう一度更新できます。",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",

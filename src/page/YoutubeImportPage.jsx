@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaYoutube, FaTiktok, FaInstagram, FaFileImport, FaCheck, FaPlayCircle, FaCrown, FaRegClock } from "react-icons/fa";
+import { FaYoutube, FaTiktok, FaInstagram, FaFileImport, FaCheck, FaPlayCircle, FaCrown, FaRegClock, FaSyncAlt } from "react-icons/fa";
 import { SiRumble } from "react-icons/si";
 import { TailChase } from "ldrs/react";
 import "ldrs/react/TailChase.css";
@@ -11,7 +11,7 @@ import { BatchForm, BatchStatus } from "./ImportBatch";
 import { SHORTS_MAX_DURATION_SEC, ENABLE_SUBS } from "../utils/config";
 import {
   IMPORT_MODE_PLATFORMS, getImportStatus, listChannelVideos, listTikTokVideos, listInstagramVideos, listPlatformVideos, resolveImportUrl, getImportBatches, startImportJob, getImportJob, cancelImportJob,
-  downloadImportFile, fetchThumbnailDataUrl, handOffToStudio, youtubeStudioUrl, youtubeWatchUrl, fmtDuration,
+  downloadImportFile, fetchThumbnailDataUrl, handOffToStudio, youtubeStudioUrl, youtubeWatchUrl, fmtDuration, refreshImportLists,
 } from "../lib/youtubeImport";
 import "./YoutubeImportPage.scss";
 
@@ -171,11 +171,16 @@ export default function YoutubeImportPage() {
     }
   }, [channel]);
 
+  // "Refresh lists" bumps this to load every list again.
+  const [listsKey, setListsKey] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshNote, setRefreshNote] = useState('');
+
   // The first page of every shown type at once, so each tab shows its count right away.
   useEffect(() => {
     setGroups(emptyGroups());
     if (channel) types.forEach((type) => loadGroup(type));
-  }, [channel, loadGroup, types]);
+  }, [channel, loadGroup, types, listsKey]);
 
   // Land on the first type that has anything, in tab order.
   const allLoaded = types.every((type) => groups[type].loaded);
@@ -204,6 +209,32 @@ export default function YoutubeImportPage() {
       .then((d) => set({ items: d.videos || [], loading: false, loaded: true, error: '', page: 0, hasMore: !!d.hasMore }))
       .catch((e) => set({ ...emptyLinkList, loaded: true, error: e.message }));
   }, [platform, hasLinkAccount, ttList.loaded, ttList.loading]);
+  // All linked channels on every platform are read again: new and newly public
+  // videos show up. YouTube's tabs reload now and once more when the server has
+  // gone through the whole channel (an old video keeps its old place in it); the
+  // other platforms reload when their tab is shown.
+  const refreshLists = async () => {
+    setRefreshing(true);
+    setRefreshNote('');
+    try {
+      await refreshImportLists();
+      setLinkLists(Object.fromEntries(Object.keys(LINK_PLATFORMS).map((k) => [k, emptyLinkList])));
+      setListsKey((n) => n + 1);
+      if (channel) {
+        for (let i = 0; i < 20; i++) {
+          await new Promise((r) => setTimeout(r, 3000));
+          const d = await listChannelVideos({ channel, type: types[0] }).catch(() => null);
+          if (!d || d.total != null) break; // total stays null while the channel is being read
+        }
+        setListsKey((n) => n + 1);
+      }
+    } catch (e) {
+      setRefreshNote(e.code === 'refresh_too_soon' ? t('ytimport.refreshTooSoon') : e.message);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const loadMoreLink = () => {
     const p = platform;
     const cur = linkLists[p];
@@ -520,7 +551,8 @@ export default function YoutubeImportPage() {
           title={blocked ? t('ytimport.tooLong', { minutes: blocked }) : undefined}
         >
           <div className="yt-import__thumb">
-            <img src={shown.thumbnail} alt="" loading="lazy" />
+            {/* A cover that cannot be loaded leaves the tile's grey, not a broken image. */}
+            <img src={shown.thumbnail} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
             {shown.duration > 0 && <span className="yt-import__dur">{fmtDuration(shown.duration)}</span>}
             {blocked && <span className="yt-import__too-long">{t('ytimport.tooLong', { minutes: blocked })}</span>}
             {onSite && (
@@ -580,22 +612,36 @@ export default function YoutubeImportPage() {
       {latestBatch && <BatchStatus batch={latestBatch} user={user} onChange={showBatch} />}
       {!status && !statusError && <div className="yt-import__center"><TailChase size="30" speed="1.75" color="red" /></div>}
 
-      {status && platformTabs.length > 1 && (
-        <div className="yt-import__platforms" role="tablist">
-          {platformTabs.map(({ key, Icon }) => (
-            <button
-              type="button"
-              role="tab"
-              key={key}
-              aria-selected={platform === key}
-              className={`yt-import__platform${platform === key ? ' yt-import__platform--active' : ''}`}
-              onClick={() => switchPlatform(key)}
-            >
-              <Icon /> {t(`ytimport.platforms.${key}`)}
-            </button>
-          ))}
+      {status && (
+        <div className="yt-import__toolbar">
+          {platformTabs.length > 1 && (
+            <div className="yt-import__platforms" role="tablist">
+              {platformTabs.map(({ key, Icon }) => (
+                <button
+                  type="button"
+                  role="tab"
+                  key={key}
+                  aria-selected={platform === key}
+                  className={`yt-import__platform${platform === key ? ' yt-import__platform--active' : ''}`}
+                  onClick={() => switchPlatform(key)}
+                >
+                  <Icon /> {t(`ytimport.platforms.${key}`)}
+                </button>
+              ))}
+            </div>
+          )}
+          <button
+            type="button"
+            className={`yt-import__btn yt-import__btn--outline yt-import__refresh${refreshing ? ' is-busy' : ''}`}
+            onClick={refreshLists}
+            disabled={refreshing || busy}
+            title={t('ytimport.refreshHint')}
+          >
+            <FaSyncAlt aria-hidden="true" /> {refreshing ? t('ytimport.refreshing') : t('ytimport.refresh')}
+          </button>
         </div>
       )}
+      {refreshNote && <p className="yt-import__note yt-import__refresh-note">{refreshNote}</p>}
 
       {status && isLinkPlatform && (
         !hasLinkAccount ? (

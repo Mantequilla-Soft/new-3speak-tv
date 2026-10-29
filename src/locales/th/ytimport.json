@@ -50,6 +50,10 @@
   "viewPost": "ดูโพสต์",
   "premiumHint": "ด้วย 3Speak Pro คุณนำเข้าได้สูงสุด {{height}}p",
   "getPro": "สมัคร 3Speak Pro",
+  "refresh": "รีเฟรชรายการ",
+  "refreshing": "กำลังรีเฟรช…",
+  "refreshHint": "ค้นหาวิดีโอใหม่และวิดีโอที่เพิ่งเปิดเป็นสาธารณะในทุกบัญชีที่เชื่อมโยง",
+  "refreshTooSoon": "เพิ่งรีเฟรชรายการไป รีเฟรชได้อีกครั้งในอีกไม่กี่นาที",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
