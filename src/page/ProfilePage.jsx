@@ -183,6 +183,11 @@ function ProfilePage() {
   const [inProgress, setInProgress] = useState(null);
   const pollingRef = useRef(null);
   const refetchRef = useRef(null);
+  // Polling only ever stopped on a successful `count === 0`, so a failing
+  // upload service (502) kept it going every 5s for as long as the page was
+  // open. Give up after a few failures in a row.
+  const inProgressFailuresRef = useRef(0);
+  const IN_PROGRESS_MAX_FAILURES = 3;
 
   /* ===============================
      FETCH IN-PROGRESS UPLOADS
@@ -201,8 +206,7 @@ function ProfilePage() {
       );
 
       const json = res.data;
-
-      console.log(json)
+      inProgressFailuresRef.current = 0;
 
       if (!json.success) return;
 
@@ -221,6 +225,11 @@ function ProfilePage() {
         "In-progress fetch error:",
         err.response?.data || err.message
       );
+      inProgressFailuresRef.current += 1;
+      if (inProgressFailuresRef.current >= IN_PROGRESS_MAX_FAILURES && pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
     }
   }, [user]);
 
@@ -237,8 +246,10 @@ function ProfilePage() {
       pollingRef.current = null;
     }
 
+    inProgressFailuresRef.current = 0;
+
     // Run immediately
-    fetchInProgressUploads(); 
+    fetchInProgressUploads();
 
     // Set up polling interval
     pollingRef.current = setInterval(() => { 
@@ -472,7 +483,10 @@ function ProfilePage() {
       }
       return undefined;
     },
-    enabled: show === 'shorts',
+    // The Overview's Shorts section reads this same list. Gated on the Shorts
+    // tab alone, the Overview only showed shorts after that tab had been
+    // opened in the same visit, and the section vanished again on reload.
+    enabled: !!user && (show === 'shorts' || show === 'overview'),
   });
 
   const shortsVideos = useMemo(() => (
