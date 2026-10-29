@@ -292,6 +292,7 @@
   "supports": {
     "incomingTitle": "@{{user}} deu a @{{profile}} {{amount}} em gorjetas no total",
     "outgoingTitle": "@{{profile}} deu a @{{user}} {{amount}} em gorjetas no total",
+    "incomingTitleLightning": "Gorjetas Lightning anônimas para @{{profile}}: {{amount}} no total",
     "received": "Recebidas",
     "given": "Dadas",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -301,6 +302,7 @@
     "emptyGivenOwn": "Você ainda não deu gorjetas em nenhum vídeo. As gorjetas que você enviar de um vídeo aparecem aqui.",
     "untitled": "Sem título",
     "paidInHive": "enviado como {{amount}} HIVE",
+    "lightningSupporter": "Apoiador Lightning",
     "hideTip": "Ocultar gorjeta",
     "unhideTip": "Mostrar gorjeta",
     "hiddenLabel": "Oculta no seu perfil",

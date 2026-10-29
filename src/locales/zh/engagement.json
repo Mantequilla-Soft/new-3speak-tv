@@ -10,6 +10,8 @@
       "transferFailed": "转账失败：{{message}}"
     },
     "heading": "打赏 @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "金额：",
     "amountPlaceholder": "例如 1.000",
     "currencyLabel": "币种：",
@@ -17,7 +19,26 @@
     "memoLabel": "备注（可选）：",
     "memoPlaceholder": "例如：感谢这么棒的内容！",
     "memoLinkNote": "此链接会附加到备注中：{{link}}",
-    "send": "打赏"
+    "send": "打赏",
+    "lightning": {
+      "amountLabel": "金额（sats）：",
+      "messageLabel": "留言（可选）：",
+      "note": "通过 v4v.app 发给 @{{recipient}}，无需 Hive 账户：任何 Lightning 钱包都可以。足以支付 v4v.app 兑换手续费（约 60 sats）的打赏会以 HIVE 到账，更小的打赏则以 sats 留在对方的 v4v.app 账户中。",
+      "send": "用 Lightning 支付",
+      "scan": "用任意 Lightning 钱包扫码，向 @{{recipient}} 发送 {{sats}} sats。",
+      "openWallet": "在钱包中打开",
+      "copy": "复制账单",
+      "copied": "账单已复制",
+      "waiting": "正在等待付款…",
+      "done": "完成",
+      "errors": {
+        "amount": "请输入整数的 sats",
+        "tooMuch": "超出此地址可接收的上限（最多 {{max}} sats）",
+        "noAccount": "该 Hive 账户不存在",
+        "invoiceFailed": "无法创建 Lightning 账单，请重试。",
+        "copyFailed": "无法复制账单"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "请登录以个性化你的信息流",

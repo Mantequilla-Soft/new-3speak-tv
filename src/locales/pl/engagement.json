@@ -10,6 +10,8 @@
       "transferFailed": "Przelew nie powiódł się: {{message}}"
     },
     "heading": "Wyślij napiwek do @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Kwota: ",
     "amountPlaceholder": "np. 1.000",
     "currencyLabel": "Waluta:",
@@ -17,7 +19,26 @@
     "memoLabel": "Notatka (opcjonalnie):",
     "memoPlaceholder": "np. Dzięki za świetne treści!",
     "memoLinkNote": "Ten link zostanie dodany do notatki: {{link}}",
-    "send": "Wyślij napiwek"
+    "send": "Wyślij napiwek",
+    "lightning": {
+      "amountLabel": "Kwota (sats):",
+      "messageLabel": "Wiadomość (opcjonalnie):",
+      "note": "Trafia do @{{recipient}} przez v4v.app, bez konta Hive: zadziała dowolny portfel Lightning. Napiwki pokrywające opłatę za przewalutowanie v4v.app (około 60 sats) docierają jako HIVE, mniejsze zostają jako sats na koncie v4v.app odbiorcy.",
+      "send": "Zapłać przez Lightning",
+      "scan": "Zeskanuj dowolnym portfelem Lightning, aby wysłać {{sats}} sats do @{{recipient}}.",
+      "openWallet": "Otwórz w portfelu",
+      "copy": "Kopiuj fakturę",
+      "copied": "Faktura skopiowana",
+      "waiting": "Czekam na płatność…",
+      "done": "Gotowe",
+      "errors": {
+        "amount": "Wpisz całkowitą liczbę sats",
+        "tooMuch": "To więcej, niż przyjmuje ten adres (maks. {{max}} sats)",
+        "noAccount": "To konto Hive nie istnieje",
+        "invoiceFailed": "Nie udało się utworzyć faktury Lightning. Spróbuj ponownie.",
+        "copyFailed": "Nie udało się skopiować faktury"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Zaloguj się, aby spersonalizować swój kanał",

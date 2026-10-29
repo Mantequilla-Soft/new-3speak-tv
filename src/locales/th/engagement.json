@@ -10,6 +10,8 @@
       "transferFailed": "โอนไม่สำเร็จ: {{message}}"
     },
     "heading": "ส่งทิปให้ @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "จำนวน: ",
     "amountPlaceholder": "เช่น 1.000",
     "currencyLabel": "สกุลเงิน:",
@@ -17,7 +19,26 @@
     "memoLabel": "บันทึกช่วยจำ (ไม่บังคับ):",
     "memoPlaceholder": "เช่น ขอบคุณสำหรับคอนเทนต์ดีๆ!",
     "memoLinkNote": "ลิงก์นี้จะถูกเพิ่มในบันทึก: {{link}}",
-    "send": "ส่งทิป"
+    "send": "ส่งทิป",
+    "lightning": {
+      "amountLabel": "จำนวน (sats):",
+      "messageLabel": "ข้อความ (ไม่บังคับ):",
+      "note": "ส่งถึง @{{recipient}} ผ่าน v4v.app ไม่ต้องมีบัญชี Hive: ใช้กระเป๋า Lightning ใดก็ได้ ทิปที่ครอบคลุมค่าธรรมเนียมแปลงของ v4v.app (ประมาณ 60 sats) จะได้รับเป็น HIVE ส่วนทิปที่น้อยกว่าจะอยู่เป็น sats ในบัญชี v4v.app ของผู้รับ",
+      "send": "จ่ายด้วย Lightning",
+      "scan": "สแกนด้วยกระเป๋า Lightning ใดก็ได้เพื่อส่ง {{sats}} sats ให้ @{{recipient}}",
+      "openWallet": "เปิดในกระเป๋า",
+      "copy": "คัดลอกใบแจ้งหนี้",
+      "copied": "คัดลอกใบแจ้งหนี้แล้ว",
+      "waiting": "กำลังรอการชำระเงิน…",
+      "done": "เสร็จ",
+      "errors": {
+        "amount": "กรอกจำนวน sats เป็นจำนวนเต็ม",
+        "tooMuch": "มากกว่าที่ที่อยู่นี้รับได้ (สูงสุด {{max}} sats)",
+        "noAccount": "ไม่มีบัญชี Hive นี้",
+        "invoiceFailed": "สร้างใบแจ้งหนี้ Lightning ไม่ได้ โปรดลองอีกครั้ง",
+        "copyFailed": "คัดลอกใบแจ้งหนี้ไม่ได้"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "โปรดเข้าสู่ระบบเพื่อปรับแต่งฟีดของคุณ",

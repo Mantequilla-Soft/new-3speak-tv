@@ -275,6 +275,7 @@
   "supports": {
     "incomingTitle": "@{{user}} tipped @{{profile}} {{amount}} in total",
     "outgoingTitle": "@{{profile}} tipped @{{user}} {{amount}} in total",
+    "incomingTitleLightning": "Anonymous Lightning tips to @{{profile}}: {{amount}} in total",
     "received": "Received",
     "given": "Given",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -284,6 +285,7 @@
     "emptyGivenOwn": "You haven't tipped any videos yet. Tips you send from a video show up here.",
     "untitled": "Untitled",
     "paidInHive": "sent as {{amount}} HIVE",
+    "lightningSupporter": "Lightning supporter",
     "hideTip": "Hide tip",
     "unhideTip": "Unhide tip",
     "hiddenLabel": "Hidden from your profile",

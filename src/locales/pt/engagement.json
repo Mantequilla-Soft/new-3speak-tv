@@ -10,6 +10,8 @@
       "transferFailed": "Falha na transferência: {{message}}"
     },
     "heading": "Enviar gorjeta para @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Valor: ",
     "amountPlaceholder": "ex.: 1.000",
     "currencyLabel": "Moeda:",
@@ -17,7 +19,26 @@
     "memoLabel": "Memo (opcional):",
     "memoPlaceholder": "ex.: Valeu por esse conteúdo incrível!",
     "memoLinkNote": "Este link é adicionado ao memo: {{link}}",
-    "send": "Enviar gorjeta"
+    "send": "Enviar gorjeta",
+    "lightning": {
+      "amountLabel": "Valor (sats):",
+      "messageLabel": "Mensagem (opcional):",
+      "note": "Vai para @{{recipient}} pela v4v.app, sem precisar de conta Hive: qualquer carteira Lightning serve. Gorjetas que cobrem a taxa de conversão da v4v.app (cerca de 60 sats) chegam como HIVE; as menores ficam em sats na conta v4v.app da pessoa.",
+      "send": "Pagar com Lightning",
+      "scan": "Escaneie com qualquer carteira Lightning para enviar {{sats}} sats a @{{recipient}}.",
+      "openWallet": "Abrir na carteira",
+      "copy": "Copiar fatura",
+      "copied": "Fatura copiada",
+      "waiting": "Aguardando o pagamento…",
+      "done": "Concluído",
+      "errors": {
+        "amount": "Digite um número inteiro de sats",
+        "tooMuch": "É mais do que este endereço aceita (máx. {{max}} sats)",
+        "noAccount": "Esta conta Hive não existe",
+        "invoiceFailed": "Não foi possível criar a fatura Lightning. Tente novamente.",
+        "copyFailed": "Não foi possível copiar a fatura"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Entre na sua conta para personalizar seu feed",

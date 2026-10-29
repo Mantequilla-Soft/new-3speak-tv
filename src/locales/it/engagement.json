@@ -10,6 +10,8 @@
       "transferFailed": "Trasferimento non riuscito: {{message}}"
     },
     "heading": "Invia una mancia a @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Importo: ",
     "amountPlaceholder": "es. 1.000",
     "currencyLabel": "Valuta:",
@@ -17,7 +19,26 @@
     "memoLabel": "Memo (facoltativo):",
     "memoPlaceholder": "es. Grazie per questo contenuto fantastico!",
     "memoLinkNote": "Questo link viene aggiunto al memo: {{link}}",
-    "send": "Invia mancia"
+    "send": "Invia mancia",
+    "lightning": {
+      "amountLabel": "Importo (sats):",
+      "messageLabel": "Messaggio (facoltativo):",
+      "note": "Arriva a @{{recipient}} tramite v4v.app, senza bisogno di un account Hive: va bene qualsiasi wallet Lightning. Le mance che coprono la commissione di conversione di v4v.app (circa 60 sats) arrivano come HIVE, quelle più piccole restano in sats nel suo account v4v.app.",
+      "send": "Paga con Lightning",
+      "scan": "Scansiona con qualsiasi wallet Lightning per inviare {{sats}} sats a @{{recipient}}.",
+      "openWallet": "Apri nel wallet",
+      "copy": "Copia fattura",
+      "copied": "Fattura copiata",
+      "waiting": "In attesa del pagamento…",
+      "done": "Fatto",
+      "errors": {
+        "amount": "Inserisci un numero intero di sats",
+        "tooMuch": "È più di quanto accetta questo indirizzo (max {{max}} sats)",
+        "noAccount": "Questo account Hive non esiste",
+        "invoiceFailed": "Impossibile creare la fattura Lightning. Riprova.",
+        "copyFailed": "Impossibile copiare la fattura"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Accedi per personalizzare il tuo feed",

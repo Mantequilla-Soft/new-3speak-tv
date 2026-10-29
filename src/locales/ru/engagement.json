@@ -10,6 +10,8 @@
       "transferFailed": "Перевод не удался: {{message}}"
     },
     "heading": "Чаевые для @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Сумма: ",
     "amountPlaceholder": "напр. 1.000",
     "currencyLabel": "Валюта:",
@@ -17,7 +19,26 @@
     "memoLabel": "Мемо (необязательно):",
     "memoPlaceholder": "напр. Спасибо за отличный контент!",
     "memoLinkNote": "Эта ссылка добавляется в мемо: {{link}}",
-    "send": "Отправить чаевые"
+    "send": "Отправить чаевые",
+    "lightning": {
+      "amountLabel": "Сумма (sats):",
+      "messageLabel": "Сообщение (необязательно):",
+      "note": "Отправляется @{{recipient}} через v4v.app, аккаунт Hive не нужен: подойдёт любой Lightning-кошелёк. Чаевые, покрывающие комиссию v4v.app за конвертацию (около 60 sats), приходят в HIVE, более мелкие остаются в sats на аккаунте v4v.app.",
+      "send": "Оплатить через Lightning",
+      "scan": "Отсканируйте любым Lightning-кошельком, чтобы отправить {{sats}} sats пользователю @{{recipient}}.",
+      "openWallet": "Открыть в кошельке",
+      "copy": "Скопировать счёт",
+      "copied": "Счёт скопирован",
+      "waiting": "Ожидание оплаты…",
+      "done": "Готово",
+      "errors": {
+        "amount": "Введите целое число sats",
+        "tooMuch": "Это больше, чем принимает этот адрес (макс. {{max}} sats)",
+        "noAccount": "Такого аккаунта Hive нет",
+        "invoiceFailed": "Не удалось создать Lightning-счёт. Попробуйте ещё раз.",
+        "copyFailed": "Не удалось скопировать счёт"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Войдите, чтобы настроить ленту под себя",

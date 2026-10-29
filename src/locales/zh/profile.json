@@ -258,6 +258,7 @@
   "supports": {
     "incomingTitle": "@{{user}} 共打赏 @{{profile}} {{amount}}",
     "outgoingTitle": "@{{profile}} 共打赏 @{{user}} {{amount}}",
+    "incomingTitleLightning": "给 @{{profile}} 的匿名 Lightning 打赏：共 {{amount}}",
     "received": "收到",
     "given": "送出",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -267,6 +268,7 @@
     "emptyGivenOwn": "你还没有打赏过任何视频。你在视频上送出的打赏会显示在这里。",
     "untitled": "无标题",
     "paidInHive": "以 {{amount}} HIVE 发送",
+    "lightningSupporter": "Lightning 支持者",
     "hideTip": "隐藏打赏",
     "unhideTip": "取消隐藏",
     "hiddenLabel": "已从你的主页隐藏",

@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { MdGraphicEq, MdRedeem, MdVolunteerActivism, MdVisibilityOff, MdVisibility } from 'react-icons/md';
+import { MdGraphicEq, MdRedeem, MdVolunteerActivism, MdVisibilityOff, MdVisibility, MdBolt } from 'react-icons/md';
 import AccountImg from '../HiveAvatar/AccountImg';
 import TimeAgo from '../TimeAgo/TimeAgo';
 import BarLoader from '../Loader/BarLoader';
 import { fixVideoThumbnail } from '../../utils/fixThumbnails';
-import { fetchSupports, fetchSupportsGiven, supportItemLink, formatHbd, formatHbdCompact } from '../../lib/supports';
+import { fetchSupports, fetchSupportsGiven, supportItemLink, formatHbd, formatSats, formatSupportTotal } from '../../lib/supports';
 import { setSupportHidden } from '../../lib/supportsHide';
 import { toastIn } from '../../utils/toast';
 import './Supporters.scss';
@@ -100,14 +100,24 @@ function SupportCard({ item, person, canHide }) {
       <div className="sp-card-body">
         <Link to={link} className="sp-card-title" title={title}>{title}</Link>
         <div className="sp-card-meta">
-          <Link to={`/@${person}`} className="sp-card-tipper">
-            <AccountImg account={person} alt="" loading="lazy" />
-            <span>@{person}</span>
-          </Link>
+          {person ? (
+            <Link to={`/@${person}`} className="sp-card-tipper">
+              <AccountImg account={person} alt="" loading="lazy" />
+              <span>@{person}</span>
+            </Link>
+          ) : (
+            // A Lightning tip whose payer can't be told (not paid from Hive).
+            <span className="sp-card-tipper sp-card-tipper--anon">
+              <MdBolt aria-hidden="true" />
+              <span>{t('profile.supports.lightningSupporter')}</span>
+            </span>
+          )}
           <span className="sp-card-time"><TimeAgo date={item.tippedAt || item.createdAt} /></span>
         </div>
         <div className="sp-card-amount">
-          <span className="sp-pill">{formatHbd(item.hbd_value)}</span>
+          {item.currency === 'SATS'
+            ? <span className="sp-pill"><MdBolt aria-hidden="true" />{formatSats(item.amount)}</span>
+            : <span className="sp-pill">{formatHbd(item.hbd_value)}</span>}
           {item.currency === 'HIVE' && (
             <span className="sp-card-paid">{t('profile.supports.paidInHive', { amount: Number(item.amount).toFixed(3) })}</span>
           )}
@@ -171,7 +181,7 @@ export default function SupportersList({ user, isOwnProfile }) {
     >
       <Icon className="sp-subtab-icon" aria-hidden="true" />
       {page
-        ? t('profile.supports.subTabTotal', { label, amount: formatHbdCompact(page.total_hbd) })
+        ? t('profile.supports.subTabTotal', { label, amount: formatSupportTotal(page.total_hbd, page.total_sats) })
         : label}
     </button>
   );

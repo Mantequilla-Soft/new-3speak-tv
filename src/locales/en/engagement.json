@@ -10,6 +10,8 @@
       "transferFailed": "Transfer failed: {{message}}"
     },
     "heading": "Send a Tip to @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Amount: ",
     "amountPlaceholder": "e.g. 1.000",
     "currencyLabel": "Currency:",
@@ -17,7 +19,26 @@
     "memoLabel": "Memo (optional):",
     "memoPlaceholder": "e.g. Thanks for this amazing content!",
     "memoLinkNote": "This link is added to the memo: {{link}}",
-    "send": "Send Tip"
+    "send": "Send Tip",
+    "lightning": {
+      "amountLabel": "Amount (sats):",
+      "messageLabel": "Message (optional):",
+      "note": "Goes to @{{recipient}} through v4v.app, no Hive account needed: any Lightning wallet works. Tips that cover v4v.app's conversion fee (about 60 sats) arrive as HIVE, smaller ones stay as sats in their v4v.app account.",
+      "send": "Pay with Lightning",
+      "scan": "Scan with any Lightning wallet to send {{sats}} sats to @{{recipient}}.",
+      "openWallet": "Open in wallet",
+      "copy": "Copy invoice",
+      "copied": "Invoice copied",
+      "waiting": "Waiting for the payment…",
+      "done": "Done",
+      "errors": {
+        "amount": "Enter a whole number of sats",
+        "tooMuch": "That is more than this address accepts (max {{max}} sats)",
+        "noAccount": "This Hive account does not exist",
+        "invoiceFailed": "Could not create a Lightning invoice. Please try again.",
+        "copyFailed": "Could not copy the invoice"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Please login to personalize your feed",

@@ -11,6 +11,8 @@ import 'ldrs/react/LineSpinner.css'
 import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useQueryClient } from '@tanstack/react-query';
 import { queueSupport, recordSupport } from '../../lib/supports';
+import { QRCodeSVG } from 'qrcode.react';
+import { LIGHTNING_PRESETS, requestLightningInvoice, isLightningInvoicePaid, hasWebln, payWithWebln } from '../../lib/lightningTip';
 
 // Every toast from this module is headed "Tip"; the message becomes the
 // line under it. See utils/toast.js.
@@ -34,11 +36,44 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip })
   const [selectedBalance, setSelectedBalance] = useState()
 //   const [error, setError] = useState()
   const [loading, setLoading] = useState(false);
+  // 'hive' = HIVE/HBD transfer from the viewer's Hive wallet; 'lightning' = an
+  // invoice any Lightning wallet can pay (lib/lightningTip.js), no Hive account
+  // needed, so it is where a signed-out viewer starts.
+  const [method, setMethod] = useState(() => (activetUser && isLoggedIn() ? 'hive' : 'lightning'));
+  const [sats, setSats] = useState(String(LIGHTNING_PRESETS[1]));
+  const [invoice, setInvoice] = useState(null);
+  const [creatingInvoice, setCreatingInvoice] = useState(false);
 
 
   useEffect(()=>{
-    getbalance()
+    if (activetUser) getbalance()
   },[])
+
+  // While the invoice is on screen, ask every few seconds whether it was paid,
+  // so the viewer sees the thank-you without pressing anything.
+  useEffect(() => {
+    if (!invoice?.hash) return undefined;
+    let stopped = false;
+    let timer;
+    const check = async () => {
+      if (stopped) return;
+      if (!document.hidden) {
+        try {
+          if (await isLightningInvoicePaid(invoice.hash)) {
+            if (stopped) return;
+            setAmount(String(invoice.sats));
+            setCurrency('sats');
+            setInvoice(null);
+            setStep(2);
+            return;
+          }
+        } catch { /* network blip: ask again next round */ }
+      }
+      timer = setTimeout(check, 3000);
+    };
+    timer = setTimeout(check, 3000);
+    return () => { stopped = true; clearTimeout(timer); };
+  }, [invoice]);
 
   useEffect(() => {
     if (balances && currency) {
@@ -72,7 +107,60 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip })
     setAmount("");
     setCurrency("HIVE");
     setMemo("");
+    setInvoice(null);
     onClose();
+  };
+
+  // Same memo as a Hive tip: the typed text plus the link to the post.
+  const memoWithLink = () => {
+    const typed = memo.trim();
+    return memoLink && !typed.includes(memoLink)
+      ? (typed ? `${typed} ${memoLink}` : memoLink)
+      : typed;
+  };
+
+  const handleLightning = async () => {
+    const n = Number(sats);
+    if (!Number.isInteger(n) || n < 1) {
+      toast.error(t('engagement.tip.lightning.errors.amount'));
+      return;
+    }
+    setCreatingInvoice(true);
+    let inv;
+    try {
+      inv = await requestLightningInvoice({ to: recipient, sats: n, comment: memoWithLink() });
+    } catch (err) {
+      const key = err.code === 'amount_out_of_range' ? 'tooMuch'
+        : err.code === 'no_account' ? 'noAccount'
+        : 'invoiceFailed';
+      toast.error(t(`engagement.tip.lightning.errors.${key}`, { max: err.max }));
+      return;
+    } finally {
+      setCreatingInvoice(false);
+    }
+    // A wallet in the browser pays in one step; if there is none, or the viewer
+    // backs out of it, the invoice is shown to scan or open in a wallet app.
+    if (hasWebln()) {
+      try {
+        await payWithWebln(inv.pr);
+        setAmount(String(inv.sats));
+        setCurrency('sats');
+        setStep(2);
+        return;
+      } catch (err) {
+        console.warn('[tip] WebLN payment not made:', err?.message || err);
+      }
+    }
+    setInvoice(inv);
+  };
+
+  const copyInvoice = async () => {
+    try {
+      await navigator.clipboard.writeText(invoice.pr);
+      toast.success(t('engagement.tip.lightning.copied'));
+    } catch {
+      toast.error(t('engagement.tip.lightning.errors.copyFailed'));
+    }
   };
 
   const handleSubmitTransfer = async () => {
@@ -99,10 +187,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip })
 
     // The checker matches the reported memo against the on-chain one, so the
     // support report carries the memo with the link too.
-    const typed = memo.trim();
-    const fullMemo = memoLink && !typed.includes(memoLink)
-      ? (typed ? `${typed} ${memoLink}` : memoLink)
-      : typed;
+    const fullMemo = memoWithLink();
 
     // Saved BEFORE the broadcast: if the page reloads while the wallet is still
     // signing, the next app start reports it (lib/supports.js).
@@ -142,7 +227,98 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip })
           onClose={handleClose}
         />
       
-        {step === 1 && <div className="tip-modal-in">
+        {step === 1 && !invoice && (
+          <div className="tip-method-switch" role="tablist">
+            <button type="button" role="tab" aria-selected={method === 'hive'} className={method === 'hive' ? 'active' : ''} onClick={() => setMethod('hive')}>
+              {t('engagement.tip.methodHive')}
+            </button>
+            <button type="button" role="tab" aria-selected={method === 'lightning'} className={method === 'lightning' ? 'active' : ''} onClick={() => setMethod('lightning')}>
+              ⚡ {t('engagement.tip.methodLightning')}
+            </button>
+          </div>
+        )}
+
+        {step === 1 && method === 'hive' && !(activetUser && isLoggedIn()) && (
+          <div className="tip-modal-in">
+            <p className="tip-method-note">{t('engagement.tip.errors.loginRequired')}</p>
+          </div>
+        )}
+
+        {step === 1 && method === 'lightning' && !invoice && <div className="tip-modal-in">
+          <div className="form">
+            <div className="field">
+              <label>{t('engagement.tip.lightning.amountLabel')}</label>
+              <div className="sats-presets">
+                {LIGHTNING_PRESETS.map((p) => (
+                  <button type="button" key={p} className={String(p) === sats ? 'active' : ''} onClick={() => setSats(String(p))}>
+                    {p.toLocaleString()}
+                  </button>
+                ))}
+              </div>
+              <input
+                type="number"
+                min="1"
+                step="1"
+                inputMode="numeric"
+                value={sats}
+                onChange={(e) => setSats(e.target.value)}
+              />
+            </div>
+
+            <div className="field">
+              <label>{t('engagement.tip.lightning.messageLabel')}</label>
+              <input
+                type="text"
+                maxLength={500}
+                placeholder={t('engagement.tip.memoPlaceholder')}
+                value={memo}
+                onChange={(e) => setMemo(e.target.value)}
+              />
+              {memoLink && (
+                <div className="memo-link-note">{t('engagement.tip.memoLinkNote', { link: memoLink })}</div>
+              )}
+            </div>
+
+            <p className="tip-method-note">{t('engagement.tip.lightning.note', { recipient })}</p>
+
+            <div className="actions">
+              <button className="cancel-btn" onClick={handleClose}>
+                {t('common.actions.cancel')}
+              </button>
+              <button className="send-btn" onClick={handleLightning} disabled={creatingInvoice}>
+                {creatingInvoice
+                  ? <LineSpinner size="14" stroke="2" speed="1" color="currentColor" />
+                  : t('engagement.tip.lightning.send')}
+              </button>
+            </div>
+          </div>
+        </div>}
+
+        {step === 1 && method === 'lightning' && invoice && <div className="tip-modal-in">
+          <div className="lightning-invoice">
+            <p className="tip-method-note">{t('engagement.tip.lightning.scan', { sats: invoice.sats.toLocaleString(), recipient })}</p>
+            <a className="qr-wrap" href={`lightning:${invoice.pr}`} aria-label={t('engagement.tip.lightning.openWallet')}>
+              <QRCodeSVG value={`lightning:${invoice.pr}`.toUpperCase()} size={220} marginSize={2} bgColor="#ffffff" fgColor="#000000" />
+            </a>
+            <div className="actions">
+              <button className="cancel-btn" onClick={copyInvoice}>
+                {t('engagement.tip.lightning.copy')}
+              </button>
+              <a className="send-btn" href={`lightning:${invoice.pr}`}>
+                {t('engagement.tip.lightning.openWallet')}
+              </a>
+            </div>
+            <p className="lightning-waiting">
+              <LineSpinner size="12" stroke="2" speed="1" color="currentColor" />
+              {t('engagement.tip.lightning.waiting')}
+            </p>
+            <button type="button" className="lightning-done" onClick={handleClose}>
+              {t('engagement.tip.lightning.done')}
+            </button>
+          </div>
+        </div>}
+
+        {step === 1 && method === 'hive' && activetUser && isLoggedIn() && <div className="tip-modal-in">
           <div className="form">
             <div className="field">
               <label>{t('engagement.tip.amountLabel')}</label>

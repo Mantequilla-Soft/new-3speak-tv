@@ -60,6 +60,13 @@
       flex-shrink: 0;
       background: rgba(148, 163, 184, 0.25);
     }
+
+    // The anonymous Lightning chip has a bolt where the avatar would be.
+    .sp-badge-bolt {
+      padding: 3px;
+      box-sizing: border-box;
+      color: #f59e0b;
+    }
   }
 
   // Same as .hive-badge-more, the "Show more" chip in the Hive row above.
@@ -251,6 +258,18 @@
   span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   &:hover { color: var(--text-primary); }
+
+  // Anonymous Lightning tip: a bolt instead of an avatar, and no profile to open.
+  &--anon {
+    > svg {
+      flex: 0 0 auto;
+      width: 22px;
+      height: 22px;
+      color: #f59e0b;
+    }
+
+    &:hover { color: var(--text-secondary); }
+  }
 }
 
 .sp-card-time { flex: 0 0 auto; margin-left: auto; white-space: nowrap; }
@@ -274,6 +293,8 @@
   font-size: 0.78rem;
   font-weight: 700;
   white-space: nowrap;
+
+  > svg { margin-right: 3px; color: #f59e0b; }
 }
 
 .sp-card-paid {

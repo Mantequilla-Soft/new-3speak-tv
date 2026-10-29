@@ -275,6 +275,7 @@
   "supports": {
     "incomingTitle": "Nag-tip si @{{user}} kay @{{profile}} ng kabuuang {{amount}}",
     "outgoingTitle": "Nag-tip si @{{profile}} kay @{{user}} ng kabuuang {{amount}}",
+    "incomingTitleLightning": "Mga anonymous na Lightning tip kay @{{profile}}: kabuuang {{amount}}",
     "received": "Natanggap",
     "given": "Ibinigay",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -284,6 +285,7 @@
     "emptyGivenOwn": "Hindi ka pa nagti-tip sa anumang video. Lalabas dito ang mga tip na ipinadala mo mula sa isang video.",
     "untitled": "Walang pamagat",
     "paidInHive": "ipinadala bilang {{amount}} HIVE",
+    "lightningSupporter": "Lightning supporter",
     "hideTip": "Itago ang tip",
     "unhideTip": "Ipakita ang tip",
     "hiddenLabel": "Nakatago sa profile mo",

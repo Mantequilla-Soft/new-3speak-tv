@@ -274,7 +274,8 @@ function AudioPost() {
                   type="button"
                   className="audio-post-action-btn"
                   onClick={() => {
-                    if (!loggedIn) { toast.error(t('audio.post.signInToTip')); return; }
+                    // Signed out, the tip window opens on Lightning, which needs
+                    // no Hive account.
                     setIsTipOpen(true);
                   }}
                 >

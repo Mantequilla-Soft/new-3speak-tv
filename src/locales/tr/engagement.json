@@ -10,6 +10,8 @@
       "transferFailed": "Transfer başarısız: {{message}}"
     },
     "heading": "@{{recipient}} kullanıcısına bahşiş gönder",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Miktar: ",
     "amountPlaceholder": "örn. 1.000",
     "currencyLabel": "Para birimi:",
@@ -17,7 +19,26 @@
     "memoLabel": "Not (isteğe bağlı):",
     "memoPlaceholder": "örn. Bu harika içerik için teşekkürler!",
     "memoLinkNote": "Bu bağlantı nota eklenir: {{link}}",
-    "send": "Bahşiş Gönder"
+    "send": "Bahşiş Gönder",
+    "lightning": {
+      "amountLabel": "Tutar (sats):",
+      "messageLabel": "Mesaj (isteğe bağlı):",
+      "note": "v4v.app üzerinden @{{recipient}} kullanıcısına gider, Hive hesabı gerekmez: herhangi bir Lightning cüzdanı olur. v4v.app'in dönüşüm ücretini (yaklaşık 60 sats) karşılayan bahşişler HIVE olarak ulaşır, daha küçükleri v4v.app hesabında sats olarak kalır.",
+      "send": "Lightning ile öde",
+      "scan": "@{{recipient}} kullanıcısına {{sats}} sats göndermek için herhangi bir Lightning cüzdanıyla tarayın.",
+      "openWallet": "Cüzdanda aç",
+      "copy": "Faturayı kopyala",
+      "copied": "Fatura kopyalandı",
+      "waiting": "Ödeme bekleniyor…",
+      "done": "Tamam",
+      "errors": {
+        "amount": "Tam sayı olarak sats girin",
+        "tooMuch": "Bu, adresin kabul ettiğinden fazla (en çok {{max}} sats)",
+        "noAccount": "Bu Hive hesabı yok",
+        "invoiceFailed": "Lightning faturası oluşturulamadı. Lütfen tekrar deneyin.",
+        "copyFailed": "Fatura kopyalanamadı"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Akışını kişiselleştirmek için giriş yap",

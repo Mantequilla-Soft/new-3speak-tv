@@ -7,6 +7,21 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.39',
+    date: '2026-10-29',
+    summary: 'Lightning tips now show up under Supporters on profiles, in sats.',
+  },
+  {
+    version: '1.80.38',
+    date: '2026-10-29',
+    summary: 'You can now tip creators right from Shorts and from the audio player bar.',
+  },
+  {
+    version: '1.80.37',
+    date: '2026-10-29',
+    summary: 'Tip with ⚡ Lightning: the Tip button now takes payments from any Lightning wallet, no Hive account needed.',
+  },
+  {
     version: '1.80.36',
     date: '2026-10-28',
     summary: 'Everyone can now post a 24-hour Story: tap your own avatar in the stories row or pick Story in the Upload menu.',

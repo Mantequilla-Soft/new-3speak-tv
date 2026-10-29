@@ -10,6 +10,8 @@
       "transferFailed": "Échec du transfert : {{message}}"
     },
     "heading": "Envoyer un pourboire à @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Montant : ",
     "amountPlaceholder": "ex. 1.000",
     "currencyLabel": "Devise :",
@@ -17,7 +19,26 @@
     "memoLabel": "Mémo (facultatif) :",
     "memoPlaceholder": "ex. Merci pour ce super contenu !",
     "memoLinkNote": "Ce lien est ajouté au mémo : {{link}}",
-    "send": "Envoyer le pourboire"
+    "send": "Envoyer le pourboire",
+    "lightning": {
+      "amountLabel": "Montant (sats) :",
+      "messageLabel": "Message (facultatif) :",
+      "note": "Envoyé à @{{recipient}} via v4v.app, sans compte Hive : n'importe quel portefeuille Lightning fonctionne. Les pourboires qui couvrent les frais de conversion de v4v.app (environ 60 sats) arrivent en HIVE, les plus petits restent en sats sur son compte v4v.app.",
+      "send": "Payer avec Lightning",
+      "scan": "Scannez avec n'importe quel portefeuille Lightning pour envoyer {{sats}} sats à @{{recipient}}.",
+      "openWallet": "Ouvrir dans le portefeuille",
+      "copy": "Copier la facture",
+      "copied": "Facture copiée",
+      "waiting": "En attente du paiement…",
+      "done": "Terminé",
+      "errors": {
+        "amount": "Saisissez un nombre entier de sats",
+        "tooMuch": "C'est plus que ce que cette adresse accepte (max {{max}} sats)",
+        "noAccount": "Ce compte Hive n'existe pas",
+        "invoiceFailed": "Impossible de créer la facture Lightning. Veuillez réessayer.",
+        "copyFailed": "Impossible de copier la facture"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Connectez-vous pour personnaliser votre fil",

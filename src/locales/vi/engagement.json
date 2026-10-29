@@ -10,6 +10,8 @@
       "transferFailed": "Chuyển thất bại: {{message}}"
     },
     "heading": "Gửi tip cho @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Số lượng: ",
     "amountPlaceholder": "ví dụ 1.000",
     "currencyLabel": "Loại tiền:",
@@ -17,7 +19,26 @@
     "memoLabel": "Ghi chú (không bắt buộc):",
     "memoPlaceholder": "ví dụ Cảm ơn vì nội dung tuyệt vời này!",
     "memoLinkNote": "Liên kết này được thêm vào ghi chú: {{link}}",
-    "send": "Gửi tip"
+    "send": "Gửi tip",
+    "lightning": {
+      "amountLabel": "Số tiền (sats):",
+      "messageLabel": "Lời nhắn (không bắt buộc):",
+      "note": "Gửi đến @{{recipient}} qua v4v.app, không cần tài khoản Hive: ví Lightning nào cũng dùng được. Tip đủ trả phí quy đổi của v4v.app (khoảng 60 sats) sẽ đến dưới dạng HIVE, tip nhỏ hơn vẫn là sats trong tài khoản v4v.app của họ.",
+      "send": "Thanh toán bằng Lightning",
+      "scan": "Quét bằng ví Lightning bất kỳ để gửi {{sats}} sats cho @{{recipient}}.",
+      "openWallet": "Mở trong ví",
+      "copy": "Sao chép hóa đơn",
+      "copied": "Đã sao chép hóa đơn",
+      "waiting": "Đang chờ thanh toán…",
+      "done": "Xong",
+      "errors": {
+        "amount": "Nhập số sats là số nguyên",
+        "tooMuch": "Vượt quá mức địa chỉ này chấp nhận (tối đa {{max}} sats)",
+        "noAccount": "Tài khoản Hive này không tồn tại",
+        "invoiceFailed": "Không tạo được hóa đơn Lightning. Vui lòng thử lại.",
+        "copyFailed": "Không sao chép được hóa đơn"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Vui lòng đăng nhập để cá nhân hóa bảng tin của bạn",

@@ -10,6 +10,8 @@
       "transferFailed": "送金に失敗しました: {{message}}"
     },
     "heading": "@{{recipient}} さんに投げ銭を送る",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "金額: ",
     "amountPlaceholder": "例: 1.000",
     "currencyLabel": "通貨:",
@@ -17,7 +19,26 @@
     "memoLabel": "メモ（任意）:",
     "memoPlaceholder": "例: 素晴らしいコンテンツをありがとう！",
     "memoLinkNote": "このリンクがメモに追加されます: {{link}}",
-    "send": "投げ銭を送る"
+    "send": "投げ銭を送る",
+    "lightning": {
+      "amountLabel": "金額（sats）:",
+      "messageLabel": "メッセージ（任意）:",
+      "note": "v4v.app 経由で @{{recipient}} さんに届きます。Hive アカウントは不要で、どの Lightning ウォレットでも使えます。v4v.app の換算手数料（約 60 sats）を上回る投げ銭は HIVE で届き、それより少ない分は v4v.app アカウントに sats のまま残ります。",
+      "send": "Lightning で支払う",
+      "scan": "任意の Lightning ウォレットでスキャンして、@{{recipient}} さんに {{sats}} sats を送ります。",
+      "openWallet": "ウォレットで開く",
+      "copy": "請求書をコピー",
+      "copied": "請求書をコピーしました",
+      "waiting": "支払いを待っています…",
+      "done": "完了",
+      "errors": {
+        "amount": "sats を整数で入力してください",
+        "tooMuch": "このアドレスの上限を超えています（最大 {{max}} sats）",
+        "noAccount": "この Hive アカウントは存在しません",
+        "invoiceFailed": "Lightning の請求書を作成できませんでした。もう一度お試しください。",
+        "copyFailed": "請求書をコピーできませんでした"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "フィードをカスタマイズするにはログインしてください",

@@ -10,6 +10,8 @@
       "transferFailed": "Überweisung fehlgeschlagen: {{message}}"
     },
     "heading": "Trinkgeld an @{{recipient}} senden",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Betrag: ",
     "amountPlaceholder": "z. B. 1.000",
     "currencyLabel": "Währung:",
@@ -17,7 +19,26 @@
     "memoLabel": "Memo (optional):",
     "memoPlaceholder": "z. B. Danke für diesen tollen Inhalt!",
     "memoLinkNote": "Dieser Link wird dem Memo angehängt: {{link}}",
-    "send": "Trinkgeld senden"
+    "send": "Trinkgeld senden",
+    "lightning": {
+      "amountLabel": "Betrag (Sats):",
+      "messageLabel": "Nachricht (optional):",
+      "note": "Geht über v4v.app an @{{recipient}}, kein Hive-Konto nötig: Jede Lightning-Wallet funktioniert. Trinkgelder, die die Umrechnungsgebühr von v4v.app (etwa 60 Sats) decken, kommen als HIVE an, kleinere bleiben als Sats im v4v.app-Konto.",
+      "send": "Mit Lightning bezahlen",
+      "scan": "Scanne mit einer beliebigen Lightning-Wallet, um {{sats}} Sats an @{{recipient}} zu senden.",
+      "openWallet": "In Wallet öffnen",
+      "copy": "Rechnung kopieren",
+      "copied": "Rechnung kopiert",
+      "waiting": "Warte auf die Zahlung…",
+      "done": "Fertig",
+      "errors": {
+        "amount": "Gib eine ganze Zahl an Sats ein",
+        "tooMuch": "Das ist mehr, als diese Adresse annimmt (max. {{max}} Sats)",
+        "noAccount": "Dieses Hive-Konto gibt es nicht",
+        "invoiceFailed": "Die Lightning-Rechnung konnte nicht erstellt werden. Bitte versuche es erneut.",
+        "copyFailed": "Die Rechnung konnte nicht kopiert werden"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Bitte melde dich an, um deinen Feed zu personalisieren",

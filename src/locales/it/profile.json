@@ -292,6 +292,7 @@
   "supports": {
     "incomingTitle": "@{{user}} ha dato a @{{profile}} {{amount}} di mance in totale",
     "outgoingTitle": "@{{profile}} ha dato a @{{user}} {{amount}} di mance in totale",
+    "incomingTitleLightning": "Mance Lightning anonime a @{{profile}}: {{amount}} in totale",
     "received": "Ricevute",
     "given": "Date",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -301,6 +302,7 @@
     "emptyGivenOwn": "Non hai ancora lasciato mance su nessun video. Le mance che invii da un video compaiono qui.",
     "untitled": "Senza titolo",
     "paidInHive": "inviato come {{amount}} HIVE",
+    "lightningSupporter": "Sostenitore Lightning",
     "hideTip": "Nascondi mancia",
     "unhideTip": "Mostra mancia",
     "hiddenLabel": "Nascosta dal tuo profilo",

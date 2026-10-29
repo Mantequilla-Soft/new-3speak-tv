@@ -10,6 +10,8 @@
       "transferFailed": "Kutuma kumeshindwa: {{message}}"
     },
     "heading": "Tuma bakshishi kwa @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Kiasi: ",
     "amountPlaceholder": "k.m. 1.000",
     "currencyLabel": "Sarafu:",
@@ -17,7 +19,26 @@
     "memoLabel": "Memo (si lazima):",
     "memoPlaceholder": "k.m. Asante kwa maudhui haya mazuri!",
     "memoLinkNote": "Kiungo hiki kinaongezwa kwenye memo: {{link}}",
-    "send": "Tuma bakshishi"
+    "send": "Tuma bakshishi",
+    "lightning": {
+      "amountLabel": "Kiasi (sats):",
+      "messageLabel": "Ujumbe (si lazima):",
+      "note": "Inamfikia @{{recipient}} kupitia v4v.app, hakuna haja ya akaunti ya Hive: pochi yoyote ya Lightning inafanya kazi. Bakshishi zinazolipia ada ya ubadilishaji ya v4v.app (karibu sats 60) zinafika kama HIVE, ndogo zaidi hubaki kama sats kwenye akaunti yake ya v4v.app.",
+      "send": "Lipa kwa Lightning",
+      "scan": "Changanua kwa pochi yoyote ya Lightning ili kutuma sats {{sats}} kwa @{{recipient}}.",
+      "openWallet": "Fungua kwenye pochi",
+      "copy": "Nakili ankara",
+      "copied": "Ankara imenakiliwa",
+      "waiting": "Inasubiri malipo…",
+      "done": "Imekamilika",
+      "errors": {
+        "amount": "Weka idadi kamili ya sats",
+        "tooMuch": "Hiyo ni zaidi ya anwani hii inavyokubali (juu kabisa sats {{max}})",
+        "noAccount": "Akaunti hii ya Hive haipo",
+        "invoiceFailed": "Imeshindwa kuunda ankara ya Lightning. Tafadhali jaribu tena.",
+        "copyFailed": "Imeshindwa kunakili ankara"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Tafadhali ingia ili kubinafsisha mlisho wako",

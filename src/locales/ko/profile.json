@@ -258,6 +258,7 @@
   "supports": {
     "incomingTitle": "@{{user}} 님이 @{{profile}} 님에게 총 {{amount}}를 팁으로 보냈습니다",
     "outgoingTitle": "@{{profile}} 님이 @{{user}} 님에게 총 {{amount}}를 팁으로 보냈습니다",
+    "incomingTitleLightning": "@{{profile}} 님에게 온 익명 Lightning 팁: 총 {{amount}}",
     "received": "받음",
     "given": "보냄",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -267,6 +268,7 @@
     "emptyGivenOwn": "아직 동영상에 팁을 보내지 않았습니다. 동영상에서 보낸 팁이 여기에 표시됩니다.",
     "untitled": "제목 없음",
     "paidInHive": "{{amount}} HIVE로 보냄",
+    "lightningSupporter": "Lightning 후원자",
     "hideTip": "팁 숨기기",
     "unhideTip": "팁 다시 표시",
     "hiddenLabel": "내 프로필에서 숨김",

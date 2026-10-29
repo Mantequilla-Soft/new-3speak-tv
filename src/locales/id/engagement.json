@@ -10,6 +10,8 @@
       "transferFailed": "Transfer gagal: {{message}}"
     },
     "heading": "Kirim Tip ke @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Jumlah: ",
     "amountPlaceholder": "mis. 1.000",
     "currencyLabel": "Mata uang:",
@@ -17,7 +19,26 @@
     "memoLabel": "Memo (opsional):",
     "memoPlaceholder": "mis. Makasih untuk konten kerennya!",
     "memoLinkNote": "Tautan ini ditambahkan ke memo: {{link}}",
-    "send": "Kirim Tip"
+    "send": "Kirim Tip",
+    "lightning": {
+      "amountLabel": "Jumlah (sats):",
+      "messageLabel": "Pesan (opsional):",
+      "note": "Dikirim ke @{{recipient}} lewat v4v.app, tanpa perlu akun Hive: dompet Lightning apa pun bisa. Tip yang menutupi biaya konversi v4v.app (sekitar 60 sats) tiba sebagai HIVE, yang lebih kecil tetap berupa sats di akun v4v.app mereka.",
+      "send": "Bayar dengan Lightning",
+      "scan": "Pindai dengan dompet Lightning apa pun untuk mengirim {{sats}} sats ke @{{recipient}}.",
+      "openWallet": "Buka di dompet",
+      "copy": "Salin invoice",
+      "copied": "Invoice disalin",
+      "waiting": "Menunggu pembayaran…",
+      "done": "Selesai",
+      "errors": {
+        "amount": "Masukkan jumlah sats berupa bilangan bulat",
+        "tooMuch": "Itu lebih dari yang diterima alamat ini (maks {{max}} sats)",
+        "noAccount": "Akun Hive ini tidak ada",
+        "invoiceFailed": "Tidak dapat membuat invoice Lightning. Silakan coba lagi.",
+        "copyFailed": "Tidak dapat menyalin invoice"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Silakan masuk untuk menyesuaikan feed-mu",

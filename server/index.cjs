@@ -2385,6 +2385,9 @@ require('./og-cards.cjs').mountOgCards(app, {
   },
 })
 
+// ⚡ Lightning tips through the creator's v4v.app address. See lightning-tip.cjs.
+require('./lightning-tip.cjs').mountLightningTip(app, { client, limiter: baseLimiter })
+
 // 🧩 Section order + settings of a channel's Overview tab. See profile-layout.cjs.
 require('./profile-layout.cjs').mountProfileLayout(app, {
   uri: process.env.MONGODB_URI || '',

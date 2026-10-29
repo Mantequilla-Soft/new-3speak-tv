@@ -275,6 +275,7 @@
   "supports": {
     "incomingTitle": "@{{user}} hat @{{profile}} insgesamt {{amount}} als Tipp gegeben",
     "outgoingTitle": "@{{profile}} hat @{{user}} insgesamt {{amount}} als Tipp gegeben",
+    "incomingTitleLightning": "Anonyme Lightning-Trinkgelder an @{{profile}}: insgesamt {{amount}}",
     "received": "Erhalten",
     "given": "Gegeben",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -284,6 +285,7 @@
     "emptyGivenOwn": "Du hast noch bei keinem Video einen Tipp gegeben. Tipps, die du bei einem Video gibst, erscheinen hier.",
     "untitled": "Ohne Titel",
     "paidInHive": "gesendet als {{amount}} HIVE",
+    "lightningSupporter": "Lightning-Unterstützer",
     "hideTip": "Tipp ausblenden",
     "unhideTip": "Tipp einblenden",
     "hiddenLabel": "In deinem Profil ausgeblendet",

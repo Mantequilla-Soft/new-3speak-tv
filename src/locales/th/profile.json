@@ -258,6 +258,7 @@
   "supports": {
     "incomingTitle": "@{{user}} ให้ทิป @{{profile}} รวม {{amount}}",
     "outgoingTitle": "@{{profile}} ให้ทิป @{{user}} รวม {{amount}}",
+    "incomingTitleLightning": "ทิป Lightning แบบไม่ระบุชื่อถึง @{{profile}}: รวม {{amount}}",
     "received": "ได้รับ",
     "given": "ให้แล้ว",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -267,6 +268,7 @@
     "emptyGivenOwn": "คุณยังไม่เคยให้ทิปวิดีโอใด ทิปที่คุณส่งจากวิดีโอจะแสดงที่นี่",
     "untitled": "ไม่มีชื่อ",
     "paidInHive": "ส่งเป็น {{amount}} HIVE",
+    "lightningSupporter": "ผู้สนับสนุนผ่าน Lightning",
     "hideTip": "ซ่อนทิป",
     "unhideTip": "เลิกซ่อนทิป",
     "hiddenLabel": "ซ่อนจากโปรไฟล์ของคุณแล้ว",

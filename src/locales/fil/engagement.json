@@ -10,6 +10,8 @@
       "transferFailed": "Pumalya ang transfer: {{message}}"
     },
     "heading": "Magpadala ng Tip kay @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Halaga: ",
     "amountPlaceholder": "hal. 1.000",
     "currencyLabel": "Currency:",
@@ -17,7 +19,26 @@
     "memoLabel": "Memo (opsyonal):",
     "memoPlaceholder": "hal. Salamat sa astig na content na ito!",
     "memoLinkNote": "Idadagdag ang link na ito sa memo: {{link}}",
-    "send": "Ipadala ang Tip"
+    "send": "Ipadala ang Tip",
+    "lightning": {
+      "amountLabel": "Halaga (sats):",
+      "messageLabel": "Mensahe (opsyonal):",
+      "note": "Mapupunta kay @{{recipient}} sa pamamagitan ng v4v.app, hindi kailangan ng Hive account: gagana ang kahit anong Lightning wallet. Ang mga tip na sapat para sa conversion fee ng v4v.app (mga 60 sats) ay darating bilang HIVE, ang mas maliliit ay mananatiling sats sa kanilang v4v.app account.",
+      "send": "Magbayad gamit ang Lightning",
+      "scan": "I-scan gamit ang kahit anong Lightning wallet para magpadala ng {{sats}} sats kay @{{recipient}}.",
+      "openWallet": "Buksan sa wallet",
+      "copy": "Kopyahin ang invoice",
+      "copied": "Nakopya ang invoice",
+      "waiting": "Hinihintay ang bayad…",
+      "done": "Tapos na",
+      "errors": {
+        "amount": "Maglagay ng buong bilang ng sats",
+        "tooMuch": "Mas malaki iyan sa tinatanggap ng address na ito (max {{max}} sats)",
+        "noAccount": "Walang ganitong Hive account",
+        "invoiceFailed": "Hindi makagawa ng Lightning invoice. Pakisubukang muli.",
+        "copyFailed": "Hindi makopya ang invoice"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Mag-log in para i-personalize ang feed mo",

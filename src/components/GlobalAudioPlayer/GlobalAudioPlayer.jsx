@@ -19,6 +19,8 @@ import PayoutAmount from '../PayoutAmount/PayoutAmount';
 import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import AddToPlaylistModal from '../AddToPlaylistModal/AddToPlaylistModal';
+import TipModal from '../tip-reward/TipModal';
+import { BiDollar } from 'react-icons/bi';
 import BlogContent from '../playVideo/BlogContent';
 import Waveform from './Waveform';
 import ModalHeader from '../ModalHeader/ModalHeader';
@@ -151,6 +153,7 @@ function GlobalAudioPlayer() {
   const [accountData, setAccountData] = useState(null);
   const [playlistTarget, setPlaylistTarget] = useState(null);
   const [shareTarget, setShareTarget] = useState(null);
+  const [tipTarget, setTipTarget] = useState(null);
 
   // Post enrichment
   const [npIsVoted, setNpIsVoted] = useState(false);
@@ -478,6 +481,8 @@ function GlobalAudioPlayer() {
 
           <div className="audio-np-extras">
             {loggedIn && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={20} /></button>}
+            {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
+            {nowPlaying.post_permlink && user !== nowPlaying.owner && <button className="audio-np-tip-btn" onClick={() => setTipTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink })} title={t('audio.post.tip')}><BiDollar size={18} /></button>}
             <div className="audio-np-share-wrap">
               <button className="audio-np-share-btn" onClick={() => setShareTarget(shareTarget?._id === nowPlaying._id ? null : nowPlaying)} title={t('common.actions.share')}><MdShare size={16} /></button>
               {shareTarget?._id === nowPlaying._id && <AudioShareDropdown item={nowPlaying} onClose={() => setShareTarget(null)} />}
@@ -530,6 +535,8 @@ function GlobalAudioPlayer() {
                 <UpvoteCount count={npVoteCount} voted={npIsVoted} onClick={() => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink }); setShowVoteTooltip(!showVoteTooltip); }} size={12} />
               )}
               {loggedIn && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={18} /></button>}
+              {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
+              {nowPlaying.post_permlink && user !== nowPlaying.owner && <button className="audio-np-tip-btn" onClick={() => setTipTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink })} title={t('audio.post.tip')}><BiDollar size={16} /></button>}
               <div className="audio-np-share-wrap">
                 <button className="audio-np-share-btn" onClick={() => setShareTarget(shareTarget?._id === nowPlaying._id ? null : nowPlaying)} title={t('common.actions.share')}><MdShare size={16} /></button>
                 {shareTarget?._id === nowPlaying._id && <AudioShareDropdown item={nowPlaying} onClose={() => setShareTarget(null)} />}
@@ -649,6 +656,16 @@ function GlobalAudioPlayer() {
           voteValue={voteValue} setVoteValue={setVoteValue}
           accountData={accountData} setAccountData={setAccountData}
           compact onVoteSuccess={() => { setShowVoteTooltip(false); setNpIsVoted(true); setNpVoteCount(c => c + 1); }}
+        />
+      )}
+
+      {tipTarget && (
+        <TipModal
+          recipient={tipTarget.author}
+          permlink={tipTarget.permlink}
+          memoLink={`https://3speak.tv/audio/${tipTarget.author}/${tipTarget.permlink}`}
+          isOpen={!!tipTarget}
+          onClose={() => setTipTarget(null)}
         />
       )}
 

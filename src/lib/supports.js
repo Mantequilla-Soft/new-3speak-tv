@@ -200,3 +200,27 @@ export function formatHbdCompact(n) {
   const decimals = v >= 100 ? 0 : v >= 10 ? 1 : v >= 1 ? 2 : 3;
   return `${parseFloat(v.toFixed(decimals))} HBD`;
 }
+
+// Lightning tips are kept in sats (the checker never converts them to HBD):
+// "1,000 sats" in full, "1k sats" in the short form.
+export function formatSats(n) {
+  return `${Math.round(Number(n || 0)).toLocaleString()} sats`;
+}
+
+export function formatSatsCompact(n) {
+  const v = Math.round(Number(n || 0));
+  if (v >= 999500) return `${parseFloat((v / 1e6).toFixed(1))}M sats`;
+  if (v >= 1000) return `${parseFloat((v / 1000).toFixed(1))}k sats`;
+  return `${v} sats`;
+}
+
+// A total that can hold both: "4.48 HBD", "1k sats" or "4.48 HBD + 1k sats".
+export function formatSupportTotal(hbd, sats, { compact = true } = {}) {
+  const h = Number(hbd || 0);
+  const s = Number(sats || 0);
+  const fh = compact ? formatHbdCompact : formatHbd;
+  const fs = compact ? formatSatsCompact : formatSats;
+  if (s > 0 && h > 0) return `${fh(h)} + ${fs(s)}`;
+  if (s > 0) return fs(s);
+  return fh(h);
+}

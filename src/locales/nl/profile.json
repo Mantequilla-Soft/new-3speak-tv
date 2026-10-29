@@ -275,6 +275,7 @@
   "supports": {
     "incomingTitle": "@{{user}} gaf @{{profile}} in totaal {{amount}} aan fooien",
     "outgoingTitle": "@{{profile}} gaf @{{user}} in totaal {{amount}} aan fooien",
+    "incomingTitleLightning": "Anonieme Lightning-fooien aan @{{profile}}: {{amount}} in totaal",
     "received": "Ontvangen",
     "given": "Gegeven",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -284,6 +285,7 @@
     "emptyGivenOwn": "Je hebt nog bij geen enkele video een fooi gegeven. Fooien die je vanaf een video stuurt, verschijnen hier.",
     "untitled": "Zonder titel",
     "paidInHive": "verstuurd als {{amount}} HIVE",
+    "lightningSupporter": "Lightning-supporter",
     "hideTip": "Fooi verbergen",
     "unhideTip": "Fooi tonen",
     "hiddenLabel": "Verborgen op je profiel",

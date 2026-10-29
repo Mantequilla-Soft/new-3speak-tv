@@ -275,6 +275,7 @@
   "supports": {
     "incomingTitle": "@{{user}}, @{{profile}} hesabına toplam {{amount}} bahşiş verdi",
     "outgoingTitle": "@{{profile}}, @{{user}} hesabına toplam {{amount}} bahşiş verdi",
+    "incomingTitleLightning": "@{{profile}} hesabına anonim Lightning bahşişleri: toplam {{amount}}",
     "received": "Alınan",
     "given": "Verilen",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -284,6 +285,7 @@
     "emptyGivenOwn": "Henüz hiçbir videoya bahşiş vermedin. Bir videodan gönderdiğin bahşişler burada görünür.",
     "untitled": "Başlıksız",
     "paidInHive": "{{amount}} HIVE olarak gönderildi",
+    "lightningSupporter": "Lightning destekçisi",
     "hideTip": "Bahşişi gizle",
     "unhideTip": "Bahşişi göster",
     "hiddenLabel": "Profilinde gizli",

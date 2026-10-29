@@ -258,6 +258,7 @@
   "supports": {
     "incomingTitle": "@{{user}} memberi @{{profile}} tip total {{amount}}",
     "outgoingTitle": "@{{profile}} memberi @{{user}} tip total {{amount}}",
+    "incomingTitleLightning": "Tip Lightning anonim untuk @{{profile}}: total {{amount}}",
     "received": "Diterima",
     "given": "Diberikan",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -267,6 +268,7 @@
     "emptyGivenOwn": "Kamu belum memberi tip di video mana pun. Tip yang kamu kirim dari sebuah video muncul di sini.",
     "untitled": "Tanpa judul",
     "paidInHive": "dikirim sebagai {{amount}} HIVE",
+    "lightningSupporter": "Pendukung Lightning",
     "hideTip": "Sembunyikan tip",
     "unhideTip": "Tampilkan tip",
     "hiddenLabel": "Disembunyikan dari profilmu",
