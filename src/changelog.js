@@ -7,6 +7,11 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.40',
+    date: '2026-10-29',
+    summary: 'Older video thumbnails that showed as broken pictures load again.',
+  },
+  {
     version: '1.80.39',
     date: '2026-10-29',
     summary: 'Lightning tips now show up under Supporters on profiles, in sats.',
