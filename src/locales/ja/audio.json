@@ -358,7 +358,11 @@
       "limit": "フォローできるポッドキャストの上限に達しています。",
       "internal": "これは 3Speak のチャンネルです。ほかの音声タイプの中にあります。",
       "disabled": "外部ポッドキャストは現在オフになっています。",
-      "generic": "問題が発生しました。もう一度お試しください。"
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "closedPlatform": "{{platform}} は番組のフィードを公開していません。番組名で検索してください。",
+      "appleOnly": "この番組は Apple Podcasts でのみ配信されています。",
+      "directoryNotFound": "この番組のフィードが見つかりませんでした。RSS フィードを入力するか、名前で検索してください。",
+      "directoryDown": "このポッドキャストディレクトリは現在応答していません。もう一度お試しください。"
     },
     "tip": {
       "button": "このポッドキャストを応援",
@@ -383,7 +387,9 @@
     },
     "rss": {
       "label": "RSSフィードで追加",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "リンクで追加",
+      "placeholderLink": "RSS フィード、Apple Podcasts のリンク、またはウェブサイト"
     },
     "listened": "再生済み",
     "listenedPct": "{{pct}}%再生済み",
@@ -435,6 +441,12 @@
       "Technology": "テクノロジー",
       "TrueCrime": "実録犯罪",
       "TV": "テレビ／映画"
+    },
+    "charts": {
+      "title": "トップチャート",
+      "country": "国",
+      "none": "この国とカテゴリのチャートは現在ありません。",
+      "failed": "チャートを現在表示できません。もう一度お試しください。"
     }
   }
 }

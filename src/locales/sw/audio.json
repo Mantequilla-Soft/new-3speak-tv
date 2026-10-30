@@ -379,7 +379,11 @@
       "limit": "Unafuata idadi ya juu kabisa ya podikasti.",
       "internal": "Hiyo ni chaneli ya 3Speak: utaipata chini ya aina nyingine za sauti.",
       "disabled": "Podikasti za nje zimezimwa kwa sasa.",
-      "generic": "Hitilafu imetokea. Tafadhali jaribu tena."
+      "generic": "Hitilafu imetokea. Tafadhali jaribu tena.",
+      "closedPlatform": "{{platform}} haishiriki milisho ya vipindi vyake. Tafuta kipindi kwa jina badala yake.",
+      "appleOnly": "Kipindi hiki kinapatikana ndani ya Apple Podcasts pekee.",
+      "directoryNotFound": "Hatukupata mlisho wa kipindi hicho. Jaribu mlisho wake wa RSS au tafuta kwa jina.",
+      "directoryDown": "Saraka hiyo ya podikasti haijibu kwa sasa. Tafadhali jaribu tena."
     },
     "tip": {
       "button": "Saidia podikasti hii",
@@ -406,7 +410,9 @@
     },
     "rss": {
       "label": "Ongeza kwa mlisho wa RSS",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Ongeza kwa kiungo",
+      "placeholderLink": "Mlisho wa RSS, kiungo cha Apple Podcasts au tovuti"
     },
     "listened": "Imesikilizwa",
     "listenedPct": "Imesikilizwa {{pct}}%",
@@ -458,6 +464,12 @@
       "Technology": "Teknolojia",
       "TrueCrime": "Uhalifu wa kweli",
       "TV": "TV na Filamu"
+    },
+    "charts": {
+      "title": "Chati bora",
+      "country": "Nchi",
+      "none": "Hakuna chati ya nchi na aina hii kwa sasa.",
+      "failed": "Chati hazipatikani kwa sasa. Tafadhali jaribu tena."
     }
   }
 }

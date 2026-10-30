@@ -379,7 +379,11 @@
       "limit": "You follow the maximum number of podcasts.",
       "internal": "That is a 3Speak channel: you find it under the other audio types.",
       "disabled": "Outside podcasts are switched off right now.",
-      "generic": "Something went wrong. Please try again."
+      "generic": "Something went wrong. Please try again.",
+      "closedPlatform": "{{platform}} does not share its shows' feeds. Search for the show by name instead.",
+      "appleOnly": "This show is only available inside Apple Podcasts.",
+      "directoryNotFound": "We could not find that show's feed. Try its RSS feed or search by name.",
+      "directoryDown": "That podcast directory is not answering right now. Please try again."
     },
     "tip": {
       "button": "Support this podcast",
@@ -406,7 +410,9 @@
     },
     "rss": {
       "label": "Add by RSS feed",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Add by link",
+      "placeholderLink": "RSS feed, Apple Podcasts link or website"
     },
     "listened": "Listened",
     "listenedPct": "{{pct}}% listened",
@@ -458,6 +464,12 @@
       "Technology": "Technology",
       "TrueCrime": "True Crime",
       "TV": "TV & Film"
+    },
+    "charts": {
+      "title": "Top charts",
+      "country": "Country",
+      "none": "No chart for this country and category right now.",
+      "failed": "The charts are not available right now. Please try again."
     }
   }
 }

@@ -379,7 +379,11 @@
       "limit": "Naabot mo na ang maximum na bilang ng podcast na puwedeng i-follow.",
       "internal": "3Speak channel iyan: makikita mo ito sa ibang uri ng audio.",
       "disabled": "Naka-off ngayon ang mga panlabas na podcast.",
-      "generic": "May nangyaring mali. Pakisubukang muli."
+      "generic": "May nangyaring mali. Pakisubukang muli.",
+      "closedPlatform": "Hindi ibinabahagi ng {{platform}} ang mga feed ng mga palabas nito. Hanapin na lang ang palabas ayon sa pangalan.",
+      "appleOnly": "Sa Apple Podcasts lang mapapakinggan ang palabas na ito.",
+      "directoryNotFound": "Hindi namin nakita ang feed ng palabas na iyon. Subukan ang RSS feed nito o hanapin ayon sa pangalan.",
+      "directoryDown": "Hindi sumasagot ngayon ang podcast directory na iyon. Pakisubukang muli."
     },
     "tip": {
       "button": "Suportahan ang podcast na ito",
@@ -406,7 +410,9 @@
     },
     "rss": {
       "label": "Magdagdag gamit ang RSS feed",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Idagdag gamit ang link",
+      "placeholderLink": "RSS feed, link ng Apple Podcasts o website"
     },
     "listened": "Napakinggan",
     "listenedPct": "{{pct}}% napakinggan",
@@ -458,6 +464,12 @@
       "Technology": "Teknolohiya",
       "TrueCrime": "Totoong Krimen",
       "TV": "TV at Pelikula"
+    },
+    "charts": {
+      "title": "Mga top chart",
+      "country": "Bansa",
+      "none": "Walang chart para sa bansa at kategoryang ito ngayon.",
+      "failed": "Hindi available ngayon ang mga chart. Pakisubukang muli."
     }
   }
 }

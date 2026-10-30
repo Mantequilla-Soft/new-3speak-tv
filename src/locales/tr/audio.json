@@ -379,7 +379,11 @@
       "limit": "Takip edebileceğin en fazla podcast sayısına ulaştın.",
       "internal": "Bu bir 3Speak kanalı: onu diğer ses türlerinin altında bulabilirsin.",
       "disabled": "Harici podcast'ler şu anda kapalı.",
-      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene."
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene.",
+      "closedPlatform": "{{platform}} programlarının beslemelerini paylaşmıyor. Programı adıyla ara.",
+      "appleOnly": "Bu program yalnızca Apple Podcasts’te var.",
+      "directoryNotFound": "Bu programın beslemesini bulamadık. RSS beslemesini dene veya adıyla ara.",
+      "directoryDown": "Bu podcast dizini şu anda yanıt vermiyor. Lütfen tekrar dene."
     },
     "tip": {
       "button": "Bu podcast'i destekle",
@@ -406,7 +410,9 @@
     },
     "rss": {
       "label": "RSS akışıyla ekle",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Bağlantıyla ekle",
+      "placeholderLink": "RSS beslemesi, Apple Podcasts bağlantısı veya web sitesi"
     },
     "listened": "Dinlendi",
     "listenedPct": "%{{pct}} dinlendi",
@@ -458,6 +464,12 @@
       "Technology": "Teknoloji",
       "TrueCrime": "Gerçek Suç",
       "TV": "TV ve Film"
+    },
+    "charts": {
+      "title": "Listeler",
+      "country": "Ülke",
+      "none": "Bu ülke ve kategori için şu anda liste yok.",
+      "failed": "Listeler şu anda kullanılamıyor. Lütfen tekrar dene."
     }
   }
 }

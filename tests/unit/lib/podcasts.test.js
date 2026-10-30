@@ -3,7 +3,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { splitSats, hiveAccountOf, tipOptions } from '../../../src/lib/podcastTips.js'
-import { parseOpml, buildOpml, episodeToTrack } from '../../../src/lib/podcasts.js'
+import { parseOpml, buildOpml, episodeToTrack, feedKey, followErrorText } from '../../../src/lib/podcasts.js'
 
 const host = { name: 'Host', type: 'lnaddress', address: 'host@getalby.com', split: 90 }
 const cohost = { name: 'Cohost', type: 'node', address: '03' + 'a'.repeat(64), split: 10 }
@@ -137,5 +137,29 @@ describe('audioPlayQueued', async () => {
     get().audioPlayQueued(a)
     expect(get().audioQueue.map((i) => i._id)).toEqual(['a'])
     expect(get().audioCurrent._id).toBe('a')
+  })
+})
+
+describe('feedKey (is a directory result a show you follow?)', () => {
+  it('ignores the scheme, www. and a trailing slash, as the checker does', () => {
+    expect(feedKey('http://www.Example.com/feed/')).toBe('example.com/feed')
+    expect(feedKey('https://example.com/feed')).toBe('example.com/feed')
+    expect(feedKey('https://example.com:8443/feed?x=1')).toBe('example.com:8443/feed?x=1')
+  })
+
+  it('keeps anything that is not a URL as it is', () => {
+    expect(feedKey('not a url')).toBe('not a url')
+  })
+})
+
+describe('followErrorText', () => {
+  it('names the app that keeps its feeds to itself', () => {
+    expect(followErrorText('closed_platform', { platform: 'Spotify' })).toContain('Spotify')
+  })
+
+  it('has a message for every directory answer', () => {
+    for (const code of ['apple_only', 'directory_not_found', 'directory_down']) {
+      expect(followErrorText(code)).not.toBe(followErrorText('something_else'))
+    }
   })
 })

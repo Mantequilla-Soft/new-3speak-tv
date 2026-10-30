@@ -379,7 +379,11 @@
       "limit": "Je volgt al het maximale aantal podcasts.",
       "internal": "Dat is een 3Speak-kanaal: je vindt het bij de andere audiotypes.",
       "disabled": "Externe podcasts staan op dit moment uit.",
-      "generic": "Er ging iets mis. Probeer het opnieuw."
+      "generic": "Er ging iets mis. Probeer het opnieuw.",
+      "closedPlatform": "{{platform}} deelt de feeds van zijn programma’s niet. Zoek het programma in plaats daarvan op naam.",
+      "appleOnly": "Dit programma is alleen te beluisteren in Apple Podcasts.",
+      "directoryNotFound": "We konden de feed van dat programma niet vinden. Probeer de RSS-feed of zoek op naam.",
+      "directoryDown": "Die podcastgids reageert nu niet. Probeer het opnieuw."
     },
     "tip": {
       "button": "Steun deze podcast",
@@ -406,7 +410,9 @@
     },
     "rss": {
       "label": "Toevoegen via RSS-feed",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Toevoegen via link",
+      "placeholderLink": "RSS-feed, Apple Podcasts-link of website"
     },
     "listened": "Beluisterd",
     "listenedPct": "{{pct}}% beluisterd",
@@ -458,6 +464,12 @@
       "Technology": "Technologie",
       "TrueCrime": "True crime",
       "TV": "Tv en film"
+    },
+    "charts": {
+      "title": "Hitlijsten",
+      "country": "Land",
+      "none": "Er is nu geen hitlijst voor dit land en deze categorie.",
+      "failed": "De hitlijsten zijn nu niet beschikbaar. Probeer het opnieuw."
     }
   }
 }

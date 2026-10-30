@@ -400,7 +400,11 @@
       "limit": "Vous suivez déjà le nombre maximal de podcasts.",
       "internal": "C'est une chaîne 3Speak : vous la trouverez dans les autres types d'audio.",
       "disabled": "Les podcasts externes sont désactivés pour le moment.",
-      "generic": "Une erreur s'est produite. Veuillez réessayer."
+      "generic": "Une erreur s'est produite. Veuillez réessayer.",
+      "closedPlatform": "{{platform}} ne partage pas les flux de ses émissions. Recherchez plutôt l’émission par son nom.",
+      "appleOnly": "Cette émission n’est disponible que dans Apple Podcasts.",
+      "directoryNotFound": "Nous n’avons pas trouvé le flux de cette émission. Essayez son flux RSS ou recherchez-la par son nom.",
+      "directoryDown": "Cet annuaire de podcasts ne répond pas pour le moment. Veuillez réessayer."
     },
     "tip": {
       "button": "Soutenir ce podcast",
@@ -429,7 +433,9 @@
     },
     "rss": {
       "label": "Ajouter par flux RSS",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Ajouter par lien",
+      "placeholderLink": "Flux RSS, lien Apple Podcasts ou site web"
     },
     "listened": "Écouté",
     "listenedPct": "{{pct}} % écouté",
@@ -481,6 +487,12 @@
       "Technology": "Technologie",
       "TrueCrime": "Faits divers",
       "TV": "Télévision et cinéma"
+    },
+    "charts": {
+      "title": "Top classements",
+      "country": "Pays",
+      "none": "Aucun classement pour ce pays et cette catégorie pour le moment.",
+      "failed": "Les classements ne sont pas disponibles pour le moment. Veuillez réessayer."
     }
   }
 }

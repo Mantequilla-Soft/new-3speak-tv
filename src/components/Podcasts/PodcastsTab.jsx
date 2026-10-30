@@ -3,7 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   MdPlayArrow, MdPause, MdAdd, MdRssFeed, MdNotificationsActive, MdNotificationsOff, MdArrowBack, MdOpenInNew,
-  MdUploadFile, MdDownload, MdSearch, MdClose, MdCheck, MdPodcasts, MdTrendingUp, MdHistory, MdExpandMore, MdWhatshot,
+  MdUploadFile, MdDownload, MdSearch, MdClose, MdCheck, MdPodcasts, MdTrendingUp, MdHistory, MdExpandMore, MdWhatshot, MdLink,
+  MdLeaderboard,
 } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
@@ -11,7 +12,7 @@ import { toastIn } from '../../utils/toast';
 import {
   usePodcastConfig, usePodcastSubscriptions, usePodcastLatest, usePodcastFeed, usePodcastDiscover, useInvalidatePodcasts,
   followFeeds, unfollowFeed, setFeedNotify, followErrorText, fetchOlderEpisodes, searchPodcasts, searchPeople,
-  usePodcastTrending, TRENDING_CATEGORIES,
+  usePodcastTrending, usePodcastCharts, TRENDING_CATEGORIES, CHART_COUNTRIES, feedKey,
   episodeToTrack, parseOpml, downloadOpml,
 } from '../../lib/podcasts';
 import PodcastTipModal from './PodcastTipModal';
@@ -215,6 +216,7 @@ function useFollowFeeds(user, onFollowed) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
   const follow = async (urls, titles) => {
+    if (!user) { toastIn('Podcasts').error(t('audio.podcasts.errors.signIn')); return false; }
     setBusy(true);
     try {
       const res = await followFeeds(user, urls, titles);
@@ -225,7 +227,7 @@ function useFollowFeeds(user, onFollowed) {
           toastIn('Podcasts').success(ok[0].already ? t('audio.podcasts.alreadyFollowing') : t('audio.podcasts.followed'));
           onFollowed?.(ok[0].feed_id);
         } else {
-          toastIn('Podcasts').error(followErrorText(failed[0]?.code));
+          toastIn('Podcasts').error(followErrorText(failed[0]?.code, failed[0]));
         }
       } else {
         toastIn('Podcasts').success(t('audio.podcasts.opml.imported', { count: ok.length, failed: failed.length }));
@@ -253,7 +255,10 @@ function PiResults({ list, followed, busy, onFollow }) {
     <div className="pod-results">
       {list.map((r) => (
         <div key={r.url} className="pod-result">
-          <PodcastArt art={r.art} px={256} className="pod-result-art" />
+          <span className="pod-result-cover">
+            <PodcastArt art={r.art} px={256} className="pod-result-art" />
+            {r.rank > 0 && <span className="pod-result-rank">{r.rank}</span>}
+          </span>
           <div className="pod-result-body">
             <div className="pod-result-title" title={r.title}>{r.title}</div>
             <div className="pod-result-meta">{r.author}</div>
@@ -264,7 +269,7 @@ function PiResults({ list, followed, busy, onFollow }) {
               </>
             ) : r.episodes > 0 && <div className="pod-result-meta">{t('audio.podcasts.episodes', { count: r.episodes })}</div>}
           </div>
-          {followed.has(r.url)
+          {followed.has(feedKey(r.url))
             ? <span className="pod-following"><MdCheck size={15} /> {t('audio.podcasts.following')}</span>
             : <button type="button" className="pod-btn pod-btn--primary pod-result-follow" disabled={busy} onClick={() => onFollow([r.url])}><MdAdd size={16} /> {t('audio.podcasts.follow')}</button>}
         </div>
@@ -273,71 +278,119 @@ function PiResults({ list, followed, busy, onFollow }) {
   );
 }
 
-// ─── Trending (Podcast Index) ─────────────────────────────────────────────────
-
-const TRENDING_KEY = 'pod-trending';
-const TRENDING_SHOWN = 9;
-
-/** The language to start with: the one saved last, else the page's own when trending knows it. */
-function initialTrending() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(TRENDING_KEY) || 'null');
-    if (saved && typeof saved.lang === 'string' && typeof saved.cat === 'string') return saved;
-  } catch { /* storage off */ }
-  const ui = String(getLanguage() || '').split('-')[0];
-  return { lang: UI_LANGUAGES.some((l) => l.code === ui) ? ui : '', cat: '' };
+/** The followed shows' feeds, compared the way the checker compares them. */
+function useFollowedKeys(subscriptions) {
+  return useMemo(() => new Set((subscriptions || []).flatMap((s) => [feedKey(s.url), ...(s.keys || [])])), [subscriptions]);
 }
 
-function TrendingSection({ user, subscriptions, onFollowed }) {
+// ─── Discover: Apple's charts and Podcast Index's trending ────────────────────
+
+const DISCOVER_KEY = 'pod-discover';
+const DISCOVER_SHOWN = 9;
+
+// A language's usual Apple storefront, when the browser names no country.
+const LANG_COUNTRY = {
+  en: 'us', es: 'es', pt: 'br', de: 'de', fr: 'fr', it: 'it', pl: 'pl', ru: 'us', tr: 'tr', id: 'id', ko: 'kr',
+  ja: 'jp', zh: 'tw', hi: 'in', bn: 'in', vi: 'vn', fil: 'ph', th: 'th', sw: 'ke', uk: 'ua', nl: 'nl',
+};
+
+/**
+ * What Discover starts with: the listener's last choice, else their country (from
+ * the browser's language list, e.g. de-AT) and the page's language.
+ */
+function discoverPrefs() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(DISCOVER_KEY) || 'null');
+    if (saved && typeof saved.country === 'string') return { tab: 'charts', lang: '', cat: '', ...saved };
+  } catch { /* storage off */ }
+  const ui = String(getLanguage() || '').split('-')[0];
+  const region = (typeof navigator !== 'undefined' ? navigator.languages || [navigator.language] : [])
+    .map((l) => String(l || '').split('-')[1]?.toLowerCase())
+    .find((c) => c && CHART_COUNTRIES.includes(c));
+  return {
+    tab: 'charts',
+    country: region || LANG_COUNTRY[ui] || 'us',
+    lang: UI_LANGUAGES.some((l) => l.code === ui) ? ui : '',
+    cat: '',
+  };
+}
+
+function DiscoverSection({ user, subscriptions, onFollowed, config }) {
   const { t } = useTranslation();
-  const [pick, setPick] = useState(initialTrending);
+  const hasTrending = !!config?.trending;
+  const countries = config?.chart_countries?.length ? config.chart_countries : CHART_COUNTRIES;
+  const [pick, setPick] = useState(discoverPrefs);
   const [all, setAll] = useState(false);
-  const { data: list = [], isLoading, isError } = usePodcastTrending(pick.lang, pick.cat);
+  const tab = pick.tab === 'trending' && hasTrending ? 'trending' : 'charts';
+  const charts = usePodcastCharts(pick.country, pick.cat, tab === 'charts');
+  const trending = usePodcastTrending(pick.lang, pick.cat, tab === 'trending');
+  const { data: list = [], isLoading, isError } = tab === 'charts' ? charts : trending;
   const { busy, follow } = useFollowFeeds(user, onFollowed);
-  const followed = useMemo(() => new Set((subscriptions || []).map((s) => s.url)), [subscriptions]);
-  // Language names in the page's own language; their own names on old browsers.
-  let names = null;
-  try { names = new Intl.DisplayNames([getLanguage()], { type: 'language' }); } catch { /* old browser */ }
-  const langName = (code) => names?.of(code) || UI_LANGUAGES.find((l) => l.code === code)?.native || code;
+  const followed = useFollowedKeys(subscriptions);
+  // Country and language names in the page's own language.
+  let regionNames = null;
+  let languageNames = null;
+  try {
+    regionNames = new Intl.DisplayNames([getLanguage()], { type: 'region' });
+    languageNames = new Intl.DisplayNames([getLanguage()], { type: 'language' });
+  } catch { /* old browser */ }
+  const countryName = (c) => regionNames?.of(c.toUpperCase()) || c.toUpperCase();
+  const langName = (code) => languageNames?.of(code) || UI_LANGUAGES.find((l) => l.code === code)?.native || code;
+  const sortedCountries = [...countries].sort((a, b) => countryName(a).localeCompare(countryName(b)));
 
   const choose = (next) => {
     const value = { ...pick, ...next };
     setPick(value);
     setAll(false);
-    try { localStorage.setItem(TRENDING_KEY, JSON.stringify(value)); } catch { /* storage off */ }
+    try { localStorage.setItem(DISCOVER_KEY, JSON.stringify(value)); } catch { /* storage off */ }
   };
 
-  const shown = all ? list : list.slice(0, TRENDING_SHOWN);
+  const tabs = [
+    { key: 'charts', icon: <MdLeaderboard size={17} />, label: t('audio.podcasts.charts.title') },
+    ...(hasTrending ? [{ key: 'trending', icon: <MdWhatshot size={17} />, label: t('audio.podcasts.trending.title') }] : []),
+  ];
+  const shown = all ? list : list.slice(0, DISCOVER_SHOWN);
   return (
-    <section className="pod-section">
+    <section className="pod-section pod-discover">
       <div className="pod-section-head pod-section-head--filters">
-        <h2 className="pod-section-title"><MdWhatshot size={18} />{t('audio.podcasts.trending.title')}</h2>
+        <div className="pod-discover-tabs" role="tablist">
+          {tabs.map((x) => (
+            <button
+              key={x.key}
+              type="button"
+              role="tab"
+              aria-selected={tab === x.key}
+              className={`pod-discover-tab${tab === x.key ? ' active' : ''}`}
+              onClick={() => choose({ tab: x.key })}
+            >
+              {x.icon}{x.label}
+            </button>
+          ))}
+        </div>
         <div className="pod-trending-filters">
-          <select
-            className="pod-select"
-            value={pick.lang}
-            onChange={(e) => choose({ lang: e.target.value })}
-            aria-label={t('audio.podcasts.trending.language')}
-          >
-            <option value="">{t('audio.podcasts.trending.allLanguages')}</option>
-            {UI_LANGUAGES.map((l) => <option key={l.code} value={l.code}>{langName(l.code)}</option>)}
-          </select>
-          <select
-            className="pod-select"
-            value={pick.cat}
-            onChange={(e) => choose({ cat: e.target.value })}
-            aria-label={t('audio.podcasts.trending.category')}
-          >
+          {tab === 'charts' ? (
+            <select className="pod-select" value={pick.country} onChange={(e) => choose({ country: e.target.value })} aria-label={t('audio.podcasts.charts.country')}>
+              {sortedCountries.map((c) => <option key={c} value={c}>{countryName(c)}</option>)}
+            </select>
+          ) : (
+            <select className="pod-select" value={pick.lang} onChange={(e) => choose({ lang: e.target.value })} aria-label={t('audio.podcasts.trending.language')}>
+              <option value="">{t('audio.podcasts.trending.allLanguages')}</option>
+              {UI_LANGUAGES.map((l) => <option key={l.code} value={l.code}>{langName(l.code)}</option>)}
+            </select>
+          )}
+          <select className="pod-select" value={pick.cat} onChange={(e) => choose({ cat: e.target.value })} aria-label={t('audio.podcasts.trending.category')}>
             <option value="">{t('audio.podcasts.trending.allCategories')}</option>
             {TRENDING_CATEGORIES.map((c) => <option key={c} value={c}>{t(`audio.podcasts.categories.${c.replace(/\s+/g, '')}`)}</option>)}
           </select>
         </div>
       </div>
       {isLoading && <p className="pod-empty">{t('common.status.loading')}</p>}
-      {isError && <p className="pod-empty">{t('audio.podcasts.trending.failed')}</p>}
-      {!isLoading && !isError && list.length === 0 && <p className="pod-empty">{t('audio.podcasts.trending.none')}</p>}
+      {isError && <p className="pod-empty">{t(tab === 'charts' ? 'audio.podcasts.charts.failed' : 'audio.podcasts.trending.failed')}</p>}
+      {!isLoading && !isError && list.length === 0 && (
+        <p className="pod-empty">{t(tab === 'charts' ? 'audio.podcasts.charts.none' : 'audio.podcasts.trending.none')}</p>
+      )}
       <PiResults list={shown} followed={followed} busy={busy} onFollow={follow} />
-      {!all && list.length > TRENDING_SHOWN && (
+      {!all && list.length > DISCOVER_SHOWN && (
         <button type="button" className="pod-btn pod-more" onClick={() => setAll(true)}>{t('audio.podcasts.more')}</button>
       )}
     </section>
@@ -351,7 +404,7 @@ const SEARCH_MODES = [
   { key: 'people', labelKey: 'audio.podcasts.search.modePeople', placeholderKey: 'audio.podcasts.search.placeholderPeople' },
 ];
 
-function PodcastHero({ user, searchEnabled, subscriptions, subsLoaded, onFollowed }) {
+function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, subsLoaded, onFollowed }) {
   const { t } = useTranslation();
   // Search, RSS and OPML are open for someone who follows nothing yet, and
   // folded away once they follow a show, so their shows come first. Closed
@@ -366,7 +419,7 @@ function PodcastHero({ user, searchEnabled, subscriptions, subsLoaded, onFollowe
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState(null);
   const fileRef = useRef(null);
-  const followed = useMemo(() => new Set((subscriptions || []).map((s) => s.url)), [subscriptions]);
+  const followed = useFollowedKeys(subscriptions);
 
   const search = async (e) => {
     e.preventDefault();
@@ -374,7 +427,8 @@ function PodcastHero({ user, searchEnabled, subscriptions, subsLoaded, onFollowe
     if (q.length < 2) return;
     setSearching(true);
     try {
-      const found = mode === 'people' ? await searchPeople(q) : await searchPodcasts(q);
+      // Apple's results come from the store of the country Discover shows.
+      const found = mode === 'people' && personEnabled ? await searchPeople(q) : await searchPodcasts(q, discoverPrefs().country);
       setResults({ q, list: found.results || [] });
     } catch {
       toastIn('Podcasts').error(t('audio.podcasts.search.failed'));
@@ -439,7 +493,7 @@ function PodcastHero({ user, searchEnabled, subscriptions, subsLoaded, onFollowe
                 <form className="pod-field" onSubmit={search}>
                   <div className="pod-field-head">
                   <label className="pod-field-label" htmlFor="pod-search">{t('audio.podcasts.search.label')}</label>
-                  <div className="pod-search-modes" role="group" aria-label={t('audio.podcasts.search.label')}>
+                  {personEnabled && <div className="pod-search-modes" role="group" aria-label={t('audio.podcasts.search.label')}>
                     {SEARCH_MODES.map((m) => (
                       <button
                         key={m.key}
@@ -451,7 +505,7 @@ function PodcastHero({ user, searchEnabled, subscriptions, subsLoaded, onFollowe
                         {t(m.labelKey)}
                       </button>
                     ))}
-                  </div>
+                  </div>}
                 </div>
                   <div className="pod-field-row">
                     <MdSearch className="pod-field-icon" size={18} />
@@ -470,16 +524,16 @@ function PodcastHero({ user, searchEnabled, subscriptions, subsLoaded, onFollowe
                 </form>
               )}
               <form className="pod-field" onSubmit={addFeed}>
-                <label className="pod-field-label" htmlFor="pod-rss">{t('audio.podcasts.rss.label')}</label>
+                <label className="pod-field-label" htmlFor="pod-rss">{t('audio.podcasts.rss.labelLink')}</label>
                 <div className="pod-field-row">
-                  <MdRssFeed className="pod-field-icon" size={18} />
+                  <MdLink className="pod-field-icon" size={18} />
                   <input
                     id="pod-rss"
                     type="url"
                     inputMode="url"
                     value={feedUrl}
                     onChange={(e) => setFeedUrl(e.target.value)}
-                    placeholder={t('audio.podcasts.rss.placeholder')}
+                    placeholder={t('audio.podcasts.rss.placeholderLink')}
                     autoComplete="off"
                   />
                   <button type="submit" className="pod-btn pod-btn--primary" disabled={busy || !feedUrl.trim()}>
@@ -628,7 +682,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
             ) : (
               <button type="button" className="pod-btn pod-btn--primary" disabled={busy} onClick={() => run(async () => {
                 const [r] = await followFeeds(user, [feed.url]);
-                if (!r?.ok) throw new Error(followErrorText(r?.code));
+                if (!r?.ok) throw new Error(followErrorText(r?.code, r));
               }, t('audio.podcasts.followed'))}>
                 <MdAdd size={16} /> {t('audio.podcasts.follow')}
               </button>
@@ -737,7 +791,7 @@ export default function PodcastsTab() {
 
   return (
     <div className="pod-tab">
-      <PodcastHero user={me} searchEnabled={!!config?.search} subscriptions={subscriptions} subsLoaded={subsLoaded} onFollowed={(id) => { invalidate(); if (id) openShow(id); }} />
+      <PodcastHero user={me} searchEnabled={!!config?.search} personEnabled={!!config?.person || config?.person === undefined && !!config?.search} subscriptions={subscriptions} subsLoaded={subsLoaded} onFollowed={(id) => { invalidate(); if (id) openShow(id); }} />
 
       <ShowRail
         icon={<MdPodcasts size={18} />}
@@ -768,8 +822,8 @@ export default function PodcastsTab() {
         </section>
       )}
 
-      {me && config?.search && (
-        <TrendingSection user={me} subscriptions={subscriptions} onFollowed={(id) => { invalidate(); if (id) openShow(id); }} />
+      {config?.enabled !== false && (config?.charts || config?.trending) && (
+        <DiscoverSection user={me} config={config} subscriptions={subscriptions} onFollowed={(id) => { invalidate(); if (id) openShow(id); }} />
       )}
 
       <ShowRail icon={<MdTrendingUp size={18} />} title={t('audio.podcasts.topTitle')} feeds={discover?.top} onOpen={openShow} ranked artFor={artFor} />

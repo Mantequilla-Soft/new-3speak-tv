@@ -358,7 +358,11 @@
       "limit": "팔로우할 수 있는 팟캐스트 수가 최대에 도달했어요.",
       "internal": "3Speak 채널이에요. 다른 오디오 유형에서 찾을 수 있어요.",
       "disabled": "외부 팟캐스트 기능이 지금은 꺼져 있어요.",
-      "generic": "문제가 발생했어요. 다시 시도해 주세요."
+      "generic": "문제가 발생했어요. 다시 시도해 주세요.",
+      "closedPlatform": "{{platform}}은(는) 프로그램 피드를 공개하지 않아요. 프로그램 이름으로 검색해 보세요.",
+      "appleOnly": "이 프로그램은 Apple 팟캐스트에서만 들을 수 있어요.",
+      "directoryNotFound": "이 프로그램의 피드를 찾지 못했어요. RSS 피드를 입력하거나 이름으로 검색해 보세요.",
+      "directoryDown": "이 팟캐스트 디렉터리가 지금 응답하지 않아요. 다시 시도해 주세요."
     },
     "tip": {
       "button": "이 팟캐스트 후원하기",
@@ -383,7 +387,9 @@
     },
     "rss": {
       "label": "RSS 피드로 추가",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "링크로 추가",
+      "placeholderLink": "RSS 피드, Apple 팟캐스트 링크 또는 웹사이트"
     },
     "listened": "들음",
     "listenedPct": "{{pct}}% 들음",
@@ -435,6 +441,12 @@
       "Technology": "기술",
       "TrueCrime": "실화 범죄",
       "TV": "TV 및 영화"
+    },
+    "charts": {
+      "title": "인기 차트",
+      "country": "국가",
+      "none": "이 국가와 카테고리의 차트가 지금은 없어요.",
+      "failed": "지금은 차트를 불러올 수 없어요. 다시 시도해 주세요."
     }
   }
 }

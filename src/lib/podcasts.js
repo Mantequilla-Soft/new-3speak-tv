@@ -116,14 +116,30 @@ export async function setFeedNotify(user, feedId, notify) {
 }
 
 /** The user-facing reason a URL could not be followed. */
-export function followErrorText(code) {
+/** The message for a failed follow; `info` is the checker's result row (Spotify & co. name the platform). */
+export function followErrorText(code, info = {}) {
   const known = {
     bad_url: 'badUrl', blocked_address: 'badUrl', not_a_podcast: 'notPodcast', parse_error: 'notPodcast',
     no_episodes: 'noEpisodes', too_large: 'tooLarge', timeout: 'unreachable', network: 'unreachable',
     limit: 'limit', internal_feed: 'internal', disabled: 'disabled',
+    closed_platform: 'closedPlatform', apple_only: 'appleOnly', directory_not_found: 'directoryNotFound', directory_down: 'directoryDown',
   };
   const key = known[code] || (String(code || '').startsWith('http_') ? 'unreachable' : 'generic');
-  return t(`audio.podcasts.errors.${key}`);
+  return t(`audio.podcasts.errors.${key}`, { platform: info?.platform || '' });
+}
+
+/**
+ * A feed URL without the parts that do not change which feed it is (scheme,
+ * www., trailing slash), as the checker compares them: so a directory's
+ * http://…/feed/ shows as followed when you follow https://…/feed.
+ */
+export function feedKey(url) {
+  try {
+    const u = new URL(String(url).trim());
+    return `${u.hostname.toLowerCase().replace(/^www\./, '')}${u.port ? `:${u.port}` : ''}${u.pathname.replace(/\/+$/, '')}${u.search}`;
+  } catch {
+    return String(url || '');
+  }
 }
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
@@ -207,7 +223,8 @@ export function useEpisodeNotes(episodeId) {
     retry: 1,
   });
 }
-export const searchPodcasts = (q) => getJson(`search?q=${encodeURIComponent(q)}`);
+/** Podcast Index, Apple Podcasts (in `country`'s store) and fyyd at once, merged by the checker. */
+export const searchPodcasts = (q, country = '') => getJson(`search?${new URLSearchParams({ q, country })}`);
 /** Shows a host or guest appears in, with how many of their episodes matched. */
 export const searchPeople = (q) => getJson(`person?q=${encodeURIComponent(q)}`);
 
@@ -216,6 +233,24 @@ export const searchPeople = (q) => getJson(`person?q=${encodeURIComponent(q)}`);
 export const TRENDING_CATEGORIES = [
   'Arts', 'Business', 'Comedy', 'Education', 'Fiction', 'Government', 'Health', 'History', 'Kids',
   'Leisure', 'Music', 'News', 'Religion', 'Science', 'Society', 'Sports', 'Technology', 'True Crime', 'TV',
+];
+
+/** Apple Podcasts' top charts for one country and category ('' = all), ranked. */
+export function usePodcastCharts(country, cat, enabled = true) {
+  return useQuery({
+    queryKey: ['podcasts', 'charts', country, cat],
+    enabled: enabled && !!country,
+    queryFn: async () => (await getJson(`charts?${new URLSearchParams({ country, cat })}`)).results || [],
+    staleTime: 60 * 60 * 1000,
+    retry: 1,
+  });
+}
+
+// Apple's storefronts, as the checker offers them when it does not say (old checker).
+export const CHART_COUNTRIES = [
+  'us', 'gb', 'ca', 'au', 'ie', 'nz', 'in', 'za', 'ng', 'ke', 'de', 'at', 'ch', 'fr', 'be', 'nl', 'lu', 'es', 'pt',
+  'it', 'pl', 'cz', 'se', 'no', 'dk', 'fi', 'ua', 'tr', 'gr', 'ro', 'hu', 'il', 'ae', 'sa', 'eg', 'mx', 'br', 'ar',
+  'co', 'cl', 'pe', 'jp', 'kr', 'tw', 'hk', 'sg', 'ph', 'id', 'my', 'th', 'vn',
 ];
 
 /** Podcast Index's trending shows, for one language ('' = all) and category ('' = all). */

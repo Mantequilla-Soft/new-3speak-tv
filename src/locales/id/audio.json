@@ -358,7 +358,11 @@
       "limit": "Anda sudah mengikuti jumlah maksimum podcast.",
       "internal": "Itu adalah channel 3Speak: Anda dapat menemukannya di jenis audio lainnya.",
       "disabled": "Podcast eksternal sedang dinonaktifkan.",
-      "generic": "Terjadi kesalahan. Silakan coba lagi."
+      "generic": "Terjadi kesalahan. Silakan coba lagi.",
+      "closedPlatform": "{{platform}} tidak membagikan feed acaranya. Cari acaranya berdasarkan nama.",
+      "appleOnly": "Acara ini hanya tersedia di Apple Podcasts.",
+      "directoryNotFound": "Kami tidak menemukan feed acara itu. Coba feed RSS-nya atau cari berdasarkan nama.",
+      "directoryDown": "Direktori podcast itu sedang tidak merespons. Silakan coba lagi."
     },
     "tip": {
       "button": "Dukung podcast ini",
@@ -383,7 +387,9 @@
     },
     "rss": {
       "label": "Tambah lewat feed RSS",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Tambah lewat tautan",
+      "placeholderLink": "Feed RSS, tautan Apple Podcasts, atau situs web"
     },
     "listened": "Sudah didengarkan",
     "listenedPct": "{{pct}}% didengarkan",
@@ -435,6 +441,12 @@
       "Technology": "Teknologi",
       "TrueCrime": "Kisah Kriminal Nyata",
       "TV": "TV & Film"
+    },
+    "charts": {
+      "title": "Tangga teratas",
+      "country": "Negara",
+      "none": "Belum ada tangga untuk negara dan kategori ini.",
+      "failed": "Tangga teratas tidak tersedia saat ini. Silakan coba lagi."
     }
   }
 }

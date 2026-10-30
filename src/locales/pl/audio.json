@@ -421,7 +421,11 @@
       "limit": "Obserwujesz już maksymalną liczbę podcastów.",
       "internal": "To kanał 3Speak: znajdziesz go wśród innych typów audio.",
       "disabled": "Zewnętrzne podcasty są teraz wyłączone.",
-      "generic": "Coś poszło nie tak. Spróbuj ponownie."
+      "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+      "closedPlatform": "{{platform}} nie udostępnia kanałów swoich audycji. Wyszukaj audycję po nazwie.",
+      "appleOnly": "Ta audycja jest dostępna tylko w Apple Podcasts.",
+      "directoryNotFound": "Nie znaleźliśmy kanału tej audycji. Spróbuj jej kanału RSS lub wyszukaj po nazwie.",
+      "directoryDown": "Ten katalog podcastów teraz nie odpowiada. Spróbuj ponownie."
     },
     "tip": {
       "button": "Wesprzyj ten podcast",
@@ -452,7 +456,9 @@
     },
     "rss": {
       "label": "Dodaj przez kanał RSS",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Dodaj przez link",
+      "placeholderLink": "Kanał RSS, link do Apple Podcasts lub strona"
     },
     "listened": "Wysłuchany",
     "listenedPct": "Wysłuchano {{pct}}%",
@@ -504,6 +510,12 @@
       "Technology": "Technologia",
       "TrueCrime": "Prawdziwe zbrodnie",
       "TV": "TV i film"
+    },
+    "charts": {
+      "title": "Listy przebojów",
+      "country": "Kraj",
+      "none": "Brak listy dla tego kraju i kategorii.",
+      "failed": "Listy są teraz niedostępne. Spróbuj ponownie."
     }
   }
 }

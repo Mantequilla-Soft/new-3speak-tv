@@ -358,7 +358,11 @@
       "limit": "你关注的播客已达上限。",
       "internal": "这是 3Speak 频道：你可以在其他音频类型中找到它。",
       "disabled": "外部播客功能目前已关闭。",
-      "generic": "出了点问题，请重试。"
+      "generic": "出了点问题，请重试。",
+      "closedPlatform": "{{platform}} 不公开其节目的订阅源。请改为按名称搜索节目。",
+      "appleOnly": "该节目仅在 Apple 播客中提供。",
+      "directoryNotFound": "找不到该节目的订阅源。请尝试其 RSS 订阅源或按名称搜索。",
+      "directoryDown": "该播客目录暂时没有响应，请重试。"
     },
     "tip": {
       "button": "支持这个播客",
@@ -383,7 +387,9 @@
     },
     "rss": {
       "label": "通过 RSS 订阅源添加",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "通过链接添加",
+      "placeholderLink": "RSS 订阅源、Apple 播客链接或网站"
     },
     "listened": "已听完",
     "listenedPct": "已听 {{pct}}%",
@@ -435,6 +441,12 @@
       "Technology": "科技",
       "TrueCrime": "真实罪案",
       "TV": "电视与电影"
+    },
+    "charts": {
+      "title": "热门排行",
+      "country": "国家/地区",
+      "none": "暂时没有该国家和类别的排行。",
+      "failed": "暂时无法加载排行，请重试。"
     }
   }
 }

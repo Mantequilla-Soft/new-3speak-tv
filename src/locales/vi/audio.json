@@ -358,7 +358,11 @@
       "limit": "Bạn đã theo dõi số podcast tối đa.",
       "internal": "Đó là kênh 3Speak: bạn sẽ thấy nó trong các loại âm thanh khác.",
       "disabled": "Podcast bên ngoài hiện đang tắt.",
-      "generic": "Đã xảy ra lỗi. Vui lòng thử lại."
+      "generic": "Đã xảy ra lỗi. Vui lòng thử lại.",
+      "closedPlatform": "{{platform}} không chia sẻ nguồn cấp của các chương trình. Hãy tìm chương trình theo tên.",
+      "appleOnly": "Chương trình này chỉ có trên Apple Podcasts.",
+      "directoryNotFound": "Không tìm thấy nguồn cấp của chương trình đó. Hãy thử nguồn RSS hoặc tìm theo tên.",
+      "directoryDown": "Danh bạ podcast đó hiện không phản hồi. Vui lòng thử lại."
     },
     "tip": {
       "button": "Ủng hộ podcast này",
@@ -383,7 +387,9 @@
     },
     "rss": {
       "label": "Thêm bằng nguồn RSS",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Thêm bằng liên kết",
+      "placeholderLink": "Nguồn RSS, liên kết Apple Podcasts hoặc trang web"
     },
     "listened": "Đã nghe",
     "listenedPct": "Đã nghe {{pct}}%",
@@ -435,6 +441,12 @@
       "Technology": "Công nghệ",
       "TrueCrime": "Tội phạm có thật",
       "TV": "TV & Phim"
+    },
+    "charts": {
+      "title": "Bảng xếp hạng",
+      "country": "Quốc gia",
+      "none": "Hiện chưa có bảng xếp hạng cho quốc gia và danh mục này.",
+      "failed": "Hiện không thể tải bảng xếp hạng. Vui lòng thử lại."
     }
   }
 }
