@@ -75,8 +75,13 @@ export function resumePosition(user, id) {
   return Math.max(0, p.pos - 3);
 }
 
-async function getVouch(user) {
-  if (vouch && vouch.user === user && Date.now() - vouch.timestamp < VOUCH_REUSE_MS) return vouch;
+// A failed vouch (no session our API can prove, the API down) is remembered for
+// a few minutes, so the reads that ask for it (lib/podcasts.js) don't each try again.
+const VOUCH_RETRY_MS = 5 * 60 * 1000;
+let vouchFailed = null;    // { user, at }
+let vouchInFlight = null;  // { user, promise }
+
+async function fetchVouch(user) {
   try {
     const headers = { 'Content-Type': 'application/json' };
     if (getCurrentProvider() === Providers.HiveSigner) {
@@ -89,11 +94,30 @@ async function getVouch(user) {
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.signature || data.username !== user) return null;
-    vouch = { user, signature: data.signature, timestamp: data.timestamp };
-    return vouch;
+    return { user, signature: data.signature, timestamp: data.timestamp };
   } catch {
     return null;
   }
+}
+
+/**
+ * Our API's word for who this session is (action 'progress', payload 'session'),
+ * reused for most of a day. Saving progress sends it, and so do the reads that
+ * may include a private feed (the checker then knows the reader follows it).
+ * One request at a time per user; null when the session can't be proven.
+ */
+export async function sessionVouch(user) {
+  if (!user) return null;
+  if (vouch && vouch.user === user && Date.now() - vouch.timestamp < VOUCH_REUSE_MS) return vouch;
+  if (vouchFailed && vouchFailed.user === user && Date.now() - vouchFailed.at < VOUCH_RETRY_MS) return null;
+  if (vouchInFlight?.user === user) return vouchInFlight.promise;
+  const promise = fetchVouch(user).then((v) => {
+    if (v) { vouch = v; vouchFailed = null; } else vouchFailed = { user, at: Date.now() };
+    vouchInFlight = null;
+    return v;
+  });
+  vouchInFlight = { user, promise };
+  return promise;
 }
 
 /** Send what changed since the last save. Signed out, progress stays in this browser. */
@@ -104,7 +128,7 @@ export async function flushProgress({ keepalive = false } = {}) {
   if (!user || !dirty.size) return;
   const items = [...dirty].slice(0, 20).map((id) => ({ id, pos: map.get(id)?.pos || 0, dur: map.get(id)?.dur || 0 }));
   items.forEach((it) => dirty.delete(it.id));
-  const v = await getVouch(user);
+  const v = await sessionVouch(user);
   if (!v) return;
   try {
     await fetch(`${API}/progress`, {
