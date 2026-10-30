@@ -31,6 +31,7 @@ import { recordProgress, flushProgress, resumePosition } from '../../lib/podcast
 import { podcastPath, episodePath, artUrl, PODCAST_PLACEHOLDER, pseudoWaveform } from '../../lib/podcasts';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
 import { trackArtist } from '../../utils/audioTrack';
+import useListenTime from '../../hooks/useListenTime';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
 import '../../page/Audio.scss';
 import './GlobalAudioPlayer.scss';
@@ -143,6 +144,9 @@ function GlobalAudioPlayer() {
   const navigate = useNavigate();
 
   const audioRef = useRef(null);
+  // Listening time for every track, 3Speak audio and outside episodes alike
+  // (anonymous, like video watch time). Separate from pay-per-listen below.
+  useListenTime(audioRef, audioCurrent);
 
   // Pay-per-listen accounting. The server measures real elapsed playback:
   // we open a session on track start (only when logged in — anonymous plays
