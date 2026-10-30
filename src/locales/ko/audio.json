@@ -398,6 +398,8 @@
     "showNotes": "에피소드 소개",
     "notesLoading": "에피소드 소개를 불러오는 중…",
     "noNotes": "이 에피소드에는 소개가 없어요.",
-    "openEpisode": "에피소드 열기"
+    "openEpisode": "에피소드 열기",
+    "addToQueue": "대기열에 추가",
+    "inQueue": "대기열에 있음"
   }
 }

@@ -442,6 +442,8 @@
     "showNotes": "Note dell'episodio",
     "notesLoading": "Caricamento delle note dell'episodio…",
     "noNotes": "Questo episodio non ha note.",
-    "openEpisode": "Apri episodio"
+    "openEpisode": "Apri episodio",
+    "addToQueue": "Aggiungi alla coda",
+    "inQueue": "In coda"
   }
 }

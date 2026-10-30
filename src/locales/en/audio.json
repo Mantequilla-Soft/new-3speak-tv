@@ -420,6 +420,8 @@
     "showNotes": "Show notes",
     "notesLoading": "Loading the show notes…",
     "noNotes": "This episode has no show notes.",
-    "openEpisode": "Open episode"
+    "openEpisode": "Open episode",
+    "addToQueue": "Add to queue",
+    "inQueue": "In queue"
   }
 }

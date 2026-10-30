@@ -420,6 +420,8 @@
     "showNotes": "Bölüm notları",
     "notesLoading": "Bölüm notları yükleniyor…",
     "noNotes": "Bu bölümün notu yok.",
-    "openEpisode": "Bölümü aç"
+    "openEpisode": "Bölümü aç",
+    "addToQueue": "Sıraya ekle",
+    "inQueue": "Sırada"
   }
 }

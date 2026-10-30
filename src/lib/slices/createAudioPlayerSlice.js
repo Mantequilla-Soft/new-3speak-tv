@@ -97,6 +97,23 @@ export const createAudioPlayerSlice = (set, get) => {
       persistQueue(next);
       set({ audioQueue: next });
     },
+    // Play `track` now WITHOUT losing what was playing: that one goes into the
+    // queue if it isn't there yet, `track` lands right after it and starts. The
+    // player then carries on through the queue, and Previous goes back to the
+    // interrupted item. Used by the outside podcasts (components/Podcasts).
+    audioPlayQueued: (track) => {
+      if (!track) return;
+      const { audioCurrent, audioQueue } = get();
+      const queue = audioQueue.filter((i) => i._id !== track._id);
+      if (audioCurrent && audioCurrent._id !== track._id && !queue.some((i) => i._id === audioCurrent._id)) {
+        queue.push(audioCurrent);
+      }
+      const at = audioCurrent ? queue.findIndex((i) => i._id === audioCurrent._id) : -1;
+      if (at >= 0) queue.splice(at + 1, 0, track); else queue.push(track);
+      persistQueue(queue);
+      set({ audioQueue: queue });
+      get().audioPlay(track, queue);
+    },
     audioRemoveFromQueue: (id) => {
       const next = get().audioQueue.filter((i) => i._id !== id);
       persistQueue(next);

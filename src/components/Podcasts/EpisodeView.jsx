@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdArrowBack, MdPlayArrow, MdPause, MdOpenInNew, MdCheck, MdPodcasts } from 'react-icons/md';
+import { MdArrowBack, MdPlayArrow, MdPause, MdOpenInNew, MdCheck, MdPodcasts, MdPlaylistAdd, MdPlaylistAddCheck } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
 import { usePodcastEpisode, useEpisodeNotes, episodeToTrack } from '../../lib/podcasts';
@@ -24,7 +24,9 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
   usePodcastProgress(user, { ids: [episodeId] });
   const audioCurrent = useAppStore((s) => s.audioCurrent);
   const audioIsPlaying = useAppStore((s) => s.audioIsPlaying);
-  const audioPlay = useAppStore((s) => s.audioPlay);
+  const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
+  const audioAddToQueue = useAppStore((s) => s.audioAddToQueue);
+  const inQueue = useAppStore((s) => s.audioQueue.some((i) => i._id === episodeId));
   const audioRequestToggle = useAppStore((s) => s.audioRequestToggle);
   const [tipping, setTipping] = useState(false);
 
@@ -49,7 +51,7 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
   const started = progress && !progress.done && progress.pct > 0;
   const play = () => {
     if (isCurrent) { audioRequestToggle(); return; }
-    audioPlay(track, [track]);
+    audioPlayQueued(track);
   };
 
   return (
@@ -78,6 +80,15 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
             <button type="button" className="pod-btn pod-btn--solid" onClick={play}>
               {playing ? <MdPause size={18} /> : <MdPlayArrow size={18} />}
               {playing ? t('audio.podcasts.pause') : started && !isCurrent ? t('audio.podcasts.resume') : t('audio.podcasts.play')}
+            </button>
+            <button
+              type="button"
+              className={`pod-btn${inQueue ? ' pod-btn--on' : ''}`}
+              onClick={() => { if (!inQueue) audioAddToQueue(track); }}
+              disabled={inQueue}
+            >
+              {inQueue ? <MdPlaylistAddCheck size={18} /> : <MdPlaylistAdd size={18} />}
+              {inQueue ? t('audio.podcasts.inQueue') : t('audio.podcasts.addToQueue')}
             </button>
             {canTipEpisode(track) && (
               <button type="button" className="pod-btn" onClick={() => setTipping(true)}>

@@ -420,6 +420,8 @@
     "showNotes": "পর্বের বিবরণ",
     "notesLoading": "পর্বের বিবরণ লোড হচ্ছে…",
     "noNotes": "এই পর্বের কোনো বিবরণ নেই।",
-    "openEpisode": "পর্ব খুলুন"
+    "openEpisode": "পর্ব খুলুন",
+    "addToQueue": "কিউতে যোগ করুন",
+    "inQueue": "কিউতে আছে"
   }
 }

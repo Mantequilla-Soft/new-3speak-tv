@@ -420,6 +420,8 @@
     "showNotes": "Shownotes",
     "notesLoading": "Shownotes werden geladen…",
     "noNotes": "Diese Folge hat keine Shownotes.",
-    "openEpisode": "Folge öffnen"
+    "openEpisode": "Folge öffnen",
+    "addToQueue": "Zur Warteschlange",
+    "inQueue": "In der Warteschlange"
   }
 }

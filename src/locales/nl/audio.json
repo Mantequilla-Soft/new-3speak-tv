@@ -420,6 +420,8 @@
     "showNotes": "Shownotes",
     "notesLoading": "Shownotes laden…",
     "noNotes": "Deze aflevering heeft geen shownotes.",
-    "openEpisode": "Aflevering openen"
+    "openEpisode": "Aflevering openen",
+    "addToQueue": "Aan wachtrij toevoegen",
+    "inQueue": "In wachtrij"
   }
 }

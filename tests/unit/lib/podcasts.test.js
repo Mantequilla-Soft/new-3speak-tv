@@ -106,3 +106,36 @@ describe('sanitizeShowNotes', async () => {
     expect(sanitizeShowNotes('')).toBe('')
   })
 })
+
+describe('audioPlayQueued', async () => {
+  const { createAudioPlayerSlice } = await import('../../../src/lib/slices/createAudioPlayerSlice.js')
+  const makeStore = () => {
+    sessionStorage.clear()
+    let state
+    const set = (p) => { state = { ...state, ...(typeof p === 'function' ? p(state) : p) } }
+    const get = () => state
+    state = createAudioPlayerSlice(set, get)
+    return get
+  }
+  const a = { _id: 'a' }, b = { _id: 'b' }, c = { _id: 'c' }
+
+  it('keeps what was playing in the queue and plays the new one right after it', () => {
+    const get = makeStore()
+    get().audioPlay(a)
+    get().audioPlayQueued(b)
+    expect(get().audioCurrent._id).toBe('b')
+    expect(get().audioQueue.map((i) => i._id)).toEqual(['a', 'b'])
+    get().audioAddToQueue(c)
+    get().audioPlay(get().audioQueue[0])            // back to a
+    get().audioPlayQueued(c)                         // c moves up, right after a
+    expect(get().audioQueue.map((i) => i._id)).toEqual(['a', 'c', 'b'])
+    expect(get().audioCurrent._id).toBe('c')
+  })
+
+  it('with nothing playing, simply queues and plays', () => {
+    const get = makeStore()
+    get().audioPlayQueued(a)
+    expect(get().audioQueue.map((i) => i._id)).toEqual(['a'])
+    expect(get().audioCurrent._id).toBe('a')
+  })
+})

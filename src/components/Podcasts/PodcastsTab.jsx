@@ -100,12 +100,12 @@ function EpisodeFilters({ days, onDays, listen, onListen, range, onRange }) {
 
 // ─── One episode ──────────────────────────────────────────────────────────────
 
-function EpisodeTile({ ep, feed, list, showShow = true, onOpenShow, onOpenEpisode }) {
+function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpisode }) {
   const { t } = useTranslation();
   const fmtDate = useDateFormat();
   const audioCurrent = useAppStore((s) => s.audioCurrent);
   const audioIsPlaying = useAppStore((s) => s.audioIsPlaying);
-  const audioPlay = useAppStore((s) => s.audioPlay);
+  const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
   const audioRequestToggle = useAppStore((s) => s.audioRequestToggle);
   const [tipping, setTipping] = useState(false);
   const track = useMemo(() => episodeToTrack(ep, feed), [ep, feed]);
@@ -116,7 +116,7 @@ function EpisodeTile({ ep, feed, list, showShow = true, onOpenShow, onOpenEpisod
 
   const play = () => {
     if (isCurrent) { audioRequestToggle(); return; }
-    audioPlay(track, list ? list() : [track]);
+    audioPlayQueued(track);
   };
 
   return (
@@ -385,7 +385,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
   const { since, until } = bounds;
   const { data, isLoading, error } = usePodcastFeed(feedId, since, until);
   usePodcastProgress(user, { feedId });
-  const audioPlay = useAppStore((s) => s.audioPlay);
+  const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
   const invalidate = useInvalidatePodcasts();
   const [older, setOlder] = useState([]);
   const [olderState, setOlderState] = useState({ loading: false, done: false });
@@ -442,7 +442,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
   const episodeArt = episodes.find((e) => e.art)?.art;
   const playLatest = () => {
     const tracks = list();
-    if (tracks.length) audioPlay(tracks[0], tracks);
+    if (tracks.length) audioPlayQueued(tracks[0]);
   };
 
   return (
@@ -506,7 +506,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
           <EpisodeFilters days={days} onDays={changeDays} listen={listen} onListen={setListen} range={range} onRange={changeRange} />
         </div>
         <ul className="pod-tile-grid">
-          {shown.map((ep) => <EpisodeTile key={ep.id} ep={ep} feed={feed} list={list} showShow={false} onOpenEpisode={onOpenEpisode} />)}
+          {shown.map((ep) => <EpisodeTile key={ep.id} ep={ep} feed={feed} showShow={false} onOpenEpisode={onOpenEpisode} />)}
         </ul>
         {episodes.length === 0 && <p className="pod-empty">{since || until ? t('audio.podcasts.filters.none') : t('audio.podcasts.noEpisodes')}</p>}
         {episodes.length > 0 && shown.length === 0 && <p className="pod-empty">{t('audio.podcasts.filters.none')}</p>}
@@ -584,7 +584,6 @@ export default function PodcastsTab() {
   const feedsById = Object.assign({}, ...pages.map((p) => p.feeds || {}));
   const episodes = pages.flatMap((p) => p.episodes || []);
   const latestShown = episodes.filter((e) => inRange(e, latestBounds) && matchesListen(e, latestListen));
-  const latestList = () => latestShown.map((e) => episodeToTrack(e, feedsById[e.feed_id]));
   // A show without a cover of its own borrows its newest loaded episode's art.
   const episodeArt = {};
   for (const e of episodes) if (e.art && !episodeArt[e.feed_id]) episodeArt[e.feed_id] = e.art;
@@ -613,7 +612,7 @@ export default function PodcastsTab() {
           </div>
           <ul className="pod-tile-grid">
             {latestShown.map((ep) => (
-              <EpisodeTile key={ep.id} ep={ep} feed={feedsById[ep.feed_id]} list={latestList} onOpenShow={openShow} onOpenEpisode={openEpisode} />
+              <EpisodeTile key={ep.id} ep={ep} feed={feedsById[ep.feed_id]} onOpenShow={openShow} onOpenEpisode={openEpisode} />
             ))}
           </ul>
           {latestShown.length === 0 && <p className="pod-empty">{t('audio.podcasts.filters.none')}</p>}

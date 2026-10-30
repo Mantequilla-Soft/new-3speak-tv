@@ -398,6 +398,8 @@
     "showNotes": "Catatan episode",
     "notesLoading": "Memuat catatan episode…",
     "noNotes": "Episode ini tidak punya catatan.",
-    "openEpisode": "Buka episode"
+    "openEpisode": "Buka episode",
+    "addToQueue": "Tambah ke antrean",
+    "inQueue": "Dalam antrean"
   }
 }

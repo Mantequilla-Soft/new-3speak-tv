@@ -398,6 +398,8 @@
     "showNotes": "エピソードの説明",
     "notesLoading": "エピソードの説明を読み込み中…",
     "noNotes": "このエピソードには説明がありません。",
-    "openEpisode": "エピソードを開く"
+    "openEpisode": "エピソードを開く",
+    "addToQueue": "キューに追加",
+    "inQueue": "キューに追加済み"
   }
 }

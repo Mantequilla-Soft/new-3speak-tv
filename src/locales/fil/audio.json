@@ -420,6 +420,8 @@
     "showNotes": "Show notes",
     "notesLoading": "Nilo-load ang show notes…",
     "noNotes": "Walang show notes ang episode na ito.",
-    "openEpisode": "Buksan ang episode"
+    "openEpisode": "Buksan ang episode",
+    "addToQueue": "Idagdag sa queue",
+    "inQueue": "Nasa queue na"
   }
 }

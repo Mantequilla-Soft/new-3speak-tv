@@ -420,6 +420,8 @@
     "showNotes": "Maelezo ya kipindi",
     "notesLoading": "Inapakia maelezo ya kipindi…",
     "noNotes": "Kipindi hiki hakina maelezo.",
-    "openEpisode": "Fungua kipindi"
+    "openEpisode": "Fungua kipindi",
+    "addToQueue": "Ongeza kwenye foleni",
+    "inQueue": "Iko kwenye foleni"
   }
 }

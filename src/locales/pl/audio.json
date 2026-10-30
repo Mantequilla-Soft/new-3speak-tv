@@ -464,6 +464,8 @@
     "showNotes": "Opis odcinka",
     "notesLoading": "Ładowanie opisu odcinka…",
     "noNotes": "Ten odcinek nie ma opisu.",
-    "openEpisode": "Otwórz odcinek"
+    "openEpisode": "Otwórz odcinek",
+    "addToQueue": "Dodaj do kolejki",
+    "inQueue": "W kolejce"
   }
 }

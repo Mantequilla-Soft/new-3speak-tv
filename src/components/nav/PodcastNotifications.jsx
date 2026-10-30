@@ -19,7 +19,7 @@ import './PodcastNotifications.scss';
 export default function PodcastNotifications({ episodes, user, onOpen, variant = 'dropdown' }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const audioPlay = useAppStore((s) => s.audioPlay);
+  const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
   const hadUnseen = useRef(false);
 
   useEffect(() => {
@@ -30,8 +30,7 @@ export default function PodcastNotifications({ episodes, user, onOpen, variant =
   if (!episodes?.length) return null;
 
   const open = (ep) => {
-    const track = episodeToTrack(ep, ep.feed);
-    audioPlay(track, [track]);
+    audioPlayQueued(episodeToTrack(ep, ep.feed));
     onOpen?.();
     navigate(episodePath(ep.id));
   };

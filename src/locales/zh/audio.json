@@ -398,6 +398,8 @@
     "showNotes": "节目说明",
     "notesLoading": "正在加载节目说明…",
     "noNotes": "这一集没有节目说明。",
-    "openEpisode": "打开单集"
+    "openEpisode": "打开单集",
+    "addToQueue": "加入队列",
+    "inQueue": "已在队列中"
   }
 }

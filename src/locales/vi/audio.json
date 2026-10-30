@@ -398,6 +398,8 @@
     "showNotes": "Ghi chú tập",
     "notesLoading": "Đang tải ghi chú tập…",
     "noNotes": "Tập này không có ghi chú.",
-    "openEpisode": "Mở tập"
+    "openEpisode": "Mở tập",
+    "addToQueue": "Thêm vào hàng chờ",
+    "inQueue": "Đã trong hàng chờ"
   }
 }
