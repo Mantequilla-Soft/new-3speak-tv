@@ -30,6 +30,7 @@ import { canTipEpisode } from '../../lib/podcastTips';
 import { recordProgress, flushProgress, resumePosition } from '../../lib/podcastProgress';
 import { podcastPath, episodePath, artUrl, PODCAST_PLACEHOLDER, pseudoWaveform } from '../../lib/podcasts';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
+import { trackArtist } from '../../utils/audioTrack';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
 import '../../page/Audio.scss';
 import './GlobalAudioPlayer.scss';
@@ -83,6 +84,20 @@ function audioThumb(item) {
     return `/img/u/${item.owner}/avatar/small`;
   }
   return fixed;
+}
+
+// The cover the phone's media notification and lock screen show (Media
+// Session): larger than the player's own thumbnail, and absolute so the system
+// can fetch it.
+function sessionArtwork(item) {
+  let src;
+  if (item.external) src = item.art ? artUrl(item.art, 512) : '';
+  else {
+    const fixed = fixVideoThumbnail({ thumbnail_url: item.thumbnail_url, thumbnail: item.thumbnail_url });
+    src = !fixed || fixed === fallbackImg || fixed === '/images/speak.jpg' ? `/img/u/${item.owner}/avatar/large` : fixed;
+  }
+  if (!src) return [];
+  try { return [{ src: new URL(src, window.location.href).href }]; } catch { return []; }
 }
 
 function fmt(sec) {
@@ -461,6 +476,47 @@ function GlobalAudioPlayer() {
     const i = list.findIndex(x => x._id === audioCurrent._id);
     if (i > 0) audioPlay(list[i - 1]);
   }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
+
+  // What the phone's media notification, lock screen, headphones and car show
+  // and control (Media Session). Without it Android shows the tab's title and
+  // the site icon instead of the track.
+  const sessionTitle = audioCurrent ? audioCurrent.title || t('audio.untitled') : '';
+  useEffect(() => {
+    const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
+    if (!ms || typeof window.MediaMetadata !== 'function') return;
+    if (!audioCurrent) { ms.metadata = null; return; }
+    ms.metadata = new window.MediaMetadata({
+      title: sessionTitle,
+      artist: trackArtist(audioCurrent),
+      album: audioCurrent.external ? '' : '3Speak',
+      artwork: sessionArtwork(audioCurrent),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioCurrent?._id, sessionTitle]);
+
+  useEffect(() => {
+    const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
+    if (ms) ms.playbackState = audioIsPlaying ? 'playing' : 'paused';
+  }, [audioIsPlaying]);
+
+  useEffect(() => {
+    const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
+    if (!ms?.setActionHandler) return undefined;
+    const el = () => audioRef.current;
+    // An action a browser does not know throws; it just goes without that button.
+    const set = (action, fn) => { try { ms.setActionHandler(action, fn); } catch { /* unsupported */ } };
+    const handlers = {
+      play: () => { el()?.play().catch(() => {}); },
+      pause: () => { el()?.pause(); },
+      previoustrack: playPrev,
+      nexttrack: playNext,
+      seekto: (d) => { const a = el(); if (a && Number.isFinite(d.seekTime)) a.currentTime = d.seekTime; },
+      seekbackward: (d) => { const a = el(); if (a) a.currentTime = Math.max(0, a.currentTime - (d.seekOffset || 10)); },
+      seekforward: (d) => { const a = el(); if (a) a.currentTime = a.currentTime + (d.seekOffset || 30); },
+    };
+    for (const [action, fn] of Object.entries(handlers)) set(action, fn);
+    return () => { for (const action of Object.keys(handlers)) set(action, null); };
+  }, [playNext, playPrev]);
 
   // Publish how far the player's top edge sits above the viewport bottom as
   // --audio-np-clearance, so fixed elements (Feedback FAB) can stay above it.

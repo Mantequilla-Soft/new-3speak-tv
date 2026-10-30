@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n';
 import { parseHivePath } from '../utils/urls';
+import { useAppStore } from '../lib/store';
+import { nowPlayingLabel } from '../utils/audioTrack';
 
 /**
  * Sets the browser-tab title, and the search-engine tags, for every route.
@@ -161,6 +163,7 @@ export default function RouteTitle() {
   const { pathname, search } = useLocation();
   // Subscribes to language changes so the title re-renders in the new language.
   useTranslation();
+  const audioCurrent = useAppStore((s) => s.audioCurrent);
 
   // index.html carries the homepage's description / og:url / og:title for
   // readers that run no JavaScript. Once this component writes the page's
@@ -180,6 +183,11 @@ export default function RouteTitle() {
   const isHome = hit && hit.route.full;
   const noindex = isPrivateRoute(pathname);
   const title = resolveDocumentTitle(pathname);
+  // On the audio pages the tab names the track that is playing, so it can be
+  // read from the tab bar and the phone's task switcher. Only the tab: the
+  // share and search tags keep the page's own title.
+  const playing = /^\/audio(\/|$)/.test(pathname) ? nowPlayingLabel(audioCurrent) : '';
+  const tabTitle = playing ? `3S | ${playing}` : title;
   const description = isHome || !label
     ? t('misc.seo.siteDescription')
     : t('misc.seo.pageDescription', { page: label });
@@ -189,7 +197,7 @@ export default function RouteTitle() {
 
   return (
     <Helmet>
-      {ownsTitle && <title>{title}</title>}
+      {ownsTitle && <title>{tabTitle}</title>}
       {noindex && <meta name="robots" content="noindex, follow" />}
       <meta name="description" content={description} />
       {canonical && <link rel="canonical" href={canonical} />}
