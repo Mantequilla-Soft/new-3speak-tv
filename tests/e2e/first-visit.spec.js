@@ -2,6 +2,7 @@
 // the login chooser and the language.
 import { test, expect, APP_VERSION, VIDEO_LINK } from './fixtures.js'
 import es from '../../src/locales/es/common.json' with { type: 'json' }
+import { CHANGELOG } from '../../src/changelog.js'
 
 test.describe('cookie banner', () => {
   test.use({ fresh: true })
@@ -31,7 +32,9 @@ test('a returning user on an older version sees the update popup once', async ({
   const modal = page.locator('.changelog-modal')
   await expect(modal).toBeVisible()
   await expect(modal).toContainText('We shipped an update!')
-  await expect(modal.locator('.changelog-entry-version').first()).toContainText(APP_VERSION)
+  // The newest entry, which is APP_VERSION or older (a release may bump the version
+  // without an entry); the stored version still becomes APP_VERSION below.
+  await expect(modal.locator('.changelog-entry-version').first()).toContainText(CHANGELOG[0].version)
   await modal.locator('.changelog-close').click()
   await expect(modal).toBeHidden()
   expect(await page.evaluate(() => localStorage.getItem('3speak_app_version'))).toBe(APP_VERSION)
