@@ -21,7 +21,7 @@ export const CHANGELOG = [
     version: '1.80.57',
     category: 'audio',
     date: '2026-10-30',
-    summary: "We're preparing Earn to Listen: the audio player now measures listening time for 3Speak audio and podcast episodes, anonymously, as the groundwork for rewarding listeners with a share of ad revenue, just like viewers.",
+    summary: 'Preparing Earn to Listen: the audio player now measures listening time, so listeners can soon earn a share of ad revenue.',
   },
   {
     version: '1.80.56',
