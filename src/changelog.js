@@ -7,6 +7,11 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.56',
+    date: '2026-10-30',
+    summary: 'The External podcasts page now has three tabs: Mine for your shows, Discover to find new ones and Trends for the charts.',
+  },
+  {
     version: '1.80.55',
     date: '2026-10-30',
     summary: "Follow a podcast by pasting its Apple Podcasts or Overcast link, or simply the show's website.",
