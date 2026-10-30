@@ -215,6 +215,7 @@ function BadgeView({ account }) {
         // From the index, but through our /img/ cache rather than the raw
         // original on someone else's host (see cachedProfileImage).
         avatarUrl={cachedProfileImage(account, badge?.image, 'large')}
+        avatarCoin
         coverUrl={badge?.cover}
         // No subscribe here. Subscribing to a badge is a plain Hive follow of
         // the badge account, which does nothing: a badge is not a feed you join,

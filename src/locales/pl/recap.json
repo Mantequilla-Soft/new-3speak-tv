@@ -1,0 +1,179 @@
+{
+  "open": "Twój rok na 3Speak",
+  "pageTitle": "Rok {{user}} na 3Speak",
+  "intro": {
+    "title": "Rok @{{user}} na 3Speak",
+    "sub": "Ostatnie 12 miesięcy w liczbach."
+  },
+  "uploads": {
+    "kicker": "Przesłane przez ciebie",
+    "videos_one": "{{count}} film",
+    "videos_few": "{{count}} filmy",
+    "videos_many": "{{count}} filmów",
+    "videos_other": "{{count}} filmu",
+    "shorts_one": "{{count}} short",
+    "shorts_few": "{{count}} shorty",
+    "shorts_many": "{{count}} shortów",
+    "shorts_other": "{{count}} shorta",
+    "and": "i"
+  },
+  "watch": {
+    "kicker": "Oglądano cię przez",
+    "sub": "Łącznie z filmów i shortów.",
+    "since": "Czas oglądania jest liczony od {{date}}.",
+    "graph": "Czas oglądania w tygodniu.",
+    "bestWeek": "Najlepszy tydzień: {{date}}, {{time}}",
+    "weekOf": "Tydzień od {{date}}",
+    "panHint": "Przewijaj lub przeciągaj, aby przejść przez rok."
+  },
+  "audience": {
+    "kicker": "Twoje filmy odtworzono",
+    "views_one": "{{count}} raz",
+    "views_few": "{{count}} razy",
+    "views_many": "{{count}} razy",
+    "views_other": "{{count}} razy",
+    "votes_one": "{{count}} głos",
+    "votes_few": "{{count}} głosy",
+    "votes_many": "{{count}} głosów",
+    "votes_other": "{{count}} głosu",
+    "comments_one": "{{count}} komentarz",
+    "comments_few": "{{count}} komentarze",
+    "comments_many": "{{count}} komentarzy",
+    "comments_other": "{{count}} komentarza",
+    "fans": "Twoi najwięksi fani",
+    "fansLoading": "Szukamy twoich największych fanów…",
+    "noFans": "Brak jeszcze głosów i odpowiedzi od innych."
+  },
+  "top": {
+    "kicker": "Twoje najczęściej oglądane filmy",
+    "watched": "Oglądane przez {{time}}"
+  },
+  "supporters": {
+    "kicker": "Twoi najwięksi wspierający",
+    "anonymous": "Anonim"
+  },
+  "rank": {
+    "kicker": "Twoje najlepsze miejsce w rankingu",
+    "board": "w rankingu {{board}}",
+    "hint": "Każdy stopień to twórca z tego rankingu. Najedź na niego, aby zobaczyć kto."
+  },
+  "outro": {
+    "title": "Dzięki, że tworzysz na 3Speak",
+    "sub": "Za kolejne 12 miesięcy!",
+    "channel": "Otwórz swój kanał"
+  },
+  "empty": {
+    "title": "Brak przesłanych materiałów w ostatnich 12 miesiącach",
+    "sub": "Prześlij film lub shorta, a twój rok na 3Speak zacznie się tutaj.",
+    "upload": "Prześlij"
+  },
+  "signIn": "Zaloguj się, aby zobaczyć swój rok na 3Speak.",
+  "loading": "Podliczamy twój rok…",
+  "error": "Nie udało się wczytać twojego roku. Spróbuj ponownie za chwilę.",
+  "nav": {
+    "previous": "Wstecz",
+    "next": "Dalej",
+    "slide": "Slajd {{n}} z {{total}}"
+  },
+  "communities": {
+    "kicker": "Społeczności z twoimi postami",
+    "count_one": "{{count}} społeczność",
+    "count_few": "{{count}} społeczności",
+    "count_many": "{{count}} społeczności",
+    "count_other": "{{count}} społeczności",
+    "posts_one": "{{count}} post",
+    "posts_few": "{{count}} posty",
+    "posts_many": "{{count}} postów",
+    "posts_other": "{{count}} posta"
+  },
+  "followed": {
+    "kicker": "Nowe obserwowane konta",
+    "count_one": "{{count}} konto",
+    "count_few": "{{count}} konta",
+    "count_many": "{{count}} kont",
+    "count_other": "{{count}} konta"
+  },
+  "watched": {
+    "kicker": "Twórcy, których oglądasz najczęściej",
+    "videos_one": "{{count}} obejrzany film",
+    "videos_few": "{{count}} obejrzane filmy",
+    "videos_many": "{{count}} obejrzanych filmów",
+    "videos_other": "{{count}} obejrzanego filmu"
+  },
+  "followers": {
+    "kicker": "Nowi obserwujący od {{date}}",
+    "count_one": "{{count}} konto zaczęło cię obserwować",
+    "count_few": "{{count}} konta zaczęły cię obserwować",
+    "count_many": "{{count}} kont zaczęło cię obserwować",
+    "count_other": "{{count}} konta zaczęło cię obserwować",
+    "kickerYear": "Nowi obserwujący w tym roku"
+  },
+  "panel": {
+    "openCommunity": "Otwórz społeczność",
+    "untitled": "Bez tytułu",
+    "closeAndLook": "Zamknij i rozejrzyj się"
+  },
+  "income": {
+    "kicker": "Twoje zarobki",
+    "sub": "Z nagród za posty, reklam 3Speak i napiwków.",
+    "note": "W HBD (ok. jeden dolar amerykański za sztukę), HIVE i HP według aktualnej ceny HIVE.",
+    "partial": "Bardzo aktywne konto: to obejmuje najnowszą część roku.",
+    "hint": "Najedź na kolumnę, aby zobaczyć szczegóły.",
+    "sources": {
+      "author": "Nagrody za posty",
+      "ads": "Reklamy 3Speak",
+      "tips": "Napiwki"
+    },
+    "legendOurs": "na 3Speak",
+    "legendOther": "gdzie indziej na Hive",
+    "segments": {
+      "ours": "Nagrody za posty na 3Speak",
+      "other": "Nagrody za posty gdzie indziej na Hive",
+      "ads_creator": "Przychód z reklam jako twórca",
+      "ads_viewer": "Nagrody za reklamy jako widz",
+      "ads_combined": "Płatności za reklamy za obie role (bez podziału)"
+    },
+    "rewardedPosts_one": "{{count}} nagrodzony post",
+    "rewardedPosts_few": "{{count}} nagrodzone posty",
+    "rewardedPosts_many": "{{count}} nagrodzonych postów",
+    "rewardedPosts_other": "{{count}} nagrodzonego posta",
+    "legendCreator": "jako twórca",
+    "legendViewer": "jako widz",
+    "logScale": "Wysokość kolumn jest w skali logarytmicznej, więc małe kwoty pozostają widoczne.",
+    "payments_one": "{{count}} płatność",
+    "payments_few": "{{count}} płatności",
+    "payments_many": "{{count}} płatności",
+    "payments_other": "{{count}} płatności",
+    "legendCombined": "obie role, bez podziału"
+  },
+  "loadingSteps": {
+    "stats": "Sprawdzamy twój rok…",
+    "uploads": "Liczymy twoje materiały…",
+    "watch": "Mierzymy czas oglądania…",
+    "audience": "Liczymy wyświetlenia…",
+    "fans": "Szukamy twoich fanów…",
+    "income": "Sumujemy twoje zarobki…",
+    "communities": "Odwiedzamy twoje społeczności…",
+    "followers": "Sprawdzamy, kto cię obserwuje…",
+    "watched": "Przeglądamy twoją historię oglądania…",
+    "thumbnails": "Wczytujemy miniatury… {{done}} z {{total}}"
+  },
+  "tips": {
+    "label": "Wskazówka:",
+    "mouse": {
+      "tip1": "Rusz myszką, a każda scena za nią podąży, nawet poza slajdem.",
+      "tip2": "Przewijaj, aby przybliżać i oddalać ściany filmów.",
+      "tip3": "Przewijaj lub przeciągaj wykres czasu oglądania, aby przejść przez rok.",
+      "tip4": "Najedź na słupek, stopień, kolumnę lub kafelek, aby zobaczyć, co kryje.",
+      "tip5": "Kliknij kafelek, słupek lub społeczność, aby szczegóły pozostały otwarte."
+    },
+    "touch": {
+      "tip1": "Użyj strzałek na dole, aby przechodzić między slajdami.",
+      "tip2": "Przeciągaj po ścianach filmów, aby się rozejrzeć.",
+      "tip3": "Przesuń wykres czasu oglądania w bok, aby przejść przez rok.",
+      "tip4": "Stuknij kafelek, aby zobaczyć kartę filmu.",
+      "tip5": "Stuknij społeczność lub tydzień, aby zobaczyć filmy.",
+      "tip6": "Sceny obracają się powoli same; przeciągnij pierścienie, aby obrócić je samodzielnie."
+    }
+  }
+}

@@ -226,6 +226,12 @@
             min-width: 6rem;
           }
 
+          // Badge page: the badge's medal spins like a coin on hover.
+          &--coin {
+            @include mix.coin-spin(700px);
+            &:hover { @include mix.coin-spin-hover(700px); }
+          }
+
           // Own profile: the avatar opens the edit dialog.
           &--clickable {
             cursor: pointer;

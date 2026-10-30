@@ -18,6 +18,19 @@
     display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
   }
 
+  .cs-recap-link {
+    margin-left: auto;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--accent-primary);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover { background: var(--bg-hover); }
+  }
+
   // ── Stat tiles ──────────────────────────────────────────────
   .cs-tiles {
     display: grid;

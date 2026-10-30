@@ -1,0 +1,155 @@
+{
+  "open": "Your year on 3Speak",
+  "pageTitle": "{{user}}'s year on 3Speak",
+  "intro": {
+    "title": "@{{user}}'s year on 3Speak",
+    "sub": "The last 12 months, in numbers."
+  },
+  "uploads": {
+    "kicker": "You uploaded",
+    "videos_one": "{{count}} video",
+    "videos_other": "{{count}} videos",
+    "shorts_one": "{{count}} short",
+    "shorts_other": "{{count}} shorts",
+    "and": "and"
+  },
+  "watch": {
+    "kicker": "People watched you for",
+    "sub": "Across your videos and shorts.",
+    "since": "Watch time is counted since {{date}}.",
+    "graph": "Watch time per week.",
+    "bestWeek": "Best week: {{date}}, {{time}}",
+    "weekOf": "Week of {{date}}",
+    "panHint": "Scroll or drag to move through the year."
+  },
+  "audience": {
+    "kicker": "Your videos were played",
+    "views_one": "{{count}} time",
+    "views_other": "{{count}} times",
+    "votes_one": "{{count}} vote",
+    "votes_other": "{{count}} votes",
+    "comments_one": "{{count}} comment",
+    "comments_other": "{{count}} comments",
+    "fans": "Your top fans",
+    "fansLoading": "Finding your top fans…",
+    "noFans": "No votes or replies from others yet."
+  },
+  "top": {
+    "kicker": "Your most watched videos",
+    "watched": "Watched for {{time}}"
+  },
+  "supporters": {
+    "kicker": "Your top supporters",
+    "anonymous": "Anonymous"
+  },
+  "rank": {
+    "kicker": "Your best leaderboard spot",
+    "board": "on {{board}}",
+    "hint": "Each step is a creator on that board. Hover one to see who."
+  },
+  "outro": {
+    "title": "Thanks for creating on 3Speak",
+    "sub": "Here's to the next 12 months.",
+    "channel": "Open your channel"
+  },
+  "empty": {
+    "title": "No uploads in the last 12 months",
+    "sub": "Upload a video or a short and your year on 3Speak starts here.",
+    "upload": "Upload"
+  },
+  "signIn": "Sign in to see your year on 3Speak.",
+  "loading": "Counting your year…",
+  "error": "Your year could not be loaded. Try again in a moment.",
+  "nav": {
+    "previous": "Previous",
+    "next": "Next",
+    "slide": "Slide {{n}} of {{total}}"
+  },
+  "communities": {
+    "kicker": "You posted in",
+    "count_one": "{{count}} community",
+    "count_other": "{{count}} communities",
+    "posts_one": "{{count}} post",
+    "posts_other": "{{count}} posts"
+  },
+  "followed": {
+    "kicker": "You started following",
+    "count_one": "{{count}} account",
+    "count_other": "{{count}} accounts"
+  },
+  "watched": {
+    "kicker": "The creators you watched most",
+    "videos_one": "{{count}} video watched",
+    "videos_other": "{{count}} videos watched"
+  },
+  "followers": {
+    "kicker": "New followers since {{date}}",
+    "count_one": "{{count}} account followed you",
+    "count_other": "{{count}} accounts followed you",
+    "kickerYear": "New followers this year"
+  },
+  "panel": {
+    "openCommunity": "Open the community",
+    "untitled": "Untitled",
+    "closeAndLook": "Close and look around"
+  },
+  "income": {
+    "kicker": "You earned",
+    "sub": "From post rewards, 3Speak ads and tips.",
+    "note": "In HBD (about one US dollar each), with HIVE and HP at the chain's current HIVE price.",
+    "partial": "A very busy account: this covers the most recent part of the year.",
+    "hint": "Hover a pillar for its breakdown.",
+    "sources": {
+      "author": "Post rewards",
+      "ads": "3Speak ads",
+      "tips": "Tips"
+    },
+    "legendOurs": "on 3Speak",
+    "legendOther": "elsewhere on Hive",
+    "segments": {
+      "ours": "Post rewards on 3Speak",
+      "other": "Post rewards elsewhere on Hive",
+      "ads_creator": "Ad revenue as a creator",
+      "ads_viewer": "Ad rewards as a viewer",
+      "ads_combined": "Ad payments for both (not split)"
+    },
+    "rewardedPosts_one": "{{count}} rewarded post",
+    "rewardedPosts_other": "{{count}} rewarded posts",
+    "legendCreator": "as a creator",
+    "legendViewer": "as a viewer",
+    "logScale": "Pillar heights are on a log scale, so small amounts stay visible.",
+    "payments_one": "{{count}} payment",
+    "payments_other": "{{count}} payments",
+    "legendCombined": "both, not split"
+  },
+  "loadingSteps": {
+    "stats": "Looking up your year…",
+    "uploads": "Counting your uploads…",
+    "watch": "Measuring watch time…",
+    "audience": "Counting your views…",
+    "fans": "Finding your fans…",
+    "income": "Adding up your income…",
+    "communities": "Visiting your communities…",
+    "followers": "Checking who followed you…",
+    "watched": "Going through what you watched…",
+    "thumbnails": "Loading your thumbnails… {{done}} of {{total}}"
+  },
+  "tips": {
+    "label": "Tip:",
+    "mouse": {
+      "tip1": "Move your mouse and each scene follows it, even outside the slide.",
+      "tip2": "Scroll to zoom in and out of your video walls.",
+      "tip3": "Scroll or drag the watch-time graph to move through the year.",
+      "tip4": "Hover a bar, step, pillar or tile to see what is behind it.",
+      "tip5": "Click a tile, bar or community to keep its details open."
+    },
+    "touch": {
+      "tip1": "Use the arrows at the bottom to step through the slides.",
+      "tip2": "Drag across your video walls to look around.",
+      "tip3": "Swipe the watch-time graph sideways to move through the year.",
+      "tip4": "Tap a tile to see its video card.",
+      "tip5": "Tap a community or a week to see its videos.",
+      "tip6": "The scenes turn slowly on their own; drag the rings to turn them yourself."
+    }
+  }
+}

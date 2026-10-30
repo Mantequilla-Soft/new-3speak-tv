@@ -1,0 +1,155 @@
+{
+  "open": "Jouw jaar op 3Speak",
+  "pageTitle": "Het jaar van {{user}} op 3Speak",
+  "intro": {
+    "title": "Het jaar van @{{user}} op 3Speak",
+    "sub": "De afgelopen 12 maanden in cijfers."
+  },
+  "uploads": {
+    "kicker": "Je uploadde",
+    "videos_one": "{{count}} video",
+    "videos_other": "{{count}} video's",
+    "shorts_one": "{{count}} short",
+    "shorts_other": "{{count}} shorts",
+    "and": "en"
+  },
+  "watch": {
+    "kicker": "Mensen keken in totaal",
+    "sub": "Over al je video's en shorts.",
+    "since": "Kijktijd wordt geteld sinds {{date}}.",
+    "graph": "Kijktijd per week.",
+    "bestWeek": "Beste week: {{date}}, {{time}}",
+    "weekOf": "Week van {{date}}",
+    "panHint": "Scroll of sleep om door het jaar te gaan."
+  },
+  "audience": {
+    "kicker": "Je video's werden afgespeeld",
+    "views_one": "{{count}} keer",
+    "views_other": "{{count}} keer",
+    "votes_one": "{{count}} stem",
+    "votes_other": "{{count}} stemmen",
+    "comments_one": "{{count}} reactie",
+    "comments_other": "{{count}} reacties",
+    "fans": "Je grootste fans",
+    "fansLoading": "Je grootste fans zoeken…",
+    "noFans": "Nog geen stemmen of reacties van anderen."
+  },
+  "top": {
+    "kicker": "Je meest bekeken video's",
+    "watched": "{{time}} bekeken"
+  },
+  "supporters": {
+    "kicker": "Je grootste supporters",
+    "anonymous": "Anoniem"
+  },
+  "rank": {
+    "kicker": "Je beste plek in het klassement",
+    "board": "in {{board}}",
+    "hint": "Elke trede is een maker in dat klassement. Hover erover om te zien wie."
+  },
+  "outro": {
+    "title": "Bedankt voor het maken op 3Speak",
+    "sub": "Op naar de volgende 12 maanden.",
+    "channel": "Open je kanaal"
+  },
+  "empty": {
+    "title": "Geen uploads in de afgelopen 12 maanden",
+    "sub": "Upload een video of short en je jaar op 3Speak begint hier.",
+    "upload": "Uploaden"
+  },
+  "signIn": "Log in om je jaar op 3Speak te zien.",
+  "loading": "Je jaar wordt geteld…",
+  "error": "Je jaar kon niet worden geladen. Probeer het zo opnieuw.",
+  "nav": {
+    "previous": "Vorige",
+    "next": "Volgende",
+    "slide": "Dia {{n}} van {{total}}"
+  },
+  "communities": {
+    "kicker": "Je postte in",
+    "count_one": "{{count}} community",
+    "count_other": "{{count}} community's",
+    "posts_one": "{{count}} post",
+    "posts_other": "{{count}} posts"
+  },
+  "followed": {
+    "kicker": "Je begon te volgen",
+    "count_one": "{{count}} account",
+    "count_other": "{{count}} accounts"
+  },
+  "watched": {
+    "kicker": "De makers die je het meest bekeek",
+    "videos_one": "{{count}} video bekeken",
+    "videos_other": "{{count}} video's bekeken"
+  },
+  "followers": {
+    "kicker": "Nieuwe volgers sinds {{date}}",
+    "count_one": "{{count}} account volgde je",
+    "count_other": "{{count}} accounts volgden je",
+    "kickerYear": "Nieuwe volgers dit jaar"
+  },
+  "panel": {
+    "openCommunity": "Open de community",
+    "untitled": "Zonder titel",
+    "closeAndLook": "Sluiten en rondkijken"
+  },
+  "income": {
+    "kicker": "Je verdiende",
+    "sub": "Uit postbeloningen, 3Speak-advertenties en tips.",
+    "note": "In HBD (ongeveer één Amerikaanse dollar per stuk), met HIVE en HP tegen de huidige HIVE-koers.",
+    "partial": "Een heel druk account: dit dekt het meest recente deel van het jaar.",
+    "hint": "Hover over een pilaar voor de details.",
+    "sources": {
+      "author": "Postbeloningen",
+      "ads": "3Speak-advertenties",
+      "tips": "Tips"
+    },
+    "legendOurs": "op 3Speak",
+    "legendOther": "elders op Hive",
+    "segments": {
+      "ours": "Postbeloningen op 3Speak",
+      "other": "Postbeloningen elders op Hive",
+      "ads_creator": "Advertentie-inkomsten als maker",
+      "ads_viewer": "Advertentiebeloningen als kijker",
+      "ads_combined": "Advertentiebetalingen voor beide (niet gesplitst)"
+    },
+    "rewardedPosts_one": "{{count}} beloonde post",
+    "rewardedPosts_other": "{{count}} beloonde posts",
+    "legendCreator": "als maker",
+    "legendViewer": "als kijker",
+    "logScale": "Pilaarhoogtes staan op een logaritmische schaal, zodat kleine bedragen zichtbaar blijven.",
+    "payments_one": "{{count}} betaling",
+    "payments_other": "{{count}} betalingen",
+    "legendCombined": "beide, niet gesplitst"
+  },
+  "loadingSteps": {
+    "stats": "Je jaar opzoeken…",
+    "uploads": "Je uploads tellen…",
+    "watch": "Kijktijd meten…",
+    "audience": "Je weergaven tellen…",
+    "fans": "Je fans zoeken…",
+    "income": "Je inkomsten optellen…",
+    "communities": "Je communities bezoeken…",
+    "followers": "Nagaan wie jou is gaan volgen…",
+    "watched": "Doornemen wat je hebt bekeken…",
+    "thumbnails": "Je thumbnails laden… {{done}} van {{total}}"
+  },
+  "tips": {
+    "label": "Tip:",
+    "mouse": {
+      "tip1": "Beweeg je muis en elke scène volgt hem, zelfs buiten de dia.",
+      "tip2": "Scroll om in en uit te zoomen op je videomuren.",
+      "tip3": "Scroll of sleep de kijktijdgrafiek om door het jaar te gaan.",
+      "tip4": "Hover over een balk, trede, pilaar of tegel om te zien wat erachter zit.",
+      "tip5": "Klik op een tegel, balk of community om de details open te houden."
+    },
+    "touch": {
+      "tip1": "Gebruik de pijlen onderaan om door de dia's te gaan.",
+      "tip2": "Sleep over je videomuren om rond te kijken.",
+      "tip3": "Veeg de kijktijdgrafiek opzij om door het jaar te gaan.",
+      "tip4": "Tik op een tegel om de videokaart te zien.",
+      "tip5": "Tik op een community of week om de video's te zien.",
+      "tip6": "De scènes draaien langzaam vanzelf; sleep aan de ringen om ze zelf te draaien."
+    }
+  }
+}

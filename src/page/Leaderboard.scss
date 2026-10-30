@@ -284,11 +284,26 @@
   }
 
   .lb-podium {
+    position: relative; // PodiumStage measures the cards against it
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
     align-items: end;
     margin-bottom: 22px;
+
+    // 3D steps are up: each card stands on its step (--lb-step, from
+    // PodiumStage) and rides up with it, in the steps' order: 3rd, 2nd, winner.
+    &.lb-podium--3d .lb-podium-slot {
+      position: relative;
+      z-index: 1;
+      margin-bottom: var(--lb-step, 0px);
+      animation: lb-podium-ride 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+
+      &.lb-rank-2 { animation-delay: 0.12s; }
+      &.lb-rank-1 { animation-delay: 0.24s; }
+
+      @media (prefers-reduced-motion: reduce) { animation: none; }
+    }
 
     @include mix.respond(phone) {
       gap: 6px;
@@ -508,4 +523,11 @@
     &:hover:not(:disabled) { background: var(--bg-hover); }
     &:disabled { opacity: 0.6; cursor: default; }
   }
+}
+
+// Cards start on the floor and ride up with their step (individual `translate`,
+// so the hover lift on `transform` still works).
+@keyframes lb-podium-ride {
+  from { translate: 0 var(--lb-step, 0px); }
+  to { translate: 0 0; }
 }

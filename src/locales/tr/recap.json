@@ -1,0 +1,155 @@
+{
+  "open": "3Speak'te yılın",
+  "pageTitle": "{{user}} kullanıcısının 3Speak yılı",
+  "intro": {
+    "title": "@{{user}} kullanıcısının 3Speak yılı",
+    "sub": "Son 12 ay, rakamlarla."
+  },
+  "uploads": {
+    "kicker": "Yüklediklerin",
+    "videos_one": "{{count}} video",
+    "videos_other": "{{count}} video",
+    "shorts_one": "{{count}} short",
+    "shorts_other": "{{count}} short",
+    "and": "ve"
+  },
+  "watch": {
+    "kicker": "Toplam izlenme süren",
+    "sub": "Tüm videoların ve short'ların genelinde.",
+    "since": "İzlenme süresi {{date}} tarihinden beri sayılıyor.",
+    "graph": "Haftalık izlenme süresi.",
+    "bestWeek": "En iyi hafta: {{date}}, {{time}}",
+    "weekOf": "{{date}} haftası",
+    "panHint": "Yıl içinde gezinmek için kaydır veya sürükle."
+  },
+  "audience": {
+    "kicker": "Videolarının oynatılma sayısı",
+    "views_one": "{{count}} kez",
+    "views_other": "{{count}} kez",
+    "votes_one": "{{count}} oy",
+    "votes_other": "{{count}} oy",
+    "comments_one": "{{count}} yorum",
+    "comments_other": "{{count}} yorum",
+    "fans": "En büyük hayranların",
+    "fansLoading": "En büyük hayranların bulunuyor…",
+    "noFans": "Henüz başkalarından oy veya yanıt yok."
+  },
+  "top": {
+    "kicker": "En çok izlenen videoların",
+    "watched": "{{time}} izlendi"
+  },
+  "supporters": {
+    "kicker": "En büyük destekçilerin",
+    "anonymous": "Anonim"
+  },
+  "rank": {
+    "kicker": "Sıralamadaki en iyi yerin",
+    "board": "{{board}} sıralamasında",
+    "hint": "Her basamak o sıralamadaki bir içerik üreticisi. Kim olduğunu görmek için üzerine gel."
+  },
+  "outro": {
+    "title": "3Speak'te ürettiğin için teşekkürler",
+    "sub": "Nice 12 aylara!",
+    "channel": "Kanalını aç"
+  },
+  "empty": {
+    "title": "Son 12 ayda yükleme yok",
+    "sub": "Bir video veya short yükle, 3Speak yılın burada başlasın.",
+    "upload": "Yükle"
+  },
+  "signIn": "3Speak yılını görmek için giriş yap.",
+  "loading": "Yılın hesaplanıyor…",
+  "error": "Yılın yüklenemedi. Birazdan tekrar dene.",
+  "nav": {
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "slide": "Slayt {{n}} / {{total}}"
+  },
+  "communities": {
+    "kicker": "Paylaşım yaptığın topluluklar",
+    "count_one": "{{count}} topluluk",
+    "count_other": "{{count}} topluluk",
+    "posts_one": "{{count}} gönderi",
+    "posts_other": "{{count}} gönderi"
+  },
+  "followed": {
+    "kicker": "Takip etmeye başladığın",
+    "count_one": "{{count}} hesap",
+    "count_other": "{{count}} hesap"
+  },
+  "watched": {
+    "kicker": "En çok izlediğin içerik üreticileri",
+    "videos_one": "{{count}} video izlendi",
+    "videos_other": "{{count}} video izlendi"
+  },
+  "followers": {
+    "kicker": "{{date}} tarihinden beri yeni takipçiler",
+    "count_one": "{{count}} hesap seni takip etti",
+    "count_other": "{{count}} hesap seni takip etti",
+    "kickerYear": "Bu yılki yeni takipçiler"
+  },
+  "panel": {
+    "openCommunity": "Topluluğu aç",
+    "untitled": "Başlıksız",
+    "closeAndLook": "Kapat ve etrafa bak"
+  },
+  "income": {
+    "kicker": "Kazancın",
+    "sub": "Gönderi ödülleri, 3Speak reklamları ve bahşişlerden.",
+    "note": "HBD cinsinden (her biri yaklaşık bir ABD doları), HIVE ve HP güncel HIVE fiyatıyla.",
+    "partial": "Çok aktif bir hesap: bu, yılın en son kısmını kapsıyor.",
+    "hint": "Ayrıntılar için bir sütunun üzerine gel.",
+    "sources": {
+      "author": "Gönderi ödülleri",
+      "ads": "3Speak reklamları",
+      "tips": "Bahşişler"
+    },
+    "legendOurs": "3Speak'te",
+    "legendOther": "Hive'ın başka yerlerinde",
+    "segments": {
+      "ours": "3Speak'teki gönderi ödülleri",
+      "other": "Hive'ın başka yerlerindeki gönderi ödülleri",
+      "ads_creator": "İçerik üreticisi olarak reklam geliri",
+      "ads_viewer": "İzleyici olarak reklam ödülleri",
+      "ads_combined": "İkisi için reklam ödemeleri (ayrılmamış)"
+    },
+    "rewardedPosts_one": "{{count}} ödüllü gönderi",
+    "rewardedPosts_other": "{{count}} ödüllü gönderi",
+    "legendCreator": "içerik üreticisi olarak",
+    "legendViewer": "izleyici olarak",
+    "logScale": "Sütun yükseklikleri logaritmik ölçekte, böylece küçük tutarlar da görünür kalır.",
+    "payments_one": "{{count}} ödeme",
+    "payments_other": "{{count}} ödeme",
+    "legendCombined": "ikisi, ayrılmamış"
+  },
+  "loadingSteps": {
+    "stats": "Yılına bakılıyor…",
+    "uploads": "Yüklemelerin sayılıyor…",
+    "watch": "İzlenme süresi ölçülüyor…",
+    "audience": "İzlenmelerin sayılıyor…",
+    "fans": "Hayranların bulunuyor…",
+    "income": "Gelirin toplanıyor…",
+    "communities": "Toplulukların ziyaret ediliyor…",
+    "followers": "Seni kimlerin takip ettiğine bakılıyor…",
+    "watched": "İzlediklerin gözden geçiriliyor…",
+    "thumbnails": "Küçük resimler yükleniyor… {{done}} / {{total}}"
+  },
+  "tips": {
+    "label": "İpucu:",
+    "mouse": {
+      "tip1": "Fareni hareket ettir, her sahne onu takip eder, slaytın dışında bile.",
+      "tip2": "Video duvarlarını yakınlaştırıp uzaklaştırmak için kaydır.",
+      "tip3": "Yıl içinde gezinmek için izlenme süresi grafiğini kaydır veya sürükle.",
+      "tip4": "Arkasında ne olduğunu görmek için bir çubuk, basamak, sütun veya kutucuğun üzerine gel.",
+      "tip5": "Ayrıntılarını açık tutmak için bir kutucuğa, çubuğa veya topluluğa tıkla."
+    },
+    "touch": {
+      "tip1": "Slaytlar arasında geçmek için alttaki okları kullan.",
+      "tip2": "Etrafa bakmak için video duvarlarında sürükle.",
+      "tip3": "Yıl içinde gezinmek için izlenme süresi grafiğini yana kaydır.",
+      "tip4": "Video kartını görmek için bir kutucuğa dokun.",
+      "tip5": "Videolarını görmek için bir topluluğa veya haftaya dokun.",
+      "tip6": "Sahneler kendi kendine yavaşça döner; kendin döndürmek için halkaları sürükle."
+    }
+  }
+}

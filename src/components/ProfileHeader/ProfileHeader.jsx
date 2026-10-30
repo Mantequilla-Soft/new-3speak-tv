@@ -54,6 +54,8 @@ export default function ProfileHeader({
   // banner even though both images were set and serving fine.
   avatarUrl,
   coverUrl: coverUrlProp,
+  // Badge pages: the avatar is the badge's medal, so it spins like a coin on hover.
+  avatarCoin = false,
 }) {
   const { t } = useTranslation();
   const [hiveBio, setHiveBio] = useState('');
@@ -188,7 +190,7 @@ export default function ProfileHeader({
                 matches the text lines and stops above the badges. */}
             <div className="identity-row">
             <div
-              className={`avatar${avatarClickable ? ' avatar--clickable' : ''}`}
+              className={`avatar${avatarClickable ? ' avatar--clickable' : ''}${avatarCoin ? ' avatar--coin' : ''}`}
               style={avatarSize ? { width: avatarSize, height: avatarSize } : undefined}
               {...(avatarClickable ? {
                 role: 'button',

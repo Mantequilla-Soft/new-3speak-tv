@@ -1,0 +1,167 @@
+{
+  "open": "Votre année sur 3Speak",
+  "pageTitle": "L'année de {{user}} sur 3Speak",
+  "intro": {
+    "title": "L'année de @{{user}} sur 3Speak",
+    "sub": "Les 12 derniers mois, en chiffres."
+  },
+  "uploads": {
+    "kicker": "Vous avez mis en ligne",
+    "videos_one": "{{count}} vidéo",
+    "videos_many": "{{count}} vidéos",
+    "videos_other": "{{count}} vidéos",
+    "shorts_one": "{{count}} short",
+    "shorts_many": "{{count}} shorts",
+    "shorts_other": "{{count}} shorts",
+    "and": "et"
+  },
+  "watch": {
+    "kicker": "On vous a regardé pendant",
+    "sub": "Sur l'ensemble de vos vidéos et shorts.",
+    "since": "La durée de visionnage est comptée depuis le {{date}}.",
+    "graph": "Durée de visionnage par semaine.",
+    "bestWeek": "Meilleure semaine : {{date}}, {{time}}",
+    "weekOf": "Semaine du {{date}}",
+    "panHint": "Faites défiler ou glissez pour parcourir l'année."
+  },
+  "audience": {
+    "kicker": "Vos vidéos ont été lues",
+    "views_one": "{{count}} fois",
+    "views_many": "{{count}} fois",
+    "views_other": "{{count}} fois",
+    "votes_one": "{{count}} vote",
+    "votes_many": "{{count}} votes",
+    "votes_other": "{{count}} votes",
+    "comments_one": "{{count}} commentaire",
+    "comments_many": "{{count}} commentaires",
+    "comments_other": "{{count}} commentaires",
+    "fans": "Vos plus grands fans",
+    "fansLoading": "Recherche de vos plus grands fans…",
+    "noFans": "Pas encore de votes ni de réponses d'autres personnes."
+  },
+  "top": {
+    "kicker": "Vos vidéos les plus regardées",
+    "watched": "Regardée pendant {{time}}"
+  },
+  "supporters": {
+    "kicker": "Vos plus grands soutiens",
+    "anonymous": "Anonyme"
+  },
+  "rank": {
+    "kicker": "Votre meilleure place au classement",
+    "board": "sur {{board}}",
+    "hint": "Chaque marche est un créateur de ce classement. Survolez-en une pour voir qui c'est."
+  },
+  "outro": {
+    "title": "Merci de créer sur 3Speak",
+    "sub": "À vos 12 prochains mois.",
+    "channel": "Ouvrir votre chaîne"
+  },
+  "empty": {
+    "title": "Aucune mise en ligne ces 12 derniers mois",
+    "sub": "Mettez en ligne une vidéo ou un short, et votre année sur 3Speak commence ici.",
+    "upload": "Mettre en ligne"
+  },
+  "signIn": "Connectez-vous pour voir votre année sur 3Speak.",
+  "loading": "Calcul de votre année…",
+  "error": "Impossible de charger votre année. Réessayez dans un instant.",
+  "nav": {
+    "previous": "Précédent",
+    "next": "Suivant",
+    "slide": "Diapo {{n}} sur {{total}}"
+  },
+  "communities": {
+    "kicker": "Vous avez publié dans",
+    "count_one": "{{count}} communauté",
+    "count_many": "{{count}} communautés",
+    "count_other": "{{count}} communautés",
+    "posts_one": "{{count}} publication",
+    "posts_many": "{{count}} publications",
+    "posts_other": "{{count}} publications"
+  },
+  "followed": {
+    "kicker": "Vous avez commencé à suivre",
+    "count_one": "{{count}} compte",
+    "count_many": "{{count}} comptes",
+    "count_other": "{{count}} comptes"
+  },
+  "watched": {
+    "kicker": "Les créateurs que vous avez le plus regardés",
+    "videos_one": "{{count}} vidéo regardée",
+    "videos_many": "{{count}} vidéos regardées",
+    "videos_other": "{{count}} vidéos regardées"
+  },
+  "followers": {
+    "kicker": "Nouveaux abonnés depuis le {{date}}",
+    "count_one": "{{count}} compte vous a suivi",
+    "count_many": "{{count}} comptes vous ont suivi",
+    "count_other": "{{count}} comptes vous ont suivi",
+    "kickerYear": "Nouveaux abonnés cette année"
+  },
+  "panel": {
+    "openCommunity": "Ouvrir la communauté",
+    "untitled": "Sans titre",
+    "closeAndLook": "Fermer et explorer"
+  },
+  "income": {
+    "kicker": "Vous avez gagné",
+    "sub": "Grâce aux récompenses de publications, aux pubs 3Speak et aux pourboires.",
+    "note": "En HBD (environ un dollar américain chacun), avec HIVE et HP au cours actuel de HIVE sur la chaîne.",
+    "partial": "Un compte très actif : ceci couvre la partie la plus récente de l'année.",
+    "hint": "Survolez une colonne pour voir le détail.",
+    "sources": {
+      "author": "Récompenses de publications",
+      "ads": "Pubs 3Speak",
+      "tips": "Pourboires"
+    },
+    "legendOurs": "sur 3Speak",
+    "legendOther": "ailleurs sur Hive",
+    "segments": {
+      "ours": "Récompenses de publications sur 3Speak",
+      "other": "Récompenses de publications ailleurs sur Hive",
+      "ads_creator": "Revenus publicitaires en tant que créateur",
+      "ads_viewer": "Récompenses publicitaires en tant que spectateur",
+      "ads_combined": "Paiements publicitaires pour les deux (non séparés)"
+    },
+    "rewardedPosts_one": "{{count}} publication récompensée",
+    "rewardedPosts_many": "{{count}} publications récompensées",
+    "rewardedPosts_other": "{{count}} publications récompensées",
+    "legendCreator": "en tant que créateur",
+    "legendViewer": "en tant que spectateur",
+    "logScale": "La hauteur des colonnes suit une échelle logarithmique, pour que les petits montants restent visibles.",
+    "payments_one": "{{count}} paiement",
+    "payments_many": "{{count}} paiements",
+    "payments_other": "{{count}} paiements",
+    "legendCombined": "les deux, non séparés"
+  },
+  "loadingSteps": {
+    "stats": "Recherche de votre année…",
+    "uploads": "Comptage de vos mises en ligne…",
+    "watch": "Mesure de la durée de visionnage…",
+    "audience": "Comptage de vos vues…",
+    "fans": "Recherche de vos fans…",
+    "income": "Calcul de vos revenus…",
+    "communities": "Visite de vos communautés…",
+    "followers": "On regarde qui vous a suivi…",
+    "watched": "On parcourt ce que vous avez regardé…",
+    "thumbnails": "Chargement de vos miniatures… {{done}} sur {{total}}"
+  },
+  "tips": {
+    "label": "Astuce :",
+    "mouse": {
+      "tip1": "Bougez la souris et chaque scène la suit, même en dehors de la diapo.",
+      "tip2": "Faites défiler pour zoomer sur vos murs de vidéos.",
+      "tip3": "Faites défiler ou glissez le graphique de visionnage pour parcourir l'année.",
+      "tip4": "Survolez une barre, une marche, une colonne ou une vignette pour voir ce qu'il y a derrière.",
+      "tip5": "Cliquez sur une vignette, une barre ou une communauté pour garder ses détails ouverts."
+    },
+    "touch": {
+      "tip1": "Utilisez les flèches en bas pour passer d'une diapo à l'autre.",
+      "tip2": "Faites glisser vos murs de vidéos pour regarder autour.",
+      "tip3": "Balayez le graphique de visionnage sur le côté pour parcourir l'année.",
+      "tip4": "Touchez une vignette pour voir la fiche de sa vidéo.",
+      "tip5": "Touchez une communauté ou une semaine pour voir ses vidéos.",
+      "tip6": "Les scènes tournent lentement toutes seules ; faites glisser les anneaux pour les tourner vous-même."
+    }
+  }
+}

@@ -568,7 +568,16 @@ function GlobalAudioPlayer() {
         </div>
 
         <div className="audio-np-content">
-          <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.src = nowPlaying.external ? PODCAST_PLACEHOLDER : fallbackImg; }} onClick={() => audioSetExpanded(v => !v)} />
+          {/* The cover is a record sleeve: while playing, the record slides out
+              from behind it and spins, labelled with the same cover. */}
+          <div className={`audio-np-art${audioIsPlaying ? ' is-playing' : ''}`} onClick={() => audioSetExpanded(v => !v)}>
+            <span className="audio-np-record" aria-hidden="true">
+              <span className="audio-np-record-disc">
+                <img className="audio-np-record-label" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.style.visibility = 'hidden'; }} />
+              </span>
+            </span>
+            <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.src = nowPlaying.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
+          </div>
           <div className="audio-np-info" onClick={() => audioSetExpanded(v => !v)}>
             <span
               className={`audio-np-title${nowPlaying.post_permlink || nowPlaying.external ? ' has-post' : ''}`}

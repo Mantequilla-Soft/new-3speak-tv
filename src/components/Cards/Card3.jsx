@@ -94,6 +94,9 @@ function shortsHint(video) {
 // every existing caller is unaffected.
 const isShortCard = (video, shortsGrid) => !!(shortsGrid || video?._short);
 
+// How long the Spotlight thumbnail takes to turn in (Cards.scss .img-wrap--flip-*).
+const FEATURED_FLIP_MS = 450;
+
 // Same key the grid uses for each card (and callers use for featuredKey).
 const cardKeyOf = (v) => `${v.author?.username || v.author || v.owner}/${v.permlink}`;
 
@@ -315,12 +318,16 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
   // The video a click just chose: once it is the big card, its preview starts by
   // itself (below), without waiting for a hover.
   const pendingPreviewRef = useRef(null);
+  // The thumbnail it just chose turns in like a card being flipped over, from
+  // the side the user stepped towards ({ key, dir: 'next' | 'prev' }).
+  const [featuredFlip, setFeaturedFlip] = useState(null);
   const selectFeatured = (e, i) => {
     e.preventDefault();
     e.stopPropagation();
     const n = featuredNav.items.length;
     const next = ((i % n) + n) % n;
     pendingPreviewRef.current = cardKeyOf(featuredNav.items[next]);
+    setFeaturedFlip({ key: pendingPreviewRef.current, dir: i < featuredNav.index ? 'prev' : 'next' });
     featuredNav.onSelect(next);
   };
   const featuredFirst = processedVideos[0]?._featured ? processedVideos[0] : null;
@@ -330,9 +337,16 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
     : null;
   const featuredFirstKey = featuredFirst ? cardKeyOf(featuredFirst) : null;
   useEffect(() => {
-    if (!featuredFirstKey || pendingPreviewRef.current !== featuredFirstKey) return;
+    if (!featuredFirstKey || pendingPreviewRef.current !== featuredFirstKey) return undefined;
     pendingPreviewRef.current = null;
-    startPreview(featuredFirstKey, featuredFirst.title);
+    // The preview overlay is placed from the thumbnail's box, which is narrow
+    // mid-turn, so it starts once the turn is over.
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const timer = setTimeout(() => {
+      setFeaturedFlip(null);
+      startPreview(featuredFirstKey, featuredFirst.title);
+    }, reduced ? 0 : FEATURED_FLIP_MS);
+    return () => clearTimeout(timer);
     // Only when the big card changes; startPreview and the card are read fresh then.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [featuredFirstKey]);
@@ -376,7 +390,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
             render={() => (<>
             {/* Thumbnail — fast fallback so a dead image host can't leave the
                 card blank for ~a minute (see CardThumbnail). */}
-            <div className="img-wrap">
+            <div className={`img-wrap${video._featured && featuredFlip?.key === postKey ? ` img-wrap--flip-${featuredFlip.dir}` : ''}`}>
               <CardThumbnail
                 src={video._processedThumbnail}
                 fallback={img}

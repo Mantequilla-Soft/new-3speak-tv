@@ -1,0 +1,143 @@
+{
+  "open": "3Speakでのあなたの1年",
+  "pageTitle": "{{user}}さんの3Speakでの1年",
+  "intro": {
+    "title": "@{{user}}さんの3Speakでの1年",
+    "sub": "この12か月を数字で振り返ります。"
+  },
+  "uploads": {
+    "kicker": "あなたがアップロードしたのは",
+    "videos_other": "動画{{count}}本",
+    "shorts_other": "Shorts {{count}}本",
+    "and": "と"
+  },
+  "watch": {
+    "kicker": "あなたの動画が視聴された時間",
+    "sub": "動画とShortsの合計です。",
+    "since": "視聴時間は{{date}}から集計しています。",
+    "graph": "週ごとの視聴時間。",
+    "bestWeek": "最高の週：{{date}}、{{time}}",
+    "weekOf": "{{date}}の週",
+    "panHint": "スクロールまたはドラッグで1年を移動できます。"
+  },
+  "audience": {
+    "kicker": "あなたの動画の再生回数",
+    "views_other": "{{count}}回",
+    "votes_other": "{{count}}件の投票",
+    "comments_other": "{{count}}件のコメント",
+    "fans": "トップファン",
+    "fansLoading": "トップファンを探しています…",
+    "noFans": "まだ他の人からの投票や返信はありません。"
+  },
+  "top": {
+    "kicker": "最も視聴された動画",
+    "watched": "視聴時間：{{time}}"
+  },
+  "supporters": {
+    "kicker": "トップサポーター",
+    "anonymous": "匿名"
+  },
+  "rank": {
+    "kicker": "ランキングでの最高順位",
+    "board": "{{board}}にて",
+    "hint": "各段はそのランキングのクリエイターです。カーソルを合わせると誰か分かります。"
+  },
+  "outro": {
+    "title": "3Speakでの創作をありがとう",
+    "sub": "次の12か月に乾杯。",
+    "channel": "チャンネルを開く"
+  },
+  "empty": {
+    "title": "この12か月にアップロードはありません",
+    "sub": "動画かShortsをアップロードすれば、3Speakでのあなたの1年がここから始まります。",
+    "upload": "アップロード"
+  },
+  "signIn": "サインインして3Speakでのあなたの1年を見てみましょう。",
+  "loading": "あなたの1年を集計中…",
+  "error": "あなたの1年を読み込めませんでした。少し経ってから再度お試しください。",
+  "nav": {
+    "previous": "前へ",
+    "next": "次へ",
+    "slide": "スライド {{n}} / {{total}}"
+  },
+  "communities": {
+    "kicker": "投稿したコミュニティ",
+    "count_other": "{{count}}個のコミュニティ",
+    "posts_other": "{{count}}件の投稿"
+  },
+  "followed": {
+    "kicker": "新しくフォローしたのは",
+    "count_other": "{{count}}アカウント"
+  },
+  "watched": {
+    "kicker": "あなたが一番見たクリエイター",
+    "videos_other": "{{count}}本の動画を視聴"
+  },
+  "followers": {
+    "kicker": "{{date}}以降の新しいフォロワー",
+    "count_other": "{{count}}アカウントがあなたをフォローしました",
+    "kickerYear": "今年の新しいフォロワー"
+  },
+  "panel": {
+    "openCommunity": "コミュニティを開く",
+    "untitled": "無題",
+    "closeAndLook": "閉じて見て回る"
+  },
+  "income": {
+    "kicker": "あなたの収入",
+    "sub": "投稿報酬、3Speak広告、チップから。",
+    "note": "HBD建て（1 HBDは約1米ドル）。HIVEとHPは現在のHIVE価格で換算しています。",
+    "partial": "とても活発なアカウントのため、1年のうち直近の期間のみを対象にしています。",
+    "hint": "柱にカーソルを合わせると内訳が表示されます。",
+    "sources": {
+      "author": "投稿報酬",
+      "ads": "3Speak広告",
+      "tips": "チップ"
+    },
+    "legendOurs": "3Speakで",
+    "legendOther": "Hiveのほかの場所で",
+    "segments": {
+      "ours": "3Speakでの投稿報酬",
+      "other": "Hiveのほかの場所での投稿報酬",
+      "ads_creator": "クリエイターとしての広告収入",
+      "ads_viewer": "視聴者としての広告報酬",
+      "ads_combined": "両方の広告支払い（内訳なし）"
+    },
+    "rewardedPosts_other": "報酬を得た投稿{{count}}件",
+    "legendCreator": "クリエイターとして",
+    "legendViewer": "視聴者として",
+    "logScale": "柱の高さは対数スケールなので、少額も見えるようになっています。",
+    "payments_other": "{{count}}件の支払い",
+    "legendCombined": "両方（内訳なし）"
+  },
+  "loadingSteps": {
+    "stats": "あなたの1年を調べています…",
+    "uploads": "アップロードを数えています…",
+    "watch": "視聴時間を計測しています…",
+    "audience": "再生回数を数えています…",
+    "fans": "ファンを探しています…",
+    "income": "収入を合計しています…",
+    "communities": "コミュニティを巡っています…",
+    "followers": "フォローしてくれた人を確認しています…",
+    "watched": "視聴した動画を振り返っています…",
+    "thumbnails": "サムネイルを読み込み中… {{done}} / {{total}}"
+  },
+  "tips": {
+    "label": "ヒント：",
+    "mouse": {
+      "tip1": "マウスを動かすと、スライドの外でも各シーンがついてきます。",
+      "tip2": "スクロールで動画の壁をズームイン・アウトできます。",
+      "tip3": "視聴時間のグラフはスクロールかドラッグで1年を移動できます。",
+      "tip4": "バー、段、柱、タイルにカーソルを合わせると中身が分かります。",
+      "tip5": "タイル、バー、コミュニティをクリックすると詳細を開いたままにできます。"
+    },
+    "touch": {
+      "tip1": "下の矢印でスライドを切り替えられます。",
+      "tip2": "動画の壁をドラッグして見回せます。",
+      "tip3": "視聴時間のグラフを横にスワイプすると1年を移動できます。",
+      "tip4": "タイルをタップすると動画カードが表示されます。",
+      "tip5": "コミュニティや週をタップするとその動画が表示されます。",
+      "tip6": "シーンはゆっくり自動で回ります。リングをドラッグすると自分で回せます。"
+    }
+  }
+}

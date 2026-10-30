@@ -1,0 +1,155 @@
+{
+  "open": "Mwaka wako kwenye 3Speak",
+  "pageTitle": "Mwaka wa {{user}} kwenye 3Speak",
+  "intro": {
+    "title": "Mwaka wa @{{user}} kwenye 3Speak",
+    "sub": "Miezi 12 iliyopita, kwa takwimu."
+  },
+  "uploads": {
+    "kicker": "Ulipakia",
+    "videos_one": "video {{count}}",
+    "videos_other": "video {{count}}",
+    "shorts_one": "Short {{count}}",
+    "shorts_other": "Shorts {{count}}",
+    "and": "na"
+  },
+  "watch": {
+    "kicker": "Watu walikutazama kwa",
+    "sub": "Kwenye video na Shorts zako zote.",
+    "since": "Muda wa kutazama unahesabiwa tangu {{date}}.",
+    "graph": "Muda wa kutazama kwa kila wiki.",
+    "bestWeek": "Wiki bora: {{date}}, {{time}}",
+    "weekOf": "Wiki ya {{date}}",
+    "panHint": "Sogeza au buruta ili kupitia mwaka mzima."
+  },
+  "audience": {
+    "kicker": "Video zako zilichezwa",
+    "views_one": "mara {{count}}",
+    "views_other": "mara {{count}}",
+    "votes_one": "kura {{count}}",
+    "votes_other": "kura {{count}}",
+    "comments_one": "maoni {{count}}",
+    "comments_other": "maoni {{count}}",
+    "fans": "Mashabiki wako wakuu",
+    "fansLoading": "Tunatafuta mashabiki wako wakuu…",
+    "noFans": "Bado hakuna kura wala majibu kutoka kwa wengine."
+  },
+  "top": {
+    "kicker": "Video zako zilizotazamwa zaidi",
+    "watched": "Imetazamwa kwa {{time}}"
+  },
+  "supporters": {
+    "kicker": "Wafadhili wako wakuu",
+    "anonymous": "Bila jina"
+  },
+  "rank": {
+    "kicker": "Nafasi yako bora kwenye ubao wa wanaoongoza",
+    "board": "kwenye {{board}}",
+    "hint": "Kila hatua ni mtayarishaji mmoja kwenye ubao huo. Elekeza kipanya juu yake kuona ni nani."
+  },
+  "outro": {
+    "title": "Asante kwa kutayarisha maudhui kwenye 3Speak",
+    "sub": "Kwa miezi 12 ijayo.",
+    "channel": "Fungua chaneli yako"
+  },
+  "empty": {
+    "title": "Hakuna upakiaji katika miezi 12 iliyopita",
+    "sub": "Pakia video au Short na mwaka wako kwenye 3Speak unaanzia hapa.",
+    "upload": "Pakia"
+  },
+  "signIn": "Ingia ili kuona mwaka wako kwenye 3Speak.",
+  "loading": "Tunahesabu mwaka wako…",
+  "error": "Mwaka wako haukuweza kupakiwa. Jaribu tena baada ya muda mfupi.",
+  "nav": {
+    "previous": "Iliyotangulia",
+    "next": "Inayofuata",
+    "slide": "Slaidi {{n}} kati ya {{total}}"
+  },
+  "communities": {
+    "kicker": "Ulichapisha kwenye",
+    "count_one": "jumuiya {{count}}",
+    "count_other": "jumuiya {{count}}",
+    "posts_one": "chapisho {{count}}",
+    "posts_other": "machapisho {{count}}"
+  },
+  "followed": {
+    "kicker": "Ulianza kufuata",
+    "count_one": "akaunti {{count}}",
+    "count_other": "akaunti {{count}}"
+  },
+  "watched": {
+    "kicker": "Watayarishaji uliowatazama zaidi",
+    "videos_one": "video {{count}} imetazamwa",
+    "videos_other": "video {{count}} zimetazamwa"
+  },
+  "followers": {
+    "kicker": "Wafuasi wapya tangu {{date}}",
+    "count_one": "akaunti {{count}} imekufuata",
+    "count_other": "akaunti {{count}} zimekufuata",
+    "kickerYear": "Wafuasi wapya mwaka huu"
+  },
+  "panel": {
+    "openCommunity": "Fungua jumuiya",
+    "untitled": "Bila kichwa",
+    "closeAndLook": "Funga na uangalie pande zote"
+  },
+  "income": {
+    "kicker": "Ulipata",
+    "sub": "Kutoka zawadi za machapisho, matangazo ya 3Speak na bakshishi.",
+    "note": "Kwa HBD (takriban dola moja ya Marekani kila moja), HIVE na HP zikihesabiwa kwa bei ya sasa ya HIVE kwenye chain.",
+    "partial": "Akaunti yenye shughuli nyingi sana: hii inahusu sehemu ya karibuni zaidi ya mwaka.",
+    "hint": "Elekeza kipanya juu ya nguzo kuona mgawanyo wake.",
+    "sources": {
+      "author": "Zawadi za machapisho",
+      "ads": "Matangazo ya 3Speak",
+      "tips": "Bakshishi"
+    },
+    "legendOurs": "kwenye 3Speak",
+    "legendOther": "kwingineko kwenye Hive",
+    "segments": {
+      "ours": "Zawadi za machapisho kwenye 3Speak",
+      "other": "Zawadi za machapisho kwingineko kwenye Hive",
+      "ads_creator": "Mapato ya matangazo kama mtayarishaji",
+      "ads_viewer": "Zawadi za matangazo kama mtazamaji",
+      "ads_combined": "Malipo ya matangazo kwa yote mawili (hayajagawanywa)"
+    },
+    "rewardedPosts_one": "chapisho {{count}} lililozawadiwa",
+    "rewardedPosts_other": "machapisho {{count}} yaliyozawadiwa",
+    "legendCreator": "kama mtayarishaji",
+    "legendViewer": "kama mtazamaji",
+    "logScale": "Urefu wa nguzo uko kwenye kipimo cha logi, ili kiasi kidogo kionekane pia.",
+    "payments_one": "malipo {{count}}",
+    "payments_other": "malipo {{count}}",
+    "legendCombined": "yote mawili, hayajagawanywa"
+  },
+  "loadingSteps": {
+    "stats": "Tunatafuta mwaka wako…",
+    "uploads": "Tunahesabu upakiaji wako…",
+    "watch": "Tunapima muda wa kutazama…",
+    "audience": "Tunahesabu mitazamo yako…",
+    "fans": "Tunatafuta mashabiki wako…",
+    "income": "Tunajumlisha mapato yako…",
+    "communities": "Tunatembelea jumuiya zako…",
+    "followers": "Tunaangalia nani alikufuata…",
+    "watched": "Tunapitia ulichotazama…",
+    "thumbnails": "Tunapakia picha ndogo zako… {{done}} kati ya {{total}}"
+  },
+  "tips": {
+    "label": "Dokezo:",
+    "mouse": {
+      "tip1": "Sogeza kipanya na kila onyesho litakifuata, hata nje ya slaidi.",
+      "tip2": "Sogeza gurudumu ili kukuza na kupunguza kuta zako za video.",
+      "tip3": "Sogeza au buruta grafu ya muda wa kutazama ili kupitia mwaka mzima.",
+      "tip4": "Elekeza kipanya juu ya upau, hatua, nguzo au kigae ili kuona kilicho nyuma yake.",
+      "tip5": "Bofya kigae, upau au jumuiya ili maelezo yake yabaki wazi."
+    },
+    "touch": {
+      "tip1": "Tumia mishale iliyo chini kupitia slaidi moja baada ya nyingine.",
+      "tip2": "Buruta kwenye kuta zako za video ili kuangalia pande zote.",
+      "tip3": "Telezesha grafu ya muda wa kutazama pembeni ili kupitia mwaka mzima.",
+      "tip4": "Gusa kigae ili kuona kadi yake ya video.",
+      "tip5": "Gusa jumuiya au wiki ili kuona video zake.",
+      "tip6": "Maonyesho huzunguka polepole yenyewe; buruta pete ili uyazungushe mwenyewe."
+    }
+  }
+}

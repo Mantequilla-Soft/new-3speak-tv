@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { MdOutlineLeaderboard, MdInfoOutline } from 'react-icons/md';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
+import PodiumStage from '../components/PodiumStage/PodiumStage';
 import { useAppStore } from '../lib/store';
 import { TAG_CATEGORIES, getCategoryOf } from '../utils/tagsV2';
 import {
@@ -46,18 +47,27 @@ function watchNotice(sinceIso) {
 // A thin board (one or two creators — common on a quiet topic) still gets the
 // full three-slot podium, with the unclaimed places shown as empty placeholders
 // rather than collapsing the winner into a plain list row.
+//
+// Behind the cards, PodiumStage draws 3D steps that rise out of the floor; once
+// they are up it reports how high each card stands (`steps`), and the cards
+// ride up onto them. Until then (or without WebGL) the podium stays flat.
 function Podium({ entries, metric, focusUser }) {
   const { t } = useTranslation();
+  const podiumRef = useRef(null);
+  const [steps, setSteps] = useState(null);
   if (!entries.length) return null;
   const slot = (rank) => entries[rank - 1] || { rank, placeholder: true };
   // Visual order puts the winner in the middle: 2nd, 1st, 3rd.
   const order = [slot(2), slot(1), slot(3)];
+  const stepStyle = (rank) => (steps?.[rank] != null ? { '--lb-step': `${steps[rank]}px` } : undefined);
   return (
-    <div className="lb-podium">
+    <div className={`lb-podium${steps ? ' lb-podium--3d' : ''}`} ref={podiumRef}>
+      <PodiumStage podiumRef={podiumRef} onSteps={setSteps} />
       {order.map((e) => (e.placeholder ? (
         <div
           key={`empty-${e.rank}`}
           className={`lb-podium-slot lb-rank-${e.rank} empty`}
+          style={stepStyle(e.rank)}
           aria-hidden="true"
         >
           <span className="lb-podium-medal">{e.rank}</span>
@@ -72,6 +82,7 @@ function Podium({ entries, metric, focusUser }) {
           to={`/@${e.user}`}
           id={rowId(e.user)}
           className={`lb-podium-slot lb-rank-${e.rank}${e.user === focusUser ? ' focused' : ''}`}
+          style={stepStyle(e.rank)}
         >
           <span className="lb-podium-medal">{e.rank}</span>
           <HiveAvatar username={e.user} size="medium" className="lb-podium-avatar" badgeSize={14} />
@@ -401,7 +412,8 @@ function Leaderboard() {
 
       {!isLoading && !isError && entries.length > 0 && (
         <>
-          <Podium entries={podium} metric={metric} focusUser={focusUser} />
+          {/* Keyed by board, so switching boards raises the steps again. */}
+          <Podium key={`${activeTopic}|${window}|${metricId}`} entries={podium} metric={metric} focusUser={focusUser} />
           {/* Only 1–2 creators on the board: they're all on the podium, so the
               list would just be an empty bordered box. */}
           {rest.length > 0 && (

@@ -4,6 +4,11 @@ import {
   fmtDuration, fmtCount, timeAgo, countryFlag, countryName, countryLatLng,
 } from '../../lib/creatorStats';
 import BarLoader from '../Loader/BarLoader';
+import { Link } from 'react-router-dom';
+
+// The "Your year on 3Speak" link. OFF until the recap launches (planned with a
+// popup around 2026-12-20); /recap itself still works by its address.
+const RECAP_LINK_VISIBLE = false;
 import VideoStats from './VideoStats';
 import { WORLD_LAND_PATH } from '../../lib/worldMapPath';
 import './CreatorStats.scss';
@@ -334,6 +339,9 @@ export default function CreatorStats({ user }) {
       <div className="cs-seg">
         {CONTENTS.map((c) => <button key={c.k} className={content === c.k ? 'active' : ''} onClick={() => setContent(c.k)}>{t(c.l)}</button>)}
       </div>
+      {/* The last 12 months as a short story (page/Recap.jsx). Hidden until the
+          recap launches in December (RECAP_LINK_VISIBLE). */}
+      {RECAP_LINK_VISIBLE && <Link className="cs-recap-link" to="/recap">{t('recap.open')}</Link>}
     </div>
   );
 
