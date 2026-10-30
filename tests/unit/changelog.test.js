@@ -14,8 +14,11 @@ const cmp = (a, b) => {
 }
 
 describe('changelog entries', () => {
-  it('the newest entry is the running APP_VERSION', () => {
-    expect(CHANGELOG[0].version).toBe(APP_VERSION)
+  // A release may raise APP_VERSION without an entry (a change with nothing to tell
+  // users: "version bump, no changelog"). What must never happen is an entry newer
+  // than the running build: it would announce something that is not deployed.
+  it('no entry is newer than the running APP_VERSION', () => {
+    expect(cmp(CHANGELOG[0].version, APP_VERSION)).toBeLessThanOrEqual(0)
   })
 
   it('every entry has an x.y.z version above the 1.0.0 production baseline', () => {
