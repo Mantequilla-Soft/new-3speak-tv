@@ -7,6 +7,7 @@
 // `hiveClient` proxy / `getHiveUrl()` so everything uses that one node, with
 // the remaining nodes kept as fast dhive failover if it dies mid-session.
 
+import axios from 'axios';
 import { Client } from '@hiveio/dhive';
 import { HIVE_API_NODES } from './config';
 
@@ -137,6 +138,7 @@ export function ensureHealthyNode() {
   // failover list to hivemind-capable nodes, and re-pins if the node we
   // adopted (including one restored from sessionStorage) turns out unusable.
   healthy.then((ok) => {
+    _healthy = ok;
     if (!ok.length) return;
     if (!ok.includes(chosen)) {
       chosen = ok[0];
@@ -167,3 +169,59 @@ export function ensureHealthyNode() {
 // Kick off selection as soon as this module is imported (idempotent); the
 // app bootstrap also calls it explicitly.
 ensureHealthyNode();
+
+// ---------------------------------------------------------------------------
+// Moving off a node that stops serving us mid-session.
+//
+// The probe above is two cheap calls, so a node that rate-limits under real
+// traffic (api.openhive.network answering 429) passes it and stays pinned for
+// the whole session, sessionStorage included, so a reload did not help either.
+// dhive rotates on its own, but most Hive reads are raw `axios.post(getHiveUrl())`
+// calls, and those just failed: profile badges vanished, among others.
+
+// Probe survivors, once the background pass has settled (null until then).
+let _healthy = null;
+// Nodes that failed us this load. Not persisted: a rate limit is temporary.
+const _demoted = new Set();
+
+const norm = (url) => String(url || '').trim().replace(/\/+$/, '');
+const CANDIDATE_SET = new Set(CANDIDATES.map(norm));
+
+/**
+ * Stop using `url` for this session and pin the next usable node. Returns the
+ * node to use now (unchanged when `url` is no longer the pinned one, i.e. an
+ * earlier failure already moved us on).
+ */
+export function demoteNode(url) {
+  const bad = norm(url);
+  _demoted.add(bad);
+  if (norm(chosen) !== bad) return chosen;
+  const pool = _healthy && _healthy.length ? _healthy : CANDIDATES;
+  // Every node failed at least once: any node but the one that just failed.
+  const next = pool.find((n) => !_demoted.has(norm(n))) || pool.find((n) => norm(n) !== bad);
+  if (!next) return chosen;
+  chosen = next;
+  try { sessionStorage.setItem(SESSION_KEY, chosen); } catch { /* ignore */ }
+  adoptHealthy(chosen, _healthy);
+  console.warn(`[hive] ${bad} failed, switched to ${chosen}`);
+  return chosen;
+}
+
+// Rate limited or the node's gateway is down. Anything else (400, 404) is an
+// answer about the request, not about the node.
+const NODE_FAILURE_STATUS = new Set([429, 500, 502, 503, 504]);
+
+// Retry a failed raw JSON-RPC call on the next node. No status counts as a
+// node failure too: a 429 without CORS headers reaches us as a bare network
+// error. Retrying a broadcast is safe, the chain rejects a duplicate tx.
+axios.interceptors.response.use(undefined, (error) => {
+  const cfg = error?.config;
+  if (!cfg || !CANDIDATE_SET.has(norm(cfg.url)) || axios.isCancel(error)) throw error;
+  const status = error.response?.status;
+  if (status && !NODE_FAILURE_STATUS.has(status)) throw error;
+  const tries = (cfg.hiveNodeTries || 0) + 1;
+  if (tries >= CANDIDATE_SET.size) throw error;
+  const next = demoteNode(cfg.url);
+  if (norm(next) === norm(cfg.url)) throw error;
+  return axios.request({ ...cfg, url: next, hiveNodeTries: tries });
+});

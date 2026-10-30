@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.80.60',
+    category: 'profile',
+    date: '2026-10-30',
+    summary: 'Profiles no longer lose their Hive badges when a Hive server starts rate-limiting: the site now switches to another server and retries automatically.',
+  },
+  {
     version: '1.80.58',
     category: 'tips',
     date: '2026-10-30',
