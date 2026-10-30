@@ -7,6 +7,21 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.52',
+    date: '2026-10-30',
+    summary: "Your phone's media controls and lock screen now show the track, artist and cover of what's playing.",
+  },
+  {
+    version: '1.80.51',
+    date: '2026-10-30',
+    summary: 'Discover trending podcasts by language and category on the External podcasts page.',
+  },
+  {
+    version: '1.80.50',
+    date: '2026-10-30',
+    summary: 'Find podcasts by the people in them: switch the podcast search to People to see the shows a host or guest appears in.',
+  },
+  {
     version: '1.80.48',
     date: '2026-10-30',
     summary: 'Import your own YouTube videos to 3Speak: use Import videos on your profile or in the upload window.',
