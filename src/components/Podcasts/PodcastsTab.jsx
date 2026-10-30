@@ -3,20 +3,23 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   MdPlayArrow, MdPause, MdAdd, MdRssFeed, MdNotificationsActive, MdNotificationsOff, MdArrowBack, MdOpenInNew,
-  MdUploadFile, MdDownload, MdSearch, MdClose, MdCheck, MdPodcasts, MdTrendingUp, MdHistory,
+  MdUploadFile, MdDownload, MdSearch, MdClose, MdCheck, MdPodcasts, MdTrendingUp, MdHistory, MdExpandMore, MdWhatshot,
 } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
 import { toastIn } from '../../utils/toast';
 import {
   usePodcastConfig, usePodcastSubscriptions, usePodcastLatest, usePodcastFeed, usePodcastDiscover, useInvalidatePodcasts,
-  followFeeds, unfollowFeed, setFeedNotify, followErrorText, fetchOlderEpisodes, searchPodcasts,
+  followFeeds, unfollowFeed, setFeedNotify, followErrorText, fetchOlderEpisodes, searchPodcasts, searchPeople,
+  usePodcastTrending, TRENDING_CATEGORIES,
   episodeToTrack, parseOpml, downloadOpml,
 } from '../../lib/podcasts';
 import PodcastTipModal from './PodcastTipModal';
 import PodcastArt from './PodcastArt';
 import EpisodeView from './EpisodeView';
 import { fmtDuration, useDateFormat } from '../../lib/podcastFormat';
+import { getLanguage } from '../../i18n';
+import { LANGUAGES as UI_LANGUAGES } from '../../i18n/languages';
 import { canTipEpisode } from '../../lib/podcastTips';
 import { usePodcastProgress, progressOf } from '../../lib/podcastProgress';
 import './PodcastsTab.scss';
@@ -205,18 +208,12 @@ function ShowRail({ icon, title, feeds, onOpen, ranked = false, noteFor, artFor 
   );
 }
 
-// ─── The header: search, RSS, OPML ────────────────────────────────────────────
+// ─── Following from a list (search, trending) ─────────────────────────────────
 
-function PodcastHero({ user, searchEnabled, subscriptions, onFollowed }) {
+/** Follow one feed URL or a whole OPML list, with the toasts that go with it. */
+function useFollowFeeds(user, onFollowed) {
   const { t } = useTranslation();
-  const [query, setQuery] = useState('');
-  const [feedUrl, setFeedUrl] = useState('');
   const [busy, setBusy] = useState(false);
-  const [searching, setSearching] = useState(false);
-  const [results, setResults] = useState(null);
-  const fileRef = useRef(null);
-  const followed = useMemo(() => new Set((subscriptions || []).map((s) => s.url)), [subscriptions]);
-
   const follow = async (urls, titles) => {
     setBusy(true);
     try {
@@ -242,6 +239,134 @@ function PodcastHero({ user, searchEnabled, subscriptions, onFollowed }) {
       setBusy(false);
     }
   };
+  return { busy, follow };
+}
+
+/**
+ * Shows from Podcast Index (search, a person search, trending): not on 3Speak
+ * yet, so the action is Follow. A person search adds how many of their episodes
+ * the show has, and the newest one.
+ */
+function PiResults({ list, followed, busy, onFollow }) {
+  const { t } = useTranslation();
+  return (
+    <div className="pod-results">
+      {list.map((r) => (
+        <div key={r.url} className="pod-result">
+          <PodcastArt art={r.art} px={256} className="pod-result-art" />
+          <div className="pod-result-body">
+            <div className="pod-result-title" title={r.title}>{r.title}</div>
+            <div className="pod-result-meta">{r.author}</div>
+            {r.matches > 0 ? (
+              <>
+                <div className="pod-result-meta pod-result-meta--accent">{t('audio.podcasts.search.appearsIn', { count: r.matches })}</div>
+                {r.sample && <div className="pod-result-meta" title={r.sample}>{t('audio.podcasts.search.latestMatch', { title: r.sample })}</div>}
+              </>
+            ) : r.episodes > 0 && <div className="pod-result-meta">{t('audio.podcasts.episodes', { count: r.episodes })}</div>}
+          </div>
+          {followed.has(r.url)
+            ? <span className="pod-following"><MdCheck size={15} /> {t('audio.podcasts.following')}</span>
+            : <button type="button" className="pod-btn pod-btn--primary pod-result-follow" disabled={busy} onClick={() => onFollow([r.url])}><MdAdd size={16} /> {t('audio.podcasts.follow')}</button>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Trending (Podcast Index) ─────────────────────────────────────────────────
+
+const TRENDING_KEY = 'pod-trending';
+const TRENDING_SHOWN = 9;
+
+/** The language to start with: the one saved last, else the page's own when trending knows it. */
+function initialTrending() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(TRENDING_KEY) || 'null');
+    if (saved && typeof saved.lang === 'string' && typeof saved.cat === 'string') return saved;
+  } catch { /* storage off */ }
+  const ui = String(getLanguage() || '').split('-')[0];
+  return { lang: UI_LANGUAGES.some((l) => l.code === ui) ? ui : '', cat: '' };
+}
+
+function TrendingSection({ user, subscriptions, onFollowed }) {
+  const { t } = useTranslation();
+  const [pick, setPick] = useState(initialTrending);
+  const [all, setAll] = useState(false);
+  const { data: list = [], isLoading, isError } = usePodcastTrending(pick.lang, pick.cat);
+  const { busy, follow } = useFollowFeeds(user, onFollowed);
+  const followed = useMemo(() => new Set((subscriptions || []).map((s) => s.url)), [subscriptions]);
+  // Language names in the page's own language; their own names on old browsers.
+  let names = null;
+  try { names = new Intl.DisplayNames([getLanguage()], { type: 'language' }); } catch { /* old browser */ }
+  const langName = (code) => names?.of(code) || UI_LANGUAGES.find((l) => l.code === code)?.native || code;
+
+  const choose = (next) => {
+    const value = { ...pick, ...next };
+    setPick(value);
+    setAll(false);
+    try { localStorage.setItem(TRENDING_KEY, JSON.stringify(value)); } catch { /* storage off */ }
+  };
+
+  const shown = all ? list : list.slice(0, TRENDING_SHOWN);
+  return (
+    <section className="pod-section">
+      <div className="pod-section-head pod-section-head--filters">
+        <h2 className="pod-section-title"><MdWhatshot size={18} />{t('audio.podcasts.trending.title')}</h2>
+        <div className="pod-trending-filters">
+          <select
+            className="pod-select"
+            value={pick.lang}
+            onChange={(e) => choose({ lang: e.target.value })}
+            aria-label={t('audio.podcasts.trending.language')}
+          >
+            <option value="">{t('audio.podcasts.trending.allLanguages')}</option>
+            {UI_LANGUAGES.map((l) => <option key={l.code} value={l.code}>{langName(l.code)}</option>)}
+          </select>
+          <select
+            className="pod-select"
+            value={pick.cat}
+            onChange={(e) => choose({ cat: e.target.value })}
+            aria-label={t('audio.podcasts.trending.category')}
+          >
+            <option value="">{t('audio.podcasts.trending.allCategories')}</option>
+            {TRENDING_CATEGORIES.map((c) => <option key={c} value={c}>{t(`audio.podcasts.categories.${c.replace(/\s+/g, '')}`)}</option>)}
+          </select>
+        </div>
+      </div>
+      {isLoading && <p className="pod-empty">{t('common.status.loading')}</p>}
+      {isError && <p className="pod-empty">{t('audio.podcasts.trending.failed')}</p>}
+      {!isLoading && !isError && list.length === 0 && <p className="pod-empty">{t('audio.podcasts.trending.none')}</p>}
+      <PiResults list={shown} followed={followed} busy={busy} onFollow={follow} />
+      {!all && list.length > TRENDING_SHOWN && (
+        <button type="button" className="pod-btn pod-more" onClick={() => setAll(true)}>{t('audio.podcasts.more')}</button>
+      )}
+    </section>
+  );
+}
+
+// ─── The header: search, RSS, OPML ────────────────────────────────────────────
+
+const SEARCH_MODES = [
+  { key: 'shows', labelKey: 'audio.podcasts.search.modeShows', placeholderKey: 'audio.podcasts.search.placeholder' },
+  { key: 'people', labelKey: 'audio.podcasts.search.modePeople', placeholderKey: 'audio.podcasts.search.placeholderPeople' },
+];
+
+function PodcastHero({ user, searchEnabled, subscriptions, subsLoaded, onFollowed }) {
+  const { t } = useTranslation();
+  // Search, RSS and OPML are open for someone who follows nothing yet, and
+  // folded away once they follow a show, so their shows come first. Closed
+  // while their list loads, so a follower never sees it open and snap shut.
+  // A tap on the header wins from then on.
+  const [openPick, setOpenPick] = useState(null);
+  const open = openPick ?? (subsLoaded && !(subscriptions?.length > 0));
+  const [query, setQuery] = useState('');
+  const [mode, setMode] = useState('shows');
+  const [feedUrl, setFeedUrl] = useState('');
+  const { busy, follow } = useFollowFeeds(user, onFollowed);
+  const [searching, setSearching] = useState(false);
+  const [results, setResults] = useState(null);
+  const fileRef = useRef(null);
+  const followed = useMemo(() => new Set((subscriptions || []).map((s) => s.url)), [subscriptions]);
 
   const search = async (e) => {
     e.preventDefault();
@@ -249,7 +374,8 @@ function PodcastHero({ user, searchEnabled, subscriptions, onFollowed }) {
     if (q.length < 2) return;
     setSearching(true);
     try {
-      setResults({ q, list: (await searchPodcasts(q)).results || [] });
+      const found = mode === 'people' ? await searchPeople(q) : await searchPodcasts(q);
+      setResults({ q, list: found.results || [] });
     } catch {
       toastIn('Podcasts').error(t('audio.podcasts.search.failed'));
     } finally {
@@ -281,67 +407,99 @@ function PodcastHero({ user, searchEnabled, subscriptions, onFollowed }) {
   return (
     <>
       <header className="pod-hero">
-        <div className="pod-hero-intro">
-          <span className="pod-hero-icon"><MdPodcasts size={28} /></span>
-          <div>
-            <h2 className="pod-hero-title">{t('audio.podcasts.introTitle')}</h2>
-            <p className="pod-hero-sub">{user ? t('audio.podcasts.heroSub') : t('audio.podcasts.introSignedOut')}</p>
-          </div>
-        </div>
-
-        {user && (
-          <div className={`pod-hero-fields${searchEnabled ? '' : ' pod-hero-fields--single'}`}>
-            {searchEnabled && (
-              <form className="pod-field" onSubmit={search}>
-                <label className="pod-field-label" htmlFor="pod-search">{t('audio.podcasts.search.label')}</label>
-                <div className="pod-field-row">
-                  <MdSearch className="pod-field-icon" size={18} />
-                  <input
-                    id="pod-search"
-                    type="search"
-                    value={query}
-                    onChange={(e) => { setQuery(e.target.value); if (!e.target.value) setResults(null); }}
-                    placeholder={t('audio.podcasts.search.placeholder')}
-                    autoComplete="off"
-                  />
-                  <button type="submit" className="pod-btn pod-btn--primary" disabled={searching || query.trim().length < 2}>
-                    {searching ? t('common.status.loading') : t('audio.podcasts.search.button')}
-                  </button>
-                </div>
-              </form>
-            )}
-            <form className="pod-field" onSubmit={addFeed}>
-              <label className="pod-field-label" htmlFor="pod-rss">{t('audio.podcasts.rss.label')}</label>
-              <div className="pod-field-row">
-                <MdRssFeed className="pod-field-icon" size={18} />
-                <input
-                  id="pod-rss"
-                  type="url"
-                  inputMode="url"
-                  value={feedUrl}
-                  onChange={(e) => setFeedUrl(e.target.value)}
-                  placeholder={t('audio.podcasts.rss.placeholder')}
-                  autoComplete="off"
-                />
-                <button type="submit" className="pod-btn pod-btn--primary" disabled={busy || !feedUrl.trim()}>
-                  <MdAdd size={16} /> {t('audio.podcasts.follow')}
-                </button>
-              </div>
-            </form>
+        {user ? (
+          <button
+            type="button"
+            className="pod-hero-intro pod-hero-toggle"
+            aria-expanded={open}
+            aria-controls="pod-hero-body"
+            onClick={() => setOpenPick(!open)}
+          >
+            <span className="pod-hero-icon"><MdPodcasts size={28} /></span>
+            <span className="pod-hero-text">
+              <span className="pod-hero-title">{t('audio.podcasts.introTitle')}</span>
+              <span className="pod-hero-sub">{t('audio.podcasts.heroSub')}</span>
+            </span>
+            <MdExpandMore className={`pod-hero-chevron${open ? ' pod-hero-chevron--open' : ''}`} size={26} aria-hidden="true" />
+          </button>
+        ) : (
+          <div className="pod-hero-intro">
+            <span className="pod-hero-icon"><MdPodcasts size={28} /></span>
+            <div>
+              <h2 className="pod-hero-title">{t('audio.podcasts.introTitle')}</h2>
+              <p className="pod-hero-sub">{t('audio.podcasts.introSignedOut')}</p>
+            </div>
           </div>
         )}
 
-        {user && (
-          <div className="pod-hero-tools">
-            <button type="button" className="pod-link-btn" onClick={() => fileRef.current?.click()} disabled={busy}>
-              <MdUploadFile size={15} /> {t('audio.podcasts.opml.import')}
-            </button>
-            {subscriptions?.length > 0 && (
-              <button type="button" className="pod-link-btn" onClick={() => downloadOpml(subscriptions, user)}>
-                <MdDownload size={15} /> {t('audio.podcasts.opml.export')}
+        {user && open && (
+          <div id="pod-hero-body" className="pod-hero-body">
+            <div className={`pod-hero-fields${searchEnabled ? '' : ' pod-hero-fields--single'}`}>
+              {searchEnabled && (
+                <form className="pod-field" onSubmit={search}>
+                  <div className="pod-field-head">
+                  <label className="pod-field-label" htmlFor="pod-search">{t('audio.podcasts.search.label')}</label>
+                  <div className="pod-search-modes" role="group" aria-label={t('audio.podcasts.search.label')}>
+                    {SEARCH_MODES.map((m) => (
+                      <button
+                        key={m.key}
+                        type="button"
+                        className={`pod-search-mode${mode === m.key ? ' active' : ''}`}
+                        aria-pressed={mode === m.key}
+                        onClick={() => { setMode(m.key); setResults(null); }}
+                      >
+                        {t(m.labelKey)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                  <div className="pod-field-row">
+                    <MdSearch className="pod-field-icon" size={18} />
+                    <input
+                      id="pod-search"
+                      type="search"
+                      value={query}
+                      onChange={(e) => { setQuery(e.target.value); if (!e.target.value) setResults(null); }}
+                      placeholder={t(SEARCH_MODES.find((m) => m.key === mode).placeholderKey)}
+                      autoComplete="off"
+                    />
+                    <button type="submit" className="pod-btn pod-btn--primary" disabled={searching || query.trim().length < 2}>
+                      {searching ? t('common.status.loading') : t('audio.podcasts.search.button')}
+                    </button>
+                  </div>
+                </form>
+              )}
+              <form className="pod-field" onSubmit={addFeed}>
+                <label className="pod-field-label" htmlFor="pod-rss">{t('audio.podcasts.rss.label')}</label>
+                <div className="pod-field-row">
+                  <MdRssFeed className="pod-field-icon" size={18} />
+                  <input
+                    id="pod-rss"
+                    type="url"
+                    inputMode="url"
+                    value={feedUrl}
+                    onChange={(e) => setFeedUrl(e.target.value)}
+                    placeholder={t('audio.podcasts.rss.placeholder')}
+                    autoComplete="off"
+                  />
+                  <button type="submit" className="pod-btn pod-btn--primary" disabled={busy || !feedUrl.trim()}>
+                    <MdAdd size={16} /> {t('audio.podcasts.follow')}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div className="pod-hero-tools">
+              <button type="button" className="pod-link-btn" onClick={() => fileRef.current?.click()} disabled={busy}>
+                <MdUploadFile size={15} /> {t('audio.podcasts.opml.import')}
               </button>
-            )}
-            <input ref={fileRef} type="file" accept=".opml,.xml,text/xml,text/x-opml,application/xml" hidden onChange={(e) => importOpml(e.target.files?.[0])} />
+              {subscriptions?.length > 0 && (
+                <button type="button" className="pod-link-btn" onClick={() => downloadOpml(subscriptions, user)}>
+                  <MdDownload size={15} /> {t('audio.podcasts.opml.export')}
+                </button>
+              )}
+              <input ref={fileRef} type="file" accept=".opml,.xml,text/xml,text/x-opml,application/xml" hidden onChange={(e) => importOpml(e.target.files?.[0])} />
+            </div>
           </div>
         )}
       </header>
@@ -353,21 +511,7 @@ function PodcastHero({ user, searchEnabled, subscriptions, onFollowed }) {
             <button type="button" className="pod-icon-btn" onClick={() => setResults(null)} aria-label={t('common.actions.close')}><MdClose size={18} /></button>
           </div>
           {results.list.length === 0 && <p className="pod-empty">{t('audio.podcasts.search.none')}</p>}
-          <div className="pod-results">
-            {results.list.map((r) => (
-              <div key={r.url} className="pod-result">
-                <PodcastArt art={r.art} px={256} className="pod-result-art" />
-                <div className="pod-result-body">
-                  <div className="pod-result-title" title={r.title}>{r.title}</div>
-                  <div className="pod-result-meta">{r.author}</div>
-                  {r.episodes > 0 && <div className="pod-result-meta">{t('audio.podcasts.episodes', { count: r.episodes })}</div>}
-                </div>
-                {followed.has(r.url)
-                  ? <span className="pod-following"><MdCheck size={15} /> {t('audio.podcasts.following')}</span>
-                  : <button type="button" className="pod-btn pod-btn--primary pod-result-follow" disabled={busy} onClick={() => follow([r.url])}><MdAdd size={16} /> {t('audio.podcasts.follow')}</button>}
-              </div>
-            ))}
-          </div>
+          <PiResults list={results.list} followed={followed} busy={busy} onFollow={follow} />
         </section>
       )}
     </>
@@ -530,7 +674,7 @@ export default function PodcastsTab() {
   const user = useAppStore((s) => s.user);
   const me = authenticated ? user : null;
   const { data: config } = usePodcastConfig();
-  const { data: subscriptions = [] } = usePodcastSubscriptions(me);
+  const { data: subscriptions = [], isSuccess: subsLoaded } = usePodcastSubscriptions(me);
   const { data: discover } = usePodcastDiscover();
   const latest = usePodcastLatest(me);
   const invalidate = useInvalidatePodcasts();
@@ -593,7 +737,7 @@ export default function PodcastsTab() {
 
   return (
     <div className="pod-tab">
-      <PodcastHero user={me} searchEnabled={!!config?.search} subscriptions={subscriptions} onFollowed={(id) => { invalidate(); if (id) openShow(id); }} />
+      <PodcastHero user={me} searchEnabled={!!config?.search} subscriptions={subscriptions} subsLoaded={subsLoaded} onFollowed={(id) => { invalidate(); if (id) openShow(id); }} />
 
       <ShowRail
         icon={<MdPodcasts size={18} />}
@@ -622,6 +766,10 @@ export default function PodcastsTab() {
             </button>
           )}
         </section>
+      )}
+
+      {me && config?.search && (
+        <TrendingSection user={me} subscriptions={subscriptions} onFollowed={(id) => { invalidate(); if (id) openShow(id); }} />
       )}
 
       <ShowRail icon={<MdTrendingUp size={18} />} title={t('audio.podcasts.topTitle')} feeds={discover?.top} onOpen={openShow} ranked artFor={artFor} />

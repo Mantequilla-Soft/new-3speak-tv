@@ -333,7 +333,12 @@
       "none": "팟캐스트를 찾지 못했어요. 다른 이름으로 검색하거나 RSS 피드 URL을 붙여넣으세요.",
       "failed": "지금은 검색할 수 없어요. 다시 시도해 주세요.",
       "label": "팟캐스트 찾기",
-      "placeholder": "프로그램 이름, 진행자 또는 주제"
+      "placeholder": "프로그램 이름, 진행자 또는 주제",
+      "modeShows": "프로그램",
+      "modePeople": "인물",
+      "placeholderPeople": "진행자 또는 게스트 이름",
+      "appearsIn_other": "에피소드 {{count}}개에 출연",
+      "latestMatch": "최신: {{title}}"
     },
     "opml": {
       "import": "OPML 가져오기",
@@ -400,6 +405,36 @@
     "noNotes": "이 에피소드에는 소개가 없어요.",
     "openEpisode": "에피소드 열기",
     "addToQueue": "대기열에 추가",
-    "inQueue": "대기열에 있음"
+    "inQueue": "대기열에 있음",
+    "trending": {
+      "title": "인기 급상승 팟캐스트",
+      "language": "언어",
+      "allLanguages": "모든 언어",
+      "category": "카테고리",
+      "allCategories": "모든 카테고리",
+      "none": "지금은 여기서 인기 급상승 중인 팟캐스트가 없어요. 다른 언어나 카테고리를 선택해 보세요.",
+      "failed": "지금은 인기 급상승 팟캐스트를 불러올 수 없어요. 다시 시도해 주세요."
+    },
+    "categories": {
+      "Arts": "예술",
+      "Business": "비즈니스",
+      "Comedy": "코미디",
+      "Education": "교육",
+      "Fiction": "픽션",
+      "Government": "정부",
+      "Health": "건강 및 피트니스",
+      "History": "역사",
+      "Kids": "어린이 및 가족",
+      "Leisure": "레저",
+      "Music": "음악",
+      "News": "뉴스",
+      "Religion": "종교 및 영성",
+      "Science": "과학",
+      "Society": "사회 및 문화",
+      "Sports": "스포츠",
+      "Technology": "기술",
+      "TrueCrime": "실화 범죄",
+      "TV": "TV 및 영화"
+    }
   }
 }

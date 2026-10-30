@@ -333,7 +333,12 @@
       "none": "未找到播客。试试其他名称，或粘贴 RSS 订阅源链接。",
       "failed": "搜索暂时不可用，请重试。",
       "label": "查找播客",
-      "placeholder": "节目名称、主持人或话题"
+      "placeholder": "节目名称、主持人或话题",
+      "modeShows": "节目",
+      "modePeople": "人物",
+      "placeholderPeople": "主持人或嘉宾姓名",
+      "appearsIn_other": "出现在 {{count}} 集中",
+      "latestMatch": "最新：{{title}}"
     },
     "opml": {
       "import": "导入 OPML",
@@ -400,6 +405,36 @@
     "noNotes": "这一集没有节目说明。",
     "openEpisode": "打开单集",
     "addToQueue": "加入队列",
-    "inQueue": "已在队列中"
+    "inQueue": "已在队列中",
+    "trending": {
+      "title": "热门播客",
+      "language": "语言",
+      "allLanguages": "所有语言",
+      "category": "类别",
+      "allCategories": "所有类别",
+      "none": "这里暂时没有热门内容。请换个语言或类别试试。",
+      "failed": "暂时无法加载热门播客，请重试。"
+    },
+    "categories": {
+      "Arts": "艺术",
+      "Business": "商业",
+      "Comedy": "喜剧",
+      "Education": "教育",
+      "Fiction": "小说",
+      "Government": "政府",
+      "Health": "健康与健身",
+      "History": "历史",
+      "Kids": "儿童与家庭",
+      "Leisure": "休闲",
+      "Music": "音乐",
+      "News": "新闻",
+      "Religion": "宗教与灵性",
+      "Science": "科学",
+      "Society": "社会与文化",
+      "Sports": "体育",
+      "Technology": "科技",
+      "TrueCrime": "真实罪案",
+      "TV": "电视与电影"
+    }
   }
 }

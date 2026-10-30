@@ -352,7 +352,13 @@
       "none": "No podcasts found. Try another name, or paste the RSS feed URL.",
       "failed": "Search is not available right now. Please try again.",
       "label": "Find a podcast",
-      "placeholder": "Show name, host or topic"
+      "placeholder": "Show name, host or topic",
+      "modeShows": "Shows",
+      "modePeople": "People",
+      "placeholderPeople": "Host or guest name",
+      "appearsIn_one": "In {{count}} episode",
+      "appearsIn_other": "In {{count}} episodes",
+      "latestMatch": "Latest: {{title}}"
     },
     "opml": {
       "import": "Import OPML",
@@ -422,6 +428,36 @@
     "noNotes": "This episode has no show notes.",
     "openEpisode": "Open episode",
     "addToQueue": "Add to queue",
-    "inQueue": "In queue"
+    "inQueue": "In queue",
+    "trending": {
+      "title": "Trending podcasts",
+      "language": "Language",
+      "allLanguages": "All languages",
+      "category": "Category",
+      "allCategories": "All categories",
+      "none": "Nothing is trending here right now. Try another language or category.",
+      "failed": "Trending podcasts are not available right now. Please try again."
+    },
+    "categories": {
+      "Arts": "Arts",
+      "Business": "Business",
+      "Comedy": "Comedy",
+      "Education": "Education",
+      "Fiction": "Fiction",
+      "Government": "Government",
+      "Health": "Health & Fitness",
+      "History": "History",
+      "Kids": "Kids & Family",
+      "Leisure": "Leisure",
+      "Music": "Music",
+      "News": "News",
+      "Religion": "Religion & Spirituality",
+      "Science": "Science",
+      "Society": "Society & Culture",
+      "Sports": "Sports",
+      "Technology": "Technology",
+      "TrueCrime": "True Crime",
+      "TV": "TV & Film"
+    }
   }
 }

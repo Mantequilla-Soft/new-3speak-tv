@@ -333,7 +333,12 @@
       "none": "ポッドキャストが見つかりません。別の名前で検索するか、RSS フィード URL を貼り付けてください。",
       "failed": "現在検索を利用できません。もう一度お試しください。",
       "label": "ポッドキャストを探す",
-      "placeholder": "番組名、ホスト、トピック"
+      "placeholder": "番組名、ホスト、トピック",
+      "modeShows": "番組",
+      "modePeople": "人物",
+      "placeholderPeople": "ホストまたはゲストの名前",
+      "appearsIn_other": "{{count}} 件のエピソードに出演",
+      "latestMatch": "最新: {{title}}"
     },
     "opml": {
       "import": "OPML をインポート",
@@ -400,6 +405,36 @@
     "noNotes": "このエピソードには説明がありません。",
     "openEpisode": "エピソードを開く",
     "addToQueue": "キューに追加",
-    "inQueue": "キューに追加済み"
+    "inQueue": "キューに追加済み",
+    "trending": {
+      "title": "トレンドのポッドキャスト",
+      "language": "言語",
+      "allLanguages": "すべての言語",
+      "category": "カテゴリ",
+      "allCategories": "すべてのカテゴリ",
+      "none": "現在ここでトレンドになっている番組はありません。別の言語やカテゴリを試してください。",
+      "failed": "トレンドのポッドキャストを現在表示できません。もう一度お試しください。"
+    },
+    "categories": {
+      "Arts": "アート",
+      "Business": "ビジネス",
+      "Comedy": "コメディ",
+      "Education": "教育",
+      "Fiction": "フィクション",
+      "Government": "行政",
+      "Health": "健康／フィットネス",
+      "History": "歴史",
+      "Kids": "キッズ／ファミリー",
+      "Leisure": "レジャー",
+      "Music": "ミュージック",
+      "News": "ニュース",
+      "Religion": "宗教／スピリチュアル",
+      "Science": "科学",
+      "Society": "社会／文化",
+      "Sports": "スポーツ",
+      "Technology": "テクノロジー",
+      "TrueCrime": "実録犯罪",
+      "TV": "テレビ／映画"
+    }
   }
 }

@@ -333,7 +333,12 @@
       "none": "Podcast tidak ditemukan. Coba nama lain, atau tempel URL feed RSS.",
       "failed": "Pencarian sedang tidak tersedia. Silakan coba lagi.",
       "label": "Cari podcast",
-      "placeholder": "Nama acara, pembawa, atau topik"
+      "placeholder": "Nama acara, pembawa, atau topik",
+      "modeShows": "Acara",
+      "modePeople": "Orang",
+      "placeholderPeople": "Nama pembawa acara atau tamu",
+      "appearsIn_other": "Di {{count}} episode",
+      "latestMatch": "Terbaru: {{title}}"
     },
     "opml": {
       "import": "Impor OPML",
@@ -400,6 +405,36 @@
     "noNotes": "Episode ini tidak punya catatan.",
     "openEpisode": "Buka episode",
     "addToQueue": "Tambah ke antrean",
-    "inQueue": "Dalam antrean"
+    "inQueue": "Dalam antrean",
+    "trending": {
+      "title": "Podcast yang sedang tren",
+      "language": "Bahasa",
+      "allLanguages": "Semua bahasa",
+      "category": "Kategori",
+      "allCategories": "Semua kategori",
+      "none": "Belum ada yang sedang tren di sini. Coba bahasa atau kategori lain.",
+      "failed": "Podcast yang sedang tren tidak tersedia saat ini. Silakan coba lagi."
+    },
+    "categories": {
+      "Arts": "Seni",
+      "Business": "Bisnis",
+      "Comedy": "Komedi",
+      "Education": "Pendidikan",
+      "Fiction": "Fiksi",
+      "Government": "Pemerintahan",
+      "Health": "Kesehatan & Kebugaran",
+      "History": "Sejarah",
+      "Kids": "Anak & Keluarga",
+      "Leisure": "Waktu Luang",
+      "Music": "Musik",
+      "News": "Berita",
+      "Religion": "Agama & Spiritualitas",
+      "Science": "Sains",
+      "Society": "Masyarakat & Budaya",
+      "Sports": "Olahraga",
+      "Technology": "Teknologi",
+      "TrueCrime": "Kisah Kriminal Nyata",
+      "TV": "TV & Film"
+    }
   }
 }

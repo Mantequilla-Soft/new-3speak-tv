@@ -352,7 +352,13 @@
       "none": "Geen podcasts gevonden. Probeer een andere naam of plak de RSS-feed-URL.",
       "failed": "Zoeken is nu niet beschikbaar. Probeer het opnieuw.",
       "label": "Zoek een podcast",
-      "placeholder": "Naam, host of onderwerp"
+      "placeholder": "Naam, host of onderwerp",
+      "modeShows": "Programma’s",
+      "modePeople": "Personen",
+      "placeholderPeople": "Naam van host of gast",
+      "appearsIn_one": "In {{count}} aflevering",
+      "appearsIn_other": "In {{count}} afleveringen",
+      "latestMatch": "Nieuwste: {{title}}"
     },
     "opml": {
       "import": "OPML importeren",
@@ -422,6 +428,36 @@
     "noNotes": "Deze aflevering heeft geen shownotes.",
     "openEpisode": "Aflevering openen",
     "addToQueue": "Aan wachtrij toevoegen",
-    "inQueue": "In wachtrij"
+    "inQueue": "In wachtrij",
+    "trending": {
+      "title": "Trending podcasts",
+      "language": "Taal",
+      "allLanguages": "Alle talen",
+      "category": "Categorie",
+      "allCategories": "Alle categorieën",
+      "none": "Er is hier nu niets trending. Probeer een andere taal of categorie.",
+      "failed": "Trending podcasts zijn nu niet beschikbaar. Probeer het opnieuw."
+    },
+    "categories": {
+      "Arts": "Kunst",
+      "Business": "Zakelijk",
+      "Comedy": "Comedy",
+      "Education": "Onderwijs",
+      "Fiction": "Fictie",
+      "Government": "Overheid",
+      "Health": "Gezondheid en fitness",
+      "History": "Geschiedenis",
+      "Kids": "Kinderen en gezin",
+      "Leisure": "Vrije tijd",
+      "Music": "Muziek",
+      "News": "Nieuws",
+      "Religion": "Religie en spiritualiteit",
+      "Science": "Wetenschap",
+      "Society": "Maatschappij en cultuur",
+      "Sports": "Sport",
+      "Technology": "Technologie",
+      "TrueCrime": "True crime",
+      "TV": "Tv en film"
+    }
   }
 }

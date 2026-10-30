@@ -352,7 +352,13 @@
       "none": "Hakuna podikasti iliyopatikana. Jaribu jina lingine, au bandika URL ya mlisho wa RSS.",
       "failed": "Utafutaji haupatikani kwa sasa. Tafadhali jaribu tena.",
       "label": "Tafuta podikasti",
-      "placeholder": "Jina la kipindi, mtangazaji au mada"
+      "placeholder": "Jina la kipindi, mtangazaji au mada",
+      "modeShows": "Vipindi",
+      "modePeople": "Watu",
+      "placeholderPeople": "Jina la mtangazaji au mgeni",
+      "appearsIn_one": "Katika kipindi {{count}}",
+      "appearsIn_other": "Katika vipindi {{count}}",
+      "latestMatch": "Kipya zaidi: {{title}}"
     },
     "opml": {
       "import": "Leta OPML",
@@ -422,6 +428,36 @@
     "noNotes": "Kipindi hiki hakina maelezo.",
     "openEpisode": "Fungua kipindi",
     "addToQueue": "Ongeza kwenye foleni",
-    "inQueue": "Iko kwenye foleni"
+    "inQueue": "Iko kwenye foleni",
+    "trending": {
+      "title": "Podikasti zinazovuma",
+      "language": "Lugha",
+      "allLanguages": "Lugha zote",
+      "category": "Aina",
+      "allCategories": "Aina zote",
+      "none": "Hakuna kinachovuma hapa kwa sasa. Jaribu lugha au aina nyingine.",
+      "failed": "Podikasti zinazovuma hazipatikani kwa sasa. Tafadhali jaribu tena."
+    },
+    "categories": {
+      "Arts": "Sanaa",
+      "Business": "Biashara",
+      "Comedy": "Vichekesho",
+      "Education": "Elimu",
+      "Fiction": "Hadithi za kubuni",
+      "Government": "Serikali",
+      "Health": "Afya na Mazoezi",
+      "History": "Historia",
+      "Kids": "Watoto na Familia",
+      "Leisure": "Burudani",
+      "Music": "Muziki",
+      "News": "Habari",
+      "Religion": "Dini na Kiroho",
+      "Science": "Sayansi",
+      "Society": "Jamii na Utamaduni",
+      "Sports": "Michezo",
+      "Technology": "Teknolojia",
+      "TrueCrime": "Uhalifu wa kweli",
+      "TV": "TV na Filamu"
+    }
   }
 }

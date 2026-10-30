@@ -208,6 +208,26 @@ export function useEpisodeNotes(episodeId) {
   });
 }
 export const searchPodcasts = (q) => getJson(`search?q=${encodeURIComponent(q)}`);
+/** Shows a host or guest appears in, with how many of their episodes matched. */
+export const searchPeople = (q) => getJson(`person?q=${encodeURIComponent(q)}`);
+
+// The top-level podcast categories the checker passes on to Podcast Index (by
+// this English name; the label is translated, audio.podcasts.categories.*).
+export const TRENDING_CATEGORIES = [
+  'Arts', 'Business', 'Comedy', 'Education', 'Fiction', 'Government', 'Health', 'History', 'Kids',
+  'Leisure', 'Music', 'News', 'Religion', 'Science', 'Society', 'Sports', 'Technology', 'True Crime', 'TV',
+];
+
+/** Podcast Index's trending shows, for one language ('' = all) and category ('' = all). */
+export function usePodcastTrending(lang, cat, enabled = true) {
+  return useQuery({
+    queryKey: ['podcasts', 'trending', lang, cat],
+    enabled,
+    queryFn: async () => (await getJson(`trending?${new URLSearchParams({ lang, cat })}`)).results || [],
+    staleTime: 30 * 60 * 1000,
+    retry: 1,
+  });
+}
 
 export function useInvalidatePodcasts() {
   const qc = useQueryClient();

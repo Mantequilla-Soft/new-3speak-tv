@@ -333,7 +333,12 @@
       "none": "Không tìm thấy podcast nào. Hãy thử tên khác hoặc dán URL nguồn RSS.",
       "failed": "Hiện không thể tìm kiếm. Vui lòng thử lại.",
       "label": "Tìm podcast",
-      "placeholder": "Tên chương trình, người dẫn hoặc chủ đề"
+      "placeholder": "Tên chương trình, người dẫn hoặc chủ đề",
+      "modeShows": "Chương trình",
+      "modePeople": "Người",
+      "placeholderPeople": "Tên người dẫn hoặc khách mời",
+      "appearsIn_other": "Trong {{count}} tập",
+      "latestMatch": "Mới nhất: {{title}}"
     },
     "opml": {
       "import": "Nhập OPML",
@@ -400,6 +405,36 @@
     "noNotes": "Tập này không có ghi chú.",
     "openEpisode": "Mở tập",
     "addToQueue": "Thêm vào hàng chờ",
-    "inQueue": "Đã trong hàng chờ"
+    "inQueue": "Đã trong hàng chờ",
+    "trending": {
+      "title": "Podcast thịnh hành",
+      "language": "Ngôn ngữ",
+      "allLanguages": "Tất cả ngôn ngữ",
+      "category": "Danh mục",
+      "allCategories": "Tất cả danh mục",
+      "none": "Hiện chưa có gì thịnh hành ở đây. Hãy thử ngôn ngữ hoặc danh mục khác.",
+      "failed": "Hiện không thể tải podcast thịnh hành. Vui lòng thử lại."
+    },
+    "categories": {
+      "Arts": "Nghệ thuật",
+      "Business": "Kinh doanh",
+      "Comedy": "Hài kịch",
+      "Education": "Giáo dục",
+      "Fiction": "Hư cấu",
+      "Government": "Chính phủ",
+      "Health": "Sức khỏe & Thể hình",
+      "History": "Lịch sử",
+      "Kids": "Trẻ em & Gia đình",
+      "Leisure": "Giải trí",
+      "Music": "Âm nhạc",
+      "News": "Tin tức",
+      "Religion": "Tôn giáo & Tâm linh",
+      "Science": "Khoa học",
+      "Society": "Xã hội & Văn hóa",
+      "Sports": "Thể thao",
+      "Technology": "Công nghệ",
+      "TrueCrime": "Tội phạm có thật",
+      "TV": "TV & Phim"
+    }
   }
 }

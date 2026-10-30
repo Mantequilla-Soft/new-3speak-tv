@@ -352,7 +352,13 @@
       "none": "Walang nakitang podcast. Subukan ang ibang pangalan, o i-paste ang RSS feed URL.",
       "failed": "Hindi available ang paghahanap ngayon. Pakisubukang muli.",
       "label": "Maghanap ng podcast",
-      "placeholder": "Pangalan ng show, host o paksa"
+      "placeholder": "Pangalan ng show, host o paksa",
+      "modeShows": "Mga palabas",
+      "modePeople": "Mga tao",
+      "placeholderPeople": "Pangalan ng host o bisita",
+      "appearsIn_one": "Sa {{count}} episode",
+      "appearsIn_other": "Sa {{count}} na episode",
+      "latestMatch": "Pinakabago: {{title}}"
     },
     "opml": {
       "import": "I-import ang OPML",
@@ -422,6 +428,36 @@
     "noNotes": "Walang show notes ang episode na ito.",
     "openEpisode": "Buksan ang episode",
     "addToQueue": "Idagdag sa queue",
-    "inQueue": "Nasa queue na"
+    "inQueue": "Nasa queue na",
+    "trending": {
+      "title": "Mga trending na podcast",
+      "language": "Wika",
+      "allLanguages": "Lahat ng wika",
+      "category": "Kategorya",
+      "allCategories": "Lahat ng kategorya",
+      "none": "Walang trending dito ngayon. Subukan ang ibang wika o kategorya.",
+      "failed": "Hindi available ngayon ang mga trending na podcast. Pakisubukang muli."
+    },
+    "categories": {
+      "Arts": "Sining",
+      "Business": "Negosyo",
+      "Comedy": "Komedya",
+      "Education": "Edukasyon",
+      "Fiction": "Piksyon",
+      "Government": "Gobyerno",
+      "Health": "Kalusugan at Fitness",
+      "History": "Kasaysayan",
+      "Kids": "Mga Bata at Pamilya",
+      "Leisure": "Libangan",
+      "Music": "Musika",
+      "News": "Balita",
+      "Religion": "Relihiyon at Espiritwalidad",
+      "Science": "Agham",
+      "Society": "Lipunan at Kultura",
+      "Sports": "Palakasan",
+      "Technology": "Teknolohiya",
+      "TrueCrime": "Totoong Krimen",
+      "TV": "TV at Pelikula"
+    }
   }
 }

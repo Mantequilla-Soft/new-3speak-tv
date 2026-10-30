@@ -352,7 +352,13 @@
       "none": "Podcast bulunamadı. Başka bir ad dene veya RSS akışı URL'sini yapıştır.",
       "failed": "Arama şu anda kullanılamıyor. Lütfen tekrar dene.",
       "label": "Podcast bul",
-      "placeholder": "Program adı, sunucu veya konu"
+      "placeholder": "Program adı, sunucu veya konu",
+      "modeShows": "Programlar",
+      "modePeople": "Kişiler",
+      "placeholderPeople": "Sunucu veya konuk adı",
+      "appearsIn_one": "{{count}} bölümde",
+      "appearsIn_other": "{{count}} bölümde",
+      "latestMatch": "En yeni: {{title}}"
     },
     "opml": {
       "import": "OPML içe aktar",
@@ -422,6 +428,36 @@
     "noNotes": "Bu bölümün notu yok.",
     "openEpisode": "Bölümü aç",
     "addToQueue": "Sıraya ekle",
-    "inQueue": "Sırada"
+    "inQueue": "Sırada",
+    "trending": {
+      "title": "Trend podcast’ler",
+      "language": "Dil",
+      "allLanguages": "Tüm diller",
+      "category": "Kategori",
+      "allCategories": "Tüm kategoriler",
+      "none": "Şu anda burada trend olan bir şey yok. Başka bir dil veya kategori dene.",
+      "failed": "Trend podcast’ler şu anda kullanılamıyor. Lütfen tekrar dene."
+    },
+    "categories": {
+      "Arts": "Sanat",
+      "Business": "İş Dünyası",
+      "Comedy": "Komedi",
+      "Education": "Eğitim",
+      "Fiction": "Kurgu",
+      "Government": "Devlet",
+      "Health": "Sağlık ve Fitness",
+      "History": "Tarih",
+      "Kids": "Çocuk ve Aile",
+      "Leisure": "Boş Zaman",
+      "Music": "Müzik",
+      "News": "Haberler",
+      "Religion": "Din ve Maneviyat",
+      "Science": "Bilim",
+      "Society": "Toplum ve Kültür",
+      "Sports": "Spor",
+      "Technology": "Teknoloji",
+      "TrueCrime": "Gerçek Suç",
+      "TV": "TV ve Film"
+    }
   }
 }

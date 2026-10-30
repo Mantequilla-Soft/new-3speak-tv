@@ -371,7 +371,14 @@
       "none": "No se encontraron podcasts. Prueba con otro nombre o pega la URL del feed RSS.",
       "failed": "La búsqueda no está disponible ahora mismo. Inténtalo de nuevo.",
       "label": "Buscar un podcast",
-      "placeholder": "Nombre, presentador o tema"
+      "placeholder": "Nombre, presentador o tema",
+      "modeShows": "Programas",
+      "modePeople": "Personas",
+      "placeholderPeople": "Nombre del presentador o invitado",
+      "appearsIn_many": "En {{count}} episodios",
+      "appearsIn_one": "En {{count}} episodio",
+      "appearsIn_other": "En {{count}} episodios",
+      "latestMatch": "Último: {{title}}"
     },
     "opml": {
       "import": "Importar OPML",
@@ -444,6 +451,36 @@
     "noNotes": "Este episodio no tiene notas.",
     "openEpisode": "Abrir episodio",
     "addToQueue": "Añadir a la cola",
-    "inQueue": "En la cola"
+    "inQueue": "En la cola",
+    "trending": {
+      "title": "Podcasts en tendencia",
+      "language": "Idioma",
+      "allLanguages": "Todos los idiomas",
+      "category": "Categoría",
+      "allCategories": "Todas las categorías",
+      "none": "Ahora mismo no hay nada en tendencia aquí. Prueba otro idioma u otra categoría.",
+      "failed": "Los podcasts en tendencia no están disponibles ahora mismo. Inténtalo de nuevo."
+    },
+    "categories": {
+      "Arts": "Arte",
+      "Business": "Negocios",
+      "Comedy": "Comedia",
+      "Education": "Educación",
+      "Fiction": "Ficción",
+      "Government": "Gobierno",
+      "Health": "Salud y bienestar",
+      "History": "Historia",
+      "Kids": "Niños y familia",
+      "Leisure": "Ocio",
+      "Music": "Música",
+      "News": "Noticias",
+      "Religion": "Religión y espiritualidad",
+      "Science": "Ciencia",
+      "Society": "Sociedad y cultura",
+      "Sports": "Deportes",
+      "Technology": "Tecnología",
+      "TrueCrime": "Crímenes reales",
+      "TV": "TV y cine"
+    }
   }
 }

@@ -390,7 +390,15 @@
       "none": "Nie znaleziono podcastów. Spróbuj innej nazwy lub wklej adres URL kanału RSS.",
       "failed": "Wyszukiwanie jest teraz niedostępne. Spróbuj ponownie.",
       "label": "Znajdź podcast",
-      "placeholder": "Nazwa, prowadzący lub temat"
+      "placeholder": "Nazwa, prowadzący lub temat",
+      "modeShows": "Audycje",
+      "modePeople": "Osoby",
+      "placeholderPeople": "Imię prowadzącego lub gościa",
+      "appearsIn_few": "W {{count}} odcinkach",
+      "appearsIn_many": "W {{count}} odcinkach",
+      "appearsIn_one": "W {{count}} odcinku",
+      "appearsIn_other": "W {{count}} odcinka",
+      "latestMatch": "Najnowszy: {{title}}"
     },
     "opml": {
       "import": "Importuj OPML",
@@ -466,6 +474,36 @@
     "noNotes": "Ten odcinek nie ma opisu.",
     "openEpisode": "Otwórz odcinek",
     "addToQueue": "Dodaj do kolejki",
-    "inQueue": "W kolejce"
+    "inQueue": "W kolejce",
+    "trending": {
+      "title": "Popularne podcasty",
+      "language": "Język",
+      "allLanguages": "Wszystkie języki",
+      "category": "Kategoria",
+      "allCategories": "Wszystkie kategorie",
+      "none": "Nic tu teraz nie jest popularne. Spróbuj innego języka lub kategorii.",
+      "failed": "Popularne podcasty są teraz niedostępne. Spróbuj ponownie."
+    },
+    "categories": {
+      "Arts": "Sztuka",
+      "Business": "Biznes",
+      "Comedy": "Komedia",
+      "Education": "Edukacja",
+      "Fiction": "Fikcja",
+      "Government": "Polityka",
+      "Health": "Zdrowie i fitness",
+      "History": "Historia",
+      "Kids": "Dzieci i rodzina",
+      "Leisure": "Czas wolny",
+      "Music": "Muzyka",
+      "News": "Wiadomości",
+      "Religion": "Religia i duchowość",
+      "Science": "Nauka",
+      "Society": "Społeczeństwo i kultura",
+      "Sports": "Sport",
+      "Technology": "Technologia",
+      "TrueCrime": "Prawdziwe zbrodnie",
+      "TV": "TV i film"
+    }
   }
 }

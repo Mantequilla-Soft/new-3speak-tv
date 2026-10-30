@@ -352,7 +352,13 @@
       "none": "Keine Podcasts gefunden. Versuche einen anderen Namen oder füge die RSS-Feed-URL ein.",
       "failed": "Die Suche ist gerade nicht verfügbar. Bitte versuche es erneut.",
       "label": "Podcast finden",
-      "placeholder": "Name, Host oder Thema"
+      "placeholder": "Name, Host oder Thema",
+      "modeShows": "Sendungen",
+      "modePeople": "Personen",
+      "placeholderPeople": "Name von Host oder Gast",
+      "appearsIn_one": "In {{count}} Folge",
+      "appearsIn_other": "In {{count}} Folgen",
+      "latestMatch": "Neueste: {{title}}"
     },
     "opml": {
       "import": "OPML importieren",
@@ -422,6 +428,36 @@
     "noNotes": "Diese Folge hat keine Shownotes.",
     "openEpisode": "Folge öffnen",
     "addToQueue": "Zur Warteschlange",
-    "inQueue": "In der Warteschlange"
+    "inQueue": "In der Warteschlange",
+    "trending": {
+      "title": "Angesagte Podcasts",
+      "language": "Sprache",
+      "allLanguages": "Alle Sprachen",
+      "category": "Kategorie",
+      "allCategories": "Alle Kategorien",
+      "none": "Hier ist gerade nichts angesagt. Probier eine andere Sprache oder Kategorie.",
+      "failed": "Angesagte Podcasts sind gerade nicht verfügbar. Bitte versuche es erneut."
+    },
+    "categories": {
+      "Arts": "Kunst",
+      "Business": "Wirtschaft",
+      "Comedy": "Comedy",
+      "Education": "Bildung",
+      "Fiction": "Fiktion",
+      "Government": "Regierung",
+      "Health": "Gesundheit & Fitness",
+      "History": "Geschichte",
+      "Kids": "Kinder & Familie",
+      "Leisure": "Freizeit",
+      "Music": "Musik",
+      "News": "Nachrichten",
+      "Religion": "Religion & Spiritualität",
+      "Science": "Wissenschaft",
+      "Society": "Gesellschaft & Kultur",
+      "Sports": "Sport",
+      "Technology": "Technologie",
+      "TrueCrime": "True Crime",
+      "TV": "TV & Film"
+    }
   }
 }
