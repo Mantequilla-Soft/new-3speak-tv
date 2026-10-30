@@ -25,11 +25,14 @@ function fakeAudio() {
   return el
 }
 
-function mount(el, track) {
+function mount(el, track, elementKey) {
   const ref = { current: el }
-  function Probe({ t }) { mod.default(ref, t); return null }
-  act(() => { root.render(createElement(Probe, { t: track })) })
-  return (t) => act(() => { root.render(createElement(Probe, { t })) })
+  function Probe({ t, k }) { mod.default(ref, t, k); return null }
+  act(() => { root.render(createElement(Probe, { t: track, k: elementKey })) })
+  return (t, k = elementKey, nextEl) => act(() => {
+    if (nextEl) ref.current = nextEl
+    root.render(createElement(Probe, { t, k }))
+  })
 }
 
 beforeEach(async () => {
@@ -52,6 +55,10 @@ describe('which item a track is', () => {
     expect(mod._test.itemOf({ external: true, _id: '6ae3c77f91d7738e82354365:Igp2yAbCdEfGhIjK' }))
       .toEqual({ kind: 'podcast', id: '6ae3c77f91d7738e82354365:Igp2yAbCdEfGhIjK' })
     expect(mod._test.itemOf(null)).toBeNull()
+  })
+
+  it('a live stream is not measured', () => {
+    expect(mod._test.itemOf({ external: true, live: true, _id: 'live:feed:1' })).toBeNull()
   })
 })
 
@@ -105,5 +112,31 @@ describe('who is listening', () => {
     el.paused = false
     await act(async () => { el.dispatchEvent(new Event('play')) })
     expect(calls('/audio/listen/start')[0]).toMatchObject({ listener: 'alice', listenerSig: 'sig', listenerTs: 123 })
+  })
+})
+
+describe('the player swapping its element', () => {
+  it('keeps the same session on the new element and beats with its real rate', async () => {
+    vi.useFakeTimers({ now: 0 })
+    const first = fakeAudio()
+    const track = { permlink: 'one' }
+    const rerender = mount(first, track, 'plain')
+    first.paused = false
+    await act(async () => { first.dispatchEvent(new Event('play')) })
+    first.currentTime = 20; first.dispatchEvent(new Event('timeupdate'))
+
+    // Voice boost switched on: a routed element takes over at the same spot.
+    const second = fakeAudio()
+    Object.assign(second, { currentTime: 20, paused: false, playbackRate: 3.75 })
+    await act(async () => { rerender(track, 'fx', second) })
+    expect(calls('/audio/listen/beat').at(-1)).toMatchObject({ sid: 's1', position: 20 })
+
+    vi.setSystemTime(11000); second.currentTime = 45; second.dispatchEvent(new Event('timeupdate'))
+    expect(calls('/audio/listen/start')).toHaveLength(1)
+    expect(calls('/audio/listen/beat').at(-1)).toMatchObject({ sid: 's1', position: 45, rate: 3.75 })
+
+    // The old element's events no longer count.
+    first.currentTime = 99; first.dispatchEvent(new Event('pause'))
+    expect(calls('/audio/listen/beat').at(-1).position).toBe(45)
   })
 })

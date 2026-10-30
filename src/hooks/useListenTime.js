@@ -21,22 +21,31 @@ import { listenVouch } from '../lib/podcasts';
  * hidden tab keeps beating, because audio is made to run in the background.
  */
 const itemOf = (track) => {
-  if (!track) return null;
+  // A live stream has no timeline to measure against.
+  if (!track || track.live) return null;
   if (track.external) return track._id ? { kind: 'podcast', id: String(track._id) } : null;
   return track.permlink ? { kind: 'audio', id: String(track.permlink) } : null;
 };
 
-export default function useListenTime(audioRef, track) {
+/**
+ * @param elementKey changes when the player swaps its <audio> element for
+ *   another one mid-track (plain vs routed through Web Audio): the listeners
+ *   move to the new element and the same session carries on.
+ */
+export default function useListenTime(audioRef, track, elementKey) {
   const item = itemOf(track);
   const key = item ? `${item.kind}:${item.id}` : null;
-  const s = useRef({ sid: null, token: null, beatMs: 10000, lastBeatAt: 0, starting: false, lastTime: 0 });
+  const s = useRef({ key: null, sid: null, token: null, beatMs: 10000, lastBeatAt: 0, starting: false, lastTime: 0 });
 
   useEffect(() => {
     const el = audioRef.current;
     if (!el || !key) return undefined;
     const [kind, ...rest] = key.split(':');
     const id = rest.join(':');
-    s.current = { sid: null, token: null, beatMs: 10000, lastBeatAt: 0, starting: false, lastTime: el.currentTime || 0 };
+    // A new track starts a new session; a new element for the same track keeps it.
+    if (s.current.key !== key) {
+      s.current = { key, sid: null, token: null, beatMs: 10000, lastBeatAt: 0, starting: false, lastTime: el.currentTime || 0 };
+    }
 
     const beat = (position = el.currentTime) => {
       const cur = s.current;
@@ -47,6 +56,8 @@ export default function useListenTime(audioRef, track) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            // The element's real rate: the chosen speed, or the faster one skip
+            // silence uses through a pause.
             sid: cur.sid, token: cur.token, position, rate: el.playbackRate || 1,
             hidden: typeof document !== 'undefined' && document.visibilityState === 'hidden',
           }),
@@ -128,7 +139,7 @@ export default function useListenTime(audioRef, track) {
       window.removeEventListener('pagehide', onPageHide);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
+  }, [key, elementKey]);
 }
 
 export const _test = { itemOf };

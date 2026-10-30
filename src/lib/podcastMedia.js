@@ -5,6 +5,9 @@
  * (3speakchecks routes/podcasts.js /episode/:id/chapters and /transcript).
  */
 import { CHECKER_URL } from '../utils/config';
+// The namespace, for vouchQuery (lib/podcasts.js): a private feed's chapters and
+// transcript need the same proof of following as its episodes.
+import * as podcastsLib from './podcasts';
 
 const API = `${CHECKER_URL}/podcasts`;
 const cache = new Map();
@@ -21,21 +24,39 @@ async function getOnce(key, url) {
   return data;
 }
 
-/** [{ start, end?, title, img?, url? }] sorted by start, or [] when there are none. */
-export async function fetchChapters(episodeId) {
+// "vu=&vts=&vsig=" for an episode of a private feed, '' otherwise (or when
+// there's no proof to give: the checker then answers 404, which reads as none).
+async function vouchFor(opts) {
+  if (!opts?.private || typeof podcastsLib.vouchQuery !== 'function') return '';
+  try {
+    const q = await podcastsLib.vouchQuery();
+    return typeof q === 'string' ? q.replace(/^[?&]/, '') : '';
+  } catch { return ''; }
+}
+
+const withQuery = (url, q) => (q ? `${url}${url.includes('?') ? '&' : '?'}${q}` : url);
+
+/**
+ * [{ start, end?, title, img?, url? }] sorted by start, or [] when there are none.
+ * `{ private: true }` for an episode of a private feed.
+ */
+export async function fetchChapters(episodeId, opts) {
   if (!episodeId) return [];
-  const data = await getOnce(`c:${episodeId}`, `${API}/episode/${encodeURIComponent(episodeId)}/chapters`);
+  const url = withQuery(`${API}/episode/${encodeURIComponent(episodeId)}/chapters`, await vouchFor(opts));
+  const data = await getOnce(`c:${episodeId}`, url);
   return Array.isArray(data?.chapters) ? data.chapters : [];
 }
 
 /**
  * { lang, languages, cues: [{ start, end, text, speaker? }] } for one language
- * (the feed's first when none is asked for), or null.
+ * (the feed's first when none is asked for), or null. `{ private: true }` as
+ * for fetchChapters.
  */
-export async function fetchTranscript(episodeId, lang) {
+export async function fetchTranscript(episodeId, lang, opts) {
   if (!episodeId) return null;
   const q = lang ? `?lang=${encodeURIComponent(lang)}` : '';
-  const data = await getOnce(`t:${episodeId}:${lang || ''}`, `${API}/episode/${encodeURIComponent(episodeId)}/transcript${q}`);
+  const url = withQuery(`${API}/episode/${encodeURIComponent(episodeId)}/transcript${q}`, await vouchFor(opts));
+  const data = await getOnce(`t:${episodeId}:${lang || ''}`, url);
   return Array.isArray(data?.cues) ? data : null;
 }
 
