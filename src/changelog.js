@@ -7,6 +7,11 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.48',
+    date: '2026-10-30',
+    summary: 'Import your own YouTube videos to 3Speak: use Import videos on your profile or in the upload window.',
+  },
+  {
     version: '1.80.47',
     date: '2026-10-29',
     summary: 'Support podcasters in sats right from an episode whenever their feed accepts Lightning tips.',
