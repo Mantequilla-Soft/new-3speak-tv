@@ -23,7 +23,7 @@ import {
 } from '../hive-api/aioha';
 import { CHECKER_URL } from '../utils/config';
 import { t } from '../i18n';
-import { sessionVouch } from './podcastProgress';
+import { sessionVouch, lastVouchUser } from './podcastProgress';
 
 const API = `${CHECKER_URL}/podcasts`;
 const THREESPEAK_API = import.meta.env.VITE_THREESPEAK_API || '/api';
@@ -119,11 +119,40 @@ async function getJson(path) {
  * read; private feeds are then simply left out.
  */
 async function readJson(path, user) {
-  if (!user) return getJson(path);
+  const qs = await vouchQuery(user);
+  return getJson(qs ? `${path}${path.includes('?') ? '&' : '?'}${qs}` : path);
+}
+
+/**
+ * `vu=..&vts=..&vsig=..` for a checker read of a private feed (the session
+ * vouch of lib/podcastProgress.js), or '' signed out or when there is none.
+ * Without `user`, the listener the last vouch was for.
+ */
+export async function vouchQuery(user = lastVouchUser()) {
+  if (!user) return '';
   const v = await sessionVouch(user);
-  if (!v) return getJson(path);
-  const qs = new URLSearchParams({ vu: user, vts: String(v.timestamp), vsig: v.signature });
-  return getJson(`${path}${path.includes('?') ? '&' : '?'}${qs}`);
+  return v ? String(new URLSearchParams({ vu: user, vts: String(v.timestamp), vsig: v.signature })) : '';
+}
+
+/**
+ * Where a private feed's episode plays from: its own address may sit behind the
+ * feed's login, so the checker streams it (/episode/:id/download, with Range
+ * for seeking) once it knows you follow the feed. Null when the session can't
+ * be vouched for. The player calls this for tracks with `private: true`.
+ */
+export async function privateAudioUrl(episodeId, user = lastVouchUser()) {
+  const qs = await vouchQuery(user);
+  return qs ? `${API}/episode/${encodeURIComponent(episodeId)}/download?${qs}` : null;
+}
+
+/** An episode's chapters, read with the vouch (a private feed's are not public). */
+export async function fetchPrivateChapters(episodeId, user) {
+  try {
+    const data = await readJson(`episode/${encodeURIComponent(episodeId)}/chapters`, user);
+    return Array.isArray(data?.chapters) ? data.chapters : [];
+  } catch {
+    return [];
+  }
 }
 
 /**
@@ -270,11 +299,11 @@ export function usePodcastEpisode(episodeId, user = null) {
 }
 
 /** The full show notes (raw HTML from the feed; sanitise before showing). */
-export function useEpisodeNotes(episodeId) {
+export function useEpisodeNotes(episodeId, user = null) {
   return useQuery({
-    queryKey: ['podcasts', 'notes', episodeId],
+    queryKey: ['podcasts', 'notes', episodeId, user || ''],
     enabled: !!episodeId,
-    queryFn: async () => (await getJson(`episode/${encodeURIComponent(episodeId)}/notes`)).html || '',
+    queryFn: async () => (await readJson(`episode/${encodeURIComponent(episodeId)}/notes`, user)).html || '',
     staleTime: 15 * 60 * 1000,
     retry: 1,
   });
@@ -347,7 +376,7 @@ export function usePodcastNotifications(user) {
   const { data } = useQuery({
     queryKey: ['podcasts', 'notifications', user],
     enabled: !!user,
-    queryFn: () => getJson(`notifications?user=${encodeURIComponent(user)}`),
+    queryFn: () => readJson(`notifications?user=${encodeURIComponent(user)}`, user),
     staleTime: 60 * 1000,
     refetchInterval: 5 * 60 * 1000,
   });

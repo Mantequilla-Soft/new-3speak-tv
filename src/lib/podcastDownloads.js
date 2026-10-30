@@ -14,11 +14,13 @@
  *   rate limit (429);
  * - a 3Speak audio: our audio gateway, which allows CORS.
  *
- * Errors carry a `code` ('too_large', 'rate_limited', 'storage', 'failed',
+ * Errors carry a `code` ('too_large', 'rate_limited' (also the checker's 503
+ * busy), 'storage', 'failed',
  * 'cancelled', 'no_source') that the page turns into a message.
  */
 import { useSyncExternalStore } from 'react';
 import { CHECKER_URL } from '../utils/config';
+import { sessionVouch, lastVouchUser } from './podcastProgress';
 
 const API = `${CHECKER_URL}/podcasts`;
 const AUDIO_GATEWAY = 'https://ipfs-audio.3speak.tv/ipfs';
@@ -192,23 +194,36 @@ export async function localAudioUrl(id) {
   return urls.get(id);
 }
 
-/** Where to fetch a track's audio, in order: [{ url, checker }]. */
-export function sourcesFor(track) {
+/**
+ * Where to fetch a track's audio, in order: [{ url, checker }]. A private
+ * feed's audio may sit behind its login, so it only comes through the checker,
+ * with the session vouch (`vouch`, 'vu=..&vts=..&vsig=..').
+ */
+export function sourcesFor(track, vouch = '') {
   if (!track?._id || track.live) return [];
   if (!track.external) {
     return track.audio_cid ? [{ url: `${AUDIO_GATEWAY}/${track.audio_cid}`, checker: false }] : [];
   }
   const out = [];
+  const viaChecker = `${API}/episode/${encodeURIComponent(track._id)}/download`;
+  if (track.private) return [{ url: vouch ? `${viaChecker}?${vouch}` : viaChecker, checker: true }];
   if (/^https?:\/\//i.test(track.src || '')) out.push({ url: track.src, checker: false });
-  out.push({ url: `${API}/episode/${encodeURIComponent(track._id)}/download`, checker: true });
+  out.push({ url: viaChecker, checker: true });
   return out;
+}
+
+// The vouch a private feed's download needs (see lib/podcasts.js vouchQuery).
+async function vouchFor(track) {
+  const user = track?.private ? lastVouchUser() : null;
+  const v = user ? await sessionVouch(user) : null;
+  return v ? String(new URLSearchParams({ vu: user, vts: String(v.timestamp), vsig: v.signature })) : '';
 }
 
 // A host that answers with a web page (a login, an error) did not give us audio.
 const looksLikeAudio = (res) => !/^text\/|json/i.test(res.headers.get('content-type') || '');
 
 async function openSource(track, signal) {
-  const sources = sourcesFor(track);
+  const sources = sourcesFor(track, await vouchFor(track));
   if (!sources.length) throw downloadError('no_source');
   let last = downloadError('failed');
   for (const s of sources) {
@@ -222,7 +237,8 @@ async function openSource(track, signal) {
     }
     if (res.ok && looksLikeAudio(res)) return res;
     if (s.checker && res.status === 413) last = downloadError('too_large', 413);
-    else if (s.checker && res.status === 429) last = downloadError('rate_limited', 429);
+    // 429: this address asked too often; 503: the checker is busy with other downloads.
+    else if (s.checker && (res.status === 429 || res.status === 503)) last = downloadError('rate_limited', res.status);
     else last = downloadError('failed', res.status);
   }
   throw last;

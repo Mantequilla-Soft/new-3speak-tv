@@ -1,5 +1,6 @@
 // Episodes saved for offline listening (src/lib/podcastDownloads.js), on an
 // in-memory store in place of IndexedDB and a stubbed fetch.
+// @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import {
   _useBackendForTests, downloadTrack, cancelDownload, removeDownload, isDownloaded, localAudioUrl, sourcesFor,
@@ -46,6 +47,12 @@ describe('where the audio comes from', () => {
     expect(s[0]).toEqual({ url: 'https://host.example/ep1.mp3', checker: false })
     expect(s[1].checker).toBe(true)
     expect(s[1].url).toMatch(/\/podcasts\/episode\/feed1%3Aep1\/download$/)
+  })
+
+  it('a private episode: only the checker, with the vouch', () => {
+    expect(sourcesFor({ ...outside, private: true }, 'vu=a&vts=1&vsig=s')).toEqual([
+      { url: expect.stringMatching(/\/episode\/feed1%3Aep1\/download\?vu=a&vts=1&vsig=s$/), checker: true },
+    ])
   })
 
   it('a 3Speak audio: the audio gateway', () => {
@@ -104,6 +111,11 @@ describe('downloadTrack', () => {
       return new Response('{}', { status: 429 })
     }))
     await expect(downloadTrack(outside)).rejects.toMatchObject({ code: 'rate_limited' })
+    vi.stubGlobal('fetch', vi.fn(async (url) => {
+      if (url.startsWith('https://host.example')) throw new TypeError('cors')
+      return new Response('{"code":"busy"}', { status: 503 })
+    }))
+    await expect(downloadTrack(outside)).rejects.toMatchObject({ code: 'rate_limited', status: 503 })
     expect(isDownloaded(outside._id)).toBe(false)
   })
 

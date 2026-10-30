@@ -106,6 +106,9 @@ async function fetchVouch(user) {
  * may include a private feed (the checker then knows the reader follows it).
  * One request at a time per user; null when the session can't be proven.
  */
+/** Whose session the last good vouch was for (the signed-in listener), or null. */
+export const lastVouchUser = () => vouch?.user || null;
+
 export async function sessionVouch(user) {
   if (!user) return null;
   if (vouch && vouch.user === user && Date.now() - vouch.timestamp < VOUCH_REUSE_MS) return vouch;

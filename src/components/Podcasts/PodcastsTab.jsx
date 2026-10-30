@@ -291,7 +291,8 @@ function PiResults({ list, followed, busy, onFollow }) {
 
 /** The followed shows' feeds, compared the way the checker compares them. */
 function useFollowedKeys(subscriptions) {
-  return useMemo(() => new Set((subscriptions || []).flatMap((s) => [feedKey(s.url), ...(s.keys || [])])), [subscriptions]);
+  // A private feed comes without its link (url '', keys []): it never matches a search result.
+  return useMemo(() => new Set((subscriptions || []).flatMap((s) => (s.url ? [feedKey(s.url), ...(s.keys || [])] : []))), [subscriptions]);
 }
 
 // ─── Discover: Apple's charts and Podcast Index's trending ────────────────────

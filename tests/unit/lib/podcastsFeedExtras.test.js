@@ -4,7 +4,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest'
 import {
-  episodeToTrack, liveToTrack, buildPrivateFeedUrl, episodeNumberLabel, followFeeds, fetchEpisode, downloadOpml,
+  episodeToTrack, liveToTrack, buildPrivateFeedUrl, episodeNumberLabel, followFeeds, fetchEpisode, downloadOpml, privateAudioUrl,
 } from '../../../src/lib/podcasts.js'
 
 const NOW_TS = Date.now()
@@ -49,6 +49,7 @@ describe('episodeNumberLabel', () => {
     expect(episodeNumberLabel({ episode: 3 })).toBe('E3')
     expect(episodeNumberLabel({ season: 1 })).toBe('S1')
     expect(episodeNumberLabel({})).toBe('')
+    expect(episodeNumberLabel({ season: 1.5, episode: 2 })).toBe('S1.5 E2')
   })
 })
 
@@ -123,6 +124,14 @@ describe('private feeds', () => {
     expect(reads).toHaveLength(2)
     expect(reads[0].url).not.toContain('vu=')
     expect(calls.filter((c) => c.url.endsWith('/podcasts/signature'))).toHaveLength(1)
+  })
+
+  it('a private episode plays through the checker with the vouch', async () => {
+    stubFetch({ user: 'erin' })
+    const url = await privateAudioUrl('f1:9', 'erin')
+    expect(url).toMatch(/\/podcasts\/episode\/f1%3A9\/download\?vu=erin&vts=\d+&vsig=SIG$/)
+    // Without a name, the listener the last vouch was for.
+    expect(await privateAudioUrl('f1:9')).toBe(url)
   })
 
   it('a signed-out read asks for no vouch', async () => {

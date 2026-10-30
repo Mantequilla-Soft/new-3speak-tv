@@ -10,7 +10,7 @@ import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
 import { toastIn } from '../../utils/toast';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
-import { usePodcastEpisode, useEpisodeNotes, episodeToTrack, episodePath } from '../../lib/podcasts';
+import { usePodcastEpisode, useEpisodeNotes, episodeToTrack, episodePath, fetchPrivateChapters } from '../../lib/podcasts';
 import { usePodcastProgress, progressOf, recordProgress, flushProgress, resumePosition } from '../../lib/podcastProgress';
 import { fetchChapters } from '../../lib/podcastMedia';
 import { useDownloads } from '../../lib/podcastDownloads';
@@ -79,7 +79,7 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
   const [params] = useSearchParams();
   const deep = useMemo(() => deepLinkTimes(params), [params]);
   const { data, isLoading, error } = usePodcastEpisode(episodeId, user);
-  const notes = useEpisodeNotes(episodeId);
+  const notes = useEpisodeNotes(episodeId, user);
   usePodcastProgress(user, { ids: [episodeId] });
   useDownloads();
   const audioCurrent = useAppStore((s) => s.audioCurrent);
@@ -102,9 +102,10 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
   const track = useMemo(() => (ep ? episodeToTrack(ep, feed) : null), [ep, feed]);
   const notesHtml = useMemo(() => sanitizeShowNotes(notes.data), [notes.data]);
   const chapters = useQuery({
-    queryKey: ['podcasts', 'chapters', episodeId],
+    queryKey: ['podcasts', 'chapters', episodeId, user || ''],
     enabled: !!ep?.chapters,
-    queryFn: () => fetchChapters(episodeId),
+    // A private feed's chapters need the vouch; everyone else's come from the shared cache.
+    queryFn: () => (track?.private ? fetchPrivateChapters(episodeId, user) : fetchChapters(episodeId)),
     staleTime: 30 * 60 * 1000,
   });
 
