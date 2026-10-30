@@ -388,7 +388,32 @@
   .pod-filter-listen { margin-right: 0; }
   .pod-filter-dates { margin: 0; }
 
-  @include mix.respond(phone) { margin-left: 0; justify-content: flex-start; }
+  // Phones: each chip group is one row you swipe sideways (long labels, German
+  // for one, made the date row wider than the screen).
+  @include mix.respond(phone) {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+    justify-content: flex-start;
+
+    .pod-filter-listen,
+    .pod-filter-dates {
+      max-width: 100%;
+      // Left-aligned: the audio page's date row is flex-end, and an overflowing
+      // flex-end row spills past the left edge where it can't be scrolled to.
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x proximity;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+
+      &::-webkit-scrollbar { display: none; }
+
+      > button { flex-shrink: 0; scroll-snap-align: start; }
+    }
+  }
 }
 
 // The custom date range: two date fields under the chips.
