@@ -18,10 +18,10 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
-    version: '1.80.57',
-    category: 'audio',
+    version: '1.80.58',
+    category: 'tips',
     date: '2026-10-30',
-    summary: 'Preparing Earn to Listen: the audio player now measures listening time, so listeners can soon earn a share of ad revenue.',
+    summary: 'Earn while you watch and listen: agree once in Settings and your listening on 3speak.tv counts toward listener rewards, which start once we have checked the numbers.',
   },
   {
     version: '1.80.56',
