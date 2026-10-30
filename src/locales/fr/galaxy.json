@@ -1,0 +1,139 @@
+{
+  "title": "Galaxie Hive",
+  "desktopOnly": {
+    "title": "La galaxie Hive a besoin d'un plus grand écran",
+    "text": "Ouvrez-la sur un ordinateur pour découvrir qui suit qui.",
+    "back": "Retour à la chaîne de @{{user}}"
+  },
+  "modeLabel": "Liens à cartographier",
+  "mode": {
+    "following": "Abonnements",
+    "followers": "Abonnés",
+    "mutuals": "Amis"
+  },
+  "depth": {
+    "label": "Exploration",
+    "orbit": "Orbite ({{n}} comptes)",
+    "starsystem": "Système stellaire ({{n}} comptes)",
+    "nebula": "Nébuleuse ({{n}} comptes)",
+    "deepspace": "Espace lointain (jusqu'à {{n}} comptes, plus lent)"
+  },
+  "find": {
+    "label": "Trouver un compte dans cette galaxie",
+    "placeholder": "Trouver ou explorer un compte",
+    "go": "Trouver",
+    "hidden": "@{{user}} est dans cette galaxie, mais masqué par vos filtres ou la limite de la carte.",
+    "missing": "@{{user}} n'est pas dans cette galaxie.",
+    "explore": "Explorer la galaxie de @{{user}}"
+  },
+  "loading": "Cartographie de la galaxie de @{{user}}…",
+  "progressLists": "Lecture des listes d'abonnements",
+  "progress": "Lecture de leurs abonnements",
+  "progressDetails": "Chargement des détails des comptes",
+  "error": "Impossible de charger cette galaxie. Réessayez dans un instant.",
+  "empty": {
+    "following": "@{{user}} ne suit encore personne, il n'y a donc pas de galaxie à dessiner.",
+    "followers": "Personne ne suit encore @{{user}}, il n'y a donc pas de galaxie à dessiner.",
+    "mutuals": "Personne ne suit encore @{{user}} en retour, il n'y a donc pas de galaxie à dessiner."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Comptes ({{count}})",
+    "mutual": "Abonnement mutuel ({{count}})",
+    "oneWay": "Abonnement à sens unique ({{count}})",
+    "suggestions": "Créateurs à découvrir ({{count}} sur {{total}})",
+    "capped": "La carte affiche {{shown}} sur {{total}}"
+  },
+  "hint": "Glissez pour pivoter, glissez avec le clic droit ou Shift pour déplacer, faites défiler pour zoomer vers le pointeur. Cliquez sur une étoile ; cliquez sur le centre pour y revenir.",
+  "via": "{{count}} des {{total}} comptes explorés les suivent",
+  "followedBy": "@{{user}} les suit",
+  "followsCenter": "Suit @{{user}}",
+  "mutual": "@{{user}} et ce compte se suivent mutuellement",
+  "leadsTo_one": "Mène à {{count}} créateur sur la carte",
+  "leadsTo_many": "Mène à {{count}} créateurs sur la carte",
+  "leadsTo_other": "Mène à {{count}} créateurs sur la carte",
+  "scanInfo": "Abonnements de {{count}} comptes sur {{total}} explorés.",
+  "scanSkip": "Les comptes qui suivent plus de {{n}} autres ne sont pas explorés : les abonnements en masse en disent peu sur les goûts.",
+  "credit": "Données d'abonnement fournies par <src>HafSQL</src>, maintenu par <user>@{{user}}</user>",
+  "noSuggestions": "Aucun créateur à suggérer pour cette exploration.",
+  "filters": {
+    "title": "Filtres",
+    "overlap_one": "Suivi par au moins {{count}} des {{total}} comptes explorés",
+    "overlap_many": "Suivi par au moins {{count}} des {{total}} comptes explorés",
+    "overlap_other": "Suivi par au moins {{count}} des {{total}} comptes explorés",
+    "active": "Actif",
+    "activeWithin": "Ces {{count}} derniers jours",
+    "any": "Peu importe",
+    "rep": "Réputation",
+    "repAtLeast": "{{rep}} ou plus",
+    "creators": "Uniquement les créateurs avec des vidéos sur 3Speak",
+    "hideMine": "Masquer les comptes que je suis déjà",
+    "partial": "Certains détails de comptes n'ont pas pu être chargés, quelques filtres sont donc désactivés.",
+    "none": "Aucun créateur ne correspond à ces filtres.",
+    "reset": "Réinitialiser les filtres"
+  },
+  "stats": {
+    "followers_one": "{{n}} abonné",
+    "followers_many": "{{n}} abonnés",
+    "followers_other": "{{n}} abonnés",
+    "rep": "Réputation {{rep}}",
+    "videos": "{{videos}} vidéos, {{shorts}} shorts sur 3Speak",
+    "noVideos": "Pas encore de vidéos sur 3Speak"
+  },
+  "activeToday": "Actif aujourd'hui",
+  "activeAgo_one": "Actif il y a {{count}} jour",
+  "activeAgo_many": "Actif il y a {{count}} jours",
+  "activeAgo_other": "Actif il y a {{count}} jours",
+  "discover": "Créateurs à découvrir",
+  "openChannel": "Ouvrir la chaîne",
+  "exploreHere": "Explorer à partir d'ici",
+  "close": "Fermer",
+  "profileButton": "Explorer la galaxie Hive de @{{user}}",
+  "panelToggle": "Filtres et créateurs ({{count}})",
+  "controls": "Commandes",
+  "music": "Musique de fond",
+  "history": {
+    "label": "Précédent et suivant",
+    "undo": "Précédent",
+    "redo": "Suivant",
+    "undoKey": "Précédent (Ctrl+Z)",
+    "redoKey": "Suivant (Ctrl+Shift+Z)"
+  },
+  "collapse": "Réduire",
+  "links": {
+    "loading": "Chargement de leurs liens sur cette carte…",
+    "out_one": "Suit {{count}} compte sur cette carte",
+    "out_many": "Suit {{count}} comptes sur cette carte",
+    "out_other": "Suit {{count}} comptes sur cette carte",
+    "in_one": "Suivi par {{count}} compte sur cette carte",
+    "in_many": "Suivi par {{count}} comptes sur cette carte",
+    "in_other": "Suivi par {{count}} comptes sur cette carte"
+  },
+  "circles": {
+    "title": "Cercles",
+    "note": "Les comptes suivis par les mêmes personnes, regroupés automatiquement. Cliquez sur un cercle pour le mettre en avant.",
+    "label": "Cercle de @{{user}} · {{count}}",
+    "name": "Cercle de @{{user}}",
+    "size_one": "{{count}} à découvrir",
+    "size_many": "{{count}} à découvrir",
+    "size_other": "{{count}} à découvrir",
+    "ring": {
+      "following_one": "{{count}} suivi par @{{user}}",
+      "following_many": "{{count}} suivis par @{{user}}",
+      "following_other": "{{count}} suivis par @{{user}}",
+      "followers_one": "{{count}} suit @{{user}}",
+      "followers_many": "{{count}} suivent @{{user}}",
+      "followers_other": "{{count}} suivent @{{user}}",
+      "mutuals_one": "{{count}} ami",
+      "mutuals_many": "{{count}} amis",
+      "mutuals_other": "{{count}} amis"
+    },
+    "ringTitle": {
+      "following": "Comptes suivis par @{{user}} dans ce cercle ({{count}})",
+      "followers": "Abonnés de @{{user}} dans ce cercle ({{count}})",
+      "mutuals": "Amis de @{{user}} dans ce cercle ({{count}})"
+    },
+    "in": "Dans le cercle de @{{user}}",
+    "clear": "Afficher tous les créateurs"
+  }
+}

@@ -5,7 +5,7 @@ import { getFollowers, getRelationshipBetweenAccounts, isAccountValid } from '..
 // viewer's PERSONAL "not interested" hide state). This one is the moderation check.
 import { isCreatorHidden as isModeratedCreatorHidden } from '../../utils/hiddenCreators';
 import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useOpenChat } from '../../hooks/useOpenChat';
 import "./UserProfilePage.scss"
 import BarLoader from '../Loader/BarLoader';
@@ -21,7 +21,8 @@ import { MdAdd, MdClose, MdPlayArrow, MdFlag, MdChatBubbleOutline } from 'react-
 import ReportModal, { isReported } from '../modal/ReportModal';
 import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri';
 import { BiDollar } from 'react-icons/bi';
-import { IoBanOutline, IoEyeOutline } from 'react-icons/io5';
+import { IoBanOutline, IoEyeOutline, IoPlanetOutline } from 'react-icons/io5';
+import useGalaxyFits from '../../hooks/useGalaxyFits';
 import { getHidden, hideCreator, unhideCreator } from '../../utils/userFilters';
 import Follower from './Follower';
 import PlaylistCard from '../Cards/PlaylistCard';
@@ -63,6 +64,7 @@ const toast = toastIn('Profile');
 // a segment that starts with "@"), else from the /p/:user route.
 function UserProfilePage({ user: userProp }) {
     const { t } = useTranslation();
+    const galaxyFits = useGalaxyFits(); // the galaxy is desktop only
     const { user: routeUser } = useParams();
     const user = userProp || routeUser;
     const [searchParams] = useSearchParams();
@@ -627,6 +629,17 @@ const {
                     ? <><IoEyeOutline /> {t('profile.page.unhide')}</>
                     : <><IoBanOutline /> {t('profile.page.hide')}</>}
               </button>
+            )}
+            {/* This channel's Hive galaxy: who they follow and who those follow (page/Galaxy.jsx). */}
+            {galaxyFits && (
+              <Link
+                className="btn btn-secondary"
+                to={`/galaxy/${user}`}
+                title={t('galaxy.profileButton', { user })}
+                aria-label={t('galaxy.profileButton', { user })}
+              >
+                <IoPlanetOutline />
+              </Link>
             )}
             {/* Podcast / RSS feed for the channel. React 19 hoists the <link>
                 into <head>, which is what makes browsers and feed readers

@@ -1,0 +1,129 @@
+{
+  "title": "Hive galaxy",
+  "desktopOnly": {
+    "title": "The Hive galaxy needs a bigger screen",
+    "text": "Open it on a computer to explore who follows whom.",
+    "back": "Back to @{{user}}'s channel"
+  },
+  "modeLabel": "Whose follows to map",
+  "mode": {
+    "following": "Following",
+    "followers": "Followers",
+    "mutuals": "Friends"
+  },
+  "depth": {
+    "label": "Scan",
+    "orbit": "Orbit ({{n}} accounts)",
+    "starsystem": "Star system ({{n}} accounts)",
+    "nebula": "Nebula ({{n}} accounts)",
+    "deepspace": "Deep space (up to {{n}} accounts, slower)"
+  },
+  "find": {
+    "label": "Find an account in this galaxy",
+    "placeholder": "Find or explore an account",
+    "go": "Find",
+    "hidden": "@{{user}} is in this galaxy but hidden by your filters or the map limit.",
+    "missing": "@{{user}} is not in this galaxy.",
+    "explore": "Explore @{{user}}'s galaxy"
+  },
+  "loading": "Mapping @{{user}}'s galaxy…",
+  "progressLists": "Reading the follow lists",
+  "progress": "Reading their follows",
+  "progressDetails": "Loading account details",
+  "error": "This galaxy could not be loaded. Try again in a moment.",
+  "empty": {
+    "following": "@{{user}} doesn't follow anyone yet, so there is no galaxy to draw.",
+    "followers": "Nobody follows @{{user}} yet, so there is no galaxy to draw.",
+    "mutuals": "Nobody follows @{{user}} back yet, so there is no galaxy to draw."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Accounts ({{count}})",
+    "mutual": "Follow each other ({{count}})",
+    "oneWay": "One-way follow ({{count}})",
+    "suggestions": "Creators to discover ({{count}} of {{total}})",
+    "capped": "Map shows {{shown}} of {{total}}"
+  },
+  "hint": "Drag to turn, right-drag or Shift+drag to move, scroll to zoom toward the pointer. Click a star; click the centre to fly back.",
+  "via": "{{count}} of {{total}} scanned accounts follow them",
+  "followedBy": "@{{user}} follows them",
+  "followsCenter": "Follows @{{user}}",
+  "mutual": "@{{user}} and they follow each other",
+  "leadsTo_one": "Leads to {{count}} creator on the map",
+  "leadsTo_other": "Leads to {{count}} creators on the map",
+  "scanInfo": "Scanned the follows of {{count}} of {{total}} accounts.",
+  "scanSkip": "Accounts that follow more than {{n}} others are not scanned: mass-followers say little about taste.",
+  "credit": "Follow data from <src>HafSQL</src>, maintained by <user>@{{user}}</user>",
+  "noSuggestions": "No creators to suggest from this scan.",
+  "filters": {
+    "title": "Filters",
+    "overlap_one": "Followed by at least {{count}} of the {{total}} scanned",
+    "overlap_other": "Followed by at least {{count}} of the {{total}} scanned",
+    "active": "Active",
+    "activeWithin": "In the last {{count}} days",
+    "any": "Any",
+    "rep": "Reputation",
+    "repAtLeast": "{{rep}} or more",
+    "creators": "Only creators with videos on 3Speak",
+    "hideMine": "Hide accounts I already follow",
+    "partial": "Some account details could not be loaded, so a few filters are off.",
+    "none": "No creators match these filters.",
+    "reset": "Reset filters"
+  },
+  "stats": {
+    "followers_one": "{{n}} follower",
+    "followers_other": "{{n}} followers",
+    "rep": "Reputation {{rep}}",
+    "videos": "{{videos}} videos, {{shorts}} shorts on 3Speak",
+    "noVideos": "No videos on 3Speak yet"
+  },
+  "activeToday": "Active today",
+  "activeAgo_one": "Active {{count}} day ago",
+  "activeAgo_other": "Active {{count}} days ago",
+  "discover": "Creators to discover",
+  "openChannel": "Open channel",
+  "exploreHere": "Explore from here",
+  "close": "Close",
+  "profileButton": "Explore @{{user}}'s Hive galaxy",
+  "panelToggle": "Filters & creators ({{count}})",
+  "controls": "Controls",
+  "music": "Background music",
+  "history": {
+    "label": "Back and forward",
+    "undo": "Back",
+    "redo": "Forward",
+    "undoKey": "Back (Ctrl+Z)",
+    "redoKey": "Forward (Ctrl+Shift+Z)"
+  },
+  "collapse": "Collapse",
+  "links": {
+    "loading": "Loading their links on this map…",
+    "out_one": "Follows {{count}} account on this map",
+    "out_other": "Follows {{count}} accounts on this map",
+    "in_one": "Followed by {{count}} account on this map",
+    "in_other": "Followed by {{count}} accounts on this map"
+  },
+  "circles": {
+    "title": "Circles",
+    "note": "Accounts the same people follow, grouped automatically. Click one to focus it.",
+    "label": "@{{user}}'s circle · {{count}}",
+    "name": "@{{user}}'s circle",
+    "size_one": "{{count}} to discover",
+    "size_other": "{{count}} to discover",
+    "ring": {
+      "following_one": "{{count}} @{{user}} follows",
+      "following_other": "{{count}} @{{user}} follows",
+      "followers_one": "{{count}} follows @{{user}}",
+      "followers_other": "{{count}} follow @{{user}}",
+      "mutuals_one": "{{count}} friend",
+      "mutuals_other": "{{count}} friends"
+    },
+    "ringTitle": {
+      "following": "Accounts @{{user}} follows in this circle ({{count}})",
+      "followers": "@{{user}}'s followers in this circle ({{count}})",
+      "mutuals": "@{{user}}'s friends in this circle ({{count}})"
+    },
+    "in": "In @{{user}}'s circle",
+    "clear": "Show all creators"
+  }
+}

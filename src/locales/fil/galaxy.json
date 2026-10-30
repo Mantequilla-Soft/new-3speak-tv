@@ -1,0 +1,129 @@
+{
+  "title": "Hive galaxy",
+  "desktopOnly": {
+    "title": "Kailangan ng mas malaking screen ang Hive galaxy",
+    "text": "Buksan ito sa computer para makita kung sino ang nagfo-follow kanino.",
+    "back": "Bumalik sa channel ni @{{user}}"
+  },
+  "modeLabel": "Kaninong mga follow ang ima-map",
+  "mode": {
+    "following": "Fina-follow",
+    "followers": "Mga follower",
+    "mutuals": "Mga kaibigan"
+  },
+  "depth": {
+    "label": "Scan",
+    "orbit": "Orbita ({{n}} account)",
+    "starsystem": "Sistemang bituin ({{n}} account)",
+    "nebula": "Nebula ({{n}} account)",
+    "deepspace": "Malalim na kalawakan (hanggang {{n}} account, mas mabagal)"
+  },
+  "find": {
+    "label": "Maghanap ng account sa galaxy na ito",
+    "placeholder": "Maghanap o mag-explore ng account",
+    "go": "Hanapin",
+    "hidden": "Nasa galaxy na ito si @{{user}} pero nakatago dahil sa mga filter mo o sa limit ng mapa.",
+    "missing": "Wala si @{{user}} sa galaxy na ito.",
+    "explore": "I-explore ang galaxy ni @{{user}}"
+  },
+  "loading": "Mina-map ang galaxy ni @{{user}}…",
+  "progressLists": "Binabasa ang mga follow list",
+  "progress": "Binabasa ang mga fina-follow nila",
+  "progressDetails": "Nilo-load ang detalye ng mga account",
+  "error": "Hindi ma-load ang galaxy na ito. Subukan ulit mamaya.",
+  "empty": {
+    "following": "Wala pang fina-follow si @{{user}}, kaya walang galaxy na maiguguhit.",
+    "followers": "Wala pang nagfo-follow kay @{{user}}, kaya walang galaxy na maiguguhit.",
+    "mutuals": "Wala pang nag-follow back kay @{{user}}, kaya walang galaxy na maiguguhit."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Mga account ({{count}})",
+    "mutual": "Nagfo-follow sa isa't isa ({{count}})",
+    "oneWay": "One-way na follow ({{count}})",
+    "suggestions": "Mga creator na matutuklasan ({{count}} ng {{total}})",
+    "capped": "Ipinapakita ng mapa ang {{shown}} ng {{total}}"
+  },
+  "hint": "I-drag para iikot, i-right-drag o Shift+drag para ilipat, mag-scroll para mag-zoom papunta sa pointer. Mag-click ng bituin; i-click ang gitna para bumalik.",
+  "via": "{{count}} sa {{total}} na na-scan na account ang nagfo-follow sa kanila",
+  "followedBy": "Fina-follow sila ni @{{user}}",
+  "followsCenter": "Fina-follow si @{{user}}",
+  "mutual": "Nagfo-follow sa isa't isa sila at si @{{user}}",
+  "leadsTo_one": "Papunta sa {{count}} creator sa mapa",
+  "leadsTo_other": "Papunta sa {{count}} creator sa mapa",
+  "scanInfo": "Na-scan ang mga follow ng {{count}} sa {{total}} account.",
+  "scanSkip": "Hindi sina-scan ang mga account na nagfo-follow ng higit sa {{n}} iba: kaunti lang ang sinasabi ng mga mass-follower tungkol sa panlasa.",
+  "credit": "Follow data mula sa <src>HafSQL</src>, pinapanatili ni <user>@{{user}}</user>",
+  "noSuggestions": "Walang creator na maimumungkahi mula sa scan na ito.",
+  "filters": {
+    "title": "Mga filter",
+    "overlap_one": "Fina-follow ng hindi bababa sa {{count}} sa {{total}} na na-scan",
+    "overlap_other": "Fina-follow ng hindi bababa sa {{count}} sa {{total}} na na-scan",
+    "active": "Aktibo",
+    "activeWithin": "Sa huling {{count}} araw",
+    "any": "Kahit ano",
+    "rep": "Reputasyon",
+    "repAtLeast": "{{rep}} o higit pa",
+    "creators": "Mga creator lang na may video sa 3Speak",
+    "hideMine": "Itago ang mga account na fina-follow ko na",
+    "partial": "Hindi ma-load ang detalye ng ilang account, kaya naka-off ang ilang filter.",
+    "none": "Walang creator na tugma sa mga filter na ito.",
+    "reset": "I-reset ang mga filter"
+  },
+  "stats": {
+    "followers_one": "{{n}} follower",
+    "followers_other": "{{n}} follower",
+    "rep": "Reputasyon {{rep}}",
+    "videos": "{{videos}} video, {{shorts}} Shorts sa 3Speak",
+    "noVideos": "Wala pang video sa 3Speak"
+  },
+  "activeToday": "Aktibo ngayong araw",
+  "activeAgo_one": "Aktibo {{count}} araw na ang nakalipas",
+  "activeAgo_other": "Aktibo {{count}} araw na ang nakalipas",
+  "discover": "Mga creator na matutuklasan",
+  "openChannel": "Buksan ang channel",
+  "exploreHere": "Mag-explore mula rito",
+  "close": "Isara",
+  "profileButton": "I-explore ang Hive galaxy ni @{{user}}",
+  "panelToggle": "Mga filter at creator ({{count}})",
+  "controls": "Mga kontrol",
+  "music": "Background music",
+  "history": {
+    "label": "Pabalik at pasulong",
+    "undo": "Bumalik",
+    "redo": "Pasulong",
+    "undoKey": "Bumalik (Ctrl+Z)",
+    "redoKey": "Pasulong (Ctrl+Shift+Z)"
+  },
+  "collapse": "I-collapse",
+  "links": {
+    "loading": "Nilo-load ang mga koneksyon nila sa mapang ito…",
+    "out_one": "Nagfo-follow ng {{count}} account sa mapang ito",
+    "out_other": "Nagfo-follow ng {{count}} account sa mapang ito",
+    "in_one": "Fina-follow ng {{count}} account sa mapang ito",
+    "in_other": "Fina-follow ng {{count}} account sa mapang ito"
+  },
+  "circles": {
+    "title": "Mga circle",
+    "note": "Mga account na fina-follow ng parehong mga tao, awtomatikong pinagsama-sama. I-click ang isa para i-focus ito.",
+    "label": "Circle ni @{{user}} · {{count}}",
+    "name": "Circle ni @{{user}}",
+    "size_one": "{{count}} na matutuklasan",
+    "size_other": "{{count}} na matutuklasan",
+    "ring": {
+      "following_one": "{{count}} na fina-follow ni @{{user}}",
+      "following_other": "{{count}} na fina-follow ni @{{user}}",
+      "followers_one": "{{count}} na nagfo-follow kay @{{user}}",
+      "followers_other": "{{count}} na nagfo-follow kay @{{user}}",
+      "mutuals_one": "{{count}} kaibigan",
+      "mutuals_other": "{{count}} kaibigan"
+    },
+    "ringTitle": {
+      "following": "Mga account na fina-follow ni @{{user}} sa circle na ito ({{count}})",
+      "followers": "Mga follower ni @{{user}} sa circle na ito ({{count}})",
+      "mutuals": "Mga kaibigan ni @{{user}} sa circle na ito ({{count}})"
+    },
+    "in": "Nasa circle ni @{{user}}",
+    "clear": "Ipakita ang lahat ng creator"
+  }
+}

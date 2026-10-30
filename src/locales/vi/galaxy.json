@@ -1,0 +1,119 @@
+{
+  "title": "Thiên hà Hive",
+  "desktopOnly": {
+    "title": "Thiên hà Hive cần màn hình lớn hơn",
+    "text": "Mở trên máy tính để khám phá ai theo dõi ai.",
+    "back": "Quay lại kênh của @{{user}}"
+  },
+  "modeLabel": "Vẽ bản đồ theo dõi của ai",
+  "mode": {
+    "following": "Đang theo dõi",
+    "followers": "Người theo dõi",
+    "mutuals": "Bạn bè"
+  },
+  "depth": {
+    "label": "Quét",
+    "orbit": "Quỹ đạo ({{n}} tài khoản)",
+    "starsystem": "Hệ sao ({{n}} tài khoản)",
+    "nebula": "Tinh vân ({{n}} tài khoản)",
+    "deepspace": "Không gian sâu (tối đa {{n}} tài khoản, chậm hơn)"
+  },
+  "find": {
+    "label": "Tìm một tài khoản trong thiên hà này",
+    "placeholder": "Tìm hoặc khám phá một tài khoản",
+    "go": "Tìm",
+    "hidden": "@{{user}} có trong thiên hà này nhưng bị ẩn do bộ lọc của bạn hoặc giới hạn của bản đồ.",
+    "missing": "@{{user}} không có trong thiên hà này.",
+    "explore": "Khám phá thiên hà của @{{user}}"
+  },
+  "loading": "Đang vẽ thiên hà của @{{user}}…",
+  "progressLists": "Đang đọc danh sách theo dõi",
+  "progress": "Đang đọc lượt theo dõi của họ",
+  "progressDetails": "Đang tải thông tin tài khoản",
+  "error": "Không thể tải thiên hà này. Hãy thử lại sau giây lát.",
+  "empty": {
+    "following": "@{{user}} chưa theo dõi ai, nên chưa có thiên hà nào để vẽ.",
+    "followers": "Chưa có ai theo dõi @{{user}}, nên chưa có thiên hà nào để vẽ.",
+    "mutuals": "Chưa có ai theo dõi lại @{{user}}, nên chưa có thiên hà nào để vẽ."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Tài khoản ({{count}})",
+    "mutual": "Theo dõi lẫn nhau ({{count}})",
+    "oneWay": "Theo dõi một chiều ({{count}})",
+    "suggestions": "Nhà sáng tạo để khám phá ({{count}} trên {{total}})",
+    "capped": "Bản đồ hiển thị {{shown}} trên {{total}}"
+  },
+  "hint": "Kéo để xoay, kéo chuột phải hoặc Shift+kéo để di chuyển, cuộn để phóng to về phía con trỏ. Nhấp vào một ngôi sao; nhấp vào tâm để bay về.",
+  "via": "{{count}} trên {{total}} tài khoản đã quét theo dõi họ",
+  "followedBy": "@{{user}} theo dõi họ",
+  "followsCenter": "Theo dõi @{{user}}",
+  "mutual": "@{{user}} và họ theo dõi lẫn nhau",
+  "leadsTo_other": "Dẫn đến {{count}} nhà sáng tạo trên bản đồ",
+  "scanInfo": "Đã quét lượt theo dõi của {{count}} trên {{total}} tài khoản.",
+  "scanSkip": "Không quét các tài khoản theo dõi hơn {{n}} người khác: những tài khoản theo dõi hàng loạt không cho biết nhiều về sở thích.",
+  "credit": "Dữ liệu theo dõi từ <src>HafSQL</src>, do <user>@{{user}}</user> duy trì",
+  "noSuggestions": "Lần quét này không có nhà sáng tạo nào để gợi ý.",
+  "filters": {
+    "title": "Bộ lọc",
+    "overlap_other": "Được ít nhất {{count}} trên {{total}} tài khoản đã quét theo dõi",
+    "active": "Hoạt động",
+    "activeWithin": "Trong {{count}} ngày qua",
+    "any": "Bất kỳ",
+    "rep": "Danh tiếng",
+    "repAtLeast": "Từ {{rep}} trở lên",
+    "creators": "Chỉ nhà sáng tạo có video trên 3Speak",
+    "hideMine": "Ẩn các tài khoản tôi đã theo dõi",
+    "partial": "Không tải được thông tin của một số tài khoản, nên vài bộ lọc đã bị tắt.",
+    "none": "Không có nhà sáng tạo nào khớp với các bộ lọc này.",
+    "reset": "Đặt lại bộ lọc"
+  },
+  "stats": {
+    "followers_other": "{{n}} người theo dõi",
+    "rep": "Danh tiếng {{rep}}",
+    "videos": "{{videos}} video, {{shorts}} Shorts trên 3Speak",
+    "noVideos": "Chưa có video nào trên 3Speak"
+  },
+  "activeToday": "Hoạt động hôm nay",
+  "activeAgo_other": "Hoạt động {{count}} ngày trước",
+  "discover": "Nhà sáng tạo để khám phá",
+  "openChannel": "Mở kênh",
+  "exploreHere": "Khám phá từ đây",
+  "close": "Đóng",
+  "profileButton": "Khám phá thiên hà Hive của @{{user}}",
+  "panelToggle": "Bộ lọc và nhà sáng tạo ({{count}})",
+  "controls": "Điều khiển",
+  "music": "Nhạc nền",
+  "history": {
+    "label": "Lùi và tiến",
+    "undo": "Lùi",
+    "redo": "Tiến",
+    "undoKey": "Lùi (Ctrl+Z)",
+    "redoKey": "Tiến (Ctrl+Shift+Z)"
+  },
+  "collapse": "Thu gọn",
+  "links": {
+    "loading": "Đang tải các liên kết của họ trên bản đồ này…",
+    "out_other": "Theo dõi {{count}} tài khoản trên bản đồ này",
+    "in_other": "Được {{count}} tài khoản trên bản đồ này theo dõi"
+  },
+  "circles": {
+    "title": "Vòng tròn",
+    "note": "Các tài khoản được cùng một nhóm người theo dõi, tự động gom lại. Nhấp vào một vòng để tập trung vào nó.",
+    "label": "Vòng tròn của @{{user}} · {{count}}",
+    "name": "Vòng tròn của @{{user}}",
+    "size_other": "{{count}} để khám phá",
+    "ring": {
+      "following_other": "{{count}} được @{{user}} theo dõi",
+      "followers_other": "{{count}} theo dõi @{{user}}",
+      "mutuals_other": "{{count}} bạn bè"
+    },
+    "ringTitle": {
+      "following": "Tài khoản @{{user}} theo dõi trong vòng tròn này ({{count}})",
+      "followers": "Người theo dõi @{{user}} trong vòng tròn này ({{count}})",
+      "mutuals": "Bạn bè của @{{user}} trong vòng tròn này ({{count}})"
+    },
+    "in": "Trong vòng tròn của @{{user}}",
+    "clear": "Hiện tất cả nhà sáng tạo"
+  }
+}

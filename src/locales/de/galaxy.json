@@ -1,0 +1,129 @@
+{
+  "title": "Hive-Galaxie",
+  "desktopOnly": {
+    "title": "Die Hive-Galaxie braucht einen größeren Bildschirm",
+    "text": "Öffne sie auf einem Computer, um zu entdecken, wer wem folgt.",
+    "back": "Zurück zum Kanal von @{{user}}"
+  },
+  "modeLabel": "Wessen Follows angezeigt werden",
+  "mode": {
+    "following": "Folgt",
+    "followers": "Follower",
+    "mutuals": "Freunde"
+  },
+  "depth": {
+    "label": "Scan",
+    "orbit": "Umlaufbahn ({{n}} Konten)",
+    "starsystem": "Sternsystem ({{n}} Konten)",
+    "nebula": "Nebel ({{n}} Konten)",
+    "deepspace": "Tiefer Weltraum (bis zu {{n}} Konten, langsamer)"
+  },
+  "find": {
+    "label": "Ein Konto in dieser Galaxie finden",
+    "placeholder": "Konto finden oder erkunden",
+    "go": "Finden",
+    "hidden": "@{{user}} ist in dieser Galaxie, wird aber durch deine Filter oder das Kartenlimit ausgeblendet.",
+    "missing": "@{{user}} ist nicht in dieser Galaxie.",
+    "explore": "Galaxie von @{{user}} erkunden"
+  },
+  "loading": "Wir kartieren die Galaxie von @{{user}}…",
+  "progressLists": "Follow-Listen werden gelesen",
+  "progress": "Ihre Follows werden gelesen",
+  "progressDetails": "Kontodetails werden geladen",
+  "error": "Diese Galaxie konnte nicht geladen werden. Versuch es gleich noch einmal.",
+  "empty": {
+    "following": "@{{user}} folgt noch niemandem, deshalb gibt es keine Galaxie zu zeichnen.",
+    "followers": "Noch folgt niemand @{{user}}, deshalb gibt es keine Galaxie zu zeichnen.",
+    "mutuals": "Noch folgt niemand @{{user}} zurück, deshalb gibt es keine Galaxie zu zeichnen."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Konten ({{count}})",
+    "mutual": "Folgen sich gegenseitig ({{count}})",
+    "oneWay": "Einseitiges Folgen ({{count}})",
+    "suggestions": "Creator zum Entdecken ({{count}} von {{total}})",
+    "capped": "Die Karte zeigt {{shown}} von {{total}}"
+  },
+  "hint": "Ziehen zum Drehen, mit rechter Maustaste oder Shift+Ziehen zum Verschieben, scrollen zum Zoomen in Richtung Mauszeiger. Klick auf einen Stern; klick auf die Mitte, um zurückzufliegen.",
+  "via": "{{count}} von {{total}} gescannten Konten folgen ihnen",
+  "followedBy": "@{{user}} folgt ihnen",
+  "followsCenter": "Folgt @{{user}}",
+  "mutual": "@{{user}} und sie folgen sich gegenseitig",
+  "leadsTo_one": "Führt zu {{count}} Creator auf der Karte",
+  "leadsTo_other": "Führt zu {{count}} Creatorn auf der Karte",
+  "scanInfo": "Die Follows von {{count}} von {{total}} Konten wurden gescannt.",
+  "scanSkip": "Konten, die mehr als {{n}} anderen folgen, werden nicht gescannt: Massen-Follower sagen wenig über Geschmack aus.",
+  "credit": "Follow-Daten von <src>HafSQL</src>, betreut von <user>@{{user}}</user>",
+  "noSuggestions": "Aus diesem Scan gibt es keine Creator zum Vorschlagen.",
+  "filters": {
+    "title": "Filter",
+    "overlap_one": "Gefolgt von mindestens {{count}} der {{total}} gescannten",
+    "overlap_other": "Gefolgt von mindestens {{count}} der {{total}} gescannten",
+    "active": "Aktiv",
+    "activeWithin": "In den letzten {{count}} Tagen",
+    "any": "Egal",
+    "rep": "Reputation",
+    "repAtLeast": "{{rep}} oder mehr",
+    "creators": "Nur Creator mit Videos auf 3Speak",
+    "hideMine": "Konten ausblenden, denen ich schon folge",
+    "partial": "Einige Kontodetails konnten nicht geladen werden, deshalb sind ein paar Filter aus.",
+    "none": "Keine Creator passen zu diesen Filtern.",
+    "reset": "Filter zurücksetzen"
+  },
+  "stats": {
+    "followers_one": "{{n}} Follower",
+    "followers_other": "{{n}} Follower",
+    "rep": "Reputation {{rep}}",
+    "videos": "{{videos}} Videos, {{shorts}} Shorts auf 3Speak",
+    "noVideos": "Noch keine Videos auf 3Speak"
+  },
+  "activeToday": "Heute aktiv",
+  "activeAgo_one": "Vor {{count}} Tag aktiv",
+  "activeAgo_other": "Vor {{count}} Tagen aktiv",
+  "discover": "Creator zum Entdecken",
+  "openChannel": "Kanal öffnen",
+  "exploreHere": "Von hier aus erkunden",
+  "close": "Schließen",
+  "profileButton": "Hive-Galaxie von @{{user}} erkunden",
+  "panelToggle": "Filter & Creator ({{count}})",
+  "controls": "Steuerung",
+  "music": "Hintergrundmusik",
+  "history": {
+    "label": "Zurück und vor",
+    "undo": "Zurück",
+    "redo": "Vor",
+    "undoKey": "Zurück (Ctrl+Z)",
+    "redoKey": "Vor (Ctrl+Shift+Z)"
+  },
+  "collapse": "Einklappen",
+  "links": {
+    "loading": "Ihre Verbindungen auf dieser Karte werden geladen…",
+    "out_one": "Folgt {{count}} Konto auf dieser Karte",
+    "out_other": "Folgt {{count}} Konten auf dieser Karte",
+    "in_one": "Gefolgt von {{count}} Konto auf dieser Karte",
+    "in_other": "Gefolgt von {{count}} Konten auf dieser Karte"
+  },
+  "circles": {
+    "title": "Kreise",
+    "note": "Konten, denen dieselben Leute folgen, automatisch gruppiert. Klick auf einen Kreis, um ihn hervorzuheben.",
+    "label": "Kreis von @{{user}} · {{count}}",
+    "name": "Kreis von @{{user}}",
+    "size_one": "{{count}} zum Entdecken",
+    "size_other": "{{count}} zum Entdecken",
+    "ring": {
+      "following_one": "{{count}}, dem @{{user}} folgt",
+      "following_other": "{{count}}, denen @{{user}} folgt",
+      "followers_one": "{{count}} folgt @{{user}}",
+      "followers_other": "{{count}} folgen @{{user}}",
+      "mutuals_one": "{{count}} Freund",
+      "mutuals_other": "{{count}} Freunde"
+    },
+    "ringTitle": {
+      "following": "Konten in diesem Kreis, denen @{{user}} folgt ({{count}})",
+      "followers": "Follower von @{{user}} in diesem Kreis ({{count}})",
+      "mutuals": "Freunde von @{{user}} in diesem Kreis ({{count}})"
+    },
+    "in": "Im Kreis von @{{user}}",
+    "clear": "Alle Creator zeigen"
+  }
+}

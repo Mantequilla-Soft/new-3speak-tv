@@ -1,0 +1,119 @@
+{
+  "title": "Hiveギャラクシー",
+  "desktopOnly": {
+    "title": "Hiveギャラクシーには大きな画面が必要です",
+    "text": "パソコンで開くと、誰が誰をフォローしているかを探索できます。",
+    "back": "@{{user}}さんのチャンネルに戻る"
+  },
+  "modeLabel": "マップにするフォロー関係",
+  "mode": {
+    "following": "フォロー中",
+    "followers": "フォロワー",
+    "mutuals": "友達"
+  },
+  "depth": {
+    "label": "スキャン",
+    "orbit": "軌道（{{n}}アカウント）",
+    "starsystem": "恒星系（{{n}}アカウント）",
+    "nebula": "星雲（{{n}}アカウント）",
+    "deepspace": "深宇宙（最大{{n}}アカウント、時間がかかります）"
+  },
+  "find": {
+    "label": "このギャラクシーでアカウントを探す",
+    "placeholder": "アカウントを探す、または探索する",
+    "go": "探す",
+    "hidden": "@{{user}}さんはこのギャラクシーにいますが、フィルターまたはマップの上限により非表示になっています。",
+    "missing": "@{{user}}さんはこのギャラクシーにいません。",
+    "explore": "@{{user}}さんのギャラクシーを探索"
+  },
+  "loading": "@{{user}}さんのギャラクシーをマッピングしています…",
+  "progressLists": "フォローリストを読み込んでいます",
+  "progress": "その人たちのフォローを読み込んでいます",
+  "progressDetails": "アカウントの詳細を読み込んでいます",
+  "error": "このギャラクシーを読み込めませんでした。しばらくしてからもう一度お試しください。",
+  "empty": {
+    "following": "@{{user}}さんはまだ誰もフォローしていないため、描けるギャラクシーがありません。",
+    "followers": "@{{user}}さんをフォローしている人はまだいないため、描けるギャラクシーがありません。",
+    "mutuals": "@{{user}}さんをフォローし返している人はまだいないため、描けるギャラクシーがありません。"
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "アカウント（{{count}}）",
+    "mutual": "相互フォロー（{{count}}）",
+    "oneWay": "片方向のフォロー（{{count}}）",
+    "suggestions": "おすすめのクリエイター（{{total}}人中{{count}}人）",
+    "capped": "マップには{{total}}件中{{shown}}件を表示しています"
+  },
+  "hint": "ドラッグで回転、右ドラッグまたはShift+ドラッグで移動、スクロールでポインターに向かってズームします。星をクリックして選択し、中心をクリックすると戻ります。",
+  "via": "スキャンした{{total}}アカウント中{{count}}アカウントがフォローしています",
+  "followedBy": "@{{user}}さんがフォローしています",
+  "followsCenter": "@{{user}}さんをフォローしています",
+  "mutual": "@{{user}}さんと相互フォローしています",
+  "leadsTo_other": "マップ上の{{count}}人のクリエイターにつながります",
+  "scanInfo": "{{total}}アカウント中{{count}}アカウントのフォローをスキャンしました。",
+  "scanSkip": "{{n}}人より多くフォローしているアカウントはスキャンしません。大量にフォローするアカウントからは好みがほとんどわからないためです。",
+  "credit": "フォローデータは<src>HafSQL</src>によるもので、<user>@{{user}}</user>さんが管理しています",
+  "noSuggestions": "このスキャンからおすすめできるクリエイターはいません。",
+  "filters": {
+    "title": "フィルター",
+    "overlap_other": "スキャンした{{total}}アカウントのうち{{count}}以上がフォロー",
+    "active": "アクティブ",
+    "activeWithin": "過去{{count}}日以内",
+    "any": "すべて",
+    "rep": "レピュテーション",
+    "repAtLeast": "{{rep}}以上",
+    "creators": "3Speakに動画があるクリエイターのみ",
+    "hideMine": "すでにフォローしているアカウントを隠す",
+    "partial": "一部のアカウント詳細を読み込めなかったため、いくつかのフィルターは無効になっています。",
+    "none": "これらのフィルターに一致するクリエイターはいません。",
+    "reset": "フィルターをリセット"
+  },
+  "stats": {
+    "followers_other": "フォロワー{{n}}人",
+    "rep": "レピュテーション{{rep}}",
+    "videos": "3Speakで動画{{videos}}本、Shorts {{shorts}}本",
+    "noVideos": "3Speakにはまだ動画がありません"
+  },
+  "activeToday": "今日アクティブ",
+  "activeAgo_other": "{{count}}日前にアクティブ",
+  "discover": "おすすめのクリエイター",
+  "openChannel": "チャンネルを開く",
+  "exploreHere": "ここから探索",
+  "close": "閉じる",
+  "profileButton": "@{{user}}さんのHiveギャラクシーを探索",
+  "panelToggle": "フィルターとクリエイター（{{count}}）",
+  "controls": "操作",
+  "music": "BGM",
+  "history": {
+    "label": "戻る・進む",
+    "undo": "戻る",
+    "redo": "進む",
+    "undoKey": "戻る（Ctrl+Z）",
+    "redoKey": "進む（Ctrl+Shift+Z）"
+  },
+  "collapse": "折りたたむ",
+  "links": {
+    "loading": "このマップ上のつながりを読み込んでいます…",
+    "out_other": "このマップ上の{{count}}アカウントをフォロー",
+    "in_other": "このマップ上の{{count}}アカウントにフォローされています"
+  },
+  "circles": {
+    "title": "サークル",
+    "note": "同じ人たちがフォローしているアカウントを自動でグループ化しています。クリックするとそのサークルに絞り込みます。",
+    "label": "@{{user}}さんのサークル · {{count}}",
+    "name": "@{{user}}さんのサークル",
+    "size_other": "おすすめ{{count}}人",
+    "ring": {
+      "following_other": "@{{user}}さんがフォロー中の{{count}}人",
+      "followers_other": "@{{user}}さんをフォロー中の{{count}}人",
+      "mutuals_other": "友達{{count}}人"
+    },
+    "ringTitle": {
+      "following": "このサークルで@{{user}}さんがフォローしているアカウント（{{count}}）",
+      "followers": "このサークルにいる@{{user}}さんのフォロワー（{{count}}）",
+      "mutuals": "このサークルにいる@{{user}}さんの友達（{{count}}）"
+    },
+    "in": "@{{user}}さんのサークル内",
+    "clear": "すべてのクリエイターを表示"
+  }
+}

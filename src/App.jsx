@@ -99,6 +99,7 @@ const FollowFeed = lazyRoute(() => import("./page/FollowFeed"), "./page/FollowFe
 const HiveImageUploader = lazyRoute(() => import("./page/HiveImageUploader"), "./page/HiveImageUploader");
 const Leaderboard = lazyRoute(() => import("./page/Leaderboard"), "./page/Leaderboard");
 const Recap = lazyRoute(() => import("./page/Recap"), "./page/Recap");
+const Galaxy = lazyRoute(() => import("./page/Galaxy"), "./page/Galaxy");
 const InvitePage = lazyRoute(() => import("./page/Invite/InvitePage"), "./page/Invite/InvitePage");
 import InvitePopup from "./components/InvitePopup/InvitePopup";
 const InviteLinks = lazyRoute(() => import("./page/Invite/InviteLinks"), "./page/Invite/InviteLinks");
@@ -860,6 +861,8 @@ function App() {
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/recap" element={<Recap />} />
               <Route path="/recap/:username" element={<Recap />} />
+              <Route path="/galaxy" element={<Galaxy />} />
+              <Route path="/galaxy/:username" element={<Galaxy />} />
               {/* In-app translation editor; translators only (server-checked). */}
               <Route path="/translate" element={<Translate />} />
               <Route path="/surf" element={<Surf />} />

@@ -1,0 +1,149 @@
+{
+  "title": "Galaktyka Hive",
+  "desktopOnly": {
+    "title": "Galaktyka Hive potrzebuje większego ekranu",
+    "text": "Otwórz ją na komputerze, aby zobaczyć, kto kogo obserwuje.",
+    "back": "Wróć do kanału @{{user}}"
+  },
+  "modeLabel": "Czyje obserwacje pokazać",
+  "mode": {
+    "following": "Obserwowani",
+    "followers": "Obserwujący",
+    "mutuals": "Znajomi"
+  },
+  "depth": {
+    "label": "Skan",
+    "orbit": "Orbita (kont: {{n}})",
+    "starsystem": "Układ gwiezdny (kont: {{n}})",
+    "nebula": "Mgławica (kont: {{n}})",
+    "deepspace": "Głęboki kosmos (do {{n}} kont, wolniej)"
+  },
+  "find": {
+    "label": "Znajdź konto w tej galaktyce",
+    "placeholder": "Znajdź lub odkryj konto",
+    "go": "Znajdź",
+    "hidden": "@{{user}} jest w tej galaktyce, ale ukrywają je twoje filtry lub limit mapy.",
+    "missing": "@{{user}} nie ma w tej galaktyce.",
+    "explore": "Odkryj galaktykę @{{user}}"
+  },
+  "loading": "Mapujemy galaktykę @{{user}}…",
+  "progressLists": "Wczytujemy listy obserwowanych",
+  "progress": "Wczytujemy, kogo obserwują",
+  "progressDetails": "Wczytujemy szczegóły kont",
+  "error": "Nie udało się wczytać tej galaktyki. Spróbuj ponownie za chwilę.",
+  "empty": {
+    "following": "@{{user}} jeszcze nikogo nie obserwuje, więc nie ma galaktyki do narysowania.",
+    "followers": "Nikt jeszcze nie obserwuje @{{user}}, więc nie ma galaktyki do narysowania.",
+    "mutuals": "Nikt jeszcze nie odwzajemnia obserwacji @{{user}}, więc nie ma galaktyki do narysowania."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Konta ({{count}})",
+    "mutual": "Obserwują się wzajemnie ({{count}})",
+    "oneWay": "Obserwacja jednostronna ({{count}})",
+    "suggestions": "Twórcy do odkrycia ({{count}} z {{total}})",
+    "capped": "Mapa pokazuje {{shown}} z {{total}}"
+  },
+  "hint": "Przeciągnij, aby obracać, przeciągnij prawym przyciskiem lub z Shift, aby przesuwać, przewiń, aby przybliżać w stronę kursora. Kliknij gwiazdę; kliknij środek, aby wrócić.",
+  "via": "Obserwowane przez {{count}} z {{total}} przeskanowanych kont",
+  "followedBy": "Obserwowane przez @{{user}}",
+  "followsCenter": "Obserwuje @{{user}}",
+  "mutual": "Obserwuje się wzajemnie z @{{user}}",
+  "leadsTo_one": "Prowadzi do {{count}} twórcy na mapie",
+  "leadsTo_few": "Prowadzi do {{count}} twórców na mapie",
+  "leadsTo_many": "Prowadzi do {{count}} twórców na mapie",
+  "leadsTo_other": "Prowadzi do {{count}} twórcy na mapie",
+  "scanInfo": "Przeskanowano obserwowanych przez {{count}} z {{total}} kont.",
+  "scanSkip": "Konta obserwujące więcej niż {{n}} innych nie są skanowane: masowi obserwujący niewiele mówią o guście.",
+  "credit": "Dane o obserwacjach z <src>HafSQL</src>, utrzymywane przez <user>@{{user}}</user>",
+  "noSuggestions": "Ten skan nie dał żadnych twórców do polecenia.",
+  "filters": {
+    "title": "Filtry",
+    "overlap_one": "Obserwowane przez co najmniej {{count}} z {{total}} przeskanowanych",
+    "overlap_few": "Obserwowane przez co najmniej {{count}} z {{total}} przeskanowanych",
+    "overlap_many": "Obserwowane przez co najmniej {{count}} z {{total}} przeskanowanych",
+    "overlap_other": "Obserwowane przez co najmniej {{count}} z {{total}} przeskanowanych",
+    "active": "Aktywność",
+    "activeWithin": "W ciągu ostatnich {{count}} dni",
+    "any": "Dowolna",
+    "rep": "Reputacja",
+    "repAtLeast": "{{rep}} lub więcej",
+    "creators": "Tylko twórcy z filmami na 3Speak",
+    "hideMine": "Ukryj konta, które już obserwuję",
+    "partial": "Nie udało się wczytać części szczegółów kont, więc kilka filtrów jest wyłączonych.",
+    "none": "Żaden twórca nie pasuje do tych filtrów.",
+    "reset": "Resetuj filtry"
+  },
+  "stats": {
+    "followers_one": "{{n}} obserwujący",
+    "followers_few": "{{n}} obserwujących",
+    "followers_many": "{{n}} obserwujących",
+    "followers_other": "{{n}} obserwującego",
+    "rep": "Reputacja {{rep}}",
+    "videos": "Na 3Speak: filmy {{videos}}, shorty {{shorts}}",
+    "noVideos": "Brak jeszcze filmów na 3Speak"
+  },
+  "activeToday": "Aktywność: dziś",
+  "activeAgo_one": "Aktywność: {{count}} dzień temu",
+  "activeAgo_few": "Aktywność: {{count}} dni temu",
+  "activeAgo_many": "Aktywność: {{count}} dni temu",
+  "activeAgo_other": "Aktywność: {{count}} dnia temu",
+  "discover": "Twórcy do odkrycia",
+  "openChannel": "Otwórz kanał",
+  "exploreHere": "Odkrywaj stąd",
+  "close": "Zamknij",
+  "profileButton": "Odkryj galaktykę Hive @{{user}}",
+  "panelToggle": "Filtry i twórcy ({{count}})",
+  "controls": "Sterowanie",
+  "music": "Muzyka w tle",
+  "history": {
+    "label": "Wstecz i dalej",
+    "undo": "Wstecz",
+    "redo": "Dalej",
+    "undoKey": "Wstecz (Ctrl+Z)",
+    "redoKey": "Dalej (Ctrl+Shift+Z)"
+  },
+  "collapse": "Zwiń",
+  "links": {
+    "loading": "Wczytujemy powiązania na tej mapie…",
+    "out_one": "Obserwuje {{count}} konto na tej mapie",
+    "out_few": "Obserwuje {{count}} konta na tej mapie",
+    "out_many": "Obserwuje {{count}} kont na tej mapie",
+    "out_other": "Obserwuje {{count}} konta na tej mapie",
+    "in_one": "Obserwowane przez {{count}} konto na tej mapie",
+    "in_few": "Obserwowane przez {{count}} konta na tej mapie",
+    "in_many": "Obserwowane przez {{count}} kont na tej mapie",
+    "in_other": "Obserwowane przez {{count}} konta na tej mapie"
+  },
+  "circles": {
+    "title": "Kręgi",
+    "note": "Konta obserwowane przez te same osoby, grupowane automatycznie. Kliknij krąg, aby się na nim skupić.",
+    "label": "Krąg @{{user}} · {{count}}",
+    "name": "Krąg @{{user}}",
+    "size_one": "Do odkrycia: {{count}}",
+    "size_few": "Do odkrycia: {{count}}",
+    "size_many": "Do odkrycia: {{count}}",
+    "size_other": "Do odkrycia: {{count}}",
+    "ring": {
+      "following_one": "Obserwowane przez @{{user}}: {{count}}",
+      "following_few": "Obserwowane przez @{{user}}: {{count}}",
+      "following_many": "Obserwowane przez @{{user}}: {{count}}",
+      "following_other": "Obserwowane przez @{{user}}: {{count}}",
+      "followers_one": "Obserwujący @{{user}}: {{count}}",
+      "followers_few": "Obserwujący @{{user}}: {{count}}",
+      "followers_many": "Obserwujący @{{user}}: {{count}}",
+      "followers_other": "Obserwujący @{{user}}: {{count}}",
+      "mutuals_one": "{{count}} znajomy",
+      "mutuals_few": "{{count}} znajomych",
+      "mutuals_many": "{{count}} znajomych",
+      "mutuals_other": "{{count}} znajomego"
+    },
+    "ringTitle": {
+      "following": "Konta obserwowane przez @{{user}} w tym kręgu ({{count}})",
+      "followers": "Obserwujący @{{user}} w tym kręgu ({{count}})",
+      "mutuals": "Znajomi @{{user}} w tym kręgu ({{count}})"
+    },
+    "in": "W kręgu @{{user}}",
+    "clear": "Pokaż wszystkich twórców"
+  }
+}

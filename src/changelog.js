@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.80.63',
+    category: 'profile',
+    date: '2026-10-30',
+    summary: "New on desktop: the Hive galaxy, a 3D map of a channel's follows that helps you discover new creators. Open it with the planet button.",
+  },
+  {
     version: '1.80.62',
     category: 'audio',
     date: '2026-10-30',

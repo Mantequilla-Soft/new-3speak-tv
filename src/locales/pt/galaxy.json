@@ -1,0 +1,139 @@
+{
+  "title": "Galáxia Hive",
+  "desktopOnly": {
+    "title": "A galáxia Hive precisa de uma tela maior",
+    "text": "Abra no computador para explorar quem segue quem.",
+    "back": "Voltar ao canal de @{{user}}"
+  },
+  "modeLabel": "Quais conexões mapear",
+  "mode": {
+    "following": "Seguindo",
+    "followers": "Seguidores",
+    "mutuals": "Amigos"
+  },
+  "depth": {
+    "label": "Varredura",
+    "orbit": "Órbita ({{n}} contas)",
+    "starsystem": "Sistema estelar ({{n}} contas)",
+    "nebula": "Nebulosa ({{n}} contas)",
+    "deepspace": "Espaço profundo (até {{n}} contas, mais lento)"
+  },
+  "find": {
+    "label": "Encontrar uma conta nesta galáxia",
+    "placeholder": "Encontre ou explore uma conta",
+    "go": "Encontrar",
+    "hidden": "@{{user}} está nesta galáxia, mas está oculto pelos seus filtros ou pelo limite do mapa.",
+    "missing": "@{{user}} não está nesta galáxia.",
+    "explore": "Explorar a galáxia de @{{user}}"
+  },
+  "loading": "Mapeando a galáxia de @{{user}}…",
+  "progressLists": "Lendo as listas de seguidos",
+  "progress": "Lendo quem eles seguem",
+  "progressDetails": "Carregando os detalhes das contas",
+  "error": "Não foi possível carregar esta galáxia. Tente de novo em instantes.",
+  "empty": {
+    "following": "@{{user}} ainda não segue ninguém, então não há galáxia para desenhar.",
+    "followers": "Ninguém segue @{{user}} ainda, então não há galáxia para desenhar.",
+    "mutuals": "Ninguém segue @{{user}} de volta ainda, então não há galáxia para desenhar."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Contas ({{count}})",
+    "mutual": "Seguem um ao outro ({{count}})",
+    "oneWay": "Seguem em um só sentido ({{count}})",
+    "suggestions": "Criadores para descobrir ({{count}} de {{total}})",
+    "capped": "O mapa mostra {{shown}} de {{total}}"
+  },
+  "hint": "Arraste para girar, arraste com o botão direito ou com Shift para mover, role para dar zoom em direção ao ponteiro. Clique em uma estrela; clique no centro para voltar.",
+  "via": "{{count}} de {{total}} contas analisadas seguem essa conta",
+  "followedBy": "@{{user}} segue essa conta",
+  "followsCenter": "Segue @{{user}}",
+  "mutual": "@{{user}} e essa conta seguem uma à outra",
+  "leadsTo_one": "Leva a {{count}} criador no mapa",
+  "leadsTo_many": "Leva a {{count}} criadores no mapa",
+  "leadsTo_other": "Leva a {{count}} criadores no mapa",
+  "scanInfo": "Analisamos quem {{count}} de {{total}} contas seguem.",
+  "scanSkip": "Contas que seguem mais de {{n}} outras não são analisadas: quem segue em massa diz pouco sobre gosto.",
+  "credit": "Dados de seguidores do <src>HafSQL</src>, mantido por <user>@{{user}}</user>",
+  "noSuggestions": "Nenhum criador para sugerir nesta varredura.",
+  "filters": {
+    "title": "Filtros",
+    "overlap_one": "Seguido por pelo menos {{count}} das {{total}} analisadas",
+    "overlap_many": "Seguido por pelo menos {{count}} das {{total}} analisadas",
+    "overlap_other": "Seguido por pelo menos {{count}} das {{total}} analisadas",
+    "active": "Ativo",
+    "activeWithin": "Nos últimos {{count}} dias",
+    "any": "Qualquer",
+    "rep": "Reputação",
+    "repAtLeast": "{{rep}} ou mais",
+    "creators": "Só criadores com vídeos no 3Speak",
+    "hideMine": "Ocultar contas que eu já sigo",
+    "partial": "Não foi possível carregar alguns detalhes das contas, então alguns filtros estão desativados.",
+    "none": "Nenhum criador corresponde a esses filtros.",
+    "reset": "Redefinir filtros"
+  },
+  "stats": {
+    "followers_one": "{{n}} seguidor",
+    "followers_many": "{{n}} seguidores",
+    "followers_other": "{{n}} seguidores",
+    "rep": "Reputação {{rep}}",
+    "videos": "{{videos}} vídeos, {{shorts}} shorts no 3Speak",
+    "noVideos": "Ainda sem vídeos no 3Speak"
+  },
+  "activeToday": "Ativo hoje",
+  "activeAgo_one": "Ativo há {{count}} dia",
+  "activeAgo_many": "Ativo há {{count}} dias",
+  "activeAgo_other": "Ativo há {{count}} dias",
+  "discover": "Criadores para descobrir",
+  "openChannel": "Abrir canal",
+  "exploreHere": "Explorar a partir daqui",
+  "close": "Fechar",
+  "profileButton": "Explorar a galáxia Hive de @{{user}}",
+  "panelToggle": "Filtros e criadores ({{count}})",
+  "controls": "Controles",
+  "music": "Música de fundo",
+  "history": {
+    "label": "Voltar e avançar",
+    "undo": "Voltar",
+    "redo": "Avançar",
+    "undoKey": "Voltar (Ctrl+Z)",
+    "redoKey": "Avançar (Ctrl+Shift+Z)"
+  },
+  "collapse": "Recolher",
+  "links": {
+    "loading": "Carregando as conexões neste mapa…",
+    "out_one": "Segue {{count}} conta neste mapa",
+    "out_many": "Segue {{count}} contas neste mapa",
+    "out_other": "Segue {{count}} contas neste mapa",
+    "in_one": "Seguido por {{count}} conta neste mapa",
+    "in_many": "Seguido por {{count}} contas neste mapa",
+    "in_other": "Seguido por {{count}} contas neste mapa"
+  },
+  "circles": {
+    "title": "Círculos",
+    "note": "Contas que as mesmas pessoas seguem, agrupadas automaticamente. Clique em um círculo para destacá-lo.",
+    "label": "Círculo de @{{user}} · {{count}}",
+    "name": "Círculo de @{{user}}",
+    "size_one": "{{count}} para descobrir",
+    "size_many": "{{count}} para descobrir",
+    "size_other": "{{count}} para descobrir",
+    "ring": {
+      "following_one": "{{count}} seguido por @{{user}}",
+      "following_many": "{{count}} seguidos por @{{user}}",
+      "following_other": "{{count}} seguidos por @{{user}}",
+      "followers_one": "{{count}} segue @{{user}}",
+      "followers_many": "{{count}} seguem @{{user}}",
+      "followers_other": "{{count}} seguem @{{user}}",
+      "mutuals_one": "{{count}} amigo",
+      "mutuals_many": "{{count}} amigos",
+      "mutuals_other": "{{count}} amigos"
+    },
+    "ringTitle": {
+      "following": "Contas que @{{user}} segue neste círculo ({{count}})",
+      "followers": "Seguidores de @{{user}} neste círculo ({{count}})",
+      "mutuals": "Amigos de @{{user}} neste círculo ({{count}})"
+    },
+    "in": "No círculo de @{{user}}",
+    "clear": "Mostrar todos os criadores"
+  }
+}

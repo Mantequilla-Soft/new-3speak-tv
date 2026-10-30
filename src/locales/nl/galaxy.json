@@ -1,0 +1,129 @@
+{
+  "title": "Hive-sterrenstelsel",
+  "desktopOnly": {
+    "title": "Het Hive-sterrenstelsel heeft een groter scherm nodig",
+    "text": "Open het op een computer om te ontdekken wie wie volgt.",
+    "back": "Terug naar het kanaal van @{{user}}"
+  },
+  "modeLabel": "Welke volgrelaties in kaart brengen",
+  "mode": {
+    "following": "Volgend",
+    "followers": "Volgers",
+    "mutuals": "Vrienden"
+  },
+  "depth": {
+    "label": "Scan",
+    "orbit": "Baan ({{n}} accounts)",
+    "starsystem": "Stersysteem ({{n}} accounts)",
+    "nebula": "Nevel ({{n}} accounts)",
+    "deepspace": "Diepe ruimte (tot {{n}} accounts, trager)"
+  },
+  "find": {
+    "label": "Een account in dit sterrenstelsel zoeken",
+    "placeholder": "Zoek of verken een account",
+    "go": "Zoeken",
+    "hidden": "@{{user}} staat in dit sterrenstelsel, maar is verborgen door je filters of de kaartlimiet.",
+    "missing": "@{{user}} staat niet in dit sterrenstelsel.",
+    "explore": "Verken het sterrenstelsel van @{{user}}"
+  },
+  "loading": "Het sterrenstelsel van @{{user}} wordt in kaart gebracht…",
+  "progressLists": "Volglijsten worden gelezen",
+  "progress": "Hun gevolgde accounts worden gelezen",
+  "progressDetails": "Accountgegevens worden geladen",
+  "error": "Dit sterrenstelsel kon niet worden geladen. Probeer het zo opnieuw.",
+  "empty": {
+    "following": "@{{user}} volgt nog niemand, dus er is geen sterrenstelsel om te tekenen.",
+    "followers": "Nog niemand volgt @{{user}}, dus er is geen sterrenstelsel om te tekenen.",
+    "mutuals": "Nog niemand volgt @{{user}} terug, dus er is geen sterrenstelsel om te tekenen."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Accounts ({{count}})",
+    "mutual": "Volgen elkaar ({{count}})",
+    "oneWay": "Eenzijdig gevolgd ({{count}})",
+    "suggestions": "Makers om te ontdekken ({{count}} van {{total}})",
+    "capped": "Kaart toont {{shown}} van {{total}}"
+  },
+  "hint": "Sleep om te draaien, sleep met rechts of Shift+slepen om te verschuiven, scroll om naar de aanwijzer te zoomen. Klik op een ster; klik op het midden om terug te vliegen.",
+  "via": "Gevolgd door {{count}} van {{total}} gescande accounts",
+  "followedBy": "Gevolgd door @{{user}}",
+  "followsCenter": "Volgt @{{user}}",
+  "mutual": "@{{user}} en dit account volgen elkaar",
+  "leadsTo_one": "Leidt naar {{count}} maker op de kaart",
+  "leadsTo_other": "Leidt naar {{count}} makers op de kaart",
+  "scanInfo": "De gevolgde accounts van {{count}} van {{total}} accounts gescand.",
+  "scanSkip": "Accounts die meer dan {{n}} anderen volgen worden niet gescand: massavolgers zeggen weinig over smaak.",
+  "credit": "Volgdata van <src>HafSQL</src>, onderhouden door <user>@{{user}}</user>",
+  "noSuggestions": "Geen makers om voor te stellen uit deze scan.",
+  "filters": {
+    "title": "Filters",
+    "overlap_one": "Gevolgd door minstens {{count}} van de {{total}} gescande accounts",
+    "overlap_other": "Gevolgd door minstens {{count}} van de {{total}} gescande accounts",
+    "active": "Actief",
+    "activeWithin": "In de afgelopen {{count}} dagen",
+    "any": "Alle",
+    "rep": "Reputatie",
+    "repAtLeast": "{{rep}} of meer",
+    "creators": "Alleen makers met video's op 3Speak",
+    "hideMine": "Accounts verbergen die ik al volg",
+    "partial": "Sommige accountgegevens konden niet worden geladen, dus een paar filters staan uit.",
+    "none": "Geen makers voldoen aan deze filters.",
+    "reset": "Filters wissen"
+  },
+  "stats": {
+    "followers_one": "{{n}} volger",
+    "followers_other": "{{n}} volgers",
+    "rep": "Reputatie {{rep}}",
+    "videos": "{{videos}} video's, {{shorts}} shorts op 3Speak",
+    "noVideos": "Nog geen video's op 3Speak"
+  },
+  "activeToday": "Vandaag actief",
+  "activeAgo_one": "{{count}} dag geleden actief",
+  "activeAgo_other": "{{count}} dagen geleden actief",
+  "discover": "Makers om te ontdekken",
+  "openChannel": "Kanaal openen",
+  "exploreHere": "Vanaf hier verkennen",
+  "close": "Sluiten",
+  "profileButton": "Verken het Hive-sterrenstelsel van @{{user}}",
+  "panelToggle": "Filters en makers ({{count}})",
+  "controls": "Bediening",
+  "music": "Achtergrondmuziek",
+  "history": {
+    "label": "Terug en vooruit",
+    "undo": "Terug",
+    "redo": "Vooruit",
+    "undoKey": "Terug (Ctrl+Z)",
+    "redoKey": "Vooruit (Ctrl+Shift+Z)"
+  },
+  "collapse": "Inklappen",
+  "links": {
+    "loading": "Hun verbindingen op deze kaart worden geladen…",
+    "out_one": "Volgt {{count}} account op deze kaart",
+    "out_other": "Volgt {{count}} accounts op deze kaart",
+    "in_one": "Gevolgd door {{count}} account op deze kaart",
+    "in_other": "Gevolgd door {{count}} accounts op deze kaart"
+  },
+  "circles": {
+    "title": "Kringen",
+    "note": "Accounts die dezelfde mensen volgen, automatisch gegroepeerd. Klik op een kring om erop te focussen.",
+    "label": "Kring van @{{user}} · {{count}}",
+    "name": "Kring van @{{user}}",
+    "size_one": "{{count}} om te ontdekken",
+    "size_other": "{{count}} om te ontdekken",
+    "ring": {
+      "following_one": "{{count}} gevolgd door @{{user}}",
+      "following_other": "{{count}} gevolgd door @{{user}}",
+      "followers_one": "{{count}} volgt @{{user}}",
+      "followers_other": "{{count}} volgen @{{user}}",
+      "mutuals_one": "{{count}} vriend",
+      "mutuals_other": "{{count}} vrienden"
+    },
+    "ringTitle": {
+      "following": "Accounts die @{{user}} volgt in deze kring ({{count}})",
+      "followers": "Volgers van @{{user}} in deze kring ({{count}})",
+      "mutuals": "Vrienden van @{{user}} in deze kring ({{count}})"
+    },
+    "in": "In de kring van @{{user}}",
+    "clear": "Alle makers tonen"
+  }
+}
