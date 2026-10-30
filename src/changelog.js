@@ -7,6 +7,21 @@
 // 1.0.0 — that way they see all of these when develop is pushed to production.
 export const CHANGELOG = [
   {
+    version: '1.80.55',
+    date: '2026-10-30',
+    summary: "Follow a podcast by pasting its Apple Podcasts or Overcast link, or simply the show's website.",
+  },
+  {
+    version: '1.80.54',
+    date: '2026-10-30',
+    summary: 'Podcast search now also looks through Apple Podcasts and fyyd, so you find more shows.',
+  },
+  {
+    version: '1.80.53',
+    date: '2026-10-30',
+    summary: 'Discover the top podcast charts for your country and favourite category on the External podcasts page.',
+  },
+  {
     version: '1.80.52',
     date: '2026-10-30',
     summary: "Your phone's media controls and lock screen now show the track, artist and cover of what's playing.",
