@@ -41,6 +41,19 @@
         "invoiceFailed": "Hindi makagawa ng Lightning invoice. Pakisubukang muli.",
         "copyFailed": "Hindi makopya ang invoice"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Ang iyong Hive username:",
+      "usernamePlaceholder": "hal. alice",
+      "next": "Susunod",
+      "signWith": "Pirmahan ang {{amount}} {{currency}} mula kay @{{user}} para kay @{{recipient}} gamit ang:",
+      "noExtension": "Walang wallet extension sa browser na ito. Gumagana ang HiveSigner kahit wala nito.",
+      "waitingHiveSigner": "Tapusin ang pagpirma sa HiveSigner window. Kukumpirmahin ng window na ito ang tip kapag nasa Hive na ito.",
+      "errors": {
+        "noUser": "Ilagay ang iyong Hive username",
+        "self": "Hindi mo puwedeng i-tip ang sarili mo",
+        "walletFailed": "Hindi ipinadala ng wallet ang tip: {{message}}"
+      }
     }
   },
   "cardMenu": {

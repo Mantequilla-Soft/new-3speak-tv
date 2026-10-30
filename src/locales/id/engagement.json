@@ -41,6 +41,19 @@
         "invoiceFailed": "Tidak dapat membuat invoice Lightning. Silakan coba lagi.",
         "copyFailed": "Tidak dapat menyalin invoice"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Username Hive kamu:",
+      "usernamePlaceholder": "mis. alice",
+      "next": "Lanjut",
+      "signWith": "Tanda tangani {{amount}} {{currency}} dari @{{user}} ke @{{recipient}} dengan:",
+      "noExtension": "Tidak ada ekstensi dompet di browser ini. HiveSigner bisa dipakai tanpa ekstensi.",
+      "waitingHiveSigner": "Selesaikan penandatanganan di jendela HiveSigner. Jendela ini mengonfirmasi tip begitu sudah ada di Hive.",
+      "errors": {
+        "noUser": "Masukkan username Hive kamu",
+        "self": "Kamu tidak bisa memberi tip ke diri sendiri",
+        "walletFailed": "Dompet tidak mengirim tip: {{message}}"
+      }
     }
   },
   "cardMenu": {

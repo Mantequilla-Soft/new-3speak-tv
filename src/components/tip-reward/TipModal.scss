@@ -211,6 +211,39 @@
     }
   }
 
+  // The /tip page's wallet buttons (WalletTip.jsx), one per row.
+  .wallet-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      background: transparent;
+      color: var(--accent-primary, #e53935);
+      border: 1px solid var(--accent-primary, #e53935);
+
+      &:disabled { opacity: 0.6; cursor: default; }
+    }
+  }
+
+  .lightning-links {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .lightning-done {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary, #666);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
   .lightning-actions {
     flex-wrap: wrap;
 

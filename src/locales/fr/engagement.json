@@ -41,6 +41,19 @@
         "invoiceFailed": "Impossible de créer la facture Lightning. Veuillez réessayer.",
         "copyFailed": "Impossible de copier la facture"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Votre nom d'utilisateur Hive :",
+      "usernamePlaceholder": "ex. alice",
+      "next": "Suivant",
+      "signWith": "Signer {{amount}} {{currency}} de @{{user}} pour @{{recipient}} avec :",
+      "noExtension": "Aucune extension de portefeuille trouvée dans ce navigateur. HiveSigner fonctionne sans.",
+      "waitingHiveSigner": "Terminez la signature dans la fenêtre HiveSigner. Cette fenêtre confirme le pourboire dès qu'il est sur Hive.",
+      "errors": {
+        "noUser": "Saisissez votre nom d'utilisateur Hive",
+        "self": "Vous ne pouvez pas vous donner un pourboire",
+        "walletFailed": "Le portefeuille n'a pas envoyé le pourboire : {{message}}"
+      }
     }
   },
   "cardMenu": {

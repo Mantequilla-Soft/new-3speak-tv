@@ -41,6 +41,19 @@
         "invoiceFailed": "Lightning 인보이스를 만들 수 없습니다. 다시 시도해 주세요.",
         "copyFailed": "인보이스를 복사할 수 없습니다"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Hive 사용자 이름:",
+      "usernamePlaceholder": "예: alice",
+      "next": "다음",
+      "signWith": "@{{user}} 님이 @{{recipient}} 님에게 보내는 {{amount}} {{currency}}를 다음으로 서명:",
+      "noExtension": "이 브라우저에서 지갑 확장 프로그램을 찾을 수 없습니다. HiveSigner는 확장 프로그램 없이 작동합니다.",
+      "waitingHiveSigner": "HiveSigner 창에서 서명을 마치세요. 팁이 Hive에 기록되면 이 창에서 확인됩니다.",
+      "errors": {
+        "noUser": "Hive 사용자 이름을 입력하세요",
+        "self": "자기 자신에게는 팁을 보낼 수 없습니다",
+        "walletFailed": "지갑이 팁을 보내지 않았습니다: {{message}}"
+      }
     }
   },
   "cardMenu": {

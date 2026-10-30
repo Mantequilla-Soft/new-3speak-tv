@@ -41,6 +41,19 @@
         "invoiceFailed": "Die Lightning-Rechnung konnte nicht erstellt werden. Bitte versuche es erneut.",
         "copyFailed": "Die Rechnung konnte nicht kopiert werden"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Dein Hive-Benutzername:",
+      "usernamePlaceholder": "z. B. alice",
+      "next": "Weiter",
+      "signWith": "{{amount}} {{currency}} von @{{user}} an @{{recipient}} signieren mit:",
+      "noExtension": "In diesem Browser wurde keine Wallet-Erweiterung gefunden. HiveSigner funktioniert ohne.",
+      "waitingHiveSigner": "Schließe das Signieren im HiveSigner-Fenster ab. Dieses Fenster bestätigt das Trinkgeld, sobald es auf Hive ist.",
+      "errors": {
+        "noUser": "Gib deinen Hive-Benutzernamen ein",
+        "self": "Du kannst dir selbst kein Trinkgeld geben",
+        "walletFailed": "Die Wallet hat das Trinkgeld nicht gesendet: {{message}}"
+      }
     }
   },
   "cardMenu": {

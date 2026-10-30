@@ -41,6 +41,19 @@
         "invoiceFailed": "Nie udało się utworzyć faktury Lightning. Spróbuj ponownie.",
         "copyFailed": "Nie udało się skopiować faktury"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Twoja nazwa użytkownika Hive:",
+      "usernamePlaceholder": "np. alice",
+      "next": "Dalej",
+      "signWith": "Podpisz {{amount}} {{currency}} od @{{user}} dla @{{recipient}} za pomocą:",
+      "noExtension": "Nie znaleziono rozszerzenia portfela w tej przeglądarce. HiveSigner działa bez niego.",
+      "waitingHiveSigner": "Dokończ podpisywanie w oknie HiveSigner. To okno potwierdzi napiwek, gdy trafi na Hive.",
+      "errors": {
+        "noUser": "Wpisz swoją nazwę użytkownika Hive",
+        "self": "Nie możesz dać napiwku samemu sobie",
+        "walletFailed": "Portfel nie wysłał napiwku: {{message}}"
+      }
     }
   },
   "cardMenu": {

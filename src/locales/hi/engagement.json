@@ -41,6 +41,19 @@
         "invoiceFailed": "Lightning इनवॉइस नहीं बन सका। कृपया फिर से कोशिश करें।",
         "copyFailed": "इनवॉइस कॉपी नहीं हो सका"
       }
+    },
+    "wallet": {
+      "usernameLabel": "आपका Hive यूज़रनेम:",
+      "usernamePlaceholder": "जैसे alice",
+      "next": "आगे",
+      "signWith": "@{{user}} से @{{recipient}} को {{amount}} {{currency}} इसके साथ साइन करें:",
+      "noExtension": "इस ब्राउज़र में कोई वॉलेट एक्सटेंशन नहीं मिला। HiveSigner बिना एक्सटेंशन के चलता है।",
+      "waitingHiveSigner": "HiveSigner विंडो में साइन करना पूरा करें। टिप Hive पर पहुँचते ही यह विंडो पुष्टि करेगी।",
+      "errors": {
+        "noUser": "अपना Hive यूज़रनेम दर्ज करें",
+        "self": "आप खुद को टिप नहीं दे सकते",
+        "walletFailed": "वॉलेट ने टिप नहीं भेजा: {{message}}"
+      }
     }
   },
   "cardMenu": {

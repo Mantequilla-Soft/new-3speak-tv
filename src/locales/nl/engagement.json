@@ -41,6 +41,19 @@
         "invoiceFailed": "Kon geen Lightning-factuur maken. Probeer het opnieuw.",
         "copyFailed": "Kon de factuur niet kopiëren"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Je Hive-gebruikersnaam:",
+      "usernamePlaceholder": "bijv. alice",
+      "next": "Volgende",
+      "signWith": "{{amount}} {{currency}} van @{{user}} aan @{{recipient}} ondertekenen met:",
+      "noExtension": "Geen wallet-extensie gevonden in deze browser. HiveSigner werkt zonder.",
+      "waitingHiveSigner": "Rond het ondertekenen af in het HiveSigner-venster. Dit venster bevestigt de fooi zodra die op Hive staat.",
+      "errors": {
+        "noUser": "Voer je Hive-gebruikersnaam in",
+        "self": "Je kunt jezelf geen fooi geven",
+        "walletFailed": "De wallet heeft de fooi niet verstuurd: {{message}}"
+      }
     }
   },
   "cardMenu": {

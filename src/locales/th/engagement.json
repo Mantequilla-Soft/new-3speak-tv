@@ -41,6 +41,19 @@
         "invoiceFailed": "สร้างใบแจ้งหนี้ Lightning ไม่ได้ โปรดลองอีกครั้ง",
         "copyFailed": "คัดลอกใบแจ้งหนี้ไม่ได้"
       }
+    },
+    "wallet": {
+      "usernameLabel": "ชื่อผู้ใช้ Hive ของคุณ:",
+      "usernamePlaceholder": "เช่น alice",
+      "next": "ถัดไป",
+      "signWith": "ลงนาม {{amount}} {{currency}} จาก @{{user}} ถึง @{{recipient}} ด้วย:",
+      "noExtension": "ไม่พบส่วนขยายกระเป๋าในเบราว์เซอร์นี้ HiveSigner ใช้ได้โดยไม่ต้องมีส่วนขยาย",
+      "waitingHiveSigner": "ลงนามให้เสร็จในหน้าต่าง HiveSigner หน้าต่างนี้จะยืนยันทิปเมื่อขึ้นบน Hive แล้ว",
+      "errors": {
+        "noUser": "กรอกชื่อผู้ใช้ Hive ของคุณ",
+        "self": "คุณให้ทิปตัวเองไม่ได้",
+        "walletFailed": "กระเป๋าไม่ได้ส่งทิป: {{message}}"
+      }
     }
   },
   "cardMenu": {

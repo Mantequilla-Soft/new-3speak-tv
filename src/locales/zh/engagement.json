@@ -41,6 +41,19 @@
         "invoiceFailed": "无法创建 Lightning 账单，请重试。",
         "copyFailed": "无法复制账单"
       }
+    },
+    "wallet": {
+      "usernameLabel": "你的 Hive 用户名：",
+      "usernamePlaceholder": "例如 alice",
+      "next": "下一步",
+      "signWith": "用以下方式签名 @{{user}} 打赏 @{{recipient}} 的 {{amount}} {{currency}}：",
+      "noExtension": "此浏览器中没有找到钱包扩展。HiveSigner 无需扩展即可使用。",
+      "waitingHiveSigner": "请在 HiveSigner 窗口中完成签名。打赏上链后，此窗口会确认。",
+      "errors": {
+        "noUser": "请输入你的 Hive 用户名",
+        "self": "不能打赏自己",
+        "walletFailed": "钱包未发送打赏：{{message}}"
+      }
     }
   },
   "cardMenu": {

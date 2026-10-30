@@ -41,6 +41,19 @@
         "invoiceFailed": "Could not create a Lightning invoice. Please try again.",
         "copyFailed": "Could not copy the invoice"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Your Hive username:",
+      "usernamePlaceholder": "e.g. alice",
+      "next": "Next",
+      "signWith": "Sign {{amount}} {{currency}} from @{{user}} to @{{recipient}} with:",
+      "noExtension": "No wallet extension found in this browser. HiveSigner works without one.",
+      "waitingHiveSigner": "Finish signing in the HiveSigner window. This window confirms the tip once it is on Hive.",
+      "errors": {
+        "noUser": "Enter your Hive username",
+        "self": "You can't tip yourself",
+        "walletFailed": "The wallet did not send the tip: {{message}}"
+      }
     }
   },
   "cardMenu": {

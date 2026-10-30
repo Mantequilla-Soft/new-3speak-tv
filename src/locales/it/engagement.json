@@ -41,6 +41,19 @@
         "invoiceFailed": "Impossibile creare la fattura Lightning. Riprova.",
         "copyFailed": "Impossibile copiare la fattura"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Il tuo nome utente Hive:",
+      "usernamePlaceholder": "es. alice",
+      "next": "Avanti",
+      "signWith": "Firma {{amount}} {{currency}} da @{{user}} a @{{recipient}} con:",
+      "noExtension": "Nessuna estensione wallet trovata in questo browser. HiveSigner funziona anche senza.",
+      "waitingHiveSigner": "Completa la firma nella finestra di HiveSigner. Questa finestra conferma la mancia appena è su Hive.",
+      "errors": {
+        "noUser": "Inserisci il tuo nome utente Hive",
+        "self": "Non puoi darti una mancia da solo",
+        "walletFailed": "Il wallet non ha inviato la mancia: {{message}}"
+      }
     }
   },
   "cardMenu": {

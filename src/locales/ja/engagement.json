@@ -41,6 +41,19 @@
         "invoiceFailed": "Lightning の請求書を作成できませんでした。もう一度お試しください。",
         "copyFailed": "請求書をコピーできませんでした"
       }
+    },
+    "wallet": {
+      "usernameLabel": "あなたの Hive ユーザー名:",
+      "usernamePlaceholder": "例: alice",
+      "next": "次へ",
+      "signWith": "@{{user}} から @{{recipient}} への {{amount}} {{currency}} を次で署名:",
+      "noExtension": "このブラウザにウォレット拡張機能が見つかりません。HiveSigner は拡張機能なしで使えます。",
+      "waitingHiveSigner": "HiveSigner のウィンドウで署名を完了してください。投げ銭が Hive に届くと、このウィンドウで確認できます。",
+      "errors": {
+        "noUser": "Hive ユーザー名を入力してください",
+        "self": "自分自身に投げ銭はできません",
+        "walletFailed": "ウォレットが投げ銭を送信しませんでした: {{message}}"
+      }
     }
   },
   "cardMenu": {

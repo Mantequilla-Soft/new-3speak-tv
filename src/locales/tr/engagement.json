@@ -41,6 +41,19 @@
         "invoiceFailed": "Lightning faturası oluşturulamadı. Lütfen tekrar deneyin.",
         "copyFailed": "Fatura kopyalanamadı"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Hive kullanıcı adın:",
+      "usernamePlaceholder": "örn. alice",
+      "next": "İleri",
+      "signWith": "@{{user}} hesabından @{{recipient}} hesabına {{amount}} {{currency}} şununla imzala:",
+      "noExtension": "Bu tarayıcıda cüzdan uzantısı bulunamadı. HiveSigner uzantı olmadan çalışır.",
+      "waitingHiveSigner": "İmzalamayı HiveSigner penceresinde tamamla. Bahşiş Hive'a ulaştığında bu pencere onaylar.",
+      "errors": {
+        "noUser": "Hive kullanıcı adını gir",
+        "self": "Kendine bahşiş gönderemezsin",
+        "walletFailed": "Cüzdan bahşişi göndermedi: {{message}}"
+      }
     }
   },
   "cardMenu": {

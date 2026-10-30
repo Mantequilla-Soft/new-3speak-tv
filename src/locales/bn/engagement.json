@@ -41,6 +41,19 @@
         "invoiceFailed": "Lightning ইনভয়েস তৈরি করা যায়নি। আবার চেষ্টা করুন।",
         "copyFailed": "ইনভয়েস কপি করা যায়নি"
       }
+    },
+    "wallet": {
+      "usernameLabel": "আপনার Hive ইউজারনেম:",
+      "usernamePlaceholder": "যেমন alice",
+      "next": "পরবর্তী",
+      "signWith": "@{{user}} থেকে @{{recipient}}-কে {{amount}} {{currency}} সাইন করুন যেটি দিয়ে:",
+      "noExtension": "এই ব্রাউজারে কোনো ওয়ালেট এক্সটেনশন পাওয়া যায়নি। HiveSigner এক্সটেনশন ছাড়াই চলে।",
+      "waitingHiveSigner": "HiveSigner উইন্ডোতে সাইন করা শেষ করুন। টিপ Hive-এ পৌঁছালে এই উইন্ডো তা নিশ্চিত করবে।",
+      "errors": {
+        "noUser": "আপনার Hive ইউজারনেম লিখুন",
+        "self": "আপনি নিজেকে টিপ দিতে পারবেন না",
+        "walletFailed": "ওয়ালেট টিপটি পাঠায়নি: {{message}}"
+      }
     }
   },
   "cardMenu": {

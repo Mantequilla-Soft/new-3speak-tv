@@ -41,6 +41,19 @@
         "invoiceFailed": "Não foi possível criar a fatura Lightning. Tente novamente.",
         "copyFailed": "Não foi possível copiar a fatura"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Seu nome de usuário Hive:",
+      "usernamePlaceholder": "ex.: alice",
+      "next": "Avançar",
+      "signWith": "Assinar {{amount}} {{currency}} de @{{user}} para @{{recipient}} com:",
+      "noExtension": "Nenhuma extensão de carteira encontrada neste navegador. O HiveSigner funciona sem ela.",
+      "waitingHiveSigner": "Conclua a assinatura na janela do HiveSigner. Esta janela confirma a gorjeta assim que ela estiver na Hive.",
+      "errors": {
+        "noUser": "Digite seu nome de usuário Hive",
+        "self": "Você não pode dar gorjeta a si mesmo",
+        "walletFailed": "A carteira não enviou a gorjeta: {{message}}"
+      }
     }
   },
   "cardMenu": {

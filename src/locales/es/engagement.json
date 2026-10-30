@@ -41,6 +41,19 @@
         "invoiceFailed": "No se pudo crear la factura Lightning. Inténtalo de nuevo.",
         "copyFailed": "No se pudo copiar la factura"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Tu usuario de Hive:",
+      "usernamePlaceholder": "p. ej. alice",
+      "next": "Siguiente",
+      "signWith": "Firmar {{amount}} {{currency}} de @{{user}} para @{{recipient}} con:",
+      "noExtension": "No se encontró ninguna extensión de billetera en este navegador. HiveSigner funciona sin ella.",
+      "waitingHiveSigner": "Termina de firmar en la ventana de HiveSigner. Esta ventana confirma la propina en cuanto esté en Hive.",
+      "errors": {
+        "noUser": "Introduce tu usuario de Hive",
+        "self": "No puedes darte propina a ti mismo",
+        "walletFailed": "La billetera no envió la propina: {{message}}"
+      }
     }
   },
   "cardMenu": {

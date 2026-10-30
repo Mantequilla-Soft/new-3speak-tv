@@ -41,6 +41,19 @@
         "invoiceFailed": "Не вдалося створити Lightning-рахунок. Спробуйте ще раз.",
         "copyFailed": "Не вдалося скопіювати рахунок"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Ваше ім'я користувача Hive:",
+      "usernamePlaceholder": "наприклад, alice",
+      "next": "Далі",
+      "signWith": "Підписати {{amount}} {{currency}} від @{{user}} для @{{recipient}} за допомогою:",
+      "noExtension": "У цьому браузері не знайдено розширення гаманця. HiveSigner працює без нього.",
+      "waitingHiveSigner": "Завершіть підпис у вікні HiveSigner. Це вікно підтвердить чайові, щойно вони з'являться в Hive.",
+      "errors": {
+        "noUser": "Введіть ім'я користувача Hive",
+        "self": "Не можна надіслати чайові самому собі",
+        "walletFailed": "Гаманець не надіслав чайові: {{message}}"
+      }
     }
   },
   "cardMenu": {

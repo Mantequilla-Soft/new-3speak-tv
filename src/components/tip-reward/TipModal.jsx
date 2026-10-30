@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Success from './Success';
 import { useTranslation } from 'react-i18next';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import WalletTip from './WalletTip';
 import './TipModal.scss';
 import { fetchBalances, isAccountValid } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
@@ -41,7 +42,10 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
   // 'hive' = HIVE/HBD transfer from the viewer's Hive wallet; 'lightning' = an
   // invoice any Lightning wallet can pay (lib/lightningTip.js), no Hive account
   // needed, so it is where a signed-out viewer starts.
-  const [method, setMethod] = useState(() => (activetUser && isLoggedIn() ? 'hive' : 'lightning'));
+  // The /tip page (variant="page") never uses the 3speak.tv session: its HIVE /
+  // HBD tab asks for a username and a wallet instead (WalletTip), so it opens there.
+  const isPage = variant === 'page';
+  const [method, setMethod] = useState(() => (isPage || (activetUser && isLoggedIn()) ? 'hive' : 'lightning'));
   const [sats, setSats] = useState(String(LIGHTNING_PRESETS[1]));
   const [invoice, setInvoice] = useState(null);
   // Which Lightning button is fetching its invoice: 'qr', 'extension' or null.
@@ -49,7 +53,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
 
 
   useEffect(()=>{
-    if (activetUser) getbalance()
+    if (activetUser && !isPage) getbalance()
   },[])
 
   // While the invoice is on screen, ask every few seconds whether it was paid,
@@ -241,7 +245,17 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
           </div>
         )}
 
-        {step === 1 && method === 'hive' && !(activetUser && isLoggedIn()) && (
+        {step === 1 && method === 'hive' && isPage && (
+          <WalletTip
+            recipient={recipient}
+            permlink={permlink}
+            memoLink={memoLink}
+            onSent={(sentAmount, sentCurrency) => { setAmount(sentAmount); setCurrency(sentCurrency); setStep(2); }}
+            onClose={handleClose}
+          />
+        )}
+
+        {step === 1 && method === 'hive' && !isPage && !(activetUser && isLoggedIn()) && (
           <div className="tip-modal-in">
             <p className="tip-method-note">{t('engagement.tip.errors.loginRequired')}</p>
           </div>
@@ -334,7 +348,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
           </div>
         </div>}
 
-        {step === 1 && method === 'hive' && activetUser && isLoggedIn() && <div className="tip-modal-in">
+        {step === 1 && method === 'hive' && !isPage && activetUser && isLoggedIn() && <div className="tip-modal-in">
           <div className="form">
             <div className="field">
               <label>{t('engagement.tip.amountLabel')}</label>

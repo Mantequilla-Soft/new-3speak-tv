@@ -41,6 +41,19 @@
         "invoiceFailed": "Không tạo được hóa đơn Lightning. Vui lòng thử lại.",
         "copyFailed": "Không sao chép được hóa đơn"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Tên người dùng Hive của bạn:",
+      "usernamePlaceholder": "vd. alice",
+      "next": "Tiếp",
+      "signWith": "Ký {{amount}} {{currency}} từ @{{user}} gửi @{{recipient}} bằng:",
+      "noExtension": "Không tìm thấy tiện ích ví trong trình duyệt này. HiveSigner dùng được mà không cần tiện ích.",
+      "waitingHiveSigner": "Hoàn tất ký trong cửa sổ HiveSigner. Cửa sổ này sẽ xác nhận tip khi đã lên Hive.",
+      "errors": {
+        "noUser": "Nhập tên người dùng Hive của bạn",
+        "self": "Bạn không thể tự tip cho mình",
+        "walletFailed": "Ví đã không gửi tip: {{message}}"
+      }
     }
   },
   "cardMenu": {

@@ -41,6 +41,19 @@
         "invoiceFailed": "Imeshindwa kuunda ankara ya Lightning. Tafadhali jaribu tena.",
         "copyFailed": "Imeshindwa kunakili ankara"
       }
+    },
+    "wallet": {
+      "usernameLabel": "Jina lako la mtumiaji la Hive:",
+      "usernamePlaceholder": "mf. alice",
+      "next": "Endelea",
+      "signWith": "Saini {{amount}} {{currency}} kutoka @{{user}} kwenda @{{recipient}} kwa:",
+      "noExtension": "Hakuna kiendelezi cha pochi kwenye kivinjari hiki. HiveSigner inafanya kazi bila kiendelezi.",
+      "waitingHiveSigner": "Maliza kusaini kwenye dirisha la HiveSigner. Dirisha hili litathibitisha bakshishi ikishafika kwenye Hive.",
+      "errors": {
+        "noUser": "Weka jina lako la mtumiaji la Hive",
+        "self": "Huwezi kujipa bakshishi mwenyewe",
+        "walletFailed": "Pochi haikutuma bakshishi: {{message}}"
+      }
     }
   },
   "cardMenu": {
