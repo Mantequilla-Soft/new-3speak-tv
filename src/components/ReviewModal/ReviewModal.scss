@@ -251,7 +251,9 @@
 
   // The global audio player publishes its top edge as --audio-np-clearance
   // (GlobalAudioPlayer.jsx, tracks expand/collapse), so stay 12px above it.
-  bottom: max(18px, calc(var(--audio-np-clearance, 0px) + 12px));
+  // On desktop the open queue sits above the player and publishes its own top
+  // edge as --audio-queue-clearance; that one wins while it's set.
+  bottom: max(18px, calc(var(--audio-queue-clearance, var(--audio-np-clearance, 0px)) + 12px));
 
   // Lift above the bottom nav wherever it's shown. The nav renders on BOTH the
   // phone and tab breakpoints, so both need the offset — otherwise on tablets

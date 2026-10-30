@@ -12,6 +12,7 @@ import {
   MdVolumeUp, MdVolumeOff,
 } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
+import { persistAudioPosition } from '../../lib/slices/createAudioPlayerSlice';
 import { CHECKER_URL, LISTEN_BEAT_KEY } from '../../utils/config';
 import { isLoggedIn } from '../../hive-api/aioha';
 import { getUersContent } from '../../utils/hiveUtils';
@@ -261,10 +262,21 @@ function GlobalAudioPlayer() {
       if (!audioCurrent?.external) return;
       recordProgress(useAppStore.getState().user, audioCurrent._id, pos, audioCurrent.duration || el.duration);
     };
+    // Remembers the spot for the next visit (slice: audioRestoredAt). Not before
+    // the metadata is in, or a fresh load at 0 would overwrite the saved spot.
+    let posSavedAt = 0;
+    const savePosition = (t = el.currentTime) => {
+      if (el.readyState < 1) return;
+      posSavedAt = Date.now();
+      persistAudioPosition(audioCurrent?._id, t);
+    };
+    const onPageHide = () => savePosition();
+    window.addEventListener('pagehide', onPageHide);
     const h = {
       timeupdate: () => {
         audioSetCurrentTime(el.currentTime);
         saveExternal(el.currentTime);
+        if (Date.now() - posSavedAt >= 5000) savePosition();
         // timeupdate only fires while audio is genuinely advancing (not when
         // paused), so it doubles as our "still listening" signal. Beat at
         // most once per interval; the server measures the real gap.
@@ -273,9 +285,15 @@ function GlobalAudioPlayer() {
           beatOnce();
         }
       },
-      play: () => { audioSetIsPlaying(true); notifyMediaPlay('audio'); },
-      pause: () => { audioSetIsPlaying(false); if (audioCurrent?.external) flushProgress(); },
+      play: () => {
+        audioSetIsPlaying(true);
+        notifyMediaPlay('audio');
+        if (useAppStore.getState().audioRestoredAt != null) useAppStore.getState().audioClearRestored();
+      },
+      pause: () => { audioSetIsPlaying(false); savePosition(); if (audioCurrent?.external) flushProgress(); },
+      seeked: () => savePosition(),
       ended: () => {
+        savePosition(0);
         if (audioCurrent?.external) { saveExternal(audioCurrent.duration || el.duration); flushProgress(); }
         audioSetIsPlaying(false);
         playNext();
@@ -287,7 +305,10 @@ function GlobalAudioPlayer() {
       },
     };
     for (const [e, fn] of Object.entries(h)) el.addEventListener(e, fn);
-    return () => { for (const [e, fn] of Object.entries(h)) el.removeEventListener(e, fn); };
+    return () => {
+      window.removeEventListener('pagehide', onPageHide);
+      for (const [e, fn] of Object.entries(h)) el.removeEventListener(e, fn);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioCurrent?._id, audioQueue, audioAutoplayList]);
 
@@ -319,10 +340,16 @@ function GlobalAudioPlayer() {
     const el = audioRef.current; if (!el || !(audioCurrent?.audio_cid || audioCurrent?.external)) return;
     // Outside podcast episodes play straight from the podcast's own host.
     const desired = audioCurrent.external ? audioCurrent.src : `${AUDIO_CDN}/${audioCurrent.audio_cid}`;
+    // Back from the last visit: load it paused at the saved spot, the listener
+    // presses play. The flag stays until real playback starts (play handler), so
+    // a second run of this effect (StrictMode, re-render) can't start it either.
+    const { audioRestoredAt } = useAppStore.getState();
+    const restoring = audioRestoredAt != null;
     if (el.src !== desired) {
       el.src = desired;
       // An outside episode started before picks up where it was left.
-      const resumeAt = audioCurrent.external ? resumePosition(useAppStore.getState().user, audioCurrent._id) : 0;
+      const resumeAt = restoring && audioRestoredAt > 0 ? audioRestoredAt
+        : audioCurrent.external ? resumePosition(useAppStore.getState().user, audioCurrent._id) : 0;
       if (resumeAt) el.addEventListener('loadedmetadata', () => { el.currentTime = resumeAt; }, { once: true });
       // The next track opens the way the viewer left the transcript. It only shows
       // once that track's subtitles have loaded, so a track without any is unaffected.
@@ -330,7 +357,7 @@ function GlobalAudioPlayer() {
       setSubtitleData(null);
       setSubtitleCues([]);
     }
-    el.play().catch(() => {});
+    if (!restoring) el.play().catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioCurrent?._id, audioPlayNonce]);
 
@@ -342,9 +369,10 @@ function GlobalAudioPlayer() {
       const i = AUDIO_GATEWAYS.findIndex(g => el.src === `${g}/${cid}`);
       if (i < 0 || i + 1 >= AUDIO_GATEWAYS.length) return;
       const pos = el.currentTime;
+      const wasPlaying = !el.paused;
       el.src = `${AUDIO_GATEWAYS[i + 1]}/${cid}`;
       if (pos) el.currentTime = pos;
-      el.play().catch(() => {});
+      if (wasPlaying) el.play().catch(() => {});
     };
     el.addEventListener('error', onError);
     return () => el.removeEventListener('error', onError);
@@ -545,6 +573,30 @@ function GlobalAudioPlayer() {
       root.style.removeProperty('--audio-np-clearance');
     };
   }, [hasNowPlaying]);
+
+  // Same for the open queue, which on desktop sits above the player: its top
+  // edge goes into --audio-queue-clearance so the Feedback FAB clears it too.
+  // offsetHeight, not the rect, so the pop-up animation's offset isn't counted.
+  const queuePanelRef = useRef(null);
+  useEffect(() => {
+    const panel = queuePanelRef.current;
+    const root = document.documentElement;
+    if (!audioShowQueue || !panel) return;
+    const update = () => {
+      const below = parseFloat(getComputedStyle(panel).bottom) || 0;
+      root.style.setProperty('--audio-queue-clearance', `${Math.round(below + panel.offsetHeight)}px`);
+    };
+    update();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    ro?.observe(panel);
+    if (npRef.current) ro?.observe(npRef.current);
+    window.addEventListener('resize', update);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener('resize', update);
+      root.style.removeProperty('--audio-queue-clearance');
+    };
+  }, [audioShowQueue, hasNowPlaying]);
 
   if (!audioCurrent) {
     return <audio ref={audioRef} preload="metadata" style={{ display: 'none' }} />;
@@ -752,7 +804,7 @@ function GlobalAudioPlayer() {
 
       {audioShowQueue && (
         <div className="audio-queue-overlay" onClick={() => audioSetShowQueue(false)}>
-          <div className="audio-queue-panel" onClick={e => e.stopPropagation()}>
+          <div ref={queuePanelRef} className="audio-queue-panel" onClick={e => e.stopPropagation()}>
             <ModalHeader title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
               <span className="audio-queue-count">{audioQueue.length}</span>
               {audioQueue.length > 0 && (

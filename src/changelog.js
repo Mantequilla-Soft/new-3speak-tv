@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.80.62',
+    category: 'audio',
+    date: '2026-10-30',
+    summary: 'On desktop, the audio queue now opens right above the player instead of over the page.',
+  },
+  {
+    version: '1.80.61',
+    category: 'audio',
+    date: '2026-10-30',
+    summary: 'The audio player now remembers where you stopped and reopens paused at that spot.',
+  },
+  {
     version: '1.80.60',
     category: 'profile',
     date: '2026-10-30',
