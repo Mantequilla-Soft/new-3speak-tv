@@ -81,6 +81,11 @@ export const createAudioPlayerSlice = (set, get) => {
     audioToggleNonce: 0,
     audioSeekNonce: 0,
     audioPendingSeek: 0,
+    // A start point and an optional end for the track just started with
+    // audioPlayAt (a shared timestamp, a soundbite, a clip). The player seeks to
+    // audioStartAt once the track loads and pauses at audioClipEnd. null = none.
+    audioStartAt: null,
+    audioClipEnd: null,
 
     audioPlay: (track, contextItems) => {
       if (!track) return;
@@ -89,6 +94,8 @@ export const createAudioPlayerSlice = (set, get) => {
         audioCurrent: track,
         audioAutoplayList: Array.isArray(contextItems) ? contextItems : [track],
         audioRestoredAt: null,
+        audioStartAt: null,
+        audioClipEnd: null,
         audioCurrentTime: 0,
         // Source of truth for the timeline: the duration stored in the
         // embed-audio doc (Mongo). Don't probe the <audio> element.
@@ -144,6 +151,16 @@ export const createAudioPlayerSlice = (set, get) => {
       set({ audioQueue: queue });
       get().audioPlay(track, queue);
     },
+    // Play `track` from `start` seconds, and pause at `end` when given. Outside
+    // podcast episodes go through audioPlayQueued, so what was playing is kept.
+    audioPlayAt: (track, start, end) => {
+      if (!track) return;
+      if (track.external) get().audioPlayQueued(track); else get().audioPlay(track);
+      const from = Number.isFinite(Number(start)) && Number(start) > 0 ? Number(start) : null;
+      const to = Number.isFinite(Number(end)) && Number(end) > (from || 0) ? Number(end) : null;
+      set({ audioStartAt: from, audioClipEnd: to, audioCurrentTime: from || 0 });
+    },
+    audioClearClip: () => set({ audioClipEnd: null }),
     audioRemoveFromQueue: (id) => {
       const next = get().audioQueue.filter((i) => i._id !== id);
       persistQueue(next);
