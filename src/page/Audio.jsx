@@ -13,6 +13,7 @@ import AudioAuthorBadge from './AudioAuthorBadge';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
 import { AudioShareDropdown } from '../components/GlobalAudioPlayer/GlobalAudioPlayer';
+import { parseTimeParam } from '../components/GlobalAudioPlayer/playerMath';
 import AudioTile, { AudioTileSkeleton } from '../components/AudioTile/AudioTile';
 import AudioPlaylistTile from '../components/AudioPlaylistTile/AudioPlaylistTile';
 import PodcastsTab from '../components/Podcasts/PodcastsTab';
@@ -154,7 +155,7 @@ function loadFilters() {
 
 function Audio() {
   const { t } = useTranslation();
-  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioAddToQueue } = useAppStore();
+  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioPlayAt, audioAddToQueue } = useAppStore();
   const loggedIn = authenticated && isLoggedIn();
 
   // "External": podcasts from outside RSS feeds (components/Podcasts). It is the last
@@ -353,22 +354,29 @@ function Audio() {
     queryFn: async () => { const { data } = await axios.get(`${CHECKER_URL}/audio/auto-tags?limit=15`); return data.tags || []; },
   });
 
-  // Deep-link: ?play=<owner>/<permlink> → start playback in the global player
+  // Deep-link: ?play=<owner>/<permlink> → start playback in the global player.
+  // &t=<seconds> starts there, &end=<seconds> stops there (a shared clip).
   useEffect(() => {
     if (deepLinkHandled) return;
-    const p = new URLSearchParams(window.location.search).get('play');
+    const qs = new URLSearchParams(window.location.search);
+    const p = qs.get('play');
     if (!p) return;
     const [o, pl] = p.split('/');
     if (!o || !pl) return;
+    const from = parseTimeParam(qs.get('t'));
+    const to = parseTimeParam(qs.get('end'));
     (async () => {
       try {
         const { data } = await axios.get(`${CHECKER_URL}/audio?owner=${encodeURIComponent(o)}&q=${encodeURIComponent(pl)}&limit=1`);
         const item = data?.audio?.find(a => a.permlink === pl);
-        if (item && !isHiddenOwner(item.owner)) audioPlay(item, [item]);
-      } catch {}
+        if (item && !isHiddenOwner(item.owner)) {
+          if (from != null || to != null) audioPlayAt(item, from, to);
+          else audioPlay(item, [item]);
+        }
+      } catch { /* a link to audio that's gone: nothing plays */ }
       setDeepLinkHandled(true);
     })();
-  }, [deepLinkHandled, audioPlay]);
+  }, [deepLinkHandled, audioPlay, audioPlayAt]);
 
   const tp = (item, items) => ({
     item,

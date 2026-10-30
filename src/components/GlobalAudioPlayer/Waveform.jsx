@@ -10,11 +10,15 @@ import { useEffect, useRef } from 'react';
 // roughly 4× per second, so any prop-driven approach produces visible
 // stair-step motion no matter how fast we paint. Sampling el.currentTime
 // each rAF tick gives true 60 fps motion.
-export default function Waveform({ samples, audioRef, duration, onSeek }) {
+//
+// `markers` (fractions in [0, 1], playerMath.js chapterMarkers) draw a thin
+// tick where each chapter starts. audioRef is read on every frame, so a swap
+// of the player's <audio> element needs nothing here.
+export default function Waveform({ samples, audioRef, duration, onSeek, markers }) {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
-  const stateRef = useRef({ samples, audioRef, duration });
-  stateRef.current = { samples, audioRef, duration };
+  const stateRef = useRef({ samples, audioRef, duration, markers });
+  stateRef.current = { samples, audioRef, duration, markers };
 
   // Drag state lives in a ref so the rAF loop can read it without
   // re-subscribing. `active` flips on pointerdown and back on pointerup;
@@ -31,6 +35,7 @@ export default function Waveform({ samples, audioRef, duration, onSeek }) {
     let lastProgress = -1;
     let lastDragActive = false;
     let lastDragFraction = -1;
+    let lastMarkers = null;
     let cssW = 0;
     let cssH = 0;
     let dpr = window.devicePixelRatio || 1;
@@ -41,6 +46,7 @@ export default function Waveform({ samples, audioRef, duration, onSeek }) {
     let gap = 0;
     let accent = '#7B5CFA';
     let idle = 'rgba(255,255,255,0.25)';
+    let tick = '#888';
 
     const ctx = canvas.getContext('2d');
 
@@ -48,8 +54,10 @@ export default function Waveform({ samples, audioRef, duration, onSeek }) {
       const cs = getComputedStyle(container);
       const a = cs.getPropertyValue('--accent-primary').trim();
       const m = cs.getPropertyValue('--text-muted').trim();
+      const p = cs.getPropertyValue('--text-primary').trim();
       if (a) accent = a;
       if (m) idle = m;
+      if (p) tick = p;
     };
 
     const computeBars = (samples) => {
@@ -87,12 +95,13 @@ export default function Waveform({ samples, audioRef, duration, onSeek }) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       lastSamples = null;     // force bars + repaint
       lastProgress = -1;
+      lastMarkers = null;
       return true;
     };
 
     const paint = () => {
       if (cssW === 0) return;
-      const { samples, audioRef, duration } = stateRef.current;
+      const { samples, audioRef, duration, markers } = stateRef.current;
       if (!samples || samples.length === 0) return;
 
       const el = audioRef?.current;
@@ -105,7 +114,8 @@ export default function Waveform({ samples, audioRef, duration, onSeek }) {
       const progressChanged = progress !== lastProgress;
       const dragChanged = drag.active !== lastDragActive
         || (drag.active && drag.fraction !== lastDragFraction);
-      if (!samplesChanged && !progressChanged && !dragChanged) return;
+      const markersChanged = markers !== lastMarkers;
+      if (!samplesChanged && !progressChanged && !dragChanged && !markersChanged) return;
 
       if (samplesChanged) {
         computeBars(samples);
@@ -115,6 +125,7 @@ export default function Waveform({ samples, audioRef, duration, onSeek }) {
       lastProgress = progress;
       lastDragActive = drag.active;
       lastDragFraction = drag.fraction;
+      lastMarkers = markers;
 
       ctx.clearRect(0, 0, cssW, cssH);
       const playedBars = Math.min(barCount, Math.floor(progress * barCount));
@@ -149,6 +160,14 @@ export default function Waveform({ samples, audioRef, duration, onSeek }) {
         for (let i = 0; i < playedBars; i++) drawBar(i);
         ctx.fillStyle = idle;
         for (let i = playedBars; i < barCount; i++) drawBar(i);
+      }
+
+      // Chapter starts: a thin full-height tick, half transparent.
+      if (markers?.length) {
+        ctx.fillStyle = tick;
+        ctx.globalAlpha = 0.55;
+        for (const f of markers) ctx.fillRect(Math.round(f * cssW) - 0.5, 0, 1, cssH);
+        ctx.globalAlpha = 1;
       }
     };
 

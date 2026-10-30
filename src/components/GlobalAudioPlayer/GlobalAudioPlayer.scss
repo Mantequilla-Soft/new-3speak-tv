@@ -165,3 +165,405 @@
 .audio-now-playing.audio-np-expanded .audio-np-progress {
   display: none;
 }
+
+// ─── Podcast-app controls ─────────────────────────────────────────────────────
+// Skip 15/30, speed, sleep timer, audio effects, cast, offline copy, chapters,
+// clips. The bar keeps only what fits: it is a size container, and below the
+// widths here the previous/next and volume buttons move to the tools row of
+// the expanded area (which is its own container, so it knows the same width).
+// Nothing in the bar may push a 360 px phone wider.
+
+.audio-np-content {
+  container: audio-np-bar / inline-size;
+}
+
+@container audio-np-bar (max-width: 499px) {
+  .audio-np-controls.has-skip .audio-np-track-btn { display: none; }
+}
+
+@container audio-np-bar (max-width: 439px) {
+  .audio-np-btn { width: 32px; height: 32px; }
+  .audio-np-play-btn { width: 38px; height: 38px; }
+}
+
+@container audio-np-bar (max-width: 379px) {
+  .audio-np-volume { display: none; }
+}
+
+.audio-np-content { min-width: 0; }
+
+@media (min-width: 768px) {
+  .audio-now-playing .audio-np-content { gap: 8px; padding-left: 14px; padding-right: 14px; }
+}
+
+// The skip buttons' numbers are part of the icon.
+.audio-np-skip-btn svg { stroke-width: 1.8; }
+
+// Thin progress bar: chapter starts and the live state.
+.audio-np-progress {
+  position: relative;
+
+  &.is-live {
+    cursor: default;
+    &:hover { height: 6px; }
+  }
+}
+
+.audio-np-progress-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--bg-elevated, var(--bg-secondary));
+  pointer-events: none;
+}
+
+// Second line under the title: show / author, the current chapter.
+.audio-np-subline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+
+  .audio-np-author { flex-shrink: 0; max-width: 60%; overflow: hidden; text-overflow: ellipsis; }
+}
+
+.audio-np-chapter-now {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  color: var(--text-secondary);
+
+  &::before { content: '·'; margin-right: 6px; }
+}
+
+.audio-np-live-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border: 1px solid var(--accent-primary);
+  border-radius: 4px;
+  color: var(--accent-primary);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+// While a clip plays: where it stops; a click lets it play on.
+.audio-np-clip-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  margin-top: 2px;
+  padding: 1px 6px;
+  border: 1px solid var(--accent-primary);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--accent-primary);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+
+  span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  &:hover { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+}
+
+// ─── Tools row (expanded area) ───
+.audio-np-tools {
+  container: audio-np-tools / inline-size;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+
+  // In the bar while it has room.
+  .audio-np-track-btn,
+  .audio-np-tools-vol { display: none; }
+}
+
+@container audio-np-tools (max-width: 507px) {
+  .audio-np-tool.audio-np-track-btn { display: inline-flex; }
+}
+
+@container audio-np-tools (max-width: 387px) {
+  .audio-np-tool.audio-np-tools-vol { display: inline-flex; }
+}
+
+.audio-np-tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: color 0.12s ease, border-color 0.12s ease;
+
+  &:hover:not(:disabled) { color: var(--accent-primary); border-color: var(--accent-primary); }
+  &.active { color: var(--accent-primary); border-color: var(--accent-primary); }
+  &:disabled { opacity: 0.45; cursor: default; }
+  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 1px; }
+
+  // The volume button keeps its round shape class but sits in the row's style.
+  &.audio-np-btn { width: auto; border-radius: 8px; color: var(--text-secondary); }
+}
+
+.audio-np-tool-label { font-size: 11px; }
+
+.audio-np-speed-btn { min-width: 44px; }
+
+// ─── Chapters ───
+.audio-np-chapters {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.audio-np-chapters-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.audio-np-chapters-jump { display: flex; gap: 4px; }
+
+.audio-np-chapter-art {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--bg-tertiary);
+}
+
+.audio-np-chapter-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--accent-primary);
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.audio-np-chapter-list {
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-light) transparent;
+
+  // Buttons in the transcript cue look.
+  .audio-cue {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    font: inherit;
+  }
+  .audio-cue-active { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+}
+
+// A plain-text transcript: paragraphs, not seek targets.
+.audio-cue--plain {
+  margin: 0;
+  cursor: default;
+  &:hover { background: transparent; }
+}
+
+.audio-cue-speaker { font-weight: 600; color: var(--text-secondary); }
+
+// ─── Player menus (PlayerMenu.jsx) ───
+// A popover above its button on wider screens, a bottom sheet on a phone.
+.audio-pm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+}
+
+.audio-pm {
+  position: fixed;
+  right: var(--pm-right, 16px);
+  bottom: var(--pm-bottom, 96px);
+  width: 260px;
+  max-width: calc(100vw - 16px);
+  max-height: min(70vh, 480px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 14px 6px 8px;
+  background: var(--bg-elevated, var(--bg-secondary));
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  outline: none;
+
+  .audio-pm-header {
+    padding: 0 10px 10px;
+    margin-bottom: 4px;
+    .app-modal-header-title { font-size: 15px; }
+  }
+
+  @include mix.respond(phone) {
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 88vh;
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    animation: audio-pm-up 0.18s ease;
+  }
+}
+
+@include mix.respond(phone) {
+  .audio-pm-overlay { background: rgba(0, 0, 0, 0.3); }
+}
+
+@keyframes audio-pm-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .audio-pm { animation: none; }
+}
+
+.audio-pm-options {
+  display: flex;
+  flex-direction: column;
+
+  .audio-share-option { width: 100%; border-radius: 6px; }
+}
+
+.audio-share-option.is-active { color: var(--accent-primary); }
+
+.audio-pm-check {
+  display: inline-flex;
+  width: 14px;
+  flex-shrink: 0;
+  color: var(--accent-primary);
+}
+
+.audio-pm-switch {
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.audio-pm-switch-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+
+  small { font-size: 11px; color: var(--text-secondary); }
+}
+
+// A flat switch: outline track, the knob turns accent when on.
+.audio-pm-toggle {
+  position: relative;
+  flex-shrink: 0;
+  width: 32px;
+  height: 18px;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  transition: border-color 0.12s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text-muted, var(--text-secondary));
+    transition: transform 0.12s ease, background-color 0.12s ease;
+  }
+
+  &.on {
+    border-color: var(--accent-primary);
+    &::after { transform: translateX(14px); background: var(--accent-primary); }
+  }
+}
+
+.audio-pm-note {
+  margin: 6px 14px 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+// The share options without their own box, inside a player menu.
+.audio-share-dropdown.is-bare {
+  min-width: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+// ─── Make a clip ───
+.audio-np-clip-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 8px 6px;
+  padding: 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.audio-np-clip-form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+  svg { color: var(--text-secondary); }
+}
+
+.audio-np-clip-form-len {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+
+  input { flex: 1; min-width: 0; accent-color: var(--accent-primary); }
+}
+
+.audio-np-clip-form-sec { min-width: 34px; text-align: right; font-variant-numeric: tabular-nums; }
+
+.audio-np-clip-form-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid var(--accent-primary);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--accent-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+}
