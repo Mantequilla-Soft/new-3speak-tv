@@ -493,6 +493,12 @@
       "country": "Pays",
       "none": "Aucun classement pour ce pays et cette catégorie pour le moment.",
       "failed": "Les classements ne sont pas disponibles pour le moment. Veuillez réessayer."
+    },
+    "views": {
+      "mine": "Les miens",
+      "discover": "Découvrir",
+      "trends": "Tendances",
+      "mineEmpty": "Vous ne suivez encore aucun podcast. Trouvez des émissions dans Découvrir ou voyez ce qui est populaire dans Tendances."
     }
   }
 }

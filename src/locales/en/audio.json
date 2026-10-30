@@ -470,6 +470,12 @@
       "country": "Country",
       "none": "No chart for this country and category right now.",
       "failed": "The charts are not available right now. Please try again."
+    },
+    "views": {
+      "mine": "Mine",
+      "discover": "Discover",
+      "trends": "Trends",
+      "mineEmpty": "You don't follow any podcasts yet. Find shows in Discover, or see what's popular in Trends."
     }
   }
 }

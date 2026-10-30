@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   MdPlayArrow, MdPause, MdAdd, MdRssFeed, MdNotificationsActive, MdNotificationsOff, MdArrowBack, MdOpenInNew,
-  MdUploadFile, MdDownload, MdSearch, MdClose, MdCheck, MdPodcasts, MdTrendingUp, MdHistory, MdExpandMore, MdWhatshot, MdLink,
+  MdUploadFile, MdDownload, MdSearch, MdClose, MdCheck, MdPodcasts, MdTrendingUp, MdHistory, MdWhatshot, MdLink, MdExplore, MdLibraryMusic,
   MdLeaderboard,
 } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
@@ -404,14 +404,8 @@ const SEARCH_MODES = [
   { key: 'people', labelKey: 'audio.podcasts.search.modePeople', placeholderKey: 'audio.podcasts.search.placeholderPeople' },
 ];
 
-function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, subsLoaded, onFollowed }) {
+function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFollowed }) {
   const { t } = useTranslation();
-  // Search, RSS and OPML are open for someone who follows nothing yet, and
-  // folded away once they follow a show, so their shows come first. Closed
-  // while their list loads, so a follower never sees it open and snap shut.
-  // A tap on the header wins from then on.
-  const [openPick, setOpenPick] = useState(null);
-  const open = openPick ?? (subsLoaded && !(subscriptions?.length > 0));
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState('shows');
   const [feedUrl, setFeedUrl] = useState('');
@@ -461,33 +455,16 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, subsLo
   return (
     <>
       <header className="pod-hero">
-        {user ? (
-          <button
-            type="button"
-            className="pod-hero-intro pod-hero-toggle"
-            aria-expanded={open}
-            aria-controls="pod-hero-body"
-            onClick={() => setOpenPick(!open)}
-          >
-            <span className="pod-hero-icon"><MdPodcasts size={28} /></span>
-            <span className="pod-hero-text">
-              <span className="pod-hero-title">{t('audio.podcasts.introTitle')}</span>
-              <span className="pod-hero-sub">{t('audio.podcasts.heroSub')}</span>
-            </span>
-            <MdExpandMore className={`pod-hero-chevron${open ? ' pod-hero-chevron--open' : ''}`} size={26} aria-hidden="true" />
-          </button>
-        ) : (
-          <div className="pod-hero-intro">
-            <span className="pod-hero-icon"><MdPodcasts size={28} /></span>
-            <div>
-              <h2 className="pod-hero-title">{t('audio.podcasts.introTitle')}</h2>
-              <p className="pod-hero-sub">{t('audio.podcasts.introSignedOut')}</p>
-            </div>
+        <div className="pod-hero-intro">
+          <span className="pod-hero-icon"><MdPodcasts size={28} /></span>
+          <div>
+            <h2 className="pod-hero-title">{t('audio.podcasts.introTitle')}</h2>
+            <p className="pod-hero-sub">{user ? t('audio.podcasts.heroSub') : t('audio.podcasts.introSignedOut')}</p>
           </div>
-        )}
+        </div>
 
-        {user && open && (
-          <div id="pod-hero-body" className="pod-hero-body">
+        {user && (
+          <div className="pod-hero-body">
             <div className={`pod-hero-fields${searchEnabled ? '' : ' pod-hero-fields--single'}`}>
               {searchEnabled && (
                 <form className="pod-field" onSubmit={search}>
@@ -720,6 +697,19 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
 
 // ─── The tab ──────────────────────────────────────────────────────────────────
 
+// Mine | Discover | Trends, in the URL (?view=) so Back returns to it. Without one:
+// the last one picked, else Mine for someone signed in and Discover for a guest.
+const VIEWS = ['mine', 'discover', 'trends'];
+const VIEW_KEY = 'pod-view';
+function viewOf(param, user) {
+  if (VIEWS.includes(param)) return param;
+  try {
+    const saved = localStorage.getItem(VIEW_KEY);
+    if (VIEWS.includes(saved)) return saved;
+  } catch { /* storage off */ }
+  return user ? 'mine' : 'discover';
+}
+
 export default function PodcastsTab() {
   const { t } = useTranslation();
   const fmtDate = useDateFormat();
@@ -729,6 +719,7 @@ export default function PodcastsTab() {
   const me = authenticated ? user : null;
   const { data: config } = usePodcastConfig();
   const { data: subscriptions = [], isSuccess: subsLoaded } = usePodcastSubscriptions(me);
+  const view = viewOf(params.get('view'), me);
   const { data: discover } = usePodcastDiscover();
   const latest = usePodcastLatest(me);
   const invalidate = useInvalidatePodcasts();
@@ -762,6 +753,14 @@ export default function PodcastsTab() {
     window.scrollTo({ top: 0 });
   };
 
+  const showView = (v) => {
+    const next = new URLSearchParams(params);
+    next.set('type', 'external');
+    next.set('view', v);
+    setParams(next);
+    try { localStorage.setItem(VIEW_KEY, v); } catch { /* storage off */ }
+  };
+
   const subsById = useMemo(() => new Map(subscriptions.map((s) => [s.id, s])), [subscriptions]);
 
   // One episode (a tile's title or description, the player, the bell, a push).
@@ -789,55 +788,91 @@ export default function PodcastsTab() {
   // The shows you followed last come first.
   const mine = [...subscriptions].sort((a, b) => new Date(b.added_at) - new Date(a.added_at));
 
+  const followed = (id) => { invalidate(); if (id) openShow(id); };
+  const views = [
+    { key: 'mine', icon: <MdLibraryMusic size={18} />, label: t('audio.podcasts.views.mine') },
+    { key: 'discover', icon: <MdExplore size={18} />, label: t('audio.podcasts.views.discover') },
+    { key: 'trends', icon: <MdWhatshot size={18} />, label: t('audio.podcasts.views.trends') },
+  ];
+
   return (
     <div className="pod-tab">
-      <PodcastHero user={me} searchEnabled={!!config?.search} personEnabled={!!config?.person || config?.person === undefined && !!config?.search} subscriptions={subscriptions} subsLoaded={subsLoaded} onFollowed={(id) => { invalidate(); if (id) openShow(id); }} />
+      <nav className="pod-views" role="tablist" aria-label={t('audio.podcasts.kicker')}>
+        {views.map((v) => (
+          <button
+            key={v.key}
+            type="button"
+            role="tab"
+            aria-selected={view === v.key}
+            className={`pod-view${view === v.key ? ' active' : ''}`}
+            onClick={() => showView(v.key)}
+          >
+            {v.icon}<span>{v.label}</span>
+          </button>
+        ))}
+      </nav>
 
-      <ShowRail
-        icon={<MdPodcasts size={18} />}
-        title={t('audio.podcasts.yourPodcasts', { count: subscriptions.length })}
-        feeds={mine}
-        onOpen={openShow}
-        artFor={artFor}
-        noteFor={(f) => (f.status === 'pending' ? t('audio.podcasts.pending') : f.status === 'error' ? t('audio.podcasts.cantRead') : f.author)}
-      />
-
-      {episodes.length > 0 && (
-        <section className="pod-section">
-          <div className="pod-section-head pod-section-head--filters">
-            <h2 className="pod-section-title"><MdPlayArrow size={18} />{t('audio.podcasts.latest')}</h2>
-            <EpisodeFilters days={latestDays} onDays={setLatestDays} listen={latestListen} onListen={setLatestListen} range={latestRange} onRange={setLatestRange} />
-          </div>
-          <ul className="pod-tile-grid">
-            {latestShown.map((ep) => (
-              <EpisodeTile key={ep.id} ep={ep} feed={feedsById[ep.feed_id]} onOpenShow={openShow} onOpenEpisode={openEpisode} />
-            ))}
-          </ul>
-          {latestShown.length === 0 && <p className="pod-empty">{t('audio.podcasts.filters.none')}</p>}
-          {latest.hasNextPage && (
-            <button type="button" className="pod-btn pod-more" onClick={() => latest.fetchNextPage()} disabled={latest.isFetchingNextPage}>
-              {latest.isFetchingNextPage ? t('common.status.loading') : t('audio.podcasts.more')}
-            </button>
+      {view === 'mine' && (
+        <>
+          {!me && <p className="pod-empty pod-empty--center">{t('audio.podcasts.introSignedOut')}</p>}
+          {me && subsLoaded && subscriptions.length === 0 && (
+            <div className="pod-mine-empty">
+              <MdPodcasts size={40} />
+              <p>{t('audio.podcasts.views.mineEmpty')}</p>
+              <div className="pod-mine-empty-actions">
+                <button type="button" className="pod-btn pod-btn--primary" onClick={() => showView('discover')}><MdExplore size={16} /> {t('audio.podcasts.views.discover')}</button>
+                <button type="button" className="pod-btn" onClick={() => showView('trends')}><MdWhatshot size={16} /> {t('audio.podcasts.views.trends')}</button>
+              </div>
+            </div>
           )}
-        </section>
+          <ShowRail
+            icon={<MdPodcasts size={18} />}
+            title={t('audio.podcasts.yourPodcasts', { count: subscriptions.length })}
+            feeds={mine}
+            onOpen={openShow}
+            artFor={artFor}
+            noteFor={(f) => (f.status === 'pending' ? t('audio.podcasts.pending') : f.status === 'error' ? t('audio.podcasts.cantRead') : f.author)}
+          />
+
+          {episodes.length > 0 && (
+            <section className="pod-section">
+              <div className="pod-section-head pod-section-head--filters">
+                <h2 className="pod-section-title"><MdPlayArrow size={18} />{t('audio.podcasts.latest')}</h2>
+                <EpisodeFilters days={latestDays} onDays={setLatestDays} listen={latestListen} onListen={setLatestListen} range={latestRange} onRange={setLatestRange} />
+              </div>
+              <ul className="pod-tile-grid">
+                {latestShown.map((ep) => (
+                  <EpisodeTile key={ep.id} ep={ep} feed={feedsById[ep.feed_id]} onOpenShow={openShow} onOpenEpisode={openEpisode} />
+                ))}
+              </ul>
+              {latestShown.length === 0 && <p className="pod-empty">{t('audio.podcasts.filters.none')}</p>}
+              {latest.hasNextPage && (
+                <button type="button" className="pod-btn pod-more" onClick={() => latest.fetchNextPage()} disabled={latest.isFetchingNextPage}>
+                  {latest.isFetchingNextPage ? t('common.status.loading') : t('audio.podcasts.more')}
+                </button>
+              )}
+            </section>
+          )}
+        </>
       )}
 
-      {config?.enabled !== false && (config?.charts || config?.trending) && (
-        <DiscoverSection user={me} config={config} subscriptions={subscriptions} onFollowed={(id) => { invalidate(); if (id) openShow(id); }} />
+      {view === 'discover' && (
+        <>
+          <PodcastHero user={me} searchEnabled={!!config?.search} personEnabled={!!config?.person || config?.person === undefined && !!config?.search} subscriptions={subscriptions} onFollowed={followed} />
+          <ShowRail icon={<MdTrendingUp size={18} />} title={t('audio.podcasts.topTitle')} feeds={discover?.top} onOpen={openShow} ranked artFor={artFor} />
+          <ShowRail
+            icon={<MdHistory size={18} />}
+            title={t('audio.podcasts.recentTitle')}
+            feeds={discover?.recent}
+            onOpen={openShow}
+            artFor={artFor}
+            noteFor={(f) => (f.last_followed_at ? t('audio.podcasts.followedOn', { date: fmtDate(f.last_followed_at) }) : f.author)}
+          />
+        </>
       )}
 
-      <ShowRail icon={<MdTrendingUp size={18} />} title={t('audio.podcasts.topTitle')} feeds={discover?.top} onOpen={openShow} ranked artFor={artFor} />
-      <ShowRail
-        icon={<MdHistory size={18} />}
-        title={t('audio.podcasts.recentTitle')}
-        feeds={discover?.recent}
-        onOpen={openShow}
-        artFor={artFor}
-        noteFor={(f) => (f.last_followed_at ? t('audio.podcasts.followedOn', { date: fmtDate(f.last_followed_at) }) : f.author)}
-      />
-
-      {me && subscriptions.length === 0 && !discover?.top?.length && (
-        <p className="pod-empty pod-empty--center">{config?.search ? t('audio.podcasts.introSearch') : t('audio.podcasts.intro')}</p>
+      {view === 'trends' && (config?.charts || config?.trending) && (
+        <DiscoverSection user={me} config={config} subscriptions={subscriptions} onFollowed={followed} />
       )}
     </div>
   );

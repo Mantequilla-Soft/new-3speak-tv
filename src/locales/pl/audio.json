@@ -516,6 +516,12 @@
       "country": "Kraj",
       "none": "Brak listy dla tego kraju i kategorii.",
       "failed": "Listy są teraz niedostępne. Spróbuj ponownie."
+    },
+    "views": {
+      "mine": "Moje",
+      "discover": "Odkrywaj",
+      "trends": "Trendy",
+      "mineEmpty": "Nie obserwujesz jeszcze żadnego podcastu. Znajdź audycje w zakładce Odkrywaj albo zobacz, co jest popularne w Trendach."
     }
   }
 }

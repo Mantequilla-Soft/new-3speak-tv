@@ -470,6 +470,12 @@
       "country": "Land",
       "none": "Er is nu geen hitlijst voor dit land en deze categorie.",
       "failed": "De hitlijsten zijn nu niet beschikbaar. Probeer het opnieuw."
+    },
+    "views": {
+      "mine": "Mijn",
+      "discover": "Ontdekken",
+      "trends": "Trends",
+      "mineEmpty": "Je volgt nog geen podcasts. Vind programma’s bij Ontdekken, of kijk bij Trends wat populair is."
     }
   }
 }

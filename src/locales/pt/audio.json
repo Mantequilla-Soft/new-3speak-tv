@@ -493,6 +493,12 @@
       "country": "País",
       "none": "Não há ranking para este país e categoria agora.",
       "failed": "Os rankings não estão disponíveis agora. Tente novamente."
+    },
+    "views": {
+      "mine": "Meus",
+      "discover": "Descobrir",
+      "trends": "Tendências",
+      "mineEmpty": "Você ainda não segue nenhum podcast. Encontre programas em Descobrir ou veja o que está em alta em Tendências."
     }
   }
 }

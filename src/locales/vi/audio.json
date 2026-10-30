@@ -447,6 +447,12 @@
       "country": "Quốc gia",
       "none": "Hiện chưa có bảng xếp hạng cho quốc gia và danh mục này.",
       "failed": "Hiện không thể tải bảng xếp hạng. Vui lòng thử lại."
+    },
+    "views": {
+      "mine": "Của tôi",
+      "discover": "Khám phá",
+      "trends": "Xu hướng",
+      "mineEmpty": "Bạn chưa theo dõi podcast nào. Tìm chương trình trong Khám phá hoặc xem những gì đang phổ biến trong Xu hướng."
     }
   }
 }

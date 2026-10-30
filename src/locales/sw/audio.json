@@ -470,6 +470,12 @@
       "country": "Nchi",
       "none": "Hakuna chati ya nchi na aina hii kwa sasa.",
       "failed": "Chati hazipatikani kwa sasa. Tafadhali jaribu tena."
+    },
+    "views": {
+      "mine": "Zangu",
+      "discover": "Gundua",
+      "trends": "Mitindo",
+      "mineEmpty": "Bado hufuati podikasti yoyote. Tafuta vipindi kwenye Gundua, au uone kinachopendwa kwenye Mitindo."
     }
   }
 }

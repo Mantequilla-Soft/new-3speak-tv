@@ -470,6 +470,12 @@
       "country": "Bansa",
       "none": "Walang chart para sa bansa at kategoryang ito ngayon.",
       "failed": "Hindi available ngayon ang mga chart. Pakisubukang muli."
+    },
+    "views": {
+      "mine": "Akin",
+      "discover": "Tuklasin",
+      "trends": "Mga uso",
+      "mineEmpty": "Wala ka pang sinusundang podcast. Maghanap ng palabas sa Tuklasin, o tingnan ang patok sa Mga uso."
     }
   }
 }

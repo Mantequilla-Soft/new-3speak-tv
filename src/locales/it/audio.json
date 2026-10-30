@@ -493,6 +493,12 @@
       "country": "Paese",
       "none": "Al momento non c’è una classifica per questo paese e categoria.",
       "failed": "Le classifiche non sono disponibili in questo momento. Riprova."
+    },
+    "views": {
+      "mine": "I miei",
+      "discover": "Scopri",
+      "trends": "Tendenze",
+      "mineEmpty": "Non segui ancora nessun podcast. Trova programmi in Scopri o guarda cosa va di moda in Tendenze."
     }
   }
 }

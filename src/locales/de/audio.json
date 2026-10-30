@@ -470,6 +470,12 @@
       "country": "Land",
       "none": "Für dieses Land und diese Kategorie gibt es gerade keine Charts.",
       "failed": "Die Charts sind gerade nicht verfügbar. Bitte versuche es erneut."
+    },
+    "views": {
+      "mine": "Meine",
+      "discover": "Entdecken",
+      "trends": "Trends",
+      "mineEmpty": "Du folgst noch keinem Podcast. Finde Sendungen unter Entdecken oder sieh dir unter Trends an, was beliebt ist."
     }
   }
 }

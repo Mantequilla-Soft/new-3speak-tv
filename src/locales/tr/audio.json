@@ -470,6 +470,12 @@
       "country": "Ülke",
       "none": "Bu ülke ve kategori için şu anda liste yok.",
       "failed": "Listeler şu anda kullanılamıyor. Lütfen tekrar dene."
+    },
+    "views": {
+      "mine": "Benimkiler",
+      "discover": "Keşfet",
+      "trends": "Trendler",
+      "mineEmpty": "Henüz hiçbir podcast’i takip etmiyorsun. Keşfet’te program bul ya da Trendler’de popüler olanlara bak."
     }
   }
 }

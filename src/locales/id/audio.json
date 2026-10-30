@@ -447,6 +447,12 @@
       "country": "Negara",
       "none": "Belum ada tangga untuk negara dan kategori ini.",
       "failed": "Tangga teratas tidak tersedia saat ini. Silakan coba lagi."
+    },
+    "views": {
+      "mine": "Milik saya",
+      "discover": "Jelajahi",
+      "trends": "Tren",
+      "mineEmpty": "Kamu belum mengikuti podcast apa pun. Temukan acara di Jelajahi, atau lihat yang populer di Tren."
     }
   }
 }
