@@ -1,0 +1,119 @@
+# Public card-image routes for the site's server block. TEMPLATE: see README.md.
+# The cache and the loopback resizer live in image-cache.conf; read that first.
+# Include inside the server { } of each site that serves the frontend.
+# ^~ so the /@ and other regex locations never take these.
+
+# Video thumbnails from the image host. Filenames are unique per upload, so a
+# cached copy never goes stale: long-lived for browsers and Cloudflare too.
+location ^~ /img/t/ {
+    proxy_pass http://127.0.0.1:${SPK_IMG_PORT}/t/;
+    proxy_cache spkimg;
+    proxy_cache_key "t$uri$spkimg_w";
+    proxy_cache_valid 200 365d;
+    proxy_cache_valid 404 415 10m;
+    proxy_cache_valid any 1m;
+    proxy_cache_lock on;
+    proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+    proxy_ignore_headers Cache-Control Expires Set-Cookie Vary;
+    proxy_hide_header Set-Cookie;
+    proxy_hide_header Cache-Control;
+    proxy_hide_header Expires;
+    add_header Cache-Control "public, max-age=2592000, immutable";
+    add_header X-Img-Cache $upstream_cache_status;
+}
+
+# IPFS thumbnails by CID, cropped to the card shape. A CID names fixed bytes,
+# so a cached copy never goes stale.
+location ^~ /img/i/ {
+    proxy_pass http://127.0.0.1:${SPK_IMG_PORT}/i/;
+    proxy_cache spkimg;
+    proxy_cache_key "i$uri$spkimg_w";
+    proxy_cache_valid 200 365d;
+    proxy_cache_valid 404 415 10m;
+    proxy_cache_valid any 1m;
+    proxy_cache_lock on;
+    proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+    proxy_ignore_headers Cache-Control Expires Set-Cookie Vary;
+    proxy_hide_header Set-Cookie;
+    proxy_hide_header Cache-Control;
+    proxy_hide_header Expires;
+    add_header Cache-Control "public, max-age=2592000, immutable";
+    add_header X-Img-Cache $upstream_cache_status;
+}
+
+# Avatars. A user can change theirs, so a day, the same as Hive's own redirect.
+location ^~ /img/u/ {
+    proxy_pass http://127.0.0.1:${SPK_IMG_PORT}/u/;
+    proxy_cache spkimg;
+    proxy_cache_key "u$uri";
+    proxy_cache_valid 200 1d;
+    proxy_cache_valid 404 10m;
+    proxy_cache_valid any 1m;
+    proxy_cache_lock on;
+    proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+    proxy_ignore_headers Cache-Control Expires Set-Cookie Vary;
+    proxy_hide_header Set-Cookie;
+    proxy_hide_header Cache-Control;
+    proxy_hide_header Expires;
+    add_header Cache-Control "public, max-age=86400";
+    add_header X-Img-Cache $upstream_cache_status;
+}
+
+# Our own uploaded avatars, square-cropped. Unique filenames, so long-lived.
+location ^~ /img/a/ {
+    proxy_pass http://127.0.0.1:${SPK_IMG_PORT}/a/;
+    proxy_cache spkimg;
+    proxy_cache_key "a$uri$spkimg_px";
+    proxy_cache_valid 200 365d;
+    proxy_cache_valid 404 415 10m;
+    proxy_cache_valid any 1m;
+    proxy_cache_lock on;
+    proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+    proxy_ignore_headers Cache-Control Expires Set-Cookie Vary;
+    proxy_hide_header Set-Cookie;
+    proxy_hide_header Cache-Control;
+    proxy_hide_header Expires;
+    add_header Cache-Control "public, max-age=2592000, immutable";
+    add_header X-Img-Cache $upstream_cache_status;
+}
+
+# Anything from Hive's image proxy (/p/ resizes of thumbnails and profile pictures).
+# The URL names the source and the size, so it never changes: long-lived.
+location ^~ /img/h/ {
+    proxy_pass http://127.0.0.1:${SPK_IMG_PORT}/h/;
+    proxy_cache spkimg;
+    proxy_cache_key "h$uri$is_args$args";
+    proxy_cache_valid 200 365d;
+    proxy_cache_valid 404 415 10m;
+    proxy_cache_valid any 1m;
+    proxy_cache_lock on;
+    proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+    proxy_ignore_headers Cache-Control Expires Set-Cookie Vary;
+    proxy_hide_header Set-Cookie;
+    proxy_hide_header Cache-Control;
+    proxy_hide_header Expires;
+    add_header Cache-Control "public, max-age=2592000, immutable";
+    add_header X-Img-Cache $upstream_cache_status;
+}
+
+# Podcast cover art: square 1400 px JPEGs for Apple Podcasts, rendered by the
+# checker (3speakchecks routes/rss.js, /rss/cover/). Feeds link these. A cover
+# can change (new playlist art, new avatar), so a day, like avatars.
+location ^~ /img/c/ {
+    proxy_pass http://127.0.0.1:${SPK_CHECKER_PORT}/rss/cover/;
+    proxy_cache spkimg;
+    proxy_cache_key "c$uri";
+    proxy_cache_valid 200 1d;
+    proxy_cache_valid 404 10m;
+    proxy_cache_valid any 1m;
+    proxy_cache_lock on;
+    proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+    proxy_ignore_headers Cache-Control Expires Set-Cookie Vary;
+    proxy_hide_header Set-Cookie;
+    proxy_hide_header Cache-Control;
+    proxy_hide_header Expires;
+    add_header Cache-Control "public, max-age=86400";
+    add_header X-Img-Cache $upstream_cache_status;
+}
+
+location ^~ /img/ { return 404; }
