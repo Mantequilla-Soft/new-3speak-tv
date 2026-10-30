@@ -20,10 +20,32 @@
   "changelog": {
     "title": "업데이트가 나왔어요!",
     "subtitle": "v{{version}}의 새로운 기능",
-    "previousUpdates": "이전 업데이트",
-    "newerUpdates": "최신 업데이트",
     "readTheCode": "코드 보기",
-    "gotIt": "확인"
+    "gotIt": "확인",
+    "categories": {
+      "home": "홈 및 피드",
+      "watch": "동영상 페이지",
+      "comments": "댓글",
+      "shorts": "쇼츠",
+      "stories": "스토리",
+      "editor": "편집기 및 리믹스",
+      "upload": "업로드 및 게시",
+      "audio": "오디오",
+      "podcasts": "팟캐스트",
+      "live": "라이브 방송",
+      "profile": "프로필 및 채널",
+      "groups": "커뮤니티 및 배지",
+      "playlists": "재생목록",
+      "tips": "팁, 지갑 및 Pro",
+      "ads": "광고",
+      "chat": "채팅",
+      "notifications": "알림",
+      "leaderboard": "리더보드",
+      "sharing": "공유",
+      "account": "로그인 및 계정",
+      "settings": "설정 및 언어",
+      "general": "3Speak 전체"
+    }
   },
   "routes": {
     "homeFeed": "홈 피드",

@@ -20,10 +20,32 @@
   "changelog": {
     "title": "Bir güncelleme yayınladık!",
     "subtitle": "v{{version}} sürümündeki yenilikler",
-    "previousUpdates": "Önceki güncellemeler",
-    "newerUpdates": "Daha yeni güncellemeler",
     "readTheCode": "Kodu oku",
-    "gotIt": "Anladım"
+    "gotIt": "Anladım",
+    "categories": {
+      "home": "Ana sayfa ve akışlar",
+      "watch": "İzleme sayfası",
+      "comments": "Yorumlar",
+      "shorts": "Shorts",
+      "stories": "Hikâyeler",
+      "editor": "Editör ve remiksler",
+      "upload": "Yükleme ve yayınlama",
+      "audio": "Ses",
+      "podcasts": "Podcast’ler",
+      "live": "Canlı yayınlar",
+      "profile": "Profiller ve kanallar",
+      "groups": "Topluluklar ve rozetler",
+      "playlists": "Oynatma listeleri",
+      "tips": "Bahşiş, cüzdan ve Pro",
+      "ads": "Reklam",
+      "chat": "Sohbet",
+      "notifications": "Bildirimler",
+      "leaderboard": "Sıralama",
+      "sharing": "Paylaşım",
+      "account": "Giriş ve hesap",
+      "settings": "Ayarlar ve diller",
+      "general": "Tüm 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "Ana Akış",

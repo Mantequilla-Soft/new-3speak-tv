@@ -20,10 +20,32 @@
   "changelog": {
     "title": "Мы выпустили обновление!",
     "subtitle": "Что нового в v{{version}}",
-    "previousUpdates": "Предыдущие обновления",
-    "newerUpdates": "Более новые обновления",
     "readTheCode": "Посмотреть код",
-    "gotIt": "Понятно"
+    "gotIt": "Понятно",
+    "categories": {
+      "home": "Главная и ленты",
+      "watch": "Страница видео",
+      "comments": "Комментарии",
+      "shorts": "Shorts",
+      "stories": "Истории",
+      "editor": "Редактор и ремиксы",
+      "upload": "Загрузка и публикация",
+      "audio": "Аудио",
+      "podcasts": "Подкасты",
+      "live": "Трансляции",
+      "profile": "Профили и каналы",
+      "groups": "Сообщества и значки",
+      "playlists": "Плейлисты",
+      "tips": "Чаевые, кошелёк и Pro",
+      "ads": "Реклама",
+      "chat": "Чат",
+      "notifications": "Уведомления",
+      "leaderboard": "Рейтинг",
+      "sharing": "Поделиться",
+      "account": "Вход и аккаунт",
+      "settings": "Настройки и языки",
+      "general": "Весь 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "Главная лента",

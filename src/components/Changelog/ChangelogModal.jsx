@@ -1,10 +1,15 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { IoClose, IoChevronBack, IoChevronForward, IoLogoGithub, IoCheckmarkCircle } from 'react-icons/io5';
+import { IoClose, IoLogoGithub, IoCheckmarkCircle } from 'react-icons/io5';
+import {
+  MdHome, MdOndemandVideo, MdChatBubbleOutline, MdSmartphone, MdAmpStories, MdContentCut, MdFileUpload,
+  MdAudiotrack, MdPodcasts, MdLiveTv, MdPerson, MdGroups, MdPlaylistPlay, MdVolunteerActivism, MdCampaign,
+  MdForum, MdNotifications, MdLeaderboard, MdShare, MdLogin, MdSettings, MdAutoAwesome, MdExpandMore,
+} from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
-import { CHANGELOG, changelogSince } from '../../changelog';
+import { CHANGELOG, changelogSince, groupChangelog } from '../../changelog';
 import { markVersionSeen } from '../../utils/appVersion';
 import { formatDaysAgo } from '../../i18n';
 import logo from '../../assets/image/3S_logo.svg';
@@ -18,6 +23,22 @@ const DUMMY_MODE = false;
 
 // Short, friendly relative date e.g. "2 weeks ago", in the reader's language.
 const timeAgo = formatDaysAgo;
+
+// One icon per category (src/changelog.js CHANGELOG_CATEGORIES).
+const CATEGORY_ICONS = {
+  home: MdHome, watch: MdOndemandVideo, comments: MdChatBubbleOutline, shorts: MdSmartphone, stories: MdAmpStories,
+  editor: MdContentCut, upload: MdFileUpload, audio: MdAudiotrack, podcasts: MdPodcasts, live: MdLiveTv,
+  profile: MdPerson, groups: MdGroups, playlists: MdPlaylistPlay, tips: MdVolunteerActivism, ads: MdCampaign,
+  chat: MdForum, notifications: MdNotifications, leaderboard: MdLeaderboard, sharing: MdShare, account: MdLogin,
+  settings: MdSettings, general: MdAutoAwesome,
+};
+
+// Few updates: every group open. Many (someone back after weeks): only the group
+// with the newest change, the rest are headers with a count to open.
+const OPEN_ALL_UP_TO = 6;
+const initiallyOpen = (groups, total) => new Set(
+  groups.length === 1 || total <= OPEN_ALL_UP_TO ? groups.map((g) => g.category) : groups.slice(0, 1).map((g) => g.category),
+);
 
 // Routes that must never be interrupted by "what's new". /advertise is a landing
 // page we send people to from outside 3Speak, and a changelog for an app they have
@@ -36,14 +57,8 @@ export default function ChangelogModal() {
   const setAppUpdatedFrom = useAppStore((s) => s.setAppUpdatedFrom);
   const theme = useAppStore((s) => s.theme);
   const [open, setOpen] = useState(false);
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(true);
-  // Custom scrollbar geometry (percent-based) so we get a real, themed, fixed
-  // thickness in every browser — Firefox can't size a native scrollbar.
-  const [thumb, setThumb] = useState({ width: 100, left: 0, visible: false });
-  const scrollRef = useRef(null);
-  const trackRef = useRef(null);
-
+  // Which category groups are open (null until the popup first renders its groups).
+  const [openGroups, setOpenGroups] = useState(null);
   useEffect(() => {
     // Held, not spent: `appUpdatedFrom` is left alone and markVersionSeen() is not
     // called, so the popup still appears the moment they leave this route.
@@ -72,101 +87,19 @@ export default function ChangelogModal() {
     return () => { document.body.style.overflow = previous; };
   }, [open, silenced]);
 
-  // Recompute edge fades + the custom scrollbar thumb size/position.
-  const updateFades = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setAtStart(el.scrollLeft <= 1);
-    setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 1);
-
-    const ratio = el.scrollWidth > 0 ? el.clientWidth / el.scrollWidth : 1;
-    const visible = ratio < 0.999;
-    const width = Math.max(ratio * 100, 8); // percent, min 8% so it stays grabbable
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    const left = maxScroll > 0 ? (el.scrollLeft / maxScroll) * (100 - width) : 0;
-    setThumb({ width, left, visible });
-  }, []);
-
-  // Drag the custom thumb to scroll the entries row.
-  const onThumbDown = useCallback((e) => {
-    e.preventDefault();
-    const el = scrollRef.current;
-    const track = trackRef.current;
-    if (!el || !track) return;
-    const startX = e.clientX;
-    const startScroll = el.scrollLeft;
-    const trackW = track.clientWidth;
-    const thumbW = (thumb.width / 100) * trackW;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    const movableTrack = trackW - thumbW;
-    const onMove = (ev) => {
-      if (movableTrack <= 0) return;
-      const delta = ev.clientX - startX;
-      el.scrollLeft = startScroll + (delta / movableTrack) * maxScroll;
-    };
-    const onUp = () => {
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerup', onUp);
-    };
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
-  }, [thumb.width]);
-
-  // Click on the empty track to page toward the click point.
-  const onTrackDown = useCallback((e) => {
-    if (e.target !== trackRef.current) return; // ignore clicks on the thumb
-    const el = scrollRef.current;
-    const track = trackRef.current;
-    if (!el || !track) return;
-    const rect = track.getBoundingClientRect();
-    const frac = (e.clientX - rect.left) / rect.width;
-    el.scrollTo({ left: frac * (el.scrollWidth - el.clientWidth), behavior: 'smooth' });
-  }, []);
-
-  // Desktop arrow nav — centre the next/previous card in the viewport.
-  const scrollByCard = useCallback((dir) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const cards = el.querySelectorAll('.changelog-entry');
-    if (!cards.length) return;
-    const mid = el.getBoundingClientRect().left + el.clientWidth / 2;
-    // Find the card nearest the centre now, then centre the next/prev one.
-    let curr = 0, best = Infinity;
-    cards.forEach((c, i) => {
-      const r = c.getBoundingClientRect();
-      const d = Math.abs(r.left + r.width / 2 - mid);
-      if (d < best) { best = d; curr = i; }
-    });
-    const target = cards[Math.max(0, Math.min(cards.length - 1, curr + dir))];
-    const tr = target.getBoundingClientRect();
-    el.scrollBy({ left: tr.left + tr.width / 2 - mid, behavior: 'smooth' });
-  }, []);
-
-  // Translate vertical mouse-wheel into horizontal scrolling of the entries row.
-  // Native non-passive listener so we can preventDefault (background stays put).
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el || !open) return;
-    updateFades();
-    const onWheel = (e) => {
-      if (e.deltaY === 0) return;
-      e.preventDefault();
-      el.scrollLeft += e.deltaY;
-    };
-    el.addEventListener('wheel', onWheel, { passive: false });
-    window.addEventListener('resize', updateFades);
-    return () => {
-      el.removeEventListener('wheel', onWheel);
-      window.removeEventListener('resize', updateFades);
-    };
-  }, [open, updateFades]);
-
   // Also covers arriving at a silenced route with the popup already up: it goes
   // away, and comes back on the way out, because `open` is never cleared here.
   if (!open || silenced) return null;
 
   const entries = DUMMY_MODE ? CHANGELOG : changelogSince(appUpdatedFrom);
   if (entries.length === 0) return null;
+  const groups = groupChangelog(entries);
+  const opened = openGroups || initiallyOpen(groups, entries.length);
+  const toggle = (category) => {
+    const next = new Set(opened);
+    if (next.has(category)) next.delete(category); else next.add(category);
+    setOpenGroups(next);
+  };
 
   const close = () => {
     setOpen(false);
@@ -189,39 +122,35 @@ export default function ChangelogModal() {
           <p className="changelog-subtitle">{t('app.changelog.subtitle', { version: APP_VERSION })}</p>
         </div>
 
-        <div className={`changelog-scroller${atStart ? ' at-start' : ''}${atEnd ? ' at-end' : ''}`}>
-          <div className="changelog-body" ref={scrollRef} onScroll={updateFades}>
-            {entries.map((entry) => (
-              <div className="changelog-entry" key={entry.version}>
-                <div className="changelog-entry-meta">
-                  <span className="changelog-entry-version">v{entry.version}</span>
-                  {entry.date && <span className="changelog-entry-date">{timeAgo(entry.date)}</span>}
-                </div>
-                <p className="changelog-entry-summary">{entry.summary}</p>
-              </div>
-            ))}
-          </div>
-          <span className="changelog-fade left" aria-hidden="true" />
-          <span className="changelog-fade right" aria-hidden="true" />
-          {thumb.visible && (
-            <div className="changelog-scrollbar" ref={trackRef} onPointerDown={onTrackDown}>
-              <div
-                className="changelog-scrollbar-thumb"
-                style={{ width: `${thumb.width}%`, left: `${thumb.left}%` }}
-                onPointerDown={onThumbDown}
-              />
-            </div>
-          )}
-          {entries.length > 1 && (
-            <>
-              <button className="changelog-arrow left" onClick={() => scrollByCard(-1)} disabled={atStart} aria-label={t('app.changelog.previousUpdates')}>
-                <IoChevronBack />
-              </button>
-              <button className="changelog-arrow right" onClick={() => scrollByCard(1)} disabled={atEnd} aria-label={t('app.changelog.newerUpdates')}>
-                <IoChevronForward />
-              </button>
-            </>
-          )}
+        <div className="changelog-body">
+          {groups.map(({ category, entries: list }) => {
+            const Icon = CATEGORY_ICONS[category] || MdAutoAwesome;
+            const isOpen = opened.has(category);
+            const panelId = `changelog-group-${category}`;
+            return (
+              <section className={`changelog-group${isOpen ? ' open' : ''}`} key={category}>
+                <button type="button" className="changelog-group-head" aria-expanded={isOpen} aria-controls={panelId} onClick={() => toggle(category)}>
+                  <span className="changelog-group-icon"><Icon /></span>
+                  <span className="changelog-group-name">{t(`app.changelog.categories.${category}`)}</span>
+                  <span className="changelog-group-count">{list.length}</span>
+                  <MdExpandMore className="changelog-group-chevron" aria-hidden="true" />
+                </button>
+                {isOpen && (
+                  <div className="changelog-group-list" id={panelId}>
+                    {list.map((entry) => (
+                      <div className="changelog-entry" key={entry.version}>
+                        <div className="changelog-entry-meta">
+                          <span className="changelog-entry-version">v{entry.version}</span>
+                          {entry.date && <span className="changelog-entry-date">{timeAgo(entry.date)}</span>}
+                        </div>
+                        <p className="changelog-entry-summary">{entry.summary}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+            );
+          })}
         </div>
 
         <div className="changelog-footer">

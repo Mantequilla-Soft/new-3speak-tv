@@ -20,10 +20,32 @@
   "changelog": {
     "title": "हमने एक अपडेट जारी किया है!",
     "subtitle": "v{{version}} में ये नया है",
-    "previousUpdates": "पिछले अपडेट",
-    "newerUpdates": "नए अपडेट",
     "readTheCode": "कोड पढ़ें",
-    "gotIt": "समझ गया"
+    "gotIt": "समझ गया",
+    "categories": {
+      "home": "होम और फ़ीड",
+      "watch": "वीडियो पेज",
+      "comments": "टिप्पणियाँ",
+      "shorts": "शॉर्ट्स",
+      "stories": "स्टोरीज़",
+      "editor": "एडिटर और रीमिक्स",
+      "upload": "अपलोड और प्रकाशन",
+      "audio": "ऑडियो",
+      "podcasts": "पॉडकास्ट",
+      "live": "लाइव स्ट्रीम",
+      "profile": "प्रोफ़ाइल और चैनल",
+      "groups": "समुदाय और बैज",
+      "playlists": "प्लेलिस्ट",
+      "tips": "टिप, वॉलेट और Pro",
+      "ads": "विज्ञापन",
+      "chat": "चैट",
+      "notifications": "सूचनाएँ",
+      "leaderboard": "लीडरबोर्ड",
+      "sharing": "शेयर करना",
+      "account": "साइन-इन और खाता",
+      "settings": "सेटिंग्स और भाषाएँ",
+      "general": "पूरा 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "होम फ़ीड",

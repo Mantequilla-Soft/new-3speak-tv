@@ -20,10 +20,32 @@
   "changelog": {
     "title": "我们发布了更新！",
     "subtitle": "v{{version}} 的新内容",
-    "previousUpdates": "更早的更新",
-    "newerUpdates": "较新的更新",
     "readTheCode": "查看代码",
-    "gotIt": "知道了"
+    "gotIt": "知道了",
+    "categories": {
+      "home": "首页与动态",
+      "watch": "视频页面",
+      "comments": "评论",
+      "shorts": "短视频",
+      "stories": "快拍",
+      "editor": "编辑器与混剪",
+      "upload": "上传与发布",
+      "audio": "音频",
+      "podcasts": "播客",
+      "live": "直播",
+      "profile": "个人主页与频道",
+      "groups": "社区与徽章",
+      "playlists": "播放列表",
+      "tips": "打赏、钱包与 Pro",
+      "ads": "广告",
+      "chat": "聊天",
+      "notifications": "通知",
+      "leaderboard": "排行榜",
+      "sharing": "分享",
+      "account": "登录与账号",
+      "settings": "设置与语言",
+      "general": "整个 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "首页推荐",

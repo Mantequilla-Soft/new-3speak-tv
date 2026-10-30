@@ -20,10 +20,32 @@
   "changelog": {
     "title": "アップデートしました！",
     "subtitle": "v{{version}} の新機能",
-    "previousUpdates": "以前のアップデート",
-    "newerUpdates": "新しいアップデート",
     "readTheCode": "コードを見る",
-    "gotIt": "OK"
+    "gotIt": "OK",
+    "categories": {
+      "home": "ホームとフィード",
+      "watch": "動画ページ",
+      "comments": "コメント",
+      "shorts": "ショート",
+      "stories": "ストーリー",
+      "editor": "エディターとリミックス",
+      "upload": "アップロードと投稿",
+      "audio": "オーディオ",
+      "podcasts": "ポッドキャスト",
+      "live": "ライブ配信",
+      "profile": "プロフィールとチャンネル",
+      "groups": "コミュニティとバッジ",
+      "playlists": "プレイリスト",
+      "tips": "チップ・ウォレット・Pro",
+      "ads": "広告",
+      "chat": "チャット",
+      "notifications": "通知",
+      "leaderboard": "リーダーボード",
+      "sharing": "共有",
+      "account": "ログインとアカウント",
+      "settings": "設定と言語",
+      "general": "3Speak 全体"
+    }
   },
   "routes": {
     "homeFeed": "ホームフィード",

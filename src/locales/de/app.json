@@ -20,10 +20,32 @@
   "changelog": {
     "title": "Wir haben ein Update veröffentlicht!",
     "subtitle": "Das ist neu in v{{version}}",
-    "previousUpdates": "Frühere Updates",
-    "newerUpdates": "Neuere Updates",
     "readTheCode": "Zum Code",
-    "gotIt": "Verstanden"
+    "gotIt": "Verstanden",
+    "categories": {
+      "home": "Startseite & Feeds",
+      "watch": "Videoseite",
+      "comments": "Kommentare",
+      "shorts": "Shorts",
+      "stories": "Stories",
+      "editor": "Editor & Remixe",
+      "upload": "Hochladen & Veröffentlichen",
+      "audio": "Audio",
+      "podcasts": "Podcasts",
+      "live": "Livestreams",
+      "profile": "Profile & Kanäle",
+      "groups": "Communities & Abzeichen",
+      "playlists": "Playlists",
+      "tips": "Tipps, Wallet & Pro",
+      "ads": "Werbung",
+      "chat": "Chat",
+      "notifications": "Benachrichtigungen",
+      "leaderboard": "Bestenliste",
+      "sharing": "Teilen",
+      "account": "Anmeldung & Konto",
+      "settings": "Einstellungen & Sprachen",
+      "general": "Ganz 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "Startseite",

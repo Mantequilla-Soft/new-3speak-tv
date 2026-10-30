@@ -20,10 +20,32 @@
   "changelog": {
     "title": "Ada pembaruan baru!",
     "subtitle": "Ini yang baru di v{{version}}",
-    "previousUpdates": "Pembaruan sebelumnya",
-    "newerUpdates": "Pembaruan lebih baru",
     "readTheCode": "Baca kodenya",
-    "gotIt": "Mengerti"
+    "gotIt": "Mengerti",
+    "categories": {
+      "home": "Beranda & feed",
+      "watch": "Halaman video",
+      "comments": "Komentar",
+      "shorts": "Shorts",
+      "stories": "Story",
+      "editor": "Editor & remix",
+      "upload": "Unggah & terbitkan",
+      "audio": "Audio",
+      "podcasts": "Podcast",
+      "live": "Siaran langsung",
+      "profile": "Profil & kanal",
+      "groups": "Komunitas & lencana",
+      "playlists": "Playlist",
+      "tips": "Tip, dompet & Pro",
+      "ads": "Iklan",
+      "chat": "Obrolan",
+      "notifications": "Notifikasi",
+      "leaderboard": "Papan peringkat",
+      "sharing": "Berbagi",
+      "account": "Masuk & akun",
+      "settings": "Pengaturan & bahasa",
+      "general": "Seluruh 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "Feed Beranda",

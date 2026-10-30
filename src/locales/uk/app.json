@@ -20,10 +20,32 @@
   "changelog": {
     "title": "Ми випустили оновлення!",
     "subtitle": "Що нового у v{{version}}",
-    "previousUpdates": "Попередні оновлення",
-    "newerUpdates": "Новіші оновлення",
     "readTheCode": "Переглянути код",
-    "gotIt": "Зрозуміло"
+    "gotIt": "Зрозуміло",
+    "categories": {
+      "home": "Головна і стрічки",
+      "watch": "Сторінка відео",
+      "comments": "Коментарі",
+      "shorts": "Shorts",
+      "stories": "Історії",
+      "editor": "Редактор і ремікси",
+      "upload": "Завантаження й публікація",
+      "audio": "Аудіо",
+      "podcasts": "Подкасти",
+      "live": "Трансляції",
+      "profile": "Профілі й канали",
+      "groups": "Спільноти й значки",
+      "playlists": "Плейлисти",
+      "tips": "Чайові, гаманець і Pro",
+      "ads": "Реклама",
+      "chat": "Чат",
+      "notifications": "Сповіщення",
+      "leaderboard": "Рейтинг",
+      "sharing": "Поширення",
+      "account": "Вхід і акаунт",
+      "settings": "Налаштування й мови",
+      "general": "Увесь 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "Головна стрічка",

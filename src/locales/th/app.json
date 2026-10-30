@@ -20,10 +20,32 @@
   "changelog": {
     "title": "เราปล่อยอัปเดตใหม่แล้ว!",
     "subtitle": "มีอะไรใหม่ใน v{{version}}",
-    "previousUpdates": "อัปเดตก่อนหน้า",
-    "newerUpdates": "อัปเดตที่ใหม่กว่า",
     "readTheCode": "อ่านโค้ด",
-    "gotIt": "เข้าใจแล้ว"
+    "gotIt": "เข้าใจแล้ว",
+    "categories": {
+      "home": "หน้าแรกและฟีด",
+      "watch": "หน้าวิดีโอ",
+      "comments": "ความคิดเห็น",
+      "shorts": "ช็อตส์",
+      "stories": "สตอรี่",
+      "editor": "ตัวแก้ไขและรีมิกซ์",
+      "upload": "อัปโหลดและเผยแพร่",
+      "audio": "เสียง",
+      "podcasts": "พอดแคสต์",
+      "live": "ไลฟ์สด",
+      "profile": "โปรไฟล์และช่อง",
+      "groups": "ชุมชนและเหรียญตรา",
+      "playlists": "เพลย์ลิสต์",
+      "tips": "ทิป กระเป๋าเงิน และ Pro",
+      "ads": "โฆษณา",
+      "chat": "แชท",
+      "notifications": "การแจ้งเตือน",
+      "leaderboard": "กระดานผู้นำ",
+      "sharing": "การแชร์",
+      "account": "การเข้าสู่ระบบและบัญชี",
+      "settings": "การตั้งค่าและภาษา",
+      "general": "ทั้ง 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "ฟีดหน้าแรก",

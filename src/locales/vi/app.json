@@ -20,10 +20,32 @@
   "changelog": {
     "title": "Chúng tôi vừa ra mắt bản cập nhật!",
     "subtitle": "Có gì mới trong v{{version}}",
-    "previousUpdates": "Các bản cập nhật trước",
-    "newerUpdates": "Các bản cập nhật mới hơn",
     "readTheCode": "Xem mã nguồn",
-    "gotIt": "Đã hiểu"
+    "gotIt": "Đã hiểu",
+    "categories": {
+      "home": "Trang chủ & bảng tin",
+      "watch": "Trang video",
+      "comments": "Bình luận",
+      "shorts": "Shorts",
+      "stories": "Tin",
+      "editor": "Trình chỉnh sửa & remix",
+      "upload": "Tải lên & đăng",
+      "audio": "Âm thanh",
+      "podcasts": "Podcast",
+      "live": "Phát trực tiếp",
+      "profile": "Hồ sơ & kênh",
+      "groups": "Cộng đồng & huy hiệu",
+      "playlists": "Danh sách phát",
+      "tips": "Tiền tip, ví & Pro",
+      "ads": "Quảng cáo",
+      "chat": "Trò chuyện",
+      "notifications": "Thông báo",
+      "leaderboard": "Bảng xếp hạng",
+      "sharing": "Chia sẻ",
+      "account": "Đăng nhập & tài khoản",
+      "settings": "Cài đặt & ngôn ngữ",
+      "general": "Toàn bộ 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "Bảng tin chính",

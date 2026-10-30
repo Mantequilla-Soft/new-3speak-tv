@@ -20,10 +20,32 @@
   "changelog": {
     "title": "We hebben een update uitgebracht!",
     "subtitle": "Dit is er nieuw in v{{version}}",
-    "previousUpdates": "Eerdere updates",
-    "newerUpdates": "Nieuwere updates",
     "readTheCode": "Bekijk de code",
-    "gotIt": "Begrepen"
+    "gotIt": "Begrepen",
+    "categories": {
+      "home": "Home & feeds",
+      "watch": "Videopagina",
+      "comments": "Reacties",
+      "shorts": "Shorts",
+      "stories": "Stories",
+      "editor": "Editor & remixes",
+      "upload": "Uploaden & publiceren",
+      "audio": "Audio",
+      "podcasts": "Podcasts",
+      "live": "Livestreams",
+      "profile": "Profielen & kanalen",
+      "groups": "Communities & badges",
+      "playlists": "Afspeellijsten",
+      "tips": "Fooien, wallet & Pro",
+      "ads": "Adverteren",
+      "chat": "Chat",
+      "notifications": "Meldingen",
+      "leaderboard": "Ranglijst",
+      "sharing": "Delen",
+      "account": "Inloggen & account",
+      "settings": "Instellingen & talen",
+      "general": "Heel 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "Home-feed",
