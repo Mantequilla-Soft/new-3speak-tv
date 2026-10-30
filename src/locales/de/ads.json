@@ -92,7 +92,9 @@
     "turnAdsOff": "Werbung in deinen Videos ausschalten",
     "rewardsOn": "Zuschauer-Belohnungen einschalten",
     "rewardsOff": "Zuschauer-Belohnungen ausschalten",
-    "showApplications": "Deine Werbeanfragen anzeigen"
+    "showApplications": "Deine Werbeanfragen anzeigen",
+    "listenOn": "Hörer-Belohnungen einschalten",
+    "listenOff": "Hörer-Belohnungen ausschalten"
   },
   "slot": {
     "atBeginning": "Am Anfang des Videos",
@@ -256,7 +258,9 @@
     "text": "Werbung auf 3Speak bezahlt den Creator, seine Community und jetzt auch dich. Dein Anteil stammt aus dem, was der Werbekunde bezahlt hat, in der Währung, in der er bezahlt hat, für Videos, die du sowieso angesehen hättest.",
     "note": "3Speak speichert deinen Wiedergabeverlauf bereits, damit du Dinge wiederfindest. Damit können wir ihn nutzen, um zu berechnen, was dir zusteht, und speichern, wie viel du von jedem Video wirklich angesehen hast. Sag Nein, und nichts ändert sich. Du kannst das jederzeit in den Einstellungen ausschalten, und dann wird gelöscht, was wir für Belohnungen gespeichert haben.",
     "noThanks": "Nein, danke",
-    "yes": "Ja, bezahl mich"
+    "yes": "Ja, bezahl mich",
+    "titleBoth": "Werde fürs Schauen und Hören bezahlt",
+    "listenNote": "Hören zählt auch: Hörer-Belohnungen für Audio und Podcasts auf 3speak.tv starten bald, sobald wir die Zahlen geprüft haben. Was du ab heute hörst, zählt."
   },
   "promote": {
     "pricingFailed": "Die Preise für Promotions konnten nicht geladen werden.",
@@ -785,5 +789,12 @@
     "bookAnother": "Weitere buchen",
     "pickProduct": "Wähle ein Produkt, um seine Werbevideos und Buchungen zu sehen.",
     "showUpHere": "Deine Produkte, ihre Werbevideos und Buchungen erscheinen hier, sobald sie geladen sind."
+  },
+  "listenPrompt": {
+    "title": "Auch fürs Hören verdienen?",
+    "text": "Die Hörer-Belohnungen starten bald. Lass uns ab heute zählen, wie lange du Audio und Podcast-Folgen auf 3speak.tv hörst.",
+    "note": "Sag nein und nichts ändert sich. Du kannst es jederzeit in den Einstellungen ausschalten, dann löschen wir, was wir gespeichert haben.",
+    "yes": "Ja, zählt mein Hören",
+    "savedYes": "Dein Hören zählt jetzt für die Hörer-Belohnungen"
   }
 }

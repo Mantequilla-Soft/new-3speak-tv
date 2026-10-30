@@ -37,7 +37,13 @@
     "title": "Zarabiaj, oglądając",
     "rowTitle": "Nagrody dla widzów",
     "desc": "Otrzymuj część przychodów z reklam za to, co oglądasz, wypłacaną w HBD lub HIVE. Płacimy za obejrzane filmy niezależnie od tego, czy wyświetliła się reklama, więc nagradzane jest oglądanie, a nie przesiadywanie nad reklamami. Same reklamy wyświetlają się wszystkim poza subskrybentami 3Speak Pro. Zapisujemy, jaką część każdego filmu obejrzano, oprócz historii oglądania, którą już prowadzi strona Obejrzane, i usuwamy te dane w chwili, gdy to wyłączysz.",
-    "aria": "Otrzymuj część przychodów z reklam za to, co oglądasz"
+    "aria": "Otrzymuj część przychodów z reklam za to, co oglądasz",
+    "titleListen": "Zarabiaj, oglądając i słuchając",
+    "listenDesc": "Słuchanie też się liczy: zapisujemy, jak długo słuchasz audio 3Speak i odcinków podcastów na 3speak.tv. Nagrody za słuchanie ruszą, gdy sprawdzimy liczby, a liczy się to, czego słuchasz od dnia włączenia tej opcji.",
+    "listenAlso": "Licz też moje słuchanie",
+    "listenOnToast": "Twoje słuchanie liczy się teraz do nagród za słuchanie",
+    "onToastBoth": "Nagrody za oglądanie i słuchanie włączone",
+    "offToastBoth": "Nagrody wyłączone, a twoje dane oglądania i słuchania zostały usunięte"
   },
   "postingAuth": {
     "updateFailed": "Nie udało się zaktualizować uprawnień posting.",

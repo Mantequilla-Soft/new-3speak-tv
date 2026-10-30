@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { CHECKER_URL } from '../utils/config';
 import { useAppStore } from '../lib/store';
+import { listenerRewardsName } from '../utils/viewerRewards';
+import { listenVouch } from '../lib/podcasts';
 
 /**
  * Listening time for whatever the global audio player plays: 3Speak audio and
@@ -13,8 +15,10 @@ import { useAppStore } from '../lib/store';
  *     the beats itself and only counts forward playback, so this cannot claim
  *     listening that did not happen.
  *
- * Anonymous: nothing here names the listener. Unlike video, a hidden tab keeps
- * beating, because audio is made to run in the background.
+ * Anonymous, except for someone who agreed to listener rewards: then the session
+ * carries their name and our API's proof of it (listenVouch), and the checker
+ * records qualifying listens in its separate listener ledger. Unlike video, a
+ * hidden tab keeps beating, because audio is made to run in the background.
  */
 const itemOf = (track) => {
   if (!track) return null;
@@ -57,6 +61,14 @@ export default function useListenTime(audioRef, track) {
       if (cur.sid || cur.starting) return;
       cur.starting = true;
       try {
+        // Named only for someone who agreed to listener rewards, with our API's
+        // proof of who they are; everyone else listens anonymously.
+        let who = {};
+        const name = await listenerRewardsName().catch(() => null);
+        if (name) {
+          const v = await listenVouch(name).catch(() => null);
+          if (v) who = { listener: name, listenerSig: v.signature, listenerTs: v.timestamp };
+        }
         const res = await fetch(`${CHECKER_URL}/audio/listen/start`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -66,6 +78,7 @@ export default function useListenTime(audioRef, track) {
             position: el.currentTime || 0,
             source: '3speak',
             private: !!useAppStore.getState().privateMode,
+            ...who,
           }),
         });
         const data = res.ok ? await res.json() : null;

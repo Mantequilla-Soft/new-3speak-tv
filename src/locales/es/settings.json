@@ -37,7 +37,13 @@
     "title": "Gana mientras ves",
     "rowTitle": "Recompensas por ver",
     "desc": "Gana una parte de los ingresos por publicidad por lo que ves, pagada en HBD o HIVE. Se te paga por los videos que ves, se haya reproducido un anuncio o no, así que recompensa ver videos y no aguantar anuncios. Los anuncios se reproducen para todos excepto los suscriptores de 3Speak Pro. Registramos cuánto viste de cada video, además del historial que ya guarda la página Vistos, y lo eliminamos en el momento en que desactivas esta opción.",
-    "aria": "Gana una parte de los ingresos por publicidad por lo que ves"
+    "aria": "Gana una parte de los ingresos por publicidad por lo que ves",
+    "titleListen": "Gana mientras ves y escuchas",
+    "listenDesc": "Escuchar también cuenta: registramos cuánto tiempo escuchas audio de 3Speak y episodios de podcasts en 3speak.tv. Las recompensas por escuchar empiezan cuando hayamos revisado las cifras, y cuenta lo que escuches desde el día en que lo actives.",
+    "listenAlso": "Contar también lo que escucho",
+    "listenOnToast": "Lo que escuchas ya cuenta para las recompensas por escuchar",
+    "onToastBoth": "Recompensas por ver y escuchar activadas",
+    "offToastBoth": "Recompensas desactivadas, y se han borrado tus datos de visualización y escucha"
   },
   "postingAuth": {
     "updateFailed": "No se pudo actualizar tu autoridad de publicación.",

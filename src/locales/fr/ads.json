@@ -93,7 +93,9 @@
     "turnAdsOff": "Désactiver les pubs sur vos vidéos",
     "rewardsOn": "Activer les récompenses spectateur",
     "rewardsOff": "Désactiver les récompenses spectateur",
-    "showApplications": "Afficher vos demandes publicitaires"
+    "showApplications": "Afficher vos demandes publicitaires",
+    "listenOn": "Activer les récompenses d’écoute",
+    "listenOff": "Désactiver les récompenses d’écoute"
   },
   "slot": {
     "atBeginning": "Au début de la vidéo",
@@ -259,7 +261,9 @@
     "text": "Sur 3Speak, les pubs rémunèrent le créateur, sa communauté, et maintenant vous. Votre part provient de ce que l'annonceur a payé, dans la devise qu'il a utilisée, pour des vidéos que vous alliez regarder de toute façon.",
     "note": "3Speak conserve déjà votre historique de visionnage pour que vous retrouviez vos vidéos. Ceci nous permet de l'utiliser pour calculer ce qui vous est dû, et garde une trace de la part de chaque vidéo que vous avez réellement regardée. Refusez et rien ne change. Vous pouvez désactiver cette option à tout moment dans les Paramètres, ce qui supprime ce que nous avions conservé pour les récompenses.",
     "noThanks": "Non merci",
-    "yes": "Oui, payez-moi"
+    "yes": "Oui, payez-moi",
+    "titleBoth": "Soyez payé pour regarder et écouter",
+    "listenNote": "L’écoute compte aussi : les récompenses d’écoute pour l’audio et les podcasts sur 3speak.tv arrivent bientôt, une fois les chiffres vérifiés. Ce que vous écoutez dès aujourd’hui compte."
   },
   "promote": {
     "pricingFailed": "Impossible de charger les tarifs de promotion.",
@@ -812,5 +816,12 @@
     "bookAnother": "En réserver une autre",
     "pickProduct": "Choisissez un produit pour voir ses vidéos publicitaires et ses réservations.",
     "showUpHere": "Vos produits, leurs vidéos publicitaires et leurs réservations s'affichent ici une fois chargés."
+  },
+  "listenPrompt": {
+    "title": "Gagner aussi en écoutant ?",
+    "text": "Les récompenses d’écoute arrivent bientôt. Laissez-nous compter combien de temps vous écoutez de l’audio et des épisodes de podcasts sur 3speak.tv, à partir d’aujourd’hui.",
+    "note": "Dites non et rien ne change. Vous pouvez le désactiver à tout moment dans les Paramètres, ce qui supprime ce que nous avons gardé.",
+    "yes": "Oui, comptez mon écoute",
+    "savedYes": "Votre écoute compte désormais pour les récompenses d’écoute"
   }
 }

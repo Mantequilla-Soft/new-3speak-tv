@@ -92,7 +92,9 @@
     "turnAdsOff": "Advertenties in je video's uitzetten",
     "rewardsOn": "Kijkbeloningen aanzetten",
     "rewardsOff": "Kijkbeloningen uitzetten",
-    "showApplications": "Je advertentieaanvragen tonen"
+    "showApplications": "Je advertentieaanvragen tonen",
+    "listenOn": "Luisteraarsbeloningen aanzetten",
+    "listenOff": "Luisteraarsbeloningen uitzetten"
   },
   "slot": {
     "atBeginning": "Aan het begin van de video",
@@ -256,7 +258,9 @@
     "text": "Advertenties op 3Speak betalen de maker, hun community, en nu ook jou. Jouw deel komt uit wat de adverteerder heeft betaald, in de valuta waarmee is betaald, voor video's die je toch al ging bekijken.",
     "note": "3Speak houdt je kijkgeschiedenis al bij zodat je dingen terug kunt vinden. Hiermee kunnen we die gebruiken om uit te rekenen wat je toekomt, en houden we bij hoeveel je van elke video echt hebt bekeken. Zeg je nee, dan verandert er niets. Je kunt het op elk moment uitzetten in Instellingen, en dan wordt verwijderd wat we voor beloningen hebben bewaard.",
     "noThanks": "Nee, bedankt",
-    "yes": "Ja, betaal me"
+    "yes": "Ja, betaal me",
+    "titleBoth": "Krijg betaald voor kijken en luisteren",
+    "listenNote": "Luisteren telt ook: luisteraarsbeloningen voor audio en podcasts op 3speak.tv starten binnenkort, zodra we de cijfers hebben gecontroleerd. Wat je vanaf vandaag luistert, telt mee."
   },
   "promote": {
     "pricingFailed": "Promotieprijzen konden niet worden geladen.",
@@ -785,5 +789,12 @@
     "bookAnother": "Nog een boeken",
     "pickProduct": "Kies een product om de advertentievideo's en boekingen te zien.",
     "showUpHere": "Je producten, hun advertentievideo's en boekingen verschijnen hier zodra ze zijn geladen."
+  },
+  "listenPrompt": {
+    "title": "Ook verdienen met luisteren?",
+    "text": "Luisteraarsbeloningen starten binnenkort. Laat ons vanaf vandaag tellen hoe lang je naar audio en podcastafleveringen op 3speak.tv luistert.",
+    "note": "Zeg nee en er verandert niets. Je kunt het altijd uitzetten in Instellingen, en dan verwijderen we wat we bewaarden.",
+    "yes": "Ja, tel mijn luisteren mee",
+    "savedYes": "Je luisteren telt nu mee voor luisteraarsbeloningen"
   }
 }

@@ -60,6 +60,20 @@ async function vouch(action, payload, user) {
   }
 }
 
+/* Who is listening, for listener rewards: one vouch from our API (who its session
+ * is), reused for most of a day like the progress vouch. Null when the session
+ * cannot be proven here; the listen is then simply anonymous. */
+const LISTEN_VOUCH_REUSE_MS = 20 * 60 * 60 * 1000;
+let listenVouchCache = null;
+export async function listenVouch(user) {
+  if (!user) return null;
+  const c = listenVouchCache;
+  if (c && c.user === user && Date.now() - c.timestamp < LISTEN_VOUCH_REUSE_MS) return c;
+  const v = await vouch('listen', 'session', user);
+  listenVouchCache = v ? { user, ...v } : null;
+  return listenVouchCache;
+}
+
 async function sign(action, payload, user) {
   const v = await vouch(action, payload, user);
   if (v) return v;

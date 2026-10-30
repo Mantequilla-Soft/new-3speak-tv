@@ -2107,6 +2107,35 @@ app.post('/api/ads/viewer-signature', signChallengeLimiter, async (req, res) => 
   }
 })
 
+// POST /api/ads/listener-signature: sign a listener's consent to LISTENER rewards
+// on their behalf. The same delegated shape as the viewer consent above, with its
+// own message, so agreeing to one is never a signature for the other.
+app.post('/api/ads/listener-signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    const hiveUsername = await resolveDelegatedSignUser(req, res)
+    if (!hiveUsername) return res.status(401).json({ error: 'Unauthorized' })
+    if (typeof req.body?.listenEnabled !== 'boolean') {
+      return res.status(400).json({ error: 'listenEnabled must be true or false' })
+    }
+    const listenEnabled = req.body.listenEnabled
+    if (!(await hasThreespeakPostingGrant(hiveUsername))) {
+      return res.status(403).json({
+        error: `Setting this from here needs @${HIVE_ACCOUNT} posting authority on your account. Log in with Keychain, HiveAuth, PeakVault or Ledger to set it directly instead.`,
+      })
+    }
+    const timestamp = Date.now()
+    // Keep in lockstep with listenerPrefsMessage() in 3speakchecks/routes/advertise.js.
+    const message = ['3speak-ads', 'listener-prefs', hiveUsername, listenEnabled ? 'on' : 'off',
+      String(timestamp)].join('|')
+    const signature = PrivateKey.fromString(POSTING_WIF).sign(cryptoUtils.sha256(Buffer.from(message, 'utf8'))).toString()
+    return res.json({ success: true, signature, timestamp, username: hiveUsername, listenEnabled })
+  } catch (err) {
+    console.error('Ads listener signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
 // POST /api/ads/identity-signature — prove who is logged in, so /advertise can list
 // their own applications without them keeping a reference code around.
 //
@@ -2215,6 +2244,9 @@ const PODCAST_VOUCH_PAYLOAD = {
   unsubscribe: /^[0-9a-f]{24}$/,        // feed id
   notify: /^[0-9a-f]{24}:(?:on|off)$/,  // feed id + switch
   progress: /^session$/,                // listening progress, reused for up to a day
+  // Who is listening, for listener rewards (3speakchecks routes/audioListen.js
+  // proveListener), reused for up to a day. Only names the signed-in account.
+  listen: /^session$/,
 }
 app.post('/api/podcasts/signature', signChallengeLimiter, async (req, res) => {
   try {

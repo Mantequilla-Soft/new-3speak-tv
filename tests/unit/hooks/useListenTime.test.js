@@ -7,6 +7,9 @@ import { createRoot } from 'react-dom/client'
 
 vi.mock('../../../src/lib/store', () => ({ useAppStore: { getState: () => ({ privateMode: false }) } }))
 vi.mock('../../../src/utils/config', () => ({ CHECKER_URL: 'https://checker.test' }))
+const rewards = vi.hoisted(() => ({ name: null }))
+vi.mock('../../../src/utils/viewerRewards', () => ({ listenerRewardsName: async () => rewards.name }))
+vi.mock('../../../src/lib/podcasts', () => ({ listenVouch: async (u) => ({ user: u, signature: 'sig', timestamp: 123 }) }))
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
 
@@ -30,6 +33,7 @@ function mount(el, track) {
 }
 
 beforeEach(async () => {
+  rewards.name = null
   vi.resetModules()
   fetchMock = vi.fn(async (url) => ({
     ok: true,
@@ -82,5 +86,24 @@ describe('the beats', () => {
     expect(calls('/audio/listen/beat').at(-1)).toMatchObject({ sid: 's1', position: 42 })
     // Still playing on the new track: it opens its own session right away.
     expect(calls('/audio/listen/start').map((b) => b.id)).toEqual(['one', 'two'])
+  })
+})
+
+describe('who is listening', () => {
+  it('is nobody, unless the listener agreed to listener rewards', async () => {
+    const el = fakeAudio()
+    mount(el, { permlink: 'one' })
+    el.paused = false
+    await act(async () => { el.dispatchEvent(new Event('play')) })
+    expect(calls('/audio/listen/start')[0]).not.toHaveProperty('listener')
+  })
+
+  it('is named, with our API\'s proof, for someone who agreed', async () => {
+    rewards.name = 'alice'
+    const el = fakeAudio()
+    mount(el, { permlink: 'one' })
+    el.paused = false
+    await act(async () => { el.dispatchEvent(new Event('play')) })
+    expect(calls('/audio/listen/start')[0]).toMatchObject({ listener: 'alice', listenerSig: 'sig', listenerTs: 123 })
   })
 })

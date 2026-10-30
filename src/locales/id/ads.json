@@ -91,7 +91,9 @@
     "turnAdsOff": "Matikan iklan di videomu",
     "rewardsOn": "Aktifkan reward penonton",
     "rewardsOff": "Nonaktifkan reward penonton",
-    "showApplications": "Tampilkan pengajuan iklanmu"
+    "showApplications": "Tampilkan pengajuan iklanmu",
+    "listenOn": "Nyalakan hadiah pendengar",
+    "listenOff": "Matikan hadiah pendengar"
   },
   "slot": {
     "atBeginning": "Di awal video",
@@ -253,7 +255,9 @@
     "text": "Iklan di 3Speak membayar kreator, komunitasnya, dan sekarang kamu. Bagianmu diambil dari yang dibayarkan pengiklan, dalam mata uang apa pun yang mereka pakai, untuk video yang memang akan kamu tonton.",
     "note": "3Speak sudah menyimpan riwayat tontonanmu agar kamu bisa menemukan sesuatu lagi. Ini memungkinkan kami memakainya untuk menghitung berapa hakmu, dan menyimpan catatan seberapa banyak bagian setiap video yang benar-benar kamu tonton. Jika kamu menolak, tidak ada yang berubah. Kamu bisa menonaktifkannya kapan saja di Pengaturan, dan itu akan menghapus data yang kami simpan untuk reward.",
     "noThanks": "Tidak, terima kasih",
-    "yes": "Ya, bayar aku"
+    "yes": "Ya, bayar aku",
+    "titleBoth": "Dibayar untuk menonton dan mendengarkan",
+    "listenNote": "Mendengarkan juga dihitung: hadiah pendengar untuk audio dan podcast di 3speak.tv segera dimulai, setelah kami memeriksa angkanya. Yang kamu dengarkan mulai hari ini ikut dihitung."
   },
   "promote": {
     "pricingFailed": "Harga promosi tidak dapat dimuat.",
@@ -758,5 +762,12 @@
     "bookAnother": "Pesan lagi",
     "pickProduct": "Pilih produk untuk melihat video iklan dan pemesanannya.",
     "showUpHere": "Produkmu, video iklan, dan pemesanannya tampil di sini setelah dimuat."
+  },
+  "listenPrompt": {
+    "title": "Dapat hasil dari mendengarkan juga?",
+    "text": "Hadiah pendengar segera dimulai. Izinkan kami menghitung berapa lama kamu mendengarkan audio dan episode podcast di 3speak.tv, mulai hari ini.",
+    "note": "Jawab tidak dan tidak ada yang berubah. Kamu bisa mematikannya kapan saja di Pengaturan, dan itu menghapus yang kami simpan.",
+    "yes": "Ya, hitung yang saya dengarkan",
+    "savedYes": "Yang kamu dengarkan kini dihitung untuk hadiah pendengar"
   }
 }
