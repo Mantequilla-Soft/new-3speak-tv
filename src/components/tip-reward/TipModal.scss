@@ -16,6 +16,19 @@
   &.add {
     background: transparent;
   }
+
+  // The /tip popup: the page itself, so no dimmed backdrop, and the window
+  // centred at every width (a bottom sheet makes no sense in a popup).
+  &.tip-modal--page {
+    background: var(--bg-primary, #111);
+    align-items: center;
+    padding: 12px;
+
+    .modal-content-trx {
+      border-radius: 1rem;
+      animation: none;
+    }
+  }
 }
 
 .modal-content-trx {
@@ -198,6 +211,14 @@
     }
   }
 
+  .lightning-actions {
+    flex-wrap: wrap;
+
+    > button {
+      flex: 1 1 auto;
+    }
+  }
+
   .send-btn:disabled {
     opacity: 0.6;
     cursor: default;
@@ -246,6 +267,11 @@
         font-size: 15px;
         line-height: 1.2;
       }
+    }
+
+    .lightning-links {
+      display: flex;
+      gap: 1.5rem;
     }
 
     .lightning-waiting {

@@ -23,7 +23,9 @@ const toast = toastIn('Tip');
 // a profile tip passes none and is not one.
 // `memoLink`: public 3speak.tv link of that video/audio post, appended to the
 // memo so the recipient sees what the tip was for.
-const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip }) => {
+// `variant="page"`: the window is the whole page (the /tip popup), not an
+// overlay on top of one.
+const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, variant }) => {
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const { user: activetUser } = useAppStore();
@@ -42,7 +44,8 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip })
   const [method, setMethod] = useState(() => (activetUser && isLoggedIn() ? 'hive' : 'lightning'));
   const [sats, setSats] = useState(String(LIGHTNING_PRESETS[1]));
   const [invoice, setInvoice] = useState(null);
-  const [creatingInvoice, setCreatingInvoice] = useState(false);
+  // Which Lightning button is fetching its invoice: 'qr', 'extension' or null.
+  const [creatingInvoice, setCreatingInvoice] = useState(null);
 
 
   useEffect(()=>{
@@ -119,13 +122,15 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip })
       : typed;
   };
 
-  const handleLightning = async () => {
+  // `viaExtension`: pay with the browser's Lightning wallet (WebLN); without it,
+  // or when the viewer backs out of the wallet, the invoice shows as a QR code.
+  const handleLightning = async (viaExtension) => {
     const n = Number(sats);
     if (!Number.isInteger(n) || n < 1) {
       toast.error(t('engagement.tip.lightning.errors.amount'));
       return;
     }
-    setCreatingInvoice(true);
+    setCreatingInvoice(viaExtension ? 'extension' : 'qr');
     let inv;
     try {
       inv = await requestLightningInvoice({ to: recipient, sats: n, comment: memoWithLink() });
@@ -136,11 +141,9 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip })
       toast.error(t(`engagement.tip.lightning.errors.${key}`, { max: err.max }));
       return;
     } finally {
-      setCreatingInvoice(false);
+      setCreatingInvoice(null);
     }
-    // A wallet in the browser pays in one step; if there is none, or the viewer
-    // backs out of it, the invoice is shown to scan or open in a wallet app.
-    if (hasWebln()) {
+    if (viaExtension && hasWebln()) {
       try {
         await payWithWebln(inv.pr);
         setAmount(String(inv.sats));
@@ -219,7 +222,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip })
 
 
   return (
-    <div className={`tip-modal ${step === 2 ? "add" : ""}`}>
+    <div className={`tip-modal ${step === 2 ? "add" : ""}${variant === 'page' ? ' tip-modal--page' : ''}`}>
         <div className={`modal-content-trx ${step === 2 ? "add" : ""}`}>
         <ModalHeader
           className="tip-modal-header"
@@ -281,15 +284,21 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip })
 
             <p className="tip-method-note">{t('engagement.tip.lightning.note', { recipient })}</p>
 
-            <div className="actions">
-              <button className="cancel-btn" onClick={handleClose}>
-                {t('common.actions.cancel')}
-              </button>
-              <button className="send-btn" onClick={handleLightning} disabled={creatingInvoice}>
-                {creatingInvoice
+            {/* The header's X closes the window, so no Cancel here: room for the
+                QR button always, and the extension button when there is one. */}
+            <div className="actions lightning-actions">
+              <button className="send-btn" onClick={() => handleLightning(false)} disabled={!!creatingInvoice}>
+                {creatingInvoice === 'qr'
                   ? <LineSpinner size="14" stroke="2" speed="1" color="currentColor" />
-                  : t('engagement.tip.lightning.send')}
+                  : t('engagement.tip.lightning.showQr')}
               </button>
+              {hasWebln() && (
+                <button className="send-btn" onClick={() => handleLightning(true)} disabled={!!creatingInvoice}>
+                  {creatingInvoice === 'extension'
+                    ? <LineSpinner size="14" stroke="2" speed="1" color="currentColor" />
+                    : t('engagement.tip.lightning.payExtension')}
+                </button>
+              )}
             </div>
           </div>
         </div>}
@@ -312,9 +321,16 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip })
               <LineSpinner size="12" stroke="2" speed="1" color="currentColor" />
               {t('engagement.tip.lightning.waiting')}
             </p>
-            <button type="button" className="lightning-done" onClick={handleClose}>
-              {t('engagement.tip.lightning.done')}
-            </button>
+            {/* Back keeps the amount and the message, to change either and make a
+                new invoice; this one simply expires unpaid. */}
+            <div className="lightning-links">
+              <button type="button" className="lightning-done" onClick={() => setInvoice(null)}>
+                {t('engagement.tip.lightning.back')}
+              </button>
+              <button type="button" className="lightning-done" onClick={handleClose}>
+                {t('engagement.tip.lightning.done')}
+              </button>
+            </div>
           </div>
         </div>}
 
