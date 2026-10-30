@@ -296,13 +296,17 @@
 // ─── Search results ──────────────────
 .pod-results {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: 12px;
 
-  @include mix.respond(phone) { grid-template-columns: 1fr; }
+  // minmax(0, ...): a plain 1fr column is at least as wide as its longest
+  // unbreakable line (a show name, "Latest: ..."), which made the page wider
+  // than a phone and threw every fixed popup off-centre.
+  @include mix.respond(phone) { grid-template-columns: minmax(0, 1fr); }
 }
 
 .pod-result {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 12px;
