@@ -10,6 +10,8 @@
       "transferFailed": "Overboeking mislukt: {{message}}"
     },
     "heading": "Stuur een fooi naar @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Bedrag: ",
     "amountPlaceholder": "bijv. 1.000",
     "currencyLabel": "Valuta:",
@@ -17,7 +19,42 @@
     "memoLabel": "Memo (optioneel):",
     "memoPlaceholder": "bijv. Bedankt voor deze geweldige content!",
     "memoLinkNote": "Deze link wordt aan de memo toegevoegd: {{link}}",
-    "send": "Fooi sturen"
+    "send": "Fooi sturen",
+    "lightning": {
+      "amountLabel": "Bedrag (sats):",
+      "messageLabel": "Bericht (optioneel):",
+      "note": "Gaat via v4v.app naar @{{recipient}}, geen Hive-account nodig: elke Lightning-wallet werkt. Fooien die de omzettingskosten van v4v.app (ongeveer 60 sats) dekken komen aan als HIVE, kleinere blijven als sats op hun v4v.app-account.",
+      "send": "Betalen met Lightning",
+      "showQr": "QR-code tonen",
+      "payExtension": "Betalen via extensie",
+      "scan": "Scan met een willekeurige Lightning-wallet om {{sats}} sats naar @{{recipient}} te sturen.",
+      "openWallet": "Openen in wallet",
+      "copy": "Factuur kopiëren",
+      "copied": "Factuur gekopieerd",
+      "waiting": "Wachten op de betaling…",
+      "back": "Terug",
+      "done": "Klaar",
+      "errors": {
+        "amount": "Voer een heel aantal sats in",
+        "tooMuch": "Dat is meer dan dit adres accepteert (max. {{max}} sats)",
+        "noAccount": "Dit Hive-account bestaat niet",
+        "invoiceFailed": "Kon geen Lightning-factuur maken. Probeer het opnieuw.",
+        "copyFailed": "Kon de factuur niet kopiëren"
+      }
+    },
+    "wallet": {
+      "usernameLabel": "Je Hive-gebruikersnaam:",
+      "usernamePlaceholder": "bijv. alice",
+      "next": "Volgende",
+      "signWith": "{{amount}} {{currency}} van @{{user}} aan @{{recipient}} ondertekenen met:",
+      "noExtension": "Geen wallet-extensie gevonden in deze browser. HiveSigner werkt zonder.",
+      "waitingHiveSigner": "Rond het ondertekenen af in het HiveSigner-venster. Dit venster bevestigt de fooi zodra die op Hive staat.",
+      "errors": {
+        "noUser": "Voer je Hive-gebruikersnaam in",
+        "self": "Je kunt jezelf geen fooi geven",
+        "walletFailed": "De wallet heeft de fooi niet verstuurd: {{message}}"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Log in om je feed te personaliseren",

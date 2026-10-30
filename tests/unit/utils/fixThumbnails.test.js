@@ -30,25 +30,33 @@ describe('fixVideoThumbnail: missing values', () => {
 })
 
 describe('fixVideoThumbnail: IPFS', () => {
-  it('ipfs:// URIs go through the resize proxy via the one gateway it accepts', () => {
-    const out = proxied(fixVideoThumbnail({ thumbnail: `ipfs://${CID}` }))
-    expect(out.source).toBe(`https://ipfs.3speak.tv/ipfs/${CID}`)
-    expect(out.query).toBe('format=jpeg&mode=cover&width=340&height=191')
+  // Hive's resize proxy 403s on ipfs.3speak.tv, so IPFS thumbnails are cropped
+  // by our own image cache.
+  it('ipfs:// URIs go through the /img/i/ crop route', () => {
+    expect(fixVideoThumbnail({ thumbnail: `ipfs://${CID}` })).toBe(`/img/i/${CID}`)
   })
 
   it('shorts ask for a portrait crop', () => {
-    expect(proxied(fixVideoThumbnail({ thumbnail: `ipfs://${CID}` }, true)).query).toBe('format=jpeg&mode=cover&width=360&height=640')
+    expect(fixVideoThumbnail({ thumbnail: `ipfs://${CID}` }, true)).toBe(`/img/i/${CID}?s=p`)
   })
 
-  it('every 3Speak IPFS gateway URL is normalised to the proxy-able host', () => {
-    for (const host of ['ipfs-3speak.b-cdn.net', 'hotipfs-3speak-1.b-cdn.net', 'ipfs-audio.3speak.tv', 'IPFS-3SPEAK.B-CDN.NET']) {
-      expect(proxied(fixVideoThumbnail({ thumbnail: `https://${host}/ipfs/${CID}/thumb.png` })).source, host)
-        .toBe(`https://ipfs.3speak.tv/ipfs/${CID}/thumb.png`)
+  it('CIDv1 thumbnails (bafy..., bafkrei...) are cropped the same way', () => {
+    const v1 = 'bafkreiba3wodopgbexhrmxsjky5hnqjdnfpoxlr4sqogbspdemvkgaoipq'
+    expect(fixVideoThumbnail({ thumbnail: `ipfs://${v1}` })).toBe(`/img/i/${v1}`)
+  })
+
+  it('every 3Speak IPFS gateway URL is cropped by its CID and path', () => {
+    for (const host of ['ipfs.3speak.tv', 'ipfs-3speak.b-cdn.net', 'hotipfs-3speak-1.b-cdn.net', 'ipfs-audio.3speak.tv', 'IPFS-3SPEAK.B-CDN.NET']) {
+      expect(fixVideoThumbnail({ thumbnail: `https://${host}/ipfs/${CID}/thumb.png?x=1` }), host).toBe(`/img/i/${CID}/thumb.png`)
     }
   })
 
   it('a bare CID is treated like an ipfs:// URI', () => {
-    expect(proxied(fixVideoThumbnail({ thumbnail: CID })).source).toBe(`https://ipfs.3speak.tv/ipfs/${CID}`)
+    expect(fixVideoThumbnail({ thumbnail: CID })).toBe(`/img/i/${CID}`)
+  })
+
+  it('an IPFS path that is not a CID still goes through the Hive proxy', () => {
+    expect(proxied(fixVideoThumbnail({ thumbnail: 'ipfs://not-a-cid.jpg' })).source).toBe('https://ipfs.3speak.tv/ipfs/not-a-cid.jpg')
   })
 
   it('an http URL wrongly wrapped in an IPFS path is unwrapped', () => {

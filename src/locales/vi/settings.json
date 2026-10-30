@@ -68,6 +68,10 @@
         "title": "Âm thanh mới",
         "desc": "Khi nhà sáng tạo bạn theo dõi tải lên một bản nhạc hoặc tập podcast."
       },
+      "podcasts": {
+        "title": "Tập podcast mới",
+        "desc": "Khi một podcast bên ngoài bạn theo dõi trên 3Speak phát hành tập mới."
+      },
       "replies": {
         "title": "Phản hồi",
         "desc": "Khi ai đó phản hồi bài đăng hoặc bình luận của bạn."

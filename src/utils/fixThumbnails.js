@@ -13,16 +13,22 @@ export { fallbackImg };
 const LANDSCAPE = { w: 340, h: 191 };
 const PORTRAIT = { w: 360, h: 640 };
 
-// The IPFS gateway we hand to images.hive.blog's resize proxy. Legacy IPFS
-// thumbnails are routinely the raw, full resolution upload (1–12 MB — one drone
-// photo is 12 MB), so sending an unresized one straight to a card is what makes
-// those thumbnails take forever to appear. Normalising to one host lets the proxy
-// downscale it (12 MB → ~24 KB).
-// ⚠️ This used to be ipfs-3speak.b-cdn.net, but that Bunny zone has answered 403
-// "Domain suspended" since 2026-09-08, so every thumbnail the proxy had not cached
-// before then came back as a 403 (verified 2026-10-26). The proxy now fetches
-// ipfs.3speak.tv fine, which it used to refuse.
+// IPFS thumbnails are cropped by OUR image cache (/img/i/<cid>, nginx
+// conf.d/3speak-img.conf), which fetches them from ipfs.3speak.tv. Legacy IPFS
+// thumbnails are routinely the raw, full resolution upload (1-12 MB), so they must
+// be resized, but Hive's resize proxy 403s on ipfs.3speak.tv sources (8,915 of
+// 9,353 thumbnails on 2026-10-29) and the Bunny zone it used before (ipfs-3speak.b-cdn.net)
+// has answered 403 "Domain suspended" since 2026-09-08.
+// A path that is not a plain CID (+ path) still goes through Hive's proxy, from
+// this host, as before.
 const IPFS_PROXY_HOST = "https://ipfs.3speak.tv";
+const IPFS_PATH_RE = /^(?:Qm[1-9A-HJ-NP-Za-km-z]{44}|b[a-z2-7]{58,})(?:\/[^?#]*)?$/;
+const ipfsThumb = (path, portrait, size) => {
+  const clean = String(path).split(/[?#]/)[0];
+  return IPFS_PATH_RE.test(clean)
+    ? `/img/i/${clean}${portrait ? '?s=p' : ''}`
+    : hiveProxy(`${IPFS_PROXY_HOST}/ipfs/${clean}`, size);
+};
 const IPFS_GATEWAY_RE = /^https?:\/\/(?:ipfs\.3speak\.tv|hotipfs-3speak-1\.b-cdn\.net|ipfs-3speak\.b-cdn\.net|ipfs-audio\.3speak\.tv)\/ipfs\/(.+)$/i;
 
 // Hosts Hive's resize proxy REFUSES. It answers 403 for images.3speak.tv, so
@@ -92,23 +98,22 @@ export function fixVideoThumbnail(video, portrait = false, sizeOverride = null) 
 
   // 🧠 Handle IPFS URIs (ipfs://<cid>) — the stored form for many legacy videos.
   // These used to be returned as a RAW gateway URL, i.e. the full-resolution
-  // original (often multiple MB), which is why such thumbnails crawled in. Send
-  // them through the resize proxy instead.
+  // original (often multiple MB), which is why such thumbnails crawled in. Our
+  // image cache crops them to the card instead.
   if (cleanThumbnail.includes("ipfs://")) {
     const ipfsHash = cleanThumbnail.replace("ipfs://", "").trim();
     // Validate IPFS hash exists
     if (!ipfsHash || ipfsHash === '') {
       return fallbackImg;
     }
-    return hiveProxy(`${IPFS_PROXY_HOST}/ipfs/${ipfsHash}`, size);
+    return ipfsThumb(ipfsHash, portrait, size);
   }
 
-  // 🧠 Handle IPFS *gateway* URLs — normalise to the one host the proxy accepts,
-  // then downscale. (Rewriting these to hotipfs, as we used to, turned the one
-  // proxy-able host into one the proxy 403s on, so the raw original was served.)
+  // 🧠 Handle IPFS *gateway* URLs — any of our gateways, Bunny's suspended ones
+  // included: the CID is the same everywhere, so crop it like an ipfs:// URI.
   const ipfsGateway = cleanThumbnail.match(IPFS_GATEWAY_RE);
   if (ipfsGateway) {
-    return hiveProxy(`${IPFS_PROXY_HOST}/ipfs/${ipfsGateway[1]}`, size);
+    return ipfsThumb(ipfsGateway[1], portrait, size);
   }
 
   // ✅ Already a SIZED Hive proxy URL (…/p/… or …/WxH/…) — already small, leave it.
@@ -163,7 +168,7 @@ export function fixVideoThumbnail(video, portrait = false, sizeOverride = null) 
 
   // 🧠 Bare CID (no scheme) — same treatment as an ipfs:// URI.
   if (/^(Qm[1-9A-HJ-NP-Za-km-z]{44}|ba[a-z2-7]{57})/.test(cleanThumbnail)) {
-    return hiveProxy(`${IPFS_PROXY_HOST}/ipfs/${cleanThumbnail}`, size);
+    return ipfsThumb(cleanThumbnail, portrait, size);
   }
 
   // Return as-is for any other format

@@ -52,6 +52,9 @@ async function call(path, { method = 'GET', body, raw = false } = {}) {
 
 export const getImportStatus = () => call('/status');
 
+// Read all linked channels again (new and newly public videos). 429 refresh_too_soon within 5 min.
+export const refreshImportLists = () => call('/refresh', { method: 'POST', body: {} });
+
 export const listChannelVideos = ({ channel, type, pageToken } = {}) => {
   const qs = new URLSearchParams();
   if (channel) qs.set('channel', channel);
@@ -167,6 +170,14 @@ export function handOffToStudio(file, video, thumbnailDataUrl, mode = 'longform'
     tags: toHiveTags(video),
     thumbnail: thumbnailDataUrl || null,
   };
+}
+
+/** 754 → "12:34", 3754 → "1:02:34". */
+export function fmtDuration(s) {
+  if (!s) return '';
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  const mm = h ? String(m).padStart(2, '0') : String(m);
+  return `${h ? `${h}:` : ''}${mm}:${String(sec).padStart(2, '0')}`;
 }
 
 export const youtubeStudioUrl = (videoId) => `https://studio.youtube.com/video/${videoId}/edit`;

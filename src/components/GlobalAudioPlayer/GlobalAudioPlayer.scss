@@ -123,6 +123,23 @@
   max-height: none;
   overflow: visible;
 
+  // An outside podcast's summary: opens the episode page with the full show notes.
+  &--link {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+
+    &:hover { color: var(--text-primary); }
+  }
+
+  .audio-np-more { color: var(--accent-primary); font-weight: 600; white-space: nowrap; }
+
   // The post body embeds an inline OpenPod player for the same audio the
   // GlobalAudioPlayer is already playing — hide the duplicate here only
   // (it still shows on the standalone post page).

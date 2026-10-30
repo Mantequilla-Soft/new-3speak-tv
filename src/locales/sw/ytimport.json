@@ -29,7 +29,8 @@
     "generic": "Kuleta kumeshindwa.",
     "blocked": "YouTube haikuruhusu seva yetu kupakua video hii kwa sasa.",
     "notVideo": "Faili hiyo si video.",
-    "tooLongForShort": "Video hii ni ndefu kuliko dakika {{minutes}}, ni ndefu mno kwa Short. Iulete kama video ya kawaida badala yake."
+    "tooLongForShort": "Video hii ni ndefu kuliko dakika {{minutes}}, ni ndefu mno kwa Short. Iulete kama video ya kawaida badala yake.",
+    "proxyPaused": "Kuleta video kutoka YouTube kumesitishwa kwa muda. Tafadhali jaribu tena baadaye."
   },
   "entry": "Leta video",
   "types": {
@@ -45,8 +46,14 @@
   "limits": "Uletaji unaruhusiwa kwa video zisizozidi dakika {{minutes}}, kwa ubora usiozidi {{height}}p.",
   "tooLong": "Zaidi ya dak {{minutes}}",
   "onSite": "Tayari iko kwenye 3Speak",
+  "inBatch": "Inasubiri kwenye kundi la kuleta",
   "viewPost": "Tazama chapisho",
-  "premiumHint": "Ukiwa na 3Speak Premium, unaweza kuleta video hadi {{height}}p.",
+  "premiumHint": "Ukiwa na 3Speak Pro, unaweza kuleta video hadi {{height}}p.",
+  "getPro": "Pata 3Speak Pro",
+  "refresh": "Onyesha upya orodha",
+  "refreshing": "Inaonyesha upya…",
+  "refreshHint": "Tafuta video mpya na zilizowekwa hadharani hivi karibuni kwenye akaunti zako zote zilizounganishwa",
+  "refreshTooSoon": "Orodha zako zimeonyeshwa upya sasa hivi. Unaweza kujaribu tena baada ya dakika chache.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +99,14 @@
     "clear": "Futa",
     "importSelected": "Ingiza zilizochaguliwa ({{count}})",
     "busy": "Kundi lako la awali bado linaingizwa",
-    "formTitle": "Ingiza video {{count}}",
-    "formIntro": "Vichwa, maelezo, lebo na picha ndogo zinatoka kwenye kila video. Mipangilio hii inatumika kwa zote.",
-    "community": "Jumuiya",
-    "rewards": "Zawadi",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "Kataa zawadi"
+    "steps": {
+      "content": "Maudhui",
+      "settings": "Mipangilio"
     },
-    "beneficiaries": "Wanufaika wa ziada",
-    "accountPlaceholder": "Akaunti ya Hive",
-    "remove": "Ondoa",
-    "addBeneficiary": "Ongeza mnufaika",
-    "lockedNote": "3Speak huongeza sehemu yake ya kawaida: 10% kwa @threespeakfund na 1% kwa usimbaji (wanachama wa 3Speak Premium hawalipi).",
-    "nsfw": "Weka alama ya NSFW (maudhui ya watu wazima)",
-    "ads": "Onyesha matangazo kwenye video hizi",
+    "formTitle": "Ingiza video {{count}}",
+    "contentIntro": "Vichwa, maelezo, lebo na picha ndogo zinatoka kwenye kila video.",
+    "settingsIntro": "Mipangilio hii inatumika kwa video zote ulizochagua.",
+    "shortsNote": "Shorts huenda kila mara kwenye mlisho wa Shorts: mipangilio ya jumuiya, blogu na matangazo inahusu video za kawaida tu.",
     "spacing": "Kila video inaingizwa kwenye seva yetu kisha inachapishwa peke yake, kwa tofauti ya dakika {{minutes}}. Ya kwanza inatoka dakika chache baada ya kuwa tayari. Unaweza kufunga ukurasa huu.",
     "grantNeeded": "Ili kuchapisha ukiwa haupo, 3Speak inahitaji ruhusa ya kuchapisha kwa niaba ya akaunti yako. Unaweza kuiondoa wakati wowote kwenye pochi yako ya Hive.",
     "grantButton": "Ruhusu 3Speak kuchapisha kwa niaba yangu",
@@ -116,6 +115,7 @@
     "start": "Anza kuingiza",
     "starting": "Inaanza…",
     "statusTitle": "Uingizaji wako wa kundi",
+    "canLeave": "Sasa unaweza kufunga ukurasa huu. Video zako zinaletwa na kuchapishwa kwenye seva yetu, hata usipokuwepo.",
     "stop": "Simamisha zilizobaki",
     "short": "Short",
     "status": {

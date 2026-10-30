@@ -61,7 +61,7 @@ import { GiTwoCoins } from 'react-icons/gi';
 import { MdTranslate, MdClosedCaption, MdClosedCaptionOff, MdFlag, MdPushPin } from 'react-icons/md';
 import mantequillaLogo from '../assets/mantequilla-logo.png';
 import ReportModal, { isReported } from '../components/modal/ReportModal';
-import { Flag, Megaphone } from 'lucide-react';
+import { Flag, Megaphone, Gift } from 'lucide-react';
 import ShareChooserModal from '../components/Chat/ShareChooserModal';
 import { useMyPlaylists, isVideoInPlaylist } from '../hooks/useMyPlaylists';
 import { addToPlaylist, removeFromPlaylist, createPlaylistAndAdd } from '../utils/playlistOperations';
@@ -127,6 +127,7 @@ import { checkRemix, remixBlockedMessage } from '../utils/remixChain';
 import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import EditVideoModal from '../components/playVideo/EditVideoModal';
 import PromoteModal from '../components/Promote/PromoteModal';
+import TipModal from '../components/tip-reward/TipModal';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 import { markStorySeen, useInvalidateStories, useStoryClock } from '../lib/stories';
@@ -396,6 +397,7 @@ const VideoShort = () => {
   const [showEditorModal, setShowEditorModal] = useState(false);
   const [isEditShortOpen, setIsEditShortOpen] = useState(false);
   const [isPromoteOpen, setIsPromoteOpen] = useState(false);
+  const [isTipOpen, setIsTipOpen] = useState(false);
   const [editorVideoUrl, setEditorVideoUrl] = useState(null);
   const [editorVideoName, setEditorVideoName] = useState(null);
   const [editorOriginalAuthor, setEditorOriginalAuthor] = useState(null);
@@ -4002,6 +4004,18 @@ const VideoShort = () => {
             <span className="actionLabel">{reshareCount || 0}</span>
           </div>
 
+          {/* Tip — not on your own short, and only with a Hive post: a warm-up
+              creator has no Hive account to receive it. Signed out, the tip window
+              opens on Lightning, which needs no Hive account. */}
+          {user !== currentVideo.author && !currentVideo.hivePostMissing && (
+            <div className="actionItem" onClick={(e) => { e.stopPropagation(); try { playerRef.current?.pause?.(); } catch { /* not fatal */ } setIsTipOpen(true); }}>
+              <div className="actionButton">
+                <Gift size={24} />
+              </div>
+              <span className="actionLabel">{t('watch.actions.tip')}</span>
+            </div>
+          )}
+
           {/* Watch Later — one tap adds/removes this short from the playlist. */}
           <div className="actionItem" onClick={(e) => { e.stopPropagation(); toggleWatchLater(); }}>
             <div className={`actionButton ${isInWatchLater ? 'saved' : ''}`}>
@@ -4064,6 +4078,16 @@ const VideoShort = () => {
           onClose={() => setShareChooserOpen(false)}
           onGeneralShare={handleShare}
         />
+
+        {isTipOpen && (
+          <TipModal
+            recipient={currentVideo.author}
+            permlink={currentVideo.permlink}
+            memoLink={`https://3speak.tv/shorts?v=${currentVideo.author}/${currentVideo.permlink}`}
+            isOpen={isTipOpen}
+            onClose={() => setIsTipOpen(false)}
+          />
+        )}
 
         <PromoteModal
           open={isPromoteOpen}

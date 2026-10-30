@@ -10,6 +10,8 @@
       "transferFailed": "ট্রান্সফার ব্যর্থ: {{message}}"
     },
     "heading": "@{{recipient}}-কে টিপ পাঠান",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "পরিমাণ: ",
     "amountPlaceholder": "যেমন 1.000",
     "currencyLabel": "মুদ্রা:",
@@ -17,7 +19,42 @@
     "memoLabel": "মেমো (ঐচ্ছিক):",
     "memoPlaceholder": "যেমন: দারুণ কনটেন্টের জন্য ধন্যবাদ!",
     "memoLinkNote": "এই লিংকটি মেমোতে যোগ করা হবে: {{link}}",
-    "send": "টিপ পাঠান"
+    "send": "টিপ পাঠান",
+    "lightning": {
+      "amountLabel": "পরিমাণ (sats):",
+      "messageLabel": "বার্তা (ঐচ্ছিক):",
+      "note": "v4v.app-এর মাধ্যমে @{{recipient}}-এর কাছে যায়, কোনো Hive অ্যাকাউন্ট লাগে না: যেকোনো Lightning ওয়ালেট চলবে। যে টিপ v4v.app-এর রূপান্তর ফি (প্রায় 60 sats) মেটায় তা HIVE হিসেবে পৌঁছায়, ছোটগুলো তাদের v4v.app অ্যাকাউন্টে sats হিসেবে থাকে।",
+      "send": "Lightning দিয়ে পেমেন্ট করুন",
+      "showQr": "QR কোড দেখান",
+      "payExtension": "এক্সটেনশন দিয়ে পেমেন্ট করুন",
+      "scan": "@{{recipient}}-কে {{sats}} sats পাঠাতে যেকোনো Lightning ওয়ালেট দিয়ে স্ক্যান করুন।",
+      "openWallet": "ওয়ালেটে খুলুন",
+      "copy": "ইনভয়েস কপি করুন",
+      "copied": "ইনভয়েস কপি হয়েছে",
+      "waiting": "পেমেন্টের অপেক্ষা…",
+      "back": "ফিরে যান",
+      "done": "সম্পন্ন",
+      "errors": {
+        "amount": "sats-এর একটি পূর্ণ সংখ্যা লিখুন",
+        "tooMuch": "এই ঠিকানা যত গ্রহণ করে এটি তার বেশি (সর্বোচ্চ {{max}} sats)",
+        "noAccount": "এই Hive অ্যাকাউন্টটি নেই",
+        "invoiceFailed": "Lightning ইনভয়েস তৈরি করা যায়নি। আবার চেষ্টা করুন।",
+        "copyFailed": "ইনভয়েস কপি করা যায়নি"
+      }
+    },
+    "wallet": {
+      "usernameLabel": "আপনার Hive ইউজারনেম:",
+      "usernamePlaceholder": "যেমন alice",
+      "next": "পরবর্তী",
+      "signWith": "@{{user}} থেকে @{{recipient}}-কে {{amount}} {{currency}} সাইন করুন যেটি দিয়ে:",
+      "noExtension": "এই ব্রাউজারে কোনো ওয়ালেট এক্সটেনশন পাওয়া যায়নি। HiveSigner এক্সটেনশন ছাড়াই চলে।",
+      "waitingHiveSigner": "HiveSigner উইন্ডোতে সাইন করা শেষ করুন। টিপ Hive-এ পৌঁছালে এই উইন্ডো তা নিশ্চিত করবে।",
+      "errors": {
+        "noUser": "আপনার Hive ইউজারনেম লিখুন",
+        "self": "আপনি নিজেকে টিপ দিতে পারবেন না",
+        "walletFailed": "ওয়ালেট টিপটি পাঠায়নি: {{message}}"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "আপনার ফিড নিজের মতো সাজাতে লগ ইন করুন",

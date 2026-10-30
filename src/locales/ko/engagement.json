@@ -10,6 +10,8 @@
       "transferFailed": "송금 실패: {{message}}"
     },
     "heading": "@{{recipient}}님에게 팁 보내기",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "금액: ",
     "amountPlaceholder": "예: 1.000",
     "currencyLabel": "통화:",
@@ -17,7 +19,42 @@
     "memoLabel": "메모(선택):",
     "memoPlaceholder": "예: 멋진 콘텐츠 감사해요!",
     "memoLinkNote": "이 링크가 메모에 추가됩니다: {{link}}",
-    "send": "팁 보내기"
+    "send": "팁 보내기",
+    "lightning": {
+      "amountLabel": "금액(sats):",
+      "messageLabel": "메시지(선택):",
+      "note": "v4v.app을 통해 @{{recipient}} 님에게 전달되며 Hive 계정이 필요 없습니다. 어떤 Lightning 지갑이든 사용할 수 있습니다. v4v.app 전환 수수료(약 60 sats)를 넘는 팁은 HIVE로 도착하고, 더 작은 팁은 v4v.app 계정에 sats로 남습니다.",
+      "send": "Lightning으로 결제",
+      "showQr": "QR 코드 보기",
+      "payExtension": "확장 프로그램으로 결제",
+      "scan": "아무 Lightning 지갑으로 스캔해 @{{recipient}} 님에게 {{sats}} sats를 보내세요.",
+      "openWallet": "지갑에서 열기",
+      "copy": "인보이스 복사",
+      "copied": "인보이스를 복사했습니다",
+      "waiting": "결제를 기다리는 중…",
+      "back": "뒤로",
+      "done": "완료",
+      "errors": {
+        "amount": "sats를 정수로 입력하세요",
+        "tooMuch": "이 주소가 받을 수 있는 금액보다 많습니다(최대 {{max}} sats)",
+        "noAccount": "존재하지 않는 Hive 계정입니다",
+        "invoiceFailed": "Lightning 인보이스를 만들 수 없습니다. 다시 시도해 주세요.",
+        "copyFailed": "인보이스를 복사할 수 없습니다"
+      }
+    },
+    "wallet": {
+      "usernameLabel": "Hive 사용자 이름:",
+      "usernamePlaceholder": "예: alice",
+      "next": "다음",
+      "signWith": "@{{user}} 님이 @{{recipient}} 님에게 보내는 {{amount}} {{currency}}를 다음으로 서명:",
+      "noExtension": "이 브라우저에서 지갑 확장 프로그램을 찾을 수 없습니다. HiveSigner는 확장 프로그램 없이 작동합니다.",
+      "waitingHiveSigner": "HiveSigner 창에서 서명을 마치세요. 팁이 Hive에 기록되면 이 창에서 확인됩니다.",
+      "errors": {
+        "noUser": "Hive 사용자 이름을 입력하세요",
+        "self": "자기 자신에게는 팁을 보낼 수 없습니다",
+        "walletFailed": "지갑이 팁을 보내지 않았습니다: {{message}}"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "피드를 맞춤 설정하려면 로그인해 주세요",

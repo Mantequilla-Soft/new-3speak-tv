@@ -82,6 +82,11 @@
       "type": "Tin",
       "hoursLeft_other": "còn {{count}} giờ",
       "ariaUnseen_other": "Thông báo, {{count}} tin mới"
+    },
+    "podcasts": {
+      "heading": "Tập mới của podcast bạn theo dõi",
+      "newEpisode": "Tập mới của {{show}}",
+      "type": "Podcast"
     }
   },
   "search": {

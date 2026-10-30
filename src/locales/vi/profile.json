@@ -258,6 +258,7 @@
   "supports": {
     "incomingTitle": "@{{user}} đã tip cho @{{profile}} tổng cộng {{amount}}",
     "outgoingTitle": "@{{profile}} đã tip cho @{{user}} tổng cộng {{amount}}",
+    "incomingTitleLightning": "Tip Lightning ẩn danh cho @{{profile}}: tổng cộng {{amount}}",
     "received": "Đã nhận",
     "given": "Đã tặng",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -267,6 +268,7 @@
     "emptyGivenOwn": "Bạn chưa tip cho video nào. Các khoản tip bạn gửi từ video sẽ hiện ở đây.",
     "untitled": "Không có tiêu đề",
     "paidInHive": "gửi dưới dạng {{amount}} HIVE",
+    "lightningSupporter": "Người ủng hộ qua Lightning",
     "hideTip": "Ẩn tip",
     "unhideTip": "Hiện tip",
     "hiddenLabel": "Đã ẩn khỏi hồ sơ của bạn",

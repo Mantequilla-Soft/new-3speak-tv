@@ -1,7 +1,8 @@
 // ── ▶️ Batch import (up to 5 videos, fully server side) ───────────────────────
 // A creator ticks up to BATCH_MAX of their own videos on /youtube-import and fills
-// in one form (community, rewards, extra beneficiaries, NSFW, ads). Title,
-// description, tags and thumbnail come from each source. The server then, one
+// in one form (community, rewards, extra beneficiaries, remix, NSFW, add to blog,
+// ads, rolls). Title, description, tags and thumbnail come from each source.
+// The server then, one
 // video at a time across ALL users (spaced out, so imports never download in a
 // burst):
 //   download (the importer's own job machinery: same limits, proxy, retries)
@@ -59,6 +60,7 @@ const ENCODER_PREMIUM_PAYERS = new Set([
 ])
 
 const HIVE_NAME_RE = /^[a-z][a-z0-9-.]{2,15}$/
+const HIVE_MAX_BENEFICIARIES = 8
 const COMMUNITY_RE = /^hive-\d{3,8}$/
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
@@ -182,7 +184,7 @@ function buildPost({ user, source, media, embedUrl, thumbnailUrl, options, isSho
     video: {
       platform: '3speak',
       url: embedUrl,
-      reusable: true,
+      reusable: options.reusable !== false,
       ...(thumbnailUrl ? { thumbnail: thumbnailUrl } : {}),
       info: {
         platform: '3speak',
@@ -197,7 +199,10 @@ function buildPost({ user, source, media, embedUrl, thumbnailUrl, options, isSho
     ...(orientation ? {
       'threespeak.video': { surface: isShort ? 'shorts' : 'watch', orientation, ...(duration > 0 ? { duration } : {}) },
     } : {}),
-    ...(options.ads ? {} : { '3speak': { ads: false } }),
+    // Same opt-outs as the wizard: no ads at all, or overlays without rolls. The
+    // checker mirrors them into the ad rows when it publishes the post. Shorts
+    // never carry ads, so they get neither (the wizard does not offer them there).
+    ...(isShort ? {} : !options.ads ? { '3speak': { ads: false } } : options.rolls === false ? { '3speak': { rolls: false } } : {}),
     imported_from: {
       platform: source.platform,
       id: String(source.sourceId).replace(/^[a-z]+:/, ''),
@@ -232,8 +237,14 @@ function frameFromFile(file, outFile, at = 1) {
 
 // Thumbnail bytes: the source's own cover for regular videos and for Instagram /
 // TikTok (portrait already); a frame from the file for YouTube Shorts (their
-// thumbnails are 16:9) or when the cover cannot be fetched.
-async function thumbnailBytes(source, file, isShort, workDir) {
+// thumbnails are 16:9) or when the cover cannot be fetched. `keptCover` = the
+// importer's kept cover image (import-covers), tried first: the cover links of
+// those platforms are signed and die.
+async function thumbnailBytes(source, file, isShort, workDir, keptCover) {
+  if (source.platform !== 'youtube' && keptCover) {
+    const kept = await keptCover(source.sourceId).catch(() => null)
+    if (kept?.buf?.length > 2000) return kept
+  }
   const tryUrls = []
   if (source.platform === 'youtube') {
     if (!isShort) for (const n of ['maxresdefault', 'sddefault', 'hqdefault']) tryUrls.push(`https://i.ytimg.com/vi/${source.sourceId}/${n}.jpg`)
@@ -365,10 +376,12 @@ async function checkerStatuses(user) {
  *   auth(req,res) → user | null, mw (limiter array),
  *   resolveSource(user, item) → source spec (ownership checked) | throws {status,message},
  *   startDownload(user, spec) → job, getJob(id) → job, removeJob(job),
- *   canStartDownload() → bool, startsToday(user) → number, maxPerDay,
- *   isPremium(user), recordImport(user, sourceId, permlink),
+ *   canStartDownload(source) → bool, startsToday(user) → number, maxPerDay,
+ *   isPremium(user), recordImport(user, sourceId, permlink) → Promise,
+ *   knownImports(user) → { imported: {sourceId: permlink}, inBatch: {sourceId: …} },
  *   uploadImage(buf, type) → url, hasPostingGrant(user) → bool,
- *   alert({title, color, user, platform, videoId, url, code, message, fields})
+ *   alert({title, color, user, platform, videoId, url, code, message, fields}),
+ *   coverFor(sourceId) → { buf, type } | null (kept cover image)
  */
 function mountImportBatch(app, deps) {
   const { auth, mw } = deps
@@ -392,7 +405,7 @@ function mountImportBatch(app, deps) {
   const publicBatch = (b, live = {}) => ({
     id: b.id,
     createdAt: b.createdAt,
-    options: { community: b.options.community, payout: b.options.payout, nsfw: b.options.nsfw, ads: b.options.ads },
+    options: { community: b.options.community, payout: b.options.payout, nsfw: b.options.nsfw, ads: b.options.ads, rolls: b.options.rolls !== false, reusable: b.options.reusable !== false, reblog: b.options.reblog === true },
     items: b.items.map((it) => {
       const c = it.permlink ? live[it.permlink] : null
       const status = it.status === 'scheduled' && c?.status === 'posted' ? 'posted'
@@ -422,9 +435,12 @@ function mountImportBatch(app, deps) {
       for (;;) {
         const waiting = store.batches.flatMap((b) => b.items.map((it) => ({ b, it }))).filter(({ it }) => it.status === 'queued')
         if (!waiting.length) return
-        const next = waiting.find(({ b }) => lastSlotOf(b.user) - Date.now() <= PREP_AHEAD_MS)
+        // Items that can start now go first, so a paused (proxied) one does not
+        // hold up everyone else's.
+        const ready = waiting.filter(({ b }) => lastSlotOf(b.user) - Date.now() <= PREP_AHEAD_MS)
+        const next = ready.find(({ it }) => deps.canStartDownload(it.source)) || ready[0]
         if (!next) { await sleep(60 * 1000); continue } // everyone's next post is still far off
-        while (!deps.canStartDownload()) await sleep(15000)
+        while (!deps.canStartDownload(next.it.source)) await sleep(15000)
         await processItem(next.b, next.it)
         await sleep(ITEM_GAP_MS[0] + crypto.randomInt(ITEM_GAP_MS[1] - ITEM_GAP_MS[0]))
       }
@@ -474,7 +490,7 @@ function mountImportBatch(app, deps) {
       it.status = 'uploading'; it.progress = 50; save(b)
       let thumbnailUrl = null
       try {
-        const t = await thumbnailBytes(it.source, job.file, isShort, workDir)
+        const t = await thumbnailBytes(it.source, job.file, isShort, workDir, deps.coverFor)
         if (t) thumbnailUrl = await deps.uploadImage(t.buf, t.type)
       } catch (e) { console.warn(`[import-batch] @${user} ${it.source.sourceId} thumbnail skipped: ${e.message}`) }
       it.thumbnailUrl = thumbnailUrl
@@ -516,10 +532,14 @@ function mountImportBatch(app, deps) {
         parentAuthor: parent.author,
         parentPermlink: parent.permlink,
         embedPermlink: post.embedPermlink,
+        // "Add to my blog": the checker reblogs it once posted. Not for Shorts,
+        // which are replies (nothing to put on a blog).
+        reblog: !isShort && b.options.reblog === true,
       })
       it.status = 'scheduled'; it.progress = 100; it.permlink = permlink; it.scheduledOn = new Date(slot).toISOString()
       save(b)
-      try { deps.recordImport(user, it.source.sourceId, permlink) } catch { /* the ✓ mark only */ }
+      // The importer's "already on 3Speak" record (and its duplicate check).
+      await deps.recordImport(user, it.source.sourceId, permlink).catch((e) => console.warn(`[import-batch] could not record ${it.source.sourceId}: ${e.message}`))
       console.log(`[import-batch] @${user} ${it.source.sourceId} → ${permlink} (${isShort ? 'short' : 'video'}) at ${it.scheduledOn}`)
     } catch (e) {
       deps.removeJob(job)
@@ -561,7 +581,7 @@ function mountImportBatch(app, deps) {
       if (!COMMUNITY_RE.test(community)) return res.status(400).json({ error: 'Invalid community' })
       const payout = ['default', 'powerup', 'decline'].includes(o.payout) ? o.payout : 'default'
       const extras = []
-      for (const b of Array.isArray(o.beneficiaries) ? o.beneficiaries.slice(0, 6) : []) {
+      for (const b of Array.isArray(o.beneficiaries) ? o.beneficiaries.slice(0, HIVE_MAX_BENEFICIARIES) : []) {
         const account = String(b?.account || '').toLowerCase().replace(/^@/, '')
         const weight = Math.round(Number(b?.percent) * 100)
         if (!HIVE_NAME_RE.test(account) || account === user || !(weight >= 1 && weight <= 10000)) {
@@ -570,9 +590,13 @@ function mountImportBatch(app, deps) {
         extras.push({ account, weight })
       }
       const premium = await deps.isPremium(user).catch(() => false)
-      const total = beneficiariesFor(user, premium, extras).reduce((s, b) => s + b.weight, 0)
-      if (total > 10000) return res.status(400).json({ error: 'Beneficiaries add up to more than 100%' })
-      const options = { community, payout, beneficiaries: extras, nsfw: o.nsfw === true, ads: o.ads !== false }
+      const all = beneficiariesFor(user, premium, extras)
+      if (all.length > HIVE_MAX_BENEFICIARIES) return res.status(400).json({ error: `Hive allows at most ${HIVE_MAX_BENEFICIARIES} beneficiaries` })
+      if (all.reduce((s, b) => s + b.weight, 0) > 10000) return res.status(400).json({ error: 'Beneficiaries add up to more than 100%' })
+      const options = {
+        community, payout, beneficiaries: extras, nsfw: o.nsfw === true, ads: o.ads !== false,
+        rolls: o.rolls !== false, reusable: o.reusable !== false, reblog: o.reblog === true,
+      }
 
       // Every video is resolved and ownership-checked now, not later.
       const sources = []
@@ -584,6 +608,17 @@ function mountImportBatch(app, deps) {
         } catch (e) {
           return res.status(e.status || 400).json({ error: e.message || 'A video could not be checked', errorCode: e.code || 'bad_item' })
         }
+      }
+      // Never post the same video twice from a batch. The page already greys these
+      // out; this is the check that holds. A failed read does not block a batch.
+      const known = await deps.knownImports(user).catch(() => null)
+      const dup = known && sources.find((s) => known.imported[s.sourceId] || known.inBatch[s.sourceId])
+      if (dup) {
+        return res.status(409).json({
+          error: `"${dup.title || dup.sourceId}" is already on 3Speak or waiting in a batch`,
+          errorCode: 'already_imported',
+          sourceId: dup.sourceId,
+        })
       }
 
       const batch = {
@@ -630,4 +665,23 @@ function mountImportBatch(app, deps) {
   ready.then((ok) => { if (ok) kick() })
 }
 
-module.exports = { mountImportBatch, buildPost, beneficiariesFor, tagsFor, permlinkFor }
+/**
+ * A user's videos that a batch still has to publish: source id → { status,
+ * scheduledOn }. A scheduled item counts until a few minutes past its slot; after
+ * that the post is (or failed to be) on Hive, which the caller reads itself.
+ */
+function batchSourcesFor(user) {
+  const out = {}
+  const now = Date.now()
+  for (const b of store.batches) {
+    if (b.user !== user) continue
+    for (const it of b.items) {
+      const pending = ACTIVE.has(it.status)
+        || (it.status === 'scheduled' && Date.parse(it.scheduledOn) > now - 5 * 60 * 1000)
+      if (pending) out[it.source.sourceId] = { status: it.status, scheduledOn: it.scheduledOn || null }
+    }
+  }
+  return out
+}
+
+module.exports = { mountImportBatch, batchSourcesFor, buildPost, beneficiariesFor, tagsFor, permlinkFor }

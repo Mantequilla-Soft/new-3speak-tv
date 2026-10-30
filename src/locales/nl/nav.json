@@ -86,6 +86,11 @@
       "hoursLeft_other": "nog {{count}} u",
       "ariaUnseen_one": "Meldingen, {{count}} nieuwe story",
       "ariaUnseen_other": "Meldingen, {{count}} nieuwe story's"
+    },
+    "podcasts": {
+      "heading": "Nieuwe afleveringen van podcasts die je volgt",
+      "newEpisode": "Nieuwe aflevering van {{show}}",
+      "type": "Podcast"
     }
   },
   "search": {

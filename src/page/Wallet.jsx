@@ -58,6 +58,14 @@ function Wallet() {
     fetchPrices();
   }, [user]);
 
+  // /wallet/<user>#pro (the importer's Pro button, for one) lands on the Pro
+  // plans. They sit below the balances, which load first and move them down.
+  useEffect(() => {
+    if (isLoading || window.location.hash !== '#pro') return undefined;
+    const id = setTimeout(() => document.getElementById('pro')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+    return () => clearTimeout(id);
+  }, [isLoading]);
+
   // Detect Hive Keychain extension presence (poll briefly to catch late installs)
     useEffect(() => {
       const check = () => setHasKeychain(typeof window !== 'undefined' && !!window.hive_keychain);
@@ -216,7 +224,7 @@ function Wallet() {
           ))}
         </div>
 
-        {ENABLE_SUBS && currentUser === user && <ProPlansPanel />}
+        {ENABLE_SUBS && currentUser === user && <div id="pro"><ProPlansPanel /></div>}
         </div>
         )}
 

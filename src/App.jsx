@@ -105,6 +105,7 @@ const Advertise = lazyRoute(() => import("./page/Advertise"), "./page/Advertise"
 const Legal = lazyRoute(() => import("./page/Legal"), "./page/Legal");
 const LoginNew = lazyRoute(() => import("./page/Login/LoginNew"), "./page/Login/LoginNew");
 const ManteAuthCallback = lazyRoute(() => import("./page/Login/ManteAuthCallback"), "./page/Login/ManteAuthCallback");
+const TipPopup = lazyRoute(() => import("./page/TipPopup"), "./page/TipPopup");
 const NewVideos = lazyRoute(() => import("./page/NewVideos"), "./page/NewVideos");
 const Notifications = lazyRoute(() => import("./page/Notifications"), "./page/Notifications");
 const OpenPodPublish = lazyRoute(() => import("./page/OpenPodPublish"), "./page/OpenPodPublish");
@@ -678,6 +679,19 @@ function App() {
     return (
       <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'transparent' }} />}>
         <ObsChatOverlay />
+      </Suspense>
+    );
+  }
+
+  // The tip window on its own (/tip/@author/permlink): the embeds' Tip button
+  // opens it as a popup, so no app shell around it. See page/TipPopup.jsx.
+  if (location.pathname.startsWith('/tip/')) {
+    return (
+      <Suspense fallback={null}>
+        <Toaster position="top-center" expand visibleToasts={3} />
+        <Routes>
+          <Route path="/tip/:author/:permlink?" element={<TipPopup />} />
+        </Routes>
       </Suspense>
     );
   }

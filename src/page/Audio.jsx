@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../lib/store';
@@ -14,6 +15,7 @@ import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistMo
 import { AudioShareDropdown } from '../components/GlobalAudioPlayer/GlobalAudioPlayer';
 import AudioTile, { AudioTileSkeleton } from '../components/AudioTile/AudioTile';
 import AudioPlaylistTile from '../components/AudioPlaylistTile/AudioPlaylistTile';
+import PodcastsTab from '../components/Podcasts/PodcastsTab';
 import { isLoggedIn } from '../hive-api/aioha';
 
 import './Audio.scss';
@@ -112,6 +114,10 @@ function fmtDur(sec, t) {
 
 const FILTER_STORAGE_KEY = 'audio-filters-v3';
 
+const EXTERNAL_KEY = 'audio-external-selected';
+const readExternal = () => { try { return localStorage.getItem(EXTERNAL_KEY) === '1'; } catch { return false; } };
+const rememberExternal = (on) => { try { if (on) localStorage.setItem(EXTERNAL_KEY, '1'); else localStorage.removeItem(EXTERNAL_KEY); } catch { /* private mode */ } };
+
 function loadFilters() {
   const fallback = {
     activeTags: [],
@@ -150,6 +156,27 @@ function Audio() {
   const { t } = useTranslation();
   const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioAddToQueue } = useAppStore();
   const loggedIn = authenticated && isLoggedIn();
+
+  // "External": podcasts from outside RSS feeds (components/Podcasts). It is the last
+  // type chip, but lives in the URL rather than in the saved type filter, because
+  // that filter goes to the checker's 3Speak audio queries.
+  // The choice is remembered like the other chips: landing on a bare /audio after
+  // leaving it on External goes back to External.
+  const [params, setParams] = useSearchParams();
+  const external = params.get('type') === 'external' || params.has('podcast') || params.has('episode');
+  const leaveExternal = () => {
+    rememberExternal(false);
+    if (!external) return;
+    const next = new URLSearchParams(params);
+    for (const k of ['type', 'podcast', 'episode']) next.delete(k);
+    setParams(next);
+  };
+  useEffect(() => {
+    if (external) rememberExternal(true);
+    else if (![...params.keys()].length && readExternal()) setParams({ type: 'external' }, { replace: true });
+    // Only on arrival and when the URL itself changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [external]);
 
   // Filters (persisted in localStorage)
   const [activeTags, setActiveTags] = useState(() => loadFilters().activeTags);
@@ -391,21 +418,27 @@ function Audio() {
         <div className="audio-toolbar">
           <div className="audio-type-filter">
             <button
-              className={`audio-type-chip${typeFilter === '' ? ' active' : ''}`}
-              onClick={() => { setTypeFilter(''); setGenreFilter(''); }}
+              className={`audio-type-chip${typeFilter === '' && !external ? ' active' : ''}`}
+              onClick={() => { leaveExternal(); setTypeFilter(''); setGenreFilter(''); }}
             >{t('audio.page.all')}</button>
             {TYPE_FILTERS.map((opt) => (
               <button
                 key={opt.value}
-                className={`audio-type-chip${typeFilter === opt.value ? ' active' : ''}`}
+                className={`audio-type-chip${typeFilter === opt.value && !external ? ' active' : ''}`}
                 onClick={() => {
+                  leaveExternal();
                   setTypeFilter(opt.value);
                   if (opt.value !== 'song') setGenreFilter('');
                 }}
               ><i className={`audio-type-chip-icon ${opt.icon}`} /> {t(opt.labelKey)}</button>
             ))}
+            <button
+              className={`audio-type-chip${external ? ' active' : ''}`}
+              onClick={() => { if (!external) setParams({ type: 'external' }); }}
+              title={t('audio.podcasts.chipHint')}
+            ><i className="audio-type-chip-icon fa-solid fa-rss" /> {t('audio.podcasts.chip')}</button>
           </div>
-          {typeFilter === 'song' && (
+          {typeFilter === 'song' && !external && (
             <select
               className="audio-genre-select"
               value={genreFilter}
@@ -416,18 +449,18 @@ function Audio() {
               {MUSIC_GENRE_FILTERS.map((g) => <option key={g} value={g}>{g}</option>)}
             </select>
           )}
-          <div className="audio-date-presets">
+          {!external && <div className="audio-date-presets">
             {DATE_PRESETS.map(p => (
               <button key={p.days} className={`audio-date-btn${datePreset === p.days ? ' active' : ''}`} onClick={() => setDatePreset(prev => prev === p.days ? DEFAULT_DATE_PRESET : p.days)}>
                 {t(p.labelKey)}
               </button>
             ))}
-          </div>
+          </div>}
         </div>
       )}
 
       {/* Tags + duration filter row */}
-      {!selectedCreator && (
+      {!selectedCreator && !external && (
         <div className="audio-filter-row">
           <div className="audio-topic-tags">
             {isFiltered && (
@@ -448,7 +481,9 @@ function Audio() {
       )}
 
       {/* ─── Creator drill-down ──────── */}
-      {selectedCreator ? (
+      {external ? (
+        <PodcastsTab />
+      ) : selectedCreator ? (
         <div className="audio-creator-view">
           <div className="audio-creator-header">
             <AuthorBadge author={selectedCreator} showFollow />

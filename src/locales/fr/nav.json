@@ -90,6 +90,11 @@
       "ariaUnseen_one": "Notifications, {{count}} nouvelle story",
       "ariaUnseen_many": "Notifications, {{count}} nouvelles stories",
       "ariaUnseen_other": "Notifications, {{count}} nouvelles stories"
+    },
+    "podcasts": {
+      "heading": "Nouveaux épisodes des podcasts que vous suivez",
+      "newEpisode": "Nouvel épisode de {{show}}",
+      "type": "Podcast"
     }
   },
   "search": {

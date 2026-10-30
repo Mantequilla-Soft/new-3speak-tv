@@ -275,6 +275,7 @@
   "supports": {
     "incomingTitle": "@{{user}} amempa @{{profile}} tip za jumla ya {{amount}}",
     "outgoingTitle": "@{{profile}} amempa @{{user}} tip za jumla ya {{amount}}",
+    "incomingTitleLightning": "Bakshishi za Lightning bila jina kwa @{{profile}}: jumla {{amount}}",
     "received": "Zilizopokelewa",
     "given": "Zilizotolewa",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -284,6 +285,7 @@
     "emptyGivenOwn": "Bado hujatoa tip kwenye video yoyote. Tip unazotuma kutoka kwenye video zitaonekana hapa.",
     "untitled": "Bila kichwa",
     "paidInHive": "imetumwa kama {{amount}} HIVE",
+    "lightningSupporter": "Mfadhili wa Lightning",
     "hideTip": "Ficha tip",
     "unhideTip": "Onyesha tip",
     "hiddenLabel": "Imefichwa kwenye wasifu wako",

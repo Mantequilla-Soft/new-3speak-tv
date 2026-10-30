@@ -27,6 +27,8 @@ import { useWhaleDetection } from '../../utils/whaleDetection';
 import threeSpeakLogo from '../../assets/image/3S_mark.svg';
 import { useStoryNotifications } from '../../lib/stories';
 import StoryNotifications from './StoryNotifications';
+import PodcastNotifications from './PodcastNotifications';
+import { usePodcastNotifications } from '../../lib/podcasts';
 import './NotificationBell.scss';
 
 // Every toast from this module is headed "Notifications"; the message becomes the
@@ -100,6 +102,8 @@ function NotificationBell() {
   // 24h stories from followed accounts, injected above the Hive list. An unseen
   // one turns on the bell's cyan dot.
   const { stories, unseenCount: unseenStories } = useStoryNotifications(authenticated ? user : null);
+  // New episodes of outside podcasts the user follows ("External" on /audio).
+  const { episodes: podcastEpisodes, unseenCount: unseenPodcasts } = usePodcastNotifications(authenticated ? user : null);
 
   // Grouping
   const grouped = useMemo(() => groupNotifications(notifications), [notifications]);
@@ -196,11 +200,11 @@ function NotificationBell() {
         onClick={handleToggle}
         aria-label={unseenStories
           ? t('nav.notifications.stories.ariaUnseen', { count: unseenStories })
-          : unreadCount ? t('nav.notifications.ariaUnread', { count: unreadCount }) : t('common.nav.notifications')}
+          : unreadCount + unseenPodcasts ? t('nav.notifications.ariaUnread', { count: unreadCount + unseenPodcasts }) : t('common.nav.notifications')}
         title={t('common.nav.notifications')}
       >
         <IoIosNotifications size={22} />
-        {unreadCount > 0 && (
+        {(unreadCount > 0 || unseenPodcasts > 0) && (
           <span className="notif-bell-dot" aria-hidden="true" />
         )}
         {/* Its own dot (top left), so a new story still shows next to unread Hive activity. */}
@@ -247,8 +251,9 @@ function NotificationBell() {
           )}
 
           <StoryNotifications stories={stories} onOpen={() => setOpen(false)} />
+          <PodcastNotifications episodes={podcastEpisodes} user={user} onOpen={() => setOpen(false)} />
 
-          {!loading && notifications.length === 0 && stories.length === 0 && (
+          {!loading && notifications.length === 0 && stories.length === 0 && podcastEpisodes.length === 0 && (
             <div className="notif-dropdown-empty">{t('nav.notifications.empty')}</div>
           )}
 

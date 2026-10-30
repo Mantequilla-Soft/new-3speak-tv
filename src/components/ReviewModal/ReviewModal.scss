@@ -231,7 +231,6 @@
 .review-fab {
   position: fixed;
   right: 18px;
-  bottom: 18px;
   z-index: 900;
   display: inline-flex;
   align-items: center;
@@ -245,25 +244,29 @@
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-  transition: transform 0.15s ease, background 0.2s ease;
+  transition: transform 0.15s ease, background 0.2s ease, bottom 0.2s ease;
 
   svg { font-size: 20px; }
   &:hover { transform: translateY(-2px); background: #c62828; }
+
+  // The global audio player publishes its top edge as --audio-np-clearance
+  // (GlobalAudioPlayer.jsx, tracks expand/collapse), so stay 12px above it.
+  bottom: max(18px, calc(var(--audio-np-clearance, 0px) + 12px));
 
   // Lift above the bottom nav wherever it's shown. The nav renders on BOTH the
   // phone and tab breakpoints, so both need the offset — otherwise on tablets
   // the FAB stays at bottom:18px and covers the Profile tab.
   @include respond(tab) {
-    bottom: 76px; // clear the bottom nav (shown on tablet too)
+    bottom: max(76px, calc(var(--audio-np-clearance, 0px) + 12px)); // clear the bottom nav (shown on tablet too)
     // The mini-player bar is 56px tall and sits on top of the nav — lift past it.
-    &.review-fab--mini { bottom: 132px; }
+    &.review-fab--mini { bottom: max(132px, calc(var(--audio-np-clearance, 0px) + 12px)); }
   }
 
   @include respond(phone) {
-    bottom: 76px; // clear the mobile bottom nav
+    bottom: max(76px, calc(var(--audio-np-clearance, 0px) + 12px)); // clear the mobile bottom nav
     right: 14px;
     padding: 12px;
     span { display: none; } // icon-only on phones
-    &.review-fab--mini { bottom: 132px; } // clear the mini-player bar too
+    &.review-fab--mini { bottom: max(132px, calc(var(--audio-np-clearance, 0px) + 12px)); } // clear the mini-player bar too
   }
 }

@@ -10,6 +10,8 @@
       "transferFailed": "Не вдалося виконати переказ: {{message}}"
     },
     "heading": "Надіслати чайові @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Сума: ",
     "amountPlaceholder": "напр. 1.000",
     "currencyLabel": "Валюта:",
@@ -17,7 +19,42 @@
     "memoLabel": "Примітка (необов'язково):",
     "memoPlaceholder": "напр. Дякую за чудовий контент!",
     "memoLinkNote": "Це посилання додається до мемо: {{link}}",
-    "send": "Надіслати чайові"
+    "send": "Надіслати чайові",
+    "lightning": {
+      "amountLabel": "Сума (sats):",
+      "messageLabel": "Повідомлення (необов'язково):",
+      "note": "Надходить до @{{recipient}} через v4v.app, акаунт Hive не потрібен: підійде будь-який Lightning-гаманець. Чайові, що покривають комісію v4v.app за конвертацію (близько 60 sats), надходять у HIVE, менші залишаються в sats на акаунті v4v.app.",
+      "send": "Оплатити через Lightning",
+      "showQr": "Показати QR-код",
+      "payExtension": "Оплатити через розширення",
+      "scan": "Відскануйте будь-яким Lightning-гаманцем, щоб надіслати {{sats}} sats користувачу @{{recipient}}.",
+      "openWallet": "Відкрити в гаманці",
+      "copy": "Скопіювати рахунок",
+      "copied": "Рахунок скопійовано",
+      "waiting": "Очікування оплати…",
+      "back": "Назад",
+      "done": "Готово",
+      "errors": {
+        "amount": "Введіть ціле число sats",
+        "tooMuch": "Це більше, ніж приймає ця адреса (макс. {{max}} sats)",
+        "noAccount": "Такого акаунта Hive немає",
+        "invoiceFailed": "Не вдалося створити Lightning-рахунок. Спробуйте ще раз.",
+        "copyFailed": "Не вдалося скопіювати рахунок"
+      }
+    },
+    "wallet": {
+      "usernameLabel": "Ваше ім'я користувача Hive:",
+      "usernamePlaceholder": "наприклад, alice",
+      "next": "Далі",
+      "signWith": "Підписати {{amount}} {{currency}} від @{{user}} для @{{recipient}} за допомогою:",
+      "noExtension": "У цьому браузері не знайдено розширення гаманця. HiveSigner працює без нього.",
+      "waitingHiveSigner": "Завершіть підпис у вікні HiveSigner. Це вікно підтвердить чайові, щойно вони з'являться в Hive.",
+      "errors": {
+        "noUser": "Введіть ім'я користувача Hive",
+        "self": "Не можна надіслати чайові самому собі",
+        "walletFailed": "Гаманець не надіслав чайові: {{message}}"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Увійдіть, щоб налаштувати свою стрічку",

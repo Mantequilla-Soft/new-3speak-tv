@@ -29,7 +29,8 @@
     "generic": "Import się nie powiódł.",
     "blocked": "YouTube nie pozwolił naszemu serwerowi pobrać tego filmu w tej chwili.",
     "notVideo": "Ten plik nie jest filmem.",
-    "tooLongForShort": "Ten film jest dłuższy niż {{minutes}} minut, za długi na format Shorts. Zaimportuj go zamiast tego jako zwykły film."
+    "tooLongForShort": "Ten film jest dłuższy niż {{minutes}} minut, za długi na format Shorts. Zaimportuj go zamiast tego jako zwykły film.",
+    "proxyPaused": "Import z YouTube jest chwilowo wstrzymany. Spróbuj ponownie później."
   },
   "entry": "Importuj filmy",
   "types": {
@@ -45,8 +46,14 @@
   "limits": "Import jest ograniczony do filmów o długości do {{minutes}} minut, w rozdzielczości do {{height}}p.",
   "tooLong": "Ponad {{minutes}} min",
   "onSite": "Już na 3Speak",
+  "inBatch": "Czeka w imporcie zbiorczym",
   "viewPost": "Zobacz wpis",
-  "premiumHint": "Dzięki 3Speak Premium zaimportujesz filmy w rozdzielczości do {{height}}p.",
+  "premiumHint": "Dzięki 3Speak Pro zaimportujesz filmy w rozdzielczości do {{height}}p.",
+  "getPro": "Wybierz 3Speak Pro",
+  "refresh": "Odśwież listy",
+  "refreshing": "Odświeżanie…",
+  "refreshHint": "Szukaj nowych i niedawno upublicznionych filmów na wszystkich połączonych kontach",
+  "refreshTooSoon": "Listy zostały właśnie odświeżone. Spróbuj ponownie za kilka minut.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +99,14 @@
     "clear": "Wyczyść",
     "importSelected": "Importuj zaznaczone ({{count}})",
     "busy": "Poprzedni import zbiorczy wciąż trwa",
-    "formTitle": "Importuj filmy ({{count}})",
-    "formIntro": "Tytuły, opisy, tagi i miniatury pochodzą z każdego filmu. Te ustawienia dotyczą wszystkich.",
-    "community": "Społeczność",
-    "rewards": "Nagrody",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "Odrzuć nagrody"
+    "steps": {
+      "content": "Treść",
+      "settings": "Ustawienia"
     },
-    "beneficiaries": "Dodatkowi beneficjenci",
-    "accountPlaceholder": "Konto Hive",
-    "remove": "Usuń",
-    "addBeneficiary": "Dodaj beneficjenta",
-    "lockedNote": "3Speak dolicza swój zwykły udział: 10% dla @threespeakfund i 1% za kodowanie (członkowie 3Speak Premium tego nie płacą).",
-    "nsfw": "Oznacz jako NSFW (treści dla dorosłych)",
-    "ads": "Pokazuj reklamy w tych filmach",
+    "formTitle": "Importuj filmy ({{count}})",
+    "contentIntro": "Tytuły, opisy, tagi i miniatury pochodzą z każdego filmu.",
+    "settingsIntro": "Te ustawienia dotyczą wszystkich wybranych filmów.",
+    "shortsNote": "Shorty zawsze trafiają do kanału Shorts: ustawienia społeczności, bloga i reklam dotyczą tylko zwykłych filmów.",
     "spacing": "Każdy film jest importowany na naszym serwerze, a potem publikowany osobno, co {{minutes}} minut. Pierwszy pojawi się kilka minut po przygotowaniu. Możesz zamknąć tę stronę.",
     "grantNeeded": "Aby publikować pod Twoją nieobecność, 3Speak potrzebuje zgody na publikowanie z Twojego konta. Możesz ją w każdej chwili cofnąć w portfelu Hive.",
     "grantButton": "Pozwól 3Speak publikować za mnie",
@@ -116,6 +115,7 @@
     "start": "Rozpocznij import",
     "starting": "Uruchamianie…",
     "statusTitle": "Twój import zbiorczy",
+    "canLeave": "Możesz już zamknąć tę stronę. Twoje filmy są importowane i publikowane na naszym serwerze, także pod twoją nieobecność.",
     "stop": "Zatrzymaj resztę",
     "short": "Short",
     "status": {

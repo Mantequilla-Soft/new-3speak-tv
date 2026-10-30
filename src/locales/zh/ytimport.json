@@ -29,7 +29,8 @@
     "generic": "导入失败。",
     "blocked": "YouTube 目前不允许我们的服务器下载此视频。",
     "notVideo": "该文件不是视频。",
-    "tooLongForShort": "此视频时长超过 {{minutes}} 分钟，对 Short 来说太长了。请将其作为普通视频导入。"
+    "tooLongForShort": "此视频时长超过 {{minutes}} 分钟，对 Short 来说太长了。请将其作为普通视频导入。",
+    "proxyPaused": "YouTube 导入暂时暂停，请稍后再试。"
   },
   "entry": "导入视频",
   "types": {
@@ -45,8 +46,14 @@
   "limits": "导入仅限时长不超过 {{minutes}} 分钟、分辨率不超过 {{height}}p 的视频。",
   "tooLong": "超过 {{minutes}} 分钟",
   "onSite": "已在 3Speak 上",
+  "inBatch": "正在批量导入中等待",
   "viewPost": "查看帖子",
-  "premiumHint": "使用 3Speak Premium，你可以导入最高 {{height}}p 的视频。",
+  "premiumHint": "使用 3Speak Pro，你可以导入最高 {{height}}p 的视频。",
+  "getPro": "获取 3Speak Pro",
+  "refresh": "刷新列表",
+  "refreshing": "正在刷新…",
+  "refreshHint": "在所有已关联账号中查找新视频和刚公开的视频",
+  "refreshTooSoon": "列表刚刚刷新过，几分钟后可以再次刷新。",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +99,14 @@
     "clear": "清空",
     "importSelected": "导入所选 ({{count}})",
     "busy": "你上一批导入仍在进行中",
-    "formTitle": "导入 {{count}} 个视频",
-    "formIntro": "标题、描述、标签和缩略图都取自各个视频。以下设置适用于全部视频。",
-    "community": "社区",
-    "rewards": "奖励",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "拒绝奖励"
+    "steps": {
+      "content": "内容",
+      "settings": "设置"
     },
-    "beneficiaries": "额外受益人",
-    "accountPlaceholder": "Hive 账号",
-    "remove": "移除",
-    "addBeneficiary": "添加受益人",
-    "lockedNote": "3Speak 会照常加上它的份额：10% 给 @threespeakfund，1% 用于编码（3Speak 高级会员免除）。",
-    "nsfw": "标记为 NSFW（成人内容）",
-    "ads": "在这些视频中显示广告",
+    "formTitle": "导入 {{count}} 个视频",
+    "contentIntro": "标题、描述、标签和缩略图都取自各个视频。",
+    "settingsIntro": "以下设置适用于你选择的全部视频。",
+    "shortsNote": "短视频始终发布到短视频信息流：社区、博客和广告设置只适用于普通视频。",
     "spacing": "每个视频会先在我们的服务器上导入，然后逐个发布，间隔 {{minutes}} 分钟。第一个会在准备好几分钟后发布。你可以关闭此页面。",
     "grantNeeded": "要在你不在时发布，3Speak 需要代表你的账号发帖的权限。你可以随时在 Hive 钱包中撤销。",
     "grantButton": "允许 3Speak 代我发布",
@@ -116,6 +115,7 @@
     "start": "开始导入",
     "starting": "正在开始…",
     "statusTitle": "你的批量导入",
+    "canLeave": "现在可以关闭此页面。你的视频会在我们的服务器上导入并发布，即使你不在也一样。",
     "stop": "停止剩余部分",
     "short": "短视频",
     "status": {

@@ -86,6 +86,11 @@
       "hoursLeft_other": "{{count}} sa kaldı",
       "ariaUnseen_one": "Bildirimler, {{count}} yeni hikâye",
       "ariaUnseen_other": "Bildirimler, {{count}} yeni hikâye"
+    },
+    "podcasts": {
+      "heading": "Takip ettiğin podcast'lerin yeni bölümleri",
+      "newEpisode": "Yeni bölüm: {{show}}",
+      "type": "Podcast"
     }
   },
   "search": {

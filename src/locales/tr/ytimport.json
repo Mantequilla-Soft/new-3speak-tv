@@ -29,7 +29,8 @@
     "generic": "İçe aktarma başarısız oldu.",
     "blocked": "YouTube şu anda sunucumuzun bu videoyu indirmesine izin vermedi.",
     "notVideo": "Bu dosya bir video değil.",
-    "tooLongForShort": "Bu video {{minutes}} dakikadan uzun, bir Short için çok uzun. Bunun yerine normal video olarak içe aktarın."
+    "tooLongForShort": "Bu video {{minutes}} dakikadan uzun, bir Short için çok uzun. Bunun yerine normal video olarak içe aktarın.",
+    "proxyPaused": "YouTube içe aktarmaları bir süreliğine duraklatıldı. Lütfen daha sonra tekrar dene."
   },
   "entry": "Videoları içe aktar",
   "types": {
@@ -45,8 +46,14 @@
   "limits": "İçe aktarma, en fazla {{minutes}} dakikalık ve en fazla {{height}}p çözünürlüğündeki videolarla sınırlıdır.",
   "tooLong": "{{minutes}} dk üzeri",
   "onSite": "Zaten 3Speak'te",
+  "inBatch": "Toplu içe aktarmada bekliyor",
   "viewPost": "Gönderiyi gör",
-  "premiumHint": "3Speak Premium ile en fazla {{height}}p çözünürlüğe kadar içe aktarabilirsiniz.",
+  "premiumHint": "3Speak Pro ile en fazla {{height}}p çözünürlüğe kadar içe aktarabilirsiniz.",
+  "getPro": "3Speak Pro’ya geç",
+  "refresh": "Listeleri yenile",
+  "refreshing": "Yenileniyor…",
+  "refreshHint": "Bağlı tüm hesaplarında yeni ve yeni herkese açılan videoları ara",
+  "refreshTooSoon": "Listelerin az önce yenilendi. Birkaç dakika sonra tekrar yenileyebilirsin.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +99,14 @@
     "clear": "Temizle",
     "importSelected": "Seçilenleri içe aktar ({{count}})",
     "busy": "Önceki toplu içe aktarman hâlâ sürüyor",
-    "formTitle": "{{count}} videoyu içe aktar",
-    "formIntro": "Başlıklar, açıklamalar, etiketler ve küçük resimler her videodan alınır. Bu ayarlar hepsine uygulanır.",
-    "community": "Topluluk",
-    "rewards": "Ödüller",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "Ödülleri reddet"
+    "steps": {
+      "content": "İçerik",
+      "settings": "Ayarlar"
     },
-    "beneficiaries": "Ek faydalanıcılar",
-    "accountPlaceholder": "Hive hesabı",
-    "remove": "Kaldır",
-    "addBeneficiary": "Faydalanıcı ekle",
-    "lockedNote": "3Speak her zamanki payını ekler: @threespeakfund için %10 ve kodlama için %1 (3Speak Premium üyeleri ödemez).",
-    "nsfw": "NSFW olarak işaretle (yetişkin içerik)",
-    "ads": "Bu videolarda reklam göster",
+    "formTitle": "{{count}} videoyu içe aktar",
+    "contentIntro": "Başlıklar, açıklamalar, etiketler ve küçük resimler her videodan alınır.",
+    "settingsIntro": "Bu ayarlar seçtiğin tüm videolara uygulanır.",
+    "shortsNote": "Shorts her zaman Shorts akışına gider: topluluk, blog ve reklam ayarları yalnızca normal videolar için geçerlidir.",
     "spacing": "Her video sunucumuzda içe aktarılır ve ardından ayrı ayrı, {{minutes}} dakika arayla yayınlanır. İlki hazır olduktan birkaç dakika sonra yayına girer. Bu sayfayı kapatabilirsin.",
     "grantNeeded": "Sen yokken yayınlayabilmek için 3Speak'in hesabın adına paylaşım izni olması gerekir. Bu izni Hive cüzdanından istediğin zaman kaldırabilirsin.",
     "grantButton": "3Speak benim adıma yayınlasın",
@@ -116,6 +115,7 @@
     "start": "İçe aktarmayı başlat",
     "starting": "Başlatılıyor…",
     "statusTitle": "Toplu içe aktarman",
+    "canLeave": "Bu sayfayı artık kapatabilirsin. Videoların sen yokken de sunucumuzda içe aktarılıp yayınlanır.",
     "stop": "Kalanları durdur",
     "short": "Short",
     "status": {

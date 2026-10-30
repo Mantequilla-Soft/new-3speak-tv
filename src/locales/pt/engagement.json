@@ -10,6 +10,8 @@
       "transferFailed": "Falha na transferência: {{message}}"
     },
     "heading": "Enviar gorjeta para @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Valor: ",
     "amountPlaceholder": "ex.: 1.000",
     "currencyLabel": "Moeda:",
@@ -17,7 +19,42 @@
     "memoLabel": "Memo (opcional):",
     "memoPlaceholder": "ex.: Valeu por esse conteúdo incrível!",
     "memoLinkNote": "Este link é adicionado ao memo: {{link}}",
-    "send": "Enviar gorjeta"
+    "send": "Enviar gorjeta",
+    "lightning": {
+      "amountLabel": "Valor (sats):",
+      "messageLabel": "Mensagem (opcional):",
+      "note": "Vai para @{{recipient}} pela v4v.app, sem precisar de conta Hive: qualquer carteira Lightning serve. Gorjetas que cobrem a taxa de conversão da v4v.app (cerca de 60 sats) chegam como HIVE; as menores ficam em sats na conta v4v.app da pessoa.",
+      "send": "Pagar com Lightning",
+      "showQr": "Mostrar código QR",
+      "payExtension": "Pagar pela extensão",
+      "scan": "Escaneie com qualquer carteira Lightning para enviar {{sats}} sats a @{{recipient}}.",
+      "openWallet": "Abrir na carteira",
+      "copy": "Copiar fatura",
+      "copied": "Fatura copiada",
+      "waiting": "Aguardando o pagamento…",
+      "back": "Voltar",
+      "done": "Concluído",
+      "errors": {
+        "amount": "Digite um número inteiro de sats",
+        "tooMuch": "É mais do que este endereço aceita (máx. {{max}} sats)",
+        "noAccount": "Esta conta Hive não existe",
+        "invoiceFailed": "Não foi possível criar a fatura Lightning. Tente novamente.",
+        "copyFailed": "Não foi possível copiar a fatura"
+      }
+    },
+    "wallet": {
+      "usernameLabel": "Seu nome de usuário Hive:",
+      "usernamePlaceholder": "ex.: alice",
+      "next": "Avançar",
+      "signWith": "Assinar {{amount}} {{currency}} de @{{user}} para @{{recipient}} com:",
+      "noExtension": "Nenhuma extensão de carteira encontrada neste navegador. O HiveSigner funciona sem ela.",
+      "waitingHiveSigner": "Conclua a assinatura na janela do HiveSigner. Esta janela confirma a gorjeta assim que ela estiver na Hive.",
+      "errors": {
+        "noUser": "Digite seu nome de usuário Hive",
+        "self": "Você não pode dar gorjeta a si mesmo",
+        "walletFailed": "A carteira não enviou a gorjeta: {{message}}"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Entre na sua conta para personalizar seu feed",

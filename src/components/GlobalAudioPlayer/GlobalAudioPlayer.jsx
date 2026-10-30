@@ -19,10 +19,16 @@ import PayoutAmount from '../PayoutAmount/PayoutAmount';
 import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import AddToPlaylistModal from '../AddToPlaylistModal/AddToPlaylistModal';
+import TipModal from '../tip-reward/TipModal';
+import { BiDollar } from 'react-icons/bi';
 import BlogContent from '../playVideo/BlogContent';
 import Waveform from './Waveform';
 import ModalHeader from '../ModalHeader/ModalHeader';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
+import PodcastTipModal from '../Podcasts/PodcastTipModal';
+import { canTipEpisode } from '../../lib/podcastTips';
+import { recordProgress, flushProgress, resumePosition } from '../../lib/podcastProgress';
+import { podcastPath, episodePath, artUrl, PODCAST_PLACEHOLDER, pseudoWaveform } from '../../lib/podcasts';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
 import '../../page/Audio.scss';
@@ -70,6 +76,8 @@ async function encryptBeat(obj) {
 
 function audioThumb(item) {
   if (!item) return fallbackImg;
+  // An outside podcast episode (components/Podcasts): the show's or episode's art.
+  if (item.external) return item.art ? artUrl(item.art, 128) : PODCAST_PLACEHOLDER;
   const fixed = fixVideoThumbnail({ thumbnail_url: item.thumbnail_url, thumbnail: item.thumbnail_url });
   if (!fixed || fixed === fallbackImg || fixed === '/images/speak.jpg') {
     return `/img/u/${item.owner}/avatar/small`;
@@ -111,7 +119,7 @@ function GlobalAudioPlayer() {
     audioExpanded, audioShowQueue, audioPlayNonce,
     audioToggleNonce, audioSeekNonce, audioPendingSeek,
     audioPlay, audioStop,
-    audioSetIsPlaying, audioSetCurrentTime,
+    audioSetIsPlaying, audioSetCurrentTime, audioSetDuration,
     audioSetExpanded, audioSetShowQueue,
     audioRemoveFromQueue, audioMoveInQueue, audioClearQueue,
     authenticated, user,
@@ -151,6 +159,8 @@ function GlobalAudioPlayer() {
   const [accountData, setAccountData] = useState(null);
   const [playlistTarget, setPlaylistTarget] = useState(null);
   const [shareTarget, setShareTarget] = useState(null);
+  const [tipTarget, setTipTarget] = useState(null);
+  const [podcastTip, setPodcastTip] = useState(null);
 
   // Post enrichment
   const [npIsVoted, setNpIsVoted] = useState(false);
@@ -227,9 +237,15 @@ function GlobalAudioPlayer() {
     // Duration is sourced from the embed-audio Mongo doc (set in the slice
     // when the track is selected) — we deliberately ignore <audio>.duration
     // because VBR MP3s without Xing headers report it incorrectly.
+    // Outside podcast episodes remember how far the listener got (lib/podcastProgress.js).
+    const saveExternal = (pos) => {
+      if (!audioCurrent?.external) return;
+      recordProgress(useAppStore.getState().user, audioCurrent._id, pos, audioCurrent.duration || el.duration);
+    };
     const h = {
       timeupdate: () => {
         audioSetCurrentTime(el.currentTime);
+        saveExternal(el.currentTime);
         // timeupdate only fires while audio is genuinely advancing (not when
         // paused), so it doubles as our "still listening" signal. Beat at
         // most once per interval; the server measures the real gap.
@@ -239,8 +255,17 @@ function GlobalAudioPlayer() {
         }
       },
       play: () => { audioSetIsPlaying(true); notifyMediaPlay('audio'); },
-      pause: () => audioSetIsPlaying(false),
-      ended: () => { audioSetIsPlaying(false); playNext(); },
+      pause: () => { audioSetIsPlaying(false); if (audioCurrent?.external) flushProgress(); },
+      ended: () => {
+        if (audioCurrent?.external) { saveExternal(audioCurrent.duration || el.duration); flushProgress(); }
+        audioSetIsPlaying(false);
+        playNext();
+      },
+      // Outside podcast feeds don't always say how long an episode is; only then
+      // does the element's own figure stand in for the stored one.
+      loadedmetadata: () => {
+        if (audioCurrent?.external && !audioCurrent.duration && Number.isFinite(el.duration) && el.duration > 0) audioSetDuration(el.duration);
+      },
     };
     for (const [e, fn] of Object.entries(h)) el.addEventListener(e, fn);
     return () => { for (const [e, fn] of Object.entries(h)) el.removeEventListener(e, fn); };
@@ -272,10 +297,14 @@ function GlobalAudioPlayer() {
 
   // Load src and play when current track changes (or play nonce bumps)
   useEffect(() => {
-    const el = audioRef.current; if (!el || !audioCurrent?.audio_cid) return;
-    const desired = `${AUDIO_CDN}/${audioCurrent.audio_cid}`;
+    const el = audioRef.current; if (!el || !(audioCurrent?.audio_cid || audioCurrent?.external)) return;
+    // Outside podcast episodes play straight from the podcast's own host.
+    const desired = audioCurrent.external ? audioCurrent.src : `${AUDIO_CDN}/${audioCurrent.audio_cid}`;
     if (el.src !== desired) {
       el.src = desired;
+      // An outside episode started before picks up where it was left.
+      const resumeAt = audioCurrent.external ? resumePosition(useAppStore.getState().user, audioCurrent._id) : 0;
+      if (resumeAt) el.addEventListener('loadedmetadata', () => { el.currentTime = resumeAt; }, { once: true });
       // The next track opens the way the viewer left the transcript. It only shows
       // once that track's subtitles have loaded, so a track without any is unaffected.
       setShowSubtitlesState(readTranscriptOn());
@@ -433,40 +462,72 @@ function GlobalAudioPlayer() {
     if (i > 0) audioPlay(list[i - 1]);
   }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
 
+  // Publish how far the player's top edge sits above the viewport bottom as
+  // --audio-np-clearance, so fixed elements (Feedback FAB) can stay above it.
+  // ResizeObserver catches expand/collapse; the var is removed when it closes.
+  const npRef = useRef(null);
+  const hasNowPlaying = !!audioCurrent;
+  useEffect(() => {
+    const el = npRef.current;
+    const root = document.documentElement;
+    if (!hasNowPlaying || !el) return;
+    const update = () => {
+      const top = el.getBoundingClientRect().top;
+      root.style.setProperty('--audio-np-clearance', `${Math.max(0, Math.round(window.innerHeight - top))}px`);
+    };
+    update();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    window.addEventListener('resize', update);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener('resize', update);
+      root.style.removeProperty('--audio-np-clearance');
+    };
+  }, [hasNowPlaying]);
+
   if (!audioCurrent) {
     return <audio ref={audioRef} preload="metadata" style={{ display: 'none' }} />;
   }
 
   const nowPlaying = audioCurrent;
 
+  // Outside podcast episodes have no waveform of their own: a stand-in (lib/podcasts.js).
+
+  const npWave = nowPlaying?.waveform?.[0]?.length ? nowPlaying.waveform[0]
+
+    : nowPlaying?.external ? pseudoWaveform(nowPlaying._id)[0] : null;
+
   return (
     <>
       <audio ref={audioRef} preload="metadata" />
 
-      <div className={`audio-now-playing${audioExpanded ? ' audio-np-expanded' : ''}`}>
+      <div ref={npRef} className={`audio-now-playing${audioExpanded ? ' audio-np-expanded' : ''}`}>
         <div className="audio-np-progress" onClick={handleSeek}>
           <div className="audio-np-progress-fill" style={{ width: audioDuration ? `${(audioCurrentTime / audioDuration) * 100}%` : '0%' }} />
         </div>
 
         <div className="audio-np-content">
-          <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.src = fallbackImg; }} onClick={() => audioSetExpanded(v => !v)} />
+          <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.src = nowPlaying.external ? PODCAST_PLACEHOLDER : fallbackImg; }} onClick={() => audioSetExpanded(v => !v)} />
           <div className="audio-np-info" onClick={() => audioSetExpanded(v => !v)}>
             <span
-              className={`audio-np-title${nowPlaying.post_permlink ? ' has-post' : ''}`}
+              className={`audio-np-title${nowPlaying.post_permlink || nowPlaying.external ? ' has-post' : ''}`}
               onClick={(e) => {
-                if (!nowPlaying.post_permlink) return;
+                if (!nowPlaying.post_permlink && !nowPlaying.external) return;
                 e.stopPropagation();
-                navigate(`/audio/${nowPlaying.owner}/${nowPlaying.post_permlink}`);
+                navigate(nowPlaying.external ? episodePath(nowPlaying._id) : `/audio/${nowPlaying.owner}/${nowPlaying.post_permlink}`);
                 audioSetExpanded(false);
               }}
-              title={nowPlaying.post_permlink ? t('audio.player.openPost') : ''}
+              title={nowPlaying.post_permlink ? t('audio.player.openPost') : nowPlaying.external ? t('audio.podcasts.openEpisode') : ''}
             >
               <span className="audio-np-title-text">{nowPlaying.title || t('audio.untitled')}</span>
-              {nowPlaying.post_permlink && (
+              {(nowPlaying.post_permlink || nowPlaying.external) && (
                 <MdOpenInNew className="audio-np-title-icon" size={12} aria-hidden />
               )}
             </span>
-            <span className="audio-np-author" onClick={(e) => { e.stopPropagation(); navigate(`/@${nowPlaying.owner}?tab=audio`); audioSetExpanded(false); }}>@{nowPlaying.owner}</span>
+            {nowPlaying.external
+              ? <span className="audio-np-author" onClick={(e) => { e.stopPropagation(); navigate(podcastPath(nowPlaying.show_id)); audioSetExpanded(false); }}>{nowPlaying.show}</span>
+              : <span className="audio-np-author" onClick={(e) => { e.stopPropagation(); navigate(`/@${nowPlaying.owner}?tab=audio`); audioSetExpanded(false); }}>@{nowPlaying.owner}</span>}
           </div>
 
           <div className="audio-np-desktop-meta">
@@ -477,11 +538,16 @@ function GlobalAudioPlayer() {
           </div>
 
           <div className="audio-np-extras">
-            {loggedIn && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={20} /></button>}
-            <div className="audio-np-share-wrap">
-              <button className="audio-np-share-btn" onClick={() => setShareTarget(shareTarget?._id === nowPlaying._id ? null : nowPlaying)} title={t('common.actions.share')}><MdShare size={16} /></button>
-              {shareTarget?._id === nowPlaying._id && <AudioShareDropdown item={nowPlaying} onClose={() => setShareTarget(null)} />}
-            </div>
+            {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={20} /></button>}
+            {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
+            {nowPlaying.post_permlink && user !== nowPlaying.owner && <button className="audio-np-tip-btn" onClick={() => setTipTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink })} title={t('audio.post.tip')}><BiDollar size={18} /></button>}
+            {nowPlaying.external && canTipEpisode(nowPlaying) && <button className="audio-np-tip-btn" onClick={() => setPodcastTip(nowPlaying)} title={t('audio.podcasts.tip.button')}><BiDollar size={18} /></button>}
+            {!nowPlaying.external && (
+              <div className="audio-np-share-wrap">
+                <button className="audio-np-share-btn" onClick={() => setShareTarget(shareTarget?._id === nowPlaying._id ? null : nowPlaying)} title={t('common.actions.share')}><MdShare size={16} /></button>
+                {shareTarget?._id === nowPlaying._id && <AudioShareDropdown item={nowPlaying} onClose={() => setShareTarget(null)} />}
+              </div>
+            )}
             {subtitleData && <button className={`audio-np-sub-btn${showSubtitles ? ' active' : ''}`} onClick={() => setShowSubtitles(!showSubtitles)} title={t('audio.player.transcript')}><MdSubtitles size={18} /></button>}
             <span className="audio-np-time">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>
           </div>
@@ -529,18 +595,23 @@ function GlobalAudioPlayer() {
               {nowPlaying.post_permlink && (
                 <UpvoteCount count={npVoteCount} voted={npIsVoted} onClick={() => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink }); setShowVoteTooltip(!showVoteTooltip); }} size={12} />
               )}
-              {loggedIn && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={18} /></button>}
-              <div className="audio-np-share-wrap">
-                <button className="audio-np-share-btn" onClick={() => setShareTarget(shareTarget?._id === nowPlaying._id ? null : nowPlaying)} title={t('common.actions.share')}><MdShare size={16} /></button>
-                {shareTarget?._id === nowPlaying._id && <AudioShareDropdown item={nowPlaying} onClose={() => setShareTarget(null)} />}
-              </div>
+              {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={18} /></button>}
+              {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
+              {nowPlaying.post_permlink && user !== nowPlaying.owner && <button className="audio-np-tip-btn" onClick={() => setTipTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink })} title={t('audio.post.tip')}><BiDollar size={16} /></button>}
+              {nowPlaying.external && canTipEpisode(nowPlaying) && <button className="audio-np-tip-btn" onClick={() => setPodcastTip(nowPlaying)} title={t('audio.podcasts.tip.button')}><BiDollar size={16} /></button>}
+              {!nowPlaying.external && (
+                <div className="audio-np-share-wrap">
+                  <button className="audio-np-share-btn" onClick={() => setShareTarget(shareTarget?._id === nowPlaying._id ? null : nowPlaying)} title={t('common.actions.share')}><MdShare size={16} /></button>
+                  {shareTarget?._id === nowPlaying._id && <AudioShareDropdown item={nowPlaying} onClose={() => setShareTarget(null)} />}
+                </div>
+              )}
               {subtitleData && <button className={`audio-np-sub-btn${showSubtitles ? ' active' : ''}`} onClick={() => setShowSubtitles(!showSubtitles)} title={t('audio.player.transcript')}><MdSubtitles size={16} /></button>}
               <span className="audio-np-time">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>
             </div>
 
-            {Array.isArray(nowPlaying.waveform?.[0]) && nowPlaying.waveform[0].length > 0 && (
+            {npWave && (
               <Waveform
-                samples={nowPlaying.waveform[0]}
+                samples={npWave}
                 audioRef={audioRef}
                 duration={audioDuration}
                 onSeek={(f) => {
@@ -566,6 +637,17 @@ function GlobalAudioPlayer() {
                   </div>
                 )}
                 {!nowPlaying.post_permlink && npBody && <div className="audio-np-body">{npBody}</div>}
+                {/* The full show notes are on the episode page. */}
+                {nowPlaying.external && nowPlaying.summary && (
+                  <button
+                    type="button"
+                    className="audio-np-body audio-np-body--link"
+                    onClick={() => { navigate(episodePath(nowPlaying._id)); audioSetExpanded(false); }}
+                    title={t('audio.podcasts.openEpisode')}
+                  >
+                    {nowPlaying.summary} <span className="audio-np-more">{t('audio.podcasts.showNotes')} →</span>
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -616,10 +698,10 @@ function GlobalAudioPlayer() {
               <ul className="audio-queue-list">{audioQueue.map((item, idx) => (
                 <li key={item._id} className={`audio-queue-item${audioCurrent?._id === item._id ? ' current' : ''}`}>
                   <span className="audio-queue-drag"><MdDragIndicator size={16} /></span>
-                  <img className="audio-queue-thumb" src={audioThumb(item)} alt="" onError={e => { e.currentTarget.src = fallbackImg; }} />
+                  <img className="audio-queue-thumb" src={audioThumb(item)} alt="" onError={e => { e.currentTarget.src = item.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
                   <div className="audio-queue-info" onClick={() => audioPlay(item)}>
                     <span className="audio-queue-title">{item.title || t('audio.untitled')}</span>
-                    <span className="audio-queue-author">@{item.owner} · {fmt(item.duration)}</span>
+                    <span className="audio-queue-author">{item.external ? item.show : `@${item.owner}`} · {fmt(item.duration)}</span>
                   </div>
                   <div className="audio-queue-actions">
                     {idx > 0 && <button onClick={() => audioMoveInQueue(idx, idx - 1)}>↑</button>}
@@ -649,6 +731,18 @@ function GlobalAudioPlayer() {
           voteValue={voteValue} setVoteValue={setVoteValue}
           accountData={accountData} setAccountData={setAccountData}
           compact onVoteSuccess={() => { setShowVoteTooltip(false); setNpIsVoted(true); setNpVoteCount(c => c + 1); }}
+        />
+      )}
+
+      {podcastTip && <PodcastTipModal track={podcastTip} onClose={() => setPodcastTip(null)} />}
+
+      {tipTarget && (
+        <TipModal
+          recipient={tipTarget.author}
+          permlink={tipTarget.permlink}
+          memoLink={`https://3speak.tv/audio/${tipTarget.author}/${tipTarget.permlink}`}
+          isOpen={!!tipTarget}
+          onClose={() => setTipTarget(null)}
         />
       )}
 

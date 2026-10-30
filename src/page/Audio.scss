@@ -1166,6 +1166,17 @@
   position: relative;
 }
 
+.audio-np-tip-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  border-radius: 4px;
+  &:hover { color: var(--accent-primary); }
+}
+
 .audio-np-share-btn {
   background: none;
   border: none;

@@ -82,6 +82,11 @@
       "type": "快拍",
       "hoursLeft_other": "剩余 {{count}} 小时",
       "ariaUnseen_other": "通知,{{count}} 条新快拍"
+    },
+    "podcasts": {
+      "heading": "你关注的播客的新单集",
+      "newEpisode": "{{show}} 有新单集",
+      "type": "播客"
     }
   },
   "search": {

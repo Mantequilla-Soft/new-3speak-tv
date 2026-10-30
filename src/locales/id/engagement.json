@@ -10,6 +10,8 @@
       "transferFailed": "Transfer gagal: {{message}}"
     },
     "heading": "Kirim Tip ke @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "Jumlah: ",
     "amountPlaceholder": "mis. 1.000",
     "currencyLabel": "Mata uang:",
@@ -17,7 +19,42 @@
     "memoLabel": "Memo (opsional):",
     "memoPlaceholder": "mis. Makasih untuk konten kerennya!",
     "memoLinkNote": "Tautan ini ditambahkan ke memo: {{link}}",
-    "send": "Kirim Tip"
+    "send": "Kirim Tip",
+    "lightning": {
+      "amountLabel": "Jumlah (sats):",
+      "messageLabel": "Pesan (opsional):",
+      "note": "Dikirim ke @{{recipient}} lewat v4v.app, tanpa perlu akun Hive: dompet Lightning apa pun bisa. Tip yang menutupi biaya konversi v4v.app (sekitar 60 sats) tiba sebagai HIVE, yang lebih kecil tetap berupa sats di akun v4v.app mereka.",
+      "send": "Bayar dengan Lightning",
+      "showQr": "Tampilkan kode QR",
+      "payExtension": "Bayar lewat ekstensi",
+      "scan": "Pindai dengan dompet Lightning apa pun untuk mengirim {{sats}} sats ke @{{recipient}}.",
+      "openWallet": "Buka di dompet",
+      "copy": "Salin invoice",
+      "copied": "Invoice disalin",
+      "waiting": "Menunggu pembayaran…",
+      "back": "Kembali",
+      "done": "Selesai",
+      "errors": {
+        "amount": "Masukkan jumlah sats berupa bilangan bulat",
+        "tooMuch": "Itu lebih dari yang diterima alamat ini (maks {{max}} sats)",
+        "noAccount": "Akun Hive ini tidak ada",
+        "invoiceFailed": "Tidak dapat membuat invoice Lightning. Silakan coba lagi.",
+        "copyFailed": "Tidak dapat menyalin invoice"
+      }
+    },
+    "wallet": {
+      "usernameLabel": "Username Hive kamu:",
+      "usernamePlaceholder": "mis. alice",
+      "next": "Lanjut",
+      "signWith": "Tanda tangani {{amount}} {{currency}} dari @{{user}} ke @{{recipient}} dengan:",
+      "noExtension": "Tidak ada ekstensi dompet di browser ini. HiveSigner bisa dipakai tanpa ekstensi.",
+      "waitingHiveSigner": "Selesaikan penandatanganan di jendela HiveSigner. Jendela ini mengonfirmasi tip begitu sudah ada di Hive.",
+      "errors": {
+        "noUser": "Masukkan username Hive kamu",
+        "self": "Kamu tidak bisa memberi tip ke diri sendiri",
+        "walletFailed": "Dompet tidak mengirim tip: {{message}}"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "Silakan masuk untuk menyesuaikan feed-mu",

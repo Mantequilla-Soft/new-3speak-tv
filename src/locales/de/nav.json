@@ -86,6 +86,11 @@
       "hoursLeft_other": "noch {{count}} Std.",
       "ariaUnseen_one": "Benachrichtigungen, {{count}} neue Story",
       "ariaUnseen_other": "Benachrichtigungen, {{count}} neue Storys"
+    },
+    "podcasts": {
+      "heading": "Neue Folgen von Podcasts, denen du folgst",
+      "newEpisode": "Neue Folge von {{show}}",
+      "type": "Podcast"
     }
   },
   "search": {

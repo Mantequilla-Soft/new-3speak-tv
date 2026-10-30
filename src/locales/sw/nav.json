@@ -86,6 +86,11 @@
       "hoursLeft_other": "zimebaki saa {{count}}",
       "ariaUnseen_one": "Arifa, hadithi {{count}} mpya",
       "ariaUnseen_other": "Arifa, hadithi {{count}} mpya"
+    },
+    "podcasts": {
+      "heading": "Vipindi vipya vya podikasti unazofuata",
+      "newEpisode": "Kipindi kipya cha {{show}}",
+      "type": "Podikasti"
     }
   },
   "search": {

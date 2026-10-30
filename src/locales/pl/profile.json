@@ -309,6 +309,7 @@
   "supports": {
     "incomingTitle": "@{{user}} dał(a) @{{profile}} łącznie {{amount}} napiwków",
     "outgoingTitle": "@{{profile}} dał(a) @{{user}} łącznie {{amount}} napiwków",
+    "incomingTitleLightning": "Anonimowe napiwki Lightning dla @{{profile}}: łącznie {{amount}}",
     "received": "Otrzymane",
     "given": "Dane",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -318,6 +319,7 @@
     "emptyGivenOwn": "Nie dałeś(-aś) jeszcze napiwku pod żadnym filmem. Napiwki wysłane spod filmu pojawią się tutaj.",
     "untitled": "Bez tytułu",
     "paidInHive": "wysłano jako {{amount}} HIVE",
+    "lightningSupporter": "Wspierający przez Lightning",
     "hideTip": "Ukryj napiwek",
     "unhideTip": "Pokaż napiwek",
     "hiddenLabel": "Ukryty w twoim profilu",

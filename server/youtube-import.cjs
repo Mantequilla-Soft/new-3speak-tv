@@ -75,6 +75,12 @@ const PIP_BIN = path.join(path.dirname(YTDLP_BIN), 'pip')
 // Without a placeholder the proxy is used as-is and a blocked attempt is not retried
 // (it would leave from the same IP again).
 const PROXY_ROTATES = /\{session\}|\{port:\d+-\d+\}/.test(YTDLP_PROXY)
+// Remaining proxy traffic (proxy-traffic.cjs): set when the routes are mounted.
+// Near zero, downloads that need the proxy pause instead of failing through it.
+let traffic = null
+const PROXY_PAUSED_MESSAGE = 'YouTube imports are paused for a while. Please try again later.'
+/** Whether a source downloads through the proxy: YouTube always, BitChute/Rumble without a direct file. */
+const needsProxy = (src) => !!YTDLP_PROXY && (src.platform === 'youtube' || ((src.platform === 'bitchute' || src.platform === 'rumble') && !src.direct))
 function proxyForAttempt() {
   if (!YTDLP_PROXY) return ''
   const session = crypto.randomBytes(6).toString('hex')
@@ -148,18 +154,23 @@ function alertDiscord({ title, color, user, platform, videoId, url, code, messag
     .catch((e) => console.warn(`[yt-import] Discord alert failed: ${e.message}`))
 }
 // ── What has already been published from an import ──────────────────────────
-// user → { "<youtube id>" | "tiktok:<id>" | "instagram:<shortcode>": { permlink, at } }, written by the
-// uploader after a successful publish, read by the grid for its ✓ mark. A small
-// JSON file is plenty at POC scale; written via temp file + rename.
+// Kept in Mongo `import-records` (import-library.cjs): one doc per creator and
+// source ("<youtube id>" | "tiktok:<id>" | "instagram:<shortcode>" | …), written by
+// the uploader after a publish and by the batch when it schedules a post. Read by
+// the grid for its ✓ mark and by the batch to never post a video twice. Not tied
+// to preview/prod: a post from either is on Hive all the same. Without Mongo, a
+// JSON file on this server stands in (temp file + rename).
 const IMPORTS_FILE = process.env.YT_IMPORT_STORE || path.join(__dirname, 'data', 'yt-imports.json')
 const SOURCE_RE = /^(?:[A-Za-z0-9_-]{11}|tiktok:\d{8,25}|instagram:[A-Za-z0-9_-]{5,40}|bitchute:[A-Za-z0-9_-]{6,20}|rumble:v[a-z0-9]{3,15})$/
+let library = null // set when the routes are mounted
 let importsStore = null
 function loadImports() {
   if (importsStore) return importsStore
   try { importsStore = JSON.parse(fs.readFileSync(IMPORTS_FILE, 'utf8')) || {} } catch { importsStore = {} }
   return importsStore
 }
-function recordImport(user, source, permlink) {
+async function recordImport(user, source, permlink) {
+  if (library && await library.recordImport(user, source, permlink)) return
   const store = loadImports()
   store[user] = { ...(store[user] || {}), [source]: { permlink, at: new Date().toISOString() } }
   fs.mkdirSync(path.dirname(IMPORTS_FILE), { recursive: true })
@@ -167,9 +178,22 @@ function recordImport(user, source, permlink) {
   fs.writeFileSync(tmp, JSON.stringify(store, null, 1))
   fs.renameSync(tmp, IMPORTS_FILE)
 }
-function importedFor(user) {
+async function importedFor(user) {
+  const fromMongo = library ? await library.importedFor(user) : null
+  if (fromMongo) return fromMongo
   const mine = loadImports()[user] || {}
   return Object.fromEntries(Object.entries(mine).map(([src, v]) => [src, v.permlink]))
+}
+/**
+ * What the importer marks: `imported` (on 3Speak) and `inBatch` (a batch still has
+ * to publish it). A batch records its post when it schedules it, so until the slot
+ * has passed such a video is only "in a batch": its post does not exist yet.
+ */
+async function knownImports(user) {
+  const inBatch = require('./import-batch.cjs').batchSourcesFor(user)
+  const imported = await importedFor(user)
+  for (const src of Object.keys(inBatch)) delete imported[src]
+  return { imported, inBatch }
 }
 
 const ALERT_RED = 0xe53935
@@ -372,7 +396,7 @@ function tiktokEntry(user, ev) {
     description: ev.caption,
     tags: [],
     publishedAt: ev.createTime ? new Date(ev.createTime * 1000).toISOString() : null,
-    thumbnail: ev.cover ? `/api/yt-import/thumb-token/${token}` : '',
+    thumbnail: ev.cover ? coverPath(`tiktok:${ev.id}`) : '',
     duration: ev.duration,
     tooLong: ev.duration > MAX_DURATION_S,
     privacy: 'public',
@@ -494,9 +518,10 @@ async function instagramMedia(shortcode, { forDownload = false } = {}) {
   return m && m.code === shortcode ? shapeIg(m) : null
 }
 
-// The newest videos of a profile, from its reels tab.
-async function instagramLatest(handle) {
-  const d = await igBrowser(`/reels/${encodeURIComponent(handle)}`)
+// The newest videos of a profile, from its reels tab. `fresh`: a list at most 10
+// minutes old (the service keeps lists forever, and their cover links die).
+async function instagramLatest(handle, { fresh = false } = {}) {
+  const d = await igBrowser(`/reels/${encodeURIComponent(handle)}${fresh ? '?maxAge=600' : ''}`)
   return (d?.videos || []).map(shapeIg)
 }
 
@@ -513,7 +538,7 @@ function instagramEntry(user, ev) {
     description: ev.caption,
     tags: [],
     publishedAt: ev.createTime ? new Date(ev.createTime * 1000).toISOString() : null,
-    thumbnail: ev.cover ? `/api/yt-import/thumb-token/${token}` : '',
+    thumbnail: ev.cover ? coverPath(`instagram:${ev.shortcode}`) : '',
     duration: ev.duration,
     tooLong: ev.duration > MAX_DURATION_S,
     privacy: 'public',
@@ -541,7 +566,7 @@ function platformEntry(user, platform, ev) {
     description,
     tags: ev.tags || [],
     publishedAt: ev.createTime ? new Date(ev.createTime).toISOString() : null,
-    thumbnail: ev.cover ? `/api/yt-import/thumb-token/${token}` : '',
+    thumbnail: ev.cover ? coverPath(`${platform}:${ev.id}`) : '',
     duration: Math.round(ev.duration || 0),
     tooLong: ev.duration > MAX_DURATION_S,
     privacy: 'public',
@@ -567,6 +592,9 @@ async function mapLimit(items, limit, fn) {
 
 /** token → { user, platform, videoKey, sourceUrl, thumbUrl, video, createdAt }: links a user looked up and owns */
 const resolved = new Map()
+// A cover's address on this server: stable (no token), served from the kept
+// image (import-covers), so it survives restarts and dead CDN links.
+const coverPath = (key) => `/api/yt-import/cover/${encodeURIComponent(key)}`
 
 // ISO-8601 duration (PT1H2M3S) → seconds
 function isoDuration(d) {
@@ -780,6 +808,14 @@ async function directTikTokDownload(job) {
 }
 
 function runAttempt(job) {
+  // Every yt-dlp run without the TikTok session goes through the proxy.
+  if (traffic?.paused && YTDLP_PROXY && !(job.platform === 'tiktok' && tiktokSession())) {
+    job.status = 'failed'
+    job.errorCode = 'proxy_paused'
+    job.error = PROXY_PAUSED_MESSAGE
+    console.warn(`[yt-import] @${job.user} ${job.videoId} not started: proxy traffic paused`)
+    return
+  }
   const dir = path.join(WORK_DIR, job.id)
   // A failed attempt can leave .part fragments; start every attempt clean.
   fs.rmSync(dir, { recursive: true, force: true })
@@ -956,7 +992,7 @@ function sweep() {
  * (butrauth session, wallet session cookie, or HiveSigner bearer) or null.
  */
 function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPostingGrant }) {
-  const library = require('./import-library.cjs').createLibrary({
+  library = require('./import-library.cjs').createLibrary({
     uri: process.env.IMPORT_LIBRARY_MONGODB_URI || process.env.MONGODB_URI || '',
     dbName: process.env.IMPORT_LIBRARY_DATABASE_NAME || process.env.DATABASE_NAME || '',
   })
@@ -968,6 +1004,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
   setInterval(sweep, 10 * 60 * 1000).unref()
   setTimeout(maybeUpdateYtdlp, 60 * 1000).unref()
   setInterval(maybeUpdateYtdlp, 30 * 60 * 1000).unref()
+  traffic = require('./proxy-traffic.cjs').createProxyTraffic(YTDLP_PROXY)
 
   const mw = limiter ? [limiter] : []
 
@@ -989,6 +1026,8 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
         apiConfigured: !!YT_API_KEY,
         downloader: fs.existsSync(YTDLP_BIN),
         proxyConfigured: !!YTDLP_PROXY || !!YTDLP_COOKIES,
+        // Out of proxy traffic: YouTube downloads are paused (proxy-traffic.cjs).
+        proxyPaused: traffic.paused,
         instagramReady: igReady,
         // The sources this server imports from (IMPORT_SOURCE_<NAME>).
         sources: enabledSources(),
@@ -998,8 +1037,9 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
           baseHeight: MAX_HEIGHT,
           premiumHeight: MAX_HEIGHT_PREMIUM,
         },
-        // source id → 3Speak permlink, for the ✓ "On 3Speak" mark
-        imported: importedFor(user),
+        // source id → 3Speak permlink, for the ✓ "On 3Speak" mark; and the ones a
+        // batch still has to publish.
+        ...(await knownImports(user)),
       })
     } catch (e) { fail(res, e) }
   })
@@ -1011,7 +1051,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     const permlink = String(req.body?.permlink || '')
     if (!SOURCE_RE.test(source) || !/^[a-z0-9-]{1,255}$/.test(permlink)) return res.status(400).json({ error: 'invalid source or permlink' })
     try {
-      recordImport(user, source, permlink)
+      await recordImport(user, source, permlink)
       console.log(`[yt-import] @${user} published ${source} as ${permlink}`)
       res.json({ ok: true })
     } catch (e) {
@@ -1031,6 +1071,26 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     const loading = channels.some((c) => library.isLoading(platform, c, type))
     return { evs, total, hasMore: (page + 1) * PAGE < total || loading, loading }
   }
+
+  // "Refresh lists": read all of the creator's linked channels again on the next
+  // visit, every platform at once (new and newly public videos). Once per 5
+  // minutes; the YouTube API has a daily quota.
+  app.post('/api/yt-import/refresh', ...mw, async (req, res) => {
+    const user = await auth(req, res); if (!user) return
+    try {
+      const links = await verifiedLinks(user)
+      const lists = ['youtube', 'tiktok', 'instagram', 'bitchute', 'rumble']
+        .filter((p) => sourceEnabled(p) && links[p]?.length)
+        .map((p) => ({ platform: p, channelIds: links[p], types: p === 'youtube' ? Object.keys(TYPE_PLAYLIST_PREFIX) : ['all'] }))
+      if (!lists.length) return res.status(403).json({ error: 'Link and verify an account on your profile first', errorCode: 'no_link' })
+      const { retryAfterS } = await library.refreshChannels(lists)
+      if (retryAfterS) {
+        return res.status(429).json({ error: 'Your lists were just refreshed, try again in a few minutes', errorCode: 'refresh_too_soon', retryAfterS })
+      }
+      console.log(`[yt-import] @${user} refreshes their lists (${lists.map((l) => l.platform).join(', ')})`)
+      res.json({ ok: true, platforms: lists.map((l) => l.platform) })
+    } catch (e) { fail(res, e) }
+  })
 
   // One page of a YouTube upload playlist (50 ids → details); cursor = pageToken.
   async function ytPage(channelId, type, cursor, max = 50) {
@@ -1164,6 +1224,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
         .filter((ev) => ev && links.tiktok.includes(ev.author))
         .map((ev) => tiktokEntry(user, ev))
         .sort(byDateDesc)
+      warmCovers(videos.map((v) => v.id))
       res.json({ handles: links.tiktok, videos })
     } catch (e) { fail(res, e) }
   })
@@ -1266,6 +1327,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
         rumble.warmDescriptions(evs.filter((ev) => !ev.description), (id, pageInfo) => library.patchVideo('rumble', id, { description: pageInfo.description }))
       }
       const videos = evs.map((ev) => platformEntry(user, platform, ev)).sort(byDateDesc)
+      warmCovers(videos.map((v) => v.id))
       res.json({ channels, videos, page, hasMore })
     } catch (e) { sendError(res, e) }
   }
@@ -1308,7 +1370,8 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
       const links = await verifiedLinks(user)
       if (!links.instagram.length) return res.status(403).json({ error: 'Link and verify your Instagram account on your profile first', errorCode: 'no_link' })
       const kept = await Promise.all(links.instagram.map((h) => library.ensureChannel('instagram', h, 'all', {
-        fetchPage: async () => ({ evs: await instagramLatest(h), next: null }),
+        // Only runs when the library reads the channel (first visit, "Refresh lists").
+        fetchPage: async () => ({ evs: await instagramLatest(h, { fresh: true }), next: null }),
         store: igStore(h),
       })))
       let evs = []
@@ -1318,11 +1381,84 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
         .filter((ev) => links.instagram.includes(ev.author))
         .map((ev) => instagramEntry(user, ev))
         .sort(byDateDesc)
+      warmCovers(videos.map((v) => v.id))
       res.json({ handles: links.instagram, videos })
     } catch (e) { res.status(e.status || 500).json({ error: e.status ? e.message : 'Something went wrong', errorCode: e.code || undefined }) }
   })
 
   // Thumbnail of a looked-up TikTok / Instagram video (signed CDN URL kept server side).
+  // ── Covers (TikTok / Instagram / BitChute / Rumble) ─────────────────────────
+  // Kept as images in the library (import-covers): saved the first time a list
+  // shows them, while their signed links still work. A missing one is fetched from
+  // the kept link, or, when that died, from a fresh one (TikTok's embed, the
+  // Instagram browser service), which the library then keeps too.
+  const COVER_KEY_RE = /^(tiktok|instagram|bitchute|rumble):[A-Za-z0-9_-]{3,40}$/
+  const COVER_HOST_RE = /^https:\/\/[^/]*(tiktokcdn|tiktokcdn-eu|tiktokcdn-us|ibyteimg|byteimg|cdninstagram|fbcdn|bitchute|rumble|rmbl)\.(com|net|cloud|ws)\//i
+  async function fetchCover(url) {
+    if (!url || !COVER_HOST_RE.test(url)) return null
+    const r = await fetch(url, { headers: { 'User-Agent': BROWSER_UA }, signal: AbortSignal.timeout(8000) }).catch(() => null)
+    const type = (r?.headers.get('content-type') || '').split(';')[0]
+    if (!r?.ok || !type.startsWith('image/')) return null
+    const buf = Buffer.from(await r.arrayBuffer())
+    return buf.length > 0 && buf.length < 3 * 1024 * 1024 ? { buf, type } : null
+  }
+  async function freshCoverUrl(platform, id) {
+    if (platform === 'tiktok') return (await tiktokEmbedVideo(id))?.cover || null
+    if (platform === 'instagram' && INSTAGRAM_ENABLED) return (await instagramMedia(id))?.cover || null
+    return null
+  }
+  const coverInflight = new Map()
+  function coverFor(key) {
+    if (coverInflight.has(key)) return coverInflight.get(key)
+    const p = (async () => {
+      const kept = await library.getCover(key).catch(() => null)
+      if (kept) return kept
+      const [, platform, id] = key.match(/^([a-z]+):(.+)$/)
+      let url = (await library.getVideo(platform, id).catch(() => null))?.cover
+      // Without Mongo the link is only in the list the page was given.
+      if (!url) for (const e of resolved.values()) if (e.video?.id === key) { url = e.thumbUrl; break }
+      let got = await fetchCover(url)
+      if (!got) {
+        const fresh = await freshCoverUrl(platform, id).catch(() => null)
+        got = await fetchCover(fresh)
+        if (got) library.patchVideo(platform, id, { cover: fresh }).catch(() => {})
+      }
+      if (got) await library.putCover(key, got.buf, got.type).catch(() => {})
+      return got
+    })().finally(() => coverInflight.delete(key))
+    coverInflight.set(key, p)
+    return p
+  }
+  // After a list is served: keep its covers now, while the links are fresh. One
+  // at a time, in the background; the ones already kept are skipped.
+  const coverQueue = []
+  let coverRunning = false
+  async function warmCovers(keys) {
+    const want = keys.filter((k) => COVER_KEY_RE.test(k) && !coverQueue.includes(k))
+    const have = await library.hasCovers(want).catch(() => new Set())
+    coverQueue.push(...want.filter((k) => !have.has(k)))
+    if (coverRunning) return
+    coverRunning = true
+    try {
+      while (coverQueue.length) {
+        await coverFor(coverQueue[0]).catch(() => null)
+        coverQueue.shift()
+        await new Promise((r) => setTimeout(r, 300))
+      }
+    } finally { coverRunning = false }
+  }
+  app.get('/api/yt-import/cover/:key', ...mw, async (req, res) => {
+    const key = String(req.params.key || '')
+    if (!COVER_KEY_RE.test(key)) return res.status(400).end()
+    try {
+      const got = await coverFor(key)
+      if (!got) return res.status(404).end()
+      res.set('Content-Type', got.type)
+      res.set('Cache-Control', 'public, max-age=86400')
+      res.send(got.buf)
+    } catch { res.status(404).end() }
+  })
+
   app.get('/api/yt-import/thumb-token/:token', ...mw, async (req, res) => {
     const entry = resolved.get(String(req.params.token || ''))
     if (!entry?.thumbUrl || !/^https:\/\/[^/]*(tiktokcdn|tiktokcdn-eu|tiktokcdn-us|ibyteimg|byteimg|cdninstagram|fbcdn|bitchute|rumble|rmbl)\.(com|net|cloud|ws)\//i.test(entry.thumbUrl)) return res.status(404).end()
@@ -1346,6 +1482,9 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     if (!entry && !VIDEO_ID_RE.test(videoId)) return res.status(400).json({ error: 'invalid video id' })
     if (!fs.existsSync(YTDLP_BIN)) return res.status(503).json({ error: 'Downloader is not installed on this server', errorCode: 'no_downloader' })
     if (ytdlpUpdating) return res.status(503).json({ error: 'The importer is updating itself, try again in a minute', errorCode: 'busy' })
+    if (needsProxy(entry || { platform: 'youtube' }) && await traffic.pausedNow()) {
+      return res.status(503).json({ error: PROXY_PAUSED_MESSAGE, errorCode: 'proxy_paused' })
+    }
     try {
       let video
       if (entry) {
@@ -1489,6 +1628,29 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
     return job
   }
 
+  // Thumbnails of batch posts: @threespeak on images.hive.blog first, like the
+  // upload wizard (src/utils/uploadThumbnail.js), then the 3Speak image server when
+  // that refuses. @threespeak's images.hive.blog quota does run out (429
+  // qouta_exceeded), and a post without a thumbnail is a broken post.
+  const IMAGE_SERVER_URL = (process.env.IMAGE_SERVER_URL || '').replace(/\/$/, '')
+  const IMAGE_SERVER_KEY = process.env.IMAGE_SERVER_KEY || ''
+  async function uploadImageWithFallback(buf, type) {
+    try {
+      return await uploadImage(buf, type)
+    } catch (e) {
+      if (!IMAGE_SERVER_URL || !IMAGE_SERVER_KEY) throw e
+      console.warn(`[yt-import] @threespeak image upload failed (${e.message}), using ${IMAGE_SERVER_URL}`)
+      const form = new FormData()
+      form.append('image', new Blob([buf], { type }), `thumbnail.${(type.split('/')[1] || 'jpg').replace('jpeg', 'jpg')}`)
+      const r = await fetch(`${IMAGE_SERVER_URL}/upload`, {
+        method: 'POST', headers: { Authorization: `Bearer ${IMAGE_SERVER_KEY}` }, body: form, signal: AbortSignal.timeout(30000),
+      })
+      const d = await r.json().catch(() => ({}))
+      if (!r.ok || !d.success || !d.url) throw new Error(`3Speak image server: ${d.error?.name || d.error || `HTTP ${r.status}`}`)
+      return d.url
+    }
+  }
+
   if (uploadImage && hasPostingGrant) {
     require('./import-batch.cjs').mountImportBatch(app, {
       auth, mw, resolveSource,
@@ -1501,14 +1663,17 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
       startDownload: startBatchDownload,
       getJob: (id) => jobs.get(id),
       removeJob,
-      canStartDownload: () => !ytdlpUpdating && runningCount() < MAX_CONCURRENT,
+      // A proxied source waits (stays queued) while the proxy traffic is paused.
+      canStartDownload: (src) => !ytdlpUpdating && runningCount() < MAX_CONCURRENT && !(src && needsProxy(src) && traffic.paused),
       startsToday: (user) => (userStarts.get(user) || []).filter((t) => Date.now() - t < 24 * 3600 * 1000).length,
       maxPerDay: MAX_JOBS_PER_DAY,
       isPremium,
       recordImport,
-      uploadImage,
+      knownImports,
+      uploadImage: uploadImageWithFallback,
       hasPostingGrant,
       alert: alertDiscord,
+      coverFor,
     })
   }
 }

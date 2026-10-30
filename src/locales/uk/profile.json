@@ -309,6 +309,7 @@
   "supports": {
     "incomingTitle": "@{{user}} загалом надіслав(ла) @{{profile}} {{amount}} чайових",
     "outgoingTitle": "@{{profile}} загалом надіслав(ла) @{{user}} {{amount}} чайових",
+    "incomingTitleLightning": "Анонімні Lightning-чайові для @{{profile}}: загалом {{amount}}",
     "received": "Отримано",
     "given": "Надіслано",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -318,6 +319,7 @@
     "emptyGivenOwn": "Ви ще не залишали чайових під жодним відео. Чайові, надіслані з відео, з'являться тут.",
     "untitled": "Без назви",
     "paidInHive": "надіслано як {{amount}} HIVE",
+    "lightningSupporter": "Підтримка через Lightning",
     "hideTip": "Приховати чайові",
     "unhideTip": "Показати чайові",
     "hiddenLabel": "Приховано у вашому профілі",

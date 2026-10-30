@@ -292,6 +292,7 @@
   "supports": {
     "incomingTitle": "@{{user}} a donné {{amount}} de pourboires à @{{profile}} au total",
     "outgoingTitle": "@{{profile}} a donné {{amount}} de pourboires à @{{user}} au total",
+    "incomingTitleLightning": "Pourboires Lightning anonymes à @{{profile}} : {{amount}} au total",
     "received": "Reçus",
     "given": "Donnés",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -301,6 +302,7 @@
     "emptyGivenOwn": "Tu n'as encore donné aucun pourboire sur une vidéo. Ceux que tu envoies depuis une vidéo apparaissent ici.",
     "untitled": "Sans titre",
     "paidInHive": "envoyé en {{amount}} HIVE",
+    "lightningSupporter": "Soutien Lightning",
     "hideTip": "Masquer le pourboire",
     "unhideTip": "Afficher le pourboire",
     "hiddenLabel": "Masqué sur ton profil",

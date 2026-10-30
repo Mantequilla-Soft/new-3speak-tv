@@ -275,6 +275,7 @@
   "supports": {
     "incomingTitle": "@{{user}} @{{profile}}-কে মোট {{amount}} টিপ দিয়েছেন",
     "outgoingTitle": "@{{profile}} @{{user}}-কে মোট {{amount}} টিপ দিয়েছেন",
+    "incomingTitleLightning": "@{{profile}}-কে বেনামী Lightning টিপ: মোট {{amount}}",
     "received": "পাওয়া",
     "given": "দেওয়া",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -284,6 +285,7 @@
     "emptyGivenOwn": "আপনি এখনো কোনো ভিডিওতে টিপ দেননি। ভিডিও থেকে পাঠানো টিপ এখানে দেখা যাবে।",
     "untitled": "শিরোনামহীন",
     "paidInHive": "{{amount}} HIVE হিসেবে পাঠানো",
+    "lightningSupporter": "Lightning সমর্থক",
     "hideTip": "টিপ লুকান",
     "unhideTip": "টিপ দেখান",
     "hiddenLabel": "আপনার প্রোফাইল থেকে লুকানো",

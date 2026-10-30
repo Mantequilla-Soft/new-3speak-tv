@@ -275,6 +275,7 @@
   "supports": {
     "incomingTitle": "@{{user}} ने @{{profile}} को कुल {{amount}} टिप दिए",
     "outgoingTitle": "@{{profile}} ने @{{user}} को कुल {{amount}} टिप दिए",
+    "incomingTitleLightning": "@{{profile}} को गुमनाम Lightning टिप: कुल {{amount}}",
     "received": "मिली",
     "given": "दी",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -284,6 +285,7 @@
     "emptyGivenOwn": "आपने अभी तक किसी वीडियो पर टिप नहीं दी है। किसी वीडियो से भेजी गई टिप यहाँ दिखेगी।",
     "untitled": "बिना शीर्षक",
     "paidInHive": "{{amount}} HIVE के रूप में भेजा गया",
+    "lightningSupporter": "Lightning समर्थक",
     "hideTip": "टिप छिपाएँ",
     "unhideTip": "टिप दिखाएँ",
     "hiddenLabel": "आपकी प्रोफ़ाइल से छिपी",

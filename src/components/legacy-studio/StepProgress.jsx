@@ -14,13 +14,15 @@ import { useTranslation } from "react-i18next";
 // `short`: shorts have no Timeline step (chapters and link toasters are for
 // long-form videos), so they keep the original four.
 //
+// `labels`: another flow's own steps (the batch import dialog), in order.
+//
 // EmbedUploadProgressBar measures `.step-progress__container` /
 // `.step-progress__step` to match its width to the row; keep those classes.
-export const StepProgress = ({ step, short = false }) => {
+export const StepProgress = ({ step, short = false, labels = null }) => {
   const { t } = useTranslation();
-  const steps = short
+  const steps = labels || (short
     ? [t("upload.steps.selectVideo"), t("upload.steps.chooseThumbnail"), t("upload.steps.addDetails"), t("upload.steps.previewUpload")]
-    : [t("upload.steps.selectVideo"), t("upload.steps.chooseThumbnail"), t("upload.steps.addDetails"), t("upload.steps.timeline"), t("upload.steps.previewUpload")];
+    : [t("upload.steps.selectVideo"), t("upload.steps.chooseThumbnail"), t("upload.steps.addDetails"), t("upload.steps.timeline"), t("upload.steps.previewUpload")]);
   const current = step;
   const stateOf = (n) => (n < current ? "done" : n === current ? "active" : "todo");
 

@@ -159,7 +159,7 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
     return () => { cancelled = true; };
   }, [author, permlink, currentUser, incubationHandle]);
 
-  // `action` is 'vote' or 'tip' (a key suffix, not display text).
+  // `action` is a key suffix ('vote'), not display text.
   const requireLogin = useCallback((action) => {
     if (authenticated && currentUser && isLoggedIn()) return true;
     toast.error(t(`posts.view.loginTo.${action}`));
@@ -226,10 +226,10 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
     }
   }, []);
 
+  // Signed out, the tip window opens on Lightning, which needs no Hive account.
   const handleTip = useCallback(() => {
-    if (!requireLogin('tip')) return;
     setIsTipModalOpen(true);
-  }, [requireLogin]);
+  }, []);
 
   // Fetch thumbnail from audio backend for OpenPod posts
   useEffect(() => {

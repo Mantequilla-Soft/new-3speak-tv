@@ -1,0 +1,20 @@
+// New outside-podcast episodes in the bell (PodcastNotifications.jsx). Row layout,
+// unseen tint and dot come from StoryNotifications.scss; only the square cover art
+// (where a story has its ring) and the episode title line are new.
+.podcast-notif-cover {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--bg-tertiary);
+}
+
+.podcast-notif-title {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

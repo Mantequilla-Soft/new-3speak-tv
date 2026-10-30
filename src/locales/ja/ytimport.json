@@ -29,7 +29,8 @@
     "generic": "インポートに失敗しました。",
     "blocked": "現在、YouTubeが当サーバーによるこの動画のダウンロードを許可しませんでした。",
     "notVideo": "そのファイルは動画ではありません。",
-    "tooLongForShort": "この動画は{{minutes}}分より長いため、ショートには長すぎます。代わりに通常の動画としてインポートしてください。"
+    "tooLongForShort": "この動画は{{minutes}}分より長いため、ショートには長すぎます。代わりに通常の動画としてインポートしてください。",
+    "proxyPaused": "YouTubeからのインポートは一時停止中です。しばらくしてからもう一度お試しください。"
   },
   "entry": "動画をインポート",
   "types": {
@@ -45,8 +46,14 @@
   "limits": "インポートできるのは、長さ{{minutes}}分まで、解像度{{height}}pまでの動画です。",
   "tooLong": "{{minutes}}分超",
   "onSite": "3Speakに投稿済み",
+  "inBatch": "一括インポートで待機中",
   "viewPost": "投稿を見る",
-  "premiumHint": "3Speak Premiumなら、{{height}}pまでインポートできます。",
+  "premiumHint": "3Speak Proなら、{{height}}pまでインポートできます。",
+  "getPro": "3Speak Proを利用する",
+  "refresh": "リストを更新",
+  "refreshing": "更新中…",
+  "refreshHint": "連携したすべてのアカウントで新しい動画や公開されたばかりの動画を探します",
+  "refreshTooSoon": "リストは更新されたばかりです。数分後にもう一度更新できます。",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +99,14 @@
     "clear": "クリア",
     "importSelected": "選択をインポート ({{count}})",
     "busy": "前回の一括インポートがまだ処理中です",
-    "formTitle": "{{count}} 本の動画をインポート",
-    "formIntro": "タイトル・説明・タグ・サムネイルは各動画から取得します。以下の設定はすべての動画に適用されます。",
-    "community": "コミュニティ",
-    "rewards": "報酬",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "報酬を辞退"
+    "steps": {
+      "content": "コンテンツ",
+      "settings": "設定"
     },
-    "beneficiaries": "追加の受益者",
-    "accountPlaceholder": "Hive アカウント",
-    "remove": "削除",
-    "addBeneficiary": "受益者を追加",
-    "lockedNote": "3Speak は通常の取り分を加えます：@threespeakfund に 10%、エンコード費用として 1%（3Speak プレミアム会員は対象外）。",
-    "nsfw": "NSFW（成人向けコンテンツ）として設定",
-    "ads": "これらの動画に広告を表示",
+    "formTitle": "{{count}} 本の動画をインポート",
+    "contentIntro": "タイトル・説明・タグ・サムネイルは各動画から取得します。",
+    "settingsIntro": "以下の設定は選んだすべての動画に適用されます。",
+    "shortsNote": "ショートは常にショートフィードに投稿されます。コミュニティ、ブログ、広告の設定は通常の動画にのみ適用されます。",
     "spacing": "各動画はサーバーでインポートされ、{{minutes}} 分間隔で1本ずつ公開されます。最初の動画は準備完了の数分後に公開されます。このページは閉じても大丈夫です。",
     "grantNeeded": "あなたが不在の間に公開するには、3Speak にあなたのアカウントで投稿する許可が必要です。許可は Hive ウォレットでいつでも取り消せます。",
     "grantButton": "3Speak に代理公開を許可する",
@@ -116,6 +115,7 @@
     "start": "インポートを開始",
     "starting": "開始しています…",
     "statusTitle": "一括インポートの状況",
+    "canLeave": "このページは閉じても大丈夫です。動画はあなたがいない間もサーバー上でインポート・公開されます。",
     "stop": "残りを停止",
     "short": "ショート",
     "status": {

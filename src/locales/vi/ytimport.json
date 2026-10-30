@@ -29,7 +29,8 @@
     "generic": "Nhập thất bại.",
     "blocked": "YouTube hiện không cho máy chủ của chúng tôi tải video này.",
     "notVideo": "Tệp đó không phải là video.",
-    "tooLongForShort": "Video này dài hơn {{minutes}} phút, quá dài cho một Short. Hãy nhập nó dưới dạng video thường."
+    "tooLongForShort": "Video này dài hơn {{minutes}} phút, quá dài cho một Short. Hãy nhập nó dưới dạng video thường.",
+    "proxyPaused": "Tính năng nhập từ YouTube đang tạm dừng. Vui lòng thử lại sau."
   },
   "entry": "Nhập video",
   "types": {
@@ -45,8 +46,14 @@
   "limits": "Chỉ có thể nhập video dài tối đa {{minutes}} phút, với độ phân giải tối đa {{height}}p.",
   "tooLong": "Quá {{minutes}} phút",
   "onSite": "Đã có trên 3Speak",
+  "inBatch": "Đang chờ trong lô nhập",
   "viewPost": "Xem bài đăng",
-  "premiumHint": "Với 3Speak Premium, bạn có thể nhập video lên đến {{height}}p.",
+  "premiumHint": "Với 3Speak Pro, bạn có thể nhập video lên đến {{height}}p.",
+  "getPro": "Nâng cấp lên 3Speak Pro",
+  "refresh": "Làm mới danh sách",
+  "refreshing": "Đang làm mới…",
+  "refreshHint": "Tìm video mới và video vừa được công khai trên mọi tài khoản đã liên kết",
+  "refreshTooSoon": "Danh sách vừa được làm mới. Bạn có thể làm mới lại sau vài phút.",
   "platforms": {
     "youtube": "YouTube",
     "tiktok": "TikTok",
@@ -92,22 +99,14 @@
     "clear": "Xóa chọn",
     "importSelected": "Nhập mục đã chọn ({{count}})",
     "busy": "Lô nhập trước của bạn vẫn đang chạy",
-    "formTitle": "Nhập {{count}} video",
-    "formIntro": "Tiêu đề, mô tả, thẻ và ảnh thu nhỏ được lấy từ từng video. Các cài đặt này áp dụng cho tất cả.",
-    "community": "Cộng đồng",
-    "rewards": "Phần thưởng",
-    "payout": {
-      "default": "50% HBD / 50% HP",
-      "powerup": "100% Hive Power",
-      "decline": "Từ chối phần thưởng"
+    "steps": {
+      "content": "Nội dung",
+      "settings": "Cài đặt"
     },
-    "beneficiaries": "Người thụ hưởng thêm",
-    "accountPlaceholder": "Tài khoản Hive",
-    "remove": "Xóa",
-    "addBeneficiary": "Thêm người thụ hưởng",
-    "lockedNote": "3Speak cộng thêm phần thường lệ: 10% cho @threespeakfund và 1% cho mã hóa (thành viên 3Speak Premium được miễn).",
-    "nsfw": "Đánh dấu NSFW (nội dung người lớn)",
-    "ads": "Hiện quảng cáo trên các video này",
+    "formTitle": "Nhập {{count}} video",
+    "contentIntro": "Tiêu đề, mô tả, thẻ và ảnh thu nhỏ được lấy từ từng video.",
+    "settingsIntro": "Các cài đặt này áp dụng cho tất cả video bạn đã chọn.",
+    "shortsNote": "Shorts luôn được đưa vào bảng tin Shorts: cài đặt cộng đồng, blog và quảng cáo chỉ áp dụng cho video thường.",
     "spacing": "Mỗi video được nhập trên máy chủ của chúng tôi rồi đăng riêng, cách nhau {{minutes}} phút. Video đầu tiên lên sóng vài phút sau khi sẵn sàng. Bạn có thể đóng trang này.",
     "grantNeeded": "Để đăng khi bạn vắng mặt, 3Speak cần quyền đăng bài thay cho tài khoản của bạn. Bạn có thể gỡ quyền này bất cứ lúc nào trong ví Hive.",
     "grantButton": "Cho phép 3Speak đăng thay tôi",
@@ -116,6 +115,7 @@
     "start": "Bắt đầu nhập",
     "starting": "Đang bắt đầu…",
     "statusTitle": "Lô nhập của bạn",
+    "canLeave": "Bạn có thể đóng trang này. Video của bạn được nhập và đăng trên máy chủ của chúng tôi, kể cả khi bạn không ở đây.",
     "stop": "Dừng phần còn lại",
     "short": "Short",
     "status": {

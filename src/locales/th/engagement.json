@@ -10,6 +10,8 @@
       "transferFailed": "โอนไม่สำเร็จ: {{message}}"
     },
     "heading": "ส่งทิปให้ @{{recipient}}",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "จำนวน: ",
     "amountPlaceholder": "เช่น 1.000",
     "currencyLabel": "สกุลเงิน:",
@@ -17,7 +19,42 @@
     "memoLabel": "บันทึกช่วยจำ (ไม่บังคับ):",
     "memoPlaceholder": "เช่น ขอบคุณสำหรับคอนเทนต์ดีๆ!",
     "memoLinkNote": "ลิงก์นี้จะถูกเพิ่มในบันทึก: {{link}}",
-    "send": "ส่งทิป"
+    "send": "ส่งทิป",
+    "lightning": {
+      "amountLabel": "จำนวน (sats):",
+      "messageLabel": "ข้อความ (ไม่บังคับ):",
+      "note": "ส่งถึง @{{recipient}} ผ่าน v4v.app ไม่ต้องมีบัญชี Hive: ใช้กระเป๋า Lightning ใดก็ได้ ทิปที่ครอบคลุมค่าธรรมเนียมแปลงของ v4v.app (ประมาณ 60 sats) จะได้รับเป็น HIVE ส่วนทิปที่น้อยกว่าจะอยู่เป็น sats ในบัญชี v4v.app ของผู้รับ",
+      "send": "จ่ายด้วย Lightning",
+      "showQr": "แสดงคิวอาร์โค้ด",
+      "payExtension": "จ่ายผ่านส่วนขยาย",
+      "scan": "สแกนด้วยกระเป๋า Lightning ใดก็ได้เพื่อส่ง {{sats}} sats ให้ @{{recipient}}",
+      "openWallet": "เปิดในกระเป๋า",
+      "copy": "คัดลอกใบแจ้งหนี้",
+      "copied": "คัดลอกใบแจ้งหนี้แล้ว",
+      "waiting": "กำลังรอการชำระเงิน…",
+      "back": "ย้อนกลับ",
+      "done": "เสร็จ",
+      "errors": {
+        "amount": "กรอกจำนวน sats เป็นจำนวนเต็ม",
+        "tooMuch": "มากกว่าที่ที่อยู่นี้รับได้ (สูงสุด {{max}} sats)",
+        "noAccount": "ไม่มีบัญชี Hive นี้",
+        "invoiceFailed": "สร้างใบแจ้งหนี้ Lightning ไม่ได้ โปรดลองอีกครั้ง",
+        "copyFailed": "คัดลอกใบแจ้งหนี้ไม่ได้"
+      }
+    },
+    "wallet": {
+      "usernameLabel": "ชื่อผู้ใช้ Hive ของคุณ:",
+      "usernamePlaceholder": "เช่น alice",
+      "next": "ถัดไป",
+      "signWith": "ลงนาม {{amount}} {{currency}} จาก @{{user}} ถึง @{{recipient}} ด้วย:",
+      "noExtension": "ไม่พบส่วนขยายกระเป๋าในเบราว์เซอร์นี้ HiveSigner ใช้ได้โดยไม่ต้องมีส่วนขยาย",
+      "waitingHiveSigner": "ลงนามให้เสร็จในหน้าต่าง HiveSigner หน้าต่างนี้จะยืนยันทิปเมื่อขึ้นบน Hive แล้ว",
+      "errors": {
+        "noUser": "กรอกชื่อผู้ใช้ Hive ของคุณ",
+        "self": "คุณให้ทิปตัวเองไม่ได้",
+        "walletFailed": "กระเป๋าไม่ได้ส่งทิป: {{message}}"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "โปรดเข้าสู่ระบบเพื่อปรับแต่งฟีดของคุณ",

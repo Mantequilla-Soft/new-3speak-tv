@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaYoutube, FaTiktok, FaInstagram, FaFileImport, FaCheck, FaPlayCircle } from "react-icons/fa";
+import { FaYoutube, FaTiktok, FaInstagram, FaFileImport, FaCheck, FaPlayCircle, FaCrown, FaRegClock, FaSyncAlt } from "react-icons/fa";
 import { SiRumble } from "react-icons/si";
 import { TailChase } from "ldrs/react";
 import "ldrs/react/TailChase.css";
 import { useAppStore } from "../lib/store";
 import { toastIn } from "../utils/toast";
 import { BatchForm, BatchStatus } from "./ImportBatch";
-import { SHORTS_MAX_DURATION_SEC } from "../utils/config";
+import { SHORTS_MAX_DURATION_SEC, ENABLE_SUBS } from "../utils/config";
 import {
   IMPORT_MODE_PLATFORMS, getImportStatus, listChannelVideos, listTikTokVideos, listInstagramVideos, listPlatformVideos, resolveImportUrl, getImportBatches, startImportJob, getImportJob, cancelImportJob,
-  downloadImportFile, fetchThumbnailDataUrl, handOffToStudio, youtubeStudioUrl, youtubeWatchUrl,
+  downloadImportFile, fetchThumbnailDataUrl, handOffToStudio, youtubeStudioUrl, youtubeWatchUrl, fmtDuration, refreshImportLists,
 } from "../lib/youtubeImport";
 import "./YoutubeImportPage.scss";
 
@@ -39,13 +39,6 @@ const emptyLinkList = { items: [], loading: false, loaded: false, error: '', pag
 const emptyGroups = () => Object.fromEntries(
   TYPES.map((type) => [type, { items: [], next: null, total: null, loaded: false, loading: false, error: '' }]),
 );
-
-function fmtDuration(s) {
-  if (!s) return '';
-  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
-  const mm = h ? String(m).padStart(2, '0') : String(m);
-  return `${h ? `${h}:` : ''}${mm}:${String(sec).padStart(2, '0')}`;
-}
 
 /**
  * ▶️ Import a video from the creator's own (verified) YouTube channel.
@@ -133,6 +126,21 @@ export default function YoutubeImportPage() {
     const iv = batchPending ? setInterval(load, batchRunning ? 5000 : 60000) : null;
     return () => { alive = false; if (iv) clearInterval(iv); };
   }, [authenticated, user, batchRunning, batchPending]);
+  // Already on 3Speak (source id → permlink) and still waiting in a batch: the
+  // server's view (Hive + batches), plus the batches on this page, which change
+  // sooner than a status reload.
+  const { importedMap, inBatch } = useMemo(() => {
+    const imported = { ...(status?.imported || {}) };
+    const waiting = { ...(status?.inBatch || {}) };
+    for (const b of batchInfo?.batches || []) {
+      for (const it of b.items) {
+        if (it.status === 'posted' && it.permlink) { imported[it.sourceId] = it.permlink; delete waiting[it.sourceId]; }
+        else if (['queued', 'downloading', 'uploading', 'scheduling', 'scheduled'].includes(it.status)) waiting[it.sourceId] = it;
+      }
+    }
+    return { importedMap: imported, inBatch: waiting };
+  }, [status, batchInfo]);
+
   const showBatch = (b) => setBatchInfo((info) => ({ ...(info || {}), batches: [b, ...((info?.batches || []).filter((x) => x.id !== b.id))] }));
   const batchMax = batchInfo?.max || 5;
   const togglePick = (v) => setPicked((list) => (list.some((x) => x.id === v.id)
@@ -163,11 +171,16 @@ export default function YoutubeImportPage() {
     }
   }, [channel]);
 
+  // "Refresh lists" bumps this to load every list again.
+  const [listsKey, setListsKey] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshNote, setRefreshNote] = useState('');
+
   // The first page of every shown type at once, so each tab shows its count right away.
   useEffect(() => {
     setGroups(emptyGroups());
     if (channel) types.forEach((type) => loadGroup(type));
-  }, [channel, loadGroup, types]);
+  }, [channel, loadGroup, types, listsKey]);
 
   // Land on the first type that has anything, in tab order.
   const allLoaded = types.every((type) => groups[type].loaded);
@@ -196,6 +209,32 @@ export default function YoutubeImportPage() {
       .then((d) => set({ items: d.videos || [], loading: false, loaded: true, error: '', page: 0, hasMore: !!d.hasMore }))
       .catch((e) => set({ ...emptyLinkList, loaded: true, error: e.message }));
   }, [platform, hasLinkAccount, ttList.loaded, ttList.loading]);
+  // All linked channels on every platform are read again: new and newly public
+  // videos show up. YouTube's tabs reload now and once more when the server has
+  // gone through the whole channel (an old video keeps its old place in it); the
+  // other platforms reload when their tab is shown.
+  const refreshLists = async () => {
+    setRefreshing(true);
+    setRefreshNote('');
+    try {
+      await refreshImportLists();
+      setLinkLists(Object.fromEntries(Object.keys(LINK_PLATFORMS).map((k) => [k, emptyLinkList])));
+      setListsKey((n) => n + 1);
+      if (channel) {
+        for (let i = 0; i < 20; i++) {
+          await new Promise((r) => setTimeout(r, 3000));
+          const d = await listChannelVideos({ channel, type: types[0] }).catch(() => null);
+          if (!d || d.total != null) break; // total stays null while the channel is being read
+        }
+        setListsKey((n) => n + 1);
+      }
+    } catch (e) {
+      setRefreshNote(e.code === 'refresh_too_soon' ? t('ytimport.refreshTooSoon') : e.message);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const loadMoreLink = () => {
     const p = platform;
     const cur = linkLists[p];
@@ -409,11 +448,14 @@ export default function YoutubeImportPage() {
           <a href={youtubeWatchUrl(v.id)} target="_blank" rel="noopener noreferrer">{t('ytimport.openOnYoutube')}</a>
         )}
       </p>
-      {status?.imported?.[v.id] && (
+      {importedMap[v.id] && (
         <p className="yt-import__on-site">
           <FaCheck /> {t('ytimport.onSite')} ·{' '}
-          <Link to={`/@${user}/${status.imported[v.id]}`}>{t('ytimport.viewPost')}</Link>
+          <Link to={`/@${user}/${importedMap[v.id]}`}>{t('ytimport.viewPost')}</Link>
         </p>
+      )}
+      {!importedMap[v.id] && inBatch[v.id] && (
+        <p className="yt-import__on-site yt-import__on-site--waiting"><FaRegClock /> {t('ytimport.inBatch')}</p>
       )}
 
       {phase === 'idle' && (
@@ -449,7 +491,9 @@ export default function YoutubeImportPage() {
       {phase === 'failed' && (
         <div className="yt-import__fallback">
           <p className="yt-import__error">
-            {failure?.code === 'bot_check' ? t('ytimport.errors.blocked') : failure?.message}
+            {failure?.code === 'bot_check' ? t('ytimport.errors.blocked')
+              : failure?.code === 'proxy_paused' ? t('ytimport.errors.proxyPaused')
+                : failure?.message}
           </p>
           <p>{t('ytimport.fallback.intro')}</p>
           {v.platform !== 'youtube' ? (
@@ -485,7 +529,10 @@ export default function YoutubeImportPage() {
   // tile opens across its row with the import controls next to the cover.
   const renderCard = (v) => {
     const blocked = blockedMinutes(v);
-    const onSite = !!status?.imported?.[v.id];
+    const onSite = !!importedMap[v.id];
+    // Never twice in a batch: these cannot be ticked (the server refuses them too).
+    const waiting = !onSite && !!inBatch[v.id];
+    const tickBlocked = onSite || waiting;
     const isSelected = selected?.id === v.id;
     const isPicked = picked.some((x) => x.id === v.id);
     // The selected copy can be fresher (details looked up after the pick).
@@ -504,7 +551,8 @@ export default function YoutubeImportPage() {
           title={blocked ? t('ytimport.tooLong', { minutes: blocked }) : undefined}
         >
           <div className="yt-import__thumb">
-            <img src={shown.thumbnail} alt="" loading="lazy" />
+            {/* A cover that cannot be loaded leaves the tile's grey, not a broken image. */}
+            <img src={shown.thumbnail} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
             {shown.duration > 0 && <span className="yt-import__dur">{fmtDuration(shown.duration)}</span>}
             {blocked && <span className="yt-import__too-long">{t('ytimport.tooLong', { minutes: blocked })}</span>}
             {onSite && (
@@ -512,11 +560,16 @@ export default function YoutubeImportPage() {
                 <FaCheck />
               </span>
             )}
+            {waiting && (
+              <span className="yt-import__done yt-import__done--waiting" title={t('ytimport.inBatch')} aria-label={t('ytimport.inBatch')}>
+                <FaRegClock />
+              </span>
+            )}
           </div>
           <span className="yt-import__title">{shown.title}</span>
           {shown.publishedAt && <span className="yt-import__muted">{new Date(shown.publishedAt).toLocaleDateString()}</span>}
         </button>
-        {!blocked && (
+        {!blocked && !tickBlocked && (
           <button
             type="button"
             className={`yt-import__tick${isPicked ? ' is-on' : ''}`}
@@ -544,7 +597,14 @@ export default function YoutubeImportPage() {
         <p className="yt-import__limits">
           {t('ytimport.limits', { minutes: limitMinutes, height: status.limits.maxHeight })}
           {!status.premium && status.limits.premiumHeight > status.limits.maxHeight && (
-            <> {t('ytimport.premiumHint', { height: status.limits.premiumHeight })}</>
+            <>
+              {' '}{t('ytimport.premiumHint', { height: status.limits.premiumHeight })}
+              {ENABLE_SUBS && user && (
+                <Link to={`/wallet/${user}#pro`} className="yt-import__btn yt-import__btn--outline yt-import__pro">
+                  <FaCrown aria-hidden="true" /> {t('ytimport.getPro')}
+                </Link>
+              )}
+            </>
           )}
         </p>
       )}
@@ -552,22 +612,36 @@ export default function YoutubeImportPage() {
       {latestBatch && <BatchStatus batch={latestBatch} user={user} onChange={showBatch} />}
       {!status && !statusError && <div className="yt-import__center"><TailChase size="30" speed="1.75" color="red" /></div>}
 
-      {status && platformTabs.length > 1 && (
-        <div className="yt-import__platforms" role="tablist">
-          {platformTabs.map(({ key, Icon }) => (
-            <button
-              type="button"
-              role="tab"
-              key={key}
-              aria-selected={platform === key}
-              className={`yt-import__platform${platform === key ? ' yt-import__platform--active' : ''}`}
-              onClick={() => switchPlatform(key)}
-            >
-              <Icon /> {t(`ytimport.platforms.${key}`)}
-            </button>
-          ))}
+      {status && (
+        <div className="yt-import__toolbar">
+          {platformTabs.length > 1 && (
+            <div className="yt-import__platforms" role="tablist">
+              {platformTabs.map(({ key, Icon }) => (
+                <button
+                  type="button"
+                  role="tab"
+                  key={key}
+                  aria-selected={platform === key}
+                  className={`yt-import__platform${platform === key ? ' yt-import__platform--active' : ''}`}
+                  onClick={() => switchPlatform(key)}
+                >
+                  <Icon /> {t(`ytimport.platforms.${key}`)}
+                </button>
+              ))}
+            </div>
+          )}
+          <button
+            type="button"
+            className={`yt-import__btn yt-import__btn--outline yt-import__refresh${refreshing ? ' is-busy' : ''}`}
+            onClick={refreshLists}
+            disabled={refreshing || busy}
+            title={t('ytimport.refreshHint')}
+          >
+            <FaSyncAlt aria-hidden="true" /> {refreshing ? t('ytimport.refreshing') : t('ytimport.refresh')}
+          </button>
         </div>
       )}
+      {refreshNote && <p className="yt-import__note yt-import__refresh-note">{refreshNote}</p>}
 
       {status && isLinkPlatform && (
         !hasLinkAccount ? (
@@ -621,6 +695,11 @@ export default function YoutubeImportPage() {
           )}
           </>
         )
+      )}
+
+      {/* Out of proxy traffic: the server refuses YouTube downloads until a top-up. */}
+      {status?.proxyPaused && platform === 'youtube' && (
+        <p className="yt-import__paused" role="status">{t('ytimport.errors.proxyPaused')}</p>
       )}
 
       {status && platform === 'youtube' && status.channels.length === 0 && (

@@ -10,6 +10,8 @@
       "transferFailed": "ट्रांसफ़र फ़ेल हुआ: {{message}}"
     },
     "heading": "@{{recipient}} को टिप भेजें",
+    "methodHive": "HIVE / HBD",
+    "methodLightning": "Lightning",
     "amountLabel": "राशि: ",
     "amountPlaceholder": "जैसे 1.000",
     "currencyLabel": "करेंसी:",
@@ -17,7 +19,42 @@
     "memoLabel": "मेमो (वैकल्पिक):",
     "memoPlaceholder": "जैसे इस शानदार कंटेंट के लिए धन्यवाद!",
     "memoLinkNote": "यह लिंक मेमो में जोड़ा जाएगा: {{link}}",
-    "send": "टिप भेजें"
+    "send": "टिप भेजें",
+    "lightning": {
+      "amountLabel": "राशि (sats):",
+      "messageLabel": "संदेश (वैकल्पिक):",
+      "note": "v4v.app के ज़रिए @{{recipient}} तक जाता है, Hive अकाउंट की ज़रूरत नहीं: कोई भी Lightning वॉलेट चलेगा। जो टिप v4v.app का कन्वर्ज़न शुल्क (लगभग 60 sats) पूरा करते हैं वे HIVE के रूप में पहुँचते हैं, छोटे टिप उनके v4v.app अकाउंट में sats के रूप में रहते हैं।",
+      "send": "Lightning से भुगतान करें",
+      "showQr": "QR कोड दिखाएँ",
+      "payExtension": "एक्सटेंशन से भुगतान करें",
+      "scan": "@{{recipient}} को {{sats}} sats भेजने के लिए किसी भी Lightning वॉलेट से स्कैन करें।",
+      "openWallet": "वॉलेट में खोलें",
+      "copy": "इनवॉइस कॉपी करें",
+      "copied": "इनवॉइस कॉपी हो गया",
+      "waiting": "भुगतान की प्रतीक्षा…",
+      "back": "वापस",
+      "done": "हो गया",
+      "errors": {
+        "amount": "sats की एक पूर्ण संख्या दर्ज करें",
+        "tooMuch": "यह इस पते की सीमा से ज़्यादा है (अधिकतम {{max}} sats)",
+        "noAccount": "यह Hive अकाउंट मौजूद नहीं है",
+        "invoiceFailed": "Lightning इनवॉइस नहीं बन सका। कृपया फिर से कोशिश करें।",
+        "copyFailed": "इनवॉइस कॉपी नहीं हो सका"
+      }
+    },
+    "wallet": {
+      "usernameLabel": "आपका Hive यूज़रनेम:",
+      "usernamePlaceholder": "जैसे alice",
+      "next": "आगे",
+      "signWith": "@{{user}} से @{{recipient}} को {{amount}} {{currency}} इसके साथ साइन करें:",
+      "noExtension": "इस ब्राउज़र में कोई वॉलेट एक्सटेंशन नहीं मिला। HiveSigner बिना एक्सटेंशन के चलता है।",
+      "waitingHiveSigner": "HiveSigner विंडो में साइन करना पूरा करें। टिप Hive पर पहुँचते ही यह विंडो पुष्टि करेगी।",
+      "errors": {
+        "noUser": "अपना Hive यूज़रनेम दर्ज करें",
+        "self": "आप खुद को टिप नहीं दे सकते",
+        "walletFailed": "वॉलेट ने टिप नहीं भेजा: {{message}}"
+      }
+    }
   },
   "cardMenu": {
     "loginToPersonalize": "अपनी फ़ीड को पर्सनलाइज़ करने के लिए कृपया लॉग इन करें",

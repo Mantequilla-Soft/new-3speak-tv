@@ -292,6 +292,7 @@
   "supports": {
     "incomingTitle": "@{{user}} dio a @{{profile}} {{amount}} en propinas en total",
     "outgoingTitle": "@{{profile}} dio a @{{user}} {{amount}} en propinas en total",
+    "incomingTitleLightning": "Propinas Lightning anónimas para @{{profile}}: {{amount}} en total",
     "received": "Recibidas",
     "given": "Dadas",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -301,6 +302,7 @@
     "emptyGivenOwn": "Aún no has dado propinas en ningún video. Las propinas que envíes desde un video aparecen aquí.",
     "untitled": "Sin título",
     "paidInHive": "enviado como {{amount}} HIVE",
+    "lightningSupporter": "Seguidor Lightning",
     "hideTip": "Ocultar propina",
     "unhideTip": "Mostrar propina",
     "hiddenLabel": "Oculta en tu perfil",

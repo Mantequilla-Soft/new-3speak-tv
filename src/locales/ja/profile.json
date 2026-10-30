@@ -258,6 +258,7 @@
   "supports": {
     "incomingTitle": "@{{user}} さんが @{{profile}} さんに合計 {{amount}} のチップを送りました",
     "outgoingTitle": "@{{profile}} さんが @{{user}} さんに合計 {{amount}} のチップを送りました",
+    "incomingTitleLightning": "@{{profile}} さんへの匿名の Lightning 投げ銭: 合計 {{amount}}",
     "received": "受け取り",
     "given": "贈った",
     "subTabTotal": "{{label}} · {{amount}}",
@@ -267,6 +268,7 @@
     "emptyGivenOwn": "まだ動画にチップを送っていません。動画から送ったチップがここに表示されます。",
     "untitled": "無題",
     "paidInHive": "{{amount}} HIVEで送信",
+    "lightningSupporter": "Lightning サポーター",
     "hideTip": "チップを非表示",
     "unhideTip": "チップを再表示",
     "hiddenLabel": "プロフィールで非表示",
