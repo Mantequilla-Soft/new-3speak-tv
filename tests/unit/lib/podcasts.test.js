@@ -111,6 +111,7 @@ describe('audioPlayQueued', async () => {
   const { createAudioPlayerSlice } = await import('../../../src/lib/slices/createAudioPlayerSlice.js')
   const makeStore = () => {
     sessionStorage.clear()
+    localStorage.clear()
     let state
     const set = (p) => { state = { ...state, ...(typeof p === 'function' ? p(state) : p) } }
     const get = () => state

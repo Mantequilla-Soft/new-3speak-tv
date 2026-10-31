@@ -23,6 +23,7 @@ import {
 } from '../hive-api/aioha';
 import { CHECKER_URL } from '../utils/config';
 import { t } from '../i18n';
+import { sessionVouch, lastVouchUser } from './podcastProgress';
 
 const API = `${CHECKER_URL}/podcasts`;
 const THREESPEAK_API = import.meta.env.VITE_THREESPEAK_API || '/api';
@@ -111,11 +112,75 @@ async function getJson(path) {
   return data;
 }
 
-/** Follow one or more feeds. Resolves to the per-URL results [{ url, ok, feed_id, already, code, owner }]. */
-export async function followFeeds(user, urls, titles = []) {
-  const clean = urls.map((u) => String(u).trim()).filter(Boolean);
+/**
+ * A read that may include a private feed (a show, its episodes, /latest,
+ * /subscriptions): signed in, it carries the session vouch, so the checker can
+ * see the reader follows that feed. A vouch that can't be had never stops the
+ * read; private feeds are then simply left out.
+ */
+async function readJson(path, user) {
+  const qs = await vouchQuery(user);
+  return getJson(qs ? `${path}${path.includes('?') ? '&' : '?'}${qs}` : path);
+}
+
+/**
+ * `vu=..&vts=..&vsig=..` for a checker read of a private feed (the session
+ * vouch of lib/podcastProgress.js), or '' signed out or when there is none.
+ * Without `user`, the listener the last vouch was for.
+ */
+export async function vouchQuery(user = lastVouchUser()) {
+  if (!user) return '';
+  const v = await sessionVouch(user);
+  return v ? String(new URLSearchParams({ vu: user, vts: String(v.timestamp), vsig: v.signature })) : '';
+}
+
+/**
+ * Where a private feed's episode plays from: its own address may sit behind the
+ * feed's login, so the checker streams it (/episode/:id/download, with Range
+ * for seeking) once it knows you follow the feed. Null when the session can't
+ * be vouched for. The player calls this for tracks with `private: true`.
+ */
+export async function privateAudioUrl(episodeId, user = lastVouchUser()) {
+  const qs = await vouchQuery(user);
+  return qs ? `${API}/episode/${encodeURIComponent(episodeId)}/download?${qs}` : null;
+}
+
+/** An episode's chapters, read with the vouch (a private feed's are not public). */
+export async function fetchPrivateChapters(episodeId, user) {
+  try {
+    const data = await readJson(`episode/${encodeURIComponent(episodeId)}/chapters`, user);
+    return Array.isArray(data?.chapters) ? data.chapters : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * A private feed's link with its login in it (https://user:pass@host/...), both
+ * parts URL-encoded; the checker fetches such a feed with Basic auth. An empty
+ * username leaves the link as it is (a feed whose link has a token in it).
+ */
+export function buildPrivateFeedUrl(url, username, password) {
+  const raw = String(url || '').trim();
+  const name = String(username || '').trim();
+  if (!name) return raw;
+  let u;
+  try { u = new URL(raw); } catch { return raw; }
+  if (!/^https?:$/.test(u.protocol)) return raw;
+  return `${u.protocol}//${encodeURIComponent(name)}:${encodeURIComponent(String(password || ''))}@${u.host}${u.pathname}${u.search}${u.hash}`;
+}
+
+/**
+ * Follow one or more feeds. Resolves to the per-URL results [{ url, ok, feed_id, already, code, owner }].
+ * `priv` marks private feeds (needs a login), aligned with `urls`.
+ */
+export async function followFeeds(user, urls, titles = [], priv = []) {
+  const rows = urls.map((u, i) => ({ url: String(u).trim(), title: titles[i], priv: !!priv[i] })).filter((r) => r.url);
+  const clean = rows.map((r) => r.url);
   const signed = await sign('subscribe', await sha256Hex(clean.join('\n')), user);
-  const data = await post('subscribe', { user, urls: clean, titles, ...signed });
+  const body = { user, urls: clean, titles: titles.length ? rows.map((r) => r.title || '') : [], ...signed };
+  if (rows.some((r) => r.priv)) body.private = rows.map((r) => r.priv);
+  const data = await post('subscribe', body);
   return data.results || [];
 }
 
@@ -170,7 +235,7 @@ export function usePodcastSubscriptions(user) {
   return useQuery({
     queryKey: ['podcasts', 'subs', user],
     enabled: !!user,
-    queryFn: async () => (await getJson(`subscriptions?user=${encodeURIComponent(user)}`)).subscriptions || [],
+    queryFn: async () => (await readJson(`subscriptions?user=${encodeURIComponent(user)}`, user)).subscriptions || [],
     staleTime: 60 * 1000,
   });
 }
@@ -184,7 +249,7 @@ export function usePodcastLatest(user) {
     queryFn: async ({ pageParam }) => {
       const qs = new URLSearchParams({ user, limit: '30' });
       if (pageParam) qs.set('before', pageParam);
-      return getJson(`latest?${qs}`);
+      return readJson(`latest?${qs}`, user);
     },
     getNextPageParam: (last) => (last.episodes?.length === 30 ? last.episodes[29].published_at : undefined),
     staleTime: 60 * 1000,
@@ -193,12 +258,18 @@ export function usePodcastLatest(user) {
 
 const rangeQuery = (since, until) => `${since ? `&since=${encodeURIComponent(since)}` : ''}${until ? `&until=${encodeURIComponent(until)}` : ''}`;
 
-/** A show and its newest episodes; `since` / `until` (ISO dates) are the show page's date filter. */
-export function usePodcastFeed(feedId, since = '', until = '') {
+const searchQuery = (q) => (q ? `&q=${encodeURIComponent(q)}` : '');
+
+/**
+ * A show and its newest episodes; `since` / `until` (ISO dates) are the show
+ * page's date filter, `q` its episode search. `user` (signed in) can read a
+ * private feed they follow.
+ */
+export function usePodcastFeed(feedId, since = '', until = '', q = '', user = null) {
   return useQuery({
-    queryKey: ['podcasts', 'feed', feedId, since, until],
+    queryKey: ['podcasts', 'feed', feedId, since, until, q, user || ''],
     enabled: !!feedId,
-    queryFn: () => getJson(`feed/${feedId}?limit=60${rangeQuery(since, until)}`),
+    queryFn: () => readJson(`feed/${feedId}?limit=60${rangeQuery(since, until)}${searchQuery(q)}`, user),
     staleTime: 60 * 1000,
     placeholderData: (prev) => prev,
   });
@@ -213,26 +284,26 @@ export function usePodcastDiscover() {
   });
 }
 
-export const fetchOlderEpisodes = (feedId, offset, since = '', until = '') =>
-  getJson(`feed/${feedId}/older?offset=${offset}&limit=60${rangeQuery(since, until)}`);
-export const fetchEpisode = (episodeId) => getJson(`episode/${encodeURIComponent(episodeId)}`);
+export const fetchOlderEpisodes = (feedId, offset, since = '', until = '', q = '', user = null) =>
+  readJson(`feed/${feedId}/older?offset=${offset}&limit=60${rangeQuery(since, until)}${searchQuery(q)}`, user);
+export const fetchEpisode = (episodeId, user = null) => readJson(`episode/${encodeURIComponent(episodeId)}`, user);
 
 /** One episode and its show: { episode, feed }. */
-export function usePodcastEpisode(episodeId) {
+export function usePodcastEpisode(episodeId, user = null) {
   return useQuery({
-    queryKey: ['podcasts', 'episode', episodeId],
+    queryKey: ['podcasts', 'episode', episodeId, user || ''],
     enabled: !!episodeId,
-    queryFn: () => fetchEpisode(episodeId),
+    queryFn: () => fetchEpisode(episodeId, user),
     staleTime: 5 * 60 * 1000,
   });
 }
 
 /** The full show notes (raw HTML from the feed; sanitise before showing). */
-export function useEpisodeNotes(episodeId) {
+export function useEpisodeNotes(episodeId, user = null) {
   return useQuery({
-    queryKey: ['podcasts', 'notes', episodeId],
+    queryKey: ['podcasts', 'notes', episodeId, user || ''],
     enabled: !!episodeId,
-    queryFn: async () => (await getJson(`episode/${encodeURIComponent(episodeId)}/notes`)).html || '',
+    queryFn: async () => (await readJson(`episode/${encodeURIComponent(episodeId)}/notes`, user)).html || '',
     staleTime: 15 * 60 * 1000,
     retry: 1,
   });
@@ -305,7 +376,7 @@ export function usePodcastNotifications(user) {
   const { data } = useQuery({
     queryKey: ['podcasts', 'notifications', user],
     enabled: !!user,
-    queryFn: () => getJson(`notifications?user=${encodeURIComponent(user)}`),
+    queryFn: () => readJson(`notifications?user=${encodeURIComponent(user)}`, user),
     staleTime: 60 * 1000,
     refetchInterval: 5 * 60 * 1000,
   });
@@ -366,7 +437,51 @@ export function episodeToTrack(ep, feed) {
     value: ep.value || feed?.value || null,
     funding: feed?.funding || [],
     feed_url: feed?.url || '',
+    // Podcasting 2.0 extras (see the checker's feed parser), only when the feed has them.
+    ...pick(ep, EPISODE_EXTRAS),
+    ...(ep.private || feed?.private ? { private: true } : {}),
   };
+}
+
+const EPISODE_EXTRAS = ['season', 'episode', 'episode_type', 'chapters', 'transcripts', 'persons', 'soundbites', 'video'];
+function pick(obj, keys) {
+  const out = {};
+  for (const k of keys) if (obj?.[k] !== undefined && obj[k] !== null) out[k] = obj[k];
+  return out;
+}
+
+/**
+ * A show's live stream (podcast:liveItem) as a track: no length, no progress,
+ * never downloaded; the player shows LIVE for it.
+ */
+export function liveToTrack(live, feed) {
+  return {
+    _id: `live:${feed?.id || ''}:${live.id}`,
+    external: true,
+    live: true,
+    src: live.url,
+    mime: live.mime || '',
+    title: live.title || feed?.title || '',
+    owner: '',
+    show: feed?.title || '',
+    show_id: feed?.id || '',
+    thumbnail_url: feed?.image || '',
+    art: feed?.art || '',
+    duration: 0,
+    summary: '',
+    link: live.link || feed?.link || '',
+    value: feed?.value || null,
+    funding: feed?.funding || [],
+    feed_url: feed?.url || '',
+    ...(feed?.private ? { private: true } : {}),
+  };
+}
+
+/** "S2 E14", "E14", "S2" or '' for an episode's numbers. */
+export function episodeNumberLabel(ep) {
+  const s = Number(ep?.season) > 0 ? `S${Number(ep.season)}` : '';
+  const e = Number(ep?.episode) > 0 ? `E${Number(ep.episode)}` : '';
+  return [s, e].filter(Boolean).join(' ');
 }
 
 export const podcastPath = (feedId) => `/audio?type=external&podcast=${feedId}`;
@@ -446,8 +561,16 @@ ${lines.join('\n')}
 `;
 }
 
+/**
+ * Saves the followed shows as an OPML file. Private feeds are left out (the
+ * checker never hands out their link, and it would carry the login); returns
+ * to how many were left out, so the page can say so.
+ */
 export function downloadOpml(subscriptions, user) {
-  const blob = new Blob([buildOpml(subscriptions, user)], { type: 'text/x-opml' });
+  const open = subscriptions.filter((s) => !s.private && s.url);
+  const left = subscriptions.length - open.length;
+  if (!open.length) return left;
+  const blob = new Blob([buildOpml(open, user)], { type: 'text/x-opml' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = '3speak-podcasts.opml';
@@ -455,4 +578,5 @@ export function downloadOpml(subscriptions, user) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  return left;
 }

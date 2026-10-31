@@ -473,7 +473,12 @@
       "none": "No episodes match these filters.",
       "custom": "Custom range",
       "from": "From",
-      "to": "To"
+      "to": "To",
+      "inbox": "New",
+      "inboxEmpty": "Nothing new. Episodes from the last week that you have not played show up here.",
+      "unplayed": "Unplayed",
+      "inProgress": "In progress",
+      "downloaded": "Downloaded"
     },
     "resume": "Resume",
     "showNotes": "Show notes",
@@ -523,6 +528,103 @@
       "discover": "Discover",
       "trends": "Trends",
       "mineEmpty": "You don't follow any podcasts yet. Find shows in Discover, or see what's popular in Trends."
+    },
+    "downloads": {
+      "title": "Downloads",
+      "download": "Download for offline listening",
+      "short": "Download",
+      "downloading": "Downloading {{pct}}%",
+      "cancel": "Cancel download",
+      "saved": "Saved offline",
+      "remove": "Remove download",
+      "removeShort": "Remove",
+      "removed": "Download removed",
+      "done": "Saved for offline listening",
+      "total": "{{size}} saved",
+      "storage": "this site uses {{used}} of {{quota}} in this browser",
+      "perBrowser": "Downloads stay in this browser, whoever is signed in.",
+      "errors": {
+        "tooLarge": "This episode is too big to save.",
+        "rateLimited": "Too many downloads right now. Please try again in a few minutes.",
+        "storage": "There is no room to save this episode in this browser.",
+        "failed": "The episode could not be downloaded. Please try again.",
+        "noSource": "This episode can not be saved."
+      }
+    },
+    "autoQueue": {
+      "label": "Auto-add new episodes to the queue",
+      "hint": "New episodes of this show go to the end of your queue when they come out",
+      "onDone": "New episodes of this show will go to your queue",
+      "offDone": "New episodes of this show no longer go to your queue",
+      "added_one": "{{count}} new episode added to your queue",
+      "added_other": "{{count}} new episodes added to your queue"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Start here",
+    "seasons": {
+      "label": "Season",
+      "all": "All seasons",
+      "season": "Season {{n}}"
+    },
+    "persons": {
+      "title": "Hosts and guests",
+      "roles": {
+        "host": "Host",
+        "guest": "Guest",
+        "cohost": "Co-host",
+        "producer": "Producer"
+      }
+    },
+    "episodeSearch": {
+      "label": "Search episodes",
+      "placeholder": "Search this show's episodes",
+      "none": "No episodes match \"{{q}}\"."
+    },
+    "live": {
+      "now": "Live now",
+      "badge": "LIVE",
+      "listen": "Listen live",
+      "upcoming": "Upcoming",
+      "startsAt": "Starts {{time}}"
+    },
+    "private": {
+      "toggle": "This is a private feed (needs a login)",
+      "username": "Username",
+      "password": "Password",
+      "hint": "The login is sent to 3Speak's podcast service so it can read the feed for you. Private feeds never show in public lists.",
+      "badge": "Private",
+      "badgeHint": "A private feed: only people who follow it with a login see it",
+      "opmlLeftOut_one": "{{count}} private feed was left out of the file.",
+      "opmlLeftOut_other": "{{count}} private feeds were left out of the file."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "play": "Play highlight",
+      "untitled": "Highlight at {{time}}"
+    },
+    "chapters": {
+      "title": "Chapters",
+      "loading": "Loading chapters…",
+      "none": "The chapters could not be loaded.",
+      "link": "Chapter link"
+    },
+    "share": {
+      "copy": "Copy link",
+      "copyAt": "Copy link at {{time}}",
+      "clip": "Copy a link to this highlight",
+      "copied": "Link copied",
+      "failed": "Could not copy the link"
+    },
+    "deepLink": {
+      "playFrom": "Play from {{time}}",
+      "playClip": "Play {{from}} to {{to}}"
+    },
+    "video": {
+      "watch": "Watch video",
+      "hide": "Hide video"
     }
   }
 }

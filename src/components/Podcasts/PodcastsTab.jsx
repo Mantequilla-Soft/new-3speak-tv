@@ -1,10 +1,10 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   MdPlayArrow, MdPause, MdAdd, MdRssFeed, MdNotificationsActive, MdNotificationsOff, MdArrowBack, MdOpenInNew,
   MdUploadFile, MdDownload, MdSearch, MdClose, MdCheck, MdPodcasts, MdTrendingUp, MdHistory, MdWhatshot, MdLink, MdExplore, MdLibraryMusic,
-  MdLeaderboard,
+  MdLeaderboard, MdLock, MdLockOpen, MdQueueMusic, MdFiberNew,
 } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
@@ -13,7 +13,7 @@ import {
   usePodcastConfig, usePodcastSubscriptions, usePodcastLatest, usePodcastFeed, usePodcastDiscover, useInvalidatePodcasts,
   followFeeds, unfollowFeed, setFeedNotify, followErrorText, fetchOlderEpisodes, searchPodcasts, searchPeople,
   usePodcastTrending, usePodcastCharts, TRENDING_CATEGORIES, CHART_COUNTRIES, feedKey,
-  episodeToTrack, parseOpml, downloadOpml,
+  episodeToTrack, parseOpml, downloadOpml, buildPrivateFeedUrl,
 } from '../../lib/podcasts';
 import PodcastTipModal from './PodcastTipModal';
 import PodcastArt from './PodcastArt';
@@ -23,6 +23,13 @@ import { getLanguage } from '../../i18n';
 import { LANGUAGES as UI_LANGUAGES } from '../../i18n/languages';
 import { canTipEpisode } from '../../lib/podcastTips';
 import { usePodcastProgress, progressOf } from '../../lib/podcastProgress';
+import { isDownloaded, useDownloads } from '../../lib/podcastDownloads';
+import {
+  matchesListenFilter, isInboxEpisode, readMineVisit, markMineVisit, seasonsOf, trailerOf,
+  readAutoQueue, setAutoQueue, markAutoQueued, pickAutoQueue, isLiveNow,
+} from '../../lib/podcastLibrary';
+import { EpisodeBadges, DownloadButton, PersonsRow, LiveBanner, PrivateBadge } from './PodcastBits';
+import DownloadsSection from './DownloadsSection';
 import './PodcastsTab.scss';
 
 // ─── Filters: date range and listening state ──────────────────────────────────
@@ -35,10 +42,13 @@ const DATE_FILTERS = [
   { days: 365, labelKey: 'audio.page.dates.thisYear' },
   { days: 'custom', labelKey: 'audio.podcasts.filters.custom' },
 ];
+// Smart filters (lib/podcastLibrary.js). "New" is the inbox on Mine only.
 const LISTEN_FILTERS = [
+  { key: 'new', labelKey: 'audio.podcasts.filters.inbox', mineOnly: true },
   { key: 'all', labelKey: 'audio.podcasts.filters.all' },
-  { key: 'new', labelKey: 'audio.podcasts.filters.notListened' },
-  { key: 'unfinished', labelKey: 'audio.podcasts.filters.notFinished' },
+  { key: 'unplayed', labelKey: 'audio.podcasts.filters.unplayed' },
+  { key: 'inProgress', labelKey: 'audio.podcasts.filters.inProgress' },
+  { key: 'downloaded', labelKey: 'audio.podcasts.filters.downloaded' },
 ];
 
 /** The cut-off date for a date filter, stable within a day so queries can cache. */
@@ -59,23 +69,22 @@ function inRange(ep, { since, until }) {
   return (!since || at >= new Date(since).getTime()) && (!until || at <= new Date(until).getTime());
 }
 
-function matchesListen(ep, listen) {
-  if (listen === 'all') return true;
-  const p = progressOf(ep.id);
-  if (listen === 'new') return !p || (!p.done && p.pos < 5);
-  return !p?.done;
-}
+const matchesListen = (ep, listen, lastVisit = 0) => matchesListenFilter(ep, listen, { progressOf, isDownloaded, lastVisit });
 
-/** Listening state on the left, date range on the right, the 3Speak audio filter look. */
-function EpisodeFilters({ days, onDays, listen, onListen, range, onRange }) {
+/**
+ * Listening state on the left, date range on the right, the 3Speak audio filter
+ * look. `inbox` (Mine) adds "New" with how many there are.
+ */
+function EpisodeFilters({ days, onDays, listen, onListen, range, onRange, inbox = null }) {
   const { t } = useTranslation();
   const today = new Date().toISOString().slice(0, 10);
   return (
     <div className="pod-filters">
       <div className="audio-type-filter pod-filter-listen" role="group" aria-label={t('audio.podcasts.filters.listenLabel')}>
-        {LISTEN_FILTERS.map((f) => (
-          <button key={f.key} type="button" className={`audio-type-chip${listen === f.key ? ' active' : ''}`} onClick={() => onListen(f.key)}>
+        {LISTEN_FILTERS.filter((f) => inbox != null || !f.mineOnly).map((f) => (
+          <button key={f.key} type="button" className={`audio-type-chip${listen === f.key ? ' active' : ''}`} aria-pressed={listen === f.key} onClick={() => onListen(f.key)}>
             {t(f.labelKey)}
+            {f.key === 'new' && inbox > 0 && <span className="pod-chip-count">{inbox}</span>}
           </button>
         ))}
       </div>
@@ -136,6 +145,7 @@ function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpisode }) {
           )}
           <button type="button" className="pod-tile-title" title={ep.title} onClick={() => onOpenEpisode?.(ep.id)}>{ep.title || t('audio.untitled')}</button>
           <div className="pod-tile-meta">
+            <EpisodeBadges ep={ep} />
             {ep.published_at && <span>{fmtDate(ep.published_at)}</span>}
             {ep.duration > 0 && <span className="pod-tile-dur">{fmtDuration(ep.duration)}</span>}
             {progress?.done && <span className="pod-tile-listened"><MdCheck size={13} /> {t('audio.podcasts.listened')}</span>}
@@ -147,20 +157,19 @@ function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpisode }) {
       {ep.summary && (
         <button type="button" className="pod-tile-summary" onClick={() => onOpenEpisode?.(ep.id)} title={t('audio.podcasts.openEpisode')}>{ep.summary}</button>
       )}
-      {(canTipEpisode(track) || ep.link) && (
-        <div className="pod-tile-actions">
-          {canTipEpisode(track) && (
-            <button type="button" className="pod-icon-btn pod-icon-btn--tip" onClick={() => setTipping(true)} title={t('audio.podcasts.tip.button')} aria-label={t('audio.podcasts.tip.button')}>
-              <BiDollar size={18} />
-            </button>
-          )}
-          {ep.link && (
-            <a className="pod-icon-btn" href={ep.link} target="_blank" rel="noopener noreferrer nofollow" title={t('audio.podcasts.episodePage')} aria-label={t('audio.podcasts.episodePage')}>
-              <MdOpenInNew size={16} />
-            </a>
-          )}
-        </div>
-      )}
+      <div className="pod-tile-actions">
+        <DownloadButton track={track} />
+        {canTipEpisode(track) && (
+          <button type="button" className="pod-icon-btn pod-icon-btn--tip" onClick={() => setTipping(true)} title={t('audio.podcasts.tip.button')} aria-label={t('audio.podcasts.tip.button')}>
+            <BiDollar size={18} />
+          </button>
+        )}
+        {ep.link && (
+          <a className="pod-icon-btn" href={ep.link} target="_blank" rel="noopener noreferrer nofollow" title={t('audio.podcasts.episodePage')} aria-label={t('audio.podcasts.episodePage')}>
+            <MdOpenInNew size={16} />
+          </a>
+        )}
+      </div>
       {started && (
         <div
           className="pod-tile-bar"
@@ -184,12 +193,14 @@ function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpisode }) {
 function ShowCard({ feed, onOpen, rank, note, fallbackArt }) {
   const { t } = useTranslation();
   return (
-    <button type="button" className={`pod-card${feed.status === 'error' ? ' pod-card--error' : ''}`} onClick={() => onOpen(feed.id)} title={feed.title || feed.url}>
+    <button type="button" className={`pod-card${feed.status === 'error' ? ' pod-card--error' : ''}`} onClick={() => onOpen(feed.id)} title={feed.title || feed.url || undefined}>
       <span className="pod-card-art">
         <PodcastArt art={feed.art} fallback={fallbackArt} px={256} />
         {rank && <span className="pod-card-rank">{rank}</span>}
+        {isLiveNow(feed) && <span className="pod-card-live">{t('audio.podcasts.live.badge')}</span>}
+        {feed.private && <span className="pod-card-lock"><PrivateBadge /></span>}
       </span>
-      <span className="pod-card-title">{feed.title || feed.url}</span>
+      <span className="pod-card-title">{feed.title || feed.url || t('audio.podcasts.private.badge')}</span>
       <span className="pod-card-meta">
         {note || (feed.subscribers ? t('audio.podcasts.followers', { count: feed.subscribers }) : feed.author)}
       </span>
@@ -215,11 +226,11 @@ function ShowRail({ icon, title, feeds, onOpen, ranked = false, noteFor, artFor 
 function useFollowFeeds(user, onFollowed) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
-  const follow = async (urls, titles) => {
+  const follow = async (urls, titles, priv) => {
     if (!user) { toastIn('Podcasts').error(t('audio.podcasts.errors.signIn')); return false; }
     setBusy(true);
     try {
-      const res = await followFeeds(user, urls, titles);
+      const res = await followFeeds(user, urls, titles, priv);
       const ok = res.filter((r) => r.ok);
       const failed = res.filter((r) => !r.ok);
       if (urls.length === 1) {
@@ -280,7 +291,8 @@ function PiResults({ list, followed, busy, onFollow }) {
 
 /** The followed shows' feeds, compared the way the checker compares them. */
 function useFollowedKeys(subscriptions) {
-  return useMemo(() => new Set((subscriptions || []).flatMap((s) => [feedKey(s.url), ...(s.keys || [])])), [subscriptions]);
+  // A private feed comes without its link (url '', keys []): it never matches a search result.
+  return useMemo(() => new Set((subscriptions || []).flatMap((s) => (s.url ? [feedKey(s.url), ...(s.keys || [])] : []))), [subscriptions]);
 }
 
 // ─── Discover: Apple's charts and Podcast Index's trending ────────────────────
@@ -409,6 +421,8 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState('shows');
   const [feedUrl, setFeedUrl] = useState('');
+  // A private feed (a supporters' feed, a paid show): its login goes into the link.
+  const [priv, setPriv] = useState({ on: false, username: '', password: '' });
   const { busy, follow } = useFollowFeeds(user, onFollowed);
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState(null);
@@ -436,7 +450,19 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
     const url = feedUrl.trim();
     if (!url) return;
     if (!/^https?:\/\//i.test(url)) { toastIn('Podcasts').error(t('audio.podcasts.errors.badUrl')); return; }
+    if (priv.on) {
+      if (await follow([buildPrivateFeedUrl(url, priv.username, priv.password)], [], [true])) {
+        setFeedUrl('');
+        setPriv({ on: false, username: '', password: '' });
+      }
+      return;
+    }
     if (await follow([url])) setFeedUrl('');
+  };
+
+  const exportOpml = () => {
+    const left = downloadOpml(subscriptions, user);
+    if (left) toastIn('Podcasts').info(t('audio.podcasts.private.opmlLeftOut', { count: left }));
   };
 
   const importOpml = async (file) => {
@@ -517,6 +543,30 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
                     <MdAdd size={16} /> {t('audio.podcasts.follow')}
                   </button>
                 </div>
+                <button
+                  type="button"
+                  className="pod-link-btn pod-private-toggle"
+                  aria-expanded={priv.on}
+                  aria-controls="pod-private-fields"
+                  onClick={() => setPriv((p) => ({ ...p, on: !p.on }))}
+                >
+                  {priv.on ? <MdLock size={15} /> : <MdLockOpen size={15} />} {t('audio.podcasts.private.toggle')}
+                </button>
+                {priv.on && (
+                  <div className="pod-private" id="pod-private-fields">
+                    <div className="pod-private-fields">
+                      <label className="pod-field">
+                        <span className="pod-field-label">{t('audio.podcasts.private.username')}</span>
+                        <input className="pod-input" type="text" autoComplete="off" value={priv.username} onChange={(e) => setPriv((p) => ({ ...p, username: e.target.value }))} />
+                      </label>
+                      <label className="pod-field">
+                        <span className="pod-field-label">{t('audio.podcasts.private.password')}</span>
+                        <input className="pod-input" type="password" autoComplete="new-password" value={priv.password} onChange={(e) => setPriv((p) => ({ ...p, password: e.target.value }))} />
+                      </label>
+                    </div>
+                    <p className="pod-private-hint">{t('audio.podcasts.private.hint')}</p>
+                  </div>
+                )}
               </form>
             </div>
 
@@ -525,7 +575,7 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
                 <MdUploadFile size={15} /> {t('audio.podcasts.opml.import')}
               </button>
               {subscriptions?.length > 0 && (
-                <button type="button" className="pod-link-btn" onClick={() => downloadOpml(subscriptions, user)}>
+                <button type="button" className="pod-link-btn" onClick={exportOpml}>
                   <MdDownload size={15} /> {t('audio.podcasts.opml.export')}
                 </button>
               )}
@@ -551,20 +601,36 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
 
 // ─── One show ─────────────────────────────────────────────────────────────────
 
+/** `value`, once it has stopped changing for `ms`. */
+function useDebounced(value, ms) {
+  const [v, setV] = useState(value);
+  useEffect(() => {
+    const id = setTimeout(() => setV(value), ms);
+    return () => clearTimeout(id);
+  }, [value, ms]);
+  return v;
+}
+
 function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
   const { t } = useTranslation();
   const [days, setDays] = useState(0);
   const [range, setRange] = useState({ from: '', to: '' });
   const [listen, setListen] = useState('all');
+  const [season, setSeason] = useState(0);
+  const [search, setSearch] = useState('');
+  // The episode search runs on the checker (?q=), once typing stops.
+  const q = useDebounced(search.trim().length >= 2 ? search.trim() : '', 400);
   const bounds = useMemo(() => rangeFor(days, range), [days, range]);
   const { since, until } = bounds;
-  const { data, isLoading, error } = usePodcastFeed(feedId, since, until);
+  const { data, isLoading, error } = usePodcastFeed(feedId, since, until, q, user);
   usePodcastProgress(user, { feedId });
+  useDownloads();
   const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
   const invalidate = useInvalidatePodcasts();
   const [older, setOlder] = useState([]);
   const [olderState, setOlderState] = useState({ loading: false, done: false });
   const [busy, setBusy] = useState(false);
+  const [autoQueue, setAutoQueueState] = useState(() => !!(user && readAutoQueue(user).feeds[feedId]));
   const feed = data?.feed;
   const episodes = useMemo(() => [...(data?.episodes || []), ...older], [data, older]);
   const list = () => episodes.map((e) => episodeToTrack(e, feed));
@@ -575,11 +641,14 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
   };
   const changeDays = (d) => { setDays(d); resetOlder(); };
   const changeRange = (r) => { setRange(r); resetOlder(); };
+  // A new search is a new list: the older pages of the last one go.
+  const [lastQ, setLastQ] = useState(q);
+  if (lastQ !== q) { setLastQ(q); resetOlder(); }
 
   const loadOlder = async () => {
     setOlderState({ loading: true, done: false });
     try {
-      const r = await fetchOlderEpisodes(feedId, episodes.length, since, until);
+      const r = await fetchOlderEpisodes(feedId, episodes.length, since, until, q, user);
       setOlder((o) => [...o, ...r.episodes]);
       setOlderState({ loading: false, done: r.next_offset >= r.total || !r.episodes.length });
     } catch {
@@ -601,6 +670,13 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
     }
   };
 
+  const toggleAutoQueue = () => {
+    const on = !autoQueue;
+    setAutoQueue(user, feedId, on);
+    setAutoQueueState(on);
+    toastIn('Podcasts').success(on ? t('audio.podcasts.autoQueue.onDone') : t('audio.podcasts.autoQueue.offDone'));
+  };
+
   if (isLoading) return <div className="pod-empty">{t('common.status.loading')}</div>;
   if (error || !feed) {
     return (
@@ -612,8 +688,14 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
   }
 
   const olderAvailable = (data.total || 0) > episodes.length && !olderState.done;
+  const seasons = seasonsOf(episodes);
+  // The trailer, pinned on top as "Start here" while the list is not narrowed down.
+  const trailer = !q && !season && listen === 'all' && !since && !until ? trailerOf(episodes) : null;
   // The range is also applied here, so the page is right whatever the server did with it.
-  const shown = episodes.filter((ep) => inRange(ep, bounds) && matchesListen(ep, listen));
+  const shown = episodes.filter((ep) => ep !== trailer
+    && inRange(ep, bounds)
+    && matchesListen(ep, listen)
+    && (!season || Number(ep.season) === season));
   const episodeArt = episodes.find((e) => e.art)?.art;
   const playLatest = () => {
     const tracks = list();
@@ -626,7 +708,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
       <header className="pod-show-head">
         <PodcastArt art={feed.art} fallback={episodeArt} px={512} className="pod-show-cover" />
         <div className="pod-show-info">
-          <span className="pod-show-kicker"><MdPodcasts size={14} /> {t('audio.podcasts.kicker')}</span>
+          <span className="pod-show-kicker"><MdPodcasts size={14} /> {t('audio.podcasts.kicker')}{feed.private && <PrivateBadge withText />}</span>
           <h2 className="pod-show-title">{feed.title || feed.url}</h2>
           {feed.author && <div className="pod-show-author">{feed.author}</div>}
           <div className="pod-show-meta">
@@ -652,11 +734,20 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
                   {subscription.notify ? <MdNotificationsActive size={16} /> : <MdNotificationsOff size={16} />}
                   {subscription.notify ? t('audio.podcasts.notifyOn') : t('audio.podcasts.notifyOff')}
                 </button>
+                <button
+                  type="button"
+                  className={`pod-btn${autoQueue ? ' pod-btn--on' : ''}`}
+                  aria-pressed={autoQueue}
+                  onClick={toggleAutoQueue}
+                  title={t('audio.podcasts.autoQueue.hint')}
+                >
+                  <MdQueueMusic size={16} /> {t('audio.podcasts.autoQueue.label')}
+                </button>
                 <button type="button" className="pod-btn" disabled={busy} onClick={() => run(() => unfollowFeed(user, feed.id), t('audio.podcasts.unfollowed'))}>
                   <MdCheck size={16} /> {t('audio.podcasts.unfollow')}
                 </button>
               </>
-            ) : (
+            ) : feed.url && (
               <button type="button" className="pod-btn pod-btn--primary" disabled={busy} onClick={() => run(async () => {
                 const [r] = await followFeeds(user, [feed.url]);
                 if (!r?.ok) throw new Error(followErrorText(r?.code, r));
@@ -667,10 +758,25 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
             {feed.link && (
               <a className="pod-btn" href={feed.link} target="_blank" rel="noopener noreferrer nofollow"><MdOpenInNew size={16} /> {t('audio.podcasts.website')}</a>
             )}
-            <a className="pod-btn" href={feed.url} target="_blank" rel="noopener noreferrer nofollow"><MdRssFeed size={16} /> RSS</a>
+            {/* A private feed's link is never handed out (it carries the login). */}
+            {feed.url && !feed.private && (
+              <a className="pod-btn" href={feed.url} target="_blank" rel="noopener noreferrer nofollow"><MdRssFeed size={16} /> RSS</a>
+            )}
           </div>
         </div>
       </header>
+
+      <LiveBanner feed={feed} />
+      <PersonsRow persons={feed.persons} />
+
+      {trailer && (
+        <section className="pod-section">
+          <h2 className="pod-section-title"><MdFiberNew size={18} />{t('audio.podcasts.startHere')}</h2>
+          <ul className="pod-tile-grid">
+            <EpisodeTile ep={trailer} feed={feed} showShow={false} onOpenEpisode={onOpenEpisode} />
+          </ul>
+        </section>
+      )}
 
       <section className="pod-section">
         <div className="pod-section-head pod-section-head--filters">
@@ -680,11 +786,34 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
           </h2>
           <EpisodeFilters days={days} onDays={changeDays} listen={listen} onListen={setListen} range={range} onRange={changeRange} />
         </div>
+        <div className="pod-show-tools">
+          <label className="pod-field-row pod-episode-search">
+            <MdSearch className="pod-field-icon" size={18} />
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t('audio.podcasts.episodeSearch.placeholder')}
+              aria-label={t('audio.podcasts.episodeSearch.label')}
+              autoComplete="off"
+            />
+          </label>
+          {seasons.length > 0 && (
+            <select className="pod-select" value={season} onChange={(e) => setSeason(Number(e.target.value))} aria-label={t('audio.podcasts.seasons.label')}>
+              <option value={0}>{t('audio.podcasts.seasons.all')}</option>
+              {seasons.map((n) => <option key={n} value={n}>{t('audio.podcasts.seasons.season', { n })}</option>)}
+            </select>
+          )}
+        </div>
         <ul className="pod-tile-grid">
           {shown.map((ep) => <EpisodeTile key={ep.id} ep={ep} feed={feed} showShow={false} onOpenEpisode={onOpenEpisode} />)}
         </ul>
-        {episodes.length === 0 && <p className="pod-empty">{since || until ? t('audio.podcasts.filters.none') : t('audio.podcasts.noEpisodes')}</p>}
-        {episodes.length > 0 && shown.length === 0 && <p className="pod-empty">{t('audio.podcasts.filters.none')}</p>}
+        {episodes.length === 0 && (
+          <p className="pod-empty">
+            {q ? t('audio.podcasts.episodeSearch.none', { q }) : since || until ? t('audio.podcasts.filters.none') : t('audio.podcasts.noEpisodes')}
+          </p>
+        )}
+        {episodes.length > 0 && shown.length === 0 && !trailer && <p className="pod-empty">{t('audio.podcasts.filters.none')}</p>}
         {olderAvailable && (
           <button type="button" className="pod-btn pod-more" onClick={loadOlder} disabled={olderState.loading}>
             {olderState.loading ? t('common.status.loading') : t('audio.podcasts.loadOlder')}
@@ -710,6 +839,47 @@ function viewOf(param, user) {
   return user ? 'mine' : 'discover';
 }
 
+/**
+ * When Mine was opened before this visit (for the "New" inbox), read once each
+ * time Mine is opened; opening it records the new visit.
+ */
+function useMineVisit(user, active) {
+  const key = active ? user || '~anon' : null;
+  const [visit, setVisit] = useState(null);
+  // Read while rendering, before the effect below records this visit.
+  if ((visit?.key ?? null) !== key) setVisit(key ? { key, at: readMineVisit(user) } : null);
+  useEffect(() => { if (active) markMineVisit(user); }, [user, active]);
+  return visit ? visit.at : readMineVisit(user);
+}
+
+/**
+ * Shows with "Auto-add new episodes to the queue" on: when the latest episodes
+ * load, the new unplayed ones go to the end of the queue, each once
+ * (lib/podcastLibrary.js pickAutoQueue). Runs while the podcasts page is open.
+ */
+function useAutoQueue(user, episodes, feedsById) {
+  const { t } = useTranslation();
+  const audioAddToQueue = useAppStore((s) => s.audioAddToQueue);
+  const key = episodes.map((e) => e.id).join(',');
+  useEffect(() => {
+    if (!user || !episodes.length) return;
+    const settings = readAutoQueue(user);
+    if (!Object.keys(settings.feeds).length) return;
+    const { audioQueue, audioCurrent } = useAppStore.getState();
+    const picked = pickAutoQueue(episodes, settings, {
+      progressOf,
+      queuedIds: new Set(audioQueue.map((i) => i._id)),
+      currentId: audioCurrent?._id,
+    });
+    if (!picked.length) return;
+    picked.forEach((ep) => audioAddToQueue(episodeToTrack(ep, feedsById[ep.feed_id])));
+    markAutoQueued(user, picked.map((ep) => ep.id));
+    toastIn('Podcasts').success(t('audio.podcasts.autoQueue.added', { count: picked.length }));
+    // The ids stand for the list; feedsById comes with it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, key]);
+}
+
 export default function PodcastsTab() {
   const { t } = useTranslation();
   const fmtDate = useDateFormat();
@@ -727,6 +897,8 @@ export default function PodcastsTab() {
   const [latestRange, setLatestRange] = useState({ from: '', to: '' });
   const [latestListen, setLatestListen] = useState('all');
   const latestBounds = useMemo(() => rangeFor(latestDays, latestRange), [latestDays, latestRange]);
+  const lastVisit = useMineVisit(me, view === 'mine' && !params.get('podcast') && !params.get('episode'));
+  useDownloads();
   const latestIds = useMemo(
     () => (latest.data?.pages || []).flatMap((p) => (p.episodes || []).map((e) => e.id)).slice(0, 150),
     [latest.data],
@@ -734,11 +906,18 @@ export default function PodcastsTab() {
   usePodcastProgress(me, { ids: latestIds });
   const feedId = params.get('podcast');
   const episodeParam = params.get('episode');
+  const pages = latest.data?.pages || [];
+  const feedsById = Object.assign({}, ...pages.map((p) => p.feeds || {}));
+  const episodes = pages.flatMap((p) => p.episodes || []);
+  useAutoQueue(me, episodes, feedsById);
 
   const openShow = (id) => {
     const next = new URLSearchParams(params);
     next.set('type', 'external');
     next.delete('episode');
+    // A shared timestamp belongs to the episode it came with.
+    next.delete('t');
+    next.delete('end');
     if (id) next.set('podcast', id); else next.delete('podcast');
     setParams(next);
     window.scrollTo({ top: 0 });
@@ -748,6 +927,8 @@ export default function PodcastsTab() {
     const next = new URLSearchParams(params);
     next.set('type', 'external');
     next.delete('podcast');
+    next.delete('t');
+    next.delete('end');
     next.set('episode', id);
     setParams(next);
     window.scrollTo({ top: 0 });
@@ -777,10 +958,8 @@ export default function PodcastsTab() {
     return <p className="pod-empty">{t('audio.podcasts.errors.disabled')}</p>;
   }
 
-  const pages = latest.data?.pages || [];
-  const feedsById = Object.assign({}, ...pages.map((p) => p.feeds || {}));
-  const episodes = pages.flatMap((p) => p.episodes || []);
-  const latestShown = episodes.filter((e) => inRange(e, latestBounds) && matchesListen(e, latestListen));
+  const latestShown = episodes.filter((e) => inRange(e, latestBounds) && matchesListen(e, latestListen, lastVisit));
+  const inboxCount = episodes.filter((e) => isInboxEpisode(e, progressOf(e.id), lastVisit)).length;
   // A show without a cover of its own borrows its newest loaded episode's art.
   const episodeArt = {};
   for (const e of episodes) if (e.art && !episodeArt[e.feed_id]) episodeArt[e.feed_id] = e.art;
@@ -815,6 +994,7 @@ export default function PodcastsTab() {
       {view === 'mine' && (
         <>
           {!me && <p className="pod-empty pod-empty--center">{t('audio.podcasts.introSignedOut')}</p>}
+          {!me && <DownloadsSection onOpenEpisode={openEpisode} />}
           {me && subsLoaded && subscriptions.length === 0 && (
             <div className="pod-mine-empty">
               <MdPodcasts size={40} />
@@ -838,14 +1018,24 @@ export default function PodcastsTab() {
             <section className="pod-section">
               <div className="pod-section-head pod-section-head--filters">
                 <h2 className="pod-section-title"><MdPlayArrow size={18} />{t('audio.podcasts.latest')}</h2>
-                <EpisodeFilters days={latestDays} onDays={setLatestDays} listen={latestListen} onListen={setLatestListen} range={latestRange} onRange={setLatestRange} />
+                <EpisodeFilters
+                  days={latestDays}
+                  onDays={setLatestDays}
+                  listen={latestListen}
+                  onListen={setLatestListen}
+                  range={latestRange}
+                  onRange={setLatestRange}
+                  inbox={inboxCount}
+                />
               </div>
               <ul className="pod-tile-grid">
                 {latestShown.map((ep) => (
                   <EpisodeTile key={ep.id} ep={ep} feed={feedsById[ep.feed_id]} onOpenShow={openShow} onOpenEpisode={openEpisode} />
                 ))}
               </ul>
-              {latestShown.length === 0 && <p className="pod-empty">{t('audio.podcasts.filters.none')}</p>}
+              {latestShown.length === 0 && (
+                <p className="pod-empty">{latestListen === 'new' ? t('audio.podcasts.filters.inboxEmpty') : t('audio.podcasts.filters.none')}</p>
+              )}
               {latest.hasNextPage && (
                 <button type="button" className="pod-btn pod-more" onClick={() => latest.fetchNextPage()} disabled={latest.isFetchingNextPage}>
                   {latest.isFetchingNextPage ? t('common.status.loading') : t('audio.podcasts.more')}
@@ -853,6 +1043,7 @@ export default function PodcastsTab() {
               )}
             </section>
           )}
+          {me && <DownloadsSection onOpenEpisode={openEpisode} />}
         </>
       )}
 
