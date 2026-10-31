@@ -150,7 +150,9 @@
     "tabExplore": "浏览",
     "tabPlayer": "播放器",
     "nothingPlaying": "还没有在播放的内容。",
-    "goExplore": "找点东西听"
+    "goExplore": "找点东西听",
+    "exploreViews": "分区",
+    "mostPlayed": "播放最多"
   },
   "upload": {
     "title": "上传音频",

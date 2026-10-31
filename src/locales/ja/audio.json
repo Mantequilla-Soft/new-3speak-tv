@@ -150,7 +150,9 @@
     "tabExplore": "探す",
     "tabPlayer": "プレーヤー",
     "nothingPlaying": "まだ何も再生していません。",
-    "goExplore": "聴くものを探す"
+    "goExplore": "聴くものを探す",
+    "exploreViews": "セクション",
+    "mostPlayed": "よく再生されている"
   },
   "upload": {
     "title": "音声をアップロード",

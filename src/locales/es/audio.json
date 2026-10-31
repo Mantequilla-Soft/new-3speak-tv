@@ -156,7 +156,9 @@
     "tabExplore": "Explorar",
     "tabPlayer": "Reproductor",
     "nothingPlaying": "Todavía no suena nada.",
-    "goExplore": "Busca algo para escuchar"
+    "goExplore": "Busca algo para escuchar",
+    "exploreViews": "Secciones",
+    "mostPlayed": "Lo más escuchado"
   },
   "upload": {
     "title": "Subir audio",

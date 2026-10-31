@@ -156,7 +156,9 @@
     "tabExplore": "Esplora",
     "tabPlayer": "Player",
     "nothingPlaying": "Ancora niente in riproduzione.",
-    "goExplore": "Trova qualcosa da ascoltare"
+    "goExplore": "Trova qualcosa da ascoltare",
+    "exploreViews": "Sezioni",
+    "mostPlayed": "I più ascoltati"
   },
   "upload": {
     "title": "Carica audio",

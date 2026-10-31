@@ -153,7 +153,9 @@
     "tabExplore": "Vinjari",
     "tabPlayer": "Kicheza",
     "nothingPlaying": "Bado hakuna kinachocheza.",
-    "goExplore": "Tafuta kitu cha kusikiliza"
+    "goExplore": "Tafuta kitu cha kusikiliza",
+    "exploreViews": "Sehemu",
+    "mostPlayed": "Zinazosikilizwa zaidi"
   },
   "upload": {
     "title": "Pakia sauti",

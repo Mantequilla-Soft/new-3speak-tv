@@ -45,7 +45,7 @@ function open(path) {
       </QueryClientProvider>,
     )
   })
-  const tabs = [...host.querySelectorAll('[role="tab"]')]
+  const tabs = [...host.querySelectorAll('.audio-views [role="tab"]')]
   return { host, root, tabs, selected: tabs.findIndex((b) => b.getAttribute('aria-selected') === 'true') }
 }
 
@@ -112,6 +112,23 @@ describe('audio page tabs', () => {
     expect(st.audioRestoredAt).toBe(0)
     expect(host.querySelector('.audio-player-empty')).toBeNull()
     act(() => { useAppStore.getState().audioClearQueue() })
+    act(() => root.unmount())
+  })
+
+  it('has Mine, Discover and Trends above the chips, and leaves an empty Mine for Discover', async () => {
+    const { host, root } = open('/audio?view=mine')
+    const views = [...host.querySelectorAll('.audio-explore-views [role="tab"]')].map((b) => b.textContent)
+    expect(views).toEqual(['Mine', 'Discover', 'Trends'])
+    // Signed out with nothing downloaded: Mine is empty, so Discover it is.
+    await act(async () => { await new Promise((r) => setTimeout(r, 50)) })
+    expect(where).toContain('view=discover')
+    expect(host.querySelector('.audio-type-filter')).toBeTruthy()
+    act(() => root.unmount())
+  })
+
+  it('shows the type chips under Trends', () => {
+    const { host, root } = open('/audio?view=trends')
+    expect(host.querySelector('.audio-type-filter')).toBeTruthy()
     act(() => root.unmount())
   })
 })

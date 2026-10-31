@@ -153,7 +153,9 @@
     "tabExplore": "Mag-explore",
     "tabPlayer": "Player",
     "nothingPlaying": "Wala pang tumutugtog.",
-    "goExplore": "Maghanap ng mapapakinggan"
+    "goExplore": "Maghanap ng mapapakinggan",
+    "exploreViews": "Mga seksyon",
+    "mostPlayed": "Pinakamadalas pakinggan"
   },
   "upload": {
     "title": "Mag-upload ng audio",

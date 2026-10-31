@@ -159,7 +159,9 @@
     "tabExplore": "Przeglądaj",
     "tabPlayer": "Odtwarzacz",
     "nothingPlaying": "Nic jeszcze nie gra.",
-    "goExplore": "Znajdź coś do posłuchania"
+    "goExplore": "Znajdź coś do posłuchania",
+    "exploreViews": "Sekcje",
+    "mostPlayed": "Najczęściej słuchane"
   },
   "upload": {
     "title": "Prześlij audio",

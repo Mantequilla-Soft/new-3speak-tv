@@ -153,7 +153,9 @@
     "tabExplore": "Verkennen",
     "tabPlayer": "Speler",
     "nothingPlaying": "Er speelt nog niets.",
-    "goExplore": "Zoek iets om te luisteren"
+    "goExplore": "Zoek iets om te luisteren",
+    "exploreViews": "Onderdelen",
+    "mostPlayed": "Meest beluisterd"
   },
   "upload": {
     "title": "Audio uploaden",

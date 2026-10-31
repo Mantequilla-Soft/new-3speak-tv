@@ -153,7 +153,9 @@
     "tabExplore": "Explore",
     "tabPlayer": "Player",
     "nothingPlaying": "Nothing is playing yet.",
-    "goExplore": "Find something to listen to"
+    "goExplore": "Find something to listen to",
+    "exploreViews": "Explore sections",
+    "mostPlayed": "Most played"
   },
   "upload": {
     "title": "Upload audio",

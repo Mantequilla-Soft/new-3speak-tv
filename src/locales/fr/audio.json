@@ -156,7 +156,9 @@
     "tabExplore": "Explorer",
     "tabPlayer": "Lecteur",
     "nothingPlaying": "Rien n'est en lecture pour l'instant.",
-    "goExplore": "Trouver quelque chose à écouter"
+    "goExplore": "Trouver quelque chose à écouter",
+    "exploreViews": "Rubriques",
+    "mostPlayed": "Les plus écoutés"
   },
   "upload": {
     "title": "Mettre en ligne un audio",

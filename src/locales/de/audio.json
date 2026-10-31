@@ -153,7 +153,9 @@
     "tabExplore": "Stöbern",
     "tabPlayer": "Player",
     "nothingPlaying": "Noch läuft nichts.",
-    "goExplore": "Etwas zum Anhören finden"
+    "goExplore": "Etwas zum Anhören finden",
+    "exploreViews": "Bereiche",
+    "mostPlayed": "Meistgehört"
   },
   "upload": {
     "title": "Audio hochladen",

@@ -150,7 +150,9 @@
     "tabExplore": "Telusuri",
     "tabPlayer": "Pemutar",
     "nothingPlaying": "Belum ada yang diputar.",
-    "goExplore": "Cari sesuatu untuk didengarkan"
+    "goExplore": "Cari sesuatu untuk didengarkan",
+    "exploreViews": "Bagian",
+    "mostPlayed": "Paling banyak diputar"
   },
   "upload": {
     "title": "Unggah audio",

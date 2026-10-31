@@ -150,7 +150,9 @@
     "tabExplore": "เลือกดู",
     "tabPlayer": "เครื่องเล่น",
     "nothingPlaying": "ยังไม่มีอะไรเล่นอยู่",
-    "goExplore": "หาสิ่งที่จะฟัง"
+    "goExplore": "หาสิ่งที่จะฟัง",
+    "exploreViews": "หมวด",
+    "mostPlayed": "เล่นมากที่สุด"
   },
   "upload": {
     "title": "อัปโหลดเสียง",

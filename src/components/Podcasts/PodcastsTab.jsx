@@ -828,8 +828,10 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
 
 // Mine | Discover | Trends, in the URL (?view=) so Back returns to it. Without one:
 // the last one picked, else Mine for someone signed in and Discover for a guest.
-const VIEWS = ['mine', 'discover', 'trends'];
-const VIEW_KEY = 'pod-view';
+// The audio page uses the same views as its own navigation (page/Audio.jsx) and
+// then tells this tab which one to show.
+export const VIEWS = ['mine', 'discover', 'trends'];
+export const VIEW_KEY = 'pod-view';
 function viewOf(param, user) {
   if (VIEWS.includes(param)) return param;
   try {
@@ -880,7 +882,11 @@ function useAutoQueue(user, episodes, feedsById) {
   }, [user, key]);
 }
 
-export default function PodcastsTab() {
+/**
+ * `view`: which view to show when the page around it picks it (the audio page's
+ * Mine | Discover | Trends); `hideNav`: that page draws the navigation itself.
+ */
+export default function PodcastsTab({ view: viewProp, hideNav = false }) {
   const { t } = useTranslation();
   const fmtDate = useDateFormat();
   const [params, setParams] = useSearchParams();
@@ -889,7 +895,7 @@ export default function PodcastsTab() {
   const me = authenticated ? user : null;
   const { data: config } = usePodcastConfig();
   const { data: subscriptions = [], isSuccess: subsLoaded } = usePodcastSubscriptions(me);
-  const view = viewOf(params.get('view'), me);
+  const view = VIEWS.includes(viewProp) ? viewProp : viewOf(params.get('view'), me);
   const { data: discover } = usePodcastDiscover();
   const latest = usePodcastLatest(me);
   const invalidate = useInvalidatePodcasts();
@@ -976,7 +982,7 @@ export default function PodcastsTab() {
 
   return (
     <div className="pod-tab">
-      <nav className="pod-views" role="tablist" aria-label={t('audio.podcasts.kicker')}>
+      {!hideNav && <nav className="pod-views" role="tablist" aria-label={t('audio.podcasts.kicker')}>
         {views.map((v) => (
           <button
             key={v.key}
@@ -989,7 +995,7 @@ export default function PodcastsTab() {
             {v.icon}<span>{v.label}</span>
           </button>
         ))}
-      </nav>
+      </nav>}
 
       {view === 'mine' && (
         <>

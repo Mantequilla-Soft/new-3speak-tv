@@ -153,7 +153,9 @@
     "tabExplore": "এক্সপ্লোর",
     "tabPlayer": "প্লেয়ার",
     "nothingPlaying": "এখনও কিছু বাজছে না।",
-    "goExplore": "শোনার মতো কিছু খুঁজুন"
+    "goExplore": "শোনার মতো কিছু খুঁজুন",
+    "exploreViews": "বিভাগ",
+    "mostPlayed": "সবচেয়ে বেশি শোনা"
   },
   "upload": {
     "title": "অডিও আপলোড করুন",

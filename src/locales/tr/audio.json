@@ -153,7 +153,9 @@
     "tabExplore": "Göz at",
     "tabPlayer": "Oynatıcı",
     "nothingPlaying": "Henüz çalan bir şey yok.",
-    "goExplore": "Dinleyecek bir şey bul"
+    "goExplore": "Dinleyecek bir şey bul",
+    "exploreViews": "Gezinme",
+    "mostPlayed": "En çok dinlenenler"
   },
   "upload": {
     "title": "Ses yükle",

@@ -7,16 +7,18 @@ import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../lib/store';
 import { CHECKER_URL, HIVE_API_URL } from '../utils/config';
 import { AUDIO_CATEGORY_ICONS } from '../utils/audioCategoryIcons';
-import { MdClose, MdArrowBack, MdExplore, MdPlayCircleOutline } from 'react-icons/md';
+import { MdClose, MdArrowBack, MdExplore, MdPlayCircleOutline, MdLibraryMusic, MdWhatshot } from 'react-icons/md';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
 import AudioAuthorBadge from './AudioAuthorBadge';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
 import { AudioShareDropdown } from '../components/GlobalAudioPlayer/GlobalAudioPlayer';
 import AudioItemView from '../components/AudioItem/AudioItemView';
+import { usePodcastSubscriptions } from '../lib/podcasts';
+import { useDownloads } from '../lib/podcastDownloads';
 import AudioTile, { AudioTileSkeleton } from '../components/AudioTile/AudioTile';
 import AudioPlaylistTile from '../components/AudioPlaylistTile/AudioPlaylistTile';
-import PodcastsTab from '../components/Podcasts/PodcastsTab';
+import PodcastsTab, { VIEWS as EXPLORE_VIEWS, VIEW_KEY as EXPLORE_VIEW_KEY } from '../components/Podcasts/PodcastsTab';
 import { isLoggedIn } from '../hive-api/aioha';
 
 import './Audio.scss';
@@ -175,6 +177,45 @@ function Audio() {
   // leaving it on External goes back to External.
   const [params, setParams] = useSearchParams();
   const external = params.get('type') === 'external' || params.has('podcast') || params.has('episode');
+
+  // Explore's own navigation: Mine | Discover | Trends (?view=, shared with the
+  // podcasts tab). Mine is your library (followed podcasts, downloads), with no
+  // chips; under Discover and Trends the type chips pick 3Speak audio or the
+  // outside podcasts (External). Without one: the last one picked, else Discover.
+  const exploreView = (() => {
+    const v = params.get('view');
+    if (EXPLORE_VIEWS.includes(v)) return v;
+    try {
+      const saved = localStorage.getItem(EXPLORE_VIEW_KEY);
+      if (EXPLORE_VIEWS.includes(saved)) return saved;
+    } catch { /* storage off */ }
+    return 'discover';
+  })();
+  const showExploreView = (v) => {
+    const next = new URLSearchParams(params);
+    for (const k of ['podcast', 'episode', 'play', 't', 'end']) next.delete(k);
+    next.set('view', v);
+    setParams(next);
+    setSelectedCreator(null);
+    try { localStorage.setItem(EXPLORE_VIEW_KEY, v); } catch { /* storage off */ }
+  };
+  const onMine = exploreView === 'mine';
+
+  // An empty Mine (no followed podcasts, nothing downloaded) has nothing to
+  // show: Discover instead, in place, once both are known.
+  const me = authenticated ? user : null;
+  const mineSubs = usePodcastSubscriptions(me);
+  const mineDownloads = useDownloads();
+  const mineKnown = (!me || mineSubs.isSuccess) && mineDownloads.ready;
+  const mineEmpty = mineKnown && !(mineSubs.data || []).length && !mineDownloads.items.length;
+  const insideMine = params.has('podcast') || params.has('episode') || params.has('play');
+  useEffect(() => {
+    if (!onMine || !mineEmpty || insideMine) return;
+    const next = new URLSearchParams(params);
+    next.set('view', 'discover');
+    setParams(next, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onMine, mineEmpty, insideMine]);
 
   // One 3Speak audio on its own page, like an outside episode: ?play=<owner>/<id>
   // (shared player links, a click on an audio card). See AudioItemView.
@@ -357,7 +398,8 @@ function Audio() {
       const { data } = await axios.get(`${CHECKER_URL}/audio?${filterParams}`);
       return (data.audio || []).filter((it) => !isHiddenOwner(it.owner));
     },
-    enabled: isFiltered && !selectedCreator,
+    // Discover lists them once a filter is set; Trends always does.
+    enabled: (isFiltered || exploreView === 'trends') && !selectedCreator && !external,
   });
 
   const creatorsParams = useMemo(() => {
@@ -499,8 +541,27 @@ function Audio() {
         </header>
       )}
 
-      {/* Date presets + type / genre filters */}
-      {!selectedCreator && (
+      <nav className="pod-views audio-explore-views" role="tablist" aria-label={t('audio.page.exploreViews')}>
+        {[
+          { key: 'mine', icon: <MdLibraryMusic size={18} />, label: t('audio.podcasts.views.mine') },
+          { key: 'discover', icon: <MdExplore size={18} />, label: t('audio.podcasts.views.discover') },
+          { key: 'trends', icon: <MdWhatshot size={18} />, label: t('audio.podcasts.views.trends') },
+        ].map((v) => (
+          <button
+            key={v.key}
+            type="button"
+            role="tab"
+            aria-selected={exploreView === v.key}
+            className={`pod-view${exploreView === v.key ? ' active' : ''}`}
+            onClick={() => showExploreView(v.key)}
+          >
+            {v.icon}<span>{v.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      {/* Date presets + type / genre filters: Discover and Trends only */}
+      {!selectedCreator && !onMine && (
         <div className="audio-toolbar">
           <div className="audio-type-filter">
             <button
@@ -520,7 +581,13 @@ function Audio() {
             ))}
             <button
               className={`audio-type-chip${external ? ' active' : ''}`}
-              onClick={() => { if (!external) setParams({ type: 'external' }); }}
+              onClick={() => {
+                if (external) return;
+                const next = new URLSearchParams(params);
+                for (const k of ['play', 't', 'end']) next.delete(k);
+                next.set('type', 'external');
+                setParams(next);
+              }}
               title={t('audio.podcasts.chipHint')}
             ><i className="audio-type-chip-icon fa-solid fa-rss" /> {t('audio.podcasts.chip')}</button>
           </div>
@@ -546,7 +613,7 @@ function Audio() {
       )}
 
       {/* Tags + duration filter row */}
-      {!selectedCreator && !external && !item && (
+      {!selectedCreator && !external && !item && !onMine && (
         <div className="audio-filter-row">
           <div className="audio-topic-tags">
             {isFiltered && (
@@ -567,10 +634,12 @@ function Audio() {
       )}
 
       {/* ─── Creator drill-down ──────── */}
-      {external ? (
-        <PodcastsTab />
+      {params.has('podcast') || params.has('episode') ? (
+        <PodcastsTab view={exploreView} hideNav />
       ) : item ? (
         <AudioItemView owner={item.owner} id={item.id} onBack={closeItem} />
+      ) : onMine || external ? (
+        <PodcastsTab view={exploreView} hideNav />
       ) : selectedCreator ? (
         <div className="audio-creator-view">
           <div className="audio-creator-header">
@@ -585,6 +654,21 @@ function Audio() {
             <div className="audio-empty"><p>{t('audio.page.noTracks')}</p></div>
           )}
         </div>
+      ) : exploreView === 'trends' ? (
+        /* ─── Trends: the most played for the chosen type, time and filters ─── */
+        <section className="audio-section">
+          <h2 className="audio-section-title">
+            <i className={SECTION_CONFIG.popular.icon} /> {t('audio.page.mostPlayed')}
+            {filteredAudio && <span className="audio-section-count">{t('audio.page.tracks', { count: filteredAudio.length })}</span>}
+          </h2>
+          {filteredLoading ? (
+            <div className="audio-tile-row"><AudioTileSkeleton count={5} /></div>
+          ) : filteredAudio?.length > 0 ? (
+            <div className="audio-tile-grid">{filteredAudio.map((item, idx) => <AudioTile key={item._id || idx} {...tp(item, filteredAudio)} />)}</div>
+          ) : (
+            <div className="audio-empty"><p>{t('audio.page.noAudioForFilters')}</p></div>
+          )}
+        </section>
       ) : (
         <>
           {/* ─── Creators section ────── */}

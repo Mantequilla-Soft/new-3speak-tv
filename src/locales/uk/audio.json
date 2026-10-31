@@ -159,7 +159,9 @@
     "tabExplore": "Каталог",
     "tabPlayer": "Плеєр",
     "nothingPlaying": "Поки нічого не грає.",
-    "goExplore": "Знайти, що послухати"
+    "goExplore": "Знайти, що послухати",
+    "exploreViews": "Розділи",
+    "mostPlayed": "Найпопулярніше"
   },
   "upload": {
     "title": "Завантажити аудіо",

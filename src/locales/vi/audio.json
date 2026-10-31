@@ -150,7 +150,9 @@
     "tabExplore": "Duyệt",
     "tabPlayer": "Trình phát",
     "nothingPlaying": "Chưa có gì đang phát.",
-    "goExplore": "Tìm nội dung để nghe"
+    "goExplore": "Tìm nội dung để nghe",
+    "exploreViews": "Mục",
+    "mostPlayed": "Nghe nhiều nhất"
   },
   "upload": {
     "title": "Tải âm thanh lên",

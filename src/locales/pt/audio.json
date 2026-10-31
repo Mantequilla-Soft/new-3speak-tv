@@ -156,7 +156,9 @@
     "tabExplore": "Explorar",
     "tabPlayer": "Player",
     "nothingPlaying": "Nada está tocando ainda.",
-    "goExplore": "Encontre algo para ouvir"
+    "goExplore": "Encontre algo para ouvir",
+    "exploreViews": "Seções",
+    "mostPlayed": "Mais ouvidos"
   },
   "upload": {
     "title": "Enviar áudio",

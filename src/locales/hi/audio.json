@@ -153,7 +153,9 @@
     "tabExplore": "एक्सप्लोर",
     "tabPlayer": "प्लेयर",
     "nothingPlaying": "अभी कुछ नहीं चल रहा है।",
-    "goExplore": "सुनने के लिए कुछ ढूंढें"
+    "goExplore": "सुनने के लिए कुछ ढूंढें",
+    "exploreViews": "अनुभाग",
+    "mostPlayed": "सबसे ज़्यादा सुने गए"
   },
   "upload": {
     "title": "ऑडियो अपलोड करें",
