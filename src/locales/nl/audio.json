@@ -90,7 +90,6 @@
     "nextChapter": "Volgend hoofdstuk",
     "chapterLink": "Link naar hoofdstuk",
     "upNext": "Hierna",
-    "playQueue": "Wachtrij afspelen",
     "hideIdle": "Verbergen (je wachtrij blijft)",
     "continueAt": "Verder bij {{time}}"
   },
@@ -154,10 +153,7 @@
     "tabExplore": "Verkennen",
     "tabPlayer": "Speler",
     "nothingPlaying": "Er speelt nog niets.",
-    "goExplore": "Zoek iets om te luisteren",
-    "queueWaiting": "In je wachtrij: {{count}}",
-    "showQueue": "Wachtrij tonen",
-    "reopenLast": "\"{{title}}\" weer openen"
+    "goExplore": "Zoek iets om te luisteren"
   },
   "upload": {
     "title": "Audio uploaden",

@@ -90,7 +90,6 @@
     "nextChapter": "Next chapter",
     "chapterLink": "Chapter link",
     "upNext": "Up next",
-    "playQueue": "Play the queue",
     "hideIdle": "Hide (your queue stays)",
     "continueAt": "Continue at {{time}}"
   },
@@ -154,10 +153,7 @@
     "tabExplore": "Explore",
     "tabPlayer": "Player",
     "nothingPlaying": "Nothing is playing yet.",
-    "goExplore": "Find something to listen to",
-    "queueWaiting": "Waiting in your queue: {{count}}",
-    "showQueue": "Show the queue",
-    "reopenLast": "Open \"{{title}}\" again"
+    "goExplore": "Find something to listen to"
   },
   "upload": {
     "title": "Upload audio",

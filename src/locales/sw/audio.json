@@ -90,7 +90,6 @@
     "nextChapter": "Sura inayofuata",
     "chapterLink": "Kiungo cha sura",
     "upNext": "Kinachofuata",
-    "playQueue": "Cheza foleni",
     "hideIdle": "Ficha (foleni yako inabaki)",
     "continueAt": "Endelea kutoka {{time}}"
   },
@@ -154,10 +153,7 @@
     "tabExplore": "Vinjari",
     "tabPlayer": "Kicheza",
     "nothingPlaying": "Bado hakuna kinachocheza.",
-    "goExplore": "Tafuta kitu cha kusikiliza",
-    "queueWaiting": "Kwenye foleni yako: {{count}}",
-    "showQueue": "Onyesha foleni",
-    "reopenLast": "Fungua tena \"{{title}}\""
+    "goExplore": "Tafuta kitu cha kusikiliza"
   },
   "upload": {
     "title": "Pakia sauti",

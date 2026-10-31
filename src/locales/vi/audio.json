@@ -88,7 +88,6 @@
     "nextChapter": "Chương sau",
     "chapterLink": "Liên kết chương",
     "upNext": "Tiếp theo",
-    "playQueue": "Phát hàng đợi",
     "hideIdle": "Ẩn (hàng đợi vẫn còn)",
     "continueAt": "Tiếp tục từ {{time}}"
   },
@@ -151,10 +150,7 @@
     "tabExplore": "Duyệt",
     "tabPlayer": "Trình phát",
     "nothingPlaying": "Chưa có gì đang phát.",
-    "goExplore": "Tìm nội dung để nghe",
-    "queueWaiting": "Trong hàng đợi: {{count}}",
-    "showQueue": "Xem hàng đợi",
-    "reopenLast": "Mở lại \"{{title}}\""
+    "goExplore": "Tìm nội dung để nghe"
   },
   "upload": {
     "title": "Tải âm thanh lên",

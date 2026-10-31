@@ -648,13 +648,14 @@
   .audio-np-tools .audio-np-track-btn { display: none; }
   .audio-np-tools .audio-np-tools-vol { display: inline-flex; }
 
-  // The queue sits in the corner.
-  .audio-np-queue-btn { position: absolute; top: 12px; right: 0; }
+  // The queue is unfolded on the page (.audio-np-queue-inline), no button needed.
+  .audio-np-queue-btn { display: none; }
 
-  .audio-np-chapters { order: 7; }
-  .audio-np-tags { order: 8; justify-content: center; }
-  .audio-np-body { order: 9; max-height: none; }
-  .audio-transcript-panel { order: 10; }
+  .audio-np-queue-inline { order: 7; }
+  .audio-np-chapters { order: 8; }
+  .audio-np-tags { order: 9; justify-content: center; }
+  .audio-np-body { order: 10; max-height: none; }
+  .audio-transcript-panel { order: 11; }
 }
 
 // Without a waveform (outside podcast episodes, audio without one) the progress

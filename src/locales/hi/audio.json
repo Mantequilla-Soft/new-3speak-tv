@@ -90,7 +90,6 @@
     "nextChapter": "अगला चैप्टर",
     "chapterLink": "चैप्टर लिंक",
     "upNext": "आगे",
-    "playQueue": "कतार चलाएं",
     "hideIdle": "छिपाएं (आपकी कतार बनी रहेगी)",
     "continueAt": "{{time}} से जारी रखें"
   },
@@ -154,10 +153,7 @@
     "tabExplore": "एक्सप्लोर",
     "tabPlayer": "प्लेयर",
     "nothingPlaying": "अभी कुछ नहीं चल रहा है।",
-    "goExplore": "सुनने के लिए कुछ ढूंढें",
-    "queueWaiting": "आपकी कतार में: {{count}}",
-    "showQueue": "कतार दिखाएं",
-    "reopenLast": "\"{{title}}\" फिर से खोलें"
+    "goExplore": "सुनने के लिए कुछ ढूंढें"
   },
   "upload": {
     "title": "ऑडियो अपलोड करें",

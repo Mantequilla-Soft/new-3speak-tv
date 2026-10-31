@@ -165,7 +165,7 @@ function loadFilters() {
 
 function Audio() {
   const { t } = useTranslation();
-  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioPlayAt, audioAddToQueue, audioSetDock, audioSetDockOpener, audioQueue, audioSetShowQueue, audioLast, audioResumeLast } = useAppStore();
+  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioPlayAt, audioAddToQueue, audioSetDock, audioSetDockOpener } = useAppStore();
   const loggedIn = authenticated && isLoggedIn();
 
   // "External": podcasts from outside RSS feeds (components/Podcasts). It is the last
@@ -196,14 +196,16 @@ function Audio() {
     return () => audioSetDockOpener(null);
   }, [mobile, showPlayerTab, audioSetDockOpener]);
   const dockRef = useCallback((el) => audioSetDock(el), [audioSetDock]);
-  // Opening the Player tab with nothing loaded brings back what was playing when
-  // the player was closed, paused at that spot. Only on the way in: closing the
-  // player while on this tab leaves it closed.
+  // The Player tab never sits empty while there is something to play: it loads,
+  // paused, what was playing when the player was closed (at that spot), or else
+  // the top of the queue, which it shows unfolded under the player.
+  const hasCurrent = !!audioCurrent;
   useEffect(() => {
-    if (!playerView) return;
+    if (!playerView || hasCurrent) return;
     const st = useAppStore.getState();
-    if (!st.audioCurrent && st.audioLast) st.audioResumeLast(false);
-  }, [playerView]);
+    if (st.audioLast) st.audioResumeLast(false);
+    else if (st.audioQueue.length) st.audioLoadPaused(st.audioQueue[0], 0, st.audioQueue);
+  }, [playerView, hasCurrent]);
   const leaveExternal = () => {
     rememberExternal(false);
     if (!external) return;
@@ -215,11 +217,13 @@ function Audio() {
     if (external) { rememberExternal(true); return; }
     // A bare /audio: back on the podcasts chip if that is where the listener left
     // off, and on phones and tablets on the Player tab while something is loaded
-    // in the player (Explore otherwise). One URL change for both, in place.
+    // in the player or waiting in the queue (Explore otherwise). One URL change
+    // for both, in place.
     if ([...params.keys()].length) return;
     const next = new URLSearchParams();
     if (readExternal()) next.set('type', 'external');
-    if (mobile && useAppStore.getState().audioCurrent) next.set('player', '1');
+    const st = useAppStore.getState();
+    if (mobile && (st.audioCurrent || st.audioQueue.length)) next.set('player', '1');
     if ([...next.keys()].length) setParams(next, { replace: true });
     // Only on arrival and when the URL itself changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -488,22 +492,7 @@ function Audio() {
             <div className="audio-empty audio-player-empty">
               <MdPlayCircleOutline size={44} aria-hidden />
               <p>{t('audio.page.nothingPlaying')}</p>
-              {audioLast && (
-                <button type="button" className="audio-type-chip active" onClick={() => audioResumeLast(false)}>
-                  {t('audio.page.reopenLast', { title: audioLast.track.title || t('audio.untitled') })}
-                </button>
-              )}
-              {/* A closed player keeps its queue: offer it here. */}
-              {audioQueue.length > 0 && (
-                <>
-                  <p>{t('audio.page.queueWaiting', { count: audioQueue.length })}</p>
-                  <div className="audio-player-empty-actions">
-                    <button type="button" className={`audio-type-chip${audioLast ? '' : ' active'}`} onClick={() => audioPlay(audioQueue[0], audioQueue)}>{t('audio.player.playQueue')}</button>
-                    <button type="button" className="audio-type-chip" onClick={() => audioSetShowQueue(true)}>{t('audio.page.showQueue')}</button>
-                  </div>
-                </>
-              )}
-              <button type="button" className={`audio-type-chip${audioQueue.length || audioLast ? '' : ' active'}`} onClick={() => showPlayerTab(false)}>{t('audio.page.goExplore')}</button>
+              <button type="button" className="audio-type-chip active" onClick={() => showPlayerTab(false)}>{t('audio.page.goExplore')}</button>
             </div>
           )}
         </div>

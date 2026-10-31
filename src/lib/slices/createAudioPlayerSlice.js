@@ -144,23 +144,30 @@ export const createAudioPlayerSlice = (set, get) => {
         audioExpanded: false,
       });
     },
+    // Load `track` paused at `at` seconds (0: where the listener last was, for an
+    // outside episode), the way a reload brings the player back. The listener
+    // presses play.
+    audioLoadPaused: (track, at = 0, list) => {
+      if (!track) return;
+      persistNow(track);
+      set((s) => ({
+        audioCurrent: track,
+        audioAutoplayList: Array.isArray(list) ? list : [track],
+        audioRestoredAt: at || 0,
+        audioStartAt: null,
+        audioClipEnd: null,
+        audioCurrentTime: at || 0,
+        audioDuration: Number(track.duration) || 0,
+        audioPlayNonce: s.audioPlayNonce + 1,
+      }));
+    },
     // Back to what was playing when the player was closed: loaded paused at that
-    // spot (like a reload does), or playing from there with `play`.
+    // spot, or playing from there with `play`.
     audioResumeLast: (play = false) => {
       const last = get().audioLast;
       if (!last) return;
-      if (play) { get().audioPlayAt(last.track, last.t || 0); return; }
-      persistNow(last.track);
-      set((s) => ({
-        audioCurrent: last.track,
-        audioAutoplayList: [last.track],
-        audioRestoredAt: last.t || 0,
-        audioStartAt: null,
-        audioClipEnd: null,
-        audioCurrentTime: last.t || 0,
-        audioDuration: Number(last.track.duration) || 0,
-        audioPlayNonce: s.audioPlayNonce + 1,
-      }));
+      if (play) get().audioPlayAt(last.track, last.t || 0);
+      else get().audioLoadPaused(last.track, last.t || 0);
     },
     audioRequestPlayPauseToggle: () => {
       // Flip a flag; the GlobalAudioPlayer reads it via subscribe and toggles the <audio> element

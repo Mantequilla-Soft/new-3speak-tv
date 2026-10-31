@@ -92,7 +92,6 @@
     "nextChapter": "Capítulo siguiente",
     "chapterLink": "Enlace al capítulo",
     "upNext": "A continuación",
-    "playQueue": "Reproducir la cola",
     "hideIdle": "Ocultar (tu cola se mantiene)",
     "continueAt": "Continuar en {{time}}"
   },
@@ -157,10 +156,7 @@
     "tabExplore": "Explorar",
     "tabPlayer": "Reproductor",
     "nothingPlaying": "Todavía no suena nada.",
-    "goExplore": "Busca algo para escuchar",
-    "queueWaiting": "En tu cola: {{count}}",
-    "showQueue": "Ver la cola",
-    "reopenLast": "Volver a abrir «{{title}}»"
+    "goExplore": "Busca algo para escuchar"
   },
   "upload": {
     "title": "Subir audio",

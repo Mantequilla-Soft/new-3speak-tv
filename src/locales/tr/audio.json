@@ -90,7 +90,6 @@
     "nextChapter": "Sonraki kısım",
     "chapterLink": "Kısım bağlantısı",
     "upNext": "Sıradaki",
-    "playQueue": "Sırayı oynat",
     "hideIdle": "Gizle (sıran kalır)",
     "continueAt": "{{time}} noktasından devam et"
   },
@@ -154,10 +153,7 @@
     "tabExplore": "Göz at",
     "tabPlayer": "Oynatıcı",
     "nothingPlaying": "Henüz çalan bir şey yok.",
-    "goExplore": "Dinleyecek bir şey bul",
-    "queueWaiting": "Sırandakiler: {{count}}",
-    "showQueue": "Sırayı göster",
-    "reopenLast": "\"{{title}}\" yeniden aç"
+    "goExplore": "Dinleyecek bir şey bul"
   },
   "upload": {
     "title": "Ses yükle",

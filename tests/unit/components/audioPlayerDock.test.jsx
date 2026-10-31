@@ -112,4 +112,22 @@ describe('docked audio player', () => {
     expect(useAppStore.getState().audioQueue).toHaveLength(2)
     act(() => root.unmount())
   })
+
+  it('docked, the queue is unfolded under the player', () => {
+    const { host, dock, root } = mount()
+    const second = { ...track, _id: 'f1:two', title: 'Second' }
+    act(() => {
+      useAppStore.getState().audioAddToQueue(track)
+      useAppStore.getState().audioAddToQueue(second)
+      useAppStore.getState().audioPlay(track, [track, second])
+      useAppStore.getState().audioSetDock(dock)
+    })
+    const inline = dock.querySelector('.audio-np-queue-inline')
+    expect(inline).toBeTruthy()
+    expect(inline.querySelectorAll('.audio-queue-item')).toHaveLength(2)
+    // No queue window over the page while docked.
+    act(() => { useAppStore.getState().audioSetShowQueue(true) })
+    expect(host.querySelector('.audio-queue-overlay')).toBeNull()
+    act(() => root.unmount())
+  })
 })

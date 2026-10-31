@@ -94,7 +94,6 @@
     "nextChapter": "Następny rozdział",
     "chapterLink": "Link do rozdziału",
     "upNext": "Następne",
-    "playQueue": "Odtwórz kolejkę",
     "hideIdle": "Ukryj (kolejka zostaje)",
     "continueAt": "Kontynuuj od {{time}}"
   },
@@ -160,10 +159,7 @@
     "tabExplore": "Przeglądaj",
     "tabPlayer": "Odtwarzacz",
     "nothingPlaying": "Nic jeszcze nie gra.",
-    "goExplore": "Znajdź coś do posłuchania",
-    "queueWaiting": "W twojej kolejce: {{count}}",
-    "showQueue": "Pokaż kolejkę",
-    "reopenLast": "Otwórz ponownie „{{title}}”"
+    "goExplore": "Znajdź coś do posłuchania"
   },
   "upload": {
     "title": "Prześlij audio",

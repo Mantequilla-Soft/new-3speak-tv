@@ -88,7 +88,6 @@
     "nextChapter": "บทถัดไป",
     "chapterLink": "ลิงก์บท",
     "upNext": "ถัดไป",
-    "playQueue": "เล่นคิว",
     "hideIdle": "ซ่อน (คิวยังอยู่)",
     "continueAt": "เล่นต่อที่ {{time}}"
   },
@@ -151,10 +150,7 @@
     "tabExplore": "เลือกดู",
     "tabPlayer": "เครื่องเล่น",
     "nothingPlaying": "ยังไม่มีอะไรเล่นอยู่",
-    "goExplore": "หาสิ่งที่จะฟัง",
-    "queueWaiting": "ในคิวของคุณ: {{count}}",
-    "showQueue": "ดูคิว",
-    "reopenLast": "เปิด \"{{title}}\" อีกครั้ง"
+    "goExplore": "หาสิ่งที่จะฟัง"
   },
   "upload": {
     "title": "อัปโหลดเสียง",

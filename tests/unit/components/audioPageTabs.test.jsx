@@ -90,10 +90,28 @@ describe('audio page tabs', () => {
     expect(st.audioRestoredAt).toBe(42)
     expect(host.querySelector('.audio-player-dock')).toBeTruthy()
 
-    // Closing it again on this tab leaves it closed.
+    // There is no close button on the Player tab; a stop from elsewhere loads it again.
     act(() => { useAppStore.getState().audioStop() })
-    expect(useAppStore.getState().audioCurrent).toBeNull()
-    expect(host.querySelector('.audio-player-empty')).toBeTruthy()
+    expect(useAppStore.getState().audioCurrent?._id).toBe('a1')
+    expect(host.querySelector('.audio-player-empty')).toBeNull()
+    act(() => root.unmount())
+  })
+
+  it('with a queue and nothing loaded, opens the Player tab with the top of the queue, paused', () => {
+    const second = { ...track, _id: 'a2', permlink: 'p2', title: 'Two' }
+    act(() => {
+      useAppStore.setState({ audioLast: null })
+      useAppStore.getState().audioAddToQueue(track)
+      useAppStore.getState().audioAddToQueue(second)
+    })
+    const { host, root, selected } = open('/audio')
+    expect(selected).toBe(0)
+    expect(where).toContain('player=1')
+    const st = useAppStore.getState()
+    expect(st.audioCurrent?._id).toBe('a1')
+    expect(st.audioRestoredAt).toBe(0)
+    expect(host.querySelector('.audio-player-empty')).toBeNull()
+    act(() => { useAppStore.getState().audioClearQueue() })
     act(() => root.unmount())
   })
 })

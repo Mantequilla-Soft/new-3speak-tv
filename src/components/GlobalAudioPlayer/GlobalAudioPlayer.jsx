@@ -1157,18 +1157,8 @@ function GlobalAudioPlayer() {
     />
   );
 
-  const queueOverlay = audioShowQueue ? (
-        <div className="audio-queue-overlay" onClick={() => audioSetShowQueue(false)}>
-          <div ref={queuePanelRef} className="audio-queue-panel" onClick={e => e.stopPropagation()}>
-            <ModalHeader title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
-              <span className="audio-queue-count">{audioQueue.length}</span>
-              {audioQueue.length > 0 && (
-                <button className="audio-queue-clear" onClick={audioClearQueue} title={t('audio.player.clearQueue')}>
-                  <MdDelete size={16} /> {t('audio.player.clearAll')}
-                </button>
-              )}
-            </ModalHeader>
-            {audioQueue.length === 0 ? (
+  // The queue's list: in the queue window, and unfolded on the Player tab.
+  const queueList = audioQueue.length === 0 ? (
               <p className="audio-queue-empty">{t('audio.player.queueEmpty')}</p>
             ) : (
               <ul className="audio-queue-list">{audioQueue.map((item, idx) => (
@@ -1186,7 +1176,21 @@ function GlobalAudioPlayer() {
                   </div>
                 </li>
               ))}</ul>
-            )}
+            );
+  const queueClear = audioQueue.length > 0 && (
+    <button className="audio-queue-clear" onClick={audioClearQueue} title={t('audio.player.clearQueue')}>
+      <MdDelete size={16} /> {t('audio.player.clearAll')}
+    </button>
+  );
+
+  const queueOverlay = audioShowQueue && !docked ? (
+        <div className="audio-queue-overlay" onClick={() => audioSetShowQueue(false)}>
+          <div ref={queuePanelRef} className="audio-queue-panel" onClick={e => e.stopPropagation()}>
+            <ModalHeader title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
+              <span className="audio-queue-count">{audioQueue.length}</span>
+              {queueClear}
+            </ModalHeader>
+            {queueList}
           </div>
         </div>
   ) : null;
@@ -1511,6 +1515,17 @@ function GlobalAudioPlayer() {
                   if (el && audioDuration > 0) el.currentTime = f * audioDuration;
                 }}
               />
+            )}
+
+            {/* On the Player tab the queue is part of the page, unfolded. */}
+            {docked && audioQueue.length > 0 && (
+              <section className="audio-np-queue-inline" aria-label={t('audio.player.queue')}>
+                <div className="audio-np-chapters-head">
+                  <span className="audio-transcript-label"><MdQueueMusic size={14} /> {t('audio.player.queue')} <span className="audio-queue-count">{audioQueue.length}</span></span>
+                  {queueClear}
+                </div>
+                {queueList}
+              </section>
             )}
 
             {chapters.length > 0 && (

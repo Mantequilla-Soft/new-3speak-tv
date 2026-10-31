@@ -90,7 +90,6 @@
     "nextChapter": "Susunod na kabanata",
     "chapterLink": "Link ng kabanata",
     "upNext": "Susunod",
-    "playQueue": "I-play ang queue",
     "hideIdle": "Itago (mananatili ang queue mo)",
     "continueAt": "Ituloy sa {{time}}"
   },
@@ -154,10 +153,7 @@
     "tabExplore": "Mag-explore",
     "tabPlayer": "Player",
     "nothingPlaying": "Wala pang tumutugtog.",
-    "goExplore": "Maghanap ng mapapakinggan",
-    "queueWaiting": "Nasa queue mo: {{count}}",
-    "showQueue": "Ipakita ang queue",
-    "reopenLast": "Buksan ulit ang \"{{title}}\""
+    "goExplore": "Maghanap ng mapapakinggan"
   },
   "upload": {
     "title": "Mag-upload ng audio",
