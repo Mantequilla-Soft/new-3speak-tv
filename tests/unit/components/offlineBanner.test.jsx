@@ -11,13 +11,15 @@ let items = []
 vi.mock('../../../src/lib/podcastDownloads', () => ({ useDownloads: () => ({ items }) }))
 let online = true
 vi.mock('../../../src/hooks/useOnline', () => ({ default: () => online }))
+let playing = false
+vi.mock('../../../src/lib/store', () => ({ useAppStore: (sel) => sel({ audioIsPlaying: playing }) }))
 
 const render = async (path) => {
   const { default: OfflineBanner } = await import('../../../src/components/OfflineBanner/OfflineBanner.jsx')
   return renderToString(<MemoryRouter initialEntries={[path]}><OfflineBanner /></MemoryRouter>)
 }
 
-afterEach(() => { items = []; online = true })
+afterEach(() => { items = []; online = true; playing = false })
 
 describe('the offline notice', () => {
   it('is not there online', async () => {
@@ -42,5 +44,12 @@ describe('the offline notice', () => {
   it('without downloads, says how to listen offline', async () => {
     online = false
     expect(await render('/')).toContain('Download episodes to listen without a connection')
+  })
+
+  it('stays out of the way while something plays', async () => {
+    online = false
+    items = [{ id: 'a' }]
+    playing = true
+    expect(await render('/feeds')).toBe('')
   })
 })
