@@ -40,7 +40,8 @@ export function isHlsTrack(track) {
 
 // ─── Playback speed ───────────────────────────────────────────────────────────
 
-export const SPEEDS = [0.5, 0.8, 1, 1.2, 1.5, 1.8, 2, 2.5, 3];
+// Up to 2x: faster than that, speech stops being worth listening to.
+export const SPEEDS = [0.5, 0.8, 1, 1.2, 1.5, 1.8, 2];
 export const SPEED_KEY = '3speak-audio-speed';
 
 /** One of SPEEDS (the nearest), or 1 for anything that isn't a number. */

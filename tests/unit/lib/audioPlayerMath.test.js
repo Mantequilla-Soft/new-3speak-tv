@@ -43,10 +43,12 @@ describe('time', () => {
 
 describe('speed', () => {
   it('snaps to the offered speeds and falls back to 1', () => {
-    expect(SPEEDS).toEqual([0.5, 0.8, 1, 1.2, 1.5, 1.8, 2, 2.5, 3])
+    expect(SPEEDS).toEqual([0.5, 0.8, 1, 1.2, 1.5, 1.8, 2])
     expect(normalizeSpeed('1.5')).toBe(1.5)
     expect(normalizeSpeed(1.45)).toBe(1.5)
-    expect(normalizeSpeed(9)).toBe(3)
+    expect(normalizeSpeed(9)).toBe(2)
+    // A 2.5x or 3x saved by an earlier build comes back as 2x.
+    expect(normalizeSpeed(3)).toBe(2)
     expect(normalizeSpeed('nope')).toBe(1)
     expect(normalizeSpeed(null)).toBe(1)
     expect(normalizeSpeed(0)).toBe(1)
