@@ -93,7 +93,8 @@
     "chapterLink": "Lien du chapitre",
     "upNext": "À suivre",
     "playQueue": "Lire la file d'attente",
-    "hideIdle": "Masquer (votre file d'attente reste)"
+    "hideIdle": "Masquer (votre file d'attente reste)",
+    "continueAt": "Reprendre à {{time}}"
   },
   "share": {
     "failed": "Échec",
@@ -158,7 +159,8 @@
     "nothingPlaying": "Rien n'est en lecture pour l'instant.",
     "goExplore": "Trouver quelque chose à écouter",
     "queueWaiting": "Dans votre file d'attente : {{count}}",
-    "showQueue": "Voir la file d'attente"
+    "showQueue": "Voir la file d'attente",
+    "reopenLast": "Rouvrir « {{title}} »"
   },
   "upload": {
     "title": "Mettre en ligne un audio",

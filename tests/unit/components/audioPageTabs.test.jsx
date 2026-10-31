@@ -75,4 +75,25 @@ describe('audio page tabs', () => {
     expect(selected).toBe(1)
     act(() => root.unmount())
   })
+
+  it('the Player tab brings back what was playing when the player was closed, at that spot', () => {
+    act(() => { useAppStore.getState().audioPlay(track) })
+    act(() => { useAppStore.getState().audioSetCurrentTime(42); useAppStore.getState().audioStop() })
+    expect(useAppStore.getState().audioCurrent).toBeNull()
+    expect(JSON.parse(localStorage.getItem('audio-last'))).toMatchObject({ track: { _id: 'a1' }, t: 42 })
+
+    const { host, root, selected } = open('/audio?player=1')
+    expect(selected).toBe(0)
+    const st = useAppStore.getState()
+    expect(st.audioCurrent?._id).toBe('a1')
+    // Loaded paused at the spot, not started.
+    expect(st.audioRestoredAt).toBe(42)
+    expect(host.querySelector('.audio-player-dock')).toBeTruthy()
+
+    // Closing it again on this tab leaves it closed.
+    act(() => { useAppStore.getState().audioStop() })
+    expect(useAppStore.getState().audioCurrent).toBeNull()
+    expect(host.querySelector('.audio-player-empty')).toBeTruthy()
+    act(() => root.unmount())
+  })
 })

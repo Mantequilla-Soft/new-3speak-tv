@@ -169,7 +169,7 @@ function GlobalAudioPlayer() {
     audioCurrent, audioQueue, audioAutoplayList,
     audioIsPlaying, audioCurrentTime, audioDuration,
     audioExpanded, audioShowQueue, audioPlayNonce,
-    audioDock, audioDockOpener,
+    audioDock, audioDockOpener, audioLast, audioResumeLast,
     audioToggleNonce, audioSeekNonce, audioPendingSeek,
     audioClipEnd, audioClearClip,
     audioPlay, audioStop,
@@ -1193,7 +1193,11 @@ function GlobalAudioPlayer() {
 
   if (!audioCurrent) {
     if (!idleBar) return <>{audioEl}{queueOverlay}</>;
-    const next = audioQueue[0];
+    // What was playing when the player was closed comes first, at its spot;
+    // without it, the top of the queue.
+    const next = audioLast?.track || audioQueue[0];
+    const playIdle = () => (audioLast ? audioResumeLast(true) : audioPlay(next, audioQueue));
+    const idleLabel = audioLast ? t('audio.player.continueAt', { time: fmt(audioLast.t) }) : t('audio.player.upNext');
     return (
       <>
         {audioEl}
@@ -1204,10 +1208,10 @@ function GlobalAudioPlayer() {
             </div>
             <div className="audio-np-info" onClick={() => audioSetShowQueue(true)}>
               <span className="audio-np-title"><span className="audio-np-title-text">{next.title || t('audio.untitled')}</span></span>
-              <span className="audio-np-subline"><span className="audio-np-author">{t('audio.player.upNext')}</span></span>
+              <span className="audio-np-subline"><span className="audio-np-author">{idleLabel}</span></span>
             </div>
             <div className="audio-np-controls">
-              <button className="audio-np-play-btn" onClick={() => audioPlay(next, audioQueue)} aria-label={t('audio.player.playQueue')} title={t('audio.player.playQueue')}><MdPlayArrow size={26} /></button>
+              <button className="audio-np-play-btn" onClick={playIdle} aria-label={idleLabel} title={idleLabel}><MdPlayArrow size={26} /></button>
             </div>
             <button className="audio-np-queue-btn" onClick={() => audioSetShowQueue(v => !v)} title={t('audio.player.queue')} aria-label={t('audio.player.queue')}>
               <MdQueueMusic size={20} />

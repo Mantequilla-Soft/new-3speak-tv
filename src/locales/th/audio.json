@@ -89,7 +89,8 @@
     "chapterLink": "ลิงก์บท",
     "upNext": "ถัดไป",
     "playQueue": "เล่นคิว",
-    "hideIdle": "ซ่อน (คิวยังอยู่)"
+    "hideIdle": "ซ่อน (คิวยังอยู่)",
+    "continueAt": "เล่นต่อที่ {{time}}"
   },
   "share": {
     "failed": "ไม่สำเร็จ",
@@ -152,7 +153,8 @@
     "nothingPlaying": "ยังไม่มีอะไรเล่นอยู่",
     "goExplore": "หาสิ่งที่จะฟัง",
     "queueWaiting": "ในคิวของคุณ: {{count}}",
-    "showQueue": "ดูคิว"
+    "showQueue": "ดูคิว",
+    "reopenLast": "เปิด \"{{title}}\" อีกครั้ง"
   },
   "upload": {
     "title": "อัปโหลดเสียง",

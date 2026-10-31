@@ -91,7 +91,8 @@
     "chapterLink": "অধ্যায়ের লিংক",
     "upNext": "এরপর",
     "playQueue": "কিউ চালান",
-    "hideIdle": "লুকান (আপনার কিউ থাকবে)"
+    "hideIdle": "লুকান (আপনার কিউ থাকবে)",
+    "continueAt": "{{time}} থেকে চালিয়ে যান"
   },
   "share": {
     "failed": "ব্যর্থ",
@@ -155,7 +156,8 @@
     "nothingPlaying": "এখনও কিছু বাজছে না।",
     "goExplore": "শোনার মতো কিছু খুঁজুন",
     "queueWaiting": "আপনার কিউতে: {{count}}",
-    "showQueue": "কিউ দেখুন"
+    "showQueue": "কিউ দেখুন",
+    "reopenLast": "\"{{title}}\" আবার খুলুন"
   },
   "upload": {
     "title": "অডিও আপলোড করুন",

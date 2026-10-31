@@ -91,7 +91,8 @@
     "chapterLink": "Link zum Kapitel",
     "upNext": "Als Nächstes",
     "playQueue": "Warteschlange abspielen",
-    "hideIdle": "Ausblenden (die Warteschlange bleibt)"
+    "hideIdle": "Ausblenden (die Warteschlange bleibt)",
+    "continueAt": "Weiter bei {{time}}"
   },
   "share": {
     "failed": "Fehlgeschlagen",
@@ -155,7 +156,8 @@
     "nothingPlaying": "Noch läuft nichts.",
     "goExplore": "Etwas zum Anhören finden",
     "queueWaiting": "In deiner Warteschlange: {{count}}",
-    "showQueue": "Warteschlange anzeigen"
+    "showQueue": "Warteschlange anzeigen",
+    "reopenLast": "„{{title}}“ wieder öffnen"
   },
   "upload": {
     "title": "Audio hochladen",

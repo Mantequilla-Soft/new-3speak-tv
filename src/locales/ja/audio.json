@@ -89,7 +89,8 @@
     "chapterLink": "チャプターのリンク",
     "upNext": "次に再生",
     "playQueue": "キューを再生",
-    "hideIdle": "非表示 (キューは残ります)"
+    "hideIdle": "非表示 (キューは残ります)",
+    "continueAt": "{{time}} から再開"
   },
   "share": {
     "failed": "失敗しました",
@@ -152,7 +153,8 @@
     "nothingPlaying": "まだ何も再生していません。",
     "goExplore": "聴くものを探す",
     "queueWaiting": "キューの項目: {{count}}",
-    "showQueue": "キューを表示"
+    "showQueue": "キューを表示",
+    "reopenLast": "「{{title}}」をもう一度開く"
   },
   "upload": {
     "title": "音声をアップロード",

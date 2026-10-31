@@ -89,7 +89,8 @@
     "chapterLink": "Liên kết chương",
     "upNext": "Tiếp theo",
     "playQueue": "Phát hàng đợi",
-    "hideIdle": "Ẩn (hàng đợi vẫn còn)"
+    "hideIdle": "Ẩn (hàng đợi vẫn còn)",
+    "continueAt": "Tiếp tục từ {{time}}"
   },
   "share": {
     "failed": "Thất bại",
@@ -152,7 +153,8 @@
     "nothingPlaying": "Chưa có gì đang phát.",
     "goExplore": "Tìm nội dung để nghe",
     "queueWaiting": "Trong hàng đợi: {{count}}",
-    "showQueue": "Xem hàng đợi"
+    "showQueue": "Xem hàng đợi",
+    "reopenLast": "Mở lại \"{{title}}\""
   },
   "upload": {
     "title": "Tải âm thanh lên",

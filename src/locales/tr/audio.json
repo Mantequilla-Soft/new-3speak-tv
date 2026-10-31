@@ -91,7 +91,8 @@
     "chapterLink": "Kısım bağlantısı",
     "upNext": "Sıradaki",
     "playQueue": "Sırayı oynat",
-    "hideIdle": "Gizle (sıran kalır)"
+    "hideIdle": "Gizle (sıran kalır)",
+    "continueAt": "{{time}} noktasından devam et"
   },
   "share": {
     "failed": "Başarısız",
@@ -155,7 +156,8 @@
     "nothingPlaying": "Henüz çalan bir şey yok.",
     "goExplore": "Dinleyecek bir şey bul",
     "queueWaiting": "Sırandakiler: {{count}}",
-    "showQueue": "Sırayı göster"
+    "showQueue": "Sırayı göster",
+    "reopenLast": "\"{{title}}\" yeniden aç"
   },
   "upload": {
     "title": "Ses yükle",

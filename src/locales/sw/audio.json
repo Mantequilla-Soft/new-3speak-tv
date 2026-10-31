@@ -91,7 +91,8 @@
     "chapterLink": "Kiungo cha sura",
     "upNext": "Kinachofuata",
     "playQueue": "Cheza foleni",
-    "hideIdle": "Ficha (foleni yako inabaki)"
+    "hideIdle": "Ficha (foleni yako inabaki)",
+    "continueAt": "Endelea kutoka {{time}}"
   },
   "share": {
     "failed": "Imeshindwa",
@@ -155,7 +156,8 @@
     "nothingPlaying": "Bado hakuna kinachocheza.",
     "goExplore": "Tafuta kitu cha kusikiliza",
     "queueWaiting": "Kwenye foleni yako: {{count}}",
-    "showQueue": "Onyesha foleni"
+    "showQueue": "Onyesha foleni",
+    "reopenLast": "Fungua tena \"{{title}}\""
   },
   "upload": {
     "title": "Pakia sauti",

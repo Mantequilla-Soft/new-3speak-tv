@@ -91,7 +91,8 @@
     "chapterLink": "Link naar hoofdstuk",
     "upNext": "Hierna",
     "playQueue": "Wachtrij afspelen",
-    "hideIdle": "Verbergen (je wachtrij blijft)"
+    "hideIdle": "Verbergen (je wachtrij blijft)",
+    "continueAt": "Verder bij {{time}}"
   },
   "share": {
     "failed": "Mislukt",
@@ -155,7 +156,8 @@
     "nothingPlaying": "Er speelt nog niets.",
     "goExplore": "Zoek iets om te luisteren",
     "queueWaiting": "In je wachtrij: {{count}}",
-    "showQueue": "Wachtrij tonen"
+    "showQueue": "Wachtrij tonen",
+    "reopenLast": "\"{{title}}\" weer openen"
   },
   "upload": {
     "title": "Audio uploaden",

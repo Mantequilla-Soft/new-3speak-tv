@@ -89,7 +89,8 @@
     "chapterLink": "章节链接",
     "upNext": "接下来",
     "playQueue": "播放队列",
-    "hideIdle": "隐藏 (队列会保留)"
+    "hideIdle": "隐藏 (队列会保留)",
+    "continueAt": "从 {{time}} 继续"
   },
   "share": {
     "failed": "失败",
@@ -152,7 +153,8 @@
     "nothingPlaying": "还没有在播放的内容。",
     "goExplore": "找点东西听",
     "queueWaiting": "队列中: {{count}}",
-    "showQueue": "查看队列"
+    "showQueue": "查看队列",
+    "reopenLast": "重新打开「{{title}}」"
   },
   "upload": {
     "title": "上传音频",

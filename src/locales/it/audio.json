@@ -93,7 +93,8 @@
     "chapterLink": "Link al capitolo",
     "upNext": "Prossimo",
     "playQueue": "Riproduci la coda",
-    "hideIdle": "Nascondi (la coda resta)"
+    "hideIdle": "Nascondi (la coda resta)",
+    "continueAt": "Riprendi da {{time}}"
   },
   "share": {
     "failed": "Non riuscito",
@@ -158,7 +159,8 @@
     "nothingPlaying": "Ancora niente in riproduzione.",
     "goExplore": "Trova qualcosa da ascoltare",
     "queueWaiting": "In coda: {{count}}",
-    "showQueue": "Mostra la coda"
+    "showQueue": "Mostra la coda",
+    "reopenLast": "Riapri «{{title}}»"
   },
   "upload": {
     "title": "Carica audio",

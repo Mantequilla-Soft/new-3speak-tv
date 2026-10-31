@@ -14,6 +14,18 @@
 const LS_NOW_KEY = 'audio-now-playing';
 const LS_QUEUE_KEY = 'audio-queue';
 const LS_POS_KEY = 'audio-now-position';
+// What was playing when the listener closed the player, and where: { track, t }.
+// Closing hides the player; it comes back with this (audioLast).
+const LS_LAST_KEY = 'audio-last';
+
+function readLast() {
+  try {
+    const last = JSON.parse(localStorage.getItem(LS_LAST_KEY) || 'null');
+    return last?.track?._id ? { track: last.track, t: Number.isFinite(last.t) ? last.t : 0 } : null;
+  } catch {
+    return null;
+  }
+}
 
 function readKey(key) {
   // Older builds kept these in sessionStorage; pick them up once.
@@ -65,6 +77,7 @@ export const createAudioPlayerSlice = (set, get) => {
     audioCurrent: init.audioCurrent,
     audioQueue: init.audioQueue,
     audioAutoplayList: init.audioCurrent ? [init.audioCurrent] : [],
+    audioLast: readLast(),
     audioIsPlaying: false,
     // Set when the page opened with a track from the last visit: the player
     // loads it paused and seeks here instead of starting it. null otherwise.
@@ -108,6 +121,18 @@ export const createAudioPlayerSlice = (set, get) => {
       }));
     },
     audioStop: () => {
+      const { audioCurrent, audioCurrentTime } = get();
+      if (audioCurrent && !audioCurrent.live) {
+        // The spot the player last saved for this track, else where it is now.
+        let t = audioCurrentTime;
+        try {
+          const pos = JSON.parse(localStorage.getItem(LS_POS_KEY) || 'null');
+          if (pos?.id === audioCurrent._id && Number.isFinite(pos.t)) t = pos.t;
+        } catch { /* storage unavailable */ }
+        const last = { track: audioCurrent, t: Math.max(0, Math.floor(Number(t) || 0)) };
+        try { localStorage.setItem(LS_LAST_KEY, JSON.stringify(last)); } catch { /* storage unavailable */ }
+        set({ audioLast: last });
+      }
       persistNow(null);
       set({
         audioCurrent: null,
@@ -118,6 +143,24 @@ export const createAudioPlayerSlice = (set, get) => {
         audioAutoplayList: [],
         audioExpanded: false,
       });
+    },
+    // Back to what was playing when the player was closed: loaded paused at that
+    // spot (like a reload does), or playing from there with `play`.
+    audioResumeLast: (play = false) => {
+      const last = get().audioLast;
+      if (!last) return;
+      if (play) { get().audioPlayAt(last.track, last.t || 0); return; }
+      persistNow(last.track);
+      set((s) => ({
+        audioCurrent: last.track,
+        audioAutoplayList: [last.track],
+        audioRestoredAt: last.t || 0,
+        audioStartAt: null,
+        audioClipEnd: null,
+        audioCurrentTime: last.t || 0,
+        audioDuration: Number(last.track.duration) || 0,
+        audioPlayNonce: s.audioPlayNonce + 1,
+      }));
     },
     audioRequestPlayPauseToggle: () => {
       // Flip a flag; the GlobalAudioPlayer reads it via subscribe and toggles the <audio> element

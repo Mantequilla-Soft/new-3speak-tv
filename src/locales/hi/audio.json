@@ -91,7 +91,8 @@
     "chapterLink": "चैप्टर लिंक",
     "upNext": "आगे",
     "playQueue": "कतार चलाएं",
-    "hideIdle": "छिपाएं (आपकी कतार बनी रहेगी)"
+    "hideIdle": "छिपाएं (आपकी कतार बनी रहेगी)",
+    "continueAt": "{{time}} से जारी रखें"
   },
   "share": {
     "failed": "फ़ेल हुआ",
@@ -155,7 +156,8 @@
     "nothingPlaying": "अभी कुछ नहीं चल रहा है।",
     "goExplore": "सुनने के लिए कुछ ढूंढें",
     "queueWaiting": "आपकी कतार में: {{count}}",
-    "showQueue": "कतार दिखाएं"
+    "showQueue": "कतार दिखाएं",
+    "reopenLast": "\"{{title}}\" फिर से खोलें"
   },
   "upload": {
     "title": "ऑडियो अपलोड करें",

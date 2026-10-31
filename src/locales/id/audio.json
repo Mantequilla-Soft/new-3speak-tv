@@ -89,7 +89,8 @@
     "chapterLink": "Tautan bab",
     "upNext": "Berikutnya",
     "playQueue": "Putar antrean",
-    "hideIdle": "Sembunyikan (antrean tetap ada)"
+    "hideIdle": "Sembunyikan (antrean tetap ada)",
+    "continueAt": "Lanjutkan dari {{time}}"
   },
   "share": {
     "failed": "Gagal",
@@ -152,7 +153,8 @@
     "nothingPlaying": "Belum ada yang diputar.",
     "goExplore": "Cari sesuatu untuk didengarkan",
     "queueWaiting": "Di antreanmu: {{count}}",
-    "showQueue": "Lihat antrean"
+    "showQueue": "Lihat antrean",
+    "reopenLast": "Buka lagi \"{{title}}\""
   },
   "upload": {
     "title": "Unggah audio",

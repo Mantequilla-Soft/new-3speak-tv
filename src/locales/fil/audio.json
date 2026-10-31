@@ -91,7 +91,8 @@
     "chapterLink": "Link ng kabanata",
     "upNext": "Susunod",
     "playQueue": "I-play ang queue",
-    "hideIdle": "Itago (mananatili ang queue mo)"
+    "hideIdle": "Itago (mananatili ang queue mo)",
+    "continueAt": "Ituloy sa {{time}}"
   },
   "share": {
     "failed": "Pumalya",
@@ -155,7 +156,8 @@
     "nothingPlaying": "Wala pang tumutugtog.",
     "goExplore": "Maghanap ng mapapakinggan",
     "queueWaiting": "Nasa queue mo: {{count}}",
-    "showQueue": "Ipakita ang queue"
+    "showQueue": "Ipakita ang queue",
+    "reopenLast": "Buksan ulit ang \"{{title}}\""
   },
   "upload": {
     "title": "Mag-upload ng audio",

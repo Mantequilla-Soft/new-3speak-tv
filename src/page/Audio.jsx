@@ -165,7 +165,7 @@ function loadFilters() {
 
 function Audio() {
   const { t } = useTranslation();
-  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioPlayAt, audioAddToQueue, audioSetDock, audioSetDockOpener, audioQueue, audioSetShowQueue } = useAppStore();
+  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioPlayAt, audioAddToQueue, audioSetDock, audioSetDockOpener, audioQueue, audioSetShowQueue, audioLast, audioResumeLast } = useAppStore();
   const loggedIn = authenticated && isLoggedIn();
 
   // "External": podcasts from outside RSS feeds (components/Podcasts). It is the last
@@ -196,6 +196,14 @@ function Audio() {
     return () => audioSetDockOpener(null);
   }, [mobile, showPlayerTab, audioSetDockOpener]);
   const dockRef = useCallback((el) => audioSetDock(el), [audioSetDock]);
+  // Opening the Player tab with nothing loaded brings back what was playing when
+  // the player was closed, paused at that spot. Only on the way in: closing the
+  // player while on this tab leaves it closed.
+  useEffect(() => {
+    if (!playerView) return;
+    const st = useAppStore.getState();
+    if (!st.audioCurrent && st.audioLast) st.audioResumeLast(false);
+  }, [playerView]);
   const leaveExternal = () => {
     rememberExternal(false);
     if (!external) return;
@@ -480,17 +488,22 @@ function Audio() {
             <div className="audio-empty audio-player-empty">
               <MdPlayCircleOutline size={44} aria-hidden />
               <p>{t('audio.page.nothingPlaying')}</p>
+              {audioLast && (
+                <button type="button" className="audio-type-chip active" onClick={() => audioResumeLast(false)}>
+                  {t('audio.page.reopenLast', { title: audioLast.track.title || t('audio.untitled') })}
+                </button>
+              )}
               {/* A closed player keeps its queue: offer it here. */}
               {audioQueue.length > 0 && (
                 <>
                   <p>{t('audio.page.queueWaiting', { count: audioQueue.length })}</p>
                   <div className="audio-player-empty-actions">
-                    <button type="button" className="audio-type-chip active" onClick={() => audioPlay(audioQueue[0], audioQueue)}>{t('audio.player.playQueue')}</button>
+                    <button type="button" className={`audio-type-chip${audioLast ? '' : ' active'}`} onClick={() => audioPlay(audioQueue[0], audioQueue)}>{t('audio.player.playQueue')}</button>
                     <button type="button" className="audio-type-chip" onClick={() => audioSetShowQueue(true)}>{t('audio.page.showQueue')}</button>
                   </div>
                 </>
               )}
-              <button type="button" className={`audio-type-chip${audioQueue.length ? '' : ' active'}`} onClick={() => showPlayerTab(false)}>{t('audio.page.goExplore')}</button>
+              <button type="button" className={`audio-type-chip${audioQueue.length || audioLast ? '' : ' active'}`} onClick={() => showPlayerTab(false)}>{t('audio.page.goExplore')}</button>
             </div>
           )}
         </div>

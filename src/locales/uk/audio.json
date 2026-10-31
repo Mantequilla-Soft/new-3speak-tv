@@ -95,7 +95,8 @@
     "chapterLink": "Посилання на розділ",
     "upNext": "Далі",
     "playQueue": "Слухати чергу",
-    "hideIdle": "Сховати (черга залишиться)"
+    "hideIdle": "Сховати (черга залишиться)",
+    "continueAt": "Продовжити з {{time}}"
   },
   "share": {
     "failed": "Помилка",
@@ -161,7 +162,8 @@
     "nothingPlaying": "Поки нічого не грає.",
     "goExplore": "Знайти, що послухати",
     "queueWaiting": "У вашій черзі: {{count}}",
-    "showQueue": "Показати чергу"
+    "showQueue": "Показати чергу",
+    "reopenLast": "Знову відкрити «{{title}}»"
   },
   "upload": {
     "title": "Завантажити аудіо",

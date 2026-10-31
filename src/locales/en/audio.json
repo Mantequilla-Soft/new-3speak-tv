@@ -91,7 +91,8 @@
     "chapterLink": "Chapter link",
     "upNext": "Up next",
     "playQueue": "Play the queue",
-    "hideIdle": "Hide (your queue stays)"
+    "hideIdle": "Hide (your queue stays)",
+    "continueAt": "Continue at {{time}}"
   },
   "share": {
     "failed": "Failed",
@@ -155,7 +156,8 @@
     "nothingPlaying": "Nothing is playing yet.",
     "goExplore": "Find something to listen to",
     "queueWaiting": "Waiting in your queue: {{count}}",
-    "showQueue": "Show the queue"
+    "showQueue": "Show the queue",
+    "reopenLast": "Open \"{{title}}\" again"
   },
   "upload": {
     "title": "Upload audio",

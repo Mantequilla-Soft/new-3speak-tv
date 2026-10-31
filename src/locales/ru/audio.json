@@ -95,7 +95,8 @@
     "chapterLink": "Ссылка на главу",
     "upNext": "Далее",
     "playQueue": "Слушать очередь",
-    "hideIdle": "Скрыть (очередь сохранится)"
+    "hideIdle": "Скрыть (очередь сохранится)",
+    "continueAt": "Продолжить с {{time}}"
   },
   "share": {
     "failed": "Ошибка",
@@ -161,7 +162,8 @@
     "nothingPlaying": "Пока ничего не играет.",
     "goExplore": "Найти, что послушать",
     "queueWaiting": "В вашей очереди: {{count}}",
-    "showQueue": "Показать очередь"
+    "showQueue": "Показать очередь",
+    "reopenLast": "Снова открыть «{{title}}»"
   },
   "upload": {
     "title": "Загрузить аудио",

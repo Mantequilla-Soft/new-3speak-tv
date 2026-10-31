@@ -93,7 +93,8 @@
     "chapterLink": "Link do capítulo",
     "upNext": "A seguir",
     "playQueue": "Tocar a fila",
-    "hideIdle": "Ocultar (sua fila continua)"
+    "hideIdle": "Ocultar (sua fila continua)",
+    "continueAt": "Continuar em {{time}}"
   },
   "share": {
     "failed": "Falhou",
@@ -158,7 +159,8 @@
     "nothingPlaying": "Nada está tocando ainda.",
     "goExplore": "Encontre algo para ouvir",
     "queueWaiting": "Na sua fila: {{count}}",
-    "showQueue": "Ver a fila"
+    "showQueue": "Ver a fila",
+    "reopenLast": "Abrir \"{{title}}\" de novo"
   },
   "upload": {
     "title": "Enviar áudio",
