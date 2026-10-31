@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.80.79',
+    category: 'audio',
+    date: '2026-10-31',
+    summary: 'Listen offline: without a connection the Audio page opens your downloads, and they keep playing.',
+  },
+  {
     version: '1.80.78',
     category: 'audio',
     date: '2026-10-31',
