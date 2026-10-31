@@ -640,7 +640,7 @@
     "missing": "This audio is not available.",
     "description": "Description",
     "noDescription": "No description.",
-    "comments": "Votes and comments",
+    "comments": "Comments",
     "album": "From {{name}}"
   }
 }

@@ -665,7 +665,7 @@
     "missing": "Questo audio non è disponibile.",
     "description": "Descrizione",
     "noDescription": "Nessuna descrizione.",
-    "comments": "Voti e commenti",
+    "comments": "Commenti",
     "album": "Da {{name}}"
   }
 }

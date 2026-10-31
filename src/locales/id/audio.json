@@ -615,7 +615,7 @@
     "missing": "Audio ini tidak tersedia.",
     "description": "Deskripsi",
     "noDescription": "Tidak ada deskripsi.",
-    "comments": "Vote dan komentar",
+    "comments": "Komentar",
     "album": "Dari {{name}}"
   }
 }

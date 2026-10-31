@@ -690,7 +690,7 @@
     "missing": "Это аудио недоступно.",
     "description": "Описание",
     "noDescription": "Нет описания.",
-    "comments": "Голоса и комментарии",
+    "comments": "Комментарии",
     "album": "Из {{name}}"
   }
 }

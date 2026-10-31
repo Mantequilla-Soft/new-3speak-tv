@@ -615,7 +615,7 @@
     "missing": "このオーディオは利用できません。",
     "description": "説明",
     "noDescription": "説明はありません。",
-    "comments": "投票とコメント",
+    "comments": "コメント",
     "album": "{{name}} より"
   }
 }

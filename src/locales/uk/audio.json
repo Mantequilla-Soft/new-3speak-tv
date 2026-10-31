@@ -690,7 +690,7 @@
     "missing": "Це аудіо недоступне.",
     "description": "Опис",
     "noDescription": "Немає опису.",
-    "comments": "Голоси й коментарі",
+    "comments": "Коментарі",
     "album": "З {{name}}"
   }
 }

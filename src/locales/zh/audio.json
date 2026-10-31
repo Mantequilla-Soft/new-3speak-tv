@@ -615,7 +615,7 @@
     "missing": "该音频不可用。",
     "description": "简介",
     "noDescription": "暂无简介。",
-    "comments": "投票和评论",
+    "comments": "评论",
     "album": "来自 {{name}}"
   }
 }

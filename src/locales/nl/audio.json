@@ -640,7 +640,7 @@
     "missing": "Deze audio is niet beschikbaar.",
     "description": "Beschrijving",
     "noDescription": "Geen beschrijving.",
-    "comments": "Stemmen en reacties",
+    "comments": "Reacties",
     "album": "Uit {{name}}"
   }
 }

@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import {
   MdArrowBack, MdPlayArrow, MdPause, MdPlaylistAdd, MdPlaylistAddCheck, MdLink, MdShare,
-  MdPlaylistPlay, MdForum, MdAlbum,
+  MdPlaylistPlay, MdForum, MdAlbum, MdThumbUp,
 } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
@@ -16,7 +16,10 @@ import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import { fmtClock, episodeShareUrl } from '../../lib/podcastLibrary';
 import { parseTimeParam } from '../GlobalAudioPlayer/playerMath';
 import { fmtDuration, useDateFormat } from '../../lib/podcastFormat';
+import { getUersContent } from '../../utils/hiveUtils';
 import { DownloadButton } from '../Podcasts/PodcastBits';
+import PayoutAmount from '../PayoutAmount/PayoutAmount';
+import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import BlogContent from '../playVideo/BlogContent';
 import TipModal from '../tip-reward/TipModal';
 import AddToPlaylistModal from '../AddToPlaylistModal/AddToPlaylistModal';
@@ -72,6 +75,11 @@ export default function AudioItemView({ owner, id, onBack }) {
   const [deepUsed, setDeepUsed] = useState(false);
   const [tipping, setTipping] = useState(false);
   const [listing, setListing] = useState(false);
+  const [voting, setVoting] = useState(false);
+  const [votedNow, setVotedNow] = useState(false);
+  const [weight, setWeight] = useState(100);
+  const [voteValue, setVoteValue] = useState(0);
+  const [accountData, setAccountData] = useState(null);
 
   const { data: item, isLoading, error } = useQuery({
     queryKey: ['audio-item', owner, id],
@@ -80,6 +88,14 @@ export default function AudioItemView({ owner, id, onBack }) {
       return (data?.audio || []).find((a) => a.owner === owner && a.permlink === id) || null;
     },
     staleTime: 5 * 60 * 1000,
+  });
+  const postPermlink = String(item?.post_permlink || '').split('/').pop();
+  // The Hive post behind the audio: its votes, payout and comments.
+  const { data: post } = useQuery({
+    queryKey: ['audio-item-post', owner, postPermlink],
+    enabled: !!postPermlink,
+    queryFn: () => getUersContent(owner, postPermlink),
+    staleTime: 60 * 1000,
   });
   const inQueue = useAppStore((s) => !!item && s.audioQueue.some((i) => i._id === item._id));
   const isCurrent = !!item && audioCurrent?._id === item._id;
@@ -108,8 +124,15 @@ export default function AudioItemView({ owner, id, onBack }) {
   };
   const shareAt = isCurrent && currentSec > 0 ? currentSec : 0;
   const link = (from) => episodeShareUrl(window.location.origin, audioItemPath(item), from);
-  const postPermlink = String(item.post_permlink || '').split('/').pop();
   const genre = item.category === 'song' && item.genre ? item.genre : '';
+  const votes = post?.active_votes || [];
+  const voted = votedNow || (!!user && votes.some((v) => v.voter === user));
+  const voteCount = votes.length + (votedNow && !votes.some((v) => v.voter === user) ? 1 : 0);
+  const payout = post
+    ? (parseFloat(post.pending_payout_value || 0) > 0
+      ? parseFloat(post.pending_payout_value)
+      : parseFloat(post.total_payout_value || 0) + parseFloat(post.curator_payout_value || 0))
+    : 0;
 
   return (
     <div className="pod-show pod-episode audio-item">
@@ -127,6 +150,7 @@ export default function AudioItemView({ owner, id, onBack }) {
             {item.duration > 0 && <span className="pod-chip">{fmtDuration(item.duration)}</span>}
             {genre && <span className="pod-chip">{genre}</span>}
             {item.plays > 0 && <span>{t('audio.tile.plays', { count: item.plays })}</span>}
+            {post && <PayoutAmount amount={payout} size={13} />}
           </div>
           {item.playlist_id && item.playlist_name && (
             <button type="button" className="pod-show-kicker pod-episode-show" onClick={() => navigate(`/playlist/${item.playlist_id}`)}>
@@ -147,6 +171,19 @@ export default function AudioItemView({ owner, id, onBack }) {
               {inQueue ? <MdPlaylistAddCheck size={18} /> : <MdPlaylistAdd size={18} />}
               {inQueue ? t('audio.podcasts.inQueue') : t('audio.podcasts.addToQueue')}
             </button>
+            {postPermlink && (
+              <button
+                type="button"
+                className={`pod-btn${voted ? ' pod-btn--on' : ''}`}
+                onClick={() => {
+                  if (!loggedIn) { toastIn('Post').error(t('audio.post.signInToVote')); return; }
+                  setVoting((v) => !v);
+                }}
+              >
+                <MdThumbUp size={16} /> {voted ? t('audio.post.voted') : t('audio.post.vote')}
+                {voteCount > 0 && <span className="pod-btn-count">{voteCount}</span>}
+              </button>
+            )}
             <DownloadButton track={item} variant="button" />
             <button type="button" className="pod-btn" onClick={() => copyLink(link(shareAt), t)}>
               {shareAt ? <MdShare size={16} /> : <MdLink size={16} />}
@@ -166,6 +203,7 @@ export default function AudioItemView({ owner, id, onBack }) {
             {postPermlink && (
               <button type="button" className="pod-btn" onClick={() => navigate(`/audio/${item.owner}/${postPermlink}`)}>
                 <MdForum size={16} /> {t('audio.item.comments')}
+                {post?.children > 0 && <span className="pod-btn-count">{post.children}</span>}
               </button>
             )}
           </div>
@@ -179,6 +217,19 @@ export default function AudioItemView({ owner, id, onBack }) {
           : <div className="pod-notes"><p className={item.description ? undefined : 'pod-empty'}>{item.description || t('audio.item.noDescription')}</p></div>}
       </section>
 
+      {voting && (
+        <CommentVoteTooltip
+          author={item.owner}
+          permlink={postPermlink}
+          showTooltip={voting}
+          setShowTooltip={setVoting}
+          weight={weight} setWeight={setWeight}
+          voteValue={voteValue} setVoteValue={setVoteValue}
+          accountData={accountData} setAccountData={setAccountData}
+          compact
+          onVoteSuccess={() => { setVoting(false); setVotedNow(true); }}
+        />
+      )}
       {tipping && (
         <TipModal
           recipient={item.owner}

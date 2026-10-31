@@ -640,7 +640,7 @@
     "missing": "Bu ses kullanılamıyor.",
     "description": "Açıklama",
     "noDescription": "Açıklama yok.",
-    "comments": "Oylar ve yorumlar",
+    "comments": "Yorumlar",
     "album": "{{name}} albümünden"
   }
 }

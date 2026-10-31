@@ -1643,3 +1643,10 @@
   border-radius: 50%;
   object-fit: cover;
 }
+
+// A count inside an action button (votes, comments).
+.pod-btn-count {
+  margin-left: 2px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}

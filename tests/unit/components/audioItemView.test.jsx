@@ -29,6 +29,7 @@ async function render(path, item) {
   const { default: AudioItemView } = await import('../../../src/components/AudioItem/AudioItemView.jsx')
   const qc = new QueryClient()
   qc.setQueryData(['audio-item', 'epodcaster', 'f48l7vyi'], item)
+  qc.setQueryData(['audio-item-post', 'epodcaster', 'my-show-ep-1'], { active_votes: [{ voter: 'a' }, { voter: 'b' }], children: 3, pending_payout_value: '1.234 HBD' })
   return renderToString(
     <QueryClientProvider client={qc}><MemoryRouter initialEntries={[path]}><AudioItemView owner="epodcaster" id="f48l7vyi" onBack={() => {}} /></MemoryRouter></QueryClientProvider>,
   )
@@ -43,7 +44,10 @@ describe('a 3Speak audio page', () => {
     expect(html).toContain('From Season One')
     expect(html).toContain('Add to queue')
     expect(html).toContain('Copy link')
-    expect(html).toContain('Votes and comments')
+    expect(html).toContain('Comments')
+    // Vote, with the post's two votes; its three comments.
+    expect(html).toContain('Vote<span class="pod-btn-count">2</span>')
+    expect(html).toContain('<span class="pod-btn-count">3</span>')
     expect(html).toContain('Description')
     expect(html).toContain('my-show-ep-1')
   })

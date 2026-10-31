@@ -640,7 +640,7 @@
     "missing": "এই অডিওটি উপলব্ধ নয়।",
     "description": "বিবরণ",
     "noDescription": "কোনো বিবরণ নেই।",
-    "comments": "ভোট ও মন্তব্য",
+    "comments": "মন্তব্য",
     "album": "{{name}} থেকে"
   }
 }
