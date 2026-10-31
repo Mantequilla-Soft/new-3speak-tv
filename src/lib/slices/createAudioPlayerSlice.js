@@ -86,6 +86,10 @@ export const createAudioPlayerSlice = (set, get) => {
     // audioStartAt once the track loads and pauses at audioClipEnd. null = none.
     audioStartAt: null,
     audioClipEnd: null,
+    // The Player tab of a phone's audio page (page/Audio.jsx): the element the
+    // player draws its controls into instead of the bar, and how to open that tab.
+    audioDock: null,
+    audioDockOpener: null,
 
     audioPlay: (track, contextItems) => {
       if (!track) return;
@@ -161,6 +165,8 @@ export const createAudioPlayerSlice = (set, get) => {
       set({ audioStartAt: from, audioClipEnd: to, audioCurrentTime: from || 0 });
     },
     audioClearClip: () => set({ audioClipEnd: null }),
+    audioSetDock: (el) => set({ audioDock: el || null }),
+    audioSetDockOpener: (fn) => set({ audioDockOpener: typeof fn === 'function' ? fn : null }),
     audioRemoveFromQueue: (id) => {
       const next = get().audioQueue.filter((i) => i._id !== id);
       persistQueue(next);

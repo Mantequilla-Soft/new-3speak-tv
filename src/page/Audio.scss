@@ -1618,3 +1618,19 @@
     border: none !important;
   }
 }
+
+// ─── Explore | Player tabs (phones and tablets) ──────
+// The tab look is the podcasts tab's (.pod-views / .pod-view, PodcastsTab.scss).
+.audio-views { margin-bottom: 14px; }
+
+.audio-player-tab { min-height: 50vh; }
+
+.audio-player-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 16px;
+  color: var(--text-secondary);
+  text-align: center;
+}

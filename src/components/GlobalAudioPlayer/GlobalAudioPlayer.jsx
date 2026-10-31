@@ -169,6 +169,7 @@ function GlobalAudioPlayer() {
     audioCurrent, audioQueue, audioAutoplayList,
     audioIsPlaying, audioCurrentTime, audioDuration,
     audioExpanded, audioShowQueue, audioPlayNonce,
+    audioDock, audioDockOpener,
     audioToggleNonce, audioSeekNonce, audioPendingSeek,
     audioClipEnd, audioClearClip,
     audioPlay, audioStop,
@@ -1091,10 +1092,16 @@ function GlobalAudioPlayer() {
   // ResizeObserver catches expand/collapse; the var is removed when it closes.
   const npRef = useRef(null);
   const hasNowPlaying = !!audioCurrent;
+  // On a phone's audio page the player can sit in its own tab (page/Audio.jsx,
+  // the Player tab hands us `audioDock`): the same controls, drawn into the page
+  // instead of the bar. Only the controls move; the <audio> element stays here,
+  // so playback carries on when the tab or the page changes.
+  const docked = !!audioDock;
   useEffect(() => {
     const el = npRef.current;
     const root = document.documentElement;
-    if (!hasNowPlaying || !el) return;
+    // Docked, nothing floats over the page, so there is nothing to clear.
+    if (!hasNowPlaying || !el || docked) return;
     const update = () => {
       const top = el.getBoundingClientRect().top;
       root.style.setProperty('--audio-np-clearance', `${Math.max(0, Math.round(window.innerHeight - top))}px`);
@@ -1108,7 +1115,7 @@ function GlobalAudioPlayer() {
       window.removeEventListener('resize', update);
       root.style.removeProperty('--audio-np-clearance');
     };
-  }, [hasNowPlaying]);
+  }, [hasNowPlaying, docked]);
 
   // Same for the open queue, which on desktop sits above the player: its top
   // edge goes into --audio-queue-clearance so the Feedback FAB clears it too.
@@ -1132,7 +1139,7 @@ function GlobalAudioPlayer() {
       window.removeEventListener('resize', update);
       root.style.removeProperty('--audio-queue-clearance');
     };
-  }, [audioShowQueue, hasNowPlaying]);
+  }, [audioShowQueue, hasNowPlaying, docked]);
 
   const audioEl = (
     <audio
@@ -1148,6 +1155,7 @@ function GlobalAudioPlayer() {
   if (!audioCurrent) return audioEl;
 
   const nowPlaying = audioCurrent;
+  const portalIfDocked = (node) => (docked ? createPortal(node, audioDock) : node);
 
   // Outside podcast episodes have no waveform of their own: a stand-in (lib/podcasts.js).
 
@@ -1219,6 +1227,14 @@ function GlobalAudioPlayer() {
     </button>
   );
 
+  // Opening the player on a phone's audio page goes to its Player tab instead of
+  // the sheet over the bar.
+  const toggleExpanded = () => {
+    if (!audioExpanded && audioDockOpener) audioDockOpener();
+    else audioSetExpanded(v => !v);
+  };
+  const showExpanded = audioExpanded || docked;
+
   const timeOrLive = isLive
     ? <span className="audio-np-live-badge">{t('audio.player.live')}</span>
     : <span className="audio-np-time">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>;
@@ -1227,7 +1243,7 @@ function GlobalAudioPlayer() {
     <>
       {audioEl}
 
-      <div ref={npRef} className={`audio-now-playing${audioExpanded ? ' audio-np-expanded' : ''}${isLive ? ' is-live' : ''}`}>
+      {portalIfDocked(<div ref={npRef} className={`audio-now-playing${showExpanded ? ' audio-np-expanded' : ''}${docked ? ' audio-np-docked' : ''}${isLive ? ' is-live' : ''}`}>
         <div className={`audio-np-progress${isLive ? ' is-live' : ''}`} onClick={isLive ? undefined : handleSeek}>
           {!isLive && <div className="audio-np-progress-fill" style={{ width: audioDuration ? `${(audioCurrentTime / audioDuration) * 100}%` : '0%' }} />}
           {markers.map((f, i) => <span key={i} className="audio-np-progress-marker" style={{ left: `${f * 100}%` }} aria-hidden="true" />)}
@@ -1236,7 +1252,7 @@ function GlobalAudioPlayer() {
         <div className="audio-np-content">
           {/* The cover is a record sleeve: while playing, the record slides out
               from behind it and spins, labelled with the same cover. */}
-          <div className={`audio-np-art${audioIsPlaying ? ' is-playing' : ''}`} onClick={() => audioSetExpanded(v => !v)}>
+          <div className={`audio-np-art${audioIsPlaying ? ' is-playing' : ''}`} onClick={toggleExpanded}>
             <span className="audio-np-record" aria-hidden="true">
               <span className="audio-np-record-disc">
                 <img className="audio-np-record-label" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.style.visibility = 'hidden'; }} />
@@ -1244,7 +1260,7 @@ function GlobalAudioPlayer() {
             </span>
             <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.src = nowPlaying.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
           </div>
-          <div className="audio-np-info" onClick={() => audioSetExpanded(v => !v)}>
+          <div className="audio-np-info" onClick={toggleExpanded}>
             <span
               className={`audio-np-title${nowPlaying.post_permlink || (nowPlaying.external && !isLive) ? ' has-post' : ''}`}
               onClick={(e) => {
@@ -1322,7 +1338,7 @@ function GlobalAudioPlayer() {
           </button>
           <button
             className="audio-np-expand-btn"
-            onClick={() => audioSetExpanded(v => !v)}
+            onClick={toggleExpanded}
             aria-label={audioExpanded ? t('audio.player.collapse') : t('audio.player.expand')}
             aria-expanded={audioExpanded}
           >
@@ -1343,7 +1359,7 @@ function GlobalAudioPlayer() {
           ><MdClose size={18} /></button>
         </div>
 
-        {audioExpanded && (
+        {showExpanded && (
           <div className="audio-np-expanded-area">
             <div className="audio-np-mobile-extras">
               {nowPlaying.post_permlink && <PayoutAmount amount={npPayout} size={12} />}
@@ -1544,7 +1560,7 @@ function GlobalAudioPlayer() {
             ) : <div className="audio-transcript-loading">{t('audio.player.noCues')}</div>}
           </div>
         )}
-      </div>
+      </div>)}
 
       {menu?.name === 'speed' && (
         <PlayerMenu anchor={menu.anchor} title={t('audio.player.speed')} onClose={closeMenu}>

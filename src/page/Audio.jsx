@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../lib/store';
 import { CHECKER_URL, HIVE_API_URL } from '../utils/config';
 import { AUDIO_CATEGORY_ICONS } from '../utils/audioCategoryIcons';
-import { MdClose, MdArrowBack } from 'react-icons/md';
+import { MdClose, MdArrowBack, MdExplore, MdPlayCircleOutline } from 'react-icons/md';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
 import AudioAuthorBadge from './AudioAuthorBadge';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
@@ -25,6 +25,16 @@ import './Audio.scss';
 // Frontend-only filter applied to every audio/album query result below.
 const HIDDEN_AUDIO_OWNERS = new Set(['badadib']);
 const isHiddenOwner = (owner) => HIDDEN_AUDIO_OWNERS.has(owner);
+
+// The phone and tablet layout (the bottom navigation shows up to 1024 px): there
+// the page has two tabs, Explore (everything below) and Player (the player as a page).
+const MOBILE_QUERY = '(max-width: 1024px)';
+const subscribeMobile = (cb) => {
+  const m = window.matchMedia(MOBILE_QUERY);
+  m.addEventListener('change', cb);
+  return () => m.removeEventListener('change', cb);
+};
+const isMobileLayout = () => window.matchMedia(MOBILE_QUERY).matches;
 
 // Horizontal tile rail whose height adapts to how many tiles there are:
 // - everything fits in one visible row  → 1 row
@@ -155,7 +165,7 @@ function loadFilters() {
 
 function Audio() {
   const { t } = useTranslation();
-  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioPlayAt, audioAddToQueue } = useAppStore();
+  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioPlayAt, audioAddToQueue, audioSetDock, audioSetDockOpener } = useAppStore();
   const loggedIn = authenticated && isLoggedIn();
 
   // "External": podcasts from outside RSS feeds (components/Podcasts). It is the last
@@ -165,6 +175,27 @@ function Audio() {
   // leaving it on External goes back to External.
   const [params, setParams] = useSearchParams();
   const external = params.get('type') === 'external' || params.has('podcast') || params.has('episode');
+
+  // Explore | Player on phones and tablets, in the URL (`player=1`; the podcasts tab already uses `view`) so Back
+  // returns to the tab. The Player tab hands its element to the global player,
+  // which draws its controls there; the audio itself never leaves the global
+  // player, so it keeps playing on Explore and on every other page.
+  const mobile = useSyncExternalStore(subscribeMobile, isMobileLayout, () => false);
+  const playerView = mobile && params.get('player') === '1';
+  const showPlayerTab = useCallback((on) => {
+    setParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (on) next.set('player', '1'); else next.delete('player');
+      return next;
+    });
+  }, [setParams]);
+  // The bar's open button goes to the Player tab while this page shows tabs.
+  useEffect(() => {
+    if (!mobile) return undefined;
+    audioSetDockOpener(() => showPlayerTab(true));
+    return () => audioSetDockOpener(null);
+  }, [mobile, showPlayerTab, audioSetDockOpener]);
+  const dockRef = useCallback((el) => audioSetDock(el), [audioSetDock]);
   const leaveExternal = () => {
     rememberExternal(false);
     if (!external) return;
@@ -197,7 +228,7 @@ function Audio() {
       localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify({
         activeTags, datePreset, minDurIdx, maxDurIdx, type: typeFilter, genre: genreFilter,
       }));
-    } catch {}
+    } catch { /* storage off */ }
   }, [activeTags, datePreset, minDurIdx, maxDurIdx, typeFilter, genreFilter]);
 
   // Upload modal
@@ -412,9 +443,42 @@ function Audio() {
     setGenreFilter('');
   };
 
+  const views = [
+    { key: 'explore', icon: <MdExplore size={18} />, label: t('audio.page.tabExplore') },
+    { key: 'player', icon: <MdPlayCircleOutline size={18} />, label: t('audio.page.tabPlayer') },
+  ];
+
   return (
-    <div className="audio-page">
-      {/* Header — only show back button when drilled into creator */}
+    <div className={`audio-page${playerView ? ' audio-page--player' : ''}`}>
+      {mobile && (
+        <nav className="pod-views audio-views" role="tablist" aria-label={t('audio.page.tabsLabel')}>
+          {views.map((v) => (
+            <button
+              key={v.key}
+              type="button"
+              role="tab"
+              aria-selected={(v.key === 'player') === playerView}
+              className={`pod-view${(v.key === 'player') === playerView ? ' active' : ''}`}
+              onClick={() => showPlayerTab(v.key === 'player')}
+            >
+              {v.icon}<span>{v.label}</span>
+            </button>
+          ))}
+        </nav>
+      )}
+
+      {playerView ? (
+        <div className="audio-player-tab" role="tabpanel">
+          {audioCurrent ? <div ref={dockRef} className="audio-player-dock" /> : (
+            <div className="audio-empty audio-player-empty">
+              <MdPlayCircleOutline size={44} aria-hidden />
+              <p>{t('audio.page.nothingPlaying')}</p>
+              <button type="button" className="audio-type-chip active" onClick={() => showPlayerTab(false)}>{t('audio.page.goExplore')}</button>
+            </div>
+          )}
+        </div>
+      ) : (<>
+      {/* Header: only show back button when drilled into creator */}
       {selectedCreator && (
         <header className="audio-header">
           <button className="audio-back-btn" onClick={() => setSelectedCreator(null)}><MdArrowBack size={20} /> {t('common.actions.back')}</button>
@@ -574,6 +638,7 @@ function Audio() {
           )}
         </>
       )}
+      </>)}
 
       {/* Tile-level share overlay (the now-playing bar's share lives in <GlobalAudioPlayer />) */}
       {shareTarget && shareTarget._id !== audioCurrent?._id && (
