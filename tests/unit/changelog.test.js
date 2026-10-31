@@ -2,7 +2,7 @@
 // localStorage logic in src/utils/appVersion.js.
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach } from 'vitest'
-import { CHANGELOG, changelogSince } from '../../src/changelog.js'
+import { CHANGELOG, CHANGELOG_CATEGORIES, changelogSince, groupChangelog } from '../../src/changelog.js'
 import { APP_VERSION } from '../../src/version.js'
 import { readAppVersion, markVersionSeen, APP_VERSION_STORAGE_KEY } from '../../src/utils/appVersion.js'
 
@@ -44,6 +44,11 @@ describe('changelog entries', () => {
 
   it('every entry has a summary', () => {
     for (const e of CHANGELOG) expect(e.summary.trim().length, e.version).toBeGreaterThan(0)
+  })
+
+  // The popup groups entries by the page or part of 3Speak they change.
+  it('every entry has a category from CHANGELOG_CATEGORIES', () => {
+    for (const e of CHANGELOG) expect(CHANGELOG_CATEGORIES, e.version).toContain(e.category)
   })
 
   // House style since 1.78.69: short entries (at most ~3 sentences) and no em dashes.
@@ -97,5 +102,26 @@ describe('readAppVersion / markVersionSeen', () => {
   it('a user already on this version is not prompted', () => {
     localStorage.setItem(APP_VERSION_STORAGE_KEY, APP_VERSION)
     expect(readAppVersion().shouldPrompt).toBe(false)
+  })
+})
+
+describe('groupChangelog', () => {
+  const e = (version, category) => ({ version, category, date: '2026-10-30', summary: version })
+
+  it('groups by category, newest change first, entries keeping their order', () => {
+    const groups = groupChangelog([e('1.3.0', 'podcasts'), e('1.2.0', 'watch'), e('1.1.0', 'podcasts')])
+    expect(groups.map((g) => [g.category, g.entries.map((x) => x.version)])).toEqual([
+      ['podcasts', ['1.3.0', '1.1.0']],
+      ['watch', ['1.2.0']],
+    ])
+  })
+
+  it('puts an entry without a known category under general', () => {
+    expect(groupChangelog([e('1.0.5', 'nonsense'), e('1.0.4', undefined)])[0]).toMatchObject({ category: 'general' })
+  })
+
+  it('every category has a name in the English locale', async () => {
+    const app = (await import('../../src/locales/en/app.json')).default
+    for (const c of CHANGELOG_CATEGORIES) expect(app.changelog.categories[c], c).toBeTruthy()
   })
 })

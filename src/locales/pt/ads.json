@@ -93,7 +93,9 @@
     "turnAdsOff": "Desativar anúncios nos seus vídeos",
     "rewardsOn": "Ativar recompensas para espectadores",
     "rewardsOff": "Desativar recompensas para espectadores",
-    "showApplications": "Mostrar suas solicitações de publicidade"
+    "showApplications": "Mostrar suas solicitações de publicidade",
+    "listenOn": "Ativar recompensas por ouvir",
+    "listenOff": "Desativar recompensas por ouvir"
   },
   "slot": {
     "atBeginning": "No começo do vídeo",
@@ -259,7 +261,9 @@
     "text": "Os anúncios no 3Speak pagam o criador, a comunidade dele e agora você. Sua parte sai do que o anunciante pagou, na moeda em que ele pagou, por vídeos que você ia assistir de qualquer jeito.",
     "note": "O 3Speak já guarda seu histórico para você encontrar as coisas de novo. Isto nos permite usá-lo para calcular quanto você tem a receber, e mantém um registro de quanto de cada vídeo você realmente assistiu. Se disser não, nada muda. Você pode desativar a qualquer momento nas Configurações, e isso apaga o que guardamos para as recompensas.",
     "noThanks": "Não, obrigado",
-    "yes": "Sim, quero receber"
+    "yes": "Sim, quero receber",
+    "titleBoth": "Seja pago por assistir e ouvir",
+    "listenNote": "Ouvir também conta: as recompensas por ouvir áudios e podcasts no 3speak.tv começam em breve, quando tivermos conferido os números. Conta o que você ouvir a partir de hoje."
   },
   "promote": {
     "pricingFailed": "Não foi possível carregar os preços de promoção.",
@@ -812,5 +816,12 @@
     "bookAnother": "Reservar outro",
     "pickProduct": "Escolha um produto para ver os vídeos de anúncio e as reservas dele.",
     "showUpHere": "Seus produtos, os vídeos de anúncio e as reservas aparecem aqui depois de carregar."
+  },
+  "listenPrompt": {
+    "title": "Ganhar também por ouvir?",
+    "text": "As recompensas por ouvir começam em breve. Deixe-nos contar quanto tempo você ouve áudios e episódios de podcasts no 3speak.tv, a partir de hoje.",
+    "note": "Diga não e nada muda. Você pode desativar quando quiser nas Configurações, e isso apaga o que guardamos.",
+    "yes": "Sim, contem o que eu ouço",
+    "savedYes": "O que você ouve agora conta para as recompensas por ouvir"
   }
 }

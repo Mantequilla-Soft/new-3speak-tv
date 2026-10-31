@@ -1,0 +1,119 @@
+{
+  "title": "Hive 갤럭시",
+  "desktopOnly": {
+    "title": "Hive 갤럭시는 더 큰 화면이 필요해요",
+    "text": "컴퓨터에서 열면 누가 누구를 팔로우하는지 둘러볼 수 있어요.",
+    "back": "@{{user}}님의 채널로 돌아가기"
+  },
+  "modeLabel": "지도로 볼 팔로우 관계",
+  "mode": {
+    "following": "팔로잉",
+    "followers": "팔로워",
+    "mutuals": "친구"
+  },
+  "depth": {
+    "label": "스캔",
+    "orbit": "궤도 (계정 {{n}}개)",
+    "starsystem": "항성계 (계정 {{n}}개)",
+    "nebula": "성운 (계정 {{n}}개)",
+    "deepspace": "심우주 (최대 계정 {{n}}개, 더 느림)"
+  },
+  "find": {
+    "label": "이 갤럭시에서 계정 찾기",
+    "placeholder": "계정 찾기 또는 둘러보기",
+    "go": "찾기",
+    "hidden": "@{{user}}님은 이 갤럭시에 있지만 필터나 지도 표시 한도 때문에 숨겨져 있어요.",
+    "missing": "@{{user}}님은 이 갤럭시에 없어요.",
+    "explore": "@{{user}}님의 갤럭시 둘러보기"
+  },
+  "loading": "@{{user}}님의 갤럭시를 그리는 중…",
+  "progressLists": "팔로우 목록을 읽는 중",
+  "progress": "그 계정들의 팔로우를 읽는 중",
+  "progressDetails": "계정 정보를 불러오는 중",
+  "error": "이 갤럭시를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "empty": {
+    "following": "@{{user}}님이 아직 아무도 팔로우하지 않아서 그릴 갤럭시가 없어요.",
+    "followers": "아직 @{{user}}님을 팔로우하는 사람이 없어서 그릴 갤럭시가 없어요.",
+    "mutuals": "아직 @{{user}}님을 맞팔로우한 사람이 없어서 그릴 갤럭시가 없어요."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "계정 ({{count}})",
+    "mutual": "서로 팔로우 ({{count}})",
+    "oneWay": "한쪽만 팔로우 ({{count}})",
+    "suggestions": "추천 크리에이터 ({{total}}명 중 {{count}}명)",
+    "capped": "지도에 {{total}}개 중 {{shown}}개 표시 중"
+  },
+  "hint": "드래그해서 회전하고, 오른쪽 드래그나 Shift+드래그로 이동하고, 스크롤로 포인터 쪽을 확대해요. 별을 클릭해 보고, 중심을 클릭하면 돌아와요.",
+  "via": "스캔한 계정 {{total}}개 중 {{count}}개가 팔로우해요",
+  "followedBy": "@{{user}}님이 팔로우해요",
+  "followsCenter": "@{{user}}님을 팔로우해요",
+  "mutual": "@{{user}}님과 서로 팔로우해요",
+  "leadsTo_other": "지도의 크리에이터 {{count}}명으로 이어져요",
+  "scanInfo": "계정 {{total}}개 중 {{count}}개의 팔로우를 스캔했어요.",
+  "scanSkip": "{{n}}명보다 많이 팔로우하는 계정은 스캔하지 않아요. 무작정 팔로우하는 계정으로는 취향을 알기 어렵거든요.",
+  "credit": "팔로우 데이터 출처: <src>HafSQL</src>, 관리: <user>@{{user}}</user>",
+  "noSuggestions": "이번 스캔에서 추천할 크리에이터가 없어요.",
+  "filters": {
+    "title": "필터",
+    "overlap_other": "스캔한 {{total}}개 중 최소 {{count}}개 계정이 팔로우",
+    "active": "활동",
+    "activeWithin": "최근 {{count}}일 이내",
+    "any": "전체",
+    "rep": "평판",
+    "repAtLeast": "{{rep}} 이상",
+    "creators": "3Speak에 동영상이 있는 크리에이터만",
+    "hideMine": "이미 팔로우하는 계정 숨기기",
+    "partial": "일부 계정 정보를 불러오지 못해서 몇몇 필터가 꺼져 있어요.",
+    "none": "이 필터에 맞는 크리에이터가 없어요.",
+    "reset": "필터 초기화"
+  },
+  "stats": {
+    "followers_other": "팔로워 {{n}}명",
+    "rep": "평판 {{rep}}",
+    "videos": "3Speak 동영상 {{videos}}개, Shorts {{shorts}}개",
+    "noVideos": "아직 3Speak에 동영상이 없어요"
+  },
+  "activeToday": "오늘 활동함",
+  "activeAgo_other": "{{count}}일 전 활동",
+  "discover": "추천 크리에이터",
+  "openChannel": "채널 열기",
+  "exploreHere": "여기서부터 둘러보기",
+  "close": "닫기",
+  "profileButton": "@{{user}}님의 Hive 갤럭시 둘러보기",
+  "panelToggle": "필터 및 크리에이터 ({{count}})",
+  "controls": "조작",
+  "music": "배경 음악",
+  "history": {
+    "label": "뒤로 및 앞으로",
+    "undo": "뒤로",
+    "redo": "앞으로",
+    "undoKey": "뒤로 (Ctrl+Z)",
+    "redoKey": "앞으로 (Ctrl+Shift+Z)"
+  },
+  "collapse": "접기",
+  "links": {
+    "loading": "이 지도에서의 연결을 불러오는 중…",
+    "out_other": "이 지도의 계정 {{count}}개를 팔로우",
+    "in_other": "이 지도의 계정 {{count}}개가 팔로우"
+  },
+  "circles": {
+    "title": "서클",
+    "note": "같은 사람들이 팔로우하는 계정을 자동으로 묶었어요. 클릭하면 그 서클에 집중해요.",
+    "label": "@{{user}}님의 서클 · {{count}}",
+    "name": "@{{user}}님의 서클",
+    "size_other": "추천 {{count}}명",
+    "ring": {
+      "following_other": "@{{user}}님이 팔로우하는 {{count}}명",
+      "followers_other": "@{{user}}님을 팔로우하는 {{count}}명",
+      "mutuals_other": "친구 {{count}}명"
+    },
+    "ringTitle": {
+      "following": "이 서클에서 @{{user}}님이 팔로우하는 계정 ({{count}})",
+      "followers": "이 서클에 있는 @{{user}}님의 팔로워 ({{count}})",
+      "mutuals": "이 서클에 있는 @{{user}}님의 친구 ({{count}})"
+    },
+    "in": "@{{user}}님의 서클 안",
+    "clear": "모든 크리에이터 보기"
+  }
+}

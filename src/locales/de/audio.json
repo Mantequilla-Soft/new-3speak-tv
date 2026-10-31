@@ -41,7 +41,57 @@
     "noCues": "Keine Cues.",
     "clearQueue": "Warteschlange leeren",
     "clearAll": "Alle löschen",
-    "queueEmpty": "Die Warteschlange ist leer."
+    "queueEmpty": "Die Warteschlange ist leer.",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "expand": "Player vergrößern",
+    "collapse": "Player verkleinern",
+    "skipBack": "{{seconds}} Sekunden zurück",
+    "skipForward": "{{seconds}} Sekunden vor",
+    "speed": "Wiedergabegeschwindigkeit",
+    "speedValue": "Wiedergabegeschwindigkeit: {{speed}}",
+    "sleep": "Sleep-Timer",
+    "sleepOff": "Aus",
+    "sleepMinutes": "{{minutes}} Minuten",
+    "sleepEnd": "Am Ende dieser Folge",
+    "sleepEndShort": "Ende",
+    "sleepLeft": "Stoppt in {{time}}",
+    "effects": "Audioeffekte",
+    "voiceBoost": "Stimmverstärkung",
+    "voiceBoostHint": "Klarere, gleichmäßigere Stimmen",
+    "skipSilence": "Stille überspringen",
+    "skipSilenceHint": "Geht zügig über Pausen hinweg",
+    "effectsUnavailable": "Für diese Folge nicht verfügbar.",
+    "effectsChecking": "Prüfe, ob diese Folge das unterstützt…",
+    "timeSaved": "Zeit gespart: {{time}}",
+    "cast": "Auf anderem Gerät abspielen",
+    "download": "Offline speichern",
+    "downloading": "Wird gespeichert: {{pct}} %",
+    "downloaded": "Offline gespeichert",
+    "downloadDone": "Zum Offline-Hören gespeichert",
+    "downloadFailed": "Diese Folge konnte nicht gespeichert werden",
+    "copyEpisode": "Link zur Folge kopieren",
+    "copiedEpisode": "Link zur Folge kopiert!",
+    "copyAt": "Link ab {{time}} kopieren",
+    "copiedAt": "Link ab {{time}} kopiert!",
+    "copyFailed": "Link konnte nicht kopiert werden",
+    "clipMake": "Clip erstellen",
+    "clipRange": "Von {{from}} bis {{to}}",
+    "clipLength": "Länge",
+    "clipSeconds": "{{seconds}} s",
+    "clipCopy": "Clip-Link kopieren",
+    "clipCopied": "Clip-Link kopiert!",
+    "clipEnds": "Clip, endet bei {{time}}",
+    "clipClear": "Nach dem Clip weiterhören",
+    "live": "LIVE",
+    "liveUnsupported": "Dieser Livestream kann in diesem Browser nicht abgespielt werden.",
+    "chapters": "Kapitel",
+    "prevChapter": "Vorheriges Kapitel",
+    "nextChapter": "Nächstes Kapitel",
+    "chapterLink": "Link zum Kapitel",
+    "upNext": "Als Nächstes",
+    "hideIdle": "Ausblenden (die Warteschlange bleibt)",
+    "continueAt": "Weiter bei {{time}}"
   },
   "share": {
     "failed": "Fehlgeschlagen",
@@ -98,7 +148,14 @@
     "noTracks": "Keine Tracks gefunden.",
     "creators": "Creator",
     "albumsPlaylists": "Alben & Playlists",
-    "noAudioForFilters": "Für diese Filter wurde kein Audio gefunden."
+    "noAudioForFilters": "Für diese Filter wurde kein Audio gefunden.",
+    "tabsLabel": "Audio-Ansichten",
+    "tabExplore": "Stöbern",
+    "tabPlayer": "Player",
+    "nothingPlaying": "Noch läuft nichts.",
+    "goExplore": "Etwas zum Anhören finden",
+    "exploreViews": "Bereiche",
+    "mostPlayed": "Meistgehört"
   },
   "upload": {
     "title": "Audio hochladen",
@@ -352,7 +409,13 @@
       "none": "Keine Podcasts gefunden. Versuche einen anderen Namen oder füge die RSS-Feed-URL ein.",
       "failed": "Die Suche ist gerade nicht verfügbar. Bitte versuche es erneut.",
       "label": "Podcast finden",
-      "placeholder": "Name, Host oder Thema"
+      "placeholder": "Name, Host oder Thema",
+      "modeShows": "Sendungen",
+      "modePeople": "Personen",
+      "placeholderPeople": "Name von Host oder Gast",
+      "appearsIn_one": "In {{count}} Folge",
+      "appearsIn_other": "In {{count}} Folgen",
+      "latestMatch": "Neueste: {{title}}"
     },
     "opml": {
       "import": "OPML importieren",
@@ -373,7 +436,11 @@
       "limit": "Du folgst bereits der maximalen Anzahl an Podcasts.",
       "internal": "Das ist ein 3Speak-Kanal: Du findest ihn unter den anderen Audio-Arten.",
       "disabled": "Externe Podcasts sind gerade abgeschaltet.",
-      "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+      "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+      "closedPlatform": "{{platform}} gibt die Feeds seiner Sendungen nicht heraus. Such die Sendung stattdessen nach ihrem Namen.",
+      "appleOnly": "Diese Sendung gibt es nur in Apple Podcasts.",
+      "directoryNotFound": "Wir haben den Feed dieser Sendung nicht gefunden. Probier ihren RSS-Feed oder such nach dem Namen.",
+      "directoryDown": "Dieses Podcast-Verzeichnis antwortet gerade nicht. Bitte versuche es erneut."
     },
     "tip": {
       "button": "Diesen Podcast unterstützen",
@@ -400,7 +467,9 @@
     },
     "rss": {
       "label": "Per RSS-Feed hinzufügen",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Per Link hinzufügen",
+      "placeholderLink": "RSS-Feed, Apple-Podcasts-Link oder Website"
     },
     "listened": "Gehört",
     "listenedPct": "{{pct}} % gehört",
@@ -414,7 +483,12 @@
       "none": "Keine Folgen passen zu diesen Filtern.",
       "custom": "Eigener Zeitraum",
       "from": "Von",
-      "to": "Bis"
+      "to": "Bis",
+      "inbox": "Neu",
+      "inboxEmpty": "Nichts Neues. Folgen der letzten Woche, die du noch nicht gehört hast, erscheinen hier.",
+      "unplayed": "Ungehört",
+      "inProgress": "Angefangen",
+      "downloaded": "Heruntergeladen"
     },
     "resume": "Weiterhören",
     "showNotes": "Shownotes",
@@ -422,6 +496,160 @@
     "noNotes": "Diese Folge hat keine Shownotes.",
     "openEpisode": "Folge öffnen",
     "addToQueue": "Zur Warteschlange",
-    "inQueue": "In der Warteschlange"
+    "inQueue": "In der Warteschlange",
+    "trending": {
+      "title": "Angesagte Podcasts",
+      "language": "Sprache",
+      "allLanguages": "Alle Sprachen",
+      "category": "Kategorie",
+      "allCategories": "Alle Kategorien",
+      "none": "Hier ist gerade nichts angesagt. Probier eine andere Sprache oder Kategorie.",
+      "failed": "Angesagte Podcasts sind gerade nicht verfügbar. Bitte versuche es erneut."
+    },
+    "categories": {
+      "Arts": "Kunst",
+      "Business": "Wirtschaft",
+      "Comedy": "Comedy",
+      "Education": "Bildung",
+      "Fiction": "Fiktion",
+      "Government": "Regierung",
+      "Health": "Gesundheit & Fitness",
+      "History": "Geschichte",
+      "Kids": "Kinder & Familie",
+      "Leisure": "Freizeit",
+      "Music": "Musik",
+      "News": "Nachrichten",
+      "Religion": "Religion & Spiritualität",
+      "Science": "Wissenschaft",
+      "Society": "Gesellschaft & Kultur",
+      "Sports": "Sport",
+      "Technology": "Technologie",
+      "TrueCrime": "True Crime",
+      "TV": "TV & Film"
+    },
+    "charts": {
+      "title": "Charts",
+      "country": "Land",
+      "none": "Für dieses Land und diese Kategorie gibt es gerade keine Charts.",
+      "failed": "Die Charts sind gerade nicht verfügbar. Bitte versuche es erneut."
+    },
+    "views": {
+      "mine": "Meine",
+      "discover": "Entdecken",
+      "trends": "Trends",
+      "mineEmpty": "Du folgst noch keinem Podcast. Finde Sendungen unter Entdecken oder sieh dir unter Trends an, was beliebt ist."
+    },
+    "downloads": {
+      "title": "Downloads",
+      "download": "Zum Offline-Hören herunterladen",
+      "short": "Herunterladen",
+      "downloading": "Lädt {{pct}} %",
+      "cancel": "Download abbrechen",
+      "saved": "Offline gespeichert",
+      "remove": "Download entfernen",
+      "removeShort": "Entfernen",
+      "removed": "Download entfernt",
+      "done": "Zum Offline-Hören gespeichert",
+      "total": "{{size}} gespeichert",
+      "storage": "diese Seite nutzt {{used}} von {{quota}} in diesem Browser",
+      "perBrowser": "Downloads bleiben in diesem Browser, egal wer angemeldet ist.",
+      "errors": {
+        "tooLarge": "Diese Folge ist zu groß zum Speichern.",
+        "rateLimited": "Gerade laufen zu viele Downloads. Bitte versuche es in ein paar Minuten erneut.",
+        "storage": "In diesem Browser ist kein Platz mehr für diese Folge.",
+        "failed": "Die Folge konnte nicht heruntergeladen werden. Bitte versuche es erneut.",
+        "noSource": "Diese Folge kann nicht gespeichert werden."
+      }
+    },
+    "autoQueue": {
+      "label": "Neue Folgen automatisch zur Warteschlange hinzufügen",
+      "hint": "Neue Folgen dieses Podcasts landen beim Erscheinen am Ende deiner Warteschlange",
+      "onDone": "Neue Folgen dieses Podcasts kommen in deine Warteschlange",
+      "offDone": "Neue Folgen dieses Podcasts kommen nicht mehr in deine Warteschlange",
+      "added_one": "{{count}} neue Folge zur Warteschlange hinzugefügt",
+      "added_other": "{{count}} neue Folgen zur Warteschlange hinzugefügt"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Hier einsteigen",
+    "seasons": {
+      "label": "Staffel",
+      "all": "Alle Staffeln",
+      "season": "Staffel {{n}}"
+    },
+    "persons": {
+      "title": "Hosts und Gäste",
+      "roles": {
+        "host": "Host",
+        "guest": "Gast",
+        "cohost": "Co-Host",
+        "producer": "Produktion"
+      }
+    },
+    "episodeSearch": {
+      "label": "Folgen durchsuchen",
+      "placeholder": "Folgen dieses Podcasts durchsuchen",
+      "none": "Keine Folgen zu \"{{q}}\"."
+    },
+    "live": {
+      "now": "Jetzt live",
+      "badge": "LIVE",
+      "listen": "Live hören",
+      "upcoming": "Demnächst",
+      "startsAt": "Beginn: {{time}}"
+    },
+    "private": {
+      "toggle": "Das ist ein privater Feed (mit Login)",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "hint": "Die Zugangsdaten gehen an den Podcast-Dienst von 3Speak, damit er den Feed für dich lesen kann. Private Feeds erscheinen nie in öffentlichen Listen.",
+      "badge": "Privat",
+      "badgeHint": "Ein privater Feed: Nur wer ihm mit Login folgt, sieht ihn",
+      "opmlLeftOut_one": "{{count}} privater Feed wurde nicht in die Datei übernommen.",
+      "opmlLeftOut_other": "{{count}} private Feeds wurden nicht in die Datei übernommen."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "play": "Highlight abspielen",
+      "untitled": "Highlight bei {{time}}"
+    },
+    "chapters": {
+      "title": "Kapitel",
+      "loading": "Kapitel werden geladen…",
+      "none": "Die Kapitel konnten nicht geladen werden.",
+      "link": "Kapitel-Link"
+    },
+    "share": {
+      "copy": "Link kopieren",
+      "copyAt": "Link ab {{time}} kopieren",
+      "clip": "Link zu diesem Highlight kopieren",
+      "copied": "Link kopiert",
+      "failed": "Link konnte nicht kopiert werden"
+    },
+    "deepLink": {
+      "playFrom": "Ab {{time}} abspielen",
+      "playClip": "{{from}} bis {{to}} abspielen"
+    },
+    "video": {
+      "watch": "Video ansehen",
+      "hide": "Video ausblenden"
+    },
+    "signInToFollow": "Melde dich an, um Podcasts zu folgen",
+    "addExternal": "Externen Podcast hinzufügen"
+  },
+  "item": {
+    "back": "Alle Audios",
+    "missing": "Dieses Audio ist nicht verfügbar.",
+    "description": "Beschreibung",
+    "noDescription": "Keine Beschreibung.",
+    "comments": "Kommentare",
+    "album": "Aus {{name}}"
+  },
+  "offline": {
+    "notice": "Du bist offline. Deine Downloads spielen trotzdem.",
+    "noticeNoDownloads": "Du bist offline. Lade Folgen herunter, um ohne Verbindung zu hören.",
+    "open": "Downloads öffnen"
   }
 }

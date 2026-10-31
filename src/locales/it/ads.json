@@ -93,7 +93,9 @@
     "turnAdsOff": "Disattiva gli annunci sui tuoi video",
     "rewardsOn": "Attiva le ricompense per gli spettatori",
     "rewardsOff": "Disattiva le ricompense per gli spettatori",
-    "showApplications": "Mostra le tue richieste pubblicitarie"
+    "showApplications": "Mostra le tue richieste pubblicitarie",
+    "listenOn": "Attiva le ricompense per l’ascolto",
+    "listenOff": "Disattiva le ricompense per l’ascolto"
   },
   "slot": {
     "atBeginning": "All'inizio del video",
@@ -259,7 +261,9 @@
     "text": "Gli annunci su 3Speak pagano il creator, la sua community e ora anche te. La tua quota proviene da ciò che ha pagato l'inserzionista, nella valuta con cui ha pagato, per video che avresti guardato comunque.",
     "note": "3Speak conserva già la tua cronologia di visione così puoi ritrovare le cose. Questa opzione ci permette di usarla per calcolare quanto ti spetta, e registra quanta parte di ogni video hai guardato davvero. Se dici di no non cambia nulla. Puoi disattivarla in qualsiasi momento nelle Impostazioni, e così vengono eliminati i dati conservati per le ricompense.",
     "noThanks": "No, grazie",
-    "yes": "Sì, pagami"
+    "yes": "Sì, pagami",
+    "titleBoth": "Fatti pagare per guardare e ascoltare",
+    "listenNote": "Conta anche l’ascolto: le ricompense per l’ascolto di audio e podcast su 3speak.tv partono presto, quando avremo controllato i numeri. Conta ciò che ascolti da oggi."
   },
   "promote": {
     "pricingFailed": "Impossibile caricare i prezzi della promozione.",
@@ -812,5 +816,12 @@
     "bookAnother": "Prenotane un altro",
     "pickProduct": "Scegli un prodotto per vedere i suoi video pubblicitari e le sue prenotazioni.",
     "showUpHere": "I tuoi prodotti, i loro video pubblicitari e le prenotazioni compariranno qui una volta caricati."
+  },
+  "listenPrompt": {
+    "title": "Guadagnare anche ascoltando?",
+    "text": "Le ricompense per l’ascolto partono presto. Lasciaci contare per quanto tempo ascolti audio ed episodi di podcast su 3speak.tv, da oggi.",
+    "note": "Rispondi no e non cambia nulla. Puoi disattivarlo quando vuoi nelle Impostazioni, e così cancelliamo ciò che abbiamo conservato.",
+    "yes": "Sì, contate il mio ascolto",
+    "savedYes": "Il tuo ascolto ora conta per le ricompense per l’ascolto"
   }
 }

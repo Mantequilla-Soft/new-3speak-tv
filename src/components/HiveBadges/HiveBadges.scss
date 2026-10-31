@@ -48,6 +48,11 @@
     object-fit: cover;
     flex-shrink: 0;
     background: rgba(148, 163, 184, 0.25);
+    @include mix.coin-spin(120px);
+  }
+
+  .hive-badge:hover .hive-badge-img {
+    @include mix.coin-spin-hover(120px);
   }
 
   // Badge artwork that failed to load: the neutral circle above is all that's

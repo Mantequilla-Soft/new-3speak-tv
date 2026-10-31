@@ -591,6 +591,20 @@ html[data-card-size="large"] { --card-min-w: 420px; }
     .featured-strip-wrap {
       flex-shrink: 0;
     }
+    // Browsing the line-up: the new thumbnail turns in like a flipped card,
+    // from the side the arrow / strip pick pointed to (Card3 FEATURED_FLIP_MS).
+    .img-wrap--flip-next {
+      animation: spotlight-flip-next 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    }
+    .img-wrap--flip-prev {
+      animation: spotlight-flip-prev 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .img-wrap--flip-next,
+      .img-wrap--flip-prev {
+        animation: none;
+      }
+    }
     h2 {
       -webkit-line-clamp: 3;
       margin-top: 4px;
@@ -1111,4 +1125,14 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 
 @media (prefers-reduced-motion: reduce) {
   .card-container .card.card--skeleton .card-skeleton-block { animation: none; }
+}
+
+@keyframes spotlight-flip-next {
+  from { transform: perspective(1600px) rotateY(-90deg); filter: brightness(0.5); }
+  to { transform: perspective(1600px) rotateY(0deg); filter: brightness(1); }
+}
+
+@keyframes spotlight-flip-prev {
+  from { transform: perspective(1600px) rotateY(90deg); filter: brightness(0.5); }
+  to { transform: perspective(1600px) rotateY(0deg); filter: brightness(1); }
 }

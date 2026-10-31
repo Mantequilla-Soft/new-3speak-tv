@@ -83,9 +83,9 @@ export default defineConfig({
             icons: [{ src: "/pwa-192x192.png", sizes: "192x192" }],
           },
           {
-            name: "Shorts Editor",
-            short_name: "Editor",
-            url: "/embed-studio",
+            name: "Audio",
+            short_name: "Audio",
+            url: "/audio",
             icons: [{ src: "/pwa-192x192.png", sizes: "192x192" }],
           },
         ],

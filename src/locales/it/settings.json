@@ -37,7 +37,13 @@
     "title": "Guadagna mentre guardi",
     "rowTitle": "Ricompense per gli spettatori",
     "desc": "Guadagna una parte dei ricavi pubblicitari in base a ciò che guardi, pagata in HBD o HIVE. Vieni pagato per i video guardati, indipendentemente dal fatto che sia stato riprodotto un annuncio, quindi viene premiata la visione e non la sopportazione degli annunci. Gli annunci vengono comunque riprodotti per tutti tranne gli abbonati a 3Speak Pro. Registriamo quanta parte di ogni video hai guardato, oltre alla cronologia che la pagina Guardati conserva già, e la eliminiamo nel momento in cui disattivi questa opzione.",
-    "aria": "Guadagna una parte dei ricavi pubblicitari in base a ciò che guardi"
+    "aria": "Guadagna una parte dei ricavi pubblicitari in base a ciò che guardi",
+    "titleListen": "Guadagna guardando e ascoltando",
+    "listenDesc": "Conta anche l’ascolto: registriamo per quanto tempo ascolti l’audio di 3Speak e gli episodi dei podcast su 3speak.tv. Le ricompense per l’ascolto partono quando avremo controllato i numeri, e conta ciò che ascolti dal giorno in cui attivi questa opzione.",
+    "listenAlso": "Conta anche il mio ascolto",
+    "listenOnToast": "Il tuo ascolto ora conta per le ricompense per l’ascolto",
+    "onToastBoth": "Ricompense per guardare e ascoltare attive",
+    "offToastBoth": "Ricompense disattivate, i tuoi dati di visione e ascolto sono stati eliminati"
   },
   "postingAuth": {
     "updateFailed": "Impossibile aggiornare la tua autorità posting.",

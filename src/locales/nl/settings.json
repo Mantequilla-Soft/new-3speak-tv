@@ -37,7 +37,13 @@
     "title": "Verdien terwijl je kijkt",
     "rowTitle": "Kijkbeloningen",
     "desc": "Verdien een deel van de advertentie-inkomsten voor wat je kijkt, uitbetaald in HBD of HIVE. Je wordt betaald voor bekeken video's, of er nu een advertentie werd afgespeeld of niet, dus het beloont kijken en niet het uitzitten van advertenties. Advertenties zelf worden afgespeeld voor iedereen behalve 3Speak Pro-abonnees. We leggen vast hoeveel je van elke video hebt bekeken, bovenop de kijkgeschiedenis die de pagina Bekeken al bijhoudt, en verwijderen dit zodra je dit uitzet.",
-    "aria": "Verdien een deel van de advertentie-inkomsten voor wat je kijkt"
+    "aria": "Verdien een deel van de advertentie-inkomsten voor wat je kijkt",
+    "titleListen": "Verdien tijdens kijken en luisteren",
+    "listenDesc": "Luisteren telt ook: we houden bij hoe lang je naar 3Speak-audio en podcastafleveringen op 3speak.tv luistert. Luisteraarsbeloningen starten zodra we de cijfers hebben gecontroleerd, en wat je luistert vanaf de dag dat je dit aanzet, telt mee.",
+    "listenAlso": "Tel mijn luisteren ook mee",
+    "listenOnToast": "Je luisteren telt nu mee voor luisteraarsbeloningen",
+    "onToastBoth": "Beloningen voor kijken en luisteren aan",
+    "offToastBoth": "Beloningen uit, en je kijk- en luistergegevens zijn verwijderd"
   },
   "postingAuth": {
     "updateFailed": "Je posting-autoriteit kon niet worden bijgewerkt.",

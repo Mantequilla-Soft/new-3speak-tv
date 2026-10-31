@@ -41,7 +41,57 @@
     "noCues": "Geen cues.",
     "clearQueue": "Wachtrij wissen",
     "clearAll": "Alles wissen",
-    "queueEmpty": "Wachtrij is leeg."
+    "queueEmpty": "Wachtrij is leeg.",
+    "previous": "Vorige",
+    "next": "Volgende",
+    "expand": "Speler vergroten",
+    "collapse": "Speler verkleinen",
+    "skipBack": "{{seconds}} seconden terug",
+    "skipForward": "{{seconds}} seconden vooruit",
+    "speed": "Afspeelsnelheid",
+    "speedValue": "Afspeelsnelheid: {{speed}}",
+    "sleep": "Slaaptimer",
+    "sleepOff": "Uit",
+    "sleepMinutes": "{{minutes}} minuten",
+    "sleepEnd": "Aan het einde van deze aflevering",
+    "sleepEndShort": "Einde",
+    "sleepLeft": "Stopt over {{time}}",
+    "effects": "Audio-effecten",
+    "voiceBoost": "Stemversterking",
+    "voiceBoostHint": "Helderdere, gelijkmatigere stemmen",
+    "skipSilence": "Stiltes overslaan",
+    "skipSilenceHint": "Gaat snel door de pauzes",
+    "effectsUnavailable": "Niet beschikbaar voor deze aflevering.",
+    "effectsChecking": "Controleren of deze aflevering dit ondersteunt…",
+    "timeSaved": "Tijd bespaard: {{time}}",
+    "cast": "Afspelen op een ander apparaat",
+    "download": "Offline bewaren",
+    "downloading": "Bewaren: {{pct}}%",
+    "downloaded": "Offline bewaard",
+    "downloadDone": "Bewaard om offline te luisteren",
+    "downloadFailed": "Kan deze aflevering niet bewaren",
+    "copyEpisode": "Link naar aflevering kopiëren",
+    "copiedEpisode": "Link naar aflevering gekopieerd!",
+    "copyAt": "Link vanaf {{time}} kopiëren",
+    "copiedAt": "Link vanaf {{time}} gekopieerd!",
+    "copyFailed": "Kan de link niet kopiëren",
+    "clipMake": "Clip maken",
+    "clipRange": "Van {{from}} tot {{to}}",
+    "clipLength": "Lengte",
+    "clipSeconds": "{{seconds}} s",
+    "clipCopy": "Cliplink kopiëren",
+    "clipCopied": "Cliplink gekopieerd!",
+    "clipEnds": "Clip, stopt op {{time}}",
+    "clipClear": "Doorspelen na de clip",
+    "live": "LIVE",
+    "liveUnsupported": "Deze livestream kan niet in deze browser worden afgespeeld.",
+    "chapters": "Hoofdstukken",
+    "prevChapter": "Vorig hoofdstuk",
+    "nextChapter": "Volgend hoofdstuk",
+    "chapterLink": "Link naar hoofdstuk",
+    "upNext": "Hierna",
+    "hideIdle": "Verbergen (je wachtrij blijft)",
+    "continueAt": "Verder bij {{time}}"
   },
   "share": {
     "failed": "Mislukt",
@@ -98,7 +148,14 @@
     "noTracks": "Geen tracks gevonden.",
     "creators": "Makers",
     "albumsPlaylists": "Albums & playlists",
-    "noAudioForFilters": "Geen audio gevonden voor deze filters."
+    "noAudioForFilters": "Geen audio gevonden voor deze filters.",
+    "tabsLabel": "Audioweergaven",
+    "tabExplore": "Verkennen",
+    "tabPlayer": "Speler",
+    "nothingPlaying": "Er speelt nog niets.",
+    "goExplore": "Zoek iets om te luisteren",
+    "exploreViews": "Onderdelen",
+    "mostPlayed": "Meest beluisterd"
   },
   "upload": {
     "title": "Audio uploaden",
@@ -352,7 +409,13 @@
       "none": "Geen podcasts gevonden. Probeer een andere naam of plak de RSS-feed-URL.",
       "failed": "Zoeken is nu niet beschikbaar. Probeer het opnieuw.",
       "label": "Zoek een podcast",
-      "placeholder": "Naam, host of onderwerp"
+      "placeholder": "Naam, host of onderwerp",
+      "modeShows": "Programma’s",
+      "modePeople": "Personen",
+      "placeholderPeople": "Naam van host of gast",
+      "appearsIn_one": "In {{count}} aflevering",
+      "appearsIn_other": "In {{count}} afleveringen",
+      "latestMatch": "Nieuwste: {{title}}"
     },
     "opml": {
       "import": "OPML importeren",
@@ -373,7 +436,11 @@
       "limit": "Je volgt al het maximale aantal podcasts.",
       "internal": "Dat is een 3Speak-kanaal: je vindt het bij de andere audiotypes.",
       "disabled": "Externe podcasts staan op dit moment uit.",
-      "generic": "Er ging iets mis. Probeer het opnieuw."
+      "generic": "Er ging iets mis. Probeer het opnieuw.",
+      "closedPlatform": "{{platform}} deelt de feeds van zijn programma’s niet. Zoek het programma in plaats daarvan op naam.",
+      "appleOnly": "Dit programma is alleen te beluisteren in Apple Podcasts.",
+      "directoryNotFound": "We konden de feed van dat programma niet vinden. Probeer de RSS-feed of zoek op naam.",
+      "directoryDown": "Die podcastgids reageert nu niet. Probeer het opnieuw."
     },
     "tip": {
       "button": "Steun deze podcast",
@@ -400,7 +467,9 @@
     },
     "rss": {
       "label": "Toevoegen via RSS-feed",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Toevoegen via link",
+      "placeholderLink": "RSS-feed, Apple Podcasts-link of website"
     },
     "listened": "Beluisterd",
     "listenedPct": "{{pct}}% beluisterd",
@@ -414,7 +483,12 @@
       "none": "Geen afleveringen voor deze filters.",
       "custom": "Eigen periode",
       "from": "Van",
-      "to": "Tot"
+      "to": "Tot",
+      "inbox": "Nieuw",
+      "inboxEmpty": "Niets nieuws. Afleveringen van de afgelopen week die je nog niet hebt afgespeeld, verschijnen hier.",
+      "unplayed": "Niet afgespeeld",
+      "inProgress": "Bezig",
+      "downloaded": "Gedownload"
     },
     "resume": "Verder luisteren",
     "showNotes": "Shownotes",
@@ -422,6 +496,160 @@
     "noNotes": "Deze aflevering heeft geen shownotes.",
     "openEpisode": "Aflevering openen",
     "addToQueue": "Aan wachtrij toevoegen",
-    "inQueue": "In wachtrij"
+    "inQueue": "In wachtrij",
+    "trending": {
+      "title": "Trending podcasts",
+      "language": "Taal",
+      "allLanguages": "Alle talen",
+      "category": "Categorie",
+      "allCategories": "Alle categorieën",
+      "none": "Er is hier nu niets trending. Probeer een andere taal of categorie.",
+      "failed": "Trending podcasts zijn nu niet beschikbaar. Probeer het opnieuw."
+    },
+    "categories": {
+      "Arts": "Kunst",
+      "Business": "Zakelijk",
+      "Comedy": "Comedy",
+      "Education": "Onderwijs",
+      "Fiction": "Fictie",
+      "Government": "Overheid",
+      "Health": "Gezondheid en fitness",
+      "History": "Geschiedenis",
+      "Kids": "Kinderen en gezin",
+      "Leisure": "Vrije tijd",
+      "Music": "Muziek",
+      "News": "Nieuws",
+      "Religion": "Religie en spiritualiteit",
+      "Science": "Wetenschap",
+      "Society": "Maatschappij en cultuur",
+      "Sports": "Sport",
+      "Technology": "Technologie",
+      "TrueCrime": "True crime",
+      "TV": "Tv en film"
+    },
+    "charts": {
+      "title": "Hitlijsten",
+      "country": "Land",
+      "none": "Er is nu geen hitlijst voor dit land en deze categorie.",
+      "failed": "De hitlijsten zijn nu niet beschikbaar. Probeer het opnieuw."
+    },
+    "views": {
+      "mine": "Mijn",
+      "discover": "Ontdekken",
+      "trends": "Trends",
+      "mineEmpty": "Je volgt nog geen podcasts. Vind programma’s bij Ontdekken, of kijk bij Trends wat populair is."
+    },
+    "downloads": {
+      "title": "Downloads",
+      "download": "Downloaden om offline te luisteren",
+      "short": "Downloaden",
+      "downloading": "Downloaden {{pct}}%",
+      "cancel": "Download annuleren",
+      "saved": "Offline opgeslagen",
+      "remove": "Download verwijderen",
+      "removeShort": "Verwijderen",
+      "removed": "Download verwijderd",
+      "done": "Opgeslagen om offline te luisteren",
+      "total": "{{size}} opgeslagen",
+      "storage": "deze site gebruikt {{used}} van {{quota}} in deze browser",
+      "perBrowser": "Downloads blijven in deze browser, wie er ook is ingelogd.",
+      "errors": {
+        "tooLarge": "Deze aflevering is te groot om op te slaan.",
+        "rateLimited": "Te veel downloads op dit moment. Probeer het over een paar minuten opnieuw.",
+        "storage": "Er is geen ruimte om deze aflevering in deze browser op te slaan.",
+        "failed": "De aflevering kon niet worden gedownload. Probeer het opnieuw.",
+        "noSource": "Deze aflevering kan niet worden opgeslagen."
+      }
+    },
+    "autoQueue": {
+      "label": "Nieuwe afleveringen automatisch aan de wachtrij toevoegen",
+      "hint": "Nieuwe afleveringen van deze podcast komen achteraan in je wachtrij zodra ze verschijnen",
+      "onDone": "Nieuwe afleveringen van deze podcast gaan naar je wachtrij",
+      "offDone": "Nieuwe afleveringen van deze podcast gaan niet meer naar je wachtrij",
+      "added_one": "{{count}} nieuwe aflevering aan je wachtrij toegevoegd",
+      "added_other": "{{count}} nieuwe afleveringen aan je wachtrij toegevoegd"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Begin hier",
+    "seasons": {
+      "label": "Seizoen",
+      "all": "Alle seizoenen",
+      "season": "Seizoen {{n}}"
+    },
+    "persons": {
+      "title": "Hosts en gasten",
+      "roles": {
+        "host": "Host",
+        "guest": "Gast",
+        "cohost": "Co-host",
+        "producer": "Producent"
+      }
+    },
+    "episodeSearch": {
+      "label": "Afleveringen zoeken",
+      "placeholder": "Zoek in de afleveringen van deze podcast",
+      "none": "Geen afleveringen gevonden voor \"{{q}}\"."
+    },
+    "live": {
+      "now": "Nu live",
+      "badge": "LIVE",
+      "listen": "Live luisteren",
+      "upcoming": "Binnenkort",
+      "startsAt": "Start: {{time}}"
+    },
+    "private": {
+      "toggle": "Dit is een privéfeed (inloggen vereist)",
+      "username": "Gebruikersnaam",
+      "password": "Wachtwoord",
+      "hint": "De inloggegevens gaan naar de podcastdienst van 3Speak, zodat die de feed voor je kan lezen. Privéfeeds verschijnen nooit in openbare lijsten.",
+      "badge": "Privé",
+      "badgeHint": "Een privéfeed: alleen wie hem met inloggegevens volgt, ziet hem",
+      "opmlLeftOut_one": "{{count}} privéfeed is niet in het bestand opgenomen.",
+      "opmlLeftOut_other": "{{count}} privéfeeds zijn niet in het bestand opgenomen."
+    },
+    "highlights": {
+      "title": "Hoogtepunten",
+      "play": "Hoogtepunt afspelen",
+      "untitled": "Hoogtepunt op {{time}}"
+    },
+    "chapters": {
+      "title": "Hoofdstukken",
+      "loading": "Hoofdstukken laden…",
+      "none": "De hoofdstukken konden niet worden geladen.",
+      "link": "Hoofdstuklink"
+    },
+    "share": {
+      "copy": "Link kopiëren",
+      "copyAt": "Link kopiëren vanaf {{time}}",
+      "clip": "Link naar dit hoogtepunt kopiëren",
+      "copied": "Link gekopieerd",
+      "failed": "Kon de link niet kopiëren"
+    },
+    "deepLink": {
+      "playFrom": "Afspelen vanaf {{time}}",
+      "playClip": "{{from}} tot {{to}} afspelen"
+    },
+    "video": {
+      "watch": "Video bekijken",
+      "hide": "Video verbergen"
+    },
+    "signInToFollow": "Log in om podcasts te volgen",
+    "addExternal": "Externe podcast toevoegen"
+  },
+  "item": {
+    "back": "Alle audio",
+    "missing": "Deze audio is niet beschikbaar.",
+    "description": "Beschrijving",
+    "noDescription": "Geen beschrijving.",
+    "comments": "Reacties",
+    "album": "Uit {{name}}"
+  },
+  "offline": {
+    "notice": "Je bent offline. Je downloads spelen nog steeds af.",
+    "noticeNoDownloads": "Je bent offline. Download afleveringen om zonder verbinding te luisteren.",
+    "open": "Downloads openen"
   }
 }

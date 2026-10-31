@@ -41,7 +41,57 @@
     "noCues": "No cues.",
     "clearQueue": "Clear queue",
     "clearAll": "Clear all",
-    "queueEmpty": "Queue is empty."
+    "queueEmpty": "Queue is empty.",
+    "previous": "Previous",
+    "next": "Next",
+    "expand": "Expand player",
+    "collapse": "Collapse player",
+    "skipBack": "Back {{seconds}} seconds",
+    "skipForward": "Forward {{seconds}} seconds",
+    "speed": "Playback speed",
+    "speedValue": "Playback speed: {{speed}}",
+    "sleep": "Sleep timer",
+    "sleepOff": "Off",
+    "sleepMinutes": "{{minutes}} minutes",
+    "sleepEnd": "At the end of this episode",
+    "sleepEndShort": "End",
+    "sleepLeft": "Stops in {{time}}",
+    "effects": "Audio effects",
+    "voiceBoost": "Voice boost",
+    "voiceBoostHint": "Clearer, more even voices",
+    "skipSilence": "Skip silence",
+    "skipSilenceHint": "Rushes through the pauses",
+    "effectsUnavailable": "Not available for this episode.",
+    "effectsChecking": "Checking whether this episode supports it…",
+    "timeSaved": "Time saved: {{time}}",
+    "cast": "Play on another device",
+    "download": "Save for offline",
+    "downloading": "Saving: {{pct}}%",
+    "downloaded": "Saved for offline",
+    "downloadDone": "Saved for offline listening",
+    "downloadFailed": "Couldn't save this episode",
+    "copyEpisode": "Copy episode link",
+    "copiedEpisode": "Episode link copied!",
+    "copyAt": "Copy link at {{time}}",
+    "copiedAt": "Link at {{time}} copied!",
+    "copyFailed": "Couldn't copy the link",
+    "clipMake": "Make a clip",
+    "clipRange": "From {{from}} to {{to}}",
+    "clipLength": "Length",
+    "clipSeconds": "{{seconds}} s",
+    "clipCopy": "Copy clip link",
+    "clipCopied": "Clip link copied!",
+    "clipEnds": "Clip, stops at {{time}}",
+    "clipClear": "Play on past the clip",
+    "live": "LIVE",
+    "liveUnsupported": "This live stream can't play in this browser.",
+    "chapters": "Chapters",
+    "prevChapter": "Previous chapter",
+    "nextChapter": "Next chapter",
+    "chapterLink": "Chapter link",
+    "upNext": "Up next",
+    "hideIdle": "Hide (your queue stays)",
+    "continueAt": "Continue at {{time}}"
   },
   "share": {
     "failed": "Failed",
@@ -98,7 +148,14 @@
     "noTracks": "No tracks found.",
     "creators": "Creators",
     "albumsPlaylists": "Albums & Playlists",
-    "noAudioForFilters": "No audio found for these filters."
+    "noAudioForFilters": "No audio found for these filters.",
+    "tabsLabel": "Audio views",
+    "tabExplore": "Explore",
+    "tabPlayer": "Player",
+    "nothingPlaying": "Nothing is playing yet.",
+    "goExplore": "Find something to listen to",
+    "exploreViews": "Explore sections",
+    "mostPlayed": "Most played"
   },
   "upload": {
     "title": "Upload audio",
@@ -352,7 +409,13 @@
       "none": "No podcasts found. Try another name, or paste the RSS feed URL.",
       "failed": "Search is not available right now. Please try again.",
       "label": "Find a podcast",
-      "placeholder": "Show name, host or topic"
+      "placeholder": "Show name, host or topic",
+      "modeShows": "Shows",
+      "modePeople": "People",
+      "placeholderPeople": "Host or guest name",
+      "appearsIn_one": "In {{count}} episode",
+      "appearsIn_other": "In {{count}} episodes",
+      "latestMatch": "Latest: {{title}}"
     },
     "opml": {
       "import": "Import OPML",
@@ -373,7 +436,11 @@
       "limit": "You follow the maximum number of podcasts.",
       "internal": "That is a 3Speak channel: you find it under the other audio types.",
       "disabled": "Outside podcasts are switched off right now.",
-      "generic": "Something went wrong. Please try again."
+      "generic": "Something went wrong. Please try again.",
+      "closedPlatform": "{{platform}} does not share its shows' feeds. Search for the show by name instead.",
+      "appleOnly": "This show is only available inside Apple Podcasts.",
+      "directoryNotFound": "We could not find that show's feed. Try its RSS feed or search by name.",
+      "directoryDown": "That podcast directory is not answering right now. Please try again."
     },
     "tip": {
       "button": "Support this podcast",
@@ -400,7 +467,9 @@
     },
     "rss": {
       "label": "Add by RSS feed",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Add by link",
+      "placeholderLink": "RSS feed, Apple Podcasts link or website"
     },
     "listened": "Listened",
     "listenedPct": "{{pct}}% listened",
@@ -414,7 +483,12 @@
       "none": "No episodes match these filters.",
       "custom": "Custom range",
       "from": "From",
-      "to": "To"
+      "to": "To",
+      "inbox": "New",
+      "inboxEmpty": "Nothing new. Episodes from the last week that you have not played show up here.",
+      "unplayed": "Unplayed",
+      "inProgress": "In progress",
+      "downloaded": "Downloaded"
     },
     "resume": "Resume",
     "showNotes": "Show notes",
@@ -422,6 +496,160 @@
     "noNotes": "This episode has no show notes.",
     "openEpisode": "Open episode",
     "addToQueue": "Add to queue",
-    "inQueue": "In queue"
+    "inQueue": "In queue",
+    "trending": {
+      "title": "Trending podcasts",
+      "language": "Language",
+      "allLanguages": "All languages",
+      "category": "Category",
+      "allCategories": "All categories",
+      "none": "Nothing is trending here right now. Try another language or category.",
+      "failed": "Trending podcasts are not available right now. Please try again."
+    },
+    "categories": {
+      "Arts": "Arts",
+      "Business": "Business",
+      "Comedy": "Comedy",
+      "Education": "Education",
+      "Fiction": "Fiction",
+      "Government": "Government",
+      "Health": "Health & Fitness",
+      "History": "History",
+      "Kids": "Kids & Family",
+      "Leisure": "Leisure",
+      "Music": "Music",
+      "News": "News",
+      "Religion": "Religion & Spirituality",
+      "Science": "Science",
+      "Society": "Society & Culture",
+      "Sports": "Sports",
+      "Technology": "Technology",
+      "TrueCrime": "True Crime",
+      "TV": "TV & Film"
+    },
+    "charts": {
+      "title": "Top charts",
+      "country": "Country",
+      "none": "No chart for this country and category right now.",
+      "failed": "The charts are not available right now. Please try again."
+    },
+    "views": {
+      "mine": "Mine",
+      "discover": "Discover",
+      "trends": "Trends",
+      "mineEmpty": "You don't follow any podcasts yet. Find shows in Discover, or see what's popular in Trends."
+    },
+    "downloads": {
+      "title": "Downloads",
+      "download": "Download for offline listening",
+      "short": "Download",
+      "downloading": "Downloading {{pct}}%",
+      "cancel": "Cancel download",
+      "saved": "Saved offline",
+      "remove": "Remove download",
+      "removeShort": "Remove",
+      "removed": "Download removed",
+      "done": "Saved for offline listening",
+      "total": "{{size}} saved",
+      "storage": "this site uses {{used}} of {{quota}} in this browser",
+      "perBrowser": "Downloads stay in this browser, whoever is signed in.",
+      "errors": {
+        "tooLarge": "This episode is too big to save.",
+        "rateLimited": "Too many downloads right now. Please try again in a few minutes.",
+        "storage": "There is no room to save this episode in this browser.",
+        "failed": "The episode could not be downloaded. Please try again.",
+        "noSource": "This episode can not be saved."
+      }
+    },
+    "autoQueue": {
+      "label": "Auto-add new episodes to the queue",
+      "hint": "New episodes of this show go to the end of your queue when they come out",
+      "onDone": "New episodes of this show will go to your queue",
+      "offDone": "New episodes of this show no longer go to your queue",
+      "added_one": "{{count}} new episode added to your queue",
+      "added_other": "{{count}} new episodes added to your queue"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Start here",
+    "seasons": {
+      "label": "Season",
+      "all": "All seasons",
+      "season": "Season {{n}}"
+    },
+    "persons": {
+      "title": "Hosts and guests",
+      "roles": {
+        "host": "Host",
+        "guest": "Guest",
+        "cohost": "Co-host",
+        "producer": "Producer"
+      }
+    },
+    "episodeSearch": {
+      "label": "Search episodes",
+      "placeholder": "Search this show's episodes",
+      "none": "No episodes match \"{{q}}\"."
+    },
+    "live": {
+      "now": "Live now",
+      "badge": "LIVE",
+      "listen": "Listen live",
+      "upcoming": "Upcoming",
+      "startsAt": "Starts {{time}}"
+    },
+    "private": {
+      "toggle": "This is a private feed (needs a login)",
+      "username": "Username",
+      "password": "Password",
+      "hint": "The login is sent to 3Speak's podcast service so it can read the feed for you. Private feeds never show in public lists.",
+      "badge": "Private",
+      "badgeHint": "A private feed: only people who follow it with a login see it",
+      "opmlLeftOut_one": "{{count}} private feed was left out of the file.",
+      "opmlLeftOut_other": "{{count}} private feeds were left out of the file."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "play": "Play highlight",
+      "untitled": "Highlight at {{time}}"
+    },
+    "chapters": {
+      "title": "Chapters",
+      "loading": "Loading chapters…",
+      "none": "The chapters could not be loaded.",
+      "link": "Chapter link"
+    },
+    "share": {
+      "copy": "Copy link",
+      "copyAt": "Copy link at {{time}}",
+      "clip": "Copy a link to this highlight",
+      "copied": "Link copied",
+      "failed": "Could not copy the link"
+    },
+    "deepLink": {
+      "playFrom": "Play from {{time}}",
+      "playClip": "Play {{from}} to {{to}}"
+    },
+    "video": {
+      "watch": "Watch video",
+      "hide": "Hide video"
+    },
+    "signInToFollow": "Sign in to follow podcasts",
+    "addExternal": "Add external podcast"
+  },
+  "item": {
+    "back": "All audio",
+    "missing": "This audio is not available.",
+    "description": "Description",
+    "noDescription": "No description.",
+    "comments": "Comments",
+    "album": "From {{name}}"
+  },
+  "offline": {
+    "notice": "You're offline. Your downloads still play.",
+    "noticeNoDownloads": "You're offline. Download episodes to listen without a connection.",
+    "open": "Open downloads"
   }
 }

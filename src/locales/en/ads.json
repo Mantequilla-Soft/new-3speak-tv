@@ -92,7 +92,9 @@
     "turnAdsOff": "Turn ads off on your videos",
     "rewardsOn": "Turn on viewer rewards",
     "rewardsOff": "Turn off viewer rewards",
-    "showApplications": "Show your advertising applications"
+    "showApplications": "Show your advertising applications",
+    "listenOn": "Turn on listener rewards",
+    "listenOff": "Turn off listener rewards"
   },
   "slot": {
     "atBeginning": "At the beginning of the video",
@@ -256,7 +258,9 @@
     "text": "Ads on 3Speak pay the creator, their community, and now you. Your share comes out of what the advertiser paid, in whatever they paid with, for videos you were going to watch anyway.",
     "note": "3Speak already keeps your watch history so you can find things again. This lets us use it to work out what you are owed, and keeps a record of how much of each video you actually watched. Say no and nothing changes. You can switch it off any time in Settings, and that deletes what we kept for rewards.",
     "noThanks": "No thanks",
-    "yes": "Yes, pay me"
+    "yes": "Yes, pay me",
+    "titleBoth": "Get paid for watching and listening",
+    "listenNote": "Listening counts too: listener rewards for audio and podcasts on 3speak.tv start soon, once we have checked the numbers. What you listen to from today counts."
   },
   "promote": {
     "pricingFailed": "Could not load promotion pricing.",
@@ -785,5 +789,12 @@
     "bookAnother": "Book another",
     "pickProduct": "Pick a product to see its ad videos and bookings.",
     "showUpHere": "Your products, their ad videos and bookings show up here once they load."
+  },
+  "listenPrompt": {
+    "title": "Earn for listening too?",
+    "text": "Listener rewards are starting soon. Let us count how long you listen to audio and podcast episodes on 3speak.tv, from today.",
+    "note": "Say no and nothing changes. You can switch it off any time in Settings, and that deletes what we kept.",
+    "yes": "Yes, count my listening",
+    "savedYes": "Your listening now counts toward listener rewards"
   }
 }

@@ -39,7 +39,57 @@
     "noCues": "Tidak ada cue.",
     "clearQueue": "Kosongkan antrean",
     "clearAll": "Hapus semua",
-    "queueEmpty": "Antrean kosong."
+    "queueEmpty": "Antrean kosong.",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "expand": "Perbesar pemutar",
+    "collapse": "Perkecil pemutar",
+    "skipBack": "Mundur {{seconds}} detik",
+    "skipForward": "Maju {{seconds}} detik",
+    "speed": "Kecepatan putar",
+    "speedValue": "Kecepatan putar: {{speed}}",
+    "sleep": "Timer tidur",
+    "sleepOff": "Mati",
+    "sleepMinutes": "{{minutes}} menit",
+    "sleepEnd": "Di akhir episode ini",
+    "sleepEndShort": "Akhir",
+    "sleepLeft": "Berhenti dalam {{time}}",
+    "effects": "Efek audio",
+    "voiceBoost": "Penguat suara",
+    "voiceBoostHint": "Suara lebih jelas dan rata",
+    "skipSilence": "Lewati hening",
+    "skipSilenceHint": "Melaju cepat melewati jeda",
+    "effectsUnavailable": "Tidak tersedia untuk episode ini.",
+    "effectsChecking": "Memeriksa apakah episode ini mendukungnya…",
+    "timeSaved": "Waktu dihemat: {{time}}",
+    "cast": "Putar di perangkat lain",
+    "download": "Simpan untuk offline",
+    "downloading": "Menyimpan: {{pct}}%",
+    "downloaded": "Tersimpan untuk offline",
+    "downloadDone": "Tersimpan untuk didengarkan offline",
+    "downloadFailed": "Gagal menyimpan episode ini",
+    "copyEpisode": "Salin tautan episode",
+    "copiedEpisode": "Tautan episode tersalin!",
+    "copyAt": "Salin tautan di {{time}}",
+    "copiedAt": "Tautan di {{time}} tersalin!",
+    "copyFailed": "Gagal menyalin tautan",
+    "clipMake": "Buat klip",
+    "clipRange": "Dari {{from}} sampai {{to}}",
+    "clipLength": "Durasi",
+    "clipSeconds": "{{seconds}} dtk",
+    "clipCopy": "Salin tautan klip",
+    "clipCopied": "Tautan klip tersalin!",
+    "clipEnds": "Klip, berhenti di {{time}}",
+    "clipClear": "Lanjut putar setelah klip",
+    "live": "LIVE",
+    "liveUnsupported": "Siaran live ini tidak bisa diputar di browser ini.",
+    "chapters": "Bab",
+    "prevChapter": "Bab sebelumnya",
+    "nextChapter": "Bab berikutnya",
+    "chapterLink": "Tautan bab",
+    "upNext": "Berikutnya",
+    "hideIdle": "Sembunyikan (antrean tetap ada)",
+    "continueAt": "Lanjutkan dari {{time}}"
   },
   "share": {
     "failed": "Gagal",
@@ -95,7 +145,14 @@
     "noTracks": "Tidak ada lagu yang ditemukan.",
     "creators": "Kreator",
     "albumsPlaylists": "Album & Playlist",
-    "noAudioForFilters": "Tidak ada audio untuk filter ini."
+    "noAudioForFilters": "Tidak ada audio untuk filter ini.",
+    "tabsLabel": "Tampilan audio",
+    "tabExplore": "Telusuri",
+    "tabPlayer": "Pemutar",
+    "nothingPlaying": "Belum ada yang diputar.",
+    "goExplore": "Cari sesuatu untuk didengarkan",
+    "exploreViews": "Bagian",
+    "mostPlayed": "Paling banyak diputar"
   },
   "upload": {
     "title": "Unggah audio",
@@ -333,7 +390,12 @@
       "none": "Podcast tidak ditemukan. Coba nama lain, atau tempel URL feed RSS.",
       "failed": "Pencarian sedang tidak tersedia. Silakan coba lagi.",
       "label": "Cari podcast",
-      "placeholder": "Nama acara, pembawa, atau topik"
+      "placeholder": "Nama acara, pembawa, atau topik",
+      "modeShows": "Acara",
+      "modePeople": "Orang",
+      "placeholderPeople": "Nama pembawa acara atau tamu",
+      "appearsIn_other": "Di {{count}} episode",
+      "latestMatch": "Terbaru: {{title}}"
     },
     "opml": {
       "import": "Impor OPML",
@@ -353,7 +415,11 @@
       "limit": "Anda sudah mengikuti jumlah maksimum podcast.",
       "internal": "Itu adalah channel 3Speak: Anda dapat menemukannya di jenis audio lainnya.",
       "disabled": "Podcast eksternal sedang dinonaktifkan.",
-      "generic": "Terjadi kesalahan. Silakan coba lagi."
+      "generic": "Terjadi kesalahan. Silakan coba lagi.",
+      "closedPlatform": "{{platform}} tidak membagikan feed acaranya. Cari acaranya berdasarkan nama.",
+      "appleOnly": "Acara ini hanya tersedia di Apple Podcasts.",
+      "directoryNotFound": "Kami tidak menemukan feed acara itu. Coba feed RSS-nya atau cari berdasarkan nama.",
+      "directoryDown": "Direktori podcast itu sedang tidak merespons. Silakan coba lagi."
     },
     "tip": {
       "button": "Dukung podcast ini",
@@ -378,7 +444,9 @@
     },
     "rss": {
       "label": "Tambah lewat feed RSS",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Tambah lewat tautan",
+      "placeholderLink": "Feed RSS, tautan Apple Podcasts, atau situs web"
     },
     "listened": "Sudah didengarkan",
     "listenedPct": "{{pct}}% didengarkan",
@@ -392,7 +460,12 @@
       "none": "Tidak ada episode yang cocok dengan filter ini.",
       "custom": "Rentang khusus",
       "from": "Dari",
-      "to": "Sampai"
+      "to": "Sampai",
+      "inbox": "Baru",
+      "inboxEmpty": "Belum ada yang baru. Episode dari seminggu terakhir yang belum Anda putar muncul di sini.",
+      "unplayed": "Belum diputar",
+      "inProgress": "Sedang didengarkan",
+      "downloaded": "Diunduh"
     },
     "resume": "Lanjutkan",
     "showNotes": "Catatan episode",
@@ -400,6 +473,158 @@
     "noNotes": "Episode ini tidak punya catatan.",
     "openEpisode": "Buka episode",
     "addToQueue": "Tambah ke antrean",
-    "inQueue": "Dalam antrean"
+    "inQueue": "Dalam antrean",
+    "trending": {
+      "title": "Podcast yang sedang tren",
+      "language": "Bahasa",
+      "allLanguages": "Semua bahasa",
+      "category": "Kategori",
+      "allCategories": "Semua kategori",
+      "none": "Belum ada yang sedang tren di sini. Coba bahasa atau kategori lain.",
+      "failed": "Podcast yang sedang tren tidak tersedia saat ini. Silakan coba lagi."
+    },
+    "categories": {
+      "Arts": "Seni",
+      "Business": "Bisnis",
+      "Comedy": "Komedi",
+      "Education": "Pendidikan",
+      "Fiction": "Fiksi",
+      "Government": "Pemerintahan",
+      "Health": "Kesehatan & Kebugaran",
+      "History": "Sejarah",
+      "Kids": "Anak & Keluarga",
+      "Leisure": "Waktu Luang",
+      "Music": "Musik",
+      "News": "Berita",
+      "Religion": "Agama & Spiritualitas",
+      "Science": "Sains",
+      "Society": "Masyarakat & Budaya",
+      "Sports": "Olahraga",
+      "Technology": "Teknologi",
+      "TrueCrime": "Kisah Kriminal Nyata",
+      "TV": "TV & Film"
+    },
+    "charts": {
+      "title": "Tangga teratas",
+      "country": "Negara",
+      "none": "Belum ada tangga untuk negara dan kategori ini.",
+      "failed": "Tangga teratas tidak tersedia saat ini. Silakan coba lagi."
+    },
+    "views": {
+      "mine": "Milik saya",
+      "discover": "Jelajahi",
+      "trends": "Tren",
+      "mineEmpty": "Kamu belum mengikuti podcast apa pun. Temukan acara di Jelajahi, atau lihat yang populer di Tren."
+    },
+    "downloads": {
+      "title": "Unduhan",
+      "download": "Unduh untuk didengarkan offline",
+      "short": "Unduh",
+      "downloading": "Mengunduh {{pct}}%",
+      "cancel": "Batalkan unduhan",
+      "saved": "Tersimpan offline",
+      "remove": "Hapus unduhan",
+      "removeShort": "Hapus",
+      "removed": "Unduhan dihapus",
+      "done": "Tersimpan untuk didengarkan offline",
+      "total": "{{size}} tersimpan",
+      "storage": "situs ini memakai {{used}} dari {{quota}} di browser ini",
+      "perBrowser": "Unduhan tetap ada di browser ini, siapa pun yang masuk.",
+      "errors": {
+        "tooLarge": "Episode ini terlalu besar untuk disimpan.",
+        "rateLimited": "Terlalu banyak unduhan saat ini. Silakan coba lagi dalam beberapa menit.",
+        "storage": "Tidak ada ruang untuk menyimpan episode ini di browser ini.",
+        "failed": "Episode tidak dapat diunduh. Silakan coba lagi.",
+        "noSource": "Episode ini tidak dapat disimpan."
+      }
+    },
+    "autoQueue": {
+      "label": "Tambahkan episode baru ke antrean secara otomatis",
+      "hint": "Episode baru dari acara ini masuk ke akhir antrean Anda saat terbit",
+      "onDone": "Episode baru dari acara ini akan masuk ke antrean Anda",
+      "offDone": "Episode baru dari acara ini tidak lagi masuk ke antrean Anda",
+      "added_other": "{{count}} episode baru ditambahkan ke antrean Anda"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Mulai dari sini",
+    "seasons": {
+      "label": "Musim",
+      "all": "Semua musim",
+      "season": "Musim {{n}}"
+    },
+    "persons": {
+      "title": "Pembawa acara dan tamu",
+      "roles": {
+        "host": "Pembawa acara",
+        "guest": "Tamu",
+        "cohost": "Pembawa acara pendamping",
+        "producer": "Produser"
+      }
+    },
+    "episodeSearch": {
+      "label": "Cari episode",
+      "placeholder": "Cari episode acara ini",
+      "none": "Tidak ada episode yang cocok dengan \"{{q}}\"."
+    },
+    "live": {
+      "now": "Sedang live",
+      "badge": "LIVE",
+      "listen": "Dengarkan live",
+      "upcoming": "Akan datang",
+      "startsAt": "Mulai: {{time}}"
+    },
+    "private": {
+      "toggle": "Ini feed privat (perlu login)",
+      "username": "Nama pengguna",
+      "password": "Kata sandi",
+      "hint": "Data login dikirim ke layanan podcast 3Speak agar dapat membaca feed untuk Anda. Feed privat tidak pernah muncul di daftar publik.",
+      "badge": "Privat",
+      "badgeHint": "Feed privat: hanya orang yang mengikutinya dengan login yang dapat melihatnya",
+      "opmlLeftOut_other": "{{count}} feed privat tidak disertakan dalam file."
+    },
+    "highlights": {
+      "title": "Sorotan",
+      "play": "Putar sorotan",
+      "untitled": "Sorotan di {{time}}"
+    },
+    "chapters": {
+      "title": "Bab",
+      "loading": "Memuat bab…",
+      "none": "Bab tidak dapat dimuat.",
+      "link": "Tautan bab"
+    },
+    "share": {
+      "copy": "Salin tautan",
+      "copyAt": "Salin tautan di {{time}}",
+      "clip": "Salin tautan ke sorotan ini",
+      "copied": "Tautan tersalin",
+      "failed": "Tidak dapat menyalin tautan"
+    },
+    "deepLink": {
+      "playFrom": "Putar dari {{time}}",
+      "playClip": "Putar {{from}} sampai {{to}}"
+    },
+    "video": {
+      "watch": "Tonton video",
+      "hide": "Sembunyikan video"
+    },
+    "signInToFollow": "Masuk untuk mengikuti podcast",
+    "addExternal": "Tambah podcast eksternal"
+  },
+  "item": {
+    "back": "Semua audio",
+    "missing": "Audio ini tidak tersedia.",
+    "description": "Deskripsi",
+    "noDescription": "Tidak ada deskripsi.",
+    "comments": "Komentar",
+    "album": "Dari {{name}}"
+  },
+  "offline": {
+    "notice": "Kamu sedang offline. Unduhanmu tetap bisa diputar.",
+    "noticeNoDownloads": "Kamu sedang offline. Unduh episode untuk mendengarkan tanpa koneksi.",
+    "open": "Buka unduhan"
   }
 }

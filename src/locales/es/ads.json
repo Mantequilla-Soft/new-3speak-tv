@@ -93,7 +93,9 @@
     "turnAdsOff": "Desactivar los anuncios en tus videos",
     "rewardsOn": "Activar las recompensas por ver",
     "rewardsOff": "Desactivar las recompensas por ver",
-    "showApplications": "Ver tus solicitudes de publicidad"
+    "showApplications": "Ver tus solicitudes de publicidad",
+    "listenOn": "Activar recompensas por escuchar",
+    "listenOff": "Desactivar recompensas por escuchar"
   },
   "slot": {
     "atBeginning": "Al inicio del video",
@@ -259,7 +261,9 @@
     "text": "Los anuncios en 3Speak le pagan al creador, a su comunidad y ahora también a ti. Tu parte sale de lo que pagó el anunciante, en la moneda con la que pagó, por videos que ibas a ver de todos modos.",
     "note": "3Speak ya guarda tu historial de reproducción para que puedas volver a encontrar cosas. Esto nos permite usarlo para calcular lo que te corresponde, y guarda un registro de cuánto viste realmente de cada video. Si dices que no, nada cambia. Puedes desactivarlo cuando quieras en Ajustes, y eso elimina lo que guardamos para las recompensas.",
     "noThanks": "No, gracias",
-    "yes": "Sí, págame"
+    "yes": "Sí, págame",
+    "titleBoth": "Gana por ver y escuchar",
+    "listenNote": "Escuchar también cuenta: las recompensas por escuchar audio y podcasts en 3speak.tv empiezan pronto, cuando hayamos revisado las cifras. Cuenta lo que escuches desde hoy."
   },
   "promote": {
     "pricingFailed": "No se pudieron cargar los precios de promoción.",
@@ -812,5 +816,12 @@
     "bookAnother": "Reservar otro",
     "pickProduct": "Elige un producto para ver sus videos publicitarios y reservas.",
     "showUpHere": "Tus productos, sus videos publicitarios y reservas aparecen aquí cuando se cargan."
+  },
+  "listenPrompt": {
+    "title": "¿Ganar también por escuchar?",
+    "text": "Las recompensas por escuchar empiezan pronto. Déjanos contar cuánto tiempo escuchas audio y episodios de podcasts en 3speak.tv, desde hoy.",
+    "note": "Si dices que no, nada cambia. Puedes desactivarlo cuando quieras en Ajustes, y eso borra lo que guardamos.",
+    "yes": "Sí, contad lo que escucho",
+    "savedYes": "Lo que escuchas ya cuenta para las recompensas por escuchar"
   }
 }

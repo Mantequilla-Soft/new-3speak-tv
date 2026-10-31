@@ -91,7 +91,9 @@
     "turnAdsOff": "Tắt quảng cáo trên video của bạn",
     "rewardsOn": "Bật phần thưởng người xem",
     "rewardsOff": "Tắt phần thưởng người xem",
-    "showApplications": "Hiển thị đơn đăng ký quảng cáo của bạn"
+    "showApplications": "Hiển thị đơn đăng ký quảng cáo của bạn",
+    "listenOn": "Bật phần thưởng cho người nghe",
+    "listenOff": "Tắt phần thưởng cho người nghe"
   },
   "slot": {
     "atBeginning": "Ở đầu video",
@@ -253,7 +255,9 @@
     "text": "Quảng cáo trên 3Speak trả cho nhà sáng tạo, cộng đồng của họ, và giờ là cả bạn. Phần của bạn được lấy từ số tiền nhà quảng cáo đã trả, bằng đúng loại tiền họ đã dùng, cho những video bạn vốn định xem.",
     "note": "3Speak vốn đã lưu lịch sử xem để bạn có thể tìm lại nội dung. Tùy chọn này cho phép chúng tôi dùng nó để tính số tiền bạn được nhận, và lưu lại bạn đã thực sự xem bao nhiêu phần của mỗi video. Nếu từ chối, không có gì thay đổi. Bạn có thể tắt bất cứ lúc nào trong Cài đặt, và việc đó sẽ xóa những gì chúng tôi đã lưu cho phần thưởng.",
     "noThanks": "Không, cảm ơn",
-    "yes": "Có, trả cho tôi"
+    "yes": "Có, trả cho tôi",
+    "titleBoth": "Được trả tiền khi xem và nghe",
+    "listenNote": "Việc nghe cũng được tính: phần thưởng cho người nghe âm thanh và podcast trên 3speak.tv sẽ sớm bắt đầu khi chúng tôi đã kiểm tra số liệu. Những gì bạn nghe từ hôm nay đều được tính."
   },
   "promote": {
     "pricingFailed": "Không thể tải bảng giá quảng bá.",
@@ -758,5 +762,12 @@
     "bookAnother": "Đặt thêm",
     "pickProduct": "Chọn một sản phẩm để xem video quảng cáo và lượt đặt của nó.",
     "showUpHere": "Sản phẩm, video quảng cáo và lượt đặt của bạn sẽ hiện ở đây khi tải xong."
+  },
+  "listenPrompt": {
+    "title": "Kiếm cả khi nghe?",
+    "text": "Phần thưởng cho người nghe sắp bắt đầu. Hãy cho phép chúng tôi tính thời gian bạn nghe âm thanh và các tập podcast trên 3speak.tv, kể từ hôm nay.",
+    "note": "Chọn không thì không có gì thay đổi. Bạn có thể tắt bất cứ lúc nào trong Cài đặt, và khi đó dữ liệu đã lưu sẽ bị xóa.",
+    "yes": "Có, hãy tính thời gian tôi nghe",
+    "savedYes": "Thời gian bạn nghe giờ được tính vào phần thưởng cho người nghe"
   }
 }

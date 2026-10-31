@@ -1,0 +1,143 @@
+{
+  "open": "3Speak에서 보낸 나의 1년",
+  "pageTitle": "{{user}}님의 3Speak 1년",
+  "intro": {
+    "title": "@{{user}}님의 3Speak 1년",
+    "sub": "지난 12개월을 숫자로 돌아봐요."
+  },
+  "uploads": {
+    "kicker": "업로드한 콘텐츠",
+    "videos_other": "동영상 {{count}}개",
+    "shorts_other": "Shorts {{count}}개",
+    "and": "그리고"
+  },
+  "watch": {
+    "kicker": "사람들이 내 영상을 본 시간",
+    "sub": "동영상과 Shorts를 합친 시간이에요.",
+    "since": "시청 시간은 {{date}}부터 집계돼요.",
+    "graph": "주별 시청 시간.",
+    "bestWeek": "최고의 주: {{date}}, {{time}}",
+    "weekOf": "{{date}} 주",
+    "panHint": "스크롤하거나 드래그해서 1년을 둘러보세요."
+  },
+  "audience": {
+    "kicker": "내 영상 재생 횟수",
+    "views_other": "{{count}}회",
+    "votes_other": "투표 {{count}}개",
+    "comments_other": "댓글 {{count}}개",
+    "fans": "나의 최고의 팬",
+    "fansLoading": "최고의 팬을 찾는 중…",
+    "noFans": "아직 다른 사람의 투표나 답글이 없어요."
+  },
+  "top": {
+    "kicker": "가장 많이 본 영상",
+    "watched": "시청 시간 {{time}}"
+  },
+  "supporters": {
+    "kicker": "나의 최고의 후원자",
+    "anonymous": "익명"
+  },
+  "rank": {
+    "kicker": "리더보드 최고 순위",
+    "board": "{{board}}에서",
+    "hint": "각 계단은 해당 리더보드의 크리에이터예요. 마우스를 올리면 누군지 보여요."
+  },
+  "outro": {
+    "title": "3Speak에서 창작해 주셔서 고마워요",
+    "sub": "다음 12개월도 함께해요.",
+    "channel": "내 채널 열기"
+  },
+  "empty": {
+    "title": "지난 12개월 동안 업로드가 없어요",
+    "sub": "동영상이나 Shorts를 올리면 3Speak에서의 1년이 여기서 시작돼요.",
+    "upload": "업로드"
+  },
+  "signIn": "로그인하고 3Speak에서 보낸 1년을 확인하세요.",
+  "loading": "1년을 집계하는 중…",
+  "error": "1년 기록을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "nav": {
+    "previous": "이전",
+    "next": "다음",
+    "slide": "슬라이드 {{n}}/{{total}}"
+  },
+  "communities": {
+    "kicker": "게시한 커뮤니티",
+    "count_other": "커뮤니티 {{count}}개",
+    "posts_other": "게시물 {{count}}개"
+  },
+  "followed": {
+    "kicker": "새로 팔로우한 계정",
+    "count_other": "계정 {{count}}개"
+  },
+  "watched": {
+    "kicker": "가장 많이 본 크리에이터",
+    "videos_other": "동영상 {{count}}개 시청"
+  },
+  "followers": {
+    "kicker": "{{date}} 이후 새 팔로워",
+    "count_other": "{{count}}개 계정이 나를 팔로우했어요",
+    "kickerYear": "올해의 새 팔로워"
+  },
+  "panel": {
+    "openCommunity": "커뮤니티 열기",
+    "untitled": "제목 없음",
+    "closeAndLook": "닫고 둘러보기"
+  },
+  "income": {
+    "kicker": "내가 번 금액",
+    "sub": "게시물 보상, 3Speak 광고, 팁에서.",
+    "note": "HBD 기준(1 HBD는 약 1미국 달러)이며, HIVE와 HP는 현재 HIVE 시세로 환산했어요.",
+    "partial": "활동이 아주 많은 계정이라 올해 중 최근 기간만 포함했어요.",
+    "hint": "기둥에 마우스를 올리면 세부 내역이 보여요.",
+    "sources": {
+      "author": "게시물 보상",
+      "ads": "3Speak 광고",
+      "tips": "팁"
+    },
+    "legendOurs": "3Speak에서",
+    "legendOther": "Hive의 다른 곳에서",
+    "segments": {
+      "ours": "3Speak 게시물 보상",
+      "other": "Hive 다른 곳의 게시물 보상",
+      "ads_creator": "크리에이터 광고 수익",
+      "ads_viewer": "시청자 광고 보상",
+      "ads_combined": "두 가지 모두의 광고 지급(구분 없음)"
+    },
+    "rewardedPosts_other": "보상받은 게시물 {{count}}개",
+    "legendCreator": "크리에이터로서",
+    "legendViewer": "시청자로서",
+    "logScale": "기둥 높이는 로그 스케일이라 작은 금액도 잘 보여요.",
+    "payments_other": "지급 {{count}}건",
+    "legendCombined": "둘 다, 구분 없음"
+  },
+  "loadingSteps": {
+    "stats": "1년을 살펴보는 중…",
+    "uploads": "업로드를 세는 중…",
+    "watch": "시청 시간을 재는 중…",
+    "audience": "조회수를 세는 중…",
+    "fans": "팬을 찾는 중…",
+    "income": "수입을 합산하는 중…",
+    "communities": "커뮤니티를 둘러보는 중…",
+    "followers": "누가 팔로우했는지 확인하는 중…",
+    "watched": "시청한 영상을 살펴보는 중…",
+    "thumbnails": "썸네일 불러오는 중… {{done}}/{{total}}"
+  },
+  "tips": {
+    "label": "팁:",
+    "mouse": {
+      "tip1": "마우스를 움직이면 슬라이드 밖에서도 각 장면이 따라와요.",
+      "tip2": "스크롤해서 영상 벽을 확대하거나 축소하세요.",
+      "tip3": "시청 시간 그래프를 스크롤하거나 드래그해서 1년을 둘러보세요.",
+      "tip4": "막대, 계단, 기둥, 타일에 마우스를 올리면 자세한 내용이 보여요.",
+      "tip5": "타일, 막대, 커뮤니티를 클릭하면 세부 정보가 계속 열려 있어요."
+    },
+    "touch": {
+      "tip1": "아래 화살표로 슬라이드를 넘기세요.",
+      "tip2": "영상 벽을 드래그해서 둘러보세요.",
+      "tip3": "시청 시간 그래프를 옆으로 밀어 1년을 둘러보세요.",
+      "tip4": "타일을 탭하면 동영상 카드가 보여요.",
+      "tip5": "커뮤니티나 주를 탭하면 해당 영상이 보여요.",
+      "tip6": "장면은 저절로 천천히 돌아가요. 링을 드래그하면 직접 돌릴 수 있어요."
+    }
+  }
+}

@@ -20,10 +20,32 @@
   "changelog": {
     "title": "Tumetoa sasisho!",
     "subtitle": "Haya ndiyo mapya katika v{{version}}",
-    "previousUpdates": "Masasisho ya awali",
-    "newerUpdates": "Masasisho mapya zaidi",
     "readTheCode": "Soma msimbo",
-    "gotIt": "Nimeelewa"
+    "gotIt": "Nimeelewa",
+    "categories": {
+      "home": "Mwanzo na milisho",
+      "watch": "Ukurasa wa video",
+      "comments": "Maoni",
+      "shorts": "Shorts",
+      "stories": "Hadithi",
+      "editor": "Kihariri na remix",
+      "upload": "Kupakia na kuchapisha",
+      "audio": "Sauti",
+      "podcasts": "Podikasti",
+      "live": "Matangazo mubashara",
+      "profile": "Wasifu na chaneli",
+      "groups": "Jumuiya na beji",
+      "playlists": "Orodha za kucheza",
+      "tips": "Bakshishi, pochi na Pro",
+      "ads": "Matangazo",
+      "chat": "Gumzo",
+      "notifications": "Arifa",
+      "leaderboard": "Ubao wa viongozi",
+      "sharing": "Kushiriki",
+      "account": "Kuingia na akaunti",
+      "settings": "Mipangilio na lugha",
+      "general": "3Speak yote"
+    }
   },
   "routes": {
     "homeFeed": "Mlisho wa nyumbani",

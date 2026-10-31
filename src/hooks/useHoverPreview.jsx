@@ -4,6 +4,7 @@ import { ThreeSpeakApi } from "@mantequilla-soft/3speak-player";
 import { getPlayerUrl } from "../utils/playerUrl";
 import { createLowResPreviewPlayer } from "../lib/lowResPreviewPlayer";
 import { useAppStore } from "../lib/store";
+import useCardSize from "./useCardSize";
 import useSubtitles, { prefetchSubtitles } from "./useSubtitles";
 import SubtitleOverlay from "../components/SubtitleOverlay/SubtitleOverlay";
 
@@ -76,7 +77,7 @@ async function prefetchManifestAbortable(hlsUrl, signal, onGone) {
 // `setLock(true)` while a popup is open so leaving the card doesn't kill the preview.
 export default function useHoverPreview({ renderControls } = {}) {
   const previewEnabled = useAppStore((s) => s.previewEnabled !== false);
-  const cardSize = useAppStore((s) => s.homeCardSize);
+  const cardSize = useCardSize();
 
   const canHover = useMemo(
     () => typeof window !== "undefined" && window.matchMedia && window.matchMedia("(hover: hover)").matches,

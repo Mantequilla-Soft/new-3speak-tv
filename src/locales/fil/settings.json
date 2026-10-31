@@ -37,7 +37,13 @@
     "title": "Kumita habang nanonood",
     "rowTitle": "Viewer rewards",
     "desc": "Kumita ng bahagi ng ad revenue para sa mga pinapanood mo, bayad sa HBD o HIVE. Binabayaran ka batay sa mga video na napanood mo, may ad mang nag-play o wala, kaya ang panonood ang ginagantimpalaan at hindi ang pagtitiis sa ads. Nagpe-play ang ads para sa lahat maliban sa mga 3Speak Pro subscriber. Nire-record namin kung gaano kalaki ng bawat video ang napanood mo, bukod pa sa watch history na itinatago na ng Napanood page, at buburahin namin ito sa sandaling i-off mo ito.",
-    "aria": "Kumita ng bahagi ng ad revenue para sa mga pinapanood mo"
+    "aria": "Kumita ng bahagi ng ad revenue para sa mga pinapanood mo",
+    "titleListen": "Kumita habang nanonood at nakikinig",
+    "listenDesc": "Bilang din ang pakikinig: itinatala namin kung gaano katagal kang nakikinig sa 3Speak audio at mga episode ng podcast sa 3speak.tv. Magsisimula ang gantimpala sa pakikinig kapag nasuri na namin ang mga numero, at bilang ang pinakikinggan mo mula sa araw na i-on mo ito.",
+    "listenAlso": "Bilangin din ang pakikinig ko",
+    "listenOnToast": "Bilang na ang pakikinig mo para sa gantimpala sa pakikinig",
+    "onToastBoth": "Naka-on ang gantimpala sa panonood at pakikinig",
+    "offToastBoth": "Naka-off ang gantimpala, at nabura na ang data ng panonood at pakikinig mo"
   },
   "postingAuth": {
     "updateFailed": "Hindi ma-update ang posting authority mo.",

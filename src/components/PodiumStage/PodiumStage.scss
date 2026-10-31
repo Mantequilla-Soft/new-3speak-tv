@@ -1,0 +1,10 @@
+// The 3D steps sit along the bottom of the podium, behind the cards.
+.lb-podium-stage {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0; // set by PodiumStage once the scene is up
+  z-index: 0;
+  pointer-events: none;
+}

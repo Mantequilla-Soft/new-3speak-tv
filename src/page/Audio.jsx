@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
@@ -7,15 +7,19 @@ import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../lib/store';
 import { CHECKER_URL, HIVE_API_URL } from '../utils/config';
 import { AUDIO_CATEGORY_ICONS } from '../utils/audioCategoryIcons';
-import { MdClose, MdArrowBack } from 'react-icons/md';
+import { MdClose, MdArrowBack, MdExplore, MdPlayCircleOutline, MdLibraryMusic, MdWhatshot } from 'react-icons/md';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
 import AudioAuthorBadge from './AudioAuthorBadge';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
 import { AudioShareDropdown } from '../components/GlobalAudioPlayer/GlobalAudioPlayer';
+import AudioItemView from '../components/AudioItem/AudioItemView';
+import { usePodcastSubscriptions } from '../lib/podcasts';
+import { useDownloads } from '../lib/podcastDownloads';
+import useOnline from '../hooks/useOnline';
 import AudioTile, { AudioTileSkeleton } from '../components/AudioTile/AudioTile';
 import AudioPlaylistTile from '../components/AudioPlaylistTile/AudioPlaylistTile';
-import PodcastsTab from '../components/Podcasts/PodcastsTab';
+import PodcastsTab, { VIEWS as EXPLORE_VIEWS, VIEW_KEY as EXPLORE_VIEW_KEY } from '../components/Podcasts/PodcastsTab';
 import { isLoggedIn } from '../hive-api/aioha';
 
 import './Audio.scss';
@@ -24,6 +28,16 @@ import './Audio.scss';
 // Frontend-only filter applied to every audio/album query result below.
 const HIDDEN_AUDIO_OWNERS = new Set(['badadib']);
 const isHiddenOwner = (owner) => HIDDEN_AUDIO_OWNERS.has(owner);
+
+// The phone and tablet layout (the bottom navigation shows up to 1024 px): there
+// the page has two tabs, Player (the player as a page) and Explore (everything below).
+const MOBILE_QUERY = '(max-width: 1024px)';
+const subscribeMobile = (cb) => {
+  const m = window.matchMedia(MOBILE_QUERY);
+  m.addEventListener('change', cb);
+  return () => m.removeEventListener('change', cb);
+};
+const isMobileLayout = () => window.matchMedia(MOBILE_QUERY).matches;
 
 // Horizontal tile rail whose height adapts to how many tiles there are:
 // - everything fits in one visible row  → 1 row
@@ -154,7 +168,7 @@ function loadFilters() {
 
 function Audio() {
   const { t } = useTranslation();
-  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioAddToQueue } = useAppStore();
+  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioAddToQueue, audioSetDock, audioSetDockOpener } = useAppStore();
   const loggedIn = authenticated && isLoggedIn();
 
   // "External": podcasts from outside RSS feeds (components/Podcasts). It is the last
@@ -164,16 +178,117 @@ function Audio() {
   // leaving it on External goes back to External.
   const [params, setParams] = useSearchParams();
   const external = params.get('type') === 'external' || params.has('podcast') || params.has('episode');
+
+  // Explore's own navigation: Mine | Discover | Trends (?view=, shared with the
+  // podcasts tab). Mine is your library (followed podcasts, downloads), with no
+  // chips; under Discover and Trends the type chips pick 3Speak audio or the
+  // outside podcasts (External). Without one: the last one picked, else Discover.
+  const online = useOnline();
+  const exploreView = (() => {
+    const v = params.get('view');
+    if (EXPLORE_VIEWS.includes(v)) return v;
+    // Offline, only what was saved here plays: open on Mine (the downloads).
+    if (!online) return 'mine';
+    try {
+      const saved = localStorage.getItem(EXPLORE_VIEW_KEY);
+      if (EXPLORE_VIEWS.includes(saved)) return saved;
+    } catch { /* storage off */ }
+    return 'discover';
+  })();
+  const showExploreView = (v) => {
+    const next = new URLSearchParams(params);
+    for (const k of ['podcast', 'episode', 'play', 't', 'end']) next.delete(k);
+    next.set('view', v);
+    setParams(next);
+    setSelectedCreator(null);
+    try { localStorage.setItem(EXPLORE_VIEW_KEY, v); } catch { /* storage off */ }
+  };
+  const onMine = exploreView === 'mine';
+
+  // An empty Mine (no followed podcasts, nothing downloaded) has nothing to
+  // show: Discover instead, in place, once both are known.
+  const me = authenticated ? user : null;
+  const mineSubs = usePodcastSubscriptions(me);
+  const mineDownloads = useDownloads();
+  const mineKnown = (!me || mineSubs.isSuccess) && mineDownloads.ready;
+  const mineEmpty = mineKnown && !(mineSubs.data || []).length && !mineDownloads.items.length;
+  const insideMine = params.has('podcast') || params.has('episode') || params.has('play');
+  useEffect(() => {
+    if (!onMine || !mineEmpty || insideMine || !online) return;
+    const next = new URLSearchParams(params);
+    next.set('view', 'discover');
+    setParams(next, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onMine, mineEmpty, insideMine, online]);
+
+  // One 3Speak audio on its own page, like an outside episode: ?play=<owner>/<id>
+  // (shared player links, a click on an audio card). See AudioItemView.
+  const [itemOwner, itemId] = String(params.get('play') || '').replace(/^@/, '').split('/');
+  const item = !external && itemOwner && itemId ? { owner: itemOwner.toLowerCase(), id: itemId } : null;
+  const openItem = useCallback((it) => {
+    setParams((prev) => {
+      const next = new URLSearchParams(prev);
+      for (const k of ['type', 'podcast', 'episode', 't', 'end', 'player']) next.delete(k);
+      next.set('play', `${it.owner}/${it.permlink}`);
+      return next;
+    });
+    window.scrollTo({ top: 0 });
+  }, [setParams]);
+  const closeItem = () => {
+    const next = new URLSearchParams(params);
+    for (const k of ['play', 't', 'end']) next.delete(k);
+    setParams(next);
+  };
+
+  // Player | Explore on phones and tablets, in the URL (`player=1`; the podcasts tab already uses `view`) so Back
+  // returns to the tab. The Player tab hands its element to the global player,
+  // which draws its controls there; the audio itself never leaves the global
+  // player, so it keeps playing on Explore and on every other page.
+  const mobile = useSyncExternalStore(subscribeMobile, isMobileLayout, () => false);
+  const playerView = mobile && params.get('player') === '1';
+  const showPlayerTab = useCallback((on) => {
+    setParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (on) next.set('player', '1'); else next.delete('player');
+      return next;
+    });
+  }, [setParams]);
+  // The bar's open button goes to the Player tab while this page shows tabs.
+  useEffect(() => {
+    if (!mobile) return undefined;
+    audioSetDockOpener(() => showPlayerTab(true));
+    return () => audioSetDockOpener(null);
+  }, [mobile, showPlayerTab, audioSetDockOpener]);
+  const dockRef = useCallback((el) => audioSetDock(el), [audioSetDock]);
+  // The Player tab never sits empty while there is something to play: it loads,
+  // paused, what was playing when the player was closed (at that spot), or else
+  // the top of the queue, which it shows unfolded under the player.
+  const hasCurrent = !!audioCurrent;
+  useEffect(() => {
+    if (!playerView || hasCurrent) return;
+    const st = useAppStore.getState();
+    if (st.audioLast) st.audioResumeLast(false);
+    else if (st.audioQueue.length) st.audioLoadPaused(st.audioQueue[0], 0, st.audioQueue);
+  }, [playerView, hasCurrent]);
   const leaveExternal = () => {
     rememberExternal(false);
-    if (!external) return;
+    if (!external && !item) return;
     const next = new URLSearchParams(params);
-    for (const k of ['type', 'podcast', 'episode']) next.delete(k);
+    for (const k of ['type', 'podcast', 'episode', 'play', 't', 'end']) next.delete(k);
     setParams(next);
   };
   useEffect(() => {
-    if (external) rememberExternal(true);
-    else if (![...params.keys()].length && readExternal()) setParams({ type: 'external' }, { replace: true });
+    if (external) { rememberExternal(true); return; }
+    // A bare /audio: back on the podcasts chip if that is where the listener left
+    // off, and on phones and tablets on the Player tab while something is loaded
+    // in the player or waiting in the queue (Explore otherwise). One URL change
+    // for both, in place.
+    if ([...params.keys()].length) return;
+    const next = new URLSearchParams();
+    if (readExternal()) next.set('type', 'external');
+    const st = useAppStore.getState();
+    if (mobile && (st.audioCurrent || st.audioQueue.length)) next.set('player', '1');
+    if ([...next.keys()].length) setParams(next, { replace: true });
     // Only on arrival and when the URL itself changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [external]);
@@ -196,7 +311,7 @@ function Audio() {
       localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify({
         activeTags, datePreset, minDurIdx, maxDurIdx, type: typeFilter, genre: genreFilter,
       }));
-    } catch {}
+    } catch { /* storage off */ }
   }, [activeTags, datePreset, minDurIdx, maxDurIdx, typeFilter, genreFilter]);
 
   // Upload modal
@@ -211,8 +326,6 @@ function Audio() {
   const [playlistTarget, setPlaylistTarget] = useState(null);
   const [shareTarget, setShareTarget] = useState(null);
 
-  // Deep link
-  const [deepLinkHandled, setDeepLinkHandled] = useState(false);
 
   const minDur = DURATION_STOPS[minDurIdx];
   const maxDur = DURATION_STOPS[maxDurIdx];
@@ -289,7 +402,8 @@ function Audio() {
       const { data } = await axios.get(`${CHECKER_URL}/audio?${filterParams}`);
       return (data.audio || []).filter((it) => !isHiddenOwner(it.owner));
     },
-    enabled: isFiltered && !selectedCreator,
+    // Discover lists them once a filter is set; Trends always does.
+    enabled: (isFiltered || exploreView === 'trends') && !selectedCreator && !external,
   });
 
   const creatorsParams = useMemo(() => {
@@ -353,22 +467,6 @@ function Audio() {
     queryFn: async () => { const { data } = await axios.get(`${CHECKER_URL}/audio/auto-tags?limit=15`); return data.tags || []; },
   });
 
-  // Deep-link: ?play=<owner>/<permlink> → start playback in the global player
-  useEffect(() => {
-    if (deepLinkHandled) return;
-    const p = new URLSearchParams(window.location.search).get('play');
-    if (!p) return;
-    const [o, pl] = p.split('/');
-    if (!o || !pl) return;
-    (async () => {
-      try {
-        const { data } = await axios.get(`${CHECKER_URL}/audio?owner=${encodeURIComponent(o)}&q=${encodeURIComponent(pl)}&limit=1`);
-        const item = data?.audio?.find(a => a.permlink === pl);
-        if (item && !isHiddenOwner(item.owner)) audioPlay(item, [item]);
-      } catch {}
-      setDeepLinkHandled(true);
-    })();
-  }, [deepLinkHandled, audioPlay]);
 
   const tp = (item, items) => ({
     item,
@@ -380,6 +478,7 @@ function Audio() {
     onVote: () => { setVoteTarget({ author: item.owner, permlink: item.post_permlink }); setShowVoteTooltip(true); },
     onShare: () => setShareTarget(shareTarget?._id === item._id ? null : item),
     onAuthorClick: () => setSelectedCreator(item.owner),
+    onOpen: () => openItem(item),
     loggedIn,
   });
 
@@ -404,17 +503,69 @@ function Audio() {
     setGenreFilter('');
   };
 
+  const views = [
+    { key: 'player', icon: <MdPlayCircleOutline size={18} />, label: t('audio.page.tabPlayer') },
+    { key: 'explore', icon: <MdExplore size={18} />, label: t('audio.page.tabExplore') },
+  ];
+
   return (
-    <div className="audio-page">
-      {/* Header — only show back button when drilled into creator */}
+    <div className={`audio-page${playerView ? ' audio-page--player' : ''}`}>
+      {mobile && (
+        <nav className="pod-views audio-views" role="tablist" aria-label={t('audio.page.tabsLabel')}>
+          {views.map((v) => (
+            <button
+              key={v.key}
+              type="button"
+              role="tab"
+              aria-selected={(v.key === 'player') === playerView}
+              className={`pod-view${(v.key === 'player') === playerView ? ' active' : ''}`}
+              onClick={() => showPlayerTab(v.key === 'player')}
+            >
+              {v.icon}<span>{v.label}</span>
+            </button>
+          ))}
+        </nav>
+      )}
+
+      {playerView ? (
+        <div className="audio-player-tab" role="tabpanel">
+          {audioCurrent ? <div ref={dockRef} className="audio-player-dock" /> : (
+            <div className="audio-empty audio-player-empty">
+              <MdPlayCircleOutline size={44} aria-hidden />
+              <p>{t('audio.page.nothingPlaying')}</p>
+              <button type="button" className="audio-type-chip active" onClick={() => showPlayerTab(false)}>{t('audio.page.goExplore')}</button>
+            </div>
+          )}
+        </div>
+      ) : (<>
+      {/* Header: only show back button when drilled into creator */}
       {selectedCreator && (
         <header className="audio-header">
           <button className="audio-back-btn" onClick={() => setSelectedCreator(null)}><MdArrowBack size={20} /> {t('common.actions.back')}</button>
         </header>
       )}
 
-      {/* Date presets + type / genre filters */}
-      {!selectedCreator && (
+      <nav className="pod-views audio-explore-views" role="tablist" aria-label={t('audio.page.exploreViews')}>
+        {[
+          { key: 'mine', icon: <MdLibraryMusic size={18} />, label: t('audio.podcasts.views.mine') },
+          { key: 'discover', icon: <MdExplore size={18} />, label: t('audio.podcasts.views.discover') },
+          { key: 'trends', icon: <MdWhatshot size={18} />, label: t('audio.podcasts.views.trends') },
+        ].map((v) => (
+          <button
+            key={v.key}
+            type="button"
+            role="tab"
+            aria-selected={exploreView === v.key}
+            className={`pod-view${exploreView === v.key ? ' active' : ''}`}
+            onClick={() => showExploreView(v.key)}
+          >
+            {v.icon}<span>{v.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      {/* Date presets + type / genre filters: Discover and Trends only */}
+      {!selectedCreator && !onMine && (
         <div className="audio-toolbar">
           <div className="audio-type-filter">
             <button
@@ -434,7 +585,13 @@ function Audio() {
             ))}
             <button
               className={`audio-type-chip${external ? ' active' : ''}`}
-              onClick={() => { if (!external) setParams({ type: 'external' }); }}
+              onClick={() => {
+                if (external) return;
+                const next = new URLSearchParams(params);
+                for (const k of ['play', 't', 'end']) next.delete(k);
+                next.set('type', 'external');
+                setParams(next);
+              }}
               title={t('audio.podcasts.chipHint')}
             ><i className="audio-type-chip-icon fa-solid fa-rss" /> {t('audio.podcasts.chip')}</button>
           </div>
@@ -460,7 +617,7 @@ function Audio() {
       )}
 
       {/* Tags + duration filter row */}
-      {!selectedCreator && !external && (
+      {!selectedCreator && !external && !item && !onMine && (
         <div className="audio-filter-row">
           <div className="audio-topic-tags">
             {isFiltered && (
@@ -481,8 +638,12 @@ function Audio() {
       )}
 
       {/* ─── Creator drill-down ──────── */}
-      {external ? (
-        <PodcastsTab />
+      {params.has('podcast') || params.has('episode') ? (
+        <PodcastsTab view={exploreView} hideNav />
+      ) : item ? (
+        <AudioItemView owner={item.owner} id={item.id} onBack={closeItem} />
+      ) : onMine || external ? (
+        <PodcastsTab view={exploreView} hideNav />
       ) : selectedCreator ? (
         <div className="audio-creator-view">
           <div className="audio-creator-header">
@@ -497,6 +658,21 @@ function Audio() {
             <div className="audio-empty"><p>{t('audio.page.noTracks')}</p></div>
           )}
         </div>
+      ) : exploreView === 'trends' ? (
+        /* ─── Trends: the most played for the chosen type, time and filters ─── */
+        <section className="audio-section">
+          <h2 className="audio-section-title">
+            <i className={SECTION_CONFIG.popular.icon} /> {t('audio.page.mostPlayed')}
+            {filteredAudio && <span className="audio-section-count">{t('audio.page.tracks', { count: filteredAudio.length })}</span>}
+          </h2>
+          {filteredLoading ? (
+            <div className="audio-tile-row"><AudioTileSkeleton count={5} /></div>
+          ) : filteredAudio?.length > 0 ? (
+            <div className="audio-tile-grid">{filteredAudio.map((item, idx) => <AudioTile key={item._id || idx} {...tp(item, filteredAudio)} />)}</div>
+          ) : (
+            <div className="audio-empty"><p>{t('audio.page.noAudioForFilters')}</p></div>
+          )}
+        </section>
       ) : (
         <>
           {/* ─── Creators section ────── */}
@@ -566,6 +742,7 @@ function Audio() {
           )}
         </>
       )}
+      </>)}
 
       {/* Tile-level share overlay (the now-playing bar's share lives in <GlobalAudioPlayer />) */}
       {shareTarget && shareTarget._id !== audioCurrent?._id && (

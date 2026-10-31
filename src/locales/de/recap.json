@@ -1,0 +1,155 @@
+{
+  "open": "Dein Jahr auf 3Speak",
+  "pageTitle": "{{user}}s Jahr auf 3Speak",
+  "intro": {
+    "title": "@{{user}}s Jahr auf 3Speak",
+    "sub": "Die letzten 12 Monate in Zahlen."
+  },
+  "uploads": {
+    "kicker": "Du hast hochgeladen",
+    "videos_one": "{{count}} Video",
+    "videos_other": "{{count}} Videos",
+    "shorts_one": "{{count}} Short",
+    "shorts_other": "{{count}} Shorts",
+    "and": "und"
+  },
+  "watch": {
+    "kicker": "Man hat dir zugeschaut",
+    "sub": "Über all deine Videos und Shorts.",
+    "since": "Die Wiedergabezeit wird seit dem {{date}} gezählt.",
+    "graph": "Wiedergabezeit pro Woche.",
+    "bestWeek": "Beste Woche: {{date}}, {{time}}",
+    "weekOf": "Woche vom {{date}}",
+    "panHint": "Scrolle oder ziehe, um durchs Jahr zu wandern."
+  },
+  "audience": {
+    "kicker": "Deine Videos wurden abgespielt",
+    "views_one": "{{count}}-mal",
+    "views_other": "{{count}}-mal",
+    "votes_one": "{{count}} Vote",
+    "votes_other": "{{count}} Votes",
+    "comments_one": "{{count}} Kommentar",
+    "comments_other": "{{count}} Kommentare",
+    "fans": "Deine größten Fans",
+    "fansLoading": "Wir suchen deine größten Fans…",
+    "noFans": "Noch keine Votes oder Antworten von anderen."
+  },
+  "top": {
+    "kicker": "Deine meistgesehenen Videos",
+    "watched": "{{time}} angeschaut"
+  },
+  "supporters": {
+    "kicker": "Deine größten Unterstützer",
+    "anonymous": "Anonym"
+  },
+  "rank": {
+    "kicker": "Dein bester Platz in der Rangliste",
+    "board": "in {{board}}",
+    "hint": "Jede Stufe ist ein Creator dieser Rangliste. Fahr mit der Maus darüber, um zu sehen, wer."
+  },
+  "outro": {
+    "title": "Danke, dass du auf 3Speak kreativ bist",
+    "sub": "Auf die nächsten 12 Monate.",
+    "channel": "Deinen Kanal öffnen"
+  },
+  "empty": {
+    "title": "Keine Uploads in den letzten 12 Monaten",
+    "sub": "Lade ein Video oder einen Short hoch und dein Jahr auf 3Speak beginnt hier.",
+    "upload": "Hochladen"
+  },
+  "signIn": "Melde dich an, um dein Jahr auf 3Speak zu sehen.",
+  "loading": "Wir zählen dein Jahr…",
+  "error": "Dein Jahr konnte nicht geladen werden. Versuch es gleich noch einmal.",
+  "nav": {
+    "previous": "Zurück",
+    "next": "Weiter",
+    "slide": "Folie {{n}} von {{total}}"
+  },
+  "communities": {
+    "kicker": "Du hast gepostet in",
+    "count_one": "{{count}} Community",
+    "count_other": "{{count}} Communities",
+    "posts_one": "{{count}} Beitrag",
+    "posts_other": "{{count}} Beiträge"
+  },
+  "followed": {
+    "kicker": "Du folgst jetzt neu",
+    "count_one": "{{count}} Account",
+    "count_other": "{{count}} Accounts"
+  },
+  "watched": {
+    "kicker": "Die Creator, die du am meisten geschaut hast",
+    "videos_one": "{{count}} Video geschaut",
+    "videos_other": "{{count}} Videos geschaut"
+  },
+  "followers": {
+    "kicker": "Neue Follower seit dem {{date}}",
+    "count_one": "{{count}} Account folgt dir",
+    "count_other": "{{count}} Accounts folgen dir",
+    "kickerYear": "Neue Follower in diesem Jahr"
+  },
+  "panel": {
+    "openCommunity": "Community öffnen",
+    "untitled": "Ohne Titel",
+    "closeAndLook": "Schließen und umsehen"
+  },
+  "income": {
+    "kicker": "Du hast verdient",
+    "sub": "Mit Post-Belohnungen, 3Speak-Werbung und Tips.",
+    "note": "In HBD (je etwa ein US-Dollar), HIVE und HP zum aktuellen HIVE-Kurs der Chain.",
+    "partial": "Ein sehr aktiver Account: Das deckt den jüngsten Teil des Jahres ab.",
+    "hint": "Fahr über eine Säule, um die Aufschlüsselung zu sehen.",
+    "sources": {
+      "author": "Post-Belohnungen",
+      "ads": "3Speak-Werbung",
+      "tips": "Tips"
+    },
+    "legendOurs": "auf 3Speak",
+    "legendOther": "anderswo auf Hive",
+    "segments": {
+      "ours": "Post-Belohnungen auf 3Speak",
+      "other": "Post-Belohnungen anderswo auf Hive",
+      "ads_creator": "Werbeeinnahmen als Creator",
+      "ads_viewer": "Werbebelohnungen als Zuschauer",
+      "ads_combined": "Werbezahlungen für beides (nicht aufgeteilt)"
+    },
+    "rewardedPosts_one": "{{count}} belohnter Beitrag",
+    "rewardedPosts_other": "{{count}} belohnte Beiträge",
+    "legendCreator": "als Creator",
+    "legendViewer": "als Zuschauer",
+    "logScale": "Die Säulenhöhen sind logarithmisch skaliert, damit kleine Beträge sichtbar bleiben.",
+    "payments_one": "{{count}} Zahlung",
+    "payments_other": "{{count}} Zahlungen",
+    "legendCombined": "beides, nicht aufgeteilt"
+  },
+  "loadingSteps": {
+    "stats": "Wir suchen dein Jahr heraus…",
+    "uploads": "Wir zählen deine Uploads…",
+    "watch": "Wir messen die Wiedergabezeit…",
+    "audience": "Wir zählen deine Aufrufe…",
+    "fans": "Wir suchen deine Fans…",
+    "income": "Wir rechnen deine Einnahmen zusammen…",
+    "communities": "Wir besuchen deine Communities…",
+    "followers": "Wir schauen, wer dir gefolgt ist…",
+    "watched": "Wir gehen durch, was du geschaut hast…",
+    "thumbnails": "Wir laden deine Thumbnails… {{done}} von {{total}}"
+  },
+  "tips": {
+    "label": "Tipp:",
+    "mouse": {
+      "tip1": "Beweg die Maus und jede Szene folgt ihr, auch außerhalb der Folie.",
+      "tip2": "Scrolle, um in deine Videowände hinein- und herauszuzoomen.",
+      "tip3": "Scrolle oder ziehe die Wiedergabezeit-Grafik, um durchs Jahr zu wandern.",
+      "tip4": "Fahr über einen Balken, eine Stufe, eine Säule oder eine Kachel, um zu sehen, was dahintersteckt.",
+      "tip5": "Klick auf eine Kachel, einen Balken oder eine Community, damit die Details offen bleiben."
+    },
+    "touch": {
+      "tip1": "Nutze die Pfeile unten, um durch die Folien zu blättern.",
+      "tip2": "Zieh über deine Videowände, um dich umzusehen.",
+      "tip3": "Wische die Wiedergabezeit-Grafik seitlich, um durchs Jahr zu wandern.",
+      "tip4": "Tippe auf eine Kachel, um ihre Videokarte zu sehen.",
+      "tip5": "Tippe auf eine Community oder eine Woche, um ihre Videos zu sehen.",
+      "tip6": "Die Szenen drehen sich langsam von selbst; zieh an den Ringen, um sie selbst zu drehen."
+    }
+  }
+}

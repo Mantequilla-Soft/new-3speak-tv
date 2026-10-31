@@ -850,6 +850,37 @@
   to { transform: translateY(0); }
 }
 
+// Desktop: the player is a card at the bottom right, so the queue opens right
+// above it at the same width instead of as a centered sheet. No dimming; the
+// overlay sits just under the player (z 90) so the player stays usable and a
+// click anywhere else still closes the queue.
+@media (min-width: 1025px) {
+  .audio-queue-overlay {
+    background: none;
+    z-index: 89;
+  }
+
+  .audio-queue-panel {
+    position: fixed;
+    right: 16px;
+    bottom: calc(var(--audio-np-clearance, 120px) + 8px);
+    width: 33vw;
+    min-width: 360px;
+    max-width: 560px;
+    max-height: min(60vh, calc(100vh - var(--audio-np-clearance, 120px) - 24px));
+    background: var(--bg-elevated, var(--bg-secondary));
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    animation: queue-pop-up 0.18s ease;
+  }
+}
+
+@keyframes queue-pop-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .audio-queue-count {
   font-size: 12px;
   color: var(--text-secondary);
@@ -992,12 +1023,83 @@
 }
 
 .audio-np-thumb {
+  position: relative;
+  z-index: 1;
   width: 42px;
   height: 42px;
   border-radius: 6px;
   object-fit: cover;
   flex-shrink: 0;
   background: var(--bg-tertiary);
+}
+
+// Sleeve + record. The width is reserved whether playing or not, so the title
+// next to it never shifts when the record slides out.
+.audio-np-art {
+  position: relative;
+  flex-shrink: 0;
+  width: 58px;
+  height: 42px;
+  cursor: pointer;
+}
+
+.audio-np-record {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 38px;
+  height: 38px;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+
+  .audio-np-art.is-playing & { transform: translateX(18px); }
+}
+
+.audio-np-record-disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #111;
+  // Grooves: flat rings, no gradient.
+  box-shadow:
+    inset 0 0 0 3px #111,
+    inset 0 0 0 4px #2c2c2c,
+    inset 0 0 0 7px #111,
+    inset 0 0 0 8px #2c2c2c,
+    0 1px 3px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: audio-record-spin 1.8s linear infinite;
+  animation-play-state: paused;
+
+  .audio-np-art.is-playing & { animation-play-state: running; }
+
+  // Spindle hole
+  &::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--bg-elevated, var(--bg-secondary));
+  }
+}
+
+.audio-np-record-label {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--accent-primary);
+}
+
+@keyframes audio-record-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .audio-np-record { transition: none; }
+  .audio-np-record-disc { animation: none; }
 }
 
 .audio-np-info {
@@ -1205,7 +1307,6 @@
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  @include mix.respond(phone) { display: none; }
 }
 
 .audio-np-controls {
@@ -1516,3 +1617,38 @@
     border: none !important;
   }
 }
+
+// ─── Explore | Player tabs (phones and tablets) ──────
+// The tab look is the podcasts tab's (.pod-views / .pod-view, PodcastsTab.scss).
+.audio-views { margin-bottom: 14px; }
+
+.audio-player-tab { min-height: 50vh; }
+
+.audio-player-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 16px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+// A 3Speak audio on its own page (AudioItemView): the podcast episode layout,
+// with the creator's avatar in the kicker.
+.audio-item-avatar {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+// A count inside an action button (votes, comments).
+.pod-btn-count {
+  margin-left: 2px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+// Mine | Discover | Trends: Explore's own navigation, above the type chips.
+.audio-explore-views { margin-bottom: 14px; }

@@ -25,6 +25,11 @@
     .lb-badge-icon {
       font-size: 13px;
       flex-shrink: 0;
+      @include mix.coin-spin(80px);
+    }
+
+    &:hover .lb-badge-icon {
+      @include mix.coin-spin-hover(80px);
     }
 
     @include mix.respond(phone) {

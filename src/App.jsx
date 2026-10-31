@@ -98,6 +98,8 @@ const FirstUploads = lazyRoute(() => import("./page/FirstUploads"), "./page/Firs
 const FollowFeed = lazyRoute(() => import("./page/FollowFeed"), "./page/FollowFeed");
 const HiveImageUploader = lazyRoute(() => import("./page/HiveImageUploader"), "./page/HiveImageUploader");
 const Leaderboard = lazyRoute(() => import("./page/Leaderboard"), "./page/Leaderboard");
+const Recap = lazyRoute(() => import("./page/Recap"), "./page/Recap");
+const Galaxy = lazyRoute(() => import("./page/Galaxy"), "./page/Galaxy");
 const InvitePage = lazyRoute(() => import("./page/Invite/InvitePage"), "./page/Invite/InvitePage");
 import InvitePopup from "./components/InvitePopup/InvitePopup";
 const InviteLinks = lazyRoute(() => import("./page/Invite/InviteLinks"), "./page/Invite/InviteLinks");
@@ -181,12 +183,14 @@ import { FEATURE_EDITOR, VIDEO_IMPORT_ENABLED } from "./utils/config";
 import BottomNav from "./components/BottomNav/BottomNav";
 import MiniPlayer from "./components/MiniPlayer/MiniPlayer";
 import GlobalAudioPlayer from "./components/GlobalAudioPlayer/GlobalAudioPlayer";
+import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
 import AudioUploadModal from "./components/AudioUploadModal/AudioUploadModal";
 import { KeyTypes, Providers } from "@aioha/aioha";
 import '@aioha/react-ui/dist/build.css';
 import { LOCAL_STORAGE_USER_ID_KEY } from "./hooks/localStorageKeys";
 import { endWalletSession } from "./hive-api/aioha";
 import { rememberButrauthAccount } from "./utils/butrauthAccounts";
+import useCardSize from "./hooks/useCardSize";
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -294,7 +298,7 @@ function App() {
   const location = useLocation();
   const { initializeAuth, initializeTheme, authenticated, LogOut, setUser, user: appUser } = useAppStore();
   const sessionExpired = useAppStore((s) => s.sessionExpired);
-  const homeCardSize = useAppStore((s) => s.homeCardSize);
+  const homeCardSize = useCardSize(); // the saved setting on mobile, always small on desktop
 
   // Reflect the card-size preference on <html> so the card grids (home, profile,
   // playlists) can size themselves via CSS variables.
@@ -857,6 +861,10 @@ function App() {
               <Route path="/badge/:account" element={<BadgePage />} />
               <Route path="/t/:tag" element={<TagFeed />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/recap" element={<Recap />} />
+              <Route path="/recap/:username" element={<Recap />} />
+              <Route path="/galaxy" element={<Galaxy />} />
+              <Route path="/galaxy/:username" element={<Galaxy />} />
               {/* In-app translation editor; translators only (server-checked). */}
               <Route path="/translate" element={<Translate />} />
               <Route path="/surf" element={<Surf />} />
@@ -895,6 +903,7 @@ function App() {
         )}
         <MiniPlayer />
         <GlobalAudioPlayer />
+        <OfflineBanner />
         <AudioUploadModal
           isOpen={audioUploadOpen}
           onClose={() => { setAudioUploadOpen(false); setPendingAudioTrack(null); }}

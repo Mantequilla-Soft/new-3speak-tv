@@ -4,7 +4,8 @@ import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { adsEnabledFor, adsBetaUserFor } from '../../utils/config';
-import { fetchAdAccess, fetchViewerAdPrefs, setViewerAdPrefs } from '../../lib/advertiseData';
+import { fetchAdAccess, fetchViewerAdPrefs, setViewerAdPrefs, setListenerAdPrefs } from '../../lib/advertiseData';
+import { resetViewerRewards } from '../../utils/viewerRewards';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { isAdvertiserAccount } from '../../utils/advertiserAccount';
 import ModalHeader from '../ModalHeader/ModalHeader';
@@ -25,6 +26,11 @@ const toast = toastIn('Advertising');
  *
  * Because the question is "may we store your username", declining is a real answer
  * that we record and then respect. There is no third showing.
+ *
+ * Listening (listener rewards) is its own consent record. Someone never asked gets
+ * one question covering watching and listening; someone who already agreed to
+ * watching is asked once more, about listening only (owner, 2026-10-30). Listener
+ * payouts start later, once the numbers are checked, and the copy says so.
  */
 export default function ViewerRewardsPrompt() {
   const { t } = useTranslation();
@@ -45,7 +51,8 @@ export default function ViewerRewardsPrompt() {
   // One prompt at a time across the app. Welcome and interests outrank this.
   const promptsActive = usePromptsActive('viewer-rewards');
 
-  const [open, setOpen] = useState(false);
+  // 'both' = never asked; 'listen' = agreed to watching, not yet asked about listening.
+  const [open, setOpen] = useState(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -69,8 +76,12 @@ export default function ViewerRewardsPrompt() {
       .then((r) => {
         // `decided` is the whole point: false means never asked. Someone who said
         // no is decided, and is never asked again.
-        if (alive && r && r.decided === false) {
-          setOpen(true);
+        if (!alive || !r) return;
+        const ask = r.decided === false ? 'both'
+          : r.rewardsEnabled === true && r.listenDecided === false ? 'listen'
+            : null;
+        if (ask) {
+          setOpen(ask);
           setPromptActive('viewer-rewards', true);
         }
       })
@@ -79,18 +90,19 @@ export default function ViewerRewardsPrompt() {
   }, [allowed, onAdvertise, promptsActive, user]);
 
   function close() {
-    setOpen(false);
+    setOpen(null);
     setPromptActive('viewer-rewards', false);
   }
 
-  async function answer(rewardsEnabled) {
+  async function answer(yes) {
     if (saving) return;
     setSaving(true);
     try {
-      await setViewerAdPrefs(user, { rewardsEnabled });
-      toast.success(rewardsEnabled
-        ? t('ads.viewerPrompt.savedYes')
-        : t('ads.viewerPrompt.savedNo'));
+      if (open === 'both') await setViewerAdPrefs(user, { rewardsEnabled: yes });
+      await setListenerAdPrefs(user, { listenEnabled: yes });
+      resetViewerRewards();
+      toast.success(!yes ? t('ads.viewerPrompt.savedNo')
+        : open === 'listen' ? t('ads.listenPrompt.savedYes') : t('ads.viewerPrompt.savedYes'));
       close();
     } catch (err) {
       // Left open on failure: an unrecorded answer must not look like a recorded
@@ -103,18 +115,41 @@ export default function ViewerRewardsPrompt() {
 
   if (!open) return null;
 
+  if (open === 'listen') {
+    return (
+      <div className="ads-prompt-overlay">
+        <div className="ads-prompt" role="dialog" aria-modal="true" aria-labelledby="listener-rewards-title">
+          <ModalHeader title={t('ads.listenPrompt.title')} titleId="listener-rewards-title" />
+          <p className="ads-prompt-text">{t('ads.listenPrompt.text')}</p>
+          <p className="ads-prompt-note">{t('ads.listenPrompt.note')}</p>
+          <div className="ads-prompt-actions">
+            <button type="button" className="ads-prompt-ghost" onClick={() => answer(false)} disabled={saving}>
+              {t('ads.viewerPrompt.noThanks')}
+            </button>
+            <button type="button" className="ads-prompt-primary" onClick={() => answer(true)} disabled={saving}>
+              {saving ? t('common.actions.saving') : t('ads.listenPrompt.yes')}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="ads-prompt-overlay">
       <div className="ads-prompt" role="dialog" aria-modal="true" aria-labelledby="viewer-rewards-title">
         {/* No X: both ways out record an answer (yes or no), and closing without
             one would only bring the question back. */}
-        <ModalHeader title={t('ads.viewerPrompt.title')} titleId="viewer-rewards-title" />
+        <ModalHeader title={t('ads.viewerPrompt.titleBoth')} titleId="viewer-rewards-title" />
         <p className="ads-prompt-lede">
           <Trans i18nKey="ads.viewerPrompt.lede" components={{ b: <strong /> }} />
         </p>
 
         <p className="ads-prompt-text">
           {t('ads.viewerPrompt.text')}
+        </p>
+        <p className="ads-prompt-note">
+          {t('ads.viewerPrompt.listenNote')}
         </p>
         <p className="ads-prompt-note">
           {t('ads.viewerPrompt.note')}

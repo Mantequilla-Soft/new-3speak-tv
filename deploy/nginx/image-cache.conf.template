@@ -1,0 +1,155 @@
+# Card images for the site: video thumbnails resized to card size, avatars and
+# IPFS thumbnails, kept on this server's disk. TEMPLATE: see README.md for the
+# placeholders and the one command that fills them in.
+#
+# Goes in the http context (e.g. conf.d/). The public side is
+# image-cache-locations.conf (included in the site's server block): its /img/
+# locations go through the `spkimg` cache below and, on a miss, to the loopback
+# resizer further down. So every image is fetched and resized ONCE, then served
+# from disk to everyone.
+#
+# Why: new videos' thumbnails are full-size webp on the image host (no CDN, no
+# resizing): ~200 KB and ~0.7 s each, shown at 340 px on a feed card. Avatars go
+# through Hive's image service, which costs every viewer a redirect.
+#
+# Rotation: ONLY by size. max_size evicts the least recently used files once the
+# cache reaches 1 GB. A card thumbnail is ~15-40 KB, so that is tens of thousands
+# of images. inactive is set to a year on purpose: nginx's DEFAULT is 10 minutes,
+# which would throw away anything not asked for in 10 minutes.
+#
+# Needs: ngx_http_image_filter_module, and a `resolver` in the http context
+# (the upstream hosts are variables, resolved at request time).
+proxy_cache_path ${SPK_IMG_CACHE_DIR} levels=1:2 keys_zone=spkimg:20m
+                 max_size=1g inactive=365d use_temp_path=off;
+
+# Only the shapes the site uses, so nobody can make us render arbitrary sizes.
+#   (default) landscape card, 16:9, 2x the 340 px card for sharp high-DPI screens
+#   s=p       portrait shorts card, 9:16
+map $arg_s $spkimg_w { p 360; default 640; }
+map $arg_s $spkimg_h { p 640; default 360; }
+# Square avatar sizes, matching the avatar helper's small/medium/large.
+map $arg_px $spkimg_px { 128 128; 512 512; default 64; }
+
+# Loopback-only resizer. Never exposed: the vhosts reach it through the cache.
+server {
+    listen 127.0.0.1:${SPK_IMG_PORT};
+    server_name _;
+    access_log off;
+
+    # /t/<path on the image host>  ->  cover-cropped to the card shape.
+    location /t/ {
+        set $up_images ${SPK_IMAGES_HOST};
+        rewrite ^/t/(.*)$ /$1 break;
+        proxy_pass https://$up_images;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${SPK_IMAGES_HOST};
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 20s;
+
+        # crop = scale down to cover the box, then trim the overflow (like the
+        # Hive proxy's mode=cover). Never enlarges a small original.
+        image_filter crop $spkimg_w $spkimg_h;
+        image_filter_buffer 20M;
+        image_filter_jpeg_quality 82;
+        image_filter_webp_quality 80;
+        image_filter_interlace on;
+    }
+
+    # /u/<account>/avatar[/small|medium|large]  ->  that account's Hive avatar, the
+    # same layout as Hive's image service so the site only swaps the host. Hive answers
+    # with a redirect to its /p/ proxy; we follow it here so the viewer makes one
+    # request, not two.
+    location ~* "^/u/([a-z0-9.-]{3,16})/avatar(/(small|medium|large))?$" {
+        set $up_hive ${SPK_HIVE_IMAGES_HOST};
+        set $spk_who $1;
+        set $spk_size $2;
+        proxy_pass https://$up_hive/u/$spk_who/avatar$spk_size;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${SPK_HIVE_IMAGES_HOST};
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 15s;
+        proxy_intercept_errors on;
+        error_page 301 302 307 = @spk_hive_follow;
+    }
+
+    location @spk_hive_follow {
+        set $up_hive ${SPK_HIVE_IMAGES_HOST};
+        set $spk_loc $upstream_http_location;
+        # Hive sends a relative /p/... location; anything else is not followed.
+        if ($spk_loc !~ "^/") { return 502; }
+        proxy_pass https://$up_hive$spk_loc;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${SPK_HIVE_IMAGES_HOST};
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 15s;
+    }
+
+    # /i/<cid>[/<path>]  ->  an IPFS thumbnail (legacy and ecency uploads store
+    # ipfs://<cid>), cover-cropped to the card shape like /t/. These used to go
+    # through Hive's resize proxy, which refuses most of these sources (8,915 of
+    # 9,353 on 2026-10-29). The fallback gateway is tried when the first one fails.
+    location ~ "^/i/((?:Qm[1-9A-HJ-NP-Za-km-z]{44}|b[a-z2-7]{58,})(?:/[^?]*)?)$" {
+        set $up_ipfs ${SPK_IPFS_HOST};
+        set $spk_cid $1;
+        proxy_pass https://$up_ipfs/ipfs/$spk_cid;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${SPK_IPFS_HOST};
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 20s;
+        proxy_intercept_errors on;
+        error_page 403 404 429 500 502 503 504 = @spk_ipfs_alt;
+        image_filter crop $spkimg_w $spkimg_h;
+        image_filter_buffer 20M;
+        image_filter_jpeg_quality 82;
+        image_filter_webp_quality 80;
+        image_filter_interlace on;
+    }
+
+    location @spk_ipfs_alt {
+        set $up_ipfs ${SPK_IPFS_FALLBACK_HOST};
+        proxy_pass https://$up_ipfs/ipfs/$spk_cid;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${SPK_IPFS_FALLBACK_HOST};
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 25s;
+        image_filter crop $spkimg_w $spkimg_h;
+        image_filter_buffer 20M;
+        image_filter_jpeg_quality 82;
+        image_filter_webp_quality 80;
+        image_filter_interlace on;
+    }
+
+    # /a/<path on the image host>  ->  a profile picture someone uploaded through
+    # 3Speak, square-cropped. Hive's proxy cannot fetch our host, so without this
+    # those avatars load at full size.
+    location /a/ {
+        set $up_images ${SPK_IMAGES_HOST};
+        rewrite ^/a/(.*)$ /$1 break;
+        proxy_pass https://$up_images;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${SPK_IMAGES_HOST};
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 20s;
+        image_filter crop $spkimg_px $spkimg_px;
+        image_filter_buffer 20M;
+        image_filter_jpeg_quality 82;
+        image_filter_webp_quality 80;
+    }
+
+    # /h/<anything on Hive's image service>  ->  passed through as is. Hive's /p/ URLs
+    # already name the source and the size, so one cached copy serves everyone and
+    # the viewer never has to open a connection to Hive's proxy.
+    location /h/ {
+        set $up_hive ${SPK_HIVE_IMAGES_HOST};
+        rewrite ^/h/(.*)$ /$1 break;
+        proxy_pass https://$up_hive;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${SPK_HIVE_IMAGES_HOST};
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 20s;
+        proxy_intercept_errors on;
+        error_page 301 302 307 = @spk_hive_follow;
+    }
+
+    location / { return 404; }
+}

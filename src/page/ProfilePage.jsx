@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { toastIn } from '../utils/toast';
@@ -21,6 +21,8 @@ import { fetchUserShortsWithDetails } from "../hive-api/hiveApi";
 
 import { FaVideo, FaPlus } from "react-icons/fa";
 import { IoMdShare, IoMdAdd } from "react-icons/io";
+import { IoPlanetOutline } from "react-icons/io5";
+import useGalaxyFits from "../hooks/useGalaxyFits";
 import { MdLock, MdPublic, MdClose, MdRssFeed } from "react-icons/md";
 import SocialLinks from "../components/Userprofilepage/SocialLinks";
 import LeaderboardBadges from "../components/LeaderboardBadges/LeaderboardBadges";
@@ -66,6 +68,7 @@ const WATCH_LATER_NAME = 'Watch Later';
 
 function ProfilePage() {
   const { t } = useTranslation();
+  const galaxyFits = useGalaxyFits(); // the galaxy is desktop only
 
   const { user, authenticated } = useAppStore();
   const navigate = useNavigate();
@@ -608,6 +611,17 @@ function ProfilePage() {
                 has no feed. */}
             {user && (
               <>
+                {/* Your Hive galaxy, same button as on public profiles (UserProfilePage). */}
+                {galaxyFits && (
+                  <Link
+                    className="btn btn-secondary"
+                    to={`/galaxy/${user}`}
+                    title={t('galaxy.profileButton', { user })}
+                    aria-label={t('galaxy.profileButton', { user })}
+                  >
+                    <IoPlanetOutline />
+                  </Link>
+                )}
                 <link
                   rel="alternate"
                   type="application/rss+xml"

@@ -92,7 +92,9 @@
     "turnAdsOff": "Videolarında reklamları kapat",
     "rewardsOn": "İzleyici ödüllerini aç",
     "rewardsOff": "İzleyici ödüllerini kapat",
-    "showApplications": "Reklam başvurularını göster"
+    "showApplications": "Reklam başvurularını göster",
+    "listenOn": "Dinleyici ödüllerini aç",
+    "listenOff": "Dinleyici ödüllerini kapat"
   },
   "slot": {
     "atBeginning": "Videonun başında",
@@ -256,7 +258,9 @@
     "text": "3Speak'teki reklamlar içerik üreticisine, topluluğuna ve artık sana da ödeme yapar. Payın, reklamverenin ödediği tutardan, onun ödediği para birimiyle, zaten izleyecek olduğun videolar için çıkar.",
     "note": "3Speak, bir şeyleri yeniden bulabilmen için izleme geçmişini zaten tutar. Bu, sana ne kadar borçlu olduğumuzu hesaplamak için onu kullanmamızı sağlar ve her videonun ne kadarını gerçekten izlediğinin kaydını tutar. Hayır dersen hiçbir şey değişmez. İstediğin zaman Ayarlar'dan kapatabilirsin; bu, ödüller için tuttuklarımızı siler.",
     "noThanks": "Hayır, teşekkürler",
-    "yes": "Evet, öde"
+    "yes": "Evet, öde",
+    "titleBoth": "İzlemek ve dinlemek için para kazan",
+    "listenNote": "Dinlemek de sayılır: 3speak.tv’de ses ve podcast’ler için dinleyici ödülleri, rakamları kontrol ettikten sonra yakında başlıyor. Bugünden itibaren dinlediklerin sayılır."
   },
   "promote": {
     "pricingFailed": "Tanıtım fiyatları yüklenemedi.",
@@ -785,5 +789,12 @@
     "bookAnother": "Başka bir rezervasyon yap",
     "pickProduct": "Reklam videolarını ve rezervasyonlarını görmek için bir ürün seç.",
     "showUpHere": "Ürünlerin, reklam videoları ve rezervasyonları yüklendiğinde burada görünür."
+  },
+  "listenPrompt": {
+    "title": "Dinleyerek de kazanmak ister misin?",
+    "text": "Dinleyici ödülleri yakında başlıyor. 3speak.tv’de ses ve podcast bölümlerini ne kadar dinlediğini bugünden itibaren saymamıza izin ver.",
+    "note": "Hayır de, hiçbir şey değişmez. İstediğin zaman Ayarlar’dan kapatabilirsin; o zaman sakladıklarımızı sileriz.",
+    "yes": "Evet, dinlediklerimi say",
+    "savedYes": "Dinlediklerin artık dinleyici ödüllerine sayılıyor"
   }
 }

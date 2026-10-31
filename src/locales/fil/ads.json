@@ -92,7 +92,9 @@
     "turnAdsOff": "I-off ang ads sa mga video mo",
     "rewardsOn": "I-on ang viewer rewards",
     "rewardsOff": "I-off ang viewer rewards",
-    "showApplications": "Ipakita ang mga advertising application mo"
+    "showApplications": "Ipakita ang mga advertising application mo",
+    "listenOn": "I-on ang gantimpala sa pakikinig",
+    "listenOff": "I-off ang gantimpala sa pakikinig"
   },
   "slot": {
     "atBeginning": "Sa simula ng video",
@@ -256,7 +258,9 @@
     "text": "Binabayaran ng ads sa 3Speak ang creator, ang komunidad nila, at ngayon ikaw. Galing ang bahagi mo sa ibinayad ng advertiser, sa anumang ipinambayad nila, para sa mga video na papanoorin mo rin naman.",
     "note": "Itinatago na ng 3Speak ang watch history mo para mahanap mo ulit ang mga bagay. Dahil dito, magagamit namin ito para kalkulahin ang dapat ibayad sa iyo, at nag-iingat ito ng record kung gaano kalaki ng bawat video ang talagang napanood mo. Kung tatanggi ka, walang magbabago. Puwede mo itong i-off anumang oras sa Settings, at buburahin noon ang itinago namin para sa rewards.",
     "noThanks": "Huwag na, salamat",
-    "yes": "Oo, bayaran mo ako"
+    "yes": "Oo, bayaran mo ako",
+    "titleBoth": "Mabayaran sa panonood at pakikinig",
+    "listenNote": "Bilang din ang pakikinig: malapit nang magsimula ang gantimpala sa pakikinig sa audio at podcast sa 3speak.tv, kapag nasuri na namin ang mga numero. Bilang ang pinakikinggan mo mula ngayon."
   },
   "promote": {
     "pricingFailed": "Hindi ma-load ang presyo ng promotion.",
@@ -785,5 +789,12 @@
     "bookAnother": "Mag-book ng isa pa",
     "pickProduct": "Pumili ng product para makita ang mga ad video at booking nito.",
     "showUpHere": "Lalabas dito ang mga product mo, ang kanilang ad videos at bookings kapag na-load na."
+  },
+  "listenPrompt": {
+    "title": "Kumita rin sa pakikinig?",
+    "text": "Malapit nang magsimula ang gantimpala sa pakikinig. Hayaan kaming bilangin kung gaano katagal kang nakikinig sa audio at mga episode ng podcast sa 3speak.tv, mula ngayon.",
+    "note": "Kapag tumanggi ka, walang magbabago. Puwede mo itong i-off anumang oras sa Settings, at mabubura ang itinago namin.",
+    "yes": "Oo, bilangin ang pakikinig ko",
+    "savedYes": "Bilang na ang pakikinig mo para sa gantimpala sa pakikinig"
   }
 }

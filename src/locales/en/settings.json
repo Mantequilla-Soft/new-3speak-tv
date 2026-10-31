@@ -37,7 +37,13 @@
     "title": "Earn while you watch",
     "rowTitle": "Viewer rewards",
     "desc": "Earn a share of ad revenue for what you watch, paid in HBD or HIVE. You are paid on videos watched, whether or not an ad played, so it rewards watching rather than sitting through ads. Ads themselves play for everyone except 3Speak Pro subscribers. We record how much of each video you watched, on top of the watch history the Watched page already keeps, and delete it the moment you turn this off.",
-    "aria": "Earn a share of ad revenue for what you watch"
+    "aria": "Earn a share of ad revenue for what you watch",
+    "titleListen": "Earn while you watch and listen",
+    "listenDesc": "Listening counts too: we record how long you listen to 3Speak audio and podcast episodes on 3speak.tv. Listener rewards start once we have checked the numbers, and what you listen to from the day you turn this on counts.",
+    "listenAlso": "Count my listening too",
+    "listenOnToast": "Your listening now counts toward listener rewards",
+    "onToastBoth": "Rewards for watching and listening on",
+    "offToastBoth": "Rewards off, and your watch and listening data has been deleted"
   },
   "postingAuth": {
     "updateFailed": "Could not update your posting authority.",

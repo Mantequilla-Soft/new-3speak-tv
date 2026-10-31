@@ -41,7 +41,57 @@
     "noCues": "İşaret yok.",
     "clearQueue": "Sırayı temizle",
     "clearAll": "Tümünü temizle",
-    "queueEmpty": "Sıra boş."
+    "queueEmpty": "Sıra boş.",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "expand": "Oynatıcıyı genişlet",
+    "collapse": "Oynatıcıyı daralt",
+    "skipBack": "{{seconds}} saniye geri",
+    "skipForward": "{{seconds}} saniye ileri",
+    "speed": "Oynatma hızı",
+    "speedValue": "Oynatma hızı: {{speed}}",
+    "sleep": "Uyku zamanlayıcısı",
+    "sleepOff": "Kapalı",
+    "sleepMinutes": "{{minutes}} dakika",
+    "sleepEnd": "Bu bölümün sonunda",
+    "sleepEndShort": "Son",
+    "sleepLeft": "{{time}} sonra durur",
+    "effects": "Ses efektleri",
+    "voiceBoost": "Konuşma güçlendirme",
+    "voiceBoostHint": "Daha net, daha dengeli sesler",
+    "skipSilence": "Sessizliği atla",
+    "skipSilenceHint": "Duraklamaları hızla geçer",
+    "effectsUnavailable": "Bu bölüm için kullanılamıyor.",
+    "effectsChecking": "Bu bölümün destekleyip desteklemediği kontrol ediliyor…",
+    "timeSaved": "Kazanılan süre: {{time}}",
+    "cast": "Başka bir cihazda oynat",
+    "download": "Çevrimdışı için kaydet",
+    "downloading": "Kaydediliyor: %{{pct}}",
+    "downloaded": "Çevrimdışı için kaydedildi",
+    "downloadDone": "Çevrimdışı dinlemek için kaydedildi",
+    "downloadFailed": "Bu bölüm kaydedilemedi",
+    "copyEpisode": "Bölüm bağlantısını kopyala",
+    "copiedEpisode": "Bölüm bağlantısı kopyalandı!",
+    "copyAt": "{{time}} anına bağlantı kopyala",
+    "copiedAt": "{{time}} anına bağlantı kopyalandı!",
+    "copyFailed": "Bağlantı kopyalanamadı",
+    "clipMake": "Klip oluştur",
+    "clipRange": "{{from}} ile {{to}} arası",
+    "clipLength": "Uzunluk",
+    "clipSeconds": "{{seconds}} sn",
+    "clipCopy": "Klip bağlantısını kopyala",
+    "clipCopied": "Klip bağlantısı kopyalandı!",
+    "clipEnds": "Klip, {{time}} anında durur",
+    "clipClear": "Klipten sonra devam et",
+    "live": "CANLI",
+    "liveUnsupported": "Bu canlı yayın bu tarayıcıda oynatılamıyor.",
+    "chapters": "Kısımlar",
+    "prevChapter": "Önceki kısım",
+    "nextChapter": "Sonraki kısım",
+    "chapterLink": "Kısım bağlantısı",
+    "upNext": "Sıradaki",
+    "hideIdle": "Gizle (sıran kalır)",
+    "continueAt": "{{time}} noktasından devam et"
   },
   "share": {
     "failed": "Başarısız",
@@ -98,7 +148,14 @@
     "noTracks": "Parça bulunamadı.",
     "creators": "İçerik üreticileri",
     "albumsPlaylists": "Albümler ve Oynatma Listeleri",
-    "noAudioForFilters": "Bu filtrelerle ses bulunamadı."
+    "noAudioForFilters": "Bu filtrelerle ses bulunamadı.",
+    "tabsLabel": "Ses görünümleri",
+    "tabExplore": "Göz at",
+    "tabPlayer": "Oynatıcı",
+    "nothingPlaying": "Henüz çalan bir şey yok.",
+    "goExplore": "Dinleyecek bir şey bul",
+    "exploreViews": "Gezinme",
+    "mostPlayed": "En çok dinlenenler"
   },
   "upload": {
     "title": "Ses yükle",
@@ -352,7 +409,13 @@
       "none": "Podcast bulunamadı. Başka bir ad dene veya RSS akışı URL'sini yapıştır.",
       "failed": "Arama şu anda kullanılamıyor. Lütfen tekrar dene.",
       "label": "Podcast bul",
-      "placeholder": "Program adı, sunucu veya konu"
+      "placeholder": "Program adı, sunucu veya konu",
+      "modeShows": "Programlar",
+      "modePeople": "Kişiler",
+      "placeholderPeople": "Sunucu veya konuk adı",
+      "appearsIn_one": "{{count}} bölümde",
+      "appearsIn_other": "{{count}} bölümde",
+      "latestMatch": "En yeni: {{title}}"
     },
     "opml": {
       "import": "OPML içe aktar",
@@ -373,7 +436,11 @@
       "limit": "Takip edebileceğin en fazla podcast sayısına ulaştın.",
       "internal": "Bu bir 3Speak kanalı: onu diğer ses türlerinin altında bulabilirsin.",
       "disabled": "Harici podcast'ler şu anda kapalı.",
-      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene."
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene.",
+      "closedPlatform": "{{platform}} programlarının beslemelerini paylaşmıyor. Programı adıyla ara.",
+      "appleOnly": "Bu program yalnızca Apple Podcasts’te var.",
+      "directoryNotFound": "Bu programın beslemesini bulamadık. RSS beslemesini dene veya adıyla ara.",
+      "directoryDown": "Bu podcast dizini şu anda yanıt vermiyor. Lütfen tekrar dene."
     },
     "tip": {
       "button": "Bu podcast'i destekle",
@@ -400,7 +467,9 @@
     },
     "rss": {
       "label": "RSS akışıyla ekle",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Bağlantıyla ekle",
+      "placeholderLink": "RSS beslemesi, Apple Podcasts bağlantısı veya web sitesi"
     },
     "listened": "Dinlendi",
     "listenedPct": "%{{pct}} dinlendi",
@@ -414,7 +483,12 @@
       "none": "Bu filtrelere uyan bölüm yok.",
       "custom": "Özel aralık",
       "from": "Başlangıç",
-      "to": "Bitiş"
+      "to": "Bitiş",
+      "inbox": "Yeni",
+      "inboxEmpty": "Yeni bir şey yok. Son bir haftanın henüz oynatmadığın bölümleri burada görünür.",
+      "unplayed": "Oynatılmamış",
+      "inProgress": "Devam eden",
+      "downloaded": "İndirilen"
     },
     "resume": "Devam et",
     "showNotes": "Bölüm notları",
@@ -422,6 +496,160 @@
     "noNotes": "Bu bölümün notu yok.",
     "openEpisode": "Bölümü aç",
     "addToQueue": "Sıraya ekle",
-    "inQueue": "Sırada"
+    "inQueue": "Sırada",
+    "trending": {
+      "title": "Trend podcast’ler",
+      "language": "Dil",
+      "allLanguages": "Tüm diller",
+      "category": "Kategori",
+      "allCategories": "Tüm kategoriler",
+      "none": "Şu anda burada trend olan bir şey yok. Başka bir dil veya kategori dene.",
+      "failed": "Trend podcast’ler şu anda kullanılamıyor. Lütfen tekrar dene."
+    },
+    "categories": {
+      "Arts": "Sanat",
+      "Business": "İş Dünyası",
+      "Comedy": "Komedi",
+      "Education": "Eğitim",
+      "Fiction": "Kurgu",
+      "Government": "Devlet",
+      "Health": "Sağlık ve Fitness",
+      "History": "Tarih",
+      "Kids": "Çocuk ve Aile",
+      "Leisure": "Boş Zaman",
+      "Music": "Müzik",
+      "News": "Haberler",
+      "Religion": "Din ve Maneviyat",
+      "Science": "Bilim",
+      "Society": "Toplum ve Kültür",
+      "Sports": "Spor",
+      "Technology": "Teknoloji",
+      "TrueCrime": "Gerçek Suç",
+      "TV": "TV ve Film"
+    },
+    "charts": {
+      "title": "Listeler",
+      "country": "Ülke",
+      "none": "Bu ülke ve kategori için şu anda liste yok.",
+      "failed": "Listeler şu anda kullanılamıyor. Lütfen tekrar dene."
+    },
+    "views": {
+      "mine": "Benimkiler",
+      "discover": "Keşfet",
+      "trends": "Trendler",
+      "mineEmpty": "Henüz hiçbir podcast’i takip etmiyorsun. Keşfet’te program bul ya da Trendler’de popüler olanlara bak."
+    },
+    "downloads": {
+      "title": "İndirilenler",
+      "download": "Çevrimdışı dinlemek için indir",
+      "short": "İndir",
+      "downloading": "İndiriliyor %{{pct}}",
+      "cancel": "İndirmeyi iptal et",
+      "saved": "Çevrimdışı kaydedildi",
+      "remove": "İndirileni kaldır",
+      "removeShort": "Kaldır",
+      "removed": "İndirilen kaldırıldı",
+      "done": "Çevrimdışı dinlemek için kaydedildi",
+      "total": "{{size}} kaydedildi",
+      "storage": "bu site bu tarayıcıda {{quota}} alanın {{used}} kadarını kullanıyor",
+      "perBrowser": "İndirilenler, kim giriş yapmış olursa olsun bu tarayıcıda kalır.",
+      "errors": {
+        "tooLarge": "Bu bölüm kaydedilemeyecek kadar büyük.",
+        "rateLimited": "Şu anda çok fazla indirme var. Lütfen birkaç dakika sonra tekrar dene.",
+        "storage": "Bu tarayıcıda bu bölümü kaydedecek yer yok.",
+        "failed": "Bölüm indirilemedi. Lütfen tekrar dene.",
+        "noSource": "Bu bölüm kaydedilemez."
+      }
+    },
+    "autoQueue": {
+      "label": "Yeni bölümleri sıraya otomatik ekle",
+      "hint": "Bu programın yeni bölümleri çıktıklarında sıranın sonuna eklenir",
+      "onDone": "Bu programın yeni bölümleri sırana eklenecek",
+      "offDone": "Bu programın yeni bölümleri artık sırana eklenmeyecek",
+      "added_one": "{{count}} yeni bölüm sırana eklendi",
+      "added_other": "{{count}} yeni bölüm sırana eklendi"
+    },
+    "badges": {
+      "trailer": "Fragman",
+      "bonus": "Bonus"
+    },
+    "startHere": "Buradan başla",
+    "seasons": {
+      "label": "Sezon",
+      "all": "Tüm sezonlar",
+      "season": "Sezon {{n}}"
+    },
+    "persons": {
+      "title": "Sunucular ve konuklar",
+      "roles": {
+        "host": "Sunucu",
+        "guest": "Konuk",
+        "cohost": "Yardımcı sunucu",
+        "producer": "Yapımcı"
+      }
+    },
+    "episodeSearch": {
+      "label": "Bölümlerde ara",
+      "placeholder": "Bu programın bölümlerinde ara",
+      "none": "\"{{q}}\" ile eşleşen bölüm yok."
+    },
+    "live": {
+      "now": "Şu an canlı",
+      "badge": "CANLI",
+      "listen": "Canlı dinle",
+      "upcoming": "Yakında",
+      "startsAt": "Başlangıç: {{time}}"
+    },
+    "private": {
+      "toggle": "Bu gizli bir akış (giriş gerektirir)",
+      "username": "Kullanıcı adı",
+      "password": "Şifre",
+      "hint": "Giriş bilgileri, akışı senin için okuyabilmesi için 3Speak'in podcast hizmetine gönderilir. Gizli akışlar hiçbir zaman herkese açık listelerde görünmez.",
+      "badge": "Gizli",
+      "badgeHint": "Gizli bir akış: yalnızca giriş bilgileriyle takip edenler görür",
+      "opmlLeftOut_one": "{{count}} gizli akış dosyaya eklenmedi.",
+      "opmlLeftOut_other": "{{count}} gizli akış dosyaya eklenmedi."
+    },
+    "highlights": {
+      "title": "Öne çıkanlar",
+      "play": "Öne çıkanı oynat",
+      "untitled": "{{time}} anındaki öne çıkan"
+    },
+    "chapters": {
+      "title": "Kısımlar",
+      "loading": "Kısımlar yükleniyor…",
+      "none": "Kısımlar yüklenemedi.",
+      "link": "Kısım bağlantısı"
+    },
+    "share": {
+      "copy": "Bağlantıyı kopyala",
+      "copyAt": "{{time}} anına bağlantı kopyala",
+      "clip": "Bu öne çıkana bağlantı kopyala",
+      "copied": "Bağlantı kopyalandı",
+      "failed": "Bağlantı kopyalanamadı"
+    },
+    "deepLink": {
+      "playFrom": "{{time}} anından oynat",
+      "playClip": "{{from}} ile {{to}} arasını oynat"
+    },
+    "video": {
+      "watch": "Videoyu izle",
+      "hide": "Videoyu gizle"
+    },
+    "signInToFollow": "Podcast takip etmek için giriş yap",
+    "addExternal": "Harici podcast ekle"
+  },
+  "item": {
+    "back": "Tüm sesler",
+    "missing": "Bu ses kullanılamıyor.",
+    "description": "Açıklama",
+    "noDescription": "Açıklama yok.",
+    "comments": "Yorumlar",
+    "album": "{{name}} albümünden"
+  },
+  "offline": {
+    "notice": "Çevrimdışısın. İndirdiklerin yine de çalar.",
+    "noticeNoDownloads": "Çevrimdışısın. Bağlantı olmadan dinlemek için bölümleri indir.",
+    "open": "İndirilenleri aç"
   }
 }

@@ -148,6 +148,22 @@
   color: var(--text-secondary, #9aa);
 }
 
+// A small outlined action under a setting's text (e.g. "Count my listening too").
+.settings-inline-btn {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 5px 12px;
+  border: 1px solid var(--accent-primary, #e53935);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--accent-primary, #e53935);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.6; cursor: default; }
+}
+
 // ─── Compact switch ───
 .settings-switch {
   flex-shrink: 0;

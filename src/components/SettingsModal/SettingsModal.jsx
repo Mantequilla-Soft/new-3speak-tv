@@ -6,7 +6,8 @@ import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
 import { getHiveUrl } from '../../utils/hiveNode';
 import { fetchUserInterests, saveInterestsToHive } from '../../utils/interests';
-import { fetchAdAccess, fetchCreatorAdPrefs, fetchViewerAdPrefs, setViewerAdPrefs } from '../../lib/advertiseData';
+import { fetchAdAccess, fetchCreatorAdPrefs, fetchViewerAdPrefs, setViewerAdPrefs, setListenerAdPrefs } from '../../lib/advertiseData';
+import { resetViewerRewards } from '../../utils/viewerRewards';
 import { saveCreatorAdSettings } from '../../utils/adSettings';
 import { adsEnabledFor, adsBetaUserFor } from '../../utils/config';
 import {
@@ -22,6 +23,7 @@ import DataRequestForm from './DataRequestForm';
 import LanguagePicker from '../LanguagePicker/LanguagePicker';
 import ModalHeader from '../ModalHeader/ModalHeader';
 import './SettingsModal.scss';
+import useCardSize, { useIsCardSizeMobile } from '../../hooks/useCardSize';
 
 // Every toast from this module is headed "Settings"; the message becomes the
 // line under it. See utils/toast.js.
@@ -301,6 +303,9 @@ function ViewerRewardsSection() {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [enabled, setEnabled] = useState(false);
+  // Listening is its own consent record (POST /advertise/listener/prefs). The one
+  // switch sets both; someone who only agreed to watching gets a button for it.
+  const [listen, setListen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -312,7 +317,7 @@ function ViewerRewardsSection() {
     let alive = true;
     setLoading(true);
     fetchViewerAdPrefs(user)
-      .then((r) => { if (alive) setEnabled(r.rewardsEnabled === true); })
+      .then((r) => { if (alive) { setEnabled(r.rewardsEnabled === true); setListen(r.listenEnabled === true); } })
       .catch(() => { /* an unreadable setting is not worth an error banner */ })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
@@ -320,35 +325,59 @@ function ViewerRewardsSection() {
 
   if (!user || !visible) return null;
 
-  async function onToggle(next) {
-    // Optimistic, then rolled back on failure. Every save costs a signature, so the
-    // switch must not sit unresponsive while a wallet prompt is open.
-    const previous = enabled;
-    setEnabled(next);
+  async function save(fn, rollback) {
     setSaving(true);
     setError(null);
     try {
-      await setViewerAdPrefs(user, { rewardsEnabled: next });
-      toast.success(next
-        ? t('settings.viewerRewards.onToast')
-        : t('settings.viewerRewards.offToast'));
+      await fn();
     } catch (err) {
-      setEnabled(previous);
+      rollback();
       setError(err.message || t('settings.viewerRewards.saveFailed'));
     } finally {
+      // The next watch or listen session reads the new answer, not a cached one.
+      resetViewerRewards();
       setSaving(false);
     }
   }
 
+  // Optimistic, then rolled back on failure. Every save costs a signature, so the
+  // switch must not sit unresponsive while a wallet prompt is open.
+  function onToggle(next) {
+    const before = { enabled, listen };
+    setEnabled(next);
+    setListen(next);
+    return save(async () => {
+      await setViewerAdPrefs(user, { rewardsEnabled: next });
+      await setListenerAdPrefs(user, { listenEnabled: next });
+      toast.success(next ? t('settings.viewerRewards.onToastBoth') : t('settings.viewerRewards.offToastBoth'));
+    }, () => { setEnabled(before.enabled); setListen(before.listen); });
+  }
+
+  function addListening() {
+    setListen(true);
+    return save(async () => {
+      await setListenerAdPrefs(user, { listenEnabled: true });
+      toast.success(t('settings.viewerRewards.listenOnToast'));
+    }, () => setListen(false));
+  }
+
   return (
     <div className="settings-modal-section">
-      <h3 className="settings-section-title">{t('settings.viewerRewards.title')}</h3>
+      <h3 className="settings-section-title">{t('settings.viewerRewards.titleListen')}</h3>
       <div className="settings-modal-row">
         <div className="settings-row-text">
           <span className="settings-row-title">{t('settings.viewerRewards.rowTitle')}</span>
           <span className="settings-row-desc">
             {t('settings.viewerRewards.desc')}
           </span>
+          <span className="settings-row-desc">
+            {t('settings.viewerRewards.listenDesc')}
+          </span>
+          {enabled && !listen && !loading && (
+            <button type="button" className="settings-inline-btn" onClick={addListening} disabled={saving}>
+              {t('settings.viewerRewards.listenAlso')}
+            </button>
+          )}
         </div>
         <Switch
           checked={enabled}
@@ -648,6 +677,8 @@ const CONTENT_TABS = [
 export default function SettingsModal({ isOpen, onClose }) {
   const { t } = useTranslation();
   const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
+  const cardSize = useCardSize();
+  const cardSizeMobile = useIsCardSizeMobile();
   /* Whether the Ads & rewards page exists at all.
    *
    * 🚨 THE CHECKER DECIDES, not the build flag. adsEnabledFor() is true for everybody
@@ -754,7 +785,7 @@ export default function SettingsModal({ isOpen, onClose }) {
   // Previews only work on touch devices in large mode, so hide the toggle when
   // a touch user has small cards selected (it would have no effect).
   const isTouch = !window.matchMedia('(hover: hover)').matches;
-  const showPreviewSetting = !isTouch || homeCardSize === 'large';
+  const showPreviewSetting = !isTouch || cardSize === 'large';
   // The shorts comment bar is rendered only under 768px (see Short.scss), so its
   // toggle would do nothing on desktop/tablet. Gate it on the SAME breakpoint —
   // `isDesktop` (>=1025px) would wrongly still show it on a tablet.
@@ -807,12 +838,15 @@ export default function SettingsModal({ isOpen, onClose }) {
               checked={theme === 'dark'}
               onChange={(wantDark) => { if ((theme === 'dark') !== wantDark) toggleTheme(); }}
             />
-            <Row
-              title={t('settings.appearance.largeCards.title')}
-              desc={t('settings.appearance.largeCards.desc')}
-              checked={homeCardSize === 'large'}
-              onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
-            />
+            {/* Large cards are a phone thing: desktop always uses small ones (hooks/useCardSize). */}
+            {cardSizeMobile && (
+              <Row
+                title={t('settings.appearance.largeCards.title')}
+                desc={t('settings.appearance.largeCards.desc')}
+                checked={homeCardSize === 'large'}
+                onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
+              />
+            )}
             {showPreviewSetting && (
               <Row
                 title={t('settings.appearance.previews.title')}

@@ -20,10 +20,32 @@
   "changelog": {
     "title": "May bago kaming update!",
     "subtitle": "Ito ang bago sa v{{version}}",
-    "previousUpdates": "Mga nakaraang update",
-    "newerUpdates": "Mga mas bagong update",
     "readTheCode": "Basahin ang code",
-    "gotIt": "Sige"
+    "gotIt": "Sige",
+    "categories": {
+      "home": "Home at mga feed",
+      "watch": "Pahina ng video",
+      "comments": "Mga komento",
+      "shorts": "Shorts",
+      "stories": "Stories",
+      "editor": "Editor at mga remix",
+      "upload": "Pag-upload at pag-publish",
+      "audio": "Audio",
+      "podcasts": "Mga podcast",
+      "live": "Mga live stream",
+      "profile": "Mga profile at channel",
+      "groups": "Mga komunidad at badge",
+      "playlists": "Mga playlist",
+      "tips": "Tip, wallet at Pro",
+      "ads": "Advertising",
+      "chat": "Chat",
+      "notifications": "Mga notification",
+      "leaderboard": "Leaderboard",
+      "sharing": "Pagbabahagi",
+      "account": "Pag-sign in at account",
+      "settings": "Settings at mga wika",
+      "general": "Buong 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "Home Feed",

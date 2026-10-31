@@ -39,7 +39,57 @@
     "noCues": "Không có lời.",
     "clearQueue": "Xóa hàng đợi",
     "clearAll": "Xóa tất cả",
-    "queueEmpty": "Hàng đợi trống."
+    "queueEmpty": "Hàng đợi trống.",
+    "previous": "Trước",
+    "next": "Tiếp",
+    "expand": "Mở rộng trình phát",
+    "collapse": "Thu gọn trình phát",
+    "skipBack": "Lùi {{seconds}} giây",
+    "skipForward": "Tới {{seconds}} giây",
+    "speed": "Tốc độ phát",
+    "speedValue": "Tốc độ phát: {{speed}}",
+    "sleep": "Hẹn giờ tắt",
+    "sleepOff": "Tắt",
+    "sleepMinutes": "{{minutes}} phút",
+    "sleepEnd": "Khi hết tập này",
+    "sleepEndShort": "Hết tập",
+    "sleepLeft": "Dừng sau {{time}}",
+    "effects": "Hiệu ứng âm thanh",
+    "voiceBoost": "Tăng cường giọng nói",
+    "voiceBoostHint": "Giọng nói rõ và đều hơn",
+    "skipSilence": "Bỏ qua khoảng lặng",
+    "skipSilenceHint": "Lướt nhanh qua các đoạn ngắt",
+    "effectsUnavailable": "Không khả dụng cho tập này.",
+    "effectsChecking": "Đang kiểm tra xem tập này có hỗ trợ không…",
+    "timeSaved": "Thời gian tiết kiệm: {{time}}",
+    "cast": "Phát trên thiết bị khác",
+    "download": "Lưu để nghe ngoại tuyến",
+    "downloading": "Đang lưu: {{pct}}%",
+    "downloaded": "Đã lưu ngoại tuyến",
+    "downloadDone": "Đã lưu để nghe ngoại tuyến",
+    "downloadFailed": "Không thể lưu tập này",
+    "copyEpisode": "Sao chép liên kết tập",
+    "copiedEpisode": "Đã sao chép liên kết tập!",
+    "copyAt": "Sao chép liên kết tại {{time}}",
+    "copiedAt": "Đã sao chép liên kết tại {{time}}!",
+    "copyFailed": "Không thể sao chép liên kết",
+    "clipMake": "Cắt clip",
+    "clipRange": "Từ {{from}} đến {{to}}",
+    "clipLength": "Độ dài",
+    "clipSeconds": "{{seconds}} giây",
+    "clipCopy": "Sao chép liên kết clip",
+    "clipCopied": "Đã sao chép liên kết clip!",
+    "clipEnds": "Clip, dừng tại {{time}}",
+    "clipClear": "Phát tiếp sau clip",
+    "live": "TRỰC TIẾP",
+    "liveUnsupported": "Không thể phát buổi phát trực tiếp này trên trình duyệt này.",
+    "chapters": "Chương",
+    "prevChapter": "Chương trước",
+    "nextChapter": "Chương sau",
+    "chapterLink": "Liên kết chương",
+    "upNext": "Tiếp theo",
+    "hideIdle": "Ẩn (hàng đợi vẫn còn)",
+    "continueAt": "Tiếp tục từ {{time}}"
   },
   "share": {
     "failed": "Thất bại",
@@ -95,7 +145,14 @@
     "noTracks": "Không tìm thấy bản nhạc nào.",
     "creators": "Nhà sáng tạo",
     "albumsPlaylists": "Album & danh sách phát",
-    "noAudioForFilters": "Không tìm thấy âm thanh nào với các bộ lọc này."
+    "noAudioForFilters": "Không tìm thấy âm thanh nào với các bộ lọc này.",
+    "tabsLabel": "Chế độ xem âm thanh",
+    "tabExplore": "Duyệt",
+    "tabPlayer": "Trình phát",
+    "nothingPlaying": "Chưa có gì đang phát.",
+    "goExplore": "Tìm nội dung để nghe",
+    "exploreViews": "Mục",
+    "mostPlayed": "Nghe nhiều nhất"
   },
   "upload": {
     "title": "Tải âm thanh lên",
@@ -333,7 +390,12 @@
       "none": "Không tìm thấy podcast nào. Hãy thử tên khác hoặc dán URL nguồn RSS.",
       "failed": "Hiện không thể tìm kiếm. Vui lòng thử lại.",
       "label": "Tìm podcast",
-      "placeholder": "Tên chương trình, người dẫn hoặc chủ đề"
+      "placeholder": "Tên chương trình, người dẫn hoặc chủ đề",
+      "modeShows": "Chương trình",
+      "modePeople": "Người",
+      "placeholderPeople": "Tên người dẫn hoặc khách mời",
+      "appearsIn_other": "Trong {{count}} tập",
+      "latestMatch": "Mới nhất: {{title}}"
     },
     "opml": {
       "import": "Nhập OPML",
@@ -353,7 +415,11 @@
       "limit": "Bạn đã theo dõi số podcast tối đa.",
       "internal": "Đó là kênh 3Speak: bạn sẽ thấy nó trong các loại âm thanh khác.",
       "disabled": "Podcast bên ngoài hiện đang tắt.",
-      "generic": "Đã xảy ra lỗi. Vui lòng thử lại."
+      "generic": "Đã xảy ra lỗi. Vui lòng thử lại.",
+      "closedPlatform": "{{platform}} không chia sẻ nguồn cấp của các chương trình. Hãy tìm chương trình theo tên.",
+      "appleOnly": "Chương trình này chỉ có trên Apple Podcasts.",
+      "directoryNotFound": "Không tìm thấy nguồn cấp của chương trình đó. Hãy thử nguồn RSS hoặc tìm theo tên.",
+      "directoryDown": "Danh bạ podcast đó hiện không phản hồi. Vui lòng thử lại."
     },
     "tip": {
       "button": "Ủng hộ podcast này",
@@ -378,7 +444,9 @@
     },
     "rss": {
       "label": "Thêm bằng nguồn RSS",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Thêm bằng liên kết",
+      "placeholderLink": "Nguồn RSS, liên kết Apple Podcasts hoặc trang web"
     },
     "listened": "Đã nghe",
     "listenedPct": "Đã nghe {{pct}}%",
@@ -392,7 +460,12 @@
       "none": "Không có tập nào khớp với bộ lọc này.",
       "custom": "Khoảng tùy chọn",
       "from": "Từ",
-      "to": "Đến"
+      "to": "Đến",
+      "inbox": "Mới",
+      "inboxEmpty": "Chưa có gì mới. Các tập trong tuần qua mà bạn chưa phát sẽ hiện ở đây.",
+      "unplayed": "Chưa phát",
+      "inProgress": "Đang nghe",
+      "downloaded": "Đã tải xuống"
     },
     "resume": "Nghe tiếp",
     "showNotes": "Ghi chú tập",
@@ -400,6 +473,158 @@
     "noNotes": "Tập này không có ghi chú.",
     "openEpisode": "Mở tập",
     "addToQueue": "Thêm vào hàng chờ",
-    "inQueue": "Đã trong hàng chờ"
+    "inQueue": "Đã trong hàng chờ",
+    "trending": {
+      "title": "Podcast thịnh hành",
+      "language": "Ngôn ngữ",
+      "allLanguages": "Tất cả ngôn ngữ",
+      "category": "Danh mục",
+      "allCategories": "Tất cả danh mục",
+      "none": "Hiện chưa có gì thịnh hành ở đây. Hãy thử ngôn ngữ hoặc danh mục khác.",
+      "failed": "Hiện không thể tải podcast thịnh hành. Vui lòng thử lại."
+    },
+    "categories": {
+      "Arts": "Nghệ thuật",
+      "Business": "Kinh doanh",
+      "Comedy": "Hài kịch",
+      "Education": "Giáo dục",
+      "Fiction": "Hư cấu",
+      "Government": "Chính phủ",
+      "Health": "Sức khỏe & Thể hình",
+      "History": "Lịch sử",
+      "Kids": "Trẻ em & Gia đình",
+      "Leisure": "Giải trí",
+      "Music": "Âm nhạc",
+      "News": "Tin tức",
+      "Religion": "Tôn giáo & Tâm linh",
+      "Science": "Khoa học",
+      "Society": "Xã hội & Văn hóa",
+      "Sports": "Thể thao",
+      "Technology": "Công nghệ",
+      "TrueCrime": "Tội phạm có thật",
+      "TV": "TV & Phim"
+    },
+    "charts": {
+      "title": "Bảng xếp hạng",
+      "country": "Quốc gia",
+      "none": "Hiện chưa có bảng xếp hạng cho quốc gia và danh mục này.",
+      "failed": "Hiện không thể tải bảng xếp hạng. Vui lòng thử lại."
+    },
+    "views": {
+      "mine": "Của tôi",
+      "discover": "Khám phá",
+      "trends": "Xu hướng",
+      "mineEmpty": "Bạn chưa theo dõi podcast nào. Tìm chương trình trong Khám phá hoặc xem những gì đang phổ biến trong Xu hướng."
+    },
+    "downloads": {
+      "title": "Bản tải xuống",
+      "download": "Tải xuống để nghe ngoại tuyến",
+      "short": "Tải xuống",
+      "downloading": "Đang tải {{pct}}%",
+      "cancel": "Hủy tải xuống",
+      "saved": "Đã lưu ngoại tuyến",
+      "remove": "Xóa bản tải xuống",
+      "removeShort": "Gỡ bỏ",
+      "removed": "Đã xóa bản tải xuống",
+      "done": "Đã lưu để nghe ngoại tuyến",
+      "total": "Đã lưu {{size}}",
+      "storage": "trang này dùng {{used}} trên {{quota}} trong trình duyệt này",
+      "perBrowser": "Bản tải xuống nằm trong trình duyệt này, dù ai đang đăng nhập.",
+      "errors": {
+        "tooLarge": "Tập này quá lớn để lưu.",
+        "rateLimited": "Hiện có quá nhiều lượt tải xuống. Vui lòng thử lại sau vài phút.",
+        "storage": "Trình duyệt này không còn chỗ để lưu tập này.",
+        "failed": "Không tải xuống được tập này. Vui lòng thử lại.",
+        "noSource": "Không thể lưu tập này."
+      }
+    },
+    "autoQueue": {
+      "label": "Tự động thêm tập mới vào hàng chờ",
+      "hint": "Tập mới của chương trình này sẽ vào cuối hàng chờ của bạn khi phát hành",
+      "onDone": "Tập mới của chương trình này sẽ vào hàng chờ của bạn",
+      "offDone": "Tập mới của chương trình này không còn vào hàng chờ của bạn",
+      "added_other": "Đã thêm {{count}} tập mới vào hàng chờ của bạn"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Bắt đầu từ đây",
+    "seasons": {
+      "label": "Mùa",
+      "all": "Tất cả các mùa",
+      "season": "Mùa {{n}}"
+    },
+    "persons": {
+      "title": "Người dẫn và khách mời",
+      "roles": {
+        "host": "Người dẫn",
+        "guest": "Khách mời",
+        "cohost": "Đồng dẫn",
+        "producer": "Nhà sản xuất"
+      }
+    },
+    "episodeSearch": {
+      "label": "Tìm tập",
+      "placeholder": "Tìm trong các tập của chương trình này",
+      "none": "Không có tập nào khớp với \"{{q}}\"."
+    },
+    "live": {
+      "now": "Đang trực tiếp",
+      "badge": "TRỰC TIẾP",
+      "listen": "Nghe trực tiếp",
+      "upcoming": "Sắp diễn ra",
+      "startsAt": "Bắt đầu: {{time}}"
+    },
+    "private": {
+      "toggle": "Đây là nguồn riêng tư (cần đăng nhập)",
+      "username": "Tên người dùng",
+      "password": "Mật khẩu",
+      "hint": "Thông tin đăng nhập được gửi đến dịch vụ podcast của 3Speak để đọc nguồn thay bạn. Nguồn riêng tư không bao giờ hiện trong danh sách công khai.",
+      "badge": "Riêng tư",
+      "badgeHint": "Nguồn riêng tư: chỉ người theo dõi bằng thông tin đăng nhập mới thấy",
+      "opmlLeftOut_other": "{{count}} nguồn riêng tư không được đưa vào tệp."
+    },
+    "highlights": {
+      "title": "Điểm nổi bật",
+      "play": "Phát điểm nổi bật",
+      "untitled": "Điểm nổi bật lúc {{time}}"
+    },
+    "chapters": {
+      "title": "Chương",
+      "loading": "Đang tải chương…",
+      "none": "Không tải được các chương.",
+      "link": "Liên kết chương"
+    },
+    "share": {
+      "copy": "Sao chép liên kết",
+      "copyAt": "Sao chép liên kết tại {{time}}",
+      "clip": "Sao chép liên kết đến điểm nổi bật này",
+      "copied": "Đã sao chép liên kết",
+      "failed": "Không sao chép được liên kết"
+    },
+    "deepLink": {
+      "playFrom": "Phát từ {{time}}",
+      "playClip": "Phát từ {{from}} đến {{to}}"
+    },
+    "video": {
+      "watch": "Xem video",
+      "hide": "Ẩn video"
+    },
+    "signInToFollow": "Đăng nhập để theo dõi podcast",
+    "addExternal": "Thêm podcast bên ngoài"
+  },
+  "item": {
+    "back": "Tất cả âm thanh",
+    "missing": "Âm thanh này không khả dụng.",
+    "description": "Mô tả",
+    "noDescription": "Không có mô tả.",
+    "comments": "Bình luận",
+    "album": "Từ {{name}}"
+  },
+  "offline": {
+    "notice": "Bạn đang ngoại tuyến. Nội dung đã tải vẫn phát được.",
+    "noticeNoDownloads": "Bạn đang ngoại tuyến. Hãy tải tập về để nghe khi không có kết nối.",
+    "open": "Mở mục đã tải"
   }
 }

@@ -37,7 +37,13 @@
     "title": "İzlerken kazan",
     "rowTitle": "İzleyici ödülleri",
     "desc": "İzlediklerin için reklam gelirinden pay kazan; ödeme HBD veya HIVE olarak yapılır. Ödeme, reklam oynatılmış olsun ya da olmasın izlenen videolar üzerinden yapılır; yani reklamlara katlanmayı değil, izlemeyi ödüllendirir. Reklamların kendisi 3Speak Pro aboneleri dışında herkese oynatılır. İzlenenler sayfasının zaten tuttuğu izleme geçmişine ek olarak her videonun ne kadarını izlediğini kaydederiz ve bunu kapattığın anda sileriz.",
-    "aria": "İzlediklerin için reklam gelirinden pay kazan"
+    "aria": "İzlediklerin için reklam gelirinden pay kazan",
+    "titleListen": "İzlerken ve dinlerken kazan",
+    "listenDesc": "Dinlemek de sayılır: 3speak.tv’de 3Speak seslerini ve podcast bölümlerini ne kadar dinlediğini kaydediyoruz. Dinleyici ödülleri rakamları kontrol ettikten sonra başlayacak ve bunu açtığın günden itibaren dinlediklerin sayılır.",
+    "listenAlso": "Dinlediklerimi de say",
+    "listenOnToast": "Dinlediklerin artık dinleyici ödüllerine sayılıyor",
+    "onToastBoth": "İzleme ve dinleme ödülleri açık",
+    "offToastBoth": "Ödüller kapalı, izleme ve dinleme verilerin silindi"
   },
   "postingAuth": {
     "updateFailed": "Posting yetkin güncellenemedi.",

@@ -147,6 +147,77 @@
   gap: 14px;
 }
 
+// "Add external podcast": the search / link / OPML box stays folded until asked for.
+.pod-add-row {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.pod-hero-close { margin-left: auto; align-self: flex-start; }
+
+// Mine | Discover | Trends: the External page's own tabs.
+.pod-views {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.pod-view {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  margin-bottom: -1px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &:hover { color: var(--text-primary); }
+  &.active { color: var(--text-primary); border-bottom-color: var(--accent-primary); }
+  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: -2px; border-radius: 6px; }
+
+  @include mix.respond(phone) {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 6px;
+    font-size: 14px;
+  }
+}
+
+// Mine, for someone who follows nothing yet.
+.pod-mine-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 36px 16px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  text-align: center;
+
+  svg:first-child { color: var(--accent-primary); }
+  p { margin: 0; max-width: 420px; line-height: 1.5; }
+}
+
+.pod-mine-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pod-hero-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 .pod-hero-icon {
   flex-shrink: 0;
   display: inline-flex;
@@ -188,6 +259,36 @@
   flex-direction: column;
   gap: 6px;
   min-width: 0;
+}
+
+.pod-field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+// Shows / People: what the search box looks for.
+.pod-search-modes {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+}
+
+.pod-search-mode {
+  padding: 3px 12px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &.active { background: var(--accent-primary); color: #fff; }
 }
 
 .pod-field-label {
@@ -234,13 +335,17 @@
 // ─── Search results ──────────────────
 .pod-results {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: 12px;
 
-  @include mix.respond(phone) { grid-template-columns: 1fr; }
+  // minmax(0, ...): a plain 1fr column is at least as wide as its longest
+  // unbreakable line (a show name, "Latest: ..."), which made the page wider
+  // than a phone and threw every fixed popup off-centre.
+  @include mix.respond(phone) { grid-template-columns: minmax(0, 1fr); }
 }
 
 .pod-result {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -250,6 +355,53 @@
   transition: box-shadow 0.15s ease;
 
   @media (hover: hover) { &:hover { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1); } }
+}
+
+.pod-result-cover {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+}
+
+// A chart place on the cover, like the top-10 cards.
+.pod-result-rank {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  min-width: 24px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--accent-primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+// Discover: Top charts | Trending, as tabs that are also the section title.
+.pod-discover-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pod-discover-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { color: var(--text-primary); }
+  &.active { color: var(--text-primary); background: color-mix(in srgb, var(--accent-primary) 12%, transparent); }
+  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
 }
 
 .pod-result-art {
@@ -272,6 +424,22 @@
   overflow: hidden;
 }
 
+.pod-trending-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pod-select {
+  max-width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+}
+
 .pod-result-meta {
   font-size: 0.76rem;
   color: var(--text-muted);
@@ -279,6 +447,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.pod-result-meta--accent { color: var(--accent-primary); font-weight: 600; }
 
 .pod-following {
   flex-shrink: 0;
@@ -786,4 +956,372 @@
   blockquote { padding-left: 12px; border-left: 3px solid var(--border-light); }
   hr { border: none; border-top: 1px solid var(--border-light); margin: 16px 0; }
   pre, code { font-size: 13px; white-space: pre-wrap; }
+}
+
+// ─── Labels: S2 E14, Trailer, Bonus, Private ──
+.pod-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+
+  &--accent { color: var(--accent-primary); background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+  &--lock { color: var(--text-secondary); }
+}
+
+// How many are in the "New" inbox, inside its filter chip.
+.pod-chip-count {
+  margin-left: 5px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--accent-primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.pod-icon-btn--on { color: var(--accent-primary); }
+
+.pod-dl-pct {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+// LIVE and the lock on a show's cover (Mine).
+.pod-card-live {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--accent-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.pod-card-lock {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  display: inline-flex;
+
+  .pod-badge { background: var(--card-bg); }
+}
+
+// ─── Follow a private feed ──
+.pod-private-toggle { align-self: flex-start; }
+
+.pod-private {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pod-private-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+
+  @include mix.respond(phone) { grid-template-columns: minmax(0, 1fr); }
+}
+
+.pod-input {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+
+  &:focus { outline: none; border-color: var(--accent-primary); }
+}
+
+.pod-private-hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+// ─── Show page: live, hosts, search, seasons ──
+.pod-live {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pod-live-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  min-width: 0;
+
+  &--on { box-shadow: inset 0 0 0 1px var(--accent-primary); }
+}
+
+.pod-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--accent-primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+
+  &--soon { background: var(--bg-tertiary); color: var(--text-secondary); }
+}
+
+.pod-live-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.pod-live-when { font-size: 12px; color: var(--text-muted); }
+
+.pod-persons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pod-person {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 12px 6px 6px;
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  text-decoration: none;
+  min-width: 0;
+}
+
+a.pod-person:hover .pod-person-name { color: var(--accent-primary); }
+
+.pod-person-img {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg-tertiary);
+
+  &--initial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 700;
+  }
+}
+
+.pod-person-text { display: flex; flex-direction: column; min-width: 0; }
+
+.pod-person-name {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pod-person-role { font-size: 11px; color: var(--text-muted); text-transform: capitalize; }
+
+.pod-show-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.pod-episode-search {
+  flex: 1 1 260px;
+  max-width: 420px;
+  min-width: 0;
+  padding: 2px 8px 2px 10px;
+
+  input { padding: 6px 0; font-size: 0.88rem; }
+}
+
+// ─── Episode page: video, highlights, chapters ──
+.pod-video {
+  display: block;
+  width: 100%;
+  max-width: 860px;
+  max-height: 70vh;
+  border-radius: 12px;
+  background: #000;
+}
+
+.pod-marks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 860px;
+}
+
+.pod-mark {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 10px;
+  background: var(--card-bg);
+  min-width: 0;
+
+  &--now {
+    box-shadow: inset 0 0 0 1px var(--accent-primary);
+    .pod-mark-title { color: var(--accent-primary); }
+  }
+}
+
+.pod-mark-play {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+
+  svg { flex-shrink: 0; color: var(--accent-primary); }
+  &:hover .pod-mark-title { color: var(--accent-primary); }
+}
+
+.pod-mark-time {
+  flex-shrink: 0;
+  min-width: 44px;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+.pod-mark-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 13.5px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.pod-mark-len {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+// ─── Mine → Downloads ──
+.pod-dl-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  margin: -4px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.pod-dl-note { flex-basis: 100%; }
+
+.pod-dl-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+
+  @include mix.respond(phone) { grid-template-columns: minmax(0, 1fr); }
+}
+
+.pod-dl-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.pod-dl-cover { width: 48px; height: 48px; border-radius: 8px; }
+
+.pod-dl-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pod-dl-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-line-clamp: 1;
+}
+
+.pod-dl-bar { position: static; height: 3px; border-radius: 2px; }
+
+.pod-dl-remove {
+  flex-shrink: 0;
+
+  @include mix.respond(phone) {
+    width: 34px;
+    padding: 0;
+    span { display: none; }
+  }
+}
+
+// Phones: a long action label (or a translated one) wraps instead of making
+// the page wider than the screen.
+@include mix.respond(phone) {
+  .pod-show-actions .pod-btn {
+    height: auto;
+    min-height: 34px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    white-space: normal;
+    text-align: left;
+  }
 }

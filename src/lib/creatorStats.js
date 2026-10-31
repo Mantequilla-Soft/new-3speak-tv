@@ -26,6 +26,21 @@ export function fetchCreatorOverview(username, opts) {
   return get(`/creator-stats/overview?${qs(username, opts)}`);
 }
 
+// Follows in both directions over the window, dated (HafSQL, via the checker).
+export function fetchCreatorFollows(username, { days = 365 } = {}) {
+  return get(`/creator-stats/follows?username=${encodeURIComponent(username)}&days=${days}`);
+}
+
+// Paid ad payouts with their split by kind, per period (yearly recap).
+export function fetchCreatorAdIncome(username, { days = 365 } = {}) {
+  return get(`/creator-stats/ad-income?username=${encodeURIComponent(username)}&days=${days}`);
+}
+
+// Per week, the videos that earned the most watch time in it (yearly recap).
+export function fetchCreatorWeeklyTop(username, { days = 365, per = 3 } = {}) {
+  return get(`/creator-stats/weekly-top?username=${encodeURIComponent(username)}&days=${days}&per=${per}`);
+}
+
 // Daily watch-time / views trend. opts: { days, content }.
 export function fetchCreatorTimeseries(username, opts) {
   return get(`/creator-stats/timeseries?${qs(username, opts)}`);

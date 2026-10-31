@@ -37,7 +37,13 @@
     "title": "Pata mapato unapotazama",
     "rowTitle": "Zawadi za watazamaji",
     "desc": "Pata sehemu ya mapato ya matangazo kwa kile unachotazama, inayolipwa kwa HBD au HIVE. Unalipwa kwa video ulizotazama, iwe tangazo lilicheza au la, kwa hivyo inazawadia kutazama badala ya kuvumilia matangazo. Matangazo yenyewe hucheza kwa kila mtu isipokuwa wanachama wa 3Speak Pro. Tunarekodi kiasi ulichotazama cha kila video, juu ya historia ya kutazama ambayo ukurasa wa Ulizotazama tayari unahifadhi, na tunaifuta mara tu unapozima hili.",
-    "aria": "Pata sehemu ya mapato ya matangazo kwa kile unachotazama"
+    "aria": "Pata sehemu ya mapato ya matangazo kwa kile unachotazama",
+    "titleListen": "Pata mapato ukitazama na kusikiliza",
+    "listenDesc": "Kusikiliza kunahesabiwa pia: tunarekodi muda unaosikiliza sauti za 3Speak na vipindi vya podikasti kwenye 3speak.tv. Zawadi za wasikilizaji zitaanza tukishakagua takwimu, na unachosikiliza tangu siku unayowasha hili kinahesabiwa.",
+    "listenAlso": "Hesabu pia usikilizaji wangu",
+    "listenOnToast": "Usikilizaji wako sasa unahesabiwa kwa zawadi za wasikilizaji",
+    "onToastBoth": "Zawadi za kutazama na kusikiliza zimewashwa",
+    "offToastBoth": "Zawadi zimezimwa, na data yako ya kutazama na kusikiliza imefutwa"
   },
   "postingAuth": {
     "updateFailed": "Imeshindwa kusasisha mamlaka yako ya posting.",

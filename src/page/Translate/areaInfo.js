@@ -35,6 +35,8 @@ export const AREA_INFO = {
   profile: 'Channel / profile pages (/@user): the header, stats, tabs (Videos, Shorts, Snaps, ...), followers, links, the channel trailer, and creator suggestions.',
   settings: 'The Settings window (gear icon): appearance, feed and Shorts options, notifications, ads and viewer rewards, posting authority, and "Your data".',
   shorts: 'Shorts (/shorts): the vertical video feed, its buttons, comments on shorts, and the Shorts row on the home page.',
+  galaxy: 'The Hive galaxy (/galaxy/user, desktop only): a 3D map of an account\'s follows and the creators they lead to, with its scan levels, filters, circles, the selected-account card and the back/forward and music buttons.',
+  recap: '"Your year on 3Speak": a creator\'s private slide-by-slide summary of the last 12 months (/recap), its loading steps and control tips.',
   spotlight: 'Spotlight link pages: the page editor (blocks, themes, templates, fonts) and the public Spotlight page.',
   stats: 'Creator analytics (Profile → Analytics): views, watch time, traffic sources, countries, and per-video stats.',
   studio: 'Creator studio: drafts, scheduled posts, the schedule picker, and the markdown composer.',

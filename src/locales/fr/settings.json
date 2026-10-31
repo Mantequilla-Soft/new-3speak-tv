@@ -37,7 +37,13 @@
     "title": "Gagnez en regardant",
     "rowTitle": "Récompenses spectateur",
     "desc": "Gagnez une part des revenus publicitaires pour ce que vous regardez, payée en HBD ou en HIVE. Vous êtes payé pour les vidéos regardées, qu'une pub ait été diffusée ou non : ce sont donc les visionnages qui sont récompensés, pas le fait de subir des pubs. Les pubs elles-mêmes sont diffusées pour tout le monde, sauf les abonnés 3Speak Pro. Nous enregistrons quelle part de chaque vidéo vous avez regardée, en plus de l'historique que conserve déjà la page Déjà vues, et nous supprimons ces données dès que vous désactivez cette option.",
-    "aria": "Gagner une part des revenus publicitaires pour ce que vous regardez"
+    "aria": "Gagner une part des revenus publicitaires pour ce que vous regardez",
+    "titleListen": "Gagnez en regardant et en écoutant",
+    "listenDesc": "L’écoute compte aussi : nous enregistrons combien de temps vous écoutez l’audio de 3Speak et des épisodes de podcasts sur 3speak.tv. Les récompenses d’écoute commenceront une fois les chiffres vérifiés, et ce que vous écoutez à partir du jour où vous activez ceci compte.",
+    "listenAlso": "Compter aussi mon écoute",
+    "listenOnToast": "Votre écoute compte désormais pour les récompenses d’écoute",
+    "onToastBoth": "Récompenses pour regarder et écouter activées",
+    "offToastBoth": "Récompenses désactivées, vos données de visionnage et d’écoute ont été supprimées"
   },
   "postingAuth": {
     "updateFailed": "Impossible de mettre à jour votre autorité de publication.",

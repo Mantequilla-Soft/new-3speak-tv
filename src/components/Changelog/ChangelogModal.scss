@@ -24,6 +24,11 @@
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
   padding: 28px 24px 22px;
   overflow: hidden;
+  // A column: header and footer stay, the grouped list in between scrolls.
+  display: flex;
+  flex-direction: column;
+  max-height: min(86vh, 760px);
+  max-height: min(86dvh, 760px);
   animation: changelog-pop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 
   // Accent glow strip across the top
@@ -89,123 +94,93 @@
   }
 }
 
-.changelog-scroller {
-  position: relative;
-  margin-bottom: 20px;
-
-  // Soft fade hints at each scrollable edge (sit above the cards, never block input).
-  .changelog-fade {
-    position: absolute;
-    top: 0;
-    bottom: 20px; // clear the custom 12px scrollbar (+8px margin) below
-    width: 40px;
-    pointer-events: none;
-    z-index: 2;
-    opacity: 1;
-    transition: opacity 0.2s ease;
-
-    &.left {
-      left: 0;
-      background: linear-gradient(to right, var(--card-bg, #1a1a1a), transparent);
-    }
-    &.right {
-      right: 0;
-      background: linear-gradient(to left, var(--card-bg, #1a1a1a), transparent);
-    }
-
-    // Narrower fades on mobile — the 40px ones cover too much of the card.
-    @include mix.respond(phone) { width: 18px; }
-  }
-
-  &.at-start .changelog-fade.left { opacity: 0; }
-  &.at-end .changelog-fade.right { opacity: 0; }
-
-  // Desktop arrow nav — jump one entry at a time. Hidden on mobile.
-  .changelog-arrow {
-    position: absolute;
-    top: calc(50% - 10px); // re-center on the cards, not the scrollbar zone below
-    transform: translateY(-50%);
-    z-index: 3;
-    display: grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    border: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
-    border-radius: 50%;
-    background: var(--card-bg, #1a1a1a);
-    color: var(--text-primary, #fff);
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    transition: background 0.15s ease, opacity 0.15s ease;
-
-    &:hover:not(:disabled) { background: var(--bg-tertiary, rgba(255, 255, 255, 0.14)); }
-    &:disabled { opacity: 0; pointer-events: none; } // hide at the matching edge
-
-    &.left { left: -2px; }
-    &.right { right: -2px; }
-
-    @include mix.respond(phone) { display: none; }
-  }
-}
-
 .changelog-body {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 10px;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   overscroll-behavior: contain;
-
-  // Hide the native scrollbar — we render our own (.changelog-scrollbar) so the
-  // thickness is a real, fixed 24px in every browser (Firefox can't size a
-  // native scrollbar via CSS).
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar { display: none; }
-
-  // Mobile: lock a card to the centre when the drag/swipe is released.
-  @include mix.respond(phone) { scroll-snap-type: x mandatory; }
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 -6px 18px;
+  padding: 0 6px;
+  scrollbar-width: thin;
 }
 
-// Custom horizontal scrollbar, foreground-colored and 12px thick.
-.changelog-scrollbar {
-  position: relative;
-  height: 12px;
-  margin-top: 8px;
-  border-radius: 6px;
-  background: var(--bg-tertiary, rgba(127, 127, 127, 0.15));
+// One category: a header to open or fold it, then its entries, newest first.
+.changelog-group {
+  flex-shrink: 0;
+  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.06));
+  border-radius: 12px;
+  background: var(--bg-tertiary, rgba(255, 255, 255, 0.04));
+}
+
+.changelog-group-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  color: var(--text-primary, #fff);
+  font: inherit;
+  text-align: left;
   cursor: pointer;
-  touch-action: none;
 
-  .changelog-scrollbar-thumb {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    min-width: 12px;
-    border-radius: 6px;
-    background: var(--text-primary);
-    cursor: grab;
-    transition: background 0.15s ease;
+  &:hover { background: var(--bg-hover, rgba(255, 255, 255, 0.05)); }
+  &:focus-visible { outline: 2px solid var(--accent-primary, #e53935); outline-offset: -2px; }
+}
 
-    &:hover { background: var(--text-primary); opacity: 0.85; }
-    &:active { cursor: grabbing; }
-  }
+.changelog-group-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  color: var(--accent-primary, #e53935);
+  background: var(--accent-light, rgba(255, 82, 82, 0.15));
+  font-size: 18px;
+}
+
+.changelog-group-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.changelog-group-count {
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 20px;
+  background: var(--bg-hover, rgba(255, 255, 255, 0.08));
+  color: var(--text-secondary, #aaa);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.changelog-group-chevron {
+  flex-shrink: 0;
+  font-size: 22px;
+  color: var(--text-secondary, #aaa);
+  transition: transform 0.2s ease;
+
+  .changelog-group.open & { transform: rotate(180deg); }
+}
+
+.changelog-group-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0 14px 4px;
 }
 
 .changelog-entry {
-  flex: 0 0 230px;
-  min-width: 230px;
-  scroll-snap-align: center;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-tertiary, rgba(255, 255, 255, 0.04));
-  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.06));
-  border-radius: 12px;
-  padding: 13px 15px;
+  padding: 10px 0 12px;
+  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.06));
 
   .changelog-entry-meta {
     display: flex;

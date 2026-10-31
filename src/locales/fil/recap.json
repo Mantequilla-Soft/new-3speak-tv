@@ -1,0 +1,155 @@
+{
+  "open": "Ang taon mo sa 3Speak",
+  "pageTitle": "Ang taon ni {{user}} sa 3Speak",
+  "intro": {
+    "title": "Ang taon ni @{{user}} sa 3Speak",
+    "sub": "Ang huling 12 buwan, sa mga numero."
+  },
+  "uploads": {
+    "kicker": "Nag-upload ka ng",
+    "videos_one": "{{count}} video",
+    "videos_other": "{{count}} video",
+    "shorts_one": "{{count}} Short",
+    "shorts_other": "{{count}} Shorts",
+    "and": "at"
+  },
+  "watch": {
+    "kicker": "Pinanood ka ng mga tao nang",
+    "sub": "Sa lahat ng video at Shorts mo.",
+    "since": "Binibilang ang watch time mula {{date}}.",
+    "graph": "Watch time bawat linggo.",
+    "bestWeek": "Pinakamagandang linggo: {{date}}, {{time}}",
+    "weekOf": "Linggo ng {{date}}",
+    "panHint": "Mag-scroll o mag-drag para lumipat sa buong taon."
+  },
+  "audience": {
+    "kicker": "Na-play ang mga video mo nang",
+    "views_one": "{{count}} beses",
+    "views_other": "{{count}} beses",
+    "votes_one": "{{count}} vote",
+    "votes_other": "{{count}} vote",
+    "comments_one": "{{count}} comment",
+    "comments_other": "{{count}} comment",
+    "fans": "Ang mga top fan mo",
+    "fansLoading": "Hinahanap ang mga top fan mo…",
+    "noFans": "Wala pang vote o reply mula sa iba."
+  },
+  "top": {
+    "kicker": "Ang mga pinakapinanood mong video",
+    "watched": "Pinanood nang {{time}}"
+  },
+  "supporters": {
+    "kicker": "Ang mga top supporter mo",
+    "anonymous": "Anonymous"
+  },
+  "rank": {
+    "kicker": "Ang pinakamataas mong puwesto sa leaderboard",
+    "board": "sa {{board}}",
+    "hint": "Bawat baitang ay isang creator sa board na iyon. I-hover para makita kung sino."
+  },
+  "outro": {
+    "title": "Salamat sa paglikha sa 3Speak",
+    "sub": "Para sa susunod na 12 buwan.",
+    "channel": "Buksan ang channel mo"
+  },
+  "empty": {
+    "title": "Walang upload sa huling 12 buwan",
+    "sub": "Mag-upload ng video o Short at dito magsisimula ang taon mo sa 3Speak.",
+    "upload": "Upload"
+  },
+  "signIn": "Mag-sign in para makita ang taon mo sa 3Speak.",
+  "loading": "Binibilang ang taon mo…",
+  "error": "Hindi ma-load ang taon mo. Subukan ulit mamaya.",
+  "nav": {
+    "previous": "Nakaraan",
+    "next": "Susunod",
+    "slide": "Slide {{n}} ng {{total}}"
+  },
+  "communities": {
+    "kicker": "Nag-post ka sa",
+    "count_one": "{{count}} community",
+    "count_other": "{{count}} community",
+    "posts_one": "{{count}} post",
+    "posts_other": "{{count}} post"
+  },
+  "followed": {
+    "kicker": "Nagsimula kang mag-follow ng",
+    "count_one": "{{count}} account",
+    "count_other": "{{count}} account"
+  },
+  "watched": {
+    "kicker": "Ang mga creator na pinakamadalas mong panoorin",
+    "videos_one": "{{count}} video ang napanood",
+    "videos_other": "{{count}} video ang napanood"
+  },
+  "followers": {
+    "kicker": "Mga bagong follower mula {{date}}",
+    "count_one": "{{count}} account ang nag-follow sa iyo",
+    "count_other": "{{count}} account ang nag-follow sa iyo",
+    "kickerYear": "Mga bagong follower ngayong taon"
+  },
+  "panel": {
+    "openCommunity": "Buksan ang community",
+    "untitled": "Walang pamagat",
+    "closeAndLook": "Isara at tumingin-tingin"
+  },
+  "income": {
+    "kicker": "Kumita ka ng",
+    "sub": "Mula sa post rewards, 3Speak ads at tips.",
+    "note": "Sa HBD (mga isang US dollar bawat isa), kasama ang HIVE at HP sa kasalukuyang presyo ng HIVE sa chain.",
+    "partial": "Napaka-busy na account: sakop nito ang pinakabagong bahagi ng taon.",
+    "hint": "I-hover ang isang haligi para makita ang breakdown nito.",
+    "sources": {
+      "author": "Post rewards",
+      "ads": "3Speak ads",
+      "tips": "Tips"
+    },
+    "legendOurs": "sa 3Speak",
+    "legendOther": "sa ibang bahagi ng Hive",
+    "segments": {
+      "ours": "Post rewards sa 3Speak",
+      "other": "Post rewards sa ibang bahagi ng Hive",
+      "ads_creator": "Kita sa ads bilang creator",
+      "ads_viewer": "Ad rewards bilang viewer",
+      "ads_combined": "Ad payments para sa dalawa (hindi hinati)"
+    },
+    "rewardedPosts_one": "{{count}} post na may reward",
+    "rewardedPosts_other": "{{count}} post na may reward",
+    "legendCreator": "bilang creator",
+    "legendViewer": "bilang viewer",
+    "logScale": "Naka-log scale ang taas ng mga haligi, kaya kita pa rin ang maliliit na halaga.",
+    "payments_one": "{{count}} bayad",
+    "payments_other": "{{count}} bayad",
+    "legendCombined": "pareho, hindi hinati"
+  },
+  "loadingSteps": {
+    "stats": "Hinahanap ang taon mo…",
+    "uploads": "Binibilang ang mga upload mo…",
+    "watch": "Sinusukat ang watch time…",
+    "audience": "Binibilang ang mga view mo…",
+    "fans": "Hinahanap ang mga fan mo…",
+    "income": "Sinusuma ang kita mo…",
+    "communities": "Binibisita ang mga community mo…",
+    "followers": "Tinitingnan kung sino ang nag-follow sa iyo…",
+    "watched": "Sinusuri ang mga pinanood mo…",
+    "thumbnails": "Nilo-load ang mga thumbnail mo… {{done}} ng {{total}}"
+  },
+  "tips": {
+    "label": "Tip:",
+    "mouse": {
+      "tip1": "Igalaw ang mouse at susundan ito ng bawat eksena, kahit sa labas ng slide.",
+      "tip2": "Mag-scroll para mag-zoom in at out sa mga video wall mo.",
+      "tip3": "I-scroll o i-drag ang watch-time graph para lumipat sa buong taon.",
+      "tip4": "I-hover ang bar, baitang, haligi o tile para makita kung ano ang nasa likod nito.",
+      "tip5": "I-click ang tile, bar o community para manatiling bukas ang detalye nito."
+    },
+    "touch": {
+      "tip1": "Gamitin ang mga arrow sa ibaba para lumipat sa mga slide.",
+      "tip2": "Mag-drag sa mga video wall mo para tumingin-tingin.",
+      "tip3": "I-swipe pagilid ang watch-time graph para lumipat sa buong taon.",
+      "tip4": "I-tap ang tile para makita ang video card nito.",
+      "tip5": "I-tap ang community o linggo para makita ang mga video nito.",
+      "tip6": "Kusang umiikot nang mabagal ang mga eksena; i-drag ang mga ring para ikaw ang magpaikot."
+    }
+  }
+}

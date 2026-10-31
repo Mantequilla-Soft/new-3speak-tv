@@ -94,7 +94,9 @@
     "turnAdsOff": "Wyłącz reklamy w swoich filmach",
     "rewardsOn": "Włącz nagrody dla widzów",
     "rewardsOff": "Wyłącz nagrody dla widzów",
-    "showApplications": "Pokaż swoje zgłoszenia reklamowe"
+    "showApplications": "Pokaż swoje zgłoszenia reklamowe",
+    "listenOn": "Włącz nagrody za słuchanie",
+    "listenOff": "Wyłącz nagrody za słuchanie"
   },
   "slot": {
     "atBeginning": "Na początku filmu",
@@ -262,7 +264,9 @@
     "text": "Reklamy na 3Speak płacą twórcy, jego społeczności, a teraz także tobie. Twój udział pochodzi z tego, co zapłacił reklamodawca, w walucie, w której zapłacił, za filmy, które i tak zamierzasz obejrzeć.",
     "note": "3Speak już przechowuje twoją historię oglądania, aby łatwo było wracać do filmów. Ta opcja pozwala nam użyć jej do obliczenia, ile ci się należy, i zapisuje, jaką część każdego filmu faktycznie obejrzano. Jeśli odmówisz, nic się nie zmieni. Możesz to wyłączyć w każdej chwili w Ustawieniach, co usuwa dane zachowane na potrzeby nagród.",
     "noThanks": "Nie, dziękuję",
-    "yes": "Tak, płaćcie mi"
+    "yes": "Tak, płaćcie mi",
+    "titleBoth": "Zarabiaj za oglądanie i słuchanie",
+    "listenNote": "Słuchanie też się liczy: nagrody za słuchanie audio i podcastów na 3speak.tv ruszą wkrótce, gdy sprawdzimy liczby. Liczy się to, czego słuchasz od dziś."
   },
   "promote": {
     "pricingFailed": "Nie udało się wczytać cennika promocji.",
@@ -839,5 +843,12 @@
     "bookAnother": "Zarezerwuj kolejną",
     "pickProduct": "Wybierz produkt, aby zobaczyć jego filmy reklamowe i rezerwacje.",
     "showUpHere": "Twoje produkty, ich filmy reklamowe i rezerwacje pojawią się tutaj po wczytaniu."
+  },
+  "listenPrompt": {
+    "title": "Zarabiać też za słuchanie?",
+    "text": "Nagrody za słuchanie ruszą wkrótce. Pozwól nam liczyć od dziś, jak długo słuchasz audio i odcinków podcastów na 3speak.tv.",
+    "note": "Odpowiedz nie, a nic się nie zmieni. Możesz to wyłączyć w każdej chwili w Ustawieniach, co usuwa to, co zapisaliśmy.",
+    "yes": "Tak, liczcie moje słuchanie",
+    "savedYes": "Twoje słuchanie liczy się teraz do nagród za słuchanie"
   }
 }

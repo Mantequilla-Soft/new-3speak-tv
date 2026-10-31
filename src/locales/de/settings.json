@@ -37,7 +37,13 @@
     "title": "Verdienen beim Zuschauen",
     "rowTitle": "Zuschauer-Belohnungen",
     "desc": "Verdiene einen Anteil an den Werbeeinnahmen für das, was du ansiehst, ausgezahlt in HBD oder HIVE. Bezahlt wirst du für angesehene Videos, egal ob dabei Werbung lief oder nicht – belohnt wird also das Zuschauen, nicht das Durchhalten von Werbung. Die Werbung selbst läuft für alle außer 3Speak-Pro-Abonnenten. Wir speichern, wie viel du von jedem Video angesehen hast, zusätzlich zum Wiedergabeverlauf, den die Seite „Angesehen“ ohnehin führt, und löschen diese Daten in dem Moment, in dem du das ausschaltest.",
-    "aria": "Einen Anteil an den Werbeeinnahmen für das verdienen, was du ansiehst"
+    "aria": "Einen Anteil an den Werbeeinnahmen für das verdienen, was du ansiehst",
+    "titleListen": "Verdiene beim Schauen und Hören",
+    "listenDesc": "Hören zählt auch: Wir speichern, wie lange du 3Speak-Audio und Podcast-Folgen auf 3speak.tv hörst. Die Hörer-Belohnungen starten, sobald wir die Zahlen geprüft haben, und was du ab dem Tag hörst, an dem du das einschaltest, zählt.",
+    "listenAlso": "Mein Hören auch zählen",
+    "listenOnToast": "Dein Hören zählt jetzt für die Hörer-Belohnungen",
+    "onToastBoth": "Belohnungen fürs Schauen und Hören an",
+    "offToastBoth": "Belohnungen aus, deine Schau- und Hördaten wurden gelöscht"
   },
   "postingAuth": {
     "updateFailed": "Deine Posting-Berechtigung konnte nicht aktualisiert werden.",

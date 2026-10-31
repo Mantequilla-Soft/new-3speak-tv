@@ -92,7 +92,9 @@
     "turnAdsOff": "Zima matangazo kwenye video zako",
     "rewardsOn": "Washa zawadi za watazamaji",
     "rewardsOff": "Zima zawadi za watazamaji",
-    "showApplications": "Onyesha maombi yako ya utangazaji"
+    "showApplications": "Onyesha maombi yako ya utangazaji",
+    "listenOn": "Washa zawadi za wasikilizaji",
+    "listenOff": "Zima zawadi za wasikilizaji"
   },
   "slot": {
     "atBeginning": "Mwanzoni mwa video",
@@ -256,7 +258,9 @@
     "text": "Matangazo kwenye 3Speak humlipa mtayarishaji, jumuiya yake, na sasa wewe. Sehemu yako inatoka kwenye kile mtangazaji alicholipa, kwa sarafu yoyote aliyolipia, kwa video ambazo ungezitazama hata hivyo.",
     "note": "3Speak tayari huhifadhi historia yako ya kutazama ili uweze kupata vitu tena. Hili linaturuhusu kuitumia kukokotoa unachostahili kulipwa, na huhifadhi rekodi ya kiasi ulichotazama kweli cha kila video. Ukikataa hakuna kinachobadilika. Unaweza kulizima wakati wowote kwenye Mipangilio, na hilo linafuta tulichohifadhi kwa ajili ya zawadi.",
     "noThanks": "Hapana, asante",
-    "yes": "Ndiyo, nilipe"
+    "yes": "Ndiyo, nilipe",
+    "titleBoth": "Lipwa kwa kutazama na kusikiliza",
+    "listenNote": "Kusikiliza kunahesabiwa pia: zawadi za wasikilizaji kwa sauti na podikasti kwenye 3speak.tv zinaanza hivi karibuni, tukishakagua takwimu. Unachosikiliza kuanzia leo kinahesabiwa."
   },
   "promote": {
     "pricingFailed": "Imeshindwa kupakia bei za utangazaji.",
@@ -785,5 +789,12 @@
     "bookAnother": "Weka jingine",
     "pickProduct": "Chagua bidhaa ili uone video zake za tangazo na maagizo.",
     "showUpHere": "Bidhaa zako, video zao za tangazo na maagizo vinaonekana hapa vikishapakia."
+  },
+  "listenPrompt": {
+    "title": "Upate mapato kwa kusikiliza pia?",
+    "text": "Zawadi za wasikilizaji zinaanza hivi karibuni. Turuhusu kuhesabu muda unaosikiliza sauti na vipindi vya podikasti kwenye 3speak.tv, kuanzia leo.",
+    "note": "Ukisema hapana hakuna kitakachobadilika. Unaweza kuzima wakati wowote kwenye Mipangilio, na hilo linafuta tulichohifadhi.",
+    "yes": "Ndiyo, hesabu usikilizaji wangu",
+    "savedYes": "Usikilizaji wako sasa unahesabiwa kwa zawadi za wasikilizaji"
   }
 }

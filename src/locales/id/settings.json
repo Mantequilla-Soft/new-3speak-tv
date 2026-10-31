@@ -37,7 +37,13 @@
     "title": "Dapatkan penghasilan sambil menonton",
     "rowTitle": "Reward penonton",
     "desc": "Dapatkan bagian dari pendapatan iklan atas apa yang kamu tonton, dibayar dalam HBD atau HIVE. Kamu dibayar berdasarkan video yang ditonton, baik ada iklan yang diputar maupun tidak, jadi yang dihargai adalah menonton, bukan menunggu iklan selesai. Iklan sendiri diputar untuk semua orang kecuali pelanggan 3Speak Pro. Kami mencatat seberapa banyak bagian setiap video yang kamu tonton, di samping riwayat tontonan yang sudah disimpan halaman Sudah Ditonton, dan menghapusnya begitu kamu menonaktifkan fitur ini.",
-    "aria": "Dapatkan bagian dari pendapatan iklan atas apa yang kamu tonton"
+    "aria": "Dapatkan bagian dari pendapatan iklan atas apa yang kamu tonton",
+    "titleListen": "Dapatkan hasil saat menonton dan mendengarkan",
+    "listenDesc": "Mendengarkan juga dihitung: kami mencatat berapa lama kamu mendengarkan audio 3Speak dan episode podcast di 3speak.tv. Hadiah pendengar dimulai setelah kami memeriksa angkanya, dan yang kamu dengarkan sejak hari kamu menyalakan ini ikut dihitung.",
+    "listenAlso": "Hitung juga yang saya dengarkan",
+    "listenOnToast": "Yang kamu dengarkan kini dihitung untuk hadiah pendengar",
+    "onToastBoth": "Hadiah menonton dan mendengarkan aktif",
+    "offToastBoth": "Hadiah nonaktif, dan data tontonan serta dengaranmu sudah dihapus"
   },
   "postingAuth": {
     "updateFailed": "Otoritas posting-mu tidak dapat diperbarui.",

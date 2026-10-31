@@ -45,7 +45,57 @@
     "noCues": "Brak znaczników.",
     "clearQueue": "Wyczyść kolejkę",
     "clearAll": "Wyczyść wszystko",
-    "queueEmpty": "Kolejka jest pusta."
+    "queueEmpty": "Kolejka jest pusta.",
+    "previous": "Poprzedni",
+    "next": "Następny",
+    "expand": "Rozwiń odtwarzacz",
+    "collapse": "Zwiń odtwarzacz",
+    "skipBack": "{{seconds}} sekund do tyłu",
+    "skipForward": "{{seconds}} sekund do przodu",
+    "speed": "Szybkość odtwarzania",
+    "speedValue": "Szybkość odtwarzania: {{speed}}",
+    "sleep": "Wyłącznik czasowy",
+    "sleepOff": "Wyłączony",
+    "sleepMinutes": "{{minutes}} minut",
+    "sleepEnd": "Na końcu tego odcinka",
+    "sleepEndShort": "Koniec",
+    "sleepLeft": "Zatrzyma się za {{time}}",
+    "effects": "Efekty dźwięku",
+    "voiceBoost": "Wzmocnienie głosu",
+    "voiceBoostHint": "Wyraźniejsze, bardziej wyrównane głosy",
+    "skipSilence": "Pomijaj ciszę",
+    "skipSilenceHint": "Przyspiesza w przerwach",
+    "effectsUnavailable": "Niedostępne dla tego odcinka.",
+    "effectsChecking": "Sprawdzam, czy ten odcinek to obsługuje…",
+    "timeSaved": "Zaoszczędzony czas: {{time}}",
+    "cast": "Odtwórz na innym urządzeniu",
+    "download": "Zapisz offline",
+    "downloading": "Zapisywanie: {{pct}}%",
+    "downloaded": "Zapisano offline",
+    "downloadDone": "Zapisano do słuchania offline",
+    "downloadFailed": "Nie udało się zapisać tego odcinka",
+    "copyEpisode": "Kopiuj link do odcinka",
+    "copiedEpisode": "Skopiowano link do odcinka!",
+    "copyAt": "Kopiuj link od {{time}}",
+    "copiedAt": "Skopiowano link od {{time}}!",
+    "copyFailed": "Nie udało się skopiować linku",
+    "clipMake": "Utwórz klip",
+    "clipRange": "Od {{from}} do {{to}}",
+    "clipLength": "Długość",
+    "clipSeconds": "{{seconds}} s",
+    "clipCopy": "Kopiuj link do klipu",
+    "clipCopied": "Skopiowano link do klipu!",
+    "clipEnds": "Klip, koniec o {{time}}",
+    "clipClear": "Graj dalej po klipie",
+    "live": "NA ŻYWO",
+    "liveUnsupported": "Tej transmisji na żywo nie da się odtworzyć w tej przeglądarce.",
+    "chapters": "Rozdziały",
+    "prevChapter": "Poprzedni rozdział",
+    "nextChapter": "Następny rozdział",
+    "chapterLink": "Link do rozdziału",
+    "upNext": "Następne",
+    "hideIdle": "Ukryj (kolejka zostaje)",
+    "continueAt": "Kontynuuj od {{time}}"
   },
   "share": {
     "failed": "Błąd",
@@ -104,7 +154,14 @@
     "noTracks": "Nie znaleziono utworów.",
     "creators": "Twórcy",
     "albumsPlaylists": "Albumy i playlisty",
-    "noAudioForFilters": "Nie znaleziono audio dla tych filtrów."
+    "noAudioForFilters": "Nie znaleziono audio dla tych filtrów.",
+    "tabsLabel": "Widoki audio",
+    "tabExplore": "Przeglądaj",
+    "tabPlayer": "Odtwarzacz",
+    "nothingPlaying": "Nic jeszcze nie gra.",
+    "goExplore": "Znajdź coś do posłuchania",
+    "exploreViews": "Sekcje",
+    "mostPlayed": "Najczęściej słuchane"
   },
   "upload": {
     "title": "Prześlij audio",
@@ -390,7 +447,15 @@
       "none": "Nie znaleziono podcastów. Spróbuj innej nazwy lub wklej adres URL kanału RSS.",
       "failed": "Wyszukiwanie jest teraz niedostępne. Spróbuj ponownie.",
       "label": "Znajdź podcast",
-      "placeholder": "Nazwa, prowadzący lub temat"
+      "placeholder": "Nazwa, prowadzący lub temat",
+      "modeShows": "Audycje",
+      "modePeople": "Osoby",
+      "placeholderPeople": "Imię prowadzącego lub gościa",
+      "appearsIn_few": "W {{count}} odcinkach",
+      "appearsIn_many": "W {{count}} odcinkach",
+      "appearsIn_one": "W {{count}} odcinku",
+      "appearsIn_other": "W {{count}} odcinka",
+      "latestMatch": "Najnowszy: {{title}}"
     },
     "opml": {
       "import": "Importuj OPML",
@@ -413,7 +478,11 @@
       "limit": "Obserwujesz już maksymalną liczbę podcastów.",
       "internal": "To kanał 3Speak: znajdziesz go wśród innych typów audio.",
       "disabled": "Zewnętrzne podcasty są teraz wyłączone.",
-      "generic": "Coś poszło nie tak. Spróbuj ponownie."
+      "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+      "closedPlatform": "{{platform}} nie udostępnia kanałów swoich audycji. Wyszukaj audycję po nazwie.",
+      "appleOnly": "Ta audycja jest dostępna tylko w Apple Podcasts.",
+      "directoryNotFound": "Nie znaleźliśmy kanału tej audycji. Spróbuj jej kanału RSS lub wyszukaj po nazwie.",
+      "directoryDown": "Ten katalog podcastów teraz nie odpowiada. Spróbuj ponownie."
     },
     "tip": {
       "button": "Wesprzyj ten podcast",
@@ -444,7 +513,9 @@
     },
     "rss": {
       "label": "Dodaj przez kanał RSS",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "Dodaj przez link",
+      "placeholderLink": "Kanał RSS, link do Apple Podcasts lub strona"
     },
     "listened": "Wysłuchany",
     "listenedPct": "Wysłuchano {{pct}}%",
@@ -458,7 +529,12 @@
       "none": "Żaden odcinek nie pasuje do tych filtrów.",
       "custom": "Własny zakres",
       "from": "Od",
-      "to": "Do"
+      "to": "Do",
+      "inbox": "Nowe",
+      "inboxEmpty": "Nic nowego. Tutaj pojawiają się nieodtworzone odcinki z ostatniego tygodnia.",
+      "unplayed": "Nieodtworzone",
+      "inProgress": "W trakcie",
+      "downloaded": "Pobrane"
     },
     "resume": "Wznów",
     "showNotes": "Opis odcinka",
@@ -466,6 +542,164 @@
     "noNotes": "Ten odcinek nie ma opisu.",
     "openEpisode": "Otwórz odcinek",
     "addToQueue": "Dodaj do kolejki",
-    "inQueue": "W kolejce"
+    "inQueue": "W kolejce",
+    "trending": {
+      "title": "Popularne podcasty",
+      "language": "Język",
+      "allLanguages": "Wszystkie języki",
+      "category": "Kategoria",
+      "allCategories": "Wszystkie kategorie",
+      "none": "Nic tu teraz nie jest popularne. Spróbuj innego języka lub kategorii.",
+      "failed": "Popularne podcasty są teraz niedostępne. Spróbuj ponownie."
+    },
+    "categories": {
+      "Arts": "Sztuka",
+      "Business": "Biznes",
+      "Comedy": "Komedia",
+      "Education": "Edukacja",
+      "Fiction": "Fikcja",
+      "Government": "Polityka",
+      "Health": "Zdrowie i fitness",
+      "History": "Historia",
+      "Kids": "Dzieci i rodzina",
+      "Leisure": "Czas wolny",
+      "Music": "Muzyka",
+      "News": "Wiadomości",
+      "Religion": "Religia i duchowość",
+      "Science": "Nauka",
+      "Society": "Społeczeństwo i kultura",
+      "Sports": "Sport",
+      "Technology": "Technologia",
+      "TrueCrime": "Prawdziwe zbrodnie",
+      "TV": "TV i film"
+    },
+    "charts": {
+      "title": "Listy przebojów",
+      "country": "Kraj",
+      "none": "Brak listy dla tego kraju i kategorii.",
+      "failed": "Listy są teraz niedostępne. Spróbuj ponownie."
+    },
+    "views": {
+      "mine": "Moje",
+      "discover": "Odkrywaj",
+      "trends": "Trendy",
+      "mineEmpty": "Nie obserwujesz jeszcze żadnego podcastu. Znajdź audycje w zakładce Odkrywaj albo zobacz, co jest popularne w Trendach."
+    },
+    "downloads": {
+      "title": "Pobrane",
+      "download": "Pobierz do słuchania offline",
+      "short": "Pobierz",
+      "downloading": "Pobieranie {{pct}}%",
+      "cancel": "Anuluj pobieranie",
+      "saved": "Zapisano offline",
+      "remove": "Usuń pobrany plik",
+      "removeShort": "Usuń",
+      "removed": "Usunięto pobrany plik",
+      "done": "Zapisano do słuchania offline",
+      "total": "Zapisano {{size}}",
+      "storage": "ta strona zajmuje {{used}} z {{quota}} w tej przeglądarce",
+      "perBrowser": "Pobrane pliki zostają w tej przeglądarce, niezależnie od tego, kto jest zalogowany.",
+      "errors": {
+        "tooLarge": "Ten odcinek jest za duży, aby go zapisać.",
+        "rateLimited": "Za dużo pobrań w tej chwili. Spróbuj ponownie za kilka minut.",
+        "storage": "W tej przeglądarce brakuje miejsca na zapisanie tego odcinka.",
+        "failed": "Nie udało się pobrać odcinka. Spróbuj ponownie.",
+        "noSource": "Tego odcinka nie można zapisać."
+      }
+    },
+    "autoQueue": {
+      "label": "Automatycznie dodawaj nowe odcinki do kolejki",
+      "hint": "Nowe odcinki tej audycji trafiają na koniec kolejki, gdy tylko się ukażą",
+      "onDone": "Nowe odcinki tej audycji będą trafiać do kolejki",
+      "offDone": "Nowe odcinki tej audycji nie trafiają już do kolejki",
+      "added_one": "Dodano {{count}} nowy odcinek do kolejki",
+      "added_few": "Dodano {{count}} nowe odcinki do kolejki",
+      "added_many": "Dodano {{count}} nowych odcinków do kolejki",
+      "added_other": "Dodano {{count}} nowego odcinka do kolejki"
+    },
+    "badges": {
+      "trailer": "Zwiastun",
+      "bonus": "Bonus"
+    },
+    "startHere": "Zacznij tutaj",
+    "seasons": {
+      "label": "Sezon",
+      "all": "Wszystkie sezony",
+      "season": "Sezon {{n}}"
+    },
+    "persons": {
+      "title": "Prowadzący i goście",
+      "roles": {
+        "host": "Prowadzący",
+        "guest": "Gość",
+        "cohost": "Współprowadzący",
+        "producer": "Producent"
+      }
+    },
+    "episodeSearch": {
+      "label": "Szukaj odcinków",
+      "placeholder": "Szukaj w odcinkach tej audycji",
+      "none": "Brak odcinków pasujących do „{{q}}”."
+    },
+    "live": {
+      "now": "Teraz na żywo",
+      "badge": "NA ŻYWO",
+      "listen": "Słuchaj na żywo",
+      "upcoming": "Wkrótce",
+      "startsAt": "Początek: {{time}}"
+    },
+    "private": {
+      "toggle": "To prywatny kanał (wymaga logowania)",
+      "username": "Nazwa użytkownika",
+      "password": "Hasło",
+      "hint": "Dane logowania trafiają do usługi podcastowej 3Speak, aby mogła odczytać kanał za ciebie. Prywatne kanały nigdy nie pojawiają się na publicznych listach.",
+      "badge": "Prywatny",
+      "badgeHint": "Prywatny kanał: widzą go tylko osoby, które obserwują go z danymi logowania",
+      "opmlLeftOut_one": "Pominięto w pliku {{count}} prywatny kanał.",
+      "opmlLeftOut_few": "Pominięto w pliku {{count}} prywatne kanały.",
+      "opmlLeftOut_many": "Pominięto w pliku {{count}} prywatnych kanałów.",
+      "opmlLeftOut_other": "Pominięto w pliku {{count}} prywatnego kanału."
+    },
+    "highlights": {
+      "title": "Najlepsze momenty",
+      "play": "Odtwórz moment",
+      "untitled": "Moment w {{time}}"
+    },
+    "chapters": {
+      "title": "Rozdziały",
+      "loading": "Wczytywanie rozdziałów…",
+      "none": "Nie udało się wczytać rozdziałów.",
+      "link": "Link do rozdziału"
+    },
+    "share": {
+      "copy": "Kopiuj link",
+      "copyAt": "Kopiuj link od {{time}}",
+      "clip": "Kopiuj link do tego momentu",
+      "copied": "Skopiowano link",
+      "failed": "Nie udało się skopiować linku"
+    },
+    "deepLink": {
+      "playFrom": "Odtwórz od {{time}}",
+      "playClip": "Odtwórz od {{from}} do {{to}}"
+    },
+    "video": {
+      "watch": "Obejrzyj wideo",
+      "hide": "Ukryj wideo"
+    },
+    "signInToFollow": "Zaloguj się, aby obserwować podcasty",
+    "addExternal": "Dodaj zewnętrzny podcast"
+  },
+  "item": {
+    "back": "Całe audio",
+    "missing": "To audio jest niedostępne.",
+    "description": "Opis",
+    "noDescription": "Brak opisu.",
+    "comments": "Komentarze",
+    "album": "Z {{name}}"
+  },
+  "offline": {
+    "notice": "Jesteś offline. Pobrane odcinki nadal działają.",
+    "noticeNoDownloads": "Jesteś offline. Pobieraj odcinki, aby słuchać bez połączenia.",
+    "open": "Otwórz pobrane"
   }
 }

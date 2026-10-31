@@ -39,7 +39,57 @@
     "noCues": "キューポイントはありません。",
     "clearQueue": "キューをクリア",
     "clearAll": "すべてクリア",
-    "queueEmpty": "キューは空です。"
+    "queueEmpty": "キューは空です。",
+    "previous": "前へ",
+    "next": "次へ",
+    "expand": "プレーヤーを拡大",
+    "collapse": "プレーヤーを縮小",
+    "skipBack": "{{seconds}}秒戻る",
+    "skipForward": "{{seconds}}秒進む",
+    "speed": "再生速度",
+    "speedValue": "再生速度: {{speed}}",
+    "sleep": "スリープタイマー",
+    "sleepOff": "オフ",
+    "sleepMinutes": "{{minutes}}分",
+    "sleepEnd": "このエピソードの終わりで",
+    "sleepEndShort": "終了時",
+    "sleepLeft": "あと{{time}}で停止",
+    "effects": "オーディオ効果",
+    "voiceBoost": "ボイスブースト",
+    "voiceBoostHint": "声をよりクリアで均一に",
+    "skipSilence": "無音をスキップ",
+    "skipSilenceHint": "間を早送りします",
+    "effectsUnavailable": "このエピソードでは使用できません。",
+    "effectsChecking": "このエピソードが対応しているか確認しています…",
+    "timeSaved": "短縮した時間: {{time}}",
+    "cast": "別のデバイスで再生",
+    "download": "オフライン用に保存",
+    "downloading": "保存中: {{pct}}%",
+    "downloaded": "オフライン用に保存済み",
+    "downloadDone": "オフライン再生用に保存しました",
+    "downloadFailed": "このエピソードを保存できませんでした",
+    "copyEpisode": "エピソードのリンクをコピー",
+    "copiedEpisode": "エピソードのリンクをコピーしました！",
+    "copyAt": "{{time}} からのリンクをコピー",
+    "copiedAt": "{{time}} からのリンクをコピーしました！",
+    "copyFailed": "リンクをコピーできませんでした",
+    "clipMake": "クリップを作成",
+    "clipRange": "{{from}} から {{to}} まで",
+    "clipLength": "長さ",
+    "clipSeconds": "{{seconds}} 秒",
+    "clipCopy": "クリップのリンクをコピー",
+    "clipCopied": "クリップのリンクをコピーしました！",
+    "clipEnds": "クリップ、{{time}} で停止",
+    "clipClear": "クリップの後も再生を続ける",
+    "live": "LIVE",
+    "liveUnsupported": "このライブ配信はこのブラウザでは再生できません。",
+    "chapters": "チャプター",
+    "prevChapter": "前のチャプター",
+    "nextChapter": "次のチャプター",
+    "chapterLink": "チャプターのリンク",
+    "upNext": "次に再生",
+    "hideIdle": "非表示 (キューは残ります)",
+    "continueAt": "{{time}} から再開"
   },
   "share": {
     "failed": "失敗しました",
@@ -95,7 +145,14 @@
     "noTracks": "トラックが見つかりません。",
     "creators": "クリエイター",
     "albumsPlaylists": "アルバムと再生リスト",
-    "noAudioForFilters": "この条件に一致する音声はありません。"
+    "noAudioForFilters": "この条件に一致する音声はありません。",
+    "tabsLabel": "オーディオの表示",
+    "tabExplore": "探す",
+    "tabPlayer": "プレーヤー",
+    "nothingPlaying": "まだ何も再生していません。",
+    "goExplore": "聴くものを探す",
+    "exploreViews": "セクション",
+    "mostPlayed": "よく再生されている"
   },
   "upload": {
     "title": "音声をアップロード",
@@ -333,7 +390,12 @@
       "none": "ポッドキャストが見つかりません。別の名前で検索するか、RSS フィード URL を貼り付けてください。",
       "failed": "現在検索を利用できません。もう一度お試しください。",
       "label": "ポッドキャストを探す",
-      "placeholder": "番組名、ホスト、トピック"
+      "placeholder": "番組名、ホスト、トピック",
+      "modeShows": "番組",
+      "modePeople": "人物",
+      "placeholderPeople": "ホストまたはゲストの名前",
+      "appearsIn_other": "{{count}} 件のエピソードに出演",
+      "latestMatch": "最新: {{title}}"
     },
     "opml": {
       "import": "OPML をインポート",
@@ -353,7 +415,11 @@
       "limit": "フォローできるポッドキャストの上限に達しています。",
       "internal": "これは 3Speak のチャンネルです。ほかの音声タイプの中にあります。",
       "disabled": "外部ポッドキャストは現在オフになっています。",
-      "generic": "問題が発生しました。もう一度お試しください。"
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "closedPlatform": "{{platform}} は番組のフィードを公開していません。番組名で検索してください。",
+      "appleOnly": "この番組は Apple Podcasts でのみ配信されています。",
+      "directoryNotFound": "この番組のフィードが見つかりませんでした。RSS フィードを入力するか、名前で検索してください。",
+      "directoryDown": "このポッドキャストディレクトリは現在応答していません。もう一度お試しください。"
     },
     "tip": {
       "button": "このポッドキャストを応援",
@@ -378,7 +444,9 @@
     },
     "rss": {
       "label": "RSSフィードで追加",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "リンクで追加",
+      "placeholderLink": "RSS フィード、Apple Podcasts のリンク、またはウェブサイト"
     },
     "listened": "再生済み",
     "listenedPct": "{{pct}}%再生済み",
@@ -392,7 +460,12 @@
       "none": "この条件に合うエピソードはありません。",
       "custom": "期間を指定",
       "from": "開始",
-      "to": "終了"
+      "to": "終了",
+      "inbox": "新着",
+      "inboxEmpty": "新着はありません。過去1週間のエピソードのうち、まだ再生していないものがここに表示されます。",
+      "unplayed": "未再生",
+      "inProgress": "再生途中",
+      "downloaded": "ダウンロード済み"
     },
     "resume": "続きから再生",
     "showNotes": "エピソードの説明",
@@ -400,6 +473,158 @@
     "noNotes": "このエピソードには説明がありません。",
     "openEpisode": "エピソードを開く",
     "addToQueue": "キューに追加",
-    "inQueue": "キューに追加済み"
+    "inQueue": "キューに追加済み",
+    "trending": {
+      "title": "トレンドのポッドキャスト",
+      "language": "言語",
+      "allLanguages": "すべての言語",
+      "category": "カテゴリ",
+      "allCategories": "すべてのカテゴリ",
+      "none": "現在ここでトレンドになっている番組はありません。別の言語やカテゴリを試してください。",
+      "failed": "トレンドのポッドキャストを現在表示できません。もう一度お試しください。"
+    },
+    "categories": {
+      "Arts": "アート",
+      "Business": "ビジネス",
+      "Comedy": "コメディ",
+      "Education": "教育",
+      "Fiction": "フィクション",
+      "Government": "行政",
+      "Health": "健康／フィットネス",
+      "History": "歴史",
+      "Kids": "キッズ／ファミリー",
+      "Leisure": "レジャー",
+      "Music": "ミュージック",
+      "News": "ニュース",
+      "Religion": "宗教／スピリチュアル",
+      "Science": "科学",
+      "Society": "社会／文化",
+      "Sports": "スポーツ",
+      "Technology": "テクノロジー",
+      "TrueCrime": "実録犯罪",
+      "TV": "テレビ／映画"
+    },
+    "charts": {
+      "title": "トップチャート",
+      "country": "国",
+      "none": "この国とカテゴリのチャートは現在ありません。",
+      "failed": "チャートを現在表示できません。もう一度お試しください。"
+    },
+    "views": {
+      "mine": "マイ",
+      "discover": "見つける",
+      "trends": "トレンド",
+      "mineEmpty": "まだフォローしているポッドキャストはありません。「見つける」で番組を探すか、「トレンド」で人気の番組をチェックしましょう。"
+    },
+    "downloads": {
+      "title": "ダウンロード",
+      "download": "オフライン再生用にダウンロード",
+      "short": "ダウンロード",
+      "downloading": "ダウンロード中 {{pct}}%",
+      "cancel": "ダウンロードをキャンセル",
+      "saved": "オフライン保存済み",
+      "remove": "ダウンロードを削除",
+      "removeShort": "削除",
+      "removed": "ダウンロードを削除しました",
+      "done": "オフライン再生用に保存しました",
+      "total": "{{size}} 保存済み",
+      "storage": "このサイトはこのブラウザで {{quota}} 中 {{used}} を使用しています",
+      "perBrowser": "ダウンロードは、誰がログインしていてもこのブラウザに残ります。",
+      "errors": {
+        "tooLarge": "このエピソードは大きすぎて保存できません。",
+        "rateLimited": "現在ダウンロードが集中しています。数分後にもう一度お試しください。",
+        "storage": "このブラウザにはこのエピソードを保存する空き容量がありません。",
+        "failed": "エピソードをダウンロードできませんでした。もう一度お試しください。",
+        "noSource": "このエピソードは保存できません。"
+      }
+    },
+    "autoQueue": {
+      "label": "新しいエピソードを自動でキューに追加",
+      "hint": "この番組の新しいエピソードが公開されると、キューの最後に追加されます",
+      "onDone": "この番組の新しいエピソードはキューに追加されます",
+      "offDone": "この番組の新しいエピソードはキューに追加されなくなりました",
+      "added_other": "新しいエピソード {{count}} 件をキューに追加しました"
+    },
+    "badges": {
+      "trailer": "予告編",
+      "bonus": "ボーナス"
+    },
+    "startHere": "ここから聴く",
+    "seasons": {
+      "label": "シーズン",
+      "all": "すべてのシーズン",
+      "season": "シーズン {{n}}"
+    },
+    "persons": {
+      "title": "ホストとゲスト",
+      "roles": {
+        "host": "ホスト",
+        "guest": "ゲスト",
+        "cohost": "共同ホスト",
+        "producer": "プロデューサー"
+      }
+    },
+    "episodeSearch": {
+      "label": "エピソードを検索",
+      "placeholder": "この番組のエピソードを検索",
+      "none": "「{{q}}」に一致するエピソードはありません。"
+    },
+    "live": {
+      "now": "ライブ配信中",
+      "badge": "LIVE",
+      "listen": "ライブで聴く",
+      "upcoming": "配信予定",
+      "startsAt": "開始: {{time}}"
+    },
+    "private": {
+      "toggle": "非公開フィード（ログインが必要）",
+      "username": "ユーザー名",
+      "password": "パスワード",
+      "hint": "ログイン情報は、フィードを代わりに読み込むために 3Speak のポッドキャストサービスに送信されます。非公開フィードが公開リストに表示されることはありません。",
+      "badge": "非公開",
+      "badgeHint": "非公開フィード: ログイン情報でフォローした人だけが見られます",
+      "opmlLeftOut_other": "非公開フィード {{count}} 件はファイルに含まれていません。"
+    },
+    "highlights": {
+      "title": "ハイライト",
+      "play": "ハイライトを再生",
+      "untitled": "{{time}} のハイライト"
+    },
+    "chapters": {
+      "title": "チャプター",
+      "loading": "チャプターを読み込み中…",
+      "none": "チャプターを読み込めませんでした。",
+      "link": "チャプターのリンク"
+    },
+    "share": {
+      "copy": "リンクをコピー",
+      "copyAt": "{{time}} からのリンクをコピー",
+      "clip": "このハイライトへのリンクをコピー",
+      "copied": "リンクをコピーしました",
+      "failed": "リンクをコピーできませんでした"
+    },
+    "deepLink": {
+      "playFrom": "{{time}} から再生",
+      "playClip": "{{from}} から {{to}} まで再生"
+    },
+    "video": {
+      "watch": "動画を見る",
+      "hide": "動画を隠す"
+    },
+    "signInToFollow": "ポッドキャストをフォローするにはログインしてください",
+    "addExternal": "外部ポッドキャストを追加"
+  },
+  "item": {
+    "back": "すべてのオーディオ",
+    "missing": "このオーディオは利用できません。",
+    "description": "説明",
+    "noDescription": "説明はありません。",
+    "comments": "コメント",
+    "album": "{{name}} より"
+  },
+  "offline": {
+    "notice": "オフラインです。ダウンロード済みのものは再生できます。",
+    "noticeNoDownloads": "オフラインです。接続なしで聴くにはエピソードをダウンロードしてください。",
+    "open": "ダウンロードを開く"
   }
 }

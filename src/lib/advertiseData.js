@@ -327,6 +327,9 @@ export async function setCreatorAdPrefs(account, { adsEnabled, rollsEnabled = tr
 const viewerPrefsMessage = (account, rewardsEnabled, timestamp) =>
   ['3speak-ads', 'viewer-prefs', account, rewardsEnabled ? 'on' : 'off',
     String(timestamp)].join('|');
+// Must match listenerPrefsMessage() in 3speakchecks/routes/advertise.js exactly.
+const listenerPrefsMessage = (account, listenEnabled, timestamp) =>
+  ['3speak-ads', 'listener-prefs', account, listenEnabled ? 'on' : 'off', String(timestamp)].join('|');
 
 /**
  * Has this viewer answered the question yet, and what did they say?
@@ -375,13 +378,22 @@ export async function fetchWatchToken(owner, permlink) {
   }
 }
 
-async function signViewerViaThreespeak(rewardsEnabled, account) {
+function signViewerViaThreespeak(rewardsEnabled, account) {
+  return signConsentViaThreespeak('viewer-signature', { rewardsEnabled }, account);
+}
+
+// The same for the listening consent (its own message, its own endpoint).
+function signListenerViaThreespeak(listenEnabled, account) {
+  return signConsentViaThreespeak('listener-signature', { listenEnabled }, account);
+}
+
+async function signConsentViaThreespeak(endpoint, consent, account) {
   const provider = getCurrentProvider();
   const isWallet = !!provider && provider !== Providers.HiveSigner && !isManteAuthLogin();
 
   const doPost = async () => {
     const headers = { 'Content-Type': 'application/json' };
-    const body = { rewardsEnabled };
+    const body = { ...consent };
     if (provider === Providers.HiveSigner) {
       const token = localStorage.getItem('hivesignerToken');
       if (!token) throw new Error(t('ads.errors.hivesignerExpired'));
@@ -390,7 +402,7 @@ async function signViewerViaThreespeak(rewardsEnabled, account) {
       headers['X-API-Key'] = EMBED_API_KEY;
       body.username = account;
     }
-    const r = await fetch(`${THREESPEAK_API}/ads/viewer-signature`, {
+    const r = await fetch(`${THREESPEAK_API}/ads/${endpoint}`, {
       method: 'POST', headers, credentials: 'include', body: JSON.stringify(body),
     });
     return { r, d: await r.json().catch(() => ({})) };
@@ -454,6 +466,35 @@ export async function setViewerAdPrefs(account, { rewardsEnabled }) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ account, rewardsEnabled, signature, timestamp }),
+  }));
+}
+
+/**
+ * Record whether this listener agrees to be identified for LISTENING, so they can
+ * earn from listening. Its own signed consent, set beside the viewer one (the
+ * Settings switch sets both). Turning it off deletes the listening rows already
+ * collected (the server does that).
+ */
+export async function setListenerAdPrefs(account, { listenEnabled }) {
+  let signed;
+  try {
+    signed = await signListenerViaThreespeak(listenEnabled, account);
+  } catch (err) {
+    if (!canSignLocally()) throw err;
+    const timestamp = Date.now();
+    const res = await signMessageWithAioha(
+      listenerPrefsMessage(account, listenEnabled, timestamp),
+      KeyTypes.Posting,
+      listenEnabled ? t('ads.wallet.listenOn') : t('ads.wallet.listenOff'),
+    );
+    if (!res?.success || !res.result) throw new Error(t('ads.errors.signatureRejected'), { cause: err });
+    signed = { signature: res.result, timestamp };
+  }
+  const { signature, timestamp } = signed;
+  return readJson(await fetch(`${BASE}/listener/prefs`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ account, listenEnabled, signature, timestamp }),
   }));
 }
 

@@ -550,6 +550,15 @@
           grid-template-columns: 1fr;
         }
       }
+
+      // An audio track fills its column like a video card; an all-audio
+      // playlist (an album, a podcast) gets the audio page's narrower columns.
+      .audio-tile { width: auto; min-width: 0; }
+      &.playlist-videos-grid--audio {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 14px;
+        @include respond(phone) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      }
     }
 
     .playlist-video-card {
@@ -1038,4 +1047,12 @@
     color: var(--accent-primary) !important;
     border: 1px solid var(--accent-primary) !important;
   }
+}
+
+// Follow an all-audio playlist like a podcast (PlaylistFollowButton).
+.playlist-follow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
 }

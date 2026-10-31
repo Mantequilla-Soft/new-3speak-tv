@@ -1,0 +1,43 @@
+// Offline notice: a flat bar at the bottom, above the player and the bottom
+// navigation (--audio-np-clearance covers both while the player is open), so it
+// never sits over the page's own tabs. Full width less the page gutter on a
+// phone, a centred card on a wide screen.
+.offline-banner {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: calc(var(--audio-np-clearance, var(--bottom-nav-height, 0px)) + 12px);
+  z-index: 95;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 10px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: var(--bg-elevated, var(--bg-secondary));
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.35;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+
+  > svg { flex-shrink: 0; color: var(--text-secondary); }
+}
+
+.offline-banner-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.offline-banner-link {
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--accent-primary);
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}

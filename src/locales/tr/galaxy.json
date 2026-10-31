@@ -1,0 +1,129 @@
+{
+  "title": "Hive galaksisi",
+  "desktopOnly": {
+    "title": "Hive galaksisi için daha büyük bir ekran gerekiyor",
+    "text": "Kimin kimi takip ettiğini keşfetmek için bir bilgisayarda aç.",
+    "back": "@{{user}} kanalına dön"
+  },
+  "modeLabel": "Hangi takipler haritalansın",
+  "mode": {
+    "following": "Takip edilenler",
+    "followers": "Takipçiler",
+    "mutuals": "Arkadaşlar"
+  },
+  "depth": {
+    "label": "Tarama",
+    "orbit": "Yörünge ({{n}} hesap)",
+    "starsystem": "Yıldız sistemi ({{n}} hesap)",
+    "nebula": "Bulutsu ({{n}} hesap)",
+    "deepspace": "Derin uzay ({{n}} hesaba kadar, daha yavaş)"
+  },
+  "find": {
+    "label": "Bu galakside bir hesap bul",
+    "placeholder": "Bir hesap bul veya keşfet",
+    "go": "Bul",
+    "hidden": "@{{user}} bu galakside, ancak filtrelerin veya harita sınırı nedeniyle gizli.",
+    "missing": "@{{user}} bu galakside değil.",
+    "explore": "@{{user}} galaksisini keşfet"
+  },
+  "loading": "@{{user}} galaksisi haritalanıyor…",
+  "progressLists": "Takip listeleri okunuyor",
+  "progress": "Takip ettikleri okunuyor",
+  "progressDetails": "Hesap ayrıntıları yükleniyor",
+  "error": "Bu galaksi yüklenemedi. Birazdan tekrar dene.",
+  "empty": {
+    "following": "@{{user}} henüz kimseyi takip etmiyor, bu yüzden çizilecek bir galaksi yok.",
+    "followers": "@{{user}} kullanıcısını henüz kimse takip etmiyor, bu yüzden çizilecek bir galaksi yok.",
+    "mutuals": "@{{user}} kullanıcısını henüz kimse geri takip etmiyor, bu yüzden çizilecek bir galaksi yok."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Hesaplar ({{count}})",
+    "mutual": "Karşılıklı takip ({{count}})",
+    "oneWay": "Tek yönlü takip ({{count}})",
+    "suggestions": "Keşfedilecek içerik üreticileri ({{count}} / {{total}})",
+    "capped": "Harita {{total}} hesaptan {{shown}} tanesini gösteriyor"
+  },
+  "hint": "Döndürmek için sürükle, taşımak için sağ tuşla veya Shift ile sürükle, imlece doğru yakınlaştırmak için kaydır. Bir yıldıza tıkla; geri uçmak için merkeze tıkla.",
+  "via": "Taranan {{total}} hesaptan {{count}} tanesi bu hesabı takip ediyor",
+  "followedBy": "@{{user}} bu hesabı takip ediyor",
+  "followsCenter": "@{{user}} kullanıcısını takip ediyor",
+  "mutual": "@{{user}} ile karşılıklı takipleşiyor",
+  "leadsTo_one": "Haritada {{count}} içerik üreticisine götürüyor",
+  "leadsTo_other": "Haritada {{count}} içerik üreticisine götürüyor",
+  "scanInfo": "{{total}} hesaptan {{count}} tanesinin takip ettikleri tarandı.",
+  "scanSkip": "{{n}} kişiden fazlasını takip eden hesaplar taranmaz: toplu takip edenler zevk hakkında pek bir şey söylemez.",
+  "credit": "Takip verileri <src>HafSQL</src> kaynağından, bakımını <user>@{{user}}</user> yapıyor",
+  "noSuggestions": "Bu taramadan önerilecek içerik üreticisi çıkmadı.",
+  "filters": {
+    "title": "Filtreler",
+    "overlap_one": "Taranan {{total}} hesaptan en az {{count}} tanesinin takip ettikleri",
+    "overlap_other": "Taranan {{total}} hesaptan en az {{count}} tanesinin takip ettikleri",
+    "active": "Etkinlik",
+    "activeWithin": "Son {{count}} gün içinde",
+    "any": "Herhangi",
+    "rep": "İtibar",
+    "repAtLeast": "{{rep}} veya üzeri",
+    "creators": "Yalnızca 3Speak'te videosu olan içerik üreticileri",
+    "hideMine": "Zaten takip ettiğim hesapları gizle",
+    "partial": "Bazı hesap ayrıntıları yüklenemedi, bu yüzden birkaç filtre kapalı.",
+    "none": "Bu filtrelere uyan içerik üreticisi yok.",
+    "reset": "Filtreleri sıfırla"
+  },
+  "stats": {
+    "followers_one": "{{n}} takipçi",
+    "followers_other": "{{n}} takipçi",
+    "rep": "İtibar {{rep}}",
+    "videos": "3Speak'te {{videos}} video, {{shorts}} short",
+    "noVideos": "3Speak'te henüz video yok"
+  },
+  "activeToday": "Bugün etkin",
+  "activeAgo_one": "{{count}} gün önce etkin",
+  "activeAgo_other": "{{count}} gün önce etkin",
+  "discover": "Keşfedilecek içerik üreticileri",
+  "openChannel": "Kanalı aç",
+  "exploreHere": "Buradan keşfet",
+  "close": "Kapat",
+  "profileButton": "@{{user}} kullanıcısının Hive galaksisini keşfet",
+  "panelToggle": "Filtreler ve içerik üreticileri ({{count}})",
+  "controls": "Kontroller",
+  "music": "Arka plan müziği",
+  "history": {
+    "label": "Geri ve ileri",
+    "undo": "Geri",
+    "redo": "İleri",
+    "undoKey": "Geri (Ctrl+Z)",
+    "redoKey": "İleri (Ctrl+Shift+Z)"
+  },
+  "collapse": "Daralt",
+  "links": {
+    "loading": "Bu haritadaki bağlantıları yükleniyor…",
+    "out_one": "Bu haritada {{count}} hesabı takip ediyor",
+    "out_other": "Bu haritada {{count}} hesabı takip ediyor",
+    "in_one": "Bu haritada {{count}} hesap tarafından takip ediliyor",
+    "in_other": "Bu haritada {{count}} hesap tarafından takip ediliyor"
+  },
+  "circles": {
+    "title": "Çevreler",
+    "note": "Aynı kişilerin takip ettiği hesaplar, otomatik olarak gruplanır. Odaklanmak için birine tıkla.",
+    "label": "@{{user}} çevresi · {{count}}",
+    "name": "@{{user}} çevresi",
+    "size_one": "{{count}} keşfedilecek hesap",
+    "size_other": "{{count}} keşfedilecek hesap",
+    "ring": {
+      "following_one": "@{{user}} takip ediyor: {{count}}",
+      "following_other": "@{{user}} takip ediyor: {{count}}",
+      "followers_one": "@{{user}} kullanıcısını takip ediyor: {{count}}",
+      "followers_other": "@{{user}} kullanıcısını takip ediyor: {{count}}",
+      "mutuals_one": "{{count}} arkadaş",
+      "mutuals_other": "{{count}} arkadaş"
+    },
+    "ringTitle": {
+      "following": "@{{user}} kullanıcısının bu çevrede takip ettiği hesaplar ({{count}})",
+      "followers": "@{{user}} kullanıcısının bu çevredeki takipçileri ({{count}})",
+      "mutuals": "@{{user}} kullanıcısının bu çevredeki arkadaşları ({{count}})"
+    },
+    "in": "@{{user}} çevresinde",
+    "clear": "Tüm içerik üreticilerini göster"
+  }
+}

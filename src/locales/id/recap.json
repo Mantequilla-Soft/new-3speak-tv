@@ -1,0 +1,143 @@
+{
+  "open": "Setahunmu di 3Speak",
+  "pageTitle": "Setahun {{user}} di 3Speak",
+  "intro": {
+    "title": "Setahun @{{user}} di 3Speak",
+    "sub": "12 bulan terakhir, dalam angka."
+  },
+  "uploads": {
+    "kicker": "Kamu mengunggah",
+    "videos_other": "{{count}} video",
+    "shorts_other": "{{count}} Shorts",
+    "and": "dan"
+  },
+  "watch": {
+    "kicker": "Orang menontonmu selama",
+    "sub": "Dari semua video dan Shorts-mu.",
+    "since": "Waktu tonton dihitung sejak {{date}}.",
+    "graph": "Waktu tonton per minggu.",
+    "bestWeek": "Minggu terbaik: {{date}}, {{time}}",
+    "weekOf": "Minggu {{date}}",
+    "panHint": "Gulir atau seret untuk menjelajahi setahun."
+  },
+  "audience": {
+    "kicker": "Videomu diputar",
+    "views_other": "{{count}} kali",
+    "votes_other": "{{count}} vote",
+    "comments_other": "{{count}} komentar",
+    "fans": "Penggemar teratasmu",
+    "fansLoading": "Mencari penggemar teratasmu…",
+    "noFans": "Belum ada vote atau balasan dari orang lain."
+  },
+  "top": {
+    "kicker": "Video paling banyak ditonton",
+    "watched": "Ditonton selama {{time}}"
+  },
+  "supporters": {
+    "kicker": "Pendukung teratasmu",
+    "anonymous": "Anonim"
+  },
+  "rank": {
+    "kicker": "Peringkat terbaikmu di papan peringkat",
+    "board": "di {{board}}",
+    "hint": "Setiap anak tangga adalah kreator di papan itu. Arahkan kursor untuk melihat siapa."
+  },
+  "outro": {
+    "title": "Terima kasih sudah berkarya di 3Speak",
+    "sub": "Untuk 12 bulan ke depan.",
+    "channel": "Buka kanalmu"
+  },
+  "empty": {
+    "title": "Tidak ada unggahan dalam 12 bulan terakhir",
+    "sub": "Unggah video atau Shorts, dan setahunmu di 3Speak dimulai di sini.",
+    "upload": "Unggah"
+  },
+  "signIn": "Masuk untuk melihat setahunmu di 3Speak.",
+  "loading": "Menghitung setahunmu…",
+  "error": "Setahunmu tidak bisa dimuat. Coba lagi sebentar lagi.",
+  "nav": {
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "slide": "Slide {{n}} dari {{total}}"
+  },
+  "communities": {
+    "kicker": "Kamu memposting di",
+    "count_other": "{{count}} komunitas",
+    "posts_other": "{{count}} postingan"
+  },
+  "followed": {
+    "kicker": "Kamu mulai mengikuti",
+    "count_other": "{{count}} akun"
+  },
+  "watched": {
+    "kicker": "Kreator yang paling sering kamu tonton",
+    "videos_other": "{{count}} video ditonton"
+  },
+  "followers": {
+    "kicker": "Pengikut baru sejak {{date}}",
+    "count_other": "{{count}} akun mengikutimu",
+    "kickerYear": "Pengikut baru tahun ini"
+  },
+  "panel": {
+    "openCommunity": "Buka komunitas",
+    "untitled": "Tanpa judul",
+    "closeAndLook": "Tutup dan lihat-lihat"
+  },
+  "income": {
+    "kicker": "Kamu mendapatkan",
+    "sub": "Dari hadiah postingan, iklan 3Speak, dan tip.",
+    "note": "Dalam HBD (masing-masing sekitar satu dolar AS), dengan HIVE dan HP dihitung pada harga HIVE saat ini.",
+    "partial": "Akun yang sangat aktif: ini mencakup bagian terbaru dari tahun ini.",
+    "hint": "Arahkan kursor ke pilar untuk melihat rinciannya.",
+    "sources": {
+      "author": "Hadiah postingan",
+      "ads": "Iklan 3Speak",
+      "tips": "Tip"
+    },
+    "legendOurs": "di 3Speak",
+    "legendOther": "di tempat lain di Hive",
+    "segments": {
+      "ours": "Hadiah postingan di 3Speak",
+      "other": "Hadiah postingan di tempat lain di Hive",
+      "ads_creator": "Pendapatan iklan sebagai kreator",
+      "ads_viewer": "Hadiah iklan sebagai penonton",
+      "ads_combined": "Pembayaran iklan untuk keduanya (tidak dipisah)"
+    },
+    "rewardedPosts_other": "{{count}} postingan berhadiah",
+    "legendCreator": "sebagai kreator",
+    "legendViewer": "sebagai penonton",
+    "logScale": "Tinggi pilar memakai skala log, jadi jumlah kecil tetap terlihat.",
+    "payments_other": "{{count}} pembayaran",
+    "legendCombined": "keduanya, tidak dipisah"
+  },
+  "loadingSteps": {
+    "stats": "Mencari data setahunmu…",
+    "uploads": "Menghitung unggahanmu…",
+    "watch": "Mengukur waktu tonton…",
+    "audience": "Menghitung penayanganmu…",
+    "fans": "Mencari penggemarmu…",
+    "income": "Menjumlahkan pendapatanmu…",
+    "communities": "Mengunjungi komunitasmu…",
+    "followers": "Memeriksa siapa yang mengikutimu…",
+    "watched": "Menelusuri apa yang kamu tonton…",
+    "thumbnails": "Memuat thumbnail… {{done}} dari {{total}}"
+  },
+  "tips": {
+    "label": "Tips:",
+    "mouse": {
+      "tip1": "Gerakkan mouse dan setiap adegan akan mengikutinya, bahkan di luar slide.",
+      "tip2": "Gulir untuk memperbesar dan memperkecil dinding videomu.",
+      "tip3": "Gulir atau seret grafik waktu tonton untuk menjelajahi setahun.",
+      "tip4": "Arahkan kursor ke batang, anak tangga, pilar, atau ubin untuk melihat isinya.",
+      "tip5": "Klik ubin, batang, atau komunitas agar detailnya tetap terbuka."
+    },
+    "touch": {
+      "tip1": "Gunakan panah di bawah untuk berpindah slide.",
+      "tip2": "Seret dinding videomu untuk melihat-lihat.",
+      "tip3": "Geser grafik waktu tonton ke samping untuk menjelajahi setahun.",
+      "tip4": "Ketuk ubin untuk melihat kartu videonya.",
+      "tip5": "Ketuk komunitas atau minggu untuk melihat videonya.",
+      "tip6": "Adegan berputar pelan dengan sendirinya; seret cincinnya untuk memutarnya sendiri."
+    }
+  }
+}

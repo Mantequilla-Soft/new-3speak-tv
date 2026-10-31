@@ -13,24 +13,24 @@
 import { useAppStore } from '../lib/store';
 import { fetchViewerAdPrefs } from '../lib/advertiseData';
 
-let cached = { account: null, enabled: false };
+let cached = { account: null, enabled: false, listen: false };
 let inFlight = null;
 
 /** Refresh the cached opt-in for the logged-in account. Safe to call repeatedly. */
 export function primeViewerRewards(account) {
-  if (!account) { cached = { account: null, enabled: false }; return Promise.resolve(false); }
+  if (!account) { cached = { account: null, enabled: false, listen: false }; return Promise.resolve(false); }
   if (cached.account === account) return Promise.resolve(cached.enabled);
   if (inFlight) return inFlight;
   inFlight = fetchViewerAdPrefs(account)
     .then((r) => {
-      cached = { account, enabled: r?.rewardsEnabled === true };
+      cached = { account, enabled: r?.rewardsEnabled === true, listen: r?.listenEnabled === true };
       return cached.enabled;
     })
     .catch(() => {
       // Unreadable preference means we do NOT send a name. Failing closed here
       // costs someone a few seconds of credit; failing open would send identity
       // for a viewer who may have declined.
-      cached = { account, enabled: false };
+      cached = { account, enabled: false, listen: false };
       return false;
     })
     .finally(() => { inFlight = null; });
@@ -58,4 +58,22 @@ export async function viewerRewardsName() {
   const now = useAppStore.getState().user;
   if (!now || cached.account !== now) return null;
   return cached.enabled ? now : null;
+}
+
+/**
+ * The name to send with a LISTENING session, or null: only for someone who agreed
+ * to be identified for listening (the server checks again before recording).
+ */
+export async function listenerRewardsName() {
+  const user = useAppStore.getState().user;
+  if (!user) return null;
+  if (cached.account !== user) await primeViewerRewards(user);
+  const now = useAppStore.getState().user;
+  if (!now || cached.account !== now) return null;
+  return cached.listen ? now : null;
+}
+
+/** Forget the cached answers, after the person changed them, so the next session uses the new ones. */
+export function resetViewerRewards() {
+  cached = { account: null, enabled: false, listen: false };
 }

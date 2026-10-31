@@ -1,0 +1,119 @@
+{
+  "title": "Hive 星系",
+  "desktopOnly": {
+    "title": "Hive 星系需要更大的屏幕",
+    "text": "在电脑上打开，探索谁关注了谁。",
+    "back": "返回 @{{user}} 的频道"
+  },
+  "modeLabel": "要绘制的关注关系",
+  "mode": {
+    "following": "关注",
+    "followers": "粉丝",
+    "mutuals": "好友"
+  },
+  "depth": {
+    "label": "扫描",
+    "orbit": "轨道（{{n}} 个账号）",
+    "starsystem": "恒星系（{{n}} 个账号）",
+    "nebula": "星云（{{n}} 个账号）",
+    "deepspace": "深空（最多 {{n}} 个账号，较慢）"
+  },
+  "find": {
+    "label": "在这个星系中查找账号",
+    "placeholder": "查找或探索账号",
+    "go": "查找",
+    "hidden": "@{{user}} 在这个星系中，但被你的筛选条件或地图上限隐藏了。",
+    "missing": "@{{user}} 不在这个星系中。",
+    "explore": "探索 @{{user}} 的星系"
+  },
+  "loading": "正在绘制 @{{user}} 的星系…",
+  "progressLists": "正在读取关注列表",
+  "progress": "正在读取他们的关注",
+  "progressDetails": "正在加载账号详情",
+  "error": "无法加载这个星系，请稍后再试。",
+  "empty": {
+    "following": "@{{user}} 还没有关注任何人，所以没有星系可以绘制。",
+    "followers": "还没有人关注 @{{user}}，所以没有星系可以绘制。",
+    "mutuals": "还没有人回关 @{{user}}，所以没有星系可以绘制。"
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "账号（{{count}}）",
+    "mutual": "互相关注（{{count}}）",
+    "oneWay": "单向关注（{{count}}）",
+    "suggestions": "值得发现的创作者（{{total}} 位中的 {{count}} 位）",
+    "capped": "地图显示了 {{total}} 个中的 {{shown}} 个"
+  },
+  "hint": "拖动可旋转，右键拖动或 Shift+拖动可平移，滚动可朝指针方向缩放。点击一颗星查看详情，点击中心可飞回。",
+  "via": "扫描的 {{total}} 个账号中有 {{count}} 个关注了对方",
+  "followedBy": "@{{user}} 关注了对方",
+  "followsCenter": "关注了 @{{user}}",
+  "mutual": "与 @{{user}} 互相关注",
+  "leadsTo_other": "通往地图上的 {{count}} 位创作者",
+  "scanInfo": "已扫描 {{total}} 个账号中 {{count}} 个的关注。",
+  "scanSkip": "关注超过 {{n}} 人的账号不会被扫描：大量关注的账号很难反映真实喜好。",
+  "credit": "关注数据来自 <src>HafSQL</src>，由 <user>@{{user}}</user> 维护",
+  "noSuggestions": "这次扫描没有可推荐的创作者。",
+  "filters": {
+    "title": "筛选",
+    "overlap_other": "至少被扫描的 {{total}} 个账号中的 {{count}} 个关注",
+    "active": "活跃",
+    "activeWithin": "最近 {{count}} 天内",
+    "any": "不限",
+    "rep": "声誉",
+    "repAtLeast": "{{rep}} 或以上",
+    "creators": "仅显示在 3Speak 有视频的创作者",
+    "hideMine": "隐藏我已关注的账号",
+    "partial": "部分账号详情无法加载，因此有几个筛选条件已关闭。",
+    "none": "没有符合这些筛选条件的创作者。",
+    "reset": "重置筛选"
+  },
+  "stats": {
+    "followers_other": "{{n}} 位粉丝",
+    "rep": "声誉 {{rep}}",
+    "videos": "在 3Speak 上有 {{videos}} 个视频、{{shorts}} 个 Shorts",
+    "noVideos": "在 3Speak 上还没有视频"
+  },
+  "activeToday": "今天活跃",
+  "activeAgo_other": "{{count}} 天前活跃",
+  "discover": "值得发现的创作者",
+  "openChannel": "打开频道",
+  "exploreHere": "从这里探索",
+  "close": "关闭",
+  "profileButton": "探索 @{{user}} 的 Hive 星系",
+  "panelToggle": "筛选和创作者（{{count}}）",
+  "controls": "操作",
+  "music": "背景音乐",
+  "history": {
+    "label": "后退和前进",
+    "undo": "后退",
+    "redo": "前进",
+    "undoKey": "后退（Ctrl+Z）",
+    "redoKey": "前进（Ctrl+Shift+Z）"
+  },
+  "collapse": "收起",
+  "links": {
+    "loading": "正在加载对方在这张地图上的连接…",
+    "out_other": "关注了这张地图上的 {{count}} 个账号",
+    "in_other": "被这张地图上的 {{count}} 个账号关注"
+  },
+  "circles": {
+    "title": "圈子",
+    "note": "被同一批人关注的账号会自动归为一组。点击一个圈子即可聚焦。",
+    "label": "@{{user}} 的圈子 · {{count}}",
+    "name": "@{{user}} 的圈子",
+    "size_other": "{{count}} 位待发现",
+    "ring": {
+      "following_other": "@{{user}} 关注的 {{count}} 位",
+      "followers_other": "{{count}} 位关注了 @{{user}}",
+      "mutuals_other": "{{count}} 位好友"
+    },
+    "ringTitle": {
+      "following": "这个圈子中 @{{user}} 关注的账号（{{count}}）",
+      "followers": "这个圈子中 @{{user}} 的粉丝（{{count}}）",
+      "mutuals": "这个圈子中 @{{user}} 的好友（{{count}}）"
+    },
+    "in": "在 @{{user}} 的圈子中",
+    "clear": "显示所有创作者"
+  }
+}

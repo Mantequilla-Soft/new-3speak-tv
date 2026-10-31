@@ -39,7 +39,57 @@
     "noCues": "큐가 없어요.",
     "clearQueue": "대기열 비우기",
     "clearAll": "모두 지우기",
-    "queueEmpty": "대기열이 비어 있어요."
+    "queueEmpty": "대기열이 비어 있어요.",
+    "previous": "이전",
+    "next": "다음",
+    "expand": "플레이어 펼치기",
+    "collapse": "플레이어 접기",
+    "skipBack": "{{seconds}}초 뒤로",
+    "skipForward": "{{seconds}}초 앞으로",
+    "speed": "재생 속도",
+    "speedValue": "재생 속도: {{speed}}",
+    "sleep": "수면 타이머",
+    "sleepOff": "끄기",
+    "sleepMinutes": "{{minutes}}분",
+    "sleepEnd": "이 에피소드가 끝나면",
+    "sleepEndShort": "끝",
+    "sleepLeft": "{{time}} 후 정지",
+    "effects": "오디오 효과",
+    "voiceBoost": "음성 강화",
+    "voiceBoostHint": "더 또렷하고 고른 목소리",
+    "skipSilence": "무음 건너뛰기",
+    "skipSilenceHint": "쉬는 구간을 빠르게 지나가요",
+    "effectsUnavailable": "이 에피소드에서는 사용할 수 없어요.",
+    "effectsChecking": "이 에피소드가 지원하는지 확인하고 있어요…",
+    "timeSaved": "절약한 시간: {{time}}",
+    "cast": "다른 기기에서 재생",
+    "download": "오프라인용으로 저장",
+    "downloading": "저장 중: {{pct}}%",
+    "downloaded": "오프라인용으로 저장됨",
+    "downloadDone": "오프라인으로 들을 수 있게 저장했어요",
+    "downloadFailed": "이 에피소드를 저장하지 못했어요",
+    "copyEpisode": "에피소드 링크 복사",
+    "copiedEpisode": "에피소드 링크를 복사했어요!",
+    "copyAt": "{{time}} 지점 링크 복사",
+    "copiedAt": "{{time}} 지점 링크를 복사했어요!",
+    "copyFailed": "링크를 복사하지 못했어요",
+    "clipMake": "클립 만들기",
+    "clipRange": "{{from}}부터 {{to}}까지",
+    "clipLength": "길이",
+    "clipSeconds": "{{seconds}}초",
+    "clipCopy": "클립 링크 복사",
+    "clipCopied": "클립 링크를 복사했어요!",
+    "clipEnds": "클립, {{time}}에 멈춰요",
+    "clipClear": "클립 이후에도 계속 재생",
+    "live": "LIVE",
+    "liveUnsupported": "이 라이브 스트림은 이 브라우저에서 재생할 수 없어요.",
+    "chapters": "챕터",
+    "prevChapter": "이전 챕터",
+    "nextChapter": "다음 챕터",
+    "chapterLink": "챕터 링크",
+    "upNext": "다음 재생",
+    "hideIdle": "숨기기 (대기열은 유지됨)",
+    "continueAt": "{{time}}부터 계속"
   },
   "share": {
     "failed": "실패",
@@ -95,7 +145,14 @@
     "noTracks": "트랙을 찾을 수 없어요.",
     "creators": "크리에이터",
     "albumsPlaylists": "앨범 및 재생목록",
-    "noAudioForFilters": "이 필터에 해당하는 오디오가 없어요."
+    "noAudioForFilters": "이 필터에 해당하는 오디오가 없어요.",
+    "tabsLabel": "오디오 보기",
+    "tabExplore": "탐색",
+    "tabPlayer": "플레이어",
+    "nothingPlaying": "아직 재생 중인 항목이 없습니다.",
+    "goExplore": "들을 거리 찾기",
+    "exploreViews": "섹션",
+    "mostPlayed": "가장 많이 재생됨"
   },
   "upload": {
     "title": "오디오 업로드",
@@ -333,7 +390,12 @@
       "none": "팟캐스트를 찾지 못했어요. 다른 이름으로 검색하거나 RSS 피드 URL을 붙여넣으세요.",
       "failed": "지금은 검색할 수 없어요. 다시 시도해 주세요.",
       "label": "팟캐스트 찾기",
-      "placeholder": "프로그램 이름, 진행자 또는 주제"
+      "placeholder": "프로그램 이름, 진행자 또는 주제",
+      "modeShows": "프로그램",
+      "modePeople": "인물",
+      "placeholderPeople": "진행자 또는 게스트 이름",
+      "appearsIn_other": "에피소드 {{count}}개에 출연",
+      "latestMatch": "최신: {{title}}"
     },
     "opml": {
       "import": "OPML 가져오기",
@@ -353,7 +415,11 @@
       "limit": "팔로우할 수 있는 팟캐스트 수가 최대에 도달했어요.",
       "internal": "3Speak 채널이에요. 다른 오디오 유형에서 찾을 수 있어요.",
       "disabled": "외부 팟캐스트 기능이 지금은 꺼져 있어요.",
-      "generic": "문제가 발생했어요. 다시 시도해 주세요."
+      "generic": "문제가 발생했어요. 다시 시도해 주세요.",
+      "closedPlatform": "{{platform}}은(는) 프로그램 피드를 공개하지 않아요. 프로그램 이름으로 검색해 보세요.",
+      "appleOnly": "이 프로그램은 Apple 팟캐스트에서만 들을 수 있어요.",
+      "directoryNotFound": "이 프로그램의 피드를 찾지 못했어요. RSS 피드를 입력하거나 이름으로 검색해 보세요.",
+      "directoryDown": "이 팟캐스트 디렉터리가 지금 응답하지 않아요. 다시 시도해 주세요."
     },
     "tip": {
       "button": "이 팟캐스트 후원하기",
@@ -378,7 +444,9 @@
     },
     "rss": {
       "label": "RSS 피드로 추가",
-      "placeholder": "https://example.com/feed.xml"
+      "placeholder": "https://example.com/feed.xml",
+      "labelLink": "링크로 추가",
+      "placeholderLink": "RSS 피드, Apple 팟캐스트 링크 또는 웹사이트"
     },
     "listened": "들음",
     "listenedPct": "{{pct}}% 들음",
@@ -392,7 +460,12 @@
       "none": "이 필터에 맞는 에피소드가 없어요.",
       "custom": "기간 직접 설정",
       "from": "시작",
-      "to": "종료"
+      "to": "종료",
+      "inbox": "새 에피소드",
+      "inboxEmpty": "새 에피소드가 없어요. 지난 일주일 동안 나온 에피소드 중 아직 재생하지 않은 것이 여기에 표시돼요.",
+      "unplayed": "재생 안 함",
+      "inProgress": "듣는 중",
+      "downloaded": "다운로드됨"
     },
     "resume": "이어 듣기",
     "showNotes": "에피소드 소개",
@@ -400,6 +473,158 @@
     "noNotes": "이 에피소드에는 소개가 없어요.",
     "openEpisode": "에피소드 열기",
     "addToQueue": "대기열에 추가",
-    "inQueue": "대기열에 있음"
+    "inQueue": "대기열에 있음",
+    "trending": {
+      "title": "인기 급상승 팟캐스트",
+      "language": "언어",
+      "allLanguages": "모든 언어",
+      "category": "카테고리",
+      "allCategories": "모든 카테고리",
+      "none": "지금은 여기서 인기 급상승 중인 팟캐스트가 없어요. 다른 언어나 카테고리를 선택해 보세요.",
+      "failed": "지금은 인기 급상승 팟캐스트를 불러올 수 없어요. 다시 시도해 주세요."
+    },
+    "categories": {
+      "Arts": "예술",
+      "Business": "비즈니스",
+      "Comedy": "코미디",
+      "Education": "교육",
+      "Fiction": "픽션",
+      "Government": "정부",
+      "Health": "건강 및 피트니스",
+      "History": "역사",
+      "Kids": "어린이 및 가족",
+      "Leisure": "레저",
+      "Music": "음악",
+      "News": "뉴스",
+      "Religion": "종교 및 영성",
+      "Science": "과학",
+      "Society": "사회 및 문화",
+      "Sports": "스포츠",
+      "Technology": "기술",
+      "TrueCrime": "실화 범죄",
+      "TV": "TV 및 영화"
+    },
+    "charts": {
+      "title": "인기 차트",
+      "country": "국가",
+      "none": "이 국가와 카테고리의 차트가 지금은 없어요.",
+      "failed": "지금은 차트를 불러올 수 없어요. 다시 시도해 주세요."
+    },
+    "views": {
+      "mine": "내 팟캐스트",
+      "discover": "둘러보기",
+      "trends": "트렌드",
+      "mineEmpty": "아직 팔로우한 팟캐스트가 없어요. 둘러보기에서 프로그램을 찾거나 트렌드에서 인기 있는 프로그램을 확인해 보세요."
+    },
+    "downloads": {
+      "title": "다운로드",
+      "download": "오프라인 청취용으로 다운로드",
+      "short": "다운로드",
+      "downloading": "다운로드 중 {{pct}}%",
+      "cancel": "다운로드 취소",
+      "saved": "오프라인 저장됨",
+      "remove": "다운로드 삭제",
+      "removeShort": "제거",
+      "removed": "다운로드를 삭제했어요",
+      "done": "오프라인으로 들을 수 있게 저장했어요",
+      "total": "{{size}} 저장됨",
+      "storage": "이 사이트가 이 브라우저에서 {{quota}} 중 {{used}} 사용 중",
+      "perBrowser": "다운로드는 누가 로그인하든 이 브라우저에 남아요.",
+      "errors": {
+        "tooLarge": "이 에피소드는 너무 커서 저장할 수 없어요.",
+        "rateLimited": "지금 다운로드가 너무 많아요. 몇 분 후에 다시 시도해 주세요.",
+        "storage": "이 브라우저에 이 에피소드를 저장할 공간이 없어요.",
+        "failed": "에피소드를 다운로드하지 못했어요. 다시 시도해 주세요.",
+        "noSource": "이 에피소드는 저장할 수 없어요."
+      }
+    },
+    "autoQueue": {
+      "label": "새 에피소드를 대기열에 자동 추가",
+      "hint": "이 프로그램의 새 에피소드가 나오면 대기열 맨 끝에 추가돼요",
+      "onDone": "이 프로그램의 새 에피소드가 대기열에 추가돼요",
+      "offDone": "이 프로그램의 새 에피소드가 더 이상 대기열에 추가되지 않아요",
+      "added_other": "새 에피소드 {{count}}개를 대기열에 추가했어요"
+    },
+    "badges": {
+      "trailer": "예고편",
+      "bonus": "보너스"
+    },
+    "startHere": "여기서 시작하기",
+    "seasons": {
+      "label": "시즌",
+      "all": "모든 시즌",
+      "season": "시즌 {{n}}"
+    },
+    "persons": {
+      "title": "진행자와 게스트",
+      "roles": {
+        "host": "진행자",
+        "guest": "게스트",
+        "cohost": "공동 진행자",
+        "producer": "프로듀서"
+      }
+    },
+    "episodeSearch": {
+      "label": "에피소드 검색",
+      "placeholder": "이 프로그램의 에피소드 검색",
+      "none": "\"{{q}}\"와(과) 일치하는 에피소드가 없어요."
+    },
+    "live": {
+      "now": "지금 라이브",
+      "badge": "LIVE",
+      "listen": "라이브 듣기",
+      "upcoming": "예정",
+      "startsAt": "시작: {{time}}"
+    },
+    "private": {
+      "toggle": "비공개 피드예요 (로그인 필요)",
+      "username": "사용자 이름",
+      "password": "비밀번호",
+      "hint": "로그인 정보는 피드를 대신 읽을 수 있도록 3Speak 팟캐스트 서비스로 전송돼요. 비공개 피드는 공개 목록에 절대 표시되지 않아요.",
+      "badge": "비공개",
+      "badgeHint": "비공개 피드: 로그인 정보로 팔로우한 사람만 볼 수 있어요",
+      "opmlLeftOut_other": "비공개 피드 {{count}}개는 파일에서 제외했어요."
+    },
+    "highlights": {
+      "title": "하이라이트",
+      "play": "하이라이트 재생",
+      "untitled": "{{time}} 하이라이트"
+    },
+    "chapters": {
+      "title": "챕터",
+      "loading": "챕터 불러오는 중…",
+      "none": "챕터를 불러오지 못했어요.",
+      "link": "챕터 링크"
+    },
+    "share": {
+      "copy": "링크 복사",
+      "copyAt": "{{time}} 위치 링크 복사",
+      "clip": "이 하이라이트 링크 복사",
+      "copied": "링크를 복사했어요",
+      "failed": "링크를 복사하지 못했어요"
+    },
+    "deepLink": {
+      "playFrom": "{{time}}부터 재생",
+      "playClip": "{{from}}~{{to}} 재생"
+    },
+    "video": {
+      "watch": "동영상 보기",
+      "hide": "동영상 숨기기"
+    },
+    "signInToFollow": "팟캐스트를 팔로우하려면 로그인하세요",
+    "addExternal": "외부 팟캐스트 추가"
+  },
+  "item": {
+    "back": "모든 오디오",
+    "missing": "이 오디오는 사용할 수 없습니다.",
+    "description": "설명",
+    "noDescription": "설명이 없습니다.",
+    "comments": "댓글",
+    "album": "{{name}} 수록"
+  },
+  "offline": {
+    "notice": "오프라인 상태입니다. 다운로드한 항목은 계속 재생됩니다.",
+    "noticeNoDownloads": "오프라인 상태입니다. 연결 없이 들으려면 에피소드를 다운로드하세요.",
+    "open": "다운로드 열기"
   }
 }

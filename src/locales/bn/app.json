@@ -20,10 +20,32 @@
   "changelog": {
     "title": "আমরা একটি আপডেট এনেছি!",
     "subtitle": "v{{version}}-এ যা নতুন",
-    "previousUpdates": "আগের আপডেট",
-    "newerUpdates": "নতুন আপডেট",
     "readTheCode": "কোড পড়ুন",
-    "gotIt": "বুঝেছি"
+    "gotIt": "বুঝেছি",
+    "categories": {
+      "home": "হোম ও ফিড",
+      "watch": "ভিডিও পেজ",
+      "comments": "মন্তব্য",
+      "shorts": "শর্টস",
+      "stories": "স্টোরি",
+      "editor": "এডিটর ও রিমিক্স",
+      "upload": "আপলোড ও প্রকাশ",
+      "audio": "অডিও",
+      "podcasts": "পডকাস্ট",
+      "live": "লাইভ স্ট্রিম",
+      "profile": "প্রোফাইল ও চ্যানেল",
+      "groups": "কমিউনিটি ও ব্যাজ",
+      "playlists": "প্লেলিস্ট",
+      "tips": "টিপ, ওয়ালেট ও Pro",
+      "ads": "বিজ্ঞাপন",
+      "chat": "চ্যাট",
+      "notifications": "নোটিফিকেশন",
+      "leaderboard": "লিডারবোর্ড",
+      "sharing": "শেয়ার",
+      "account": "সাইন-ইন ও অ্যাকাউন্ট",
+      "settings": "সেটিংস ও ভাষা",
+      "general": "পুরো 3Speak"
+    }
   },
   "routes": {
     "homeFeed": "হোম ফিড",

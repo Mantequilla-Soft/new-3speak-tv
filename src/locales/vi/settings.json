@@ -37,7 +37,13 @@
     "title": "Kiếm tiền khi xem",
     "rowTitle": "Phần thưởng người xem",
     "desc": "Nhận một phần doanh thu quảng cáo cho những gì bạn xem, được trả bằng HBD hoặc HIVE. Bạn được trả theo video đã xem, dù có quảng cáo phát hay không, nên phần thưởng dành cho việc xem chứ không phải việc ngồi xem hết quảng cáo. Bản thân quảng cáo phát cho tất cả mọi người, trừ người đăng ký 3Speak Pro. Chúng tôi ghi lại bạn đã xem bao nhiêu phần của mỗi video, ngoài lịch sử xem mà trang Đã xem vốn đã lưu, và xóa dữ liệu đó ngay khi bạn tắt mục này.",
-    "aria": "Nhận một phần doanh thu quảng cáo cho những gì bạn xem"
+    "aria": "Nhận một phần doanh thu quảng cáo cho những gì bạn xem",
+    "titleListen": "Kiếm tiền khi xem và nghe",
+    "listenDesc": "Việc nghe cũng được tính: chúng tôi ghi lại thời gian bạn nghe âm thanh 3Speak và các tập podcast trên 3speak.tv. Phần thưởng cho người nghe sẽ bắt đầu khi chúng tôi đã kiểm tra số liệu, và những gì bạn nghe từ ngày bật tùy chọn này đều được tính.",
+    "listenAlso": "Tính cả thời gian tôi nghe",
+    "listenOnToast": "Thời gian bạn nghe giờ được tính vào phần thưởng cho người nghe",
+    "onToastBoth": "Đã bật phần thưởng xem và nghe",
+    "offToastBoth": "Đã tắt phần thưởng, dữ liệu xem và nghe của bạn đã bị xóa"
   },
   "postingAuth": {
     "updateFailed": "Không thể cập nhật quyền posting của bạn.",

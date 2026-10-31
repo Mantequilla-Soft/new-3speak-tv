@@ -1,0 +1,129 @@
+{
+  "title": "Galaksi ya Hive",
+  "desktopOnly": {
+    "title": "Galaksi ya Hive inahitaji skrini kubwa zaidi",
+    "text": "Ifungue kwenye kompyuta ili kuchunguza nani anamfuata nani.",
+    "back": "Rudi kwenye chaneli ya @{{user}}"
+  },
+  "modeLabel": "Ufuataji wa nani uchorwe",
+  "mode": {
+    "following": "Wanaofuatwa",
+    "followers": "Wafuasi",
+    "mutuals": "Marafiki"
+  },
+  "depth": {
+    "label": "Uchunguzi",
+    "orbit": "Obiti (akaunti {{n}})",
+    "starsystem": "Mfumo wa nyota (akaunti {{n}})",
+    "nebula": "Nebula (akaunti {{n}})",
+    "deepspace": "Anga za mbali (hadi akaunti {{n}}, polepole zaidi)"
+  },
+  "find": {
+    "label": "Tafuta akaunti kwenye galaksi hii",
+    "placeholder": "Tafuta au chunguza akaunti",
+    "go": "Tafuta",
+    "hidden": "@{{user}} yuko kwenye galaksi hii lakini amefichwa na vichujio vyako au kikomo cha ramani.",
+    "missing": "@{{user}} hayuko kwenye galaksi hii.",
+    "explore": "Chunguza galaksi ya @{{user}}"
+  },
+  "loading": "Tunachora ramani ya galaksi ya @{{user}}…",
+  "progressLists": "Tunasoma orodha za ufuataji",
+  "progress": "Tunasoma wanaowafuata",
+  "progressDetails": "Tunapakia maelezo ya akaunti",
+  "error": "Galaksi hii haikuweza kupakiwa. Jaribu tena baada ya muda mfupi.",
+  "empty": {
+    "following": "@{{user}} bado hamfuati mtu yeyote, kwa hiyo hakuna galaksi ya kuchora.",
+    "followers": "Bado hakuna anayemfuata @{{user}}, kwa hiyo hakuna galaksi ya kuchora.",
+    "mutuals": "Bado hakuna anayemfuata @{{user}} kwa kurudisha, kwa hiyo hakuna galaksi ya kuchora."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Akaunti ({{count}})",
+    "mutual": "Wanafuatana ({{count}})",
+    "oneWay": "Ufuataji wa upande mmoja ({{count}})",
+    "suggestions": "Watayarishaji wa kugundua ({{count}} kati ya {{total}})",
+    "capped": "Ramani inaonyesha {{shown}} kati ya {{total}}"
+  },
+  "hint": "Buruta ili kuzungusha, buruta kwa kitufe cha kulia au Shift+buruta ili kusogeza, sogeza gurudumu ili kukuza kuelekea kiashiria. Bofya nyota; bofya katikati ili kurudi.",
+  "via": "Akaunti {{count}} kati ya {{total}} zilizochunguzwa zinawafuata",
+  "followedBy": "@{{user}} anawafuata",
+  "followsCenter": "Wanamfuata @{{user}}",
+  "mutual": "@{{user}} na wao wanafuatana",
+  "leadsTo_one": "Inaelekeza kwa mtayarishaji {{count}} kwenye ramani",
+  "leadsTo_other": "Inaelekeza kwa watayarishaji {{count}} kwenye ramani",
+  "scanInfo": "Tumechunguza ufuataji wa akaunti {{count}} kati ya {{total}}.",
+  "scanSkip": "Akaunti zinazofuata zaidi ya wengine {{n}} hazichunguzwi: wanaofuata watu wengi kiholela hawaelezi mengi kuhusu ladha.",
+  "credit": "Data ya ufuataji kutoka <src>HafSQL</src>, inayotunzwa na <user>@{{user}}</user>",
+  "noSuggestions": "Hakuna watayarishaji wa kupendekeza kutoka uchunguzi huu.",
+  "filters": {
+    "title": "Vichujio",
+    "overlap_one": "Wanafuatwa na angalau {{count}} kati ya {{total}} waliochunguzwa",
+    "overlap_other": "Wanafuatwa na angalau {{count}} kati ya {{total}} waliochunguzwa",
+    "active": "Amilifu",
+    "activeWithin": "Katika siku {{count}} zilizopita",
+    "any": "Yoyote",
+    "rep": "Sifa",
+    "repAtLeast": "{{rep}} au zaidi",
+    "creators": "Watayarishaji wenye video kwenye 3Speak pekee",
+    "hideMine": "Ficha akaunti ninazozifuata tayari",
+    "partial": "Maelezo ya baadhi ya akaunti hayakuweza kupakiwa, kwa hiyo vichujio vichache vimezimwa.",
+    "none": "Hakuna watayarishaji wanaolingana na vichujio hivi.",
+    "reset": "Weka upya vichujio"
+  },
+  "stats": {
+    "followers_one": "mfuasi {{n}}",
+    "followers_other": "wafuasi {{n}}",
+    "rep": "Sifa {{rep}}",
+    "videos": "Video {{videos}}, Shorts {{shorts}} kwenye 3Speak",
+    "noVideos": "Bado hakuna video kwenye 3Speak"
+  },
+  "activeToday": "Amilifu leo",
+  "activeAgo_one": "Amilifu siku {{count}} iliyopita",
+  "activeAgo_other": "Amilifu siku {{count}} zilizopita",
+  "discover": "Watayarishaji wa kugundua",
+  "openChannel": "Fungua chaneli",
+  "exploreHere": "Chunguza kuanzia hapa",
+  "close": "Funga",
+  "profileButton": "Chunguza galaksi ya Hive ya @{{user}}",
+  "panelToggle": "Vichujio na watayarishaji ({{count}})",
+  "controls": "Vidhibiti",
+  "music": "Muziki wa usuli",
+  "history": {
+    "label": "Nyuma na mbele",
+    "undo": "Nyuma",
+    "redo": "Mbele",
+    "undoKey": "Nyuma (Ctrl+Z)",
+    "redoKey": "Mbele (Ctrl+Shift+Z)"
+  },
+  "collapse": "Kunja",
+  "links": {
+    "loading": "Tunapakia miunganisho yao kwenye ramani hii…",
+    "out_one": "Anafuata akaunti {{count}} kwenye ramani hii",
+    "out_other": "Anafuata akaunti {{count}} kwenye ramani hii",
+    "in_one": "Anafuatwa na akaunti {{count}} kwenye ramani hii",
+    "in_other": "Anafuatwa na akaunti {{count}} kwenye ramani hii"
+  },
+  "circles": {
+    "title": "Duara",
+    "note": "Akaunti ambazo watu walewale wanazifuata, zimepangwa katika vikundi kiotomatiki. Bofya moja ili kuiangazia.",
+    "label": "Duara la @{{user}} · {{count}}",
+    "name": "Duara la @{{user}}",
+    "size_one": "{{count}} wa kugundua",
+    "size_other": "{{count}} wa kugundua",
+    "ring": {
+      "following_one": "{{count}} anayefuatwa na @{{user}}",
+      "following_other": "{{count}} wanaofuatwa na @{{user}}",
+      "followers_one": "{{count}} anamfuata @{{user}}",
+      "followers_other": "{{count}} wanamfuata @{{user}}",
+      "mutuals_one": "rafiki {{count}}",
+      "mutuals_other": "marafiki {{count}}"
+    },
+    "ringTitle": {
+      "following": "Akaunti anazofuata @{{user}} kwenye duara hili ({{count}})",
+      "followers": "Wafuasi wa @{{user}} kwenye duara hili ({{count}})",
+      "mutuals": "Marafiki wa @{{user}} kwenye duara hili ({{count}})"
+    },
+    "in": "Kwenye duara la @{{user}}",
+    "clear": "Onyesha watayarishaji wote"
+  }
+}

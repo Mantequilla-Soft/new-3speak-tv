@@ -1,0 +1,143 @@
+{
+  "open": "Một năm của bạn trên 3Speak",
+  "pageTitle": "Một năm của {{user}} trên 3Speak",
+  "intro": {
+    "title": "Một năm của @{{user}} trên 3Speak",
+    "sub": "12 tháng qua, qua những con số."
+  },
+  "uploads": {
+    "kicker": "Bạn đã tải lên",
+    "videos_other": "{{count}} video",
+    "shorts_other": "{{count}} Shorts",
+    "and": "và"
+  },
+  "watch": {
+    "kicker": "Mọi người đã xem bạn trong",
+    "sub": "Tính trên các video và Shorts của bạn.",
+    "since": "Thời gian xem được tính từ {{date}}.",
+    "graph": "Thời gian xem mỗi tuần.",
+    "bestWeek": "Tuần đỉnh nhất: {{date}}, {{time}}",
+    "weekOf": "Tuần {{date}}",
+    "panHint": "Cuộn hoặc kéo để đi qua cả năm."
+  },
+  "audience": {
+    "kicker": "Video của bạn đã được phát",
+    "views_other": "{{count}} lần",
+    "votes_other": "{{count}} lượt vote",
+    "comments_other": "{{count}} bình luận",
+    "fans": "Fan hàng đầu của bạn",
+    "fansLoading": "Đang tìm fan hàng đầu của bạn…",
+    "noFans": "Chưa có vote hay phản hồi nào từ người khác."
+  },
+  "top": {
+    "kicker": "Video được xem nhiều nhất",
+    "watched": "Đã xem {{time}}"
+  },
+  "supporters": {
+    "kicker": "Người ủng hộ hàng đầu",
+    "anonymous": "Ẩn danh"
+  },
+  "rank": {
+    "kicker": "Thứ hạng tốt nhất trên bảng xếp hạng",
+    "board": "trên {{board}}",
+    "hint": "Mỗi bậc là một nhà sáng tạo trên bảng đó. Di chuột để xem là ai."
+  },
+  "outro": {
+    "title": "Cảm ơn bạn đã sáng tạo trên 3Speak",
+    "sub": "Cùng chào đón 12 tháng tới.",
+    "channel": "Mở kênh của bạn"
+  },
+  "empty": {
+    "title": "Không có video tải lên trong 12 tháng qua",
+    "sub": "Tải lên một video hoặc Shorts và một năm của bạn trên 3Speak sẽ bắt đầu từ đây.",
+    "upload": "Tải lên"
+  },
+  "signIn": "Đăng nhập để xem một năm của bạn trên 3Speak.",
+  "loading": "Đang tổng kết năm của bạn…",
+  "error": "Không tải được năm của bạn. Hãy thử lại sau ít phút.",
+  "nav": {
+    "previous": "Trước",
+    "next": "Tiếp",
+    "slide": "Trang {{n}}/{{total}}"
+  },
+  "communities": {
+    "kicker": "Bạn đã đăng bài trong",
+    "count_other": "{{count}} cộng đồng",
+    "posts_other": "{{count}} bài đăng"
+  },
+  "followed": {
+    "kicker": "Bạn đã bắt đầu theo dõi",
+    "count_other": "{{count}} tài khoản"
+  },
+  "watched": {
+    "kicker": "Những nhà sáng tạo bạn xem nhiều nhất",
+    "videos_other": "Đã xem {{count}} video"
+  },
+  "followers": {
+    "kicker": "Người theo dõi mới từ {{date}}",
+    "count_other": "{{count}} tài khoản đã theo dõi bạn",
+    "kickerYear": "Người theo dõi mới năm nay"
+  },
+  "panel": {
+    "openCommunity": "Mở cộng đồng",
+    "untitled": "Không có tiêu đề",
+    "closeAndLook": "Đóng và xem quanh"
+  },
+  "income": {
+    "kicker": "Bạn đã kiếm được",
+    "sub": "Từ phần thưởng bài đăng, quảng cáo 3Speak và tiền tip.",
+    "note": "Tính bằng HBD (mỗi đơn vị khoảng một đô la Mỹ), HIVE và HP quy đổi theo giá HIVE hiện tại.",
+    "partial": "Tài khoản rất sôi nổi: số liệu này chỉ gồm phần gần đây nhất của năm.",
+    "hint": "Di chuột lên một cột để xem chi tiết.",
+    "sources": {
+      "author": "Phần thưởng bài đăng",
+      "ads": "Quảng cáo 3Speak",
+      "tips": "Tiền tip"
+    },
+    "legendOurs": "trên 3Speak",
+    "legendOther": "nơi khác trên Hive",
+    "segments": {
+      "ours": "Phần thưởng bài đăng trên 3Speak",
+      "other": "Phần thưởng bài đăng ở nơi khác trên Hive",
+      "ads_creator": "Doanh thu quảng cáo với vai trò nhà sáng tạo",
+      "ads_viewer": "Phần thưởng quảng cáo với vai trò người xem",
+      "ads_combined": "Thanh toán quảng cáo cho cả hai (không tách riêng)"
+    },
+    "rewardedPosts_other": "{{count}} bài đăng được thưởng",
+    "legendCreator": "với vai trò nhà sáng tạo",
+    "legendViewer": "với vai trò người xem",
+    "logScale": "Chiều cao cột dùng thang logarit để số tiền nhỏ vẫn nhìn thấy được.",
+    "payments_other": "{{count}} khoản thanh toán",
+    "legendCombined": "cả hai, không tách riêng"
+  },
+  "loadingSteps": {
+    "stats": "Đang tra cứu năm của bạn…",
+    "uploads": "Đang đếm video tải lên…",
+    "watch": "Đang đo thời gian xem…",
+    "audience": "Đang đếm lượt xem…",
+    "fans": "Đang tìm fan của bạn…",
+    "income": "Đang cộng thu nhập…",
+    "communities": "Đang ghé các cộng đồng của bạn…",
+    "followers": "Đang xem ai đã theo dõi bạn…",
+    "watched": "Đang xem lại những gì bạn đã xem…",
+    "thumbnails": "Đang tải ảnh thu nhỏ… {{done}}/{{total}}"
+  },
+  "tips": {
+    "label": "Mẹo:",
+    "mouse": {
+      "tip1": "Di chuyển chuột và mỗi cảnh sẽ chuyển động theo, kể cả bên ngoài trang.",
+      "tip2": "Cuộn để phóng to và thu nhỏ bức tường video của bạn.",
+      "tip3": "Cuộn hoặc kéo biểu đồ thời gian xem để đi qua cả năm.",
+      "tip4": "Di chuột lên thanh, bậc, cột hoặc ô để xem chi tiết.",
+      "tip5": "Nhấp vào ô, thanh hoặc cộng đồng để giữ chi tiết luôn mở."
+    },
+    "touch": {
+      "tip1": "Dùng các mũi tên ở dưới để chuyển trang.",
+      "tip2": "Kéo trên bức tường video để nhìn quanh.",
+      "tip3": "Vuốt ngang biểu đồ thời gian xem để đi qua cả năm.",
+      "tip4": "Chạm vào một ô để xem thẻ video.",
+      "tip5": "Chạm vào cộng đồng hoặc một tuần để xem video của nó.",
+      "tip6": "Các cảnh tự xoay chậm; kéo các vòng để tự xoay chúng."
+    }
+  }
+}

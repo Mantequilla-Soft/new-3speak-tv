@@ -37,7 +37,13 @@
     "title": "Ganhe enquanto assiste",
     "rowTitle": "Recompensas para espectadores",
     "desc": "Ganhe uma parte da receita de anúncios pelo que você assiste, paga em HBD ou HIVE. Você recebe pelos vídeos assistidos, tendo tocado um anúncio ou não, então a recompensa é por assistir, não por aguentar anúncios. Os anúncios em si tocam para todos, exceto assinantes do 3Speak Pro. Registramos quanto de cada vídeo você assistiu, além do histórico que a página Assistidos já guarda, e apagamos esses dados assim que você desativar isto.",
-    "aria": "Ganhe uma parte da receita de anúncios pelo que você assiste"
+    "aria": "Ganhe uma parte da receita de anúncios pelo que você assiste",
+    "titleListen": "Ganhe enquanto assiste e ouve",
+    "listenDesc": "Ouvir também conta: registramos quanto tempo você ouve áudios do 3Speak e episódios de podcasts no 3speak.tv. As recompensas por ouvir começam quando tivermos conferido os números, e conta o que você ouvir a partir do dia em que ativar isto.",
+    "listenAlso": "Contar também o que eu ouço",
+    "listenOnToast": "O que você ouve agora conta para as recompensas por ouvir",
+    "onToastBoth": "Recompensas por assistir e ouvir ativadas",
+    "offToastBoth": "Recompensas desativadas, e seus dados de exibição e audição foram apagados"
   },
   "postingAuth": {
     "updateFailed": "Não foi possível atualizar sua autoridade de postagem.",

@@ -1,0 +1,143 @@
+{
+  "open": "你在 3Speak 的这一年",
+  "pageTitle": "{{user}} 在 3Speak 的这一年",
+  "intro": {
+    "title": "@{{user}} 在 3Speak 的这一年",
+    "sub": "用数字回顾过去 12 个月。"
+  },
+  "uploads": {
+    "kicker": "你上传了",
+    "videos_other": "{{count}} 个视频",
+    "shorts_other": "{{count}} 个 Shorts",
+    "and": "和"
+  },
+  "watch": {
+    "kicker": "大家观看你的时长",
+    "sub": "包括你的视频和 Shorts。",
+    "since": "观看时长从 {{date}} 起统计。",
+    "graph": "每周观看时长。",
+    "bestWeek": "最佳一周：{{date}}，{{time}}",
+    "weekOf": "{{date}} 当周",
+    "panHint": "滚动或拖动即可浏览全年。"
+  },
+  "audience": {
+    "kicker": "你的视频被播放了",
+    "views_other": "{{count}} 次",
+    "votes_other": "{{count}} 个投票",
+    "comments_other": "{{count}} 条评论",
+    "fans": "你的头号粉丝",
+    "fansLoading": "正在寻找你的头号粉丝…",
+    "noFans": "还没有其他人的投票或回复。"
+  },
+  "top": {
+    "kicker": "你观看次数最多的视频",
+    "watched": "观看时长 {{time}}"
+  },
+  "supporters": {
+    "kicker": "你的头号支持者",
+    "anonymous": "匿名"
+  },
+  "rank": {
+    "kicker": "你在排行榜上的最佳名次",
+    "board": "在 {{board}}",
+    "hint": "每一级台阶代表该榜单上的一位创作者。悬停即可查看是谁。"
+  },
+  "outro": {
+    "title": "感谢你在 3Speak 创作",
+    "sub": "敬接下来的 12 个月。",
+    "channel": "打开你的频道"
+  },
+  "empty": {
+    "title": "过去 12 个月没有上传",
+    "sub": "上传一个视频或 Shorts，你在 3Speak 的这一年就从这里开始。",
+    "upload": "上传"
+  },
+  "signIn": "登录即可查看你在 3Speak 的这一年。",
+  "loading": "正在统计你的这一年…",
+  "error": "无法加载你的这一年，请稍后再试。",
+  "nav": {
+    "previous": "上一页",
+    "next": "下一页",
+    "slide": "第 {{n}} 页，共 {{total}} 页"
+  },
+  "communities": {
+    "kicker": "你发帖的社区",
+    "count_other": "{{count}} 个社区",
+    "posts_other": "{{count}} 篇帖子"
+  },
+  "followed": {
+    "kicker": "你新关注了",
+    "count_other": "{{count}} 个账号"
+  },
+  "watched": {
+    "kicker": "你看得最多的创作者",
+    "videos_other": "观看了 {{count}} 个视频"
+  },
+  "followers": {
+    "kicker": "自 {{date}} 起的新粉丝",
+    "count_other": "{{count}} 个账号关注了你",
+    "kickerYear": "今年的新粉丝"
+  },
+  "panel": {
+    "openCommunity": "打开社区",
+    "untitled": "无标题",
+    "closeAndLook": "关闭并四处看看"
+  },
+  "income": {
+    "kicker": "你赚到了",
+    "sub": "来自帖子奖励、3Speak 广告和打赏。",
+    "note": "以 HBD 计（每个约合 1 美元），HIVE 和 HP 按链上当前 HIVE 价格折算。",
+    "partial": "账号非常活跃：这里只统计了今年最近的一段时间。",
+    "hint": "悬停在柱子上查看明细。",
+    "sources": {
+      "author": "帖子奖励",
+      "ads": "3Speak 广告",
+      "tips": "打赏"
+    },
+    "legendOurs": "在 3Speak",
+    "legendOther": "在 Hive 其他地方",
+    "segments": {
+      "ours": "3Speak 上的帖子奖励",
+      "other": "Hive 其他地方的帖子奖励",
+      "ads_creator": "作为创作者的广告收入",
+      "ads_viewer": "作为观众的广告奖励",
+      "ads_combined": "两者合计的广告付款（未拆分）"
+    },
+    "rewardedPosts_other": "{{count}} 篇获得奖励的帖子",
+    "legendCreator": "作为创作者",
+    "legendViewer": "作为观众",
+    "logScale": "柱子高度采用对数刻度，小额也能看得见。",
+    "payments_other": "{{count}} 笔付款",
+    "legendCombined": "两者合计，未拆分"
+  },
+  "loadingSteps": {
+    "stats": "正在查找你的这一年…",
+    "uploads": "正在统计你的上传…",
+    "watch": "正在计算观看时长…",
+    "audience": "正在统计播放次数…",
+    "fans": "正在寻找你的粉丝…",
+    "income": "正在汇总你的收入…",
+    "communities": "正在走访你的社区…",
+    "followers": "正在查看谁关注了你…",
+    "watched": "正在回顾你看过的内容…",
+    "thumbnails": "正在加载缩略图… {{done}} / {{total}}"
+  },
+  "tips": {
+    "label": "提示：",
+    "mouse": {
+      "tip1": "移动鼠标，每个场景都会跟随，即使在幻灯片外也一样。",
+      "tip2": "滚动即可放大或缩小你的视频墙。",
+      "tip3": "滚动或拖动观看时长图表来浏览全年。",
+      "tip4": "悬停在柱条、台阶、柱子或方块上查看详情。",
+      "tip5": "点击方块、柱条或社区，可保持其详情打开。"
+    },
+    "touch": {
+      "tip1": "使用底部的箭头逐页浏览。",
+      "tip2": "在视频墙上拖动即可四处查看。",
+      "tip3": "左右滑动观看时长图表来浏览全年。",
+      "tip4": "点按方块查看视频卡片。",
+      "tip5": "点按社区或某一周查看相关视频。",
+      "tip6": "场景会自己慢慢转动；拖动圆环可以亲手转动它们。"
+    }
+  }
+}

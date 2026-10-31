@@ -1,0 +1,119 @@
+{
+  "title": "Galaksi Hive",
+  "desktopOnly": {
+    "title": "Galaksi Hive butuh layar yang lebih besar",
+    "text": "Buka di komputer untuk menjelajahi siapa mengikuti siapa.",
+    "back": "Kembali ke kanal @{{user}}"
+  },
+  "modeLabel": "Yang dipetakan",
+  "mode": {
+    "following": "Mengikuti",
+    "followers": "Pengikut",
+    "mutuals": "Teman"
+  },
+  "depth": {
+    "label": "Pindai",
+    "orbit": "Orbit ({{n}} akun)",
+    "starsystem": "Sistem bintang ({{n}} akun)",
+    "nebula": "Nebula ({{n}} akun)",
+    "deepspace": "Antariksa dalam (hingga {{n}} akun, lebih lambat)"
+  },
+  "find": {
+    "label": "Cari akun di galaksi ini",
+    "placeholder": "Cari atau jelajahi akun",
+    "go": "Cari",
+    "hidden": "@{{user}} ada di galaksi ini, tapi tersembunyi oleh filtermu atau batas peta.",
+    "missing": "@{{user}} tidak ada di galaksi ini.",
+    "explore": "Jelajahi galaksi @{{user}}"
+  },
+  "loading": "Memetakan galaksi @{{user}}…",
+  "progressLists": "Membaca daftar ikutan",
+  "progress": "Membaca siapa yang mereka ikuti",
+  "progressDetails": "Memuat detail akun",
+  "error": "Galaksi ini tidak bisa dimuat. Coba lagi sebentar lagi.",
+  "empty": {
+    "following": "@{{user}} belum mengikuti siapa pun, jadi tidak ada galaksi untuk digambar.",
+    "followers": "Belum ada yang mengikuti @{{user}}, jadi tidak ada galaksi untuk digambar.",
+    "mutuals": "Belum ada yang mengikuti balik @{{user}}, jadi tidak ada galaksi untuk digambar."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Akun ({{count}})",
+    "mutual": "Saling mengikuti ({{count}})",
+    "oneWay": "Ikutan satu arah ({{count}})",
+    "suggestions": "Kreator untuk ditemukan ({{count}} dari {{total}})",
+    "capped": "Peta menampilkan {{shown}} dari {{total}}"
+  },
+  "hint": "Seret untuk memutar, seret dengan klik kanan atau Shift+seret untuk menggeser, gulir untuk zoom ke arah kursor. Klik sebuah bintang; klik bagian tengah untuk kembali.",
+  "via": "{{count}} dari {{total}} akun yang dipindai mengikuti mereka",
+  "followedBy": "@{{user}} mengikuti mereka",
+  "followsCenter": "Mengikuti @{{user}}",
+  "mutual": "@{{user}} dan mereka saling mengikuti",
+  "leadsTo_other": "Mengarah ke {{count}} kreator di peta",
+  "scanInfo": "Sudah memindai ikutan {{count}} dari {{total}} akun.",
+  "scanSkip": "Akun yang mengikuti lebih dari {{n}} akun lain tidak dipindai: akun yang asal mengikuti banyak orang kurang mencerminkan selera.",
+  "credit": "Data ikutan dari <src>HafSQL</src>, dikelola oleh <user>@{{user}}</user>",
+  "noSuggestions": "Tidak ada kreator untuk disarankan dari pindaian ini.",
+  "filters": {
+    "title": "Filter",
+    "overlap_other": "Diikuti oleh setidaknya {{count}} dari {{total}} akun yang dipindai",
+    "active": "Aktif",
+    "activeWithin": "Dalam {{count}} hari terakhir",
+    "any": "Semua",
+    "rep": "Reputasi",
+    "repAtLeast": "{{rep}} atau lebih",
+    "creators": "Hanya kreator dengan video di 3Speak",
+    "hideMine": "Sembunyikan akun yang sudah kuikuti",
+    "partial": "Sebagian detail akun tidak bisa dimuat, jadi beberapa filter dimatikan.",
+    "none": "Tidak ada kreator yang cocok dengan filter ini.",
+    "reset": "Atur ulang filter"
+  },
+  "stats": {
+    "followers_other": "{{n}} pengikut",
+    "rep": "Reputasi {{rep}}",
+    "videos": "{{videos}} video, {{shorts}} Shorts di 3Speak",
+    "noVideos": "Belum ada video di 3Speak"
+  },
+  "activeToday": "Aktif hari ini",
+  "activeAgo_other": "Aktif {{count}} hari lalu",
+  "discover": "Kreator untuk ditemukan",
+  "openChannel": "Buka kanal",
+  "exploreHere": "Jelajahi dari sini",
+  "close": "Tutup",
+  "profileButton": "Jelajahi galaksi Hive @{{user}}",
+  "panelToggle": "Filter & kreator ({{count}})",
+  "controls": "Kontrol",
+  "music": "Musik latar",
+  "history": {
+    "label": "Mundur dan maju",
+    "undo": "Mundur",
+    "redo": "Maju",
+    "undoKey": "Mundur (Ctrl+Z)",
+    "redoKey": "Maju (Ctrl+Shift+Z)"
+  },
+  "collapse": "Ciutkan",
+  "links": {
+    "loading": "Memuat hubungan mereka di peta ini…",
+    "out_other": "Mengikuti {{count}} akun di peta ini",
+    "in_other": "Diikuti oleh {{count}} akun di peta ini"
+  },
+  "circles": {
+    "title": "Lingkaran",
+    "note": "Akun yang diikuti oleh orang-orang yang sama, dikelompokkan otomatis. Klik salah satu untuk memfokuskannya.",
+    "label": "Lingkaran @{{user}} · {{count}}",
+    "name": "Lingkaran @{{user}}",
+    "size_other": "{{count}} untuk ditemukan",
+    "ring": {
+      "following_other": "{{count}} diikuti @{{user}}",
+      "followers_other": "{{count}} mengikuti @{{user}}",
+      "mutuals_other": "{{count}} teman"
+    },
+    "ringTitle": {
+      "following": "Akun yang diikuti @{{user}} di lingkaran ini ({{count}})",
+      "followers": "Pengikut @{{user}} di lingkaran ini ({{count}})",
+      "mutuals": "Teman @{{user}} di lingkaran ini ({{count}})"
+    },
+    "in": "Di lingkaran @{{user}}",
+    "clear": "Tampilkan semua kreator"
+  }
+}

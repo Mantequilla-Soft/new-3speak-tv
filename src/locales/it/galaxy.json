@@ -1,0 +1,139 @@
+{
+  "title": "Galassia Hive",
+  "desktopOnly": {
+    "title": "La galassia Hive ha bisogno di uno schermo più grande",
+    "text": "Aprila su un computer per esplorare chi segue chi.",
+    "back": "Torna al canale di @{{user}}"
+  },
+  "modeLabel": "Quali collegamenti mappare",
+  "mode": {
+    "following": "Seguiti",
+    "followers": "Follower",
+    "mutuals": "Amici"
+  },
+  "depth": {
+    "label": "Scansione",
+    "orbit": "Orbita ({{n}} account)",
+    "starsystem": "Sistema stellare ({{n}} account)",
+    "nebula": "Nebulosa ({{n}} account)",
+    "deepspace": "Spazio profondo (fino a {{n}} account, più lento)"
+  },
+  "find": {
+    "label": "Trova un account in questa galassia",
+    "placeholder": "Trova o esplora un account",
+    "go": "Trova",
+    "hidden": "@{{user}} è in questa galassia, ma è nascosto dai tuoi filtri o dal limite della mappa.",
+    "missing": "@{{user}} non è in questa galassia.",
+    "explore": "Esplora la galassia di @{{user}}"
+  },
+  "loading": "Stiamo mappando la galassia di @{{user}}…",
+  "progressLists": "Lettura delle liste dei seguiti",
+  "progress": "Lettura dei loro seguiti",
+  "progressDetails": "Caricamento dei dettagli degli account",
+  "error": "Impossibile caricare questa galassia. Riprova tra un momento.",
+  "empty": {
+    "following": "@{{user}} non segue ancora nessuno, quindi non c'è nessuna galassia da disegnare.",
+    "followers": "Nessuno segue ancora @{{user}}, quindi non c'è nessuna galassia da disegnare.",
+    "mutuals": "Nessuno ricambia ancora il follow di @{{user}}, quindi non c'è nessuna galassia da disegnare."
+  },
+  "legend": {
+    "center": "@{{user}}",
+    "follows": "Account ({{count}})",
+    "mutual": "Si seguono a vicenda ({{count}})",
+    "oneWay": "Follow non ricambiato ({{count}})",
+    "suggestions": "Creator da scoprire ({{count}} su {{total}})",
+    "capped": "La mappa mostra {{shown}} su {{total}}"
+  },
+  "hint": "Trascina per ruotare, trascina con il tasto destro o con Shift per spostare, scorri per zoomare verso il puntatore. Clicca una stella; clicca il centro per tornare indietro.",
+  "via": "{{count}} dei {{total}} account scansionati li seguono",
+  "followedBy": "@{{user}} li segue",
+  "followsCenter": "Segue @{{user}}",
+  "mutual": "@{{user}} e questo account si seguono a vicenda",
+  "leadsTo_one": "Porta a {{count}} creator sulla mappa",
+  "leadsTo_many": "Porta a {{count}} creator sulla mappa",
+  "leadsTo_other": "Porta a {{count}} creator sulla mappa",
+  "scanInfo": "Scansionati i seguiti di {{count}} account su {{total}}.",
+  "scanSkip": "Gli account che seguono più di {{n}} altri non vengono scansionati: chi segue in massa dice poco sui propri gusti.",
+  "credit": "Dati sui follow da <src>HafSQL</src>, gestito da <user>@{{user}}</user>",
+  "noSuggestions": "Nessun creator da suggerire da questa scansione.",
+  "filters": {
+    "title": "Filtri",
+    "overlap_one": "Seguito da almeno {{count}} dei {{total}} scansionati",
+    "overlap_many": "Seguito da almeno {{count}} dei {{total}} scansionati",
+    "overlap_other": "Seguito da almeno {{count}} dei {{total}} scansionati",
+    "active": "Attivo",
+    "activeWithin": "Negli ultimi {{count}} giorni",
+    "any": "Qualsiasi",
+    "rep": "Reputazione",
+    "repAtLeast": "{{rep}} o più",
+    "creators": "Solo creator con video su 3Speak",
+    "hideMine": "Nascondi gli account che seguo già",
+    "partial": "Non è stato possibile caricare alcuni dettagli degli account, quindi alcuni filtri sono disattivati.",
+    "none": "Nessun creator corrisponde a questi filtri.",
+    "reset": "Reimposta filtri"
+  },
+  "stats": {
+    "followers_one": "{{n}} follower",
+    "followers_many": "{{n}} follower",
+    "followers_other": "{{n}} follower",
+    "rep": "Reputazione {{rep}}",
+    "videos": "{{videos}} video, {{shorts}} short su 3Speak",
+    "noVideos": "Ancora nessun video su 3Speak"
+  },
+  "activeToday": "Attivo oggi",
+  "activeAgo_one": "Attivo {{count}} giorno fa",
+  "activeAgo_many": "Attivo {{count}} giorni fa",
+  "activeAgo_other": "Attivo {{count}} giorni fa",
+  "discover": "Creator da scoprire",
+  "openChannel": "Apri il canale",
+  "exploreHere": "Esplora da qui",
+  "close": "Chiudi",
+  "profileButton": "Esplora la galassia Hive di @{{user}}",
+  "panelToggle": "Filtri e creator ({{count}})",
+  "controls": "Comandi",
+  "music": "Musica di sottofondo",
+  "history": {
+    "label": "Indietro e avanti",
+    "undo": "Indietro",
+    "redo": "Avanti",
+    "undoKey": "Indietro (Ctrl+Z)",
+    "redoKey": "Avanti (Ctrl+Shift+Z)"
+  },
+  "collapse": "Comprimi",
+  "links": {
+    "loading": "Caricamento dei loro collegamenti su questa mappa…",
+    "out_one": "Segue {{count}} account su questa mappa",
+    "out_many": "Segue {{count}} account su questa mappa",
+    "out_other": "Segue {{count}} account su questa mappa",
+    "in_one": "Seguito da {{count}} account su questa mappa",
+    "in_many": "Seguito da {{count}} account su questa mappa",
+    "in_other": "Seguito da {{count}} account su questa mappa"
+  },
+  "circles": {
+    "title": "Cerchie",
+    "note": "Account seguiti dalle stesse persone, raggruppati automaticamente. Clicca una cerchia per metterla in evidenza.",
+    "label": "Cerchia di @{{user}} · {{count}}",
+    "name": "Cerchia di @{{user}}",
+    "size_one": "{{count}} da scoprire",
+    "size_many": "{{count}} da scoprire",
+    "size_other": "{{count}} da scoprire",
+    "ring": {
+      "following_one": "{{count}} seguito da @{{user}}",
+      "following_many": "{{count}} seguiti da @{{user}}",
+      "following_other": "{{count}} seguiti da @{{user}}",
+      "followers_one": "{{count}} segue @{{user}}",
+      "followers_many": "{{count}} seguono @{{user}}",
+      "followers_other": "{{count}} seguono @{{user}}",
+      "mutuals_one": "{{count}} amico",
+      "mutuals_many": "{{count}} amici",
+      "mutuals_other": "{{count}} amici"
+    },
+    "ringTitle": {
+      "following": "Account seguiti da @{{user}} in questa cerchia ({{count}})",
+      "followers": "Follower di @{{user}} in questa cerchia ({{count}})",
+      "mutuals": "Amici di @{{user}} in questa cerchia ({{count}})"
+    },
+    "in": "Nella cerchia di @{{user}}",
+    "clear": "Mostra tutti i creator"
+  }
+}
