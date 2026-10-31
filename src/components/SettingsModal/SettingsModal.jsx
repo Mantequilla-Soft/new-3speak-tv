@@ -23,6 +23,7 @@ import DataRequestForm from './DataRequestForm';
 import LanguagePicker from '../LanguagePicker/LanguagePicker';
 import ModalHeader from '../ModalHeader/ModalHeader';
 import './SettingsModal.scss';
+import useCardSize, { useIsCardSizeMobile } from '../../hooks/useCardSize';
 
 // Every toast from this module is headed "Settings"; the message becomes the
 // line under it. See utils/toast.js.
@@ -676,6 +677,8 @@ const CONTENT_TABS = [
 export default function SettingsModal({ isOpen, onClose }) {
   const { t } = useTranslation();
   const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
+  const cardSize = useCardSize();
+  const cardSizeMobile = useIsCardSizeMobile();
   /* Whether the Ads & rewards page exists at all.
    *
    * 🚨 THE CHECKER DECIDES, not the build flag. adsEnabledFor() is true for everybody
@@ -782,7 +785,7 @@ export default function SettingsModal({ isOpen, onClose }) {
   // Previews only work on touch devices in large mode, so hide the toggle when
   // a touch user has small cards selected (it would have no effect).
   const isTouch = !window.matchMedia('(hover: hover)').matches;
-  const showPreviewSetting = !isTouch || homeCardSize === 'large';
+  const showPreviewSetting = !isTouch || cardSize === 'large';
   // The shorts comment bar is rendered only under 768px (see Short.scss), so its
   // toggle would do nothing on desktop/tablet. Gate it on the SAME breakpoint —
   // `isDesktop` (>=1025px) would wrongly still show it on a tablet.
@@ -835,12 +838,15 @@ export default function SettingsModal({ isOpen, onClose }) {
               checked={theme === 'dark'}
               onChange={(wantDark) => { if ((theme === 'dark') !== wantDark) toggleTheme(); }}
             />
-            <Row
-              title={t('settings.appearance.largeCards.title')}
-              desc={t('settings.appearance.largeCards.desc')}
-              checked={homeCardSize === 'large'}
-              onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
-            />
+            {/* Large cards are a phone thing: desktop always uses small ones (hooks/useCardSize). */}
+            {cardSizeMobile && (
+              <Row
+                title={t('settings.appearance.largeCards.title')}
+                desc={t('settings.appearance.largeCards.desc')}
+                checked={homeCardSize === 'large'}
+                onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
+              />
+            )}
             {showPreviewSetting && (
               <Row
                 title={t('settings.appearance.previews.title')}
