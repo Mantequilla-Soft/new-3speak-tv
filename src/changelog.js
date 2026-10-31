@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.80.78',
+    category: 'audio',
+    date: '2026-10-31',
+    summary: 'The Audio page is now split into Mine, Discover and Trends, with the filters under Discover and Trends.',
+  },
+  {
     version: '1.80.77',
     category: 'audio',
     date: '2026-10-31',
