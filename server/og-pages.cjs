@@ -35,6 +35,9 @@ const INVITE_CODE_RE = /^[a-z0-9]{10}$/;
 // &episode=<feedId>:<hash> (the checker's ids, routes/podcasts.js).
 const PODCAST_ID_RE = /^[0-9a-f]{24}$/;
 const EPISODE_ID_RE = /^[0-9a-f]{24}:[A-Za-z0-9_-]{16}$/;
+// A 3Speak audio by its own id (embed-audio permlink): /audio?play=<owner>/<id>,
+// the link the player's share menu copies.
+const AUDIO_PERMLINK_RE = /^[A-Za-z0-9_-]{1,64}$/;
 // Where live rooms are looked up (the site's VITE_HANGOUTS_API_URLS servers).
 const HANGOUTS_APIS = (process.env.OG_HANGOUTS_APIS || 'https://live.3speak.tv')
   .split(',').map((s) => s.trim().replace(/\/+$/, '')).filter(Boolean);
@@ -113,6 +116,13 @@ module.exports = function createPages(h) {
       if (episode) return EPISODE_ID_RE.test(episode) ? { kind: 'episode', id: episode } : { kind: 'missing' };
       const podcast = url.searchParams.get('podcast');
       if (podcast) return PODCAST_ID_RE.test(podcast) ? { kind: 'podcast', id: podcast } : { kind: 'missing' };
+      const play = url.searchParams.get('play');
+      if (play) {
+        const [owner, id] = play.replace(/^@/, '').split('/');
+        return ACCOUNT_RE.test(String(owner || '').toLowerCase()) && AUDIO_PERMLINK_RE.test(String(id || ''))
+          ? { kind: 'audioplay', owner: owner.toLowerCase(), id }
+          : { kind: 'missing' };
+      }
       // The audio page itself: its own card (og-server PAGE_CARDS).
       return null;
     }
@@ -648,6 +658,43 @@ ${body}
     });
   }
 
+  // ─── A 3Speak audio by its player link: /audio?play=<owner>/<id> ───────────
+  // The same card as the audio's Hive post (/audio/:author/:permlink) when it
+  // has one; an audio not on Hive (yet) gets its own artwork and title.
+
+  async function audioPlayPage(req, res, page, origin) {
+    const state = await getJsonState(`${CHECKER_URL}/audio?owner=${encodeURIComponent(page.owner)}&permlink=${encodeURIComponent(page.id)}&limit=1`);
+    if (state.error) return null;
+    const list = (state.data && state.data.audio) || [];
+    const doc = list.find((a) => a && a.permlink === page.id && a.owner === page.owner);
+    if (state.missing || !doc || (doc.status && doc.status !== 'published')) return MISSING;
+    const postPermlink = String(doc.post_permlink || '').split('/').pop();
+    if (postPermlink && PERMLINK_RE.test(postPermlink)) {
+      return audioPage(req, res, { kind: 'audio', author: page.owner, permlink: postPermlink }, origin);
+    }
+    const title = doc.title || `Audio by @${page.owner}`;
+    const description = clip(doc.description) || `${isSongDoc(doc) ? 'A song' : 'Audio'} by @${page.owner} on 3Speak`;
+    const { image, imageType } = cardImage(doc.thumbnail_url || avatarOf(page.owner), req, origin);
+    const audio = doc.mp3_cid ? `${AUDIO_GATEWAY}/ipfs/${doc.mp3_cid}` : doc.audio_cid ? `${AUDIO_GATEWAY}/ipfs/${doc.audio_cid}` : '';
+    const type = doc.mp3_cid ? 'audio/mpeg' : AUDIO_MIME[String(doc.format || '').toLowerCase()] || 'audio/mpeg';
+    return buildHtml({
+      title: `${title} on 3speak.tv`,
+      ogTitle: `${title} on 3speak.tv`,
+      description,
+      image,
+      imageType,
+      imageAlt: title,
+      url: origin + req.url,
+      canonical: `${CANONICAL_ORIGIN}/audio?play=${page.owner}/${page.id}`,
+      ogExtra: audio ? [['og:audio', audio], ['og:audio:secure_url', audio], ['og:audio:type', type]] : [],
+      // Not on Hive yet: nothing a search engine should keep.
+      noindex: true,
+      body: `  <h1>${escapeHtml(title)}</h1>
+  <p>${escapeHtml(description)}</p>
+  <p>By <a href="${escapeHtml(`${origin}/@${page.owner}`)}">@${escapeHtml(page.owner)}</a></p>`,
+    });
+  }
+
   // ─── Outside podcasts: /audio?type=external&podcast= / &episode= ───────────
   // Shows and episodes from other hosts that listeners follow on 3Speak. The
   // card names the show and who makes it; the picture is drawn by the API
@@ -723,6 +770,7 @@ ${body}
     invite: invitePage,
     podcast: podcastPage,
     episode: episodePage,
+    audioplay: audioPlayPage,
     missing: async () => MISSING,
   };
 

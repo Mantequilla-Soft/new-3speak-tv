@@ -24,4 +24,11 @@ describe('podcast share pages', () => {
     expect(at('/audio?podcast=nope')).toEqual({ kind: 'missing' })
     expect(at('/audio?episode=6ae3d0da1b502682dec2f1d5')).toEqual({ kind: 'missing' })
   })
+
+  it('match a 3Speak audio by its player link', () => {
+    expect(at('/audio?play=kevinicabales/aa8ro7ms')).toEqual({ kind: 'audioplay', owner: 'kevinicabales', id: 'aa8ro7ms' })
+    expect(at('/audio?play=@Kevinicabales/aa8ro7ms&t=30')).toEqual({ kind: 'audioplay', owner: 'kevinicabales', id: 'aa8ro7ms' })
+    expect(at('/audio?play=x/aa8ro7ms')).toEqual({ kind: 'missing' })
+    expect(at('/audio?play=kevinicabales/../etc')).toEqual({ kind: 'missing' })
+  })
 })
