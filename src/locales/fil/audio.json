@@ -473,7 +473,12 @@
       "none": "Walang episode na tugma sa mga filter na ito.",
       "custom": "Sariling saklaw",
       "from": "Mula",
-      "to": "Hanggang"
+      "to": "Hanggang",
+      "inbox": "Bago",
+      "inboxEmpty": "Wala pang bago. Dito lalabas ang mga episode mula sa nakaraang linggo na hindi mo pa naipe-play.",
+      "unplayed": "Hindi pa na-play",
+      "inProgress": "Sinimulan",
+      "downloaded": "Na-download"
     },
     "resume": "Ituloy",
     "showNotes": "Show notes",
@@ -523,6 +528,103 @@
       "discover": "Tuklasin",
       "trends": "Mga uso",
       "mineEmpty": "Wala ka pang sinusundang podcast. Maghanap ng palabas sa Tuklasin, o tingnan ang patok sa Mga uso."
+    },
+    "downloads": {
+      "title": "Mga download",
+      "download": "I-download para mapakinggan offline",
+      "short": "I-download",
+      "downloading": "Nagda-download {{pct}}%",
+      "cancel": "Kanselahin ang download",
+      "saved": "Naka-save offline",
+      "remove": "Alisin ang download",
+      "removeShort": "Alisin",
+      "removed": "Naalis ang download",
+      "done": "Naka-save para mapakinggan offline",
+      "total": "{{size}} ang naka-save",
+      "storage": "gumagamit ang site na ito ng {{used}} sa {{quota}} sa browser na ito",
+      "perBrowser": "Nananatili ang mga download sa browser na ito, sino man ang naka-sign in.",
+      "errors": {
+        "tooLarge": "Masyadong malaki ang episode na ito para i-save.",
+        "rateLimited": "Masyadong maraming download ngayon. Pakisubukang muli makalipas ang ilang minuto.",
+        "storage": "Wala nang espasyo para i-save ang episode na ito sa browser na ito.",
+        "failed": "Hindi ma-download ang episode. Pakisubukang muli.",
+        "noSource": "Hindi mase-save ang episode na ito."
+      }
+    },
+    "autoQueue": {
+      "label": "Awtomatikong idagdag sa queue ang mga bagong episode",
+      "hint": "Mapupunta sa dulo ng iyong queue ang mga bagong episode ng show na ito paglabas nila",
+      "onDone": "Mapupunta sa iyong queue ang mga bagong episode ng show na ito",
+      "offDone": "Hindi na mapupunta sa iyong queue ang mga bagong episode ng show na ito",
+      "added_one": "{{count}} bagong episode ang naidagdag sa iyong queue",
+      "added_other": "{{count}} bagong episode ang naidagdag sa iyong queue"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Magsimula rito",
+    "seasons": {
+      "label": "Season",
+      "all": "Lahat ng season",
+      "season": "Season {{n}}"
+    },
+    "persons": {
+      "title": "Mga host at bisita",
+      "roles": {
+        "host": "Host",
+        "guest": "Bisita",
+        "cohost": "Co-host",
+        "producer": "Producer"
+      }
+    },
+    "episodeSearch": {
+      "label": "Maghanap ng episode",
+      "placeholder": "Hanapin sa mga episode ng show na ito",
+      "none": "Walang episode na tumutugma sa \"{{q}}\"."
+    },
+    "live": {
+      "now": "Live ngayon",
+      "badge": "LIVE",
+      "listen": "Makinig nang live",
+      "upcoming": "Paparating",
+      "startsAt": "Magsisimula: {{time}}"
+    },
+    "private": {
+      "toggle": "Pribadong feed ito (kailangan ng login)",
+      "username": "Username",
+      "password": "Password",
+      "hint": "Ipinapadala ang login sa podcast service ng 3Speak para mabasa nito ang feed para sa iyo. Hindi kailanman lumalabas ang mga pribadong feed sa mga pampublikong listahan.",
+      "badge": "Pribado",
+      "badgeHint": "Pribadong feed: ang mga nagfo-follow lang dito gamit ang login ang nakakakita",
+      "opmlLeftOut_one": "{{count}} pribadong feed ang hindi isinama sa file.",
+      "opmlLeftOut_other": "{{count}} pribadong feed ang hindi isinama sa file."
+    },
+    "highlights": {
+      "title": "Mga highlight",
+      "play": "I-play ang highlight",
+      "untitled": "Highlight sa {{time}}"
+    },
+    "chapters": {
+      "title": "Mga kabanata",
+      "loading": "Nilo-load ang mga kabanata…",
+      "none": "Hindi ma-load ang mga kabanata.",
+      "link": "Link ng kabanata"
+    },
+    "share": {
+      "copy": "Kopyahin ang link",
+      "copyAt": "Kopyahin ang link sa {{time}}",
+      "clip": "Kopyahin ang link sa highlight na ito",
+      "copied": "Nakopya ang link",
+      "failed": "Hindi makopya ang link"
+    },
+    "deepLink": {
+      "playFrom": "I-play mula {{time}}",
+      "playClip": "I-play mula {{from}} hanggang {{to}}"
+    },
+    "video": {
+      "watch": "Panoorin ang video",
+      "hide": "Itago ang video"
     }
   }
 }

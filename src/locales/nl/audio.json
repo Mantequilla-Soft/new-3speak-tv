@@ -473,7 +473,12 @@
       "none": "Geen afleveringen voor deze filters.",
       "custom": "Eigen periode",
       "from": "Van",
-      "to": "Tot"
+      "to": "Tot",
+      "inbox": "Nieuw",
+      "inboxEmpty": "Niets nieuws. Afleveringen van de afgelopen week die je nog niet hebt afgespeeld, verschijnen hier.",
+      "unplayed": "Niet afgespeeld",
+      "inProgress": "Bezig",
+      "downloaded": "Gedownload"
     },
     "resume": "Verder luisteren",
     "showNotes": "Shownotes",
@@ -523,6 +528,103 @@
       "discover": "Ontdekken",
       "trends": "Trends",
       "mineEmpty": "Je volgt nog geen podcasts. Vind programma’s bij Ontdekken, of kijk bij Trends wat populair is."
+    },
+    "downloads": {
+      "title": "Downloads",
+      "download": "Downloaden om offline te luisteren",
+      "short": "Downloaden",
+      "downloading": "Downloaden {{pct}}%",
+      "cancel": "Download annuleren",
+      "saved": "Offline opgeslagen",
+      "remove": "Download verwijderen",
+      "removeShort": "Verwijderen",
+      "removed": "Download verwijderd",
+      "done": "Opgeslagen om offline te luisteren",
+      "total": "{{size}} opgeslagen",
+      "storage": "deze site gebruikt {{used}} van {{quota}} in deze browser",
+      "perBrowser": "Downloads blijven in deze browser, wie er ook is ingelogd.",
+      "errors": {
+        "tooLarge": "Deze aflevering is te groot om op te slaan.",
+        "rateLimited": "Te veel downloads op dit moment. Probeer het over een paar minuten opnieuw.",
+        "storage": "Er is geen ruimte om deze aflevering in deze browser op te slaan.",
+        "failed": "De aflevering kon niet worden gedownload. Probeer het opnieuw.",
+        "noSource": "Deze aflevering kan niet worden opgeslagen."
+      }
+    },
+    "autoQueue": {
+      "label": "Nieuwe afleveringen automatisch aan de wachtrij toevoegen",
+      "hint": "Nieuwe afleveringen van deze podcast komen achteraan in je wachtrij zodra ze verschijnen",
+      "onDone": "Nieuwe afleveringen van deze podcast gaan naar je wachtrij",
+      "offDone": "Nieuwe afleveringen van deze podcast gaan niet meer naar je wachtrij",
+      "added_one": "{{count}} nieuwe aflevering aan je wachtrij toegevoegd",
+      "added_other": "{{count}} nieuwe afleveringen aan je wachtrij toegevoegd"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Begin hier",
+    "seasons": {
+      "label": "Seizoen",
+      "all": "Alle seizoenen",
+      "season": "Seizoen {{n}}"
+    },
+    "persons": {
+      "title": "Hosts en gasten",
+      "roles": {
+        "host": "Host",
+        "guest": "Gast",
+        "cohost": "Co-host",
+        "producer": "Producent"
+      }
+    },
+    "episodeSearch": {
+      "label": "Afleveringen zoeken",
+      "placeholder": "Zoek in de afleveringen van deze podcast",
+      "none": "Geen afleveringen gevonden voor \"{{q}}\"."
+    },
+    "live": {
+      "now": "Nu live",
+      "badge": "LIVE",
+      "listen": "Live luisteren",
+      "upcoming": "Binnenkort",
+      "startsAt": "Start: {{time}}"
+    },
+    "private": {
+      "toggle": "Dit is een privéfeed (inloggen vereist)",
+      "username": "Gebruikersnaam",
+      "password": "Wachtwoord",
+      "hint": "De inloggegevens gaan naar de podcastdienst van 3Speak, zodat die de feed voor je kan lezen. Privéfeeds verschijnen nooit in openbare lijsten.",
+      "badge": "Privé",
+      "badgeHint": "Een privéfeed: alleen wie hem met inloggegevens volgt, ziet hem",
+      "opmlLeftOut_one": "{{count}} privéfeed is niet in het bestand opgenomen.",
+      "opmlLeftOut_other": "{{count}} privéfeeds zijn niet in het bestand opgenomen."
+    },
+    "highlights": {
+      "title": "Hoogtepunten",
+      "play": "Hoogtepunt afspelen",
+      "untitled": "Hoogtepunt op {{time}}"
+    },
+    "chapters": {
+      "title": "Hoofdstukken",
+      "loading": "Hoofdstukken laden…",
+      "none": "De hoofdstukken konden niet worden geladen.",
+      "link": "Hoofdstuklink"
+    },
+    "share": {
+      "copy": "Link kopiëren",
+      "copyAt": "Link kopiëren vanaf {{time}}",
+      "clip": "Link naar dit hoogtepunt kopiëren",
+      "copied": "Link gekopieerd",
+      "failed": "Kon de link niet kopiëren"
+    },
+    "deepLink": {
+      "playFrom": "Afspelen vanaf {{time}}",
+      "playClip": "{{from}} tot {{to}} afspelen"
+    },
+    "video": {
+      "watch": "Video bekijken",
+      "hide": "Video verbergen"
     }
   }
 }

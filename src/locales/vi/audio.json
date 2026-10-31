@@ -450,7 +450,12 @@
       "none": "Không có tập nào khớp với bộ lọc này.",
       "custom": "Khoảng tùy chọn",
       "from": "Từ",
-      "to": "Đến"
+      "to": "Đến",
+      "inbox": "Mới",
+      "inboxEmpty": "Chưa có gì mới. Các tập trong tuần qua mà bạn chưa phát sẽ hiện ở đây.",
+      "unplayed": "Chưa phát",
+      "inProgress": "Đang nghe",
+      "downloaded": "Đã tải xuống"
     },
     "resume": "Nghe tiếp",
     "showNotes": "Ghi chú tập",
@@ -500,6 +505,101 @@
       "discover": "Khám phá",
       "trends": "Xu hướng",
       "mineEmpty": "Bạn chưa theo dõi podcast nào. Tìm chương trình trong Khám phá hoặc xem những gì đang phổ biến trong Xu hướng."
+    },
+    "downloads": {
+      "title": "Bản tải xuống",
+      "download": "Tải xuống để nghe ngoại tuyến",
+      "short": "Tải xuống",
+      "downloading": "Đang tải {{pct}}%",
+      "cancel": "Hủy tải xuống",
+      "saved": "Đã lưu ngoại tuyến",
+      "remove": "Xóa bản tải xuống",
+      "removeShort": "Gỡ bỏ",
+      "removed": "Đã xóa bản tải xuống",
+      "done": "Đã lưu để nghe ngoại tuyến",
+      "total": "Đã lưu {{size}}",
+      "storage": "trang này dùng {{used}} trên {{quota}} trong trình duyệt này",
+      "perBrowser": "Bản tải xuống nằm trong trình duyệt này, dù ai đang đăng nhập.",
+      "errors": {
+        "tooLarge": "Tập này quá lớn để lưu.",
+        "rateLimited": "Hiện có quá nhiều lượt tải xuống. Vui lòng thử lại sau vài phút.",
+        "storage": "Trình duyệt này không còn chỗ để lưu tập này.",
+        "failed": "Không tải xuống được tập này. Vui lòng thử lại.",
+        "noSource": "Không thể lưu tập này."
+      }
+    },
+    "autoQueue": {
+      "label": "Tự động thêm tập mới vào hàng chờ",
+      "hint": "Tập mới của chương trình này sẽ vào cuối hàng chờ của bạn khi phát hành",
+      "onDone": "Tập mới của chương trình này sẽ vào hàng chờ của bạn",
+      "offDone": "Tập mới của chương trình này không còn vào hàng chờ của bạn",
+      "added_other": "Đã thêm {{count}} tập mới vào hàng chờ của bạn"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Bắt đầu từ đây",
+    "seasons": {
+      "label": "Mùa",
+      "all": "Tất cả các mùa",
+      "season": "Mùa {{n}}"
+    },
+    "persons": {
+      "title": "Người dẫn và khách mời",
+      "roles": {
+        "host": "Người dẫn",
+        "guest": "Khách mời",
+        "cohost": "Đồng dẫn",
+        "producer": "Nhà sản xuất"
+      }
+    },
+    "episodeSearch": {
+      "label": "Tìm tập",
+      "placeholder": "Tìm trong các tập của chương trình này",
+      "none": "Không có tập nào khớp với \"{{q}}\"."
+    },
+    "live": {
+      "now": "Đang trực tiếp",
+      "badge": "TRỰC TIẾP",
+      "listen": "Nghe trực tiếp",
+      "upcoming": "Sắp diễn ra",
+      "startsAt": "Bắt đầu: {{time}}"
+    },
+    "private": {
+      "toggle": "Đây là nguồn riêng tư (cần đăng nhập)",
+      "username": "Tên người dùng",
+      "password": "Mật khẩu",
+      "hint": "Thông tin đăng nhập được gửi đến dịch vụ podcast của 3Speak để đọc nguồn thay bạn. Nguồn riêng tư không bao giờ hiện trong danh sách công khai.",
+      "badge": "Riêng tư",
+      "badgeHint": "Nguồn riêng tư: chỉ người theo dõi bằng thông tin đăng nhập mới thấy",
+      "opmlLeftOut_other": "{{count}} nguồn riêng tư không được đưa vào tệp."
+    },
+    "highlights": {
+      "title": "Điểm nổi bật",
+      "play": "Phát điểm nổi bật",
+      "untitled": "Điểm nổi bật lúc {{time}}"
+    },
+    "chapters": {
+      "title": "Chương",
+      "loading": "Đang tải chương…",
+      "none": "Không tải được các chương.",
+      "link": "Liên kết chương"
+    },
+    "share": {
+      "copy": "Sao chép liên kết",
+      "copyAt": "Sao chép liên kết tại {{time}}",
+      "clip": "Sao chép liên kết đến điểm nổi bật này",
+      "copied": "Đã sao chép liên kết",
+      "failed": "Không sao chép được liên kết"
+    },
+    "deepLink": {
+      "playFrom": "Phát từ {{time}}",
+      "playClip": "Phát từ {{from}} đến {{to}}"
+    },
+    "video": {
+      "watch": "Xem video",
+      "hide": "Ẩn video"
     }
   }
 }

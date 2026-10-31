@@ -496,7 +496,12 @@
       "none": "Nenhum episódio corresponde a estes filtros.",
       "custom": "Período personalizado",
       "from": "De",
-      "to": "Até"
+      "to": "Até",
+      "inbox": "Novos",
+      "inboxEmpty": "Nada de novo. Os episódios da última semana que você ainda não ouviu aparecem aqui.",
+      "unplayed": "Não reproduzidos",
+      "inProgress": "Em andamento",
+      "downloaded": "Baixados"
     },
     "resume": "Continuar",
     "showNotes": "Notas do episódio",
@@ -546,6 +551,105 @@
       "discover": "Descobrir",
       "trends": "Tendências",
       "mineEmpty": "Você ainda não segue nenhum podcast. Encontre programas em Descobrir ou veja o que está em alta em Tendências."
+    },
+    "downloads": {
+      "title": "Downloads",
+      "download": "Baixar para ouvir offline",
+      "short": "Baixar",
+      "downloading": "Baixando {{pct}}%",
+      "cancel": "Cancelar download",
+      "saved": "Salvo offline",
+      "remove": "Remover download",
+      "removeShort": "Remover",
+      "removed": "Download removido",
+      "done": "Salvo para ouvir offline",
+      "total": "{{size}} salvos",
+      "storage": "este site usa {{used}} de {{quota}} neste navegador",
+      "perBrowser": "Os downloads ficam neste navegador, não importa quem esteja conectado.",
+      "errors": {
+        "tooLarge": "Este episódio é grande demais para ser salvo.",
+        "rateLimited": "Muitos downloads no momento. Tente novamente em alguns minutos.",
+        "storage": "Não há espaço para salvar este episódio neste navegador.",
+        "failed": "Não foi possível baixar o episódio. Tente novamente.",
+        "noSource": "Este episódio não pode ser salvo."
+      }
+    },
+    "autoQueue": {
+      "label": "Adicionar novos episódios à fila automaticamente",
+      "hint": "Novos episódios deste programa vão para o fim da sua fila quando saem",
+      "onDone": "Novos episódios deste programa irão para a sua fila",
+      "offDone": "Novos episódios deste programa não vão mais para a sua fila",
+      "added_one": "{{count}} novo episódio adicionado à sua fila",
+      "added_many": "{{count}} novos episódios adicionados à sua fila",
+      "added_other": "{{count}} novos episódios adicionados à sua fila"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bônus"
+    },
+    "startHere": "Comece por aqui",
+    "seasons": {
+      "label": "Temporada",
+      "all": "Todas as temporadas",
+      "season": "Temporada {{n}}"
+    },
+    "persons": {
+      "title": "Apresentadores e convidados",
+      "roles": {
+        "host": "Apresentador",
+        "guest": "Convidado",
+        "cohost": "Coapresentador",
+        "producer": "Produtor"
+      }
+    },
+    "episodeSearch": {
+      "label": "Buscar episódios",
+      "placeholder": "Buscar nos episódios deste programa",
+      "none": "Nenhum episódio corresponde a \"{{q}}\"."
+    },
+    "live": {
+      "now": "Ao vivo agora",
+      "badge": "AO VIVO",
+      "listen": "Ouvir ao vivo",
+      "upcoming": "Em breve",
+      "startsAt": "Início: {{time}}"
+    },
+    "private": {
+      "toggle": "Este é um feed privado (exige login)",
+      "username": "Nome de usuário",
+      "password": "Senha",
+      "hint": "O login é enviado ao serviço de podcasts do 3Speak para que ele possa ler o feed por você. Feeds privados nunca aparecem em listas públicas.",
+      "badge": "Privado",
+      "badgeHint": "Um feed privado: só quem o segue com login pode vê-lo",
+      "opmlLeftOut_one": "{{count}} feed privado ficou de fora do arquivo.",
+      "opmlLeftOut_many": "{{count}} feeds privados ficaram de fora do arquivo.",
+      "opmlLeftOut_other": "{{count}} feeds privados ficaram de fora do arquivo."
+    },
+    "highlights": {
+      "title": "Destaques",
+      "play": "Tocar destaque",
+      "untitled": "Destaque em {{time}}"
+    },
+    "chapters": {
+      "title": "Capítulos",
+      "loading": "Carregando capítulos…",
+      "none": "Não foi possível carregar os capítulos.",
+      "link": "Link do capítulo"
+    },
+    "share": {
+      "copy": "Copiar link",
+      "copyAt": "Copiar link em {{time}}",
+      "clip": "Copiar um link para este destaque",
+      "copied": "Link copiado",
+      "failed": "Não foi possível copiar o link"
+    },
+    "deepLink": {
+      "playFrom": "Tocar a partir de {{time}}",
+      "playClip": "Tocar de {{from}} a {{to}}"
+    },
+    "video": {
+      "watch": "Assistir ao vídeo",
+      "hide": "Ocultar vídeo"
     }
   }
 }

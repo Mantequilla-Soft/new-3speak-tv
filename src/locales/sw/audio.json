@@ -473,7 +473,12 @@
       "none": "Hakuna kipindi kinacholingana na vichujio hivi.",
       "custom": "Kipindi maalum",
       "from": "Kuanzia",
-      "to": "Hadi"
+      "to": "Hadi",
+      "inbox": "Mpya",
+      "inboxEmpty": "Hakuna kipya. Vipindi vya wiki iliyopita ambavyo hujavicheza vinaonekana hapa.",
+      "unplayed": "Havijachezwa",
+      "inProgress": "Vinavyoendelea",
+      "downloaded": "Vilivyopakuliwa"
     },
     "resume": "Endelea",
     "showNotes": "Maelezo ya kipindi",
@@ -523,6 +528,103 @@
       "discover": "Gundua",
       "trends": "Mitindo",
       "mineEmpty": "Bado hufuati podikasti yoyote. Tafuta vipindi kwenye Gundua, au uone kinachopendwa kwenye Mitindo."
+    },
+    "downloads": {
+      "title": "Vipakuliwa",
+      "download": "Pakua ili usikilize nje ya mtandao",
+      "short": "Pakua",
+      "downloading": "Inapakua {{pct}}%",
+      "cancel": "Ghairi upakuaji",
+      "saved": "Kimehifadhiwa nje ya mtandao",
+      "remove": "Ondoa kipakuliwa",
+      "removeShort": "Ondoa",
+      "removed": "Kipakuliwa kimeondolewa",
+      "done": "Kimehifadhiwa ili kisikilizwe nje ya mtandao",
+      "total": "Imehifadhiwa: {{size}}",
+      "storage": "tovuti hii inatumia {{used}} kati ya {{quota}} kwenye kivinjari hiki",
+      "perBrowser": "Vipakuliwa hubaki kwenye kivinjari hiki, bila kujali nani ameingia.",
+      "errors": {
+        "tooLarge": "Kipindi hiki ni kikubwa mno kuhifadhiwa.",
+        "rateLimited": "Kuna vipakuliwa vingi mno sasa hivi. Tafadhali jaribu tena baada ya dakika chache.",
+        "storage": "Hakuna nafasi ya kuhifadhi kipindi hiki kwenye kivinjari hiki.",
+        "failed": "Imeshindwa kupakua kipindi. Tafadhali jaribu tena.",
+        "noSource": "Kipindi hiki hakiwezi kuhifadhiwa."
+      }
+    },
+    "autoQueue": {
+      "label": "Ongeza vipindi vipya kwenye foleni kiotomatiki",
+      "hint": "Vipindi vipya vya podikasti hii huenda mwisho wa foleni yako vinapotoka",
+      "onDone": "Vipindi vipya vya podikasti hii vitaenda kwenye foleni yako",
+      "offDone": "Vipindi vipya vya podikasti hii havitaenda tena kwenye foleni yako",
+      "added_one": "Kipindi {{count}} kipya kimeongezwa kwenye foleni yako",
+      "added_other": "Vipindi {{count}} vipya vimeongezwa kwenye foleni yako"
+    },
+    "badges": {
+      "trailer": "Kionjo",
+      "bonus": "Ziada"
+    },
+    "startHere": "Anza hapa",
+    "seasons": {
+      "label": "Msimu",
+      "all": "Misimu yote",
+      "season": "Msimu {{n}}"
+    },
+    "persons": {
+      "title": "Watangazaji na wageni",
+      "roles": {
+        "host": "Mtangazaji",
+        "guest": "Mgeni",
+        "cohost": "Mtangazaji mwenza",
+        "producer": "Mtayarishaji"
+      }
+    },
+    "episodeSearch": {
+      "label": "Tafuta vipindi",
+      "placeholder": "Tafuta vipindi vya podikasti hii",
+      "none": "Hakuna vipindi vinavyolingana na \"{{q}}\"."
+    },
+    "live": {
+      "now": "Mubashara sasa",
+      "badge": "MUBASHARA",
+      "listen": "Sikiliza mubashara",
+      "upcoming": "Vinakuja",
+      "startsAt": "Kuanza: {{time}}"
+    },
+    "private": {
+      "toggle": "Huu ni mlisho binafsi (unahitaji kuingia)",
+      "username": "Jina la mtumiaji",
+      "password": "Nenosiri",
+      "hint": "Taarifa za kuingia zinatumwa kwa huduma ya podikasti ya 3Speak ili iweze kusoma mlisho kwa niaba yako. Milisho binafsi haionekani kamwe kwenye orodha za umma.",
+      "badge": "Binafsi",
+      "badgeHint": "Mlisho binafsi: unaonekana tu kwa wanaoufuata kwa taarifa za kuingia",
+      "opmlLeftOut_one": "Mlisho {{count}} binafsi haukujumuishwa kwenye faili.",
+      "opmlLeftOut_other": "Milisho {{count}} binafsi haikujumuishwa kwenye faili."
+    },
+    "highlights": {
+      "title": "Vivutio",
+      "play": "Cheza kivutio",
+      "untitled": "Kivutio katika {{time}}"
+    },
+    "chapters": {
+      "title": "Sura",
+      "loading": "Inapakia sura…",
+      "none": "Imeshindwa kupakia sura.",
+      "link": "Kiungo cha sura"
+    },
+    "share": {
+      "copy": "Nakili kiungo",
+      "copyAt": "Nakili kiungo katika {{time}}",
+      "clip": "Nakili kiungo cha kivutio hiki",
+      "copied": "Kiungo kimenakiliwa",
+      "failed": "Imeshindwa kunakili kiungo"
+    },
+    "deepLink": {
+      "playFrom": "Cheza kuanzia {{time}}",
+      "playClip": "Cheza kuanzia {{from}} hadi {{to}}"
+    },
+    "video": {
+      "watch": "Tazama video",
+      "hide": "Ficha video"
     }
   }
 }

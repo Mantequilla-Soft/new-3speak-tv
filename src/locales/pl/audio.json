@@ -519,7 +519,12 @@
       "none": "Żaden odcinek nie pasuje do tych filtrów.",
       "custom": "Własny zakres",
       "from": "Od",
-      "to": "Do"
+      "to": "Do",
+      "inbox": "Nowe",
+      "inboxEmpty": "Nic nowego. Tutaj pojawiają się nieodtworzone odcinki z ostatniego tygodnia.",
+      "unplayed": "Nieodtworzone",
+      "inProgress": "W trakcie",
+      "downloaded": "Pobrane"
     },
     "resume": "Wznów",
     "showNotes": "Opis odcinka",
@@ -569,6 +574,107 @@
       "discover": "Odkrywaj",
       "trends": "Trendy",
       "mineEmpty": "Nie obserwujesz jeszcze żadnego podcastu. Znajdź audycje w zakładce Odkrywaj albo zobacz, co jest popularne w Trendach."
+    },
+    "downloads": {
+      "title": "Pobrane",
+      "download": "Pobierz do słuchania offline",
+      "short": "Pobierz",
+      "downloading": "Pobieranie {{pct}}%",
+      "cancel": "Anuluj pobieranie",
+      "saved": "Zapisano offline",
+      "remove": "Usuń pobrany plik",
+      "removeShort": "Usuń",
+      "removed": "Usunięto pobrany plik",
+      "done": "Zapisano do słuchania offline",
+      "total": "Zapisano {{size}}",
+      "storage": "ta strona zajmuje {{used}} z {{quota}} w tej przeglądarce",
+      "perBrowser": "Pobrane pliki zostają w tej przeglądarce, niezależnie od tego, kto jest zalogowany.",
+      "errors": {
+        "tooLarge": "Ten odcinek jest za duży, aby go zapisać.",
+        "rateLimited": "Za dużo pobrań w tej chwili. Spróbuj ponownie za kilka minut.",
+        "storage": "W tej przeglądarce brakuje miejsca na zapisanie tego odcinka.",
+        "failed": "Nie udało się pobrać odcinka. Spróbuj ponownie.",
+        "noSource": "Tego odcinka nie można zapisać."
+      }
+    },
+    "autoQueue": {
+      "label": "Automatycznie dodawaj nowe odcinki do kolejki",
+      "hint": "Nowe odcinki tej audycji trafiają na koniec kolejki, gdy tylko się ukażą",
+      "onDone": "Nowe odcinki tej audycji będą trafiać do kolejki",
+      "offDone": "Nowe odcinki tej audycji nie trafiają już do kolejki",
+      "added_one": "Dodano {{count}} nowy odcinek do kolejki",
+      "added_few": "Dodano {{count}} nowe odcinki do kolejki",
+      "added_many": "Dodano {{count}} nowych odcinków do kolejki",
+      "added_other": "Dodano {{count}} nowego odcinka do kolejki"
+    },
+    "badges": {
+      "trailer": "Zwiastun",
+      "bonus": "Bonus"
+    },
+    "startHere": "Zacznij tutaj",
+    "seasons": {
+      "label": "Sezon",
+      "all": "Wszystkie sezony",
+      "season": "Sezon {{n}}"
+    },
+    "persons": {
+      "title": "Prowadzący i goście",
+      "roles": {
+        "host": "Prowadzący",
+        "guest": "Gość",
+        "cohost": "Współprowadzący",
+        "producer": "Producent"
+      }
+    },
+    "episodeSearch": {
+      "label": "Szukaj odcinków",
+      "placeholder": "Szukaj w odcinkach tej audycji",
+      "none": "Brak odcinków pasujących do „{{q}}”."
+    },
+    "live": {
+      "now": "Teraz na żywo",
+      "badge": "NA ŻYWO",
+      "listen": "Słuchaj na żywo",
+      "upcoming": "Wkrótce",
+      "startsAt": "Początek: {{time}}"
+    },
+    "private": {
+      "toggle": "To prywatny kanał (wymaga logowania)",
+      "username": "Nazwa użytkownika",
+      "password": "Hasło",
+      "hint": "Dane logowania trafiają do usługi podcastowej 3Speak, aby mogła odczytać kanał za ciebie. Prywatne kanały nigdy nie pojawiają się na publicznych listach.",
+      "badge": "Prywatny",
+      "badgeHint": "Prywatny kanał: widzą go tylko osoby, które obserwują go z danymi logowania",
+      "opmlLeftOut_one": "Pominięto w pliku {{count}} prywatny kanał.",
+      "opmlLeftOut_few": "Pominięto w pliku {{count}} prywatne kanały.",
+      "opmlLeftOut_many": "Pominięto w pliku {{count}} prywatnych kanałów.",
+      "opmlLeftOut_other": "Pominięto w pliku {{count}} prywatnego kanału."
+    },
+    "highlights": {
+      "title": "Najlepsze momenty",
+      "play": "Odtwórz moment",
+      "untitled": "Moment w {{time}}"
+    },
+    "chapters": {
+      "title": "Rozdziały",
+      "loading": "Wczytywanie rozdziałów…",
+      "none": "Nie udało się wczytać rozdziałów.",
+      "link": "Link do rozdziału"
+    },
+    "share": {
+      "copy": "Kopiuj link",
+      "copyAt": "Kopiuj link od {{time}}",
+      "clip": "Kopiuj link do tego momentu",
+      "copied": "Skopiowano link",
+      "failed": "Nie udało się skopiować linku"
+    },
+    "deepLink": {
+      "playFrom": "Odtwórz od {{time}}",
+      "playClip": "Odtwórz od {{from}} do {{to}}"
+    },
+    "video": {
+      "watch": "Obejrzyj wideo",
+      "hide": "Ukryj wideo"
     }
   }
 }

@@ -473,7 +473,12 @@
       "none": "Bu filtrelere uyan bölüm yok.",
       "custom": "Özel aralık",
       "from": "Başlangıç",
-      "to": "Bitiş"
+      "to": "Bitiş",
+      "inbox": "Yeni",
+      "inboxEmpty": "Yeni bir şey yok. Son bir haftanın henüz oynatmadığın bölümleri burada görünür.",
+      "unplayed": "Oynatılmamış",
+      "inProgress": "Devam eden",
+      "downloaded": "İndirilen"
     },
     "resume": "Devam et",
     "showNotes": "Bölüm notları",
@@ -523,6 +528,103 @@
       "discover": "Keşfet",
       "trends": "Trendler",
       "mineEmpty": "Henüz hiçbir podcast’i takip etmiyorsun. Keşfet’te program bul ya da Trendler’de popüler olanlara bak."
+    },
+    "downloads": {
+      "title": "İndirilenler",
+      "download": "Çevrimdışı dinlemek için indir",
+      "short": "İndir",
+      "downloading": "İndiriliyor %{{pct}}",
+      "cancel": "İndirmeyi iptal et",
+      "saved": "Çevrimdışı kaydedildi",
+      "remove": "İndirileni kaldır",
+      "removeShort": "Kaldır",
+      "removed": "İndirilen kaldırıldı",
+      "done": "Çevrimdışı dinlemek için kaydedildi",
+      "total": "{{size}} kaydedildi",
+      "storage": "bu site bu tarayıcıda {{quota}} alanın {{used}} kadarını kullanıyor",
+      "perBrowser": "İndirilenler, kim giriş yapmış olursa olsun bu tarayıcıda kalır.",
+      "errors": {
+        "tooLarge": "Bu bölüm kaydedilemeyecek kadar büyük.",
+        "rateLimited": "Şu anda çok fazla indirme var. Lütfen birkaç dakika sonra tekrar dene.",
+        "storage": "Bu tarayıcıda bu bölümü kaydedecek yer yok.",
+        "failed": "Bölüm indirilemedi. Lütfen tekrar dene.",
+        "noSource": "Bu bölüm kaydedilemez."
+      }
+    },
+    "autoQueue": {
+      "label": "Yeni bölümleri sıraya otomatik ekle",
+      "hint": "Bu programın yeni bölümleri çıktıklarında sıranın sonuna eklenir",
+      "onDone": "Bu programın yeni bölümleri sırana eklenecek",
+      "offDone": "Bu programın yeni bölümleri artık sırana eklenmeyecek",
+      "added_one": "{{count}} yeni bölüm sırana eklendi",
+      "added_other": "{{count}} yeni bölüm sırana eklendi"
+    },
+    "badges": {
+      "trailer": "Fragman",
+      "bonus": "Bonus"
+    },
+    "startHere": "Buradan başla",
+    "seasons": {
+      "label": "Sezon",
+      "all": "Tüm sezonlar",
+      "season": "Sezon {{n}}"
+    },
+    "persons": {
+      "title": "Sunucular ve konuklar",
+      "roles": {
+        "host": "Sunucu",
+        "guest": "Konuk",
+        "cohost": "Yardımcı sunucu",
+        "producer": "Yapımcı"
+      }
+    },
+    "episodeSearch": {
+      "label": "Bölümlerde ara",
+      "placeholder": "Bu programın bölümlerinde ara",
+      "none": "\"{{q}}\" ile eşleşen bölüm yok."
+    },
+    "live": {
+      "now": "Şu an canlı",
+      "badge": "CANLI",
+      "listen": "Canlı dinle",
+      "upcoming": "Yakında",
+      "startsAt": "Başlangıç: {{time}}"
+    },
+    "private": {
+      "toggle": "Bu gizli bir akış (giriş gerektirir)",
+      "username": "Kullanıcı adı",
+      "password": "Şifre",
+      "hint": "Giriş bilgileri, akışı senin için okuyabilmesi için 3Speak'in podcast hizmetine gönderilir. Gizli akışlar hiçbir zaman herkese açık listelerde görünmez.",
+      "badge": "Gizli",
+      "badgeHint": "Gizli bir akış: yalnızca giriş bilgileriyle takip edenler görür",
+      "opmlLeftOut_one": "{{count}} gizli akış dosyaya eklenmedi.",
+      "opmlLeftOut_other": "{{count}} gizli akış dosyaya eklenmedi."
+    },
+    "highlights": {
+      "title": "Öne çıkanlar",
+      "play": "Öne çıkanı oynat",
+      "untitled": "{{time}} anındaki öne çıkan"
+    },
+    "chapters": {
+      "title": "Kısımlar",
+      "loading": "Kısımlar yükleniyor…",
+      "none": "Kısımlar yüklenemedi.",
+      "link": "Kısım bağlantısı"
+    },
+    "share": {
+      "copy": "Bağlantıyı kopyala",
+      "copyAt": "{{time}} anına bağlantı kopyala",
+      "clip": "Bu öne çıkana bağlantı kopyala",
+      "copied": "Bağlantı kopyalandı",
+      "failed": "Bağlantı kopyalanamadı"
+    },
+    "deepLink": {
+      "playFrom": "{{time}} anından oynat",
+      "playClip": "{{from}} ile {{to}} arasını oynat"
+    },
+    "video": {
+      "watch": "Videoyu izle",
+      "hide": "Videoyu gizle"
     }
   }
 }
