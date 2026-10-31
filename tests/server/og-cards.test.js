@@ -192,3 +192,42 @@ describe('the other card shapes', () => {
     }
   }, 30000)
 })
+
+describe('outside podcast cards', () => {
+  it('a show: its name, and who makes it', async () => {
+    expect(await cards.podcastText({ title: 'Podnews Daily', author: 'Podnews LLC' })).toMatchObject({
+      headline: 'Podnews Daily', subtitle: [['Podcast', true], [' by '], ['Podnews LLC', true]],
+    })
+    expect((await cards.podcastText({ title: 'No Author' })).subtitle).toEqual([['Podcast', true], ON_3SPEAK])
+  })
+
+  it('an episode: its title, its number and the show, a long show name in its short form', async () => {
+    expect(await cards.episodeText({ title: 'Pilot', season: 2, episode: 14 }, { title: 'Short Show' })).toMatchObject({
+      headline: 'Pilot', subtitle: [['S2 E14', true], [' of '], ['Short Show', true]],
+    })
+    expect((await cards.episodeText({ title: 'Who is buying?' }, { title: 'Podnews Daily - podcast industry and podcasting news' })).subtitle)
+      .toEqual([['Episode', true], [' of '], ['Podnews Daily', true]])
+  })
+
+  it('cuts the last name of a subtitle that would run into the cover', () => {
+    const [, , [name]] = cards.fitSubtitle([['Podcast', true], [' by '], ['A'.repeat(80), true]])
+    expect(name.endsWith('…')).toBe(true)
+    expect(name.length).toBeLessThan(80)
+  })
+
+  it('names an episode card by feed and hash, and drops show and episode cards after 30 days', async () => {
+    const card = Buffer.from(await cards.renderCard({ headline: 'Show', subtitle: [['Podcast', true]], avatar: null }))
+    const feed = 'a'.repeat(24)
+    expect(await cards.saveCard('podcast', feed, card)).toBe(true)
+    expect(await cards.saveCard('episode', `${feed}_AbCdEfGh-_123456`, card)).toBe(true)
+    expect(cards.cardUrl('https://3speak.tv', 'episode', `${feed}_AbCdEfGh-_123456`))
+      .toMatch(/^https:\/\/3speak\.tv\/api\/og-card\/episode\/a{24}_AbCdEfGh-_123456\.jpg\?v=/)
+    expect(cards.cardVersion('episode', `${feed}:AbCdEfGh-_123456`)).toBe('')
+    expect(await cards.pruneExpired()).toBe(0)
+    const old = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000)
+    fs.utimesSync(path.join(dir, 'episode', `${feed}_AbCdEfGh-_123456.jpg`), old, old)
+    expect(await cards.pruneExpired()).toBe(1)
+    expect(fs.existsSync(path.join(dir, 'episode', `${feed}_AbCdEfGh-_123456.jpg`))).toBe(false)
+    expect(fs.existsSync(path.join(dir, 'podcast', `${feed}.jpg`))).toBe(true)
+  }, 30000)
+})

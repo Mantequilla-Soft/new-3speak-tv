@@ -31,6 +31,10 @@ const MAX_LISTED = 20;
 const ROOM_RE = /^[a-z0-9][a-z0-9.-]{2,40}$/;
 const OPENPODS_PAGES = new Set(['publish', 'templates']);
 const INVITE_CODE_RE = /^[a-z0-9]{10}$/;
+// Outside podcasts on the audio page: /audio?type=external&podcast=<feedId> and
+// &episode=<feedId>:<hash> (the checker's ids, routes/podcasts.js).
+const PODCAST_ID_RE = /^[0-9a-f]{24}$/;
+const EPISODE_ID_RE = /^[0-9a-f]{24}:[A-Za-z0-9_-]{16}$/;
 // Where live rooms are looked up (the site's VITE_HANGOUTS_API_URLS servers).
 const HANGOUTS_APIS = (process.env.OG_HANGOUTS_APIS || 'https://live.3speak.tv')
   .split(',').map((s) => s.trim().replace(/\/+$/, '')).filter(Boolean);
@@ -104,6 +108,14 @@ module.exports = function createPages(h) {
     // A name no Hive account can have, an id no playlist can have: missing
     // without asking anyone.
     const decode = (v) => { try { return decodeURIComponent(v); } catch (_) { return ''; } };
+    if (p === '/audio') {
+      const episode = url.searchParams.get('episode');
+      if (episode) return EPISODE_ID_RE.test(episode) ? { kind: 'episode', id: episode } : { kind: 'missing' };
+      const podcast = url.searchParams.get('podcast');
+      if (podcast) return PODCAST_ID_RE.test(podcast) ? { kind: 'podcast', id: podcast } : { kind: 'missing' };
+      // The audio page itself: its own card (og-server PAGE_CARDS).
+      return null;
+    }
     let m = p.match(/^\/(?:p|user)\/([^/]+)$/) || p.match(/^\/@([^/]+)(?:\/shorts)?$/);
     if (m) {
       const account = decode(m[1]).toLowerCase();
@@ -636,6 +648,72 @@ ${body}
     });
   }
 
+  // ─── Outside podcasts: /audio?type=external&podcast= / &episode= ───────────
+  // Shows and episodes from other hosts that listeners follow on 3Speak. The
+  // card names the show and who makes it; the picture is drawn by the API
+  // (og-cards.cjs, kept 30 days). Never indexed: the show lives elsewhere.
+
+  const podcastBy = (feed) => (feed && feed.author ? ` by ${clip(feed.author, 80)}` : '');
+  const episodeNumber = (ep) => {
+    const n = (v) => (v != null && v !== '' && Number.isFinite(Number(v)) ? Number(v) : null);
+    if (n(ep.episode) == null) return '';
+    return n(ep.season) != null ? `Season ${n(ep.season)}, episode ${n(ep.episode)}` : `Episode ${n(ep.episode)}`;
+  };
+
+  async function podcastPage(req, res, page, origin) {
+    const state = await getJsonState(`${CHECKER_URL}/podcasts/feed/${page.id}?limit=5`);
+    if (state.error) return null;
+    const feed = state.data && state.data.feed;
+    if (state.missing || !feed || !feed.title || feed.private) return MISSING;
+    const title = clip(feed.title, 120);
+    const lead = `Podcast${podcastBy(feed)}.`;
+    const description = clip(`${title}: ${lead}${feed.description ? ` ${feed.description}` : ''}`, 300);
+    const path = `/audio?type=external&podcast=${page.id}`;
+    const episodes = (state.data.episodes || []).slice(0, 5);
+    return buildHtml({
+      title: `${title} on 3speak.tv`,
+      ogTitle: `${title} on 3speak.tv`,
+      description,
+      ...drawnCard(cardUrl(origin, 'podcast', page.id), `${title}${podcastBy(feed)}`),
+      url: origin + req.url,
+      canonical: `${CANONICAL_ORIGIN}${path}`,
+      noindex: true,
+      body: `  <h1>${escapeHtml(title)}</h1>
+  <p>${escapeHtml(lead)}</p>${feed.description ? `\n  <p>${escapeHtml(clip(feed.description, 600))}</p>` : ''}${episodes.length ? `
+  <ul>${episodes.map((e) => `<li><a href="${escapeHtml(`${origin}/audio?type=external&episode=${encodeURIComponent(e.id)}`)}">${escapeHtml(clip(e.title, 140))}</a></li>`).join('')}</ul>` : ''}`,
+    });
+  }
+
+  async function episodePage(req, res, page, origin) {
+    const state = await getJsonState(`${CHECKER_URL}/podcasts/episode/${encodeURIComponent(page.id)}`);
+    if (state.error) return null;
+    const ep = state.data && state.data.episode;
+    const feed = (state.data && state.data.feed) || {};
+    if (state.missing || !ep || !ep.title || ep.private) return MISSING;
+    const title = clip(ep.title, 140);
+    const show = clip(feed.title || '', 100);
+    const number = episodeNumber(ep);
+    const lead = show ? `${number ? `${number} of` : 'An episode of'} ${show}${podcastBy(feed)}.` : (number ? `${number}.` : 'A podcast episode.');
+    const description = clip(`${lead}${ep.summary ? ` ${ep.summary}` : ''}`, 300);
+    const path = `/audio?type=external&episode=${encodeURIComponent(page.id)}`;
+    // The episode's own file, for platforms that play audio in the card.
+    const audio = /^https:\/\//i.test(String(ep.audio_url || '')) ? ep.audio_url : '';
+    const ogExtra = audio ? [['og:audio', audio], ['og:audio:secure_url', audio], ['og:audio:type', ep.mime || 'audio/mpeg']] : [];
+    return buildHtml({
+      title: `${title} | ${show || 'Podcast'} on 3speak.tv`,
+      ogTitle: show ? `${title} | ${show}` : title,
+      description,
+      ...drawnCard(cardUrl(origin, 'episode', page.id.replace(':', '_')), `${title}${show ? `, ${show}` : ''}`),
+      url: origin + req.url,
+      canonical: `${CANONICAL_ORIGIN}${path}`,
+      ogExtra,
+      noindex: true,
+      body: `  <h1>${escapeHtml(title)}</h1>
+  <p>${escapeHtml(lead)}</p>${ep.summary ? `\n  <p>${escapeHtml(clip(ep.summary, 600))}</p>` : ''}${feed.id ? `
+  <p><a href="${escapeHtml(`${origin}/audio?type=external&podcast=${feed.id}`)}">${escapeHtml(show || 'The show')}</a> on 3Speak</p>` : ''}`,
+    });
+  }
+
   const HANDLERS = {
     profile: profilePage,
     playlist: playlistPage,
@@ -643,6 +721,8 @@ ${body}
     badge: badgePage,
     stream: streamPage,
     invite: invitePage,
+    podcast: podcastPage,
+    episode: episodePage,
     missing: async () => MISSING,
   };
 

@@ -1419,12 +1419,14 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  const pageCard = PAGE_CARDS[url.pathname.replace(/\/+$/, '')];
+  // Before the page cards: a podcast or episode on the audio page has its own
+  // card, the bare /audio keeps the page's (ogPages.match answers null there).
+  const page = ogPages.match(url);
+  const pageCard = !page && PAGE_CARDS[url.pathname.replace(/\/+$/, '')];
   if (pageCard) {
     return sendHtml(req, res, 200, buildGenericHtml(origin + url.pathname, { ...pageCard, image: origin + pageCard.image }));
   }
 
-  const page = ogPages.match(url);
   if (page) {
     try {
       const html = await ogPages.render(req, res, page, origin);

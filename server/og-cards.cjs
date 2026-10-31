@@ -17,6 +17,8 @@
 //   GET /api/og-card/stream/<room>.jpg            a live room: title, LIVE, host
 //   GET /api/og-card/playlist/<id>.jpg            cover (square) and name
 //   GET /api/og-card/audio/<author>/<permlink>.jpg   artwork (square) and title
+//   GET /api/og-card/podcast/<feedId>.jpg             an outside podcast: cover, name, author
+//   GET /api/og-card/episode/<feedId>_<hash>.jpg      one of its episodes: cover, title, show
 //
 // Files live in data/og-cards/<kind>/<id>.jpg (OG_CARD_DIR to move them):
 //   - communities: every Hive community is drawn by the weekly sync below; one
@@ -46,12 +48,16 @@ const crypto = require('crypto')
 const W = 1200
 const H = 630
 const CARD_DIR = process.env.OG_CARD_DIR || path.join(__dirname, 'data', 'og-cards')
-const KINDS = new Set(['community', 'user', 'badge', 'tag', 'invite', 'stream', 'playlist', 'audio'])
+const KINDS = new Set(['community', 'user', 'badge', 'tag', 'invite', 'stream', 'playlist', 'audio', 'podcast', 'episode'])
 // Kinds whose cards the weekly sync draws again (communities are listed from
 // Hive instead). A stream's room is gone once it ends, so its card is only
 // kept for STREAM_KEEP_MS; a tag card never changes.
 const REDRAWN = ['user', 'badge', 'invite', 'playlist', 'audio']
 const STREAM_KEEP_MS = 14 * 24 * 60 * 60 * 1000
+// Outside podcasts are not ours to keep: their cards go 30 days after they were
+// drawn (the hourly check and the route both see to it), and the next share of
+// that show or episode draws a fresh one.
+const EXPIRES_MS = { podcast: 30 * 24 * 60 * 60 * 1000, episode: 30 * 24 * 60 * 60 * 1000 }
 const ACCOUNT_RE = /^[a-z][a-z0-9.-]{2,15}$/
 const COMMUNITY_RE = /^hive-\d{1,10}$/
 const TAG_RE = /^[a-z0-9][a-z0-9-]{0,31}$/
@@ -60,6 +66,10 @@ const INVITE_CODE_RE = /^[a-z0-9]{10}$/
 const ROOM_RE = /^[a-z0-9][a-z0-9.-]{2,40}$/
 const PLAYLIST_ID_RE = /^[a-zA-Z0-9-]{8,64}$/
 const AUDIO_ID_RE = /^[a-z][a-z0-9.-]{2,15}\/[a-z0-9][a-z0-9-]{0,255}$/
+// Outside podcasts (the checker's podcast_feeds): a show is its feed id, an
+// episode `<feedId>:<16 base64url>`, kept as `<feedId>_<hash>` (no ':' in a URL path).
+const PODCAST_ID_RE = /^[0-9a-f]{24}$/
+const EPISODE_FILE_RE = /^[0-9a-f]{24}_[A-Za-z0-9_-]{16}$/
 // Where live rooms are looked up (the site's VITE_HANGOUTS_API_URLS servers).
 const HANGOUTS_APIS = (process.env.OG_CARD_HANGOUTS_APIS || 'https://live.3speak.tv')
   .split(',').map((s) => s.trim().replace(/\/+$/, '')).filter(Boolean)
@@ -113,6 +123,8 @@ function validId(kind, id) {
   if (kind === 'stream') return ROOM_RE.test(id)
   if (kind === 'playlist') return PLAYLIST_ID_RE.test(id)
   if (kind === 'audio') return AUDIO_ID_RE.test(id)
+  if (kind === 'podcast') return PODCAST_ID_RE.test(id)
+  if (kind === 'episode') return EPISODE_FILE_RE.test(id)
   return false
 }
 
@@ -288,6 +300,21 @@ async function fetchPicture(raw) {
     } catch (_) { /* the next source */ }
   }
   return null
+}
+
+/**
+ * An outside podcast's cover as a square JPEG data URI, or null. The checker
+ * keeps the show's art behind its own address (routes/podcasts.js /art, a
+ * signed token), so no podcast host is fetched from here.
+ */
+async function fetchPodcastArt(checkerUrl, art) {
+  if (!art || !/^[A-Za-z0-9._-]{1,600}$/.test(String(art))) return null
+  try {
+    const jpg = await squareJpeg(await fetchBuf(`${checkerUrl}/podcasts/art/${art}/512.jpg`))
+    return jpg ? `data:image/jpeg;base64,${jpg.toString('base64')}` : null
+  } catch (_) {
+    return null
+  }
 }
 
 // ── Fonts and scripts ───────────────────────────────────────────────────────
@@ -710,6 +737,60 @@ async function audioText(author, title, isSong) {
   return { ...await drawnOr(title, `@${author}`), subtitle: [[isSong ? 'Song' : 'Audio', true], [' by '], [`@${author}`, true]] }
 }
 
+const SUBTITLE_SIZE = 40
+
+/**
+ * A subtitle that fits beside the cover: the last bold piece (a show's name,
+ * an author) loses letters, then gets an ellipsis, until the line fits.
+ */
+function fitSubtitle(parts) {
+  const width = (ps) => ps.reduce((sum, [text]) => sum + textWidth(text, SUBTITLE_SIZE), 0)
+  const out = parts.map((p) => [...p])
+  const i = out.map((p) => p[1] === true).lastIndexOf(true)
+  if (i < 0) return out
+  let text = out[i][0]
+  while (graphemes(text).length > 1 && width(out) > TEXT_WIDTH) {
+    text = graphemes(text).slice(0, -1).join('').trimEnd()
+    out[i][0] = `${text}…`
+  }
+  return out
+}
+
+/** A name for the subtitle as { text, cjk }: drawable, or null to leave it out. */
+async function subtitleName(raw) {
+  const prepared = await prepareText(String(raw || '').replace(/\s+/g, ' ').trim())
+  return prepared.ok && prepared.text ? { text: prepared.text, cjk: prepared.cjk } : null
+}
+
+/** What an outside podcast's card says. Exported for the tests. */
+async function podcastText(feed) {
+  const author = await subtitleName(feed.author)
+  const head = await drawnOr(feed.title, 'Podcast')
+  return {
+    headline: head.headline,
+    cjk: [...head.cjk, ...(author ? author.cjk : [])],
+    subtitle: fitSubtitle(author ? [['Podcast', true], [' by '], [author.text, true]] : [['Podcast', true], [' on 3Speak']]),
+  }
+}
+
+/** What an episode's card says: its title, then the show (and the episode's number). Exported for the tests. */
+async function episodeText(ep, feed) {
+  const show = await subtitleName(feed && feed.title)
+  const n = (v) => (v != null && v !== '' && Number.isFinite(Number(v)) ? Number(v) : null)
+  const num = n(ep.episode) != null ? `${n(ep.season) != null ? `S${n(ep.season)} ` : ''}E${n(ep.episode)}` : ''
+  const head = await drawnOr(ep.title, show ? show.text : 'Podcast episode')
+  const line = (name) => (name ? [[num || 'Episode', true], [' of '], [name, true]] : [[num || 'Episode', true], [' on 3Speak']])
+  let subtitle = fitSubtitle(line(show && show.text))
+  // A long show name ("Podnews Daily - podcast industry news") that had to be
+  // cut: its short form, the part before " - " or ":", when that fits whole.
+  const short = show && show.text.split(/\s+[-\u2013\u2014|]\s+|:\s+/)[0].trim()
+  if (show && subtitle[2][0] !== show.text && short && short !== show.text && graphemes(short).length >= 3) {
+    const shorter = fitSubtitle(line(short))
+    if (shorter[2][0] === short) subtitle = shorter
+  }
+  return { headline: head.headline, cjk: [...head.cjk, ...(show ? show.cjk : [])], subtitle }
+}
+
 async function checkerJson(checkerUrl, p) {
   const res = await fetch(`${checkerUrl}${p}`, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
   if (res.status === 404) return null
@@ -832,6 +913,21 @@ async function buildCard(kind, id, { checkerUrl, community } = {}) {
         avatar: cover || await fetchAvatar(author),
         shape: cover ? 'square' : 'ring',
       })
+    }
+    case 'podcast': {
+      // 404 for a private feed or one nobody follows any more.
+      const data = await checkerJson(checkerUrl, `/podcasts/feed/${id}?limit=1`)
+      const feed = data && data.feed
+      if (!feed || !feed.title || feed.private) return null
+      const cover = await fetchPodcastArt(checkerUrl, feed.art)
+      return renderCard({ ...await podcastText(feed), avatar: cover, shape: 'square', initial: initialOf(feed.title) })
+    }
+    case 'episode': {
+      const data = await checkerJson(checkerUrl, `/podcasts/episode/${id.replace('_', ':')}`)
+      const ep = data && data.episode
+      if (!ep || !ep.title || ep.private) return null
+      const cover = await fetchPodcastArt(checkerUrl, ep.art || (data.feed && data.feed.art))
+      return renderCard({ ...await episodeText(ep, data.feed), avatar: cover, shape: 'square', initial: initialOf((data.feed && data.feed.title) || ep.title) })
     }
     default:
       return null
@@ -1028,9 +1124,33 @@ function serveWorker() {
   })
 }
 
+/** A card of an expiring kind that is older than its time, or not. */
+async function expired(kind, id) {
+  if (!EXPIRES_MS[kind]) return false
+  try {
+    return Date.now() - (await fsp.stat(cardPath(kind, id))).mtimeMs > EXPIRES_MS[kind]
+  } catch (_) {
+    return false
+  }
+}
+
+/** Delete the expired cards of every expiring kind. Returns how many went. */
+async function pruneExpired() {
+  let removed = 0
+  for (const kind of Object.keys(EXPIRES_MS)) {
+    for (const id of await cardIds(kind)) {
+      if (!(await expired(kind, id))) continue
+      try { await fsp.unlink(cardPath(kind, id)); removed++ } catch (_) { /* already gone */ }
+    }
+  }
+  return removed
+}
+
 function scheduleSync(call, opts) {
   let running = false
   const tick = async () => {
+    // Every hour, whatever the weekly sync does: cheap, only file dates.
+    await pruneExpired().catch((err) => console.error('[og-cards] prune failed:', err.message))
     if (running) return
     const state = await readState()
     if (state.lastRun && Date.now() - state.lastRun < SYNC_EVERY_MS) return
@@ -1061,8 +1181,8 @@ function mountOgCards(app, { checkerUrl = 'https://checker.3speak.tv', resolveIn
   const missing = new Map()
 
   const serve = async (req, res, kind, urlId) => {
-    // A playlist id keeps its case; every other id is a Hive name.
-    const asked = kind === 'playlist' ? urlId : urlId.toLowerCase()
+    // A playlist id and an episode's hash keep their case; every other id is a Hive name.
+    const asked = kind === 'playlist' || kind === 'episode' ? urlId : urlId.toLowerCase()
     if (!KINDS.has(kind)) return res.status(404).end()
     if (kind === 'invite' ? !INVITE_CODE_RE.test(asked) : !validId(kind, asked)) return res.status(404).end()
     const key = `${kind}/${asked}`
@@ -1097,6 +1217,8 @@ function mountOgCards(app, { checkerUrl = 'https://checker.3speak.tv', resolveIn
       if (!id || !ACCOUNT_RE.test(id)) return notFound()
     }
 
+    // Past its time (an outside podcast's, after 30 days): drawn again below.
+    if (await expired(kind, id)) await fsp.unlink(cardPath(kind, id)).catch(() => {})
     try {
       return send(await fsp.readFile(cardPath(kind, id)))
     } catch (_) { /* not drawn yet */ }
@@ -1145,6 +1267,10 @@ module.exports = {
   streamText,
   playlistText,
   audioText,
+  podcastText,
+  episodeText,
+  pruneExpired,
+  fitSubtitle,
   prepareText,
   fitHeadline,
   syncAll,
