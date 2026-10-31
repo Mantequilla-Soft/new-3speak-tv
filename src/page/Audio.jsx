@@ -27,7 +27,7 @@ const HIDDEN_AUDIO_OWNERS = new Set(['badadib']);
 const isHiddenOwner = (owner) => HIDDEN_AUDIO_OWNERS.has(owner);
 
 // The phone and tablet layout (the bottom navigation shows up to 1024 px): there
-// the page has two tabs, Explore (everything below) and Player (the player as a page).
+// the page has two tabs, Player (the player as a page) and Explore (everything below).
 const MOBILE_QUERY = '(max-width: 1024px)';
 const subscribeMobile = (cb) => {
   const m = window.matchMedia(MOBILE_QUERY);
@@ -176,7 +176,7 @@ function Audio() {
   const [params, setParams] = useSearchParams();
   const external = params.get('type') === 'external' || params.has('podcast') || params.has('episode');
 
-  // Explore | Player on phones and tablets, in the URL (`player=1`; the podcasts tab already uses `view`) so Back
+  // Player | Explore on phones and tablets, in the URL (`player=1`; the podcasts tab already uses `view`) so Back
   // returns to the tab. The Player tab hands its element to the global player,
   // which draws its controls there; the audio itself never leaves the global
   // player, so it keeps playing on Explore and on every other page.
@@ -204,8 +204,15 @@ function Audio() {
     setParams(next);
   };
   useEffect(() => {
-    if (external) rememberExternal(true);
-    else if (![...params.keys()].length && readExternal()) setParams({ type: 'external' }, { replace: true });
+    if (external) { rememberExternal(true); return; }
+    // A bare /audio: back on the podcasts chip if that is where the listener left
+    // off, and on phones and tablets on the Player tab while something is loaded
+    // in the player (Explore otherwise). One URL change for both, in place.
+    if ([...params.keys()].length) return;
+    const next = new URLSearchParams();
+    if (readExternal()) next.set('type', 'external');
+    if (mobile && useAppStore.getState().audioCurrent) next.set('player', '1');
+    if ([...next.keys()].length) setParams(next, { replace: true });
     // Only on arrival and when the URL itself changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [external]);
@@ -444,8 +451,8 @@ function Audio() {
   };
 
   const views = [
-    { key: 'explore', icon: <MdExplore size={18} />, label: t('audio.page.tabExplore') },
     { key: 'player', icon: <MdPlayCircleOutline size={18} />, label: t('audio.page.tabPlayer') },
+    { key: 'explore', icon: <MdExplore size={18} />, label: t('audio.page.tabExplore') },
   ];
 
   return (

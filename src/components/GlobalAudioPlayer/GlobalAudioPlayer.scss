@@ -629,10 +629,9 @@
   .audio-np-title-text { white-space: normal; }
   .audio-np-subline { justify-content: center; flex-wrap: wrap; white-space: normal; }
 
-  // The timeline: the waveform, or the thin bar when there is none.
+  // The timeline: the waveform, or the progress bar when there is none.
   .audio-np-waveform,
   .audio-np-progress { order: 3; }
-  .audio-np-progress { height: 8px; border-radius: 4px; }
 
   .audio-np-mobile-extras { order: 4; display: flex; justify-content: center; flex-wrap: wrap; }
 
@@ -658,4 +657,31 @@
   .audio-transcript-panel { order: 10; }
 }
 
-.audio-now-playing.audio-np-docked:not(:has(.audio-np-waveform)) .audio-np-progress { display: block; }
+// Without a waveform (outside podcast episodes, audio without one) the progress
+// bar stays the timeline when the player is open too.
+.audio-now-playing.audio-np-expanded:not(:has(.audio-np-waveform)) .audio-np-progress { display: block; }
+
+// Docked, it is a full seek bar with a handle at the play position.
+.audio-now-playing.audio-np-docked .audio-np-progress {
+  height: 6px;
+  margin: 6px 0;
+  border-radius: 3px;
+  overflow: visible;
+  &:hover { height: 6px; }
+
+  .audio-np-progress-fill {
+    position: relative;
+    border-radius: 3px;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -7px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      transform: translateY(-50%);
+    }
+  }
+}

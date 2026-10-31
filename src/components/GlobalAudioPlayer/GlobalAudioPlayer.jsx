@@ -32,7 +32,7 @@ import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import PodcastTipModal from '../Podcasts/PodcastTipModal';
 import { canTipEpisode } from '../../lib/podcastTips';
 import { recordProgress, flushProgress, resumePosition } from '../../lib/podcastProgress';
-import { podcastPath, episodePath, artUrl, PODCAST_PLACEHOLDER, pseudoWaveform } from '../../lib/podcasts';
+import { podcastPath, episodePath, artUrl, PODCAST_PLACEHOLDER } from '../../lib/podcasts';
 // The namespace too, for privateAudioUrl: the podcast library adds it, and a
 // build without it must still load (the player then plays track.src).
 import * as podcastsLib from '../../lib/podcasts';
@@ -1157,11 +1157,9 @@ function GlobalAudioPlayer() {
   const nowPlaying = audioCurrent;
   const portalIfDocked = (node) => (docked ? createPortal(node, audioDock) : node);
 
-  // Outside podcast episodes have no waveform of their own: a stand-in (lib/podcasts.js).
-
-  const npWave = isLive ? null : nowPlaying?.waveform?.[0]?.length ? nowPlaying.waveform[0]
-
-    : nowPlaying?.external ? pseudoWaveform(nowPlaying._id)[0] : null;
+  // Only 3Speak audio has a real waveform. Outside podcast episodes (and live
+  // streams) get the plain progress bar instead of a made-up one.
+  const npWave = isLive || nowPlaying?.external ? null : nowPlaying?.waveform?.[0]?.length ? nowPlaying.waveform[0] : null;
 
   const markers = chapterMarkers(chapters, audioDuration);
   const curChapter = chapters.length ? chapterAt(chapters, audioCurrentTime) : null;
