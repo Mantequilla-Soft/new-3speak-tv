@@ -1307,7 +1307,6 @@
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  @include mix.respond(phone) { display: none; }
 }
 
 .audio-np-controls {

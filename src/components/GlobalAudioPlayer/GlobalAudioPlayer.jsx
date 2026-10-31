@@ -1364,6 +1364,8 @@ function GlobalAudioPlayer() {
                 ? <span className="audio-np-author" onClick={(e) => { e.stopPropagation(); navigate(podcastPath(nowPlaying.show_id)); audioSetExpanded(false); }}>{nowPlaying.show}</span>
                 : <span className="audio-np-author" onClick={(e) => { e.stopPropagation(); navigate(`/@${nowPlaying.owner}?tab=audio`); audioSetExpanded(false); }}>@{nowPlaying.owner}</span>}
               {curChapter?.title && <span className="audio-np-chapter-now" title={curChapter.title}>{curChapter.title}</span>}
+              {/* Where it is and how long it runs, in the bar itself. */}
+              {!isLive && <span className="audio-np-subline-time">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>}
             </span>
             {audioClipEnd != null && (
               <button
@@ -1524,6 +1526,14 @@ function GlobalAudioPlayer() {
                   if (el && audioDuration > 0) el.currentTime = f * audioDuration;
                 }}
               />
+            )}
+
+            {/* The Player tab: elapsed under the start of the timeline, the length under its end. */}
+            {docked && !isLive && (
+              <div className="audio-np-timeline-times" aria-hidden="true">
+                <span>{fmt(audioCurrentTime)}</span>
+                <span>{fmt(audioDuration)}</span>
+              </div>
             )}
 
             {/* On the Player tab the queue is part of the page, unfolded. */}

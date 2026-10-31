@@ -49,8 +49,12 @@ describe('docked audio player', () => {
     const audio = host.querySelector('audio')
     expect(audio).toBeTruthy()
     expect(host.querySelector('.audio-now-playing')).toBeTruthy()
+    // The bar says where it is and how long it runs.
+    expect(host.querySelector('.audio-np-subline-time').textContent).toBe('0:00 / 10:00')
 
     act(() => { useAppStore.getState().audioSetDock(dock) })
+    // The Player tab: elapsed and length under the timeline.
+    expect([...dock.querySelectorAll('.audio-np-timeline-times span')].map((e) => e.textContent)).toEqual(['0:00', '10:00'])
     expect(host.querySelector('.audio-now-playing')).toBeNull()
     expect(dock.querySelector('.audio-now-playing.audio-np-docked')).toBeTruthy()
     // The page's view includes what the sheet over the bar would show.

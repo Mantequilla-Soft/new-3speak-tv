@@ -633,7 +633,19 @@
   .audio-np-waveform,
   .audio-np-progress { order: 3; }
 
+  .audio-np-timeline-times {
+    order: 3;
+    display: flex;
+    justify-content: space-between;
+    margin-top: -8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
   .audio-np-mobile-extras { order: 4; display: flex; justify-content: center; flex-wrap: wrap; }
+  // The times are under the timeline here; the bar's line has nothing to add.
+  .audio-np-mobile-extras .audio-np-time,
+  .audio-np-subline-time { display: none; }
 
   .audio-np-controls {
     order: 5;
@@ -685,4 +697,15 @@
       transform: translateY(-50%);
     }
   }
+}
+
+// "1:23 / 45:00" at the end of the bar's second line: it never shrinks, the
+// show or author name gives way first.
+.audio-np-subline-time {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-left: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
 }
