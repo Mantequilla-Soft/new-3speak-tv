@@ -403,7 +403,12 @@
       "none": "没有符合这些筛选条件的单集。",
       "custom": "自定义范围",
       "from": "从",
-      "to": "到"
+      "to": "到",
+      "inbox": "新单集",
+      "inboxEmpty": "暂无新内容。过去一周内你还没播放的单集会显示在这里。",
+      "unplayed": "未播放",
+      "inProgress": "收听中",
+      "downloaded": "已下载"
     },
     "resume": "继续播放",
     "showNotes": "节目说明",
@@ -453,6 +458,101 @@
       "discover": "发现",
       "trends": "趋势",
       "mineEmpty": "你还没有关注任何播客。在“发现”中寻找节目，或在“趋势”中查看热门内容。"
+    },
+    "downloads": {
+      "title": "下载",
+      "download": "下载以离线收听",
+      "short": "下载",
+      "downloading": "正在下载 {{pct}}%",
+      "cancel": "取消下载",
+      "saved": "已离线保存",
+      "remove": "移除下载",
+      "removeShort": "移除",
+      "removed": "已移除下载",
+      "done": "已保存，可离线收听",
+      "total": "已保存 {{size}}",
+      "storage": "本网站在此浏览器中已使用 {{used}}，共 {{quota}}",
+      "perBrowser": "下载内容保存在此浏览器中，与登录的账号无关。",
+      "errors": {
+        "tooLarge": "此单集太大，无法保存。",
+        "rateLimited": "当前下载过多，请几分钟后重试。",
+        "storage": "此浏览器中没有足够空间保存此单集。",
+        "failed": "无法下载此单集，请重试。",
+        "noSource": "此单集无法保存。"
+      }
+    },
+    "autoQueue": {
+      "label": "自动将新单集加入队列",
+      "hint": "此节目有新单集发布时，会自动加到你的队列末尾",
+      "onDone": "此节目的新单集将加入你的队列",
+      "offDone": "此节目的新单集将不再加入你的队列",
+      "added_other": "已将 {{count}} 个新单集加入你的队列"
+    },
+    "badges": {
+      "trailer": "预告",
+      "bonus": "番外"
+    },
+    "startHere": "从这里开始",
+    "seasons": {
+      "label": "季",
+      "all": "全部季",
+      "season": "第 {{n}} 季"
+    },
+    "persons": {
+      "title": "主持人和嘉宾",
+      "roles": {
+        "host": "主持人",
+        "guest": "嘉宾",
+        "cohost": "联合主持人",
+        "producer": "制作人"
+      }
+    },
+    "episodeSearch": {
+      "label": "搜索单集",
+      "placeholder": "搜索此节目的单集",
+      "none": "没有与“{{q}}”匹配的单集。"
+    },
+    "live": {
+      "now": "正在直播",
+      "badge": "直播中",
+      "listen": "收听直播",
+      "upcoming": "即将开始",
+      "startsAt": "开始时间：{{time}}"
+    },
+    "private": {
+      "toggle": "这是私密订阅源（需要登录）",
+      "username": "用户名",
+      "password": "密码",
+      "hint": "登录信息会发送到 3Speak 的播客服务，以便代你读取订阅源。私密订阅源绝不会出现在公开列表中。",
+      "badge": "私密",
+      "badgeHint": "私密订阅源：只有使用登录信息关注它的人才能看到",
+      "opmlLeftOut_other": "{{count}} 个私密订阅源未包含在文件中。"
+    },
+    "highlights": {
+      "title": "精彩片段",
+      "play": "播放精彩片段",
+      "untitled": "{{time}} 处的精彩片段"
+    },
+    "chapters": {
+      "title": "章节",
+      "loading": "正在加载章节…",
+      "none": "无法加载章节。",
+      "link": "章节链接"
+    },
+    "share": {
+      "copy": "复制链接",
+      "copyAt": "复制 {{time}} 处的链接",
+      "clip": "复制此精彩片段的链接",
+      "copied": "链接已复制",
+      "failed": "无法复制链接"
+    },
+    "deepLink": {
+      "playFrom": "从 {{time}} 开始播放",
+      "playClip": "播放 {{from}} 至 {{to}}"
+    },
+    "video": {
+      "watch": "观看视频",
+      "hide": "隐藏视频"
     }
   }
 }

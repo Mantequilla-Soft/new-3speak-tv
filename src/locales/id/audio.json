@@ -403,7 +403,12 @@
       "none": "Tidak ada episode yang cocok dengan filter ini.",
       "custom": "Rentang khusus",
       "from": "Dari",
-      "to": "Sampai"
+      "to": "Sampai",
+      "inbox": "Baru",
+      "inboxEmpty": "Belum ada yang baru. Episode dari seminggu terakhir yang belum Anda putar muncul di sini.",
+      "unplayed": "Belum diputar",
+      "inProgress": "Sedang didengarkan",
+      "downloaded": "Diunduh"
     },
     "resume": "Lanjutkan",
     "showNotes": "Catatan episode",
@@ -453,6 +458,101 @@
       "discover": "Jelajahi",
       "trends": "Tren",
       "mineEmpty": "Kamu belum mengikuti podcast apa pun. Temukan acara di Jelajahi, atau lihat yang populer di Tren."
+    },
+    "downloads": {
+      "title": "Unduhan",
+      "download": "Unduh untuk didengarkan offline",
+      "short": "Unduh",
+      "downloading": "Mengunduh {{pct}}%",
+      "cancel": "Batalkan unduhan",
+      "saved": "Tersimpan offline",
+      "remove": "Hapus unduhan",
+      "removeShort": "Hapus",
+      "removed": "Unduhan dihapus",
+      "done": "Tersimpan untuk didengarkan offline",
+      "total": "{{size}} tersimpan",
+      "storage": "situs ini memakai {{used}} dari {{quota}} di browser ini",
+      "perBrowser": "Unduhan tetap ada di browser ini, siapa pun yang masuk.",
+      "errors": {
+        "tooLarge": "Episode ini terlalu besar untuk disimpan.",
+        "rateLimited": "Terlalu banyak unduhan saat ini. Silakan coba lagi dalam beberapa menit.",
+        "storage": "Tidak ada ruang untuk menyimpan episode ini di browser ini.",
+        "failed": "Episode tidak dapat diunduh. Silakan coba lagi.",
+        "noSource": "Episode ini tidak dapat disimpan."
+      }
+    },
+    "autoQueue": {
+      "label": "Tambahkan episode baru ke antrean secara otomatis",
+      "hint": "Episode baru dari acara ini masuk ke akhir antrean Anda saat terbit",
+      "onDone": "Episode baru dari acara ini akan masuk ke antrean Anda",
+      "offDone": "Episode baru dari acara ini tidak lagi masuk ke antrean Anda",
+      "added_other": "{{count}} episode baru ditambahkan ke antrean Anda"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Mulai dari sini",
+    "seasons": {
+      "label": "Musim",
+      "all": "Semua musim",
+      "season": "Musim {{n}}"
+    },
+    "persons": {
+      "title": "Pembawa acara dan tamu",
+      "roles": {
+        "host": "Pembawa acara",
+        "guest": "Tamu",
+        "cohost": "Pembawa acara pendamping",
+        "producer": "Produser"
+      }
+    },
+    "episodeSearch": {
+      "label": "Cari episode",
+      "placeholder": "Cari episode acara ini",
+      "none": "Tidak ada episode yang cocok dengan \"{{q}}\"."
+    },
+    "live": {
+      "now": "Sedang live",
+      "badge": "LIVE",
+      "listen": "Dengarkan live",
+      "upcoming": "Akan datang",
+      "startsAt": "Mulai: {{time}}"
+    },
+    "private": {
+      "toggle": "Ini feed privat (perlu login)",
+      "username": "Nama pengguna",
+      "password": "Kata sandi",
+      "hint": "Data login dikirim ke layanan podcast 3Speak agar dapat membaca feed untuk Anda. Feed privat tidak pernah muncul di daftar publik.",
+      "badge": "Privat",
+      "badgeHint": "Feed privat: hanya orang yang mengikutinya dengan login yang dapat melihatnya",
+      "opmlLeftOut_other": "{{count}} feed privat tidak disertakan dalam file."
+    },
+    "highlights": {
+      "title": "Sorotan",
+      "play": "Putar sorotan",
+      "untitled": "Sorotan di {{time}}"
+    },
+    "chapters": {
+      "title": "Bab",
+      "loading": "Memuat bab…",
+      "none": "Bab tidak dapat dimuat.",
+      "link": "Tautan bab"
+    },
+    "share": {
+      "copy": "Salin tautan",
+      "copyAt": "Salin tautan di {{time}}",
+      "clip": "Salin tautan ke sorotan ini",
+      "copied": "Tautan tersalin",
+      "failed": "Tidak dapat menyalin tautan"
+    },
+    "deepLink": {
+      "playFrom": "Putar dari {{time}}",
+      "playClip": "Putar {{from}} sampai {{to}}"
+    },
+    "video": {
+      "watch": "Tonton video",
+      "hide": "Sembunyikan video"
     }
   }
 }

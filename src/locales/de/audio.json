@@ -426,7 +426,12 @@
       "none": "Keine Folgen passen zu diesen Filtern.",
       "custom": "Eigener Zeitraum",
       "from": "Von",
-      "to": "Bis"
+      "to": "Bis",
+      "inbox": "Neu",
+      "inboxEmpty": "Nichts Neues. Folgen der letzten Woche, die du noch nicht gehört hast, erscheinen hier.",
+      "unplayed": "Ungehört",
+      "inProgress": "Angefangen",
+      "downloaded": "Heruntergeladen"
     },
     "resume": "Weiterhören",
     "showNotes": "Shownotes",
@@ -476,6 +481,103 @@
       "discover": "Entdecken",
       "trends": "Trends",
       "mineEmpty": "Du folgst noch keinem Podcast. Finde Sendungen unter Entdecken oder sieh dir unter Trends an, was beliebt ist."
+    },
+    "downloads": {
+      "title": "Downloads",
+      "download": "Zum Offline-Hören herunterladen",
+      "short": "Herunterladen",
+      "downloading": "Lädt {{pct}} %",
+      "cancel": "Download abbrechen",
+      "saved": "Offline gespeichert",
+      "remove": "Download entfernen",
+      "removeShort": "Entfernen",
+      "removed": "Download entfernt",
+      "done": "Zum Offline-Hören gespeichert",
+      "total": "{{size}} gespeichert",
+      "storage": "diese Seite nutzt {{used}} von {{quota}} in diesem Browser",
+      "perBrowser": "Downloads bleiben in diesem Browser, egal wer angemeldet ist.",
+      "errors": {
+        "tooLarge": "Diese Folge ist zu groß zum Speichern.",
+        "rateLimited": "Gerade laufen zu viele Downloads. Bitte versuche es in ein paar Minuten erneut.",
+        "storage": "In diesem Browser ist kein Platz mehr für diese Folge.",
+        "failed": "Die Folge konnte nicht heruntergeladen werden. Bitte versuche es erneut.",
+        "noSource": "Diese Folge kann nicht gespeichert werden."
+      }
+    },
+    "autoQueue": {
+      "label": "Neue Folgen automatisch zur Warteschlange hinzufügen",
+      "hint": "Neue Folgen dieses Podcasts landen beim Erscheinen am Ende deiner Warteschlange",
+      "onDone": "Neue Folgen dieses Podcasts kommen in deine Warteschlange",
+      "offDone": "Neue Folgen dieses Podcasts kommen nicht mehr in deine Warteschlange",
+      "added_one": "{{count}} neue Folge zur Warteschlange hinzugefügt",
+      "added_other": "{{count}} neue Folgen zur Warteschlange hinzugefügt"
+    },
+    "badges": {
+      "trailer": "Trailer",
+      "bonus": "Bonus"
+    },
+    "startHere": "Hier einsteigen",
+    "seasons": {
+      "label": "Staffel",
+      "all": "Alle Staffeln",
+      "season": "Staffel {{n}}"
+    },
+    "persons": {
+      "title": "Hosts und Gäste",
+      "roles": {
+        "host": "Host",
+        "guest": "Gast",
+        "cohost": "Co-Host",
+        "producer": "Produktion"
+      }
+    },
+    "episodeSearch": {
+      "label": "Folgen durchsuchen",
+      "placeholder": "Folgen dieses Podcasts durchsuchen",
+      "none": "Keine Folgen zu \"{{q}}\"."
+    },
+    "live": {
+      "now": "Jetzt live",
+      "badge": "LIVE",
+      "listen": "Live hören",
+      "upcoming": "Demnächst",
+      "startsAt": "Beginn: {{time}}"
+    },
+    "private": {
+      "toggle": "Das ist ein privater Feed (mit Login)",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "hint": "Die Zugangsdaten gehen an den Podcast-Dienst von 3Speak, damit er den Feed für dich lesen kann. Private Feeds erscheinen nie in öffentlichen Listen.",
+      "badge": "Privat",
+      "badgeHint": "Ein privater Feed: Nur wer ihm mit Login folgt, sieht ihn",
+      "opmlLeftOut_one": "{{count}} privater Feed wurde nicht in die Datei übernommen.",
+      "opmlLeftOut_other": "{{count}} private Feeds wurden nicht in die Datei übernommen."
+    },
+    "highlights": {
+      "title": "Highlights",
+      "play": "Highlight abspielen",
+      "untitled": "Highlight bei {{time}}"
+    },
+    "chapters": {
+      "title": "Kapitel",
+      "loading": "Kapitel werden geladen…",
+      "none": "Die Kapitel konnten nicht geladen werden.",
+      "link": "Kapitel-Link"
+    },
+    "share": {
+      "copy": "Link kopieren",
+      "copyAt": "Link ab {{time}} kopieren",
+      "clip": "Link zu diesem Highlight kopieren",
+      "copied": "Link kopiert",
+      "failed": "Link konnte nicht kopiert werden"
+    },
+    "deepLink": {
+      "playFrom": "Ab {{time}} abspielen",
+      "playClip": "{{from}} bis {{to}} abspielen"
+    },
+    "video": {
+      "watch": "Video ansehen",
+      "hide": "Video ausblenden"
     }
   }
 }
