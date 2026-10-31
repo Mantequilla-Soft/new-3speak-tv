@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { formatTimeAgo } from '../../i18n';
 import { MdPlayArrow, MdPlaylistPlay, MdShare, MdAdd } from 'react-icons/md';
@@ -77,6 +77,7 @@ function getMetaLine(item, t) {
  *   loggedIn      — gate playlist button rendering (defaults to false)
  *   trackNumber   — optional; shown before the title (e.g. inside a playlist)
  *   hideAlbum     — hide the "from <album>" line (the playlist page itself)
+ *   hideFollow    — no Follow button (the page already names the creator)
  */
 function AudioTile({
   item,
@@ -91,13 +92,13 @@ function AudioTile({
   loggedIn = false,
   trackNumber,
   hideAlbum = false,
+  hideFollow = false,
 }) {
   const { t } = useTranslation();
   const audioCurrent = useAppStore((s) => s.audioCurrent);
   const audioIsPlaying = useAppStore((s) => s.audioIsPlaying);
   const audioPlay = useAppStore((s) => s.audioPlay);
   const audioAddToQueue = useAppStore((s) => s.audioAddToQueue);
-  const navigate = useNavigate();
 
   const isCurrent = audioCurrent?._id === item._id;
   const isPlaying = isCurrent && audioIsPlaying;
@@ -181,11 +182,6 @@ function AudioTile({
     if (onAddToQueue) return onAddToQueue();
     audioAddToQueue(item);
   };
-  const handleAuthor = (e) => {
-    e.stopPropagation();
-    if (onAuthorClick) return onAuthorClick();
-    navigate(`/@${item.owner}?tab=audio`);
-  };
 
   const thumb = audioThumb(item);
   const metaLine = getMetaLine(item, t);
@@ -226,7 +222,7 @@ function AudioTile({
         {trackNumber != null && <span className="audio-tile-track-num">{trackNumber}.</span>}
         {item.title || t('audio.untitled')}
       </span>
-      <AuthorBadge author={item.owner} showFollow={inView} compact tabHint="audio" onClick={onAuthorClick} />
+      <AuthorBadge author={item.owner} showFollow={inView && !hideFollow} compact tabHint="audio" onClick={onAuthorClick} />
       {metaLine && <span className="audio-tile-meta"><i className={`audio-tile-meta-icon ${audioCategoryIcon(item.category)}`} /> {metaLine}</span>}
       {/* The album (public playlist) the track belongs to, from the checker. */}
       {!hideAlbum && item.playlist_id && item.playlist_name && (

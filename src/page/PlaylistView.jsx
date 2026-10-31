@@ -21,6 +21,7 @@ import './PlaylistView.scss';
 import { HIVE_API_URL, PLAYLISTS_READ_URL } from '../utils/config';
 import { MdPlayArrow as MdPlayIcon } from 'react-icons/md';
 import AudioTile from '../components/AudioTile/AudioTile';
+import { audioItemPath } from '../components/AudioItem/AudioItemView';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
 import { fixVideoThumbnail, fallbackImg, squareCover } from '../utils/fixThumbnails';
 import { fetchVideosForPlaylist } from '../utils/playlistVideos';
@@ -633,7 +634,7 @@ function PlaylistView() {
           </div>
         ) : (
           /* Grid view (default) */
-          <div className="playlist-videos-grid" {...containerProps}>
+          <div className={`playlist-videos-grid${audioTracks.length && audioTracks.length === displayVideos.length ? ' playlist-videos-grid--audio' : ''}`} {...containerProps}>
             {displayVideos.map((video) => video.isAudio && video.audioDoc ? (
               <AudioTile
                 key={`${video.author}-${video.permlink}`}
@@ -650,6 +651,9 @@ function PlaylistView() {
                 loggedIn={!!authenticatedUser}
                 trackNumber={audioTracks.indexOf(video) + 1}
                 hideAlbum
+                /* The page header already names the owner: no Follow on each of their tracks. */
+                hideFollow={video.audioDoc.owner === playlist?.owner}
+                onOpen={() => navigate(audioItemPath(video.audioDoc))}
                 onAddToPlaylist={() => setPlaylistTarget({
                   author: video.audioDoc.owner,
                   permlink: video.audioDoc.post_permlink || video.audioDoc.permlink,
