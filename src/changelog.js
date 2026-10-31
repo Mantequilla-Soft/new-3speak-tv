@@ -18,6 +18,66 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.80.75',
+    category: 'audio',
+    date: '2026-10-31',
+    summary: 'Cast audio to a speaker or TV from the player when your browser finds one.',
+  },
+  {
+    version: '1.80.74',
+    category: 'podcasts',
+    date: '2026-10-31',
+    summary: 'Podcast pages now show seasons and episode numbers, trailers, live episodes and video versions. You can also follow private feeds that need a login.',
+  },
+  {
+    version: '1.80.73',
+    category: 'podcasts',
+    date: '2026-10-31',
+    summary: 'New podcast filters: New, Unplayed, In progress and Downloaded. A show can add its new episodes to your queue by itself, and you can search the episodes of a show.',
+  },
+  {
+    version: '1.80.72',
+    category: 'podcasts',
+    date: '2026-10-31',
+    summary: 'Save podcast episodes and 3Speak audio to listen without a connection. Your downloads are listed under Mine and stay in this browser.',
+  },
+  {
+    version: '1.80.71',
+    category: 'podcasts',
+    date: '2026-10-31',
+    summary: 'Podcast episodes show their chapters, with marks on the timeline, and their transcripts when the podcast provides them. Episode pages also list highlights and the hosts and guests.',
+  },
+  {
+    version: '1.80.70',
+    category: 'sharing',
+    date: '2026-10-31',
+    summary: 'Share audio from a moment: copy a link that starts at the current time, or make a clip of 15 to 90 seconds that plays just that part.',
+  },
+  {
+    version: '1.80.69',
+    category: 'audio',
+    date: '2026-10-31',
+    summary: 'Closing the player keeps your queue, and the player comes back with what you were listening to, right where you stopped.',
+  },
+  {
+    version: '1.80.68',
+    category: 'audio',
+    date: '2026-10-31',
+    summary: 'On phones and tablets the Audio page has two tabs: Player for the full player with your queue, and Explore to find something to listen to. Playback keeps going when you switch tabs or pages.',
+  },
+  {
+    version: '1.80.67',
+    category: 'audio',
+    date: '2026-10-31',
+    summary: "Two audio effects in the player: Voice boost makes voices clearer, and Skip silence hurries through pauses and shows the time you saved. They work when the podcast's host allows it.",
+  },
+  {
+    version: '1.80.66',
+    category: 'audio',
+    date: '2026-10-31',
+    summary: 'Playback speed from 0.5x to 2x, buttons to skip back and forward 15 seconds, and a sleep timer that stops after a set time or at the end of the episode.',
+  },
+  {
     version: '1.80.65',
     category: 'general',
     date: '2026-10-31',
