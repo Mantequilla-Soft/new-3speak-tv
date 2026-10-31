@@ -646,5 +646,10 @@
     "noDescription": "Walang paglalarawan.",
     "comments": "Mga komento",
     "album": "Mula sa {{name}}"
+  },
+  "offline": {
+    "notice": "Offline ka. Tumutugtog pa rin ang mga download mo.",
+    "noticeNoDownloads": "Offline ka. Mag-download ng mga episode para makinig kahit walang koneksyon.",
+    "open": "Buksan ang mga download"
   }
 }

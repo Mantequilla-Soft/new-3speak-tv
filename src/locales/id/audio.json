@@ -621,5 +621,10 @@
     "noDescription": "Tidak ada deskripsi.",
     "comments": "Komentar",
     "album": "Dari {{name}}"
+  },
+  "offline": {
+    "notice": "Kamu sedang offline. Unduhanmu tetap bisa diputar.",
+    "noticeNoDownloads": "Kamu sedang offline. Unduh episode untuk mendengarkan tanpa koneksi.",
+    "open": "Buka unduhan"
   }
 }

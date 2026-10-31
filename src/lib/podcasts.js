@@ -231,11 +231,28 @@ export function usePodcastConfig() {
   });
 }
 
+// The last "Your podcasts" and latest-episodes lists that loaded, kept in this
+// browser so Mine still shows them offline. Loaded as stale data: a page that is
+// online reads them again straight away.
+const snapKey = (kind, user) => `podcast-${kind}-snapshot:${user}`;
+function readSnap(kind, user) {
+  try { return JSON.parse(localStorage.getItem(snapKey(kind, user)) || 'null'); } catch { return null; }
+}
+function writeSnap(kind, user, data) {
+  try { localStorage.setItem(snapKey(kind, user), JSON.stringify(data)); } catch { /* storage full or off */ }
+}
+
 export function usePodcastSubscriptions(user) {
   return useQuery({
     queryKey: ['podcasts', 'subs', user],
     enabled: !!user,
-    queryFn: async () => (await readJson(`subscriptions?user=${encodeURIComponent(user)}`, user)).subscriptions || [],
+    queryFn: async () => {
+      const subs = (await readJson(`subscriptions?user=${encodeURIComponent(user)}`, user)).subscriptions || [];
+      writeSnap('subs', user, subs);
+      return subs;
+    },
+    initialData: () => (user ? readSnap('subs', user) ?? undefined : undefined),
+    initialDataUpdatedAt: 0,
     staleTime: 60 * 1000,
   });
 }
@@ -249,9 +266,16 @@ export function usePodcastLatest(user) {
     queryFn: async ({ pageParam }) => {
       const qs = new URLSearchParams({ user, limit: '30' });
       if (pageParam) qs.set('before', pageParam);
-      return readJson(`latest?${qs}`, user);
+      const page = await readJson(`latest?${qs}`, user);
+      if (!pageParam) writeSnap('latest', user, page);
+      return page;
     },
     getNextPageParam: (last) => (last.episodes?.length === 30 ? last.episodes[29].published_at : undefined),
+    initialData: () => {
+      const page = user ? readSnap('latest', user) : null;
+      return page ? { pages: [page], pageParams: [null] } : undefined;
+    },
+    initialDataUpdatedAt: 0,
     staleTime: 60 * 1000,
   });
 }

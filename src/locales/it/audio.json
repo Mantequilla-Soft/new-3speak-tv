@@ -671,5 +671,10 @@
     "noDescription": "Nessuna descrizione.",
     "comments": "Commenti",
     "album": "Da {{name}}"
+  },
+  "offline": {
+    "notice": "Sei offline. I tuoi download si possono ancora ascoltare.",
+    "noticeNoDownloads": "Sei offline. Scarica gli episodi per ascoltarli senza connessione.",
+    "open": "Apri i download"
   }
 }

@@ -30,6 +30,7 @@ import {
 } from '../../lib/podcastLibrary';
 import { EpisodeBadges, DownloadButton, PersonsRow, LiveBanner, PrivateBadge } from './PodcastBits';
 import DownloadsSection from './DownloadsSection';
+import useOnline from '../../hooks/useOnline';
 import './PodcastsTab.scss';
 
 // ─── Filters: date range and listening state ──────────────────────────────────
@@ -911,6 +912,7 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
   const { data: config } = usePodcastConfig();
   const { data: subscriptions = [], isSuccess: subsLoaded } = usePodcastSubscriptions(me);
   const view = VIEWS.includes(viewProp) ? viewProp : viewOf(params.get('view'), me);
+  const online = useOnline();
   const { data: discover } = usePodcastDiscover();
   const latest = usePodcastLatest(me);
   const invalidate = useInvalidatePodcasts();
@@ -1026,6 +1028,8 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
               </div>
             </div>
           )}
+          {/* Offline only the saved episodes play: they come first. */}
+          {me && !online && <DownloadsSection onOpenEpisode={openEpisode} />}
           <ShowRail
             icon={<MdPodcasts size={18} />}
             title={t('audio.podcasts.yourPodcasts', { count: subscriptions.length })}
@@ -1064,7 +1068,7 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
               )}
             </section>
           )}
-          {me && <DownloadsSection onOpenEpisode={openEpisode} />}
+          {me && online && <DownloadsSection onOpenEpisode={openEpisode} />}
         </>
       )}
 

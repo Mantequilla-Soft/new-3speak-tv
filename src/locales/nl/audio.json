@@ -646,5 +646,10 @@
     "noDescription": "Geen beschrijving.",
     "comments": "Reacties",
     "album": "Uit {{name}}"
+  },
+  "offline": {
+    "notice": "Je bent offline. Je downloads spelen nog steeds af.",
+    "noticeNoDownloads": "Je bent offline. Download afleveringen om zonder verbinding te luisteren.",
+    "open": "Downloads openen"
   }
 }

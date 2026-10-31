@@ -621,5 +621,10 @@
     "noDescription": "Không có mô tả.",
     "comments": "Bình luận",
     "album": "Từ {{name}}"
+  },
+  "offline": {
+    "notice": "Bạn đang ngoại tuyến. Nội dung đã tải vẫn phát được.",
+    "noticeNoDownloads": "Bạn đang ngoại tuyến. Hãy tải tập về để nghe khi không có kết nối.",
+    "open": "Mở mục đã tải"
   }
 }

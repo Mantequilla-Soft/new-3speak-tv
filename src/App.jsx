@@ -183,6 +183,7 @@ import { FEATURE_EDITOR, VIDEO_IMPORT_ENABLED } from "./utils/config";
 import BottomNav from "./components/BottomNav/BottomNav";
 import MiniPlayer from "./components/MiniPlayer/MiniPlayer";
 import GlobalAudioPlayer from "./components/GlobalAudioPlayer/GlobalAudioPlayer";
+import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
 import AudioUploadModal from "./components/AudioUploadModal/AudioUploadModal";
 import { KeyTypes, Providers } from "@aioha/aioha";
 import '@aioha/react-ui/dist/build.css';
@@ -902,6 +903,7 @@ function App() {
         )}
         <MiniPlayer />
         <GlobalAudioPlayer />
+        <OfflineBanner />
         <AudioUploadModal
           isOpen={audioUploadOpen}
           onClose={() => { setAudioUploadOpen(false); setPendingAudioTrack(null); }}

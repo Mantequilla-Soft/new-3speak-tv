@@ -621,5 +621,10 @@
     "noDescription": "暂无简介。",
     "comments": "评论",
     "album": "来自 {{name}}"
+  },
+  "offline": {
+    "notice": "你已离线。已下载的内容仍可播放。",
+    "noticeNoDownloads": "你已离线。下载单集即可在无网络时收听。",
+    "open": "打开下载"
   }
 }

@@ -646,5 +646,10 @@
     "noDescription": "Hakuna maelezo.",
     "comments": "Maoni",
     "album": "Kutoka {{name}}"
+  },
+  "offline": {
+    "notice": "Uko nje ya mtandao. Vipakuliwa vyako bado vinacheza.",
+    "noticeNoDownloads": "Uko nje ya mtandao. Pakua vipindi ili usikilize bila mtandao.",
+    "open": "Fungua vipakuliwa"
   }
 }

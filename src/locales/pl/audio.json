@@ -696,5 +696,10 @@
     "noDescription": "Brak opisu.",
     "comments": "Komentarze",
     "album": "Z {{name}}"
+  },
+  "offline": {
+    "notice": "Jesteś offline. Pobrane odcinki nadal działają.",
+    "noticeNoDownloads": "Jesteś offline. Pobieraj odcinki, aby słuchać bez połączenia.",
+    "open": "Otwórz pobrane"
   }
 }

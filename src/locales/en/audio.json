@@ -646,5 +646,10 @@
     "noDescription": "No description.",
     "comments": "Comments",
     "album": "From {{name}}"
+  },
+  "offline": {
+    "notice": "You're offline. Your downloads still play.",
+    "noticeNoDownloads": "You're offline. Download episodes to listen without a connection.",
+    "open": "Open downloads"
   }
 }

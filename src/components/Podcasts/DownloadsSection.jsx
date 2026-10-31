@@ -6,11 +6,12 @@ import { fmtBytes } from '../../lib/podcastLibrary';
 import { fmtDuration } from '../../lib/podcastFormat';
 import PodcastArt from './PodcastArt';
 import { forgetDownload } from './downloadActions';
+import useOnline from '../../hooks/useOnline';
 
 /**
  * Mine → Downloads: the episodes saved in this browser (lib/podcastDownloads.js),
  * how much room they take, and the ones still downloading. Per browser, so it
- * shows signed out too.
+ * shows signed out too. Offline a title plays the episode: its page needs the network.
  */
 export default function DownloadsSection({ onOpenEpisode }) {
   const { t } = useTranslation();
@@ -20,6 +21,7 @@ export default function DownloadsSection({ onOpenEpisode }) {
   const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
   const audioPlay = useAppStore((s) => s.audioPlay);
   const audioRequestToggle = useAppStore((s) => s.audioRequestToggle);
+  const online = useOnline();
   const running = Object.keys(progress);
   if (!items.length && !running.length) return null;
 
@@ -63,7 +65,7 @@ export default function DownloadsSection({ onOpenEpisode }) {
               </button>
               <span className="pod-dl-info">
                 {track.external
-                  ? <button type="button" className="pod-tile-title pod-dl-title" title={track.title} onClick={() => onOpenEpisode?.(id)}>{track.title || t('audio.untitled')}</button>
+                  ? <button type="button" className="pod-tile-title pod-dl-title" title={track.title} onClick={() => (online ? onOpenEpisode?.(id) : play(track))}>{track.title || t('audio.untitled')}</button>
                   : <span className="pod-dl-title" title={track.title}>{track.title || t('audio.untitled')}</span>}
                 <span className="pod-tile-meta">
                   {(track.show || track.owner) && <span>{track.show || `@${track.owner}`}</span>}

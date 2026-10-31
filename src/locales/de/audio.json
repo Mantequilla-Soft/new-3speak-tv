@@ -646,5 +646,10 @@
     "noDescription": "Keine Beschreibung.",
     "comments": "Kommentare",
     "album": "Aus {{name}}"
+  },
+  "offline": {
+    "notice": "Du bist offline. Deine Downloads spielen trotzdem.",
+    "noticeNoDownloads": "Du bist offline. Lade Folgen herunter, um ohne Verbindung zu hören.",
+    "open": "Downloads öffnen"
   }
 }

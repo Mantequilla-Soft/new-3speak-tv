@@ -646,5 +646,10 @@
     "noDescription": "Açıklama yok.",
     "comments": "Yorumlar",
     "album": "{{name}} albümünden"
+  },
+  "offline": {
+    "notice": "Çevrimdışısın. İndirdiklerin yine de çalar.",
+    "noticeNoDownloads": "Çevrimdışısın. Bağlantı olmadan dinlemek için bölümleri indir.",
+    "open": "İndirilenleri aç"
   }
 }

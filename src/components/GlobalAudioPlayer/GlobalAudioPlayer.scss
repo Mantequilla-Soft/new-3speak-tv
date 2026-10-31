@@ -228,7 +228,8 @@
   white-space: nowrap;
   overflow: hidden;
 
-  .audio-np-author { flex-shrink: 0; max-width: 60%; overflow: hidden; text-overflow: ellipsis; }
+  // The name gives way before the time does (.audio-np-subline-time never shrinks).
+  .audio-np-author { flex-shrink: 1; min-width: 2em; max-width: 60%; overflow: hidden; text-overflow: ellipsis; }
 }
 
 .audio-np-chapter-now {

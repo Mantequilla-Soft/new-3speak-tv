@@ -621,5 +621,10 @@
     "noDescription": "설명이 없습니다.",
     "comments": "댓글",
     "album": "{{name}} 수록"
+  },
+  "offline": {
+    "notice": "오프라인 상태입니다. 다운로드한 항목은 계속 재생됩니다.",
+    "noticeNoDownloads": "오프라인 상태입니다. 연결 없이 들으려면 에피소드를 다운로드하세요.",
+    "open": "다운로드 열기"
   }
 }

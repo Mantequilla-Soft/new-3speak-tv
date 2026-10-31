@@ -16,6 +16,7 @@ import { AudioShareDropdown } from '../components/GlobalAudioPlayer/GlobalAudioP
 import AudioItemView from '../components/AudioItem/AudioItemView';
 import { usePodcastSubscriptions } from '../lib/podcasts';
 import { useDownloads } from '../lib/podcastDownloads';
+import useOnline from '../hooks/useOnline';
 import AudioTile, { AudioTileSkeleton } from '../components/AudioTile/AudioTile';
 import AudioPlaylistTile from '../components/AudioPlaylistTile/AudioPlaylistTile';
 import PodcastsTab, { VIEWS as EXPLORE_VIEWS, VIEW_KEY as EXPLORE_VIEW_KEY } from '../components/Podcasts/PodcastsTab';
@@ -182,9 +183,12 @@ function Audio() {
   // podcasts tab). Mine is your library (followed podcasts, downloads), with no
   // chips; under Discover and Trends the type chips pick 3Speak audio or the
   // outside podcasts (External). Without one: the last one picked, else Discover.
+  const online = useOnline();
   const exploreView = (() => {
     const v = params.get('view');
     if (EXPLORE_VIEWS.includes(v)) return v;
+    // Offline, only what was saved here plays: open on Mine (the downloads).
+    if (!online) return 'mine';
     try {
       const saved = localStorage.getItem(EXPLORE_VIEW_KEY);
       if (EXPLORE_VIEWS.includes(saved)) return saved;
@@ -210,12 +214,12 @@ function Audio() {
   const mineEmpty = mineKnown && !(mineSubs.data || []).length && !mineDownloads.items.length;
   const insideMine = params.has('podcast') || params.has('episode') || params.has('play');
   useEffect(() => {
-    if (!onMine || !mineEmpty || insideMine) return;
+    if (!onMine || !mineEmpty || insideMine || !online) return;
     const next = new URLSearchParams(params);
     next.set('view', 'discover');
     setParams(next, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onMine, mineEmpty, insideMine]);
+  }, [onMine, mineEmpty, insideMine, online]);
 
   // One 3Speak audio on its own page, like an outside episode: ?play=<owner>/<id>
   // (shared player links, a click on an audio card). See AudioItemView.
