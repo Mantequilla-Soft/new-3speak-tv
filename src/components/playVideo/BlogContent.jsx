@@ -14,8 +14,9 @@ const THRESHOLD_HEIGHT = 100;
 
 // `duration` + `onSeek` (content seconds) turn timestamps in the text into links
 // that seek the player. Without them, or before the duration is known, the text
-// stays as written.
-const BlogContent = ({ author, permlink, description, alwaysExpanded = false, duration = 0, onSeek = null }) => {
+// stays as written. `hideAudioPlayers` leaves out the audio players the post
+// body embeds (an OpenPod recording): on the audio's own page they repeat it.
+const BlogContent = ({ author, permlink, description, alwaysExpanded = false, duration = 0, onSeek = null, hideAudioPlayers = false }) => {
   const { t } = useTranslation();
   const [content, setContent] = useState("");
   const [renderedContent, setRenderedContent] = useState("");
@@ -166,7 +167,7 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
     audioRootsRef.current.forEach(r => r.unmount());
     audioRootsRef.current = [];
 
-    if (!contentRef.current || !audioUrlsRef.current.length) return;
+    if (hideAudioPlayers || !contentRef.current || !audioUrlsRef.current.length) return;
 
     const slots = contentRef.current.querySelectorAll('.audio-player-slot');
     slots.forEach((slot) => {
@@ -183,7 +184,7 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
       audioRootsRef.current.forEach(r => r.unmount());
       audioRootsRef.current = [];
     };
-  }, [renderedContent]);
+  }, [renderedContent, hideAudioPlayers]);
 
   // Check if content needs expansion after rendering
   useEffect(() => {
@@ -215,7 +216,7 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
   );
 
   return (
-    <div className="blog-content-container">
+    <div className={`blog-content-container${hideAudioPlayers ? ' blog-content-container--no-audio' : ''}`}>
       <div
         className={`content-wrapper ${needsExpansion && !isExpanded ? 'collapsed' : 'expanded'}`}
         ref={contentRef}

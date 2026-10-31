@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.80.76',
+    category: 'audio',
+    date: '2026-10-31',
+    summary: 'Every audio now has its own page with its description, like podcast episodes.',
+  },
+  {
     version: '1.80.75',
     category: 'audio',
     date: '2026-10-31',

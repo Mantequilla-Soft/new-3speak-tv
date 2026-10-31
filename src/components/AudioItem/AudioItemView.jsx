@@ -175,7 +175,7 @@ export default function AudioItemView({ owner, id, onBack }) {
       <section className="pod-section">
         <h2 className="pod-section-title">{t('audio.item.description')}</h2>
         {postPermlink
-          ? <div className="pod-notes"><BlogContent author={item.owner} permlink={postPermlink} defaultExpanded /></div>
+          ? <div className="pod-notes"><BlogContent author={item.owner} permlink={postPermlink} alwaysExpanded hideAudioPlayers /></div>
           : <div className="pod-notes"><p className={item.description ? undefined : 'pod-empty'}>{item.description || t('audio.item.noDescription')}</p></div>}
       </section>
 

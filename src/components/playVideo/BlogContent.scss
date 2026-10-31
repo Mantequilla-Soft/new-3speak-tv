@@ -415,3 +415,5 @@
       height: 100%;
     }
   }
+// The audio's own page (AudioItemView): the post's embedded player repeats it.
+.blog-content-container--no-audio .audio-player-slot { display: none; }
