@@ -88,7 +88,10 @@
     "chapters": "Sura",
     "prevChapter": "Sura iliyotangulia",
     "nextChapter": "Sura inayofuata",
-    "chapterLink": "Kiungo cha sura"
+    "chapterLink": "Kiungo cha sura",
+    "upNext": "Kinachofuata",
+    "playQueue": "Cheza foleni",
+    "hideIdle": "Ficha (foleni yako inabaki)"
   },
   "share": {
     "failed": "Imeshindwa",
@@ -150,7 +153,9 @@
     "tabExplore": "Vinjari",
     "tabPlayer": "Kicheza",
     "nothingPlaying": "Bado hakuna kinachocheza.",
-    "goExplore": "Tafuta kitu cha kusikiliza"
+    "goExplore": "Tafuta kitu cha kusikiliza",
+    "queueWaiting": "Kwenye foleni yako: {{count}}",
+    "showQueue": "Onyesha foleni"
   },
   "upload": {
     "title": "Pakia sauti",

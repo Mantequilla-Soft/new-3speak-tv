@@ -92,7 +92,10 @@
     "chapters": "Розділи",
     "prevChapter": "Попередній розділ",
     "nextChapter": "Наступний розділ",
-    "chapterLink": "Посилання на розділ"
+    "chapterLink": "Посилання на розділ",
+    "upNext": "Далі",
+    "playQueue": "Слухати чергу",
+    "hideIdle": "Сховати (черга залишиться)"
   },
   "share": {
     "failed": "Помилка",
@@ -156,7 +159,9 @@
     "tabExplore": "Каталог",
     "tabPlayer": "Плеєр",
     "nothingPlaying": "Поки нічого не грає.",
-    "goExplore": "Знайти, що послухати"
+    "goExplore": "Знайти, що послухати",
+    "queueWaiting": "У вашій черзі: {{count}}",
+    "showQueue": "Показати чергу"
   },
   "upload": {
     "title": "Завантажити аудіо",

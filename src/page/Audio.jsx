@@ -165,7 +165,7 @@ function loadFilters() {
 
 function Audio() {
   const { t } = useTranslation();
-  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioPlayAt, audioAddToQueue, audioSetDock, audioSetDockOpener } = useAppStore();
+  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioPlayAt, audioAddToQueue, audioSetDock, audioSetDockOpener, audioQueue, audioSetShowQueue } = useAppStore();
   const loggedIn = authenticated && isLoggedIn();
 
   // "External": podcasts from outside RSS feeds (components/Podcasts). It is the last
@@ -480,7 +480,17 @@ function Audio() {
             <div className="audio-empty audio-player-empty">
               <MdPlayCircleOutline size={44} aria-hidden />
               <p>{t('audio.page.nothingPlaying')}</p>
-              <button type="button" className="audio-type-chip active" onClick={() => showPlayerTab(false)}>{t('audio.page.goExplore')}</button>
+              {/* A closed player keeps its queue: offer it here. */}
+              {audioQueue.length > 0 && (
+                <>
+                  <p>{t('audio.page.queueWaiting', { count: audioQueue.length })}</p>
+                  <div className="audio-player-empty-actions">
+                    <button type="button" className="audio-type-chip active" onClick={() => audioPlay(audioQueue[0], audioQueue)}>{t('audio.player.playQueue')}</button>
+                    <button type="button" className="audio-type-chip" onClick={() => audioSetShowQueue(true)}>{t('audio.page.showQueue')}</button>
+                  </div>
+                </>
+              )}
+              <button type="button" className={`audio-type-chip${audioQueue.length ? '' : ' active'}`} onClick={() => showPlayerTab(false)}>{t('audio.page.goExplore')}</button>
             </div>
           )}
         </div>

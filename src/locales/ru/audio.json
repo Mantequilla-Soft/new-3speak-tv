@@ -92,7 +92,10 @@
     "chapters": "Главы",
     "prevChapter": "Предыдущая глава",
     "nextChapter": "Следующая глава",
-    "chapterLink": "Ссылка на главу"
+    "chapterLink": "Ссылка на главу",
+    "upNext": "Далее",
+    "playQueue": "Слушать очередь",
+    "hideIdle": "Скрыть (очередь сохранится)"
   },
   "share": {
     "failed": "Ошибка",
@@ -156,7 +159,9 @@
     "tabExplore": "Каталог",
     "tabPlayer": "Плеер",
     "nothingPlaying": "Пока ничего не играет.",
-    "goExplore": "Найти, что послушать"
+    "goExplore": "Найти, что послушать",
+    "queueWaiting": "В вашей очереди: {{count}}",
+    "showQueue": "Показать очередь"
   },
   "upload": {
     "title": "Загрузить аудио",

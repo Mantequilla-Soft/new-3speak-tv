@@ -88,7 +88,10 @@
     "chapters": "Mga kabanata",
     "prevChapter": "Nakaraang kabanata",
     "nextChapter": "Susunod na kabanata",
-    "chapterLink": "Link ng kabanata"
+    "chapterLink": "Link ng kabanata",
+    "upNext": "Susunod",
+    "playQueue": "I-play ang queue",
+    "hideIdle": "Itago (mananatili ang queue mo)"
   },
   "share": {
     "failed": "Pumalya",
@@ -150,7 +153,9 @@
     "tabExplore": "Mag-explore",
     "tabPlayer": "Player",
     "nothingPlaying": "Wala pang tumutugtog.",
-    "goExplore": "Maghanap ng mapapakinggan"
+    "goExplore": "Maghanap ng mapapakinggan",
+    "queueWaiting": "Nasa queue mo: {{count}}",
+    "showQueue": "Ipakita ang queue"
   },
   "upload": {
     "title": "Mag-upload ng audio",

@@ -88,7 +88,10 @@
     "chapters": "चैप्टर",
     "prevChapter": "पिछला चैप्टर",
     "nextChapter": "अगला चैप्टर",
-    "chapterLink": "चैप्टर लिंक"
+    "chapterLink": "चैप्टर लिंक",
+    "upNext": "आगे",
+    "playQueue": "कतार चलाएं",
+    "hideIdle": "छिपाएं (आपकी कतार बनी रहेगी)"
   },
   "share": {
     "failed": "फ़ेल हुआ",
@@ -150,7 +153,9 @@
     "tabExplore": "एक्सप्लोर",
     "tabPlayer": "प्लेयर",
     "nothingPlaying": "अभी कुछ नहीं चल रहा है।",
-    "goExplore": "सुनने के लिए कुछ ढूंढें"
+    "goExplore": "सुनने के लिए कुछ ढूंढें",
+    "queueWaiting": "आपकी कतार में: {{count}}",
+    "showQueue": "कतार दिखाएं"
   },
   "upload": {
     "title": "ऑडियो अपलोड करें",

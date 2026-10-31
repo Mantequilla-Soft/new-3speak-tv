@@ -86,7 +86,10 @@
     "chapters": "章节",
     "prevChapter": "上一章节",
     "nextChapter": "下一章节",
-    "chapterLink": "章节链接"
+    "chapterLink": "章节链接",
+    "upNext": "接下来",
+    "playQueue": "播放队列",
+    "hideIdle": "隐藏 (队列会保留)"
   },
   "share": {
     "failed": "失败",
@@ -147,7 +150,9 @@
     "tabExplore": "浏览",
     "tabPlayer": "播放器",
     "nothingPlaying": "还没有在播放的内容。",
-    "goExplore": "找点东西听"
+    "goExplore": "找点东西听",
+    "queueWaiting": "队列中: {{count}}",
+    "showQueue": "查看队列"
   },
   "upload": {
     "title": "上传音频",

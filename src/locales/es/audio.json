@@ -90,7 +90,10 @@
     "chapters": "Capítulos",
     "prevChapter": "Capítulo anterior",
     "nextChapter": "Capítulo siguiente",
-    "chapterLink": "Enlace al capítulo"
+    "chapterLink": "Enlace al capítulo",
+    "upNext": "A continuación",
+    "playQueue": "Reproducir la cola",
+    "hideIdle": "Ocultar (tu cola se mantiene)"
   },
   "share": {
     "failed": "Error",
@@ -153,7 +156,9 @@
     "tabExplore": "Explorar",
     "tabPlayer": "Reproductor",
     "nothingPlaying": "Todavía no suena nada.",
-    "goExplore": "Busca algo para escuchar"
+    "goExplore": "Busca algo para escuchar",
+    "queueWaiting": "En tu cola: {{count}}",
+    "showQueue": "Ver la cola"
   },
   "upload": {
     "title": "Subir audio",

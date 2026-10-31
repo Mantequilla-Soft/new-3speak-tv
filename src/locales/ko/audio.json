@@ -86,7 +86,10 @@
     "chapters": "챕터",
     "prevChapter": "이전 챕터",
     "nextChapter": "다음 챕터",
-    "chapterLink": "챕터 링크"
+    "chapterLink": "챕터 링크",
+    "upNext": "다음 재생",
+    "playQueue": "대기열 재생",
+    "hideIdle": "숨기기 (대기열은 유지됨)"
   },
   "share": {
     "failed": "실패",
@@ -147,7 +150,9 @@
     "tabExplore": "탐색",
     "tabPlayer": "플레이어",
     "nothingPlaying": "아직 재생 중인 항목이 없습니다.",
-    "goExplore": "들을 거리 찾기"
+    "goExplore": "들을 거리 찾기",
+    "queueWaiting": "대기열 항목: {{count}}",
+    "showQueue": "대기열 보기"
   },
   "upload": {
     "title": "오디오 업로드",

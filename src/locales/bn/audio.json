@@ -88,7 +88,10 @@
     "chapters": "অধ্যায়",
     "prevChapter": "আগের অধ্যায়",
     "nextChapter": "পরের অধ্যায়",
-    "chapterLink": "অধ্যায়ের লিংক"
+    "chapterLink": "অধ্যায়ের লিংক",
+    "upNext": "এরপর",
+    "playQueue": "কিউ চালান",
+    "hideIdle": "লুকান (আপনার কিউ থাকবে)"
   },
   "share": {
     "failed": "ব্যর্থ",
@@ -150,7 +153,9 @@
     "tabExplore": "এক্সপ্লোর",
     "tabPlayer": "প্লেয়ার",
     "nothingPlaying": "এখনও কিছু বাজছে না।",
-    "goExplore": "শোনার মতো কিছু খুঁজুন"
+    "goExplore": "শোনার মতো কিছু খুঁজুন",
+    "queueWaiting": "আপনার কিউতে: {{count}}",
+    "showQueue": "কিউ দেখুন"
   },
   "upload": {
     "title": "অডিও আপলোড করুন",

@@ -86,7 +86,10 @@
     "chapters": "Chương",
     "prevChapter": "Chương trước",
     "nextChapter": "Chương sau",
-    "chapterLink": "Liên kết chương"
+    "chapterLink": "Liên kết chương",
+    "upNext": "Tiếp theo",
+    "playQueue": "Phát hàng đợi",
+    "hideIdle": "Ẩn (hàng đợi vẫn còn)"
   },
   "share": {
     "failed": "Thất bại",
@@ -147,7 +150,9 @@
     "tabExplore": "Duyệt",
     "tabPlayer": "Trình phát",
     "nothingPlaying": "Chưa có gì đang phát.",
-    "goExplore": "Tìm nội dung để nghe"
+    "goExplore": "Tìm nội dung để nghe",
+    "queueWaiting": "Trong hàng đợi: {{count}}",
+    "showQueue": "Xem hàng đợi"
   },
   "upload": {
     "title": "Tải âm thanh lên",

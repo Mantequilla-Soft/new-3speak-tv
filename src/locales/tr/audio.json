@@ -88,7 +88,10 @@
     "chapters": "Kısımlar",
     "prevChapter": "Önceki kısım",
     "nextChapter": "Sonraki kısım",
-    "chapterLink": "Kısım bağlantısı"
+    "chapterLink": "Kısım bağlantısı",
+    "upNext": "Sıradaki",
+    "playQueue": "Sırayı oynat",
+    "hideIdle": "Gizle (sıran kalır)"
   },
   "share": {
     "failed": "Başarısız",
@@ -150,7 +153,9 @@
     "tabExplore": "Göz at",
     "tabPlayer": "Oynatıcı",
     "nothingPlaying": "Henüz çalan bir şey yok.",
-    "goExplore": "Dinleyecek bir şey bul"
+    "goExplore": "Dinleyecek bir şey bul",
+    "queueWaiting": "Sırandakiler: {{count}}",
+    "showQueue": "Sırayı göster"
   },
   "upload": {
     "title": "Ses yükle",

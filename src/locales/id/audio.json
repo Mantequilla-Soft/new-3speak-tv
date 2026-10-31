@@ -86,7 +86,10 @@
     "chapters": "Bab",
     "prevChapter": "Bab sebelumnya",
     "nextChapter": "Bab berikutnya",
-    "chapterLink": "Tautan bab"
+    "chapterLink": "Tautan bab",
+    "upNext": "Berikutnya",
+    "playQueue": "Putar antrean",
+    "hideIdle": "Sembunyikan (antrean tetap ada)"
   },
   "share": {
     "failed": "Gagal",
@@ -147,7 +150,9 @@
     "tabExplore": "Telusuri",
     "tabPlayer": "Pemutar",
     "nothingPlaying": "Belum ada yang diputar.",
-    "goExplore": "Cari sesuatu untuk didengarkan"
+    "goExplore": "Cari sesuatu untuk didengarkan",
+    "queueWaiting": "Di antreanmu: {{count}}",
+    "showQueue": "Lihat antrean"
   },
   "upload": {
     "title": "Unggah audio",

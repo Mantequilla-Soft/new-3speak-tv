@@ -86,7 +86,10 @@
     "chapters": "บท",
     "prevChapter": "บทก่อนหน้า",
     "nextChapter": "บทถัดไป",
-    "chapterLink": "ลิงก์บท"
+    "chapterLink": "ลิงก์บท",
+    "upNext": "ถัดไป",
+    "playQueue": "เล่นคิว",
+    "hideIdle": "ซ่อน (คิวยังอยู่)"
   },
   "share": {
     "failed": "ไม่สำเร็จ",
@@ -147,7 +150,9 @@
     "tabExplore": "เลือกดู",
     "tabPlayer": "เครื่องเล่น",
     "nothingPlaying": "ยังไม่มีอะไรเล่นอยู่",
-    "goExplore": "หาสิ่งที่จะฟัง"
+    "goExplore": "หาสิ่งที่จะฟัง",
+    "queueWaiting": "ในคิวของคุณ: {{count}}",
+    "showQueue": "ดูคิว"
   },
   "upload": {
     "title": "อัปโหลดเสียง",

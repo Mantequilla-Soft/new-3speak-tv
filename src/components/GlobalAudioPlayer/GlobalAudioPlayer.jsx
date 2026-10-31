@@ -259,6 +259,11 @@ function GlobalAudioPlayer() {
   const [shareTarget, setShareTarget] = useState(null);
   const [tipTarget, setTipTarget] = useState(null);
   const [podcastTip, setPodcastTip] = useState(null);
+  // Closing the player stops the track, never the queue: while the queue holds
+  // something, a small "Up next" bar stays (hidden on request until the next play).
+  const [idleHidden, setIdleHidden] = useState(false);
+  useEffect(() => { if (audioCurrent) setIdleHidden(false); }, [audioCurrent]);
+  const idleBar = !audioCurrent && audioQueue.length > 0 && !idleHidden;
 
   // Post enrichment
   const [npIsVoted, setNpIsVoted] = useState(false);
@@ -1091,7 +1096,7 @@ function GlobalAudioPlayer() {
   // --audio-np-clearance, so fixed elements (Feedback FAB) can stay above it.
   // ResizeObserver catches expand/collapse; the var is removed when it closes.
   const npRef = useRef(null);
-  const hasNowPlaying = !!audioCurrent;
+  const hasNowPlaying = !!audioCurrent || idleBar;
   // On a phone's audio page the player can sit in its own tab (page/Audio.jsx,
   // the Player tab hands us `audioDock`): the same controls, drawn into the page
   // instead of the bar. Only the controls move; the <audio> element stays here,
@@ -1152,7 +1157,69 @@ function GlobalAudioPlayer() {
     />
   );
 
-  if (!audioCurrent) return audioEl;
+  const queueOverlay = audioShowQueue ? (
+        <div className="audio-queue-overlay" onClick={() => audioSetShowQueue(false)}>
+          <div ref={queuePanelRef} className="audio-queue-panel" onClick={e => e.stopPropagation()}>
+            <ModalHeader title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
+              <span className="audio-queue-count">{audioQueue.length}</span>
+              {audioQueue.length > 0 && (
+                <button className="audio-queue-clear" onClick={audioClearQueue} title={t('audio.player.clearQueue')}>
+                  <MdDelete size={16} /> {t('audio.player.clearAll')}
+                </button>
+              )}
+            </ModalHeader>
+            {audioQueue.length === 0 ? (
+              <p className="audio-queue-empty">{t('audio.player.queueEmpty')}</p>
+            ) : (
+              <ul className="audio-queue-list">{audioQueue.map((item, idx) => (
+                <li key={item._id} className={`audio-queue-item${audioCurrent?._id === item._id ? ' current' : ''}`}>
+                  <span className="audio-queue-drag"><MdDragIndicator size={16} /></span>
+                  <img className="audio-queue-thumb" src={audioThumb(item)} alt="" onError={e => { e.currentTarget.src = item.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
+                  <div className="audio-queue-info" onClick={() => audioPlay(item)}>
+                    <span className="audio-queue-title">{item.title || t('audio.untitled')}</span>
+                    <span className="audio-queue-author">{item.external ? item.show : `@${item.owner}`} · {item.live ? t('audio.player.live') : fmt(item.duration)}</span>
+                  </div>
+                  <div className="audio-queue-actions">
+                    {idx > 0 && <button onClick={() => audioMoveInQueue(idx, idx - 1)}>↑</button>}
+                    {idx < audioQueue.length - 1 && <button onClick={() => audioMoveInQueue(idx, idx + 1)}>↓</button>}
+                    <button onClick={() => audioRemoveFromQueue(item._id)}><MdDelete size={16} /></button>
+                  </div>
+                </li>
+              ))}</ul>
+            )}
+          </div>
+        </div>
+  ) : null;
+
+  if (!audioCurrent) {
+    if (!idleBar) return <>{audioEl}{queueOverlay}</>;
+    const next = audioQueue[0];
+    return (
+      <>
+        {audioEl}
+        <div ref={npRef} className="audio-now-playing audio-np-idle">
+          <div className="audio-np-content">
+            <div className="audio-np-art" onClick={() => audioSetShowQueue(true)}>
+              <img className="audio-np-thumb" src={audioThumb(next)} alt="" onError={e => { e.currentTarget.src = next.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
+            </div>
+            <div className="audio-np-info" onClick={() => audioSetShowQueue(true)}>
+              <span className="audio-np-title"><span className="audio-np-title-text">{next.title || t('audio.untitled')}</span></span>
+              <span className="audio-np-subline"><span className="audio-np-author">{t('audio.player.upNext')}</span></span>
+            </div>
+            <div className="audio-np-controls">
+              <button className="audio-np-play-btn" onClick={() => audioPlay(next, audioQueue)} aria-label={t('audio.player.playQueue')} title={t('audio.player.playQueue')}><MdPlayArrow size={26} /></button>
+            </div>
+            <button className="audio-np-queue-btn" onClick={() => audioSetShowQueue(v => !v)} title={t('audio.player.queue')} aria-label={t('audio.player.queue')}>
+              <MdQueueMusic size={20} />
+              <span className="audio-np-queue-badge">{audioQueue.length}</span>
+            </button>
+            <button className="audio-np-close-btn" onClick={() => { setIdleHidden(true); audioSetShowQueue(false); }} title={t('audio.player.hideIdle')} aria-label={t('audio.player.hideIdle')}><MdClose size={18} /></button>
+          </div>
+        </div>
+        {queueOverlay}
+      </>
+    );
+  }
 
   const nowPlaying = audioCurrent;
   const portalIfDocked = (node) => (docked ? createPortal(node, audioDock) : node);
@@ -1648,39 +1715,7 @@ function GlobalAudioPlayer() {
         </PlayerMenu>
       )}
 
-      {audioShowQueue && (
-        <div className="audio-queue-overlay" onClick={() => audioSetShowQueue(false)}>
-          <div ref={queuePanelRef} className="audio-queue-panel" onClick={e => e.stopPropagation()}>
-            <ModalHeader title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
-              <span className="audio-queue-count">{audioQueue.length}</span>
-              {audioQueue.length > 0 && (
-                <button className="audio-queue-clear" onClick={audioClearQueue} title={t('audio.player.clearQueue')}>
-                  <MdDelete size={16} /> {t('audio.player.clearAll')}
-                </button>
-              )}
-            </ModalHeader>
-            {audioQueue.length === 0 ? (
-              <p className="audio-queue-empty">{t('audio.player.queueEmpty')}</p>
-            ) : (
-              <ul className="audio-queue-list">{audioQueue.map((item, idx) => (
-                <li key={item._id} className={`audio-queue-item${audioCurrent?._id === item._id ? ' current' : ''}`}>
-                  <span className="audio-queue-drag"><MdDragIndicator size={16} /></span>
-                  <img className="audio-queue-thumb" src={audioThumb(item)} alt="" onError={e => { e.currentTarget.src = item.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
-                  <div className="audio-queue-info" onClick={() => audioPlay(item)}>
-                    <span className="audio-queue-title">{item.title || t('audio.untitled')}</span>
-                    <span className="audio-queue-author">{item.external ? item.show : `@${item.owner}`} · {item.live ? t('audio.player.live') : fmt(item.duration)}</span>
-                  </div>
-                  <div className="audio-queue-actions">
-                    {idx > 0 && <button onClick={() => audioMoveInQueue(idx, idx - 1)}>↑</button>}
-                    {idx < audioQueue.length - 1 && <button onClick={() => audioMoveInQueue(idx, idx + 1)}>↓</button>}
-                    <button onClick={() => audioRemoveFromQueue(item._id)}><MdDelete size={16} /></button>
-                  </div>
-                </li>
-              ))}</ul>
-            )}
-          </div>
-        </div>
-      )}
+      {queueOverlay}
 
       {shareTarget && shareTarget._id !== audioCurrent?._id && (
         <div className="audio-share-overlay" onClick={() => setShareTarget(null)}>

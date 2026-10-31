@@ -88,7 +88,10 @@
     "chapters": "Kapitel",
     "prevChapter": "Vorheriges Kapitel",
     "nextChapter": "Nächstes Kapitel",
-    "chapterLink": "Link zum Kapitel"
+    "chapterLink": "Link zum Kapitel",
+    "upNext": "Als Nächstes",
+    "playQueue": "Warteschlange abspielen",
+    "hideIdle": "Ausblenden (die Warteschlange bleibt)"
   },
   "share": {
     "failed": "Fehlgeschlagen",
@@ -150,7 +153,9 @@
     "tabExplore": "Stöbern",
     "tabPlayer": "Player",
     "nothingPlaying": "Noch läuft nichts.",
-    "goExplore": "Etwas zum Anhören finden"
+    "goExplore": "Etwas zum Anhören finden",
+    "queueWaiting": "In deiner Warteschlange: {{count}}",
+    "showQueue": "Warteschlange anzeigen"
   },
   "upload": {
     "title": "Audio hochladen",

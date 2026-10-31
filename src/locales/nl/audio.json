@@ -88,7 +88,10 @@
     "chapters": "Hoofdstukken",
     "prevChapter": "Vorig hoofdstuk",
     "nextChapter": "Volgend hoofdstuk",
-    "chapterLink": "Link naar hoofdstuk"
+    "chapterLink": "Link naar hoofdstuk",
+    "upNext": "Hierna",
+    "playQueue": "Wachtrij afspelen",
+    "hideIdle": "Verbergen (je wachtrij blijft)"
   },
   "share": {
     "failed": "Mislukt",
@@ -150,7 +153,9 @@
     "tabExplore": "Verkennen",
     "tabPlayer": "Speler",
     "nothingPlaying": "Er speelt nog niets.",
-    "goExplore": "Zoek iets om te luisteren"
+    "goExplore": "Zoek iets om te luisteren",
+    "queueWaiting": "In je wachtrij: {{count}}",
+    "showQueue": "Wachtrij tonen"
   },
   "upload": {
     "title": "Audio uploaden",

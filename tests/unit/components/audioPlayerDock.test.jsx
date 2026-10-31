@@ -29,7 +29,7 @@ beforeAll(async () => {
 })
 
 afterEach(() => {
-  act(() => { useAppStore.getState().audioSetDock(null); useAppStore.getState().audioStop() })
+  act(() => { useAppStore.getState().audioSetDock(null); useAppStore.getState().audioStop(); useAppStore.getState().audioClearQueue(); useAppStore.getState().audioSetShowQueue(false) })
   document.body.innerHTML = ''
 })
 
@@ -79,6 +79,37 @@ describe('docked audio player', () => {
     act(() => { useAppStore.getState().audioSetDockOpener(null) })
     act(() => { host.querySelector('.audio-np-expand-btn').click() })
     expect(useAppStore.getState().audioExpanded).toBe(true)
+    act(() => root.unmount())
+  })
+
+  it('closing the player keeps the queue, and an Up next bar offers it', () => {
+    const { host, root } = mount()
+    const second = { ...track, _id: 'f1:two', title: 'Second' }
+    act(() => {
+      useAppStore.getState().audioAddToQueue(track)
+      useAppStore.getState().audioAddToQueue(second)
+      useAppStore.getState().audioPlay(track, [track, second])
+    })
+    act(() => { host.querySelector('.audio-np-close-btn').click() })
+    expect(useAppStore.getState().audioCurrent).toBeNull()
+    expect(useAppStore.getState().audioQueue.map((i) => i._id)).toEqual(['f1:ep', 'f1:two'])
+    expect(JSON.parse(localStorage.getItem('audio-queue')).length).toBe(2)
+
+    const idle = host.querySelector('.audio-np-idle')
+    expect(idle).toBeTruthy()
+    expect(idle.textContent).toContain('Episode')
+    // Its queue button opens the queue as usual.
+    act(() => { idle.querySelector('.audio-np-queue-btn').click() })
+    expect(host.querySelectorAll('.audio-queue-item')).toHaveLength(2)
+    // Play starts the queue from the top.
+    act(() => { idle.querySelector('.audio-np-play-btn').click() })
+    expect(useAppStore.getState().audioCurrent?._id).toBe('f1:ep')
+
+    // Hiding the Up next bar still keeps the queue.
+    act(() => { host.querySelector('.audio-np-close-btn').click() })
+    act(() => { host.querySelector('.audio-np-idle .audio-np-close-btn').click() })
+    expect(host.querySelector('.audio-np-idle')).toBeNull()
+    expect(useAppStore.getState().audioQueue).toHaveLength(2)
     act(() => root.unmount())
   })
 })
