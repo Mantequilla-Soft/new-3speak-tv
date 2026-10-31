@@ -302,6 +302,14 @@ const CommentVoteTooltip = ({
     return () => document.removeEventListener('keydown', handleKey);
   }, [showTooltip, setShowTooltip, setActiveTooltipPermlink]);
 
+  // The value line is rendered from the parent's voteValue once loading ends,
+  // which would put the stale (often $0) value back over what updateSliderDOM
+  // wrote. Hand the estimate for the opening weight to the parent as well.
+  const showEstimate = () => {
+    if (!cachedAccountRef.current || !cachedDynamicPropsRef.current) return;
+    setParentVoteValue?.(estimateLocal(cachedAccountRef.current, cachedDynamicPropsRef.current, weightRef.current));
+  };
+
   // Use pre-cached data if available, otherwise fetch on open
   useEffect(() => {
     if (!user || !showTooltip) return;
@@ -311,6 +319,7 @@ const CommentVoteTooltip = ({
       cachedAccountRef.current = accountData;
       cachedDynamicPropsRef.current = cachedDynamicProps;
       updateSliderDOM(weightRef.current);
+      showEstimate();
       setInitializing(false);
       return;
     }
@@ -338,6 +347,7 @@ const CommentVoteTooltip = ({
 
         if (acct && dynProps) {
           updateSliderDOM(weightRef.current);
+          showEstimate();
         }
       } catch (err) {
         console.error('Error fetching vote data:', err);

@@ -633,7 +633,8 @@
     "video": {
       "watch": "Video bekijken",
       "hide": "Video verbergen"
-    }
+    },
+    "signInToFollow": "Log in om podcasts te volgen"
   },
   "item": {
     "back": "Alle audio",

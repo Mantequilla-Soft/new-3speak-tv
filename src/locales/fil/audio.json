@@ -633,7 +633,8 @@
     "video": {
       "watch": "Panoorin ang video",
       "hide": "Itago ang video"
-    }
+    },
+    "signInToFollow": "Mag-sign in para i-follow ang mga podcast"
   },
   "item": {
     "back": "Lahat ng audio",

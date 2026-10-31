@@ -23,6 +23,7 @@ import { MdPlayArrow as MdPlayIcon } from 'react-icons/md';
 import AudioTile from '../components/AudioTile/AudioTile';
 import { audioItemPath } from '../components/AudioItem/AudioItemView';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
+import PlaylistFollowButton from '../components/Podcasts/PlaylistFollowButton';
 import { fixVideoThumbnail, fallbackImg, squareCover } from '../utils/fixThumbnails';
 import { fetchVideosForPlaylist } from '../utils/playlistVideos';
 import useHoverPreview from '../hooks/useHoverPreview';
@@ -477,6 +478,10 @@ function PlaylistView() {
                 </>
               )}
             </div>
+            {/* An all-audio playlist is a podcast too: follow it like one (Podcasts > Mine). */}
+            {!isPrivate && listedVideos.length > 0 && listedVideos.every((v) => v.isAudio && v.audioDoc) && (
+              <PlaylistFollowButton playlistId={playlistId} name={playlist.name} user={authenticatedUser} />
+            )}
             {playlist.metadata?.album && (
               <div className="playlist-album-meta">
                 {playlist.metadata.album.musicStyle && <span><Trans i18nKey="playlists.view.album.genre" values={{ value: playlist.metadata.album.musicStyle }} components={{ strong: <strong /> }} /></span>}

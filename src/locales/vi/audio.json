@@ -608,7 +608,8 @@
     "video": {
       "watch": "Xem video",
       "hide": "Ẩn video"
-    }
+    },
+    "signInToFollow": "Đăng nhập để theo dõi podcast"
   },
   "item": {
     "back": "Tất cả âm thanh",

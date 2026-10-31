@@ -633,7 +633,8 @@
     "video": {
       "watch": "Video ansehen",
       "hide": "Video ausblenden"
-    }
+    },
+    "signInToFollow": "Melde dich an, um Podcasts zu folgen"
   },
   "item": {
     "back": "Alle Audios",

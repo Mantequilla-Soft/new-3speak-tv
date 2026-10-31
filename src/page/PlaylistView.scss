@@ -1048,3 +1048,11 @@
     border: 1px solid var(--accent-primary) !important;
   }
 }
+
+// Follow an all-audio playlist like a podcast (PlaylistFollowButton).
+.playlist-follow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}

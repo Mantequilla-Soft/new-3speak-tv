@@ -633,7 +633,8 @@
     "video": {
       "watch": "Watch video",
       "hide": "Hide video"
-    }
+    },
+    "signInToFollow": "Sign in to follow podcasts"
   },
   "item": {
     "back": "All audio",

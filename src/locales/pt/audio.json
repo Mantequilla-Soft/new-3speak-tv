@@ -658,7 +658,8 @@
     "video": {
       "watch": "Assistir ao vídeo",
       "hide": "Ocultar vídeo"
-    }
+    },
+    "signInToFollow": "Entre para seguir podcasts"
   },
   "item": {
     "back": "Todos os áudios",

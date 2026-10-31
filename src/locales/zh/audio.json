@@ -608,7 +608,8 @@
     "video": {
       "watch": "观看视频",
       "hide": "隐藏视频"
-    }
+    },
+    "signInToFollow": "登录后即可关注播客"
   },
   "item": {
     "back": "全部音频",

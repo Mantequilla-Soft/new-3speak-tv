@@ -608,7 +608,8 @@
     "video": {
       "watch": "Tonton video",
       "hide": "Sembunyikan video"
-    }
+    },
+    "signInToFollow": "Masuk untuk mengikuti podcast"
   },
   "item": {
     "back": "Semua audio",

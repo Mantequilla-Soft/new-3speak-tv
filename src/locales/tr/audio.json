@@ -633,7 +633,8 @@
     "video": {
       "watch": "Videoyu izle",
       "hide": "Videoyu gizle"
-    }
+    },
+    "signInToFollow": "Podcast takip etmek için giriş yap"
   },
   "item": {
     "back": "Tüm sesler",
