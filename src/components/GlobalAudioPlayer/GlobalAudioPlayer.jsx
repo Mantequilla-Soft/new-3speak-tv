@@ -13,7 +13,7 @@ import {
   MdBedtime, MdGraphicEq, MdCast, MdAirplay, MdDownload, MdDownloadDone,
   MdListAlt, MdCheck, MdLink,
 } from 'react-icons/md';
-import { TbRewindBackward15, TbRewindForward30 } from 'react-icons/tb';
+import { TbRewindBackward15, TbRewindForward15 } from 'react-icons/tb';
 import { useAppStore } from '../../lib/store';
 import { persistAudioPosition } from '../../lib/slices/createAudioPlayerSlice';
 import { CHECKER_URL, LISTEN_BEAT_KEY } from '../../utils/config';
@@ -1056,7 +1056,7 @@ function GlobalAudioPlayer() {
     const el = () => audioRef.current;
     // An action a browser does not know throws; it just goes without that button.
     const set = (action, fn) => { try { ms.setActionHandler(action, fn); } catch { /* unsupported */ } };
-    // The same 15 s back / 30 s forward as the player's own buttons. A live
+    // The same 15 s back / 15 s forward as the player's own buttons. A live
     // stream can't be skipped through.
     const handlers = {
       play: () => { el()?.play().catch(() => {}); },
@@ -1397,7 +1397,7 @@ function GlobalAudioPlayer() {
             <button className="audio-np-play-btn" onClick={togglePlay} aria-label={audioIsPlaying ? t('common.actions.pause') : t('common.actions.play')}>{audioIsPlaying ? <MdPause size={26} /> : <MdPlayArrow size={26} />}</button>
             {!isLive && (
               <button className="audio-np-btn audio-np-skip-btn" onClick={() => skipBy(SKIP_FORWARD)} aria-label={t('audio.player.skipForward', { seconds: SKIP_FORWARD })} title={t('audio.player.skipForward', { seconds: SKIP_FORWARD })}>
-                <TbRewindForward30 size={21} />
+                <TbRewindForward15 size={21} />
               </button>
             )}
             <button className="audio-np-btn audio-np-track-btn" onClick={playNext} aria-label={t('audio.player.next')} title={t('audio.player.next')}><MdSkipNext size={22} /></button>

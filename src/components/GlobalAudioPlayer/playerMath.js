@@ -57,7 +57,7 @@ export const formatSpeed = (v) => `${Number(v).toString()}×`;
 // ─── Skip buttons ─────────────────────────────────────────────────────────────
 
 export const SKIP_BACK = 15;
-export const SKIP_FORWARD = 30;
+export const SKIP_FORWARD = 15;
 
 /** Where a skip by `delta` seconds lands, kept inside 0..duration (when known). */
 export function skipTarget(current, delta, duration) {
