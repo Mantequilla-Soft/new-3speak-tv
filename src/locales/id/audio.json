@@ -611,7 +611,8 @@
       "watch": "Tonton video",
       "hide": "Sembunyikan video"
     },
-    "signInToFollow": "Masuk untuk mengikuti podcast"
+    "signInToFollow": "Masuk untuk mengikuti podcast",
+    "addExternal": "Tambah podcast eksternal"
   },
   "item": {
     "back": "Semua audio",

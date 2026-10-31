@@ -611,7 +611,8 @@
       "watch": "Xem video",
       "hide": "Ẩn video"
     },
-    "signInToFollow": "Đăng nhập để theo dõi podcast"
+    "signInToFollow": "Đăng nhập để theo dõi podcast",
+    "addExternal": "Thêm podcast bên ngoài"
   },
   "item": {
     "back": "Tất cả âm thanh",

@@ -63,4 +63,12 @@ describe('podcast pages', () => {
     expect(html).toContain('LIVE')
     expect(html).toContain('In progress')
   })
+
+  it('Discover keeps the search, link and OPML box folded behind a button', async () => {
+    const html = await render('/audio?type=external&view=discover', (qc) => {
+      qc.setQueryData(['podcasts', 'config'], { enabled: true, search: true })
+    })
+    expect(html).toContain('Add external podcast')
+    expect(html).not.toContain('Podcasts from anywhere')
+  })
 })

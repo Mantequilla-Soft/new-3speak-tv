@@ -636,7 +636,8 @@
       "watch": "Tazama video",
       "hide": "Ficha video"
     },
-    "signInToFollow": "Ingia ili kufuata podikasti"
+    "signInToFollow": "Ingia ili kufuata podikasti",
+    "addExternal": "Ongeza podikasti ya nje"
   },
   "item": {
     "back": "Sauti zote",

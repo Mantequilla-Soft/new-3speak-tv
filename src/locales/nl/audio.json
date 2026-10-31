@@ -636,7 +636,8 @@
       "watch": "Video bekijken",
       "hide": "Video verbergen"
     },
-    "signInToFollow": "Log in om podcasts te volgen"
+    "signInToFollow": "Log in om podcasts te volgen",
+    "addExternal": "Externe podcast toevoegen"
   },
   "item": {
     "back": "Alle audio",

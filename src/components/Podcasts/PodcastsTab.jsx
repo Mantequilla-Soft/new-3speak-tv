@@ -426,6 +426,8 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
   const { busy, follow } = useFollowFeeds(user, onFollowed);
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState(null);
+  // Folded behind "Add external podcast" until asked for.
+  const [open, setOpen] = useState(false);
   const fileRef = useRef(null);
   const followed = useFollowedKeys(subscriptions);
 
@@ -478,6 +480,16 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
     }
   };
 
+  if (!open) {
+    return (
+      <div className="pod-add-row">
+        <button type="button" className="pod-btn pod-btn--solid" onClick={() => setOpen(true)} aria-expanded={false}>
+          <MdAdd size={18} /> {t('audio.podcasts.addExternal')}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
       <header className="pod-hero">
@@ -487,6 +499,9 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
             <h2 className="pod-hero-title">{t('audio.podcasts.introTitle')}</h2>
             <p className="pod-hero-sub">{user ? t('audio.podcasts.heroSub') : t('audio.podcasts.introSignedOut')}</p>
           </div>
+          <button type="button" className="pod-icon-btn pod-hero-close" onClick={() => setOpen(false)} aria-expanded aria-label={t('common.actions.close')} title={t('common.actions.close')}>
+            <MdClose size={18} />
+          </button>
         </div>
 
         {user && (

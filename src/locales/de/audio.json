@@ -636,7 +636,8 @@
       "watch": "Video ansehen",
       "hide": "Video ausblenden"
     },
-    "signInToFollow": "Melde dich an, um Podcasts zu folgen"
+    "signInToFollow": "Melde dich an, um Podcasts zu folgen",
+    "addExternal": "Externen Podcast hinzufügen"
   },
   "item": {
     "back": "Alle Audios",

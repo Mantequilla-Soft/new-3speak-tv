@@ -611,7 +611,8 @@
       "watch": "동영상 보기",
       "hide": "동영상 숨기기"
     },
-    "signInToFollow": "팟캐스트를 팔로우하려면 로그인하세요"
+    "signInToFollow": "팟캐스트를 팔로우하려면 로그인하세요",
+    "addExternal": "외부 팟캐스트 추가"
   },
   "item": {
     "back": "모든 오디오",

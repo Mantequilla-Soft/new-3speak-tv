@@ -147,6 +147,14 @@
   gap: 14px;
 }
 
+// "Add external podcast": the search / link / OPML box stays folded until asked for.
+.pod-add-row {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.pod-hero-close { margin-left: auto; align-self: flex-start; }
+
 // Mine | Discover | Trends: the External page's own tabs.
 .pod-views {
   display: flex;

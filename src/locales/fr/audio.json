@@ -661,7 +661,8 @@
       "watch": "Voir la vidéo",
       "hide": "Masquer la vidéo"
     },
-    "signInToFollow": "Connectez-vous pour suivre des podcasts"
+    "signInToFollow": "Connectez-vous pour suivre des podcasts",
+    "addExternal": "Ajouter un podcast externe"
   },
   "item": {
     "back": "Tous les audios",

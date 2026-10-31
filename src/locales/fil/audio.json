@@ -636,7 +636,8 @@
       "watch": "Panoorin ang video",
       "hide": "Itago ang video"
     },
-    "signInToFollow": "Mag-sign in para i-follow ang mga podcast"
+    "signInToFollow": "Mag-sign in para i-follow ang mga podcast",
+    "addExternal": "Magdagdag ng external podcast"
   },
   "item": {
     "back": "Lahat ng audio",

@@ -686,7 +686,8 @@
       "watch": "Obejrzyj wideo",
       "hide": "Ukryj wideo"
     },
-    "signInToFollow": "Zaloguj się, aby obserwować podcasty"
+    "signInToFollow": "Zaloguj się, aby obserwować podcasty",
+    "addExternal": "Dodaj zewnętrzny podcast"
   },
   "item": {
     "back": "Całe audio",

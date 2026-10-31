@@ -636,7 +636,8 @@
       "watch": "Watch video",
       "hide": "Hide video"
     },
-    "signInToFollow": "Sign in to follow podcasts"
+    "signInToFollow": "Sign in to follow podcasts",
+    "addExternal": "Add external podcast"
   },
   "item": {
     "back": "All audio",

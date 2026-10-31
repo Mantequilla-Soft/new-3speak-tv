@@ -636,7 +636,8 @@
       "watch": "Videoyu izle",
       "hide": "Videoyu gizle"
     },
-    "signInToFollow": "Podcast takip etmek için giriş yap"
+    "signInToFollow": "Podcast takip etmek için giriş yap",
+    "addExternal": "Harici podcast ekle"
   },
   "item": {
     "back": "Tüm sesler",
