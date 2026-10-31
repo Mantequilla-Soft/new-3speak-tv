@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.80.77',
+    category: 'audio',
+    date: '2026-10-31',
+    summary: "Vote right from an audio's page, and follow an all-audio playlist like a podcast.",
+  },
+  {
     version: '1.80.76',
     category: 'audio',
     date: '2026-10-31',
