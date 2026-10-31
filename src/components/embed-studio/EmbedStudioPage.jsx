@@ -140,19 +140,23 @@ function EmbedStudioPage() {
   useEffect(() => {
     if (sharedFileHandled.current) return;
 
-    const processFile = async (file) => {
+    // `autoShort`: a file shared from the phone's share sheet picks its own
+    // uploader. Vertical and no longer than a Short may be → the Shorts one.
+    const processFile = async (file, { autoShort = false } = {}) => {
       if (!file || !file.type.startsWith('video/')) return;
       sharedFileHandled.current = true;
 
       const video = document.createElement('video');
       video.preload = 'metadata';
-      const duration = await new Promise((resolve) => {
+      const { duration, width, height } = await new Promise((resolve) => {
         video.onloadedmetadata = () => {
           URL.revokeObjectURL(video.src);
-          resolve(video.duration);
+          resolve({ duration: video.duration, width: video.videoWidth, height: video.videoHeight });
         };
         video.src = URL.createObjectURL(file);
       });
+      const sharedShort = autoShort && height > width && duration <= SHORTS_MAX_DURATION_SEC;
+      if (sharedShort) setFromStories(true);
 
       const thumbs = await generateVideoThumbnails(file, 2, 'url');
 
@@ -176,7 +180,7 @@ function EmbedStudioPage() {
       // effect ran, so an import says which mode it wants explicitly. An imported
       // TikTok is sent as a Short before anyone measured it; if the file is longer
       // than a Short may be, it goes in as a normal video instead.
-      let mode = ytMeta?.mode || (fromStories ? 'shorts' : 'longform');
+      let mode = ytMeta?.mode || (fromStories || sharedShort ? 'shorts' : 'longform');
       if (ytMeta?.mode === 'shorts' && duration > SHORTS_MAX_DURATION_SEC) {
         mode = 'longform';
         setFromStories(false);
@@ -204,7 +208,10 @@ function EmbedStudioPage() {
           const blob = await res.blob();
           await cache.delete('/shared-video');
           const name = res.headers.get('X-File-Name') || 'shared-video.mp4';
-          await processFile(new File([blob], name, { type: blob.type || res.headers.get('Content-Type') || 'video/mp4' }));
+          await processFile(
+            new File([blob], name, { type: blob.type || res.headers.get('Content-Type') || 'video/mp4' }),
+            { autoShort: true },
+          );
         } catch (err) {
           console.error('Shared video pickup failed:', err);
         }

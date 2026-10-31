@@ -31,6 +31,7 @@ import PlaylistFeedCard from "../components/Cards/PlaylistFeedCard";
 import { SHORTS_API_URL } from "../utils/config";
 import { Rocket, Compass, Users, Tags, Clock, GripVertical, Tv } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import useCardSize from "../hooks/useCardSize";
 
 // Extra feed params for the logged-in user: interests (checker weights the feed
 // toward them), currentuser (needed for BOTH the always-on dismissals and
@@ -448,7 +449,8 @@ function useVisibleKeys(rootRef, sig, count) {
 
 const HomeGrouped = () => {
   const { t } = useTranslation();
-  const { authenticated, user, showNsfw, homeCardSize, hideWatched, hideAi, interests, simpleFeed } = useAppStore();
+  const { authenticated, user, showNsfw, hideWatched, hideAi, interests, simpleFeed } = useAppStore();
+  const homeCardSize = useCardSize(); // large only on mobile, see hooks/useCardSize
   const spotlightSize = useAppStore((st) => st.spotlightSize);
   const setSpotlightSize = useAppStore((st) => st.setSpotlightSize);
   // Who is looking, for feature gates that are keyed on a name. A warm-up user

@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.80.65',
+    category: 'general',
+    date: '2026-10-31',
+    summary: "The 3Speak app's icon shortcuts now take you to the Audio page as well.",
+  },
+  {
+    version: '1.80.64',
+    category: 'upload',
+    date: '2026-10-31',
+    summary: 'Sharing a vertical video from your phone to 3Speak now opens the Shorts uploader for you.',
+  },
+  {
     version: '1.80.63',
     category: 'profile',
     date: '2026-10-30',

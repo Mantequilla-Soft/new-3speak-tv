@@ -189,6 +189,7 @@ import '@aioha/react-ui/dist/build.css';
 import { LOCAL_STORAGE_USER_ID_KEY } from "./hooks/localStorageKeys";
 import { endWalletSession } from "./hive-api/aioha";
 import { rememberButrauthAccount } from "./utils/butrauthAccounts";
+import useCardSize from "./hooks/useCardSize";
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -296,7 +297,7 @@ function App() {
   const location = useLocation();
   const { initializeAuth, initializeTheme, authenticated, LogOut, setUser, user: appUser } = useAppStore();
   const sessionExpired = useAppStore((s) => s.sessionExpired);
-  const homeCardSize = useAppStore((s) => s.homeCardSize);
+  const homeCardSize = useCardSize(); // the saved setting on mobile, always small on desktop
 
   // Reflect the card-size preference on <html> so the card grids (home, profile,
   // playlists) can size themselves via CSS variables.
