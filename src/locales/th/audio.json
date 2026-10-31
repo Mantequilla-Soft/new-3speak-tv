@@ -142,7 +142,12 @@
     "noTracks": "ไม่พบแทร็ก",
     "creators": "ครีเอเตอร์",
     "albumsPlaylists": "อัลบั้มและเพลย์ลิสต์",
-    "noAudioForFilters": "ไม่พบเสียงตามตัวกรองเหล่านี้"
+    "noAudioForFilters": "ไม่พบเสียงตามตัวกรองเหล่านี้",
+    "tabsLabel": "มุมมองเสียง",
+    "tabExplore": "เลือกดู",
+    "tabPlayer": "เครื่องเล่น",
+    "nothingPlaying": "ยังไม่มีอะไรเล่นอยู่",
+    "goExplore": "หาสิ่งที่จะฟัง"
   },
   "upload": {
     "title": "อัปโหลดเสียง",

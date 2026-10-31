@@ -85,10 +85,10 @@
     "clipClear": "Klipten sonra devam et",
     "live": "CANLI",
     "liveUnsupported": "Bu canlı yayın bu tarayıcıda oynatılamıyor.",
-    "chapters": "Bölümler",
-    "prevChapter": "Önceki bölüm",
-    "nextChapter": "Sonraki bölüm",
-    "chapterLink": "Bölüm bağlantısı"
+    "chapters": "Kısımlar",
+    "prevChapter": "Önceki kısım",
+    "nextChapter": "Sonraki kısım",
+    "chapterLink": "Kısım bağlantısı"
   },
   "share": {
     "failed": "Başarısız",
@@ -145,7 +145,12 @@
     "noTracks": "Parça bulunamadı.",
     "creators": "İçerik üreticileri",
     "albumsPlaylists": "Albümler ve Oynatma Listeleri",
-    "noAudioForFilters": "Bu filtrelerle ses bulunamadı."
+    "noAudioForFilters": "Bu filtrelerle ses bulunamadı.",
+    "tabsLabel": "Ses görünümleri",
+    "tabExplore": "Göz at",
+    "tabPlayer": "Oynatıcı",
+    "nothingPlaying": "Henüz çalan bir şey yok.",
+    "goExplore": "Dinleyecek bir şey bul"
   },
   "upload": {
     "title": "Ses yükle",

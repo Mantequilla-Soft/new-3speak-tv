@@ -142,7 +142,12 @@
     "noTracks": "トラックが見つかりません。",
     "creators": "クリエイター",
     "albumsPlaylists": "アルバムと再生リスト",
-    "noAudioForFilters": "この条件に一致する音声はありません。"
+    "noAudioForFilters": "この条件に一致する音声はありません。",
+    "tabsLabel": "オーディオの表示",
+    "tabExplore": "探す",
+    "tabPlayer": "プレーヤー",
+    "nothingPlaying": "まだ何も再生していません。",
+    "goExplore": "聴くものを探す"
   },
   "upload": {
     "title": "音声をアップロード",

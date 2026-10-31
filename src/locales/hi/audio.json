@@ -145,7 +145,12 @@
     "noTracks": "कोई ट्रैक नहीं मिला।",
     "creators": "क्रिएटर्स",
     "albumsPlaylists": "एल्बम और प्लेलिस्ट",
-    "noAudioForFilters": "इन फ़िल्टर के लिए कोई ऑडियो नहीं मिला।"
+    "noAudioForFilters": "इन फ़िल्टर के लिए कोई ऑडियो नहीं मिला।",
+    "tabsLabel": "ऑडियो दृश्य",
+    "tabExplore": "एक्सप्लोर",
+    "tabPlayer": "प्लेयर",
+    "nothingPlaying": "अभी कुछ नहीं चल रहा है।",
+    "goExplore": "सुनने के लिए कुछ ढूंढें"
   },
   "upload": {
     "title": "ऑडियो अपलोड करें",

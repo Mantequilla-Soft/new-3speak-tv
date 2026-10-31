@@ -151,7 +151,12 @@
     "noTracks": "Nie znaleziono utworów.",
     "creators": "Twórcy",
     "albumsPlaylists": "Albumy i playlisty",
-    "noAudioForFilters": "Nie znaleziono audio dla tych filtrów."
+    "noAudioForFilters": "Nie znaleziono audio dla tych filtrów.",
+    "tabsLabel": "Widoki audio",
+    "tabExplore": "Przeglądaj",
+    "tabPlayer": "Odtwarzacz",
+    "nothingPlaying": "Nic jeszcze nie gra.",
+    "goExplore": "Znajdź coś do posłuchania"
   },
   "upload": {
     "title": "Prześlij audio",

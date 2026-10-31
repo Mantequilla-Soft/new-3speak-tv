@@ -151,7 +151,12 @@
     "noTracks": "Треки не найдены.",
     "creators": "Авторы",
     "albumsPlaylists": "Альбомы и плейлисты",
-    "noAudioForFilters": "По этим фильтрам аудио не найдено."
+    "noAudioForFilters": "По этим фильтрам аудио не найдено.",
+    "tabsLabel": "Разделы аудио",
+    "tabExplore": "Каталог",
+    "tabPlayer": "Плеер",
+    "nothingPlaying": "Пока ничего не играет.",
+    "goExplore": "Найти, что послушать"
   },
   "upload": {
     "title": "Загрузить аудио",

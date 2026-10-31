@@ -148,7 +148,12 @@
     "noTracks": "Nessuna traccia trovata.",
     "creators": "Creator",
     "albumsPlaylists": "Album e playlist",
-    "noAudioForFilters": "Nessun audio trovato con questi filtri."
+    "noAudioForFilters": "Nessun audio trovato con questi filtri.",
+    "tabsLabel": "Viste audio",
+    "tabExplore": "Esplora",
+    "tabPlayer": "Player",
+    "nothingPlaying": "Ancora niente in riproduzione.",
+    "goExplore": "Trova qualcosa da ascoltare"
   },
   "upload": {
     "title": "Carica audio",

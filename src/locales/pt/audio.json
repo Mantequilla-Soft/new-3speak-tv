@@ -148,7 +148,12 @@
     "noTracks": "Nenhuma faixa encontrada.",
     "creators": "Criadores",
     "albumsPlaylists": "Álbuns e playlists",
-    "noAudioForFilters": "Nenhum áudio encontrado com esses filtros."
+    "noAudioForFilters": "Nenhum áudio encontrado com esses filtros.",
+    "tabsLabel": "Vistas de áudio",
+    "tabExplore": "Explorar",
+    "tabPlayer": "Player",
+    "nothingPlaying": "Nada está tocando ainda.",
+    "goExplore": "Encontre algo para ouvir"
   },
   "upload": {
     "title": "Enviar áudio",

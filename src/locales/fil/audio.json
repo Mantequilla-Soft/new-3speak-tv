@@ -145,7 +145,12 @@
     "noTracks": "Walang nahanap na track.",
     "creators": "Mga Creator",
     "albumsPlaylists": "Mga Album at Playlist",
-    "noAudioForFilters": "Walang nahanap na audio para sa mga filter na ito."
+    "noAudioForFilters": "Walang nahanap na audio para sa mga filter na ito.",
+    "tabsLabel": "Mga view ng audio",
+    "tabExplore": "Mag-explore",
+    "tabPlayer": "Player",
+    "nothingPlaying": "Wala pang tumutugtog.",
+    "goExplore": "Maghanap ng mapapakinggan"
   },
   "upload": {
     "title": "Mag-upload ng audio",

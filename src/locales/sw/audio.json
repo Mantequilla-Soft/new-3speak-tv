@@ -145,7 +145,12 @@
     "noTracks": "Hakuna nyimbo zilizopatikana.",
     "creators": "Watayarishaji",
     "albumsPlaylists": "Albamu na orodha za kucheza",
-    "noAudioForFilters": "Hakuna sauti iliyopatikana kwa vichujio hivi."
+    "noAudioForFilters": "Hakuna sauti iliyopatikana kwa vichujio hivi.",
+    "tabsLabel": "Mionekano ya sauti",
+    "tabExplore": "Vinjari",
+    "tabPlayer": "Kicheza",
+    "nothingPlaying": "Bado hakuna kinachocheza.",
+    "goExplore": "Tafuta kitu cha kusikiliza"
   },
   "upload": {
     "title": "Pakia sauti",

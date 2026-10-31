@@ -145,7 +145,12 @@
     "noTracks": "Geen tracks gevonden.",
     "creators": "Makers",
     "albumsPlaylists": "Albums & playlists",
-    "noAudioForFilters": "Geen audio gevonden voor deze filters."
+    "noAudioForFilters": "Geen audio gevonden voor deze filters.",
+    "tabsLabel": "Audioweergaven",
+    "tabExplore": "Verkennen",
+    "tabPlayer": "Speler",
+    "nothingPlaying": "Er speelt nog niets.",
+    "goExplore": "Zoek iets om te luisteren"
   },
   "upload": {
     "title": "Audio uploaden",

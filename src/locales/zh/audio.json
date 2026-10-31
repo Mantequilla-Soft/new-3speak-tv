@@ -142,7 +142,12 @@
     "noTracks": "没有找到曲目。",
     "creators": "创作者",
     "albumsPlaylists": "专辑与播放列表",
-    "noAudioForFilters": "没有符合这些筛选条件的音频。"
+    "noAudioForFilters": "没有符合这些筛选条件的音频。",
+    "tabsLabel": "音频视图",
+    "tabExplore": "浏览",
+    "tabPlayer": "播放器",
+    "nothingPlaying": "还没有在播放的内容。",
+    "goExplore": "找点东西听"
   },
   "upload": {
     "title": "上传音频",

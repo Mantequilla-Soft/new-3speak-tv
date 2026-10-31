@@ -145,7 +145,12 @@
     "noTracks": "কোনো ট্র্যাক পাওয়া যায়নি।",
     "creators": "ক্রিয়েটর",
     "albumsPlaylists": "অ্যালবাম ও প্লেলিস্ট",
-    "noAudioForFilters": "এই ফিল্টারগুলোতে কোনো অডিও পাওয়া যায়নি।"
+    "noAudioForFilters": "এই ফিল্টারগুলোতে কোনো অডিও পাওয়া যায়নি।",
+    "tabsLabel": "অডিও ভিউ",
+    "tabExplore": "এক্সপ্লোর",
+    "tabPlayer": "প্লেয়ার",
+    "nothingPlaying": "এখনও কিছু বাজছে না।",
+    "goExplore": "শোনার মতো কিছু খুঁজুন"
   },
   "upload": {
     "title": "অডিও আপলোড করুন",

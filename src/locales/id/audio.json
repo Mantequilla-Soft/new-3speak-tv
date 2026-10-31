@@ -142,7 +142,12 @@
     "noTracks": "Tidak ada lagu yang ditemukan.",
     "creators": "Kreator",
     "albumsPlaylists": "Album & Playlist",
-    "noAudioForFilters": "Tidak ada audio untuk filter ini."
+    "noAudioForFilters": "Tidak ada audio untuk filter ini.",
+    "tabsLabel": "Tampilan audio",
+    "tabExplore": "Telusuri",
+    "tabPlayer": "Pemutar",
+    "nothingPlaying": "Belum ada yang diputar.",
+    "goExplore": "Cari sesuatu untuk didengarkan"
   },
   "upload": {
     "title": "Unggah audio",

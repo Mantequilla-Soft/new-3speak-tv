@@ -148,7 +148,12 @@
     "noTracks": "No se encontraron pistas.",
     "creators": "Creadores",
     "albumsPlaylists": "Álbumes y playlists",
-    "noAudioForFilters": "No se encontró audio con estos filtros."
+    "noAudioForFilters": "No se encontró audio con estos filtros.",
+    "tabsLabel": "Vistas de audio",
+    "tabExplore": "Explorar",
+    "tabPlayer": "Reproductor",
+    "nothingPlaying": "Todavía no suena nada.",
+    "goExplore": "Busca algo para escuchar"
   },
   "upload": {
     "title": "Subir audio",

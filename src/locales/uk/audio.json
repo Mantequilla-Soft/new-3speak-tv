@@ -151,7 +151,12 @@
     "noTracks": "Треків не знайдено.",
     "creators": "Автори",
     "albumsPlaylists": "Альбоми й плейлисти",
-    "noAudioForFilters": "За цими фільтрами аудіо не знайдено."
+    "noAudioForFilters": "За цими фільтрами аудіо не знайдено.",
+    "tabsLabel": "Розділи аудіо",
+    "tabExplore": "Каталог",
+    "tabPlayer": "Плеєр",
+    "nothingPlaying": "Поки нічого не грає.",
+    "goExplore": "Знайти, що послухати"
   },
   "upload": {
     "title": "Завантажити аудіо",

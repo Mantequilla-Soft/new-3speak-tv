@@ -142,7 +142,12 @@
     "noTracks": "Không tìm thấy bản nhạc nào.",
     "creators": "Nhà sáng tạo",
     "albumsPlaylists": "Album & danh sách phát",
-    "noAudioForFilters": "Không tìm thấy âm thanh nào với các bộ lọc này."
+    "noAudioForFilters": "Không tìm thấy âm thanh nào với các bộ lọc này.",
+    "tabsLabel": "Chế độ xem âm thanh",
+    "tabExplore": "Duyệt",
+    "tabPlayer": "Trình phát",
+    "nothingPlaying": "Chưa có gì đang phát.",
+    "goExplore": "Tìm nội dung để nghe"
   },
   "upload": {
     "title": "Tải âm thanh lên",

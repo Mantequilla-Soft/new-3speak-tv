@@ -145,7 +145,12 @@
     "noTracks": "Keine Tracks gefunden.",
     "creators": "Creator",
     "albumsPlaylists": "Alben & Playlists",
-    "noAudioForFilters": "Für diese Filter wurde kein Audio gefunden."
+    "noAudioForFilters": "Für diese Filter wurde kein Audio gefunden.",
+    "tabsLabel": "Audio-Ansichten",
+    "tabExplore": "Stöbern",
+    "tabPlayer": "Player",
+    "nothingPlaying": "Noch läuft nichts.",
+    "goExplore": "Etwas zum Anhören finden"
   },
   "upload": {
     "title": "Audio hochladen",

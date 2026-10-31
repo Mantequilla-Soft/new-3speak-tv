@@ -148,7 +148,12 @@
     "noTracks": "Aucun titre trouvé.",
     "creators": "Créateurs",
     "albumsPlaylists": "Albums et playlists",
-    "noAudioForFilters": "Aucun audio trouvé pour ces filtres."
+    "noAudioForFilters": "Aucun audio trouvé pour ces filtres.",
+    "tabsLabel": "Vues audio",
+    "tabExplore": "Explorer",
+    "tabPlayer": "Lecteur",
+    "nothingPlaying": "Rien n'est en lecture pour l'instant.",
+    "goExplore": "Trouver quelque chose à écouter"
   },
   "upload": {
     "title": "Mettre en ligne un audio",
