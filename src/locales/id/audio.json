@@ -609,5 +609,13 @@
       "watch": "Tonton video",
       "hide": "Sembunyikan video"
     }
+  },
+  "item": {
+    "back": "Semua audio",
+    "missing": "Audio ini tidak tersedia.",
+    "description": "Deskripsi",
+    "noDescription": "Tidak ada deskripsi.",
+    "comments": "Vote dan komentar",
+    "album": "Dari {{name}}"
   }
 }

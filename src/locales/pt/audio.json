@@ -659,5 +659,13 @@
       "watch": "Assistir ao vídeo",
       "hide": "Ocultar vídeo"
     }
+  },
+  "item": {
+    "back": "Todos os áudios",
+    "missing": "Este áudio não está disponível.",
+    "description": "Descrição",
+    "noDescription": "Sem descrição.",
+    "comments": "Votos e comentários",
+    "album": "De {{name}}"
   }
 }

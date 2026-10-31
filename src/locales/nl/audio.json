@@ -634,5 +634,13 @@
       "watch": "Video bekijken",
       "hide": "Video verbergen"
     }
+  },
+  "item": {
+    "back": "Alle audio",
+    "missing": "Deze audio is niet beschikbaar.",
+    "description": "Beschrijving",
+    "noDescription": "Geen beschrijving.",
+    "comments": "Stemmen en reacties",
+    "album": "Uit {{name}}"
   }
 }

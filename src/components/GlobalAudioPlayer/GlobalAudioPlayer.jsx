@@ -51,6 +51,7 @@ import { ClipForm, CopyAtOption, EpisodeShareOptions } from './PlayerShare';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
 import { trackArtist } from '../../utils/audioTrack';
 import useListenTime from '../../hooks/useListenTime';
+import { audioItemPath } from '../AudioItem/AudioItemView';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
 import '../../page/Audio.scss';
 import './GlobalAudioPlayer.scss';
@@ -117,6 +118,14 @@ async function encryptBeat(obj) {
     for (let i = 0; i < out.length; i++) bin += String.fromCharCode(out[i]);
     return btoa(bin);
   } catch { return null; }
+}
+
+// The page a track's title opens: an outside episode's page, or a 3Speak audio's
+// own page on the audio page (AudioItemView). None for a live stream.
+function pageOf(track) {
+  if (!track || track.live) return '';
+  if (track.external) return episodePath(track._id);
+  return track.owner && track.permlink ? audioItemPath(track) : '';
 }
 
 function audioThumb(item) {
@@ -1335,17 +1344,17 @@ function GlobalAudioPlayer() {
           </div>
           <div className="audio-np-info" onClick={toggleExpanded}>
             <span
-              className={`audio-np-title${nowPlaying.post_permlink || (nowPlaying.external && !isLive) ? ' has-post' : ''}`}
+              className={`audio-np-title${pageOf(nowPlaying) ? ' has-post' : ''}`}
               onClick={(e) => {
-                if (!nowPlaying.post_permlink && !(nowPlaying.external && !isLive)) return;
+                if (!pageOf(nowPlaying)) return;
                 e.stopPropagation();
-                navigate(nowPlaying.external ? episodePath(nowPlaying._id) : `/audio/${nowPlaying.owner}/${nowPlaying.post_permlink}`);
+                navigate(pageOf(nowPlaying));
                 audioSetExpanded(false);
               }}
-              title={nowPlaying.post_permlink ? t('audio.player.openPost') : nowPlaying.external && !isLive ? t('audio.podcasts.openEpisode') : ''}
+              title={pageOf(nowPlaying) ? (nowPlaying.external ? t('audio.podcasts.openEpisode') : t('audio.player.openPost')) : ''}
             >
               <span className="audio-np-title-text">{nowPlaying.title || t('audio.untitled')}</span>
-              {(nowPlaying.post_permlink || (nowPlaying.external && !isLive)) && (
+              {pageOf(nowPlaying) && (
                 <MdOpenInNew className="audio-np-title-icon" size={12} aria-hidden />
               )}
             </span>

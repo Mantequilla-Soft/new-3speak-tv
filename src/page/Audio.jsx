@@ -13,7 +13,7 @@ import AudioAuthorBadge from './AudioAuthorBadge';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
 import { AudioShareDropdown } from '../components/GlobalAudioPlayer/GlobalAudioPlayer';
-import { parseTimeParam } from '../components/GlobalAudioPlayer/playerMath';
+import AudioItemView from '../components/AudioItem/AudioItemView';
 import AudioTile, { AudioTileSkeleton } from '../components/AudioTile/AudioTile';
 import AudioPlaylistTile from '../components/AudioPlaylistTile/AudioPlaylistTile';
 import PodcastsTab from '../components/Podcasts/PodcastsTab';
@@ -165,7 +165,7 @@ function loadFilters() {
 
 function Audio() {
   const { t } = useTranslation();
-  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioPlayAt, audioAddToQueue, audioSetDock, audioSetDockOpener } = useAppStore();
+  const { showNsfw, authenticated, user, audioCurrent, audioIsPlaying, audioPlay, audioAddToQueue, audioSetDock, audioSetDockOpener } = useAppStore();
   const loggedIn = authenticated && isLoggedIn();
 
   // "External": podcasts from outside RSS feeds (components/Podcasts). It is the last
@@ -175,6 +175,25 @@ function Audio() {
   // leaving it on External goes back to External.
   const [params, setParams] = useSearchParams();
   const external = params.get('type') === 'external' || params.has('podcast') || params.has('episode');
+
+  // One 3Speak audio on its own page, like an outside episode: ?play=<owner>/<id>
+  // (shared player links, a click on an audio card). See AudioItemView.
+  const [itemOwner, itemId] = String(params.get('play') || '').replace(/^@/, '').split('/');
+  const item = !external && itemOwner && itemId ? { owner: itemOwner.toLowerCase(), id: itemId } : null;
+  const openItem = useCallback((it) => {
+    setParams((prev) => {
+      const next = new URLSearchParams(prev);
+      for (const k of ['type', 'podcast', 'episode', 't', 'end', 'player']) next.delete(k);
+      next.set('play', `${it.owner}/${it.permlink}`);
+      return next;
+    });
+    window.scrollTo({ top: 0 });
+  }, [setParams]);
+  const closeItem = () => {
+    const next = new URLSearchParams(params);
+    for (const k of ['play', 't', 'end']) next.delete(k);
+    setParams(next);
+  };
 
   // Player | Explore on phones and tablets, in the URL (`player=1`; the podcasts tab already uses `view`) so Back
   // returns to the tab. The Player tab hands its element to the global player,
@@ -208,9 +227,9 @@ function Audio() {
   }, [playerView, hasCurrent]);
   const leaveExternal = () => {
     rememberExternal(false);
-    if (!external) return;
+    if (!external && !item) return;
     const next = new URLSearchParams(params);
-    for (const k of ['type', 'podcast', 'episode']) next.delete(k);
+    for (const k of ['type', 'podcast', 'episode', 'play', 't', 'end']) next.delete(k);
     setParams(next);
   };
   useEffect(() => {
@@ -262,8 +281,6 @@ function Audio() {
   const [playlistTarget, setPlaylistTarget] = useState(null);
   const [shareTarget, setShareTarget] = useState(null);
 
-  // Deep link
-  const [deepLinkHandled, setDeepLinkHandled] = useState(false);
 
   const minDur = DURATION_STOPS[minDurIdx];
   const maxDur = DURATION_STOPS[maxDurIdx];
@@ -404,29 +421,6 @@ function Audio() {
     queryFn: async () => { const { data } = await axios.get(`${CHECKER_URL}/audio/auto-tags?limit=15`); return data.tags || []; },
   });
 
-  // Deep-link: ?play=<owner>/<permlink> → start playback in the global player.
-  // &t=<seconds> starts there, &end=<seconds> stops there (a shared clip).
-  useEffect(() => {
-    if (deepLinkHandled) return;
-    const qs = new URLSearchParams(window.location.search);
-    const p = qs.get('play');
-    if (!p) return;
-    const [o, pl] = p.split('/');
-    if (!o || !pl) return;
-    const from = parseTimeParam(qs.get('t'));
-    const to = parseTimeParam(qs.get('end'));
-    (async () => {
-      try {
-        const { data } = await axios.get(`${CHECKER_URL}/audio?owner=${encodeURIComponent(o)}&q=${encodeURIComponent(pl)}&limit=1`);
-        const item = data?.audio?.find(a => a.permlink === pl);
-        if (item && !isHiddenOwner(item.owner)) {
-          if (from != null || to != null) audioPlayAt(item, from, to);
-          else audioPlay(item, [item]);
-        }
-      } catch { /* a link to audio that's gone: nothing plays */ }
-      setDeepLinkHandled(true);
-    })();
-  }, [deepLinkHandled, audioPlay, audioPlayAt]);
 
   const tp = (item, items) => ({
     item,
@@ -438,6 +432,7 @@ function Audio() {
     onVote: () => { setVoteTarget({ author: item.owner, permlink: item.post_permlink }); setShowVoteTooltip(true); },
     onShare: () => setShareTarget(shareTarget?._id === item._id ? null : item),
     onAuthorClick: () => setSelectedCreator(item.owner),
+    onOpen: () => openItem(item),
     loggedIn,
   });
 
@@ -551,7 +546,7 @@ function Audio() {
       )}
 
       {/* Tags + duration filter row */}
-      {!selectedCreator && !external && (
+      {!selectedCreator && !external && !item && (
         <div className="audio-filter-row">
           <div className="audio-topic-tags">
             {isFiltered && (
@@ -574,6 +569,8 @@ function Audio() {
       {/* ─── Creator drill-down ──────── */}
       {external ? (
         <PodcastsTab />
+      ) : item ? (
+        <AudioItemView owner={item.owner} id={item.id} onBack={closeItem} />
       ) : selectedCreator ? (
         <div className="audio-creator-view">
           <div className="audio-creator-header">

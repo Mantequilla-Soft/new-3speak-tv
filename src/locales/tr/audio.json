@@ -634,5 +634,13 @@
       "watch": "Videoyu izle",
       "hide": "Videoyu gizle"
     }
+  },
+  "item": {
+    "back": "Tüm sesler",
+    "missing": "Bu ses kullanılamıyor.",
+    "description": "Açıklama",
+    "noDescription": "Açıklama yok.",
+    "comments": "Oylar ve yorumlar",
+    "album": "{{name}} albümünden"
   }
 }

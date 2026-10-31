@@ -634,5 +634,13 @@
       "watch": "Watch video",
       "hide": "Hide video"
     }
+  },
+  "item": {
+    "back": "All audio",
+    "missing": "This audio is not available.",
+    "description": "Description",
+    "noDescription": "No description.",
+    "comments": "Votes and comments",
+    "album": "From {{name}}"
   }
 }

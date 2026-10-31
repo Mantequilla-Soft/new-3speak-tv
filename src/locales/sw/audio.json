@@ -634,5 +634,13 @@
       "watch": "Tazama video",
       "hide": "Ficha video"
     }
+  },
+  "item": {
+    "back": "Sauti zote",
+    "missing": "Sauti hii haipatikani.",
+    "description": "Maelezo",
+    "noDescription": "Hakuna maelezo.",
+    "comments": "Kura na maoni",
+    "album": "Kutoka {{name}}"
   }
 }

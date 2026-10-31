@@ -634,5 +634,13 @@
       "watch": "Panoorin ang video",
       "hide": "Itago ang video"
     }
+  },
+  "item": {
+    "back": "Lahat ng audio",
+    "missing": "Hindi available ang audio na ito.",
+    "description": "Paglalarawan",
+    "noDescription": "Walang paglalarawan.",
+    "comments": "Mga boto at komento",
+    "album": "Mula sa {{name}}"
   }
 }

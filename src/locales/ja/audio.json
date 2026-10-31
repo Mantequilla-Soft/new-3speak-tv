@@ -609,5 +609,13 @@
       "watch": "動画を見る",
       "hide": "動画を隠す"
     }
+  },
+  "item": {
+    "back": "すべてのオーディオ",
+    "missing": "このオーディオは利用できません。",
+    "description": "説明",
+    "noDescription": "説明はありません。",
+    "comments": "投票とコメント",
+    "album": "{{name}} より"
   }
 }

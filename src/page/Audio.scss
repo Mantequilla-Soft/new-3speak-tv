@@ -1634,3 +1634,12 @@
   color: var(--text-secondary);
   text-align: center;
 }
+
+// A 3Speak audio on its own page (AudioItemView): the podcast episode layout,
+// with the creator's avatar in the kicker.
+.audio-item-avatar {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  object-fit: cover;
+}

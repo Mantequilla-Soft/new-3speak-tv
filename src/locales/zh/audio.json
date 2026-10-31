@@ -609,5 +609,13 @@
       "watch": "观看视频",
       "hide": "隐藏视频"
     }
+  },
+  "item": {
+    "back": "全部音频",
+    "missing": "该音频不可用。",
+    "description": "简介",
+    "noDescription": "暂无简介。",
+    "comments": "投票和评论",
+    "album": "来自 {{name}}"
   }
 }

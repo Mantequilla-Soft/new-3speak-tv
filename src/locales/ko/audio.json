@@ -609,5 +609,13 @@
       "watch": "동영상 보기",
       "hide": "동영상 숨기기"
     }
+  },
+  "item": {
+    "back": "모든 오디오",
+    "missing": "이 오디오는 사용할 수 없습니다.",
+    "description": "설명",
+    "noDescription": "설명이 없습니다.",
+    "comments": "투표 및 댓글",
+    "album": "{{name}} 수록"
   }
 }

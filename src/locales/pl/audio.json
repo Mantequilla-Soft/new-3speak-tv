@@ -684,5 +684,13 @@
       "watch": "Obejrzyj wideo",
       "hide": "Ukryj wideo"
     }
+  },
+  "item": {
+    "back": "Całe audio",
+    "missing": "To audio jest niedostępne.",
+    "description": "Opis",
+    "noDescription": "Brak opisu.",
+    "comments": "Głosy i komentarze",
+    "album": "Z {{name}}"
   }
 }

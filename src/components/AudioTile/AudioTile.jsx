@@ -68,6 +68,8 @@ function getMetaLine(item, t) {
  *   item          — required, an `embed-audio` doc
  *   contextItems  — optional list used for next/prev autoplay (defaults to [item])
  *   onPlay        — override the default play behavior
+ *   onOpen        — optional; a click on the title opens the audio's own page
+ *                  (the audio page's AudioItemView) instead of playing it
  *   onAddToQueue  — override default queue behavior
  *   onAuthorClick — override default (navigate to /@owner)
  *   onAddToPlaylist, onShare, onVote — optional; the corresponding action button
@@ -80,6 +82,7 @@ function AudioTile({
   item,
   contextItems,
   onPlay,
+  onOpen,
   onAddToQueue,
   onAuthorClick,
   onAddToPlaylist,
@@ -219,7 +222,7 @@ function AudioTile({
 
   const body = (
     <div className="audio-tile-body">
-      <span className="audio-tile-title" onClick={handlePlay}>
+      <span className="audio-tile-title" onClick={onOpen ? (e) => { e.stopPropagation(); onOpen(); } : handlePlay}>
         {trackNumber != null && <span className="audio-tile-track-num">{trackNumber}.</span>}
         {item.title || t('audio.untitled')}
       </span>

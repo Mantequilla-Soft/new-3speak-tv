@@ -609,5 +609,13 @@
       "watch": "Xem video",
       "hide": "Ẩn video"
     }
+  },
+  "item": {
+    "back": "Tất cả âm thanh",
+    "missing": "Âm thanh này không khả dụng.",
+    "description": "Mô tả",
+    "noDescription": "Không có mô tả.",
+    "comments": "Bình chọn và bình luận",
+    "album": "Từ {{name}}"
   }
 }
