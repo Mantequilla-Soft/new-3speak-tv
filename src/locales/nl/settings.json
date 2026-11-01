@@ -126,6 +126,11 @@
     "feed": "Feed",
     "aria": "Contentinstellingen"
   },
+  "connectionsTabs": {
+    "support": "Steun",
+    "profiles": "Gekoppelde profielen",
+    "aria": "Instellingen voor koppelingen"
+  },
   "butrauthUnlocked": "Butter Auth ontgrendeld",
   "appearance": {
     "title": "Weergave",

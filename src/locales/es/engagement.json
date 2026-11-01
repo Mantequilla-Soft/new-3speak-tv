@@ -12,6 +12,7 @@
     "heading": "Enviar una propina a @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Más formas",
     "amountLabel": "Monto: ",
     "amountPlaceholder": "p. ej. 1.000",
     "currencyLabel": "Moneda:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "Más formas de apoyar a @{{recipient}}",
+    "otherWaysNote": "Cada botón abre la página del creador en ese sitio en una pestaña nueva. Los pagos que hagas allí no pasan por 3Speak.",
     "monthly": {
       "label": "Con qué frecuencia",
       "once": "Una vez",

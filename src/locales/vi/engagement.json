@@ -12,6 +12,7 @@
     "heading": "Gửi tip cho @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Cách khác",
     "amountLabel": "Số lượng: ",
     "amountPlaceholder": "ví dụ 1.000",
     "currencyLabel": "Loại tiền:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "Thêm cách để ủng hộ @{{recipient}}",
+    "otherWaysNote": "Mỗi nút mở trang của nhà sáng tạo trên trang đó trong một thẻ mới. Các khoản thanh toán ở đó không đi qua 3Speak.",
     "monthly": {
       "label": "Bao lâu một lần",
       "once": "Một lần",

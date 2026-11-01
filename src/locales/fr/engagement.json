@@ -12,6 +12,7 @@
     "heading": "Envoyer un pourboire à @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Plus de façons",
     "amountLabel": "Montant : ",
     "amountPlaceholder": "ex. 1.000",
     "currencyLabel": "Devise :",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "Plus de façons de soutenir @{{recipient}}",
+    "otherWaysNote": "Chaque bouton ouvre la page du créateur sur ce site dans un nouvel onglet. Les paiements faits là-bas ne passent pas par 3Speak.",
     "monthly": {
       "label": "À quelle fréquence",
       "once": "Une fois",

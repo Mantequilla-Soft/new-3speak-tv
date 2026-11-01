@@ -12,6 +12,7 @@
     "heading": "Send a Tip to @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "More ways",
     "amountLabel": "Amount: ",
     "amountPlaceholder": "e.g. 1.000",
     "currencyLabel": "Currency:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "More ways to support @{{recipient}}",
+    "otherWaysNote": "Each button opens the creator's page on that site in a new tab. Payments made there don't go through 3Speak.",
     "monthly": {
       "label": "How often",
       "once": "Once",

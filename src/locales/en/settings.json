@@ -126,6 +126,11 @@
     "feed": "Feed",
     "aria": "Content settings"
   },
+  "connectionsTabs": {
+    "support": "Support",
+    "profiles": "Linked profiles",
+    "aria": "Connection settings"
+  },
   "butrauthUnlocked": "Butter Auth unlocked",
   "appearance": {
     "title": "Appearance",

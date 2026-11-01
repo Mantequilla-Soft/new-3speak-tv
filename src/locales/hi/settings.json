@@ -126,6 +126,11 @@
     "feed": "फ़ीड",
     "aria": "कंटेंट सेटिंग्स"
   },
+  "connectionsTabs": {
+    "support": "सपोर्ट",
+    "profiles": "लिंक की गई प्रोफ़ाइलें",
+    "aria": "कनेक्शन सेटिंग्स"
+  },
   "butrauthUnlocked": "Butter Auth अनलॉक हो गया",
   "appearance": {
     "title": "दिखावट",

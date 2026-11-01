@@ -882,6 +882,13 @@ const TABS = [
   { id: 'about', labelKey: 'settings.tabs.about' },
 ];
 
+// The two panels behind Connections: where money reaches the creator, and their
+// verified channels elsewhere.
+const CONNECTIONS_TABS = [
+  { id: 'support', labelKey: 'settings.connectionsTabs.support' },
+  { id: 'profiles', labelKey: 'settings.connectionsTabs.profiles' },
+];
+
 // The three panels behind Content. Kept as data so the sub-tab bar and the
 // panels below cannot fall out of step.
 const CONTENT_TABS = [
@@ -940,6 +947,7 @@ export default function SettingsModal({ isOpen, onClose }) {
   );
   const [tab, setTab] = useState('general');
   const [contentTab, setContentTab] = useState('feed');
+  const [connectionsTab, setConnectionsTab] = useState('support');
   // Losing the group (or logging out) while standing on that page would leave the modal
   // with no tab selected and nothing rendered.
   useEffect(() => {
@@ -1086,9 +1094,25 @@ export default function SettingsModal({ isOpen, onClose }) {
           </div>
         )}
         {tab === 'general' && <PostingAuthoritySection />}
-        {tab === 'connections' && <LightningReceiveSection />}
-        {tab === 'connections' && <SupportLinksSection />}
-        {tab === 'connections' && settingsUser && (
+        {tab === 'connections' && (
+          <div className="settings-subtabs" role="tablist" aria-label={t('settings.connectionsTabs.aria')}>
+            {CONNECTIONS_TABS.map((ct) => (
+              <button
+                key={ct.id}
+                type="button"
+                role="tab"
+                aria-selected={connectionsTab === ct.id}
+                className={`settings-subtab${connectionsTab === ct.id ? ' is-active' : ''}`}
+                onClick={() => setConnectionsTab(ct.id)}
+              >
+                {t(ct.labelKey)}
+              </button>
+            ))}
+          </div>
+        )}
+        {tab === 'connections' && connectionsTab === 'support' && <LightningReceiveSection />}
+        {tab === 'connections' && connectionsTab === 'support' && <SupportLinksSection />}
+        {tab === 'connections' && connectionsTab === 'profiles' && settingsUser && (
           <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />
         )}
 

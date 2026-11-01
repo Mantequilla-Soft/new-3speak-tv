@@ -126,6 +126,11 @@
     "feed": "피드",
     "aria": "콘텐츠 설정"
   },
+  "connectionsTabs": {
+    "support": "후원",
+    "profiles": "연결된 프로필",
+    "aria": "연결 설정"
+  },
   "butrauthUnlocked": "Butter Auth 잠금 해제됨",
   "appearance": {
     "title": "화면",

@@ -12,6 +12,7 @@
     "heading": "@{{recipient}} さんに投げ銭を送る",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "ほかの方法",
     "amountLabel": "金額: ",
     "amountPlaceholder": "例: 1.000",
     "currencyLabel": "通貨:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "@{{recipient}} を応援するほかの方法",
+    "otherWaysNote": "各ボタンは、そのサイトにあるクリエイターのページを新しいタブで開きます。そこでの支払いは 3Speak を通りません。",
     "monthly": {
       "label": "頻度",
       "once": "1回のみ",

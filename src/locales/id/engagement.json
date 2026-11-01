@@ -12,6 +12,7 @@
     "heading": "Kirim Tip ke @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Cara lain",
     "amountLabel": "Jumlah: ",
     "amountPlaceholder": "mis. 1.000",
     "currencyLabel": "Mata uang:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "Cara lain mendukung @{{recipient}}",
+    "otherWaysNote": "Setiap tombol membuka halaman kreator di situs itu pada tab baru. Pembayaran di sana tidak melalui 3Speak.",
     "monthly": {
       "label": "Seberapa sering",
       "once": "Sekali",

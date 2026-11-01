@@ -126,6 +126,11 @@
     "feed": "フィード",
     "aria": "コンテンツの設定"
   },
+  "connectionsTabs": {
+    "support": "応援",
+    "profiles": "連携したプロフィール",
+    "aria": "連携の設定"
+  },
   "butrauthUnlocked": "Butter Auth のロックを解除しました",
   "appearance": {
     "title": "表示",

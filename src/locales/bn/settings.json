@@ -126,6 +126,11 @@
     "feed": "ফিড",
     "aria": "কনটেন্ট সেটিংস"
   },
+  "connectionsTabs": {
+    "support": "সাপোর্ট",
+    "profiles": "লিংক করা প্রোফাইল",
+    "aria": "সংযোগ সেটিংস"
+  },
   "butrauthUnlocked": "Butter Auth চালু হয়েছে",
   "appearance": {
     "title": "চেহারা",

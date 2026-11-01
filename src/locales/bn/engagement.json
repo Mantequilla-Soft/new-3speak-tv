@@ -12,6 +12,7 @@
     "heading": "@{{recipient}}-কে টিপ পাঠান",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "আরও উপায়",
     "amountLabel": "পরিমাণ: ",
     "amountPlaceholder": "যেমন 1.000",
     "currencyLabel": "মুদ্রা:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "@{{recipient}}-কে সাপোর্ট করার আরও উপায়",
+    "otherWaysNote": "প্রতিটি বোতাম সেই সাইটে ক্রিয়েটরের পেজ নতুন ট্যাবে খোলে। সেখানে করা পেমেন্ট 3Speak-এর মাধ্যমে যায় না।",
     "monthly": {
       "label": "কত ঘন ঘন",
       "once": "একবার",

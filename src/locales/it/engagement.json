@@ -12,6 +12,7 @@
     "heading": "Invia una mancia a @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Altri modi",
     "amountLabel": "Importo: ",
     "amountPlaceholder": "es. 1.000",
     "currencyLabel": "Valuta:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "Altri modi per sostenere @{{recipient}}",
+    "otherWaysNote": "Ogni pulsante apre la pagina del creator su quel sito in una nuova scheda. I pagamenti fatti lì non passano da 3Speak.",
     "monthly": {
       "label": "Ogni quanto",
       "once": "Una volta",

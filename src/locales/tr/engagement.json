@@ -12,6 +12,7 @@
     "heading": "@{{recipient}} kullanıcısına bahşiş gönder",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Diğer yollar",
     "amountLabel": "Miktar: ",
     "amountPlaceholder": "örn. 1.000",
     "currencyLabel": "Para birimi:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "@{{recipient}} kullanıcısını desteklemenin başka yolları",
+    "otherWaysNote": "Her düğme, içerik üreticisinin o sitedeki sayfasını yeni sekmede açar. Orada yapılan ödemeler 3Speak üzerinden geçmez.",
     "monthly": {
       "label": "Ne sıklıkla",
       "once": "Bir kez",

@@ -12,6 +12,7 @@
     "heading": "@{{recipient}} को टिप भेजें",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "और तरीके",
     "amountLabel": "राशि: ",
     "amountPlaceholder": "जैसे 1.000",
     "currencyLabel": "करेंसी:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "@{{recipient}} को सपोर्ट करने के और तरीके",
+    "otherWaysNote": "हर बटन उस साइट पर क्रिएटर का पेज नए टैब में खोलता है। वहाँ किए गए भुगतान 3Speak से होकर नहीं जाते।",
     "monthly": {
       "label": "कितनी बार",
       "once": "एक बार",

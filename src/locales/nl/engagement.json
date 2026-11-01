@@ -12,6 +12,7 @@
     "heading": "Stuur een fooi naar @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Meer manieren",
     "amountLabel": "Bedrag: ",
     "amountPlaceholder": "bijv. 1.000",
     "currencyLabel": "Valuta:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "Meer manieren om @{{recipient}} te steunen",
+    "otherWaysNote": "Elke knop opent de pagina van de maker op die site in een nieuw tabblad. Betalingen daar lopen niet via 3Speak.",
     "monthly": {
       "label": "Hoe vaak",
       "once": "Eenmalig",

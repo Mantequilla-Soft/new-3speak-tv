@@ -126,6 +126,11 @@
     "feed": "ฟีด",
     "aria": "การตั้งค่าเนื้อหา"
   },
+  "connectionsTabs": {
+    "support": "การสนับสนุน",
+    "profiles": "โปรไฟล์ที่เชื่อมไว้",
+    "aria": "การตั้งค่าการเชื่อมต่อ"
+  },
   "butrauthUnlocked": "ปลดล็อก Butter Auth แล้ว",
   "appearance": {
     "title": "รูปลักษณ์",

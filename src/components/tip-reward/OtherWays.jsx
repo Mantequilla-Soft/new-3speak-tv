@@ -14,11 +14,9 @@ export const SUPPORT_SITE_ICONS = {
   opencollective: SiOpencollective,
 };
 
-// "More ways to support @x": the creator's pages on payment sites
-// (lib/supportLinks.js), under the tip form. Nothing when they set none.
-// `hidden` keeps the fetched list while the invoice screen is up.
-export default function OtherWays({ recipient, hidden = false }) {
-  const { t } = useTranslation();
+// The creator's pages on payment sites (lib/supportLinks.js); [] while loading
+// and when they set none.
+export function useSupportLinks(recipient) {
   const [links, setLinks] = useState([]);
   useEffect(() => {
     if (!recipient) return undefined;
@@ -28,20 +26,28 @@ export default function OtherWays({ recipient, hidden = false }) {
       .catch(() => { /* no account or a node blip: just no links */ });
     return () => { alive = false; };
   }, [recipient]);
+  return links;
+}
 
-  if (hidden || !links.length) return null;
+// The "More ways" tab of the tip window: one big button per page.
+export default function OtherWays({ recipient, links }) {
+  const { t } = useTranslation();
   return (
-    <div className="tip-other-ways">
-      <span className="tip-other-ways-title">{t('engagement.tip.otherWays', { recipient })}</span>
-      <div className="tip-other-ways-links">
-        {links.map(({ site, url }) => {
-          const Icon = SUPPORT_SITE_ICONS[site.id];
-          return (
-            <a key={url} href={url} target="_blank" rel="noopener noreferrer nofollow ugc" title={url}>
-              {Icon && <Icon />} {site.label}
-            </a>
-          );
-        })}
+    <div className="tip-modal-in">
+      <div className="form">
+        <p className="tip-method-note">{t('engagement.tip.otherWays', { recipient })}</p>
+        <div className="tip-other-ways">
+          {links.map(({ site, url }) => {
+            const Icon = SUPPORT_SITE_ICONS[site.id];
+            return (
+              <a key={url} href={url} target="_blank" rel="noopener noreferrer nofollow ugc" title={url}>
+                {Icon && <Icon size={18} />}
+                <span>{site.label}</span>
+              </a>
+            );
+          })}
+        </div>
+        <p className="tip-method-note">{t('engagement.tip.otherWaysNote')}</p>
       </div>
     </div>
   );

@@ -12,6 +12,7 @@
     "heading": "Wyślij napiwek do @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Więcej sposobów",
     "amountLabel": "Kwota: ",
     "amountPlaceholder": "np. 1.000",
     "currencyLabel": "Waluta:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "Więcej sposobów, by wesprzeć @{{recipient}}",
+    "otherWaysNote": "Każdy przycisk otwiera stronę twórcy na tej witrynie w nowej karcie. Płatności tam nie przechodzą przez 3Speak.",
     "monthly": {
       "label": "Jak często",
       "once": "Jednorazowo",

@@ -126,6 +126,11 @@
     "feed": "Bảng tin",
     "aria": "Cài đặt nội dung"
   },
+  "connectionsTabs": {
+    "support": "Ủng hộ",
+    "profiles": "Hồ sơ đã liên kết",
+    "aria": "Cài đặt kết nối"
+  },
   "butrauthUnlocked": "Đã mở khóa Butter Auth",
   "appearance": {
     "title": "Giao diện",

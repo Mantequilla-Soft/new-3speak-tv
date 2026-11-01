@@ -126,6 +126,11 @@
     "feed": "Лента",
     "aria": "Настройки контента"
   },
+  "connectionsTabs": {
+    "support": "Поддержка",
+    "profiles": "Связанные профили",
+    "aria": "Настройки подключений"
+  },
   "butrauthUnlocked": "Butter Auth разблокирован",
   "appearance": {
     "title": "Внешний вид",

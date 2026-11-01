@@ -12,6 +12,7 @@
     "heading": "Tuma bakshishi kwa @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Njia zaidi",
     "amountLabel": "Kiasi: ",
     "amountPlaceholder": "k.m. 1.000",
     "currencyLabel": "Sarafu:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "Njia zaidi za kumuunga mkono @{{recipient}}",
+    "otherWaysNote": "Kila kitufe hufungua ukurasa wa mtayarishaji kwenye tovuti hiyo katika kichupo kipya. Malipo yanayofanywa huko hayapitii 3Speak.",
     "monthly": {
       "label": "Mara ngapi",
       "once": "Mara moja",

@@ -12,6 +12,7 @@
     "heading": "打赏 @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "更多方式",
     "amountLabel": "金额：",
     "amountPlaceholder": "例如 1.000",
     "currencyLabel": "币种：",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "支持 @{{recipient}} 的更多方式",
+    "otherWaysNote": "每个按钮都会在新标签页中打开创作者在该网站上的页面。在那里的付款不经过 3Speak。",
     "monthly": {
       "label": "频率",
       "once": "一次",

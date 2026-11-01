@@ -126,6 +126,11 @@
     "feed": "Feed",
     "aria": "Pengaturan konten"
   },
+  "connectionsTabs": {
+    "support": "Dukungan",
+    "profiles": "Profil tertaut",
+    "aria": "Pengaturan koneksi"
+  },
   "butrauthUnlocked": "Butter Auth terbuka",
   "appearance": {
     "title": "Tampilan",

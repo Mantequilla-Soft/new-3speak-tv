@@ -126,6 +126,11 @@
     "feed": "Akış",
     "aria": "İçerik ayarları"
   },
+  "connectionsTabs": {
+    "support": "Destek",
+    "profiles": "Bağlı profiller",
+    "aria": "Bağlantı ayarları"
+  },
   "butrauthUnlocked": "Butter Auth kilidi açıldı",
   "appearance": {
     "title": "Görünüm",

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ModalHeader from '../ModalHeader/ModalHeader';
 import WalletTip from './WalletTip';
 import MonthlyField from './MonthlyField';
-import OtherWays from './OtherWays';
+import OtherWays, { useSupportLinks } from './OtherWays';
 import './TipModal.scss';
 import { fetchBalances, isAccountValid } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
@@ -51,7 +51,8 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
   const [loading, setLoading] = useState(false);
   // 'hive' = HIVE/HBD transfer from the viewer's Hive wallet; 'lightning' = an
   // invoice any Lightning wallet can pay (lib/lightningTip.js), no Hive account
-  // needed, so it is where a signed-out viewer starts.
+  // needed, so it is where a signed-out viewer starts; 'more' = the creator's
+  // pages on payment sites, a tab only when they set some.
   // The /tip page (variant="page") never uses the 3speak.tv session: its HIVE /
   // HBD tab asks for a username and a wallet instead (WalletTip), so it opens there.
   const isPage = variant === 'page';
@@ -64,6 +65,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
   // address } when they set their own address. Only the note under the form
   // depends on it; the server picks the route for the invoice itself.
   const [receiver, setReceiver] = useState(null);
+  const supportLinks = useSupportLinks(recipient);
   useEffect(() => {
     if (method !== 'lightning' || !recipient) return undefined;
     let alive = true;
@@ -304,6 +306,11 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
             <button type="button" role="tab" aria-selected={method === 'lightning'} className={method === 'lightning' ? 'active' : ''} onClick={() => setMethod('lightning')}>
               ⚡ {t('engagement.tip.methodLightning')}
             </button>
+            {supportLinks.length > 0 && (
+              <button type="button" role="tab" aria-selected={method === 'more'} className={method === 'more' ? 'active' : ''} onClick={() => setMethod('more')}>
+                {t('engagement.tip.methodMore')}
+              </button>
+            )}
           </div>
         )}
 
@@ -483,7 +490,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
             </div>
           </div>
         </div>}
-        {step === 1 && <OtherWays recipient={recipient} hidden={!!invoice} />}
+        {step === 1 && method === 'more' && <OtherWays recipient={recipient} links={supportLinks} />}
         {step === 2 && <Success 
         amount={amount}
         currency={currency}

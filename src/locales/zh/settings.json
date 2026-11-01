@@ -126,6 +126,11 @@
     "feed": "信息流",
     "aria": "内容设置"
   },
+  "connectionsTabs": {
+    "support": "支持",
+    "profiles": "已关联的个人资料",
+    "aria": "关联设置"
+  },
   "butrauthUnlocked": "Butter Auth 已解锁",
   "appearance": {
     "title": "外观",

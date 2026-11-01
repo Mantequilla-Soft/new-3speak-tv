@@ -126,6 +126,11 @@
     "feed": "Kanał",
     "aria": "Ustawienia treści"
   },
+  "connectionsTabs": {
+    "support": "Wsparcie",
+    "profiles": "Połączone profile",
+    "aria": "Ustawienia połączeń"
+  },
   "butrauthUnlocked": "Butter Auth odblokowany",
   "appearance": {
     "title": "Wygląd",

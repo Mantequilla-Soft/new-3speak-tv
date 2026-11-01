@@ -12,6 +12,7 @@
     "heading": "ส่งทิปให้ @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "วิธีอื่น",
     "amountLabel": "จำนวน: ",
     "amountPlaceholder": "เช่น 1.000",
     "currencyLabel": "สกุลเงิน:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "วิธีอื่นในการสนับสนุน @{{recipient}}",
+    "otherWaysNote": "แต่ละปุ่มจะเปิดหน้าของครีเอเตอร์บนเว็บไซต์นั้นในแท็บใหม่ การชำระเงินที่นั่นไม่ผ่าน 3Speak",
     "monthly": {
       "label": "บ่อยแค่ไหน",
       "once": "ครั้งเดียว",

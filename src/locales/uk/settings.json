@@ -126,6 +126,11 @@
     "feed": "Стрічка",
     "aria": "Налаштування контенту"
   },
+  "connectionsTabs": {
+    "support": "Підтримка",
+    "profiles": "Пов'язані профілі",
+    "aria": "Налаштування підключень"
+  },
   "butrauthUnlocked": "Butter Auth розблоковано",
   "appearance": {
     "title": "Вигляд",

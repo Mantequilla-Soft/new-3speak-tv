@@ -12,6 +12,7 @@
     "heading": "Чаевые для @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Другие способы",
     "amountLabel": "Сумма: ",
     "amountPlaceholder": "напр. 1.000",
     "currencyLabel": "Валюта:",
@@ -59,6 +60,7 @@
       }
     },
     "otherWays": "Другие способы поддержать @{{recipient}}",
+    "otherWaysNote": "Каждая кнопка открывает страницу автора на этом сайте в новой вкладке. Платежи там проходят не через 3Speak.",
     "monthly": {
       "label": "Как часто",
       "once": "Один раз",

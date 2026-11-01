@@ -126,6 +126,11 @@
     "feed": "Mlisho",
     "aria": "Mipangilio ya maudhui"
   },
+  "connectionsTabs": {
+    "support": "Usaidizi",
+    "profiles": "Wasifu uliounganishwa",
+    "aria": "Mipangilio ya miunganisho"
+  },
   "butrauthUnlocked": "Butter Auth imefunguliwa",
   "appearance": {
     "title": "Mwonekano",

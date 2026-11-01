@@ -126,6 +126,11 @@
     "feed": "Feed",
     "aria": "Settings ng content"
   },
+  "connectionsTabs": {
+    "support": "Suporta",
+    "profiles": "Mga naka-link na profile",
+    "aria": "Mga setting ng koneksyon"
+  },
   "butrauthUnlocked": "Na-unlock ang Butter Auth",
   "appearance": {
     "title": "Itsura",
