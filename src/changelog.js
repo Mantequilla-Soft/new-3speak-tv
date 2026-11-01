@@ -27,7 +27,7 @@ export const CHANGELOG = [
     version: '1.81.34',
     category: 'ads',
     date: '2026-11-01',
-    summary: "Advertisers can listen to their ticker before booking, exactly as it will sound in the audio player.",
+    summary: "Advertisers can now activate audio advertisements with the regular ticker ads or book a standalone audio advertisement with their own audio files.",
   },
   {
     version: '1.81.33',
