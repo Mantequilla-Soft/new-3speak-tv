@@ -163,6 +163,11 @@
     "failed": "Pumalya",
     "unknown": "hindi alam",
     "unknownError": "hindi kilalang error",
+    "errors": {
+      "unreadable": "Hindi mabasa ang audio file. Pakidagdag itong muli, saka i-publish.",
+      "rateLimited": "Masyadong maraming pagsubok mag-upload. Maghintay ng ilang minuto, saka subukang muli.",
+      "server": "Hindi nai-save ng audio server ang file na ito. Pakisubukang muli mamaya-maya."
+    },
     "recorded": "Na-record",
     "uploaded": "Na-upload",
     "steps": {

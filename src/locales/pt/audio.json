@@ -166,6 +166,11 @@
     "failed": "Falhou",
     "unknown": "desconhecido",
     "unknownError": "erro desconhecido",
+    "errors": {
+      "unreadable": "Não foi possível ler o arquivo de áudio. Adicione-o novamente e depois publique.",
+      "rateLimited": "Muitas tentativas de envio. Aguarde alguns minutos e tente novamente.",
+      "server": "O servidor de áudio não conseguiu salvar este arquivo. Tente novamente em instantes."
+    },
     "recorded": "Gravado",
     "uploaded": "Enviado",
     "steps": {

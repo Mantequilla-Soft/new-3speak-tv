@@ -163,6 +163,11 @@
     "failed": "Failed",
     "unknown": "unknown",
     "unknownError": "unknown error",
+    "errors": {
+      "unreadable": "The audio file could not be read. Please add it again, then publish.",
+      "rateLimited": "Too many upload attempts. Please wait a few minutes, then try again.",
+      "server": "The audio server could not save this file. Please try again in a moment."
+    },
     "recorded": "Recorded",
     "uploaded": "Uploaded",
     "steps": {

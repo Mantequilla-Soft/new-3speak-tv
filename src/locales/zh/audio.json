@@ -160,6 +160,11 @@
     "failed": "失败",
     "unknown": "未知",
     "unknownError": "未知错误",
+    "errors": {
+      "unreadable": "无法读取音频文件。请重新添加该文件，然后再发布。",
+      "rateLimited": "上传尝试次数过多。请等待几分钟后再试。",
+      "server": "音频服务器无法保存此文件。请稍后再试。"
+    },
     "recorded": "录制的",
     "uploaded": "上传的",
     "steps": {

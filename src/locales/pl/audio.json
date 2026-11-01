@@ -169,6 +169,11 @@
     "failed": "Błąd",
     "unknown": "nieznane",
     "unknownError": "nieznany błąd",
+    "errors": {
+      "unreadable": "Nie udało się odczytać pliku audio. Dodaj go ponownie, a potem opublikuj.",
+      "rateLimited": "Zbyt wiele prób przesłania. Odczekaj kilka minut i spróbuj ponownie.",
+      "server": "Serwer audio nie mógł zapisać tego pliku. Spróbuj ponownie za chwilę."
+    },
     "recorded": "Nagrane",
     "uploaded": "Przesłane",
     "steps": {

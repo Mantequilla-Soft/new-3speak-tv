@@ -166,6 +166,11 @@
     "failed": "Échec",
     "unknown": "inconnu",
     "unknownError": "erreur inconnue",
+    "errors": {
+      "unreadable": "Le fichier audio n'a pas pu être lu. Ajoute-le à nouveau, puis publie.",
+      "rateLimited": "Trop de tentatives d'envoi. Attends quelques minutes, puis réessaie.",
+      "server": "Le serveur audio n'a pas pu enregistrer ce fichier. Réessaie dans un instant."
+    },
     "recorded": "Enregistré",
     "uploaded": "Mis en ligne",
     "steps": {

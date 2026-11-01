@@ -163,6 +163,11 @@
     "failed": "Fehlgeschlagen",
     "unknown": "unbekannt",
     "unknownError": "unbekannter Fehler",
+    "errors": {
+      "unreadable": "Die Audiodatei konnte nicht gelesen werden. Bitte füge sie erneut hinzu und veröffentliche dann.",
+      "rateLimited": "Zu viele Upload-Versuche. Bitte warte ein paar Minuten und versuche es dann erneut.",
+      "server": "Der Audio-Server konnte diese Datei nicht speichern. Bitte versuche es gleich noch einmal."
+    },
     "recorded": "Aufgenommen",
     "uploaded": "Hochgeladen",
     "steps": {

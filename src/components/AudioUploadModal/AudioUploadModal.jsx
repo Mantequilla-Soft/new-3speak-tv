@@ -11,7 +11,7 @@ import { toastIn } from '../../utils/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { KeyTypes } from '@aioha/aioha';
 import { useMyPlaylists } from '../../hooks/useMyPlaylists';
-import { uploadAudioTo3Speak, getSnapsContainer, linkAudioToPost } from '../../utils/audioUpload';
+import { uploadAudioTo3Speak, getSnapsContainer, linkAudioToPost, audioFormatFor } from '../../utils/audioUpload';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
 import { broadcastWithAioha, broadcastViaThreespeak, getCurrentProvider, Providers } from '../../hive-api/aioha';
 import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../../utils/postingAuthority';
@@ -77,6 +77,18 @@ const FLOWS = {
 };
 
 const MAX_RECORD_SEC = 300;
+
+// Upload failures with a known cause (err.code, set in utils/audioUpload.js) get
+// a line in the user's language; anything else shows the service's own message.
+const UPLOAD_ERROR_KEYS = {
+  unreadable: 'audio.upload.errors.unreadable',
+  rateLimited: 'audio.upload.errors.rateLimited',
+  server: 'audio.upload.errors.server',
+};
+function uploadErrorText(err, t) {
+  if (err?.code && UPLOAD_ERROR_KEYS[err.code]) return t(UPLOAD_ERROR_KEYS[err.code]);
+  return err?.message || (typeof err === 'string' ? err : t('audio.upload.failed'));
+}
 const AUDIO_EXT_RE = /\.(mp3|wav|ogg|webm|m4a|flac|aac)$/i;
 
 // Spacing between sequential broadcasts so the Hive RPC + audio service
@@ -457,11 +469,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       const mr = new MediaRecorder(stream);
       mr.ondataavailable = (e) => { if (e.data?.size > 0) recordChunksRef.current.push(e.data); };
       mr.onstop = async () => {
-        const blob = new Blob(recordChunksRef.current, { type: 'audio/webm' });
+        // Safari's recorder makes audio/mp4, not webm: keep the type it reports.
+        const type = mr.mimeType || recordChunksRef.current[0]?.type || 'audio/webm';
+        const blob = new Blob(recordChunksRef.current, { type });
         recordStreamRef.current?.getTracks().forEach(tr => tr.stop());
         recordStreamRef.current = null;
         const idx = newId().slice(0, 4);
-        await addBlobAsTrack(blob, `recording-${idx}.webm`, 'record');
+        await addBlobAsTrack(blob, `recording-${idx}.${audioFormatFor(blob)}`, 'record');
         setIsRecording(false);
         setRecordSec(0);
         stopRecordTimer();
@@ -741,7 +755,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const publishSinglePost = useCallback(async (track) => {
     setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
-      blob: track.blob, durationSec: track.durationSec, username: user, title: track.title,
+      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: user, title: track.title,
     });
     setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
     const hivePermlink = generatePermlink(mainTitle || track.title) || audioPermlink;
@@ -872,7 +886,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const publishTrackComment = useCallback(async (track, parent) => {
     setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
-      blob: track.blob, durationSec: track.durationSec, username: user, title: track.title,
+      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: user, title: track.title,
     });
     setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
     const hivePermlink = generatePermlink(track.title) || audioPermlink;
@@ -1043,7 +1057,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       markDoneIfComplete();
       if (playlistChoice) queryClient.invalidateQueries({ queryKey: ['myPlaylists', user] });
     } catch (err) {
-      const message = err?.message || (typeof err === 'string' ? err : t('audio.upload.failed'));
+      const message = uploadErrorText(err, t);
       setTrackStatus(trackId, { state: 'error', stage: undefined, message });
     } finally {
       setIsPublishing(false);
@@ -1119,7 +1133,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         await publishOneTrack(track, parent);
       } catch (err) {
         allOk = false;
-        const message = err?.message || (typeof err === 'string' ? err : t('audio.upload.failed'));
+        const message = uploadErrorText(err, t);
         setTrackStatus(track.id, { state: 'error', stage: undefined, message });
       }
     }

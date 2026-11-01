@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.23',
+    category: 'upload',
+    date: '2026-11-01',
+    summary: "Audio uploads from iPad and iPhone now read the whole file before sending, and show a clear message if it can't be read. Files also keep their real type (m4a, wav, ogg).",
+  },
+  {
     version: '1.81.22',
     category: 'tips',
     date: '2026-11-01',

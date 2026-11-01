@@ -163,6 +163,11 @@
     "failed": "Imeshindwa",
     "unknown": "haijulikani",
     "unknownError": "hitilafu isiyojulikana",
+    "errors": {
+      "unreadable": "Faili la sauti halikuweza kusomwa. Tafadhali liongeze tena, kisha uchapishe.",
+      "rateLimited": "Majaribio mengi mno ya kupakia. Tafadhali subiri dakika chache, kisha ujaribu tena.",
+      "server": "Seva ya sauti haikuweza kuhifadhi faili hili. Tafadhali jaribu tena baada ya muda mfupi."
+    },
     "recorded": "Imerekodiwa",
     "uploaded": "Imepakiwa",
     "steps": {

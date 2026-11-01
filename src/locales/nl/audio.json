@@ -163,6 +163,11 @@
     "failed": "Mislukt",
     "unknown": "onbekend",
     "unknownError": "onbekende fout",
+    "errors": {
+      "unreadable": "Het audiobestand kon niet worden gelezen. Voeg het opnieuw toe en publiceer daarna.",
+      "rateLimited": "Te veel uploadpogingen. Wacht een paar minuten en probeer het dan opnieuw.",
+      "server": "De audioserver kon dit bestand niet opslaan. Probeer het zo meteen opnieuw."
+    },
     "recorded": "Opgenomen",
     "uploaded": "Geüpload",
     "steps": {

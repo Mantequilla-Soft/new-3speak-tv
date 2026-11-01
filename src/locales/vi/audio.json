@@ -160,6 +160,11 @@
     "failed": "Thất bại",
     "unknown": "không rõ",
     "unknownError": "lỗi không xác định",
+    "errors": {
+      "unreadable": "Không thể đọc tệp âm thanh. Vui lòng thêm lại tệp rồi đăng.",
+      "rateLimited": "Quá nhiều lần tải lên. Vui lòng đợi vài phút rồi thử lại.",
+      "server": "Máy chủ âm thanh không thể lưu tệp này. Vui lòng thử lại sau giây lát."
+    },
     "recorded": "Đã ghi âm",
     "uploaded": "Đã tải lên",
     "steps": {

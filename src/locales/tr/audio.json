@@ -163,6 +163,11 @@
     "failed": "Başarısız",
     "unknown": "bilinmiyor",
     "unknownError": "bilinmeyen hata",
+    "errors": {
+      "unreadable": "Ses dosyası okunamadı. Lütfen dosyayı yeniden ekleyin, ardından yayınlayın.",
+      "rateLimited": "Çok fazla yükleme denemesi. Lütfen birkaç dakika bekleyip tekrar deneyin.",
+      "server": "Ses sunucusu bu dosyayı kaydedemedi. Lütfen birazdan tekrar deneyin."
+    },
     "recorded": "Kaydedildi",
     "uploaded": "Yüklendi",
     "steps": {
