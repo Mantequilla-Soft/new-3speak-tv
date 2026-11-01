@@ -32,10 +32,12 @@
     "followers_other": "フォロワー <b>{{value}}</b> 人",
     "videos_other": "動画 <b>{{value}}</b> 本",
     "shorts_other": "ショート <b>{{value}}</b> 本",
+    "audio_other": "音声 <b>{{value}}</b> 件",
     "views_other": "<b>{{value}}</b> 回視聴",
     "followersTitle_other": "フォロワー {{num}} 人",
     "videosTitle_other": "動画 {{num}} 本",
     "shortsTitle_other": "ショート {{num}} 本",
+    "audioTitle_other": "音声 {{num}} 件",
     "viewsTitle_other": "{{num}} 回視聴",
     "onHiveSince": "{{year}} 年から Hive を利用"
   },

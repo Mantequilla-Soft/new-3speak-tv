@@ -32,10 +32,12 @@
     "followers_other": "ผู้ติดตาม <b>{{value}}</b> คน",
     "videos_other": "<b>{{value}}</b> วิดีโอ",
     "shorts_other": "<b>{{value}}</b> Shorts",
+    "audio_other": "เสียง <b>{{value}}</b> รายการ",
     "views_other": "การดู <b>{{value}}</b> ครั้ง",
     "followersTitle_other": "ผู้ติดตาม {{num}} คน",
     "videosTitle_other": "{{num}} วิดีโอ",
     "shortsTitle_other": "{{num}} Shorts",
+    "audioTitle_other": "เสียง {{num}} รายการ",
     "viewsTitle_other": "การดู {{num}} ครั้ง",
     "onHiveSince": "อยู่บน Hive ตั้งแต่ปี {{year}}"
   },

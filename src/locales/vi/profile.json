@@ -32,10 +32,12 @@
     "followers_other": "<b>{{value}}</b> người theo dõi",
     "videos_other": "<b>{{value}}</b> video",
     "shorts_other": "<b>{{value}}</b> Shorts",
+    "audio_other": "<b>{{value}}</b> âm thanh",
     "views_other": "<b>{{value}}</b> lượt xem",
     "followersTitle_other": "{{num}} người theo dõi",
     "videosTitle_other": "{{num}} video",
     "shortsTitle_other": "{{num}} Shorts",
+    "audioTitle_other": "{{num}} âm thanh",
     "viewsTitle_other": "{{num}} lượt xem",
     "onHiveSince": "trên Hive từ {{year}}"
   },

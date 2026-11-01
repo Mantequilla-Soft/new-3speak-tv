@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.25',
+    category: 'profile',
+    date: '2026-11-01',
+    summary: 'Profiles now show how many audio files a creator has published, next to their video and shorts counts.',
+  },
+  {
     version: '1.81.24',
     category: 'audio',
     date: '2026-11-01',

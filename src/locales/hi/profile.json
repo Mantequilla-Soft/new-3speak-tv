@@ -37,6 +37,8 @@
     "videos_other": "<b>{{value}}</b> वीडियो",
     "shorts_one": "<b>{{value}}</b> शॉर्ट",
     "shorts_other": "<b>{{value}}</b> शॉर्ट्स",
+    "audio_one": "<b>{{value}}</b> ऑडियो",
+    "audio_other": "<b>{{value}}</b> ऑडियो",
     "views_one": "<b>{{value}}</b> व्यू",
     "views_other": "<b>{{value}}</b> व्यू",
     "followersTitle_one": "{{num}} फ़ॉलोअर",
@@ -45,6 +47,8 @@
     "videosTitle_other": "{{num}} वीडियो",
     "shortsTitle_one": "{{num}} शॉर्ट",
     "shortsTitle_other": "{{num}} शॉर्ट्स",
+    "audioTitle_one": "{{num}} ऑडियो",
+    "audioTitle_other": "{{num}} ऑडियो",
     "viewsTitle_one": "{{num}} व्यू",
     "viewsTitle_other": "{{num}} व्यू",
     "onHiveSince": "{{year}} से Hive पर"

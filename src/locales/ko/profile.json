@@ -32,10 +32,12 @@
     "followers_other": "팔로워 <b>{{value}}</b>명",
     "videos_other": "동영상 <b>{{value}}</b>개",
     "shorts_other": "쇼츠 <b>{{value}}</b>개",
+    "audio_other": "오디오 <b>{{value}}</b>개",
     "views_other": "조회수 <b>{{value}}</b>회",
     "followersTitle_other": "팔로워 {{num}}명",
     "videosTitle_other": "동영상 {{num}}개",
     "shortsTitle_other": "쇼츠 {{num}}개",
+    "audioTitle_other": "오디오 {{num}}개",
     "viewsTitle_other": "조회수 {{num}}회",
     "onHiveSince": "{{year}}년부터 Hive 활동"
   },

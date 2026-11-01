@@ -37,6 +37,8 @@
     "videos_other": "<b>{{value}}</b> videos",
     "shorts_one": "<b>{{value}}</b> short",
     "shorts_other": "<b>{{value}}</b> shorts",
+    "audio_one": "<b>{{value}}</b> audio",
+    "audio_other": "<b>{{value}}</b> audio",
     "views_one": "<b>{{value}}</b> view",
     "views_other": "<b>{{value}}</b> views",
     "followersTitle_one": "{{num}} follower",
@@ -45,6 +47,8 @@
     "videosTitle_other": "{{num}} videos",
     "shortsTitle_one": "{{num}} short",
     "shortsTitle_other": "{{num}} shorts",
+    "audioTitle_one": "{{num}} audio",
+    "audioTitle_other": "{{num}} audio",
     "viewsTitle_one": "{{num}} view",
     "viewsTitle_other": "{{num}} views",
     "onHiveSince": "on Hive since {{year}}"

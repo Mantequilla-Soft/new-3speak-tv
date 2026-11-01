@@ -37,6 +37,8 @@
     "videos_other": "video <b>{{value}}</b>",
     "shorts_one": "short <b>{{value}}</b>",
     "shorts_other": "Shorts <b>{{value}}</b>",
+    "audio_one": "sauti <b>{{value}}</b>",
+    "audio_other": "sauti <b>{{value}}</b>",
     "views_one": "mtazamo <b>{{value}}</b>",
     "views_other": "mitazamo <b>{{value}}</b>",
     "followersTitle_one": "mfuasi {{num}}",
@@ -45,6 +47,8 @@
     "videosTitle_other": "video {{num}}",
     "shortsTitle_one": "short {{num}}",
     "shortsTitle_other": "Shorts {{num}}",
+    "audioTitle_one": "sauti {{num}}",
+    "audioTitle_other": "sauti {{num}}",
     "viewsTitle_one": "mtazamo {{num}}",
     "viewsTitle_other": "mitazamo {{num}}",
     "onHiveSince": "kwenye Hive tangu {{year}}"
