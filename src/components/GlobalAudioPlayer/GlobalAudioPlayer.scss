@@ -69,6 +69,24 @@
   }
 }
 
+.audio-np-pip-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  border-radius: 4px;
+  &:hover,
+  &.active { color: var(--accent-primary); }
+}
+
+// The pop-out is a desktop thing: phones and the Player tab have no room for a second window.
+@media (max-width: 768px) {
+  .audio-np-pip-btn { display: none; }
+}
+.audio-now-playing.audio-np-docked .audio-np-pip-btn { display: none; }
+
 .audio-np-close-btn {
   background: none;
   border: none;
@@ -709,4 +727,28 @@
   font-size: 11px;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
+}
+
+// The popped-out player (AudioPip.jsx): its own window with the page's styles
+// copied in, holding the whole player in the Player-tab layout (.audio-np-docked).
+.audio-pip-body {
+  margin: 0;
+  background: var(--bg-primary, var(--bg-elevated));
+  color: var(--text-primary);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.audio-pip-root { padding: 0 16px; }
+
+.audio-now-playing.audio-np-docked.audio-np-in-pip {
+  // Room for the window's own "back to the page" button in the corner.
+  padding-top: 40px;
+
+  .audio-np-pip-btn {
+    display: inline-flex;
+    position: absolute;
+    top: 8px;
+    right: 0;
+  }
 }

@@ -38,7 +38,9 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers 
     let lastMarkers = null;
     let cssW = 0;
     let cssH = 0;
-    let dpr = window.devicePixelRatio || 1;
+    // The page, or the player's pop-out window: frames and sizes come from the one it's drawn in.
+    const view = canvas.ownerDocument?.defaultView || window;
+    let dpr = view.devicePixelRatio || 1;
     let bars = null;          // Float32Array of normalized peak heights
     let barCount = 0;
     let barW = 0;
@@ -51,7 +53,7 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers 
     const ctx = canvas.getContext('2d');
 
     const readColors = () => {
-      const cs = getComputedStyle(container);
+      const cs = view.getComputedStyle(container);
       const a = cs.getPropertyValue('--accent-primary').trim();
       const m = cs.getPropertyValue('--text-muted').trim();
       const p = cs.getPropertyValue('--text-primary').trim();
@@ -85,7 +87,7 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers 
       const w = container.clientWidth;
       const h = container.clientHeight;
       if (w === 0 || h === 0) return false;
-      const newDpr = window.devicePixelRatio || 1;
+      const newDpr = view.devicePixelRatio || 1;
       if (w === cssW && h === cssH && newDpr === dpr) return false;
       cssW = w; cssH = h; dpr = newDpr;
       canvas.width = cssW * dpr;
@@ -177,11 +179,11 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers 
     const loop = () => {
       if (stopped) return;
       paint();
-      requestAnimationFrame(loop);
+      view.requestAnimationFrame(loop);
     };
-    requestAnimationFrame(loop);
+    view.requestAnimationFrame(loop);
 
-    const ro = new ResizeObserver(() => { resize(); readColors(); });
+    const ro = new view.ResizeObserver(() => { resize(); readColors(); });
     ro.observe(container);
 
     return () => { stopped = true; ro.disconnect(); };

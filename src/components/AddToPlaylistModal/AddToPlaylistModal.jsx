@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { usePortalDoc } from '../../utils/portalDocument';
 import { MdPlaylistAdd, MdPlaylistAddCheck, MdAdd, MdClose, MdLock, MdPublic, MdWatchLater } from 'react-icons/md';
 import { toastIn } from '../../utils/toast';
 import { useQueryClient } from '@tanstack/react-query';
@@ -20,6 +21,7 @@ const WATCH_LATER_NAME = 'Watch Later';
 
 function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
   const { t } = useTranslation();
+  const doc = usePortalDoc();
   const { user } = useAppStore();
   const queryClient = useQueryClient();
   const { data: playlists = [], isLoading, refetch } = useMyPlaylists();
@@ -327,7 +329,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
         </div>
       </div>
     </div>,
-    document.body
+    doc.body
   );
 }
 

@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.24',
+    category: 'audio',
+    date: '2026-11-01',
+    summary: 'Desktop audio player: new pop-out button opens the player in its own small window.',
+  },
+  {
     version: '1.81.23',
     category: 'upload',
     date: '2026-11-01',
