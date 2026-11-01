@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.32',
+    category: 'profile',
+    date: '2026-11-01',
+    summary: "On phones, a creator's Audio tab now splits into Playlists and Audio sub-tabs instead of one long list.",
+  },
+  {
     version: '1.81.31',
     category: 'watch',
     date: '2026-11-01',

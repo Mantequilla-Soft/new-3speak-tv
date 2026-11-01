@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { CHECKER_URL } from '../../utils/config';
@@ -18,6 +19,7 @@ const isAudioOnly = (p) => p.trackCount > 0 && p.trackCount === p.totalItems;
 // has its own albums section, so podcasts only show on the full Audio tab).
 function UserAudioList({ user, limit = 0, isOwnProfile = false }) {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { data: audio = [], isLoading } = useQuery({
     queryKey: ['user-audio', user],
     queryFn: async () => {
@@ -45,16 +47,43 @@ function UserAudioList({ user, limit = 0, isOwnProfile = false }) {
 
   if (podcasts.length === 0) return grid;
 
+  // On a phone the two sections become sub-tabs (Playlists / Audio) instead of
+  // one long stack; desktop keeps both headed sections. The sub-tab lives in the
+  // URL (`?tab=audio&sub=audio`) so back-navigation from a tile lands on it.
+  const sub = grid && searchParams.get('sub') === 'audio' ? 'audio' : 'playlists';
+  const selectSub = (next) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('sub', next);
+    setSearchParams(params, { replace: true });
+  };
+  const subTab = (key, label, count) => (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={sub === key}
+      className={`user-audio-subtab${sub === key ? ' active' : ''}`}
+      onClick={() => selectSub(key)}
+    >
+      {label} ({count})
+    </button>
+  );
+
   return (
     <>
-      <section className="user-audio-section">
+      {grid && (
+        <div className="user-audio-subtabs" role="tablist">
+          {subTab('playlists', t('profile.tabs.playlists'), podcasts.length)}
+          {subTab('audio', t('profile.tabs.audio'), audio.length)}
+        </div>
+      )}
+      <section className={`user-audio-section${grid && sub !== 'playlists' ? ' is-sub-hidden' : ''}`}>
         <h3 className="user-audio-heading">{t('audio.page.sections.podcasts')}</h3>
         <div className="audio-tile-grid user-audio-list-grid">
           {podcasts.map((p) => <AudioPlaylistTile key={p.id} playlist={p} />)}
         </div>
       </section>
       {grid && (
-        <section className="user-audio-section">
+        <section className={`user-audio-section${sub !== 'audio' ? ' is-sub-hidden' : ''}`}>
           <h3 className="user-audio-heading">{t('profile.audioTab.files')}</h3>
           {grid}
         </section>

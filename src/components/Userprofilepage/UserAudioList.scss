@@ -1,3 +1,5 @@
+@use "../../mixins.scss" as mix;
+
 // Audio tab grid on the profile page — uses the shared `.audio-tile-grid` and
 // `.audio-tile` styles defined in Audio.scss. Adds breathing room so hover-scale
 // effects don't get cropped by the parent container's overflow.
@@ -17,4 +19,72 @@
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-primary);
+}
+
+// Phone only: the sections turn into Playlists / Audio sub-tabs, styled like
+// the Supporters tab's (.sp-subtabs). The tab names the section, so the
+// headings go and only the chosen section shows.
+.user-audio-subtabs {
+  display: none;
+
+  @include mix.respond(phone) {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border-light);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+}
+
+.user-audio-subtab {
+  position: relative;
+  flex: 0 0 auto;
+  // The underline sits inside the button (bottom: 0): the row scrolls, and
+  // overflow would clip anything hanging out of it.
+  padding: 4px 2px 10px;
+  border: none;
+  background: none;
+  box-shadow: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  transition: color 0.18s ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--accent-primary);
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+
+  &:hover { color: var(--text-primary); }
+  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: -2px; }
+
+  &.active {
+    color: var(--accent-primary);
+    font-weight: 600;
+    &::after { opacity: 1; }
+  }
+}
+
+@include mix.respond(phone) {
+  .user-audio-subtabs ~ .user-audio-section {
+    .user-audio-heading { display: none; }
+    &.is-sub-hidden { display: none; }
+    & + .user-audio-section { margin-top: 0; }
+  }
 }
