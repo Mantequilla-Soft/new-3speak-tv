@@ -14,19 +14,22 @@ export const SUPPORT_SITE_ICONS = {
   opencollective: SiOpencollective,
 };
 
+const NO_LINKS = [];
+
 // The creator's pages on payment sites (lib/supportLinks.js); [] while loading
-// and when they set none.
+// and when they set none. Kept with the recipient they belong to, so a tip window
+// that switches creator never shows the previous one's links.
 export function useSupportLinks(recipient) {
-  const [links, setLinks] = useState([]);
+  const [state, setState] = useState({ recipient: null, links: [] });
   useEffect(() => {
     if (!recipient) return undefined;
     let alive = true;
     readSupportLinks(recipient)
-      .then((l) => { if (alive) setLinks(l); })
+      .then((links) => { if (alive) setState({ recipient, links }); })
       .catch(() => { /* no account or a node blip: just no links */ });
     return () => { alive = false; };
   }, [recipient]);
-  return links;
+  return state.recipient === recipient ? state.links : NO_LINKS;
 }
 
 // The "More ways" tab of the tip window: one big button per page.

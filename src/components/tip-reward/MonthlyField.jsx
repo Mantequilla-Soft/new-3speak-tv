@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MONTH_CHOICES, lastPaymentDate, formatMonth } from '../../lib/recurringTip';
 
@@ -7,11 +8,12 @@ import { MONTH_CHOICES, lastPaymentDate, formatMonth } from '../../lib/recurring
 // new one replaces.
 export default function MonthlyField({ months, onChange, existing, recipient }) {
   const { t, i18n } = useTranslation();
+  const id = useId();
   const now = Date.now();
   return (
     <div className="field">
-      <label>{t('engagement.tip.monthly.label')}</label>
-      <select value={months} onChange={(e) => onChange(Number(e.target.value))}>
+      <label htmlFor={id}>{t('engagement.tip.monthly.label')}</label>
+      <select id={id} value={months} onChange={(e) => onChange(Number(e.target.value))}>
         <option value={0}>{t('engagement.tip.monthly.once')}</option>
         {MONTH_CHOICES.map((m) => (
           <option key={m} value={m}>
