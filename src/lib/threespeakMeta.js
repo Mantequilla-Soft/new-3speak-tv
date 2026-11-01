@@ -21,18 +21,20 @@ export async function readThreespeakMeta(username) {
   return ns && typeof ns === 'object' ? ns : {};
 }
 
-// What we last broadcast per account: a node can still answer with the metadata
-// from before it for a few seconds.
-const lastWritten = new Map();
-const WRITTEN_FRESH_MS = 60 * 1000;
+// The `3speak` keys our own recent saves set, per account: a node can still answer
+// with the metadata from before them for a few seconds. Only these keys are laid
+// over a fresh read, so whatever else changed meanwhile (profile, interests, other
+// apps' keys, other `3speak` settings) is kept.
+const recentChanges = new Map();
+const CHANGES_FRESH_MS = 60 * 1000;
 // One save at a time per account, so each reads after the one before it landed.
 const queues = new Map();
 
 // `change(ns)` edits a copy of the `3speak` object; everything else in the
 // metadata (`profile`, other apps' keys) is written back as it was. Saves run one
-// after the other per account and start from our own last write while the node
-// may not have it yet, so two settings saved close together don't undo each
-// other. Posting authority is enough.
+// after the other per account, and keys this app saved in the last minute win
+// over a node that may not have them yet, so two settings saved close together
+// don't undo each other. Posting authority is enough.
 export function saveThreespeakMeta(username, change) {
   const run = (queues.get(username) || Promise.resolve())
     .catch(() => {})
@@ -45,20 +47,32 @@ export function saveThreespeakMeta(username, change) {
 async function writeThreespeakMeta(username, change) {
   const [account] = await getAccounts([username]);
   if (!account) throw new Error('no_account');
-  const written = lastWritten.get(username);
-  const fresh = written && Date.now() - written.at < WRITTEN_FRESH_MS;
-  const meta = fresh ? JSON.parse(written.json) : postingMeta(account);
+  const meta = postingMeta(account);
   const ns = { ...(meta['3speak'] && typeof meta['3speak'] === 'object' ? meta['3speak'] : {}) };
+  const recent = recentChanges.get(username);
+  const ours = recent && Date.now() - recent.at < CHANGES_FRESH_MS ? recent.keys : {};
+  for (const [key, value] of Object.entries(ours)) {
+    if (value === undefined) delete ns[key];
+    else ns[key] = JSON.parse(value);
+  }
+  const before = JSON.stringify(ns);
+  const was = JSON.parse(before);
   change(ns);
   meta['3speak'] = ns;
-  const json = JSON.stringify(meta);
   const op = ['account_update2', {
     account: username,
     json_metadata: '',
-    posting_json_metadata: json,
+    posting_json_metadata: JSON.stringify(meta),
     extensions: [],
   }];
   const result = await broadcastWithAioha([op], KeyTypes.Posting);
   if (!result || !result.success) throw new Error(result?.error || 'broadcast_failed');
-  lastWritten.set(username, { json, at: Date.now() });
+  // Remember what this save changed (as JSON, undefined = removed) on top of the
+  // keys still fresh from earlier saves.
+  const keys = { ...ours };
+  for (const key of new Set([...Object.keys(was), ...Object.keys(ns)])) {
+    const now = ns[key] === undefined ? undefined : JSON.stringify(ns[key]);
+    if (now !== (was[key] === undefined ? undefined : JSON.stringify(was[key]))) keys[key] = now;
+  }
+  recentChanges.set(username, { keys, at: Date.now() });
 }

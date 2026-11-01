@@ -40,4 +40,27 @@ describe('saveThreespeakMeta', () => {
     await saveThreespeakMeta('alice', (ns) => { ns.supportLinks = [] })
     expect(written().at(-1)['3speak']).toEqual({ supportLinks: [] })
   })
+
+  it('keeps what other writers saved meanwhile, and only our own fresh keys win', async () => {
+    broadcastWithAioha.mockResolvedValue({ success: true })
+    await saveThreespeakMeta('carol', (ns) => { ns.supportLinks = ['https://ko-fi.com/carol'] })
+    // Meanwhile another part of the app saved the ad choice and a new profile; the
+    // node has those, but not yet our support links.
+    getAccounts.mockResolvedValue([{ posting_json_metadata: JSON.stringify({
+      profile: { name: 'C2' }, '3speak': { ads: { audio: false } },
+    }) }])
+    await saveThreespeakMeta('carol', (ns) => { ns.lightning = { address: 'c@d.e' } })
+    expect(written().at(-1)).toEqual({
+      profile: { name: 'C2' },
+      '3speak': { ads: { audio: false }, supportLinks: ['https://ko-fi.com/carol'], lightning: { address: 'c@d.e' } },
+    })
+  })
+
+  it('a removed key stays removed while the node still has it', async () => {
+    broadcastWithAioha.mockResolvedValue({ success: true })
+    getAccounts.mockResolvedValue([{ posting_json_metadata: JSON.stringify({ '3speak': { lightning: { address: 'old@x.y' } } }) }])
+    await saveThreespeakMeta('dave', (ns) => { delete ns.lightning })
+    await saveThreespeakMeta('dave', (ns) => { ns.supportLinks = [] })
+    expect(written().at(-1)['3speak']).toEqual({ supportLinks: [] })
+  })
 })
