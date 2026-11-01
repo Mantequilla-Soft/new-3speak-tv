@@ -19,6 +19,7 @@ import {
   flightPrice,
   hiveEquivalent,
   suppliesFor,
+  formatTabOf,
   specFor,
   savingAt,
   groupByFormat,
@@ -36,7 +37,116 @@ function StatTile({ value, label, note }) {
   );
 }
 
-export function InventoryPanel({ data, isLoading, error }) {
+export function FormatTabs({ tabs, value, onChange }) {
+  const { t } = useTranslation();
+  if (tabs.length < 2) return null;
+  return (
+    <div className="mkt-ftabs" role="tablist" aria-label={t('ads.rateCard.tabs.label')}>
+      {tabs.map(({ id, label, Icon }) => (
+        <button
+          key={id}
+          type="button"
+          role="tab"
+          aria-selected={value === id}
+          className={`mkt-ftab${value === id ? ' selected' : ''}`}
+          onClick={() => onChange(id)}
+        >
+          <Icon aria-hidden="true" />
+          {t(label)}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/* The audio player's audience (checker adInventory computeAudio). Small while audio is
+ * young: the per-day numbers are over the days actually measured, and the trial line
+ * says how much of it a booking reaches today. */
+function AudioAudience({ a }) {
+  const { t } = useTranslation();
+  if (!a) return <div className="mkt-panel mkt-panel-muted">{t('ads.inventory.audioNone')}</div>;
+  const ordered = [...(a.slots || [])].sort((x, y) => x.percent - y.percent);
+  const topCountries = (a.countries || []).slice(0, 6);
+  return (
+    <div className="mkt-inventory">
+      <div className="mkt-stats">
+        <StatTile value={formatCount(a.listensPerDay)} label={t('ads.inventory.listensPerDay')} note={t('ads.inventory.measuredDays', { days: a.measuredDays })} />
+        <StatTile value={formatCount(a.tracks)} label={t('ads.inventory.tracksHeard')} note={a.catalogue ? t('ads.inventory.tracksNote', { catalogue: formatCount(a.catalogue) }) : null} />
+        <StatTile value={formatCount(a.listenHours)} label={t('ads.inventory.listenHours')} note={t('ads.inventory.measuredDays', { days: a.measuredDays })} />
+      </div>
+      {a.trial?.length ? (
+        <p className="mkt-note">
+          <span>{t('ads.inventory.audioTrial', { owners: a.trial.map((o) => `@${o}`).join(', '), n: formatCount(a.trialListensPerDay) })}</span>
+        </p>
+      ) : null}
+      <div className="mkt-slots">
+        <h3>{t('ads.inventory.audioWhere')}</h3>
+        <div className="mkt-table-wrap">
+          <table className="mkt-table">
+            <thead>
+              <tr>
+                <th>{t('ads.inventory.placement')}</th>
+                <th className="num">{t('ads.inventory.listensDay')}</th>
+                <th className="num">{t('ads.inventory.listensMonth')}</th>
+                <th className="num">{t('ads.inventory.reach')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ordered.map((s) => (
+                <tr key={s.percent}>
+                  <td>{slotLabel({ ...s, audio: true })}</td>
+                  <td className="num">{formatCount(s.perDay)}</td>
+                  <td className="num">{formatCount(s.perMonth)}</td>
+                  <td className="num">{s.reachPct}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mkt-fine">{t('ads.inventory.audioFine')}</p>
+      </div>
+      {SHOW_MARKETS && topCountries.length > 0 && (
+        <div className="mkt-countries">
+          <h3>{t('ads.inventory.whoListens')}</h3>
+          <ul className="mkt-country-list">
+            {topCountries.map((c) => (
+              <li key={c.code}>
+                <span className="mkt-country-name">{countryName(c.code)}</span>
+                <span className="mkt-country-bar" aria-hidden="true">
+                  <span style={{ width: `${Math.min(100, c.sharePct * 3)}%` }} />
+                </span>
+                <span className="mkt-country-share">{c.sharePct}%</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* Uploads on 3speak.tv, where the pre-upload spot plays once each (adInventory computeUploads). */
+function UploadAudience({ u, windowDays }) {
+  const { t } = useTranslation();
+  if (!u) return <div className="mkt-panel mkt-panel-muted">{t('ads.inventory.uploadNone')}</div>;
+  return (
+    <div className="mkt-inventory">
+      <div className="mkt-stats">
+        <StatTile value={formatCount(u.uploadsPerDay)} label={t('ads.inventory.uploadsPerDay')} note={t('ads.inventory.uploadsNote')} />
+        {/* Audio has its own collection; an older checker sends no audioPerDay. */}
+        <StatTile
+          value={[u.videosPerDay, u.shortsPerDay, ...(u.audioPerDay != null ? [u.audioPerDay] : [])].map(formatCount).join(' / ')}
+          label={u.audioPerDay != null ? t('ads.inventory.videosShortsAudio') : t('ads.inventory.videosShorts')}
+          note={t('ads.inventory.lastDays', { days: windowDays })}
+        />
+        <StatTile value={formatCount(u.creators)} label={t('ads.inventory.creatorsUploading')} note={t('ads.inventory.creatorsNote', { days: windowDays })} />
+      </div>
+      <p className="mkt-fine">{t('ads.inventory.uploadsFine')}</p>
+    </div>
+  );
+}
+
+export function InventoryPanel({ data, isLoading, error, tab = 'video' }) {
   const { t } = useTranslation();
   if (isLoading) return <div className="mkt-panel mkt-panel-muted">{t('ads.inventory.loading')}</div>;
 
@@ -63,13 +173,15 @@ export function InventoryPanel({ data, isLoading, error }) {
     );
   }
   if (!data) return null;
+  if (tab === 'audio') return <AudioAudience a={data.audio} />;
+  if (tab === 'upload') return <UploadAudience u={data.uploads} windowDays={data.windowDays} />;
 
   const { audience, slots, quality } = data;
   // Mid-roll first: it is what we actually sell, and leading with the bigger
   // pre-roll number would be selling a slot we do not recommend.
   // Plain time order. It used to push pre-roll to the bottom so the biggest number
   // would not lead, but a table of positions that is not in position order reads as
-  // broken — the "not recommended" tag carries that argument on its own.
+  // broken.
   const ordered = [...(slots || [])].sort((a, b) => a.percent - b.percent);
   const topCountries = (audience?.countries || []).slice(0, 6);
 
@@ -98,10 +210,7 @@ export function InventoryPanel({ data, isLoading, error }) {
             <tbody>
               {ordered.map((s) => (
                 <tr key={s.percent}>
-                  <td>
-                    {slotLabel(s)}
-                    {s.percent === 0 ? <span className="mkt-tag">{t('ads.inventory.notRecommendedTag')}</span> : null}
-                  </td>
+                  <td>{slotLabel(s)}</td>
                   <td className="num">{formatCount(s.perDay)}</td>
                   <td className="num">{formatCount(s.perMonth)}</td>
                   <td className="num">{s.reachPct}%</td>
@@ -110,9 +219,6 @@ export function InventoryPanel({ data, isLoading, error }) {
             </tbody>
           </table>
         </div>
-        <p className="mkt-fine">
-          <Trans i18nKey="ads.inventory.notRecommendedNote" components={{ b: <strong /> }} />
-        </p>
       </div>
 
       {SHOW_MARKETS && topCountries.length > 0 && (
@@ -161,11 +267,13 @@ export function InventoryPanel({ data, isLoading, error }) {
  * that is not the point. Each tile carries a worked example, because a raw
  * per-second-per-day rate is a number nobody can price a campaign from in their head.
  */
-export function RateCard({ pricing }) {
+/* `tab`: only that tab's formats (see FormatTabs). Without it, every format. */
+export function RateCard({ pricing, tab = null }) {
   const { t } = useTranslation();
-  const formats = pricing?.formats || [];
-  if (!formats.length) return null;
+  const all = pricing?.formats || [];
+  if (!all.length) return null;
   const days = Math.max(EXAMPLE_DAYS, pricing?.minDays || 0) || null;
+  const formats = tab ? all.filter((f) => formatTabOf(f) === tab) : all;
 
   return (
     <div className="mkt-format-groups">

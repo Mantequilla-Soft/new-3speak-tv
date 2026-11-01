@@ -1056,3 +1056,24 @@
   gap: 8px;
   margin-top: 12px;
 }
+
+// An all-audio playlist drawn as a podcast show (PodcastsTab.scss look).
+.playlist-pod-head {
+  margin-bottom: 20px;
+
+  .pod-show-author {
+    align-self: flex-start;
+    text-decoration: none;
+
+    &:hover { color: var(--accent-primary); }
+  }
+
+  .pod-show-meta strong { color: var(--text-secondary); font-weight: 600; }
+
+  // The Follow / Open podcast pair sits in the action row like the other buttons.
+  .playlist-follow { display: contents; }
+}
+
+.playlist-pod-episodes {
+  margin-top: 4px;
+}

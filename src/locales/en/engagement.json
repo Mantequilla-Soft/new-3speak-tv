@@ -12,6 +12,7 @@
     "heading": "Send a Tip to @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "More ways",
     "amountLabel": "Amount: ",
     "amountPlaceholder": "e.g. 1.000",
     "currencyLabel": "Currency:",
@@ -40,7 +41,10 @@
         "noAccount": "This Hive account does not exist",
         "invoiceFailed": "Could not create a Lightning invoice. Please try again.",
         "copyFailed": "Could not copy the invoice"
-      }
+      },
+      "noteOwn": "Goes straight to @{{recipient}}'s own Lightning wallet ({{address}}). Any Lightning wallet works, no Hive account needed.",
+      "waitingUnverified": "Your wallet shows when the payment went through.",
+      "cashApp": "No Lightning wallet? Apps like Cash App and Strike can pay it from your normal balance."
     },
     "wallet": {
       "usernameLabel": "Your Hive username:",
@@ -54,6 +58,22 @@
         "self": "You can't tip yourself",
         "walletFailed": "The wallet did not send the tip: {{message}}"
       }
+    },
+    "otherWays": "More ways to support @{{recipient}}",
+    "otherWaysNote": "Each button opens the creator's page on that site in a new tab. Payments made there don't go through 3Speak.",
+    "monthly": {
+      "label": "How often",
+      "once": "Once",
+      "until": "Every month, until {{date}}",
+      "note": "Hive sends it by itself every 30 days, the first one right now. You can stop it any time.",
+      "replaces": "This replaces the monthly support you already send @{{recipient}}.",
+      "replacesOther": "This replaces the recurring payment you already send @{{recipient}}.",
+      "current": "You send @{{recipient}} {{amount}} every month, until {{date}}.",
+      "currentEvery": "You send @{{recipient}} {{amount}} every {{interval}}, until {{date}}.",
+      "stop": "Stop",
+      "stopped": "Monthly support stopped",
+      "stopFailed": "Could not stop it: {{message}}",
+      "successNote": "The next one goes out by itself in 30 days."
     }
   },
   "cardMenu": {

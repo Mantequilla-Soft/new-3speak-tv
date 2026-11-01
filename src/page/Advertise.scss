@@ -1437,6 +1437,54 @@ $mkt-sub: 12px;
     }
   }
 
+  /* Video / Audio / Upload above the rate card and the audience. The headline size,
+     with an icon each, so they read as the way into the section, not a filter. */
+  .mkt-ftabs {
+    display: flex;
+    gap: 4px;
+    margin: 4px 0 20px;
+    border-bottom: 1px solid var(--border-color);
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .mkt-ftab {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    background: none;
+    font: inherit;
+    font-size: $mkt-head;
+    font-weight: 700;
+    color: var(--text-muted);
+    white-space: nowrap;
+    cursor: pointer;
+
+    svg { flex: none; width: 18px; height: 18px; }
+
+    &:hover { color: var(--text-primary); }
+
+    &.selected {
+      color: var(--text-primary);
+      border-bottom-color: var(--accent-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-primary);
+      outline-offset: -2px;
+    }
+  }
+
+  // The audience heading inside the tabbed section: room above, like a new section.
+  .mkt-tab-subhead { margin-top: 32px; }
+
   /* One product's three jobs. Deliberately quieter than the page-level .mkt-tabs,
      which stays the primary navigation. */
   .mkt-ptabs {
@@ -1706,6 +1754,17 @@ $mkt-sub: 12px;
   }
 
   .mkt-upload-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+  /* "Listen" under a ticker: the button, then the player once the spot is made. */
+  .mkt-listen {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 8px 0;
+    audio { width: 100%; max-width: 420px; }
+  }
+  .mkt-audio-item audio,
+  .mkt-flight-audio { width: 100%; max-width: 420px; }
 
   /* A <label> wearing a button's clothes, so the file input can stay hidden. It used
      to force `border: none`, which suited a filled button and silently stripped the

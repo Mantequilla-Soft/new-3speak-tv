@@ -12,6 +12,7 @@
     "heading": "Envoyer un pourboire à @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Plus de façons",
     "amountLabel": "Montant : ",
     "amountPlaceholder": "ex. 1.000",
     "currencyLabel": "Devise :",
@@ -40,7 +41,10 @@
         "noAccount": "Ce compte Hive n'existe pas",
         "invoiceFailed": "Impossible de créer la facture Lightning. Veuillez réessayer.",
         "copyFailed": "Impossible de copier la facture"
-      }
+      },
+      "noteOwn": "Va directement dans le portefeuille Lightning de @{{recipient}} ({{address}}). Tout portefeuille Lightning fonctionne, pas besoin de compte Hive.",
+      "waitingUnverified": "Ton portefeuille indique quand le paiement est passé.",
+      "cashApp": "Pas de portefeuille Lightning ? Des applis comme Cash App et Strike peuvent le payer avec ton solde habituel."
     },
     "wallet": {
       "usernameLabel": "Votre nom d'utilisateur Hive :",
@@ -54,6 +58,22 @@
         "self": "Vous ne pouvez pas vous donner un pourboire",
         "walletFailed": "Le portefeuille n'a pas envoyé le pourboire : {{message}}"
       }
+    },
+    "otherWays": "Plus de façons de soutenir @{{recipient}}",
+    "otherWaysNote": "Chaque bouton ouvre la page du créateur sur ce site dans un nouvel onglet. Les paiements faits là-bas ne passent pas par 3Speak.",
+    "monthly": {
+      "label": "À quelle fréquence",
+      "once": "Une fois",
+      "until": "Chaque mois, jusqu'à {{date}}",
+      "note": "Hive l'envoie tout seul tous les 30 jours, le premier tout de suite. Tu peux l'arrêter à tout moment.",
+      "replaces": "Ceci remplace le soutien mensuel que tu envoies déjà à @{{recipient}}.",
+      "replacesOther": "Ceci remplace le paiement récurrent que tu envoies déjà à @{{recipient}}.",
+      "current": "Tu envoies {{amount}} à @{{recipient}} chaque mois, jusqu'à {{date}}.",
+      "currentEvery": "Tu envoies {{amount}} à @{{recipient}} tous les {{interval}}, jusqu'à {{date}}.",
+      "stop": "Arrêter",
+      "stopped": "Soutien mensuel arrêté",
+      "stopFailed": "Impossible de l'arrêter : {{message}}",
+      "successNote": "Le prochain part tout seul dans 30 jours."
     }
   },
   "cardMenu": {

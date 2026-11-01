@@ -15,6 +15,10 @@
     "offToast": "Werbung ist für deine Videos deaktiviert",
     "rollsOnToast": "Video-Rolls sind für deine Videos an",
     "rollsOffToast": "Auf deinen Videos laufen jetzt nur Banner und Ticker",
+    "audio": "Werbung in deinem Audio",
+    "audioDesc": "Eine kurze gesprochene Nachricht eines Sponsors kann während deines Audios laufen, mit einem Link, den Hörer öffnen können. Du bekommst einen Anteil, wie bei Videowerbung. Im Audio-Uploader kannst du das für jeden Upload einzeln ändern.",
+    "audioOnToast": "Werbung in deinem Audio ist an",
+    "audioOffToast": "Werbung in deinem Audio ist aus",
     "splitSaved": "Aufteilung der Einnahmen gespeichert",
     "title": "Werbung in deinen Videos",
     "allow": "Werbung erlauben",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "Allgemein",
     "content": "Inhalte",
+    "connections": "Verbindungen",
     "rewards": "Werbung & Belohnungen",
     "about": "Info / Version"
   },
   "contentTabs": {
     "feed": "Feed",
     "aria": "Inhaltseinstellungen"
+  },
+  "connectionsTabs": {
+    "support": "Unterstützung",
+    "profiles": "Verknüpfte Profile",
+    "aria": "Verbindungseinstellungen"
   },
   "butrauthUnlocked": "Butter Auth freigeschaltet",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "Löschung beantragen",
     "requestData": "Meine Daten anfordern",
     "foot": "Wir antworten innerhalb eines Monats. Du kannst auch direkt an <mail>privacy@3speak.tv</mail> schreiben."
+  },
+  "lightning": {
+    "title": "Lightning-Trinkgelder",
+    "checking": "Prüfe, wohin deine Trinkgelder gehen…",
+    "toV4v": "Trinkgelder gehen an {{account}}@v4v.app",
+    "toOwn": "Trinkgelder gehen an {{address}}",
+    "v4vDesc": "Die Voreinstellung, nichts einzurichten: Trinkgelder kommen auf Hive als HIVE an. Trinkgelder unter der Umrechnungsgebühr von v4v.app (etwa 60 Sats) bleiben als Sats in deinem v4v.app-Konto. Gib unten eine Lightning-Adresse ein, um sie stattdessen in deiner eigenen Wallet zu bekommen.",
+    "ownDesc": "Trinkgelder gehen direkt in deine eigene Lightning-Wallet, ohne v4v.app und dessen Umrechnungsgebühr. In deinem Hive-Profil gespeichert.",
+    "inputLabel": "Deine Lightning-Adresse",
+    "placeholder": "du@wallet.com",
+    "useV4v": "Wieder v4v.app nutzen",
+    "savedOwn": "Lightning-Trinkgelder gehen jetzt an deine eigene Adresse",
+    "savedV4v": "Lightning-Trinkgelder gehen wieder über v4v.app",
+    "badAddress": "Das ist keine Lightning-Adresse. Sie sieht aus wie name@wallet.com.",
+    "unreachable": "Diese Adresse hat nicht als Lightning-Adresse geantwortet. Prüfe sie und versuche es noch einmal.",
+    "saveFailed": "Konnte nicht in deinem Hive-Profil gespeichert werden.",
+    "supportersNote": "Trinkgelder an deine eigene Adresse laufen nie über Hive, darum erscheinen sie nicht unter Unterstützer.",
+    "publicNote": "Deine Lightning-Adresse wird in deinem Hive-Konto gespeichert und ist dort für alle sichtbar."
+  },
+  "supportLinks": {
+    "title": "Weitere Wege, dich zu unterstützen",
+    "desc": "Deine Seite auf {{sites}}. Zuschauer finden diese Links in deinem Trinkgeld-Fenster.",
+    "placeholder": "https://ko-fi.com/deinname",
+    "add": "Hinzufügen",
+    "remove": "{{site}}-Link entfernen",
+    "badLink": "Füge den vollständigen Link zu deiner Seite auf einer dieser Seiten ein.",
+    "duplicate": "Dieser Link ist schon in der Liste.",
+    "max": "Du kannst bis zu {{max}} Links hinzufügen.",
+    "saved": "Unterstützungs-Links gespeichert",
+    "publicNote": "Diese Links werden in deinem Hive-Konto gespeichert und sind dort für alle sichtbar."
   }
 }

@@ -35,6 +35,9 @@
     "volume": "Âm lượng",
     "queue": "Hàng đợi",
     "closePlayer": "Đóng trình phát",
+    "pipOpen": "Mở trình phát trong cửa sổ riêng",
+    "pipClose": "Đóng trình phát ở cửa sổ riêng",
+    "pipActive": "Đang phát trong cửa sổ riêng",
     "curated": "Tuyển chọn",
     "noCues": "Không có lời.",
     "clearQueue": "Xóa hàng đợi",
@@ -160,6 +163,11 @@
     "failed": "Thất bại",
     "unknown": "không rõ",
     "unknownError": "lỗi không xác định",
+    "errors": {
+      "unreadable": "Không thể đọc tệp âm thanh. Vui lòng thêm lại tệp rồi đăng.",
+      "rateLimited": "Quá nhiều lần tải lên. Vui lòng đợi vài phút rồi thử lại.",
+      "server": "Máy chủ âm thanh không thể lưu tệp này. Vui lòng thử lại sau giây lát."
+    },
     "recorded": "Đã ghi âm",
     "uploaded": "Đã tải lên",
     "steps": {
@@ -271,7 +279,9 @@
       "postRewardsTitle": "Phần thưởng bài đăng (một lần)",
       "postRewardsDesc": "Bạn nhận phần thưởng tác giả Hive thông thường — trả một lần, khoảng 7 ngày sau khi xuất bản.",
       "pplTitle": "Trả theo lượt nghe (trọn đời)",
-      "pplDesc": "Toàn bộ phần thưởng bài đăng âm thanh được chuyển cho @{{account}}. Thay vì một khoản thanh toán duy nhất, một chương trình của 3Speak trả cho bạn theo từng lượt nghe trong suốt vòng đời của bản nhạc."
+      "pplDesc": "Toàn bộ phần thưởng bài đăng âm thanh được chuyển cho @{{account}}. Thay vì một khoản thanh toán duy nhất, một chương trình của 3Speak trả cho bạn theo từng lượt nghe trong suốt vòng đời của bản nhạc.",
+      "adsTitle": "Quảng cáo trong âm thanh này",
+      "adsHint": "Một thông điệp ngắn được đọc từ nhà tài trợ có thể phát trong âm thanh này, và bạn nhận một phần doanh thu. Mặc định theo cài đặt tài khoản; đổi ở đây chỉ cho lượt tải lên này."
     },
     "reward": {
       "distribution": "Phân chia phần thưởng",

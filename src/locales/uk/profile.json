@@ -47,6 +47,10 @@
     "shorts_few": "<b>{{value}}</b> Shorts",
     "shorts_many": "<b>{{value}}</b> Shorts",
     "shorts_other": "<b>{{value}}</b> Shorts",
+    "audio_one": "<b>{{value}}</b> аудіо",
+    "audio_few": "<b>{{value}}</b> аудіо",
+    "audio_many": "<b>{{value}}</b> аудіо",
+    "audio_other": "<b>{{value}}</b> аудіо",
     "views_one": "<b>{{value}}</b> перегляд",
     "views_few": "<b>{{value}}</b> перегляди",
     "views_many": "<b>{{value}}</b> переглядів",
@@ -63,6 +67,10 @@
     "shortsTitle_few": "{{num}} Shorts",
     "shortsTitle_many": "{{num}} Shorts",
     "shortsTitle_other": "{{num}} Shorts",
+    "audioTitle_one": "{{num}} аудіо",
+    "audioTitle_few": "{{num}} аудіо",
+    "audioTitle_many": "{{num}} аудіо",
+    "audioTitle_other": "{{num}} аудіо",
     "viewsTitle_one": "{{num}} перегляд",
     "viewsTitle_few": "{{num}} перегляди",
     "viewsTitle_many": "{{num}} переглядів",
@@ -440,5 +448,8 @@
         "body": "«Зберегти макет» публікує його. «Скасувати» й «Повторити» гортають ваші зміни (Ctrl+Z теж працює), «Скасувати» внизу їх відкидає, а «Скинути до типового» повертає стандартну сторінку. «?» біля заголовка знову відкриває цей тур."
       }
     }
+  },
+  "audioTab": {
+    "files": "Аудіофайли"
   }
 }

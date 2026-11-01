@@ -32,10 +32,12 @@
     "followers_other": "<b>{{value}}</b> pengikut",
     "videos_other": "<b>{{value}}</b> video",
     "shorts_other": "<b>{{value}}</b> Shorts",
+    "audio_other": "<b>{{value}}</b> audio",
     "views_other": "<b>{{value}}</b> tayangan",
     "followersTitle_other": "{{num}} pengikut",
     "videosTitle_other": "{{num}} video",
     "shortsTitle_other": "{{num}} Shorts",
+    "audioTitle_other": "{{num}} audio",
     "viewsTitle_other": "{{num}} tayangan",
     "onHiveSince": "di Hive sejak {{year}}"
   },
@@ -383,5 +385,8 @@
         "body": "Simpan tata letak menerbitkannya. Urungkan dan Ulangi melangkah maju mundur di antara perubahanmu (Ctrl+Z juga bisa), Batal membuangnya, dan Kembalikan ke bawaan memulihkan halaman standar. Tanda ? di samping judul membuka tur ini lagi."
       }
     }
+  },
+  "audioTab": {
+    "files": "File audio"
   }
 }

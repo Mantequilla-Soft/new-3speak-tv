@@ -37,6 +37,9 @@
     "volume": "Volume",
     "queue": "Queue",
     "closePlayer": "Isara ang player",
+    "pipOpen": "Buksan ang player sa hiwalay na window",
+    "pipClose": "Isara ang player sa hiwalay na window",
+    "pipActive": "Tumutugtog sa hiwalay na window",
     "curated": "Curated",
     "noCues": "Walang cues.",
     "clearQueue": "I-clear ang queue",
@@ -163,6 +166,11 @@
     "failed": "Pumalya",
     "unknown": "hindi alam",
     "unknownError": "hindi kilalang error",
+    "errors": {
+      "unreadable": "Hindi mabasa ang audio file. Pakidagdag itong muli, saka i-publish.",
+      "rateLimited": "Masyadong maraming pagsubok mag-upload. Maghintay ng ilang minuto, saka subukang muli.",
+      "server": "Hindi nai-save ng audio server ang file na ito. Pakisubukang muli mamaya-maya."
+    },
     "recorded": "Na-record",
     "uploaded": "Na-upload",
     "steps": {
@@ -279,7 +287,9 @@
       "postRewardsTitle": "Post rewards (isang beses)",
       "postRewardsDesc": "Matatanggap mo ang normal na Hive author payout — isang beses lang ibabayad, ~7 araw pagkatapos mag-publish.",
       "pplTitle": "Pay-per-listen (panghabambuhay)",
-      "pplDesc": "Mapupunta kay @{{account}} lahat ng rewards ng audio post. Sa halip na isang beses na payout, babayaran ka ng isang 3Speak program sa bawat pakikinig habang buhay ang track."
+      "pplDesc": "Mapupunta kay @{{account}} lahat ng rewards ng audio post. Sa halip na isang beses na payout, babayaran ka ng isang 3Speak program sa bawat pakikinig habang buhay ang track.",
+      "adsTitle": "Mga ad sa audio na ito",
+      "adsHint": "Puwedeng mag-play ang maikling binibigkas na mensahe ng sponsor habang tumutugtog ang audio na ito, at may bahagi ka. Nagsisimula sa setting ng account mo; baguhin dito para sa upload na ito lang."
     },
     "reward": {
       "distribution": "Distribusyon ng rewards",

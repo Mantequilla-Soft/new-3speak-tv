@@ -3,6 +3,7 @@
  * page and the market panels (components/ads/AdMarketPanels.jsx). Plain values and
  * functions only, so the component files stay components (fast refresh).
  */
+import { FaVideo, FaHeadphones, FaCloudUploadAlt } from 'react-icons/fa';
 import { t } from '../i18n';
 
 // Country breakdown and per-market targeting, hidden for now. The numbers behind
@@ -26,7 +27,7 @@ export const SHOW_MARKETS = false;
  *
  * Keyed off `surface`, the server's own word, so a format on a NEW surface is treated
  * as travelling rather than being silently labelled site-only on a guess. */
-export const SITE_ONLY_SURFACES = new Set(['shorts', 'upload']);
+export const SITE_ONLY_SURFACES = new Set(['shorts', 'upload', 'audio']);
 
 // Where each format actually runs, in the reader's terms. Keyed off `surface`,
 // which is the server's own word for it, so a format on a new surface shows the
@@ -36,6 +37,7 @@ export const SURFACE_LABEL = {
   watch: 'ads.market.surface.watch',
   shorts: 'ads.market.surface.shorts',
   upload: 'ads.market.surface.upload',
+  audio: 'ads.market.surface.audio',
 };
 
 export const EXAMPLE_SECONDS = 10;
@@ -104,6 +106,7 @@ export function hiveEquivalent(hbd, hbdPerHive) {
 export function suppliesKey(f) {
   const kinds = f?.creativeKinds?.length ? f.creativeKinds : (f ? [f.creativeKind] : []);
   if (kinds.includes('text')) return 'text';
+  if (kinds.includes('audio')) return 'audio';
   const image = kinds.includes('image');
   const video = kinds.includes('video');
   if (image && video) return 'imageOrVideo';
@@ -188,6 +191,15 @@ export function specFor(f) {
       ],
     };
   }
+  // An audio clip: no size or shape, just the files we take and the link's button.
+  if (kinds.includes('audio')) {
+    return {
+      rows: [
+        { label: t('ads.market.spec.file'), value: t('ads.market.spec.filesAudio'), note: t('ads.market.spec.upToMb', { mb: spec?.maxMb || 20 }) },
+        { label: t('ads.market.spec.link'), value: t('ads.market.spec.anyHttps'), note: t('ads.market.spec.audioButton') },
+      ],
+    };
+  }
   const files = kinds.includes('image') && kinds.includes('video')
     ? t('ads.market.spec.filesAny')
     : (kinds.includes('image') ? t('ads.market.spec.filesImage') : 'MP4 (H.264)');
@@ -235,6 +247,12 @@ export const FORMAT_GROUPS = [
     keys: ['video_banner', 'video_ticker'],
   },
   {
+    id: 'audio',
+    title: 'ads.market.groups.audio.title',
+    note: 'ads.market.groups.audio.note',
+    keys: ['audio_spot'],
+  },
+  {
     id: 'creators',
     title: 'ads.market.groups.creators.title',
     note: 'ads.market.groups.creators.note',
@@ -251,4 +269,20 @@ export function groupByFormat(items, keyOf) {
   const rest = items.filter((it) => !placed.has(keyOf(it)));
   if (rest.length) groups.push({ id: 'more', title: 'ads.market.groups.more.title', note: null, items: rest });
   return groups;
+}
+
+/* The format tabs on /advertise: Video, Audio, Upload. The rate card AND the audience
+ * below it follow the same choice. A tab the rate card has nothing for (the audio spot
+ * is beta) is left out. */
+export const FORMAT_TABS = [
+  { id: 'video', label: 'ads.rateCard.tabs.video', Icon: FaVideo },
+  { id: 'audio', label: 'ads.rateCard.tabs.audio', Icon: FaHeadphones },
+  { id: 'upload', label: 'ads.rateCard.tabs.upload', Icon: FaCloudUploadAlt },
+];
+export const formatTabOf = (f) => (f.surface === 'audio' ? 'audio' : (f.surface === 'upload' ? 'upload' : 'video'));
+/** The tabs this rate card has formats for (Video alone while it has not loaded). */
+export function formatTabsFor(pricing) {
+  const formats = pricing?.formats || [];
+  if (!formats.length) return FORMAT_TABS.filter((tb) => tb.id === 'video');
+  return FORMAT_TABS.filter((tb) => formats.some((f) => formatTabOf(f) === tb.id));
 }

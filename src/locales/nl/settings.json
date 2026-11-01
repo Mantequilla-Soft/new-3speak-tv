@@ -15,6 +15,10 @@
     "offToast": "Advertenties staan uit voor je video's",
     "rollsOnToast": "Videorolls staan aan voor je video's",
     "rollsOffToast": "Nu alleen banners en tickers op je video's",
+    "audio": "Advertenties in je audio",
+    "audioDesc": "Een korte gesproken boodschap van een sponsor kan tijdens je audio spelen, met een link die luisteraars kunnen openen. Je krijgt een deel, net als bij videoadvertenties. Je kunt dit per upload aanpassen in de audio-uploader.",
+    "audioOnToast": "Advertenties staan aan voor je audio",
+    "audioOffToast": "Advertenties staan uit voor je audio",
     "splitSaved": "Opbrengstverdeling opgeslagen",
     "title": "Advertenties in je video's",
     "allow": "Advertenties toestaan",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "Algemeen",
     "content": "Content",
+    "connections": "Koppelingen",
     "rewards": "Advertenties & beloningen",
     "about": "Over / versie"
   },
   "contentTabs": {
     "feed": "Feed",
     "aria": "Contentinstellingen"
+  },
+  "connectionsTabs": {
+    "support": "Steun",
+    "profiles": "Gekoppelde profielen",
+    "aria": "Instellingen voor koppelingen"
   },
   "butrauthUnlocked": "Butter Auth ontgrendeld",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "Verwijdering aanvragen",
     "requestData": "Mijn gegevens aanvragen",
     "foot": "We antwoorden binnen een maand. Je kunt ook rechtstreeks mailen naar <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Lightning-fooien",
+    "checking": "Controleren waar je fooien heen gaan…",
+    "toV4v": "Fooien gaan naar {{account}}@v4v.app",
+    "toOwn": "Fooien gaan naar {{address}}",
+    "v4vDesc": "De standaard, niets in te stellen: fooien komen op Hive aan als HIVE. Fooien kleiner dan de omzettingskosten van v4v.app (ongeveer 60 sats) blijven als sats op je v4v.app-account. Vul hieronder een Lightning-adres in om ze in je eigen wallet te krijgen.",
+    "ownDesc": "Fooien gaan rechtstreeks naar je eigen Lightning-wallet, zonder v4v.app en zijn omzettingskosten. Opgeslagen in je Hive-profiel.",
+    "inputLabel": "Je Lightning-adres",
+    "placeholder": "jij@wallet.com",
+    "useV4v": "Weer v4v.app gebruiken",
+    "savedOwn": "Lightning-fooien gaan nu naar je eigen adres",
+    "savedV4v": "Lightning-fooien gaan weer via v4v.app",
+    "badAddress": "Dat is geen Lightning-adres. Het ziet eruit als naam@wallet.com.",
+    "unreachable": "Dit adres antwoordde niet als Lightning-adres. Controleer het en probeer het opnieuw.",
+    "saveFailed": "Kon het niet opslaan in je Hive-profiel.",
+    "supportersNote": "Fooien naar je eigen adres gaan nooit via Hive, dus ze staan niet bij Supporters.",
+    "publicNote": "Je Lightning-adres wordt opgeslagen in je Hive-account, waar iedereen het kan zien."
+  },
+  "supportLinks": {
+    "title": "Andere manieren om je te steunen",
+    "desc": "Je pagina op {{sites}}. Kijkers vinden deze links in je fooivenster.",
+    "placeholder": "https://ko-fi.com/jouwnaam",
+    "add": "Toevoegen",
+    "remove": "{{site}}-link verwijderen",
+    "badLink": "Plak de volledige link naar je pagina op een van deze sites.",
+    "duplicate": "Die link staat al in de lijst.",
+    "max": "Je kunt tot {{max}} links toevoegen.",
+    "saved": "Steunlinks opgeslagen",
+    "publicNote": "Deze links worden opgeslagen in je Hive-account, waar iedereen ze kan zien."
   }
 }

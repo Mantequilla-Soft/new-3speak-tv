@@ -133,6 +133,12 @@ export async function getAccounts(accounts) {
   return await hiveRpc("condenser_api.get_accounts", [accounts]);
 }
 
+// Hive's recurring transfers sent BY an account: [{ to, amount: '5.000 HBD', memo,
+// recurrence (hours), remaining_executions, trigger_date (next one), pair_id }].
+export async function getRecurrentTransfers(from) {
+  return (await hiveRpc("condenser_api.find_recurrent_transfers", [from])) || [];
+}
+
 // Communities an account subscribes to. Each entry is [name, title, role, role_title].
 export async function getSubscriptions(account) {
   return await hiveRpc("bridge.list_all_subscriptions", { account });

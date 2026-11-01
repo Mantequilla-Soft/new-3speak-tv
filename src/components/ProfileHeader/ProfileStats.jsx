@@ -32,6 +32,18 @@ export default function ProfileStats({ username, followers, onFollowersClick }) 
     queryFn: async () => (await axios.get(`${CHECKER_URL}/user/${encodeURIComponent(username)}/counts`)).data,
   });
 
+  // Audio count: the SAME query (key + URL) the profile pages use for the Audio
+  // tab header, so the stat and the tab share one cached request and can never
+  // disagree. Its own query so a slow /audio costs this number, not the line.
+  const { data: audioData } = useQuery({
+    queryKey: ['audio-count', username],
+    enabled: !!username,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+    queryFn: async () => (await axios.get(`${CHECKER_URL}/audio?owner=${encodeURIComponent(username)}&limit=1`)).data,
+  });
+  const audio = Number(audioData?.total) || 0;
+
   // Account age, straight from the chain. Its own query so a slow/failed Hive
   // node costs the year, not the whole stat line.
   const { data: since } = useQuery({
@@ -65,6 +77,7 @@ export default function ProfileStats({ username, followers, onFollowersClick }) 
     },
     data.videos > 0 && { key: 'videos', value: fmt(data.videos), count: data.videos, labelKey: 'profile.stats.videos', title: t('profile.stats.videosTitle', { count: data.videos, num: exact(data.videos) }) },
     data.shorts > 0 && { key: 'shorts', value: fmt(data.shorts), count: data.shorts, labelKey: 'profile.stats.shorts', title: t('profile.stats.shortsTitle', { count: data.shorts, num: exact(data.shorts) }) },
+    audio > 0 && { key: 'audio', value: fmt(audio), count: audio, labelKey: 'profile.stats.audio', title: t('profile.stats.audioTitle', { count: audio, num: exact(audio) }) },
     data.views > 0 && { key: 'views', value: fmt(data.views), count: data.views, labelKey: 'profile.stats.views', title: t('profile.stats.viewsTitle', { count: data.views, num: exact(data.views) }) },
   ].filter(Boolean);
 

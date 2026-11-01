@@ -12,6 +12,7 @@
     "heading": "@{{recipient}}님에게 팁 보내기",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "다른 방법",
     "amountLabel": "금액: ",
     "amountPlaceholder": "예: 1.000",
     "currencyLabel": "통화:",
@@ -40,7 +41,10 @@
         "noAccount": "존재하지 않는 Hive 계정입니다",
         "invoiceFailed": "Lightning 인보이스를 만들 수 없습니다. 다시 시도해 주세요.",
         "copyFailed": "인보이스를 복사할 수 없습니다"
-      }
+      },
+      "noteOwn": "@{{recipient}}님의 Lightning 지갑({{address}})으로 바로 갑니다. 어떤 Lightning 지갑이든 되며 Hive 계정은 필요 없습니다.",
+      "waitingUnverified": "결제가 완료되면 지갑에 표시됩니다.",
+      "cashApp": "Lightning 지갑이 없나요? Cash App, Strike 같은 앱으로 평소 잔액에서 결제할 수 있어요."
     },
     "wallet": {
       "usernameLabel": "Hive 사용자 이름:",
@@ -54,6 +58,22 @@
         "self": "자기 자신에게는 팁을 보낼 수 없습니다",
         "walletFailed": "지갑이 팁을 보내지 않았습니다: {{message}}"
       }
+    },
+    "otherWays": "@{{recipient}} 님을 후원하는 다른 방법",
+    "otherWaysNote": "각 버튼은 해당 사이트의 크리에이터 페이지를 새 탭에서 엽니다. 그곳에서의 결제는 3Speak를 거치지 않아요.",
+    "monthly": {
+      "label": "얼마나 자주",
+      "once": "한 번",
+      "until": "매달, {{date}}까지",
+      "note": "Hive가 30일마다 자동으로 보내며, 첫 번째는 지금 바로 보냅니다. 언제든 멈출 수 있어요.",
+      "replaces": "@{{recipient}} 님에게 이미 보내고 있는 월간 후원이 이것으로 바뀝니다.",
+      "replacesOther": "@{{recipient}} 님에게 이미 보내고 있는 정기 송금이 이것으로 바뀝니다.",
+      "current": "@{{recipient}} 님에게 매달 {{amount}}를 보내고 있어요({{date}}까지).",
+      "currentEvery": "@{{recipient}} 님에게 {{interval}}마다 {{amount}}를 보내고 있어요({{date}}까지).",
+      "stop": "멈추기",
+      "stopped": "월간 후원을 멈췄어요",
+      "stopFailed": "멈출 수 없었어요: {{message}}",
+      "successNote": "다음 후원은 30일 뒤에 자동으로 나갑니다."
     }
   },
   "cardMenu": {

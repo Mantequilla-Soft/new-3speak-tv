@@ -42,6 +42,9 @@
     "shorts_one": "<b>{{value}}</b> Short",
     "shorts_many": "<b>{{value}}</b> Shorts",
     "shorts_other": "<b>{{value}}</b> Shorts",
+    "audio_one": "<b>{{value}}</b> áudio",
+    "audio_many": "<b>{{value}}</b> áudios",
+    "audio_other": "<b>{{value}}</b> áudios",
     "views_one": "<b>{{value}}</b> visualização",
     "views_many": "<b>{{value}}</b> visualizações",
     "views_other": "<b>{{value}}</b> visualizações",
@@ -54,6 +57,9 @@
     "shortsTitle_one": "{{num}} Short",
     "shortsTitle_many": "{{num}} Shorts",
     "shortsTitle_other": "{{num}} Shorts",
+    "audioTitle_one": "{{num}} áudio",
+    "audioTitle_many": "{{num}} áudios",
+    "audioTitle_other": "{{num}} áudios",
     "viewsTitle_one": "{{num}} visualização",
     "viewsTitle_many": "{{num}} visualizações",
     "viewsTitle_other": "{{num}} visualizações",
@@ -421,5 +427,8 @@
         "body": "Salvar layout publica. Desfazer e Refazer passam pelas suas mudanças (Ctrl+Z também funciona), Cancelar descarta e Restaurar padrão traz a página normal de volta. O ? ao lado do título abre este tour de novo."
       }
     }
+  },
+  "audioTab": {
+    "files": "Arquivos de áudio"
   }
 }

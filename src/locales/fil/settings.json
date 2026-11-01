@@ -15,6 +15,10 @@
     "offToast": "Naka-off ang ads sa mga video mo",
     "rollsOnToast": "Naka-on ang video ad roll sa mga video mo",
     "rollsOffToast": "Banner at ticker na lang ang nasa mga video mo",
+    "audio": "Mga ad sa audio mo",
+    "audioDesc": "Puwedeng mag-play ang maikling binibigkas na mensahe mula sa isang sponsor habang pinapakinggan ang audio mo, kasama ang link na mabubuksan ng mga nakikinig. May bahagi ka rito, gaya ng sa mga video ad. Mababago mo ito sa bawat upload sa audio uploader.",
+    "audioOnToast": "Naka-on ang mga ad sa audio mo",
+    "audioOffToast": "Naka-off ang mga ad sa audio mo",
     "splitSaved": "Na-save ang revenue split",
     "title": "Ads sa mga video mo",
     "allow": "Payagan ang ads",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "General",
     "content": "Content",
+    "connections": "Mga koneksyon",
     "rewards": "Ads at rewards",
     "about": "Tungkol / Bersyon"
   },
   "contentTabs": {
     "feed": "Feed",
     "aria": "Settings ng content"
+  },
+  "connectionsTabs": {
+    "support": "Suporta",
+    "profiles": "Mga naka-link na profile",
+    "aria": "Mga setting ng koneksyon"
   },
   "butrauthUnlocked": "Na-unlock ang Butter Auth",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "Mag-request ng pagbura",
     "requestData": "I-request ang data ko",
     "foot": "Sasagot kami sa loob ng isang buwan. Puwede ka ring mag-email nang direkta sa <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Mga tip sa Lightning",
+    "checking": "Tinitingnan kung saan napupunta ang mga tip mo…",
+    "toV4v": "Napupunta ang mga tip sa {{account}}@v4v.app",
+    "toOwn": "Napupunta ang mga tip sa {{address}}",
+    "v4vDesc": "Ang default, walang kailangang i-set up: dumarating ang mga tip sa Hive bilang HIVE. Ang mga tip na mas maliit sa conversion fee ng v4v.app (mga 60 sats) ay nananatiling sats sa v4v.app account mo. Maglagay ng Lightning address sa ibaba para sa sarili mong wallet ito mapunta.",
+    "ownDesc": "Diretso sa sarili mong Lightning wallet ang mga tip, walang v4v.app at walang conversion fee nito. Naka-save sa Hive profile mo.",
+    "inputLabel": "Ang Lightning address mo",
+    "placeholder": "ikaw@wallet.com",
+    "useV4v": "Gamitin ulit ang v4v.app",
+    "savedOwn": "Sa sarili mong address na napupunta ang mga Lightning tip",
+    "savedV4v": "Dumadaan ulit sa v4v.app ang mga Lightning tip",
+    "badAddress": "Hindi iyan Lightning address. Ganito ang itsura nito: pangalan@wallet.com.",
+    "unreachable": "Hindi sumagot ang address na ito bilang Lightning address. Suriin ito at subukan ulit.",
+    "saveFailed": "Hindi ito ma-save sa Hive profile mo.",
+    "supportersNote": "Hindi kailanman dumadaan sa Hive ang mga tip sa sarili mong address, kaya hindi sila lumalabas sa Mga Supporter.",
+    "publicNote": "Naka-save ang iyong Lightning address sa iyong Hive account, kung saan makikita ito ng kahit sino."
+  },
+  "supportLinks": {
+    "title": "Iba pang paraan para suportahan ka",
+    "desc": "Ang page mo sa {{sites}}. Makikita ng mga manonood ang mga link na ito sa tip window mo.",
+    "placeholder": "https://ko-fi.com/pangalanmo",
+    "add": "Idagdag",
+    "remove": "Alisin ang link ng {{site}}",
+    "badLink": "I-paste ang buong link ng page mo sa isa sa mga site na ito.",
+    "duplicate": "Nasa listahan na ang link na iyan.",
+    "max": "Hanggang {{max}} link ang puwede mong idagdag.",
+    "saved": "Na-save ang mga support link",
+    "publicNote": "Naka-save ang mga link na ito sa iyong Hive account, kung saan makikita ito ng kahit sino."
   }
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { usePortalDoc } from '../../utils/portalDocument';
 import { useTranslation, Trans } from 'react-i18next';
 import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
@@ -67,6 +68,7 @@ const CommentVoteTooltip = ({
   voteKind = 'post',
 }) => {
   const { t } = useTranslation();
+  const doc = usePortalDoc();
   const { user, authenticated } = useAppStore();
   const [isLoading, setIsLoading] = useState(false);
   const [initializing, setInitializing] = useState(false);
@@ -211,14 +213,14 @@ const CommentVoteTooltip = ({
     if (startWeight !== parentWeight) setParentWeight(startWeight);
 
     // Build track → fill + thumb
-    const track = document.createElement('div');
+    const track = doc.createElement('div');
     track.className = 'vote-slider-track';
 
-    const fill = document.createElement('div');
+    const fill = doc.createElement('div');
     fill.className = 'vote-slider-fill';
     fill.style.width = `${startWeight}%`;
 
-    const thumb = document.createElement('div');
+    const thumb = doc.createElement('div');
     thumb.className = 'vote-slider-thumb';
     thumb.style.left = `${startWeight}%`;
 
@@ -263,22 +265,22 @@ const CommentVoteTooltip = ({
     const onTouchEnd = () => { onPointerUp(); };
 
     track.addEventListener('mousedown', onMouseDown);
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    doc.addEventListener('mousemove', onMouseMove);
+    doc.addEventListener('mouseup', onMouseUp);
 
     track.addEventListener('touchstart', onTouchStart, { passive: true });
-    document.addEventListener('touchmove', onTouchMove, { passive: false });
-    document.addEventListener('touchend', onTouchEnd);
+    doc.addEventListener('touchmove', onTouchMove, { passive: false });
+    doc.addEventListener('touchend', onTouchEnd);
 
     container.appendChild(track);
 
     return () => {
       track.removeEventListener('mousedown', onMouseDown);
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      doc.removeEventListener('mousemove', onMouseMove);
+      doc.removeEventListener('mouseup', onMouseUp);
       track.removeEventListener('touchstart', onTouchStart);
-      document.removeEventListener('touchmove', onTouchMove);
-      document.removeEventListener('touchend', onTouchEnd);
+      doc.removeEventListener('touchmove', onTouchMove);
+      doc.removeEventListener('touchend', onTouchEnd);
       if (container.contains(track)) container.removeChild(track);
       fillRef.current = null;
       thumbRef.current = null;
@@ -298,8 +300,8 @@ const CommentVoteTooltip = ({
         setActiveTooltipPermlink?.(null);
       }
     };
-    document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
+    doc.addEventListener('keydown', handleKey);
+    return () => doc.removeEventListener('keydown', handleKey);
   }, [showTooltip, setShowTooltip, setActiveTooltipPermlink]);
 
   // The value line is rendered from the parent's voteValue once loading ends,
@@ -605,7 +607,7 @@ const CommentVoteTooltip = ({
             )}
           </div>
         </div>,
-        document.body
+        doc.body
       )}
     </>
   );

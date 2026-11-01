@@ -18,10 +18,15 @@ import {
   hasThreespeakPostingAuth, addThreespeakToPostingAuth, removeThreespeakFromPostingAuth,
   waitForThreespeakPostingAuth,
 } from '../../utils/postingAuthority';
+import { LIGHTNING_ADDRESS_RE, checkLightningAddress, readOwnLightningAddress, saveOwnLightningAddress } from '../../lib/lightningTip';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import DataRequestForm from './DataRequestForm';
 import LanguagePicker from '../LanguagePicker/LanguagePicker';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import AddSocialLink_modal from '../modal/AddSocialLink_modal';
+import { SUPPORT_SITE_ICONS } from '../tip-reward/OtherWays';
+import { parseSupportLink, readSupportLinks, saveSupportLinks, SUPPORT_LINK_MAX, SUPPORT_SITE_NAMES } from '../../lib/supportLinks';
+import { IoClose } from 'react-icons/io5';
 import './SettingsModal.scss';
 import useCardSize, { useIsCardSizeMobile } from '../../hooks/useCardSize';
 
@@ -122,6 +127,8 @@ function AdsSection() {
   const [adsEnabled, setAdsEnabled] = useState(true);
   // Video rolls on top of banners and tickers. Off = overlays only.
   const [rollsEnabled, setRollsEnabled] = useState(true);
+  // Spoken spots in the creator's audio. The uploader can override it per track.
+  const [audioEnabled, setAudioEnabled] = useState(true);
   // Placeholder only — the real split (and the platform default for a creator who
   // has never set one) comes from the server. The row stays hidden until it lands,
   // so nobody is shown a share that is about to change under them.
@@ -145,6 +152,7 @@ function AdsSection() {
         if (!alive) return;
         setAdsEnabled(r.adsEnabled !== false);
         setRollsEnabled(r.rollsEnabled !== false);
+        setAudioEnabled(r.audioEnabled !== false);
         if (r.split) { setSplit(r.split); setDraftCommunity(String(r.split.communityPct)); }
       })
       .catch(() => { /* unreadable preference just shows the default */ })
@@ -153,7 +161,9 @@ function AdsSection() {
   }, [user, visible]);
 
   // Both fields ride one signed message, so saving either costs a single prompt.
-  async function save(nextEnabled, nextCommunity, nextRolls = rollsEnabled) {
+  // `nextAudio` only from the audio switch: any other save leaves the stored audio
+  // choice alone (turning ads back on must not write the "off" it showed meanwhile).
+  async function save(nextEnabled, nextCommunity, nextRolls = rollsEnabled, nextAudio = null) {
     if (saving) return false;
     setSaving(true);
     setError(null);
@@ -164,8 +174,10 @@ function AdsSection() {
       const res = await saveCreatorAdSettings(user, {
         adsEnabled: nextEnabled,
         rollsEnabled: nextRolls,
+        audioEnabled: typeof nextAudio === 'boolean' ? nextAudio : undefined,
         communitySharePct: nextCommunity,
       });
+      if (typeof res.audioEnabled === 'boolean') setAudioEnabled(res.audioEnabled);
       if (res.split) { setSplit(res.split); setDraftCommunity(String(res.split.communityPct)); }
       if (!res.chainSaved) {
         setError(t('settings.ads.chainNotSaved'));
@@ -193,6 +205,14 @@ function AdsSection() {
     const ok = await save(adsEnabled, split ? split.communityPct : undefined, next);
     if (ok) toast.success(next ? t('settings.ads.rollsOnToast') : t('settings.ads.rollsOffToast'));
     else setRollsEnabled(previous);
+  }
+
+  async function onToggleAudio(next) {
+    const previous = audioEnabled;
+    setAudioEnabled(next);
+    const ok = await save(adsEnabled, split ? split.communityPct : undefined, rollsEnabled, next);
+    if (ok) toast.success(next ? t('settings.ads.audioOnToast') : t('settings.ads.audioOffToast'));
+    else setAudioEnabled(previous);
   }
 
   const parsedDraft = parseInt(draftCommunity, 10);
@@ -235,6 +255,21 @@ function AdsSection() {
             checked={rollsEnabled}
             onChange={onToggleRolls}
             ariaLabel={t('settings.ads.rolls')}
+          />
+        </div>
+      )}
+      {adsEnabled && (
+        <div className="settings-modal-row">
+          <div className="settings-row-text">
+            <span className="settings-row-title">{t('settings.ads.audio')}</span>
+            <span className="settings-row-desc">
+              {t('settings.ads.audioDesc')}
+            </span>
+          </div>
+          <Switch
+            checked={audioEnabled}
+            onChange={onToggleAudio}
+            ariaLabel={t('settings.ads.audio')}
           />
         </div>
       )}
@@ -484,6 +519,218 @@ function PostingAuthoritySection() {
   );
 }
 
+/**
+ * Where sats tipped over Lightning go. Default: the creator's v4v.app address,
+ * which pays out on Hive. Or a Lightning address of their own, kept in their
+ * posting_json_metadata (`3speak.lightning.address`), so any app can read it and
+ * our API sends tippers' invoices there (server/lightning-tip.cjs).
+ */
+function LightningReceiveSection() {
+  const { t } = useTranslation();
+  const user = useAppStore((s) => s.user);
+  // null = loading, '' = v4v.app, else the saved address; 'unavailable' = no Hive account
+  const [saved, setSaved] = useState(null);
+  const [draft, setDraft] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!user) return undefined;
+    let alive = true;
+    setSaved(null);
+    readOwnLightningAddress(user)
+      .then((a) => { if (alive) { setSaved(a); setDraft(a); } })
+      .catch(() => { if (alive) setSaved('unavailable'); });
+    return () => { alive = false; };
+  }, [user]);
+
+  if (!user || saved === 'unavailable') return null;
+
+  const next = draft.trim().toLowerCase();
+  const changed = saved !== null && next !== saved;
+
+  async function save(address) {
+    if (busy) return;
+    setError(null);
+    if (address && !LIGHTNING_ADDRESS_RE.test(address)) {
+      setError(t('settings.lightning.badAddress'));
+      return;
+    }
+    setBusy(true);
+    try {
+      if (address) {
+        try { await checkLightningAddress(address); } catch {
+          setError(t('settings.lightning.unreachable'));
+          return;
+        }
+      }
+      await saveOwnLightningAddress(user, address);
+      setSaved(address);
+      setDraft(address);
+      toast.success(address ? t('settings.lightning.savedOwn') : t('settings.lightning.savedV4v'));
+    } catch (err) {
+      setError(t('settings.lightning.saveFailed'));
+      console.warn('[settings] lightning address not saved:', err?.message || err);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="settings-section">
+      <h4 className="settings-section-title">{t('settings.lightning.title')}</h4>
+      <div className="settings-modal-row settings-lightning">
+        <div className="settings-row-text">
+          <span className="settings-row-title">
+            {saved === null ? t('settings.lightning.checking')
+              : saved ? t('settings.lightning.toOwn', { address: saved })
+              : t('settings.lightning.toV4v', { account: user })}
+          </span>
+          <span className="settings-row-desc">{saved ? t('settings.lightning.ownDesc') : t('settings.lightning.v4vDesc')}</span>
+          <form
+            className="settings-lightning-form"
+            onSubmit={(e) => { e.preventDefault(); if (changed) save(next); }}
+          >
+            <input
+              type="text"
+              inputMode="email"
+              autoComplete="off"
+              autoCapitalize="none"
+              spellCheck={false}
+              aria-label={t('settings.lightning.inputLabel')}
+              placeholder={t('settings.lightning.placeholder')}
+              value={draft}
+              onChange={(e) => { setDraft(e.target.value); setError(null); }}
+              disabled={busy || saved === null}
+            />
+            <button type="submit" className="settings-ads-save" disabled={busy || !changed}>
+              {busy ? t('common.actions.saving') : t('common.actions.save')}
+            </button>
+          </form>
+          {saved && (
+            <button type="button" className="settings-lightning-reset" onClick={() => save('')} disabled={busy}>
+              {t('settings.lightning.useV4v')}
+            </button>
+          )}
+          <span className="settings-row-desc">{t('settings.lightning.supportersNote')}</span>
+          <span className="settings-row-desc">{t('settings.lightning.publicNote')}</span>
+        </div>
+      </div>
+      {error && <p className="settings-ads-status error">{error}</p>}
+    </div>
+  );
+}
+
+/**
+ * "Other ways to support you": the creator's pages on payment sites, shown in
+ * their tip window (lib/supportLinks.js). Every add or remove is saved to the
+ * Hive account right away.
+ */
+function SupportLinksSection() {
+  const { t } = useTranslation();
+  const user = useAppStore((s) => s.user);
+  // null = loading; 'unavailable' = no Hive account
+  const [links, setLinks] = useState(null);
+  const [draft, setDraft] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!user) return undefined;
+    let alive = true;
+    setLinks(null);
+    readSupportLinks(user)
+      .then((l) => { if (alive) setLinks(l); })
+      .catch(() => { if (alive) setLinks('unavailable'); });
+    return () => { alive = false; };
+  }, [user]);
+
+  if (!user || links === 'unavailable') return null;
+
+  async function save(nextLinks) {
+    setBusy(true);
+    setError(null);
+    try {
+      await saveSupportLinks(user, nextLinks.map((l) => l.url));
+      setLinks(nextLinks);
+      toast.success(t('settings.supportLinks.saved'));
+      return true;
+    } catch (err) {
+      setError(t('settings.lightning.saveFailed'));
+      console.warn('[settings] support links not saved:', err?.message || err);
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function add() {
+    if (busy || !Array.isArray(links)) return;
+    const parsed = parseSupportLink(draft);
+    if (!parsed) { setError(t('settings.supportLinks.badLink')); return; }
+    if (links.some((l) => l.url === parsed.url)) { setError(t('settings.supportLinks.duplicate')); return; }
+    if (links.length >= SUPPORT_LINK_MAX) { setError(t('settings.supportLinks.max', { max: SUPPORT_LINK_MAX })); return; }
+    if (await save([...links, parsed])) setDraft('');
+  }
+
+  const loading = links === null;
+  return (
+    <div className="settings-section">
+      <h4 className="settings-section-title">{t('settings.supportLinks.title')}</h4>
+      <div className="settings-modal-row settings-lightning">
+        <div className="settings-row-text">
+          <span className="settings-row-desc">
+            {t('settings.supportLinks.desc', { sites: SUPPORT_SITE_NAMES.join(', ') })}
+          </span>
+          {Array.isArray(links) && links.length > 0 && (
+            <ul className="settings-support-links">
+              {links.map((l) => {
+                const Icon = SUPPORT_SITE_ICONS[l.site.id];
+                return (
+                  <li key={l.url}>
+                    {Icon && <Icon />}
+                    <a href={l.url} target="_blank" rel="noopener noreferrer">{l.url.replace(/^https:\/\//, '')}</a>
+                    <button
+                      type="button"
+                      onClick={() => save(links.filter((x) => x.url !== l.url))}
+                      disabled={busy}
+                      aria-label={t('settings.supportLinks.remove', { site: l.site.label })}
+                      title={t('settings.supportLinks.remove', { site: l.site.label })}
+                    >
+                      <IoClose />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {(loading || links.length < SUPPORT_LINK_MAX) && (
+            <form className="settings-lightning-form" onSubmit={(e) => { e.preventDefault(); add(); }}>
+              <input
+                type="text"
+                inputMode="url"
+                autoComplete="off"
+                autoCapitalize="none"
+                spellCheck={false}
+                aria-label={t('settings.supportLinks.title')}
+                placeholder={t('settings.supportLinks.placeholder')}
+                value={draft}
+                onChange={(e) => { setDraft(e.target.value); setError(null); }}
+                disabled={busy || loading}
+              />
+              <button type="submit" className="settings-ads-save" disabled={busy || loading || !draft.trim()}>
+                {busy ? t('common.actions.saving') : t('settings.supportLinks.add')}
+              </button>
+            </form>
+          )}
+          <span className="settings-row-desc">{t('settings.supportLinks.publicNote')}</span>
+        </div>
+      </div>
+      {error && <p className="settings-ads-status error">{error}</p>}
+    </div>
+  );
+}
+
 function Switch({ checked, onChange, ariaLabel }) {
   return (
     <button
@@ -651,6 +898,9 @@ const TABS = [
   // overflowed the row even on desktop, and the three of them were all answering
   // "what shows up in my feeds" from separate pages.
   { id: 'content', labelKey: 'settings.tabs.content' },
+  // What the Hive account is tied to outside 3Speak: the Lightning address tips
+  // go to, and verified channels on other platforms. Hive accounts only.
+  { id: 'connections', labelKey: 'settings.tabs.connections' },
   // Hive accounts only: every setting behind it is about notifications that come
   // from the chain, so for anyone else it was a page of switches that could not
   // do anything.
@@ -660,6 +910,13 @@ const TABS = [
   // a page otherwise made of one-line switches. Only shown to those who have it.
   { id: 'rewards', labelKey: 'settings.tabs.rewards' },
   { id: 'about', labelKey: 'settings.tabs.about' },
+];
+
+// The two panels behind Connections: where money reaches the creator, and their
+// verified channels elsewhere.
+const CONNECTIONS_TABS = [
+  { id: 'support', labelKey: 'settings.connectionsTabs.support' },
+  { id: 'profiles', labelKey: 'settings.connectionsTabs.profiles' },
 ];
 
 // The three panels behind Content. Kept as data so the sub-tab bar and the
@@ -713,17 +970,20 @@ export default function SettingsModal({ isOpen, onClose }) {
     () => TABS.filter((tb) => {
       if (tb.id === 'rewards') return rewardsVisible;
       if (tb.id === 'notifications') return notificationsVisible;
+      if (tb.id === 'connections') return notificationsVisible;
       return true;
     }),
     [rewardsVisible, notificationsVisible],
   );
   const [tab, setTab] = useState('general');
   const [contentTab, setContentTab] = useState('feed');
+  const [connectionsTab, setConnectionsTab] = useState('support');
   // Losing the group (or logging out) while standing on that page would leave the modal
   // with no tab selected and nothing rendered.
   useEffect(() => {
     if (tab === 'rewards' && !rewardsVisible) setTab('general');
     if (tab === 'notifications' && !notificationsVisible) setTab('general');
+    if (tab === 'connections' && !notificationsVisible) setTab('general');
   }, [tab, rewardsVisible, notificationsVisible]);
 
   // Lock background page scroll while the modal is open (restore on close).
@@ -864,6 +1124,27 @@ export default function SettingsModal({ isOpen, onClose }) {
           </div>
         )}
         {tab === 'general' && <PostingAuthoritySection />}
+        {tab === 'connections' && (
+          <div className="settings-subtabs" role="tablist" aria-label={t('settings.connectionsTabs.aria')}>
+            {CONNECTIONS_TABS.map((ct) => (
+              <button
+                key={ct.id}
+                type="button"
+                role="tab"
+                aria-selected={connectionsTab === ct.id}
+                className={`settings-subtab${connectionsTab === ct.id ? ' is-active' : ''}`}
+                onClick={() => setConnectionsTab(ct.id)}
+              >
+                {t(ct.labelKey)}
+              </button>
+            ))}
+          </div>
+        )}
+        {tab === 'connections' && connectionsTab === 'support' && <LightningReceiveSection />}
+        {tab === 'connections' && connectionsTab === 'support' && <SupportLinksSection />}
+        {tab === 'connections' && connectionsTab === 'profiles' && settingsUser && (
+          <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />
+        )}
 
         {tab === 'content' && (
           <div className="settings-subtabs" role="tablist" aria-label={t('settings.contentTabs.aria')}>

@@ -12,6 +12,7 @@
     "heading": "Trinkgeld an @{{recipient}} senden",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Weitere Wege",
     "amountLabel": "Betrag: ",
     "amountPlaceholder": "z. B. 1.000",
     "currencyLabel": "Währung:",
@@ -40,7 +41,10 @@
         "noAccount": "Dieses Hive-Konto gibt es nicht",
         "invoiceFailed": "Die Lightning-Rechnung konnte nicht erstellt werden. Bitte versuche es erneut.",
         "copyFailed": "Die Rechnung konnte nicht kopiert werden"
-      }
+      },
+      "noteOwn": "Geht direkt in die eigene Lightning-Wallet von @{{recipient}} ({{address}}). Jede Lightning-Wallet funktioniert, kein Hive-Konto nötig.",
+      "waitingUnverified": "Deine Wallet zeigt an, wann die Zahlung durch ist.",
+      "cashApp": "Keine Lightning-Wallet? Apps wie Cash App und Strike können es von deinem normalen Guthaben bezahlen."
     },
     "wallet": {
       "usernameLabel": "Dein Hive-Benutzername:",
@@ -54,6 +58,22 @@
         "self": "Du kannst dir selbst kein Trinkgeld geben",
         "walletFailed": "Die Wallet hat das Trinkgeld nicht gesendet: {{message}}"
       }
+    },
+    "otherWays": "Weitere Wege, @{{recipient}} zu unterstützen",
+    "otherWaysNote": "Jeder Button öffnet die Seite des Creators auf dieser Website in einem neuen Tab. Zahlungen dort laufen nicht über 3Speak.",
+    "monthly": {
+      "label": "Wie oft",
+      "once": "Einmal",
+      "until": "Jeden Monat, bis {{date}}",
+      "note": "Hive sendet es alle 30 Tage von selbst, das erste Mal sofort. Du kannst es jederzeit beenden.",
+      "replaces": "Das ersetzt die monatliche Unterstützung, die du @{{recipient}} schon sendest.",
+      "replacesOther": "Das ersetzt die wiederkehrende Zahlung, die du @{{recipient}} schon sendest.",
+      "current": "Du sendest @{{recipient}} jeden Monat {{amount}}, bis {{date}}.",
+      "currentEvery": "Du sendest @{{recipient}} alle {{interval}} {{amount}}, bis {{date}}.",
+      "stop": "Beenden",
+      "stopped": "Monatliche Unterstützung beendet",
+      "stopFailed": "Konnte nicht beendet werden: {{message}}",
+      "successNote": "Die nächste Zahlung geht in 30 Tagen von selbst raus."
     }
   },
   "cardMenu": {

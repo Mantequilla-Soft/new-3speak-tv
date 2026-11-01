@@ -39,6 +39,9 @@
     "volume": "Volumen",
     "queue": "Cola",
     "closePlayer": "Cerrar reproductor",
+    "pipOpen": "Abrir reproductor flotante",
+    "pipClose": "Cerrar reproductor flotante",
+    "pipActive": "Sonando en la ventana flotante",
     "curated": "Seleccionado",
     "noCues": "Sin marcas.",
     "clearQueue": "Vaciar cola",
@@ -166,6 +169,11 @@
     "failed": "Error",
     "unknown": "desconocido",
     "unknownError": "error desconocido",
+    "errors": {
+      "unreadable": "No se pudo leer el archivo de audio. Vuelve a añadirlo y luego publica.",
+      "rateLimited": "Demasiados intentos de subida. Espera unos minutos y vuelve a intentarlo.",
+      "server": "El servidor de audio no pudo guardar este archivo. Inténtalo de nuevo en un momento."
+    },
     "recorded": "Grabado",
     "uploaded": "Subido",
     "steps": {
@@ -287,7 +295,9 @@
       "postRewardsTitle": "Recompensas de publicación (una vez)",
       "postRewardsDesc": "Recibes el pago normal de autor de Hive, que se paga una sola vez, unos 7 días después de publicar.",
       "pplTitle": "Pago por escucha (de por vida)",
-      "pplDesc": "Todas las recompensas de la publicación de audio van a @{{account}}. En lugar de un único pago, un programa de 3Speak te paga por cada escucha durante toda la vida de la pista."
+      "pplDesc": "Todas las recompensas de la publicación de audio van a @{{account}}. En lugar de un único pago, un programa de 3Speak te paga por cada escucha durante toda la vida de la pista.",
+      "adsTitle": "Anuncios en este audio",
+      "adsHint": "Un breve mensaje hablado de un patrocinador puede sonar durante este audio, y recibes una parte. Empieza con la configuración de tu cuenta; cámbialo aquí solo para esta subida."
     },
     "reward": {
       "distribution": "Distribución de recompensas",

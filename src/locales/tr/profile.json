@@ -37,6 +37,8 @@
     "videos_other": "<b>{{value}}</b> video",
     "shorts_one": "<b>{{value}}</b> Shorts",
     "shorts_other": "<b>{{value}}</b> Shorts",
+    "audio_one": "<b>{{value}}</b> ses",
+    "audio_other": "<b>{{value}}</b> ses",
     "views_one": "<b>{{value}}</b> görüntülenme",
     "views_other": "<b>{{value}}</b> görüntülenme",
     "followersTitle_one": "{{num}} takipçi",
@@ -45,6 +47,8 @@
     "videosTitle_other": "{{num}} video",
     "shortsTitle_one": "{{num}} Shorts",
     "shortsTitle_other": "{{num}} Shorts",
+    "audioTitle_one": "{{num}} ses",
+    "audioTitle_other": "{{num}} ses",
     "viewsTitle_one": "{{num}} görüntülenme",
     "viewsTitle_other": "{{num}} görüntülenme",
     "onHiveSince": "{{year}} yılından beri Hive'da"
@@ -402,5 +406,8 @@
         "body": "Düzeni kaydet onu yayınlar. Geri al ve Yinele değişikliklerin arasında gezer (Ctrl+Z de çalışır), İptal onları atar, Varsayılana sıfırla standart sayfayı geri getirir. Başlığın yanındaki ? bu turu yeniden açar."
       }
     }
+  },
+  "audioTab": {
+    "files": "Ses dosyaları"
   }
 }

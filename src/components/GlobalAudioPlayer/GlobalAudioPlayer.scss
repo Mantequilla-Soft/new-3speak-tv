@@ -69,6 +69,24 @@
   }
 }
 
+.audio-np-pip-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  border-radius: 4px;
+  &:hover,
+  &.active { color: var(--accent-primary); }
+}
+
+// The pop-out is a desktop thing: phones and the Player tab have no room for a second window.
+@media (max-width: 768px) {
+  .audio-np-pip-btn { display: none; }
+}
+.audio-now-playing.audio-np-docked .audio-np-pip-btn { display: none; }
+
 .audio-np-close-btn {
   background: none;
   border: none;
@@ -118,6 +136,67 @@
 .audio-now-playing .audio-np-expanded-area {
   max-height: 66vh;
 }
+
+// Slides open and shut: a grid row going from 0fr to 1fr animates to the
+// area's own height. 260ms = EXPAND_MS in GlobalAudioPlayer.jsx.
+.audio-np-expand-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  opacity: 0;
+  transition: grid-template-rows 260ms ease, opacity 260ms ease;
+
+  &.open { grid-template-rows: 1fr; opacity: 1; }
+
+  .audio-np-expanded-area { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .audio-np-expand-wrap { transition: none; }
+}
+
+// The opened desktop card: the controls get the first row, and the cover,
+// title and author the whole second row, so the title is readable.
+@media (min-width: 769px) {
+  .audio-now-playing.audio-np-expanded:not(.audio-np-docked) .audio-np-content {
+    flex-wrap: wrap;
+    row-gap: 0;
+
+    > * { order: 1; }
+    .audio-np-controls { margin-right: auto; }
+
+    // Line break between the two rows.
+    &::after {
+      content: '';
+      order: 2;
+      flex-basis: 100%;
+      height: 10px;
+    }
+
+    .audio-np-art,
+    .audio-np-info { order: 3; }
+
+    // The time is in the actions line below.
+    .audio-np-subline-time { display: none; }
+  }
+
+  // Speed, sleep, effects... on the left, votes, tip, share and time on the
+  // right. The line takes over as the tools' size container: it is as wide as
+  // the tools row was on its own.
+  .audio-now-playing.audio-np-expanded:not(.audio-np-docked) .audio-np-actions {
+    container: audio-np-tools / inline-size;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+
+    .audio-np-tools { container: none; order: 1; }
+    .audio-np-mobile-extras { order: 2; margin-left: auto; }
+  }
+}
+
+// Everywhere else the two rows stay as they were.
+.audio-np-actions { display: contents; }
 
 .audio-now-playing .audio-np-body {
   max-height: none;
@@ -594,6 +673,7 @@
   overflow: visible;
 
   .audio-np-content,
+  .audio-np-expand-wrap,
   .audio-np-expanded-area { display: contents; }
 
   .audio-np-desktop-meta,
@@ -666,6 +746,7 @@
 
   .audio-np-queue-inline { order: 7; }
   .audio-np-chapters { order: 8; }
+  .audio-np-ad-card { order: 9; }
   .audio-np-tags { order: 9; justify-content: center; }
   .audio-np-body { order: 10; max-height: none; }
   .audio-transcript-panel { order: 11; }
@@ -709,4 +790,136 @@
   font-size: 11px;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
+}
+
+// The popped-out player (AudioPip.jsx): its own window with the page's styles
+// copied in, holding the whole player in the Player-tab layout (.audio-np-docked).
+.audio-pip-body {
+  margin: 0;
+  background: var(--bg-primary, var(--bg-elevated));
+  color: var(--text-primary);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.audio-pip-root { padding: 0 16px; }
+
+.audio-now-playing.audio-np-docked.audio-np-in-pip {
+  // Room for the window's own "back to the page" button in the corner.
+  padding-top: 40px;
+
+  .audio-np-pip-btn {
+    display: inline-flex;
+    position: absolute;
+    top: 8px;
+    right: 0;
+  }
+}
+
+// A spoken ticker spot: its strip sits in the card, under the progress bar,
+// for as long as the spot plays (hooks/useAudioAd.js).
+.audio-now-playing .audio-np-ad {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  // The ticker's own band, so the button reads as part of the strip.
+  background: rgba(0, 0, 0, 0.72);
+
+  .watch-ticker {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    height: 30px;
+    background: transparent;
+  }
+
+  // Visible, not loud: an outlined pill in the strip's own white.
+  .audio-np-ad-more {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 8px 0 4px;
+    padding: 3px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 999px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #fff;
+    }
+  }
+}
+
+// After a spoken spot: its link, kept above the description for the rest of the
+// track. A flat row in the player's own colours, the button the strip's pill.
+.audio-np-ad-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  font-size: 13px;
+  color: var(--text-secondary);
+
+  .audio-np-ad-card-label {
+    flex: none;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--text-primary);
+    color: var(--bg-elevated);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .audio-np-ad-card-avatar {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+  }
+
+  .audio-np-ad-card-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    strong { color: var(--text-primary); flex: none; }
+    span { overflow: hidden; text-overflow: ellipsis; }
+  }
+
+  .audio-np-ad-more {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border: 1px solid var(--accent-primary);
+    border-radius: 999px;
+    color: var(--accent-primary);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--accent-primary);
+      color: #fff;
+    }
+  }
 }

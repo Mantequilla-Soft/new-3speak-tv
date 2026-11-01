@@ -7,7 +7,8 @@ import './Success.scss';
 
 
 
-const Success = ({ amount, currency, onClose }) => {
+// `monthly`: the tip was the first of a monthly support (lib/recurringTip.js).
+const Success = ({ amount, currency, monthly = false, onClose }) => {
   const { t } = useTranslation();
   useEffect(() => {
     const duration = 3000;
@@ -47,6 +48,7 @@ const Success = ({ amount, currency, onClose }) => {
         <p className="message">
           {t('engagement.tip.successMessage', { amount, currency })}
         </p>
+        {monthly && <p className="message">{t('engagement.tip.monthly.successNote')}</p>}
         <button 
           onClick={onClose}
           className="button"

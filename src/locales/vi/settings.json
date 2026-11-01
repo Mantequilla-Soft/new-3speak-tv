@@ -15,6 +15,10 @@
     "offToast": "Đã tắt quảng cáo cho video của bạn",
     "rollsOnToast": "Đã bật quảng cáo dạng video cho video của bạn",
     "rollsOffToast": "Giờ video của bạn chỉ có banner và ticker",
+    "audio": "Quảng cáo trong âm thanh của bạn",
+    "audioDesc": "Một thông điệp ngắn được đọc từ nhà tài trợ có thể phát trong âm thanh của bạn, kèm một liên kết người nghe có thể mở. Bạn nhận một phần doanh thu, như với quảng cáo video. Bạn có thể đổi cài đặt này cho từng lượt tải lên trong trình tải âm thanh.",
+    "audioOnToast": "Đã bật quảng cáo trong âm thanh của bạn",
+    "audioOffToast": "Đã tắt quảng cáo trong âm thanh của bạn",
     "splitSaved": "Đã lưu tỷ lệ chia doanh thu",
     "title": "Quảng cáo trên video của bạn",
     "allow": "Cho phép quảng cáo",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "Chung",
     "content": "Nội dung",
+    "connections": "Kết nối",
     "rewards": "Quảng cáo & phần thưởng",
     "about": "Giới thiệu / Phiên bản"
   },
   "contentTabs": {
     "feed": "Bảng tin",
     "aria": "Cài đặt nội dung"
+  },
+  "connectionsTabs": {
+    "support": "Ủng hộ",
+    "profiles": "Hồ sơ đã liên kết",
+    "aria": "Cài đặt kết nối"
   },
   "butrauthUnlocked": "Đã mở khóa Butter Auth",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "Yêu cầu xóa",
     "requestData": "Yêu cầu dữ liệu của tôi",
     "foot": "Chúng tôi phản hồi trong vòng một tháng. Bạn cũng có thể gửi email trực tiếp tới <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Tiền tip Lightning",
+    "checking": "Đang kiểm tra tiền tip của bạn đi đâu…",
+    "toV4v": "Tiền tip gửi tới {{account}}@v4v.app",
+    "toOwn": "Tiền tip gửi tới {{address}}",
+    "v4vDesc": "Mặc định, không cần thiết lập gì: tiền tip về Hive dưới dạng HIVE. Tip nhỏ hơn phí chuyển đổi của v4v.app (khoảng 60 sats) được giữ dưới dạng sats trong tài khoản v4v.app của bạn. Nhập địa chỉ Lightning bên dưới để nhận chúng vào ví của chính bạn.",
+    "ownDesc": "Tiền tip đi thẳng vào ví Lightning của bạn, không qua v4v.app và phí chuyển đổi của nó. Được lưu trong hồ sơ Hive của bạn.",
+    "inputLabel": "Địa chỉ Lightning của bạn",
+    "placeholder": "ban@vi.com",
+    "useV4v": "Dùng lại v4v.app",
+    "savedOwn": "Tiền tip Lightning giờ gửi tới địa chỉ của bạn",
+    "savedV4v": "Tiền tip Lightning lại đi qua v4v.app",
+    "badAddress": "Đó không phải địa chỉ Lightning. Nó có dạng ten@vi.com.",
+    "unreachable": "Địa chỉ này không phản hồi như một địa chỉ Lightning. Hãy kiểm tra rồi thử lại.",
+    "saveFailed": "Không lưu được vào hồ sơ Hive của bạn.",
+    "supportersNote": "Tiền tip tới địa chỉ riêng của bạn không bao giờ đi qua Hive, nên chúng không hiện trong Người ủng hộ.",
+    "publicNote": "Địa chỉ Lightning của bạn được lưu trong tài khoản Hive của bạn, nơi ai cũng có thể xem."
+  },
+  "supportLinks": {
+    "title": "Các cách khác để ủng hộ bạn",
+    "desc": "Trang của bạn trên {{sites}}. Người xem sẽ thấy các liên kết này trong cửa sổ tip của bạn.",
+    "placeholder": "https://ko-fi.com/tencuaban",
+    "add": "Thêm",
+    "remove": "Xóa liên kết {{site}}",
+    "badLink": "Dán liên kết đầy đủ đến trang của bạn trên một trong các trang này.",
+    "duplicate": "Liên kết này đã có trong danh sách.",
+    "max": "Bạn có thể thêm tối đa {{max}} liên kết.",
+    "saved": "Đã lưu liên kết ủng hộ",
+    "publicNote": "Các liên kết này được lưu trong tài khoản Hive của bạn, nơi ai cũng có thể xem."
   }
 }

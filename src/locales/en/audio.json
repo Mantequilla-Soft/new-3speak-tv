@@ -37,6 +37,9 @@
     "volume": "Volume",
     "queue": "Queue",
     "closePlayer": "Close player",
+    "pipOpen": "Pop out player",
+    "pipClose": "Close pop-out player",
+    "pipActive": "Playing in the pop-out window",
     "curated": "Curated",
     "noCues": "No cues.",
     "clearQueue": "Clear queue",
@@ -163,6 +166,11 @@
     "failed": "Failed",
     "unknown": "unknown",
     "unknownError": "unknown error",
+    "errors": {
+      "unreadable": "The audio file could not be read. Please add it again, then publish.",
+      "rateLimited": "Too many upload attempts. Please wait a few minutes, then try again.",
+      "server": "The audio server could not save this file. Please try again in a moment."
+    },
     "recorded": "Recorded",
     "uploaded": "Uploaded",
     "steps": {
@@ -279,7 +287,9 @@
       "postRewardsTitle": "Post rewards (one-time)",
       "postRewardsDesc": "You receive the normal Hive author payout — paid out once, ~7 days after publishing.",
       "pplTitle": "Pay-per-listen (lifetime)",
-      "pplDesc": "All audio-post rewards go to @{{account}}. Instead of a single payout, a 3Speak program pays you per listen for the lifetime of the track."
+      "pplDesc": "All audio-post rewards go to @{{account}}. Instead of a single payout, a 3Speak program pays you per listen for the lifetime of the track.",
+      "adsTitle": "Ads on this audio",
+      "adsHint": "A short spoken sponsor message can play during this audio, and you get a share. Starts at your account setting; change it here for this upload only."
     },
     "reward": {
       "distribution": "Rewards distribution",

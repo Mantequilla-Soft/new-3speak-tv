@@ -15,6 +15,10 @@
     "offToast": "Les pubs sont désactivées sur vos vidéos",
     "rollsOnToast": "Les spots vidéo sont activés sur vos vidéos",
     "rollsOffToast": "Seulement des bannières et des bandeaux sur vos vidéos désormais",
+    "audio": "Publicités dans vos audios",
+    "audioDesc": "Un court message parlé d'un sponsor peut être diffusé pendant votre audio, avec un lien que les auditeurs peuvent ouvrir. Vous recevez une part, comme pour les publicités vidéo. Vous pouvez modifier ce choix pour chaque envoi dans l'outil d'envoi audio.",
+    "audioOnToast": "Les publicités sont activées pour vos audios",
+    "audioOffToast": "Les publicités sont désactivées pour vos audios",
     "splitSaved": "Partage des revenus enregistré",
     "title": "Pubs sur vos vidéos",
     "allow": "Autoriser les pubs",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "Général",
     "content": "Contenu",
+    "connections": "Connexions",
     "rewards": "Pubs et récompenses",
     "about": "À propos / Version"
   },
   "contentTabs": {
     "feed": "Fil",
     "aria": "Paramètres du contenu"
+  },
+  "connectionsTabs": {
+    "support": "Soutien",
+    "profiles": "Profils liés",
+    "aria": "Paramètres des connexions"
   },
   "butrauthUnlocked": "Butter Auth débloqué",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "Demander la suppression",
     "requestData": "Demander mes données",
     "foot": "Nous répondons sous un mois. Vous pouvez aussi écrire directement à <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Pourboires Lightning",
+    "checking": "Vérification de la destination de tes pourboires…",
+    "toV4v": "Les pourboires vont à {{account}}@v4v.app",
+    "toOwn": "Les pourboires vont à {{address}}",
+    "v4vDesc": "Le réglage par défaut, rien à configurer : les pourboires arrivent sur Hive en HIVE. Ceux plus petits que les frais de conversion de v4v.app (environ 60 sats) restent en sats sur ton compte v4v.app. Indique une adresse Lightning ci-dessous pour les recevoir plutôt dans ton propre portefeuille.",
+    "ownDesc": "Les pourboires vont directement dans ton propre portefeuille Lightning, sans v4v.app ni ses frais de conversion. Enregistré dans ton profil Hive.",
+    "inputLabel": "Ton adresse Lightning",
+    "placeholder": "toi@portefeuille.com",
+    "useV4v": "Revenir à v4v.app",
+    "savedOwn": "Les pourboires Lightning vont maintenant à ta propre adresse",
+    "savedV4v": "Les pourboires Lightning passent de nouveau par v4v.app",
+    "badAddress": "Ce n'est pas une adresse Lightning. Elle a la forme nom@portefeuille.com.",
+    "unreachable": "Cette adresse n'a pas répondu comme une adresse Lightning. Vérifie-la et réessaie.",
+    "saveFailed": "Impossible de l'enregistrer dans ton profil Hive.",
+    "supportersNote": "Les pourboires vers ta propre adresse ne passent jamais par Hive, ils n'apparaissent donc pas dans Soutiens.",
+    "publicNote": "Ton adresse Lightning est enregistrée sur ton compte Hive, où tout le monde peut la voir."
+  },
+  "supportLinks": {
+    "title": "Autres façons de te soutenir",
+    "desc": "Ta page sur {{sites}}. Les spectateurs trouvent ces liens dans ta fenêtre de pourboire.",
+    "placeholder": "https://ko-fi.com/tonnom",
+    "add": "Ajouter",
+    "remove": "Retirer le lien {{site}}",
+    "badLink": "Colle le lien complet vers ta page sur l'un de ces sites.",
+    "duplicate": "Ce lien est déjà dans la liste.",
+    "max": "Tu peux ajouter jusqu'à {{max}} liens.",
+    "saved": "Liens de soutien enregistrés",
+    "publicNote": "Ces liens sont enregistrés sur ton compte Hive, où tout le monde peut les voir."
   }
 }

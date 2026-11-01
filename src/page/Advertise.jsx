@@ -6,7 +6,7 @@ import { FaRocket, FaLayerGroup, FaUsers, FaVideo, FaTv } from 'react-icons/fa';
 import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import { transferWithAioha, getOperationUser } from '../hive-api/aioha';
-import { adsEnabledFor, tickerEnabledFor, ENABLE_BUTRAUTH, adWizardEnabledFor } from '../utils/config';
+import { adsEnabledFor, tickerEnabledFor, adsBetaUserFor, ENABLE_BUTRAUTH, adWizardEnabledFor } from '../utils/config';
 import { createPortal } from 'react-dom';
 import { X as CloseIcon } from 'lucide-react';
 import AdWizardFrame from '../components/ads/AdWizardFrame';
@@ -39,6 +39,10 @@ import {
   saveTickerCreative,
   fetchPricing,
   createCampaign,
+  listenTicker,
+  setCampaignAudio,
+  uploadAudioCreative,
+  checkerUrl,
   fetchCampaigns,
   fetchSlots,
   fetchForecast,
@@ -50,7 +54,7 @@ import {
   slotLabel,
   countryName,
 } from '../lib/advertiseData';
-import { InventoryPanel, RateCard } from '../components/ads/AdMarketPanels';
+import { InventoryPanel, RateCard, FormatTabs } from '../components/ads/AdMarketPanels';
 import {
   SHOW_MARKETS,
   SITE_ONLY_SURFACES,
@@ -64,6 +68,7 @@ import {
   savingAt,
   groupByFormat,
   tickerMinSeconds,
+  formatTabsFor,
 } from '../lib/adMarket';
 import './Advertise.scss';
 
@@ -260,7 +265,10 @@ const isVideoAd = (t) => t === 'video' || t === 'shorts' || t === 'upload';
 
 /* Which product an ad TYPE books. Module-level so the wizard and a product's own
    "Book a spot" agree on it. */
-const AD_TYPE_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 'shorts_roll', ticker: 'video_ticker', upload: 'upload_gate' };
+const AD_TYPE_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 'shorts_roll', ticker: 'video_ticker', audio: 'audio_spot', upload: 'upload_gate' };
+// Types with their own "Your ad" panel instead of the file upload, and nothing for us to
+// make: the ticker (a message and a link) and the audio spot (an audio file and a link).
+const ownAdPanel = (t) => t === 'ticker' || t === 'audio';
 // The other way round, for "Book again": a finished flight knows its format, the page asks for a type.
 const FORMAT_AD_TYPE = Object.fromEntries(Object.entries(AD_TYPE_FORMAT).map(([k, v]) => [v, k]));
 // Types that run a video spot, and so carry the label overlay and the "we make it" offer.
@@ -291,6 +299,7 @@ function adStepMissing(type, creatives, production) {
   const live = (creatives || []).filter((c) => c.status !== 'rejected');
   const has = (...kinds) => live.some((c) => kinds.includes(c.kind || 'video'));
   if (type === 'ticker') return has('text') ? null : 'ads.missing.ticker';
+  if (type === 'audio') return has('audio') ? null : 'ads.missing.audio';
   const briefOk = !!production?.wanted && String(production?.brief || '').trim().length >= 20;
   if (type === 'banner') return has('image', 'video') || briefOk ? null : 'ads.missing.banner';
   return has('video') || briefOk ? null : 'ads.missing.video';
@@ -319,6 +328,7 @@ function AdTypePicker({ value, onChange, pricing }) {
     { id: 'banner', title: t('ads.adType.banner.title'), blurb: t('ads.adType.banner.blurb') },
     { id: 'shorts', title: t('ads.adType.shorts.title'), blurb: t('ads.adType.shorts.blurb') },
     { id: 'ticker', title: t('ads.adType.ticker.title'), blurb: t('ads.adType.ticker.blurb') },
+    { id: 'audio', title: t('ads.adType.audio.title'), blurb: t('ads.adType.audio.blurb') },
     { id: 'upload', title: t('ads.adType.upload.title'), blurb: t('ads.adType.upload.blurb') },
   // Only what the rate card offers right now (a beta format only to its testers).
   ].filter((o) => !pricing?.formats?.length || pricing.formats.some((f) => f.key === AD_TYPE_FORMAT[o.id]));
@@ -353,6 +363,8 @@ function AdTypePicker({ value, onChange, pricing }) {
       <p className="mkt-fine">
         {value === 'ticker'
           ? t('ads.adType.hint.ticker')
+          : value === 'audio'
+            ? t('ads.adType.hint.audio')
           : value === 'upload'
             ? t('ads.adType.hint.upload')
           : value === 'banner'
@@ -514,10 +526,14 @@ function CampaignPanel({
   // length is time on screen.
   const isTicker = !!fmt?.overlayOnly;
   const isBanner = !!fmt?.burnsIn || isTicker;
+  // A video ticker is read aloud in the audio player too only when this is ticked (opt-in).
+  const [audioSpot, setAudioSpot] = useState(false);
   // What this format will actually take. Older checkers send no list, so fall back to
   // the single kind they do send.
   const acceptedKinds = fmt?.creativeKinds?.length ? fmt.creativeKinds : (fmt ? [fmt.creativeKind] : []);
   const takesVideo = acceptedKinds.includes('video');
+  // The audio spot: an uploaded clip whose length is read like a video's.
+  const takesAudio = acceptedKinds.includes('audio');
 
   const slotRow = (p) => slotState?.find((x) => x.percent === p) || null;
   // FULL, not merely occupied. A position now carries several advertisers at once and
@@ -561,8 +577,10 @@ function CampaignPanel({
    * real problem the advertiser has to see and fix, and quietly booking 15s would price
    * a spot that cannot run. lengthOk already refuses it, and the hint says why. */
   const spotCandidates = useMemo(() => (
-    (creatives || []).filter((c) => c.kind !== 'image' && Number(c.durationSeconds) > 0)
-  ), [creatives]);
+    // Only files of the kind this format plays: an audio clip is no video spot's length.
+    (creatives || []).filter((c) => (c.kind || 'video') === (takesAudio ? 'audio' : 'video')
+      && Number(c.durationSeconds) > 0)
+  ), [creatives, takesAudio]);
   /* Exactly one file, or none of this. With two uploaded, "the length of your video" has
      no answer and picking the newest would quietly price against a file the advertiser
      may not have meant. They choose, and the number is theirs to type.
@@ -583,8 +601,8 @@ function CampaignPanel({
    *
    * Keyed on whether a VIDEO was uploaded rather than on the format, so a banner with
    * a still has no length to read and the box stays out of reach, exactly as before. */
-  const autoAvailable = latestSpotSeconds != null && takesVideo;
-  const tooManySpots = spotCandidates.length > 1 && takesVideo;
+  const autoAvailable = latestSpotSeconds != null && (takesVideo || takesAudio);
+  const tooManySpots = spotCandidates.length > 1 && (takesVideo || takesAudio);
   const [autoLength, setAutoLength] = useState(true);
 
   // Video-length targeting, entered in seconds and open-ended at both ends.
@@ -831,6 +849,7 @@ function CampaignPanel({
         minVideoSeconds: Number.isFinite(minVideoNum) && minVideoNum > 0 ? minVideoNum : undefined,
         maxVideoSeconds: Number.isFinite(maxVideoNum) && maxVideoNum > 0 ? maxVideoNum : undefined,
         production: wantProduction ? { requested: true, brief: brief.trim(), tier: prodTier?.key } : undefined,
+        audioSpot: fmt?.key === 'video_ticker' ? audioSpot : undefined,
       });
       // Credit from an earlier flight that under-delivered is spent at booking, so
       // there may be nothing left to send. Telling someone to pay when they do not
@@ -1148,8 +1167,8 @@ function CampaignPanel({
                 title={autoAvailable
                   ? ''
                   : (tooManySpots
-                    ? t('ads.book.tooManySpots')
-                    : t('ads.book.uploadFirst'))}
+                    ? (takesAudio ? t('ads.book.tooManyClips') : t('ads.book.tooManySpots'))
+                    : (takesAudio ? t('ads.book.uploadFirstAudio') : t('ads.book.uploadFirst')))}
               >
                 <input
                   type="checkbox"
@@ -1175,7 +1194,7 @@ function CampaignPanel({
                 <>
                   {t('ads.book.secondsRange', { min: minSpot, max: maxSpot })}{' '}
                   {autoOn
-                    ? t('ads.book.lengthFromVideo')
+                    ? (takesAudio ? t('ads.book.lengthFromAudio') : t('ads.book.lengthFromVideo'))
                     : (isTicker
                       ? (tickerTooShort
                         ? t('ads.book.tickerTooShort', { seconds: tickerNeeds })
@@ -1183,8 +1202,8 @@ function CampaignPanel({
                       : isBanner
                       ? t('ads.book.bannerOnScreen')
                       : (tooManySpots
-                        ? t('ads.book.enterLength')
-                        : t('ads.book.mustFit')))}
+                        ? (takesAudio ? t('ads.book.enterLengthAudio') : t('ads.book.enterLength'))
+                        : (takesAudio ? t('ads.book.mustFitAudio') : t('ads.book.mustFit'))))}
                 </>
               )}
           </span>
@@ -1206,7 +1225,7 @@ function CampaignPanel({
         <fieldset className="mkt-group">
           <legend>{t('ads.inventory.placement')}</legend>
         <div className="mkt-field">
-          <label htmlFor="mkt-slot">{t('ads.book.whenInVideo')}</label>
+          <label htmlFor="mkt-slot">{takesAudio ? t('ads.book.whenInTrack') : t('ads.book.whenInVideo')}</label>
           <select id="mkt-slot" value={chosenSlot} onChange={(e) => setSlotPct(Number(e.target.value))}>
             {slots.map((p) => (
               <option key={p} value={p} disabled={slotTaken(p)}>
@@ -1214,9 +1233,7 @@ function CampaignPanel({
                     before the video, to people who were about to leave. A banner at 0%
                     is not that — it appears with the video, so the caveat does not
                     apply and neither does the wording. */}
-                {p === 0 && !isBanner
-                  ? t('ads.book.beforeNotRecommended')
-                  : slotLabel({ percent: p, banner: isBanner })}
+                {slotLabel({ percent: p, banner: isBanner, audio: takesAudio })}
                 {slotTaken(p)
                   ? t('ads.book.slotFull')
                   : (sharingWith(p) > 0 ? t('ads.book.placesLeft', { left: sharesLeft(p), total: slotRow(p).sharesTotal }) : '')}
@@ -1226,7 +1243,7 @@ function CampaignPanel({
           <span className="mkt-hint">
             {/* A position is sold to one advertiser at a time, across every format —
                 so this says what is actually for sale, not what exists. */}
-            {t('ads.book.slotHint')}
+            {takesAudio ? t('ads.book.slotHintAudio') : t('ads.book.slotHint')}
             {sharingWith(chosenSlot) > 0
               ? ` ${t('ads.book.sharePosition', { count: sharingWith(chosenSlot) })}`
               : ` ${t('ads.book.positionCarries', { count: slotRow(chosenSlot)?.sharesTotal || 3 })}`}
@@ -1241,9 +1258,9 @@ function CampaignPanel({
             underneath. The pre-upload spot runs in the upload flow. */}
         {fmt?.surface === 'watch' ? (
         <fieldset className="mkt-group">
-          <legend>{t('ads.book.videosToRunOn')} <span className="mkt-optional">{t('ads.book.optional')}</span></legend>
+          <legend>{takesAudio ? t('ads.book.tracksToRunOn') : t('ads.book.videosToRunOn')} <span className="mkt-optional">{t('ads.book.optional')}</span></legend>
         <div className="mkt-field">
-          <label htmlFor="mkt-minvid">{t('ads.book.shortestVideo')}</label>
+          <label htmlFor="mkt-minvid">{takesAudio ? t('ads.book.shortestTrack') : t('ads.book.shortestVideo')}</label>
           <input
             id="mkt-minvid" type="number" min="0" step="1" placeholder={t('ads.book.any')}
             value={minVideo} onChange={(e) => setMinVideo(e.target.value)}
@@ -1253,7 +1270,7 @@ function CampaignPanel({
         </div>
 
         <div className="mkt-field">
-          <label htmlFor="mkt-maxvid">{t('ads.book.longestVideo')}</label>
+          <label htmlFor="mkt-maxvid">{takesAudio ? t('ads.book.longestTrack') : t('ads.book.longestVideo')}</label>
           <input
             id="mkt-maxvid" type="number" min="0" step="1" placeholder={t('ads.book.any')}
             value={maxVideo} onChange={(e) => setMaxVideo(e.target.value)}
@@ -1294,6 +1311,18 @@ function CampaignPanel({
             tickerStyle={tickerCreative.tickerStyle === 'hold' ? 'hold' : 'crawl'}
             caption={t('ads.ticker.previewCaption', { seconds: chosenLength })}
           />
+        ) : null}
+        {fmt?.key === 'video_ticker' && tickerCreative ? (
+          <ListenButton reference={reference} message={tickerCreative.message} clickUrl={tickerCreative.clickUrl} />
+        ) : null}
+        {fmt?.key === 'video_ticker' ? (
+          <label className="mkt-check">
+            <input type="checkbox" checked={audioSpot} onChange={(e) => setAudioSpot(e.target.checked)} />
+            <span>
+              <strong>{t('ads.book.audioSpot')}</strong>
+              <span className="mkt-hint">{t('ads.book.audioSpotHint')}</span>
+            </span>
+          </label>
         ) : null}
         <div className="mkt-book-total">
           {total != null ? (
@@ -1384,7 +1413,7 @@ function CampaignPanel({
               </div>
               <div className="mkt-flight-body">
                 <FlightFacts c={c} />
-                <FlightCreative c={c} account={account} productName={productName} />
+                <FlightCreative c={c} account={account} productName={productName} reference={reference} onChanged={refresh} />
               </div>
 
               {c.production && (
@@ -1486,6 +1515,7 @@ function CampaignPanel({
                 const canImage = kinds.includes('image');
                 const canVideo = kinds.includes('video');
                 const wantsText = kinds.includes('text');
+                const wantsAudio = kinds.includes('audio');
                 // Only when the still is the ONLY thing that runs. A banner flight
                 // takes either, and calling that "image" is what hid a finished
                 // video banner from its own picker.
@@ -1498,6 +1528,8 @@ function CampaignPanel({
                       <p className="mkt-hint">
                         {wantsText
                           ? t('ads.attach.needsTicker')
+                          : wantsAudio
+                          ? t('ads.attach.needsAudio')
                           : canImage && canVideo
                           ? t('ads.attach.needsBannerEither', {
                             format: c.formatLabel || t('ads.attach.banner'),
@@ -1518,6 +1550,8 @@ function CampaignPanel({
                   <label className="mkt-hint" htmlFor={`attach-${c.id}`}>
                     {wantsText
                       ? t('ads.attach.useTicker')
+                      : wantsAudio
+                      ? t('ads.attach.useAudio')
                       : canImage && canVideo
                       ? t('ads.attach.useBannerOrVideo')
                       : wantsImage ? t('ads.attach.useBanner') : t('ads.attach.useVideo')}
@@ -1536,7 +1570,9 @@ function CampaignPanel({
                             ? `${t('ads.attach.bannerOption')}${cr.imageWidth ? ` · ${cr.imageWidth}×${cr.imageHeight}` : ''}`
                             : cr.kind === 'text'
                               ? `${t('ads.attach.tickerOption')} · ${cr.message.length > 48 ? `${cr.message.slice(0, 47)}…` : cr.message}`
-                              : t('ads.attach.secondsAd', { seconds: cr.durationSeconds })}
+                              : cr.kind === 'audio'
+                                ? t('ads.attach.audioOption', { seconds: Math.ceil(cr.durationSeconds || 0) })
+                                : t('ads.attach.secondsAd', { seconds: cr.durationSeconds })}
                         </option>
                       ))}
                     </select>
@@ -1909,6 +1945,7 @@ function FlightFacts({ c }) {
         position: c.slotPosition,
         // The ticker interrupts nothing either, so its 0% is the beginning, as a banner's is.
         banner: c.format === 'video_banner' || c.format === 'video_ticker',
+        audio: c.format === 'audio_spot',
       }) : null,
       seconds ? t('ads.flight.seconds', { seconds }) : null,
     ].filter(Boolean).join(' · ')] : null,
@@ -1933,9 +1970,22 @@ function FlightFacts({ c }) {
  * a booking carried used to be something the advertiser had to remember. A still is
  * cheap and shown outright; a spot is an embedded player, so it loads only when asked
  * for, or a history of ten flights would be ten players. */
-function FlightCreative({ c, account, productName }) {
+function FlightCreative({ c, account, productName, reference, onChanged }) {
   const { t } = useTranslation();
   const cr = c.creative;
+  const [audioBusy, setAudioBusy] = useState(false);
+  // A finished flight's switch changes nothing, so it is only offered while it can run.
+  const audioSwitchable = c.format === 'video_ticker' && c.audioSpot !== null
+    && !['complete', 'cancelled'].includes(c.status);
+  async function onAudio(on) {
+    setAudioBusy(true);
+    try {
+      await setCampaignAudio({ reference, id: c.id, audioSpot: on });
+      onChanged?.();
+    } catch (err) {
+      toast.error(err.message || t('ads.flight.audioFailed'));
+    } finally { setAudioBusy(false); }
+  }
   // A checker from before the campaign list carried the whole creative sends no kind.
   if (!cr || !cr.kind) return null;
   const seconds = c.spotSeconds || cr.minSeconds || 10;
@@ -1947,7 +1997,9 @@ function FlightCreative({ c, account, productName }) {
             ? t('ads.flight.runsBanner')
             : cr.kind === 'text'
               ? t('ads.flight.runsTicker')
-              : t('ads.flight.runsVideo', { seconds: cr.durationSeconds || seconds })}
+              : cr.kind === 'audio'
+                ? t('ads.flight.runsAudio', { seconds: Math.ceil(cr.durationSeconds || 0) })
+                : t('ads.flight.runsVideo', { seconds: cr.durationSeconds || seconds })}
         </span>
         <CreativeStatus c={cr} />
       </div>
@@ -1977,6 +2029,28 @@ function FlightCreative({ c, account, productName }) {
               <a href={cr.clickUrl} target="_blank" rel="noopener noreferrer">{cr.clickUrl.replace(/^https?:\/\//, '')}</a>
             </span>
           ) : null}
+          {reference && c.audioSpot ? (
+            <ListenButton reference={reference} message={cr.message} clickUrl={cr.clickUrl} />
+          ) : null}
+          {audioSwitchable ? (
+            <label className="mkt-check">
+              <input type="checkbox" checked={!!c.audioSpot} disabled={audioBusy} onChange={(e) => onAudio(e.target.checked)} />
+              <span>
+                <strong>{t('ads.book.audioSpot')}</strong>
+                <span className="mkt-hint">{t('ads.book.audioSpotHint')}</span>
+              </span>
+            </label>
+          ) : null}
+        </>
+      ) : cr.kind === 'audio' && cr.audioPath ? (
+        <>
+          <audio className="mkt-flight-audio" controls preload="none" src={checkerUrl(cr.audioPath)} />
+          {cr.clickUrl ? (
+            <span className="mkt-creative-meta">
+              {t('ads.flight.linksTo')}{' '}
+              <a href={cr.clickUrl} target="_blank" rel="noopener noreferrer">{cr.clickUrl.replace(/^https?:\/\//, '')}</a>
+            </span>
+          ) : null}
         </>
       ) : cr.previewUrl && cr.encoded ? (
         // The player itself. Lazy, so a long history only loads the ones scrolled to.
@@ -1992,6 +2066,146 @@ function FlightCreative({ c, account, productName }) {
       ) : cr.kind === 'video' ? (
         <span className="mkt-creative-meta">{t('ads.creative.stillEncoding')}</span>
       ) : null}
+    </div>
+  );
+}
+
+/* "Listen": the message rendered by the checker exactly as the audio player plays it
+ * (same voice, chime and music; the very file a listener gets). Asked for on press,
+ * never while typing: a render costs the server a second of work. An edit after
+ * listening hides the old player, so what is on screen always matches the words. */
+function ListenButton({ reference, message, clickUrl, disabled = false }) {
+  const { t } = useTranslation();
+  const key = `${message || ''}\n${clickUrl || ''}`;
+  const [heard, setHeard] = useState(null);   // { key, url, text }
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const current = heard && heard.key === key ? heard : null;
+  async function onListen() {
+    if (busy || disabled || !reference) return;
+    setBusy(true); setError(null);
+    try {
+      const r = await listenTicker({ reference, message, clickUrl });
+      setHeard({ key, url: r.audioUrl, text: r.text });
+    } catch (err) {
+      setError(err.message || t('ads.ticker.listenFailed'));
+    } finally { setBusy(false); }
+  }
+  return (
+    <div className="mkt-listen">
+      {current ? (
+        <>
+          <audio controls autoPlay src={current.url} preload="auto" />
+          <span className="mkt-hint">{t('ads.ticker.listenSays', { text: current.text })}</span>
+        </>
+      ) : (
+        <div className="mkt-upload-row">
+          <button type="button" className="mkt-outline" disabled={disabled || busy || !reference} onClick={onListen}>
+            {busy ? t('ads.ticker.listenBusy') : t('ads.ticker.listen')}
+          </button>
+          <span className="mkt-hint">{t('ads.ticker.listenHint')}</span>
+        </div>
+      )}
+      {error ? <p className="mkt-upload-error">{error}</p> : null}
+    </div>
+  );
+}
+
+/* The audio spot's "Your ad": the advertiser's own audio file and the link the player's
+ * "Find out more" button opens. The checker levels and re-encodes the file; the players
+ * below play the stored result, so what is heard here is exactly what listeners get.
+ * Each upload goes to the same review as any other creative. */
+function AudioSpotPanel({ reference, format = null, onCreatives }) {
+  const { t } = useTranslation();
+  const maxSeconds = format?.maxSeconds || 30;
+  const maxMb = format?.creativeSpec?.maxMb || 20;
+  const [file, setFile] = useState(null);
+  const [link, setLink] = useState('https://');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const [saved, setSaved] = useState([]);
+  const fileId = useId();
+
+  const refresh = useCallback(() => {
+    fetchCreatives(reference)
+      .then((r) => {
+        const all = r.creatives || [];
+        setSaved(all.filter((c) => c.kind === 'audio'));
+        onCreatives?.(all);
+      })
+      .catch(() => { /* an unreadable list is not worth an error banner */ });
+  }, [reference, onCreatives]);
+  useEffect(() => { refresh(); }, [refresh]);
+  usePollWhileUnsettled(saved, refresh);
+
+  const linkOk = /^https:\/\/[^\s/]+\.[^\s]+/i.test(link.trim());
+  const tooBig = !!file && file.size > maxMb * 1024 * 1024;
+  const canUpload = !!file && !tooBig && linkOk && !busy;
+
+  async function onUpload() {
+    if (!canUpload) return;
+    setBusy(true); setError(null);
+    try {
+      await uploadAudioCreative({ reference, file, clickUrl: link.trim() });
+      toast.success(t('ads.audio.savedReview'));
+      setFile(null);
+      refresh();
+    } catch (err) {
+      setError(err.message || t('ads.audio.uploadFailed'));
+    } finally { setBusy(false); }
+  }
+
+  return (
+    <div className="mkt-creatives">
+      <h3>{t('ads.audio.yourSpot')}</h3>
+      <div className="mkt-field mkt-field-wide">
+        <label htmlFor={fileId}>{t('ads.audio.file')}</label>
+        <input
+          id={fileId}
+          type="file"
+          accept="audio/*,.mp3,.wav,.m4a,.ogg,.opus,.flac,.webm"
+          onChange={(e) => { setFile(e.target.files?.[0] || null); setError(null); }}
+        />
+        <span className={`mkt-hint${tooBig ? ' mkt-hint-short' : ''}`}>
+          {tooBig ? t('ads.audio.tooBig', { mb: maxMb }) : t('ads.audio.fileHint', { seconds: maxSeconds, mb: maxMb })}
+        </span>
+      </div>
+      <div className="mkt-field mkt-field-wide">
+        <label htmlFor="mkt-audio-link">{t('ads.market.spec.link')}</label>
+        <input
+          id="mkt-audio-link"
+          type="url"
+          inputMode="url"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+        />
+        <span className={`mkt-hint${link.trim() && link.trim() !== 'https://' && !linkOk ? ' mkt-hint-short' : ''}`}>
+          {t('ads.audio.linkHint')}
+        </span>
+      </div>
+      <p className="mkt-fine">{t('ads.audio.howItPlays')}</p>
+      <div className="mkt-upload-row">
+        <button type="button" className="mkt-outline" disabled={!canUpload} onClick={onUpload}>
+          {busy ? t('ads.audio.uploading') : t('ads.audio.upload')}
+        </button>
+      </div>
+      {error ? <p className="mkt-upload-error">{error}</p> : null}
+
+      {saved.length > 0 && (
+        <ul className="mkt-creative-list">
+          {saved.map((c) => (
+            <li key={c.embedId} className="mkt-audio-item">
+              <CreativeStatus c={c} />
+              <span className="mkt-creative-meta">
+                {t('ads.audio.seconds', { seconds: Math.ceil(c.durationSeconds || 0) })}
+                {c.note && !rejectedWithNote(c) ? ` · ${c.note}` : ''}
+              </span>
+              {c.audioPath ? <audio controls preload="none" src={checkerUrl(c.audioPath)} /> : null}
+              {c.clickUrl ? <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">{t('ads.ticker.checkLink')}</a> : null}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
@@ -2121,6 +2335,15 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
         seconds={Math.min(needs, maxSeconds)}
         tickerStyle={tickerStyle}
         caption={t('ads.ticker.alongTop', { seconds: Math.min(needs, maxSeconds) })}
+      />
+
+      {/* Spoken in the audio player too. */}
+      <p className="mkt-fine">{t('ads.ticker.audioNote')}</p>
+      <ListenButton
+        reference={reference}
+        message={message.trim()}
+        clickUrl={link.trim()}
+        disabled={!(length > 0 && length <= maxChars && !tooSlowToRead && linkOk)}
       />
 
       <div className="mkt-upload-row">
@@ -2441,7 +2664,9 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
                   ? `${t('ads.creative.image')}${c.imageWidth ? ` · ${c.imageWidth}×${c.imageHeight}` : ''}`
                   : c.kind === 'text'
                     ? `${t('ads.attach.tickerOption')} · ${c.message}`
-                    : (c.durationSeconds ? `${c.durationSeconds}s` : t('ads.creative.durationUnknown'))}
+                    : c.kind === 'audio'
+                      ? t('ads.attach.audioOption', { seconds: Math.ceil(c.durationSeconds || 0) })
+                      : (c.durationSeconds ? `${c.durationSeconds}s` : t('ads.creative.durationUnknown'))}
                 {c.note && !rejectedWithNote(c) ? ` · ${c.note}` : ''}
               </span>
               {c.kind === 'image' ? (
@@ -2640,9 +2865,16 @@ export default function Advertise({ openLoginModal }) {
    * courtesy: the checker refuses the booking either way. */
   const pricing = useMemo(() => {
     if (!rawPricing?.formats) return rawPricing;
-    const showBeta = tickerEnabledFor(user);
-    return { ...rawPricing, formats: rawPricing.formats.filter((f) => !f.beta || showBeta) };
+    // The ticker has its own switch (VITE_ENABLE_TICKER); any other beta format (the
+    // audio spot) only to the ads beta testers, who are the only ones the checker lets book it.
+    const showBeta = (f) => (f.key === 'video_ticker' ? tickerEnabledFor(user) : adsBetaUserFor(user));
+    return { ...rawPricing, formats: rawPricing.formats.filter((f) => !f.beta || showBeta(f)) };
   }, [rawPricing, user]);
+  // Video / Audio / Upload on the overview: the rate card and the audience follow it.
+  const [formatTab, setFormatTab] = useState('video');
+  const formatTabs = formatTabsFor(pricing);
+  // A tab that disappeared (the audio spot hidden from a non-tester) falls back to Video.
+  const shownFormatTab = formatTabs.some((tb) => tb.id === formatTab) ? formatTab : 'video';
 
   // The page was one long scroll that mixed three unrelated jobs: reading what is
   // for sale, filling in a form, and managing work already in flight. Tabs so each
@@ -3032,6 +3264,7 @@ export default function Advertise({ openLoginModal }) {
 
       <section className="mkt-section">
         <h2><FaLayerGroup aria-hidden="true" /> {t('ads.general.formatsTitle')}</h2>
+        <FormatTabs tabs={formatTabs} value={shownFormatTab} onChange={setFormatTab} />
         {pricing?.formats?.length ? (
           <p className="mkt-intro-lede">
             {savingAt(7, pricing)
@@ -3070,18 +3303,17 @@ export default function Advertise({ openLoginModal }) {
         ) : null}
         {/* Every number here comes from /advertise/pricing rather than the copy: a
             hardcoded price is a promise the server has no idea it made. */}
-        <RateCard pricing={pricing} />
+        <RateCard pricing={pricing} tab={shownFormatTab} />
         <p>
           {t('ads.general.flatBooking')}
         </p>
         <p>
           {t('ads.general.quotedForecast')}
         </p>
-      </section>
 
-      <section className="mkt-section">
-        <h2><FaUsers aria-hidden="true" /> {t('ads.general.audienceTitle')}</h2>
-        <InventoryPanel data={inventory} isLoading={isLoading} error={error} />
+        {/* The audience for the formats on this tab, not the video audience for all three. */}
+        <h2 className="mkt-tab-subhead"><FaUsers aria-hidden="true" /> {t('ads.general.audienceTitle')}</h2>
+        <InventoryPanel data={inventory} isLoading={isLoading} error={error} tab={shownFormatTab} />
       </section>
 
       {/* Work the price out before booking: any format, any length, every flight
@@ -3244,7 +3476,13 @@ export default function Advertise({ openLoginModal }) {
                       if (wizRef?.reference) rememberWizard(user, wizRef.reference, wizAt, type);
                     }}
                   />
-                  {wizType === 'ticker' ? (
+                  {wizType === 'audio' ? (
+                    <AudioSpotPanel
+                      reference={wizRef.reference}
+                      format={pricing?.formats?.find((f) => f.key === 'audio_spot')}
+                      onCreatives={setWizCreativeList}
+                    />
+                  ) : wizType === 'ticker' ? (
                     <TickerPanel
                       reference={wizRef.reference}
                       account={wizRef.hiveAccount}
@@ -3307,7 +3545,7 @@ export default function Advertise({ openLoginModal }) {
                     creatives={wizCreativeList}
                     // A ticker has no video for us to make, so a production request ticked
                     // earlier for a video ad must not ride along and charge its fee.
-                    production={wizType === 'ticker' ? null : bookProduction}
+                    production={ownAdPanel(wizType) ? null : bookProduction}
                     awaitingApproval={wizRef.status !== 'approved'}
                     lockFormat={WIZ_FORMAT[wizType] || 'video_roll'}
                     account={wizRef.hiveAccount}
@@ -3566,7 +3804,7 @@ export default function Advertise({ openLoginModal }) {
                   />
                   {/* The upload panel stays MOUNTED for the ticker too (hidden), because it
                       owns the creative list the Active spots pickers are filled from. */}
-                  <div style={{ display: bookType === 'ticker' ? 'none' : undefined }}>
+                  <div style={{ display: ownAdPanel(bookType) ? 'none' : undefined }}>
                   <CreativePanel
                     reference={lookupRef.trim()}
                     account={lookup.hiveAccount}
@@ -3583,7 +3821,7 @@ export default function Advertise({ openLoginModal }) {
                       logoUrl: lookup.logoUrl,
                       slogan: lookup.slogan,
                     } : null}
-                    offer={bookType !== 'ticker' && lookup.status === 'approved' && !lookup.production?.requested ? {
+                    offer={!ownAdPanel(bookType) && lookup.status === 'approved' && !lookup.production?.requested ? {
                       ...bookProduction,
                       feeHbd: pricing?.productionFeeHbd,
                       tiers: tiersFor(pricing, AD_TYPE_FORMAT[bookType] || 'video_roll'),
@@ -3591,6 +3829,13 @@ export default function Advertise({ openLoginModal }) {
                     } : null}
                   />
                   </div>
+                  {bookType === 'audio' && (
+                    <AudioSpotPanel
+                      reference={lookupRef.trim()}
+                      format={pricing?.formats?.find((f) => f.key === 'audio_spot')}
+                      onCreatives={setCreativeList}
+                    />
+                  )}
                   {bookType === 'ticker' && (
                     <TickerPanel
                       reference={lookupRef.trim()}
@@ -3615,7 +3860,7 @@ export default function Advertise({ openLoginModal }) {
                     pricing={pricing}
                     creatives={creativeList}
                     // A ticker is text they type, so there is nothing for us to make.
-                    production={bookType !== 'ticker' ? bookProduction : null}
+                    production={!ownAdPanel(bookType) ? bookProduction : null}
                     awaitingApproval={lookup.status !== 'approved'}
                     // Settled in "Your ad", so the booking form does not ask again.
                     lockFormat={AD_TYPE_FORMAT[bookType] || 'video_roll'}

@@ -12,6 +12,7 @@
     "heading": "Gửi tip cho @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Cách khác",
     "amountLabel": "Số lượng: ",
     "amountPlaceholder": "ví dụ 1.000",
     "currencyLabel": "Loại tiền:",
@@ -40,7 +41,10 @@
         "noAccount": "Tài khoản Hive này không tồn tại",
         "invoiceFailed": "Không tạo được hóa đơn Lightning. Vui lòng thử lại.",
         "copyFailed": "Không sao chép được hóa đơn"
-      }
+      },
+      "noteOwn": "Đi thẳng vào ví Lightning của @{{recipient}} ({{address}}). Ví Lightning nào cũng được, không cần tài khoản Hive.",
+      "waitingUnverified": "Ví của bạn sẽ báo khi thanh toán hoàn tất.",
+      "cashApp": "Chưa có ví Lightning? Các ứng dụng như Cash App và Strike có thể thanh toán bằng số dư thông thường của bạn."
     },
     "wallet": {
       "usernameLabel": "Tên người dùng Hive của bạn:",
@@ -54,6 +58,22 @@
         "self": "Bạn không thể tự tip cho mình",
         "walletFailed": "Ví đã không gửi tip: {{message}}"
       }
+    },
+    "otherWays": "Thêm cách để ủng hộ @{{recipient}}",
+    "otherWaysNote": "Mỗi nút mở trang của nhà sáng tạo trên trang đó trong một thẻ mới. Các khoản thanh toán ở đó không đi qua 3Speak.",
+    "monthly": {
+      "label": "Bao lâu một lần",
+      "once": "Một lần",
+      "until": "Mỗi tháng, đến {{date}}",
+      "note": "Hive tự gửi mỗi 30 ngày, lần đầu ngay bây giờ. Bạn có thể dừng bất cứ lúc nào.",
+      "replaces": "Khoản này sẽ thay thế khoản ủng hộ hằng tháng bạn đang gửi cho @{{recipient}}.",
+      "replacesOther": "Khoản này sẽ thay thế khoản thanh toán định kỳ bạn đang gửi cho @{{recipient}}.",
+      "current": "Bạn gửi cho @{{recipient}} {{amount}} mỗi tháng, đến {{date}}.",
+      "currentEvery": "Bạn gửi cho @{{recipient}} {{amount}} mỗi {{interval}}, đến {{date}}.",
+      "stop": "Dừng",
+      "stopped": "Đã dừng ủng hộ hằng tháng",
+      "stopFailed": "Không thể dừng: {{message}}",
+      "successNote": "Khoản tiếp theo sẽ tự gửi sau 30 ngày."
     }
   },
   "cardMenu": {

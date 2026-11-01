@@ -12,6 +12,7 @@
     "heading": "打赏 @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "更多方式",
     "amountLabel": "金额：",
     "amountPlaceholder": "例如 1.000",
     "currencyLabel": "币种：",
@@ -40,7 +41,10 @@
         "noAccount": "该 Hive 账户不存在",
         "invoiceFailed": "无法创建 Lightning 账单，请重试。",
         "copyFailed": "无法复制账单"
-      }
+      },
+      "noteOwn": "直接进入 @{{recipient}} 自己的 Lightning 钱包（{{address}}）。任何 Lightning 钱包都可以，无需 Hive 账户。",
+      "waitingUnverified": "付款完成后，你的钱包会显示。",
+      "cashApp": "没有闪电网络钱包？Cash App 和 Strike 等应用可以用你的普通余额支付。"
     },
     "wallet": {
       "usernameLabel": "你的 Hive 用户名：",
@@ -54,6 +58,22 @@
         "self": "不能打赏自己",
         "walletFailed": "钱包未发送打赏：{{message}}"
       }
+    },
+    "otherWays": "支持 @{{recipient}} 的更多方式",
+    "otherWaysNote": "每个按钮都会在新标签页中打开创作者在该网站上的页面。在那里的付款不经过 3Speak。",
+    "monthly": {
+      "label": "频率",
+      "once": "一次",
+      "until": "每月，直到 {{date}}",
+      "note": "Hive 每 30 天自动发送，第一笔立即发出。你可以随时停止。",
+      "replaces": "这将替换你已经发给 @{{recipient}} 的每月支持。",
+      "replacesOther": "这将替换你已经发给 @{{recipient}} 的定期转账。",
+      "current": "你每月发给 @{{recipient}} {{amount}}，直到 {{date}}。",
+      "currentEvery": "你每{{interval}}发给 @{{recipient}} {{amount}}，直到 {{date}}。",
+      "stop": "停止",
+      "stopped": "每月支持已停止",
+      "stopFailed": "无法停止：{{message}}",
+      "successNote": "下一笔将在 30 天后自动发出。"
     }
   },
   "cardMenu": {

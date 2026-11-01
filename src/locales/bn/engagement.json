@@ -12,6 +12,7 @@
     "heading": "@{{recipient}}-কে টিপ পাঠান",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "আরও উপায়",
     "amountLabel": "পরিমাণ: ",
     "amountPlaceholder": "যেমন 1.000",
     "currencyLabel": "মুদ্রা:",
@@ -40,7 +41,10 @@
         "noAccount": "এই Hive অ্যাকাউন্টটি নেই",
         "invoiceFailed": "Lightning ইনভয়েস তৈরি করা যায়নি। আবার চেষ্টা করুন।",
         "copyFailed": "ইনভয়েস কপি করা যায়নি"
-      }
+      },
+      "noteOwn": "সরাসরি @{{recipient}}-এর নিজের Lightning ওয়ালেটে যায় ({{address}})। যেকোনো Lightning ওয়ালেট চলবে, Hive অ্যাকাউন্ট লাগবে না।",
+      "waitingUnverified": "পেমেন্ট সম্পন্ন হলে আপনার ওয়ালেট জানিয়ে দেবে।",
+      "cashApp": "Lightning ওয়ালেট নেই? Cash App ও Strike-এর মতো অ্যাপ আপনার সাধারণ ব্যালান্স থেকে পেমেন্ট করতে পারে।"
     },
     "wallet": {
       "usernameLabel": "আপনার Hive ইউজারনেম:",
@@ -54,6 +58,22 @@
         "self": "আপনি নিজেকে টিপ দিতে পারবেন না",
         "walletFailed": "ওয়ালেট টিপটি পাঠায়নি: {{message}}"
       }
+    },
+    "otherWays": "@{{recipient}}-কে সাপোর্ট করার আরও উপায়",
+    "otherWaysNote": "প্রতিটি বোতাম সেই সাইটে ক্রিয়েটরের পেজ নতুন ট্যাবে খোলে। সেখানে করা পেমেন্ট 3Speak-এর মাধ্যমে যায় না।",
+    "monthly": {
+      "label": "কত ঘন ঘন",
+      "once": "একবার",
+      "until": "প্রতি মাসে, {{date}} পর্যন্ত",
+      "note": "Hive প্রতি ৩০ দিনে নিজে থেকেই পাঠায়, প্রথমটি এখনই। আপনি যেকোনো সময় এটি বন্ধ করতে পারেন।",
+      "replaces": "এটি @{{recipient}}-কে আপনি এখন যে মাসিক সাপোর্ট পাঠান, তার জায়গা নেবে।",
+      "replacesOther": "এটি @{{recipient}}-কে আপনি এখন যে নিয়মিত পেমেন্ট পাঠান, তার জায়গা নেবে।",
+      "current": "আপনি প্রতি মাসে @{{recipient}}-কে {{amount}} পাঠান, {{date}} পর্যন্ত।",
+      "currentEvery": "আপনি প্রতি {{interval}} পর পর @{{recipient}}-কে {{amount}} পাঠান, {{date}} পর্যন্ত।",
+      "stop": "বন্ধ করুন",
+      "stopped": "মাসিক সাপোর্ট বন্ধ হয়েছে",
+      "stopFailed": "বন্ধ করা যায়নি: {{message}}",
+      "successNote": "পরেরটি ৩০ দিন পরে নিজে থেকেই যাবে।"
     }
   },
   "cardMenu": {

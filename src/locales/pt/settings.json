@@ -15,6 +15,10 @@
     "offToast": "Anúncios desativados nos seus vídeos",
     "rollsOnToast": "Os spots em vídeo estão ativados nos seus vídeos",
     "rollsOffToast": "Agora só banners e tickers nos seus vídeos",
+    "audio": "Anúncios nos seus áudios",
+    "audioDesc": "Uma breve mensagem falada de um patrocinador pode tocar durante o seu áudio, com um link que os ouvintes podem abrir. Você recebe uma parte, como nos anúncios em vídeo. Você pode mudar isso em cada envio no carregador de áudio.",
+    "audioOnToast": "Os anúncios estão ativados nos seus áudios",
+    "audioOffToast": "Os anúncios estão desativados nos seus áudios",
     "splitSaved": "Divisão da receita salva",
     "title": "Anúncios nos seus vídeos",
     "allow": "Permitir anúncios",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "Geral",
     "content": "Conteúdo",
+    "connections": "Conexões",
     "rewards": "Anúncios e recompensas",
     "about": "Sobre / Versão"
   },
   "contentTabs": {
     "feed": "Feed",
     "aria": "Configurações de conteúdo"
+  },
+  "connectionsTabs": {
+    "support": "Apoio",
+    "profiles": "Perfis vinculados",
+    "aria": "Configurações de conexões"
   },
   "butrauthUnlocked": "Butter Auth liberado",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "Pedir exclusão",
     "requestData": "Pedir meus dados",
     "foot": "Respondemos em até um mês. Você também pode escrever diretamente para <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Gorjetas Lightning",
+    "checking": "Verificando para onde vão suas gorjetas…",
+    "toV4v": "As gorjetas vão para {{account}}@v4v.app",
+    "toOwn": "As gorjetas vão para {{address}}",
+    "v4vDesc": "O padrão, nada para configurar: as gorjetas chegam na Hive como HIVE. Gorjetas menores que a taxa de conversão da v4v.app (cerca de 60 sats) ficam como sats na sua conta v4v.app. Digite um endereço Lightning abaixo para recebê-las na sua própria carteira.",
+    "ownDesc": "As gorjetas vão direto para a sua própria carteira Lightning, sem a v4v.app e sua taxa de conversão. Salvo no seu perfil Hive.",
+    "inputLabel": "Seu endereço Lightning",
+    "placeholder": "voce@carteira.com",
+    "useV4v": "Usar a v4v.app de novo",
+    "savedOwn": "As gorjetas Lightning agora vão para o seu endereço",
+    "savedV4v": "As gorjetas Lightning voltam a passar pela v4v.app",
+    "badAddress": "Isso não é um endereço Lightning. Ele tem a forma nome@carteira.com.",
+    "unreachable": "Este endereço não respondeu como endereço Lightning. Confira e tente de novo.",
+    "saveFailed": "Não foi possível salvar no seu perfil Hive.",
+    "supportersNote": "Gorjetas para o seu próprio endereço nunca passam pela Hive, por isso não aparecem em Apoiadores.",
+    "publicNote": "Seu endereço Lightning fica salvo na sua conta Hive, onde qualquer pessoa pode vê-lo."
+  },
+  "supportLinks": {
+    "title": "Outras formas de te apoiar",
+    "desc": "Sua página no {{sites}}. Os espectadores encontram estes links na sua janela de gorjetas.",
+    "placeholder": "https://ko-fi.com/seunome",
+    "add": "Adicionar",
+    "remove": "Remover o link do {{site}}",
+    "badLink": "Cole o link completo da sua página em um destes sites.",
+    "duplicate": "Esse link já está na lista.",
+    "max": "Você pode adicionar até {{max}} links.",
+    "saved": "Links de apoio salvos",
+    "publicNote": "Estes links ficam salvos na sua conta Hive, onde qualquer pessoa pode vê-los."
   }
 }

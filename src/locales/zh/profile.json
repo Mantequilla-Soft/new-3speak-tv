@@ -32,10 +32,12 @@
     "followers_other": "<b>{{value}}</b> 位粉丝",
     "videos_other": "<b>{{value}}</b> 个视频",
     "shorts_other": "<b>{{value}}</b> 个短视频",
+    "audio_other": "<b>{{value}}</b> 个音频",
     "views_other": "<b>{{value}}</b> 次观看",
     "followersTitle_other": "{{num}} 位粉丝",
     "videosTitle_other": "{{num}} 个视频",
     "shortsTitle_other": "{{num}} 个短视频",
+    "audioTitle_other": "{{num}} 个音频",
     "viewsTitle_other": "{{num}} 次观看",
     "onHiveSince": "{{year}} 年加入 Hive"
   },
@@ -383,5 +385,8 @@
         "body": "点击保存布局即可发布。撤销和重做可以在修改之间来回切换（也可以用 Ctrl+Z），取消会放弃修改，恢复默认会还原标准页面。标题旁边的 ? 可以再次打开这个导览。"
       }
     }
+  },
+  "audioTab": {
+    "files": "音频文件"
   }
 }

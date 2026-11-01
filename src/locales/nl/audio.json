@@ -37,6 +37,9 @@
     "volume": "Volume",
     "queue": "Wachtrij",
     "closePlayer": "Speler sluiten",
+    "pipOpen": "Speler losmaken",
+    "pipClose": "Losse speler sluiten",
+    "pipActive": "Speelt in het losse venster",
     "curated": "Geselecteerd",
     "noCues": "Geen cues.",
     "clearQueue": "Wachtrij wissen",
@@ -163,6 +166,11 @@
     "failed": "Mislukt",
     "unknown": "onbekend",
     "unknownError": "onbekende fout",
+    "errors": {
+      "unreadable": "Het audiobestand kon niet worden gelezen. Voeg het opnieuw toe en publiceer daarna.",
+      "rateLimited": "Te veel uploadpogingen. Wacht een paar minuten en probeer het dan opnieuw.",
+      "server": "De audioserver kon dit bestand niet opslaan. Probeer het zo meteen opnieuw."
+    },
     "recorded": "Opgenomen",
     "uploaded": "Geüpload",
     "steps": {
@@ -279,7 +287,9 @@
       "postRewardsTitle": "Postbeloningen (eenmalig)",
       "postRewardsDesc": "Je ontvangt de normale Hive-auteursuitbetaling — eenmalig uitbetaald, ~7 dagen na publicatie.",
       "pplTitle": "Betalen per luisterbeurt (levenslang)",
-      "pplDesc": "Alle beloningen van de audiopost gaan naar @{{account}}. In plaats van één uitbetaling betaalt een 3Speak-programma je per luisterbeurt, zolang de track bestaat."
+      "pplDesc": "Alle beloningen van de audiopost gaan naar @{{account}}. In plaats van één uitbetaling betaalt een 3Speak-programma je per luisterbeurt, zolang de track bestaat.",
+      "adsTitle": "Advertenties in deze audio",
+      "adsHint": "Een korte gesproken sponsorboodschap kan tijdens deze audio spelen, en je krijgt een deel. Begint bij je accountinstelling; pas het hier aan voor alleen deze upload."
     },
     "reward": {
       "distribution": "Verdeling van beloningen",

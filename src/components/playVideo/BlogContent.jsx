@@ -1,5 +1,5 @@
 import MarkdownView from '../common/MarkdownView';
-import React, { useEffect, useMemo, useState, useRef, useCallback } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState, useRef, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { useTranslation } from "react-i18next";
 import { getUersContent } from "../../utils/hiveUtils";
@@ -11,6 +11,8 @@ import { getPostBodyRenderer } from "../../lib/hiveRenderer";
 import { linkifyTimestamps, handleTimestampClick, unlinkTimestampsInMarkdown } from "../../utils/timestamps";
 
 const THRESHOLD_HEIGHT = 100;
+// The .content-wrapper max-height transition (BlogContent.scss).
+const SLIDE_MS = 300;
 
 // `duration` + `onSeek` (content seconds) turn timestamps in the text into links
 // that seek the player. Without them, or before the duration is known, the text
@@ -186,18 +188,37 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
     };
   }, [renderedContent, hideAudioPlayers]);
 
-  // Check if content needs expansion after rendering
-  useEffect(() => {
+  // Check if content needs expansion after rendering. Measured before the
+  // browser paints, so a long text never shows in full for a frame and then
+  // snaps shut (opening the audio player showed that).
+  useLayoutEffect(() => {
     if (alwaysExpanded) return;
     if (contentRef.current && renderedContent) {
-      requestAnimationFrame(() => {
-        const contentHeight = contentRef.current?.scrollHeight || 0;
-        setNeedsExpansion(contentHeight > THRESHOLD_HEIGHT);
-      });
+      setNeedsExpansion(contentRef.current.scrollHeight > THRESHOLD_HEIGHT);
     }
   }, [renderedContent, alwaysExpanded]);
 
-  const toggleExpand = () => setIsExpanded(!isExpanded);
+  // "Show more" slides: max-height can't animate to or from `none`, so it runs
+  // through the text's measured height and lets go once it has arrived.
+  const [slideHeight, setSlideHeight] = useState(null);
+  const slideTimer = useRef(0);
+  useEffect(() => () => clearTimeout(slideTimer.current), []);
+  const toggleExpand = () => {
+    const el = contentRef.current;
+    clearTimeout(slideTimer.current);
+    if (!el) { setIsExpanded(!isExpanded); return; }
+    setSlideHeight(el.scrollHeight);
+    if (!isExpanded) {
+      setIsExpanded(true);
+      slideTimer.current = setTimeout(() => setSlideHeight(null), SLIDE_MS);
+    } else {
+      // From its full height first, then shut on the next frame.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        setIsExpanded(false);
+        setSlideHeight(null);
+      }));
+    }
+  };
 
   // Stable for the component's life. MarkdownView is memoised so playback ticks
   // never rebuild the description; a fresh arrow here on every render (the watch
@@ -219,6 +240,7 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
     <div className={`blog-content-container${hideAudioPlayers ? ' blog-content-container--no-audio' : ''}`}>
       <div
         className={`content-wrapper ${needsExpansion && !isExpanded ? 'collapsed' : 'expanded'}`}
+        style={slideHeight != null ? { maxHeight: slideHeight } : undefined}
         ref={contentRef}
       >
         {loading ? (

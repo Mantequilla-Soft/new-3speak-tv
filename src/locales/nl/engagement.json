@@ -12,6 +12,7 @@
     "heading": "Stuur een fooi naar @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Meer manieren",
     "amountLabel": "Bedrag: ",
     "amountPlaceholder": "bijv. 1.000",
     "currencyLabel": "Valuta:",
@@ -40,7 +41,10 @@
         "noAccount": "Dit Hive-account bestaat niet",
         "invoiceFailed": "Kon geen Lightning-factuur maken. Probeer het opnieuw.",
         "copyFailed": "Kon de factuur niet kopiëren"
-      }
+      },
+      "noteOwn": "Gaat rechtstreeks naar de eigen Lightning-wallet van @{{recipient}} ({{address}}). Elke Lightning-wallet werkt, geen Hive-account nodig.",
+      "waitingUnverified": "Je wallet laat zien wanneer de betaling gelukt is.",
+      "cashApp": "Geen Lightning-wallet? Apps zoals Cash App en Strike kunnen het betalen vanaf je gewone saldo."
     },
     "wallet": {
       "usernameLabel": "Je Hive-gebruikersnaam:",
@@ -54,6 +58,22 @@
         "self": "Je kunt jezelf geen fooi geven",
         "walletFailed": "De wallet heeft de fooi niet verstuurd: {{message}}"
       }
+    },
+    "otherWays": "Meer manieren om @{{recipient}} te steunen",
+    "otherWaysNote": "Elke knop opent de pagina van de maker op die site in een nieuw tabblad. Betalingen daar lopen niet via 3Speak.",
+    "monthly": {
+      "label": "Hoe vaak",
+      "once": "Eenmalig",
+      "until": "Elke maand, tot {{date}}",
+      "note": "Hive stuurt het elke 30 dagen vanzelf, de eerste meteen. Je kunt het altijd stoppen.",
+      "replaces": "Dit vervangt de maandelijkse steun die je @{{recipient}} al stuurt.",
+      "replacesOther": "Dit vervangt de terugkerende betaling die je @{{recipient}} al stuurt.",
+      "current": "Je stuurt @{{recipient}} elke maand {{amount}}, tot {{date}}.",
+      "currentEvery": "Je stuurt @{{recipient}} elke {{interval}} {{amount}}, tot {{date}}.",
+      "stop": "Stoppen",
+      "stopped": "Maandelijkse steun gestopt",
+      "stopFailed": "Kon het niet stoppen: {{message}}",
+      "successNote": "De volgende gaat over 30 dagen vanzelf de deur uit."
     }
   },
   "cardMenu": {

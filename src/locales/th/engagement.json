@@ -12,6 +12,7 @@
     "heading": "ส่งทิปให้ @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "วิธีอื่น",
     "amountLabel": "จำนวน: ",
     "amountPlaceholder": "เช่น 1.000",
     "currencyLabel": "สกุลเงิน:",
@@ -40,7 +41,10 @@
         "noAccount": "ไม่มีบัญชี Hive นี้",
         "invoiceFailed": "สร้างใบแจ้งหนี้ Lightning ไม่ได้ โปรดลองอีกครั้ง",
         "copyFailed": "คัดลอกใบแจ้งหนี้ไม่ได้"
-      }
+      },
+      "noteOwn": "เข้ากระเป๋า Lightning ของ @{{recipient}} โดยตรง ({{address}}) ใช้กระเป๋า Lightning ใดก็ได้ ไม่ต้องมีบัญชี Hive",
+      "waitingUnverified": "กระเป๋าของคุณจะแสดงเมื่อการชำระเงินสำเร็จ",
+      "cashApp": "ไม่มีวอลเล็ต Lightning? แอปอย่าง Cash App และ Strike ชำระได้จากยอดเงินปกติของคุณ"
     },
     "wallet": {
       "usernameLabel": "ชื่อผู้ใช้ Hive ของคุณ:",
@@ -54,6 +58,22 @@
         "self": "คุณให้ทิปตัวเองไม่ได้",
         "walletFailed": "กระเป๋าไม่ได้ส่งทิป: {{message}}"
       }
+    },
+    "otherWays": "วิธีอื่นในการสนับสนุน @{{recipient}}",
+    "otherWaysNote": "แต่ละปุ่มจะเปิดหน้าของครีเอเตอร์บนเว็บไซต์นั้นในแท็บใหม่ การชำระเงินที่นั่นไม่ผ่าน 3Speak",
+    "monthly": {
+      "label": "บ่อยแค่ไหน",
+      "once": "ครั้งเดียว",
+      "until": "ทุกเดือน จนถึง {{date}}",
+      "note": "Hive จะส่งให้เองทุก 30 วัน ครั้งแรกส่งทันที คุณหยุดได้ทุกเมื่อ",
+      "replaces": "รายการนี้จะแทนที่การสนับสนุนรายเดือนที่คุณส่งให้ @{{recipient}} อยู่แล้ว",
+      "replacesOther": "รายการนี้จะแทนที่การโอนแบบประจำที่คุณส่งให้ @{{recipient}} อยู่แล้ว",
+      "current": "คุณส่ง {{amount}} ให้ @{{recipient}} ทุกเดือน จนถึง {{date}}",
+      "currentEvery": "คุณส่ง {{amount}} ให้ @{{recipient}} ทุก {{interval}} จนถึง {{date}}",
+      "stop": "หยุด",
+      "stopped": "หยุดการสนับสนุนรายเดือนแล้ว",
+      "stopFailed": "หยุดไม่ได้: {{message}}",
+      "successNote": "ครั้งถัดไปจะส่งเองในอีก 30 วัน"
     }
   },
   "cardMenu": {

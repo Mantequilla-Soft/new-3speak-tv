@@ -15,6 +15,10 @@
     "offToast": "Ads are off for your videos",
     "rollsOnToast": "Video ad rolls are on for your videos",
     "rollsOffToast": "Only banners and tickers on your videos now",
+    "audio": "Ads on your audio",
+    "audioDesc": "A short spoken message from a sponsor can play during your audio, with a link listeners can open. You get a share, as with video ads. You can change this for each upload in the audio uploader.",
+    "audioOnToast": "Ads are on for your audio",
+    "audioOffToast": "Ads are off for your audio",
     "splitSaved": "Revenue split saved",
     "title": "Ads on your videos",
     "allow": "Allow ads",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "General",
     "content": "Content",
+    "connections": "Connections",
     "rewards": "Ads & rewards",
     "about": "About / Version"
   },
   "contentTabs": {
     "feed": "Feed",
     "aria": "Content settings"
+  },
+  "connectionsTabs": {
+    "support": "Support",
+    "profiles": "Linked profiles",
+    "aria": "Connection settings"
   },
   "butrauthUnlocked": "Butter Auth unlocked",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "Request deletion",
     "requestData": "Request my data",
     "foot": "We reply within one month. You can also email <mail>privacy@3speak.tv</mail> directly."
+  },
+  "lightning": {
+    "title": "Lightning tips",
+    "checking": "Checking where your tips go…",
+    "toV4v": "Tips go to {{account}}@v4v.app",
+    "toOwn": "Tips go to {{address}}",
+    "v4vDesc": "The default, nothing to set up: tips arrive on Hive as HIVE. Tips smaller than v4v.app's conversion fee (about 60 sats) stay as sats in your v4v.app account. Enter a Lightning address below to get them in your own wallet instead.",
+    "ownDesc": "Tips go straight to your own Lightning wallet, without v4v.app and its conversion fee. Saved in your Hive profile.",
+    "inputLabel": "Your Lightning address",
+    "placeholder": "you@wallet.com",
+    "useV4v": "Use v4v.app again",
+    "savedOwn": "Lightning tips now go to your own address",
+    "savedV4v": "Lightning tips go through v4v.app again",
+    "badAddress": "That is not a Lightning address. It looks like name@wallet.com.",
+    "unreachable": "This address did not answer as a Lightning address. Check it and try again.",
+    "saveFailed": "Could not save it to your Hive profile.",
+    "supportersNote": "Tips to your own address never pass through Hive, so they don't show up under Supporters.",
+    "publicNote": "Your Lightning address is saved on your Hive account, where anyone can see it."
+  },
+  "supportLinks": {
+    "title": "Other ways to support you",
+    "desc": "Your page on {{sites}}. Viewers find these links in your tip window.",
+    "placeholder": "https://ko-fi.com/yourname",
+    "add": "Add",
+    "remove": "Remove the {{site}} link",
+    "badLink": "Paste the full link to your page on one of these sites.",
+    "duplicate": "That link is already on the list.",
+    "max": "You can add up to {{max}} links.",
+    "saved": "Support links saved",
+    "publicNote": "These links are saved on your Hive account, where anyone can see them."
   }
 }

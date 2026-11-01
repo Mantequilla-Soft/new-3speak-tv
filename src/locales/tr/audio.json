@@ -37,6 +37,9 @@
     "volume": "Ses düzeyi",
     "queue": "Sıra",
     "closePlayer": "Oynatıcıyı kapat",
+    "pipOpen": "Oynatıcıyı ayrı pencerede aç",
+    "pipClose": "Ayrı penceredeki oynatıcıyı kapat",
+    "pipActive": "Ayrı pencerede çalıyor",
     "curated": "Seçildi",
     "noCues": "İşaret yok.",
     "clearQueue": "Sırayı temizle",
@@ -163,6 +166,11 @@
     "failed": "Başarısız",
     "unknown": "bilinmiyor",
     "unknownError": "bilinmeyen hata",
+    "errors": {
+      "unreadable": "Ses dosyası okunamadı. Lütfen dosyayı yeniden ekleyin, ardından yayınlayın.",
+      "rateLimited": "Çok fazla yükleme denemesi. Lütfen birkaç dakika bekleyip tekrar deneyin.",
+      "server": "Ses sunucusu bu dosyayı kaydedemedi. Lütfen birazdan tekrar deneyin."
+    },
     "recorded": "Kaydedildi",
     "uploaded": "Yüklendi",
     "steps": {
@@ -279,7 +287,9 @@
       "postRewardsTitle": "Gönderi ödülleri (tek seferlik)",
       "postRewardsDesc": "Normal Hive yazar ödemesini alırsın; yayınlandıktan yaklaşık 7 gün sonra bir kez ödenir.",
       "pplTitle": "Dinleme başına ödeme (ömür boyu)",
-      "pplDesc": "Tüm ses gönderisi ödülleri @{{account}} hesabına gider. Tek bir ödeme yerine, bir 3Speak programı parçanın ömrü boyunca sana dinleme başına ödeme yapar."
+      "pplDesc": "Tüm ses gönderisi ödülleri @{{account}} hesabına gider. Tek bir ödeme yerine, bir 3Speak programı parçanın ömrü boyunca sana dinleme başına ödeme yapar.",
+      "adsTitle": "Bu seste reklamlar",
+      "adsHint": "Bu sesin sırasında kısa, seslendirilmiş bir sponsor mesajı çalabilir ve sen bir pay alırsın. Hesap ayarınla başlar; burada yalnızca bu yükleme için değiştir."
     },
     "reward": {
       "distribution": "Ödül dağılımı",

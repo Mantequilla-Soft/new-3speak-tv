@@ -12,6 +12,7 @@
     "heading": "Invia una mancia a @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Altri modi",
     "amountLabel": "Importo: ",
     "amountPlaceholder": "es. 1.000",
     "currencyLabel": "Valuta:",
@@ -40,7 +41,10 @@
         "noAccount": "Questo account Hive non esiste",
         "invoiceFailed": "Impossibile creare la fattura Lightning. Riprova.",
         "copyFailed": "Impossibile copiare la fattura"
-      }
+      },
+      "noteOwn": "Va dritto nel wallet Lightning di @{{recipient}} ({{address}}). Va bene qualsiasi wallet Lightning, non serve un account Hive.",
+      "waitingUnverified": "Il tuo wallet ti mostra quando il pagamento è andato a buon fine.",
+      "cashApp": "Non hai un wallet Lightning? App come Cash App e Strike possono pagarlo con il tuo saldo normale."
     },
     "wallet": {
       "usernameLabel": "Il tuo nome utente Hive:",
@@ -54,6 +58,22 @@
         "self": "Non puoi darti una mancia da solo",
         "walletFailed": "Il wallet non ha inviato la mancia: {{message}}"
       }
+    },
+    "otherWays": "Altri modi per sostenere @{{recipient}}",
+    "otherWaysNote": "Ogni pulsante apre la pagina del creator su quel sito in una nuova scheda. I pagamenti fatti lì non passano da 3Speak.",
+    "monthly": {
+      "label": "Ogni quanto",
+      "once": "Una volta",
+      "until": "Ogni mese, fino a {{date}}",
+      "note": "Hive lo invia da solo ogni 30 giorni, il primo subito. Puoi fermarlo quando vuoi.",
+      "replaces": "Questo sostituisce il sostegno mensile che già invii a @{{recipient}}.",
+      "replacesOther": "Questo sostituisce il pagamento ricorrente che già invii a @{{recipient}}.",
+      "current": "Invii a @{{recipient}} {{amount}} ogni mese, fino a {{date}}.",
+      "currentEvery": "Invii a @{{recipient}} {{amount}} ogni {{interval}}, fino a {{date}}.",
+      "stop": "Ferma",
+      "stopped": "Sostegno mensile fermato",
+      "stopFailed": "Impossibile fermarlo: {{message}}",
+      "successNote": "Il prossimo parte da solo tra 30 giorni."
     }
   },
   "cardMenu": {

@@ -32,10 +32,12 @@
     "followers_other": "팔로워 <b>{{value}}</b>명",
     "videos_other": "동영상 <b>{{value}}</b>개",
     "shorts_other": "쇼츠 <b>{{value}}</b>개",
+    "audio_other": "오디오 <b>{{value}}</b>개",
     "views_other": "조회수 <b>{{value}}</b>회",
     "followersTitle_other": "팔로워 {{num}}명",
     "videosTitle_other": "동영상 {{num}}개",
     "shortsTitle_other": "쇼츠 {{num}}개",
+    "audioTitle_other": "오디오 {{num}}개",
     "viewsTitle_other": "조회수 {{num}}회",
     "onHiveSince": "{{year}}년부터 Hive 활동"
   },
@@ -383,5 +385,8 @@
         "body": "레이아웃 저장을 누르면 공개됩니다. 실행 취소와 다시 실행으로 변경 사항을 오갈 수 있고(Ctrl+Z도 됩니다), 취소는 변경을 버리며, 기본값으로 재설정은 기본 페이지로 되돌립니다. 제목 옆의 ?를 누르면 이 안내가 다시 열립니다."
       }
     }
+  },
+  "audioTab": {
+    "files": "오디오 파일"
   }
 }

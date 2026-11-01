@@ -13,7 +13,7 @@ import {
   MdBedtime, MdGraphicEq, MdCast, MdAirplay, MdDownload, MdDownloadDone,
   MdListAlt, MdCheck, MdLink,
 } from 'react-icons/md';
-import { TbRewindBackward15, TbRewindForward15 } from 'react-icons/tb';
+import { TbRewindBackward15, TbRewindForward15, TbPictureInPicture } from 'react-icons/tb';
 import { useAppStore } from '../../lib/store';
 import { persistAudioPosition } from '../../lib/slices/createAudioPlayerSlice';
 import { CHECKER_URL, LISTEN_BEAT_KEY } from '../../utils/config';
@@ -47,10 +47,14 @@ import {
 } from './playerMath';
 import { attach, detach, canRoute, markNoCors, webAudioSupported, warmUp } from './audioEffects';
 import PlayerMenu from './PlayerMenu';
+import { openAudioPip, watchAudioPip, useAudioPipWindow } from './AudioPip';
+import { PortalDocContext } from '../../utils/portalDocument';
 import { ClipForm, CopyAtOption, EpisodeShareOptions } from './PlayerShare';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
 import { trackArtist } from '../../utils/audioTrack';
 import useListenTime from '../../hooks/useListenTime';
+import useAudioAd from '../../hooks/useAudioAd';
+import TickerCrawl from '../ads/TickerCrawl';
 import { audioItemPath } from '../AudioItem/AudioItemView';
 import mantequillaLogo from '../../assets/mantequilla-logo.png';
 import '../../page/Audio.scss';
@@ -60,6 +64,8 @@ const TRANSCRIPT_ON_KEY = '3speak-audio-transcript';
 const TRANSCRIPT_LANG_KEY = '3speak-audio-transcript-lang';
 // Voice boost and skip silence, as last chosen: { boost, skip }.
 const EFFECTS_KEY = '3speak-audio-effects';
+// How long the opened area takes to slide open or shut (.audio-np-expand-wrap).
+const EXPAND_MS = 260;
 
 const toast = toastIn('Podcasts');
 
@@ -219,6 +225,9 @@ function GlobalAudioPlayer() {
   // Listening time for every track, 3Speak audio and outside episodes alike
   // (anonymous, like video watch time). Separate from pay-per-listen below.
   useListenTime(audioRef, audioCurrent, elKey);
+  // Spoken ticker spots on 3Speak audio (the checker decides which tracks).
+  const audioAd = useAudioAd(audioRef, audioCurrent, elKey);
+  const { toggle: toggleAudioAd } = audioAd;
 
   const switchElement = useCallback((toRouted) => {
     if (routedRef.current === toRouted) return;
@@ -269,10 +278,8 @@ function GlobalAudioPlayer() {
   const [tipTarget, setTipTarget] = useState(null);
   const [podcastTip, setPodcastTip] = useState(null);
   // Closing the player stops the track, never the queue: while the queue holds
-  // something, a small "Up next" bar stays (hidden on request until the next play).
-  const [idleHidden, setIdleHidden] = useState(false);
-  useEffect(() => { if (audioCurrent) setIdleHidden(false); }, [audioCurrent]);
-  const idleBar = !audioCurrent && audioQueue.length > 0 && !idleHidden;
+  // something, a small "Up next" bar stays. Its own X clears the queue.
+  const idleBar = !audioCurrent && audioQueue.length > 0;
 
   // Post enrichment
   const [npIsVoted, setNpIsVoted] = useState(false);
@@ -338,6 +345,27 @@ function GlobalAudioPlayer() {
   // Casting (Remote Playback API, AirPlay on Safari).
   const [castAvailable, setCastAvailable] = useState(false);
 
+  // The player popped out into its own window (AudioPip.jsx): { win, root },
+  // root being where the controls are drawn. Menus, modals and the volume
+  // popover go to that window's document too (PortalDocContext).
+  const [pip, setPip] = useState(null);
+  const hostDoc = pip ? pip.win.document : document;
+  useEffect(() => {
+    if (!pip) return undefined;
+    const stop = watchAudioPip(pip.win, () => setPip(null));
+    return () => { stop(); try { pip.win.close(); } catch { /* gone */ } };
+  }, [pip]);
+  // Closing the player closes its window too.
+  useEffect(() => { if (!audioCurrent) setPip(null); }, [audioCurrent]);
+  const togglePip = async () => {
+    if (pip) { setPip(null); return; }
+    setMenu(null);
+    setVolOpen(false);
+    const opened = await openAudioPip();
+    if (opened) setPip(opened);
+  };
+  const focusPip = () => { try { pip?.win.focus(); } catch { /* gone */ } };
+
   // Saving for offline.
   const downloads = useDownloads();
   const [dlStarting, setDlStarting] = useState(null);
@@ -388,10 +416,10 @@ function GlobalAudioPlayer() {
       if (!e.target.closest?.('.audio-np-vol-btn') && !volPopRef.current?.contains(e.target)) setVolOpen(false);
     };
     const onKey = (e) => { if (e.key === 'Escape') setVolOpen(false); };
-    document.addEventListener('mousedown', onDown);
-    document.addEventListener('keydown', onKey);
-    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey); };
-  }, [volOpen]);
+    hostDoc.addEventListener('mousedown', onDown);
+    hostDoc.addEventListener('keydown', onKey);
+    return () => { hostDoc.removeEventListener('mousedown', onDown); hostDoc.removeEventListener('keydown', onKey); };
+  }, [volOpen, hostDoc]);
 
   // Ends the sleep timer: the volume the fade took down comes back.
   const endSleep = useCallback(() => {
@@ -995,10 +1023,12 @@ function GlobalAudioPlayer() {
 
   const togglePlay = useCallback(() => {
     const el = audioRef.current; if (!el) return;
+    // While a spot plays, the button is the spot's.
+    if (toggleAudioAd()) return;
     // From the click itself: some browsers only start Web Audio inside one.
     if (el.paused) graphRef.current?.resume();
     el.paused ? el.play().catch(() => {}) : el.pause();
-  }, []);
+  }, [toggleAudioAd]);
 
   const seekTo = useCallback((sec) => {
     const el = audioRef.current;
@@ -1101,6 +1131,15 @@ function GlobalAudioPlayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioCurrent?._id, audioDuration, isLive, elKey]);
 
+  useAudioPipWindow(pip?.win, {
+    title: sessionTitle || t('audio.untitled'),
+    onToggle: togglePlay,
+    onSkip: skipBy,
+    canSkip: !isLive,
+    back: SKIP_BACK,
+    forward: SKIP_FORWARD,
+  });
+
   // Publish how far the player's top edge sits above the viewport bottom as
   // --audio-np-clearance, so fixed elements (Feedback FAB) can stay above it.
   // ResizeObserver catches expand/collapse; the var is removed when it closes.
@@ -1110,12 +1149,16 @@ function GlobalAudioPlayer() {
   // the Player tab hands us `audioDock`): the same controls, drawn into the page
   // instead of the bar. Only the controls move; the <audio> element stays here,
   // so playback carries on when the tab or the page changes.
-  const docked = !!audioDock;
+  // The pop-out window takes the player the same way: everything in there.
+  const inPip = !!pip;
+  const dockTarget = pip?.root || audioDock;
+  const docked = !!dockTarget;
   useEffect(() => {
     const el = npRef.current;
     const root = document.documentElement;
     // Docked, nothing floats over the page, so there is nothing to clear.
-    if (!hasNowPlaying || !el || docked) return;
+    // In the pop-out window the small bar left in the page (npRef) is what floats.
+    if (!hasNowPlaying || !el || (docked && !inPip)) return;
     const update = () => {
       const top = el.getBoundingClientRect().top;
       root.style.setProperty('--audio-np-clearance', `${Math.max(0, Math.round(window.innerHeight - top))}px`);
@@ -1129,18 +1172,24 @@ function GlobalAudioPlayer() {
       window.removeEventListener('resize', update);
       root.style.removeProperty('--audio-np-clearance');
     };
-  }, [hasNowPlaying, docked]);
+  }, [hasNowPlaying, docked, inPip]);
 
   // Same for the open queue, which on desktop sits above the player: its top
-  // edge goes into --audio-queue-clearance so the Feedback FAB clears it too.
-  // offsetHeight, not the rect, so the pop-up animation's offset isn't counted.
+  // edge goes into --audio-queue-clearance so the Feedback FAB clears it too
+  // (and the profile FAB on a phone). offsetHeight, not the rect, so the pop-up
+  // animation's offset isn't counted. On desktop the panel is fixed with its own
+  // `bottom`; on a phone/tablet it is a sheet at the foot of the overlay, lifted
+  // by the overlay's padding (the BottomNav), so that padding is what's below it.
   const queuePanelRef = useRef(null);
   useEffect(() => {
     const panel = queuePanelRef.current;
     const root = document.documentElement;
     if (!audioShowQueue || !panel) return;
     const update = () => {
-      const below = parseFloat(getComputedStyle(panel).bottom) || 0;
+      const cs = getComputedStyle(panel);
+      const below = cs.position === 'fixed'
+        ? parseFloat(cs.bottom) || 0
+        : parseFloat(getComputedStyle(panel.parentElement).paddingBottom) || 0;
       root.style.setProperty('--audio-queue-clearance', `${Math.round(below + panel.offsetHeight)}px`);
     };
     update();
@@ -1154,6 +1203,23 @@ function GlobalAudioPlayer() {
       root.style.removeProperty('--audio-queue-clearance');
     };
   }, [audioShowQueue, hasNowPlaying, docked]);
+
+  // The opened area slides open and shut: it mounts closed and opens on the
+  // next frame, and stays mounted while it closes (EXPAND_MS, as in the SCSS).
+  const showExpanded = audioExpanded || docked;
+  const [areaMounted, setAreaMounted] = useState(showExpanded);
+  const [areaOpen, setAreaOpen] = useState(showExpanded);
+  useEffect(() => {
+    if (showExpanded) {
+      setAreaMounted(true);
+      let inner = 0;
+      const outer = requestAnimationFrame(() => { inner = requestAnimationFrame(() => setAreaOpen(true)); });
+      return () => { cancelAnimationFrame(outer); cancelAnimationFrame(inner); };
+    }
+    setAreaOpen(false);
+    const id = setTimeout(() => setAreaMounted(false), EXPAND_MS);
+    return () => clearTimeout(id);
+  }, [showExpanded]);
 
   const audioEl = (
     <audio
@@ -1230,7 +1296,7 @@ function GlobalAudioPlayer() {
               <MdQueueMusic size={20} />
               <span className="audio-np-queue-badge">{audioQueue.length}</span>
             </button>
-            <button className="audio-np-close-btn" onClick={() => { setIdleHidden(true); audioSetShowQueue(false); }} title={t('audio.player.hideIdle')} aria-label={t('audio.player.hideIdle')}><MdClose size={18} /></button>
+            <button className="audio-np-close-btn" onClick={() => { audioClearQueue(); audioSetShowQueue(false); }} title={t('audio.player.clearQueue')} aria-label={t('audio.player.clearQueue')}><MdClose size={18} /></button>
           </div>
         </div>
         {queueOverlay}
@@ -1239,7 +1305,9 @@ function GlobalAudioPlayer() {
   }
 
   const nowPlaying = audioCurrent;
-  const portalIfDocked = (node) => (docked ? createPortal(node, audioDock) : node);
+  const portalIfDocked = (node) => (docked ? createPortal(node, dockTarget) : node);
+  // The player's windows and modals: with the player in the pop-out window, in there.
+  const toHost = (node) => (inPip ? createPortal(node, pip.root) : node);
 
   // Only 3Speak audio has a real waveform. Outside podcast episodes (and live
   // streams) get the plain progress bar instead of a made-up one.
@@ -1315,21 +1383,68 @@ function GlobalAudioPlayer() {
     if (!audioExpanded && audioDockOpener) audioDockOpener();
     else audioSetExpanded(v => !v);
   };
-  const showExpanded = audioExpanded || docked;
 
   const timeOrLive = isLive
     ? <span className="audio-np-live-badge">{t('audio.player.live')}</span>
     : <span className="audio-np-time">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>;
 
   return (
-    <>
+    <PortalDocContext.Provider value={inPip ? hostDoc : null}>
       {audioEl}
 
-      {portalIfDocked(<div ref={npRef} className={`audio-now-playing${showExpanded ? ' audio-np-expanded' : ''}${docked ? ' audio-np-docked' : ''}${isLive ? ' is-live' : ''}`}>
+      {/* Left in the page while the player is in its pop-out window. */}
+      {inPip && (
+        <div ref={npRef} className="audio-now-playing audio-np-idle audio-np-pip-stub">
+          <div className="audio-np-content">
+            <div className="audio-np-art" onClick={focusPip}>
+              <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.src = nowPlaying.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
+            </div>
+            <div className="audio-np-info" onClick={focusPip} title={t('audio.player.pipActive')}>
+              <span className="audio-np-title"><span className="audio-np-title-text">{nowPlaying.title || t('audio.untitled')}</span></span>
+              <span className="audio-np-subline"><span className="audio-np-author">{t('audio.player.pipActive')}</span></span>
+            </div>
+            <div className="audio-np-controls">
+              <button className="audio-np-play-btn" onClick={togglePlay} aria-label={audioIsPlaying ? t('common.actions.pause') : t('common.actions.play')}>{audioIsPlaying ? <MdPause size={26} /> : <MdPlayArrow size={26} />}</button>
+            </div>
+            <button className="audio-np-pip-btn active" onClick={togglePip} title={t('audio.player.pipClose')} aria-label={t('audio.player.pipClose')} aria-pressed="true"><TbPictureInPicture size={19} /></button>
+          </div>
+        </div>
+      )}
+
+      {portalIfDocked(<div ref={inPip ? undefined : npRef} className={`audio-now-playing${showExpanded ? ' audio-np-expanded' : ''}${docked ? ' audio-np-docked' : ''}${inPip ? ' audio-np-in-pip' : ''}${isLive ? ' is-live' : ''}`}>
         <div className={`audio-np-progress${isLive ? ' is-live' : ''}`} onClick={isLive ? undefined : handleSeek}>
           {!isLive && <div className="audio-np-progress-fill" style={{ width: audioDuration ? `${(audioCurrentTime / audioDuration) * 100}%` : '0%' }} />}
           {markers.map((f, i) => <span key={i} className="audio-np-progress-marker" style={{ left: `${f * 100}%` }} aria-hidden="true" />)}
         </div>
+
+        {/* The spot being heard, written out, with its disclosure and link. */}
+        {audioAd.spot && (
+          <div className="audio-np-ad">
+            <TickerCrawl
+              message={audioAd.spot.message}
+              label={audioAd.spot.label}
+              account={audioAd.spot.account}
+              productName={audioAd.spot.productName}
+              clickUrl={audioAd.spot.clickUrl}
+              durationSeconds={audioAd.spot.durationSeconds}
+              paused={!audioAd.playing}
+              tickerStyle={audioAd.spot.style}
+              compact
+            />
+            {/* The link the spot's last sentence points at. Counted once per spot, server side. */}
+            {audioAd.spot.clickUrl && (
+              <a
+                className="audio-np-ad-more"
+                href={audioAd.spot.clickUrl}
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+                title={audioAd.spot.productName ? t('ads.ticker.openProduct', { name: audioAd.spot.productName }) : t('ads.ticker.openLink')}
+              >
+                {t('ads.ticker.findOutMore')} <MdOpenInNew size={13} aria-hidden="true" />
+              </a>
+            )}
+          </div>
+        )}
 
         <div className="audio-np-content">
           {/* The cover is a record sleeve: while playing, the record slides out
@@ -1416,6 +1531,13 @@ function GlobalAudioPlayer() {
           <div className={`audio-np-volume${volOpen ? ' open' : ''}`}>
             {volumeButton()}
           </div>
+          <button
+            className={`audio-np-pip-btn${inPip ? ' active' : ''}`}
+            onClick={togglePip}
+            title={inPip ? t('audio.player.pipClose') : t('audio.player.pipOpen')}
+            aria-label={inPip ? t('audio.player.pipClose') : t('audio.player.pipOpen')}
+            aria-pressed={inPip}
+          ><TbPictureInPicture size={19} /></button>
           <button className="audio-np-queue-btn" onClick={() => audioSetShowQueue(v => !v)} title={t('audio.player.queue')} aria-label={t('audio.player.queue')}>
             <MdQueueMusic size={20} />
             {audioQueue.length > 0 && <span className="audio-np-queue-badge">{audioQueue.length}</span>}
@@ -1443,8 +1565,12 @@ function GlobalAudioPlayer() {
           ><MdClose size={18} /></button>
         </div>
 
-        {showExpanded && (
+        {(showExpanded || areaMounted) && (
+          <div className={`audio-np-expand-wrap${showExpanded && areaOpen ? ' open' : ''}`}>
           <div className="audio-np-expanded-area">
+            {/* One line on the opened desktop card (tools left, these right);
+                elsewhere the wrapper is display: contents. */}
+            <div className="audio-np-actions">
             <div className="audio-np-mobile-extras">
               {nowPlaying.post_permlink && <PayoutAmount amount={npPayout} size={12} />}
               {nowPlaying.post_permlink && (
@@ -1513,6 +1639,7 @@ function GlobalAudioPlayer() {
                   {dlBusy && <span className="audio-np-tool-label">{Math.round((dlProgress || 0) * 100)}%</span>}
                 </button>
               )}
+            </div>
             </div>
 
             {npWave && (
@@ -1591,6 +1718,28 @@ function GlobalAudioPlayer() {
 
             {!showSubtitles && (
               <>
+                {/* The spot that played on this track, still one click away once it is over. */}
+                {audioAd.heardSpot?.clickUrl && (
+                  <div className="audio-np-ad-card">
+                    <span className="audio-np-ad-card-label">{audioAd.heardSpot.label}</span>
+                    {audioAd.heardSpot.account && (
+                      <img className="audio-np-ad-card-avatar" src={`/img/u/${audioAd.heardSpot.account}/avatar/small`} alt="" loading="lazy" />
+                    )}
+                    <span className="audio-np-ad-card-text">
+                      {audioAd.heardSpot.productName && <strong>{audioAd.heardSpot.productName}</strong>}
+                      <span>{audioAd.heardSpot.message}</span>
+                    </span>
+                    <a
+                      className="audio-np-ad-more"
+                      href={audioAd.heardSpot.clickUrl}
+                      target="_blank"
+                      rel="noopener noreferrer sponsored"
+                      title={audioAd.heardSpot.productName ? t('ads.ticker.openProduct', { name: audioAd.heardSpot.productName }) : t('ads.ticker.openLink')}
+                    >
+                      {t('ads.ticker.findOutMore')} <MdOpenInNew size={13} aria-hidden="true" />
+                    </a>
+                  </div>
+                )}
                 {(npTags.length > 0 || npMantecurated) && (
                   <div className="audio-np-tags">
                     {npMantecurated && <span className="audio-np-curated-badge"><img src={mantequillaLogo} alt="" /> {t('audio.player.curated')}</span>}
@@ -1618,6 +1767,7 @@ function GlobalAudioPlayer() {
                 )}
               </>
             )}
+          </div>
           </div>
         )}
 
@@ -1665,6 +1815,7 @@ function GlobalAudioPlayer() {
         )}
       </div>)}
 
+      {toHost(<>
       {menu?.name === 'speed' && (
         <PlayerMenu anchor={menu.anchor} title={t('audio.player.speed')} onClose={closeMenu}>
           <div className="audio-pm-options" role="radiogroup" aria-label={t('audio.player.speed')}>
@@ -1816,9 +1967,10 @@ function GlobalAudioPlayer() {
             aria-label={t('audio.player.volume')}
           />
         </div>,
-        document.body
+        hostDoc.body
       )}
-    </>
+      </>)}
+    </PortalDocContext.Provider>
   );
 }
 

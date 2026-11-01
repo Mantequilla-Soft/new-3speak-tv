@@ -383,10 +383,24 @@
     flex-direction: column;
     align-items: flex-end;
     position: fixed;
-    bottom: calc(56px + 16px + env(safe-area-inset-bottom, 0px));
+    // Above the BottomNav, and above the audio player bar and its open queue
+    // sheet: the player publishes their top edges (GlobalAudioPlayer.jsx), the
+    // queue's wins while it's open. Never on top of either.
+    bottom: max(
+      calc(56px + 16px + env(safe-area-inset-bottom, 0px)),
+      calc(var(--audio-queue-clearance, var(--audio-np-clearance, 0px)) + 16px)
+    );
     right: calc(12px + env(safe-area-inset-right, 0px));
     z-index: 9999;
+    // In step with the queue sheet sliding up (0.25s, Audio.scss).
+    transition: bottom 0.25s ease;
+
+    // The opened player fills most of the screen; riding above it would put the
+    // FAB at the top of the page, so it waits until the player is folded.
+    &.is-under-player { display: none; }
   }
+
+  @media (prefers-reduced-motion: reduce) { transition: none; }
 }
 
 .profile-fab-actions {

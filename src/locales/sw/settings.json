@@ -15,6 +15,10 @@
     "offToast": "Matangazo yamezimwa kwa video zako",
     "rollsOnToast": "Matangazo ya video yamewashwa kwenye video zako",
     "rollsOffToast": "Sasa ni mabango na tika pekee kwenye video zako",
+    "audio": "Matangazo kwenye sauti zako",
+    "audioDesc": "Ujumbe mfupi unaosomwa kwa sauti kutoka kwa mdhamini unaweza kucheza wakati wa sauti yako, pamoja na kiungo ambacho wasikilizaji wanaweza kufungua. Unapata sehemu, kama ilivyo kwa matangazo ya video. Unaweza kubadilisha hili kwa kila upakiaji kwenye kipakiaji cha sauti.",
+    "audioOnToast": "Matangazo yamewashwa kwenye sauti zako",
+    "audioOffToast": "Matangazo yamezimwa kwenye sauti zako",
     "splitSaved": "Mgawanyo wa mapato umehifadhiwa",
     "title": "Matangazo kwenye video zako",
     "allow": "Ruhusu matangazo",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "Jumla",
     "content": "Maudhui",
+    "connections": "Miunganisho",
     "rewards": "Matangazo na zawadi",
     "about": "Kuhusu / Toleo"
   },
   "contentTabs": {
     "feed": "Mlisho",
     "aria": "Mipangilio ya maudhui"
+  },
+  "connectionsTabs": {
+    "support": "Usaidizi",
+    "profiles": "Wasifu uliounganishwa",
+    "aria": "Mipangilio ya miunganisho"
   },
   "butrauthUnlocked": "Butter Auth imefunguliwa",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "Omba kufutwa",
     "requestData": "Omba data yangu",
     "foot": "Tunajibu ndani ya mwezi mmoja. Unaweza pia kutuma barua pepe moja kwa moja kwa <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Bakshishi za Lightning",
+    "checking": "Inaangalia bakshishi zako zinakwenda wapi…",
+    "toV4v": "Bakshishi zinakwenda kwa {{account}}@v4v.app",
+    "toOwn": "Bakshishi zinakwenda kwa {{address}}",
+    "v4vDesc": "Chaguo la msingi, hakuna cha kuweka: bakshishi zinafika kwenye Hive kama HIVE. Bakshishi ndogo kuliko ada ya ubadilishaji ya v4v.app (takriban sats 60) zinabaki kama sats kwenye akaunti yako ya v4v.app. Weka anwani ya Lightning hapa chini ili zifike kwenye pochi yako mwenyewe.",
+    "ownDesc": "Bakshishi zinakwenda moja kwa moja kwenye pochi yako ya Lightning, bila v4v.app na ada yake ya ubadilishaji. Imehifadhiwa kwenye wasifu wako wa Hive.",
+    "inputLabel": "Anwani yako ya Lightning",
+    "placeholder": "wewe@pochi.com",
+    "useV4v": "Tumia v4v.app tena",
+    "savedOwn": "Bakshishi za Lightning sasa zinakwenda kwenye anwani yako",
+    "savedV4v": "Bakshishi za Lightning zinapitia v4v.app tena",
+    "badAddress": "Hiyo si anwani ya Lightning. Inaonekana kama jina@pochi.com.",
+    "unreachable": "Anwani hii haikujibu kama anwani ya Lightning. Iangalie kisha ujaribu tena.",
+    "saveFailed": "Haikuweza kuhifadhiwa kwenye wasifu wako wa Hive.",
+    "supportersNote": "Bakshishi kwenda anwani yako mwenyewe hazipiti kwenye Hive kamwe, kwa hiyo hazionekani chini ya Wafadhili.",
+    "publicNote": "Anwani yako ya Lightning huhifadhiwa kwenye akaunti yako ya Hive, ambapo mtu yeyote anaweza kuiona."
+  },
+  "supportLinks": {
+    "title": "Njia nyingine za kukuunga mkono",
+    "desc": "Ukurasa wako kwenye {{sites}}. Watazamaji wanaona viungo hivi kwenye dirisha lako la tuzo.",
+    "placeholder": "https://ko-fi.com/jinalako",
+    "add": "Ongeza",
+    "remove": "Ondoa kiungo cha {{site}}",
+    "badLink": "Bandika kiungo kamili cha ukurasa wako kwenye mojawapo ya tovuti hizi.",
+    "duplicate": "Kiungo hicho tayari kiko kwenye orodha.",
+    "max": "Unaweza kuongeza hadi viungo {{max}}.",
+    "saved": "Viungo vya usaidizi vimehifadhiwa",
+    "publicNote": "Viungo hivi huhifadhiwa kwenye akaunti yako ya Hive, ambapo mtu yeyote anaweza kuviona."
   }
 }

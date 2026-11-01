@@ -3,19 +3,22 @@
     "surface": {
       "watch": "Sa loob ng mga video",
       "shorts": "Sa pagitan ng Shorts",
-      "upload": "Bago ang upload"
+      "upload": "Bago ang upload",
+      "audio": "Sa audio player"
     },
     "supplies": {
       "text": "Maikling mensahe at link",
       "imageOrVideo": "Larawan o video",
       "image": "Larawan",
-      "video": "Video"
+      "video": "Video",
+      "audio": "Isang audio clip at link"
     },
     "youSupply": {
       "text": "Ikaw ang magbibigay ng maikling mensahe at link",
       "imageOrVideo": "Ikaw ang magbibigay ng larawan o video",
       "image": "Ikaw ang magbibigay ng larawan",
-      "video": "Ikaw ang magbibigay ng video"
+      "video": "Ikaw ang magbibigay ng video",
+      "audio": "Magbibigay ka ng audio clip at link"
     },
     "bannerAdvice": {
       "wideStrip": "Kailangan itong maging malapad na strip.",
@@ -36,7 +39,10 @@
       "minWidth": "hindi bababa sa {{width}}px ang lapad",
       "landscape": "landscape, tulad ng player",
       "filesAny": "PNG, JPG o MP4",
-      "filesImage": "PNG o JPG"
+      "filesImage": "PNG o JPG",
+      "filesAudio": "MP3, WAV, M4A, OGG, FLAC o WebM",
+      "upToMb": "hanggang {{mb}} MB, pinapantay ang lakas sa ibang ads",
+      "audioButton": "ipinapakita bilang button habang tumutugtog"
     },
     "groups": {
       "screen": {
@@ -53,6 +59,10 @@
       },
       "more": {
         "title": "Iba pang format"
+      },
+      "audio": {
+        "title": "Sa audio player",
+        "note": "Naririnig ng mga nakikinig sa audio posts. Humihinto sandali ang track at tutuloy pagkatapos."
       }
     },
     "unplaced": "Walang puwesto"
@@ -106,7 +116,8 @@
     "secondsIn_one": "Pagkalipas ng {{count}} segundo",
     "secondsIn_other": "Pagkalipas ng {{count}} segundo",
     "oneMinuteIn": "Pagkalipas ng 1 minuto",
-    "minutesIn": "Pagkalipas ng {{minutes}} minuto"
+    "minutesIn": "Pagkalipas ng {{minutes}} minuto",
+    "beforeTrack": "Bago ang track"
   },
   "blocked": {
     "unpaid": "Hinihintay ang bayad mo",
@@ -138,10 +149,28 @@
     "playsDay": "Plays bawat araw",
     "playsMonth": "Plays bawat buwan",
     "reach": "Abot",
-    "notRecommendedTag": "hindi inirerekomenda",
-    "notRecommendedNote": "<b>Hindi inirerekomenda:</b> mas maraming session ang naaabot ng ad bago ang video sa papel, pero halos kalahati ng lahat ng panonood dito ay humihinto sa loob ng labinlimang segundo, kaya karamihan sa mga play na iyon ay napupunta sa taong paalis na. Ang ad na mas malalim ang puwesto ay binibilang lang kapag talagang umabot doon ang viewer.",
     "whoWatches": "Sino ang nanonood",
-    "qualityNote": "<b>{{pct}}% ng raw traffic ang hindi isinama</b> sa mga numerong ito: mga session na mas maikli sa {{seconds}} segundo, mga account na masyadong mabilis para maging totoong viewer, at mga video na nag-opt out ang creator. Ang natitira ang ibinebenta namin."
+    "qualityNote": "<b>{{pct}}% ng raw traffic ang hindi isinama</b> sa mga numerong ito: mga session na mas maikli sa {{seconds}} segundo, mga account na masyadong mabilis para maging totoong viewer, at mga video na nag-opt out ang creator. Ang natitira ang ibinebenta namin.",
+    "listensPerDay": "Pakikinig bawat araw",
+    "measuredDays": "sinukat sa nakaraang {{days}} araw",
+    "tracksHeard": "Mga track na pinakinggan",
+    "tracksNote": "sa {{catalogue}} pampublikong track sa 3Speak",
+    "listenHours": "Oras ng pakikinig",
+    "audioTrial": "Sa ngayon, sa audio lang ni {{owners}} tumutugtog ang audio ads, mga {{n}} pakikinig bawat araw. Madadagdagan ang mga creator habang nagbubukas ang audio ads.",
+    "audioWhere": "Saan sa track tumutugtog",
+    "listensDay": "Pakikinig / araw",
+    "listensMonth": "Pakikinig / buwan",
+    "audioFine": "Binibilang mula sa 3Speak audio na talagang pinakinggan, hindi lang binuksan. Bumibilang ang isang puwesto kapag umabot doon ang nakikinig.",
+    "whoListens": "Sino ang nakikinig",
+    "audioNone": "Hindi ma-load ang bilang ng pakikinig ngayon. Subukan ulit maya-maya.",
+    "uploadsPerDay": "Upload bawat araw",
+    "uploadsNote": "sa 3speak.tv, nakaraang 7 araw",
+    "videosShorts": "Video / shorts bawat araw",
+    "creatorsUploading": "Mga creator na nag-a-upload",
+    "creatorsNote": "magkakaibang account sa nakaraang {{days}} araw",
+    "uploadsFine": "Binibilang mula sa mga upload sa 3speak.tv. Tumutugtog ang spot bago ang bawat upload ng video, short at audio.",
+    "uploadNone": "Hindi ma-load ang bilang ng upload ngayon. Subukan ulit maya-maya.",
+    "videosShortsAudio": "Video / shorts / audio bawat araw"
   },
   "rateCard": {
     "perSecDay": " /seg /araw",
@@ -154,7 +183,13 @@
     "orAboutHive": "o mga {{hive}} HIVE",
     "forSpotOver": "para sa {{seconds}}s na spot sa loob ng {{days}} araw",
     "longerOffer": "<b>{{price}} HBD</b> para sa {{days}} araw, mga {{saving}}% na mas mura bawat araw",
-    "agreedRate": "ang napagkasunduan mong rate"
+    "agreedRate": "ang napagkasunduan mong rate",
+    "tabs": {
+      "label": "Mga format",
+      "video": "Video",
+      "audio": "Audio",
+      "upload": "Upload"
+    }
   },
   "overlay": {
     "advertisement": "Advertisement",
@@ -190,6 +225,7 @@
   "ticker": {
     "openProduct": "Buksan ang {{name}}",
     "openLink": "Buksan ang link ng advertiser",
+    "findOutMore": "Alamin pa",
     "previewCaption": "Ang ticker mo sa {{seconds}}s, gaya ng makikita ng mga viewer",
     "preview": "Preview",
     "screenSize": "Laki ng screen",
@@ -212,7 +248,13 @@
     "styleHold": "dumudulas papasok at humihinto",
     "styleCrawl": "gumagapang",
     "atLeastSeconds": ", hindi bababa sa {{seconds}}s",
-    "checkLink": "Tingnan ang link"
+    "checkLink": "Tingnan ang link",
+    "audioNote": "Tumutugtog din ang tickers sa audio player: binabasa ng boses ng computer ang mensahe mo sa English, na may maikling tunog at mahinang musika sa ilalim, at lalabas ang link mo bilang button. Pindutin ang Pakinggan para marinig mismo ang maririnig ng mga nakikinig.",
+    "listen": "Pakinggan",
+    "listenBusy": "Inihahanda…",
+    "listenHint": "Ang parehong tunog na makukuha ng mga nakikinig, mula sa laman ng form.",
+    "listenSays": "Sinasabi: “{{text}}”",
+    "listenFailed": "Hindi magawa ang preview"
   },
   "gate": {
     "ariaLabel": "Sponsor message",
@@ -381,7 +423,8 @@
   "missing": {
     "ticker": "I-save muna ang ticker mo.",
     "banner": "I-upload muna ang banner mo.",
-    "video": "I-upload ang ad video mo, o ipagawa ito sa amin."
+    "video": "I-upload ang ad video mo, o ipagawa ito sa amin.",
+    "audio": "I-upload muna ang audio clip mo."
   },
   "adType": {
     "question": "Ano ang patatakbuhin mo?",
@@ -411,7 +454,12 @@
       "upload": "I-upload ang landscape na video na papanoorin ng mga creator bago magsimula ang upload nila, o ipagawa ito sa amin.",
       "banner": "I-upload ang larawang ipapakita sa ibabaw ng video.",
       "shorts": "I-upload ang patayong video na magpe-play sa pagitan ng Shorts. Kailangan itong portrait, dahil maliit na magpe-play ang landscape na spot na may itim na bars sa magkabilang gilid. Swak ang 1080x1920.",
-      "video": "I-upload ang video na magpe-play, o ipagawa ito sa amin. Dito rin itinatakda ang logo at slogan na ipapakita sa ibabaw ng ad mo."
+      "video": "I-upload ang video na magpe-play, o ipagawa ito sa amin. Dito rin itinatakda ang logo at slogan na ipapakita sa ibabaw ng ad mo.",
+      "audio": "I-upload ang audio clip mo at ang link ng button nito. Hihinto ang track sa puwestong na-book mo, tutugtog ang clip mo, tapos tuloy ang track."
+    },
+    "audio": {
+      "title": "Isang audio ad",
+      "blurb": "Sarili mong audio clip, pinapatugtog sa audio player."
     }
   },
   "book": {
@@ -451,7 +499,6 @@
     "enterLength": "Higit sa isang ad video ang na-upload, kaya ilagay ang haba ng bino-book mo.",
     "mustFit": "Kailangang kumasya rito ang ad video mo.",
     "whenInVideo": "Kailan sa video",
-    "beforeNotRecommended": "Bago ang video (hindi inirerekomenda)",
     "slotFull": " (puno para sa mga petsang ito)",
     "placesLeft": " ({{left}} sa {{total}} puwesto ang natitira)",
     "slotHint": "Gaano kalalim sa bawat video ito tatakbo. Mas huli, mas kaunting tao ang naaabot, pero naaabot sila habang nanonood.",
@@ -500,7 +547,19 @@
     "chartTotal_other": "{{seconds}}s sa loob ng {{count}} araw = {{total}} HBD",
     "chartDays": "Mga araw na na-book",
     "chartYAxis": "HBD bawat segundo bawat araw",
-    "chartAria": "{{format}}: {{from}} HBD bawat segundo bawat araw para sa {{min}} araw, bumababa sa {{to}} HBD para sa {{max}} araw"
+    "chartAria": "{{format}}: {{from}} HBD bawat segundo bawat araw para sa {{min}} araw, bumababa sa {{to}} HBD para sa {{max}} araw",
+    "audioSpot": "I-play din sa audio player",
+    "audioSpotHint": "Binabasa nang malakas sa mga nakikinig sa audio posts, kasama ang link mo bilang button.",
+    "lengthFromAudio": "Kinuha mula sa audio clip na in-upload mo.",
+    "uploadFirstAudio": "I-upload muna ang audio clip mo",
+    "tooManyClips": "Higit sa isa ang audio clip mo, kaya hindi namin alam kung aling haba ang gagamitin. Ilagay mo ito.",
+    "enterLengthAudio": "Higit sa isang audio clip ang na-upload, kaya ilagay ang haba ng bino-book mo.",
+    "mustFitAudio": "Dapat kumasya rito ang audio clip mo.",
+    "whenInTrack": "Kailan sa track",
+    "slotHintAudio": "Gaano kalayo sa bawat track ito tumutugtog. Mas huli, mas kaunting tao, pero nakikinig sila.",
+    "tracksToRunOn": "Mga track na pagpapatugtugan",
+    "shortestTrack": "Pinakamaikling track",
+    "longestTrack": "Pinakamahabang track"
   },
   "attach": {
     "needsTicker": "Ticker flight ito, kaya kailangan nito ng aprubadong ticker message.",
@@ -516,7 +575,10 @@
     "chooseOne": "Pumili ng isa",
     "bannerOption": "Banner",
     "tickerOption": "Ticker",
-    "secondsAd": "{{seconds}}s na ad"
+    "secondsAd": "{{seconds}}s na ad",
+    "needsAudio": "Audio flight ito, kaya kailangan nito ng aprubadong audio clip.",
+    "useAudio": "Gamitin ang isa sa mga aprubadong audio clip mo",
+    "audioOption": "Audio clip · {{seconds}}s"
   },
   "delivery": {
     "deliveredOf_one": "<b>{{delivered}}</b> play ang naibigay sa {{forecast}} na forecast",
@@ -553,7 +615,9 @@
     "clickRate": "({{rate}}% ng mga play)",
     "avgWatchedOf": "<b>{{seconds}}s</b> ang average na napanood, sa {{length}}s",
     "avgWatched": "<b>{{seconds}}s</b> ang average na napanood",
-    "toEnd": "{{percent}}% ang nanood hanggang dulo"
+    "toEnd": "{{percent}}% ang nanood hanggang dulo",
+    "runsAudio": "Ang audio clip mo · {{seconds}}s",
+    "audioFailed": "Hindi mabago ang audio setting"
   },
   "rebook": {
     "button": "I-book ulit",
@@ -796,5 +860,19 @@
     "note": "Kapag tumanggi ka, walang magbabago. Puwede mo itong i-off anumang oras sa Settings, at mabubura ang itinago namin.",
     "yes": "Oo, bilangin ang pakikinig ko",
     "savedYes": "Bilang na ang pakikinig mo para sa gantimpala sa pakikinig"
+  },
+  "audio": {
+    "yourSpot": "Ang audio ad mo",
+    "file": "Audio file",
+    "fileHint": "MP3, WAV, M4A, OGG, FLAC o WebM. Hanggang {{seconds}} segundo at {{mb}} MB.",
+    "tooBig": "Lampas {{mb}} MB ang file. Mag-export ng mas maliit, halimbawa bilang MP3.",
+    "tooBigServer": "Masyadong malaki ang file para i-upload.",
+    "linkHint": "Kung saan pupunta ang button na “Alamin pa” habang tumutugtog ang clip mo. Buong https:// address.",
+    "howItPlays": "Pinapantay namin ang lakas ng tunog sa ibang ads. Ang player sa ibaba ay tumutugtog ng naka-save na file, kaya ang naririnig mo ay mismong maririnig ng mga nakikinig. Nire-review ang bawat clip bago tumakbo.",
+    "upload": "I-upload ang audio",
+    "uploading": "Ina-upload…",
+    "savedReview": "Na-save ang audio. Rerepasuhin namin bago tumakbo",
+    "uploadFailed": "Hindi ma-upload ang audio",
+    "seconds": "{{seconds}}s na audio clip"
   }
 }

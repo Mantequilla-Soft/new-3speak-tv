@@ -47,6 +47,10 @@
     "shorts_few": "<b>{{value}}</b> ролика Shorts",
     "shorts_many": "<b>{{value}}</b> роликов Shorts",
     "shorts_other": "<b>{{value}}</b> ролика Shorts",
+    "audio_one": "<b>{{value}}</b> аудио",
+    "audio_few": "<b>{{value}}</b> аудио",
+    "audio_many": "<b>{{value}}</b> аудио",
+    "audio_other": "<b>{{value}}</b> аудио",
     "views_one": "<b>{{value}}</b> просмотр",
     "views_few": "<b>{{value}}</b> просмотра",
     "views_many": "<b>{{value}}</b> просмотров",
@@ -63,6 +67,10 @@
     "shortsTitle_few": "{{num}} ролика Shorts",
     "shortsTitle_many": "{{num}} роликов Shorts",
     "shortsTitle_other": "{{num}} ролика Shorts",
+    "audioTitle_one": "{{num}} аудио",
+    "audioTitle_few": "{{num}} аудио",
+    "audioTitle_many": "{{num}} аудио",
+    "audioTitle_other": "{{num}} аудио",
     "viewsTitle_one": "{{num}} просмотр",
     "viewsTitle_few": "{{num}} просмотра",
     "viewsTitle_many": "{{num}} просмотров",
@@ -440,5 +448,8 @@
         "body": "«Сохранить макет» публикует его. «Отменить» и «Повторить» листают ваши изменения (Ctrl+Z тоже работает), «Отмена» их сбрасывает, а «Сбросить по умолчанию» возвращает стандартную страницу. «?» рядом с заголовком снова открывает этот тур."
       }
     }
+  },
+  "audioTab": {
+    "files": "Аудиофайлы"
   }
 }

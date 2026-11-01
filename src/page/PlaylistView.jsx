@@ -2,7 +2,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState, useMemo, useRef } from 'react';
-import { MdPlaylistPlay, MdClose, MdDragIndicator, MdEdit, MdLock, MdPublic, MdCloudUpload, MdRssFeed } from 'react-icons/md';
+import { MdPlaylistPlay, MdClose, MdDragIndicator, MdEdit, MdLock, MdPublic, MdCloudUpload, MdRssFeed, MdPodcasts, MdLibraryMusic, MdSearch } from 'react-icons/md';
 import { IoArrowBack, IoTrash, IoSave, IoReorderThree } from 'react-icons/io5';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -24,6 +24,8 @@ import AudioTile from '../components/AudioTile/AudioTile';
 import { audioItemPath } from '../components/AudioItem/AudioItemView';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
 import PlaylistFollowButton from '../components/Podcasts/PlaylistFollowButton';
+import PlaylistEpisodeTile from '../components/Podcasts/PlaylistEpisodeTile';
+import { PODCAST_PLACEHOLDER } from '../lib/podcasts';
 import { fixVideoThumbnail, fallbackImg, squareCover } from '../utils/fixThumbnails';
 import { fetchVideosForPlaylist } from '../utils/playlistVideos';
 import useHoverPreview from '../hooks/useHoverPreview';
@@ -73,6 +75,8 @@ function PlaylistView() {
   const [editTagInput, setEditTagInput] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
   const [playlistTarget, setPlaylistTarget] = useState(null);
+  const [episodeSearch, setEpisodeSearch] = useState('');
+  const audioPlay = useAppStore((s) => s.audioPlay);
 
   // Fetch playlist data
   const { data: playlist, isLoading: playlistLoading, error: playlistError } = useQuery({
@@ -159,6 +163,22 @@ function PlaylistView() {
     } catch { return {}; }
   }, [playlist]);
   const playlistTags = useMemo(() => playlistJsonMeta.tags || [], [playlistJsonMeta]);
+
+  // An all-audio playlist (an album, a 3Speak podcast) is drawn like an outside
+  // podcast show (components/Podcasts): show header, episode tiles. Until the
+  // items load, an album upload's `type: 'audio'` says so already.
+  const isAudioShow = listedVideos.length > 0
+    ? listedVideos.every((v) => v.isAudio && v.audioDoc)
+    : videosLoading && playlistJsonMeta.type === 'audio';
+  const isMusic = audioTracks.length > 0 && audioTracks.every((v) => ['song', 'music'].includes(v.audioDoc.category));
+  const showCover = playlist?.thumbnail || listedVideos.find((v) => v.audioDoc?.thumbnail_url)?.audioDoc.thumbnail_url || '';
+  // What a tile plays: the track with the playlist's cover, when it has one.
+  const trackItem = (v) => (playlist?.thumbnail ? { ...v.audioDoc, thumbnail_url: playlist.thumbnail } : v.audioDoc);
+  const episodeQuery = episodeSearch.trim().toLowerCase();
+  const shownEpisodes = episodeQuery
+    ? audioTracks.filter((v) => `${v.title || ''} ${v.audioDoc.title || ''} ${v.summary || ''}`.toLowerCase().includes(episodeQuery))
+    : audioTracks;
+  const episodeItems = shownEpisodes.map(trackItem);
 
   // What the edit dialog opened with. Cover and album details are only sent when
   // they differ from it: an update that carries them REPLACES what is stored, so
@@ -430,9 +450,78 @@ function PlaylistView() {
     );
   }
 
+  const album = playlist.metadata?.album || {};
+  const feedHref = `/rss/playlist/${encodeURIComponent(playlistId)}.xml`;
+  const ownerButtons = isOwner && (
+    <>
+      <button type="button" className="pod-btn" onClick={handleOpenEdit} disabled={isSaving}>
+        <MdEdit size={16} /> {t('common.actions.edit')}
+      </button>
+      <button type="button" className={`pod-btn${reorderMode ? ' pod-btn--on' : ''}`} onClick={() => setReorderMode(!reorderMode)} disabled={isSaving}>
+        <IoReorderThree size={16} /> {reorderMode ? t('common.actions.done') : t('playlists.view.reorder')}
+      </button>
+      <button type="button" className="pod-btn" onClick={() => setShowDeleteConfirm(true)} disabled={isSaving}>
+        <IoTrash size={16} /> {t('playlists.view.deletePlaylist')}
+      </button>
+    </>
+  );
+
   return (
     <div className="playlist-view-container">
-      {/* Playlist Header */}
+      {isAudioShow ? (
+        <header className="pod-show-head playlist-pod-head">
+          <img
+            className="pod-art pod-show-cover"
+            src={showCover ? squareCover(showCover) : PODCAST_PLACEHOLDER}
+            alt=""
+            onError={(e) => { e.currentTarget.src = PODCAST_PLACEHOLDER; }}
+          />
+          <div className="pod-show-info">
+            <span className="pod-show-kicker">
+              {isMusic ? <MdLibraryMusic size={14} /> : <MdPodcasts size={14} />}
+              {isMusic ? t('audio.categories.music') : t('audio.podcasts.kicker')}
+              {isPrivate && <span className="pod-badge pod-badge--lock"><MdLock size={12} />{t('playlists.private')}</span>}
+            </span>
+            <h1 className="pod-show-title">{playlist.name}</h1>
+            <Link to={`/@${playlist.owner}`} className="pod-show-author">@{playlist.owner}</Link>
+            <div className="pod-show-meta">
+              {album.musicStyle && <span className="pod-chip">{album.musicStyle}</span>}
+              {playlistTags
+                .filter((tag) => tag.toLowerCase() !== String(album.musicStyle || '').toLowerCase())
+                .map((tag) => <span key={tag} className="pod-chip">{tag}</span>)}
+              <span>{t('audio.podcasts.episodes', { count: listedVideos.length })}</span>
+              {album.year && <span>{album.year}</span>}
+              <span>{t('playlists.view.created', { when: dayjs.unix(playlist.created_at).fromNow() })}</span>
+            </div>
+            {(album.label || album.credits) && (
+              <div className="pod-show-meta">
+                {album.label && <span><Trans i18nKey="playlists.view.album.label" values={{ value: album.label }} components={{ strong: <strong /> }} /></span>}
+                {album.credits && <span><Trans i18nKey="playlists.view.album.credits" values={{ value: album.credits }} components={{ strong: <strong /> }} /></span>}
+              </div>
+            )}
+            {album.description && <p className="pod-show-desc">{album.description}</p>}
+            <div className="pod-show-actions">
+              {audioTracks.length > 0 && (
+                <button type="button" className="pod-btn pod-btn--solid" onClick={() => audioPlay(trackItem(audioTracks[0]), audioTracks.map(trackItem))}>
+                  <MdPlayIcon size={18} /> {t('common.actions.play')}
+                </button>
+              )}
+              {!isPrivate && listedVideos.length > 0 && (
+                <PlaylistFollowButton playlistId={playlistId} name={playlist.name} user={authenticatedUser} />
+              )}
+              {!isPrivate && (
+                <>
+                  <link rel="alternate" type="application/rss+xml" title={playlist.name} href={`${window.location.origin}${feedHref}`} />
+                  <a className="pod-btn" href={feedHref} target="_blank" rel="noreferrer" title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}>
+                    <MdRssFeed size={16} /> RSS
+                  </a>
+                </>
+              )}
+              {ownerButtons}
+            </div>
+          </div>
+        </header>
+      ) : (
       <div className="playlist-header">
         <div className="playlist-info">
           {playlist.thumbnail ? (
@@ -478,10 +567,6 @@ function PlaylistView() {
                 </>
               )}
             </div>
-            {/* An all-audio playlist is a podcast too: follow it like one (Podcasts > Mine). */}
-            {!isPrivate && listedVideos.length > 0 && listedVideos.every((v) => v.isAudio && v.audioDoc) && (
-              <PlaylistFollowButton playlistId={playlistId} name={playlist.name} user={authenticatedUser} />
-            )}
             {playlist.metadata?.album && (
               <div className="playlist-album-meta">
                 {playlist.metadata.album.musicStyle && <span><Trans i18nKey="playlists.view.album.genre" values={{ value: playlist.metadata.album.musicStyle }} components={{ strong: <strong /> }} /></span>}
@@ -533,6 +618,7 @@ function PlaylistView() {
           </div>
         )}
       </div>
+      )}
 
       {/* Save Changes Bar */}
       {isOwner && hasChanges && (
@@ -551,6 +637,68 @@ function PlaylistView() {
         </div>
       )}
 
+      {isAudioShow && !reorderMode ? (
+        <section className="pod-section playlist-pod-episodes">
+          <div className="pod-section-head pod-section-head--filters">
+            <h2 className="pod-section-title">
+              {t('audio.podcasts.episodesTitle')}
+              {listedVideos.length > 0 && <span className="audio-section-count">{listedVideos.length}</span>}
+            </h2>
+            <div className="pod-filters">
+              <div className="audio-date-presets pod-filter-dates" role="group" aria-label={t('audio.podcasts.filters.dateLabel')}>
+                {DATE_FILTERS.map((f) => (
+                  <button type="button" key={f.key} className={`audio-date-btn${dateFilter === f.key ? ' active' : ''}`} onClick={() => setDateFilter(f.key)}>
+                    {t(f.labelKey)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          {listedVideos.length > 5 && (
+            <div className="pod-show-tools">
+              <label className="pod-field-row pod-episode-search">
+                <MdSearch className="pod-field-icon" size={18} />
+                <input
+                  type="search"
+                  value={episodeSearch}
+                  onChange={(e) => setEpisodeSearch(e.target.value)}
+                  placeholder={t('audio.podcasts.episodeSearch.placeholder')}
+                  aria-label={t('audio.podcasts.episodeSearch.label')}
+                  autoComplete="off"
+                />
+              </label>
+            </div>
+          )}
+          {videosLoading ? (
+            <BarLoader />
+          ) : shownEpisodes.length > 0 ? (
+            <ul className="pod-tile-grid">
+              {shownEpisodes.map((video, i) => (
+                <PlaylistEpisodeTile
+                  key={`${video.author}-${video.permlink}`}
+                  video={video}
+                  item={episodeItems[i]}
+                  contextItems={episodeItems}
+                  number={listedVideos.indexOf(video) + 1}
+                  onOpen={() => navigate(audioItemPath(video.audioDoc))}
+                  onAddToPlaylist={authenticatedUser ? () => setPlaylistTarget({
+                    author: video.audioDoc.owner,
+                    permlink: video.audioDoc.post_permlink || video.audioDoc.permlink,
+                    title: video.audioDoc.title,
+                  }) : undefined}
+                />
+              ))}
+            </ul>
+          ) : (
+            <p className="pod-empty">
+              {episodeQuery
+                ? t('audio.podcasts.episodeSearch.none', { q: episodeSearch.trim() })
+                : dateFilter !== 'all' ? t('playlists.view.emptyPeriod') : t('playlists.view.empty')}
+            </p>
+          )}
+        </section>
+      ) : (
+      <>
       {/* Date filter toolbar */}
       <div className="playlist-toolbar">
         <div className="date-filters">
@@ -710,6 +858,8 @@ function PlaylistView() {
           </div>
         )}
       </div>
+      </>
+      )}
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (

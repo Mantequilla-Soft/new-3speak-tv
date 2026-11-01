@@ -42,6 +42,9 @@
     "shorts_one": "<b>{{value}}</b> short",
     "shorts_many": "<b>{{value}}</b> shorts",
     "shorts_other": "<b>{{value}}</b> shorts",
+    "audio_one": "<b>{{value}}</b> audio",
+    "audio_many": "<b>{{value}}</b> audios",
+    "audio_other": "<b>{{value}}</b> audios",
     "views_one": "<b>{{value}}</b> vista",
     "views_many": "<b>{{value}}</b> vistas",
     "views_other": "<b>{{value}}</b> vistas",
@@ -54,6 +57,9 @@
     "shortsTitle_one": "{{num}} short",
     "shortsTitle_many": "{{num}} shorts",
     "shortsTitle_other": "{{num}} shorts",
+    "audioTitle_one": "{{num}} audio",
+    "audioTitle_many": "{{num}} audios",
+    "audioTitle_other": "{{num}} audios",
     "viewsTitle_one": "{{num}} vista",
     "viewsTitle_many": "{{num}} vistas",
     "viewsTitle_other": "{{num}} vistas",
@@ -421,5 +427,8 @@
         "body": "Guardar diseño lo publica. Deshacer y Rehacer recorren tus cambios (Ctrl+Z también funciona), Cancelar los descarta y Restablecer devuelve la página estándar. El ? junto al título vuelve a abrir este recorrido."
       }
     }
+  },
+  "audioTab": {
+    "files": "Archivos de audio"
   }
 }

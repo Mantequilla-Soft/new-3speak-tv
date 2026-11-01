@@ -15,6 +15,10 @@
     "offToast": "Videolarında reklamlar kapalı",
     "rollsOnToast": "Videolarında video reklamları açık",
     "rollsOffToast": "Artık videolarında yalnızca bannerlar ve kayan yazılar var",
+    "audio": "Seslerinde reklamlar",
+    "audioDesc": "Sesinin sırasında bir sponsordan kısa, seslendirilmiş bir mesaj çalabilir; dinleyicilerin açabileceği bir bağlantıyla birlikte. Video reklamlarında olduğu gibi bir pay alırsın. Bunu ses yükleyicide her yükleme için ayrı ayrı değiştirebilirsin.",
+    "audioOnToast": "Seslerinde reklamlar açık",
+    "audioOffToast": "Seslerinde reklamlar kapalı",
     "splitSaved": "Gelir paylaşımı kaydedildi",
     "title": "Videolarındaki reklamlar",
     "allow": "Reklamlara izin ver",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "Genel",
     "content": "İçerik",
+    "connections": "Bağlantılar",
     "rewards": "Reklamlar ve ödüller",
     "about": "Hakkında / Sürüm"
   },
   "contentTabs": {
     "feed": "Akış",
     "aria": "İçerik ayarları"
+  },
+  "connectionsTabs": {
+    "support": "Destek",
+    "profiles": "Bağlı profiller",
+    "aria": "Bağlantı ayarları"
   },
   "butrauthUnlocked": "Butter Auth kilidi açıldı",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "Silme talep et",
     "requestData": "Verilerimi talep et",
     "foot": "Bir ay içinde yanıt veririz. Doğrudan <mail>privacy@3speak.tv</mail> adresine de e-posta gönderebilirsin."
+  },
+  "lightning": {
+    "title": "Lightning bahşişleri",
+    "checking": "Bahşişlerinin nereye gittiği kontrol ediliyor…",
+    "toV4v": "Bahşişler {{account}}@v4v.app adresine gider",
+    "toOwn": "Bahşişler {{address}} adresine gider",
+    "v4vDesc": "Varsayılan ayar, kurulacak bir şey yok: bahşişler Hive'a HIVE olarak gelir. v4v.app'in dönüşüm ücretinden (yaklaşık 60 sat) küçük bahşişler v4v.app hesabında sat olarak kalır. Bunun yerine kendi cüzdanına almak için aşağıya bir Lightning adresi gir.",
+    "ownDesc": "Bahşişler v4v.app ve dönüşüm ücreti olmadan doğrudan kendi Lightning cüzdanına gider. Hive profilinde saklanır.",
+    "inputLabel": "Lightning adresin",
+    "placeholder": "sen@cuzdan.com",
+    "useV4v": "Yeniden v4v.app kullan",
+    "savedOwn": "Lightning bahşişleri artık kendi adresine gidiyor",
+    "savedV4v": "Lightning bahşişleri yeniden v4v.app üzerinden gidiyor",
+    "badAddress": "Bu bir Lightning adresi değil. ad@cuzdan.com gibi görünür.",
+    "unreachable": "Bu adres bir Lightning adresi olarak yanıt vermedi. Kontrol edip yeniden dene.",
+    "saveFailed": "Hive profiline kaydedilemedi.",
+    "supportersNote": "Kendi adresine gelen bahşişler hiç Hive'dan geçmez, bu yüzden Destekçiler altında görünmez.",
+    "publicNote": "Lightning adresin Hive hesabına kaydedilir ve orada herkes tarafından görülebilir."
+  },
+  "supportLinks": {
+    "title": "Seni desteklemenin başka yolları",
+    "desc": "{{sites}} üzerindeki sayfan. İzleyiciler bu bağlantıları bahşiş pencerende görür.",
+    "placeholder": "https://ko-fi.com/adin",
+    "add": "Ekle",
+    "remove": "{{site}} bağlantısını kaldır",
+    "badLink": "Bu sitelerden birindeki sayfanın tam bağlantısını yapıştır.",
+    "duplicate": "Bu bağlantı zaten listede.",
+    "max": "En fazla {{max}} bağlantı ekleyebilirsin.",
+    "saved": "Destek bağlantıları kaydedildi",
+    "publicNote": "Bu bağlantılar Hive hesabına kaydedilir ve orada herkes tarafından görülebilir."
   }
 }

@@ -50,6 +50,8 @@ export function readAdSettingsFromAccount(account) {
     enabled: ads.enabled !== false,
     // Video rolls on top of banners and tickers. Same rule: only `false` is off.
     rolls: ads.rolls !== false,
+    // "Ads on your audio": true / false when chosen, null when never chosen.
+    audio: typeof ads.audio === 'boolean' ? ads.audio : null,
     communityPct: Number.isInteger(pct) && pct >= 0 && pct <= 100 ? pct : null,
     updatedAt: typeof ads.updatedAt === 'string' ? ads.updatedAt : null,
   };
@@ -82,7 +84,7 @@ export async function fetchAdSettingsFromHive(username) {
  * or Butter Auth session is routed through @threespeak under the authority the
  * creator already granted it, and costs no wallet prompt at all.
  */
-export async function saveAdSettingsToHive(username, { adsEnabled, rollsEnabled = true, communitySharePct }) {
+export async function saveAdSettingsToHive(username, { adsEnabled, rollsEnabled = true, communitySharePct, audioEnabled }) {
   const u = clean(username);
   if (!u) throw new Error(t('ads.errors.notLoggedIn'));
 
@@ -91,6 +93,11 @@ export async function saveAdSettingsToHive(username, { adsEnabled, rollsEnabled 
   const ads = { enabled: adsEnabled !== false, updatedAt: new Date().toISOString() };
   // Written only when off, like the per-video flag: an absent key is the default.
   if (adsEnabled !== false && rollsEnabled === false) ads.rolls = false;
+  // The audio choice, written both ways once made (true overrides what it would
+  // otherwise follow). A save that does not carry one keeps the earlier one.
+  const priorAudio = meta[META_NS] && meta[META_NS][META_KEY] && meta[META_NS][META_KEY].audio;
+  if (typeof audioEnabled === 'boolean') ads.audio = audioEnabled;
+  else if (typeof priorAudio === 'boolean') ads.audio = priorAudio;
   // Omitted rather than nulled when the caller has no number to write: an absent
   // key means "whatever the platform default is", and writing null would make the
   // read path above fall back anyway while looking like a deliberate choice.
@@ -157,8 +164,8 @@ export async function readCreatorAdChoice(username) {
  * still taken effect, and reporting that honestly beats rolling back a preference
  * the creator asked for.
  */
-export async function saveCreatorAdSettings(username, { adsEnabled, rollsEnabled = true, communitySharePct }) {
-  const res = await setCreatorAdPrefs(username, { adsEnabled, rollsEnabled, communitySharePct });
+export async function saveCreatorAdSettings(username, { adsEnabled, rollsEnabled = true, communitySharePct, audioEnabled }) {
+  const res = await setCreatorAdPrefs(username, { adsEnabled, rollsEnabled, communitySharePct, audioEnabled });
 
   let chainSaved = false;
   let chainError = null;
@@ -166,7 +173,7 @@ export async function saveCreatorAdSettings(username, { adsEnabled, rollsEnabled
     // Write the number the server settled on, not the draft — if the server
     // clamped or defaulted anything, the two copies must not disagree.
     const pct = res && res.split ? res.split.communityPct : communitySharePct;
-    await saveAdSettingsToHive(username, { adsEnabled, rollsEnabled, communitySharePct: pct });
+    await saveAdSettingsToHive(username, { adsEnabled, rollsEnabled, communitySharePct: pct, audioEnabled: adsEnabled ? audioEnabled : undefined });
     chainSaved = true;
   } catch (err) {
     chainError = (err && err.message) || t('ads.errors.saveToHiveAccount');

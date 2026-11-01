@@ -3,19 +3,22 @@
     "surface": {
       "watch": "Inside videos",
       "shorts": "Between shorts",
-      "upload": "Before an upload"
+      "upload": "Before an upload",
+      "audio": "In the audio player"
     },
     "supplies": {
       "text": "A short message and a link",
       "imageOrVideo": "An image or a video",
       "image": "An image",
-      "video": "A video"
+      "video": "A video",
+      "audio": "An audio clip and a link"
     },
     "youSupply": {
       "text": "You supply a short message and a link",
       "imageOrVideo": "You supply an image or a video",
       "image": "You supply an image",
-      "video": "You supply a video"
+      "video": "You supply a video",
+      "audio": "You supply an audio clip and a link"
     },
     "bannerAdvice": {
       "wideStrip": "It needs to be a wide strip.",
@@ -36,7 +39,10 @@
       "minWidth": "at least {{width}}px wide",
       "landscape": "landscape, like the player",
       "filesAny": "PNG, JPG or MP4",
-      "filesImage": "PNG or JPG"
+      "filesImage": "PNG or JPG",
+      "filesAudio": "MP3, WAV, M4A, OGG, FLAC or WebM",
+      "upToMb": "up to {{mb}} MB, levelled to match the other ads",
+      "audioButton": "shown as a button while it plays"
     },
     "groups": {
       "screen": {
@@ -53,6 +59,10 @@
       },
       "more": {
         "title": "More formats"
+      },
+      "audio": {
+        "title": "In the audio player",
+        "note": "Heard by people listening to audio posts. The track pauses for it and carries on after."
       }
     },
     "unplaced": "Unplaced"
@@ -106,7 +116,8 @@
     "secondsIn_one": "{{count}} second in",
     "secondsIn_other": "{{count}} seconds in",
     "oneMinuteIn": "1 minute in",
-    "minutesIn": "{{minutes}} minutes in"
+    "minutesIn": "{{minutes}} minutes in",
+    "beforeTrack": "Before the track"
   },
   "blocked": {
     "unpaid": "Waiting for your payment",
@@ -138,10 +149,28 @@
     "playsDay": "Plays a day",
     "playsMonth": "Plays a month",
     "reach": "Reach",
-    "notRecommendedTag": "not recommended",
-    "notRecommendedNote": "<b>Not recommended:</b> an ad before the video reaches more sessions on paper, but almost half of all watching here stops inside fifteen seconds, so most of those plays land on someone who was already leaving. An ad placed further in is counted only when the viewer actually got there.",
     "whoWatches": "Who watches",
-    "qualityNote": "<b>{{pct}}% of raw traffic is excluded</b> from these figures: sessions under {{seconds}} seconds, accounts too fast to be real viewers, and videos whose creator opted out. What is left is what we sell."
+    "qualityNote": "<b>{{pct}}% of raw traffic is excluded</b> from these figures: sessions under {{seconds}} seconds, accounts too fast to be real viewers, and videos whose creator opted out. What is left is what we sell.",
+    "listensPerDay": "Listens a day",
+    "measuredDays": "measured over the last {{days}} days",
+    "tracksHeard": "Tracks listened to",
+    "tracksNote": "of {{catalogue}} public tracks on 3Speak",
+    "listenHours": "Listening hours",
+    "audioTrial": "Audio spots play only on {{owners}}’s audio for now, about {{n}} listens a day. More creators are added as audio ads open up.",
+    "audioWhere": "Where in the track it plays",
+    "listensDay": "Listens / day",
+    "listensMonth": "Listens / month",
+    "audioFine": "Counted from 3Speak audio that was really listened to, not just opened. A position counts a listen once the listener got that far into the track.",
+    "whoListens": "Who listens",
+    "audioNone": "Could not load the listening numbers right now. Try again in a moment.",
+    "uploadsPerDay": "Uploads a day",
+    "uploadsNote": "on 3speak.tv, last 7 days",
+    "videosShorts": "Videos / shorts a day",
+    "creatorsUploading": "Creators uploading",
+    "creatorsNote": "different accounts in the last {{days}} days",
+    "uploadsFine": "Counted from uploads on 3speak.tv. The spot plays before every video, short and audio upload.",
+    "uploadNone": "Could not load the upload numbers right now. Try again in a moment.",
+    "videosShortsAudio": "Videos / shorts / audio a day"
   },
   "rateCard": {
     "perSecDay": " /sec /day",
@@ -154,7 +183,13 @@
     "orAboutHive": "or about {{hive}} HIVE",
     "forSpotOver": "for a {{seconds}}s spot over {{days}} days",
     "longerOffer": "<b>{{price}} HBD</b> for {{days}} days, about {{saving}}% less per day",
-    "agreedRate": "your agreed rate"
+    "agreedRate": "your agreed rate",
+    "tabs": {
+      "label": "Formats",
+      "video": "Video",
+      "audio": "Audio",
+      "upload": "Upload"
+    }
   },
   "overlay": {
     "advertisement": "Advertisement",
@@ -190,6 +225,7 @@
   "ticker": {
     "openProduct": "Open {{name}}",
     "openLink": "Open the advertiser’s link",
+    "findOutMore": "Find out more",
     "previewCaption": "Your ticker at {{seconds}}s, as viewers will see it",
     "preview": "Preview",
     "screenSize": "Screen size",
@@ -212,7 +248,13 @@
     "styleHold": "slides in and pauses",
     "styleCrawl": "crawls",
     "atLeastSeconds": ", at least {{seconds}}s",
-    "checkLink": "Check the link"
+    "checkLink": "Check the link",
+    "audioNote": "Tickers also play in the audio player: your message is read aloud by a computer voice in English, with a short chime and soft music under it, and your link shows as a button. Press Listen to hear exactly what listeners will hear.",
+    "listen": "Listen",
+    "listenBusy": "Preparing…",
+    "listenHint": "The same sound listeners get, made from what is in the form.",
+    "listenSays": "Spoken: “{{text}}”",
+    "listenFailed": "Could not make the preview"
   },
   "gate": {
     "ariaLabel": "Sponsor message",
@@ -381,7 +423,8 @@
   "missing": {
     "ticker": "Save your ticker first.",
     "banner": "Upload your banner first.",
-    "video": "Upload your ad video, or ask us to make it."
+    "video": "Upload your ad video, or ask us to make it.",
+    "audio": "Upload your audio clip first."
   },
   "adType": {
     "question": "What are you running?",
@@ -411,7 +454,12 @@
       "upload": "Upload the landscape video creators will watch before their upload starts, or ask us to make it.",
       "banner": "Upload the image that will be shown over the video.",
       "shorts": "Upload the upright video that will play between shorts. It has to be portrait, because a landscape spot plays small with black bars either side. 1080x1920 works well.",
-      "video": "Upload the video that will play, or ask us to make it. This is also where the logo and slogan shown over your ad are set."
+      "video": "Upload the video that will play, or ask us to make it. This is also where the logo and slogan shown over your ad are set.",
+      "audio": "Upload your audio clip and the link for its button. The track pauses where you book it, your clip plays, then the track carries on."
+    },
+    "audio": {
+      "title": "An audio spot",
+      "blurb": "Your own audio clip, played in the audio player."
     }
   },
   "book": {
@@ -451,7 +499,6 @@
     "enterLength": "More than one ad video uploaded, so enter the length of the one you are booking.",
     "mustFit": "Your ad video has to fit inside this.",
     "whenInVideo": "When in the video",
-    "beforeNotRecommended": "Before the video (not recommended)",
     "slotFull": " (full for these dates)",
     "placesLeft": " ({{left}} of {{total}} places left)",
     "slotHint": "How far into each video it runs. Later reaches fewer people, but reaches them watching.",
@@ -500,7 +547,19 @@
     "chartTotal_other": "{{seconds}}s for {{count}} days = {{total}} HBD",
     "chartDays": "Days booked",
     "chartYAxis": "HBD per second per day",
-    "chartAria": "{{format}}: {{from}} HBD per second per day for {{min}} days, falling to {{to}} HBD for {{max}} days"
+    "chartAria": "{{format}}: {{from}} HBD per second per day for {{min}} days, falling to {{to}} HBD for {{max}} days",
+    "audioSpot": "Also play it in the audio player",
+    "audioSpotHint": "Read aloud to people listening to audio posts, with your link as a button.",
+    "lengthFromAudio": "Taken from the audio clip you uploaded.",
+    "uploadFirstAudio": "Upload your audio clip first",
+    "tooManyClips": "You have more than one audio clip, so we cannot tell which length to use. Enter it yourself.",
+    "enterLengthAudio": "More than one audio clip uploaded, so enter the length of the one you are booking.",
+    "mustFitAudio": "Your audio clip has to fit inside this.",
+    "whenInTrack": "When in the track",
+    "slotHintAudio": "How far into each track it plays. Later reaches fewer people, but reaches them listening.",
+    "tracksToRunOn": "Tracks to run on",
+    "shortestTrack": "Shortest track",
+    "longestTrack": "Longest track"
   },
   "attach": {
     "needsTicker": "This is a ticker flight, so it needs an approved ticker message.",
@@ -516,7 +575,10 @@
     "chooseOne": "Choose one",
     "bannerOption": "Banner",
     "tickerOption": "Ticker",
-    "secondsAd": "{{seconds}}s ad"
+    "secondsAd": "{{seconds}}s ad",
+    "needsAudio": "This is an audio flight, so it needs an approved audio clip.",
+    "useAudio": "Use one of your approved audio clips",
+    "audioOption": "Audio clip · {{seconds}}s"
   },
   "delivery": {
     "deliveredOf_one": "<b>{{delivered}}</b> play delivered of {{forecast}} forecast",
@@ -553,7 +615,9 @@
     "clickRate": "({{rate}}% of plays)",
     "avgWatchedOf": "<b>{{seconds}}s</b> watched on average, of {{length}}s",
     "avgWatched": "<b>{{seconds}}s</b> watched on average",
-    "toEnd": "{{percent}}% watched to the end"
+    "toEnd": "{{percent}}% watched to the end",
+    "runsAudio": "Your audio clip · {{seconds}}s",
+    "audioFailed": "Could not change the audio setting"
   },
   "rebook": {
     "button": "Book again",
@@ -796,5 +860,19 @@
     "note": "Say no and nothing changes. You can switch it off any time in Settings, and that deletes what we kept.",
     "yes": "Yes, count my listening",
     "savedYes": "Your listening now counts toward listener rewards"
+  },
+  "audio": {
+    "yourSpot": "Your audio spot",
+    "file": "Audio file",
+    "fileHint": "MP3, WAV, M4A, OGG, FLAC or WebM. Up to {{seconds}} seconds and {{mb}} MB.",
+    "tooBig": "That file is over {{mb}} MB. Export a smaller one, for example as MP3.",
+    "tooBigServer": "That file is too large to upload.",
+    "linkHint": "Where the “Find out more” button goes while your clip plays. A full https:// address.",
+    "howItPlays": "We level the volume to match the other ads. The player below plays the stored file, so what you hear is exactly what listeners get. Every clip is reviewed before it runs.",
+    "upload": "Upload audio",
+    "uploading": "Uploading…",
+    "savedReview": "Audio saved. We will review it before it runs",
+    "uploadFailed": "Could not upload the audio",
+    "seconds": "{{seconds}}s audio clip"
   }
 }

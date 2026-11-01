@@ -12,6 +12,7 @@
     "heading": "Чаевые для @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Другие способы",
     "amountLabel": "Сумма: ",
     "amountPlaceholder": "напр. 1.000",
     "currencyLabel": "Валюта:",
@@ -40,7 +41,10 @@
         "noAccount": "Такого аккаунта Hive нет",
         "invoiceFailed": "Не удалось создать Lightning-счёт. Попробуйте ещё раз.",
         "copyFailed": "Не удалось скопировать счёт"
-      }
+      },
+      "noteOwn": "Идёт прямо в Lightning-кошелёк @{{recipient}} ({{address}}). Подойдёт любой Lightning-кошелёк, аккаунт Hive не нужен.",
+      "waitingUnverified": "Ваш кошелёк покажет, когда платёж пройдёт.",
+      "cashApp": "Нет Lightning-кошелька? Приложения вроде Cash App и Strike могут оплатить с обычного баланса."
     },
     "wallet": {
       "usernameLabel": "Ваше имя пользователя Hive:",
@@ -54,6 +58,22 @@
         "self": "Нельзя отправить чаевые самому себе",
         "walletFailed": "Кошелёк не отправил чаевые: {{message}}"
       }
+    },
+    "otherWays": "Другие способы поддержать @{{recipient}}",
+    "otherWaysNote": "Каждая кнопка открывает страницу автора на этом сайте в новой вкладке. Платежи там проходят не через 3Speak.",
+    "monthly": {
+      "label": "Как часто",
+      "once": "Один раз",
+      "until": "Каждый месяц, до {{date}}",
+      "note": "Hive сам отправляет платёж каждые 30 дней, первый уходит сразу. Остановить можно в любой момент.",
+      "replaces": "Это заменит ежемесячную поддержку, которую вы уже отправляете @{{recipient}}.",
+      "replacesOther": "Это заменит регулярный платёж, который вы уже отправляете @{{recipient}}.",
+      "current": "Вы отправляете @{{recipient}} {{amount}} каждый месяц, до {{date}}.",
+      "currentEvery": "Вы отправляете @{{recipient}} {{amount}} раз в {{interval}}, до {{date}}.",
+      "stop": "Остановить",
+      "stopped": "Ежемесячная поддержка остановлена",
+      "stopFailed": "Не удалось остановить: {{message}}",
+      "successNote": "Следующий платёж уйдёт сам через 30 дней."
     }
   },
   "cardMenu": {

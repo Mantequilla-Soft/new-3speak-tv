@@ -21,6 +21,11 @@
 // `parent_id` is the invoice's payment hash (base64). While any invoice from here
 // is waiting, one poller reads @v4vapp's latest custom_jsons and marks the matching
 // hashes paid; the page asks /api/lightning/status/<hash>.
+//
+// A creator can have tips go to a Lightning address of their own instead (any
+// wallet's name@host), set in 3Speak's settings and kept in their Hive
+// posting_json_metadata as `3speak.lightning.address`. When it is set, the invoice
+// comes from that address and v4v.app is not involved.
 
 const USER_RE = /^[a-z][a-z0-9.-]{2,15}$/
 const LNURLP_BASE = 'https://v4v.app/.well-known/lnurlp/'
@@ -40,6 +45,10 @@ const HASH_RE = /^[0-9a-f]{64}$/
 
 // Hive names only ever come into existence, so a "yes" can be kept a while.
 const knownAccounts = new Map()
+// Where an account's Lightning tips go, read from its posting_json_metadata. Short,
+// so a changed setting takes effect within a minute.
+const RECEIVER_TTL_MS = 30 * 1000
+const receivers = new Map() // name → { at, address }
 
 async function getJson(url) {
   const res = await fetch(url, { signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) })
@@ -181,6 +190,48 @@ function getPublicJson(rawUrl) {
   })
 }
 
+// The creator's own Lightning address from posting_json_metadata, or null for the
+// v4v.app default.
+function ownLightningAddress(account) {
+  let meta = account?.posting_json_metadata
+  try { if (typeof meta === 'string') meta = JSON.parse(meta || '{}') } catch { return null }
+  const address = String(meta?.['3speak']?.lightning?.address || '').trim().toLowerCase()
+  return LNADDRESS_RE.test(address) ? address : null
+}
+
+const isV4vHost = (host) => host === 'v4v.app' || host.endsWith('.v4v.app')
+
+class AmountOutOfRange extends Error {
+  constructor(min, max) { super('amount_out_of_range'); this.min = min; this.max = max }
+}
+
+// LNURL-pay (LUD-16) against any Lightning address: the address's limits, then an
+// invoice of exactly that amount. → { pr, sats, hash, verifyUrl }
+async function addressInvoice(address, sats, comment) {
+  const [, name, host] = LNADDRESS_RE.exec(address)
+  const pay = await getPublicJson(`https://${host}/.well-known/lnurlp/${encodeURIComponent(name)}`)
+  if (pay?.tag !== 'payRequest' || typeof pay.callback !== 'string') throw new Error('not a payRequest')
+  const msats = sats * 1000
+  if (msats < Number(pay.minSendable) || msats > Number(pay.maxSendable)) {
+    throw new AmountOutOfRange(Math.ceil(Number(pay.minSendable) / 1000), Math.floor(Number(pay.maxSendable) / 1000))
+  }
+  const cb = new URL(pay.callback)
+  cb.searchParams.set('amount', String(msats))
+  const allowed = Math.min(Number(pay.commentAllowed) || 0, MAX_COMMENT)
+  if (comment && allowed > 0) cb.searchParams.set('comment', comment.slice(0, allowed))
+  const inv = await getPublicJson(cb.toString())
+  if (inv?.status === 'ERROR' || typeof inv?.pr !== 'string') throw new Error(inv?.reason || 'no invoice')
+  if (bolt11Msats(inv.pr) !== msats) throw new Error('invoice amount mismatch')
+  let verifyUrl = null
+  if (typeof inv.verify === 'string') {
+    try {
+      const v = new URL(inv.verify)
+      if (v.protocol === 'https:') verifyUrl = v.toString()
+    } catch {}
+  }
+  return { pr: inv.pr, sats, hash: bolt11PaymentHash(inv.pr), verifyUrl }
+}
+
 function mountLightningTip(app, { client, limiter }) {
   const pending = new Map() // hash → time the invoice was made
   const paid = new Map()    // hash → time it was seen paid
@@ -222,18 +273,69 @@ function mountLightningTip(app, { client, limiter }) {
     timer = setTimeout(tick, 0)
   }
 
-  async function accountExists(name) {
-    const hit = knownAccounts.get(name)
-    if (hit && Date.now() - hit < ACCOUNT_CACHE_TTL_MS) return true
+  // → null when there is no such account, else { address }: the creator's own
+  // Lightning address, or null for <name>@v4v.app.
+  async function receiverOf(name) {
+    const hit = receivers.get(name)
+    if (hit && Date.now() - hit.at < RECEIVER_TTL_MS) return { address: hit.address }
     const [acct] = await client.database.getAccounts([name])
-    if (!acct) return false
+    if (!acct) return null
     if (knownAccounts.size >= ACCOUNT_CACHE_MAX) knownAccounts.clear()
     knownAccounts.set(name, Date.now())
-    return true
+    const address = ownLightningAddress(acct)
+    if (receivers.size >= ACCOUNT_CACHE_MAX) receivers.clear()
+    receivers.set(name, { at: Date.now(), address })
+    return { address }
   }
 
+  // Keeps an invoice from an outside address watchable: through its LUD-21 verify
+  // URL, or, for a v4v.app address, through the @v4vapp credit poller.
+  function watch(hash, verifyUrl, host) {
+    if (!hash) return false
+    if (verifyUrl) { verifyUrls.set(hash, { url: verifyUrl, at: Date.now() }); return true }
+    if (isV4vHost(host)) { pending.set(hash, Date.now()); ensurePolling(); return true }
+    return false
+  }
+
+  function sendRangeError(res, err) {
+    return res.status(400).json({ error: 'amount_out_of_range', min: err.min, max: err.max })
+  }
+
+  // GET /api/lightning/receiver?to=<account> → { via: 'v4v' } or
+  // { via: 'address', address }: what the tip window tells the viewer.
+  app.get('/api/lightning/receiver', limiter, async (req, res) => {
+    const to = String(req.query.to || '').trim().toLowerCase().replace(/^@/, '')
+    if (!USER_RE.test(to)) return res.status(400).json({ error: 'bad_account' })
+    try {
+      const r = await receiverOf(to)
+      if (!r) return res.status(404).json({ error: 'no_account' })
+      res.set('Cache-Control', 'no-store')
+      res.json(r.address ? { via: 'address', address: r.address } : { via: 'v4v' })
+    } catch (err) {
+      console.warn(`[lightning-tip] receiver of @${to} failed:`, err.message)
+      res.status(502).json({ error: 'lookup_failed' })
+    }
+  })
+
+  // GET /api/lightning/check-address?address=<name@host> → { ok, min, max }.
+  // Settings asks before saving an address, so a typo never reaches the profile.
+  app.get('/api/lightning/check-address', limiter, async (req, res) => {
+    const address = String(req.query.address || '').trim().toLowerCase()
+    const m = LNADDRESS_RE.exec(address)
+    if (!m) return res.status(400).json({ error: 'bad_address' })
+    try {
+      const pay = await getPublicJson(`https://${m[2]}/.well-known/lnurlp/${encodeURIComponent(m[1])}`)
+      if (pay?.tag !== 'payRequest' || typeof pay.callback !== 'string') throw new Error('not a payRequest')
+      res.set('Cache-Control', 'no-store')
+      res.json({ ok: true, min: Math.ceil(Number(pay.minSendable) / 1000), max: Math.floor(Number(pay.maxSendable) / 1000) })
+    } catch (err) {
+      console.warn(`[lightning-tip] check of ${address} failed:`, err.message)
+      res.status(502).json({ error: 'unreachable' })
+    }
+  })
+
   // GET /api/lightning/invoice?to=<account>&sats=<n>&comment=<text>
-  // → { pr, sats }
+  // → { pr, sats, hash, via, address?, verifiable }
   app.get('/api/lightning/invoice', limiter, async (req, res) => {
     const to = String(req.query.to || '').trim().toLowerCase().replace(/^@/, '')
     const sats = Number(req.query.sats)
@@ -245,7 +347,15 @@ function mountLightningTip(app, { client, limiter }) {
     }
 
     try {
-      if (!(await accountExists(to))) return res.status(404).json({ error: 'no_account' })
+      const receiver = await receiverOf(to)
+      if (!receiver) return res.status(404).json({ error: 'no_account' })
+
+      if (receiver.address) {
+        const inv = await addressInvoice(receiver.address, sats, comment)
+        const verifiable = watch(inv.hash, inv.verifyUrl, receiver.address.split('@')[1])
+        res.set('Cache-Control', 'no-store')
+        return res.json({ pr: inv.pr, sats, hash: inv.hash, via: 'address', address: receiver.address, verifiable })
+      }
 
       const pay = await getJson(LNURLP_BASE + encodeURIComponent(to))
       if (pay?.tag !== 'payRequest' || typeof pay.callback !== 'string') {
@@ -280,8 +390,9 @@ function mountLightningTip(app, { client, limiter }) {
       }
 
       res.set('Cache-Control', 'no-store')
-      res.json({ pr: inv.pr, sats, hash })
+      res.json({ pr: inv.pr, sats, hash, via: 'v4v', verifiable: !!hash })
     } catch (err) {
+      if (err instanceof AmountOutOfRange) return sendRangeError(res, err)
       console.warn(`[lightning-tip] invoice for @${to} (${sats} sats) failed:`, err.message)
       res.status(502).json({ error: 'invoice_failed' })
     }
@@ -299,37 +410,12 @@ function mountLightningTip(app, { client, limiter }) {
     if (!Number.isInteger(sats) || sats < MIN_SATS || sats > MAX_SATS) return res.status(400).json({ error: 'bad_amount' })
     const [, name, host] = m
     try {
-      const pay = await getPublicJson(`https://${host}/.well-known/lnurlp/${encodeURIComponent(name)}`)
-      if (pay?.tag !== 'payRequest' || typeof pay.callback !== 'string') throw new Error('not a payRequest')
-      const msats = sats * 1000
-      if (msats < Number(pay.minSendable) || msats > Number(pay.maxSendable)) {
-        return res.status(400).json({
-          error: 'amount_out_of_range',
-          min: Math.ceil(Number(pay.minSendable) / 1000),
-          max: Math.floor(Number(pay.maxSendable) / 1000),
-        })
-      }
-      const cb = new URL(pay.callback)
-      cb.searchParams.set('amount', String(msats))
-      const allowed = Math.min(Number(pay.commentAllowed) || 0, MAX_COMMENT)
-      if (comment && allowed > 0) cb.searchParams.set('comment', comment.slice(0, allowed))
-      const inv = await getPublicJson(cb.toString())
-      if (inv?.status === 'ERROR' || typeof inv?.pr !== 'string') throw new Error(inv?.reason || 'no invoice')
-      if (bolt11Msats(inv.pr) !== msats) throw new Error('invoice amount mismatch')
-      const hash = bolt11PaymentHash(inv.pr)
-      let verifiable = false
-      if (hash && typeof inv.verify === 'string') {
-        try {
-          const v = new URL(inv.verify)
-          if (v.protocol === 'https:') {
-            verifyUrls.set(hash, { url: v.toString(), at: Date.now() })
-            verifiable = true
-          }
-        } catch {}
-      }
+      const inv = await addressInvoice(`${name}@${host}`, sats, comment)
+      const verifiable = !!(inv.hash && inv.verifyUrl) && watch(inv.hash, inv.verifyUrl, host)
       res.set('Cache-Control', 'no-store')
-      res.json({ pr: inv.pr, sats, hash, verifiable })
+      res.json({ pr: inv.pr, sats, hash: inv.hash, verifiable })
     } catch (err) {
+      if (err instanceof AmountOutOfRange) return sendRangeError(res, err)
       console.warn(`[lightning-tip] invoice for ${name}@${host} (${sats} sats) failed:`, err.message)
       res.status(502).json({ error: 'invoice_failed' })
     }
@@ -357,4 +443,4 @@ function mountLightningTip(app, { client, limiter }) {
   })
 }
 
-module.exports = { mountLightningTip, bolt11Msats, bolt11PaymentHash, v4vCredits, isBlockedIp, getPublicJson }
+module.exports = { mountLightningTip, ownLightningAddress, bolt11Msats, bolt11PaymentHash, v4vCredits, isBlockedIp, getPublicJson }

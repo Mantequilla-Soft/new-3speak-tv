@@ -7,6 +7,8 @@ import { isAccountValid } from '../../hive-api/api';
 import { queueSupport, recordSupport, dropPendingSupport } from '../../lib/supports';
 import { CHECKER_URL } from '../../utils/config';
 import { toastIn } from '../../utils/toast';
+import { recurrentTransferOp, findMonthlySupport, MONTH_HOURS, isMonthly } from '../../lib/recurringTip';
+import MonthlyField from './MonthlyField';
 
 const toast = toastIn('Tip');
 
@@ -36,6 +38,9 @@ const readLastUser = () => {
  * A tip on a post is reported as a support like any other. Keychain and
  * PeakVault say when it is sent; for HiveSigner, which signs in its own window,
  * this asks the checker until it finds the transfer on chain.
+ *
+ * A monthly tip (lib/recurringTip.js) is one recurrent_transfer instead, and is
+ * not reported: HiveSigner then only waits for Done.
  */
 export default function WalletTip({ recipient, permlink, memoLink, onSent, onClose }) {
   const { t } = useTranslation();
@@ -44,6 +49,9 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('HIVE');
   const [memo, setMemo] = useState('');
+  const [months, setMonths] = useState(0);
+  // The monthly support this tipper already sends the creator (a new one replaces it).
+  const [existing, setExisting] = useState(null);
   const [busy, setBusy] = useState(null);
   const [pending, setPending] = useState(null);
 
@@ -61,6 +69,7 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
     setBusy('next');
     try {
       if (!(await isAccountValid(tipper))) { toast.error(t('engagement.tip.lightning.errors.noAccount')); return; }
+      setExisting(months > 0 ? await findMonthlySupport(tipper, recipient).catch(() => null) : null);
     } finally {
       setBusy(null);
     }
@@ -70,7 +79,7 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
 
   const sent = (entry) => {
     if (entry) recordSupport(entry);
-    onSent(value.toFixed(3), currency);
+    onSent(value.toFixed(3), currency, months);
   };
 
   const failed = (entry, err) => {
@@ -78,23 +87,35 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
     toast.error(t('engagement.tip.wallet.errors.walletFailed', { message: err?.message || String(err || '') }));
   };
 
-  const transferOp = () => ['transfer', {
-    from: tipper, to: recipient, amount: `${value.toFixed(3)} ${currency}`, memo: fullMemo,
-  }];
+  const transferOp = () => (months > 0
+    ? recurrentTransferOp({ from: tipper, to: recipient, amount: value, currency, memo: fullMemo, months })
+    : ['transfer', { from: tipper, to: recipient, amount: `${value.toFixed(3)} ${currency}`, memo: fullMemo }]);
+
+  // A single tip on a post is reported as a support; a monthly one is not.
+  const queue = () => (months > 0 ? null
+    : queueSupport({ tipper, author: recipient, permlink, amount: value, currency, memo: fullMemo }));
 
   const payKeychain = () => {
-    const entry = queueSupport({ tipper, author: recipient, permlink, amount: value, currency, memo: fullMemo });
+    const entry = queue();
     setBusy('keychain');
-    // `true`: Keychain must sign as exactly this account.
-    window.hive_keychain.requestTransfer(tipper, recipient, value.toFixed(3), fullMemo, currency, (res) => {
+    const done = (res) => {
       setBusy(null);
       if (res && res.success) sent(entry);
       else failed(entry, { message: res?.message || res?.error });
-    }, true);
+    };
+    const kc = window.hive_keychain;
+    if (months > 0 && typeof kc.requestRecurrentTransfer === 'function') {
+      kc.requestRecurrentTransfer(tipper, recipient, value.toFixed(3), currency, fullMemo, MONTH_HOURS, months, done);
+    } else if (months > 0) {
+      kc.requestBroadcast(tipper, [transferOp()], 'Active', done);
+    } else {
+      // `true`: Keychain must sign as exactly this account.
+      kc.requestTransfer(tipper, recipient, value.toFixed(3), fullMemo, currency, done, true);
+    }
   };
 
   const payPeakVault = async () => {
-    const entry = queueSupport({ tipper, author: recipient, permlink, amount: value, currency, memo: fullMemo });
+    const entry = queue();
     setBusy('peakvault');
     try {
       const res = await window.peakvault.requestBroadcast(tipper, [transferOp()], 'active');
@@ -108,7 +129,7 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
   };
 
   const payHiveSigner = () => {
-    const entry = queueSupport({ tipper, author: recipient, permlink, amount: value, currency, memo: fullMemo });
+    const entry = queue();
     // The same link aioha opens for a HiveSigner signature (hive://sign/ops/...).
     window.open(`https://hivesigner.com/sign/ops/${b64u(JSON.stringify([transferOp()]))}`, '_blank', 'noopener');
     setPending(entry);
@@ -175,6 +196,8 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
           <p className="tip-method-note">
             {t('engagement.tip.wallet.signWith', { amount: value.toFixed(3), currency, user: tipper, recipient })}
           </p>
+          {months > 0 && <p className="tip-method-note">{t('engagement.tip.monthly.note')}</p>}
+          {months > 0 && existing && <p className="tip-method-note">{t(isMonthly(existing) ? 'engagement.tip.monthly.replaces' : 'engagement.tip.monthly.replacesOther', { recipient })}</p>}
           <div className="wallet-choices">
             {keychain && (
               <button type="button" className="send-btn" onClick={payKeychain} disabled={!!busy}>
@@ -232,6 +255,7 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
             <option value="HBD">HBD</option>
           </select>
         </div>
+        <MonthlyField months={months} onChange={setMonths} recipient={recipient} />
         <div className="field">
           <label>{t('engagement.tip.memoLabel')}</label>
           <input

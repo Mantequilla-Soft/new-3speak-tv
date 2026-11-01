@@ -15,6 +15,10 @@
     "offToast": "あなたの動画の広告をオフにしました",
     "rollsOnToast": "あなたの動画で動画広告ロールがオンになりました",
     "rollsOffToast": "あなたの動画はバナーとティッカーだけになりました",
+    "audio": "音声への広告",
+    "audioDesc": "音声の再生中に、スポンサーからの短い読み上げメッセージが流れることがあります。リスナーが開けるリンクも表示されます。動画広告と同じく、収益の一部を受け取れます。音声アップローダーでアップロードごとに変更できます。",
+    "audioOnToast": "音声への広告をオンにしました",
+    "audioOffToast": "音声への広告をオフにしました",
     "splitSaved": "収益の分配を保存しました",
     "title": "あなたの動画の広告",
     "allow": "広告を許可",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "一般",
     "content": "コンテンツ",
+    "connections": "連携",
     "rewards": "広告と報酬",
     "about": "概要 / バージョン"
   },
   "contentTabs": {
     "feed": "フィード",
     "aria": "コンテンツの設定"
+  },
+  "connectionsTabs": {
+    "support": "応援",
+    "profiles": "連携したプロフィール",
+    "aria": "連携の設定"
   },
   "butrauthUnlocked": "Butter Auth のロックを解除しました",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "削除をリクエスト",
     "requestData": "データをリクエスト",
     "foot": "1 か月以内に返信します。<mail>privacy@3speak.tv</mail> に直接メールすることもできます。"
+  },
+  "lightning": {
+    "title": "Lightningのチップ",
+    "checking": "チップの送り先を確認しています…",
+    "toV4v": "チップは{{account}}@v4v.appへ届きます",
+    "toOwn": "チップは{{address}}へ届きます",
+    "v4vDesc": "初期設定で、設定は不要です。チップはHiveにHIVEとして届きます。v4v.appの換算手数料(約60 sats)より小さいチップは、v4v.appアカウントにsatsのまま残ります。自分のウォレットで受け取るには、下にLightningアドレスを入力してください。",
+    "ownDesc": "チップはv4v.appとその換算手数料を通さず、自分のLightningウォレットに直接届きます。Hiveプロフィールに保存されます。",
+    "inputLabel": "あなたのLightningアドレス",
+    "placeholder": "you@wallet.com",
+    "useV4v": "v4v.appに戻す",
+    "savedOwn": "Lightningのチップは自分のアドレスに届くようになりました",
+    "savedV4v": "Lightningのチップは再びv4v.app経由になりました",
+    "badAddress": "Lightningアドレスではありません。name@wallet.comのような形式です。",
+    "unreachable": "このアドレスはLightningアドレスとして応答しませんでした。確認してもう一度お試しください。",
+    "saveFailed": "Hiveプロフィールに保存できませんでした。",
+    "supportersNote": "自分のアドレスへのチップはHiveを通らないため、サポーターには表示されません。",
+    "publicNote": "Lightningアドレスはあなたの Hive アカウントに保存され、誰でも見ることができます。"
+  },
+  "supportLinks": {
+    "title": "あなたを応援するほかの方法",
+    "desc": "{{sites}} のあなたのページです。視聴者はチップ画面でこれらのリンクを見られます。",
+    "placeholder": "https://ko-fi.com/yourname",
+    "add": "追加",
+    "remove": "{{site}} のリンクを削除",
+    "badLink": "これらのサイトにあるあなたのページの完全なリンクを貼り付けてください。",
+    "duplicate": "そのリンクはすでにリストにあります。",
+    "max": "リンクは最大 {{max}} 件まで追加できます。",
+    "saved": "応援リンクを保存しました",
+    "publicNote": "これらのリンクはあなたの Hive アカウントに保存され、誰でも見ることができます。"
   }
 }

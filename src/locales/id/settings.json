@@ -15,6 +15,10 @@
     "offToast": "Iklan dinonaktifkan untuk videomu",
     "rollsOnToast": "Video roll iklan aktif untuk videomu",
     "rollsOffToast": "Sekarang hanya banner dan ticker di videomu",
+    "audio": "Iklan di audiomu",
+    "audioDesc": "Pesan singkat bersuara dari sponsor bisa diputar selama audiomu, dengan tautan yang bisa dibuka pendengar. Kamu dapat bagian, sama seperti iklan video. Kamu bisa mengubahnya untuk setiap unggahan di pengunggah audio.",
+    "audioOnToast": "Iklan aktif untuk audiomu",
+    "audioOffToast": "Iklan nonaktif untuk audiomu",
     "splitSaved": "Pembagian pendapatan disimpan",
     "title": "Iklan di videomu",
     "allow": "Izinkan iklan",
@@ -118,12 +122,18 @@
   "tabs": {
     "general": "Umum",
     "content": "Konten",
+    "connections": "Koneksi",
     "rewards": "Iklan & reward",
     "about": "Tentang / Versi"
   },
   "contentTabs": {
     "feed": "Feed",
     "aria": "Pengaturan konten"
+  },
+  "connectionsTabs": {
+    "support": "Dukungan",
+    "profiles": "Profil tertaut",
+    "aria": "Pengaturan koneksi"
   },
   "butrauthUnlocked": "Butter Auth terbuka",
   "appearance": {
@@ -215,5 +225,35 @@
     "requestDeletion": "Minta penghapusan",
     "requestData": "Minta dataku",
     "foot": "Kami membalas dalam waktu satu bulan. Kamu juga bisa langsung mengirim email ke <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Tip Lightning",
+    "checking": "Memeriksa ke mana tip kamu dikirim…",
+    "toV4v": "Tip dikirim ke {{account}}@v4v.app",
+    "toOwn": "Tip dikirim ke {{address}}",
+    "v4vDesc": "Bawaan, tidak perlu diatur: tip masuk ke Hive sebagai HIVE. Tip yang lebih kecil dari biaya konversi v4v.app (sekitar 60 sats) tetap sebagai sats di akun v4v.app kamu. Masukkan alamat Lightning di bawah agar tip masuk ke dompet kamu sendiri.",
+    "ownDesc": "Tip langsung masuk ke dompet Lightning kamu sendiri, tanpa v4v.app dan biaya konversinya. Disimpan di profil Hive kamu.",
+    "inputLabel": "Alamat Lightning kamu",
+    "placeholder": "kamu@dompet.com",
+    "useV4v": "Pakai v4v.app lagi",
+    "savedOwn": "Tip Lightning sekarang masuk ke alamat kamu sendiri",
+    "savedV4v": "Tip Lightning kembali lewat v4v.app",
+    "badAddress": "Itu bukan alamat Lightning. Bentuknya seperti nama@dompet.com.",
+    "unreachable": "Alamat ini tidak menjawab sebagai alamat Lightning. Periksa lalu coba lagi.",
+    "saveFailed": "Tidak bisa menyimpannya ke profil Hive kamu.",
+    "supportersNote": "Tip ke alamat kamu sendiri tidak pernah lewat Hive, jadi tidak muncul di Pendukung.",
+    "publicNote": "Alamat Lightning kamu disimpan di akun Hive kamu, dan siapa pun bisa melihatnya."
+  },
+  "supportLinks": {
+    "title": "Cara lain untuk mendukungmu",
+    "desc": "Halamanmu di {{sites}}. Penonton menemukan tautan ini di jendela tip kamu.",
+    "placeholder": "https://ko-fi.com/namamu",
+    "add": "Tambah",
+    "remove": "Hapus tautan {{site}}",
+    "badLink": "Tempel tautan lengkap ke halamanmu di salah satu situs ini.",
+    "duplicate": "Tautan itu sudah ada di daftar.",
+    "max": "Kamu bisa menambahkan hingga {{max}} tautan.",
+    "saved": "Tautan dukungan disimpan",
+    "publicNote": "Tautan ini disimpan di akun Hive kamu, dan siapa pun bisa melihatnya."
   }
 }

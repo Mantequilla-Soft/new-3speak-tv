@@ -12,6 +12,7 @@
     "heading": "@{{recipient}} kullanıcısına bahşiş gönder",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Diğer yollar",
     "amountLabel": "Miktar: ",
     "amountPlaceholder": "örn. 1.000",
     "currencyLabel": "Para birimi:",
@@ -40,7 +41,10 @@
         "noAccount": "Bu Hive hesabı yok",
         "invoiceFailed": "Lightning faturası oluşturulamadı. Lütfen tekrar deneyin.",
         "copyFailed": "Fatura kopyalanamadı"
-      }
+      },
+      "noteOwn": "Doğrudan @{{recipient}} kullanıcısının kendi Lightning cüzdanına gider ({{address}}). Her Lightning cüzdanı çalışır, Hive hesabı gerekmez.",
+      "waitingUnverified": "Ödeme geçtiğinde cüzdanın bunu gösterir.",
+      "cashApp": "Lightning cüzdanın yok mu? Cash App ve Strike gibi uygulamalar bunu normal bakiyenden ödeyebilir."
     },
     "wallet": {
       "usernameLabel": "Hive kullanıcı adın:",
@@ -54,6 +58,22 @@
         "self": "Kendine bahşiş gönderemezsin",
         "walletFailed": "Cüzdan bahşişi göndermedi: {{message}}"
       }
+    },
+    "otherWays": "@{{recipient}} kullanıcısını desteklemenin başka yolları",
+    "otherWaysNote": "Her düğme, içerik üreticisinin o sitedeki sayfasını yeni sekmede açar. Orada yapılan ödemeler 3Speak üzerinden geçmez.",
+    "monthly": {
+      "label": "Ne sıklıkla",
+      "once": "Bir kez",
+      "until": "Her ay, {{date}} tarihine kadar",
+      "note": "Hive bunu her 30 günde bir kendiliğinden gönderir, ilki hemen. İstediğin zaman durdurabilirsin.",
+      "replaces": "Bu, @{{recipient}} kullanıcısına zaten gönderdiğin aylık desteğin yerini alır.",
+      "replacesOther": "Bu, @{{recipient}} kullanıcısına zaten gönderdiğin düzenli ödemenin yerini alır.",
+      "current": "@{{recipient}} kullanıcısına her ay {{amount}} gönderiyorsun, {{date}} tarihine kadar.",
+      "currentEvery": "@{{recipient}} kullanıcısına {{interval}} arayla {{amount}} gönderiyorsun, {{date}} tarihine kadar.",
+      "stop": "Durdur",
+      "stopped": "Aylık destek durduruldu",
+      "stopFailed": "Durdurulamadı: {{message}}",
+      "successNote": "Bir sonraki 30 gün sonra kendiliğinden gönderilir."
     }
   },
   "cardMenu": {

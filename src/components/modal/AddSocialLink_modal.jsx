@@ -35,7 +35,12 @@ const PLATFORM_ICONS = {
 // channel" task. Everything goes through warmupSocial (3Speak's API, keyed by the
 // session) and the platform list comes from the server, NOT the profile link
 // switches (SOCIAL_LINK_ENABLED), so it works on prod while those are off.
-export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onChange, warmup = false }) {
+// `inline`: Settings > Connections renders the same panel as a page section.
+// A change there tells an open own-profile page (SOCIAL_LINKS_CHANGED) to reload
+// its link chips, since nothing else would.
+export const SOCIAL_LINKS_CHANGED = '3speak:social-links-changed';
+
+export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onChange, warmup = false, inline = false }) {
   const { t } = useTranslation();
   const [warmupPlatforms, setWarmupPlatforms] = useState([]);
   const [step, setStep] = useState('list'); // 'list' | 'flow'
@@ -94,6 +99,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
       : await getLinks(hiveUsername).catch(() => []);
     setLinks(fresh);
     onChange?.();
+    if (inline) window.dispatchEvent(new Event(SOCIAL_LINKS_CHANGED));
   };
 
   const handleCopyHash = async () => {
@@ -195,140 +201,155 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
     }
   };
 
+  const title = step === 'flow' && selectedPlatform
+    ? t('modals.socialLink.flowTitle', { platform: platformLabel(selectedPlatform) })
+    : t('modals.socialLink.title');
+
+  const body = (
+    <>
+      {step === 'list' && (
+        <>
+          <p className="social-link-modal-sub">
+            {t('modals.socialLink.intro')}
+          </p>
+
+          {loadingLinks ? (
+            <p className="social-link-loading">{t('common.status.loading')}</p>
+          ) : links.length > 0 ? (
+            <ul className="social-link-list">
+              {links.map((link) => {
+                const Icon = PLATFORM_ICONS[link.platform];
+                const url = platformProfileUrl(link.platform, link.platform_username);
+                const key = `${link.platform}:${link.platform_username}`;
+                return (
+                  <li key={key} className="social-link-list__item">
+                    {Icon && <Icon className="social-link-list__icon" />}
+                    <div className="social-link-list__meta">
+                      <strong>{platformLabel(link.platform)}</strong>
+                      <span className="social-link-list__id">{link.platform_username}</span>
+                    </div>
+                    {url && (
+                      <a
+                        href={url}
+                        className="social-link-list__open"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={t('modals.socialLink.openProfile')}
+                      >
+                        <FaExternalLinkAlt />
+                      </a>
+                    )}
+                    <button
+                      className="social-link-list__remove"
+                      onClick={() => handleUnlink(link)}
+                      disabled={unlinkingKey === key}
+                      title={t('modals.socialLink.removeLink')}
+                    >
+                      {unlinkingKey === key ? '…' : <FaTrash />}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="social-link-empty">{t('modals.socialLink.empty')}</p>
+          )}
+
+          <h4 className="social-link-section-title">{t('modals.socialLink.addPlatform')}</h4>
+          <div className="social-link-platform-grid">
+            {Object.entries(PLATFORMS).filter(([key]) => (warmup ? warmupPlatforms.includes(key) : SOCIAL_LINK_ENABLED[key])).map(([key, info]) => {
+              const Icon = PLATFORM_ICONS[key];
+              return (
+                <button
+                  key={key}
+                  className="social-link-platform-btn"
+                  onClick={() => handlePickPlatform(key)}
+                >
+                  {Icon && <Icon size={28} />}
+                  <span>{info.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {step === 'flow' && selectedPlatform && (
+        <>
+          <ol className="social-link-steps">
+            <li>
+              <strong>{t('modals.socialLink.step1')}</strong>
+              <div className="social-link-hash-row">
+                <code className="social-link-hash">{hashInfo?.hash || '…'}</code>
+                <button
+                  className="social-link-copy-btn"
+                  onClick={handleCopyHash}
+                  disabled={!hashInfo?.hash}
+                >
+                  {hashCopied ? <FaCheck /> : <FaCopy />}
+                </button>
+              </div>
+            </li>
+            <li>
+              <Trans i18nKey="modals.socialLink.step2" values={{ platform: platformLabel(selectedPlatform) }} components={{ strong: <strong /> }} />
+            </li>
+            <li>
+              <strong>{t('modals.socialLink.step3', { platform: platformLabel(selectedPlatform) })}</strong>
+              <input
+                className="social-link-input"
+                type="text"
+                value={platformUsername}
+                onChange={(e) => setPlatformUsername(e.target.value)}
+                placeholder={PLATFORMS[selectedPlatform]?.inputPlaceholderKey && t(PLATFORMS[selectedPlatform].inputPlaceholderKey)}
+                autoFocus
+              />
+              {PLATFORMS[selectedPlatform]?.inputHelpKey && (
+                <small className="social-link-input-help">
+                  {t(PLATFORMS[selectedPlatform].inputHelpKey)}
+                </small>
+              )}
+            </li>
+          </ol>
+
+          {error && <div className="social-link-error">{error}</div>}
+
+          <div className="social-link-actions">
+            <button
+              className="social-link-btn-secondary"
+              onClick={() => { setStep('list'); setError(''); }}
+              disabled={submitting}
+            >
+              {t('common.actions.back')}
+            </button>
+            <button
+              className="social-link-btn-primary"
+              onClick={handleVerify}
+              disabled={submitting || !platformUsername.trim()}
+            >
+              {submitting ? t('modals.socialLink.verifying') : t('modals.socialLink.verify')}
+            </button>
+          </div>
+        </>
+      )}
+    </>
+  );
+
+  // Settings > Connections: the same panel as a section of the page, no popup.
+  if (inline) {
+    return (
+      <div className="settings-section social-link-inline">
+        <h4 className="settings-section-title">{title}</h4>
+        {body}
+      </div>
+    );
+  }
+
   return createPortal(
     <div className="social-link-modal-overlay" onClick={handleClose}>
       <div className="social-link-modal-content" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader
-          title={step === 'flow' && selectedPlatform
-            ? t('modals.socialLink.flowTitle', { platform: platformLabel(selectedPlatform) })
-            : t('modals.socialLink.title')}
-          onClose={handleClose}
-        />
+        <ModalHeader title={title} onClose={handleClose} />
 
-        {step === 'list' && (
-          <>
-            <p className="social-link-modal-sub">
-              {t('modals.socialLink.intro')}
-            </p>
-
-            {loadingLinks ? (
-              <p className="social-link-loading">{t('common.status.loading')}</p>
-            ) : links.length > 0 ? (
-              <ul className="social-link-list">
-                {links.map((link) => {
-                  const Icon = PLATFORM_ICONS[link.platform];
-                  const url = platformProfileUrl(link.platform, link.platform_username);
-                  const key = `${link.platform}:${link.platform_username}`;
-                  return (
-                    <li key={key} className="social-link-list__item">
-                      {Icon && <Icon className="social-link-list__icon" />}
-                      <div className="social-link-list__meta">
-                        <strong>{platformLabel(link.platform)}</strong>
-                        <span className="social-link-list__id">{link.platform_username}</span>
-                      </div>
-                      {url && (
-                        <a
-                          href={url}
-                          className="social-link-list__open"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title={t('modals.socialLink.openProfile')}
-                        >
-                          <FaExternalLinkAlt />
-                        </a>
-                      )}
-                      <button
-                        className="social-link-list__remove"
-                        onClick={() => handleUnlink(link)}
-                        disabled={unlinkingKey === key}
-                        title={t('modals.socialLink.removeLink')}
-                      >
-                        {unlinkingKey === key ? '…' : <FaTrash />}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p className="social-link-empty">{t('modals.socialLink.empty')}</p>
-            )}
-
-            <h4 className="social-link-section-title">{t('modals.socialLink.addPlatform')}</h4>
-            <div className="social-link-platform-grid">
-              {Object.entries(PLATFORMS).filter(([key]) => (warmup ? warmupPlatforms.includes(key) : SOCIAL_LINK_ENABLED[key])).map(([key, info]) => {
-                const Icon = PLATFORM_ICONS[key];
-                return (
-                  <button
-                    key={key}
-                    className="social-link-platform-btn"
-                    onClick={() => handlePickPlatform(key)}
-                  >
-                    {Icon && <Icon size={28} />}
-                    <span>{info.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </>
-        )}
-
-        {step === 'flow' && selectedPlatform && (
-          <>
-            <ol className="social-link-steps">
-              <li>
-                <strong>{t('modals.socialLink.step1')}</strong>
-                <div className="social-link-hash-row">
-                  <code className="social-link-hash">{hashInfo?.hash || '…'}</code>
-                  <button
-                    className="social-link-copy-btn"
-                    onClick={handleCopyHash}
-                    disabled={!hashInfo?.hash}
-                  >
-                    {hashCopied ? <FaCheck /> : <FaCopy />}
-                  </button>
-                </div>
-              </li>
-              <li>
-                <Trans i18nKey="modals.socialLink.step2" values={{ platform: platformLabel(selectedPlatform) }} components={{ strong: <strong /> }} />
-              </li>
-              <li>
-                <strong>{t('modals.socialLink.step3', { platform: platformLabel(selectedPlatform) })}</strong>
-                <input
-                  className="social-link-input"
-                  type="text"
-                  value={platformUsername}
-                  onChange={(e) => setPlatformUsername(e.target.value)}
-                  placeholder={PLATFORMS[selectedPlatform]?.inputPlaceholderKey && t(PLATFORMS[selectedPlatform].inputPlaceholderKey)}
-                  autoFocus
-                />
-                {PLATFORMS[selectedPlatform]?.inputHelpKey && (
-                  <small className="social-link-input-help">
-                    {t(PLATFORMS[selectedPlatform].inputHelpKey)}
-                  </small>
-                )}
-              </li>
-            </ol>
-
-            {error && <div className="social-link-error">{error}</div>}
-
-            <div className="social-link-actions">
-              <button
-                className="social-link-btn-secondary"
-                onClick={() => { setStep('list'); setError(''); }}
-                disabled={submitting}
-              >
-                {t('common.actions.back')}
-              </button>
-              <button
-                className="social-link-btn-primary"
-                onClick={handleVerify}
-                disabled={submitting || !platformUsername.trim()}
-              >
-                {submitting ? t('modals.socialLink.verifying') : t('modals.socialLink.verify')}
-              </button>
-            </div>
-          </>
-        )}
+        {body}
       </div>
     </div>,
     document.body

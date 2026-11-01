@@ -169,7 +169,8 @@
 
     button {
       flex: 1;
-      padding: 0.55rem 1rem;
+      min-width: 0;
+      padding: 0.55rem 0.6rem;
       border-radius: 999px;
       border: 1px solid var(--border-light, #e1e1e1);
       background: transparent;
@@ -327,6 +328,47 @@
 }
 
 /* Custom toast style */
+.tip-modal {
+  // "You send @x 5.000 HBD every month…" + Stop, above the HIVE / HBD form.
+  .tip-monthly-current {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border-light, #e1e1e1);
+    border-radius: 8px;
+    background: var(--bg-tertiary, #f5f5f5);
+    font-size: 13px;
+    color: var(--text-primary, #333);
+
+    .lightning-done { flex-shrink: 0; }
+  }
+
+  // The "More ways" tab (OtherWays.jsx): one big button per page, like the
+  // /tip page's wallet buttons.
+  .tip-other-ways {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--accent-primary, #e53935);
+      color: var(--accent-primary, #e53935);
+      font-weight: 500;
+      text-decoration: none;
+
+      &:hover { background: var(--bg-tertiary, #f5f5f5); }
+    }
+  }
+}
+
 .toastify-custom {
   max-width: 300px;
   font-size: 14px;

@@ -3,19 +3,22 @@
     "surface": {
       "watch": "In video's",
       "shorts": "Tussen Shorts",
-      "upload": "Vóór een upload"
+      "upload": "Vóór een upload",
+      "audio": "In de audiospeler"
     },
     "supplies": {
       "text": "Een korte boodschap en een link",
       "imageOrVideo": "Een afbeelding of video",
       "image": "Een afbeelding",
-      "video": "Een video"
+      "video": "Een video",
+      "audio": "Een audioclip en een link"
     },
     "youSupply": {
       "text": "Jij levert een korte boodschap en een link",
       "imageOrVideo": "Jij levert een afbeelding of video",
       "image": "Jij levert een afbeelding",
-      "video": "Jij levert een video"
+      "video": "Jij levert een video",
+      "audio": "Je levert een audioclip en een link"
     },
     "bannerAdvice": {
       "wideStrip": "Het moet een brede strook zijn.",
@@ -36,7 +39,10 @@
       "minWidth": "minstens {{width}}px breed",
       "landscape": "liggend, zoals de speler",
       "filesAny": "PNG, JPG of MP4",
-      "filesImage": "PNG of JPG"
+      "filesImage": "PNG of JPG",
+      "filesAudio": "MP3, WAV, M4A, OGG, FLAC of WebM",
+      "upToMb": "tot {{mb}} MB, volume gelijk aan de andere advertenties",
+      "audioButton": "getoond als knop terwijl hij speelt"
     },
     "groups": {
       "screen": {
@@ -53,6 +59,10 @@
       },
       "more": {
         "title": "Meer formaten"
+      },
+      "audio": {
+        "title": "In de audiospeler",
+        "note": "Gehoord door mensen die naar audioberichten luisteren. Het nummer pauzeert ervoor en gaat daarna verder."
       }
     },
     "unplaced": "Niet geplaatst"
@@ -106,7 +116,8 @@
     "secondsIn_one": "Na {{count}} seconde",
     "secondsIn_other": "Na {{count}} seconden",
     "oneMinuteIn": "Na 1 minuut",
-    "minutesIn": "Na {{minutes}} minuten"
+    "minutesIn": "Na {{minutes}} minuten",
+    "beforeTrack": "Voor het nummer"
   },
   "blocked": {
     "unpaid": "Wacht op je betaling",
@@ -138,10 +149,28 @@
     "playsDay": "Weergaven per dag",
     "playsMonth": "Weergaven per maand",
     "reach": "Bereik",
-    "notRecommendedTag": "niet aanbevolen",
-    "notRecommendedNote": "<b>Niet aanbevolen:</b> een advertentie vóór de video bereikt op papier meer sessies, maar bijna de helft van al het kijken hier stopt binnen vijftien seconden, dus de meeste van die weergaven komen terecht bij iemand die al aan het vertrekken was. Een advertentie verderop wordt alleen geteld als de kijker daar ook echt is aangekomen.",
     "whoWatches": "Wie er kijkt",
-    "qualityNote": "<b>{{pct}}% van het ruwe verkeer is uitgesloten</b> van deze cijfers: sessies korter dan {{seconds}} seconden, accounts die te snel zijn om echte kijkers te zijn, en video's waarvan de maker zich heeft afgemeld. Wat overblijft, is wat we verkopen."
+    "qualityNote": "<b>{{pct}}% van het ruwe verkeer is uitgesloten</b> van deze cijfers: sessies korter dan {{seconds}} seconden, accounts die te snel zijn om echte kijkers te zijn, en video's waarvan de maker zich heeft afgemeld. Wat overblijft, is wat we verkopen.",
+    "listensPerDay": "Luisterbeurten per dag",
+    "measuredDays": "gemeten over de laatste {{days}} dagen",
+    "tracksHeard": "Beluisterde nummers",
+    "tracksNote": "van {{catalogue}} openbare nummers op 3Speak",
+    "listenHours": "Luisteruren",
+    "audioTrial": "Audiospots spelen voorlopig alleen op de audio van {{owners}}, ongeveer {{n}} luisterbeurten per dag. Meer makers komen erbij zodra audioadvertenties opengaan.",
+    "audioWhere": "Waar in het nummer hij speelt",
+    "listensDay": "Luisterbeurten / dag",
+    "listensMonth": "Luisterbeurten / maand",
+    "audioFine": "Geteld op 3Speak-audio die echt beluisterd is, niet alleen geopend. Een positie telt een luisterbeurt zodra de luisteraar zo ver kwam.",
+    "whoListens": "Wie luistert",
+    "audioNone": "De luistercijfers konden nu niet worden geladen. Probeer het zo opnieuw.",
+    "uploadsPerDay": "Uploads per dag",
+    "uploadsNote": "op 3speak.tv, laatste 7 dagen",
+    "videosShorts": "Video’s / shorts per dag",
+    "creatorsUploading": "Makers die uploaden",
+    "creatorsNote": "verschillende accounts in de laatste {{days}} dagen",
+    "uploadsFine": "Geteld uit uploads op 3speak.tv. De spot speelt voor elke upload van een video, short of audio.",
+    "uploadNone": "De uploadcijfers konden nu niet worden geladen. Probeer het zo opnieuw.",
+    "videosShortsAudio": "Video’s / shorts / audio per dag"
   },
   "rateCard": {
     "perSecDay": " /sec /dag",
@@ -154,7 +183,13 @@
     "orAboutHive": "of ongeveer {{hive}} HIVE",
     "forSpotOver": "voor een spot van {{seconds}}s gedurende {{days}} dagen",
     "longerOffer": "<b>{{price}} HBD</b> voor {{days}} dagen, ongeveer {{saving}}% minder per dag",
-    "agreedRate": "je afgesproken tarief"
+    "agreedRate": "je afgesproken tarief",
+    "tabs": {
+      "label": "Formaten",
+      "video": "Video",
+      "audio": "Audio",
+      "upload": "Upload"
+    }
   },
   "overlay": {
     "advertisement": "Advertentie",
@@ -190,6 +225,7 @@
   "ticker": {
     "openProduct": "{{name}} openen",
     "openLink": "Link van de adverteerder openen",
+    "findOutMore": "Meer informatie",
     "previewCaption": "Je ticker op {{seconds}}s, zoals kijkers hem zien",
     "preview": "Voorbeeld",
     "screenSize": "Schermformaat",
@@ -212,7 +248,13 @@
     "styleHold": "schuift in en pauzeert",
     "styleCrawl": "schuift voorbij",
     "atLeastSeconds": ", minstens {{seconds}}s",
-    "checkLink": "Link controleren"
+    "checkLink": "Link controleren",
+    "audioNote": "Tickers spelen ook in de audiospeler: een computerstem leest je bericht in het Engels voor, met een kort belletje en zachte muziek eronder, en je link verschijnt als knop. Druk op Beluisteren om precies te horen wat luisteraars horen.",
+    "listen": "Beluisteren",
+    "listenBusy": "Bezig…",
+    "listenHint": "Hetzelfde geluid dat luisteraars krijgen, gemaakt van wat in het formulier staat.",
+    "listenSays": "Uitgesproken: “{{text}}”",
+    "listenFailed": "Kon de voorbeeldweergave niet maken"
   },
   "gate": {
     "ariaLabel": "Sponsorboodschap",
@@ -381,7 +423,8 @@
   "missing": {
     "ticker": "Sla eerst je ticker op.",
     "banner": "Upload eerst je banner.",
-    "video": "Upload je advertentievideo, of vraag ons hem te maken."
+    "video": "Upload je advertentievideo, of vraag ons hem te maken.",
+    "audio": "Upload eerst je audioclip."
   },
   "adType": {
     "question": "Wat wil je laten draaien?",
@@ -411,7 +454,12 @@
       "upload": "Upload de liggende video die makers bekijken voordat hun upload begint, of vraag ons hem te maken.",
       "banner": "Upload de afbeelding die over de video wordt getoond.",
       "shorts": "Upload de staande video die tussen Shorts speelt. Hij moet staand zijn, want een liggende spot speelt klein met zwarte balken aan weerszijden. 1080x1920 werkt goed.",
-      "video": "Upload de video die gaat spelen, of vraag ons hem te maken. Hier stel je ook het logo en de slogan in die over je advertentie worden getoond."
+      "video": "Upload de video die gaat spelen, of vraag ons hem te maken. Hier stel je ook het logo en de slogan in die over je advertentie worden getoond.",
+      "audio": "Upload je audioclip en de link voor de knop. Het nummer pauzeert waar je het boekt, je clip speelt, daarna gaat het nummer verder."
+    },
+    "audio": {
+      "title": "Een audiospot",
+      "blurb": "Je eigen audioclip, afgespeeld in de audiospeler."
     }
   },
   "book": {
@@ -451,7 +499,6 @@
     "enterLength": "Er is meer dan één advertentievideo geüpload, dus vul de lengte in van de video die je boekt.",
     "mustFit": "Je advertentievideo moet hierin passen.",
     "whenInVideo": "Wanneer in de video",
-    "beforeNotRecommended": "Vóór de video (niet aanbevolen)",
     "slotFull": " (vol voor deze data)",
     "placesLeft": " ({{left}} van {{total}} plekken over)",
     "slotHint": "Hoe ver in elke video hij draait. Later bereikt minder mensen, maar bereikt ze terwijl ze kijken.",
@@ -500,7 +547,19 @@
     "chartTotal_other": "{{seconds}} s voor {{count}} dagen = {{total}} HBD",
     "chartDays": "Geboekte dagen",
     "chartYAxis": "HBD per seconde per dag",
-    "chartAria": "{{format}}: {{from}} HBD per seconde per dag voor {{min}} dagen, dalend naar {{to}} HBD voor {{max}} dagen"
+    "chartAria": "{{format}}: {{from}} HBD per seconde per dag voor {{min}} dagen, dalend naar {{to}} HBD voor {{max}} dagen",
+    "audioSpot": "Ook afspelen in de audiospeler",
+    "audioSpotHint": "Voorgelezen aan mensen die naar audioberichten luisteren, met je link als knop.",
+    "lengthFromAudio": "Overgenomen van de audioclip die je uploadde.",
+    "uploadFirstAudio": "Upload eerst je audioclip",
+    "tooManyClips": "Je hebt meer dan één audioclip, dus we weten niet welke lengte we moeten nemen. Vul hem zelf in.",
+    "enterLengthAudio": "Meer dan één audioclip geüpload, vul dus de lengte in van de clip die je boekt.",
+    "mustFitAudio": "Je audioclip moet hierin passen.",
+    "whenInTrack": "Wanneer in het nummer",
+    "slotHintAudio": "Hoe ver in elk nummer hij speelt. Later bereikt minder mensen, maar wel luisterende.",
+    "tracksToRunOn": "Nummers om op te spelen",
+    "shortestTrack": "Kortste nummer",
+    "longestTrack": "Langste nummer"
   },
   "attach": {
     "needsTicker": "Dit is een tickercampagne, dus er is een goedgekeurde tickerboodschap nodig.",
@@ -516,7 +575,10 @@
     "chooseOne": "Kies er een",
     "bannerOption": "Banner",
     "tickerOption": "Ticker",
-    "secondsAd": "Advertentie van {{seconds}}s"
+    "secondsAd": "Advertentie van {{seconds}}s",
+    "needsAudio": "Dit is een audioboeking, dus er is een goedgekeurde audioclip nodig.",
+    "useAudio": "Gebruik een van je goedgekeurde audioclips",
+    "audioOption": "Audioclip · {{seconds}} s"
   },
   "delivery": {
     "deliveredOf_one": "<b>{{delivered}}</b> weergave geleverd van {{forecast}} voorspeld",
@@ -553,7 +615,9 @@
     "clickRate": "({{rate}}% van de weergaven)",
     "avgWatchedOf": "Gemiddeld <b>{{seconds}} s</b> bekeken, van {{length}} s",
     "avgWatched": "Gemiddeld <b>{{seconds}} s</b> bekeken",
-    "toEnd": "{{percent}}% keek tot het einde"
+    "toEnd": "{{percent}}% keek tot het einde",
+    "runsAudio": "Je audioclip · {{seconds}} s",
+    "audioFailed": "Kon de audio-instelling niet wijzigen"
   },
   "rebook": {
     "button": "Opnieuw boeken",
@@ -796,5 +860,19 @@
     "note": "Zeg nee en er verandert niets. Je kunt het altijd uitzetten in Instellingen, en dan verwijderen we wat we bewaarden.",
     "yes": "Ja, tel mijn luisteren mee",
     "savedYes": "Je luisteren telt nu mee voor luisteraarsbeloningen"
+  },
+  "audio": {
+    "yourSpot": "Je audiospot",
+    "file": "Audiobestand",
+    "fileHint": "MP3, WAV, M4A, OGG, FLAC of WebM. Tot {{seconds}} seconden en {{mb}} MB.",
+    "tooBig": "Dat bestand is groter dan {{mb}} MB. Exporteer een kleiner bestand, bijvoorbeeld als MP3.",
+    "tooBigServer": "Dat bestand is te groot om te uploaden.",
+    "linkHint": "Waar de knop “Meer weten” heen gaat terwijl je clip speelt. Een volledig https://-adres.",
+    "howItPlays": "We stemmen het volume af op de andere advertenties. De speler hieronder speelt het opgeslagen bestand, dus je hoort precies wat luisteraars horen. Elke clip wordt bekeken voordat hij loopt.",
+    "upload": "Audio uploaden",
+    "uploading": "Uploaden…",
+    "savedReview": "Audio opgeslagen. We bekijken het voordat het loopt",
+    "uploadFailed": "Kon de audio niet uploaden",
+    "seconds": "Audioclip van {{seconds}} s"
   }
 }

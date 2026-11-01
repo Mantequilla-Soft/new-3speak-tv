@@ -35,6 +35,9 @@
     "volume": "Volume",
     "queue": "Antrean",
     "closePlayer": "Tutup pemutar",
+    "pipOpen": "Buka pemutar di jendela terpisah",
+    "pipClose": "Tutup pemutar di jendela terpisah",
+    "pipActive": "Diputar di jendela terpisah",
     "curated": "Dikurasi",
     "noCues": "Tidak ada cue.",
     "clearQueue": "Kosongkan antrean",
@@ -160,6 +163,11 @@
     "failed": "Gagal",
     "unknown": "tidak diketahui",
     "unknownError": "kesalahan tidak diketahui",
+    "errors": {
+      "unreadable": "File audio tidak dapat dibaca. Tambahkan lagi, lalu terbitkan.",
+      "rateLimited": "Terlalu banyak percobaan unggah. Tunggu beberapa menit, lalu coba lagi.",
+      "server": "Server audio tidak dapat menyimpan file ini. Coba lagi sebentar lagi."
+    },
     "recorded": "Direkam",
     "uploaded": "Diunggah",
     "steps": {
@@ -271,7 +279,9 @@
       "postRewardsTitle": "Reward postingan (sekali)",
       "postRewardsDesc": "Kamu menerima payout penulis Hive yang biasa — dibayar sekali, ~7 hari setelah diterbitkan.",
       "pplTitle": "Bayar per dengar (seumur hidup)",
-      "pplDesc": "Semua reward postingan audio masuk ke @{{account}}. Alih-alih satu kali payout, program 3Speak membayarmu per dengar selama lagu itu ada."
+      "pplDesc": "Semua reward postingan audio masuk ke @{{account}}. Alih-alih satu kali payout, program 3Speak membayarmu per dengar selama lagu itu ada.",
+      "adsTitle": "Iklan di audio ini",
+      "adsHint": "Pesan sponsor singkat bersuara bisa diputar selama audio ini, dan kamu dapat bagian. Mengikuti pengaturan akunmu; ubah di sini hanya untuk unggahan ini."
     },
     "reward": {
       "distribution": "Distribusi reward",

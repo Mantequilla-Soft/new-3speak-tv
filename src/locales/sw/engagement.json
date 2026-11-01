@@ -12,6 +12,7 @@
     "heading": "Tuma bakshishi kwa @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Njia zaidi",
     "amountLabel": "Kiasi: ",
     "amountPlaceholder": "k.m. 1.000",
     "currencyLabel": "Sarafu:",
@@ -40,7 +41,10 @@
         "noAccount": "Akaunti hii ya Hive haipo",
         "invoiceFailed": "Imeshindwa kuunda ankara ya Lightning. Tafadhali jaribu tena.",
         "copyFailed": "Imeshindwa kunakili ankara"
-      }
+      },
+      "noteOwn": "Inakwenda moja kwa moja kwenye pochi ya Lightning ya @{{recipient}} ({{address}}). Pochi yoyote ya Lightning inafaa, hakuna haja ya akaunti ya Hive.",
+      "waitingUnverified": "Pochi yako itaonyesha malipo yakishapita.",
+      "cashApp": "Huna pochi ya Lightning? Programu kama Cash App na Strike zinaweza kulipa kutoka salio lako la kawaida."
     },
     "wallet": {
       "usernameLabel": "Jina lako la mtumiaji la Hive:",
@@ -54,6 +58,22 @@
         "self": "Huwezi kujipa bakshishi mwenyewe",
         "walletFailed": "Pochi haikutuma bakshishi: {{message}}"
       }
+    },
+    "otherWays": "Njia zaidi za kumuunga mkono @{{recipient}}",
+    "otherWaysNote": "Kila kitufe hufungua ukurasa wa mtayarishaji kwenye tovuti hiyo katika kichupo kipya. Malipo yanayofanywa huko hayapitii 3Speak.",
+    "monthly": {
+      "label": "Mara ngapi",
+      "once": "Mara moja",
+      "until": "Kila mwezi, hadi {{date}}",
+      "note": "Hive huituma yenyewe kila siku 30, ya kwanza sasa hivi. Unaweza kuisimamisha wakati wowote.",
+      "replaces": "Hii itachukua nafasi ya usaidizi wa kila mwezi unaomtumia @{{recipient}} tayari.",
+      "replacesOther": "Hii itachukua nafasi ya malipo ya kujirudia unayomtumia @{{recipient}} tayari.",
+      "current": "Unamtumia @{{recipient}} {{amount}} kila mwezi, hadi {{date}}.",
+      "currentEvery": "Unamtumia @{{recipient}} {{amount}} kila {{interval}}, hadi {{date}}.",
+      "stop": "Simamisha",
+      "stopped": "Usaidizi wa kila mwezi umesimamishwa",
+      "stopFailed": "Haikuweza kusimamishwa: {{message}}",
+      "successNote": "Unaofuata utatumwa wenyewe baada ya siku 30."
     }
   },
   "cardMenu": {

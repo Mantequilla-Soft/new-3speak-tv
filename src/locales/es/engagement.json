@@ -12,6 +12,7 @@
     "heading": "Enviar una propina a @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Más formas",
     "amountLabel": "Monto: ",
     "amountPlaceholder": "p. ej. 1.000",
     "currencyLabel": "Moneda:",
@@ -40,7 +41,10 @@
         "noAccount": "Esta cuenta de Hive no existe",
         "invoiceFailed": "No se pudo crear la factura Lightning. Inténtalo de nuevo.",
         "copyFailed": "No se pudo copiar la factura"
-      }
+      },
+      "noteOwn": "Va directo a la billetera Lightning de @{{recipient}} ({{address}}). Sirve cualquier billetera Lightning, no hace falta cuenta de Hive.",
+      "waitingUnverified": "Tu billetera te muestra cuándo se completó el pago.",
+      "cashApp": "¿No tienes billetera Lightning? Apps como Cash App y Strike pueden pagarlo con tu saldo normal."
     },
     "wallet": {
       "usernameLabel": "Tu usuario de Hive:",
@@ -54,6 +58,22 @@
         "self": "No puedes darte propina a ti mismo",
         "walletFailed": "La billetera no envió la propina: {{message}}"
       }
+    },
+    "otherWays": "Más formas de apoyar a @{{recipient}}",
+    "otherWaysNote": "Cada botón abre la página del creador en ese sitio en una pestaña nueva. Los pagos que hagas allí no pasan por 3Speak.",
+    "monthly": {
+      "label": "Con qué frecuencia",
+      "once": "Una vez",
+      "until": "Cada mes, hasta {{date}}",
+      "note": "Hive lo envía solo cada 30 días, el primero ahora mismo. Puedes detenerlo cuando quieras.",
+      "replaces": "Esto reemplaza el apoyo mensual que ya envías a @{{recipient}}.",
+      "replacesOther": "Esto reemplaza el pago recurrente que ya envías a @{{recipient}}.",
+      "current": "Envías a @{{recipient}} {{amount}} cada mes, hasta {{date}}.",
+      "currentEvery": "Envías a @{{recipient}} {{amount}} cada {{interval}}, hasta {{date}}.",
+      "stop": "Detener",
+      "stopped": "Apoyo mensual detenido",
+      "stopFailed": "No se pudo detener: {{message}}",
+      "successNote": "El siguiente sale solo dentro de 30 días."
     }
   },
   "cardMenu": {

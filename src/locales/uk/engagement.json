@@ -12,6 +12,7 @@
     "heading": "Надіслати чайові @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Інші способи",
     "amountLabel": "Сума: ",
     "amountPlaceholder": "напр. 1.000",
     "currencyLabel": "Валюта:",
@@ -40,7 +41,10 @@
         "noAccount": "Такого акаунта Hive немає",
         "invoiceFailed": "Не вдалося створити Lightning-рахунок. Спробуйте ще раз.",
         "copyFailed": "Не вдалося скопіювати рахунок"
-      }
+      },
+      "noteOwn": "Іде просто в Lightning-гаманець @{{recipient}} ({{address}}). Підійде будь-який Lightning-гаманець, акаунт Hive не потрібен.",
+      "waitingUnverified": "Ваш гаманець покаже, коли платіж пройде.",
+      "cashApp": "Немає Lightning-гаманця? Застосунки на кшталт Cash App і Strike можуть оплатити зі звичайного балансу."
     },
     "wallet": {
       "usernameLabel": "Ваше ім'я користувача Hive:",
@@ -54,6 +58,22 @@
         "self": "Не можна надіслати чайові самому собі",
         "walletFailed": "Гаманець не надіслав чайові: {{message}}"
       }
+    },
+    "otherWays": "Інші способи підтримати @{{recipient}}",
+    "otherWaysNote": "Кожна кнопка відкриває сторінку автора на цьому сайті в новій вкладці. Платежі там проходять не через 3Speak.",
+    "monthly": {
+      "label": "Як часто",
+      "once": "Один раз",
+      "until": "Щомісяця, до {{date}}",
+      "note": "Hive сам надсилає платіж кожні 30 днів, перший іде одразу. Зупинити можна будь-коли.",
+      "replaces": "Це замінить щомісячну підтримку, яку ви вже надсилаєте @{{recipient}}.",
+      "replacesOther": "Це замінить регулярний платіж, який ви вже надсилаєте @{{recipient}}.",
+      "current": "Ви надсилаєте @{{recipient}} {{amount}} щомісяця, до {{date}}.",
+      "currentEvery": "Ви надсилаєте @{{recipient}} {{amount}} раз на {{interval}}, до {{date}}.",
+      "stop": "Зупинити",
+      "stopped": "Щомісячну підтримку зупинено",
+      "stopFailed": "Не вдалося зупинити: {{message}}",
+      "successNote": "Наступний платіж піде сам через 30 днів."
     }
   },
   "cardMenu": {

@@ -1828,7 +1828,14 @@ app.post('/api/ads/opt-out-signature', signChallengeLimiter, async (req, res) =>
     if (rollsRaw !== undefined && typeof rollsRaw !== 'boolean') {
       return res.status(400).json({ error: 'rollsEnabled must be true or false' })
     }
-    const mode = !adsEnabled ? 'off' : (rollsRaw === false ? 'no-rolls' : 'on')
+    // "Ads on your audio": optional too, and signed as a '+audio' / '+no-audio'
+    // suffix on the mode, only with ads on.
+    const audioRaw = req.body.audioEnabled
+    if (audioRaw !== undefined && typeof audioRaw !== 'boolean') {
+      return res.status(400).json({ error: 'audioEnabled must be true or false' })
+    }
+    const baseMode = !adsEnabled ? 'off' : (rollsRaw === false ? 'no-rolls' : 'on')
+    const mode = adsEnabled && audioRaw !== undefined ? `${baseMode}${audioRaw ? '+audio' : '+no-audio'}` : baseMode
 
     // The community's cut of the creator pool. Signed along with everything else so
     // a signature cannot be lifted from one split and reused on another — this is

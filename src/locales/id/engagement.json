@@ -12,6 +12,7 @@
     "heading": "Kirim Tip ke @{{recipient}}",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
+    "methodMore": "Cara lain",
     "amountLabel": "Jumlah: ",
     "amountPlaceholder": "mis. 1.000",
     "currencyLabel": "Mata uang:",
@@ -40,7 +41,10 @@
         "noAccount": "Akun Hive ini tidak ada",
         "invoiceFailed": "Tidak dapat membuat invoice Lightning. Silakan coba lagi.",
         "copyFailed": "Tidak dapat menyalin invoice"
-      }
+      },
+      "noteOwn": "Langsung masuk ke dompet Lightning milik @{{recipient}} ({{address}}). Dompet Lightning apa pun bisa, tidak perlu akun Hive.",
+      "waitingUnverified": "Dompet kamu akan menunjukkan saat pembayaran berhasil.",
+      "cashApp": "Tidak punya dompet Lightning? Aplikasi seperti Cash App dan Strike bisa membayarnya dari saldo biasa kamu."
     },
     "wallet": {
       "usernameLabel": "Username Hive kamu:",
@@ -54,6 +58,22 @@
         "self": "Kamu tidak bisa memberi tip ke diri sendiri",
         "walletFailed": "Dompet tidak mengirim tip: {{message}}"
       }
+    },
+    "otherWays": "Cara lain mendukung @{{recipient}}",
+    "otherWaysNote": "Setiap tombol membuka halaman kreator di situs itu pada tab baru. Pembayaran di sana tidak melalui 3Speak.",
+    "monthly": {
+      "label": "Seberapa sering",
+      "once": "Sekali",
+      "until": "Setiap bulan, sampai {{date}}",
+      "note": "Hive mengirimnya sendiri setiap 30 hari, yang pertama sekarang juga. Kamu bisa menghentikannya kapan saja.",
+      "replaces": "Ini menggantikan dukungan bulanan yang sudah kamu kirim ke @{{recipient}}.",
+      "replacesOther": "Ini menggantikan pembayaran berulang yang sudah kamu kirim ke @{{recipient}}.",
+      "current": "Kamu mengirim {{amount}} ke @{{recipient}} setiap bulan, sampai {{date}}.",
+      "currentEvery": "Kamu mengirim {{amount}} ke @{{recipient}} setiap {{interval}}, sampai {{date}}.",
+      "stop": "Hentikan",
+      "stopped": "Dukungan bulanan dihentikan",
+      "stopFailed": "Tidak bisa dihentikan: {{message}}",
+      "successNote": "Pembayaran berikutnya terkirim sendiri dalam 30 hari."
     }
   },
   "cardMenu": {

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import { usePortalDoc } from '../../utils/portalDocument';
 
 /**
  * The small menus of the audio player (speed, sleep timer, audio effects,
@@ -14,8 +15,10 @@ import ModalHeader from '../ModalHeader/ModalHeader';
  * @param {function} onClose
  */
 export default function PlayerMenu({ anchor, title, onClose, children, className = '' }) {
+  const doc = usePortalDoc();
+  const view = doc.defaultView || window;
   const panelRef = useRef(null);
-  const openerRef = useRef(typeof document !== 'undefined' ? document.activeElement : null);
+  const openerRef = useRef(doc.activeElement);
   // The handler changes on every render of the player; the listeners stay put.
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
@@ -23,19 +26,20 @@ export default function PlayerMenu({ anchor, title, onClose, children, className
   useEffect(() => {
     panelRef.current?.focus();
     const onKey = (e) => { if (e.key === 'Escape') { e.stopPropagation(); closeRef.current(); } };
-    document.addEventListener('keydown', onKey);
+    doc.addEventListener('keydown', onKey);
     const opener = openerRef.current;
     return () => {
-      document.removeEventListener('keydown', onKey);
+      doc.removeEventListener('keydown', onKey);
       // Back to the button, unless something else took the focus meanwhile.
-      if (opener && document.contains(opener) && (!document.activeElement || document.activeElement === document.body)) opener.focus();
+      if (opener && doc.contains(opener) && (!doc.activeElement || doc.activeElement === doc.body)) opener.focus();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Right-aligned with the button, kept on screen.
   const style = anchor ? {
-    '--pm-right': `${Math.max(8, window.innerWidth - anchor.right)}px`,
-    '--pm-bottom': `${Math.max(8, window.innerHeight - anchor.top + 8)}px`,
+    '--pm-right': `${Math.max(8, view.innerWidth - anchor.right)}px`,
+    '--pm-bottom': `${Math.max(8, view.innerHeight - anchor.top + 8)}px`,
   } : undefined;
 
   return createPortal(
@@ -52,6 +56,6 @@ export default function PlayerMenu({ anchor, title, onClose, children, className
         <div className="audio-pm-body">{children}</div>
       </div>
     </div>,
-    document.body,
+    doc.body,
   );
 }

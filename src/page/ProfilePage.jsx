@@ -31,7 +31,7 @@ import SupportersList from "../components/Supporters/SupportersList";
 import { useSupporters } from "../lib/supports";
 import HiveBadges from "../components/HiveBadges/HiveBadges";
 import ProfileStreams, { ProfileLiveNow } from "../components/Userprofilepage/ProfileStreams";
-import AddSocialLink_modal from "../components/modal/AddSocialLink_modal";
+import AddSocialLink_modal, { SOCIAL_LINKS_CHANGED } from "../components/modal/AddSocialLink_modal";
 import EditVideoHintModal from "../components/modal/EditVideoHintModal";
 import { fetchScheduledPosts, normalizeScheduledForCard } from "../utils/scheduledPosts";
 
@@ -135,6 +135,12 @@ function ProfilePage() {
   const [showSocialLinkModal, setShowSocialLinkModal] = useState(false);
   const [showEditHint, setShowEditHint] = useState(false);
   const [socialLinksRefreshKey, setSocialLinksRefreshKey] = useState(0);
+  // Links added or removed in Settings > Connections while this page is open.
+  useEffect(() => {
+    const bump = () => setSocialLinksRefreshKey((k) => k + 1);
+    window.addEventListener(SOCIAL_LINKS_CHANGED, bump);
+    return () => window.removeEventListener(SOCIAL_LINKS_CHANGED, bump);
+  }, []);
   const [editProfileOpen, setEditProfileOpen] = useState(false);
   // Bumped after a profile save so the header re-reads the bio from Hive.
   const [profileRefreshKey, setProfileRefreshKey] = useState(0);
