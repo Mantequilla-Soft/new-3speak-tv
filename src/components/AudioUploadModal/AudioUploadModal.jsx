@@ -90,6 +90,14 @@ function uploadErrorText(err, t) {
   return err?.message || (typeof err === 'string' ? err : t('audio.upload.failed'));
 }
 const AUDIO_EXT_RE = /\.(mp3|wav|ogg|webm|m4a|flac|aac)$/i;
+// iOS greys out audio files in the Files app when the picker only says
+// `audio/*` (WebKit bug 242110 reads it as video/*), so name the formats the
+// hint lists, by extension and MIME type. Desktop browsers read the same list.
+const AUDIO_ACCEPT = [
+  '.mp3', '.wav', '.ogg', '.webm', '.m4a', '.flac', '.aac',
+  'audio/mpeg', 'audio/wav', 'audio/x-wav', 'audio/ogg', 'audio/webm',
+  'audio/mp4', 'audio/x-m4a', 'audio/flac', 'audio/aac',
+].join(',');
 
 // Spacing between sequential broadcasts so the Hive RPC + audio service
 // don't see a burst from a single user (avoids rate-limit / dupe-window issues).
@@ -1415,7 +1423,7 @@ function SourceStep({
           <input
             ref={fileInputRef}
             type="file"
-            accept="audio/*"
+            accept={AUDIO_ACCEPT}
             multiple
             hidden
             onChange={onFilesSelected}

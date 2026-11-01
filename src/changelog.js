@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.26',
+    category: 'upload',
+    date: '2026-11-01',
+    summary: 'Upload audio: on iPhone and iPad, audio files in the Files app can now be picked for upload.',
+  },
+  {
     version: '1.81.25',
     category: 'profile',
     date: '2026-11-01',
