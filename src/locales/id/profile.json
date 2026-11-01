@@ -385,5 +385,8 @@
         "body": "Simpan tata letak menerbitkannya. Urungkan dan Ulangi melangkah maju mundur di antara perubahanmu (Ctrl+Z juga bisa), Batal membuangnya, dan Kembalikan ke bawaan memulihkan halaman standar. Tanda ? di samping judul membuka tur ini lagi."
       }
     }
+  },
+  "audioTab": {
+    "files": "File audio"
   }
 }

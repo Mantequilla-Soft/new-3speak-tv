@@ -406,5 +406,8 @@
         "body": "Düzeni kaydet onu yayınlar. Geri al ve Yinele değişikliklerin arasında gezer (Ctrl+Z de çalışır), İptal onları atar, Varsayılana sıfırla standart sayfayı geri getirir. Başlığın yanındaki ? bu turu yeniden açar."
       }
     }
+  },
+  "audioTab": {
+    "files": "Ses dosyaları"
   }
 }

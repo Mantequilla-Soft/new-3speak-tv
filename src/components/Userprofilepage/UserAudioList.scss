@@ -4,3 +4,17 @@
 .user-audio-list-grid {
   padding: 4px;
 }
+
+// With podcasts on the tab, it splits into "Podcasts" and "Audio files", headed
+// like the Overview's sections (.pov-head h3).
+.user-audio-section + .user-audio-section {
+  margin-top: 1.5rem;
+}
+
+.user-audio-heading {
+  margin: 0 0 0.6rem;
+  padding: 0 0.25rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}

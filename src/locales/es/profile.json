@@ -427,5 +427,8 @@
         "body": "Guardar diseño lo publica. Deshacer y Rehacer recorren tus cambios (Ctrl+Z también funciona), Cancelar los descarta y Restablecer devuelve la página estándar. El ? junto al título vuelve a abrir este recorrido."
       }
     }
+  },
+  "audioTab": {
+    "files": "Archivos de audio"
   }
 }

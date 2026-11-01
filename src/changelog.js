@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.28',
+    category: 'profile',
+    date: '2026-11-01',
+    summary: "The Audio tab on profiles now shows a creator's podcasts (playlists with only audio) above their audio files.",
+  },
+  {
     version: '1.81.27',
     category: 'playlists',
     date: '2026-11-01',

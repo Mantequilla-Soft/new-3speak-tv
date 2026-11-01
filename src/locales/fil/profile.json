@@ -406,5 +406,8 @@
         "body": "Ina-publish ito ng I-save ang layout. Ang I-undo at I-redo ay pabalik-balik sa mga pagbabago mo (gumagana rin ang Ctrl+Z), itinatapon ng Cancel ang mga ito, at ibinabalik ng I-reset sa default ang karaniwang page. Binubuksan ulit ng ? sa tabi ng title ang tour na ito."
       }
     }
+  },
+  "audioTab": {
+    "files": "Mga audio file"
   }
 }

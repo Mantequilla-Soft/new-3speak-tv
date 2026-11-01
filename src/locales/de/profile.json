@@ -406,5 +406,8 @@
         "body": "Layout speichern veröffentlicht es. Rückgängig und Wiederholen springen durch deine Änderungen (Strg+Z geht auch), Abbrechen verwirft sie, und Auf Standard zurücksetzen bringt die normale Seite zurück. Das ? neben dem Titel öffnet diese Tour wieder."
       }
     }
+  },
+  "audioTab": {
+    "files": "Audiodateien"
   }
 }

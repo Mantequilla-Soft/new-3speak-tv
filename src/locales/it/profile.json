@@ -427,5 +427,8 @@
         "body": "Salva layout lo pubblica. Annulla e Ripristina scorrono tra le modifiche (funziona anche Ctrl+Z), Annulla in basso le scarta e Ripristina predefinito riporta la pagina standard. Il ? accanto al titolo riapre questo tour."
       }
     }
+  },
+  "audioTab": {
+    "files": "File audio"
   }
 }

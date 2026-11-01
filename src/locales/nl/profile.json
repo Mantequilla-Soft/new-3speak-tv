@@ -406,5 +406,8 @@
         "body": "Indeling opslaan publiceert hem. Ongedaan maken en Opnieuw lopen door je wijzigingen (Ctrl+Z werkt ook), Annuleren gooit ze weg en Standaard herstellen zet de gewone pagina terug. Het ? naast de titel opent deze rondleiding opnieuw."
       }
     }
+  },
+  "audioTab": {
+    "files": "Audiobestanden"
   }
 }

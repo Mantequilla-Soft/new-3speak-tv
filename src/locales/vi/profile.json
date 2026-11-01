@@ -385,5 +385,8 @@
         "body": "Lưu bố cục sẽ đăng nó. Hoàn tác và Làm lại đi qua lại các thay đổi (Ctrl+Z cũng được), Hủy bỏ chúng, và Khôi phục mặc định đưa trang chuẩn trở lại. Dấu ? cạnh tiêu đề mở lại hướng dẫn này."
       }
     }
+  },
+  "audioTab": {
+    "files": "Tệp âm thanh"
   }
 }

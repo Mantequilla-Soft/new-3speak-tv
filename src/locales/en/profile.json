@@ -406,5 +406,8 @@
         "body": "Save layout publishes it. Undo and redo step back and forth through your changes (Ctrl+Z works too), Cancel drops them, and Reset to default brings back the standard page. The ? next to the title opens this tour again."
       }
     }
+  },
+  "audioTab": {
+    "files": "Audio files"
   }
 }

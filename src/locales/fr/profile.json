@@ -427,5 +427,8 @@
         "body": "Enregistrer la mise en page la publie. Annuler et Rétablir parcourent tes modifications (Ctrl+Z marche aussi), Annuler en bas les abandonne, et Rétablir par défaut remet la page standard. Le ? à côté du titre rouvre cette visite."
       }
     }
+  },
+  "audioTab": {
+    "files": "Fichiers audio"
   }
 }

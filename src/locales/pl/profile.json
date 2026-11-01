@@ -448,5 +448,8 @@
         "body": "Zapisz układ go publikuje. Cofnij i Ponów przechodzą przez zmiany (działa też Ctrl+Z), Anuluj je odrzuca, a Przywróć domyślny przywraca standardową stronę. ? obok tytułu ponownie otwiera ten przewodnik."
       }
     }
+  },
+  "audioTab": {
+    "files": "Pliki audio"
   }
 }

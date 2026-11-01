@@ -427,5 +427,8 @@
         "body": "Salvar layout publica. Desfazer e Refazer passam pelas suas mudanças (Ctrl+Z também funciona), Cancelar descarta e Restaurar padrão traz a página normal de volta. O ? ao lado do título abre este tour de novo."
       }
     }
+  },
+  "audioTab": {
+    "files": "Arquivos de áudio"
   }
 }
