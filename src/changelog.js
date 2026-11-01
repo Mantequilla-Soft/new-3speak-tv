@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.27',
+    category: 'playlists',
+    date: '2026-11-01',
+    summary: 'All-audio playlists now look like podcast shows, with Play, Follow and RSS up top and episode cards with show notes.',
+  },
+  {
     version: '1.81.26',
     category: 'upload',
     date: '2026-11-01',

@@ -3,6 +3,27 @@ import { getHiveUrl } from './hiveNode';
 import { CHECKER_URL } from './config';
 
 /**
+ * A post body as one line of plain show notes for an episode tile: no images,
+ * no player link, no markup. Same rules as the checker's playlist feed
+ * (routes/rss.js showNotesFromBody); the audio uploader only writes the notes
+ * into the Hive post.
+ */
+export function postSummary(body, max = 400) {
+  const text = String(body || '')
+    .replace(/<sup>[\s\S]*?<\/sup>/gi, '')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+    .replace(/<img[^>]*>/gi, '')
+    .replace(/^\s*https?:\/\/audio\.3speak\.tv\/play\S*\s*$/gim, '')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/^\s*(?:#{1,6}|>)\s*/gm, '')
+    .replace(/\*\*|__|`/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return text.length > max ? `${text.slice(0, max).replace(/\s+\S*$/, '')}…` : text;
+}
+
+/**
  * Fetch video data from Hive for a list of playlist items
  */
 export async function fetchVideosForPlaylist(items) {
@@ -66,6 +87,7 @@ export async function fetchVideosForPlaylist(items) {
         author: post.author,
         permlink: post.permlink,
         title: post.title,
+        summary: audioDoc ? postSummary(post.body) : '',
         created_at: post.created,
         images: { thumbnail },
         duration,
