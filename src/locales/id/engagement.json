@@ -40,7 +40,9 @@
         "noAccount": "Akun Hive ini tidak ada",
         "invoiceFailed": "Tidak dapat membuat invoice Lightning. Silakan coba lagi.",
         "copyFailed": "Tidak dapat menyalin invoice"
-      }
+      },
+      "noteOwn": "Langsung masuk ke dompet Lightning milik @{{recipient}} ({{address}}). Dompet Lightning apa pun bisa, tidak perlu akun Hive.",
+      "waitingUnverified": "Dompet kamu akan menunjukkan saat pembayaran berhasil."
     },
     "wallet": {
       "usernameLabel": "Username Hive kamu:",

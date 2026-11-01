@@ -215,5 +215,22 @@
     "requestDeletion": "Mag-request ng pagbura",
     "requestData": "I-request ang data ko",
     "foot": "Sasagot kami sa loob ng isang buwan. Puwede ka ring mag-email nang direkta sa <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Mga tip sa Lightning",
+    "checking": "Tinitingnan kung saan napupunta ang mga tip mo…",
+    "toV4v": "Napupunta ang mga tip sa {{account}}@v4v.app",
+    "toOwn": "Napupunta ang mga tip sa {{address}}",
+    "v4vDesc": "Ang default, walang kailangang i-set up: dumarating ang mga tip sa Hive bilang HIVE. Ang mga tip na mas maliit sa conversion fee ng v4v.app (mga 60 sats) ay nananatiling sats sa v4v.app account mo. Maglagay ng Lightning address sa ibaba para sa sarili mong wallet ito mapunta.",
+    "ownDesc": "Diretso sa sarili mong Lightning wallet ang mga tip, walang v4v.app at walang conversion fee nito. Naka-save sa Hive profile mo.",
+    "inputLabel": "Ang Lightning address mo",
+    "placeholder": "ikaw@wallet.com",
+    "useV4v": "Gamitin ulit ang v4v.app",
+    "savedOwn": "Sa sarili mong address na napupunta ang mga Lightning tip",
+    "savedV4v": "Dumadaan ulit sa v4v.app ang mga Lightning tip",
+    "badAddress": "Hindi iyan Lightning address. Ganito ang itsura nito: pangalan@wallet.com.",
+    "unreachable": "Hindi sumagot ang address na ito bilang Lightning address. Suriin ito at subukan ulit.",
+    "saveFailed": "Hindi ito ma-save sa Hive profile mo.",
+    "supportersNote": "Hindi kailanman dumadaan sa Hive ang mga tip sa sarili mong address, kaya hindi sila lumalabas sa Mga Supporter."
   }
 }

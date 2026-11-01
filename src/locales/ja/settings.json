@@ -215,5 +215,22 @@
     "requestDeletion": "削除をリクエスト",
     "requestData": "データをリクエスト",
     "foot": "1 か月以内に返信します。<mail>privacy@3speak.tv</mail> に直接メールすることもできます。"
+  },
+  "lightning": {
+    "title": "Lightningのチップ",
+    "checking": "チップの送り先を確認しています…",
+    "toV4v": "チップは{{account}}@v4v.appへ届きます",
+    "toOwn": "チップは{{address}}へ届きます",
+    "v4vDesc": "初期設定で、設定は不要です。チップはHiveにHIVEとして届きます。v4v.appの換算手数料(約60 sats)より小さいチップは、v4v.appアカウントにsatsのまま残ります。自分のウォレットで受け取るには、下にLightningアドレスを入力してください。",
+    "ownDesc": "チップはv4v.appとその換算手数料を通さず、自分のLightningウォレットに直接届きます。Hiveプロフィールに保存されます。",
+    "inputLabel": "あなたのLightningアドレス",
+    "placeholder": "you@wallet.com",
+    "useV4v": "v4v.appに戻す",
+    "savedOwn": "Lightningのチップは自分のアドレスに届くようになりました",
+    "savedV4v": "Lightningのチップは再びv4v.app経由になりました",
+    "badAddress": "Lightningアドレスではありません。name@wallet.comのような形式です。",
+    "unreachable": "このアドレスはLightningアドレスとして応答しませんでした。確認してもう一度お試しください。",
+    "saveFailed": "Hiveプロフィールに保存できませんでした。",
+    "supportersNote": "自分のアドレスへのチップはHiveを通らないため、サポーターには表示されません。"
   }
 }

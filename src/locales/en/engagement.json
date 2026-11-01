@@ -40,7 +40,9 @@
         "noAccount": "This Hive account does not exist",
         "invoiceFailed": "Could not create a Lightning invoice. Please try again.",
         "copyFailed": "Could not copy the invoice"
-      }
+      },
+      "noteOwn": "Goes straight to @{{recipient}}'s own Lightning wallet ({{address}}). Any Lightning wallet works, no Hive account needed.",
+      "waitingUnverified": "Your wallet shows when the payment went through."
     },
     "wallet": {
       "usernameLabel": "Your Hive username:",

@@ -215,5 +215,22 @@
     "requestDeletion": "डिलीट करने की रिक्वेस्ट करें",
     "requestData": "मेरा डेटा माँगें",
     "foot": "हम एक महीने के अंदर जवाब देते हैं। आप सीधे <mail>privacy@3speak.tv</mail> पर भी ईमेल कर सकते हैं।"
+  },
+  "lightning": {
+    "title": "Lightning टिप",
+    "checking": "देख रहे हैं कि आपकी टिप कहाँ जाती हैं…",
+    "toV4v": "टिप {{account}}@v4v.app पर जाती हैं",
+    "toOwn": "टिप {{address}} पर जाती हैं",
+    "v4vDesc": "डिफ़ॉल्ट, कुछ सेट करने की ज़रूरत नहीं: टिप Hive पर HIVE के रूप में आती हैं। v4v.app के कन्वर्ज़न शुल्क (लगभग 60 sats) से छोटी टिप आपके v4v.app खाते में sats के रूप में रहती हैं। इन्हें अपने वॉलेट में पाने के लिए नीचे Lightning पता डालें।",
+    "ownDesc": "टिप सीधे आपके अपने Lightning वॉलेट में जाती हैं, बिना v4v.app और उसके कन्वर्ज़न शुल्क के। आपकी Hive प्रोफ़ाइल में सहेजा गया।",
+    "inputLabel": "आपका Lightning पता",
+    "placeholder": "aap@wallet.com",
+    "useV4v": "फिर से v4v.app इस्तेमाल करें",
+    "savedOwn": "Lightning टिप अब आपके अपने पते पर जाती हैं",
+    "savedV4v": "Lightning टिप फिर से v4v.app से जाती हैं",
+    "badAddress": "यह Lightning पता नहीं है। यह name@wallet.com जैसा दिखता है।",
+    "unreachable": "इस पते ने Lightning पते की तरह जवाब नहीं दिया। जाँचें और फिर कोशिश करें।",
+    "saveFailed": "आपकी Hive प्रोफ़ाइल में सहेजा नहीं जा सका।",
+    "supportersNote": "आपके अपने पते पर आई टिप Hive से होकर नहीं जातीं, इसलिए वे समर्थकों में नहीं दिखतीं।"
   }
 }

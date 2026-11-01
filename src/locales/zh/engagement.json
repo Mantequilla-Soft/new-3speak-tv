@@ -40,7 +40,9 @@
         "noAccount": "该 Hive 账户不存在",
         "invoiceFailed": "无法创建 Lightning 账单，请重试。",
         "copyFailed": "无法复制账单"
-      }
+      },
+      "noteOwn": "直接进入 @{{recipient}} 自己的 Lightning 钱包（{{address}}）。任何 Lightning 钱包都可以，无需 Hive 账户。",
+      "waitingUnverified": "付款完成后，你的钱包会显示。"
     },
     "wallet": {
       "usernameLabel": "你的 Hive 用户名：",

@@ -40,7 +40,9 @@
         "noAccount": "Akaunti hii ya Hive haipo",
         "invoiceFailed": "Imeshindwa kuunda ankara ya Lightning. Tafadhali jaribu tena.",
         "copyFailed": "Imeshindwa kunakili ankara"
-      }
+      },
+      "noteOwn": "Inakwenda moja kwa moja kwenye pochi ya Lightning ya @{{recipient}} ({{address}}). Pochi yoyote ya Lightning inafaa, hakuna haja ya akaunti ya Hive.",
+      "waitingUnverified": "Pochi yako itaonyesha malipo yakishapita."
     },
     "wallet": {
       "usernameLabel": "Jina lako la mtumiaji la Hive:",

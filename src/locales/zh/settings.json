@@ -215,5 +215,22 @@
     "requestDeletion": "申请删除",
     "requestData": "申请获取我的数据",
     "foot": "我们会在一个月内回复。你也可以直接发邮件至 <mail>privacy@3speak.tv</mail>。"
+  },
+  "lightning": {
+    "title": "Lightning 打赏",
+    "checking": "正在查看你的打赏去向…",
+    "toV4v": "打赏会发到 {{account}}@v4v.app",
+    "toOwn": "打赏会发到 {{address}}",
+    "v4vDesc": "默认方式，无需设置：打赏以 HIVE 到账 Hive。小于 v4v.app 兑换手续费（约 60 sats）的打赏会以 sats 留在你的 v4v.app 账户。在下方填写 Lightning 地址，即可改为收进你自己的钱包。",
+    "ownDesc": "打赏直接进入你自己的 Lightning 钱包，不经过 v4v.app，也没有兑换手续费。保存在你的 Hive 资料中。",
+    "inputLabel": "你的 Lightning 地址",
+    "placeholder": "you@wallet.com",
+    "useV4v": "改回使用 v4v.app",
+    "savedOwn": "Lightning 打赏现在发到你自己的地址",
+    "savedV4v": "Lightning 打赏重新经由 v4v.app",
+    "badAddress": "这不是 Lightning 地址，格式类似 name@wallet.com。",
+    "unreachable": "这个地址没有作为 Lightning 地址响应。请检查后重试。",
+    "saveFailed": "无法保存到你的 Hive 资料。",
+    "supportersNote": "发到你自己地址的打赏不经过 Hive，所以不会显示在支持者中。"
   }
 }

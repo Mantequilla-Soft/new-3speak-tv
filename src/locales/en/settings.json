@@ -215,5 +215,22 @@
     "requestDeletion": "Request deletion",
     "requestData": "Request my data",
     "foot": "We reply within one month. You can also email <mail>privacy@3speak.tv</mail> directly."
+  },
+  "lightning": {
+    "title": "Lightning tips",
+    "checking": "Checking where your tips go…",
+    "toV4v": "Tips go to {{account}}@v4v.app",
+    "toOwn": "Tips go to {{address}}",
+    "v4vDesc": "The default, nothing to set up: tips arrive on Hive as HIVE. Tips smaller than v4v.app's conversion fee (about 60 sats) stay as sats in your v4v.app account. Enter a Lightning address below to get them in your own wallet instead.",
+    "ownDesc": "Tips go straight to your own Lightning wallet, without v4v.app and its conversion fee. Saved in your Hive profile.",
+    "inputLabel": "Your Lightning address",
+    "placeholder": "you@wallet.com",
+    "useV4v": "Use v4v.app again",
+    "savedOwn": "Lightning tips now go to your own address",
+    "savedV4v": "Lightning tips go through v4v.app again",
+    "badAddress": "That is not a Lightning address. It looks like name@wallet.com.",
+    "unreachable": "This address did not answer as a Lightning address. Check it and try again.",
+    "saveFailed": "Could not save it to your Hive profile.",
+    "supportersNote": "Tips to your own address never pass through Hive, so they don't show up under Supporters."
   }
 }

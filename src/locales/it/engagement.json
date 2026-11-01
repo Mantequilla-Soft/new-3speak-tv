@@ -40,7 +40,9 @@
         "noAccount": "Questo account Hive non esiste",
         "invoiceFailed": "Impossibile creare la fattura Lightning. Riprova.",
         "copyFailed": "Impossibile copiare la fattura"
-      }
+      },
+      "noteOwn": "Va dritto nel wallet Lightning di @{{recipient}} ({{address}}). Va bene qualsiasi wallet Lightning, non serve un account Hive.",
+      "waitingUnverified": "Il tuo wallet ti mostra quando il pagamento è andato a buon fine."
     },
     "wallet": {
       "usernameLabel": "Il tuo nome utente Hive:",

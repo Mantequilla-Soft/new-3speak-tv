@@ -40,7 +40,9 @@
         "noAccount": "এই Hive অ্যাকাউন্টটি নেই",
         "invoiceFailed": "Lightning ইনভয়েস তৈরি করা যায়নি। আবার চেষ্টা করুন।",
         "copyFailed": "ইনভয়েস কপি করা যায়নি"
-      }
+      },
+      "noteOwn": "সরাসরি @{{recipient}}-এর নিজের Lightning ওয়ালেটে যায় ({{address}})। যেকোনো Lightning ওয়ালেট চলবে, Hive অ্যাকাউন্ট লাগবে না।",
+      "waitingUnverified": "পেমেন্ট সম্পন্ন হলে আপনার ওয়ালেট জানিয়ে দেবে।"
     },
     "wallet": {
       "usernameLabel": "আপনার Hive ইউজারনেম:",

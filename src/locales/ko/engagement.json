@@ -40,7 +40,9 @@
         "noAccount": "존재하지 않는 Hive 계정입니다",
         "invoiceFailed": "Lightning 인보이스를 만들 수 없습니다. 다시 시도해 주세요.",
         "copyFailed": "인보이스를 복사할 수 없습니다"
-      }
+      },
+      "noteOwn": "@{{recipient}}님의 Lightning 지갑({{address}})으로 바로 갑니다. 어떤 Lightning 지갑이든 되며 Hive 계정은 필요 없습니다.",
+      "waitingUnverified": "결제가 완료되면 지갑에 표시됩니다."
     },
     "wallet": {
       "usernameLabel": "Hive 사용자 이름:",

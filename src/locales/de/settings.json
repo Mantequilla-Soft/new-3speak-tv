@@ -215,5 +215,22 @@
     "requestDeletion": "Löschung beantragen",
     "requestData": "Meine Daten anfordern",
     "foot": "Wir antworten innerhalb eines Monats. Du kannst auch direkt an <mail>privacy@3speak.tv</mail> schreiben."
+  },
+  "lightning": {
+    "title": "Lightning-Trinkgelder",
+    "checking": "Prüfe, wohin deine Trinkgelder gehen…",
+    "toV4v": "Trinkgelder gehen an {{account}}@v4v.app",
+    "toOwn": "Trinkgelder gehen an {{address}}",
+    "v4vDesc": "Die Voreinstellung, nichts einzurichten: Trinkgelder kommen auf Hive als HIVE an. Trinkgelder unter der Umrechnungsgebühr von v4v.app (etwa 60 Sats) bleiben als Sats in deinem v4v.app-Konto. Gib unten eine Lightning-Adresse ein, um sie stattdessen in deiner eigenen Wallet zu bekommen.",
+    "ownDesc": "Trinkgelder gehen direkt in deine eigene Lightning-Wallet, ohne v4v.app und dessen Umrechnungsgebühr. In deinem Hive-Profil gespeichert.",
+    "inputLabel": "Deine Lightning-Adresse",
+    "placeholder": "du@wallet.com",
+    "useV4v": "Wieder v4v.app nutzen",
+    "savedOwn": "Lightning-Trinkgelder gehen jetzt an deine eigene Adresse",
+    "savedV4v": "Lightning-Trinkgelder gehen wieder über v4v.app",
+    "badAddress": "Das ist keine Lightning-Adresse. Sie sieht aus wie name@wallet.com.",
+    "unreachable": "Diese Adresse hat nicht als Lightning-Adresse geantwortet. Prüfe sie und versuche es noch einmal.",
+    "saveFailed": "Konnte nicht in deinem Hive-Profil gespeichert werden.",
+    "supportersNote": "Trinkgelder an deine eigene Adresse laufen nie über Hive, darum erscheinen sie nicht unter Unterstützer."
   }
 }

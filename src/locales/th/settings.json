@@ -215,5 +215,22 @@
     "requestDeletion": "ขอลบข้อมูล",
     "requestData": "ขอข้อมูลของฉัน",
     "foot": "เราจะตอบกลับภายในหนึ่งเดือน คุณยังส่งอีเมลถึง <mail>privacy@3speak.tv</mail> โดยตรงได้ด้วย"
+  },
+  "lightning": {
+    "title": "ทิป Lightning",
+    "checking": "กำลังตรวจสอบว่าทิปของคุณไปที่ไหน…",
+    "toV4v": "ทิปไปที่ {{account}}@v4v.app",
+    "toOwn": "ทิปไปที่ {{address}}",
+    "v4vDesc": "ค่าเริ่มต้น ไม่ต้องตั้งค่าอะไร: ทิปเข้าบน Hive เป็น HIVE ทิปที่น้อยกว่าค่าธรรมเนียมแปลงของ v4v.app (ประมาณ 60 sats) จะอยู่เป็น sats ในบัญชี v4v.app ของคุณ ใส่ที่อยู่ Lightning ด้านล่างเพื่อรับเข้ากระเป๋าของคุณเองแทน",
+    "ownDesc": "ทิปเข้ากระเป๋า Lightning ของคุณโดยตรง ไม่ผ่าน v4v.app และไม่มีค่าธรรมเนียมแปลง บันทึกไว้ในโปรไฟล์ Hive ของคุณ",
+    "inputLabel": "ที่อยู่ Lightning ของคุณ",
+    "placeholder": "you@wallet.com",
+    "useV4v": "กลับไปใช้ v4v.app",
+    "savedOwn": "ตอนนี้ทิป Lightning ไปที่ที่อยู่ของคุณเองแล้ว",
+    "savedV4v": "ทิป Lightning กลับไปผ่าน v4v.app แล้ว",
+    "badAddress": "นี่ไม่ใช่ที่อยู่ Lightning รูปแบบคือ name@wallet.com",
+    "unreachable": "ที่อยู่นี้ไม่ตอบกลับในฐานะที่อยู่ Lightning ตรวจสอบแล้วลองอีกครั้ง",
+    "saveFailed": "บันทึกลงโปรไฟล์ Hive ของคุณไม่ได้",
+    "supportersNote": "ทิปที่เข้าที่อยู่ของคุณเองไม่ผ่าน Hive จึงไม่แสดงในผู้สนับสนุน"
   }
 }

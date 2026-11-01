@@ -40,7 +40,9 @@
         "noAccount": "Tài khoản Hive này không tồn tại",
         "invoiceFailed": "Không tạo được hóa đơn Lightning. Vui lòng thử lại.",
         "copyFailed": "Không sao chép được hóa đơn"
-      }
+      },
+      "noteOwn": "Đi thẳng vào ví Lightning của @{{recipient}} ({{address}}). Ví Lightning nào cũng được, không cần tài khoản Hive.",
+      "waitingUnverified": "Ví của bạn sẽ báo khi thanh toán hoàn tất."
     },
     "wallet": {
       "usernameLabel": "Tên người dùng Hive của bạn:",

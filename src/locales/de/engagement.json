@@ -40,7 +40,9 @@
         "noAccount": "Dieses Hive-Konto gibt es nicht",
         "invoiceFailed": "Die Lightning-Rechnung konnte nicht erstellt werden. Bitte versuche es erneut.",
         "copyFailed": "Die Rechnung konnte nicht kopiert werden"
-      }
+      },
+      "noteOwn": "Geht direkt in die eigene Lightning-Wallet von @{{recipient}} ({{address}}). Jede Lightning-Wallet funktioniert, kein Hive-Konto nötig.",
+      "waitingUnverified": "Deine Wallet zeigt an, wann die Zahlung durch ist."
     },
     "wallet": {
       "usernameLabel": "Dein Hive-Benutzername:",

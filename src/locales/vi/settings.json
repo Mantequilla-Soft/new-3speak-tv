@@ -215,5 +215,22 @@
     "requestDeletion": "Yêu cầu xóa",
     "requestData": "Yêu cầu dữ liệu của tôi",
     "foot": "Chúng tôi phản hồi trong vòng một tháng. Bạn cũng có thể gửi email trực tiếp tới <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Tiền tip Lightning",
+    "checking": "Đang kiểm tra tiền tip của bạn đi đâu…",
+    "toV4v": "Tiền tip gửi tới {{account}}@v4v.app",
+    "toOwn": "Tiền tip gửi tới {{address}}",
+    "v4vDesc": "Mặc định, không cần thiết lập gì: tiền tip về Hive dưới dạng HIVE. Tip nhỏ hơn phí chuyển đổi của v4v.app (khoảng 60 sats) được giữ dưới dạng sats trong tài khoản v4v.app của bạn. Nhập địa chỉ Lightning bên dưới để nhận chúng vào ví của chính bạn.",
+    "ownDesc": "Tiền tip đi thẳng vào ví Lightning của bạn, không qua v4v.app và phí chuyển đổi của nó. Được lưu trong hồ sơ Hive của bạn.",
+    "inputLabel": "Địa chỉ Lightning của bạn",
+    "placeholder": "ban@vi.com",
+    "useV4v": "Dùng lại v4v.app",
+    "savedOwn": "Tiền tip Lightning giờ gửi tới địa chỉ của bạn",
+    "savedV4v": "Tiền tip Lightning lại đi qua v4v.app",
+    "badAddress": "Đó không phải địa chỉ Lightning. Nó có dạng ten@vi.com.",
+    "unreachable": "Địa chỉ này không phản hồi như một địa chỉ Lightning. Hãy kiểm tra rồi thử lại.",
+    "saveFailed": "Không lưu được vào hồ sơ Hive của bạn.",
+    "supportersNote": "Tiền tip tới địa chỉ riêng của bạn không bao giờ đi qua Hive, nên chúng không hiện trong Người ủng hộ."
   }
 }

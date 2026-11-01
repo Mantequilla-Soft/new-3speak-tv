@@ -215,5 +215,22 @@
     "requestDeletion": "Pedir exclusão",
     "requestData": "Pedir meus dados",
     "foot": "Respondemos em até um mês. Você também pode escrever diretamente para <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Gorjetas Lightning",
+    "checking": "Verificando para onde vão suas gorjetas…",
+    "toV4v": "As gorjetas vão para {{account}}@v4v.app",
+    "toOwn": "As gorjetas vão para {{address}}",
+    "v4vDesc": "O padrão, nada para configurar: as gorjetas chegam na Hive como HIVE. Gorjetas menores que a taxa de conversão da v4v.app (cerca de 60 sats) ficam como sats na sua conta v4v.app. Digite um endereço Lightning abaixo para recebê-las na sua própria carteira.",
+    "ownDesc": "As gorjetas vão direto para a sua própria carteira Lightning, sem a v4v.app e sua taxa de conversão. Salvo no seu perfil Hive.",
+    "inputLabel": "Seu endereço Lightning",
+    "placeholder": "voce@carteira.com",
+    "useV4v": "Usar a v4v.app de novo",
+    "savedOwn": "As gorjetas Lightning agora vão para o seu endereço",
+    "savedV4v": "As gorjetas Lightning voltam a passar pela v4v.app",
+    "badAddress": "Isso não é um endereço Lightning. Ele tem a forma nome@carteira.com.",
+    "unreachable": "Este endereço não respondeu como endereço Lightning. Confira e tente de novo.",
+    "saveFailed": "Não foi possível salvar no seu perfil Hive.",
+    "supportersNote": "Gorjetas para o seu próprio endereço nunca passam pela Hive, por isso não aparecem em Apoiadores."
   }
 }

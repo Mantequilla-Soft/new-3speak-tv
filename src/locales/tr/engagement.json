@@ -40,7 +40,9 @@
         "noAccount": "Bu Hive hesabı yok",
         "invoiceFailed": "Lightning faturası oluşturulamadı. Lütfen tekrar deneyin.",
         "copyFailed": "Fatura kopyalanamadı"
-      }
+      },
+      "noteOwn": "Doğrudan @{{recipient}} kullanıcısının kendi Lightning cüzdanına gider ({{address}}). Her Lightning cüzdanı çalışır, Hive hesabı gerekmez.",
+      "waitingUnverified": "Ödeme geçtiğinde cüzdanın bunu gösterir."
     },
     "wallet": {
       "usernameLabel": "Hive kullanıcı adın:",

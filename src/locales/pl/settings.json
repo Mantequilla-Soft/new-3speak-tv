@@ -215,5 +215,22 @@
     "requestDeletion": "Zażądaj usunięcia",
     "requestData": "Zażądaj moich danych",
     "foot": "Odpowiadamy w ciągu miesiąca. Możesz też napisać bezpośrednio na <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Napiwki Lightning",
+    "checking": "Sprawdzam, dokąd trafiają twoje napiwki…",
+    "toV4v": "Napiwki trafiają do {{account}}@v4v.app",
+    "toOwn": "Napiwki trafiają do {{address}}",
+    "v4vDesc": "Ustawienie domyślne, nic do konfigurowania: napiwki trafiają na Hive jako HIVE. Napiwki mniejsze niż opłata za wymianę v4v.app (około 60 satów) zostają jako saty na twoim koncie v4v.app. Wpisz poniżej adres Lightning, żeby dostawać je do własnego portfela.",
+    "ownDesc": "Napiwki trafiają prosto do twojego portfela Lightning, bez v4v.app i jego opłaty za wymianę. Zapisane w twoim profilu Hive.",
+    "inputLabel": "Twój adres Lightning",
+    "placeholder": "ty@portfel.com",
+    "useV4v": "Znowu używaj v4v.app",
+    "savedOwn": "Napiwki Lightning trafiają teraz na twój adres",
+    "savedV4v": "Napiwki Lightning znowu idą przez v4v.app",
+    "badAddress": "To nie jest adres Lightning. Wygląda on tak: nazwa@portfel.com.",
+    "unreachable": "Ten adres nie odpowiedział jako adres Lightning. Sprawdź go i spróbuj ponownie.",
+    "saveFailed": "Nie udało się zapisać w twoim profilu Hive.",
+    "supportersNote": "Napiwki na twój własny adres nigdy nie przechodzą przez Hive, więc nie pojawiają się wśród Wspierających."
   }
 }

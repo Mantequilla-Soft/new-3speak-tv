@@ -215,5 +215,22 @@
     "requestDeletion": "মুছে ফেলার অনুরোধ করুন",
     "requestData": "আমার ডেটার অনুরোধ করুন",
     "foot": "আমরা এক মাসের মধ্যে উত্তর দিই। আপনি সরাসরি <mail>privacy@3speak.tv</mail>-এ ইমেইলও করতে পারেন।"
+  },
+  "lightning": {
+    "title": "Lightning টিপ",
+    "checking": "আপনার টিপ কোথায় যায় দেখা হচ্ছে…",
+    "toV4v": "টিপ যায় {{account}}@v4v.app-এ",
+    "toOwn": "টিপ যায় {{address}}-এ",
+    "v4vDesc": "ডিফল্ট, কিছু সেট করতে হবে না: টিপ Hive-এ HIVE হিসেবে আসে। v4v.app-এর রূপান্তর ফি (প্রায় 60 sats)-এর চেয়ে ছোট টিপ আপনার v4v.app অ্যাকাউন্টে sats হিসেবে থাকে। নিজের ওয়ালেটে পেতে নিচে একটি Lightning ঠিকানা দিন।",
+    "ownDesc": "টিপ সরাসরি আপনার নিজের Lightning ওয়ালেটে যায়, v4v.app ও তার রূপান্তর ফি ছাড়া। আপনার Hive প্রোফাইলে সংরক্ষিত।",
+    "inputLabel": "আপনার Lightning ঠিকানা",
+    "placeholder": "apni@wallet.com",
+    "useV4v": "আবার v4v.app ব্যবহার করুন",
+    "savedOwn": "Lightning টিপ এখন আপনার নিজের ঠিকানায় যায়",
+    "savedV4v": "Lightning টিপ আবার v4v.app দিয়ে যায়",
+    "badAddress": "এটি Lightning ঠিকানা নয়। এটি দেখতে name@wallet.com-এর মতো।",
+    "unreachable": "এই ঠিকানা Lightning ঠিকানা হিসেবে সাড়া দেয়নি। দেখে আবার চেষ্টা করুন।",
+    "saveFailed": "আপনার Hive প্রোফাইলে সংরক্ষণ করা যায়নি।",
+    "supportersNote": "আপনার নিজের ঠিকানায় আসা টিপ কখনো Hive দিয়ে যায় না, তাই সমর্থকদের তালিকায় দেখা যায় না।"
   }
 }

@@ -40,7 +40,9 @@
         "noAccount": "この Hive アカウントは存在しません",
         "invoiceFailed": "Lightning の請求書を作成できませんでした。もう一度お試しください。",
         "copyFailed": "請求書をコピーできませんでした"
-      }
+      },
+      "noteOwn": "@{{recipient}}自身のLightningウォレット({{address}})に直接届きます。どのLightningウォレットでも使え、Hiveアカウントは不要です。",
+      "waitingUnverified": "支払いが完了するとウォレットに表示されます。"
     },
     "wallet": {
       "usernameLabel": "あなたの Hive ユーザー名:",

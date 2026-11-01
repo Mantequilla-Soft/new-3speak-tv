@@ -40,7 +40,9 @@
         "noAccount": "Walang ganitong Hive account",
         "invoiceFailed": "Hindi makagawa ng Lightning invoice. Pakisubukang muli.",
         "copyFailed": "Hindi makopya ang invoice"
-      }
+      },
+      "noteOwn": "Diretso sa sariling Lightning wallet ni @{{recipient}} ({{address}}). Gumagana ang kahit anong Lightning wallet, hindi kailangan ng Hive account.",
+      "waitingUnverified": "Ipapakita ng wallet mo kapag natuloy na ang bayad."
     },
     "wallet": {
       "usernameLabel": "Ang iyong Hive username:",

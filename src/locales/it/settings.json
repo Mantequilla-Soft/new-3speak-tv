@@ -215,5 +215,22 @@
     "requestDeletion": "Richiedi l'eliminazione",
     "requestData": "Richiedi i miei dati",
     "foot": "Rispondiamo entro un mese. Puoi anche scrivere direttamente a <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Mance Lightning",
+    "checking": "Controllo dove vanno le tue mance…",
+    "toV4v": "Le mance vanno a {{account}}@v4v.app",
+    "toOwn": "Le mance vanno a {{address}}",
+    "v4vDesc": "L'impostazione predefinita, niente da configurare: le mance arrivano su Hive come HIVE. Quelle più piccole della commissione di conversione di v4v.app (circa 60 sats) restano come sats nel tuo account v4v.app. Inserisci qui sotto un indirizzo Lightning per riceverle invece nel tuo wallet.",
+    "ownDesc": "Le mance vanno dritte nel tuo wallet Lightning, senza v4v.app e la sua commissione di conversione. Salvato nel tuo profilo Hive.",
+    "inputLabel": "Il tuo indirizzo Lightning",
+    "placeholder": "tu@wallet.com",
+    "useV4v": "Usa di nuovo v4v.app",
+    "savedOwn": "Le mance Lightning ora vanno al tuo indirizzo",
+    "savedV4v": "Le mance Lightning passano di nuovo da v4v.app",
+    "badAddress": "Questo non è un indirizzo Lightning. Ha la forma nome@wallet.com.",
+    "unreachable": "Questo indirizzo non ha risposto come indirizzo Lightning. Controllalo e riprova.",
+    "saveFailed": "Impossibile salvarlo nel tuo profilo Hive.",
+    "supportersNote": "Le mance al tuo indirizzo non passano mai da Hive, quindi non compaiono tra i Sostenitori."
   }
 }

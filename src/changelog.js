@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.16',
+    category: 'settings',
+    date: '2026-11-01',
+    summary: 'On phones the Settings tabs disappeared when a page was long. They stay at the bottom of the sheet again.',
+  },
+  {
+    version: '1.81.15',
+    category: 'tips',
+    date: '2026-11-01',
+    summary: 'Tipping someone who uses their own Lightning address? The tip window now says where your sats go.',
+  },
+  {
+    version: '1.81.14',
+    category: 'tips',
+    date: '2026-11-01',
+    summary: 'Get Lightning tips straight into your own wallet: add your Lightning address in Settings.',
+  },
+  {
     version: '1.81.13',
     category: 'audio',
     date: '2026-10-31',

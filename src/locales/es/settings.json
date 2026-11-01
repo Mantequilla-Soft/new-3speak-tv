@@ -215,5 +215,22 @@
     "requestDeletion": "Solicitar eliminación",
     "requestData": "Solicitar mis datos",
     "foot": "Respondemos en un plazo de un mes. También puedes escribir directamente a <mail>privacy@3speak.tv</mail>."
+  },
+  "lightning": {
+    "title": "Propinas Lightning",
+    "checking": "Comprobando adónde van tus propinas…",
+    "toV4v": "Las propinas van a {{account}}@v4v.app",
+    "toOwn": "Las propinas van a {{address}}",
+    "v4vDesc": "La opción por defecto, sin nada que configurar: las propinas llegan a Hive como HIVE. Las propinas menores que la comisión de conversión de v4v.app (unos 60 sats) se quedan como sats en tu cuenta de v4v.app. Escribe abajo una dirección Lightning para recibirlas en tu propia billetera.",
+    "ownDesc": "Las propinas van directo a tu propia billetera Lightning, sin v4v.app ni su comisión de conversión. Guardado en tu perfil de Hive.",
+    "inputLabel": "Tu dirección Lightning",
+    "placeholder": "tu@billetera.com",
+    "useV4v": "Volver a usar v4v.app",
+    "savedOwn": "Las propinas Lightning ahora van a tu propia dirección",
+    "savedV4v": "Las propinas Lightning vuelven a pasar por v4v.app",
+    "badAddress": "Eso no es una dirección Lightning. Tiene la forma nombre@billetera.com.",
+    "unreachable": "Esta dirección no respondió como dirección Lightning. Revísala e inténtalo de nuevo.",
+    "saveFailed": "No se pudo guardar en tu perfil de Hive.",
+    "supportersNote": "Las propinas a tu propia dirección nunca pasan por Hive, así que no aparecen en Seguidores que apoyan."
   }
 }

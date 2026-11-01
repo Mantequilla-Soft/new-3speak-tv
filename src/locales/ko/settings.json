@@ -215,5 +215,22 @@
     "requestDeletion": "삭제 요청",
     "requestData": "내 데이터 요청",
     "foot": "한 달 이내에 답변드려요. <mail>privacy@3speak.tv</mail>로 직접 이메일을 보낼 수도 있어요."
+  },
+  "lightning": {
+    "title": "Lightning 팁",
+    "checking": "팁이 어디로 가는지 확인하는 중…",
+    "toV4v": "팁은 {{account}}@v4v.app(으)로 갑니다",
+    "toOwn": "팁은 {{address}}(으)로 갑니다",
+    "v4vDesc": "기본값으로, 설정할 것이 없습니다. 팁은 Hive에 HIVE로 들어옵니다. v4v.app 전환 수수료(약 60 sats)보다 작은 팁은 v4v.app 계정에 sats로 남습니다. 내 지갑으로 받으려면 아래에 Lightning 주소를 입력하세요.",
+    "ownDesc": "팁이 v4v.app과 전환 수수료 없이 내 Lightning 지갑으로 바로 들어옵니다. Hive 프로필에 저장됩니다.",
+    "inputLabel": "내 Lightning 주소",
+    "placeholder": "you@wallet.com",
+    "useV4v": "다시 v4v.app 사용",
+    "savedOwn": "이제 Lightning 팁이 내 주소로 갑니다",
+    "savedV4v": "Lightning 팁이 다시 v4v.app을 거칩니다",
+    "badAddress": "Lightning 주소가 아닙니다. name@wallet.com 같은 형식입니다.",
+    "unreachable": "이 주소가 Lightning 주소로 응답하지 않았습니다. 확인 후 다시 시도하세요.",
+    "saveFailed": "Hive 프로필에 저장하지 못했습니다.",
+    "supportersNote": "내 주소로 들어오는 팁은 Hive를 거치지 않으므로 후원자 목록에 표시되지 않습니다."
   }
 }

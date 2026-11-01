@@ -46,18 +46,29 @@
     border-radius: 16px 16px 0 0;
     border-bottom: none;
     max-height: 88vh;
-    padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+    // No env(safe-area-inset-bottom): Android Chrome reports its system bar's
+    // height there even though the page ends above it, which left a band of empty
+    // sheet under the tab bar (same reason BottomNav leaves it out).
+    padding-bottom: 12px;
     animation: settings-sheet-up 0.28s ease forwards;
 
     // Flex so we can reorder: on a bottom sheet the tab bar belongs at the BOTTOM,
     // within thumb reach, not up at the top edge of the screen.
     display: flex;
     flex-direction: column;
+
+    // The sheet scrolls; its children must not shrink to fit it instead. A flex
+    // item that scrolls on its own (the tab bar, overflow-x: auto) has no minimum
+    // height, so once a tab grew taller than the sheet the bar was squeezed down
+    // to its 10px of padding and the tabs vanished.
+    > * { flex-shrink: 0; }
   }
 
   // DOM order is header → tabs → panel. `order` moves the bar past the panel
   // without touching the markup, which must stay tabs-before-panel for a11y.
-  .settings-tabs {
+  // `.settings-modal` in front: the base .settings-tabs rule (margin-bottom: 18px)
+  // comes later in this file and used to win, leaving a gap under the bar.
+  .settings-modal .settings-tabs {
     order: 2;
     margin: 16px 0 0;
 
@@ -67,16 +78,18 @@
     bottom: 0;
     z-index: 1;
 
-    // The bar is a translucent pill, so scrolling content would show through its
-    // rounded corners. Paint an opaque plate behind it that bleeds out into the
-    // sheet's padding (incl. the safe-area inset) so content passes cleanly under.
-    &::before {
-      content: '';
-      position: absolute;
-      inset: -10px -20px calc(-22px - env(safe-area-inset-bottom, 0px));
-      background: var(--card-bg, #1a1a2e);
-      z-index: -1;
-    }
+    // The bar is a translucent pill, so scrolling content would show through it
+    // and around its rounded corners. The tint goes over the sheet's own colour
+    // (one flat colour, layered), and a spread shadow in that colour is the plate
+    // that bleeds into the sheet's padding so content
+    // passes cleanly under. Not a ::before plate: the bar scrolls sideways
+    // (overflow-x: auto), which clips its own pseudo-elements to the bar.
+    background:
+      linear-gradient(var(--bg-tertiary, rgba(255, 255, 255, 0.05)), var(--bg-tertiary, rgba(255, 255, 255, 0.05))),
+      var(--card-bg, #1a1a2e);
+    box-shadow:
+      0 0 0 12px var(--card-bg, #1a1a2e),
+      0 8px 0 20px var(--card-bg, #1a1a2e);
   }
 }
 
@@ -472,4 +485,41 @@
 .settings-auth-add {
   border-color: var(--accent-primary);
   color: var(--accent-primary);
+}
+
+// Lightning tips: the address field sits under the row's text, full width.
+.settings-lightning .settings-row-text { flex: 1; gap: 6px; }
+
+.settings-lightning-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+
+  input {
+    flex: 1;
+    min-width: 0;
+    padding: 7px 9px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 13px;
+
+    &:focus { outline: none; border-color: var(--accent-primary); }
+  }
+}
+
+.settings-lightning-reset {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent-primary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
 }

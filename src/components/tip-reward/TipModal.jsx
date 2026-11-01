@@ -13,7 +13,7 @@ import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useQueryClient } from '@tanstack/react-query';
 import { queueSupport, recordSupport } from '../../lib/supports';
 import { QRCodeSVG } from 'qrcode.react';
-import { LIGHTNING_PRESETS, requestLightningInvoice, isLightningInvoicePaid, hasWebln, payWithWebln } from '../../lib/lightningTip';
+import { LIGHTNING_PRESETS, requestLightningInvoice, isLightningInvoicePaid, hasWebln, payWithWebln, fetchLightningReceiver } from '../../lib/lightningTip';
 
 // Every toast from this module is headed "Tip"; the message becomes the
 // line under it. See utils/toast.js.
@@ -50,6 +50,16 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
   const [invoice, setInvoice] = useState(null);
   // Which Lightning button is fetching its invoice: 'qr', 'extension' or null.
   const [creatingInvoice, setCreatingInvoice] = useState(null);
+  // Where the creator's Lightning tips go: { via: 'v4v' } or { via: 'address',
+  // address } when they set their own address. Only the note under the form
+  // depends on it; the server picks the route for the invoice itself.
+  const [receiver, setReceiver] = useState(null);
+  useEffect(() => {
+    if (method !== 'lightning' || !recipient) return undefined;
+    let alive = true;
+    fetchLightningReceiver(recipient).then((r) => { if (alive) setReceiver(r); });
+    return () => { alive = false; };
+  }, [method, recipient]);
 
 
   useEffect(()=>{
@@ -59,7 +69,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
   // While the invoice is on screen, ask every few seconds whether it was paid,
   // so the viewer sees the thank-you without pressing anything.
   useEffect(() => {
-    if (!invoice?.hash) return undefined;
+    if (!invoice?.hash || invoice.verifiable === false) return undefined;
     let stopped = false;
     let timer;
     const check = async () => {
@@ -296,7 +306,11 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
               )}
             </div>
 
-            <p className="tip-method-note">{t('engagement.tip.lightning.note', { recipient })}</p>
+            <p className="tip-method-note">
+              {receiver?.via === 'address'
+                ? t('engagement.tip.lightning.noteOwn', { recipient, address: receiver.address })
+                : t('engagement.tip.lightning.note', { recipient })}
+            </p>
 
             {/* The header's X closes the window, so no Cancel here: room for the
                 QR button always, and the extension button when there is one. */}
@@ -331,10 +345,16 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
                 {t('engagement.tip.lightning.openWallet')}
               </a>
             </div>
-            <p className="lightning-waiting">
-              <LineSpinner size="12" stroke="2" speed="1" color="currentColor" />
-              {t('engagement.tip.lightning.waiting')}
-            </p>
+            {/* An address without a LUD-21 verify URL never tells us it was paid:
+                no spinner that would spin forever, the wallet says when it is done. */}
+            {invoice.verifiable === false ? (
+              <p className="lightning-waiting">{t('engagement.tip.lightning.waitingUnverified')}</p>
+            ) : (
+              <p className="lightning-waiting">
+                <LineSpinner size="12" stroke="2" speed="1" color="currentColor" />
+                {t('engagement.tip.lightning.waiting')}
+              </p>
+            )}
             {/* Back keeps the amount and the message, to change either and make a
                 new invoice; this one simply expires unpaid. */}
             <div className="lightning-links">

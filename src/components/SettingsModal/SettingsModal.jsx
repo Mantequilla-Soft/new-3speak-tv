@@ -18,6 +18,7 @@ import {
   hasThreespeakPostingAuth, addThreespeakToPostingAuth, removeThreespeakFromPostingAuth,
   waitForThreespeakPostingAuth,
 } from '../../utils/postingAuthority';
+import { LIGHTNING_ADDRESS_RE, checkLightningAddress, readOwnLightningAddress, saveOwnLightningAddress } from '../../lib/lightningTip';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import DataRequestForm from './DataRequestForm';
 import LanguagePicker from '../LanguagePicker/LanguagePicker';
@@ -484,6 +485,107 @@ function PostingAuthoritySection() {
   );
 }
 
+/**
+ * Where sats tipped over Lightning go. Default: the creator's v4v.app address,
+ * which pays out on Hive. Or a Lightning address of their own, kept in their
+ * posting_json_metadata (`3speak.lightning.address`), so any app can read it and
+ * our API sends tippers' invoices there (server/lightning-tip.cjs).
+ */
+function LightningReceiveSection() {
+  const { t } = useTranslation();
+  const user = useAppStore((s) => s.user);
+  // null = loading, '' = v4v.app, else the saved address; 'unavailable' = no Hive account
+  const [saved, setSaved] = useState(null);
+  const [draft, setDraft] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!user) return undefined;
+    let alive = true;
+    setSaved(null);
+    readOwnLightningAddress(user)
+      .then((a) => { if (alive) { setSaved(a); setDraft(a); } })
+      .catch(() => { if (alive) setSaved('unavailable'); });
+    return () => { alive = false; };
+  }, [user]);
+
+  if (!user || saved === 'unavailable') return null;
+
+  const next = draft.trim().toLowerCase();
+  const changed = saved !== null && next !== saved;
+
+  async function save(address) {
+    if (busy) return;
+    setError(null);
+    if (address && !LIGHTNING_ADDRESS_RE.test(address)) {
+      setError(t('settings.lightning.badAddress'));
+      return;
+    }
+    setBusy(true);
+    try {
+      if (address) {
+        try { await checkLightningAddress(address); } catch {
+          setError(t('settings.lightning.unreachable'));
+          return;
+        }
+      }
+      await saveOwnLightningAddress(user, address);
+      setSaved(address);
+      setDraft(address);
+      toast.success(address ? t('settings.lightning.savedOwn') : t('settings.lightning.savedV4v'));
+    } catch (err) {
+      setError(t('settings.lightning.saveFailed'));
+      console.warn('[settings] lightning address not saved:', err?.message || err);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="settings-section">
+      <h4 className="settings-section-title">{t('settings.lightning.title')}</h4>
+      <div className="settings-modal-row settings-lightning">
+        <div className="settings-row-text">
+          <span className="settings-row-title">
+            {saved === null ? t('settings.lightning.checking')
+              : saved ? t('settings.lightning.toOwn', { address: saved })
+              : t('settings.lightning.toV4v', { account: user })}
+          </span>
+          <span className="settings-row-desc">{saved ? t('settings.lightning.ownDesc') : t('settings.lightning.v4vDesc')}</span>
+          <form
+            className="settings-lightning-form"
+            onSubmit={(e) => { e.preventDefault(); if (changed) save(next); }}
+          >
+            <input
+              type="text"
+              inputMode="email"
+              autoComplete="off"
+              autoCapitalize="none"
+              spellCheck={false}
+              aria-label={t('settings.lightning.inputLabel')}
+              placeholder={t('settings.lightning.placeholder')}
+              value={draft}
+              onChange={(e) => { setDraft(e.target.value); setError(null); }}
+              disabled={busy || saved === null}
+            />
+            <button type="submit" className="settings-ads-save" disabled={busy || !changed}>
+              {busy ? t('common.actions.saving') : t('common.actions.save')}
+            </button>
+          </form>
+          {saved && (
+            <button type="button" className="settings-lightning-reset" onClick={() => save('')} disabled={busy}>
+              {t('settings.lightning.useV4v')}
+            </button>
+          )}
+          <span className="settings-row-desc">{t('settings.lightning.supportersNote')}</span>
+        </div>
+      </div>
+      {error && <p className="settings-ads-status error">{error}</p>}
+    </div>
+  );
+}
+
 function Switch({ checked, onChange, ariaLabel }) {
   return (
     <button
@@ -864,6 +966,7 @@ export default function SettingsModal({ isOpen, onClose }) {
           </div>
         )}
         {tab === 'general' && <PostingAuthoritySection />}
+        {tab === 'general' && <LightningReceiveSection />}
 
         {tab === 'content' && (
           <div className="settings-subtabs" role="tablist" aria-label={t('settings.contentTabs.aria')}>

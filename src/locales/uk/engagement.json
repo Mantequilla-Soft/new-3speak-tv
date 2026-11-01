@@ -40,7 +40,9 @@
         "noAccount": "Такого акаунта Hive немає",
         "invoiceFailed": "Не вдалося створити Lightning-рахунок. Спробуйте ще раз.",
         "copyFailed": "Не вдалося скопіювати рахунок"
-      }
+      },
+      "noteOwn": "Іде просто в Lightning-гаманець @{{recipient}} ({{address}}). Підійде будь-який Lightning-гаманець, акаунт Hive не потрібен.",
+      "waitingUnverified": "Ваш гаманець покаже, коли платіж пройде."
     },
     "wallet": {
       "usernameLabel": "Ваше ім'я користувача Hive:",

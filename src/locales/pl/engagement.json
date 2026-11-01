@@ -40,7 +40,9 @@
         "noAccount": "To konto Hive nie istnieje",
         "invoiceFailed": "Nie udało się utworzyć faktury Lightning. Spróbuj ponownie.",
         "copyFailed": "Nie udało się skopiować faktury"
-      }
+      },
+      "noteOwn": "Trafia prosto do portfela Lightning @{{recipient}} ({{address}}). Działa każdy portfel Lightning, konto Hive nie jest potrzebne.",
+      "waitingUnverified": "Twój portfel pokaże, kiedy płatność przejdzie."
     },
     "wallet": {
       "usernameLabel": "Twoja nazwa użytkownika Hive:",

@@ -40,7 +40,9 @@
         "noAccount": "Dit Hive-account bestaat niet",
         "invoiceFailed": "Kon geen Lightning-factuur maken. Probeer het opnieuw.",
         "copyFailed": "Kon de factuur niet kopiëren"
-      }
+      },
+      "noteOwn": "Gaat rechtstreeks naar de eigen Lightning-wallet van @{{recipient}} ({{address}}). Elke Lightning-wallet werkt, geen Hive-account nodig.",
+      "waitingUnverified": "Je wallet laat zien wanneer de betaling gelukt is."
     },
     "wallet": {
       "usernameLabel": "Je Hive-gebruikersnaam:",
