@@ -23,6 +23,7 @@ import TagsV2Picker from '../tooltip/TagsV2Picker';
 import DataRequestForm from './DataRequestForm';
 import LanguagePicker from '../LanguagePicker/LanguagePicker';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import AddSocialLink_modal from '../modal/AddSocialLink_modal';
 import './SettingsModal.scss';
 import useCardSize, { useIsCardSizeMobile } from '../../hooks/useCardSize';
 
@@ -579,6 +580,7 @@ function LightningReceiveSection() {
             </button>
           )}
           <span className="settings-row-desc">{t('settings.lightning.supportersNote')}</span>
+          <span className="settings-row-desc">{t('settings.lightning.publicNote')}</span>
         </div>
       </div>
       {error && <p className="settings-ads-status error">{error}</p>}
@@ -753,6 +755,9 @@ const TABS = [
   // overflowed the row even on desktop, and the three of them were all answering
   // "what shows up in my feeds" from separate pages.
   { id: 'content', labelKey: 'settings.tabs.content' },
+  // What the Hive account is tied to outside 3Speak: the Lightning address tips
+  // go to, and verified channels on other platforms. Hive accounts only.
+  { id: 'connections', labelKey: 'settings.tabs.connections' },
   // Hive accounts only: every setting behind it is about notifications that come
   // from the chain, so for anyone else it was a page of switches that could not
   // do anything.
@@ -815,6 +820,7 @@ export default function SettingsModal({ isOpen, onClose }) {
     () => TABS.filter((tb) => {
       if (tb.id === 'rewards') return rewardsVisible;
       if (tb.id === 'notifications') return notificationsVisible;
+      if (tb.id === 'connections') return notificationsVisible;
       return true;
     }),
     [rewardsVisible, notificationsVisible],
@@ -826,6 +832,7 @@ export default function SettingsModal({ isOpen, onClose }) {
   useEffect(() => {
     if (tab === 'rewards' && !rewardsVisible) setTab('general');
     if (tab === 'notifications' && !notificationsVisible) setTab('general');
+    if (tab === 'connections' && !notificationsVisible) setTab('general');
   }, [tab, rewardsVisible, notificationsVisible]);
 
   // Lock background page scroll while the modal is open (restore on close).
@@ -966,7 +973,10 @@ export default function SettingsModal({ isOpen, onClose }) {
           </div>
         )}
         {tab === 'general' && <PostingAuthoritySection />}
-        {tab === 'general' && <LightningReceiveSection />}
+        {tab === 'connections' && <LightningReceiveSection />}
+        {tab === 'connections' && settingsUser && (
+          <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />
+        )}
 
         {tab === 'content' && (
           <div className="settings-subtabs" role="tablist" aria-label={t('settings.contentTabs.aria')}>

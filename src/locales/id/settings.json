@@ -118,6 +118,7 @@
   "tabs": {
     "general": "Umum",
     "content": "Konten",
+    "connections": "Koneksi",
     "rewards": "Iklan & reward",
     "about": "Tentang / Versi"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Itu bukan alamat Lightning. Bentuknya seperti nama@dompet.com.",
     "unreachable": "Alamat ini tidak menjawab sebagai alamat Lightning. Periksa lalu coba lagi.",
     "saveFailed": "Tidak bisa menyimpannya ke profil Hive kamu.",
-    "supportersNote": "Tip ke alamat kamu sendiri tidak pernah lewat Hive, jadi tidak muncul di Pendukung."
+    "supportersNote": "Tip ke alamat kamu sendiri tidak pernah lewat Hive, jadi tidak muncul di Pendukung.",
+    "publicNote": "Alamat Lightning kamu disimpan di akun Hive kamu, dan siapa pun bisa melihatnya."
   }
 }

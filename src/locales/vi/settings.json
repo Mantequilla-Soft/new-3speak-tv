@@ -118,6 +118,7 @@
   "tabs": {
     "general": "Chung",
     "content": "Nội dung",
+    "connections": "Kết nối",
     "rewards": "Quảng cáo & phần thưởng",
     "about": "Giới thiệu / Phiên bản"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Đó không phải địa chỉ Lightning. Nó có dạng ten@vi.com.",
     "unreachable": "Địa chỉ này không phản hồi như một địa chỉ Lightning. Hãy kiểm tra rồi thử lại.",
     "saveFailed": "Không lưu được vào hồ sơ Hive của bạn.",
-    "supportersNote": "Tiền tip tới địa chỉ riêng của bạn không bao giờ đi qua Hive, nên chúng không hiện trong Người ủng hộ."
+    "supportersNote": "Tiền tip tới địa chỉ riêng của bạn không bao giờ đi qua Hive, nên chúng không hiện trong Người ủng hộ.",
+    "publicNote": "Địa chỉ Lightning của bạn được lưu trong tài khoản Hive của bạn, nơi ai cũng có thể xem."
   }
 }

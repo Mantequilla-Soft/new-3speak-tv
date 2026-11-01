@@ -118,6 +118,7 @@
   "tabs": {
     "general": "Generali",
     "content": "Contenuti",
+    "connections": "Connessioni",
     "rewards": "Annunci e ricompense",
     "about": "Informazioni / Versione"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Questo non è un indirizzo Lightning. Ha la forma nome@wallet.com.",
     "unreachable": "Questo indirizzo non ha risposto come indirizzo Lightning. Controllalo e riprova.",
     "saveFailed": "Impossibile salvarlo nel tuo profilo Hive.",
-    "supportersNote": "Le mance al tuo indirizzo non passano mai da Hive, quindi non compaiono tra i Sostenitori."
+    "supportersNote": "Le mance al tuo indirizzo non passano mai da Hive, quindi non compaiono tra i Sostenitori.",
+    "publicNote": "Il tuo indirizzo Lightning viene salvato nel tuo account Hive, dove chiunque può vederlo."
   }
 }

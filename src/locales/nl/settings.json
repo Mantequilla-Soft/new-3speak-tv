@@ -118,6 +118,7 @@
   "tabs": {
     "general": "Algemeen",
     "content": "Content",
+    "connections": "Koppelingen",
     "rewards": "Advertenties & beloningen",
     "about": "Over / versie"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Dat is geen Lightning-adres. Het ziet eruit als naam@wallet.com.",
     "unreachable": "Dit adres antwoordde niet als Lightning-adres. Controleer het en probeer het opnieuw.",
     "saveFailed": "Kon het niet opslaan in je Hive-profiel.",
-    "supportersNote": "Fooien naar je eigen adres gaan nooit via Hive, dus ze staan niet bij Supporters."
+    "supportersNote": "Fooien naar je eigen adres gaan nooit via Hive, dus ze staan niet bij Supporters.",
+    "publicNote": "Je Lightning-adres wordt opgeslagen in je Hive-account, waar iedereen het kan zien."
   }
 }

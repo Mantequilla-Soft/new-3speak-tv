@@ -118,6 +118,7 @@
   "tabs": {
     "general": "General",
     "content": "Contenido",
+    "connections": "Conexiones",
     "rewards": "Anuncios y recompensas",
     "about": "Acerca de / versión"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Eso no es una dirección Lightning. Tiene la forma nombre@billetera.com.",
     "unreachable": "Esta dirección no respondió como dirección Lightning. Revísala e inténtalo de nuevo.",
     "saveFailed": "No se pudo guardar en tu perfil de Hive.",
-    "supportersNote": "Las propinas a tu propia dirección nunca pasan por Hive, así que no aparecen en Seguidores que apoyan."
+    "supportersNote": "Las propinas a tu propia dirección nunca pasan por Hive, así que no aparecen en Seguidores que apoyan.",
+    "publicNote": "Tu dirección Lightning se guarda en tu cuenta de Hive, donde cualquiera puede verla."
   }
 }

@@ -118,6 +118,7 @@
   "tabs": {
     "general": "通用",
     "content": "内容",
+    "connections": "关联",
     "rewards": "广告与奖励",
     "about": "关于 / 版本"
   },
@@ -231,6 +232,7 @@
     "badAddress": "这不是 Lightning 地址，格式类似 name@wallet.com。",
     "unreachable": "这个地址没有作为 Lightning 地址响应。请检查后重试。",
     "saveFailed": "无法保存到你的 Hive 资料。",
-    "supportersNote": "发到你自己地址的打赏不经过 Hive，所以不会显示在支持者中。"
+    "supportersNote": "发到你自己地址的打赏不经过 Hive，所以不会显示在支持者中。",
+    "publicNote": "你的闪电网络地址会保存在你的 Hive 账户中，任何人都可以看到。"
   }
 }

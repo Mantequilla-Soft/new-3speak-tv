@@ -118,6 +118,7 @@
   "tabs": {
     "general": "General",
     "content": "Content",
+    "connections": "Connections",
     "rewards": "Ads & rewards",
     "about": "About / Version"
   },
@@ -231,6 +232,7 @@
     "badAddress": "That is not a Lightning address. It looks like name@wallet.com.",
     "unreachable": "This address did not answer as a Lightning address. Check it and try again.",
     "saveFailed": "Could not save it to your Hive profile.",
-    "supportersNote": "Tips to your own address never pass through Hive, so they don't show up under Supporters."
+    "supportersNote": "Tips to your own address never pass through Hive, so they don't show up under Supporters.",
+    "publicNote": "Your Lightning address is saved on your Hive account, where anyone can see it."
   }
 }

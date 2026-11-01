@@ -118,6 +118,7 @@
   "tabs": {
     "general": "Général",
     "content": "Contenu",
+    "connections": "Connexions",
     "rewards": "Pubs et récompenses",
     "about": "À propos / Version"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Ce n'est pas une adresse Lightning. Elle a la forme nom@portefeuille.com.",
     "unreachable": "Cette adresse n'a pas répondu comme une adresse Lightning. Vérifie-la et réessaie.",
     "saveFailed": "Impossible de l'enregistrer dans ton profil Hive.",
-    "supportersNote": "Les pourboires vers ta propre adresse ne passent jamais par Hive, ils n'apparaissent donc pas dans Soutiens."
+    "supportersNote": "Les pourboires vers ta propre adresse ne passent jamais par Hive, ils n'apparaissent donc pas dans Soutiens.",
+    "publicNote": "Ton adresse Lightning est enregistrée sur ton compte Hive, où tout le monde peut la voir."
   }
 }

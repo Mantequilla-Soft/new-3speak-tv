@@ -118,6 +118,7 @@
   "tabs": {
     "general": "Ogólne",
     "content": "Treści",
+    "connections": "Połączenia",
     "rewards": "Reklamy i nagrody",
     "about": "Informacje / wersja"
   },
@@ -231,6 +232,7 @@
     "badAddress": "To nie jest adres Lightning. Wygląda on tak: nazwa@portfel.com.",
     "unreachable": "Ten adres nie odpowiedział jako adres Lightning. Sprawdź go i spróbuj ponownie.",
     "saveFailed": "Nie udało się zapisać w twoim profilu Hive.",
-    "supportersNote": "Napiwki na twój własny adres nigdy nie przechodzą przez Hive, więc nie pojawiają się wśród Wspierających."
+    "supportersNote": "Napiwki na twój własny adres nigdy nie przechodzą przez Hive, więc nie pojawiają się wśród Wspierających.",
+    "publicNote": "Twój adres Lightning jest zapisywany na twoim koncie Hive, gdzie każdy może go zobaczyć."
   }
 }

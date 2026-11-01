@@ -118,6 +118,7 @@
   "tabs": {
     "general": "일반",
     "content": "콘텐츠",
+    "connections": "연결",
     "rewards": "광고 및 보상",
     "about": "정보 / 버전"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Lightning 주소가 아닙니다. name@wallet.com 같은 형식입니다.",
     "unreachable": "이 주소가 Lightning 주소로 응답하지 않았습니다. 확인 후 다시 시도하세요.",
     "saveFailed": "Hive 프로필에 저장하지 못했습니다.",
-    "supportersNote": "내 주소로 들어오는 팁은 Hive를 거치지 않으므로 후원자 목록에 표시되지 않습니다."
+    "supportersNote": "내 주소로 들어오는 팁은 Hive를 거치지 않으므로 후원자 목록에 표시되지 않습니다.",
+    "publicNote": "Lightning 주소는 내 Hive 계정에 저장되며 누구나 볼 수 있습니다."
   }
 }

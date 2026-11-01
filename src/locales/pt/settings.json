@@ -118,6 +118,7 @@
   "tabs": {
     "general": "Geral",
     "content": "Conteúdo",
+    "connections": "Conexões",
     "rewards": "Anúncios e recompensas",
     "about": "Sobre / Versão"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Isso não é um endereço Lightning. Ele tem a forma nome@carteira.com.",
     "unreachable": "Este endereço não respondeu como endereço Lightning. Confira e tente de novo.",
     "saveFailed": "Não foi possível salvar no seu perfil Hive.",
-    "supportersNote": "Gorjetas para o seu próprio endereço nunca passam pela Hive, por isso não aparecem em Apoiadores."
+    "supportersNote": "Gorjetas para o seu próprio endereço nunca passam pela Hive, por isso não aparecem em Apoiadores.",
+    "publicNote": "Seu endereço Lightning fica salvo na sua conta Hive, onde qualquer pessoa pode vê-lo."
   }
 }

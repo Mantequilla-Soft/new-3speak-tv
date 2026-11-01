@@ -118,6 +118,7 @@
   "tabs": {
     "general": "Jumla",
     "content": "Maudhui",
+    "connections": "Miunganisho",
     "rewards": "Matangazo na zawadi",
     "about": "Kuhusu / Toleo"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Hiyo si anwani ya Lightning. Inaonekana kama jina@pochi.com.",
     "unreachable": "Anwani hii haikujibu kama anwani ya Lightning. Iangalie kisha ujaribu tena.",
     "saveFailed": "Haikuweza kuhifadhiwa kwenye wasifu wako wa Hive.",
-    "supportersNote": "Bakshishi kwenda anwani yako mwenyewe hazipiti kwenye Hive kamwe, kwa hiyo hazionekani chini ya Wafadhili."
+    "supportersNote": "Bakshishi kwenda anwani yako mwenyewe hazipiti kwenye Hive kamwe, kwa hiyo hazionekani chini ya Wafadhili.",
+    "publicNote": "Anwani yako ya Lightning huhifadhiwa kwenye akaunti yako ya Hive, ambapo mtu yeyote anaweza kuiona."
   }
 }

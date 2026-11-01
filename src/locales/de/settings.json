@@ -118,6 +118,7 @@
   "tabs": {
     "general": "Allgemein",
     "content": "Inhalte",
+    "connections": "Verbindungen",
     "rewards": "Werbung & Belohnungen",
     "about": "Info / Version"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Das ist keine Lightning-Adresse. Sie sieht aus wie name@wallet.com.",
     "unreachable": "Diese Adresse hat nicht als Lightning-Adresse geantwortet. Prüfe sie und versuche es noch einmal.",
     "saveFailed": "Konnte nicht in deinem Hive-Profil gespeichert werden.",
-    "supportersNote": "Trinkgelder an deine eigene Adresse laufen nie über Hive, darum erscheinen sie nicht unter Unterstützer."
+    "supportersNote": "Trinkgelder an deine eigene Adresse laufen nie über Hive, darum erscheinen sie nicht unter Unterstützer.",
+    "publicNote": "Deine Lightning-Adresse wird in deinem Hive-Konto gespeichert und ist dort für alle sichtbar."
   }
 }

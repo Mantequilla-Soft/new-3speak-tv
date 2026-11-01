@@ -118,6 +118,7 @@
   "tabs": {
     "general": "Genel",
     "content": "İçerik",
+    "connections": "Bağlantılar",
     "rewards": "Reklamlar ve ödüller",
     "about": "Hakkında / Sürüm"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Bu bir Lightning adresi değil. ad@cuzdan.com gibi görünür.",
     "unreachable": "Bu adres bir Lightning adresi olarak yanıt vermedi. Kontrol edip yeniden dene.",
     "saveFailed": "Hive profiline kaydedilemedi.",
-    "supportersNote": "Kendi adresine gelen bahşişler hiç Hive'dan geçmez, bu yüzden Destekçiler altında görünmez."
+    "supportersNote": "Kendi adresine gelen bahşişler hiç Hive'dan geçmez, bu yüzden Destekçiler altında görünmez.",
+    "publicNote": "Lightning adresin Hive hesabına kaydedilir ve orada herkes tarafından görülebilir."
   }
 }

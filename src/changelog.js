@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.18',
+    category: 'settings',
+    date: '2026-11-01',
+    summary: 'New Connections tab in Settings: your Lightning tip address and your linked YouTube and other channels, in one place.',
+  },
+  {
     version: '1.81.17',
     category: 'tips',
     date: '2026-11-01',

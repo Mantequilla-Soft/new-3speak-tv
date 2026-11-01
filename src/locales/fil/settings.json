@@ -118,6 +118,7 @@
   "tabs": {
     "general": "General",
     "content": "Content",
+    "connections": "Mga koneksyon",
     "rewards": "Ads at rewards",
     "about": "Tungkol / Bersyon"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Hindi iyan Lightning address. Ganito ang itsura nito: pangalan@wallet.com.",
     "unreachable": "Hindi sumagot ang address na ito bilang Lightning address. Suriin ito at subukan ulit.",
     "saveFailed": "Hindi ito ma-save sa Hive profile mo.",
-    "supportersNote": "Hindi kailanman dumadaan sa Hive ang mga tip sa sarili mong address, kaya hindi sila lumalabas sa Mga Supporter."
+    "supportersNote": "Hindi kailanman dumadaan sa Hive ang mga tip sa sarili mong address, kaya hindi sila lumalabas sa Mga Supporter.",
+    "publicNote": "Naka-save ang iyong Lightning address sa iyong Hive account, kung saan makikita ito ng kahit sino."
   }
 }

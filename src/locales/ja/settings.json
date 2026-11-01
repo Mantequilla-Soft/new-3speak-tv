@@ -118,6 +118,7 @@
   "tabs": {
     "general": "一般",
     "content": "コンテンツ",
+    "connections": "連携",
     "rewards": "広告と報酬",
     "about": "概要 / バージョン"
   },
@@ -231,6 +232,7 @@
     "badAddress": "Lightningアドレスではありません。name@wallet.comのような形式です。",
     "unreachable": "このアドレスはLightningアドレスとして応答しませんでした。確認してもう一度お試しください。",
     "saveFailed": "Hiveプロフィールに保存できませんでした。",
-    "supportersNote": "自分のアドレスへのチップはHiveを通らないため、サポーターには表示されません。"
+    "supportersNote": "自分のアドレスへのチップはHiveを通らないため、サポーターには表示されません。",
+    "publicNote": "Lightningアドレスはあなたの Hive アカウントに保存され、誰でも見ることができます。"
   }
 }
