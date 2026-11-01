@@ -8,8 +8,11 @@ import { requestAudioAd, reportAudioAdHeard } from '../lib/audioAd';
  *
  * When the track reaches the booked position (0% = before it starts) the track is
  * paused, the spot plays on its own element, and the track resumes where it was.
- * A pre-roll that only arrived after the first moments played rewinds the track to
- * the start, so nothing of it is missed.
+ *
+ * The track's opening is HELD (paused at the start) while the checker's answer is
+ * still out, at most HOLD_MAX_MS, so a pre-roll really comes first instead of cutting
+ * in after a moment of the track. A later spot, or no spot, releases it at once. A
+ * pre-roll that only arrives after the hold rewinds the track to the start.
  *
  * While the spot runs, the player's own controls drive the spot: any play on the
  * track's element (button, headphones, lock screen, pop-out window) is turned into
@@ -20,6 +23,8 @@ import { requestAudioAd, reportAudioAdHeard } from '../lib/audioAd';
  * dropped and the track goes on. One spot per track per play.
  */
 const STALL_MS = 8000;
+// The longest the track's opening waits for the checker's answer. Fails open after.
+const HOLD_MAX_MS = 2500;
 // A pre-roll that starts later than this into the track does not rewind it.
 const REWIND_WITHIN_S = 3;
 
@@ -35,19 +40,47 @@ export default function useAudioAd(audioRef, track, elementKey) {
   const [phase, setPhase] = useState('idle');
   // The spot played to its end: its link stays offered for the rest of the track.
   const [heard, setHeard] = useState(false);
-  const s = useRef({ key: null, spot: null, done: false, active: false, el: null, resumeAt: 0, lastProgressAt: 0 });
+  const s = useRef({ key: null, spot: null, done: false, active: false, el: null, resumeAt: 0, lastProgressAt: 0, pending: false, held: false });
 
   // A new track: ask, and get the sound ready (fetching it records nothing).
   useEffect(() => {
-    const cur = { key, spot: null, done: false, active: false, el: null, resumeAt: 0, lastProgressAt: 0 };
+    const cur = { key, spot: null, done: false, active: false, el: null, resumeAt: 0, lastProgressAt: 0, pending: !!key, held: false };
     s.current = cur;
     setSpot(null);
     setPhase('idle');
     setHeard(false);
     if (!key) return undefined;
     const [owner, permlink] = [track.owner, track.permlink];
+
+    // Hold the opening while the answer is out (see the top).
+    const main = audioRef.current;
+    const hold = () => {
+      if (!cur.pending || !main || main.currentTime >= REWIND_WITHIN_S) return;
+      cur.held = true;
+      main.pause();
+    };
+    const resumeHeld = () => {
+      if (cur.held && !cur.active && !cur.done && main) { cur.held = false; main.play().catch(() => {}); }
+    };
+    let timer = null;
+    const release = () => {
+      if (!cur.pending) return;
+      cur.pending = false;
+      clearTimeout(timer);
+      if (main) { main.removeEventListener('play', hold); main.removeEventListener('playing', hold); }
+    };
+    if (main) {
+      main.addEventListener('play', hold);
+      main.addEventListener('playing', hold);
+      if (!main.paused) hold();
+    }
+    timer = setTimeout(() => { release(); resumeHeld(); }, HOLD_MAX_MS);
+
     requestAudioAd({ owner, permlink, viewer: useAppStore.getState().user || null }).then((a) => {
-      if (s.current !== cur || !a) return;
+      if (s.current !== cur) return;
+      release();
+      // No spot: the held track goes on. A spot: the binding below decides.
+      if (!a) { resumeHeld(); return; }
       const el = new Audio();
       el.preload = 'auto';
       el.src = a.audioUrl;
@@ -56,6 +89,7 @@ export default function useAudioAd(audioRef, track, elementKey) {
       setSpot(a);
     });
     return () => {
+      release();
       cur.done = true;
       cur.active = false;
       if (cur.el) { try { cur.el.pause(); cur.el.removeAttribute('src'); cur.el.load(); } catch { /* gone */ } }
@@ -147,8 +181,13 @@ export default function useAudioAd(audioRef, track, elementKey) {
     ad.addEventListener('timeupdate', onAdTime);
     ad.addEventListener('ended', onAdEnded);
     ad.addEventListener('error', onAdError);
-    // The track may already be playing when the answer comes in.
-    if (!main.paused && !cur.active) { const at = due(); if (at != null) begin(at); }
+    // The track may already be playing when the answer comes in, or be held for it:
+    // a spot that is due now starts, otherwise a held track goes on.
+    if ((!main.paused || cur.held) && !cur.active) {
+      const at = due();
+      if (at != null) { cur.held = false; begin(at); }
+      else if (cur.held) { cur.held = false; main.play().catch(() => {}); }
+    }
     return () => {
       clearInterval(watchdog);
       main.removeEventListener('play', onMainPlay);

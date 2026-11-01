@@ -114,6 +114,63 @@ describe('playing', () => {
     expect(ad.heardSpot.message).toBe('Try it')
   })
 
+  // The answer still out when the track starts: its opening is held, not heard.
+  const deferAnswer = () => {
+    let answer
+    const pending = new Promise((r) => { answer = r })
+    fetchMock.mockImplementation(async (url) => (url.endsWith('/m/session')
+      ? { ok: true, json: async () => { await pending; return { ad: null, audioAd: spot } } }
+      : { ok: true, json: async () => ({}) }))
+    return () => answer()
+  }
+
+  it('the opening is held while the answer is out, so a pre-roll really comes first', async () => {
+    const answer = deferAnswer()
+    const main = fakeMain()
+    const ad = await mount(main, { owner: 'badadib', permlink: 'abc' })
+    await act(async () => { await main.play() })
+    expect(main.paused).toBe(true)
+    expect(adEls).toHaveLength(0)
+
+    await act(async () => { answer() })
+    await act(async () => {})
+    expect(adEls[0].paused).toBe(false)
+    expect(main.paused).toBe(true)
+    expect(ad.active).toBe(true)
+
+    await act(async () => { adEls[0].ended = true; adEls[0].dispatchEvent(new Event('ended')) })
+    expect(main.paused).toBe(false)
+    expect(main.currentTime).toBe(0)
+  })
+
+  it('a later spot releases the held opening at once', async () => {
+    spot.positionPercent = 50
+    const answer = deferAnswer()
+    const main = fakeMain()
+    await mount(main, { owner: 'badadib', permlink: 'abc' })
+    await act(async () => { await main.play() })
+    expect(main.paused).toBe(true)
+    await act(async () => { answer() })
+    await act(async () => {})
+    expect(main.paused).toBe(false)
+    expect(adEls[0].paused).toBe(true)
+  })
+
+  it('no answer within the hold lets the track go on', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    try {
+      deferAnswer()
+      const main = fakeMain()
+      await mount(main, { owner: 'badadib', permlink: 'abc' })
+      await act(async () => { await main.play() })
+      expect(main.paused).toBe(true)
+      await act(async () => { vi.advanceTimersByTime(2600) })
+      expect(main.paused).toBe(false)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('a mid-roll waits for its position', async () => {
     spot.positionPercent = 50
     const main = fakeMain()
