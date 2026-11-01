@@ -234,5 +234,17 @@
     "saveFailed": "Não foi possível salvar no seu perfil Hive.",
     "supportersNote": "Gorjetas para o seu próprio endereço nunca passam pela Hive, por isso não aparecem em Apoiadores.",
     "publicNote": "Seu endereço Lightning fica salvo na sua conta Hive, onde qualquer pessoa pode vê-lo."
+  },
+  "supportLinks": {
+    "title": "Outras formas de te apoiar",
+    "desc": "Sua página no {{sites}}. Os espectadores encontram estes links na sua janela de gorjetas.",
+    "placeholder": "https://ko-fi.com/seunome",
+    "add": "Adicionar",
+    "remove": "Remover o link do {{site}}",
+    "badLink": "Cole o link completo da sua página em um destes sites.",
+    "duplicate": "Esse link já está na lista.",
+    "max": "Você pode adicionar até {{max}} links.",
+    "saved": "Links de apoio salvos",
+    "publicNote": "Estes links ficam salvos na sua conta Hive, onde qualquer pessoa pode vê-los."
   }
 }

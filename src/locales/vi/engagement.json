@@ -42,7 +42,8 @@
         "copyFailed": "Không sao chép được hóa đơn"
       },
       "noteOwn": "Đi thẳng vào ví Lightning của @{{recipient}} ({{address}}). Ví Lightning nào cũng được, không cần tài khoản Hive.",
-      "waitingUnverified": "Ví của bạn sẽ báo khi thanh toán hoàn tất."
+      "waitingUnverified": "Ví của bạn sẽ báo khi thanh toán hoàn tất.",
+      "cashApp": "Chưa có ví Lightning? Các ứng dụng như Cash App và Strike có thể thanh toán bằng số dư thông thường của bạn."
     },
     "wallet": {
       "usernameLabel": "Tên người dùng Hive của bạn:",
@@ -56,6 +57,19 @@
         "self": "Bạn không thể tự tip cho mình",
         "walletFailed": "Ví đã không gửi tip: {{message}}"
       }
+    },
+    "otherWays": "Thêm cách để ủng hộ @{{recipient}}",
+    "monthly": {
+      "label": "Bao lâu một lần",
+      "once": "Một lần",
+      "until": "Mỗi tháng, đến {{date}}",
+      "note": "Hive tự gửi mỗi 30 ngày, lần đầu ngay bây giờ. Bạn có thể dừng bất cứ lúc nào.",
+      "replaces": "Khoản này sẽ thay thế khoản ủng hộ hằng tháng bạn đang gửi cho @{{recipient}}.",
+      "current": "Bạn gửi cho @{{recipient}} {{amount}} mỗi tháng, đến {{date}}.",
+      "stop": "Dừng",
+      "stopped": "Đã dừng ủng hộ hằng tháng",
+      "stopFailed": "Không thể dừng: {{message}}",
+      "successNote": "Khoản tiếp theo sẽ tự gửi sau 30 ngày."
     }
   },
   "cardMenu": {

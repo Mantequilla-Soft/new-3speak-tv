@@ -42,7 +42,8 @@
         "copyFailed": "請求書をコピーできませんでした"
       },
       "noteOwn": "@{{recipient}}自身のLightningウォレット({{address}})に直接届きます。どのLightningウォレットでも使え、Hiveアカウントは不要です。",
-      "waitingUnverified": "支払いが完了するとウォレットに表示されます。"
+      "waitingUnverified": "支払いが完了するとウォレットに表示されます。",
+      "cashApp": "Lightning ウォレットがない場合は、Cash App や Strike などのアプリで普段の残高から支払えます。"
     },
     "wallet": {
       "usernameLabel": "あなたの Hive ユーザー名:",
@@ -56,6 +57,19 @@
         "self": "自分自身に投げ銭はできません",
         "walletFailed": "ウォレットが投げ銭を送信しませんでした: {{message}}"
       }
+    },
+    "otherWays": "@{{recipient}} を応援するほかの方法",
+    "monthly": {
+      "label": "頻度",
+      "once": "1回のみ",
+      "until": "毎月、{{date}}まで",
+      "note": "Hive が30日ごとに自動で送ります。初回はいますぐです。いつでも停止できます。",
+      "replaces": "@{{recipient}} にすでに送っている毎月の応援は、これに置き換わります。",
+      "current": "@{{recipient}} に毎月 {{amount}} を送っています（{{date}}まで）。",
+      "stop": "停止",
+      "stopped": "毎月の応援を停止しました",
+      "stopFailed": "停止できませんでした: {{message}}",
+      "successNote": "次回は30日後に自動で送られます。"
     }
   },
   "cardMenu": {

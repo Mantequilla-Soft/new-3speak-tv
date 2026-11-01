@@ -510,6 +510,52 @@
   }
 }
 
+// Other ways to support you: one saved link per row, X to remove.
+.settings-support-links {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 13px;
+
+    svg { flex-shrink: 0; }
+  }
+
+  a {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text-primary);
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  button {
+    display: inline-flex;
+    padding: 2px;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+
+    &:hover { color: var(--text-primary); }
+    &:disabled { opacity: 0.55; cursor: not-allowed; }
+  }
+}
+
 .settings-lightning-reset {
   align-self: flex-start;
   padding: 0;

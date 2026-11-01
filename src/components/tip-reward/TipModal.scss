@@ -327,6 +327,60 @@
 }
 
 /* Custom toast style */
+.tip-modal {
+  // "You send @x 5.000 HBD every month…" + Stop, above the HIVE / HBD form.
+  .tip-monthly-current {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border-light, #e1e1e1);
+    border-radius: 8px;
+    background: var(--bg-tertiary, #f5f5f5);
+    font-size: 13px;
+    color: var(--text-primary, #333);
+
+    .lightning-done { flex-shrink: 0; }
+  }
+
+  // The creator's pages on payment sites (OtherWays.jsx), under the form.
+  .tip-other-ways {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border-light, #e1e1e1);
+  }
+
+  .tip-other-ways-title {
+    font-size: 13px;
+    color: var(--text-secondary, #666);
+  }
+
+  .tip-other-ways-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-light, #e1e1e1);
+      background: var(--bg-tertiary, #f5f5f5);
+      color: var(--text-primary, #333);
+      font-size: 13px;
+      text-decoration: none;
+
+      &:hover { border-color: var(--text-secondary, #666); }
+    }
+  }
+}
+
 .toastify-custom {
   max-width: 300px;
   font-size: 14px;

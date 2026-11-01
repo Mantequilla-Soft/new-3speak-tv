@@ -234,5 +234,17 @@
     "saveFailed": "Konnte nicht in deinem Hive-Profil gespeichert werden.",
     "supportersNote": "Trinkgelder an deine eigene Adresse laufen nie über Hive, darum erscheinen sie nicht unter Unterstützer.",
     "publicNote": "Deine Lightning-Adresse wird in deinem Hive-Konto gespeichert und ist dort für alle sichtbar."
+  },
+  "supportLinks": {
+    "title": "Weitere Wege, dich zu unterstützen",
+    "desc": "Deine Seite auf {{sites}}. Zuschauer finden diese Links in deinem Trinkgeld-Fenster.",
+    "placeholder": "https://ko-fi.com/deinname",
+    "add": "Hinzufügen",
+    "remove": "{{site}}-Link entfernen",
+    "badLink": "Füge den vollständigen Link zu deiner Seite auf einer dieser Seiten ein.",
+    "duplicate": "Dieser Link ist schon in der Liste.",
+    "max": "Du kannst bis zu {{max}} Links hinzufügen.",
+    "saved": "Unterstützungs-Links gespeichert",
+    "publicNote": "Diese Links werden in deinem Hive-Konto gespeichert und sind dort für alle sichtbar."
   }
 }

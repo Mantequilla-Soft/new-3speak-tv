@@ -234,5 +234,17 @@
     "saveFailed": "Kon het niet opslaan in je Hive-profiel.",
     "supportersNote": "Fooien naar je eigen adres gaan nooit via Hive, dus ze staan niet bij Supporters.",
     "publicNote": "Je Lightning-adres wordt opgeslagen in je Hive-account, waar iedereen het kan zien."
+  },
+  "supportLinks": {
+    "title": "Andere manieren om je te steunen",
+    "desc": "Je pagina op {{sites}}. Kijkers vinden deze links in je fooivenster.",
+    "placeholder": "https://ko-fi.com/jouwnaam",
+    "add": "Toevoegen",
+    "remove": "{{site}}-link verwijderen",
+    "badLink": "Plak de volledige link naar je pagina op een van deze sites.",
+    "duplicate": "Die link staat al in de lijst.",
+    "max": "Je kunt tot {{max}} links toevoegen.",
+    "saved": "Steunlinks opgeslagen",
+    "publicNote": "Deze links worden opgeslagen in je Hive-account, waar iedereen ze kan zien."
   }
 }

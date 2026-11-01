@@ -234,5 +234,17 @@
     "saveFailed": "Nie udało się zapisać w twoim profilu Hive.",
     "supportersNote": "Napiwki na twój własny adres nigdy nie przechodzą przez Hive, więc nie pojawiają się wśród Wspierających.",
     "publicNote": "Twój adres Lightning jest zapisywany na twoim koncie Hive, gdzie każdy może go zobaczyć."
+  },
+  "supportLinks": {
+    "title": "Inne sposoby, by cię wesprzeć",
+    "desc": "Twoja strona na {{sites}}. Widzowie znajdą te linki w twoim oknie napiwków.",
+    "placeholder": "https://ko-fi.com/twojanazwa",
+    "add": "Dodaj",
+    "remove": "Usuń link {{site}}",
+    "badLink": "Wklej pełny link do swojej strony na jednej z tych witryn.",
+    "duplicate": "Ten link jest już na liście.",
+    "max": "Możesz dodać maksymalnie {{max}} linków.",
+    "saved": "Linki wsparcia zapisane",
+    "publicNote": "Te linki są zapisywane na twoim koncie Hive, gdzie każdy może je zobaczyć."
   }
 }

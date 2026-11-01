@@ -42,7 +42,8 @@
         "copyFailed": "Fatura kopyalanamadı"
       },
       "noteOwn": "Doğrudan @{{recipient}} kullanıcısının kendi Lightning cüzdanına gider ({{address}}). Her Lightning cüzdanı çalışır, Hive hesabı gerekmez.",
-      "waitingUnverified": "Ödeme geçtiğinde cüzdanın bunu gösterir."
+      "waitingUnverified": "Ödeme geçtiğinde cüzdanın bunu gösterir.",
+      "cashApp": "Lightning cüzdanın yok mu? Cash App ve Strike gibi uygulamalar bunu normal bakiyenden ödeyebilir."
     },
     "wallet": {
       "usernameLabel": "Hive kullanıcı adın:",
@@ -56,6 +57,19 @@
         "self": "Kendine bahşiş gönderemezsin",
         "walletFailed": "Cüzdan bahşişi göndermedi: {{message}}"
       }
+    },
+    "otherWays": "@{{recipient}} kullanıcısını desteklemenin başka yolları",
+    "monthly": {
+      "label": "Ne sıklıkla",
+      "once": "Bir kez",
+      "until": "Her ay, {{date}} tarihine kadar",
+      "note": "Hive bunu her 30 günde bir kendiliğinden gönderir, ilki hemen. İstediğin zaman durdurabilirsin.",
+      "replaces": "Bu, @{{recipient}} kullanıcısına zaten gönderdiğin aylık desteğin yerini alır.",
+      "current": "@{{recipient}} kullanıcısına her ay {{amount}} gönderiyorsun, {{date}} tarihine kadar.",
+      "stop": "Durdur",
+      "stopped": "Aylık destek durduruldu",
+      "stopFailed": "Durdurulamadı: {{message}}",
+      "successNote": "Bir sonraki 30 gün sonra kendiliğinden gönderilir."
     }
   },
   "cardMenu": {

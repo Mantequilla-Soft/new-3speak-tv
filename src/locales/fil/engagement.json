@@ -42,7 +42,8 @@
         "copyFailed": "Hindi makopya ang invoice"
       },
       "noteOwn": "Diretso sa sariling Lightning wallet ni @{{recipient}} ({{address}}). Gumagana ang kahit anong Lightning wallet, hindi kailangan ng Hive account.",
-      "waitingUnverified": "Ipapakita ng wallet mo kapag natuloy na ang bayad."
+      "waitingUnverified": "Ipapakita ng wallet mo kapag natuloy na ang bayad.",
+      "cashApp": "Walang Lightning wallet? Kayang bayaran ito ng mga app tulad ng Cash App at Strike mula sa karaniwan mong balanse."
     },
     "wallet": {
       "usernameLabel": "Ang iyong Hive username:",
@@ -56,6 +57,19 @@
         "self": "Hindi mo puwedeng i-tip ang sarili mo",
         "walletFailed": "Hindi ipinadala ng wallet ang tip: {{message}}"
       }
+    },
+    "otherWays": "Iba pang paraan para suportahan si @{{recipient}}",
+    "monthly": {
+      "label": "Gaano kadalas",
+      "once": "Isang beses",
+      "until": "Bawat buwan, hanggang {{date}}",
+      "note": "Kusa itong ipinapadala ng Hive tuwing 30 araw, ang una ngayon din. Puwede mo itong ihinto anumang oras.",
+      "replaces": "Papalitan nito ang buwanang suporta na ipinapadala mo na kay @{{recipient}}.",
+      "current": "Nagpapadala ka kay @{{recipient}} ng {{amount}} bawat buwan, hanggang {{date}}.",
+      "stop": "Ihinto",
+      "stopped": "Inihinto ang buwanang suporta",
+      "stopFailed": "Hindi ito maihinto: {{message}}",
+      "successNote": "Kusang lalabas ang susunod pagkalipas ng 30 araw."
     }
   },
   "cardMenu": {

@@ -42,7 +42,8 @@
         "copyFailed": "No se pudo copiar la factura"
       },
       "noteOwn": "Va directo a la billetera Lightning de @{{recipient}} ({{address}}). Sirve cualquier billetera Lightning, no hace falta cuenta de Hive.",
-      "waitingUnverified": "Tu billetera te muestra cuándo se completó el pago."
+      "waitingUnverified": "Tu billetera te muestra cuándo se completó el pago.",
+      "cashApp": "¿No tienes billetera Lightning? Apps como Cash App y Strike pueden pagarlo con tu saldo normal."
     },
     "wallet": {
       "usernameLabel": "Tu usuario de Hive:",
@@ -56,6 +57,19 @@
         "self": "No puedes darte propina a ti mismo",
         "walletFailed": "La billetera no envió la propina: {{message}}"
       }
+    },
+    "otherWays": "Más formas de apoyar a @{{recipient}}",
+    "monthly": {
+      "label": "Con qué frecuencia",
+      "once": "Una vez",
+      "until": "Cada mes, hasta {{date}}",
+      "note": "Hive lo envía solo cada 30 días, el primero ahora mismo. Puedes detenerlo cuando quieras.",
+      "replaces": "Esto reemplaza el apoyo mensual que ya envías a @{{recipient}}.",
+      "current": "Envías a @{{recipient}} {{amount}} cada mes, hasta {{date}}.",
+      "stop": "Detener",
+      "stopped": "Apoyo mensual detenido",
+      "stopFailed": "No se pudo detener: {{message}}",
+      "successNote": "El siguiente sale solo dentro de 30 días."
     }
   },
   "cardMenu": {

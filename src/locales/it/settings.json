@@ -234,5 +234,17 @@
     "saveFailed": "Impossibile salvarlo nel tuo profilo Hive.",
     "supportersNote": "Le mance al tuo indirizzo non passano mai da Hive, quindi non compaiono tra i Sostenitori.",
     "publicNote": "Il tuo indirizzo Lightning viene salvato nel tuo account Hive, dove chiunque può vederlo."
+  },
+  "supportLinks": {
+    "title": "Altri modi per sostenerti",
+    "desc": "La tua pagina su {{sites}}. Gli spettatori trovano questi link nella tua finestra delle mance.",
+    "placeholder": "https://ko-fi.com/tuonome",
+    "add": "Aggiungi",
+    "remove": "Rimuovi il link {{site}}",
+    "badLink": "Incolla il link completo alla tua pagina su uno di questi siti.",
+    "duplicate": "Questo link è già nella lista.",
+    "max": "Puoi aggiungere fino a {{max}} link.",
+    "saved": "Link di sostegno salvati",
+    "publicNote": "Questi link vengono salvati nel tuo account Hive, dove chiunque può vederli."
   }
 }

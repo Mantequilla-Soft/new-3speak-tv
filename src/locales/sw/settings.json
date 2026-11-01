@@ -234,5 +234,17 @@
     "saveFailed": "Haikuweza kuhifadhiwa kwenye wasifu wako wa Hive.",
     "supportersNote": "Bakshishi kwenda anwani yako mwenyewe hazipiti kwenye Hive kamwe, kwa hiyo hazionekani chini ya Wafadhili.",
     "publicNote": "Anwani yako ya Lightning huhifadhiwa kwenye akaunti yako ya Hive, ambapo mtu yeyote anaweza kuiona."
+  },
+  "supportLinks": {
+    "title": "Njia nyingine za kukuunga mkono",
+    "desc": "Ukurasa wako kwenye {{sites}}. Watazamaji wanaona viungo hivi kwenye dirisha lako la tuzo.",
+    "placeholder": "https://ko-fi.com/jinalako",
+    "add": "Ongeza",
+    "remove": "Ondoa kiungo cha {{site}}",
+    "badLink": "Bandika kiungo kamili cha ukurasa wako kwenye mojawapo ya tovuti hizi.",
+    "duplicate": "Kiungo hicho tayari kiko kwenye orodha.",
+    "max": "Unaweza kuongeza hadi viungo {{max}}.",
+    "saved": "Viungo vya usaidizi vimehifadhiwa",
+    "publicNote": "Viungo hivi huhifadhiwa kwenye akaunti yako ya Hive, ambapo mtu yeyote anaweza kuviona."
   }
 }

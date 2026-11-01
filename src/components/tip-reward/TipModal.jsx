@@ -3,16 +3,19 @@ import Success from './Success';
 import { useTranslation } from 'react-i18next';
 import ModalHeader from '../ModalHeader/ModalHeader';
 import WalletTip from './WalletTip';
+import MonthlyField from './MonthlyField';
+import OtherWays from './OtherWays';
 import './TipModal.scss';
 import { fetchBalances, isAccountValid } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
 import { toastIn } from '../../utils/toast';
 import { LineSpinner } from 'ldrs/react'
 import 'ldrs/react/LineSpinner.css'
-import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
+import { transferWithAioha, broadcastWithAioha, KeyTypes, isLoggedIn } from '../../hive-api/aioha';
 import { useQueryClient } from '@tanstack/react-query';
 import { queueSupport, recordSupport } from '../../lib/supports';
 import { QRCodeSVG } from 'qrcode.react';
+import { recurrentTransferOp, stopRecurrentTransferOp, findMonthlySupport, formatMonth } from '../../lib/recurringTip';
 import { LIGHTNING_PRESETS, requestLightningInvoice, isLightningInvoicePaid, hasWebln, payWithWebln, fetchLightningReceiver } from '../../lib/lightningTip';
 
 // Every toast from this module is headed "Tip"; the message becomes the
@@ -27,12 +30,19 @@ const toast = toastIn('Tip');
 // `variant="page"`: the window is the whole page (the /tip popup), not an
 // overlay on top of one.
 const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, variant }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const queryClient = useQueryClient();
     const { user: activetUser } = useAppStore();
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("HIVE");
   const [memo, setMemo] = useState("");
+  // 0 = a single tip; else monthly for that many months (lib/recurringTip.js).
+  const [months, setMonths] = useState(0);
+  // The monthly support the signed-in viewer already sends this creator, or null.
+  const [monthly, setMonthly] = useState(null);
+  const [stopping, setStopping] = useState(false);
+  // Set when the tip just sent was a monthly one: the thank-you says so.
+  const [sentMonthly, setSentMonthly] = useState(false);
   const [step, setStep] = useState(1)
 //   const [balErr, setBalErr] = useState ("")
   const [balances, setBalances] = useState({})
@@ -65,6 +75,15 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
   useEffect(()=>{
     if (activetUser && !isPage) getbalance()
   },[])
+
+  useEffect(() => {
+    if (isPage || !activetUser || !recipient || activetUser === recipient) return undefined;
+    let alive = true;
+    findMonthlySupport(activetUser, recipient)
+      .then((m) => { if (alive) setMonthly(m); })
+      .catch(() => { /* a node blip: the form works without it */ });
+    return () => { alive = false; };
+  }, [isPage, activetUser, recipient]);
 
   // While the invoice is on screen, ask every few seconds whether it was paid,
   // so the viewer sees the thank-you without pressing anything.
@@ -124,6 +143,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
     setAmount("");
     setCurrency("HIVE");
     setMemo("");
+    setMonths(0);
     setInvoice(null);
     onClose();
   };
@@ -206,6 +226,23 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
     // support report carries the memo with the link too.
     const fullMemo = memoWithLink();
 
+    // Monthly: one recurrent_transfer, the first payment right away. Not reported
+    // as a support (see lib/recurringTip.js).
+    if (months > 0) {
+      try {
+        await broadcastWithAioha([recurrentTransferOp({
+          from: activetUser, to: recipient, amount: parseFloat(amount), currency, memo: fullMemo, months,
+        })], KeyTypes.Active);
+        setSentMonthly(true);
+        setStep(2);
+        findMonthlySupport(activetUser, recipient).then(setMonthly).catch(() => {});
+      } catch (error) {
+        toast.error(t('engagement.tip.errors.transferFailed', { message: error.message }));
+        console.error(error);
+      }
+      return;
+    }
+
     // Saved BEFORE the broadcast: if the page reloads while the wallet is still
     // signing, the next app start reports it (lib/supports.js).
     const pending = permlink
@@ -213,6 +250,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
       : null;
     try {
       await transferWithAioha(recipient, parseFloat(amount), currency, fullMemo);
+      setSentMonthly(false);
       setStep(2);
       if (pending) {
         recordSupport(pending)
@@ -234,6 +272,20 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
   };
   
 
+
+  const stopMonthly = async () => {
+    if (!monthly) return;
+    setStopping(true);
+    try {
+      await broadcastWithAioha([stopRecurrentTransferOp({ from: activetUser, to: recipient, currency: monthly.currency })], KeyTypes.Active);
+      setMonthly(null);
+      toast.success(t('engagement.tip.monthly.stopped'));
+    } catch (error) {
+      toast.error(t('engagement.tip.monthly.stopFailed', { message: error.message }));
+    } finally {
+      setStopping(false);
+    }
+  };
 
   return (
     <div className={`tip-modal ${step === 2 ? "add" : ""}${variant === 'page' ? ' tip-modal--page' : ''}`}>
@@ -260,7 +312,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
             recipient={recipient}
             permlink={permlink}
             memoLink={memoLink}
-            onSent={(sentAmount, sentCurrency) => { setAmount(sentAmount); setCurrency(sentCurrency); setStep(2); }}
+            onSent={(sentAmount, sentCurrency, sentMonths = 0) => { setAmount(sentAmount); setCurrency(sentCurrency); setSentMonthly(sentMonths > 0); setStep(2); }}
             onClose={handleClose}
           />
         )}
@@ -311,6 +363,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
                 ? t('engagement.tip.lightning.noteOwn', { recipient, address: receiver.address })
                 : t('engagement.tip.lightning.note', { recipient })}
             </p>
+            <p className="tip-method-note">{t('engagement.tip.lightning.cashApp')}</p>
 
             {/* The header's X closes the window, so no Cancel here: room for the
                 QR button always, and the extension button when there is one. */}
@@ -334,6 +387,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
         {step === 1 && method === 'lightning' && invoice && <div className="tip-modal-in">
           <div className="lightning-invoice">
             <p className="tip-method-note">{t('engagement.tip.lightning.scan', { sats: invoice.sats.toLocaleString(), recipient })}</p>
+            <p className="tip-method-note">{t('engagement.tip.lightning.cashApp')}</p>
             <a className="qr-wrap" href={`lightning:${invoice.pr}`} aria-label={t('engagement.tip.lightning.openWallet')}>
               <QRCodeSVG value={`lightning:${invoice.pr}`.toUpperCase()} size={220} marginSize={2} bgColor="#ffffff" fgColor="#000000" />
             </a>
@@ -370,6 +424,14 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
 
         {step === 1 && method === 'hive' && !isPage && activetUser && isLoggedIn() && <div className="tip-modal-in">
           <div className="form">
+            {monthly && (
+              <div className="tip-monthly-current">
+                <span>{t('engagement.tip.monthly.current', { recipient, amount: monthly.amount, date: formatMonth(monthly.until, i18n.language) })}</span>
+                <button type="button" className="lightning-done" onClick={stopMonthly} disabled={stopping}>
+                  {stopping ? <LineSpinner size="12" stroke="2" speed="1" color="currentColor" /> : t('engagement.tip.monthly.stop')}
+                </button>
+              </div>
+            )}
             <div className="field">
               <label>{t('engagement.tip.amountLabel')}</label>
               <input
@@ -392,6 +454,8 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
                  :
                  <span>{currency === "HIVE" ? <div>{balances.hive}</div>: <div>{balances.hbd}</div>}</span>}</div>
             </div>
+
+            <MonthlyField months={months} onChange={setMonths} existing={monthly} recipient={recipient} />
 
             
              
@@ -419,9 +483,11 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
             </div>
           </div>
         </div>}
+        {step === 1 && <OtherWays recipient={recipient} hidden={!!invoice} />}
         {step === 2 && <Success 
         amount={amount}
         currency={currency}
+        monthly={sentMonthly}
         onClose={handleClose}
       />}
         </div>

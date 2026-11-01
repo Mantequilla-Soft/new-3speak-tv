@@ -42,7 +42,8 @@
         "copyFailed": "Impossible de copier la facture"
       },
       "noteOwn": "Va directement dans le portefeuille Lightning de @{{recipient}} ({{address}}). Tout portefeuille Lightning fonctionne, pas besoin de compte Hive.",
-      "waitingUnverified": "Ton portefeuille indique quand le paiement est passé."
+      "waitingUnverified": "Ton portefeuille indique quand le paiement est passé.",
+      "cashApp": "Pas de portefeuille Lightning ? Des applis comme Cash App et Strike peuvent le payer avec ton solde habituel."
     },
     "wallet": {
       "usernameLabel": "Votre nom d'utilisateur Hive :",
@@ -56,6 +57,19 @@
         "self": "Vous ne pouvez pas vous donner un pourboire",
         "walletFailed": "Le portefeuille n'a pas envoyé le pourboire : {{message}}"
       }
+    },
+    "otherWays": "Plus de façons de soutenir @{{recipient}}",
+    "monthly": {
+      "label": "À quelle fréquence",
+      "once": "Une fois",
+      "until": "Chaque mois, jusqu'à {{date}}",
+      "note": "Hive l'envoie tout seul tous les 30 jours, le premier tout de suite. Tu peux l'arrêter à tout moment.",
+      "replaces": "Ceci remplace le soutien mensuel que tu envoies déjà à @{{recipient}}.",
+      "current": "Tu envoies {{amount}} à @{{recipient}} chaque mois, jusqu'à {{date}}.",
+      "stop": "Arrêter",
+      "stopped": "Soutien mensuel arrêté",
+      "stopFailed": "Impossible de l'arrêter : {{message}}",
+      "successNote": "Le prochain part tout seul dans 30 jours."
     }
   },
   "cardMenu": {

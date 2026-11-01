@@ -42,7 +42,8 @@
         "copyFailed": "Nie udało się skopiować faktury"
       },
       "noteOwn": "Trafia prosto do portfela Lightning @{{recipient}} ({{address}}). Działa każdy portfel Lightning, konto Hive nie jest potrzebne.",
-      "waitingUnverified": "Twój portfel pokaże, kiedy płatność przejdzie."
+      "waitingUnverified": "Twój portfel pokaże, kiedy płatność przejdzie.",
+      "cashApp": "Nie masz portfela Lightning? Aplikacje takie jak Cash App i Strike mogą zapłacić ze zwykłego salda."
     },
     "wallet": {
       "usernameLabel": "Twoja nazwa użytkownika Hive:",
@@ -56,6 +57,19 @@
         "self": "Nie możesz dać napiwku samemu sobie",
         "walletFailed": "Portfel nie wysłał napiwku: {{message}}"
       }
+    },
+    "otherWays": "Więcej sposobów, by wesprzeć @{{recipient}}",
+    "monthly": {
+      "label": "Jak często",
+      "once": "Jednorazowo",
+      "until": "Co miesiąc, do {{date}}",
+      "note": "Hive wysyła to samo co 30 dni, pierwszy raz od razu. Możesz to zatrzymać w każdej chwili.",
+      "replaces": "To zastąpi miesięczne wsparcie, które już wysyłasz do @{{recipient}}.",
+      "current": "Wysyłasz @{{recipient}} {{amount}} co miesiąc, do {{date}}.",
+      "stop": "Zatrzymaj",
+      "stopped": "Miesięczne wsparcie zatrzymane",
+      "stopFailed": "Nie udało się zatrzymać: {{message}}",
+      "successNote": "Kolejna płatność wyjdzie sama za 30 dni."
     }
   },
   "cardMenu": {

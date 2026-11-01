@@ -234,5 +234,17 @@
     "saveFailed": "无法保存到你的 Hive 资料。",
     "supportersNote": "发到你自己地址的打赏不经过 Hive，所以不会显示在支持者中。",
     "publicNote": "你的闪电网络地址会保存在你的 Hive 账户中，任何人都可以看到。"
+  },
+  "supportLinks": {
+    "title": "支持你的其他方式",
+    "desc": "你在 {{sites}} 上的页面。观众会在你的打赏窗口中看到这些链接。",
+    "placeholder": "https://ko-fi.com/yourname",
+    "add": "添加",
+    "remove": "删除 {{site}} 链接",
+    "badLink": "请粘贴你在以上某个网站上页面的完整链接。",
+    "duplicate": "该链接已在列表中。",
+    "max": "最多可以添加 {{max}} 个链接。",
+    "saved": "支持链接已保存",
+    "publicNote": "这些链接保存在你的 Hive 账户中，任何人都可以看到。"
   }
 }

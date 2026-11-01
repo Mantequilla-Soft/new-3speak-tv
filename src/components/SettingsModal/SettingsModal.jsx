@@ -24,6 +24,9 @@ import DataRequestForm from './DataRequestForm';
 import LanguagePicker from '../LanguagePicker/LanguagePicker';
 import ModalHeader from '../ModalHeader/ModalHeader';
 import AddSocialLink_modal from '../modal/AddSocialLink_modal';
+import { SUPPORT_SITE_ICONS } from '../tip-reward/OtherWays';
+import { parseSupportLink, readSupportLinks, saveSupportLinks, SUPPORT_LINK_MAX, SUPPORT_SITE_NAMES } from '../../lib/supportLinks';
+import { IoClose } from 'react-icons/io5';
 import './SettingsModal.scss';
 import useCardSize, { useIsCardSizeMobile } from '../../hooks/useCardSize';
 
@@ -588,6 +591,116 @@ function LightningReceiveSection() {
   );
 }
 
+/**
+ * "Other ways to support you": the creator's pages on payment sites, shown in
+ * their tip window (lib/supportLinks.js). Every add or remove is saved to the
+ * Hive account right away.
+ */
+function SupportLinksSection() {
+  const { t } = useTranslation();
+  const user = useAppStore((s) => s.user);
+  // null = loading; 'unavailable' = no Hive account
+  const [links, setLinks] = useState(null);
+  const [draft, setDraft] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!user) return undefined;
+    let alive = true;
+    setLinks(null);
+    readSupportLinks(user)
+      .then((l) => { if (alive) setLinks(l); })
+      .catch(() => { if (alive) setLinks('unavailable'); });
+    return () => { alive = false; };
+  }, [user]);
+
+  if (!user || links === 'unavailable') return null;
+
+  async function save(nextLinks) {
+    setBusy(true);
+    setError(null);
+    try {
+      await saveSupportLinks(user, nextLinks.map((l) => l.url));
+      setLinks(nextLinks);
+      toast.success(t('settings.supportLinks.saved'));
+      return true;
+    } catch (err) {
+      setError(t('settings.lightning.saveFailed'));
+      console.warn('[settings] support links not saved:', err?.message || err);
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function add() {
+    if (busy || !Array.isArray(links)) return;
+    const parsed = parseSupportLink(draft);
+    if (!parsed) { setError(t('settings.supportLinks.badLink')); return; }
+    if (links.some((l) => l.url === parsed.url)) { setError(t('settings.supportLinks.duplicate')); return; }
+    if (links.length >= SUPPORT_LINK_MAX) { setError(t('settings.supportLinks.max', { max: SUPPORT_LINK_MAX })); return; }
+    if (await save([...links, parsed])) setDraft('');
+  }
+
+  const loading = links === null;
+  return (
+    <div className="settings-section">
+      <h4 className="settings-section-title">{t('settings.supportLinks.title')}</h4>
+      <div className="settings-modal-row settings-lightning">
+        <div className="settings-row-text">
+          <span className="settings-row-desc">
+            {t('settings.supportLinks.desc', { sites: SUPPORT_SITE_NAMES.join(', ') })}
+          </span>
+          {Array.isArray(links) && links.length > 0 && (
+            <ul className="settings-support-links">
+              {links.map((l) => {
+                const Icon = SUPPORT_SITE_ICONS[l.site.id];
+                return (
+                  <li key={l.url}>
+                    {Icon && <Icon />}
+                    <a href={l.url} target="_blank" rel="noopener noreferrer">{l.url.replace(/^https:\/\//, '')}</a>
+                    <button
+                      type="button"
+                      onClick={() => save(links.filter((x) => x.url !== l.url))}
+                      disabled={busy}
+                      aria-label={t('settings.supportLinks.remove', { site: l.site.label })}
+                      title={t('settings.supportLinks.remove', { site: l.site.label })}
+                    >
+                      <IoClose />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {(loading || links.length < SUPPORT_LINK_MAX) && (
+            <form className="settings-lightning-form" onSubmit={(e) => { e.preventDefault(); add(); }}>
+              <input
+                type="text"
+                inputMode="url"
+                autoComplete="off"
+                autoCapitalize="none"
+                spellCheck={false}
+                aria-label={t('settings.supportLinks.title')}
+                placeholder={t('settings.supportLinks.placeholder')}
+                value={draft}
+                onChange={(e) => { setDraft(e.target.value); setError(null); }}
+                disabled={busy || loading}
+              />
+              <button type="submit" className="settings-ads-save" disabled={busy || loading || !draft.trim()}>
+                {busy ? t('common.actions.saving') : t('settings.supportLinks.add')}
+              </button>
+            </form>
+          )}
+          <span className="settings-row-desc">{t('settings.supportLinks.publicNote')}</span>
+        </div>
+      </div>
+      {error && <p className="settings-ads-status error">{error}</p>}
+    </div>
+  );
+}
+
 function Switch({ checked, onChange, ariaLabel }) {
   return (
     <button
@@ -974,6 +1087,7 @@ export default function SettingsModal({ isOpen, onClose }) {
         )}
         {tab === 'general' && <PostingAuthoritySection />}
         {tab === 'connections' && <LightningReceiveSection />}
+        {tab === 'connections' && <SupportLinksSection />}
         {tab === 'connections' && settingsUser && (
           <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />
         )}

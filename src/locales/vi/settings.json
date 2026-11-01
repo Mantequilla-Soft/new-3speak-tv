@@ -234,5 +234,17 @@
     "saveFailed": "Không lưu được vào hồ sơ Hive của bạn.",
     "supportersNote": "Tiền tip tới địa chỉ riêng của bạn không bao giờ đi qua Hive, nên chúng không hiện trong Người ủng hộ.",
     "publicNote": "Địa chỉ Lightning của bạn được lưu trong tài khoản Hive của bạn, nơi ai cũng có thể xem."
+  },
+  "supportLinks": {
+    "title": "Các cách khác để ủng hộ bạn",
+    "desc": "Trang của bạn trên {{sites}}. Người xem sẽ thấy các liên kết này trong cửa sổ tip của bạn.",
+    "placeholder": "https://ko-fi.com/tencuaban",
+    "add": "Thêm",
+    "remove": "Xóa liên kết {{site}}",
+    "badLink": "Dán liên kết đầy đủ đến trang của bạn trên một trong các trang này.",
+    "duplicate": "Liên kết này đã có trong danh sách.",
+    "max": "Bạn có thể thêm tối đa {{max}} liên kết.",
+    "saved": "Đã lưu liên kết ủng hộ",
+    "publicNote": "Các liên kết này được lưu trong tài khoản Hive của bạn, nơi ai cũng có thể xem."
   }
 }

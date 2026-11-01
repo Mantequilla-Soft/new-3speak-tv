@@ -234,5 +234,17 @@
     "saveFailed": "Hive 프로필에 저장하지 못했습니다.",
     "supportersNote": "내 주소로 들어오는 팁은 Hive를 거치지 않으므로 후원자 목록에 표시되지 않습니다.",
     "publicNote": "Lightning 주소는 내 Hive 계정에 저장되며 누구나 볼 수 있습니다."
+  },
+  "supportLinks": {
+    "title": "나를 후원하는 다른 방법",
+    "desc": "{{sites}}에 있는 내 페이지입니다. 시청자는 팁 창에서 이 링크를 볼 수 있어요.",
+    "placeholder": "https://ko-fi.com/yourname",
+    "add": "추가",
+    "remove": "{{site}} 링크 삭제",
+    "badLink": "이 사이트 중 한 곳에 있는 내 페이지의 전체 링크를 붙여 넣으세요.",
+    "duplicate": "이미 목록에 있는 링크예요.",
+    "max": "링크는 최대 {{max}}개까지 추가할 수 있어요.",
+    "saved": "후원 링크를 저장했어요",
+    "publicNote": "이 링크는 내 Hive 계정에 저장되며 누구나 볼 수 있습니다."
   }
 }

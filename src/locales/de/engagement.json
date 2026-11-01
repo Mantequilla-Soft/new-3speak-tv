@@ -42,7 +42,8 @@
         "copyFailed": "Die Rechnung konnte nicht kopiert werden"
       },
       "noteOwn": "Geht direkt in die eigene Lightning-Wallet von @{{recipient}} ({{address}}). Jede Lightning-Wallet funktioniert, kein Hive-Konto nötig.",
-      "waitingUnverified": "Deine Wallet zeigt an, wann die Zahlung durch ist."
+      "waitingUnverified": "Deine Wallet zeigt an, wann die Zahlung durch ist.",
+      "cashApp": "Keine Lightning-Wallet? Apps wie Cash App und Strike können es von deinem normalen Guthaben bezahlen."
     },
     "wallet": {
       "usernameLabel": "Dein Hive-Benutzername:",
@@ -56,6 +57,19 @@
         "self": "Du kannst dir selbst kein Trinkgeld geben",
         "walletFailed": "Die Wallet hat das Trinkgeld nicht gesendet: {{message}}"
       }
+    },
+    "otherWays": "Weitere Wege, @{{recipient}} zu unterstützen",
+    "monthly": {
+      "label": "Wie oft",
+      "once": "Einmal",
+      "until": "Jeden Monat, bis {{date}}",
+      "note": "Hive sendet es alle 30 Tage von selbst, das erste Mal sofort. Du kannst es jederzeit beenden.",
+      "replaces": "Das ersetzt die monatliche Unterstützung, die du @{{recipient}} schon sendest.",
+      "current": "Du sendest @{{recipient}} jeden Monat {{amount}}, bis {{date}}.",
+      "stop": "Beenden",
+      "stopped": "Monatliche Unterstützung beendet",
+      "stopFailed": "Konnte nicht beendet werden: {{message}}",
+      "successNote": "Die nächste Zahlung geht in 30 Tagen von selbst raus."
     }
   },
   "cardMenu": {

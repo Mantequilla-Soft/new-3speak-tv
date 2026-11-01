@@ -42,7 +42,8 @@
         "copyFailed": "Não foi possível copiar a fatura"
       },
       "noteOwn": "Vai direto para a carteira Lightning de @{{recipient}} ({{address}}). Qualquer carteira Lightning serve, sem precisar de conta Hive.",
-      "waitingUnverified": "Sua carteira mostra quando o pagamento foi concluído."
+      "waitingUnverified": "Sua carteira mostra quando o pagamento foi concluído.",
+      "cashApp": "Não tem carteira Lightning? Apps como Cash App e Strike podem pagar com seu saldo normal."
     },
     "wallet": {
       "usernameLabel": "Seu nome de usuário Hive:",
@@ -56,6 +57,19 @@
         "self": "Você não pode dar gorjeta a si mesmo",
         "walletFailed": "A carteira não enviou a gorjeta: {{message}}"
       }
+    },
+    "otherWays": "Mais formas de apoiar @{{recipient}}",
+    "monthly": {
+      "label": "Com que frequência",
+      "once": "Uma vez",
+      "until": "Todo mês, até {{date}}",
+      "note": "A Hive envia sozinha a cada 30 dias, o primeiro agora mesmo. Você pode parar quando quiser.",
+      "replaces": "Isto substitui o apoio mensal que você já envia para @{{recipient}}.",
+      "current": "Você envia {{amount}} para @{{recipient}} todo mês, até {{date}}.",
+      "stop": "Parar",
+      "stopped": "Apoio mensal encerrado",
+      "stopFailed": "Não foi possível parar: {{message}}",
+      "successNote": "O próximo sai sozinho daqui a 30 dias."
     }
   },
   "cardMenu": {

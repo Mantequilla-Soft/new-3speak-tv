@@ -42,7 +42,8 @@
         "copyFailed": "无法复制账单"
       },
       "noteOwn": "直接进入 @{{recipient}} 自己的 Lightning 钱包（{{address}}）。任何 Lightning 钱包都可以，无需 Hive 账户。",
-      "waitingUnverified": "付款完成后，你的钱包会显示。"
+      "waitingUnverified": "付款完成后，你的钱包会显示。",
+      "cashApp": "没有闪电网络钱包？Cash App 和 Strike 等应用可以用你的普通余额支付。"
     },
     "wallet": {
       "usernameLabel": "你的 Hive 用户名：",
@@ -56,6 +57,19 @@
         "self": "不能打赏自己",
         "walletFailed": "钱包未发送打赏：{{message}}"
       }
+    },
+    "otherWays": "支持 @{{recipient}} 的更多方式",
+    "monthly": {
+      "label": "频率",
+      "once": "一次",
+      "until": "每月，直到 {{date}}",
+      "note": "Hive 每 30 天自动发送，第一笔立即发出。你可以随时停止。",
+      "replaces": "这将替换你已经发给 @{{recipient}} 的每月支持。",
+      "current": "你每月发给 @{{recipient}} {{amount}}，直到 {{date}}。",
+      "stop": "停止",
+      "stopped": "每月支持已停止",
+      "stopFailed": "无法停止：{{message}}",
+      "successNote": "下一笔将在 30 天后自动发出。"
     }
   },
   "cardMenu": {

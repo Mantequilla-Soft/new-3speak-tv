@@ -234,5 +234,17 @@
     "saveFailed": "Hive profiline kaydedilemedi.",
     "supportersNote": "Kendi adresine gelen bahşişler hiç Hive'dan geçmez, bu yüzden Destekçiler altında görünmez.",
     "publicNote": "Lightning adresin Hive hesabına kaydedilir ve orada herkes tarafından görülebilir."
+  },
+  "supportLinks": {
+    "title": "Seni desteklemenin başka yolları",
+    "desc": "{{sites}} üzerindeki sayfan. İzleyiciler bu bağlantıları bahşiş pencerende görür.",
+    "placeholder": "https://ko-fi.com/adin",
+    "add": "Ekle",
+    "remove": "{{site}} bağlantısını kaldır",
+    "badLink": "Bu sitelerden birindeki sayfanın tam bağlantısını yapıştır.",
+    "duplicate": "Bu bağlantı zaten listede.",
+    "max": "En fazla {{max}} bağlantı ekleyebilirsin.",
+    "saved": "Destek bağlantıları kaydedildi",
+    "publicNote": "Bu bağlantılar Hive hesabına kaydedilir ve orada herkes tarafından görülebilir."
   }
 }

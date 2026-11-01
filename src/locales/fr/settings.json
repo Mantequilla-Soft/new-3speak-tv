@@ -234,5 +234,17 @@
     "saveFailed": "Impossible de l'enregistrer dans ton profil Hive.",
     "supportersNote": "Les pourboires vers ta propre adresse ne passent jamais par Hive, ils n'apparaissent donc pas dans Soutiens.",
     "publicNote": "Ton adresse Lightning est enregistrée sur ton compte Hive, où tout le monde peut la voir."
+  },
+  "supportLinks": {
+    "title": "Autres façons de te soutenir",
+    "desc": "Ta page sur {{sites}}. Les spectateurs trouvent ces liens dans ta fenêtre de pourboire.",
+    "placeholder": "https://ko-fi.com/tonnom",
+    "add": "Ajouter",
+    "remove": "Retirer le lien {{site}}",
+    "badLink": "Colle le lien complet vers ta page sur l'un de ces sites.",
+    "duplicate": "Ce lien est déjà dans la liste.",
+    "max": "Tu peux ajouter jusqu'à {{max}} liens.",
+    "saved": "Liens de soutien enregistrés",
+    "publicNote": "Ces liens sont enregistrés sur ton compte Hive, où tout le monde peut les voir."
   }
 }

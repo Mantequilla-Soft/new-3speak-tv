@@ -234,5 +234,17 @@
     "saveFailed": "Hindi ito ma-save sa Hive profile mo.",
     "supportersNote": "Hindi kailanman dumadaan sa Hive ang mga tip sa sarili mong address, kaya hindi sila lumalabas sa Mga Supporter.",
     "publicNote": "Naka-save ang iyong Lightning address sa iyong Hive account, kung saan makikita ito ng kahit sino."
+  },
+  "supportLinks": {
+    "title": "Iba pang paraan para suportahan ka",
+    "desc": "Ang page mo sa {{sites}}. Makikita ng mga manonood ang mga link na ito sa tip window mo.",
+    "placeholder": "https://ko-fi.com/pangalanmo",
+    "add": "Idagdag",
+    "remove": "Alisin ang link ng {{site}}",
+    "badLink": "I-paste ang buong link ng page mo sa isa sa mga site na ito.",
+    "duplicate": "Nasa listahan na ang link na iyan.",
+    "max": "Hanggang {{max}} link ang puwede mong idagdag.",
+    "saved": "Na-save ang mga support link",
+    "publicNote": "Naka-save ang mga link na ito sa iyong Hive account, kung saan makikita ito ng kahit sino."
   }
 }

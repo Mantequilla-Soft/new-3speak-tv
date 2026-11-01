@@ -3,11 +3,10 @@
 // conversion fee as sats in the creator's v4v.app account). Our API asks v4v.app
 // for the invoice (server/lightning-tip.cjs); the browser can't call it directly.
 //
-// A creator can set a Lightning address of their own instead (Settings > General),
+// A creator can set a Lightning address of their own instead (Settings > Connections),
 // kept in their Hive posting_json_metadata as `3speak.lightning.address`. The server
 // reads it there and asks that address for the invoice, so v4v.app is left out.
-import { getAccounts } from '../hive-api/hiveApi';
-import { broadcastWithAioha, KeyTypes } from '../hive-api/aioha';
+import { readThreespeakMeta, saveThreespeakMeta } from './threespeakMeta';
 
 // v4v.app takes about 50 sats + 3% to convert a tip to HIVE, so the presets start
 // where most of the tip still reaches the creator. TipModal preselects the second.
@@ -78,40 +77,17 @@ export async function checkLightningAddress(address) {
   return data;
 }
 
-function postingMeta(account) {
-  const raw = account?.posting_json_metadata;
-  try {
-    if (typeof raw === 'string') return JSON.parse(raw || '{}') || {};
-    if (raw && typeof raw === 'object') return { ...raw };
-  } catch { /* malformed metadata: start over */ }
-  return {};
-}
-
 // The address saved on the account, or '' for the v4v.app default.
 export async function readOwnLightningAddress(username) {
-  const [account] = await getAccounts([username]);
-  if (!account) throw new Error('no_account');
-  const address = String(postingMeta(account)['3speak']?.lightning?.address || '');
+  const address = String((await readThreespeakMeta(username)).lightning?.address || '');
   return LIGHTNING_ADDRESS_RE.test(address) ? address.toLowerCase() : '';
 }
 
 // Saves (or, with '', removes) the creator's own Lightning address in their
-// posting_json_metadata. Merges into the current metadata so `profile` and every
-// other app's keys stay as they are; posting authority is enough.
+// posting_json_metadata (lib/threespeakMeta.js).
 export async function saveOwnLightningAddress(username, address) {
-  const [account] = await getAccounts([username]);
-  if (!account) throw new Error('no_account');
-  const meta = postingMeta(account);
-  const ns = { ...(meta['3speak'] && typeof meta['3speak'] === 'object' ? meta['3speak'] : {}) };
-  if (address) ns.lightning = { address: address.toLowerCase(), updatedAt: new Date().toISOString() };
-  else delete ns.lightning;
-  meta['3speak'] = ns;
-  const op = ['account_update2', {
-    account: username,
-    json_metadata: '',
-    posting_json_metadata: JSON.stringify(meta),
-    extensions: [],
-  }];
-  const result = await broadcastWithAioha([op], KeyTypes.Posting);
-  if (!result || !result.success) throw new Error(result?.error || 'broadcast_failed');
+  await saveThreespeakMeta(username, (ns) => {
+    if (address) ns.lightning = { address: address.toLowerCase(), updatedAt: new Date().toISOString() };
+    else delete ns.lightning;
+  });
 }

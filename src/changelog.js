@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.22',
+    category: 'tips',
+    date: '2026-11-01',
+    summary: 'Creators can add their Ko-fi, Patreon, PayPal and similar pages in Settings > Connections, and viewers find them in the tip window.',
+  },
+  {
+    version: '1.81.21',
+    category: 'tips',
+    date: '2026-11-01',
+    summary: 'No Lightning wallet? The tip window now tells you that apps like Cash App and Strike can pay Lightning tips too.',
+  },
+  {
+    version: '1.81.20',
+    category: 'tips',
+    date: '2026-11-01',
+    summary: 'Monthly tips: pick "Every month" in the tip window and Hive sends your tip by itself every 30 days, until you stop it.',
+  },
+  {
     version: '1.81.18',
     category: 'settings',
     date: '2026-11-01',

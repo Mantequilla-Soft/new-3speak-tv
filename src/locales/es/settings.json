@@ -234,5 +234,17 @@
     "saveFailed": "No se pudo guardar en tu perfil de Hive.",
     "supportersNote": "Las propinas a tu propia dirección nunca pasan por Hive, así que no aparecen en Seguidores que apoyan.",
     "publicNote": "Tu dirección Lightning se guarda en tu cuenta de Hive, donde cualquiera puede verla."
+  },
+  "supportLinks": {
+    "title": "Otras formas de apoyarte",
+    "desc": "Tu página en {{sites}}. Los espectadores encuentran estos enlaces en tu ventana de propinas.",
+    "placeholder": "https://ko-fi.com/tunombre",
+    "add": "Añadir",
+    "remove": "Quitar el enlace de {{site}}",
+    "badLink": "Pega el enlace completo a tu página en uno de estos sitios.",
+    "duplicate": "Ese enlace ya está en la lista.",
+    "max": "Puedes añadir hasta {{max}} enlaces.",
+    "saved": "Enlaces de apoyo guardados",
+    "publicNote": "Estos enlaces se guardan en tu cuenta de Hive, donde cualquiera puede verlos."
   }
 }
