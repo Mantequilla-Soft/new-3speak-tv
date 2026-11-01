@@ -38,8 +38,9 @@ export function lastPaymentDate(start, count, recurrenceHours = MONTH_HOURS) {
   return new Date(new Date(start).getTime() + Math.max(0, count - 1) * recurrenceHours * 3600 * 1000);
 }
 
-// The monthly support `from` already sends `to`, or null.
-// → { amount: '5.000 HBD', currency, until: Date }
+// The recurring transfer `from` already sends `to`, or null. Usually our own
+// monthly one, but other wallets let people pick any `recurrence` (hours).
+// → { amount: '5.000 HBD', currency, until: Date, recurrence: 720 }
 export async function findMonthlySupport(from, to) {
   if (!from || !to) return null;
   const list = await getRecurrentTransfers(from);
@@ -51,7 +52,20 @@ export async function findMonthlySupport(from, to) {
     amount: r.amount,
     currency: String(r.amount).split(' ')[1] || 'HBD',
     until: lastPaymentDate(next, r.remaining_executions, r.recurrence),
+    recurrence: Number(r.recurrence) || MONTH_HOURS,
   };
+}
+
+export const isMonthly = (support) => !support?.recurrence || support.recurrence === MONTH_HOURS;
+
+// "7 days" / "36 hours" in the viewer's language, for a transfer that is not
+// our monthly one.
+export function formatInterval(hours, lang) {
+  const days = hours % 24 === 0;
+  const value = days ? hours / 24 : hours;
+  try {
+    return new Intl.NumberFormat(lang || undefined, { style: 'unit', unit: days ? 'day' : 'hour', unitDisplay: 'long' }).format(value);
+  } catch { return days ? `${value} d` : `${value} h`; }
 }
 
 // "February 2027" in the viewer's language.

@@ -7,7 +7,7 @@ import { isAccountValid } from '../../hive-api/api';
 import { queueSupport, recordSupport, dropPendingSupport } from '../../lib/supports';
 import { CHECKER_URL } from '../../utils/config';
 import { toastIn } from '../../utils/toast';
-import { recurrentTransferOp, findMonthlySupport, MONTH_HOURS } from '../../lib/recurringTip';
+import { recurrentTransferOp, findMonthlySupport, MONTH_HOURS, isMonthly } from '../../lib/recurringTip';
 import MonthlyField from './MonthlyField';
 
 const toast = toastIn('Tip');
@@ -197,7 +197,7 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
             {t('engagement.tip.wallet.signWith', { amount: value.toFixed(3), currency, user: tipper, recipient })}
           </p>
           {months > 0 && <p className="tip-method-note">{t('engagement.tip.monthly.note')}</p>}
-          {months > 0 && existing && <p className="tip-method-note">{t('engagement.tip.monthly.replaces', { recipient })}</p>}
+          {months > 0 && existing && <p className="tip-method-note">{t(isMonthly(existing) ? 'engagement.tip.monthly.replaces' : 'engagement.tip.monthly.replacesOther', { recipient })}</p>}
           <div className="wallet-choices">
             {keychain && (
               <button type="button" className="send-btn" onClick={payKeychain} disabled={!!busy}>

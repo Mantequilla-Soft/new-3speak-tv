@@ -15,7 +15,7 @@ import { transferWithAioha, broadcastWithAioha, KeyTypes, isLoggedIn } from '../
 import { useQueryClient } from '@tanstack/react-query';
 import { queueSupport, recordSupport } from '../../lib/supports';
 import { QRCodeSVG } from 'qrcode.react';
-import { recurrentTransferOp, stopRecurrentTransferOp, findMonthlySupport, formatMonth } from '../../lib/recurringTip';
+import { recurrentTransferOp, stopRecurrentTransferOp, findMonthlySupport, formatMonth, formatInterval, isMonthly } from '../../lib/recurringTip';
 import { LIGHTNING_PRESETS, requestLightningInvoice, isLightningInvoicePaid, hasWebln, payWithWebln, fetchLightningReceiver } from '../../lib/lightningTip';
 
 // Every toast from this module is headed "Tip"; the message becomes the
@@ -433,7 +433,9 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
           <div className="form">
             {monthly && (
               <div className="tip-monthly-current">
-                <span>{t('engagement.tip.monthly.current', { recipient, amount: monthly.amount, date: formatMonth(monthly.until, i18n.language) })}</span>
+                <span>{isMonthly(monthly)
+                  ? t('engagement.tip.monthly.current', { recipient, amount: monthly.amount, date: formatMonth(monthly.until, i18n.language) })
+                  : t('engagement.tip.monthly.currentEvery', { recipient, amount: monthly.amount, interval: formatInterval(monthly.recurrence, i18n.language), date: formatMonth(monthly.until, i18n.language) })}</span>
                 <button type="button" className="lightning-done" onClick={stopMonthly} disabled={stopping}>
                   {stopping ? <LineSpinner size="12" stroke="2" speed="1" color="currentColor" /> : t('engagement.tip.monthly.stop')}
                 </button>

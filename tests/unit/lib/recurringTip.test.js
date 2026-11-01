@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from 'vitest'
 
 vi.mock('../../../src/hive-api/hiveApi.js', () => ({ getRecurrentTransfers: vi.fn() }))
 
-const { recurrentTransferOp, stopRecurrentTransferOp, findMonthlySupport, MONTH_CHOICES, MONTH_HOURS } = await import('../../../src/lib/recurringTip.js')
+const { recurrentTransferOp, stopRecurrentTransferOp, findMonthlySupport, formatInterval, isMonthly, MONTH_CHOICES, MONTH_HOURS } = await import('../../../src/lib/recurringTip.js')
 const { getRecurrentTransfers } = await import('../../../src/hive-api/hiveApi.js')
 
 describe('recurrentTransferOp', () => {
@@ -36,10 +36,31 @@ describe('findMonthlySupport', () => {
     expect(r.amount).toBe('5.000 HBD')
     expect(r.currency).toBe('HBD')
     expect(r.until.toISOString()).toBe('2027-01-16T00:00:00.000Z')
+    expect(r.recurrence).toBe(720)
+    expect(isMonthly(r)).toBe(true)
+  })
+
+  it('keeps the real interval of one made in another wallet', async () => {
+    getRecurrentTransfers.mockResolvedValueOnce([
+      { to: 'badadib', amount: '1.000 HIVE', recurrence: 168, remaining_executions: 4, trigger_date: '2026-11-17T00:00:00', pair_id: 0 },
+    ])
+    const r = await findMonthlySupport('a', 'badadib')
+    expect(r.recurrence).toBe(168)
+    expect(isMonthly(r)).toBe(false)
+    expect(r.until.toISOString()).toBe('2026-12-08T00:00:00.000Z')
   })
 
   it('is null when there is none', async () => {
     getRecurrentTransfers.mockResolvedValueOnce([])
     expect(await findMonthlySupport('a', 'badadib')).toBeNull()
+  })
+})
+
+describe('formatInterval', () => {
+  it('says days for whole days and hours otherwise, in the viewer\'s language', () => {
+    expect(formatInterval(168, 'en')).toBe('7 days')
+    expect(formatInterval(24, 'en')).toBe('1 day')
+    expect(formatInterval(36, 'en')).toBe('36 hours')
+    expect(formatInterval(168, 'de')).toBe('7 Tage')
   })
 })
