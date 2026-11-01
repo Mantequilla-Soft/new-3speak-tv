@@ -287,7 +287,9 @@
       "postRewardsTitle": "Post rewards (one-time)",
       "postRewardsDesc": "You receive the normal Hive author payout — paid out once, ~7 days after publishing.",
       "pplTitle": "Pay-per-listen (lifetime)",
-      "pplDesc": "All audio-post rewards go to @{{account}}. Instead of a single payout, a 3Speak program pays you per listen for the lifetime of the track."
+      "pplDesc": "All audio-post rewards go to @{{account}}. Instead of a single payout, a 3Speak program pays you per listen for the lifetime of the track.",
+      "adsTitle": "Ads on this audio",
+      "adsHint": "A short spoken sponsor message can play during this audio, and you get a share. Starts at your account setting; change it here for this upload only."
     },
     "reward": {
       "distribution": "Rewards distribution",

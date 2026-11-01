@@ -287,7 +287,9 @@
       "postRewardsTitle": "Post-Belohnungen (einmalig)",
       "postRewardsDesc": "Du erhältst die normale Hive-Autorenauszahlung – einmalig ausgezahlt, ca. 7 Tage nach dem Veröffentlichen.",
       "pplTitle": "Pay-per-Listen (lebenslang)",
-      "pplDesc": "Alle Belohnungen für Audio-Posts gehen an @{{account}}. Statt einer einmaligen Auszahlung bezahlt dich ein 3Speak-Programm für jedes Anhören, solange es den Track gibt."
+      "pplDesc": "Alle Belohnungen für Audio-Posts gehen an @{{account}}. Statt einer einmaligen Auszahlung bezahlt dich ein 3Speak-Programm für jedes Anhören, solange es den Track gibt.",
+      "adsTitle": "Werbung in diesem Audio",
+      "adsHint": "Eine kurze gesprochene Sponsor-Nachricht kann während dieses Audios laufen, und du bekommst einen Anteil. Startet mit deiner Kontoeinstellung; hier änderst du es nur für diesen Upload."
     },
     "reward": {
       "distribution": "Verteilung der Belohnungen",

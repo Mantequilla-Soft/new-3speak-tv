@@ -287,7 +287,9 @@
       "postRewardsTitle": "Post rewards (isang beses)",
       "postRewardsDesc": "Matatanggap mo ang normal na Hive author payout — isang beses lang ibabayad, ~7 araw pagkatapos mag-publish.",
       "pplTitle": "Pay-per-listen (panghabambuhay)",
-      "pplDesc": "Mapupunta kay @{{account}} lahat ng rewards ng audio post. Sa halip na isang beses na payout, babayaran ka ng isang 3Speak program sa bawat pakikinig habang buhay ang track."
+      "pplDesc": "Mapupunta kay @{{account}} lahat ng rewards ng audio post. Sa halip na isang beses na payout, babayaran ka ng isang 3Speak program sa bawat pakikinig habang buhay ang track.",
+      "adsTitle": "Mga ad sa audio na ito",
+      "adsHint": "Puwedeng mag-play ang maikling binibigkas na mensahe ng sponsor habang tumutugtog ang audio na ito, at may bahagi ka. Nagsisimula sa setting ng account mo; baguhin dito para sa upload na ito lang."
     },
     "reward": {
       "distribution": "Distribusyon ng rewards",

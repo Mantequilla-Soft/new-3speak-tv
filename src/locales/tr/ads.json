@@ -3,19 +3,22 @@
     "surface": {
       "watch": "Videoların içinde",
       "shorts": "Shorts arasında",
-      "upload": "Yüklemeden önce"
+      "upload": "Yüklemeden önce",
+      "audio": "Ses oynatıcısında"
     },
     "supplies": {
       "text": "Kısa bir mesaj ve bir bağlantı",
       "imageOrVideo": "Bir görsel veya video",
       "image": "Bir görsel",
-      "video": "Bir video"
+      "video": "Bir video",
+      "audio": "Bir ses klibi ve bir bağlantı"
     },
     "youSupply": {
       "text": "Sen kısa bir mesaj ve bir bağlantı sağlarsın",
       "imageOrVideo": "Sen bir görsel veya video sağlarsın",
       "image": "Sen bir görsel sağlarsın",
-      "video": "Sen bir video sağlarsın"
+      "video": "Sen bir video sağlarsın",
+      "audio": "Bir ses klibi ve bir bağlantı sağlarsınız"
     },
     "bannerAdvice": {
       "wideStrip": "Geniş bir şerit olması gerekir.",
@@ -36,7 +39,10 @@
       "minWidth": "en az {{width}}px genişliğinde",
       "landscape": "oynatıcı gibi yatay",
       "filesAny": "PNG, JPG veya MP4",
-      "filesImage": "PNG veya JPG"
+      "filesImage": "PNG veya JPG",
+      "filesAudio": "MP3, WAV, M4A, OGG, FLAC veya WebM",
+      "upToMb": "en fazla {{mb}} MB, ses seviyesi diğer reklamlarla eşitlenir",
+      "audioButton": "çalarken düğme olarak gösterilir"
     },
     "groups": {
       "screen": {
@@ -53,6 +59,10 @@
       },
       "more": {
         "title": "Diğer formatlar"
+      },
+      "audio": {
+        "title": "Ses oynatıcısında",
+        "note": "Sesli gönderileri dinleyenler duyar. Parça bunun için durur, sonra devam eder."
       }
     },
     "unplaced": "Yerleştirilmemiş"
@@ -138,10 +148,28 @@
     "playsDay": "Günlük oynatma",
     "playsMonth": "Aylık oynatma",
     "reach": "Erişim",
-    "notRecommendedTag": "önerilmez",
-    "notRecommendedNote": "<b>Önerilmez:</b> videodan önceki bir reklam kâğıt üzerinde daha fazla oturuma ulaşır, ancak buradaki izlemelerin neredeyse yarısı ilk on beş saniye içinde biter, yani bu oynatmaların çoğu zaten ayrılmak üzere olan birine denk gelir. Daha ileride yerleştirilen bir reklam yalnızca izleyici gerçekten o noktaya ulaştığında sayılır.",
     "whoWatches": "Kimler izliyor",
-    "qualityNote": "<b>Ham trafiğin %{{pct}} kadarı</b> bu rakamlardan hariç tutuldu: {{seconds}} saniyeden kısa oturumlar, gerçek izleyici olamayacak kadar hızlı hesaplar ve içerik üreticisinin devre dışı bıraktığı videolar. Geriye kalan, sattığımız şeydir."
+    "qualityNote": "<b>Ham trafiğin %{{pct}} kadarı</b> bu rakamlardan hariç tutuldu: {{seconds}} saniyeden kısa oturumlar, gerçek izleyici olamayacak kadar hızlı hesaplar ve içerik üreticisinin devre dışı bıraktığı videolar. Geriye kalan, sattığımız şeydir.",
+    "listensPerDay": "Günlük dinleme",
+    "measuredDays": "son {{days}} günde ölçüldü",
+    "tracksHeard": "Dinlenen parçalar",
+    "tracksNote": "3Speak’teki {{catalogue}} herkese açık parçadan",
+    "listenHours": "Dinleme saati",
+    "audioTrial": "Sesli reklamlar şimdilik yalnızca {{owners}} hesabının seslerinde çalıyor, günde yaklaşık {{n}} dinleme. Sesli reklamlar açıldıkça daha fazla içerik üretici eklenecek.",
+    "audioWhere": "Parçanın neresinde çalar",
+    "listensDay": "Dinleme / gün",
+    "listensMonth": "Dinleme / ay",
+    "audioFine": "Yalnızca açılan değil gerçekten dinlenen 3Speak sesleri sayılır. Bir konum, dinleyici oraya kadar geldiyse dinleme sayar.",
+    "whoListens": "Kim dinliyor",
+    "audioNone": "Dinleme sayıları şu an yüklenemedi. Birazdan tekrar deneyin.",
+    "uploadsPerDay": "Günlük yükleme",
+    "uploadsNote": "3speak.tv’de, son 7 gün",
+    "videosShorts": "Günlük video / short",
+    "creatorsUploading": "Yükleyen içerik üreticiler",
+    "creatorsNote": "son {{days}} günde farklı hesap",
+    "uploadsFine": "3speak.tv’deki yüklemelerden sayılır. Reklam her video, short ve ses yüklemesinden önce çalar.",
+    "uploadNone": "Yükleme sayıları şu an yüklenemedi. Birazdan tekrar deneyin.",
+    "videosShortsAudio": "Günlük video / short / ses"
   },
   "rateCard": {
     "perSecDay": " /sn /gün",
@@ -154,7 +182,13 @@
     "orAboutHive": "ya da yaklaşık {{hive}} HIVE",
     "forSpotOver": "{{days}} gün boyunca {{seconds}} sn'lik bir spot için",
     "longerOffer": "{{days}} gün için <b>{{price}} HBD</b>, günlük yaklaşık %{{saving}} daha az",
-    "agreedRate": "anlaşılan fiyatın"
+    "agreedRate": "anlaşılan fiyatın",
+    "tabs": {
+      "label": "Biçimler",
+      "video": "Video",
+      "audio": "Ses",
+      "upload": "Yükleme"
+    }
   },
   "overlay": {
     "advertisement": "Reklam",
@@ -190,6 +224,7 @@
   "ticker": {
     "openProduct": "{{name}} aç",
     "openLink": "Reklamverenin bağlantısını aç",
+    "findOutMore": "Daha fazla bilgi",
     "previewCaption": "Kayan yazın {{seconds}} sn'de, izleyicilerin göreceği şekilde",
     "preview": "Önizleme",
     "screenSize": "Ekran boyutu",
@@ -212,7 +247,13 @@
     "styleHold": "kayarak gelir ve durur",
     "styleCrawl": "kayar",
     "atLeastSeconds": ", en az {{seconds}} sn",
-    "checkLink": "Bağlantıyı kontrol et"
+    "checkLink": "Bağlantıyı kontrol et",
+    "audioNote": "Kayan yazılar ses oynatıcısında da çalar: mesajınızı bir bilgisayar sesi İngilizce okur, kısa bir zil sesi ve altta yumuşak müzikle, bağlantınız da bir düğme olarak görünür. Dinleyicilerin duyacağını aynen duymak için Dinle’ye basın.",
+    "listen": "Dinle",
+    "listenBusy": "Hazırlanıyor…",
+    "listenHint": "Dinleyicilerin aldığı sesin aynısı, formdakilerden yapılır.",
+    "listenSays": "Okunan: “{{text}}”",
+    "listenFailed": "Önizleme oluşturulamadı"
   },
   "gate": {
     "ariaLabel": "Sponsor mesajı",
@@ -381,7 +422,8 @@
   "missing": {
     "ticker": "Önce kayan yazını kaydet.",
     "banner": "Önce bannerını yükle.",
-    "video": "Reklam videonu yükle ya da bizden yapmamızı iste."
+    "video": "Reklam videonu yükle ya da bizden yapmamızı iste.",
+    "audio": "Önce ses klibinizi yükleyin."
   },
   "adType": {
     "question": "Ne yayınlıyorsun?",
@@ -411,7 +453,12 @@
       "upload": "İçerik üreticilerinin yüklemeleri başlamadan önce izleyeceği yatay videoyu yükle ya da bizden yapmamızı iste.",
       "banner": "Videonun üzerinde gösterilecek görseli yükle.",
       "shorts": "Shorts'ların arasında oynayacak dikey videoyu yükle. Dikey olmalı, çünkü yatay bir spot iki yanında siyah şeritlerle küçük oynar. 1080x1920 iyi çalışır.",
-      "video": "Oynayacak videoyu yükle ya da bizden yapmamızı iste. Reklamının üzerinde gösterilen logo ve slogan da burada ayarlanır."
+      "video": "Oynayacak videoyu yükle ya da bizden yapmamızı iste. Reklamının üzerinde gösterilen logo ve slogan da burada ayarlanır.",
+      "audio": "Ses klibinizi ve düğmesinin bağlantısını yükleyin. Parça ayırdığınız yerde durur, klibiniz çalar, sonra parça devam eder."
+    },
+    "audio": {
+      "title": "Sesli reklam",
+      "blurb": "Kendi ses klibiniz, ses oynatıcısında çalınır."
     }
   },
   "book": {
@@ -451,7 +498,6 @@
     "enterLength": "Birden fazla reklam videosu yüklendi, bu yüzden rezervasyon yaptığın videonun uzunluğunu gir.",
     "mustFit": "Reklam videonun buna sığması gerekir.",
     "whenInVideo": "Videonun neresinde",
-    "beforeNotRecommended": "Videodan önce (önerilmez)",
     "slotFull": " (bu tarihler için dolu)",
     "placesLeft": " ({{total}} yerden {{left}} tanesi boş)",
     "slotHint": "Her videoda ne kadar ileride yayınlanacağı. Daha ileride daha az kişiye ulaşır ama onlara izlerken ulaşır.",
@@ -500,7 +546,10 @@
     "chartTotal_other": "{{count}} gün boyunca {{seconds}} sn = {{total}} HBD",
     "chartDays": "Rezerve edilen günler",
     "chartYAxis": "Günde saniye başı HBD",
-    "chartAria": "{{format}}: {{min}} gün için günde saniye başı {{from}} HBD, {{max}} gün için {{to}} HBD’ye düşer"
+    "chartAria": "{{format}}: {{min}} gün için günde saniye başı {{from}} HBD, {{max}} gün için {{to}} HBD’ye düşer",
+    "audioSpot": "Ses oynatıcısında da çal",
+    "audioSpotHint": "Sesli gönderileri dinleyenlere, bağlantınız düğme olarak, yüksek sesle okunur. Yalnızca videolarda kalması için işareti kaldırın.",
+    "lengthFromAudio": "Yüklediğiniz ses klibinden alındı."
   },
   "attach": {
     "needsTicker": "Bu bir kayan yazı yayın dönemi, bu yüzden onaylanmış bir kayan yazı mesajı gerekiyor.",
@@ -516,7 +565,10 @@
     "chooseOne": "Birini seç",
     "bannerOption": "Banner",
     "tickerOption": "Kayan yazı",
-    "secondsAd": "{{seconds}} sn reklam"
+    "secondsAd": "{{seconds}} sn reklam",
+    "needsAudio": "Bu bir ses kampanyası, onaylı bir ses klibi gerekiyor.",
+    "useAudio": "Onaylı ses kliplerinizden birini kullanın",
+    "audioOption": "Ses klibi · {{seconds}} sn"
   },
   "delivery": {
     "deliveredOf_one": "Tahmini {{forecast}} oynatmadan <b>{{delivered}}</b> tanesi teslim edildi",
@@ -553,7 +605,9 @@
     "clickRate": "(oynatmaların %{{rate}}'i)",
     "avgWatchedOf": "Ortalama <b>{{seconds}} sn</b> izlendi, {{length}} sn içinden",
     "avgWatched": "Ortalama <b>{{seconds}} sn</b> izlendi",
-    "toEnd": "%{{percent}} sonuna kadar izledi"
+    "toEnd": "%{{percent}} sonuna kadar izledi",
+    "runsAudio": "Ses klibiniz · {{seconds}} sn",
+    "audioFailed": "Ses ayarı değiştirilemedi"
   },
   "rebook": {
     "button": "Tekrar rezerve et",
@@ -796,5 +850,19 @@
     "note": "Hayır de, hiçbir şey değişmez. İstediğin zaman Ayarlar’dan kapatabilirsin; o zaman sakladıklarımızı sileriz.",
     "yes": "Evet, dinlediklerimi say",
     "savedYes": "Dinlediklerin artık dinleyici ödüllerine sayılıyor"
+  },
+  "audio": {
+    "yourSpot": "Sesli reklamınız",
+    "file": "Ses dosyası",
+    "fileHint": "MP3, WAV, M4A, OGG, FLAC veya WebM. En fazla {{seconds}} saniye ve {{mb}} MB.",
+    "tooBig": "Bu dosya {{mb}} MB’tan büyük. Daha küçük bir dosya dışa aktarın, örneğin MP3 olarak.",
+    "tooBigServer": "Bu dosya yüklemek için çok büyük.",
+    "linkHint": "Klibiniz çalarken “Daha fazla bilgi” düğmesinin gideceği yer. Tam bir https:// adresi.",
+    "howItPlays": "Ses seviyesini diğer reklamlarla eşitliyoruz. Aşağıdaki oynatıcı kaydedilen dosyayı çalar, yani dinleyicilerin duyacağını aynen duyarsınız. Her klip yayından önce incelenir.",
+    "upload": "Ses yükle",
+    "uploading": "Yükleniyor…",
+    "savedReview": "Ses kaydedildi. Yayından önce inceleyeceğiz",
+    "uploadFailed": "Ses yüklenemedi",
+    "seconds": "{{seconds}} sn ses klibi"
   }
 }

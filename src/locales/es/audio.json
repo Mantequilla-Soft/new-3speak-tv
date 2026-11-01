@@ -295,7 +295,9 @@
       "postRewardsTitle": "Recompensas de publicación (una vez)",
       "postRewardsDesc": "Recibes el pago normal de autor de Hive, que se paga una sola vez, unos 7 días después de publicar.",
       "pplTitle": "Pago por escucha (de por vida)",
-      "pplDesc": "Todas las recompensas de la publicación de audio van a @{{account}}. En lugar de un único pago, un programa de 3Speak te paga por cada escucha durante toda la vida de la pista."
+      "pplDesc": "Todas las recompensas de la publicación de audio van a @{{account}}. En lugar de un único pago, un programa de 3Speak te paga por cada escucha durante toda la vida de la pista.",
+      "adsTitle": "Anuncios en este audio",
+      "adsHint": "Un breve mensaje hablado de un patrocinador puede sonar durante este audio, y recibes una parte. Empieza con la configuración de tu cuenta; cámbialo aquí solo para esta subida."
     },
     "reward": {
       "distribution": "Distribución de recompensas",

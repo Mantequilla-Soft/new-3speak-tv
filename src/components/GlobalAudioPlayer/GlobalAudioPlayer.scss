@@ -746,6 +746,7 @@
 
   .audio-np-queue-inline { order: 7; }
   .audio-np-chapters { order: 8; }
+  .audio-np-ad-card { order: 9; }
   .audio-np-tags { order: 9; justify-content: center; }
   .audio-np-body { order: 10; max-height: none; }
   .audio-transcript-panel { order: 11; }
@@ -818,10 +819,107 @@
 // A spoken ticker spot: its strip sits in the card, under the progress bar,
 // for as long as the spot plays (hooks/useAudioAd.js).
 .audio-now-playing .audio-np-ad {
-  position: relative;
+  display: flex;
+  align-items: center;
   height: 30px;
+  // The ticker's own band, so the button reads as part of the strip.
+  background: rgba(0, 0, 0, 0.72);
 
   .watch-ticker {
+    position: relative;
+    flex: 1;
+    min-width: 0;
     height: 30px;
+    background: transparent;
+  }
+
+  // Visible, not loud: an outlined pill in the strip's own white.
+  .audio-np-ad-more {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 8px 0 4px;
+    padding: 3px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 999px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #fff;
+    }
+  }
+}
+
+// After a spoken spot: its link, kept above the description for the rest of the
+// track. A flat row in the player's own colours, the button the strip's pill.
+.audio-np-ad-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  font-size: 13px;
+  color: var(--text-secondary);
+
+  .audio-np-ad-card-label {
+    flex: none;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--text-primary);
+    color: var(--bg-elevated);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .audio-np-ad-card-avatar {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+  }
+
+  .audio-np-ad-card-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    strong { color: var(--text-primary); flex: none; }
+    span { overflow: hidden; text-overflow: ellipsis; }
+  }
+
+  .audio-np-ad-more {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border: 1px solid var(--accent-primary);
+    border-radius: 999px;
+    color: var(--accent-primary);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--accent-primary);
+      color: #fff;
+    }
   }
 }

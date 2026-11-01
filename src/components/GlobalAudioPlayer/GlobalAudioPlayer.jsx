@@ -1431,6 +1431,18 @@ function GlobalAudioPlayer() {
               tickerStyle={audioAd.spot.style}
               compact
             />
+            {/* The link the spot's last sentence points at. Counted once per spot, server side. */}
+            {audioAd.spot.clickUrl && (
+              <a
+                className="audio-np-ad-more"
+                href={audioAd.spot.clickUrl}
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+                title={audioAd.spot.productName ? t('ads.ticker.openProduct', { name: audioAd.spot.productName }) : t('ads.ticker.openLink')}
+              >
+                {t('ads.ticker.findOutMore')} <MdOpenInNew size={13} aria-hidden="true" />
+              </a>
+            )}
           </div>
         )}
 
@@ -1706,6 +1718,28 @@ function GlobalAudioPlayer() {
 
             {!showSubtitles && (
               <>
+                {/* The spot that played on this track, still one click away once it is over. */}
+                {audioAd.heardSpot?.clickUrl && (
+                  <div className="audio-np-ad-card">
+                    <span className="audio-np-ad-card-label">{audioAd.heardSpot.label}</span>
+                    {audioAd.heardSpot.account && (
+                      <img className="audio-np-ad-card-avatar" src={`/img/u/${audioAd.heardSpot.account}/avatar/small`} alt="" loading="lazy" />
+                    )}
+                    <span className="audio-np-ad-card-text">
+                      {audioAd.heardSpot.productName && <strong>{audioAd.heardSpot.productName}</strong>}
+                      <span>{audioAd.heardSpot.message}</span>
+                    </span>
+                    <a
+                      className="audio-np-ad-more"
+                      href={audioAd.heardSpot.clickUrl}
+                      target="_blank"
+                      rel="noopener noreferrer sponsored"
+                      title={audioAd.heardSpot.productName ? t('ads.ticker.openProduct', { name: audioAd.heardSpot.productName }) : t('ads.ticker.openLink')}
+                    >
+                      {t('ads.ticker.findOutMore')} <MdOpenInNew size={13} aria-hidden="true" />
+                    </a>
+                  </div>
+                )}
                 {(npTags.length > 0 || npMantecurated) && (
                   <div className="audio-np-tags">
                     {npMantecurated && <span className="audio-np-curated-badge"><img src={mantequillaLogo} alt="" /> {t('audio.player.curated')}</span>}

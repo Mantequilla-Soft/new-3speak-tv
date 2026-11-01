@@ -295,7 +295,9 @@
       "postRewardsTitle": "Récompenses de publication (une fois)",
       "postRewardsDesc": "Vous recevez les gains d'auteur Hive habituels — versés une seule fois, environ 7 jours après la publication.",
       "pplTitle": "Paiement à l'écoute (à vie)",
-      "pplDesc": "Toutes les récompenses des publications audio vont à @{{account}}. Au lieu d'un paiement unique, un programme 3Speak vous paie à chaque écoute, pendant toute la vie du titre."
+      "pplDesc": "Toutes les récompenses des publications audio vont à @{{account}}. Au lieu d'un paiement unique, un programme 3Speak vous paie à chaque écoute, pendant toute la vie du titre.",
+      "adsTitle": "Publicités dans cet audio",
+      "adsHint": "Un court message parlé d'un sponsor peut être diffusé pendant cet audio, et vous recevez une part. Reprend le réglage de votre compte ; modifiez-le ici pour cet envoi uniquement."
     },
     "reward": {
       "distribution": "Répartition des récompenses",

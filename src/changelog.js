@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.35',
+    category: 'ads',
+    date: '2026-11-01',
+    summary: "The Advertise page now sorts formats into Video, Audio and Upload tabs, each with the audience it reaches.",
+  },
+  {
+    version: '1.81.34',
+    category: 'ads',
+    date: '2026-11-01',
+    summary: "Advertisers can listen to their ticker before booking, exactly as it will sound in the audio player.",
+  },
+  {
+    version: '1.81.33',
+    category: 'audio',
+    date: '2026-11-01',
+    summary: "Creators can now choose whether ads play on their audio, in Settings or for each track when uploading.",
+  },
+  {
     version: '1.81.32',
     category: 'profile',
     date: '2026-11-01',

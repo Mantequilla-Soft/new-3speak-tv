@@ -3,19 +3,22 @@
     "surface": {
       "watch": "Dentro dos vídeos",
       "shorts": "Entre Shorts",
-      "upload": "Antes de um envio"
+      "upload": "Antes de um envio",
+      "audio": "No leitor de áudio"
     },
     "supplies": {
       "text": "Uma mensagem curta e um link",
       "imageOrVideo": "Uma imagem ou um vídeo",
       "image": "Uma imagem",
-      "video": "Um vídeo"
+      "video": "Um vídeo",
+      "audio": "Um clip de áudio e um link"
     },
     "youSupply": {
       "text": "Você fornece uma mensagem curta e um link",
       "imageOrVideo": "Você fornece uma imagem ou um vídeo",
       "image": "Você fornece uma imagem",
-      "video": "Você fornece um vídeo"
+      "video": "Você fornece um vídeo",
+      "audio": "Forneces um clip de áudio e um link"
     },
     "bannerAdvice": {
       "wideStrip": "Precisa ser uma faixa larga.",
@@ -37,7 +40,10 @@
       "minWidth": "pelo menos {{width}}px de largura",
       "landscape": "horizontal, como o player",
       "filesAny": "PNG, JPG ou MP4",
-      "filesImage": "PNG ou JPG"
+      "filesImage": "PNG ou JPG",
+      "filesAudio": "MP3, WAV, M4A, OGG, FLAC ou WebM",
+      "upToMb": "até {{mb}} MB, com volume igual ao dos outros anúncios",
+      "audioButton": "mostrado como botão enquanto toca"
     },
     "groups": {
       "screen": {
@@ -54,6 +60,10 @@
       },
       "more": {
         "title": "Mais formatos"
+      },
+      "audio": {
+        "title": "No leitor de áudio",
+        "note": "Ouvido por quem ouve publicações de áudio. A faixa pausa e continua a seguir."
       }
     },
     "unplaced": "Sem posição"
@@ -140,10 +150,28 @@
     "playsDay": "Reproduções por dia",
     "playsMonth": "Reproduções por mês",
     "reach": "Alcance",
-    "notRecommendedTag": "não recomendado",
-    "notRecommendedNote": "<b>Não recomendado:</b> um anúncio antes do vídeo alcança mais sessões no papel, mas quase metade de todas as visualizações aqui para nos primeiros quinze segundos, então a maioria dessas reproduções cai em alguém que já estava saindo. Um anúncio posicionado mais adiante só é contado quando o espectador realmente chegou lá.",
     "whoWatches": "Quem assiste",
-    "qualityNote": "<b>{{pct}}% do tráfego bruto é excluído</b> destes números: sessões com menos de {{seconds}} segundos, contas rápidas demais para serem espectadores reais e vídeos cujo criador optou por não ter anúncios. O que sobra é o que vendemos."
+    "qualityNote": "<b>{{pct}}% do tráfego bruto é excluído</b> destes números: sessões com menos de {{seconds}} segundos, contas rápidas demais para serem espectadores reais e vídeos cujo criador optou por não ter anúncios. O que sobra é o que vendemos.",
+    "listensPerDay": "Audições por dia",
+    "measuredDays": "medido nos últimos {{days}} dias",
+    "tracksHeard": "Faixas ouvidas",
+    "tracksNote": "de {{catalogue}} faixas públicas na 3Speak",
+    "listenHours": "Horas de audição",
+    "audioTrial": "Por agora os anúncios de áudio só tocam no áudio de {{owners}}, cerca de {{n}} audições por dia. Mais criadores juntam-se à medida que os anúncios de áudio abrem.",
+    "audioWhere": "Onde toca na faixa",
+    "listensDay": "Audições / dia",
+    "listensMonth": "Audições / mês",
+    "audioFine": "Contado a partir de áudio da 3Speak realmente ouvido, não só aberto. Uma posição conta uma audição quando o ouvinte chegou até lá.",
+    "whoListens": "Quem ouve",
+    "audioNone": "Não foi possível carregar os números de audição agora. Tenta de novo daqui a pouco.",
+    "uploadsPerDay": "Carregamentos por dia",
+    "uploadsNote": "na 3speak.tv, últimos 7 dias",
+    "videosShorts": "Vídeos / shorts por dia",
+    "creatorsUploading": "Criadores a carregar",
+    "creatorsNote": "contas diferentes nos últimos {{days}} dias",
+    "uploadsFine": "Contado a partir dos carregamentos na 3speak.tv. O anúncio passa antes de cada carregamento de vídeo, short e áudio.",
+    "uploadNone": "Não foi possível carregar os números de carregamentos agora. Tenta de novo daqui a pouco.",
+    "videosShortsAudio": "Vídeos / shorts / áudio por dia"
   },
   "rateCard": {
     "perSecDay": " /s /dia",
@@ -156,7 +184,13 @@
     "orAboutHive": "ou cerca de {{hive}} HIVE",
     "forSpotOver": "por um spot de {{seconds}}s durante {{days}} dias",
     "longerOffer": "<b>{{price}} HBD</b> por {{days}} dias, cerca de {{saving}}% a menos por dia",
-    "agreedRate": "sua taxa combinada"
+    "agreedRate": "sua taxa combinada",
+    "tabs": {
+      "label": "Formatos",
+      "video": "Vídeo",
+      "audio": "Áudio",
+      "upload": "Carregamento"
+    }
   },
   "overlay": {
     "advertisement": "Publicidade",
@@ -192,6 +226,7 @@
   "ticker": {
     "openProduct": "Abrir {{name}}",
     "openLink": "Abrir o link do anunciante",
+    "findOutMore": "Saiba mais",
     "previewCaption": "Seu ticker com {{seconds}}s, como os espectadores vão ver",
     "preview": "Prévia",
     "screenSize": "Tamanho da tela",
@@ -215,7 +250,13 @@
     "styleHold": "entra deslizando e para",
     "styleCrawl": "rola",
     "atLeastSeconds": ", pelo menos {{seconds}}s",
-    "checkLink": "Verificar o link"
+    "checkLink": "Verificar o link",
+    "audioNote": "Os tickers também tocam no leitor de áudio: uma voz de computador lê a tua mensagem em inglês, com um toque curto e música suave por baixo, e o teu link aparece como um botão. Carrega em Ouvir para ouvir exatamente o que os ouvintes vão ouvir.",
+    "listen": "Ouvir",
+    "listenBusy": "A preparar…",
+    "listenHint": "O mesmo som que os ouvintes recebem, feito a partir do formulário.",
+    "listenSays": "Dito: “{{text}}”",
+    "listenFailed": "Não foi possível criar a pré-visualização"
   },
   "gate": {
     "ariaLabel": "Mensagem do patrocinador",
@@ -389,7 +430,8 @@
   "missing": {
     "ticker": "Salve seu ticker primeiro.",
     "banner": "Envie seu banner primeiro.",
-    "video": "Envie seu vídeo de anúncio ou peça para nós o produzirmos."
+    "video": "Envie seu vídeo de anúncio ou peça para nós o produzirmos.",
+    "audio": "Carrega primeiro o teu clip de áudio."
   },
   "adType": {
     "question": "O que você vai veicular?",
@@ -419,7 +461,12 @@
       "upload": "Envie o vídeo horizontal que os criadores vão assistir antes do envio começar, ou peça para nós o produzirmos.",
       "banner": "Envie a imagem que será exibida sobre o vídeo.",
       "shorts": "Envie o vídeo vertical que vai tocar entre os Shorts. Ele precisa ser em retrato, porque um spot horizontal toca pequeno com barras pretas dos lados. 1080x1920 funciona bem.",
-      "video": "Envie o vídeo que vai tocar ou peça para nós o produzirmos. Aqui também se definem o logo e o slogan exibidos sobre seu anúncio."
+      "video": "Envie o vídeo que vai tocar ou peça para nós o produzirmos. Aqui também se definem o logo e o slogan exibidos sobre seu anúncio.",
+      "audio": "Carrega o teu clip de áudio e o link do botão. A faixa pausa onde reservaste, toca o teu clip e a faixa continua."
+    },
+    "audio": {
+      "title": "Um anúncio em áudio",
+      "blurb": "O teu próprio clip de áudio, no leitor de áudio."
     }
   },
   "book": {
@@ -460,7 +507,6 @@
     "enterLength": "Mais de um vídeo de anúncio enviado, então digite a duração do que você está reservando.",
     "mustFit": "Seu vídeo de anúncio precisa caber nisto.",
     "whenInVideo": "Em que momento do vídeo",
-    "beforeNotRecommended": "Antes do vídeo (não recomendado)",
     "slotFull": " (lotado nestas datas)",
     "placesLeft": " ({{left}} de {{total}} vagas restantes)",
     "slotHint": "Em que ponto de cada vídeo ele roda. Mais tarde alcança menos pessoas, mas pessoas que estão assistindo.",
@@ -518,7 +564,10 @@
     "chartTotal_many": "{{seconds}} s por {{count}} dias = {{total}} HBD",
     "chartDays": "Dias reservados",
     "chartYAxis": "HBD por segundo por dia",
-    "chartAria": "{{format}}: {{from}} HBD por segundo por dia para {{min}} dias, caindo para {{to}} HBD para {{max}} dias"
+    "chartAria": "{{format}}: {{from}} HBD por segundo por dia para {{min}} dias, caindo para {{to}} HBD para {{max}} dias",
+    "audioSpot": "Tocar também no leitor de áudio",
+    "audioSpotHint": "Lido em voz alta a quem ouve publicações de áudio, com o teu link como botão. Desmarca para ficar só nos vídeos.",
+    "lengthFromAudio": "Tirado do clip de áudio que carregaste."
   },
   "attach": {
     "needsTicker": "Esta é uma veiculação de ticker, então precisa de uma mensagem de ticker aprovada.",
@@ -534,7 +583,10 @@
     "chooseOne": "Escolha um",
     "bannerOption": "Banner",
     "tickerOption": "Ticker",
-    "secondsAd": "Anúncio de {{seconds}}s"
+    "secondsAd": "Anúncio de {{seconds}}s",
+    "needsAudio": "Esta é uma campanha de áudio, por isso precisa de um clip de áudio aprovado.",
+    "useAudio": "Usa um dos teus clips de áudio aprovados",
+    "audioOption": "Clip de áudio · {{seconds}} s"
   },
   "delivery": {
     "deliveredOf_one": "<b>{{delivered}}</b> reprodução entregue de {{forecast}} previstas",
@@ -575,7 +627,9 @@
     "clickRate": "({{rate}}% das reproduções)",
     "avgWatchedOf": "<b>{{seconds}} s</b> assistidos em média, de {{length}} s",
     "avgWatched": "<b>{{seconds}} s</b> assistidos em média",
-    "toEnd": "{{percent}}% assistiram até o fim"
+    "toEnd": "{{percent}}% assistiram até o fim",
+    "runsAudio": "O teu clip de áudio · {{seconds}} s",
+    "audioFailed": "Não foi possível mudar a definição de áudio"
   },
   "rebook": {
     "button": "Reservar de novo",
@@ -823,5 +877,19 @@
     "note": "Diga não e nada muda. Você pode desativar quando quiser nas Configurações, e isso apaga o que guardamos.",
     "yes": "Sim, contem o que eu ouço",
     "savedYes": "O que você ouve agora conta para as recompensas por ouvir"
+  },
+  "audio": {
+    "yourSpot": "O teu anúncio em áudio",
+    "file": "Ficheiro de áudio",
+    "fileHint": "MP3, WAV, M4A, OGG, FLAC ou WebM. Até {{seconds}} segundos e {{mb}} MB.",
+    "tooBig": "Esse ficheiro tem mais de {{mb}} MB. Exporta um mais pequeno, por exemplo em MP3.",
+    "tooBigServer": "Esse ficheiro é demasiado grande para carregar.",
+    "linkHint": "Para onde vai o botão “Saber mais” enquanto o teu clip toca. Um endereço https:// completo.",
+    "howItPlays": "Igualamos o volume ao dos outros anúncios. O leitor abaixo toca o ficheiro guardado, por isso ouves exatamente o que os ouvintes vão ouvir. Cada clip é revisto antes de passar.",
+    "upload": "Carregar áudio",
+    "uploading": "A carregar…",
+    "savedReview": "Áudio guardado. Vamos revê-lo antes de passar",
+    "uploadFailed": "Não foi possível carregar o áudio",
+    "seconds": "Clip de áudio de {{seconds}} s"
   }
 }

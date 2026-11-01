@@ -3,19 +3,22 @@
     "surface": {
       "watch": "Bên trong video",
       "shorts": "Giữa các Shorts",
-      "upload": "Trước khi tải lên"
+      "upload": "Trước khi tải lên",
+      "audio": "Trong trình phát âm thanh"
     },
     "supplies": {
       "text": "Một thông điệp ngắn và một liên kết",
       "imageOrVideo": "Một hình ảnh hoặc một video",
       "image": "Một hình ảnh",
-      "video": "Một video"
+      "video": "Một video",
+      "audio": "Một clip âm thanh và một liên kết"
     },
     "youSupply": {
       "text": "Bạn cung cấp một thông điệp ngắn và một liên kết",
       "imageOrVideo": "Bạn cung cấp một hình ảnh hoặc một video",
       "image": "Bạn cung cấp một hình ảnh",
-      "video": "Bạn cung cấp một video"
+      "video": "Bạn cung cấp một video",
+      "audio": "Bạn cung cấp một clip âm thanh và một liên kết"
     },
     "bannerAdvice": {
       "wideStrip": "Cần là một dải ngang rộng.",
@@ -35,7 +38,10 @@
       "minWidth": "rộng ít nhất {{width}}px",
       "landscape": "ngang, giống trình phát",
       "filesAny": "PNG, JPG hoặc MP4",
-      "filesImage": "PNG hoặc JPG"
+      "filesImage": "PNG hoặc JPG",
+      "filesAudio": "MP3, WAV, M4A, OGG, FLAC hoặc WebM",
+      "upToMb": "tối đa {{mb}} MB, âm lượng chỉnh đều với các quảng cáo khác",
+      "audioButton": "hiện thành nút khi đang phát"
     },
     "groups": {
       "screen": {
@@ -52,6 +58,10 @@
       },
       "more": {
         "title": "Định dạng khác"
+      },
+      "audio": {
+        "title": "Trong trình phát âm thanh",
+        "note": "Người nghe các bài đăng âm thanh sẽ nghe thấy. Bản nhạc tạm dừng rồi phát tiếp."
       }
     },
     "unplaced": "Chưa đặt vị trí"
@@ -136,10 +146,28 @@
     "playsDay": "Lượt phát mỗi ngày",
     "playsMonth": "Lượt phát mỗi tháng",
     "reach": "Phạm vi tiếp cận",
-    "notRecommendedTag": "không khuyến nghị",
-    "notRecommendedNote": "<b>Không khuyến nghị:</b> quảng cáo trước video trên lý thuyết tiếp cận nhiều phiên hơn, nhưng gần một nửa số lượt xem ở đây dừng lại trong vòng mười lăm giây, nên phần lớn các lượt phát đó rơi vào người vốn đã định rời đi. Quảng cáo đặt sâu hơn chỉ được tính khi người xem thực sự xem đến đó.",
     "whoWatches": "Ai đang xem",
-    "qualityNote": "<b>{{pct}}% lưu lượng thô bị loại</b> khỏi các số liệu này: các phiên dưới {{seconds}} giây, tài khoản quá nhanh để là người xem thật, và video mà nhà sáng tạo đã từ chối quảng cáo. Phần còn lại là những gì chúng tôi bán."
+    "qualityNote": "<b>{{pct}}% lưu lượng thô bị loại</b> khỏi các số liệu này: các phiên dưới {{seconds}} giây, tài khoản quá nhanh để là người xem thật, và video mà nhà sáng tạo đã từ chối quảng cáo. Phần còn lại là những gì chúng tôi bán.",
+    "listensPerDay": "Lượt nghe mỗi ngày",
+    "measuredDays": "đo trong {{days}} ngày qua",
+    "tracksHeard": "Bài đã được nghe",
+    "tracksNote": "trong {{catalogue}} bài công khai trên 3Speak",
+    "listenHours": "Giờ nghe",
+    "audioTrial": "Hiện quảng cáo âm thanh chỉ phát trên âm thanh của {{owners}}, khoảng {{n}} lượt nghe mỗi ngày. Sẽ có thêm nhà sáng tạo khi quảng cáo âm thanh mở rộng.",
+    "audioWhere": "Phát ở đâu trong bài",
+    "listensDay": "Lượt nghe / ngày",
+    "listensMonth": "Lượt nghe / tháng",
+    "audioFine": "Chỉ tính âm thanh 3Speak thực sự được nghe, không chỉ được mở. Một vị trí được tính khi người nghe nghe tới đó.",
+    "whoListens": "Ai đang nghe",
+    "audioNone": "Hiện không tải được số lượt nghe. Hãy thử lại sau giây lát.",
+    "uploadsPerDay": "Lượt tải lên mỗi ngày",
+    "uploadsNote": "trên 3speak.tv, 7 ngày qua",
+    "videosShorts": "Video / shorts mỗi ngày",
+    "creatorsUploading": "Nhà sáng tạo tải lên",
+    "creatorsNote": "tài khoản khác nhau trong {{days}} ngày qua",
+    "uploadsFine": "Tính từ các lượt tải lên trên 3speak.tv. Quảng cáo phát trước mỗi lượt tải video, short và âm thanh.",
+    "uploadNone": "Hiện không tải được số lượt tải lên. Hãy thử lại sau giây lát.",
+    "videosShortsAudio": "Video / shorts / âm thanh mỗi ngày"
   },
   "rateCard": {
     "perSecDay": " /giây /ngày",
@@ -152,7 +180,13 @@
     "orAboutHive": "hoặc khoảng {{hive}} HIVE",
     "forSpotOver": "cho đoạn quảng cáo {{seconds}} giây trong {{days}} ngày",
     "longerOffer": "<b>{{price}} HBD</b> cho {{days}} ngày, rẻ hơn khoảng {{saving}}% mỗi ngày",
-    "agreedRate": "mức giá đã thỏa thuận của bạn"
+    "agreedRate": "mức giá đã thỏa thuận của bạn",
+    "tabs": {
+      "label": "Định dạng",
+      "video": "Video",
+      "audio": "Âm thanh",
+      "upload": "Tải lên"
+    }
   },
   "overlay": {
     "advertisement": "Quảng cáo",
@@ -188,6 +222,7 @@
   "ticker": {
     "openProduct": "Mở {{name}}",
     "openLink": "Mở liên kết của nhà quảng cáo",
+    "findOutMore": "Tìm hiểu thêm",
     "previewCaption": "Ticker của bạn ở {{seconds}} giây, như người xem sẽ thấy",
     "preview": "Xem trước",
     "screenSize": "Kích thước màn hình",
@@ -209,7 +244,13 @@
     "styleHold": "trượt vào và dừng lại",
     "styleCrawl": "chạy ngang",
     "atLeastSeconds": ", ít nhất {{seconds}} giây",
-    "checkLink": "Kiểm tra liên kết"
+    "checkLink": "Kiểm tra liên kết",
+    "audioNote": "Ticker cũng phát trong trình phát âm thanh: giọng máy tính đọc tin nhắn của bạn bằng tiếng Anh, kèm tiếng chuông ngắn và nhạc nền nhẹ, và liên kết của bạn hiện thành một nút. Nhấn Nghe thử để nghe đúng những gì người nghe sẽ nghe.",
+    "listen": "Nghe thử",
+    "listenBusy": "Đang chuẩn bị…",
+    "listenHint": "Cùng âm thanh người nghe nhận được, tạo từ nội dung trong biểu mẫu.",
+    "listenSays": "Được đọc: “{{text}}”",
+    "listenFailed": "Không tạo được bản nghe thử"
   },
   "gate": {
     "ariaLabel": "Thông điệp nhà tài trợ",
@@ -373,7 +414,8 @@
   "missing": {
     "ticker": "Hãy lưu ticker của bạn trước.",
     "banner": "Hãy tải banner của bạn lên trước.",
-    "video": "Hãy tải video quảng cáo của bạn lên, hoặc nhờ chúng tôi làm."
+    "video": "Hãy tải video quảng cáo của bạn lên, hoặc nhờ chúng tôi làm.",
+    "audio": "Hãy tải clip âm thanh lên trước."
   },
   "adType": {
     "question": "Bạn muốn chạy gì?",
@@ -403,7 +445,12 @@
       "upload": "Tải lên video ngang mà nhà sáng tạo sẽ xem trước khi lượt tải lên của họ bắt đầu, hoặc nhờ chúng tôi làm.",
       "banner": "Tải lên hình ảnh sẽ được hiển thị phủ lên video.",
       "shorts": "Tải lên video dọc sẽ phát giữa các Shorts. Video phải ở chiều dọc, vì đoạn quảng cáo ngang sẽ phát nhỏ với viền đen hai bên. 1080x1920 là phù hợp.",
-      "video": "Tải lên video sẽ được phát, hoặc nhờ chúng tôi làm. Đây cũng là nơi đặt logo và slogan hiển thị trên quảng cáo của bạn."
+      "video": "Tải lên video sẽ được phát, hoặc nhờ chúng tôi làm. Đây cũng là nơi đặt logo và slogan hiển thị trên quảng cáo của bạn.",
+      "audio": "Tải lên clip âm thanh và liên kết cho nút của nó. Bản nhạc dừng ở chỗ bạn đặt, clip của bạn phát, rồi bản nhạc tiếp tục."
+    },
+    "audio": {
+      "title": "Quảng cáo âm thanh",
+      "blurb": "Clip âm thanh của riêng bạn, phát trong trình phát âm thanh."
     }
   },
   "book": {
@@ -442,7 +489,6 @@
     "enterLength": "Đã tải lên nhiều hơn một video quảng cáo, nên hãy nhập độ dài của video bạn đang đặt.",
     "mustFit": "Video quảng cáo của bạn phải nằm gọn trong thời lượng này.",
     "whenInVideo": "Thời điểm trong video",
-    "beforeNotRecommended": "Trước video (không khuyến nghị)",
     "slotFull": " (đã kín cho các ngày này)",
     "placesLeft": " (còn {{left}} / {{total}} chỗ)",
     "slotHint": "Quảng cáo chạy ở mốc bao xa trong mỗi video. Càng về sau càng tiếp cận ít người hơn, nhưng là những người đang thực sự xem.",
@@ -482,7 +528,10 @@
     "chartTotal_other": "{{seconds}} giây trong {{count}} ngày = {{total}} HBD",
     "chartDays": "Số ngày đã đặt",
     "chartYAxis": "HBD mỗi giây mỗi ngày",
-    "chartAria": "{{format}}: {{from}} HBD mỗi giây mỗi ngày cho {{min}} ngày, giảm xuống {{to}} HBD cho {{max}} ngày"
+    "chartAria": "{{format}}: {{from}} HBD mỗi giây mỗi ngày cho {{min}} ngày, giảm xuống {{to}} HBD cho {{max}} ngày",
+    "audioSpot": "Phát cả trong trình phát âm thanh",
+    "audioSpotHint": "Đọc to cho người nghe bài đăng âm thanh, với liên kết của bạn là một nút. Bỏ chọn để chỉ hiện trên video.",
+    "lengthFromAudio": "Lấy từ clip âm thanh bạn đã tải lên."
   },
   "attach": {
     "needsTicker": "Đây là đợt quảng cáo ticker, nên cần một thông điệp ticker đã được duyệt.",
@@ -498,7 +547,10 @@
     "chooseOne": "Chọn một",
     "bannerOption": "Banner",
     "tickerOption": "Ticker",
-    "secondsAd": "Quảng cáo {{seconds}} giây"
+    "secondsAd": "Quảng cáo {{seconds}} giây",
+    "needsAudio": "Đây là đợt chạy âm thanh, cần một clip âm thanh đã duyệt.",
+    "useAudio": "Dùng một trong các clip âm thanh đã duyệt",
+    "audioOption": "Clip âm thanh · {{seconds}} giây"
   },
   "delivery": {
     "deliveredOf_other": "Đã phát <b>{{delivered}}</b> / {{forecast}} lượt dự báo",
@@ -531,7 +583,9 @@
     "clickRate": "({{rate}}% số lượt phát)",
     "avgWatchedOf": "Trung bình xem <b>{{seconds}} giây</b> trên {{length}} giây",
     "avgWatched": "Trung bình xem <b>{{seconds}} giây</b>",
-    "toEnd": "{{percent}}% xem đến hết"
+    "toEnd": "{{percent}}% xem đến hết",
+    "runsAudio": "Clip âm thanh của bạn · {{seconds}} giây",
+    "audioFailed": "Không đổi được cài đặt âm thanh"
   },
   "rebook": {
     "button": "Đặt lại",
@@ -769,5 +823,19 @@
     "note": "Chọn không thì không có gì thay đổi. Bạn có thể tắt bất cứ lúc nào trong Cài đặt, và khi đó dữ liệu đã lưu sẽ bị xóa.",
     "yes": "Có, hãy tính thời gian tôi nghe",
     "savedYes": "Thời gian bạn nghe giờ được tính vào phần thưởng cho người nghe"
+  },
+  "audio": {
+    "yourSpot": "Quảng cáo âm thanh của bạn",
+    "file": "Tệp âm thanh",
+    "fileHint": "MP3, WAV, M4A, OGG, FLAC hoặc WebM. Tối đa {{seconds}} giây và {{mb}} MB.",
+    "tooBig": "Tệp lớn hơn {{mb}} MB. Hãy xuất tệp nhỏ hơn, ví dụ dạng MP3.",
+    "tooBigServer": "Tệp quá lớn để tải lên.",
+    "linkHint": "Nơi nút “Tìm hiểu thêm” dẫn đến khi clip của bạn phát. Một địa chỉ https:// đầy đủ.",
+    "howItPlays": "Chúng tôi chỉnh âm lượng cho đều với các quảng cáo khác. Trình phát bên dưới phát tệp đã lưu, nên bạn nghe đúng những gì người nghe sẽ nghe. Mỗi clip được duyệt trước khi chạy.",
+    "upload": "Tải âm thanh lên",
+    "uploading": "Đang tải lên…",
+    "savedReview": "Đã lưu âm thanh. Chúng tôi sẽ duyệt trước khi chạy",
+    "uploadFailed": "Không tải lên được âm thanh",
+    "seconds": "Clip âm thanh {{seconds}} giây"
   }
 }

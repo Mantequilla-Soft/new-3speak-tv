@@ -3,19 +3,22 @@
     "surface": {
       "watch": "Ndani ya video",
       "shorts": "Kati ya Shorts",
-      "upload": "Kabla ya upakiaji"
+      "upload": "Kabla ya upakiaji",
+      "audio": "Kwenye kicheza sauti"
     },
     "supplies": {
       "text": "Ujumbe mfupi na kiungo",
       "imageOrVideo": "Picha au video",
       "image": "Picha",
-      "video": "Video"
+      "video": "Video",
+      "audio": "Klipu ya sauti na kiungo"
     },
     "youSupply": {
       "text": "Unatoa ujumbe mfupi na kiungo",
       "imageOrVideo": "Unatoa picha au video",
       "image": "Unatoa picha",
-      "video": "Unatoa video"
+      "video": "Unatoa video",
+      "audio": "Unatoa klipu ya sauti na kiungo"
     },
     "bannerAdvice": {
       "wideStrip": "Inahitaji kuwa ukanda mpana.",
@@ -36,7 +39,10 @@
       "minWidth": "angalau upana wa {{width}}px",
       "landscape": "mlalo, kama kicheza",
       "filesAny": "PNG, JPG au MP4",
-      "filesImage": "PNG au JPG"
+      "filesImage": "PNG au JPG",
+      "filesAudio": "MP3, WAV, M4A, OGG, FLAC au WebM",
+      "upToMb": "hadi MB {{mb}}, sauti husawazishwa na matangazo mengine",
+      "audioButton": "huonyeshwa kama kitufe inapocheza"
     },
     "groups": {
       "screen": {
@@ -53,6 +59,10 @@
       },
       "more": {
         "title": "Miundo zaidi"
+      },
+      "audio": {
+        "title": "Kwenye kicheza sauti",
+        "note": "Husikika na watu wanaosikiliza machapisho ya sauti. Wimbo husimama kwa muda kisha huendelea."
       }
     },
     "unplaced": "Haijawekwa"
@@ -138,10 +148,28 @@
     "playsDay": "Uchezaji kwa siku",
     "playsMonth": "Uchezaji kwa mwezi",
     "reach": "Ufikiaji",
-    "notRecommendedTag": "haipendekezwi",
-    "notRecommendedNote": "<b>Haipendekezwi:</b> tangazo kabla ya video linafikia vipindi zaidi kwenye karatasi, lakini karibu nusu ya utazamaji wote hapa husimama ndani ya sekunde kumi na tano, kwa hivyo uchezaji mwingi huo unamfikia mtu ambaye tayari alikuwa anaondoka. Tangazo lililowekwa mbele zaidi linahesabiwa tu mtazamaji akifika hapo kweli.",
     "whoWatches": "Wanaotazama",
-    "qualityNote": "<b>{{pct}}% ya trafiki ghafi imeondolewa</b> kwenye takwimu hizi: vipindi vya chini ya sekunde {{seconds}}, akaunti zenye kasi mno kuwa watazamaji halisi, na video ambazo watayarishaji wake wamejiondoa. Kilichobaki ndicho tunachouza."
+    "qualityNote": "<b>{{pct}}% ya trafiki ghafi imeondolewa</b> kwenye takwimu hizi: vipindi vya chini ya sekunde {{seconds}}, akaunti zenye kasi mno kuwa watazamaji halisi, na video ambazo watayarishaji wake wamejiondoa. Kilichobaki ndicho tunachouza.",
+    "listensPerDay": "Usikilizaji kwa siku",
+    "measuredDays": "imepimwa katika siku {{days}} zilizopita",
+    "tracksHeard": "Nyimbo zilizosikilizwa",
+    "tracksNote": "kati ya nyimbo {{catalogue}} za umma kwenye 3Speak",
+    "listenHours": "Saa za kusikiliza",
+    "audioTrial": "Kwa sasa matangazo ya sauti yanacheza kwenye sauti za {{owners}} pekee, takriban usikilizaji {{n}} kwa siku. Watayarishi zaidi wataongezwa matangazo ya sauti yanapofunguliwa.",
+    "audioWhere": "Inacheza wapi kwenye wimbo",
+    "listensDay": "Usikilizaji / siku",
+    "listensMonth": "Usikilizaji / mwezi",
+    "audioFine": "Huhesabiwa kutoka sauti za 3Speak zilizosikilizwa kweli, si kufunguliwa tu. Nafasi huhesabu usikilizaji msikilizaji akifika hapo.",
+    "whoListens": "Nani anasikiliza",
+    "audioNone": "Takwimu za usikilizaji hazikuweza kupakiwa sasa. Jaribu tena baada ya muda mfupi.",
+    "uploadsPerDay": "Upakiaji kwa siku",
+    "uploadsNote": "kwenye 3speak.tv, siku 7 zilizopita",
+    "videosShorts": "Video / shorts kwa siku",
+    "creatorsUploading": "Watayarishi wanaopakia",
+    "creatorsNote": "akaunti tofauti katika siku {{days}} zilizopita",
+    "uploadsFine": "Huhesabiwa kutoka upakiaji kwenye 3speak.tv. Tangazo hucheza kabla ya kila upakiaji wa video, short na sauti.",
+    "uploadNone": "Takwimu za upakiaji hazikuweza kupakiwa sasa. Jaribu tena baada ya muda mfupi.",
+    "videosShortsAudio": "Video / shorts / sauti kwa siku"
   },
   "rateCard": {
     "perSecDay": " /sek /siku",
@@ -154,7 +182,13 @@
     "orAboutHive": "au takriban {{hive}} HIVE",
     "forSpotOver": "kwa tangazo la sek {{seconds}} kwa siku {{days}}",
     "longerOffer": "<b>{{price}} HBD</b> kwa siku {{days}}, takriban {{saving}}% chini kwa siku",
-    "agreedRate": "kiwango mlichokubaliana"
+    "agreedRate": "kiwango mlichokubaliana",
+    "tabs": {
+      "label": "Miundo",
+      "video": "Video",
+      "audio": "Sauti",
+      "upload": "Upakiaji"
+    }
   },
   "overlay": {
     "advertisement": "Tangazo",
@@ -190,6 +224,7 @@
   "ticker": {
     "openProduct": "Fungua {{name}}",
     "openLink": "Fungua kiungo cha mtangazaji",
+    "findOutMore": "Pata maelezo zaidi",
     "previewCaption": "Tika yako kwa sek {{seconds}}, kama watazamaji watakavyoiona",
     "preview": "Onyesho la awali",
     "screenSize": "Ukubwa wa skrini",
@@ -212,7 +247,13 @@
     "styleHold": "huingia na kusimama",
     "styleCrawl": "hutambaa",
     "atLeastSeconds": ", angalau sek {{seconds}}",
-    "checkLink": "Kagua kiungo"
+    "checkLink": "Kagua kiungo",
+    "audioNote": "Matangazo ya mstari pia hucheza kwenye kicheza sauti: sauti ya kompyuta inasoma ujumbe wako kwa Kiingereza, pamoja na mlio mfupi na muziki laini chini yake, na kiungo chako huonekana kama kitufe. Bonyeza Sikiliza kusikia hasa watakachosikia wasikilizaji.",
+    "listen": "Sikiliza",
+    "listenBusy": "Inaandaliwa…",
+    "listenHint": "Sauti ileile wanayopata wasikilizaji, kutoka kwa kilicho kwenye fomu.",
+    "listenSays": "Kinachosemwa: “{{text}}”",
+    "listenFailed": "Imeshindwa kutengeneza onyesho"
   },
   "gate": {
     "ariaLabel": "Ujumbe wa mfadhili",
@@ -381,7 +422,8 @@
   "missing": {
     "ticker": "Hifadhi tika yako kwanza.",
     "banner": "Pakia bango lako kwanza.",
-    "video": "Pakia video yako ya tangazo, au tuombe tuitengeneze."
+    "video": "Pakia video yako ya tangazo, au tuombe tuitengeneze.",
+    "audio": "Pakia klipu yako ya sauti kwanza."
   },
   "adType": {
     "question": "Unaonyesha nini?",
@@ -411,7 +453,12 @@
       "upload": "Pakia video ya mlalo ambayo watayarishaji wataitazama kabla upakiaji wao haujaanza, au tuombe tuitengeneze.",
       "banner": "Pakia picha itakayoonyeshwa juu ya video.",
       "shorts": "Pakia video wima itakayocheza kati ya Shorts. Lazima iwe wima, kwa sababu tangazo la mlalo linacheza dogo likiwa na mistari myeusi pande zote mbili. 1080x1920 inafaa vizuri.",
-      "video": "Pakia video itakayocheza, au tuombe tuitengeneze. Hapa pia ndipo nembo na kauli mbiu inayoonyeshwa juu ya tangazo lako vinapowekwa."
+      "video": "Pakia video itakayocheza, au tuombe tuitengeneze. Hapa pia ndipo nembo na kauli mbiu inayoonyeshwa juu ya tangazo lako vinapowekwa.",
+      "audio": "Pakia klipu yako ya sauti na kiungo cha kitufe chake. Wimbo husimama mahali ulipoweka nafasi, klipu yako inacheza, kisha wimbo unaendelea."
+    },
+    "audio": {
+      "title": "Tangazo la sauti",
+      "blurb": "Klipu yako ya sauti, inachezwa kwenye kicheza sauti."
     }
   },
   "book": {
@@ -451,7 +498,6 @@
     "enterLength": "Video zaidi ya moja za tangazo zimepakiwa, kwa hivyo weka urefu wa ile unayoiwekea agizo.",
     "mustFit": "Video yako ya tangazo lazima itoshee ndani ya hii.",
     "whenInVideo": "Wakati gani ndani ya video",
-    "beforeNotRecommended": "Kabla ya video (haipendekezwi)",
     "slotFull": " (imejaa kwa tarehe hizi)",
     "placesLeft": " (nafasi {{left}} kati ya {{total}} zimebaki)",
     "slotHint": "Umbali gani ndani ya kila video linaonyeshwa. Baadaye linafikia watu wachache, lakini linawafikia wakiwa wanatazama.",
@@ -500,7 +546,10 @@
     "chartTotal_other": "Sekunde {{seconds}} kwa siku {{count}} = {{total}} HBD",
     "chartDays": "Siku zilizohifadhiwa",
     "chartYAxis": "HBD kwa sekunde kwa siku",
-    "chartAria": "{{format}}: {{from}} HBD kwa sekunde kwa siku kwa siku {{min}}, ikishuka hadi {{to}} HBD kwa siku {{max}}"
+    "chartAria": "{{format}}: {{from}} HBD kwa sekunde kwa siku kwa siku {{min}}, ikishuka hadi {{to}} HBD kwa siku {{max}}",
+    "audioSpot": "Cheza pia kwenye kicheza sauti",
+    "audioSpotHint": "Husomwa kwa sauti kwa wanaosikiliza machapisho ya sauti, kiungo chako kikiwa kitufe. Ondoa alama ili libaki kwenye video tu.",
+    "lengthFromAudio": "Imechukuliwa kutoka kwenye klipu ya sauti uliyopakia."
   },
   "attach": {
     "needsTicker": "Hii ni kampeni ya tika, kwa hivyo inahitaji ujumbe wa tika ulioidhinishwa.",
@@ -516,7 +565,10 @@
     "chooseOne": "Chagua moja",
     "bannerOption": "Bango",
     "tickerOption": "Tika",
-    "secondsAd": "Tangazo la sek {{seconds}}"
+    "secondsAd": "Tangazo la sek {{seconds}}",
+    "needsAudio": "Hii ni kampeni ya sauti, kwa hiyo inahitaji klipu ya sauti iliyoidhinishwa.",
+    "useAudio": "Tumia mojawapo ya klipu zako za sauti zilizoidhinishwa",
+    "audioOption": "Klipu ya sauti · sek {{seconds}}"
   },
   "delivery": {
     "deliveredOf_one": "Uchezaji <b>{{delivered}}</b> umetolewa kati ya {{forecast}} uliokadiriwa",
@@ -553,7 +605,9 @@
     "clickRate": "({{rate}}% ya michezo)",
     "avgWatchedOf": "Wastani wa <b>sek {{seconds}}</b> zimetazamwa, kati ya sek {{length}}",
     "avgWatched": "Wastani wa <b>sek {{seconds}}</b> zimetazamwa",
-    "toEnd": "{{percent}}% walitazama hadi mwisho"
+    "toEnd": "{{percent}}% walitazama hadi mwisho",
+    "runsAudio": "Klipu yako ya sauti · sek {{seconds}}",
+    "audioFailed": "Imeshindwa kubadilisha mpangilio wa sauti"
   },
   "rebook": {
     "button": "Weka tena",
@@ -796,5 +850,19 @@
     "note": "Ukisema hapana hakuna kitakachobadilika. Unaweza kuzima wakati wowote kwenye Mipangilio, na hilo linafuta tulichohifadhi.",
     "yes": "Ndiyo, hesabu usikilizaji wangu",
     "savedYes": "Usikilizaji wako sasa unahesabiwa kwa zawadi za wasikilizaji"
+  },
+  "audio": {
+    "yourSpot": "Tangazo lako la sauti",
+    "file": "Faili ya sauti",
+    "fileHint": "MP3, WAV, M4A, OGG, FLAC au WebM. Hadi sekunde {{seconds}} na MB {{mb}}.",
+    "tooBig": "Faili hiyo ni zaidi ya MB {{mb}}. Hamisha ndogo zaidi, kwa mfano kama MP3.",
+    "tooBigServer": "Faili hiyo ni kubwa mno kupakiwa.",
+    "linkHint": "Kitufe cha “Pata maelezo zaidi” kinapoelekea wakati klipu yako inacheza. Anwani kamili ya https://.",
+    "howItPlays": "Tunasawazisha sauti na matangazo mengine. Kicheza kilicho chini kinacheza faili iliyohifadhiwa, kwa hiyo unasikia hasa watakachosikia wasikilizaji. Kila klipu hukaguliwa kabla ya kuonyeshwa.",
+    "upload": "Pakia sauti",
+    "uploading": "Inapakia…",
+    "savedReview": "Sauti imehifadhiwa. Tutaikagua kabla haijaonyeshwa",
+    "uploadFailed": "Imeshindwa kupakia sauti",
+    "seconds": "Klipu ya sauti ya sek {{seconds}}"
   }
 }

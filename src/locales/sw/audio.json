@@ -287,7 +287,9 @@
       "postRewardsTitle": "Zawadi za chapisho (mara moja)",
       "postRewardsDesc": "Unapokea malipo ya kawaida ya mwandishi wa Hive — yanalipwa mara moja, takriban siku 7 baada ya kuchapisha.",
       "pplTitle": "Malipo kwa kila usikilizaji (maisha yote)",
-      "pplDesc": "Zawadi zote za machapisho ya sauti huenda kwa @{{account}}. Badala ya malipo ya mara moja, programu ya 3Speak inakulipa kwa kila usikilizaji katika maisha yote ya wimbo."
+      "pplDesc": "Zawadi zote za machapisho ya sauti huenda kwa @{{account}}. Badala ya malipo ya mara moja, programu ya 3Speak inakulipa kwa kila usikilizaji katika maisha yote ya wimbo.",
+      "adsTitle": "Matangazo kwenye sauti hii",
+      "adsHint": "Ujumbe mfupi wa mdhamini unaosomwa kwa sauti unaweza kucheza wakati wa sauti hii, na unapata sehemu. Huanza na mpangilio wa akaunti yako; ubadilishe hapa kwa upakiaji huu tu."
     },
     "reward": {
       "distribution": "Mgawanyo wa zawadi",

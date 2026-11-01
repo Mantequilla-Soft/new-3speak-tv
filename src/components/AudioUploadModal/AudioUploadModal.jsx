@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import {
   MdClose, MdCloudUpload, MdMic, MdStop, MdDelete,
@@ -23,11 +24,15 @@ import Beneficiary_modal from '../modal/Beneficiary_modal';
 import { useAppStore } from '../../lib/store';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { enforceLockedBeneficiaries } from '../../utils/beneficiaries';
-import { PPL_BENEFICIARY, ENABLE_PPL, CHECKER_URL, CHECKER_API_KEY } from '../../utils/config';
+import { PPL_BENEFICIARY, ENABLE_PPL, CHECKER_URL, CHECKER_API_KEY, adsEnabledFor } from '../../utils/config';
+import { fetchCreatorAdPrefs, syncAudioAdChoice } from '../../lib/advertiseData';
 import './AudioUploadModal.scss';
 import AccountImg from '../HiveAvatar/AccountImg';
 import ModalHeader from '../ModalHeader/ModalHeader';
 import { getHiveUrl } from '../../utils/hiveNode';
+import UploadGate from '../ads/UploadGate';
+import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from '../../lib/uploadGate';
+import { usePortalDoc } from '../../utils/portalDocument';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../../utils/addToBlog';
 
 // Every toast from this module is headed "Upload"; the message becomes the
@@ -308,6 +313,30 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // Hoisted here (above the useCallbacks below) — putting them later would
   // put `isPremium`/`user` in the TDZ when openBeneFor's deps array is built.
   const { user } = useAppStore();
+  // "Ads on this audio": starts at the account's "Ads on your audio" and overrides it
+  // for this upload. null = untouched (the tracks keep following the account, also
+  // after a later change there); true / false = written into each track's post.
+  const adsVisible = adsEnabledFor(user);
+  const [accountAudioAds, setAccountAudioAds] = useState(true);
+  const [audioAds, setAudioAds] = useState(null);
+  useEffect(() => {
+    if (!user || !adsVisible) return undefined;
+    let alive = true;
+    fetchCreatorAdPrefs(user)
+      .then((r) => { if (alive) setAccountAudioAds(r.audioEnabled !== false); })
+      .catch(() => { /* unreadable: the switch shows the default, on */ });
+    return () => { alive = false; };
+  }, [user, adsVisible]);
+  const audioAdsOn = audioAds ?? accountAudioAds;
+  const setAudioAdsOn = useCallback((on) => setAudioAds(on === accountAudioAds ? null : on), [accountAudioAds]);
+  // Into a track's json_metadata, only when overridden. The checker copies it off the chain.
+  const audioAdsMeta = audioAds === null ? {} : { '3speak': { audioAds } };
+  const mirrorAudioAds = useCallback((hivePermlink) => {
+    if (audioAds === null) return;
+    // Best effort, never holds up publishing: retried by the helper until the
+    // post is readable and linked to its audio.
+    syncAudioAdChoice(user, hivePermlink).catch(() => {});
+  }, [audioAds, user]);
   const isPremium = !!usePremiumStatus(user)?.premium;
 
   const patchTrack = useCallback((id, patch) => {
@@ -783,6 +812,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       audio: audioMeta,
       ...oaEnvelope(OA_ARTICLE),
       ...threespeakAudio({ ...audioMeta, duration: track.durationSec }),
+      ...audioAdsMeta,
     };
     if (postThumb) metaObj.image = [postThumb];
 
@@ -806,11 +836,12 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
     await broadcastAudioOps(ops);
     await linkAudioToPost({ audioPermlink, postPermlink: hivePermlink, username: user });
+    mirrorAudioAds(hivePermlink);
     await shareToBlog(hivePermlink);
     await pushAudioThumb(audioPermlink, postThumb);
     trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: track.title };
     setTrackStatus(track.id, { state: 'success', stage: undefined });
-  }, [user, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog]);
+  }, [user, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog, audioAds, mirrorAudioAds]);
 
   // ── album main post (no audio — pure composer landing page) ──
   // Cached so a per-track retry doesn't re-broadcast the parent.
@@ -917,6 +948,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       audio: audioMeta,
       ...oaEnvelope(mode === 'album' ? OA_COMMENT : OA_MICROPOST),
       ...threespeakAudio({ ...audioMeta, duration: track.durationSec }),
+      ...audioAdsMeta,
     };
     if (tThumb) metaObj.image = [tThumb];
 
@@ -942,10 +974,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
     await broadcastAudioOps(ops);
     await linkAudioToPost({ audioPermlink, postPermlink: hivePermlink, username: user });
+    mirrorAudioAds(hivePermlink);
     await pushAudioThumb(audioPermlink, tThumb);
     trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: track.title };
     setTrackStatus(track.id, { state: 'success', stage: undefined });
-  }, [user, mode, isPremium, rewardMode, playlistChoice, pushAudioThumb]);
+  }, [user, mode, isPremium, rewardMode, playlistChoice, pushAudioThumb, audioAds, mirrorAudioAds]);
 
   // Resolve the parent a track comment hangs off, per mode.
   const resolveParent = useCallback(async () => {
@@ -1084,6 +1117,39 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   const allPublished = tracks.length > 0 && tracks.every(tr => publishStatus[tr.id]?.state === 'success');
 
+  /* The pre-upload spot, as in the video studio (EmbedPreview): fetched when the modal
+   * opens, played only when they press "Watch ad to publish", and it fails open: no ad,
+   * an error or a spot that will not play all leave Publish live. Completed on the
+   * checker only once the audio is out (/m/:sid/posted finds it in embed-audio). */
+  const portalDoc = usePortalDoc();
+  const [pendingAd, setPendingAd] = useState(null);
+  const [gateAd, setGateAd] = useState(null);
+  const [gateWatched, setGateWatched] = useState(false);
+  const gateSidRef = useRef(null);
+  useEffect(() => {
+    if (!isOpen || !user) return undefined;
+    let alive = true;
+    fetchUploadGateAd(user)
+      .then((ad) => { if (alive && ad) setPendingAd(ad); })
+      .catch(() => { /* fail open */ });
+    return () => { alive = false; };
+  }, [isOpen, user]);
+  // Only a spot that actually played is an impression; the gate unlocks either way.
+  const onGateWatched = useCallback((played) => {
+    if (played) gateSidRef.current = gateSessionId(gateAd);
+    setGateWatched(true);
+    setGateAd(null);
+    setPendingAd(null);
+  }, [gateAd]);
+  useEffect(() => {
+    if (!gateSidRef.current || !published) return;
+    const first = Object.values(trackPostsRef.current)[0];
+    if (!first?.permlink) return;
+    confirmUploadGatePost(gateSidRef.current, first.permlink);
+    gateSidRef.current = null;   // once only
+  }, [published]);
+  const gateSatisfied = gateWatched || !pendingAd;
+
   if (!isOpen) return null;
 
   const flow = FLOWS[mode] || FLOWS.snaps;
@@ -1104,6 +1170,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   const onPublish = async () => {
     if (!user) { toast.error(t('audio.upload.toasts.signInFirst')); return; }
+    // The button is swapped while a spot is outstanding; this is the publish path itself.
+    if (!gateSatisfied) return;
     if (tracks.length === 0) return;
     setIsPublishing(true);
     setMainError(null);
@@ -1230,6 +1298,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               setRewardMode={setRewardMode}
               isPublishing={isPublishing}
               publishStatus={publishStatus}
+              adsVisible={adsVisible}
+              audioAdsOn={audioAdsOn}
+              setAudioAdsOn={setAudioAdsOn}
             />
           )}
           {stepKey === 'playlist' && (
@@ -1347,6 +1418,14 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
             >
               <MdCheck size={16} /> {t('common.actions.close')}
             </button>
+          ) : !gateSatisfied ? (
+            <button
+              className="audio-upload-btn-primary"
+              onClick={() => { if (pendingAd && !gateAd) setGateAd(pendingAd); }}
+              title={t('upload.review.watchSponsorFirst')}
+            >
+              {t('upload.review.watchAdToPublish')}
+            </button>
           ) : (
             <button
               className="audio-upload-btn-primary"
@@ -1358,6 +1437,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
           )}
         </div>
         </>)}
+
+        {gateAd && createPortal(<UploadGate ad={gateAd} onWatched={onGateWatched} />, portalDoc.body)}
 
         {showCloseConfirm && (
           <div className="audio-upload-confirm" onClick={(e) => e.stopPropagation()}>
@@ -1906,7 +1987,10 @@ function TrackTypeFields({ track, patchTrack, disabled }) {
 }
 
 // ─── Step: Mode (how the audio is published + how it earns) ───
-function ModeStep({ tracks, mode, setMode, rewardMode, setRewardMode, isPublishing, publishStatus = {} }) {
+function ModeStep({
+  tracks, mode, setMode, rewardMode, setRewardMode, isPublishing, publishStatus = {},
+  adsVisible = false, audioAdsOn = true, setAudioAdsOn,
+}) {
   const { t } = useTranslation();
   const locked = isPublishing || tracks.some(tr => publishStatus[tr.id]?.state);
   const count = tracks.length;
@@ -1961,6 +2045,21 @@ function ModeStep({ tracks, mode, setMode, rewardMode, setRewardMode, isPublishi
             </small>
           </button>
         </div>
+      )}
+
+      {adsVisible && (
+        <label className="audio-upload-blog-toggle">
+          <input
+            type="checkbox"
+            checked={!!audioAdsOn}
+            onChange={(e) => setAudioAdsOn(e.target.checked)}
+            disabled={locked}
+          />
+          <span>
+            <strong>{t('audio.upload.mode.adsTitle')}</strong>
+            <small>{t('audio.upload.mode.adsHint')}</small>
+          </span>
+        </label>
       )}
     </div>
   );

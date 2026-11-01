@@ -287,7 +287,9 @@
       "postRewardsTitle": "Gönderi ödülleri (tek seferlik)",
       "postRewardsDesc": "Normal Hive yazar ödemesini alırsın; yayınlandıktan yaklaşık 7 gün sonra bir kez ödenir.",
       "pplTitle": "Dinleme başına ödeme (ömür boyu)",
-      "pplDesc": "Tüm ses gönderisi ödülleri @{{account}} hesabına gider. Tek bir ödeme yerine, bir 3Speak programı parçanın ömrü boyunca sana dinleme başına ödeme yapar."
+      "pplDesc": "Tüm ses gönderisi ödülleri @{{account}} hesabına gider. Tek bir ödeme yerine, bir 3Speak programı parçanın ömrü boyunca sana dinleme başına ödeme yapar.",
+      "adsTitle": "Bu seste reklamlar",
+      "adsHint": "Bu sesin sırasında kısa, seslendirilmiş bir sponsor mesajı çalabilir ve sen bir pay alırsın. Hesap ayarınla başlar; burada yalnızca bu yükleme için değiştir."
     },
     "reward": {
       "distribution": "Ödül dağılımı",

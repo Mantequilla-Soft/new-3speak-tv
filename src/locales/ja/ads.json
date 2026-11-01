@@ -3,19 +3,22 @@
     "surface": {
       "watch": "動画の中",
       "shorts": "ショートの間",
-      "upload": "アップロードの前"
+      "upload": "アップロードの前",
+      "audio": "オーディオプレーヤー"
     },
     "supplies": {
       "text": "短いメッセージとリンク",
       "imageOrVideo": "画像または動画",
       "image": "画像",
-      "video": "動画"
+      "video": "動画",
+      "audio": "音声クリップとリンク"
     },
     "youSupply": {
       "text": "短いメッセージとリンクを用意してください",
       "imageOrVideo": "画像または動画を用意してください",
       "image": "画像を用意してください",
-      "video": "動画を用意してください"
+      "video": "動画を用意してください",
+      "audio": "音声クリップとリンクを用意します"
     },
     "bannerAdvice": {
       "wideStrip": "横長の帯状にする必要があります。",
@@ -35,7 +38,10 @@
       "minWidth": "幅 {{width}}px 以上",
       "landscape": "プレーヤーと同じ横向き",
       "filesAny": "PNG、JPG または MP4",
-      "filesImage": "PNG または JPG"
+      "filesImage": "PNG または JPG",
+      "filesAudio": "MP3、WAV、M4A、OGG、FLAC、WebM",
+      "upToMb": "{{mb}} MBまで。音量はほかの広告に合わせます",
+      "audioButton": "再生中はボタンとして表示"
     },
     "groups": {
       "screen": {
@@ -52,6 +58,10 @@
       },
       "more": {
         "title": "その他のフォーマット"
+      },
+      "audio": {
+        "title": "オーディオプレーヤー",
+        "note": "音声投稿を聴く人に届きます。トラックは一時停止し、その後再開します。"
       }
     },
     "unplaced": "未配置"
@@ -136,10 +146,28 @@
     "playsDay": "1 日の再生数",
     "playsMonth": "1 か月の再生数",
     "reach": "リーチ",
-    "notRecommendedTag": "非推奨",
-    "notRecommendedNote": "<b>非推奨:</b> 動画の前の広告は、数字の上ではより多くのセッションに届きます。しかし、ここでの視聴のほぼ半分は 15 秒以内に終わるため、その再生の大半はすでに離れようとしている人に当たります。もっと後ろに配置した広告は、視聴者が実際にそこまで見た場合にのみカウントされます。",
     "whoWatches": "視聴者層",
-    "qualityNote": "これらの数値からは<b>生のトラフィックの {{pct}}% が除外されています</b>: {{seconds}} 秒未満のセッション、実際の視聴者とは考えられないほど速いアカウント、クリエイターがオプトアウトした動画です。残ったものが私たちの販売するものです。"
+    "qualityNote": "これらの数値からは<b>生のトラフィックの {{pct}}% が除外されています</b>: {{seconds}} 秒未満のセッション、実際の視聴者とは考えられないほど速いアカウント、クリエイターがオプトアウトした動画です。残ったものが私たちの販売するものです。",
+    "listensPerDay": "1日の再生数",
+    "measuredDays": "直近{{days}}日間の計測",
+    "tracksHeard": "聴かれたトラック",
+    "tracksNote": "3Speakの公開トラック{{catalogue}}件のうち",
+    "listenHours": "再生時間",
+    "audioTrial": "音声広告は今のところ{{owners}}の音声でのみ流れ、1日あたり約{{n}}回再生されます。音声広告の開放に合わせてクリエイターが増えていきます。",
+    "audioWhere": "トラックのどこで流れるか",
+    "listensDay": "再生 / 日",
+    "listensMonth": "再生 / 月",
+    "audioFine": "開いただけでなく実際に聴かれた3Speakの音声を数えています。リスナーがその位置まで聴いた場合にカウントされます。",
+    "whoListens": "聴いている人",
+    "audioNone": "再生数を読み込めませんでした。少ししてからもう一度お試しください。",
+    "uploadsPerDay": "1日のアップロード数",
+    "uploadsNote": "3speak.tvで、直近7日間",
+    "videosShorts": "1日の動画 / ショート",
+    "creatorsUploading": "アップロードしたクリエイター",
+    "creatorsNote": "直近{{days}}日間の異なるアカウント",
+    "uploadsFine": "3speak.tvでのアップロードから数えています。動画、ショート、音声のアップロードの前に毎回広告が流れます。",
+    "uploadNone": "アップロード数を読み込めませんでした。少ししてからもう一度お試しください。",
+    "videosShortsAudio": "1日の動画 / ショート / 音声"
   },
   "rateCard": {
     "perSecDay": " /秒 /日",
@@ -152,7 +180,13 @@
     "orAboutHive": "または約 {{hive}} HIVE",
     "forSpotOver": "{{seconds}} 秒の枠を {{days}} 日間",
     "longerOffer": "{{days}} 日間で <b>{{price}} HBD</b>、1 日あたり約 {{saving}}% お得",
-    "agreedRate": "合意済みの料金"
+    "agreedRate": "合意済みの料金",
+    "tabs": {
+      "label": "フォーマット",
+      "video": "動画",
+      "audio": "音声",
+      "upload": "アップロード"
+    }
   },
   "overlay": {
     "advertisement": "広告",
@@ -188,6 +222,7 @@
   "ticker": {
     "openProduct": "{{name}} を開く",
     "openLink": "広告主のリンクを開く",
+    "findOutMore": "詳しく見る",
     "previewCaption": "{{seconds}} 秒のティッカー（視聴者に表示されるとおり）",
     "preview": "プレビュー",
     "screenSize": "画面サイズ",
@@ -209,7 +244,13 @@
     "styleHold": "スライドインして一時停止",
     "styleCrawl": "流れる",
     "atLeastSeconds": "、{{seconds}} 秒以上",
-    "checkLink": "リンクを確認"
+    "checkLink": "リンクを確認",
+    "audioNote": "ティッカーはオーディオプレーヤーでも流れます。メッセージは合成音声が英語で読み上げ、短いチャイムと静かな音楽が付き、リンクはボタンとして表示されます。「試聴」を押すと、リスナーが聴くものとまったく同じ音を確認できます。",
+    "listen": "試聴",
+    "listenBusy": "準備中…",
+    "listenHint": "フォームの内容から作る、リスナーに届くのと同じ音です。",
+    "listenSays": "読み上げ: 「{{text}}」",
+    "listenFailed": "プレビューを作成できませんでした"
   },
   "gate": {
     "ariaLabel": "スポンサーメッセージ",
@@ -373,7 +414,8 @@
   "missing": {
     "ticker": "先にティッカーを保存してください。",
     "banner": "先にバナーをアップロードしてください。",
-    "video": "広告動画をアップロードするか、制作を依頼してください。"
+    "video": "広告動画をアップロードするか、制作を依頼してください。",
+    "audio": "先に音声クリップをアップロードしてください。"
   },
   "adType": {
     "question": "何を掲載しますか？",
@@ -403,7 +445,12 @@
       "upload": "クリエイターがアップロード開始前に見る横向きの動画をアップロードするか、制作を依頼してください。",
       "banner": "動画の上に表示する画像をアップロードしてください。",
       "shorts": "ショートの間に再生する縦向きの動画をアップロードしてください。横向きの枠は小さく表示され、両側に黒い帯が入るため、縦向きである必要があります。1080x1920 がおすすめです。",
-      "video": "再生する動画をアップロードするか、制作を依頼してください。広告の上に表示するロゴとスローガンもここで設定します。"
+      "video": "再生する動画をアップロードするか、制作を依頼してください。広告の上に表示するロゴとスローガンもここで設定します。",
+      "audio": "音声クリップとボタンのリンクをアップロードしてください。予約した位置でトラックが一時停止し、クリップが流れ、その後トラックが再開します。"
+    },
+    "audio": {
+      "title": "音声広告",
+      "blurb": "あなた自身の音声クリップをオーディオプレーヤーで流します。"
     }
   },
   "book": {
@@ -442,7 +489,6 @@
     "enterLength": "広告動画が複数アップロードされているため、予約するものの長さを入力してください。",
     "mustFit": "広告動画はこの長さに収まる必要があります。",
     "whenInVideo": "動画内のタイミング",
-    "beforeNotRecommended": "動画の前（非推奨）",
     "slotFull": "（この期間は満枠）",
     "placesLeft": "（{{total}} 枠中 残り {{left}}）",
     "slotHint": "各動画のどの位置で掲載するか。後ろにするほど届く人は減りますが、視聴中の人に届きます。",
@@ -482,7 +528,10 @@
     "chartTotal_other": "{{seconds}} 秒を {{count}} 日間 = {{total}} HBD",
     "chartDays": "予約日数",
     "chartYAxis": "1日あたり1秒の HBD",
-    "chartAria": "{{format}}：{{min}} 日で1日あたり1秒 {{from}} HBD、{{max}} 日では {{to}} HBD まで下がります"
+    "chartAria": "{{format}}：{{min}} 日で1日あたり1秒 {{from}} HBD、{{max}} 日では {{to}} HBD まで下がります",
+    "audioSpot": "オーディオプレーヤーでも流す",
+    "audioSpotHint": "音声投稿を聴く人に読み上げられ、リンクはボタンになります。動画だけにする場合はチェックを外してください。",
+    "lengthFromAudio": "アップロードした音声クリップから取得しました。"
   },
   "attach": {
     "needsTicker": "これはティッカーの掲載なので、承認済みのティッカーメッセージが必要です。",
@@ -498,7 +547,10 @@
     "chooseOne": "1 つ選択",
     "bannerOption": "バナー",
     "tickerOption": "ティッカー",
-    "secondsAd": "{{seconds}} 秒の広告"
+    "secondsAd": "{{seconds}} 秒の広告",
+    "needsAudio": "音声の出稿なので、承認済みの音声クリップが必要です。",
+    "useAudio": "承認済みの音声クリップから選ぶ",
+    "audioOption": "音声クリップ · {{seconds}}秒"
   },
   "delivery": {
     "deliveredOf_other": "予測 {{forecast}} 回のうち <b>{{delivered}}</b> 回再生",
@@ -531,7 +583,9 @@
     "clickRate": "(再生の {{rate}}%)",
     "avgWatchedOf": "平均 <b>{{seconds}} 秒</b> 視聴（{{length}} 秒中）",
     "avgWatched": "平均 <b>{{seconds}} 秒</b> 視聴",
-    "toEnd": "{{percent}}% が最後まで視聴"
+    "toEnd": "{{percent}}% が最後まで視聴",
+    "runsAudio": "あなたの音声クリップ · {{seconds}}秒",
+    "audioFailed": "音声の設定を変更できませんでした"
   },
   "rebook": {
     "button": "もう一度予約",
@@ -769,5 +823,19 @@
     "note": "いいえと答えても何も変わりません。設定からいつでもオフにでき、その場合は保存した内容を削除します。",
     "yes": "はい、聴いた分を数えてください",
     "savedYes": "聴いた分がリスナー報酬の対象になりました"
+  },
+  "audio": {
+    "yourSpot": "あなたの音声広告",
+    "file": "音声ファイル",
+    "fileHint": "MP3、WAV、M4A、OGG、FLAC、WebM。最大{{seconds}}秒、{{mb}} MBまで。",
+    "tooBig": "ファイルが{{mb}} MBを超えています。MP3などで小さく書き出してください。",
+    "tooBigServer": "ファイルが大きすぎてアップロードできません。",
+    "linkHint": "クリップ再生中に「詳しく見る」ボタンが開く先。https:// から始まる完全なアドレス。",
+    "howItPlays": "音量はほかの広告に合わせて調整します。下のプレーヤーは保存されたファイルを再生するので、リスナーが聴くものとまったく同じです。すべてのクリップは配信前に審査されます。",
+    "upload": "音声をアップロード",
+    "uploading": "アップロード中…",
+    "savedReview": "音声を保存しました。配信前に審査します",
+    "uploadFailed": "音声をアップロードできませんでした",
+    "seconds": "{{seconds}}秒の音声クリップ"
   }
 }

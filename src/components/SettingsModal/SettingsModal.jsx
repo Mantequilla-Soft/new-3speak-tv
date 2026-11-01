@@ -127,6 +127,8 @@ function AdsSection() {
   const [adsEnabled, setAdsEnabled] = useState(true);
   // Video rolls on top of banners and tickers. Off = overlays only.
   const [rollsEnabled, setRollsEnabled] = useState(true);
+  // Spoken spots in the creator's audio. The uploader can override it per track.
+  const [audioEnabled, setAudioEnabled] = useState(true);
   // Placeholder only — the real split (and the platform default for a creator who
   // has never set one) comes from the server. The row stays hidden until it lands,
   // so nobody is shown a share that is about to change under them.
@@ -150,6 +152,7 @@ function AdsSection() {
         if (!alive) return;
         setAdsEnabled(r.adsEnabled !== false);
         setRollsEnabled(r.rollsEnabled !== false);
+        setAudioEnabled(r.audioEnabled !== false);
         if (r.split) { setSplit(r.split); setDraftCommunity(String(r.split.communityPct)); }
       })
       .catch(() => { /* unreadable preference just shows the default */ })
@@ -158,7 +161,9 @@ function AdsSection() {
   }, [user, visible]);
 
   // Both fields ride one signed message, so saving either costs a single prompt.
-  async function save(nextEnabled, nextCommunity, nextRolls = rollsEnabled) {
+  // `nextAudio` only from the audio switch: any other save leaves the stored audio
+  // choice alone (turning ads back on must not write the "off" it showed meanwhile).
+  async function save(nextEnabled, nextCommunity, nextRolls = rollsEnabled, nextAudio = null) {
     if (saving) return false;
     setSaving(true);
     setError(null);
@@ -169,8 +174,10 @@ function AdsSection() {
       const res = await saveCreatorAdSettings(user, {
         adsEnabled: nextEnabled,
         rollsEnabled: nextRolls,
+        audioEnabled: typeof nextAudio === 'boolean' ? nextAudio : undefined,
         communitySharePct: nextCommunity,
       });
+      if (typeof res.audioEnabled === 'boolean') setAudioEnabled(res.audioEnabled);
       if (res.split) { setSplit(res.split); setDraftCommunity(String(res.split.communityPct)); }
       if (!res.chainSaved) {
         setError(t('settings.ads.chainNotSaved'));
@@ -198,6 +205,14 @@ function AdsSection() {
     const ok = await save(adsEnabled, split ? split.communityPct : undefined, next);
     if (ok) toast.success(next ? t('settings.ads.rollsOnToast') : t('settings.ads.rollsOffToast'));
     else setRollsEnabled(previous);
+  }
+
+  async function onToggleAudio(next) {
+    const previous = audioEnabled;
+    setAudioEnabled(next);
+    const ok = await save(adsEnabled, split ? split.communityPct : undefined, rollsEnabled, next);
+    if (ok) toast.success(next ? t('settings.ads.audioOnToast') : t('settings.ads.audioOffToast'));
+    else setAudioEnabled(previous);
   }
 
   const parsedDraft = parseInt(draftCommunity, 10);
@@ -240,6 +255,21 @@ function AdsSection() {
             checked={rollsEnabled}
             onChange={onToggleRolls}
             ariaLabel={t('settings.ads.rolls')}
+          />
+        </div>
+      )}
+      {adsEnabled && (
+        <div className="settings-modal-row">
+          <div className="settings-row-text">
+            <span className="settings-row-title">{t('settings.ads.audio')}</span>
+            <span className="settings-row-desc">
+              {t('settings.ads.audioDesc')}
+            </span>
+          </div>
+          <Switch
+            checked={audioEnabled}
+            onChange={onToggleAudio}
+            ariaLabel={t('settings.ads.audio')}
           />
         </div>
       )}

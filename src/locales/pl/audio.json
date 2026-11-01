@@ -303,7 +303,9 @@
       "postRewardsTitle": "Nagrody za post (jednorazowo)",
       "postRewardsDesc": "Otrzymujesz zwykłą wypłatę autora na Hive — wypłacaną raz, ok. 7 dni po publikacji.",
       "pplTitle": "Płatność za odsłuch (dożywotnio)",
-      "pplDesc": "Wszystkie nagrody za post audio trafiają do @{{account}}. Zamiast jednorazowej wypłaty program 3Speak płaci ci za każdy odsłuch przez cały okres istnienia utworu."
+      "pplDesc": "Wszystkie nagrody za post audio trafiają do @{{account}}. Zamiast jednorazowej wypłaty program 3Speak płaci ci za każdy odsłuch przez cały okres istnienia utworu.",
+      "adsTitle": "Reklamy w tym audio",
+      "adsHint": "Krótki komunikat sponsora czytany głosem może zostać odtworzony podczas tego audio, a Ty dostajesz udział. Domyślnie jak w ustawieniach konta; zmień tutaj tylko dla tego przesłania."
     },
     "reward": {
       "distribution": "Podział nagród",

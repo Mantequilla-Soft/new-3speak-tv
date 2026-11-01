@@ -144,6 +144,26 @@ export async function syncVideoAdOptOut(author, permlink) {
 }
 
 /**
+ * Mirror one audio post's "Ads on this audio" choice into the checker. Like the
+ * video one: no signature, the checker reads the post off the chain. 404 until the
+ * post is readable and linked to its audio, so that is retried.
+ */
+export async function syncAudioAdChoice(author, permlink) {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await readJson(await fetch(`${BASE}/creator/audio-ads/sync`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ author, permlink }),
+      }));
+    } catch (err) {
+      if (err?.status !== 404 || attempt >= VIDEO_ADS_SYNC_DELAYS_MS.length) throw err;
+      await new Promise((r) => setTimeout(r, VIDEO_ADS_SYNC_DELAYS_MS[attempt]));
+    }
+  }
+}
+
+/**
  * After an EDIT of a post's ad choice: mirror it, and keep asking until the
  * checker reads the new choice ('on', 'off' or 'no-rolls') off the chain. Unlike
  * a fresh post, an edited one is readable at once, but with its OLD metadata for
@@ -184,12 +204,16 @@ function canSignLocally() {
 // community share is part of it because that field decides where money goes — a
 // signature made for one split must not be reusable on another. The mode is 'on',
 // 'off' or 'no-rolls' (banners and tickers only).
-const prefsMode = (adsEnabled, rollsEnabled) => {
+// "Ads on your audio" is a '+audio' / '+no-audio' suffix, only when it is sent.
+const prefsMode = (adsEnabled, rollsEnabled, audioEnabled) => {
   if (!adsEnabled) return 'off';
-  return rollsEnabled === false ? 'no-rolls' : 'on';
+  const base = rollsEnabled === false ? 'no-rolls' : 'on';
+  if (audioEnabled === true) return `${base}+audio`;
+  if (audioEnabled === false) return `${base}+no-audio`;
+  return base;
 };
-const prefsMessage = (account, adsEnabled, rollsEnabled, communitySharePct, timestamp) =>
-  ['3speak-ads', 'creator-prefs', account, prefsMode(adsEnabled, rollsEnabled),
+const prefsMessage = (account, adsEnabled, rollsEnabled, communitySharePct, timestamp, audioEnabled) =>
+  ['3speak-ads', 'creator-prefs', account, prefsMode(adsEnabled, rollsEnabled, audioEnabled),
     String(communitySharePct), String(timestamp)].join('|');
 
 /**
@@ -207,13 +231,13 @@ const prefsMessage = (account, adsEnabled, rollsEnabled, communitySharePct, time
  * account has not granted the authority, which is what makes the wallet fallback
  * in setCreatorAdPrefs reachable.
  */
-async function signViaThreespeak(adsEnabled, rollsEnabled, communitySharePct, account) {
+async function signViaThreespeak(adsEnabled, rollsEnabled, communitySharePct, account, audioEnabled) {
   const provider = getCurrentProvider();
   const isWallet = !!provider && provider !== Providers.HiveSigner && !isManteAuthLogin();
 
   const doPost = async () => {
     const headers = { 'Content-Type': 'application/json' };
-    const body = { adsEnabled, rollsEnabled, communitySharePct };
+    const body = { adsEnabled, rollsEnabled, communitySharePct, ...(typeof audioEnabled === 'boolean' ? { audioEnabled } : {}) };
 
     if (provider === Providers.HiveSigner) {
       const token = localStorage.getItem('hivesignerToken');
@@ -266,10 +290,10 @@ async function signViaThreespeak(adsEnabled, rollsEnabled, communitySharePct, ac
   return { signature: data.signature, timestamp: data.timestamp };
 }
 
-async function signLocally(account, adsEnabled, rollsEnabled, communitySharePct) {
+async function signLocally(account, adsEnabled, rollsEnabled, communitySharePct, audioEnabled) {
   const timestamp = Date.now();
   const res = await signMessageWithAioha(
-    prefsMessage(account, adsEnabled, rollsEnabled, communitySharePct, timestamp),
+    prefsMessage(account, adsEnabled, rollsEnabled, communitySharePct, timestamp, audioEnabled),
     KeyTypes.Posting,
     adsEnabled ? t('ads.wallet.saveAdSettings') : t('ads.wallet.turnAdsOff'),
   );
@@ -286,9 +310,12 @@ async function signLocally(account, adsEnabled, rollsEnabled, communitySharePct)
  * Both fields go in one signed message, so saving is one signature rather than one
  * per field — which matters when the wallet shows a prompt for each.
  */
-export async function setCreatorAdPrefs(account, { adsEnabled, rollsEnabled = true, communitySharePct }) {
+export async function setCreatorAdPrefs(account, { adsEnabled, rollsEnabled = true, communitySharePct, audioEnabled }) {
   // Video rolls only mean something with ads on; 'off' signs no rolls choice.
   const rolls = !adsEnabled || rollsEnabled !== false;
+  // "Ads on your audio": only when the caller has one, and only with ads on.
+  // Left out, the stored choice stays as it is.
+  const audio = adsEnabled && typeof audioEnabled === 'boolean' ? audioEnabled : undefined;
   // No default here on purpose: the platform default lives on the server, and a
   // second copy in the browser is a copy that can drift out of step with the
   // message being signed. Omitting the field lets the server decide; passing 0
@@ -302,20 +329,23 @@ export async function setCreatorAdPrefs(account, { adsEnabled, rollsEnabled = tr
   // up that authority, which is the only case where it is actually needed.
   let signed;
   try {
-    signed = await signViaThreespeak(adsEnabled, rolls, communitySharePct, account);
+    signed = await signViaThreespeak(adsEnabled, rolls, communitySharePct, account, audio);
   } catch (err) {
     // A 403 is "no @threespeak grant". Anything else is a session or server
     // problem. Either way, a wallet that can sign should just sign rather than
     // hand the creator an error about authority they may not want to grant.
     if (!canSignLocally()) throw err;
-    signed = await signLocally(account, adsEnabled, rolls, communitySharePct);
+    signed = await signLocally(account, adsEnabled, rolls, communitySharePct, audio);
   }
   const { signature, timestamp } = signed;
 
   return readJson(await fetch(`${BASE}/creator/prefs`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ account, adsEnabled, rollsEnabled: rolls, communitySharePct, signature, timestamp }),
+    body: JSON.stringify({
+      account, adsEnabled, rollsEnabled: rolls, communitySharePct, signature, timestamp,
+      ...(audio !== undefined ? { audioEnabled: audio } : {}),
+    }),
   }));
 }
 
@@ -859,6 +889,50 @@ export async function saveTickerCreative({ reference, message, clickUrl, style =
   }));
 }
 
+/**
+ * Hear a ticker message before saving it: the checker renders it exactly as the audio
+ * player would play it (same voice, chime and music, same file) and returns
+ * { audioUrl, durationSeconds, text }. Nothing is saved or sent to review.
+ */
+export async function listenTicker({ reference, message, clickUrl }) {
+  return readJson(await fetch(`${BASE}/creatives/listen`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reference, message, clickUrl }),
+  }));
+}
+
+/**
+ * Upload an audio spot's clip. The file is the request body; the checker levels and
+ * re-encodes it and saves it as a creative in review. Returns { creative } whose
+ * `audioPath` (see checkerUrl) plays the stored file.
+ */
+export async function uploadAudioCreative({ reference, file, clickUrl }) {
+  const q = new URLSearchParams({ reference, clickUrl });
+  const res = await fetch(`${BASE}/creatives/audio?${q.toString()}`, {
+    method: 'POST',
+    headers: { 'Content-Type': file.type || 'application/octet-stream' },
+    body: file,
+  });
+  // nginx answers an oversized body with an HTML 413 before the checker sees it.
+  if (res.status === 413) throw new Error(t('ads.audio.tooBigServer'));
+  return readJson(res);
+}
+
+/** A path the checker returns (an audio spot's `/m/tts/…`), as a full URL. */
+export function checkerUrl(path) {
+  return path ? new URL(path, BASE).toString() : null;
+}
+
+/** A ticker flight's "also play in the audio player" switch. */
+export async function setCampaignAudio({ reference, id, audioSpot }) {
+  return readJson(await fetch(`${BASE}/campaigns/${encodeURIComponent(id)}/audio`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reference, audioSpot }),
+  }));
+}
+
 export async function fetchCreatives(reference) {
   return readJson(await fetch(`${BASE}/creatives?reference=${encodeURIComponent(reference)}`));
 }
@@ -883,14 +957,14 @@ export async function fetchPricing(reference, { beta = false } = {}) {
 
 export async function createCampaign({
   reference, format, name, days, slotPercent, spotSeconds,
-  minVideoSeconds, maxVideoSeconds, markets, startAt, production,
+  minVideoSeconds, maxVideoSeconds, markets, startAt, production, audioSpot,
 }) {
   return readJson(await fetch(`${BASE}/campaigns`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       reference, format, name, days, slotPercent, spotSeconds,
-      minVideoSeconds, maxVideoSeconds, markets, startAt, production,
+      minVideoSeconds, maxVideoSeconds, markets, startAt, production, audioSpot,
     }),
   }));
 }
