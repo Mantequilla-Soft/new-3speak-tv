@@ -114,7 +114,8 @@
     "percentIn": "播放到 {{percent}}% 时",
     "secondsIn_other": "播放到第 {{count}} 秒时",
     "oneMinuteIn": "播放到第 1 分钟时",
-    "minutesIn": "播放到第 {{minutes}} 分钟时"
+    "minutesIn": "播放到第 {{minutes}} 分钟时",
+    "beforeTrack": "曲目之前"
   },
   "blocked": {
     "unpaid": "等待你付款",
@@ -530,8 +531,17 @@
     "chartYAxis": "每秒每天 HBD",
     "chartAria": "{{format}}：{{min}} 天时每秒每天 {{from}} HBD，{{max}} 天时降至 {{to}} HBD",
     "audioSpot": "同时在音频播放器中播放",
-    "audioSpotHint": "向收听音频帖子的人朗读，链接显示为按钮。取消勾选则只在视频上显示。",
-    "lengthFromAudio": "取自你上传的音频片段。"
+    "audioSpotHint": "向收听音频帖子的人朗读，链接显示为按钮。",
+    "lengthFromAudio": "取自你上传的音频片段。",
+    "uploadFirstAudio": "请先上传音频片段",
+    "tooManyClips": "你有多个音频片段，我们无法判断使用哪个时长。请自行填写。",
+    "enterLengthAudio": "上传了多个音频片段，请填写你预订的那个的时长。",
+    "mustFitAudio": "你的音频片段必须能放进这个时长。",
+    "whenInTrack": "在曲目中的位置",
+    "slotHintAudio": "在每首曲目中播放的位置。越靠后覆盖的人越少，但都是正在收听的人。",
+    "tracksToRunOn": "投放的曲目",
+    "shortestTrack": "最短曲目",
+    "longestTrack": "最长曲目"
   },
   "attach": {
     "needsTicker": "这是滚动字幕投放，因此需要一条已批准的滚动字幕。",

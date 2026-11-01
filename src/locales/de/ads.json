@@ -116,7 +116,8 @@
     "secondsIn_one": "Nach {{count}} Sekunde",
     "secondsIn_other": "Nach {{count}} Sekunden",
     "oneMinuteIn": "Nach 1 Minute",
-    "minutesIn": "Nach {{minutes}} Minuten"
+    "minutesIn": "Nach {{minutes}} Minuten",
+    "beforeTrack": "Vor dem Titel"
   },
   "blocked": {
     "unpaid": "Wartet auf deine Zahlung",
@@ -548,8 +549,17 @@
     "chartYAxis": "HBD pro Sekunde pro Tag",
     "chartAria": "{{format}}: {{from}} HBD pro Sekunde pro Tag für {{min}} Tage, sinkend auf {{to}} HBD für {{max}} Tage",
     "audioSpot": "Auch im Audioplayer abspielen",
-    "audioSpotHint": "Wird Leuten vorgelesen, die Audio-Beiträge hören, mit deinem Link als Button. Abwählen, um ihn nur auf Videos zu zeigen.",
-    "lengthFromAudio": "Aus dem hochgeladenen Audio-Clip übernommen."
+    "audioSpotHint": "Wird Leuten vorgelesen, die Audio-Beiträge hören, mit deinem Link als Button.",
+    "lengthFromAudio": "Aus dem hochgeladenen Audio-Clip übernommen.",
+    "uploadFirstAudio": "Lade zuerst deinen Audio-Clip hoch",
+    "tooManyClips": "Du hast mehr als einen Audio-Clip, daher wissen wir nicht, welche Länge gilt. Gib sie selbst ein.",
+    "enterLengthAudio": "Mehr als ein Audio-Clip hochgeladen, gib also die Länge des gebuchten ein.",
+    "mustFitAudio": "Dein Audio-Clip muss hier hineinpassen.",
+    "whenInTrack": "Wann im Titel",
+    "slotHintAudio": "Wie weit in jedem Titel er läuft. Später erreicht weniger Leute, aber die hören zu.",
+    "tracksToRunOn": "Titel, auf denen er läuft",
+    "shortestTrack": "Kürzester Titel",
+    "longestTrack": "Längster Titel"
   },
   "attach": {
     "needsTicker": "Das ist eine Ticker-Kampagne, sie braucht also eine freigegebene Ticker-Botschaft.",

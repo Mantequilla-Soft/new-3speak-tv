@@ -94,7 +94,7 @@ function AudioAudience({ a }) {
             <tbody>
               {ordered.map((s) => (
                 <tr key={s.percent}>
-                  <td>{slotLabel(s)}</td>
+                  <td>{slotLabel({ ...s, audio: true })}</td>
                   <td className="num">{formatCount(s.perDay)}</td>
                   <td className="num">{formatCount(s.perMonth)}</td>
                   <td className="num">{s.reachPct}%</td>

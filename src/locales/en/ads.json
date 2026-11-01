@@ -116,7 +116,8 @@
     "secondsIn_one": "{{count}} second in",
     "secondsIn_other": "{{count}} seconds in",
     "oneMinuteIn": "1 minute in",
-    "minutesIn": "{{minutes}} minutes in"
+    "minutesIn": "{{minutes}} minutes in",
+    "beforeTrack": "Before the track"
   },
   "blocked": {
     "unpaid": "Waiting for your payment",
@@ -548,8 +549,17 @@
     "chartYAxis": "HBD per second per day",
     "chartAria": "{{format}}: {{from}} HBD per second per day for {{min}} days, falling to {{to}} HBD for {{max}} days",
     "audioSpot": "Also play it in the audio player",
-    "audioSpotHint": "Read aloud to people listening to audio posts, with your link as a button. Untick to keep it on videos only.",
-    "lengthFromAudio": "Taken from the audio clip you uploaded."
+    "audioSpotHint": "Read aloud to people listening to audio posts, with your link as a button.",
+    "lengthFromAudio": "Taken from the audio clip you uploaded.",
+    "uploadFirstAudio": "Upload your audio clip first",
+    "tooManyClips": "You have more than one audio clip, so we cannot tell which length to use. Enter it yourself.",
+    "enterLengthAudio": "More than one audio clip uploaded, so enter the length of the one you are booking.",
+    "mustFitAudio": "Your audio clip has to fit inside this.",
+    "whenInTrack": "When in the track",
+    "slotHintAudio": "How far into each track it plays. Later reaches fewer people, but reaches them listening.",
+    "tracksToRunOn": "Tracks to run on",
+    "shortestTrack": "Shortest track",
+    "longestTrack": "Longest track"
   },
   "attach": {
     "needsTicker": "This is a ticker flight, so it needs an approved ticker message.",

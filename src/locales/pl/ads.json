@@ -120,7 +120,8 @@
     "secondsIn_many": "Po {{count}} sekundach",
     "secondsIn_other": "Po {{count}} sekundy",
     "oneMinuteIn": "Po 1 minucie",
-    "minutesIn": "Po {{minutes}} min"
+    "minutesIn": "Po {{minutes}} min",
+    "beforeTrack": "Przed utworem"
   },
   "blocked": {
     "unpaid": "Czeka na twoją płatność",
@@ -584,8 +585,17 @@
     "chartYAxis": "HBD za sekundę dziennie",
     "chartAria": "{{format}}: {{from}} HBD za sekundę dziennie przy {{min}} dniach, spadając do {{to}} HBD przy {{max}} dniach",
     "audioSpot": "Odtwarzaj też w odtwarzaczu audio",
-    "audioSpotHint": "Czytany na głos osobom słuchającym postów audio, z Twoim linkiem jako przyciskiem. Odznacz, aby był tylko na filmach.",
-    "lengthFromAudio": "Wzięte z przesłanego klipu audio."
+    "audioSpotHint": "Czytany na głos osobom słuchającym postów audio, z Twoim linkiem jako przyciskiem.",
+    "lengthFromAudio": "Wzięte z przesłanego klipu audio.",
+    "uploadFirstAudio": "Najpierw prześlij klip audio",
+    "tooManyClips": "Masz więcej niż jeden klip audio, więc nie wiemy, której długości użyć. Wpisz ją sam.",
+    "enterLengthAudio": "Przesłano więcej niż jeden klip audio, więc wpisz długość tego, który rezerwujesz.",
+    "mustFitAudio": "Twój klip audio musi się w tym zmieścić.",
+    "whenInTrack": "Kiedy w utworze",
+    "slotHintAudio": "Jak daleko w każdym utworze gra. Później dociera do mniej osób, ale słuchających.",
+    "tracksToRunOn": "Utwory, na których gra",
+    "shortestTrack": "Najkrótszy utwór",
+    "longestTrack": "Najdłuższy utwór"
   },
   "attach": {
     "needsTicker": "To kampania z paskiem, więc wymaga zatwierdzonej wiadomości paska.",

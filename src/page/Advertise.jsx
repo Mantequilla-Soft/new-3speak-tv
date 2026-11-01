@@ -526,8 +526,8 @@ function CampaignPanel({
   // length is time on screen.
   const isTicker = !!fmt?.overlayOnly;
   const isBanner = !!fmt?.burnsIn || isTicker;
-  // A video ticker is also read aloud in the audio player unless this is unticked.
-  const [audioSpot, setAudioSpot] = useState(true);
+  // A video ticker is read aloud in the audio player too only when this is ticked (opt-in).
+  const [audioSpot, setAudioSpot] = useState(false);
   // What this format will actually take. Older checkers send no list, so fall back to
   // the single kind they do send.
   const acceptedKinds = fmt?.creativeKinds?.length ? fmt.creativeKinds : (fmt ? [fmt.creativeKind] : []);
@@ -1167,8 +1167,8 @@ function CampaignPanel({
                 title={autoAvailable
                   ? ''
                   : (tooManySpots
-                    ? t('ads.book.tooManySpots')
-                    : t('ads.book.uploadFirst'))}
+                    ? (takesAudio ? t('ads.book.tooManyClips') : t('ads.book.tooManySpots'))
+                    : (takesAudio ? t('ads.book.uploadFirstAudio') : t('ads.book.uploadFirst')))}
               >
                 <input
                   type="checkbox"
@@ -1202,8 +1202,8 @@ function CampaignPanel({
                       : isBanner
                       ? t('ads.book.bannerOnScreen')
                       : (tooManySpots
-                        ? t('ads.book.enterLength')
-                        : t('ads.book.mustFit')))}
+                        ? (takesAudio ? t('ads.book.enterLengthAudio') : t('ads.book.enterLength'))
+                        : (takesAudio ? t('ads.book.mustFitAudio') : t('ads.book.mustFit'))))}
                 </>
               )}
           </span>
@@ -1225,7 +1225,7 @@ function CampaignPanel({
         <fieldset className="mkt-group">
           <legend>{t('ads.inventory.placement')}</legend>
         <div className="mkt-field">
-          <label htmlFor="mkt-slot">{t('ads.book.whenInVideo')}</label>
+          <label htmlFor="mkt-slot">{takesAudio ? t('ads.book.whenInTrack') : t('ads.book.whenInVideo')}</label>
           <select id="mkt-slot" value={chosenSlot} onChange={(e) => setSlotPct(Number(e.target.value))}>
             {slots.map((p) => (
               <option key={p} value={p} disabled={slotTaken(p)}>
@@ -1233,7 +1233,7 @@ function CampaignPanel({
                     before the video, to people who were about to leave. A banner at 0%
                     is not that — it appears with the video, so the caveat does not
                     apply and neither does the wording. */}
-                {slotLabel({ percent: p, banner: isBanner })}
+                {slotLabel({ percent: p, banner: isBanner, audio: takesAudio })}
                 {slotTaken(p)
                   ? t('ads.book.slotFull')
                   : (sharingWith(p) > 0 ? t('ads.book.placesLeft', { left: sharesLeft(p), total: slotRow(p).sharesTotal }) : '')}
@@ -1243,7 +1243,7 @@ function CampaignPanel({
           <span className="mkt-hint">
             {/* A position is sold to one advertiser at a time, across every format —
                 so this says what is actually for sale, not what exists. */}
-            {t('ads.book.slotHint')}
+            {takesAudio ? t('ads.book.slotHintAudio') : t('ads.book.slotHint')}
             {sharingWith(chosenSlot) > 0
               ? ` ${t('ads.book.sharePosition', { count: sharingWith(chosenSlot) })}`
               : ` ${t('ads.book.positionCarries', { count: slotRow(chosenSlot)?.sharesTotal || 3 })}`}
@@ -1258,9 +1258,9 @@ function CampaignPanel({
             underneath. The pre-upload spot runs in the upload flow. */}
         {fmt?.surface === 'watch' ? (
         <fieldset className="mkt-group">
-          <legend>{t('ads.book.videosToRunOn')} <span className="mkt-optional">{t('ads.book.optional')}</span></legend>
+          <legend>{takesAudio ? t('ads.book.tracksToRunOn') : t('ads.book.videosToRunOn')} <span className="mkt-optional">{t('ads.book.optional')}</span></legend>
         <div className="mkt-field">
-          <label htmlFor="mkt-minvid">{t('ads.book.shortestVideo')}</label>
+          <label htmlFor="mkt-minvid">{takesAudio ? t('ads.book.shortestTrack') : t('ads.book.shortestVideo')}</label>
           <input
             id="mkt-minvid" type="number" min="0" step="1" placeholder={t('ads.book.any')}
             value={minVideo} onChange={(e) => setMinVideo(e.target.value)}
@@ -1270,7 +1270,7 @@ function CampaignPanel({
         </div>
 
         <div className="mkt-field">
-          <label htmlFor="mkt-maxvid">{t('ads.book.longestVideo')}</label>
+          <label htmlFor="mkt-maxvid">{takesAudio ? t('ads.book.longestTrack') : t('ads.book.longestVideo')}</label>
           <input
             id="mkt-maxvid" type="number" min="0" step="1" placeholder={t('ads.book.any')}
             value={maxVideo} onChange={(e) => setMaxVideo(e.target.value)}
@@ -1945,6 +1945,7 @@ function FlightFacts({ c }) {
         position: c.slotPosition,
         // The ticker interrupts nothing either, so its 0% is the beginning, as a banner's is.
         banner: c.format === 'video_banner' || c.format === 'video_ticker',
+        audio: c.format === 'audio_spot',
       }) : null,
       seconds ? t('ads.flight.seconds', { seconds }) : null,
     ].filter(Boolean).join(' · ')] : null,

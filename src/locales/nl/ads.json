@@ -116,7 +116,8 @@
     "secondsIn_one": "Na {{count}} seconde",
     "secondsIn_other": "Na {{count}} seconden",
     "oneMinuteIn": "Na 1 minuut",
-    "minutesIn": "Na {{minutes}} minuten"
+    "minutesIn": "Na {{minutes}} minuten",
+    "beforeTrack": "Voor het nummer"
   },
   "blocked": {
     "unpaid": "Wacht op je betaling",
@@ -548,8 +549,17 @@
     "chartYAxis": "HBD per seconde per dag",
     "chartAria": "{{format}}: {{from}} HBD per seconde per dag voor {{min}} dagen, dalend naar {{to}} HBD voor {{max}} dagen",
     "audioSpot": "Ook afspelen in de audiospeler",
-    "audioSpotHint": "Voorgelezen aan mensen die naar audioberichten luisteren, met je link als knop. Vink uit om hem alleen op video’s te tonen.",
-    "lengthFromAudio": "Overgenomen van de audioclip die je uploadde."
+    "audioSpotHint": "Voorgelezen aan mensen die naar audioberichten luisteren, met je link als knop.",
+    "lengthFromAudio": "Overgenomen van de audioclip die je uploadde.",
+    "uploadFirstAudio": "Upload eerst je audioclip",
+    "tooManyClips": "Je hebt meer dan één audioclip, dus we weten niet welke lengte we moeten nemen. Vul hem zelf in.",
+    "enterLengthAudio": "Meer dan één audioclip geüpload, vul dus de lengte in van de clip die je boekt.",
+    "mustFitAudio": "Je audioclip moet hierin passen.",
+    "whenInTrack": "Wanneer in het nummer",
+    "slotHintAudio": "Hoe ver in elk nummer hij speelt. Later bereikt minder mensen, maar wel luisterende.",
+    "tracksToRunOn": "Nummers om op te spelen",
+    "shortestTrack": "Kortste nummer",
+    "longestTrack": "Langste nummer"
   },
   "attach": {
     "needsTicker": "Dit is een tickercampagne, dus er is een goedgekeurde tickerboodschap nodig.",

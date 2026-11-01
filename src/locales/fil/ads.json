@@ -116,7 +116,8 @@
     "secondsIn_one": "Pagkalipas ng {{count}} segundo",
     "secondsIn_other": "Pagkalipas ng {{count}} segundo",
     "oneMinuteIn": "Pagkalipas ng 1 minuto",
-    "minutesIn": "Pagkalipas ng {{minutes}} minuto"
+    "minutesIn": "Pagkalipas ng {{minutes}} minuto",
+    "beforeTrack": "Bago ang track"
   },
   "blocked": {
     "unpaid": "Hinihintay ang bayad mo",
@@ -548,8 +549,17 @@
     "chartYAxis": "HBD bawat segundo bawat araw",
     "chartAria": "{{format}}: {{from}} HBD bawat segundo bawat araw para sa {{min}} araw, bumababa sa {{to}} HBD para sa {{max}} araw",
     "audioSpot": "I-play din sa audio player",
-    "audioSpotHint": "Binabasa nang malakas sa mga nakikinig sa audio posts, kasama ang link mo bilang button. Alisin ang tsek para sa videos lang.",
-    "lengthFromAudio": "Kinuha mula sa audio clip na in-upload mo."
+    "audioSpotHint": "Binabasa nang malakas sa mga nakikinig sa audio posts, kasama ang link mo bilang button.",
+    "lengthFromAudio": "Kinuha mula sa audio clip na in-upload mo.",
+    "uploadFirstAudio": "I-upload muna ang audio clip mo",
+    "tooManyClips": "Higit sa isa ang audio clip mo, kaya hindi namin alam kung aling haba ang gagamitin. Ilagay mo ito.",
+    "enterLengthAudio": "Higit sa isang audio clip ang na-upload, kaya ilagay ang haba ng bino-book mo.",
+    "mustFitAudio": "Dapat kumasya rito ang audio clip mo.",
+    "whenInTrack": "Kailan sa track",
+    "slotHintAudio": "Gaano kalayo sa bawat track ito tumutugtog. Mas huli, mas kaunting tao, pero nakikinig sila.",
+    "tracksToRunOn": "Mga track na pagpapatugtugan",
+    "shortestTrack": "Pinakamaikling track",
+    "longestTrack": "Pinakamahabang track"
   },
   "attach": {
     "needsTicker": "Ticker flight ito, kaya kailangan nito ng aprubadong ticker message.",

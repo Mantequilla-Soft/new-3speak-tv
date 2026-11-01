@@ -118,7 +118,8 @@
     "secondsIn_many": "Dopo {{count}} secondi",
     "secondsIn_other": "Dopo {{count}} secondi",
     "oneMinuteIn": "Dopo 1 minuto",
-    "minutesIn": "Dopo {{minutes}} minuti"
+    "minutesIn": "Dopo {{minutes}} minuti",
+    "beforeTrack": "Prima della traccia"
   },
   "blocked": {
     "unpaid": "In attesa del tuo pagamento",
@@ -566,8 +567,17 @@
     "chartYAxis": "HBD al secondo al giorno",
     "chartAria": "{{format}}: {{from}} HBD al secondo al giorno per {{min}} giorni, in calo fino a {{to}} HBD per {{max}} giorni",
     "audioSpot": "Riproducilo anche nel lettore audio",
-    "audioSpotHint": "Letto ad alta voce a chi ascolta post audio, con il tuo link come pulsante. Togli la spunta per tenerlo solo sui video.",
-    "lengthFromAudio": "Preso dal clip audio caricato."
+    "audioSpotHint": "Letto ad alta voce a chi ascolta post audio, con il tuo link come pulsante.",
+    "lengthFromAudio": "Preso dal clip audio caricato.",
+    "uploadFirstAudio": "Carica prima il tuo clip audio",
+    "tooManyClips": "Hai più di un clip audio, quindi non sappiamo quale durata usare. Inseriscila tu.",
+    "enterLengthAudio": "Più di un clip audio caricato: inserisci la durata di quello che prenoti.",
+    "mustFitAudio": "Il tuo clip audio deve starci dentro.",
+    "whenInTrack": "Quando nella traccia",
+    "slotHintAudio": "Quanto avanti in ogni traccia va. Più tardi raggiunge meno persone, ma che stanno ascoltando.",
+    "tracksToRunOn": "Tracce su cui va",
+    "shortestTrack": "Traccia più corta",
+    "longestTrack": "Traccia più lunga"
   },
   "attach": {
     "needsTicker": "Questa è una campagna ticker, quindi richiede un messaggio ticker approvato.",

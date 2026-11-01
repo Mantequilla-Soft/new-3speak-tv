@@ -116,7 +116,8 @@
     "secondsIn_one": "{{count}}. saniyede",
     "secondsIn_other": "{{count}}. saniyede",
     "oneMinuteIn": "1. dakikada",
-    "minutesIn": "{{minutes}}. dakikada"
+    "minutesIn": "{{minutes}}. dakikada",
+    "beforeTrack": "Parçadan önce"
   },
   "blocked": {
     "unpaid": "Ödemen bekleniyor",
@@ -548,8 +549,17 @@
     "chartYAxis": "Günde saniye başı HBD",
     "chartAria": "{{format}}: {{min}} gün için günde saniye başı {{from}} HBD, {{max}} gün için {{to}} HBD’ye düşer",
     "audioSpot": "Ses oynatıcısında da çal",
-    "audioSpotHint": "Sesli gönderileri dinleyenlere, bağlantınız düğme olarak, yüksek sesle okunur. Yalnızca videolarda kalması için işareti kaldırın.",
-    "lengthFromAudio": "Yüklediğiniz ses klibinden alındı."
+    "audioSpotHint": "Sesli gönderileri dinleyenlere, bağlantınız düğme olarak, yüksek sesle okunur.",
+    "lengthFromAudio": "Yüklediğiniz ses klibinden alındı.",
+    "uploadFirstAudio": "Önce ses klibinizi yükleyin",
+    "tooManyClips": "Birden fazla ses klibiniz var, hangi süreyi kullanacağımızı bilemiyoruz. Kendiniz girin.",
+    "enterLengthAudio": "Birden fazla ses klibi yüklendi, ayırdığınız klibin süresini girin.",
+    "mustFitAudio": "Ses klibiniz buna sığmalı.",
+    "whenInTrack": "Parçanın neresinde",
+    "slotHintAudio": "Her parçanın ne kadar içinde çalar. Daha geç, daha az kişiye ama dinleyenlere ulaşır.",
+    "tracksToRunOn": "Çalacağı parçalar",
+    "shortestTrack": "En kısa parça",
+    "longestTrack": "En uzun parça"
   },
   "attach": {
     "needsTicker": "Bu bir kayan yazı yayın dönemi, bu yüzden onaylanmış bir kayan yazı mesajı gerekiyor.",

@@ -118,7 +118,8 @@
     "secondsIn_many": "À {{count}} secondes",
     "secondsIn_other": "À {{count}} secondes",
     "oneMinuteIn": "À 1 minute",
-    "minutesIn": "À {{minutes}} minutes"
+    "minutesIn": "À {{minutes}} minutes",
+    "beforeTrack": "Avant la piste"
   },
   "blocked": {
     "unpaid": "En attente de votre paiement",
@@ -566,8 +567,17 @@
     "chartYAxis": "HBD par seconde et par jour",
     "chartAria": "{{format}} : {{from}} HBD par seconde et par jour pour {{min}} jours, en baisse jusqu’à {{to}} HBD pour {{max}} jours",
     "audioSpot": "Le diffuser aussi dans le lecteur audio",
-    "audioSpotHint": "Lu à voix haute aux personnes qui écoutent des publications audio, avec votre lien en bouton. Décochez pour le garder sur les vidéos seulement.",
-    "lengthFromAudio": "Repris du clip audio envoyé."
+    "audioSpotHint": "Lu à voix haute aux personnes qui écoutent des publications audio, avec votre lien en bouton.",
+    "lengthFromAudio": "Repris du clip audio envoyé.",
+    "uploadFirstAudio": "Envoyez d’abord votre clip audio",
+    "tooManyClips": "Vous avez plus d’un clip audio, nous ne savons donc pas quelle durée utiliser. Indiquez-la vous-même.",
+    "enterLengthAudio": "Plus d’un clip audio envoyé : indiquez la durée de celui que vous réservez.",
+    "mustFitAudio": "Votre clip audio doit tenir dans cette durée.",
+    "whenInTrack": "À quel moment de la piste",
+    "slotHintAudio": "À quel point de chaque piste il passe. Plus tard touche moins de monde, mais des gens qui écoutent.",
+    "tracksToRunOn": "Pistes sur lesquelles il passe",
+    "shortestTrack": "Piste la plus courte",
+    "longestTrack": "Piste la plus longue"
   },
   "attach": {
     "needsTicker": "Il s'agit d'une diffusion de bandeau : elle nécessite un message de bandeau approuvé.",

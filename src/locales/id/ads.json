@@ -114,7 +114,8 @@
     "percentIn": "Di {{percent}}%",
     "secondsIn_other": "Di detik ke-{{count}}",
     "oneMinuteIn": "Di menit ke-1",
-    "minutesIn": "Di menit ke-{{minutes}}"
+    "minutesIn": "Di menit ke-{{minutes}}",
+    "beforeTrack": "Sebelum trek"
   },
   "blocked": {
     "unpaid": "Menunggu pembayaranmu",
@@ -530,8 +531,17 @@
     "chartYAxis": "HBD per detik per hari",
     "chartAria": "{{format}}: {{from}} HBD per detik per hari untuk {{min}} hari, turun menjadi {{to}} HBD untuk {{max}} hari",
     "audioSpot": "Putar juga di pemutar audio",
-    "audioSpotHint": "Dibacakan untuk orang yang mendengarkan postingan audio, dengan tautanmu sebagai tombol. Hapus centang agar hanya di video.",
-    "lengthFromAudio": "Diambil dari klip audio yang kamu unggah."
+    "audioSpotHint": "Dibacakan untuk orang yang mendengarkan postingan audio, dengan tautanmu sebagai tombol.",
+    "lengthFromAudio": "Diambil dari klip audio yang kamu unggah.",
+    "uploadFirstAudio": "Unggah klip audiomu dulu",
+    "tooManyClips": "Kamu punya lebih dari satu klip audio, jadi kami tidak tahu durasi mana yang dipakai. Isi sendiri.",
+    "enterLengthAudio": "Lebih dari satu klip audio diunggah, jadi isi durasi klip yang kamu pesan.",
+    "mustFitAudio": "Klip audiomu harus muat di sini.",
+    "whenInTrack": "Kapan di trek",
+    "slotHintAudio": "Seberapa jauh di setiap trek iklan diputar. Lebih lambat menjangkau lebih sedikit orang, tapi yang sedang mendengarkan.",
+    "tracksToRunOn": "Trek tempat diputar",
+    "shortestTrack": "Trek terpendek",
+    "longestTrack": "Trek terpanjang"
   },
   "attach": {
     "needsTicker": "Ini penayangan ticker, jadi butuh pesan ticker yang sudah disetujui.",

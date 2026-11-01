@@ -116,7 +116,8 @@
     "secondsIn_one": "Baada ya sekunde {{count}}",
     "secondsIn_other": "Baada ya sekunde {{count}}",
     "oneMinuteIn": "Baada ya dakika 1",
-    "minutesIn": "Baada ya dakika {{minutes}}"
+    "minutesIn": "Baada ya dakika {{minutes}}",
+    "beforeTrack": "Kabla ya wimbo"
   },
   "blocked": {
     "unpaid": "Inasubiri malipo yako",
@@ -548,8 +549,17 @@
     "chartYAxis": "HBD kwa sekunde kwa siku",
     "chartAria": "{{format}}: {{from}} HBD kwa sekunde kwa siku kwa siku {{min}}, ikishuka hadi {{to}} HBD kwa siku {{max}}",
     "audioSpot": "Cheza pia kwenye kicheza sauti",
-    "audioSpotHint": "Husomwa kwa sauti kwa wanaosikiliza machapisho ya sauti, kiungo chako kikiwa kitufe. Ondoa alama ili libaki kwenye video tu.",
-    "lengthFromAudio": "Imechukuliwa kutoka kwenye klipu ya sauti uliyopakia."
+    "audioSpotHint": "Husomwa kwa sauti kwa wanaosikiliza machapisho ya sauti, kiungo chako kikiwa kitufe.",
+    "lengthFromAudio": "Imechukuliwa kutoka kwenye klipu ya sauti uliyopakia.",
+    "uploadFirstAudio": "Pakia klipu yako ya sauti kwanza",
+    "tooManyClips": "Una zaidi ya klipu moja ya sauti, kwa hiyo hatujui urefu gani utumike. Uweke mwenyewe.",
+    "enterLengthAudio": "Zaidi ya klipu moja ya sauti imepakiwa, kwa hiyo weka urefu wa ile unayoweka nafasi.",
+    "mustFitAudio": "Klipu yako ya sauti lazima itoshee hapa.",
+    "whenInTrack": "Wakati gani kwenye wimbo",
+    "slotHintAudio": "Inacheza umbali gani ndani ya kila wimbo. Baadaye hufikia watu wachache, lakini wanaosikiliza.",
+    "tracksToRunOn": "Nyimbo za kuchezwa",
+    "shortestTrack": "Wimbo mfupi zaidi",
+    "longestTrack": "Wimbo mrefu zaidi"
   },
   "attach": {
     "needsTicker": "Hii ni kampeni ya tika, kwa hivyo inahitaji ujumbe wa tika ulioidhinishwa.",

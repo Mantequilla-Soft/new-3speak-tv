@@ -114,7 +114,8 @@
     "percentIn": "{{percent}}% の位置",
     "secondsIn_other": "{{count}} 秒の位置",
     "oneMinuteIn": "1 分の位置",
-    "minutesIn": "{{minutes}} 分の位置"
+    "minutesIn": "{{minutes}} 分の位置",
+    "beforeTrack": "トラックの前"
   },
   "blocked": {
     "unpaid": "お支払いを待っています",
@@ -530,8 +531,17 @@
     "chartYAxis": "1日あたり1秒の HBD",
     "chartAria": "{{format}}：{{min}} 日で1日あたり1秒 {{from}} HBD、{{max}} 日では {{to}} HBD まで下がります",
     "audioSpot": "オーディオプレーヤーでも流す",
-    "audioSpotHint": "音声投稿を聴く人に読み上げられ、リンクはボタンになります。動画だけにする場合はチェックを外してください。",
-    "lengthFromAudio": "アップロードした音声クリップから取得しました。"
+    "audioSpotHint": "音声投稿を聴く人に読み上げられ、リンクはボタンになります。",
+    "lengthFromAudio": "アップロードした音声クリップから取得しました。",
+    "uploadFirstAudio": "先に音声クリップをアップロードしてください",
+    "tooManyClips": "音声クリップが複数あるため、どの長さを使うかわかりません。ご自身で入力してください。",
+    "enterLengthAudio": "複数の音声クリップがアップロードされています。予約するクリップの長さを入力してください。",
+    "mustFitAudio": "音声クリップはこの長さに収まる必要があります。",
+    "whenInTrack": "トラックのどこで",
+    "slotHintAudio": "各トラックのどこで流れるか。後ろほど届く人は減りますが、聴いている人に届きます。",
+    "tracksToRunOn": "流すトラック",
+    "shortestTrack": "最短のトラック",
+    "longestTrack": "最長のトラック"
   },
   "attach": {
     "needsTicker": "これはティッカーの掲載なので、承認済みのティッカーメッセージが必要です。",

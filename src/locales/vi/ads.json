@@ -114,7 +114,8 @@
     "percentIn": "Ở mốc {{percent}}%",
     "secondsIn_other": "Ở giây thứ {{count}}",
     "oneMinuteIn": "Ở phút thứ 1",
-    "minutesIn": "Ở phút thứ {{minutes}}"
+    "minutesIn": "Ở phút thứ {{minutes}}",
+    "beforeTrack": "Trước bài"
   },
   "blocked": {
     "unpaid": "Đang chờ thanh toán của bạn",
@@ -530,8 +531,17 @@
     "chartYAxis": "HBD mỗi giây mỗi ngày",
     "chartAria": "{{format}}: {{from}} HBD mỗi giây mỗi ngày cho {{min}} ngày, giảm xuống {{to}} HBD cho {{max}} ngày",
     "audioSpot": "Phát cả trong trình phát âm thanh",
-    "audioSpotHint": "Đọc to cho người nghe bài đăng âm thanh, với liên kết của bạn là một nút. Bỏ chọn để chỉ hiện trên video.",
-    "lengthFromAudio": "Lấy từ clip âm thanh bạn đã tải lên."
+    "audioSpotHint": "Đọc to cho người nghe bài đăng âm thanh, với liên kết của bạn là một nút.",
+    "lengthFromAudio": "Lấy từ clip âm thanh bạn đã tải lên.",
+    "uploadFirstAudio": "Hãy tải clip âm thanh lên trước",
+    "tooManyClips": "Bạn có nhiều hơn một clip âm thanh nên chúng tôi không biết dùng độ dài nào. Hãy tự nhập.",
+    "enterLengthAudio": "Đã tải lên nhiều hơn một clip âm thanh, hãy nhập độ dài của clip bạn đặt.",
+    "mustFitAudio": "Clip âm thanh của bạn phải vừa trong khoảng này.",
+    "whenInTrack": "Ở đâu trong bài",
+    "slotHintAudio": "Phát ở bao xa trong mỗi bài. Càng muộn càng ít người, nhưng là người đang nghe.",
+    "tracksToRunOn": "Bài sẽ phát",
+    "shortestTrack": "Bài ngắn nhất",
+    "longestTrack": "Bài dài nhất"
   },
   "attach": {
     "needsTicker": "Đây là đợt quảng cáo ticker, nên cần một thông điệp ticker đã được duyệt.",

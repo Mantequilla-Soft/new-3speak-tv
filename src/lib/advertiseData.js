@@ -728,7 +728,9 @@ export function slotLabel(slot) {
   // starts with the video rather than playing before it. Calling that "before the
   // video" describes a roll, and would have an advertiser expecting their banner to
   // show while the video had not started.
-  const zeroLabel = slot && slot.banner ? t('ads.slot.atBeginning') : t('ads.slot.beforeVideo');
+  // In the audio player (`audio`) the spot pauses a TRACK, so 0% is before the track.
+  const zeroLabel = slot && slot.banner ? t('ads.slot.atBeginning')
+    : (slot && slot.audio ? t('ads.slot.beforeTrack') : t('ads.slot.beforeVideo'));
   if (!slot) return zeroLabel;
 
   if (slot.percent != null) {
