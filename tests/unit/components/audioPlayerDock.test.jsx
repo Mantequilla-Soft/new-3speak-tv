@@ -86,7 +86,7 @@ describe('docked audio player', () => {
     act(() => root.unmount())
   })
 
-  it('closing the player keeps the queue, and an Up next bar offers it', () => {
+  it('closing the player keeps the queue, an Up next bar offers it, and its X clears it', () => {
     const { host, root } = mount()
     const second = { ...track, _id: 'f1:two', title: 'Second' }
     act(() => {
@@ -109,11 +109,11 @@ describe('docked audio player', () => {
     act(() => { idle.querySelector('.audio-np-play-btn').click() })
     expect(useAppStore.getState().audioCurrent?._id).toBe('f1:ep')
 
-    // Hiding the Up next bar still keeps the queue.
+    // The Up next bar's X is "Clear queue" (b9f1d2cf): it empties the queue and the bar goes.
     act(() => { host.querySelector('.audio-np-close-btn').click() })
     act(() => { host.querySelector('.audio-np-idle .audio-np-close-btn').click() })
     expect(host.querySelector('.audio-np-idle')).toBeNull()
-    expect(useAppStore.getState().audioQueue).toHaveLength(2)
+    expect(useAppStore.getState().audioQueue).toHaveLength(0)
     act(() => root.unmount())
   })
 
