@@ -1175,15 +1175,21 @@ function GlobalAudioPlayer() {
   }, [hasNowPlaying, docked, inPip]);
 
   // Same for the open queue, which on desktop sits above the player: its top
-  // edge goes into --audio-queue-clearance so the Feedback FAB clears it too.
-  // offsetHeight, not the rect, so the pop-up animation's offset isn't counted.
+  // edge goes into --audio-queue-clearance so the Feedback FAB clears it too
+  // (and the profile FAB on a phone). offsetHeight, not the rect, so the pop-up
+  // animation's offset isn't counted. On desktop the panel is fixed with its own
+  // `bottom`; on a phone/tablet it is a sheet at the foot of the overlay, lifted
+  // by the overlay's padding (the BottomNav), so that padding is what's below it.
   const queuePanelRef = useRef(null);
   useEffect(() => {
     const panel = queuePanelRef.current;
     const root = document.documentElement;
     if (!audioShowQueue || !panel) return;
     const update = () => {
-      const below = parseFloat(getComputedStyle(panel).bottom) || 0;
+      const cs = getComputedStyle(panel);
+      const below = cs.position === 'fixed'
+        ? parseFloat(cs.bottom) || 0
+        : parseFloat(getComputedStyle(panel.parentElement).paddingBottom) || 0;
       root.style.setProperty('--audio-queue-clearance', `${Math.round(below + panel.offsetHeight)}px`);
     };
     update();

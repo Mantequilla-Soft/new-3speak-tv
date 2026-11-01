@@ -144,6 +144,10 @@ function UserProfilePage({ user: userProp }) {
     const [isCreating, setIsCreating] = useState(false);
     const [isReportOpen, setIsReportOpen] = useState(false);
     const [fabOpen, setFabOpen] = useState(false);
+    // The opened audio player covers most of a phone's screen: the FAB steps
+    // out of the way until the player is folded again. (Its open menu's backdrop
+    // covers the player, so the player can't open while the menu is up.)
+    const audioExpanded = useAppStore((st) => st.audioExpanded);
     const [isTipModalOpen, setIsTipModalOpen] = useState(false);
 
     // Check if viewing own profile and redirect to /profile
@@ -872,7 +876,7 @@ const {
           {fabOpen && (
             <div className="profile-fab-backdrop" onClick={() => setFabOpen(false)} />
           )}
-          <div className={`profile-fab-speed-dial${fabOpen ? ' open' : ''}`}>
+          <div className={`profile-fab-speed-dial${fabOpen ? ' open' : ''}${audioExpanded ? ' is-under-player' : ''}`}>
             {fabOpen && (
               <div className="profile-fab-actions">
                 {authenticated && isLoggedIn() && (
