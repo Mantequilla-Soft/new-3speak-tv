@@ -843,6 +843,16 @@
   overflow-y: auto;
   padding: 16px;
   animation: queue-slide-up 0.25s ease;
+
+  // The heading (count, Clear all, X) stays put while the list scrolls under it.
+  > .app-modal-header {
+    position: sticky;
+    top: -16px;
+    z-index: 2;
+    margin-top: -16px;
+    padding-top: 16px;
+    background: inherit;
+  }
 }
 
 @keyframes queue-slide-up {
@@ -867,7 +877,8 @@
     width: 33vw;
     min-width: 360px;
     max-width: 560px;
-    max-height: min(60vh, calc(100vh - var(--audio-np-clearance, 120px) - 24px));
+    // About six rows, and always clear of the top bar, also over the opened player.
+    max-height: min(440px, 50vh, calc(100vh - var(--audio-np-clearance, 120px) - var(--nav-height, 60px) - 32px));
     background: var(--bg-elevated, var(--bg-secondary));
     border: 1px solid var(--border-light);
     border-radius: 12px;

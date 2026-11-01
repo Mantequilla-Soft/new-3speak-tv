@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.31',
+    category: 'watch',
+    date: '2026-11-01',
+    summary: "Video descriptions now slide open and closed smoothly when you tap Show more.",
+  },
+  {
+    version: '1.81.30',
+    category: 'audio',
+    date: '2026-11-01',
+    summary: "The audio player's queue now fits better on screen, and its heading stays visible while you scroll.",
+  },
+  {
+    version: '1.81.29',
+    category: 'audio',
+    date: '2026-11-01',
+    summary: "The opened audio player is tidier: controls on top, the full title below, and it slides open and closed smoothly.",
+  },
+  {
     version: '1.81.28',
     category: 'profile',
     date: '2026-11-01',
