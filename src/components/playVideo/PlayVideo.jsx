@@ -587,12 +587,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     }
   }, [clipMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Tip nudge at 90% playtime (only for logged-in viewers watching someone else's video)
+  // Tip nudge at 90% playtime, for anyone watching someone else's video. Signed
+  // out, the tip window opens on Lightning, which needs no Hive account.
   useEffect(() => {
     const duration = videoControls?.duration;
     const currentTime = videoControls?.currentTime;
     if (!duration || duration < 10 || tipNudgeShownRef.current) return;
-    if (!authenticated || !isLoggedIn() || user === author) return;
+    if (user === author) return;
     const triggerAt = duration * 0.9;
     if (currentTime >= triggerAt) {
       setTipNudgeVisible(true);
@@ -1346,7 +1347,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   band, the tip nudge and the fullscreen surf remote rather than
                   covering them (z map in TimelineToasters.scss). */}
               {timelineLinks?.length > 0 && (() => {
-                const tipShown = tipNudgeVisible && !isTipModalOpen && authenticated && isLoggedIn() && user !== author;
+                const tipShown = tipNudgeVisible && !isTipModalOpen && user !== author;
                 const top = 10
                   + (tickerShown ? 34 : 0)
                   + (tipShown ? 58 : 0)
@@ -1362,7 +1363,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   />
                 );
               })()}
-              {tipNudgeVisible && !isTipModalOpen && authenticated && isLoggedIn() && user !== author && (
+              {tipNudgeVisible && !isTipModalOpen && user !== author && (
                 <div className="tip-nudge">
                   <FaHeart className="tip-nudge-emoji hide-mobile" style={{ color: '#e53935' }} />
                   <span className="tip-nudge-text"><Trans i18nKey="watch.tipNudge.text" values={{ author }} components={{ hide: <span className="hide-mobile" />, b: <strong /> }} /></span>
@@ -1933,19 +1934,18 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 )}
 
                 {authenticated && isLoggedIn() && (
-                  <>
-                    <button type="button" className="pv-btn playlist-btn" onClick={() => setIsPlaylistModalOpen(true)} title={t('watch.actions.addToPlaylist')} {...lockProps}>
-                      <MdPlaylistAdd />
-                      <span>{t('watch.actions.playlist')}</span>
-                    </button>
-                    {/* Nobody tips themselves: no gift button on your own post. */}
-                    {user !== author && (
-                      <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title={t('watch.actions.tipTitle')} {...lockProps}>
-                        <Gift size={16} />
-                        <span>{t('watch.actions.tip')}</span>
-                      </button>
-                    )}
-                  </>
+                  <button type="button" className="pv-btn playlist-btn" onClick={() => setIsPlaylistModalOpen(true)} title={t('watch.actions.addToPlaylist')} {...lockProps}>
+                    <MdPlaylistAdd />
+                    <span>{t('watch.actions.playlist')}</span>
+                  </button>
+                )}
+                {/* Nobody tips themselves: no gift button on your own post. Signed
+                    out, the tip window opens on Lightning, which needs no Hive account. */}
+                {user !== author && (
+                  <button type="button" className="pv-btn tip-btn" onClick={() => setIsTipModalOpen(true)} title={t('watch.actions.tipTitle')} {...lockProps}>
+                    <Gift size={16} />
+                    <span>{t('watch.actions.tip')}</span>
+                  </button>
                 )}
 
                 {authenticated && isLoggedIn() && (
@@ -2259,7 +2259,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 </div>
               )}
 
-              {authenticated && isLoggedIn() && author !== user && (
+              {author !== user && (
                 <div className="fab-action">
                   <span className="fab-action-label">{t('watch.actions.tip')}</span>
                   <button

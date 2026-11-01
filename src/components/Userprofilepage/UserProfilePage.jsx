@@ -21,6 +21,7 @@ import { MdAdd, MdClose, MdPlayArrow, MdFlag, MdChatBubbleOutline } from 'react-
 import ReportModal, { isReported } from '../modal/ReportModal';
 import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri';
 import { BiDollar } from 'react-icons/bi';
+import { Gift } from 'lucide-react';
 import { IoBanOutline, IoEyeOutline, IoPlanetOutline } from 'react-icons/io5';
 import useGalaxyFits from '../../hooks/useGalaxyFits';
 import { getHidden, hideCreator, unhideCreator } from '../../utils/userFilters';
@@ -593,6 +594,15 @@ const {
             >
               <MdChatBubbleOutline /> {t('profile.page.message')}
             </button>
+            {/* Signed out too: the tip window opens on Lightning. Phones get
+                Tip from the speed-dial instead (ProfileHeader.scss hides this). */}
+            <button
+              className="btn btn-hero-message btn-hero-tip"
+              title={t('profile.fab.tipCreator')}
+              onClick={() => setIsTipModalOpen(true)}
+            >
+              <Gift size={16} /> {t('profile.fab.tip')}
+            </button>
             {/* Narrow screens only: below 1025px the framed links page beside
                 Overview isn't rendered, so this is the way through to it. It
                 sits directly under Message (see ProfileLinksButton.scss). */}
@@ -881,7 +891,8 @@ const {
                   </div>
                 )}
 
-                {authenticated && isLoggedIn() && (
+                {/* Signed out too: the tip window opens on Lightning. */}
+                {!isOwnProfile && (
                   <div className="profile-fab-action">
                     <span className="profile-fab-action-label">{t('profile.fab.tip')}</span>
                     <button

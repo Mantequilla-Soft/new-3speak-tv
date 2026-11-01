@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.17',
+    category: 'tips',
+    date: '2026-11-01',
+    summary: 'Tip without signing in: the Tip button on videos, the end-of-video tip prompt and a new Tip button on creator profiles now show for everyone, so visitors without a Hive account can send a Lightning tip.',
+  },
+  {
     version: '1.81.16',
     category: 'settings',
     date: '2026-11-01',

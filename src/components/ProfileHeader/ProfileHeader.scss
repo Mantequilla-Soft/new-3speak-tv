@@ -380,6 +380,11 @@
               }
             }
 
+            // Phones tip from the profile speed-dial, which already has Tip.
+            .btn-hero-tip {
+              @include mix.respond(phone) { display: none; }
+            }
+
             // A third action (ProfileLinksButton, narrow screens only) belongs
             // directly UNDER Message rather than wrapped onto a line of its
             // own: two columns, and the extra button claims column 2's second
