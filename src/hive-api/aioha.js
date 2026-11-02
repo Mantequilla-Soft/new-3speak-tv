@@ -786,6 +786,21 @@ export const endWalletSession = async () => {
     .catch(() => {})
 }
 
+// Did /api/broadcast refuse because its session cookie belongs to ANOTHER account
+// than `me` (e.g. a Butter Auth session from an earlier login outranking this
+// wallet login)? Two shapes:
+//   • 403 "Operation not allowed" (older server wording for any op).
+//   • 403 "You do not hold posting authority over @me": a custom_json naming `me`
+//     (playlists, follows) while the cookie says someone else. When it names a
+//     DIFFERENT account (acting for a badge) it is a real refusal, not a mismatch.
+export function isSessionMismatch(status, error, me) {
+  if (status !== 403) return false;
+  const msg = String(error || '');
+  if (/operation not allowed/i.test(msg)) return true;
+  const m = msg.match(/posting authority over @([a-z0-9.-]+)/i);
+  return !!(m && me && m[1].toLowerCase() === String(me).toLowerCase());
+}
+
 // @threespeak proxy broadcast — the user granted @threespeak posting authority
 // (via the upload gate), so the server signs posting-level ops on their behalf,
 // no wallet popup per action. Authentication of WHICH user, by provider:
@@ -825,12 +840,13 @@ export const broadcastViaThreespeak = async (operations) => {
   let { res, data } = await doPost()
   // Recover from a missing OR mismatched server session:
   //   • 401                          → no session yet (app-key auth disabled).
-  //   • 403 "Operation not allowed"  → the session cookie is bound to a DIFFERENT
-  //     account than the one we're posting for (e.g. switched wallets without
-  //     logging out). Clear the stale cookies first, then establish fresh.
+  //   • 403 mismatch (isSessionMismatch) → the session cookie is bound to a
+  //     DIFFERENT account than the one we're posting for (e.g. switched wallets,
+  //     or an old Butter Auth login). Clear the stale cookies first, then
+  //     establish fresh.
   // A 403 "Authorization required" is different (no @threespeak grant) and is
   // left to the caller's client-side-signing fallback.
-  const mismatch = res.status === 403 && /operation not allowed/i.test(data.error || '')
+  const mismatch = isSessionMismatch(res.status, data.error, aioha.getCurrentUser())
   if (mismatch) {
     // A stale session cookie (from a previously logged-in account) outranked our
     // current credential on the server. Clear it, then retry with the right
