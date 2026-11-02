@@ -11,7 +11,14 @@
     "storyTitle": "Historia de {{user}}",
     "streakTitle_one": "Racha de historias de {{count}} día",
     "streakTitle_many": "Racha de historias de {{count}} días",
-    "streakTitle_other": "Racha de historias de {{count}} días"
+    "streakTitle_other": "Racha de historias de {{count}} días",
+    "card": {
+      "storyPosted": "Historia publicada {{time}}",
+      "lastShort": "Último short {{time}}",
+      "rep": "Rep {{rep}}",
+      "repTitle": "Reputación en Hive",
+      "viewProfile": "Ver perfil"
+    }
   },
   "errors": {
     "votingUnavailable": "No se puede votar en esta publicación",

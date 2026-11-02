@@ -10,7 +10,14 @@
     "you": "Sen",
     "storyTitle": "{{user}} adlı kişinin hikâyesi",
     "streakTitle_one": "{{count}} günlük hikâye serisi",
-    "streakTitle_other": "{{count}} günlük hikâye serisi"
+    "streakTitle_other": "{{count}} günlük hikâye serisi",
+    "card": {
+      "storyPosted": "Hikâye paylaşıldı: {{time}}",
+      "lastShort": "Son Shorts: {{time}}",
+      "rep": "İtibar {{rep}}",
+      "repTitle": "Hive itibarı",
+      "viewProfile": "Profili gör"
+    }
   },
   "errors": {
     "votingUnavailable": "Bu gönderi için oy verme kullanılamıyor",

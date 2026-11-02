@@ -9,7 +9,14 @@
   "stories": {
     "you": "Bạn",
     "storyTitle": "Tin của {{user}}",
-    "streakTitle_other": "Chuỗi đăng tin {{count}} ngày"
+    "streakTitle_other": "Chuỗi đăng tin {{count}} ngày",
+    "card": {
+      "storyPosted": "Đã đăng tin {{time}}",
+      "lastShort": "Shorts gần nhất {{time}}",
+      "rep": "Uy tín {{rep}}",
+      "repTitle": "Uy tín trên Hive",
+      "viewProfile": "Xem trang cá nhân"
+    }
   },
   "errors": {
     "votingUnavailable": "Không thể vote cho bài đăng này",

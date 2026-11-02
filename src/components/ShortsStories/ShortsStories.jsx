@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaChevronLeft, FaChevronRight, FaPlus } from "react-icons/fa";
@@ -8,6 +8,8 @@ import { SHORTS_STORIES_URL, storiesEnabledFor } from "../../utils/config";
 import { useAppStore } from "../../lib/store";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
 import { useStoryCreators, storyViewerPath, storyTimeLeft, useStoryClock, STREAK_MIN } from "../../lib/stories";
+import { creatorCardQueries } from "../../lib/creatorCard";
+import StoryCreatorCard from "./StoryCreatorCard";
 import "./ShortsStories.scss";
 import { useTranslation } from "react-i18next";
 
@@ -57,6 +59,12 @@ const StreakBadge = ({ streak }) => {
   );
 };
 
+// The hover card opens while the avatar is turning around (coin-spin, 0.6s): a
+// short delay, so a pointer sweeping across the row doesn't flash cards. It
+// closes a moment after the pointer left both the avatar and the card.
+const CARD_OPEN_MS = 150;
+const CARD_CLOSE_MS = 150;
+
 /**
  * ShortsStories component — horizontal row of creator avatars.
  *
@@ -78,6 +86,11 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
   const [showRight, setShowRight] = useState(false);
   const dragStartScrollLeft = useRef(null);
   const isDragging = useRef(false);
+  const queryClient = useQueryClient();
+  // { username, story, anchor }: the creator card on screen (mouse hover only).
+  const [card, setCard] = useState(null);
+  const openTimer = useRef(null);
+  const closeTimer = useRef(null);
 
   const { creators, currentUserHasShort, isLoading } = useShortsStories();
   // 24h stories go first, with the cyan ring. A creator with a live story shows
@@ -87,12 +100,44 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
   const storyUsers = new Set(storyCreators.map((c) => c.username));
   const shortCreators = creators.filter((c) => c.username !== user && !storyUsers.has(c.username));
 
+  const cancelCardClose = useCallback(() => clearTimeout(closeTimer.current), []);
+  const closeCardSoon = useCallback(() => {
+    clearTimeout(openTimer.current);
+    clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setCard(null), CARD_CLOSE_MS);
+  }, []);
+  const closeCard = useCallback(() => {
+    clearTimeout(openTimer.current);
+    clearTimeout(closeTimer.current);
+    setCard(null);
+  }, []);
+  useEffect(() => () => { clearTimeout(openTimer.current); clearTimeout(closeTimer.current); }, []);
+  useEffect(() => {
+    if (!card) return undefined;
+    window.addEventListener("scroll", closeCard, { passive: true });
+    return () => window.removeEventListener("scroll", closeCard);
+  }, [card, closeCard]);
+
+  // A mouse resting on an avatar: fetch the card's data right away, show the card
+  // while the avatar turns. Touch has no hover, so it keeps the plain tap.
+  const onAvatarEnter = useCallback((e, username, story = null) => {
+    if (e.pointerType !== "mouse") return;
+    clearTimeout(closeTimer.current);
+    clearTimeout(openTimer.current);
+    creatorCardQueries(username, { story: !!story }).forEach((q) => { queryClient.prefetchQuery(q); });
+    const el = e.currentTarget.querySelector(".story-avatar-wrap") || e.currentTarget;
+    openTimer.current = setTimeout(() => {
+      setCard({ username, story, anchor: el.getBoundingClientRect() });
+    }, CARD_OPEN_MS);
+  }, [queryClient]);
+
   const checkScrollButtons = () => {
     if (scrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
       setShowLeft(scrollLeft > 10);
       setShowRight(scrollLeft < scrollWidth - clientWidth - 10);
     }
+    setCard(null);
   };
 
   useEffect(() => {
@@ -139,12 +184,13 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
 
   const handleCreatorClick = useCallback((username, story = false) => {
     if (isDragging.current) return;
+    closeCard();
     if (onCreatorSelect) {
       onCreatorSelect(username, { story });
     } else {
       navigate(story ? storyViewerPath(username) : `/shorts/stories?user=${username}`);
     }
-  }, [onCreatorSelect, navigate]);
+  }, [onCreatorSelect, navigate, closeCard]);
 
   const handleOwnAvatarClick = useCallback(() => {
     if (isDragging.current) return;
@@ -227,7 +273,9 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
                     data-creator={creator.username}
                     className={`story-item story-item--story${isActive ? " story-item--active" : ""}`}
                     onClick={() => handleCreatorClick(creator.username, true)}
-                    title={t("shorts.stories.storyTitle", { user: creator.username })}
+                    onPointerEnter={(e) => onAvatarEnter(e, creator.username, creator)}
+                    onPointerLeave={closeCardSoon}
+                    aria-label={t("shorts.stories.storyTitle", { user: creator.username })}
                   >
                     <div
                       className={`story-avatar-wrap story-timer${creator.followed ? " story-timer--followed" : ""}${creator.unseen_count > 0 ? "" : " story-timer--seen"}`}
@@ -263,6 +311,8 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
                       data-creator={creator.username}
                       className={`story-item${isActive ? " story-item--active" : ""}`}
                       onClick={() => handleCreatorClick(creator.username)}
+                      onPointerEnter={(e) => onAvatarEnter(e, creator.username)}
+                      onPointerLeave={closeCardSoon}
                     >
                       <div
                         className={`story-avatar-wrap ${
@@ -297,6 +347,18 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
           </button>
         )}
       </div>
+
+      {card && (
+        <StoryCreatorCard
+          key={card.username}
+          username={card.username}
+          story={card.story}
+          anchor={card.anchor}
+          now={now}
+          onPointerEnter={cancelCardClose}
+          onPointerLeave={closeCardSoon}
+        />
+      )}
     </div>
   );
 };

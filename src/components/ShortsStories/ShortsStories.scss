@@ -279,6 +279,9 @@
       width: 100%;
       height: 100%;
       display: block;
+      // Hovered with a mouse, the picture turns around once inside its still
+      // ring while the creator card opens (StoryCreatorCard).
+      @include coin-spin(220px);
     }
 
     .story-avatar {
@@ -421,4 +424,9 @@
       height: 13px;
     }
   }
+}
+
+// The turnaround, for the avatars that open a creator card (not your own "+").
+.shorts-stories .story-item:not(.own-story):hover .story-avatar-wrap .hive-avatar {
+  @include coin-spin-hover(220px);
 }

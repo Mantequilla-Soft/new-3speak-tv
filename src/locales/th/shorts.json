@@ -9,7 +9,14 @@
   "stories": {
     "you": "คุณ",
     "storyTitle": "สตอรี่ของ {{user}}",
-    "streakTitle_other": "สตอรี่ต่อเนื่อง {{count}} วัน"
+    "streakTitle_other": "สตอรี่ต่อเนื่อง {{count}} วัน",
+    "card": {
+      "storyPosted": "โพสต์สตอรี่เมื่อ {{time}}",
+      "lastShort": "Shorts ล่าสุดเมื่อ {{time}}",
+      "rep": "ชื่อเสียง {{rep}}",
+      "repTitle": "ชื่อเสียงบน Hive",
+      "viewProfile": "ดูโปรไฟล์"
+    }
   },
   "errors": {
     "votingUnavailable": "โพสต์นี้โหวตไม่ได้",

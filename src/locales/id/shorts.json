@@ -9,7 +9,14 @@
   "stories": {
     "you": "Kamu",
     "storyTitle": "Story {{user}}",
-    "streakTitle_other": "Streak story {{count}} hari"
+    "streakTitle_other": "Streak story {{count}} hari",
+    "card": {
+      "storyPosted": "Story diposting {{time}}",
+      "lastShort": "Shorts terakhir {{time}}",
+      "rep": "Rep {{rep}}",
+      "repTitle": "Reputasi Hive",
+      "viewProfile": "Lihat profil"
+    }
   },
   "errors": {
     "votingUnavailable": "Vote tidak tersedia untuk postingan ini",

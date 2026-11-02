@@ -12,7 +12,14 @@
     "streakTitle_one": "Seria relacji: {{count}} dzień",
     "streakTitle_few": "Seria relacji: {{count}} dni",
     "streakTitle_many": "Seria relacji: {{count}} dni",
-    "streakTitle_other": "Seria relacji: {{count}} dnia"
+    "streakTitle_other": "Seria relacji: {{count}} dnia",
+    "card": {
+      "storyPosted": "Relacja dodana {{time}}",
+      "lastShort": "Ostatni short {{time}}",
+      "rep": "Rep. {{rep}}",
+      "repTitle": "Reputacja na Hive",
+      "viewProfile": "Zobacz profil"
+    }
   },
   "errors": {
     "votingUnavailable": "Głosowanie nie jest dostępne dla tego posta",

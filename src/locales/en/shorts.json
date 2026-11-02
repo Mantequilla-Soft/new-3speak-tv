@@ -10,7 +10,14 @@
     "you": "You",
     "storyTitle": "{{user}}'s story",
     "streakTitle_one": "{{count}}-day story streak",
-    "streakTitle_other": "{{count}}-day story streak"
+    "streakTitle_other": "{{count}}-day story streak",
+    "card": {
+      "storyPosted": "Story posted {{time}}",
+      "lastShort": "Last short {{time}}",
+      "rep": "Rep {{rep}}",
+      "repTitle": "Hive reputation",
+      "viewProfile": "View profile"
+    }
   },
   "errors": {
     "votingUnavailable": "Voting isn't available for this post",

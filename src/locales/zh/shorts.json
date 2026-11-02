@@ -9,7 +9,14 @@
   "stories": {
     "you": "你",
     "storyTitle": "{{user}} 的快拍",
-    "streakTitle_other": "连续 {{count}} 天发布快拍"
+    "streakTitle_other": "连续 {{count}} 天发布快拍",
+    "card": {
+      "storyPosted": "快拍发布于{{time}}",
+      "lastShort": "最新短视频：{{time}}",
+      "rep": "声誉 {{rep}}",
+      "repTitle": "Hive 声誉",
+      "viewProfile": "查看主页"
+    }
   },
   "errors": {
     "votingUnavailable": "此帖子暂不支持点赞",

@@ -9,7 +9,14 @@
   "stories": {
     "you": "나",
     "storyTitle": "{{user}}님의 스토리",
-    "streakTitle_other": "{{count}}일 연속 스토리"
+    "streakTitle_other": "{{count}}일 연속 스토리",
+    "card": {
+      "storyPosted": "스토리 게시: {{time}}",
+      "lastShort": "최근 쇼츠: {{time}}",
+      "rep": "평판 {{rep}}",
+      "repTitle": "Hive 평판",
+      "viewProfile": "프로필 보기"
+    }
   },
   "errors": {
     "votingUnavailable": "이 게시물에는 투표할 수 없어요",

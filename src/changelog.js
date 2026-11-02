@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.48',
+    category: 'stories',
+    date: '2026-11-02',
+    summary: "Hover an avatar in the stories row to see when they last posted, plus their bio, reputation and video, short and audio counts.",
+  },
+  {
     version: '1.81.47',
     category: 'audio',
     date: '2026-11-02',

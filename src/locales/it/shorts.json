@@ -11,7 +11,14 @@
     "storyTitle": "Storia di {{user}}",
     "streakTitle_one": "Serie di storie di {{count}} giorno",
     "streakTitle_many": "Serie di storie di {{count}} giorni",
-    "streakTitle_other": "Serie di storie di {{count}} giorni"
+    "streakTitle_other": "Serie di storie di {{count}} giorni",
+    "card": {
+      "storyPosted": "Storia pubblicata {{time}}",
+      "lastShort": "Ultimo short {{time}}",
+      "rep": "Rep {{rep}}",
+      "repTitle": "Reputazione su Hive",
+      "viewProfile": "Vedi profilo"
+    }
   },
   "errors": {
     "votingUnavailable": "Il voto non è disponibile per questo post",
