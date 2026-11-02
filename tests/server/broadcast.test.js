@@ -47,6 +47,23 @@ describe('broadcast', () => {
     expect(r.status).toBe(200)
   })
 
+  it('two sessions in one browser: the one the operations act for is used', async () => {
+    // A Butter Auth login as bob in another tab, alice signed in here with a wallet.
+    const both = { cookies: { threespeak_session: 'test-butr:bob', threespeak_wsession: walletSession(api.env.SESSION_SIGNING_SECRET, 'alice') } }
+    expect((await broadcast([follow(['alice'])], both)).status).toBe(200)
+    expect((await broadcast([vote('alice')], both)).status).toBe(200)
+    // ...and bob's actions still go through as bob.
+    expect((await broadcast([vote('bob', 'alice')], both)).status).toBe(200)
+  })
+
+  it('two sessions do not let a request act for a third account', async () => {
+    const both = { cookies: { threespeak_session: 'test-butr:bob', threespeak_wsession: walletSession(api.env.SESSION_SIGNING_SECRET, 'alice') } }
+    const before = broadcastCount()
+    const r = await broadcast([vote('carol')], both)
+    expect(r.status).toBe(403)
+    expect(broadcastCount()).toBe(before)
+  })
+
   it('needs at least one and at most 20 operations', async () => {
     for (const operations of [undefined, []]) {
       const r = await broadcast(operations)

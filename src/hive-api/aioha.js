@@ -651,6 +651,31 @@ export const syncWalletSession = async () => {
   }
 }
 
+// Keychain's extension injects `window.hive_keychain` a moment after the page
+// starts, and the sign-in right after a reload can run before that. aioha's
+// Keychain wrapper then throws inside a promise that never settles (its
+// keychain-mini `challenge`), so the sign-in hung for good and every later
+// broadcast waited on it. Wait a little for the extension, and never wait on a
+// signature forever.
+const KEYCHAIN_WAIT_MS = 5000
+const SIGN_IN_TIMEOUT_MS = 120000
+export async function keychainReady(waitMs = KEYCHAIN_WAIT_MS) {
+  if (typeof window === 'undefined') return false
+  const end = Date.now() + waitMs
+  while (!window.hive_keychain) {
+    if (Date.now() >= end) return false
+    await new Promise((r) => setTimeout(r, 200))
+  }
+  return true
+}
+export function withTimeout(promise, ms, message) {
+  let timer
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(message)), ms) }),
+  ]).finally(() => clearTimeout(timer))
+}
+
 let walletSessionPromise = null
 export const establishWalletSession = async (wantAccount = null) => {
   if (isManteAuthLogin()) return false
@@ -714,9 +739,16 @@ export const establishWalletSession = async (wantAccount = null) => {
       // approval" prompt (QR / deep link). Without it the signature request is
       // sent but the user is never shown anything to approve, so sign-in silently
       // times out — and every HiveAuth user then fails /api/broadcast with 401.
-      const signed = await withHiveAuthWaiting(
-        () => aioha.signMessage(chData.challenge, KeyTypes.Posting),
-        'Approve sign-in on HiveAuth...',
+      if (provider === Providers.Keychain && !await keychainReady()) {
+        throw new Error('Hive Keychain is not available in this page')
+      }
+      const signed = await withTimeout(
+        withHiveAuthWaiting(
+          () => aioha.signMessage(chData.challenge, KeyTypes.Posting),
+          'Approve sign-in on HiveAuth...',
+        ),
+        SIGN_IN_TIMEOUT_MS,
+        'Sign-in was not approved in time',
       )
       if (!signed?.success || !signed.result) {
         throw new Error(extractAiohaError(signed, 'Sign-in signature was declined'))
@@ -738,23 +770,6 @@ export const establishWalletSession = async (wantAccount = null) => {
     }
   })()
   return walletSessionPromise
-}
-
-// Clear BOTH server-side session cookies (ManteAuth + SIWH wallet). Used when a
-// proxy broadcast resolves to the WRONG user — i.e. a session cookie left over
-// from a previously logged-in account (switching wallets without logging out).
-// Safe in the wallet broadcast path: a ManteAuth cookie present there is stale,
-// because ManteAuth logins never take this path.
-export const clearServerSession = async () => {
-  walletSessionPromise = null
-  await Promise.allSettled([
-    fetch(`${THREESPEAK_API}/auth/wallet/logout`, { method: 'POST', credentials: 'include' }),
-    // A live Butter Auth login is never the stale one: after switching to it
-    // from a wallet, only the wallet cookie can be left over.
-    ...(isManteAuthLogin() ? [] : [
-      fetch(`${THREESPEAK_API}/manteauth/logout`, { method: 'POST', credentials: 'include' }),
-    ]),
-  ])
 }
 
 // A Butter Auth login REPLACES a wallet login instead of sitting on top of it:
@@ -786,9 +801,9 @@ export const endWalletSession = async () => {
     .catch(() => {})
 }
 
-// Did /api/broadcast refuse because its session cookie belongs to ANOTHER account
-// than `me` (e.g. a Butter Auth session from an earlier login outranking this
-// wallet login)? Two shapes:
+// Did /api/broadcast refuse because the only session it holds belongs to ANOTHER
+// account than `me` (e.g. a Butter Auth login in another tab, and no wallet
+// session for this tab yet)? Two shapes:
 //   • 403 "Operation not allowed" (older server wording for any op).
 //   • 403 "You do not hold posting authority over @me": a custom_json naming `me`
 //     (playlists, follows) while the cookie says someone else. When it names a
@@ -840,20 +855,16 @@ export const broadcastViaThreespeak = async (operations) => {
   let { res, data } = await doPost()
   // Recover from a missing OR mismatched server session:
   //   • 401                          → no session yet (app-key auth disabled).
-  //   • 403 mismatch (isSessionMismatch) → the session cookie is bound to a
-  //     DIFFERENT account than the one we're posting for (e.g. switched wallets,
-  //     or an old Butter Auth login). Clear the stale cookies first, then
-  //     establish fresh.
+  //   • 403 mismatch (isSessionMismatch) → the server only holds a session for
+  //     ANOTHER account (e.g. a Butter Auth login in another tab). Sign this
+  //     wallet in too and retry: with both sessions present the server uses the
+  //     one the operations act for. Nothing is logged out: the other session is
+  //     someone's live login, not ours to end.
   // A 403 "Authorization required" is different (no @threespeak grant) and is
   // left to the caller's client-side-signing fallback.
   const mismatch = isSessionMismatch(res.status, data.error, aioha.getCurrentUser())
-  if (mismatch) {
-    // A stale session cookie (from a previously logged-in account) outranked our
-    // current credential on the server. Clear it, then retry with the right
-    // identity — wallet logins re-establish a SIWH session; HiveSigner's Bearer
-    // token authenticates on its own once the stale cookie is gone.
-    await clearServerSession()
-    if (!isWallet || await establishWalletSession()) {
+  if (mismatch && isWallet) {
+    if (await establishWalletSession(aioha.getCurrentUser())) {
       ({ res, data } = await doPost())
     }
   } else if (isWallet && res.status === 401) {
