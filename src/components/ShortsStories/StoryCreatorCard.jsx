@@ -20,9 +20,9 @@ const fmt = (n) => formatNumber(Number(n) || 0, { compact: true });
  * bio and how much they publish. `anchor` is the avatar's rect; the card sits
  * under it (over it when there is no room below), kept inside the window.
  * `story` is the stories-row entry for a live story (latest_at, latest_expires_at),
- * null for a plain shorts creator.
+ * null for a plain shorts creator. `leaving`: fading out (ShortsStories closes it after).
  */
-export default function StoryCreatorCard({ username, story, anchor, now, onPointerEnter, onPointerLeave }) {
+export default function StoryCreatorCard({ username, story, anchor, now, leaving = false, onPointerEnter, onPointerLeave }) {
   const { t } = useTranslation();
   const doc = usePortalDoc();
   const ref = useRef(null);
@@ -62,7 +62,7 @@ export default function StoryCreatorCard({ username, story, anchor, now, onPoint
   return createPortal(
     <div
       ref={ref}
-      className="story-creator-card"
+      className={`story-creator-card${leaving ? " story-creator-card--leaving" : ""}`}
       style={pos ? { left: pos.left, top: pos.top, width: CARD_WIDTH } : { left: -9999, top: 0, width: CARD_WIDTH, visibility: 'hidden' }}
       onPointerEnter={onPointerEnter}
       onPointerLeave={onPointerLeave}

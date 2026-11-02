@@ -61,9 +61,11 @@ const StreakBadge = ({ streak }) => {
 
 // The hover card opens while the avatar is turning around (coin-spin, 0.6s): a
 // short delay, so a pointer sweeping across the row doesn't flash cards. It
-// closes a moment after the pointer left both the avatar and the card.
+// closes a moment after the pointer left both the avatar and the card, fading
+// out over CARD_FADE_MS (StoryCreatorCard.scss `--leaving`).
 const CARD_OPEN_MS = 150;
 const CARD_CLOSE_MS = 150;
+const CARD_FADE_MS = 200;
 
 /**
  * ShortsStories component — horizontal row of creator avatars.
@@ -89,8 +91,10 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
   const queryClient = useQueryClient();
   // { username, story, anchor }: the creator card on screen (mouse hover only).
   const [card, setCard] = useState(null);
+  const [cardLeaving, setCardLeaving] = useState(false);
   const openTimer = useRef(null);
   const closeTimer = useRef(null);
+  const fadeTimer = useRef(null);
 
   const { creators, currentUserHasShort, isLoading } = useShortsStories();
   // 24h stories go first, with the cyan ring. A creator with a live story shows
@@ -100,18 +104,33 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
   const storyUsers = new Set(storyCreators.map((c) => c.username));
   const shortCreators = creators.filter((c) => c.username !== user && !storyUsers.has(c.username));
 
-  const cancelCardClose = useCallback(() => clearTimeout(closeTimer.current), []);
+  // Back on the card (also mid-fade): it stays, fading back in.
+  const cancelCardClose = useCallback(() => {
+    clearTimeout(closeTimer.current);
+    clearTimeout(fadeTimer.current);
+    setCardLeaving(false);
+  }, []);
   const closeCardSoon = useCallback(() => {
     clearTimeout(openTimer.current);
     clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setCard(null), CARD_CLOSE_MS);
+    closeTimer.current = setTimeout(() => {
+      setCardLeaving(true);
+      fadeTimer.current = setTimeout(() => { setCard(null); setCardLeaving(false); }, CARD_FADE_MS);
+    }, CARD_CLOSE_MS);
   }, []);
+  // Clicks and scrolling close it at once.
   const closeCard = useCallback(() => {
     clearTimeout(openTimer.current);
     clearTimeout(closeTimer.current);
+    clearTimeout(fadeTimer.current);
     setCard(null);
+    setCardLeaving(false);
   }, []);
-  useEffect(() => () => { clearTimeout(openTimer.current); clearTimeout(closeTimer.current); }, []);
+  useEffect(() => () => {
+    clearTimeout(openTimer.current);
+    clearTimeout(closeTimer.current);
+    clearTimeout(fadeTimer.current);
+  }, []);
   useEffect(() => {
     if (!card) return undefined;
     window.addEventListener("scroll", closeCard, { passive: true });
@@ -126,7 +145,10 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
     clearTimeout(openTimer.current);
     creatorCardQueries(username, { story: !!story }).forEach((q) => { queryClient.prefetchQuery(q); });
     const el = e.currentTarget.querySelector(".story-avatar-wrap") || e.currentTarget;
+    // A card still fading out finishes fading until this one replaces it.
     openTimer.current = setTimeout(() => {
+      clearTimeout(fadeTimer.current);
+      setCardLeaving(false);
       setCard({ username, story, anchor: el.getBoundingClientRect() });
     }, CARD_OPEN_MS);
   }, [queryClient]);
@@ -355,6 +377,7 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
           story={card.story}
           anchor={card.anchor}
           now={now}
+          leaving={cardLeaving}
           onPointerEnter={cancelCardClose}
           onPointerLeave={closeCardSoon}
         />
