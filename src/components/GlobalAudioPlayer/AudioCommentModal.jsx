@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ModalHeader from '../ModalHeader/ModalHeader';
 import { commentWithAioha } from '../../hive-api/aioha';
 import { usePortalDoc } from '../../utils/portalDocument';
+import useEmojiShortcodes from '../../hooks/useEmojiShortcodes';
 import { toastIn } from '../../utils/toast';
 import './AudioCommentModal.scss';
 
@@ -36,6 +37,7 @@ export default function AudioCommentModal({ author, permlink, title, at, onClose
   const [withTime, setWithTime] = useState(false);
   const [busy, setBusy] = useState(false);
   const inputRef = useRef(null);
+  const emoji = useEmojiShortcodes(inputRef, text, setText);
   const atSec = Math.floor(at || 0);
 
   useEffect(() => { inputRef.current?.focus(); }, []);
@@ -73,13 +75,15 @@ export default function AudioCommentModal({ author, permlink, title, at, onClose
           ref={inputRef}
           className="audio-comment-input"
           value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) post(); }}
+          onChange={(e) => setText(emoji.change(e))}
+          onKeyDown={(e) => { if (emoji.keyDown(e)) return; if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) post(); }}
+          onBlur={emoji.blur}
           placeholder={t('comments.section.commentPlaceholder')}
           rows={4}
           maxLength={10000}
           disabled={busy}
         />
+        {emoji.popup}
         <div className="audio-comment-foot">
           {atSec > 0 ? (
             <label className="audio-comment-at">

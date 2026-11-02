@@ -1,0 +1,33 @@
+// The ":" emoji list under a comment box (hooks/useEmojiShortcodes.jsx). Same
+// look as the chat's (.chat-typeahead), but fixed, so it works inside modals and
+// side panels; above everything (Short's comments panel sits at 999999).
+.emoji-shortcode-list {
+  position: fixed;
+  z-index: 1000001;
+  box-sizing: border-box;
+  max-height: 240px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+}
+
+.emoji-shortcode-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-size: 13.5px;
+
+  &.active { background: var(--bg-hover); }
+
+  .emoji-shortcode-emoji { font-size: 18px; line-height: 1; }
+  .emoji-shortcode-name { color: var(--text-secondary); }
+}

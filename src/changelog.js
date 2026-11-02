@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.49',
+    category: 'comments',
+    date: '2026-11-02',
+    summary: "Type : in any comment box to pick an emoji, or a name like :fire: to get 🔥, just like in Chat.",
+  },
+  {
     version: '1.81.48',
     category: 'stories',
     date: '2026-11-02',

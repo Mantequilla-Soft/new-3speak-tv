@@ -1,19 +1,12 @@
 import { useRef, useState, useCallback, useEffect } from 'react'
-import { search as searchEmoji, get as getEmoji } from 'node-emoji'
-
-// Common emojis shown the moment ":" is typed (before a query is entered).
-const POPULAR = ['joy', 'heart', 'fire', '+1', 'pray', 'tada', '100', 'eyes', 'sob', 'rocket']
-  .map((name) => ({ name, emoji: getEmoji(name) }))
-  .filter((e) => e.emoji)
-
-const OPEN_RE = /(?:^|\s):([a-z0-9_+\-]*)$/i
-const CLOSE_RE = /(:([a-z0-9_+\-]+):)$/i
+import { emojiSuggestions, convertClosedShortcode, insertPickedEmoji } from '../../lib/emojiShortcodes'
 
 /**
  * Multiline chat composer with inline `:shortcode:` emoji support.
  *  - Enter sends (desktop); Shift+Enter and touch-Enter insert a newline
  *  - typing ":" opens an emoji typeahead (↑/↓ move, Enter/Tab insert, Esc close)
  *  - typing a closing ":" (":fire:") converts to the emoji inline
+ * The shortcode rules live in lib/emojiShortcodes.js (shared with the comment boxes).
  */
 export default function EmojiTextInput({ value, onChange, onSubmit, onPasteFiles, placeholder, className, inputRef }) {
   const internalRef = useRef(null)
@@ -29,26 +22,19 @@ export default function EmojiTextInput({ value, onChange, onSubmit, onPasteFiles
   }, [value, ref])
 
   const refreshTypeahead = useCallback((val, cursor) => {
-    const m = val.slice(0, cursor).match(OPEN_RE)
-    if (!m) { setTa(null); return }
-    const q = m[1]
-    const items = q.length === 0 ? POPULAR : searchEmoji(q).slice(0, 8)
-    setTa(items.length ? { items, index: 0 } : null)
+    const items = emojiSuggestions(val, cursor)
+    setTa(items ? { items, index: 0 } : null)
   }, [])
 
   const apply = useCallback((emojiChar) => {
     const el = ref.current
     const cursor = el ? el.selectionStart : value.length
-    const m = value.slice(0, cursor).match(OPEN_RE)
-    if (!m) { setTa(null); return }
-    const colonIdx = cursor - (m[1].length + 1)
-    const insert = emojiChar + ' '
-    const next = value.slice(0, colonIdx) + insert + value.slice(cursor)
-    onChange(next)
+    const picked = insertPickedEmoji(value, cursor, emojiChar)
     setTa(null)
+    if (!picked) return
+    onChange(picked.value)
     requestAnimationFrame(() => {
-      const p = colonIdx + insert.length
-      if (ref.current) { ref.current.focus(); ref.current.setSelectionRange(p, p) }
+      if (ref.current) { ref.current.focus(); ref.current.setSelectionRange(picked.cursor, picked.cursor) }
     })
   }, [value, onChange, ref])
 
@@ -56,20 +42,14 @@ export default function EmojiTextInput({ value, onChange, onSubmit, onPasteFiles
     const val = e.target.value
     const cursor = e.target.selectionStart
     // Auto-convert a just-completed ":word:" at the cursor → emoji.
-    const closed = val.slice(0, cursor).match(CLOSE_RE)
-    if (closed) {
-      const em = getEmoji(closed[2])
-      if (em) {
-        const start = cursor - closed[1].length
-        const next = val.slice(0, start) + em + val.slice(cursor)
-        onChange(next)
-        setTa(null)
-        requestAnimationFrame(() => {
-          const p = start + em.length
-          if (ref.current) { ref.current.focus(); ref.current.setSelectionRange(p, p) }
-        })
-        return
-      }
+    const converted = convertClosedShortcode(val, cursor)
+    if (converted) {
+      onChange(converted.value)
+      setTa(null)
+      requestAnimationFrame(() => {
+        if (ref.current) { ref.current.focus(); ref.current.setSelectionRange(converted.cursor, converted.cursor) }
+      })
+      return
     }
     onChange(val)
     refreshTypeahead(val, cursor)
