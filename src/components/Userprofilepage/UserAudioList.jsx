@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { CHECKER_URL } from '../../utils/config';
 import { useProfileAudioPlaylists } from '../../lib/profileLayout';
 import AudioTile from '../AudioTile/AudioTile';
+import { audioItemPath } from '../AudioItem/AudioItemView';
 import AudioPlaylistTile from '../AudioPlaylistTile/AudioPlaylistTile';
 import BarLoader from '../Loader/BarLoader';
 import ProfileEmptyState from './ProfileEmptyState';
@@ -19,6 +20,7 @@ const isAudioOnly = (p) => p.trackCount > 0 && p.trackCount === p.totalItems;
 // has its own albums section, so podcasts only show on the full Audio tab).
 function UserAudioList({ user, limit = 0, isOwnProfile = false }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: audio = [], isLoading } = useQuery({
     queryKey: ['user-audio', user],
@@ -40,7 +42,12 @@ function UserAudioList({ user, limit = 0, isOwnProfile = false }) {
   const grid = audio.length > 0 && (
     <div className="audio-tile-grid user-audio-list-grid">
       {shown.map((item) => (
-        <AudioTile key={item._id || item.permlink} item={item} contextItems={audio} />
+        <AudioTile
+          key={item._id || item.permlink}
+          item={item}
+          contextItems={audio}
+          onOpen={() => navigate(audioItemPath(item))}
+        />
       ))}
     </div>
   );
