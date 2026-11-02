@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.50',
+    category: 'general',
+    date: '2026-11-02',
+    summary: "Video previews on cards now fade in and out smoothly when you hover a thumbnail.",
+  },
+  {
     version: '1.81.49',
     category: 'comments',
     date: '2026-11-02',
