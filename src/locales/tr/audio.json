@@ -21,7 +21,12 @@
     "playlist": "Oynatma listesi",
     "plays_one": "{{count}} dinlenme",
     "plays_other": "{{count}} dinlenme",
-    "fromAlbum": "{{album}} albümünden"
+    "fromAlbum": "{{album}} albümünden",
+    "addAll": "Tümünü ekle",
+    "addNew": "Yenileri ekle",
+    "addAllHint": "Tüm parçalar, en eskiden başlayarak",
+    "addNewHint": "Yalnızca sonuna kadar dinlemediğiniz parçalar, en eskiden başlayarak",
+    "addNewNone": "Tüm parçaları dinlediniz"
   },
   "author": {
     "followed": "@{{author}} takip edildi",

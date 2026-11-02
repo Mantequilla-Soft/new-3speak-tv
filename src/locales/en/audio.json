@@ -21,7 +21,12 @@
     "playlist": "Playlist",
     "plays_one": "{{count}} play",
     "plays_other": "{{count}} plays",
-    "fromAlbum": "from {{album}}"
+    "fromAlbum": "from {{album}}",
+    "addAll": "Add all",
+    "addNew": "Add new",
+    "addAllHint": "Every track, oldest first",
+    "addNewHint": "Only tracks you haven't heard to the end, oldest first",
+    "addNewNone": "You've heard every track"
   },
   "author": {
     "followed": "Followed @{{author}}",

@@ -258,7 +258,10 @@
     "emptyShorts": "এখনো কোনো শর্টস দেখা হয়নি",
     "emptyVideos": "এখনো কোনো ভিডিও দেখা হয়নি",
     "removeTitle": "দেখার ইতিহাস থেকে সরান",
-    "watchedAt": "দেখা হয়েছে {{when}}"
+    "watchedAt": "দেখা হয়েছে {{when}}",
+    "audioTab": "অডিও ({{count}})",
+    "emptyAudio": "এখনও কোনো অডিও শোনা হয়নি",
+    "listenedAt": "শোনা হয়েছে {{when}}"
   },
   "watchStream": {
     "saySomething": "কিছু বলুন…",

@@ -74,3 +74,26 @@ describe('oldestFirst', () => {
     expect(oldestFirst(undefined)).toEqual([])
   })
 })
+
+describe('listened 3Speak tracks', () => {
+  beforeEach(() => { localStorage.clear(); vi.resetModules() })
+
+  it('marks a track listened once played to the end, and keeps it after a reload signed out', async () => {
+    let p = await import('../../../src/lib/podcastProgress.js')
+    p.recordProgress(null, 't1', 100, 300)
+    p.recordProgress(null, 't2', 290, 300)
+    expect(p.isListened(null, 't1')).toBe(false)
+    expect(p.isListened(null, 't2')).toBe(true)
+    vi.resetModules()
+    p = await import('../../../src/lib/podcastProgress.js')
+    expect(p.isListened(null, 't2')).toBe(true)
+  })
+
+  it('keeps each listener apart', async () => {
+    const p = await import('../../../src/lib/podcastProgress.js')
+    vi.stubGlobal('fetch', vi.fn(async () => ({ json: async () => ({}) })))
+    p.recordProgress('alice', 't3', 300, 300)
+    expect(p.isListened('alice', 't3')).toBe(true)
+    expect(p.isListened('bob', 't3')).toBe(false)
+  })
+})

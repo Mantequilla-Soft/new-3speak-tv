@@ -5,6 +5,7 @@ import { MdHistory, MdDelete } from 'react-icons/md';
 import { IoArrowBack } from 'react-icons/io5';
 import BarLoader from '../components/Loader/BarLoader';
 import Card3 from '../components/Cards/Card3';
+import AudioTile from '../components/AudioTile/AudioTile';
 import icon from '../../public/images/stack.png';
 import { useAppStore } from '../lib/store';
 import { deleteWatchHistoryEntry } from '../utils/watchHistory';
@@ -51,8 +52,10 @@ async function fetchWatchedPage(username, type, since, page) {
     }
   }));
   return {
-    videos: videos.filter(Boolean),
-    counts: data.counts || { videos: 0, shorts: 0 },
+    // Only audio entries in the Audio tab, whatever a checker that predates the
+    // tab sends back for `type=audio`.
+    videos: videos.filter((v) => v && (type === 'audio') === !!v._audio),
+    counts: { videos: 0, shorts: 0, audio: 0, ...(data.counts || {}) },
     totalPages: data.totalPages || 1,
   };
 }
@@ -71,6 +74,7 @@ function WatchedView() {
   const [activeTab, setActiveTab] = useState('videos');
   const [videosPage, setVideosPage] = useState(1);
   const [shortsPage, setShortsPage] = useState(1);
+  const [audioPage, setAudioPage] = useState(1);
   // Today first: a long history is slow to page through, and what someone
   // usually wants back is something they watched today.
   const [dateFilter, setDateFilter] = useState('today');
@@ -80,14 +84,15 @@ function WatchedView() {
 
   const since = useMemo(() => getSinceTimestamp(dateFilter), [dateFilter]);
 
-  const apiType = activeTab === 'shorts' ? 'shorts' : 'videos';
-  const currentPage = activeTab === 'shorts' ? shortsPage : videosPage;
-  const setCurrentPage = activeTab === 'shorts' ? setShortsPage : setVideosPage;
+  const apiType = ['shorts', 'audio'].includes(activeTab) ? activeTab : 'videos';
+  const pages = { videos: [videosPage, setVideosPage], shorts: [shortsPage, setShortsPage], audio: [audioPage, setAudioPage] };
+  const [currentPage, setCurrentPage] = pages[apiType];
 
   const handleDateFilterChange = useCallback((key) => {
     setDateFilter(key);
     setVideosPage(1);
     setShortsPage(1);
+    setAudioPage(1);
   }, []);
 
   const { data, isLoading, isError } = useQuery({
@@ -98,6 +103,7 @@ function WatchedView() {
   });
   const videosCount = data?.counts.videos ?? 0;
   const shortsCount = data?.counts.shorts ?? 0;
+  const audioCount = data?.counts.audio ?? 0;
   const totalPages = data?.totalPages ?? 1;
 
   const filtered = useMemo(
@@ -124,7 +130,7 @@ function WatchedView() {
 
   const renderFooter = useCallback((video) => (
     <div className="watched-card-footer">
-      <span className="watched-date">{t('misc.watched.watchedAt', { when: formatRelativeDate(video.watched_at) })}</span>
+      <span className="watched-date">{t(video._audio ? 'misc.watched.listenedAt' : 'misc.watched.watchedAt', { when: formatRelativeDate(video.watched_at) })}</span>
       {isOwner && (
         <button
           type="button"
@@ -154,7 +160,7 @@ function WatchedView() {
                 @{username}
               </Link>
               <span className="separator">-</span>
-              <span>{t('misc.watched.count', { count: videosCount + shortsCount })}</span>
+              <span>{t('misc.watched.count', { count: videosCount + shortsCount + audioCount })}</span>
             </div>
           </div>
         </div>
@@ -185,6 +191,7 @@ function WatchedView() {
         tabs={[
           { key: 'videos', label: t('misc.watched.videosTab', { count: videosCount }) },
           { key: 'shorts', label: t('misc.watched.shortsTab', { count: shortsCount }) },
+          { key: 'audio', label: t('misc.watched.audioTab', { count: audioCount }) },
         ]}
         page={currentPage}
         totalPages={totalPages}
@@ -202,7 +209,18 @@ function WatchedView() {
         ) : filtered.length === 0 ? (
           <div className="empty-wrap">
             <img src={icon} alt="" />
-            <span>{activeTab === 'shorts' ? t('misc.watched.emptyShorts') : t('misc.watched.emptyVideos')}</span>
+            <span>{activeTab === 'shorts' ? t('misc.watched.emptyShorts') : activeTab === 'audio' ? t('misc.watched.emptyAudio') : t('misc.watched.emptyVideos')}</span>
+          </div>
+        ) : activeTab === 'audio' ? (
+          // The audio page's own tile (plays through the global player); the
+          // history line and remove button sit under each.
+          <div className="audio-tile-grid watched-audio-grid">
+            {filtered.map((item) => (
+              <div key={item._historyKey} className="watched-audio-item">
+                <AudioTile item={item} contextItems={filtered} />
+                {renderFooter(item)}
+              </div>
+            ))}
           </div>
         ) : activeTab === 'shorts' ? (
           <div className="watched-shorts-grid">

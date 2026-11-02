@@ -258,7 +258,10 @@
     "emptyShorts": "Bado hakuna Shorts ulizotazama",
     "emptyVideos": "Bado hakuna video ulizotazama",
     "removeTitle": "Ondoa kwenye historia ya kutazama",
-    "watchedAt": "Ilitazamwa {{when}}"
+    "watchedAt": "Ilitazamwa {{when}}",
+    "audioTab": "Sauti ({{count}})",
+    "emptyAudio": "Bado hujasikiliza sauti yoyote",
+    "listenedAt": "Ilisikilizwa {{when}}"
   },
   "watchStream": {
     "saySomething": "Sema kitu…",

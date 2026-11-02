@@ -258,7 +258,10 @@
     "emptyShorts": "Nog geen bekeken Shorts",
     "emptyVideos": "Nog geen bekeken video's",
     "removeTitle": "Verwijderen uit kijkgeschiedenis",
-    "watchedAt": "Bekeken {{when}}"
+    "watchedAt": "Bekeken {{when}}",
+    "audioTab": "Audio ({{count}})",
+    "emptyAudio": "Nog geen audio beluisterd",
+    "listenedAt": "Beluisterd {{when}}"
   },
   "watchStream": {
     "saySomething": "Zeg iets…",

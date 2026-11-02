@@ -18,6 +18,42 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.47',
+    category: 'audio',
+    date: '2026-11-02',
+    summary: "Audio you listen to now shows up in your Watched history, in a new Audio tab.",
+  },
+  {
+    version: '1.81.46',
+    category: 'audio',
+    date: '2026-11-02',
+    summary: "Audio play counts now include every listen, and hyped tracks rise in Popular.",
+  },
+  {
+    version: '1.81.45',
+    category: 'audio',
+    date: '2026-11-02',
+    summary: "The pop-out audio player now fits any window size, from a narrow strip to a wide, short window.",
+  },
+  {
+    version: '1.81.44',
+    category: 'sharing',
+    date: '2026-11-02',
+    summary: "The audio share menu can now reblog a track to your Hive blog.",
+  },
+  {
+    version: '1.81.43',
+    category: 'audio',
+    date: '2026-11-02',
+    summary: "Comment on and Hype any 3Speak audio right from the open player.",
+  },
+  {
+    version: '1.81.42',
+    category: 'audio',
+    date: '2026-11-02',
+    summary: "Playlist covers on /audio now offer Add all or Add new, which skips tracks you've already heard. On phones, a tap asks.",
+  },
+  {
     version: '1.81.41',
     category: 'audio',
     date: '2026-11-02',

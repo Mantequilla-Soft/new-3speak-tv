@@ -258,7 +258,10 @@
     "emptyShorts": "Noch keine angesehenen Shorts",
     "emptyVideos": "Noch keine angesehenen Videos",
     "removeTitle": "Aus dem Wiedergabeverlauf entfernen",
-    "watchedAt": "Angesehen {{when}}"
+    "watchedAt": "Angesehen {{when}}",
+    "audioTab": "Audio ({{count}})",
+    "emptyAudio": "Noch kein Audio gehört",
+    "listenedAt": "Gehört {{when}}"
   },
   "watchStream": {
     "saySomething": "Sag etwas…",

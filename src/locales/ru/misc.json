@@ -260,7 +260,10 @@
     "emptyShorts": "Просмотренных Shorts пока нет",
     "emptyVideos": "Просмотренных видео пока нет",
     "removeTitle": "Удалить из истории просмотров",
-    "watchedAt": "Просмотрено {{when}}"
+    "watchedAt": "Просмотрено {{when}}",
+    "audioTab": "Аудио ({{count}})",
+    "emptyAudio": "Вы ещё не слушали аудио",
+    "listenedAt": "Прослушано {{when}}"
   },
   "watchStream": {
     "saySomething": "Напишите что-нибудь…",

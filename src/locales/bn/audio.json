@@ -21,7 +21,12 @@
     "playlist": "প্লেলিস্ট",
     "plays_one": "{{count}} বার শোনা",
     "plays_other": "{{count}} বার শোনা",
-    "fromAlbum": "{{album}} থেকে"
+    "fromAlbum": "{{album}} থেকে",
+    "addAll": "সব যোগ করুন",
+    "addNew": "নতুনগুলো যোগ করুন",
+    "addAllHint": "সব ট্র্যাক, পুরনোগুলো আগে",
+    "addNewHint": "শুধু যে ট্র্যাকগুলো আপনি শেষ পর্যন্ত শোনেননি, পুরনোগুলো আগে",
+    "addNewNone": "আপনি সব ট্র্যাক শুনেছেন"
   },
   "author": {
     "followed": "@{{author}}-কে ফলো করেছেন",

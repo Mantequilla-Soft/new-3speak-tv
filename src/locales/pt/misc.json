@@ -259,7 +259,10 @@
     "emptyShorts": "Nenhum Short assistido ainda",
     "emptyVideos": "Nenhum vídeo assistido ainda",
     "removeTitle": "Remover do histórico",
-    "watchedAt": "Assistido {{when}}"
+    "watchedAt": "Assistido {{when}}",
+    "audioTab": "Áudio ({{count}})",
+    "emptyAudio": "Ainda não ouviste nenhum áudio",
+    "listenedAt": "Ouvido {{when}}"
   },
   "watchStream": {
     "saySomething": "Diga alguma coisa…",

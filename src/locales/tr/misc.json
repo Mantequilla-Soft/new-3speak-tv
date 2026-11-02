@@ -258,7 +258,10 @@
     "emptyShorts": "Henüz izlenen Shorts yok",
     "emptyVideos": "Henüz izlenen video yok",
     "removeTitle": "İzleme geçmişinden kaldır",
-    "watchedAt": "İzlendi: {{when}}"
+    "watchedAt": "İzlendi: {{when}}",
+    "audioTab": "Ses ({{count}})",
+    "emptyAudio": "Henüz dinlenen ses yok",
+    "listenedAt": "Dinlendi: {{when}}"
   },
   "watchStream": {
     "saySomething": "Bir şey söyle…",

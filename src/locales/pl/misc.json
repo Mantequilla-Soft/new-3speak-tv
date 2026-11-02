@@ -260,7 +260,10 @@
     "emptyShorts": "Brak obejrzanych Shorts",
     "emptyVideos": "Brak obejrzanych filmów",
     "removeTitle": "Usuń z historii oglądania",
-    "watchedAt": "Obejrzano {{when}}"
+    "watchedAt": "Obejrzano {{when}}",
+    "audioTab": "Audio ({{count}})",
+    "emptyAudio": "Brak odsłuchanych nagrań",
+    "listenedAt": "Odsłuchano {{when}}"
   },
   "watchStream": {
     "saySomething": "Napisz coś…",

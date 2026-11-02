@@ -21,7 +21,12 @@
     "playlist": "Orodha ya kucheza",
     "plays_one": "uchezaji {{count}}",
     "plays_other": "michezo {{count}}",
-    "fromAlbum": "kutoka {{album}}"
+    "fromAlbum": "kutoka {{album}}",
+    "addAll": "Ongeza zote",
+    "addNew": "Ongeza mpya",
+    "addAllHint": "Nyimbo zote, za zamani kwanza",
+    "addNewHint": "Nyimbo ambazo hujasikiliza hadi mwisho tu, za zamani kwanza",
+    "addNewNone": "Umesikiliza nyimbo zote"
   },
   "author": {
     "followed": "Umemfuata @{{author}}",

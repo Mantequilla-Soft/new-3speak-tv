@@ -21,7 +21,12 @@
     "playlist": "Playlist",
     "plays_one": "{{count}} play",
     "plays_other": "{{count}} plays",
-    "fromAlbum": "mula sa {{album}}"
+    "fromAlbum": "mula sa {{album}}",
+    "addAll": "Idagdag lahat",
+    "addNew": "Idagdag ang bago",
+    "addAllHint": "Lahat ng track, mula sa pinakaluma",
+    "addNewHint": "Mga track lang na hindi mo pa natatapos pakinggan, mula sa pinakaluma",
+    "addNewNone": "Napakinggan mo na ang lahat ng track"
   },
   "author": {
     "followed": "Fina-follow mo na si @{{author}}",

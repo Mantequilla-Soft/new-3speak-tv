@@ -257,7 +257,10 @@
     "emptyShorts": "視聴したショートはまだありません",
     "emptyVideos": "視聴した動画はまだありません",
     "removeTitle": "再生履歴から削除",
-    "watchedAt": "{{when}} に視聴"
+    "watchedAt": "{{when}} に視聴",
+    "audioTab": "オーディオ（{{count}}）",
+    "emptyAudio": "まだ聴いたオーディオはありません",
+    "listenedAt": "{{when}} に聴取"
   },
   "watchStream": {
     "saySomething": "何か話しかけよう…",

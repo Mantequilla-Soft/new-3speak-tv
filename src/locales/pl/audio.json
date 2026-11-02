@@ -23,7 +23,12 @@
     "plays_few": "{{count}} odtworzenia",
     "plays_many": "{{count}} odtworzeń",
     "plays_other": "{{count}} odtworzenia",
-    "fromAlbum": "z {{album}}"
+    "fromAlbum": "z {{album}}",
+    "addAll": "Dodaj wszystkie",
+    "addNew": "Dodaj nowe",
+    "addAllHint": "Wszystkie utwory, od najstarszych",
+    "addNewHint": "Tylko utwory niewysłuchane do końca, od najstarszych",
+    "addNewNone": "Wszystkie utwory są już wysłuchane"
   },
   "author": {
     "followed": "Obserwujesz @{{author}}",

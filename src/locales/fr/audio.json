@@ -22,7 +22,12 @@
     "plays_one": "{{count}} écoute",
     "plays_many": "{{count}} écoutes",
     "plays_other": "{{count}} écoutes",
-    "fromAlbum": "de {{album}}"
+    "fromAlbum": "de {{album}}",
+    "addAll": "Tout ajouter",
+    "addNew": "Ajouter les nouveaux",
+    "addAllHint": "Tous les titres, les plus anciens d'abord",
+    "addNewHint": "Seulement les titres que vous n'avez pas écoutés jusqu'au bout, les plus anciens d'abord",
+    "addNewNone": "Vous avez écouté tous les titres"
   },
   "author": {
     "followed": "Vous suivez @{{author}}",

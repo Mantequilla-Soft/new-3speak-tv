@@ -257,7 +257,10 @@
     "emptyShorts": "Chưa xem Shorts nào",
     "emptyVideos": "Chưa xem video nào",
     "removeTitle": "Xóa khỏi lịch sử xem",
-    "watchedAt": "Đã xem {{when}}"
+    "watchedAt": "Đã xem {{when}}",
+    "audioTab": "Âm thanh ({{count}})",
+    "emptyAudio": "Chưa nghe âm thanh nào",
+    "listenedAt": "Đã nghe {{when}}"
   },
   "watchStream": {
     "saySomething": "Nói gì đó…",

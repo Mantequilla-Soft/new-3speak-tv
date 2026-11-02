@@ -259,7 +259,10 @@
     "emptyShorts": "Aucun Short vu pour l'instant",
     "emptyVideos": "Aucune vidéo vue pour l'instant",
     "removeTitle": "Retirer de l'historique",
-    "watchedAt": "Vu {{when}}"
+    "watchedAt": "Vu {{when}}",
+    "audioTab": "Audio ({{count}})",
+    "emptyAudio": "Aucun audio écouté pour l'instant",
+    "listenedAt": "Écouté {{when}}"
   },
   "watchStream": {
     "saySomething": "Dites quelque chose…",

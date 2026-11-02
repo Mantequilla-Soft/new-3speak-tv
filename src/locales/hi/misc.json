@@ -258,7 +258,10 @@
     "emptyShorts": "अभी कोई शॉर्ट नहीं देखा",
     "emptyVideos": "अभी कोई वीडियो नहीं देखा",
     "removeTitle": "वॉच हिस्ट्री से हटाएँ",
-    "watchedAt": "{{when}} देखा"
+    "watchedAt": "{{when}} देखा",
+    "audioTab": "ऑडियो ({{count}})",
+    "emptyAudio": "अभी तक कोई ऑडियो नहीं सुना",
+    "listenedAt": "{{when}} सुना"
   },
   "watchStream": {
     "saySomething": "कुछ कहें…",

@@ -816,6 +816,92 @@
   }
 }
 
+// The pop-out window follows its own size. The page's styles are copied into
+// that window, so these media queries measure the WINDOW; they are scoped to
+// .audio-np-in-pip so the phone's Player tab never picks them up.
+//   narrow       ≤ 300 px wide: smaller cover, no record, tighter controls
+//   very narrow  ≤ 190 px wide: play, pause and skip only
+//   wide         short and wider than tall: cover left, the rest right
+//   mini         ≤ 300 px tall: cover, title, timeline and controls only
+@media (max-width: 300px) {
+  .audio-pip-root { padding: 0 8px; }
+  .audio-now-playing.audio-np-docked.audio-np-in-pip {
+    --dock-art: min(72vw, 170px);
+    gap: 10px;
+    padding-bottom: 12px;
+    .audio-np-art { width: var(--dock-art); }
+    .audio-np-record { display: none; }
+    .audio-np-title { font-size: 15px; }
+    .audio-np-mobile-extras { gap: 4px; }
+    .audio-np-controls {
+      gap: 4px;
+      .audio-np-btn { width: 34px; height: 34px; svg { width: 20px; height: 20px; } }
+      .audio-np-play-btn { width: 50px; height: 50px; svg { width: 26px; height: 26px; } }
+    }
+    .audio-np-tools { flex-wrap: wrap; gap: 4px; }
+  }
+}
+@media (max-width: 190px) {
+  .audio-now-playing.audio-np-docked.audio-np-in-pip {
+    .audio-np-controls .audio-np-track-btn,
+    .audio-np-tools,
+    .audio-np-tags,
+    .audio-np-timeline-times { display: none; }
+    .audio-np-subline { font-size: 11px; }
+  }
+}
+@media (max-height: 560px) and (min-aspect-ratio: 5/4) and (min-width: 380px) {
+  .audio-now-playing.audio-np-docked.audio-np-in-pip {
+    --dock-art: min(48vh, 30vw, 240px);
+    display: grid;
+    grid-template-columns: calc(var(--dock-art) * 1.3) minmax(0, 1fr);
+    column-gap: 20px;
+    row-gap: 10px;
+    align-content: start;
+    max-width: none;
+    // The player's pieces are the grid items here (their wrappers are
+    // display: contents): all to the right, the cover alone on the left.
+    > *, .audio-np-content > *, .audio-np-expanded-area > *, .audio-np-actions > * { grid-column: 2; }
+    .audio-np-art {
+      grid-column: 1;
+      grid-row: 1 / span 12;
+      align-self: start;
+      position: sticky;
+      top: 40px;
+    }
+    .audio-np-info { text-align: left; }
+    .audio-np-title, .audio-np-subline, .audio-np-mobile-extras,
+    .audio-np-controls, .audio-np-tools, .audio-np-tags { justify-content: flex-start; }
+  }
+}
+@media (max-height: 300px) {
+  .audio-now-playing.audio-np-docked.audio-np-in-pip {
+    --dock-art: min(56vh, 30vw, 150px);
+    padding-top: 36px;
+    padding-bottom: 8px;
+    gap: 6px;
+    .audio-np-record { display: none; }
+    .audio-np-art { width: var(--dock-art); }
+    .audio-np-queue-inline,
+    .audio-np-chapters,
+    .audio-np-ad-card,
+    .audio-np-tags,
+    .audio-np-body,
+    .audio-transcript-panel,
+    .audio-np-tools { display: none; }
+    .audio-np-controls {
+      .audio-np-btn { width: 34px; height: 34px; svg { width: 20px; height: 20px; } }
+      .audio-np-play-btn { width: 46px; height: 46px; svg { width: 24px; height: 24px; } }
+    }
+  }
+}
+@media (max-height: 300px) and (min-aspect-ratio: 5/4) and (min-width: 380px) {
+  .audio-now-playing.audio-np-docked.audio-np-in-pip {
+    grid-template-columns: var(--dock-art) minmax(0, 1fr);
+    .audio-np-art { top: 36px; }
+  }
+}
+
 // A spoken ticker spot: its strip sits in the card, under the progress bar,
 // for as long as the spot plays (hooks/useAudioAd.js).
 .audio-now-playing .audio-np-ad {

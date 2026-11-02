@@ -257,7 +257,10 @@
     "emptyShorts": "Belum ada Shorts yang ditonton",
     "emptyVideos": "Belum ada video yang ditonton",
     "removeTitle": "Hapus dari riwayat tontonan",
-    "watchedAt": "Ditonton {{when}}"
+    "watchedAt": "Ditonton {{when}}",
+    "audioTab": "Audio ({{count}})",
+    "emptyAudio": "Belum ada audio yang didengarkan",
+    "listenedAt": "Didengarkan {{when}}"
   },
   "watchStream": {
     "saySomething": "Katakan sesuatu…",
