@@ -9,6 +9,7 @@ import {
 } from 'react'
 import { ChatProvider as SdkChatProvider } from '@snapie/chat-client/react'
 import { useAppStore } from '../lib/store'
+import useHoverPeek from '../hooks/useHoverPeek'
 import { t } from '../i18n'
 import {
   getChatClient,
@@ -246,7 +247,12 @@ export function ChatProvider({ children }) {
     if (dm) setPendingDm(String(dm).trim().replace(/^@/, '').toLowerCase())
     setOverlayOpen(true)
   }, [])
-  const closeOverlay = useCallback(() => setOverlayOpen(false), [])
+  // A mouse resting on the top bar's chat button peeks at the panel, hung under
+  // the button (ChatButton + ChatOverlay); a click inside or on the button keeps
+  // it. Closing the chat (its X, Escape) also closes a peek.
+  const peek = useHoverPeek()
+  const { close: closePeek } = peek
+  const closeOverlay = useCallback(() => { setOverlayOpen(false); closePeek() }, [closePeek])
 
   // Open a queued DM as soon as the client can.
   useEffect(() => {
@@ -281,12 +287,14 @@ export function ChatProvider({ children }) {
       overlayOpen,
       openOverlay,
       closeOverlay,
+      peek,
     }),
     [
       warmup,
       overlayOpen,
       openOverlay,
       closeOverlay,
+      peek,
       client,
       ready,
       connecting,

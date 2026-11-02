@@ -191,6 +191,7 @@ import { LOCAL_STORAGE_USER_ID_KEY } from "./hooks/localStorageKeys";
 import { endWalletSession } from "./hive-api/aioha";
 import { rememberButrauthAccount } from "./utils/butrauthAccounts";
 import useCardSize from "./hooks/useCardSize";
+import useHoverPeek from "./hooks/useHoverPeek";
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -307,7 +308,10 @@ function App() {
   }, [homeCardSize]);
   const clearSessionExpired = useAppStore((s) => s.clearSessionExpired);
   const { aioha, user: aiohaUser } = useAioha();
-  const [profileNavVisible, setProfileNavVisible] = useState(false);
+  // The account menu: a mouse resting on the top bar's avatar peeks at it, a click
+  // (or the bottom bar's Profile tap) keeps it open; it fades in and out.
+  const profileMenu = useHoverPeek();
+  const profileNavVisible = profileMenu.shown;
 
   const [globalCloseRender, setGlobalCloseRender] = useState(false)
   const [toggle, setToggle] = useState(false);
@@ -601,10 +605,7 @@ function App() {
   // const closeProfileNav = ()=>{
   //   setProfileNavVisible(!profileNavVisible)
   // }
-  const toggleProfileNav = () => {
-    setProfileNavVisible((prev) => !prev);
-    console.log(profileNavVisible);
-  };
+  const toggleProfileNav = profileMenu.toggle;
 
   const toggleAddAccount = () => {
     setToggle((prev) => !prev);
@@ -766,7 +767,7 @@ function App() {
       <ReviewFab />
       <ShortsPreloader />
       {!hideNavOnMobile && (
-        <Nav toggleProfileNav={toggleProfileNav} globalClose={globalCloseRender} setGlobalClose={setGlobalCloseRender} openLoginModal={openLoginModal} />
+        <Nav toggleProfileNav={toggleProfileNav} profileMenuHover={profileMenu.hoverProps} globalClose={globalCloseRender} setGlobalClose={setGlobalCloseRender} openLoginModal={openLoginModal} />
       )}
       <div>
         {/* The left sidebar is gone. The content keeps the classes it wore
@@ -899,7 +900,7 @@ function App() {
           <OpenPodModalMounter />
         </div>
         {!hideNavOnMobile && (
-          <ProfileNav isVisible={profileNavVisible} onclose={toggleProfileNav} toggleAddAccount={toggleAddAccount} openLoginModal={openLoginModal} />
+          <ProfileNav isVisible={profileMenu.rendered} pinned={profileMenu.open} leaving={profileMenu.leaving} hoverProps={profileMenu.hoverProps} onclose={profileMenu.close} toggleAddAccount={toggleAddAccount} openLoginModal={openLoginModal} />
         )}
         <MiniPlayer />
         <GlobalAudioPlayer />

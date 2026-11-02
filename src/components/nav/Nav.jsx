@@ -13,6 +13,7 @@ import { FaMedal } from "react-icons/fa6";
 import { useMyPlaylists } from "../../hooks/useMyPlaylists";
 import ShortsIcon from "../icons/ShortsIcon";
 import UploadLinks from "../UploadLinks";
+import useHoverPeek from "../../hooks/useHoverPeek";
 import ModalHeader from "../ModalHeader/ModalHeader";
 import NavProgress from '../Incubation/NavProgress';
 import IncubationBell from '../Incubation/IncubationBell';
@@ -144,12 +145,15 @@ const UPLOAD_SHEET_QUERY = '(max-width: 1024px)';
 
 function NavUploadDropdown() {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const sheetRef = useRef(null);
   const [asSheet, setAsSheet] = useState(
     () => typeof window !== 'undefined' && window.matchMedia?.(UPLOAD_SHEET_QUERY).matches,
   );
+  // Desktop dropdown: a mouse resting on Share peeks at it, a click keeps it open,
+  // and it fades in and out (hooks/useHoverPeek.js). The bottom sheet is tap only.
+  const menu = useHoverPeek({ enabled: !asSheet });
+  const { shown: open, close: closeMenu } = menu;
 
   useEffect(() => {
     const mq = window.matchMedia(UPLOAD_SHEET_QUERY);
@@ -164,33 +168,33 @@ function NavUploadDropdown() {
     // before the link's click lands).
     const handleClickOutside = (e) => {
       if (ref.current?.contains(e.target) || sheetRef.current?.contains(e.target)) return;
-      setOpen(false);
+      closeMenu();
     };
     if (open) document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [open]);
+  }, [open, closeMenu]);
 
   return (
-    <div className="nav-upload-wrapper" ref={ref}>
+    <div className="nav-upload-wrapper" ref={ref} {...menu.hoverProps}>
       {/* Two icons, one shown per breakpoint: the labelled cloud button on
           desktop, a bare "+" on mobile where this replaces the bottom bar's
           centre item and has to fit next to the avatar. */}
-      <div className="nav-upload-btn" onClick={() => setOpen(!open)} title={t('common.actions.share')}>
+      <div className="nav-upload-btn" onClick={menu.toggle} title={t('common.actions.share')}>
         <IoCloudUploadSharp size={18} className="nav-upload-icon-desktop" />
         <MdAdd size={21} className="nav-upload-icon-mobile" />
         <span className="nav-upload-label">{t('common.actions.share')}</span>
       </div>
-      {open && !asSheet && (
-        <div className="nav-upload-flyout" onClick={() => setOpen(false)}>
+      {menu.rendered && !asSheet && (
+        <div className={`nav-upload-flyout${menu.leaving ? ' nav-upload-flyout--leaving' : ''}`} onClick={menu.close}>
           <UploadLinks linkClass="nav-upload-flyout-item" iconClass="nav-upload-flyout-icon" />
         </div>
       )}
       {/* Portalled: the nav bar gets a transform when it auto-hides on scroll,
           which would otherwise drag a position:fixed sheet along with it. */}
       {open && asSheet && createPortal(
-        <div className="nav-upload-sheet-overlay" onClick={() => setOpen(false)}>
+        <div className="nav-upload-sheet-overlay" onClick={menu.close}>
           <div className="nav-upload-sheet" ref={sheetRef} role="dialog" aria-label={t('common.actions.share')}>
-            <ModalHeader className="nav-upload-sheet-header" title={t('common.actions.share')} onClose={() => setOpen(false)} />
+            <ModalHeader className="nav-upload-sheet-header" title={t('common.actions.share')} onClose={menu.close} />
             <UploadLinks linkClass="nav-upload-flyout-item" iconClass="nav-upload-flyout-icon" />
           </div>
         </div>,
@@ -204,7 +208,7 @@ function NavUploadDropdown() {
 // look, not something to sync anywhere.
 const NAV_TABS_KEY = '3speak_nav_tabs_open';
 
-function Nav({ toggleProfileNav, openLoginModal }) {
+function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
   const { t } = useTranslation();
   const { authenticated, LogOut, user, initializeTheme } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
@@ -240,6 +244,21 @@ function Nav({ toggleProfileNav, openLoginModal }) {
     });
   };
   const [settingsOpen, setSettingsOpen] = useState(false);
+  // A mouse resting on the gear peeks at Settings, hung under it (SettingsModal
+  // `dropdown`); typing in it, or a click on the gear, keeps it there. A click on the gear with nothing
+  // showing opens the usual centred dialog. Never at phone widths (bottom sheet).
+  const settingsPeek = useHoverPeek({
+    enabled: typeof window !== 'undefined' && !!window.matchMedia?.('(min-width: 641px)').matches,
+  });
+  const [settingsRect, setSettingsRect] = useState(null);
+  const settingsGearProps = {
+    onClick: () => { if (settingsPeek.shown) settingsPeek.toggle(); else setSettingsOpen(true); },
+    onPointerEnter: (e) => {
+      if (!settingsPeek.shown) setSettingsRect(e.currentTarget.getBoundingClientRect());
+      settingsPeek.hoverProps.onPointerEnter(e);
+    },
+    onPointerLeave: settingsPeek.hoverProps.onPointerLeave,
+  };
   const navContainerRef = useRef(null);
   const navTabsRef = useRef(null);
 
@@ -491,8 +510,8 @@ function Nav({ toggleProfileNav, openLoginModal }) {
               so an incubating user's bell reads from the incubation service
               instead of showing them a permanently empty one. */}
           {incubationHandle ? <IncubationBell /> : <NotificationBell />}
-          <FiSettings size={19} className="nav-settings-btn" onClick={() => setSettingsOpen(true)} title={t('common.nav.settings')} />
-          <span className="nav-avatar-wrap" onClick={toggleProfileNav}>
+          <FiSettings size={19} className="nav-settings-btn" {...settingsGearProps} title={t('common.nav.settings')} />
+          <span className="nav-avatar-wrap" onClick={toggleProfileNav} {...profileMenuHover}>
             <img src={myAvatar} alt="" />
             <PremiumBadge username={user} size={10} className="nav-avatar-premium" />
           </span>
@@ -526,11 +545,21 @@ function Nav({ toggleProfileNav, openLoginModal }) {
             <button className="nav-guest-login" onClick={() => openLoginModal('login')}><FiLogIn /> {t('common.actions.login')}</button>
           )}
           </>)}
-          <FiSettings size={19} className="nav-settings-btn" onClick={() => setSettingsOpen(true)} title={t('common.nav.settings')} />
+          <FiSettings size={19} className="nav-settings-btn" {...settingsGearProps} title={t('common.nav.settings')} />
         </div>
       )}
 
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      {!settingsOpen && settingsPeek.rendered && settingsRect && (
+        <SettingsModal
+          isOpen
+          dropdown={{ rect: settingsRect, held: settingsPeek.open }}
+          leaving={settingsPeek.leaving}
+          hoverProps={settingsPeek.hoverProps}
+          typingProps={settingsPeek.typingProps}
+          onClose={settingsPeek.close}
+        />
+      )}
     </nav>
   );
 }

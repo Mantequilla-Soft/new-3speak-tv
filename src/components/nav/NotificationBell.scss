@@ -67,7 +67,7 @@
   pointer-events: none;
 }
 
-// An unseen 24h story from someone you follow: top LEFT, so it never covers the
+// An unseen 24h story or new podcast episode: top LEFT, so it never covers the
 // red unread dot (top right) and reads as its own signal.
 .notif-bell-dot--story {
   right: auto;
@@ -90,6 +90,20 @@
   border-radius: 10px;
   box-shadow: var(--shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.2));
   z-index: 100;
+  // Fades in on open (hover peek or click); `--leaving` fades it out
+  // (hooks/useHoverPeek.js, 200ms), back in if the mouse returns.
+  animation: notif-dropdown-in 0.18s ease-out;
+  transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+
+  &.notif-dropdown--leaving {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    transition: none;
+  }
 
   scrollbar-width: thin;
   scrollbar-color: var(--border-light) transparent;
@@ -427,4 +441,9 @@
     color: var(--text-primary) !important;
     border: none !important;
   }
+}
+
+@keyframes notif-dropdown-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
 }

@@ -14,9 +14,10 @@ import './PodcastNotifications.scss';
  * remembered in this browser, marked when the list is closed (dropdown) or left
  * (page), so the unseen highlight stays while the person reads it.
  *
- * Props: episodes + user (from usePodcastNotifications), onOpen, variant.
+ * Props: episodes + user (from usePodcastNotifications), onOpen, variant, markSeen
+ * (default true: closing marks the unseen ones seen).
  */
-export default function PodcastNotifications({ episodes, user, onOpen, variant = 'dropdown' }) {
+export default function PodcastNotifications({ episodes, user, onOpen, variant = 'dropdown', markSeen = true }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
@@ -25,7 +26,11 @@ export default function PodcastNotifications({ episodes, user, onOpen, variant =
   useEffect(() => {
     if (episodes?.some((e) => !e.seen)) hadUnseen.current = true;
   }, [episodes]);
-  useEffect(() => () => { if (hadUnseen.current) markPodcastNotificationsSeen(user); }, [user]);
+  // `markSeen` false (the bell's hover peek): showing them is not seeing them,
+  // unless it was pinned open with a click at some point before closing.
+  const markRef = useRef(markSeen);
+  useEffect(() => { if (markSeen) markRef.current = true; }, [markSeen]);
+  useEffect(() => () => { if (hadUnseen.current && markRef.current) markPodcastNotificationsSeen(user); }, [user]);
 
   if (!episodes?.length) return null;
 

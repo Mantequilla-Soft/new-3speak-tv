@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.51',
+    category: 'general',
+    date: '2026-11-02',
+    summary: "Rest your mouse on the bell, Share, chat, settings or your avatar to peek at that menu; click it to keep it open.",
+  },
+  {
     version: '1.81.50',
     category: 'general',
     date: '2026-11-02',

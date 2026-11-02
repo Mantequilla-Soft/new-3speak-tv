@@ -931,7 +931,18 @@ const CONTENT_TABS = [
  * Settings popup — the toggles that used to live inline in the profile
  * side menu, now grouped with headers + explanations and compact switches.
  */
-export default function SettingsModal({ isOpen, onClose }) {
+// `dropdown` ({ rect, held }): the hover peek from the top bar's gear (Nav.jsx,
+// hooks/useHoverPeek.js). Hung under `rect` instead of centred, no backdrop, and
+// the page stays usable while it's only a peek, and there's no X (it closes when
+// the mouse leaves). `held` (typing in it, `typingProps` from useHoverPeek, or a
+// click on the gear) adds the X and a see-through layer, so a click outside
+// closes it while prompts on top (Hive signing) stay clickable. `leaving` =
+// fading out.
+const DROPDOWN_GAP = 8;
+const DROPDOWN_EDGE = 8;
+const DROPDOWN_WIDTH = 520;
+
+export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps }) {
   const { t } = useTranslation();
   const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
   const cardSize = useCardSize();
@@ -1023,7 +1034,7 @@ export default function SettingsModal({ isOpen, onClose }) {
   };
 
   useLayoutEffect(() => {
-    if (!isOpen) { setAnchor(null); return undefined; }
+    if (!isOpen || dropdown) { setAnchor(null); return undefined; }
     // Bottom sheet (<=640px, see the SCSS) must not be anchored.
     if (!window.matchMedia('(min-width: 641px)').matches) { setAnchor(null); return undefined; }
 
@@ -1038,7 +1049,15 @@ export default function SettingsModal({ isOpen, onClose }) {
     const onResize = () => setAnchor(null);
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-  }, [isOpen, anchor]);
+  }, [isOpen, anchor, dropdown]);
+
+  // A dropdown closes on Escape, like the other top-bar menus.
+  useEffect(() => {
+    if (!isOpen || !dropdown) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [isOpen, dropdown, onClose]);
 
   if (!isOpen) return null;
 
@@ -1051,13 +1070,33 @@ export default function SettingsModal({ isOpen, onClose }) {
   // `isDesktop` (>=1025px) would wrongly still show it on a tablet.
   const showShortsCommentBarSetting = window.matchMedia('(max-width: 768px)').matches;
 
+  let dropdownStyle;
+  if (dropdown?.rect) {
+    const width = Math.min(DROPDOWN_WIDTH, window.innerWidth - DROPDOWN_EDGE * 2);
+    const top = dropdown.rect.bottom + DROPDOWN_GAP;
+    dropdownStyle = {
+      position: 'fixed',
+      top,
+      left: Math.min(Math.max(DROPDOWN_EDGE, dropdown.rect.right - width), window.innerWidth - width - DROPDOWN_EDGE),
+      width,
+      maxHeight: `calc(100vh - ${Math.round(top)}px - 16px)`,
+    };
+  }
+  const overlayClass = [
+    'settings-modal-overlay',
+    dropdown && 'settings-modal-overlay--dropdown',
+    dropdown?.held && 'settings-modal-overlay--held',
+    leaving && 'settings-modal-overlay--leaving',
+  ].filter(Boolean).join(' ');
+
   return createPortal(
-    <div className="settings-modal-overlay" onClick={onClose}>
+    <div className={overlayClass} onClick={onClose}>
       <div
         className="settings-modal"
         ref={modalRef}
         onClick={(e) => e.stopPropagation()}
-        style={anchor ? {
+        {...(dropdown ? { ...hoverProps, ...typingProps } : {})}
+        style={dropdownStyle || (anchor ? {
           position: 'fixed',
           top: anchor.top,
           left: anchor.left,
@@ -1065,9 +1104,9 @@ export default function SettingsModal({ isOpen, onClose }) {
           // of the screen — cap it to the room actually left below the anchor and
           // let the content scroll inside.
           maxHeight: `calc(100vh - ${Math.round(anchor.top)}px - 16px)`,
-        } : undefined}
+        } : undefined)}
       >
-        <ModalHeader title={t('common.nav.settings')} onClose={onClose} />
+        <ModalHeader title={t('common.nav.settings')} onClose={dropdown && !dropdown.held ? undefined : onClose} />
 
         <div className="settings-tabs" role="tablist">
           {visibleTabs.map(({ id, labelKey }) => (
