@@ -10,7 +10,14 @@
     "you": "আপনি",
     "storyTitle": "{{user}}-এর স্টোরি",
     "streakTitle_one": "টানা {{count}} দিনের স্টোরি স্ট্রিক",
-    "streakTitle_other": "টানা {{count}} দিনের স্টোরি স্ট্রিক"
+    "streakTitle_other": "টানা {{count}} দিনের স্টোরি স্ট্রিক",
+    "card": {
+      "storyPosted": "স্টোরি পোস্ট হয়েছে {{time}}",
+      "lastShort": "শেষ শর্ট {{time}}",
+      "rep": "রেপ {{rep}}",
+      "repTitle": "Hive রেপুটেশন",
+      "viewProfile": "প্রোফাইল দেখুন"
+    }
   },
   "errors": {
     "votingUnavailable": "এই পোস্টে ভোট দেওয়া যাচ্ছে না",

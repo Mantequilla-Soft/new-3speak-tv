@@ -17,6 +17,21 @@
 
   &.visible { display: block; }
 
+  // A hover peek, or fading out: no outside-click layer, the page stays usable
+  // and the pointer can leave the menu (hooks/useHoverPeek.js). The menu itself
+  // still takes the pointer, so coming back to it keeps it.
+  &.peek,
+  &.leaving {
+    pointer-events: none;
+
+    .profile-wrap { pointer-events: auto; }
+  }
+
+  &.leaving .profile-wrap {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
   // Phone: stop at the top of the bottom bar, so the bar stays uncovered and
   // tapping Profile again (or any other tab) is still possible.
   @include respond(phone) {
@@ -48,7 +63,14 @@
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
     font-family: "Roboto", "Arial", sans-serif;
     transform-origin: top right;
-    animation: pn-drop-in 0.14s ease-out;
+    animation: pn-drop-in 0.18s ease-out;
+    // Fades out with `.leaving` (200ms, useHoverPeek), back in if the mouse returns.
+    transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+      transition: none;
+    }
 
     [data-theme="dark"] & {
       background: #212121;

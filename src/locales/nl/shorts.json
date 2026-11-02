@@ -10,7 +10,14 @@
     "you": "Jij",
     "storyTitle": "Story van {{user}}",
     "streakTitle_one": "Storyreeks van {{count}} dag",
-    "streakTitle_other": "Storyreeks van {{count}} dagen"
+    "streakTitle_other": "Storyreeks van {{count}} dagen",
+    "card": {
+      "storyPosted": "Story geplaatst {{time}}",
+      "lastShort": "Laatste short {{time}}",
+      "rep": "Rep {{rep}}",
+      "repTitle": "Hive-reputatie",
+      "viewProfile": "Profiel bekijken"
+    }
   },
   "errors": {
     "votingUnavailable": "Voten is niet mogelijk voor deze post",

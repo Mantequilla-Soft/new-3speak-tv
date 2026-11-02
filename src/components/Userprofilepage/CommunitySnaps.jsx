@@ -21,6 +21,7 @@ import { useAppStore } from '../../lib/store';
 import SnapComposer from './SnapComposer';
 import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
 import { insertAtCursor, gifMarkdown } from '../../utils/composerInsert';
+import useEmojiShortcodes from '../../hooks/useEmojiShortcodes';
 import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
@@ -186,6 +187,7 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
   const [reply, setReply] = useState('');
   const [posting, setPosting] = useState(false);
   const replyRef = useRef(null);
+  const replyEmoji = useEmojiShortcodes(replyRef, reply, setReply);
   // A warm-up user has a handle rather than a `user`, and commentWithAioha
   // already stores their reply off-chain. Gating on `user` alone hid the
   // composer from exactly the people the warm-up asks to write ten comments.
@@ -226,10 +228,13 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
         ref={replyRef}
         placeholder={t('profile.snaps.commentPlaceholder')}
         value={reply}
-        onChange={(e) => setReply(e.target.value)}
+        onChange={(e) => setReply(replyEmoji.change(e))}
+        onKeyDown={replyEmoji.keyDown}
+        onBlur={replyEmoji.blur}
         rows={2}
         autoFocus={autoFocus}
       />
+      {replyEmoji.popup}
       <div className="snap-reply-actions">
         <EmojiGifPicker
           onPickEmoji={(em) => insertAtCursor(replyRef.current, reply, em, setReply)}

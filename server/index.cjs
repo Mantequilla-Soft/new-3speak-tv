@@ -1406,30 +1406,52 @@ app.patch('/api/gated/:permlink/allowlist', baseLimiter, async (req, res) => {
   }
 })
 
+// The account a batch acts for: its first operation's signer. Used only to pick
+// between identities the request has ALREADY proven (see /api/broadcast).
+function actingAccount(operations) {
+  const [opType, opData] = (Array.isArray(operations) && operations[0]) || []
+  if (!opData || typeof opData !== 'object') return null
+  if (opType === 'custom_json') return (opData.required_posting_auths || [])[0] || null
+  const field = OP_USER_FIELD[opType]
+  return field ? opData[field] || null : null
+}
+
 app.post('/api/broadcast', broadcastLimiter, async (req, res) => {
   try {
     let hiveUsername = null
 
+    // Every identity this request proves, each verified on its own:
     // 1) ButrAuth httpOnly session cookie — auto-refreshed when the (1 hour)
     //    access token has expired, so the session lasts as long as the refresh
     //    token rather than dying mid-use.
-    hiveUsername = await resolveButrUser(req, res)
-
     // 2) SIWH wallet session cookie (Keychain/HiveAuth/PeakVault/Ledger): the
     //    user proved posting-key control at login, so the username is bound to a
     //    server-signed cookie — no public-key impersonation possible.
-    if (!hiveUsername) {
-      const ws = req.cookies?.[WSESSION_COOKIE_NAME]
-      const wu = ws && verifyWalletSession(ws)
-      if (wu) hiveUsername = wu
-    }
-
     // 3) HiveSigner access token via Authorization: Bearer (HiveSigner users
     //    can't sign client-side; verify the token and post on their behalf).
-    if (!hiveUsername) {
-      const authHeader = req.headers.authorization || ''
-      const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
-      if (bearer) hiveUsername = await verifyHiveSignerToken(bearer)
+    //
+    // A browser can carry more than one: a Butter Auth login with another
+    // account in another tab leaves its cookie next to this tab's wallet session.
+    // Taking the Butter Auth one first then made every action of the wallet
+    // account fail ("You do not hold posting authority over @<them>"). So use the
+    // proven identity the operations act for, else the first in the order above.
+    // Choosing among identities the requester already proved grants nothing new;
+    // the per-operation checks in broadcastAsThreespeak still apply.
+    const proven = []
+    const butrUser = await resolveButrUser(req, res)
+    if (butrUser) proven.push(butrUser)
+    const ws = req.cookies?.[WSESSION_COOKIE_NAME]
+    const walletUser = ws && verifyWalletSession(ws)
+    if (walletUser) proven.push(walletUser)
+    const authHeader = req.headers.authorization || ''
+    const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+    if (bearer) {
+      const hsUser = await verifyHiveSignerToken(bearer)
+      if (hsUser) proven.push(hsUser)
+    }
+    if (proven.length) {
+      const wanted = actingAccount(req.body?.operations)
+      hiveUsername = proven.find((u) => u === wanted) || proven[0]
     }
 
     // 4) LEGACY app-key path (wallet logins that haven't established a session).

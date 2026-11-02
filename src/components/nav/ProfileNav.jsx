@@ -37,7 +37,9 @@ const installToast = toastIn('Install');
 
 
 
-function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
+// `pinned` false = a hover peek (useHoverPeek in App.jsx): the page stays usable
+// around it and leaving it closes it. `leaving` = fading out.
+function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onclose, toggleAddAccount, openLoginModal }) {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate()
@@ -153,8 +155,8 @@ function ProfileNav({ isVisible, onclose, toggleAddAccount, openLoginModal }) {
     // Profile button. The cover photo that used to fill the
     // top was dropped on purpose: it was the loudest thing on screen and said
     // nothing about what the menu does.
-    <div className={`profilenav-container ${isVisible ? 'visible' : ''}`} onClick={onclose}>
-      <div className="profile-wrap" role="menu" aria-label={t('nav.profile.accountMenu')} onClick={(e) => e.stopPropagation()}>
+    <div className={`profilenav-container${isVisible ? ' visible' : ''}${pinned ? '' : ' peek'}${leaving ? ' leaving' : ''}`} onClick={onclose}>
+      <div className="profile-wrap" role="menu" aria-label={t('nav.profile.accountMenu')} onClick={(e) => e.stopPropagation()} {...hoverProps}>
         <div className="pn-header">
           <Link to="/profile" className="pn-avatar-link" onClick={onclose} aria-label={t('nav.profile.myChannelAria')}>
             <img className="pn-avatar" src={myAvatar} alt="" />

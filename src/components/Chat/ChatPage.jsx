@@ -1058,7 +1058,10 @@ function Thread({ conv, headerActions = null }) {
 // chat is open in the small panel, so it spends no extra row on its own chrome.
 function OverlayActions({ expanded, onToggleExpand }) {
   const { t } = useTranslation()
-  const { closeOverlay } = useChat()
+  const { closeOverlay, overlayOpen, peek } = useChat()
+  // A plain hover peek (ChatOverlay) closes by itself when the mouse leaves, so
+  // it shows no X; it gets one once kept (typing in it, or the chat button).
+  const hoverOnly = !overlayOpen && peek?.shown && !peek.open
   return (
     <div className="chat-overlay-actions">
       <button
@@ -1070,15 +1073,17 @@ function OverlayActions({ expanded, onToggleExpand }) {
       >
         {expanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
       </button>
-      <button
-        type="button"
-        className="chat-icon-btn"
-        onClick={closeOverlay}
-        aria-label={t('chat.overlay.close')}
-        title={t('chat.overlay.close')}
-      >
-        <X size={18} />
-      </button>
+      {!hoverOnly && (
+        <button
+          type="button"
+          className="chat-icon-btn"
+          onClick={closeOverlay}
+          aria-label={t('chat.overlay.close')}
+          title={t('chat.overlay.close')}
+        >
+          <X size={18} />
+        </button>
+      )}
     </div>
   )
 }

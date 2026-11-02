@@ -10,7 +10,14 @@
     "you": "Ikaw",
     "storyTitle": "Story ni {{user}}",
     "streakTitle_one": "{{count}}-araw na story streak",
-    "streakTitle_other": "{{count}}-araw na story streak"
+    "streakTitle_other": "{{count}}-araw na story streak",
+    "card": {
+      "storyPosted": "Na-post ang story {{time}}",
+      "lastShort": "Huling short {{time}}",
+      "rep": "Rep {{rep}}",
+      "repTitle": "Reputasyon sa Hive",
+      "viewProfile": "Tingnan ang profile"
+    }
   },
   "errors": {
     "votingUnavailable": "Hindi available ang voting sa post na ito",

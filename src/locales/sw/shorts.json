@@ -10,7 +10,14 @@
     "you": "Wewe",
     "storyTitle": "Hadithi ya {{user}}",
     "streakTitle_one": "Mfululizo wa hadithi wa siku {{count}}",
-    "streakTitle_other": "Mfululizo wa hadithi wa siku {{count}}"
+    "streakTitle_other": "Mfululizo wa hadithi wa siku {{count}}",
+    "card": {
+      "storyPosted": "Hadithi imechapishwa {{time}}",
+      "lastShort": "Short ya mwisho {{time}}",
+      "rep": "Sifa {{rep}}",
+      "repTitle": "Sifa kwenye Hive",
+      "viewProfile": "Tazama wasifu"
+    }
   },
   "errors": {
     "votingUnavailable": "Kupiga kura hakupatikani kwa chapisho hili",

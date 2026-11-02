@@ -71,6 +71,37 @@ $overlay-gap: 12px;
   }
 }
 
+// Hover peek (ChatOverlay.jsx): hung under the top bar's chat button (top and
+// right are set inline from the button), shorter than the docked panel, fading
+// in; `--leaving` fades it out (200ms, hooks/useHoverPeek.js).
+.chat-overlay--peek {
+  bottom: auto;
+  height: min(520px, calc(100dvh - var(--nav-top-offset, 60px) - #{$overlay-gap * 2}));
+  // Over the page like the other top-bar menus, still below the nav (1000).
+  z-index: 995;
+  animation: chat-overlay-peek-in 0.18s ease-out;
+  transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+
+  @include mix.respond(tab) {
+    bottom: auto;
+    height: min(520px, calc(100dvh - var(--nav-top-offset, 60px) - var(--bottom-nav-height, 56px) - #{$overlay-gap * 2}));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    transition: none;
+  }
+}
+.chat-overlay--leaving {
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+}
+@keyframes chat-overlay-peek-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
 // ---- Chat inside the panel ----
 .chat-overlay .chat-page--overlay {
   height: 100%;

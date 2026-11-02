@@ -481,6 +481,20 @@
         border: 1px solid var(--border-light);
         padding: 6px 0;
         z-index: 100;
+        // Fades in on open (hover peek or click); `--leaving` fades it out
+        // (200ms, hooks/useHoverPeek.js), back in if the mouse returns.
+        animation: nav-upload-flyout-in 0.18s ease-out;
+        transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+
+        &.nav-upload-flyout--leaving {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          animation: none;
+          transition: none;
+        }
 
         @include nav-upload-items;
       }
@@ -833,4 +847,9 @@
 @keyframes nav-upload-sheet-fade {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes nav-upload-flyout-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
 }

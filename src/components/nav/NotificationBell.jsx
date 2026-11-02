@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
+import useHoverPeek from '../../hooks/useHoverPeek';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { IoIosNotifications } from 'react-icons/io';
@@ -41,7 +42,9 @@ const MAX_STACKED_AVATARS = 4;
 function NotificationBell() {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
-  const [open, setOpen] = useState(false);
+  // A mouse resting on the bell peeks at the list, a click keeps it open, and it
+  // fades in and out (hooks/useHoverPeek.js, `.notif-dropdown--leaving`).
+  const { open, shown, leaving, close, toggle, hoverProps } = useHoverPeek();
 
   // Browser push, opted into from here — this dropdown IS the notifications UI,
   // so it's where someone looks for "also tell me when I'm not on the site".
@@ -66,9 +69,9 @@ function NotificationBell() {
   // ...and again whenever the dropdown opens, so the switch reflects a change
   // made in Settings (or another tab) without a reload.
   useEffect(() => {
-    if (!open || !pushSupported()) return;
+    if (!shown || !pushSupported()) return;
     getPushState().then(setPush).catch(() => {});
-  }, [open]);
+  }, [shown]);
 
   const togglePush = async () => {
     setPushBusy(true);
@@ -102,7 +105,8 @@ function NotificationBell() {
   // 24h stories from followed accounts, injected above the Hive list. An unseen
   // one turns on the bell's cyan dot.
   const { stories, unseenCount: unseenStories } = useStoryNotifications(authenticated ? user : null);
-  // New episodes of outside podcasts the user follows ("External" on /audio).
+  // New episodes of outside podcasts the user follows ("External" on /audio); an
+  // unseen one turns on the same cyan dot.
   const { episodes: podcastEpisodes, unseenCount: unseenPodcasts } = usePodcastNotifications(authenticated ? user : null);
 
   // Grouping
@@ -146,29 +150,26 @@ function NotificationBell() {
 
   // Close on outside click
   useEffect(() => {
-    if (!open) return;
+    if (!shown) return;
     const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target)) close();
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [open]);
+  }, [shown, close]);
 
   // Close on Escape
   useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    if (!shown) return;
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [open]);
+  }, [shown, close]);
 
-  const handleToggle = () => {
-    setOpen((prev) => !prev);
-  };
 
   const handleRowClick = async (notif) => {
     const route = getNotificationRoute(notif);
-    setOpen(false);
+    close();
     if (!route) return;
     // Navigate to the actual post/comment — PostView handles
     // 3Speak redirect and parent navigation buttons
@@ -193,28 +194,29 @@ function NotificationBell() {
   };
 
   return (
-    <div className="notif-bell-wrapper" ref={ref}>
+    <div className="notif-bell-wrapper" ref={ref} {...hoverProps}>
       <button
         type="button"
         className="notif-bell-btn"
-        onClick={handleToggle}
+        onClick={toggle}
         aria-label={unseenStories
           ? t('nav.notifications.stories.ariaUnseen', { count: unseenStories })
           : unreadCount + unseenPodcasts ? t('nav.notifications.ariaUnread', { count: unreadCount + unseenPodcasts }) : t('common.nav.notifications')}
         title={t('common.nav.notifications')}
       >
         <IoIosNotifications size={22} />
-        {(unreadCount > 0 || unseenPodcasts > 0) && (
+        {unreadCount > 0 && (
           <span className="notif-bell-dot" aria-hidden="true" />
         )}
-        {/* Its own dot (top left), so a new story still shows next to unread Hive activity. */}
-        {unseenStories > 0 && (
+        {/* Its own dot (top left) for the cyan rows (new stories, new podcast episodes),
+            so they still show next to unread Hive activity. */}
+        {(unseenStories > 0 || unseenPodcasts > 0) && (
           <span className="notif-bell-dot notif-bell-dot--story" aria-hidden="true" />
         )}
       </button>
 
-      {open && (
-        <div className="notif-dropdown" role="menu">
+      {(shown || leaving) && (
+        <div className={`notif-dropdown${leaving ? ' notif-dropdown--leaving' : ''}`} role="menu">
           <div className="notif-dropdown-header">
             <span className="notif-dropdown-title">{t('common.nav.notifications')}</span>
             <div className="notif-dropdown-actions">
@@ -239,7 +241,7 @@ function NotificationBell() {
               <Link
                 to="/notifications"
                 className="notif-dropdown-seeall"
-                onClick={() => setOpen(false)}
+                onClick={close}
               >
                 {t('common.actions.seeAll')}
               </Link>
@@ -250,8 +252,9 @@ function NotificationBell() {
             <div className="notif-dropdown-empty">{t('common.status.loading')}</div>
           )}
 
-          <StoryNotifications stories={stories} onOpen={() => setOpen(false)} />
-          <PodcastNotifications episodes={podcastEpisodes} user={user} onOpen={() => setOpen(false)} />
+          <StoryNotifications stories={stories} onOpen={close} />
+          {/* A peek is not "seen": only a dropdown opened with a click marks episodes. */}
+          <PodcastNotifications episodes={podcastEpisodes} user={user} onOpen={close} markSeen={open} />
 
           {!loading && notifications.length === 0 && stories.length === 0 && podcastEpisodes.length === 0 && (
             <div className="notif-dropdown-empty">{t('nav.notifications.empty')}</div>

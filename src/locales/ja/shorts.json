@@ -9,7 +9,14 @@
   "stories": {
     "you": "あなた",
     "storyTitle": "{{user}}さんのストーリー",
-    "streakTitle_other": "{{count}}日連続ストーリー"
+    "streakTitle_other": "{{count}}日連続ストーリー",
+    "card": {
+      "storyPosted": "ストーリー投稿：{{time}}",
+      "lastShort": "最新のショート：{{time}}",
+      "rep": "評価 {{rep}}",
+      "repTitle": "Hive の評価（レピュテーション）",
+      "viewProfile": "プロフィールを見る"
+    }
   },
   "errors": {
     "votingUnavailable": "この投稿には投票できません",

@@ -33,6 +33,45 @@
   overscroll-behavior: contain;
 }
 
+// Hover peek from the top bar's gear (SettingsModal `dropdown`): hung under the
+// gear (top/left/width inline), no backdrop. A peek lets the page under it work;
+// once held, a see-through layer catches the click outside that closes it.
+// `--leaving` fades it out (200ms, hooks/useHoverPeek.js). Desktop/tablet only:
+// the gear never peeks at phone widths.
+.settings-modal-overlay--dropdown {
+  background: transparent;
+  display: block;
+  padding: 0;
+  pointer-events: none;
+
+  .settings-modal {
+    pointer-events: auto;
+    box-shadow: var(--shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.2));
+    animation: settings-dropdown-in 0.18s ease-out;
+    transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+      transition: none;
+    }
+  }
+
+  &.settings-modal-overlay--held { pointer-events: auto; }
+
+  &.settings-modal-overlay--leaving {
+    pointer-events: none;
+
+    .settings-modal {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+}
+@keyframes settings-dropdown-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
 // Mobile: bottom sheet instead of a centred popup (convention: all popups are
 // bottom modals on mobile).
 @media (max-width: 640px) {

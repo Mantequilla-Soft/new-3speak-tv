@@ -12,7 +12,14 @@
     "streakTitle_one": "Серия историй: {{count}} день",
     "streakTitle_few": "Серия историй: {{count}} дня",
     "streakTitle_many": "Серия историй: {{count}} дней",
-    "streakTitle_other": "Серия историй: {{count}} дня"
+    "streakTitle_other": "Серия историй: {{count}} дня",
+    "card": {
+      "storyPosted": "История опубликована {{time}}",
+      "lastShort": "Последний ролик Shorts {{time}}",
+      "rep": "Реп. {{rep}}",
+      "repTitle": "Репутация в Hive",
+      "viewProfile": "Открыть профиль"
+    }
   },
   "errors": {
     "votingUnavailable": "Голосование за этот пост недоступно",

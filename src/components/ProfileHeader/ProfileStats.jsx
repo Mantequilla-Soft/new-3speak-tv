@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { CHECKER_URL } from '../../utils/config';
 import { getAccounts } from '../../hive-api/hiveApi';
+import { profileCountsQuery, audioCountQuery } from '../../lib/creatorCard';
 import { useTranslation, Trans } from 'react-i18next';
 import { formatNumber } from '../../i18n';
 import './ProfileStats.scss';
@@ -24,24 +23,13 @@ const fmt = (n) => formatNumber(Number(n) || 0, { compact: true });
 
 export default function ProfileStats({ username, followers, onFollowersClick }) {
   const { t } = useTranslation();
-  const { data } = useQuery({
-    queryKey: ['profile-counts', username],
-    enabled: !!username,
-    staleTime: 5 * 60 * 1000,
-    retry: 1,
-    queryFn: async () => (await axios.get(`${CHECKER_URL}/user/${encodeURIComponent(username)}/counts`)).data,
-  });
+  const { data } = useQuery(profileCountsQuery(username));
 
   // Audio count: the SAME query (key + URL) the profile pages use for the Audio
   // tab header, so the stat and the tab share one cached request and can never
-  // disagree. Its own query so a slow /audio costs this number, not the line.
-  const { data: audioData } = useQuery({
-    queryKey: ['audio-count', username],
-    enabled: !!username,
-    staleTime: 5 * 60 * 1000,
-    retry: 1,
-    queryFn: async () => (await axios.get(`${CHECKER_URL}/audio?owner=${encodeURIComponent(username)}&limit=1`)).data,
-  });
+  // disagree (lib/creatorCard.js, also the stories row's hover card). Its own query
+  // so a slow /audio costs this number, not the line.
+  const { data: audioData } = useQuery(audioCountQuery(username));
   const audio = Number(audioData?.total) || 0;
 
   // Account age, straight from the chain. Its own query so a slow/failed Hive

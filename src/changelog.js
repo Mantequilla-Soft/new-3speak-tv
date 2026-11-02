@@ -18,6 +18,30 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.51',
+    category: 'general',
+    date: '2026-11-02',
+    summary: "Rest your mouse on the bell, Share, chat, settings or your avatar to peek at that menu; click it to keep it open.",
+  },
+  {
+    version: '1.81.50',
+    category: 'general',
+    date: '2026-11-02',
+    summary: "Video previews on cards now fade in and out smoothly when you hover a thumbnail.",
+  },
+  {
+    version: '1.81.49',
+    category: 'comments',
+    date: '2026-11-02',
+    summary: "Type : in any comment box to pick an emoji, or a name like :fire: to get 🔥, just like in Chat.",
+  },
+  {
+    version: '1.81.48',
+    category: 'stories',
+    date: '2026-11-02',
+    summary: "Hover an avatar in the stories row to see when they last posted, plus their bio, reputation and video, short and audio counts.",
+  },
+  {
     version: '1.81.47',
     category: 'audio',
     date: '2026-11-02',

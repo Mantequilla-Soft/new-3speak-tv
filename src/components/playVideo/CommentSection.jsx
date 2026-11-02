@@ -33,6 +33,7 @@ import TimeAgo from '../TimeAgo/TimeAgo';
 import { Link } from 'react-router-dom';
 import EmojiGifPicker from '../common/EmojiGifPicker/EmojiGifPicker';
 import { insertAtCursor, gifMarkdown } from '../../utils/composerInsert';
+import useEmojiShortcodes from '../../hooks/useEmojiShortcodes';
 import { getHiveRenderer } from '../../lib/hiveRenderer';
 import { setCommentPinned } from '../../lib/commentPins';
 import {
@@ -110,6 +111,8 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   // Cache for rendered comment bodies
   const [renderedBodies, setRenderedBodies] = useState({});
   const commentInputRef = useRef(null);
+  // ":fire:" → 🔥 and the ":" emoji list, as in the chat.
+  const commentEmoji = useEmojiShortcodes(commentInputRef, commentInfo, setCommentInfo);
   const commentImages = useCommentImageUpload(commentInputRef, commentInfo, setCommentInfo, user);
 
   // Write / Preview: the preview goes through what a posted comment goes
@@ -725,13 +728,16 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
             className="textarea-box"
             value={commentInfo}
             onChange={(e) => {
-              setCommentInfo(e.target.value);
+              setCommentInfo(commentEmoji.change(e));
               e.target.style.height = 'auto';
               e.target.style.height = e.target.scrollHeight + 'px';
             }}
+            onKeyDown={commentEmoji.keyDown}
+            onBlur={commentEmoji.blur}
             onFocus={handleTextareaFocus}
             onPaste={commentImages.onPaste}
           />
+          {commentEmoji.popup}
           </CommentDropZone>
           <div className="comment-form-row">
             <div className="comment-compose-tools">
@@ -900,6 +906,7 @@ function Comment({
   const editInputRef = useRef(null);
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
+  const editEmoji = useEmojiShortcodes(editInputRef, editText, setEditText);
   const editImages = useCommentImageUpload(editInputRef, editText, setEditText, currentUser);
   const replyImages = useCommentImageUpload(replyInputRef, replyText, setReplyText, currentUser);
   const [savingEdit, setSavingEdit] = useState(false);
@@ -1005,12 +1012,15 @@ function Comment({
                 value={editText}
                 disabled={savingEdit}
                 onChange={(e) => {
-                  setEditText(e.target.value);
+                  setEditText(editEmoji.change(e));
                   e.target.style.height = 'auto';
                   e.target.style.height = e.target.scrollHeight + 'px';
                 }}
+                onKeyDown={editEmoji.keyDown}
+                onBlur={editEmoji.blur}
                 onPaste={editImages.onPaste}
               />
+              {editEmoji.popup}
               </CommentDropZone>
               <div className="comment-form-row">
                 <div className="comment-compose-tools">

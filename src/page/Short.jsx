@@ -73,6 +73,7 @@ import SubtitleOverlay from '../components/SubtitleOverlay/SubtitleOverlay';
 import { SUPPORTED_LANGUAGES } from '../utils/translate';
 import EmojiGifPicker from '../components/common/EmojiGifPicker/EmojiGifPicker';
 import { insertAtCursor, gifMarkdown } from '../utils/composerInsert';
+import useEmojiShortcodes from '../hooks/useEmojiShortcodes';
 import { prefetchVideoTagsV2 } from '../utils/tagsV2';
 import AiBadge from '../components/AiBadge/AiBadge';
 
@@ -374,6 +375,9 @@ const VideoShort = () => {
   const [newComment, setNewComment] = useState('');
   const mainCommentRef = useRef(null);
   const bottomCommentRef = useRef(null);
+  // ":fire:" → 🔥 and the ":" emoji list in both comment boxes, as in the chat.
+  const mainCommentEmoji = useEmojiShortcodes(mainCommentRef, newComment, setNewComment);
+  const bottomCommentEmoji = useEmojiShortcodes(bottomCommentRef, newComment, setNewComment);
   const [shareChooserOpen, setShareChooserOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -4240,15 +4244,18 @@ const VideoShort = () => {
             }
             value={newComment}
             onChange={(e) => {
-              setNewComment(e.target.value);
+              setNewComment(mainCommentEmoji.change(e));
               e.target.style.height = 'auto';
               e.target.style.height = e.target.scrollHeight + 'px';
             }}
+            onKeyDown={mainCommentEmoji.keyDown}
+            onBlur={mainCommentEmoji.blur}
             disabled={!(user || incubationHandle) || postingComment || currentVideo.hivePostMissing}
             onPaste={mainCommentImages.onPaste}
             // Enter always inserts a newline (multi-line comments); posting is
             // handled only by the Send button.
           />
+          {mainCommentEmoji.popup}
           </CommentDropZone>
           {(user || incubationHandle) && !currentVideo.hivePostMissing && (
             <>
@@ -4308,13 +4315,16 @@ const VideoShort = () => {
             }
             value={newComment}
             onChange={(e) => {
-              setNewComment(e.target.value);
+              setNewComment(bottomCommentEmoji.change(e));
               e.target.style.height = 'auto';
               e.target.style.height = e.target.scrollHeight + 'px';
             }}
+            onKeyDown={bottomCommentEmoji.keyDown}
+            onBlur={bottomCommentEmoji.blur}
             disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
             onPaste={bottomCommentImages.onPaste}
           />
+          {bottomCommentEmoji.popup}
           </CommentDropZone>
           {(user || incubationHandle) && !currentVideo.hivePostMissing && (
             <>

@@ -10,7 +10,14 @@
     "you": "आप",
     "storyTitle": "{{user}} की स्टोरी",
     "streakTitle_one": "{{count}} दिन की स्टोरी स्ट्रीक",
-    "streakTitle_other": "{{count}} दिन की स्टोरी स्ट्रीक"
+    "streakTitle_other": "{{count}} दिन की स्टोरी स्ट्रीक",
+    "card": {
+      "storyPosted": "स्टोरी पोस्ट की {{time}}",
+      "lastShort": "आखिरी शॉर्ट {{time}}",
+      "rep": "रेप {{rep}}",
+      "repTitle": "Hive रेप्युटेशन",
+      "viewProfile": "प्रोफ़ाइल देखें"
+    }
   },
   "errors": {
     "votingUnavailable": "इस पोस्ट पर वोटिंग उपलब्ध नहीं है",

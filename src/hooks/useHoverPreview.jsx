@@ -10,6 +10,8 @@ import SubtitleOverlay from "../components/SubtitleOverlay/SubtitleOverlay";
 
 // Statuses with no playable stream — never preview these.
 const NON_PLAYABLE = new Set(["scheduled", "encoding", "draft", "failed", "deleted"]);
+// How long an ended preview fades out (matches `.card-hover-overlay.leaving` in Cards.scss).
+const FADE_OUT_MS = 300;
 
 // Abortable clone of the SDK's ThreeSpeakApi.prefetchManifest — warms the HLS
 // manifest, the LOWEST-bitrate variant playlist, and its first .ts segment (the
@@ -99,6 +101,29 @@ export default function useHoverPreview({ renderControls } = {}) {
   const [progress, setProgress] = useState(0);
   const [curTime, setCurTime] = useState(0);
   useEffect(() => () => clearTimeout(hoverTimer.current), []);
+
+  // Fade-out: when a preview ends, the last one stays on screen for FADE_OUT_MS
+  // with `.leaving` (Cards.scss) while it fades, still playing. Set before paint,
+  // so the overlay never blinks off for a frame first. `skipFadeRef` ends one
+  // instantly (its card left the grid: no ghost over whatever moved there).
+  const [fading, setFading] = useState(null);
+  const prevHoverRef = useRef(null);
+  const skipFadeRef = useRef(false);
+  const fadeTimer = useRef(null);
+  useLayoutEffect(() => {
+    const prev = prevHoverRef.current;
+    prevHoverRef.current = hover;
+    clearTimeout(fadeTimer.current);
+    if (hover || !prev || skipFadeRef.current) {
+      skipFadeRef.current = false;
+      setFading(null);
+      return;
+    }
+    setFading(prev);
+    fadeTimer.current = setTimeout(() => setFading(null), FADE_OUT_MS);
+  }, [hover]);
+  useEffect(() => () => clearTimeout(fadeTimer.current), []);
+  const shown = hover || fading;
 
   // Set while an overlay control has a popup open — see onContainerLeave.
   const controlsLockRef = useRef(false);
@@ -199,14 +224,19 @@ export default function useHoverPreview({ renderControls } = {}) {
 
   useEffect(() => {
     const player = hover ? ensurePlayer() : playerRef.current;
-    if (!player) return;
-    if (!hover) { try { player.pause(); } catch { /* ignore */ } return; }
+    if (!player) return undefined;
+    if (!hover) {
+      // Keeps playing while it fades out; a new preview cancels the pause.
+      const t = setTimeout(() => { try { player.pause(); } catch { /* ignore */ } }, FADE_OUT_MS);
+      return () => clearTimeout(t);
+    }
     setReady(false);
     setProgress(0);
     setCurTime(0);
     player.load(hover.source || `${hover.author}/${hover.permlink}`)
       .then(() => { if (!player.destroyed) player.play().catch(() => {}); })
       .catch(() => {});
+    return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hover?.key]);
 
@@ -215,7 +245,7 @@ export default function useHoverPreview({ renderControls } = {}) {
   // Captions for the active video, always on since the preview is muted: the
   // viewer's saved CC language, else their device language, else English.
   // Nothing is saved as a choice.
-  const { cues, subtitleStyle } = useSubtitles(hover?.author, hover?.permlink, { autoSelect: true });
+  const { cues, subtitleStyle } = useSubtitles(shown?.author, shown?.permlink, { autoSelect: true });
 
   // In the container's CONTENT coordinates, which is where the absolutely
   // positioned overlay lives. When the container is itself a scroller (the
@@ -337,7 +367,7 @@ export default function useHoverPreview({ renderControls } = {}) {
   useLayoutEffect(() => {
     if (!hover || mobileAutoplay) return;
     const node = hoverNodeRef.current;
-    if (!node || !node.isConnected) { setHover(null); return; }
+    if (!node || !node.isConnected) { skipFadeRef.current = true; setHover(null); return; }
     const r = rectOf(node);
     if (!r) return;
     const o = hover.rect;
@@ -430,15 +460,15 @@ export default function useHoverPreview({ renderControls } = {}) {
 
   const overlay = !active ? null : (
     <div
-      className={`card-hover-overlay${hover ? " active" : ""}${ready ? " ready" : ""}`}
+      className={`card-hover-overlay${shown ? " active" : ""}${ready ? " ready" : ""}${!hover && fading ? " leaving" : ""}`}
       ref={overlayElRef}
       // Desktop positions via state; mobile positions imperatively while scrolling.
-      style={hover && !mobileAutoplay ? { top: hover.rect.top, left: hover.rect.left, width: hover.rect.width, height: hover.rect.height } : undefined}
+      style={shown && !mobileAutoplay ? { top: shown.rect.top, left: shown.rect.left, width: shown.rect.width, height: shown.rect.height } : undefined}
       // Only decorative when it carries no interactive controls.
       aria-hidden={renderControls ? undefined : "true"}
     >
       <video ref={videoElRef} className="card-hover-video" muted playsInline disablePictureInPicture />
-      {hover?.thumb && <img className="card-hover-poster" src={hover.thumb} alt="" />}
+      {shown?.thumb && <img className="card-hover-poster" src={shown.thumb} alt="" />}
       {ready && cues?.length > 0 && (
         <SubtitleOverlay currentTime={curTime} cues={cues} style={{ ...(subtitleStyle || {}), fontSize: "small" }} />
       )}

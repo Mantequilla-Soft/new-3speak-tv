@@ -61,6 +61,16 @@ function parseHiveDate(dateStr) {
 }
 
 /**
+ * The `setLastRead` date that marks everything up to and including a
+ * notification as read. Hive still counts a notification dated exactly at
+ * `lastread` as unread, so go one second past it: still before the next block
+ * (3s), so later notifications stay unread.
+ */
+function readThroughDate(dateStr) {
+  return new Date(parseHiveDate(dateStr).getTime() + 1000).toISOString().slice(0, 19);
+}
+
+/**
  * React hook that returns the user's Hive notifications along with the
  * on-chain unread count from `bridge.unread_notifications`.
  *
@@ -185,8 +195,8 @@ export function useHiveNotifications(user, { limit = 50, poll = true } = {}) {
     try {
       // Use the newest notification's date, or current UTC time
       const newestDate = notifications.length > 0
-        ? notifications[0].date
-        : new Date().toISOString().replace('Z', '');
+        ? readThroughDate(notifications[0].date)
+        : new Date().toISOString().slice(0, 19);
 
       await customJsonWithAioha(
         KeyTypes.Posting,
@@ -212,7 +222,7 @@ export function useHiveNotifications(user, { limit = 50, poll = true } = {}) {
   const markAsRead = useCallback(async (notifDate) => {
     if (!user || markingAsRead) return;
     // Only broadcast if this date is newer than the current lastRead
-    const targetDate = typeof notifDate === 'string' ? notifDate : new Date().toISOString().replace('Z', '');
+    const targetDate = typeof notifDate === 'string' ? readThroughDate(notifDate) : new Date().toISOString().slice(0, 19);
     if (parseHiveDate(targetDate) <= parseHiveDate(lastRead)) return;
 
     setMarkingAsRead(true);
