@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.41',
+    category: 'audio',
+    date: '2026-11-02',
+    summary: "Tapping a track, episode or playlist cover while something is playing now adds it to the end of your queue instead of stopping what you're listening to. Playlists go into the queue oldest first.",
+  },
+  {
     version: '1.81.35',
     category: 'ads',
     date: '2026-11-01',

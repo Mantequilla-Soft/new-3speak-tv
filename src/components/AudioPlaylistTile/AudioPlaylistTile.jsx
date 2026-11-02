@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { MdPlayArrow, MdLibraryMusic } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
+import { oldestFirst } from '../../lib/slices/createAudioPlayerSlice';
 import PremiumBadge from '../PremiumBadge/PremiumBadge';
 import { fallbackImg, fixVideoThumbnail } from '../../utils/fixThumbnails';
 // Reuse the audio tile styles so playlists look identical to track tiles.
@@ -19,18 +20,21 @@ export default function AudioPlaylistTile({ playlist, kind }) {
   const navigate = useNavigate();
   const audioPlay = useAppStore((s) => s.audioPlay);
   const audioAddToQueue = useAppStore((s) => s.audioAddToQueue);
+  const audioQueueIfPlaying = useAppStore((s) => s.audioQueueIfPlaying);
   if (!playlist) return null;
 
   // Through the /img/ cache in the tile's 16:9 shape: covers are stored as the
   // full-size upload.
   const rawCover = playlist.thumbnail || playlist.tracks?.find(tr => tr.thumbnail_url)?.thumbnail_url;
   const cover = rawCover ? fixVideoThumbnail({ thumbnail: rawCover }) : fallbackImg;
-  const tracks = playlist.tracks || [];
+  const tracks = oldestFirst(playlist.tracks);
   const open = (e) => { e?.stopPropagation(); navigate(`/playlist/${playlist.id}`); };
   const playAlbum = (e) => {
     e.stopPropagation();
     if (tracks.length === 0) return open();
-    // Put every track in the queue, then start track 1.
+    // While something plays, the album lines up at the end of the queue.
+    if (audioQueueIfPlaying(tracks)) return;
+    // Otherwise put every track in the queue, oldest first, then start track 1.
     tracks.forEach((tr) => audioAddToQueue(tr));
     audioPlay(tracks[0], tracks);
   };
