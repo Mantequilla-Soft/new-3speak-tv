@@ -20,7 +20,12 @@
     "queue": "キュー",
     "playlist": "再生リスト",
     "plays_other": "{{count}} 回再生",
-    "fromAlbum": "{{album}} より"
+    "fromAlbum": "{{album}} より",
+    "addAll": "すべて追加",
+    "addNew": "新しいものを追加",
+    "addAllHint": "すべてのトラック（古い順）",
+    "addNewHint": "最後まで聴いていないトラックのみ（古い順）",
+    "addNewNone": "すべてのトラックを聴き終えました"
   },
   "author": {
     "followed": "@{{author}} さんをフォローしました",

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { getHiveUrl } from '../../utils/hiveNode';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
@@ -11,7 +11,7 @@ import {
   MdKeyboardArrowUp, MdKeyboardArrowDown,
   MdVolumeUp, MdVolumeOff,
   MdBedtime, MdGraphicEq, MdCast, MdAirplay, MdDownload, MdDownloadDone,
-  MdListAlt, MdCheck, MdLink,
+  MdListAlt, MdCheck, MdLink, MdChatBubbleOutline,
 } from 'react-icons/md';
 import { TbRewindBackward15, TbRewindForward15, TbPictureInPicture } from 'react-icons/tb';
 import { useAppStore } from '../../lib/store';
@@ -39,6 +39,11 @@ import * as podcastsLib from '../../lib/podcasts';
 import { fetchChapters, fetchTranscript, chapterAt } from '../../lib/podcastMedia';
 import { isDownloaded, localAudioUrl, downloadTrack, useDownloads } from '../../lib/podcastDownloads';
 import { toastIn } from '../../utils/toast';
+import useReblog from '../../hooks/useReblog';
+import AudioCommentModal from './AudioCommentModal';
+import AudioHypeButton from './AudioHypeButton';
+import { recordWatch } from '../../utils/watchHistory';
+import { Repeat2 } from 'lucide-react';
 import {
   fmt, SPEEDS, SPEED_KEY, normalizeSpeed, formatSpeed, SKIP_BACK, SKIP_FORWARD, skipTarget,
   SLEEP_OPTIONS, startSleepTimer, sleepRemainingMs, sleepFadeFactor,
@@ -250,6 +255,9 @@ function GlobalAudioPlayer() {
   // never earn) and send a heartbeat while the audio is actually advancing.
   // The backend credits the wall-clock time it observes between beats, so a
   // listen can't be forged with a single request.
+  // The 3Speak track last put in the listener's watch history (once per track
+  // per page visit; the history counts rewatches itself).
+  const historyRef = useRef(null);
   const listenRef = useRef({ permlink: null, sid: null, token: null, beatMs: 10000, lastBeatAt: 0, credited: false, encrypted: false });
   const beatOnce = useCallback(async () => {
     const L = listenRef.current;
@@ -277,6 +285,8 @@ function GlobalAudioPlayer() {
   const [shareTarget, setShareTarget] = useState(null);
   const [tipTarget, setTipTarget] = useState(null);
   const [podcastTip, setPodcastTip] = useState(null);
+  // The comment popup of the expanded player: { author, permlink, title, at }.
+  const [commentTarget, setCommentTarget] = useState(null);
   // Closing the player stops the track, never the queue: while the queue holds
   // something, a small "Up next" bar stays. Its own X clears the queue.
   const idleBar = !audioCurrent && audioQueue.length > 0;
@@ -436,10 +446,12 @@ function GlobalAudioPlayer() {
     // Duration is sourced from the embed-audio Mongo doc (set in the slice
     // when the track is selected) — we deliberately ignore <audio>.duration
     // because VBR MP3s without Xing headers report it incorrectly.
-    // Outside podcast episodes remember how far the listener got (lib/podcastProgress.js).
+    // Every track remembers how far the listener got (lib/podcastProgress.js):
+    // outside episodes resume from it, and a playlist cover leaves out the
+    // 3Speak tracks already listened to.
     const live = !!audioCurrent?.live;
-    const saveExternal = (pos) => {
-      if (!audioCurrent?.external || live) return;
+    const saveProgress = (pos) => {
+      if (!audioCurrent?._id || live) return;
       recordProgress(useAppStore.getState().user, audioCurrent._id, pos, audioCurrent.duration || el.duration);
     };
     // Remembers the spot for the next visit (slice: audioRestoredAt). Not before
@@ -452,10 +464,22 @@ function GlobalAudioPlayer() {
     };
     const onPageHide = () => savePosition();
     window.addEventListener('pagehide', onPageHide);
+    // A 3Speak track joins the watch history (/watched, Audio tab) once it was
+    // really listened to: 30 s, or half of a shorter track, the rule a play uses.
+    const saveHistory = (pos) => {
+      if (!audioCurrent?.permlink || audioCurrent.external || live || historyRef.current === audioCurrent._id) return;
+      const dur = Number(audioCurrent.duration) || el.duration || 0;
+      if (!(pos >= Math.min(30, dur > 0 ? dur / 2 : 30))) return;
+      historyRef.current = audioCurrent._id;
+      const { user: u, incubationHandle, watchHistoryEnabled } = useAppStore.getState();
+      const who = u || incubationHandle;
+      if (who && watchHistoryEnabled !== false) recordWatch(who, audioCurrent.owner, audioCurrent.permlink);
+    };
     const h = {
       timeupdate: () => {
         audioSetCurrentTime(el.currentTime);
-        saveExternal(el.currentTime);
+        saveProgress(el.currentTime);
+        saveHistory(el.currentTime);
         if (Date.now() - posSavedAt >= 5000) savePosition();
         // A clip (audioPlayAt with an end) stops where it ends.
         const clipEnd = useAppStore.getState().audioClipEnd;
@@ -476,7 +500,7 @@ function GlobalAudioPlayer() {
         notifyMediaPlay('audio');
         if (useAppStore.getState().audioRestoredAt != null) useAppStore.getState().audioClearRestored();
       },
-      pause: () => { audioSetIsPlaying(false); savePosition(); if (audioCurrent?.external) flushProgress(); },
+      pause: () => { audioSetIsPlaying(false); savePosition(); if (!live) flushProgress(); },
       seeked: () => {
         savePosition();
         // Jumping past the end of a clip means listening on: the clip is over.
@@ -485,7 +509,7 @@ function GlobalAudioPlayer() {
       },
       ended: () => {
         savePosition(0);
-        if (audioCurrent?.external) { saveExternal(audioCurrent.duration || el.duration); flushProgress(); }
+        if (!live) { saveProgress(audioCurrent?.duration || el.duration); flushProgress(); }
         audioSetIsPlaying(false);
         // "Sleep at the end of this episode": stop here, don't start the next one.
         if (sleepRef.current?.mode === 'end') { endSleep(); return; }
@@ -1577,6 +1601,18 @@ function GlobalAudioPlayer() {
                 <UpvoteCount count={npVoteCount} voted={npIsVoted} onClick={() => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink }); setShowVoteTooltip(!showVoteTooltip); }} size={12} />
               )}
               {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={18} /></button>}
+              {/* A 3Speak audio's Hive post: comment on it and hype it. */}
+              {loggedIn && !nowPlaying.external && nowPlaying.post_permlink && (
+                <button
+                  className="audio-np-playlist-btn audio-np-comment-btn"
+                  onClick={() => setCommentTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink, title: nowPlaying.title, at: isLive ? 0 : audioRef.current?.currentTime })}
+                  title={t('comments.section.commentTab')}
+                  aria-label={t('comments.section.commentTab')}
+                >
+                  <MdChatBubbleOutline size={17} />
+                </button>
+              )}
+              {!nowPlaying.external && nowPlaying.post_permlink && <AudioHypeButton author={nowPlaying.owner} permlink={nowPlaying.post_permlink} size={16} />}
               {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
               {nowPlaying.post_permlink && user !== nowPlaying.owner && <button className="audio-np-tip-btn" onClick={() => setTipTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink })} title={t('audio.post.tip')}><BiDollar size={16} /></button>}
               {nowPlaying.external && canTipEpisode(nowPlaying) && <button className="audio-np-tip-btn" onClick={() => setPodcastTip(nowPlaying)} title={t('audio.podcasts.tip.button')}><BiDollar size={16} /></button>}
@@ -1927,6 +1963,8 @@ function GlobalAudioPlayer() {
 
       {podcastTip && <PodcastTipModal track={podcastTip} onClose={() => setPodcastTip(null)} />}
 
+      {commentTarget && <AudioCommentModal {...commentTarget} onClose={() => setCommentTarget(null)} />}
+
       {tipTarget && (
         <TipModal
           recipient={tipTarget.author}
@@ -1986,6 +2024,9 @@ export function AudioShareDropdown({ item, onClose, title, at, duration, bare })
   const audioPlayerUrl = `https://audio.3speak.tv/play?a=${item?.permlink}`;
   const [hivePermlink, setHivePermlink] = useState(item?.post_permlink || null);
   const [searching, setSearching] = useState(false);
+  // Reblog onto the listener's own Hive blog (two taps, hooks/useReblog.js).
+  const reblogToast = useMemo(() => toastIn('Audio'), []);
+  const reblog = useReblog(author, hivePermlink, reblogToast);
 
   useEffect(() => {
     if (hivePermlink || !author || !item?.permlink) return;
@@ -2021,6 +2062,16 @@ export function AudioShareDropdown({ item, onClose, title, at, duration, bare })
       {title && <ModalHeader className="audio-share-header" title={title} onClose={onClose} />}
       {hivePermlink && <button className="audio-share-option" onClick={() => copy(`https://peakd.com/@${author}/${hivePermlink}`, t('audio.share.copiedPeakd'))}><MdContentCopy size={14} /><span>{t('audio.share.copyPeakd')}</span></button>}
       {searching && !hivePermlink && <span className="audio-share-loading">{t('audio.share.searchingHive')}</span>}
+      {reblog.canReblog && (
+        <button
+          className={`audio-share-option${reblog.armed ? ' is-armed' : ''}`}
+          onClick={async () => { if (await reblog.press()) onClose(); }}
+          disabled={reblog.busy || reblog.reblogged}
+          title={reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title')}
+        >
+          <Repeat2 size={14} /><span>{reblog.label}</span>
+        </button>
+      )}
       <button className="audio-share-option" onClick={() => copy(threeSpeakUrl, t('audio.share.copied3speak'))}><MdContentCopy size={14} /><span>{t('audio.share.copy3speak')}</span></button>
       {at != null && <CopyAtOption url={threeSpeakUrl} at={at} onDone={onClose} />}
       <button className="audio-share-option" onClick={() => copy(audioPlayerUrl, t('audio.share.copiedAudioPlayer'))}><MdContentCopy size={14} /><span>{t('audio.share.copyAudioPlayer')}</span></button>

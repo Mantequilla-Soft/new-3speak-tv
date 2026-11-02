@@ -9,6 +9,9 @@
  *     plays, createdAt, post_permlink?, subtitle_languages? }
  */
 
+import { t } from '../../i18n';
+import { toastIn } from '../../utils/toast';
+
 // localStorage, so the player comes back after the browser was closed: the
 // same track, paused, at the spot the listener left it (audioRestoredAt).
 const LS_NOW_KEY = 'audio-now-playing';
@@ -69,6 +72,19 @@ export function persistAudioPosition(id, t) {
   try {
     if (id && Number.isFinite(t)) localStorage.setItem(LS_POS_KEY, JSON.stringify({ id, t: Math.floor(t) }));
   } catch { /* storage unavailable */ }
+}
+
+// A playlist's tracks oldest first, the order they go into the queue. Tracks
+// without a date keep their playlist order, after the dated ones.
+export function oldestFirst(tracks) {
+  const at = (tr) => {
+    const ms = new Date(tr?.createdAt || tr?.created_at || NaN).getTime();
+    return Number.isNaN(ms) ? Infinity : ms;
+  };
+  return (tracks || [])
+    .map((tr, i) => ({ tr, i, ms: at(tr) }))
+    .sort((a, b) => (a.ms - b.ms) || (a.i - b.i))
+    .map((x) => x.tr);
 }
 
 export const createAudioPlayerSlice = (set, get) => {
@@ -187,6 +203,27 @@ export const createAudioPlayerSlice = (set, get) => {
       const next = [...cur, item];
       persistQueue(next);
       set({ audioQueue: next });
+    },
+    // A tap or click on a cover (a track, an episode, a playlist) while
+    // something else plays: `tracks` go to the end of the queue, each once, and
+    // what plays keeps playing. With the queue empty, the playing item goes in
+    // first, so the queue reads in play order and Previous can go back to it.
+    // Returns false when nothing plays (or the cover is the playing item), and
+    // the caller starts it the usual way.
+    audioQueueIfPlaying: (tracks) => {
+      const { audioCurrent, audioIsPlaying, audioQueue } = get();
+      if (!audioCurrent || !audioIsPlaying) return false;
+      const list = (Array.isArray(tracks) ? tracks : [tracks]).filter((tr) => tr?._id && tr._id !== audioCurrent._id);
+      if (!list.length) return false;
+      const queue = audioQueue.length ? [...audioQueue] : [audioCurrent];
+      const before = queue.length;
+      list.forEach((tr) => { if (!queue.some((i) => i._id === tr._id)) queue.push(tr); });
+      if (queue.length > before) {
+        persistQueue(queue);
+        set({ audioQueue: queue });
+        toastIn('Audio').success(t('audio.post.addedToQueue'));
+      }
+      return true;
     },
     // Play `track` now WITHOUT losing what was playing: that one goes into the
     // queue if it isn't there yet, `track` lands right after it and starts. The

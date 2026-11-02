@@ -258,7 +258,10 @@
     "emptyShorts": "Wala ka pang napanood na Shorts",
     "emptyVideos": "Wala ka pang napanood na video",
     "removeTitle": "Alisin sa watch history",
-    "watchedAt": "Napanood {{when}}"
+    "watchedAt": "Napanood {{when}}",
+    "audioTab": "Audio ({{count}})",
+    "emptyAudio": "Wala ka pang napakinggang audio",
+    "listenedAt": "Napakinggan {{when}}"
   },
   "watchStream": {
     "saySomething": "Magsabi ng kahit ano…",

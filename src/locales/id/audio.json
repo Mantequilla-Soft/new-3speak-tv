@@ -20,7 +20,12 @@
     "queue": "Antrean",
     "playlist": "Playlist",
     "plays_other": "{{count}} kali diputar",
-    "fromAlbum": "dari {{album}}"
+    "fromAlbum": "dari {{album}}",
+    "addAll": "Tambah semua",
+    "addNew": "Tambah yang baru",
+    "addAllHint": "Semua trek, dari yang terlama",
+    "addNewHint": "Hanya trek yang belum kamu dengarkan sampai habis, dari yang terlama",
+    "addNewNone": "Kamu sudah mendengarkan semua trek"
   },
   "author": {
     "followed": "Mengikuti @{{author}}",

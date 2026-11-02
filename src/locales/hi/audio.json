@@ -21,7 +21,12 @@
     "playlist": "प्लेलिस्ट",
     "plays_one": "{{count}} प्ले",
     "plays_other": "{{count}} प्ले",
-    "fromAlbum": "{{album}} से"
+    "fromAlbum": "{{album}} से",
+    "addAll": "सभी जोड़ें",
+    "addNew": "नए जोड़ें",
+    "addAllHint": "सभी ट्रैक, सबसे पुराने पहले",
+    "addNewHint": "सिर्फ़ वे ट्रैक जो आपने पूरे नहीं सुने, सबसे पुराने पहले",
+    "addNewNone": "आप सभी ट्रैक सुन चुके हैं"
   },
   "author": {
     "followed": "@{{author}} को फ़ॉलो किया",

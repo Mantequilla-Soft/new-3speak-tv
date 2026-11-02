@@ -257,7 +257,10 @@
     "emptyShorts": "아직 시청한 쇼츠가 없어요",
     "emptyVideos": "아직 시청한 동영상이 없어요",
     "removeTitle": "시청 기록에서 삭제",
-    "watchedAt": "{{when}} 시청함"
+    "watchedAt": "{{when}} 시청함",
+    "audioTab": "오디오 ({{count}})",
+    "emptyAudio": "아직 들은 오디오가 없어요",
+    "listenedAt": "{{when}} 들음"
   },
   "watchStream": {
     "saySomething": "메시지를 입력하세요…",

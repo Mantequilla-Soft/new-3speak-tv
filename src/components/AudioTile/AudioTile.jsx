@@ -162,14 +162,15 @@ function AudioTile({
     if (suppressClickRef.current) { suppressClickRef.current = false; return; }
     setRevealed(false);
 
-    // Mobile default: a short tap enqueues the track as the last item. It only
-    // becomes the currently-playing item when the queue was empty (it's now the
-    // first item) or nothing is currently playing — otherwise it just lines up.
+    // While something else plays, a tap or click lines the track up at the end
+    // of the queue.
+    if (useAppStore.getState().audioQueueIfPlaying(item)) return;
+
+    // Mobile default: a short tap enqueues the track as the last item and,
+    // since nothing is playing, starts it.
     if (wasTouch) {
-      const { audioQueue, audioIsPlaying } = useAppStore.getState();
-      const makeCurrent = audioQueue.length === 0 || !audioIsPlaying;
       audioAddToQueue(item); // no-op if already queued; appends as last otherwise
-      if (makeCurrent) audioPlay(item);
+      audioPlay(item);
       return;
     }
 

@@ -257,7 +257,10 @@
     "emptyShorts": "ยังไม่มี Shorts ที่ดูแล้ว",
     "emptyVideos": "ยังไม่มีวิดีโอที่ดูแล้ว",
     "removeTitle": "นำออกจากประวัติการดู",
-    "watchedAt": "ดูเมื่อ {{when}}"
+    "watchedAt": "ดูเมื่อ {{when}}",
+    "audioTab": "เสียง ({{count}})",
+    "emptyAudio": "ยังไม่มีเสียงที่ฟังแล้ว",
+    "listenedAt": "ฟังเมื่อ {{when}}"
   },
   "watchStream": {
     "saySomething": "พูดอะไรสักหน่อย…",

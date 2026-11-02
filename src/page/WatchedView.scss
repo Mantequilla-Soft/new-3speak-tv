@@ -151,6 +151,15 @@
   }
 
   // Under each card: when it was watched, and (own history) its remove button.
+  // Audio tab: the audio page's tiles, with the history line under each.
+  .watched-audio-grid { margin-top: 8px; }
+  .watched-audio-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    .audio-tile { width: auto; min-width: 0; }
+  }
+
   .watched-card-footer {
     display: flex;
     align-items: center;

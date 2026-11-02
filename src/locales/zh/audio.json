@@ -20,7 +20,12 @@
     "queue": "队列",
     "playlist": "播放列表",
     "plays_other": "{{count}} 次播放",
-    "fromAlbum": "来自 {{album}}"
+    "fromAlbum": "来自 {{album}}",
+    "addAll": "全部添加",
+    "addNew": "添加新的",
+    "addAllHint": "所有曲目，从最早开始",
+    "addNewHint": "仅添加你还没听完的曲目，从最早开始",
+    "addNewNone": "你已听完所有曲目"
   },
   "author": {
     "followed": "已关注 @{{author}}",

@@ -259,7 +259,10 @@
     "emptyShorts": "Ancora nessuno Short guardato",
     "emptyVideos": "Ancora nessun video guardato",
     "removeTitle": "Rimuovi dalla cronologia",
-    "watchedAt": "Guardato {{when}}"
+    "watchedAt": "Guardato {{when}}",
+    "audioTab": "Audio ({{count}})",
+    "emptyAudio": "Nessun audio ascoltato",
+    "listenedAt": "Ascoltato {{when}}"
   },
   "watchStream": {
     "saySomething": "Scrivi qualcosa…",

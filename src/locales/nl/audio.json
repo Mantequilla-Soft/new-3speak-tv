@@ -21,7 +21,12 @@
     "playlist": "Playlist",
     "plays_one": "{{count}} keer afgespeeld",
     "plays_other": "{{count}} keer afgespeeld",
-    "fromAlbum": "uit {{album}}"
+    "fromAlbum": "uit {{album}}",
+    "addAll": "Alles toevoegen",
+    "addNew": "Nieuwe toevoegen",
+    "addAllHint": "Alle nummers, oudste eerst",
+    "addNewHint": "Alleen nummers die je nog niet tot het einde hebt gehoord, oudste eerst",
+    "addNewNone": "Je hebt alle nummers gehoord"
   },
   "author": {
     "followed": "Je volgt @{{author}}",

@@ -20,7 +20,12 @@
     "queue": "คิว",
     "playlist": "เพลย์ลิสต์",
     "plays_other": "เล่น {{count}} ครั้ง",
-    "fromAlbum": "จาก {{album}}"
+    "fromAlbum": "จาก {{album}}",
+    "addAll": "เพิ่มทั้งหมด",
+    "addNew": "เพิ่มเฉพาะใหม่",
+    "addAllHint": "ทุกแทร็ก เรียงจากเก่าสุด",
+    "addNewHint": "เฉพาะแทร็กที่คุณยังฟังไม่จบ เรียงจากเก่าสุด",
+    "addNewNone": "คุณฟังครบทุกแทร็กแล้ว"
   },
   "author": {
     "followed": "ติดตาม @{{author}} แล้ว",

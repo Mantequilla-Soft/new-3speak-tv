@@ -259,7 +259,10 @@
     "emptyShorts": "Aún no has visto Shorts",
     "emptyVideos": "Aún no has visto videos",
     "removeTitle": "Quitar del historial de reproducción",
-    "watchedAt": "Visto {{when}}"
+    "watchedAt": "Visto {{when}}",
+    "audioTab": "Audio ({{count}})",
+    "emptyAudio": "Aún no has escuchado audio",
+    "listenedAt": "Escuchado {{when}}"
   },
   "watchStream": {
     "saySomething": "Di algo…",

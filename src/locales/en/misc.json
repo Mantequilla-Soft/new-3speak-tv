@@ -258,7 +258,10 @@
     "emptyShorts": "No watched shorts yet",
     "emptyVideos": "No watched videos yet",
     "removeTitle": "Remove from watch history",
-    "watchedAt": "Watched {{when}}"
+    "watchedAt": "Watched {{when}}",
+    "audioTab": "Audio ({{count}})",
+    "emptyAudio": "No listened audio yet",
+    "listenedAt": "Listened {{when}}"
   },
   "watchStream": {
     "saySomething": "Say something…",

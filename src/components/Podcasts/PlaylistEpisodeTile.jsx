@@ -36,6 +36,7 @@ export default function PlaylistEpisodeTile({ video, item, contextItems, number,
 
   const play = () => {
     if (isCurrent) { audioRequestToggle(); return; }
+    if (useAppStore.getState().audioQueueIfPlaying(item)) return;
     audioPlay(item, contextItems);
   };
 

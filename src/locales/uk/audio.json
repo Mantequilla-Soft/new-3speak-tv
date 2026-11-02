@@ -23,7 +23,12 @@
     "plays_few": "{{count}} прослуховування",
     "plays_many": "{{count}} прослуховувань",
     "plays_other": "{{count}} прослуховування",
-    "fromAlbum": "з «{{album}}»"
+    "fromAlbum": "з «{{album}}»",
+    "addAll": "Додати всі",
+    "addNew": "Додати нові",
+    "addAllHint": "Усі треки, спочатку старіші",
+    "addNewHint": "Лише треки, які ви не дослухали до кінця, спочатку старіші",
+    "addNewNone": "Ви прослухали всі треки"
   },
   "author": {
     "followed": "Ви підписалися на @{{author}}",

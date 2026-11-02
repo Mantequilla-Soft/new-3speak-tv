@@ -20,7 +20,12 @@
     "queue": "Hàng đợi",
     "playlist": "Danh sách phát",
     "plays_other": "{{count}} lượt nghe",
-    "fromAlbum": "từ {{album}}"
+    "fromAlbum": "từ {{album}}",
+    "addAll": "Thêm tất cả",
+    "addNew": "Thêm bài mới",
+    "addAllHint": "Tất cả bài, cũ nhất trước",
+    "addNewHint": "Chỉ những bài bạn chưa nghe hết, cũ nhất trước",
+    "addNewNone": "Bạn đã nghe hết tất cả các bài"
   },
   "author": {
     "followed": "Đã theo dõi @{{author}}",

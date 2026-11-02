@@ -1,5 +1,7 @@
 /**
- * How far the listener got in outside podcast episodes (External on /audio).
+ * How far the listener got in outside podcast episodes (External on /audio) and
+ * in 3Speak's own audio tracks (keyed by their embed-audio _id; a playlist cover
+ * leaves out the finished ones, components/AudioPlaylistTile).
  *
  * The global audio player reports the position of an `external` track as it plays
  * (recordProgress); tiles read it back as a bar and a "listened" mark, and an
@@ -25,7 +27,7 @@ const LOCAL_MAX = 2000;
 /** Same rule as the checker: the last 5 %, or the last 30 s, counts as finished. */
 export const isFinished = (pos, dur) => dur > 0 && (pos >= dur * 0.95 || dur - pos <= 30);
 
-let owner = null;          // whose progress is in `map`
+let owner;                 // whose progress is in `map` (null: signed out; unset until first asked)
 let map = new Map();       // episodeId → { pos, dur, done, at }
 let version = 0;
 const listeners = new Set();
@@ -163,9 +165,10 @@ export function recordProgress(user, id, pos, dur) {
 }
 
 /** Merge what the checker has (another device may have played further). */
-async function loadFromServer(user, query) {
+async function loadFromServer(user, query, { timeoutMs } = {}) {
   try {
-    const res = await fetch(`${API}/progress?user=${encodeURIComponent(user)}&${query}`);
+    const signal = timeoutMs && typeof AbortSignal?.timeout === 'function' ? AbortSignal.timeout(timeoutMs) : undefined;
+    const res = await fetch(`${API}/progress?user=${encodeURIComponent(user)}&${query}`, { signal });
     const data = await res.json();
     if (owner !== user || !data?.progress) return;
     let changed = false;
@@ -179,6 +182,49 @@ async function loadFromServer(user, query) {
     }
     if (changed) { saveLocal(); emit(); }
   } catch { /* the local copy still works */ }
+}
+
+/**
+ * Bring this browser's copy up to date for `ids` (what another device played),
+ * for a decision made right now. Waits at most a moment; the local copy is used
+ * when the checker is slow or down. Read the result with progressOf().
+ */
+export async function loadProgressFor(user, ids) {
+  switchOwner(user);
+  if (!user) return;
+  const list = [...new Set((ids || []).filter(Boolean).map(String))];
+  const chunks = [];
+  for (let i = 0; i < list.length; i += 150) chunks.push(list.slice(i, i + 150));
+  await Promise.all(chunks.map((c) => loadFromServer(user, `ids=${c.map(encodeURIComponent).join(',')}`, { timeoutMs: 2500 })));
+}
+
+// Tiles that need progress for their tracks (playlist covers) ask through
+// wantProgressFor; the ids asked within a moment go out together, each id once
+// per signed-in listener and page load.
+let wanted = { user: null, ids: new Set(), asked: new Set(), timer: null };
+
+/** Load `user`'s progress for `ids` soon, batched with other tiles' asks. */
+export function wantProgressFor(user, ids) {
+  if (!user || !ids?.length) return;
+  if (wanted.user !== user) {
+    clearTimeout(wanted.timer);
+    wanted = { user, ids: new Set(), asked: new Set(), timer: null };
+  }
+  ids.forEach((id) => { if (id && !wanted.asked.has(String(id))) wanted.ids.add(String(id)); });
+  if (!wanted.ids.size || wanted.timer) return;
+  wanted.timer = setTimeout(() => {
+    const list = [...wanted.ids];
+    list.forEach((id) => wanted.asked.add(id));
+    wanted.ids.clear();
+    wanted.timer = null;
+    loadProgressFor(user, list);
+  }, 150);
+}
+
+/** Has `user` played `id` to the end (the last 5 %, or the last 30 s)? */
+export function isListened(user, id) {
+  switchOwner(user);
+  return !!map.get(id)?.done;
 }
 
 const subscribe = (fn) => { listeners.add(fn); return () => listeners.delete(fn); };

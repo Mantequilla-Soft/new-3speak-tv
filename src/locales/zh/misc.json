@@ -257,7 +257,10 @@
     "emptyShorts": "还没有看过的短视频",
     "emptyVideos": "还没有看过的视频",
     "removeTitle": "从观看记录中移除",
-    "watchedAt": "观看于 {{when}}"
+    "watchedAt": "观看于 {{when}}",
+    "audioTab": "音频（{{count}}）",
+    "emptyAudio": "还没有收听过音频",
+    "listenedAt": "收听于 {{when}}"
   },
   "watchStream": {
     "saySomething": "说点什么…",

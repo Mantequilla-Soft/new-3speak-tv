@@ -21,7 +21,12 @@
     "playlist": "Playlist",
     "plays_one": "{{count}} Wiedergabe",
     "plays_other": "{{count}} Wiedergaben",
-    "fromAlbum": "aus {{album}}"
+    "fromAlbum": "aus {{album}}",
+    "addAll": "Alle hinzufügen",
+    "addNew": "Neue hinzufügen",
+    "addAllHint": "Alle Titel, älteste zuerst",
+    "addNewHint": "Nur Titel, die du noch nicht bis zum Ende gehört hast, älteste zuerst",
+    "addNewNone": "Du hast alle Titel gehört"
   },
   "author": {
     "followed": "Du folgst jetzt @{{author}}",

@@ -130,6 +130,7 @@ function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpisode }) {
 
   const play = () => {
     if (isCurrent) { audioRequestToggle(); return; }
+    if (useAppStore.getState().audioQueueIfPlaying(track)) return;
     audioPlayQueued(track);
   };
 

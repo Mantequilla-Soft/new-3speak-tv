@@ -20,7 +20,12 @@
     "queue": "대기열",
     "playlist": "재생목록",
     "plays_other": "재생 {{count}}회",
-    "fromAlbum": "{{album}} 앨범"
+    "fromAlbum": "{{album}} 앨범",
+    "addAll": "모두 추가",
+    "addNew": "새 트랙 추가",
+    "addAllHint": "모든 트랙, 오래된 순",
+    "addNewHint": "끝까지 듣지 않은 트랙만, 오래된 순",
+    "addNewNone": "모든 트랙을 다 들었어요"
   },
   "author": {
     "followed": "@{{author}}님을 팔로우했어요",
