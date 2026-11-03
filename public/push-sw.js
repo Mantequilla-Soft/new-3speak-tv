@@ -33,7 +33,9 @@ self.addEventListener('push', (event) => {
     self.registration.showNotification(data.title, {
       body: data.body || '',
       icon: '/3speak.jpeg',
-      badge: '/3speak.jpeg',
+      // The status-bar icon: Android draws it as a white silhouette of its alpha
+      // channel, so it must be a transparent PNG (a JPEG became a white square).
+      badge: '/notification-badge.png',
       tag: data.tag || undefined,
       data: { url: data.url || '/' },
     })

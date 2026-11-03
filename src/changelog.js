@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.55',
+    category: 'notifications',
+    date: '2026-11-03',
+    summary: "Notifications on Android show the 3Speak mark in the status bar instead of a white square.",
+  },
+  {
     version: '1.81.54',
     category: 'audio',
     date: '2026-11-03',
