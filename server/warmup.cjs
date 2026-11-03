@@ -193,7 +193,31 @@ async function claimAssets({ userId, handle, hiveUsername }) {
   })
   const body = await r.json().catch(() => ({}))
   if (!r.ok) throw new Error(body.error || `checker claim-assets returned ${r.status}`)
+  body.playlists = await claimPlaylists(handle, hiveUsername)
   return body
+}
+
+// Playlists made while warming up (3speak-playlists, warm-up write route) move to
+// the new Hive account, and so do their tracks in anyone's playlists. Best effort:
+// a failure leaves them under the handle, logged, and does not hold up graduation.
+async function claimPlaylists(from, to) {
+  const base = (process.env.PLAYLISTS_UPSTREAM_URL || 'https://playlists.3speak.tv/api').replace(/\/+$/, '')
+  const token = process.env.PLAYLISTS_API_TOKEN
+  if (!token || !from || !to || from === to) return null
+  try {
+    const r = await fetch(`${base}/warmup/claim`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ from, to }),
+      signal: AbortSignal.timeout(10000)
+    })
+    const data = await r.json().catch(() => ({}))
+    if (!r.ok) throw new Error(data.error || `HTTP ${r.status}`)
+    return data
+  } catch (err) {
+    console.error(`[warmup] playlist claim ${from} -> ${to} failed:`, err.message)
+    return { error: err.message }
+  }
 }
 
 /**

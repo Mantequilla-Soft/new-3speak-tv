@@ -1017,6 +1017,40 @@ app.put('/api/incubation/social/track', (req, res, next) => {
   res.status(403).json({ error: 'track_closed' })
 })
 
+// POST /api/incubation/playlists/:op -- playlists for a warm-up account. A handle
+// cannot sign Hive custom_json, so its playlist ops go to the playlist service's
+// warm-up write route instead (3speak-playlists, POST /api/warmup/playlists/:op,
+// server token), which applies them exactly like the chain ops. The owner is
+// ALWAYS the session's own handle, never something the page sends.
+const WARMUP_PLAYLIST_OPS = new Set(['create', 'add', 'remove', 'reorder', 'update', 'delete'])
+app.post('/api/incubation/playlists/:op', incubationLimiter, async (req, res) => {
+  const op = String(req.params.op || '')
+  if (!WARMUP_PLAYLIST_OPS.has(op)) return res.status(404).json({ error: 'Unknown playlist op' })
+  if (!PLAYLISTS_API_TOKEN) return res.status(503).json({ error: 'Playlists are not configured' })
+  try {
+    const session = await resolveButrSession(req, res)
+    const handle = session?.claims?.incubation && session.claims.handle
+      ? String(session.claims.handle).toLowerCase() : null
+    if (!handle) return res.status(401).json({ error: 'Not a warm-up account' })
+    // The playlist service cannot tell a handle from a Hive name of the same
+    // spelling. A handle that is also a live Hive account must never write as it.
+    const [acct] = await client.database.getAccounts([handle])
+    if (acct) return res.status(409).json({ error: 'handle_is_hive_account' })
+    const body = req.body && typeof req.body === 'object' && !Array.isArray(req.body) ? req.body : {}
+    const r = await fetch(`${PLAYLISTS_UPSTREAM}/warmup/playlists/${op}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${PLAYLISTS_API_TOKEN}` },
+      body: JSON.stringify({ ...body, owner: handle }),
+      signal: AbortSignal.timeout(10000)
+    })
+    const data = await r.json().catch(() => ({}))
+    res.status(r.status).json(data)
+  } catch (err) {
+    console.error('[warmup-playlists]', op, 'failed:', err.message)
+    res.status(502).json({ error: 'Playlist service unavailable' })
+  }
+})
+
 // /api/incubation/* -- the warm-up backend. The SDK's createWarmupHandler:
 // an allowlist of routes, each forwarded to one SDK call with the user's own
 // token (or, for a wallet login, vouched for with 3Speak's client credentials),

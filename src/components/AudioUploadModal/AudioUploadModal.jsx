@@ -80,8 +80,9 @@ const FLOWS = {
   // 2+ audios → one main post (no audio) + each track as a comment reply
   album: ['source', 'mode', 'playlist', 'mainpost', 'tracks', 'review'],
   // A warm-up account (no Hive account yet): one audio, its own post, kept by the
-  // warm-up service until they graduate. No playlists or payout to choose.
-  warmup: ['source', 'post', 'review'],
+  // warm-up service until they graduate. Playlists work (through our server);
+  // there is no mode or payout to choose.
+  warmup: ['source', 'playlist', 'post', 'review'],
 };
 
 const MAX_RECORD_SEC = 300;
@@ -574,7 +575,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   }, [pendingPlaylist, playlists]);
 
   const handleCreatePlaylist = useCallback(async ({ name, access, credits, musicStyle, year, label, description, thumbnail }) => {
-    if (!user) { toast.error(t('audio.upload.toasts.signInFirst')); return; }
+    if (!owner) { toast.error(t('audio.upload.toasts.signInFirst')); return; }
     const trimmed = name.trim();
     if (!trimmed) { toast.error(t('audio.upload.toasts.enterPlaylistName')); return; }
     const playlistId = (typeof crypto !== 'undefined' && crypto.randomUUID)
@@ -609,7 +610,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       const ops = [
         ['custom_json', {
           required_auths: [],
-          required_posting_auths: [user],
+          required_posting_auths: [owner],
           id: '3speak_playlist_create',
           json: JSON.stringify(createPayload),
         }],
@@ -623,26 +624,28 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         updatePayload.metadata = { album };
         ops.push(['custom_json', {
           required_auths: [],
-          required_posting_auths: [user],
+          required_posting_auths: [owner],
           id: '3speak_playlist_update',
           json: JSON.stringify(updatePayload),
         }]);
       }
 
+      // A warm-up account's ops go to the playlist service through our server
+      // (aioha diverts playlist custom_json for a handle).
       await broadcastAudioOps(ops);
       toast.success(t('audio.upload.toasts.playlistCreated'));
       setPlaylistChoice(playlistId);
       setPendingPlaylist({ id: playlistId, name: trimmed, access });
       setTimeout(() => {
         refetchPlaylists();
-        queryClient.invalidateQueries({ queryKey: ['myPlaylists', user] });
+        queryClient.invalidateQueries({ queryKey: ['myPlaylists', owner] });
       }, 3000);
       return true;
     } catch (err) {
       toast.error(t('audio.upload.toasts.failedWithError', { error: err?.message || t('audio.upload.unknownError') }));
       return false;
     }
-  }, [user, queryClient, refetchPlaylists, t]);
+  }, [owner, queryClient, refetchPlaylists, t]);
 
   // Check the @threespeak posting-auth grant when the modal opens (aioha logins
   // only; ButrAuth → getCurrentProvider() null → keeps its own cookie path).
@@ -781,9 +784,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     'custom_json',
     {
       required_auths: [],
-      required_posting_auths: [user],
+      required_posting_auths: [owner],
       id: '3speak_playlist_add',
-      json: JSON.stringify({ playlist_id: playlistChoice, author: user, permlink, position: 0 }),
+      json: JSON.stringify({ playlist_id: playlistChoice, author: owner, permlink, position: 0 }),
     },
   ]);
 
@@ -842,6 +845,14 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         (mainTitle || track.title || '').trim() || 'Audio', body, warmMeta,
       );
       await linkAudioToPost({ audioPermlink, postPermlink: hivePermlink, username: owner });
+      // Not in one transaction with the post as on chain: the post is out either way.
+      if (playlistChoice) {
+        try {
+          await broadcastAudioOps([playlistAddOp(hivePermlink)]);
+        } catch (err) {
+          toast.error(t('audio.upload.toasts.failedWithError', { error: err?.message || t('audio.upload.unknownError') }));
+        }
+      }
       await pushAudioThumb(audioPermlink, postThumb);
       trackPostsRef.current[track.id] = { author: owner, permlink: hivePermlink, title: track.title };
       setTrackStatus(track.id, { state: 'success', stage: undefined });

@@ -277,6 +277,18 @@ async function write(path, method, body) {
  * the player resolves a video's source by.
  */
 export const postIncubationContent = (payload) => announcing(write('/content', 'POST', payload));
+
+/**
+ * A playlist op (create, add, remove, reorder, update, delete) for a warm-up
+ * account: the payload the 3speak_playlist_<op> custom_json would carry. Our
+ * server sends it to the playlist service as the session's own handle. Throws
+ * with the service's error when it is refused.
+ */
+export async function playlistIncubation(op, payload) {
+  const data = await write(`/playlists/${op}`, 'POST', payload);
+  if (data && data.ok === false) throw new Error(data.error || 'Playlist change failed');
+  return data;
+}
 export const fetchMyIncubationContent = () => write('/content/mine', 'GET');
 /**
  * How many people have voted on an off-chain post, and whether the viewer has.

@@ -11,7 +11,9 @@ import { PLAYLISTS_READ_URL, HIVE_API_URL } from '../utils/config';
  * @returns {object} React Query result with playlists data
  */
 export function useMyPlaylists(options = {}) {
-  const { user } = useAppStore();
+  // A warm-up account's playlists are kept under its handle (written through
+  // /api/incubation/playlists), so the handle stands in for the Hive name.
+  const user = useAppStore((s) => s.user || s.incubationHandle || null);
 
   return useQuery({
     queryKey: ['myPlaylists', user],

@@ -172,8 +172,17 @@ async function divertToIncubation([opType, opData]) {
     await api.saveIncubationProfile(meta.profile || {}, meta.profile?.interests);
     return { success: true, incubation: true };
   }
+  // Playlists: the playlist service takes them from our server for a warm-up
+  // handle (no Hive account to sign the custom_json), applied the same way.
+  if (opType === 'custom_json' && isPlaylistOp(opData?.id)) {
+    const data = await api.playlistIncubation(opData.id.slice(PLAYLIST_OP_PREFIX.length), JSON.parse(opData.json || '{}'));
+    return { success: true, incubation: true, result: data };
+  }
   return null;
 }
+
+const PLAYLIST_OP_PREFIX = '3speak_playlist_';
+const isPlaylistOp = (id) => typeof id === 'string' && id.startsWith(PLAYLIST_OP_PREFIX);
 
 export const voteWithAioha = async (author, permlink, weight = 10000, viewerTag = null) => {
   const tag = viewerTag ? String(viewerTag).trim().toLowerCase() : null;
@@ -420,6 +429,10 @@ export const reblogWithAioha = async (author, permlink) => {
 
 // Helper function for custom_json operations
 export const customJsonWithAioha = async (keyType, id, json, displayTitle = '') => {
+  if (incubatingHandle() && keyType === KeyTypes.Posting) {
+    const diverted = await divertToIncubation(['custom_json', { id, json }]);
+    if (diverted) return diverted;
+  }
   if (isManteAuthLogin() && keyType === KeyTypes.Posting) {
     const user = localStorage.getItem('user_id')
     return broadcastViaManteAuth([['custom_json', {
@@ -538,6 +551,13 @@ export const broadcastWithAioha = async (operations, keyType = KeyTypes.Active) 
   if (incubatingHandle() && keyType === KeyTypes.Posting && operations?.length === 1) {
     const diverted = await divertToIncubation(operations[0]);
     if (diverted) return diverted;
+  }
+  // The one multi-op exception: playlist ops only (create, then add the item). In
+  // order, so the add finds the playlist the create just made.
+  if (incubatingHandle() && keyType === KeyTypes.Posting && operations?.length > 1
+    && operations.every(([type, data]) => type === 'custom_json' && isPlaylistOp(data?.id))) {
+    for (const op of operations) await divertToIncubation(op);
+    return { success: true, incubation: true };
   }
   if (isManteAuthLogin() && keyType === KeyTypes.Posting) {
     return broadcastViaManteAuth(operations)
