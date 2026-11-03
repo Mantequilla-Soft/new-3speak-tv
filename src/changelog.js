@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.62',
+    category: 'home',
+    date: '2026-11-03',
+    summary: "The Discover feed now mixes in new audio from the last few days, next to snaps and playlists.",
+  },
+  {
+    version: '1.81.61',
+    category: 'upload',
+    date: '2026-11-03',
+    summary: "In the Thumbnail editor, Pick frame lets you choose any moment of your video, now on phones and tablets too.",
+  },
+  {
+    version: '1.81.60',
+    category: 'upload',
+    date: '2026-11-03',
+    summary: "When uploading, pick from four frames of your video or open the new Thumbnail editor to zoom in and add text, boxes and stickers.",
+  },
+  {
     version: '1.81.59',
     category: 'watch',
     date: '2026-11-03',
