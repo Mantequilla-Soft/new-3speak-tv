@@ -116,7 +116,7 @@
     "starting": "Starting…",
     "statusTitle": "Your batch import",
     "canLeave": "You can close this page now. Your videos are imported and published on our server, also while you are away.",
-    "stop": "Stop the rest",
+    "stop": "Stop import",
     "short": "Short",
     "status": {
       "queued": "Waiting",
@@ -124,11 +124,16 @@
       "uploading": "Uploading to 3Speak",
       "scheduling": "Scheduling",
       "scheduled": "Publishes at {{time}}",
+      "scheduledIn": "Publishes at {{time}} (in {{minutes}} min)",
+      "publishingNow": "Publishing now",
       "posted": "Published",
       "failed": "Failed",
       "publish_failed": "Publishing failed",
-      "cancelled": "Stopped"
-    }
+      "cancelled": "Stopped, not published"
+    },
+    "stopConfirm": "Stop this import? Videos that are not published yet are cancelled, including ones already scheduled. Published videos stay.",
+    "stopYes": "Yes, stop",
+    "stopKeep": "Keep importing"
   },
   "bitchute": {
     "noLink": "You have not linked a BitChute account yet. Link and verify it on your profile first, then come back here.",

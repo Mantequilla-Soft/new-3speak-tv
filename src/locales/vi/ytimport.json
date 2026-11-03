@@ -116,7 +116,7 @@
     "starting": "Đang bắt đầu…",
     "statusTitle": "Lô nhập của bạn",
     "canLeave": "Bạn có thể đóng trang này. Video của bạn được nhập và đăng trên máy chủ của chúng tôi, kể cả khi bạn không ở đây.",
-    "stop": "Dừng phần còn lại",
+    "stop": "Dừng nhập",
     "short": "Short",
     "status": {
       "queued": "Đang chờ",
@@ -124,11 +124,16 @@
       "uploading": "Đang tải lên 3Speak",
       "scheduling": "Đang lên lịch",
       "scheduled": "Đăng lúc {{time}}",
+      "scheduledIn": "Đăng lúc {{time}} (sau {{minutes}} phút)",
+      "publishingNow": "Đang đăng",
       "posted": "Đã đăng",
       "failed": "Thất bại",
       "publish_failed": "Đăng thất bại",
-      "cancelled": "Đã dừng"
-    }
+      "cancelled": "Đã dừng, chưa đăng"
+    },
+    "stopConfirm": "Dừng lần nhập này? Các video chưa đăng sẽ bị hủy, kể cả video đã lên lịch. Video đã đăng vẫn giữ nguyên.",
+    "stopYes": "Có, dừng lại",
+    "stopKeep": "Tiếp tục nhập"
   },
   "bitchute": {
     "noLink": "Bạn chưa liên kết tài khoản BitChute. Hãy liên kết và xác minh trong hồ sơ của bạn trước, rồi quay lại đây.",

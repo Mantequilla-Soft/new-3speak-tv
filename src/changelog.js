@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.56',
+    category: 'upload',
+    date: '2026-11-03',
+    summary: "Batch imports now show how many minutes are left until each video publishes. Stopping an import asks first, because it also cancels videos that are already scheduled.",
+  },
+  {
     version: '1.81.55',
     category: 'notifications',
     date: '2026-11-03',

@@ -116,7 +116,7 @@
     "starting": "Avvio…",
     "statusTitle": "La tua importazione multipla",
     "canLeave": "Ora puoi chiudere questa pagina. I tuoi video vengono importati e pubblicati sul nostro server, anche mentre non ci sei.",
-    "stop": "Ferma il resto",
+    "stop": "Interrompi importazione",
     "short": "Short",
     "status": {
       "queued": "In attesa",
@@ -124,11 +124,16 @@
       "uploading": "Caricamento su 3Speak",
       "scheduling": "Programmazione",
       "scheduled": "Pubblicazione alle {{time}}",
+      "scheduledIn": "Pubblicazione alle {{time}} (tra {{minutes}} min)",
+      "publishingNow": "Pubblicazione in corso",
       "posted": "Pubblicato",
       "failed": "Non riuscito",
       "publish_failed": "Pubblicazione non riuscita",
-      "cancelled": "Fermato"
-    }
+      "cancelled": "Interrotto, non pubblicato"
+    },
+    "stopConfirm": "Interrompere questa importazione? I video non ancora pubblicati vengono annullati, anche quelli già programmati. I video pubblicati restano.",
+    "stopYes": "Sì, interrompi",
+    "stopKeep": "Continua a importare"
   },
   "bitchute": {
     "noLink": "Non hai ancora collegato un account BitChute. Collegalo e verificalo prima nel tuo profilo, poi torna qui.",

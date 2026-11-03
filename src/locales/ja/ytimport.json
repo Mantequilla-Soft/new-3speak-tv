@@ -116,7 +116,7 @@
     "starting": "開始しています…",
     "statusTitle": "一括インポートの状況",
     "canLeave": "このページは閉じても大丈夫です。動画はあなたがいない間もサーバー上でインポート・公開されます。",
-    "stop": "残りを停止",
+    "stop": "インポートを停止",
     "short": "ショート",
     "status": {
       "queued": "待機中",
@@ -124,11 +124,16 @@
       "uploading": "3Speak にアップロード中",
       "scheduling": "予約中",
       "scheduled": "{{time}} に公開",
+      "scheduledIn": "{{time}}に公開（あと{{minutes}}分）",
+      "publishingNow": "公開中",
       "posted": "公開済み",
       "failed": "失敗",
       "publish_failed": "公開に失敗",
-      "cancelled": "停止済み"
-    }
+      "cancelled": "停止済み、未公開"
+    },
+    "stopConfirm": "このインポートを停止しますか？まだ公開されていない動画は、予約済みのものも含めてキャンセルされます。公開済みの動画は残ります。",
+    "stopYes": "はい、停止します",
+    "stopKeep": "インポートを続ける"
   },
   "bitchute": {
     "noLink": "BitChuteアカウントがまだリンクされていません。まずプロフィールでリンクして認証してから、ここに戻ってください。",

@@ -116,7 +116,7 @@
     "starting": "Iniciando…",
     "statusTitle": "Sua importação em lote",
     "canLeave": "Você já pode fechar esta página. Seus vídeos são importados e publicados no nosso servidor, mesmo enquanto você estiver fora.",
-    "stop": "Parar o resto",
+    "stop": "Parar importação",
     "short": "Short",
     "status": {
       "queued": "Aguardando",
@@ -124,11 +124,16 @@
       "uploading": "Enviando para o 3Speak",
       "scheduling": "Agendando",
       "scheduled": "Publica às {{time}}",
+      "scheduledIn": "Publica às {{time}} (daqui a {{minutes}} min)",
+      "publishingNow": "A publicar agora",
       "posted": "Publicado",
       "failed": "Falhou",
       "publish_failed": "Falha ao publicar",
-      "cancelled": "Parado"
-    }
+      "cancelled": "Parado, não publicado"
+    },
+    "stopConfirm": "Parar esta importação? Os vídeos ainda não publicados são cancelados, incluindo os já agendados. Os vídeos publicados ficam.",
+    "stopYes": "Sim, parar",
+    "stopKeep": "Continuar a importar"
   },
   "bitchute": {
     "noLink": "Você ainda não vinculou uma conta do BitChute. Vincule e verifique primeiro no seu perfil e depois volte aqui.",

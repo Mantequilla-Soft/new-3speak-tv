@@ -299,6 +299,8 @@ const RUNNING = new Set(['queued', 'downloading', 'uploading', 'scheduling']);
 export function BatchStatus({ batch, user, onChange }) {
   const { t } = useTranslation();
   const [stopping, setStopping] = useState(false);
+  // Stopping also cancels posts that are already scheduled, so it asks first.
+  const [confirming, setConfirming] = useState(false);
   const [, tick] = useState(0);
   // Keep the "publishes at" times honest while the page stays open.
   useEffect(() => {
@@ -310,12 +312,17 @@ export function BatchStatus({ batch, user, onChange }) {
 
   const stop = async () => {
     setStopping(true);
-    try { onChange(await cancelImportBatch(batch.id)); } catch { /* the next poll shows the state */ } finally { setStopping(false); }
+    try { onChange(await cancelImportBatch(batch.id)); } catch { /* the next poll shows the state */ } finally { setStopping(false); setConfirming(false); }
   };
 
   const label = (it) => {
     if (it.status === 'scheduled' && it.scheduledOn) {
-      return t('ytimport.batch.status.scheduled', { time: new Date(it.scheduledOn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+      // Batches post a few minutes later on purpose; say how long, or the wait
+      // looks like nothing is happening.
+      const at = new Date(it.scheduledOn);
+      const minutes = Math.ceil((at.getTime() - Date.now()) / 60000);
+      if (minutes <= 0) return t('ytimport.batch.status.publishingNow');
+      return t('ytimport.batch.status.scheduledIn', { time: at.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), minutes });
     }
     return t(`ytimport.batch.status.${it.status}`);
   };
@@ -324,12 +331,25 @@ export function BatchStatus({ batch, user, onChange }) {
     <section className="yt-batch-status" aria-live="polite">
       <div className="yt-batch-status__head">
         <h3 className="yt-import__section">{t('ytimport.batch.statusTitle')}</h3>
-        {stoppable && (
-          <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={stop} disabled={stopping}>
+        {stoppable && !confirming && (
+          <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={() => setConfirming(true)}>
             {t('ytimport.batch.stop')}
           </button>
         )}
       </div>
+      {stoppable && confirming && (
+        <div className="yt-batch-status__confirm" role="alert">
+          <p>{t('ytimport.batch.stopConfirm')}</p>
+          <div className="yt-import__actions">
+            <button type="button" className="yt-import__btn" onClick={stop} disabled={stopping}>
+              {t('ytimport.batch.stopYes')}
+            </button>
+            <button type="button" className="yt-import__btn yt-import__btn--outline" onClick={() => setConfirming(false)} disabled={stopping}>
+              {t('ytimport.batch.stopKeep')}
+            </button>
+          </div>
+        </div>
+      )}
       {/* Everything happens on the server (import-batch.cjs), so say so: people
           otherwise keep the tab open for hours. */}
       {stoppable && (

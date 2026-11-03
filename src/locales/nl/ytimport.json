@@ -116,7 +116,7 @@
     "starting": "Bezig met starten…",
     "statusTitle": "Je bulkimport",
     "canLeave": "Je kunt deze pagina nu sluiten. Je video’s worden op onze server geïmporteerd en gepubliceerd, ook als je weg bent.",
-    "stop": "De rest stoppen",
+    "stop": "Import stoppen",
     "short": "Short",
     "status": {
       "queued": "Wacht",
@@ -124,11 +124,16 @@
       "uploading": "Uploaden naar 3Speak",
       "scheduling": "Inplannen",
       "scheduled": "Verschijnt om {{time}}",
+      "scheduledIn": "Verschijnt om {{time}} (over {{minutes}} min)",
+      "publishingNow": "Wordt nu gepubliceerd",
       "posted": "Gepubliceerd",
       "failed": "Mislukt",
       "publish_failed": "Publiceren mislukt",
-      "cancelled": "Gestopt"
-    }
+      "cancelled": "Gestopt, niet gepubliceerd"
+    },
+    "stopConfirm": "Deze import stoppen? Video's die nog niet gepubliceerd zijn worden geannuleerd, ook als ze al ingepland zijn. Gepubliceerde video's blijven staan.",
+    "stopYes": "Ja, stoppen",
+    "stopKeep": "Doorgaan met importeren"
   },
   "bitchute": {
     "noLink": "Je hebt nog geen BitChute-account gekoppeld. Koppel en verifieer het eerst in je profiel en kom daarna hier terug.",

@@ -116,7 +116,7 @@
     "starting": "正在开始…",
     "statusTitle": "你的批量导入",
     "canLeave": "现在可以关闭此页面。你的视频会在我们的服务器上导入并发布，即使你不在也一样。",
-    "stop": "停止剩余部分",
+    "stop": "停止导入",
     "short": "短视频",
     "status": {
       "queued": "等待中",
@@ -124,11 +124,16 @@
       "uploading": "正在上传到 3Speak",
       "scheduling": "正在排期",
       "scheduled": "将于 {{time}} 发布",
+      "scheduledIn": "{{time}} 发布（{{minutes}} 分钟后）",
+      "publishingNow": "正在发布",
       "posted": "已发布",
       "failed": "失败",
       "publish_failed": "发布失败",
-      "cancelled": "已停止"
-    }
+      "cancelled": "已停止，未发布"
+    },
+    "stopConfirm": "要停止这次导入吗？尚未发布的视频会被取消，包括已排定的。已发布的视频会保留。",
+    "stopYes": "是的，停止",
+    "stopKeep": "继续导入"
   },
   "bitchute": {
     "noLink": "你还没有关联 BitChute 账号。请先在个人资料中关联并验证，然后再回到这里。",

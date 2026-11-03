@@ -116,7 +116,7 @@
     "starting": "Inaanza…",
     "statusTitle": "Uingizaji wako wa kundi",
     "canLeave": "Sasa unaweza kufunga ukurasa huu. Video zako zinaletwa na kuchapishwa kwenye seva yetu, hata usipokuwepo.",
-    "stop": "Simamisha zilizobaki",
+    "stop": "Simamisha uingizaji",
     "short": "Short",
     "status": {
       "queued": "Inasubiri",
@@ -124,11 +124,16 @@
       "uploading": "Inapakia kwenda 3Speak",
       "scheduling": "Inapanga ratiba",
       "scheduled": "Itachapishwa saa {{time}}",
+      "scheduledIn": "Inachapishwa saa {{time}} (baada ya dak {{minutes}})",
+      "publishingNow": "Inachapishwa sasa",
       "posted": "Imechapishwa",
       "failed": "Imeshindwa",
       "publish_failed": "Kuchapisha kumeshindwa",
-      "cancelled": "Imesimamishwa"
-    }
+      "cancelled": "Imesimamishwa, haijachapishwa"
+    },
+    "stopConfirm": "Usimamishe uingizaji huu? Video ambazo bado hazijachapishwa zitaghairiwa, zikiwemo zilizopangwa tayari. Video zilizochapishwa zitabaki.",
+    "stopYes": "Ndiyo, simamisha",
+    "stopKeep": "Endelea kuingiza"
   },
   "bitchute": {
     "noLink": "Bado hujaunganisha akaunti ya BitChute. Iunganishe na uithibitishe kwenye wasifu wako kwanza, kisha urudi hapa.",
