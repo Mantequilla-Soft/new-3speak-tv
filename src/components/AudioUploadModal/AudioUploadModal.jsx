@@ -265,6 +265,16 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // 'ppl'   → assign 100% beneficiaries to @threespeak-audio; a separate
   //           program pays the author per listen for the track's lifetime.
   const [rewardMode, setRewardMode] = useState('post');
+  // Hoisted here (above the mode effect and the useCallbacks below) — putting them later would
+  // put `isPremium`/`user` in the TDZ when openBeneFor's deps array is built.
+  const { user } = useAppStore();
+  // A warm-up account publishes under its handle (musicians and podcasters have
+  // an audio goal). The post goes to the warm-up service, not to Hive:
+  // commentWithAioha diverts it there.
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  const warmup = !user && !!incubationHandle;
+  const owner = user || incubationHandle;
+
   // Publish mode:
   //   'snaps'  → each audio = a comment under the latest peak.snaps container
   //   'single' → 1 audio embedded in a standalone Hive post (1 track only)
@@ -315,15 +325,6 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const [thumbUploadingId, setThumbUploadingId] = useState(null);
   const thumbInputRef = useRef(null);
 
-  // Hoisted here (above the useCallbacks below) — putting them later would
-  // put `isPremium`/`user` in the TDZ when openBeneFor's deps array is built.
-  const { user } = useAppStore();
-  // A warm-up account publishes under its handle (musicians and podcasters have
-  // an audio goal). The post goes to the warm-up service, not to Hive:
-  // commentWithAioha diverts it there.
-  const incubationHandle = useAppStore((s) => s.incubationHandle);
-  const warmup = !user && !!incubationHandle;
-  const owner = user || incubationHandle;
   // "Ads on this audio": starts at the account's "Ads on your audio" and overrides it
   // for this upload. null = untouched (the tracks keep following the account, also
   // after a later change there); true / false = written into each track's post.
