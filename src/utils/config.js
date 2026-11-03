@@ -104,6 +104,13 @@ const EDITOR_URLS = (import.meta.env.VITE_EDITOR_URLS || import.meta.env.VITE_ED
   .map(u => u.trim())
   .filter(Boolean);
 
+// The video editor's sticker library (emojis, badges, shapes, 3Speak + Hive
+// branding), also offered in the upload's thumbnail editor. Served by the prod
+// editor's frontend at /stickers/ with Access-Control-Allow-Origin: *, which
+// the thumbnail canvas needs to export. editor.3speak.tv does not serve it.
+const STICKER_LIBRARY_URL = import.meta.env.VITE_STICKER_LIBRARY_URL
+  || 'https://3speak-editor.okinoko.io/stickers/library.json';
+
 /**
  * Pick a random reachable editor URL from the configured list.
  * Shuffles the list, then HEAD-requests each until one responds non-404.
@@ -433,6 +440,7 @@ export {
   USER_SHORTS_API_URL,
   EDITOR_URLS,
   getEditorUrl,
+  STICKER_LIBRARY_URL,
   FEATURE_EDITOR,
   COMPACT_SIDEBAR,
   EMBED_DEBUG,

@@ -2489,6 +2489,10 @@ app.post('/api/upload-image', imageUploadLimiter, express.raw({ type: () => true
 
 app.get('/api/health', (req, res) => res.json({ ok: true }))
 
+// 🎞️ One video frame decoded with ffmpeg, for browsers that can't read frames
+// themselves (the thumbnail editor's Pick frame). See thumbnail-frame.cjs.
+require('./thumbnail-frame.cjs').mountThumbnailFrame(app, { apiKey: EMBED_API_KEY })
+
 // 🗺️ Sitemaps of every watchable video, short and channel. See sitemaps.cjs.
 require('./sitemaps.cjs').mountSitemaps(app, {
   uri: process.env.MONGODB_URI || '',

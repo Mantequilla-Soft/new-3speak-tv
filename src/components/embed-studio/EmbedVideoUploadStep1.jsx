@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { Upload, FileVideo, Video, Scissors } from "lucide-react";
 import { FaFileImport } from "react-icons/fa";
 import "../legacy-studio/VideoUploadStep1.scss"
-import { generateVideoThumbnails } from "../../utils/videoThumbnails";
+import { generateVideoThumbnailsAt } from "../../utils/videoThumbnails";
 import { toastIn } from '../../utils/toast';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useNavigate } from 'react-router-dom';
@@ -242,7 +242,7 @@ function EmbedVideoUploadStep1() {
       // upload — the user can add a custom thumbnail on the next step.
       let thumbs = [];
       try {
-        thumbs = await generateVideoThumbnails(file, 2, "url");
+        thumbs = await generateVideoThumbnailsAt(file);
       } catch (thumbErr) {
         console.warn("Thumbnail generation failed; continuing without a preview", thumbErr);
         toast(t("upload.select.thumbnailGenFailed"));

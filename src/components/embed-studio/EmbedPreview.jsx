@@ -38,6 +38,7 @@ function EmbedPreview() {
     videoFile,
     prevVideoFile,
     selectedThumbnail,
+    editedThumbnail,
     uploading, setUploading,
     completed,
     uploadProgress,
@@ -328,7 +329,7 @@ function EmbedPreview() {
                 <div className="ep-post-card">
                   <EmbedPreviewPlayer
                     file={prevVideoFile}
-                    poster={selectedThumbnail}
+                    poster={editedThumbnail || selectedThumbnail}
                     portrait={fromStories}
                     chapters={shownTimeline.chapters}
                     links={shownTimeline.links}

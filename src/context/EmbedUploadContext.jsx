@@ -152,6 +152,17 @@ export function EmbedUploadProvider({ children }) {
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
+  // The thumbnail step's choice and the editor's design, kept here so Back from
+  // Details finds them as they were: { src, edit, active, plainSrc } (see
+  // EmbedThumbnail.jsx; `edit` as in embed-studio/thumbnail-editor/editState.js).
+  // `editedThumbnail` is the thumbnail in use as a data URL, for the posters on
+  // later steps; `thumbnailFile` is the same image as a Blob.
+  const [thumbnailDesign, setThumbnailDesign] = useState(null);
+  const [editedThumbnail, setEditedThumbnail] = useState(null);
+  // Pictures added on the thumbnail step beside the generated frames:
+  // [{ src, kind: 'custom' | 'picked' }] (an uploaded image / a frame picked
+  // from the video).
+  const [thumbnailExtras, setThumbnailExtras] = useState([]);
   // The quick story flow skips the thumbnail step: the first generated frame is
   // the cover. False when there is no frame, so the caller can fall back to the step.
   const pickFirstThumbnail = useCallback((thumbs) => {
@@ -160,6 +171,8 @@ export function EmbedUploadProvider({ children }) {
     setSelectedIndex(0);
     setSelectedThumbnail(first);
     setThumbnailFile(dataUrlToBlob(first));
+    setThumbnailDesign(null);
+    setEditedThumbnail(null);
     return true;
   }, []);
 
@@ -377,6 +390,9 @@ export function EmbedUploadProvider({ children }) {
     setSelectedThumbnail(null);
     setThumbnailFile(null);
     setSelectedIndex(null);
+    setThumbnailDesign(null);
+    setEditedThumbnail(null);
+    setThumbnailExtras([]);
     setVideoMode(null);
     // Times belong to the video they were set against.
     setChapters([]);
@@ -406,6 +422,9 @@ export function EmbedUploadProvider({ children }) {
     setSelectedThumbnail(null);
     setThumbnailFile(null);
     setSelectedIndex(null);
+    setThumbnailDesign(null);
+    setEditedThumbnail(null);
+    setThumbnailExtras([]);
     setVideoMode(null);
     setTitle('');
     setDescription('');
@@ -2272,6 +2291,9 @@ export function EmbedUploadProvider({ children }) {
     selectedThumbnail, setSelectedThumbnail,
     thumbnailFile, setThumbnailFile,
     selectedIndex, setSelectedIndex,
+    thumbnailDesign, setThumbnailDesign,
+    editedThumbnail, setEditedThumbnail,
+    thumbnailExtras, setThumbnailExtras,
     pickFirstThumbnail,
     // Details
     title, setTitle,

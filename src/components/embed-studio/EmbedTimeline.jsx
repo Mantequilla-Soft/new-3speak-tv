@@ -29,6 +29,7 @@ export default function EmbedTimeline() {
     completed,
     videoFile, prevVideoFile, videoDuration,
     selectedThumbnail,
+    editedThumbnail,
     chapters, setChapters,
     timelineLinks, setTimelineLinks,
     timelineSeeded, setTimelineSeeded,
@@ -116,7 +117,7 @@ export default function EmbedTimeline() {
 
           <TimelineEditor
             src={src}
-            poster={selectedThumbnail}
+            poster={editedThumbnail || selectedThumbnail}
             duration={duration}
             chapters={chapters}
             links={timelineLinks}

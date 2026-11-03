@@ -13,7 +13,7 @@ import { useEmbedUpload } from "../../context/EmbedUploadContext";
 import { HIVE_API_URL, SHORTS_MAX_DURATION_SEC, storiesEnabledFor } from "../../utils/config";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { generateVideoThumbnails } from "../../utils/videoThumbnails";
+import { generateVideoThumbnailsAt, THUMBNAIL_FRAME_POINTS } from "../../utils/videoThumbnails";
 import { useTranslation } from "react-i18next";
 
 function EmbedStudioPage() {
@@ -158,12 +158,15 @@ function EmbedStudioPage() {
       const sharedShort = autoShort && height > width && duration <= SHORTS_MAX_DURATION_SEC;
       if (sharedShort) setFromStories(true);
 
-      const thumbs = await generateVideoThumbnails(file, 2, 'url');
-
       // ▶️ YouTube import (/youtube-import): carry over title, description, tags
-      // and the original thumbnail, which goes first so it is preselected.
+      // and the original thumbnail, which goes first so it is preselected. It
+      // takes the start frame's place, so the thumbnail step still offers four.
       const ytMeta = window.__ytImportMeta;
       delete window.__ytImportMeta;
+      const thumbs = await generateVideoThumbnailsAt(
+        file,
+        ytMeta?.thumbnail ? THUMBNAIL_FRAME_POINTS.filter((p) => p > 0) : THUMBNAIL_FRAME_POINTS,
+      );
       if (ytMeta) {
         setImportSource(ytMeta.videoId ? { id: ytMeta.videoId, platform: ytMeta.platform, url: ytMeta.sourceUrl } : null);
         if (ytMeta.title) setTitle(ytMeta.title);
