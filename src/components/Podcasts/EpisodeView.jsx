@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import {
   MdArrowBack, MdPlayArrow, MdPause, MdOpenInNew, MdCheck, MdPodcasts, MdPlaylistAdd, MdPlaylistAddCheck,
-  MdLink, MdOndemandVideo, MdClose, MdBolt, MdFormatListBulleted, MdShare,
+  MdLink, MdOndemandVideo, MdClose, MdBolt, MdFormatListBulleted, MdShare, MdThumbUp, MdForum,
 } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
 import { toastIn } from '../../utils/toast';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
-import { usePodcastEpisode, useEpisodeNotes, episodeToTrack, episodePath, fetchPrivateChapters } from '../../lib/podcasts';
+import { usePodcastEpisode, useEpisodeNotes, episodeToTrack, episodePath, fetchPrivateChapters, threeSpeakPost } from '../../lib/podcasts';
 import { usePodcastProgress, progressOf, recordProgress, flushProgress, resumePosition } from '../../lib/podcastProgress';
 import { fetchChapters } from '../../lib/podcastMedia';
 import { useDownloads } from '../../lib/podcastDownloads';
@@ -20,6 +20,12 @@ import { fmtDuration, useDateFormat, sanitizeShowNotes } from '../../lib/podcast
 import PodcastArt from './PodcastArt';
 import PodcastTipModal from './PodcastTipModal';
 import { EpisodeBadges, DownloadButton, PersonsRow, PrivateBadge } from './PodcastBits';
+import { isLoggedIn } from '../../hive-api/aioha';
+import { getUersContent } from '../../utils/hiveUtils';
+import PayoutAmount from '../PayoutAmount/PayoutAmount';
+import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
+import BlogContent from '../playVideo/BlogContent';
+import TipModal from '../tip-reward/TipModal';
 
 async function copyLink(url, t) {
   try {
@@ -72,9 +78,14 @@ function EpisodeVideo({ ep, user }) {
  * A shared link may carry &t= (start there) and &end= (stop there, a clip): the
  * page then offers "Play from 12:34". Never on its own: browsers block sound
  * that starts without a click.
+ *
+ * A 3Speak episode (a 3Speak RSS feed followed as an outside show) gets what the
+ * 3Speak audio page has (components/AudioItem/AudioItemView.jsx): payout, Vote,
+ * Comments, the Hive tip, and its Hive post, rendered, as the show notes.
  */
 export default function EpisodeView({ episodeId, user, onOpenShow }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const fmtDate = useDateFormat();
   const [params] = useSearchParams();
   const deep = useMemo(() => deepLinkTimes(params), [params]);
@@ -96,10 +107,26 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
   const [tipping, setTipping] = useState(false);
   const [video, setVideo] = useState(false);
   const [deepUsed, setDeepUsed] = useState(false);
+  const authenticated = useAppStore((s) => s.authenticated);
+  const loggedIn = authenticated && isLoggedIn();
+  const [hiveTipping, setHiveTipping] = useState(false);
+  const [voting, setVoting] = useState(false);
+  const [votedNow, setVotedNow] = useState(false);
+  const [weight, setWeight] = useState(100);
+  const [voteValue, setVoteValue] = useState(0);
+  const [accountData, setAccountData] = useState(null);
 
   const ep = data?.episode;
   const feed = data?.feed;
   const track = useMemo(() => (ep ? episodeToTrack(ep, feed) : null), [ep, feed]);
+  const hive = useMemo(() => threeSpeakPost(ep?.link), [ep?.link]);
+  // The Hive post behind a 3Speak episode: its votes, payout and comments.
+  const { data: post } = useQuery({
+    queryKey: ['audio-item-post', hive?.author, hive?.permlink],
+    enabled: !!hive,
+    queryFn: () => getUersContent(hive.author, hive.permlink),
+    staleTime: 60 * 1000,
+  });
   const notesHtml = useMemo(() => sanitizeShowNotes(notes.data), [notes.data]);
   const chapters = useQuery({
     queryKey: ['podcasts', 'chapters', episodeId, user || ''],
@@ -144,6 +171,18 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
   const link = (from, to) => episodeShareUrl(window.location.origin, episodePath(ep.id), from, to);
   const shareAt = isCurrent && currentSec > 0 ? currentSec : 0;
   const soundbites = (ep.soundbites || []).filter((b) => b.duration > 0);
+  const votes = post?.active_votes || [];
+  const voted = votedNow || (!!user && votes.some((v) => v.voter === user));
+  const voteCount = votes.length + (votedNow && !votes.some((v) => v.voter === user) ? 1 : 0);
+  const payout = post
+    ? (parseFloat(post.pending_payout_value || 0) > 0
+      ? parseFloat(post.pending_payout_value)
+      : parseFloat(post.total_payout_value || 0) + parseFloat(post.curator_payout_value || 0))
+    : 0;
+  // Comments live on the post's 3Speak page: the audio one, or the video one.
+  const postPage = hive && (String(ep.mime || '').startsWith('video/')
+    ? `/watch?v=${hive.author}/${hive.permlink}`
+    : `/audio/${hive.author}/${hive.permlink}`);
   const chapterList = chapters.data || [];
 
   return (
@@ -166,6 +205,7 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
             {ep.duration > 0 && <span className="pod-chip">{fmtDuration(ep.duration)}</span>}
             {progress?.done && <span className="pod-tile-listened"><MdCheck size={13} /> {t('audio.podcasts.listened')}</span>}
             {started && <span className="pod-tile-pct">{t('audio.podcasts.listenedPct', { pct: progress.pct })}</span>}
+            {post && <PayoutAmount amount={payout} size={13} />}
           </div>
           {(started || progress?.done) && (
             <div className="pod-episode-bar" aria-hidden="true"><span style={{ width: `${progress.pct}%` }} /></div>
@@ -187,6 +227,19 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
               {inQueue ? <MdPlaylistAddCheck size={18} /> : <MdPlaylistAdd size={18} />}
               {inQueue ? t('audio.podcasts.inQueue') : t('audio.podcasts.addToQueue')}
             </button>
+            {hive && (
+              <button
+                type="button"
+                className={`pod-btn${voted ? ' pod-btn--on' : ''}`}
+                onClick={() => {
+                  if (!loggedIn) { toastIn('Post').error(t('audio.post.signInToVote')); return; }
+                  setVoting((v) => !v);
+                }}
+              >
+                <MdThumbUp size={16} /> {voted ? t('audio.post.voted') : t('audio.post.vote')}
+                {voteCount > 0 && <span className="pod-btn-count">{voteCount}</span>}
+              </button>
+            )}
             <DownloadButton track={track} variant="button" />
             {ep.video?.url && (
               <button type="button" className={`pod-btn${video ? ' pod-btn--on' : ''}`} aria-pressed={video} onClick={() => setVideo((v) => !v)}>
@@ -198,9 +251,21 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
               {shareAt ? <MdShare size={16} /> : <MdLink size={16} />}
               {shareAt ? t('audio.podcasts.share.copyAt', { time: fmtClock(shareAt) }) : t('audio.podcasts.share.copy')}
             </button>
-            {canTipEpisode(track) && (
+            {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
+            {hive && user !== hive.author && (
+              <button type="button" className="pod-btn" onClick={() => setHiveTipping(true)}>
+                <BiDollar size={16} /> {t('audio.post.tip')}
+              </button>
+            )}
+            {!hive && canTipEpisode(track) && (
               <button type="button" className="pod-btn" onClick={() => setTipping(true)}>
                 <BiDollar size={16} /> {t('audio.podcasts.tip.button')}
+              </button>
+            )}
+            {hive && (
+              <button type="button" className="pod-btn" onClick={() => navigate(postPage)}>
+                <MdForum size={16} /> {t('audio.item.comments')}
+                {post?.children > 0 && <span className="pod-btn-count">{post.children}</span>}
               </button>
             )}
             {ep.link && (
@@ -272,19 +337,44 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
 
       <section className="pod-section">
         <h2 className="pod-section-title">{t('audio.podcasts.showNotes')}</h2>
-        {notesHtml
-          // Sanitised by sanitizeShowNotes (DOMPurify: links and formatting only).
-          ? <div className="pod-notes" dangerouslySetInnerHTML={{ __html: notesHtml }} />
-          : (
-            <div className="pod-notes">
-              {ep.summary && <p>{ep.summary}</p>}
-              {notes.isLoading && <p className="pod-empty">{t('audio.podcasts.notesLoading')}</p>}
-              {!notes.isLoading && !ep.summary && <p className="pod-empty">{t('audio.podcasts.noNotes')}</p>}
-            </div>
-          )}
+        {/* A 3Speak episode: the Hive post itself, rendered (the feed's copy is flattened markdown). */}
+        {hive
+          ? <div className="pod-notes"><BlogContent author={hive.author} permlink={hive.permlink} alwaysExpanded hideAudioPlayers /></div>
+          : notesHtml
+            // Sanitised by sanitizeShowNotes (DOMPurify: links and formatting only).
+            ? <div className="pod-notes" dangerouslySetInnerHTML={{ __html: notesHtml }} />
+            : (
+              <div className="pod-notes">
+                {ep.summary && <p>{ep.summary}</p>}
+                {notes.isLoading && <p className="pod-empty">{t('audio.podcasts.notesLoading')}</p>}
+                {!notes.isLoading && !ep.summary && <p className="pod-empty">{t('audio.podcasts.noNotes')}</p>}
+              </div>
+            )}
       </section>
 
       {tipping && <PodcastTipModal track={track} onClose={() => setTipping(false)} />}
+      {voting && hive && (
+        <CommentVoteTooltip
+          author={hive.author}
+          permlink={hive.permlink}
+          showTooltip={voting}
+          setShowTooltip={setVoting}
+          weight={weight} setWeight={setWeight}
+          voteValue={voteValue} setVoteValue={setVoteValue}
+          accountData={accountData} setAccountData={setAccountData}
+          compact
+          onVoteSuccess={() => { setVoting(false); setVotedNow(true); }}
+        />
+      )}
+      {hiveTipping && hive && (
+        <TipModal
+          recipient={hive.author}
+          permlink={hive.permlink}
+          memoLink={`https://3speak.tv${postPage}`}
+          isOpen
+          onClose={() => setHiveTipping(false)}
+        />
+      )}
     </div>
   );
 }

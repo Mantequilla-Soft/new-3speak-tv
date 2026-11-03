@@ -3,7 +3,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { splitSats, hiveAccountOf, tipOptions } from '../../../src/lib/podcastTips.js'
-import { parseOpml, buildOpml, episodeToTrack, feedKey, followErrorText } from '../../../src/lib/podcasts.js'
+import { parseOpml, buildOpml, episodeToTrack, feedKey, followErrorText, threeSpeakPost } from '../../../src/lib/podcasts.js'
 
 const host = { name: 'Host', type: 'lnaddress', address: 'host@getalby.com', split: 90 }
 const cohost = { name: 'Cohost', type: 'node', address: '03' + 'a'.repeat(64), split: 10 }
@@ -74,6 +74,31 @@ describe('episodeToTrack', () => {
     expect(track).toMatchObject({ external: true, src: 'https://cdn/x.mp3', show: 'Show', thumbnail_url: 'https://cdn/c.jpg', duration: 60 })
     expect(track.permlink).toBeUndefined()
     expect(track.post_permlink).toBeUndefined()
+  })
+
+  it('carries the Hive post of a 3Speak episode, still without a 3Speak permlink', () => {
+    const track = episodeToTrack(
+      { id: 'f:2', feed_id: 'f', title: 'Ep', audio_url: 'https://cdn/y.mp3', link: 'https://3speak.tv/watch?v=steevc/solar-report-october-2026-mvzqb24f' },
+      { title: 'NaPodPoMo 2026' },
+    )
+    expect(track).toMatchObject({ external: true, owner: 'steevc', post_permlink: 'solar-report-october-2026-mvzqb24f' })
+    expect(track.permlink).toBeUndefined()
+  })
+})
+
+describe('threeSpeakPost', () => {
+  it('reads the Hive post from a 3Speak watch or Hive-style link', () => {
+    expect(threeSpeakPost('https://3speak.tv/watch?v=steevc/day-1')).toEqual({ author: 'steevc', permlink: 'day-1' })
+    expect(threeSpeakPost('https://www.3speak.tv/@steevc/day-1')).toEqual({ author: 'steevc', permlink: 'day-1' })
+  })
+
+  it('ignores every other link', () => {
+    expect(threeSpeakPost('https://podnews.net/watch?v=steevc/day-1')).toBeNull()
+    expect(threeSpeakPost('https://3speak.tv.evil.com/watch?v=steevc/day-1')).toBeNull()
+    expect(threeSpeakPost('https://3speak.tv/playlist/89824da022425799e9cd52e2a75e7e1e')).toBeNull()
+    expect(threeSpeakPost('https://3speak.tv/@steevc')).toBeNull()
+    expect(threeSpeakPost('')).toBeNull()
+    expect(threeSpeakPost(undefined)).toBeNull()
   })
 })
 
