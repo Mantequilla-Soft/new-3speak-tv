@@ -1,8 +1,8 @@
 {
   "tracks": {
     "viewer": {
-      "title": "Çoğunlukla izleyiciyim",
-      "body": "İzlemek, yorum yapmak ve içerik üreticilerini takip etmek için buradayım."
+      "title": "Çoğunlukla izleyici ya da dinleyici",
+      "body": "İzlemek ve dinlemek, yorum yapmak ve içerik üreticilerini takip etmek için buradayım."
     },
     "creator": {
       "title": "Çoğunlukla içerik üreticisiyim",
@@ -11,6 +11,14 @@
     "advertiser": {
       "title": "Reklamverenim",
       "body": "Bir markayı temsil ediyorum ve 3Speak izleyicilerine ulaşmak istiyorum."
+    },
+    "musician": {
+      "title": "Müzisyen",
+      "body": "Müzik yapıyorum ve parçalarımı yayınlamak istiyorum."
+    },
+    "podcaster": {
+      "title": "Podcast yapımcısı",
+      "body": "Bir podcast yapıyorum ve bölümlerimi yayınlamak istiyorum."
     }
   },
   "tips": {
@@ -66,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Seni 3Speak'e ne getirdi?",
-    "intro": "Hive hesabına giden yolun buna bağlı: izleyiciler izler ve katılır, içerik üreticileri yayınlar, reklamverenler markalarını kurar.",
-    "introNoAdvertisers": "Hive hesabına giden yolun buna bağlı: izleyiciler izler ve katılır, içerik üreticileri ise yayınlar."
+    "intro": "Hive hesabına giden yolun buna bağlı: izleyiciler ve dinleyiciler izler, dinler ve katılır, içerik üreticileri video yayınlar, müzisyenler ve podcast yapımcıları ses yayınlar, reklamcılar da markalarını kurar.",
+    "introNoAdvertisers": "Hive hesabına giden yolun buna bağlı: izleyiciler ve dinleyiciler izler, dinler ve katılır, içerik üreticileri video yayınlar, müzisyenler ve podcast yapımcıları da ses yayınlar."
   },
   "tipCard": {
     "aria": "İpucu",
@@ -176,6 +184,43 @@
           "1": "Adres: isteğe bağlı.",
           "2": "Adresin VEYA yukarıdaki marka profilinde bir web sitesi gerekli; ikisinden en az biri."
         }
+      },
+      "audio": {
+        "label_one": "Bir parça ya da bölüm yayınla",
+        "label_other": "{{count}} parça ya da bölüm yayınla",
+        "hint": "Bir şarkı, bir podcast bölümü ya da başka bir kayıt.",
+        "why": "Ekip seni incelerken sesini dinler, ziyaretçiler de onu profilinde bulur.",
+        "counts": {
+          "0": "Yükle ve ardından Müzik / Ses üzerinden yayınladığın her ses.",
+          "1": "Senin olarak kalır. Yükseltildiğinde Hive hesabına taşınır."
+        },
+        "cta": "Ses yükle"
+      },
+      "listen": {
+        "labelHours_one": "3Speak'te bir saat dinle",
+        "labelHours_other": "3Speak'te {{count}} saat dinle",
+        "labelMinutes_one": "3Speak'te bir dakika dinle",
+        "labelMinutes_other": "3Speak'te {{count}} dakika dinle",
+        "hint": "3Speak ses oynatıcısındaki herhangi bir müzik ya da podcast. Gerçekten çalarken sayılır.",
+        "why": "Başkalarını dinlemek, müzisyenlerin ve podcast yapımcılarının dinleyicilerini ve insanlarını bulma yoludur.",
+        "counts": {
+          "0": "Parça ya da bölüm başına bir kez. Yeniden dinlemek en iyi süreyi artırır, hiçbir zaman toplamaz.",
+          "1": "Kendi sesin değil."
+        },
+        "cta": "Dinleyecek bir şey bul"
+      },
+      "watchListen": {
+        "labelHours_one": "3Speak'te bir saat izle ya da dinle",
+        "labelHours_other": "3Speak'te {{count}} saat izle ya da dinle",
+        "labelMinutes_one": "3Speak'te bir dakika izle ya da dinle",
+        "labelMinutes_other": "3Speak'te {{count}} dakika izle ya da dinle",
+        "hint": "Videolar, müzik ve podcast'ler birlikte sayılır. Gerçekten oynarken sayılır.",
+        "why": "İzlemek ve dinlemek, yalnızca paylaşım yapmak için değil katılmak için burada olduğunu gösterir. Çoğu kişi bu hedefi farkında olmadan tamamlar.",
+        "counts": {
+          "0": "Video, parça ya da bölüm başına bir kez. Yeniden oynatmak en iyi süreyi artırır, hiçbir zaman toplamaz.",
+          "1": "Kendi videoların ya da seslerin değil."
+        },
+        "cta": "İzleyecek ya da dinleyecek bir şey bul"
       }
     },
     "duration": {
@@ -245,8 +290,8 @@
       "aside": "Birkaç şey hesabını bekliyor: ödül kazanmak ve bahşiş göndermek. Bunlar gerçek para hareket ettirdiği için gerçekten sana ait bir hesap gerektirir."
     },
     "path": {
-      "p1": "Profilinde kısa bir yapılacaklar listesi var ve bu, burada ne için olduğuna bağlı: izleyiciler izler ve katılır, içerik üreticileri yayınlar, reklamverenler markalarını kurar.",
-      "p1NoAdvertisers": "Profilinde kısa bir yapılacaklar listesi var ve bu, burada ne için olduğuna bağlı: izleyiciler izler ve katılır, içerik üreticileri ise yayınlar.",
+      "p1": "Profilin kısa bir yapılacaklar listesi gösterir ve bu, burada ne için olduğuna bağlıdır: izleyiciler ve dinleyiciler izler, dinler ve katılır, içerik üreticileri video yayınlar, müzisyenler ve podcast yapımcıları ses yayınlar, reklamcılar da markalarını kurar.",
+      "p1NoAdvertisers": "Profilin kısa bir yapılacaklar listesi gösterir ve bu, burada ne için olduğuna bağlıdır: izleyiciler ve dinleyiciler izler, dinler ve katılır, içerik üreticileri video yayınlar, müzisyenler ve podcast yapımcıları da ses yayınlar.",
       "p2": "Bu bir sınav değil. Gerçek bir hesabı boş ya da kötü niyetli bir hesaptan ayırt etmemizin yolu sadece bu. Liste tamamlandığında ekip seni inceler ve en kısa sürede yükseltir.",
       "perkEarn": "Kazanç getiren gönderiler",
       "perkKeys": "Yalnızca sende olan anahtarlar",
@@ -495,7 +540,8 @@
     "viewerDone": {
       "watched": "{{time}} izledin",
       "written": "{{items}} yazdın",
-      "followed": "{{items}} takip ettin"
+      "followed": "{{items}} takip ettin",
+      "watchedListened": "{{time}} izledin ve dinledin"
     },
     "advertiser": {
       "lede": "Ekip <b>{{name}}</b> markasını inceledi. Ücretsiz olarak <b>Hive hesabını</b> oluştur: bu senin reklamveren hesabın olur.",

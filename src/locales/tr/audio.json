@@ -367,7 +367,8 @@
       "post": "Hive'a gönderiliyor",
       "uploadingFallback": "Yükleniyor",
       "published": "Yayınlandı"
-    }
+    },
+    "warmupOneTrack": "Hesabın ısınırken aynı anda bir ses yayınlarsın. Devam etmek için diğerlerini kaldır."
   },
   "podcasts": {
     "chip": "Harici",

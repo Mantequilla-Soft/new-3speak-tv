@@ -1,8 +1,8 @@
 {
   "tracks": {
     "viewer": {
-      "title": "Vooral kijker",
-      "body": "Ik ben hier om te kijken, te reageren en makers te volgen."
+      "title": "Vooral kijker of luisteraar",
+      "body": "Ik ben hier om te kijken en te luisteren, te reageren en makers te volgen."
     },
     "creator": {
       "title": "Vooral maker",
@@ -11,6 +11,14 @@
     "advertiser": {
       "title": "Adverteerder",
       "body": "Ik vertegenwoordig een merk en wil 3Speak-kijkers bereiken."
+    },
+    "musician": {
+      "title": "Muzikant",
+      "body": "Ik maak muziek en wil mijn nummers publiceren."
+    },
+    "podcaster": {
+      "title": "Podcaster",
+      "body": "Ik maak een podcast en wil mijn afleveringen publiceren."
     }
   },
   "tips": {
@@ -66,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Wat brengt je naar 3Speak?",
-    "intro": "Je weg naar een Hive-account hangt ervan af: kijkers kijken en doen mee, makers publiceren, en adverteerders zetten hun merk neer.",
-    "introNoAdvertisers": "Je weg naar een Hive-account hangt ervan af: kijkers kijken en doen mee, en makers publiceren."
+    "intro": "Je weg naar een Hive-account hangt ervan af: kijkers en luisteraars kijken, luisteren en doen mee, makers publiceren video's, muzikanten en podcasters publiceren audio, en adverteerders zetten hun merk op.",
+    "introNoAdvertisers": "Je weg naar een Hive-account hangt ervan af: kijkers en luisteraars kijken, luisteren en doen mee, makers publiceren video's, en muzikanten en podcasters publiceren audio."
   },
   "tipCard": {
     "aria": "Tip",
@@ -176,6 +184,43 @@
           "1": "Adres: optioneel.",
           "2": "Je hebt je adres OF een website in je merkprofiel hierboven nodig, minstens een van de twee."
         }
+      },
+      "audio": {
+        "label_one": "Publiceer een nummer of een aflevering",
+        "label_other": "Publiceer {{count}} nummers of afleveringen",
+        "hint": "Een liedje, een podcastaflevering of een andere opname.",
+        "why": "Naar jouw audio luistert het team als het je beoordeelt, en bezoekers vinden het op je profiel.",
+        "counts": {
+          "0": "Elke audio die je publiceert via Uploaden en dan Muziek / Audio.",
+          "1": "Het blijft van jou. Als je wordt opgewaardeerd, gaat het naar je Hive-account."
+        },
+        "cta": "Audio uploaden"
+      },
+      "listen": {
+        "labelHours_one": "Luister een uur op 3Speak",
+        "labelHours_other": "Luister {{count}} uur op 3Speak",
+        "labelMinutes_one": "Luister een minuut op 3Speak",
+        "labelMinutes_other": "Luister {{count}} minuten op 3Speak",
+        "hint": "Alle muziek of podcasts in de audiospeler van 3Speak. Telt zolang het echt speelt.",
+        "why": "Door naar anderen te luisteren vinden muzikanten en podcasters hun publiek en hun mensen.",
+        "counts": {
+          "0": "Eén keer per nummer of aflevering. Opnieuw luisteren verhoogt de beste tijd, het telt nooit op.",
+          "1": "Niet je eigen audio."
+        },
+        "cta": "Zoek iets om naar te luisteren"
+      },
+      "watchListen": {
+        "labelHours_one": "Kijk of luister een uur op 3Speak",
+        "labelHours_other": "Kijk of luister {{count}} uur op 3Speak",
+        "labelMinutes_one": "Kijk of luister een minuut op 3Speak",
+        "labelMinutes_other": "Kijk of luister {{count}} minuten op 3Speak",
+        "hint": "Video's, muziek en podcasts tellen allemaal samen. Telt zolang ze echt spelen.",
+        "why": "Kijken en luisteren laten zien dat je hier bent om mee te doen en niet alleen om te posten. De meeste mensen halen dit doel zonder het te proberen.",
+        "counts": {
+          "0": "Eén keer per video, nummer of aflevering. Opnieuw afspelen verhoogt de beste tijd, het telt nooit op.",
+          "1": "Niet je eigen video's of audio."
+        },
+        "cta": "Zoek iets om te kijken of te luisteren"
       }
     },
     "duration": {
@@ -245,8 +290,8 @@
       "aside": "Een paar dingen wachten op je account: beloningen verdienen en fooien geven. Daarmee gaat echt geld om, dus daarvoor is een account nodig dat echt van jou is."
     },
     "path": {
-      "p1": "Je profiel toont een korte takenlijst, en die hangt af van waarvoor je hier bent: kijkers kijken en doen mee, makers publiceren, en adverteerders zetten hun merk neer.",
-      "p1NoAdvertisers": "Je profiel toont een korte takenlijst, en die hangt af van waarvoor je hier bent: kijkers kijken en doen mee, en makers publiceren.",
+      "p1": "Je profiel toont een korte lijst met taken, en die hangt af van waarvoor je hier bent: kijkers en luisteraars kijken, luisteren en doen mee, makers publiceren video's, muzikanten en podcasters publiceren audio, en adverteerders zetten hun merk op.",
+      "p1NoAdvertisers": "Je profiel toont een korte lijst met taken, en die hangt af van waarvoor je hier bent: kijkers en luisteraars kijken, luisteren en doen mee, makers publiceren video's, en muzikanten en podcasters publiceren audio.",
       "p2": "Het is geen test. Het is gewoon hoe we een echt account kunnen onderscheiden van een leeg of kwaadwillend account. Zodra de lijst klaar is, beoordeelt het team je en upgradet het je zo snel mogelijk.",
       "perkEarn": "Posts die verdienen",
       "perkKeys": "Keys die alleen jij hebt",
@@ -495,7 +540,8 @@
     "viewerDone": {
       "watched": "{{time}} gekeken",
       "written": "{{items}} geschreven",
-      "followed": "{{items}} gevolgd"
+      "followed": "{{items}} gevolgd",
+      "watchedListened": "{{time}} gekeken en geluisterd"
     },
     "advertiser": {
       "lede": "Het team heeft <b>{{name}}</b> beoordeeld. Maak gratis je <b>Hive-account</b> aan: dat wordt je adverteerdersaccount.",

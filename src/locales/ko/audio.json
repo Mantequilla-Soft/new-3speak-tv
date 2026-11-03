@@ -352,7 +352,8 @@
       "post": "Hive에 게시 중",
       "uploadingFallback": "업로드 중",
       "published": "게시됨"
-    }
+    },
+    "warmupOneTrack": "계정 준비 기간에는 오디오를 한 번에 하나씩 공개해요. 계속하려면 나머지를 삭제하세요."
   },
   "podcasts": {
     "chip": "외부",

@@ -1,8 +1,8 @@
 {
   "tracks": {
     "viewer": {
-      "title": "Chủ yếu là người xem",
-      "body": "Tôi ở đây để xem, bình luận và theo dõi các nhà sáng tạo."
+      "title": "Chủ yếu là người xem hoặc người nghe",
+      "body": "Tôi ở đây để xem và nghe, bình luận và theo dõi các nhà sáng tạo."
     },
     "creator": {
       "title": "Chủ yếu là nhà sáng tạo",
@@ -11,6 +11,14 @@
     "advertiser": {
       "title": "Nhà quảng cáo",
       "body": "Tôi đại diện cho một thương hiệu và muốn tiếp cận người xem 3Speak."
+    },
+    "musician": {
+      "title": "Nhạc sĩ",
+      "body": "Tôi làm nhạc và muốn đăng các bản nhạc của mình."
+    },
+    "podcaster": {
+      "title": "Người làm podcast",
+      "body": "Tôi làm podcast và muốn đăng các tập của mình."
     }
   },
   "tips": {
@@ -66,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Điều gì đưa bạn đến với 3Speak?",
-    "intro": "Con đường đến tài khoản Hive của bạn phụ thuộc vào điều này: người xem thì xem và tham gia, nhà sáng tạo thì đăng nội dung, còn nhà quảng cáo thì thiết lập thương hiệu.",
-    "introNoAdvertisers": "Con đường đến tài khoản Hive của bạn phụ thuộc vào điều này: người xem thì xem và tham gia, còn nhà sáng tạo thì đăng nội dung."
+    "intro": "Con đường đến tài khoản Hive của bạn phụ thuộc vào điều này: người xem và người nghe thì xem, nghe và tham gia, nhà sáng tạo đăng video, nhạc sĩ và người làm podcast đăng âm thanh, còn nhà quảng cáo thiết lập thương hiệu.",
+    "introNoAdvertisers": "Con đường đến tài khoản Hive của bạn phụ thuộc vào điều này: người xem và người nghe thì xem, nghe và tham gia, nhà sáng tạo đăng video, còn nhạc sĩ và người làm podcast đăng âm thanh."
   },
   "tipCard": {
     "aria": "Mẹo",
@@ -163,6 +171,38 @@
           "1": "Địa chỉ: không bắt buộc.",
           "2": "Bạn cần có địa chỉ HOẶC trang web trong hồ sơ thương hiệu ở trên, ít nhất một trong hai."
         }
+      },
+      "audio": {
+        "label_other": "Đăng {{count}} bản nhạc hoặc tập podcast",
+        "hint": "Một bài hát, một tập podcast hoặc bất kỳ bản ghi âm nào khác.",
+        "why": "Âm thanh của bạn là thứ đội ngũ nghe khi xét duyệt bạn, và là thứ khách truy cập thấy trên hồ sơ của bạn.",
+        "counts": {
+          "0": "Bất kỳ âm thanh nào bạn đăng qua Tải lên, rồi Nhạc / Âm thanh.",
+          "1": "Nó vẫn là của bạn. Khi bạn được nâng cấp, nó chuyển sang tài khoản Hive của bạn."
+        },
+        "cta": "Tải âm thanh lên"
+      },
+      "listen": {
+        "labelHours_other": "Nghe {{count}} giờ trên 3Speak",
+        "labelMinutes_other": "Nghe {{count}} phút trên 3Speak",
+        "hint": "Bất kỳ nhạc hay podcast nào trong trình phát âm thanh của 3Speak. Được tính khi thật sự đang phát.",
+        "why": "Nghe người khác là cách nhạc sĩ và người làm podcast tìm thấy khán giả và những người đồng điệu.",
+        "counts": {
+          "0": "Một lần cho mỗi bản nhạc hoặc tập. Nghe lại sẽ nâng thời gian tốt nhất, không bao giờ cộng dồn.",
+          "1": "Không phải âm thanh của chính bạn."
+        },
+        "cta": "Tìm gì đó để nghe"
+      },
+      "watchListen": {
+        "labelHours_other": "Xem hoặc nghe {{count}} giờ trên 3Speak",
+        "labelMinutes_other": "Xem hoặc nghe {{count}} phút trên 3Speak",
+        "hint": "Video, nhạc và podcast đều được tính chung. Được tính khi thật sự đang phát.",
+        "why": "Xem và nghe cho thấy bạn ở đây để tham gia chứ không chỉ để đăng bài. Đây là mục tiêu hầu hết mọi người hoàn thành mà không cần cố.",
+        "counts": {
+          "0": "Một lần cho mỗi video, bản nhạc hoặc tập. Phát lại sẽ nâng thời gian tốt nhất, không bao giờ cộng dồn.",
+          "1": "Không phải video hay âm thanh của chính bạn."
+        },
+        "cta": "Tìm gì đó để xem hoặc nghe"
       }
     },
     "duration": {
@@ -228,8 +268,8 @@
       "aside": "Một vài thứ phải chờ đến khi bạn có tài khoản: nhận phần thưởng và gửi tip. Những việc đó liên quan đến tiền thật, nên cần một tài khoản thực sự thuộc về bạn."
     },
     "path": {
-      "p1": "Hồ sơ của bạn hiển thị một danh sách ngắn những việc cần làm, tùy thuộc vào mục đích bạn đến đây: người xem thì xem và tham gia, nhà sáng tạo thì đăng nội dung, còn nhà quảng cáo thì thiết lập thương hiệu.",
-      "p1NoAdvertisers": "Hồ sơ của bạn hiển thị một danh sách ngắn những việc cần làm, tùy thuộc vào mục đích bạn đến đây: người xem thì xem và tham gia, còn nhà sáng tạo thì đăng nội dung.",
+      "p1": "Hồ sơ của bạn hiển thị một danh sách việc cần làm ngắn, tùy vào lý do bạn ở đây: người xem và người nghe thì xem, nghe và tham gia, nhà sáng tạo đăng video, nhạc sĩ và người làm podcast đăng âm thanh, còn nhà quảng cáo thiết lập thương hiệu.",
+      "p1NoAdvertisers": "Hồ sơ của bạn hiển thị một danh sách việc cần làm ngắn, tùy vào lý do bạn ở đây: người xem và người nghe thì xem, nghe và tham gia, nhà sáng tạo đăng video, còn nhạc sĩ và người làm podcast đăng âm thanh.",
       "p2": "Đây không phải bài kiểm tra. Đơn giản đó là cách chúng tôi phân biệt một tài khoản thật với một tài khoản trống hoặc có ý đồ xấu. Khi hoàn thành danh sách, đội ngũ sẽ xét duyệt và nâng cấp cho bạn sớm nhất có thể.",
       "perkEarn": "Bài đăng có thu nhập",
       "perkKeys": "Khóa chỉ mình bạn nắm giữ",
@@ -467,7 +507,8 @@
     "viewerDone": {
       "watched": "đã xem {{time}}",
       "written": "đã viết {{items}}",
-      "followed": "đã theo dõi {{items}}"
+      "followed": "đã theo dõi {{items}}",
+      "watchedListened": "đã xem và nghe {{time}}"
     },
     "advertiser": {
       "lede": "Đội ngũ đã xét duyệt <b>{{name}}</b>. Hãy tạo <b>tài khoản Hive</b> miễn phí: nó sẽ trở thành tài khoản nhà quảng cáo của bạn.",

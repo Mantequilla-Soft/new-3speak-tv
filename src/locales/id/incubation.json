@@ -1,8 +1,8 @@
 {
   "tracks": {
     "viewer": {
-      "title": "Kebanyakan penonton",
-      "body": "Aku di sini untuk menonton, berkomentar, dan mengikuti kreator."
+      "title": "Kebanyakan penonton atau pendengar",
+      "body": "Saya di sini untuk menonton dan mendengarkan, berkomentar, dan mengikuti kreator."
     },
     "creator": {
       "title": "Kebanyakan kreator",
@@ -11,6 +11,14 @@
     "advertiser": {
       "title": "Pengiklan",
       "body": "Aku mewakili sebuah brand dan ingin menjangkau penonton 3Speak."
+    },
+    "musician": {
+      "title": "Musisi",
+      "body": "Saya membuat musik dan ingin menerbitkan lagu-lagu saya."
+    },
+    "podcaster": {
+      "title": "Podcaster",
+      "body": "Saya membuat podcast dan ingin menerbitkan episode saya."
     }
   },
   "tips": {
@@ -66,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Apa yang membawamu ke 3Speak?",
-    "intro": "Jalanmu menuju akun Hive bergantung pada ini: penonton menonton dan ikut berinteraksi, kreator menerbitkan, dan pengiklan menyiapkan brand mereka.",
-    "introNoAdvertisers": "Jalanmu menuju akun Hive bergantung pada ini: penonton menonton dan ikut berinteraksi, dan kreator menerbitkan."
+    "intro": "Jalanmu menuju akun Hive bergantung pada ini: penonton dan pendengar menonton, mendengarkan, dan ikut serta, kreator menerbitkan video, musisi dan podcaster menerbitkan audio, dan pengiklan menyiapkan merek mereka.",
+    "introNoAdvertisers": "Jalanmu menuju akun Hive bergantung pada ini: penonton dan pendengar menonton, mendengarkan, dan ikut serta, kreator menerbitkan video, serta musisi dan podcaster menerbitkan audio."
   },
   "tipCard": {
     "aria": "Tip",
@@ -163,6 +171,38 @@
           "1": "Alamat: opsional.",
           "2": "Kamu butuh alamat ATAU situs web di profil brand-mu di atas, minimal salah satunya."
         }
+      },
+      "audio": {
+        "label_other": "Terbitkan {{count}} lagu atau episode",
+        "hint": "Sebuah lagu, episode podcast, atau rekaman lainnya.",
+        "why": "Audio kamu yang didengarkan tim saat meninjau kamu, dan yang ditemukan pengunjung di profilmu.",
+        "counts": {
+          "0": "Audio apa pun yang kamu terbitkan lewat Unggah, lalu Musik / Audio.",
+          "1": "Tetap milikmu. Saat kamu dinaikkan, audio itu pindah ke akun Hive-mu."
+        },
+        "cta": "Unggah audio"
+      },
+      "listen": {
+        "labelHours_other": "Dengarkan {{count}} jam di 3Speak",
+        "labelMinutes_other": "Dengarkan {{count}} menit di 3Speak",
+        "hint": "Musik atau podcast apa pun di pemutar audio 3Speak. Dihitung selama benar-benar diputar.",
+        "why": "Mendengarkan orang lain adalah cara musisi dan podcaster menemukan pendengar dan komunitasnya.",
+        "counts": {
+          "0": "Sekali per lagu atau episode. Mendengarkan ulang menaikkan waktu terbaiknya, tidak pernah menambahnya.",
+          "1": "Bukan audiomu sendiri."
+        },
+        "cta": "Cari sesuatu untuk didengar"
+      },
+      "watchListen": {
+        "labelHours_other": "Tonton atau dengarkan {{count}} jam di 3Speak",
+        "labelMinutes_other": "Tonton atau dengarkan {{count}} menit di 3Speak",
+        "hint": "Video, musik, dan podcast dihitung bersama. Dihitung selama benar-benar diputar.",
+        "why": "Menonton dan mendengarkan menunjukkan kamu di sini untuk ikut serta, bukan hanya untuk memposting. Kebanyakan orang menyelesaikannya tanpa berusaha.",
+        "counts": {
+          "0": "Sekali per video, lagu, atau episode. Memutar ulang menaikkan waktu terbaiknya, tidak pernah menambahnya.",
+          "1": "Bukan video atau audiomu sendiri."
+        },
+        "cta": "Cari sesuatu untuk ditonton atau didengar"
       }
     },
     "duration": {
@@ -228,8 +268,8 @@
       "aside": "Beberapa hal menunggu akunmu: mendapatkan reward dan memberi tip. Hal-hal itu melibatkan uang sungguhan, jadi butuh akun yang benar-benar milikmu."
     },
     "path": {
-      "p1": "Profilmu menampilkan daftar singkat hal yang perlu dilakukan, dan isinya bergantung pada tujuanmu di sini: penonton menonton dan ikut berinteraksi, kreator menerbitkan, dan pengiklan menyiapkan brand mereka.",
-      "p1NoAdvertisers": "Profilmu menampilkan daftar singkat hal yang perlu dilakukan, dan isinya bergantung pada tujuanmu di sini: penonton menonton dan ikut berinteraksi, dan kreator menerbitkan.",
+      "p1": "Profilmu menampilkan daftar singkat hal yang perlu dilakukan, tergantung tujuanmu di sini: penonton dan pendengar menonton, mendengarkan, dan ikut serta, kreator menerbitkan video, musisi dan podcaster menerbitkan audio, dan pengiklan menyiapkan merek mereka.",
+      "p1NoAdvertisers": "Profilmu menampilkan daftar singkat hal yang perlu dilakukan, tergantung tujuanmu di sini: penonton dan pendengar menonton, mendengarkan, dan ikut serta, kreator menerbitkan video, serta musisi dan podcaster menerbitkan audio.",
       "p2": "Ini bukan ujian. Ini hanya cara kami membedakan akun sungguhan dari akun kosong atau berniat jahat. Setelah daftarnya selesai, tim meninjaumu dan meningkatkan akunmu secepat mungkin.",
       "perkEarn": "Postingan yang menghasilkan",
       "perkKeys": "Key yang hanya kamu pegang",
@@ -467,7 +507,8 @@
     "viewerDone": {
       "watched": "menonton {{time}}",
       "written": "menulis {{items}}",
-      "followed": "mengikuti {{items}}"
+      "followed": "mengikuti {{items}}",
+      "watchedListened": "menonton dan mendengarkan selama {{time}}"
     },
     "advertiser": {
       "lede": "Tim sudah meninjau <b>{{name}}</b>. Buat <b>akun Hive</b>-mu, gratis: akun itu menjadi akun pengiklanmu.",

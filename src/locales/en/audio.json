@@ -367,7 +367,8 @@
       "post": "Posting to Hive",
       "uploadingFallback": "Uploading",
       "published": "Published"
-    }
+    },
+    "warmupOneTrack": "While your account warms up, you publish one audio at a time. Remove the others to go on."
   },
   "podcasts": {
     "chip": "External",

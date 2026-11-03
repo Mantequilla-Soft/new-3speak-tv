@@ -1,8 +1,8 @@
 {
   "tracks": {
     "viewer": {
-      "title": "Kadalasan ay viewer",
-      "body": "Nandito ako para manood, mag-comment at mag-follow ng mga creator."
+      "title": "Kadalasang viewer o listener",
+      "body": "Narito ako para manood at makinig, mag-comment at mag-follow ng mga creator."
     },
     "creator": {
       "title": "Kadalasan ay creator",
@@ -11,6 +11,14 @@
     "advertiser": {
       "title": "Advertiser",
       "body": "Kinakatawan ko ang isang brand at gusto kong maabot ang mga viewer ng 3Speak."
+    },
+    "musician": {
+      "title": "Musikero",
+      "body": "Gumagawa ako ng musika at gusto kong i-publish ang mga track ko."
+    },
+    "podcaster": {
+      "title": "Podcaster",
+      "body": "Gumagawa ako ng podcast at gusto kong i-publish ang mga episode ko."
     }
   },
   "tips": {
@@ -66,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Ano ang nagdala sa iyo sa 3Speak?",
-    "intro": "Nakadepende rito ang daan mo papunta sa Hive account: nanonood at nakikisali ang mga viewer, nagpa-publish ang mga creator, at sine-set up ng mga advertiser ang kanilang brand.",
-    "introNoAdvertisers": "Nakadepende rito ang daan mo papunta sa Hive account: nanonood at nakikisali ang mga viewer, at nagpa-publish ang mga creator."
+    "intro": "Dito nakasalalay ang daan mo papunta sa Hive account: nanonood, nakikinig at nakikilahok ang mga viewer at listener, nagpa-publish ng video ang mga creator, nagpa-publish ng audio ang mga musikero at podcaster, at inaayos ng mga advertiser ang kanilang brand.",
+    "introNoAdvertisers": "Dito nakasalalay ang daan mo papunta sa Hive account: nanonood, nakikinig at nakikilahok ang mga viewer at listener, nagpa-publish ng video ang mga creator, at nagpa-publish ng audio ang mga musikero at podcaster."
   },
   "tipCard": {
     "aria": "Tip",
@@ -176,6 +184,43 @@
           "1": "Address: opsyonal.",
           "2": "Kailangan mo ang address mo O isang website sa brand profile mo sa itaas, kahit isa sa dalawa."
         }
+      },
+      "audio": {
+        "label_one": "Mag-publish ng isang track o episode",
+        "label_other": "Mag-publish ng {{count}} na track o episode",
+        "hint": "Isang kanta, episode ng podcast o anumang ibang recording.",
+        "why": "Ang audio mo ang pinakikinggan ng team kapag nire-review ka nila, at ito ang makikita ng mga bisita sa profile mo.",
+        "counts": {
+          "0": "Anumang audio na i-publish mo mula sa Upload, tapos Music / Audio.",
+          "1": "Sa iyo pa rin ito. Kapag na-upgrade ka, lilipat ito sa Hive account mo."
+        },
+        "cta": "Mag-upload ng audio"
+      },
+      "listen": {
+        "labelHours_one": "Makinig nang isang oras sa 3Speak",
+        "labelHours_other": "Makinig nang {{count}} oras sa 3Speak",
+        "labelMinutes_one": "Makinig nang isang minuto sa 3Speak",
+        "labelMinutes_other": "Makinig nang {{count}} minuto sa 3Speak",
+        "hint": "Anumang musika o podcast sa audio player ng 3Speak. Binibilang habang talagang tumutugtog.",
+        "why": "Sa pakikinig sa iba nahahanap ng mga musikero at podcaster ang kanilang tagapakinig at mga kasama.",
+        "counts": {
+          "0": "Isang beses bawat track o episode. Ang muling pakikinig ay nagtataas ng pinakamahusay na oras nito, hindi nagdadagdag.",
+          "1": "Hindi ang sarili mong audio."
+        },
+        "cta": "Maghanap ng mapapakinggan"
+      },
+      "watchListen": {
+        "labelHours_one": "Manood o makinig nang isang oras sa 3Speak",
+        "labelHours_other": "Manood o makinig nang {{count}} oras sa 3Speak",
+        "labelMinutes_one": "Manood o makinig nang isang minuto sa 3Speak",
+        "labelMinutes_other": "Manood o makinig nang {{count}} minuto sa 3Speak",
+        "hint": "Sabay-sabay na binibilang ang mga video, musika at podcast. Binibilang habang talagang tumutugtog.",
+        "why": "Ipinapakita ng panonood at pakikinig na narito ka para makilahok, hindi lang para mag-post. Natatapos ito ng karamihan nang hindi sinusubukan.",
+        "counts": {
+          "0": "Isang beses bawat video, track o episode. Ang muling pag-play ay nagtataas ng pinakamahusay na oras nito, hindi nagdadagdag.",
+          "1": "Hindi ang sarili mong mga video o audio."
+        },
+        "cta": "Maghanap ng mapapanood o mapapakinggan"
       }
     },
     "duration": {
@@ -245,8 +290,8 @@
       "aside": "May ilang bagay na naghihintay sa account mo: pagkita ng rewards at pag-tip. Gumagalaw ang mga ito ng totoong pera, kaya kailangan ng account na talagang sa iyo."
     },
     "path": {
-      "p1": "Nagpapakita ang profile mo ng maikling listahan ng mga gagawin, at nakadepende ito sa kung para saan ka nandito: nanonood at nakikisali ang mga viewer, nagpa-publish ang mga creator, at sine-set up ng mga advertiser ang kanilang brand.",
-      "p1NoAdvertisers": "Nagpapakita ang profile mo ng maikling listahan ng mga gagawin, at nakadepende ito sa kung para saan ka nandito: nanonood at nakikisali ang mga viewer, at nagpa-publish ang mga creator.",
+      "p1": "Nagpapakita ang profile mo ng maikling listahan ng gagawin, depende kung bakit ka narito: nanonood, nakikinig at nakikilahok ang mga viewer at listener, nagpa-publish ng video ang mga creator, nagpa-publish ng audio ang mga musikero at podcaster, at inaayos ng mga advertiser ang kanilang brand.",
+      "p1NoAdvertisers": "Nagpapakita ang profile mo ng maikling listahan ng gagawin, depende kung bakit ka narito: nanonood, nakikinig at nakikilahok ang mga viewer at listener, nagpa-publish ng video ang mga creator, at nagpa-publish ng audio ang mga musikero at podcaster.",
       "p2": "Hindi ito test. Ito lang ang paraan namin para makilala ang totoong account mula sa walang laman o mapanirang account. Kapag tapos na ang listahan, ire-review ka ng team at ia-upgrade ka sa lalong madaling panahon.",
       "perkEarn": "Mga post na kumikita",
       "perkKeys": "Keys na ikaw lang ang may hawak",
@@ -495,7 +540,8 @@
     "viewerDone": {
       "watched": "nanood nang {{time}}",
       "written": "sumulat ng {{items}}",
-      "followed": "nag-follow ng {{items}}"
+      "followed": "nag-follow ng {{items}}",
+      "watchedListened": "nanood at nakinig nang {{time}}"
     },
     "advertiser": {
       "lede": "Na-review na ng team ang <b>{{name}}</b>. Gawin ang <b>Hive account</b> mo, nang libre: ito ang magiging advertiser account mo.",

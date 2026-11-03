@@ -352,7 +352,8 @@
       "post": "Đang đăng lên Hive",
       "uploadingFallback": "Đang tải lên",
       "published": "Đã xuất bản"
-    }
+    },
+    "warmupOneTrack": "Trong khi tài khoản của bạn đang khởi động, bạn đăng từng âm thanh một. Hãy bỏ các tệp khác để tiếp tục."
   },
   "podcasts": {
     "chip": "Bên ngoài",

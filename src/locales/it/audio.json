@@ -382,7 +382,8 @@
       "post": "Pubblicazione su Hive",
       "uploadingFallback": "Caricamento",
       "published": "Pubblicato"
-    }
+    },
+    "warmupOneTrack": "Finché il tuo account si scalda, pubblichi un audio alla volta. Togli gli altri per continuare."
   },
   "podcasts": {
     "chip": "Esterni",

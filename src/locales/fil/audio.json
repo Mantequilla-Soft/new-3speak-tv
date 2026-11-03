@@ -367,7 +367,8 @@
       "post": "Pino-post sa Hive",
       "uploadingFallback": "Ina-upload",
       "published": "Na-publish"
-    }
+    },
+    "warmupOneTrack": "Habang nagwa-warm up ang account mo, isang audio lang ang ipa-publish mo bawat beses. Alisin ang iba para magpatuloy."
   },
   "podcasts": {
     "chip": "Panlabas",

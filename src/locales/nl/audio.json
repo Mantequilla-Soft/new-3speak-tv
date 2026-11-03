@@ -367,7 +367,8 @@
       "post": "Posten op Hive",
       "uploadingFallback": "Uploaden",
       "published": "Gepubliceerd"
-    }
+    },
+    "warmupOneTrack": "Zolang je account opwarmt, publiceer je één audio tegelijk. Haal de andere weg om verder te gaan."
   },
   "podcasts": {
     "chip": "Extern",

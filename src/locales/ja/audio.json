@@ -352,7 +352,8 @@
       "post": "Hive に投稿中",
       "uploadingFallback": "アップロード中",
       "published": "公開済み"
-    }
+    },
+    "warmupOneTrack": "アカウントのウォームアップ中は、音声を1本ずつ公開します。続けるにはほかを削除してください。"
   },
   "podcasts": {
     "chip": "外部",

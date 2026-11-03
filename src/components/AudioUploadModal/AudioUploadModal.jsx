@@ -14,7 +14,7 @@ import { KeyTypes } from '@aioha/aioha';
 import { useMyPlaylists } from '../../hooks/useMyPlaylists';
 import { uploadAudioTo3Speak, getSnapsContainer, linkAudioToPost, audioFormatFor } from '../../utils/audioUpload';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
-import { broadcastWithAioha, broadcastViaThreespeak, getCurrentProvider, Providers } from '../../hive-api/aioha';
+import { broadcastWithAioha, broadcastViaThreespeak, getCurrentProvider, Providers, commentWithAioha } from '../../hive-api/aioha';
 import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../../utils/postingAuthority';
 import { checkPostingRc } from '../../utils/rcCheck';
 import { oaEnvelope, threespeakAudio, OA_ARTICLE, OA_MICROPOST, OA_COMMENT } from '../../utils/openAttribute';
@@ -79,6 +79,9 @@ const FLOWS = {
   single: ['source', 'mode', 'playlist', 'post', 'review'],
   // 2+ audios → one main post (no audio) + each track as a comment reply
   album: ['source', 'mode', 'playlist', 'mainpost', 'tracks', 'review'],
+  // A warm-up account (no Hive account yet): one audio, its own post, kept by the
+  // warm-up service until they graduate. No playlists or payout to choose.
+  warmup: ['source', 'post', 'review'],
 };
 
 const MAX_RECORD_SEC = 300;
@@ -269,10 +272,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // Keep mode valid for the current track count.
   useEffect(() => {
     setMode((m) => {
+      if (warmup) return 'single';
       if (tracks.length <= 1) return m === 'album' ? 'single' : m;
       return m === 'single' ? 'album' : m;
     });
-  }, [tracks.length]);
+  }, [tracks.length, warmup]);
 
   // Main/single-post composer (the standalone post, or the album's parent
   // post). post* fields = this composer; tracks carry their own per-track
@@ -313,6 +317,12 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // Hoisted here (above the useCallbacks below) — putting them later would
   // put `isPremium`/`user` in the TDZ when openBeneFor's deps array is built.
   const { user } = useAppStore();
+  // A warm-up account publishes under its handle (musicians and podcasters have
+  // an audio goal). The post goes to the warm-up service, not to Hive:
+  // commentWithAioha diverts it there.
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  const warmup = !user && !!incubationHandle;
+  const owner = user || incubationHandle;
   // "Ads on this audio": starts at the account's "Ads on your audio" and overrides it
   // for this upload. null = untouched (the tracks keep following the account, also
   // after a later change there); true / false = written into each track's post.
@@ -749,13 +759,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     try {
       await axios.put(
         `${CHECKER_URL}/video/thumbnail`,
-        { owner: user, permlink: audioPermlink, thumbnail: thumb },
+        { owner, permlink: audioPermlink, thumbnail: thumb },
         { headers: { Authorization: `Bearer ${CHECKER_API_KEY}` } },
       );
     } catch (thumbErr) {
       console.warn('Audio thumbnail Mongo update failed (non-fatal):', thumbErr?.message);
     }
-  }, [user]);
+  }, [owner]);
 
   const audioMetaFor = (track) => {
     const audioMeta = { type: track.type || undefined };
@@ -792,10 +802,13 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const publishSinglePost = useCallback(async (track) => {
     setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
-      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: user, title: track.title,
+      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: owner, title: track.title,
     });
     setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
-    const hivePermlink = generatePermlink(mainTitle || track.title) || audioPermlink;
+    // A warm-up post takes the audio's own id as its permlink, as a warm-up video
+    // does: the post replayed on Hive at graduation keeps it, and the audio row
+    // already points at it.
+    const hivePermlink = warmup ? audioPermlink : (generatePermlink(mainTitle || track.title) || audioPermlink);
     const userTags = postTagsInput.split(/[\s,]+/).map(tr => tr.trim().toLowerCase()).filter(Boolean);
     const tags = userTags.length ? Array.from(new Set(userTags)) : Array.from(new Set(HIVE_DEFAULT_TAGS));
     const desc = (postDescription || '').trim() || (track.title || '').trim();
@@ -815,6 +828,25 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       ...audioAdsMeta,
     };
     if (postThumb) metaObj.image = [postThumb];
+
+    if (warmup) {
+      // No Article envelope (`oa`): the warm-up service files an Article as a VIDEO,
+      // which would tick a creator's video goal and list the audio among videos.
+      // Without it this is a post; the audio keys above still mark it as audio. No
+      // ad choice either (that is a creator setting of a Hive account).
+      const warmMeta = { ...metaObj };
+      delete warmMeta.oa;
+      for (const k of Object.keys(audioAdsMeta || {})) delete warmMeta[k];
+      await commentWithAioha(
+        '', (community && community.name) || tags[0], hivePermlink,
+        (mainTitle || track.title || '').trim() || 'Audio', body, warmMeta,
+      );
+      await linkAudioToPost({ audioPermlink, postPermlink: hivePermlink, username: owner });
+      await pushAudioThumb(audioPermlink, postThumb);
+      trackPostsRef.current[track.id] = { author: owner, permlink: hivePermlink, title: track.title };
+      setTrackStatus(track.id, { state: 'success', stage: undefined });
+      return;
+    }
 
     const ops = [[
       'comment',
@@ -841,7 +873,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     await pushAudioThumb(audioPermlink, postThumb);
     trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: track.title };
     setTrackStatus(track.id, { state: 'success', stage: undefined });
-  }, [user, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog, audioAds, mirrorAudioAds]);
+  }, [user, owner, warmup, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog, audioAds, mirrorAudioAds]);
 
   // ── album main post (no audio — pure composer landing page) ──
   // Cached so a per-track retry doesn't re-broadcast the parent.
@@ -997,6 +1029,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     let post = null;
     if (mode === 'album' && albumMainRef.current) {
       post = `/post/${albumMainRef.current.author}/${albumMainRef.current.permlink}`;
+    } else if (warmup) {
+      // A warm-up post lives on their warm-up profile until they graduate.
+      if (trackPostsRef.current[tracks[0]?.id]) post = '/profile';
     } else if (mode === 'single') {
       const p = trackPostsRef.current[tracks[0]?.id];
       if (p) post = `/audio/${p.author}/${p.permlink}`;
@@ -1006,7 +1041,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       playlist: playlistChoice ? `/playlist/${playlistChoice}` : null,
       profileAudio: mode === 'snaps' && user ? `/@${user}?tab=audio` : null,
     };
-  }, [mode, tracks, playlistChoice, user]);
+  }, [mode, tracks, playlistChoice, user, warmup]);
 
   // The modal stays mounted (App.jsx), so a closed session would otherwise
   // reopen with the last upload still in it. Every close starts fresh.
@@ -1152,11 +1187,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   if (!isOpen) return null;
 
-  const flow = FLOWS[mode] || FLOWS.snaps;
+  const flow = warmup ? FLOWS.warmup : (FLOWS[mode] || FLOWS.snaps);
   const stepKey = flow[Math.min(step, flow.length - 1)];
   const isLastStep = step >= flow.length - 1;
   const canNext = (() => {
-    if (stepKey === 'source') return tracks.length > 0 && !isRecording;
+    if (stepKey === 'source') return tracks.length > 0 && !isRecording && (!warmup || tracks.length === 1);
     if (stepKey === 'post') return (tracks[0]?.title || mainTitle || '').trim().length > 0;
     if (stepKey === 'mainpost') return (mainTitle || '').trim().length > 0;
     // Album posts must live inside a playlist so the main post + track
@@ -1169,7 +1204,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const goBack = () => setStep(s => Math.max(s - 1, 0));
 
   const onPublish = async () => {
-    if (!user) { toast.error(t('audio.upload.toasts.signInFirst')); return; }
+    if (!owner) { toast.error(t('audio.upload.toasts.signInFirst')); return; }
     // The button is swapped while a spot is outstanding; this is the publish path itself.
     if (!gateSatisfied) return;
     if (tracks.length === 0) return;
@@ -1272,6 +1307,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         </ol>
 
         <div className="audio-upload-body">
+          {stepKey === 'source' && warmup && tracks.length > 1 && (
+            <p className="audio-upload-warmup-note">{t('audio.upload.warmupOneTrack')}</p>
+          )}
           {stepKey === 'source' && (
             <SourceStep
               tracks={tracks}
@@ -1338,6 +1376,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               onOpenBene={() => openBeneFor('main')}
               addToBlog={addToBlog}
               setAddToBlog={setAddToBlog}
+              warmup={warmup}
             />
           )}
           {stepKey === 'tracks' && (
@@ -2093,7 +2132,7 @@ function MainPostStep({
   community, setCommunityOpen, tagsInput, setTagsInput,
   thumb, setThumb, thumbUploading, onPickThumb,
   payout, setPayout, beneCount, onOpenBene,
-  addToBlog, setAddToBlog,
+  addToBlog, setAddToBlog, warmup = false,
 }) {
   const { t } = useTranslation();
   const isAlbum = variant === 'album';
@@ -2153,19 +2192,24 @@ function MainPostStep({
         </div>
       )}
 
-      <RewardRow payout={payout} setPayout={setPayout} beneCount={beneCount} onOpenBene={onOpenBene} />
+      {/* A warm-up post has no payout and no blog yet: those come with the Hive account. */}
+      {!warmup && (
+        <>
+        <RewardRow payout={payout} setPayout={setPayout} beneCount={beneCount} onOpenBene={onOpenBene} />
 
-      <label className="audio-upload-blog-toggle">
-        <input
-          type="checkbox"
-          checked={!!addToBlog}
-          onChange={(e) => setAddToBlog(e.target.checked)}
-        />
-        <span>
-          <strong>{t('audio.upload.mainPost.addToBlog')}</strong>
-          <small>{t('audio.upload.mainPost.addToBlogHint')}</small>
-        </span>
-      </label>
+        <label className="audio-upload-blog-toggle">
+          <input
+            type="checkbox"
+            checked={!!addToBlog}
+            onChange={(e) => setAddToBlog(e.target.checked)}
+          />
+          <span>
+            <strong>{t('audio.upload.mainPost.addToBlog')}</strong>
+            <small>{t('audio.upload.mainPost.addToBlogHint')}</small>
+          </span>
+        </label>
+        </>
+      )}
     </div>
   );
 }

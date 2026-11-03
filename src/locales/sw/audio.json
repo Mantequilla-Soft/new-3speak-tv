@@ -367,7 +367,8 @@
       "post": "Inachapisha kwenye Hive",
       "uploadingFallback": "Inapakia",
       "published": "Imechapishwa"
-    }
+    },
+    "warmupOneTrack": "Akaunti yako ikiwa bado inapashwa joto, unachapisha sauti moja kwa wakati. Ondoa nyingine ili kuendelea."
   },
   "podcasts": {
     "chip": "Za nje",

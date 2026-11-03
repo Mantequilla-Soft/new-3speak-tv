@@ -1,8 +1,8 @@
 {
   "tracks": {
     "viewer": {
-      "title": "Głównie oglądam",
-      "body": "Jestem tu, żeby oglądać, komentować i obserwować twórców."
+      "title": "Głównie widz lub słuchacz",
+      "body": "Jestem tu, żeby oglądać i słuchać, komentować i obserwować twórców."
     },
     "creator": {
       "title": "Głównie tworzę",
@@ -11,6 +11,14 @@
     "advertiser": {
       "title": "Reklamodawca",
       "body": "Reprezentuję markę i chcę dotrzeć do widzów 3Speak."
+    },
+    "musician": {
+      "title": "Muzyk",
+      "body": "Tworzę muzykę i chcę publikować swoje utwory."
+    },
+    "podcaster": {
+      "title": "Podcaster",
+      "body": "Tworzę podcast i chcę publikować swoje odcinki."
     }
   },
   "tips": {
@@ -66,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Co sprowadza cię do 3Speak?",
-    "intro": "Od tego zależy twoja droga do konta Hive: widzowie oglądają i się angażują, twórcy publikują, a reklamodawcy konfigurują swoją markę.",
-    "introNoAdvertisers": "Od tego zależy twoja droga do konta Hive: widzowie oglądają i się angażują, a twórcy publikują."
+    "intro": "Od tego zależy twoja droga do konta Hive: widzowie i słuchacze oglądają, słuchają i się włączają, twórcy publikują filmy, muzycy i podcasterzy publikują audio, a reklamodawcy przygotowują swoją markę.",
+    "introNoAdvertisers": "Od tego zależy twoja droga do konta Hive: widzowie i słuchacze oglądają, słuchają i się włączają, twórcy publikują filmy, a muzycy i podcasterzy publikują audio."
   },
   "tipCard": {
     "aria": "Wskazówka",
@@ -202,6 +210,53 @@
           "1": "Adres: opcjonalny.",
           "2": "Potrzebujesz adresu LUB strony internetowej w profilu marki powyżej, co najmniej jednego z nich."
         }
+      },
+      "audio": {
+        "label_one": "Opublikuj utwór lub odcinek",
+        "label_few": "Opublikuj {{count}} utwory lub odcinki",
+        "label_many": "Opublikuj {{count}} utworów lub odcinków",
+        "label_other": "Opublikuj {{count}} utworu lub odcinka",
+        "hint": "Piosenka, odcinek podcastu lub dowolne inne nagranie.",
+        "why": "Twojego audio słucha zespół, gdy cię ocenia, i to właśnie odwiedzający znajdą na twoim profilu.",
+        "counts": {
+          "0": "Każde audio, które opublikujesz przez Prześlij, a potem Muzyka / Audio.",
+          "1": "Zostaje twoje. Gdy zostaniesz awansowany, przejdzie na twoje konto Hive."
+        },
+        "cta": "Prześlij audio"
+      },
+      "listen": {
+        "labelHours_one": "Słuchaj przez godzinę na 3Speak",
+        "labelHours_few": "Słuchaj przez {{count}} godziny na 3Speak",
+        "labelHours_many": "Słuchaj przez {{count}} godzin na 3Speak",
+        "labelHours_other": "Słuchaj przez {{count}} godziny na 3Speak",
+        "labelMinutes_one": "Słuchaj przez minutę na 3Speak",
+        "labelMinutes_few": "Słuchaj przez {{count}} minuty na 3Speak",
+        "labelMinutes_many": "Słuchaj przez {{count}} minut na 3Speak",
+        "labelMinutes_other": "Słuchaj przez {{count}} minuty na 3Speak",
+        "hint": "Dowolna muzyka lub podcasty w odtwarzaczu audio 3Speak. Liczy się, gdy naprawdę gra.",
+        "why": "Słuchając innych, muzycy i podcasterzy znajdują swoją publiczność i swoich ludzi.",
+        "counts": {
+          "0": "Raz na utwór lub odcinek. Ponowne słuchanie podnosi najlepszy czas, nigdy go nie sumuje.",
+          "1": "Nie twoje własne audio."
+        },
+        "cta": "Znajdź coś do posłuchania"
+      },
+      "watchListen": {
+        "labelHours_one": "Oglądaj lub słuchaj przez godzinę na 3Speak",
+        "labelHours_few": "Oglądaj lub słuchaj przez {{count}} godziny na 3Speak",
+        "labelHours_many": "Oglądaj lub słuchaj przez {{count}} godzin na 3Speak",
+        "labelHours_other": "Oglądaj lub słuchaj przez {{count}} godziny na 3Speak",
+        "labelMinutes_one": "Oglądaj lub słuchaj przez minutę na 3Speak",
+        "labelMinutes_few": "Oglądaj lub słuchaj przez {{count}} minuty na 3Speak",
+        "labelMinutes_many": "Oglądaj lub słuchaj przez {{count}} minut na 3Speak",
+        "labelMinutes_other": "Oglądaj lub słuchaj przez {{count}} minuty na 3Speak",
+        "hint": "Filmy, muzyka i podcasty liczą się razem. Liczy się, gdy naprawdę grają.",
+        "why": "Oglądanie i słuchanie pokazują, że jesteś tu, by uczestniczyć, a nie tylko publikować. Większość osiąga ten cel bez starania.",
+        "counts": {
+          "0": "Raz na film, utwór lub odcinek. Ponowne odtworzenie podnosi najlepszy czas, nigdy go nie sumuje.",
+          "1": "Nie twoje własne filmy ani audio."
+        },
+        "cta": "Znajdź coś do obejrzenia lub posłuchania"
       }
     },
     "duration": {
@@ -279,8 +334,8 @@
       "aside": "Kilka rzeczy czeka na twoje konto: zarabianie nagród i dawanie napiwków. Przenoszą one prawdziwe pieniądze, więc wymagają konta, które naprawdę należy do ciebie."
     },
     "path": {
-      "p1": "Na twoim profilu jest krótka lista zadań, zależna od tego, po co tu jesteś: widzowie oglądają i się angażują, twórcy publikują, a reklamodawcy konfigurują swoją markę.",
-      "p1NoAdvertisers": "Na twoim profilu jest krótka lista zadań, zależna od tego, po co tu jesteś: widzowie oglądają i się angażują, a twórcy publikują.",
+      "p1": "Twój profil pokazuje krótką listę zadań, zależną od tego, po co tu jesteś: widzowie i słuchacze oglądają, słuchają i się włączają, twórcy publikują filmy, muzycy i podcasterzy publikują audio, a reklamodawcy przygotowują swoją markę.",
+      "p1NoAdvertisers": "Twój profil pokazuje krótką listę zadań, zależną od tego, po co tu jesteś: widzowie i słuchacze oglądają, słuchają i się włączają, twórcy publikują filmy, a muzycy i podcasterzy publikują audio.",
       "p2": "To nie jest test. To po prostu sposób, by odróżnić prawdziwe konto od pustego lub złośliwego. Gdy lista będzie wykonana, zespół jak najszybciej cię oceni i przeniesie na Hive.",
       "perkEarn": "Posty, które zarabiają",
       "perkKeys": "Klucze, które masz tylko ty",
@@ -551,7 +606,8 @@
     "viewerDone": {
       "watched": "{{time}} oglądania",
       "written": "napisane: {{items}}",
-      "followed": "obserwowani: {{items}}"
+      "followed": "obserwowani: {{items}}",
+      "watchedListened": "oglądałeś i słuchałeś przez {{time}}"
     },
     "advertiser": {
       "lede": "Zespół ocenił <b>{{name}}</b>. Utwórz za darmo <b>konto Hive</b>: stanie się ono twoim kontem reklamodawcy.",

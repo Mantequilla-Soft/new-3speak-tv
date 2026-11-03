@@ -7,9 +7,10 @@
 //
 //   goals         the ladders a person climbs before the team reviews them for
 //                 a Hive account, one per kind of user (viewer, creator,
-//                 advertiser). The counts come from the hosted service; watch
-//                 time is 3Speak's own measurement (the player writes it into
-//                 3Speak's database) and comes from the checker.
+//                 musician, podcaster, advertiser). The counts come from the
+//                 hosted service; watch time, listening time and audio uploads
+//                 are 3Speak's own (the player and the checker write them into
+//                 3Speak's database) and come from the checker.
 //
 //   claim assets  at graduation, uploads made under the warm-up handle move to
 //                 the new Hive account. Those are 3Speak's embed-video records,
@@ -27,9 +28,33 @@ const CHECKER_INTERNAL_URL = (process.env.CHECKER_INTERNAL_URL || 'http://127.0.
 // `time` is last in every list because it is the only goal you cannot go and
 // do: a minimum age between signing up and being reviewable.
 const watch = (need) => ({ type: 'watch', need, unit: 'seconds', measure: ({ handle }) => watchSeconds(handle) })
+const listen = (need) => ({ type: 'listen', need, unit: 'seconds', measure: ({ handle }) => listenSeconds(handle) })
+// Viewers and listeners (owner, 2026-11-03): watching and listening count together.
+const watchOrListen = (need) => ({
+  type: 'watchListen',
+  need,
+  unit: 'seconds',
+  measure: async ({ handle }) => {
+    const [w, l] = await Promise.all([watchSeconds(handle), listenSeconds(handle)])
+    return w + l
+  }
+})
+// Audio uploads are 3Speak's own records (embed-audio, owner = the warm-up handle).
+const audio = (need) => ({ type: 'audio', need, measure: ({ handle }) => audioUploads(handle) })
+// Musicians and podcasters (owner, 2026-11-03): the same ladder for both. They
+// publish audio, and both listen AND watch, 15 minutes each.
+const audioTrack = () => [
+  audio(1),
+  { type: 'follow', need: 5 },
+  { type: 'comment', need: 5 },
+  listen(900),
+  watch(900),
+  { type: 'time', from: 'days', need: 3 }
+]
 const TRACKS = {
+  // "Viewer / listener": videos, music and podcasts all count toward the hour.
   viewer: [
-    watch(3600),
+    watchOrListen(3600),
     { type: 'comment', need: 10 },
     { type: 'follow', need: 5 },
     { type: 'subscription', need: 1 },
@@ -44,6 +69,8 @@ const TRACKS = {
     { type: 'comment', need: 5 },
     { type: 'time', from: 'days', need: 3 }
   ],
+  musician: audioTrack(),
+  podcaster: audioTrack(),
   // A brand is judged by its profile: name, about and logo filled in (no banner,
   // owner 2026-10-01: keep it as simple as possible). Whether they fit the brand is
   // the reviewer's call.
@@ -63,12 +90,23 @@ const TRACKS = {
 // WARMUP_ADVERTISER_SIGNUP=true reopens it (and VITE_ENABLE_ADVERTISER_SIGNUP in
 // the frontend shows the option again).
 function trackOpen(track) {
-  if (track === 'viewer' || track === 'creator') return true
+  if (track === 'viewer' || track === 'creator' || track === 'musician' || track === 'podcaster') return true
   return track === 'advertiser' && process.env.WARMUP_ADVERTISER_SIGNUP === 'true'
 }
 
 // A length floor for a reply to count, not a quality judgement.
 const MIN_COMMENT_CHARS = 20
+
+// Loopback reads from the checker (routes/incubation.js /internal/*).
+async function checkerNumber(path, field, handle) {
+  const r = await fetch(`${CHECKER_INTERNAL_URL}/incubation/internal/${path}/${encodeURIComponent(handle)}`, {
+    signal: AbortSignal.timeout(5000)
+  })
+  if (!r.ok) throw new Error(`checker ${path} returned ${r.status}`)
+  return Number((await r.json())[field]) || 0
+}
+const listenSeconds = (handle) => checkerNumber('listen', 'seconds', handle)
+const audioUploads = (handle) => checkerNumber('audio', 'uploads', handle)
 
 async function watchSeconds(handle) {
   const r = await fetch(`${CHECKER_INTERNAL_URL}/incubation/internal/watch/${encodeURIComponent(handle)}`, {

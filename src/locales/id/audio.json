@@ -352,7 +352,8 @@
       "post": "Memposting ke Hive",
       "uploadingFallback": "Mengunggah",
       "published": "Diterbitkan"
-    }
+    },
+    "warmupOneTrack": "Selama akunmu dalam masa pemanasan, kamu menerbitkan satu audio sekaligus. Hapus yang lain untuk lanjut."
   },
   "podcasts": {
     "chip": "Eksternal",

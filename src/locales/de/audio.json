@@ -367,7 +367,8 @@
       "post": "Wird auf Hive gepostet",
       "uploadingFallback": "Wird hochgeladen",
       "published": "Veröffentlicht"
-    }
+    },
+    "warmupOneTrack": "Solange dein Konto aufgewärmt wird, veröffentlichst du ein Audio auf einmal. Entferne die anderen, um weiterzumachen."
   },
   "podcasts": {
     "chip": "Extern",

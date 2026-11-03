@@ -175,7 +175,10 @@ export default function GraduationPrompt() {
   const track = progress?.track || null;
   const have = (type) => progress?.tasks?.find((task) => task.type === type)?.have;
   const viewerDone = sentenceList([
-    watched(have('watch'), t) ? t('incubation.graduation.viewerDone.watched', { time: watched(have('watch'), t) }) : null,
+    // Viewers and listeners have one goal for both (watchListen); older progress has 'watch'.
+    watched(have('watchListen'), t)
+      ? t('incubation.graduation.viewerDone.watchedListened', { time: watched(have('watchListen'), t) })
+      : watched(have('watch'), t) ? t('incubation.graduation.viewerDone.watched', { time: watched(have('watch'), t) }) : null,
     count(have('comment'), 'comment', t) ? t('incubation.graduation.viewerDone.written', { items: count(have('comment'), 'comment', t) }) : null,
     count(have('follow'), 'creator', t) ? t('incubation.graduation.viewerDone.followed', { items: count(have('follow'), 'creator', t) }) : null,
   ], t);
