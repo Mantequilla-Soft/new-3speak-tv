@@ -613,11 +613,13 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     prefetchVideoTagsV2(author, permlink);
   }, [author, permlink]);
 
-  // Report popup open state to parent (blocks autoplay)
+  // Report popup open state to parent (blocks autoplay). Not the tip nudge: it
+  // shows at 90% on nearly every video and stays until dismissed, so counting it
+  // stopped autoplay-next and channel surfing at the end of almost everything.
   useEffect(() => {
     const isVotePopupOpen = showTooltip && authenticated && isLoggedIn();
-    videoControls?.onPopupOpen?.(tipNudgeVisible || isTipModalOpen || isVotePopupOpen);
-  }, [tipNudgeVisible, isTipModalOpen, showTooltip, authenticated]); // eslint-disable-line react-hooks/exhaustive-deps
+    videoControls?.onPopupOpen?.(isTipModalOpen || isVotePopupOpen);
+  }, [isTipModalOpen, showTooltip, authenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Watch Later detection
   const { data: myPlaylists = [], refetch: refetchPlaylists } = useMyPlaylists({ enabled: !!user });

@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.59',
+    category: 'watch',
+    date: '2026-11-03',
+    summary: "Autoplay and Channel Surfing move on to the next video again when a video ends. The tip banner near the end of a video was stopping them.",
+  },
+  {
     version: '1.81.58',
     category: 'audio',
     date: '2026-11-03',
