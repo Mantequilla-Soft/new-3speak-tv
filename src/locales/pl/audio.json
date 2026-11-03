@@ -397,7 +397,8 @@
       "post": "Publikowanie na Hive",
       "uploadingFallback": "Przesyłanie",
       "published": "Opublikowano"
-    }
+    },
+    "warmupOneTrack": "Dopóki twoje konto się rozgrzewa, publikujesz jedno audio naraz. Usuń pozostałe, aby kontynuować."
   },
   "podcasts": {
     "chip": "Zewnętrzne",
@@ -702,7 +703,14 @@
       "hide": "Ukryj wideo"
     },
     "signInToFollow": "Zaloguj się, aby obserwować podcasty",
-    "addExternal": "Dodaj zewnętrzny podcast"
+    "addExternal": "Dodaj zewnętrzny podcast",
+    "continue": {
+      "title": "Słuchaj dalej",
+      "left": "zostało {{minutes}} min",
+      "remove": "Usuń z Słuchaj dalej",
+      "removed": "Usunięto z Słuchaj dalej",
+      "removeFailed": "Nie udało się usunąć. Spróbuj ponownie."
+    }
   },
   "item": {
     "back": "Całe audio",

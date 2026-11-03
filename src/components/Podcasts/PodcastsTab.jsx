@@ -30,6 +30,7 @@ import {
 } from '../../lib/podcastLibrary';
 import { EpisodeBadges, DownloadButton, PersonsRow, LiveBanner, PrivateBadge } from './PodcastBits';
 import DownloadsSection from './DownloadsSection';
+import ContinueListening, { useContinueListening } from './ContinueListening';
 import useOnline from '../../hooks/useOnline';
 import './PodcastsTab.scss';
 
@@ -912,6 +913,7 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
   const me = authenticated ? user : null;
   const { data: config } = usePodcastConfig();
   const { data: subscriptions = [], isSuccess: subsLoaded } = usePodcastSubscriptions(me);
+  const { data: continueItems = [] } = useContinueListening(me);
   const view = VIEWS.includes(viewProp) ? viewProp : viewOf(params.get('view'), me);
   const online = useOnline();
   const { data: discover } = usePodcastDiscover();
@@ -1019,7 +1021,9 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
         <>
           {!me && <p className="pod-empty pod-empty--center">{t('audio.podcasts.introSignedOut')}</p>}
           {!me && <DownloadsSection onOpenEpisode={openEpisode} />}
-          {me && subsLoaded && subscriptions.length === 0 && (
+          {/* Half-heard episodes and tracks first: the quickest way back in. */}
+          {me && online && <ContinueListening user={me} />}
+          {me && subsLoaded && subscriptions.length === 0 && !continueItems.length && (
             <div className="pod-mine-empty">
               <MdPodcasts size={40} />
               <p>{t('audio.podcasts.views.mineEmpty')}</p>

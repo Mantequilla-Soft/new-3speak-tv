@@ -382,7 +382,8 @@
       "post": "Pubblicazione su Hive",
       "uploadingFallback": "Caricamento",
       "published": "Pubblicato"
-    }
+    },
+    "warmupOneTrack": "Finché il tuo account si scalda, pubblichi un audio alla volta. Togli gli altri per continuare."
   },
   "podcasts": {
     "chip": "Esterni",
@@ -677,7 +678,14 @@
       "hide": "Nascondi video"
     },
     "signInToFollow": "Accedi per seguire i podcast",
-    "addExternal": "Aggiungi podcast esterno"
+    "addExternal": "Aggiungi podcast esterno",
+    "continue": {
+      "title": "Continua ad ascoltare",
+      "left": "mancano {{minutes}} min",
+      "remove": "Rimuovi da Continua ad ascoltare",
+      "removed": "Rimosso da Continua ad ascoltare",
+      "removeFailed": "Impossibile rimuoverlo. Riprova."
+    }
   },
   "item": {
     "back": "Tutti gli audio",

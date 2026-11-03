@@ -116,7 +116,7 @@
     "starting": "Démarrage…",
     "statusTitle": "Ton import groupé",
     "canLeave": "Vous pouvez fermer cette page. Vos vidéos sont importées et publiées sur notre serveur, même en votre absence.",
-    "stop": "Arrêter le reste",
+    "stop": "Arrêter l'import",
     "short": "Short",
     "status": {
       "queued": "En attente",
@@ -124,11 +124,16 @@
       "uploading": "Envoi vers 3Speak",
       "scheduling": "Planification",
       "scheduled": "Publication à {{time}}",
+      "scheduledIn": "Publication à {{time}} (dans {{minutes}} min)",
+      "publishingNow": "Publication en cours",
       "posted": "Publiée",
       "failed": "Échec",
       "publish_failed": "Échec de la publication",
-      "cancelled": "Arrêtée"
-    }
+      "cancelled": "Arrêté, non publié"
+    },
+    "stopConfirm": "Arrêter cet import ? Les vidéos pas encore publiées sont annulées, y compris celles déjà programmées. Les vidéos publiées restent.",
+    "stopYes": "Oui, arrêter",
+    "stopKeep": "Continuer l'import"
   },
   "bitchute": {
     "noLink": "Vous n'avez pas encore lié de compte BitChute. Liez-le et vérifiez-le d'abord dans votre profil, puis revenez ici.",

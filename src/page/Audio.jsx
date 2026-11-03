@@ -16,6 +16,7 @@ import { AudioShareDropdown } from '../components/GlobalAudioPlayer/GlobalAudioP
 import AudioItemView from '../components/AudioItem/AudioItemView';
 import { usePodcastSubscriptions } from '../lib/podcasts';
 import { useDownloads } from '../lib/podcastDownloads';
+import { useContinueListening } from '../components/Podcasts/ContinueListening';
 import useOnline from '../hooks/useOnline';
 import AudioTile, { AudioTileSkeleton } from '../components/AudioTile/AudioTile';
 import AudioPlaylistTile from '../components/AudioPlaylistTile/AudioPlaylistTile';
@@ -210,8 +211,9 @@ function Audio() {
   const me = authenticated ? user : null;
   const mineSubs = usePodcastSubscriptions(me);
   const mineDownloads = useDownloads();
-  const mineKnown = (!me || mineSubs.isSuccess) && mineDownloads.ready;
-  const mineEmpty = mineKnown && !(mineSubs.data || []).length && !mineDownloads.items.length;
+  const mineContinue = useContinueListening(me);
+  const mineKnown = (!me || (mineSubs.isSuccess && !mineContinue.isPending)) && mineDownloads.ready;
+  const mineEmpty = mineKnown && !(mineSubs.data || []).length && !mineDownloads.items.length && !(mineContinue.data || []).length;
   const insideMine = params.has('podcast') || params.has('episode') || params.has('play');
   useEffect(() => {
     if (!onMine || !mineEmpty || insideMine || !online) return;

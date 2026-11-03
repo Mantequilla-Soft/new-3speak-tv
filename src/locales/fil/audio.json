@@ -367,7 +367,8 @@
       "post": "Pino-post sa Hive",
       "uploadingFallback": "Ina-upload",
       "published": "Na-publish"
-    }
+    },
+    "warmupOneTrack": "Habang nagwa-warm up ang account mo, isang audio lang ang ipa-publish mo bawat beses. Alisin ang iba para magpatuloy."
   },
   "podcasts": {
     "chip": "Panlabas",
@@ -652,7 +653,14 @@
       "hide": "Itago ang video"
     },
     "signInToFollow": "Mag-sign in para i-follow ang mga podcast",
-    "addExternal": "Magdagdag ng external podcast"
+    "addExternal": "Magdagdag ng external podcast",
+    "continue": {
+      "title": "Ituloy ang pakikinig",
+      "left": "{{minutes}} min na lang",
+      "remove": "Alisin sa Ituloy ang pakikinig",
+      "removed": "Inalis sa Ituloy ang pakikinig",
+      "removeFailed": "Hindi ito maalis. Subukan ulit."
+    }
   },
   "item": {
     "back": "Lahat ng audio",

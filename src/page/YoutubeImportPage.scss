@@ -494,6 +494,14 @@
     color: var(--text-secondary, #666);
     svg { color: #43a047; flex-shrink: 0; }
   }
+  &__confirm {
+    margin: 10px 0 4px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color, #e0e0e0);
+    p { margin: 0; font-size: 14px; }
+    .yt-import__actions { margin-top: 10px; }
+  }
   ul { list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-direction: column; gap: 10px; }
   &__item {
     display: flex;

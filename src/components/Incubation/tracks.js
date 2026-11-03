@@ -1,4 +1,4 @@
-import { FaEye, FaVideo, FaBullhorn } from 'react-icons/fa';
+import { FaEye, FaVideo, FaMusic, FaMicrophone, FaBullhorn } from 'react-icons/fa';
 import { ADVERTISER_SIGNUP } from '../../utils/config';
 
 // The kinds of warm-up user. The ids must match the tracks in
@@ -15,6 +15,18 @@ export const TRACKS = [
     Icon: FaVideo,
     titleKey: 'incubation.tracks.creator.title',
     bodyKey: 'incubation.tracks.creator.body',
+  },
+  {
+    id: 'musician',
+    Icon: FaMusic,
+    titleKey: 'incubation.tracks.musician.title',
+    bodyKey: 'incubation.tracks.musician.body',
+  },
+  {
+    id: 'podcaster',
+    Icon: FaMicrophone,
+    titleKey: 'incubation.tracks.podcaster.title',
+    bodyKey: 'incubation.tracks.podcaster.body',
   },
   {
     id: 'advertiser',

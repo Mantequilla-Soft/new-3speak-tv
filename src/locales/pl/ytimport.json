@@ -116,7 +116,7 @@
     "starting": "Uruchamianie…",
     "statusTitle": "Twój import zbiorczy",
     "canLeave": "Możesz już zamknąć tę stronę. Twoje filmy są importowane i publikowane na naszym serwerze, także pod twoją nieobecność.",
-    "stop": "Zatrzymaj resztę",
+    "stop": "Zatrzymaj import",
     "short": "Short",
     "status": {
       "queued": "Oczekuje",
@@ -124,11 +124,16 @@
       "uploading": "Wysyłanie do 3Speak",
       "scheduling": "Planowanie",
       "scheduled": "Publikacja o {{time}}",
+      "scheduledIn": "Publikacja o {{time}} (za {{minutes}} min)",
+      "publishingNow": "Publikowanie teraz",
       "posted": "Opublikowano",
       "failed": "Niepowodzenie",
       "publish_failed": "Publikacja nie powiodła się",
-      "cancelled": "Zatrzymano"
-    }
+      "cancelled": "Zatrzymano, nie opublikowano"
+    },
+    "stopConfirm": "Zatrzymać ten import? Filmy jeszcze nieopublikowane zostaną anulowane, także te już zaplanowane. Opublikowane filmy zostają.",
+    "stopYes": "Tak, zatrzymaj",
+    "stopKeep": "Importuj dalej"
   },
   "bitchute": {
     "noLink": "Nie połączono jeszcze konta BitChute. Najpierw połącz je i zweryfikuj w swoim profilu, a potem wróć tutaj.",

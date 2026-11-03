@@ -18,6 +18,54 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.62',
+    category: 'home',
+    date: '2026-11-03',
+    summary: "The Discover feed now mixes in new audio from the last few days, next to snaps and playlists.",
+  },
+  {
+    version: '1.81.61',
+    category: 'upload',
+    date: '2026-11-03',
+    summary: "In the Thumbnail editor, Pick frame lets you choose any moment of your video, now on phones and tablets too.",
+  },
+  {
+    version: '1.81.60',
+    category: 'upload',
+    date: '2026-11-03',
+    summary: "When uploading, pick from four frames of your video or open the new Thumbnail editor to zoom in and add text, boxes and stickers.",
+  },
+  {
+    version: '1.81.59',
+    category: 'watch',
+    date: '2026-11-03',
+    summary: "Autoplay and Channel Surfing move on to the next video again when a video ends. The tip banner near the end of a video was stopping them.",
+  },
+  {
+    version: '1.81.58',
+    category: 'audio',
+    date: '2026-11-03',
+    summary: "Remove an episode or track from Continue listening with the corner button, or with a long press on your phone. It only leaves that list; your history stays.",
+  },
+  {
+    version: '1.81.57',
+    category: 'audio',
+    date: '2026-11-03',
+    summary: "Mine on the audio page now starts with Continue listening: podcast episodes and 3Speak audio you stopped partway through, on any device. Tap one to play on from where you left off.",
+  },
+  {
+    version: '1.81.56',
+    category: 'upload',
+    date: '2026-11-03',
+    summary: "Batch imports now show how many minutes are left until each video publishes. Stopping an import asks first, because it also cancels videos that are already scheduled.",
+  },
+  {
+    version: '1.81.55',
+    category: 'notifications',
+    date: '2026-11-03',
+    summary: "Notifications on Android show the 3Speak mark in the status bar instead of a white square.",
+  },
+  {
     version: '1.81.54',
     category: 'audio',
     date: '2026-11-03',

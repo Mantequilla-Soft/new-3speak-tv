@@ -40,38 +40,8 @@
   // the whole row reads as a broken player, so the bars go.
   .video-preview-container .video-preview { background: transparent; }
 
-  // Thumbnail: the frames fill the row (three across for the usual two
-  // generated frames + the upload card), wrapping as custom ones are added.
+  // Thumbnail: the editor (thumbnail-editor/ThumbnailEditor.scss) takes the full row.
   .upload-step { width: 100%; }
-  .upload-step__content {
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .thumbnail-grid:not(.thumbnail-grid--portrait) {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    width: 100%;
-
-    .thumbnail-card,
-    .thumbnail-upload {
-      width: auto;
-      min-width: 0;
-    }
-    .thumbnail-card .content .image {
-      height: auto;
-      aspect-ratio: 16 / 9;
-    }
-    // The upload card stretches to the frames' height; keep its prompt centred.
-    .thumbnail-upload {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    @include mix.respond(phone) {
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    }
-  }
 
   // Details: the form card was 80% of a full-width wrapper with 16px around it.
   .video-detail-wrap {

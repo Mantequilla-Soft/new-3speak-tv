@@ -18,6 +18,47 @@
  * Returned strings are base64 JPEG data URLs.
  */
 export async function generateVideoThumbnails(file, count = 2 /* , type ignored */) {
+  return generateVideoThumbnailsAt(file, evenSpread(count));
+}
+
+/**
+ * The frames the upload wizard offers on its thumbnail step: the start, then a
+ * quarter, half and three quarters into the video, in that order.
+ */
+export const THUMBNAIL_FRAME_POINTS = [0, 0.25, 0.5, 0.75];
+
+// A frame whose average brightness (0-255) is below this reads as black.
+const DARK_LUMA = 18;
+// Where to look instead when the opening frame is black (a fade-in, a black
+// leader): the first of these, in seconds, that shows something.
+const OPENING_RETRIES_SEC = [1, 2.5];
+
+/**
+ * A phone or tablet (not a narrow desktop window or a touch laptop). Frames
+ * grabbed in mobile browsers come out black or garbled (Firefox for Android
+ * can't read video frames back at all), so the upload wizard doesn't generate
+ * any there: the creator picks a frame in the thumbnail editor, which asks our
+ * API for it (utils/frameCapture.js), or uploads an image. Same flow on every
+ * mobile device.
+ */
+export function isMobileDevice() {
+  if (typeof navigator === 'undefined') return false;
+  if (navigator.userAgentData?.mobile === true) return true;
+  const ua = navigator.userAgent || '';
+  // Android tablets drop "Mobile" from the UA; iPads ask for desktop sites
+  // and say "Macintosh", but no Mac has a touch screen.
+  if (/iPhone|iPod|iPad|Android|Mobi/i.test(ua)) return true;
+  return /Macintosh/.test(ua) && (navigator.maxTouchPoints || 0) > 1;
+}
+
+/**
+ * One JPEG data URL per point, each point a fraction of the duration (0..1).
+ * Point 0 is "the start": if the opening frame is black, a frame a moment later
+ * is taken instead, so the first option is never an empty black card.
+ * Mobile devices get none (see isMobileDevice); callers handle an empty list.
+ */
+export async function generateVideoThumbnailsAt(file, points = THUMBNAIL_FRAME_POINTS) {
+  if (isMobileDevice()) return [];
   if (!file || !(file.type || '').startsWith('video/')) {
     throw new Error('Not a video file');
   }
@@ -27,12 +68,21 @@ export async function generateVideoThumbnails(file, count = 2 /* , type ignored 
     if (!isFinite(duration) || duration <= 0) {
       throw new Error('Invalid video duration');
     }
-    const stamps = pickStamps(duration, count);
+    const safe = Math.max(0, duration - 0.1);
     const out = [];
-    for (const t of stamps) {
+    for (const point of points) {
       try {
-        const b64 = await captureFrame(objectUrl, t);
-        if (b64) out.push(b64);
+        let frame = await captureFrame(objectUrl, Math.min(safe, Math.max(0.1, duration * point)));
+        if (point === 0) {
+          for (const sec of OPENING_RETRIES_SEC) {
+            if (frame.luma >= DARK_LUMA || sec >= duration * 0.25) break;
+            try {
+              const later = await captureFrame(objectUrl, sec);
+              if (later.luma > frame.luma) frame = later;
+            } catch { /* keep the dark one */ }
+          }
+        }
+        out.push(frame.dataUrl);
       } catch {
         // skip individual failed frames; try the rest
       }
@@ -44,15 +94,19 @@ export async function generateVideoThumbnails(file, count = 2 /* , type ignored 
   }
 }
 
-/** Even spread, biased ~5% off both ends so we don't catch a black frame. */
-function pickStamps(duration, count) {
-  const stamps = [];
-  const safe = Math.max(0, duration - 0.1);
-  for (let i = 0; i < count; i++) {
-    const t = (duration * (i + 0.5)) / count;
-    stamps.push(Math.min(safe, Math.max(0.1, t)));
+/** One frame at `time` seconds as a JPEG data URL, by the same mobile-safe path. */
+export async function captureFrameAt(file, time) {
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    return (await captureFrame(objectUrl, Math.max(0.05, time))).dataUrl;
+  } finally {
+    URL.revokeObjectURL(objectUrl);
   }
-  return stamps;
+}
+
+/** Even spread as fractions, centred in equal slices so neither end is hit. */
+function evenSpread(count) {
+  return Array.from({ length: count }, (_, i) => (i + 0.5) / count);
 }
 
 function getDurationFromUrl(src) {
@@ -77,6 +131,7 @@ function getDurationFromUrl(src) {
   });
 }
 
+/** Resolves { dataUrl, luma } for the frame at `time` seconds. */
 function captureFrame(src, time) {
   return new Promise((resolve, reject) => {
     const v = document.createElement('video');
@@ -138,8 +193,8 @@ function captureFrame(src, time) {
         canvas.height = h;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(v, 0, 0, w, h);
-        const b64 = canvas.toDataURL('image/jpeg', 0.85);
-        finish(b64, false);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        finish({ dataUrl, luma: averageLuma(v) }, false);
       } catch (e) {
         finish(e, true);
       }
@@ -198,6 +253,23 @@ function captureFrame(src, time) {
     v.src = src;
     v.load();
   });
+}
+
+/** Average brightness (0-255) of a frame, read from a tiny downscaled copy. */
+function averageLuma(source) {
+  try {
+    const c = document.createElement('canvas');
+    c.width = 16;
+    c.height = 9;
+    const ctx = c.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(source, 0, 0, 16, 9);
+    const px = ctx.getImageData(0, 0, 16, 9).data;
+    let sum = 0;
+    for (let i = 0; i < px.length; i += 4) sum += 0.2126 * px[i] + 0.7152 * px[i + 1] + 0.0722 * px[i + 2];
+    return sum / (px.length / 4);
+  } catch {
+    return 255; // unreadable: treat as fine rather than retry
+  }
 }
 
 /** A base64 data URL (what generateVideoThumbnails returns) as a Blob for upload. */

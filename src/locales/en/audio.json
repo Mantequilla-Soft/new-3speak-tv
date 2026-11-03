@@ -367,7 +367,8 @@
       "post": "Posting to Hive",
       "uploadingFallback": "Uploading",
       "published": "Published"
-    }
+    },
+    "warmupOneTrack": "While your account warms up, you publish one audio at a time. Remove the others to go on."
   },
   "podcasts": {
     "chip": "External",
@@ -652,7 +653,14 @@
       "hide": "Hide video"
     },
     "signInToFollow": "Sign in to follow podcasts",
-    "addExternal": "Add external podcast"
+    "addExternal": "Add external podcast",
+    "continue": {
+      "title": "Continue listening",
+      "left": "{{minutes}} min left",
+      "remove": "Remove from Continue listening",
+      "removed": "Removed from Continue listening",
+      "removeFailed": "Couldn't remove it. Please try again."
+    }
   },
   "item": {
     "back": "All audio",

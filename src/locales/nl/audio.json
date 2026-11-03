@@ -367,7 +367,8 @@
       "post": "Posten op Hive",
       "uploadingFallback": "Uploaden",
       "published": "Gepubliceerd"
-    }
+    },
+    "warmupOneTrack": "Zolang je account opwarmt, publiceer je één audio tegelijk. Haal de andere weg om verder te gaan."
   },
   "podcasts": {
     "chip": "Extern",
@@ -652,7 +653,14 @@
       "hide": "Video verbergen"
     },
     "signInToFollow": "Log in om podcasts te volgen",
-    "addExternal": "Externe podcast toevoegen"
+    "addExternal": "Externe podcast toevoegen",
+    "continue": {
+      "title": "Verder luisteren",
+      "left": "nog {{minutes}} min",
+      "remove": "Verwijderen uit Verder luisteren",
+      "removed": "Verwijderd uit Verder luisteren",
+      "removeFailed": "Verwijderen lukte niet. Probeer het opnieuw."
+    }
   },
   "item": {
     "back": "Alle audio",

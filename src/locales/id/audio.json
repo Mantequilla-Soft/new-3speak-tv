@@ -352,7 +352,8 @@
       "post": "Memposting ke Hive",
       "uploadingFallback": "Mengunggah",
       "published": "Diterbitkan"
-    }
+    },
+    "warmupOneTrack": "Selama akunmu dalam masa pemanasan, kamu menerbitkan satu audio sekaligus. Hapus yang lain untuk lanjut."
   },
   "podcasts": {
     "chip": "Eksternal",
@@ -627,7 +628,14 @@
       "hide": "Sembunyikan video"
     },
     "signInToFollow": "Masuk untuk mengikuti podcast",
-    "addExternal": "Tambah podcast eksternal"
+    "addExternal": "Tambah podcast eksternal",
+    "continue": {
+      "title": "Lanjutkan mendengarkan",
+      "left": "{{minutes}} mnt lagi",
+      "remove": "Hapus dari Lanjutkan mendengarkan",
+      "removed": "Dihapus dari Lanjutkan mendengarkan",
+      "removeFailed": "Tidak bisa dihapus. Coba lagi."
+    }
   },
   "item": {
     "back": "Semua audio",

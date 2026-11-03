@@ -352,7 +352,8 @@
       "post": "正在发布到 Hive",
       "uploadingFallback": "上传中",
       "published": "已发布"
-    }
+    },
+    "warmupOneTrack": "账户预热期间，你一次只能发布一个音频。请移除其他音频后继续。"
   },
   "podcasts": {
     "chip": "外部",
@@ -627,7 +628,14 @@
       "hide": "隐藏视频"
     },
     "signInToFollow": "登录后即可关注播客",
-    "addExternal": "添加外部播客"
+    "addExternal": "添加外部播客",
+    "continue": {
+      "title": "继续收听",
+      "left": "还剩 {{minutes}} 分钟",
+      "remove": "从继续收听中移除",
+      "removed": "已从继续收听中移除",
+      "removeFailed": "无法移除，请重试。"
+    }
   },
   "item": {
     "back": "全部音频",

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, Loader2 } from 'lucide-react';
-import { generateVideoThumbnails } from '../../utils/videoThumbnails';
+import { generateVideoThumbnailsAt } from '../../utils/videoThumbnails';
 import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, cameraRecordEnabledFor, storiesEnabledFor } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
@@ -397,8 +397,9 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       let thumbs = [];
       try {
         thumbs = await Promise.race([
-          generateVideoThumbnails(file, 2, 'url'),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Thumbnail timeout')), 10000))
+          generateVideoThumbnailsAt(file),
+          // Four frames now (start, 25/50/75%), hence more time than the old two.
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Thumbnail timeout')), 20000))
         ]);
         setGeneratedThumbnail(thumbs);
       } catch (thumbErr) {

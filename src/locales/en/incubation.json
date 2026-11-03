@@ -1,8 +1,8 @@
 {
   "tracks": {
     "viewer": {
-      "title": "Mostly a viewer",
-      "body": "I am here to watch, comment and follow creators."
+      "title": "Mostly a viewer or listener",
+      "body": "I am here to watch and listen, comment and follow creators."
     },
     "creator": {
       "title": "Mostly a creator",
@@ -11,6 +11,14 @@
     "advertiser": {
       "title": "An advertiser",
       "body": "I represent a brand and want to reach 3Speak viewers."
+    },
+    "musician": {
+      "title": "A musician",
+      "body": "I make music and want to publish my tracks."
+    },
+    "podcaster": {
+      "title": "A podcaster",
+      "body": "I make a podcast and want to publish my episodes."
     }
   },
   "tips": {
@@ -66,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "What brings you to 3Speak?",
-    "intro": "Your path to a Hive account depends on it: viewers watch and join in, creators publish, and advertisers set up their brand.",
-    "introNoAdvertisers": "Your path to a Hive account depends on it: viewers watch and join in, and creators publish."
+    "intro": "Your path to a Hive account depends on it: viewers and listeners watch, listen and join in, creators publish videos, musicians and podcasters publish audio, and advertisers set up their brand.",
+    "introNoAdvertisers": "Your path to a Hive account depends on it: viewers and listeners watch, listen and join in, creators publish videos, and musicians and podcasters publish audio."
   },
   "tipCard": {
     "aria": "Tip",
@@ -176,6 +184,43 @@
           "1": "Address: optional.",
           "2": "You need your address OR a website in your brand profile above, at least one of the two."
         }
+      },
+      "audio": {
+        "label_one": "Publish a track or an episode",
+        "label_other": "Publish {{count}} tracks or episodes",
+        "hint": "A song, a podcast episode or any other recording.",
+        "why": "Your audio is what the team listens to when they review you, and what visitors find on your profile.",
+        "counts": {
+          "0": "Any audio you publish from Upload, then Music / Audio.",
+          "1": "It stays yours. When you are upgraded it moves to your Hive account."
+        },
+        "cta": "Upload audio"
+      },
+      "listen": {
+        "labelHours_one": "Listen for an hour on 3Speak",
+        "labelHours_other": "Listen for {{count}} hours on 3Speak",
+        "labelMinutes_one": "Listen for a minute on 3Speak",
+        "labelMinutes_other": "Listen for {{count}} minutes on 3Speak",
+        "hint": "Any music or podcasts in the 3Speak audio player. Counted while it really plays.",
+        "why": "Listening to others is how musicians and podcasters find their audience and their people.",
+        "counts": {
+          "0": "Once per track or episode. Listening again raises its best time, it never adds to it.",
+          "1": "Not your own audio."
+        },
+        "cta": "Find something to listen to"
+      },
+      "watchListen": {
+        "labelHours_one": "Watch or listen for an hour on 3Speak",
+        "labelHours_other": "Watch or listen for {{count}} hours on 3Speak",
+        "labelMinutes_one": "Watch or listen for a minute on 3Speak",
+        "labelMinutes_other": "Watch or listen for {{count}} minutes on 3Speak",
+        "hint": "Videos, music and podcasts all count, together. Counted while they really play.",
+        "why": "Watching and listening say you are here to take part and not only to post. It is the goal most people finish without trying.",
+        "counts": {
+          "0": "Once per video, track or episode. Playing one again raises its best time, it never adds to it.",
+          "1": "Not your own videos or audio."
+        },
+        "cta": "Find something to watch or hear"
       }
     },
     "duration": {
@@ -245,8 +290,8 @@
       "aside": "A few things wait for your account: earning rewards and tipping. Those move real money, so they need an account that really is yours."
     },
     "path": {
-      "p1": "Your profile shows a short list of things to do, and it depends on what you are here for: viewers watch and join in, creators publish, and advertisers set up their brand.",
-      "p1NoAdvertisers": "Your profile shows a short list of things to do, and it depends on what you are here for: viewers watch and join in, and creators publish.",
+      "p1": "Your profile shows a short list of things to do, and it depends on what you are here for: viewers and listeners watch, listen and join in, creators publish videos, musicians and podcasters publish audio, and advertisers set up their brand.",
+      "p1NoAdvertisers": "Your profile shows a short list of things to do, and it depends on what you are here for: viewers and listeners watch, listen and join in, creators publish videos, and musicians and podcasters publish audio.",
       "p2": "It is not a test. It is simply how we can tell a real account from an empty or malicious one. Once the list is done the team reviews you and upgrades you as soon as possible.",
       "perkEarn": "Posts that earn",
       "perkKeys": "Keys only you hold",
@@ -495,7 +540,8 @@
     "viewerDone": {
       "watched": "watched {{time}}",
       "written": "written {{items}}",
-      "followed": "followed {{items}}"
+      "followed": "followed {{items}}",
+      "watchedListened": "watched and listened for {{time}}"
     },
     "advertiser": {
       "lede": "The team has reviewed <b>{{name}}</b>. Create your <b>Hive account</b>, for free: it becomes your advertiser account.",

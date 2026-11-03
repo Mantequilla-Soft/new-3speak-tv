@@ -1,8 +1,8 @@
 {
   "tracks": {
     "viewer": {
-      "title": "Vor allem Zuschauer",
-      "body": "Ich bin hier, um zuzuschauen, zu kommentieren und Creatorn zu folgen."
+      "title": "Vor allem Zuschauer oder Zuhörer",
+      "body": "Ich bin hier, um zuzuschauen und zuzuhören, zu kommentieren und Creatorn zu folgen."
     },
     "creator": {
       "title": "Vor allem Creator",
@@ -11,6 +11,14 @@
     "advertiser": {
       "title": "Werbekunde",
       "body": "Ich vertrete eine Marke und will 3Speak-Zuschauer erreichen."
+    },
+    "musician": {
+      "title": "Musiker",
+      "body": "Ich mache Musik und will meine Tracks veröffentlichen."
+    },
+    "podcaster": {
+      "title": "Podcaster",
+      "body": "Ich mache einen Podcast und will meine Folgen veröffentlichen."
     }
   },
   "tips": {
@@ -66,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Was führt dich zu 3Speak?",
-    "intro": "Davon hängt dein Weg zu einem Hive-Konto ab: Zuschauer schauen zu und machen mit, Creator veröffentlichen, und Werbekunden richten ihre Marke ein.",
-    "introNoAdvertisers": "Davon hängt dein Weg zu einem Hive-Konto ab: Zuschauer schauen zu und machen mit, und Creator veröffentlichen."
+    "intro": "Davon hängt dein Weg zu einem Hive-Konto ab: Zuschauer und Zuhörer schauen zu, hören zu und machen mit, Creator veröffentlichen Videos, Musiker und Podcaster veröffentlichen Audio, und Werbekunden richten ihre Marke ein.",
+    "introNoAdvertisers": "Davon hängt dein Weg zu einem Hive-Konto ab: Zuschauer und Zuhörer schauen zu, hören zu und machen mit, Creator veröffentlichen Videos, und Musiker und Podcaster veröffentlichen Audio."
   },
   "tipCard": {
     "aria": "Tipp",
@@ -176,6 +184,43 @@
           "1": "Anschrift: optional.",
           "2": "Du brauchst deine Anschrift ODER eine Website in deinem Markenprofil oben, mindestens eins von beiden."
         }
+      },
+      "audio": {
+        "label_one": "Einen Track oder eine Folge veröffentlichen",
+        "label_other": "{{count}} Tracks oder Folgen veröffentlichen",
+        "hint": "Ein Song, eine Podcast-Folge oder eine andere Aufnahme.",
+        "why": "Deine Audios hört sich das Team an, wenn es dich prüft, und Besucher finden sie auf deinem Profil.",
+        "counts": {
+          "0": "Jedes Audio, das du über Hochladen und dann Musik / Audio veröffentlichst.",
+          "1": "Es bleibt deins. Wenn du hochgestuft wirst, wandert es in dein Hive-Konto."
+        },
+        "cta": "Audio hochladen"
+      },
+      "listen": {
+        "labelHours_one": "Eine Stunde auf 3Speak zuhören",
+        "labelHours_other": "{{count}} Stunden auf 3Speak zuhören",
+        "labelMinutes_one": "Eine Minute auf 3Speak zuhören",
+        "labelMinutes_other": "{{count}} Minuten auf 3Speak zuhören",
+        "hint": "Beliebige Musik oder Podcasts im Audio-Player von 3Speak. Gezählt wird, solange es wirklich läuft.",
+        "why": "Anderen zuzuhören ist der Weg, auf dem Musiker und Podcaster ihr Publikum und ihre Leute finden.",
+        "counts": {
+          "0": "Einmal pro Track oder Folge. Erneutes Hören erhöht die Bestzeit, addiert aber nie etwas dazu.",
+          "1": "Nicht deine eigenen Audios."
+        },
+        "cta": "Etwas zum Anhören finden"
+      },
+      "watchListen": {
+        "labelHours_one": "Eine Stunde auf 3Speak zuschauen oder zuhören",
+        "labelHours_other": "{{count}} Stunden auf 3Speak zuschauen oder zuhören",
+        "labelMinutes_one": "Eine Minute auf 3Speak zuschauen oder zuhören",
+        "labelMinutes_other": "{{count}} Minuten auf 3Speak zuschauen oder zuhören",
+        "hint": "Videos, Musik und Podcasts zählen alle zusammen. Gezählt wird, solange sie wirklich laufen.",
+        "why": "Zuschauen und Zuhören zeigen, dass du hier bist, um mitzumachen, und nicht nur, um zu posten. Dieses Ziel erreichen die meisten, ohne es zu versuchen.",
+        "counts": {
+          "0": "Einmal pro Video, Track oder Folge. Erneutes Abspielen erhöht die Bestzeit, addiert aber nie etwas dazu.",
+          "1": "Nicht deine eigenen Videos oder Audios."
+        },
+        "cta": "Etwas zum Anschauen oder Anhören finden"
       }
     },
     "duration": {
@@ -245,8 +290,8 @@
       "aside": "Ein paar Dinge warten auf dein Konto: Belohnungen verdienen und Trinkgeld geben. Dabei geht es um echtes Geld, deshalb braucht es dafür ein Konto, das wirklich dir gehört."
     },
     "path": {
-      "p1": "Dein Profil zeigt eine kurze Liste mit Aufgaben, und die hängt davon ab, wofür du hier bist: Zuschauer schauen zu und machen mit, Creator veröffentlichen, und Werbekunden richten ihre Marke ein.",
-      "p1NoAdvertisers": "Dein Profil zeigt eine kurze Liste mit Aufgaben, und die hängt davon ab, wofür du hier bist: Zuschauer schauen zu und machen mit, und Creator veröffentlichen.",
+      "p1": "Dein Profil zeigt eine kurze Liste mit Aufgaben, und sie hängt davon ab, wofür du hier bist: Zuschauer und Zuhörer schauen zu, hören zu und machen mit, Creator veröffentlichen Videos, Musiker und Podcaster veröffentlichen Audio, und Werbekunden richten ihre Marke ein.",
+      "p1NoAdvertisers": "Dein Profil zeigt eine kurze Liste mit Aufgaben, und sie hängt davon ab, wofür du hier bist: Zuschauer und Zuhörer schauen zu, hören zu und machen mit, Creator veröffentlichen Videos, und Musiker und Podcaster veröffentlichen Audio.",
       "p2": "Das ist kein Test. So können wir einfach ein echtes Konto von einem leeren oder böswilligen unterscheiden. Sobald die Liste erledigt ist, prüft dich das Team und stuft dich so schnell wie möglich hoch.",
       "perkEarn": "Posts, die verdienen",
       "perkKeys": "Schlüssel, die nur du hast",
@@ -495,7 +540,8 @@
     "viewerDone": {
       "watched": "{{time}} zugeschaut",
       "written": "{{items}} geschrieben",
-      "followed": "{{items}} gefolgt"
+      "followed": "{{items}} gefolgt",
+      "watchedListened": "{{time}} zugeschaut und zugehört"
     },
     "advertiser": {
       "lede": "Das Team hat <b>{{name}}</b> geprüft. Erstelle kostenlos dein <b>Hive-Konto</b>: Es wird dein Werbekonto.",

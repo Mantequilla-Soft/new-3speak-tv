@@ -89,7 +89,9 @@ export default function AudioItemView({ owner, id, onBack }) {
     },
     staleTime: 5 * 60 * 1000,
   });
-  const postPermlink = String(item?.post_permlink || '').split('/').pop();
+  // A warm-up account's audio (checker: warmup) has no Hive post until they
+  // graduate: no votes, tips or comments yet, and its own description.
+  const postPermlink = item?.warmup ? '' : String(item?.post_permlink || '').split('/').pop();
   // The Hive post behind the audio: its votes, payout and comments.
   const { data: post } = useQuery({
     queryKey: ['audio-item-post', owner, postPermlink],

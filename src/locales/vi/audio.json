@@ -352,7 +352,8 @@
       "post": "Đang đăng lên Hive",
       "uploadingFallback": "Đang tải lên",
       "published": "Đã xuất bản"
-    }
+    },
+    "warmupOneTrack": "Trong khi tài khoản của bạn đang khởi động, bạn đăng từng âm thanh một. Hãy bỏ các tệp khác để tiếp tục."
   },
   "podcasts": {
     "chip": "Bên ngoài",
@@ -627,7 +628,14 @@
       "hide": "Ẩn video"
     },
     "signInToFollow": "Đăng nhập để theo dõi podcast",
-    "addExternal": "Thêm podcast bên ngoài"
+    "addExternal": "Thêm podcast bên ngoài",
+    "continue": {
+      "title": "Nghe tiếp",
+      "left": "còn {{minutes}} phút",
+      "remove": "Xóa khỏi Nghe tiếp",
+      "removed": "Đã xóa khỏi Nghe tiếp",
+      "removeFailed": "Không xóa được. Vui lòng thử lại."
+    }
   },
   "item": {
     "back": "Tất cả âm thanh",

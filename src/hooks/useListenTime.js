@@ -3,6 +3,7 @@ import { CHECKER_URL } from '../utils/config';
 import { useAppStore } from '../lib/store';
 import { listenerRewardsName } from '../utils/viewerRewards';
 import { listenVouch } from '../lib/podcasts';
+import { currentHandle } from '../lib/incubation';
 
 /**
  * Listening time for whatever the global audio player plays: 3Speak audio and
@@ -85,11 +86,18 @@ export default function useListenTime(audioRef, track, elementKey) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             kind, id,
+            // An outside episode that is really a 3Speak audio (its link names the
+            // post): the checker counts it as that creator's track.
+            ...(track?.external && track.owner && track.post_permlink
+              ? { owner: track.owner, postPermlink: track.post_permlink } : {}),
             duration: Number.isFinite(el.duration) && el.duration > 0 ? el.duration : (track?.duration || undefined),
             position: el.currentTime || 0,
             source: '3speak',
             private: !!useAppStore.getState().privateMode,
             ...who,
+            // A warm-up account's listening counts toward its warm-up goals
+            // (musicians and podcasters), the way video watch time does.
+            ...(currentHandle() ? { incubationListener: currentHandle() } : {}),
           }),
         });
         const data = res.ok ? await res.json() : null;

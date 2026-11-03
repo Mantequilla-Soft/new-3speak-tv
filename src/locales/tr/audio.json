@@ -367,7 +367,8 @@
       "post": "Hive'a gönderiliyor",
       "uploadingFallback": "Yükleniyor",
       "published": "Yayınlandı"
-    }
+    },
+    "warmupOneTrack": "Hesabın ısınırken aynı anda bir ses yayınlarsın. Devam etmek için diğerlerini kaldır."
   },
   "podcasts": {
     "chip": "Harici",
@@ -652,7 +653,14 @@
       "hide": "Videoyu gizle"
     },
     "signInToFollow": "Podcast takip etmek için giriş yap",
-    "addExternal": "Harici podcast ekle"
+    "addExternal": "Harici podcast ekle",
+    "continue": {
+      "title": "Dinlemeye devam et",
+      "left": "{{minutes}} dk kaldı",
+      "remove": "Dinlemeye devam et listesinden kaldır",
+      "removed": "Dinlemeye devam et listesinden kaldırıldı",
+      "removeFailed": "Kaldırılamadı. Lütfen tekrar dene."
+    }
   },
   "item": {
     "back": "Tüm sesler",

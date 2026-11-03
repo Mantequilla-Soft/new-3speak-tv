@@ -116,7 +116,7 @@
     "starting": "Wird gestartet…",
     "statusTitle": "Dein Sammelimport",
     "canLeave": "Du kannst diese Seite jetzt schließen. Deine Videos werden auf unserem Server importiert und veröffentlicht, auch während du weg bist.",
-    "stop": "Den Rest stoppen",
+    "stop": "Import stoppen",
     "short": "Short",
     "status": {
       "queued": "Wartet",
@@ -124,11 +124,16 @@
       "uploading": "Wird zu 3Speak hochgeladen",
       "scheduling": "Wird eingeplant",
       "scheduled": "Erscheint um {{time}}",
+      "scheduledIn": "Erscheint um {{time}} (in {{minutes}} Min.)",
+      "publishingNow": "Wird jetzt veröffentlicht",
       "posted": "Veröffentlicht",
       "failed": "Fehlgeschlagen",
       "publish_failed": "Veröffentlichen fehlgeschlagen",
-      "cancelled": "Gestoppt"
-    }
+      "cancelled": "Gestoppt, nicht veröffentlicht"
+    },
+    "stopConfirm": "Diesen Import stoppen? Noch nicht veröffentlichte Videos werden abgebrochen, auch bereits eingeplante. Veröffentlichte Videos bleiben.",
+    "stopYes": "Ja, stoppen",
+    "stopKeep": "Weiter importieren"
   },
   "bitchute": {
     "noLink": "Du hast noch kein BitChute-Konto verknüpft. Verknüpfe und verifiziere es zuerst in deinem Profil und komm dann hierher zurück.",

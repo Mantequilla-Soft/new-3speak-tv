@@ -1,0 +1,1094 @@
+@use "../../../mixins.scss" as mix;
+
+// Thumbnail step: the pictures to start from left, the result in the middle,
+// the editor and the upload tiles right; and the editor popup.
+// Flat, theme variables only.
+
+$gap: 10px;
+
+.thumb-studio {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+// ── Pictures | preview | actions ────────────────────────────────────────────
+// The preview alone sets the row's height; both side columns are laid over
+// their cells (absolute) so they never stretch it. Left: the generated frames,
+// four rows. Right: the editor tile, what the creator made (the design, the
+// uploads), the upload tile.
+// 1fr:4fr:1fr gives the left rows about the preview's aspect.
+.thumb-studio__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 4fr) minmax(0, 1fr);
+  gap: $gap;
+}
+
+.thumb-studio__preview {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+
+  &:has(.thumb-canvas.is-readonly):hover { border-color: var(--accent-primary, #e53935); }
+}
+
+.thumb-studio__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+}
+
+// No picture yet (always so at first on phones): the preview opens the editor
+// on Pick frame.
+.thumb-studio__empty--action {
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+
+  .thumb-option__icon { width: 40px; height: 40px; }
+  &:hover { background: rgba(255, 255, 255, 0.06); }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-primary, #e53935);
+    outline-offset: -4px;
+  }
+}
+
+.thumb-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none; // the drags are ours, not the page's scroll
+  user-select: none;
+
+  &.is-readonly { cursor: pointer; }
+  &.is-pannable { cursor: grab; }
+  &.is-over-layer { cursor: move; }
+  &.is-dragging-frame { cursor: grabbing; }
+  &.is-dragging-layer { cursor: move; }
+}
+
+.thumb-studio__side {
+  position: relative;
+  min-height: 0;
+
+  > * {
+    position: absolute;
+    inset: 0;
+  }
+}
+
+.thumb-studio__options {
+  display: grid;
+  grid-auto-rows: calc((100% - 3 * #{$gap}) / 4);
+  gap: $gap;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.thumb-studio__side--actions {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  // Two tiles sharing the cell's height. `contain: size` keeps their text from
+  // sizing the row (the preview alone does), like the list's absolute box.
+  contain: size;
+
+  > * { position: relative; inset: auto; }
+}
+
+.thumb-option {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-secondary, #f1f1f3);
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &:hover { border-color: color-mix(in srgb, var(--accent-primary, #e53935) 50%, transparent); }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-primary, #e53935);
+    outline-offset: 2px;
+  }
+
+  &.is-selected {
+    border-color: var(--accent-primary, #e53935);
+    box-shadow: inset 0 0 0 2px var(--accent-primary, #e53935);
+  }
+}
+
+.thumb-option__check {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-primary, #e53935);
+  color: #fff;
+}
+
+.thumb-option__badge {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+}
+
+// The two tiles on the right, the editor and the upload: one look.
+.thumb-action {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  border: 2px dashed var(--border-color, rgba(0, 0, 0, 0.2));
+  border-radius: 8px;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #111);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  &:hover { border-color: color-mix(in srgb, var(--accent-primary, #e53935) 50%, transparent); }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-primary, #e53935);
+    outline-offset: 2px;
+  }
+}
+
+.thumb-action--upload.is-dragging {
+  border-color: var(--accent-primary, #e53935);
+  background: color-mix(in srgb, var(--accent-primary, #e53935) 6%, transparent);
+}
+
+// Between the two tiles: the design made in the editor (a live render of it;
+// `cover` crops it to the tile like the pictures) and the uploaded pictures.
+// Takes what it needs and scrolls past that; the tiles keep at least 64px.
+.thumb-studio__made {
+  flex: 0 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  overflow-y: auto;
+  scrollbar-width: thin;
+
+  &:empty { display: none; }
+
+  > .thumb-option {
+    flex: 0 0 auto;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.thumb-studio__side--actions .thumb-action { min-height: 64px; }
+
+.thumb-option--design {
+  background: #000;
+
+  .thumb-canvas { object-fit: cover; }
+}
+
+.thumb-option__input { display: none; }
+
+.thumb-option__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+  color: var(--accent-primary, #e53935);
+}
+
+.thumb-option__label {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary, #111);
+}
+
+.thumb-option__hint {
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--text-secondary, #6b7280);
+}
+
+// Shorts / stories: a 9:16 preview; the pictures one column of 9:16 rows.
+.thumb-studio--portrait {
+  .thumb-studio__stage {
+    grid-template-columns: minmax(0, 110px) minmax(0, 380px) minmax(0, 150px);
+    justify-content: center;
+  }
+  .thumb-studio__preview { aspect-ratio: 9 / 16; }
+  .thumb-studio__made > .thumb-option {
+    width: 62%;
+    align-self: center;
+    aspect-ratio: 9 / 16;
+  }
+}
+
+// Phones: the preview first and full width, the pictures in a sideways strip
+// under it, the two tiles side by side last.
+@include mix.respond(phone) {
+  .thumb-studio__stage,
+  .thumb-studio--portrait .thumb-studio__stage { grid-template-columns: minmax(0, 1fr); }
+
+  .thumb-studio__preview { order: -1; }
+  // Phones generate no frames: no empty strip.
+  .thumb-studio__side--sources:has(.thumb-studio__options:empty) { display: none; }
+
+  .thumb-studio__side > * { position: static; }
+
+  .thumb-studio__options {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+  }
+  .thumb-studio__options .thumb-option {
+    flex: 0 0 30%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .thumb-studio__side--actions {
+    flex-direction: row;
+    contain: none;
+
+    .thumb-action {
+      flex-direction: row;
+      min-height: 52px;
+    }
+    .thumb-studio__made {
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      > .thumb-option { width: 92px; }
+    }
+    .thumb-option__hint { display: none; }
+  }
+
+  .thumb-studio--portrait {
+    .thumb-studio__preview {
+      width: min(100%, 300px);
+      margin: 0 auto;
+    }
+    .thumb-studio__options .thumb-option {
+      flex-basis: 22%;
+      aspect-ratio: 9 / 16;
+    }
+    .thumb-studio__made > .thumb-option {
+      width: 52px;
+      align-self: auto;
+    }
+  }
+}
+
+// ── Tool tabs + panel (the popup's side column) ─────────────────────────────
+
+.thumb-tools {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.thumb-tools__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
+}
+
+.thumb-tools__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary, #6b7280);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: var(--bg-secondary, #f1f1f3); }
+
+  &.is-active {
+    border-color: var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
+  }
+
+  &:disabled { cursor: not-allowed; opacity: 0.5; }
+}
+
+.thumb-tools__panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px 2px 4px;
+}
+
+// ── Controls (tools/controls.jsx) ───────────────────────────────────────────
+
+.thumb-field {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+
+  @include mix.respond(phone) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+}
+
+.thumb-field__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #111);
+}
+
+.thumb-field__control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.thumb-field__value {
+  min-width: 3.2em;
+  text-align: right;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary, #6b7280);
+}
+
+.thumb-slider {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--accent-primary, #e53935);
+}
+
+.thumb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-primary, #111);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: var(--bg-secondary, #f1f1f3); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.thumb-tool-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.thumb-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+}
+
+.thumb-seg {
+  display: inline-flex;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.thumb-seg__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 34px;
+  padding: 4px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary, #6b7280);
+  cursor: pointer;
+
+  & + & { border-left: 1px solid var(--border-color, rgba(0, 0, 0, 0.2)); }
+  &:hover { background: var(--bg-secondary, #f1f1f3); }
+  &.is-active {
+    color: var(--accent-primary, #e53935);
+    box-shadow: inset 0 0 0 2px var(--accent-primary, #e53935);
+  }
+}
+
+.thumb-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// Text tool
+.thumb-layers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.thumb-layer-chip {
+  display: inline-flex;
+  align-items: stretch;
+  max-width: 220px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
+  border-radius: 10px;
+  overflow: hidden;
+
+  &.is-active { border-color: var(--accent-primary, #e53935); }
+}
+
+.thumb-layer-chip__pick,
+.thumb-layer-chip__remove {
+  border: 0;
+  background: transparent;
+  color: var(--text-primary, #111);
+  font: inherit;
+  cursor: pointer;
+
+  &:hover { background: var(--bg-secondary, #f1f1f3); }
+}
+
+.thumb-layer-chip__pick {
+  padding: 6px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+
+  .is-active > & { color: var(--accent-primary, #e53935); }
+}
+
+.thumb-layer-chip__remove {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-left: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
+  color: var(--text-secondary, #6b7280);
+}
+
+.thumb-textarea {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
+  border-radius: 10px;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #111);
+  font: inherit;
+  font-size: 14px;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent-primary, #e53935);
+  }
+}
+
+.thumb-fonts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  // 26 fonts: a few rows show, the rest scroll inside.
+  max-height: 172px;
+  overflow-y: auto;
+  padding: 2px;
+  scrollbar-width: thin;
+}
+
+.thumb-font {
+  padding: 5px 10px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-primary, #111);
+  font-size: 17px;
+  line-height: 1.2;
+  cursor: pointer;
+
+  &:hover { background: var(--bg-secondary, #f1f1f3); }
+  &.is-active {
+    border-color: var(--accent-primary, #e53935);
+    box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
+  }
+}
+
+.thumb-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.thumb-swatch {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.25));
+  border-radius: 50%;
+  cursor: pointer;
+
+  &.is-active {
+    box-shadow: 0 0 0 2px var(--bg-primary, #fff), 0 0 0 4px var(--accent-primary, #e53935);
+  }
+
+  // The "any colour" swatch: a palette icon until a custom colour is picked.
+  &--custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--bg-secondary, #f1f1f3);
+    color: var(--text-secondary, #6b7280);
+
+    input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+}
+
+.thumb-btn--icon {
+  justify-content: center;
+  min-width: 36px;
+  padding: 6px 8px;
+}
+
+// Done: the accent outline, like the wizard's primary actions.
+.thumb-btn--primary {
+  min-height: 40px;
+  padding: 8px 18px;
+  font-size: 14px;
+  border-color: var(--accent-primary, #e53935);
+  color: var(--accent-primary, #e53935);
+
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
+}
+
+// Destructive: red text and outline, never a red fill.
+.thumb-btn--danger {
+  border-color: var(--accent-primary, #e53935);
+  color: var(--accent-primary, #e53935);
+
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
+}
+
+.thumb-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #111);
+}
+
+.thumb-tool-row__spacer { flex: 1 1 auto; }
+
+.thumb-btn--block {
+  width: 100%;
+  justify-content: center;
+}
+
+// On/off switch
+.thumb-toggle {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  input:focus-visible + .thumb-toggle__track {
+    outline: 2px solid var(--accent-primary, #e53935);
+    outline-offset: 2px;
+  }
+}
+
+.thumb-toggle__track {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.25));
+  background: var(--bg-secondary, #f1f1f3);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  .is-on & {
+    background: var(--accent-primary, #e53935);
+    border-color: var(--accent-primary, #e53935);
+  }
+}
+
+.thumb-toggle__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease;
+
+  .is-on & { transform: translateX(18px); }
+}
+
+// Pick frame: the video on the left, its controls beside it (stacked on phones).
+.thumb-pick {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  align-items: start;
+  gap: 14px;
+
+  @include mix.respond(phone) { grid-template-columns: minmax(0, 1fr); }
+}
+
+.thumb-pick__video {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  border-radius: 10px;
+  background: #000;
+  cursor: pointer;
+}
+
+.thumb-pick__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.thumb-pick__scrub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .thumb-field__value { min-width: 7.5em; }
+}
+
+// ── Editor popup ────────────────────────────────────────────────────────────
+// Canvas left (the pictures to start from under it), tools right, so every
+// setting sits beside the picture it changes. Phones: a full-height sheet,
+// canvas on top and the tools scrolling under it.
+
+.thumb-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.thumb-modal {
+  display: flex;
+  flex-direction: column;
+  width: min(1280px, 100%);
+  height: min(880px, 100%);
+  padding: 16px 18px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: var(--bg-primary, #fff);
+  color: var(--text-primary, #111);
+  overflow: hidden;
+
+  .thumb-modal__header { margin-bottom: 12px; }
+}
+
+.thumb-modal__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 18px;
+}
+
+.thumb-modal__stage {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+  min-width: 0;
+  min-height: 0;
+}
+
+// The canvas keeps its aspect and takes as much of this box as fits.
+.thumb-modal__canvas {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+
+  .thumb-canvas {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 10px;
+  }
+
+  .thumb-studio__empty {
+    border-radius: 10px;
+    background: #000;
+  }
+}
+
+.thumb-modal__sources {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+
+  .thumb-option {
+    flex: 0 0 auto;
+    width: 112px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.thumb-modal--portrait .thumb-modal__sources .thumb-option {
+  width: 54px;
+  aspect-ratio: 9 / 16;
+}
+
+.thumb-modal__side {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-left: 18px;
+  border-left: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
+
+  // The column is narrow: the picker's video goes above its controls.
+  .thumb-pick { grid-template-columns: minmax(0, 1fr); }
+}
+
+.thumb-modal__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.12));
+}
+
+@media (max-width: 900px) {
+  .thumb-modal__body { grid-template-columns: minmax(0, 1fr) 320px; }
+  .thumb-field { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+}
+
+// Phones: one scrolling sheet. The preview sticks to the top while the
+// pictures, the tool tabs (one row that swipes) and the settings scroll under
+// it, so the settings get the whole screen instead of a narrow box.
+@include mix.respond(phone) {
+  .thumb-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .thumb-modal {
+    width: 100%;
+    height: 100%;
+    padding: 12px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+    border-radius: 16px 16px 0 0;
+    animation: thumb-modal-up 0.2s ease-out;
+
+    .thumb-modal__header { margin-bottom: 8px; }
+  }
+
+  .thumb-modal__body {
+    display: block;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin: 0 -14px;
+    padding: 0 14px;
+  }
+
+  // Its children join the scrolling body, so the canvas can stick in all of it.
+  .thumb-modal__stage { display: contents; }
+
+  .thumb-modal__canvas {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    height: 30vh;
+    background: var(--bg-primary, #fff);
+    box-shadow: 0 8px 0 var(--bg-primary, #fff);
+  }
+  .thumb-modal--portrait .thumb-modal__canvas { height: 42vh; }
+
+  // Nothing to show yet (phones start here): the player is the picture, so it
+  // moves to the top. While picking, the result keeps a small strip.
+  .thumb-modal.is-empty .thumb-modal__canvas { display: none; }
+  .thumb-modal.is-picking .thumb-modal__canvas { height: 20vh; }
+  .thumb-modal.is-empty .thumb-modal__side { margin-top: 0; }
+
+  .thumb-pick__video { max-height: 34vh; }
+
+  .thumb-modal__sources { margin: 16px 0 4px; }
+
+  .thumb-modal__side {
+    display: block;
+    margin-top: 12px;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .thumb-tools { display: block; }
+
+  .thumb-tools__tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+  .thumb-tools__tab {
+    flex: 0 0 auto;
+    padding: 6px 10px;
+  }
+
+  .thumb-tools__panel {
+    overflow: visible;
+    padding-bottom: 12px;
+  }
+
+  .thumb-modal__footer {
+    flex-wrap: nowrap;
+    margin-top: 8px;
+    padding-top: 10px;
+
+    .thumb-btn { padding: 6px 10px; }
+    .thumb-confirm { flex: 1 1 auto; min-width: 0; flex-wrap: wrap; }
+  }
+}
+
+@keyframes thumb-modal-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+// ── Stickers tool ───────────────────────────────────────────────────────────
+
+.thumb-sticker-selected {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--accent-primary, #e53935);
+  border-radius: 10px;
+}
+
+.thumb-sticker-selected__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.thumb-sticker-bar {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+
+  .thumb-sticker-search { flex: 1; min-width: 0; }
+}
+
+.thumb-sticker-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
+  border-radius: 10px;
+  color: var(--text-secondary, #6b7280);
+
+  &:focus-within { border-color: var(--accent-primary, #e53935); }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--text-primary, #111);
+    font: inherit;
+    font-size: 14px;
+  }
+}
+
+.thumb-sticker-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.thumb-sticker-tab {
+  padding: 5px 10px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary, #6b7280);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { background: var(--bg-secondary, #f1f1f3); }
+  &.is-active {
+    border-color: var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
+  }
+}
+
+.thumb-sticker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+  gap: 6px;
+}
+
+.thumb-sticker {
+  aspect-ratio: 1;
+  padding: 6px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+  border-radius: 8px;
+  background: var(--bg-secondary, #f1f1f3);
+  cursor: pointer;
+
+  &:hover { border-color: var(--accent-primary, #e53935); }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+// Text box presets, each shown in its own style on a dark tile (most are
+// white text, made for video).
+.thumb-textboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+}
+
+.thumb-textbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  padding: 10px 6px;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+  border-radius: 8px;
+  background: #2b2b2f;
+  font-size: 15px;
+  line-height: 1.2;
+  cursor: pointer;
+  overflow: hidden;
+
+  &:hover { border-color: var(--accent-primary, #e53935); }
+
+  span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

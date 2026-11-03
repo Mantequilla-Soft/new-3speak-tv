@@ -28,10 +28,26 @@ const HOLD_MAX_MS = 2500;
 // A pre-roll that starts later than this into the track does not rewind it.
 const REWIND_WITHIN_S = 3;
 
-const itemOf = (track) => (
-  track && !track.external && !track.live && track.owner && track.permlink
-    ? `${track.owner}/${track.permlink}` : null
-);
+// Outside episodes carry spots too. One whose link names a 3Speak post
+// (lib/podcasts.js threeSpeakPost, the same check that gives it votes and comments)
+// is that creator's audio: the checker turns the post into their track, so the spot
+// pays them like on the track itself. Any other episode has no creator behind it:
+// it is asked for by episode, and the creator's share goes to the platform.
+const itemOf = (track) => {
+  if (!track || track.live) return null;
+  if (track.external) {
+    if (track.owner && track.post_permlink) return `${track.owner}/post:${track.post_permlink}`;
+    return track._id && !track.private ? `episode:${track._id}` : null;
+  }
+  return track.owner && track.permlink ? `${track.owner}/${track.permlink}` : null;
+};
+
+// What the checker is asked with, for the item above.
+const requestOf = (track) => {
+  if (!track.external) return { owner: track.owner, permlink: track.permlink };
+  if (track.owner && track.post_permlink) return { owner: track.owner, postPermlink: track.post_permlink };
+  return { episodeId: String(track._id) };
+};
 
 export default function useAudioAd(audioRef, track, elementKey) {
   const key = itemOf(track);
@@ -50,7 +66,7 @@ export default function useAudioAd(audioRef, track, elementKey) {
     setPhase('idle');
     setHeard(false);
     if (!key) return undefined;
-    const [owner, permlink] = [track.owner, track.permlink];
+    const ref = requestOf(track);
 
     // Hold the opening while the answer is out (see the top).
     const main = audioRef.current;
@@ -76,7 +92,7 @@ export default function useAudioAd(audioRef, track, elementKey) {
     }
     timer = setTimeout(() => { release(); resumeHeld(); }, HOLD_MAX_MS);
 
-    requestAudioAd({ owner, permlink, viewer: useAppStore.getState().user || null }).then((a) => {
+    requestAudioAd({ ...ref, viewer: useAppStore.getState().user || null }).then((a) => {
       if (s.current !== cur) return;
       release();
       // No spot: the held track goes on. A spot: the binding below decides.

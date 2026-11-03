@@ -1,8 +1,8 @@
 {
   "tracks": {
     "viewer": {
-      "title": "Zaidi ni mtazamaji",
-      "body": "Niko hapa kutazama, kutoa maoni na kufuata watayarishaji."
+      "title": "Hasa mtazamaji au msikilizaji",
+      "body": "Niko hapa kutazama na kusikiliza, kutoa maoni na kufuata watayarishi."
     },
     "creator": {
       "title": "Zaidi ni mtayarishaji",
@@ -11,6 +11,14 @@
     "advertiser": {
       "title": "Mtangazaji",
       "body": "Ninawakilisha chapa na nataka kuwafikia watazamaji wa 3Speak."
+    },
+    "musician": {
+      "title": "Mwanamuziki",
+      "body": "Ninatengeneza muziki na nataka kuchapisha nyimbo zangu."
+    },
+    "podcaster": {
+      "title": "Mtengenezaji wa podikasti",
+      "body": "Ninatengeneza podikasti na nataka kuchapisha vipindi vyangu."
     }
   },
   "tips": {
@@ -66,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Nini kimekuleta 3Speak?",
-    "intro": "Njia yako ya kupata akaunti ya Hive inategemea hilo: watazamaji hutazama na kushiriki, watayarishaji huchapisha, na watangazaji huandaa chapa yao.",
-    "introNoAdvertisers": "Njia yako ya kupata akaunti ya Hive inategemea hilo: watazamaji hutazama na kushiriki, na watayarishaji huchapisha."
+    "intro": "Njia yako ya kupata akaunti ya Hive inategemea hili: watazamaji na wasikilizaji hutazama, husikiliza na kushiriki, watayarishi huchapisha video, wanamuziki na watengenezaji wa podikasti huchapisha sauti, na watangazaji huandaa chapa yao.",
+    "introNoAdvertisers": "Njia yako ya kupata akaunti ya Hive inategemea hili: watazamaji na wasikilizaji hutazama, husikiliza na kushiriki, watayarishi huchapisha video, na wanamuziki na watengenezaji wa podikasti huchapisha sauti."
   },
   "tipCard": {
     "aria": "Dokezo",
@@ -176,6 +184,43 @@
           "1": "Anwani: si lazima.",
           "2": "Unahitaji anwani yako AU tovuti kwenye wasifu wa chapa yako hapo juu, angalau kimoja kati ya hivyo viwili."
         }
+      },
+      "audio": {
+        "label_one": "Chapisha wimbo au kipindi kimoja",
+        "label_other": "Chapisha nyimbo au vipindi {{count}}",
+        "hint": "Wimbo, kipindi cha podikasti au rekodi nyingine yoyote.",
+        "why": "Sauti yako ndiyo timu husikiliza inapokukagua, na ndiyo wageni huipata kwenye wasifu wako.",
+        "counts": {
+          "0": "Sauti yoyote unayochapisha kupitia Pakia, kisha Muziki / Sauti.",
+          "1": "Inabaki kuwa yako. Ukipandishwa daraja, inahamia kwenye akaunti yako ya Hive."
+        },
+        "cta": "Pakia sauti"
+      },
+      "listen": {
+        "labelHours_one": "Sikiliza kwa saa moja kwenye 3Speak",
+        "labelHours_other": "Sikiliza kwa saa {{count}} kwenye 3Speak",
+        "labelMinutes_one": "Sikiliza kwa dakika moja kwenye 3Speak",
+        "labelMinutes_other": "Sikiliza kwa dakika {{count}} kwenye 3Speak",
+        "hint": "Muziki wowote au podikasti kwenye kicheza sauti cha 3Speak. Huhesabiwa inapocheza kweli.",
+        "why": "Kusikiliza wengine ndiyo njia wanamuziki na watengenezaji wa podikasti hupata wasikilizaji na watu wao.",
+        "counts": {
+          "0": "Mara moja kwa kila wimbo au kipindi. Kusikiliza tena huongeza muda wake bora, hakuongezi jumla.",
+          "1": "Si sauti yako mwenyewe."
+        },
+        "cta": "Tafuta cha kusikiliza"
+      },
+      "watchListen": {
+        "labelHours_one": "Tazama au sikiliza kwa saa moja kwenye 3Speak",
+        "labelHours_other": "Tazama au sikiliza kwa saa {{count}} kwenye 3Speak",
+        "labelMinutes_one": "Tazama au sikiliza kwa dakika moja kwenye 3Speak",
+        "labelMinutes_other": "Tazama au sikiliza kwa dakika {{count}} kwenye 3Speak",
+        "hint": "Video, muziki na podikasti zote huhesabiwa pamoja. Huhesabiwa zinapocheza kweli.",
+        "why": "Kutazama na kusikiliza kunaonyesha uko hapa kushiriki, si kuchapisha tu. Watu wengi hulifikia lengo hili bila kujaribu.",
+        "counts": {
+          "0": "Mara moja kwa kila video, wimbo au kipindi. Kucheza tena huongeza muda wake bora, hakuongezi jumla.",
+          "1": "Si video au sauti zako mwenyewe."
+        },
+        "cta": "Tafuta cha kutazama au kusikiliza"
       }
     },
     "duration": {
@@ -245,8 +290,8 @@
       "aside": "Mambo machache yanasubiri akaunti yako: kupata zawadi na kutoa bakshishi. Hayo yanahamisha pesa halisi, kwa hivyo yanahitaji akaunti ambayo ni yako kweli."
     },
     "path": {
-      "p1": "Wasifu wako unaonyesha orodha fupi ya mambo ya kufanya, na inategemea uko hapa kwa ajili ya nini: watazamaji hutazama na kushiriki, watayarishaji huchapisha, na watangazaji huandaa chapa yao.",
-      "p1NoAdvertisers": "Wasifu wako unaonyesha orodha fupi ya mambo ya kufanya, na inategemea uko hapa kwa ajili ya nini: watazamaji hutazama na kushiriki, na watayarishaji huchapisha.",
+      "p1": "Wasifu wako unaonyesha orodha fupi ya mambo ya kufanya, kulingana na kwa nini uko hapa: watazamaji na wasikilizaji hutazama, husikiliza na kushiriki, watayarishi huchapisha video, wanamuziki na watengenezaji wa podikasti huchapisha sauti, na watangazaji huandaa chapa yao.",
+      "p1NoAdvertisers": "Wasifu wako unaonyesha orodha fupi ya mambo ya kufanya, kulingana na kwa nini uko hapa: watazamaji na wasikilizaji hutazama, husikiliza na kushiriki, watayarishi huchapisha video, na wanamuziki na watengenezaji wa podikasti huchapisha sauti.",
       "p2": "Si mtihani. Ni njia tu ya sisi kutofautisha akaunti halisi na akaunti tupu au yenye nia mbaya. Orodha ikikamilika timu inakukagua na kukupandisha daraja haraka iwezekanavyo.",
       "perkEarn": "Machapisho yanayopata mapato",
       "perkKeys": "Funguo ambazo wewe pekee unazo",
@@ -495,7 +540,8 @@
     "viewerDone": {
       "watched": "umetazama {{time}}",
       "written": "umeandika {{items}}",
-      "followed": "umefuata {{items}}"
+      "followed": "umefuata {{items}}",
+      "watchedListened": "umetazama na kusikiliza kwa {{time}}"
     },
     "advertiser": {
       "lede": "Timu imekagua <b>{{name}}</b>. Fungua <b>akaunti yako ya Hive</b>, bure: inakuwa akaunti yako ya mtangazaji.",

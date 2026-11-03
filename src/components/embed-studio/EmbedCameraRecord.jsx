@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useVoiceTeleprompter } from '../../hooks/useVoiceTeleprompter';
-import { generateVideoThumbnails } from '../../utils/videoThumbnails';
+import { generateVideoThumbnailsAt } from '../../utils/videoThumbnails';
 import { cameraRecordEnabledFor, storiesEnabledFor, SHORTS_MAX_DURATION_SEC, STT_WS_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import { detectScriptLang, modelIdToTag } from '../../utils/detectLang';
@@ -784,7 +784,7 @@ function EmbedCameraRecord() {
     const file = new File([recordedBlob], `speak-recording-${Date.now()}.${fileExt}`, { type });
     const duration = elapsedRef.current || 0;
     let thumbs = [];
-    try { thumbs = await generateVideoThumbnails(file, 2); } catch { /* pick one next step */ }
+    try { thumbs = await generateVideoThumbnailsAt(file); } catch { /* pick one next step */ }
     stopStream();
     setGeneratedThumbnail(thumbs);
     setVideoFile(file);

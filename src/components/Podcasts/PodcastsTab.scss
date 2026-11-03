@@ -1325,3 +1325,24 @@ a.pod-person:hover .pod-person-name { color: var(--accent-primary); }
     text-align: left;
   }
 }
+
+// ─── Continue listening (Mine) ──
+.pod-continue-card {
+  .pod-card-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @media (hover: hover) { &:hover .pod-tile-play { opacity: 1; } }
+  &--current .pod-card-title { color: var(--accent-primary); }
+  &--revealed .pod-tile-play { opacity: 1; }
+}
+
+// Queue and Remove, top right of the cover: on hover, or after a long press.
+.pod-continue-actions {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+  .pod-continue-card--revealed & { display: flex; }
+  @media (hover: hover) { .pod-continue-card:hover & { display: flex; } }
+}

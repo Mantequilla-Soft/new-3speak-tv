@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { MdCheckCircle, MdRadioButtonUnchecked, MdExpandMore } from 'react-icons/md';
 import {
   FaRocket, FaVideo, FaMobileAlt, FaComments, FaUserPlus, FaClock, FaHourglassHalf,
-  FaUsers, FaIdCard, FaEnvelope,
+  FaUsers, FaIdCard, FaEnvelope, FaMicrophone, FaHeadphones,
 } from 'react-icons/fa';
 import AdvertiserContactForm from './AdvertiserContactForm';
 import AddSocialLink_modal from '../modal/AddSocialLink_modal';
@@ -32,10 +32,10 @@ import {
 // number from the one that is counted. Each `labelKey` has _one/_other forms
 // and is translated with { count: need }.
 
-// Watch time as a person would say it: "an hour", "20 minutes".
-function watchLabel(seconds, t) {
-  if (seconds >= 3600 && seconds % 3600 === 0) return t('incubation.progress.tasks.watch.labelHours', { count: seconds / 3600 });
-  return t('incubation.progress.tasks.watch.labelMinutes', { count: Math.round(seconds / 60) });
+// Watch or listening time as a person would say it: "an hour", "20 minutes".
+function watchLabel(seconds, t, type = 'watch') {
+  if (seconds >= 3600 && seconds % 3600 === 0) return t(`incubation.progress.tasks.${type}.labelHours`, { count: seconds / 3600 });
+  return t(`incubation.progress.tasks.${type}.labelMinutes`, { count: Math.round(seconds / 60) });
 }
 
 // Text is stored as i18n keys (translated at render): `labelKey` takes the
@@ -97,6 +97,42 @@ const TASK_COPY = {
     ],
     cta: { labelKey: 'incubation.progress.tasks.watch.cta', to: '/' },
   },
+  // Musicians and podcasters: their own audio. The upload window is a modal, so
+  // the call to action opens it (App.jsx listens for the event) instead of a page.
+  audio: {
+    Icon: FaMicrophone,
+    labelKey: 'incubation.progress.tasks.audio.label',
+    hintKey: 'incubation.progress.tasks.audio.hint',
+    whyKey: 'incubation.progress.tasks.audio.why',
+    countsKeys: [
+      'incubation.progress.tasks.audio.counts.0',
+      'incubation.progress.tasks.audio.counts.1',
+    ],
+    cta: { labelKey: 'incubation.progress.tasks.audio.cta', event: 'open-audio-upload' },
+  },
+  // Viewers and listeners: watching and listening together toward one target.
+  watchListen: {
+    Icon: FaClock,
+    // Label built by watchLabel (hours or minutes).
+    hintKey: 'incubation.progress.tasks.watchListen.hint',
+    whyKey: 'incubation.progress.tasks.watchListen.why',
+    countsKeys: [
+      'incubation.progress.tasks.watchListen.counts.0',
+      'incubation.progress.tasks.watchListen.counts.1',
+    ],
+    cta: { labelKey: 'incubation.progress.tasks.watchListen.cta', to: '/' },
+  },
+  listen: {
+    Icon: FaHeadphones,
+    // Label built by watchLabel (hours or minutes).
+    hintKey: 'incubation.progress.tasks.listen.hint',
+    whyKey: 'incubation.progress.tasks.listen.why',
+    countsKeys: [
+      'incubation.progress.tasks.listen.counts.0',
+      'incubation.progress.tasks.listen.counts.1',
+    ],
+    cta: { labelKey: 'incubation.progress.tasks.listen.cta', to: '/audio' },
+  },
   // The only goal with no call to action, deliberately: there is nothing to go
   // and do, which is the whole point of it. Its "what counts" list is built in
   // taskCounts so it can name the actual date from the server.
@@ -146,8 +182,8 @@ const TASK_COPY = {
 // still decides what comes first. A goal type this build does not know yet
 // lands in an untitled group at the end rather than disappearing.
 const GOAL_GROUPS = [
-  { id: 'create', types: ['video', 'short'], titleKey: 'incubation.progress.groups.create' },
-  { id: 'watch', types: ['watch', 'comment'], titleKey: 'incubation.progress.groups.watch' },
+  { id: 'create', types: ['video', 'short', 'audio'], titleKey: 'incubation.progress.groups.create' },
+  { id: 'watch', types: ['watch', 'listen', 'watchListen', 'comment'], titleKey: 'incubation.progress.groups.watch' },
   { id: 'connect', types: ['follow', 'subscription'], titleKey: 'incubation.progress.groups.connect' },
   { id: 'brand', types: ['profile', 'contact'], titleKey: 'incubation.progress.groups.brand' },
   { id: 'time', types: ['time'], titleKey: 'incubation.progress.groups.time' },
@@ -164,7 +200,7 @@ function groupTasks(tasks) {
 }
 
 const labelOf = (task, t) => {
-  if (task.type === 'watch') return watchLabel(task.need, t);
+  if (task.type === 'watch' || task.type === 'listen' || task.type === 'watchListen') return watchLabel(task.need, t, task.type);
   const key = TASK_COPY[task.type]?.labelKey;
   return key ? t(key, { count: task.need }) : task.type;
 };
@@ -486,11 +522,19 @@ export default function IncubationProgressPanel() {
                             {task.type === 'contact' && <AdvertiserContactForm />}
                             {/* No call to action on a finished goal: it would
                                 invite work that earns nothing. */}
-                            {copy.cta && !task.done && (
+                            {copy.cta && !task.done && (copy.cta.event ? (
+                              <button
+                                type="button"
+                                className="inc-task-cta"
+                                onClick={() => window.dispatchEvent(new CustomEvent(copy.cta.event))}
+                              >
+                                {t(copy.cta.labelKey)}
+                              </button>
+                            ) : (
                               <Link className="inc-task-cta" to={copy.cta.to}>
                                 {t(copy.cta.labelKey)}
                               </Link>
-                            )}
+                            ))}
                           </div>
                         )}
                       </li>

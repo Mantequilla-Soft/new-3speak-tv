@@ -116,7 +116,7 @@
     "starting": "Memulai…",
     "statusTitle": "Impor massalmu",
     "canLeave": "Kamu sudah bisa menutup halaman ini. Videomu diimpor dan dipublikasikan di server kami, juga saat kamu pergi.",
-    "stop": "Hentikan sisanya",
+    "stop": "Hentikan impor",
     "short": "Short",
     "status": {
       "queued": "Menunggu",
@@ -124,11 +124,16 @@
       "uploading": "Mengunggah ke 3Speak",
       "scheduling": "Menjadwalkan",
       "scheduled": "Terbit pukul {{time}}",
+      "scheduledIn": "Terbit pukul {{time}} ({{minutes}} mnt lagi)",
+      "publishingNow": "Sedang diterbitkan",
       "posted": "Diterbitkan",
       "failed": "Gagal",
       "publish_failed": "Gagal menerbitkan",
-      "cancelled": "Dihentikan"
-    }
+      "cancelled": "Dihentikan, tidak diterbitkan"
+    },
+    "stopConfirm": "Hentikan impor ini? Video yang belum diterbitkan akan dibatalkan, termasuk yang sudah dijadwalkan. Video yang sudah terbit tetap ada.",
+    "stopYes": "Ya, hentikan",
+    "stopKeep": "Lanjutkan impor"
   },
   "bitchute": {
     "noLink": "Anda belum menautkan akun BitChute. Tautkan dan verifikasi dulu di profil Anda, lalu kembali ke sini.",

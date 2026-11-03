@@ -1,8 +1,8 @@
 {
   "tracks": {
     "viewer": {
-      "title": "Sobre todo espectador",
-      "body": "Estoy aquí para ver, comentar y seguir a creadores."
+      "title": "Sobre todo espectador u oyente",
+      "body": "Estoy aquí para ver y escuchar, comentar y seguir a creadores."
     },
     "creator": {
       "title": "Sobre todo creador",
@@ -11,6 +11,14 @@
     "advertiser": {
       "title": "Un anunciante",
       "body": "Represento a una marca y quiero llegar a los espectadores de 3Speak."
+    },
+    "musician": {
+      "title": "Músico",
+      "body": "Hago música y quiero publicar mis temas."
+    },
+    "podcaster": {
+      "title": "Podcaster",
+      "body": "Hago un podcast y quiero publicar mis episodios."
     }
   },
   "tips": {
@@ -66,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "¿Qué te trae a 3Speak?",
-    "intro": "Tu camino hacia una cuenta de Hive depende de eso: los espectadores ven y participan, los creadores publican y los anunciantes configuran su marca.",
-    "introNoAdvertisers": "Tu camino hacia una cuenta de Hive depende de eso: los espectadores ven y participan, y los creadores publican."
+    "intro": "De ello depende tu camino hacia una cuenta de Hive: espectadores y oyentes miran, escuchan y participan, los creadores publican videos, músicos y podcasters publican audio, y los anunciantes configuran su marca.",
+    "introNoAdvertisers": "De ello depende tu camino hacia una cuenta de Hive: espectadores y oyentes miran, escuchan y participan, los creadores publican videos, y músicos y podcasters publican audio."
   },
   "tipCard": {
     "aria": "Consejo",
@@ -189,6 +197,48 @@
           "1": "Dirección: opcional.",
           "2": "Necesitas tu dirección O un sitio web en el perfil de tu marca de arriba, al menos uno de los dos."
         }
+      },
+      "audio": {
+        "label_one": "Publica un tema o un episodio",
+        "label_many": "Publica {{count}} temas o episodios",
+        "label_other": "Publica {{count}} temas o episodios",
+        "hint": "Una canción, un episodio de podcast o cualquier otra grabación.",
+        "why": "Tu audio es lo que el equipo escucha al revisarte, y lo que los visitantes encuentran en tu perfil.",
+        "counts": {
+          "0": "Cualquier audio que publiques desde Subir y luego Música / Audio.",
+          "1": "Sigue siendo tuyo. Cuando te actualicen, pasa a tu cuenta de Hive."
+        },
+        "cta": "Subir audio"
+      },
+      "listen": {
+        "labelHours_one": "Escucha una hora en 3Speak",
+        "labelHours_many": "Escucha {{count}} horas en 3Speak",
+        "labelHours_other": "Escucha {{count}} horas en 3Speak",
+        "labelMinutes_one": "Escucha un minuto en 3Speak",
+        "labelMinutes_many": "Escucha {{count}} minutos en 3Speak",
+        "labelMinutes_other": "Escucha {{count}} minutos en 3Speak",
+        "hint": "Cualquier música o podcast en el reproductor de audio de 3Speak. Cuenta mientras suena de verdad.",
+        "why": "Escuchar a otros es como músicos y podcasters encuentran su público y a su gente.",
+        "counts": {
+          "0": "Una vez por tema o episodio. Volver a escucharlo sube su mejor tiempo, nunca lo suma.",
+          "1": "No tu propio audio."
+        },
+        "cta": "Busca algo que escuchar"
+      },
+      "watchListen": {
+        "labelHours_one": "Mira o escucha una hora en 3Speak",
+        "labelHours_many": "Mira o escucha {{count}} horas en 3Speak",
+        "labelHours_other": "Mira o escucha {{count}} horas en 3Speak",
+        "labelMinutes_one": "Mira o escucha un minuto en 3Speak",
+        "labelMinutes_many": "Mira o escucha {{count}} minutos en 3Speak",
+        "labelMinutes_other": "Mira o escucha {{count}} minutos en 3Speak",
+        "hint": "Videos, música y podcasts cuentan todos juntos. Cuenta mientras se reproducen de verdad.",
+        "why": "Mirar y escuchar muestran que estás aquí para participar y no solo para publicar. Es la meta que la mayoría cumple sin proponérselo.",
+        "counts": {
+          "0": "Una vez por video, tema o episodio. Volver a reproducirlo sube su mejor tiempo, nunca lo suma.",
+          "1": "No tus propios videos o audios."
+        },
+        "cta": "Busca algo que ver o escuchar"
       }
     },
     "duration": {
@@ -262,8 +312,8 @@
       "aside": "Algunas cosas esperan a tu cuenta: ganar recompensas y dar propinas. Eso mueve dinero real, así que necesita una cuenta que realmente sea tuya."
     },
     "path": {
-      "p1": "Tu perfil muestra una lista corta de tareas, y depende de para qué estás aquí: los espectadores ven y participan, los creadores publican y los anunciantes configuran su marca.",
-      "p1NoAdvertisers": "Tu perfil muestra una lista corta de tareas, y depende de para qué estás aquí: los espectadores ven y participan, y los creadores publican.",
+      "p1": "Tu perfil muestra una lista corta de tareas, y depende de para qué estás aquí: espectadores y oyentes miran, escuchan y participan, los creadores publican videos, músicos y podcasters publican audio, y los anunciantes configuran su marca.",
+      "p1NoAdvertisers": "Tu perfil muestra una lista corta de tareas, y depende de para qué estás aquí: espectadores y oyentes miran, escuchan y participan, los creadores publican videos, y músicos y podcasters publican audio.",
       "p2": "No es un examen. Es simplemente la forma en que distinguimos una cuenta real de una vacía o maliciosa. Cuando completes la lista, el equipo te revisa y actualiza tu cuenta lo antes posible.",
       "perkEarn": "Publicaciones que generan ganancias",
       "perkKeys": "Claves que solo tú tienes",
@@ -523,7 +573,8 @@
     "viewerDone": {
       "watched": "visto {{time}}",
       "written": "escrito {{items}}",
-      "followed": "seguido a {{items}}"
+      "followed": "seguido a {{items}}",
+      "watchedListened": "has visto y escuchado {{time}}"
     },
     "advertiser": {
       "lede": "El equipo revisó <b>{{name}}</b>. Crea tu <b>cuenta de Hive</b>, gratis: será tu cuenta de anunciante.",
