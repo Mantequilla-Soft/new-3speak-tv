@@ -61,7 +61,13 @@ jobs:
           fi
           npm install --no-audit --no-fund
           npx playwright install --with-deps chromium
-      - run: npm run test:e2e
+      # Playwright's Chromium cannot play H.264, and a manifest that names its codecs
+      # (every new encode) then fails at once: the watch page shows the poster and no
+      # <video>. The runner's Google Chrome plays it (playwright.config.js E2E_CHROME).
+      - name: Browser tests
+        run: |
+          if command -v google-chrome >/dev/null; then export E2E_CHROME="$(command -v google-chrome)"; fi
+          npm run test:e2e
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
