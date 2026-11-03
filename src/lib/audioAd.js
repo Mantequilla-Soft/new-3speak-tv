@@ -3,8 +3,9 @@
  * 'audio'): a ticker campaign's message, rendered to speech on the checker, played
  * at its booked position while the track waits.
  *
- * Which tracks carry one is the checker's call (AD_AUDIO_TICKER_ALLOWED_OWNERS); the
- * player always asks for 3Speak audio and plays whatever comes back.
+ * Which tracks carry one is the checker's call (AD_AUDIO_TICKER_ALLOWED_OWNERS,
+ * AD_AUDIO_EXTERNAL_ENABLED); the player asks for 3Speak audio and outside podcast
+ * episodes alike and plays whatever comes back.
  *
  * Every failure path returns "no ad": a track must never fail to play because the ad
  * system had a bad day.
@@ -13,8 +14,14 @@ import { CHECKER_URL } from '../utils/config';
 import { adCapId, recentAdKeys } from './adBreak';
 
 /** Ask for a spot on this track. Null for "none", or for anything going wrong. */
-export async function requestAudioAd({ owner, permlink, viewer }) {
-  if (!owner || !permlink) return null;
+// The track is named one of three ways: owner + permlink (3Speak audio), owner +
+// postPermlink (an outside episode linking a 3Speak post, which the checker resolves
+// to the creator's track) or episodeId (an outside episode with no 3Speak creator).
+export async function requestAudioAd({ owner, permlink, postPermlink, episodeId, viewer }) {
+  const ref = owner && permlink ? { owner, permlink }
+    : owner && postPermlink ? { owner, postPermlink }
+      : episodeId ? { episodeId } : null;
+  if (!ref) return null;
   try {
     const res = await fetch(`${CHECKER_URL}/m/session`, {
       method: 'POST',
@@ -23,8 +30,7 @@ export async function requestAudioAd({ owner, permlink, viewer }) {
         surface: 'audio',
         // Only a player that can play one is handed one.
         audioSpot: true,
-        owner,
-        permlink,
+        ...ref,
         viewer: viewer || null,
         capId: adCapId(),
         recentAdKeys: recentAdKeys(),
