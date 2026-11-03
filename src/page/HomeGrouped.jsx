@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./HomeGrouped.scss";
 import { SkeletonCard, SpotlightSkeleton } from "../components/Cards/GridSkeleton";
 import Card3 from "../components/Cards/Card3";
@@ -28,6 +28,8 @@ import { fetchCommunityFeed } from "../lib/snaps";
 import { SnapCard } from "../components/Userprofilepage/CommunitySnaps";
 import { fetchPlaylistsFeed } from "../lib/playlistsFeed";
 import PlaylistFeedCard from "../components/Cards/PlaylistFeedCard";
+import AudioTile from "../components/AudioTile/AudioTile";
+import { audioItemPath } from "../components/AudioItem/AudioItemView";
 import { SHORTS_API_URL } from "../utils/config";
 import { Rocket, Compass, Users, Tags, Clock, GripVertical, Tv } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -285,6 +287,18 @@ const fetchNewContent = async (page = 1) => {
 
 const EMPTY_VIDEOS = [];
 
+// New 3Speak audio for the Discover community rows: the last 3 days, newest
+// first (the checker reads `from=3` as "3 days ago").
+const AUDIO_FEED_DAYS = 3;
+const AUDIO_FEED_PAGE = 50;
+// Service accounts whose audio and playlists never show in the feed (the audio
+// page hides the same ones, HIDDEN_AUDIO_OWNERS in Audio.jsx).
+const HIDDEN_OWNERS = new Set(['badadib']);
+const fetchFeedAudio = async (page = 1) => {
+  const res = await axios.get(appendNsfw(`${CHECKER_URL}/audio?from=${AUDIO_FEED_DAYS}&page=${page}&limit=${AUDIO_FEED_PAGE}`, useAppStore.getState().showNsfw));
+  return res.data?.audio || [];
+};
+
 // Warm-up videos slotted into a newest-first feed at their own date, ahead of
 // the first video older than them. One older than everything loaded so far
 // waits for the page that reaches its date (or the end of the feed), so it does
@@ -450,6 +464,7 @@ function useVisibleKeys(rootRef, sig, count) {
 const HomeGrouped = () => {
   const { t } = useTranslation();
   const { authenticated, user, showNsfw, hideWatched, hideAi, interests, simpleFeed } = useAppStore();
+  const navigate = useNavigate();
   const homeCardSize = useCardSize(); // large only on mobile, see hooks/useCardSize
   const spotlightSize = useAppStore((st) => st.spotlightSize);
   const setSpotlightSize = useAppStore((st) => st.setSpotlightSize);
@@ -842,34 +857,61 @@ const HomeGrouped = () => {
   const feedPlaylists = useMemo(
     // Your own playlists never show in your own feed (the checker also filters
     // them server-side — this covers pages cached before login/logout).
-    () => (playlistsQ.data?.pages || []).flat().filter((p) => p.owner !== user),
+    () => (playlistsQ.data?.pages || []).flat().filter((p) => p.owner !== user && !HIDDEN_OWNERS.has(p.owner)),
     [playlistsQ.data, user],
   );
 
-  // Blend the two streams into ONE list so playlists and snaps genuinely
-  // ALTERNATE rather than playlists tacking on at the end. At each step we emit
-  // from whichever stream is furthest "behind" its share, which spreads them
+  // ── New audio, also MIXED INTO the community stream (Discover only) ──
+  // One per creator, at most AUDIO_FEED_DAYS old, never your own.
+  const audioQ = useInfiniteQuery({
+    queryKey: ['feed-audio', showNsfw],
+    queryFn: ({ pageParam = 1 }) => fetchFeedAudio(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: nextPage(),
+    enabled: isDiscover,
+    retry: 1,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+  const feedAudio = useMemo(() => {
+    // Newest first, so the first one seen for an owner is their most recent.
+    const seen = new Set();
+    return (audioQ.data?.pages || []).flat().filter((a) => a.owner !== user
+      && !HIDDEN_OWNERS.has(a.owner) && !seen.has(a.owner) && seen.add(a.owner));
+  }, [audioQ.data, user]);
+
+  // Blend the streams (snaps, playlists, audio) into ONE list so they genuinely
+  // ALTERNATE rather than one tacking on at the end. At each step we emit from
+  // whichever stream is furthest "behind" its share, which spreads them
   // proportionally at ANY ratio: 3 snaps + 4 playlists → p,s,p,s,p,s,p;
-  // 20 snaps + 4 → a playlist roughly every 5th card. One-sided lists pass through.
+  // 20 snaps + 4 → a playlist roughly every 5th card. Ties go to the earlier
+  // stream. One-sided lists pass through.
   const feedCommunityMixed = useMemo(() => {
-    const snaps = feedCommunity.map((s) => ({ kind: 'snap', data: s }));
-    const pls = feedPlaylists.map((p) => ({ kind: 'playlist', data: p }));
-    if (!snaps.length) return pls;
-    if (!pls.length) return snaps;
+    // Podcasters publish each episode into a playlist, so the new audio also
+    // bumps that playlist into the feed. Show the episode, not the playlist too:
+    // a creator with new audio here gets no playlist card.
+    const audioOwners = new Set(feedAudio.map((a) => a.owner));
+    const streams = [
+      feedCommunity.map((s) => ({ kind: 'snap', data: s })),
+      feedPlaylists.filter((p) => !audioOwners.has(p.owner)).map((p) => ({ kind: 'playlist', data: p })),
+      feedAudio.map((a) => ({ kind: 'audio', data: a })),
+    ].filter((l) => l.length);
+    if (streams.length < 2) return streams[0] || [];
     const out = [];
-    let si = 0;
-    let pi = 0;
-    const S = snaps.length;
-    const P = pls.length;
-    while (si < S || pi < P) {
-      // Fractional progress each list would reach by advancing (+1 avoids /0).
-      const snapAhead = (si + 1) / (S + 1);
-      const plAhead = (pi + 1) / (P + 1);
-      if (pi >= P || (si < S && snapAhead <= plAhead)) out.push(snaps[si++]);
-      else out.push(pls[pi++]);
+    const at = streams.map(() => 0);
+    for (;;) {
+      let pick = -1;
+      let best = Infinity;
+      streams.forEach((l, k) => {
+        if (at[k] >= l.length) return;
+        // Fractional progress this list would reach by advancing (+1 avoids /0).
+        const ahead = (at[k] + 1) / (l.length + 1);
+        if (ahead < best) { best = ahead; pick = k; }
+      });
+      if (pick < 0) return out;
+      out.push(streams[pick][at[pick]++]);
     }
-    return out;
-  }, [feedCommunity, feedPlaylists]);
+  }, [feedCommunity, feedPlaylists, feedAudio]);
 
   // A mixed community row roughly every 3 rows (offset from the shorts' every-2).
   // Each slot packs up to a full grid-row of cards (snaps + playlists) that mirror
@@ -883,24 +925,32 @@ const HomeGrouped = () => {
     if (feedCommunityMixed.length >= communityNeeded * communityPerRow) return;
     if (communityQ.hasNextPage && !communityQ.isFetchingNextPage) communityQ.fetchNextPage();
     if (playlistsQ.hasNextPage && !playlistsQ.isFetchingNextPage) playlistsQ.fetchNextPage();
-  }, [communityMode, communityNeeded, communityPerRow, feedCommunityMixed.length, communityQ.hasNextPage, communityQ.isFetchingNextPage, playlistsQ.hasNextPage, playlistsQ.isFetchingNextPage]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (isDiscover && audioQ.hasNextPage && !audioQ.isFetchingNextPage) audioQ.fetchNextPage();
+  }, [communityMode, communityNeeded, communityPerRow, feedCommunityMixed.length, communityQ.hasNextPage, communityQ.isFetchingNextPage, playlistsQ.hasNextPage, playlistsQ.isFetchingNextPage, isDiscover, audioQ.hasNextPage, audioQ.isFetchingNextPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderCommunityRow = useCallback((slot) => {
     const start = slot * communityPerRow;
     const group = feedCommunityMixed.slice(start, start + communityPerRow);
     if (!group.length) return null;
     // Wrap in .community-snaps so the SnapCards' (nested) styles apply; --row makes
-    // it a full-width grid that mirrors the video columns. Playlist cards ride the
-    // same row (sized to match via .community-snaps--row .playlist-feed-card).
+    // it a full-width grid that mirrors the video columns. Playlist and audio cards
+    // ride the same row (sized to match via .community-snaps--row .playlist-feed-card
+    // / .audio-tile). The audio cover plays; its title opens the audio's page.
     return (
       <div className="community-snaps community-snaps--feed community-snaps--row">
-        {group.map((el) => (el.kind === 'playlist'
-          ? <PlaylistFeedCard key={`pl-${el.data.id}`} playlist={el.data} />
-          : <SnapCard key={`${el.data.owner}/${el.data.permlink}`} snap={el.data} feedMode onRemove={removeSnap} />
-        ))}
+        {group.map((el) => {
+          if (el.kind === 'playlist') return <PlaylistFeedCard key={`pl-${el.data.id}`} playlist={el.data} />;
+          if (el.kind === 'audio') {
+            return (
+              <AudioTile key={`au-${el.data._id}`} item={el.data} contextItems={feedAudio}
+                onOpen={() => navigate(audioItemPath(el.data))} />
+            );
+          }
+          return <SnapCard key={`${el.data.owner}/${el.data.permlink}`} snap={el.data} feedMode onRemove={removeSnap} />;
+        })}
       </div>
     );
-  }, [feedCommunityMixed, removeSnap, communityPerRow]);
+  }, [feedCommunityMixed, removeSnap, communityPerRow, feedAudio, navigate]);
 
   // "Follow these" rail, injected as a full-width grid row (like the community/snaps
   // rows). Shown ONCE — only slot 0 — so it's a single suggestion strip, not a
