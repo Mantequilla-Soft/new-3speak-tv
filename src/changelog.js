@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.54',
+    category: 'audio',
+    date: '2026-11-03',
+    summary: "Episodes from 3Speak shows you follow under External now have Vote, Comments, Hype and Tip, and their show notes display tables and links properly.",
+  },
+  {
     version: '1.81.51',
     category: 'general',
     date: '2026-11-02',

@@ -1531,7 +1531,7 @@ function GlobalAudioPlayer() {
             {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={20} /></button>}
             {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
             {nowPlaying.post_permlink && user !== nowPlaying.owner && <button className="audio-np-tip-btn" onClick={() => setTipTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink })} title={t('audio.post.tip')}><BiDollar size={18} /></button>}
-            {nowPlaying.external && canTipEpisode(nowPlaying) && <button className="audio-np-tip-btn" onClick={() => setPodcastTip(nowPlaying)} title={t('audio.podcasts.tip.button')}><BiDollar size={18} /></button>}
+            {nowPlaying.external && !nowPlaying.post_permlink && canTipEpisode(nowPlaying) && <button className="audio-np-tip-btn" onClick={() => setPodcastTip(nowPlaying)} title={t('audio.podcasts.tip.button')}><BiDollar size={18} /></button>}
             {shareButton(16)}
             {hasTranscript && <button className={`audio-np-sub-btn${showSubtitles ? ' active' : ''}`} onClick={() => setShowSubtitles(!showSubtitles)} title={t('audio.player.transcript')} aria-pressed={showSubtitles}><MdSubtitles size={18} /></button>}
             {timeOrLive}
@@ -1601,8 +1601,9 @@ function GlobalAudioPlayer() {
                 <UpvoteCount count={npVoteCount} voted={npIsVoted} onClick={() => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink }); setShowVoteTooltip(!showVoteTooltip); }} size={12} />
               )}
               {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={18} /></button>}
-              {/* A 3Speak audio's Hive post: comment on it and hype it. */}
-              {loggedIn && !nowPlaying.external && nowPlaying.post_permlink && (
+              {/* A 3Speak audio's Hive post (also a 3Speak episode followed as an
+                  outside show, lib/podcasts.js threeSpeakPost): comment on it and hype it. */}
+              {loggedIn && nowPlaying.post_permlink && (
                 <button
                   className="audio-np-playlist-btn audio-np-comment-btn"
                   onClick={() => setCommentTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink, title: nowPlaying.title, at: isLive ? 0 : audioRef.current?.currentTime })}
@@ -1612,10 +1613,10 @@ function GlobalAudioPlayer() {
                   <MdChatBubbleOutline size={17} />
                 </button>
               )}
-              {!nowPlaying.external && nowPlaying.post_permlink && <AudioHypeButton author={nowPlaying.owner} permlink={nowPlaying.post_permlink} size={16} />}
+              {nowPlaying.post_permlink && <AudioHypeButton author={nowPlaying.owner} permlink={nowPlaying.post_permlink} size={16} />}
               {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
               {nowPlaying.post_permlink && user !== nowPlaying.owner && <button className="audio-np-tip-btn" onClick={() => setTipTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink })} title={t('audio.post.tip')}><BiDollar size={16} /></button>}
-              {nowPlaying.external && canTipEpisode(nowPlaying) && <button className="audio-np-tip-btn" onClick={() => setPodcastTip(nowPlaying)} title={t('audio.podcasts.tip.button')}><BiDollar size={16} /></button>}
+              {nowPlaying.external && !nowPlaying.post_permlink && canTipEpisode(nowPlaying) && <button className="audio-np-tip-btn" onClick={() => setPodcastTip(nowPlaying)} title={t('audio.podcasts.tip.button')}><BiDollar size={16} /></button>}
               {shareButton(16)}
               {hasTranscript && <button className={`audio-np-sub-btn${showSubtitles ? ' active' : ''}`} onClick={() => setShowSubtitles(!showSubtitles)} title={t('audio.player.transcript')} aria-pressed={showSubtitles}><MdSubtitles size={16} /></button>}
               {timeOrLive}
@@ -1790,8 +1791,8 @@ function GlobalAudioPlayer() {
                   </div>
                 )}
                 {!nowPlaying.post_permlink && npBody && <div className="audio-np-body">{npBody}</div>}
-                {/* The full show notes are on the episode page. */}
-                {nowPlaying.external && !isLive && nowPlaying.summary && (
+                {/* The full show notes are on the episode page. A 3Speak episode shows its Hive post above. */}
+                {nowPlaying.external && !isLive && !nowPlaying.post_permlink && nowPlaying.summary && (
                   <button
                     type="button"
                     className="audio-np-body audio-np-body--link"

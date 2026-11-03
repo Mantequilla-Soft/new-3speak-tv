@@ -7,8 +7,10 @@ const UPLOAD_URL = import.meta.env.VITE_UPLOAD_URL;
 // Ordered player backends (primary first). VITE_PLAYER_URLS is a comma-separated list
 // used for automatic fallback (see utils/playerUrl.js); a single VITE_PLAYER_URL still
 // works. PLAYER_URL is the provisional primary — prefer getPlayerUrl() at use-time so
-// callers pick up the health-resolved backend.
-const PLAYER_URLS = (import.meta.env.VITE_PLAYER_URLS || import.meta.env.VITE_PLAYER_URL || '')
+// callers pick up the health-resolved backend. Without either, play.3speak.tv (like
+// CHECKER_URL's default): an empty one made a build without .env (CI) ask its own
+// origin, and a post written around a 3Speak embed then opened as a text post.
+const PLAYER_URLS = (import.meta.env.VITE_PLAYER_URLS || import.meta.env.VITE_PLAYER_URL || 'https://play.3speak.tv')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);

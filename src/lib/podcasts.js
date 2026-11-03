@@ -443,14 +443,39 @@ export function onArtError(e) {
 
 // ─── Playing ──────────────────────────────────────────────────────────────────
 
-/** An episode as a track for the global audio player. */
+/**
+ * The Hive post behind an episode that is really 3Speak content (a 3Speak RSS
+ * feed followed as an outside show): its link is the post's 3Speak page,
+ * `3speak.tv/watch?v=<owner>/<permlink>` (checker routes/rss.js) or the
+ * Hive-style `3speak.tv/@<owner>/<permlink>`. Null for any other link.
+ */
+export function threeSpeakPost(link) {
+  let url;
+  try { url = new URL(link); } catch { return null; }
+  if (!/^(www\.)?3speak\.tv$/i.test(url.hostname)) return null;
+  const ref = url.pathname === '/watch'
+    ? url.searchParams.get('v') || ''
+    : decodeURIComponent(url.pathname).replace(/^\/@/, '');
+  const m = /^([a-z0-9][a-z0-9.-]{1,15})\/([a-z0-9-]+)$/i.exec(ref);
+  return m && (url.pathname === '/watch' || url.pathname.startsWith('/@'))
+    ? { author: m[1].toLowerCase(), permlink: m[2] }
+    : null;
+}
+
+/**
+ * An episode as a track for the global audio player. A 3Speak episode carries
+ * its Hive post (`owner` + `post_permlink`), so the player shows votes, comments,
+ * Hype and the Hive tip for it like for any 3Speak audio.
+ */
 export function episodeToTrack(ep, feed) {
+  const post = threeSpeakPost(ep.link);
   return {
     _id: ep.id,
     external: true,
     src: ep.audio_url,
     title: ep.title,
-    owner: '',
+    owner: post?.author || '',
+    ...(post ? { post_permlink: post.permlink } : {}),
     show: feed?.title || '',
     show_id: ep.feed_id,
     thumbnail_url: ep.image || feed?.image || '',
