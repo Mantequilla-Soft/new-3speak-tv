@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.58',
+    category: 'audio',
+    date: '2026-11-03',
+    summary: "Remove an episode or track from Continue listening with the corner button, or with a long press on your phone. It only leaves that list; your history stays.",
+  },
+  {
+    version: '1.81.57',
+    category: 'audio',
+    date: '2026-11-03',
+    summary: "Mine on the audio page now starts with Continue listening: podcast episodes and 3Speak audio you stopped partway through, on any device. Tap one to play on from where you left off.",
+  },
+  {
     version: '1.81.56',
     category: 'upload',
     date: '2026-11-03',

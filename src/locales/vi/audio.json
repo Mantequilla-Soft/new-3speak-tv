@@ -628,7 +628,14 @@
       "hide": "Ẩn video"
     },
     "signInToFollow": "Đăng nhập để theo dõi podcast",
-    "addExternal": "Thêm podcast bên ngoài"
+    "addExternal": "Thêm podcast bên ngoài",
+    "continue": {
+      "title": "Nghe tiếp",
+      "left": "còn {{minutes}} phút",
+      "remove": "Xóa khỏi Nghe tiếp",
+      "removed": "Đã xóa khỏi Nghe tiếp",
+      "removeFailed": "Không xóa được. Vui lòng thử lại."
+    }
   },
   "item": {
     "back": "Tất cả âm thanh",

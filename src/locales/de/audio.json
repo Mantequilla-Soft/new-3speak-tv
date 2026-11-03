@@ -653,7 +653,14 @@
       "hide": "Video ausblenden"
     },
     "signInToFollow": "Melde dich an, um Podcasts zu folgen",
-    "addExternal": "Externen Podcast hinzufügen"
+    "addExternal": "Externen Podcast hinzufügen",
+    "continue": {
+      "title": "Weiterhören",
+      "left": "noch {{minutes}} Min.",
+      "remove": "Aus „Weiterhören“ entfernen",
+      "removed": "Aus „Weiterhören“ entfernt",
+      "removeFailed": "Konnte nicht entfernt werden. Bitte versuch es noch einmal."
+    }
   },
   "item": {
     "back": "Alle Audios",

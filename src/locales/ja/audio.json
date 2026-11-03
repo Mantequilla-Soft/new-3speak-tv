@@ -628,7 +628,14 @@
       "hide": "動画を隠す"
     },
     "signInToFollow": "ポッドキャストをフォローするにはログインしてください",
-    "addExternal": "外部ポッドキャストを追加"
+    "addExternal": "外部ポッドキャストを追加",
+    "continue": {
+      "title": "続きを聴く",
+      "left": "残り{{minutes}}分",
+      "remove": "「続きを聴く」から削除",
+      "removed": "「続きを聴く」から削除しました",
+      "removeFailed": "削除できませんでした。もう一度お試しください。"
+    }
   },
   "item": {
     "back": "すべてのオーディオ",

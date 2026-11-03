@@ -628,7 +628,14 @@
       "hide": "隐藏视频"
     },
     "signInToFollow": "登录后即可关注播客",
-    "addExternal": "添加外部播客"
+    "addExternal": "添加外部播客",
+    "continue": {
+      "title": "继续收听",
+      "left": "还剩 {{minutes}} 分钟",
+      "remove": "从继续收听中移除",
+      "removed": "已从继续收听中移除",
+      "removeFailed": "无法移除，请重试。"
+    }
   },
   "item": {
     "back": "全部音频",

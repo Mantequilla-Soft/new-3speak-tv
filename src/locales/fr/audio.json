@@ -678,7 +678,14 @@
       "hide": "Masquer la vidéo"
     },
     "signInToFollow": "Connectez-vous pour suivre des podcasts",
-    "addExternal": "Ajouter un podcast externe"
+    "addExternal": "Ajouter un podcast externe",
+    "continue": {
+      "title": "Reprendre l'écoute",
+      "left": "encore {{minutes}} min",
+      "remove": "Retirer de Reprendre l'écoute",
+      "removed": "Retiré de Reprendre l'écoute",
+      "removeFailed": "Impossible de le retirer. Réessaie."
+    }
   },
   "item": {
     "back": "Tous les audios",

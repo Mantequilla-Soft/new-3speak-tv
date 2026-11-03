@@ -628,7 +628,14 @@
       "hide": "Sembunyikan video"
     },
     "signInToFollow": "Masuk untuk mengikuti podcast",
-    "addExternal": "Tambah podcast eksternal"
+    "addExternal": "Tambah podcast eksternal",
+    "continue": {
+      "title": "Lanjutkan mendengarkan",
+      "left": "{{minutes}} mnt lagi",
+      "remove": "Hapus dari Lanjutkan mendengarkan",
+      "removed": "Dihapus dari Lanjutkan mendengarkan",
+      "removeFailed": "Tidak bisa dihapus. Coba lagi."
+    }
   },
   "item": {
     "back": "Semua audio",

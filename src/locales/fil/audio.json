@@ -653,7 +653,14 @@
       "hide": "Itago ang video"
     },
     "signInToFollow": "Mag-sign in para i-follow ang mga podcast",
-    "addExternal": "Magdagdag ng external podcast"
+    "addExternal": "Magdagdag ng external podcast",
+    "continue": {
+      "title": "Ituloy ang pakikinig",
+      "left": "{{minutes}} min na lang",
+      "remove": "Alisin sa Ituloy ang pakikinig",
+      "removed": "Inalis sa Ituloy ang pakikinig",
+      "removeFailed": "Hindi ito maalis. Subukan ulit."
+    }
   },
   "item": {
     "back": "Lahat ng audio",

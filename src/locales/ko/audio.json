@@ -628,7 +628,14 @@
       "hide": "동영상 숨기기"
     },
     "signInToFollow": "팟캐스트를 팔로우하려면 로그인하세요",
-    "addExternal": "외부 팟캐스트 추가"
+    "addExternal": "외부 팟캐스트 추가",
+    "continue": {
+      "title": "이어 듣기",
+      "left": "{{minutes}}분 남음",
+      "remove": "이어 듣기에서 삭제",
+      "removed": "이어 듣기에서 삭제했습니다",
+      "removeFailed": "삭제하지 못했습니다. 다시 시도해 주세요."
+    }
   },
   "item": {
     "back": "모든 오디오",

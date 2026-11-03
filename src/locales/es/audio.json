@@ -678,7 +678,14 @@
       "hide": "Ocultar video"
     },
     "signInToFollow": "Inicia sesión para seguir podcasts",
-    "addExternal": "Añadir podcast externo"
+    "addExternal": "Añadir podcast externo",
+    "continue": {
+      "title": "Seguir escuchando",
+      "left": "quedan {{minutes}} min",
+      "remove": "Quitar de Seguir escuchando",
+      "removed": "Quitado de Seguir escuchando",
+      "removeFailed": "No se pudo quitar. Inténtalo de nuevo."
+    }
   },
   "item": {
     "back": "Todo el audio",

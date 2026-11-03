@@ -249,3 +249,49 @@ export function usePodcastProgress(user, { feedId, ids } = {}) {
 if (typeof window !== 'undefined') {
   window.addEventListener('pagehide', () => { flushProgress({ keepalive: true }); });
 }
+
+/**
+ * Continue listening (the audio page's Mine): what `user` left half way, newest
+ * first, from the checker (routes/podcasts.js /progress/recent). Each item is
+ * { id, kind: 'episode' | 'track', pos, dur, at } plus `episode` + `feed` or
+ * `track`. Their own listening history, so it goes with the session vouch.
+ * Empty when the session can't be proven.
+ */
+export async function fetchContinueListening(user) {
+  if (!user) return [];
+  const v = await sessionVouch(user);
+  if (!v) return [];
+  const res = await fetch(`${API}/progress/recent`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user, signature: v.signature, timestamp: v.timestamp }),
+  });
+  if (!res.ok) throw new Error(`continue listening: ${res.status}`);
+  const data = await res.json();
+  // Seed this browser's copy, so the bars and the resume spot agree with it.
+  let changed = false;
+  for (const it of data.items || []) {
+    const mine = map.get(it.id);
+    if (owner === user && (!mine || it.pos > mine.pos) && !mine?.done) {
+      map.set(it.id, { pos: it.pos, dur: it.dur || mine?.dur || 0, done: false, at: mine?.at || 0 });
+      changed = true;
+    }
+  }
+  if (changed) { saveLocal(); emit(); }
+  return data.items || [];
+}
+
+/**
+ * Remove `id` from `user`'s Continue listening, or bring it back (`hidden` false,
+ * the Undo). Only that list changes: the position and the listen history stay.
+ */
+export async function hideFromContinue(user, id, hidden = true) {
+  const v = await sessionVouch(user);
+  if (!v) throw new Error('not signed in');
+  const res = await fetch(`${API}/progress/hide`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user, id, hidden, signature: v.signature, timestamp: v.timestamp }),
+  });
+  if (!res.ok) throw new Error(`continue listening hide: ${res.status}`);
+}

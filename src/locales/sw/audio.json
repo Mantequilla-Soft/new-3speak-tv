@@ -653,7 +653,14 @@
       "hide": "Ficha video"
     },
     "signInToFollow": "Ingia ili kufuata podikasti",
-    "addExternal": "Ongeza podikasti ya nje"
+    "addExternal": "Ongeza podikasti ya nje",
+    "continue": {
+      "title": "Endelea kusikiliza",
+      "left": "zimebaki dak {{minutes}}",
+      "remove": "Ondoa kwenye Endelea kusikiliza",
+      "removed": "Imeondolewa kwenye Endelea kusikiliza",
+      "removeFailed": "Imeshindikana kuondoa. Jaribu tena."
+    }
   },
   "item": {
     "back": "Sauti zote",
