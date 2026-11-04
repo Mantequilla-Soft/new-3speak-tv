@@ -582,8 +582,9 @@
   // 🚨 Every :not(.x) adds a class's worth of specificity, so this rule OUTRANKS
   // `button.nav-guest-login` below whatever the source order. The guest buttons are
   // excluded here instead of relying on order: the second :not() is what turned
-  // Log in into a grey 5px box.
-  > .nav-right button:not(.notif-bell-btn):not(.chat-nav-btn):not(.nav-guest-login):not(.nav-guest-signup) {
+  // Log in into a grey 5px box. The bell dropdown's own small pills (Notify me,
+  // Mark all read) are excluded for the same reason.
+  > .nav-right button:not(.notif-bell-btn):not(.chat-nav-btn):not(.nav-guest-login):not(.nav-guest-signup):not(.notif-dropdown button) {
     padding: 7px 25px;
     border-radius: 5px;
     font-weight: 500;
