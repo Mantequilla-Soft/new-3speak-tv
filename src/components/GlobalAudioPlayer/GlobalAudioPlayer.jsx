@@ -1095,18 +1095,38 @@ function GlobalAudioPlayer() {
   // and control (Media Session). Without it Android shows the tab's title and
   // the site icon instead of the track.
   const sessionTitle = audioCurrent ? audioCurrent.title || t('audio.untitled') : '';
-  useEffect(() => {
+  const applySessionMetadata = useCallback(() => {
     const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
     if (!ms || typeof window.MediaMetadata !== 'function') return;
-    if (!audioCurrent) { ms.metadata = null; return; }
+    const cur = useAppStore.getState().audioCurrent;
+    if (!cur) { ms.metadata = null; return; }
     ms.metadata = new window.MediaMetadata({
-      title: sessionTitle,
-      artist: trackArtist(audioCurrent),
-      album: audioCurrent.external ? '' : '3Speak',
-      artwork: sessionArtwork(audioCurrent),
+      title: cur.title || t('audio.untitled'),
+      artist: trackArtist(cur),
+      album: cur.external ? '' : '3Speak',
+      artwork: sessionArtwork(cur),
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [audioCurrent?._id, sessionTitle]);
+  }, [t]);
+  useEffect(() => {
+    applySessionMetadata();
+  }, [audioCurrent?._id, sessionTitle, applySessionMetadata]);
+
+  // Told again once the new source really plays. A new source makes iOS (and a
+  // swapped element makes Android) drop what the lock screen showed, so a track
+  // that started from the queue with the screen off kept the last one, or showed
+  // nothing playing at all. Once per source, not on every resume after buffering.
+  useEffect(() => {
+    const el = audioRef.current;
+    const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
+    if (!el || !ms) return undefined;
+    let toldFor = null;
+    const onPlaying = () => {
+      if (el.currentSrc !== toldFor) { toldFor = el.currentSrc; applySessionMetadata(); }
+      ms.playbackState = 'playing';
+    };
+    el.addEventListener('playing', onPlaying);
+    return () => el.removeEventListener('playing', onPlaying);
+  }, [elKey, applySessionMetadata]);
 
   useEffect(() => {
     const ms = typeof navigator !== 'undefined' ? navigator.mediaSession : undefined;
@@ -1148,7 +1168,7 @@ function GlobalAudioPlayer() {
         ms.setPositionState({ duration: d, position: Math.min(d, Math.max(0, el.currentTime || 0)), playbackRate: el.playbackRate || 1 });
       } catch { /* a value the browser didn't like */ }
     };
-    const events = ['loadedmetadata', 'durationchange', 'ratechange', 'seeked', 'play', 'pause'];
+    const events = ['loadedmetadata', 'durationchange', 'ratechange', 'seeked', 'play', 'playing', 'pause'];
     for (const e of events) el.addEventListener(e, update);
     update();
     return () => { for (const e of events) el.removeEventListener(e, update); };

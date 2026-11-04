@@ -146,7 +146,8 @@
       "notAnnouncedAuth": "Non annunciata su Hive: 3Speak non può ancora pubblicare per te. Modifica il modello per consentirlo.",
       "stuck": "OBS si è connesso, ma non ci è arrivato alcun video, quindi la diretta non è partita. Interrompi lo streaming in OBS e riavvialo.",
       "dailyLimit": "OBS non è riuscito ad andare in diretta: gli account gratuiti possono avviare una diretta al giorno. Riprova 24 ore dopo l'inizio della tua ultima diretta, oppure passa a 3Speak Pro per trasmettere senza limite giornaliero.",
-      "useInStudio": "Usa in Stream Studio"
+      "useInStudio": "Usa in Stream Studio",
+      "proRequired": "OBS non è riuscito ad andare in diretta: trasmettere da OBS fa parte di 3Speak Pro."
     },
     "guide": {
       "title": "Come configurare OBS",
@@ -250,6 +251,11 @@
       "liveFor": "Tempo in diretta",
       "timeLeft": "Tempo rimasto prima della fine della diretta",
       "boosts": "Boost ricevuti in questa diretta (USD)"
+    },
+    "pro": {
+      "title": "Trasmettere da OBS fa parte di 3Speak Pro",
+      "desc": "Con 3Speak Pro puoi andare in diretta direttamente da OBS usando i tuoi modelli. Senza Pro, i tuoi modelli funzionano comunque nello Stream Studio del tuo browser.",
+      "cta": "Ottieni 3Speak Pro"
     }
   }
 }

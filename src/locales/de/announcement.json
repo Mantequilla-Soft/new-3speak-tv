@@ -9,5 +9,6 @@
   "sending": "Wird gesendet…",
   "replySent": "Danke! Deine Antwort wurde gesendet.",
   "replyFailed": "Deine Antwort konnte nicht gesendet werden. Bitte versuche es erneut.",
-  "replyTooMany": "Du hast gerade mehrere Antworten gesendet. Bitte versuche es in ein paar Minuten erneut."
+  "replyTooMany": "Du hast gerade mehrere Antworten gesendet. Bitte versuche es in ein paar Minuten erneut.",
+  "translateFailed": "Diese Nachricht konnte nicht übersetzt werden. Bitte versuche es erneut."
 }

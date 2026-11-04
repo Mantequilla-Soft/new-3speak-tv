@@ -9,5 +9,6 @@
   "sending": "Mengirim…",
   "replySent": "Terima kasih! Balasan Anda telah terkirim.",
   "replyFailed": "Balasan Anda tidak dapat dikirim. Silakan coba lagi.",
-  "replyTooMany": "Anda baru saja mengirim beberapa balasan. Silakan coba lagi dalam beberapa menit."
+  "replyTooMany": "Anda baru saja mengirim beberapa balasan. Silakan coba lagi dalam beberapa menit.",
+  "translateFailed": "Pesan ini tidak dapat diterjemahkan. Silakan coba lagi."
 }

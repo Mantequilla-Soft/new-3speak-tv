@@ -28,6 +28,13 @@ const HOLD_MAX_MS = 2500;
 // A pre-roll that starts later than this into the track does not rewind it.
 const REWIND_WITHIN_S = 3;
 
+// Screen locked or app in the background: nothing may interrupt the track there.
+// A pause loses the lock screen's player (it shows nothing playing), and on iPhone
+// the track, or a spot on its own element, can't start again without a tap. So
+// the opening is not held, and a spot that comes due then is passed over for this
+// track (the next track asks again).
+const hidden = () => typeof document !== 'undefined' && document.visibilityState === 'hidden';
+
 // Outside episodes carry spots too. One whose link names a 3Speak post
 // (lib/podcasts.js threeSpeakPost, the same check that gives it votes and comments)
 // is that creator's audio: the checker turns the post into their track, so the spot
@@ -71,7 +78,7 @@ export default function useAudioAd(audioRef, track, elementKey) {
     // Hold the opening while the answer is out (see the top).
     const main = audioRef.current;
     const hold = () => {
-      if (!cur.pending || !main || main.currentTime >= REWIND_WITHIN_S) return;
+      if (!cur.pending || !main || main.currentTime >= REWIND_WITHIN_S || hidden()) return;
       cur.held = true;
       main.pause();
     };
@@ -153,11 +160,16 @@ export default function useAudioAd(audioRef, track, elementKey) {
     const due = () => {
       if (cur.active || cur.done) return null;
       const pct = spot.positionPercent;
-      if (pct <= 0) return 0;
-      const d = useAppStore.getState().audioDuration || main.duration;
-      if (!(Number.isFinite(d) && d > 0)) return null;
-      const at = (pct / 100) * d;
-      return main.currentTime >= at ? at : null;
+      let at = 0;
+      if (pct > 0) {
+        const d = useAppStore.getState().audioDuration || main.duration;
+        if (!(Number.isFinite(d) && d > 0)) return null;
+        at = (pct / 100) * d;
+        if (main.currentTime < at) return null;
+      }
+      // Due with the screen locked: passed over (see `hidden` at the top).
+      if (hidden()) { cur.done = true; return null; }
+      return at;
     };
 
     const onMainPlay = () => {

@@ -9,5 +9,6 @@
   "sending": "Invio…",
   "replySent": "Grazie! La tua risposta è stata inviata.",
   "replyFailed": "Non è stato possibile inviare la tua risposta. Riprova.",
-  "replyTooMany": "Hai appena inviato diverse risposte. Riprova tra qualche minuto."
+  "replyTooMany": "Hai appena inviato diverse risposte. Riprova tra qualche minuto.",
+  "translateFailed": "Non è stato possibile tradurre questo messaggio. Riprova."
 }

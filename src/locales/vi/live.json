@@ -144,7 +144,8 @@
       "notAnnouncedAuth": "Chưa thông báo trên Hive: 3Speak chưa được phép đăng bài thay bạn. Hãy sửa mẫu để cho phép.",
       "stuck": "OBS đã kết nối nhưng không có video nào đến được chỗ chúng tôi, nên buổi phát chưa bắt đầu. Hãy dừng phát trong OBS rồi bắt đầu lại.",
       "dailyLimit": "OBS không thể phát trực tiếp: tài khoản miễn phí chỉ được bắt đầu một buổi phát mỗi ngày. Hãy thử lại 24 giờ sau khi buổi phát trước bắt đầu, hoặc dùng 3Speak Pro để phát không giới hạn mỗi ngày.",
-      "useInStudio": "Dùng trong Stream Studio"
+      "useInStudio": "Dùng trong Stream Studio",
+      "proRequired": "OBS không thể phát trực tiếp: phát trực tiếp từ OBS là một phần của 3Speak Pro."
     },
     "guide": {
       "title": "Cách thiết lập OBS",
@@ -248,6 +249,11 @@
       "liveFor": "Thời gian phát",
       "timeLeft": "Thời gian còn lại trước khi buổi phát kết thúc",
       "boosts": "Boost nhận được trong buổi phát này (USD)"
+    },
+    "pro": {
+      "title": "Phát trực tiếp từ OBS là một phần của 3Speak Pro",
+      "desc": "Với 3Speak Pro, bạn có thể phát trực tiếp ngay từ OBS bằng các mẫu của mình. Không có Pro, các mẫu của bạn vẫn dùng được trong Stream Studio trên trình duyệt.",
+      "cta": "Nhận 3Speak Pro"
     }
   }
 }

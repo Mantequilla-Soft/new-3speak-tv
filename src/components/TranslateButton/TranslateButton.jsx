@@ -6,7 +6,8 @@ import { ImSpinner9 } from 'react-icons/im';
 import { SUPPORTED_LANGUAGES, getTargetLanguage, setTargetLanguage } from '../../utils/translate';
 import './TranslateButton.scss';
 
-export default function TranslateButton({ onTranslate, isTranslating, compact }) {
+// `languages` narrows the menu (default: every language the app knows).
+export default function TranslateButton({ onTranslate, isTranslating, compact, languages = SUPPORTED_LANGUAGES }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const btnRef = useRef(null);
@@ -88,11 +89,11 @@ export default function TranslateButton({ onTranslate, isTranslating, compact })
 
   // Sort: selected language first, then the rest in original order
   const sortedLanguages = useMemo(() => {
-    if (!saved) return SUPPORTED_LANGUAGES;
-    const selected = SUPPORTED_LANGUAGES.find(l => l.code === saved);
-    if (!selected) return SUPPORTED_LANGUAGES;
-    return [selected, ...SUPPORTED_LANGUAGES.filter(l => l.code !== saved)];
-  }, [saved]);
+    if (!saved) return languages;
+    const selected = languages.find(l => l.code === saved);
+    if (!selected) return languages;
+    return [selected, ...languages.filter(l => l.code !== saved)];
+  }, [saved, languages]);
 
   const menu = open && createPortal(
     <div

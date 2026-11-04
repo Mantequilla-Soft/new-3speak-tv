@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.65',
+    category: 'notifications',
+    date: '2026-11-04',
+    summary: "You can now mark all notifications as read right from the bell menu.",
+  },
+  {
+    version: '1.81.64',
+    category: 'general',
+    date: '2026-11-04',
+    summary: "When you reply to a message from the 3Speak team, the button at the bottom of the popup now sends your reply.",
+  },
+  {
+    version: '1.81.63',
+    category: 'general',
+    date: '2026-11-04',
+    summary: "You can now translate messages from the 3Speak team into another language and copy their text with one tap.",
+  },
+  {
     version: '1.81.62',
     category: 'home',
     date: '2026-11-03',

@@ -3,7 +3,7 @@ import useHoverPeek from '../../hooks/useHoverPeek';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { IoIosNotifications } from 'react-icons/io';
-import { MdNotificationsActive, MdNotificationsOff } from 'react-icons/md';
+import { MdNotificationsActive, MdNotificationsOff, MdDoneAll } from 'react-icons/md';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import {
@@ -100,6 +100,7 @@ function NotificationBell() {
     unreadCount,
     isUnread,
     markAllAsRead,
+    markingAsRead,
   } = useHiveNotifications(authenticated ? user : null, { limit: 60 });
 
   // 24h stories from followed accounts, injected above the Hive list. An unseen
@@ -236,6 +237,20 @@ function NotificationBell() {
                 >
                   {push.subscribed ? <MdNotificationsActive size={15} /> : <MdNotificationsOff size={15} />}
                   <span>{push.subscribed ? t('nav.notifications.on') : t('nav.notifications.notifyMe')}</span>
+                </button>
+              )}
+              {/* Same action as on /notifications, so clearing the dot doesn't need
+                  a trip to the full page. Hive notifications only, like there. */}
+              {unreadCount > 0 && (
+                <button
+                  type="button"
+                  className="notif-header-pill"
+                  onClick={markAllAsRead}
+                  disabled={markingAsRead}
+                  title={t('notifications.markAllTitle')}
+                >
+                  <MdDoneAll size={15} />
+                  <span>{markingAsRead ? t('notifications.marking') : t('notifications.markAllRead')}</span>
                 </button>
               )}
               <Link

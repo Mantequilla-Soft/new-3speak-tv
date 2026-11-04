@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { IoOpenOutline } from 'react-icons/io5';
+import { IoOpenOutline, IoCopyOutline, IoCheckmark } from 'react-icons/io5';
+import TranslateButton from '../TranslateButton/TranslateButton';
+import { translateText, TITLE_LANGUAGES } from '../../utils/translate';
 import { useAppStore } from '../../lib/store';
 import {
   readSeenAnnouncement,
@@ -28,6 +30,29 @@ const isAutomated = () =>
   (navigator.webdriver || /bot|crawl|spider|headless|lighthouse/i.test(navigator.userAgent || ''));
 
 const MAX_REPLY = 2000;
+
+const langName = (code) => TITLE_LANGUAGES.find((l) => l.code === code)?.native || code;
+
+// Clipboard API first; the hidden-textarea fallback covers older WebViews and
+// pages without clipboard permission.
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    let ok;
+    try { ok = document.execCommand('copy'); } catch { ok = false; }
+    ta.remove();
+    return ok;
+  }
+}
 
 // Logged-in users only. Shows what they have not seen yet, oldest first: the
 // newest announcement addressed to them and the newest general one, at most one
@@ -95,9 +120,50 @@ function AnnouncementCard({ announcement, user, onClose }) {
   const [reply, setReply] = useState('');
   const [sendState, setSendState] = useState('idle'); // idle | sending | sent | error | throttled
   const { number, message, link, linkText, imagePath, canRespond, personalFor } = announcement;
+  // Translation into the same languages video titles come in; the original
+  // stays one click away.
+  const [translated, setTranslated] = useState(null);
+  const [translatedLang, setTranslatedLang] = useState(null);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [translateFailed, setTranslateFailed] = useState(false);
+  const [showOriginal, setShowOriginal] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const copiedTimer = useRef(null);
+  useEffect(() => () => clearTimeout(copiedTimer.current), []);
+
+  const shownMessage = translated && !showOriginal ? translated : message;
+
+  const translate = async (code) => {
+    setIsTranslating(true);
+    setTranslateFailed(false);
+    try {
+      const out = await translateText(message, code, 'auto', { plain: true });
+      if (!out) throw new Error('empty translation');
+      setTranslated(out);
+      setTranslatedLang(code);
+      setShowOriginal(false);
+    } catch {
+      setTranslateFailed(true);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  // Copies what is on screen: the translation while it is shown, else the original.
+  const copy = async () => {
+    if (!(await copyText(shownMessage))) return;
+    setCopied(true);
+    clearTimeout(copiedTimer.current);
+    copiedTimer.current = setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Once something is typed into the reply box, the bottom button turns from
+  // Close into Send: the popup cannot be closed with an unsent reply in it.
+  // Clearing the box brings Close back.
+  const mustSend = !!canRespond && sendState !== 'sent' && !!reply.trim();
 
   const send = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     const text = reply.trim();
     if (!text || sendState === 'sending') return;
     setSendState('sending');
@@ -121,7 +187,31 @@ function AnnouncementCard({ announcement, user, onClose }) {
           <img className="announcement-image" src={imagePath} alt="" onError={() => setImageFailed(true)} />
         )}
 
-        <p className="announcement-message">{message}</p>
+        <p className="announcement-message" dir="auto">{shownMessage}</p>
+
+        <div className="announcement-tools">
+          <TranslateButton onTranslate={translate} isTranslating={isTranslating} languages={TITLE_LANGUAGES} />
+          <button type="button" className="comment-translate-btn announcement-copy" onClick={copy}>
+            {copied ? <IoCheckmark size={14} /> : <IoCopyOutline size={14} />}
+            <span>{copied ? t('common.actions.copied') : t('common.actions.copy')}</span>
+          </button>
+        </div>
+
+        {translated && (
+          <div className="announcement-translated-note">
+            <span>
+              {showOriginal
+                ? t('watch.summary.showingOriginal')
+                : t('watch.summary.translatedTo', { language: langName(translatedLang) })}
+            </span>
+            <button type="button" onClick={() => setShowOriginal((v) => !v)}>
+              {showOriginal
+                ? t('watch.summary.showLanguage', { language: langName(translatedLang) })
+                : t('watch.summary.showOriginal')}
+            </button>
+          </div>
+        )}
+        {translateFailed && <p className="announcement-reply-error">{t('announcement.translateFailed')}</p>}
 
         {link && (
           // A new tab keeps the popup here until Close. Opening it counts as seen,
@@ -142,7 +232,7 @@ function AnnouncementCard({ announcement, user, onClose }) {
           sendState === 'sent' ? (
             <p className="announcement-reply-done">{t('announcement.replySent')}</p>
           ) : (
-            <form className="announcement-reply" onSubmit={send}>
+            <form id="announcement-reply-form" className="announcement-reply" onSubmit={send}>
               <label htmlFor="announcement-reply-text">{t('announcement.replyLabel')}</label>
               <textarea
                 id="announcement-reply-text"
@@ -156,9 +246,6 @@ function AnnouncementCard({ announcement, user, onClose }) {
                 <span className="announcement-reply-as">
                   {user ? t('announcement.replyAs', { user: user.replace(/^~/, '') }) : t('announcement.replyNoName')}
                 </span>
-                <button type="submit" className="announcement-send" disabled={!reply.trim() || sendState === 'sending'}>
-                  {sendState === 'sending' ? t('announcement.sending') : t('common.actions.send')}
-                </button>
               </div>
               {sendState === 'error' && <p className="announcement-reply-error">{t('announcement.replyFailed')}</p>}
               {sendState === 'throttled' && <p className="announcement-reply-error">{t('announcement.replyTooMany')}</p>}
@@ -166,9 +253,20 @@ function AnnouncementCard({ announcement, user, onClose }) {
           )
         )}
 
-        <button type="button" className="announcement-close" onClick={onClose}>
-          {t('common.actions.close')}
-        </button>
+        {mustSend ? (
+          <button
+            type="submit"
+            form="announcement-reply-form"
+            className="announcement-close announcement-close--send"
+            disabled={sendState === 'sending'}
+          >
+            {sendState === 'sending' ? t('announcement.sending') : t('common.actions.send')}
+          </button>
+        ) : (
+          <button type="button" className="announcement-close" onClick={onClose}>
+            {t('common.actions.close')}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -146,7 +146,8 @@
       "notAnnouncedAuth": "Não anunciada na Hive: o 3Speak ainda não pode publicar por você. Edite o modelo para permitir.",
       "stuck": "O OBS se conectou, mas nenhum vídeo chegou até nós, então a transmissão não começou. Pare a transmissão no OBS e inicie de novo.",
       "dailyLimit": "O OBS não conseguiu entrar ao vivo: contas gratuitas podem iniciar uma transmissão por dia. Tente de novo 24 horas depois do início da sua última transmissão ou assine o 3Speak Pro para transmitir sem limite diário.",
-      "useInStudio": "Usar no Stream Studio"
+      "useInStudio": "Usar no Stream Studio",
+      "proRequired": "O OBS não conseguiu entrar ao vivo: transmitir pelo OBS faz parte do 3Speak Pro."
     },
     "guide": {
       "title": "Como configurar o OBS",
@@ -250,6 +251,11 @@
       "liveFor": "Tempo ao vivo",
       "timeLeft": "Tempo restante até a transmissão terminar",
       "boosts": "Boosts recebidos nesta transmissão (USD)"
+    },
+    "pro": {
+      "title": "Transmitir pelo OBS faz parte do 3Speak Pro",
+      "desc": "Com o 3Speak Pro você pode entrar ao vivo direto do OBS usando seus modelos. Sem o Pro, seus modelos continuam funcionando no Stream Studio do seu navegador.",
+      "cta": "Obter 3Speak Pro"
     }
   }
 }

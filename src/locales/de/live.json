@@ -145,7 +145,8 @@
       "notAnnouncedAuth": "Nicht auf Hive angekündigt: 3Speak darf noch nicht für dich posten. Bearbeite die Vorlage, um es zu erlauben.",
       "stuck": "OBS hat sich verbunden, aber bei uns kam kein Video an, deshalb ist der Stream nicht gestartet. Beende das Streamen in OBS und starte es erneut.",
       "dailyLimit": "OBS konnte nicht live gehen: Kostenlose Konten können einen Stream pro Tag starten. Versuche es 24 Stunden nach dem Start deines letzten Streams erneut oder hol dir 3Speak Pro, um ohne Tageslimit zu streamen.",
-      "useInStudio": "Im Stream Studio verwenden"
+      "useInStudio": "Im Stream Studio verwenden",
+      "proRequired": "OBS konnte nicht live gehen: Streamen aus OBS ist Teil von 3Speak Pro."
     },
     "guide": {
       "title": "So richtest du OBS ein",
@@ -249,6 +250,11 @@
       "liveFor": "Live seit",
       "timeLeft": "Verbleibende Zeit bis zum Streamende",
       "boosts": "Boosts in diesem Stream (USD)"
+    },
+    "pro": {
+      "title": "Streamen aus OBS ist Teil von 3Speak Pro",
+      "desc": "Mit 3Speak Pro kannst du mit deinen Vorlagen direkt aus OBS live gehen. Ohne Pro funktionieren deine Vorlagen weiterhin im Stream Studio in deinem Browser.",
+      "cta": "3Speak Pro holen"
     }
   }
 }

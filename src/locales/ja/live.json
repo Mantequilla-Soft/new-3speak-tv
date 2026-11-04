@@ -144,7 +144,8 @@
       "notAnnouncedAuth": "Hive で告知されていません: 3Speak はまだあなたの代わりに投稿できません。テンプレートを編集して許可してください。",
       "stuck": "OBS は接続されましたが、映像が届かなかったため配信は始まりませんでした。OBS で配信を停止して、もう一度開始してください。",
       "dailyLimit": "OBS で配信を開始できませんでした。無料アカウントは 1 日に 1 回まで配信を開始できます。前回の配信開始から 24 時間後にもう一度お試しいただくか、3Speak Pro で 1 日の上限なしに配信してください。",
-      "useInStudio": "Stream Studio で使う"
+      "useInStudio": "Stream Studio で使う",
+      "proRequired": "OBSでライブを開始できませんでした：OBSからの配信は3Speak Proの機能です。"
     },
     "guide": {
       "title": "OBS の設定方法",
@@ -248,6 +249,11 @@
       "liveFor": "配信時間",
       "timeLeft": "配信終了までの残り時間",
       "boosts": "この配信で受け取ったブースト (USD)"
+    },
+    "pro": {
+      "title": "OBSからの配信は3Speak Proの機能です",
+      "desc": "3Speak Proなら、テンプレートを使ってOBSから直接ライブ配信できます。Proがなくても、テンプレートはブラウザのStream Studioで引き続き使えます。",
+      "cta": "3Speak Proを入手"
     }
   }
 }
