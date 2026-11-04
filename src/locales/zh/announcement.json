@@ -9,5 +9,6 @@
   "sending": "正在发送…",
   "replySent": "谢谢！你的回复已发送。",
   "replyFailed": "回复发送失败，请重试。",
-  "replyTooMany": "你刚刚发送了多条回复，请几分钟后再试。"
+  "replyTooMany": "你刚刚发送了多条回复，请几分钟后再试。",
+  "translateFailed": "无法翻译此消息,请重试。"
 }

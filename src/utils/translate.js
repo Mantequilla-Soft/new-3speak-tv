@@ -41,6 +41,12 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'ur', name: 'Urdu', native: 'اردو' },
 ];
 
+// The languages the translator service itself offers (GET /languages; it calls
+// Chinese `zh-Hans` but takes `zh`). Video titles are translated into these, so
+// places that should offer "the title languages" use this list.
+const TRANSLATOR_CODES = ['en', 'zh', 'hi', 'es', 'fr', 'ar', 'bn', 'pt', 'ru', 'ja', 'de'];
+export const TITLE_LANGUAGES = SUPPORTED_LANGUAGES.filter((l) => TRANSLATOR_CODES.includes(l.code));
+
 export function getTargetLanguage() {
   // Until someone picks a translation language, translate into the language
   // they read the interface in.
@@ -82,8 +88,10 @@ function stripMarkdownAndHtml(text) {
   return s;
 }
 
-export async function translateText(text, target, source = 'auto') {
-  const cleaned = stripMarkdownAndHtml(text);
+// `plain: true` sends the text as it is (for plain text such as team
+// announcements, where "- " at a line start is a real list, not markdown).
+export async function translateText(text, target, source = 'auto', { plain = false } = {}) {
+  const cleaned = plain ? String(text || '').trim() : stripMarkdownAndHtml(text);
   if (!cleaned) return '';
   const { data } = await axios.post(`${TRANSLATE_API_URL}/translate`, {
     q: cleaned,

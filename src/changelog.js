@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.63',
+    category: 'general',
+    date: '2026-11-04',
+    summary: "You can now translate messages from the 3Speak team into another language and copy their text with one tap.",
+  },
+  {
     version: '1.81.62',
     category: 'home',
     date: '2026-11-03',

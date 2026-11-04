@@ -9,5 +9,6 @@
   "sending": "Inatuma…",
   "replySent": "Asante! Jibu lako limetumwa.",
   "replyFailed": "Jibu lako halikuweza kutumwa. Tafadhali jaribu tena.",
-  "replyTooMany": "Umetuma majibu kadhaa sasa hivi. Tafadhali jaribu tena baada ya dakika chache."
+  "replyTooMany": "Umetuma majibu kadhaa sasa hivi. Tafadhali jaribu tena baada ya dakika chache.",
+  "translateFailed": "Ujumbe huu haukuweza kutafsiriwa. Tafadhali jaribu tena."
 }

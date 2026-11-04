@@ -9,5 +9,6 @@
   "sending": "Gönderiliyor…",
   "replySent": "Teşekkürler! Yanıtınız gönderildi.",
   "replyFailed": "Yanıtınız gönderilemedi. Lütfen tekrar deneyin.",
-  "replyTooMany": "Az önce birkaç yanıt gönderdiniz. Lütfen birkaç dakika sonra tekrar deneyin."
+  "replyTooMany": "Az önce birkaç yanıt gönderdiniz. Lütfen birkaç dakika sonra tekrar deneyin.",
+  "translateFailed": "Bu mesaj çevrilemedi. Lütfen tekrar deneyin."
 }

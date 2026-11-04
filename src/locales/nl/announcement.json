@@ -9,5 +9,6 @@
   "sending": "Versturen…",
   "replySent": "Bedankt! Je antwoord is verstuurd.",
   "replyFailed": "Je antwoord kon niet worden verstuurd. Probeer het opnieuw.",
-  "replyTooMany": "Je hebt net een paar antwoorden verstuurd. Probeer het over een paar minuten opnieuw."
+  "replyTooMany": "Je hebt net een paar antwoorden verstuurd. Probeer het over een paar minuten opnieuw.",
+  "translateFailed": "Dit bericht kon niet worden vertaald. Probeer het opnieuw."
 }

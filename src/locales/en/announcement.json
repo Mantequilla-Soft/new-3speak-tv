@@ -9,5 +9,6 @@
   "sending": "Sending…",
   "replySent": "Thanks! Your reply was sent.",
   "replyFailed": "Your reply could not be sent. Please try again.",
-  "replyTooMany": "You sent a few replies just now. Please try again in a few minutes."
+  "replyTooMany": "You sent a few replies just now. Please try again in a few minutes.",
+  "translateFailed": "This message could not be translated. Please try again."
 }
