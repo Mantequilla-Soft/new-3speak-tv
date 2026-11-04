@@ -157,8 +157,13 @@ function AnnouncementCard({ announcement, user, onClose }) {
     copiedTimer.current = setTimeout(() => setCopied(false), 2000);
   };
 
+  // Once something is typed into the reply box, the bottom button turns from
+  // Close into Send: the popup cannot be closed with an unsent reply in it.
+  // Clearing the box brings Close back.
+  const mustSend = !!canRespond && sendState !== 'sent' && !!reply.trim();
+
   const send = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     const text = reply.trim();
     if (!text || sendState === 'sending') return;
     setSendState('sending');
@@ -227,7 +232,7 @@ function AnnouncementCard({ announcement, user, onClose }) {
           sendState === 'sent' ? (
             <p className="announcement-reply-done">{t('announcement.replySent')}</p>
           ) : (
-            <form className="announcement-reply" onSubmit={send}>
+            <form id="announcement-reply-form" className="announcement-reply" onSubmit={send}>
               <label htmlFor="announcement-reply-text">{t('announcement.replyLabel')}</label>
               <textarea
                 id="announcement-reply-text"
@@ -241,9 +246,6 @@ function AnnouncementCard({ announcement, user, onClose }) {
                 <span className="announcement-reply-as">
                   {user ? t('announcement.replyAs', { user: user.replace(/^~/, '') }) : t('announcement.replyNoName')}
                 </span>
-                <button type="submit" className="announcement-send" disabled={!reply.trim() || sendState === 'sending'}>
-                  {sendState === 'sending' ? t('announcement.sending') : t('common.actions.send')}
-                </button>
               </div>
               {sendState === 'error' && <p className="announcement-reply-error">{t('announcement.replyFailed')}</p>}
               {sendState === 'throttled' && <p className="announcement-reply-error">{t('announcement.replyTooMany')}</p>}
@@ -251,9 +253,20 @@ function AnnouncementCard({ announcement, user, onClose }) {
           )
         )}
 
-        <button type="button" className="announcement-close" onClick={onClose}>
-          {t('common.actions.close')}
-        </button>
+        {mustSend ? (
+          <button
+            type="submit"
+            form="announcement-reply-form"
+            className="announcement-close announcement-close--send"
+            disabled={sendState === 'sending'}
+          >
+            {sendState === 'sending' ? t('announcement.sending') : t('common.actions.send')}
+          </button>
+        ) : (
+          <button type="button" className="announcement-close" onClick={onClose}>
+            {t('common.actions.close')}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -192,21 +192,6 @@
   overflow-wrap: anywhere;
 }
 
-.announcement-send {
-  flex-shrink: 0;
-  padding: 8px 18px;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 10px;
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s ease, opacity 0.15s ease;
-
-  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
-  &:disabled { opacity: 0.45; cursor: default; }
-}
 
 .announcement-reply-error {
   margin: 0;
@@ -237,6 +222,16 @@
   transition: background 0.15s ease;
 
   &:hover { background: var(--bg-hover, rgba(255, 255, 255, 0.08)); }
+
+  // Takes Close's place while a reply is typed. Red outline, never a red fill.
+  &--send {
+    border-color: var(--accent-primary, #e53935);
+    color: var(--accent-primary, #e53935);
+    transition: background 0.15s ease, opacity 0.15s ease;
+
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
+    &:disabled { opacity: 0.45; cursor: default; }
+  }
 }
 
 @keyframes announcement-fade {

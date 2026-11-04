@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.64',
+    category: 'general',
+    date: '2026-11-04',
+    summary: "When you reply to a message from the 3Speak team, the button at the bottom of the popup now sends your reply.",
+  },
+  {
     version: '1.81.63',
     category: 'general',
     date: '2026-11-04',
