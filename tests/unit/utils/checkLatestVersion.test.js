@@ -1,4 +1,4 @@
-// The stale-build check against GitHub's production version.js, and the upload
+// The stale-build check against the live site's version.json, and the upload
 // gate that reloads onto the new build first (src/utils/checkLatestVersion.js).
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
@@ -9,7 +9,7 @@ import { isNewerVersion, fetchNewerVersion, reloadForUpdate, reloadIfStale } fro
 import { APP_VERSION } from '../../../src/version.js'
 
 const bump = (v) => v.split('.').map((n, i) => (i === 2 ? Number(n) + 1 : n)).join('.')
-const remoteFile = (v) => ({ ok: true, text: async () => `// release\nexport const APP_VERSION = '${v}';\n` })
+const remoteFile = (v) => ({ ok: true, text: async () => `${JSON.stringify({ version: v })}\n` })
 
 let reload
 beforeEach(() => {
@@ -46,17 +46,17 @@ describe('fetchNewerVersion', () => {
     expect(f).not.toHaveBeenCalled()
   })
 
-  it('returns the production version when it is newer, read uncached', async () => {
+  it('returns the live version when it is newer, read uncached from the same origin', async () => {
     const newer = bump(APP_VERSION)
     const f = vi.fn().mockResolvedValue(remoteFile(newer))
     vi.stubGlobal('fetch', f)
     expect(await fetchNewerVersion()).toBe(newer)
     const [url, opts] = f.mock.calls[0]
-    expect(url).toMatch(/^https:\/\/raw\.githubusercontent\.com\/Mantequilla-Soft\/new-3speak-tv\/production\/src\/version\.js\?t=\d+$/)
+    expect(url).toMatch(/^\/version\.json\?t=\d+$/)
     expect(opts.cache).toBe('no-store')
   })
 
-  it('is null when production is the same or older', async () => {
+  it('is null when the live site is the same or older', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(remoteFile(APP_VERSION)))
     expect(await fetchNewerVersion()).toBeNull()
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(remoteFile('1.0.0')))
@@ -67,6 +67,8 @@ describe('fetchNewerVersion', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }))
     expect(await fetchNewerVersion()).toBeNull()
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, text: async () => '<html>' }))
+    expect(await fetchNewerVersion()).toBeNull()
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, text: async () => '{"version":"<b>"}' }))
     expect(await fetchNewerVersion()).toBeNull()
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('offline')))
     expect(await fetchNewerVersion()).toBeNull()
