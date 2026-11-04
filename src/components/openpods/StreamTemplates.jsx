@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Copy, Eye, EyeOff, Pencil, Plus, RefreshCw, Trash2, ImagePlus, Radio, ChevronDown, Clapperboard, MessageSquare } from 'lucide-react';
+import { Copy, Eye, EyeOff, Pencil, Plus, RefreshCw, Trash2, ImagePlus, Radio, ChevronDown, Clapperboard, MessageSquare, Crown } from 'lucide-react';
+import { ENABLE_SUBS } from '../../utils/config';
 import { toastIn } from '../../utils/toast';
 import { getLanguage } from '../../i18n';
 import { getCurrentProvider, Providers } from '../../hive-api/aioha';
@@ -212,6 +213,29 @@ function ChatUrlBox({ overlayKey }) {
   );
 }
 
+// ─── OBS is Pro ────────────────────────────────────────────────────────────
+/**
+ * Shown to free accounts in place of the stream secret, the chat URL and the
+ * OBS guide: streaming from OBS is a 3Speak Pro feature (the live server refuses
+ * OBS for free hosts too). Templates still work in the browser studio.
+ */
+function ObsProNotice({ user }) {
+  const { t } = useTranslation();
+  return (
+    <section className="st-secret st-pro">
+      <div className="st-secret__text">
+        <h2>{t('live.obs.pro.title')}</h2>
+        <p>{t('live.obs.pro.desc')}</p>
+      </div>
+      {ENABLE_SUBS && user && (
+        <Link to={`/wallet/${user}#pro`} className="st-btn st-btn--primary">
+          <Crown size={15} /><span>{t('live.obs.pro.cta')}</span>
+        </Link>
+      )}
+    </section>
+  );
+}
+
 // ─── OBS guide ─────────────────────────────────────────────────────────────
 function ObsGuide({ isPremium, defaultOpen }) {
   const { t } = useTranslation();
@@ -271,7 +295,7 @@ function useVisible(ref) {
   return visible;
 }
 
-function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
+function TemplateCard({ tpl, token, obsAllowed, onEdit, onDelete, onUse }) {
   const { t } = useTranslation();
   const ref = useRef(null);
   const visible = useVisible(ref);
@@ -308,7 +332,7 @@ function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
       <div className="st-card__body">
         <div className="st-card__name">{tpl.name}</div>
         <div className="st-card__title">{tpl.title}</div>
-        <code className="st-card__url" title={tpl.whipUrl}>{tpl.whipUrl}</code>
+        {obsAllowed && <code className="st-card__url" title={tpl.whipUrl}>{tpl.whipUrl}</code>}
         {state === 'live' && ingress && (
           <div className="st-card__ingress">
             {[ingress.width && ingress.height ? `${ingress.width}×${ingress.height}` : null,
@@ -336,6 +360,10 @@ function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
         {state === 'idle' && status?.lastEnd?.reason === 'daily_limit' && (
           <div className="st-card__warn">{t('live.obs.card.dailyLimit')}</div>
         )}
+        {/* OBS was refused at connect because the account has no 3Speak Pro. */}
+        {state === 'idle' && status?.lastEnd?.reason === 'pro_required' && (
+          <div className="st-card__warn">{t('live.obs.card.proRequired')}</div>
+        )}
         <div className="st-card__meta">
           {lastLive
             ? t('live.obs.card.lastLive', { date: lastLive.toLocaleString(getLanguage(), { dateStyle: 'medium', timeStyle: 'short' }) })
@@ -348,9 +376,11 @@ function TemplateCard({ tpl, token, onEdit, onDelete, onUse }) {
               <Clapperboard size={15} /><span>{t('live.obs.card.useInStudio')}</span>
             </button>
           )}
-          <button type="button" className="st-btn st-btn--ghost" onClick={copyUrl}>
-            <Copy size={15} /><span>{t('live.obs.card.copyUrl')}</span>
-          </button>
+          {obsAllowed && (
+            <button type="button" className="st-btn st-btn--ghost" onClick={copyUrl}>
+              <Copy size={15} /><span>{t('live.obs.card.copyUrl')}</span>
+            </button>
+          )}
           <button type="button" className="st-btn st-btn--ghost" onClick={() => onEdit(tpl)}>
             <Pencil size={15} /><span>{t('common.actions.edit')}</span>
           </button>
@@ -768,7 +798,9 @@ function TemplateEditor({ token, user, whipBase, existing, isPremium, onSaved, o
  * and the library (status, copy address, edit, delete). Needs a hangouts
  * session token; the studio page shows its own sign-in call to action without one.
  */
-export function StreamTemplatesPanel({ token, user, isPremium, onUse }) {
+// `premiumKnown` is false while the Pro lookup is still running: the OBS block
+// then waits instead of flashing the Pro notice at a Pro account.
+export function StreamTemplatesPanel({ token, user, isPremium, premiumKnown = true, onUse }) {
   const { t } = useTranslation();
   const [data, setData] = useState({ status: 'idle', templates: [], whipBase: '', chatOverlayKey: '' });
   const [editing, setEditing] = useState(null);   // null | 'new' | template
@@ -831,11 +863,15 @@ export function StreamTemplatesPanel({ token, user, isPremium, onUse }) {
     <div className="stream-templates">
       <p className="st-intro">{t('live.obs.pageIntro')}</p>
 
-      <SecretBox token={token} />
-
-      <ChatUrlBox overlayKey={data.chatOverlayKey} />
-
-      <ObsGuide isPremium={isPremium} defaultOpen={data.status === 'ready' && data.templates.length === 0} />
+      {premiumKnown && (isPremium ? (
+        <>
+          <SecretBox token={token} />
+          <ChatUrlBox overlayKey={data.chatOverlayKey} />
+          <ObsGuide isPremium={isPremium} defaultOpen={data.status === 'ready' && data.templates.length === 0} />
+        </>
+      ) : (
+        <ObsProNotice user={user} />
+      ))}
 
       <div className="st-list-head">
         <h2>{t('live.obs.yourTemplates')}</h2>
@@ -869,7 +905,7 @@ export function StreamTemplatesPanel({ token, user, isPremium, onUse }) {
       {data.status === 'ready' && data.templates.length > 0 && (
         <div className="st-grid">
           {data.templates.map((tpl) => (
-            <TemplateCard key={tpl.id} tpl={tpl} token={token} onEdit={setEditing} onDelete={setDeleting} onUse={onUse} />
+            <TemplateCard key={tpl.id} tpl={tpl} token={token} obsAllowed={premiumKnown && isPremium} onEdit={setEditing} onDelete={setDeleting} onUse={onUse} />
           ))}
         </div>
       )}

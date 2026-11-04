@@ -144,7 +144,8 @@
       "notAnnouncedAuth": "Tidak diumumkan di Hive: 3Speak belum boleh memposting untukmu. Edit template untuk mengizinkannya.",
       "stuck": "OBS sudah terhubung, tetapi tidak ada video yang sampai ke kami, jadi siaran tidak dimulai. Hentikan streaming di OBS lalu mulai lagi.",
       "dailyLimit": "OBS tidak bisa siaran: akun gratis bisa memulai satu siaran per hari. Coba lagi 24 jam setelah siaran terakhirmu dimulai, atau gunakan 3Speak Pro untuk siaran tanpa batas harian.",
-      "useInStudio": "Gunakan di Stream Studio"
+      "useInStudio": "Gunakan di Stream Studio",
+      "proRequired": "OBS tidak bisa mulai siaran: streaming dari OBS adalah bagian dari 3Speak Pro."
     },
     "guide": {
       "title": "Cara menyiapkan OBS",
@@ -248,6 +249,11 @@
       "liveFor": "Lama siaran",
       "timeLeft": "Sisa waktu sebelum siaran berakhir",
       "boosts": "Boost yang diterima di siaran ini (USD)"
+    },
+    "pro": {
+      "title": "Streaming dari OBS adalah bagian dari 3Speak Pro",
+      "desc": "Dengan 3Speak Pro kamu bisa siaran langsung dari OBS memakai template milikmu. Tanpa Pro, template kamu tetap bisa dipakai di Stream Studio di browser.",
+      "cta": "Dapatkan 3Speak Pro"
     }
   }
 }

@@ -147,7 +147,8 @@
       "notAnnouncedAuth": "Nie ogłoszono na Hive: 3Speak nie może jeszcze publikować w twoim imieniu. Edytuj szablon, aby na to zezwolić.",
       "stuck": "OBS się połączył, ale nie dotarło do nas żadne wideo, więc transmisja się nie rozpoczęła. Zatrzymaj streamowanie w OBS i uruchom je ponownie.",
       "dailyLimit": "OBS nie mógł rozpocząć transmisji: konta darmowe mogą rozpocząć jedną transmisję dziennie. Spróbuj ponownie 24 godziny po rozpoczęciu ostatniej transmisji albo wybierz 3Speak Pro, aby nadawać bez dziennego limitu.",
-      "useInStudio": "Użyj w Stream Studio"
+      "useInStudio": "Użyj w Stream Studio",
+      "proRequired": "OBS nie mógł rozpocząć transmisji: streamowanie z OBS jest częścią 3Speak Pro."
     },
     "guide": {
       "title": "Jak skonfigurować OBS",
@@ -251,6 +252,11 @@
       "liveFor": "Czas na żywo",
       "timeLeft": "Pozostały czas do końca transmisji",
       "boosts": "Boosty otrzymane w tej transmisji (USD)"
+    },
+    "pro": {
+      "title": "Streamowanie z OBS jest częścią 3Speak Pro",
+      "desc": "Z 3Speak Pro możesz nadawać na żywo prosto z OBS, korzystając ze swoich szablonów. Bez Pro Twoje szablony nadal działają w Stream Studio w przeglądarce.",
+      "cta": "Zdobądź 3Speak Pro"
     }
   }
 }

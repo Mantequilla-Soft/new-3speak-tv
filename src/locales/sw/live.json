@@ -145,7 +145,8 @@
       "notAnnouncedAuth": "Haukutangazwa kwenye Hive: 3Speak bado haiwezi kuchapisha kwa niaba yako. Hariri kiolezo ili kuruhusu.",
       "stuck": "OBS imeunganishwa, lakini hakuna video iliyotufikia, kwa hivyo mtiririko haukuanza. Simamisha utiririshaji kwenye OBS kisha uanze tena.",
       "dailyLimit": "OBS haikuweza kwenda hewani: akaunti za bure zinaweza kuanzisha mtiririko mmoja kwa siku. Jaribu tena saa 24 baada ya mtiririko wako wa mwisho kuanza, au pata 3Speak Pro ili kutiririsha bila kikomo cha kila siku.",
-      "useInStudio": "Tumia kwenye Stream Studio"
+      "useInStudio": "Tumia kwenye Stream Studio",
+      "proRequired": "OBS haikuweza kwenda moja kwa moja: kutiririsha kutoka OBS ni sehemu ya 3Speak Pro."
     },
     "guide": {
       "title": "Jinsi ya kuweka OBS",
@@ -249,6 +250,11 @@
       "liveFor": "Muda hewani",
       "timeLeft": "Muda uliobaki kabla mtiririko kuisha",
       "boosts": "Boost zilizopokelewa katika mtiririko huu (USD)"
+    },
+    "pro": {
+      "title": "Kutiririsha kutoka OBS ni sehemu ya 3Speak Pro",
+      "desc": "Ukiwa na 3Speak Pro unaweza kwenda moja kwa moja kutoka OBS ukitumia violezo vyako. Bila Pro, violezo vyako bado vinafanya kazi kwenye Stream Studio katika kivinjari chako.",
+      "cta": "Pata 3Speak Pro"
     }
   }
 }

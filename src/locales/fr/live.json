@@ -146,7 +146,8 @@
       "notAnnouncedAuth": "Non annoncé sur Hive : 3Speak n'a pas encore le droit de publier pour vous. Modifiez le modèle pour l'autoriser.",
       "stuck": "OBS s'est connecté, mais aucune vidéo ne nous est parvenue, le stream n'a donc pas démarré. Arrêtez le stream dans OBS puis relancez-le.",
       "dailyLimit": "OBS n'a pas pu passer en direct : les comptes gratuits peuvent lancer un live par jour. Réessayez 24 heures après le début de votre dernier live, ou passez à 3Speak Pro pour streamer sans limite quotidienne.",
-      "useInStudio": "Utiliser dans Stream Studio"
+      "useInStudio": "Utiliser dans Stream Studio",
+      "proRequired": "OBS n'a pas pu passer en direct : diffuser depuis OBS fait partie de 3Speak Pro."
     },
     "guide": {
       "title": "Configurer OBS",
@@ -250,6 +251,11 @@
       "liveFor": "Durée du live",
       "timeLeft": "Temps restant avant la fin du live",
       "boosts": "Boosts reçus pendant ce live (USD)"
+    },
+    "pro": {
+      "title": "Diffuser depuis OBS fait partie de 3Speak Pro",
+      "desc": "Avec 3Speak Pro, vous pouvez passer en direct directement depuis OBS avec vos modèles. Sans Pro, vos modèles fonctionnent toujours dans le Stream Studio de votre navigateur.",
+      "cta": "Obtenir 3Speak Pro"
     }
   }
 }

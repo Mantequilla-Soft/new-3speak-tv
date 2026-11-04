@@ -272,7 +272,7 @@ export default function OpenPods() {
 
       {tab === 'templates' ? (
         <div className="openpods-studio-panel">
-          <StreamTemplatesPanel token={sessionToken} user={user} isPremium={isPremium} onUse={loadTemplate} />
+          <StreamTemplatesPanel token={sessionToken} user={user} isPremium={isPremium} premiumKnown={!!premiumStatus} onUse={loadTemplate} />
         </div>
       ) : (
       <>

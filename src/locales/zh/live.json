@@ -144,7 +144,8 @@
       "notAnnouncedAuth": "未在 Hive 上发布公告：3Speak 还不能代你发帖。编辑模板即可授权。",
       "stuck": "OBS 已连接，但我们没有收到视频，因此直播没有开始。请在 OBS 中停止推流后重新开始。",
       "dailyLimit": "OBS 无法开播：免费账户每天只能开播一次。请在上次直播开始 24 小时后再试，或升级 3Speak Pro 即可不受每日次数限制地直播。",
-      "useInStudio": "在 Stream Studio 中使用"
+      "useInStudio": "在 Stream Studio 中使用",
+      "proRequired": "OBS 无法开播:通过 OBS 直播是 3Speak Pro 的功能。"
     },
     "guide": {
       "title": "如何设置 OBS",
@@ -248,6 +249,11 @@
       "liveFor": "直播时长",
       "timeLeft": "距离直播结束的剩余时间",
       "boosts": "本场直播收到的助推 (USD)"
+    },
+    "pro": {
+      "title": "通过 OBS 直播是 3Speak Pro 的功能",
+      "desc": "有了 3Speak Pro,你可以使用模板直接从 OBS 开播。没有 Pro,你的模板仍可在浏览器中的 Stream Studio 使用。",
+      "cta": "获取 3Speak Pro"
     }
   }
 }
