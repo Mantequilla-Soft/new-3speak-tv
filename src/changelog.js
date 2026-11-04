@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.65',
+    category: 'notifications',
+    date: '2026-11-04',
+    summary: "You can now mark all notifications as read right from the bell menu.",
+  },
+  {
     version: '1.81.64',
     category: 'general',
     date: '2026-11-04',
