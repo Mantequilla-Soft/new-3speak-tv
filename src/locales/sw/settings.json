@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "Usaidizi",
     "profiles": "Wasifu uliounganishwa",
-    "aria": "Mipangilio ya miunganisho"
+    "aria": "Mipangilio ya miunganisho",
+    "referrals": "Rufaa"
   },
   "butrauthUnlocked": "Butter Auth imefunguliwa",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "Unaweza kuongeza hadi viungo {{max}}.",
     "saved": "Viungo vya usaidizi vimehifadhiwa",
     "publicNote": "Viungo hivi huhifadhiwa kwenye akaunti yako ya Hive, ambapo mtu yeyote anaweza kuviona."
+  },
+  "referrals": {
+    "title": "Alika watu kwenye 3Speak",
+    "intro": "Tunataka kuleta waundaji, watazamaji na wasikilizaji wapya kwenye 3Speak. Shiriki kiungo chako na watu ambao wangefurahia kutengeneza, kutazama au kusikiliza video na podikasti hapa, na upate zawadi kwa hilo.",
+    "linkLabel": "Kiungo chako cha rufaa",
+    "copy": "Nakili",
+    "copied": "Kiungo cha rufaa kimenakiliwa",
+    "copyFailed": "Imeshindikana kunakili kiungo",
+    "shareTip": "Iweke kwenye wasifu wako, sahihi ya barua pepe yako, au ichapishe kwenye fulana. Hatutakuhukumu.",
+    "earnTitle": "Unachopata",
+    "bonusValue": "{{pct}}%",
+    "bonusLabel": "ya zawadi zao za matangazo",
+    "bonusDesc": "kama mwundaji, mtazamaji au msikilizaji",
+    "timeValue": "miezi {{months}}",
+    "timeLabel": "tangu siku wanapojisajili",
+    "adsValue": "{{pct}}%",
+    "adsLabel": "ya kampeni zao za matangazo",
+    "adsDesc": "wakinunua matangazo",
+    "earnOnTop": "3Speak hulipa hii juu ya hapo. Watu unaowaalika hubaki na kila kitu wanachopata.",
+    "rules": "Akaunti mpya tu zinazojisajili kupitia kiungo chako ndizo zinahesabiwa. Zawadi zinafika pamoja na malipo ya kawaida ya matangazo, zikiwa zimewekwa alama ya bonasi ya rufaa."
   }
 }

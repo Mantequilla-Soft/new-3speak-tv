@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "Ủng hộ",
     "profiles": "Hồ sơ đã liên kết",
-    "aria": "Cài đặt kết nối"
+    "aria": "Cài đặt kết nối",
+    "referrals": "Giới thiệu"
   },
   "butrauthUnlocked": "Đã mở khóa Butter Auth",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "Bạn có thể thêm tối đa {{max}} liên kết.",
     "saved": "Đã lưu liên kết ủng hộ",
     "publicNote": "Các liên kết này được lưu trong tài khoản Hive của bạn, nơi ai cũng có thể xem."
+  },
+  "referrals": {
+    "title": "Mời mọi người đến 3Speak",
+    "intro": "Chúng tôi muốn đưa thêm nhà sáng tạo, người xem và người nghe mới đến 3Speak. Hãy chia sẻ liên kết của bạn với những người sẽ thích tạo, xem hoặc nghe video và podcast ở đây, và nhận phần thưởng cho việc đó.",
+    "linkLabel": "Liên kết giới thiệu của bạn",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép liên kết giới thiệu",
+    "copyFailed": "Không thể sao chép liên kết",
+    "shareTip": "Hãy đặt nó vào phần giới thiệu, chữ ký email, hoặc in lên áo thun. Chúng tôi không phán xét đâu.",
+    "earnTitle": "Bạn nhận được gì",
+    "bonusValue": "{{pct}}%",
+    "bonusLabel": "phần thưởng quảng cáo của họ",
+    "bonusDesc": "với vai trò nhà sáng tạo, người xem hoặc người nghe",
+    "timeValue": "{{months}} tháng",
+    "timeLabel": "kể từ ngày họ đăng ký",
+    "adsValue": "{{pct}}%",
+    "adsLabel": "từ chiến dịch quảng cáo của họ",
+    "adsDesc": "nếu họ đặt quảng cáo",
+    "earnOnTop": "3Speak trả khoản này thêm vào. Những người bạn mời vẫn giữ toàn bộ số tiền họ kiếm được.",
+    "rules": "Chỉ những tài khoản mới đăng ký qua liên kết của bạn mới được tính. Phần thưởng đến cùng các khoản thanh toán quảng cáo thông thường, được ghi là thưởng giới thiệu."
   }
 }

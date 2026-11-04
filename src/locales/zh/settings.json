@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "支持",
     "profiles": "已关联的个人资料",
-    "aria": "关联设置"
+    "aria": "关联设置",
+    "referrals": "推荐"
   },
   "butrauthUnlocked": "Butter Auth 已解锁",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "最多可以添加 {{max}} 个链接。",
     "saved": "支持链接已保存",
     "publicNote": "这些链接保存在你的 Hive 账户中，任何人都可以看到。"
+  },
+  "referrals": {
+    "title": "邀请大家来 3Speak",
+    "intro": "我们希望为 3Speak 带来新的创作者、观众和听众。把你的链接分享给会喜欢在这里制作、观看或收听视频和播客的人，并为此获得奖励。",
+    "linkLabel": "你的推荐链接",
+    "copy": "复制",
+    "copied": "已复制推荐链接",
+    "copyFailed": "无法复制链接",
+    "shareTip": "放进你的个人简介、邮件签名，或者印在 T 恤上。我们不会评判你。",
+    "earnTitle": "你能获得什么",
+    "bonusValue": "{{pct}}%",
+    "bonusLabel": "其广告奖励",
+    "bonusDesc": "作为创作者、观众或听众",
+    "timeValue": "{{months}} 个月",
+    "timeLabel": "从注册当天起",
+    "adsValue": "{{pct}}%",
+    "adsLabel": "其广告活动收入",
+    "adsDesc": "如果对方投放广告",
+    "earnOnTop": "这部分由 3Speak 额外支付。你邀请的人可以保留他们的全部收入。",
+    "rules": "只有通过你的链接注册的新账户才计算在内。奖励会随常规广告收益一起发放，并标注为推荐奖励。"
   }
 }

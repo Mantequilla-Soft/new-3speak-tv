@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "Destek",
     "profiles": "Bağlı profiller",
-    "aria": "Bağlantı ayarları"
+    "aria": "Bağlantı ayarları",
+    "referrals": "Davetler"
   },
   "butrauthUnlocked": "Butter Auth kilidi açıldı",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "En fazla {{max}} bağlantı ekleyebilirsin.",
     "saved": "Destek bağlantıları kaydedildi",
     "publicNote": "Bu bağlantılar Hive hesabına kaydedilir ve orada herkes tarafından görülebilir."
+  },
+  "referrals": {
+    "title": "İnsanları 3Speak'e davet et",
+    "intro": "3Speak'e yeni içerik üreticileri, izleyiciler ve dinleyiciler kazandırmaya çalışıyoruz. Bağlantını burada video ve podcast yapmaktan, izlemekten veya dinlemekten hoşlanacak kişilerle paylaş ve bunun için ödül kazan.",
+    "linkLabel": "Davet bağlantın",
+    "copy": "Kopyala",
+    "copied": "Davet bağlantısı kopyalandı",
+    "copyFailed": "Bağlantı kopyalanamadı",
+    "shareTip": "Biyografine, e-posta imzana ekle ya da bir tişörte bastır. Yargılamayız.",
+    "earnTitle": "Ne kazanırsın",
+    "bonusValue": "%{{pct}}",
+    "bonusLabel": "reklam ödüllerinden",
+    "bonusDesc": "içerik üreticisi, izleyici veya dinleyici olarak",
+    "timeValue": "{{months}} ay",
+    "timeLabel": "kaydoldukları günden itibaren",
+    "adsValue": "%{{pct}}",
+    "adsLabel": "reklam kampanyalarından",
+    "adsDesc": "reklam verirlerse",
+    "earnOnTop": "Bunu 3Speak ayrıca öder. Davet ettiğin kişiler kazandıklarının hepsini alır.",
+    "rules": "Yalnızca bağlantın üzerinden kaydolan yeni hesaplar sayılır. Ödüller normal reklam ödemeleriyle birlikte, davet bonusu olarak işaretlenmiş şekilde gelir."
   }
 }

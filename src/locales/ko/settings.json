@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "후원",
     "profiles": "연결된 프로필",
-    "aria": "연결 설정"
+    "aria": "연결 설정",
+    "referrals": "추천"
   },
   "butrauthUnlocked": "Butter Auth 잠금 해제됨",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "링크는 최대 {{max}}개까지 추가할 수 있어요.",
     "saved": "후원 링크를 저장했어요",
     "publicNote": "이 링크는 내 Hive 계정에 저장되며 누구나 볼 수 있습니다."
+  },
+  "referrals": {
+    "title": "3Speak에 사람들을 초대하세요",
+    "intro": "새로운 크리에이터, 시청자, 청취자를 3Speak에 모시려고 해요. 이곳에서 영상과 팟캐스트를 만들거나 보거나 듣는 걸 좋아할 만한 사람들에게 내 링크를 공유하고 보상을 받으세요.",
+    "linkLabel": "내 추천 링크",
+    "copy": "복사",
+    "copied": "추천 링크를 복사했어요",
+    "copyFailed": "링크를 복사할 수 없어요",
+    "shareTip": "프로필 소개나 이메일 서명에 넣거나, 티셔츠에 인쇄해도 좋아요. 아무도 뭐라 안 해요.",
+    "earnTitle": "받는 보상",
+    "bonusValue": "{{pct}}%",
+    "bonusLabel": "상대의 광고 보상",
+    "bonusDesc": "크리에이터, 시청자, 청취자로서",
+    "timeValue": "{{months}}개월",
+    "timeLabel": "가입한 날부터",
+    "adsValue": "{{pct}}%",
+    "adsLabel": "상대의 광고 캠페인",
+    "adsDesc": "광고를 집행하면",
+    "earnOnTop": "이 금액은 3Speak가 추가로 지급해요. 초대받은 사람은 자신이 번 금액을 모두 받아요.",
+    "rules": "내 링크로 가입한 새 계정만 해당돼요. 보상은 일반 광고 지급과 함께 추천 보너스로 표시되어 지급돼요."
   }
 }

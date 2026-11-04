@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "Apoio",
     "profiles": "Perfis vinculados",
-    "aria": "Configurações de conexões"
+    "aria": "Configurações de conexões",
+    "referrals": "Indicações"
   },
   "butrauthUnlocked": "Butter Auth liberado",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "Você pode adicionar até {{max}} links.",
     "saved": "Links de apoio salvos",
     "publicNote": "Estes links ficam salvos na sua conta Hive, onde qualquer pessoa pode vê-los."
+  },
+  "referrals": {
+    "title": "Convide pessoas para o 3Speak",
+    "intro": "Queremos trazer novos criadores, espectadores e ouvintes para o 3Speak. Compartilhe seu link com pessoas que gostariam de criar, assistir ou ouvir vídeos e podcasts aqui, e seja recompensado por isso.",
+    "linkLabel": "Seu link de indicação",
+    "copy": "Copiar",
+    "copied": "Link de indicação copiado",
+    "copyFailed": "Não foi possível copiar o link",
+    "shareTip": "Coloque na sua bio, na assinatura do e-mail ou estampe numa camiseta. Não vamos julgar.",
+    "earnTitle": "O que você ganha",
+    "bonusValue": "{{pct}}%",
+    "bonusLabel": "das recompensas de anúncios",
+    "bonusDesc": "como criador, espectador ou ouvinte",
+    "timeValue": "{{months}} meses",
+    "timeLabel": "a partir do dia do cadastro",
+    "adsValue": "{{pct}}%",
+    "adsLabel": "das campanhas de anúncios",
+    "adsDesc": "se comprarem anúncios",
+    "earnOnTop": "O 3Speak paga isso à parte. As pessoas que você convida ficam com tudo o que ganham.",
+    "rules": "Só contam contas novas criadas pelo seu link. As recompensas chegam com os pagamentos normais de anúncios, marcadas como bônus de indicação."
   }
 }

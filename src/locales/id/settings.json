@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "Dukungan",
     "profiles": "Profil tertaut",
-    "aria": "Pengaturan koneksi"
+    "aria": "Pengaturan koneksi",
+    "referrals": "Referal"
   },
   "butrauthUnlocked": "Butter Auth terbuka",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "Kamu bisa menambahkan hingga {{max}} tautan.",
     "saved": "Tautan dukungan disimpan",
     "publicNote": "Tautan ini disimpan di akun Hive kamu, dan siapa pun bisa melihatnya."
+  },
+  "referrals": {
+    "title": "Ajak orang ke 3Speak",
+    "intro": "Kami ingin mengajak kreator, penonton, dan pendengar baru ke 3Speak. Bagikan tautanmu ke orang yang akan senang membuat, menonton, atau mendengarkan video dan podcast di sini, dan dapatkan hadiah untuk itu.",
+    "linkLabel": "Tautan referalmu",
+    "copy": "Salin",
+    "copied": "Tautan referal disalin",
+    "copyFailed": "Tautan tidak dapat disalin",
+    "shareTip": "Taruh di bio-mu, tanda tangan email-mu, atau cetak di kaus. Kami tidak akan menilai.",
+    "earnTitle": "Yang kamu dapatkan",
+    "bonusValue": "{{pct}}%",
+    "bonusLabel": "dari hadiah iklan mereka",
+    "bonusDesc": "sebagai kreator, penonton, atau pendengar",
+    "timeValue": "{{months}} bulan",
+    "timeLabel": "sejak hari mereka mendaftar",
+    "adsValue": "{{pct}}%",
+    "adsLabel": "dari kampanye iklan mereka",
+    "adsDesc": "jika mereka memasang iklan",
+    "earnOnTop": "3Speak membayar ini sebagai tambahan. Orang yang kamu undang tetap mendapat semua penghasilan mereka.",
+    "rules": "Hanya akun baru yang mendaftar lewat tautanmu yang dihitung. Hadiah datang bersama pembayaran iklan biasa, ditandai sebagai bonus referal."
   }
 }

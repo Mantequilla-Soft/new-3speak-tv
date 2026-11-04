@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.66',
+    category: 'settings',
+    date: '2026-11-04',
+    summary: "Invite friends from Settings → Connections → Referrals: copy your link and earn 10% of their ad rewards for their first 3 months.",
+  },
+  {
     version: '1.81.65',
     category: 'notifications',
     date: '2026-11-04',
