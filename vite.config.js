@@ -2,10 +2,27 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { VitePWA } from "vite-plugin-pwa";
+import { readFileSync } from "node:fs";
+
+// Writes version.json (the APP_VERSION of src/version.js) next to the build. The
+// "new version" prompt (utils/checkLatestVersion.js) reads it from the live site,
+// so it only fires once a deploy has really swapped the new build in: not on the
+// merge to production, and not while the upload gate is still holding the swap.
+const versionFile = () => ({
+  name: "3speak-version-file",
+  apply: "build",
+  generateBundle() {
+    const src = readFileSync(new URL("./src/version.js", import.meta.url), "utf8");
+    const version = src.match(/APP_VERSION\s*=\s*['"]([\d.]+)['"]/)?.[1];
+    if (!version) throw new Error("APP_VERSION not found in src/version.js");
+    this.emitFile({ type: "asset", fileName: "version.json", source: JSON.stringify({ version }) + "\n" });
+  },
+});
 
 export default defineConfig({
   plugins: [
     react(),
+    versionFile(),
     nodePolyfills({
       // Include all modules needed by keychain-sdk and hive crypto libraries
       include: [

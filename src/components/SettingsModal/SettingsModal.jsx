@@ -26,7 +26,7 @@ import ModalHeader from '../ModalHeader/ModalHeader';
 import AddSocialLink_modal from '../modal/AddSocialLink_modal';
 import { SUPPORT_SITE_ICONS } from '../tip-reward/OtherWays';
 import { parseSupportLink, readSupportLinks, saveSupportLinks, SUPPORT_LINK_MAX, SUPPORT_SITE_NAMES } from '../../lib/supportLinks';
-import { IoClose } from 'react-icons/io5';
+import { IoClose, IoGiftOutline, IoCalendarOutline, IoMegaphoneOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import './SettingsModal.scss';
 import useCardSize, { useIsCardSizeMobile } from '../../hooks/useCardSize';
 
@@ -621,6 +621,83 @@ function LightningReceiveSection() {
   );
 }
 
+// What a referral earns. Mirrors the checker's payout settings
+// (AD_EARNER_REFERRAL_PCT / _DAYS and AD_REFERRAL_POOL_PCT in 3speakchecks);
+// change them together.
+const REFERRAL_BONUS_PCT = 10;
+const REFERRAL_BONUS_MONTHS = 3;
+const ADVERTISER_REFERRAL_PCT = 2;
+
+/**
+ * The user's own `?ref=` link (utils/referral.js) with a copy button, and what a
+ * referral earns. Only link and invite referrals are paid (the signup screens no
+ * longer ask "who referred you?"), so this link is the way to be credited.
+ */
+function ReferralSection() {
+  const { t } = useTranslation();
+  const user = useAppStore((s) => s.user);
+  if (!user) return null;
+  const link = `${window.location.origin}/?ref=${encodeURIComponent(user)}`;
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(link);
+      toast.success(t('settings.referrals.copied'));
+    } catch {
+      toast.error(t('settings.referrals.copyFailed'));
+    }
+  }
+
+  return (
+    <div className="settings-section">
+      <h4 className="settings-section-title">{t('settings.referrals.title')}</h4>
+      <div className="settings-modal-row">
+        <div className="settings-row-text">
+          <span className="settings-row-desc">{t('settings.referrals.intro')}</span>
+          <span className="settings-row-title">{t('settings.referrals.earnTitle')}</span>
+          <ul className="settings-referral-tiles">
+            {[
+              { Icon: IoGiftOutline, value: t('settings.referrals.bonusValue', { pct: REFERRAL_BONUS_PCT }), label: t('settings.referrals.bonusLabel'), desc: t('settings.referrals.bonusDesc') },
+              { Icon: IoCalendarOutline, value: t('settings.referrals.timeValue', { months: REFERRAL_BONUS_MONTHS }), label: t('settings.referrals.timeLabel') },
+              { Icon: IoMegaphoneOutline, value: t('settings.referrals.adsValue', { pct: ADVERTISER_REFERRAL_PCT }), label: t('settings.referrals.adsLabel'), desc: t('settings.referrals.adsDesc') },
+            ].map(({ Icon, value, label, desc }) => (
+              <li key={value + label} className="settings-referral-tile">
+                <Icon className="settings-referral-tile-icon" aria-hidden="true" />
+                <span className="settings-referral-tile-value">{value}</span>
+                <span className="settings-referral-tile-label">{label}</span>
+                {desc && <span className="settings-referral-tile-desc">{desc}</span>}
+              </li>
+            ))}
+          </ul>
+          <span className="settings-referral-ontop">
+            <IoCheckmarkCircleOutline aria-hidden="true" />
+            {t('settings.referrals.earnOnTop')}
+          </span>
+          <span className="settings-row-desc">{t('settings.referrals.rules')}</span>
+        </div>
+      </div>
+      <div className="settings-modal-row settings-lightning">
+        <div className="settings-row-text">
+          <span className="settings-row-title">{t('settings.referrals.linkLabel')}</span>
+          <div className="settings-lightning-form">
+            <input
+              type="text"
+              readOnly
+              value={link}
+              aria-label={t('settings.referrals.linkLabel')}
+              onFocus={(e) => e.target.select()}
+            />
+            <button type="button" className="settings-ads-save" onClick={copy}>
+              {t('settings.referrals.copy')}
+            </button>
+          </div>
+          <span className="settings-row-desc">{t('settings.referrals.shareTip')}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /**
  * "Other ways to support you": the creator's pages on payment sites, shown in
  * their tip window (lib/supportLinks.js). Every add or remove is saved to the
@@ -912,9 +989,10 @@ const TABS = [
   { id: 'about', labelKey: 'settings.tabs.about' },
 ];
 
-// The two panels behind Connections: where money reaches the creator, and their
-// verified channels elsewhere.
+// The panels behind Connections: their referral link (first, and what the tab
+// opens on), where money reaches the creator, and their verified channels.
 const CONNECTIONS_TABS = [
+  { id: 'referrals', labelKey: 'settings.connectionsTabs.referrals' },
   { id: 'support', labelKey: 'settings.connectionsTabs.support' },
   { id: 'profiles', labelKey: 'settings.connectionsTabs.profiles' },
 ];
@@ -988,7 +1066,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   );
   const [tab, setTab] = useState('general');
   const [contentTab, setContentTab] = useState('feed');
-  const [connectionsTab, setConnectionsTab] = useState('support');
+  const [connectionsTab, setConnectionsTab] = useState('referrals');
   // Losing the group (or logging out) while standing on that page would leave the modal
   // with no tab selected and nothing rendered.
   useEffect(() => {
@@ -1181,6 +1259,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
         )}
         {tab === 'connections' && connectionsTab === 'support' && <LightningReceiveSection />}
         {tab === 'connections' && connectionsTab === 'support' && <SupportLinksSection />}
+        {tab === 'connections' && connectionsTab === 'referrals' && <ReferralSection />}
         {tab === 'connections' && connectionsTab === 'profiles' && settingsUser && (
           <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />
         )}

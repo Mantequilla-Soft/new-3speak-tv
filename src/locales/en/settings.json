@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "Support",
     "profiles": "Linked profiles",
-    "aria": "Connection settings"
+    "aria": "Connection settings",
+    "referrals": "Referrals"
   },
   "butrauthUnlocked": "Butter Auth unlocked",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "You can add up to {{max}} links.",
     "saved": "Support links saved",
     "publicNote": "These links are saved on your Hive account, where anyone can see them."
+  },
+  "referrals": {
+    "title": "Invite people to 3Speak",
+    "intro": "We are working to bring new creators, viewers and listeners to 3Speak. Share your link with people who would enjoy making, watching or listening to videos and podcasts here, and get rewarded for it.",
+    "linkLabel": "Your referral link",
+    "copy": "Copy",
+    "copied": "Referral link copied",
+    "copyFailed": "Could not copy the link",
+    "shareTip": "Put it in your bio, your email signature, or print it on a T-shirt. We won't judge.",
+    "earnTitle": "What you earn",
+    "bonusValue": "{{pct}}%",
+    "bonusLabel": "of their ad rewards",
+    "bonusDesc": "as a creator, viewer or listener",
+    "timeValue": "{{months}} months",
+    "timeLabel": "from the day they sign up",
+    "adsValue": "{{pct}}%",
+    "adsLabel": "of their ad campaigns",
+    "adsDesc": "if they book ads",
+    "earnOnTop": "3Speak pays this on top. The people you invite keep everything they earn.",
+    "rules": "Only new accounts that sign up through your link count. Rewards arrive with the regular ad payouts, marked as a referral bonus."
   }
 }

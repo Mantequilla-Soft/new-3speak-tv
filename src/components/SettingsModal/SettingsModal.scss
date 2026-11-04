@@ -549,6 +549,63 @@
   }
 }
 
+// Referrals: what an invite earns, as three flat tiles (Settings > Connections).
+.settings-referral-tiles {
+  list-style: none;
+  margin: 6px 0 2px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.settings-referral-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  border-radius: 12px;
+  background: var(--card-bg, #1a1a2e);
+}
+
+.settings-referral-tile-icon {
+  font-size: 20px;
+  color: var(--accent-primary, #e53935);
+  margin-bottom: 4px;
+}
+
+.settings-referral-tile-value {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.settings-referral-tile-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.settings-referral-tile-desc {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--text-secondary, #9aa);
+}
+
+.settings-referral-ontop {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+
+  svg { flex: none; font-size: 16px; color: var(--accent-primary, #e53935); }
+}
+
 // Other ways to support you: one saved link per row, X to remove.
 .settings-support-links {
   list-style: none;

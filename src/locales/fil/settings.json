@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "Suporta",
     "profiles": "Mga naka-link na profile",
-    "aria": "Mga setting ng koneksyon"
+    "aria": "Mga setting ng koneksyon",
+    "referrals": "Mga referral"
   },
   "butrauthUnlocked": "Na-unlock ang Butter Auth",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "Hanggang {{max}} link ang puwede mong idagdag.",
     "saved": "Na-save ang mga support link",
     "publicNote": "Naka-save ang mga link na ito sa iyong Hive account, kung saan makikita ito ng kahit sino."
+  },
+  "referrals": {
+    "title": "Mag-imbita ng mga tao sa 3Speak",
+    "intro": "Gusto naming magdala ng mga bagong creator, manonood at tagapakinig sa 3Speak. Ibahagi ang link mo sa mga taong gugustuhing gumawa, manood o makinig ng mga video at podcast dito, at magkaroon ng gantimpala para dito.",
+    "linkLabel": "Ang referral link mo",
+    "copy": "Kopyahin",
+    "copied": "Nakopya ang referral link",
+    "copyFailed": "Hindi makopya ang link",
+    "shareTip": "Ilagay mo sa bio mo, sa email signature mo, o ipa-print sa T-shirt. Hindi ka namin huhusgahan.",
+    "earnTitle": "Ang kikitain mo",
+    "bonusValue": "{{pct}}%",
+    "bonusLabel": "ng ad rewards nila",
+    "bonusDesc": "bilang creator, manonood o tagapakinig",
+    "timeValue": "{{months}} buwan",
+    "timeLabel": "mula sa araw ng pag-sign up nila",
+    "adsValue": "{{pct}}%",
+    "adsLabel": "ng ad campaigns nila",
+    "adsDesc": "kung mag-book sila ng ads",
+    "earnOnTop": "Dagdag itong binabayaran ng 3Speak. Buo pa ring natatanggap ng mga inimbita mo ang kinikita nila.",
+    "rules": "Mga bagong account lang na nag-sign up gamit ang link mo ang binibilang. Kasama ng karaniwang ad payouts dumarating ang rewards, na may markang referral bonus."
   }
 }

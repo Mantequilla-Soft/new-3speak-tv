@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "Soutien",
     "profiles": "Profils liés",
-    "aria": "Paramètres des connexions"
+    "aria": "Paramètres des connexions",
+    "referrals": "Parrainage"
   },
   "butrauthUnlocked": "Butter Auth débloqué",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "Tu peux ajouter jusqu'à {{max}} liens.",
     "saved": "Liens de soutien enregistrés",
     "publicNote": "Ces liens sont enregistrés sur ton compte Hive, où tout le monde peut les voir."
+  },
+  "referrals": {
+    "title": "Invite des gens sur 3Speak",
+    "intro": "Nous voulons attirer de nouveaux créateurs, spectateurs et auditeurs sur 3Speak. Partage ton lien avec des personnes qui aimeraient créer, regarder ou écouter des vidéos et des podcasts ici, et sois récompensé pour cela.",
+    "linkLabel": "Ton lien de parrainage",
+    "copy": "Copier",
+    "copied": "Lien de parrainage copié",
+    "copyFailed": "Impossible de copier le lien",
+    "shareTip": "Mets-le dans ta bio, ta signature d'e-mail, ou imprime-le sur un t-shirt. On ne jugera pas.",
+    "earnTitle": "Ce que tu gagnes",
+    "bonusValue": "{{pct}} %",
+    "bonusLabel": "de leurs récompenses publicitaires",
+    "bonusDesc": "comme créateur, spectateur ou auditeur",
+    "timeValue": "{{months}} mois",
+    "timeLabel": "à partir de leur inscription",
+    "adsValue": "{{pct}} %",
+    "adsLabel": "de leurs campagnes publicitaires",
+    "adsDesc": "s'ils achètent de la publicité",
+    "earnOnTop": "3Speak paie cela en plus. Les personnes que tu invites gardent tout ce qu'elles gagnent.",
+    "rules": "Seuls les nouveaux comptes créés via ton lien comptent. Les récompenses arrivent avec les paiements publicitaires habituels, marquées comme bonus de parrainage."
   }
 }

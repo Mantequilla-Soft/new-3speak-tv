@@ -418,8 +418,8 @@ function App() {
   const { search } = location;
   useEffect(() => { captureReferralFromUrl(search); }, [search]);
 
-  // Compare the running build against the latest version on GitHub (develop) and
-  // prompt the user to refresh if they're on a stale (cached) build — so updates
+  // Compare the running build against the version the live site serves (only
+  // changes once a deploy has swapped the new build in) and prompt the user to refresh if they're on a stale (cached) build — so updates
   // don't require a manual reload. Re-checks on tab focus and every 30 min.
   useEffect(() => {
     const promptIfNewer = async () => {

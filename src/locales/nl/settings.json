@@ -133,7 +133,8 @@
   "connectionsTabs": {
     "support": "Steun",
     "profiles": "Gekoppelde profielen",
-    "aria": "Instellingen voor koppelingen"
+    "aria": "Instellingen voor koppelingen",
+    "referrals": "Doorverwijzingen"
   },
   "butrauthUnlocked": "Butter Auth ontgrendeld",
   "appearance": {
@@ -255,5 +256,25 @@
     "max": "Je kunt tot {{max}} links toevoegen.",
     "saved": "Steunlinks opgeslagen",
     "publicNote": "Deze links worden opgeslagen in je Hive-account, waar iedereen ze kan zien."
+  },
+  "referrals": {
+    "title": "Nodig mensen uit voor 3Speak",
+    "intro": "We willen nieuwe makers, kijkers en luisteraars naar 3Speak halen. Deel je link met mensen die hier graag video's en podcasts zouden maken, bekijken of beluisteren, en word daarvoor beloond.",
+    "linkLabel": "Je verwijzingslink",
+    "copy": "Kopiëren",
+    "copied": "Verwijzingslink gekopieerd",
+    "copyFailed": "Kon de link niet kopiëren",
+    "shareTip": "Zet hem in je bio, je e-mailhandtekening of druk hem op een T-shirt. Wij oordelen niet.",
+    "earnTitle": "Wat je verdient",
+    "bonusValue": "{{pct}}%",
+    "bonusLabel": "van hun advertentiebeloningen",
+    "bonusDesc": "als maker, kijker of luisteraar",
+    "timeValue": "{{months}} maanden",
+    "timeLabel": "vanaf de dag dat ze zich aanmelden",
+    "adsValue": "{{pct}}%",
+    "adsLabel": "van hun advertentiecampagnes",
+    "adsDesc": "als ze advertenties boeken",
+    "earnOnTop": "3Speak betaalt dit er bovenop. De mensen die je uitnodigt houden alles wat ze verdienen.",
+    "rules": "Alleen nieuwe accounts die zich via je link aanmelden tellen mee. Beloningen komen met de gewone advertentie-uitbetalingen, gemarkeerd als verwijzingsbonus."
   }
 }

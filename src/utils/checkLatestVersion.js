@@ -7,17 +7,19 @@ import { APP_VERSION_STORAGE_KEY } from "./appVersion";
 // line under it. See utils/toast.js.
 const toast = toastIn('App update');
 
-// The live release lives on the repo's `production` branch, whose version.js is
-// the source of truth for the latest released version. We read it raw from GitHub
-// and compare it to the version baked into the running bundle, so a user on a
-// stale (cached) build can be prompted to refresh.
-const REMOTE_VERSION_URL =
-  "https://raw.githubusercontent.com/Mantequilla-Soft/new-3speak-tv/production/src/version.js";
+// What 3speak.tv is serving right now: version.json is written by the build
+// (vite.config.js) and only goes live when a deploy swaps the new build in. The
+// production branch on GitHub is no guide: a merge lands there long before the
+// swap (the deploy waits for running uploads), and a deploy that fails its smoke
+// test is swapped back. Same origin, never cached (no-store + nginx sends no
+// Cache-Control for it, the service worker has no route for .json).
+const LIVE_VERSION_URL = "/version.json";
 
-// "export const APP_VERSION = '1.2.3';" → "1.2.3"
+// '{"version":"1.2.3"}' → "1.2.3"; anything else (the SPA's HTML) → null.
 function parseVersion(text) {
-  const m = String(text || "").match(/APP_VERSION\s*=\s*['"]([\d.]+)['"]/);
-  return m ? m[1] : null;
+  let v;
+  try { v = JSON.parse(text)?.version; } catch { return null; }
+  return typeof v === "string" && /^\d+(\.\d+)*$/.test(v) ? v : null;
 }
 
 // true when version `a` is newer than `b` (numeric dot-separated parts).
@@ -32,8 +34,9 @@ export function isNewerVersion(a, b) {
   return false;
 }
 
-// Returns the latest version string if GitHub's production branch is newer than
-// the running build, otherwise null (also null on any network error / offline).
+// Returns the live site's version if it is newer than the running build, otherwise
+// null (also null on any network error / offline, or a build without version.json,
+// where the SPA fallback answers with HTML).
 export async function fetchNewerVersion() {
   // Never on the dev server. preview.3speak.tv runs Vite in dev mode off a feature
   // branch, so this would compare a branch build against `production` — two
@@ -44,14 +47,14 @@ export async function fetchNewerVersion() {
   if (import.meta.env.DEV) return null;
 
   try {
-    const res = await fetch(`${REMOTE_VERSION_URL}?t=${Date.now()}`, { cache: "no-store" });
+    const res = await fetch(`${LIVE_VERSION_URL}?t=${Date.now()}`, { cache: "no-store" });
     if (!res.ok) return null;
     const remote = parseVersion(await res.text());
 
     let stored = null;
     try { stored = localStorage.getItem(APP_VERSION_STORAGE_KEY); } catch { /* ignore */ }
     console.log(
-      `[version] GitHub (production): ${remote} | browser storage: ${stored} | running build: ${APP_VERSION}`
+      `[version] live site: ${remote} | browser storage: ${stored} | running build: ${APP_VERSION}`
     );
 
     if (remote && isNewerVersion(remote, APP_VERSION)) return remote;
@@ -85,8 +88,8 @@ export async function reloadForUpdate() {
 }
 
 // Upload gate. Call this at the very start of any real upload. If a newer build
-// has been deployed (per the GitHub `production` version.js — the same changelog-
-// driven version check used for the global refresh prompt), it toasts and force-
+// has been deployed (per the live site's version.json, the same check used for
+// the global refresh prompt), it toasts and force-
 // reloads onto the latest build BEFORE the upload runs, then resolves `true` so
 // the caller can bail out. Resolves `false` when the running build is current.
 //
