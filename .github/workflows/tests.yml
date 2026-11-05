@@ -38,7 +38,25 @@ jobs:
           fi
           npm install --no-audit --no-fund
           npm ci --prefix server --no-audit --no-fund
-      - run: npm test
+      - name: API tests
+        run: npm run test:server
+      - name: Unit tests with coverage
+        run: npm run test:coverage
+      - name: Coverage summary
+        if: always()
+        run: |
+          [ -f coverage/coverage-summary.json ] || exit 0
+          node -e '
+            const t = require("./coverage/coverage-summary.json").total;
+            const row = (k) => `| ${k} | ${t[k].pct}% | ${t[k].covered} / ${t[k].total} |`;
+            console.log(["### Unit test coverage", "| | % | covered |", "|---|---|---|", ...["lines", "statements", "functions", "branches"].map(row)].join("\n"));
+          ' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 14
 
   e2e:
     runs-on: ubuntu-latest
