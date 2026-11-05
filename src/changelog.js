@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.69',
+    category: 'shorts',
+    date: '2026-11-05',
+    summary: "Writing comments on shorts is roomier on desktop: the text box now spans the full width.",
+  },
+  {
     version: '1.81.68',
     category: 'general',
     date: '2026-11-05',

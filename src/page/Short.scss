@@ -2407,6 +2407,18 @@
       gap: 0.625rem;
       padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
     }
+
+    // Desktop: the text box gets the whole width on its own row, with the
+    // avatar (left) and emoji/GIF/image/send (right) underneath. Squeezed in
+    // one row with them it was only a few words wide (owner, 2026-11-05).
+    @media (min-width: 769px) {
+      flex-wrap: wrap;
+      align-items: center;
+      row-gap: 0.5rem;
+
+      .commentInputBox { order: -1; flex: 1 1 100%; }
+      .commentInputAvatar { margin-right: auto; }
+    }
   }
 
   .commentInputAvatar {
