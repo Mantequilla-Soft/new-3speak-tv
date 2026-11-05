@@ -48,3 +48,6 @@ server/data/
 test-results/
 playwright-report/
 .vitest/
+
+# test coverage reports
+coverage/

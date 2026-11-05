@@ -14,7 +14,8 @@
     "test:unit": "vitest run tests/unit",
     "test:server": "vitest run tests/server",
     "test:e2e": "playwright test",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run tests/unit --coverage"
   },
   "dependencies": {
     "@aioha/aioha": "^1.8.5",
@@ -125,9 +126,14 @@
     "@anthropic-ai/sdk": "^0.131.0",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.64.1",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.0.5",
+    "@vitest/coverage-v8": "^5.0.5",
     "eslint": "^10.8.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.4",
