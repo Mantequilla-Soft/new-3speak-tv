@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../lib/store';
 import { CHECKER_URL, HIVE_API_URL } from '../utils/config';
+import { withViewer } from '../utils/userFilters';
 import { AUDIO_CATEGORY_ICONS } from '../utils/audioCategoryIcons';
 import { MdClose, MdArrowBack, MdExplore, MdPlayCircleOutline, MdLibraryMusic, MdWhatshot } from 'react-icons/md';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
@@ -363,9 +364,9 @@ function Audio() {
   }, [datePreset, minDur, maxDur, showNsfw]);
 
   const { data: grouped, isLoading: groupedLoading } = useQuery({
-    queryKey: ['audio-grouped', groupedParams],
+    queryKey: ['audio-grouped', groupedParams, user || null],
     queryFn: async () => {
-      const { data } = await axios.get(`${CHECKER_URL}/audio/grouped?${groupedParams}`);
+      const { data } = await axios.get(withViewer(`${CHECKER_URL}/audio/grouped?${groupedParams}`, user));
       const groups = data.groups || {};
       // Hide service-account audio frontend-side (every grouped section).
       for (const k of Object.keys(groups)) {
@@ -379,12 +380,12 @@ function Audio() {
   // Music playlists, split "by artist" (only the creator's tracks) vs
   // "by listeners" (contains tracks from other authors).
   const { data: playlistGroups } = useQuery({
-    queryKey: ['audio-playlists', typeFilter, genreFilter],
+    queryKey: ['audio-playlists', typeFilter, genreFilter, user || null],
     queryFn: async () => {
       const p = new URLSearchParams();
       if (typeFilter) p.set('category', typeFilter);
       if (typeFilter === 'song' && genreFilter) p.set('genre', genreFilter);
-      const { data } = await axios.get(`${CHECKER_URL}/audio/playlists?${p}`);
+      const { data } = await axios.get(withViewer(`${CHECKER_URL}/audio/playlists?${p}`, user));
       const pg = data || { by_artist: [], by_listeners: [] };
       // Hide albums/playlists owned by a service account.
       return {
@@ -399,9 +400,9 @@ function Audio() {
 
   // Filtered results (when tag or date is active)
   const { data: filteredAudio, isLoading: filteredLoading } = useQuery({
-    queryKey: ['audio-filtered', filterParams],
+    queryKey: ['audio-filtered', filterParams, user || null],
     queryFn: async () => {
-      const { data } = await axios.get(`${CHECKER_URL}/audio?${filterParams}`);
+      const { data } = await axios.get(withViewer(`${CHECKER_URL}/audio?${filterParams}`, user));
       return (data.audio || []).filter((it) => !isHiddenOwner(it.owner));
     },
     // Discover lists them once a filter is set; Trends always does.
@@ -422,9 +423,9 @@ function Audio() {
   }, [activeTags, datePreset, minDur, maxDur, typeFilter, genreFilter, showNsfw]);
 
   const { data: creators } = useQuery({
-    queryKey: ['audio-creators', creatorsParams],
+    queryKey: ['audio-creators', creatorsParams, user || null],
     queryFn: async () => {
-      const { data } = await axios.get(`${CHECKER_URL}/audio/creators?${creatorsParams}`);
+      const { data } = await axios.get(withViewer(`${CHECKER_URL}/audio/creators?${creatorsParams}`, user));
       return (data.creators || []).filter((c) => !isHiddenOwner(c.owner));
     },
   });

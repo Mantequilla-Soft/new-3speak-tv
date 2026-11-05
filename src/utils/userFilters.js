@@ -66,3 +66,29 @@ export async function getHidden(username) {
     return { videos: [], creators: [] };
   }
 }
+
+/**
+ * Add the viewer to a browsing request, so the checker can drop the creators they
+ * dismissed (shorts, audio, playlists: owner, 2026-11-05). No viewer = unchanged.
+ */
+export function withViewer(url, user) {
+  if (!user) return url;
+  return `${url}${url.includes('?') ? '&' : '?'}currentuser=${encodeURIComponent(user)}`;
+}
+
+/**
+ * The rails of OTHER content types that the checker filters by hidden creators.
+ * Refetched after a hide/unhide so the creator's shorts, audio and playlists go
+ * (or come back) at once. Not the main video grids: those drop the creator
+ * locally, and a refetch would reshuffle them under the user.
+ */
+const HIDE_CREATOR_RAIL_KEYS = [
+  'feed-shorts', 'feed-audio', 'feed-community', 'feed-playlists',
+  'shorts-stories', 'stories', 'new-from-following', 'watch-related-shorts',
+  'audio-grouped', 'audio-playlists', 'audio-filtered', 'audio-creators',
+];
+
+export function refreshRailsAfterHide(queryClient) {
+  if (!queryClient) return;
+  for (const k of HIDE_CREATOR_RAIL_KEYS) queryClient.invalidateQueries({ queryKey: [k] });
+}

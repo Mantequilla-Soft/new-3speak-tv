@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.68',
+    category: 'general',
+    date: '2026-11-05',
+    summary: "Hiding a creator now also hides their shorts, audio and playlists from all your feeds.",
+  },
+  {
     version: '1.81.67',
     category: 'sharing',
     date: '2026-11-05',

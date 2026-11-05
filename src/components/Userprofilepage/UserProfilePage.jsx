@@ -24,7 +24,7 @@ import { BiDollar } from 'react-icons/bi';
 import { Gift } from 'lucide-react';
 import { IoBanOutline, IoEyeOutline, IoPlanetOutline } from 'react-icons/io5';
 import useGalaxyFits from '../../hooks/useGalaxyFits';
-import { getHidden, hideCreator, unhideCreator } from '../../utils/userFilters';
+import { getHidden, hideCreator, unhideCreator, refreshRailsAfterHide } from '../../utils/userFilters';
 import Follower from './Follower';
 import PlaylistCard from '../Cards/PlaylistCard';
 import { useUserPlaylists } from '../../hooks/useUserPlaylists';
@@ -265,8 +265,10 @@ function UserProfilePage({ user: userProp }) {
       // Refresh the toggle itself, then every feed that filters on it.
       await rqClient.invalidateQueries({ queryKey: ['hidden-creators', authenticatedUser] });
       ['discover-grouped', 'trending-grouped', 'newcontent-grouped', 'promoted-grouped',
-        'home-grouped', 'follow-feed', 'trending', 'shorts'].forEach((k) =>
+        'home-grouped', 'follow-feed', 'trending', 'shorts', 'interests-grouped'].forEach((k) =>
         rqClient.invalidateQueries({ queryKey: [k] }));
+      // ...and their shorts, audio and playlists on every other rail.
+      refreshRailsAfterHide(rqClient);
 
       toast.success(
         isCreatorHidden

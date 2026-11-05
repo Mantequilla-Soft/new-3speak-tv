@@ -9,7 +9,7 @@ import { FEED_URL, TRENDING_SORTED_URL, FOLLOW_FEED_URL, DISCOVER_FEED_URL, INTE
 import { useContentBatch } from "../hooks/useContentBatch";
 import { useWatchHistory } from "../hooks/useWatchHistory";
 import { batchCheckWatched } from "../utils/watchHistory";
-import { getHidden } from "../utils/userFilters";
+import { getHidden, withViewer } from "../utils/userFilters";
 import { aiKey, isAiFlagged, loadAiFlags } from "../utils/aiFlags";
 import useViewCounts from "../hooks/useViewCounts";
 import { useAppStore } from "../lib/store";
@@ -295,7 +295,9 @@ const AUDIO_FEED_PAGE = 50;
 // page hides the same ones, HIDDEN_AUDIO_OWNERS in Audio.jsx).
 const HIDDEN_OWNERS = new Set(['badadib']);
 const fetchFeedAudio = async (page = 1) => {
-  const res = await axios.get(appendNsfw(`${CHECKER_URL}/audio?from=${AUDIO_FEED_DAYS}&page=${page}&limit=${AUDIO_FEED_PAGE}`, useAppStore.getState().showNsfw));
+  const { showNsfw, user } = useAppStore.getState();
+  // The viewer rides along so creators they hid stay out of the stream.
+  const res = await axios.get(appendNsfw(withViewer(`${CHECKER_URL}/audio?from=${AUDIO_FEED_DAYS}&page=${page}&limit=${AUDIO_FEED_PAGE}`, user), showNsfw));
   return res.data?.audio || [];
 };
 
@@ -864,7 +866,7 @@ const HomeGrouped = () => {
   // ── New audio, also MIXED INTO the community stream (Discover only) ──
   // One per creator, at most AUDIO_FEED_DAYS old, never your own.
   const audioQ = useInfiniteQuery({
-    queryKey: ['feed-audio', showNsfw],
+    queryKey: ['feed-audio', showNsfw, user || null],
     queryFn: ({ pageParam = 1 }) => fetchFeedAudio(pageParam),
     initialPageParam: 1,
     getNextPageParam: nextPage(),
