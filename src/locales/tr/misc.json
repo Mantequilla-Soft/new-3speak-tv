@@ -147,7 +147,15 @@
     "unreachableWithError": "Snaps kapsayıcısını bulmak için hiçbir Hive düğümüne ulaşılamadı (son hata: {{error}}). Lütfen bağlantını kontrol et ve tekrar dene."
   },
   "embed": {
-    "responsive": "Duyarlı"
+    "responsive": "Duyarlı",
+    "embed": "Yerleştir",
+    "audioTitle": "Bu sesi yerleştir",
+    "playlistTitle": "Bu çalma listesini yerleştir",
+    "playlistHint": "Bunu herhangi bir web sitesine veya blog yazısına yapıştırın. Çalma listesindeki tüm ses parçalarını, sonradan eklenenler dahil, sırayla çalar.",
+    "audioFull": "Başlıklı",
+    "audioCompact": "Kompakt",
+    "audioMinimal": "Minimal",
+    "heightSub": "Tam genişlik, {{height}} px yükseklik"
   },
   "incubation": {
     "requestFailed": "İstek başarısız ({{status}})",

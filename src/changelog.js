@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.67',
+    category: 'sharing',
+    date: '2026-11-05',
+    summary: "Audio and playlists can be embedded on other websites: \"Embed on a website\" in the audio share menu, and an Embed button on audio playlists. A playlist embed plays every track in order, including ones added later.",
+  },
+  {
     version: '1.81.66',
     category: 'settings',
     date: '2026-11-04',

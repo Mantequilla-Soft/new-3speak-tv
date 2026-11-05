@@ -147,7 +147,15 @@
     "unreachableWithError": "Não foi possível acessar nenhum nó da Hive para encontrar o container de Snaps (último erro — {{error}}). Verifique sua conexão e tente de novo."
   },
   "embed": {
-    "responsive": "Responsivo"
+    "responsive": "Responsivo",
+    "embed": "Incorporar",
+    "audioTitle": "Incorporar este áudio",
+    "playlistTitle": "Incorporar esta playlist",
+    "playlistHint": "Cole isto em qualquer site ou post de blog. Ele toca em ordem todas as faixas de áudio da playlist, inclusive as adicionadas depois.",
+    "audioFull": "Com título",
+    "audioCompact": "Compacto",
+    "audioMinimal": "Mínimo",
+    "heightSub": "Largura total, {{height}} px de altura"
   },
   "incubation": {
     "requestFailed": "A solicitação falhou ({{status}})",

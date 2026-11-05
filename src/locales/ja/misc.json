@@ -147,7 +147,15 @@
     "unreachableWithError": "Snaps のコンテナを探すための Hive ノードに接続できませんでした（最後のエラー: {{error}}）。接続を確認して、もう一度お試しください。"
   },
   "embed": {
-    "responsive": "レスポンシブ"
+    "responsive": "レスポンシブ",
+    "embed": "埋め込み",
+    "audioTitle": "この音声を埋め込む",
+    "playlistTitle": "このプレイリストを埋め込む",
+    "playlistHint": "ウェブサイトやブログ記事に貼り付けてください。プレイリストのすべての音声トラックを、後から追加されたものも含めて順番に再生します。",
+    "audioFull": "タイトル付き",
+    "audioCompact": "コンパクト",
+    "audioMinimal": "ミニマル",
+    "heightSub": "幅いっぱい、高さ {{height}} px"
   },
   "incubation": {
     "requestFailed": "リクエストに失敗しました（{{status}}）",

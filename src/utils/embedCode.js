@@ -19,7 +19,7 @@
  *
  * `mode=iframe` drops the player's header/info panel, leaving just the video.
  */
-import { EMBED_PLAYER_BASE } from './config';
+import { AUDIO_EMBED_BASE, EMBED_PLAYER_BASE } from './config';
 
 const ALLOW = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
 
@@ -72,4 +72,55 @@ export function buildEmbedHtml(author, permlink, { size = 'responsive', title = 
     `  allowfullscreen allow="${ALLOW}"`,
     `  title="${label}"></iframe>`,
   ].join('\n');
+}
+
+/*
+ * Audio and playlists: the audio player at AUDIO_EMBED_BASE (audio.3speak.tv).
+ * Always full width; the size is the height. `iframe=1` gives the embedded look
+ * (dark card on a transparent page). A playlist embed loads the playlist each
+ * time it is shown, so tracks added later appear in it without a new snippet.
+ */
+export const AUDIO_EMBED_SIZES = [
+  { id: 'full', labelKey: 'misc.embed.audioFull', height: 180 },
+  { id: 'compact', labelKey: 'misc.embed.audioCompact', height: 120 },
+  { id: 'minimal', labelKey: 'misc.embed.audioMinimal', height: 80 },
+];
+
+export const PLAYLIST_EMBED_SIZES = [
+  { id: 'medium', label: '480 px', height: 480 },
+  { id: 'short', label: '360 px', height: 360 },
+  { id: 'tall', label: '640 px', height: 640 },
+];
+
+/** The audio embed's iframe src, by the audio's own permlink (embed-audio `permlink`). */
+export function buildAudioEmbedSrc(permlink, mode = 'full') {
+  return `${AUDIO_EMBED_BASE}/play?a=${encodeURIComponent(permlink)}&mode=${mode}&iframe=1`;
+}
+
+/** The playlist embed's iframe src: every audio track of the playlist. */
+export function buildPlaylistEmbedSrc(playlistId) {
+  return `${AUDIO_EMBED_BASE}/play?list=${encodeURIComponent(playlistId)}&iframe=1`;
+}
+
+function audioIframe(src, height, label) {
+  return [
+    `<iframe src="${src}"`,
+    `  width="100%" height="${height}" style="border:0;max-width:100%"`,
+    '  allow="autoplay; clipboard-write"',
+    `  title="${label}"></iframe>`,
+  ].join('\n');
+}
+
+/** Ready-to-paste HTML for one audio. `size` is an AUDIO_EMBED_SIZES id. */
+export function buildAudioEmbedHtml(permlink, { size = 'full', title = '' } = {}) {
+  const spec = AUDIO_EMBED_SIZES.find((s) => s.id === size) || AUDIO_EMBED_SIZES[0];
+  const label = escapeAttr(String(title || '').trim() || '3Speak audio');
+  return audioIframe(buildAudioEmbedSrc(permlink, spec.id), spec.height, label);
+}
+
+/** Ready-to-paste HTML for a playlist. `size` is a PLAYLIST_EMBED_SIZES id. */
+export function buildPlaylistEmbedHtml(playlistId, { size = 'medium', title = '' } = {}) {
+  const spec = PLAYLIST_EMBED_SIZES.find((s) => s.id === size) || PLAYLIST_EMBED_SIZES[0];
+  const label = escapeAttr(String(title || '').trim() || '3Speak playlist');
+  return audioIframe(buildPlaylistEmbedSrc(playlistId), spec.height, label);
 }

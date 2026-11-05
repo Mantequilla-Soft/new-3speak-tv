@@ -147,7 +147,15 @@
     "unreachableWithError": "Không thể kết nối với node Hive nào để tìm bài chứa Snaps (lỗi gần nhất — {{error}}). Vui lòng kiểm tra kết nối và thử lại."
   },
   "embed": {
-    "responsive": "Tự co giãn"
+    "responsive": "Tự co giãn",
+    "embed": "Nhúng",
+    "audioTitle": "Nhúng âm thanh này",
+    "playlistTitle": "Nhúng danh sách phát này",
+    "playlistHint": "Dán đoạn này vào bất kỳ trang web hoặc bài blog nào. Nó phát lần lượt mọi bản âm thanh trong danh sách phát, kể cả những bản được thêm sau.",
+    "audioFull": "Có tiêu đề",
+    "audioCompact": "Gọn",
+    "audioMinimal": "Tối giản",
+    "heightSub": "Toàn chiều rộng, cao {{height}} px"
   },
   "incubation": {
     "requestFailed": "Yêu cầu thất bại ({{status}})",

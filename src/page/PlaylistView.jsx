@@ -2,7 +2,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState, useMemo, useRef } from 'react';
-import { MdPlaylistPlay, MdClose, MdDragIndicator, MdEdit, MdLock, MdPublic, MdCloudUpload, MdRssFeed, MdPodcasts, MdLibraryMusic, MdSearch } from 'react-icons/md';
+import { MdPlaylistPlay, MdClose, MdDragIndicator, MdEdit, MdLock, MdPublic, MdCloudUpload, MdRssFeed, MdPodcasts, MdLibraryMusic, MdSearch, MdCode } from 'react-icons/md';
 import { IoArrowBack, IoTrash, IoSave, IoReorderThree } from 'react-icons/io5';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -32,6 +32,7 @@ import useHoverPreview from '../hooks/useHoverPreview';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
 import { DATE_FILTERS, getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
 import ModalHeader from '../components/ModalHeader/ModalHeader';
+import { openEmbedCode } from '../components/Embed/EmbedCodeModal';
 
 // Every toast from this module is headed "Playlist"; the message becomes the
 // line under it. See utils/toast.js.
@@ -515,6 +516,17 @@ function PlaylistView() {
                   <a className="pod-btn" href={feedHref} target="_blank" rel="noreferrer" title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}>
                     <MdRssFeed size={16} /> RSS
                   </a>
+                  {/* Every audio track of the playlist in one player on another site */}
+                  {audioTracks.length > 0 && (
+                    <button
+                      type="button"
+                      className="pod-btn"
+                      onClick={() => openEmbedCode({ kind: 'playlist', id: playlistId, title: playlist.name })}
+                      title={t('chat.share.embedOnWebsite')}
+                    >
+                      <MdCode size={16} /> {t('misc.embed.embed')}
+                    </button>
+                  )}
                 </>
               )}
               {ownerButtons}

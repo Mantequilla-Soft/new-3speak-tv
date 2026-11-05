@@ -147,7 +147,15 @@
     "unreachableWithError": "Imeshindwa kufikia nodi yoyote ya Hive ili kupata kontena la Snaps (hitilafu ya mwisho — {{error}}). Tafadhali kagua muunganisho wako kisha ujaribu tena."
   },
   "embed": {
-    "responsive": "Inayojirekebisha"
+    "responsive": "Inayojirekebisha",
+    "embed": "Pachika",
+    "audioTitle": "Pachika sauti hii",
+    "playlistTitle": "Pachika orodha hii ya kucheza",
+    "playlistHint": "Bandika hii kwenye tovuti au chapisho lolote la blogu. Inacheza nyimbo zote za sauti za orodha kwa mpangilio, pamoja na zitakazoongezwa baadaye.",
+    "audioFull": "Na kichwa",
+    "audioCompact": "Fupi",
+    "audioMinimal": "Ndogo kabisa",
+    "heightSub": "Upana kamili, urefu {{height}} px"
   },
   "incubation": {
     "requestFailed": "Ombi limeshindwa ({{status}})",

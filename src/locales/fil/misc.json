@@ -147,7 +147,15 @@
     "unreachableWithError": "Walang maabot na Hive node para hanapin ang snaps container (huling error — {{error}}). Tingnan ang koneksyon mo at subukan ulit."
   },
   "embed": {
-    "responsive": "Responsive"
+    "responsive": "Responsive",
+    "embed": "I-embed",
+    "audioTitle": "I-embed ang audio na ito",
+    "playlistTitle": "I-embed ang playlist na ito",
+    "playlistHint": "I-paste ito sa anumang website o blog post. Pinapatugtog nito nang sunod-sunod ang lahat ng audio track ng playlist, pati ang mga idaragdag pa.",
+    "audioFull": "May pamagat",
+    "audioCompact": "Compact",
+    "audioMinimal": "Minimal",
+    "heightSub": "Buong lapad, {{height}} px ang taas"
   },
   "incubation": {
     "requestFailed": "Pumalya ang request ({{status}})",

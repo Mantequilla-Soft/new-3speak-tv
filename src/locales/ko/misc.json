@@ -147,7 +147,15 @@
     "unreachableWithError": "Snaps 컨테이너를 찾기 위해 Hive 노드에 연결하지 못했어요(마지막 오류 — {{error}}). 연결 상태를 확인하고 다시 시도해 주세요."
   },
   "embed": {
-    "responsive": "반응형"
+    "responsive": "반응형",
+    "embed": "임베드",
+    "audioTitle": "이 오디오 임베드",
+    "playlistTitle": "이 재생목록 임베드",
+    "playlistHint": "웹사이트나 블로그 글에 붙여 넣으세요. 나중에 추가된 트랙을 포함해 재생목록의 모든 오디오 트랙을 순서대로 재생합니다.",
+    "audioFull": "제목 포함",
+    "audioCompact": "컴팩트",
+    "audioMinimal": "최소",
+    "heightSub": "전체 너비, 높이 {{height}} px"
   },
   "incubation": {
     "requestFailed": "요청 실패({{status}})",
