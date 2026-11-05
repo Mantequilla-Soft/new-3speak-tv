@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.70',
+    category: 'notifications',
+    date: '2026-11-05',
+    summary: "Mark all read now clears everything at once: Hive notifications, stories and new podcast episodes.",
+  },
+  {
     version: '1.81.69',
     category: 'shorts',
     date: '2026-11-05',

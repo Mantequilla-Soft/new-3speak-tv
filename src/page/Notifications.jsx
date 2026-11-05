@@ -26,9 +26,9 @@ import { useWhaleDetection } from '../utils/whaleDetection';
 import threeSpeakLogo from '../assets/image/3S_mark.svg';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 import StoryNotifications from '../components/nav/StoryNotifications';
-import { useStoryNotifications } from '../lib/stories';
+import { useStoryNotifications, markStoriesSeen } from '../lib/stories';
 import PodcastNotifications from '../components/nav/PodcastNotifications';
-import { usePodcastNotifications } from '../lib/podcasts';
+import { usePodcastNotifications, markPodcastNotificationsSeen } from '../lib/podcasts';
 import './Notifications.scss';
 import { useTranslation } from 'react-i18next';
 
@@ -108,8 +108,16 @@ function Notifications() {
     markingAsRead,
     isUnread,
   } = useHiveNotifications(authenticated ? user : null, { limit: 50 });
-  const { stories } = useStoryNotifications(authenticated ? user : null);
-  const { episodes: podcastEpisodes } = usePodcastNotifications(authenticated ? user : null);
+  const { stories, unseenCount: unseenStories } = useStoryNotifications(authenticated ? user : null);
+  const { episodes: podcastEpisodes, unseenCount: unseenPodcasts } = usePodcastNotifications(authenticated ? user : null);
+  // "Mark all read" clears Hive (on chain) plus stories and podcast episodes
+  // (this browser), same as the bell.
+  const anythingUnread = unreadCount > 0 || unseenStories > 0 || unseenPodcasts > 0;
+  const markEverythingRead = () => {
+    markStoriesSeen(stories);
+    if (user) markPodcastNotificationsSeen(user);
+    if (unreadCount > 0) markAllAsRead();
+  };
 
   // Monthly state declared early so mergedNotifications can reference it
   const [monthNotifs, setMonthNotifs] = useState([]);
@@ -332,11 +340,11 @@ function Notifications() {
           {unreadCount > 0 && <span className="notifications-unread-chip">{t('notifications.unreadChip', { count: unreadCount })}</span>}
         </h1>
         <div className="notifications-header-actions">
-          {unreadCount > 0 && (
+          {anythingUnread && (
             <button
               type="button"
               className="notifications-mark-all"
-              onClick={markAllAsRead}
+              onClick={markEverythingRead}
               disabled={markingAsRead}
               title={t('notifications.markAllTitle')}
             >

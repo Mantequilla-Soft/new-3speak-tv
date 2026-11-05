@@ -62,12 +62,18 @@ function parseHiveDate(dateStr) {
 
 /**
  * The `setLastRead` date that marks everything up to and including a
- * notification as read. Hive still counts a notification dated exactly at
- * `lastread` as unread, so go one second past it: still before the next block
- * (3s), so later notifications stay unread.
+ * notification as read.
+ *
+ * Hive counts a notification as read only when its BLOCK is at or before
+ * `lastread`, but dates it one block EARLIER than that block (seen 2026-11-05:
+ * a vote listed at 17:04:21 sits in a 17:04:24 block). One second past its date
+ * left exactly that notification unread after "Mark all read". So go 30s past
+ * it (a block, plus skipped slots), but never past now.
  */
+const READ_THROUGH_MS = 30 * 1000;
 function readThroughDate(dateStr) {
-  return new Date(parseHiveDate(dateStr).getTime() + 1000).toISOString().slice(0, 19);
+  const t = Math.min(parseHiveDate(dateStr).getTime() + READ_THROUGH_MS, Date.now());
+  return new Date(t).toISOString().slice(0, 19);
 }
 
 /**
