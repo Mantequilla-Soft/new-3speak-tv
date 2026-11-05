@@ -1253,14 +1253,18 @@
       margin: 0;
     }
 
+    // The time-ago always shows (owner, 2026-11-05); the payout next to it only
+    // once the caption is expanded, as before.
     .captionDate {
       font-size: 0.7rem;
       opacity: 0.6;
-      display: none;
+      display: inline;
+
+      .captionPayout { display: none; }
     }
 
-    &--expanded .captionDate {
-      display: inline;
+    &--expanded .captionDate .captionPayout {
+      display: inline-flex;
     }
 
     .captionMore {

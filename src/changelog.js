@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.71',
+    category: 'shorts',
+    date: '2026-11-05',
+    summary: "Shorts and stories now show when they were posted right under the caption, and the caption is cleaner without the extra 3Speak link.",
+  },
+  {
     version: '1.81.70',
     category: 'notifications',
     date: '2026-11-05',
