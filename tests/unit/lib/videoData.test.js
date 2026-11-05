@@ -5,16 +5,24 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const h = vi.hoisted(() => ({
   call: vi.fn(),
+  demote: vi.fn(),
+  node: 'https://node-a',
   state: {},
   incubationPost: vi.fn(),
 }))
-vi.mock('../../../src/utils/hiveNode', () => ({ getHiveClient: () => ({ call: h.call }) }))
+vi.mock('../../../src/utils/hiveNode', () => ({
+  getHiveClient: () => ({ call: h.call }),
+  getHiveUrl: () => h.node,
+  // Like the real one: pins the next node and returns it.
+  demoteNode: (url) => { h.demote(url); h.node = url === 'https://node-a' ? 'https://node-b' : 'https://node-c'; return h.node },
+}))
 vi.mock('../../../src/utils/playerUrl', () => ({ getPlayerUrl: () => 'https://play.example' }))
 vi.mock('../../../src/lib/store', () => ({ useAppStore: { getState: () => h.state } }))
 vi.mock('../../../src/lib/incubation', () => ({ fetchIncubationPost: h.incubationPost }))
 
 import {
   fetchHiveProfile, fetchPlaySource, fetchVideoDetails, fetchTrendingFeed, fetchRelatedFeed, fetchAuthorVideos,
+  isHiveNodeFailure,
 } from '../../../src/lib/videoData.js'
 
 let fetchMock
@@ -22,6 +30,8 @@ const ok = (body) => ({ ok: true, json: async () => body })
 
 beforeEach(() => {
   h.call.mockReset()
+  h.demote.mockReset()
+  h.node = 'https://node-a'
   h.incubationPost.mockReset().mockResolvedValue(null)
   h.state = {}
   fetchMock = vi.fn()
@@ -149,6 +159,36 @@ describe('fetchVideoDetails', () => {
       expect(await fetchVideoDetails('alice', 'p')).toBeNull()
     }
     expect(h.incubationPost).toHaveBeenCalledTimes(missing.length)
+  })
+
+  // What api.deathwing.me sent back on 2026-11-05 (HTTP 500), as dhive raises it.
+  const nodeDown = () => Object.assign(new Error('Received an invalid response from the endpoint.'), { name: 'RPCError' })
+
+  it('a node failure is not "not found": the next node is asked and the post shows', async () => {
+    h.call
+      .mockRejectedValueOnce(nodeDown())
+      .mockResolvedValueOnce({ author: 'alice', permlink: 'p', title: 'Hello', json_metadata: '{}', total_payout_value: '0', curator_payout_value: '0', active_votes: [] })
+    const d = await fetchVideoDetails('alice', 'p')
+    expect(d).toMatchObject({ title: 'Hello' })
+    expect(h.demote).toHaveBeenCalledWith('https://node-a')
+    expect(h.call).toHaveBeenCalledTimes(2)
+    expect(h.incubationPost).not.toHaveBeenCalled()
+  })
+
+  it('when every node fails, the error is passed on (Retry), never turned into "not found"', async () => {
+    h.call.mockRejectedValue(nodeDown())
+    await expect(fetchVideoDetails('alice', 'p')).rejects.toThrow(/invalid response/)
+    expect(h.call).toHaveBeenCalledTimes(3)
+    expect(h.incubationPost).not.toHaveBeenCalled()
+  })
+
+  it('tells node failures from answers about the post', () => {
+    expect(isHiveNodeFailure(nodeDown())).toBe(true)
+    expect(isHiveNodeFailure(Object.assign(new Error('x'), { jse_info: { code: -32603 } }))).toBe(true)
+    expect(isHiveNodeFailure(new Error('Request timeout'))).toBe(true)
+    expect(isHiveNodeFailure(new Error('Post alice/p does not exist'))).toBe(false)
+    expect(isHiveNodeFailure(Object.assign(new Error(' category=hivemind'), { jse_info: { message: 'Assert Exception', code: -32000 } }))).toBe(false)
+    expect(isHiveNodeFailure(Object.assign(new Error('x'), { name: 'RPCError' }))).toBe(false)
   })
 
   it('a real network failure is passed on so the page can say so', async () => {
