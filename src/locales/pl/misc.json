@@ -147,7 +147,15 @@
     "unreachableWithError": "Nie udało się połączyć z żadnym węzłem Hive, aby znaleźć kontener Snaps (ostatni błąd — {{error}}). Sprawdź połączenie i spróbuj ponownie."
   },
   "embed": {
-    "responsive": "Responsywny"
+    "responsive": "Responsywny",
+    "embed": "Osadź",
+    "audioTitle": "Osadź to audio",
+    "playlistTitle": "Osadź tę playlistę",
+    "playlistHint": "Wklej to na dowolną stronę lub do wpisu na blogu. Odtwarza po kolei wszystkie utwory audio z playlisty, także te dodane później.",
+    "audioFull": "Z tytułem",
+    "audioCompact": "Kompaktowy",
+    "audioMinimal": "Minimalny",
+    "heightSub": "Pełna szerokość, {{height}} px wysokości"
   },
   "incubation": {
     "requestFailed": "Żądanie nie powiodło się ({{status}})",

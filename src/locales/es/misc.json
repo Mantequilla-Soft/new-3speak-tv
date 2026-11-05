@@ -147,7 +147,15 @@
     "unreachableWithError": "No se pudo conectar con ningún nodo de Hive para encontrar el contenedor de Snaps (último error: {{error}}). Revisa tu conexión e inténtalo de nuevo."
   },
   "embed": {
-    "responsive": "Adaptable"
+    "responsive": "Adaptable",
+    "embed": "Insertar",
+    "audioTitle": "Insertar este audio",
+    "playlistTitle": "Insertar esta lista",
+    "playlistHint": "Pégalo en cualquier sitio web o entrada de blog. Reproduce en orden todas las pistas de audio de la lista, también las que se añadan después.",
+    "audioFull": "Con título",
+    "audioCompact": "Compacto",
+    "audioMinimal": "Mínimo",
+    "heightSub": "Ancho completo, {{height}} px de alto"
   },
   "incubation": {
     "requestFailed": "Falló la solicitud ({{status}})",

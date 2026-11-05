@@ -24,6 +24,14 @@ const EMBED_PLAYER_BASE = (import.meta.env.VITE_EMBED_PLAYER_BASE || 'https://pl
   .trim()
   .replace(/\/+$/, '');
 
+// Public audio player (audio.3speak.tv, the snapieaudio repo) for the audio and
+// playlist embed snippets. Same rule as EMBED_PLAYER_BASE: the snippet lives on
+// someone else's site for good. Preview points it at the dev copy
+// (dev-audio.okinoko.io) to try player branches before they are deployed.
+const AUDIO_EMBED_BASE = (import.meta.env.VITE_AUDIO_EMBED_BASE || 'https://audio.3speak.tv')
+  .trim()
+  .replace(/\/+$/, '');
+
 const HIVE_API_URL = import.meta.env.VITE_HIVE_API_URL || 'https://api.hive.blog';
 const FEED_URL = import.meta.env.VITE_FEED_URL || 'https://legacy.3speak.tv';
 const CHECKER_URL = import.meta.env.VITE_CHECKER_URL || 'https://checker.3speak.tv';
@@ -413,6 +421,7 @@ export {
   PLAYER_URL,
   PLAYER_URLS,
   EMBED_PLAYER_BASE,
+  AUDIO_EMBED_BASE,
   PLAYLISTS_API_URL,
   PLAYLISTS_READ_URL,
   WATCH_HISTORY_THRESHOLD_DAYS,

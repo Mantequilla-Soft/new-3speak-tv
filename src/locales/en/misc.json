@@ -147,7 +147,15 @@
     "unreachableWithError": "Could not reach any Hive node to find the snaps container (last error — {{error}}). Please check your connection and try again."
   },
   "embed": {
-    "responsive": "Responsive"
+    "responsive": "Responsive",
+    "embed": "Embed",
+    "audioTitle": "Embed this audio",
+    "playlistTitle": "Embed this playlist",
+    "playlistHint": "Paste this into any website or blog post. It plays every audio track of the playlist in order, including ones added later.",
+    "audioFull": "With title",
+    "audioCompact": "Compact",
+    "audioMinimal": "Minimal",
+    "heightSub": "Full width, {{height}} px tall"
   },
   "incubation": {
     "requestFailed": "Request failed ({{status}})",

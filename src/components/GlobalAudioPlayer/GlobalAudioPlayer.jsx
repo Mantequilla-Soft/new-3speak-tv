@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import {
   MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious,
   MdQueueMusic, MdPlaylistPlay, MdClose, MdDragIndicator, MdDelete,
-  MdSubtitles, MdShare, MdContentCopy, MdOpenInNew,
+  MdSubtitles, MdShare, MdContentCopy, MdOpenInNew, MdCode,
   MdKeyboardArrowUp, MdKeyboardArrowDown,
   MdVolumeUp, MdVolumeOff,
   MdBedtime, MdGraphicEq, MdCast, MdAirplay, MdDownload, MdDownloadDone,
@@ -55,6 +55,7 @@ import PlayerMenu from './PlayerMenu';
 import { openAudioPip, watchAudioPip, useAudioPipWindow } from './AudioPip';
 import { PortalDocContext } from '../../utils/portalDocument';
 import { ClipForm, CopyAtOption, EpisodeShareOptions } from './PlayerShare';
+import { openEmbedCode } from '../Embed/EmbedCodeModal';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
 import { trackArtist } from '../../utils/audioTrack';
 import useListenTime from '../../hooks/useListenTime';
@@ -2096,6 +2097,12 @@ export function AudioShareDropdown({ item, onClose, title, at, duration, bare })
       <button className="audio-share-option" onClick={() => copy(threeSpeakUrl, t('audio.share.copied3speak'))}><MdContentCopy size={14} /><span>{t('audio.share.copy3speak')}</span></button>
       {at != null && <CopyAtOption url={threeSpeakUrl} at={at} onDone={onClose} />}
       <button className="audio-share-option" onClick={() => copy(audioPlayerUrl, t('audio.share.copiedAudioPlayer'))}><MdContentCopy size={14} /><span>{t('audio.share.copyAudioPlayer')}</span></button>
+      {item?.permlink && (
+        <button
+          className="audio-share-option"
+          onClick={() => { openEmbedCode({ kind: 'audio', id: item.permlink, title: item.title }); onClose(); }}
+        ><MdCode size={14} /><span>{t('chat.share.embedOnWebsite')}</span></button>
+      )}
       {at != null && <ClipForm url={threeSpeakUrl} start={Math.floor(at || 0)} duration={duration} onDone={onClose} />}
     </div>
   );

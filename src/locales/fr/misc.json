@@ -147,7 +147,15 @@
     "unreachableWithError": "Impossible de joindre un nœud Hive pour trouver le conteneur Snaps (dernière erreur — {{error}}). Vérifiez votre connexion et réessayez."
   },
   "embed": {
-    "responsive": "Adaptatif"
+    "responsive": "Adaptatif",
+    "embed": "Intégrer",
+    "audioTitle": "Intégrer cet audio",
+    "playlistTitle": "Intégrer cette playlist",
+    "playlistHint": "Collez ceci dans un site web ou un article de blog. Il lit dans l'ordre toutes les pistes audio de la playlist, y compris celles ajoutées plus tard.",
+    "audioFull": "Avec titre",
+    "audioCompact": "Compact",
+    "audioMinimal": "Minimal",
+    "heightSub": "Pleine largeur, {{height}} px de haut"
   },
   "incubation": {
     "requestFailed": "Échec de la requête ({{status}})",

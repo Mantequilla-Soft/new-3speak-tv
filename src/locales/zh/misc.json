@@ -147,7 +147,15 @@
     "unreachableWithError": "无法连接任何 Hive 节点来查找 Snaps 容器（最后的错误——{{error}}）。请检查网络连接后重试。"
   },
   "embed": {
-    "responsive": "自适应"
+    "responsive": "自适应",
+    "embed": "嵌入",
+    "audioTitle": "嵌入此音频",
+    "playlistTitle": "嵌入此播放列表",
+    "playlistHint": "将其粘贴到任何网站或博客文章中。它会按顺序播放播放列表中的所有音频曲目，包括之后添加的曲目。",
+    "audioFull": "带标题",
+    "audioCompact": "紧凑",
+    "audioMinimal": "极简",
+    "heightSub": "全宽，高 {{height}} px"
   },
   "incubation": {
     "requestFailed": "请求失败（{{status}}）",

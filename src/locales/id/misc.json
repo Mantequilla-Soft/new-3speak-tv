@@ -147,7 +147,15 @@
     "unreachableWithError": "Tidak dapat menjangkau node Hive mana pun untuk menemukan kontainer Snaps (error terakhir — {{error}}). Periksa koneksimu lalu coba lagi."
   },
   "embed": {
-    "responsive": "Responsif"
+    "responsive": "Responsif",
+    "embed": "Sematkan",
+    "audioTitle": "Sematkan audio ini",
+    "playlistTitle": "Sematkan playlist ini",
+    "playlistHint": "Tempel ini di situs web atau postingan blog mana pun. Ini memutar semua trek audio di playlist secara berurutan, termasuk yang ditambahkan nanti.",
+    "audioFull": "Dengan judul",
+    "audioCompact": "Ringkas",
+    "audioMinimal": "Minimal",
+    "heightSub": "Lebar penuh, tinggi {{height}} px"
   },
   "incubation": {
     "requestFailed": "Permintaan gagal ({{status}})",
