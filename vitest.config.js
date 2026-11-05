@@ -34,7 +34,7 @@ export default defineConfig({
       ],
       reporter: ['text-summary', 'lcov', 'json-summary'],
       // Ratchet: raise these with the suite, never lower them to make a run pass.
-      thresholds: { lines: 0, statements: 0, functions: 0, branches: 0 },
+      thresholds: { lines: 37, statements: 36, functions: 31, branches: 32 },
     },
   },
 })
