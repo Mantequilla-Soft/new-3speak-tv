@@ -584,7 +584,10 @@
   // excluded here instead of relying on order: the second :not() is what turned
   // Log in into a grey 5px box. The bell dropdown's own small pills (Notify me,
   // Mark all read) are excluded for the same reason.
-  > .nav-right button:not(.notif-bell-btn):not(.chat-nav-btn):not(.nav-guest-login):not(.nav-guest-signup):not(.notif-dropdown button) {
+  // `.btn-reset` (Share, the cog, the avatar: real buttons that keep their own
+  // look) shares the first :not() on purpose: a :not() list weighs only its
+  // heaviest entry, so this adds no specificity.
+  > .nav-right button:not(.notif-bell-btn, .btn-reset):not(.chat-nav-btn):not(.nav-guest-login):not(.nav-guest-signup):not(.notif-dropdown button) {
     padding: 7px 25px;
     border-radius: 5px;
     font-weight: 500;

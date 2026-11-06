@@ -179,11 +179,18 @@ function NavUploadDropdown() {
       {/* Two icons, one shown per breakpoint: the labelled cloud button on
           desktop, a bare "+" on mobile where this replaces the bottom bar's
           centre item and has to fit next to the avatar. */}
-      <div className="nav-upload-btn" onClick={menu.toggle} title={t('common.actions.share')}>
+      <button
+        type="button"
+        className="btn-reset nav-upload-btn"
+        onClick={menu.toggle}
+        title={t('common.actions.share')}
+        aria-label={t('common.actions.share')}
+        aria-expanded={open}
+      >
         <IoCloudUploadSharp size={18} className="nav-upload-icon-desktop" />
         <MdAdd size={21} className="nav-upload-icon-mobile" />
         <span className="nav-upload-label">{t('common.actions.share')}</span>
-      </div>
+      </button>
       {menu.rendered && !asSheet && (
         <div className={`nav-upload-flyout${menu.leaving ? ' nav-upload-flyout--leaving' : ''}`} onClick={menu.close}>
           <UploadLinks linkClass="nav-upload-flyout-item" iconClass="nav-upload-flyout-icon" />
@@ -259,6 +266,19 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
     },
     onPointerLeave: settingsPeek.hoverProps.onPointerLeave,
   };
+  // A real button around the cog, so Settings is reachable from the keyboard.
+  // It carries the class the bare icon had: same box, same look.
+  const settingsGear = (
+    <button
+      type="button"
+      className="btn-reset nav-settings-btn"
+      {...settingsGearProps}
+      title={t('common.nav.settings')}
+      aria-label={t('common.nav.settings')}
+    >
+      <FiSettings size={19} aria-hidden="true" />
+    </button>
+  );
   const navContainerRef = useRef(null);
   const navTabsRef = useRef(null);
 
@@ -510,11 +530,18 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
               so an incubating user's bell reads from the incubation service
               instead of showing them a permanently empty one. */}
           {incubationHandle ? <IncubationBell /> : <NotificationBell />}
-          <FiSettings size={19} className="nav-settings-btn" {...settingsGearProps} title={t('common.nav.settings')} />
-          <span className="nav-avatar-wrap" onClick={toggleProfileNav} {...profileMenuHover}>
+          {settingsGear}
+          <button
+            type="button"
+            className="btn-reset nav-avatar-wrap"
+            onClick={toggleProfileNav}
+            {...profileMenuHover}
+            aria-label={t('nav.profile.accountMenu')}
+            aria-haspopup="menu"
+          >
             <img src={myAvatar} alt="" />
             <PremiumBadge username={user} size={10} className="nav-avatar-premium" />
-          </span>
+          </button>
         </div>
       ) : (
         <div className="nav-right flex-div" onClickCapture={hideToastLayer}>
@@ -545,7 +572,7 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
             <button className="nav-guest-login" onClick={() => openLoginModal('login')}><FiLogIn /> {t('common.actions.login')}</button>
           )}
           </>)}
-          <FiSettings size={19} className="nav-settings-btn" {...settingsGearProps} title={t('common.nav.settings')} />
+          {settingsGear}
         </div>
       )}
 

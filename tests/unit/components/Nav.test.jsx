@@ -232,7 +232,7 @@ describe('the top bar for a member', () => {
   // account avatar a <span onClick> (:514). None takes keyboard focus or has a
   // role, so from the keyboard there is no way to upload, open Settings or reach
   // the account menu (and log out).
-  it.skip('BUG: Share, Settings and the account menu are buttons a keyboard can reach', () => {
+  it('BUG: Share, Settings and the account menu are buttons a keyboard can reach', () => {
     mount()
     expect(screen.getByRole('button', { name: 'Share' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()

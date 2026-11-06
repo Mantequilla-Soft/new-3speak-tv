@@ -184,9 +184,10 @@ button{
 
 /* A <button> that looks exactly like the <div>, <span> or <label> it replaced
    (so the control is reachable from the keyboard without a new look): no
-   browser chrome, the surrounding font, colour and alignment. A component's own
-   class, loaded after this file, still sets whatever it styles. */
-.btn-reset {
+   browser chrome, the surrounding font, colour and alignment. Inside :where()
+   it weighs nothing, so a component's own class always sets whatever it styles,
+   whichever stylesheet happens to load first. */
+:where(.btn-reset) {
   appearance: none;
   background: none;
   border: 0;
