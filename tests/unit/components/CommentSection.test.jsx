@@ -167,7 +167,7 @@ describe('the comments under a video', () => {
   // BUG: the "at 0:00" field that sets which moment a comment refers to has no
   // label: the "at" beside it is a plain <span> (CommentSection.jsx:701-710), so
   // a screen reader announces only its placeholder, "0:00".
-  it.skip('BUG: the moment field is labelled', async () => {
+  it('BUG: the moment field is labelled', async () => {
     mount()
     await loaded()
     expect(screen.getByRole('textbox', { name: /^at/i })).toBeInTheDocument()
@@ -176,7 +176,7 @@ describe('the comments under a video', () => {
   // BUG: folding a comment is a <span onClick> (CommentSection.jsx:996), and the
   // folded bar a <div onClick> (:974): neither can be reached or used from the
   // keyboard, and neither has a name.
-  it.skip('BUG: a comment can be folded from the keyboard', async () => {
+  it('BUG: a comment can be folded from the keyboard', async () => {
     mount()
     await loaded()
     expect(within(commentOf('Body of c2')).getByRole('button', { name: /collapse|hide|fold/i })).toBeInTheDocument()
