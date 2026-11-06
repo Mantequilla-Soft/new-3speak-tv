@@ -6,6 +6,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 vi.mock('../../../src/utils/config', () => ({ CHECKER_URL: 'https://checker.example' }))
+// Our API's session vouch (lib/sessionVouch.js): none unless a test gives one.
+const vouch = vi.hoisted(() => ({ fn: null }))
+vi.mock('../../../src/lib/sessionVouch', () => ({ fetchSessionVouch: (...a) => vouch.fn(...a) }))
 
 const {
   pushSupported, getPushState, enablePush, syncPushSubscription, disablePush, getPushPrefs, setPushPrefs,
@@ -50,6 +53,8 @@ const ok = (body = {}) => ({ ok: true, json: async () => body })
 const notOk = () => ({ ok: false, json: async () => ({}) })
 
 beforeEach(() => {
+  vouch.fn = vi.fn(async () => null)
+  vi.spyOn(console, 'warn').mockImplementation(() => {})
   installBrowser()
   fetchMock = vi.fn(async () => ok())
   vi.stubGlobal('fetch', fetchMock)
@@ -282,5 +287,51 @@ describe('getPushPrefs / setPushPrefs', () => {
   it('throws when the choices cannot be saved', async () => {
     fetchMock.mockResolvedValueOnce(notOk())
     await expect(setPushPrefs('alice', {})).rejects.toThrow('Could not save your notification choices.')
+  })
+
+  // Each test uses its own account: the vouch is cached per account for the module's life.
+  const v = (user, signature = 'SIG', timestamp = Date.now()) => ({ user, signature, timestamp })
+  const status = (code, body = {}) => ({ ok: code < 300, status: code, json: async () => body })
+  const sentBodies = () => fetchMock.mock.calls.filter(([u]) => u.endsWith('/push/prefs')).map(([, i]) => JSON.parse(i.body))
+
+  it('sends the session vouch for exactly that account, cleaned like the checker cleans it', async () => {
+    vouch.fn = vi.fn(async (_a, user) => v(user))
+    fetchMock.mockResolvedValueOnce(ok({ prefs: {} }))
+    await setPushPrefs('@Vouched', { live: false })
+    expect(vouch.fn).toHaveBeenCalledWith('push', 'vouched', { named: true })
+    expect(sentBodies()[0]).toEqual({ username: '@Vouched', prefs: { live: false }, signature: 'SIG', timestamp: expect.any(Number) })
+  })
+
+  it('reuses one vouch for most of a day, then gets a new one', async () => {
+    const start = Date.now()
+    vi.spyOn(Date, 'now').mockReturnValue(start)
+    vouch.fn = vi.fn(async (_a, user) => v(user, 'SIG', start))
+    await setPushPrefs('reuser', {})
+    await setPushPrefs('reuser', {})
+    expect(vouch.fn).toHaveBeenCalledTimes(1)
+    Date.now.mockReturnValue(start + 23 * 3600 * 1000 + 1)
+    await setPushPrefs('reuser', {})
+    expect(vouch.fn).toHaveBeenCalledTimes(2)
+  })
+
+  it('a cached vouch the checker refuses is replaced once', async () => {
+    vouch.fn = vi.fn(async (_a, user) => v(user, 'OLD'))
+    await setPushPrefs('stale', {})
+    vouch.fn = vi.fn(async (_a, user) => v(user, 'NEW'))
+    fetchMock.mockResolvedValueOnce(status(401)).mockResolvedValueOnce(ok({ prefs: { live: true } }))
+    expect(await setPushPrefs('stale', { live: true })).toEqual({ live: true })
+    expect(sentBodies().slice(-2).map((b) => b.signature)).toEqual(['OLD', 'NEW'])
+  })
+
+  it('without a vouch it still saves, unsigned, while the checker takes that', async () => {
+    fetchMock.mockResolvedValueOnce(ok({ prefs: { live: true } }))
+    expect(await setPushPrefs('novouch', { live: true })).toEqual({ live: true })
+    expect(sentBodies()[0]).toEqual({ username: 'novouch', prefs: { live: true } })
+    expect(console.warn).toHaveBeenCalledWith(expect.stringMatching(/no session vouch for @novouch/))
+  })
+
+  it('a refusal for want of proof says so (code not_confirmed)', async () => {
+    fetchMock.mockResolvedValueOnce(status(401))
+    await expect(setPushPrefs('refused', {})).rejects.toMatchObject({ code: 'not_confirmed' })
   })
 })

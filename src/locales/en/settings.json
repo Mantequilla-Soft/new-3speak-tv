@@ -111,6 +111,7 @@
     "deviceOnToast": "This device will be notified",
     "changeFailed": "Could not change notifications",
     "saveFailed": "Could not save that",
+    "notConfirmed": "Could not confirm it is you. Log out and back in, then try again.",
     "loginHint": "Log in to choose what you get notified about.",
     "unsupported": "This browser can’t show notifications. On iPhone and iPad they only work once 3Speak is added to the Home Screen.",
     "device": "Notify this device",

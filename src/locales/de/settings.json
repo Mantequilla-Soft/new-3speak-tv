@@ -111,6 +111,7 @@
     "deviceOnToast": "Dieses Gerät wird benachrichtigt",
     "changeFailed": "Benachrichtigungen konnten nicht geändert werden",
     "saveFailed": "Das konnte nicht gespeichert werden",
+    "notConfirmed": "Es konnte nicht bestätigt werden, dass du es bist. Melde dich ab und wieder an und versuche es dann erneut.",
     "loginHint": "Melde dich an, um auszuwählen, worüber du benachrichtigt wirst.",
     "unsupported": "Dieser Browser kann keine Benachrichtigungen anzeigen. Auf iPhone und iPad funktionieren sie nur, wenn 3Speak zum Home-Bildschirm hinzugefügt wurde.",
     "device": "Dieses Gerät benachrichtigen",

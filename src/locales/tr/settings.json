@@ -111,6 +111,7 @@
     "deviceOnToast": "Bu cihaza bildirim gönderilecek",
     "changeFailed": "Bildirimler değiştirilemedi",
     "saveFailed": "Bu kaydedilemedi",
+    "notConfirmed": "Sen olduğun doğrulanamadı. Çıkış yapıp tekrar giriş yap, sonra yeniden dene.",
     "loginHint": "Neler için bildirim alacağını seçmek için giriş yap.",
     "unsupported": "Bu tarayıcı bildirim gösteremiyor. iPhone ve iPad'de bildirimler yalnızca 3Speak Ana Ekrana eklendikten sonra çalışır.",
     "device": "Bu cihaza bildir",

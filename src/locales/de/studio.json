@@ -69,7 +69,14 @@
     "beneficiariesButton": "BEGÜNSTIGTE",
     "range": "Zeitraum: frühestens in 15 Minuten, höchstens in 90 Tagen.",
     "cancelPost": "Geplanten Post abbrechen",
-    "saveChanges": "Änderungen speichern"
+    "saveChanges": "Änderungen speichern",
+    "proof": {
+      "walletPrompt": "Geplanten Post bestätigen",
+      "notSignedIn": "Es konnte nicht bestätigt werden, dass du als @{{owner}} angemeldet bist. Melde dich ab und wieder an und versuche es dann erneut.",
+      "noGrant": "Zum Planen braucht @threespeak Posting-Berechtigung für dein Konto.",
+      "unavailable": "Dieser geplante Post konnte gerade nicht bestätigt werden. Bitte versuche es gleich noch einmal.",
+      "refused": "Der geplante Post wurde abgelehnt, weil nicht bestätigt werden konnte, dass er von dir ist. Melde dich ab und wieder an und versuche es dann erneut."
+    }
   },
   "composer": {
     "placeholder": "Schreib hier deine Beschreibung...",

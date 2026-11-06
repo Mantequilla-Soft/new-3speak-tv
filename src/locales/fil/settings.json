@@ -111,6 +111,7 @@
     "deviceOnToast": "Aabisuhan ang device na ito",
     "changeFailed": "Hindi mabago ang mga notification",
     "saveFailed": "Hindi ma-save iyon",
+    "notConfirmed": "Hindi makumpirma na ikaw ito. Mag-log out at mag-log in muli, saka subukang muli.",
     "loginHint": "Mag-log in para piliin kung tungkol saan ka aabisuhan.",
     "unsupported": "Hindi kayang magpakita ng notification ng browser na ito. Sa iPhone at iPad, gumagana lang ang mga ito kapag naidagdag na ang 3Speak sa Home Screen.",
     "device": "Abisuhan ang device na ito",

@@ -111,6 +111,7 @@
     "deviceOnToast": "Dit apparaat krijgt meldingen",
     "changeFailed": "Meldingen konden niet worden gewijzigd",
     "saveFailed": "Dat kon niet worden opgeslagen",
+    "notConfirmed": "We konden niet bevestigen dat jij het bent. Log uit en weer in en probeer het dan opnieuw.",
     "loginHint": "Log in om te kiezen waarover je meldingen krijgt.",
     "unsupported": "Deze browser kan geen meldingen tonen. Op iPhone en iPad werken ze alleen als 3Speak op het beginscherm is gezet.",
     "device": "Meldingen op dit apparaat",

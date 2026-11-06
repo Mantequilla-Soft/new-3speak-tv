@@ -111,6 +111,7 @@
     "deviceOnToast": "Thiết bị này sẽ nhận thông báo",
     "changeFailed": "Không thể thay đổi thông báo",
     "saveFailed": "Không thể lưu",
+    "notConfirmed": "Không thể xác nhận đó là bạn. Hãy đăng xuất rồi đăng nhập lại, sau đó thử lại.",
     "loginHint": "Đăng nhập để chọn những gì bạn muốn được thông báo.",
     "unsupported": "Trình duyệt này không thể hiển thị thông báo. Trên iPhone và iPad, thông báo chỉ hoạt động sau khi 3Speak được thêm vào Màn hình chính.",
     "device": "Thông báo trên thiết bị này",

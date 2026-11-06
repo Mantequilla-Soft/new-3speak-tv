@@ -69,7 +69,14 @@
     "beneficiariesButton": "BENEFICIARI",
     "range": "Intervallo: da almeno 15 minuti da ora fino a 90 giorni.",
     "cancelPost": "Annulla post programmato",
-    "saveChanges": "Salva modifiche"
+    "saveChanges": "Salva modifiche",
+    "proof": {
+      "walletPrompt": "Conferma il tuo post programmato",
+      "notSignedIn": "Impossibile confermare che hai effettuato l'accesso come @{{owner}}. Esci e accedi di nuovo, poi riprova.",
+      "noGrant": "Per programmare serve che il tuo account conceda l'autorità di pubblicazione a @threespeak.",
+      "unavailable": "Impossibile confermare questo post programmato in questo momento. Riprova tra poco.",
+      "refused": "Il post programmato è stato rifiutato perché non è stato possibile confermare che sia tuo. Esci e accedi di nuovo, poi riprova."
+    }
   },
   "composer": {
     "placeholder": "Scrivi qui la tua descrizione...",

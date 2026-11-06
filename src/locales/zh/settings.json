@@ -111,6 +111,7 @@
     "deviceOnToast": "此设备将会收到通知",
     "changeFailed": "无法更改通知设置",
     "saveFailed": "无法保存",
+    "notConfirmed": "无法确认是你本人。请退出并重新登录，然后重试。",
     "loginHint": "登录后选择你想接收哪些通知。",
     "unsupported": "此浏览器无法显示通知。在 iPhone 和 iPad 上，需要先把 3Speak 添加到主屏幕才能使用通知。",
     "device": "通知此设备",

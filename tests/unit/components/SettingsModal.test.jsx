@@ -564,6 +564,16 @@ describe('settings: Notifications', () => {
     expect(toastMessages(toast.error)).toContain('offline')
   })
 
+  it('says to log in again when the checker wants proof it is them and there is none', async () => {
+    m.pushSupported = () => true
+    m.setPushPrefs = vi.fn(async () => { throw Object.assign(new Error('raw'), { code: 'not_confirmed' }) })
+    const { user } = mount()
+    await user.click(screen.getByRole('tab', { name: 'Notifications' }))
+    await user.click(await screen.findByRole('switch', { name: 'Replies' }))
+    await waitFor(() => expect(sw('Replies')).toHaveAttribute('aria-checked', 'true'))
+    expect(toastMessages(toast.error)).toContain('Could not confirm it is you. Log out and back in, then try again.')
+  })
+
   it('cannot be switched on while the browser blocks notifications for the site', async () => {
     m.pushSupported = () => true
     m.getPushState = vi.fn(async () => ({ supported: true, worker: true, permission: 'denied', subscribed: false }))

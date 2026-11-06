@@ -69,7 +69,14 @@
     "beneficiariesButton": "PENERIMA MANFAAT",
     "range": "Rentang: minimal 15 menit dari sekarang, hingga 90 hari.",
     "cancelPost": "Batalkan postingan terjadwal",
-    "saveChanges": "Simpan perubahan"
+    "saveChanges": "Simpan perubahan",
+    "proof": {
+      "walletPrompt": "Konfirmasi postingan terjadwalmu",
+      "notSignedIn": "Tidak dapat memastikan bahwa kamu masuk sebagai @{{owner}}. Keluar lalu masuk lagi, kemudian coba lagi.",
+      "noGrant": "Penjadwalan memerlukan otoritas posting @threespeak pada akunmu.",
+      "unavailable": "Tidak dapat mengonfirmasi postingan terjadwal ini sekarang. Silakan coba lagi sebentar lagi.",
+      "refused": "Postingan terjadwal ditolak karena tidak dapat dipastikan milikmu. Keluar lalu masuk lagi, kemudian coba lagi."
+    }
   },
   "composer": {
     "placeholder": "Tulis deskripsimu di sini...",

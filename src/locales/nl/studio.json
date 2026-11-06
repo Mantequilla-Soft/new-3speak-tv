@@ -69,7 +69,14 @@
     "beneficiariesButton": "BEGUNSTIGDEN",
     "range": "Bereik: minstens 15 minuten vanaf nu, tot 90 dagen.",
     "cancelPost": "Ingeplande post annuleren",
-    "saveChanges": "Wijzigingen opslaan"
+    "saveChanges": "Wijzigingen opslaan",
+    "proof": {
+      "walletPrompt": "Bevestig je ingeplande post",
+      "notSignedIn": "We konden niet bevestigen dat je bent ingelogd als @{{owner}}. Log uit en weer in en probeer het dan opnieuw.",
+      "noGrant": "Voor inplannen moet je account @threespeak postingbevoegdheid geven.",
+      "unavailable": "Deze ingeplande post kon nu niet worden bevestigd. Probeer het zo meteen opnieuw.",
+      "refused": "De ingeplande post is geweigerd omdat niet kon worden bevestigd dat hij van jou is. Log uit en weer in en probeer het dan opnieuw."
+    }
   },
   "composer": {
     "placeholder": "Schrijf hier je beschrijving...",

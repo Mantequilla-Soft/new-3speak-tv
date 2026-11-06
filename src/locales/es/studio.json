@@ -69,7 +69,14 @@
     "beneficiariesButton": "BENEFICIARIOS",
     "range": "Rango: al menos 15 minutos desde ahora, hasta 90 días.",
     "cancelPost": "Cancelar publicación programada",
-    "saveChanges": "Guardar cambios"
+    "saveChanges": "Guardar cambios",
+    "proof": {
+      "walletPrompt": "Confirma tu publicación programada",
+      "notSignedIn": "No se pudo confirmar que has iniciado sesión como @{{owner}}. Cierra sesión y vuelve a entrar, luego inténtalo de nuevo.",
+      "noGrant": "Programar publicaciones requiere que tu cuenta dé autoridad de publicación a @threespeak.",
+      "unavailable": "No se pudo confirmar esta publicación programada ahora. Inténtalo de nuevo en un momento.",
+      "refused": "La publicación programada fue rechazada porque no se pudo confirmar que es tuya. Cierra sesión y vuelve a entrar, luego inténtalo de nuevo."
+    }
   },
   "composer": {
     "placeholder": "Escribe tu descripción aquí...",

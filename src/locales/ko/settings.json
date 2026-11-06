@@ -111,6 +111,7 @@
     "deviceOnToast": "이 기기에서 알림을 받아요",
     "changeFailed": "알림 설정을 변경하지 못했어요",
     "saveFailed": "저장하지 못했어요",
+    "notConfirmed": "본인임을 확인할 수 없습니다. 로그아웃 후 다시 로그인한 다음 다시 시도하세요.",
     "loginHint": "알림 받을 항목을 선택하려면 로그인하세요.",
     "unsupported": "이 브라우저는 알림을 표시할 수 없어요. iPhone과 iPad에서는 3Speak를 홈 화면에 추가해야만 알림이 작동해요.",
     "device": "이 기기에서 알림 받기",

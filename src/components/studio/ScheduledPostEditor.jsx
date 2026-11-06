@@ -6,6 +6,7 @@ import { useAppStore } from '../../lib/store';
 import { CHECKER_API_KEY } from '../../utils/config';
 import { getMinMaxDates, formatDateTimeLocal } from '../../utils/schedulingHelpers';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
+import { proveScheduledPost, scheduledPostWriteError } from '../../utils/scheduledPostProof';
 import MarkdownComposer from './MarkdownComposer';
 import Beneficiary_modal from '../modal/Beneficiary_modal';
 import { useTranslation } from 'react-i18next';
@@ -187,7 +188,10 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
       }
       const scheduledOnIso = new Date(scheduleDateTime).toISOString();
       const url = `${CHECKER_BASE.replace(/\/$/, '')}/scheduled-posts/update`;
+      // The owner's signature, right before the write (utils/scheduledPostProof.js).
+      const proof = await proveScheduledPost({ action: 'update', owner: user, permlink });
       const resp = await axios.post(url, {
+        ...proof,
         owner: user,
         permlink,
         updates: {
@@ -207,7 +211,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
       onSaved?.({ title, description, thumbnail, scheduledOn: scheduledOnIso });
     } catch (err) {
       console.error('update scheduled post:', err);
-      toast.error(err?.response?.data?.error || err?.message || t('studio.scheduled.updateFailed'));
+      toast.error(scheduledPostWriteError(err, t('studio.scheduled.updateFailed')));
     } finally {
       setSaving(false);
     }
@@ -219,14 +223,15 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
     setSaving(true);
     try {
       const url = `${CHECKER_BASE.replace(/\/$/, '')}/scheduled-posts/cancel`;
-      await axios.post(url, { owner: user, permlink }, {
+      const proof = await proveScheduledPost({ action: 'cancel', owner: user, permlink });
+      await axios.post(url, { ...proof, owner: user, permlink }, {
         headers: CHECKER_API_KEY ? { Authorization: `Bearer ${CHECKER_API_KEY}` } : {},
       });
       toast.success(t('studio.scheduled.cancelled'));
       onCancelled?.();
     } catch (err) {
       console.error('cancel scheduled post:', err);
-      toast.error(err?.response?.data?.error || err?.message || t('studio.scheduled.cancelFailed'));
+      toast.error(scheduledPostWriteError(err, t('studio.scheduled.cancelFailed')));
     } finally {
       setSaving(false);
     }

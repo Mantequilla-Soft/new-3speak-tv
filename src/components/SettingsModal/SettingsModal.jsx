@@ -894,7 +894,9 @@ function NotificationsSection() {
       setPrefs(await setPushPrefs(user, next));
     } catch (err) {
       setPrefs(prefs);                                // put it back rather than lie
-      toast.error(err.message || t('settings.notifications.saveFailed'));
+      toast.error(err?.code === 'not_confirmed'
+        ? t('settings.notifications.notConfirmed')
+        : err.message || t('settings.notifications.saveFailed'));
     }
   };
 

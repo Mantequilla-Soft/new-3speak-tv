@@ -111,6 +111,7 @@
     "deviceOnToast": "Perangkat ini akan diberi notifikasi",
     "changeFailed": "Notifikasi tidak dapat diubah",
     "saveFailed": "Tidak dapat menyimpan itu",
+    "notConfirmed": "Tidak dapat memastikan bahwa ini kamu. Keluar lalu masuk lagi, kemudian coba lagi.",
     "loginHint": "Masuk untuk memilih notifikasi yang kamu terima.",
     "unsupported": "Browser ini tidak bisa menampilkan notifikasi. Di iPhone dan iPad, notifikasi hanya berfungsi setelah 3Speak ditambahkan ke Layar Utama.",
     "device": "Beri notifikasi ke perangkat ini",

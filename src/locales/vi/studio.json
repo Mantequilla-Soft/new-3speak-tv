@@ -69,7 +69,14 @@
     "beneficiariesButton": "NGƯỜI THỤ HƯỞNG",
     "range": "Phạm vi: ít nhất 15 phút kể từ bây giờ, tối đa 90 ngày.",
     "cancelPost": "Hủy bài đăng đã lên lịch",
-    "saveChanges": "Lưu thay đổi"
+    "saveChanges": "Lưu thay đổi",
+    "proof": {
+      "walletPrompt": "Xác nhận bài đăng đã lên lịch",
+      "notSignedIn": "Không thể xác nhận bạn đang đăng nhập với tài khoản @{{owner}}. Hãy đăng xuất rồi đăng nhập lại, sau đó thử lại.",
+      "noGrant": "Để lên lịch, tài khoản của bạn cần cấp quyền đăng bài cho @threespeak.",
+      "unavailable": "Hiện không thể xác nhận bài đăng đã lên lịch này. Vui lòng thử lại sau giây lát.",
+      "refused": "Bài đăng đã lên lịch bị từ chối vì không thể xác nhận đó là của bạn. Hãy đăng xuất rồi đăng nhập lại, sau đó thử lại."
+    }
   },
   "composer": {
     "placeholder": "Viết mô tả của bạn tại đây...",

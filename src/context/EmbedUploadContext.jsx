@@ -11,6 +11,7 @@ import { pickEmbedEndpoint } from '../utils/embedEndpoints';
 import { reloadIfStale } from '../utils/checkLatestVersion';
 import { commentWithAioha, broadcastWithAioha, signMessageWithAioha, isLoggedIn, getCurrentProvider, Providers, broadcastViaThreespeak, KeyTypes } from '../hive-api/aioha';
 import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../utils/postingAuthority';
+import { proveScheduledPost, scheduledPostWriteError } from '../utils/scheduledPostProof';
 import { useAppStore } from '../lib/store';
 import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { setChannelTrailer } from '../utils/channelTrailer';
@@ -2003,11 +2004,11 @@ export function EmbedUploadProvider({ children }) {
           // The HTML datetime-local string is local-tz; convert to a real ISO UTC.
           const scheduledOnIso = new Date(scheduleDateTime).toISOString();
 
-          // Auth: the checker create endpoint uses the app-key method (same as the
-          // embed /video/* writes), not a client Hive signature — because HiveSigner
-          // and ManteAuth can't sign arbitrary messages client-side. The checker
-          // trusts the app key + verifies on-chain that the user granted @threespeak
-          // posting authority (which we just ensured above and the cron relies on).
+          // Auth: the app key, plus the owner's signature over this create
+          // (utils/scheduledPostProof.js: @threespeak via our API for every login,
+          // the wallet itself as a fallback). The checker also verifies on chain
+          // that the user granted @threespeak posting authority (ensured above;
+          // the cron relies on it).
           const payoutOptions = declineRewards ? 'decline' : (rewardPowerup ? 'powerup' : 'default');
           const checkerBase =
             import.meta.env.VITE_SCHEDULED_POSTS_API_URL || 'https://prod-checker.okinoko.io';
@@ -2024,7 +2025,13 @@ export function EmbedUploadProvider({ children }) {
 
           setStatusText(t('upload.publishing.savingScheduled'));
           addMessage(t('upload.publishing.savingScheduled'));
+          // Signed right before the write (the checker allows 5 minutes), over
+          // the very scheduledOn string the body carries.
+          const proof = await proveScheduledPost({
+            action: 'create', owner: assetOwner, permlink: hivePermlink, scheduledOn: scheduledOnIso,
+          });
           const resp = await axios.post(url, {
+            ...proof,
             owner: assetOwner,
             permlink: hivePermlink,
             scheduledOn: scheduledOnIso,
@@ -2060,7 +2067,7 @@ export function EmbedUploadProvider({ children }) {
           return;
         } catch (schedErr) {
           console.error('Scheduled-post error:', schedErr);
-          const msg = schedErr?.response?.data?.error || schedErr?.message || t('upload.errors.couldNotSchedule');
+          const msg = scheduledPostWriteError(schedErr, t('upload.errors.couldNotSchedule'));
           addMessage(t('upload.errors.scheduleFailed', { msg }), 'error');
           toast.error(t('upload.errors.scheduleFailed', { msg }));
           throw schedErr;

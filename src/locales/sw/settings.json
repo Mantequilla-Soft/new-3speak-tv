@@ -111,6 +111,7 @@
     "deviceOnToast": "Kifaa hiki kitaarifiwa",
     "changeFailed": "Imeshindwa kubadilisha arifa",
     "saveFailed": "Imeshindwa kuhifadhi hilo",
+    "notConfirmed": "Haikuweza kuthibitisha kuwa ni wewe. Toka kisha uingie tena, kisha ujaribu tena.",
     "loginHint": "Ingia ili uchague unachotaka kuarifiwa kuhusu.",
     "unsupported": "Kivinjari hiki hakiwezi kuonyesha arifa. Kwenye iPhone na iPad zinafanya kazi tu baada ya 3Speak kuongezwa kwenye Skrini ya Nyumbani.",
     "device": "Arifu kifaa hiki",

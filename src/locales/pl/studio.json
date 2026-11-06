@@ -69,7 +69,14 @@
     "beneficiariesButton": "BENEFICJENCI",
     "range": "Zakres: co najmniej 15 minut od teraz, maksymalnie 90 dni.",
     "cancelPost": "Anuluj zaplanowany post",
-    "saveChanges": "Zapisz zmiany"
+    "saveChanges": "Zapisz zmiany",
+    "proof": {
+      "walletPrompt": "Potwierdź zaplanowany post",
+      "notSignedIn": "Nie udało się potwierdzić, że jesteś zalogowany jako @{{owner}}. Wyloguj się i zaloguj ponownie, a potem spróbuj jeszcze raz.",
+      "noGrant": "Planowanie wymaga, aby Twoje konto nadało @threespeak uprawnienia do publikowania.",
+      "unavailable": "Nie udało się teraz potwierdzić tego zaplanowanego posta. Spróbuj ponownie za chwilę.",
+      "refused": "Zaplanowany post został odrzucony, ponieważ nie udało się potwierdzić, że należy do Ciebie. Wyloguj się i zaloguj ponownie, a potem spróbuj jeszcze raz."
+    }
   },
   "composer": {
     "placeholder": "Napisz tu opis...",

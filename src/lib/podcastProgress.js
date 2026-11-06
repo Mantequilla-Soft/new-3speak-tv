@@ -15,11 +15,10 @@
  * asks the wallet for anything.
  */
 import { useEffect, useSyncExternalStore } from 'react';
-import { getCurrentProvider, Providers } from '../hive-api/aioha';
 import { CHECKER_URL } from '../utils/config';
+import { fetchSessionVouch } from './sessionVouch';
 
 const API = `${CHECKER_URL}/podcasts`;
-const THREESPEAK_API = import.meta.env.VITE_THREESPEAK_API || '/api';
 const SYNC_MS = 20 * 1000;
 const VOUCH_REUSE_MS = 20 * 3600 * 1000;
 const LOCAL_MAX = 2000;
@@ -92,24 +91,8 @@ const VOUCH_RETRY_MS = 5 * 60 * 1000;
 let vouchFailed = null;    // { user, at }
 let vouchInFlight = null;  // { user, promise }
 
-async function fetchVouch(user) {
-  try {
-    const headers = { 'Content-Type': 'application/json' };
-    if (getCurrentProvider() === Providers.HiveSigner) {
-      const token = localStorage.getItem('hivesignerToken');
-      if (token) headers.Authorization = `Bearer ${token}`;
-    }
-    const res = await fetch(`${THREESPEAK_API}/podcasts/signature`, {
-      method: 'POST', headers, credentials: 'include',
-      body: JSON.stringify({ action: 'progress', payload: 'session' }),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.signature || data.username !== user) return null;
-    return { user, signature: data.signature, timestamp: data.timestamp };
-  } catch {
-    return null;
-  }
-}
+// The shared helper (lib/sessionVouch.js), with this module's action word.
+const fetchVouch = (user) => fetchSessionVouch('progress', user);
 
 /**
  * Our API's word for who this session is (action 'progress', payload 'session'),

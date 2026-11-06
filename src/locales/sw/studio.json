@@ -69,7 +69,14 @@
     "beneficiariesButton": "WANUFAIKA",
     "range": "Kipindi: angalau dakika 15 kuanzia sasa, hadi siku 90.",
     "cancelPost": "Ghairi chapisho lililoratibiwa",
-    "saveChanges": "Hifadhi mabadiliko"
+    "saveChanges": "Hifadhi mabadiliko",
+    "proof": {
+      "walletPrompt": "Thibitisha chapisho lako lililopangwa",
+      "notSignedIn": "Haikuweza kuthibitisha kuwa umeingia kama @{{owner}}. Toka kisha uingie tena, kisha ujaribu tena.",
+      "noGrant": "Kupanga machapisho kunahitaji akaunti yako impe @threespeak mamlaka ya kuchapisha.",
+      "unavailable": "Haikuweza kuthibitisha chapisho hili lililopangwa kwa sasa. Tafadhali jaribu tena baada ya muda mfupi.",
+      "refused": "Chapisho lililopangwa limekataliwa kwa sababu haikuweza kuthibitishwa kuwa ni lako. Toka kisha uingie tena, kisha ujaribu tena."
+    }
   },
   "composer": {
     "placeholder": "Andika maelezo yako hapa...",

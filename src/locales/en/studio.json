@@ -69,7 +69,14 @@
     "beneficiariesButton": "BENEFICIARIES",
     "range": "Range: at least 15 minutes from now, up to 90 days.",
     "cancelPost": "Cancel scheduled post",
-    "saveChanges": "Save changes"
+    "saveChanges": "Save changes",
+    "proof": {
+      "walletPrompt": "Confirm your scheduled post",
+      "notSignedIn": "Could not confirm that you are signed in as @{{owner}}. Log out and back in, then try again.",
+      "noGrant": "Scheduling needs @threespeak posting authority on your account.",
+      "unavailable": "Could not confirm this scheduled post right now. Please try again in a moment.",
+      "refused": "The scheduled post was refused because it could not be confirmed as yours. Log out and back in, then try again."
+    }
   },
   "composer": {
     "placeholder": "Write your description here...",

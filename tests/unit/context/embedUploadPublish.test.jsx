@@ -31,6 +31,13 @@ vi.mock('../../../src/lib/advertiseData', () => h.mocks.advertise)
 vi.mock('../../../src/lib/youtubeImport', () => h.mocks.youtubeImport)
 vi.mock('../../../src/lib/stories', () => h.mocks.stories)
 vi.mock('../../../src/hive-api/hiveApi', () => h.mocks.hiveApi)
+// The owner's signature is a fake; the error wording is the real module's (its
+// t() is the same key-echo as the provider's).
+vi.mock('../../../src/i18n', () => h.mocks.appI18n)
+vi.mock('../../../src/utils/scheduledPostProof', async (importOriginal) => ({
+  ...(await importOriginal()),
+  proveScheduledPost: (...a) => h.fns.proveScheduledPost(...a),
+}))
 // A detached <video> never loads metadata in jsdom; the orientation is a given here.
 vi.mock('../../../src/utils/openAttribute', async (importOriginal) => ({
   ...(await importOriginal()),
@@ -665,6 +672,7 @@ describe('a scheduled post', () => {
     })
     expect(body.body).toContain(h.EMBED_URL)
     expect(body.jsonMetadata.app).toBe('3speak/embed')
+    expect(body).toMatchObject({ signature: 'OWNER-SIG', timestamp: 4242 })
     nothingPosted()
     expect(fetchTo('/hive')).toHaveLength(0)
     expect(result.current).toMatchObject({ completed: true, uploading: false, uploadProgress: 100 })
@@ -714,10 +722,57 @@ describe('a scheduled post', () => {
     nothingPosted()
   })
 
+  it('is signed by its owner right before it is sent, over the very scheduledOn it sends', async () => {
+    const { result } = await ready(asScheduled)
+    await publish(result)
+    const [, body] = scheduleCall()
+    expect(h.fns.proveScheduledPost).toHaveBeenCalledTimes(1)
+    expect(h.fns.proveScheduledPost).toHaveBeenCalledWith({ action: 'create', owner: 'badadib', permlink: PERMLINK, scheduledOn: body.scheduledOn })
+    const signedAt = h.fns.proveScheduledPost.mock.invocationCallOrder[0]
+    const sentAt = h.fns.axiosPost.mock.invocationCallOrder[h.fns.axiosPost.mock.calls.indexOf(scheduleCall())]
+    expect(h.fns.hasThreespeakPostingAuth.mock.invocationCallOrder[0]).toBeLessThan(signedAt)
+    expect(signedAt).toBeLessThan(sentAt)
+  })
+
+  it('without a signature (the checker still takes that) it is scheduled unsigned, as before', async () => {
+    h.fns.proveScheduledPost.mockResolvedValue({})
+    const { result } = await ready(asScheduled)
+    await publish(result)
+    const [, body] = scheduleCall()
+    expect(body).not.toHaveProperty('signature')
+    expect(body).not.toHaveProperty('timestamp')
+    expect(result.current.completed).toBe(true)
+  })
+
+  it('a signature that cannot be had fails the upload with the reason, and keeps it to retry', async () => {
+    const { ScheduledPostProofError } = await import('../../../src/utils/scheduledPostProof.js')
+    h.fns.proveScheduledPost.mockRejectedValue(new ScheduledPostProofError('no_grant', 'badadib'))
+    const { result } = await ready(asScheduled)
+    await publish(result)
+    expect(scheduleCall()).toBeUndefined()
+    expect(h.fns.toastError).toHaveBeenCalledWith('upload.errors.scheduleFailed {"msg":"studio.scheduled.proof.noGrant"}')
+    expect(result.current).toMatchObject({ completed: false, uploading: false })
+    expect(result.current.title).toBe('My First Video!')
+    nothingPosted()
+  })
+
+  it('the checker refusing it for want of a signature is said in words', async () => {
+    h.fns.axiosPost.mockImplementation(async (url) => {
+      if (url.endsWith('/scheduled-posts/create')) throw Object.assign(new Error('Request failed with status code 401'), { response: { status: 401, data: { error: 'Signature required' } } })
+      if (url.endsWith('/uploads/token')) return { data: h.state.tokenData }
+      return { status: 201, data: {} }
+    })
+    const { result } = await ready(asScheduled)
+    await publish(result)
+    expect(h.fns.toastError).toHaveBeenCalledWith('upload.errors.scheduleFailed {"msg":"studio.scheduled.proof.refused"}')
+    expect(result.current.completed).toBe(false)
+  })
+
   it('a short is never scheduled', async () => {
     const { result } = await ready((c) => { asScheduled(c); c.setFromStories(true) })
     await publish(result)
     expect(scheduleCall()).toBeUndefined()
+    expect(h.fns.proveScheduledPost).not.toHaveBeenCalled()
     expect(h.fns.broadcastViaThreespeak).toHaveBeenCalled()
   })
 })

@@ -162,6 +162,9 @@ export const mocks = {
     const t = (key, opts) => (opts ? `${key} ${JSON.stringify(opts)}` : key)
     return { useTranslation: () => ({ t }) }
   })(),
+  // src/i18n (the t() of non-React modules such as utils/scheduledPostProof.js),
+  // echoing keys like the provider's own t().
+  appI18n: { t: (key, opts) => (opts ? `${key} ${JSON.stringify(opts)}` : key) },
   toast: { toastIn: () => ({ message: call('toastMessage'), error: call('toastError'), success: call('toastSuccess') }) },
   store: { useAppStore: (sel) => (sel ? sel(state.store) : state.store) },
   premium: { usePremiumStatus: () => state.premium },
@@ -234,6 +237,8 @@ export function reset() {
     markImportPublished: vi.fn(async () => {}),
     registerStory: vi.fn(async () => {}),
     getPostDetails: vi.fn(async () => null),
+    // utils/scheduledPostProof.js: the owner's signature for a scheduled post.
+    proveScheduledPost: vi.fn(async () => ({ signature: 'OWNER-SIG', timestamp: 4242 })),
   })
 }
 
