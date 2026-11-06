@@ -6,6 +6,7 @@
       "allRequired": "Заповніть усі поля",
       "loginRequired": "Увійдіть, щоб надіслати чайові",
       "insufficientBalance": "Недостатньо коштів",
+      "amountPositive": "Введіть суму, більшу за нуль",
       "invalidUsername": "Неправильне ім'я користувача",
       "transferFailed": "Не вдалося виконати переказ: {{message}}"
     },

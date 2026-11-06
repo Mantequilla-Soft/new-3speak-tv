@@ -10,6 +10,7 @@ import { useAppStore } from '../../lib/store';
 import { useTranslation } from 'react-i18next';
 import { formatDate as formatLocaleDate } from '../../i18n';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import useDialog from '../../hooks/useDialog';
 import './AddToPlaylistModal.scss';
 
 // Every toast from this module is headed "Playlist"; the message becomes the
@@ -38,6 +39,9 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
   // Find the Watch Later playlist if it exists
   const watchLaterPlaylist = playlists.find(p => p.name === WATCH_LATER_NAME);
   const isInWatchLater = watchLaterPlaylist ? isVideoInPlaylist(watchLaterPlaylist, author, permlink) : false;
+
+  const dialog = useDialog(onClose, { active: isOpen });
+  const fieldId = dialog.titleId;
 
   if (!isOpen) return null;
 
@@ -164,10 +168,11 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
   // tore the modal down after ~1s. At <body> its z-index and clicks work normally.
   return createPortal(
     <div className="add-to-playlist-overlay" onClick={handleOverlayClick} onMouseDown={(e) => e.stopPropagation()}>
-      <div className="add-to-playlist-modal" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+      <div className="add-to-playlist-modal" {...dialog.props} onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
         <ModalHeader
           className="atp-header"
           title={t('playlists.modal.title')}
+          titleId={dialog.titleId}
           onClose={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}
         />
 
@@ -245,8 +250,9 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
           {showCreateForm && (
             <div className="create-form">
               <div className="form-group">
-                <label>{t('playlists.modal.name')}</label>
+                <label htmlFor={`${fieldId}-name`}>{t('playlists.modal.name')}</label>
                 <input
+                  id={`${fieldId}-name`}
                   type="text"
                   value={newPlaylistName}
                   onChange={(e) => setNewPlaylistName(e.target.value)}
@@ -256,8 +262,8 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
                 />
               </div>
               <div className="form-group">
-                <label>{t('playlists.modal.privacy')}</label>
-                <div className="privacy-options">
+                <span className="form-label" id={`${fieldId}-privacy`}>{t('playlists.modal.privacy')}</span>
+                <div className="privacy-options" role="group" aria-labelledby={`${fieldId}-privacy`}>
                   <button
                     className={`privacy-btn ${newPlaylistAccess === 'public' ? 'active' : ''}`}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); setNewPlaylistAccess('public'); }}
@@ -275,19 +281,20 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
                 </div>
               </div>
               <div className="form-group">
-                <label>{t('playlists.modal.tags')}</label>
+                <label htmlFor={`${fieldId}-tags`}>{t('playlists.modal.tags')}</label>
                 <div className="tags-input-wrap">
                   <div className="tags-list">
                     {newPlaylistTags.map((tag) => (
                       <span key={tag} className="tag-chip">
                         {tag}
-                        <button type="button" onClick={(e) => { e.stopPropagation(); setNewPlaylistTags(prev => prev.filter(x => x !== tag)); }}>
+                        <button type="button" aria-label={t('audio.upload.mainPost.removeTag', { tag })} onClick={(e) => { e.stopPropagation(); setNewPlaylistTags(prev => prev.filter(x => x !== tag)); }}>
                           <MdClose />
                         </button>
                       </span>
                     ))}
                   </div>
                   <input
+                    id={`${fieldId}-tags`}
                     type="text"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}

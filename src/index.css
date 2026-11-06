@@ -182,6 +182,25 @@ button{
   cursor: pointer;
 }
 
+/* A <button> that looks exactly like the <div>, <span> or <label> it replaced
+   (so the control is reachable from the keyboard without a new look): no
+   browser chrome, the surrounding font, colour and alignment. Inside :where()
+   it weighs nothing, so a component's own class always sets whatever it styles,
+   whichever stylesheet happens to load first. */
+:where(.btn-reset) {
+  appearance: none;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+  text-transform: inherit;
+}
+
 img{
   cursor: pointer;
   /* width: 100%; */

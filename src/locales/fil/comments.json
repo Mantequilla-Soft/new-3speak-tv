@@ -111,6 +111,8 @@
     "count_one": "{{count}} Comment",
     "count_other": "{{count}} Comments",
     "edited": "(na-edit)",
+    "hideComment": "Itago ang comment",
+    "showComment": "Ipakita ang comment ni @{{user}}",
     "saving": "Sine-save...",
     "translation": "Salin",
     "translationFailed": "Pumalya ang pagsasalin. Tumatakbo ba ang translation service?",

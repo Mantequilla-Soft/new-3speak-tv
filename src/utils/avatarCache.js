@@ -120,7 +120,8 @@ function viaHiveProxy(url, size) {
  * answers with its grey default face, so that goes through /img/a/ instead.
  */
 export function cachedProfileImage(account, url, size = 'small') {
-  if (hiveProxyRefuses(url)) return viaHiveProxy(String(url).trim(), size);
+  const trimmed = String(url ?? '').trim();
+  if (hiveProxyRefuses(trimmed)) return viaHiveProxy(trimmed, size);
   return hiveAvatarUrl(account, size);
 }
 

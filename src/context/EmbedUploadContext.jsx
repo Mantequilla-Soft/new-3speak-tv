@@ -367,6 +367,10 @@ export function EmbedUploadProvider({ children }) {
   const earlyDeferralRef = useRef(null);
   const earlyUploadStartedRef = useRef(false);
   const earlyUploadedFileRef = useRef(null); // which file the background upload used
+  // Bumped by every start and reset: a background attempt that is no longer the
+  // latest (the video was replaced or the upload cancelled) must not write its
+  // late success or failure into the state the newer attempt now owns.
+  const earlyAttemptRef = useRef(0);
   // The embed server chosen for this upload. Sticky for the whole lifecycle so
   // the post-upload /video/*/hive + /thumbnail writes hit the same host as the
   // bytes (works whether or not the servers share a MongoDB).
@@ -507,6 +511,7 @@ export function EmbedUploadProvider({ children }) {
         if (key.startsWith('tus::') || key.startsWith('chunked::')) localStorage.removeItem(key);
       });
     } catch { /* ignore */ }
+    earlyAttemptRef.current += 1;
     earlyEmbedUrlRef.current = '';
     earlyUploadPromiseRef.current = null;
     earlyDeferralRef.current = null;
@@ -1201,6 +1206,7 @@ export function EmbedUploadProvider({ children }) {
             // A chunk landed: the transport works, so open the other streams.
             if (!ramped) { patchUploadDetail({ workers: parallel }); releaseRamp(); }
             inflight.delete(index);
+            received.add(index);
             if (Number.isFinite(r.receivedBytes)) serverBytes = r.receivedBytes;
             paint();
           } catch (e) {
@@ -1229,6 +1235,7 @@ export function EmbedUploadProvider({ children }) {
           try {
             const st = await postForm(`${base}/upload/chunk/status`, { sessionId }, null, { timeoutMs: 30000 });
             if (st && Array.isArray(st.received)) {
+              st.received.forEach((i) => received.add(i));
               if (Number.isFinite(st.receivedBytes)) { serverBytes = st.receivedBytes; paint(); }
               if (st.received.includes(index)) {
                 ok = true;   // it did land — move on
@@ -1434,6 +1441,9 @@ export function EmbedUploadProvider({ children }) {
       startedAt: Date.now(),
       retries: 0,
     });
+    earlyAttemptRef.current += 1;
+    const attempt = earlyAttemptRef.current;
+    const superseded = () => earlyAttemptRef.current !== attempt;
     const p = (async () => {
       try {
         // Stale-client guard: if a newer build is deployed, force-reload onto it
@@ -1442,6 +1452,7 @@ export function EmbedUploadProvider({ children }) {
         // TUS on the least-busy host, auto-falling back to chunked if PATCH is blocked.
         const { embedUrl: url, deferral } = await runUploadWithFallback('');
         if (!url) throw new Error(t('upload.errors.noEmbedUrl'));
+        if (superseded()) return { embedUrl: url, deferral };
         earlyEmbedUrlRef.current = url;
         // Pin the deferral to THIS upload. Whatever else starts and mints a
         // token later cannot move the target the encode gets commissioned at.
@@ -1452,6 +1463,9 @@ export function EmbedUploadProvider({ children }) {
         setStatusText('');
         return { embedUrl: url, deferral };
       } catch (err) {
+        // An abandoned attempt (video replaced, upload cancelled) fails quietly:
+        // the refs and the bar belong to whatever runs now.
+        if (superseded()) return { embedUrl: '', deferral: null };
         console.error('Background video upload failed:', err);
         // Allow the publish step to retry the upload inline.
         earlyUploadStartedRef.current = false;

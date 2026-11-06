@@ -6,6 +6,7 @@
       "allRequired": "Kailangan punan lahat ng field",
       "loginRequired": "Mag-log in para makapagpadala ng tip",
       "insufficientBalance": "Kulang ang balance",
+      "amountPositive": "Maglagay ng halagang higit sa zero",
       "invalidUsername": "Invalid na username",
       "transferFailed": "Pumalya ang transfer: {{message}}"
     },

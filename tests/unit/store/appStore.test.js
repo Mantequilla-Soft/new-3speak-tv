@@ -222,7 +222,7 @@ describe('the Hive profile details', () => {
   // response.data.result[0].posting_json_metadata without checking the array has
   // an entry; an unknown account (result: []) throws a TypeError instead of
   // leaving the details empty.
-  it.skip('BUG: an unknown account (empty result) leaves the profile empty instead of throwing', async () => {
+  it('BUG: an unknown account (empty result) leaves the profile empty instead of throwing', async () => {
     axiosPost.mockResolvedValue({ data: { result: [] } })
     await expect(store.getState().getUserHiveDetails('nobody')).resolves.toBeDefined()
     expect(store.getState().userhiveDetails).toBeNull()

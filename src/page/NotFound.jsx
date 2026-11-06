@@ -1,12 +1,13 @@
 import React from "react";
 import "./NotFound.scss"
 import image from "../assets/image/404.png";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 
 function NotFound() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <div className="not-found-container">
       {/* Unknown URLs answer 200: the server cannot tell them from real routes, since
@@ -19,9 +20,8 @@ function NotFound() {
       <img src={image} alt={t('pages.notFound.imageAlt')} />
       <p>{t('pages.notFound.title')}</p>
       <h3>{t('pages.notFound.message')}</h3>
-      <Link to="/">
-        <button>{t('pages.notFound.goHome')}</button>
-      </Link>
+      {/* One control: a <button> inside a <Link> was two tab stops for one action. */}
+      <button type="button" onClick={() => navigate('/')}>{t('pages.notFound.goHome')}</button>
     </div>
   );
 }

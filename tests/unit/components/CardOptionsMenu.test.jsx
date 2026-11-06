@@ -205,7 +205,7 @@ describe('the card options menu', () => {
     // (imported at CardOptionsMenu.jsx:11, state at :36, no JSX for it after :194).
     // A signed-in viewer taps it and nothing happens; worse, onOpenChange(true)
     // stays on, so the card's hover preview is held open until the card unmounts.
-    it.skip('BUG: "Add tag" opens the tag dialog', async () => {
+    it('BUG: "Add tag" opens the tag dialog', async () => {
       const { user } = mount()
       await openMenu(user)
       await user.click(screen.getByRole('menuitem', { name: 'Add tag' }))

@@ -4,6 +4,7 @@ import { BsLightningChargeFill } from 'react-icons/bs';
 import { formatDuration } from '../../utils/rcCheck';
 import { useTranslation, Trans } from 'react-i18next';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import useDialog from '../../hooks/useDialog';
 import './RcInsufficientModal.scss';
 
 /**
@@ -35,6 +36,8 @@ export default function RcInsufficientModal({ isOpen, onClose, status, onRecheck
     return () => clearInterval(id);
   }, [isOpen, remaining]);
 
+  const dialog = useDialog(onClose, { active: isOpen && !!status });
+
   if (!isOpen || !status) return null;
 
   const pct = Math.max(0, Math.min(100, status.percentage ?? 0));
@@ -42,8 +45,8 @@ export default function RcInsufficientModal({ isOpen, onClose, status, onRecheck
 
   return createPortal(
     <div className="rc-modal-overlay" onClick={onClose}>
-      <div className="rc-modal-content" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={t('upload.rc.title')} onClose={onClose} />
+      <div className="rc-modal-content" {...dialog.props} onClick={(e) => e.stopPropagation()}>
+        <ModalHeader title={t('upload.rc.title')} titleId={dialog.titleId} onClose={onClose} />
 
         <div className="rc-modal-icon">
           <BsLightningChargeFill />

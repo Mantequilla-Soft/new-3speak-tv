@@ -163,14 +163,14 @@ describe("the what's new popup", () => {
 
   // BUG: the dialog is aria-modal but has no accessible name; the heading is not
   // tied to it with aria-labelledby (ChangelogModal.jsx:118).
-  it.skip('BUG: the dialog is named after its heading', () => {
+  it('BUG: the dialog is named after its heading', () => {
     show('2.0.8')
     expect(screen.getByRole('dialog', { name: 'We shipped an update!' })).toBeInTheDocument()
   })
 
   // BUG: Escape does nothing; the popup covers the whole page and can only be
   // closed with the mouse or by tabbing to a button (ChangelogModal.jsx:116-171).
-  it.skip('BUG: closes on Escape and still records the version', async () => {
+  it('BUG: closes on Escape and still records the version', async () => {
     const { user } = show('2.0.8')
     await user.keyboard('{Escape}')
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()

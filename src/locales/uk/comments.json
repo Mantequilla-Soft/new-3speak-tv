@@ -121,6 +121,8 @@
     "count_many": "{{count}} коментарів",
     "count_other": "{{count}} коментаря",
     "edited": "(змінено)",
+    "hideComment": "Сховати коментар",
+    "showComment": "Показати коментар @{{user}}",
     "saving": "Збереження...",
     "translation": "Переклад",
     "translationFailed": "Не вдалося перекласти. Чи працює сервіс перекладу?",

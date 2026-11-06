@@ -111,6 +111,8 @@
     "count_one": "{{count}} Yorum",
     "count_other": "{{count}} Yorum",
     "edited": "(düzenlendi)",
+    "hideComment": "Yorumu gizle",
+    "showComment": "@{{user}} kullanıcısının yorumunu göster",
     "saving": "Kaydediliyor...",
     "translation": "Çeviri",
     "translationFailed": "Çeviri başarısız. Çeviri servisi çalışıyor mu?",

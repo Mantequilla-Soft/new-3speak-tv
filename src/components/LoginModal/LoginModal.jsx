@@ -14,6 +14,7 @@ import AccountImg from "../HiveAvatar/AccountImg";
 import { listButrauthAccounts, forgetButrauthAccount } from "../../utils/butrauthAccounts";
 import { toastIn } from "../../utils/toast";
 import ModalHeader from "../ModalHeader/ModalHeader";
+import useDialog from "../../hooks/useDialog";
 import "./LoginModal.scss";
 import mark from "../../assets/image/3S_mark.svg";
 
@@ -331,6 +332,9 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
   const showLoginExtras = displayed && step === 'providers';
   // Asked once per page load and shared by every entry point.
   const signupPossible = useSignupPossible();
+  // Our own two screens (the chooser and the signup fallback); aioha's wallet
+  // modal is a dialog of its own.
+  const dialog = useDialog(onClose, { active: displayed && (step === 'choose' || step === 'signup') });
 
   return (
     <>
@@ -340,9 +344,10 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
           Desktop nav buttons pass an intent and skip this entirely. */}
       {displayed && step === 'choose' && (
         <div className="login-chooser-overlay" onMouseDown={onClose}>
-          <div className="login-chooser" onMouseDown={(e) => e.stopPropagation()}>
+          <div className="login-chooser" {...dialog.props} onMouseDown={(e) => e.stopPropagation()}>
             <ModalHeader
               title={isManteAuth ? t('auth.loginModal.signedInTitle') : t('auth.loginModal.welcomeTitle')}
+              titleId={dialog.titleId}
               onClose={onClose}
             />
             <img className="login-chooser-mark" src={mark} alt="3Speak" />
@@ -445,8 +450,8 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
           already opening; this is just the fallback if it was blocked. */}
       {displayed && step === 'signup' && (
         <div className="login-chooser-overlay" onMouseDown={onClose}>
-          <div className="login-chooser" onMouseDown={(e) => e.stopPropagation()}>
-            <ModalHeader title={t('auth.loginModal.openingSignup')} onClose={onClose} />
+          <div className="login-chooser" {...dialog.props} onMouseDown={(e) => e.stopPropagation()}>
+            <ModalHeader title={t('auth.loginModal.openingSignup')} titleId={dialog.titleId} onClose={onClose} />
             <img className="login-chooser-mark" src={mark} alt="3Speak" />
             <p className="login-chooser-sub">
               {t('auth.loginModal.openingSignupHint')}

@@ -108,7 +108,7 @@ describe('the embed dialog for an audio', () => {
 
   // BUG: the dialog has no keyboard way out. It listens for no Escape key, so a
   // keyboard or screen reader user has to tab to the X (EmbedCodeModal.jsx:67-118).
-  it.skip('BUG: closes on Escape like every other dialog', async () => {
+  it('BUG: closes on Escape like every other dialog', async () => {
     open({ kind: 'audio', id: 'my-audio' })
     await user.keyboard('{Escape}')
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()

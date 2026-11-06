@@ -6,6 +6,7 @@
       "allRequired": "सभी फ़ील्ड भरना ज़रूरी है",
       "loginRequired": "टिप भेजने के लिए कृपया लॉग इन करें",
       "insufficientBalance": "बैलेंस काफ़ी नहीं है",
+      "amountPositive": "शून्य से बड़ी राशि डालें",
       "invalidUsername": "यूज़रनेम गलत है",
       "transferFailed": "ट्रांसफ़र फ़ेल हुआ: {{message}}"
     },

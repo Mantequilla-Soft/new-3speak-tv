@@ -106,6 +106,8 @@
     "commentButton": "コメント",
     "count_other": "{{count}} 件のコメント",
     "edited": "（編集済み）",
+    "hideComment": "コメントを非表示",
+    "showComment": "@{{user}} さんのコメントを表示",
     "saving": "保存中...",
     "translation": "翻訳",
     "translationFailed": "翻訳に失敗しました。翻訳サービスは動作していますか？",

@@ -194,7 +194,7 @@ describe('the settings window', () => {
   // BUG: as a centred window it is neither exposed as a dialog (no role="dialog",
   // no aria-modal, no name; SettingsModal.jsx:1171-1186) nor closable with Escape:
   // the Escape handler is only installed for the hover-peek dropdown (:1133-1138).
-  it.skip('BUG: is a named dialog that closes on Escape', async () => {
+  it('BUG: is a named dialog that closes on Escape', async () => {
     const { user, onClose } = mount()
     expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
     await user.keyboard('{Escape}')

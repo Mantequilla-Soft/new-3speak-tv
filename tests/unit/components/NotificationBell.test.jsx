@@ -280,7 +280,7 @@ describe('the notifications bell', () => {
   // role, no tabindex and no key handler (NotificationBell.jsx:310-313 and the
   // group row at :412-417), so a keyboard user can open the list but not one
   // notification in it, and a screen reader finds no menu items.
-  it.skip('BUG: each notification can be reached and opened from the keyboard', async () => {
+  it('BUG: each notification can be reached and opened from the keyboard', async () => {
     const { user } = mount()
     await openList(user)
     const items = screen.getAllByRole('menuitem')

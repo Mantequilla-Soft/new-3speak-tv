@@ -111,6 +111,8 @@
     "count_one": "{{count}}টি কমেন্ট",
     "count_other": "{{count}}টি কমেন্ট",
     "edited": "(এডিট করা)",
+    "hideComment": "কমেন্ট লুকান",
+    "showComment": "@{{user}}-এর কমেন্ট দেখান",
     "saving": "সেভ হচ্ছে...",
     "translation": "অনুবাদ",
     "translationFailed": "অনুবাদ ব্যর্থ হয়েছে। অনুবাদ সার্ভিস কি চালু আছে?",

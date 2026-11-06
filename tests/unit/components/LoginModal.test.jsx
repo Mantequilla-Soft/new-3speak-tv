@@ -206,7 +206,7 @@ describe('the login window: sign up or log in', () => {
   // BUG: the chooser is a plain <div> overlay: no role="dialog", no aria-modal
   // and no Escape key (LoginModal.jsx:342-343 and :447-448), unlike aioha's own
   // wallet modal behind it.
-  it.skip('BUG: the chooser is a named dialog that closes on Escape', async () => {
+  it('BUG: the chooser is a named dialog that closes on Escape', async () => {
     const { user, onClose } = mount()
     expect(screen.getByRole('dialog', { name: 'Welcome to 3Speak' })).toBeInTheDocument()
     await user.keyboard('{Escape}')

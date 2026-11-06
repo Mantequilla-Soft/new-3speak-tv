@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import Success from './Success';
 import { useTranslation } from 'react-i18next';
 import ModalHeader from '../ModalHeader/ModalHeader';
@@ -31,6 +31,7 @@ const toast = toastIn('Tip');
 // overlay on top of one.
 const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, variant }) => {
     const { t, i18n } = useTranslation();
+    const fieldId = useId();
     const queryClient = useQueryClient();
     const { user: activetUser } = useAppStore();
   const [amount, setAmount] = useState("");
@@ -208,6 +209,11 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
       return;
     }
 
+    if (!(parseFloat(amount) > 0)) {
+      toast.error(t('engagement.tip.errors.amountPositive'));
+      return;
+    }
+
     if (!isLoggedIn()) {
       toast.error(t('engagement.tip.errors.loginRequired'));
       return;
@@ -333,7 +339,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
         {step === 1 && method === 'lightning' && !invoice && <div className="tip-modal-in">
           <div className="form">
             <div className="field">
-              <label>{t('engagement.tip.lightning.amountLabel')}</label>
+              <label htmlFor={`${fieldId}-sats`}>{t('engagement.tip.lightning.amountLabel')}</label>
               <div className="sats-presets">
                 {LIGHTNING_PRESETS.map((p) => (
                   <button type="button" key={p} className={String(p) === sats ? 'active' : ''} onClick={() => setSats(String(p))}>
@@ -342,6 +348,7 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
                 ))}
               </div>
               <input
+                id={`${fieldId}-sats`}
                 type="number"
                 min="1"
                 step="1"
@@ -352,8 +359,9 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
             </div>
 
             <div className="field">
-              <label>{t('engagement.tip.lightning.messageLabel')}</label>
+              <label htmlFor={`${fieldId}-ln-memo`}>{t('engagement.tip.lightning.messageLabel')}</label>
               <input
+                id={`${fieldId}-ln-memo`}
                 type="text"
                 maxLength={500}
                 placeholder={t('engagement.tip.memoPlaceholder')}
@@ -442,8 +450,9 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
               </div>
             )}
             <div className="field">
-              <label>{t('engagement.tip.amountLabel')}</label>
+              <label htmlFor={`${fieldId}-amount`}>{t('engagement.tip.amountLabel')}</label>
               <input
+                id={`${fieldId}-amount`}
                 type="number"
                 placeholder={t('engagement.tip.amountPlaceholder')}
                 value={amount}
@@ -452,8 +461,8 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
             </div>
 
             <div className="field">
-              <label>{t('engagement.tip.currencyLabel')}</label>
-              <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+              <label htmlFor={`${fieldId}-currency`}>{t('engagement.tip.currencyLabel')}</label>
+              <select id={`${fieldId}-currency`} value={currency} onChange={(e) => setCurrency(e.target.value)}>
                 <option value="HIVE">HIVE</option>
                 <option value="HBD">HBD</option>
               </select>
@@ -470,8 +479,9 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
              
 
             <div className="field">
-              <label>{t('engagement.tip.memoLabel')}</label>
+              <label htmlFor={`${fieldId}-memo`}>{t('engagement.tip.memoLabel')}</label>
               <input
+                id={`${fieldId}-memo`}
                 type="text"
                 placeholder={t('engagement.tip.memoPlaceholder')}
                 value={memo}

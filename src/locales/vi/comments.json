@@ -106,6 +106,8 @@
     "commentButton": "Bình luận",
     "count_other": "{{count}} bình luận",
     "edited": "(đã chỉnh sửa)",
+    "hideComment": "Ẩn bình luận",
+    "showComment": "Hiện bình luận của @{{user}}",
     "saving": "Đang lưu...",
     "translation": "Bản dịch",
     "translationFailed": "Dịch thất bại. Dịch vụ dịch có đang chạy không?",

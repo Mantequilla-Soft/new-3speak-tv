@@ -139,7 +139,7 @@ describe('the notifications page', () => {
   // the nested rows get the group's onClick (Notifications.jsx:742), which the
   // page wires to group.items[0] (:499). Clicking "@follower-b followed you"
   // opens @follower-a's profile.
-  it.skip('BUG: a notification inside an unfolded group opens its own target', async () => {
+  it('BUG: a notification inside an unfolded group opens its own target', async () => {
     const { user } = mount()
     await user.click(screen.getByText('@follower-a and @follower-b followed you').closest('li'))
     await user.click(screen.getByText('@follower-b followed you'))
@@ -221,7 +221,7 @@ describe('the notifications page', () => {
 
   // BUG: the summary cards filter the list on click but are <div onClick>
   // (Notifications.jsx:639-642): no role, no focus, no keyboard.
-  it.skip('BUG: the summary cards are buttons', () => {
+  it('BUG: the summary cards are buttons', () => {
     mount()
     expect(screen.getByRole('button', { name: /Votes/ })).toBeInTheDocument()
   })

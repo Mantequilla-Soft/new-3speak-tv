@@ -111,6 +111,8 @@
     "count_one": "{{count}} कमेंट",
     "count_other": "{{count}} कमेंट",
     "edited": "(एडिट किया गया)",
+    "hideComment": "कमेंट छिपाएं",
+    "showComment": "@{{user}} का कमेंट दिखाएं",
     "saving": "सेव हो रहा है...",
     "translation": "अनुवाद",
     "translationFailed": "अनुवाद नहीं हो सका। क्या अनुवाद सर्विस चल रही है?",

@@ -111,6 +111,8 @@
     "count_one": "{{count}} reactie",
     "count_other": "{{count}} reacties",
     "edited": "(bewerkt)",
+    "hideComment": "Reactie verbergen",
+    "showComment": "Reactie van @{{user}} tonen",
     "saving": "Opslaan...",
     "translation": "Vertaling",
     "translationFailed": "Vertalen mislukt. Draait de vertaaldienst?",

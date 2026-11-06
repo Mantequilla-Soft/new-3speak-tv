@@ -30,7 +30,7 @@ describe('the page-not-found page', () => {
   // BUG: "Go to home page" is a <button> inside a <Link> (NotFound.jsx:22-24):
   // two nested interactive controls, which HTML does not allow. Keyboard users
   // tab through two stops for one action and screen readers announce both.
-  it.skip('BUG: the way home is a single control', () => {
+  it('BUG: the way home is a single control', () => {
     renderWithProviders(<NotFound />, { route: '/no/such/page' })
     const controls = [...screen.queryAllByRole('link'), ...screen.queryAllByRole('button')]
       .filter((el) => /home page/i.test(el.textContent))

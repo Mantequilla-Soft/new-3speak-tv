@@ -111,15 +111,28 @@ const aiKeysFor = (v) => (v._liveStream ? [] : [
 const isAiCard = (v) => !v._liveStream
   && (isAiFlagged(cardAuthorOf(v), v.permlink) || (!!v.owner && isAiFlagged(v.owner, v.permlink)));
 
-// One card's link. Far from the viewport (windowed grids only) it renders as an
-// empty slot of its last height; `render` draws the card's content otherwise.
-function CardLink({ windowing, cardKey, index, cardProps, render, ...linkProps }) {
+// One card: the grid cell (.card) holding the card's link and, beside the link,
+// the controls drawn on the card (`renderControls`). Controls are never inside
+// the <a>: a button nested in a link is invalid HTML and assistive tech reads
+// the two as one control. The link fills the cell and lays its content out the
+// way the cell does (Cards.scss .card-link), so the card looks as it always did.
+// Far from the viewport (windowed grids only) it renders as an empty slot of
+// its last height; `render` draws the card's content otherwise.
+function CardLink({ windowing, cardKey, index, cardProps, render, renderControls, to, title, ...cellProps }) {
   const { ref: ownRef, ...restCardProps } = cardProps;
   const { ref, hiddenHeight } = useWindowedCard(windowing, cardKey, index, ownRef);
   if (hiddenHeight != null) {
-    return <Link {...linkProps} {...restCardProps} ref={ref} style={{ height: hiddenHeight }} tabIndex={-1} aria-hidden="true" />;
+    return <div {...cellProps} {...restCardProps} ref={ref} style={{ height: hiddenHeight }} aria-hidden="true" />;
   }
-  return <Link {...linkProps} {...restCardProps} ref={ref}>{render()}</Link>;
+  const controls = renderControls?.();
+  return (
+    <div {...cellProps} {...restCardProps} ref={ref}>
+      {/* Zero-height layer at the card's top-left: the controls sit where they
+          sat inside the thumbnail, above it (z-index), outside the link. */}
+      {controls && <div className="card-controls">{controls}</div>}
+      <Link to={to} title={title} className="card-link">{render()}</Link>
+    </div>
+  );
 }
 
 // The rest of the featured line-up under the big card: five across, the others a
@@ -387,6 +400,18 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               ? {}
               : getCardProps(postKey, cardAuthor, video.permlink, video._processedThumbnail, video.status, video.title)}
             {...(isShortCard(video, shortsGrid) ? { title: shortsHint(video) } : {})}
+            /* Options menu (playlist / not interested / hide creator).
+               Hover-capable devices get it inside the preview overlay instead,
+               see renderCardControls above. Touch devices never get the
+               `.card:hover` transform, so drawing it on the card works for them. */
+            renderControls={!canHover && !video._featured ? () => (
+              <CardOptionsMenu
+                author={cardAuthor}
+                permlink={video.permlink}
+                title={video.title}
+                onDismiss={handleDismiss}
+              />
+            ) : undefined}
             render={() => (<>
             {/* Thumbnail — fast fallback so a dead image host can't leave the
                 card blank for ~a minute (see CardThumbnail). */}
@@ -480,19 +505,6 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                   reads "LIVE CHAT"; a standalone stream reads "LIVE". */}
               {video._liveStream && (
                 <div className="card-live-badge">{video._openpodRoom ? t('cards.badges.liveChat') : t('cards.badges.live')}</div>
-              )}
-
-              {/* Options menu (playlist / not interested / hide creator).
-                  Hover-capable devices get it inside the preview overlay instead —
-                  see renderCardControls above. Touch devices never get the
-                  `.card:hover` transform, so rendering here works for them. */}
-              {!canHover && !video._featured && (
-                <CardOptionsMenu
-                  author={video.author?.username || video.author || video.owner}
-                  permlink={video.permlink}
-                  title={video.title}
-                  onDismiss={handleDismiss}
-                />
               )}
 
               {/* Status Badges */}

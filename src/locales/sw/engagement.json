@@ -6,6 +6,7 @@
       "allRequired": "Sehemu zote zinahitajika",
       "loginRequired": "Tafadhali ingia ili kutuma bakshishi",
       "insufficientBalance": "Salio halitoshi",
+      "amountPositive": "Weka kiasi kikubwa kuliko sifuri",
       "invalidUsername": "Jina la mtumiaji si sahihi",
       "transferFailed": "Kutuma kumeshindwa: {{message}}"
     },
