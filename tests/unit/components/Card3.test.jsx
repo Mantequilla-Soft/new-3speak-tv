@@ -45,6 +45,8 @@ const video = (author, permlink, extra = {}) => ({
   stats: { total_hive_reward: 1.5, num_votes: 7, num_comments: 2 }, views: 1234, ...extra,
 })
 const card = (title) => screen.getByRole('heading', { name: title }).closest('a')
+// The grid cell around a card's link (its classes and grid placement live here).
+const cell = (title) => screen.getByRole('heading', { name: title }).closest('.card')
 
 function mount(props) {
   return renderWithProviders(<Card3 videos={[]} {...props} />)
@@ -207,7 +209,7 @@ describe('a grid of video cards', () => {
     it('draws the first video large, badged, with arrows and the rest of the line-up', async () => {
       const featuredNav = nav()
       const { user } = mount({ videos: [items[0], video('badadib', 'grid')], featuredKey: 'badadib/one', featuredLayout: layout, featuredNav })
-      const big = card('Title one')
+      const big = cell('Title one')
       expect(big).toHaveClass('card--featured')
       expect(big).toHaveStyle({ gridColumn: 'span 2', gridRow: 'span 2' })
       expect(within(big).getByText('Spotlight')).toBeInTheDocument()
@@ -268,7 +270,7 @@ describe('a grid of video cards', () => {
   // BUG: on touch screens the card's "more options" button is rendered inside the
   // card's <a> (Card3.jsx:489-496 inside the CardLink at :116-124): a button
   // nested in a link, which HTML forbids and assistive tech reads as one control.
-  it.skip('BUG: the card\'s controls are not nested inside its link', () => {
+  it('BUG: the card\'s controls are not nested inside its link', () => {
     m.canHover = false
     mount({ videos: [video('badadib', 'a')] })
     expect(within(card('Title a')).queryAllByRole('button')).toHaveLength(0)
