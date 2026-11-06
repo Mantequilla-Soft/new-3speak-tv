@@ -529,9 +529,9 @@ describe('the audio player: the queue', () => {
     play(A)
     act(() => { store().audioAddToQueue(B); store().audioAddToQueue(C) })
     await user.click(screen.getByRole('button', { name: /^Queue/ }))
-    await user.click(screen.getByRole('button', { name: '↓' }))
+    await user.click(screen.getByRole('button', { name: 'Move Track 2 down' }))
     expect(store().audioQueue.map((t) => t._id)).toEqual(['id-3', 'id-2'])
-    await user.click(screen.getByRole('button', { name: '↓' }))
+    await user.click(screen.getByRole('button', { name: 'Move Track 3 down' }))
     expect(store().audioQueue.map((t) => t._id)).toEqual(['id-2', 'id-3'])
 
     const rows = document.querySelectorAll('.audio-queue-item')
@@ -555,7 +555,7 @@ describe('the audio player: the queue', () => {
   // BUG: the remove button of every queued track holds only an icon, with no
   // aria-label or title, so a screen reader announces just "button"
   // (GlobalAudioPlayer.jsx:1295). The move buttons read out "↑" and "↓" (:1293-1294).
-  it.skip('BUG: every queue button has a meaningful accessible name', async () => {
+  it('BUG: every queue button has a meaningful accessible name', async () => {
     const { user } = mount()
     play(A)
     act(() => { store().audioAddToQueue(B) })

@@ -1293,9 +1293,9 @@ function GlobalAudioPlayer() {
                     <span className="audio-queue-author">{item.external ? item.show : `@${item.owner}`} · {item.live ? t('audio.player.live') : fmt(item.duration)}</span>
                   </div>
                   <div className="audio-queue-actions">
-                    {idx > 0 && <button onClick={() => audioMoveInQueue(idx, idx - 1)}>↑</button>}
-                    {idx < audioQueue.length - 1 && <button onClick={() => audioMoveInQueue(idx, idx + 1)}>↓</button>}
-                    <button onClick={() => audioRemoveFromQueue(item._id)}><MdDelete size={16} /></button>
+                    {idx > 0 && <button type="button" aria-label={t('audio.player.queueMoveUp', { title: item.title || t('audio.untitled') })} onClick={() => audioMoveInQueue(idx, idx - 1)}><span aria-hidden="true">↑</span></button>}
+                    {idx < audioQueue.length - 1 && <button type="button" aria-label={t('audio.player.queueMoveDown', { title: item.title || t('audio.untitled') })} onClick={() => audioMoveInQueue(idx, idx + 1)}><span aria-hidden="true">↓</span></button>}
+                    <button type="button" aria-label={t('audio.player.queueRemove', { title: item.title || t('audio.untitled') })} onClick={() => audioRemoveFromQueue(item._id)}><MdDelete size={16} aria-hidden="true" /></button>
                   </div>
                 </li>
               ))}</ul>
