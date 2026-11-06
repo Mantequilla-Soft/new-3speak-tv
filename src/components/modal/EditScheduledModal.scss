@@ -55,8 +55,31 @@
     }
   }
 
-  // The editor's own page heading repeats the modal title here.
-  .studio-page-header h1 {
-    display: none;
+  // The legacy studio page is at least 87vh tall, which left a big empty band
+  // under the buttons inside the popup.
+  .studio-main-container {
+    min-height: 0;
+  }
+
+  // The editor's own page heading repeats the modal title here, and the
+  // permlink line under it keeps only a small gap.
+  .studio-page-header {
+    h1 { display: none; }
+    p { margin: 0 0 12px; }
+  }
+
+  // The form card is already inside the popup's card: no second box with its
+  // own 30px padding and background, the popup's padding is the only inset.
+  // Doubled class: beats the legacy dark-theme background rule (0,3,0) whatever
+  // order the two stylesheets were injected in.
+  .video-detail-wrap .video-items.video-items {
+    padding: 0;
+    background: transparent;
+  }
+
+  // The uploader's action row sits 22px below the page; in the popup it ends the
+  // box, so no extra space after it.
+  .step-actions--bottom {
+    margin: 18px 0 0;
   }
 }

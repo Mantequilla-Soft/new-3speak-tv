@@ -1,0 +1,113 @@
+// Inline schedule picker (ScheduleCalendar.jsx). Same vocabulary as the
+// uploader's details step: Roboto only, 14px for the one label (the month), 12px
+// for everything else, neutral borders, accent OUTLINE for the active choice
+// (never a red fill), flat, no shadows.
+.schedule-calendar {
+  font-family: "Roboto", "Arial", sans-serif;
+  font-size: 12px;
+  color: var(--text-primary, #111);
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  &__month {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+
+  &__nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
+    border-radius: 10px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+
+    &:hover:not(:disabled) { background: var(--bg-secondary, #f1f1f3); }
+    &:disabled { opacity: 0.35; cursor: not-allowed; }
+  }
+
+  &__grid {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 2px;
+    table-layout: fixed;
+
+    th {
+      padding: 0 0 4px;
+      font-size: 12px;
+      font-weight: 400;
+      opacity: 0.65;
+      text-align: center;
+    }
+
+    td { padding: 0; text-align: center; }
+  }
+
+  &__day {
+    width: 100%;
+    max-width: 40px;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+
+    &:hover:not(:disabled):not(.is-selected) { background: var(--bg-secondary, #f1f1f3); }
+
+    &.is-today { font-weight: 700; }
+
+    &.is-selected {
+      border-color: var(--accent-primary, #e53935);
+      color: var(--accent-primary, #e53935);
+      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+      font-weight: 700;
+    }
+
+    &:disabled { opacity: 0.3; cursor: not-allowed; }
+  }
+
+  &__time {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 0 10px;
+    height: 40px;
+    border: 1px solid var(--border-color, #333);
+    border-radius: 10px;
+    background: var(--input-bg, rgba(255, 255, 255, 0.04));
+    cursor: text;
+
+    svg { flex-shrink: 0; opacity: 0.65; }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: inherit;
+      font-family: inherit;
+      font-size: 14px;
+      color-scheme: light dark;
+    }
+  }
+}

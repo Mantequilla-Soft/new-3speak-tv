@@ -194,6 +194,9 @@ function Watch({ v2 = false, routeV = null }) {
   const [scheduledEditOpen, setScheduledEditOpen] = useState(false);
   // Bumped after an in-place edit so the watch page re-fetches the updated doc.
   const [scheduledRefreshKey, setScheduledRefreshKey] = useState(0);
+  // The player's onError is registered once, so it reads scheduled mode from a ref.
+  const scheduledRef = useRef(scheduled);
+  scheduledRef.current = scheduled;
 
   useEffect(() => {
     if (!scheduled || !author || !permlink || author === 'unknown') {
@@ -252,8 +255,33 @@ function Watch({ v2 = false, routeV = null }) {
     setPlaybackAttempt((n) => n + 1);
   }, []);
   const deadVideos = useDeadVideos();
-  const mediaUnavailable = playbackFailed
+  const mediaUnavailableRaw = playbackFailed
     || (!!author && !!permlink && deadVideos.has(videoKey(author, permlink)));
+
+  // Before calling a video "no longer available", ask the checker whether the
+  // post is scheduled for a future date. A scheduled post has no published media
+  // yet, so the player shows "This post is scheduled" instead. The lookup only
+  // runs once a video has actually failed, so healthy videos cost nothing.
+  //   undefined = not checked yet, null = not scheduled, string = scheduledOn
+  const [unavailableScheduledOn, setUnavailableScheduledOn] = useState(undefined);
+  useEffect(() => { setUnavailableScheduledOn(undefined); }, [author, permlink]);
+  useEffect(() => {
+    if (!mediaUnavailableRaw || unavailableScheduledOn !== undefined) return undefined;
+    const isFuture = (d) => !!d?.scheduledOn && new Date(d.scheduledOn).getTime() > Date.now();
+    // Scheduled mode already holds the checker doc.
+    if (scheduled && scheduledDoc) {
+      setUnavailableScheduledOn(isFuture(scheduledDoc) ? scheduledDoc.scheduledOn : null);
+      return undefined;
+    }
+    let alive = true;
+    fetchScheduledPost(author, permlink)
+      .then((doc) => { if (alive) setUnavailableScheduledOn(isFuture(doc) ? doc.scheduledOn : null); })
+      .catch(() => { if (alive) setUnavailableScheduledOn(null); });
+    return () => { alive = false; };
+  }, [mediaUnavailableRaw, unavailableScheduledOn, scheduled, scheduledDoc, author, permlink]);
+  // Held back until the lookup answers, so a scheduled post never flashes
+  // "no longer available" first.
+  const mediaUnavailable = mediaUnavailableRaw && unavailableScheduledOn !== undefined;
 
   // Show the branded loader OVER the player until it's actually ready to paint a
   // frame (SDK `onReady`). We can't drive this off playerState.loading: the SDK's
@@ -482,6 +510,12 @@ function Watch({ v2 = false, routeV = null }) {
       // A live post has no VOD source — an error here is expected, not a dead
       // video. Never report it unavailable or show the "not available" hint.
       if (!err?.fatal || isLiveRef.current) return;
+      // A scheduled post's preview is not a published video: never report it to
+      // the checker as dead. The player then shows "This post is scheduled".
+      if (scheduledRef.current) {
+        setPlaybackFailed(true);
+        return;
+      }
 
       // Distinguish "the media is gone" from "we couldn't reach it".
       //
@@ -802,6 +836,14 @@ function Watch({ v2 = false, routeV = null }) {
         // handles playback separately, so a load failure here is expected. Don't
         // show "unavailable" or report the stream post as a dead video.
         if (isLiveRef.current) return;
+        // Scheduled post: the embed asset could not be resolved. Do NOT report
+        // it: that report is keyed by the Hive author/permlink, i.e. the very
+        // post that is about to be published. The player shows "scheduled".
+        if (scheduledRef.current) {
+          console.warn('[Watch] Scheduled preview unavailable:', err);
+          if (active) setPlaybackFailed(true);
+          return;
+        }
         console.error('[Watch] Failed to load video:', err);
         // The player backend couldn't resolve ANY playable stream — e.g. /api/embed
         // and /api/watch both 404 for a very old post whose media isn't indexed. No
@@ -1990,6 +2032,7 @@ function Watch({ v2 = false, routeV = null }) {
         surfActive={!!surfChannel}
         scheduled={scheduled}
         scheduledOn={scheduledDoc?.scheduledOn}
+        mediaScheduledOn={unavailableScheduledOn || null}
         onEditScheduled={() => { pause(); setScheduledEditOpen(true); }}
         videoControls={{
           /* 🚨 THE TIMELINE IS DRAWN IN CONTENT SECONDS, NOT THE FILE'S.

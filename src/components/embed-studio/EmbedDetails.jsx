@@ -10,6 +10,7 @@ import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useAppStore } from '../../lib/store';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { getMinMaxDates } from '../../utils/schedulingHelpers';
+import ScheduleCalendar from '../studio/ScheduleCalendar';
 import EmbedUploadProgressBar from './EmbedUploadProgressBar';
 import StepActions from './StepActions';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
@@ -661,13 +662,11 @@ function EmbedDetails() {
                   const { minFormatted, maxFormatted } = getMinMaxDates();
                   return (
                     <>
-                      <input
-                        type="datetime-local"
-                        className="schedule-sheet__input"
+                      <ScheduleCalendar
                         value={scheduleDraft}
                         min={minFormatted}
                         max={maxFormatted}
-                        onChange={(e) => setScheduleDraft(e.target.value)}
+                        onChange={setScheduleDraft}
                       />
                       <p className="schedule-sheet__note">
                         {t('upload.details.schedule.note')}

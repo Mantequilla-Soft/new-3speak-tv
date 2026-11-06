@@ -87,7 +87,7 @@ const toast = toastIn('Video');
 
 dayjs.extend(relativeTime);
 
-const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false }) => {
+const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, mobileReactionPanel, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, v2 = false, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false }) => {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const isPremium = !!usePremiumStatus(user)?.premium;
@@ -1293,12 +1293,17 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   display: 'flex', flexDirection: 'column', alignItems: 'center',
                   justifyContent: 'center', textAlign: 'center', padding: '24px', gap: '10px',
                 }}>
-                  <div style={{ fontSize: '2.2rem', lineHeight: 1 }}>🚫</div>
+                  {/* The checker says the post is scheduled for a future date (Watch
+                      looks that up before showing this), so it is not gone, just
+                      not published yet. */}
+                  <div style={{ fontSize: '2.2rem', lineHeight: 1 }}>{mediaScheduledOn ? '🗓️' : '🚫'}</div>
                   <div style={{ fontSize: '1.05rem', fontWeight: 600, color: '#f0f0f0' }}>
-                    {t('watch.media.unavailableTitle')}
+                    {mediaScheduledOn ? t('watch.media.scheduledTitle') : t('watch.media.unavailableTitle')}
                   </div>
                   <div style={{ fontSize: '0.85rem', color: '#aaa', maxWidth: '440px', lineHeight: 1.5 }}>
-                    {t('watch.media.unavailableBody')}
+                    {mediaScheduledOn
+                      ? t('watch.media.scheduledBody', { date: new Date(mediaScheduledOn).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) })
+                      : t('watch.media.unavailableBody')}
                   </div>
                 </div>
               )}
@@ -2049,7 +2054,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               <BlogContent
                 author={author}
                 permlink={permlink}
-                description={overrideBody ?? (postIsOffChain ? videoDetails?.body : undefined)}
+                // A scheduled post is not on Hive yet: its text comes from the
+                // checker's scheduled-post record (Watch buildScheduledVideoDetails),
+                // never from a Hive lookup that can only come back empty.
+                description={overrideBody ?? ((postIsOffChain || scheduled) ? (videoDetails?.body || undefined) : undefined)}
                 duration={videoControls?.duration}
                 onSeek={isLive ? null : seekFromText}
               />
@@ -2387,6 +2395,7 @@ PlayVideo.propTypes = {
   author: PropTypes.string.isRequired,
   permlink: PropTypes.string.isRequired,
   mediaUnavailable: PropTypes.bool,
+  mediaScheduledOn: PropTypes.string,
   mediaBlocked: PropTypes.bool,
   onRetryPlayback: PropTypes.func,
   mediaLoading: PropTypes.bool,

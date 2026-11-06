@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Dieses Video ist nicht mehr verfügbar",
     "unavailableBody": "Die Mediendatei dieses älteren Uploads wurde im Netzwerk nicht gefunden. Der Post existiert weiterhin auf der Blockchain, aber das Video kann nicht mehr abgespielt werden.",
+    "scheduledTitle": "Dieser Beitrag ist geplant",
+    "scheduledBody": "Er wird am {{date}} veröffentlicht. Ab dann kann das Video angesehen werden.",
     "blockedTitle": "Das Video konnte gerade nicht geladen werden",
     "blockedBody": "Einer unserer Videoserver hat nicht geantwortet. Mit dem Video selbst ist alles in Ordnung, also versuch es bitte nochmal."
   },

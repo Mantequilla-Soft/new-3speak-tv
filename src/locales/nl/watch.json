@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Deze video is niet meer beschikbaar",
     "unavailableBody": "De media van deze oudere upload zijn niet gevonden op het netwerk. De post bestaat nog op de blockchain, maar de video kan niet meer worden afgespeeld.",
+    "scheduledTitle": "Dit bericht is ingepland",
+    "scheduledBody": "Het wordt gepubliceerd op {{date}}. Vanaf dan kun je de video bekijken.",
     "blockedTitle": "De video kon nu niet worden geladen",
     "blockedBody": "Een van onze videoservers reageerde niet. Er is niets mis met de video zelf, dus probeer het opnieuw."
   },

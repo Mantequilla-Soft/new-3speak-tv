@@ -11,7 +11,7 @@ import './EditScheduledModal.scss';
  * Props:
  *   isOpen       boolean
  *   permlink     scheduled post permlink
- *   onClose      () => void  — close without changes (Back / overlay / ✕)
+ *   onClose      () => void  — close without changes (overlay / ✕)
  *   onSaved      (changes) => void — after a successful save
  *   onCancelled  () => void  — after the post is cancelled
  */
@@ -28,6 +28,7 @@ export default function EditScheduledModal({ isOpen, permlink, onClose, onSaved,
           onClose={onClose}
           onSaved={onSaved}
           onCancelled={onCancelled}
+          showBack={false}
         />
       </div>
     </div>,

@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Questo video non è più disponibile",
     "unavailableBody": "Non è stato possibile trovare in rete i file di questo vecchio caricamento. Il post esiste ancora sulla blockchain, ma il video non può più essere riprodotto.",
+    "scheduledTitle": "Questo post è programmato",
+    "scheduledBody": "Verrà pubblicato il {{date}}. Il video si potrà guardare da quel momento.",
     "blockedTitle": "Impossibile caricare il video in questo momento",
     "blockedBody": "Uno dei nostri server video non ha risposto. Il video in sé non ha problemi, quindi riprova."
   },

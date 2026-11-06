@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.85',
+    category: 'watch',
+    date: '2026-11-06',
+    summary: "Scheduled posts now show their description, and the player says the post is scheduled instead of no longer available.",
+  },
+  {
+    version: '1.81.84',
+    category: 'upload',
+    date: '2026-11-06',
+    summary: "The edit scheduled post popup now matches the uploader, and both schedule popups show an inline calendar.",
+  },
+  {
     version: '1.81.82',
     category: 'general',
     date: '2026-11-06',
