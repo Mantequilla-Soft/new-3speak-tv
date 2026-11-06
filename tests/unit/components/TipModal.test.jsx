@@ -318,4 +318,11 @@ describe('the tip window for a member: HIVE and HBD', () => {
     expect(screen.getByRole('combobox', { name: /Currency/ })).toBeInTheDocument()
     expect(screen.getByRole('textbox', { name: /Memo/ })).toBeInTheDocument()
   })
+
+  it('closes on Escape, like its X', async () => {
+    const { user, onClose } = mount()
+    await screen.findByText('25')
+    await user.keyboard('{Escape}')
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
 })

@@ -1281,7 +1281,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         {MUSIC_GENRES.map((g) => <option key={g} value={g} />)}
       </datalist>
       <div className="audio-upload-modal audio-upload-modal-wizard" onClick={e => e.stopPropagation()}>
-        <ModalHeader className="audio-upload-header" title={t('audio.upload.title')} onClose={attemptClose} />
+        <ModalHeader closeOnEscape={false} className="audio-upload-header" title={t('audio.upload.title')} onClose={attemptClose} />
 
         {(authChecking || rcChecking || needsAuth || rcInsufficient) ? (
           <div className="audio-upload-body">

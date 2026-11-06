@@ -895,7 +895,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         aria-labelledby="evm-title"
         noValidate
       >
-        <ModalHeader className="evm-header" title={t('watch.edit.title')} titleId="evm-title" onClose={onClose} />
+        <ModalHeader closeOnEscape={false} className="evm-header" title={t('watch.edit.title')} titleId="evm-title" onClose={onClose} />
         <p className="edit-video-subtitle">@{author}/{permlink}</p>
 
         <div className="evm-tabs" role="tablist" aria-label={t('watch.edit.tabs.label')} onKeyDown={onTabKey}>

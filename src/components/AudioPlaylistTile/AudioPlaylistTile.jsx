@@ -124,7 +124,7 @@ export default function AudioPlaylistTile({ playlist, kind }) {
       {asking && createPortal(
         <div className="audio-playlist-ask-overlay" onClick={() => setAsking(false)}>
           <div className="audio-playlist-ask" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-            <ModalHeader title={playlist.name} onClose={() => setAsking(false)} />
+            <ModalHeader closeOnEscape={false} title={playlist.name} onClose={() => setAsking(false)} />
             <button type="button" className="audio-playlist-ask-option" onClick={addAll}>
               <MdPlaylistAdd size={22} />
               <span className="audio-playlist-ask-text">

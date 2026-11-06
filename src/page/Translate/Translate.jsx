@@ -803,7 +803,7 @@ function AddLanguage({ onClose, onAdded }) {
         onClick={(e) => e.stopPropagation()}
         onSubmit={submit}
       >
-        <ModalHeader className="translate-modal-header" title={t('translator.add.title')} titleId="translate-add-title" onClose={onClose} />
+        <ModalHeader closeOnEscape={false} className="translate-modal-header" title={t('translator.add.title')} titleId="translate-add-title" onClose={onClose} />
         <label>
           <span>{t('translator.add.code')}</span>
           <input value={form.code} onChange={set('code')} maxLength={6} autoCapitalize="none" autoCorrect="off" spellCheck={false} autoFocus />

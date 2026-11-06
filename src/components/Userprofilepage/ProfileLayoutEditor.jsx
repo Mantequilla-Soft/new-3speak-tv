@@ -220,7 +220,7 @@ function PropertiesPopover({ label, onClose, children }) {
   const panel = (
     <div ref={ref} className={`ple-props${isPhone ? ' ple-props--sheet' : ''}`} role="dialog" aria-label={label}>
       {isPhone ? (
-        <ModalHeader className="ple-sheet-header" title={label} onClose={onClose} />
+        <ModalHeader closeOnEscape={false} className="ple-sheet-header" title={label} onClose={onClose} />
       ) : (
         <div className="ple-props-head">
           <strong>{label}</strong>

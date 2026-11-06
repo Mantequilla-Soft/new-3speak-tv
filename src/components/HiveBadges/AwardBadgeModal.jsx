@@ -71,7 +71,7 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
         aria-label={t('badges.award.dialogLabel', { username })}
         onClick={(e) => e.stopPropagation()}
       >
-        <ModalHeader className="award-header" title={t('badges.award.title')} onClose={onClose} />
+        <ModalHeader closeOnEscape={false} className="award-header" title={t('badges.award.title')} onClose={onClose} />
         <p className="award-sub">{t('badges.award.toUser', { username })}</p>
 
         <ul className="award-list">

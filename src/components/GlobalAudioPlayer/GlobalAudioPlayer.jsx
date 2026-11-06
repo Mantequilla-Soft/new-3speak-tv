@@ -1309,7 +1309,7 @@ function GlobalAudioPlayer() {
   const queueOverlay = audioShowQueue && !docked ? (
         <div className="audio-queue-overlay" onClick={() => audioSetShowQueue(false)}>
           <div ref={queuePanelRef} className="audio-queue-panel" onClick={e => e.stopPropagation()}>
-            <ModalHeader title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
+            <ModalHeader closeOnEscape={false} title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
               <span className="audio-queue-count">{audioQueue.length}</span>
               {queueClear}
             </ModalHeader>
@@ -2088,7 +2088,7 @@ export function AudioShareDropdown({ item, onClose, title, at, duration, bare })
 
   return (
     <div className={`audio-share-dropdown${bare ? ' is-bare' : ''}`} ref={ref}>
-      {title && <ModalHeader className="audio-share-header" title={title} onClose={onClose} />}
+      {title && <ModalHeader closeOnEscape={false} className="audio-share-header" title={title} onClose={onClose} />}
       {hivePermlink && <button className="audio-share-option" onClick={() => copy(`https://peakd.com/@${author}/${hivePermlink}`, t('audio.share.copiedPeakd'))}><MdContentCopy size={14} /><span>{t('audio.share.copyPeakd')}</span></button>}
       {searching && !hivePermlink && <span className="audio-share-loading">{t('audio.share.searchingHive')}</span>}
       {reblog.canReblog && (

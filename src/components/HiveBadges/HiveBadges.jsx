@@ -139,7 +139,7 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
         aria-label={t('badges.hive.dialogLabel', { username })}
         onClick={(e) => e.stopPropagation()}
       >
-        <ModalHeader title={t('badges.hive.title')} onClose={onClose} />
+        <ModalHeader closeOnEscape={false} title={t('badges.hive.title')} onClose={onClose} />
         <p className="hbadges-sub">
           {arranging
             ? t('badges.hive.arrangeHint')

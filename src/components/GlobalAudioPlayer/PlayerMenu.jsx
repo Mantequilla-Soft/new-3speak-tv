@@ -52,7 +52,7 @@ export default function PlayerMenu({ anchor, title, onClose, children, className
         aria-label={title}
         tabIndex={-1}
       >
-        <ModalHeader className="audio-pm-header" title={title} onClose={onClose} />
+        <ModalHeader closeOnEscape={false} className="audio-pm-header" title={title} onClose={onClose} />
         <div className="audio-pm-body">{children}</div>
       </div>
     </div>,

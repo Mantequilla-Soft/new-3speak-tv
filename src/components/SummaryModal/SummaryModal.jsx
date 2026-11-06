@@ -63,7 +63,7 @@ export default function SummaryModal({ isOpen, onClose, summary, title }) {
   return (
     <div className="summary-modal-overlay" onClick={onClose}>
       <div className="summary-modal" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader className="summary-modal-header" title={t('watch.summary.title')} onClose={onClose}>
+        <ModalHeader closeOnEscape={false} className="summary-modal-header" title={t('watch.summary.title')} onClose={onClose}>
           <TranslateButton onTranslate={handleTranslate} isTranslating={isTranslating} />
         </ModalHeader>
 
