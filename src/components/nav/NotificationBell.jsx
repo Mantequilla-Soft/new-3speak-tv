@@ -284,7 +284,7 @@ function NotificationBell() {
           )}
 
           {preview.length > 0 && (
-            <ul className="notif-list">
+            <ul className="notif-list" role="none">
               {preview.map((group) => {
                 if (group.type === 'group') {
                   return (
@@ -310,7 +310,7 @@ function NotificationBell() {
                   <li
                     key={group.id}
                     className={`notif-row${unread ? ' notif-row-unread' : ''}${tier ? ` notif-${tier}` : ''}`}
-                    onClick={() => handleRowClick(n)}
+                    {...menuItem(() => handleRowClick(n))}
                   >
                     <div className="notif-avatar-wrap">
                       {actor && (
@@ -379,6 +379,19 @@ function NotifAvatar({ actor, className = 'notif-avatar', style }) {
   );
 }
 
+// A row of the list as a menu item: focusable, opened with Enter or Space as
+// well as a click.
+const menuItem = (open) => ({
+  role: 'menuitem',
+  tabIndex: 0,
+  onClick: open,
+  onKeyDown: (e) => {
+    if (e.target !== e.currentTarget || (e.key !== 'Enter' && e.key !== ' ')) return;
+    e.preventDefault();
+    open();
+  },
+});
+
 function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick, hovered, onHover, onLeave }) {
   const { t } = useTranslation();
   const { actors = [], items, notifType, date } = group;
@@ -411,7 +424,7 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick, hovered, o
   return (
     <li
       className={`notif-row notif-row-group${hasUnread ? ' notif-row-unread' : ''}${topTier ? ` notif-${topTier}` : ''}`}
-      onClick={onClick}
+      {...menuItem(onClick)}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >

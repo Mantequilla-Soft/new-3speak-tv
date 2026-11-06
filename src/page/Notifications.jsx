@@ -496,7 +496,7 @@ function Notifications() {
                           isUnread={isUnread}
                           is3Speak={getIs3Speak(group.items[0])}
                           getWhaleTier={getWhaleTier}
-                          onClick={() => handleClick(group.items[0])}
+                          onOpen={handleClick}
                         />
                       );
                     }
@@ -636,9 +636,10 @@ function SummaryCards({ summary, onFilter }) {
   return (
     <div className="notif-summary-cards">
       {cards.map((c) => (
-        <div
+        <button
+          type="button"
           key={c.key}
-          className={`notif-summary-card notif-summary-${c.color}`}
+          className={`btn-reset notif-summary-card notif-summary-${c.color}`}
           onClick={() => onFilter(c.filter)}
         >
           <i className={`${c.icon} notif-summary-card-icon`} />
@@ -646,7 +647,7 @@ function SummaryCards({ summary, onFilter }) {
           <span className="notif-summary-card-label">{c.label}</span>
           {c.sub && <span className="notif-summary-card-sub">{c.sub}</span>}
           {c.detail && <span className="notif-summary-card-detail">{c.detail}</span>}
-        </div>
+        </button>
       ))}
     </div>
   );
@@ -655,7 +656,7 @@ function SummaryCards({ summary, onFilter }) {
 // ──────────────────────────────────────────────────
 // Group row component (votes / follows)
 // ──────────────────────────────────────────────────
-function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick }) {
+function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onOpen }) {
   const { t } = useTranslation();
   const { actors = [], items, notifType, date } = group;
   const hasUnread = items.some((n) => isUnread(n));
@@ -695,7 +696,7 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick }) {
             e.stopPropagation();
             setExpanded(!expanded);
           } else {
-            onClick();
+            onOpen(items[0]);
           }
         }}
       >
@@ -739,7 +740,7 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick }) {
           <li
             key={n.id}
             className={`notifications-row notifications-row-nested${tier ? ` notif-page-${tier}` : ''}`}
-            onClick={onClick}
+            onClick={() => onOpen(n)}
           >
             <div className="notifications-avatar-wrap">
               {actor && (
