@@ -14,6 +14,7 @@ import { markVersionSeen } from '../../utils/appVersion';
 import { formatDaysAgo } from '../../i18n';
 import logo from '../../assets/image/3S_logo.svg';
 import logoDark from '../../assets/image/3S_logodark.png';
+import useDialog from '../../hooks/useDialog';
 import './ChangelogModal.scss';
 
 // DUMMY MODE: while we design the popup it opens on every load with the latest
@@ -87,6 +88,17 @@ export default function ChangelogModal() {
     return () => { document.body.style.overflow = previous; };
   }, [open, silenced]);
 
+  // Escape closes it the same way, and records the version too.
+  const close = () => {
+    setOpen(false);
+    if (!DUMMY_MODE) {
+      markVersionSeen(); // write the version only AFTER the popup has been shown
+      setAppUpdatedFrom(null);
+    }
+  };
+
+  const dialog = useDialog(close, { active: open && !silenced });
+
   // Also covers arriving at a silenced route with the popup already up: it goes
   // away, and comes back on the way out, because `open` is never cleared here.
   if (!open || silenced) return null;
@@ -101,24 +113,16 @@ export default function ChangelogModal() {
     setOpenGroups(next);
   };
 
-  const close = () => {
-    setOpen(false);
-    if (!DUMMY_MODE) {
-      markVersionSeen(); // write the version only AFTER the popup has been shown
-      setAppUpdatedFrom(null);
-    }
-  };
-
   return (
     <div className="changelog-overlay">
-      <div className="changelog-modal" role="dialog" aria-modal="true">
+      <div className="changelog-modal" {...dialog.props}>
         <button className="changelog-close" onClick={close} aria-label={t('common.actions.close')}>
           <IoClose />
         </button>
 
         <div className="changelog-header">
           <img className="changelog-logo" src={theme === 'dark' ? logoDark : logo} alt="3Speak" />
-          <h2>{t('app.changelog.title')}</h2>
+          <h2 id={dialog.titleId}>{t('app.changelog.title')}</h2>
           <p className="changelog-subtitle">{t('app.changelog.subtitle', { version: APP_VERSION })}</p>
         </div>
 

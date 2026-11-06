@@ -157,7 +157,7 @@ describe('saving a video to a playlist', () => {
   // BUG: the window is a plain <div> overlay (AddToPlaylistModal.jsx:166-167) with
   // no role="dialog" and no Escape key, and the create form's labels are not
   // tied to their fields (:248, :259, :278).
-  it.skip('BUG: is a dialog Escape closes, with labelled fields', async () => {
+  it('BUG: is a dialog Escape closes, with labelled fields', async () => {
     const { user, onClose } = mount()
     expect(screen.getByRole('dialog', { name: 'Save to Playlist' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /Create new playlist/ }))

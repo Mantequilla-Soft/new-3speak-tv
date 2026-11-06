@@ -140,7 +140,7 @@ describe('the report window', () => {
   // (ReportModal.jsx:156 and :168), so the select and the text box have no
   // accessible name; and the window is a plain <div> overlay with no
   // role="dialog" and no Escape key (:145-146).
-  it.skip('BUG: the fields are labelled and the window is a dialog Escape closes', async () => {
+  it('BUG: the fields are labelled and the window is a dialog Escape closes', async () => {
     const { user, onClose } = mount()
     expect(screen.getByRole('combobox', { name: 'Reason' })).toBeInTheDocument()
     expect(screen.getByRole('textbox', { name: 'Additional details (optional)' })).toBeInTheDocument()

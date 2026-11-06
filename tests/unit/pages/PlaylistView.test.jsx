@@ -261,7 +261,7 @@ describe('a playlist page: the owner\'s tools', () => {
   // without htmlFor, PlaylistView.jsx:900, :1000 and on), so "Name", "Year" and the
   // rest are not the fields' accessible names; the tag chips' remove buttons
   // hold only an icon (:935).
-  it.skip('BUG: every field of the edit window has a label', async () => {
+  it('BUG: every field of the edit window has a label', async () => {
     const { user } = mount()
     await screen.findByRole('heading', { name: 'Best of badadib' })
     await user.click(screen.getByRole('button', { name: /Edit/ }))
@@ -272,7 +272,7 @@ describe('a playlist page: the owner\'s tools', () => {
 
   // BUG: the delete confirmation and the edit window are plain <div> overlays,
   // without role="dialog" and without an Escape key (PlaylistView.jsx:878, :896).
-  it.skip('BUG: the delete confirmation is a dialog that Escape closes', async () => {
+  it('BUG: the delete confirmation is a dialog that Escape closes', async () => {
     const { user } = mount()
     await screen.findByRole('heading', { name: 'Best of badadib' })
     await user.click(screen.getByRole('button', { name: /Delete Playlist/ }))

@@ -298,6 +298,10 @@ function EmbedVideoUploadStep1() {
     }],
   };
 
+  // The file input itself is hidden (display:none); these real buttons open it,
+  // so the picker is reachable from the keyboard too.
+  const openPicker = () => videoInputRef.current?.click();
+
   // Drag & drop onto the upload box (gated behind the same @threespeak auth check)
   const handleDragOver = (e) => {
     if (needsAuth || rcInsufficient || loading) return;
@@ -465,6 +469,7 @@ function EmbedVideoUploadStep1() {
                 onChange={handleVideoSelect}
                 className="input"
                 id="embed-video-upload"
+                tabIndex={-1}
                 disabled={needsAuth || rcInsufficient}
               />
 
@@ -495,9 +500,9 @@ function EmbedVideoUploadStep1() {
                   // Mobile + Chromium only (Web Speech API): record straight from
                   // the front camera with a voice-driven teleprompter, or pick a file.
                   <div className="button-group">
-                    <label htmlFor="embed-video-upload" className="button">
+                    <button type="button" className="btn-reset button" onClick={openPicker}>
                       {t("upload.select.selectVideo")}
-                    </label>
+                    </button>
                     <button
                       type="button"
                       className="button button--outline"
@@ -509,18 +514,18 @@ function EmbedVideoUploadStep1() {
                     </button>
                   </div>
                 ) : (
-                  <label htmlFor="embed-video-upload" className="button">
+                  <button type="button" className="btn-reset button" onClick={openPicker}>
                     {isMobile ? t("upload.select.selectVideo") : t("upload.select.browseFiles")}
-                  </label>
+                  </button>
                 )
               ) : (
                 // The way on sits right beside Replace, not only in the action rows
                 // above and below: with a file picked, this box is where people look,
                 // and "Replace Video" alone read as the only thing to do next.
                 <div className="button-group button-group--row">
-                  <label htmlFor="embed-video-upload" className="button button--outline">
+                  <button type="button" className="btn-reset button button--outline" onClick={openPicker}>
                     {t("upload.select.replace")}
-                  </label>
+                  </button>
                   {/* Shorts: open the picked clip in the shorts editor, already on
                       the timeline. A render posted from there replaces this file. */}
                   {fromStories && FEATURE_EDITOR && (

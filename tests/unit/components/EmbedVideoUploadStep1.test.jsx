@@ -114,11 +114,13 @@ beforeEach(() => {
 
 describe('upload step 1: picking a video', () => {
   it('asks for a file, with Proceed held back until there is one', async () => {
-    mount()
+    const { user } = mount()
     await ready()
     expect(screen.getByRole('heading', { name: 'Choose a video file' })).toBeInTheDocument()
     expect(screen.getByText('Supports: MP4, AVI, MOV, WMV (Max size: 5GB)')).toBeInTheDocument()
-    expect(screen.getByText('Browse Files')).toHaveAttribute('for', 'embed-video-upload')
+    const pick = vi.spyOn(input(), 'click').mockImplementation(() => {})
+    await user.click(screen.getByRole('button', { name: 'Browse Files' }))
+    expect(pick).toHaveBeenCalledTimes(1)
     expect(proceed()).toBeDisabled()
     expect(proceed()).toHaveAttribute('title', 'Please select a video file first.')
   })
@@ -344,7 +346,7 @@ describe('upload step 1: before a file can be picked', () => {
 
   // BUG: the RC explainer is a plain <div> overlay, without role="dialog" and
   // without an Escape key (RcInsufficientModal.jsx:44-45).
-  it.skip('BUG: the Resource Credits explainer is a dialog that Escape closes', async () => {
+  it('BUG: the Resource Credits explainer is a dialog that Escape closes', async () => {
     m.rc = vi.fn(async () => ({ ok: false, percentage: 12, secondsUntilEnough: 3600 }))
     const { user } = mount()
     expect(await screen.findByRole('dialog', { name: 'Not enough Resource Credits' })).toBeInTheDocument()
@@ -359,7 +361,7 @@ describe('upload step 1: keyboard access', () => {
   // is a <label> (EmbedVideoUploadStep1.jsx:512) and the upload icon a
   // <div onClick> (:343-345): none of them takes focus, so there is no way to start
   // an upload without a mouse or touch.
-  it.skip('BUG: the file picker is a focusable button', async () => {
+  it('BUG: the file picker is a focusable button', async () => {
     const { user } = mount()
     await ready()
     const browse = screen.getByRole('button', { name: /Browse Files/ })

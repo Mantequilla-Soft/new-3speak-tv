@@ -32,6 +32,7 @@ import useHoverPreview from '../hooks/useHoverPreview';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
 import { DATE_FILTERS, getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
 import ModalHeader from '../components/ModalHeader/ModalHeader';
+import useDialog from '../hooks/useDialog';
 import { openEmbedCode } from '../components/Embed/EmbedCodeModal';
 
 // Every toast from this module is headed "Playlist"; the message becomes the
@@ -398,6 +399,11 @@ function PlaylistView() {
       setIsDeleting(false);
     }
   };
+
+  // Neither window closes mid-save (their X is hidden then too).
+  const deleteDialog = useDialog(isDeleting ? undefined : () => setShowDeleteConfirm(false), { active: showDeleteConfirm });
+  const editDialog = useDialog(isUpdating ? undefined : () => setShowEditModal(false), { active: showEditModal });
+  const fid = (name) => `${editDialog.titleId}-${name}`;
 
   if (playlistLoading) {
     return (
@@ -876,8 +882,8 @@ function PlaylistView() {
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="delete-confirm-overlay" onClick={() => setShowDeleteConfirm(false)}>
-          <div className="delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
-            <ModalHeader title={t('playlists.view.deleteConfirmTitle')} onClose={isDeleting ? undefined : () => setShowDeleteConfirm(false)} />
+          <div className="delete-confirm-modal" {...deleteDialog.props} onClick={(e) => e.stopPropagation()}>
+            <ModalHeader title={t('playlists.view.deleteConfirmTitle')} titleId={deleteDialog.titleId} onClose={isDeleting ? undefined : () => setShowDeleteConfirm(false)} />
             <p>{t('playlists.view.deleteConfirmText', { name: playlist.name })}</p>
             <div className="modal-actions">
               <button type="button" className="btn-cancel" onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>
@@ -894,11 +900,12 @@ function PlaylistView() {
       {/* Edit Playlist Modal */}
       {showEditModal && (
         <div className="delete-confirm-overlay" onClick={() => setShowEditModal(false)}>
-          <div className="edit-playlist-modal" onClick={(e) => e.stopPropagation()}>
-            <ModalHeader title={t('playlists.view.editTitle')} onClose={isUpdating ? undefined : () => setShowEditModal(false)} />
+          <div className="edit-playlist-modal" {...editDialog.props} onClick={(e) => e.stopPropagation()}>
+            <ModalHeader title={t('playlists.view.editTitle')} titleId={editDialog.titleId} onClose={isUpdating ? undefined : () => setShowEditModal(false)} />
             <div className="form-group">
-              <label>{t('playlists.modal.name')}</label>
+              <label htmlFor={fid('name')}>{t('playlists.modal.name')}</label>
               <input
+                id={fid('name')}
                 type="text"
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
@@ -907,8 +914,8 @@ function PlaylistView() {
               />
             </div>
             <div className="form-group">
-              <label>{t('playlists.view.visibility')}</label>
-              <div className="privacy-buttons">
+              <span className="form-label" id={fid('visibility')}>{t('playlists.view.visibility')}</span>
+              <div className="privacy-buttons" role="group" aria-labelledby={fid('visibility')}>
                 <button
                   type="button"
                   className={`privacy-btn ${editAccess === 'public' ? 'active' : ''}`}
@@ -926,19 +933,20 @@ function PlaylistView() {
               </div>
             </div>
             <div className="form-group">
-              <label>{t('playlists.modal.tags')}</label>
+              <label htmlFor={fid('tags')}>{t('playlists.modal.tags')}</label>
               <div className="tags-input-wrap">
                 <div className="tags-list">
                   {editTags.map((tag) => (
                     <span key={tag} className="tag-chip">
                       {tag}
-                      <button type="button" onClick={() => setEditTags(prev => prev.filter(x => x !== tag))}>
+                      <button type="button" aria-label={t('audio.upload.mainPost.removeTag', { tag })} onClick={() => setEditTags(prev => prev.filter(x => x !== tag))}>
                         <MdClose />
                       </button>
                     </span>
                   ))}
                 </div>
                 <input
+                  id={fid('tags')}
                   type="text"
                   value={editTagInput}
                   onChange={(e) => setEditTagInput(e.target.value)}
@@ -959,7 +967,7 @@ function PlaylistView() {
               </div>
             </div>
             <div className="form-group">
-              <label>{t('playlists.view.coverImage')}</label>
+              <span className="form-label">{t('playlists.view.coverImage')}</span>
               <div
                 className={`playlist-edit-thumb${editThumb ? ' has-image' : ''}`}
                 onClick={() => !editThumbUploading && editThumbInputRef.current?.click()}
@@ -992,26 +1000,26 @@ function PlaylistView() {
               </div>
             </div>
             <div className="form-group">
-              <label>{t('playlists.view.genre')}</label>
-              <input type="text" value={editMusicStyle} onChange={(e) => setEditMusicStyle(e.target.value)} placeholder={t('playlists.view.genrePlaceholder')} />
+              <label htmlFor={fid('genre')}>{t('playlists.view.genre')}</label>
+              <input id={fid('genre')} type="text" value={editMusicStyle} onChange={(e) => setEditMusicStyle(e.target.value)} placeholder={t('playlists.view.genrePlaceholder')} />
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label>{t('playlists.view.year')}</label>
-                <input type="number" value={editYear} onChange={(e) => setEditYear(e.target.value)} placeholder="1996" />
+                <label htmlFor={fid('year')}>{t('playlists.view.year')}</label>
+                <input id={fid('year')} type="number" value={editYear} onChange={(e) => setEditYear(e.target.value)} placeholder="1996" />
               </div>
               <div className="form-group">
-                <label>{t('playlists.view.label')}</label>
-                <input type="text" value={editLabel} onChange={(e) => setEditLabel(e.target.value)} placeholder={t('playlists.view.labelPlaceholder')} />
+                <label htmlFor={fid('label')}>{t('playlists.view.label')}</label>
+                <input id={fid('label')} type="text" value={editLabel} onChange={(e) => setEditLabel(e.target.value)} placeholder={t('playlists.view.labelPlaceholder')} />
               </div>
             </div>
             <div className="form-group">
-              <label>{t('playlists.view.credits')}</label>
-              <input type="text" value={editCredits} onChange={(e) => setEditCredits(e.target.value)} placeholder={t('playlists.view.creditsPlaceholder')} />
+              <label htmlFor={fid('credits')}>{t('playlists.view.credits')}</label>
+              <input id={fid('credits')} type="text" value={editCredits} onChange={(e) => setEditCredits(e.target.value)} placeholder={t('playlists.view.creditsPlaceholder')} />
             </div>
             <div className="form-group">
-              <label>{t('playlists.view.description')}</label>
-              <textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} placeholder={t('playlists.view.descriptionPlaceholder')} rows={3} maxLength={1000} />
+              <label htmlFor={fid('description')}>{t('playlists.view.description')}</label>
+              <textarea id={fid('description')} value={editDescription} onChange={(e) => setEditDescription(e.target.value)} placeholder={t('playlists.view.descriptionPlaceholder')} rows={3} maxLength={1000} />
             </div>
             <div className="modal-actions">
               <button type="button" className="btn-cancel" onClick={() => setShowEditModal(false)} disabled={isUpdating}>
