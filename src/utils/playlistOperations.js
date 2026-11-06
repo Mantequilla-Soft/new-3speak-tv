@@ -1,5 +1,6 @@
 import { customJsonWithAioha, broadcastWithAioha, getOperationUser } from '../hive-api/aioha';
 import { KeyTypes } from '@aioha/aioha';
+import { playlistTypeFields } from '../lib/playlistType';
 
 const PLAYLIST_PREFIX = '3speak_playlist_';
 
@@ -9,12 +10,14 @@ const PLAYLIST_PREFIX = '3speak_playlist_';
  * @param {string} access - "public" or "private"
  * @param {string} playlistId - Optional custom playlist ID
  * @param {string[]} tags - Optional tags
- * @param {string|null} type - Optional content type (e.g. 'audio'); stored under json_metadata.type
+ * @param {string|null} type - Optional 'video' or 'audio' (lib/playlistType.js); sent to the
+ *                              indexer and mirrored into json_metadata
  * @param {object|null} extraMeta - Additional fields merged into json_metadata
  *                                  (e.g. { album: { credits, musicStyle } } for an audio album)
+ * @param {string|null} audioKind - For audio: 'podcast' | 'music' | 'voice' | 'sounds'
  * @returns {Promise<object>} Result from Aioha
  */
-export async function createPlaylist(name, access = 'public', playlistId = null, tags = [], type = null, extraMeta = null) {
+export async function createPlaylist(name, access = 'public', playlistId = null, tags = [], type = null, extraMeta = null, audioKind = null) {
   const payload = {
     name,
     access,
@@ -26,7 +29,12 @@ export async function createPlaylist(name, access = 'public', playlistId = null,
 
   const meta = {};
   if (tags.length > 0) meta.tags = tags;
-  if (type) meta.type = type;
+  if (type) {
+    const tf = playlistTypeFields(type, audioKind);
+    payload.type = tf.type;
+    if (tf.type === 'audio') payload.audio_kind = tf.audio_kind;
+    Object.assign(meta, tf.meta);
+  }
   if (extraMeta && typeof extraMeta === 'object') Object.assign(meta, extraMeta);
   if (Object.keys(meta).length > 0) {
     payload.json_metadata = JSON.stringify(meta);
@@ -116,6 +124,8 @@ export async function reorderInPlaylist(playlistId, author, permlink, newPositio
  * @param {object} fields - Fields to update
  * @param {string} [fields.thumbnail] - Thumbnail URL
  * @param {object} [fields.metadata] - JSON metadata object
+ * @param {string} [fields.type] - 'video' | 'audio'
+ * @param {string} [fields.audio_kind] - audio kind, '' to clear
  * @returns {Promise<object>} Result from Aioha
  */
 export async function updatePlaylist(playlistId, fields = {}) {
@@ -137,6 +147,12 @@ export async function updatePlaylist(playlistId, fields = {}) {
   }
   if (fields.metadata !== undefined) {
     payload.metadata = fields.metadata;
+  }
+  if (fields.type !== undefined) {
+    payload.type = fields.type;
+  }
+  if (fields.audio_kind !== undefined) {
+    payload.audio_kind = fields.audio_kind;
   }
 
   return customJsonWithAioha(
@@ -174,7 +190,7 @@ export async function deletePlaylist(playlistId) {
  * @param {string} permlink - Video permlink
  * @returns {Promise<object>} Result from Aioha
  */
-export async function createPlaylistAndAdd(name, access, playlistId, author, permlink, tags = []) {
+export async function createPlaylistAndAdd(name, access, playlistId, author, permlink, tags = [], typeChoice = null) {
   // These two ops are hand-assembled (they're batched into ONE transaction), so
   // they need the ButrAuth-aware username — aioha has no user for those sessions
   // and `[null]` auths come back as "Operation not allowed".
@@ -187,8 +203,17 @@ export async function createPlaylistAndAdd(name, access, playlistId, author, per
     playlist_id: playlistId,
   };
 
-  if (tags.length > 0) {
-    createPayload.json_metadata = JSON.stringify({ tags });
+  const meta = {};
+  if (tags.length > 0) meta.tags = tags;
+  // typeChoice: { type: 'video' | 'audio', kind } from the create form
+  if (typeChoice?.type) {
+    const tf = playlistTypeFields(typeChoice.type, typeChoice.kind);
+    createPayload.type = tf.type;
+    if (tf.type === 'audio') createPayload.audio_kind = tf.audio_kind;
+    Object.assign(meta, tf.meta);
+  }
+  if (Object.keys(meta).length > 0) {
+    createPayload.json_metadata = JSON.stringify(meta);
   }
 
   const addPayload = {

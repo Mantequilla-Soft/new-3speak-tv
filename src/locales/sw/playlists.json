@@ -96,5 +96,17 @@
     "descriptionPlaceholder": "Kuhusu albamu hii (si lazima)",
     "filterCount_one": "{{shown}} kati ya kipengee {{count}}",
     "filterCount_other": "{{shown}} kati ya vipengee {{count}}"
+  },
+  "type": {
+    "label": "Aina",
+    "video": "Video",
+    "audio": "Sauti",
+    "kindLabel": "Ni sauti ya aina gani?",
+    "kinds": {
+      "podcast": "Podikasti",
+      "music": "Muziki",
+      "voice": "Ujumbe wa sauti",
+      "sounds": "Sauti nyingine"
+    }
   }
 }

@@ -106,5 +106,17 @@
     "filterCount_few": "{{shown}} з {{count}} елементів",
     "filterCount_many": "{{shown}} з {{count}} елементів",
     "filterCount_other": "{{shown}} з {{count}} елемента"
+  },
+  "type": {
+    "label": "Тип",
+    "video": "Відео",
+    "audio": "Аудіо",
+    "kindLabel": "Яке це аудіо?",
+    "kinds": {
+      "podcast": "Подкаст",
+      "music": "Музика",
+      "voice": "Голосові нотатки",
+      "sounds": "Інші звуки"
+    }
   }
 }

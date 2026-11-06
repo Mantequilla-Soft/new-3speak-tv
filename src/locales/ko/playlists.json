@@ -91,5 +91,17 @@
     "description": "설명",
     "descriptionPlaceholder": "이 앨범 소개(선택)",
     "filterCount_other": "{{count}}개 중 {{shown}}개"
+  },
+  "type": {
+    "label": "유형",
+    "video": "동영상",
+    "audio": "오디오",
+    "kindLabel": "어떤 오디오인가요?",
+    "kinds": {
+      "podcast": "팟캐스트",
+      "music": "음악",
+      "voice": "음성 메모",
+      "sounds": "기타 소리"
+    }
   }
 }

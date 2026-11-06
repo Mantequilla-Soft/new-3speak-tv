@@ -96,5 +96,17 @@
     "descriptionPlaceholder": "Tungkol sa album na ito (opsyonal)",
     "filterCount_one": "{{shown}} sa {{count}} item",
     "filterCount_other": "{{shown}} sa {{count}} items"
+  },
+  "type": {
+    "label": "Uri",
+    "video": "Video",
+    "audio": "Audio",
+    "kindLabel": "Anong uri ng audio?",
+    "kinds": {
+      "podcast": "Podcast",
+      "music": "Musika",
+      "voice": "Mga voice note",
+      "sounds": "Iba pang tunog"
+    }
   }
 }

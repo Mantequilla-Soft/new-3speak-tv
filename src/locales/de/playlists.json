@@ -96,5 +96,17 @@
     "descriptionPlaceholder": "Über dieses Album (optional)",
     "filterCount_one": "{{shown}} von {{count}} Eintrag",
     "filterCount_other": "{{shown}} von {{count}} Einträgen"
+  },
+  "type": {
+    "label": "Art",
+    "video": "Video",
+    "audio": "Audio",
+    "kindLabel": "Was für Audio?",
+    "kinds": {
+      "podcast": "Podcast",
+      "music": "Musik",
+      "voice": "Sprachnotizen",
+      "sounds": "Andere Klänge"
+    }
   }
 }

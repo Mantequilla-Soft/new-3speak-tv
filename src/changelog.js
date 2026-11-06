@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.88',
+    category: 'upload',
+    date: '2026-11-06',
+    summary: "Audio you upload into a Music or Podcast playlist is now marked as music or podcast to match.",
+  },
+  {
+    version: '1.81.87',
+    category: 'playlists',
+    date: '2026-11-06',
+    summary: "Playlists now have a type: Video or Audio, and audio ones can be a Podcast, Music, Voice notes or Other sounds. Set it when you create or edit a playlist.",
+  },
+  {
+    version: '1.81.86',
+    category: 'audio',
+    date: '2026-11-06',
+    summary: "Audio cards and pages now show your post's title instead of the recording's file name, and audio covers keep their shape instead of being squeezed into a square.",
+  },
+  {
     version: '1.81.85',
     category: 'watch',
     date: '2026-11-06',

@@ -31,6 +31,7 @@ import { useUserPlaylists } from '../../hooks/useUserPlaylists';
 import { useAppStore } from '../../lib/store';
 import CreatorStats from '../CreatorStats/CreatorStats';
 import { createPlaylist } from '../../utils/playlistOperations';
+import { AUDIO_KINDS } from '../../lib/playlistType';
 import { toastIn } from '../../utils/toast';
 import { useContentBatch } from '../../hooks/useContentBatch';
 import { useWatchHistory } from '../../hooks/useWatchHistory';
@@ -141,6 +142,8 @@ function UserProfilePage({ user: userProp }) {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [newPlaylistName, setNewPlaylistName] = useState('');
     const [newPlaylistAccess, setNewPlaylistAccess] = useState('public');
+    const [newPlaylistType, setNewPlaylistType] = useState('video');
+    const [newPlaylistKind, setNewPlaylistKind] = useState('podcast');
     const [isCreating, setIsCreating] = useState(false);
     const [isReportOpen, setIsReportOpen] = useState(false);
     const [fabOpen, setFabOpen] = useState(false);
@@ -330,11 +333,13 @@ function UserProfilePage({ user: userProp }) {
 
       setIsCreating(true);
       try {
-        await createPlaylist(newPlaylistName.trim(), newPlaylistAccess);
+        await createPlaylist(newPlaylistName.trim(), newPlaylistAccess, null, [], newPlaylistType, null, newPlaylistKind);
         toast.success(t('profile.playlists.created'));
         setShowCreateModal(false);
         setNewPlaylistName('');
         setNewPlaylistAccess('public');
+        setNewPlaylistType('video');
+        setNewPlaylistKind('podcast');
         // Refetch playlists after a short delay to allow blockchain indexing
         setTimeout(() => {
           refetchPlaylists();
@@ -851,6 +856,21 @@ const {
                 <option value="private">{t('profile.playlists.private')}</option>
               </select>
             </div>
+            <div className="form-group">
+              <label>{t('playlists.type.label')}</label>
+              <select value={newPlaylistType} onChange={(e) => setNewPlaylistType(e.target.value)}>
+                <option value="video">{t('playlists.type.video')}</option>
+                <option value="audio">{t('playlists.type.audio')}</option>
+              </select>
+            </div>
+            {newPlaylistType === 'audio' && (
+              <div className="form-group">
+                <label>{t('playlists.type.kindLabel')}</label>
+                <select value={newPlaylistKind} onChange={(e) => setNewPlaylistKind(e.target.value)}>
+                  {AUDIO_KINDS.map((k) => <option key={k} value={k}>{t(`playlists.type.kinds.${k}`)}</option>)}
+                </select>
+              </div>
+            )}
             <div className="modal-actions">
               <button className="btn-cancel" onClick={() => setShowCreateModal(false)} disabled={isCreating}>
                 {t('common.actions.cancel')}

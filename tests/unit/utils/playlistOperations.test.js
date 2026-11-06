@@ -37,8 +37,19 @@ describe('createPlaylist', () => {
   it('adds an id, and folds tags, type and extra metadata into json_metadata', async () => {
     await createPlaylist('Album', 'private', 'pl-1', ['rock'], 'audio', { album: { credits: 'me' } })
     const [, , payload] = lastOp()
-    expect(payload).toEqual({ name: 'Album', access: 'private', playlist_id: 'pl-1', json_metadata: expect.any(String) })
-    expect(JSON.parse(payload.json_metadata)).toEqual({ tags: ['rock'], type: 'audio', album: { credits: 'me' } })
+    // The type also goes top-level for the indexer; audio with no kind given is a podcast.
+    expect(payload).toEqual({ name: 'Album', access: 'private', playlist_id: 'pl-1', type: 'audio', audio_kind: 'podcast', json_metadata: expect.any(String) })
+    expect(JSON.parse(payload.json_metadata)).toEqual({ tags: ['rock'], type: 'audio', audio_kind: 'podcast', album: { credits: 'me' } })
+  })
+
+  it('sends the audio kind, and none for a video playlist', async () => {
+    await createPlaylist('Mix', 'public', null, [], 'audio', null, 'music')
+    expect(lastOp()[2]).toMatchObject({ type: 'audio', audio_kind: 'music' })
+    await createPlaylist('Vids', 'public', null, [], 'video', null, 'music')
+    const [, , payload] = lastOp()
+    expect(payload.type).toBe('video')
+    expect(payload).not.toHaveProperty('audio_kind')
+    expect(JSON.parse(payload.json_metadata)).toEqual({ type: 'video' })
   })
 
   it('ignores extra metadata that is not an object', async () => {
@@ -82,6 +93,11 @@ describe('updatePlaylist', () => {
     expect(lastOp()[2]).toEqual({ playlist_id: 'pl', json_metadata: '{"a":1}', metadata: { b: 2 } })
   })
 
+  it('passes type and audio kind through, an empty kind too', async () => {
+    await updatePlaylist('pl', { type: 'video', audio_kind: '' })
+    expect(lastOp()[2]).toEqual({ playlist_id: 'pl', type: 'video', audio_kind: '' })
+  })
+
   it('with no fields it only names the playlist', async () => {
     await updatePlaylist('pl')
     expect(lastOp()[2]).toEqual({ playlist_id: 'pl' })
@@ -100,6 +116,13 @@ describe('createPlaylistAndAdd', () => {
       ['custom_json', '3speak_playlist_add', [], ['alice'],
         { playlist_id: 'pl-9', author: 'bob', permlink: 'v1', position: 0 }],
     ])
+  })
+
+  it('carries the type picked in the form', async () => {
+    await createPlaylistAndAdd('Show', 'public', 'pl-9', 'bob', 'a1', [], { type: 'audio', kind: 'voice' })
+    const create = JSON.parse(h.broadcast.mock.calls[0][0][0][1].json)
+    expect(create).toMatchObject({ type: 'audio', audio_kind: 'voice' })
+    expect(JSON.parse(create.json_metadata)).toEqual({ type: 'audio', audio_kind: 'voice' })
   })
 
   it('leaves json_metadata out without tags', async () => {

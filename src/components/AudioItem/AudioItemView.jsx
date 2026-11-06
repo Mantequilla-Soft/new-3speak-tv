@@ -12,7 +12,7 @@ import { useAppStore } from '../../lib/store';
 import { CHECKER_URL } from '../../utils/config';
 import { toastIn } from '../../utils/toast';
 import { isLoggedIn } from '../../hive-api/aioha';
-import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
+import { fixVideoThumbnail, fallbackImg, wholeCover } from '../../utils/fixThumbnails';
 import { fmtClock, episodeShareUrl } from '../../lib/podcastLibrary';
 import { parseTimeParam } from '../GlobalAudioPlayer/playerMath';
 import { fmtDuration, useDateFormat } from '../../lib/podcastFormat';
@@ -28,8 +28,9 @@ import '../Podcasts/PodcastsTab.scss';
 /** The audio page's own link to one 3Speak audio: `/audio?play=<owner>/<id>`. */
 export const audioItemPath = (item) => `/audio?play=${item.owner}/${item.permlink}`;
 
+// The cover whole, in its own shape: the card thumbnail is a 16:9 crop.
 function coverOf(item) {
-  const fixed = fixVideoThumbnail({ thumbnail_url: item.thumbnail_url, thumbnail: item.thumbnail_url });
+  const fixed = item.thumbnail_url ? wholeCover(item.thumbnail_url) : fixVideoThumbnail({});
   return !fixed || fixed === fallbackImg || fixed === '/images/speak.jpg' ? `/img/u/${item.owner}/avatar/large` : fixed;
 }
 
@@ -99,6 +100,9 @@ export default function AudioItemView({ owner, id, onBack }) {
     queryFn: () => getUersContent(owner, postPermlink),
     staleTime: 60 * 1000,
   });
+  // The post's title over the audio row's, which can still be the upload's
+  // file name ("recording 4702").
+  const title = String(post?.title || '').trim() || item?.title;
   const inQueue = useAppStore((s) => !!item && s.audioQueue.some((i) => i._id === item._id));
   const isCurrent = !!item && audioCurrent?._id === item._id;
   // Whole seconds only, so the share button does not re-render the page at every tick.
@@ -146,7 +150,7 @@ export default function AudioItemView({ owner, id, onBack }) {
           <button type="button" className="pod-show-kicker pod-episode-show" onClick={() => navigate(`/@${item.owner}?tab=audio`)}>
             <img className="audio-item-avatar" src={`/img/u/${item.owner}/avatar/small`} alt="" /> @{item.owner}
           </button>
-          <h2 className="pod-show-title">{item.title || t('audio.untitled')}</h2>
+          <h2 className="pod-show-title">{title || t('audio.untitled')}</h2>
           <div className="pod-show-meta">
             {item.createdAt && <span>{fmtDate(item.createdAt)}</span>}
             {item.duration > 0 && <span className="pod-chip">{fmtDuration(item.duration)}</span>}
@@ -247,7 +251,8 @@ export default function AudioItemView({ owner, id, onBack }) {
           onClose={() => setListing(false)}
           author={item.owner}
           permlink={postPermlink || item.permlink}
-          videoTitle={item.title}
+          videoTitle={title}
+          audioCategory={item.category || ''}
         />
       )}
     </div>

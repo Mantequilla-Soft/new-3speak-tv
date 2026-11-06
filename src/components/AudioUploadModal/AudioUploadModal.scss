@@ -565,6 +565,14 @@
   }
 }
 
+.audio-upload-playlist-kind-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
 .audio-upload-playlist-form-actions {
   display: flex;
   justify-content: flex-end;

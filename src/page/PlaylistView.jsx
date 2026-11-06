@@ -2,7 +2,9 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState, useMemo, useRef } from 'react';
-import { MdPlaylistPlay, MdClose, MdDragIndicator, MdEdit, MdLock, MdPublic, MdCloudUpload, MdRssFeed, MdPodcasts, MdLibraryMusic, MdSearch, MdCode } from 'react-icons/md';
+import { MdPlaylistPlay, MdClose, MdDragIndicator, MdEdit, MdLock, MdPublic, MdCloudUpload, MdRssFeed, MdPodcasts, MdLibraryMusic, MdSearch, MdCode, MdKeyboardVoice, MdGraphicEq } from 'react-icons/md';
+import PlaylistTypePicker from '../components/PlaylistTypePicker/PlaylistTypePicker';
+import { resolvePlaylistType, playlistTypeFields } from '../lib/playlistType';
 import { IoArrowBack, IoTrash, IoSave, IoReorderThree } from 'react-icons/io5';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -64,6 +66,7 @@ function PlaylistView() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editName, setEditName] = useState('');
   const [editAccess, setEditAccess] = useState('public');
+  const [editType, setEditType] = useState({ type: 'video', kind: null });
   const [editTags, setEditTags] = useState([]);
   // Album metadata + cover image
   const [editThumb, setEditThumb] = useState('');
@@ -166,13 +169,20 @@ function PlaylistView() {
   }, [playlist]);
   const playlistTags = useMemo(() => playlistJsonMeta.tags || [], [playlistJsonMeta]);
 
-  // An all-audio playlist (an album, a 3Speak podcast) is drawn like an outside
-  // podcast show (components/Podcasts): show header, episode tiles. Until the
-  // items load, an album upload's `type: 'audio'` says so already.
+  // The playlist's type and audio kind (lib/playlistType.js): what the owner
+  // chose, else worked out from the items. Until the items load only a stored
+  // choice counts.
+  const { type: playlistType, kind: playlistKind } = useMemo(() => resolvePlaylistType(
+    playlist,
+    videosLoading ? null : listedVideos.map((v) => ({ isAudio: !!(v.isAudio && v.audioDoc), category: v.audioDoc?.category })),
+  ), [playlist, videosLoading, listedVideos]);
+  // An audio playlist (an album, a 3Speak podcast) is drawn like an outside
+  // podcast show (components/Podcasts): show header, episode tiles. That layout
+  // only lists audio, so a video in it (nothing stops one being added) brings
+  // back the plain list, where everything shows.
   const isAudioShow = listedVideos.length > 0
-    ? listedVideos.every((v) => v.isAudio && v.audioDoc)
-    : videosLoading && playlistJsonMeta.type === 'audio';
-  const isMusic = audioTracks.length > 0 && audioTracks.every((v) => ['song', 'music'].includes(v.audioDoc.category));
+    ? playlistType === 'audio' && listedVideos.every((v) => v.isAudio && v.audioDoc)
+    : videosLoading && playlistType === 'audio';
   const showCover = playlist?.thumbnail || listedVideos.find((v) => v.audioDoc?.thumbnail_url)?.audioDoc.thumbnail_url || '';
   // What a tile plays: the track with the playlist's cover, when it has one.
   const trackItem = (v) => (playlist?.thumbnail ? { ...v.audioDoc, thumbnail_url: playlist.thumbnail } : v.audioDoc);
@@ -192,6 +202,8 @@ function PlaylistView() {
   const handleOpenEdit = () => {
     setEditName(playlist.name);
     setEditAccess(playlist.access || 'public');
+    // Opens on what the page shows, stored or worked out.
+    setEditType({ type: playlistType || 'video', kind: playlistKind });
     setEditTags([...playlistTags]);
     setEditTagInput('');
     const album = playlist.metadata?.album || {};
@@ -235,20 +247,29 @@ function PlaylistView() {
       const baseline = editBaselineRef.current;
       const album = { ...baseline.album };
       const setOrDrop = (key, value) => { if (value) album[key] = value; else delete album[key]; };
-      setOrDrop('credits', editCredits.trim());
-      setOrDrop('musicStyle', editMusicStyle.trim());
-      const yearNum = parseInt(editYear, 10);
-      setOrDrop('year', !isNaN(yearNum) && yearNum > 0 ? yearNum : null);
-      setOrDrop('label', editLabel.trim());
+      // Genre, year, label and credits are only shown for a music playlist;
+      // otherwise whatever is stored stays as it is.
+      if (editType.type === 'audio' && editType.kind === 'music') {
+        setOrDrop('credits', editCredits.trim());
+        setOrDrop('musicStyle', editMusicStyle.trim());
+        const yearNum = parseInt(editYear, 10);
+        setOrDrop('year', !isNaN(yearNum) && yearNum > 0 ? yearNum : null);
+        setOrDrop('label', editLabel.trim());
+      }
       setOrDrop('description', editDescription.trim());
       // The cover lives on the playlist; mirror it into the album only where the
       // album already carried one, or the viewer changed it.
       if (editThumb !== baseline.thumb || 'thumbnail' in baseline.album) setOrDrop('thumbnail', editThumb);
 
+      const tf = playlistTypeFields(editType.type, editType.kind);
+      const jsonMeta = { ...playlistJsonMeta, tags: editTags, ...tf.meta };
+      if (tf.type !== 'audio') delete jsonMeta.audio_kind;
       const fields = {
         name: editName.trim(),
         access: editAccess,
-        json_metadata: JSON.stringify({ ...playlistJsonMeta, tags: editTags }),
+        type: tf.type,
+        audio_kind: tf.audio_kind,
+        json_metadata: JSON.stringify(jsonMeta),
       };
       if (editThumb !== baseline.thumb) fields.thumbnail = editThumb || '';
       if (JSON.stringify(album) !== JSON.stringify(baseline.album)) {
@@ -485,8 +506,13 @@ function PlaylistView() {
           />
           <div className="pod-show-info">
             <span className="pod-show-kicker">
-              {isMusic ? <MdLibraryMusic size={14} /> : <MdPodcasts size={14} />}
-              {isMusic ? t('audio.categories.music') : t('audio.podcasts.kicker')}
+              {playlistKind === 'music' ? <MdLibraryMusic size={14} />
+                : playlistKind === 'voice' ? <MdKeyboardVoice size={14} />
+                : playlistKind === 'sounds' ? <MdGraphicEq size={14} />
+                : <MdPodcasts size={14} />}
+              {playlistKind === 'music' ? t('audio.categories.music')
+                : playlistKind === 'voice' || playlistKind === 'sounds' ? t(`playlists.type.kinds.${playlistKind}`)
+                : t('audio.podcasts.kicker')}
               {isPrivate && <span className="pod-badge pod-badge--lock"><MdLock size={12} />{t('playlists.private')}</span>}
             </span>
             <h1 className="pod-show-title">{playlist.name}</h1>
@@ -703,6 +729,7 @@ function PlaylistView() {
                     author: video.audioDoc.owner,
                     permlink: video.audioDoc.post_permlink || video.audioDoc.permlink,
                     title: video.audioDoc.title,
+                    category: video.audioDoc.category || '',
                   }) : undefined}
                 />
               ))}
@@ -829,6 +856,7 @@ function PlaylistView() {
                   author: video.audioDoc.owner,
                   permlink: video.audioDoc.post_permlink || video.audioDoc.permlink,
                   title: video.audioDoc.title,
+                  category: video.audioDoc.category || '',
                 })}
               />
             ) : (
@@ -932,6 +960,7 @@ function PlaylistView() {
                 </button>
               </div>
             </div>
+            <PlaylistTypePicker type={editType.type} kind={editType.kind} onChange={setEditType} disabled={isUpdating} />
             <div className="form-group">
               <label htmlFor={fid('tags')}>{t('playlists.modal.tags')}</label>
               <div className="tags-input-wrap">
@@ -999,24 +1028,28 @@ function PlaylistView() {
                 />
               </div>
             </div>
-            <div className="form-group">
-              <label htmlFor={fid('genre')}>{t('playlists.view.genre')}</label>
-              <input id={fid('genre')} type="text" value={editMusicStyle} onChange={(e) => setEditMusicStyle(e.target.value)} placeholder={t('playlists.view.genrePlaceholder')} />
-            </div>
-            <div className="form-row">
+            {editType.type === 'audio' && editType.kind === 'music' && (
+              <>
               <div className="form-group">
-                <label htmlFor={fid('year')}>{t('playlists.view.year')}</label>
-                <input id={fid('year')} type="number" value={editYear} onChange={(e) => setEditYear(e.target.value)} placeholder="1996" />
+                <label htmlFor={fid('genre')}>{t('playlists.view.genre')}</label>
+                <input id={fid('genre')} type="text" value={editMusicStyle} onChange={(e) => setEditMusicStyle(e.target.value)} placeholder={t('playlists.view.genrePlaceholder')} />
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor={fid('year')}>{t('playlists.view.year')}</label>
+                  <input id={fid('year')} type="number" value={editYear} onChange={(e) => setEditYear(e.target.value)} placeholder="1996" />
+                </div>
+                <div className="form-group">
+                  <label htmlFor={fid('label')}>{t('playlists.view.label')}</label>
+                  <input id={fid('label')} type="text" value={editLabel} onChange={(e) => setEditLabel(e.target.value)} placeholder={t('playlists.view.labelPlaceholder')} />
+                </div>
               </div>
               <div className="form-group">
-                <label htmlFor={fid('label')}>{t('playlists.view.label')}</label>
-                <input id={fid('label')} type="text" value={editLabel} onChange={(e) => setEditLabel(e.target.value)} placeholder={t('playlists.view.labelPlaceholder')} />
+                <label htmlFor={fid('credits')}>{t('playlists.view.credits')}</label>
+                <input id={fid('credits')} type="text" value={editCredits} onChange={(e) => setEditCredits(e.target.value)} placeholder={t('playlists.view.creditsPlaceholder')} />
               </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor={fid('credits')}>{t('playlists.view.credits')}</label>
-              <input id={fid('credits')} type="text" value={editCredits} onChange={(e) => setEditCredits(e.target.value)} placeholder={t('playlists.view.creditsPlaceholder')} />
-            </div>
+              </>
+            )}
             <div className="form-group">
               <label htmlFor={fid('description')}>{t('playlists.view.description')}</label>
               <textarea id={fid('description')} value={editDescription} onChange={(e) => setEditDescription(e.target.value)} placeholder={t('playlists.view.descriptionPlaceholder')} rows={3} maxLength={1000} />
@@ -1040,6 +1073,7 @@ function PlaylistView() {
           author={playlistTarget.author}
           permlink={playlistTarget.permlink}
           videoTitle={playlistTarget.title}
+          audioCategory={playlistTarget.category}
         />
       )}
     </div>

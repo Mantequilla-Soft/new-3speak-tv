@@ -6,6 +6,8 @@ import { toastIn } from '../../utils/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMyPlaylists, isVideoInPlaylist } from '../../hooks/useMyPlaylists';
 import { addToPlaylist, createPlaylistAndAdd } from '../../utils/playlistOperations';
+import PlaylistTypePicker from '../PlaylistTypePicker/PlaylistTypePicker';
+import { trackCategoryToKind } from '../../lib/playlistType';
 import { useAppStore } from '../../lib/store';
 import { useTranslation } from 'react-i18next';
 import { formatDate as formatLocaleDate } from '../../i18n';
@@ -20,7 +22,9 @@ const toast = toastIn('Playlist');
 // Reserved playlist name for Watch Later
 const WATCH_LATER_NAME = 'Watch Later';
 
-function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
+// `audioCategory` is set (possibly '') when the item is an audio upload: a
+// playlist created from it starts as audio of the matching kind.
+function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle, audioCategory }) {
   const { t } = useTranslation();
   const doc = usePortalDoc();
   const { user } = useAppStore();
@@ -33,6 +37,10 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [newPlaylistAccess, setNewPlaylistAccess] = useState('public');
   const [newPlaylistTags, setNewPlaylistTags] = useState([]);
+  const defaultType = () => (audioCategory != null
+    ? { type: 'audio', kind: trackCategoryToKind(audioCategory) }
+    : { type: 'video', kind: null });
+  const [newPlaylistType, setNewPlaylistType] = useState(defaultType);
   const [tagInput, setTagInput] = useState('');
   const [isCreating, setIsCreating] = useState(false);
 
@@ -125,7 +133,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
 
       // Single batched transaction: Create playlist + Add video
       toast.info(t('playlists.modal.creatingAndAdding'));
-      await createPlaylistAndAdd(playlistName, newPlaylistAccess, playlistId, author, permlink, newPlaylistTags);
+      await createPlaylistAndAdd(playlistName, newPlaylistAccess, playlistId, author, permlink, newPlaylistTags, newPlaylistType);
 
       toast.success(t('playlists.modal.createdAndAdded', { name: playlistName }));
 
@@ -139,6 +147,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
       setNewPlaylistName('');
       setNewPlaylistAccess('public');
       setNewPlaylistTags([]);
+      setNewPlaylistType(defaultType());
       setTagInput('');
       setShowCreateForm(false);
       onClose();
@@ -279,6 +288,9 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle }) {
                     <MdLock /> {t('playlists.private')}
                   </button>
                 </div>
+              </div>
+              <div onClick={(e) => e.stopPropagation()}>
+                <PlaylistTypePicker type={newPlaylistType.type} kind={newPlaylistType.kind} onChange={setNewPlaylistType} groupClass="privacy-options" disabled={isCreating} />
               </div>
               <div className="form-group">
                 <label htmlFor={`${fieldId}-tags`}>{t('playlists.modal.tags')}</label>

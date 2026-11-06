@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import {
@@ -34,6 +34,8 @@ import UploadGate from '../ads/UploadGate';
 import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from '../../lib/uploadGate';
 import { usePortalDoc } from '../../utils/portalDocument';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../../utils/addToBlog';
+import PlaylistTypePicker from '../PlaylistTypePicker/PlaylistTypePicker';
+import { playlistTypeFields, trackCategoryToKind, storedPlaylistType } from '../../lib/playlistType';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -158,6 +160,10 @@ const TRACK_TYPES = [
   { value: 'audiobook',     labelKey: 'audio.categories.audiobook' },
   { value: 'interview',     labelKey: 'audio.categories.interview' },
 ];
+
+// The track type a playlist's audio kind stands for. "Other sounds" has none,
+// so tracks going there keep the type they have.
+const TRACK_TYPE_FOR_KIND = { music: 'song', podcast: 'podcast', voice: 'voice_message' };
 
 // Hardcoded suggestions; users can still type any genre into the field.
 const MUSIC_GENRES = [
@@ -425,7 +431,22 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   useEffect(() => {
     if (beneList.length === 0) setBeneRemaining(isPremium ? 100 : 90);
   }, [isPremium, beneList.length]);
-  const [pendingPlaylist, setPendingPlaylist] = useState(null); // { id, name, access } shown while waiting for indexer
+  const [pendingPlaylist, setPendingPlaylist] = useState(null); // { id, name, access, type, audio_kind } shown while waiting for indexer
+
+  // The chosen playlist's kind decides what its tracks are (a recording into
+  // a podcast playlist is a podcast, not a voice note). Only a kind the owner
+  // picked counts. Choosing the playlist retypes the tracks there are; tracks
+  // added afterwards start with it. The type stays editable per track.
+  const playlistTrackType = useMemo(() => {
+    const p = playlists.find((pl) => pl.id === playlistChoice)
+      || (pendingPlaylist && pendingPlaylist.id === playlistChoice ? pendingPlaylist : null);
+    return TRACK_TYPE_FOR_KIND[storedPlaylistType(p).kind] || null;
+  }, [playlists, playlistChoice, pendingPlaylist]);
+  const playlistTrackTypeRef = useRef(null);
+  useEffect(() => {
+    playlistTrackTypeRef.current = playlistTrackType;
+    if (playlistTrackType) setTracks((prev) => prev.map((tr) => (tr.type === playlistTrackType ? tr : { ...tr, type: playlistTrackType })));
+  }, [playlistTrackType]);
 
   const addBlobAsTrack = useCallback(async (blob, filename, source = 'file', overrideType = null) => {
     const url = URL.createObjectURL(blob);
@@ -442,7 +463,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       // Optional metadata captured in the Titles step. Caller may
       // override the auto-derived type — e.g. an OpenPods recording
       // hand-off pre-fills 'podcast'.
-      type: overrideType ?? (source === 'record' ? 'voice_message' : 'podcast'),
+      type: overrideType ?? playlistTrackTypeRef.current ?? (source === 'record' ? 'voice_message' : 'podcast'),
       genre: '',
       bpm: '',
       // Per-track publish config (snaps + album-post comments).
@@ -575,7 +596,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     }
   }, [pendingPlaylist, playlists]);
 
-  const handleCreatePlaylist = useCallback(async ({ name, access, credits, musicStyle, year, label, description, thumbnail }) => {
+  const handleCreatePlaylist = useCallback(async ({ name, access, credits, musicStyle, year, label, description, thumbnail, audioKind }) => {
     if (!owner) { toast.error(t('audio.upload.toasts.signInFirst')); return; }
     const trimmed = name.trim();
     if (!trimmed) { toast.error(t('audio.upload.toasts.enterPlaylistName')); return; }
@@ -601,12 +622,16 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       // playlist doc. The indexer's _create handler ignores json_metadata, but
       // its _update handler stores `metadata` and `thumbnail` so they surface
       // through the playlists API.
+      // An upload's playlist is always audio, of the kind picked in the form.
+      const tf = playlistTypeFields('audio', audioKind);
       const createPayload = {
         name: trimmed,
         access,
         playlist_id: playlistId,
+        type: tf.type,
+        audio_kind: tf.audio_kind,
+        json_metadata: JSON.stringify({ ...tf.meta, ...(extraMeta || {}) }),
       };
-      if (extraMeta) createPayload.json_metadata = JSON.stringify({ type: 'audio', ...extraMeta });
 
       const ops = [
         ['custom_json', {
@@ -636,7 +661,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       await broadcastAudioOps(ops);
       toast.success(t('audio.upload.toasts.playlistCreated'));
       setPlaylistChoice(playlistId);
-      setPendingPlaylist({ id: playlistId, name: trimmed, access });
+      setPendingPlaylist({ id: playlistId, name: trimmed, access, type: tf.type, audio_kind: tf.audio_kind });
       setTimeout(() => {
         refetchPlaylists();
         queryClient.invalidateQueries({ queryKey: ['myPlaylists', owner] });
@@ -805,18 +830,22 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // ── single (standalone post, audio embedded — uses the main composer) ──
   const publishSinglePost = useCallback(async (track) => {
     setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
+    // The post's title is the audio's title too: the track title is only the
+    // filename-derived default here ("recording 4702"), and audio cards and the
+    // audio page read the audio row, not the post.
+    const postTitle = (mainTitle || track.title || '').trim() || 'Audio';
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
-      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: owner, title: track.title,
+      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: owner, title: postTitle,
     });
     setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
     // A warm-up post takes the audio's own id as its permlink, as a warm-up video
     // does: the post replayed on Hive at graduation keeps it, and the audio row
     // already points at it.
-    const hivePermlink = warmup ? audioPermlink : (generatePermlink(mainTitle || track.title) || audioPermlink);
+    const hivePermlink = warmup ? audioPermlink : (generatePermlink(postTitle) || audioPermlink);
     const userTags = postTagsInput.split(/[\s,]+/).map(tr => tr.trim().toLowerCase()).filter(Boolean);
     const tags = userTags.length ? Array.from(new Set(userTags)) : Array.from(new Set(HIVE_DEFAULT_TAGS));
-    const desc = (postDescription || '').trim() || (track.title || '').trim();
-    const cover = postThumb ? `![${(track.title || 'cover').replace(/[[\]]/g, '')}](${postThumb})\n\n` : '';
+    const desc = (postDescription || '').trim() || postTitle;
+    const cover = postThumb ? `![${(postTitle || 'cover').replace(/[[\]]/g, '')}](${postThumb})\n\n` : '';
     const body = `${cover}${playUrl}\n\n${desc}`.trim();
     // A standalone track is a top-level titled post, so an Article carrying one
     // audio attribute. `threespeak.audio` mirrors the bare `audio` key above it:
@@ -843,7 +872,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       for (const k of Object.keys(audioAdsMeta || {})) delete warmMeta[k];
       await commentWithAioha(
         '', (community && community.name) || tags[0], hivePermlink,
-        (mainTitle || track.title || '').trim() || 'Audio', body, warmMeta,
+        postTitle, body, warmMeta,
       );
       await linkAudioToPost({ audioPermlink, postPermlink: hivePermlink, username: owner });
       // Not in one transaction with the post as on chain: the post is out either way.
@@ -855,7 +884,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         }
       }
       await pushAudioThumb(audioPermlink, postThumb);
-      trackPostsRef.current[track.id] = { author: owner, permlink: hivePermlink, title: track.title };
+      trackPostsRef.current[track.id] = { author: owner, permlink: hivePermlink, title: postTitle };
       setTrackStatus(track.id, { state: 'success', stage: undefined });
       return;
     }
@@ -867,7 +896,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         parent_permlink: (community && community.name) || tags[0],
         author: user,
         permlink: hivePermlink,
-        title: (mainTitle || track.title || '').trim() || 'Audio',
+        title: postTitle,
         body,
         json_metadata: JSON.stringify(metaObj),
       },
@@ -883,7 +912,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     mirrorAudioAds(hivePermlink);
     await shareToBlog(hivePermlink);
     await pushAudioThumb(audioPermlink, postThumb);
-    trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: track.title };
+    trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: postTitle };
     setTrackStatus(track.id, { state: 'success', stage: undefined });
   }, [user, owner, warmup, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog, audioAds, mirrorAudioAds]);
 
@@ -1362,6 +1391,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               pendingPlaylist={pendingPlaylist}
               onCreate={handleCreatePlaylist}
               required={mode === 'album'}
+              defaultKind={mode === 'snaps' ? 'voice' : mode === 'album' ? 'music' : trackCategoryToKind(tracks[0]?.type || 'podcast')}
             />
           )}
           {(stepKey === 'post' || stepKey === 'mainpost') && (
@@ -1665,11 +1695,12 @@ function TitlesStep({ tracks, setTitle, patchTrack, onRemove }) {
   );
 }
 
-function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, onCreate, required = false }) {
+function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, onCreate, required = false, defaultKind = 'podcast' }) {
   const { t } = useTranslation();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newName, setNewName] = useState('');
   const [newAccess, setNewAccess] = useState('public');
+  const [newKind, setNewKind] = useState(defaultKind);
   const [newCredits, setNewCredits] = useState('');
   const [newMusicStyle, setNewMusicStyle] = useState('');
   const [newYear, setNewYear] = useState('');
@@ -1687,6 +1718,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
     setShowCreateForm(false);
     setNewName('');
     setNewAccess('public');
+    setNewKind(defaultKind);
     setNewCredits('');
     setNewMusicStyle('');
     setNewYear('');
@@ -1726,12 +1758,11 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
     const ok = await onCreate({
       name: newName,
       access: newAccess,
-      credits: newCredits,
-      musicStyle: newMusicStyle,
-      year: newYear,
-      label: newLabel,
+      // Album details belong to music playlists only (the form hides them otherwise).
+      ...(newKind === 'music' ? { credits: newCredits, musicStyle: newMusicStyle, year: newYear, label: newLabel } : {}),
       description: newDescription,
       thumbnail: thumbnailUrl,
+      audioKind: newKind,
     });
     setSubmitting(false);
     if (ok) resetForm();
@@ -1838,43 +1869,52 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
               <MdLock size={14} /> {t('audio.upload.playlist.private')}
             </button>
           </div>
-          <input
-            type="text"
-            className="audio-upload-title-input"
-            value={newMusicStyle}
-            onChange={(e) => setNewMusicStyle(e.target.value)}
-            placeholder={t('audio.upload.playlist.musicStylePlaceholder')}
-            list="audio-upload-genre-options"
-            maxLength={60}
+          <PlaylistTypePicker
+            audioOnly type="audio" kind={newKind} onChange={({ kind }) => setNewKind(kind)}
+            groupClass="audio-upload-playlist-privacy" btnClass="audio-upload-playlist-privacy-btn"
+            labelClass="audio-upload-playlist-kind-label" iconSize={14} disabled={submitting}
           />
+          {newKind === 'music' && (
+            <>
+            <input
+              type="text"
+              className="audio-upload-title-input"
+              value={newMusicStyle}
+              onChange={(e) => setNewMusicStyle(e.target.value)}
+              placeholder={t('audio.upload.playlist.musicStylePlaceholder')}
+              list="audio-upload-genre-options"
+              maxLength={60}
+            />
 
-          <div className="audio-upload-album-grid">
-            <input
-              type="text"
-              className="audio-upload-title-input"
-              value={newCredits}
-              onChange={(e) => setNewCredits(e.target.value)}
-              placeholder={t('audio.upload.playlist.creditsPlaceholder')}
-              maxLength={200}
-            />
-            <input
-              type="number"
-              className="audio-upload-title-input"
-              value={newYear}
-              onChange={(e) => setNewYear(e.target.value)}
-              placeholder={t('audio.upload.playlist.yearPlaceholder')}
-              min="1900"
-              max="2100"
-            />
-            <input
-              type="text"
-              className="audio-upload-title-input"
-              value={newLabel}
-              onChange={(e) => setNewLabel(e.target.value)}
-              placeholder={t('audio.upload.playlist.labelPlaceholder')}
-              maxLength={120}
-            />
-          </div>
+            <div className="audio-upload-album-grid">
+              <input
+                type="text"
+                className="audio-upload-title-input"
+                value={newCredits}
+                onChange={(e) => setNewCredits(e.target.value)}
+                placeholder={t('audio.upload.playlist.creditsPlaceholder')}
+                maxLength={200}
+              />
+              <input
+                type="number"
+                className="audio-upload-title-input"
+                value={newYear}
+                onChange={(e) => setNewYear(e.target.value)}
+                placeholder={t('audio.upload.playlist.yearPlaceholder')}
+                min="1900"
+                max="2100"
+              />
+              <input
+                type="text"
+                className="audio-upload-title-input"
+                value={newLabel}
+                onChange={(e) => setNewLabel(e.target.value)}
+                placeholder={t('audio.upload.playlist.labelPlaceholder')}
+                maxLength={120}
+              />
+            </div>
+            </>
+          )}
 
           <textarea
             className="audio-upload-title-input audio-upload-credits-input"

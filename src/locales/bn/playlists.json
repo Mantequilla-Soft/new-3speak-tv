@@ -96,5 +96,17 @@
     "descriptionPlaceholder": "এই অ্যালবাম সম্পর্কে (ঐচ্ছিক)",
     "filterCount_one": "{{count}}টির মধ্যে {{shown}}টি আইটেম",
     "filterCount_other": "{{count}}টির মধ্যে {{shown}}টি আইটেম"
+  },
+  "type": {
+    "label": "ধরন",
+    "video": "ভিডিও",
+    "audio": "অডিও",
+    "kindLabel": "কী ধরনের অডিও?",
+    "kinds": {
+      "podcast": "পডকাস্ট",
+      "music": "সংগীত",
+      "voice": "ভয়েস নোট",
+      "sounds": "অন্যান্য শব্দ"
+    }
   }
 }

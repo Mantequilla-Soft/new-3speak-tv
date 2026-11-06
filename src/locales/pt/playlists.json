@@ -101,5 +101,17 @@
     "filterCount_one": "{{shown}} de {{count}} item",
     "filterCount_many": "{{shown}} de {{count}} itens",
     "filterCount_other": "{{shown}} de {{count}} itens"
+  },
+  "type": {
+    "label": "Tipo",
+    "video": "Vídeo",
+    "audio": "Áudio",
+    "kindLabel": "Que tipo de áudio?",
+    "kinds": {
+      "podcast": "Podcast",
+      "music": "Música",
+      "voice": "Notas de voz",
+      "sounds": "Outros sons"
+    }
   }
 }

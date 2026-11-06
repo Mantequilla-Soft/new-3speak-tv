@@ -1764,6 +1764,23 @@
   object-fit: cover;
 }
 
+// Audio covers come in any shape (most are 16:9 video-style thumbnails), so the
+// cover keeps the box height and takes the image's own width instead of being
+// squeezed into a square. Never cropped or stretched: only an extremely wide
+// image (past 60% of the row) is scaled down inside its box.
+.audio-item .pod-show-cover {
+  width: auto;
+  max-width: 60%;
+  object-fit: contain;
+
+  @include mix.respond(phone) {
+    height: auto;
+    max-height: 220px;
+    max-width: 100%;
+    align-self: flex-start;
+  }
+}
+
 // A count inside an action button (votes, comments).
 .pod-btn-count {
   margin-left: 2px;

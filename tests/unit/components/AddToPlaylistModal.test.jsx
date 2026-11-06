@@ -122,7 +122,8 @@ describe('saving a video to a playlist', () => {
     await user.type(screen.getByPlaceholderText('Add more...'), 'travel{Enter}')
     expect(screen.getAllByText(/^(travel|lakes)$/).map((n) => n.textContent)).toEqual(['travel', 'lakes'])
     await user.click(create)
-    expect(m.create).toHaveBeenCalledWith('Summer', 'private', 'uuid-1', 'badadib', 'lake-day', ['travel', 'lakes'])
+    // A playlist made from a video starts as a video playlist.
+    expect(m.create).toHaveBeenCalledWith('Summer', 'private', 'uuid-1', 'badadib', 'lake-day', ['travel', 'lakes'], { type: 'video', kind: null })
     expect(toastMessages(toast.success)).toEqual(['Created "Summer" and added video!'])
     expect(onClose).toHaveBeenCalled()
   })

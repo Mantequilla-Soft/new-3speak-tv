@@ -91,5 +91,17 @@
     "description": "简介",
     "descriptionPlaceholder": "关于这张专辑（可选）",
     "filterCount_other": "{{shown}} / {{count}} 项"
+  },
+  "type": {
+    "label": "类型",
+    "video": "视频",
+    "audio": "音频",
+    "kindLabel": "什么类型的音频？",
+    "kinds": {
+      "podcast": "播客",
+      "music": "音乐",
+      "voice": "语音笔记",
+      "sounds": "其他声音"
+    }
   }
 }

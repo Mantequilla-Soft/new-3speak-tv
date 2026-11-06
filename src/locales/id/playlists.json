@@ -91,5 +91,17 @@
     "description": "Deskripsi",
     "descriptionPlaceholder": "Tentang album ini (opsional)",
     "filterCount_other": "{{shown}} dari {{count}} item"
+  },
+  "type": {
+    "label": "Jenis",
+    "video": "Video",
+    "audio": "Audio",
+    "kindLabel": "Audio jenis apa?",
+    "kinds": {
+      "podcast": "Podcast",
+      "music": "Musik",
+      "voice": "Catatan suara",
+      "sounds": "Suara lainnya"
+    }
   }
 }
