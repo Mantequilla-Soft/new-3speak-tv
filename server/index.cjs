@@ -422,10 +422,14 @@ function consumeSiwhNonce(rand, expMs) {
   return true
 }
 
-// Recover the signer's public key from the signature over sha256(challenge) —
-// all wallet providers sign that hash — and require it to be a key in the
-// account's POSTING authority (weight >= threshold). Forging a valid signature
-// therefore requires actually controlling one of the account's posting keys.
+// Recover the signer's public key from the signature over sha256(challenge),
+// which all wallet providers sign, and require it to be a key in the account's
+// POSTING, ACTIVE or OWNER authority (weight >= that role's threshold). Active
+// and owner count too because they prove the account at least as strongly, and
+// a Ledger login usually holds the owner key (aioha keeps the first role found,
+// owner before active before posting). Forging a valid signature therefore
+// requires actually controlling one of the account's keys.
+const SIWH_ROLES = ['posting', 'active', 'owner']
 async function verifySiwhSignature(username, challenge, signature) {
   let recovered
   try {
@@ -435,8 +439,12 @@ async function verifySiwhSignature(username, challenge, signature) {
   }
   const [account] = await client.database.getAccounts([username])
   if (!account) return false
-  const threshold = account.posting.weight_threshold
-  return (account.posting.key_auths || []).some(([k, w]) => k === recovered && w >= threshold)
+  return SIWH_ROLES.some((role) => {
+    const auth = account[role]
+    if (!auth) return false
+    const threshold = auth.weight_threshold
+    return (auth.key_auths || []).some(([k, w]) => k === recovered && w >= threshold)
+  })
 }
 
 // === Custom_json operation whitelist ===
@@ -1214,7 +1222,7 @@ app.post('/api/auth/wallet/challenge', walletAuthLimiter, (req, res) => {
 })
 
 // POST /api/auth/wallet/login — { username, challenge, signature }. Verifies the
-// signature against the account's posting authority and mints a session cookie.
+// signature against the account's posting, active or owner authority and mints a session cookie.
 app.post('/api/auth/wallet/login', walletAuthLimiter, async (req, res) => {
   try {
     if (!SESSION_SIGNING_SECRET) return res.status(503).json({ error: 'Sessions not configured' })

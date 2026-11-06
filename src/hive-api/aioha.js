@@ -635,8 +635,9 @@ export const broadcastViaManteAuth = async (operations) => {
 }
 
 // "Sign in with Hive" session for wallet logins (Keychain/HiveAuth/PeakVault/
-// Ledger). The user signs a server-issued nonce with their POSTING key once; the
-// server verifies it against their on-chain posting authority and sets an
+// Ledger). The user signs a server-issued nonce once, with the posting key (or the
+// active/owner key a Ledger login holds); the server verifies it against the
+// account's on-chain posting, active or owner authority and sets an
 // httpOnly session cookie. The @threespeak broadcast proxy then trusts that
 // cookie instead of a public app key + a claimed username — so nobody can act as
 // another user. No-op for ManteAuth (own cookie) and HiveSigner (own token).
