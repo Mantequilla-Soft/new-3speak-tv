@@ -63,7 +63,7 @@ describe('cachedProfileImage', () => {
   // (hand-edited json_metadata) goes to /img/u/<account>/avatar instead, which
   // is exactly the grey default face the module warns about.
   // src/utils/avatarCache.js:123
-  it.skip('BUG: square-crops our own art even when the stored URL has surrounding spaces', () => {
+  it('BUG: square-crops our own art even when the stored URL has surrounding spaces', () => {
     expect(mod.cachedProfileImage('alice', ' https://images.3speak.tv/u/a.png ')).toBe('/img/a/u/a.png?px=64')
   })
 })

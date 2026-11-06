@@ -125,7 +125,7 @@ describe('locateFrame', () => {
   // with "wide"/"mdat"/"moov"). mp4box 2.5 then throws a raw TypeError
   // ("Cannot read properties of undefined (reading 'major_brand')") from
   // appendBuffer, so such a file can never be located. src/utils/mp4Index.js:48-56.
-  it.skip('BUG: locates a frame in a QuickTime file that has no ftyp box', async () => {
+  it('BUG: locates a frame in a QuickTime file that has no ftyp box', async () => {
     const { file } = sixFrames({ withFtyp: false })
     expect((await locateFrame(file, 0.3)).ti).toBe(3)
   })

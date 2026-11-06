@@ -5,6 +5,9 @@
 // so mp4box stays out of the main bundle.
 import { createFile, DataStream, Endianness, MP4BoxBuffer } from 'mp4box';
 
+// A minimal ftyp box: size 20, major brand "qt  ", minor 0, compatible "qt  ".
+const QT_FTYP = new Uint8Array([0, 0, 0, 20, 0x66, 0x74, 0x79, 0x70, 0x71, 0x74, 0x20, 0x20, 0, 0, 0, 0, 0x71, 0x74, 0x20, 0x20]);
+
 /** Top-level boxes: [{ type, start, size }], from their 8/16-byte headers only. */
 async function topLevelBoxes(file) {
   const boxes = [];
@@ -46,7 +49,9 @@ export async function locateFrame(file, timeSec) {
   const ftyp = boxes.find((b) => b.type === 'ftyp');
   // Fed as one stream with moov right after ftyp: the sample offsets inside
   // moov stay absolute positions in the real file, which is where we read.
-  const parts = [ftyp, moov].filter(Boolean).map((b) => file.slice(b.start, b.start + b.size));
+  // Older QuickTime .mov files have no ftyp (they open with "wide", "mdat" or
+  // "moov"); mp4box needs one, so such a file gets a stand-in "qt  " brand.
+  const parts = [ftyp ? file.slice(ftyp.start, ftyp.start + ftyp.size) : QT_FTYP, file.slice(moov.start, moov.start + moov.size)];
   const ab = await new Blob(parts).arrayBuffer();
   const mp4 = createFile();
   let info = null;

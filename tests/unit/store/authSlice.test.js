@@ -167,7 +167,7 @@ describe('switching between saved accounts', () => {
   // JSON.parse(localStorage.getItem("accountsList")).find(...) with no fallback,
   // so with no saved list yet (a fresh browser, or a cleared one) it throws
   // "Cannot read properties of null (reading 'find')" instead of just switching.
-  it.skip('BUG: switching with no saved account list does not throw', () => {
+  it('BUG: switching with no saved account list does not throw', () => {
     expect(() => state().switchAccount('badadib')).not.toThrow()
   })
 })

@@ -561,7 +561,7 @@ describe('embed URLs', () => {
   // ['https:', '', '3speak.tv', 'only-one'], so the author comes back as "https:"
   // and the permlink as "". It should be "nothing to parse" like any other
   // unparseable input. (Callers today pass checker embed_urls, "@author/permlink".)
-  it.skip('BUG: a 3speak.tv URL without author AND permlink parses to nothing, not author "https:"', () => {
+  it('BUG: a 3speak.tv URL without author AND permlink parses to nothing, not author "https:"', () => {
     expect(api.parseEmbedUrl('https://3speak.tv/only-one')).toEqual({ author: null, permlink: null })
   })
 

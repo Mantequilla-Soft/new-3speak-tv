@@ -198,9 +198,8 @@ export function parseEmbedUrl(embedUrl) {
   } else if (embedUrl.includes('3speak.tv/')) {
     // Handle formats like https://3speak.tv/author/permlink
     const urlParts = embedUrl.split('3speak.tv/')[1].split('/');
-    if (urlParts.length >= 2) {
-      cleaned = `${urlParts[0]}/${urlParts[1]}`;
-    }
+    if (urlParts.length < 2) return { author: null, permlink: null };
+    cleaned = `${urlParts[0]}/${urlParts[1]}`;
   }
 
   // Remove leading @ if present
