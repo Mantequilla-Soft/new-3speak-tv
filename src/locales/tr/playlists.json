@@ -96,5 +96,17 @@
     "descriptionPlaceholder": "Bu albüm hakkında (isteğe bağlı)",
     "filterCount_one": "{{count}} öğeden {{shown}} tanesi",
     "filterCount_other": "{{count}} öğeden {{shown}} tanesi"
+  },
+  "type": {
+    "label": "Tür",
+    "video": "Video",
+    "audio": "Ses",
+    "kindLabel": "Ne tür bir ses?",
+    "kinds": {
+      "podcast": "Podcast",
+      "music": "Müzik",
+      "voice": "Sesli notlar",
+      "sounds": "Diğer sesler"
+    }
   }
 }

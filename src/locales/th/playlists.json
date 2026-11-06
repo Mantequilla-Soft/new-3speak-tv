@@ -91,5 +91,17 @@
     "description": "คำอธิบาย",
     "descriptionPlaceholder": "เกี่ยวกับอัลบั้มนี้ (ไม่บังคับ)",
     "filterCount_other": "{{shown}} จาก {{count}} รายการ"
+  },
+  "type": {
+    "label": "ประเภท",
+    "video": "วิดีโอ",
+    "audio": "เสียง",
+    "kindLabel": "เสียงประเภทไหน?",
+    "kinds": {
+      "podcast": "พอดแคสต์",
+      "music": "เพลง",
+      "voice": "บันทึกเสียง",
+      "sounds": "เสียงอื่นๆ"
+    }
   }
 }

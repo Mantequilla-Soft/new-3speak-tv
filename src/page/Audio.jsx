@@ -477,7 +477,7 @@ function Audio() {
     isCurrent: audioCurrent?._id === item._id,
     onPlay: () => audioPlay(item, items),
     onAddToQueue: () => audioAddToQueue(item),
-    onAddToPlaylist: () => setPlaylistTarget({ author: item.owner, permlink: item.post_permlink || item.permlink, title: item.title }),
+    onAddToPlaylist: () => setPlaylistTarget({ author: item.owner, permlink: item.post_permlink || item.permlink, title: item.title, category: item.category || '' }),
     onVote: () => { setVoteTarget({ author: item.owner, permlink: item.post_permlink }); setShowVoteTooltip(true); },
     onShare: () => setShareTarget(shareTarget?._id === item._id ? null : item),
     onAuthorClick: () => setSelectedCreator(item.owner),
@@ -773,7 +773,7 @@ function Audio() {
         <AddToPlaylistModal
           isOpen={!!playlistTarget} onClose={() => setPlaylistTarget(null)}
           author={playlistTarget.author} permlink={playlistTarget.permlink}
-          videoTitle={playlistTarget.title}
+          videoTitle={playlistTarget.title} audioCategory={playlistTarget.category}
         />
       )}
 

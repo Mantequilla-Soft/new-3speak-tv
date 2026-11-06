@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.87',
+    category: 'playlists',
+    date: '2026-11-06',
+    summary: "Playlists now have a type: Video or Audio, and audio ones can be a Podcast, Music, Voice notes or Other sounds. Set it when you create or edit a playlist.",
+  },
+  {
     version: '1.81.86',
     category: 'audio',
     date: '2026-11-06',

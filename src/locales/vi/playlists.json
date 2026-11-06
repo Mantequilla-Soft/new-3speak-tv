@@ -91,5 +91,17 @@
     "description": "Mô tả",
     "descriptionPlaceholder": "Giới thiệu album này (không bắt buộc)",
     "filterCount_other": "{{shown}} / {{count}} mục"
+  },
+  "type": {
+    "label": "Loại",
+    "video": "Video",
+    "audio": "Âm thanh",
+    "kindLabel": "Loại âm thanh nào?",
+    "kinds": {
+      "podcast": "Podcast",
+      "music": "Âm nhạc",
+      "voice": "Ghi chú giọng nói",
+      "sounds": "Âm thanh khác"
+    }
   }
 }

@@ -106,5 +106,17 @@
     "filterCount_few": "{{shown}} из {{count}} элементов",
     "filterCount_many": "{{shown}} из {{count}} элементов",
     "filterCount_other": "{{shown}} из {{count}} элемента"
+  },
+  "type": {
+    "label": "Тип",
+    "video": "Видео",
+    "audio": "Аудио",
+    "kindLabel": "Какое это аудио?",
+    "kinds": {
+      "podcast": "Подкаст",
+      "music": "Музыка",
+      "voice": "Голосовые заметки",
+      "sounds": "Другие звуки"
+    }
   }
 }

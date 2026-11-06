@@ -1556,7 +1556,7 @@ function GlobalAudioPlayer() {
           </div>
 
           <div className="audio-np-extras">
-            {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={20} /></button>}
+            {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title, category: nowPlaying.category || '' })} title={t('audio.player.playlist')}><MdPlaylistPlay size={20} /></button>}
             {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
             {nowPlaying.post_permlink && user !== nowPlaying.owner && <button className="audio-np-tip-btn" onClick={() => setTipTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink })} title={t('audio.post.tip')}><BiDollar size={18} /></button>}
             {nowPlaying.external && !nowPlaying.post_permlink && canTipEpisode(nowPlaying) && <button className="audio-np-tip-btn" onClick={() => setPodcastTip(nowPlaying)} title={t('audio.podcasts.tip.button')}><BiDollar size={18} /></button>}
@@ -1628,7 +1628,7 @@ function GlobalAudioPlayer() {
               {nowPlaying.post_permlink && (
                 <UpvoteCount count={npVoteCount} voted={npIsVoted} onClick={() => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink }); setShowVoteTooltip(!showVoteTooltip); }} size={12} />
               )}
-              {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title })} title={t('audio.player.playlist')}><MdPlaylistPlay size={18} /></button>}
+              {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title, category: nowPlaying.category || '' })} title={t('audio.player.playlist')}><MdPlaylistPlay size={18} /></button>}
               {/* A 3Speak audio's Hive post (also a 3Speak episode followed as an
                   outside show, lib/podcasts.js threeSpeakPost): comment on it and hype it. */}
               {loggedIn && nowPlaying.post_permlink && (
@@ -2008,7 +2008,7 @@ function GlobalAudioPlayer() {
         <AddToPlaylistModal
           isOpen={!!playlistTarget} onClose={() => setPlaylistTarget(null)}
           author={playlistTarget.author} permlink={playlistTarget.permlink}
-          videoTitle={playlistTarget.title}
+          videoTitle={playlistTarget.title} audioCategory={playlistTarget.category}
         />
       )}
 

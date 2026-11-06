@@ -96,5 +96,17 @@
     "descriptionPlaceholder": "Over dit album (optioneel)",
     "filterCount_one": "{{shown}} van {{count}} item",
     "filterCount_other": "{{shown}} van {{count}} items"
+  },
+  "type": {
+    "label": "Soort",
+    "video": "Video",
+    "audio": "Audio",
+    "kindLabel": "Wat voor audio?",
+    "kinds": {
+      "podcast": "Podcast",
+      "music": "Muziek",
+      "voice": "Spraakberichten",
+      "sounds": "Andere geluiden"
+    }
   }
 }

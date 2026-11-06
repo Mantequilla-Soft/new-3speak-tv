@@ -34,6 +34,8 @@ import UploadGate from '../ads/UploadGate';
 import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from '../../lib/uploadGate';
 import { usePortalDoc } from '../../utils/portalDocument';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../../utils/addToBlog';
+import PlaylistTypePicker from '../PlaylistTypePicker/PlaylistTypePicker';
+import { playlistTypeFields, trackCategoryToKind } from '../../lib/playlistType';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -575,7 +577,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     }
   }, [pendingPlaylist, playlists]);
 
-  const handleCreatePlaylist = useCallback(async ({ name, access, credits, musicStyle, year, label, description, thumbnail }) => {
+  const handleCreatePlaylist = useCallback(async ({ name, access, credits, musicStyle, year, label, description, thumbnail, audioKind }) => {
     if (!owner) { toast.error(t('audio.upload.toasts.signInFirst')); return; }
     const trimmed = name.trim();
     if (!trimmed) { toast.error(t('audio.upload.toasts.enterPlaylistName')); return; }
@@ -601,12 +603,16 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       // playlist doc. The indexer's _create handler ignores json_metadata, but
       // its _update handler stores `metadata` and `thumbnail` so they surface
       // through the playlists API.
+      // An upload's playlist is always audio, of the kind picked in the form.
+      const tf = playlistTypeFields('audio', audioKind);
       const createPayload = {
         name: trimmed,
         access,
         playlist_id: playlistId,
+        type: tf.type,
+        audio_kind: tf.audio_kind,
+        json_metadata: JSON.stringify({ ...tf.meta, ...(extraMeta || {}) }),
       };
-      if (extraMeta) createPayload.json_metadata = JSON.stringify({ type: 'audio', ...extraMeta });
 
       const ops = [
         ['custom_json', {
@@ -1366,6 +1372,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               pendingPlaylist={pendingPlaylist}
               onCreate={handleCreatePlaylist}
               required={mode === 'album'}
+              defaultKind={mode === 'snaps' ? 'voice' : mode === 'album' ? 'music' : trackCategoryToKind(tracks[0]?.type || 'podcast')}
             />
           )}
           {(stepKey === 'post' || stepKey === 'mainpost') && (
@@ -1669,11 +1676,12 @@ function TitlesStep({ tracks, setTitle, patchTrack, onRemove }) {
   );
 }
 
-function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, onCreate, required = false }) {
+function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, onCreate, required = false, defaultKind = 'podcast' }) {
   const { t } = useTranslation();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newName, setNewName] = useState('');
   const [newAccess, setNewAccess] = useState('public');
+  const [newKind, setNewKind] = useState(defaultKind);
   const [newCredits, setNewCredits] = useState('');
   const [newMusicStyle, setNewMusicStyle] = useState('');
   const [newYear, setNewYear] = useState('');
@@ -1691,6 +1699,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
     setShowCreateForm(false);
     setNewName('');
     setNewAccess('public');
+    setNewKind(defaultKind);
     setNewCredits('');
     setNewMusicStyle('');
     setNewYear('');
@@ -1730,12 +1739,11 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
     const ok = await onCreate({
       name: newName,
       access: newAccess,
-      credits: newCredits,
-      musicStyle: newMusicStyle,
-      year: newYear,
-      label: newLabel,
+      // Album details belong to music playlists only (the form hides them otherwise).
+      ...(newKind === 'music' ? { credits: newCredits, musicStyle: newMusicStyle, year: newYear, label: newLabel } : {}),
       description: newDescription,
       thumbnail: thumbnailUrl,
+      audioKind: newKind,
     });
     setSubmitting(false);
     if (ok) resetForm();
@@ -1842,43 +1850,52 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
               <MdLock size={14} /> {t('audio.upload.playlist.private')}
             </button>
           </div>
-          <input
-            type="text"
-            className="audio-upload-title-input"
-            value={newMusicStyle}
-            onChange={(e) => setNewMusicStyle(e.target.value)}
-            placeholder={t('audio.upload.playlist.musicStylePlaceholder')}
-            list="audio-upload-genre-options"
-            maxLength={60}
+          <PlaylistTypePicker
+            audioOnly type="audio" kind={newKind} onChange={({ kind }) => setNewKind(kind)}
+            groupClass="audio-upload-playlist-privacy" btnClass="audio-upload-playlist-privacy-btn"
+            labelClass="audio-upload-playlist-kind-label" iconSize={14} disabled={submitting}
           />
+          {newKind === 'music' && (
+            <>
+            <input
+              type="text"
+              className="audio-upload-title-input"
+              value={newMusicStyle}
+              onChange={(e) => setNewMusicStyle(e.target.value)}
+              placeholder={t('audio.upload.playlist.musicStylePlaceholder')}
+              list="audio-upload-genre-options"
+              maxLength={60}
+            />
 
-          <div className="audio-upload-album-grid">
-            <input
-              type="text"
-              className="audio-upload-title-input"
-              value={newCredits}
-              onChange={(e) => setNewCredits(e.target.value)}
-              placeholder={t('audio.upload.playlist.creditsPlaceholder')}
-              maxLength={200}
-            />
-            <input
-              type="number"
-              className="audio-upload-title-input"
-              value={newYear}
-              onChange={(e) => setNewYear(e.target.value)}
-              placeholder={t('audio.upload.playlist.yearPlaceholder')}
-              min="1900"
-              max="2100"
-            />
-            <input
-              type="text"
-              className="audio-upload-title-input"
-              value={newLabel}
-              onChange={(e) => setNewLabel(e.target.value)}
-              placeholder={t('audio.upload.playlist.labelPlaceholder')}
-              maxLength={120}
-            />
-          </div>
+            <div className="audio-upload-album-grid">
+              <input
+                type="text"
+                className="audio-upload-title-input"
+                value={newCredits}
+                onChange={(e) => setNewCredits(e.target.value)}
+                placeholder={t('audio.upload.playlist.creditsPlaceholder')}
+                maxLength={200}
+              />
+              <input
+                type="number"
+                className="audio-upload-title-input"
+                value={newYear}
+                onChange={(e) => setNewYear(e.target.value)}
+                placeholder={t('audio.upload.playlist.yearPlaceholder')}
+                min="1900"
+                max="2100"
+              />
+              <input
+                type="text"
+                className="audio-upload-title-input"
+                value={newLabel}
+                onChange={(e) => setNewLabel(e.target.value)}
+                placeholder={t('audio.upload.playlist.labelPlaceholder')}
+                maxLength={120}
+              />
+            </div>
+            </>
+          )}
 
           <textarea
             className="audio-upload-title-input audio-upload-credits-input"

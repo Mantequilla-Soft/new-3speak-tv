@@ -252,6 +252,7 @@ export default function AudioItemView({ owner, id, onBack }) {
           author={item.owner}
           permlink={postPermlink || item.permlink}
           videoTitle={title}
+          audioCategory={item.category || ''}
         />
       )}
     </div>

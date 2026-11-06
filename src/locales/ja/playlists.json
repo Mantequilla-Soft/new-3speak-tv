@@ -91,5 +91,17 @@
     "description": "説明",
     "descriptionPlaceholder": "このアルバムについて（任意）",
     "filterCount_other": "{{count}} 件中 {{shown}} 件"
+  },
+  "type": {
+    "label": "種類",
+    "video": "動画",
+    "audio": "音声",
+    "kindLabel": "どんな音声ですか？",
+    "kinds": {
+      "podcast": "ポッドキャスト",
+      "music": "音楽",
+      "voice": "ボイスメモ",
+      "sounds": "その他のサウンド"
+    }
   }
 }

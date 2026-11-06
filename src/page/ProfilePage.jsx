@@ -48,6 +48,7 @@ import WatchedPlaylistCard from "../components/Cards/WatchedPlaylistCard";
 import WatchLaterPlaylistCard from "../components/Cards/WatchLaterPlaylistCard";
 import UserAudioList from "../components/Userprofilepage/UserAudioList";
 import { createPlaylist } from "../utils/playlistOperations";
+import PlaylistTypePicker from "../components/PlaylistTypePicker/PlaylistTypePicker";
 import { useQueryClient } from "@tanstack/react-query";
 import ProfileHeader from "../components/ProfileHeader/ProfileHeader";
 import ProfileStats from "../components/ProfileHeader/ProfileStats";
@@ -130,6 +131,7 @@ function ProfilePage() {
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [newPlaylistAccess, setNewPlaylistAccess] = useState('public');
   const [newPlaylistTags, setNewPlaylistTags] = useState([]);
+  const [newPlaylistType, setNewPlaylistType] = useState({ type: 'video', kind: null });
   const [tagInput, setTagInput] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [showSocialLinkModal, setShowSocialLinkModal] = useState(false);
@@ -168,12 +170,13 @@ function ProfilePage() {
 
     setIsCreating(true);
     try {
-      await createPlaylist(newPlaylistName.trim(), newPlaylistAccess, null, newPlaylistTags);
+      await createPlaylist(newPlaylistName.trim(), newPlaylistAccess, null, newPlaylistTags, newPlaylistType.type, null, newPlaylistType.kind);
       toast.success(t('profile.playlists.created'));
       setShowCreateModal(false);
       setNewPlaylistName('');
       setNewPlaylistAccess('public');
       setNewPlaylistTags([]);
+      setNewPlaylistType({ type: 'video', kind: null });
       setTagInput('');
       setTimeout(() => {
         refetchPlaylists();
@@ -884,6 +887,7 @@ function ProfilePage() {
                 </button>
               </div>
             </div>
+            <PlaylistTypePicker type={newPlaylistType.type} kind={newPlaylistType.kind} onChange={setNewPlaylistType} disabled={isCreating} />
             <div className="form-group">
               <label>{t('profile.playlists.tags')}</label>
               <div className="tags-input-wrap">

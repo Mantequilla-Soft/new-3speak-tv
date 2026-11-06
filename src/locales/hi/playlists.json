@@ -96,5 +96,17 @@
     "descriptionPlaceholder": "इस एल्बम के बारे में (वैकल्पिक)",
     "filterCount_one": "{{count}} में से {{shown}} आइटम",
     "filterCount_other": "{{count}} में से {{shown}} आइटम"
+  },
+  "type": {
+    "label": "प्रकार",
+    "video": "वीडियो",
+    "audio": "ऑडियो",
+    "kindLabel": "किस तरह का ऑडियो?",
+    "kinds": {
+      "podcast": "पॉडकास्ट",
+      "music": "संगीत",
+      "voice": "वॉइस नोट",
+      "sounds": "अन्य ध्वनियाँ"
+    }
   }
 }
