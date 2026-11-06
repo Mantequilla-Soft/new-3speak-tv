@@ -3,7 +3,7 @@
 // checker REST API, and the HLS source from play.3speak.tv — the same sources
 // the rest of the app and the player SDK already use. Shapes mirror what the
 // old `socialPost` / `profile` / feed queries returned so callers are unchanged.
-import { getHiveClient } from '../utils/hiveNode';
+import { getHiveClient, getHiveUrl, demoteNode } from '../utils/hiveNode';
 import { getPlayerUrl } from '../utils/playerUrl';
 import { useAppStore } from './store';
 
@@ -167,11 +167,54 @@ async function fetchIncubationVideoDetails(author, permlink) {
   };
 }
 
+// A node having a bad moment answers with a JSON-RPC error of its own (HTTP 500,
+// code -32600 "Received an invalid response from the endpoint": api.deathwing.me
+// on 2026-11-05). dhive raises that as an RPCError, just like a missing post, but
+// it says nothing about the post. Taken for "not found", it showed visitors
+// "Video not found" for videos that exist, whenever the session's node hiccuped.
+const NODE_FAILURE_TEXT = [
+  'invalid response from the endpoint', 'internal error', 'bad gateway',
+  'service unavailable', 'gateway timeout', 'too many requests', 'timeout', 'upstream',
+];
+const NODE_FAILURE_CODES = new Set([-32600, -32603]);
+
+function rpcErrorText(err) {
+  const info = err?.jse_info || {};
+  return [
+    err?.message,
+    err?.jse_shortmsg,
+    info.message,
+    info?.extension?.assertion_expression,
+  ].filter(Boolean).join(' ').toLowerCase();
+}
+
+export function isHiveNodeFailure(err) {
+  const msg = rpcErrorText(err);
+  if (msg.includes('does not exist')) return false;
+  return NODE_FAILURE_CODES.has(err?.jse_info?.code) || NODE_FAILURE_TEXT.some((t) => msg.includes(t));
+}
+
+// get_content on the session's node; a node failure moves the session to the next
+// node and asks again. Every node failing is thrown on, so the page offers Retry
+// instead of claiming the video is gone.
+const NODE_ATTEMPTS = 3;
+async function getContent(author, permlink) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await hiveClient.call('condenser_api', 'get_content', [author, permlink]);
+    } catch (err) {
+      if (!isHiveNodeFailure(err) || attempt >= NODE_ATTEMPTS) throw err;
+      const failed = getHiveUrl();
+      if (demoteNode(failed) === failed) throw err; // nowhere else to go
+    }
+  }
+}
+
 export async function fetchVideoDetails(author, permlink) {
   if (!author || author === 'unknown' || !permlink) return null;
   let post;
   try {
-    post = await hiveClient.call('condenser_api', 'get_content', [author, permlink]);
+    post = await getContent(author, permlink);
   } catch (err) {
     // Newer Hive nodes throw a JSON-RPC assertion error ("Post a/p does not
     // exist", code -32602) for a missing post instead of returning an empty
@@ -181,18 +224,13 @@ export async function fetchVideoDetails(author, permlink) {
     // that reads " category=hivemind", which matched none of these patterns, so
     // every not-found fell through to `throw` and the watch page reported a
     // network error. The assertion lives in jse_info.extension instead, so the
-    // whole error surface is searched rather than one field of it.
-    const info = err?.jse_info || {};
-    const msg = [
-      err?.message,
-      err?.jse_shortmsg,
-      info.message,
-      info?.extension?.assertion_expression,
-    ].filter(Boolean).join(' ').toLowerCase();
-    const isMissing = msg.includes('does not exist')
+    // whole error surface is searched rather than one field of it. A node
+    // failure that outlasted every retry is not "missing" either.
+    const msg = rpcErrorText(err);
+    const isMissing = !isHiveNodeFailure(err) && (msg.includes('does not exist')
       || msg.includes('-32602')
       || msg.includes('assert')
-      || err?.name === 'RPCError';
+      || err?.name === 'RPCError');
     if (isMissing) {
       return await fetchIncubationVideoDetails(author, permlink);
     }

@@ -18,6 +18,30 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.71',
+    category: 'shorts',
+    date: '2026-11-05',
+    summary: "Shorts and stories now show when they were posted right under the caption, and the caption is cleaner without the extra 3Speak link.",
+  },
+  {
+    version: '1.81.70',
+    category: 'notifications',
+    date: '2026-11-05',
+    summary: "Mark all read now clears everything at once: Hive notifications, stories and new podcast episodes.",
+  },
+  {
+    version: '1.81.69',
+    category: 'shorts',
+    date: '2026-11-05',
+    summary: "Writing comments on shorts is roomier on desktop: the text box now spans the full width.",
+  },
+  {
+    version: '1.81.68',
+    category: 'general',
+    date: '2026-11-05',
+    summary: "Hiding a creator now also hides their shorts, audio and playlists from all your feeds.",
+  },
+  {
     version: '1.81.67',
     category: 'sharing',
     date: '2026-11-05',

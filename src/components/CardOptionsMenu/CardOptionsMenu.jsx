@@ -9,7 +9,8 @@ import { isLoggedIn } from "../../hive-api/aioha";
 import { useAppStore } from "../../lib/store";
 import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import AddTagModal from "../AddTagModal/AddTagModal";
-import { hideVideo, unhideVideo, hideCreator, unhideCreator } from "../../utils/userFilters";
+import { useQueryClient } from "@tanstack/react-query";
+import { hideVideo, unhideVideo, hideCreator, unhideCreator, refreshRailsAfterHide } from "../../utils/userFilters";
 import "./CardOptionsMenu.scss";
 
 // Every toast from this module is headed "Video"; the message becomes the
@@ -29,6 +30,7 @@ const toast = toastIn('Video');
  */
 function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, className = "" }) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
   const [tagOpen, setTagOpen] = useState(false);
@@ -119,12 +121,13 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
       return;
     }
     onDismiss?.("creator", { owner: author });
-    hideCreator(user, author);
+    // Their shorts, audio and playlists leave the other rails too, once saved.
+    hideCreator(user, author).then((ok) => { if (ok) refreshRailsAfterHide(queryClient); });
     toast.success(t('engagement.cardMenu.hidingCreatorToast', { author }), {
       action: {
         label: t('engagement.cardMenu.undo'),
         onClick: () => {
-          unhideCreator(user, author);
+          unhideCreator(user, author).then((ok) => { if (ok) refreshRailsAfterHide(queryClient); });
           onDismiss?.("undo-creator", { owner: author });
         },
       },

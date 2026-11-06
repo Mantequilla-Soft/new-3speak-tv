@@ -58,6 +58,13 @@ export function markStorySeen(owner, ...permlinks) {
   window.dispatchEvent(new Event(SEEN_EVENT));
 }
 
+/** Mark every story in a list seen (this browser only): "Mark all read". */
+export function markStoriesSeen(stories) {
+  for (const s of stories || []) {
+    if (!s.seen) markStorySeen(s.owner, s.permlink, s.hive_permlink);
+  }
+}
+
 // Re-render on a change from this tab (event) or another one (storage).
 function useSeenVersion() {
   const [version, setVersion] = useState(0);

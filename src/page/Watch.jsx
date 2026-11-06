@@ -13,6 +13,7 @@ import { fetchVideoDetails, fetchPlaySource, fetchTrendingFeed, fetchAuthorVideo
 // BarLoader is intentionally not imported: this page renders immediately rather
 // than blocking on the post-metadata query (see the note above the render return).
 import { useAppStore } from '../lib/store';
+import { withViewer } from '../utils/userFilters';
 import { hasConsent } from '../lib/consent';
 import { recordWatch, batchCheckWatched } from '../utils/watchHistory';
 import { dropWatchedFromFeeds } from '../utils/feedWatched';
@@ -1626,11 +1627,12 @@ function Watch({ v2 = false, routeV = null }) {
   // Gated on the related query so we ask ONCE, with the topic already known,
   // rather than firing a topic-less request and refetching a moment later.
   const { data: rawRelatedShorts = EMPTY_LIST } = useQuery({
-    queryKey: ['watch-related-shorts', currentTopic, showNsfw],
+    queryKey: ['watch-related-shorts', currentTopic, showNsfw, user || null],
     queryFn: async () => {
       const topicParam = currentTopic ? `&topic=${encodeURIComponent(currentTopic)}` : '';
       const url = appendNsfw(
-        `${SHORTS_API_URL}?page=1&limit=${WATCH_SHORTS_LIMIT}&seed=${getFeedSeed() + WATCH_SHORTS_SEED_OFFSET}${topicParam}`,
+        // The viewer rides along so creators they hid stay out of these rails.
+        withViewer(`${SHORTS_API_URL}?page=1&limit=${WATCH_SHORTS_LIMIT}&seed=${getFeedSeed() + WATCH_SHORTS_SEED_OFFSET}${topicParam}`, user),
         showNsfw,
       );
       const r = await fetch(url);

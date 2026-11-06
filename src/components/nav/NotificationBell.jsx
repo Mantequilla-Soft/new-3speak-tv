@@ -26,10 +26,10 @@ import {
 import { groupNotifications } from '../../utils/notificationGrouping';
 import { useWhaleDetection } from '../../utils/whaleDetection';
 import threeSpeakLogo from '../../assets/image/3S_mark.svg';
-import { useStoryNotifications } from '../../lib/stories';
+import { useStoryNotifications, markStoriesSeen } from '../../lib/stories';
 import StoryNotifications from './StoryNotifications';
 import PodcastNotifications from './PodcastNotifications';
-import { usePodcastNotifications } from '../../lib/podcasts';
+import { usePodcastNotifications, markPodcastNotificationsSeen } from '../../lib/podcasts';
 import './NotificationBell.scss';
 
 // Every toast from this module is headed "Notifications"; the message becomes the
@@ -109,6 +109,14 @@ function NotificationBell() {
   // New episodes of outside podcasts the user follows ("External" on /audio); an
   // unseen one turns on the same cyan dot.
   const { episodes: podcastEpisodes, unseenCount: unseenPodcasts } = usePodcastNotifications(authenticated ? user : null);
+  // "Mark all read" clears every dot: Hive (on chain), plus stories and podcast
+  // episodes (this browser). Before, it left the cyan dot on.
+  const anythingUnread = unreadCount > 0 || unseenStories > 0 || unseenPodcasts > 0;
+  const markEverythingRead = () => {
+    markStoriesSeen(stories);
+    if (user) markPodcastNotificationsSeen(user);
+    if (unreadCount > 0) markAllAsRead();
+  };
 
   // Grouping
   const grouped = useMemo(() => groupNotifications(notifications), [notifications]);
@@ -239,13 +247,13 @@ function NotificationBell() {
                   <span>{push.subscribed ? t('nav.notifications.on') : t('nav.notifications.notifyMe')}</span>
                 </button>
               )}
-              {/* Same action as on /notifications, so clearing the dot doesn't need
-                  a trip to the full page. Hive notifications only, like there. */}
-              {unreadCount > 0 && (
+              {/* Same action as on /notifications, so clearing the dots doesn't need
+                  a trip to the full page. */}
+              {anythingUnread && (
                 <button
                   type="button"
                   className="notif-header-pill"
-                  onClick={markAllAsRead}
+                  onClick={markEverythingRead}
                   disabled={markingAsRead}
                   title={t('notifications.markAllTitle')}
                 >

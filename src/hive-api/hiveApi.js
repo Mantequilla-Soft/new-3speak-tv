@@ -21,6 +21,8 @@ const chainTitle = (title) => {
   return /^re:\s/i.test(t) ? '' : t;
 };
 import { convert } from "html-to-text";
+import { stripWatchFooter } from "../utils/watchFooter";
+export { stripWatchFooter };
 import { HIVE_API_URL, CHECKER_URL, SHORTS_API_URL, USER_SHORTS_API_URL, appendNsfw } from "../utils/config";
 import { getPlayerUrl } from "../utils/playerUrl";
 import { getFeedSeed, regenerateFeedSeed } from "../utils/feedSeed";
@@ -154,6 +156,7 @@ export async function getSubscriptions(account) {
  */
 export function bodyToPlaintext(body) {
   if (!body) return "";
+  body = stripWatchFooter(body);
   // Preserve markdown links [text](url) by replacing them with placeholders before HTML conversion
   const links = [];
   let text = body.replace(/\[([^\]]*)\]\(([^)]*)\)/g, (match) => {
