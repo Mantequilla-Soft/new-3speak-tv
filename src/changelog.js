@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.82',
+    category: 'general',
+    date: '2026-11-06',
+    summary: "Escape now closes even more windows, like Tip, Transfer, Share and Promote.",
+  },
+  {
     version: '1.81.81',
     category: 'audio',
     date: '2026-11-06',
