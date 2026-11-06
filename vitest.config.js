@@ -31,6 +31,9 @@ export default defineConfig({
         'src/sw.js',
         'src/polyfills.js',
         'src/changelog.js',
+        // JSX in a .js file: the coverage remapper cannot parse it (a PARSE_ERROR
+        // in every run) and it holds only icon markup.
+        'src/icons/svg.js',
       ],
       reporter: ['text-summary', 'lcov', 'json-summary'],
       // Ratchet: raise these with the suite, never lower them to make a run pass.
