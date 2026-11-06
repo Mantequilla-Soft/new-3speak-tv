@@ -458,10 +458,11 @@ describe('formatting', () => {
 
   it('formatDate formats per language and returns nothing for an invalid date', async () => {
     const { formatDate, setLanguage } = await load()
-    expect(formatDate('2026-03-04T12:00:00Z')).toBe('Mar 4, 2026')
-    expect(formatDate(new Date('2026-03-04T12:00:00Z'), { year: 'numeric' })).toBe('2026')
+    // Local midday (no "Z"): the same calendar day in every time zone the suite runs in.
+    expect(formatDate('2026-03-04T12:00:00')).toBe('Mar 4, 2026')
+    expect(formatDate(new Date('2026-03-04T12:00:00'), { year: 'numeric' })).toBe('2026')
     expect(formatDate('nope')).toBe('')
     await setLanguage('de')
-    expect(formatDate('2026-03-04T12:00:00Z')).toBe('04.03.2026')
+    expect(formatDate('2026-03-04T12:00:00')).toBe('04.03.2026')
   })
 })

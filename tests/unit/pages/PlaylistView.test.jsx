@@ -3,7 +3,7 @@
 // a private list hidden from everyone but its owner, the videos with their date
 // filter, and the owner's tools (remove, reorder, edit, delete). An all-audio
 // playlist is drawn as a podcast show with Play and an embed code.
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest'
 import { act, fireEvent, screen, within, waitFor } from '@testing-library/react'
 import { renderWithProviders, toastMessages } from '../components/_render.jsx'
 
@@ -37,6 +37,12 @@ const { toast } = await import('sonner')
 const { useAppStore } = await import('../../../src/lib/store')
 const { default: PlaylistView } = await import('../../../src/page/PlaylistView.jsx')
 const { default: EmbedCodeHost } = await import('../../../src/components/Embed/EmbedCodeModal.jsx')
+
+// Pinned to a Wednesday midday (only Date; timers stay real). The page groups by
+// calendar day, week and month while the fixtures are "minutes/days ago", so on a
+// real clock the suite failed whenever it ran just after midnight or the 1st.
+vi.useFakeTimers({ toFake: ['Date'], now: new Date('2026-11-04T12:00:00Z') })
+afterAll(() => vi.useRealTimers())
 
 const now = Math.floor(Date.now() / 1000)
 const PLAYLIST = {

@@ -4,7 +4,7 @@
 // activity summary whose cards filter the list, grouped votes and follows that
 // unfold, "Mark all read" for every kind of dot, Refresh, an error with Retry,
 // and Load more. The Hive notification hook is a stand-in.
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach, afterAll } from 'vitest'
 import { act, screen, within } from '@testing-library/react'
 import { renderWithProviders } from '../components/_render.jsx'
 
@@ -37,6 +37,12 @@ vi.mock('../../../src/lib/podcasts', () => ({
 
 const { useAppStore } = await import('../../../src/lib/store')
 const { default: Notifications } = await import('../../../src/page/Notifications.jsx')
+
+// Pinned to a Wednesday midday (only Date; timers stay real). The page groups by
+// calendar day, week and month while the fixtures are "minutes/days ago", so on a
+// real clock the suite failed whenever it ran just after midnight or the 1st.
+vi.useFakeTimers({ toFake: ['Date'], now: new Date('2026-11-04T12:00:00Z') })
+afterAll(() => vi.useRealTimers())
 
 const ago = (min) => new Date(Date.now() - min * 60000).toISOString().replace('Z', '')
 const NOTIFS = [
