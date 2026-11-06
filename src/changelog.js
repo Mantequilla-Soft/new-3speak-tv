@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.88',
+    category: 'upload',
+    date: '2026-11-06',
+    summary: "Audio you upload into a Music or Podcast playlist is now marked as music or podcast to match.",
+  },
+  {
     version: '1.81.87',
     category: 'playlists',
     date: '2026-11-06',

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import {
@@ -35,7 +35,7 @@ import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from '../../l
 import { usePortalDoc } from '../../utils/portalDocument';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../../utils/addToBlog';
 import PlaylistTypePicker from '../PlaylistTypePicker/PlaylistTypePicker';
-import { playlistTypeFields, trackCategoryToKind } from '../../lib/playlistType';
+import { playlistTypeFields, trackCategoryToKind, storedPlaylistType } from '../../lib/playlistType';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -160,6 +160,10 @@ const TRACK_TYPES = [
   { value: 'audiobook',     labelKey: 'audio.categories.audiobook' },
   { value: 'interview',     labelKey: 'audio.categories.interview' },
 ];
+
+// The track type a playlist's audio kind stands for. "Other sounds" has none,
+// so tracks going there keep the type they have.
+const TRACK_TYPE_FOR_KIND = { music: 'song', podcast: 'podcast', voice: 'voice_message' };
 
 // Hardcoded suggestions; users can still type any genre into the field.
 const MUSIC_GENRES = [
@@ -427,7 +431,22 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   useEffect(() => {
     if (beneList.length === 0) setBeneRemaining(isPremium ? 100 : 90);
   }, [isPremium, beneList.length]);
-  const [pendingPlaylist, setPendingPlaylist] = useState(null); // { id, name, access } shown while waiting for indexer
+  const [pendingPlaylist, setPendingPlaylist] = useState(null); // { id, name, access, type, audio_kind } shown while waiting for indexer
+
+  // The chosen playlist's kind decides what its tracks are (a recording into
+  // a podcast playlist is a podcast, not a voice note). Only a kind the owner
+  // picked counts. Choosing the playlist retypes the tracks there are; tracks
+  // added afterwards start with it. The type stays editable per track.
+  const playlistTrackType = useMemo(() => {
+    const p = playlists.find((pl) => pl.id === playlistChoice)
+      || (pendingPlaylist && pendingPlaylist.id === playlistChoice ? pendingPlaylist : null);
+    return TRACK_TYPE_FOR_KIND[storedPlaylistType(p).kind] || null;
+  }, [playlists, playlistChoice, pendingPlaylist]);
+  const playlistTrackTypeRef = useRef(null);
+  useEffect(() => {
+    playlistTrackTypeRef.current = playlistTrackType;
+    if (playlistTrackType) setTracks((prev) => prev.map((tr) => (tr.type === playlistTrackType ? tr : { ...tr, type: playlistTrackType })));
+  }, [playlistTrackType]);
 
   const addBlobAsTrack = useCallback(async (blob, filename, source = 'file', overrideType = null) => {
     const url = URL.createObjectURL(blob);
@@ -444,7 +463,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       // Optional metadata captured in the Titles step. Caller may
       // override the auto-derived type — e.g. an OpenPods recording
       // hand-off pre-fills 'podcast'.
-      type: overrideType ?? (source === 'record' ? 'voice_message' : 'podcast'),
+      type: overrideType ?? playlistTrackTypeRef.current ?? (source === 'record' ? 'voice_message' : 'podcast'),
       genre: '',
       bpm: '',
       // Per-track publish config (snaps + album-post comments).
@@ -642,7 +661,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       await broadcastAudioOps(ops);
       toast.success(t('audio.upload.toasts.playlistCreated'));
       setPlaylistChoice(playlistId);
-      setPendingPlaylist({ id: playlistId, name: trimmed, access });
+      setPendingPlaylist({ id: playlistId, name: trimmed, access, type: tf.type, audio_kind: tf.audio_kind });
       setTimeout(() => {
         refetchPlaylists();
         queryClient.invalidateQueries({ queryKey: ['myPlaylists', owner] });
