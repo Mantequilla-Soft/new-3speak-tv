@@ -300,7 +300,7 @@ describe('the tip window for a member: HIVE and HBD', () => {
   // BUG: an amount of 0 (or a negative one) passes every check (TipModal.jsx:206
   // tests only that the text is not empty) and is handed to the wallet, which
   // then fails with its own error instead of the form saying what is wrong.
-  it.skip('BUG: refuses an amount of zero or less before asking the wallet', async () => {
+  it('BUG: refuses an amount of zero or less before asking the wallet', async () => {
     const { user } = mount()
     await screen.findByText('25')
     await user.type(field('Amount:'), '0')
@@ -312,7 +312,7 @@ describe('the tip window for a member: HIVE and HBD', () => {
   // to their inputs (TipModal.jsx:445, :455, :473, and the Lightning ones at
   // :336, :355), so the amount, currency and memo boxes have no
   // accessible name. Only "How often" (MonthlyField, useId) is labelled.
-  it.skip('BUG: the amount, currency and memo fields are labelled', async () => {
+  it('BUG: the amount, currency and memo fields are labelled', async () => {
     mount()
     expect(screen.getByRole('spinbutton', { name: /Amount/ })).toBeInTheDocument()
     expect(screen.getByRole('combobox', { name: /Currency/ })).toBeInTheDocument()
