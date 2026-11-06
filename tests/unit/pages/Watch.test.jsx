@@ -68,7 +68,7 @@ vi.mock('../../../src/components/playVideo/PlayVideo', () => ({
       <h1>{p.videoDetails?.title || 'Untitled while loading'}</h1>
       <video ref={p.videoRef} />
       {p.playlistData && <p>{`Playlist ${p.playlistData.playlist.name}, video ${p.playlistData.currentIndex + 1} of ${p.playlistData.videos.length}`}</p>}
-      {p.mediaUnavailable && <p>Media unavailable</p>}
+      {p.mediaUnavailable && <p>{p.mediaScheduledOn ? `Scheduled for ${p.mediaScheduledOn}` : 'Media unavailable'}</p>}
       {p.mediaBlocked && <button type="button" onClick={p.onRetryPlayback}>Retry playback</button>}
       {p.belowPlayerSlot}
       {p.recommendations}
@@ -202,8 +202,18 @@ describe('the watch page', () => {
 
     it('a 404 from the origin marks the video unavailable and reports it', async () => {
       await failWith({ fatal: true, code: 404, message: 'HLS fatal error: manifestLoadError' })
-      expect(screen.getByText('Media unavailable')).toBeInTheDocument()
+      // Shown once the checker says the post is not scheduled (the lookup is async).
+      expect(await screen.findByText('Media unavailable')).toBeInTheDocument()
+      expect(m.scheduled).toHaveBeenCalledWith('badadib', 'lake-day')
       expect(m.report).toHaveBeenCalledWith('badadib', 'lake-day', null)
+    })
+
+    it('a post scheduled for later says so instead of "unavailable"', async () => {
+      const scheduledOn = new Date(Date.now() + 86400000).toISOString()
+      m.scheduled = vi.fn(async () => ({ owner: 'badadib', scheduledOn }))
+      await failWith({ fatal: true, code: 404, message: 'HLS fatal error: manifestLoadError' })
+      expect(await screen.findByText(`Scheduled for ${scheduledOn}`)).toBeInTheDocument()
+      expect(screen.queryByText('Media unavailable')).not.toBeInTheDocument()
     })
 
     it('a blocked or dropped request only offers a retry, and reports nothing', async () => {
