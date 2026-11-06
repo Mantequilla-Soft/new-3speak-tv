@@ -479,7 +479,7 @@ describe('the chunked upload', () => {
   // is only filled from create/status and never updated when a chunk lands
   // (src/context/EmbedUploadContext.jsx, paint() at line 1145 and the success
   // branch at line 1200), so a finished upload still reads "0 of 3 chunks".
-  it.skip('BUG: the chunk counter counts the chunks that landed', async () => {
+  it('BUG: the chunk counter counts the chunks that landed', async () => {
     const { result } = await startWith()
     await settled(result)
     expect(result.current.uploadDetail).toMatchObject({ chunksDone: 3, chunksTotal: 3 })
@@ -562,7 +562,7 @@ describe('cancelling', () => {
   // lines 1453-1467) writes the SHARED refs and state, so it marks the NEW
   // upload as failed, nulls the new attempt's promise (publish then uploads the
   // file a second time) and lets the details step start yet another upload.
-  it.skip('BUG: replacing the video mid-upload does not mark the new upload as failed', async () => {
+  it('BUG: replacing the video mid-upload does not mark the new upload as failed', async () => {
     h.tus.behaviour = patchBlocked
     // Chunks never answer, so both uploads are still running when we look.
     h.xhr.handler = (path, req) => (path === '/upload/chunk' ? 'hang' : h.defaultChunkServer(path, req))
