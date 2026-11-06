@@ -69,7 +69,14 @@
     "beneficiariesButton": "MGA BENEFICIARY",
     "range": "Saklaw: hindi bababa sa 15 minuto mula ngayon, hanggang 90 araw.",
     "cancelPost": "I-cancel ang naka-schedule na post",
-    "saveChanges": "I-save ang mga pagbabago"
+    "saveChanges": "I-save ang mga pagbabago",
+    "proof": {
+      "walletPrompt": "Kumpirmahin ang iyong naka-iskedyul na post",
+      "notSignedIn": "Hindi makumpirma na naka-sign in ka bilang @{{owner}}. Mag-log out at mag-log in muli, saka subukang muli.",
+      "noGrant": "Kailangan ng pag-iskedyul na bigyan ng iyong account ang @threespeak ng posting authority.",
+      "unavailable": "Hindi makumpirma ang naka-iskedyul na post na ito sa ngayon. Pakisubukang muli mamaya.",
+      "refused": "Tinanggihan ang naka-iskedyul na post dahil hindi makumpirma na sa iyo ito. Mag-log out at mag-log in muli, saka subukang muli."
+    }
   },
   "composer": {
     "placeholder": "Isulat dito ang description mo...",

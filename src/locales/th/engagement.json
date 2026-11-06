@@ -6,6 +6,7 @@
       "allRequired": "ต้องกรอกทุกช่อง",
       "loginRequired": "โปรดเข้าสู่ระบบเพื่อส่งทิป",
       "insufficientBalance": "ยอดคงเหลือไม่พอ",
+      "amountPositive": "กรอกจำนวนที่มากกว่าศูนย์",
       "invalidUsername": "ชื่อผู้ใช้ไม่ถูกต้อง",
       "transferFailed": "โอนไม่สำเร็จ: {{message}}"
     },

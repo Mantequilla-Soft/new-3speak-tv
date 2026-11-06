@@ -6,6 +6,7 @@
       "allRequired": "Tutti i campi sono obbligatori",
       "loginRequired": "Accedi per inviare una mancia",
       "insufficientBalance": "Saldo insufficiente",
+      "amountPositive": "Inserisci un importo maggiore di zero",
       "invalidUsername": "Nome utente non valido",
       "transferFailed": "Trasferimento non riuscito: {{message}}"
     },

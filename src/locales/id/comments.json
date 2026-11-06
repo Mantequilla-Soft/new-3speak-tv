@@ -106,6 +106,8 @@
     "commentButton": "Komentar",
     "count_other": "{{count}} Komentar",
     "edited": "(diedit)",
+    "hideComment": "Sembunyikan komentar",
+    "showComment": "Tampilkan komentar dari @{{user}}",
     "saving": "Menyimpan...",
     "translation": "Terjemahan",
     "translationFailed": "Terjemahan gagal. Apakah layanan terjemahan sedang berjalan?",

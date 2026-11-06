@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Hindi na available ang video na ito",
     "unavailableBody": "Hindi mahanap sa network ang media ng lumang upload na ito. Nasa blockchain pa rin ang post, pero hindi na mapapanood ang video.",
+    "scheduledTitle": "Naka-iskedyul ang post na ito",
+    "scheduledBody": "Ipa-publish ito sa {{date}}. Mapapanood na ang video simula noon.",
     "blockedTitle": "Hindi ma-load ang video ngayon",
     "blockedBody": "Hindi sumagot ang isa sa mga video server namin. Ayos lang ang video mismo, kaya subukan ulit."
   },

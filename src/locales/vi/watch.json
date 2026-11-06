@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Video này không còn khả dụng",
     "unavailableBody": "Không tìm thấy tệp phương tiện của video tải lên cũ này trên mạng. Bài đăng vẫn tồn tại trên blockchain, nhưng video không thể phát được nữa.",
+    "scheduledTitle": "Bài đăng này đã được lên lịch",
+    "scheduledBody": "Bài sẽ được đăng vào {{date}}. Bạn có thể xem video từ lúc đó.",
     "blockedTitle": "Hiện không thể tải video",
     "blockedBody": "Một trong các máy chủ video của chúng tôi không phản hồi. Bản thân video không có vấn đề gì, vui lòng thử lại."
   },

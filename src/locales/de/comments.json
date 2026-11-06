@@ -111,6 +111,8 @@
     "count_one": "{{count}} Kommentar",
     "count_other": "{{count}} Kommentare",
     "edited": "(bearbeitet)",
+    "hideComment": "Kommentar ausblenden",
+    "showComment": "Kommentar von @{{user}} einblenden",
     "saving": "Wird gespeichert...",
     "translation": "Übersetzung",
     "translationFailed": "Übersetzung fehlgeschlagen. Läuft der Übersetzungsdienst?",

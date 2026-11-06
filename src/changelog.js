@@ -18,6 +18,84 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.85',
+    category: 'watch',
+    date: '2026-11-06',
+    summary: "Scheduled posts now show their description, and the player says the post is scheduled instead of no longer available.",
+  },
+  {
+    version: '1.81.84',
+    category: 'upload',
+    date: '2026-11-06',
+    summary: "The edit scheduled post popup now matches the uploader, and both schedule popups show an inline calendar.",
+  },
+  {
+    version: '1.81.82',
+    category: 'general',
+    date: '2026-11-06',
+    summary: "Escape now closes even more windows, like Tip, Transfer, Share and Promote.",
+  },
+  {
+    version: '1.81.81',
+    category: 'audio',
+    date: '2026-11-06',
+    summary: "Lock-screen controls and track info now stay up to date for your whole listening session.",
+  },
+  {
+    version: '1.81.80',
+    category: 'audio',
+    date: '2026-11-06',
+    summary: "Albums and lists in the audio player now keep playing all the way through with Next, Previous and autoplay.",
+  },
+  {
+    version: '1.81.79',
+    category: 'upload',
+    date: '2026-11-06',
+    summary: "Picking a thumbnail frame now works with more .mov video files.",
+  },
+  {
+    version: '1.81.78',
+    category: 'podcasts',
+    date: '2026-11-06',
+    summary: "Your podcast listening spots now stay with the right account when you switch accounts.",
+  },
+  {
+    version: '1.81.77',
+    category: 'upload',
+    date: '2026-11-06',
+    summary: "Uploads now show a more accurate progress count, and swapping your video mid-upload is smoother.",
+  },
+  {
+    version: '1.81.76',
+    category: 'notifications',
+    date: '2026-11-06',
+    summary: "On the Notifications page (/notifications), each person in a grouped notification now opens their own notification.",
+  },
+  {
+    version: '1.81.75',
+    category: 'home',
+    date: '2026-11-06',
+    summary: "\"Add tag\" in a video card's options menu now opens the tag window.",
+  },
+  {
+    version: '1.81.74',
+    category: 'tips',
+    date: '2026-11-06',
+    summary: "Tips now check the amount first, so you get a clear message before your wallet opens.",
+  },
+  {
+    version: '1.81.73',
+    category: 'general',
+    date: '2026-11-06',
+    summary: "The top bar, notifications, comments and the upload picker now work fully with a keyboard and screen readers.",
+  },
+  {
+    version: '1.81.72',
+    category: 'general',
+    date: '2026-11-06',
+    summary: "Press Escape to close windows like Settings, Report, Save to playlist and the update popup.",
+  },
+  {
     version: '1.81.71',
     category: 'shorts',
     date: '2026-11-05',

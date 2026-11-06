@@ -9,6 +9,12 @@ import {
 } from './helpers/hive.js'
 
 const lowWeightKey = userKey('erin')
+// A Ledger-style account: separate active and owner keys (aioha's Ledger login
+// usually holds the owner key), plus a low-weight owner key.
+const ownerKey = userKey('lena-owner')
+const activeKey = userKey('lena-active')
+const weakOwnerKey = userKey('lena-weak')
+const roleAuth = (keys, threshold = 1) => ({ weight_threshold: threshold, account_auths: [], key_auths: keys })
 const FIXTURES = {
   accounts: accounts(
     hiveAccount('alice'),
@@ -16,6 +22,11 @@ const FIXTURES = {
     hiveAccount('carol', { grant: false }),
     // Holds a posting key, but below the account's threshold.
     { ...hiveAccount('erin'), posting: { weight_threshold: 2, account_auths: [['threespeak', 2]], key_auths: [[lowWeightKey.createPublic().toString(), 1]] } },
+    {
+      ...hiveAccount('lena'),
+      active: roleAuth([[activeKey.createPublic().toString(), 1]]),
+      owner: roleAuth([[ownerKey.createPublic().toString(), 2], [weakOwnerKey.createPublic().toString(), 1]], 2),
+    },
   ),
   fetch: [],
 }
@@ -112,6 +123,25 @@ describe('wallet login', () => {
   it('a key below the posting threshold is not enough', async () => {
     const challenge = await challengeFor('erin')
     const r = await post('/api/auth/wallet/login', { username: 'erin', challenge, signature: signChallenge(lowWeightKey, challenge) })
+    expect(r.status).toBe(401)
+  })
+
+  it('a signature from the owner key opens a session too (a Ledger login)', async () => {
+    const challenge = await challengeFor('lena')
+    const r = await post('/api/auth/wallet/login', { username: 'lena', challenge, signature: signChallenge(ownerKey, challenge) })
+    expect(r.status).toBe(200)
+    expect(r.body).toEqual({ success: true, username: 'lena' })
+  })
+
+  it('a signature from the active key opens a session too', async () => {
+    const challenge = await challengeFor('lena')
+    const r = await post('/api/auth/wallet/login', { username: 'lena', challenge, signature: signChallenge(activeKey, challenge) })
+    expect(r.status).toBe(200)
+  })
+
+  it('an owner key below the owner threshold is not enough', async () => {
+    const challenge = await challengeFor('lena')
+    const r = await post('/api/auth/wallet/login', { username: 'lena', challenge, signature: signChallenge(weakOwnerKey, challenge) })
     expect(r.status).toBe(401)
   })
 

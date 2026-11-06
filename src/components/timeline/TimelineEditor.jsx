@@ -292,7 +292,7 @@ function LinkSheet({ initial, defaultAt, duration, onSave, onClose }) {
         aria-label={editing ? t('upload.timeline.form.editTitle') : t('upload.timeline.form.addTitle')}
         onClick={(e) => e.stopPropagation()}
       >
-        <ModalHeader
+        <ModalHeader closeOnEscape={false}
           className="tle-sheet__head"
           title={editing ? t('upload.timeline.form.editTitle') : t('upload.timeline.form.addTitle')}
           onClose={onClose}

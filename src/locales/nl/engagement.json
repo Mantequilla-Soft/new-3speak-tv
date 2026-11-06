@@ -6,6 +6,7 @@
       "allRequired": "Alle velden zijn verplicht",
       "loginRequired": "Log in om een fooi te sturen",
       "insufficientBalance": "Onvoldoende saldo",
+      "amountPositive": "Vul een bedrag groter dan nul in",
       "invalidUsername": "Ongeldige gebruikersnaam",
       "transferFailed": "Overboeking mislukt: {{message}}"
     },

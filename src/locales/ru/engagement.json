@@ -6,6 +6,7 @@
       "allRequired": "Заполните все поля",
       "loginRequired": "Войдите, чтобы отправить чаевые",
       "insufficientBalance": "Недостаточно средств",
+      "amountPositive": "Введите сумму больше нуля",
       "invalidUsername": "Неверное имя пользователя",
       "transferFailed": "Перевод не удался: {{message}}"
     },

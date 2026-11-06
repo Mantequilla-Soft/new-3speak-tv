@@ -6,6 +6,7 @@
       "allRequired": "সব ঘর পূরণ করা আবশ্যক",
       "loginRequired": "টিপ পাঠাতে লগ ইন করুন",
       "insufficientBalance": "পর্যাপ্ত ব্যালেন্স নেই",
+      "amountPositive": "শূন্যের চেয়ে বেশি পরিমাণ লিখুন",
       "invalidUsername": "ইউজারনেম সঠিক নয়",
       "transferFailed": "ট্রান্সফার ব্যর্থ: {{message}}"
     },

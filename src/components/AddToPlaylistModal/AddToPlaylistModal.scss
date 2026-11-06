@@ -369,7 +369,8 @@
       .form-group {
         margin-bottom: 16px;
 
-        label {
+        label,
+        .form-label {
           display: block;
           font-size: 13px;
           font-weight: 500;

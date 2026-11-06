@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Video hii haipatikani tena",
     "unavailableBody": "Faili ya upakiaji huu wa zamani haikuweza kupatikana kwenye mtandao. Chapisho bado lipo kwenye blockchain, lakini video haiwezi kuchezwa tena.",
+    "scheduledTitle": "Chapisho hili limepangwa",
+    "scheduledBody": "Litachapishwa {{date}}. Video itaweza kutazamwa kuanzia wakati huo.",
     "blockedTitle": "Imeshindwa kupakia video kwa sasa",
     "blockedBody": "Mojawapo ya seva zetu za video haikujibu. Video yenyewe iko salama, kwa hivyo tafadhali jaribu tena."
   },

@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toastIn } from '../../utils/toast';
-import { MdPeopleAlt } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { CHECKER_API_KEY } from '../../utils/config';
 import { getMinMaxDates, formatDateTimeLocal } from '../../utils/schedulingHelpers';
+import ScheduleCalendar from './ScheduleCalendar';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
+import { proveScheduledPost, scheduledPostWriteError } from '../../utils/scheduledPostProof';
 import MarkdownComposer from './MarkdownComposer';
 import Beneficiary_modal from '../modal/Beneficiary_modal';
+import StepActions from '../embed-studio/StepActions';
+import SettingInfo, { SettingSheet } from '../embed-studio/SettingInfo';
 import { useTranslation } from 'react-i18next';
-// Form look is inherited from the legacy studio's stylesheet (.studio-main-container,
-// .input-group, .preview-tags, .advance-option, .bene-btn-wrap, .submit-btn-wrap, …)
-// plus EditScheduledPost.scss for the thumbnail row + the secondary buttons.
+// Same look as the uploader's details step: the legacy studio's form base
+// (.studio-main-container, .input-group, .preview-tags, …), the settings tiles and
+// page type scale from EmbedDetails.scss (`.embed-details-page`), its bottom sheets
+// (SettingSheet) and its action row (StepActions). EditScheduledPost.scss adds the
+// thumbnail row, which the uploader handles on a separate step.
 import '../legacy-studio/StudioPage.scss';
+import '../embed-studio/EmbedDetails.scss';
 import '../../page/EditScheduledPost.scss';
+
+const REWARD_LABELS = {
+  default: 'upload.details.rewards.default',
+  powerup: 'upload.details.rewards.powerup',
+  decline: 'upload.details.rewards.decline',
+};
 
 // Every toast from this module is headed "Post"; the message becomes the
 // line under it. See utils/toast.js.
@@ -88,8 +100,10 @@ function listToBenes(list) {
  *   onSaved      (changes) => void          — after a successful save
  *   onCancelled  () => void                 — after the post is cancelled
  *   showHeader   bool (default true)        — render the title/permlink header
+ *   showBack     bool (default true)        — render the Back button (the popup
+ *                                             has its own X, so it turns this off)
  */
-export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCancelled, showHeader = true }) {
+export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCancelled, showHeader = true, showBack = true }) {
   const { t } = useTranslation();
   const { user } = useAppStore();
 
@@ -106,6 +120,10 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
   const [thumbnailUploading, setThumbnailUploading] = useState(false);
   const [payoutOptions, setPayoutOptions] = useState('default');
   const [scheduleDateTime, setScheduleDateTime] = useState('');
+  // Bottom sheets, as on the uploader's details step.
+  const [rewardsOpen, setRewardsOpen] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [scheduleDraft, setScheduleDraft] = useState('');
 
   // Beneficiary modal state — same contract as EmbedUploadContext.
   const [isBeneficiaryModalOpen, setIsBeneficiaryModalOpen] = useState(false);
@@ -172,6 +190,11 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
     }
   }
 
+  function openSchedule() {
+    setScheduleDraft(scheduleDateTime || '');
+    setScheduleOpen(true);
+  }
+
   function toggleBeneficiaryModal() {
     setIsBeneficiaryModalOpen((v) => !v);
   }
@@ -187,7 +210,10 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
       }
       const scheduledOnIso = new Date(scheduleDateTime).toISOString();
       const url = `${CHECKER_BASE.replace(/\/$/, '')}/scheduled-posts/update`;
+      // The owner's signature, right before the write (utils/scheduledPostProof.js).
+      const proof = await proveScheduledPost({ action: 'update', owner: user, permlink });
       const resp = await axios.post(url, {
+        ...proof,
         owner: user,
         permlink,
         updates: {
@@ -207,7 +233,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
       onSaved?.({ title, description, thumbnail, scheduledOn: scheduledOnIso });
     } catch (err) {
       console.error('update scheduled post:', err);
-      toast.error(err?.response?.data?.error || err?.message || t('studio.scheduled.updateFailed'));
+      toast.error(scheduledPostWriteError(err, t('studio.scheduled.updateFailed')));
     } finally {
       setSaving(false);
     }
@@ -219,25 +245,26 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
     setSaving(true);
     try {
       const url = `${CHECKER_BASE.replace(/\/$/, '')}/scheduled-posts/cancel`;
-      await axios.post(url, { owner: user, permlink }, {
+      const proof = await proveScheduledPost({ action: 'cancel', owner: user, permlink });
+      await axios.post(url, { ...proof, owner: user, permlink }, {
         headers: CHECKER_API_KEY ? { Authorization: `Bearer ${CHECKER_API_KEY}` } : {},
       });
       toast.success(t('studio.scheduled.cancelled'));
       onCancelled?.();
     } catch (err) {
       console.error('cancel scheduled post:', err);
-      toast.error(err?.response?.data?.error || err?.message || t('studio.scheduled.cancelFailed'));
+      toast.error(scheduledPostWriteError(err, t('studio.scheduled.cancelFailed')));
     } finally {
       setSaving(false);
     }
   }
 
   if (loading) {
-    return <div className="studio-main-container edit-scheduled-page"><p style={{ padding: 20 }}>{t('common.status.loading')}</p></div>;
+    return <div className="studio-main-container edit-scheduled-page embed-details-page"><p style={{ padding: 20 }}>{t('common.status.loading')}</p></div>;
   }
   if (error) {
     return (
-      <div className="studio-main-container edit-scheduled-page">
+      <div className="studio-main-container edit-scheduled-page embed-details-page">
         {showHeader && <div className="studio-page-header"><h1>{t('studio.scheduled.title')}</h1></div>}
         <div className="studio-page-content"><p style={{ padding: '0 20px' }}>{error}</p></div>
       </div>
@@ -249,7 +276,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
 
   return (
     <>
-      <div className="studio-main-container edit-scheduled-page">
+      <div className="studio-main-container edit-scheduled-page embed-details-page">
         {showHeader && (
           <div className="studio-page-header">
             <h1>{t('studio.scheduled.title')}</h1>
@@ -329,76 +356,88 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
               </div>
 
               <div className="advance-option">
-                <div className="beneficiary-wrap mb">
+                <div className="beneficiary-wrap is-clickable" onClick={() => setRewardsOpen(true)}>
                   <div className="wrap">
-                    <span>{t('studio.scheduled.rewards')}</span>
-                    <span>{t('studio.scheduled.rewardsDesc')}</span>
+                    <span>{t('upload.details.rewards.label')}<SettingInfo title={t('upload.details.rewards.label')}>{t('upload.details.rewards.info')}</SettingInfo></span>
+                    <span>{t('upload.details.rewards.hint')}</span>
                   </div>
-                  <div className="select-wrap">
-                    <select value={payoutOptions} onChange={(e) => setPayoutOptions(e.target.value)}>
-                      <option value="default"> {t('studio.scheduled.payoutDefault')} </option>
-                      <option value="powerup">{t('studio.scheduled.payoutPowerup')}</option>
-                      <option value="decline">{t('studio.scheduled.payoutDecline')}</option>
-                    </select>
-                  </div>
+                  <div className="tile-value">{t(REWARD_LABELS[payoutOptions] || REWARD_LABELS.default)}</div>
                 </div>
-                <div className="beneficiary-wrap">
+                <div className="beneficiary-wrap is-clickable" onClick={toggleBeneficiaryModal}>
                   <div className="wrap">
-                    <span>{t('studio.scheduled.beneficiaries')}</span>
-                    <span>{t('studio.scheduled.beneficiariesDesc')}</span>
+                    <span>{t('upload.details.beneficiaries.label')}<SettingInfo title={t('upload.details.beneficiaries.label')}>{t('upload.details.beneficiaries.info')}</SettingInfo></span>
+                    <span>{t('upload.details.beneficiaries.hint')}</span>
                   </div>
-                  <div className="bene-btn-wrap" onClick={toggleBeneficiaryModal}>
-                    {list.length > 0 && <span>{list.length}</span>}
-                    <span> {t('studio.scheduled.beneficiariesButton')}</span>
-                    <MdPeopleAlt />
-                  </div>
+                  <div className="tile-value">{list.length > 0
+                    ? t('upload.details.beneficiaries.accounts', { count: list.length })
+                    : t('upload.details.beneficiaries.none')}</div>
                 </div>
-              </div>
-
-              <div className="schedule-box-wrap" style={{ marginTop: '12px' }}>
-                <div className="input-group">
-                  <label>{t('studio.scheduled.fields.scheduledFor')}</label>
-                  <input
-                    type="datetime-local"
-                    value={scheduleDateTime}
-                    min={minFormatted}
-                    max={maxFormatted}
-                    onChange={(e) => setScheduleDateTime(e.target.value)}
-                  />
+                <div className="beneficiary-wrap schedule-tile is-clickable" onClick={openSchedule}>
                   <div className="wrap">
-                    <span>{t('studio.scheduled.range')}</span>
+                    <span>{t('studio.scheduled.fields.scheduledFor')}</span>
+                    <span>{scheduleDateTime
+                      ? new Date(scheduleDateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+                      : ''}</span>
                   </div>
+                  <div className="tile-value">{t('upload.details.schedule.changeTime')}</div>
                 </div>
               </div>
 
-              <div className="submit-btn-wrap">
-                <button
-                  type="button"
-                  className="es-btn-secondary"
-                  onClick={() => onClose?.()}
-                  disabled={saving}
-                >
-                  {t('common.actions.back')}
-                </button>
-                <button
-                  type="button"
-                  className="es-btn-danger"
-                  onClick={handleCancel}
-                  disabled={saving}
-                >
-                  {t('studio.scheduled.cancelPost')}
-                </button>
-                <button
-                  className="es-btn-save"
-                  onClick={handleSave}
-                  disabled={saving || thumbnailUploading}
-                >
-                  {saving ? t('common.actions.saving') : t('studio.scheduled.saveChanges')}
-                </button>
-              </div>
+              <SettingSheet title={t('upload.details.rewards.label')} open={rewardsOpen} onClose={() => setRewardsOpen(false)}>
+                <div className="option-sheet">
+                  {[
+                    { value: 'default', label: t('upload.details.rewards.default'), hint: t('upload.details.rewards.defaultHint') },
+                    { value: 'powerup', label: t('upload.details.rewards.powerup'), hint: t('upload.details.rewards.powerupHint') },
+                    { value: 'decline', label: t('upload.details.rewards.decline'), hint: t('upload.details.rewards.declineHint') },
+                  ].map((opt) => (
+                    <button
+                      type="button"
+                      key={opt.value}
+                      className={`option-sheet__item${payoutOptions === opt.value ? ' is-active' : ''}`}
+                      onClick={() => { setPayoutOptions(opt.value); setRewardsOpen(false); }}
+                    >
+                      <strong>{opt.label}</strong>
+                      <span>{opt.hint}</span>
+                    </button>
+                  ))}
+                </div>
+              </SettingSheet>
+
+              <SettingSheet title={t('studio.scheduled.fields.scheduledFor')} open={scheduleOpen} onClose={() => setScheduleOpen(false)}>
+                <ScheduleCalendar
+                  value={scheduleDraft}
+                  min={minFormatted}
+                  max={maxFormatted}
+                  onChange={setScheduleDraft}
+                />
+                <p className="schedule-sheet__note">{t('studio.scheduled.range')}</p>
+                <div className="sheet-actions">
+                  <button
+                    type="button"
+                    className="sheet-actions__ok"
+                    disabled={!scheduleDraft}
+                    onClick={() => { setScheduleDateTime(scheduleDraft); setScheduleOpen(false); }}
+                  >
+                    {t('common.actions.ok')}
+                  </button>
+                </div>
+              </SettingSheet>
 
             </div>
           </div>
+          {/* The uploader's action row. Cancelling is a neutral outline like every
+              other secondary action: 3Speak never uses red buttons. */}
+          <StepActions
+            placement="bottom"
+            back={showBack ? { label: t('common.actions.back'), onClick: () => onClose?.(), disabled: saving } : null}
+            secondary={[{ key: 'cancel', label: t('studio.scheduled.cancelPost'), onClick: handleCancel, disabled: saving }]}
+            primary={[{
+              key: 'save',
+              label: saving ? t('common.actions.saving') : t('studio.scheduled.saveChanges'),
+              onClick: handleSave,
+              disabled: saving || thumbnailUploading,
+            }]}
+          />
         </div>
       </div>
 

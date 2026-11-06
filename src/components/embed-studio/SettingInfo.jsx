@@ -52,7 +52,7 @@ export function SettingSheet({ title, open, onClose, children }) {
         aria-label={title}
         onClick={(e) => e.stopPropagation()}
       >
-        <ModalHeader className="setting-info__head" title={title} onClose={(e) => { e.stopPropagation(); onClose(); }} />
+        <ModalHeader closeOnEscape={false} className="setting-info__head" title={title} onClose={(e) => { e.stopPropagation(); onClose(); }} />
         <div className="setting-info__body">{children}</div>
       </div>
     </div>,
@@ -104,7 +104,7 @@ export default function SettingInfo({ title, children }) {
             aria-label={title}
             onClick={(e) => e.stopPropagation()}
           >
-            <ModalHeader className="setting-info__head" title={title} onClose={(e) => { e.stopPropagation(); setOpen(false); }} />
+            <ModalHeader closeOnEscape={false} className="setting-info__head" title={title} onClose={(e) => { e.stopPropagation(); setOpen(false); }} />
             <div className="setting-info__body">{children}</div>
           </div>
         </div>,

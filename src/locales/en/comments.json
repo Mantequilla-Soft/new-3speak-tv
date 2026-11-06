@@ -111,6 +111,8 @@
     "count_one": "{{count}} Comment",
     "count_other": "{{count}} Comments",
     "edited": "(edited)",
+    "hideComment": "Hide comment",
+    "showComment": "Show the comment by @{{user}}",
     "saving": "Saving...",
     "translation": "Translation",
     "translationFailed": "Translation failed. Is the translation service running?",

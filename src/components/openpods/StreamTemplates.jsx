@@ -59,7 +59,7 @@ function Sheet({ title, onClose, children, footer, wide = false }) {
   return createPortal(
     <div className="st-sheet-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose?.(); }}>
       <div className={`st-sheet${wide ? ' st-sheet--wide' : ''}`} role="dialog" aria-modal="true" aria-label={title}>
-        <ModalHeader className="st-sheet__header" title={title} onClose={onClose} />
+        <ModalHeader closeOnEscape={false} className="st-sheet__header" title={title} onClose={onClose} />
         <div className="st-sheet__body">{children}</div>
         {footer && <div className="st-sheet__foot">{footer}</div>}
       </div>

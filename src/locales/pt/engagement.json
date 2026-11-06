@@ -6,6 +6,7 @@
       "allRequired": "Todos os campos são obrigatórios",
       "loginRequired": "Entre na sua conta para enviar uma gorjeta",
       "insufficientBalance": "Saldo insuficiente",
+      "amountPositive": "Insira um valor maior que zero",
       "invalidUsername": "Nome de usuário inválido",
       "transferFailed": "Falha na transferência: {{message}}"
     },

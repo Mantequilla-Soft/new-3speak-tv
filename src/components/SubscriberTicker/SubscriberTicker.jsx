@@ -71,7 +71,7 @@ export default function SubscriberTicker() {
       {open && createPortal(
         <div className="sub-modal-overlay" onClick={() => setOpen(false)}>
           <div className="sub-modal" onClick={(e) => e.stopPropagation()}>
-            <ModalHeader className="sub-modal-header" title={t('profile.subscriberTicker.modalTitle', { n: subs.length })} onClose={() => setOpen(false)} />
+            <ModalHeader closeOnEscape={false} className="sub-modal-header" title={t('profile.subscriberTicker.modalTitle', { n: subs.length })} onClose={() => setOpen(false)} />
             <div className="sub-modal-list">
               {subs.map((s) => (
                 <button

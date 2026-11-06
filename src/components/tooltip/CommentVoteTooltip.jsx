@@ -493,7 +493,7 @@ const CommentVoteTooltip = ({
           >
             {/* The weight span stays mounted while "just tag" hides it, so the
                 slider's direct DOM writes to labelRef survive the toggle. */}
-            <ModalHeader
+            <ModalHeader closeOnEscape={false}
               className="vote-popup-header"
               title={tagOnlyMode ? t('engagement.vote.votingClosed') : (
                 <>

@@ -54,7 +54,7 @@ export default function ThumbnailEditorModal({
         aria-modal="true"
         aria-labelledby={titleId}
       >
-        <ModalHeader title={t('upload.thumbnail.editor.title')} onClose={onClose} titleId={titleId} className="thumb-modal__header" />
+        <ModalHeader closeOnEscape={false} title={t('upload.thumbnail.editor.title')} onClose={onClose} titleId={titleId} className="thumb-modal__header" />
 
         <div className="thumb-modal__body">
           <div className="thumb-modal__stage">

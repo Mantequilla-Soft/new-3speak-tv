@@ -6,6 +6,7 @@
       "allRequired": "Vui lòng điền tất cả các trường",
       "loginRequired": "Vui lòng đăng nhập để gửi tip",
       "insufficientBalance": "Số dư không đủ",
+      "amountPositive": "Nhập số lượng lớn hơn 0",
       "invalidUsername": "Tên người dùng không hợp lệ",
       "transferFailed": "Chuyển thất bại: {{message}}"
     },

@@ -28,6 +28,8 @@ const SIGNED_OUT = [
   ['/api/verify/sign', { action: 'check', platform: 'youtube', platform_username: 'x' }, 401, { error: 'Unauthorized' }],
   ['/api/announcements/read-signature', {}, 401, { error: 'Not signed in' }],
   ['/api/announcements/reply-signature', { number: 3 }, 401, { error: 'Not signed in' }],
+  ['/api/scheduled-posts/signature', { action: 'cancel', owner: 'alice', permlink: 'p' }, 401, { error: 'Not signed in as this account', reason: 'not_signed_in_as' }],
+  ['/api/podcasts/signature', { action: 'push', payload: 'session', username: 'alice' }, 401, { error: 'Not signed in', reason: 'not_signed_in_as' }],
   ['/api/watch/token', { owner: 'alice', permlink: 'video' }, 401, { error: 'Unauthorized' }],
   ['/api/editor-token', { user: 'alice' }, 401, { error: 'sign-in-needed' }],
 ]
@@ -125,6 +127,8 @@ describe('credentials that prove nothing', () => {
       ['/api/verify/sign', { username: 'alice', action: 'check', platform: 'youtube', platform_username: 'x' }],
       ['/api/ads/identity-signature', { username: 'alice' }],
       ['/api/announcements/read-signature', { username: 'alice' }],
+      ['/api/scheduled-posts/signature', { username: 'alice', action: 'create', owner: 'alice', permlink: 'p', scheduledOn: '2026-12-01T10:00:00.000Z' }],
+      ['/api/podcasts/signature', { username: 'alice', action: 'push', payload: 'session' }],
       ['/api/watch/token', { username: 'alice', owner: 'bob', permlink: 'v' }],
       ['/api/editor-token', { user: 'alice', username: 'alice' }],
     ]
@@ -246,6 +250,7 @@ describe('a server with nothing configured', () => {
       '/api/ads/viewer-signature', '/api/ads/identity-signature', '/api/captions/edit-signature',
       '/api/comments/pin-signature', '/api/supports/hide-signature', '/api/verify/sign',
       '/api/announcements/read-signature', '/api/announcements/reply-signature',
+      '/api/scheduled-posts/signature',
     ]) {
       const r = await bare.request(route, { method: 'POST', json: {}, ...someone() })
       expect(r.status, route).toBe(500)

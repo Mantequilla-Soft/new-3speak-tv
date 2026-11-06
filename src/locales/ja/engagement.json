@@ -6,6 +6,7 @@
       "allRequired": "すべての項目を入力してください",
       "loginRequired": "投げ銭を送るにはログインしてください",
       "insufficientBalance": "残高が不足しています",
+      "amountPositive": "0 より大きい金額を入力してください",
       "invalidUsername": "無効なユーザー名です",
       "transferFailed": "送金に失敗しました: {{message}}"
     },

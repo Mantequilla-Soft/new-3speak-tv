@@ -77,7 +77,7 @@ export default function InvitePopup({ openLoginModal }) {
   return createPortal(
     <div className="invite-popup-overlay" onClick={close}>
       <div className="invite-popup" role="dialog" aria-modal="true" aria-labelledby="invite-popup-title" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader
+        <ModalHeader closeOnEscape={false}
           className="invite-popup-header"
           title={<Trans i18nKey="app.invite.title" values={{ referrer: invite.referrer }} components={{ who: <span /> }} />}
           titleId="invite-popup-title"

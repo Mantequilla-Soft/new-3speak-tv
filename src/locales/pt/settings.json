@@ -111,6 +111,7 @@
     "deviceOnToast": "Este dispositivo será notificado",
     "changeFailed": "Não foi possível alterar as notificações",
     "saveFailed": "Não foi possível salvar isso",
+    "notConfirmed": "Não foi possível confirmar que é você. Saia e entre novamente, depois tente outra vez.",
     "loginHint": "Entre na sua conta para escolher sobre o que quer ser notificado.",
     "unsupported": "Este navegador não consegue mostrar notificações. No iPhone e no iPad, elas só funcionam depois que o 3Speak é adicionado à Tela de Início.",
     "device": "Notificar este dispositivo",

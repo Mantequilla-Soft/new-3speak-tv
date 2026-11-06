@@ -219,7 +219,7 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
       {guideOpen && createPortal(
         <div className="surf-guide-overlay" onClick={() => setGuideOpen(false)}>
           <div className="surf-guide" role="dialog" aria-label={t('feeds.surf.guide')} onClick={(e) => e.stopPropagation()}>
-            <ModalHeader title={t('feeds.surf.guide')} onClose={() => setGuideOpen(false)} />
+            <ModalHeader closeOnEscape={false} title={t('feeds.surf.guide')} onClose={() => setGuideOpen(false)} />
             {TAG_CATEGORIES.map((cat) => (
               <div className="surf-guide__group" key={cat.slug}>
                 <div className="surf-guide__grid">

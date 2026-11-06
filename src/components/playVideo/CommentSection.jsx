@@ -1,5 +1,5 @@
 import MarkdownView from '../common/MarkdownView';
-import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import React, { useEffect, useId, useState, useRef, useCallback, useMemo } from 'react';
 import { getHiveClient } from '../../utils/hiveNode';
 import './CommentSection.scss';
 import './BlogContent.scss';
@@ -159,6 +159,7 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
 
   // Timeline position state — auto-follows playhead unless manually edited
   const [timelineInput, setTimelineInput] = useState('0:00');
+  const momentId = useId();
   const [timelineOverride, setTimelineOverride] = useState(false);
   const prevTimeRef = useRef(0);
 
@@ -699,8 +700,9 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
           </button>
         </div>
         <div className="comment-timestamp">
-          <span className="comment-timestamp-label">{t('comments.section.at')}</span>
+          <label className="comment-timestamp-label" htmlFor={momentId}>{t('comments.section.at')}</label>
           <input
+            id={momentId}
             type="text"
             className="comment-timestamp-input"
             value={timelineInput}
@@ -971,7 +973,19 @@ function Comment({
   if (collapsed) {
     return (
       <div className="comment-container" style={{ marginLeft: depth > 0 ? '40px' : '0px' }}>
-        <div className="comment-collapsed-bar" onClick={() => setCollapsed(false)}>
+        <div
+          className="comment-collapsed-bar"
+          role="button"
+          tabIndex={0}
+          aria-expanded="false"
+          aria-label={t('comments.section.showComment', { user: comment?.author?.username || '' })}
+          onClick={() => setCollapsed(false)}
+          onKeyDown={(e) => {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            e.preventDefault();
+            setCollapsed(false);
+          }}
+        >
           <AuthorBadge author={comment?.author?.username} reputation={comment?.author?.reputation} noLink compact />
           <MdKeyboardArrowUp size={18} className="comment-collapsed-chevron" />
         </div>
@@ -993,7 +1007,13 @@ function Comment({
             {comment?.parentTimestamp != null && (
               <span className="comment-timestamp-badge" onClick={() => onSeek?.(comment.parentTimestamp)}>{t('comments.section.atTime', { time: formatTimeInput(comment.parentTimestamp) })}</span>
             )}
-            <span className="comment-collapse-chevron" onClick={() => setCollapsed(true)}><MdKeyboardArrowUp size={18} /></span>
+            <button
+              type="button"
+              className="btn-reset comment-collapse-chevron"
+              aria-expanded="true"
+              aria-label={t('comments.section.hideComment')}
+              onClick={() => setCollapsed(true)}
+            ><MdKeyboardArrowUp size={18} /></button>
           </div>
           {editing ? (
             <div className="add-comment-wrap comment-edit-wrap">

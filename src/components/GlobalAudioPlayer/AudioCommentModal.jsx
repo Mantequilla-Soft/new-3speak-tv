@@ -69,7 +69,7 @@ export default function AudioCommentModal({ author, permlink, title, at, onClose
   return createPortal(
     <div className="audio-comment-overlay" onClick={() => { if (!busy) onClose(); }}>
       <div className="audio-comment-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={t('comments.section.commentTab')} onClose={busy ? undefined : onClose} />
+        <ModalHeader closeOnEscape={false} title={t('comments.section.commentTab')} onClose={busy ? undefined : onClose} />
         {title && <p className="audio-comment-on">{title}</p>}
         <textarea
           ref={inputRef}

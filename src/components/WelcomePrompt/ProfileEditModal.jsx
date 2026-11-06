@@ -74,7 +74,7 @@ export default function ProfileEditModal({
       onClick={() => { if (!saving && onClose) onClose(); }}
     >
       <div className="welcome-modal" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={t('app.profileEdit.title')} onClose={saving || !onClose ? undefined : onClose} />
+        <ModalHeader closeOnEscape={false} title={t('app.profileEdit.title')} onClose={saving || !onClose ? undefined : onClose} />
 
         <div className="welcome-head">
           <p>

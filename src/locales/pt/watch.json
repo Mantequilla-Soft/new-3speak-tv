@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Este vídeo não está mais disponível",
     "unavailableBody": "A mídia deste envio antigo não foi encontrada na rede. O post ainda existe na blockchain, mas o vídeo não pode mais ser reproduzido.",
+    "scheduledTitle": "Esta publicação está agendada",
+    "scheduledBody": "Ela será publicada em {{date}}. O vídeo poderá ser assistido a partir daí.",
     "blockedTitle": "Não foi possível carregar o vídeo agora",
     "blockedBody": "Um dos nossos servidores de vídeo não respondeu. O vídeo em si está bem, então tente de novo."
   },

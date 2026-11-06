@@ -6,6 +6,7 @@
       "allRequired": "All fields are required",
       "loginRequired": "Please login to send a tip",
       "insufficientBalance": "Insufficient balance",
+      "amountPositive": "Enter an amount greater than zero",
       "invalidUsername": "Invalid username",
       "transferFailed": "Transfer failed: {{message}}"
     },

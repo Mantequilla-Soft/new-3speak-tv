@@ -496,7 +496,7 @@ function SnapCommentsModal({ owner, permlink, onClose, onCommented }) {
   return createPortal(
     <div className="snap-comments-modal-backdrop" onClick={onClose}>
       <div className="community-snaps snap-comments-modal" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader className="snap-comments-modal-head" title={t('profile.snaps.commentsOn', { user: owner })} onClose={onClose} />
+        <ModalHeader closeOnEscape={false} className="snap-comments-modal-head" title={t('profile.snaps.commentsOn', { user: owner })} onClose={onClose} />
         <div className="snap-card snap-comments-modal-scroll">
           <SnapComments owner={owner} permlink={permlink} onCommented={onCommented} />
         </div>

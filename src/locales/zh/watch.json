@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "该视频已不可用",
     "unavailableBody": "在网络上找不到这个较早上传视频的媒体文件。帖子仍然存在于区块链上，但视频已无法播放。",
+    "scheduledTitle": "此帖子已预定发布",
+    "scheduledBody": "将于 {{date}} 发布，届时即可观看视频。",
     "blockedTitle": "暂时无法加载视频",
     "blockedBody": "我们的一台视频服务器没有响应。视频本身没有问题，请重试。"
   },

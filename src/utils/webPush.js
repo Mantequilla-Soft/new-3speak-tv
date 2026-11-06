@@ -1,4 +1,5 @@
 import { CHECKER_URL } from './config';
+import { fetchSessionVouch } from '../lib/sessionVouch';
 
 /**
  * Browser side of push notifications.
@@ -204,12 +205,66 @@ export async function getPushPrefs(username) {
   }
 }
 
+/**
+ * 🚧 TEMPORARY, remove once the checker runs with PUSH_REQUIRE_PROOF=true.
+ * While that flag is off the checker still saves choices sent without proof (and
+ * logs them), so a vouch we could not get must not stop anyone from saving: the
+ * save goes out without one, with a console warning, exactly as before. Once the
+ * flag is on, set this to false (or delete it and its branch in setPushPrefs).
+ */
+export const PUSH_PREFS_UNPROVEN_FALLBACK = true;
+
+// The checker takes a vouch for a day; reuse one for a little less.
+const PUSH_VOUCH_REUSE_MS = 23 * 60 * 60 * 1000;
+const pushVouches = new Map(); // account -> { user, signature, timestamp }
+
+// The same cleaning as the checker's cleanUser, so the vouch names the account it reads.
+const pushUser = (u) => String(u || '').trim().toLowerCase().replace(/^@/, '');
+
+async function pushVouch(user, { fresh = false } = {}) {
+  const hit = pushVouches.get(user);
+  if (!fresh && hit && Date.now() - hit.timestamp < PUSH_VOUCH_REUSE_MS) return hit;
+  pushVouches.delete(user);
+  const v = await fetchSessionVouch('push', user, { named: true });
+  if (v) pushVouches.set(user, v);
+  return v;
+}
+
+/** Thrown when the checker wants proof of who is saving and we have none. */
+const notConfirmed = () => Object.assign(
+  new Error('Could not confirm it is you. Log out and back in, then try again.'),
+  { code: 'not_confirmed' },
+);
+
+/**
+ * Save what this person wants to be told about. The checker wants proof that
+ * the request comes from that account: our API's session vouch (lib/sessionVouch.js),
+ * no wallet prompt for any login type.
+ */
 export async function setPushPrefs(username, prefs) {
-  const res = await fetch(`${CHECKER_URL}/push/prefs`, {
+  const user = pushUser(username);
+  const send = async (v) => fetch(`${CHECKER_URL}/push/prefs`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, prefs }),
+    body: JSON.stringify({ username, prefs, ...(v ? { signature: v.signature, timestamp: v.timestamp } : {}) }),
   });
+
+  const cached = pushVouches.has(user);
+  let v = await pushVouch(user);
+  if (!v) {
+    if (!PUSH_PREFS_UNPROVEN_FALLBACK) throw notConfirmed();
+    console.warn(`[push] no session vouch for @${user}; saving without one while the checker still accepts that (PUSH_REQUIRE_PROOF off)`);
+  }
+  let res = await send(v);
+  // A day-old vouch the checker no longer takes: get a fresh one and try once more.
+  if (res.status === 401 && v && cached) {
+    v = await pushVouch(user, { fresh: true });
+    if (v) res = await send(v);
+  }
+  if (res.status === 401) {
+    pushVouches.delete(user);
+    throw notConfirmed();
+  }
   if (!res.ok) throw new Error('Could not save your notification choices.');
   const data = await res.json();
   return data.prefs || {};

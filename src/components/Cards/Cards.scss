@@ -30,6 +30,31 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   }
 }
 
+// A card is a cell (.card) holding its link (.card-link) and, beside it, the
+// controls drawn on the card (.card-controls, touch screens). The link fills the
+// cell and lays the card's content out exactly as the cell would, so every rule
+// written for `.card` keeps applying. Its colour stays the link colour the card
+// always had (when the cell itself was the <a>).
+.card > .card-link {
+  display: flex;
+  flex-direction: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+  gap: inherit;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+// Zero height, first in the cell, so it takes no room: the options button keeps
+// its place over the thumbnail's top-left corner (CardOptionsMenu.scss) and its
+// z-index above the thumbnail image (z-index 1, see CardThumbnail).
+.card > .card-controls {
+  position: relative;
+  height: 0;
+  flex: 0 0 0;
+}
+
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--card-min-w, 280px), 1fr));

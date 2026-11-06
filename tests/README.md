@@ -7,6 +7,7 @@
 | `e2e/` | The real pages in a browser, desktop and phone | Playwright | `npm run test:e2e` |
 
 `npm test` runs the unit and API tests (a few seconds). The browser tests take a few minutes.
+`npm run test:coverage` runs the unit tests with a coverage report (`coverage/index.html`).
 
 ## Before the first run
 
@@ -24,6 +25,16 @@ No network and no `.env`: `fetch` is stubbed with `vi.stubGlobal`, and `import.m
 values are set with `vi.stubEnv`. A file that needs `window` or `localStorage` starts with
 `// @vitest-environment jsdom`. Name tests after the behaviour ("a viewer row never
 overwrites a creator row"), and put a file at `tests/unit/<folder>/<module>.test.js`.
+
+Components and hooks are tested the way a person uses them, with Testing Library:
+`render` and `screen.getByRole('button', { name: /share/i })`, `userEvent` for clicks and
+typing, `renderHook` for hooks. In jsdom files `tests/unit/setup.js` adds the jest-dom
+matchers (`toBeInTheDocument`, `toHaveAccessibleName`, ...) and unmounts after each test.
+Use fake timers (`vi.useFakeTimers()`) rather than waiting.
+
+Coverage measures the app's own code (`src/`, without translations, assets and entry
+points). The thresholds in `vitest.config.js` are a ratchet: raise them as coverage grows,
+never lower them to make a run pass.
 
 ## API tests
 
@@ -52,7 +63,8 @@ A test that shows a real bug stays in, written for the correct behaviour and mar
 
 ## CI
 
-`.github/workflows/tests.yml` runs everything on every pull request and every push to
-`develop`. It is informational: a red run blocks nothing unless it is made a required check.
+`.github/workflows/tests.yml` runs everything on release pull requests (develop to
+production), and by hand from the Actions tab. The unit job writes a coverage table into
+the run summary and keeps the full report as an artifact. It is informational: a red run blocks nothing unless it is made a required check.
 While `@snapie/hangouts-react` points at a local build (`file:...`), CI cannot build the
 branch, so the browser tests run against preview.3speak.tv instead.

@@ -69,7 +69,14 @@
     "beneficiariesButton": "LEHTARLAR",
     "range": "Aralık: şu andan en az 15 dakika sonra, en fazla 90 gün.",
     "cancelPost": "Planlanmış gönderiyi iptal et",
-    "saveChanges": "Değişiklikleri kaydet"
+    "saveChanges": "Değişiklikleri kaydet",
+    "proof": {
+      "walletPrompt": "Planlanmış gönderini onayla",
+      "notSignedIn": "@{{owner}} olarak giriş yaptığın doğrulanamadı. Çıkış yapıp tekrar giriş yap, sonra yeniden dene.",
+      "noGrant": "Planlama için hesabının @threespeak'e paylaşım yetkisi vermesi gerekir.",
+      "unavailable": "Bu planlanmış gönderi şu anda doğrulanamadı. Lütfen birazdan tekrar dene.",
+      "refused": "Planlanmış gönderi, sana ait olduğu doğrulanamadığı için reddedildi. Çıkış yapıp tekrar giriş yap, sonra yeniden dene."
+    }
   },
   "composer": {
     "placeholder": "Açıklamanı buraya yaz...",

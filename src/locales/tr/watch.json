@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Bu video artık kullanılamıyor",
     "unavailableBody": "Bu eski yüklemenin medyası ağda bulunamadı. Gönderi blokzincirde hâlâ duruyor ama video artık oynatılamıyor.",
+    "scheduledTitle": "Bu gönderi planlandı",
+    "scheduledBody": "{{date}} tarihinde yayınlanacak. Video o andan itibaren izlenebilir.",
     "blockedTitle": "Video şu an yüklenemedi",
     "blockedBody": "Video sunucularımızdan biri yanıt vermedi. Videonun kendisinde sorun yok, lütfen tekrar dene."
   },

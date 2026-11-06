@@ -5,6 +5,7 @@ import { useAppStore } from '../../lib/store';
 import { REPORT_API_URL, REPORT_API_SECRET } from '../../utils/config';
 import { useTranslation } from 'react-i18next';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import useDialog from '../../hooks/useDialog';
 import './ReportModal.scss';
 
 // Every toast from this module is headed "Report"; the message becomes the
@@ -137,14 +138,18 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
     onClose();
   };
 
+  const dialog = useDialog(handleClose, { active: isOpen });
+  const reasonId = `${dialog.titleId}-reason`;
+  const detailsId = `${dialog.titleId}-details`;
+
   if (!isOpen) return null;
 
   const title = type === 'user' ? t('modals.report.titles.user') : type === 'comment' ? t('modals.report.titles.comment') : type === 'short' ? t('modals.report.titles.short') : type === 'post' ? t('modals.report.titles.post') : t('modals.report.titles.video');
 
   return createPortal(
     <div className="report-modal-overlay" onClick={handleClose}>
-      <div className="report-modal-content" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={title} onClose={handleClose} />
+      <div className="report-modal-content" {...dialog.props} onClick={(e) => e.stopPropagation()}>
+        <ModalHeader title={title} titleId={dialog.titleId} onClose={handleClose} />
 
         {target?.author && (
           <p className="report-target">
@@ -153,8 +158,9 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
         )}
 
         <form onSubmit={handleSubmit} className="report-form">
-          <label className="report-label">{t('modals.report.reason')}</label>
+          <label className="report-label" htmlFor={reasonId}>{t('modals.report.reason')}</label>
           <select
+            id={reasonId}
             className="report-select"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
@@ -165,8 +171,9 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
             ))}
           </select>
 
-          <label className="report-label">{t('modals.report.details')}</label>
+          <label className="report-label" htmlFor={detailsId}>{t('modals.report.details')}</label>
           <textarea
+            id={detailsId}
             className="report-textarea"
             value={comment}
             onChange={(e) => setComment(e.target.value)}

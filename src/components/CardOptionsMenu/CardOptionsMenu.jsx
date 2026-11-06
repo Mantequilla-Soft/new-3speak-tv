@@ -199,6 +199,16 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
           videoTitle={title}
         />
       )}
+
+      {tagOpen && (
+        <AddTagModal
+          isOpen={tagOpen}
+          onClose={() => setTagOpen(false)}
+          author={author}
+          permlink={permlink}
+          title={title}
+        />
+      )}
     </>
   );
 }

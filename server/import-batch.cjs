@@ -338,11 +338,28 @@ async function snapsContainer() {
   throw new Error('could not find the Shorts container (@peak.snaps)')
 }
 
-async function scheduleOnChecker(doc) {
+// The owner's proof for a scheduled-post write (see server/scheduled-post-proof.cjs),
+// signed just before the write: the checker allows 5 minutes. `sign` is the
+// deps.signScheduledPost the API passes in. Without one, or when it fails, the
+// write goes unsigned, which the checker still takes while
+// SCHEDULED_POSTS_REQUIRE_SIGNATURE is off (and refuses with 401 after).
+function scheduledPostProof(sign, fields) {
+  if (typeof sign !== 'function') return {}
+  try {
+    const proof = sign(fields)
+    if (proof && proof.signature && proof.timestamp) return { signature: proof.signature, timestamp: proof.timestamp }
+  } catch (e) {
+    console.warn(`[import-batch] could not sign the ${fields.action} of @${fields.owner}/${fields.permlink}: ${e.message}`)
+  }
+  return {}
+}
+
+async function scheduleOnChecker(doc, sign) {
+  const proof = scheduledPostProof(sign, { action: 'create', owner: doc.owner, permlink: doc.permlink, scheduledOn: doc.scheduledOn })
   const r = await fetch(`${CHECKER_BASE}/scheduled-posts/create`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${CHECKER_API_KEY}` },
-    body: JSON.stringify(doc),
+    body: JSON.stringify({ ...doc, ...proof }),
     signal: AbortSignal.timeout(20000),
   })
   const d = await r.json().catch(() => ({}))
@@ -350,11 +367,12 @@ async function scheduleOnChecker(doc) {
   return d
 }
 
-async function cancelOnChecker(owner, permlink) {
+async function cancelOnChecker(owner, permlink, sign) {
+  const proof = scheduledPostProof(sign, { action: 'cancel', owner, permlink })
   const r = await fetch(`${CHECKER_BASE}/scheduled-posts/cancel`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${CHECKER_API_KEY}` },
-    body: JSON.stringify({ owner, permlink }),
+    body: JSON.stringify({ owner, permlink, ...proof }),
     signal: AbortSignal.timeout(15000),
   })
   return r.ok
@@ -380,6 +398,7 @@ async function checkerStatuses(user) {
  *   isPremium(user), recordImport(user, sourceId, permlink) → Promise,
  *   knownImports(user) → { imported: {sourceId: permlink}, inBatch: {sourceId: …} },
  *   uploadImage(buf, type) → url, hasPostingGrant(user) → bool,
+ *   signScheduledPost({ action, owner, permlink, scheduledOn? }) → { signature, timestamp } | null,
  *   alert({title, color, user, platform, videoId, url, code, message, fields}),
  *   coverFor(sourceId) → { buf, type } | null (kept cover image)
  */
@@ -535,7 +554,7 @@ function mountImportBatch(app, deps) {
         // "Add to my blog": the checker reblogs it once posted. Not for Shorts,
         // which are replies (nothing to put on a blog).
         reblog: !isShort && b.options.reblog === true,
-      })
+      }, deps.signScheduledPost)
       it.status = 'scheduled'; it.progress = 100; it.permlink = permlink; it.scheduledOn = new Date(slot).toISOString()
       save(b)
       // The importer's "already on 3Speak" record (and its duplicate check).
@@ -655,7 +674,7 @@ function mountImportBatch(app, deps) {
         if (it.jobId) { const j = deps.getJob(it.jobId); if (j) { j.status = 'cancelled'; deps.removeJob(j) } }
         it.status = 'cancelled'
       } else if (it.status === 'scheduled' && it.permlink) {
-        if (await cancelOnChecker(user, it.permlink).catch(() => false)) it.status = 'cancelled'
+        if (await cancelOnChecker(user, it.permlink, deps.signScheduledPost).catch(() => false)) it.status = 'cancelled'
       }
     }
     save(b)
@@ -684,4 +703,4 @@ function batchSourcesFor(user) {
   return out
 }
 
-module.exports = { mountImportBatch, batchSourcesFor, buildPost, beneficiariesFor, tagsFor, permlinkFor }
+module.exports = { mountImportBatch, batchSourcesFor, buildPost, beneficiariesFor, tagsFor, permlinkFor, scheduleOnChecker, cancelOnChecker }

@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Video ini sudah tidak tersedia",
     "unavailableBody": "Media untuk unggahan lama ini tidak ditemukan di jaringan. Postingannya masih ada di blockchain, tetapi videonya tidak bisa diputar lagi.",
+    "scheduledTitle": "Postingan ini dijadwalkan",
+    "scheduledBody": "Postingan akan dipublikasikan pada {{date}}. Video dapat ditonton sejak saat itu.",
     "blockedTitle": "Video tidak dapat dimuat saat ini",
     "blockedBody": "Salah satu server video kami tidak merespons. Videonya sendiri baik-baik saja, jadi silakan coba lagi."
   },

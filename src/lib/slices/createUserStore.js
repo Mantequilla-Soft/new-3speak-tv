@@ -34,7 +34,7 @@ export const createUserDetailsSlice = (set) => ({
         }
       ); 
       console.log("response.data.result juneroy",response.data.result)
-      if (response && response.data && response.data.result && response.data.result[0].posting_json_metadata != "") {
+      if (response && response.data && response.data.result && response.data.result[0] && response.data.result[0].posting_json_metadata) {
         const profile = JSON.parse(response.data.result[0].posting_json_metadata  ) 
         set({ userhiveDetails: profile.profile });
         console.log('response from hive',response.data.result[0].posting_json_metadata)

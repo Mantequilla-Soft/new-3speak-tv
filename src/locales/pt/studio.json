@@ -69,7 +69,14 @@
     "beneficiariesButton": "BENEFICIÁRIOS",
     "range": "Intervalo: pelo menos 15 minutos a partir de agora, até 90 dias.",
     "cancelPost": "Cancelar post agendado",
-    "saveChanges": "Salvar alterações"
+    "saveChanges": "Salvar alterações",
+    "proof": {
+      "walletPrompt": "Confirme sua publicação agendada",
+      "notSignedIn": "Não foi possível confirmar que você está conectado como @{{owner}}. Saia e entre novamente, depois tente outra vez.",
+      "noGrant": "Agendar publicações exige que sua conta conceda autoridade de postagem a @threespeak.",
+      "unavailable": "Não foi possível confirmar esta publicação agendada agora. Tente novamente em instantes.",
+      "refused": "A publicação agendada foi recusada porque não foi possível confirmar que ela é sua. Saia e entre novamente, depois tente outra vez."
+    }
   },
   "composer": {
     "placeholder": "Escreva sua descrição aqui...",

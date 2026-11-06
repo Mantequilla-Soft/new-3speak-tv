@@ -11,6 +11,7 @@ import { pickEmbedEndpoint } from '../utils/embedEndpoints';
 import { reloadIfStale } from '../utils/checkLatestVersion';
 import { commentWithAioha, broadcastWithAioha, signMessageWithAioha, isLoggedIn, getCurrentProvider, Providers, broadcastViaThreespeak, KeyTypes } from '../hive-api/aioha';
 import { hasThreespeakPostingAuth, addThreespeakToPostingAuth } from '../utils/postingAuthority';
+import { proveScheduledPost, scheduledPostWriteError } from '../utils/scheduledPostProof';
 import { useAppStore } from '../lib/store';
 import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { setChannelTrailer } from '../utils/channelTrailer';
@@ -367,6 +368,10 @@ export function EmbedUploadProvider({ children }) {
   const earlyDeferralRef = useRef(null);
   const earlyUploadStartedRef = useRef(false);
   const earlyUploadedFileRef = useRef(null); // which file the background upload used
+  // Bumped by every start and reset: a background attempt that is no longer the
+  // latest (the video was replaced or the upload cancelled) must not write its
+  // late success or failure into the state the newer attempt now owns.
+  const earlyAttemptRef = useRef(0);
   // The embed server chosen for this upload. Sticky for the whole lifecycle so
   // the post-upload /video/*/hive + /thumbnail writes hit the same host as the
   // bytes (works whether or not the servers share a MongoDB).
@@ -507,6 +512,7 @@ export function EmbedUploadProvider({ children }) {
         if (key.startsWith('tus::') || key.startsWith('chunked::')) localStorage.removeItem(key);
       });
     } catch { /* ignore */ }
+    earlyAttemptRef.current += 1;
     earlyEmbedUrlRef.current = '';
     earlyUploadPromiseRef.current = null;
     earlyDeferralRef.current = null;
@@ -1201,6 +1207,7 @@ export function EmbedUploadProvider({ children }) {
             // A chunk landed: the transport works, so open the other streams.
             if (!ramped) { patchUploadDetail({ workers: parallel }); releaseRamp(); }
             inflight.delete(index);
+            received.add(index);
             if (Number.isFinite(r.receivedBytes)) serverBytes = r.receivedBytes;
             paint();
           } catch (e) {
@@ -1229,6 +1236,7 @@ export function EmbedUploadProvider({ children }) {
           try {
             const st = await postForm(`${base}/upload/chunk/status`, { sessionId }, null, { timeoutMs: 30000 });
             if (st && Array.isArray(st.received)) {
+              st.received.forEach((i) => received.add(i));
               if (Number.isFinite(st.receivedBytes)) { serverBytes = st.receivedBytes; paint(); }
               if (st.received.includes(index)) {
                 ok = true;   // it did land — move on
@@ -1434,6 +1442,9 @@ export function EmbedUploadProvider({ children }) {
       startedAt: Date.now(),
       retries: 0,
     });
+    earlyAttemptRef.current += 1;
+    const attempt = earlyAttemptRef.current;
+    const superseded = () => earlyAttemptRef.current !== attempt;
     const p = (async () => {
       try {
         // Stale-client guard: if a newer build is deployed, force-reload onto it
@@ -1442,6 +1453,7 @@ export function EmbedUploadProvider({ children }) {
         // TUS on the least-busy host, auto-falling back to chunked if PATCH is blocked.
         const { embedUrl: url, deferral } = await runUploadWithFallback('');
         if (!url) throw new Error(t('upload.errors.noEmbedUrl'));
+        if (superseded()) return { embedUrl: url, deferral };
         earlyEmbedUrlRef.current = url;
         // Pin the deferral to THIS upload. Whatever else starts and mints a
         // token later cannot move the target the encode gets commissioned at.
@@ -1452,6 +1464,9 @@ export function EmbedUploadProvider({ children }) {
         setStatusText('');
         return { embedUrl: url, deferral };
       } catch (err) {
+        // An abandoned attempt (video replaced, upload cancelled) fails quietly:
+        // the refs and the bar belong to whatever runs now.
+        if (superseded()) return { embedUrl: '', deferral: null };
         console.error('Background video upload failed:', err);
         // Allow the publish step to retry the upload inline.
         earlyUploadStartedRef.current = false;
@@ -1989,11 +2004,11 @@ export function EmbedUploadProvider({ children }) {
           // The HTML datetime-local string is local-tz; convert to a real ISO UTC.
           const scheduledOnIso = new Date(scheduleDateTime).toISOString();
 
-          // Auth: the checker create endpoint uses the app-key method (same as the
-          // embed /video/* writes), not a client Hive signature — because HiveSigner
-          // and ManteAuth can't sign arbitrary messages client-side. The checker
-          // trusts the app key + verifies on-chain that the user granted @threespeak
-          // posting authority (which we just ensured above and the cron relies on).
+          // Auth: the app key, plus the owner's signature over this create
+          // (utils/scheduledPostProof.js: @threespeak via our API for every login,
+          // the wallet itself as a fallback). The checker also verifies on chain
+          // that the user granted @threespeak posting authority (ensured above;
+          // the cron relies on it).
           const payoutOptions = declineRewards ? 'decline' : (rewardPowerup ? 'powerup' : 'default');
           const checkerBase =
             import.meta.env.VITE_SCHEDULED_POSTS_API_URL || 'https://prod-checker.okinoko.io';
@@ -2010,7 +2025,13 @@ export function EmbedUploadProvider({ children }) {
 
           setStatusText(t('upload.publishing.savingScheduled'));
           addMessage(t('upload.publishing.savingScheduled'));
+          // Signed right before the write (the checker allows 5 minutes), over
+          // the very scheduledOn string the body carries.
+          const proof = await proveScheduledPost({
+            action: 'create', owner: assetOwner, permlink: hivePermlink, scheduledOn: scheduledOnIso,
+          });
           const resp = await axios.post(url, {
+            ...proof,
             owner: assetOwner,
             permlink: hivePermlink,
             scheduledOn: scheduledOnIso,
@@ -2046,7 +2067,7 @@ export function EmbedUploadProvider({ children }) {
           return;
         } catch (schedErr) {
           console.error('Scheduled-post error:', schedErr);
-          const msg = schedErr?.response?.data?.error || schedErr?.message || t('upload.errors.couldNotSchedule');
+          const msg = scheduledPostWriteError(schedErr, t('upload.errors.couldNotSchedule'));
           addMessage(t('upload.errors.scheduleFailed', { msg }), 'error');
           toast.error(t('upload.errors.scheduleFailed', { msg }));
           throw schedErr;

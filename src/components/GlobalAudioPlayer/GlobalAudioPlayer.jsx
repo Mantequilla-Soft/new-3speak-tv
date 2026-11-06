@@ -1079,17 +1079,20 @@ function GlobalAudioPlayer() {
       if (i >= 0 && i < audioQueue.length - 1) { audioPlay(audioQueue[i + 1]); return; }
       if (i === -1) { audioPlay(audioQueue[0]); return; }
     }
+    // The page's list goes along: audioPlay without it would make the next track
+    // a list of one, and the album or page would stop after it.
     const i = audioAutoplayList.findIndex(x => x._id === audioCurrent._id);
-    if (i >= 0 && i < audioAutoplayList.length - 1) audioPlay(audioAutoplayList[i + 1]);
+    if (i >= 0 && i < audioAutoplayList.length - 1) audioPlay(audioAutoplayList[i + 1], audioAutoplayList);
   }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
 
   const playPrev = useCallback(() => {
     const el = audioRef.current;
     if (el && el.currentTime > 3 && !audioCurrent?.live) { el.currentTime = 0; return; }
     if (!audioCurrent) return;
-    const list = audioQueue.length > 0 ? audioQueue : audioAutoplayList;
+    const fromQueue = audioQueue.length > 0;
+    const list = fromQueue ? audioQueue : audioAutoplayList;
     const i = list.findIndex(x => x._id === audioCurrent._id);
-    if (i > 0) audioPlay(list[i - 1]);
+    if (i > 0) audioPlay(list[i - 1], fromQueue ? undefined : audioAutoplayList);
   }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
 
   // What the phone's media notification, lock screen, headphones and car show
@@ -1290,9 +1293,9 @@ function GlobalAudioPlayer() {
                     <span className="audio-queue-author">{item.external ? item.show : `@${item.owner}`} · {item.live ? t('audio.player.live') : fmt(item.duration)}</span>
                   </div>
                   <div className="audio-queue-actions">
-                    {idx > 0 && <button onClick={() => audioMoveInQueue(idx, idx - 1)}>↑</button>}
-                    {idx < audioQueue.length - 1 && <button onClick={() => audioMoveInQueue(idx, idx + 1)}>↓</button>}
-                    <button onClick={() => audioRemoveFromQueue(item._id)}><MdDelete size={16} /></button>
+                    {idx > 0 && <button type="button" aria-label={t('audio.player.queueMoveUp', { title: item.title || t('audio.untitled') })} onClick={() => audioMoveInQueue(idx, idx - 1)}><span aria-hidden="true">↑</span></button>}
+                    {idx < audioQueue.length - 1 && <button type="button" aria-label={t('audio.player.queueMoveDown', { title: item.title || t('audio.untitled') })} onClick={() => audioMoveInQueue(idx, idx + 1)}><span aria-hidden="true">↓</span></button>}
+                    <button type="button" aria-label={t('audio.player.queueRemove', { title: item.title || t('audio.untitled') })} onClick={() => audioRemoveFromQueue(item._id)}><MdDelete size={16} aria-hidden="true" /></button>
                   </div>
                 </li>
               ))}</ul>
@@ -1306,7 +1309,7 @@ function GlobalAudioPlayer() {
   const queueOverlay = audioShowQueue && !docked ? (
         <div className="audio-queue-overlay" onClick={() => audioSetShowQueue(false)}>
           <div ref={queuePanelRef} className="audio-queue-panel" onClick={e => e.stopPropagation()}>
-            <ModalHeader title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
+            <ModalHeader closeOnEscape={false} title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
               <span className="audio-queue-count">{audioQueue.length}</span>
               {queueClear}
             </ModalHeader>
@@ -1315,15 +1318,19 @@ function GlobalAudioPlayer() {
         </div>
   ) : null;
 
+  // Every return has the same root (the provider) with {audioEl} first, so React
+  // keeps ONE <audio> element from the idle bar to playing. With a Fragment here
+  // it was remounted on the first play, and effects bound to the element by elKey
+  // (the lock-screen re-tell among them) stayed on the detached one.
   if (!audioCurrent) {
-    if (!idleBar) return <>{audioEl}{queueOverlay}</>;
+    if (!idleBar) return <PortalDocContext.Provider value={inPip ? hostDoc : null}>{audioEl}{queueOverlay}</PortalDocContext.Provider>;
     // What was playing when the player was closed comes first, at its spot;
     // without it, the top of the queue.
     const next = audioLast?.track || audioQueue[0];
     const playIdle = () => (audioLast ? audioResumeLast(true) : audioPlay(next, audioQueue));
     const idleLabel = audioLast ? t('audio.player.continueAt', { time: fmt(audioLast.t) }) : t('audio.player.upNext');
     return (
-      <>
+      <PortalDocContext.Provider value={inPip ? hostDoc : null}>
         {audioEl}
         <div ref={npRef} className="audio-now-playing audio-np-idle">
           <div className="audio-np-content">
@@ -1345,7 +1352,7 @@ function GlobalAudioPlayer() {
           </div>
         </div>
         {queueOverlay}
-      </>
+      </PortalDocContext.Provider>
     );
   }
 
@@ -2081,7 +2088,7 @@ export function AudioShareDropdown({ item, onClose, title, at, duration, bare })
 
   return (
     <div className={`audio-share-dropdown${bare ? ' is-bare' : ''}`} ref={ref}>
-      {title && <ModalHeader className="audio-share-header" title={title} onClose={onClose} />}
+      {title && <ModalHeader closeOnEscape={false} className="audio-share-header" title={title} onClose={onClose} />}
       {hivePermlink && <button className="audio-share-option" onClick={() => copy(`https://peakd.com/@${author}/${hivePermlink}`, t('audio.share.copiedPeakd'))}><MdContentCopy size={14} /><span>{t('audio.share.copyPeakd')}</span></button>}
       {searching && !hivePermlink && <span className="audio-share-loading">{t('audio.share.searchingHive')}</span>}
       {reblog.canReblog && (

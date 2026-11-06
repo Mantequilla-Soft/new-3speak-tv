@@ -69,7 +69,14 @@
     "beneficiariesButton": "受益人",
     "range": "范围：从现在起至少 15 分钟，最多 90 天。",
     "cancelPost": "取消定时帖子",
-    "saveChanges": "保存更改"
+    "saveChanges": "保存更改",
+    "proof": {
+      "walletPrompt": "确认你的定时发布",
+      "notSignedIn": "无法确认你已以 @{{owner}} 身份登录。请退出并重新登录，然后重试。",
+      "noGrant": "定时发布需要你的账户授予 @threespeak 发帖权限。",
+      "unavailable": "目前无法确认此定时发布。请稍后再试。",
+      "refused": "无法确认此定时发布属于你，因此已被拒绝。请退出并重新登录，然后重试。"
+    }
   },
   "composer": {
     "placeholder": "在这里写简介...",

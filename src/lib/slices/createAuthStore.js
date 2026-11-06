@@ -97,7 +97,7 @@ export const createAuthUserSlice = (set) => ({
   } else {
     console.warn('Switch failed. User may not be authenticated.');
   }
-    const account = JSON.parse(localStorage.getItem("accountsList")).find(acc => acc.username === username);
+    const account = (JSON.parse(localStorage.getItem("accountsList")) || []).find(acc => acc.username === username);
     console.log(account)
 
     if (account) {

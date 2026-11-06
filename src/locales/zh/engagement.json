@@ -6,6 +6,7 @@
       "allRequired": "所有字段均为必填",
       "loginRequired": "请登录后再打赏",
       "insufficientBalance": "余额不足",
+      "amountPositive": "请输入大于零的金额",
       "invalidUsername": "用户名无效",
       "transferFailed": "转账失败：{{message}}"
     },

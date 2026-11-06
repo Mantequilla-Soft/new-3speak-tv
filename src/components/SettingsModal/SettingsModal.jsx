@@ -23,6 +23,7 @@ import TagsV2Picker from '../tooltip/TagsV2Picker';
 import DataRequestForm from './DataRequestForm';
 import LanguagePicker from '../LanguagePicker/LanguagePicker';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import useDialog from '../../hooks/useDialog';
 import AddSocialLink_modal from '../modal/AddSocialLink_modal';
 import { SUPPORT_SITE_ICONS } from '../tip-reward/OtherWays';
 import { parseSupportLink, readSupportLinks, saveSupportLinks, SUPPORT_LINK_MAX, SUPPORT_SITE_NAMES } from '../../lib/supportLinks';
@@ -893,7 +894,9 @@ function NotificationsSection() {
       setPrefs(await setPushPrefs(user, next));
     } catch (err) {
       setPrefs(prefs);                                // put it back rather than lie
-      toast.error(err.message || t('settings.notifications.saveFailed'));
+      toast.error(err?.code === 'not_confirmed'
+        ? t('settings.notifications.notConfirmed')
+        : err.message || t('settings.notifications.saveFailed'));
     }
   };
 
@@ -1137,6 +1140,9 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
     return () => document.removeEventListener('keydown', onKey);
   }, [isOpen, dropdown, onClose]);
 
+  // The centred window is a dialog of its own, Escape included.
+  const dialog = useDialog(onClose, { active: isOpen && !dropdown, ref: modalRef });
+
   if (!isOpen) return null;
 
   // Previews only work on touch devices in large mode, so hide the toggle when
@@ -1173,7 +1179,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
         className="settings-modal"
         ref={modalRef}
         onClick={(e) => e.stopPropagation()}
-        {...(dropdown ? { ...hoverProps, ...typingProps } : {})}
+        {...(dropdown ? { ...hoverProps, ...typingProps } : dialog.props)}
         style={dropdownStyle || (anchor ? {
           position: 'fixed',
           top: anchor.top,
@@ -1184,7 +1190,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
           maxHeight: `calc(100vh - ${Math.round(anchor.top)}px - 16px)`,
         } : undefined)}
       >
-        <ModalHeader title={t('common.nav.settings')} onClose={dropdown && !dropdown.held ? undefined : onClose} />
+        <ModalHeader title={t('common.nav.settings')} titleId={dialog.titleId} onClose={dropdown && !dropdown.held ? undefined : onClose} />
 
         <div className="settings-tabs" role="tablist">
           {visibleTabs.map(({ id, labelKey }) => (

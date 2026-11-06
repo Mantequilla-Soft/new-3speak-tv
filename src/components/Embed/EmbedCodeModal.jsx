@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { Copy } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import ModalHeader from '../ModalHeader/ModalHeader'
+import useDialog from '../../hooks/useDialog'
 import { toastIn } from '../../utils/toast'
 import {
   AUDIO_EMBED_SIZES, PLAYLIST_EMBED_SIZES, buildAudioEmbedHtml, buildPlaylistEmbedHtml,
@@ -49,6 +50,7 @@ function EmbedCodeModal({ target, onClose }) {
   const sizes = isPlaylist ? PLAYLIST_EMBED_SIZES : AUDIO_EMBED_SIZES
   const [size, setSize] = useState(sizes[0].id)
   const codeRef = useRef(null)
+  const dialog = useDialog(onClose)
   const spec = sizes.find((s) => s.id === size) || sizes[0]
   const code = isPlaylist
     ? buildPlaylistEmbedHtml(target.id, { size, title: target.title })
@@ -70,13 +72,13 @@ function EmbedCodeModal({ target, onClose }) {
     <div className="share-chooser-overlay" onClick={onClose}>
       <div
         className="share-chooser"
-        role="dialog"
-        aria-label={isPlaylist ? t('misc.embed.playlistTitle') : t('misc.embed.audioTitle')}
+        {...dialog.props}
         onClick={(e) => e.stopPropagation()}
       >
         <ModalHeader
           className="share-chooser-header"
           title={isPlaylist ? t('misc.embed.playlistTitle') : t('misc.embed.audioTitle')}
+          titleId={dialog.titleId}
           onClose={onClose}
         />
         <p className="share-embed-hint">

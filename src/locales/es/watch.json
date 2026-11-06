@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Este video ya no está disponible",
     "unavailableBody": "No se encontró en la red el archivo de esta subida antigua. La publicación sigue existiendo en la blockchain, pero el video ya no se puede reproducir.",
+    "scheduledTitle": "Esta publicación está programada",
+    "scheduledBody": "Se publicará el {{date}}. El video se podrá ver a partir de entonces.",
     "blockedTitle": "No se pudo cargar el video ahora",
     "blockedBody": "Uno de nuestros servidores de video no respondió. El video está bien, así que inténtalo de nuevo."
   },

@@ -93,6 +93,8 @@
   "media": {
     "unavailableTitle": "Ten film nie jest już dostępny",
     "unavailableBody": "Nie udało się znaleźć w sieci plików tego starszego filmu. Post nadal istnieje w blockchainie, ale filmu nie da się już odtworzyć.",
+    "scheduledTitle": "Ten post jest zaplanowany",
+    "scheduledBody": "Zostanie opublikowany {{date}}. Od tego momentu będzie można obejrzeć wideo.",
     "blockedTitle": "Nie udało się teraz wczytać filmu",
     "blockedBody": "Jeden z naszych serwerów wideo nie odpowiedział. Z samym filmem wszystko w porządku, więc spróbuj ponownie."
   },

@@ -15,11 +15,10 @@
  * asks the wallet for anything.
  */
 import { useEffect, useSyncExternalStore } from 'react';
-import { getCurrentProvider, Providers } from '../hive-api/aioha';
 import { CHECKER_URL } from '../utils/config';
+import { fetchSessionVouch } from './sessionVouch';
 
 const API = `${CHECKER_URL}/podcasts`;
-const THREESPEAK_API = import.meta.env.VITE_THREESPEAK_API || '/api';
 const SYNC_MS = 20 * 1000;
 const VOUCH_REUSE_MS = 20 * 3600 * 1000;
 const LOCAL_MAX = 2000;
@@ -45,6 +44,15 @@ function emit() {
 function switchOwner(user) {
   const u = user || null;
   if (u === owner) return;
+  // Unsaved positions belong to the account that played them: send them under
+  // that account now, never in the next account's save. Played signed out they
+  // stay in this browser only, as they always do.
+  if (owner && dirty.size) {
+    const prev = owner;
+    const items = [...dirty].map((id) => itemOf(map, id));
+    for (let i = 0; i < items.length; i += 20) postProgress(prev, items.slice(i, i + 20)).catch(() => {});
+  }
+  dirty.clear();
   owner = u;
   map = new Map();
   try {
@@ -83,24 +91,8 @@ const VOUCH_RETRY_MS = 5 * 60 * 1000;
 let vouchFailed = null;    // { user, at }
 let vouchInFlight = null;  // { user, promise }
 
-async function fetchVouch(user) {
-  try {
-    const headers = { 'Content-Type': 'application/json' };
-    if (getCurrentProvider() === Providers.HiveSigner) {
-      const token = localStorage.getItem('hivesignerToken');
-      if (token) headers.Authorization = `Bearer ${token}`;
-    }
-    const res = await fetch(`${THREESPEAK_API}/podcasts/signature`, {
-      method: 'POST', headers, credentials: 'include',
-      body: JSON.stringify({ action: 'progress', payload: 'session' }),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.signature || data.username !== user) return null;
-    return { user, signature: data.signature, timestamp: data.timestamp };
-  } catch {
-    return null;
-  }
-}
+// The shared helper (lib/sessionVouch.js), with this module's action word.
+const fetchVouch = (user) => fetchSessionVouch('progress', user);
 
 /**
  * Our API's word for who this session is (action 'progress', payload 'session'),
@@ -131,20 +123,28 @@ export async function flushProgress({ keepalive = false } = {}) {
   timer = null;
   const user = owner;
   if (!user || !dirty.size) return;
-  const items = [...dirty].slice(0, 20).map((id) => ({ id, pos: map.get(id)?.pos || 0, dur: map.get(id)?.dur || 0 }));
+  const items = [...dirty].slice(0, 20).map((id) => itemOf(map, id));
   items.forEach((it) => dirty.delete(it.id));
+  try {
+    await postProgress(user, items, { keepalive });
+  } catch {
+    // Still the same listener: try these again next time.
+    if (owner === user) items.forEach((it) => dirty.add(it.id));
+  }
+}
+
+const itemOf = (m, id) => ({ id, pos: m.get(id)?.pos || 0, dur: m.get(id)?.dur || 0 });
+
+/** One save of `items` for `user`. Quietly nothing when the session can't be proven. */
+async function postProgress(user, items, { keepalive = false } = {}) {
   const v = await sessionVouch(user);
   if (!v) return;
-  try {
-    await fetch(`${API}/progress`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user, items, signature: v.signature, timestamp: v.timestamp }),
-      keepalive,
-    });
-  } catch {
-    items.forEach((it) => dirty.add(it.id));
-  }
+  await fetch(`${API}/progress`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user, items, signature: v.signature, timestamp: v.timestamp }),
+    keepalive,
+  });
 }
 
 /** The player's report: `id` is at `pos` of `dur` seconds. */

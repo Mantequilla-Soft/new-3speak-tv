@@ -111,6 +111,7 @@
     "deviceOnToast": "To urządzenie będzie otrzymywać powiadomienia",
     "changeFailed": "Nie udało się zmienić powiadomień",
     "saveFailed": "Nie udało się tego zapisać",
+    "notConfirmed": "Nie udało się potwierdzić, że to Ty. Wyloguj się i zaloguj ponownie, a potem spróbuj jeszcze raz.",
     "loginHint": "Zaloguj się, aby wybrać, o czym chcesz dostawać powiadomienia.",
     "unsupported": "Ta przeglądarka nie obsługuje powiadomień. Na iPhonie i iPadzie działają tylko po dodaniu 3Speak do ekranu początkowego.",
     "device": "Powiadamiaj to urządzenie",
