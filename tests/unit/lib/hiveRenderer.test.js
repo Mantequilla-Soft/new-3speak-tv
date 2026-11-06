@@ -162,18 +162,22 @@ describe('third-party embeds stay links', () => {
     expect(frag.querySelector('a').getAttribute('href')).toBe('https://evil.example/page')
   })
 
-  // BUG: OWN_EMBED_HOSTS (renderer.js:176) is tested against the whole src URL,
-  // not its host, so "//3speak.tv" in a query string, a host that merely starts
-  // with "3speak.tv." or any "/ipfs/" path keeps an arbitrary third-party iframe
-  // live in the post (no sandbox, author-chosen width/height). Expected: only
-  // iframes whose HOST is 3speak or that our own IPFS pass produced survive.
-  it.skip.each([
+  // Only an iframe whose HOST is 3Speak survives: a 3Speak mention elsewhere in
+  // the URL, a look-alike host or an /ipfs/ path on someone else's server used
+  // to keep a live third-party iframe in the post.
+  it.each([
     'https://evil.example/phish?ref=//3speak.tv',
     'https://3speak.tv.evil.example/phish',
     'https://evil.example/ipfs/x/y',
-  ])('BUG: an iframe to a foreign host survives when its URL merely mentions 3Speak or /ipfs/ (%s)', (src) => {
+    'javascript:alert(1)//3speak.tv',
+  ])('an iframe to a foreign host becomes a link even when its URL mentions 3Speak or /ipfs/ (%s)', (src) => {
     const frag = dom(render(`<iframe src="${src}" width="100%" height="5000"></iframe>`))
     expect(frag.querySelector('iframe')).toBeNull()
+  })
+
+  it('a hand-written iframe on a 3Speak host is still kept as a player', () => {
+    const frag = dom(render('<iframe src="https://audio.3speak.tv/play?a=abc&mode=compact&iframe=1"></iframe>'))
+    expect(frag.querySelector('iframe').getAttribute('src')).toContain('https://audio.3speak.tv/play?a=abc')
   })
 })
 

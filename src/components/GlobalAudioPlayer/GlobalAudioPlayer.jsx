@@ -1079,17 +1079,20 @@ function GlobalAudioPlayer() {
       if (i >= 0 && i < audioQueue.length - 1) { audioPlay(audioQueue[i + 1]); return; }
       if (i === -1) { audioPlay(audioQueue[0]); return; }
     }
+    // The page's list goes along: audioPlay without it would make the next track
+    // a list of one, and the album or page would stop after it.
     const i = audioAutoplayList.findIndex(x => x._id === audioCurrent._id);
-    if (i >= 0 && i < audioAutoplayList.length - 1) audioPlay(audioAutoplayList[i + 1]);
+    if (i >= 0 && i < audioAutoplayList.length - 1) audioPlay(audioAutoplayList[i + 1], audioAutoplayList);
   }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
 
   const playPrev = useCallback(() => {
     const el = audioRef.current;
     if (el && el.currentTime > 3 && !audioCurrent?.live) { el.currentTime = 0; return; }
     if (!audioCurrent) return;
-    const list = audioQueue.length > 0 ? audioQueue : audioAutoplayList;
+    const fromQueue = audioQueue.length > 0;
+    const list = fromQueue ? audioQueue : audioAutoplayList;
     const i = list.findIndex(x => x._id === audioCurrent._id);
-    if (i > 0) audioPlay(list[i - 1]);
+    if (i > 0) audioPlay(list[i - 1], fromQueue ? undefined : audioAutoplayList);
   }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
 
   // What the phone's media notification, lock screen, headphones and car show
@@ -1315,15 +1318,19 @@ function GlobalAudioPlayer() {
         </div>
   ) : null;
 
+  // Every return has the same root (the provider) with {audioEl} first, so React
+  // keeps ONE <audio> element from the idle bar to playing. With a Fragment here
+  // it was remounted on the first play, and effects bound to the element by elKey
+  // (the lock-screen re-tell among them) stayed on the detached one.
   if (!audioCurrent) {
-    if (!idleBar) return <>{audioEl}{queueOverlay}</>;
+    if (!idleBar) return <PortalDocContext.Provider value={inPip ? hostDoc : null}>{audioEl}{queueOverlay}</PortalDocContext.Provider>;
     // What was playing when the player was closed comes first, at its spot;
     // without it, the top of the queue.
     const next = audioLast?.track || audioQueue[0];
     const playIdle = () => (audioLast ? audioResumeLast(true) : audioPlay(next, audioQueue));
     const idleLabel = audioLast ? t('audio.player.continueAt', { time: fmt(audioLast.t) }) : t('audio.player.upNext');
     return (
-      <>
+      <PortalDocContext.Provider value={inPip ? hostDoc : null}>
         {audioEl}
         <div ref={npRef} className="audio-now-playing audio-np-idle">
           <div className="audio-np-content">
@@ -1345,7 +1352,7 @@ function GlobalAudioPlayer() {
           </div>
         </div>
         {queueOverlay}
-      </>
+      </PortalDocContext.Provider>
     );
   }
 

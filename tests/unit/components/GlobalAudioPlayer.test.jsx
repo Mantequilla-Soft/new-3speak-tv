@@ -310,12 +310,9 @@ describe('the audio player: previous, next and the end of a track', () => {
     expect(audio()).toHaveAttribute('src', `${CDN}/cid2`)
   })
 
-  // BUG: playNext and playPrev call audioPlay(next) without the list
-  // (GlobalAudioPlayer.jsx:1075-1094), and audioPlay then replaces
-  // audioAutoplayList with [next] (createAudioPlayerSlice.js:128). So a page's
-  // list plays one track further and then stops: a second Next does nothing,
-  // and an album started from its first track ends after the second.
-  it.skip('BUG: Next keeps going through the page list after the first skip', async () => {
+  // Next and Previous used to drop the page's list (audioPlay without it makes a
+  // list of one), so an album stopped after its second track.
+  it('Next keeps going through the page list after the first skip', async () => {
     const { user } = mount()
     play(A, [A, B, C])
     await user.click(screen.getAllByRole('button', { name: 'Next' })[0])
@@ -323,12 +320,20 @@ describe('the audio player: previous, next and the end of a track', () => {
     expect(store().audioCurrent).toBe(C)
   })
 
-  it.skip('BUG: a page list plays through to its end on its own', () => {
+  it('a page list plays through to its end on its own', () => {
     mount()
     play(A, [A, B, C])
     reachEnd()
     reachEnd()
     expect(store().audioCurrent).toBe(C)
+  })
+
+  it('Previous keeps the page list, so Next still works after it', async () => {
+    const { user } = mount()
+    play(B, [A, B, C])
+    await user.click(screen.getAllByRole('button', { name: 'Previous' })[0])
+    expect(store().audioCurrent).toBe(A)
+    expect(store().audioAutoplayList).toEqual([A, B, C])
   })
 
   it('a listened track joins the watch history once, for a signed-in listener', async () => {
@@ -420,16 +425,14 @@ describe('the audio player: the lock screen and media keys (Media Session)', () 
     expect(session.metadata).toMatchObject({ title: 'Track 1', artist: '@badadib' })
   })
 
-  // BUG: the <audio> element is replaced when the player goes from empty (or the
-  // "continue" bar) to playing, because the two returns of GlobalAudioPlayer wrap
-  // it in different parents (a Fragment at :1319/:1326 vs PortalDocContext.Provider
-  // at :1437), so React remounts it. The effect that re-tells the lock screen on a
-  // new source (:1119-1132) only re-runs on elKey, so it stays bound to the old,
-  // detached element for the rest of the session: the iOS fix from 4f08cd48 never
-  // runs for a player started by a click. (Effects keyed on the track id recover.)
-  it.skip('BUG: started from an empty player, still tells the lock screen again on a new source', () => {
+  // The <audio> element used to be remounted when the player went from empty to
+  // playing (the returns had different roots), leaving the re-tell bound to the
+  // detached element for the whole session.
+  it('started from an empty player, still tells the lock screen again on a new source', () => {
     mount()
+    const before = audio()
     play(A)
+    expect(audio()).toBe(before) // one element for the whole session
     session.metadata = null
     act(() => { audio().setAttribute('src', `${CDN}/other-gateway`) })
     fire('playing')

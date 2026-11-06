@@ -171,9 +171,24 @@ function disableUpstreamEmbedders(renderer) {
  * Safety net for the `disableUpstreamEmbedders` returned-false case, and for
  * raw third-party <iframe> tags typed by hand into an HTML post body: rewrite
  * the iframe as a plain link to its source so the URL isn't lost. Our own
- * containers (3Speak video/audio, IPFS) run before this and are left alone.
+ * 3Speak video/audio containers run before this and are left alone; IPFS
+ * iframes were already turned into <video> by then.
+ *
+ * "Our own" is decided by the iframe's HOST. It used to be a pattern anywhere in
+ * the URL, so https://evil.example/x?ref=//3speak.tv, https://3speak.tv.evil.example/
+ * or any /ipfs/ path kept a live, unsandboxed third-party iframe in a post, at
+ * whatever size its author chose.
  */
-const OWN_EMBED_HOSTS = /(?:\/\/|\.)3speak\.(?:tv|online|co)|\/ipfs\//i;
+const OWN_EMBED_HOST_RE = /(?:^|\.)3speak\.(?:tv|online|co)$/i;
+
+function isOwnEmbed(src) {
+  try {
+    const u = new URL(String(src).replace(/&amp;/gi, '&'));
+    return (u.protocol === 'https:' || u.protocol === 'http:') && OWN_EMBED_HOST_RE.test(u.hostname);
+  } catch {
+    return false;
+  }
+}
 
 // `[^>]*>` swallows the `/` of a self-closing tag, and the closing tag is
 // optional, so both `<iframe …/>` and `<iframe …></iframe>` match — xmldom
@@ -186,7 +201,7 @@ const CONTAINED_IFRAME_RE = new RegExp(
 
 function iframeToLink(match) {
   const src = match.match(/\bsrc="([^"]*)"/i)?.[1] || '';
-  if (!src || OWN_EMBED_HOSTS.test(src)) return match;
+  if (!src || isOwnEmbed(src)) return match;
   const url = youtubeWatchUrl(src) || src;
   return `<p><a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a></p>`;
 }
