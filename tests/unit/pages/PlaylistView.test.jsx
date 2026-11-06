@@ -208,7 +208,8 @@ describe('a playlist page: the owner\'s tools', () => {
     await user.click(screen.getByRole('button', { name: /Private/ }))
     await user.type(screen.getByPlaceholderText('Add more...'), 'Jazz{Enter}')
     await user.click(screen.getByRole('button', { name: /Save Changes/ }))
-    expect(m.update).toHaveBeenCalledWith('pl-1', { name: 'Renamed', access: 'private', json_metadata: JSON.stringify({ tags: ['music', 'live', 'jazz'] }) })
+    // The type goes along: top-level for the indexer, and in json_metadata as the owner's choice.
+    expect(m.update).toHaveBeenCalledWith('pl-1', { name: 'Renamed', access: 'private', type: 'video', audio_kind: '', json_metadata: JSON.stringify({ tags: ['music', 'live', 'jazz'], type: 'video' }) })
     await waitFor(() => expect(screen.queryByRole('heading', { name: 'Edit Playlist' })).not.toBeInTheDocument())
     expect(toastMessages(toast.success)).toContain('Playlist updated! Changes may take a moment to appear.')
   })
@@ -229,6 +230,10 @@ describe('a playlist page: the owner\'s tools', () => {
     await user.upload(document.querySelector('input[type="file"]'), file)
     expect(m.upload).toHaveBeenCalledWith(file)
     expect(await screen.findByRole('img', { name: 'Cover' })).toHaveAttribute('src', 'https://img.example/cover.jpg')
+    // Album details (genre, year, label, credits) belong to music playlists only.
+    expect(screen.queryByPlaceholderText('1996')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Audio' }))
+    await user.click(screen.getByRole('button', { name: 'Music' }))
     await user.type(screen.getByPlaceholderText('1996'), '2024')
     await user.click(screen.getByRole('button', { name: /Save Changes/ }))
     const fields = m.update.mock.calls[0][1]
@@ -266,6 +271,8 @@ describe('a playlist page: the owner\'s tools', () => {
     await screen.findByRole('heading', { name: 'Best of badadib' })
     await user.click(screen.getByRole('button', { name: /Edit/ }))
     expect(screen.getByLabelText('Name')).toHaveValue('Best of badadib')
+    await user.click(screen.getByRole('button', { name: 'Audio' }))
+    await user.click(screen.getByRole('button', { name: 'Music' }))
     expect(screen.getByLabelText('Year')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /remove.*music/i })).toBeInTheDocument()
   })
