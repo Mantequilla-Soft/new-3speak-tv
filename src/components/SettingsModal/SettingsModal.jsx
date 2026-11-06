@@ -1139,7 +1139,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   }, [isOpen, dropdown, onClose]);
 
   // The centred window is a dialog of its own, Escape included.
-  const dialog = useDialog(onClose, { active: isOpen && !dropdown });
+  const dialog = useDialog(onClose, { active: isOpen && !dropdown, ref: modalRef });
 
   if (!isOpen) return null;
 

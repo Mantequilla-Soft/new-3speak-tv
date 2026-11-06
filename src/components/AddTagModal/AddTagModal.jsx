@@ -13,6 +13,7 @@ import { recordViewerTag, getViewerTags, getMyViewerTag } from '../../utils/view
 import { getVideoTagsV2, getTagLabel, getCategoryOf } from '../../utils/tagsV2';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import useDialog from '../../hooks/useDialog';
 // Reuses the vote dialog's popup shell (already a bottom sheet on mobile) and the
 // tag-tile styles, so tagging looks identical wherever it's offered.
 import '../tooltip/UpvoteTooltip.scss';
@@ -84,13 +85,8 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
     return () => { alive = false; };
   }, [isOpen, author, permlink, user]);
 
-  // Escape to close (but not mid-broadcast).
-  useEffect(() => {
-    if (!isOpen) return undefined;
-    const onKey = (e) => { if (e.key === 'Escape' && !saving) onClose(); };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [isOpen, saving, onClose]);
+  // A named dialog; Escape closes it (but not mid-broadcast).
+  const dialog = useDialog(saving ? undefined : onClose, { active: isOpen });
 
   if (!isOpen) return null;
 
@@ -123,10 +119,11 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
     <div className="vote-popup-overlay" onMouseDown={() => { if (!saving) onClose(); }}>
       <div
         className="vote-popup add-tag-popup"
+        {...dialog.props}
         onClick={(e) => e.stopPropagation()}
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <ModalHeader className="vote-popup-header" title={t('modals.addTag.title')} onClose={saving ? undefined : onClose} />
+        <ModalHeader className="vote-popup-header" title={t('modals.addTag.title')} titleId={dialog.titleId} onClose={saving ? undefined : onClose} />
         {title && <p className="add-tag-title">{title}</p>}
 
         {existing === undefined ? (
