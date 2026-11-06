@@ -116,6 +116,8 @@
     "count_many": "{{count}} commenti",
     "count_other": "{{count}} commenti",
     "edited": "(modificato)",
+    "hideComment": "Nascondi commento",
+    "showComment": "Mostra il commento di @{{user}}",
     "saving": "Salvataggio...",
     "translation": "Traduzione",
     "translationFailed": "Traduzione non riuscita. Il servizio di traduzione è attivo?",

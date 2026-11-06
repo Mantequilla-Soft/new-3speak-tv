@@ -6,6 +6,7 @@
       "allRequired": "Tüm alanlar zorunlu",
       "loginRequired": "Bahşiş göndermek için giriş yapmalısın",
       "insufficientBalance": "Yetersiz bakiye",
+      "amountPositive": "Sıfırdan büyük bir miktar girin",
       "invalidUsername": "Geçersiz kullanıcı adı",
       "transferFailed": "Transfer başarısız: {{message}}"
     },

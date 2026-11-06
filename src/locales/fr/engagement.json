@@ -6,6 +6,7 @@
       "allRequired": "Tous les champs sont obligatoires",
       "loginRequired": "Connectez-vous pour envoyer un pourboire",
       "insufficientBalance": "Solde insuffisant",
+      "amountPositive": "Saisissez un montant supérieur à zéro",
       "invalidUsername": "Nom d'utilisateur invalide",
       "transferFailed": "Échec du transfert : {{message}}"
     },

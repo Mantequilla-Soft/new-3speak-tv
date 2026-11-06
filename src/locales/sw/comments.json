@@ -111,6 +111,8 @@
     "count_one": "Maoni {{count}}",
     "count_other": "Maoni {{count}}",
     "edited": "(imehaririwa)",
+    "hideComment": "Ficha maoni",
+    "showComment": "Onyesha maoni ya @{{user}}",
     "saving": "Inahifadhi...",
     "translation": "Tafsiri",
     "translationFailed": "Tafsiri imeshindwa. Je, huduma ya tafsiri inafanya kazi?",

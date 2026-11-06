@@ -6,6 +6,7 @@
       "allRequired": "모든 항목을 입력해 주세요",
       "loginRequired": "팁을 보내려면 로그인해 주세요",
       "insufficientBalance": "잔액이 부족해요",
+      "amountPositive": "0보다 큰 금액을 입력하세요",
       "invalidUsername": "잘못된 사용자 이름이에요",
       "transferFailed": "송금 실패: {{message}}"
     },

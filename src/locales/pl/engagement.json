@@ -6,6 +6,7 @@
       "allRequired": "Wszystkie pola są wymagane",
       "loginRequired": "Zaloguj się, aby wysłać napiwek",
       "insufficientBalance": "Niewystarczające saldo",
+      "amountPositive": "Wpisz kwotę większą od zera",
       "invalidUsername": "Nieprawidłowa nazwa użytkownika",
       "transferFailed": "Przelew nie powiódł się: {{message}}"
     },

@@ -106,6 +106,8 @@
     "commentButton": "แสดงความคิดเห็น",
     "count_other": "{{count}} ความคิดเห็น",
     "edited": "(แก้ไขแล้ว)",
+    "hideComment": "ซ่อนความคิดเห็น",
+    "showComment": "แสดงความคิดเห็นของ @{{user}}",
     "saving": "กำลังบันทึก...",
     "translation": "คำแปล",
     "translationFailed": "แปลไม่สำเร็จ บริการแปลทำงานอยู่หรือไม่?",

@@ -106,6 +106,8 @@
     "commentButton": "评论",
     "count_other": "{{count}} 条评论",
     "edited": "（已编辑）",
+    "hideComment": "隐藏评论",
+    "showComment": "显示 @{{user}} 的评论",
     "saving": "保存中...",
     "translation": "翻译",
     "translationFailed": "翻译失败。翻译服务是否在运行？",

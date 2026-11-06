@@ -6,6 +6,7 @@
       "allRequired": "Semua kolom wajib diisi",
       "loginRequired": "Silakan masuk untuk mengirim tip",
       "insufficientBalance": "Saldo tidak cukup",
+      "amountPositive": "Masukkan jumlah lebih dari nol",
       "invalidUsername": "Nama pengguna tidak valid",
       "transferFailed": "Transfer gagal: {{message}}"
     },

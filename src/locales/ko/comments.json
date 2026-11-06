@@ -106,6 +106,8 @@
     "commentButton": "댓글",
     "count_other": "댓글 {{count}}개",
     "edited": "(수정됨)",
+    "hideComment": "댓글 숨기기",
+    "showComment": "@{{user}} 님의 댓글 보기",
     "saving": "저장 중...",
     "translation": "번역",
     "translationFailed": "번역에 실패했어요. 번역 서비스가 실행 중인가요?",
