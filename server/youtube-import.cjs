@@ -991,7 +991,7 @@ function sweep() {
  * Mount the routes. `resolveUser(req, res)` must return a PROVEN Hive username
  * (butrauth session, wallet session cookie, or HiveSigner bearer) or null.
  */
-function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPostingGrant }) {
+function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPostingGrant, signScheduledPost }) {
   library = require('./import-library.cjs').createLibrary({
     uri: process.env.IMPORT_LIBRARY_MONGODB_URI || process.env.MONGODB_URI || '',
     dbName: process.env.IMPORT_LIBRARY_DATABASE_NAME || process.env.DATABASE_NAME || '',
@@ -1672,6 +1672,7 @@ function mountYoutubeImport(app, { resolveUser, limiter, uploadImage, hasPosting
       knownImports,
       uploadImage: uploadImageWithFallback,
       hasPostingGrant,
+      signScheduledPost,
       alert: alertDiscord,
       coverFor,
     })

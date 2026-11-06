@@ -2310,6 +2310,9 @@ const PODCAST_VOUCH_PAYLOAD = {
   // Who is listening, for listener rewards (3speakchecks routes/audioListen.js
   // proveListener), reused for up to a day. Only names the signed-in account.
   listen: /^session$/,
+  // Saving push-notification choices (3speakchecks routes/push.js proofFor,
+  // `3speak-podcasts|push-vouch|<user>|session|<ms>`), reused for up to a day.
+  push: /^session$/,
 }
 app.post('/api/podcasts/signature', signChallengeLimiter, async (req, res) => {
   try {
@@ -2318,11 +2321,88 @@ app.post('/api/podcasts/signature', signChallengeLimiter, async (req, res) => {
     const payload = typeof req.body?.payload === 'string' ? req.body.payload : ''
     const shape = PODCAST_VOUCH_PAYLOAD[action]
     if (!shape || !shape.test(payload)) return res.status(400).json({ error: 'Invalid request' })
-    const hiveUsername = await resolveAnnouncementUser(req, res)
+    // The page may name the account it acts for (`username`): then only a VERIFIED
+    // session of exactly that account counts, so a second login in the same
+    // browser is never vouched for in its place. With no name, as before: the
+    // first verified session, or a warm-up user's `~handle`.
+    const requested = typeof req.body?.username === 'string' ? req.body.username.trim().toLowerCase() : ''
+    const hiveUsername = requested
+      ? ((await resolveVerifiedHiveUsers(req, res)).includes(requested) ? requested : null)
+      : await resolveAnnouncementUser(req, res)
     if (!hiveUsername) return res.status(401).json({ error: 'Not signed in', reason: 'not_signed_in_as' })
     return res.json({ success: true, username: hiveUsername, ...signVouch(['3speak-podcasts', `${action}-vouch`, hiveUsername, payload]) })
   } catch (err) {
     console.error('Podcast signature error:', err.message)
+    res.status(500).json({ error: 'Signing failed' })
+  }
+})
+
+// Every account this request PROVES it is signed in as: a Butter Auth cookie, a
+// wallet-login session (posting key proved at login), a HiveSigner token verified
+// with hivesigner.com. Never the app key plus a claimed name. A browser can hold
+// more than one of these at once (a Butter Auth login in one tab next to a
+// Keychain session in another), so callers pick the account they act for from
+// this list instead of taking whichever comes first.
+async function resolveVerifiedHiveUsers(req, res) {
+  const out = []
+  const add = (u) => { const v = String(u || '').toLowerCase(); if (v && HIVE_USER_RE.test(v) && !out.includes(v)) out.push(v) }
+  add(await resolveButrUser(req, res))
+  const ws = req.cookies?.[WSESSION_COOKIE_NAME]
+  if (ws) add(verifyWalletSession(ws))
+  const authHeader = req.headers.authorization || ''
+  const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : ''
+  if (bearer) add(await verifyHiveSignerToken(bearer))
+  return out
+}
+
+// POST /api/scheduled-posts/signature { action, owner, permlink, scheduledOn? }:
+// the owner's proof for a write to the checker's scheduled posts (create, update,
+// cancel; 3speakchecks routes/scheduledPosts.js). The checker's cron publishes a
+// queued post AS its owner, so it wants the write signed under the owner's posting
+// authority. A HiveSigner or Butter Auth session holds no key in the browser, so
+// @threespeak signs it here under the grant the owner gave it (which the cron needs
+// anyway), once the owner's session is proved.
+//
+// 🔒 Identity only from resolveVerifiedHiveUsers, never resolveDelegatedSignUser:
+// that helper's app-key branch takes a CLAIMED name and would reopen exactly the
+// hole this signature closes. The owner named in the body must be one of the
+// accounts this request is verifiably signed in as (two logins in one browser: the
+// post's owner, not whichever session comes first). The message is built here from
+// the validated fields (server/scheduled-post-proof.cjs); it always starts with
+// `scheduled-post|`, so it can never be a Hive transaction or another app's message.
+const { parseScheduledPostRequest, signScheduledPost } = require('./scheduled-post-proof.cjs')
+app.post('/api/scheduled-posts/signature', signChallengeLimiter, async (req, res) => {
+  try {
+    if (!POSTING_WIF) return res.status(500).json({ error: 'Server is not configured' })
+    const fields = parseScheduledPostRequest(req.body)
+    if (fields.error) return res.status(400).json({ error: fields.error })
+
+    const signedInAs = await resolveVerifiedHiveUsers(req, res)
+    if (!signedInAs.includes(fields.owner)) {
+      if (signedInAs.length) {
+        console.warn(`[scheduled-posts sign] ${fields.action} for @${fields.owner}, request signed in as ${signedInAs.map((u) => '@' + u).join(', ')}`)
+      }
+      return res.status(401).json({ error: 'Not signed in as this account', reason: 'not_signed_in_as' })
+    }
+
+    let granted
+    try {
+      granted = await hasThreespeakPostingGrant(fields.owner)
+    } catch (err) {
+      console.warn('[scheduled-posts sign] posting-grant check failed:', err.message)
+      return res.status(502).json({ error: 'Could not check posting authority' })
+    }
+    if (!granted) {
+      return res.status(403).json({
+        error: `Scheduling needs @${HIVE_ACCOUNT} posting authority on your account.`,
+        reason: 'no_grant',
+      })
+    }
+
+    res.set('Cache-Control', 'no-store')
+    return res.json({ success: true, username: fields.owner, ...signScheduledPost(POSTING_WIF, fields) })
+  } catch (err) {
+    console.error('Scheduled post signature error:', err.message)
     res.status(500).json({ error: 'Signing failed' })
   }
 })
@@ -2546,6 +2626,11 @@ if (process.env.VIDEO_IMPORT_ENABLED === 'true') {
     // For the batch importer, which builds and schedules the posts itself.
     uploadImage: uploadImageAsThreespeak,
     hasPostingGrant: hasThreespeakPostingGrant,
+    // The owner's proof for the batch's scheduled-post writes, signed as
+    // @threespeak under the owner's grant: the owner started the batch from a
+    // verified session (resolveProvenViewer), and the batch checks the grant
+    // before every post. Null when no key is configured: the write goes unsigned.
+    signScheduledPost: (fields) => (POSTING_WIF ? signScheduledPost(POSTING_WIF, fields) : null),
   })
 } else {
   console.log('[yt-import] video import is OFF (VIDEO_IMPORT_ENABLED is not true)')
