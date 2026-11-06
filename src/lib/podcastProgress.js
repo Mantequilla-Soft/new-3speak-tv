@@ -45,6 +45,15 @@ function emit() {
 function switchOwner(user) {
   const u = user || null;
   if (u === owner) return;
+  // Unsaved positions belong to the account that played them: send them under
+  // that account now, never in the next account's save. Played signed out they
+  // stay in this browser only, as they always do.
+  if (owner && dirty.size) {
+    const prev = owner;
+    const items = [...dirty].map((id) => itemOf(map, id));
+    for (let i = 0; i < items.length; i += 20) postProgress(prev, items.slice(i, i + 20)).catch(() => {});
+  }
+  dirty.clear();
   owner = u;
   map = new Map();
   try {
@@ -131,20 +140,28 @@ export async function flushProgress({ keepalive = false } = {}) {
   timer = null;
   const user = owner;
   if (!user || !dirty.size) return;
-  const items = [...dirty].slice(0, 20).map((id) => ({ id, pos: map.get(id)?.pos || 0, dur: map.get(id)?.dur || 0 }));
+  const items = [...dirty].slice(0, 20).map((id) => itemOf(map, id));
   items.forEach((it) => dirty.delete(it.id));
+  try {
+    await postProgress(user, items, { keepalive });
+  } catch {
+    // Still the same listener: try these again next time.
+    if (owner === user) items.forEach((it) => dirty.add(it.id));
+  }
+}
+
+const itemOf = (m, id) => ({ id, pos: m.get(id)?.pos || 0, dur: m.get(id)?.dur || 0 });
+
+/** One save of `items` for `user`. Quietly nothing when the session can't be proven. */
+async function postProgress(user, items, { keepalive = false } = {}) {
   const v = await sessionVouch(user);
   if (!v) return;
-  try {
-    await fetch(`${API}/progress`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user, items, signature: v.signature, timestamp: v.timestamp }),
-      keepalive,
-    });
-  } catch {
-    items.forEach((it) => dirty.add(it.id));
-  }
+  await fetch(`${API}/progress`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user, items, signature: v.signature, timestamp: v.timestamp }),
+    keepalive,
+  });
 }
 
 /** The player's report: `id` is at `pos` of `dur` seconds. */

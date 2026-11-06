@@ -167,11 +167,21 @@ describe('saving to the checker', () => {
   // account) are sent in the next save under the NEW account, as rows with
   // pos 0 and dur 0, and the previous account's unsaved positions are lost.
   // Expected: a save only ever carries episodes the saving account played.
-  it.skip('BUG: switching accounts never sends the previous account\'s unsaved episodes under the new one', async () => {
+  it('BUG: switching accounts never sends the previous account\'s unsaved episodes under the new one', async () => {
     pp.recordProgress(null, 'ep1', 100, 1000)
     pp.resumePosition('alice', 'x')
     await pp.flushProgress()
     expect(callsTo('https://checker.example/podcasts/progress')).toHaveLength(0)
+  })
+
+  it('an account switched away from still gets its own unsaved episodes saved, under its own name', async () => {
+    pp.recordProgress('alice', 'ep1', 100, 1000)
+    pp.resumePosition('bob', 'x')
+    await vi.advanceTimersByTimeAsync(0)
+    const saves = callsTo('https://checker.example/podcasts/progress')
+    expect(saves.map((c) => [bodyOf(c).user, bodyOf(c).items])).toEqual([['alice', [{ id: 'ep1', pos: 100, dur: 1000 }]]])
+    await pp.flushProgress()
+    expect(callsTo('https://checker.example/podcasts/progress')).toHaveLength(1)
   })
 
   it('retries a failed save next time', async () => {
