@@ -805,18 +805,22 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   // ── single (standalone post, audio embedded — uses the main composer) ──
   const publishSinglePost = useCallback(async (track) => {
     setTrackStatus(track.id, { state: 'uploading', stage: 'upload', message: undefined });
+    // The post's title is the audio's title too: the track title is only the
+    // filename-derived default here ("recording 4702"), and audio cards and the
+    // audio page read the audio row, not the post.
+    const postTitle = (mainTitle || track.title || '').trim() || 'Audio';
     const { permlink: audioPermlink, playUrl } = await uploadAudioTo3Speak({
-      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: owner, title: track.title,
+      blob: track.blob, filename: track.filename, durationSec: track.durationSec, username: owner, title: postTitle,
     });
     setTrackStatus(track.id, { state: 'posting', stage: 'post', playUrl });
     // A warm-up post takes the audio's own id as its permlink, as a warm-up video
     // does: the post replayed on Hive at graduation keeps it, and the audio row
     // already points at it.
-    const hivePermlink = warmup ? audioPermlink : (generatePermlink(mainTitle || track.title) || audioPermlink);
+    const hivePermlink = warmup ? audioPermlink : (generatePermlink(postTitle) || audioPermlink);
     const userTags = postTagsInput.split(/[\s,]+/).map(tr => tr.trim().toLowerCase()).filter(Boolean);
     const tags = userTags.length ? Array.from(new Set(userTags)) : Array.from(new Set(HIVE_DEFAULT_TAGS));
-    const desc = (postDescription || '').trim() || (track.title || '').trim();
-    const cover = postThumb ? `![${(track.title || 'cover').replace(/[[\]]/g, '')}](${postThumb})\n\n` : '';
+    const desc = (postDescription || '').trim() || postTitle;
+    const cover = postThumb ? `![${(postTitle || 'cover').replace(/[[\]]/g, '')}](${postThumb})\n\n` : '';
     const body = `${cover}${playUrl}\n\n${desc}`.trim();
     // A standalone track is a top-level titled post, so an Article carrying one
     // audio attribute. `threespeak.audio` mirrors the bare `audio` key above it:
@@ -843,7 +847,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       for (const k of Object.keys(audioAdsMeta || {})) delete warmMeta[k];
       await commentWithAioha(
         '', (community && community.name) || tags[0], hivePermlink,
-        (mainTitle || track.title || '').trim() || 'Audio', body, warmMeta,
+        postTitle, body, warmMeta,
       );
       await linkAudioToPost({ audioPermlink, postPermlink: hivePermlink, username: owner });
       // Not in one transaction with the post as on chain: the post is out either way.
@@ -855,7 +859,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         }
       }
       await pushAudioThumb(audioPermlink, postThumb);
-      trackPostsRef.current[track.id] = { author: owner, permlink: hivePermlink, title: track.title };
+      trackPostsRef.current[track.id] = { author: owner, permlink: hivePermlink, title: postTitle };
       setTrackStatus(track.id, { state: 'success', stage: undefined });
       return;
     }
@@ -867,7 +871,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
         parent_permlink: (community && community.name) || tags[0],
         author: user,
         permlink: hivePermlink,
-        title: (mainTitle || track.title || '').trim() || 'Audio',
+        title: postTitle,
         body,
         json_metadata: JSON.stringify(metaObj),
       },
@@ -883,7 +887,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     mirrorAudioAds(hivePermlink);
     await shareToBlog(hivePermlink);
     await pushAudioThumb(audioPermlink, postThumb);
-    trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: track.title };
+    trackPostsRef.current[track.id] = { author: user, permlink: hivePermlink, title: postTitle };
     setTrackStatus(track.id, { state: 'success', stage: undefined });
   }, [user, owner, warmup, mainTitle, community, postDescription, postTagsInput, postThumb, postPayout, postBeneStr, isPremium, rewardMode, playlistChoice, pushAudioThumb, shareToBlog, audioAds, mirrorAudioAds]);
 

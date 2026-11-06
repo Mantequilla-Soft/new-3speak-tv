@@ -73,6 +73,22 @@ export function squareCover(url, px = 512) {
   return u;
 }
 
+/**
+ * A cover shown WHOLE, in its own shape (the audio page's cover), where the card
+ * helpers above would crop it to 16:9 or a square. Our own images.3speak.tv has
+ * no uncropped route in the /img/ cache, so it loads as stored (one image on the
+ * page, web-sized uploads); anything else goes through Hive's resize proxy in
+ * fit mode. Empty or unknown values fall back to the card thumbnail.
+ */
+export function wholeCover(url, box = { w: 720, h: 400 }) {
+  const u = String(url || '').trim();
+  if (/^https?:\/\/images\.3speak\.tv\//i.test(u)) return u;
+  const fit = `?format=jpeg&mode=fit&width=${box.w}&height=${box.h}`;
+  if (/^https:\/\/images\.hive\.blog\/p\//i.test(u)) return viaImageCache(`${u.split('?')[0]}${fit}`);
+  if (/^https?:\/\//i.test(u) && !hiveProxyRefuses(u)) return `/img/h/p/${bs58.encode(Buffer.from(u))}${fit}`;
+  return fixVideoThumbnail({ thumbnail_url: u });
+}
+
 // A card several columns wide (the featured video) asks for this instead.
 export const LANDSCAPE_LARGE = { w: 960, h: 540 };
 

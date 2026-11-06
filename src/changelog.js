@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.86',
+    category: 'audio',
+    date: '2026-11-06',
+    summary: "Audio cards and pages now show your post's title instead of the recording's file name, and audio covers keep their shape instead of being squeezed into a square.",
+  },
+  {
     version: '1.81.85',
     category: 'watch',
     date: '2026-11-06',
