@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { needsCorsMode, setAudioSrc } from '../../lib/audioCorsMode';
 import './AudioPlayerInline.scss';
 
 const SPEEDS = [1, 1.5, 2];
@@ -72,7 +73,7 @@ export default function AudioPlayerInline({
     const a = audioRef.current;
     if (fallbackUrl && a && a.src !== fallbackUrl) {
       const wasPlaying = playing;
-      a.src = fallbackUrl;
+      setAudioSrc(a, fallbackUrl);
       if (wasPlaying) a.play().catch(() => {});
     } else {
       setFailed(true);
@@ -137,6 +138,8 @@ export default function AudioPlayerInline({
       {audioUrl && (
         <audio
           ref={audioRef}
+          // ipfs-audio.3speak.tv only plays reliably in CORS mode (lib/audioCorsMode.js).
+          crossOrigin={needsCorsMode(audioUrl) ? 'anonymous' : undefined}
           src={audioUrl}
           onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime || 0)}
           onLoadedMetadata={() => {

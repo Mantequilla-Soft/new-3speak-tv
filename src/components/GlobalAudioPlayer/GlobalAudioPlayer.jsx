@@ -38,6 +38,7 @@ import { podcastPath, episodePath, artUrl, PODCAST_PLACEHOLDER } from '../../lib
 import * as podcastsLib from '../../lib/podcasts';
 import { fetchChapters, fetchTranscript, chapterAt } from '../../lib/podcastMedia';
 import { isDownloaded, localAudioUrl, downloadTrack, useDownloads } from '../../lib/podcastDownloads';
+import { setAudioSrc } from '../../lib/audioCorsMode';
 import { toastIn } from '../../utils/toast';
 import useReblog from '../../hooks/useReblog';
 import AudioCommentModal from './AudioCommentModal';
@@ -664,7 +665,7 @@ function GlobalAudioPlayer() {
           attachHls(el, src, track._id, play);
           return;
         }
-        el.src = src;
+        setAudioSrc(el, src, routedRef.current);
         el.defaultPlaybackRate = track.live ? 1 : speedRef.current;
         el.playbackRate = el.defaultPlaybackRate;
         pendingStartRef.current = startAt || null;
@@ -732,7 +733,7 @@ function GlobalAudioPlayer() {
         try { URL.revokeObjectURL(cur.src); } catch { /* not ours */ }
         localUrlRef.current = { id: null, url: null };
         setPlayingLocal(false);
-        el.src = net;
+        setAudioSrc(el, net, routedRef.current);
         if (pos) el.addEventListener('loadedmetadata', () => { el.currentTime = pos; }, { once: true });
         el.play().catch(() => {});
         return;
@@ -749,7 +750,7 @@ function GlobalAudioPlayer() {
       if (!cid) return;
       const i = AUDIO_GATEWAYS.findIndex(g => el.src === `${g}/${cid}`);
       if (i < 0 || i + 1 >= AUDIO_GATEWAYS.length) return;
-      el.src = `${AUDIO_GATEWAYS[i + 1]}/${cid}`;
+      setAudioSrc(el, `${AUDIO_GATEWAYS[i + 1]}/${cid}`, routedRef.current);
       if (pos) el.currentTime = pos;
       if (wasPlaying) el.play().catch(() => {});
     };
@@ -1274,7 +1275,8 @@ function GlobalAudioPlayer() {
       key={elKey}
       ref={audioRef}
       preload="metadata"
-      // Only the routed element asks for CORS: a host without it then still plays on the plain one.
+      // The routed element always asks for CORS: a host without it then still plays on
+      // the plain one. On the plain one setAudioSrc decides per source.
       crossOrigin={routed ? 'anonymous' : undefined}
       style={audioCurrent ? undefined : { display: 'none' }}
     />

@@ -242,6 +242,31 @@ describe('the audio player: playing and pausing', () => {
     expect(audio()).toHaveAttribute('src', 'https://ipfs-3speak.b-cdn.net/ipfs/cid1')
   })
 
+  // ipfs-audio sends no Content-Type on a mid-file range, which the browser's ORB
+  // check blocks unless the file is asked for in CORS mode. b-cdn sends the CORS
+  // header twice (CORS fails there) but types every range, so it stays plain.
+  it('asks ipfs-audio in CORS mode and the fallback gateway plainly', () => {
+    mount()
+    play(A)
+    expect(audio()).toHaveAttribute('src', `${CDN}/cid1`)
+    expect(audio()).toHaveAttribute('crossorigin', 'anonymous')
+    fire('error')
+    expect(audio()).toHaveAttribute('src', 'https://ipfs-3speak.b-cdn.net/ipfs/cid1')
+    expect(audio()).not.toHaveAttribute('crossorigin')
+    // The next 3Speak track is back on ipfs-audio, in CORS mode again.
+    play(B)
+    expect(audio()).toHaveAttribute('src', `${CDN}/cid2`)
+    expect(audio()).toHaveAttribute('crossorigin', 'anonymous')
+  })
+
+  it('plays an outside podcast episode without CORS', () => {
+    mount()
+    play(A)
+    play({ _id: 'ep-9', external: true, src: 'https://pod.example/ep9.mp3', title: 'Episode nine', show: 'A show', duration: 600 })
+    expect(audio()).toHaveAttribute('src', 'https://pod.example/ep9.mp3')
+    expect(audio()).not.toHaveAttribute('crossorigin')
+  })
+
   it('stops at the end of a clip', () => {
     mount()
     act(() => store().audioPlayAt(A, 10, 40))

@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.97',
+    category: 'audio',
+    date: '2026-11-07',
+    summary: "Audio now starts and skips ahead more reliably, both in the audio player and in audio inside posts.",
+  },
+  {
     version: '1.81.94',
     category: 'profile',
     date: '2026-11-07',
