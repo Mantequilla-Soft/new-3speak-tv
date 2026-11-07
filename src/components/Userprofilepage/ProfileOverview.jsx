@@ -5,6 +5,7 @@ import PlaylistCard from '../Cards/PlaylistCard';
 import BarLoader from '../Loader/BarLoader';
 import UserAudioList from './UserAudioList';
 import ChannelTrailer from './ChannelTrailer';
+import useLayoutMediaQuery from '../../hooks/useLayoutMediaQuery';
 import CommunitySnaps from './CommunitySnaps';
 import ProfileLinksPanel from './ProfileLinksPanel';
 import ProfilePlaylistRails, { PlaylistRail } from './ProfilePlaylistRails';
@@ -94,26 +95,14 @@ export default function ProfileOverview({
 
   // The links column only exists on desktop — mobile keeps the layout it had.
   // Gated in JS rather than CSS so a phone never pays for the extra Hive read.
-  const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1025px)').matches,
-  );
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1025px)');
-    const on = () => setIsDesktop(mq.matches);
-    mq.addEventListener('change', on);
-    return () => mq.removeEventListener('change', on);
-  }, []);
+  // Held still while a video is fullscreen (see the hook).
+  const isDesktop = useLayoutMediaQuery('(min-width: 1025px)');
 
   // Phones (and the narrowest tablets) get the one-column phone layout.
-  const [isPhoneWidth, setIsPhoneWidth] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
-  );
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    const on = () => setIsPhoneWidth(mq.matches);
-    mq.addEventListener('change', on);
-    return () => mq.removeEventListener('change', on);
-  }, []);
+  // Held still while a video is fullscreen: turning the phone to landscape for
+  // a fullscreen trailer would otherwise swap to the wide layout, unmount the
+  // <video> and drop out of fullscreen.
+  const isPhoneWidth = useLayoutMediaQuery('(max-width: 767px)');
 
   // ── layout ────────────────────────────────────────────────────────────────
   // Nothing renders until the layout is known: drawing the default first and
