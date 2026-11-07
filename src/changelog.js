@@ -18,6 +18,36 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.93',
+    category: 'editor',
+    date: '2026-11-07',
+    summary: "Audio editor: Duck lowers the music while someone talks, Studio voice cleans up a whole recording in one click, and Audiogram turns a piece of your episode into a short video.",
+  },
+  {
+    version: '1.81.92',
+    category: 'editor',
+    date: '2026-11-07',
+    summary: "Audio editor: mark chapters with M. They move with your cuts, end up in the MP3 and are listed in the episode's description.",
+  },
+  {
+    version: '1.81.91',
+    category: 'audio',
+    date: '2026-11-07',
+    summary: "Audio covers: your playlist's cover is picked for you, and you can design your own cover with text, stickers and framing, or upload a picture as before.",
+  },
+  {
+    version: '1.81.90',
+    category: 'upload',
+    date: '2026-11-07',
+    summary: "Audio upload: every track now has an Edit audio button that opens it in the audio editor, and the edited version takes its place.",
+  },
+  {
+    version: '1.81.89',
+    category: 'editor',
+    date: '2026-11-07',
+    summary: "New Audio Editor in the share menu: cut, clean up and level podcasts and music in your browser, even with two voices on their own tracks, then send the result straight into your audio upload.",
+  },
+  {
     version: '1.81.88',
     category: 'upload',
     date: '2026-11-06',
