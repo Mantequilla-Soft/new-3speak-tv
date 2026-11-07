@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.94',
+    category: 'profile',
+    date: '2026-11-07',
+    summary: "Fixed the channel trailer dropping out of fullscreen on phones when the screen rotates to landscape.",
+  },
+  {
     version: '1.81.88',
     category: 'upload',
     date: '2026-11-06',
