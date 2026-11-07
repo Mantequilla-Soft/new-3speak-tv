@@ -48,7 +48,7 @@ vi.mock('../../../src/components/AddToPlaylistModal/AddToPlaylistModal', () => (
 vi.mock('../../../src/components/tip-reward/TipModal', () => ({ default: () => null }))
 vi.mock('../../../src/components/playVideo/BlogContent', () => ({ default: () => <div>Post body</div> }))
 vi.mock('../../../src/components/Podcasts/PodcastTipModal', () => ({ default: () => null }))
-vi.mock('../../../src/components/GlobalAudioPlayer/AudioCommentModal', () => ({ default: () => null }))
+vi.mock('../../../src/components/GlobalAudioPlayer/AudioCommentPanel', () => ({ default: () => null }))
 vi.mock('../../../src/components/GlobalAudioPlayer/AudioHypeButton', () => ({ default: () => null }))
 vi.mock('../../../src/components/ads/TickerCrawl', () => ({ default: () => null }))
 vi.mock('../../../src/components/GlobalAudioPlayer/Waveform', () => ({ default: () => <div data-testid="waveform" /> }))

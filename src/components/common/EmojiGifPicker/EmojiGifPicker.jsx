@@ -1,9 +1,11 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Smile, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import EmojiPicker from 'emoji-picker-react'
 import { useAppStore } from '../../../lib/store'
 import useGiphySearch, { normalizeGifUrl } from '../../../hooks/useGiphySearch'
+import { usePortalDoc } from '../../../utils/portalDocument'
 import './EmojiGifPicker.scss'
 
 const PHONE = '(max-width: 767px)'
@@ -32,6 +34,9 @@ const readViewport = () => {
  *  - onPickGif(gifUrl)       → insert a GIF (plain `.gif` URL, ready for markdown)
  *  - align       'left' | 'right'  horizontal anchor of the popover (default 'left')
  *  - openDirection 'up' | 'down'   vertical direction the popover opens (default 'up')
+ *  - portal      render the popover over the page (fixed, next to the buttons)
+ *                instead of inside the wrapper: for composers inside a box that
+ *                clips its overflow (the audio player's comment box)
  *  - disabled    hide/disable the buttons
  *  - className   extra classes on the wrapper
  */
@@ -41,11 +46,15 @@ export default function EmojiGifPicker({
   align = 'left',
   openDirection = 'up',
   disabled = false,
+  portal = false,
   className = '',
 }) {
+  const doc = usePortalDoc()
   const { t } = useTranslation()
   const [open, setOpen] = useState(null) // 'emoji' | 'gif' | null
   const wrapRef = useRef(null)
+  const popRef = useRef(null)
+  const [anchor, setAnchor] = useState(null) // portal mode, wider screens: fixed position
   const appTheme = useAppStore((s) => s.theme)
   const { query, setQuery, gifs, loading } = useGiphySearch(open === 'gif')
   const [viewport, setViewport] = useState(null) // phones only, while open
@@ -77,12 +86,35 @@ export default function EmojiGifPicker({
   // Close on outside click / Escape.
   useEffect(() => {
     if (!open) return
-    const onDoc = (e) => { if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(null) }
+    const onDoc = (e) => {
+      if (wrapRef.current?.contains(e.target) || popRef.current?.contains(e.target)) return
+      setOpen(null)
+    }
     const onKey = (e) => { if (e.key === 'Escape') setOpen(null) }
-    document.addEventListener('mousedown', onDoc)
-    document.addEventListener('keydown', onKey)
-    return () => { document.removeEventListener('mousedown', onDoc); document.removeEventListener('keydown', onKey) }
-  }, [open])
+    doc.addEventListener('mousedown', onDoc)
+    doc.addEventListener('keydown', onKey)
+    return () => { doc.removeEventListener('mousedown', onDoc); doc.removeEventListener('keydown', onKey) }
+  }, [open, doc])
+
+  // Portal mode on wider screens: next to the buttons, on the side with more
+  // room, inside the window. Phones keep the bottom sheet from the stylesheet.
+  useLayoutEffect(() => {
+    if (!portal || !open || isPhone() || !wrapRef.current) { setAnchor(null); return }
+    const win = doc.defaultView || window
+    const place = () => {
+      const r = wrapRef.current.getBoundingClientRect()
+      const w = popRef.current?.offsetWidth || 360
+      const left = Math.min(Math.max(8, align === 'right' ? r.right - w : r.left), win.innerWidth - w - 8)
+      const above = r.top - 16
+      const below = win.innerHeight - r.bottom - 16
+      setAnchor(above >= below
+        ? { left, bottom: win.innerHeight - r.top + 8, maxHeight: above }
+        : { left, top: r.bottom + 8, maxHeight: below })
+    }
+    place()
+    win.addEventListener('resize', place)
+    return () => win.removeEventListener('resize', place)
+  }, [portal, open, align, doc])
 
   const pickGif = (g) => {
     const url = normalizeGifUrl(g)
@@ -91,9 +123,19 @@ export default function EmojiGifPicker({
 
   if (disabled) return null
 
-  const popClass = `egp-popover egp-${align} egp-open-${openDirection}${viewport?.kb ? ' egp-above-kb' : ''}`
-  const popStyle = viewport ? { '--egp-kb': `${viewport.kb}px`, '--egp-vh': `${viewport.h}px` } : undefined
-  const emojiHeight = viewport ? Math.max(200, Math.min(380, viewport.h - 24)) : 380
+  const popClass = `egp-popover egp-${align} egp-open-${openDirection}${viewport?.kb ? ' egp-above-kb' : ''}${portal ? ' egp-portal' : ''}`
+  const popStyle = viewport
+    ? { '--egp-kb': `${viewport.kb}px`, '--egp-vh': `${viewport.h}px` }
+    : portal ? (anchor
+      ? { left: anchor.left, top: anchor.top, bottom: anchor.bottom, maxHeight: anchor.maxHeight }
+      : { left: -9999, top: 0, visibility: 'hidden' }) // measured first, then placed
+      : undefined
+  const emojiHeight = viewport
+    ? Math.max(200, Math.min(380, viewport.h - 24))
+    : anchor ? Math.max(200, Math.min(380, anchor.maxHeight - 4)) : 380
+  // Portal mode: the popover goes into the body of the document the composer is
+  // in (the page, or the audio player's pop-out window).
+  const place = (node) => (portal ? createPortal(node, doc.body) : node)
 
   return (
     <div className={`egp-tools ${className}`} ref={wrapRef}>
@@ -116,8 +158,8 @@ export default function EmojiGifPicker({
         GIF
       </button>
 
-      {open === 'emoji' && (
-        <div className={`${popClass} egp-emoji-popover`} style={popStyle}>
+      {open === 'emoji' && place(
+        <div ref={popRef} className={`${popClass} egp-emoji-popover`} style={popStyle}>
           <EmojiPicker
             onEmojiClick={(d) => onPickEmoji?.(d.emoji)}
             theme={appTheme === 'light' ? 'light' : 'dark'}
@@ -130,8 +172,8 @@ export default function EmojiGifPicker({
         </div>
       )}
 
-      {open === 'gif' && (
-        <div className={`${popClass} egp-gif-popover`} style={popStyle}>
+      {open === 'gif' && place(
+        <div ref={popRef} className={`${popClass} egp-gif-popover`} style={popStyle}>
           <input
             className="egp-gif-search"
             type="text"
