@@ -27,6 +27,7 @@ import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { enforceLockedBeneficiaries } from '../../utils/beneficiaries';
 import { PPL_BENEFICIARY, ENABLE_PPL, CHECKER_URL, CHECKER_API_KEY, FEATURE_EDITOR, adsEnabledFor } from '../../utils/config';
 import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata } from '../../utils/soundCredits';
+import { sanitizeChapters, chaptersText, withChapters } from '../../utils/audioChapters';
 import { SOUND_AUTHOR_WEIGHT } from '../../utils/beneficiaries';
 import CoverDesigner from './CoverDesigner';
 import { fetchCreatorAdPrefs, syncAudioAdChoice } from '../../lib/advertiseData';
@@ -517,8 +518,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       musicCredits: sanitizeMusicCredits(extra.musicCredits),
       genre: '',
       bpm: '',
-      // Per-track publish config (snaps + album-post comments).
-      desc: '',
+      // Per-track publish config (snaps + album-post comments). Chapters from
+      // the audio editor start the description ("0:00 Intro" lines).
+      desc: chaptersText(sanitizeChapters(extra.chapters)),
+      chaptersText: chaptersText(sanitizeChapters(extra.chapters)),
       thumb: '',
       payout: 'default',      // default | powerup | decline
       beneStr: '[]',          // JSON beneficiary list
@@ -543,7 +546,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       initialTrack.filename || 'openpod-recording.ogg',
       initialTrack.source === 'editor' ? 'editor' : 'record',
       initialTrack.type ?? null,
-      { musicCredits: initialTrack.musicCredits },
+      { musicCredits: initialTrack.musicCredits, chapters: initialTrack.chapters },
     );
   }, [isOpen, initialTrack, addBlobAsTrack]);
 
@@ -842,7 +845,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   useEffect(() => {
     if (!isOpen) return undefined;
     const onResult = async (e) => {
-      const { trackId, file, durationSec, musicCredits } = e?.detail || {};
+      const { trackId, file, durationSec, musicCredits, chapters } = e?.detail || {};
+      const marks = chaptersText(sanitizeChapters(chapters));
       if (!trackId || !(file instanceof Blob)) return;
       const current = tracksRef.current.find(tr => tr.id === trackId);
       // Gone meanwhile, or out already (the published post keeps its audio)
@@ -864,6 +868,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
           objectUrl: url,
           edited: true,
           musicCredits: sanitizeMusicCredits(musicCredits),
+          // The chapter list goes into the description (replacing the one an
+          // earlier edit put there)
+          desc: withChapters(tr.desc, tr.chaptersText, marks),
+          chaptersText: marks,
         };
       }));
       const replaced = current;
@@ -951,7 +959,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     const hivePermlink = warmup ? audioPermlink : (generatePermlink(postTitle) || audioPermlink);
     const userTags = postTagsInput.split(/[\s,]+/).map(tr => tr.trim().toLowerCase()).filter(Boolean);
     const tags = userTags.length ? Array.from(new Set(userTags)) : Array.from(new Set(HIVE_DEFAULT_TAGS));
-    const desc = (postDescription || '').trim() || postTitle;
+    // The chapters from the audio editor under the text (unless it already has them)
+    const written = (postDescription || '').trim();
+    const chapterList = track.chaptersText && !written.includes(track.chaptersText) ? track.chaptersText : '';
+    const desc = [written || (chapterList ? '' : postTitle), chapterList].filter(Boolean).join('\n\n');
     const cover = postThumb ? `![${(postTitle || 'cover').replace(/[[\]]/g, '')}](${postThumb})\n\n` : '';
     const credits = trackCredits(track);
     const body = `${cover}${playUrl}\n\n${desc}`.trim() + soundCreditsMarkdown(credits);

@@ -315,6 +315,43 @@ describe('AudioUploadModal: covers', () => {
   })
 })
 
+describe('AudioUploadModal: chapters from the editor', () => {
+  const chapters = [{ start: 0, title: 'Intro' }, { start: 75, title: 'Questions' }]
+
+  it('puts them in the standalone post under the description', async () => {
+    const blob = new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' })
+    const { user } = openModal({ initialTrack: { blob, filename: 'Episode.mp3', type: null, source: 'editor', chapters } })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    await next(user)
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(aioha.broadcastWithAioha).toHaveBeenCalled())
+    const ops = aioha.broadcastWithAioha.mock.calls.map(([o]) => o).find((o) => o[0][0] === 'comment')
+    expect(ops[0][1].body).toContain('0:00 Intro\n1:15 Questions')
+  })
+
+  it('starts the track text with them, and an edit replaces the old list but keeps what was written', async () => {
+    const { user } = openModal()
+    await addFile(user)
+    await user.click(screen.getByRole('button', { name: /Edit audio/ }))
+    const { trackId } = opened[0]
+    await result({ trackId, file: new File(['ID3'], 'Episode 12.mp3', { type: 'audio/mpeg' }), durationSec: 120, chapters })
+    await waitFor(() => row('Episode 12.mp3'))
+    // Snap comments: each track's own text, on the tracks step
+    await next(user)
+    await user.click(screen.getByRole('button', { name: /Snap comments/ }))
+    await next(user)
+    await next(user)
+    const text = () => screen.getByPlaceholderText('Text for this snap (optional)')
+    await waitFor(() => expect(text()).toHaveValue('0:00 Intro\n1:15 Questions'))
+    await user.clear(text())
+    await user.type(text(), 'Show notes{Enter}{Enter}0:00 Intro{Enter}1:15 Questions')
+    // Edited again (from the track's Edit audio): the new list replaces the old one, the notes stay
+    await result({ trackId, file: new File(['ID3'], 'Episode 12.mp3', { type: 'audio/mpeg' }), durationSec: 100, chapters: [{ start: 0, title: 'Intro' }, { start: 60, title: 'Talk' }] })
+    await waitFor(() => expect(text()).toHaveValue('Show notes\n\n0:00 Intro\n1:00 Talk'))
+  })
+})
+
 describe('AudioUploadModal: songs from the editor', () => {
   it('credits a library song in the post and gives its 3Speak creator 5%', async () => {
     const blob = new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' })

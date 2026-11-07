@@ -10,6 +10,7 @@ import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { getLockedBeneficiaries } from '../../utils/beneficiaries';
 import { remixChainAuthors } from '../../utils/remixChain';
 import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
+import { sanitizeChapters } from '../../utils/audioChapters';
 import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { establishWalletSession, getCurrentProvider, Providers } from '../../hive-api/aioha';
@@ -107,7 +108,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     // Audio mode: "Use this audio" -> fetch the edited MP3 and hand it to the audio
     // upload. For one of its tracks (audioTrackId) it replaces that track's audio;
     // from the share menu it opens the upload with it as a new track.
-    const handleAudioResult = async ({ outputUrl, fileName, durationSec, musicCredits }) => {
+    const handleAudioResult = async ({ outputUrl, fileName, durationSec, musicCredits, chapters }) => {
       if (!outputUrl) return;
       try {
         setRenderStatus('preparing');
@@ -121,6 +122,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           : 'edited-audio.mp3';
         const file = new File([blob], name, { type: 'audio/mpeg' });
         const credits = sanitizeMusicCredits(musicCredits);
+        // Chapters marked in the editor: they go into the track's description
+        const marks = sanitizeChapters(chapters);
         const trackId = audioTrackId;
 
         handleClose({ confirmed: true });
@@ -132,11 +135,12 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
               file,
               durationSec: Number.isFinite(durationSec) && durationSec > 0 ? durationSec : null,
               musicCredits: credits,
+              chapters: marks,
             },
           }));
         } else {
           window.dispatchEvent(new CustomEvent('open-audio-upload', {
-            detail: { blob: file, filename: file.name, type: null, source: 'editor', musicCredits: credits },
+            detail: { blob: file, filename: file.name, type: null, source: 'editor', musicCredits: credits, chapters: marks },
           }));
         }
       } catch (err) {

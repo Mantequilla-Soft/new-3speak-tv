@@ -367,6 +367,7 @@ function App() {
           // 'editor' for audio made in the audio editor (the default: a recording)
           source: detail.source || null,
           musicCredits: Array.isArray(detail.musicCredits) ? detail.musicCredits : null,
+          chapters: Array.isArray(detail.chapters) ? detail.chapters : null,
         });
       }
       setAudioUploadOpen(true);

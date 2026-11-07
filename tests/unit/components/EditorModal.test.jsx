@@ -128,6 +128,7 @@ describe('EditorModal in audio mode', () => {
     await fromEditor({
       type: 'post-to-3speak', mediaType: 'audio', outputUrl: `${EDITOR}/rendered/out.mp3`, fileName: 'My episode.mp3', durationSec: 61.5,
       musicCredits: [{ id: 'song1', title: 'Calm', artist: 'Kevin MacLeod', source: 'incompetech', license: 'CC BY 4.0' }, 'junk'],
+      chapters: [{ start: 0, end: 30, title: 'Intro' }, { start: 30, end: 61.5, title: '**Questions**' }, 'junk'],
     })
     await waitFor(() => expect(events).toHaveLength(1))
     expect(fetchMock).toHaveBeenCalledWith(`${EDITOR}/rendered/out.mp3`)
@@ -139,6 +140,7 @@ describe('EditorModal in audio mode', () => {
     expect(e.detail.file.name).toBe('My episode.mp3')
     expect(e.detail.file.type).toBe('audio/mpeg')
     expect(e.detail.musicCredits).toEqual([expect.objectContaining({ title: 'Calm', artist: 'Kevin MacLeod' })])
+    expect(e.detail.chapters).toEqual([{ start: 0, title: 'Intro' }, { start: 30, title: 'Questions' }])
     expect(onClose).toHaveBeenCalled()
     // Not the video path: no short/story chooser, no studio
     expect(screen.queryByText('Post it as')).toBeNull()
@@ -149,11 +151,11 @@ describe('EditorModal in audio mode', () => {
     stubMp3()
     await open({ mode: 'audio' })
     await ready({ canEditAudio: true })
-    await fromEditor({ type: 'post-to-3speak', mediaType: 'audio', outputUrl: `${EDITOR}/rendered/x.mp3`, fileName: '../evil/../name.wav' })
+    await fromEditor({ type: 'post-to-3speak', mediaType: 'audio', outputUrl: `${EDITOR}/rendered/x.mp3`, fileName: '../evil/../name.wav', chapters: [{ start: 0, title: 'Intro' }] })
     await waitFor(() => expect(events).toHaveLength(1))
     const [e] = events
     expect(e.type).toBe('open-audio-upload')
-    expect(e.detail).toMatchObject({ filename: 'edited-audio.mp3', type: null, source: 'editor', musicCredits: [] })
+    expect(e.detail).toMatchObject({ filename: 'edited-audio.mp3', type: null, source: 'editor', musicCredits: [], chapters: [{ start: 0, title: 'Intro' }] })
     expect(e.detail.blob).toBeInstanceOf(File)
     expect(e.detail.blob.type).toBe('audio/mpeg')
   })
