@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoCloudUploadSharp } from "react-icons/io5";
-import { Clapperboard } from "lucide-react";
+import { AudioWaveform, Clapperboard } from "lucide-react";
 import { MdGraphicEq, MdDesktopWindows, MdSmartphone, MdGroups, MdAccessTime, MdPlaylistAdd } from "react-icons/md";
 import { BiCommentDetail } from "react-icons/bi";
 import ShortsIcon from "./icons/ShortsIcon";
@@ -96,6 +96,13 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
       <a href="#" className={linkClass} title={t('misc.uploadLinks.musicAudio')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-audio-upload')))}>
         <MdGraphicEq className={iconClass} /> {text('musicAudio')}
       </a>
+      {/* The video editor in audio mode: cut, clean up and level a podcast or
+          song, then hand it to the audio upload (App.jsx, open-audio-editor). */}
+      {FEATURE_EDITOR && (
+        <a href="#" className={linkClass} title={t('misc.uploadLinks.audioEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-audio-editor')))}>
+          <AudioWaveform className={iconClass} size={18} /> {text('audioEditor')}
+        </a>
+      )}
       {FEATURE_EDITOR && (
         <a href="#" className={linkClass} title={t('misc.uploadLinks.shortsEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-shorts-editor')))}>
           <Clapperboard className={iconClass} size={18} /> {text('shortsEditor')}

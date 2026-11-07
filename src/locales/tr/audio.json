@@ -211,7 +211,8 @@
       "published_other": "{{count}} parça yayınlandı",
       "someFailed": "Bazı parçalar başarısız oldu; yeniden denemek için başarısız parçayı aç",
       "trackLinksFailed": "Parçaların yayınlandı ama bağlantıları albüm gönderisine eklenemedi: {{error}}",
-      "addToBlogFailed": "Yayınlandı ama bloguna eklenemedi: {{error}}"
+      "addToBlogFailed": "Yayınlandı ama bloguna eklenemedi: {{error}}",
+      "editedApplied": "\"{{title}}\" artık düzenlenmiş sesi kullanıyor"
     },
     "gate": {
       "checking": "Kontrol ediliyor…",
@@ -277,7 +278,13 @@
       "addCover": "Kapak görseli ekle",
       "hint": "Tıkla ya da sürükleyip bırak: JPG / PNG / WebP",
       "coverAlt": "kapak",
-      "removeCover": "Kapağı kaldır"
+      "removeCover": "Kapağı kaldır",
+      "fromPlaylist": "Oynatma listesinden",
+      "designCover": "Kapak tasarla",
+      "editCover": "Kapağı düzenle",
+      "designHint": "Kapak düzenleyicide metin, çıkartma ve kadraj ekle",
+      "designerTitle": "Kapak düzenleyici",
+      "designUnavailable": "Bu görsel kapak düzenleyicide açılamıyor. Bunun yerine cihazından yükle."
     },
     "mode": {
       "help_one": "{{count}} parça eklendi. Nasıl yayınlanacaklarını seç.",
@@ -371,7 +378,11 @@
       "uploadingFallback": "Yükleniyor",
       "published": "Yayınlandı"
     },
-    "warmupOneTrack": "Hesabın ısınırken aynı anda bir ses yayınlarsın. Devam etmek için diğerlerini kaldır."
+    "warmupOneTrack": "Hesabın ısınırken aynı anda bir ses yayınlarsın. Devam etmek için diğerlerini kaldır.",
+    "editAudio": "Sesi düzenle",
+    "editAudioHint": "Bu parçayı ses düzenleyicide aç",
+    "edited": "Düzenlendi",
+    "editedHint": "Bu ses, ses düzenleyiciden geliyor"
   },
   "podcasts": {
     "chip": "Harici",

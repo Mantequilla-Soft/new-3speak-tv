@@ -6,6 +6,7 @@ import {
   MdArrowBack, MdArrowForward, MdPlaylistAdd, MdPlaylistAddCheck,
   MdPublic, MdLock, MdCheck, MdAdd,
 } from 'react-icons/md';
+import { AudioWaveform, WandSparkles } from 'lucide-react';
 import axios from 'axios';
 import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
@@ -24,7 +25,10 @@ import Beneficiary_modal from '../modal/Beneficiary_modal';
 import { useAppStore } from '../../lib/store';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { enforceLockedBeneficiaries } from '../../utils/beneficiaries';
-import { PPL_BENEFICIARY, ENABLE_PPL, CHECKER_URL, CHECKER_API_KEY, adsEnabledFor } from '../../utils/config';
+import { PPL_BENEFICIARY, ENABLE_PPL, CHECKER_URL, CHECKER_API_KEY, FEATURE_EDITOR, adsEnabledFor } from '../../utils/config';
+import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoundMetadata } from '../../utils/soundCredits';
+import { SOUND_AUTHOR_WEIGHT } from '../../utils/beneficiaries';
+import CoverDesigner from './CoverDesigner';
 import { fetchCreatorAdPrefs, syncAudioAdChoice } from '../../lib/advertiseData';
 import './AudioUploadModal.scss';
 import AccountImg from '../HiveAvatar/AccountImg';
@@ -175,7 +179,7 @@ const MUSIC_GENRES = [
 // Build a `comment_options` op for one permlink, or null if nothing needs
 // setting. PPL routes 100% to @threespeak-audio; otherwise /studio-parity
 // payout + beneficiaries (non-premium carries the locked threespeakfund split).
-function buildCommentOptions(user, permlink, { payout, beneStr, isPremium, ppl }) {
+function buildCommentOptions(user, permlink, { payout, beneStr, isPremium, ppl, soundAuthors = [] }) {
   if (ENABLE_PPL && ppl) {
     return ['comment_options', {
       author: user,
@@ -193,7 +197,14 @@ function buildCommentOptions(user, permlink, { payout, beneStr, isPremium, ppl }
       if (b && b.account && b.weight > 0) beneMap.set(String(b.account), Math.round(b.weight));
     }
   } catch { /* ignore bad json */ }
-  enforceLockedBeneficiaries(beneMap, { isPremium });
+  const chosen = new Set(beneMap.keys());
+  enforceLockedBeneficiaries(beneMap, { isPremium, soundAuthors });
+  // A song's 5% only where it still fits: the creator may have handed out
+  // everything already, and Hive refuses more than 100% in total.
+  for (const account of soundAuthors) {
+    const total = [...beneMap.values()].reduce((sum, w) => sum + w, 0);
+    if (total > 10000 && !chosen.has(account)) beneMap.delete(account);
+  }
   const bene = [...beneMap.entries()]
     .map(([account, weight]) => ({ account, weight }))
     .sort((a, b) => a.account.localeCompare(b.account)); // Hive requires sorted
@@ -242,10 +253,17 @@ function probeDuration(blob) {
   });
 }
 
+// Songs from the audio editor's music library on a track: the credit line under
+// the post, `audio.sound` in its metadata, the 5% split for 3Speak sound creators.
+const trackCredits = (track) => (Array.isArray(track?.musicCredits) ? track.musicCredits : []);
+const withSound = (audioMeta, credits) => (credits.length ? { ...audioMeta, sound: primarySoundMetadata(credits) } : audioMeta);
+
 function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const { t } = useTranslation();
   const [step, setStep] = useState(0); // index into the active flow
   const [tracks, setTracks] = useState([]);
+  const tracksRef = useRef(tracks);
+  useEffect(() => { tracksRef.current = tracks; }, [tracks]);
   const [playlistChoice, setPlaylistChoice] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -303,7 +321,11 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const [mainTitle, setMainTitle] = useState('');
   const [postDescription, setPostDescription] = useState('');
   const [postTagsInput, setPostTagsInput] = useState('');
-  const [postThumb, setPostThumb] = useState('');
+  // The post cover the creator picked, designed or cleared themselves; until
+  // they do (postThumbFrom null), the post cover is the playlist's (postThumb,
+  // below the playlists).
+  const [userPostThumb, setUserPostThumb] = useState('');
+  const [postThumbFrom, setPostThumbFrom] = useState(null);
   const [postPayout, setPostPayout] = useState('default');
   const [postBeneStr, setPostBeneStr] = useState('[]');
   // The tracks step's "Apply to all tracks" panel. Its own values, starting
@@ -361,6 +383,19 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setTracks(prev => prev.map(tr => (tr.id === id ? { ...tr, ...patch } : tr)));
   }, []);
 
+  // The creator's own cover for a target ('main', 'shared' or a track id), from
+  // an upload, the cover designer or a clear ('').
+  const setCoverFor = useCallback((target, url) => {
+    if (target === 'main') { setUserPostThumb(url); setPostThumbFrom('user'); }
+    else if (target === 'shared') setSharedThumb(url);
+    else setTracks(prev => prev.map(tr => (tr.id === target ? { ...tr, thumb: url } : tr)));
+  }, []);
+
+  // The cover designer (thumbnail editor): { target, src } while open.
+  const [designFor, setDesignFor] = useState(null);
+  const designOpenRef = useRef(false);
+  useEffect(() => { designOpenRef.current = !!designFor; }, [designFor]);
+
   // Upload a cover for a target ('main', 'shared' or a track id) and store the URL.
   const uploadCoverFor = useCallback(async (target, file) => {
     if (!file) return;
@@ -368,16 +403,14 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setThumbUploadingId(target);
     try {
       const url = await uploadThumbnail(file);
-      if (target === 'main') setPostThumb(url);
-      else if (target === 'shared') setSharedThumb(url);
-      else setTracks(prev => prev.map(tr => (tr.id === target ? { ...tr, thumb: url } : tr)));
+      setCoverFor(target, url);
     } catch (err) {
       toast.error(t('audio.upload.toasts.thumbFailed', { error: err?.message || t('audio.upload.unknown') }));
     } finally {
       setThumbUploadingId(null);
       if (thumbInputRef.current) thumbInputRef.current.value = '';
     }
-  }, [t]);
+  }, [t, setCoverFor]);
 
   // Copy the "Apply to all tracks" panel onto every track. Only on click: an
   // empty shared cover keeps each track's own.
@@ -403,12 +436,16 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     let list = [];
     try { list = (JSON.parse(json || '[]') || []).map(b => ({ account: b.account, percent: (b.weight || 0) / 100 })); } catch { list = []; }
     const used = list.reduce((s, b) => s + (b.percent || 0), 0);
+    // A track with library songs keeps 5% per 3Speak sound creator free
+    const creditTrack = target === 'main' ? (mode === 'single' ? tracks[0] : null)
+      : target === 'shared' ? null : tracks.find(tr => tr.id === target);
+    const soundShare = soundAuthorsOf(trackCredits(creditTrack), user).length * (SOUND_AUTHOR_WEIGHT / 100);
     setBeneList(list);
     setBeneListCount(list.length);
-    setBeneRemaining(Math.max(0, (isPremium ? 100 : 90) - used));
+    setBeneRemaining(Math.max(0, (isPremium ? 100 : 90) - used - soundShare));
     setBeneTarget(target);
     setBeneOpen(true);
-  }, [postBeneStr, sharedBeneStr, tracks, isPremium]);
+  }, [postBeneStr, sharedBeneStr, tracks, isPremium, mode, user]);
 
   // Write the modal's beneficiary JSON back to its target.
   const writeBeneToTarget = useCallback((json) => {
@@ -442,13 +479,25 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       || (pendingPlaylist && pendingPlaylist.id === playlistChoice ? pendingPlaylist : null);
     return TRACK_TYPE_FOR_KIND[storedPlaylistType(p).kind] || null;
   }, [playlists, playlistChoice, pendingPlaylist]);
+  // The chosen playlist's cover starts as the post's cover (album post or single
+  // post). It follows a change of playlist until the creator picks, designs or
+  // clears a cover themselves; then theirs stays. Track covers are left alone:
+  // their tiles fall back to the playlist art by themselves.
+  const playlistCover = useMemo(() => {
+    const p = playlists.find((pl) => pl.id === playlistChoice)
+      || (pendingPlaylist && pendingPlaylist.id === playlistChoice ? pendingPlaylist : null);
+    return String(p?.thumbnail || p?.metadata?.album?.thumbnail || '').trim();
+  }, [playlists, playlistChoice, pendingPlaylist]);
+  const postThumb = postThumbFrom === 'user' ? userPostThumb : playlistCover;
+
   const playlistTrackTypeRef = useRef(null);
   useEffect(() => {
     playlistTrackTypeRef.current = playlistTrackType;
     if (playlistTrackType) setTracks((prev) => prev.map((tr) => (tr.type === playlistTrackType ? tr : { ...tr, type: playlistTrackType })));
   }, [playlistTrackType]);
 
-  const addBlobAsTrack = useCallback(async (blob, filename, source = 'file', overrideType = null) => {
+  // source: 'file' | 'record' | 'editor' (made in the audio editor)
+  const addBlobAsTrack = useCallback(async (blob, filename, source = 'file', overrideType = null, extra = {}) => {
     const url = URL.createObjectURL(blob);
     objectUrlsRef.current.add(url);
     const dur = await probeDuration(blob);
@@ -464,6 +513,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       // override the auto-derived type — e.g. an OpenPods recording
       // hand-off pre-fills 'podcast'.
       type: overrideType ?? playlistTrackTypeRef.current ?? (source === 'record' ? 'voice_message' : 'podcast'),
+      edited: source === 'editor',
+      musicCredits: sanitizeMusicCredits(extra.musicCredits),
       genre: '',
       bpm: '',
       // Per-track publish config (snaps + album-post comments).
@@ -490,8 +541,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     addBlobAsTrack(
       initialTrack.blob,
       initialTrack.filename || 'openpod-recording.ogg',
-      'record',
+      initialTrack.source === 'editor' ? 'editor' : 'record',
       initialTrack.type ?? null,
+      { musicCredits: initialTrack.musicCredits },
     );
   }, [isOpen, initialTrack, addBlobAsTrack]);
 
@@ -500,6 +552,20 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     if (files.length === 0) return;
     for (const f of files) await addBlobAsTrack(f, f.name, 'file');
   }, [addBlobAsTrack]);
+
+  // "Edit audio": the track goes to the audio editor (App.jsx opens it above
+  // this modal) and comes back as `audio-editor-result` with the edited MP3,
+  // which takes the place of the track's audio. Title, text, cover and type stay.
+  const openTrackInEditor = useCallback((track) => {
+    if (!track?.blob) return;
+    const file = track.blob instanceof File
+      ? track.blob
+      : new File([track.blob], track.filename || 'audio', { type: track.blob.type || '' });
+    window.dispatchEvent(new CustomEvent('open-audio-editor', {
+      detail: { file, trackId: track.id, name: track.title || track.filename },
+    }));
+  }, []);
+
 
   const onDrop = (e) => {
     e.preventDefault();
@@ -661,7 +727,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       await broadcastAudioOps(ops);
       toast.success(t('audio.upload.toasts.playlistCreated'));
       setPlaylistChoice(playlistId);
-      setPendingPlaylist({ id: playlistId, name: trimmed, access, type: tf.type, audio_kind: tf.audio_kind });
+      setPendingPlaylist({ id: playlistId, name: trimmed, access, type: tf.type, audio_kind: tf.audio_kind, thumbnail: album.thumbnail || '' });
       setTimeout(() => {
         refetchPlaylists();
         queryClient.invalidateQueries({ queryKey: ['myPlaylists', owner] });
@@ -772,6 +838,47 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setPublishStatus(next);
   }, []);
 
+  // The edited MP3 back from the audio editor (see openTrackInEditor)
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onResult = async (e) => {
+      const { trackId, file, durationSec, musicCredits } = e?.detail || {};
+      if (!trackId || !(file instanceof Blob)) return;
+      const current = tracksRef.current.find(tr => tr.id === trackId);
+      // Gone meanwhile, or out already (the published post keeps its audio)
+      if (!current || ['success', 'uploading', 'posting'].includes(statusRef.current[trackId]?.state)) return;
+      const dur = Number.isFinite(durationSec) && durationSec > 0 ? durationSec : await probeDuration(file);
+      const url = URL.createObjectURL(file);
+      objectUrlsRef.current.add(url);
+      setTracks(prev => prev.map(tr => {
+        if (tr.id !== trackId) return tr;
+        if (tr.objectUrl && tr.objectUrl !== url) {
+          URL.revokeObjectURL(tr.objectUrl);
+          objectUrlsRef.current.delete(tr.objectUrl);
+        }
+        return {
+          ...tr,
+          blob: file,
+          filename: file.name || 'edited-audio.mp3',
+          durationSec: dur,
+          objectUrl: url,
+          edited: true,
+          musicCredits: sanitizeMusicCredits(musicCredits),
+        };
+      }));
+      const replaced = current;
+      // A failed attempt with the old file starts over with the new one
+      if (statusRef.current[trackId]?.state === 'error') {
+        const next = { ...statusRef.current };
+        delete next[trackId];
+        replaceStatuses(next);
+      }
+      toast.success(t('audio.upload.toasts.editedApplied', { title: replaced.title || replaced.filename }));
+    };
+    window.addEventListener('audio-editor-result', onResult);
+    return () => window.removeEventListener('audio-editor-result', onResult);
+  }, [isOpen, t, replaceStatuses]);
+
   // Cached snap container for the whole modal session — re-used on retry.
   const containerRef = useRef(null);
   const ensureContainer = useCallback(async () => {
@@ -846,7 +953,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     const tags = userTags.length ? Array.from(new Set(userTags)) : Array.from(new Set(HIVE_DEFAULT_TAGS));
     const desc = (postDescription || '').trim() || postTitle;
     const cover = postThumb ? `![${(postTitle || 'cover').replace(/[[\]]/g, '')}](${postThumb})\n\n` : '';
-    const body = `${cover}${playUrl}\n\n${desc}`.trim();
+    const credits = trackCredits(track);
+    const body = `${cover}${playUrl}\n\n${desc}`.trim() + soundCreditsMarkdown(credits);
     // A standalone track is a top-level titled post, so an Article carrying one
     // audio attribute. `threespeak.audio` mirrors the bare `audio` key above it:
     // the bare one is what our own readers already parse, the namespaced one is
@@ -855,7 +963,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     const metaObj = {
       app: HIVE_APP_NAME,
       tags,
-      audio: audioMeta,
+      audio: withSound(audioMeta, credits),
       ...oaEnvelope(OA_ARTICLE),
       ...threespeakAudio({ ...audioMeta, duration: track.durationSec }),
       ...audioAdsMeta,
@@ -903,6 +1011,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     ]];
     const co = buildCommentOptions(user, hivePermlink, {
       payout: postPayout, beneStr: postBeneStr, isPremium, ppl: rewardMode === 'ppl',
+      soundAuthors: soundAuthorsOf(credits, user),
     });
     if (co) ops.push(co);
     if (playlistChoice) ops.push(playlistAddOp(hivePermlink));
@@ -1009,7 +1118,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     // art by themselves (checker playlist_thumbnail).
     const tThumb = track.thumb || '';
     const cover = tThumb ? `![${(track.title || 'cover').replace(/[[\]]/g, '')}](${tThumb})\n\n` : '';
-    const body = `${cover}${playUrl}\n\n${desc}`.trim();
+    const credits = trackCredits(track);
+    const body = `${cover}${playUrl}\n\n${desc}`.trim() + soundCreditsMarkdown(credits);
     // Both modes post the track as a reply, but to different parents, and the
     // object follows the parent: an album track replies to our own album post,
     // so it is a Comment; a snap replies to the peak.snaps container, which
@@ -1018,7 +1128,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     const metaObj = {
       app: HIVE_APP_NAME,
       tags,
-      audio: audioMeta,
+      audio: withSound(audioMeta, credits),
       ...oaEnvelope(mode === 'album' ? OA_COMMENT : OA_MICROPOST),
       ...threespeakAudio({ ...audioMeta, duration: track.durationSec }),
       ...audioAdsMeta,
@@ -1041,6 +1151,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     ]];
     const co = buildCommentOptions(user, hivePermlink, {
       payout: track.payout, beneStr: track.beneStr, isPremium, ppl: rewardMode === 'ppl',
+      soundAuthors: soundAuthorsOf(credits, user),
     });
     if (co) ops.push(co);
     if (playlistChoice) ops.push(playlistAddOp(hivePermlink));
@@ -1102,7 +1213,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setMainTitle('');
     setPostDescription('');
     setPostTagsInput('');
-    setPostThumb('');
+    setUserPostThumb('');
+    setPostThumbFrom(null);
+    setDesignFor(null);
     setPostPayout('default');
     setPostBeneStr('[]');
     setSharedDesc('');
@@ -1138,6 +1251,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     if (!isOpen) return undefined;
     const onKey = (e) => {
       if (e.key !== 'Escape') return;
+      // Esc in the cover designer closes the designer only
+      if (designOpenRef.current) return;
       if (showCloseConfirm) setShowCloseConfirm(false);
       else attemptClose();
     };
@@ -1366,6 +1481,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               onStart={startRecording}
               onStop={stopRecording}
               onRemove={removeTrack}
+              onEditTrack={FEATURE_EDITOR ? openTrackInEditor : null}
+              editLocked={(id) => isPublishing || ['success', 'uploading', 'posting'].includes(publishStatus[id]?.state)}
             />
           )}
           {stepKey === 'mode' && (
@@ -1408,7 +1525,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               tagsInput={postTagsInput}
               setTagsInput={setPostTagsInput}
               thumb={postThumb}
-              setThumb={setPostThumb}
+              setThumb={(url) => setCoverFor('main', url)}
+              thumbFromPlaylist={postThumbFrom !== 'user' && !!postThumb}
+              onDesignThumb={() => setDesignFor({ target: 'main', src: postThumb || null })}
               thumbUploading={thumbUploadingId === 'main'}
               thumbRef={thumbInputRef}
               onPickThumb={(file) => uploadCoverFor('main', file)}
@@ -1429,7 +1548,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               sharedDesc={sharedDesc}
               setSharedDesc={setSharedDesc}
               sharedThumb={sharedThumb}
-              setSharedThumb={setSharedThumb}
+              setSharedThumb={(url) => setCoverFor('shared', url)}
+              onDesignCover={(target, src) => setDesignFor({ target, src: src || null })}
+              onEditTrack={FEATURE_EDITOR ? openTrackInEditor : null}
+              editLocked={(id) => isPublishing || ['success', 'uploading', 'posting'].includes(publishStatus[id]?.state)}
               sharedPayout={sharedPayout}
               setSharedPayout={setSharedPayout}
               sharedBeneCount={(() => { try { return (JSON.parse(sharedBeneStr || '[]') || []).length; } catch { return 0; } })()}
@@ -1521,6 +1643,17 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
         {gateAd && createPortal(<UploadGate ad={gateAd} onWatched={onGateWatched} />, portalDoc.body)}
 
+        {/* The thumbnail editor for a cover; inside the modal box so its clicks
+            never reach the backdrop's close */}
+        {designFor && (
+          <CoverDesigner
+            key={`${designFor.target}:${designFor.src || ''}`}
+            src={designFor.src}
+            onClose={() => setDesignFor(null)}
+            onDone={(url) => { setCoverFor(designFor.target, url); setDesignFor(null); }}
+          />
+        )}
+
         {showCloseConfirm && (
           <div className="audio-upload-confirm" onClick={(e) => e.stopPropagation()}>
             <div className="audio-upload-confirm-card">
@@ -1564,7 +1697,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 function SourceStep({
   tracks, isRecording, recordSec, isDragging, fileInputRef,
   onDrop, onDragOver, onDragLeave, onPickFiles, onFilesSelected,
-  onStart, onStop, onRemove,
+  onStart, onStop, onRemove, onEditTrack = null, editLocked = () => false,
 }) {
   const { t } = useTranslation();
   return (
@@ -1622,7 +1755,11 @@ function SourceStep({
                 {tr.source === 'record' ? <MdMic size={14} /> : <MdCloudUpload size={14} />}
               </span>
               <span className="audio-upload-track-name">{tr.filename}</span>
+              {tr.edited && <EditedBadge />}
               <span className="audio-upload-track-meta">{fmtTime(tr.durationSec)}</span>
+              {onEditTrack && tr.blob && (
+                <EditAudioButton onClick={() => onEditTrack(tr)} disabled={editLocked(tr.id)} />
+              )}
               <button className="audio-upload-track-remove" onClick={() => onRemove(tr.id)} aria-label={t('common.actions.remove')}>
                 <MdDelete size={14} />
               </button>
@@ -1983,8 +2120,25 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
   );
 }
 
+// "Edit audio" on a track: opens it in the audio editor.
+function EditAudioButton({ onClick, disabled }) {
+  const { t } = useTranslation();
+  return (
+    <button type="button" className="audio-upload-track-edit" onClick={onClick} disabled={disabled} title={t('audio.upload.editAudioHint')}>
+      <AudioWaveform size={14} aria-hidden="true" /> {t('audio.upload.editAudio')}
+    </button>
+  );
+}
+
+function EditedBadge() {
+  const { t } = useTranslation();
+  return <span className="audio-upload-edited-badge" title={t('audio.upload.editedHint')}>{t('audio.upload.edited')}</span>;
+}
+
 // Reusable cover picker — owns its own file input so many can coexist.
-function ThumbPicker({ value, uploading, onPick, onClear, label }) {
+// `onDesign` opens the cover designer (thumbnail editor) on the current cover,
+// or on a blank one; `fromPlaylist` marks a cover that came with the playlist.
+function ThumbPicker({ value, uploading, onPick, onClear, label, onDesign = null, fromPlaylist = false }) {
   const { t } = useTranslation();
   const ref = useRef(null);
   const [dragging, setDragging] = useState(false);
@@ -2006,6 +2160,7 @@ function ThumbPicker({ value, uploading, onPick, onClear, label }) {
       {value ? (
         <>
           <img src={value} alt={t('audio.upload.thumb.coverAlt')} />
+          {fromPlaylist && <span className="audio-upload-thumb-badge">{t('audio.upload.thumb.fromPlaylist')}</span>}
           <button
             type="button"
             className="audio-upload-album-thumb-remove"
@@ -2019,6 +2174,17 @@ function ThumbPicker({ value, uploading, onPick, onClear, label }) {
           <span>{uploading ? t('audio.upload.thumb.uploading') : (label === undefined ? t('audio.upload.thumb.addCover') : label)}</span>
           <small>{t('audio.upload.thumb.hint')}</small>
         </>
+      )}
+      {onDesign && !uploading && (
+        <button
+          type="button"
+          className="audio-upload-thumb-design"
+          onClick={(e) => { e.stopPropagation(); onDesign(); }}
+          title={t('audio.upload.thumb.designHint')}
+        >
+          <WandSparkles size={13} aria-hidden="true" />
+          {value ? t('audio.upload.thumb.editCover') : t('audio.upload.thumb.designCover')}
+        </button>
       )}
       <input
         ref={ref}
@@ -2182,7 +2348,7 @@ function MainPostStep({
   variant, singleTrack, patchTrack,
   title, setTitle, description, setDescription,
   community, setCommunityOpen, tagsInput, setTagsInput,
-  thumb, setThumb, thumbUploading, onPickThumb,
+  thumb, setThumb, thumbUploading, onPickThumb, thumbFromPlaylist = false, onDesignThumb = null,
   payout, setPayout, beneCount, onOpenBene,
   addToBlog, setAddToBlog, warmup = false,
 }) {
@@ -2235,6 +2401,8 @@ function MainPostStep({
         uploading={thumbUploading}
         onPick={onPickThumb}
         onClear={() => setThumb('')}
+        onDesign={onDesignThumb}
+        fromPlaylist={thumbFromPlaylist}
       />
 
       {!isAlbum && singleTrack && (
@@ -2337,6 +2505,7 @@ function TracksStep({
   sharedDesc, setSharedDesc, sharedThumb, setSharedThumb,
   sharedPayout, setSharedPayout, sharedBeneCount,
   applyToAllTracks, onOpenBene, uploadCoverFor, thumbUploadingId,
+  onDesignCover = null, onEditTrack = null, editLocked = () => false,
 }) {
   const { t } = useTranslation();
   const [openId, setOpenId] = useState(null);
@@ -2364,6 +2533,7 @@ function TracksStep({
           onPick={(f) => uploadCoverFor('shared', f)}
           onClear={() => setSharedThumb('')}
           label={t('audio.upload.tracks.sharedCover')}
+          onDesign={onDesignCover ? () => onDesignCover('shared', sharedThumb) : null}
         />
         <RewardRow
           payout={sharedPayout}
@@ -2441,10 +2611,15 @@ function TracksStep({
               onPick={(f) => uploadCoverFor(tr.id, f)}
               onClear={() => patchTrack(tr.id, { thumb: '' })}
               label={t('audio.upload.tracks.trackCover')}
+              onDesign={onDesignCover ? () => onDesignCover(tr.id, tr.thumb) : null}
             />
 
             <div className="audio-upload-title-meta-line">
               <span>{fmtTime(tr.durationSec)} · {tr.source === 'record' ? t('audio.upload.recorded') : tr.filename}</span>
+              {tr.edited && <EditedBadge />}
+              {onEditTrack && tr.blob && (
+                <EditAudioButton onClick={() => onEditTrack(tr)} disabled={editLocked(tr.id)} />
+              )}
             </div>
           </div>
         );

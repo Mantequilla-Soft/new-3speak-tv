@@ -211,7 +211,8 @@
       "published_other": "Na-publish ang {{count}} tracks",
       "someFailed": "May mga track na pumalya — buksan ang pumalyang track para subukan ulit",
       "trackLinksFailed": "Na-publish na ang mga track mo, pero hindi naidagdag ang mga link nila sa album post: {{error}}",
-      "addToBlogFailed": "Na-publish na, pero hindi ito naidagdag sa blog mo: {{error}}"
+      "addToBlogFailed": "Na-publish na, pero hindi ito naidagdag sa blog mo: {{error}}",
+      "editedApplied": "Ginagamit na ngayon ng \"{{title}}\" ang na-edit na audio"
     },
     "gate": {
       "checking": "Tinitingnan…",
@@ -277,7 +278,13 @@
       "addCover": "Magdagdag ng cover image",
       "hint": "I-click o i-drag & drop — JPG / PNG / WebP",
       "coverAlt": "cover",
-      "removeCover": "Alisin ang cover"
+      "removeCover": "Alisin ang cover",
+      "fromPlaylist": "Mula sa playlist",
+      "designCover": "Gumawa ng cover",
+      "editCover": "I-edit ang cover",
+      "designHint": "Magdagdag ng text, sticker at framing sa cover editor",
+      "designerTitle": "Cover editor",
+      "designUnavailable": "Hindi mabuksan ang larawang ito sa cover editor. I-upload na lang ito mula sa iyong device."
     },
     "mode": {
       "help_one": "{{count}} track ang naidagdag. Piliin kung paano ito ilalabas.",
@@ -371,7 +378,11 @@
       "uploadingFallback": "Ina-upload",
       "published": "Na-publish"
     },
-    "warmupOneTrack": "Habang nagwa-warm up ang account mo, isang audio lang ang ipa-publish mo bawat beses. Alisin ang iba para magpatuloy."
+    "warmupOneTrack": "Habang nagwa-warm up ang account mo, isang audio lang ang ipa-publish mo bawat beses. Alisin ang iba para magpatuloy.",
+    "editAudio": "I-edit ang audio",
+    "editAudioHint": "Buksan ang track na ito sa audio editor",
+    "edited": "Na-edit",
+    "editedHint": "Galing ang audio na ito sa audio editor"
   },
   "podcasts": {
     "chip": "Panlabas",

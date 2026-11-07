@@ -211,7 +211,8 @@
       "published_other": "{{count}} Tracks veröffentlicht",
       "someFailed": "Einige Tracks sind fehlgeschlagen – öffne den fehlgeschlagenen Track, um es nochmal zu versuchen",
       "trackLinksFailed": "Deine Tracks sind veröffentlicht, aber ihre Links konnten nicht zum Album-Beitrag hinzugefügt werden: {{error}}",
-      "addToBlogFailed": "Veröffentlicht, aber das Hinzufügen zu deinem Blog ist fehlgeschlagen: {{error}}"
+      "addToBlogFailed": "Veröffentlicht, aber das Hinzufügen zu deinem Blog ist fehlgeschlagen: {{error}}",
+      "editedApplied": "\"{{title}}\" nutzt jetzt das bearbeitete Audio"
     },
     "gate": {
       "checking": "Wird geprüft…",
@@ -277,7 +278,13 @@
       "addCover": "Coverbild hinzufügen",
       "hint": "Klicken oder per Drag & Drop – JPG / PNG / WebP",
       "coverAlt": "Cover",
-      "removeCover": "Cover entfernen"
+      "removeCover": "Cover entfernen",
+      "fromPlaylist": "Aus der Playlist",
+      "designCover": "Cover gestalten",
+      "editCover": "Cover bearbeiten",
+      "designHint": "Text, Sticker und Bildausschnitt im Cover-Editor hinzufügen",
+      "designerTitle": "Cover-Editor",
+      "designUnavailable": "Dieses Bild lässt sich im Cover-Editor nicht öffnen. Lade es stattdessen von deinem Gerät hoch."
     },
     "mode": {
       "help_one": "{{count}} Track hinzugefügt. Wähle, wie er veröffentlicht wird.",
@@ -371,7 +378,11 @@
       "uploadingFallback": "Wird hochgeladen",
       "published": "Veröffentlicht"
     },
-    "warmupOneTrack": "Solange dein Konto aufgewärmt wird, veröffentlichst du ein Audio auf einmal. Entferne die anderen, um weiterzumachen."
+    "warmupOneTrack": "Solange dein Konto aufgewärmt wird, veröffentlichst du ein Audio auf einmal. Entferne die anderen, um weiterzumachen.",
+    "editAudio": "Audio bearbeiten",
+    "editAudioHint": "Diesen Track im Audio-Editor öffnen",
+    "edited": "Bearbeitet",
+    "editedHint": "Dieses Audio stammt aus dem Audio-Editor"
   },
   "podcasts": {
     "chip": "Extern",

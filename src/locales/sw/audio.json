@@ -211,7 +211,8 @@
       "published_other": "Nyimbo {{count}} zimechapishwa",
       "someFailed": "Baadhi ya nyimbo zimeshindwa — fungua wimbo ulioshindwa ili ujaribu tena",
       "trackLinksFailed": "Nyimbo zako zimechapishwa, lakini kuongeza viungo vyake kwenye chapisho la albamu kumeshindikana: {{error}}",
-      "addToBlogFailed": "Imechapishwa, lakini kuiongeza kwenye blogu yako kumeshindikana: {{error}}"
+      "addToBlogFailed": "Imechapishwa, lakini kuiongeza kwenye blogu yako kumeshindikana: {{error}}",
+      "editedApplied": "\"{{title}}\" sasa inatumia sauti iliyohaririwa"
     },
     "gate": {
       "checking": "Inakagua…",
@@ -277,7 +278,13 @@
       "addCover": "Ongeza picha ya jalada",
       "hint": "Bofya au buruta na udondoshe — JPG / PNG / WebP",
       "coverAlt": "jalada",
-      "removeCover": "Ondoa jalada"
+      "removeCover": "Ondoa jalada",
+      "fromPlaylist": "Kutoka orodha ya kucheza",
+      "designCover": "Buni jalada",
+      "editCover": "Hariri jalada",
+      "designHint": "Ongeza maandishi, vibandiko na fremu kwenye kihariri cha jalada",
+      "designerTitle": "Kihariri cha jalada",
+      "designUnavailable": "Picha hii haiwezi kufunguliwa kwenye kihariri cha jalada. Ipakie kutoka kwenye kifaa chako badala yake."
     },
     "mode": {
       "help_one": "Wimbo {{count}} umeongezwa. Chagua jinsi utakavyotoka.",
@@ -371,7 +378,11 @@
       "uploadingFallback": "Inapakia",
       "published": "Imechapishwa"
     },
-    "warmupOneTrack": "Akaunti yako ikiwa bado inapashwa joto, unachapisha sauti moja kwa wakati. Ondoa nyingine ili kuendelea."
+    "warmupOneTrack": "Akaunti yako ikiwa bado inapashwa joto, unachapisha sauti moja kwa wakati. Ondoa nyingine ili kuendelea.",
+    "editAudio": "Hariri sauti",
+    "editAudioHint": "Fungua wimbo huu kwenye kihariri cha sauti",
+    "edited": "Imehaririwa",
+    "editedHint": "Sauti hii inatoka kwenye kihariri cha sauti"
   },
   "podcasts": {
     "chip": "Za nje",

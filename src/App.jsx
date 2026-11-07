@@ -180,6 +180,7 @@ import HandleTakenPrompt from "./components/Incubation/HandleTakenPrompt";
 import IncubationSessionSync from "./components/Incubation/IncubationSessionSync";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
 import EditorModal from "./components/modal/EditorModal";
+import { useEditorLauncher } from "./hooks/useEditorLauncher";
 import { FEATURE_EDITOR, VIDEO_IMPORT_ENABLED } from "./utils/config";
 import BottomNav from "./components/BottomNav/BottomNav";
 import MiniPlayer from "./components/MiniPlayer/MiniPlayer";
@@ -319,9 +320,9 @@ function App() {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginIntent, setLoginIntent] = useState(null); // 'login' | 'signup' from the nav
   const [loginProof, setLoginProof] = useState(() => Math.floor(Date.now() / 1000));
-  const [editorModalOpen, setEditorModalOpen] = useState(false);
-  // A file to open the editor with (the shorts uploader's "Edit this video").
-  const [editorFile, setEditorFile] = useState(null);
+  // The global editor popup: the shorts editor or, in audio mode, the audio
+  // editor, with the file it opens with (hooks/useEditorLauncher.js)
+  const editor = useEditorLauncher();
   const [audioUploadOpen, setAudioUploadOpen] = useState(false);
   // Carries an in-flight blob handed off from another flow (e.g. an
   // OpenPods recording stop). The AudioUploadModal seeds it as the
@@ -347,17 +348,6 @@ function App() {
 
   const hideNavOnMobile = isShorts && isMobile;
 
-  // Listen for "open-shorts-editor" custom event from UploadLinks (no detail) and
-  // the shorts uploader (detail.file = the video it already has)
-  useEffect(() => {
-    const handleOpenEditor = (e) => {
-      setEditorFile(e?.detail?.file instanceof Blob ? e.detail.file : null);
-      setEditorModalOpen(true);
-    };
-    window.addEventListener('open-shorts-editor', handleOpenEditor);
-    return () => window.removeEventListener('open-shorts-editor', handleOpenEditor);
-  }, []);
-
   // Apply the saved theme on every route — Nav (which also calls this) isn't
   // rendered on the mobile shorts view, so a fresh /shorts deep link would
   // otherwise load unthemed.
@@ -374,6 +364,9 @@ function App() {
           blob: detail.blob,
           filename: detail.filename || 'recording.ogg',
           type: detail.type ?? null,
+          // 'editor' for audio made in the audio editor (the default: a recording)
+          source: detail.source || null,
+          musicCredits: Array.isArray(detail.musicCredits) ? detail.musicCredits : null,
         });
       }
       setAudioUploadOpen(true);
@@ -961,9 +954,12 @@ function App() {
         <ChatAutoOpen />
         {FEATURE_EDITOR && (
           <EditorModal
-            isOpen={editorModalOpen}
-            onClose={() => { setEditorModalOpen(false); setEditorFile(null); }}
-            videoFile={editorFile}
+            isOpen={editor.open}
+            onClose={editor.close}
+            mode={editor.mode}
+            videoFile={editor.mode === 'video' ? editor.file : null}
+            audioFile={editor.mode === 'audio' ? editor.file : null}
+            audioTrackId={editor.audioTrackId}
           />
         )}
       </div>

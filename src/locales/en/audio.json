@@ -211,7 +211,8 @@
       "published_other": "Published {{count}} tracks",
       "someFailed": "Some tracks failed — open the failed track to retry",
       "trackLinksFailed": "Your tracks are published, but adding their links to the album post failed: {{error}}",
-      "addToBlogFailed": "Published, but adding it to your blog failed: {{error}}"
+      "addToBlogFailed": "Published, but adding it to your blog failed: {{error}}",
+      "editedApplied": "\"{{title}}\" now uses the edited audio"
     },
     "gate": {
       "checking": "Checking…",
@@ -277,7 +278,13 @@
       "addCover": "Add cover image",
       "hint": "Click or drag & drop — JPG / PNG / WebP",
       "coverAlt": "cover",
-      "removeCover": "Remove cover"
+      "removeCover": "Remove cover",
+      "fromPlaylist": "From playlist",
+      "designCover": "Design a cover",
+      "editCover": "Edit cover",
+      "designHint": "Add text, stickers and framing in the cover editor",
+      "designerTitle": "Cover editor",
+      "designUnavailable": "This picture can't be opened in the cover editor. Upload it from your device instead."
     },
     "mode": {
       "help_one": "{{count}} track added. Choose how they go out.",
@@ -371,7 +378,11 @@
       "uploadingFallback": "Uploading",
       "published": "Published"
     },
-    "warmupOneTrack": "While your account warms up, you publish one audio at a time. Remove the others to go on."
+    "warmupOneTrack": "While your account warms up, you publish one audio at a time. Remove the others to go on.",
+    "editAudio": "Edit audio",
+    "editAudioHint": "Open this track in the audio editor",
+    "edited": "Edited",
+    "editedHint": "This audio comes from the audio editor"
   },
   "podcasts": {
     "chip": "External",

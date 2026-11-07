@@ -207,7 +207,8 @@
       "published_other": "{{count}} トラックを公開しました",
       "someFailed": "一部のトラックが失敗しました。失敗したトラックを開いて再試行してください",
       "trackLinksFailed": "トラックは公開されましたが、アルバム投稿へのリンク追加に失敗しました: {{error}}",
-      "addToBlogFailed": "公開されましたが、自分のブログへの追加に失敗しました: {{error}}"
+      "addToBlogFailed": "公開されましたが、自分のブログへの追加に失敗しました: {{error}}",
+      "editedApplied": "「{{title}}」は編集後のオーディオになりました"
     },
     "gate": {
       "checking": "確認中…",
@@ -270,7 +271,13 @@
       "addCover": "カバー画像を追加",
       "hint": "クリックまたはドラッグ＆ドロップ — JPG / PNG / WebP",
       "coverAlt": "カバー",
-      "removeCover": "カバーを削除"
+      "removeCover": "カバーを削除",
+      "fromPlaylist": "プレイリストから",
+      "designCover": "カバーを作成",
+      "editCover": "カバーを編集",
+      "designHint": "カバーエディターでテキスト、ステッカー、トリミングを追加",
+      "designerTitle": "カバーエディター",
+      "designUnavailable": "この画像はカバーエディターで開けません。端末からアップロードしてください。"
     },
     "mode": {
       "help_other": "{{count}} トラックが追加されています。公開方法を選んでください。",
@@ -356,7 +363,11 @@
       "uploadingFallback": "アップロード中",
       "published": "公開済み"
     },
-    "warmupOneTrack": "アカウントのウォームアップ中は、音声を1本ずつ公開します。続けるにはほかを削除してください。"
+    "warmupOneTrack": "アカウントのウォームアップ中は、音声を1本ずつ公開します。続けるにはほかを削除してください。",
+    "editAudio": "編集",
+    "editAudioHint": "このトラックをオーディオエディターで開く",
+    "edited": "編集済み",
+    "editedHint": "このオーディオはオーディオエディターで編集されました"
   },
   "podcasts": {
     "chip": "外部",

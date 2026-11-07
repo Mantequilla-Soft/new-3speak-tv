@@ -215,7 +215,8 @@
       "published_other": "{{count}} titres publiés",
       "someFailed": "Certains titres ont échoué — ouvrez le titre concerné pour réessayer",
       "trackLinksFailed": "Vos pistes sont publiées, mais l'ajout de leurs liens à la publication de l'album a échoué : {{error}}",
-      "addToBlogFailed": "Publié, mais l'ajout à votre blog a échoué : {{error}}"
+      "addToBlogFailed": "Publié, mais l'ajout à votre blog a échoué : {{error}}",
+      "editedApplied": "« {{title}} » utilise maintenant l'audio modifié"
     },
     "gate": {
       "checking": "Vérification…",
@@ -284,7 +285,13 @@
       "addCover": "Ajouter une image de couverture",
       "hint": "Cliquez ou glissez-déposez — JPG / PNG / WebP",
       "coverAlt": "couverture",
-      "removeCover": "Retirer la couverture"
+      "removeCover": "Retirer la couverture",
+      "fromPlaylist": "De la playlist",
+      "designCover": "Créer une pochette",
+      "editCover": "Modifier la pochette",
+      "designHint": "Ajoutez du texte, des stickers et le cadrage dans l'éditeur de pochette",
+      "designerTitle": "Éditeur de pochette",
+      "designUnavailable": "Impossible d'ouvrir cette image dans l'éditeur de pochette. Importez-la plutôt depuis votre appareil."
     },
     "mode": {
       "help_one": "{{count}} titre ajouté. Choisissez comment le publier.",
@@ -386,7 +393,11 @@
       "uploadingFallback": "Mise en ligne",
       "published": "Publié"
     },
-    "warmupOneTrack": "Tant que ton compte se met en route, tu publies un audio à la fois. Retire les autres pour continuer."
+    "warmupOneTrack": "Tant que ton compte se met en route, tu publies un audio à la fois. Retire les autres pour continuer.",
+    "editAudio": "Modifier l'audio",
+    "editAudioHint": "Ouvrir cette piste dans l'éditeur audio",
+    "edited": "Modifié",
+    "editedHint": "Cet audio vient de l'éditeur audio"
   },
   "podcasts": {
     "chip": "Externes",

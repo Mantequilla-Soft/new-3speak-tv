@@ -207,7 +207,8 @@
       "published_other": "{{count}} lagu diterbitkan",
       "someFailed": "Beberapa lagu gagal — buka lagu yang gagal untuk mencoba lagi",
       "trackLinksFailed": "Lagu Anda sudah diterbitkan, tetapi tautannya gagal ditambahkan ke postingan album: {{error}}",
-      "addToBlogFailed": "Sudah diterbitkan, tetapi gagal ditambahkan ke blog Anda: {{error}}"
+      "addToBlogFailed": "Sudah diterbitkan, tetapi gagal ditambahkan ke blog Anda: {{error}}",
+      "editedApplied": "\"{{title}}\" kini memakai audio yang sudah diedit"
     },
     "gate": {
       "checking": "Memeriksa…",
@@ -270,7 +271,13 @@
       "addCover": "Tambah gambar sampul",
       "hint": "Klik atau seret & lepas — JPG / PNG / WebP",
       "coverAlt": "sampul",
-      "removeCover": "Hapus sampul"
+      "removeCover": "Hapus sampul",
+      "fromPlaylist": "Dari playlist",
+      "designCover": "Desain sampul",
+      "editCover": "Sunting sampul",
+      "designHint": "Tambahkan teks, stiker, dan bingkai di editor sampul",
+      "designerTitle": "Editor sampul",
+      "designUnavailable": "Gambar ini tidak bisa dibuka di editor sampul. Unggah dari perangkatmu saja."
     },
     "mode": {
       "help_other": "{{count}} lagu ditambahkan. Pilih cara menerbitkannya.",
@@ -356,7 +363,11 @@
       "uploadingFallback": "Mengunggah",
       "published": "Diterbitkan"
     },
-    "warmupOneTrack": "Selama akunmu dalam masa pemanasan, kamu menerbitkan satu audio sekaligus. Hapus yang lain untuk lanjut."
+    "warmupOneTrack": "Selama akunmu dalam masa pemanasan, kamu menerbitkan satu audio sekaligus. Hapus yang lain untuk lanjut.",
+    "editAudio": "Sunting audio",
+    "editAudioHint": "Buka trek ini di editor audio",
+    "edited": "Diedit",
+    "editedHint": "Audio ini berasal dari editor audio"
   },
   "podcasts": {
     "chip": "Eksternal",
