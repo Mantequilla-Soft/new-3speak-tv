@@ -78,6 +78,13 @@ describe('UploadLinks: Audio editor entry', () => {
     expect([...groups[1].querySelectorAll('.share-link')].map((a) => a.getAttribute('title'))).toEqual(['Music / Audio', 'Audio Editor'])
   })
 
+  it('puts the categories side by side in one layout box (columns come from nav.scss)', () => {
+    renderWithProviders(<UploadLinks linkClass="share-link" />)
+    const layout = document.querySelector('.share-menu-layout')
+    expect(layout).not.toBeNull()
+    for (const g of document.querySelectorAll('.share-menu-group')) expect(g.parentElement).toBe(layout)
+  })
+
   it('keeps the Audio category for the audio upload without the editor feature', () => {
     m.editor = false
     renderWithProviders(<UploadLinks linkClass="share-link" />)

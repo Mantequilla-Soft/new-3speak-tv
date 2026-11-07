@@ -27,7 +27,7 @@ export const CHANGELOG = [
     version: '1.81.95',
     category: 'upload',
     date: '2026-11-07',
-    summary: "The upload menu is sorted into Video and Audio now: audio upload and the Audio Editor sit together under Audio. On desktop the categories sit side by side.",
+    summary: "The upload menu is sorted into Video and Audio now: audio upload and the Audio Editor sit together under Audio, and the categories sit side by side on every screen.",
   },
   {
     version: '1.81.94',

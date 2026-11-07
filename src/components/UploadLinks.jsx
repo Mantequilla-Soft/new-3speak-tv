@@ -77,10 +77,11 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
   // when there's something under it: a lone heading reads as a bug.
   const hasOthers = !!user;
 
-  // Each category is its own group: one column each in the wide desktop flyout
-  // (nav.scss), stacked everywhere else.
+  // Each category is its own group, all inside one layout box (nav.scss):
+  // one column per category in the desktop flyout and on tablets, two
+  // columns on phones (Video | Audio, then Live | Others).
   return (
-    <>
+    <div className="share-menu-layout">
       <div className="share-menu-group">
         <div className="share-menu-heading">{t('misc.uploadLinks.headings.video')}</div>
         <Link to="/embed-studio" className={linkClass} title={t('misc.uploadLinks.regularVideo')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio'))}>
@@ -157,6 +158,6 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
           </Link>
         </div>
       )}
-    </>
+    </div>
   );
 }
