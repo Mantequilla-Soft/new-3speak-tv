@@ -192,7 +192,8 @@
     "goLiveNow": "开始直播！",
     "playlist": "播放列表",
     "headings": {
-      "upload": "上传",
+      "video": "视频",
+      "audio": "音频",
       "live": "直播",
       "others": "其他"
     },

@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.96',
+    category: 'editor',
+    date: '2026-11-07',
+    summary: "The Audio Editor gives you a short tour of its tools on your first visit. The ? next to its name shows the tour again.",
+  },
+  {
+    version: '1.81.95',
+    category: 'upload',
+    date: '2026-11-07',
+    summary: "The upload menu is sorted into Video and Audio now: audio upload and the Audio Editor sit together under Audio. On desktop the categories sit side by side.",
+  },
+  {
     version: '1.81.94',
     category: 'profile',
     date: '2026-11-07',

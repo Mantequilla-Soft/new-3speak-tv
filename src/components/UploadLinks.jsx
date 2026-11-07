@@ -77,43 +77,52 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
   // when there's something under it: a lone heading reads as a bug.
   const hasOthers = !!user;
 
+  // Each category is its own group: one column each in the wide desktop flyout
+  // (nav.scss), stacked everywhere else.
   return (
     <>
-      <div className="share-menu-heading">{t('misc.uploadLinks.headings.upload')}</div>
-      <Link to="/embed-studio" className={linkClass} title={t('misc.uploadLinks.regularVideo')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio'))}>
-        <IoCloudUploadSharp className={iconClass} /> {text('regularVideo')}
-      </Link>
-      <Link to="/embed-studio?from=shorts" className={linkClass} title={t('misc.uploadLinks.verticalShort')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=shorts'))}>
-        <ShortsIcon className={iconClass} outlineWidth={30} /> {text('verticalShort')}
-      </Link>
-      {/* 24h story: a vertical short that leaves the stories row after a day.
-          Any Hive account (storiesEnabledFor); the checker enforces it too. */}
-      {storiesEnabledFor(user) && (
-        <Link to="/embed-studio?from=story" className={linkClass} title={t('misc.uploadLinks.story')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=story'))}>
-          <MdAccessTime className={iconClass} /> {text('story')}
+      <div className="share-menu-group">
+        <div className="share-menu-heading">{t('misc.uploadLinks.headings.video')}</div>
+        <Link to="/embed-studio" className={linkClass} title={t('misc.uploadLinks.regularVideo')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio'))}>
+          <IoCloudUploadSharp className={iconClass} /> {text('regularVideo')}
         </Link>
-      )}
-      <a href="#" className={linkClass} title={t('misc.uploadLinks.musicAudio')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-audio-upload')))}>
-        <MdGraphicEq className={iconClass} /> {text('musicAudio')}
-      </a>
-      {/* The video editor in audio mode: cut, clean up and level a podcast or
-          song, then hand it to the audio upload (App.jsx, open-audio-editor). */}
-      {FEATURE_EDITOR && (
-        <a href="#" className={linkClass} title={t('misc.uploadLinks.audioEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-audio-editor')))}>
-          <AudioWaveform className={iconClass} size={18} /> {text('audioEditor')}
+        <Link to="/embed-studio?from=shorts" className={linkClass} title={t('misc.uploadLinks.verticalShort')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=shorts'))}>
+          <ShortsIcon className={iconClass} outlineWidth={30} /> {text('verticalShort')}
+        </Link>
+        {/* 24h story: a vertical short that leaves the stories row after a day.
+            Any Hive account (storiesEnabledFor); the checker enforces it too. */}
+        {storiesEnabledFor(user) && (
+          <Link to="/embed-studio?from=story" className={linkClass} title={t('misc.uploadLinks.story')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=story'))}>
+            <MdAccessTime className={iconClass} /> {text('story')}
+          </Link>
+        )}
+        {FEATURE_EDITOR && (
+          <a href="#" className={linkClass} title={t('misc.uploadLinks.shortsEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-shorts-editor')))}>
+            <Clapperboard className={iconClass} size={18} /> {text('shortsEditor')}
+          </a>
+        )}
+      </div>
+
+      {/* Audio: its own category, the upload and the editor side by side. */}
+      <div className="share-menu-group">
+        <div className="share-menu-heading">{t('misc.uploadLinks.headings.audio')}</div>
+        <a href="#" className={linkClass} title={t('misc.uploadLinks.musicAudio')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-audio-upload')))}>
+          <MdGraphicEq className={iconClass} /> {text('musicAudio')}
         </a>
-      )}
-      {FEATURE_EDITOR && (
-        <a href="#" className={linkClass} title={t('misc.uploadLinks.shortsEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-shorts-editor')))}>
-          <Clapperboard className={iconClass} size={18} /> {text('shortsEditor')}
-        </a>
-      )}
+        {/* The video editor in audio mode: cut, clean up and level a podcast or
+            song, then hand it to the audio upload (App.jsx, open-audio-editor). */}
+        {FEATURE_EDITOR && (
+          <a href="#" className={linkClass} title={t('misc.uploadLinks.audioEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-audio-editor')))}>
+            <AudioWaveform className={iconClass} size={18} /> {text('audioEditor')}
+          </a>
+        )}
+      </div>
 
       {/* OpenPods live streaming — the whole "Live" category is gated behind
           VITE_ENABLE_OPENPODS (off by default), plus an always-on allowlist of
           test accounts (see openpodsEnabledFor). */}
       {openpodsEnabledFor(user) && (
-        <>
+        <div className="share-menu-group">
           <div className="share-menu-heading">{t('misc.uploadLinks.headings.live')}</div>
           <Link
             to="/openpods?create=1&mode=standalone"
@@ -134,19 +143,19 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
           >
             <MdGroups className={iconClass} /> {text('groupChat')}
           </Link>
-        </>
+        </div>
       )}
 
-      {hasOthers && <div className="share-menu-heading">{t('misc.uploadLinks.headings.others')}</div>}
-      {user && (
-        <Link to={`/@${user}?tab=community`} className={linkClass} title={t('misc.uploadLinks.communitySnap')} onClick={go}>
-          <BiCommentDetail className={iconClass} /> {text('communitySnap')}
-        </Link>
-      )}
-      {user && (
-        <Link to="/profile?tab=playlists&create=playlist" className={linkClass} title={t('misc.uploadLinks.playlist')} onClick={go}>
-          <MdPlaylistAdd className={iconClass} /> {text('playlist')}
-        </Link>
+      {hasOthers && (
+        <div className="share-menu-group">
+          <div className="share-menu-heading">{t('misc.uploadLinks.headings.others')}</div>
+          <Link to={`/@${user}?tab=community`} className={linkClass} title={t('misc.uploadLinks.communitySnap')} onClick={go}>
+            <BiCommentDetail className={iconClass} /> {text('communitySnap')}
+          </Link>
+          <Link to="/profile?tab=playlists&create=playlist" className={linkClass} title={t('misc.uploadLinks.playlist')} onClick={go}>
+            <MdPlaylistAdd className={iconClass} /> {text('playlist')}
+          </Link>
+        </div>
       )}
     </>
   );

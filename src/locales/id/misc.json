@@ -192,7 +192,8 @@
     "goLiveNow": "Siaran langsung!",
     "playlist": "Playlist",
     "headings": {
-      "upload": "Unggah",
+      "video": "Video",
+      "audio": "Audio",
       "live": "Live",
       "others": "Lainnya"
     },

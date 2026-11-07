@@ -192,7 +192,8 @@
     "goLiveNow": "Live gehen!",
     "playlist": "Playlist",
     "headings": {
-      "upload": "Hochladen",
+      "video": "Video",
+      "audio": "Audio",
       "live": "Live",
       "others": "Sonstiges"
     },

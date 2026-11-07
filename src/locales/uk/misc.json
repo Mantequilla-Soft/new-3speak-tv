@@ -192,7 +192,8 @@
     "goLiveNow": "Вийти в ефір!",
     "playlist": "Плейлист",
     "headings": {
-      "upload": "Завантаження",
+      "video": "Відео",
+      "audio": "Аудіо",
       "live": "Наживо",
       "others": "Інше"
     },

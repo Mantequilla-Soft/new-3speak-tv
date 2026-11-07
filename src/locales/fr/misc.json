@@ -192,7 +192,8 @@
     "goLiveNow": "Passer en live !",
     "playlist": "Playlist",
     "headings": {
-      "upload": "Mettre en ligne",
+      "video": "Vidéo",
+      "audio": "Audio",
       "live": "Live",
       "others": "Autres"
     },

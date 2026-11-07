@@ -192,7 +192,8 @@
     "goLiveNow": "Phát trực tiếp!",
     "playlist": "Danh sách phát",
     "headings": {
-      "upload": "Tải lên",
+      "video": "Video",
+      "audio": "Âm thanh",
       "live": "Trực tiếp",
       "others": "Khác"
     },

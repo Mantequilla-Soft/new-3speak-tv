@@ -192,7 +192,8 @@
     "goLiveNow": "ライブ配信する！",
     "playlist": "再生リスト",
     "headings": {
-      "upload": "アップロード",
+      "video": "動画",
+      "audio": "音声",
       "live": "ライブ",
       "others": "その他"
     },

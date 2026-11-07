@@ -192,7 +192,8 @@
     "goLiveNow": "라이브 시작!",
     "playlist": "재생목록",
     "headings": {
-      "upload": "업로드",
+      "video": "동영상",
+      "audio": "오디오",
       "live": "라이브",
       "others": "기타"
     },

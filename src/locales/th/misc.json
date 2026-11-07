@@ -192,7 +192,8 @@
     "goLiveNow": "ไลฟ์เลย!",
     "playlist": "เพลย์ลิสต์",
     "headings": {
-      "upload": "อัปโหลด",
+      "video": "วิดีโอ",
+      "audio": "เสียง",
       "live": "ไลฟ์",
       "others": "อื่นๆ"
     },

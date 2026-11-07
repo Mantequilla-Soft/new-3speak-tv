@@ -469,11 +469,15 @@
         }
       }
 
+      // Wide screens only (below 1025px it's the bottom sheet, Nav.jsx), so
+      // the categories sit side by side: one column each, divider between.
       .nav-upload-flyout {
         position: absolute;
         top: calc(100% + 6px);
         right: 0;
-        width: 300px;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 230px;
         max-width: calc(100vw - 32px);
         background: var(--bg-secondary);
         border-radius: 8px;
@@ -497,6 +501,21 @@
         }
 
         @include nav-upload-items;
+
+        // narrow columns: long labels (some languages) wrap instead of
+        // running into the next column
+        .nav-upload-flyout-item {
+          white-space: normal;
+        }
+
+        .share-menu-group + .share-menu-group {
+          border-left: 1px solid var(--border-light);
+        }
+
+        // every column starts level: no extra lead-in above any heading
+        .share-menu-group > .share-menu-heading {
+          padding-top: 0.15rem;
+        }
       }
 
       // Compact "+" wherever the bottom nav is shown. Placed AFTER .nav-upload-btn

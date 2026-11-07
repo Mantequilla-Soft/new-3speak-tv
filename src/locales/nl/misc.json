@@ -192,7 +192,8 @@
     "goLiveNow": "Ga live!",
     "playlist": "Afspeellijst",
     "headings": {
-      "upload": "Uploaden",
+      "video": "Video",
+      "audio": "Audio",
       "live": "Live",
       "others": "Overig"
     },

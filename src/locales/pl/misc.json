@@ -192,7 +192,8 @@
     "goLiveNow": "Nadawaj na żywo!",
     "playlist": "Playlista",
     "headings": {
-      "upload": "Prześlij",
+      "video": "Film",
+      "audio": "Audio",
       "live": "Na żywo",
       "others": "Inne"
     },

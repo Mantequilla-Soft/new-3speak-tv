@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 // The share menu's entries (components/UploadLinks.jsx), here the Audio editor:
-// it sits right after "Music / Audio", only exists with the editor feature on,
+// it sits right after "Music / Audio" in their own "Audio" category, only
+// exists with the editor feature on,
 // goes through the same upload gate as every upload entry and then asks App.jsx
 // to open the editor in audio mode (open-audio-editor, no file).
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
@@ -52,6 +53,39 @@ describe('UploadLinks: Audio editor entry', () => {
     expect(at).toBeGreaterThanOrEqual(0)
     expect(links[at + 1]).toBe('Audio Editor')
     expect(entry()).toHaveTextContent('Cut, clean up and level podcasts and music')
+  })
+
+  it('the video entries sit under Video, audio upload and the audio editor under their own Audio category', () => {
+    renderWithProviders(<UploadLinks linkClass="share-link" />)
+    // headings and entries in menu order
+    const order = [...document.querySelectorAll('.share-menu-heading, .share-link')]
+      .map((el) => (el.classList.contains('share-menu-heading') ? `# ${el.textContent}` : el.getAttribute('title')))
+    const audio = order.indexOf('# Audio')
+    expect(order[0]).toBe('# Video')
+    expect(order).not.toContain('# Upload')
+    expect(audio).toBeGreaterThan(order.indexOf('# Video'))
+    expect(order.slice(audio + 1, audio + 3)).toEqual(['Music / Audio', 'Audio Editor'])
+    // the video entries stay under Video, before the Audio heading
+    expect(order.indexOf('Shorts Editor')).toBeLessThan(audio)
+  })
+
+  it('wraps each category in its own group (the desktop flyout lays them out as columns)', () => {
+    renderWithProviders(<UploadLinks linkClass="share-link" />)
+    const groups = [...document.querySelectorAll('.share-menu-group')]
+    expect(groups.map((g) => g.querySelector('.share-menu-heading')?.textContent)).toEqual(['Video', 'Audio']) // signed out: no Others
+    // every entry sits inside a group, under its heading
+    for (const link of document.querySelectorAll('.share-link')) expect(link.closest('.share-menu-group')).not.toBeNull()
+    expect([...groups[1].querySelectorAll('.share-link')].map((a) => a.getAttribute('title'))).toEqual(['Music / Audio', 'Audio Editor'])
+  })
+
+  it('keeps the Audio category for the audio upload without the editor feature', () => {
+    m.editor = false
+    renderWithProviders(<UploadLinks linkClass="share-link" />)
+    const order = [...document.querySelectorAll('.share-menu-heading, .share-link')]
+      .map((el) => (el.classList.contains('share-menu-heading') ? `# ${el.textContent}` : el.getAttribute('title')))
+    const audio = order.indexOf('# Audio')
+    expect(audio).toBeGreaterThan(0)
+    expect(order[audio + 1]).toBe('Music / Audio')
   })
 
   it('is not there without the editor feature', () => {

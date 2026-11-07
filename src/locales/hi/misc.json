@@ -192,7 +192,8 @@
     "goLiveNow": "लाइव जाएं!",
     "playlist": "प्लेलिस्ट",
     "headings": {
-      "upload": "अपलोड",
+      "video": "वीडियो",
+      "audio": "ऑडियो",
       "live": "लाइव",
       "others": "अन्य"
     },

@@ -192,7 +192,8 @@
     "goLiveNow": "Entrar ao vivo!",
     "playlist": "Playlist",
     "headings": {
-      "upload": "Enviar",
+      "video": "Vídeo",
+      "audio": "Áudio",
       "live": "Ao vivo",
       "others": "Outros"
     },

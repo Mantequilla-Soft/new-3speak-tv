@@ -192,7 +192,8 @@
     "goLiveNow": "Nenda mubashara!",
     "playlist": "Orodha ya kucheza",
     "headings": {
-      "upload": "Pakia",
+      "video": "Video",
+      "audio": "Sauti",
       "live": "Mubashara",
       "others": "Nyingine"
     },
