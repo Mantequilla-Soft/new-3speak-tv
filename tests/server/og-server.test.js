@@ -323,7 +323,7 @@ describe('search engines', () => {
       expect(meta(r.text, 'og:image:width'), path).toBe('1200')
       expect(meta(r.text, 'og:image:height'), path).toBe('630')
       expect(meta(r.text, 'twitter:image'), path).toBe(`https://3speak.tv/api/og-card/short/${id}.jpg`)
-      // No teaser here (the fixtures have no video), so no player card either.
+      // Shorts get no Discord/Telegram teaser: no og:video, no player card.
       expect(meta(r.text, 'og:video'), path).toBe(null)
       expect(meta(r.text, 'twitter:card'), path).toBe('summary_large_image')
       const video = jsonLd(r.text).find((d) => d['@type'] === 'VideoObject')

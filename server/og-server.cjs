@@ -1423,8 +1423,11 @@ const server = http.createServer(async (req, res) => {
     // Started now so the probe overlaps the Hive/checker lookups below. It only
     // resolves + probes (cached per rendition); the teaser build starts further
     // down, once the page is known to be allowed to carry the video.
+    // Shorts get no teaser (owner's call 2026-11-08): their card is the drawn
+    // short card below, in every app. A short reached by /watch is only known
+    // after the lookup; its probe is dropped there, nothing is built.
     const videoBot = ogVideo.wantsVideo(req.headers['user-agent']);
-    const inlineVideo = videoBot
+    const inlineVideo = videoBot && video.kind !== 'shorts'
       ? ogVideo.ogVideoFor(video.author, video.permlink).catch(() => null)
       : Promise.resolve(null);
 
@@ -1435,10 +1438,11 @@ const server = http.createServer(async (req, res) => {
       post, meta, title, description, selfUrl, canonicalUrl, duration, uploadDate, index, inlineAllowed,
     } = card;
     let { image } = card;
+    const teaserAllowed = inlineAllowed && !card.isShort;
     // A short's thumbnail is 9:16: every app shows it squeezed into a small
     // square or cropped to a strip. Its share image is a 1200x630 card instead
     // (og-cards.cjs: the thumbnail in a portrait frame, title, whose), drawn by
-    // the API on the first fetch. Not under Discord's teaser, see below.
+    // the API on the first fetch, for every app (shorts get no teaser).
     const shortCardId = card.isShort && card.embed && card.embed.owner && card.embed.permlink
       ? `${card.embed.owner}/${card.embed.permlink}` : null;
     const shortCard = shortCardId && validCardId('short', shortCardId)
@@ -1475,7 +1479,7 @@ const server = http.createServer(async (req, res) => {
         inlineAllowed ? ogVideo.manifestUrl(video.author, video.permlink) : null,
         card.embed ? { doc: card.embed } : lookupEmbed(post.author, post.permlink),
       ]);
-      if (inlineAllowed) inline = v;
+      if (teaserAllowed) inline = v;
       related = r;
       contentUrl = m;
       // The post stands but the video does not: the checker marks a video
@@ -1488,7 +1492,7 @@ const server = http.createServer(async (req, res) => {
       transcriptLang = (t && t.lang) || null;
       subtitleLanguages = (t && t.languages) || null;
       comments = c;
-    } else if (inlineAllowed) {
+    } else if (teaserAllowed) {
       inline = await inlineVideo;
     }
     // Discord fetches the MP4 the moment it unfurls and gives up if it's slow,
@@ -1509,10 +1513,8 @@ const server = http.createServer(async (req, res) => {
       if (file === null || (discord && !file)) inline = null;
       else rememberOembed(`${video.author}/${video.permlink}`, { description, url: canonicalUrl });
     }
-    // The teaser plays inside the thumbnail's own shape; any other card shows
-    // the drawn short card.
     let imageSize;
-    if (shortCard && !inline) {
+    if (shortCard) {
       image = shortCard;
       imageSize = [1200, 630];
     }

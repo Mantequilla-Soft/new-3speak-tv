@@ -565,8 +565,8 @@ const SQUARE_RADIUS = 36
 const squareBox = { ...ringBox, borderRadius: SQUARE_RADIUS }
 const SQUARE_BADGE_AT = { x: RING.cx + RING.d / 2 - BADGE * 0.72, y: RING.cy + RING.d / 2 - BADGE * 0.72 }
 const LIVE_RED = '#E32933'
-// A short's thumbnail: a 9:16 rounded frame in the ring's place, a play mark
-// on it, the 3S badge on its corner.
+// A short's thumbnail: a 9:16 rounded frame in the ring's place, the 3S badge
+// on its corner.
 const PORTRAIT = { w: 288, h: 512 }
 const PORTRAIT_PX = { w: 360, h: 640 }
 const portraitBox = {
@@ -574,7 +574,6 @@ const portraitBox = {
   width: PORTRAIT.w, height: PORTRAIT.h, borderRadius: 28,
 }
 const PORTRAIT_BADGE_AT = { x: portraitBox.left + PORTRAIT.w - BADGE * 0.72, y: portraitBox.top + PORTRAIT.h - BADGE * 0.72 }
-const PLAY = 104
 const FRAMES = {
   ring: { box: ringBox, badge: BADGE_AT },
   square: { box: squareBox, badge: SQUARE_BADGE_AT },
@@ -650,22 +649,11 @@ function cardTree({ lines, size, subtitle, avatar, initial, backdrop, shape = 'r
         subtitle.map(subtitlePart)),
     ]),
     el('div', { ...frame, border: '3px solid rgba(255,255,255,0.22)', display: 'flex' }, [picture]),
-    ...(shape === 'portrait' ? [playMark(frame)] : []),
     el('div', {
       position: 'absolute', left: badge.x, top: badge.y, width: BADGE, height: BADGE, borderRadius: BADGE / 2,
       backgroundColor: LOGO_NAVY, border: '4px solid #ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center',
     }, [{ type: 'img', props: { src: `data:image/svg+xml;base64,${Buffer.from(LOGO_SVG).toString('base64')}`, width: 58, height: 50 } }]),
   ])
-}
-
-/** A round play mark in the middle of a short's frame, so the card reads as a video. */
-function playMark(frame) {
-  const tri = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 46"><path fill="#ffffff" d="M2 3.5v39a2.5 2.5 0 0 0 3.8 2.1l31.4-19.5a2.5 2.5 0 0 0 0-4.2L5.8 1.4A2.5 2.5 0 0 0 2 3.5z"/></svg>`
-  return el('div', {
-    position: 'absolute', left: frame.left + (frame.width - PLAY) / 2, top: frame.top + (frame.height - PLAY) / 2,
-    width: PLAY, height: PLAY, borderRadius: PLAY / 2, display: 'flex', alignItems: 'center', justifyContent: 'center',
-    backgroundColor: 'rgba(20,26,74,0.62)', border: '3px solid rgba(255,255,255,0.85)',
-  }, [{ type: 'img', props: { src: `data:image/svg+xml;base64,${Buffer.from(tri).toString('base64')}`, width: 38, height: 44, style: { marginLeft: 8 } } }])
 }
 
 const backdrops = new Map()

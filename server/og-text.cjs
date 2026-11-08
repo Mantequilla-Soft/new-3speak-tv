@@ -88,6 +88,8 @@ function withoutLeadingTitle(desc, title) {
     matched++;
   }
   if (matched < want.length) return d.trim();
+  // Ending inside a word is no match ("Cat" is not the start of "Cats are").
+  if (i < d.length && /[\p{L}\p{N}]/u.test(d[i])) return d.trim();
   return d.slice(i).replace(/^[\s.,;:!?…|\-–—]+/, '').trim();
 }
 
@@ -97,10 +99,18 @@ const SHORT_TITLE_MAX = 50;
 const SHORT_DESC_MAX = 100;
 
 function shortCardText(title, description, author) {
-  const rest = withoutLeadingTitle(description, title);
+  const full = String(title || '').replace(/\s+/g, ' ').trim();
+  const shown = clip(full, SHORT_TITLE_MAX);
+  // A title that had to be cut: the description goes on where it stops, so
+  // nothing is said twice and nothing is skipped. A whole title is left out
+  // of the description whole. The title itself may already be a cut caption
+  // line ("... perfec..."), so only what is shown counts.
+  const cut = shown !== full;
+  const rest = withoutLeadingTitle(description, cut ? shown.replace(/…$/, '') : full);
+  const continues = cut && rest && rest !== String(description || '').trim();
   return {
-    title: clip(title, SHORT_TITLE_MAX),
-    description: clip(rest || `A short by @${author} on 3Speak.`, SHORT_DESC_MAX),
+    title: shown,
+    description: clip(rest ? `${continues ? '…' : ''}${rest}` : `A short by @${author} on 3Speak.`, SHORT_DESC_MAX),
   };
 }
 
