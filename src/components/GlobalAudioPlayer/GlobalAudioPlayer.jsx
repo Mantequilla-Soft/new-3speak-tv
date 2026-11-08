@@ -38,9 +38,10 @@ import { podcastPath, episodePath, artUrl, PODCAST_PLACEHOLDER } from '../../lib
 import * as podcastsLib from '../../lib/podcasts';
 import { fetchChapters, fetchTranscript, chapterAt } from '../../lib/podcastMedia';
 import { isDownloaded, localAudioUrl, downloadTrack, useDownloads } from '../../lib/podcastDownloads';
+import { setAudioSrc } from '../../lib/audioCorsMode';
 import { toastIn } from '../../utils/toast';
 import useReblog from '../../hooks/useReblog';
-import AudioCommentModal from './AudioCommentModal';
+import AudioCommentPanel from './AudioCommentPanel';
 import AudioHypeButton from './AudioHypeButton';
 import { recordWatch } from '../../utils/watchHistory';
 import { Repeat2 } from 'lucide-react';
@@ -286,7 +287,7 @@ function GlobalAudioPlayer() {
   const [shareTarget, setShareTarget] = useState(null);
   const [tipTarget, setTipTarget] = useState(null);
   const [podcastTip, setPodcastTip] = useState(null);
-  // The comment popup of the expanded player: { author, permlink, title, at }.
+  // The comment box at the top of the player: { author, permlink, title, at }.
   const [commentTarget, setCommentTarget] = useState(null);
   // Closing the player stops the track, never the queue: while the queue holds
   // something, a small "Up next" bar stays. Its own X clears the queue.
@@ -664,7 +665,7 @@ function GlobalAudioPlayer() {
           attachHls(el, src, track._id, play);
           return;
         }
-        el.src = src;
+        setAudioSrc(el, src, routedRef.current);
         el.defaultPlaybackRate = track.live ? 1 : speedRef.current;
         el.playbackRate = el.defaultPlaybackRate;
         pendingStartRef.current = startAt || null;
@@ -732,7 +733,7 @@ function GlobalAudioPlayer() {
         try { URL.revokeObjectURL(cur.src); } catch { /* not ours */ }
         localUrlRef.current = { id: null, url: null };
         setPlayingLocal(false);
-        el.src = net;
+        setAudioSrc(el, net, routedRef.current);
         if (pos) el.addEventListener('loadedmetadata', () => { el.currentTime = pos; }, { once: true });
         el.play().catch(() => {});
         return;
@@ -749,7 +750,7 @@ function GlobalAudioPlayer() {
       if (!cid) return;
       const i = AUDIO_GATEWAYS.findIndex(g => el.src === `${g}/${cid}`);
       if (i < 0 || i + 1 >= AUDIO_GATEWAYS.length) return;
-      el.src = `${AUDIO_GATEWAYS[i + 1]}/${cid}`;
+      setAudioSrc(el, `${AUDIO_GATEWAYS[i + 1]}/${cid}`, routedRef.current);
       if (pos) el.currentTime = pos;
       if (wasPlaying) el.play().catch(() => {});
     };
@@ -1274,7 +1275,8 @@ function GlobalAudioPlayer() {
       key={elKey}
       ref={audioRef}
       preload="metadata"
-      // Only the routed element asks for CORS: a host without it then still plays on the plain one.
+      // The routed element always asks for CORS: a host without it then still plays on
+      // the plain one. On the plain one setAudioSrc decides per source.
       crossOrigin={routed ? 'anonymous' : undefined}
       style={audioCurrent ? undefined : { display: 'none' }}
     />
@@ -1463,7 +1465,8 @@ function GlobalAudioPlayer() {
         </div>
       )}
 
-      {portalIfDocked(<div ref={inPip ? undefined : npRef} className={`audio-now-playing${showExpanded ? ' audio-np-expanded' : ''}${docked ? ' audio-np-docked' : ''}${inPip ? ' audio-np-in-pip' : ''}${isLive ? ' is-live' : ''}`}>
+      {portalIfDocked(<div ref={inPip ? undefined : npRef} className={`audio-now-playing${showExpanded ? ' audio-np-expanded' : ''}${docked ? ' audio-np-docked' : ''}${inPip ? ' audio-np-in-pip' : ''}${isLive ? ' is-live' : ''}${commentTarget ? ' has-comment' : ''}`}>
+        {commentTarget && <AudioCommentPanel {...commentTarget} onClose={() => setCommentTarget(null)} />}
         <div className={`audio-np-progress${isLive ? ' is-live' : ''}`} onClick={isLive ? undefined : handleSeek}>
           {!isLive && <div className="audio-np-progress-fill" style={{ width: audioDuration ? `${(audioCurrentTime / audioDuration) * 100}%` : '0%' }} />}
           {markers.map((f, i) => <span key={i} className="audio-np-progress-marker" style={{ left: `${f * 100}%` }} aria-hidden="true" />)}
@@ -1633,8 +1636,9 @@ function GlobalAudioPlayer() {
                   outside show, lib/podcasts.js threeSpeakPost): comment on it and hype it. */}
               {loggedIn && nowPlaying.post_permlink && (
                 <button
-                  className="audio-np-playlist-btn audio-np-comment-btn"
-                  onClick={() => setCommentTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink, title: nowPlaying.title, at: isLive ? 0 : audioRef.current?.currentTime })}
+                  className={`audio-np-playlist-btn audio-np-comment-btn${commentTarget ? ' active' : ''}`}
+                  onClick={() => setCommentTarget(c => (c ? null : { author: nowPlaying.owner, permlink: nowPlaying.post_permlink, title: nowPlaying.title, at: isLive ? 0 : audioRef.current?.currentTime }))}
+                  aria-expanded={!!commentTarget}
                   title={t('comments.section.commentTab')}
                   aria-label={t('comments.section.commentTab')}
                 >
@@ -1991,8 +1995,6 @@ function GlobalAudioPlayer() {
       )}
 
       {podcastTip && <PodcastTipModal track={podcastTip} onClose={() => setPodcastTip(null)} />}
-
-      {commentTarget && <AudioCommentModal {...commentTarget} onClose={() => setCommentTarget(null)} />}
 
       {tipTarget && (
         <TipModal

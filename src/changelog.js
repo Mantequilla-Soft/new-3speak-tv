@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.98',
+    category: 'audio',
+    date: '2026-11-07',
+    summary: "The audio player's comment box now opens inside the player, with emojis and GIFs, so you can pause or skip while you write.",
+  },
+  {
+    version: '1.81.97',
+    category: 'audio',
+    date: '2026-11-07',
+    summary: "Audio now starts and skips ahead more reliably, both in the audio player and in audio inside posts.",
+  },
+  {
     version: '1.81.96',
     category: 'editor',
     date: '2026-11-07',
