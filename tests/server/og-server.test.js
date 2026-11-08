@@ -312,6 +312,26 @@ describe('search engines', () => {
     }
   })
 
+  it('show a short as its drawn 1200x630 card, and keep its own thumbnail for schema.org', async () => {
+    for (const path of ['/shorts?v=alice/snap-post', '/shorts?v=alice/short1']) {
+      const r = await crawl(path, 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)')
+      const id = path.endsWith('snap-post') ? 'alice/snapasset' : 'alice/short1'
+      expect(meta(r.text, 'og:image'), path).toBe(`https://3speak.tv/api/og-card/short/${id}.jpg`)
+      expect(meta(r.text, 'og:image:type'), path).toBe('image/jpeg')
+      expect(meta(r.text, 'og:image:width'), path).toBe('1200')
+      expect(meta(r.text, 'og:image:height'), path).toBe('630')
+      expect(meta(r.text, 'twitter:image'), path).toBe(`https://3speak.tv/api/og-card/short/${id}.jpg`)
+      // No teaser here (the fixtures have no video), so no player card either.
+      expect(meta(r.text, 'og:video'), path).toBe(null)
+      expect(meta(r.text, 'twitter:card'), path).toBe('summary_large_image')
+      const video = jsonLd(r.text).find((d) => d['@type'] === 'VideoObject')
+      expect(video.thumbnailUrl, path).not.toContain('/api/og-card/')
+    }
+    // A long video keeps its thumbnail.
+    const watch = await crawl('/watch?v=alice/my-video')
+    expect(meta(watch.text, 'og:image')).not.toContain('/api/og-card/')
+  })
+
   it('keep a video whose file is confirmed gone out of the index, page still served', async () => {
     const r = await crawl('/watch?v=alice/gone-video', GOOGLEBOT)
     expect(r.status).toBe(200)

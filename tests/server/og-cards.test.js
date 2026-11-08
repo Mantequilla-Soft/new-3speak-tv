@@ -106,6 +106,13 @@ describe('what the other cards say', () => {
     expect((await cards.playlistText({ name: 'Mix', owner: 'alice' })).subtitle[0]).toEqual(['Playlist', true])
   })
 
+  it('a short: its title, else whose short it is', async () => {
+    expect(await cards.shortText('vynith', 'I ate a raw chicken breast')).toMatchObject({
+      headline: 'I ate a raw chicken breast', subtitle: [['Short', true], [' by '], ['@vynith', true]],
+    })
+    expect((await cards.shortText('vynith', '')).headline).toBe('Short by @vynith')
+  })
+
   it('an audio post: its title, a song or audio, and whose', async () => {
     expect(await cards.audioText('alice', 'Sunday Tune', true)).toMatchObject({
       headline: 'Sunday Tune', subtitle: [['Song', true], [' by '], ['@alice', true]],
@@ -163,6 +170,9 @@ describe('the card file', () => {
     expect(cards.cardVersion('audio', 'alice/../../etc')).toBe('')
     expect(cards.cardVersion('tag', 'Not A Tag')).toBe('')
     expect(cards.cardVersion('stream', '../x')).toBe('')
+    expect(cards.cardVersion('short', 'alice/../../etc')).toBe('')
+    expect(cards.validCardId('short', 'alice/snapasset')).toBe(true)
+    expect(cards.validCardId('short', 'alice/Snap Asset')).toBe(false)
   })
 
   it('names an invite card by its code and keeps it under the inviter', async () => {
@@ -179,6 +189,16 @@ describe('the card file', () => {
   })
 })
 
+describe('short cards', () => {
+  it('keeps a short card under its owner', async () => {
+    const card = Buffer.from(await cards.renderCard({ headline: 'A short', subtitle: [['Short', true]], avatar: null }))
+    expect(await cards.saveCard('short', 'alice/snapasset', card)).toBe(true)
+    expect(fs.existsSync(path.join(dir, 'short', 'alice', 'snapasset.jpg'))).toBe(true)
+    expect(cards.cardUrl('https://3speak.tv', 'short', 'alice/snapasset'))
+      .toMatch(/^https:\/\/3speak\.tv\/api\/og-card\/short\/alice\/snapasset\.jpg\?v=/)
+  }, 30000)
+})
+
 describe('the other card shapes', () => {
   it('draws a cover in a square frame and a LIVE marker, still 1200x630', async () => {
     const png1x1 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
@@ -186,6 +206,7 @@ describe('the other card shapes', () => {
       { headline: 'Summer Songs', subtitle: [['Album', true], [' by '], ['@alice', true]], avatar: png1x1, shape: 'square' },
       { headline: 'On air', subtitle: [['LIVE', 'live'], ['@meno', true], ON_3SPEAK], avatar: null },
       { ...cards.tagText('cooking'), avatar: null },
+      { headline: 'My dog learns to surf', subtitle: [['Short', true], [' by '], ['@alice', true]], avatar: png1x1, shape: 'portrait' },
     ]) {
       const img = jpeg.decode(Buffer.from(await cards.renderCard(opts)), { useTArray: true })
       expect([img.width, img.height]).toEqual([1200, 630])
