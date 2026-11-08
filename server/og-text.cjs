@@ -59,4 +59,49 @@ function videoTitle(post, embed) {
   );
 }
 
-module.exports = { shortHeading, firstLine, videoTitle };
+/** `text` cut to at most `max` characters, at a word break where there is one, with an ellipsis. */
+function clip(text, max) {
+  const t = String(text || '').replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max - 1);
+  const space = cut.lastIndexOf(' ');
+  // A break in the last third only: one long word is cut where it is.
+  const head = space > max * 0.66 ? cut.slice(0, space) : cut;
+  return `${head.replace(/[\s.,;:!?…-]+$/, '')}…`;
+}
+
+/**
+ * `desc` without `title` at its start. A short's caption usually opens with
+ * the line the title came from, so a card would say it twice. Letters and
+ * digits are compared, case and punctuation ignored.
+ */
+function withoutLeadingTitle(desc, title) {
+  const d = String(desc || '');
+  const want = String(title || '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+  if (!want) return d.trim();
+  let i = 0;
+  let matched = 0;
+  for (; i < d.length && matched < want.length; i++) {
+    const c = d[i].toLowerCase();
+    if (!/[\p{L}\p{N}]/u.test(c)) continue;
+    if (c !== want[matched]) return d.trim();
+    matched++;
+  }
+  if (matched < want.length) return d.trim();
+  return d.slice(i).replace(/^[\s.,;:!?…|\-–—]+/, '').trim();
+}
+
+// What a short's card says: a short title, and a description that does not
+// repeat it (owner's call 2026-11-08: at most 50 and 100 characters).
+const SHORT_TITLE_MAX = 50;
+const SHORT_DESC_MAX = 100;
+
+function shortCardText(title, description, author) {
+  const rest = withoutLeadingTitle(description, title);
+  return {
+    title: clip(title, SHORT_TITLE_MAX),
+    description: clip(rest || `A short by @${author} on 3Speak.`, SHORT_DESC_MAX),
+  };
+}
+
+module.exports = { shortHeading, firstLine, videoTitle, clip, withoutLeadingTitle, shortCardText };

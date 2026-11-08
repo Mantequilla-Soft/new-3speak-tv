@@ -309,6 +309,8 @@ describe('search engines', () => {
       expect(r.status, path).toBe(200)
       expect(canonical(r.text), path).toBe('https://3speak.tv/shorts?v=alice/snapasset')
       expect(r.text, path).toContain('<title>My dog learns to surf - 3Speak</title>')
+      // The caption opens with the title: the description says the rest.
+      expect(meta(r.text, 'og:description'), path).toBe('more text')
     }
   })
 

@@ -25,7 +25,7 @@ const dns = require('dns');
 dns.setDefaultResultOrder('ipv4first');
 const ogVideo = require('./og-video.cjs');
 const ogSite = require('./og-site.cjs');
-const { videoTitle } = require('./og-text.cjs');
+const { videoTitle, shortCardText } = require('./og-text.cjs');
 
 const PORT = process.env.OG_PORT || 4023;
 const HIVE_API = 'https://api.hive.blog';
@@ -1256,11 +1256,13 @@ async function resolveVideoCard(video, origin) {
   const image = boundImage(fixThumbnail(thumbnail));
 
   const kindLabel = isShort ? 'Short' : 'Video';
-  const title = videoTitle(post, embed) || `${kindLabel} by @${video.author}`;
+  let title = videoTitle(post, embed) || `${kindLabel} by @${video.author}`;
 
-  const description = post
+  let description = post
     ? extractDescription(post.body)
     : `A ${kindLabel.toLowerCase()} by @${video.author} on 3Speak.`;
+  // A short's caption opens with its title: the card says each once, briefly.
+  if (isShort) ({ title, description } = shortCardText(title, description, video.author));
 
   // og:url is the exact route that was shared (a video at /@author/permlink,
   // whichever of its two addresses was used; /shorts or /shorts/stories),
