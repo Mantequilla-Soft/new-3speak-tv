@@ -93,6 +93,7 @@ const HiveIcon = ({ size = 24, className = '' }) => (
 );
 import hiveApi, { SHORTS_PAGE_SIZE, consumePreloadedShorts, hasShortsPreloaded, preloadShorts, fetchUserShortsWithDetails } from '../hive-api/hiveApi';
 import { useAppStore } from '../lib/store';
+import { useRewardDisplay } from '../utils/hivePrice';
 import { recordWatch } from '../utils/watchHistory';
 import { dropWatchedFromFeeds, rememberWatchedShort, dropWatchedShorts } from '../utils/feedWatched';
 import { dropAiShorts } from '../utils/aiFlags';
@@ -2880,12 +2881,11 @@ const VideoShort = () => {
   const formatNumber = (num) =>
     num >= 1000 ? (num / 1000).toFixed(1) + 'K' : num?.toString() || '0';
 
+  // Payouts are HBD (dollar) values; guests and warm-up accounts see HIVE.
+  const { label: rewardLabel } = useRewardDisplay();
   const formatPayout = (payout) => {
-    if (payout === null || payout === undefined) return '$0.00';
     const num = parseFloat(payout);
-    if (isNaN(num)) return '$0.00';
-    if (num >= 1000) return `$${(num / 1000).toFixed(1)}K`;
-    return `$${num.toFixed(2)}`;
+    return rewardLabel(Number.isFinite(num) ? num : 0);
   };
 
   // Calculate which videos to preload — memoized to prevent cleanup effect from running on every render
@@ -4396,6 +4396,7 @@ const CommentItem = ({
   pinBusy = false,
 }) => {
   const { t } = useI18n();
+  const { label: rewardLabel } = useRewardDisplay();
   const [showReplies, setShowReplies] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [translatedText, setTranslatedText] = useState(null);
@@ -4506,7 +4507,7 @@ const CommentItem = ({
             </button>
             <div className="commentReward">
               <GiTwoCoins size={14} />
-              <span>${comment.stats?.total_hive_reward?.toFixed(2) ?? '0.00'}</span>
+              <span>{rewardLabel(comment.stats?.total_hive_reward ?? 0)}</span>
             </div>
             <button
               className="replyBtn"

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   MdPlayArrow, MdPause, MdAdd, MdRssFeed, MdNotificationsActive, MdNotificationsOff, MdArrowBack, MdOpenInNew,
   MdUploadFile, MdDownload, MdSearch, MdClose, MdCheck, MdPodcasts, MdTrendingUp, MdHistory, MdWhatshot, MdLink, MdExplore, MdLibraryMusic,
-  MdLeaderboard, MdLock, MdLockOpen, MdQueueMusic, MdFiberNew,
+  MdLeaderboard, MdLock, MdLockOpen, MdQueueMusic, MdFiberNew, MdCode,
 } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
@@ -32,6 +32,7 @@ import { EpisodeBadges, DownloadButton, PersonsRow, LiveBanner, PrivateBadge } f
 import DownloadsSection from './DownloadsSection';
 import ContinueListening, { useContinueListening } from './ContinueListening';
 import useOnline from '../../hooks/useOnline';
+import { openEmbedCode } from '../Embed/EmbedCodeModal';
 import './PodcastsTab.scss';
 
 // ─── Filters: date range and listening state ──────────────────────────────────
@@ -779,6 +780,17 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
             {/* A private feed's link is never handed out (it carries the login). */}
             {feed.url && !feed.private && (
               <a className="pod-btn" href={feed.url} target="_blank" rel="noopener noreferrer nofollow"><MdRssFeed size={16} /> RSS</a>
+            )}
+            {/* The show in one player on another site; an embed is anonymous, so never a private feed */}
+            {!feed.private && episodes.length > 0 && (
+              <button
+                type="button"
+                className="pod-btn"
+                onClick={() => openEmbedCode({ kind: 'podcast', id: feed.id, title: feed.title })}
+                title={t('chat.share.embedOnWebsite')}
+              >
+                <MdCode size={16} /> {t('misc.embed.embed')}
+              </button>
             )}
           </div>
         </div>

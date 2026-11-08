@@ -155,7 +155,9 @@
     "audioFull": "শিরোনামসহ",
     "audioCompact": "কমপ্যাক্ট",
     "audioMinimal": "ন্যূনতম",
-    "heightSub": "পূর্ণ প্রস্থ, {{height}} px উচ্চতা"
+    "heightSub": "পূর্ণ প্রস্থ, {{height}} px উচ্চতা",
+    "podcastTitle": "এই পডকাস্ট এম্বেড করুন",
+    "podcastHint": "এটি যেকোনো ওয়েবসাইট বা ব্লগ পোস্টে পেস্ট করুন। এটি শোয়ের সব পর্ব বাজায়, নতুন পর্ব বের হলেই সেগুলোও।"
   },
   "incubation": {
     "requestFailed": "রিকোয়েস্ট ব্যর্থ হয়েছে ({{status}})",

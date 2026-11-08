@@ -155,7 +155,9 @@
     "audioFull": "शीर्षक के साथ",
     "audioCompact": "कॉम्पैक्ट",
     "audioMinimal": "न्यूनतम",
-    "heightSub": "पूरी चौड़ाई, {{height}} px ऊँचाई"
+    "heightSub": "पूरी चौड़ाई, {{height}} px ऊँचाई",
+    "podcastTitle": "यह पॉडकास्ट एम्बेड करें",
+    "podcastHint": "इसे किसी भी वेबसाइट या ब्लॉग पोस्ट में पेस्ट करें। यह शो के सभी एपिसोड चलाता है, नए एपिसोड भी, जैसे ही वे आते हैं।"
   },
   "incubation": {
     "requestFailed": "रिक्वेस्ट फ़ेल हुई ({{status}})",

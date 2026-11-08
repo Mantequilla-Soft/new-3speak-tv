@@ -155,7 +155,9 @@
     "audioFull": "May pamagat",
     "audioCompact": "Compact",
     "audioMinimal": "Minimal",
-    "heightSub": "Buong lapad, {{height}} px ang taas"
+    "heightSub": "Buong lapad, {{height}} px ang taas",
+    "podcastTitle": "I-embed ang podcast na ito",
+    "podcastHint": "I-paste ito sa anumang website o blog post. Pinapatugtog nito ang lahat ng episode ng show, pati ang mga bago sa paglabas nila."
   },
   "incubation": {
     "requestFailed": "Pumalya ang request ({{status}})",

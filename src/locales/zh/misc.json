@@ -155,7 +155,9 @@
     "audioFull": "带标题",
     "audioCompact": "紧凑",
     "audioMinimal": "极简",
-    "heightSub": "全宽，高 {{height}} px"
+    "heightSub": "全宽，高 {{height}} px",
+    "podcastTitle": "嵌入此播客",
+    "podcastHint": "将其粘贴到任何网站或博客文章中。它会播放节目的所有单集，新单集一发布也会包含在内。"
   },
   "incubation": {
     "requestFailed": "请求失败（{{status}}）",

@@ -19,6 +19,7 @@ import { useContentBatch } from "../../hooks/useContentBatch";
 import { useWatchHistory } from "../../hooks/useWatchHistory";
 import useViewCounts from "../../hooks/useViewCounts";
 import { useAppStore } from "../../lib/store";
+import { useRewardDisplay } from "../../utils/hivePrice";
 import { customJsonWithAioha, isLoggedIn, KeyTypes } from "../../hive-api/aioha";
 import CommunitySnaps from "../Userprofilepage/CommunitySnaps";
 import { CommunityPinned, CommunityTopCreators, CommunityTeam, CommunityRules } from "./CommunityExtras";
@@ -72,6 +73,8 @@ const createdMs = (v) => new Date(v?.created || v?.created_at || 0).getTime();
 
 function CommunityPage() {
   const { t } = useTranslation();
+  // Guests and warm-up accounts see the pending rewards in HIVE.
+  const { label: rewardLabel } = useRewardDisplay();
   const { communityName: id } = useParams();
   const [dataMain, setDataMain] = useState(null);
 
@@ -294,7 +297,7 @@ function CommunityPage() {
     // num_pending counts posts still inside Hive's 7-day payout window, not the
     // community's whole history.
     { key: 'posts', icon: <FileText size={16} />, label: t('communities.page.kpis.posts'), value: fmtNum(dataMain.num_pending) },
-    { key: 'rewards', icon: <Coins size={16} />, label: t('communities.page.kpis.rewards'), value: typeof dataMain.sum_pending === 'number' ? `$${dataMain.sum_pending}` : '—' },
+    { key: 'rewards', icon: <Coins size={16} />, label: t('communities.page.kpis.rewards'), value: typeof dataMain.sum_pending === 'number' ? rewardLabel(dataMain.sum_pending) : '—' },
     { key: 'since', icon: <CalendarDays size={16} />, label: t('communities.page.kpis.created'), value: createdLabel },
   ] : [];
 

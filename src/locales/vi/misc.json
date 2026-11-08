@@ -155,7 +155,9 @@
     "audioFull": "Có tiêu đề",
     "audioCompact": "Gọn",
     "audioMinimal": "Tối giản",
-    "heightSub": "Toàn chiều rộng, cao {{height}} px"
+    "heightSub": "Toàn chiều rộng, cao {{height}} px",
+    "podcastTitle": "Nhúng podcast này",
+    "podcastHint": "Dán đoạn này vào bất kỳ trang web hoặc bài blog nào. Nó phát mọi tập của chương trình, kể cả các tập mới ngay khi ra mắt."
   },
   "incubation": {
     "requestFailed": "Yêu cầu thất bại ({{status}})",

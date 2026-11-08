@@ -155,7 +155,9 @@
     "audioFull": "Dengan judul",
     "audioCompact": "Ringkas",
     "audioMinimal": "Minimal",
-    "heightSub": "Lebar penuh, tinggi {{height}} px"
+    "heightSub": "Lebar penuh, tinggi {{height}} px",
+    "podcastTitle": "Sematkan podcast ini",
+    "podcastHint": "Tempel ini di situs web atau postingan blog mana pun. Ini memutar semua episode acara, termasuk episode baru begitu terbit."
   },
   "incubation": {
     "requestFailed": "Permintaan gagal ({{status}})",

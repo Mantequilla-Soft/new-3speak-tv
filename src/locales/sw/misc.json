@@ -155,7 +155,9 @@
     "audioFull": "Na kichwa",
     "audioCompact": "Fupi",
     "audioMinimal": "Ndogo kabisa",
-    "heightSub": "Upana kamili, urefu {{height}} px"
+    "heightSub": "Upana kamili, urefu {{height}} px",
+    "podcastTitle": "Pachika podikasti hii",
+    "podcastHint": "Bandika hii kwenye tovuti au chapisho lolote la blogu. Inacheza vipindi vyote vya kipindi, pamoja na vipya vinapotoka."
   },
   "incubation": {
     "requestFailed": "Ombi limeshindwa ({{status}})",

@@ -155,7 +155,9 @@
     "audioFull": "With title",
     "audioCompact": "Compact",
     "audioMinimal": "Minimal",
-    "heightSub": "Full width, {{height}} px tall"
+    "heightSub": "Full width, {{height}} px tall",
+    "podcastTitle": "Embed this podcast",
+    "podcastHint": "Paste this into any website or blog post. It plays every episode of the show, including new ones as they come out."
   },
   "incubation": {
     "requestFailed": "Request failed ({{status}})",

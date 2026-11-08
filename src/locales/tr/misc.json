@@ -155,7 +155,9 @@
     "audioFull": "Başlıklı",
     "audioCompact": "Kompakt",
     "audioMinimal": "Minimal",
-    "heightSub": "Tam genişlik, {{height}} px yükseklik"
+    "heightSub": "Tam genişlik, {{height}} px yükseklik",
+    "podcastTitle": "Bu podcast'i yerleştir",
+    "podcastHint": "Bunu herhangi bir web sitesine veya blog yazısına yapıştırın. Programın tüm bölümlerini, yenileri çıktıkça onları da çalar."
   },
   "incubation": {
     "requestFailed": "İstek başarısız ({{status}})",

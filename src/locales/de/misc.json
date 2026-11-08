@@ -155,7 +155,9 @@
     "audioFull": "Mit Titel",
     "audioCompact": "Kompakt",
     "audioMinimal": "Minimal",
-    "heightSub": "Volle Breite, {{height}} px hoch"
+    "heightSub": "Volle Breite, {{height}} px hoch",
+    "podcastTitle": "Diesen Podcast einbetten",
+    "podcastHint": "Füge das in eine Website oder einen Blogbeitrag ein. Es spielt alle Folgen der Sendung, auch neue, sobald sie erscheinen."
   },
   "incubation": {
     "requestFailed": "Anfrage fehlgeschlagen ({{status}})",

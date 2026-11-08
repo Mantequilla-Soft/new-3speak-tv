@@ -155,7 +155,9 @@
     "audioFull": "Avec titre",
     "audioCompact": "Compact",
     "audioMinimal": "Minimal",
-    "heightSub": "Pleine largeur, {{height}} px de haut"
+    "heightSub": "Pleine largeur, {{height}} px de haut",
+    "podcastTitle": "Intégrer ce podcast",
+    "podcastHint": "Collez ceci dans un site web ou un article de blog. Il lit tous les épisodes de l'émission, y compris les nouveaux dès leur sortie."
   },
   "incubation": {
     "requestFailed": "Échec de la requête ({{status}})",

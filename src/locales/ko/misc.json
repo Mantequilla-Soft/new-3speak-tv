@@ -155,7 +155,9 @@
     "audioFull": "제목 포함",
     "audioCompact": "컴팩트",
     "audioMinimal": "최소",
-    "heightSub": "전체 너비, 높이 {{height}} px"
+    "heightSub": "전체 너비, 높이 {{height}} px",
+    "podcastTitle": "이 팟캐스트 임베드",
+    "podcastHint": "웹사이트나 블로그 글에 붙여 넣으세요. 새 에피소드가 나오는 대로 포함해 프로그램의 모든 에피소드를 재생합니다."
   },
   "incubation": {
     "requestFailed": "요청 실패({{status}})",

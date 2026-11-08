@@ -155,7 +155,9 @@
     "audioFull": "Z tytułem",
     "audioCompact": "Kompaktowy",
     "audioMinimal": "Minimalny",
-    "heightSub": "Pełna szerokość, {{height}} px wysokości"
+    "heightSub": "Pełna szerokość, {{height}} px wysokości",
+    "podcastTitle": "Osadź ten podcast",
+    "podcastHint": "Wklej to na dowolną stronę lub do wpisu na blogu. Odtwarza wszystkie odcinki audycji, także nowe, gdy tylko się ukażą."
   },
   "incubation": {
     "requestFailed": "Żądanie nie powiodło się ({{status}})",

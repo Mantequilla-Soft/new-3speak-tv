@@ -155,7 +155,9 @@
     "audioFull": "タイトル付き",
     "audioCompact": "コンパクト",
     "audioMinimal": "ミニマル",
-    "heightSub": "幅いっぱい、高さ {{height}} px"
+    "heightSub": "幅いっぱい、高さ {{height}} px",
+    "podcastTitle": "このポッドキャストを埋め込む",
+    "podcastHint": "ウェブサイトやブログ記事に貼り付けてください。番組のすべてのエピソードを、新しいエピソードも公開され次第再生します。"
   },
   "incubation": {
     "requestFailed": "リクエストに失敗しました（{{status}}）",

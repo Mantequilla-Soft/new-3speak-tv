@@ -155,7 +155,9 @@
     "audioFull": "Met titel",
     "audioCompact": "Compact",
     "audioMinimal": "Minimaal",
-    "heightSub": "Volle breedte, {{height}} px hoog"
+    "heightSub": "Volle breedte, {{height}} px hoog",
+    "podcastTitle": "Deze podcast insluiten",
+    "podcastHint": "Plak dit in een website of blogpost. Het speelt alle afleveringen van de show af, ook nieuwe zodra ze verschijnen."
   },
   "incubation": {
     "requestFailed": "Verzoek mislukt ({{status}})",

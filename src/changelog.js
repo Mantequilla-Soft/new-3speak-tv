@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.101',
+    category: 'podcasts',
+    date: '2026-11-08',
+    summary: "Outside podcasts now have an Embed button, so you can put the whole show on your website or blog.",
+  },
+  {
+    version: '1.81.100',
+    category: 'general',
+    date: '2026-11-08',
+    summary: "Without a Hive account, rewards on videos, shorts and communities now show in HIVE instead of dollars.",
+  },
+  {
     version: '1.81.98',
     category: 'audio',
     date: '2026-11-07',

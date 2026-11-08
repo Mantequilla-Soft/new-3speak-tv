@@ -6,39 +6,16 @@ import { IoClose } from 'react-icons/io5'
 import HiveAvatar from '../HiveAvatar/HiveAvatar'
 
 import "./BeneficiariesTooltip.scss"
-import { getHiveUrl } from '../../utils/hiveNode'
-
-// Median HIVE price (HBD per 1 HIVE), fetched once per session.
-let cachedHivePrice = null;
-async function fetchHivePrice() {
-  if (cachedHivePrice != null) return cachedHivePrice;
-  try {
-    const res = await fetch(getHiveUrl(), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ jsonrpc: '2.0', method: 'condenser_api.get_current_median_history_price', params: [], id: 1 }),
-    });
-    const j = await res.json();
-    const base = parseFloat(j?.result?.base);    // e.g. "0.240 HBD"
-    const quote = parseFloat(j?.result?.quote);  // e.g. "1.000 HIVE"
-    if (base > 0 && quote > 0) cachedHivePrice = base / quote;
-  } catch { /* ignore — HIVE/HP rows just won't render */ }
-  return cachedHivePrice;
-}
+import { useHivePrice, useRewardDisplay } from '../../utils/hivePrice'
 
 function BeneficiariesTooltip({ beneficiaries, payoutInfo, displayTotal, anchorRef, pinned, onClose }) {
   const { t } = useTranslation();
   const tipRef = useRef(null);
   const navigate = useNavigate();
   const [pos, setPos] = useState(null);
-  const [hivePrice, setHivePrice] = useState(cachedHivePrice);
-
-  useEffect(() => {
-    if (hivePrice != null) return;
-    let alive = true;
-    fetchHivePrice().then((p) => { if (alive && p != null) setHivePrice(p); });
-    return () => { alive = false; };
-  }, [hivePrice]);
+  const hivePrice = useHivePrice();
+  // Guests and warm-up accounts see the amounts in HIVE, Hive accounts in $.
+  const { label: money } = useRewardDisplay();
 
   useLayoutEffect(() => {
     if (!anchorRef?.current || !tipRef.current) return;
@@ -120,13 +97,13 @@ function BeneficiariesTooltip({ beneficiaries, payoutInfo, displayTotal, anchorR
           <div className="beneficiaries-tooltip-breakdown-row">
             <span className="beneficiaries-tooltip-breakdown-label">{t('engagement.payout.curators')}</span>
             <span className="beneficiaries-tooltip-breakdown-value">
-              {!isPaidOut && '~'}${curatorPayout.toFixed(2)}
+              {!isPaidOut && '~'}{money(curatorPayout)}
             </span>
           </div>
           <div className="beneficiaries-tooltip-breakdown-row">
             <span className="beneficiaries-tooltip-breakdown-label">{t('engagement.payout.author')}</span>
             <span className="beneficiaries-tooltip-breakdown-value">
-              {!isPaidOut && '~'}${authorNet.toFixed(2)}
+              {!isPaidOut && '~'}{money(authorNet)}
             </span>
           </div>
         </div>
@@ -169,7 +146,7 @@ function BeneficiariesTooltip({ beneficiaries, payoutInfo, displayTotal, anchorR
               {b.weight}%
               {showBreakdown && (
                 <span className="beneficiaries-tooltip-amount">
-                  {!isPaidOut && '~'}${((authorPayout * b.weight) / 100).toFixed(2)}
+                  {!isPaidOut && '~'}{money((authorPayout * b.weight) / 100)}
                 </span>
               )}
             </span>
@@ -180,7 +157,7 @@ function BeneficiariesTooltip({ beneficiaries, payoutInfo, displayTotal, anchorR
       {showBreakdown && (
         <div className="beneficiaries-tooltip-total">
           <span>{isPaidOut ? t('engagement.payout.total') : t('engagement.payout.totalEstimated')}</span>
-          <span>{!isPaidOut && '~'}${totalPayout.toFixed(2)}</span>
+          <span>{!isPaidOut && '~'}{money(totalPayout)}</span>
         </div>
       )}
     </div>

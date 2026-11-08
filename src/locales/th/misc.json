@@ -155,7 +155,9 @@
     "audioFull": "มีชื่อ",
     "audioCompact": "กะทัดรัด",
     "audioMinimal": "เรียบง่าย",
-    "heightSub": "กว้างเต็ม สูง {{height}} px"
+    "heightSub": "กว้างเต็ม สูง {{height}} px",
+    "podcastTitle": "ฝังพอดแคสต์นี้",
+    "podcastHint": "วางโค้ดนี้ในเว็บไซต์หรือบล็อกใดก็ได้ จะเล่นทุกตอนของรายการ รวมถึงตอนใหม่ทันทีที่ออก"
   },
   "incubation": {
     "requestFailed": "คำขอล้มเหลว ({{status}})",
