@@ -211,7 +211,8 @@
       "published_other": "{{count}} tracks gepubliceerd",
       "someFailed": "Sommige tracks zijn mislukt — open de mislukte track om het opnieuw te proberen",
       "trackLinksFailed": "Je tracks zijn gepubliceerd, maar het toevoegen van hun links aan de albumpost is mislukt: {{error}}",
-      "addToBlogFailed": "Gepubliceerd, maar toevoegen aan je blog is mislukt: {{error}}"
+      "addToBlogFailed": "Gepubliceerd, maar toevoegen aan je blog is mislukt: {{error}}",
+      "editedApplied": "\"{{title}}\" gebruikt nu de bewerkte audio"
     },
     "gate": {
       "checking": "Controleren…",
@@ -277,7 +278,13 @@
       "addCover": "Coverafbeelding toevoegen",
       "hint": "Klik of sleep hierheen — JPG / PNG / WebP",
       "coverAlt": "cover",
-      "removeCover": "Cover verwijderen"
+      "removeCover": "Cover verwijderen",
+      "fromPlaylist": "Uit de playlist",
+      "designCover": "Cover ontwerpen",
+      "editCover": "Cover bewerken",
+      "designHint": "Voeg tekst, stickers en uitsnede toe in de cover-editor",
+      "designerTitle": "Cover-editor",
+      "designUnavailable": "Deze afbeelding kan niet in de cover-editor worden geopend. Upload hem vanaf je apparaat."
     },
     "mode": {
       "help_one": "{{count}} track toegevoegd. Kies hoe hij gepubliceerd wordt.",
@@ -371,7 +378,11 @@
       "uploadingFallback": "Uploaden",
       "published": "Gepubliceerd"
     },
-    "warmupOneTrack": "Zolang je account opwarmt, publiceer je één audio tegelijk. Haal de andere weg om verder te gaan."
+    "warmupOneTrack": "Zolang je account opwarmt, publiceer je één audio tegelijk. Haal de andere weg om verder te gaan.",
+    "editAudio": "Audio bewerken",
+    "editAudioHint": "Deze track openen in de audio-editor",
+    "edited": "Bewerkt",
+    "editedHint": "Deze audio komt uit de audio-editor"
   },
   "podcasts": {
     "chip": "Extern",

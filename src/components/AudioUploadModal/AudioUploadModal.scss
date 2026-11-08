@@ -231,6 +231,35 @@
   }
 }
 
+// "Edit audio": the track in the audio editor
+.audio-upload-track-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--border-light, #444);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+
+  svg { color: var(--accent-primary); }
+  &:hover:not(:disabled) { border-color: var(--accent-primary); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.audio-upload-edited-badge {
+  flex-shrink: 0;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
+  font-size: 11px;
+  font-weight: 500;
+}
+
 .audio-upload-track-remove {
   display: inline-flex;
   align-items: center;
@@ -362,6 +391,49 @@
   }
 }
 
+// "Design cover" / "Edit cover": opens the thumbnail editor on the cover
+.audio-upload-thumb-design {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--border-light, #444);
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+
+  svg { color: var(--accent-primary); }
+  &:hover { border-color: var(--accent-primary); }
+}
+
+.audio-upload-album-thumb.has-image .audio-upload-thumb-design {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  margin: 0;
+  border-color: transparent;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+
+  &:hover { background: rgba(0, 0, 0, 0.85); }
+}
+
+.audio-upload-album-thumb .audio-upload-thumb-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+}
+
 .audio-upload-album-thumb-remove {
   position: absolute;
   top: 6px;
@@ -428,9 +500,15 @@
 }
 
 .audio-upload-title-meta-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
   font-size: 11px;
   color: var(--text-secondary);
   padding-left: 34px;
+
+  > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 }
 
 // ─── Playlist step ──────────────────

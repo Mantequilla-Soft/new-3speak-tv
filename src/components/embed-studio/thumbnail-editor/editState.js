@@ -10,6 +10,8 @@
 export const OUTPUT_SIZE = {
   landscape: { width: 1280, height: 720 },
   portrait: { width: 720, height: 1280 },
+  // Audio covers: square everywhere they show (player, playlist, audio page)
+  square: { width: 1080, height: 1080 },
 };
 
 export const MIN_ZOOM = 1;

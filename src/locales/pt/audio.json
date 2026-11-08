@@ -215,7 +215,8 @@
       "published_other": "{{count}} faixas publicadas",
       "someFailed": "Algumas faixas falharam — abra a faixa com falha para tentar de novo",
       "trackLinksFailed": "Suas faixas foram publicadas, mas não foi possível adicionar os links delas ao post do álbum: {{error}}",
-      "addToBlogFailed": "Publicado, mas não foi possível adicionar ao seu blog: {{error}}"
+      "addToBlogFailed": "Publicado, mas não foi possível adicionar ao seu blog: {{error}}",
+      "editedApplied": "\"{{title}}\" agora usa o áudio editado"
     },
     "gate": {
       "checking": "Verificando…",
@@ -284,7 +285,13 @@
       "addCover": "Adicionar imagem de capa",
       "hint": "Clique ou arraste e solte — JPG / PNG / WebP",
       "coverAlt": "capa",
-      "removeCover": "Remover capa"
+      "removeCover": "Remover capa",
+      "fromPlaylist": "Da playlist",
+      "designCover": "Criar capa",
+      "editCover": "Editar capa",
+      "designHint": "Adicione texto, figurinhas e enquadramento no editor de capa",
+      "designerTitle": "Editor de capa",
+      "designUnavailable": "Esta imagem não pode ser aberta no editor de capa. Envie-a do seu dispositivo."
     },
     "mode": {
       "help_one": "{{count}} faixa adicionada. Escolha como ela será publicada.",
@@ -386,7 +393,11 @@
       "uploadingFallback": "Enviando",
       "published": "Publicado"
     },
-    "warmupOneTrack": "Enquanto sua conta aquece, você publica um áudio por vez. Remova os outros para continuar."
+    "warmupOneTrack": "Enquanto sua conta aquece, você publica um áudio por vez. Remova os outros para continuar.",
+    "editAudio": "Editar áudio",
+    "editAudioHint": "Abrir esta faixa no editor de áudio",
+    "edited": "Editado",
+    "editedHint": "Este áudio vem do editor de áudio"
   },
   "podcasts": {
     "chip": "Externos",

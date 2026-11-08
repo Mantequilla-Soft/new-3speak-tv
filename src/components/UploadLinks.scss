@@ -1,4 +1,4 @@
-// Group headers in the Share menu (Upload / Live / Others).
+// Group headers in the Share menu (Video / Audio / Live / Others).
 //
 // UploadLinks renders into four different containers (Nav flyout, Sidebar,
 // ProfileNav, BottomNav), each vertical, so one neutral heading style works in
@@ -15,11 +15,13 @@
   pointer-events: none;
   user-select: none;
 
-  // The first heading has an item-less top; drop the extra lead-in so the menu
-  // doesn't open with a big gap above "Upload".
-  &:first-child {
-    padding-top: 0.15rem;
-  }
+}
+
+// Each category is wrapped in a group (stacked here; columns in the wide
+// desktop flyout, nav.scss). The first heading has an item-less top: drop the
+// extra lead-in so the menu doesn't open with a big gap above "Video".
+.share-menu-group:first-child > .share-menu-heading {
+  padding-top: 0.15rem;
 }
 
 // Each entry is a label with a muted one-line subtitle under it. The subtitle

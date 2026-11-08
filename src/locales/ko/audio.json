@@ -207,7 +207,8 @@
       "published_other": "트랙 {{count}}개를 게시했어요",
       "someFailed": "일부 트랙이 실패했어요. 실패한 트랙을 열어 다시 시도하세요",
       "trackLinksFailed": "트랙은 게시됐지만 앨범 게시물에 트랙 링크를 추가하지 못했어요: {{error}}",
-      "addToBlogFailed": "게시됐지만 내 블로그에 추가하지 못했어요: {{error}}"
+      "addToBlogFailed": "게시됐지만 내 블로그에 추가하지 못했어요: {{error}}",
+      "editedApplied": "\"{{title}}\"에 편집한 오디오가 적용되었습니다"
     },
     "gate": {
       "checking": "확인 중…",
@@ -270,7 +271,13 @@
       "addCover": "커버 이미지 추가",
       "hint": "클릭하거나 드래그 앤 드롭 — JPG / PNG / WebP",
       "coverAlt": "커버",
-      "removeCover": "커버 제거"
+      "removeCover": "커버 제거",
+      "fromPlaylist": "재생목록에서",
+      "designCover": "커버 디자인",
+      "editCover": "커버 편집",
+      "designHint": "커버 편집기에서 텍스트, 스티커, 구도를 추가하세요",
+      "designerTitle": "커버 편집기",
+      "designUnavailable": "이 이미지는 커버 편집기에서 열 수 없습니다. 기기에서 직접 업로드해 주세요."
     },
     "mode": {
       "help_other": "트랙 {{count}}개를 추가했어요. 게시 방식을 선택하세요.",
@@ -356,7 +363,11 @@
       "uploadingFallback": "업로드 중",
       "published": "게시됨"
     },
-    "warmupOneTrack": "계정 준비 기간에는 오디오를 한 번에 하나씩 공개해요. 계속하려면 나머지를 삭제하세요."
+    "warmupOneTrack": "계정 준비 기간에는 오디오를 한 번에 하나씩 공개해요. 계속하려면 나머지를 삭제하세요.",
+    "editAudio": "오디오 편집",
+    "editAudioHint": "이 트랙을 오디오 편집기에서 열기",
+    "edited": "편집됨",
+    "editedHint": "이 오디오는 오디오 편집기에서 왔습니다"
   },
   "podcasts": {
     "chip": "외부",

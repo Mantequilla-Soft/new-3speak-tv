@@ -215,7 +215,8 @@
       "published_other": "Se publicaron {{count}} pistas",
       "someFailed": "Algunas pistas fallaron; abre la pista fallida para reintentar",
       "trackLinksFailed": "Tus pistas están publicadas, pero no se pudieron agregar sus enlaces a la publicación del álbum: {{error}}",
-      "addToBlogFailed": "Publicado, pero no se pudo agregar a tu blog: {{error}}"
+      "addToBlogFailed": "Publicado, pero no se pudo agregar a tu blog: {{error}}",
+      "editedApplied": "\"{{title}}\" ahora usa el audio editado"
     },
     "gate": {
       "checking": "Verificando…",
@@ -284,7 +285,13 @@
       "addCover": "Agregar imagen de portada",
       "hint": "Haz clic o arrastra y suelta: JPG / PNG / WebP",
       "coverAlt": "portada",
-      "removeCover": "Quitar portada"
+      "removeCover": "Quitar portada",
+      "fromPlaylist": "De la lista",
+      "designCover": "Diseñar portada",
+      "editCover": "Editar portada",
+      "designHint": "Añade texto, stickers y encuadre en el editor de portadas",
+      "designerTitle": "Editor de portada",
+      "designUnavailable": "Esta imagen no se puede abrir en el editor de portada. Súbela desde tu dispositivo."
     },
     "mode": {
       "help_one": "{{count}} pista agregada. Elige cómo se publica.",
@@ -386,7 +393,11 @@
       "uploadingFallback": "Subiendo",
       "published": "Publicado"
     },
-    "warmupOneTrack": "Mientras tu cuenta se calienta, publicas un audio a la vez. Quita los demás para continuar."
+    "warmupOneTrack": "Mientras tu cuenta se calienta, publicas un audio a la vez. Quita los demás para continuar.",
+    "editAudio": "Editar audio",
+    "editAudioHint": "Abrir esta pista en el editor de audio",
+    "edited": "Editado",
+    "editedHint": "Este audio viene del editor de audio"
   },
   "podcasts": {
     "chip": "Externos",
