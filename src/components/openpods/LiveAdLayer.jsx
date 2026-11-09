@@ -7,6 +7,7 @@ import TickerCrawl from '../ads/TickerCrawl';
 import BannerClick from '../ads/BannerClick';
 import LivePreroll from './LivePreroll';
 import './LiveAdLayer.scss';
+import useStreamWatch from '../../hooks/useStreamWatch';
 
 // The page clock ticks this often while the stream plays.
 const TICK_MS = 500;
@@ -162,6 +163,10 @@ export default function LiveAdLayer({ host, room, fit = 'contain', tickerTop = '
       setPhase(got?.roll && !entry.prerollDone ? 'preroll' : 'done');
     });
   }, [live, key, host, room, viewer]);
+
+  // Stream-viewer rewards: the same window the ad clock counts, the stream itself
+  // live and on screen once any pre-roll is over (see useStreamWatch).
+  useStreamWatch({ host, room, active: live && phase === 'done' });
 
   const endPreroll = useCallback(() => {
     const entry = key ? asked.get(key) : null;

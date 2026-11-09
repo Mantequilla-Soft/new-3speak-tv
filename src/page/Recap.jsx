@@ -195,9 +195,10 @@ function yearOfWeeks(series, trackedSince, now = new Date()) {
   return { weeks, marks, focus };
 }
 
-// Viewer-side payout kinds (rewards for watching / listening); every other
-// kind (creator, referral, ...) is revenue as a creator.
-const VIEWER_KINDS = new Set(['viewer', 'audio', 'podcast']);
+// Viewer-side payout kinds (rewards for watching videos or streams, listening;
+// 'listener-audio'/'listener-podcast' are the labels before 2026-11-09); every
+// other kind (creator, streamer, referral, ...) is revenue as a creator.
+const VIEWER_KINDS = new Set(['viewer', 'stream-viewer', 'listener', 'listener-audio', 'listener-podcast', 'audio', 'podcast']);
 
 // The ads pillar, stacked: as creator, as viewer, and payments that combined
 // both and could not be split (the checker's per-period parts split them when
