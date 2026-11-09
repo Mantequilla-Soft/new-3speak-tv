@@ -42,13 +42,13 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.625rem 1.25rem;
-  background: #1a1a2e;
-  border-bottom: 1px solid #2a2a4a;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
 
   h2 {
     font-size: 1rem;
-    color: #fff;
+    color: var(--text-primary);
     margin: 0;
     font-weight: 600;
   }
@@ -59,15 +59,15 @@
     justify-content: center;
     width: 2rem;
     height: 2rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-hover);
     border: none;
-    border-radius: 6px;
-    color: #fff;
+    border-radius: 8px;
+    color: var(--text-primary);
     cursor: pointer;
     transition: background 150ms;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.2);
+      color: var(--accent-primary);
     }
   }
 }
@@ -93,17 +93,17 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  background: rgba(17, 17, 17, 0.95);
+  background: var(--bg-primary);
   z-index: 10;
 
   span {
-    color: #94a3b8;
+    color: var(--text-secondary);
     font-size: 0.9rem;
   }
 
   .spinner {
     animation: editor-spin 1s linear infinite;
-    color: #e94560;
+    color: var(--accent-primary);
   }
 }
 
@@ -113,8 +113,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(17, 17, 17, 0.9);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 20;
 }
 
@@ -124,20 +123,21 @@
   align-items: center;
   gap: 1rem;
   padding: 2rem 2.5rem;
-  background: #1a1a2e;
+  background: var(--card-bg);
   border-radius: 12px;
-  border: 1px solid #2a2a4a;
-  min-width: 320px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  min-width: min(320px, calc(100vw - 32px));
 
   span {
-    color: #e2e8f0;
+    color: var(--text-primary);
     font-size: 0.95rem;
     text-align: center;
   }
 
   .spinner {
     animation: editor-spin 1s linear infinite;
-    color: #e94560;
+    color: var(--accent-primary);
   }
 
   // Short or story, after the editor's "Post to 3Speak" (outline buttons: no red fills).
@@ -155,9 +155,9 @@
     min-width: 180px;
     padding: 0.6rem 1.2rem;
     border-radius: 8px;
-    border: 1px solid rgb(227, 19, 55);
+    border: 1px solid var(--accent-primary);
     background: transparent;
-    color: #fff;
+    color: var(--text-primary);
     text-align: left;
     cursor: pointer;
 
@@ -167,14 +167,14 @@
     }
 
     &:hover {
-      background: rgba(227, 19, 55, 0.08);
+      background: var(--accent-light);
     }
   }
 
   .post-target__back {
     border: none;
     background: none;
-    color: #fff;
+    color: var(--text-primary);
     opacity: 0.75;
     text-decoration: underline;
     cursor: pointer;
@@ -182,15 +182,15 @@
 
   .render-btn {
     padding: 0.5rem 1.5rem;
-    border: none;
-    color: #fff;
+    border: 1px solid var(--accent-primary);
+    background: transparent;
+    color: var(--accent-primary);
     border-radius: 8px;
     font-size: 0.9rem;
     cursor: pointer;
-    background-image: linear-gradient(90deg, rgb(141, 11, 33) 15%, rgb(227, 19, 55) 97%);
 
     &:hover {
-      opacity: 0.9;
+      background: var(--accent-light);
     }
   }
 
@@ -202,13 +202,13 @@
 .render-progress-bar {
   width: 100%;
   height: 6px;
-  background: #2a2a4a;
+  background: var(--bg-tertiary);
   border-radius: 3px;
   overflow: hidden;
 
   .render-progress-fill {
     height: 100%;
-    background: #e94560;
+    background: var(--accent-primary);
     border-radius: 3px;
     transition: width 300ms ease;
   }

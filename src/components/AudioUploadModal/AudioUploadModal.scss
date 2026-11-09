@@ -725,6 +725,17 @@
 
 .audio-upload-post-desc { resize: vertical; min-height: 64px; }
 
+// The post description: the video upload's markdown composer, kept to a
+// sensible height inside the wizard (it scrolls past that)
+.audio-upload-post-composer {
+  max-height: 420px;
+
+  .markdown-composer {
+    min-height: 160px;
+    max-height: inherit;
+  }
+}
+
 .audio-upload-post-reward-row {
   display: flex;
   gap: 10px;
