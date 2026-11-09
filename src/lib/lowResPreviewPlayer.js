@@ -1,6 +1,7 @@
 import { Player } from '@mantequilla-soft/3speak-player';
 import Hls from 'hls.js';
 import { getPlayerUrl } from '../utils/playerUrl';
+import { withGatewayFallback } from './hlsGatewayFallback.js';
 
 /**
  * Shared factory for a muted, LOWEST-rendition SDK Player used for cheap video
@@ -39,7 +40,7 @@ export function createLowResPreviewPlayer(videoEl, { loop = false, requirePrevie
     loop,
     poster: false,
     debug: false,
-    hlsConfig: {
+    hlsConfig: withGatewayFallback({
       maxBufferLength: 10,
       startFragPrefetch: true,
       // 200 kbps default estimate → ABR selects the smallest variant up front,
@@ -47,7 +48,7 @@ export function createLowResPreviewPlayer(videoEl, { loop = false, requirePrevie
       abrEwmaDefaultEstimate: 200000,
       // A looping preview otherwise keeps every played segment in memory.
       backBufferLength: 10,
-    },
+    }),
   });
   player.attach(videoEl);
 

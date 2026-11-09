@@ -7,6 +7,7 @@ import { MdClose, MdPlayArrow, MdPause } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { hasConsent } from '../../lib/consent';
 import { getPlayerUrl } from '../../utils/playerUrl';
+import { withGatewayFallback } from '../../lib/hlsGatewayFallback.js';
 import './MiniPlayer.scss';
 import { isProfilePath, isWatchPath } from '../../utils/urls';
 
@@ -36,6 +37,7 @@ const MiniPlayer = () => {
     loop: false,
     poster: false,
     resume: hasConsent('functional'),
+    hlsConfig: withGatewayFallback(),
   });
 
   // Load video when mini player data changes

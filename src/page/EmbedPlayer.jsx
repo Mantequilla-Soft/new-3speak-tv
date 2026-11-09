@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
 import { getPlayerUrl } from '../utils/playerUrl';
+import { withGatewayFallback } from '../lib/hlsGatewayFallback.js';
 import { useTranslation } from 'react-i18next';
 import './EmbedPlayer.scss';
 
@@ -31,6 +32,7 @@ export default function EmbedPlayer() {
     muted: false,
     loop: isShort, // a short loops once it's playing — but never autoplays
     poster: true,  // SDK paints the thumbnail/poster + play affordance
+    hlsConfig: withGatewayFallback(),
   });
 
   // Keep the document transparent so the parent's loading spinner shows through

@@ -109,6 +109,7 @@ import {
   readCommentSort, saveCommentSort, sortComments, pinnedFirst, useCommentImageUpload, CommentImageButton, CommentDropZone,
 } from '../components/playVideo/commentTools';
 import { getPlayerUrl } from '../utils/playerUrl';
+import { withGatewayFallback } from '../lib/hlsGatewayFallback.js';
 import { Player, ThreeSpeakApi } from '@mantequilla-soft/3speak-player';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
@@ -2935,7 +2936,7 @@ const VideoShort = () => {
       poster: false,
       debug: false,
       // Don't keep the whole played short in memory (see page/Watch.jsx).
-      hlsConfig: { backBufferLength: 30 },
+      hlsConfig: withGatewayFallback({ backBufferLength: 30 }),
     });
 
     player.attach(element);
