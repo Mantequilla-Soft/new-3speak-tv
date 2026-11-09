@@ -53,11 +53,32 @@ vi.mock('../../../src/components/AudioUploadModal/CoverDesigner', () => ({
   ),
 }))
 
+vi.mock('../../../src/utils/audiogramShorts', async (importOriginal) => ({
+  ...(await importOriginal()),
+  // like the real one: each Short uploads, posts and is done (the second one fails here)
+  publishAudiogramShorts: vi.fn(async ({ audiograms, onProgress }) => audiograms.map((a, i) => {
+    const ok = !/audiogram-2/.test(a.url)
+    for (const step of ['upload', 'post']) onProgress?.({ index: i, count: audiograms.length, step })
+    onProgress?.({ index: i, count: audiograms.length, step: 'done', ok, ...(ok ? { permlink: `short-${i}` } : { error: 'RC too low' }) })
+    return ok ? { ok, permlink: `short-${i}` } : { ok, error: 'RC too low' }
+  })),
+}))
+vi.mock('../../../src/components/AudioUploadModal/ShortThumbDesigner', () => ({
+  default: ({ videoUrl, onDone, onClose }) => (
+    <div role="dialog" aria-label="Thumbnail of the Short">
+      <span data-testid="short-designer-video">{videoUrl}</span>
+      <button type="button" onClick={() => onDone('https://images.hive.blog/DQmThumb/short.jpg')}>Short designer done</button>
+      <button type="button" onClick={onClose}>Short designer close</button>
+    </div>
+  ),
+}))
+
 const { toast } = await import('sonner')
 const aioha = await import('../../../src/hive-api/aioha')
 const { uploadThumbnail } = await import('../../../src/utils/uploadThumbnail')
 const { useAppStore } = await import('../../../src/lib/store')
 const { default: AudioUploadModal } = await import('../../../src/components/AudioUploadModal/AudioUploadModal.jsx')
+const { publishAudiogramShorts } = await import('../../../src/utils/audiogramShorts')
 
 // jsdom reads no media: every <audio> reports m.duration as soon as it gets a src.
 let savedSrc
@@ -387,5 +408,69 @@ describe('AudioUploadModal: songs from the editor', () => {
     const ops = aioha.broadcastWithAioha.mock.calls.map(([o]) => o).find((o) => o[0][0] === 'comment')
     expect(ops[0][1].body).not.toContain('Sound:')
     expect(JSON.parse(ops[0][1].json_metadata).audio.sound).toBeUndefined()
+  })
+})
+
+describe('AudioUploadModal: audiograms as Shorts', () => {
+  const ag = (n) => ({ url: `https://3speak-editor-api.okinoko.io/rendered/audiogram-${n}.mp4`, title: `Teaser ${n}`, description: '', duration: 30, width: 1080, height: 1920 })
+
+  it('snap comments: each Short with its title, text (our post editor) and a designed 9:16 thumbnail; all posted after the track, linking to it', async () => {
+    const { user } = openModal()
+    await addFile(user)
+    await user.click(screen.getByRole('button', { name: /Edit audio/ }))
+    const { trackId } = opened[0]
+    await result({ trackId, file: new File(['ID3'], 'Episode 12.mp3', { type: 'audio/mpeg' }), durationSec: 120, audiograms: [ag(1), ag(2)] })
+    await waitFor(() => row('Episode 12.mp3'))
+    await next(user)
+    await user.click(screen.getByRole('button', { name: /Snap comments/ }))
+    await next(user)
+    await next(user) // tracks
+    const section = await screen.findByTestId('audiogram-shorts')
+    expect(within(section).getByLabelText('Title of Short 1')).toHaveValue('Teaser 1')
+    fireEvent.change(within(section).getByLabelText('Title of Short 1'), { target: { value: 'The best bit' } })
+    fireEvent.change(within(section).getByRole('group', { name: 'Text for Short 1' }).querySelector('textarea'), { target: { value: 'Listen to this' } })
+    // the thumbnail: the editor on that audiogram, and the result shows in its place
+    await user.click(within(section).getByLabelText('Thumbnail of Short 1'))
+    expect(screen.getByTestId('short-designer-video')).toHaveTextContent(ag(1).url)
+    await user.click(screen.getByRole('button', { name: 'Short designer done' }))
+    expect(within(section).getByLabelText('Thumbnail of Short 1').querySelector('img')).toHaveAttribute('src', 'https://images.hive.blog/DQmThumb/short.jpg')
+    // every one goes: there is no way to drop one here
+    expect(within(section).queryByRole('button', { name: /Don't post/ })).toBeNull()
+    await next(user) // review
+    expect(screen.getByText(/2 from the audio editor, each posted after its audio/)).toBeInTheDocument()
+    // the publish list shows them under their track: posted together with it
+    const rows = screen.getAllByTestId('review-short')
+    expect(rows).toHaveLength(2)
+    expect(rows[0]).toHaveTextContent('Short: The best bit')
+    expect(rows[0]).toHaveTextContent('Goes out together with this audio')
+    expect(rows[0].querySelector('img')).toHaveAttribute('src', 'https://images.hive.blog/DQmThumb/short.jpg')
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    await waitFor(() => expect(publishAudiogramShorts).toHaveBeenCalledTimes(1))
+    const call = publishAudiogramShorts.mock.calls[0][0]
+    expect(call.user).toBe('alice')
+    expect(call.episode).toMatchObject({ author: 'alice', title: 'Episode 12' })
+    expect(call.episode.permlink).toBeTruthy()
+    expect(call.audiograms).toEqual([
+      expect.objectContaining({ url: ag(1).url, title: 'The best bit', description: 'Listen to this', thumbnailUrl: 'https://images.hive.blog/DQmThumb/short.jpg' }),
+      expect.objectContaining({ url: ag(2).url, title: 'Teaser 2' }),
+    ])
+    // each Short's own state: the first one published, the second failed with a Retry
+    await waitFor(() => expect(screen.getAllByTestId('review-short')[0]).toHaveTextContent(/Published/i))
+    const failed = screen.getAllByTestId('review-short')[1]
+    expect(failed).toHaveTextContent('RC too low')
+    expect(failed.className).toContain('is-error')
+    publishAudiogramShorts.mockClear()
+    await user.click(within(failed).getByRole('button', { name: 'Retry' }))
+    await waitFor(() => expect(publishAudiogramShorts).toHaveBeenCalledTimes(1))
+    expect(publishAudiogramShorts.mock.calls[0][0].audiograms.map(a => a.url)).toEqual([ag(2).url])
+  })
+
+  it('a standalone post shows them on its post step', async () => {
+    const blob = new File(['ID3'], 'Episode.mp3', { type: 'audio/mpeg' })
+    const { user } = openModal({ initialTrack: { blob, filename: 'Episode.mp3', type: null, source: 'editor', audiograms: [ag(1)] } })
+    await waitFor(() => row('Episode.mp3'))
+    await toPostStep(user, null)
+    const section = await screen.findByTestId('audiogram-shorts')
+    expect(within(section).getByLabelText('Title of Short 1')).toHaveValue('Teaser 1')
   })
 })

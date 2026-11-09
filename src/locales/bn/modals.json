@@ -126,7 +126,12 @@
     "postAsStory": "স্টোরি",
     "postAsStoryHint": "২৪ ঘণ্টা, শর্টস ফিডের শুরুতে",
     "postAsShort": "শর্ট",
-    "postAsShortHint": "আপনার চ্যানেলে থাকে"
+    "postAsShortHint": "আপনার চ্যানেলে থাকে",
+    "shortText": {
+      "title": "Short-এর লেখা",
+      "hint": "এটি Short-এ অডিওগ্রামের সাথে থাকে। আপনার অডিওর লিংক নিজে থেকেই যোগ হয়।",
+      "placeholder": "এই অংশটি কী নিয়ে? (ঐচ্ছিক)"
+    }
   },
   "profile": {
     "mustLogin": "আগে লগ ইন করতে হবে",

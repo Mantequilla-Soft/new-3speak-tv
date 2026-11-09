@@ -137,5 +137,9 @@
     "kept": "Kept. It stays on your channel as a short.",
     "keepFailed": "Could not keep this story.",
     "keepWalletPrompt": "Sign to keep your story as a short"
+  },
+  "audiogram": {
+    "fullEpisode": "Full episode",
+    "listen": "Listen to the full episode: {{title}}"
   }
 }

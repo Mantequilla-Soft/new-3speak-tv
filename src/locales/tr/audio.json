@@ -364,7 +364,9 @@
       "failedDuringPost": "Hive'a gönderilirken başarısız oldu: {{message}}",
       "failedWithMessage": "Başarısız: {{message}}",
       "mainFailed": "Albüm gönderisi yayınlanamadı: {{message}}",
-      "containerFailed": "Gönderilecek snap dizisine ulaşılamadı: {{message}}"
+      "containerFailed": "Gönderilecek snap dizisine ulaşılamadı: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "Ses düzenleyiciden {{count}} adet, her biri kendi sesinden sonra ona bağlantıyla paylaşılır"
     },
     "done": {
       "title": "Tamamdır! Sesin yayınlandı.",
@@ -382,7 +384,23 @@
     "editAudio": "Sesi düzenle",
     "editAudioHint": "Bu parçayı ses düzenleyicide aç",
     "edited": "Düzenlendi",
-    "editedHint": "Bu ses, ses düzenleyiciden geliyor"
+    "editedHint": "Bu ses, ses düzenleyiciden geliyor",
+    "shorts": {
+      "failed": "Paylaşılamadı: {{error}}",
+      "sectionTitle": "Bu sesle Shorts ({{count}})",
+      "sectionHelp": "Ses düzenleyicideki audiogramların. Her biri, bu ses yayınlandığında ona bağlantıyla bir 3Speak Short olarak paylaşılır.",
+      "titlePlaceholder": "Short başlığı",
+      "titleLabel": "Short {{n}} başlığı",
+      "textPlaceholder": "Short metni (isteğe bağlı). Sese bir bağlantı otomatik eklenir.",
+      "textLabel": "Short {{n}} metni",
+      "designThumb": "Küçük resim tasarla",
+      "editThumb": "Küçük resmi düzenle",
+      "thumbLabel": "Short {{n}} küçük resmi",
+      "designerTitle": "Short'un küçük resmi",
+      "couldNotLoad": "Audiogram yüklenemedi: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Bu sesle birlikte paylaşılır"
+    }
   },
   "podcasts": {
     "chip": "Harici",

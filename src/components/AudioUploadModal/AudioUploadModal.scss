@@ -854,6 +854,67 @@
 .audio-upload-review-row.is-success { border-color: rgba(46, 160, 67, 0.5); }
 .audio-upload-review-row.is-error { border-color: rgba(229, 57, 53, 0.5); }
 
+// The track's audiograms, posted as Shorts together with it: one line each,
+// with its 9:16 thumbnail and its own state
+.audio-upload-review-shorts {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--border-light, #333);
+}
+
+.audio-upload-review-short {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--bg-tertiary);
+  border: 1px solid transparent;
+
+  &.is-success { border-color: rgba(46, 160, 67, 0.5); }
+  &.is-error { border-color: rgba(229, 57, 53, 0.5); }
+
+  .audio-upload-review-badge { margin-left: auto; }
+}
+
+.audio-upload-review-short-thumb {
+  flex: none;
+  width: 27px;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #000;
+
+  img,
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.audio-upload-review-short-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: 12px;
+
+  strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  small {
+    color: var(--text-secondary);
+  }
+}
+
 // Inline failure block + retry control
 .audio-upload-review-error {
   display: flex;
@@ -1137,4 +1198,104 @@
   margin: 0 0 12px;
   font-size: 13px;
   color: var(--text-secondary);
+}
+
+// The audiograms going out as Shorts with a track: per Short its title and
+// text on the left, its thumbnail on the right (9:16, like the Shorts)
+.audio-upload-shorts {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-light, #333);
+
+  .audio-upload-reward-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+
+.audio-upload-shorts-help {
+  margin: 2px 0 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.audio-upload-short {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 112px;
+  gap: 10px;
+  align-items: start;
+
+  & + & {
+    margin-top: 12px;
+  }
+}
+
+.audio-upload-short-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+
+  .audio-upload-post-tags,
+  .audio-upload-post-desc {
+    margin: 0;
+  }
+}
+
+.audio-upload-short-text {
+  min-width: 0;
+
+  .markdown-composer {
+    max-height: 320px;
+  }
+}
+
+.audio-upload-short-thumb {
+  position: relative;
+  width: 112px;
+  aspect-ratio: 9 / 16;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-light, #333);
+  border-radius: 8px;
+  background: var(--bg-tertiary);
+  cursor: pointer;
+
+  img,
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &:hover:not(:disabled) { border-color: var(--accent-primary); }
+}
+
+.audio-upload-short-thumb-label {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+@media (max-width: 480px) {
+  .audio-upload-short {
+    grid-template-columns: minmax(0, 1fr) 88px;
+  }
+
+  .audio-upload-short-thumb {
+    width: 88px;
+  }
 }

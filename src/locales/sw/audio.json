@@ -364,7 +364,9 @@
       "failedDuringPost": "Imeshindwa wakati wa kuchapisha kwenye Hive: {{message}}",
       "failedWithMessage": "Imeshindwa: {{message}}",
       "mainFailed": "Chapisho la albamu halikuweza kuchapishwa: {{message}}",
-      "containerFailed": "Imeshindikana kufikia uzi wa snap wa kuchapisha: {{message}}"
+      "containerFailed": "Imeshindikana kufikia uzi wa snap wa kuchapisha: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} kutoka kihariri sauti, kila moja inachapishwa baada ya sauti yake ikiwa na kiungo kwake"
     },
     "done": {
       "title": "Tayari! Sauti yako imechapishwa.",
@@ -382,7 +384,23 @@
     "editAudio": "Hariri sauti",
     "editAudioHint": "Fungua wimbo huu kwenye kihariri cha sauti",
     "edited": "Imehaririwa",
-    "editedHint": "Sauti hii inatoka kwenye kihariri cha sauti"
+    "editedHint": "Sauti hii inatoka kwenye kihariri cha sauti",
+    "shorts": {
+      "failed": "Haikuchapishwa: {{error}}",
+      "sectionTitle": "Shorts pamoja na sauti hii ({{count}})",
+      "sectionHelp": "Audiogramu zako kutoka kihariri sauti. Kila moja inachapishwa kama Short ya 3Speak sauti hii ikishachapishwa, ikiwa na kiungo kwake.",
+      "titlePlaceholder": "Kichwa cha Short",
+      "titleLabel": "Kichwa cha Short {{n}}",
+      "textPlaceholder": "Maandishi ya Short (si lazima). Kiungo cha sauti kinaongezwa kiotomatiki.",
+      "textLabel": "Maandishi ya Short {{n}}",
+      "designThumb": "Buni picha ndogo",
+      "editThumb": "Hariri picha ndogo",
+      "thumbLabel": "Picha ndogo ya Short {{n}}",
+      "designerTitle": "Picha ndogo ya Short",
+      "couldNotLoad": "Audiogramu haikuweza kupakiwa: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Inachapishwa pamoja na sauti hii"
+    }
   },
   "podcasts": {
     "chip": "Za nje",

@@ -137,5 +137,9 @@
     "kept": "Bewaard. Hij blijft als Short op je kanaal.",
     "keepFailed": "Deze story kon niet worden bewaard.",
     "keepWalletPrompt": "Onderteken om je story als Short te bewaren"
+  },
+  "audiogram": {
+    "fullEpisode": "Hele aflevering",
+    "listen": "Luister naar de hele aflevering: {{title}}"
   }
 }

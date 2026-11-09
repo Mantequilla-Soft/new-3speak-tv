@@ -75,13 +75,28 @@ describe('fixVideoThumbnail: hosts', () => {
       .toBe('/img/h/p/abc?format=jpeg&mode=cover&width=360&height=640')
   })
 
-  it('raw Ecency images go through Ecency\'s own resizer, never Hive\'s', () => {
+  it('raw Ecency images go through Ecency\'s own resizer, via our /img/e/ cache', () => {
+    // Never straight from Ecency: its Cloudflare blocks some viewers' networks.
     const src = 'https://images.ecency.com/DQm123/photo.jpg'
     expect(fixVideoThumbnail({ thumbnail: src }))
-      .toBe(`https://images.ecency.com/p/${bs58.encode(Buffer.from(src))}?format=jpeg&mode=cover&width=340&height=191`)
-    expect(fixVideoThumbnail({ thumbnail: 'https://images.ecency.com/p/xyz?format=webp' })).toBe('https://images.ecency.com/p/xyz?format=webp')
+      .toBe(`/img/e/p/${bs58.encode(Buffer.from(src))}?format=jpeg&mode=cover&width=340&height=191`)
+    const raw = 'https://i.ecency.com/DQm456/thumbnail.png'
+    expect(fixVideoThumbnail({ thumbnail: raw }, true))
+      .toBe(`/img/e/p/${bs58.encode(Buffer.from(raw))}?format=jpeg&mode=cover&width=360&height=640`)
+  })
+
+  it('Ecency resize-proxy URLs keep their options, fetched through /img/e/', () => {
+    expect(fixVideoThumbnail({ thumbnail: 'https://images.ecency.com/p/xyz?format=webp' })).toBe('/img/e/p/xyz?format=webp')
     expect(fixVideoThumbnail({ thumbnail: 'https://images.ecency.com/p/xyz?format=webp' }, true))
-      .toBe('https://images.ecency.com/p/xyz?format=jpeg&mode=cover&width=360&height=640')
+      .toBe('/img/e/p/xyz?format=jpeg&mode=cover&width=360&height=640')
+    // Sized /WxH/ URLs are not routed by the cache: left as they are.
+    expect(fixVideoThumbnail({ thumbnail: 'https://images.ecency.com/640x0/https://x.example/a.jpg' }))
+      .toBe('https://images.ecency.com/640x0/https://x.example/a.jpg')
+  })
+
+  it('an ecency.com URL nested inside another host is not treated as Ecency', () => {
+    const src = 'https://x.example/?u=https://i.ecency.com/DQm1/a.jpg'
+    expect(proxied(fixVideoThumbnail({ thumbnail: src })).source).toBe(src)
   })
 
   it('the retired media.3speak.tv host shows the local fallback', () => {
@@ -124,6 +139,13 @@ describe('proxy helpers', () => {
     expect(viaImageCache('https://images.hive.blog/u/a/avatar')).toBe('/img/h/u/a/avatar')
     expect(viaImageCache('https://other.example/x')).toBe('https://other.example/x')
     expect(viaImageCache(undefined)).toBe('')
+  })
+
+  it('hiveProxy sends Ecency-hosted images to Ecency\'s resizer via /img/e/', () => {
+    const src = 'https://i.ecency.com/DQm1/cover.jpg'
+    expect(hiveProxy(src, { w: 512, h: 512 }))
+      .toBe(`/img/e/p/${bs58.encode(Buffer.from(src))}?format=jpeg&mode=cover&width=512&height=512`)
+    expect(squareCover(src, 128)).toBe(`/img/e/p/${bs58.encode(Buffer.from(src))}?format=jpeg&mode=cover&width=128&height=128`)
   })
 
   it('squareCover crops our own covers via /img/a/ and others via the proxy', () => {

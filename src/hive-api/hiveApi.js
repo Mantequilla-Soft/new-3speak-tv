@@ -5,6 +5,7 @@
  */
 
 import axios from "axios";
+import { audiogramOfMeta } from '../utils/audiogramLink';
 import { t, formatTimeAgo, formatNumber as formatLocaleNumber } from '../i18n';
 import { getHiveUrl } from '../utils/hiveNode';
 import { isSnapsContainer } from '../utils/snapsContainer';
@@ -350,6 +351,8 @@ export async function fetchCompleteShortData(shortItem, loggedInUser = null) {
           ? JSON.parse(post.json_metadata || '{}')
           : (post.json_metadata || {});
         if (jm.video?.sound && typeof jm.video.sound === 'object') base.sound = jm.video.sound;
+        // A Short made from an audiogram: the episode it is a piece of (its card on the Shorts page)
+        base.audiogramOf = audiogramOfMeta(jm);
 
         // Extract reusable flag from MongoDB via checker endpoint
         try {

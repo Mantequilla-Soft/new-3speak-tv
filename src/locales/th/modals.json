@@ -126,7 +126,12 @@
     "postAsStory": "สตอรี่",
     "postAsStoryHint": "24 ชั่วโมง อยู่บนสุดของฟีด Shorts",
     "postAsShort": "Shorts",
-    "postAsShortHint": "อยู่ในช่องของคุณ"
+    "postAsShortHint": "อยู่ในช่องของคุณ",
+    "shortText": {
+      "title": "ข้อความของ Short",
+      "hint": "ข้อความนี้จะแสดงคู่กับออดิโอแกรมใน Short ระบบจะเพิ่มลิงก์ไปยังเสียงของคุณให้",
+      "placeholder": "ช่วงนี้เกี่ยวกับอะไร (ไม่บังคับ)"
+    }
   },
   "profile": {
     "mustLogin": "คุณต้องเข้าสู่ระบบก่อน",

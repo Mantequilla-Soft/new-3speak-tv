@@ -126,7 +126,12 @@
     "postAsStory": "Tin",
     "postAsStoryHint": "24 giờ, đứng đầu bảng tin Shorts",
     "postAsShort": "Shorts",
-    "postAsShortHint": "Ở lại trên kênh của bạn"
+    "postAsShortHint": "Ở lại trên kênh của bạn",
+    "shortText": {
+      "title": "Nội dung Short",
+      "hint": "Nội dung này đi kèm audiogram trong Short. Liên kết đến audio của bạn được tự động thêm vào.",
+      "placeholder": "Đoạn này nói về gì? (không bắt buộc)"
+    }
   },
   "profile": {
     "mustLogin": "Bạn cần đăng nhập trước",

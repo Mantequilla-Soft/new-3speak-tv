@@ -76,6 +76,8 @@ import { insertAtCursor, gifMarkdown } from '../utils/composerInsert';
 import useEmojiShortcodes from '../hooks/useEmojiShortcodes';
 import { prefetchVideoTagsV2 } from '../utils/tagsV2';
 import AiBadge from '../components/AiBadge/AiBadge';
+import AudiogramEpisodeLink from '../components/AudiogramEpisodeLink/AudiogramEpisodeLink';
+import { stripEpisodeLine } from '../utils/audiogramLink';
 
 // Custom Hive Icon Component
 const HiveIcon = ({ size = 24, className = '' }) => (
@@ -1340,6 +1342,8 @@ const VideoShort = () => {
             hivePermlink: enriched.hivePermlink || hivePermlink,
             embedUrl: enriched.embedUrl || embedUrl,
             hivePostMissing: enriched.hivePostMissing,
+            // made from an audiogram: the episode (its card above the caption)
+            audiogramOf: enriched.audiogramOf || null,
             _enriched: true,
           };
         }));
@@ -1543,6 +1547,7 @@ const VideoShort = () => {
       },
       caption: short.caption || short.title || '',
       heading: short.heading || '', // `## Title` (utils/shortTitle.js)
+      audiogramOf: short.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
       storyExpiresAt: short.storyExpiresAt || null, // 24h story
       tags: short.tags || [],
       audio: soundLabel(short.sound, short.user.username),
@@ -1640,6 +1645,7 @@ const VideoShort = () => {
               user: sharedVideoData.user,
               caption: sharedVideoData.caption || sharedVideoData.title || '',
               heading: sharedVideoData.heading || '', // `## Title` (utils/shortTitle.js)
+              audiogramOf: sharedVideoData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
               storyExpiresAt: sharedVideoData.storyExpiresAt || null, // 24h story
               audio: soundLabel(sharedVideoData.sound, sharedVideoData.user.username),
               albumArt: sharedVideoData.user.avatar,
@@ -1841,6 +1847,7 @@ const VideoShort = () => {
               user: shortData.user,
               caption: shortData.caption || shortData.title || '',
               heading: shortData.heading || '', // `## Title` (utils/shortTitle.js)
+              audiogramOf: shortData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
               storyExpiresAt: shortData.storyExpiresAt || null, // 24h story
               audio: soundLabel(shortData.sound, shortData.user.username),
               albumArt: shortData.user.avatar,
@@ -1893,6 +1900,7 @@ const VideoShort = () => {
           user: shortData.user,
           caption: shortData.caption || shortData.title || '',
           heading: shortData.heading || '', // `## Title` (utils/shortTitle.js)
+          audiogramOf: shortData.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
           storyExpiresAt: shortData.storyExpiresAt || null, // 24h story
           audio: soundLabel(shortData.sound, shortData.user.username),
           albumArt: shortData.user.avatar,
@@ -1953,6 +1961,7 @@ const VideoShort = () => {
           },
           caption: short.caption || short.title || '',
           heading: short.heading || '', // `## Title` (utils/shortTitle.js)
+          audiogramOf: short.audiogramOf || null, // made from an audiogram (utils/audiogramLink.js)
           storyExpiresAt: short.storyExpiresAt || null, // 24h story
           tags: short.tags || [],
           audio: soundLabel(short.sound, short.user.username),
@@ -3883,12 +3892,18 @@ const VideoShort = () => {
                   }}
                 />
               )}
+              {/* Made from an audiogram: the episode it is a piece of, as a card
+                  (from its metadata, so it holds whatever the text says) */}
+              {currentVideo.audiogramOf && (
+                <AudiogramEpisodeLink author={currentVideo.audiogramOf.author} permlink={currentVideo.audiogramOf.permlink} />
+              )}
               {/* The creator's `## Title` (utils/shortTitle.js), above the caption. */}
               {currentVideo.heading && <p className="captionTitle">{currentVideo.heading}</p>}
               <p className="captionText">
                 {/* A short with a title and no description falls back to the title as
                     its caption; don't say it twice. */}
-                {renderCaption(translatedCaption || (currentVideo.caption !== currentVideo.heading ? currentVideo.caption : ''))}
+                {/* without the "🎧 Full episode" line of a Short made from an audiogram: the card above shows it */}
+                {renderCaption(stripEpisodeLine(translatedCaption || (currentVideo.caption !== currentVideo.heading ? currentVideo.caption : '')))}
                 {!captionExpanded && currentVideo.mantecurated && (
                   <span className="shortsCuratedBadge shortsCuratedBadge--inline" title={t('shorts.caption.curatedBy')} onClick={(e) => { e.stopPropagation(); navigate('/t/mantecurated'); }}>
                     <img src={mantequillaLogo} alt="" />

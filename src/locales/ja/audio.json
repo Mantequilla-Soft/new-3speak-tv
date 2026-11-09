@@ -349,7 +349,9 @@
       "failedDuringPost": "Hive への投稿中に失敗しました: {{message}}",
       "failedWithMessage": "失敗しました: {{message}}",
       "mainFailed": "アルバム投稿を公開できませんでした: {{message}}",
-      "containerFailed": "投稿先の Snap スレッドに接続できませんでした: {{message}}"
+      "containerFailed": "投稿先の Snap スレッドに接続できませんでした: {{message}}",
+      "shortsLabel": "ショート:",
+      "shortsValue": "オーディオエディターから{{count}}本、それぞれ音声の投稿後にリンク付きで投稿"
     },
     "done": {
       "title": "完了！オーディオが公開されました。",
@@ -367,7 +369,23 @@
     "editAudio": "編集",
     "editAudioHint": "このトラックをオーディオエディターで開く",
     "edited": "編集済み",
-    "editedHint": "このオーディオはオーディオエディターで編集されました"
+    "editedHint": "このオーディオはオーディオエディターで編集されました",
+    "shorts": {
+      "failed": "投稿できませんでした: {{error}}",
+      "sectionTitle": "この音声のショート（{{count}}）",
+      "sectionHelp": "オーディオエディターで作ったオーディオグラムです。この音声が投稿されると、それぞれがリンク付きの3Speakショートとして投稿されます。",
+      "titlePlaceholder": "ショートのタイトル",
+      "titleLabel": "ショート{{n}}のタイトル",
+      "textPlaceholder": "ショートのテキスト（任意）。音声へのリンクは自動で追加されます。",
+      "textLabel": "ショート{{n}}のテキスト",
+      "designThumb": "サムネイルを作成",
+      "editThumb": "サムネイルを編集",
+      "thumbLabel": "ショート{{n}}のサムネイル",
+      "designerTitle": "ショートのサムネイル",
+      "couldNotLoad": "オーディオグラムを読み込めませんでした: {{error}}",
+      "rowTitle": "ショート: {{title}}",
+      "withAudio": "この音声と一緒に投稿されます"
+    }
   },
   "podcasts": {
     "chip": "外部",

@@ -349,7 +349,9 @@
       "failedDuringPost": "Hive에 게시 중 실패: {{message}}",
       "failedWithMessage": "실패: {{message}}",
       "mainFailed": "앨범 게시물을 게시하지 못했어요: {{message}}",
-      "containerFailed": "게시할 Snap 스레드에 연결하지 못했어요: {{message}}"
+      "containerFailed": "게시할 Snap 스레드에 연결하지 못했어요: {{message}}",
+      "shortsLabel": "쇼츠:",
+      "shortsValue": "오디오 편집기에서 {{count}}개, 각각 해당 오디오 게시 후 링크와 함께 게시"
     },
     "done": {
       "title": "완료! 오디오가 게시됐어요.",
@@ -367,7 +369,23 @@
     "editAudio": "오디오 편집",
     "editAudioHint": "이 트랙을 오디오 편집기에서 열기",
     "edited": "편집됨",
-    "editedHint": "이 오디오는 오디오 편집기에서 왔습니다"
+    "editedHint": "이 오디오는 오디오 편집기에서 왔습니다",
+    "shorts": {
+      "failed": "게시되지 않음: {{error}}",
+      "sectionTitle": "이 오디오와 함께하는 쇼츠 ({{count}})",
+      "sectionHelp": "오디오 편집기에서 만든 오디오그램입니다. 이 오디오가 게시되면 각각 링크와 함께 3Speak 쇼츠로 게시됩니다.",
+      "titlePlaceholder": "쇼츠 제목",
+      "titleLabel": "쇼츠 {{n}} 제목",
+      "textPlaceholder": "쇼츠 텍스트 (선택). 오디오 링크는 자동으로 추가됩니다.",
+      "textLabel": "쇼츠 {{n}} 텍스트",
+      "designThumb": "썸네일 디자인",
+      "editThumb": "썸네일 편집",
+      "thumbLabel": "쇼츠 {{n}} 썸네일",
+      "designerTitle": "쇼츠 썸네일",
+      "couldNotLoad": "오디오그램을 불러올 수 없습니다: {{error}}",
+      "rowTitle": "쇼츠: {{title}}",
+      "withAudio": "이 오디오와 함께 게시됩니다"
+    }
   },
   "podcasts": {
     "chip": "외부",

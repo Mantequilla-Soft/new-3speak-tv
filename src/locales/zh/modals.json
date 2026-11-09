@@ -126,7 +126,12 @@
     "postAsStory": "快拍",
     "postAsStoryHint": "24 小时，排在短视频信息流最前面",
     "postAsShort": "短视频",
-    "postAsShortHint": "留在你的频道"
+    "postAsShortHint": "留在你的频道",
+    "shortText": {
+      "title": "短视频文字",
+      "hint": "它会和音频波形视频一起出现在短视频中。会自动添加指向你音频的链接。",
+      "placeholder": "这一段讲的是什么？（可选）"
+    }
   },
   "profile": {
     "mustLogin": "你需要先登录",

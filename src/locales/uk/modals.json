@@ -126,7 +126,12 @@
     "postAsStory": "Історія",
     "postAsStoryHint": "24 години, на початку стрічки Shorts",
     "postAsShort": "Shorts",
-    "postAsShortHint": "Залишиться на вашому каналі"
+    "postAsShortHint": "Залишиться на вашому каналі",
+    "shortText": {
+      "title": "Текст для Short",
+      "hint": "Він буде поруч з аудіограмою в Short. Посилання на ваше аудіо додається автоматично.",
+      "placeholder": "Про що цей фрагмент? (необов'язково)"
+    }
   },
   "profile": {
     "mustLogin": "Спочатку потрібно увійти",

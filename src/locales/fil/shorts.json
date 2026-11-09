@@ -137,5 +137,9 @@
     "kept": "Naitago na. Mananatili ito sa channel mo bilang Short.",
     "keepFailed": "Hindi naitago ang story na ito.",
     "keepWalletPrompt": "Pumirma para itago ang story mo bilang Short"
+  },
+  "audiogram": {
+    "fullEpisode": "Buong episode",
+    "listen": "Pakinggan ang buong episode: {{title}}"
   }
 }

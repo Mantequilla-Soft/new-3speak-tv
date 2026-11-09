@@ -126,7 +126,12 @@
     "postAsStory": "Story",
     "postAsStoryHint": "24 hours, leads the Shorts feed",
     "postAsShort": "Short",
-    "postAsShortHint": "Stays on your channel"
+    "postAsShortHint": "Stays on your channel",
+    "shortText": {
+      "title": "Text for the Short",
+      "hint": "It goes with the audiogram in the Short. A link to your audio is added for you.",
+      "placeholder": "What is this piece about? (optional)"
+    }
   },
   "profile": {
     "mustLogin": "You must login first",

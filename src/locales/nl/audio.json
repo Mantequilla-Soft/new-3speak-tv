@@ -364,7 +364,9 @@
       "failedDuringPost": "Mislukt tijdens het posten op Hive: {{message}}",
       "failedWithMessage": "Mislukt: {{message}}",
       "mainFailed": "De albumpost kon niet worden gepubliceerd: {{message}}",
-      "containerFailed": "De snaps-thread om in te posten was niet bereikbaar: {{message}}"
+      "containerFailed": "De snaps-thread om in te posten was niet bereikbaar: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} uit de audio-editor, elk geplaatst na de bijbehorende audio met een link ernaar"
     },
     "done": {
       "title": "Klaar! Je audio is gepubliceerd.",
@@ -382,7 +384,23 @@
     "editAudio": "Audio bewerken",
     "editAudioHint": "Deze track openen in de audio-editor",
     "edited": "Bewerkt",
-    "editedHint": "Deze audio komt uit de audio-editor"
+    "editedHint": "Deze audio komt uit de audio-editor",
+    "shorts": {
+      "failed": "Niet geplaatst: {{error}}",
+      "sectionTitle": "Shorts bij deze audio ({{count}})",
+      "sectionHelp": "Je audiogrammen uit de audio-editor. Elk wordt als 3Speak Short geplaatst zodra deze audio online staat, met een link ernaar.",
+      "titlePlaceholder": "Titel van de Short",
+      "titleLabel": "Titel van Short {{n}}",
+      "textPlaceholder": "Tekst bij de Short (optioneel). Een link naar de audio wordt automatisch toegevoegd.",
+      "textLabel": "Tekst bij Short {{n}}",
+      "designThumb": "Thumbnail ontwerpen",
+      "editThumb": "Thumbnail bewerken",
+      "thumbLabel": "Thumbnail van Short {{n}}",
+      "designerTitle": "Thumbnail van de Short",
+      "couldNotLoad": "De audiogram kon niet worden geladen: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Wordt samen met deze audio geplaatst"
+    }
   },
   "podcasts": {
     "chip": "Extern",

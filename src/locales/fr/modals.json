@@ -126,7 +126,12 @@
     "postAsStory": "Story",
     "postAsStoryHint": "24 heures, en tête du fil Shorts",
     "postAsShort": "Short",
-    "postAsShortHint": "Reste sur votre chaîne"
+    "postAsShortHint": "Reste sur votre chaîne",
+    "shortText": {
+      "title": "Texte du Short",
+      "hint": "Il accompagne l'audiogramme dans le Short. Un lien vers ton audio est ajouté automatiquement.",
+      "placeholder": "De quoi parle cet extrait ? (facultatif)"
+    }
   },
   "profile": {
     "mustLogin": "Vous devez d'abord vous connecter",

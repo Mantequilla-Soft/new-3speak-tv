@@ -133,5 +133,9 @@
     "kept": "남겼어요. 채널에 쇼츠로 계속 남아요.",
     "keepFailed": "이 스토리를 남기지 못했어요.",
     "keepWalletPrompt": "스토리를 쇼츠로 남기려면 서명하세요"
+  },
+  "audiogram": {
+    "fullEpisode": "전체 에피소드",
+    "listen": "전체 에피소드 듣기: {{title}}"
   }
 }

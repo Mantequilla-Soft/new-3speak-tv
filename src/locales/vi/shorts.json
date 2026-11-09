@@ -133,5 +133,9 @@
     "kept": "Đã giữ. Tin sẽ ở lại kênh của bạn dưới dạng Shorts.",
     "keepFailed": "Không thể giữ tin này.",
     "keepWalletPrompt": "Ký để giữ tin của bạn thành Shorts"
+  },
+  "audiogram": {
+    "fullEpisode": "Tập đầy đủ",
+    "listen": "Nghe tập đầy đủ: {{title}}"
   }
 }

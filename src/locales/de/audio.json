@@ -364,7 +364,9 @@
       "failedDuringPost": "Fehler beim Posten auf Hive: {{message}}",
       "failedWithMessage": "Fehlgeschlagen: {{message}}",
       "mainFailed": "Der Album-Beitrag konnte nicht veröffentlicht werden: {{message}}",
-      "containerFailed": "Der Snaps-Thread zum Posten war nicht erreichbar: {{message}}"
+      "containerFailed": "Der Snaps-Thread zum Posten war nicht erreichbar: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} aus dem Audio-Editor, jeweils nach dem Audio veröffentlicht, mit einem Link dorthin"
     },
     "done": {
       "title": "Fertig! Dein Audio ist veröffentlicht.",
@@ -382,7 +384,23 @@
     "editAudio": "Audio bearbeiten",
     "editAudioHint": "Diesen Track im Audio-Editor öffnen",
     "edited": "Bearbeitet",
-    "editedHint": "Dieses Audio stammt aus dem Audio-Editor"
+    "editedHint": "Dieses Audio stammt aus dem Audio-Editor",
+    "shorts": {
+      "failed": "Nicht gepostet: {{error}}",
+      "sectionTitle": "Shorts zu diesem Audio ({{count}})",
+      "sectionHelp": "Deine Audiogramme aus dem Audio-Editor. Jedes erscheint als 3Speak Short, sobald dieses Audio veröffentlicht ist, mit einem Link dorthin.",
+      "titlePlaceholder": "Titel des Shorts",
+      "titleLabel": "Titel von Short {{n}}",
+      "textPlaceholder": "Text für den Short (optional). Ein Link zum Audio wird automatisch ergänzt.",
+      "textLabel": "Text für Short {{n}}",
+      "designThumb": "Vorschaubild gestalten",
+      "editThumb": "Vorschaubild bearbeiten",
+      "thumbLabel": "Vorschaubild von Short {{n}}",
+      "designerTitle": "Vorschaubild des Shorts",
+      "couldNotLoad": "Das Audiogramm konnte nicht geladen werden: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Erscheint zusammen mit diesem Audio"
+    }
   },
   "podcasts": {
     "chip": "Extern",

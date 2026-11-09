@@ -349,7 +349,9 @@
       "failedDuringPost": "发布到 Hive 时失败：{{message}}",
       "failedWithMessage": "失败：{{message}}",
       "mainFailed": "专辑帖子发布失败：{{message}}",
-      "containerFailed": "无法连接到要发布的 Snap 帖子串：{{message}}"
+      "containerFailed": "无法连接到要发布的 Snap 帖子串：{{message}}",
+      "shortsLabel": "短视频：",
+      "shortsValue": "来自音频编辑器的 {{count}} 个，各自在其音频发布后附链接发布"
     },
     "done": {
       "title": "完成！你的音频已发布。",
@@ -367,7 +369,23 @@
     "editAudio": "编辑音频",
     "editAudioHint": "在音频编辑器中打开此音轨",
     "edited": "已编辑",
-    "editedHint": "此音频来自音频编辑器"
+    "editedHint": "此音频来自音频编辑器",
+    "shorts": {
+      "failed": "未发布：{{error}}",
+      "sectionTitle": "随此音频发布的短视频（{{count}}）",
+      "sectionHelp": "你在音频编辑器中制作的音频波形视频。此音频发布后，每个都会作为 3Speak 短视频发布，并附上指向它的链接。",
+      "titlePlaceholder": "短视频标题",
+      "titleLabel": "短视频 {{n}} 的标题",
+      "textPlaceholder": "短视频文字（可选）。会自动添加音频链接。",
+      "textLabel": "短视频 {{n}} 的文字",
+      "designThumb": "设计缩略图",
+      "editThumb": "编辑缩略图",
+      "thumbLabel": "短视频 {{n}} 的缩略图",
+      "designerTitle": "短视频缩略图",
+      "couldNotLoad": "无法加载音频波形视频：{{error}}",
+      "rowTitle": "短视频：{{title}}",
+      "withAudio": "随此音频一起发布"
+    }
   },
   "podcasts": {
     "chip": "外部",

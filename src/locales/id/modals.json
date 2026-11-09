@@ -126,7 +126,12 @@
     "postAsStory": "Story",
     "postAsStoryHint": "24 jam, paling atas di feed Shorts",
     "postAsShort": "Shorts",
-    "postAsShortHint": "Tetap ada di channel-mu"
+    "postAsShortHint": "Tetap ada di channel-mu",
+    "shortText": {
+      "title": "Teks untuk Short",
+      "hint": "Teks ini menyertai audiogram di Short. Tautan ke audiomu ditambahkan otomatis.",
+      "placeholder": "Bagian ini tentang apa? (opsional)"
+    }
   },
   "profile": {
     "mustLogin": "Kamu harus masuk dulu",

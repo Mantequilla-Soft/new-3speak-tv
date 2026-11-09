@@ -349,7 +349,9 @@
       "failedDuringPost": "ล้มเหลวระหว่างโพสต์ไปยัง Hive: {{message}}",
       "failedWithMessage": "ไม่สำเร็จ: {{message}}",
       "mainFailed": "เผยแพร่โพสต์อัลบั้มไม่สำเร็จ: {{message}}",
-      "containerFailed": "เชื่อมต่อเธรด Snap สำหรับโพสต์ไม่ได้: {{message}}"
+      "containerFailed": "เชื่อมต่อเธรด Snap สำหรับโพสต์ไม่ได้: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} รายการจากโปรแกรมแก้ไขเสียง แต่ละอันโพสต์หลังเสียงของมันพร้อมลิงก์"
     },
     "done": {
       "title": "เรียบร้อย! เผยแพร่เสียงของคุณแล้ว",
@@ -367,7 +369,23 @@
     "editAudio": "แก้ไขเสียง",
     "editAudioHint": "เปิดแทร็กนี้ในโปรแกรมแก้ไขเสียง",
     "edited": "แก้ไขแล้ว",
-    "editedHint": "เสียงนี้มาจากโปรแกรมแก้ไขเสียง"
+    "editedHint": "เสียงนี้มาจากโปรแกรมแก้ไขเสียง",
+    "shorts": {
+      "failed": "โพสต์ไม่สำเร็จ: {{error}}",
+      "sectionTitle": "Shorts กับเสียงนี้ ({{count}})",
+      "sectionHelp": "ออดิโอแกรมของคุณจากโปรแกรมแก้ไขเสียง แต่ละอันจะโพสต์เป็น Short บน 3Speak เมื่อเสียงนี้โพสต์แล้ว พร้อมลิงก์ไปยังเสียงนั้น",
+      "titlePlaceholder": "ชื่อ Short",
+      "titleLabel": "ชื่อ Short {{n}}",
+      "textPlaceholder": "ข้อความของ Short (ไม่บังคับ) ระบบจะเพิ่มลิงก์ไปยังเสียงให้",
+      "textLabel": "ข้อความของ Short {{n}}",
+      "designThumb": "ออกแบบภาพปก",
+      "editThumb": "แก้ไขภาพปก",
+      "thumbLabel": "ภาพปกของ Short {{n}}",
+      "designerTitle": "ภาพปกของ Short",
+      "couldNotLoad": "โหลดออดิโอแกรมไม่ได้: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "โพสต์พร้อมกับเสียงนี้"
+    }
   },
   "podcasts": {
     "chip": "ภายนอก",

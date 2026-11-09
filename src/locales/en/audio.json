@@ -364,7 +364,9 @@
       "failedDuringPost": "Failed during posting to Hive: {{message}}",
       "failedWithMessage": "Failed: {{message}}",
       "mainFailed": "The album post couldn't be published: {{message}}",
-      "containerFailed": "Couldn't reach the snaps thread to post into: {{message}}"
+      "containerFailed": "Couldn't reach the snaps thread to post into: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} from the audio editor, each posted after its audio with a link to it"
     },
     "done": {
       "title": "All done! Your audio is published.",
@@ -382,7 +384,23 @@
     "editAudio": "Edit audio",
     "editAudioHint": "Open this track in the audio editor",
     "edited": "Edited",
-    "editedHint": "This audio comes from the audio editor"
+    "editedHint": "This audio comes from the audio editor",
+    "shorts": {
+      "failed": "Not posted: {{error}}",
+      "sectionTitle": "Shorts with this audio ({{count}})",
+      "sectionHelp": "Your audiograms from the audio editor. Each goes out as a 3Speak Short once this audio is posted, with a link to it.",
+      "titlePlaceholder": "Title of the Short",
+      "titleLabel": "Title of Short {{n}}",
+      "textPlaceholder": "Text for the Short (optional). A link to the audio is added for you.",
+      "textLabel": "Text for Short {{n}}",
+      "designThumb": "Design thumbnail",
+      "editThumb": "Edit thumbnail",
+      "thumbLabel": "Thumbnail of Short {{n}}",
+      "designerTitle": "Thumbnail of the Short",
+      "couldNotLoad": "The audiogram could not be loaded: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Goes out together with this audio"
+    }
   },
   "podcasts": {
     "chip": "External",

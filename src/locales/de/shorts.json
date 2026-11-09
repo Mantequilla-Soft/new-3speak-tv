@@ -137,5 +137,9 @@
     "kept": "Behalten. Sie bleibt als Short auf deinem Kanal.",
     "keepFailed": "Diese Story konnte nicht behalten werden.",
     "keepWalletPrompt": "Signiere, um deine Story als Short zu behalten"
+  },
+  "audiogram": {
+    "fullEpisode": "Ganze Folge",
+    "listen": "Die ganze Folge anhören: {{title}}"
   }
 }

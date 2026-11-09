@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, Loader2 } from 'lucide-react';
 import { generateVideoThumbnailsAt } from '../../utils/videoThumbnails';
-import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, cameraRecordEnabledFor, storiesEnabledFor } from '../../utils/config';
+import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, cameraRecordEnabledFor, storiesEnabledFor, PLAYLISTS_READ_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
@@ -11,6 +11,8 @@ import { getLockedBeneficiaries } from '../../utils/beneficiaries';
 import { remixChainAuthors } from '../../utils/remixChain';
 import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
 import { sanitizeChapters } from '../../utils/audioChapters';
+import { sanitizeAudiograms, playlistCoversOf } from '../../utils/audiogramShorts';
+import ShortTextModal from './ShortTextModal';
 import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { establishWalletSession, getCurrentProvider, Providers } from '../../hive-api/aioha';
@@ -42,6 +44,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   // The editor's "Post to 3Speak" for someone who can post stories: held here
   // while they pick short or story (the editor itself has one Post button).
   const [pendingPost, setPendingPost] = useState(null);
+  // The editor asked for a text in our post editor (edit-text): { requestId, value, maxLength }
+  const [textEdit, setTextEdit] = useState(null);
   const [renderProgress, setRenderProgress] = useState(0);
   const [renderedVideoUrl, setRenderedVideoUrl] = useState(null);
   const pollIntervalRef = useRef(null);
@@ -108,7 +112,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     // Audio mode: "Use this audio" -> fetch the edited MP3 and hand it to the audio
     // upload. For one of its tracks (audioTrackId) it replaces that track's audio;
     // from the share menu it opens the upload with it as a new track.
-    const handleAudioResult = async ({ outputUrl, fileName, durationSec, musicCredits, chapters }) => {
+    const handleAudioResult = async ({ outputUrl, fileName, durationSec, musicCredits, chapters, audiograms }) => {
       if (!outputUrl) return;
       try {
         setRenderStatus('preparing');
@@ -124,6 +128,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
         const credits = sanitizeMusicCredits(musicCredits);
         // Chapters marked in the editor: they go into the track's description
         const marks = sanitizeChapters(chapters);
+        // Audiograms marked "Post together with the audio": posted as Shorts after the audio post
+        const shorts = sanitizeAudiograms(audiograms);
         const trackId = audioTrackId;
 
         handleClose({ confirmed: true });
@@ -136,11 +142,12 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
               durationSec: Number.isFinite(durationSec) && durationSec > 0 ? durationSec : null,
               musicCredits: credits,
               chapters: marks,
+              audiograms: shorts,
             },
           }));
         } else {
           window.dispatchEvent(new CustomEvent('open-audio-upload', {
-            detail: { blob: file, filename: file.name, type: null, source: 'editor', musicCredits: credits, chapters: marks },
+            detail: { blob: file, filename: file.name, type: null, source: 'editor', musicCredits: credits, chapters: marks, audiograms: shorts },
           }));
         }
       } catch (err) {
@@ -217,6 +224,32 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
         case 'render-request':
           handleRenderRequest(data.timeline);
           break;
+
+        case 'get-playlist-covers': {
+          // The audiograms' picture choice: the covers of the person's own playlists
+          const owner = userRef.current;
+          (async () => {
+            let covers = [];
+            try {
+              if (owner) {
+                const res = await fetch(`${PLAYLISTS_READ_URL}/playlists?owner=${encodeURIComponent(owner)}&limit=50`);
+                if (res.ok) covers = playlistCoversOf((await res.json())?.playlists);
+              }
+            } catch { /* none, then */ }
+            sendToEditor({ type: 'playlist-covers', covers });
+          })();
+          break;
+        }
+
+        // A Short's text (the audiograms) in our own post editor, over the editor
+        case 'edit-text': {
+          const requestId = typeof data.requestId === 'string' ? data.requestId.slice(0, 64) : '';
+          if (!requestId) break;
+          const maxLength = Math.min(5000, Math.max(1, Number(data.maxLength) || 5000));
+          setTextEdit({ requestId, value: typeof data.value === 'string' ? data.value.slice(0, maxLength) : '', maxLength });
+          sendToEditor({ type: 'text-edit-open', requestId });
+          break;
+        }
 
         case 'post-to-3speak':
           if (audioMode) {
@@ -331,6 +364,8 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     if (!isOpen) return;
     const onKeyDown = (e) => {
       const el = e.target;
+      // Our own text editor over the editor (a Short's text): its keys are its own
+      if (el?.closest?.('.short-text-modal-overlay')) return;
       const editable = el?.tagName === 'INPUT' || el?.tagName === 'TEXTAREA' || el?.tagName === 'SELECT' || el?.isContentEditable;
       e.stopImmediatePropagation();
       if (editable) return;
@@ -649,6 +684,16 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
                 {t('common.actions.close')}
               </button>
             </div>
+          )}
+
+          {textEdit && (
+            <ShortTextModal
+              key={textEdit.requestId}
+              value={textEdit.value}
+              maxLength={textEdit.maxLength}
+              onDone={(value) => { sendToEditor({ type: 'text-edited', requestId: textEdit.requestId, value }); setTextEdit(null); }}
+              onCancel={() => { sendToEditor({ type: 'text-edit-cancelled', requestId: textEdit.requestId }); setTextEdit(null); }}
+            />
           )}
 
           {/* Render status overlay */}

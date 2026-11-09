@@ -126,7 +126,12 @@
     "postAsStory": "Storia",
     "postAsStoryHint": "24 ore, in cima al feed Shorts",
     "postAsShort": "Short",
-    "postAsShortHint": "Resta sul tuo canale"
+    "postAsShortHint": "Resta sul tuo canale",
+    "shortText": {
+      "title": "Testo dello Short",
+      "hint": "Accompagna l'audiogramma nello Short. Un link al tuo audio viene aggiunto automaticamente.",
+      "placeholder": "Di cosa parla questo pezzo? (facoltativo)"
+    }
   },
   "profile": {
     "mustLogin": "Prima devi accedere",

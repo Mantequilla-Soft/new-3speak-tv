@@ -364,7 +364,9 @@
       "failedDuringPost": "Hive पर पोस्ट करते समय फ़ेल हुआ: {{message}}",
       "failedWithMessage": "फ़ेल हुआ: {{message}}",
       "mainFailed": "एल्बम पोस्ट पब्लिश नहीं हो सकी: {{message}}",
-      "containerFailed": "पोस्ट करने के लिए Snap थ्रेड तक नहीं पहुंच सके: {{message}}"
+      "containerFailed": "पोस्ट करने के लिए Snap थ्रेड तक नहीं पहुंच सके: {{message}}",
+      "shortsLabel": "शॉर्ट्स:",
+      "shortsValue": "ऑडियो एडिटर से {{count}}, हर एक अपने ऑडियो के बाद उसके लिंक के साथ पोस्ट होगा"
     },
     "done": {
       "title": "हो गया! आपका ऑडियो पब्लिश हो गया है।",
@@ -382,7 +384,23 @@
     "editAudio": "ऑडियो संपादित करें",
     "editAudioHint": "इस ट्रैक को ऑडियो एडिटर में खोलें",
     "edited": "संपादित",
-    "editedHint": "यह ऑडियो ऑडियो एडिटर से आया है"
+    "editedHint": "यह ऑडियो ऑडियो एडिटर से आया है",
+    "shorts": {
+      "failed": "पोस्ट नहीं हुआ: {{error}}",
+      "sectionTitle": "इस ऑडियो के साथ Shorts ({{count}})",
+      "sectionHelp": "ऑडियो एडिटर से आपके ऑडियोग्राम। यह ऑडियो पोस्ट होते ही हर एक 3Speak Short के रूप में, उसके लिंक के साथ पोस्ट होगा।",
+      "titlePlaceholder": "Short का शीर्षक",
+      "titleLabel": "Short {{n}} का शीर्षक",
+      "textPlaceholder": "Short का टेक्स्ट (वैकल्पिक)। ऑडियो का लिंक अपने-आप जुड़ जाता है।",
+      "textLabel": "Short {{n}} का टेक्स्ट",
+      "designThumb": "थंबनेल डिज़ाइन करें",
+      "editThumb": "थंबनेल बदलें",
+      "thumbLabel": "Short {{n}} का थंबनेल",
+      "designerTitle": "Short का थंबनेल",
+      "couldNotLoad": "ऑडियोग्राम लोड नहीं हो सका: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "इस ऑडियो के साथ पोस्ट होता है"
+    }
   },
   "podcasts": {
     "chip": "बाहरी",

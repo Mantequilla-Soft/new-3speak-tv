@@ -368,6 +368,8 @@ function App() {
           source: detail.source || null,
           musicCredits: Array.isArray(detail.musicCredits) ? detail.musicCredits : null,
           chapters: Array.isArray(detail.chapters) ? detail.chapters : null,
+          // audiograms to post as Shorts with it (checked in EditorModal)
+          audiograms: Array.isArray(detail.audiograms) ? detail.audiograms : null,
         });
       }
       setAudioUploadOpen(true);

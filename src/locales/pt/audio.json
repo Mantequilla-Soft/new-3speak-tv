@@ -379,7 +379,9 @@
       "failedDuringPost": "Falha ao publicar na Hive: {{message}}",
       "failedWithMessage": "Falhou: {{message}}",
       "mainFailed": "Não foi possível publicar o post do álbum: {{message}}",
-      "containerFailed": "Não foi possível acessar o tópico de snaps para publicar: {{message}}"
+      "containerFailed": "Não foi possível acessar o tópico de snaps para publicar: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} do editor de áudio, cada um publicado depois do seu áudio com um link para ele"
     },
     "done": {
       "title": "Pronto! Seu áudio foi publicado.",
@@ -397,7 +399,23 @@
     "editAudio": "Editar áudio",
     "editAudioHint": "Abrir esta faixa no editor de áudio",
     "edited": "Editado",
-    "editedHint": "Este áudio vem do editor de áudio"
+    "editedHint": "Este áudio vem do editor de áudio",
+    "shorts": {
+      "failed": "Não publicado: {{error}}",
+      "sectionTitle": "Shorts com este áudio ({{count}})",
+      "sectionHelp": "Seus audiogramas do editor de áudio. Cada um é publicado como Short do 3Speak quando este áudio for publicado, com um link para ele.",
+      "titlePlaceholder": "Título do Short",
+      "titleLabel": "Título do Short {{n}}",
+      "textPlaceholder": "Texto do Short (opcional). Um link para o áudio é adicionado automaticamente.",
+      "textLabel": "Texto do Short {{n}}",
+      "designThumb": "Criar miniatura",
+      "editThumb": "Editar miniatura",
+      "thumbLabel": "Miniatura do Short {{n}}",
+      "designerTitle": "Miniatura do Short",
+      "couldNotLoad": "Não foi possível carregar o audiograma: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Publicado junto com este áudio"
+    }
   },
   "podcasts": {
     "chip": "Externos",

@@ -394,7 +394,9 @@
       "failedDuringPost": "Помилка під час публікації в Hive: {{message}}",
       "failedWithMessage": "Помилка: {{message}}",
       "mainFailed": "Не вдалося опублікувати пост альбому: {{message}}",
-      "containerFailed": "Не вдалося відкрити гілку Snap для публікації: {{message}}"
+      "containerFailed": "Не вдалося відкрити гілку Snap для публікації: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} з аудіоредактора, кожна публікується після свого аудіо з посиланням на нього"
     },
     "done": {
       "title": "Готово! Ваше аудіо опубліковано.",
@@ -412,7 +414,23 @@
     "editAudio": "Редагувати",
     "editAudioHint": "Відкрити цей трек в аудіоредакторі",
     "edited": "Змінено",
-    "editedHint": "Це аудіо з аудіоредактора"
+    "editedHint": "Це аудіо з аудіоредактора",
+    "shorts": {
+      "failed": "Не опубліковано: {{error}}",
+      "sectionTitle": "Shorts із цим аудіо ({{count}})",
+      "sectionHelp": "Ваші аудіограми з аудіоредактора. Кожна буде опублікована як Short на 3Speak після публікації цього аудіо, з посиланням на нього.",
+      "titlePlaceholder": "Назва Short",
+      "titleLabel": "Назва Short {{n}}",
+      "textPlaceholder": "Текст для Short (необов'язково). Посилання на аудіо додається автоматично.",
+      "textLabel": "Текст для Short {{n}}",
+      "designThumb": "Створити обкладинку",
+      "editThumb": "Змінити обкладинку",
+      "thumbLabel": "Обкладинка Short {{n}}",
+      "designerTitle": "Обкладинка Short",
+      "couldNotLoad": "Не вдалося завантажити аудіограму: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Публікується разом із цим аудіо"
+    }
   },
   "podcasts": {
     "chip": "Зовнішні",

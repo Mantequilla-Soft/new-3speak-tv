@@ -133,5 +133,9 @@
     "kept": "เก็บแล้ว สตอรี่นี้จะอยู่ในช่องของคุณเป็น Shorts",
     "keepFailed": "เก็บสตอรี่นี้ไม่ได้",
     "keepWalletPrompt": "ลงนามเพื่อเก็บสตอรี่ของคุณเป็น Shorts"
+  },
+  "audiogram": {
+    "fullEpisode": "ตอนเต็ม",
+    "listen": "ฟังตอนเต็ม: {{title}}"
   }
 }

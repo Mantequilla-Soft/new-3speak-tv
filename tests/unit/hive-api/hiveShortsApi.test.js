@@ -321,6 +321,13 @@ describe('enriching one short from Hive', () => {
     expect(card).toMatchObject({ title: 'Post title', caption: 'plain caption', stats: { likes: 2, payout: '0.75' } })
   })
 
+  it('a Short made from an audiogram names its episode (from the metadata, not the text)', async () => {
+    hive.posts['bob/my-short'] = post({ json_metadata: { video: {}, '3speak': { audiogram: { author: 'bob', permlink: 'episode-12' } } } })
+    expect((await api.fetchCompleteShortData(listed())).audiogramOf).toEqual({ author: 'bob', permlink: 'episode-12' })
+    hive.posts['bob/my-short'] = post()
+    expect((await api.fetchCompleteShortData(listed())).audiogramOf).toBe(null)
+  })
+
   it('without the checker, the reusable flag comes from the post metadata', async () => {
     hive.posts['bob/my-short'] = post({ json_metadata: { video: { reusable: false } } })
     checker.failVideo = true

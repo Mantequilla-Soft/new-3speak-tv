@@ -1,0 +1,66 @@
+// The episode card on a Short made from an audiogram: flat, dark over the
+// video, the 3Speak accent on the icon side
+.audiogramEpisodeLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  margin: 0 0 8px;
+  padding: 6px 10px 6px 6px;
+  border-radius: 10px;
+  background: rgba(10, 11, 18, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  text-decoration: none;
+  pointer-events: auto;
+
+  &:hover {
+    border-color: var(--accent-primary, #e32933);
+  }
+}
+
+.audiogramEpisodeLink__cover {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--accent-primary, #e32933);
+  color: #fff;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.audiogramEpisodeLink__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+
+  small {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  strong {
+    font-size: 13px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.audiogramEpisodeLink__go {
+  flex: none;
+  margin-left: auto;
+  opacity: 0.8;
+}
