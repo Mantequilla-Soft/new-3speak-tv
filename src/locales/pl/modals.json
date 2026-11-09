@@ -126,7 +126,12 @@
     "postAsStory": "Relacja",
     "postAsStoryHint": "24 godziny, na początku kanału Shorts",
     "postAsShort": "Short",
-    "postAsShortHint": "Zostaje na Twoim kanale"
+    "postAsShortHint": "Zostaje na Twoim kanale",
+    "shortText": {
+      "title": "Tekst Shorta",
+      "hint": "Pojawi się z audiogramem w Shorcie. Link do Twojego audio zostanie dodany automatycznie.",
+      "placeholder": "O czym jest ten fragment? (opcjonalnie)"
+    }
   },
   "profile": {
     "mustLogin": "Najpierw musisz się zalogować",

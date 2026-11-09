@@ -133,5 +133,9 @@
     "kept": "已保留。它将作为短视频留在你的频道。",
     "keepFailed": "无法保留这条快拍。",
     "keepWalletPrompt": "签名以将快拍保留为短视频"
+  },
+  "audiogram": {
+    "fullEpisode": "完整节目",
+    "listen": "收听完整节目：{{title}}"
   }
 }

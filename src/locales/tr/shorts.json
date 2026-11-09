@@ -137,5 +137,9 @@
     "kept": "Tutuldu. Kanalında Shorts olarak kalacak.",
     "keepFailed": "Bu hikâye tutulamadı.",
     "keepWalletPrompt": "Hikâyeni Shorts olarak tutmak için imzala"
+  },
+  "audiogram": {
+    "fullEpisode": "Bölümün tamamı",
+    "listen": "Bölümün tamamını dinle: {{title}}"
   }
 }

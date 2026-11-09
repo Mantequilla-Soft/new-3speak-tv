@@ -126,7 +126,12 @@
     "postAsStory": "Hadithi",
     "postAsStoryHint": "Saa 24, juu ya mlisho wa Shorts",
     "postAsShort": "Short",
-    "postAsShortHint": "Inabaki kwenye chaneli yako"
+    "postAsShortHint": "Inabaki kwenye chaneli yako",
+    "shortText": {
+      "title": "Maandishi ya Short",
+      "hint": "Yanaambatana na audiogramu kwenye Short. Kiungo cha sauti yako kinaongezwa kiotomatiki.",
+      "placeholder": "Kipande hiki kinahusu nini? (si lazima)"
+    }
   },
   "profile": {
     "mustLogin": "Lazima uingie kwanza",

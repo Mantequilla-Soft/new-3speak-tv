@@ -349,7 +349,9 @@
       "failedDuringPost": "Gagal saat memposting ke Hive: {{message}}",
       "failedWithMessage": "Gagal: {{message}}",
       "mainFailed": "Postingan album tidak dapat diterbitkan: {{message}}",
-      "containerFailed": "Utas snap untuk memposting tidak dapat dijangkau: {{message}}"
+      "containerFailed": "Utas snap untuk memposting tidak dapat dijangkau: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} dari editor audio, masing-masing diposting setelah audionya dengan tautan ke sana"
     },
     "done": {
       "title": "Selesai! Audio Anda sudah diterbitkan.",
@@ -367,7 +369,23 @@
     "editAudio": "Sunting audio",
     "editAudioHint": "Buka trek ini di editor audio",
     "edited": "Diedit",
-    "editedHint": "Audio ini berasal dari editor audio"
+    "editedHint": "Audio ini berasal dari editor audio",
+    "shorts": {
+      "failed": "Tidak diposting: {{error}}",
+      "sectionTitle": "Shorts dengan audio ini ({{count}})",
+      "sectionHelp": "Audiogram kamu dari editor audio. Masing-masing diposting sebagai Short 3Speak setelah audio ini diposting, dengan tautan ke audio tersebut.",
+      "titlePlaceholder": "Judul Short",
+      "titleLabel": "Judul Short {{n}}",
+      "textPlaceholder": "Teks untuk Short (opsional). Tautan ke audio ditambahkan otomatis.",
+      "textLabel": "Teks untuk Short {{n}}",
+      "designThumb": "Desain thumbnail",
+      "editThumb": "Edit thumbnail",
+      "thumbLabel": "Thumbnail Short {{n}}",
+      "designerTitle": "Thumbnail Short",
+      "couldNotLoad": "Audiogram tidak dapat dimuat: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Diposting bersama audio ini"
+    }
   },
   "podcasts": {
     "chip": "Eksternal",

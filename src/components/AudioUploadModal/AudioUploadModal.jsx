@@ -30,6 +30,8 @@ import { sanitizeMusicCredits, soundAuthorsOf, soundCreditsMarkdown, primarySoun
 import { sanitizeChapters, chaptersText, withChapters } from '../../utils/audioChapters';
 import { SOUND_AUTHOR_WEIGHT } from '../../utils/beneficiaries';
 import CoverDesigner from './CoverDesigner';
+import ShortThumbDesigner from './ShortThumbDesigner';
+import AudiogramShortsSection from './AudiogramShortsSection';
 import { fetchCreatorAdPrefs, syncAudioAdChoice } from '../../lib/advertiseData';
 import './AudioUploadModal.scss';
 import AccountImg from '../HiveAvatar/AccountImg';
@@ -41,6 +43,7 @@ import { usePortalDoc } from '../../utils/portalDocument';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../../utils/addToBlog';
 import PlaylistTypePicker from '../PlaylistTypePicker/PlaylistTypePicker';
 import MarkdownComposer from '../studio/MarkdownComposer';
+import { sanitizeAudiograms, publishAudiogramShorts } from '../../utils/audiogramShorts';
 import { playlistTypeFields, trackCategoryToKind, storedPlaylistType } from '../../lib/playlistType';
 
 // Every toast from this module is headed "Upload"; the message becomes the
@@ -343,6 +346,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const setAddToBlog = useCallback((on) => { setAddToBlogState(on); writeAddToBlog(on); }, []);
   // Where the success screen links to once everything is published.
   const [published, setPublished] = useState(null);
+  // Audiograms going out as Shorts after the episode: { running, n, count, ok, errors }
+  // Each Short's state in the publish list: `${trackId}|${audiogram url}` -> { state, stage?, message? }
+  const [shortStatus, setShortStatus] = useState({});
   // Album post failed to publish: shown in the review step with its own retry.
   const [mainError, setMainError] = useState(null);
   // Shared Beneficiary_modal — `beneTarget` is 'main', 'shared' or a track id.
@@ -395,6 +401,14 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
 
   // The cover designer (thumbnail editor): { target, src } while open.
   const [designFor, setDesignFor] = useState(null);
+  // The thumbnail editor for one audiogram's Short: { trackId, url }
+  const [shortThumbFor, setShortThumbFor] = useState(null);
+  const setShortsOf = useCallback((trackId, audiograms) => patchTrack(trackId, { audiograms }), [patchTrack]);
+  const setShortThumb = useCallback((trackId, url, thumbnailUrl) => {
+    setTracks(prev => prev.map(tr => (tr.id === trackId
+      ? { ...tr, audiograms: (tr.audiograms || []).map(a => (a.url === url ? { ...a, thumbnailUrl } : a)) }
+      : tr)));
+  }, []);
   const designOpenRef = useRef(false);
   useEffect(() => { designOpenRef.current = !!designFor; }, [designFor]);
 
@@ -523,6 +537,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       // the audio editor start the description ("0:00 Intro" lines).
       desc: chaptersText(sanitizeChapters(extra.chapters)),
       chaptersText: chaptersText(sanitizeChapters(extra.chapters)),
+      // Audiograms from the audio editor: posted as Shorts after this track's post
+      audiograms: sanitizeAudiograms(extra.audiograms),
       thumb: '',
       payout: 'default',      // default | powerup | decline
       beneStr: '[]',          // JSON beneficiary list
@@ -547,7 +563,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
       initialTrack.filename || 'openpod-recording.ogg',
       initialTrack.source === 'editor' ? 'editor' : 'record',
       initialTrack.type ?? null,
-      { musicCredits: initialTrack.musicCredits, chapters: initialTrack.chapters },
+      { musicCredits: initialTrack.musicCredits, chapters: initialTrack.chapters, audiograms: initialTrack.audiograms },
     );
   }, [isOpen, initialTrack, addBlobAsTrack]);
 
@@ -846,7 +862,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   useEffect(() => {
     if (!isOpen) return undefined;
     const onResult = async (e) => {
-      const { trackId, file, durationSec, musicCredits, chapters } = e?.detail || {};
+      const { trackId, file, durationSec, musicCredits, chapters, audiograms } = e?.detail || {};
       const marks = chaptersText(sanitizeChapters(chapters));
       if (!trackId || !(file instanceof Blob)) return;
       const current = tracksRef.current.find(tr => tr.id === trackId);
@@ -873,6 +889,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
           // earlier edit put there)
           desc: withChapters(tr.desc, tr.chaptersText, marks),
           chaptersText: marks,
+          // the audiograms of this edit (an edit made again brings its own)
+          audiograms: sanitizeAudiograms(audiograms),
         };
       }));
       const replaced = current;
@@ -1236,6 +1254,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setSharedBeneStr('[]');
     setBeneList([]);
     setPublished(null);
+    setShortStatus({});
     setMainError(null);
     albumMainRef.current = null;
     containerRef.current = null;
@@ -1290,6 +1309,43 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     }
   }, [mode, linkAlbumTracks, t]);
 
+  // A track's audiograms as Shorts, once the track is on Hive, linking to it
+  // (its page is /audio/<author>/<permlink>, for a standalone post, a snap or an
+  // album track alike); `only`: just that one (a retry). Not for a warm-up
+  // account: Shorts need the Hive account. Never throws: returns the results.
+  const postShortsOf = useCallback(async (track, only = null) => {
+    const episode = trackPostsRef.current[track.id];
+    const list = (track.audiograms || []).filter((a) => !only || a.url === only);
+    if (warmup || !user || !episode || list.length === 0) return [];
+    const set = (a, st) => setShortStatus((s) => ({ ...s, [`${track.id}|${a.url}`]: st }));
+    list.forEach((a) => set(a, { state: 'pending' }));
+    const userTags = postTagsInput.split(/[\s,]+/).map(x => x.trim().toLowerCase()).filter(Boolean);
+    return publishAudiogramShorts({
+      audiograms: list,
+      user,
+      isPremium,
+      episode,
+      tags: Array.from(new Set(userTags)),
+      broadcast: broadcastAudioOps,
+      onProgress: ({ index, step, ok, error }) => {
+        const a = list[index];
+        if (step === 'upload') set(a, { state: 'uploading', stage: 'upload' });
+        else if (step === 'post') set(a, { state: 'posting', stage: 'post' });
+        else if (step === 'done') set(a, ok ? { state: 'success' } : { state: 'error', message: error });
+      },
+    });
+  }, [warmup, user, isPremium, postTagsInput]);
+
+  const retryShort = useCallback(async (trackId, url) => {
+    const track = tracks.find((tr) => tr.id === trackId);
+    if (!track) return;
+    setIsPublishing(true);
+    const results = await postShortsOf(track, url);
+    setIsPublishing(false);
+    const failed = results.find((r) => !r.ok);
+    if (failed) toast.error(t('audio.upload.shorts.failed', { error: failed.error }));
+  }, [tracks, postShortsOf, t]);
+
   const retryTrack = useCallback(async (trackId) => {
     const track = tracks.find((tr) => tr.id === trackId);
     if (!track) return;
@@ -1297,6 +1353,8 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     try {
       const parent = mode === 'single' ? null : await resolveParent();
       await publishOneTrack(track, parent);
+      // now on Hive: its Shorts go out with it
+      await postShortsOf(track);
       await finishAlbum();
       markDoneIfComplete();
       if (playlistChoice) queryClient.invalidateQueries({ queryKey: ['myPlaylists', user] });
@@ -1306,7 +1364,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     } finally {
       setIsPublishing(false);
     }
-  }, [tracks, mode, resolveParent, publishOneTrack, finishAlbum, markDoneIfComplete, playlistChoice, queryClient, user, t]);
+  }, [tracks, mode, resolveParent, publishOneTrack, postShortsOf, finishAlbum, markDoneIfComplete, playlistChoice, queryClient, user, t]);
 
   const retryAllFailed = useCallback(async () => {
     const failed = tracks.filter((tr) => publishStatus[tr.id]?.state === 'error');
@@ -1418,6 +1476,18 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     }
 
     await finishAlbum();
+
+    // The audiograms from the audio editor, as Shorts: each posted track's, linking to it
+    const shortErrors = [];
+    let shortsRan = false;
+    for (const tr of tracks) {
+      if (!trackPostsRef.current[tr.id] || !tr.audiograms?.length || warmup || !user) continue;
+      if (shortsRan) await sleep(PUBLISH_DELAY_MS);
+      shortsRan = true;
+      const results = await postShortsOf(tr);
+      shortErrors.push(...results.filter(r => !r.ok).map(r => r.error));
+    }
+    if (shortErrors.length) toast.error(t('audio.upload.shorts.failed', { error: shortErrors[0] }));
     setIsPublishing(false);
 
     if (allOk) {
@@ -1550,6 +1620,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               addToBlog={addToBlog}
               setAddToBlog={setAddToBlog}
               warmup={warmup}
+              onShortsChange={setShortsOf}
+              onDesignShortThumb={(trackId, url) => setShortThumbFor({ trackId, url })}
+              shortsLocked={isPublishing}
             />
           )}
           {stepKey === 'tracks' && (
@@ -1572,6 +1645,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               uploadCoverFor={uploadCoverFor}
               thumbUploadingId={thumbUploadingId}
               thumbRef={thumbInputRef}
+              onShortsChange={setShortsOf}
+              onDesignShortThumb={(trackId, url) => setShortThumbFor({ trackId, url })}
+              shortsLocked={isPublishing}
             />
           )}
           {stepKey === 'review' && (
@@ -1591,6 +1667,10 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               onRetryMain={onPublish}
               published={published}
               onNavigate={closeModal}
+              shortsCount={warmup ? 0 : tracks.reduce((n, tr) => n + (tr.audiograms?.length || 0), 0)}
+              shortStatus={shortStatus}
+              onRetryShort={retryShort}
+              showShorts={!warmup}
             />
           )}
           {communityOpen && (
@@ -1663,6 +1743,17 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
             src={designFor.src}
             onClose={() => setDesignFor(null)}
             onDone={(url) => { setCoverFor(designFor.target, url); setDesignFor(null); }}
+          />
+        )}
+
+        {/* The thumbnail editor for a Short made from an audiogram (9:16) */}
+        {shortThumbFor && (
+          <ShortThumbDesigner
+            key={`${shortThumbFor.trackId}:${shortThumbFor.url}`}
+            videoUrl={shortThumbFor.url}
+            owner={user}
+            onClose={() => setShortThumbFor(null)}
+            onDone={(url) => { setShortThumb(shortThumbFor.trackId, shortThumbFor.url, url); setShortThumbFor(null); }}
           />
         )}
 
@@ -2363,6 +2454,7 @@ function MainPostStep({
   thumb, setThumb, thumbUploading, onPickThumb, thumbFromPlaylist = false, onDesignThumb = null,
   payout, setPayout, beneCount, onOpenBene,
   addToBlog, setAddToBlog, warmup = false,
+  onShortsChange = null, onDesignShortThumb = null, shortsLocked = false,
 }) {
   const { t } = useTranslation();
   const isAlbum = variant === 'album';
@@ -2422,6 +2514,16 @@ function MainPostStep({
           <span className="audio-upload-reward-label">{t('audio.upload.mainPost.whatKind')}</span>
           <TrackTypeFields track={singleTrack} patchTrack={patchTrack} />
         </div>
+      )}
+
+      {/* The audiograms going out as Shorts with it (not for warm-up: Shorts need the Hive account) */}
+      {!isAlbum && singleTrack && !warmup && onShortsChange && (
+        <AudiogramShortsSection
+          track={singleTrack}
+          onChange={(list) => onShortsChange(singleTrack.id, list)}
+          onDesign={(url) => onDesignShortThumb(singleTrack.id, url)}
+          disabled={shortsLocked}
+        />
       )}
 
       {/* A warm-up post has no payout and no blog yet: those come with the Hive account. */}
@@ -2518,6 +2620,7 @@ function TracksStep({
   sharedPayout, setSharedPayout, sharedBeneCount,
   applyToAllTracks, onOpenBene, uploadCoverFor, thumbUploadingId,
   onDesignCover = null, onEditTrack = null, editLocked = () => false,
+  onShortsChange = null, onDesignShortThumb = null, shortsLocked = false,
 }) {
   const { t } = useTranslation();
   const [openId, setOpenId] = useState(null);
@@ -2633,6 +2736,15 @@ function TracksStep({
                 <EditAudioButton onClick={() => onEditTrack(tr)} disabled={editLocked(tr.id)} />
               )}
             </div>
+
+            {onShortsChange && (
+              <AudiogramShortsSection
+                track={tr}
+                onChange={(list) => onShortsChange(tr.id, list)}
+                onDesign={(url) => onDesignShortThumb(tr.id, url)}
+                disabled={shortsLocked || editLocked(tr.id)}
+              />
+            )}
           </div>
         );
       })}
@@ -2643,7 +2755,8 @@ function TracksStep({
 // ─── Step 5: Review (summary + publish) ───
 function ReviewStep({
   tracks, playlists, playlistChoice, pendingPlaylist, publishStatus = {}, onRetry, onRetryAll, isPublishing,
-  mode, rewardMode, community, mainError, onRetryMain, published, onNavigate,
+  mode, rewardMode, community, mainError, onRetryMain, published, onNavigate, shortsCount = 0,
+  shortStatus = {}, onRetryShort = null, showShorts = true,
 }) {
   const chosen = playlists.find(p => p.id === playlistChoice)
     || (pendingPlaylist && pendingPlaylist.id === playlistChoice ? pendingPlaylist : null);
@@ -2669,6 +2782,12 @@ function ReviewStep({
         <div><strong>{t('audio.upload.review.publishAs')}</strong> {publishAsLabel}</div>
         <div><strong>{t('audio.upload.review.earnings')}</strong> {rewardMode === 'ppl' ? t('audio.upload.review.earningsPpl', { account: PPL_BENEFICIARY }) : t('audio.upload.review.earningsNormal')}</div>
         {chosen && <div><strong>{t('audio.upload.review.playlist')}</strong> {chosen.name}</div>}
+        {shortsCount > 0 && (
+          <div>
+            <strong>{t('audio.upload.review.shortsLabel')}</strong>{' '}
+            {t('audio.upload.review.shortsValue', { count: shortsCount })}
+          </div>
+        )}
       </div>
 
       {published && (
@@ -2759,6 +2878,33 @@ function ReviewStep({
             )}
 
             <audio controls preload="metadata" src={tr.objectUrl} className="audio-upload-review-player" />
+
+            {/* Its audiograms: posted as Shorts together with it, each with its own state */}
+            {showShorts && tr.audiograms?.length > 0 && (
+              <ul className="audio-upload-review-shorts" aria-label={t('audio.upload.shorts.withAudio')}>
+                {tr.audiograms.map((a) => {
+                  const st = shortStatus[`${tr.id}|${a.url}`];
+                  return (
+                    <li key={a.url} className={`audio-upload-review-short${st?.state ? ` is-${st.state}` : ''}`} data-testid="review-short">
+                      <span className="audio-upload-review-short-thumb" aria-hidden="true">
+                        {a.thumbnailUrl ? <img src={a.thumbnailUrl} alt="" /> : <video src={`${a.url}#t=1.5`} muted playsInline preload="metadata" />}
+                      </span>
+                      <span className="audio-upload-review-short-info">
+                        <strong>{t('audio.upload.shorts.rowTitle', { title: (a.title || '').trim() || tr.title })}</strong>
+                        <small>{t('audio.upload.shorts.withAudio')}</small>
+                        {st?.state === 'error' && <small className="audio-upload-review-error-msg">{st.message || t('audio.upload.unknownError')}</small>}
+                      </span>
+                      {st && <PublishBadge status={st} />}
+                      {st?.state === 'error' && onRetryShort && (
+                        <button type="button" className="audio-upload-btn-secondary" onClick={() => onRetryShort(tr.id, a.url)} disabled={isPublishing}>
+                          {t('common.actions.retry')}
+                        </button>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
         );
       })}

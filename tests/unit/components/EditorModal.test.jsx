@@ -204,3 +204,37 @@ describe('EditorModal in video mode (unchanged)', () => {
     expect(events).toHaveLength(0)
   })
 })
+
+describe('EditorModal: a Short\'s text in our post editor (edit-text)', () => {
+  it('opens our editor with the text, says it is open, and hands the new text back on Done', async () => {
+    const { user } = await open({ mode: 'audio' })
+    await ready({ mode: 'audio', canEditAudio: true })
+    await fromEditor({ type: 'edit-text', requestId: 'r1', value: 'Old text', maxLength: 5000 })
+    const dialog = await screen.findByRole('dialog', { name: 'Text for the Short' })
+    expect(posted).toContainEqual({ type: 'text-edit-open', requestId: 'r1' })
+    const box = dialog.querySelector('textarea')
+    expect(box).toHaveValue('Old text')
+    await user.clear(box)
+    await user.type(box, 'New **text**')
+    await user.click(screen.getByRole('button', { name: 'Done' }))
+    expect(posted).toContainEqual({ type: 'text-edited', requestId: 'r1', value: 'New **text**' })
+    expect(screen.queryByRole('dialog', { name: 'Text for the Short' })).toBeNull()
+  })
+
+  it('Cancel leaves the text as it was', async () => {
+    const { user } = await open({ mode: 'audio' })
+    await fromEditor({ type: 'edit-text', requestId: 'r2', value: 'Keep me' })
+    await screen.findByRole('dialog', { name: 'Text for the Short' })
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(posted).toContainEqual({ type: 'text-edit-cancelled', requestId: 'r2' })
+    expect(posted.some((p) => p.type === 'text-edited')).toBe(false)
+  })
+
+  it('ignores a request without an id, and from another origin', async () => {
+    await open({ mode: 'audio' })
+    await fromEditor({ type: 'edit-text', value: 'x' })
+    await fromEditor({ type: 'edit-text', requestId: 'r3', value: 'x' }, 'https://evil.test')
+    expect(screen.queryByRole('dialog', { name: 'Text for the Short' })).toBeNull()
+    expect(posted.some((p) => p.type === 'text-edit-open')).toBe(false)
+  })
+})

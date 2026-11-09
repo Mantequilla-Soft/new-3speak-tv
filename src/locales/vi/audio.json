@@ -349,7 +349,9 @@
       "failedDuringPost": "Thất bại khi đăng lên Hive: {{message}}",
       "failedWithMessage": "Thất bại: {{message}}",
       "mainFailed": "Không thể xuất bản bài đăng album: {{message}}",
-      "containerFailed": "Không thể kết nối tới chuỗi snap để đăng: {{message}}"
+      "containerFailed": "Không thể kết nối tới chuỗi snap để đăng: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} từ trình chỉnh sửa âm thanh, mỗi cái được đăng sau audio của nó kèm liên kết"
     },
     "done": {
       "title": "Xong! Âm thanh của bạn đã được xuất bản.",
@@ -367,7 +369,23 @@
     "editAudio": "Chỉnh sửa",
     "editAudioHint": "Mở bản âm thanh này trong trình chỉnh sửa",
     "edited": "Đã chỉnh sửa",
-    "editedHint": "Âm thanh này đến từ trình chỉnh sửa âm thanh"
+    "editedHint": "Âm thanh này đến từ trình chỉnh sửa âm thanh",
+    "shorts": {
+      "failed": "Chưa đăng: {{error}}",
+      "sectionTitle": "Shorts kèm audio này ({{count}})",
+      "sectionHelp": "Các audiogram của bạn từ trình chỉnh sửa âm thanh. Mỗi cái sẽ được đăng thành Short trên 3Speak khi audio này được đăng, kèm liên kết đến nó.",
+      "titlePlaceholder": "Tiêu đề Short",
+      "titleLabel": "Tiêu đề Short {{n}}",
+      "textPlaceholder": "Nội dung Short (không bắt buộc). Liên kết đến audio được tự động thêm vào.",
+      "textLabel": "Nội dung Short {{n}}",
+      "designThumb": "Thiết kế ảnh thu nhỏ",
+      "editThumb": "Sửa ảnh thu nhỏ",
+      "thumbLabel": "Ảnh thu nhỏ của Short {{n}}",
+      "designerTitle": "Ảnh thu nhỏ của Short",
+      "couldNotLoad": "Không tải được audiogram: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Được đăng cùng với audio này"
+    }
   },
   "podcasts": {
     "chip": "Bên ngoài",

@@ -126,7 +126,12 @@
     "postAsStory": "स्टोरी",
     "postAsStoryHint": "24 घंटे, शॉर्ट्स फ़ीड में सबसे ऊपर",
     "postAsShort": "शॉर्ट",
-    "postAsShortHint": "आपके चैनल पर रहता है"
+    "postAsShortHint": "आपके चैनल पर रहता है",
+    "shortText": {
+      "title": "Short का टेक्स्ट",
+      "hint": "यह Short में ऑडियोग्राम के साथ जाता है। आपके ऑडियो का लिंक अपने-आप जुड़ जाता है।",
+      "placeholder": "यह हिस्सा किस बारे में है? (वैकल्पिक)"
+    }
   },
   "profile": {
     "mustLogin": "पहले आपको लॉग इन करना होगा",

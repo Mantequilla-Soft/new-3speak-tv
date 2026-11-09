@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.107',
+    category: 'podcasts',
+    date: '2026-11-09',
+    summary: "Your audiograms go out as Shorts with any audio upload, each with its own title, text and thumbnail. On 3speak.tv they show a card that opens the full episode.",
+  },
+  {
+    version: '1.81.106',
+    category: 'editor',
+    date: '2026-11-09',
+    summary: "The audio editor makes audiograms again: pick a piece on the timeline, choose bars or a circle waveform and the 3S or full 3Speak logo, then move, resize and turn every part.",
+  },
+  {
     version: '1.81.105',
     category: 'general',
     date: '2026-11-09',

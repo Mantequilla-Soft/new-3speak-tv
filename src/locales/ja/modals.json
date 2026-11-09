@@ -126,7 +126,12 @@
     "postAsStory": "ストーリー",
     "postAsStoryHint": "24時間、ショートフィードの先頭",
     "postAsShort": "ショート",
-    "postAsShortHint": "チャンネルに残ります"
+    "postAsShortHint": "チャンネルに残ります",
+    "shortText": {
+      "title": "ショートのテキスト",
+      "hint": "ショートでオーディオグラムと一緒に表示されます。音声へのリンクは自動で追加されます。",
+      "placeholder": "この部分は何について？（任意）"
+    }
   },
   "profile": {
     "mustLogin": "先にログインしてください",

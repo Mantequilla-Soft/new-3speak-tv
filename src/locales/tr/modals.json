@@ -126,7 +126,12 @@
     "postAsStory": "Hikâye",
     "postAsStoryHint": "24 saat, Shorts akışının başında",
     "postAsShort": "Shorts",
-    "postAsShortHint": "Kanalında kalır"
+    "postAsShortHint": "Kanalında kalır",
+    "shortText": {
+      "title": "Short metni",
+      "hint": "Short'ta audiogramla birlikte görünür. Sesine bir bağlantı otomatik eklenir.",
+      "placeholder": "Bu bölüm ne hakkında? (isteğe bağlı)"
+    }
   },
   "profile": {
     "mustLogin": "Önce giriş yapmalısın",

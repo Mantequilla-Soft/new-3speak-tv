@@ -364,7 +364,9 @@
       "failedDuringPost": "Pumalya habang pino-post sa Hive: {{message}}",
       "failedWithMessage": "Pumalya: {{message}}",
       "mainFailed": "Hindi ma-publish ang album post: {{message}}",
-      "containerFailed": "Hindi maabot ang snap thread na pagpo-post-an: {{message}}"
+      "containerFailed": "Hindi maabot ang snap thread na pagpo-post-an: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} mula sa audio editor, bawat isa ay ipo-post pagkatapos ng audio nito na may link papunta rito"
     },
     "done": {
       "title": "Tapos na! Na-publish na ang audio mo.",
@@ -382,7 +384,23 @@
     "editAudio": "I-edit ang audio",
     "editAudioHint": "Buksan ang track na ito sa audio editor",
     "edited": "Na-edit",
-    "editedHint": "Galing ang audio na ito sa audio editor"
+    "editedHint": "Galing ang audio na ito sa audio editor",
+    "shorts": {
+      "failed": "Hindi na-post: {{error}}",
+      "sectionTitle": "Shorts kasama ang audio na ito ({{count}})",
+      "sectionHelp": "Ang mga audiogram mo mula sa audio editor. Bawat isa ay ipo-post bilang 3Speak Short kapag na-post na ang audio na ito, may link papunta rito.",
+      "titlePlaceholder": "Pamagat ng Short",
+      "titleLabel": "Pamagat ng Short {{n}}",
+      "textPlaceholder": "Teksto para sa Short (opsyonal). Kusang idinadagdag ang link sa audio.",
+      "textLabel": "Teksto para sa Short {{n}}",
+      "designThumb": "Magdisenyo ng thumbnail",
+      "editThumb": "I-edit ang thumbnail",
+      "thumbLabel": "Thumbnail ng Short {{n}}",
+      "designerTitle": "Thumbnail ng Short",
+      "couldNotLoad": "Hindi ma-load ang audiogram: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Ipo-post kasama ng audio na ito"
+    }
   },
   "podcasts": {
     "chip": "Panlabas",

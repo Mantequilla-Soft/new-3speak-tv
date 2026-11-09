@@ -145,5 +145,9 @@
     "kept": "Zachowano. Zostaje na Twoim kanale jako short.",
     "keepFailed": "Nie udało się zachować tej relacji.",
     "keepWalletPrompt": "Podpisz, aby zachować relację jako shorta"
+  },
+  "audiogram": {
+    "fullEpisode": "Cały odcinek",
+    "listen": "Posłuchaj całego odcinka: {{title}}"
   }
 }

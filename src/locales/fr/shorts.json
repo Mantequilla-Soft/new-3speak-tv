@@ -141,5 +141,9 @@
     "kept": "Gardée. Elle reste sur votre chaîne comme Short.",
     "keepFailed": "Impossible de garder cette story.",
     "keepWalletPrompt": "Signez pour garder votre story comme Short"
+  },
+  "audiogram": {
+    "fullEpisode": "Épisode complet",
+    "listen": "Écouter l'épisode complet : {{title}}"
   }
 }

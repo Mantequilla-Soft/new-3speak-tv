@@ -137,5 +137,9 @@
     "kept": "Imebakizwa. Itabaki kwenye chaneli yako kama short.",
     "keepFailed": "Imeshindwa kubakiza hadithi hii.",
     "keepWalletPrompt": "Tia sahihi ili kubakiza hadithi yako kama short"
+  },
+  "audiogram": {
+    "fullEpisode": "Kipindi kizima",
+    "listen": "Sikiliza kipindi kizima: {{title}}"
   }
 }

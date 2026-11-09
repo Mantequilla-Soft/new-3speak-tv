@@ -394,7 +394,9 @@
       "failedDuringPost": "Ошибка при публикации в Hive: {{message}}",
       "failedWithMessage": "Ошибка: {{message}}",
       "mainFailed": "Не удалось опубликовать пост альбома: {{message}}",
-      "containerFailed": "Не удалось открыть ветку snap для публикации: {{message}}"
+      "containerFailed": "Не удалось открыть ветку snap для публикации: {{message}}",
+      "shortsLabel": "Shorts:",
+      "shortsValue": "{{count}} из аудиоредактора, каждая публикуется после своего аудио со ссылкой на него"
     },
     "done": {
       "title": "Готово! Ваше аудио опубликовано.",
@@ -412,7 +414,23 @@
     "editAudio": "Редактировать",
     "editAudioHint": "Открыть этот трек в аудиоредакторе",
     "edited": "Изменено",
-    "editedHint": "Это аудио из аудиоредактора"
+    "editedHint": "Это аудио из аудиоредактора",
+    "shorts": {
+      "failed": "Не опубликовано: {{error}}",
+      "sectionTitle": "Shorts с этим аудио ({{count}})",
+      "sectionHelp": "Ваши аудиограммы из аудиоредактора. Каждая будет опубликована как Short на 3Speak после публикации этого аудио, со ссылкой на него.",
+      "titlePlaceholder": "Название Short",
+      "titleLabel": "Название Short {{n}}",
+      "textPlaceholder": "Текст для Short (необязательно). Ссылка на аудио добавится автоматически.",
+      "textLabel": "Текст для Short {{n}}",
+      "designThumb": "Создать обложку",
+      "editThumb": "Изменить обложку",
+      "thumbLabel": "Обложка Short {{n}}",
+      "designerTitle": "Обложка Short",
+      "couldNotLoad": "Не удалось загрузить аудиограмму: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "Публикуется вместе с этим аудио"
+    }
   },
   "podcasts": {
     "chip": "Внешние",

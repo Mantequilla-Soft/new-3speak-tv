@@ -126,7 +126,12 @@
     "postAsStory": "스토리",
     "postAsStoryHint": "24시간, 쇼츠 피드 맨 앞",
     "postAsShort": "쇼츠",
-    "postAsShortHint": "채널에 계속 남아요"
+    "postAsShortHint": "채널에 계속 남아요",
+    "shortText": {
+      "title": "쇼츠 텍스트",
+      "hint": "쇼츠에서 오디오그램과 함께 표시됩니다. 오디오 링크는 자동으로 추가됩니다.",
+      "placeholder": "이 부분은 어떤 내용인가요? (선택)"
+    }
   },
   "profile": {
     "mustLogin": "먼저 로그인해야 해요",

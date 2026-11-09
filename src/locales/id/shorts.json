@@ -133,5 +133,9 @@
     "kept": "Tersimpan. Story ini tetap di channel-mu sebagai Shorts.",
     "keepFailed": "Tidak dapat menyimpan story ini.",
     "keepWalletPrompt": "Tanda tangani untuk menyimpan story-mu sebagai Shorts"
+  },
+  "audiogram": {
+    "fullEpisode": "Episode lengkap",
+    "listen": "Dengarkan episode lengkap: {{title}}"
   }
 }

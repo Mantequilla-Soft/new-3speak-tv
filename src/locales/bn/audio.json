@@ -364,7 +364,9 @@
       "failedDuringPost": "Hive-এ পোস্ট করার সময় ব্যর্থ: {{message}}",
       "failedWithMessage": "ব্যর্থ: {{message}}",
       "mainFailed": "অ্যালবাম পোস্টটি প্রকাশ করা যায়নি: {{message}}",
-      "containerFailed": "পোস্ট করার Snap থ্রেডে পৌঁছানো যায়নি: {{message}}"
+      "containerFailed": "পোস্ট করার Snap থ্রেডে পৌঁছানো যায়নি: {{message}}",
+      "shortsLabel": "শর্টস:",
+      "shortsValue": "অডিও এডিটর থেকে {{count}}টি, প্রতিটি তার অডিওর পরে লিংকসহ পোস্ট হবে"
     },
     "done": {
       "title": "সম্পন্ন! আপনার অডিও প্রকাশিত হয়েছে।",
@@ -382,7 +384,23 @@
     "editAudio": "অডিও সম্পাদনা",
     "editAudioHint": "এই ট্র্যাকটি অডিও এডিটরে খুলুন",
     "edited": "সম্পাদিত",
-    "editedHint": "এই অডিওটি অডিও এডিটর থেকে এসেছে"
+    "editedHint": "এই অডিওটি অডিও এডিটর থেকে এসেছে",
+    "shorts": {
+      "failed": "পোস্ট হয়নি: {{error}}",
+      "sectionTitle": "এই অডিওর সাথে Shorts ({{count}})",
+      "sectionHelp": "অডিও এডিটর থেকে আপনার অডিওগ্রাম। এই অডিও পোস্ট হলেই প্রতিটি তার লিংকসহ 3Speak Short হিসেবে পোস্ট হবে।",
+      "titlePlaceholder": "Short-এর শিরোনাম",
+      "titleLabel": "Short {{n}}-এর শিরোনাম",
+      "textPlaceholder": "Short-এর লেখা (ঐচ্ছিক)। অডিওর লিংক নিজে থেকেই যোগ হয়।",
+      "textLabel": "Short {{n}}-এর লেখা",
+      "designThumb": "থাম্বনেইল ডিজাইন করুন",
+      "editThumb": "থাম্বনেইল সম্পাদনা করুন",
+      "thumbLabel": "Short {{n}}-এর থাম্বনেইল",
+      "designerTitle": "Short-এর থাম্বনেইল",
+      "couldNotLoad": "অডিওগ্রাম লোড করা যায়নি: {{error}}",
+      "rowTitle": "Short: {{title}}",
+      "withAudio": "এই অডিওর সাথে পোস্ট হয়"
+    }
   },
   "podcasts": {
     "chip": "বাইরের",

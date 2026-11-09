@@ -141,5 +141,9 @@
     "kept": "Conservada. Se queda en tu canal como short.",
     "keepFailed": "No se pudo conservar esta historia.",
     "keepWalletPrompt": "Firma para conservar tu historia como short"
+  },
+  "audiogram": {
+    "fullEpisode": "Episodio completo",
+    "listen": "Escuchar el episodio completo: {{title}}"
   }
 }

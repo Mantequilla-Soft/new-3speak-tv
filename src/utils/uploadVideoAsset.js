@@ -25,9 +25,10 @@ import { pickEmbedEndpoint, getEmbedHosts } from './embedEndpoints';
  * @param {(pct:number) => void} [opts.onProgress]
  * @param {(u:tus.Upload) => void} [opts.onStart]  receives the upload so callers can abort
  * @param {(host:string) => void} [opts.onEndpoint]  the chosen host, once picked
- * @returns {Promise<{embedUrl:string, owner:string, permlink:string}>}
+ * @param {boolean}  [opts.short]             a Short (the embed service's `short` flag)
+ * @returns {Promise<{embedUrl:string, owner:string, permlink:string, base:string}>}
  */
-export async function uploadVideoAsset(file, { owner, duration = 0, onProgress, onStart, onEndpoint } = {}) {
+export async function uploadVideoAsset(file, { owner, duration = 0, onProgress, onStart, onEndpoint, short = false } = {}) {
   if (!file) throw new Error('No file given.');
   if (!owner) throw new Error('No owner given.');
   if (!EMBED_API_KEY) throw new Error('Uploads are not configured (missing embed API key).');
@@ -59,7 +60,7 @@ export async function uploadVideoAsset(file, { owner, duration = 0, onProgress, 
         filetype: file.type || 'video/mp4',
         frontend_app: '3speak-tv',
         owner,
-        short: 'false',
+        short: short ? 'true' : 'false',
         duration: String(Math.round(duration || 0)),
         // Deliberately NO `permlink`: the service mints a fresh asset id. A
         // replacement must become its own asset — reusing the old permlink
@@ -93,7 +94,8 @@ export async function uploadVideoAsset(file, { owner, duration = 0, onProgress, 
     if (p) assetPermlink = p;
   } catch { /* keep the caller's owner, leave permlink empty */ }
 
-  return { embedUrl, owner: assetOwner, permlink: assetPermlink };
+  // `base`: the embed API host that took it (linking the post goes there too)
+  return { embedUrl, owner: assetOwner, permlink: assetPermlink, base: base || '' };
 }
 
 /**

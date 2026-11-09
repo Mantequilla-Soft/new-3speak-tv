@@ -126,7 +126,12 @@
     "postAsStory": "Story",
     "postAsStoryHint": "24 oras, nasa unahan ng Shorts feed",
     "postAsShort": "Short",
-    "postAsShortHint": "Mananatili sa channel mo"
+    "postAsShortHint": "Mananatili sa channel mo",
+    "shortText": {
+      "title": "Teksto para sa Short",
+      "hint": "Kasama ito ng audiogram sa Short. Kusang idinadagdag ang link sa audio mo.",
+      "placeholder": "Tungkol saan ang bahaging ito? (opsyonal)"
+    }
   },
   "profile": {
     "mustLogin": "Kailangan mo munang mag-log in",

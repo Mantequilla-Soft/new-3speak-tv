@@ -100,6 +100,13 @@ describe('uploadVideoAsset', () => {
     expect(tusState.uploads[0].options.metadata).toMatchObject({ filename: 'video.mp4', filetype: 'video/mp4', duration: '0' })
   })
 
+  it('marks a Short as one (short: true), a video not', async () => {
+    await uploadVideoAsset(video(), { owner: 'alice', short: true })
+    expect(tusState.uploads[0].options.metadata.short).toBe('true')
+    await uploadVideoAsset(video(), { owner: 'alice' })
+    expect(tusState.uploads[1].options.metadata.short).toBe('false')
+  })
+
   it.each([
     [0, true], // network drop, no response
     [409, true],
@@ -159,13 +166,13 @@ describe('uploadVideoAsset', () => {
 
   it('reads the asset owner and permlink back out of X-Embed-URL', async () => {
     const out = await uploadVideoAsset(video(), { owner: 'alice' })
-    expect(out).toEqual({ embedUrl: EMBED_URL, owner: 'alice', permlink: 'abc123' })
+    expect(out).toEqual({ embedUrl: EMBED_URL, owner: 'alice', permlink: 'abc123', base: 'https://embed2.3speak.tv' })
   })
 
   it('also accepts the header in lower case, and the owner the server says', async () => {
     tusState.onStart = succeedWith({ 'x-embed-url': 'https://play.3speak.tv/embed?v=bob/xyz' })
     const out = await uploadVideoAsset(video(), { owner: 'alice' })
-    expect(out).toEqual({ embedUrl: 'https://play.3speak.tv/embed?v=bob/xyz', owner: 'bob', permlink: 'xyz' })
+    expect(out).toEqual({ embedUrl: 'https://play.3speak.tv/embed?v=bob/xyz', owner: 'bob', permlink: 'xyz', base: 'https://embed2.3speak.tv' })
   })
 
   it.each([
@@ -173,7 +180,7 @@ describe('uploadVideoAsset', () => {
     ['a URL without a v parameter', 'https://play.3speak.tv/embed'],
   ])('keeps the caller\'s owner and an empty permlink for %s', async (_label, header) => {
     tusState.onStart = succeedWith({ 'X-Embed-URL': header })
-    expect(await uploadVideoAsset(video(), { owner: 'alice' })).toEqual({ embedUrl: header, owner: 'alice', permlink: '' })
+    expect(await uploadVideoAsset(video(), { owner: 'alice' })).toEqual({ embedUrl: header, owner: 'alice', permlink: '', base: 'https://embed2.3speak.tv' })
   })
 
   it('fails when the upload finishes without a video URL', async () => {

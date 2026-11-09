@@ -218,3 +218,82 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+// A Short's text (the audiograms) in our post editor, over the audio editor.
+// Flat card in the 3Speak colours; a bottom sheet on phones.
+.short-text-modal-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.short-text-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(720px, 100%);
+  max-height: calc(100% - 32px);
+  padding: 0 16px 16px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+}
+
+.short-text-modal-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.short-text-modal-composer .markdown-composer {
+  max-height: 55vh;
+}
+
+.short-text-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.short-text-modal-btn {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--bg-tertiary);
+  }
+
+  &.primary {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+
+    &:hover {
+      background: var(--accent-light);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .short-text-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .short-text-modal {
+    width: 100%;
+    max-height: 90%;
+    border-radius: 12px 12px 0 0;
+  }
+}

@@ -126,7 +126,12 @@
     "postAsStory": "История",
     "postAsStoryHint": "24 часа, в начале ленты Shorts",
     "postAsShort": "Shorts",
-    "postAsShortHint": "Останется на вашем канале"
+    "postAsShortHint": "Останется на вашем канале",
+    "shortText": {
+      "title": "Текст для Short",
+      "hint": "Он будет рядом с аудиограммой в Short. Ссылка на ваше аудио добавится автоматически.",
+      "placeholder": "О чём этот фрагмент? (необязательно)"
+    }
   },
   "profile": {
     "mustLogin": "Сначала нужно войти",

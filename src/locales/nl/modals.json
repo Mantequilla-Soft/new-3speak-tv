@@ -126,7 +126,12 @@
     "postAsStory": "Story",
     "postAsStoryHint": "24 uur, bovenaan de Shorts-feed",
     "postAsShort": "Short",
-    "postAsShortHint": "Blijft op je kanaal"
+    "postAsShortHint": "Blijft op je kanaal",
+    "shortText": {
+      "title": "Tekst bij de Short",
+      "hint": "Die staat bij het audiogram in de Short. Een link naar je audio wordt automatisch toegevoegd.",
+      "placeholder": "Waar gaat dit fragment over? (optioneel)"
+    }
   },
   "profile": {
     "mustLogin": "Je moet eerst inloggen",
