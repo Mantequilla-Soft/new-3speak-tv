@@ -35,6 +35,14 @@ const AUDIO_EMBED_BASE = (import.meta.env.VITE_AUDIO_EMBED_BASE || 'https://audi
 const HIVE_API_URL = import.meta.env.VITE_HIVE_API_URL || 'https://api.hive.blog';
 const FEED_URL = import.meta.env.VITE_FEED_URL || 'https://legacy.3speak.tv';
 const CHECKER_URL = import.meta.env.VITE_CHECKER_URL || 'https://checker.3speak.tv';
+// Every checker instance this app may use (checker.3speak.tv, checker-us.3speak.tv,
+// ...), comma-separated. The app races them on load and sends each checker call to
+// the fastest one for this viewer: utils/checkerHost.js. CHECKER_URL is always a
+// candidate (and the fallback), so leaving this empty keeps one instance.
+const CHECKER_URLS = (import.meta.env.VITE_CHECKER_URLS || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
 // Shorts spots. OFF until someone has watched one on a real phone: the shorts feed
 // drives a SINGLE persistent <video> (iOS allows no more), so handing that player an
 // ad manifest and taking it back is a change to the playback state machine that
@@ -417,6 +425,7 @@ export {
   VIEWS_URL,
   MY_VIDEOS_URL,
   CHECKER_URL,
+  CHECKER_URLS,
   SHORTS_ADS_ENABLED,
   PLAYER_URL,
   PLAYER_URLS,

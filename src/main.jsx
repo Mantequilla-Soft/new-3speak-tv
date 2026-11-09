@@ -1,5 +1,8 @@
 // MUST be first import - sets up Buffer before other modules
 import './polyfills';
+// Second: route checker calls to the fastest checker instance for this viewer
+// (checker.3speak.tv / checker-us.3speak.tv ...), see utils/checkerHost.js.
+import './checkerRouting';
 
 // Dev (preview.3speak.tv) is served live by the Vite dev server and registers
 // NO service worker. But a stale SW from this origin's previous static (dist)

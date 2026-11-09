@@ -12,6 +12,10 @@ import ResetButton from './ResetButton';
  * The thumbnail editor: the canvas with the pictures to start from under it,
  * the tools beside it (under it on phones), Reset and Done at the bottom.
  * Everything it changes is the step page's state, so closing loses nothing.
+ *
+ * Other hosts (the audio upload's cover designer) may pass `onDone` for a Done
+ * that is not just a close (it then saves; X, Esc and the backdrop still close),
+ * `doneBusy` while that runs, `square` for a 1:1 picture and their own `title`.
  */
 export default function ThumbnailEditorModal({
   onClose, portrait,
@@ -20,6 +24,7 @@ export default function ThumbnailEditorModal({
   sources, selectedSrc, onSelectSource,
   videoFile, onPickFrame,
   onReset, canReset, onDownload,
+  square = false, title = null, onDone = null, doneBusy = false,
 }) {
   const { t } = useTranslation();
   const doc = usePortalDoc();
@@ -46,6 +51,7 @@ export default function ThumbnailEditorModal({
         className={[
           'thumb-modal',
           portrait ? 'thumb-modal--portrait' : '',
+          square ? 'thumb-modal--square' : '',
           // For the phone layout: no picture yet / picking one (see the SCSS).
           image ? '' : 'is-empty',
           activeTool === 'pickFrame' ? 'is-picking' : '',
@@ -54,7 +60,7 @@ export default function ThumbnailEditorModal({
         aria-modal="true"
         aria-labelledby={titleId}
       >
-        <ModalHeader closeOnEscape={false} title={t('upload.thumbnail.editor.title')} onClose={onClose} titleId={titleId} className="thumb-modal__header" />
+        <ModalHeader closeOnEscape={false} title={title || t('upload.thumbnail.editor.title')} onClose={onClose} titleId={titleId} className="thumb-modal__header" />
 
         <div className="thumb-modal__body">
           <div className="thumb-modal__stage">
@@ -119,9 +125,9 @@ export default function ThumbnailEditorModal({
           </button>
           <ResetButton onReset={onReset} disabled={!canReset} />
           <span className="thumb-tool-row__spacer" />
-          <button type="button" className="thumb-btn thumb-btn--primary" onClick={onClose}>
+          <button type="button" className="thumb-btn thumb-btn--primary" onClick={onDone || onClose} disabled={doneBusy}>
             <Check size={15} aria-hidden="true" />
-            {t('upload.thumbnail.editor.done')}
+            {doneBusy ? t('audio.upload.thumb.uploading') : t('upload.thumbnail.editor.done')}
           </button>
         </div>
       </div>

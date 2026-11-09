@@ -207,7 +207,8 @@
       "published_other": "已发布 {{count}} 首曲目",
       "someFailed": "部分曲目发布失败——打开失败的曲目重试",
       "trackLinksFailed": "曲目已发布，但未能把它们的链接添加到专辑帖子：{{error}}",
-      "addToBlogFailed": "已发布，但添加到你的博客失败：{{error}}"
+      "addToBlogFailed": "已发布，但添加到你的博客失败：{{error}}",
+      "editedApplied": "\"{{title}}\"已改用编辑后的音频"
     },
     "gate": {
       "checking": "检查中…",
@@ -270,7 +271,13 @@
       "addCover": "添加封面图片",
       "hint": "点击或拖放——JPG / PNG / WebP",
       "coverAlt": "封面",
-      "removeCover": "移除封面"
+      "removeCover": "移除封面",
+      "fromPlaylist": "来自播放列表",
+      "designCover": "设计封面",
+      "editCover": "编辑封面",
+      "designHint": "在封面编辑器中添加文字、贴纸并调整构图",
+      "designerTitle": "封面编辑器",
+      "designUnavailable": "无法在封面编辑器中打开此图片，请改为从设备上传。"
     },
     "mode": {
       "help_other": "已添加 {{count}} 首曲目。选择发布方式。",
@@ -356,7 +363,11 @@
       "uploadingFallback": "上传中",
       "published": "已发布"
     },
-    "warmupOneTrack": "账户预热期间，你一次只能发布一个音频。请移除其他音频后继续。"
+    "warmupOneTrack": "账户预热期间，你一次只能发布一个音频。请移除其他音频后继续。",
+    "editAudio": "编辑音频",
+    "editAudioHint": "在音频编辑器中打开此音轨",
+    "edited": "已编辑",
+    "editedHint": "此音频来自音频编辑器"
   },
   "podcasts": {
     "chip": "外部",

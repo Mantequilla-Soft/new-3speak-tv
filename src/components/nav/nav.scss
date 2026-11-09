@@ -469,11 +469,15 @@
         }
       }
 
+      // Wide screens only (below 1025px it's the bottom sheet, Nav.jsx), so
+      // the categories sit side by side: one column each, divider between.
       .nav-upload-flyout {
         position: absolute;
         top: calc(100% + 6px);
         right: 0;
-        width: 300px;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 230px;
         max-width: calc(100vw - 32px);
         background: var(--bg-secondary);
         border-radius: 8px;
@@ -497,6 +501,26 @@
         }
 
         @include nav-upload-items;
+
+        // narrow columns: long labels (some languages) wrap instead of
+        // running into the next column
+        .nav-upload-flyout-item {
+          white-space: normal;
+        }
+
+        // the layout box steps aside: every category is a flyout column
+        .share-menu-layout {
+          display: contents;
+        }
+
+        .share-menu-group + .share-menu-group {
+          border-left: 1px solid var(--border-light);
+        }
+
+        // every column starts level: no extra lead-in above any heading
+        .share-menu-group > .share-menu-heading {
+          padding-top: 0.15rem;
+        }
       }
 
       // Compact "+" wherever the bottom nav is shown. Placed AFTER .nav-upload-btn
@@ -840,6 +864,60 @@
   .nav-upload-sheet-header {
     padding: 10px 16px 12px;
     margin-bottom: 4px;
+  }
+
+  // Phones: two columns, Video | Audio on top, Live | Others under them
+  // (Others moves up a slot when Live isn't shown). Labels wrap.
+  .share-menu-layout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .share-menu-group {
+    min-width: 0;
+    padding-bottom: 6px;
+
+    &:nth-child(even) {
+      border-left: 1px solid var(--border-light);
+    }
+
+    &:nth-child(n + 3) {
+      padding-top: 6px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    > .share-menu-heading {
+      padding: 0.15rem 12px 0.25rem;
+    }
+  }
+
+  .share-menu-layout .nav-upload-flyout-item {
+    gap: 8px;
+    padding: 9px 12px;
+    font-size: 13px;
+    white-space: normal;
+  }
+
+  // Tablets: a wider sheet, every category its own column.
+  @media (min-width: 600px) {
+    max-width: 820px;
+
+    .share-menu-layout {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+    }
+
+    .share-menu-group {
+      &:nth-child(n + 3) {
+        padding-top: 0;
+        border-top: none;
+      }
+
+      + .share-menu-group {
+        border-left: 1px solid var(--border-light);
+      }
+    }
   }
 }
 

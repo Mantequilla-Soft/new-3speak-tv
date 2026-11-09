@@ -1,0 +1,122 @@
+@use "../../mixins.scss" as mix;
+
+// Comment box of the audio player: the top section of the player card, above
+// the controls. No overlay, so the player stays usable while writing. The
+// floating card is anchored at the bottom, so it simply grows upwards.
+.audio-np-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px 12px;
+  border-bottom: 1px solid var(--border-light);
+  background: transparent; // the player's own background shows through
+  color: var(--text-primary);
+}
+
+.audio-now-playing.audio-np-docked .audio-np-comment {
+  order: -1;
+  padding: 0 0 12px;
+}
+
+.audio-np-comment-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.audio-np-comment-label {
+  flex: 0 0 auto;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.audio-np-comment-on {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.audio-np-comment-close {
+  flex: 0 0 auto;
+  margin-left: auto;
+  display: inline-flex;
+  padding: 4px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  &:hover:not(:disabled) { color: var(--text-primary); }
+  &:disabled { opacity: 0.5; cursor: default; }
+}
+
+.audio-np-comment-input {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 104px;
+  max-height: 34vh;
+  padding: 6px 8px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  &::placeholder { color: var(--text-secondary); }
+  &:focus { outline: none; border-color: var(--accent-primary); }
+}
+
+.audio-np-comment-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.audio-np-comment-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.audio-np-comment-at {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+// Outline, never a red background (house rule).
+.audio-np-comment-post {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--accent-primary);
+  background: transparent;
+  color: var(--accent-primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent-primary) 10%, transparent); }
+  &:disabled { opacity: 0.5; cursor: default; }
+}
+
+// The floating card must still fit on the screen with the box open: the
+// expanded area under the controls gives up the room.
+.audio-now-playing.has-comment:not(.audio-np-docked) .audio-np-expanded-area {
+  max-height: 36vh;
+  @include mix.respond(phone) { max-height: 24vh; }
+}
+
+// The bar's comment button stays lit while the box is open (it also closes it).
+.audio-np-playlist-btn.audio-np-comment-btn.active { color: var(--accent-primary); }

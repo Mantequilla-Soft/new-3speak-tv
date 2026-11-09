@@ -155,7 +155,9 @@
     "audioFull": "Con titolo",
     "audioCompact": "Compatto",
     "audioMinimal": "Minimo",
-    "heightSub": "Larghezza piena, {{height}} px di altezza"
+    "heightSub": "Larghezza piena, {{height}} px di altezza",
+    "podcastTitle": "Incorpora questo podcast",
+    "podcastHint": "Incollalo in qualsiasi sito o post di blog. Riproduce tutti gli episodi del programma, anche quelli nuovi appena escono."
   },
   "incubation": {
     "requestFailed": "Richiesta non riuscita ({{status}})",
@@ -185,13 +187,15 @@
     "verticalShort": "Short verticale",
     "story": "Storia (24 h)",
     "musicAudio": "Musica / Audio",
+    "audioEditor": "Editor audio",
     "groupChat": "Chat di gruppo",
     "communitySnap": "Snap della community",
     "shortsEditor": "Editor Shorts",
     "goLiveNow": "Vai in diretta!",
     "playlist": "Playlist",
     "headings": {
-      "upload": "Carica",
+      "video": "Video",
+      "audio": "Audio",
       "live": "Live",
       "others": "Altro"
     },
@@ -201,6 +205,7 @@
       "shortsEditor": "Registra e modifica uno short nel browser",
       "story": "Clip breve visibile per 24 ore",
       "musicAudio": "Canzoni, podcast e altro audio",
+      "audioEditor": "Taglia, pulisci e livella podcast e musica",
       "groupChat": "Stanza live che conduci con ospiti",
       "goLiveNow": "Trasmetti in diretta per i tuoi follower",
       "communitySnap": "Post veloce nella scheda community",

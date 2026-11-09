@@ -215,7 +215,8 @@
       "published_other": "{{count}} tracce pubblicate",
       "someFailed": "Alcune tracce non sono riuscite — apri la traccia non riuscita per riprovare",
       "trackLinksFailed": "Le tue tracce sono pubblicate, ma non è stato possibile aggiungere i loro link al post dell'album: {{error}}",
-      "addToBlogFailed": "Pubblicato, ma l'aggiunta al tuo blog non è riuscita: {{error}}"
+      "addToBlogFailed": "Pubblicato, ma l'aggiunta al tuo blog non è riuscita: {{error}}",
+      "editedApplied": "\"{{title}}\" ora usa l'audio modificato"
     },
     "gate": {
       "checking": "Verifica…",
@@ -284,7 +285,13 @@
       "addCover": "Aggiungi immagine di copertina",
       "hint": "Fai clic o trascina — JPG / PNG / WebP",
       "coverAlt": "copertina",
-      "removeCover": "Rimuovi copertina"
+      "removeCover": "Rimuovi copertina",
+      "fromPlaylist": "Dalla playlist",
+      "designCover": "Crea una copertina",
+      "editCover": "Modifica copertina",
+      "designHint": "Aggiungi testo, sticker e inquadratura nell'editor della copertina",
+      "designerTitle": "Editor della copertina",
+      "designUnavailable": "Questa immagine non si può aprire nell'editor della copertina. Caricala dal tuo dispositivo."
     },
     "mode": {
       "help_one": "{{count}} traccia aggiunta. Scegli come pubblicarla.",
@@ -386,7 +393,11 @@
       "uploadingFallback": "Caricamento",
       "published": "Pubblicato"
     },
-    "warmupOneTrack": "Finché il tuo account si scalda, pubblichi un audio alla volta. Togli gli altri per continuare."
+    "warmupOneTrack": "Finché il tuo account si scalda, pubblichi un audio alla volta. Togli gli altri per continuare.",
+    "editAudio": "Modifica audio",
+    "editAudioHint": "Apri questa traccia nell'editor audio",
+    "edited": "Modificato",
+    "editedHint": "Questo audio proviene dall'editor audio"
   },
   "podcasts": {
     "chip": "Esterni",

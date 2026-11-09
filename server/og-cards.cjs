@@ -19,6 +19,7 @@
 //   GET /api/og-card/audio/<author>/<permlink>.jpg   artwork (square) and title
 //   GET /api/og-card/podcast/<feedId>.jpg             an outside podcast: cover, name, author
 //   GET /api/og-card/episode/<feedId>_<hash>.jpg      one of its episodes: cover, title, show
+//   GET /api/og-card/short/<owner>/<asset>.jpg        a short: its thumbnail (portrait), title, whose
 //
 // Files live in data/og-cards/<kind>/<id>.jpg (OG_CARD_DIR to move them):
 //   - communities: every Hive community is drawn by the weekly sync below; one
@@ -44,15 +45,18 @@ const fs = require('fs')
 const fsp = fs.promises
 const path = require('path')
 const crypto = require('crypto')
+const { videoTitle } = require('./og-text.cjs')
 
 const W = 1200
 const H = 630
 const CARD_DIR = process.env.OG_CARD_DIR || path.join(__dirname, 'data', 'og-cards')
-const KINDS = new Set(['community', 'user', 'badge', 'tag', 'invite', 'stream', 'playlist', 'audio', 'podcast', 'episode'])
+const KINDS = new Set(['community', 'user', 'badge', 'tag', 'invite', 'stream', 'playlist', 'audio', 'podcast', 'episode', 'short'])
 // Kinds whose cards the weekly sync draws again (communities are listed from
 // Hive instead). A stream's room is gone once it ends, so its card is only
 // kept for STREAM_KEEP_MS; a tag card never changes.
-const REDRAWN = ['user', 'badge', 'invite', 'playlist', 'audio']
+const REDRAWN = ['user', 'badge', 'invite', 'playlist', 'audio', 'short']
+// Kinds whose id is `<account>/<permlink>`, kept as <account>/<permlink>.jpg.
+const NESTED = new Set(['audio', 'short'])
 const STREAM_KEEP_MS = 14 * 24 * 60 * 60 * 1000
 // Outside podcasts are not ours to keep: their cards go 30 days after they were
 // drawn (the hourly check and the route both see to it), and the next share of
@@ -66,6 +70,9 @@ const INVITE_CODE_RE = /^[a-z0-9]{10}$/
 const ROOM_RE = /^[a-z0-9][a-z0-9.-]{2,40}$/
 const PLAYLIST_ID_RE = /^[a-zA-Z0-9-]{8,64}$/
 const AUDIO_ID_RE = /^[a-z][a-z0-9.-]{2,15}\/[a-z0-9][a-z0-9-]{0,255}$/
+// A short by its embed asset id (`<owner>/<8 lowercase>` for uploads; older
+// ones may carry a longer permlink), the address its /shorts?v= link names.
+const SHORT_ID_RE = AUDIO_ID_RE
 // Outside podcasts (the checker's podcast_feeds): a show is its feed id, an
 // episode `<feedId>:<16 base64url>`, kept as `<feedId>_<hash>` (no ':' in a URL path).
 const PODCAST_ID_RE = /^[0-9a-f]{24}$/
@@ -123,6 +130,7 @@ function validId(kind, id) {
   if (kind === 'stream') return ROOM_RE.test(id)
   if (kind === 'playlist') return PLAYLIST_ID_RE.test(id)
   if (kind === 'audio') return AUDIO_ID_RE.test(id)
+  if (kind === 'short') return SHORT_ID_RE.test(id)
   if (kind === 'podcast') return PODCAST_ID_RE.test(id)
   if (kind === 'episode') return EPISODE_FILE_RE.test(id)
   return false
@@ -223,10 +231,15 @@ function imageType(buf) {
  * read it either (an SVG, a broken file).
  */
 function squareJpeg(buf, size = 512) {
+  return coverJpeg(buf, size, size)
+}
+
+/** The picture scaled to cover w x h and centre-cropped to it, as a JPEG (see squareJpeg). */
+function coverJpeg(buf, w, h) {
   const { spawn } = require('child_process')
   return new Promise((resolve) => {
     const ff = spawn('ffmpeg', ['-nostdin', '-v', 'error', '-i', 'pipe:0', '-frames:v', '1',
-      '-vf', `scale=${size}:${size}:force_original_aspect_ratio=increase,crop=${size}:${size}`,
+      '-vf', `scale=${w}:${h}:force_original_aspect_ratio=increase,crop=${w}:${h}`,
       '-q:v', '3', '-f', 'mjpeg', 'pipe:1'])
     const out = []
     const timer = setTimeout(() => ff.kill('SIGKILL'), 15000)
@@ -281,21 +294,24 @@ async function fetchAvatar(account) {
 }
 
 /**
- * A cover or thumbnail (a URL from someone's metadata) as a square JPEG data
- * URI, or null. Only PICTURE_HOSTS are fetched.
+ * A cover or thumbnail (a URL from someone's metadata) as a JPEG data URI, or
+ * null. Square by default; `portrait` crops it to 9:16 for a short's frame.
+ * Only PICTURE_HOSTS are fetched.
  */
-async function fetchPicture(raw) {
+async function fetchPicture(raw, { portrait = false } = {}) {
   let u
   try { u = new URL(String(raw || '').trim()) } catch (_) { return null }
   if (u.protocol !== 'https:' || !PICTURE_HOSTS.has(u.hostname)) return null
   const tries = []
   // images.hive.blog answers this box 403 for pictures it has not cached.
   if (IMG_LOOPBACK && u.hostname === 'images.hive.blog') tries.push(`${IMG_LOOPBACK}/h${u.pathname}${u.search}`)
-  if (IMG_LOOPBACK && u.hostname === 'images.3speak.tv') tries.push(`${IMG_LOOPBACK}/a${u.pathname}?px=512`)
+  // /a/ crops square, which would cut a short's thumbnail down the middle.
+  if (IMG_LOOPBACK && u.hostname === 'images.3speak.tv' && !portrait) tries.push(`${IMG_LOOPBACK}/a${u.pathname}?px=512`)
   tries.push(u.href)
   for (const url of tries) {
     try {
-      const jpg = await squareJpeg(await fetchBuf(url))
+      const buf = await fetchBuf(url)
+      const jpg = portrait ? await coverJpeg(buf, PORTRAIT_PX.w, PORTRAIT_PX.h) : await squareJpeg(buf)
       if (jpg) return `data:image/jpeg;base64,${jpg.toString('base64')}`
     } catch (_) { /* the next source */ }
   }
@@ -549,6 +565,21 @@ const SQUARE_RADIUS = 36
 const squareBox = { ...ringBox, borderRadius: SQUARE_RADIUS }
 const SQUARE_BADGE_AT = { x: RING.cx + RING.d / 2 - BADGE * 0.72, y: RING.cy + RING.d / 2 - BADGE * 0.72 }
 const LIVE_RED = '#E32933'
+// A short's thumbnail: a 9:16 rounded frame in the ring's place, the 3S badge
+// on its corner.
+const PORTRAIT = { w: 288, h: 512 }
+const PORTRAIT_PX = { w: 360, h: 640 }
+const portraitBox = {
+  position: 'absolute', left: RING.cx - PORTRAIT.w / 2, top: RING.cy - PORTRAIT.h / 2,
+  width: PORTRAIT.w, height: PORTRAIT.h, borderRadius: 28,
+}
+const PORTRAIT_BADGE_AT = { x: portraitBox.left + PORTRAIT.w - BADGE * 0.72, y: portraitBox.top + PORTRAIT.h - BADGE * 0.72 }
+const FRAMES = {
+  ring: { box: ringBox, badge: BADGE_AT },
+  square: { box: squareBox, badge: SQUARE_BADGE_AT },
+  portrait: { box: portraitBox, badge: PORTRAIT_BADGE_AT },
+}
+const frameOf = (shape) => FRAMES[shape] || FRAMES.ring
 
 /**
  * Everything that is the same on every card: the banner's gradients, the
@@ -557,8 +588,7 @@ const LIVE_RED = '#E32933'
  * as a picture.
  */
 function backdropTree(shape = 'ring') {
-  const frame = shape === 'square' ? squareBox : ringBox
-  const badge = shape === 'square' ? SQUARE_BADGE_AT : BADGE_AT
+  const { box: frame, badge } = frameOf(shape)
   return el('div', {
     width: W, height: H, display: 'flex', position: 'relative', fontFamily: 'Inter Tight', backgroundColor: NAVY,
     backgroundImage: [
@@ -593,14 +623,14 @@ function subtitlePart([text, style]) {
 }
 
 function cardTree({ lines, size, subtitle, avatar, initial, backdrop, shape = 'ring' }) {
-  const ringInner = RING.d - 6
-  const radius = shape === 'square' ? SQUARE_RADIUS - 3 : ringInner / 2
-  const frame = shape === 'square' ? squareBox : ringBox
-  const badge = shape === 'square' ? SQUARE_BADGE_AT : BADGE_AT
+  const { box: frame, badge } = frameOf(shape)
+  const innerW = frame.width - 6
+  const innerH = frame.height - 6
+  const radius = shape === 'ring' ? innerW / 2 : frame.borderRadius - 3
   const picture = avatar
-    ? { type: 'img', props: { src: avatar, width: ringInner, height: ringInner, style: { width: ringInner, height: ringInner, borderRadius: radius, objectFit: 'cover' } } }
+    ? { type: 'img', props: { src: avatar, width: innerW, height: innerH, style: { width: innerW, height: innerH, borderRadius: radius, objectFit: 'cover' } } }
     : el('div', {
-      width: ringInner, height: ringInner, borderRadius: radius, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      width: innerW, height: innerH, borderRadius: radius, display: 'flex', alignItems: 'center', justifyContent: 'center',
       backgroundImage: 'linear-gradient(135deg, #3a46a8 0%, #262d71 100%)', color: '#ffffff', fontSize: 170, fontWeight: 800,
     }, initial)
 
@@ -730,6 +760,11 @@ async function streamText(room) {
 async function playlistText(card) {
   const what = card.album ? 'Album' : card.medium === 'podcast' ? 'Podcast' : 'Playlist'
   return { ...await drawnOr(card.name, `${what} by @${card.owner}`), subtitle: [[what, true], [' by '], [`@${card.owner}`, true]] }
+}
+
+/** What a short's card says: its title, whose. Exported for the tests. */
+async function shortText(owner, title) {
+  return { ...await drawnOr(title, `Short by @${owner}`), subtitle: fitSubtitle([['Short', true], [' by '], [`@${owner}`, true]]) }
 }
 
 /** What an audio post's card says. Exported for the tests. */
@@ -914,6 +949,24 @@ async function buildCard(kind, id, { checkerUrl, community } = {}) {
         shape: cover ? 'square' : 'ring',
       })
     }
+    case 'short': {
+      const [owner, asset] = id.split('/')
+      const doc = await checkerJson(checkerUrl, `/videodetails/${encodeURIComponent(owner)}/${encodeURIComponent(asset)}`)
+      if (!doc || (!doc.owner && !doc.permlink) || doc.status === 'deleted') return null
+      if (await isBanned(checkerUrl, owner)) return null
+      // The Hive post names the short better than the doc ("## Title" or its
+      // caption, see og-text.cjs). A node that cannot answer leaves the doc's.
+      const ref = String(doc.embed_url || '').replace(/^@/, '').match(/^([a-z0-9.-]+)\/(.+)$/)
+      const post = ref ? await hiveCall('bridge.get_post', { author: ref[1], permlink: ref[2], observer: '' }).catch(() => null) : null
+      const title = videoTitle(post && post.author ? post : null, doc)
+      // An NSFW short keeps its picture off the card: the creator's avatar instead.
+      const thumb = doc.isNsfwContent ? null : await fetchPicture(doc.thumbnail_url, { portrait: true })
+      return renderCard({
+        ...await shortText(owner, title),
+        avatar: thumb || await fetchAvatar(owner),
+        shape: thumb ? 'portrait' : 'ring',
+      })
+    }
     case 'podcast': {
       // 404 for a private feed or one nobody follows any more.
       const data = await checkerJson(checkerUrl, `/podcasts/feed/${id}?limit=1`)
@@ -980,7 +1033,7 @@ async function listCommunities() {
 async function cardIds(kind) {
   const base = path.join(CARD_DIR, kind)
   const jpgs = (dir) => fsp.readdir(dir).then((names) => names.filter((f) => f.endsWith('.jpg')).map((f) => f.slice(0, -4)), () => [])
-  if (kind !== 'audio') return jpgs(base)
+  if (!NESTED.has(kind)) return jpgs(base)
   const authors = await fsp.readdir(base).catch(() => [])
   const ids = []
   for (const author of authors) ids.push(...(await jpgs(path.join(base, author))).map((p) => `${author}/${p}`))
@@ -1243,6 +1296,8 @@ function mountOgCards(app, { checkerUrl = 'https://checker.3speak.tv', resolveIn
   app.get('/api/og-card/:kind/:file', (req, res) => serve(req, res, req.params.kind, jpgName(req.params.file)))
   // An audio post is named by its author and permlink.
   app.get('/api/og-card/audio/:author/:file', (req, res) => serve(req, res, 'audio', `${req.params.author}/${jpgName(req.params.file)}`))
+  // A short by its embed asset: /api/og-card/short/<owner>/<asset>.jpg.
+  app.get('/api/og-card/short/:author/:file', (req, res) => serve(req, res, 'short', `${req.params.author}/${jpgName(req.params.file)}`))
 
   if (process.env.OG_CARD_SYNC !== 'off') scheduleSync(call, { checkerUrl })
 }
@@ -1256,6 +1311,7 @@ module.exports = {
   mountOgCards,
   cardUrl,
   cardVersion,
+  validCardId: validId,
   // For the tests.
   buildCard,
   renderCard,
@@ -1267,6 +1323,7 @@ module.exports = {
   streamText,
   playlistText,
   audioText,
+  shortText,
   podcastText,
   episodeText,
   pruneExpired,

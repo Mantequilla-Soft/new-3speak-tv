@@ -848,6 +848,11 @@ $gap: 10px;
   aspect-ratio: 9 / 16;
 }
 
+.thumb-modal--square .thumb-modal__sources .thumb-option {
+  width: 72px;
+  aspect-ratio: 1;
+}
+
 .thumb-modal__side {
   display: flex;
   flex-direction: column;
@@ -913,6 +918,7 @@ $gap: 10px;
     box-shadow: 0 8px 0 var(--bg-primary, #fff);
   }
   .thumb-modal--portrait .thumb-modal__canvas { height: 42vh; }
+  .thumb-modal--square .thumb-modal__canvas { height: 38vh; }
 
   // Nothing to show yet (phones start here): the player is the picture, so it
   // moves to the top. While picking, the result keeps a small strip.

@@ -155,7 +155,9 @@
     "audioFull": "Dengan judul",
     "audioCompact": "Ringkas",
     "audioMinimal": "Minimal",
-    "heightSub": "Lebar penuh, tinggi {{height}} px"
+    "heightSub": "Lebar penuh, tinggi {{height}} px",
+    "podcastTitle": "Sematkan podcast ini",
+    "podcastHint": "Tempel ini di situs web atau postingan blog mana pun. Ini memutar semua episode acara, termasuk episode baru begitu terbit."
   },
   "incubation": {
     "requestFailed": "Permintaan gagal ({{status}})",
@@ -185,13 +187,15 @@
     "verticalShort": "Shorts Vertikal",
     "story": "Story (24 jam)",
     "musicAudio": "Musik / Audio",
+    "audioEditor": "Editor Audio",
     "groupChat": "Chat Grup",
     "communitySnap": "Snap Komunitas",
     "shortsEditor": "Editor Shorts",
     "goLiveNow": "Siaran langsung!",
     "playlist": "Playlist",
     "headings": {
-      "upload": "Unggah",
+      "video": "Video",
+      "audio": "Audio",
       "live": "Live",
       "others": "Lainnya"
     },
@@ -201,6 +205,7 @@
       "shortsEditor": "Rekam dan edit short di browser",
       "story": "Klip pendek yang tayang selama 24 jam",
       "musicAudio": "Lagu, podcast, dan audio lainnya",
+      "audioEditor": "Potong, rapikan, dan seimbangkan podcast serta musik",
       "groupChat": "Ruang live yang kamu pandu bersama tamu",
       "goLiveNow": "Siaran langsung untuk pengikutmu",
       "communitySnap": "Postingan cepat di tab komunitasmu",

@@ -6,7 +6,7 @@ import ModalHeader from '../ModalHeader/ModalHeader'
 import useDialog from '../../hooks/useDialog'
 import { toastIn } from '../../utils/toast'
 import {
-  AUDIO_EMBED_SIZES, PLAYLIST_EMBED_SIZES, buildAudioEmbedHtml, buildPlaylistEmbedHtml,
+  AUDIO_EMBED_SIZES, PLAYLIST_EMBED_SIZES, buildAudioEmbedHtml, buildPlaylistEmbedHtml, buildPodcastEmbedHtml,
 } from '../../utils/embedCode'
 import '../Chat/shareChooser.scss'
 
@@ -20,6 +20,7 @@ const toast = toastIn('Audio')
  *
  *  - kind 'audio':    id = the audio's own permlink (embed-audio `permlink`)
  *  - kind 'playlist': id = the 3speak.tv playlist id; the embed plays its audio tracks
+ *  - kind 'podcast':  id = an outside show's id (the checker's); the embed plays its episodes
  */
 let current = null
 const listeners = new Set()
@@ -46,15 +47,16 @@ export default function EmbedCodeHost() {
 
 function EmbedCodeModal({ target, onClose }) {
   const { t } = useTranslation()
-  const isPlaylist = target.kind === 'playlist'
-  const sizes = isPlaylist ? PLAYLIST_EMBED_SIZES : AUDIO_EMBED_SIZES
+  const isList = target.kind === 'playlist' || target.kind === 'podcast'
+  const sizes = isList ? PLAYLIST_EMBED_SIZES : AUDIO_EMBED_SIZES
   const [size, setSize] = useState(sizes[0].id)
   const codeRef = useRef(null)
   const dialog = useDialog(onClose)
   const spec = sizes.find((s) => s.id === size) || sizes[0]
-  const code = isPlaylist
-    ? buildPlaylistEmbedHtml(target.id, { size, title: target.title })
-    : buildAudioEmbedHtml(target.id, { size, title: target.title })
+  const build = { playlist: buildPlaylistEmbedHtml, podcast: buildPodcastEmbedHtml }[target.kind] || buildAudioEmbedHtml
+  const code = build(target.id, { size, title: target.title })
+  const heading = { playlist: 'misc.embed.playlistTitle', podcast: 'misc.embed.podcastTitle' }[target.kind] || 'misc.embed.audioTitle'
+  const hint = { playlist: 'misc.embed.playlistHint', podcast: 'misc.embed.podcastHint' }[target.kind] || 'chat.share.embedHint'
 
   const copy = async () => {
     try {
@@ -77,12 +79,12 @@ function EmbedCodeModal({ target, onClose }) {
       >
         <ModalHeader
           className="share-chooser-header"
-          title={isPlaylist ? t('misc.embed.playlistTitle') : t('misc.embed.audioTitle')}
+          title={t(heading)}
           titleId={dialog.titleId}
           onClose={onClose}
         />
         <p className="share-embed-hint">
-          {isPlaylist ? t('misc.embed.playlistHint') : t('chat.share.embedHint')}
+          {t(hint)}
         </p>
         <div className="share-embed-sizes" role="group" aria-label={t('chat.share.embedSize')}>
           {sizes.map((s) => (

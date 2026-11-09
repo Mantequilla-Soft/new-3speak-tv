@@ -155,7 +155,9 @@
     "audioFull": "제목 포함",
     "audioCompact": "컴팩트",
     "audioMinimal": "최소",
-    "heightSub": "전체 너비, 높이 {{height}} px"
+    "heightSub": "전체 너비, 높이 {{height}} px",
+    "podcastTitle": "이 팟캐스트 임베드",
+    "podcastHint": "웹사이트나 블로그 글에 붙여 넣으세요. 새 에피소드가 나오는 대로 포함해 프로그램의 모든 에피소드를 재생합니다."
   },
   "incubation": {
     "requestFailed": "요청 실패({{status}})",
@@ -185,13 +187,15 @@
     "verticalShort": "세로 쇼츠",
     "story": "스토리 (24시간)",
     "musicAudio": "음악 / 오디오",
+    "audioEditor": "오디오 편집기",
     "groupChat": "그룹 채팅",
     "communitySnap": "커뮤니티 Snap",
     "shortsEditor": "쇼츠 편집기",
     "goLiveNow": "라이브 시작!",
     "playlist": "재생목록",
     "headings": {
-      "upload": "업로드",
+      "video": "동영상",
+      "audio": "오디오",
       "live": "라이브",
       "others": "기타"
     },
@@ -201,6 +205,7 @@
       "shortsEditor": "브라우저에서 쇼츠 녹화 및 편집",
       "story": "24시간 동안 공개되는 짧은 클립",
       "musicAudio": "노래, 팟캐스트 및 기타 오디오",
+      "audioEditor": "팟캐스트와 음악을 자르고 다듬고 음량을 맞추세요",
       "groupChat": "게스트와 함께 진행하는 라이브 룸",
       "goLiveNow": "팔로워에게 라이브 방송",
       "communitySnap": "커뮤니티 탭에 간단히 게시",

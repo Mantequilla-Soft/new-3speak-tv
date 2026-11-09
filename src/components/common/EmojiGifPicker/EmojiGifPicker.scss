@@ -65,6 +65,17 @@
   }
 }
 
+// Portal mode (EmojiGifPicker `portal`): fixed over the page, placed by the
+// component on wider screens; over the audio player (3000) and its comment box.
+.egp-popover.egp-portal {
+  position: fixed;
+  z-index: 3200;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  // The inline style gives the side it opens on; drop the in-wrapper anchors.
+  @media (min-width: 768px) { top: auto; bottom: auto; left: auto; right: auto; }
+}
+
 // emoji-picker-react brings its own chrome (search, tabs, scroll) — strip our frame.
 .egp-emoji-popover {
   width: 340px;

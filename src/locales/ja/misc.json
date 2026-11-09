@@ -155,7 +155,9 @@
     "audioFull": "タイトル付き",
     "audioCompact": "コンパクト",
     "audioMinimal": "ミニマル",
-    "heightSub": "幅いっぱい、高さ {{height}} px"
+    "heightSub": "幅いっぱい、高さ {{height}} px",
+    "podcastTitle": "このポッドキャストを埋め込む",
+    "podcastHint": "ウェブサイトやブログ記事に貼り付けてください。番組のすべてのエピソードを、新しいエピソードも公開され次第再生します。"
   },
   "incubation": {
     "requestFailed": "リクエストに失敗しました（{{status}}）",
@@ -185,13 +187,15 @@
     "verticalShort": "縦型ショート",
     "story": "ストーリー(24時間)",
     "musicAudio": "音楽 / 音声",
+    "audioEditor": "オーディオエディター",
     "groupChat": "グループチャット",
     "communitySnap": "コミュニティの Snap",
     "shortsEditor": "ショートエディター",
     "goLiveNow": "ライブ配信する！",
     "playlist": "再生リスト",
     "headings": {
-      "upload": "アップロード",
+      "video": "動画",
+      "audio": "音声",
       "live": "ライブ",
       "others": "その他"
     },
@@ -201,6 +205,7 @@
       "shortsEditor": "ブラウザでショートを撮影・編集",
       "story": "24時間だけ公開される短いクリップ",
       "musicAudio": "音楽、ポッドキャストなどの音声",
+      "audioEditor": "ポッドキャストや音楽のカット、整音、音量調整",
       "groupChat": "ゲストと一緒に進行するライブルーム",
       "goLiveNow": "フォロワーに向けてライブ配信",
       "communitySnap": "コミュニティタブに手軽に投稿",

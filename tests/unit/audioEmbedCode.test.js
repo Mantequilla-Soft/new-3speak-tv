@@ -25,3 +25,12 @@ describe('audio and playlist embed code', () => {
     expect(html).toContain('title="Mix &quot;1&quot; &amp; &lt;b&gt;"');
   });
 });
+
+describe('podcast embed code', () => {
+  it('points an outside show at the podcast embed, playlist heights', async () => {
+    const { buildPodcastEmbedHtml, buildPodcastEmbedSrc } = await import('../../src/utils/embedCode');
+    expect(buildPodcastEmbedSrc('6ae3c77f91d7738e82354365')).toBe(`${AUDIO_EMBED_BASE}/play?podcast=6ae3c77f91d7738e82354365&iframe=1`);
+    expect(buildPodcastEmbedHtml('6ae3c77f91d7738e82354365', { size: 'short', title: 'Battle of the Nerds' }))
+      .toContain('height="360"');
+  });
+});

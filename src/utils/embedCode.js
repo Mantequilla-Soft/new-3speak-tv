@@ -111,6 +111,11 @@ function audioIframe(src, height, label) {
   ].join('\n');
 }
 
+/** The podcast embed's iframe src: every episode of an outside show followed on 3Speak. */
+export function buildPodcastEmbedSrc(feedId) {
+  return `${AUDIO_EMBED_BASE}/play?podcast=${encodeURIComponent(feedId)}&iframe=1`;
+}
+
 /** Ready-to-paste HTML for one audio. `size` is an AUDIO_EMBED_SIZES id. */
 export function buildAudioEmbedHtml(permlink, { size = 'full', title = '' } = {}) {
   const spec = AUDIO_EMBED_SIZES.find((s) => s.id === size) || AUDIO_EMBED_SIZES[0];
@@ -123,4 +128,11 @@ export function buildPlaylistEmbedHtml(playlistId, { size = 'medium', title = ''
   const spec = PLAYLIST_EMBED_SIZES.find((s) => s.id === size) || PLAYLIST_EMBED_SIZES[0];
   const label = escapeAttr(String(title || '').trim() || '3Speak playlist');
   return audioIframe(buildPlaylistEmbedSrc(playlistId), spec.height, label);
+}
+
+/** Ready-to-paste HTML for an outside podcast. Same heights as a playlist. */
+export function buildPodcastEmbedHtml(feedId, { size = 'medium', title = '' } = {}) {
+  const spec = PLAYLIST_EMBED_SIZES.find((s) => s.id === size) || PLAYLIST_EMBED_SIZES[0];
+  const label = escapeAttr(String(title || '').trim() || '3Speak podcast');
+  return audioIframe(buildPodcastEmbedSrc(feedId), spec.height, label);
 }

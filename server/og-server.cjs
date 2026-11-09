@@ -25,6 +25,7 @@ const dns = require('dns');
 dns.setDefaultResultOrder('ipv4first');
 const ogVideo = require('./og-video.cjs');
 const ogSite = require('./og-site.cjs');
+const { videoTitle, shortCardText } = require('./og-text.cjs');
 
 const PORT = process.env.OG_PORT || 4023;
 const HIVE_API = 'https://api.hive.blog';
@@ -363,40 +364,7 @@ function extractDescription(body) {
   return text;
 }
 
-/**
- * The first line of a post that is real text: not the player link or an image,
- * at least three characters. Snaps put their caption there.
- */
-// A short's `## Title` first line, or ''. Keep in step with src/utils/shortTitle.js.
-function shortHeading(body) {
-  const line = String(body || '').replace(/\r\n/g, '\n').split('\n').find((l) => l.trim());
-  const m = line && line.trim().match(/^##(?!#)[ \t]*(.*)$/);
-  if (!m) return '';
-  const text = m[1]
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/[*_`~]+/g, '')
-    .replace(/\s+#+\s*$/, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-  return text.length > 100 ? `${text.slice(0, 99).trimEnd()}…` : text;
-}
-
-function firstLine(body) {
-  for (const line of String(body || '').split('\n')) {
-    const text = line
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-      .replace(/https?:\/\/\S+/g, ' ')
-      .replace(/[#*_~`>|▶]+/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-    if (text.length >= 3 && !/^-+$/.test(text)) return text.length > 100 ? `${text.slice(0, 97).trim()}...` : text;
-  }
-  return '';
-}
+// shortHeading / firstLine / videoTitle live in og-text.cjs (shared with og-cards.cjs).
 
 function secondsToISO8601(sec) {
   const total = Math.round(Number(sec) || 0);
@@ -681,6 +649,9 @@ function buildOgHtml({
   player,
   ogType = 'video.other',
   imageType,
+  imageSize,
+  // The video's own thumbnail for schema.org, when `image` is a drawn card.
+  thumbnail = image,
 }) {
   const safeTitle = escapeHtml(title);
   const safeDesc = escapeHtml(description);
@@ -742,7 +713,7 @@ function buildOgHtml({
     '@type': 'VideoObject',
     name: title,
     description: description || title,
-    thumbnailUrl: image,
+    thumbnailUrl: thumbnail,
     embedUrl,
     url: canonical,
     author: { '@type': 'Person', name: `@${author}`, url: `${BASE_URL}/@${author}` },
@@ -847,6 +818,8 @@ function buildOgHtml({
   <meta property="og:description" content="${safeDesc}" />
   <meta property="og:image" content="${safeImage}" />${
     imageType ? `\n  <meta property="og:image:type" content="${escapeHtml(imageType)}" />` : ''
+  }${
+    imageSize ? `\n  <meta property="og:image:width" content="${imageSize[0]}" />\n  <meta property="og:image:height" content="${imageSize[1]}" />` : ''
   }
   <meta property="og:url" content="${safeUrl}" />
   ${durationMeta}${videoMeta}${playerOgVideo}
@@ -1202,7 +1175,7 @@ async function serveOembed(req, res, url, origin) {
 
 // Share images of communities and profiles, drawn by the API (og-cards.cjs).
 // Only the URL helper is used here; the drawing code loads in the API.
-const { cardUrl } = require('./og-cards.cjs');
+const { cardUrl, validCardId } = require('./og-cards.cjs');
 
 // Profiles, playlists/albums and audio posts. See og-pages.cjs.
 const ogPages = require('./og-pages.cjs')({
@@ -1283,25 +1256,13 @@ async function resolveVideoCard(video, origin) {
   const image = boundImage(fixThumbnail(thumbnail));
 
   const kindLabel = isShort ? 'Short' : 'Video';
-  // A short is a Hive REPLY (to a snaps/waves container), titled "RE: Snaps
-  // Container // <date>". That says nothing about the short, so a reply's own
-  // title only counts when nothing better exists: the caption the creator
-  // wrote, i.e. the first line of the post.
-  const isReply = !!(post && post.parent_author);
-  const title =
-    (post && !isReply && post.title) ||
-    // A short's own title: the `## Title` first line the uploader writes (same
-    // rule as src/utils/shortTitle.js). Ahead of the embed doc's titles, whose
-    // embed_title can be the placeholder "Comment".
-    (post && shortHeading(post.body)) ||
-    (embed && (embed.hive_title || embed.embed_title)) ||
-    (post && firstLine(post.body)) ||
-    (embed && embed.originalFilename) ||
-    `${kindLabel} by @${video.author}`;
+  let title = videoTitle(post, embed) || `${kindLabel} by @${video.author}`;
 
-  const description = post
+  let description = post
     ? extractDescription(post.body)
     : `A ${kindLabel.toLowerCase()} by @${video.author} on 3Speak.`;
+  // A short's caption opens with its title: the card says each once, briefly.
+  if (isShort) ({ title, description } = shortCardText(title, description, video.author));
 
   // og:url is the exact route that was shared (a video at /@author/permlink,
   // whichever of its two addresses was used; /shorts or /shorts/stories),
@@ -1346,7 +1307,7 @@ async function resolveVideoCard(video, origin) {
     !(embed && (embed.gated === true || embed.gated === 'true'));
   return {
     post, embed, meta, image, title, description, selfUrl, canonicalUrl,
-    duration, uploadDate, index, indexability, inlineAllowed,
+    duration, uploadDate, index, indexability, inlineAllowed, isShort,
   };
 }
 
@@ -1462,8 +1423,11 @@ const server = http.createServer(async (req, res) => {
     // Started now so the probe overlaps the Hive/checker lookups below. It only
     // resolves + probes (cached per rendition); the teaser build starts further
     // down, once the page is known to be allowed to carry the video.
+    // Shorts get no teaser (owner's call 2026-11-08): their card is the drawn
+    // short card below, in every app. A short reached by /watch is only known
+    // after the lookup; its probe is dropped there, nothing is built.
     const videoBot = ogVideo.wantsVideo(req.headers['user-agent']);
-    const inlineVideo = videoBot
+    const inlineVideo = videoBot && video.kind !== 'shorts'
       ? ogVideo.ogVideoFor(video.author, video.permlink).catch(() => null)
       : Promise.resolve(null);
 
@@ -1474,11 +1438,20 @@ const server = http.createServer(async (req, res) => {
       post, meta, title, description, selfUrl, canonicalUrl, duration, uploadDate, index, inlineAllowed,
     } = card;
     let { image } = card;
+    const teaserAllowed = inlineAllowed && !card.isShort;
+    // A short's thumbnail is 9:16: every app shows it squeezed into a small
+    // square or cropped to a strip. Its share image is a 1200x630 card instead
+    // (og-cards.cjs: the thumbnail in a portrait frame, title, whose), drawn by
+    // the API on the first fetch, for every app (shorts get no teaser).
+    const shortCardId = card.isShort && card.embed && card.embed.owner && card.embed.permlink
+      ? `${card.embed.owner}/${card.embed.permlink}` : null;
+    const shortCard = shortCardId && validCardId('short', shortCardId)
+      ? cardUrl(origin, 'short', shortCardId) : null;
     // WhatsApp shows no preview at all for a WebP image (every 3Speak
     // thumbnail is WebP), and may read video.other as "a video" it can't
     // play. It gets a JPEG copy and a plain website card instead.
     const whatsapp = /whatsapp/i.test(req.headers['user-agent'] || '');
-    const waThumb = whatsapp ? ogVideo.jpegThumbPath(image) : null;
+    const waThumb = whatsapp && !shortCard ? ogVideo.jpegThumbPath(image) : null;
     if (waThumb) image = origin + waThumb;
 
     // Transcripts only exist for Hive-backed videos; fetch by the resolved Hive
@@ -1506,7 +1479,7 @@ const server = http.createServer(async (req, res) => {
         inlineAllowed ? ogVideo.manifestUrl(video.author, video.permlink) : null,
         card.embed ? { doc: card.embed } : lookupEmbed(post.author, post.permlink),
       ]);
-      if (inlineAllowed) inline = v;
+      if (teaserAllowed) inline = v;
       related = r;
       contentUrl = m;
       // The post stands but the video does not: the checker marks a video
@@ -1519,17 +1492,31 @@ const server = http.createServer(async (req, res) => {
       transcriptLang = (t && t.lang) || null;
       subtitleLanguages = (t && t.languages) || null;
       comments = c;
-    } else if (inlineAllowed) {
+    } else if (teaserAllowed) {
       inline = await inlineVideo;
     }
     // Discord fetches the MP4 the moment it unfurls and gives up if it's slow,
     // so its card waits for the teaser build (2-4s typically, capped). Other
     // apps get the card at once (WhatsApp drops slow previews); the build runs
     // in the background and the media route waits for it if they ask early.
+    //
+    // A card must never name a teaser that will not come: Discord then shows
+    // no player, drops og:description and leaves a cramped thumbnail with the
+    // oEmbed text twice (seen 2026-11-07 when a gateway timed out). So no
+    // og:video when the build failed (or failed a moment ago and is resting),
+    // and for Discord also when it is not done within the wait: Discord
+    // fetches the file at once and caches whatever card it got. Telegram reads
+    // the file later and the media route waits for an unfinished build.
     if (inline) {
       const discord = /discordbot/i.test(req.headers['user-agent'] || '');
-      await inline.prepare(discord ? 8000 : 0);
-      rememberOembed(`${video.author}/${video.permlink}`, { description, url: canonicalUrl });
+      const file = await inline.prepare(discord ? 8000 : 0);
+      if (file === null || (discord && !file)) inline = null;
+      else rememberOembed(`${video.author}/${video.permlink}`, { description, url: canonicalUrl });
+    }
+    let imageSize;
+    if (shortCard) {
+      image = shortCard;
+      imageSize = [1200, 630];
     }
 
     const html = buildOgHtml({
@@ -1558,7 +1545,9 @@ const server = http.createServer(async (req, res) => {
       commentCount: post && typeof post.children === 'number' ? post.children : undefined,
       video: inline ? { url: origin + inline.path, width: inline.width, height: inline.height } : null,
       ogType: whatsapp ? 'website' : 'video.other',
-      imageType: waThumb ? 'image/jpeg' : undefined,
+      imageType: waThumb || imageSize ? 'image/jpeg' : undefined,
+      imageSize,
+      thumbnail: card.image,
       oembedUrl: inline
         ? `${origin}${OEMBED_PATH}?v=${encodeURIComponent(`${video.author}/${video.permlink}`)}`
         : inlineAllowed ? publicOembedUrl(origin, canonicalUrl) : null,

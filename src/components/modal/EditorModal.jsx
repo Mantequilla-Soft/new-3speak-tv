@@ -10,14 +10,20 @@ import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { getLockedBeneficiaries } from '../../utils/beneficiaries';
 import { remixChainAuthors } from '../../utils/remixChain';
 import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
+import { sanitizeChapters } from '../../utils/audioChapters';
 import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { establishWalletSession, getCurrentProvider, Providers } from '../../hive-api/aioha';
 import './EditorModal.scss';
 
 const toast = toastIn('Shorts');
+const audioToast = toastIn('Audio');
 
-function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile }) {
+// mode 'audio' opens the same editor as an audio editor (?mode=audio): `audioFile`
+// is loaded into it, and "Use this audio" hands the edited MP3 back to the audio
+// upload, either for its track `audioTrackId` or (from the share menu) as a new one.
+function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStart, clipEnd, originalAuthor, originalPermlink, originalShortPermlink, remixChain, videoFile, mode = 'video', audioFile = null, audioTrackId = null }) {
+  const audioMode = mode === 'audio';
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { setVideoFile, setPrevVideoFile, setGeneratedThumbnail, setVideoDuration, setOriginalAuthor, setOriginalPermlink, setOriginalShortPermlink, setRemixChain, setMusicCredits, setFromStories, setIsStory, pickFirstThumbnail, setList, setRemaingPercent } = useEmbedUpload();
@@ -99,6 +105,50 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   useEffect(() => {
     if (!isOpen || !resolvedUrl) return;
 
+    // Audio mode: "Use this audio" -> fetch the edited MP3 and hand it to the audio
+    // upload. For one of its tracks (audioTrackId) it replaces that track's audio;
+    // from the share menu it opens the upload with it as a new track.
+    const handleAudioResult = async ({ outputUrl, fileName, durationSec, musicCredits, chapters }) => {
+      if (!outputUrl) return;
+      try {
+        setRenderStatus('preparing');
+        const res = await fetch(outputUrl);
+        if (!res.ok) throw new Error(`Failed to fetch the edited audio: ${res.status}`);
+        const contentType = res.headers.get('content-type') || '';
+        if (contentType.startsWith('text/')) throw new Error(`Expected audio but got ${contentType}`);
+        const blob = await res.blob();
+        const name = typeof fileName === 'string' && /\.mp3$/i.test(fileName.trim())
+          ? fileName.trim().replace(/[\\/]/g, '_')
+          : 'edited-audio.mp3';
+        const file = new File([blob], name, { type: 'audio/mpeg' });
+        const credits = sanitizeMusicCredits(musicCredits);
+        // Chapters marked in the editor: they go into the track's description
+        const marks = sanitizeChapters(chapters);
+        const trackId = audioTrackId;
+
+        handleClose({ confirmed: true });
+
+        if (trackId) {
+          window.dispatchEvent(new CustomEvent('audio-editor-result', {
+            detail: {
+              trackId,
+              file,
+              durationSec: Number.isFinite(durationSec) && durationSec > 0 ? durationSec : null,
+              musicCredits: credits,
+              chapters: marks,
+            },
+          }));
+        } else {
+          window.dispatchEvent(new CustomEvent('open-audio-upload', {
+            detail: { blob: file, filename: file.name, type: null, source: 'editor', musicCredits: credits, chapters: marks },
+          }));
+        }
+      } catch (err) {
+        console.error('[EditorModal] Audio hand-off failed:', err);
+        setRenderStatus('post-error');
+      }
+    };
+
     const handleMessage = (event) => {
       // Validate origin
       try {
@@ -113,9 +163,24 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
       switch (data.type) {
         case 'editor-ready':
+          // An editor from before the audio mode would open as the shorts editor
+          if (audioMode && !data.canEditAudio) {
+            audioToast.warning(t('modals.editor.audioNotSupported'));
+            handleClose({ confirmed: true });
+            break;
+          }
           setEditorReady(true);
           editorDraftsRef.current = !!data.canSaveDrafts;
           if (data.canSaveDrafts) sendDraftSession(false);
+          if (audioMode) {
+            // The track from the audio upload, posted as the File itself (a blob:
+            // URL made here cannot be read from the editor's origin)
+            if (audioFile && !mediaLoadedRef.current) {
+              mediaLoadedRef.current = true;
+              sendToEditor({ type: 'load-media', file: audioFile, name: audioFile.name || 'Audio', mediaType: 'audio' });
+            }
+            break;
+          }
           // If we have a video to pre-load (remix mode), send it once
           if (videoUrl && !mediaLoadedRef.current) {
             mediaLoadedRef.current = true;
@@ -154,6 +219,10 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           break;
 
         case 'post-to-3speak':
+          if (audioMode) {
+            handleAudioResult(data);
+            break;
+          }
           if (storiesEnabledFor(userRef.current)) {
             setPendingPost({ outputUrl: data.outputUrl, musicCredits: data.musicCredits });
             setRenderStatus('choose-target');
@@ -191,7 +260,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
     // a surprise popup on opening the studio.
     const sendDraftSession = async (interactive) => {
       const who = userRef.current;
-      const hasMedia = !!(videoUrl || videoFile);
+      const hasMedia = !!(videoUrl || videoFile || (audioMode && audioFile));
       if (!who) {
         sendToEditor({ type: 'drafts-session', session: null, reason: 'logged-out', hasMedia });
         return;
@@ -253,7 +322,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor, videoFile, t]);
+  }, [isOpen, resolvedUrl, videoUrl, videoName, videoType, clipStart, clipEnd, sendToEditor, videoFile, audioMode, audioFile, audioTrackId, t]);
 
   // While the editor is open, keys must not reach the page behind it (the
   // shorts page plays/pauses on Space and switches videos on the arrow keys).
@@ -556,11 +625,11 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           {resolvedUrl && (
             <iframe
               ref={iframeRef}
-              src={`${resolvedUrl}?compact=true`}
+              src={`${resolvedUrl}?compact=true${audioMode ? '&mode=audio' : ''}`}
               className="editor-iframe"
               allow="cross-origin-isolated; camera; microphone; fullscreen"
               allowFullScreen
-              title={t('modals.editor.iframeTitle')}
+              title={t(audioMode ? 'modals.editor.iframeTitleAudio' : 'modals.editor.iframeTitle')}
             />
           )}
 
@@ -628,7 +697,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
               {renderStatus === 'preparing' && (
                 <div className="render-status">
                   <Loader2 size={32} className="spinner" />
-                  <span>{t('modals.editor.preparing')}</span>
+                  <span>{t(audioMode ? 'modals.editor.preparingAudio' : 'modals.editor.preparing')}</span>
                 </div>
               )}
               {renderStatus === 'error' && (
@@ -641,7 +710,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
               )}
               {renderStatus === 'post-error' && (
                 <div className="render-status render-error">
-                  <span>{t('modals.editor.postError')}</span>
+                  <span>{t(audioMode ? 'modals.editor.postErrorAudio' : 'modals.editor.postError')}</span>
                   <button className="render-btn" onClick={() => setRenderStatus(null)}>
                     {t('modals.editor.backToEditor')}
                   </button>

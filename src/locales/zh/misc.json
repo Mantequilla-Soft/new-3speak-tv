@@ -155,7 +155,9 @@
     "audioFull": "带标题",
     "audioCompact": "紧凑",
     "audioMinimal": "极简",
-    "heightSub": "全宽，高 {{height}} px"
+    "heightSub": "全宽，高 {{height}} px",
+    "podcastTitle": "嵌入此播客",
+    "podcastHint": "将其粘贴到任何网站或博客文章中。它会播放节目的所有单集，新单集一发布也会包含在内。"
   },
   "incubation": {
     "requestFailed": "请求失败（{{status}}）",
@@ -185,13 +187,15 @@
     "verticalShort": "竖屏短视频",
     "story": "快拍(24小时)",
     "musicAudio": "音乐 / 音频",
+    "audioEditor": "音频编辑器",
     "groupChat": "群聊",
     "communitySnap": "社区 Snap",
     "shortsEditor": "短视频编辑器",
     "goLiveNow": "开始直播！",
     "playlist": "播放列表",
     "headings": {
-      "upload": "上传",
+      "video": "视频",
+      "audio": "音频",
       "live": "直播",
       "others": "其他"
     },
@@ -201,6 +205,7 @@
       "shortsEditor": "在浏览器中录制并剪辑短视频",
       "story": "展示 24 小时的短片",
       "musicAudio": "歌曲、播客及其他音频",
+      "audioEditor": "剪辑、清理并统一播客和音乐的音量",
       "groupChat": "与嘉宾一起主持的直播间",
       "goLiveNow": "向你的关注者直播",
       "communitySnap": "在社区标签页快速发帖",

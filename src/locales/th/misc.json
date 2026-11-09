@@ -155,7 +155,9 @@
     "audioFull": "มีชื่อ",
     "audioCompact": "กะทัดรัด",
     "audioMinimal": "เรียบง่าย",
-    "heightSub": "กว้างเต็ม สูง {{height}} px"
+    "heightSub": "กว้างเต็ม สูง {{height}} px",
+    "podcastTitle": "ฝังพอดแคสต์นี้",
+    "podcastHint": "วางโค้ดนี้ในเว็บไซต์หรือบล็อกใดก็ได้ จะเล่นทุกตอนของรายการ รวมถึงตอนใหม่ทันทีที่ออก"
   },
   "incubation": {
     "requestFailed": "คำขอล้มเหลว ({{status}})",
@@ -185,13 +187,15 @@
     "verticalShort": "Shorts แนวตั้ง",
     "story": "สตอรี่ (24 ชม.)",
     "musicAudio": "เพลง / เสียง",
+    "audioEditor": "โปรแกรมแก้ไขเสียง",
     "groupChat": "แชตกลุ่ม",
     "communitySnap": "Snap ชุมชน",
     "shortsEditor": "ตัวแก้ไข Shorts",
     "goLiveNow": "ไลฟ์เลย!",
     "playlist": "เพลย์ลิสต์",
     "headings": {
-      "upload": "อัปโหลด",
+      "video": "วิดีโอ",
+      "audio": "เสียง",
       "live": "ไลฟ์",
       "others": "อื่นๆ"
     },
@@ -201,6 +205,7 @@
       "shortsEditor": "อัดและตัดต่อ Shorts ในเบราว์เซอร์",
       "story": "คลิปสั้นที่แสดงอยู่ 24 ชั่วโมง",
       "musicAudio": "เพลง พอดแคสต์ และเสียงอื่นๆ",
+      "audioEditor": "ตัด ทำความสะอาด และปรับระดับเสียงพอดแคสต์และเพลง",
       "groupChat": "ห้องไลฟ์ที่คุณจัดร่วมกับแขกรับเชิญ",
       "goLiveNow": "ไลฟ์สดให้ผู้ติดตามของคุณ",
       "communitySnap": "โพสต์ด่วนในแท็บชุมชนของคุณ",

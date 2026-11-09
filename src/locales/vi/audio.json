@@ -207,7 +207,8 @@
       "published_other": "Đã xuất bản {{count}} bản nhạc",
       "someFailed": "Một số bản nhạc thất bại — mở bản nhạc lỗi để thử lại",
       "trackLinksFailed": "Các bản nhạc đã được xuất bản, nhưng không thêm được liên kết của chúng vào bài đăng album: {{error}}",
-      "addToBlogFailed": "Đã xuất bản, nhưng không thêm được vào blog của bạn: {{error}}"
+      "addToBlogFailed": "Đã xuất bản, nhưng không thêm được vào blog của bạn: {{error}}",
+      "editedApplied": "\"{{title}}\" giờ dùng âm thanh đã chỉnh sửa"
     },
     "gate": {
       "checking": "Đang kiểm tra…",
@@ -270,7 +271,13 @@
       "addCover": "Thêm ảnh bìa",
       "hint": "Nhấn hoặc kéo thả — JPG / PNG / WebP",
       "coverAlt": "ảnh bìa",
-      "removeCover": "Gỡ ảnh bìa"
+      "removeCover": "Gỡ ảnh bìa",
+      "fromPlaylist": "Từ danh sách phát",
+      "designCover": "Thiết kế ảnh bìa",
+      "editCover": "Sửa ảnh bìa",
+      "designHint": "Thêm chữ, nhãn dán và khung hình trong trình sửa ảnh bìa",
+      "designerTitle": "Trình sửa ảnh bìa",
+      "designUnavailable": "Không thể mở ảnh này trong trình sửa ảnh bìa. Hãy tải ảnh lên từ thiết bị của bạn."
     },
     "mode": {
       "help_other": "Đã thêm {{count}} bản nhạc. Chọn cách đăng chúng.",
@@ -356,7 +363,11 @@
       "uploadingFallback": "Đang tải lên",
       "published": "Đã xuất bản"
     },
-    "warmupOneTrack": "Trong khi tài khoản của bạn đang khởi động, bạn đăng từng âm thanh một. Hãy bỏ các tệp khác để tiếp tục."
+    "warmupOneTrack": "Trong khi tài khoản của bạn đang khởi động, bạn đăng từng âm thanh một. Hãy bỏ các tệp khác để tiếp tục.",
+    "editAudio": "Chỉnh sửa",
+    "editAudioHint": "Mở bản âm thanh này trong trình chỉnh sửa",
+    "edited": "Đã chỉnh sửa",
+    "editedHint": "Âm thanh này đến từ trình chỉnh sửa âm thanh"
   },
   "podcasts": {
     "chip": "Bên ngoài",
