@@ -49,12 +49,24 @@ export const hiveProxyRefuses = (url) => PROXY_REFUSES.test(String(url || ''));
  * for showing on the page: never write one of these into a post. */
 export const viaImageCache = (url) => String(url || '').replace(/^https:\/\/images\.hive\.blog\//i, '/img/h/');
 
-// Downscale any absolute image URL through Hive's resize proxy.
-export const hiveProxy = (url, size) => (
-  PROXY_REFUSES.test(url)
-    ? url
-    : `/img/h/p/${bs58.encode(Buffer.from(url))}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`
+// Ecency-hosted images. Hive's resize proxy 403s on them, so they go through
+// Ecency's own (same /p/ API), fetched by OUR image cache (/img/e/, nginx
+// conf.d/3speak-img.conf) rather than by the viewer: Ecency's Cloudflare blocks
+// some viewers' networks outright (403 "you have been blocked", 2026-11-09), and
+// every Ecency thumbnail on the feed was a placeholder for them.
+const ECENCY_RE = /^https?:\/\/(?:i|images)\.ecency\.com\//i;
+const ECENCY_PROXY_RE = /^https?:\/\/images\.ecency\.com\/p\//i;
+const ecencyProxy = (url, size) => (
+  `/img/e/p/${bs58.encode(Buffer.from(url))}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`
 );
+
+// Downscale any absolute image URL through Hive's resize proxy (Ecency's for
+// Ecency-hosted ones, see above).
+export const hiveProxy = (url, size) => {
+  if (PROXY_REFUSES.test(url)) return url;
+  if (ECENCY_RE.test(url) && !ECENCY_PROXY_RE.test(url)) return ecencyProxy(url, size);
+  return `/img/h/p/${bs58.encode(Buffer.from(url))}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`;
+};
 
 /**
  * A playlist or album cover for a SQUARE spot, through our /img/ cache.
@@ -142,21 +154,23 @@ export function fixVideoThumbnail(video, portrait = false, sizeOverride = null) 
     return viaImageCache(cleanThumbnail);
   }
 
-  // ⚠️ images.hive.blog's resize proxy 403s on ecency-hosted sources. Route them
-  // through ecency's OWN imagehoster (same /p/ API) instead, so the thumbnail is
-  // still downscaled — and portrait-cropped for shorts — rather than loading the
-  // full-resolution original.
-  if (cleanThumbnail.includes("i.ecency.com") || cleanThumbnail.includes("images.ecency.com")) {
-    // Already an ecency resize-proxy URL — leave it (re-size for portrait shorts).
-    if (cleanThumbnail.includes("images.ecency.com/p/") || /images\.ecency\.com\/\d+x\d+\//.test(cleanThumbnail)) {
-      if (portrait && cleanThumbnail.includes("images.ecency.com/p/")) {
-        return `${cleanThumbnail.split('?')[0]}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`;
-      }
-      return cleanThumbnail;
+  // ⚠️ images.hive.blog's resize proxy 403s on ecency-hosted sources. They go
+  // through Ecency's OWN imagehoster (same /p/ API), via our /img/e/ cache so the
+  // viewer never talks to Ecency (see ecencyProxy), still downscaled and
+  // portrait-cropped for shorts.
+  if (ECENCY_RE.test(cleanThumbnail)) {
+    // Already an Ecency resize-proxy URL: keep its options (re-size for portrait
+    // shorts), only fetched through our cache.
+    if (ECENCY_PROXY_RE.test(cleanThumbnail)) {
+      const local = cleanThumbnail.replace(/^https?:\/\/images\.ecency\.com\//i, '/img/e/');
+      return portrait
+        ? `${local.split('?')[0]}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`
+        : local;
     }
-    // Raw ecency image — re-proxy through ecency (hive's proxy 403s on these).
-    const encoded = bs58.encode(Buffer.from(cleanThumbnail));
-    return `https://images.ecency.com/p/${encoded}?format=jpeg&mode=cover&width=${size.w}&height=${size.h}`;
+    // A sized /WxH/ URL is not something our cache knows: left as it is.
+    if (/images\.ecency\.com\/\d+x\d+\//.test(cleanThumbnail)) return cleanThumbnail;
+    // Raw Ecency image: resized by Ecency's proxy, through our cache.
+    return ecencyProxy(cleanThumbnail, size);
   }
 
   // ⚠️ media.3speak.tv doesn't exist anymore - use fallback

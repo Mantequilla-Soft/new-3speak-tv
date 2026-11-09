@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.105',
+    category: 'general',
+    date: '2026-11-09',
+    summary: "Thumbnails hosted on Ecency now load for everyone, including viewers whose network Ecency blocks.",
+  },
+  {
     version: '1.81.103',
     category: 'editor',
     date: '2026-11-09',
