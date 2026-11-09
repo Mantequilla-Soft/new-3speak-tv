@@ -10,6 +10,7 @@ import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { recordView } from '../../lib/recordView';
 import { useAppStore } from '../../lib/store';
 import { getPlayerUrl } from '../../utils/playerUrl';
+import { withGatewayFallback } from '../../lib/hlsGatewayFallback.js';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
 import './PlayVideo.scss';
 import './InlineVideoPlayer.scss';
@@ -79,7 +80,7 @@ export default function InlineVideoPlayer({ author, permlink, poster = null, onO
     // Only a definitive failure; the player has already tried its other CDNs.
     onError: (err) => { if (err?.fatal) setFailed(true); },
     onReady: () => setReady(true),
-    hlsConfig: {
+    hlsConfig: withGatewayFallback({
       maxBufferLength: 60,
       maxMaxBufferLength: 120,
       maxBufferSize: 60 * 1000 * 1000,
@@ -94,7 +95,7 @@ export default function InlineVideoPlayer({ author, permlink, poster = null, onO
       // Don't keep the whole played video in memory (see page/Watch.jsx).
       backBufferLength: 60,
       ...(IS_APPLE_WEBKIT ? APPLE_HLS_CAPS : {}),
-    },
+    }),
   });
 
   // Callback ref for the SDK, object ref for everything that measures the element

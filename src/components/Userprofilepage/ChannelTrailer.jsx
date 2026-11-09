@@ -7,6 +7,7 @@ import { ThreeSpeakApi } from '@mantequilla-soft/3speak-player';
 import { resolveVideoMeta } from '../../lib/videoMetaCache';
 import { CHECKER_URL } from '../../utils/config';
 import { getPlayerUrl } from '../../utils/playerUrl';
+import { withGatewayFallback } from '../../lib/hlsGatewayFallback.js';
 import { fetchVideoDetails } from '../../lib/videoData';
 import { bodyToPlaintext } from '../../hive-api/hiveApi';
 import { fetchSnaps } from '../../lib/snaps';
@@ -82,6 +83,7 @@ export default function ChannelTrailer({
     apiBase: getPlayerUrl(),
     muted: true,
     poster: true,
+    hlsConfig: withGatewayFallback(),
   });
 
   const videoRef = useCallback((el) => {

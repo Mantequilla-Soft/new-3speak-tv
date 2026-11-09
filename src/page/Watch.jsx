@@ -21,6 +21,7 @@ import { Client } from '@hiveio/dhive';
 import { HIVE_API_NODES, SHORTS_API_URL, PLAYLISTS_READ_URL, appendNsfw } from '../utils/config';
 import { fetchVideosForPlaylist } from '../utils/playlistVideos';
 import { getPlayerUrl } from '../utils/playerUrl';
+import { withGatewayFallback } from '../lib/hlsGatewayFallback.js';
 import ShortsRow from '../components/ShortsRow/ShortsRow';
 import { useAiFilteredShorts } from '../hooks/useAiFilteredShorts';
 import { useGridColumns, useShortsPerRow } from '../hooks/useGridMetrics';
@@ -556,7 +557,8 @@ function Watch({ v2 = false, routeV = null }) {
     // Tuned for 3Speak's reality: older uploads sit on COLD IPFS and a segment can
     // take 30–45s to serve the first time (then the CDN has it hot). See the HAR
     // analysis of 2026-07-15.
-    hlsConfig: {
+    // Stalled IPFS segments retry on another gateway (lib/hlsGatewayFallback.js).
+    hlsConfig: withGatewayFallback({
       // Buffer a sane amount ahead. The old 600s (10 min) made hls.js fire dozens of
       // fragment requests far in advance — against a slow gateway those pile up, time
       // out and retry in a storm, which also loaded segments wildly out of order. 60s
@@ -589,7 +591,7 @@ function Watch({ v2 = false, routeV = null }) {
       // trips that limit on iPad and Mac Safari and playback stalls further into
       // a video, so they get the limits the embed player uses there.
       ...(IS_APPLE_WEBKIT ? APPLE_HLS_CAPS : {}),
-    },
+    }),
   });
 
   // The main player's CURRENT rung height in px (0 if unknown). The scrubber's low-res
