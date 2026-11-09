@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.108',
+    category: 'editor',
+    date: '2026-11-09',
+    summary: "In the Shorts editor, new text now appears right at the playhead, and remixes are kept as drafts so you can finish them later.",
+  },
+  {
     version: '1.81.107',
     category: 'podcasts',
     date: '2026-11-09',
