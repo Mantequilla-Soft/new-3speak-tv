@@ -9,7 +9,7 @@ import { act, screen, waitFor } from '@testing-library/react'
 import { renderWithProviders, stubMatchMedia, toastMessages } from './_render.jsx'
 
 const EDITOR = 'https://editor.test'
-const m = vi.hoisted(() => ({ stories: false }))
+const m = vi.hoisted(() => ({ stories: false, embed: [] }))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/config', async (importOriginal) => ({
@@ -24,7 +24,8 @@ vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => 
 vi.mock('../../../src/context/EmbedUploadContext', () => {
   const noop = () => {}
   return {
-    useEmbedUpload: () => new Proxy({ pickFirstThumbnail: () => false }, { get: (t, k) => (k in t ? t[k] : noop) }),
+    // every setter call is recorded (m.embed: [name, ...args])
+    useEmbedUpload: () => new Proxy({ pickFirstThumbnail: () => false }, { get: (t, k) => (k in t ? t[k] : (typeof k === 'string' && k.startsWith('set') ? (...args) => m.embed.push([k, ...args]) : noop)) }),
   }
 })
 
@@ -39,6 +40,7 @@ beforeEach(() => {
   posted = []
   events = []
   m.stories = false
+  m.embed = []
   stubMatchMedia(true)
   window.addEventListener('audio-editor-result', listen)
   window.addEventListener('open-audio-upload', listen)
@@ -236,5 +238,53 @@ describe('EditorModal: a Short\'s text in our post editor (edit-text)', () => {
     await fromEditor({ type: 'edit-text', requestId: 'r3', value: 'x' }, 'https://evil.test')
     expect(screen.queryByRole('dialog', { name: 'Text for the Short' })).toBeNull()
     expect(posted.some((p) => p.type === 'text-edit-open')).toBe(false)
+  })
+})
+
+describe('EditorModal: a remix draft opened again', () => {
+  const calls = (name) => m.embed.filter((c) => c[0] === name).map((c) => c.slice(1))
+  // jsdom reads no media: a video reports its metadata as soon as it gets a src
+  let savedSrc
+  beforeEach(() => {
+    const proto = HTMLMediaElement.prototype
+    savedSrc = Object.getOwnPropertyDescriptor(proto, 'src')
+    Object.defineProperty(proto, 'src', {
+      configurable: true,
+      get() { return this.getAttribute('src') || '' },
+      set(v) { this.setAttribute('src', v); queueMicrotask(() => this.onloadedmetadata?.()) },
+    })
+  })
+  afterEach(() => {
+    const proto = HTMLMediaElement.prototype
+    if (savedSrc) Object.defineProperty(proto, 'src', savedSrc); else delete proto.src
+  })
+
+  it('posts under the original the editor names when it was not opened from the remix button', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({})
+    await ready()
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, remixSource: { parentAuthor: 'Bob', parentPermlink: 'orig' } })
+    await waitFor(() => expect(calls('setRemixChain')).toHaveLength(1))
+    expect(calls('setOriginalAuthor')).toEqual([['bob']])
+    expect(calls('setOriginalPermlink')).toEqual([['orig']])
+    expect(calls('setRemixChain')[0][0]).toEqual([{ author: 'bob', permlink: 'orig' }])
+    // the original's creator gets the remix share
+    expect(calls('setList')[0][0].map((b) => b.account)).toContain('bob')
+  })
+
+  it('the remix button\'s own original wins; nonsense from the editor is ignored', async () => {
+    stubMp3({ type: 'video/mp4' })
+    await open({ originalAuthor: 'carol', originalPermlink: 'first' })
+    await ready()
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, remixSource: { parentAuthor: 'bob', parentPermlink: 'orig' } })
+    await waitFor(() => expect(calls('setRemixChain')).toHaveLength(1))
+    expect(calls('setOriginalAuthor')).toEqual([['carol']])
+    m.embed = []
+    await open({})
+    await ready()
+    await fromEditor({ type: 'post-to-3speak', outputUrl: `${EDITOR}/rendered/v.mp4`, remixSource: { parentAuthor: '<b>', parentPermlink: '../x' } })
+    await waitFor(() => expect(calls('setRemixChain')).toHaveLength(1))
+    expect(calls('setOriginalAuthor')).toEqual([])
+    expect(calls('setRemixChain')[0][0]).toEqual([])
   })
 })

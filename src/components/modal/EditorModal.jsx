@@ -13,6 +13,14 @@ import { sanitizeMusicCredits, soundAuthorsOf } from '../../utils/soundCredits';
 import { sanitizeChapters } from '../../utils/audioChapters';
 import { sanitizeAudiograms, playlistCoversOf } from '../../utils/audiogramShorts';
 import ShortTextModal from './ShortTextModal';
+
+// The original post a remix goes under, as the editor sends it ({ parentAuthor,
+// parentPermlink }): { author, permlink } when it is a Hive account and permlink
+const remixSourceOf = (src) => {
+  const author = String(src?.parentAuthor || '').toLowerCase();
+  const permlink = String(src?.parentPermlink || '').toLowerCase();
+  return /^[a-z][a-z0-9.-]{2,15}$/.test(author) && /^[a-z0-9-]{1,255}$/.test(permlink) ? { author, permlink } : null;
+};
 import { useTranslation } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { establishWalletSession, getCurrentProvider, Providers } from '../../hive-api/aioha';
@@ -257,10 +265,10 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
             break;
           }
           if (storiesEnabledFor(userRef.current)) {
-            setPendingPost({ outputUrl: data.outputUrl, musicCredits: data.musicCredits });
+            setPendingPost({ outputUrl: data.outputUrl, musicCredits: data.musicCredits, remixSource: data.remixSource });
             setRenderStatus('choose-target');
           } else {
-            handlePostTo3Speak(data.outputUrl, data.musicCredits);
+            handlePostTo3Speak(data.outputUrl, data.musicCredits, false, data.remixSource);
           }
           break;
 
@@ -464,8 +472,13 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
   };
 
   // Handle "Post to 3Speak" from editor — fetch rendered video, navigate to embed-studio
-  const handlePostTo3Speak = async (outputUrl, rawMusicCredits, asStory = false) => {
+  const handlePostTo3Speak = async (outputUrl, rawMusicCredits, asStory = false, editorRemix = null) => {
     if (!outputUrl) return;
+    // The original a remix goes under: the one the remix button opened the editor
+    // with, else the one the editor says (a remix draft opened again later)
+    const fromEditor = !originalAuthor ? remixSourceOf(editorRemix) : null;
+    const remixAuthor = originalAuthor || fromEditor?.author || null;
+    const remixPermlink = originalPermlink || fromEditor?.permlink || null;
 
     try {
       setRenderStatus('preparing');
@@ -526,16 +539,16 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
       setPrevVideoFile(file);
 
       // Set original author/permlink for credit attribution
-      if (originalAuthor) setOriginalAuthor(originalAuthor);
-      if (originalPermlink) setOriginalPermlink(originalPermlink);
+      if (remixAuthor) setOriginalAuthor(remixAuthor);
+      if (remixPermlink) setOriginalPermlink(remixPermlink);
       if (originalShortPermlink) setOriginalShortPermlink(originalShortPermlink);
       // The chain the remix button resolved (utils/remixChain.js); without one,
       // just the source, so the post still records where it came from
-      const chain = originalAuthor && originalPermlink
-        ? (remixChain?.length ? remixChain : [{
-          author: originalAuthor,
-          permlink: originalPermlink,
-          ...(originalShortPermlink && originalShortPermlink !== originalPermlink ? { short: originalShortPermlink } : {}),
+      const chain = remixAuthor && remixPermlink
+        ? (remixChain?.length && !fromEditor ? remixChain : [{
+          author: remixAuthor,
+          permlink: remixPermlink,
+          ...(!fromEditor && originalShortPermlink && originalShortPermlink !== originalPermlink ? { short: originalShortPermlink } : {}),
         }])
         : [];
       setRemixChain(chain);
@@ -558,7 +571,7 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
         isPremium,
         username: user,
         includeEncoder: true,
-        originalAuthor: originalAuthor || null,
+        originalAuthor: remixAuthor,
         remixAuthors: remixChainAuthors(chain, user),
         soundAuthors: soundAuthorsOf(musicCredits, user),
       });
@@ -725,11 +738,11 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
                 <div className="render-status">
                   <span>{t('modals.editor.postAs')}</span>
                   <div className="post-target">
-                    <button className="post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, true)}>
+                    <button className="post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, true, pendingPost.remixSource)}>
                       <strong>{t('modals.editor.postAsStory')}</strong>
                       <small>{t('modals.editor.postAsStoryHint')}</small>
                     </button>
-                    <button className="post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, false)}>
+                    <button className="post-target__btn" onClick={() => handlePostTo3Speak(pendingPost.outputUrl, pendingPost.musicCredits, false, pendingPost.remixSource)}>
                       <strong>{t('modals.editor.postAsShort')}</strong>
                       <small>{t('modals.editor.postAsShortHint')}</small>
                     </button>
