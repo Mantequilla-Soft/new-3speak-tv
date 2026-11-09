@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.103',
+    category: 'editor',
+    date: '2026-11-09',
+    summary: "The progress box after \"Use this audio\" in the audio editor now matches the 3Speak colours.",
+  },
+  {
+    version: '1.81.102',
+    category: 'podcasts',
+    date: '2026-11-09',
+    summary: "The podcast upload now has the same description editor as video posts, with formatting tools and a preview.",
+  },
+  {
     version: '1.81.101',
     category: 'podcasts',
     date: '2026-11-08',

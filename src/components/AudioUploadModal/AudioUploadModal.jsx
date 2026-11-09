@@ -40,6 +40,7 @@ import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from '../../l
 import { usePortalDoc } from '../../utils/portalDocument';
 import { readAddToBlog, writeAddToBlog, reblogOp } from '../../utils/addToBlog';
 import PlaylistTypePicker from '../PlaylistTypePicker/PlaylistTypePicker';
+import MarkdownComposer from '../studio/MarkdownComposer';
 import { playlistTypeFields, trackCategoryToKind, storedPlaylistType } from '../../lib/playlistType';
 
 // Every toast from this module is headed "Upload"; the message becomes the
@@ -2398,14 +2399,14 @@ function MainPostStep({
         placeholder={t('audio.upload.mainPost.tagsPlaceholder')}
       />
 
-      <textarea
-        className="audio-upload-post-desc"
-        placeholder={t('audio.upload.fields.descriptionOptional')}
-        rows={4}
-        maxLength={5000}
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
+      {/* The same composer as a video post: toolbar, emoji, GIFs, images and a preview */}
+      <div className="audio-upload-post-composer">
+        <MarkdownComposer
+          value={description}
+          onChange={setDescription}
+          placeholder={t('audio.upload.fields.descriptionOptional')}
+        />
+      </div>
 
       <ThumbPicker
         value={thumb}
