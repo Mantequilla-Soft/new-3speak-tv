@@ -1,5 +1,5 @@
 // Flat card like the rest of 3Speak (Audio page cards): no gradients, accent
-// red only on the icon, outlined buttons.
+// red only on the icon, neutral outlined buttons.
 .upload-block-notice {
   margin: 12px 0 16px;
   padding: 14px 16px;
@@ -31,25 +31,6 @@
 
 .ubn-note {
   margin: 10px 0 0;
-  padding: 8px 12px;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-}
-
-.ubn-note-label {
-  display: block;
-  margin-bottom: 2px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.ubn-note-text {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
 
 .ubn-body {
@@ -77,10 +58,7 @@
   font-weight: 600;
   color: var(--text-primary);
   text-decoration: none;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease;
 
-  &:hover {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-  }
+  &:hover { background: var(--bg-hover); }
 }

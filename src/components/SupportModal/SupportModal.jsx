@@ -3,6 +3,7 @@ import { SiTelegram } from 'react-icons/si';
 import { useTranslation } from 'react-i18next';
 import { useSupportBlock } from '../../lib/supportBlockStore';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import BlockNote from '../UploadBlockNotice/BlockNote';
 import './SupportModal.scss';
 
 // Discord / Telegram — same links as the profile sidebar's support-wrap.
@@ -39,15 +40,14 @@ export default function SupportModal() {
         <p className="support-modal-body">{t(copy.bodyKey)}</p>
         {block.note && (
           <div className="support-modal-note">
-            <span className="support-modal-note-label">{t('app.uploadBlock.noteLabel')}</span>
-            <p className="support-modal-note-text">{block.note}</p>
+            <BlockNote note={block.note} />
           </div>
         )}
         <div className="support-modal-actions">
-          <a className="support-modal-btn discord" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+          <a className="support-modal-btn" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
             <FaDiscord size={20} /> <span>Discord</span>
           </a>
-          <a className="support-modal-btn telegram" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
+          <a className="support-modal-btn" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
             <SiTelegram size={20} /> <span>Telegram</span>
           </a>
         </div>

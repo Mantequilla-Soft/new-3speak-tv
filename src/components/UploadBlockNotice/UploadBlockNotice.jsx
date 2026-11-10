@@ -7,6 +7,7 @@ import { IoCloudOfflineOutline } from 'react-icons/io5';
 import { useAppStore } from '../../lib/store';
 import { useSupportBlock } from '../../lib/supportBlockStore';
 import { creatorKey, isUploadBlocked, useCreatorSettings } from '../../utils/creatorSettings';
+import BlockNote from './BlockNote';
 import './UploadBlockNotice.scss';
 
 // Same links as the support popup and the profile sidebar.
@@ -83,8 +84,7 @@ export default function UploadBlockNotice({ hidden = false }) {
       </div>
       {note && (
         <div className="ubn-note">
-          <span className="ubn-note-label">{t('app.uploadBlock.noteLabel')}</span>
-          <p className="ubn-note-text">{note}</p>
+          <BlockNote note={note} />
         </div>
       )}
       <p className="ubn-body">{t('app.uploadBlock.bannerBody')}</p>

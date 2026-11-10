@@ -43,45 +43,25 @@
   justify-content: center;
 }
 
+// Neutral outline like the rest of 3Speak (no brand-coloured fills).
 .support-modal-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 10px 18px;
+  border: 1px solid var(--border-color, rgba(128, 128, 128, 0.35));
   border-radius: 22px;
+  background: transparent;
   font-weight: 600;
   font-size: 14px;
   text-decoration: none;
-  color: #fff;
-  transition: opacity 0.15s ease, transform 0.12s ease;
+  color: var(--text-primary);
+  transition: background 0.15s ease;
 
-  &:hover { opacity: 0.92; transform: translateY(-1px); }
-  &.discord { background: #5865f2; }
-  &.telegram { background: #229ed9; }
+  &:hover { background: var(--bg-hover, rgba(128, 128, 128, 0.1)); }
 }
 
-// The admin's block note, quoted under the body.
+// The admin's block note (BlockNote), quoted under the body.
 .support-modal-note {
   margin: -6px 0 20px;
-  padding: 10px 12px;
-  text-align: left;
-  background: var(--card-bg, rgba(128, 128, 128, 0.08));
-  border: 1px solid var(--border-light, rgba(128, 128, 128, 0.2));
-  border-radius: 8px;
-}
-
-.support-modal-note-label {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary, #555);
-}
-
-.support-modal-note-text {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }

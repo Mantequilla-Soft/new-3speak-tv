@@ -7,11 +7,12 @@ import { screen, waitFor, act } from '@testing-library/react'
 import { renderWithProviders } from './_render.jsx'
 
 const get = vi.hoisted(() => vi.fn())
-// Only GET /check is faked; the rest of axios (axios.create for the app's API
-// clients) stays real.
+const post = vi.hoisted(() => vi.fn())
+// Only GET /check and POST /translate are faked; the rest of axios
+// (axios.create for the app's API clients) stays real.
 vi.mock('axios', async (importOriginal) => {
   const real = (await importOriginal()).default
-  return { default: Object.assign(Object.create(real), real, { get }) }
+  return { default: Object.assign(Object.create(real), real, { get, post }) }
 })
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 
@@ -31,6 +32,7 @@ const popup = () => document.querySelector('.support-modal')
 
 beforeEach(() => {
   get.mockReset()
+  post.mockReset()
   get.mockImplementation(async (url) => ({ data: rows[decodeURIComponent(url.split('/check/')[1])] ?? { canPost: false, reason: 'User not found' } }))
   rows = {}
   clearCreatorSettingsCache()
@@ -61,6 +63,34 @@ describe('a blocked warm-up user', () => {
     mount()
     await waitFor(() => expect(banner()).not.toBeNull())
     expect(popup()).toBeNull()
+  })
+
+  it('can translate the note in the popup and switch back to the original', async () => {
+    rows['~newbie'] = { canUpload: false, uploadBlockedReason: 'Only post your own videos.' }
+    post.mockResolvedValue({ data: { translatedText: 'Lade nur eigene Videos hoch.' } })
+    const { user } = mount()
+    await waitFor(() => expect(popup()).not.toBeNull())
+    await user.click(popup().querySelector('.comment-translate-btn'))
+    const german = [...document.querySelectorAll('.translate-lang-item')].find((b) => b.textContent.includes('Deutsch'))
+    await user.click(german)
+    await waitFor(() => expect(popup()).toHaveTextContent('Lade nur eigene Videos hoch.'))
+    expect(post).toHaveBeenCalledWith(expect.stringMatching(/\/translate$/), expect.objectContaining({ q: 'Only post your own videos.', target: 'de' }))
+    expect(popup()).toHaveTextContent('Translated to Deutsch')
+    // the banner keeps the original until translated on its own
+    expect(banner()).toHaveTextContent('Only post your own videos.')
+    await user.click(screen.getByRole('button', { name: 'Show original' }))
+    expect(popup()).toHaveTextContent('Only post your own videos.')
+  })
+
+  it('says so when the translation fails, and keeps the original', async () => {
+    rows['~newbie'] = { canUpload: false, uploadBlockedReason: 'Only post your own videos.' }
+    post.mockRejectedValue(new Error('down'))
+    const { user } = mount()
+    await waitFor(() => expect(popup()).not.toBeNull())
+    await user.click(popup().querySelector('.comment-translate-btn'))
+    await user.click([...document.querySelectorAll('.translate-lang-item')].find((b) => b.textContent.includes('Deutsch')))
+    await waitFor(() => expect(popup()).toHaveTextContent('This message could not be translated. Please try again.'))
+    expect(popup()).toHaveTextContent('Only post your own videos.')
   })
 
   it('a new block (new date) shows the popup again', async () => {

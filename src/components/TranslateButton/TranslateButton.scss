@@ -13,7 +13,9 @@
   max-height: 260px;
   overflow-y: auto;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  z-index: 99999;
+  // Only exists while open, so it goes above every modal it can be opened
+  // from (support popup = 100001, editor/tour = 100050).
+  z-index: 1000002;
 
   // Scrollbar
   &::-webkit-scrollbar {
