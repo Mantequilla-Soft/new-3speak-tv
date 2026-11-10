@@ -33,6 +33,11 @@ const HIVE_API = 'https://api.hive.blog';
 // answered 403 "Domain suspended" since 2026-09-08, which left every legacy
 // thumbnail in the cards and the VideoObject pointing at an error page.
 const IPFS_GATEWAY = 'https://ipfs.3speak.tv';
+// Thumbnails (VideoObject thumbnailUrl, og:image) go out through ipfs-audio:
+// since 2026-11 many new uploads are not announced to the IPFS network and
+// ipfs.3speak.tv hangs on ~8% of their thumbnails, which Search Console reports
+// as "invalid URL in thumbnailUrl". The node behind ipfs-audio has them all.
+const THUMB_GATEWAY = process.env.OG_THUMB_GATEWAY || 'https://ipfs-audio.3speak.tv';
 // Base for author/publisher links + the fallback logo. og:url / canonical are
 // derived from the *request* host instead (so a shared preview link points back
 // to preview, and a prod link to prod) — see requestOrigin().
@@ -305,11 +310,11 @@ function fixThumbnail(thumbnail) {
   if (t.includes('ipfs://')) {
     const hash = t.replace('ipfs://', '').trim();
     if (!hash) return FALLBACK_THUMBNAIL;
-    return `${IPFS_GATEWAY}/ipfs/${hash}`;
+    return `${THUMB_GATEWAY}/ipfs/${hash}`;
   }
 
-  if (/^https:\/\/(hot)?ipfs-3speak(-1)?\.b-cdn\.net\/ipfs\//.test(t)) {
-    return t.replace(/^https:\/\/[^/]+/, IPFS_GATEWAY);
+  if (/^https:\/\/((hot)?ipfs-3speak(-1)?\.b-cdn\.net|ipfs\.3speak\.tv|ipfs-audio\.3speak\.tv)\/ipfs\//.test(t)) {
+    return t.replace(/^https:\/\/[^/]+/, THUMB_GATEWAY);
   }
 
   if (

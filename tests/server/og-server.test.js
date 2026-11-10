@@ -109,6 +109,13 @@ const FIXTURES = {
       body: 'Some thoughts on the week, no video in here, only a long enough text to read.',
       json_metadata: { app: 'peakd/2026.10.1', tags: ['life'] },
     }),
+    // IPFS thumbnails, stored as ipfs:// and as a full gateway address.
+    hivePost('erin', 'ipfs-thumb', {
+      json_metadata: { app: '3speak/0.3.0', tags: ['music'], video: { info: { duration: 60, sourceMap: [{ type: 'thumbnail', url: 'ipfs://bafkreid35b2rrxw4gh56b3rpxpegpwtvd3pav7kgwooovnfndnpy5uuada' }] } } },
+    }),
+    hivePost('erin', 'gateway-thumb', {
+      json_metadata: { app: '3speak/0.3.0', tags: ['music'], video: { info: { duration: 60 } }, image: ['https://ipfs.3speak.tv/ipfs/QmRqNYX1tghNHzKuXg5FmTajes8qwxc7FAMWSdFxJbvBY7'] },
+    }),
     // Every other video id: the checker has no such video.
     { url: 'https://checker.test.invalid/videodetails/', prefix: true, status: 404, json: { error: 'Video not found' } },
     // Anything else on Hive: no such post.
@@ -369,6 +376,15 @@ describe('search engines', () => {
     expect(linked.text).toMatch(/<meta name="robots" content="index, follow"/)
     const words = await crawl('/@dave/just-words', GOOGLEBOT)
     expect(words.text).toMatch(/<meta name="robots" content="noindex, follow"/)
+  })
+
+  it('serve IPFS thumbnails from the gateway that has every upload', async () => {
+    const stored = jsonLd((await crawl('/watch?v=erin/ipfs-thumb', GOOGLEBOT)).text).find((d) => d['@type'] === 'VideoObject')
+    expect(stored.thumbnailUrl).toBe('https://ipfs-audio.3speak.tv/ipfs/bafkreid35b2rrxw4gh56b3rpxpegpwtvd3pav7kgwooovnfndnpy5uuada')
+    // A full ipfs.3speak.tv address is moved over too, not wrapped in the Hive image proxy.
+    const r = await crawl('/watch?v=erin/gateway-thumb', GOOGLEBOT)
+    const video = jsonLd(r.text).find((d) => d['@type'] === 'VideoObject')
+    expect(video.thumbnailUrl).toBe('https://ipfs-audio.3speak.tv/ipfs/QmRqNYX1tghNHzKuXg5FmTajes8qwxc7FAMWSdFxJbvBY7')
   })
 
   it('keep a voice snap with no caption out of the index, but not one that says something', async () => {
