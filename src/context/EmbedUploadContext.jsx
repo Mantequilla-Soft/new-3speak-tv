@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
 import { resolveSnapsContainer } from '../utils/snapsContainer';
-import { getCreatorSettings, isUploadBlocked } from '../utils/creatorSettings';
+import { creatorKey, getCreatorSettings, isUploadBlocked } from '../utils/creatorSettings';
 import { useSupportBlock } from '../lib/supportBlockStore';
 import { useNavigate } from 'react-router-dom';
 import * as tus from 'tus-js-client';
@@ -1534,10 +1534,9 @@ export function EmbedUploadProvider({ children }) {
     // Backstop upload gate: blocks "Post Video/Short" for creators with
     // canUpload === false, even if they reached /embed-studio directly (bypassing
     // the upload-button gate). Fails open if the check errors.
-    // Only meaningful for a Hive account: creator settings are stored against
-    // one, so for an incubating user this would look up `null` and the result
-    // would say nothing about them either way.
-    if (user && isUploadBlocked(await getCreatorSettings(user))) {
+    // A warm-up user is looked up as `~<handle>` (creatorKey).
+    const gateKey = creatorKey(user, incubationHandle);
+    if (gateKey && isUploadBlocked(await getCreatorSettings(gateKey))) {
       useSupportBlock.getState().showSupportBlock('upload');
       return;
     }

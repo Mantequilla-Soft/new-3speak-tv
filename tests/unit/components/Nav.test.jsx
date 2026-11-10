@@ -26,6 +26,11 @@ vi.mock('../../../src/components/nav/NavSearch', () => ({ default: () => <div cl
 vi.mock('../../../src/components/UploadLinks', () => ({ default: () => <a href="/embed-studio">Upload a video</a> }))
 vi.mock('../../../src/components/Incubation/NavProgress', () => ({ default: () => null }))
 vi.mock('../../../src/components/Incubation/IncubationBell', () => ({ default: () => <span>Incubation bell</span> }))
+// Creator rows by key; only the lookup is faked, the key rule is the real one.
+vi.mock('../../../src/utils/creatorSettings', async (importOriginal) => ({
+  ...(await importOriginal()),
+  useCreatorSettings: (key) => { if (key) m.lookedUp.push(key); return (key && m.rows[key]) || null },
+}))
 vi.mock('../../../src/components/nav/NotificationBell', () => ({ default: () => <span>Hive bell</span> }))
 vi.mock('../../../src/components/Chat/ChatButton', () => ({ default: () => null }))
 vi.mock('../../../src/components/PremiumBadge/PremiumBadge', () => ({ default: () => null }))
@@ -57,7 +62,7 @@ beforeEach(() => {
   stubMatchMedia((q) => q === '(min-width: 641px)')
   Object.assign(m, {
     butrauth: true, signup: { loading: false, possible: true }, rememberedAdvertiser: false, hasProduct: false,
-    rememberAdvertiser: vi.fn(), playlists: [],
+    rememberAdvertiser: vi.fn(), playlists: [], rows: {}, lookedUp: [],
   })
   useAppStore.setState({ authenticated: false, user: null, authChecked: true, incubationHandle: null, initializeTheme: () => {} })
   localStorage.clear()
@@ -167,6 +172,24 @@ describe('the top bar for a member', () => {
     const { user, toggleProfileNav } = mount()
     await user.click(document.querySelector('.nav-avatar-wrap img'))
     expect(toggleProfileNav).toHaveBeenCalledTimes(1)
+  })
+
+  it('drops Share for a warm-up user whose ~<handle> row blocks uploads', () => {
+    act(() => useAppStore.setState({ user: null, incubationHandle: 'newbie' }))
+    const { unmount } = mount()
+    expect(screen.getByTitle('Share')).toBeInTheDocument()
+    unmount()
+    m.rows['~newbie'] = { canUpload: false }
+    mount()
+    expect(screen.queryByTitle('Share')).not.toBeInTheDocument()
+    expect(m.lookedUp).toContain('~newbie')
+  })
+
+  it('keeps Share for a Hive account even when blocked (the entries show the support notice)', () => {
+    m.rows.badadib = { canUpload: false }
+    mount()
+    expect(screen.getByTitle('Share')).toBeInTheDocument()
+    expect(m.lookedUp).toEqual([])
   })
 
   it('a click on Share keeps its menu open, a second click closes it', async () => {
