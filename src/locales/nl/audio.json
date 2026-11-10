@@ -457,6 +457,7 @@
     "allPodcasts": "Alle podcasts",
     "openShow": "Podcast openen",
     "play": "Aflevering afspelen",
+    "playTrack": "Nummer afspelen",
     "pause": "Pauzeren",
     "episodePage": "Pagina van aflevering",
     "website": "Website",
@@ -710,7 +711,7 @@
       "hide": "Video verbergen"
     },
     "signInToFollow": "Log in om podcasts te volgen",
-    "addExternal": "Externe podcast toevoegen",
+    "addExternal": "Externe RSS-feed toevoegen",
     "continue": {
       "title": "Verder luisteren",
       "left": "nog {{minutes}} min",

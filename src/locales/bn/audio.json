@@ -457,6 +457,7 @@
     "allPodcasts": "সব পডকাস্ট",
     "openShow": "পডকাস্ট খুলুন",
     "play": "এপিসোড চালান",
+    "playTrack": "ট্র্যাক চালান",
     "pause": "থামান",
     "episodePage": "এপিসোডের পেজ",
     "website": "ওয়েবসাইট",
@@ -710,7 +711,7 @@
       "hide": "ভিডিও লুকান"
     },
     "signInToFollow": "পডকাস্ট ফলো করতে সাইন ইন করুন",
-    "addExternal": "বাইরের পডকাস্ট যোগ করুন",
+    "addExternal": "বাইরের RSS ফিড যোগ করুন",
     "continue": {
       "title": "শোনা চালিয়ে যান",
       "left": "আর {{minutes}} মিনিট",

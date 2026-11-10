@@ -441,6 +441,7 @@
     "allPodcasts": "Tất cả podcast",
     "openShow": "Mở podcast",
     "play": "Phát tập",
+    "playTrack": "Phát bài",
     "pause": "Tạm dừng",
     "episodePage": "Trang của tập",
     "website": "Trang web",
@@ -685,7 +686,7 @@
       "hide": "Ẩn video"
     },
     "signInToFollow": "Đăng nhập để theo dõi podcast",
-    "addExternal": "Thêm podcast bên ngoài",
+    "addExternal": "Thêm nguồn RSS bên ngoài",
     "continue": {
       "title": "Nghe tiếp",
       "left": "còn {{minutes}} phút",

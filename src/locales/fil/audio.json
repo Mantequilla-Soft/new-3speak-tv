@@ -457,6 +457,7 @@
     "allPodcasts": "Lahat ng podcast",
     "openShow": "Buksan ang podcast",
     "play": "I-play ang episode",
+    "playTrack": "I-play ang track",
     "pause": "I-pause",
     "episodePage": "Page ng episode",
     "website": "Website",
@@ -710,7 +711,7 @@
       "hide": "Itago ang video"
     },
     "signInToFollow": "Mag-sign in para i-follow ang mga podcast",
-    "addExternal": "Magdagdag ng external podcast",
+    "addExternal": "Magdagdag ng external RSS feed",
     "continue": {
       "title": "Ituloy ang pakikinig",
       "left": "{{minutes}} min na lang",

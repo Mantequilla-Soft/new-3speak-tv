@@ -9,7 +9,8 @@ import {
 } from 'react-icons/md';
 import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
-import { CHECKER_URL } from '../../utils/config';
+import { CHECKER_URL, PLAYLISTS_READ_URL } from '../../utils/config';
+import { storedPlaylistType } from '../../lib/playlistType';
 import { toastIn } from '../../utils/toast';
 import { isLoggedIn } from '../../hive-api/aioha';
 import { fixVideoThumbnail, fallbackImg, wholeCover } from '../../utils/fixThumbnails';
@@ -100,6 +101,15 @@ export default function AudioItemView({ owner, id, onBack }) {
     queryFn: () => getUersContent(owner, postPermlink),
     staleTime: 60 * 1000,
   });
+  // The playlist the track is in (same query key as PlaylistView, so the cache
+  // is shared): a music playlist's tracks say "Play track", not "Play episode".
+  const { data: playlist } = useQuery({
+    queryKey: ['playlist', item?.playlist_id],
+    enabled: !!item?.playlist_id,
+    queryFn: async () => (await axios.get(`${PLAYLISTS_READ_URL}/playlists/${item.playlist_id}`)).data,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
   // The post's title over the audio row's, which can still be the upload's
   // file name ("recording 4702").
   const title = String(post?.title || '').trim() || item?.title;
@@ -130,6 +140,9 @@ export default function AudioItemView({ owner, id, onBack }) {
   };
   const shareAt = isCurrent && currentSec > 0 ? currentSec : 0;
   const link = (from) => episodeShareUrl(window.location.origin, audioItemPath(item), from);
+  // The playlist's saved kind wins; with none saved, the track's own category.
+  const listKind = storedPlaylistType(playlist).kind;
+  const isTrack = listKind ? listKind === 'music' : item.category === 'song';
   const genre = item.category === 'song' && item.genre ? item.genre : '';
   const votes = post?.active_votes || [];
   const voted = votedNow || (!!user && votes.some((v) => v.voter === user));
@@ -166,7 +179,7 @@ export default function AudioItemView({ owner, id, onBack }) {
           <div className="pod-show-actions">
             <button type="button" className={`pod-btn ${deepOpen ? 'pod-btn--primary' : 'pod-btn--solid'}`} onClick={play}>
               {playing ? <MdPause size={18} /> : <MdPlayArrow size={18} />}
-              {playing ? t('audio.podcasts.pause') : deepOpen ? deepLabel : t('audio.podcasts.play')}
+              {playing ? t('audio.podcasts.pause') : deepOpen ? deepLabel : t(isTrack ? 'audio.podcasts.playTrack' : 'audio.podcasts.play')}
             </button>
             <button
               type="button"

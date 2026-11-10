@@ -17,8 +17,9 @@ import './PodcastsTab.scss';
  *   number       — the track's place in the playlist
  *   onOpen       — opens the track's own audio page
  *   onAddToPlaylist — optional; shows the Playlist button
+ *   music        — the playlist is music: "Play track" instead of "Play episode"
  */
-export default function PlaylistEpisodeTile({ video, item, contextItems, number, onOpen, onAddToPlaylist }) {
+export default function PlaylistEpisodeTile({ video, item, contextItems, number, onOpen, onAddToPlaylist, music = false }) {
   const { t } = useTranslation();
   const fmtDate = useDateFormat();
   const audioCurrent = useAppStore((s) => s.audioCurrent);
@@ -43,7 +44,7 @@ export default function PlaylistEpisodeTile({ video, item, contextItems, number,
   return (
     <li className={`pod-tile${isCurrent ? ' pod-tile--current' : ''}`}>
       <div className="pod-tile-top">
-        <button type="button" className="pod-tile-cover" onClick={play} aria-label={playing ? t('audio.podcasts.pause') : t('audio.podcasts.play')}>
+        <button type="button" className="pod-tile-cover" onClick={play} aria-label={playing ? t('audio.podcasts.pause') : t(music ? 'audio.podcasts.playTrack' : 'audio.podcasts.play')}>
           <img className="pod-art" src={cover} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = PODCAST_PLACEHOLDER; }} />
           <span className={`pod-tile-play${playing ? ' pod-tile-play--on' : ''}`}>{playing ? <MdPause size={24} /> : <MdPlayArrow size={24} />}</span>
         </button>

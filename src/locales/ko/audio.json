@@ -441,6 +441,7 @@
     "allPodcasts": "모든 팟캐스트",
     "openShow": "팟캐스트 열기",
     "play": "에피소드 재생",
+    "playTrack": "트랙 재생",
     "pause": "일시정지",
     "episodePage": "에피소드 페이지",
     "website": "웹사이트",
@@ -685,7 +686,7 @@
       "hide": "동영상 숨기기"
     },
     "signInToFollow": "팟캐스트를 팔로우하려면 로그인하세요",
-    "addExternal": "외부 팟캐스트 추가",
+    "addExternal": "외부 RSS 피드 추가",
     "continue": {
       "title": "이어 듣기",
       "left": "{{minutes}}분 남음",

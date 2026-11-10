@@ -457,6 +457,7 @@
     "allPodcasts": "Alle Podcasts",
     "openShow": "Podcast öffnen",
     "play": "Folge abspielen",
+    "playTrack": "Titel abspielen",
     "pause": "Pause",
     "episodePage": "Seite der Folge",
     "website": "Website",
@@ -710,7 +711,7 @@
       "hide": "Video ausblenden"
     },
     "signInToFollow": "Melde dich an, um Podcasts zu folgen",
-    "addExternal": "Externen Podcast hinzufügen",
+    "addExternal": "Externen RSS-Feed hinzufügen",
     "continue": {
       "title": "Weiterhören",
       "left": "noch {{minutes}} Min.",

@@ -473,6 +473,7 @@
     "allPodcasts": "Todos los podcasts",
     "openShow": "Abrir podcast",
     "play": "Reproducir episodio",
+    "playTrack": "Reproducir pista",
     "pause": "Pausar",
     "episodePage": "Página del episodio",
     "website": "Sitio web",
@@ -735,7 +736,7 @@
       "hide": "Ocultar video"
     },
     "signInToFollow": "Inicia sesión para seguir podcasts",
-    "addExternal": "Añadir podcast externo",
+    "addExternal": "Añadir feed RSS externo",
     "continue": {
       "title": "Seguir escuchando",
       "left": "quedan {{minutes}} min",

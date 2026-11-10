@@ -68,7 +68,7 @@ describe('podcast pages', () => {
     const html = await render('/audio?type=external&view=discover', (qc) => {
       qc.setQueryData(['podcasts', 'config'], { enabled: true, search: true })
     })
-    expect(html).toContain('Add external podcast')
+    expect(html).toContain('Add external RSS feed')
     expect(html).not.toContain('Podcasts from anywhere')
   })
 })

@@ -441,6 +441,7 @@
     "allPodcasts": "พอดแคสต์ทั้งหมด",
     "openShow": "เปิดพอดแคสต์",
     "play": "เล่นตอน",
+    "playTrack": "เล่นเพลง",
     "pause": "หยุดชั่วคราว",
     "episodePage": "หน้าของตอน",
     "website": "เว็บไซต์",
@@ -685,7 +686,7 @@
       "hide": "ซ่อนวิดีโอ"
     },
     "signInToFollow": "เข้าสู่ระบบเพื่อติดตามพอดแคสต์",
-    "addExternal": "เพิ่มพอดแคสต์ภายนอก",
+    "addExternal": "เพิ่มฟีด RSS ภายนอก",
     "continue": {
       "title": "ฟังต่อ",
       "left": "เหลือ {{minutes}} นาที",

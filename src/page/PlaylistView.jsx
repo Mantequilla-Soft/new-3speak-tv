@@ -810,6 +810,7 @@ function PlaylistView() {
                   item={episodeItems[i]}
                   contextItems={episodeItems}
                   number={listedVideos.indexOf(video) + 1}
+                  music={playlistKind === 'music'}
                   onOpen={() => navigate(audioItemPath(video.audioDoc))}
                   onAddToPlaylist={authenticatedUser ? () => setPlaylistTarget({
                     author: video.audioDoc.owner,

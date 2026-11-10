@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.118',
+    category: 'podcasts',
+    date: '2026-11-10',
+    summary: 'The "Add external podcast" button is now called "Add external RSS feed" and uses the plain grey style instead of red.',
+  },
+  {
     version: '1.81.117',
     category: 'playlists',
     date: '2026-11-10',

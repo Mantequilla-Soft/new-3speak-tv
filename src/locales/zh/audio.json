@@ -441,6 +441,7 @@
     "allPodcasts": "全部播客",
     "openShow": "打开播客",
     "play": "播放单集",
+    "playTrack": "播放曲目",
     "pause": "暂停",
     "episodePage": "单集页面",
     "website": "网站",
@@ -685,7 +686,7 @@
       "hide": "隐藏视频"
     },
     "signInToFollow": "登录后即可关注播客",
-    "addExternal": "添加外部播客",
+    "addExternal": "添加外部 RSS 订阅源",
     "continue": {
       "title": "继续收听",
       "left": "还剩 {{minutes}} 分钟",

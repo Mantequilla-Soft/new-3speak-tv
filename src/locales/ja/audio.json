@@ -441,6 +441,7 @@
     "allPodcasts": "すべてのポッドキャスト",
     "openShow": "ポッドキャストを開く",
     "play": "エピソードを再生",
+    "playTrack": "トラックを再生",
     "pause": "一時停止",
     "episodePage": "エピソードのページ",
     "website": "ウェブサイト",
@@ -685,7 +686,7 @@
       "hide": "動画を隠す"
     },
     "signInToFollow": "ポッドキャストをフォローするにはログインしてください",
-    "addExternal": "外部ポッドキャストを追加",
+    "addExternal": "外部RSSフィードを追加",
     "continue": {
       "title": "続きを聴く",
       "left": "残り{{minutes}}分",

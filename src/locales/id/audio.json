@@ -441,6 +441,7 @@
     "allPodcasts": "Semua podcast",
     "openShow": "Buka podcast",
     "play": "Putar episode",
+    "playTrack": "Putar lagu",
     "pause": "Jeda",
     "episodePage": "Halaman episode",
     "website": "Situs web",
@@ -685,7 +686,7 @@
       "hide": "Sembunyikan video"
     },
     "signInToFollow": "Masuk untuk mengikuti podcast",
-    "addExternal": "Tambah podcast eksternal",
+    "addExternal": "Tambah feed RSS eksternal",
     "continue": {
       "title": "Lanjutkan mendengarkan",
       "left": "{{minutes}} mnt lagi",

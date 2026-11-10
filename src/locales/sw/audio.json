@@ -457,6 +457,7 @@
     "allPodcasts": "Podikasti zote",
     "openShow": "Fungua podikasti",
     "play": "Cheza kipindi",
+    "playTrack": "Cheza wimbo",
     "pause": "Sitisha",
     "episodePage": "Ukurasa wa kipindi",
     "website": "Tovuti",
@@ -710,7 +711,7 @@
       "hide": "Ficha video"
     },
     "signInToFollow": "Ingia ili kufuata podikasti",
-    "addExternal": "Ongeza podikasti ya nje",
+    "addExternal": "Ongeza mlisho wa RSS wa nje",
     "continue": {
       "title": "Endelea kusikiliza",
       "left": "zimebaki dak {{minutes}}",

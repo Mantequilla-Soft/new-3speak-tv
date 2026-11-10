@@ -457,6 +457,7 @@
     "allPodcasts": "Tüm podcast'ler",
     "openShow": "Podcast'i aç",
     "play": "Bölümü oynat",
+    "playTrack": "Parçayı oynat",
     "pause": "Duraklat",
     "episodePage": "Bölüm sayfası",
     "website": "Web sitesi",
@@ -710,7 +711,7 @@
       "hide": "Videoyu gizle"
     },
     "signInToFollow": "Podcast takip etmek için giriş yap",
-    "addExternal": "Harici podcast ekle",
+    "addExternal": "Harici RSS akışı ekle",
     "continue": {
       "title": "Dinlemeye devam et",
       "left": "{{minutes}} dk kaldı",

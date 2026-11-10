@@ -412,7 +412,7 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
   if (!open) {
     return (
       <div className="pod-add-row">
-        <button type="button" className="pod-btn pod-btn--solid" onClick={() => setOpen(true)} aria-expanded={false}>
+        <button type="button" className="pod-btn" onClick={() => setOpen(true)} aria-expanded={false}>
           <MdAdd size={18} /> {t('audio.podcasts.addExternal')}
         </button>
       </div>
