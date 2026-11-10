@@ -12,6 +12,10 @@
       "body": "Hindi pinapayagang mag-upload ang 3Speak account mo ngayon. Kung sa tingin mo ay pagkakamali ito, kontakin ang 3Speak support."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Mensahe mula sa 3Speak team",
+    "bannerBody": "Puwede ka pa ring manood, mag-comment at mag-follow. May tanong? Kausapin kami:"
+  },
   "emergency": {
     "title": "May ilang problema kami sa infrastructure",
     "body": "Inaayos na ito ng team namin para maibalik agad ang 3Speak. Sumali sa Discord namin para makausap kami at makakuha ng live updates — salamat sa pasensya mo.",

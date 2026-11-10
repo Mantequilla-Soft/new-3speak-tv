@@ -68,7 +68,8 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
     const { user: hiveUser, incubationHandle } = useAppStore.getState();
     const settings = await getCreatorSettings(creatorKey(hiveUser, incubationHandle));
     if (isUploadBlocked(settings)) {
-      useSupportBlock.getState().showSupportBlock('upload');
+      const note = settings?.uploadBlockedReason;
+      useSupportBlock.getState().showSupportBlock('upload', note ? { note } : undefined);
       return;
     }
     action();

@@ -12,6 +12,10 @@
       "body": "Sua conta do 3Speak não tem permissão para enviar vídeos no momento. Se acha que é um engano, entre em contato com o suporte do 3Speak."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Mensagem da equipe do 3Speak",
+    "bannerBody": "Você ainda pode assistir, comentar e seguir. Dúvidas? Fale com a gente:"
+  },
   "emergency": {
     "title": "Estamos com problemas de infraestrutura",
     "body": "Nossa equipe já está trabalhando para colocar o 3Speak de volta no ar. Entre no nosso Discord para falar com a gente e receber atualizações ao vivo — obrigado pela paciência.",

@@ -12,6 +12,10 @@
       "body": "Akun 3Speak-mu saat ini tidak diizinkan mengunggah. Jika menurutmu ini kesalahan, silakan hubungi dukungan 3Speak."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Pesan dari tim 3Speak",
+    "bannerBody": "Kamu masih bisa menonton, berkomentar, dan mengikuti. Ada pertanyaan? Hubungi kami:"
+  },
   "emergency": {
     "title": "Kami sedang mengalami masalah infrastruktur",
     "body": "Tim kami sedang menanganinya dan berusaha memulihkan 3Speak sekarang juga. Gabung ke Discord kami untuk menghubungi kami dan mendapat kabar terbaru — terima kasih atas kesabaranmu.",

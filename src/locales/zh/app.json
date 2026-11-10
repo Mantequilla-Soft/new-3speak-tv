@@ -12,6 +12,10 @@
       "body": "你的 3Speak 账号目前不允许上传。如果你认为这是误判，请联系 3Speak 客服。"
     }
   },
+  "uploadBlock": {
+    "noteLabel": "来自 3Speak 团队的消息",
+    "bannerBody": "你仍然可以观看、评论和关注。有疑问？联系我们："
+  },
   "emergency": {
     "title": "我们的基础设施出现了一些问题",
     "body": "我们的团队正在全力处理，尽快恢复 3Speak。加入我们的 Discord 联系我们并获取实时进展——感谢你的耐心。",

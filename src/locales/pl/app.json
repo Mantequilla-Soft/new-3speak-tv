@@ -12,6 +12,10 @@
       "body": "Twoje konto 3Speak nie może teraz przesyłać filmów. Jeśli uważasz, że to pomyłka, skontaktuj się z pomocą techniczną 3Speak."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Wiadomość od zespołu 3Speak",
+    "bannerBody": "Nadal możesz oglądać, komentować i obserwować. Masz pytania? Napisz do nas:"
+  },
   "emergency": {
     "title": "Mamy problemy z infrastrukturą",
     "body": "Nasz zespół już nad tym pracuje i stara się jak najszybciej przywrócić 3Speak. Dołącz do naszego Discorda, aby się z nami skontaktować i otrzymywać bieżące informacje — dziękujemy za cierpliwość.",

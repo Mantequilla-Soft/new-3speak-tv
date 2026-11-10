@@ -13,4 +13,11 @@ describe('useSupportBlock', () => {
     useSupportBlock.getState().hideSupportBlock()
     expect(useSupportBlock.getState().block).toBeNull()
   })
+
+  it('carries the admin note and a close callback when given', () => {
+    const onClose = () => {}
+    useSupportBlock.getState().showSupportBlock('upload', { note: 'Only your own videos.', onClose })
+    expect(useSupportBlock.getState().block).toEqual({ reason: 'upload', note: 'Only your own videos.', onClose })
+    useSupportBlock.getState().hideSupportBlock()
+  })
 })

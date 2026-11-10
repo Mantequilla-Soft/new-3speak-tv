@@ -12,6 +12,10 @@
       "body": "Dein 3Speak-Konto darf gerade nichts hochladen. Wenn du glaubst, dass das ein Fehler ist, wende dich bitte an den 3Speak-Support."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Nachricht vom 3Speak-Team",
+    "bannerBody": "Du kannst weiterhin schauen, kommentieren und folgen. Fragen? Schreib uns:"
+  },
   "emergency": {
     "title": "Wir haben gerade Probleme mit der Infrastruktur",
     "body": "Unser Team kümmert sich darum und arbeitet daran, 3Speak so schnell wie möglich wieder ans Laufen zu bringen. Tritt unserem Discord bei, um uns zu erreichen und Live-Updates zu bekommen – danke für deine Geduld.",

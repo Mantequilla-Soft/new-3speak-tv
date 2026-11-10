@@ -59,3 +59,29 @@
   &.discord { background: #5865f2; }
   &.telegram { background: #229ed9; }
 }
+
+// The admin's block note, quoted under the body.
+.support-modal-note {
+  margin: -6px 0 20px;
+  padding: 10px 12px;
+  text-align: left;
+  background: var(--card-bg, rgba(128, 128, 128, 0.08));
+  border: 1px solid var(--border-light, rgba(128, 128, 128, 0.2));
+  border-radius: 8px;
+}
+
+.support-modal-note-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary, #555);
+}
+
+.support-modal-note-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
