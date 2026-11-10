@@ -126,6 +126,27 @@ describe('signed changes', () => {
   })
 })
 
+describe('outside shows in a playlist', () => {
+  it('checks a show with a vouch over the hash of its one URL, without following it', async () => {
+    routes['/api/podcasts/signature'] = reply(200, VOUCH)
+    routes[`${API}/resolve`] = reply(200, { success: true, feed: { id: 'f1', url: 'https://a.example/rss' } })
+    expect(await P.resolveFeed('alice', ' https://a.example/rss ')).toEqual({ success: true, feed: { id: 'f1', url: 'https://a.example/rss' } })
+    expect(bodyOf('/api/podcasts/signature')).toEqual({ action: 'resolve', payload: await sha256('https://a.example/rss') })
+    expect(bodyOf(`${API}/resolve`)).toEqual({ user: 'alice', url: 'https://a.example/rss', signature: 'API-SIG', timestamp: 111 })
+    expect(fetchMock.mock.calls.some((c) => c[0] === `${API}/subscribe`)).toBe(false)
+  })
+
+  it('reads a playlist\'s shows unsigned, with the cursor only when there is one', async () => {
+    routes[`${API}/bundle`] = reply(200, { feeds: [], episodes: [] })
+    await P.fetchPlaylistBundle(['https://a/rss'])
+    expect(bodyOf(`${API}/bundle`)).toEqual({ urls: ['https://a/rss'] })
+    fetchMock.mockClear()
+    await P.fetchPlaylistBundle(['https://a/rss'], '2026-11-01T00:00:00.000Z|x')
+    expect(bodyOf(`${API}/bundle`)).toEqual({ urls: ['https://a/rss'], cursor: '2026-11-01T00:00:00.000Z|x' })
+    expect(fetchMock.mock.calls.some((c) => c[0] === '/api/podcasts/signature')).toBe(false)
+  })
+})
+
 describe('listenVouch', () => {
   it('reuses one vouch for most of a day, per user', async () => {
     vi.useFakeTimers({ toFake: ['Date'] })

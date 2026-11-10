@@ -108,5 +108,31 @@
       "voice": "Mga voice note",
       "sounds": "Iba pang tunog"
     }
+  },
+  "feeds": {
+    "button": "Mga panlabas na show",
+    "title": "Mga panlabas na show",
+    "intro": "Magdagdag ng buong podcast show mula kahit saan. Lalabas ang mga episode nila sa playlist na ito katabi ng sa iyo, pinakabago muna, at kusang darating ang mga bago.",
+    "searchLabel": "Maghanap ng show o mag-paste ng link ng feed",
+    "searchPlaceholder": "Pangalan ng show, RSS feed o link ng Apple Podcasts",
+    "add": "Idagdag",
+    "checking": "Sinusuri...",
+    "searching": "Naghahanap...",
+    "noResults": "Walang nahanap na show.",
+    "inList": "Nasa playlist",
+    "inPlaylist": "Sa playlist na ito",
+    "none": "Wala pang panlabas na show.",
+    "remove": "Alisin ang {{title}}",
+    "already": "Nasa playlist na ito na ang show na iyan.",
+    "limit": "Hanggang {{max}} panlabas na show ang kaya ng isang playlist.",
+    "ownFeed": "Iyan ang sariling feed ng playlist na ito.",
+    "privateFeed": "Hindi puwedeng ilagay sa playlist ang mga feed na may password, dahil pampubliko ang mga playlist.",
+    "tooBig": "Lampas na iyan sa kaya ng isang playlist. Mag-alis muna ng isang show.",
+    "saved": "Na-save ang mga panlabas na show. Mag-a-update ang playlist sa loob ng ilang segundo.",
+    "saveFailed": "Hindi na-save: {{error}}",
+    "fromShows": "Mula sa ibang show:",
+    "video": "Video",
+    "pending_one": "{{count}} show ang binabasa pa. Lalabas ang mga episode nito sa loob ng ilang minuto.",
+    "pending_other": "{{count}} show ang binabasa pa. Lalabas ang mga episode nila sa loob ng ilang minuto."
   }
 }

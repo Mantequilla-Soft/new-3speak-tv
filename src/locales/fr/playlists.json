@@ -113,5 +113,32 @@
       "voice": "Notes vocales",
       "sounds": "Autres sons"
     }
+  },
+  "feeds": {
+    "button": "Émissions externes",
+    "title": "Émissions externes",
+    "intro": "Ajoutez des émissions de podcast entières, d'où qu'elles viennent. Leurs épisodes apparaissent dans cette playlist à côté des vôtres, les plus récents d'abord, et les nouveaux arrivent tout seuls.",
+    "searchLabel": "Cherchez une émission ou collez un lien de flux",
+    "searchPlaceholder": "Nom de l'émission, flux RSS ou lien Apple Podcasts",
+    "add": "Ajouter",
+    "checking": "Vérification...",
+    "searching": "Recherche...",
+    "noResults": "Aucune émission trouvée.",
+    "inList": "Dans la playlist",
+    "inPlaylist": "Dans cette playlist",
+    "none": "Pas encore d'émission externe.",
+    "remove": "Retirer {{title}}",
+    "already": "Cette émission est déjà dans cette playlist.",
+    "limit": "Une playlist peut contenir jusqu'à {{max}} émissions externes.",
+    "ownFeed": "C'est le flux de cette playlist elle-même.",
+    "privateFeed": "Les flux protégés par un mot de passe ne peuvent pas aller dans une playlist, car les playlists sont publiques.",
+    "tooBig": "C'est plus que ce qu'une playlist peut contenir. Retirez d'abord une émission.",
+    "saved": "Émissions externes enregistrées. La playlist se met à jour dans quelques secondes.",
+    "saveFailed": "Échec de l'enregistrement : {{error}}",
+    "fromShows": "D'autres émissions :",
+    "video": "Vidéo",
+    "pending_one": "{{count}} émission est encore en cours de lecture. Ses épisodes apparaissent d'ici quelques minutes.",
+    "pending_many": "{{count}} émissions sont encore en cours de lecture. Leurs épisodes apparaissent d'ici quelques minutes.",
+    "pending_other": "{{count}} émissions sont encore en cours de lecture. Leurs épisodes apparaissent d'ici quelques minutes."
   }
 }

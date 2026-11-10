@@ -103,5 +103,30 @@
       "voice": "语音笔记",
       "sounds": "其他声音"
     }
+  },
+  "feeds": {
+    "button": "外部节目",
+    "title": "外部节目",
+    "intro": "从任何地方添加整档播客节目。节目的单集会和你的内容一起按最新排序显示在这个播放列表中，新单集会自动加入。",
+    "searchLabel": "搜索节目或粘贴订阅链接",
+    "searchPlaceholder": "节目名称、RSS 订阅源或 Apple Podcasts 链接",
+    "add": "添加",
+    "checking": "正在检查...",
+    "searching": "正在搜索...",
+    "noResults": "没有找到节目。",
+    "inList": "已在播放列表中",
+    "inPlaylist": "此播放列表中",
+    "none": "还没有外部节目。",
+    "remove": "移除 {{title}}",
+    "already": "这个节目已经在播放列表里了。",
+    "limit": "一个播放列表最多可包含 {{max}} 档外部节目。",
+    "ownFeed": "这是这个播放列表自己的订阅源。",
+    "privateFeed": "需要密码的订阅源不能放入播放列表，因为播放列表是公开的。",
+    "tooBig": "超出了播放列表的容量。请先移除一档节目。",
+    "saved": "外部节目已保存。播放列表将在几秒内更新。",
+    "saveFailed": "保存失败：{{error}}",
+    "fromShows": "来自其他节目：",
+    "video": "视频",
+    "pending_other": "仍有 {{count}} 档节目正在读取，单集会在几分钟内出现。"
   }
 }

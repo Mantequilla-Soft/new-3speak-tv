@@ -194,6 +194,19 @@ export async function setFeedNotify(user, feedId, notify) {
   return post('notify', { user, feed_id: feedId, notify, ...signed });
 }
 
+/**
+ * Check a show before a playlist owner adds it to a playlist (no follow). Resolves
+ * to `{ success, feed }` with the feed URL to store, or `{ success: false, code }`.
+ */
+export async function resolveFeed(user, url) {
+  const clean = String(url || '').trim();
+  const signed = await sign('resolve', await sha256Hex(clean), user);
+  return post('resolve', { user, url: clean, ...signed });
+}
+
+/** One page of a playlist's outside shows and their episodes, newest first (checker /podcasts/bundle). */
+export const fetchPlaylistBundle = (urls, cursor = null) => post('bundle', { urls, ...(cursor ? { cursor } : {}) });
+
 /** The user-facing reason a URL could not be followed. */
 /** The message for a failed follow; `info` is the checker's result row (Spotify & co. name the platform). */
 export function followErrorText(code, info = {}) {

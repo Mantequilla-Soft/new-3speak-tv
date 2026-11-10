@@ -108,5 +108,31 @@
       "voice": "Sprachnotizen",
       "sounds": "Andere Klänge"
     }
+  },
+  "feeds": {
+    "button": "Externe Shows",
+    "title": "Externe Shows",
+    "intro": "Füge ganze Podcast-Shows von überall hinzu. Ihre Folgen erscheinen in dieser Playlist neben deinen, die neuesten zuerst, und neue kommen von selbst dazu.",
+    "searchLabel": "Shows suchen oder Feed-Link einfügen",
+    "searchPlaceholder": "Showname, RSS-Feed oder Apple-Podcasts-Link",
+    "add": "Hinzufügen",
+    "checking": "Wird geprüft...",
+    "searching": "Suche läuft...",
+    "noResults": "Keine Shows gefunden.",
+    "inList": "In der Playlist",
+    "inPlaylist": "In dieser Playlist",
+    "none": "Noch keine externen Shows.",
+    "remove": "{{title}} entfernen",
+    "already": "Diese Show ist schon in dieser Playlist.",
+    "limit": "Eine Playlist kann bis zu {{max}} externe Shows enthalten.",
+    "ownFeed": "Das ist der eigene Feed dieser Playlist.",
+    "privateFeed": "Feeds mit Passwort können nicht in eine Playlist, weil Playlists öffentlich sind.",
+    "tooBig": "Das ist mehr, als eine Playlist fassen kann. Entferne zuerst eine Show.",
+    "saved": "Externe Shows gespeichert. Die Playlist aktualisiert sich in ein paar Sekunden.",
+    "saveFailed": "Speichern fehlgeschlagen: {{error}}",
+    "fromShows": "Aus anderen Shows:",
+    "video": "Video",
+    "pending_one": "{{count}} Show wird noch eingelesen. Ihre Folgen erscheinen in ein paar Minuten.",
+    "pending_other": "{{count}} Shows werden noch eingelesen. Ihre Folgen erscheinen in ein paar Minuten."
   }
 }

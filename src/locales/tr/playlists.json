@@ -108,5 +108,31 @@
       "voice": "Sesli notlar",
       "sounds": "Diğer sesler"
     }
+  },
+  "feeds": {
+    "button": "Harici programlar",
+    "title": "Harici programlar",
+    "intro": "Her yerden podcast programlarının tamamını ekle. Bölümleri bu çalma listesinde seninkilerin yanında, en yeniler önce görünür ve yenileri kendiliğinden gelir.",
+    "searchLabel": "Program ara veya bir akış bağlantısı yapıştır",
+    "searchPlaceholder": "Program adı, RSS akışı veya Apple Podcasts bağlantısı",
+    "add": "Ekle",
+    "checking": "Kontrol ediliyor...",
+    "searching": "Aranıyor...",
+    "noResults": "Program bulunamadı.",
+    "inList": "Çalma listesinde",
+    "inPlaylist": "Bu çalma listesinde",
+    "none": "Henüz harici program yok.",
+    "remove": "{{title}} kaldır",
+    "already": "Bu program zaten bu çalma listesinde.",
+    "limit": "Bir çalma listesi en fazla {{max}} harici program içerebilir.",
+    "ownFeed": "Bu, çalma listesinin kendi akışı.",
+    "privateFeed": "Şifre isteyen akışlar çalma listesine eklenemez, çünkü çalma listeleri herkese açıktır.",
+    "tooBig": "Bu, bir çalma listesinin alabileceğinden fazla. Önce bir program kaldır.",
+    "saved": "Harici programlar kaydedildi. Çalma listesi birkaç saniye içinde güncellenir.",
+    "saveFailed": "Kaydedilemedi: {{error}}",
+    "fromShows": "Diğer programlardan:",
+    "video": "Video",
+    "pending_one": "{{count}} program hâlâ okunuyor. Bölümleri birkaç dakika içinde görünür.",
+    "pending_other": "{{count}} program hâlâ okunuyor. Bölümleri birkaç dakika içinde görünür."
   }
 }

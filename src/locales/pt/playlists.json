@@ -113,5 +113,32 @@
       "voice": "Notas de voz",
       "sounds": "Outros sons"
     }
+  },
+  "feeds": {
+    "button": "Programas externos",
+    "title": "Programas externos",
+    "intro": "Adicione programas de podcast inteiros de qualquer lugar. Os episódios deles aparecem nesta playlist ao lado dos seus, os mais novos primeiro, e os novos chegam sozinhos.",
+    "searchLabel": "Busque programas ou cole um link de feed",
+    "searchPlaceholder": "Nome do programa, feed RSS ou link do Apple Podcasts",
+    "add": "Adicionar",
+    "checking": "Verificando...",
+    "searching": "Buscando...",
+    "noResults": "Nenhum programa encontrado.",
+    "inList": "Na playlist",
+    "inPlaylist": "Nesta playlist",
+    "none": "Ainda não há programas externos.",
+    "remove": "Remover {{title}}",
+    "already": "Esse programa já está nesta playlist.",
+    "limit": "Uma playlist pode ter até {{max}} programas externos.",
+    "ownFeed": "Esse é o feed desta própria playlist.",
+    "privateFeed": "Feeds que pedem senha não podem entrar numa playlist, porque playlists são públicas.",
+    "tooBig": "Isso é mais do que cabe numa playlist. Remova um programa primeiro.",
+    "saved": "Programas externos salvos. A playlist se atualiza em alguns segundos.",
+    "saveFailed": "Não foi possível salvar: {{error}}",
+    "fromShows": "De outros programas:",
+    "video": "Vídeo",
+    "pending_one": "{{count}} programa ainda está sendo lido. Os episódios aparecem em alguns minutos.",
+    "pending_many": "{{count}} programas ainda estão sendo lidos. Os episódios aparecem em alguns minutos.",
+    "pending_other": "{{count}} programas ainda estão sendo lidos. Os episódios aparecem em alguns minutos."
   }
 }

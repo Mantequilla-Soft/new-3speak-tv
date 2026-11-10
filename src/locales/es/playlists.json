@@ -113,5 +113,32 @@
       "voice": "Notas de voz",
       "sounds": "Otros sonidos"
     }
+  },
+  "feeds": {
+    "button": "Programas externos",
+    "title": "Programas externos",
+    "intro": "Añade programas de pódcast completos de cualquier sitio. Sus episodios aparecen en esta lista junto a los tuyos, los más nuevos primero, y los nuevos llegan solos.",
+    "searchLabel": "Busca programas o pega un enlace de feed",
+    "searchPlaceholder": "Nombre del programa, feed RSS o enlace de Apple Podcasts",
+    "add": "Añadir",
+    "checking": "Comprobando...",
+    "searching": "Buscando...",
+    "noResults": "No se encontraron programas.",
+    "inList": "En la lista",
+    "inPlaylist": "En esta lista",
+    "none": "Todavía no hay programas externos.",
+    "remove": "Quitar {{title}}",
+    "already": "Ese programa ya está en esta lista.",
+    "limit": "Una lista puede tener hasta {{max}} programas externos.",
+    "ownFeed": "Ese es el feed de esta misma lista.",
+    "privateFeed": "Los feeds que necesitan contraseña no pueden ir en una lista, porque las listas son públicas.",
+    "tooBig": "Eso es más de lo que cabe en una lista. Quita primero un programa.",
+    "saved": "Programas externos guardados. La lista se actualiza en unos segundos.",
+    "saveFailed": "No se pudo guardar: {{error}}",
+    "fromShows": "De otros programas:",
+    "video": "Vídeo",
+    "pending_one": "Todavía se está leyendo {{count}} programa. Sus episodios aparecerán en unos minutos.",
+    "pending_many": "Todavía se están leyendo {{count}} programas. Sus episodios aparecerán en unos minutos.",
+    "pending_other": "Todavía se están leyendo {{count}} programas. Sus episodios aparecerán en unos minutos."
   }
 }

@@ -108,5 +108,31 @@
       "voice": "Spraakberichten",
       "sounds": "Andere geluiden"
     }
+  },
+  "feeds": {
+    "button": "Externe shows",
+    "title": "Externe shows",
+    "intro": "Voeg hele podcastshows van overal toe. Hun afleveringen verschijnen in deze afspeellijst naast de jouwe, nieuwste eerst, en nieuwe komen er vanzelf bij.",
+    "searchLabel": "Zoek shows of plak een feedlink",
+    "searchPlaceholder": "Naam van de show, RSS-feed of Apple Podcasts-link",
+    "add": "Toevoegen",
+    "checking": "Controleren...",
+    "searching": "Zoeken...",
+    "noResults": "Geen shows gevonden.",
+    "inList": "In de afspeellijst",
+    "inPlaylist": "In deze afspeellijst",
+    "none": "Nog geen externe shows.",
+    "remove": "{{title}} verwijderen",
+    "already": "Die show staat al in deze afspeellijst.",
+    "limit": "Een afspeellijst kan maximaal {{max}} externe shows bevatten.",
+    "ownFeed": "Dat is de eigen feed van deze afspeellijst.",
+    "privateFeed": "Feeds met een wachtwoord kunnen niet in een afspeellijst, want afspeellijsten zijn openbaar.",
+    "tooBig": "Dat is meer dan een afspeellijst kan bevatten. Verwijder eerst een show.",
+    "saved": "Externe shows opgeslagen. De afspeellijst wordt over een paar seconden bijgewerkt.",
+    "saveFailed": "Opslaan mislukt: {{error}}",
+    "fromShows": "Uit andere shows:",
+    "video": "Video",
+    "pending_one": "{{count}} show wordt nog ingelezen. De afleveringen verschijnen binnen een paar minuten.",
+    "pending_other": "{{count}} shows worden nog ingelezen. De afleveringen verschijnen binnen een paar minuten."
   }
 }

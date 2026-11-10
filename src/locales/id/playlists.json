@@ -103,5 +103,30 @@
       "voice": "Catatan suara",
       "sounds": "Suara lainnya"
     }
+  },
+  "feeds": {
+    "button": "Acara eksternal",
+    "title": "Acara eksternal",
+    "intro": "Tambahkan acara podcast utuh dari mana saja. Episodenya muncul di playlist ini di samping milikmu, yang terbaru dulu, dan episode baru masuk dengan sendirinya.",
+    "searchLabel": "Cari acara atau tempel tautan feed",
+    "searchPlaceholder": "Nama acara, feed RSS, atau tautan Apple Podcasts",
+    "add": "Tambah",
+    "checking": "Memeriksa...",
+    "searching": "Mencari...",
+    "noResults": "Tidak ada acara ditemukan.",
+    "inList": "Di playlist",
+    "inPlaylist": "Di playlist ini",
+    "none": "Belum ada acara eksternal.",
+    "remove": "Hapus {{title}}",
+    "already": "Acara itu sudah ada di playlist ini.",
+    "limit": "Satu playlist bisa memuat hingga {{max}} acara eksternal.",
+    "ownFeed": "Itu feed milik playlist ini sendiri.",
+    "privateFeed": "Feed yang butuh kata sandi tidak bisa masuk playlist, karena playlist bersifat publik.",
+    "tooBig": "Itu melebihi kapasitas playlist. Hapus satu acara dulu.",
+    "saved": "Acara eksternal disimpan. Playlist diperbarui dalam beberapa detik.",
+    "saveFailed": "Gagal menyimpan: {{error}}",
+    "fromShows": "Dari acara lain:",
+    "video": "Video",
+    "pending_other": "{{count}} acara masih dibaca. Episodenya muncul dalam beberapa menit."
   }
 }

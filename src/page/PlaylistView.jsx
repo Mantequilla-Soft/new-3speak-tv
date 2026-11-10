@@ -27,7 +27,10 @@ import { audioItemPath } from '../components/AudioItem/AudioItemView';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
 import PlaylistFollowButton from '../components/Podcasts/PlaylistFollowButton';
 import PlaylistEpisodeTile from '../components/Podcasts/PlaylistEpisodeTile';
-import { PODCAST_PLACEHOLDER } from '../lib/podcasts';
+import PlaylistFeedsModal from '../components/Podcasts/PlaylistFeedsModal';
+import PlaylistMergedList from '../components/Podcasts/PlaylistMergedList';
+import { PODCAST_PLACEHOLDER, artUrl, episodeToTrack, podcastPath } from '../lib/podcasts';
+import { playlistFeedsOf, usePlaylistBundle, mergeByDate } from '../lib/playlistFeeds';
 import { fixVideoThumbnail, fallbackImg, squareCover } from '../utils/fixThumbnails';
 import { fetchVideosForPlaylist } from '../utils/playlistVideos';
 import useHoverPreview from '../hooks/useHoverPreview';
@@ -81,6 +84,7 @@ function PlaylistView() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [playlistTarget, setPlaylistTarget] = useState(null);
   const [episodeSearch, setEpisodeSearch] = useState('');
+  const [showFeedsModal, setShowFeedsModal] = useState(false);
   const audioPlay = useAppStore((s) => s.audioPlay);
 
   // Fetch playlist data
@@ -169,6 +173,20 @@ function PlaylistView() {
   }, [playlist]);
   const playlistTags = useMemo(() => playlistJsonMeta.tags || [], [playlistJsonMeta]);
 
+  // Outside podcast shows the owner added (lib/playlistFeeds.js): their episodes
+  // are merged by date with the playlist's own items.
+  const feedUrls = useMemo(
+    () => (isHiddenFromViewer ? [] : playlistFeedsOf(playlistJsonMeta).map((f) => f.url)),
+    [playlistJsonMeta, isHiddenFromViewer],
+  );
+  const hasFeeds = feedUrls.length > 0;
+  const bundle = usePlaylistBundle(feedUrls);
+  const bundlePages = bundle.data?.pages || [];
+  const outsideFeeds = bundlePages[0]?.feeds || [];
+  const outsideTotal = bundlePages[0]?.total || 0;
+  const pendingFeeds = bundlePages[0]?.missing?.length || 0;
+  const outsideEpisodes = useMemo(() => (bundle.data?.pages || []).flatMap((p) => p.episodes || []), [bundle.data]);
+
   // The playlist's type and audio kind (lib/playlistType.js): what the owner
   // chose, else worked out from the items. Until the items load only a stored
   // choice counts.
@@ -180,10 +198,13 @@ function PlaylistView() {
   // podcast show (components/Podcasts): show header, episode tiles. That layout
   // only lists audio, so a video in it (nothing stops one being added) brings
   // back the plain list, where everything shows.
+  // Outside shows are audio too: with some in it, an all-audio playlist is a show.
   const isAudioShow = listedVideos.length > 0
-    ? playlistType === 'audio' && listedVideos.every((v) => v.isAudio && v.audioDoc)
-    : videosLoading && playlistType === 'audio';
+    ? (playlistType === 'audio' || hasFeeds) && listedVideos.every((v) => v.isAudio && v.audioDoc)
+    : hasFeeds || (videosLoading && playlistType === 'audio');
   const showCover = playlist?.thumbnail || listedVideos.find((v) => v.audioDoc?.thumbnail_url)?.audioDoc.thumbnail_url || '';
+  const outsideArt = outsideFeeds.find((f) => f.art)?.art;
+  const headerCover = showCover ? squareCover(showCover) : outsideArt ? artUrl(outsideArt, 512) : PODCAST_PLACEHOLDER;
   // What a tile plays: the track with the playlist's cover, when it has one.
   const trackItem = (v) => (playlist?.thumbnail ? { ...v.audioDoc, thumbnail_url: playlist.thumbnail } : v.audioDoc);
   const episodeQuery = episodeSearch.trim().toLowerCase();
@@ -191,6 +212,43 @@ function PlaylistView() {
     ? audioTracks.filter((v) => `${v.title || ''} ${v.audioDoc.title || ''} ${v.summary || ''}`.toLowerCase().includes(episodeQuery))
     : audioTracks;
   const episodeItems = shownEpisodes.map(trackItem);
+
+  // With outside shows: one list, newest first, through the same date filter and search.
+  const mergedText = (e) => (e.kind === 'episode'
+    ? `${e.ep.title || ''} ${e.feed?.title || ''} ${e.ep.summary || ''}`
+    : `${e.video.title || ''} ${e.video.audioDoc?.title || ''} ${e.video.summary || ''}`).toLowerCase();
+  const merged = hasFeeds
+    ? mergeByDate(listedVideos, outsideEpisodes, outsideFeeds, { complete: !bundle.hasNextPage })
+      .filter((e) => (!since || e.at >= since * 1000) && (!episodeQuery || mergedText(e).includes(episodeQuery)))
+    : [];
+  const mergedTracks = merged.flatMap((e) => (e.kind === 'episode'
+    ? [episodeToTrack(e.ep, e.feed)]
+    : e.video.isAudio && e.video.audioDoc ? [trackItem(e.video)] : []));
+  const itemCount = listedVideos.length + outsideTotal;
+  const mergedList = (
+    <PlaylistMergedList
+      entries={merged}
+      contextItems={mergedTracks}
+      trackItem={trackItem}
+      playlist={playlist}
+      playlistId={playlistId}
+      allVideos={allVideos}
+      loading={videosLoading || bundle.isLoading}
+      hasMore={!!bundle.hasNextPage}
+      loadingMore={bundle.isFetchingNextPage}
+      onLoadMore={() => bundle.fetchNextPage()}
+      pending={pendingFeeds}
+      emptyText={episodeQuery
+        ? t('audio.podcasts.episodeSearch.none', { q: episodeSearch.trim() })
+        : dateFilter !== 'all' ? t('playlists.view.emptyPeriod') : t('playlists.view.empty')}
+      onAddToPlaylist={authenticatedUser ? (v) => setPlaylistTarget({
+        author: v.audioDoc.owner,
+        permlink: v.audioDoc.post_permlink || v.audioDoc.permlink,
+        title: v.audioDoc.title,
+        category: v.audioDoc.category || '',
+      }) : undefined}
+    />
+  );
 
   // What the edit dialog opened with. Cover and album details are only sent when
   // they differ from it: an update that carries them REPLACES what is stored, so
@@ -485,6 +543,9 @@ function PlaylistView() {
       <button type="button" className="pod-btn" onClick={handleOpenEdit} disabled={isSaving}>
         <MdEdit size={16} /> {t('common.actions.edit')}
       </button>
+      <button type="button" className="pod-btn" onClick={() => setShowFeedsModal(true)} disabled={isSaving}>
+        <MdPodcasts size={16} /> {t('playlists.feeds.button')}
+      </button>
       <button type="button" className={`pod-btn${reorderMode ? ' pod-btn--on' : ''}`} onClick={() => setReorderMode(!reorderMode)} disabled={isSaving}>
         <IoReorderThree size={16} /> {reorderMode ? t('common.actions.done') : t('playlists.view.reorder')}
       </button>
@@ -500,7 +561,7 @@ function PlaylistView() {
         <header className="pod-show-head playlist-pod-head">
           <img
             className="pod-art pod-show-cover"
-            src={showCover ? squareCover(showCover) : PODCAST_PLACEHOLDER}
+            src={headerCover}
             alt=""
             onError={(e) => { e.currentTarget.src = PODCAST_PLACEHOLDER; }}
           />
@@ -522,7 +583,7 @@ function PlaylistView() {
               {playlistTags
                 .filter((tag) => tag.toLowerCase() !== String(album.musicStyle || '').toLowerCase())
                 .map((tag) => <span key={tag} className="pod-chip">{tag}</span>)}
-              <span>{t('audio.podcasts.episodes', { count: listedVideos.length })}</span>
+              <span>{t('audio.podcasts.episodes', { count: itemCount })}</span>
               {album.year && <span>{album.year}</span>}
               <span>{t('playlists.view.created', { when: dayjs.unix(playlist.created_at).fromNow() })}</span>
             </div>
@@ -532,14 +593,24 @@ function PlaylistView() {
                 {album.credits && <span><Trans i18nKey="playlists.view.album.credits" values={{ value: album.credits }} components={{ strong: <strong /> }} /></span>}
               </div>
             )}
+            {outsideFeeds.length > 0 && (
+              <div className="pod-show-meta">
+                <span>{t('playlists.feeds.fromShows')}</span>
+                {outsideFeeds.map((f) => <Link key={f.id} to={podcastPath(f.id)} className="pod-chip">{f.title || f.url}</Link>)}
+              </div>
+            )}
             {album.description && <p className="pod-show-desc">{album.description}</p>}
             <div className="pod-show-actions">
-              {audioTracks.length > 0 && (
+              {hasFeeds ? mergedTracks.length > 0 && (
+                <button type="button" className="pod-btn pod-btn--solid" onClick={() => audioPlay(mergedTracks[0], mergedTracks)}>
+                  <MdPlayIcon size={18} /> {t('common.actions.play')}
+                </button>
+              ) : audioTracks.length > 0 && (
                 <button type="button" className="pod-btn pod-btn--solid" onClick={() => audioPlay(trackItem(audioTracks[0]), audioTracks.map(trackItem))}>
                   <MdPlayIcon size={18} /> {t('common.actions.play')}
                 </button>
               )}
-              {!isPrivate && listedVideos.length > 0 && (
+              {!isPrivate && (listedVideos.length > 0 || hasFeeds) && (
                 <PlaylistFollowButton playlistId={playlistId} name={playlist.name} user={authenticatedUser} />
               )}
               {!isPrivate && (
@@ -632,6 +703,13 @@ function PlaylistView() {
           </div>
         )}
 
+        {outsideFeeds.length > 0 && (
+          <div className="playlist-tags">
+            <span>{t('playlists.feeds.fromShows')}</span>
+            {outsideFeeds.map((f) => <Link key={f.id} to={podcastPath(f.id)} className="playlist-tag">{f.title || f.url}</Link>)}
+          </div>
+        )}
+
         {/* Owner Actions */}
         {isOwner && (
           <div className="owner-actions">
@@ -642,6 +720,14 @@ function PlaylistView() {
               disabled={isSaving}
             >
               <MdEdit /> {t('common.actions.edit')}
+            </button>
+            <button
+              type="button"
+              className="btn-edit"
+              onClick={() => setShowFeedsModal(true)}
+              disabled={isSaving}
+            >
+              <MdPodcasts /> {t('playlists.feeds.button')}
             </button>
             <button
               type="button"
@@ -686,7 +772,7 @@ function PlaylistView() {
           <div className="pod-section-head pod-section-head--filters">
             <h2 className="pod-section-title">
               {t('audio.podcasts.episodesTitle')}
-              {listedVideos.length > 0 && <span className="audio-section-count">{listedVideos.length}</span>}
+              {itemCount > 0 && <span className="audio-section-count">{itemCount}</span>}
             </h2>
             <div className="pod-filters">
               <div className="audio-date-presets pod-filter-dates" role="group" aria-label={t('audio.podcasts.filters.dateLabel')}>
@@ -698,7 +784,7 @@ function PlaylistView() {
               </div>
             </div>
           </div>
-          {listedVideos.length > 5 && (
+          {itemCount > 5 && (
             <div className="pod-show-tools">
               <label className="pod-field-row pod-episode-search">
                 <MdSearch className="pod-field-icon" size={18} />
@@ -713,7 +799,7 @@ function PlaylistView() {
               </label>
             </div>
           )}
-          {videosLoading ? (
+          {hasFeeds ? mergedList : videosLoading ? (
             <BarLoader />
           ) : shownEpisodes.length > 0 ? (
             <ul className="pod-tile-grid">
@@ -759,13 +845,15 @@ function PlaylistView() {
           ))}
         </div>
         {dateFilter !== 'all' && (
-          <span className="filter-count">{t('playlists.view.filterCount', { shown: displayVideos.length, count: listedVideos.length })}</span>
+          <span className="filter-count">{hasFeeds
+            ? t('playlists.view.filterCount', { shown: merged.length, count: itemCount })
+            : t('playlists.view.filterCount', { shown: displayVideos.length, count: listedVideos.length })}</span>
         )}
       </div>
 
       {/* Videos */}
       <div className="playlist-videos">
-        {videosLoading ? (
+        {hasFeeds && !reorderMode ? mergedList : videosLoading ? (
           <BarLoader />
         ) : displayVideos.length === 0 ? (
           <div className="empty-wrap">
@@ -1064,6 +1152,22 @@ function PlaylistView() {
             </div>
           </div>
         </div>
+      )}
+
+      {showFeedsModal && (
+        <PlaylistFeedsModal
+          playlistId={playlistId}
+          user={authenticatedUser}
+          jsonMeta={playlistJsonMeta}
+          cards={outsideFeeds}
+          onClose={() => setShowFeedsModal(false)}
+          onSaved={(json) => {
+            // Show the new list right away (an edit opened before the refetch must
+            // not write the old one back), then read what the indexer stored.
+            queryClient.setQueryData(['playlist', playlistId], (old) => (old ? { ...old, json_metadata: json } : old));
+            setTimeout(() => queryClient.invalidateQueries({ queryKey: ['playlist', playlistId] }), 3000);
+          }}
+        />
       )}
 
       {playlistTarget && (

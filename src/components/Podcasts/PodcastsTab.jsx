@@ -18,10 +18,9 @@ import {
 import PodcastTipModal from './PodcastTipModal';
 import PodcastArt from './PodcastArt';
 import EpisodeView from './EpisodeView';
-import { fmtDuration, useDateFormat } from '../../lib/podcastFormat';
+import { useDateFormat } from '../../lib/podcastFormat';
 import { getLanguage } from '../../i18n';
 import { LANGUAGES as UI_LANGUAGES } from '../../i18n/languages';
-import { canTipEpisode } from '../../lib/podcastTips';
 import { usePodcastProgress, progressOf } from '../../lib/podcastProgress';
 import { isDownloaded, useDownloads } from '../../lib/podcastDownloads';
 import {
@@ -33,6 +32,7 @@ import DownloadsSection from './DownloadsSection';
 import ContinueListening, { useContinueListening } from './ContinueListening';
 import useOnline from '../../hooks/useOnline';
 import { openEmbedCode } from '../Embed/EmbedCodeModal';
+import { EpisodeTile } from './EpisodeTile';
 import './PodcastsTab.scss';
 
 // ─── Filters: date range and listening state ──────────────────────────────────
@@ -115,81 +115,6 @@ function EpisodeFilters({ days, onDays, listen, onListen, range, onRange, inbox 
 }
 
 // ─── One episode ──────────────────────────────────────────────────────────────
-
-function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpisode }) {
-  const { t } = useTranslation();
-  const fmtDate = useDateFormat();
-  const audioCurrent = useAppStore((s) => s.audioCurrent);
-  const audioIsPlaying = useAppStore((s) => s.audioIsPlaying);
-  const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
-  const audioRequestToggle = useAppStore((s) => s.audioRequestToggle);
-  const [tipping, setTipping] = useState(false);
-  const track = useMemo(() => episodeToTrack(ep, feed), [ep, feed]);
-  const isCurrent = audioCurrent?._id === ep.id;
-  const playing = isCurrent && audioIsPlaying;
-  const progress = progressOf(ep.id);
-  const started = progress && (progress.done || progress.pct > 0);
-
-  const play = () => {
-    if (isCurrent) { audioRequestToggle(); return; }
-    if (useAppStore.getState().audioQueueIfPlaying(track)) return;
-    audioPlayQueued(track);
-  };
-
-  return (
-    <li className={`pod-tile${isCurrent ? ' pod-tile--current' : ''}${progress?.done ? ' pod-tile--done' : ''}`}>
-      <div className="pod-tile-top">
-        <button type="button" className="pod-tile-cover" onClick={play} aria-label={playing ? t('audio.podcasts.pause') : t('audio.podcasts.play')}>
-          <PodcastArt art={ep.art || feed?.art} px={128} />
-          <span className={`pod-tile-play${playing ? ' pod-tile-play--on' : ''}`}>{playing ? <MdPause size={24} /> : <MdPlayArrow size={24} />}</span>
-        </button>
-        <div className="pod-tile-head">
-          {showShow && feed && (
-            <button type="button" className="pod-tile-show" onClick={() => onOpenShow?.(ep.feed_id)}>{feed.title}</button>
-          )}
-          <button type="button" className="pod-tile-title" title={ep.title} onClick={() => onOpenEpisode?.(ep.id)}>{ep.title || t('audio.untitled')}</button>
-          <div className="pod-tile-meta">
-            <EpisodeBadges ep={ep} />
-            {ep.published_at && <span>{fmtDate(ep.published_at)}</span>}
-            {ep.duration > 0 && <span className="pod-tile-dur">{fmtDuration(ep.duration)}</span>}
-            {progress?.done && <span className="pod-tile-listened"><MdCheck size={13} /> {t('audio.podcasts.listened')}</span>}
-            {started && !progress.done && <span className="pod-tile-pct">{t('audio.podcasts.listenedPct', { pct: progress.pct })}</span>}
-          </div>
-        </div>
-      </div>
-      {/* Cropped here; the whole show notes are on the episode page. */}
-      {ep.summary && (
-        <button type="button" className="pod-tile-summary" onClick={() => onOpenEpisode?.(ep.id)} title={t('audio.podcasts.openEpisode')}>{ep.summary}</button>
-      )}
-      <div className="pod-tile-actions">
-        <DownloadButton track={track} />
-        {canTipEpisode(track) && (
-          <button type="button" className="pod-icon-btn pod-icon-btn--tip" onClick={() => setTipping(true)} title={t('audio.podcasts.tip.button')} aria-label={t('audio.podcasts.tip.button')}>
-            <BiDollar size={18} />
-          </button>
-        )}
-        {ep.link && (
-          <a className="pod-icon-btn" href={ep.link} target="_blank" rel="noopener noreferrer nofollow" title={t('audio.podcasts.episodePage')} aria-label={t('audio.podcasts.episodePage')}>
-            <MdOpenInNew size={16} />
-          </a>
-        )}
-      </div>
-      {started && (
-        <div
-          className="pod-tile-bar"
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={progress.pct}
-          aria-label={t('audio.podcasts.listenedPct', { pct: progress.pct })}
-        >
-          <span style={{ width: `${progress.pct}%` }} />
-        </div>
-      )}
-      {tipping && <PodcastTipModal track={track} onClose={() => setTipping(false)} />}
-    </li>
-  );
-}
 
 // ─── Show cards ───────────────────────────────────────────────────────────────
 

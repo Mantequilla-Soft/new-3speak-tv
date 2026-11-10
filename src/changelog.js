@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.117',
+    category: 'playlists',
+    date: '2026-11-10',
+    summary: 'Add whole podcast shows from anywhere to your playlists with the new External shows button; their new episodes appear by themselves.',
+  },
+  {
     version: '1.81.115',
     category: 'upload',
     date: '2026-11-10',
