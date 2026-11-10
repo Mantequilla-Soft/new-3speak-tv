@@ -430,6 +430,31 @@
       "couldNotLoad": "Nie udało się wczytać audiogramu: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Publikowany razem z tym audio"
+    },
+    "transcript": {
+      "make": "Utwórz transkrypcję",
+      "again": "Utwórz transkrypcję ponownie",
+      "hint": "Zapisuje to, co zostało powiedziane ({{language}}), i umieszcza pod twoim tekstem, gdzie nadal możesz to zmienić.",
+      "reading": "Odczytywanie audio...",
+      "writing": "Zapisywanie... {{percent}}%",
+      "added": "Transkrypcja dodana pod twoim tekstem. Przeczytaj ją: niektóre słowa mogą być błędne.",
+      "shortened": "Transkrypcja dodana, skrócona, aby zmieściła się w poście.",
+      "empty": "W tym audio nie znaleziono mowy.",
+      "failed": "Nie udało się utworzyć transkrypcji. Spróbuj ponownie.",
+      "heading": "Transkrypcja",
+      "language": "Język audio",
+      "waitPublish": "Transkrypcja jest jeszcze tworzona. Poczekaj na nią albo najpierw ją anuluj."
+    },
+    "teleprompter": {
+      "title": "Prompter",
+      "subtitle": "Napisz, co powiesz, i czytaj to podczas nagrywania",
+      "placeholder": "Napisz lub wklej, co powiesz. Podczas nagrywania tekst będzie duży.",
+      "followsVoice": "Podąża za twoim głosem",
+      "steady": "Przewija w stałym tempie",
+      "voiceStopped": "Śledzenie głosu zatrzymane, przewija w stałym tempie",
+      "wpm": "Słowa na minutę: {{n}}",
+      "slower": "Wolniej",
+      "faster": "Szybciej"
     }
   },
   "podcasts": {

@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { X, Loader2 } from 'lucide-react';
 import { generateVideoThumbnailsAt } from '../../utils/videoThumbnails';
-import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, cameraRecordEnabledFor, storiesEnabledFor, PLAYLISTS_READ_URL } from '../../utils/config';
+import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, sttEnabledFor, storiesEnabledFor, PLAYLISTS_READ_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
 import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
@@ -336,15 +336,15 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
 
     // The editor's teleprompter asks for the STT server + a short-lived token.
     // It runs on another origin, so it can't call /api/stt-token itself; we mint
-    // the token here and send it to the editor's origin only. Same audience as
-    // our own camera teleprompter (cameraRecordEnabledFor); everyone else gets an
-    // empty url, and the editor falls back to browser speech or timed scroll.
+    // the token here and send it to the editor's origin only. Everyone gets it
+    // where a server is set (sttEnabledFor); without one the url is empty and the
+    // editor falls back to browser speech or timed scroll.
     const replySttConfig = async (requestId) => {
       if (typeof requestId !== 'string') return;
       let url = '';
       let token = '';
       let models = [];
-      if (STT_WS_URL && cameraRecordEnabledFor(userRef.current)) {
+      if (sttEnabledFor(userRef.current)) {
         const [tok, langs] = await Promise.all([
           fetch('/api/stt-token', {
             credentials: 'include',

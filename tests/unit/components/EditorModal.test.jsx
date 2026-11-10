@@ -9,7 +9,7 @@ import { act, screen, waitFor } from '@testing-library/react'
 import { renderWithProviders, stubMatchMedia, toastMessages } from './_render.jsx'
 
 const EDITOR = 'https://editor.test'
-const m = vi.hoisted(() => ({ stories: false, embed: [] }))
+const m = vi.hoisted(() => ({ stories: false, embed: [], stt: false }))
 vi.mock('sonner', async () => (await import('./_render.jsx')).sonnerModule())
 vi.mock('../../../src/hive-api/aioha', async () => (await import('./_render.jsx')).aiohaModule())
 vi.mock('../../../src/utils/config', async (importOriginal) => ({
@@ -17,7 +17,8 @@ vi.mock('../../../src/utils/config', async (importOriginal) => ({
   getEditorUrl: async () => EDITOR,
   storiesEnabledFor: () => m.stories,
   cameraRecordEnabledFor: () => false,
-  STT_WS_URL: '',
+  get STT_WS_URL() { return m.stt ? 'wss://stt.test/stt' : '' },
+  sttEnabledFor: () => m.stt,
 }))
 vi.mock('../../../src/utils/videoThumbnails', () => ({ generateVideoThumbnailsAt: async () => [] }))
 vi.mock('../../../src/hooks/usePremiumStatus', () => ({ usePremiumStatus: () => ({ premium: false }) }))
@@ -41,6 +42,7 @@ beforeEach(() => {
   events = []
   m.stories = false
   m.embed = []
+  m.stt = false
   stubMatchMedia(true)
   window.addEventListener('audio-editor-result', listen)
   window.addEventListener('open-audio-upload', listen)
@@ -286,5 +288,35 @@ describe('EditorModal: a remix draft opened again', () => {
     await waitFor(() => expect(calls('setRemixChain')).toHaveLength(1))
     expect(calls('setOriginalAuthor')).toEqual([])
     expect(calls('setRemixChain')[0][0]).toEqual([])
+  })
+})
+
+describe('EditorModal: speech-to-text for the editor teleprompter', () => {
+  function stubSttFetch() {
+    const fetchMock = vi.fn(async (url) => ({
+      ok: true,
+      json: async () => (String(url).includes('stt-langs') ? { models: ['en-us'] } : { token: '99.sig' }),
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+    return fetchMock
+  }
+
+  it('hands the editor the server, a fresh token and the languages, for any user', async () => {
+    m.stt = true
+    const fetchMock = stubSttFetch()
+    await open({ mode: 'audio' })
+    await fromEditor({ type: 'stt-config-request', requestId: 's1' })
+    await waitFor(() => expect(posted.find((p) => p.type === 'stt-config')).toBeTruthy())
+    expect(posted.find((p) => p.type === 'stt-config')).toMatchObject({ requestId: 's1', url: 'wss://stt.test/stt', token: '99.sig', models: ['en-us'] })
+    expect(fetchMock).toHaveBeenCalledWith('/api/stt-token', expect.anything())
+  })
+
+  it('answers with an empty url where no server is set', async () => {
+    const fetchMock = stubSttFetch()
+    await open({ mode: 'audio' })
+    await fromEditor({ type: 'stt-config-request', requestId: 's2' })
+    await waitFor(() => expect(posted.find((p) => p.type === 'stt-config')).toBeTruthy())
+    expect(posted.find((p) => p.type === 'stt-config')).toMatchObject({ requestId: 's2', url: '', token: '' })
+    expect(fetchMock).not.toHaveBeenCalled()
   })
 })

@@ -385,6 +385,31 @@
       "couldNotLoad": "Không tải được audiogram: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Được đăng cùng với audio này"
+    },
+    "transcript": {
+      "make": "Tạo bản chép lời",
+      "again": "Tạo lại bản chép lời",
+      "hint": "Ghi lại những gì được nói ({{language}}) và đặt bên dưới văn bản của bạn, nơi bạn vẫn có thể sửa.",
+      "reading": "Đang đọc âm thanh...",
+      "writing": "Đang chép lời... {{percent}}%",
+      "added": "Đã thêm bản chép lời bên dưới văn bản của bạn. Hãy đọc lại: một số từ có thể sai.",
+      "shortened": "Đã thêm bản chép lời, được rút gọn để vừa một bài đăng.",
+      "empty": "Không tìm thấy giọng nói trong âm thanh này.",
+      "failed": "Không thể tạo bản chép lời. Vui lòng thử lại.",
+      "heading": "Bản chép lời",
+      "language": "Ngôn ngữ của âm thanh",
+      "waitPublish": "Bản chép lời vẫn đang được tạo. Hãy chờ hoặc hủy nó trước."
+    },
+    "teleprompter": {
+      "title": "Máy nhắc chữ",
+      "subtitle": "Viết những gì bạn sẽ nói và đọc khi ghi âm",
+      "placeholder": "Viết hoặc dán những gì bạn sẽ nói. Chữ sẽ hiện lớn khi bạn ghi âm.",
+      "followsVoice": "Theo giọng của bạn",
+      "steady": "Chạy với tốc độ đều",
+      "voiceStopped": "Đã ngừng theo giọng, chạy với tốc độ đều",
+      "wpm": "{{n}} từ mỗi phút",
+      "slower": "Chậm hơn",
+      "faster": "Nhanh hơn"
     }
   },
   "podcasts": {

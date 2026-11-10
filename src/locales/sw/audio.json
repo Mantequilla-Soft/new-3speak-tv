@@ -400,6 +400,31 @@
       "couldNotLoad": "Audiogramu haikuweza kupakiwa: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Inachapishwa pamoja na sauti hii"
+    },
+    "transcript": {
+      "make": "Tengeneza nakala",
+      "again": "Tengeneza nakala tena",
+      "hint": "Huandika kinachosemwa ({{language}}) na kukiweka chini ya maandishi yako, ambapo bado unaweza kukibadilisha.",
+      "reading": "Inasoma sauti...",
+      "writing": "Inaandika... {{percent}}%",
+      "added": "Nakala imeongezwa chini ya maandishi yako. Isome: baadhi ya maneno yanaweza kuwa si sahihi.",
+      "shortened": "Nakala imeongezwa, imefupishwa ili itoshe kwenye chapisho.",
+      "empty": "Hakuna maongezi yaliyopatikana kwenye sauti hii.",
+      "failed": "Nakala haikuweza kutengenezwa. Tafadhali jaribu tena.",
+      "heading": "Nakala",
+      "language": "Lugha ya sauti",
+      "waitPublish": "Nakala bado inatengenezwa. Isubiri au uighairi kwanza."
+    },
+    "teleprompter": {
+      "title": "Teleprompter",
+      "subtitle": "Andika utakachosema na ukisome unaporekodi",
+      "placeholder": "Andika au bandika utakachosema. Kinaonekana kwa herufi kubwa unaporekodi.",
+      "followsVoice": "Inafuata sauti yako",
+      "steady": "Inasonga kwa kasi isiyobadilika",
+      "voiceStopped": "Kufuata sauti kumesimama, inasonga kwa kasi isiyobadilika",
+      "wpm": "Maneno {{n}} kwa dakika",
+      "slower": "Polepole zaidi",
+      "faster": "Haraka zaidi"
     }
   },
   "podcasts": {

@@ -385,6 +385,31 @@
       "couldNotLoad": "Audiogram tidak dapat dimuat: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Diposting bersama audio ini"
+    },
+    "transcript": {
+      "make": "Buat transkrip",
+      "again": "Buat transkrip lagi",
+      "hint": "Menuliskan apa yang diucapkan ({{language}}) dan menaruhnya di bawah teksmu, tempat kamu masih bisa mengubahnya.",
+      "reading": "Membaca audio...",
+      "writing": "Menuliskan... {{percent}}%",
+      "added": "Transkrip ditambahkan di bawah teksmu. Baca ulang: beberapa kata mungkin salah.",
+      "shortened": "Transkrip ditambahkan, dipendekkan agar muat dalam satu postingan.",
+      "empty": "Tidak ada ucapan di audio ini.",
+      "failed": "Transkrip tidak dapat dibuat. Coba lagi.",
+      "heading": "Transkrip",
+      "language": "Bahasa audio",
+      "waitPublish": "Transkrip masih dibuat. Tunggu atau batalkan dulu."
+    },
+    "teleprompter": {
+      "title": "Teleprompter",
+      "subtitle": "Tulis apa yang akan kamu katakan dan baca saat merekam",
+      "placeholder": "Tulis atau tempel apa yang akan kamu katakan. Teksnya tampil besar saat merekam.",
+      "followsVoice": "Mengikuti suaramu",
+      "steady": "Bergerak dengan kecepatan tetap",
+      "voiceStopped": "Berhenti mengikuti suara, bergerak dengan kecepatan tetap",
+      "wpm": "{{n}} kata per menit",
+      "slower": "Lebih lambat",
+      "faster": "Lebih cepat"
     }
   },
   "podcasts": {

@@ -19,7 +19,7 @@ import { EMBED_API_KEY } from './config';
 // Mint a short-lived signed token from the preview server (which holds the signing
 // secret — never the browser). Returns '' on failure so a no-auth STT box (local
 // testing) still connects; an auth-required box will then close 4401.
-async function getSttToken() {
+export async function getSttToken() {
   try {
     const r = await fetch('/api/stt-token', {
       credentials: 'include',

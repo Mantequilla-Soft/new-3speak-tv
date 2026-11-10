@@ -410,6 +410,12 @@ const adWizardEnabledFor = (user) => ENABLE_AD_WIZARD || isTestUser(user)
 // recording). When set, recording taps the SINGLE recording audio track and
 // streams it here, so voice-scroll works DURING recording. See the STT plan.
 const STT_WS_URL = import.meta.env.VITE_STT_WS_URL || '';
+// Who gets the speech-to-text server outside the camera teleprompter (transcripts,
+// voice-following in the audio upload's and the editor's teleprompters): everyone,
+// wherever a server is set. The server runs its sessions in parallel (since
+// 2026-11-10). `user` stays in the signature for a per-user gate later.
+// eslint-disable-next-line no-unused-vars
+const sttEnabledFor = (user) => !!STT_WS_URL;
 
 export {
   isTestUser,
@@ -490,6 +496,7 @@ export {
   cameraRecordEnabledFor,
   adWizardEnabledFor,
   STT_WS_URL,
+  sttEnabledFor,
   ENABLE_PPL,
   THREESPEAK_AUDIO_API_URL,
   THREESPEAK_API_KEY,

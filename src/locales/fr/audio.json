@@ -415,6 +415,31 @@
       "couldNotLoad": "Impossible de charger l'audiogramme : {{error}}",
       "rowTitle": "Short : {{title}}",
       "withAudio": "Publié avec cet audio"
+    },
+    "transcript": {
+      "make": "Créer une transcription",
+      "again": "Refaire la transcription",
+      "hint": "Écrit ce qui est dit ({{language}}) et le place sous ton texte, où tu peux encore le modifier.",
+      "reading": "Lecture de l'audio...",
+      "writing": "Transcription en cours... {{percent}}%",
+      "added": "Transcription ajoutée sous ton texte. Relis-la : certains mots peuvent être faux.",
+      "shortened": "Transcription ajoutée, raccourcie pour tenir dans une publication.",
+      "empty": "Aucune parole trouvée dans cet audio.",
+      "failed": "La transcription n'a pas pu être créée. Réessaie.",
+      "heading": "Transcription",
+      "language": "Langue de l'audio",
+      "waitPublish": "Une transcription est encore en cours. Attends-la ou annule-la d'abord."
+    },
+    "teleprompter": {
+      "title": "Téléprompteur",
+      "subtitle": "Écris ce que tu vas dire et lis-le pendant l'enregistrement",
+      "placeholder": "Écris ou colle ce que tu vas dire. Le texte s'affiche en grand pendant l'enregistrement.",
+      "followsVoice": "Suit ta voix",
+      "steady": "Avance à un rythme régulier",
+      "voiceStopped": "Le suivi de la voix s'est arrêté, avance à un rythme régulier",
+      "wpm": "{{n}} mots par minute",
+      "slower": "Plus lent",
+      "faster": "Plus rapide"
     }
   },
   "podcasts": {

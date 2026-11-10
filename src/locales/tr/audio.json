@@ -400,6 +400,31 @@
       "couldNotLoad": "Audiogram yüklenemedi: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Bu sesle birlikte paylaşılır"
+    },
+    "transcript": {
+      "make": "Döküm oluştur",
+      "again": "Dökümü yeniden oluştur",
+      "hint": "Söylenenleri ({{language}}) yazar ve metninin altına ekler, orada hâlâ değiştirebilirsin.",
+      "reading": "Ses okunuyor...",
+      "writing": "Yazılıyor... %{{percent}}",
+      "added": "Döküm metninin altına eklendi. Bir göz at: bazı kelimeler yanlış olabilir.",
+      "shortened": "Döküm eklendi, bir gönderiye sığması için kısaltıldı.",
+      "empty": "Bu seste konuşma bulunamadı.",
+      "failed": "Döküm oluşturulamadı. Lütfen tekrar dene.",
+      "heading": "Döküm",
+      "language": "Sesin dili",
+      "waitPublish": "Bir döküm hâlâ oluşturuluyor. Bitmesini bekle ya da önce iptal et."
+    },
+    "teleprompter": {
+      "title": "Teleprompter",
+      "subtitle": "Söyleyeceklerini yaz ve kayıt sırasında oku",
+      "placeholder": "Söyleyeceklerini yaz ya da yapıştır. Kayıt sırasında büyük görünür.",
+      "followsVoice": "Sesini takip eder",
+      "steady": "Sabit hızla ilerler",
+      "voiceStopped": "Ses takibi durdu, sabit hızla ilerliyor",
+      "wpm": "Dakikada {{n}} kelime",
+      "slower": "Daha yavaş",
+      "faster": "Daha hızlı"
     }
   },
   "podcasts": {

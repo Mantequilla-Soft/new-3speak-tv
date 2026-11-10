@@ -400,6 +400,31 @@
       "couldNotLoad": "Hindi ma-load ang audiogram: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Ipo-post kasama ng audio na ito"
+    },
+    "transcript": {
+      "make": "Gumawa ng transcript",
+      "again": "Gumawa ulit ng transcript",
+      "hint": "Isinusulat ang sinasabi ({{language}}) at inilalagay sa ilalim ng iyong teksto, kung saan mababago mo pa ito.",
+      "reading": "Binabasa ang audio...",
+      "writing": "Isinusulat... {{percent}}%",
+      "added": "Naidagdag ang transcript sa ilalim ng iyong teksto. Basahin ito: may mga salitang maaaring mali.",
+      "shortened": "Naidagdag ang transcript, pinaikli para magkasya sa isang post.",
+      "empty": "Walang nakitang pananalita sa audio na ito.",
+      "failed": "Hindi nagawa ang transcript. Pakisubukan ulit.",
+      "heading": "Transcript",
+      "language": "Wika ng audio",
+      "waitPublish": "May transcript pang ginagawa. Hintayin ito o kanselahin muna."
+    },
+    "teleprompter": {
+      "title": "Teleprompter",
+      "subtitle": "Isulat ang sasabihin mo at basahin habang nagre-record",
+      "placeholder": "Isulat o i-paste ang sasabihin mo. Lalaki ito sa screen habang nagre-record ka.",
+      "followsVoice": "Sinusundan ang iyong boses",
+      "steady": "Umuusad sa tuloy-tuloy na bilis",
+      "voiceStopped": "Huminto ang pagsunod sa boses, umuusad sa tuloy-tuloy na bilis",
+      "wpm": "{{n}} salita kada minuto",
+      "slower": "Mas mabagal",
+      "faster": "Mas mabilis"
     }
   },
   "podcasts": {

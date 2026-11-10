@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '1.81.115',
+    category: 'upload',
+    date: '2026-11-10',
+    summary: "Audio upload: Make a transcript writes down what is said in your audio (English for now) and puts it under your post text, ready to edit before you publish.",
+  },
+  {
+    version: '1.81.114',
+    category: 'editor',
+    date: '2026-11-10',
+    summary: "Audio editor: the voice recorder now has a teleprompter. Write your script and it scrolls while you record, at a steady speed or following your voice.",
+  },
+  {
+    version: '1.81.113',
+    category: 'upload',
+    date: '2026-11-10',
+    summary: "Audio upload: recording in your browser now has a teleprompter. Write what you will say and it moves along while you record.",
+  },
+  {
     version: '1.81.108',
     category: 'editor',
     date: '2026-11-09',

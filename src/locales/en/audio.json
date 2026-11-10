@@ -400,6 +400,31 @@
       "couldNotLoad": "The audiogram could not be loaded: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Goes out together with this audio"
+    },
+    "transcript": {
+      "make": "Make a transcript",
+      "again": "Make the transcript again",
+      "hint": "Writes down what is said ({{language}}) and puts it under your text, where you can still change it.",
+      "reading": "Reading the audio...",
+      "writing": "Writing it down... {{percent}}%",
+      "added": "Transcript added under your text. Read it through: some words may be wrong.",
+      "shortened": "Transcript added, shortened to fit in a post.",
+      "empty": "No speech found in this audio.",
+      "failed": "The transcript could not be made. Please try again.",
+      "heading": "Transcript",
+      "language": "Language of the audio",
+      "waitPublish": "A transcript is still being made. Wait for it or cancel it first."
+    },
+    "teleprompter": {
+      "title": "Teleprompter",
+      "subtitle": "Write what you will say and read it while you record",
+      "placeholder": "Write or paste what you will say. It shows up big while you record.",
+      "followsVoice": "Follows your voice",
+      "steady": "Moves on at a steady pace",
+      "voiceStopped": "Voice following stopped, moving on at a steady pace",
+      "wpm": "{{n}} words a minute",
+      "slower": "Slower",
+      "faster": "Faster"
     }
   },
   "podcasts": {

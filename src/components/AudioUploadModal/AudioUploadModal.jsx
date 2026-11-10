@@ -32,6 +32,10 @@ import { SOUND_AUTHOR_WEIGHT } from '../../utils/beneficiaries';
 import CoverDesigner from './CoverDesigner';
 import ShortThumbDesigner from './ShortThumbDesigner';
 import AudiogramShortsSection from './AudiogramShortsSection';
+import AudioTeleprompter from './AudioTeleprompter';
+import TranscriptControl from './TranscriptControl';
+import { useTranscriptJobs } from '../../hooks/useTranscriptJobs';
+import { withTranscript, TRANSCRIPT_MAX_CHARS } from '../../utils/transcribe';
 import { fetchCreatorAdPrefs, syncAudioAdChoice } from '../../lib/advertiseData';
 import './AudioUploadModal.scss';
 import AccountImg from '../HiveAvatar/AccountImg';
@@ -97,6 +101,9 @@ const FLOWS = {
 };
 
 const MAX_RECORD_SEC = 300;
+// A track's text with a transcript in it: room for the transcript (cut to
+// TRANSCRIPT_MAX_CHARS) and what the creator wrote around it
+const TRANSCRIPT_TEXT_MAX = TRANSCRIPT_MAX_CHARS + 5000;
 
 // Upload failures with a known cause (err.code, set in utils/audioUpload.js) get
 // a line in the user's language; anything else shows the service's own message.
@@ -391,6 +398,36 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     setTracks(prev => prev.map(tr => (tr.id === id ? { ...tr, ...patch } : tr)));
   }, []);
 
+  // Transcripts: a single post's goes under the post text, a track's (snaps,
+  // album) under that track's own text. An earlier transcript is replaced.
+  const transcriptTargetRef = useRef({});
+  const postTranscriptRef = useRef('');
+  const transcripts = useTranscriptJobs((trackId, text) => {
+    if (transcriptTargetRef.current[trackId] === 'post') {
+      const previous = postTranscriptRef.current;
+      postTranscriptRef.current = text;
+      setPostDescription((d) => withTranscript(d, previous, text));
+      setTracks(prev => prev.map(tr => (tr.id === trackId ? { ...tr, transcriptText: text } : tr)));
+    } else {
+      setTracks(prev => prev.map(tr => (tr.id === trackId
+        ? { ...tr, desc: withTranscript(tr.desc, tr.transcriptText, text), transcriptText: text }
+        : tr)));
+    }
+  });
+  const { cancelAll: cancelAllTranscripts } = transcripts;
+  const startTranscript = (track, target, lang) => {
+    transcriptTargetRef.current[track.id] = target;
+    transcripts.start(track, { lang, heading: t('audio.upload.transcript.heading') });
+  };
+  const transcriptPropsFor = (track, target) => (track ? {
+    user: owner,
+    track,
+    job: transcripts.jobs[track.id],
+    hasTranscript: !!track.transcriptText,
+    onStart: (lang) => startTranscript(track, target, lang),
+    onCancel: () => transcripts.cancel(track.id),
+  } : null);
+
   // The creator's own cover for a target ('main', 'shared' or a track id), from
   // an upload, the cover designer or a clear ('').
   const setCoverFor = useCallback((target, url) => {
@@ -596,6 +633,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
   const onDragLeave = (e) => { e.preventDefault(); setIsDragging(false); };
 
   const removeTrack = (id) => {
+    transcripts.cancel(id);
     setTracks(prev => {
       const tr = prev.find(x => x.id === id);
       if (tr?.objectUrl) {
@@ -1242,6 +1280,9 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     replaceStatuses({});
     setMainTitle('');
     setPostDescription('');
+    cancelAllTranscripts();
+    postTranscriptRef.current = '';
+    transcriptTargetRef.current = {};
     setPostTagsInput('');
     setUserPostThumb('');
     setPostThumbFrom(null);
@@ -1259,7 +1300,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     albumMainRef.current = null;
     containerRef.current = null;
     trackPostsRef.current = {};
-  }, [replaceStatuses]);
+  }, [replaceStatuses, cancelAllTranscripts]);
 
   const closeModal = useCallback(() => {
     resetSession();
@@ -1434,6 +1475,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
     // The button is swapped while a spot is outstanding; this is the publish path itself.
     if (!gateSatisfied) return;
     if (tracks.length === 0) return;
+    if (transcripts.running) { toast.error(t('audio.upload.transcript.waitPublish')); return; }
     setIsPublishing(true);
     setMainError(null);
     setPublished(null);
@@ -1562,6 +1604,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               onFilesSelected={(e) => { handleFiles(e.target.files); e.target.value = ''; }}
               onStart={startRecording}
               onStop={stopRecording}
+              teleprompter={<AudioTeleprompter recording={isRecording} streamRef={recordStreamRef} user={owner} />}
               onRemove={removeTrack}
               onEditTrack={FEATURE_EDITOR ? openTrackInEditor : null}
               editLocked={(id) => isPublishing || ['success', 'uploading', 'posting'].includes(publishStatus[id]?.state)}
@@ -1623,6 +1666,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               onShortsChange={setShortsOf}
               onDesignShortThumb={(trackId, url) => setShortThumbFor({ trackId, url })}
               shortsLocked={isPublishing}
+              transcript={stepKey === 'post' ? transcriptPropsFor(tracks[0], 'post') : null}
             />
           )}
           {stepKey === 'tracks' && (
@@ -1648,6 +1692,7 @@ function AudioUploadModal({ isOpen, onClose, initialTrack }) {
               onShortsChange={setShortsOf}
               onDesignShortThumb={(trackId, url) => setShortThumbFor({ trackId, url })}
               shortsLocked={isPublishing}
+              transcriptPropsFor={(tr) => transcriptPropsFor(tr, 'track')}
             />
           )}
           {stepKey === 'review' && (
@@ -1801,6 +1846,7 @@ function SourceStep({
   tracks, isRecording, recordSec, isDragging, fileInputRef,
   onDrop, onDragOver, onDragLeave, onPickFiles, onFilesSelected,
   onStart, onStop, onRemove, onEditTrack = null, editLocked = () => false,
+  teleprompter = null,
 }) {
   const { t } = useTranslation();
   return (
@@ -1849,6 +1895,7 @@ function SourceStep({
           )}
         </div>
       </div>
+      {teleprompter}
       {tracks.length > 0 && (
         <div className="audio-upload-track-list">
           <h4>{t('audio.upload.source.added', { count: tracks.length })}</h4>
@@ -2455,6 +2502,7 @@ function MainPostStep({
   payout, setPayout, beneCount, onOpenBene,
   addToBlog, setAddToBlog, warmup = false,
   onShortsChange = null, onDesignShortThumb = null, shortsLocked = false,
+  transcript = null,
 }) {
   const { t } = useTranslation();
   const isAlbum = variant === 'album';
@@ -2499,6 +2547,7 @@ function MainPostStep({
           placeholder={t('audio.upload.fields.descriptionOptional')}
         />
       </div>
+      {!isAlbum && transcript && <TranscriptControl {...transcript} disabled={shortsLocked} />}
 
       <ThumbPicker
         value={thumb}
@@ -2621,6 +2670,7 @@ function TracksStep({
   applyToAllTracks, onOpenBene, uploadCoverFor, thumbUploadingId,
   onDesignCover = null, onEditTrack = null, editLocked = () => false,
   onShortsChange = null, onDesignShortThumb = null, shortsLocked = false,
+  transcriptPropsFor = null,
 }) {
   const { t } = useTranslation();
   const [openId, setOpenId] = useState(null);
@@ -2714,11 +2764,14 @@ function TracksStep({
             <textarea
               className="audio-upload-post-desc audio-upload-track-text"
               placeholder={mode === 'album' ? t('audio.upload.tracks.commentText') : t('audio.upload.tracks.snapText')}
-              rows={2}
-              maxLength={5000}
+              rows={tr.transcriptText ? 6 : 2}
+              maxLength={tr.transcriptText ? TRANSCRIPT_TEXT_MAX : 5000}
               value={tr.desc || ''}
               onChange={(e) => patchTrack(tr.id, { desc: e.target.value })}
             />
+            {transcriptPropsFor && (
+              <TranscriptControl {...transcriptPropsFor(tr)} disabled={shortsLocked || editLocked(tr.id)} />
+            )}
             {/* Its own cover, also always in view (it was behind Edit). */}
             <ThumbPicker
               value={tr.thumb || ''}

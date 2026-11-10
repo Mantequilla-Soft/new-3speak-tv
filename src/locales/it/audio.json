@@ -415,6 +415,31 @@
       "couldNotLoad": "Impossibile caricare l'audiogramma: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Pubblicato insieme a questo audio"
+    },
+    "transcript": {
+      "make": "Crea trascrizione",
+      "again": "Crea di nuovo la trascrizione",
+      "hint": "Scrive ciò che viene detto ({{language}}) e lo mette sotto il tuo testo, dove puoi ancora modificarlo.",
+      "reading": "Lettura dell'audio...",
+      "writing": "Trascrizione in corso... {{percent}}%",
+      "added": "Trascrizione aggiunta sotto il tuo testo. Rileggila: alcune parole potrebbero essere sbagliate.",
+      "shortened": "Trascrizione aggiunta, accorciata per stare in un post.",
+      "empty": "Nessun parlato trovato in questo audio.",
+      "failed": "Impossibile creare la trascrizione. Riprova.",
+      "heading": "Trascrizione",
+      "language": "Lingua dell'audio",
+      "waitPublish": "Una trascrizione è ancora in corso. Aspettala o annullala prima."
+    },
+    "teleprompter": {
+      "title": "Gobbo",
+      "subtitle": "Scrivi cosa dirai e leggilo mentre registri",
+      "placeholder": "Scrivi o incolla cosa dirai. Durante la registrazione appare in grande.",
+      "followsVoice": "Segue la tua voce",
+      "steady": "Va avanti a ritmo costante",
+      "voiceStopped": "Non segue più la voce, va avanti a ritmo costante",
+      "wpm": "{{n}} parole al minuto",
+      "slower": "Più lento",
+      "faster": "Più veloce"
     }
   },
   "podcasts": {

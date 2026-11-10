@@ -1299,3 +1299,162 @@
     width: 88px;
   }
 }
+
+// ─── Teleprompter for the recorder (step 1) ───
+.audio-tp {
+  margin-top: 12px;
+  border: 1px solid var(--border-light, #333);
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  padding: 4px 12px;
+
+  &.recording { padding: 12px; }
+}
+
+.audio-tp-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+
+  svg { color: var(--accent-primary); flex-shrink: 0; }
+  small {
+    flex: 1;
+    min-width: 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  svg:last-child { color: var(--text-secondary); }
+}
+
+.audio-tp-script { margin: 4px 0 8px; }
+
+.audio-tp-read {
+  max-height: 180px;
+  overflow-y: auto;
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  overscroll-behavior: contain;
+}
+
+.audio-tp-word {
+  transition: color 0.15s ease;
+
+  &.read { color: var(--text-secondary); opacity: 0.55; }
+  &.current { color: var(--text-primary); font-weight: 700; }
+}
+
+.audio-tp-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.audio-tp-wpm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid var(--border-light, #333);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+  }
+}
+
+// ─── Transcript (post step, track texts) ───
+.audio-transcript {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 8px 0;
+}
+
+.audio-transcript-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.audio-transcript-lang {
+  padding: 7px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-light, #333);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.audio-transcript-note {
+  color: var(--text-secondary);
+  font-size: 12px;
+
+  &.error { color: var(--accent-primary); }
+}
+
+.audio-transcript-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--text-primary);
+
+  > span { font-variant-numeric: tabular-nums; }
+}
+
+.audio-transcript-bar {
+  flex: 1 1 140px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border-light, #333);
+  overflow: hidden;
+
+  > div {
+    height: 100%;
+    background: var(--accent-primary);
+    transition: width 0.3s ease;
+  }
+}
+
+.audio-transcript-cancel {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-light, #333);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+}

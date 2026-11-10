@@ -385,6 +385,31 @@
       "couldNotLoad": "无法加载音频波形视频：{{error}}",
       "rowTitle": "短视频：{{title}}",
       "withAudio": "随此音频一起发布"
+    },
+    "transcript": {
+      "make": "生成文字稿",
+      "again": "重新生成文字稿",
+      "hint": "把说的话（{{language}}）写下来，放在你的文字下方，之后仍可修改。",
+      "reading": "正在读取音频...",
+      "writing": "正在转写... {{percent}}%",
+      "added": "文字稿已添加到你的文字下方。请通读一遍：有些词可能不准确。",
+      "shortened": "文字稿已添加，并已缩短以放入一篇帖子。",
+      "empty": "这段音频中没有找到语音。",
+      "failed": "无法生成文字稿，请重试。",
+      "heading": "文字稿",
+      "language": "音频语言",
+      "waitPublish": "文字稿仍在生成中。请等待完成或先取消。"
+    },
+    "teleprompter": {
+      "title": "提词器",
+      "subtitle": "写下要说的话，录音时照着读",
+      "placeholder": "写下或粘贴你要说的话。录音时会大字显示。",
+      "followsVoice": "跟随你的声音",
+      "steady": "以固定速度前进",
+      "voiceStopped": "已停止跟随声音，以固定速度前进",
+      "wpm": "每分钟 {{n}} 个词",
+      "slower": "慢一点",
+      "faster": "快一点"
     }
   },
   "podcasts": {

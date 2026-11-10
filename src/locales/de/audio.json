@@ -400,6 +400,31 @@
       "couldNotLoad": "Das Audiogramm konnte nicht geladen werden: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Erscheint zusammen mit diesem Audio"
+    },
+    "transcript": {
+      "make": "Transkript erstellen",
+      "again": "Transkript neu erstellen",
+      "hint": "Schreibt auf, was gesagt wird ({{language}}), und setzt es unter deinen Text, wo du es noch ändern kannst.",
+      "reading": "Audio wird gelesen...",
+      "writing": "Wird aufgeschrieben... {{percent}}%",
+      "added": "Transkript unter deinem Text eingefügt. Lies es durch: Einzelne Wörter können falsch sein.",
+      "shortened": "Transkript eingefügt, gekürzt, damit es in einen Beitrag passt.",
+      "empty": "In diesem Audio wurde keine Sprache gefunden.",
+      "failed": "Das Transkript konnte nicht erstellt werden. Bitte versuche es erneut.",
+      "heading": "Transkript",
+      "language": "Sprache des Audios",
+      "waitPublish": "Ein Transkript wird noch erstellt. Warte darauf oder brich es zuerst ab."
+    },
+    "teleprompter": {
+      "title": "Teleprompter",
+      "subtitle": "Schreib auf, was du sagen willst, und lies es beim Aufnehmen ab",
+      "placeholder": "Schreib oder füge ein, was du sagen willst. Beim Aufnehmen erscheint es groß.",
+      "followsVoice": "Folgt deiner Stimme",
+      "steady": "Läuft in gleichmäßigem Tempo weiter",
+      "voiceStopped": "Stimmverfolgung beendet, läuft in gleichmäßigem Tempo weiter",
+      "wpm": "{{n}} Wörter pro Minute",
+      "slower": "Langsamer",
+      "faster": "Schneller"
     }
   },
   "podcasts": {

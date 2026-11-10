@@ -400,6 +400,31 @@
       "couldNotLoad": "De audiogram kon niet worden geladen: {{error}}",
       "rowTitle": "Short: {{title}}",
       "withAudio": "Wordt samen met deze audio geplaatst"
+    },
+    "transcript": {
+      "make": "Transcript maken",
+      "again": "Transcript opnieuw maken",
+      "hint": "Schrijft op wat er gezegd wordt ({{language}}) en zet het onder je tekst, waar je het nog kunt aanpassen.",
+      "reading": "Audio wordt gelezen...",
+      "writing": "Wordt uitgeschreven... {{percent}}%",
+      "added": "Transcript onder je tekst gezet. Lees het na: sommige woorden kunnen fout zijn.",
+      "shortened": "Transcript toegevoegd, ingekort zodat het in een bericht past.",
+      "empty": "Geen spraak gevonden in deze audio.",
+      "failed": "Het transcript kon niet worden gemaakt. Probeer het opnieuw.",
+      "heading": "Transcript",
+      "language": "Taal van de audio",
+      "waitPublish": "Er wordt nog een transcript gemaakt. Wacht erop of annuleer het eerst."
+    },
+    "teleprompter": {
+      "title": "Teleprompter",
+      "subtitle": "Schrijf op wat je gaat zeggen en lees het voor tijdens het opnemen",
+      "placeholder": "Schrijf of plak wat je gaat zeggen. Tijdens het opnemen staat het groot in beeld.",
+      "followsVoice": "Volgt je stem",
+      "steady": "Gaat in een vast tempo verder",
+      "voiceStopped": "Stem volgen gestopt, gaat in een vast tempo verder",
+      "wpm": "{{n}} woorden per minuut",
+      "slower": "Langzamer",
+      "faster": "Sneller"
     }
   },
   "podcasts": {
