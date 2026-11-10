@@ -12,6 +12,7 @@ import { useAppStore } from "./lib/store";
 import { useSupportBlock } from "./lib/supportBlockStore";
 import { creatorKey, getCreatorSettings, isBanned } from "./utils/creatorSettings";
 import SupportModal from "./components/SupportModal/SupportModal";
+import UploadBlockNotice from "./components/UploadBlockNotice/UploadBlockNotice";
 import CookieConsent from "./components/CookieConsent/CookieConsent";
 import WelcomeTour from "./components/WelcomeTour/WelcomeTour";
 import { GlobalReviewModal } from "./components/ReviewModal/ReviewModal";
@@ -776,6 +777,9 @@ function App() {
             rather than one of three states it could be in. */}
         <div className={`container large-container sidebar-fully-hidden ${hideNavOnMobile ? "shorts-mobile-container" : ""}`}>
           <ScrollToTop />
+          {/* A creator blocked from uploading: popup once, banner while it lasts.
+              No banner over the full-screen mobile shorts player. */}
+          <UploadBlockNotice hidden={hideNavOnMobile} />
           {/* Browser-tab title for every route (watch/shorts set their own). */}
           <RouteTitle />
           {/* Optional: land on /shorts when the app is opened (off by default). */}

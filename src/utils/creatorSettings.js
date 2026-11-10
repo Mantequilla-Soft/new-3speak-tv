@@ -36,6 +36,21 @@ export function creatorKey(user, incubationHandle) {
   return null;
 }
 
+// One request per key for every component asking at once (nav, block banner,
+// community page), reused for a minute.
+const SHARED_TTL_MS = 60 * 1000;
+const shared = new Map();
+function sharedCreatorSettings(key) {
+  const hit = shared.get(key);
+  if (hit && Date.now() - hit.at < SHARED_TTL_MS) return hit.promise;
+  const promise = getCreatorSettings(key);
+  shared.set(key, { promise, at: Date.now() });
+  // A failed check (null) is not kept, so the next mount asks again.
+  promise.then((s) => { if (s === null && shared.get(key)?.promise === promise) shared.delete(key); });
+  return promise;
+}
+export function clearCreatorSettingsCache() { shared.clear(); }
+
 // Settings for one key, refetched when the key changes. `null` until it has
 // loaded, and stays null when the check fails (callers fail OPEN on null).
 export function useCreatorSettings(key) {
@@ -43,7 +58,7 @@ export function useCreatorSettings(key) {
   useEffect(() => {
     if (!key) return undefined;
     let cancelled = false;
-    getCreatorSettings(key).then((settings) => {
+    sharedCreatorSettings(key).then((settings) => {
       if (!cancelled) setState({ key, settings });
     });
     return () => { cancelled = true; };

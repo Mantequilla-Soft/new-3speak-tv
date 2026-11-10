@@ -12,6 +12,10 @@
       "body": "Akaunti yako ya 3Speak hairuhusiwi kupakia kwa sasa. Ikiwa unadhani hili ni kosa, tafadhali wasiliana na huduma kwa wateja ya 3Speak."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Ujumbe kutoka kwa timu ya 3Speak",
+    "bannerBody": "Bado unaweza kutazama, kutoa maoni na kufuatilia. Una maswali? Wasiliana nasi:"
+  },
   "emergency": {
     "title": "Tuna matatizo fulani ya miundombinu",
     "body": "Timu yetu inalishughulikia na inafanya kazi kurejesha 3Speak sasa hivi. Jiunge na Discord yetu ili kutufikia na kupata taarifa mubashara — asante kwa uvumilivu wako.",

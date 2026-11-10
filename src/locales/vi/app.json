@@ -12,6 +12,10 @@
       "body": "Tài khoản 3Speak của bạn hiện không được phép tải lên. Nếu bạn nghĩ đây là nhầm lẫn, vui lòng liên hệ bộ phận hỗ trợ của 3Speak."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Tin nhắn từ đội ngũ 3Speak",
+    "bannerBody": "Bạn vẫn có thể xem, bình luận và theo dõi. Có câu hỏi? Hãy liên hệ với chúng tôi:"
+  },
   "emergency": {
     "title": "Hệ thống của chúng tôi đang gặp sự cố",
     "body": "Đội ngũ của chúng tôi đang khắc phục để đưa 3Speak hoạt động trở lại ngay. Tham gia Discord của chúng tôi để liên hệ và nhận cập nhật trực tiếp — cảm ơn bạn đã kiên nhẫn.",

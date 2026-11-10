@@ -12,6 +12,10 @@
       "body": "Je 3Speak-account mag op dit moment niet uploaden. Denk je dat dit een vergissing is? Neem dan contact op met 3Speak-support."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Bericht van het 3Speak-team",
+    "bannerBody": "Je kunt nog steeds kijken, reageren en volgen. Vragen? Neem contact met ons op:"
+  },
   "emergency": {
     "title": "We hebben wat problemen met onze infrastructuur",
     "body": "Ons team is ermee bezig en werkt er nu aan om 3Speak weer online te krijgen. Kom naar onze Discord om ons te bereiken en live updates te krijgen — bedankt voor je geduld.",

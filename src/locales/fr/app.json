@@ -12,6 +12,10 @@
       "body": "Votre compte 3Speak n'est pas autorisé à mettre en ligne pour le moment. Si vous pensez qu'il s'agit d'une erreur, contactez le support 3Speak."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Message de l'équipe 3Speak",
+    "bannerBody": "Vous pouvez toujours regarder, commenter et suivre. Des questions ? Écrivez-nous :"
+  },
   "emergency": {
     "title": "Nous rencontrons des problèmes d'infrastructure",
     "body": "Notre équipe est dessus et travaille à remettre 3Speak en ligne dès maintenant. Rejoignez notre Discord pour nous contacter et suivre l'évolution en direct — merci de votre patience.",

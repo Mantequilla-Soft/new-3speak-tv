@@ -23,16 +23,26 @@ const COPY = {
 export default function SupportModal() {
   const { t } = useTranslation();
   const block = useSupportBlock((s) => s.block);
-  const hide = useSupportBlock((s) => s.hideSupportBlock);
+  const hideBlock = useSupportBlock((s) => s.hideSupportBlock);
   if (!block) return null;
 
   const copy = COPY[block.reason] || COPY.banned;
+  const hide = () => {
+    try { block.onClose?.(); } catch { /* ignore */ }
+    hideBlock();
+  };
 
   return (
     <div className="support-modal-overlay" onClick={hide}>
       <div className="support-modal" onClick={(e) => e.stopPropagation()}>
         <ModalHeader title={t(copy.titleKey)} onClose={hide} />
         <p className="support-modal-body">{t(copy.bodyKey)}</p>
+        {block.note && (
+          <div className="support-modal-note">
+            <span className="support-modal-note-label">{t('app.uploadBlock.noteLabel')}</span>
+            <p className="support-modal-note-text">{block.note}</p>
+          </div>
+        )}
         <div className="support-modal-actions">
           <a className="support-modal-btn discord" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
             <FaDiscord size={20} /> <span>Discord</span>

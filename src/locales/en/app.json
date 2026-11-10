@@ -12,6 +12,10 @@
       "body": "Your 3Speak account isn’t allowed to upload right now. If you think this is a mistake, please contact 3Speak support."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Message from the 3Speak team",
+    "bannerBody": "You can still watch, comment and follow. Questions? Talk to us:"
+  },
   "emergency": {
     "title": "We’re having some infrastructure issues",
     "body": "Our team is on it and working to bring 3Speak back right now. Join our Discord to reach us and get live updates — thanks for your patience.",

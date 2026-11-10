@@ -12,6 +12,10 @@
       "body": "Al momento il tuo account 3Speak non può caricare contenuti. Se pensi che sia un errore, contatta l'assistenza di 3Speak."
     }
   },
+  "uploadBlock": {
+    "noteLabel": "Messaggio dal team di 3Speak",
+    "bannerBody": "Puoi ancora guardare, commentare e seguire. Domande? Scrivici:"
+  },
   "emergency": {
     "title": "Stiamo avendo alcuni problemi di infrastruttura",
     "body": "Il nostro team ci sta lavorando per rimettere in funzione 3Speak il prima possibile. Unisciti al nostro Discord per contattarci e ricevere aggiornamenti in tempo reale — grazie per la pazienza.",

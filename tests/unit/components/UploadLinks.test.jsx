@@ -122,6 +122,13 @@ describe('UploadLinks: Audio editor entry', () => {
     expect(events).toHaveLength(0)
   })
 
+  it('quotes the admin\'s block note in that notice', async () => {
+    m.settings = { canUpload: false, uploadBlockedReason: 'Only your own videos.' }
+    const { user } = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    await user.click(entry())
+    await waitFor(() => expect(useSupportBlock.getState().block).toEqual({ reason: 'upload', note: 'Only your own videos.' }))
+  })
+
   it('looks a warm-up user up as ~<handle>, a Hive account by its name', async () => {
     const { getCreatorSettings } = await import('../../../src/utils/creatorSettings')
     getCreatorSettings.mockClear()
