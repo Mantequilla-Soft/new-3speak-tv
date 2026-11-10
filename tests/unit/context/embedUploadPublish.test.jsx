@@ -510,6 +510,15 @@ describe('an incubating creator (no Hive account yet)', () => {
     h.fns.broadcastViaThreespeak.mockResolvedValue({ success: true, incubation: true })
   })
 
+  it('is checked as ~<handle> and stopped when that row blocks uploads', async () => {
+    h.fns.isUploadBlocked.mockReturnValue(true)
+    const { result } = await ready()
+    await publish(result)
+    expect(h.fns.getCreatorSettings).toHaveBeenCalledWith('~newbie')
+    expect(h.fns.showSupportBlock).toHaveBeenCalledWith('upload')
+    expect(h.fns.broadcastViaThreespeak).not.toHaveBeenCalled()
+  })
+
   it('posts under the asset\'s own id, without banner or reblog', async () => {
     const { result } = await ready((c) => {
       c.setOriginalAuthor('alice')

@@ -169,7 +169,12 @@ export const mocks = {
   store: { useAppStore: (sel) => (sel ? sel(state.store) : state.store) },
   premium: { usePremiumStatus: () => state.premium },
   snaps: { resolveSnapsContainer: call('resolveSnapsContainer') },
-  creatorSettings: { getCreatorSettings: call('getCreatorSettings'), isUploadBlocked: call('isUploadBlocked') },
+  creatorSettings: {
+    getCreatorSettings: call('getCreatorSettings'),
+    isUploadBlocked: call('isUploadBlocked'),
+    // The real key rule: a warm-up user is `~<handle>`.
+    creatorKey: (user, handle) => user || (handle ? `~${String(handle).toLowerCase()}` : null),
+  },
   supportBlock: { useSupportBlock: { getState: () => ({ showSupportBlock: fns.showSupportBlock }) } },
   thumbnail: { uploadThumbnail: call('uploadThumbnail') },
   endpoints: { pickEmbedEndpoint: call('pickEmbedEndpoint') },

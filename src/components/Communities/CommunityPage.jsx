@@ -24,6 +24,7 @@ import { customJsonWithAioha, isLoggedIn, KeyTypes } from "../../hive-api/aioha"
 import CommunitySnaps from "../Userprofilepage/CommunitySnaps";
 import { CommunityPinned, CommunityTopCreators, CommunityTeam, CommunityRules } from "./CommunityExtras";
 import { findNextOnChannel, rememberCommunityChannel, surfUrl } from "../../utils/surf";
+import { creatorKey, isUploadBlocked, useCreatorSettings } from "../../utils/creatorSettings";
 
 // Every toast from this module is headed "Community"; the message becomes the
 // line under it. See utils/toast.js.
@@ -272,7 +273,11 @@ function CommunityPage() {
       setSurfing(false);
     }
   };
-  const canUpload = authenticated && (isLoggedIn() || !!incubationHandle);
+  // A warm-up user blocked from uploads (`~<handle>` row, canUpload: false)
+  // loses the link, like the nav's Share. Fails open while loading or on error.
+  const warmupKey = !isLoggedIn() && incubationHandle ? creatorKey(null, incubationHandle) : null;
+  const warmupUploadBlocked = isUploadBlocked(useCreatorSettings(warmupKey));
+  const canUpload = authenticated && (isLoggedIn() || !!incubationHandle) && !warmupUploadBlocked;
   const uploadHref = `/embed-studio?community=${encodeURIComponent(id)}&communityTitle=${encodeURIComponent(dataMain?.title || id)}`;
 
   // Batch fetch content data

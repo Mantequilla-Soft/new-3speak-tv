@@ -3,7 +3,7 @@ import { IoCloudUploadSharp } from 'react-icons/io5';
 import { MdGraphicEq } from 'react-icons/md';
 import { IoMdAdd } from 'react-icons/io';
 import ShortsIcon from '../icons/ShortsIcon';
-import { getCreatorSettings, isUploadBlocked } from '../../utils/creatorSettings';
+import { creatorKey, getCreatorSettings, isUploadBlocked } from '../../utils/creatorSettings';
 import { useSupportBlock } from '../../lib/supportBlockStore';
 import { useAppStore } from '../../lib/store';
 import { useTranslation } from 'react-i18next';
@@ -74,7 +74,8 @@ export default function ProfileEmptyState({ kind = 'video', isOwnProfile = false
     e.preventDefault();
     if (cfg.gated === false) { onAction?.(); return; }
     // Same gate as UploadLinks: fails open if the check itself errors.
-    const settings = await getCreatorSettings(useAppStore.getState().user);
+    const { user: hiveUser, incubationHandle } = useAppStore.getState();
+    const settings = await getCreatorSettings(creatorKey(hiveUser, incubationHandle));
     if (isUploadBlocked(settings)) {
       useSupportBlock.getState().showSupportBlock('upload');
       return;

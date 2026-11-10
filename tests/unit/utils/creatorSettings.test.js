@@ -5,7 +5,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 const get = vi.hoisted(() => vi.fn())
 vi.mock('axios', () => ({ default: { get } }))
 
-import { getCreatorSettings, isBanned, isUploadBlocked } from '../../../src/utils/creatorSettings.js'
+import { creatorKey, getCreatorSettings, isBanned, isUploadBlocked } from '../../../src/utils/creatorSettings.js'
 
 beforeEach(() => get.mockReset())
 
@@ -36,5 +36,20 @@ describe('isBanned / isUploadBlocked', () => {
     expect(isUploadBlocked({ canUpload: 0 })).toBe(false)
     expect(isUploadBlocked({})).toBe(false)
     expect(isUploadBlocked(null)).toBe(false)
+  })
+})
+
+describe('creatorKey', () => {
+  it('is the Hive name, or ~<handle> for a warm-up user, never a bare handle', () => {
+    expect(creatorKey('alice', null)).toBe('alice')
+    expect(creatorKey('alice', 'newbie')).toBe('alice')
+    expect(creatorKey(null, 'Newbie')).toBe('~newbie')
+    expect(creatorKey(null, null)).toBeNull()
+  })
+
+  it('~ survives the /check URL as is', async () => {
+    get.mockResolvedValue({ data: { canUpload: false } })
+    await getCreatorSettings(creatorKey(null, 'newbie'))
+    expect(get).toHaveBeenCalledWith('https://checker.3speak.tv/check/~newbie', { timeout: 8000 })
   })
 })

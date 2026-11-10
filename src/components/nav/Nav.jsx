@@ -13,6 +13,7 @@ import { FaMedal } from "react-icons/fa6";
 import { useMyPlaylists } from "../../hooks/useMyPlaylists";
 import ShortsIcon from "../icons/ShortsIcon";
 import UploadLinks from "../UploadLinks";
+import { creatorKey, isUploadBlocked, useCreatorSettings } from "../../utils/creatorSettings";
 import useHoverPeek from "../../hooks/useHoverPeek";
 import ModalHeader from "../ModalHeader/ModalHeader";
 import NavProgress from '../Incubation/NavProgress';
@@ -219,6 +220,9 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
   const { t } = useTranslation();
   const { authenticated, LogOut, user, initializeTheme } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
+  // Only a warm-up user is looked up here; a Hive account always keeps Share.
+  const warmupKey = !user && incubationHandle ? creatorKey(null, incubationHandle) : null;
+  const warmupUploadBlocked = isUploadBlocked(useCreatorSettings(warmupKey));
   const authChecked = useAppStore((s) => s.authChecked);
   const signupPossible = useSignupPossible();
   // Shows a just-uploaded profile picture immediately instead of the cached
@@ -521,7 +525,10 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
           <NavProgress />
           {/* Hive accounts only: an incubating user cannot book ads yet. */}
           {!incubationHandle && <NavAdvertiseButton user={user} />}
-          <NavUploadDropdown />
+          {/* Hidden outright for a warm-up user blocked from uploads (their
+              `~<handle>` row has canUpload: false). A Hive account keeps it and
+              gets the "contact support" popup from the entries instead. */}
+          {!warmupUploadBlocked && <NavUploadDropdown />}
           <Link to="/discover" className="nav-mobile-discover" title={t('app.routes.discover')}>
             <MdOutlineSearch size={19} />
           </Link>

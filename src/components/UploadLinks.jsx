@@ -6,7 +6,7 @@ import { MdGraphicEq, MdDesktopWindows, MdSmartphone, MdGroups, MdAccessTime, Md
 import { BiCommentDetail } from "react-icons/bi";
 import ShortsIcon from "./icons/ShortsIcon";
 import { FEATURE_EDITOR, openpodsEnabledFor, storiesEnabledFor } from "../utils/config";
-import { getCreatorSettings, isUploadBlocked } from "../utils/creatorSettings";
+import { creatorKey, getCreatorSettings, isUploadBlocked } from "../utils/creatorSettings";
 import { useSupportBlock } from "../lib/supportBlockStore";
 import { useAppStore } from "../lib/store";
 import { useTranslation } from "react-i18next";
@@ -65,7 +65,8 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
     e.preventDefault();
     pauseAllMedia();
     if (onClick) onClick(e); // close the dropdown/menu either way
-    const settings = await getCreatorSettings(useAppStore.getState().user);
+    const { user: hiveUser, incubationHandle } = useAppStore.getState();
+    const settings = await getCreatorSettings(creatorKey(hiveUser, incubationHandle));
     if (isUploadBlocked(settings)) {
       useSupportBlock.getState().showSupportBlock('upload');
       return;

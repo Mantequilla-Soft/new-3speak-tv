@@ -19,12 +19,14 @@ vi.mock('../../../src/utils/config', async (importOriginal) => {
     storiesEnabledFor: (u) => !!u,
   }
 })
-vi.mock('../../../src/utils/creatorSettings', () => ({
+vi.mock('../../../src/utils/creatorSettings', async (importOriginal) => ({
+  creatorKey: (await importOriginal()).creatorKey,
   getCreatorSettings: vi.fn(async () => m.settings),
   isUploadBlocked: (s) => s?.canUpload === false,
 }))
 
 const { useSupportBlock } = await import('../../../src/lib/supportBlockStore')
+const { useAppStore } = await import('../../../src/lib/store')
 const { default: UploadLinks } = await import('../../../src/components/UploadLinks.jsx')
 
 let events
@@ -36,6 +38,7 @@ beforeEach(() => {
   m.settings = {}
   events = []
   useSupportBlock.setState({ block: null })
+  useAppStore.setState({ user: null, incubationHandle: null })
   window.addEventListener('open-audio-editor', onOpen)
 })
 afterEach(() => {
@@ -117,6 +120,20 @@ describe('UploadLinks: Audio editor entry', () => {
     await user.click(entry())
     await waitFor(() => expect(useSupportBlock.getState().block).toEqual({ reason: 'upload' }))
     expect(events).toHaveLength(0)
+  })
+
+  it('looks a warm-up user up as ~<handle>, a Hive account by its name', async () => {
+    const { getCreatorSettings } = await import('../../../src/utils/creatorSettings')
+    getCreatorSettings.mockClear()
+    useAppStore.setState({ user: null, incubationHandle: 'Newbie' })
+    const { user, unmount } = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    await user.click(entry())
+    await waitFor(() => expect(getCreatorSettings).toHaveBeenCalledWith('~newbie'))
+    unmount()
+    useAppStore.setState({ user: 'badadib', incubationHandle: null })
+    const again = renderWithProviders(<UploadLinks linkClass="share-link" />)
+    await again.user.click(entry())
+    await waitFor(() => expect(getCreatorSettings).toHaveBeenLastCalledWith('badadib'))
   })
 
   it('pauses whatever is playing on the page first', async () => {

@@ -10,7 +10,7 @@ import HomeGrouped from "./page/HomeGrouped";
 // KeyChainLogin replaced by LoginRedirect (opens aioha modal)
 import { useAppStore } from "./lib/store";
 import { useSupportBlock } from "./lib/supportBlockStore";
-import { getCreatorSettings, isBanned } from "./utils/creatorSettings";
+import { creatorKey, getCreatorSettings, isBanned } from "./utils/creatorSettings";
 import SupportModal from "./components/SupportModal/SupportModal";
 import CookieConsent from "./components/CookieConsent/CookieConsent";
 import WelcomeTour from "./components/WelcomeTour/WelcomeTour";
@@ -559,19 +559,21 @@ function App() {
   // from persistence, while `authenticated` only flips true later via
   // initializeAuth. So if a logged-in creator gets banned, refreshing forces a
   // logout + shows the "contact support" modal. Fails open if the check errors.
+  // A warm-up user is checked as `~<handle>` (creatorKey).
   useEffect(() => {
-    if (!appUser) return;
+    const key = creatorKey(appUser, incubationHandle);
+    if (!key) return;
     let cancelled = false;
     (async () => {
-      const settings = await getCreatorSettings(appUser);
+      const settings = await getCreatorSettings(key);
       if (cancelled) return;
       if (isBanned(settings)) {
         useSupportBlock.getState().showSupportBlock('banned');
-        try { await LogOut(appUser); } catch { /* ignore */ }
+        try { await LogOut(appUser || incubationHandle); } catch { /* ignore */ }
       }
     })();
     return () => { cancelled = true; };
-  }, [appUser]);
+  }, [appUser, incubationHandle]);
 
   const tokenVaildation = ()=>{
     const token = window.localStorage.getItem("access_token")
