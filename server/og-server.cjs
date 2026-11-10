@@ -1243,6 +1243,14 @@ async function resolveVideoCard(video, origin) {
     const asShort = await lookupEmbed(post.author, post.permlink);
     if (asShort.doc && asShort.doc.short === true) embed = asShort.doc;
   }
+  // A 3Speak video posted from Ecency, PeakD, Skatehive...: the post carries
+  // only the player link, no `video` metadata and no 3Speak app name. Without
+  // the checker's doc the page was taken for a text post and noindexed, while
+  // the sitemap (built from those docs) listed it.
+  if (!embed && post && !post.parent_author && !meta.video && !/speak/i.test(String(meta.app || ''))) {
+    const asEmbed = await lookupEmbed(post.author, post.permlink);
+    if (asEmbed.doc) embed = asEmbed.doc;
+  }
   const isShort = video.kind === 'shorts' || !!(embed && embed.short === true);
 
   // Thumbnail: embed doc's thumbnail_url wins (it's the one the app shows for
@@ -1295,7 +1303,9 @@ async function resolveVideoCard(video, origin) {
   const indexability = post ? getIndexability(post, meta) : null;
   // A Hive post with no video in it (a text post opened as /@author/permlink)
   // is not a video page: kept out of the index rather than offered as one.
-  const isVideo = !!embed || !!meta.video || /speak/i.test(String(meta.app || ''));
+  // The player link in the body counts too: a slow checker proves nothing.
+  const isVideo = !!embed || !!meta.video || /speak/i.test(String(meta.app || ''))
+    || /play\.3speak\.tv\/(embed|watch)\?v=/.test(String((post && post.body) || ''));
   const index = post
     ? indexability.index && isVideo
     : !(embed && embed.isNsfwContent) && !isAdultByTitle(title);
