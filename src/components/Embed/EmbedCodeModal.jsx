@@ -2,6 +2,7 @@ import { useRef, useState, useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
 import DialogShell from '../modal/DialogShell'
 import { Button } from '../v2/ui'
+import { Icon } from '../v2/Icon'
 import { cx } from '../v2/helpers'
 import { toastIn } from '../../utils/toast'
 import {
@@ -68,8 +69,9 @@ function EmbedCodeModal({ target, onClose }) {
     }
   }
 
-  // Design 44c: hint, the sizes on a segmented track, the snippet in a mono
-  // well with its size under it, and one primary Copy button.
+  // Design 44c: hint, the sizes on a 28px segmented track, a strip that sketches
+  // the player at that size, its size line, the snippet in a mono well, and one
+  // primary Copy button.
   return (
     <DialogShell
       onClose={onClose}
@@ -87,7 +89,7 @@ function EmbedCodeModal({ target, onClose }) {
           <button
             key={s.id}
             type="button"
-            className={cx('v2-seg__opt', 'h32', size === s.id && 'is-on')}
+            className={cx('v2-seg__opt', 'h28', size === s.id && 'is-on')}
             aria-pressed={size === s.id}
             onClick={() => setSize(s.id)}
           >
@@ -95,17 +97,27 @@ function EmbedCodeModal({ target, onClose }) {
           </button>
         ))}
       </div>
+      {/* A sketch of the embedded player (cover, play, progress), not the live
+          embed: "minimal" drops the cover, "with title" adds the title line. */}
+      <div className={cx('embed-code-strip', `is-${size}`)} aria-hidden="true">
+        {size !== 'minimal' && <span className="embed-code-strip__art" />}
+        <Icon name="play_circle" size={20} />
+        <span className="embed-code-strip__main">
+          {size === 'full' && target.title && <span className="embed-code-strip__title">{target.title}</span>}
+          <span className="embed-code-strip__bar" />
+        </span>
+      </div>
+      <p className="embed-code-size">{t('misc.embed.heightSub', { height: spec.height })}</p>
       <textarea
         ref={codeRef}
         className="embed-code-text"
         readOnly
-        rows={5}
+        rows={4}
         spellCheck={false}
         value={code}
         onFocus={(e) => e.target.select()}
         aria-label={t('chat.share.embedCode')}
       />
-      <p className="embed-code-size">{t('misc.embed.heightSub', { height: spec.height })}</p>
     </DialogShell>
   )
 }

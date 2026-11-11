@@ -19,12 +19,12 @@ function pauseAllMedia() {
   });
 }
 
-// The entry's icon in a 32px well, tinted by category (44c): video and live in
+// The entry's icon (16) in a 32px well, tinted by category (44c): video and live in
 // the accent, audio cyan, the rest muted.
 function ItemIcon({ name, tone, className }) {
   return (
     <span className={`${className} share-menu-icon is-${tone}`} aria-hidden="true">
-      <Icon name={name} size={18} />
+      <Icon name={name} size={16} />
     </span>
   );
 }
@@ -70,9 +70,8 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
   // when there's something under it: a lone heading reads as a bug.
   const hasOthers = !!user;
 
-  // Each category is its own group, all inside one layout box (nav.scss):
-  // one column per category in the desktop flyout and on tablets, two
-  // columns on phones (Video | Audio, then Live | Others).
+  // Each category is its own group, stacked in one column (44c) in the
+  // desktop flyout and in the sheet alike (nav.scss).
   return (
     <div className="share-menu-layout">
       <div className="share-menu-group">

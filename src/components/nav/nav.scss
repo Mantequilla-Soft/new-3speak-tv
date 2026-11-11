@@ -365,62 +365,47 @@
   @include compact { display: none !important; }
 }
 
-// ── The Share menu (UploadLinks inside) ──────────────────────────────────────
-// Rows of the menu, used by the desktop flyout and the narrow-screen sheet.
+// ── The Create menu (UploadLinks inside), design 44c ───────────────────────
+// One column grouped Video / Audio / Live / Others, the same in the desktop
+// flyout and the narrow-screen sheet. Rows: a 32px icon well, the 12/700 label
+// and its 10px subtitle; UploadLinks.scss draws the inside of a row.
 @mixin share-items {
-  .share-menu-heading {
-    @include v2.text(eyebrow);
-    color: var(--muted);
-    opacity: 1;
-    padding: 8px 12px 4px;
-  }
+  .share-menu-layout { display: flex; flex-direction: column; min-width: 0; }
+  .share-menu-group { display: flex; flex-direction: column; min-width: 0; }
 
   .nav-upload-flyout-item {
     display: flex;
     align-items: center;
     gap: 10px;
     min-height: 44px;
-    padding: 6px 12px;
+    padding: 6px 10px;
     border-radius: var(--r-md);
     color: var(--text);
-    @include v2.text(label);
     text-decoration: none;
+    white-space: normal;
     cursor: pointer;
     transition: background var(--t-fast) var(--ease);
 
-    .nav-upload-flyout-icon {
-      flex: none;
-      width: 20px;
-      height: 20px;
-      font-size: 20px;
-      color: var(--muted);
-    }
-
-    .share-menu-sub {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    &:hover {
+    &:hover,
+    &:focus-visible {
       background: var(--bg-hover);
       color: var(--text);
-      .nav-upload-flyout-icon { color: var(--text); }
     }
   }
 }
 
-// Wide screens only (below 1025px it is the sheet, Nav.jsx): the categories
-// sit side by side, one column each, a divider between.
+// Wide screens only (below 1025px it is the sheet, Nav.jsx): one 300px column,
+// a 24-radius menu card with 8 padding (44c).
 .nav-upload-flyout {
   @include v2.menu;
   position: absolute;
   top: calc(100% + 20px);
   right: 0;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 220px;
-  gap: 4px;
+  width: 300px;
   max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 120px);
+  @include v2.scroll-y;
+  border-radius: var(--r-2xl);
   z-index: 1100;
   // Fades in on open (hover peek or click); `--leaving` fades it out (200ms,
   // hooks/useHoverPeek.js), back in if the mouse returns.
@@ -434,35 +419,16 @@
 
   @include share-items;
 
-  .nav-upload-flyout-item { white-space: normal; }
-  .share-menu-layout { display: contents; }
-  .share-menu-group { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .share-menu-group + .share-menu-group { border-left: 1px solid var(--border); padding-left: 4px; }
-
   @media (prefers-reduced-motion: reduce) {
     animation: none;
     transition: none;
   }
 }
 
-// The same menu as a v2 Dialog (bottom sheet on phones, dialog on tablets).
+// The same menu as a v2 Dialog (bottom sheet on phones, dialog on tablets):
+// the same single column.
 .nav-upload-sheet {
   @include share-items;
-
-  .share-menu-layout {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 8px;
-  }
-
-  .share-menu-group {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
-
-  .nav-upload-flyout-item { white-space: normal; }
 }
 
 @keyframes nav-tabs-in {

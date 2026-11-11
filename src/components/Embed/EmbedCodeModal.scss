@@ -1,12 +1,65 @@
 @use "../../styles/v2" as v2;
 
 // "Embed on a website" for an audio, a playlist or a podcast (design 44c):
-// the v2 dialog (DialogShell) with the sizes on a segmented track and the
-// snippet in a mono well.
+// the v2 dialog (DialogShell) with the hint, the sizes on a 28px segmented
+// track, a sketch of the player, its size line and the snippet in a mono well.
 .embed-code-dialog {
+  .v2-dialog__body { gap: 8px; }
+
   .embed-code-hint {
     margin: 0;
     @include v2.text(body-sm);
+    line-height: 1.4;
+    color: var(--muted);
+  }
+
+  // The player at the chosen size, sketched: a 48px bg strip with the cover,
+  // the play button and the progress track.
+  .embed-code-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 48px;
+    padding: 0 8px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    color: var(--text);
+
+    &__art {
+      flex: none;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--r-sm);
+      background: var(--avatar);
+    }
+
+    &__main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    &__title {
+      @include v2.text(meta-sm);
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__bar {
+      display: block;
+      height: 4px;
+      border-radius: var(--r-bar);
+      background: var(--surface-2);
+    }
+  }
+
+  .embed-code-size {
+    margin: 0;
+    @include v2.text(meta-sm);
     color: var(--muted);
   }
 
@@ -14,21 +67,15 @@
     @include v2.well;
     display: block;
     width: 100%;
-    min-height: 112px;
-    padding: 10px 12px;
+    min-height: 0;
+    padding: 8px;
     border: 2px solid transparent;
     color: var(--muted);
-    @include v2.mono(12, 400);
+    @include v2.mono(10, 500);
     line-height: 1.5;
     resize: none;
     word-break: break-all;
 
     &:focus { outline: none; border-color: var(--accent); color: var(--text); }
-  }
-
-  .embed-code-size {
-    margin: -4px 0 0;
-    @include v2.text(meta);
-    color: var(--muted);
   }
 }

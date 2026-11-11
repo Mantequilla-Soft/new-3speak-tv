@@ -3,12 +3,13 @@
 // The Create menu's contents (UploadLinks.jsx), design 44c. The rows and the
 // container (desktop flyout, narrow-screen sheet) are styled by the nav
 // (nav/nav.scss); this file draws what is inside a row: the icon well, tinted
-// by category, and the label with its one-line subtitle.
+// by category, and the 12/700 label with its 10px subtitle.
 
-.share-menu-heading {
+// Classes doubled so the eyebrow wins over the nav's row rules.
+.share-menu-group .share-menu-heading.share-menu-heading {
   @include v2.text(eyebrow);
   color: var(--muted);
-  padding: 8px 12px 4px;
+  padding: 8px 10px 2px;
   pointer-events: none;
   user-select: none;
 }
@@ -23,7 +24,7 @@
   border-radius: v2.radius-for(32);
   background: var(--surface-2);
   color: var(--muted);
-  font-size: 18px;
+  font-size: 16px;
 
   &.is-accent { color: var(--accent); }
   &.is-cyan { color: var(--cyan); }
@@ -33,18 +34,19 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  gap: 1px;
 }
 
-.share-menu-label {
-  @include v2.text(label);
-  line-height: 1.25;
+.share-menu-layout .share-menu-label {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
 }
 
-.share-menu-sub {
-  @include v2.text(meta-sm);
+.share-menu-layout .share-menu-sub {
+  font-size: 10px;
   font-weight: 400;
-  line-height: 1.3;
+  line-height: 1.4;
   white-space: normal;
   color: var(--muted);
 }
