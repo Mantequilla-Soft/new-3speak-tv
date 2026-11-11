@@ -364,14 +364,14 @@
     "backToTimeline": "Back to timeline"
   },
   "publishing": {
-    "titleShort": "Publishing Short",
-    "titleStory": "Publishing Story",
-    "titleVideo": "Publishing Video",
-    "subtitle": "Please wait while we process your content...",
+    "titleShort": "Publishing short",
+    "titleStory": "Publishing story",
+    "titleVideo": "Publishing video",
+    "subtitle": "Please stay on this page until it’s finished.",
     "starting": "Starting...",
     "stayOnPage": "Please stay on this page until publishing is finished.",
-    "activityLog": "Activity Log",
-    "support": "For Support reach out to us on <discordLink>Discord</discordLink>",
+    "activityLog": "Activity log",
+    "support": "Stuck? Reach out on <discordLink>Discord</discordLink>.",
     "finishingUpload": "Finishing video upload…",
     "preparing": "Preparing publish...",
     "finalizing": "Finalizing…",
@@ -426,13 +426,13 @@
     }
   },
   "done": {
-    "title": "Upload Finished!",
+    "title": "Upload finished!",
     "shortPublished": "Your short has been published on 3Speak. It will take around 5 minutes to show up on your profile.",
     "storyPublished": "Your story is live on 3Speak for the next 24 hours.",
-    "videoPublished": "Your video has been published!<br/>It's now encoding in the background, which can take a few minutes.",
-    "promote": "Promote this video",
-    "goToProfile": "Go To My Profile →",
-    "feedback": "How was your upload"
+    "videoPublished": "Your video is published. It’s encoding in the background, which can take a few minutes.",
+    "promote": "Promote",
+    "goToProfile": "My profile",
+    "feedback": "How was your upload?"
   },
   "record": {
     "speechErrors": {

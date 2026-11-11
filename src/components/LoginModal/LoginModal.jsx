@@ -358,7 +358,7 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
         }
         setTopContainer(top);
 
-        // BOTTOM section ("No account? Sign up", 07e) right after the list.
+        // BOTTOM section ("No account? Get one free", 07e) right after the list.
         let bottom = modalContent.querySelector('.login-bottom-section');
         if (!bottom) {
           bottom = document.createElement('div');
@@ -405,7 +405,7 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
   const showLoginExtras = displayed && step === 'providers';
   // Asked once per page load and shared by every entry point.
   const signupPossible = useSignupPossible();
-  // "No account? Sign up" under the wallets: only for somebody signed out.
+  // "No account? Get one free" under the wallets: only for somebody signed out.
   const offerSignupOnWallets = ENABLE_BUTRAUTH && signupPossible.possible && !currentName && !isManteAuth && !aioha.isLoggedIn();
 
   const chooserOpen = !!displayed && (step === 'choose' || step === 'signup');
@@ -616,7 +616,7 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
             onClick={(e) => { e.stopPropagation(); setStep('signup'); startButrauthFlow(true); }}
             onMouseDown={(e) => e.stopPropagation()}
           >
-            {t('common.actions.signUp')}
+            {t('auth.loginModal.getOneFree')}
           </button>
         </p>,
         bottomContainer

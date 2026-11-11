@@ -410,6 +410,8 @@
   border-radius: var(--r-3xl);
 
   .wizard-head { margin: 0; }
+  .wizard-head__title { font-size: 20px; }
+  .wizard-head__sub { @include v2.text(meta); }
 }
 
 .ep-publishing__progress {
@@ -464,6 +466,7 @@
     &.is-done { color: var(--muted); }
   }
   &.error { color: var(--accent); }
+  &.success { color: var(--cyan); }
 }
 
 .activity-message {
@@ -484,10 +487,12 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
   padding: 24px;
   border-radius: var(--r-3xl);
   min-height: 420px;
+  // 35d: 22% cyan into the page ground, no outline.
+  &.v2-success { border: 0; background: linear-gradient(170deg, color-mix(in srgb, var(--cyan) 22%, var(--bg)), var(--bg) 60%); }
 
   @include v2.mobile { min-height: 0; padding: 20px; }
 }
@@ -518,19 +523,39 @@
 
 .ep-done__actions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 8px;
   width: 100%;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .ep-done__feedback {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 8px;
   width: 100%;
   margin-top: 8px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
+
+  .v2-eyebrow { font-size: 11px; }
+}
+
+.ep-done__moods {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.ep-done__mood {
+  height: 48px;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--border);
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); }
+  &.is-on { border-color: var(--cyan); background: var(--cyan-tint-strong); }
 }

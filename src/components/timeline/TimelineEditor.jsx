@@ -211,7 +211,7 @@ function useCheckerSearch(type, query) {
 }
 
 /** The add/edit link form: a bottom sheet on phones, a dialog elsewhere. */
-function LinkSheet({ initial, defaultAt, duration, onSave, onClose }) {
+function LinkSheet({ initial, defaultAt, duration, onSave, onClose, count = null, max = null }) {
   const { t } = useTranslation();
   const editing = !!initial;
   const [tab, setTab] = useState(() => {
@@ -289,15 +289,15 @@ function LinkSheet({ initial, defaultAt, duration, onSave, onClose }) {
       zIndex={1200}
       className="tle-sheet"
       bodyClassName="tle-sheet__body"
+      tone="accent"
+      // 35e: which link this is ("2 of 5") beside the title; the X closes.
+      headExtra={count != null && max != null
+        ? <span className="tle-sheet__count num">{t('upload.timeline.links.count', { n: count, max })}</span>
+        : null}
       footer={(
-        <div className="tle-sheet__actions">
-          <Button variant="secondary" size={48} onClick={onClose}>
-            {t('common.actions.cancel')}
-          </Button>
-          <Button variant="primary" size={48} className="is-next" trailing={editing ? 'check' : 'add_link'} disabled={!canSave} onClick={save}>
-            {editing ? t('common.actions.save') : t('upload.timeline.form.addButton')}
-          </Button>
-        </div>
+        <Button variant="primary" size={56} block className="dlg-main" trailing={editing ? 'check' : 'add_link'} disabled={!canSave} onClick={save}>
+          {editing ? t('common.actions.save') : t('upload.timeline.form.addButton')}
+        </Button>
       )}
     >
       <Segmented
@@ -921,21 +921,20 @@ export default function TimelineEditor({
               <button type="button" className="tle-icon-btn" onClick={() => zoomTo(zoom * 2)} disabled={zoom >= maxZoom} aria-label={t('upload.timeline.zoomIn')} title={t('upload.timeline.zoomIn')}>
                 <Icon name="zoom_in" size={20} />
               </button>
-              {zoom > 1 && (
-                <button type="button" className="tle-btn tle-btn--sm tle-zoombar__fit" onClick={() => zoomTo(1)}>
-                  <Icon name="fit_screen" size={18} />
-                  {t('upload.timeline.zoomFit')}
-                </button>
-              )}
+              {/* 35e: Fit and Full width are 40 icon tiles like the zoom ones. */}
+              <button type="button" className="tle-icon-btn tle-zoombar__fit" onClick={() => zoomTo(1)} disabled={zoom <= 1} aria-label={t('upload.timeline.zoomFit')} title={t('upload.timeline.zoomFit')}>
+                <Icon name="fit_screen" size={20} />
+              </button>
               <span className="tle-zoombar__spacer" />
               <button
                 type="button"
-                className="tle-btn tle-btn--sm"
+                className="tle-icon-btn"
                 onClick={() => setExpanded((v) => !v)}
                 aria-pressed={expanded}
+                aria-label={expanded ? t('upload.timeline.collapse') : t('upload.timeline.expand')}
+                title={expanded ? t('upload.timeline.collapse') : t('upload.timeline.expand')}
               >
-                <Icon name={expanded ? 'close_fullscreen' : 'open_in_full'} size={18} />
-                {expanded ? t('upload.timeline.collapse') : t('upload.timeline.expand')}
+                <Icon name={expanded ? 'close_fullscreen' : 'open_in_full'} size={20} />
               </button>
             </div>
             <div
@@ -969,7 +968,7 @@ export default function TimelineEditor({
                       style={{ left: pct(c.start), width: `calc(${pct(Math.max(0, end - c.start))} - 2px)` }}
                       title={`${formatStamp(c.start)} ${c.title || ''}`}
                     >
-                      <span className="tle-seg__label">{c.title || formatStamp(c.start)}</span>
+                      <span className="tle-seg__label">{formatStamp(c.start)}{c.title ? ` ${c.title}` : ''}</span>
                     </div>
                   );
                 })}
@@ -1010,7 +1009,11 @@ export default function TimelineEditor({
                       aria-valuetext={formatStamp(l.at)}
                       onKeyDown={onMarkerKey('link', l._k)}
                     >
-                      {l.kind === 'video' ? <Icon name="movie" size={14} /> : l.kind === 'profile' ? <span className="tle-mark__at">@</span> : <Icon name="link" size={14} />}
+                      <Icon name={l.kind === 'video' ? 'movie' : 'link'} size={14} />
+                      {/* 35e: what it points at, as far as the bar has room. */}
+                      <span className="tle-mark__label">
+                        {l.kind === 'profile' ? `@${l.account}` : (l.title || l.site || (l.kind === 'url' ? siteOf(l.url) : ''))}
+                      </span>
                       <span
                         data-tl="linkEnd"
                         data-key={l._k}
@@ -1200,6 +1203,8 @@ export default function TimelineEditor({
           duration={duration}
           onSave={saveLink}
           onClose={() => setSheet(null)}
+          count={sheet.key ? Math.max(1, linkList.findIndex((l) => l._k === sheet.key) + 1) : linkList.length + 1}
+          max={MAX_LINKS}
         />
       )}
     </div>

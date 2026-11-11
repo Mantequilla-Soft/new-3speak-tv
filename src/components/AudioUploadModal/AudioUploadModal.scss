@@ -818,16 +818,19 @@
 }
 
 .audio-upload-chip {
-  @include v2.control(32);
+  // 34c chips: 36 tall, 2px outline, cyan outline + tint when picked
+  @include v2.control(36);
   @include v2.text(label);
   font-size: 12px;
-  background: var(--surface-2);
+  border: 2px solid var(--border);
+  background: transparent;
   color: var(--text);
 
-  svg { color: var(--muted); }
-  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
-  &.active { background: var(--cyan-tint); color: var(--cyan); svg { color: var(--cyan); } }
+  svg, .material-symbols-rounded { color: var(--muted); }
+  &:hover { background: var(--bg-hover); }
+  &.active { border-color: var(--cyan); background: var(--cyan-tint-strong); color: var(--text); svg, .material-symbols-rounded { color: var(--cyan); } }
 }
+
 
 .audio-upload-playlist-kind-label { display: block; margin-bottom: 6px; }
 
@@ -1323,6 +1326,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  text-align: left;
   padding: 10px 12px;
   border-radius: var(--r-md);
   background: var(--accent-wash);
@@ -1341,6 +1345,7 @@
   border-radius: var(--r-lg);
   background: var(--accent-wash);
   font-size: 11px;
+  text-align: left;
 
   > span { flex: 1; min-width: 0; }
 

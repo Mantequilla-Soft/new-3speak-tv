@@ -62,7 +62,6 @@ import {
   youSupply,
   bannerAdvice,
   savingAt,
-  groupByFormat,
   tickerMinSeconds,
 } from '../lib/adMarket';
 import AudioClip from '../components/AudioClip/AudioClip';
@@ -265,6 +264,8 @@ const AD_TYPE_FORMAT = { video: 'video_roll', banner: 'video_banner', shorts: 's
 // Types with their own "Your ad" panel instead of the file upload, and nothing for us to
 // make: the ticker (a message and a link) and the audio spot (an audio file and a link).
 const ownAdPanel = (t) => t === 'ticker' || t === 'audio';
+// The icon on each "What are you running?" tile (47b).
+const AD_TYPE_ICON = { video: 'smart_display', banner: 'wallpaper', shorts: 'view_day', ticker: 'subtitles', upload: 'upload', audio: 'graphic_eq' };
 // The other way round, for "Book again": a finished flight knows its format, the page asks for a type.
 const FORMAT_AD_TYPE = Object.fromEntries(Object.entries(AD_TYPE_FORMAT).map(([k, v]) => [v, k]));
 // Types that run a video spot, and so carry the label overlay and the "we make it" offer.
@@ -324,20 +325,19 @@ function AdTypePicker({ value, onChange, pricing }) {
     { id: 'banner', title: t('ads.adType.banner.title'), blurb: t('ads.adType.banner.blurb') },
     { id: 'shorts', title: t('ads.adType.shorts.title'), blurb: t('ads.adType.shorts.blurb') },
     { id: 'ticker', title: t('ads.adType.ticker.title'), blurb: t('ads.adType.ticker.blurb') },
-    { id: 'audio', title: t('ads.adType.audio.title'), blurb: t('ads.adType.audio.blurb') },
     { id: 'upload', title: t('ads.adType.upload.title'), blurb: t('ads.adType.upload.blurb') },
+    { id: 'audio', title: t('ads.adType.audio.title'), blurb: t('ads.adType.audio.blurb') },
   // Only what the rate card offers right now (a beta format only to its testers).
   ].filter((o) => !pricing?.formats?.length || pricing.formats.some((f) => f.key === AD_TYPE_FORMAT[o.id]));
   const name = `mkt-adtype-${useId()}`;
+  const qid = `${name}-q`;
+  // 47b: one list of choice tiles, each with its icon, in the board's order.
   return (
     <>
-      <div className="mkt-field mkt-field-wide mkt-adtype">
-        <span className="mkt-label">{t('ads.adType.question')}</span>
-        {groupByFormat(options, (o) => AD_TYPE_FORMAT[o.id]).map((g) => (
-        <div key={g.id} className="mkt-adtype-group">
-        <span className="mkt-adtype-group-title">{t(g.title)}</span>
+      <div className="mkt-field mkt-field-wide mkt-adtype" role="radiogroup" aria-labelledby={qid}>
+        <span className="mkt-adtype-q" id={qid}>{t('ads.adType.question')}</span>
         <div className="mkt-adtype-row">
-          {g.items.map((o) => (
+          {options.map((o) => (
             <label key={o.id} className={`mkt-adtype-opt${value === o.id ? ' selected' : ''}`}>
               <input
                 type="radio"
@@ -346,6 +346,7 @@ function AdTypePicker({ value, onChange, pricing }) {
                 checked={value === o.id}
                 onChange={() => onChange(o.id)}
               />
+              <Icon name={AD_TYPE_ICON[o.id]} size={20} className="mkt-adtype-icon" />
               <span>
                 <strong>{o.title}</strong>
                 <span className="mkt-hint">{o.blurb}</span>
@@ -353,8 +354,6 @@ function AdTypePicker({ value, onChange, pricing }) {
             </label>
           ))}
         </div>
-        </div>
-        ))}
       </div>
       <p className="mkt-fine">
         {value === 'ticker'
@@ -2119,7 +2118,7 @@ function FlightCreative({ c, account, productName, reference, onChanged }) {
  * (same voice, chime and music; the very file a listener gets). Asked for on press,
  * never while typing: a render costs the server a second of work. An edit after
  * listening hides the old player, so what is on screen always matches the words. */
-function ListenButton({ reference, message, clickUrl, disabled = false }) {
+function ListenButton({ reference, message, clickUrl, disabled = false, hint = true }) {
   const { t } = useTranslation();
   const key = `${message || ''}\n${clickUrl || ''}`;
   const [heard, setHeard] = useState(null);   // { key, url, text }
@@ -2146,9 +2145,10 @@ function ListenButton({ reference, message, clickUrl, disabled = false }) {
       ) : (
         <div className="mkt-upload-row">
           <button type="button" className="mkt-outline" disabled={disabled || busy || !reference} onClick={onListen}>
+            <Icon name="volume_up" size={18} />
             {busy ? t('ads.ticker.listenBusy') : t('ads.ticker.listen')}
           </button>
-          <span className="mkt-hint">{t('ads.ticker.listenHint')}</span>
+          {hint ? <span className="mkt-hint">{t('ads.ticker.listenHint')}</span> : null}
         </div>
       )}
       {error ? <p className="mkt-upload-error">{error}</p> : null}
@@ -2341,7 +2341,7 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
         <span className="mkt-label">{t('ads.ticker.howMoves')}</span>
         <div className="mkt-adtype-row">
           {TICKER_STYLES.map((o) => (
-            <label key={o.id} className={`mkt-adtype-opt${tickerStyle === o.id ? ' selected' : ''}`}>
+            <label key={o.id} className={`mkt-adtype-opt is-cyan${tickerStyle === o.id ? ' selected' : ''}`}>
               <input
                 type="radio"
                 name={styleName}
@@ -2382,20 +2382,22 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
         caption={t('ads.ticker.alongTop', { seconds: Math.min(needs, maxSeconds) })}
       />
 
-      {/* Spoken in the audio player too. */}
-      <p className="mkt-fine">{t('ads.ticker.audioNote')}</p>
-      <ListenButton
-        reference={reference}
-        message={message.trim()}
-        clickUrl={link.trim()}
-        disabled={!(length > 0 && length <= maxChars && !tooSlowToRead && linkOk)}
-      />
-
-      <div className="mkt-upload-row">
+      {/* Listen and Save side by side under the preview, then what the audio player
+          does with it (47b). */}
+      <div className="mkt-ticker-actions">
+        <ListenButton
+          reference={reference}
+          message={message.trim()}
+          clickUrl={link.trim()}
+          disabled={!(length > 0 && length <= maxChars && !tooSlowToRead && linkOk)}
+          hint={false}
+        />
         <button type="button" className="mkt-primary" disabled={!canSave} onClick={onSave}>
           {busy ? t('common.actions.saving') : (alreadySaved ? t('common.actions.saved') : t('ads.ticker.saveTicker'))}
         </button>
       </div>
+      {/* Spoken in the audio player too. */}
+      <p className="mkt-fine">{t('ads.ticker.audioNote')}</p>
       {error ? <p className="mkt-upload-error">{error}</p> : null}
 
       {saved.length > 0 && (
@@ -2633,33 +2635,37 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
             // the length it is multiplied by is chosen.
             <>
               <strong className="mkt-production-title">{t('ads.production.offerAny')}</strong>
+              {/* 47b: one tile per kind (cyan when picked), the price in mono on the
+                  right; "No thanks, I have my own" closes the list as a text choice. */}
               <div className="mkt-production-tiers" role="radiogroup" aria-label={t('ads.production.offerAny')}>
-                <label className="mkt-check">
-                  <input
-                    type="radio"
-                    name={tierName}
-                    checked={!offer.wanted}
-                    onChange={() => offer.onChange({ wanted: false, tier: null, brief: offer.brief })}
-                  />
-                  <span>{t('ads.production.ownAd')}</span>
-                </label>
                 {offer.tiers.map((tier) => (
-                  <label className="mkt-check" key={tier.key}>
+                  <label className={`mkt-tier-row mkt-tier-opt${offer.wanted && offer.tier === tier.key ? ' selected' : ''}`} key={tier.key}>
                     <input
                       type="radio"
                       name={tierName}
                       checked={!!offer.wanted && offer.tier === tier.key}
                       onChange={() => offer.onChange({ wanted: true, tier: tier.key, brief: offer.brief })}
                     />
-                    <span>
+                    <span className="mkt-tier-row__body">
                       <strong>{t(`ads.production.tiers.${tier.key}`)}</strong>
-                      {' '}· {tierPriceText(t, tier)}
-                      <span className="mkt-production-detail">{t(`ads.production.tierDetails.${tier.key}`)}</span>
+                      <span>{t(`ads.production.tierDetails.${tier.key}`)}</span>
                     </span>
+                    <span className="mkt-tier-row__price">{tierPriceText(t, tier)}</span>
                   </label>
                 ))}
+                <p className="mkt-fine mkt-production-foot">
+                  {t('ads.production.rounds')}{' · '}
+                  <label className={`mkt-tier-own${!offer.wanted ? ' selected' : ''}`}>
+                    <input
+                      type="radio"
+                      name={tierName}
+                      checked={!offer.wanted}
+                      onChange={() => offer.onChange({ wanted: false, tier: null, brief: offer.brief })}
+                    />
+                    <span>{t('ads.production.ownAd')}</span>
+                  </label>
+                </p>
               </div>
-              <span className="mkt-fine">{t('ads.production.rounds')}</span>
             </>
           ) : (
           <label className="mkt-check">
@@ -3588,20 +3594,18 @@ export default function Advertise({ openLoginModal }) {
               )}
 
               {wizExit && (
-                <div className="mkt-panel mkt-panel-muted mkt-wiz-exit">
+                // 47b: a cyan wash note with two text actions, not a second form.
+                <div className="mkt-panel mkt-wiz-exit mkt-wiz-saved" role="status">
                   <p style={{ margin: 0 }}>
                     <Trans i18nKey="ads.wiz.savedNotFinished" components={{ b: <strong /> }} />
                   </p>
                   <p className="mkt-fine">
                     <Trans i18nKey="ads.wiz.pickUp" components={{ b: <strong /> }} />
                   </p>
-                  <div className="mkt-wiz-actions">
-                    <button type="button" className="mkt-primary" onClick={() => { setWizExit(false); goStep(3); }}>
-                      {t('ads.wiz.bookNow')}
-                    </button>
+                  <div className="mkt-wiz-links">
                     <button
                       type="button"
-                      className="mkt-secondary"
+                      className="mkt-linkish is-muted"
                       onClick={() => {
                         setWizExit(false);
                         if (wizRef?.reference) { setLookupRef(wizRef.reference); setLookup(wizRef); }
@@ -3609,6 +3613,9 @@ export default function Advertise({ openLoginModal }) {
                       }}
                     >
                       {t('ads.wiz.leaveForNow')}
+                    </button>
+                    <button type="button" className="mkt-linkish" onClick={() => { setWizExit(false); goStep(3); }}>
+                      {t('ads.wiz.bookNow')}
                     </button>
                   </div>
                 </div>

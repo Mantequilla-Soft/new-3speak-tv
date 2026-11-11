@@ -58,9 +58,9 @@ export default function SummaryModal({ isOpen, onClose, summary, title, chapters
       className="summary-sheet"
       bodyClassName="summary-sheet__body"
       closeLabel={t('watch.summary.close')}
+      tone="muted"
       title={(
         <span className="summary-sheet__title">
-          <span className="summary-sheet__bar" aria-hidden="true" />
           {t('watch.summary.title')}
           <StatusPill tone="muted">{t('watch.aiBadge.label')}</StatusPill>
         </span>

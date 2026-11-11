@@ -307,8 +307,6 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
 
         {authenticated ? (
           <div className="nav-right" onClickCapture={hideToastLayer}>
-            {/* Incubating users only; renders nothing for everyone else. */}
-            <NavProgress />
             {/* Hive accounts only: an incubating user cannot book ads yet. */}
             {!incubationHandle && <NavAdvertiseButton user={user} />}
             {/* Hidden outright for a warm-up user blocked from uploads (their
@@ -323,17 +321,24 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
                 so an incubating user's bell reads from the incubation service
                 instead of showing them a permanently empty one. */}
             {incubationHandle ? <IncubationBell /> : <NotificationBell />}
-            <button
-              type="button"
-              className="btn-reset nav-avatar-wrap"
-              onClick={toggleProfileNav}
-              {...profileMenuHover}
-              aria-label={t('nav.profile.accountMenu')}
-              aria-haspopup="menu"
-            >
-              {myAvatar ? <img src={myAvatar} alt="" /> : <span className="nav-avatar-initial" aria-hidden="true">{initial}</span>}
-              <PremiumBadge username={user} size={10} className="nav-avatar-premium" />
-            </button>
+            {/* The account button. A warm-up user's progress ring (NavProgress,
+                renders nothing for everyone else) goes around it (46a); on
+                phones and tablets, where the avatar is in the bottom bar, the
+                ring stands on its own. */}
+            <div className="nav-avatar-group">
+              <NavProgress />
+              <button
+                type="button"
+                className="btn-reset nav-avatar-wrap"
+                onClick={toggleProfileNav}
+                {...profileMenuHover}
+                aria-label={t('nav.profile.accountMenu')}
+                aria-haspopup="menu"
+              >
+                {myAvatar ? <img src={myAvatar} alt="" /> : <span className="nav-avatar-initial" aria-hidden="true">{initial}</span>}
+                <PremiumBadge username={user} size={10} className="nav-avatar-premium" />
+              </button>
+            </div>
           </div>
         ) : (
           <div className="nav-right" onClickCapture={hideToastLayer}>

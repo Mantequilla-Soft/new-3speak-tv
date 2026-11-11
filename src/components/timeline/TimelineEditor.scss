@@ -189,7 +189,8 @@
   overflow: hidden;
   z-index: 1;
 
-  &--profile { background: var(--cyan-tint-strong); border-color: var(--cyan); }
+  gap: 4px;
+  padding-right: 10px;
   &.is-live { box-shadow: 0 0 0 2px color-mix(in srgb, var(--text) 25%, transparent); }
   &.is-selected {
     box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent);
@@ -201,6 +202,16 @@
   .material-symbols-rounded, .tle-mark__at { flex-shrink: 0; pointer-events: none; }
 }
 .tle-mark__at { @include v2.mono(11, 700); line-height: 1; }
+.tle-mark__label {
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
 
 // Drag (or arrow keys) to change how long the link shows.
 .tle-mark__end {
@@ -572,6 +583,8 @@ body.tle-expanded-open {
 
 // ── link form (DialogShell) ────────────────────────────────────────────────
 .tle-sheet__body { gap: 12px; }
+.tle-sheet__count { @include v2.mono(12, 700); color: var(--muted); flex: none; }
+.tle-sheet .v2-dialog__foot { border-top: 0; padding-top: 4px; }
 
 .tle-field {
   display: flex;
@@ -638,7 +651,8 @@ body.tle-expanded-open {
   background: var(--bg);
   min-width: 0;
 
-  > span:first-child { @include v2.text(eyebrow); color: var(--muted); }
+  // 35e: "Shows at" 11 muted over the value.
+  > span:first-child { @include v2.text(meta-sm); color: var(--muted); }
   .tle-input, .tle-time { background: var(--surface); }
 }
 .tle-inline { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }

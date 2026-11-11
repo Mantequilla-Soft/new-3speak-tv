@@ -732,12 +732,6 @@
   to { opacity: 1; transform: none; }
 }
 
-// ─── Tablet: the tabs under the title when they no longer fit beside it ───
-@media (max-width: 1099px) {
-  .settings-modal:not(.is-dropdown) .settings-head { flex-wrap: wrap; }
-  .settings-modal:not(.is-dropdown) .settings-tabs.v2-seg { order: 3; flex: 1 1 100%; }
-}
-
 // ─── Mobile: bottom sheet, sections as tiles (18d) ───
 @include v2.mobile {
   .settings-modal-overlay:not(.settings-modal-overlay--dropdown) {

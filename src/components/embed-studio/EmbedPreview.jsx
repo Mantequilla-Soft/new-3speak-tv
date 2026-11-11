@@ -169,6 +169,7 @@ function EmbedPreview() {
   // On the success screen we offer feedback (area:'upload'), rather than opening
   // the popup automatically — see the "Give feedback" button below.
   const openReview = useReviewModal((s) => s.openReview);
+  const [mood, setMood] = React.useState(null);
 
   // `completed` first: once the upload has finished this screen is the
   // destination, not a half-filled form to bounce out of. Without that, anything
@@ -338,12 +339,13 @@ function EmbedPreview() {
   const lastMessage = statusMessages[statusMessages.length - 1];
   const failedMessage = !uploading && !completed && lastMessage?.type === 'error' ? lastMessage.message : '';
 
+  // 35d log: finished lines cyan with a check, problems accent, the line in
+  // progress in ink with the spinner.
   const logIcon = (msg, i) => {
-    if (msg.type === 'success') return { name: 'check_circle', tone: 'is-cyan' };
     if (msg.type === 'error') return { name: 'error', tone: 'is-accent' };
     if (msg.type === 'warning') return { name: 'warning', tone: 'is-accent' };
     if (uploading && i === statusMessages.length - 1) return { name: 'progress_activity', tone: 'is-current' };
-    return { name: 'check', tone: 'is-done' };
+    return { name: 'check_circle', tone: 'is-cyan' };
   };
 
   const pageTitle = fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo");
@@ -552,18 +554,13 @@ function EmbedPreview() {
 
             <StepList items={publishSteps} />
 
-            <div className="v2-banner is-info ep-publishing__stay">
-              <Icon name="info" size={18} className="v2-banner__icon" />
-              <div className="v2-banner__body"><b>{t("upload.publishing.stayOnPage")}</b></div>
-            </div>
-
             <div className="activity-log">
               <div className="v2-eyebrow">{t("upload.publishing.activityLog")}</div>
               <div className="activity-log-content">
                 {statusMessages.map((msg, i) => {
                   const ic = logIcon(msg, i);
                   return (
-                    <div key={i} className={`activity-item ${msg.type === 'error' ? 'error' : msg.type === 'success' ? 'success' : 'info'}`}>
+                    <div key={i} className={`activity-item ${msg.type === 'error' || msg.type === 'warning' ? 'error' : ic.tone === 'is-current' ? 'info' : 'success'}`}>
                       <Icon name={ic.name} size={16} className={`activity-icon ${ic.tone}${ic.name === 'progress_activity' ? ' v2-spin' : ''}`} />
                       <p className="activity-message">{msg.message}</p>
                     </div>
@@ -595,6 +592,25 @@ function EmbedPreview() {
                 )}
             </p>
 
+            {/* How was your upload (35d): five moods; any of them opens the review. */}
+            <div className="ep-done__feedback">
+              <div className="v2-eyebrow">{t("upload.done.feedback")}</div>
+              <div className="ep-done__moods" role="group" aria-label={t("upload.done.feedback")}>
+                {['😖', '🙁', '😐', '🙂', '😍'].map((face, i) => (
+                  <button
+                    type="button"
+                    key={face}
+                    className={`ep-done__mood${mood === i ? ' is-on' : ''}`}
+                    aria-label={`${i + 1} / 5`}
+                    aria-pressed={mood === i}
+                    onClick={() => { setMood(i); openReview({ area: 'upload', username: user || null, permlink: publishedPermlink || null }); }}
+                  >
+                    {face}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="ep-done__actions">
               {!fromStories && publishedPermlink && (
                 <Button variant="secondary" size={48} trailing="campaign" className="is-next promote-success-btn" onClick={() => setPromoteOpen(true)}>
@@ -615,22 +631,10 @@ function EmbedPreview() {
                 className="is-next profile-btn"
                 trailing="arrow_forward"
               >
-                {t("upload.done.goToProfile").replace(/\s*→\s*$/, '')}
+                {t("upload.done.goToProfile")}
               </Button>
             </div>
 
-            <div className="ep-done__feedback">
-              <div className="v2-eyebrow">{t("upload.done.feedback")}</div>
-              <Button
-                variant="secondary"
-                size={44}
-                icon="sentiment_satisfied"
-                className="review-success-btn"
-                onClick={() => openReview({ area: 'upload', username: user || null, permlink: publishedPermlink || null })}
-              >
-                {t("upload.done.feedback")}
-              </Button>
-            </div>
           </section>
         </div>
       )}

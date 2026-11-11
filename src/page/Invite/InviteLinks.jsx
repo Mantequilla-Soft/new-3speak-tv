@@ -29,7 +29,11 @@ const STATE_LABEL_KEY = {
 // Account made (or being made) through the link = cyan; the rest muted.
 const STATE_TONE = { fast_track: 'cyan', creating: 'cyan' };
 
-const fmtDate = (d) => (d ? new Date(d).toLocaleDateString() : '');
+// "1 December" (42c, STYLE_GUIDE §10: dates as day and month), in the UI language.
+const fmtDate = (d, lang) => {
+  if (!d) return '';
+  try { return new Date(d).toLocaleDateString(lang || undefined, { day: 'numeric', month: 'long' }); } catch { return new Date(d).toLocaleDateString(); }
+};
 
 function CopyButton({ text }) {
   const { t } = useTranslation();
@@ -87,7 +91,7 @@ function linkStatus(link, t) {
 }
 
 export default function InviteLinks({ openLoginModal }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
@@ -150,7 +154,7 @@ export default function InviteLinks({ openLoginModal }) {
               <div className="invite-stat"><b>{l.accountsCreated}</b><span>{t('auth.invite.stats.accountsCreated')}</span></div>
               <div className="invite-stat"><b>{l.peopleInvited}</b><span>{t('auth.invite.stats.peopleInvited')}</span></div>
             </div>
-            <p className="invite-muted">{t('auth.invite.resetsNote', { date: fmtDate(l.resetsAt) })}</p>
+            <p className="invite-muted">{t('auth.invite.resetsNote', { date: fmtDate(l.resetsAt, i18n.language) })}</p>
 
             {/* "WHO JOINED · Hide people": the eyebrow is the switch */}
             <button

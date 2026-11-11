@@ -400,7 +400,9 @@ export default function CreatorStats({ user }) {
   const [demo, setDemo] = useState(null);
   const [series, setSeries] = useState(null);
   const [prevSeries, setPrevSeries] = useState(null);
-  const [follows, setFollows] = useState(null);
+  // Tagged with the range it was counted for; a stale count is never shown.
+  const [followsFor, setFollows] = useState(null);
+  const follows = followsFor?.days === days ? followsFor : null;
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(false);
   const [sort, setSort] = useState('watchSeconds');
@@ -440,7 +442,6 @@ export default function CreatorStats({ user }) {
   // follow list; for All, the account's follower count.
   useEffect(() => {
     let cancelled = false;
-    setFollows(null);
     if (days > 0) {
       fetchCreatorFollows(user, { days: 365 }).then((f) => {
         if (cancelled || !f?.headBlock) return;
@@ -454,11 +455,11 @@ export default function CreatorStats({ user }) {
           const back = Math.floor((head - x.block) / BLOCKS_PER_DAY);
           if (back >= 0 && back < days) perDay[days - 1 - back] += 1;
         });
-        setFollows({ count: cur.length, prev, perDay, gained: true });
+        setFollows({ days, count: cur.length, prev, perDay, gained: true });
       }).catch(() => {});
     } else {
       getFollowers(user).then((c) => {
-        if (!cancelled && c?.follower_count != null) setFollows({ count: c.follower_count, prev: null, perDay: null, gained: false });
+        if (!cancelled && c?.follower_count != null) setFollows({ days, count: c.follower_count, prev: null, perDay: null, gained: false });
       }).catch(() => {});
     }
     return () => { cancelled = true; };

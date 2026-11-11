@@ -129,8 +129,9 @@ export const Banner = ({ tone = "info", icon, title, children, action, className
 );
 
 // StatusPill: small uppercase status. tone: accent | cyan | muted | live | media
-export const StatusPill = ({ tone = "muted", children, icon, className }) => (
-  <span className={cx("v2-pill", `is-${tone}`, className)}>{renderIcon(icon, 12)}{children}</span>
+// caps={false}: sentence case, for the pills boards draw that way ("Getting started", 46b/46d).
+export const StatusPill = ({ tone = "muted", children, icon, caps = true, className }) => (
+  <span className={cx("v2-pill", `is-${tone}`, !caps && "is-sentence", className)}>{renderIcon(icon, 12)}{children}</span>
 );
 
 export const StatTile = ({ label, value, sub, money, className }) => (
@@ -187,7 +188,8 @@ export const EmptyState = ({ icon, title, children, action, className }) => (
    Dialog: centered on desktop (>= 768px), bottom sheet on mobile. One component, CSS decides.
    Traps focus, closes on Esc and on a backdrop click, renders in a portal. */
 const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
-export function Dialog({ open, onClose, title, sub, children, footer, width = 440, closeLabel = "Close", className, bodyClassName, head = true, dismissible = true, leading, backdropClose = true, zIndex }) {
+// tone: the 4px bar before the title that the 07/17 sheets draw (accent | cyan | text | muted).
+export function Dialog({ open, onClose, title, sub, children, footer, width = 440, closeLabel = "Close", className, bodyClassName, head = true, dismissible = true, leading, backdropClose = true, zIndex, tone }) {
   const ref = useRef(null);
   // Escape closes only the topmost open dialog (shared layer stack with useDialog/ModalHeader).
   useEscapeLayer(ref, onClose, { active: Boolean(open && dismissible && onClose) });
@@ -219,8 +221,9 @@ export function Dialog({ open, onClose, title, sub, children, footer, width = 44
       <div className={cx("v2-dialog__panel", className)} role="dialog" aria-modal="true" data-dialog="" aria-label={typeof title === "string" ? title : undefined} tabIndex={-1} ref={ref} style={{ "--w": `${width}px` }}>
         <div className="v2-dialog__grab" aria-hidden />
         {head && (
-          <div className="v2-dialog__head">
+          <div className={cx("v2-dialog__head", tone && "has-tone")}>
             {leading /* optional: a back button before the title (multi-view dialogs) */}
+            {tone && <span className={cx("v2-dialog__bar", `is-${tone}`)} aria-hidden="true" />}
             <h2>{title}{sub && <span className="v2-dialog__sub">{sub}</span>}</h2>
             {onClose && dismissible && <IconButton icon="close" label={closeLabel} size={32} variant="ghost" round onClick={onClose} />}
           </div>

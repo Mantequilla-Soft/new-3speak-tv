@@ -31,7 +31,7 @@ const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:n
  *                                  right (page blurred behind it), head with a tone bar and a
  *                                  20/900 title, main action pinned full width at the bottom;
  *                                  a bottom sheet under 768px like every dialog
- * @param {string}    tone        – the bar before the title: 'accent' | 'cyan' | 'text'
+ * @param {string}    tone        – the bar before the title: 'accent' | 'cyan' | 'text' | 'muted'
  * @param {Document}  doc         – the document to portal into (usePortalDoc), default the page's
  * @param {boolean}   isolate     – stop clicks inside from bubbling up the React tree to
  *                                  whatever opened it (a card, a link, a hover preview)

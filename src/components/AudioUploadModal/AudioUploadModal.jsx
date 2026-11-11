@@ -2324,7 +2324,7 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
                   type="number"
                   value={newYear}
                   onChange={(e) => setNewYear(e.target.value)}
-                  placeholder={t('audio.upload.playlist.yearPlaceholder')}
+                  aria-label={t('audio.upload.playlist.yearPlaceholder')}
                   min="1900"
                   max="2100"
                 />
@@ -2335,7 +2335,8 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
                   type="text"
                   value={newLabel}
                   onChange={(e) => setNewLabel(e.target.value)}
-                  placeholder={t('audio.upload.playlist.labelPlaceholder')}
+                  placeholder={t('app.profileFields.optional')}
+                  aria-label={t('audio.upload.playlist.labelPlaceholder')}
                   maxLength={120}
                 />
               </label>
@@ -2345,7 +2346,8 @@ function PlaylistStep({ playlists, loading, choice, onChoose, pendingPlaylist, o
                   type="text"
                   value={newCredits}
                   onChange={(e) => setNewCredits(e.target.value)}
-                  placeholder={t('audio.upload.playlist.creditsPlaceholder')}
+                  placeholder={t('app.profileFields.optional')}
+                  aria-label={t('audio.upload.playlist.creditsPlaceholder')}
                   maxLength={200}
                 />
               </label>

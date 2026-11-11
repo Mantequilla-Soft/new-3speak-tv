@@ -232,7 +232,7 @@ describe('AudioUploadModal: Edit audio', () => {
     openModal({ initialTrack: { blob: new Blob(['x'], { type: 'audio/ogg' }), filename: 'openpod.ogg', type: 'podcast' } })
     const r = await waitFor(() => row('openpod.ogg'))
     expect(within(r).queryByText('Edited')).toBeNull()
-    expect(within(r).getByTitle('Recorded')).toBeInTheDocument()
+    expect(within(r).getByText('Recorded')).toBeInTheDocument()
   })
 })
 
@@ -453,7 +453,8 @@ describe('AudioUploadModal: audiograms as Shorts', () => {
     expect(rows[0]).toHaveTextContent('Short: The best bit')
     expect(rows[0]).toHaveTextContent('Goes out together with this audio')
     expect(rows[0].querySelector('img')).toHaveAttribute('src', 'https://images.hive.blog/DQmThumb/short.jpg')
-    await user.click(screen.getByRole('button', { name: 'Publish' }))
+    // the primary action says what goes out (24a)
+    await user.click(screen.getByRole('button', { name: 'Publish audio + 2 Shorts' }))
     await waitFor(() => expect(publishAudiogramShorts).toHaveBeenCalledTimes(1))
     const call = publishAudiogramShorts.mock.calls[0][0]
     expect(call.user).toBe('alice')

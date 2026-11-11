@@ -364,6 +364,8 @@ p { text-wrap: pretty; }
   &.is-muted { background: var(--surface-2); color: var(--muted); }
   &.is-live { background: var(--accent); color: var(--on-accent); }
   &.is-media { background: var(--media-scrim); color: var(--on-media); }
+  // Sentence case (StatusPill caps={false}): the 46b/46d pills, "Getting started", "On 3Speak only".
+  &.is-sentence { text-transform: none; letter-spacing: 0; }
 }
 .v2-stat { padding: 10px 12px; border-radius: var(--r-md); background: var(--bg); min-width: 0;
   .v2-stat__l { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
@@ -438,6 +440,13 @@ p { text-wrap: pretty; }
 .v2-dialog__head { display: flex; align-items: center; gap: 8px; padding: 18px 16px 6px 20px; flex: none;
   > b, > h2 { flex: 1; @include v2.text(title); margin: 0; }
   .v2-dialog__sub { display: block; @include v2.text(meta); color: var(--muted); }
+  // Dialog tone: the 4px bar the 07/17 sheets draw before the title.
+  &.has-tone { gap: 10px; }
+}
+.v2-dialog__bar { width: 4px; height: 22px; border-radius: var(--r-bar); flex: none; background: var(--text);
+  &.is-accent { background: var(--accent); }
+  &.is-cyan { background: var(--cyan); }
+  &.is-muted { background: var(--muted); }
 }
 .v2-dialog__body { padding: 6px 20px 16px; @include v2.scroll-y; display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
 .v2-dialog__foot { padding: 12px 20px 20px; display: flex; gap: 8px; justify-content: flex-end; border-top: 1px solid var(--border); flex: none; flex-wrap: wrap; }

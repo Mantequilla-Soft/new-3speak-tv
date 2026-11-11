@@ -90,7 +90,7 @@ function useDialogFrame(ref) {
  * @param {ReactNode} children  – optional extra controls, shown before the X
  * @param {string}    className – extra class for per-modal spacing tweaks
  * @param {string}    titleId   – id for the heading, for aria-labelledby
- * @param {string}    tone      – optional 4px bar before the title (07/17 sheets): accent | cyan | text
+ * @param {string}    tone      – optional 4px bar before the title (07/17 sheets): accent | cyan | text | muted
  * @param {boolean}   closeOnEscape – Escape runs onClose (default). Pass false
  *                    where the window handles Escape itself (editors, menus).
  *                    Inside a useDialog box the box owns Escape, not the header.

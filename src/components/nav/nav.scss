@@ -301,6 +301,49 @@
   @include compact { display: none; }
 }
 
+// A warm-up user's progress ring around the avatar (46a): a 40px ring, the
+// avatar a 32px circle inside it. Wide screens only; below 1025px the avatar is
+// in the bottom bar and NavProgress shows as its own round button.
+.nav-avatar-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+@include wide-bar {
+  .nav-avatar-group:has(> .nav-progress:not(.is-choose)) {
+    width: 40px;
+    height: 40px;
+
+    > .nav-progress {
+      position: absolute;
+      inset: 0;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      gap: 0;
+      justify-content: center;
+      border-radius: 50%;
+      background: transparent;
+      pointer-events: none;
+
+      .nav-progress-ring { width: 40px; height: 40px; }
+      .nav-progress-count { display: none; }
+    }
+
+    > .nav-avatar-wrap {
+      position: relative;
+      z-index: 1;
+      width: 32px;
+      height: 32px;
+      margin: 4px;
+      border-radius: 50%;
+      img { width: 32px; height: 32px; border-radius: 50%; }
+    }
+  }
+}
+
 .nav-avatar-premium {
   position: absolute;
   right: -4px;
