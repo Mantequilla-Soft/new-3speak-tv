@@ -6,7 +6,7 @@
     "thisStreamEnded": "Mtiririko huu umekwisha",
     "noLongerLive": "Haupo mubashara tena. Anzisha mwingine wakati wowote ukiwa tayari.",
     "recordingProcessing": "Vizuri sana! Rekodi yako inachakatwa na itaonekana kwenye chapisho la tangazo hivi karibuni.",
-    "thanksForLive": "Vizuri sana — asante kwa kwenda mubashara!",
+    "thanksForLive": "Vizuri sana, asante kwa kwenda mubashara!",
     "backHome": "Rudi Nyumbani",
     "howWasStream": "Mtiririko wako ulikuwaje?",
     "connecting": "Inaunganisha na OpenPods…",
@@ -54,11 +54,11 @@
       "spam": "Barua taka au utapeli",
       "other": "Kitu kingine"
     },
-    "sent": "Asante — mtiririko huu umeripotiwa kwa timu yetu.",
+    "sent": "Asante, mtiririko huu umeripotiwa kwa timu yetu.",
     "failed": "Imeshindwa kutuma ripoti. Tafadhali jaribu tena.",
     "title": "Ripoti mtiririko huu",
     "reporting": "Unaripoti <b>@{{host}}</b>.",
-    "intro": "Tuambie tatizo ni nini — timu yetu hukagua kila ripoti.",
+    "intro": "Tuambie tatizo ni nini. Timu yetu hukagua kila ripoti.",
     "detailPlaceholder": "Ongeza maelezo yoyote (si lazima)",
     "sending": "Inatuma…",
     "submit": "Wasilisha ripoti"

@@ -16,7 +16,9 @@
     "translatedTo": "Tradotto in {{language}}",
     "showLanguage": "Mostra in {{language}}",
     "showOriginal": "Mostra originale",
-    "buttonTitle": "Riassunto IA di questo video"
+    "buttonTitle": "Riassunto IA di questo video",
+    "jumpTo": "Vai a",
+    "disclaimer": "Generato dalla trascrizione. Potrebbe contenere errori."
   },
   "errors": {
     "notAvailable": "Questo video non è disponibile.",
@@ -38,6 +40,16 @@
     "add": "Aggiungi reazione"
   },
   "liveChat": "Chat live",
+  "side": {
+    "label": "Pannelli del video"
+  },
+  "voters": {
+    "title": "Votanti",
+    "cardLabel": "Sostenitori e votanti",
+    "voter": "Votante",
+    "weight": "Peso",
+    "value": "Valore"
+  },
   "moreVideos": "Altri video",
   "vote": {
     "saveFailed": "Impossibile salvare il tuo voto"
@@ -105,7 +117,8 @@
   "community": {
     "members_one": "{{count}} membro",
     "members_many": "{{count}} membri",
-    "members_other": "{{count}} membri"
+    "members_other": "{{count}} membri",
+    "postedIn": "Pubblicato in"
   },
   "tags": {
     "curated": "Selezionato"

@@ -106,7 +106,11 @@
     "chapterLink": "Link do rozdziału",
     "upNext": "Następne",
     "hideIdle": "Ukryj (kolejka zostaje)",
-    "continueAt": "Kontynuuj od {{time}}"
+    "continueAt": "Kontynuuj od {{time}}",
+    "position": "{{current}} z {{total}}",
+    "playingFrom": "Odtwarzane z: {{name}}",
+    "atThisMoment": "W tym momencie",
+    "goTo": "Przejdź do: {{name}}"
   },
   "share": {
     "failed": "Błąd",
@@ -245,7 +249,7 @@
     },
     "source": {
       "dropHere": "Upuść tu pliki audio lub kliknij, aby przeglądać",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — można wiele",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (można wiele)",
       "stop": "Stop",
       "orRecord": "Lub nagraj na żywo",
       "recordLimit": "Do {{minutes}} min na nagranie",
@@ -525,9 +529,9 @@
       "modeShows": "Audycje",
       "modePeople": "Osoby",
       "placeholderPeople": "Imię prowadzącego lub gościa",
+      "appearsIn_one": "W {{count}} odcinku",
       "appearsIn_few": "W {{count}} odcinkach",
       "appearsIn_many": "W {{count}} odcinkach",
-      "appearsIn_one": "W {{count}} odcinku",
       "appearsIn_other": "W {{count}} odcinka",
       "latestMatch": "Najnowszy: {{title}}"
     },

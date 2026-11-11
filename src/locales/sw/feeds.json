@@ -28,6 +28,9 @@
   },
   "newFromFollowing": {
     "aria": "Mpya kutoka kwa watayarishaji unaowafuata",
+    "summary_one": "Video mpya {{count}}",
+    "summary_other": "Video mpya {{count}}",
+    "fromFollowing": "kutoka kwa watu unaowafuata",
     "shorts_one": "short {{count}}",
     "shorts_other": "Shorts {{count}}"
   },
@@ -48,6 +51,9 @@
     "empty": "Bado hakuna cha kuonyesha hapa.",
     "viewAll": "Tazama zote",
     "dragToReorder": "Buruta ili kupanga upya",
+    "customize": "Badilisha",
+    "customizeTitle": "Badilisha ukurasa wa Nyumbani",
+    "customizeHint": "Sogeza sehemu juu au chini. Zima zile usizotaka.",
     "surfTitle": "Kuvinjari chaneli: chagua mada na uitazame kama TV",
     "zapping": "Inabadilisha"
   },

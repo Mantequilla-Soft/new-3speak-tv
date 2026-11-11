@@ -438,6 +438,7 @@
     "portrait": "Staand",
     "landscape": "Liggend",
     "autoDetect": "Automatisch herkennen ({{lang}})",
+    "layout": "Indeling",
     "presets": {
       "frontcam": "Frontcamera",
       "frontcamTitle": "Smalle strook onder de selfielens — het minst opvallend dat je voorleest",

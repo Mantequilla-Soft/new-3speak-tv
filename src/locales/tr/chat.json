@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Görsel ekle",
     "searchEmoji": "Emoji ara",
     "searchGifs": "GIF ara…",
     "noGifs": "GIF bulunamadı.",
@@ -41,7 +42,7 @@
   },
   "gate": {
     "connectTitle": "3Speak Sohbet'e bağlan",
-    "connectBody": "Sohbet Snapie altyapısıyla çalışır. Bağlanmak, Hive posting anahtarınla tek seferlik bir giriş doğrulamasını imzalar; işlem yok, ücret yok.",
+    "connectBody": "Sohbet Snapie altyapısıyla çalışır. Bağlanmak, Hive posting anahtarınla tek seferlik bir giriş doğrulamasını imzalar (işlem yok, ücret yok).",
     "connecting": "Bağlanılıyor…",
     "connectButton": "Sohbete bağlan",
     "cannotSign": "Mevcut girişin sohbet doğrulamasını imzalayamıyor. Keychain, HiveAuth, PeakVault veya Ledger kullan.",
@@ -117,7 +118,7 @@
     "deleteError": "Mesaj silinemedi.",
     "back": "Sohbetlere dön",
     "loading": "Mesajlar yükleniyor…",
-    "empty": "Henüz mesaj yok, bir merhaba de 👋",
+    "empty": "Henüz mesaj yok. Bir merhaba de 👋",
     "editedSuffix": " · düzenlendi",
     "messageActions": "Mesaj işlemleri",
     "quote": "Alıntıla",

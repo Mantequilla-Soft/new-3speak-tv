@@ -21,6 +21,7 @@
     "followers_one": "{{num}} takipçi",
     "followers_other": "{{num}} takipçi",
     "popularTitle": "Popüler içerik üreticileri",
+    "suggestedTitle": "Takip edebileceğin içerik üreticileri",
     "scrollLeft": "Sola kaydır",
     "scrollRight": "Sağa kaydır",
     "mostlyPosts": "Çoğunlukla {{topic}} paylaşıyor"
@@ -230,7 +231,11 @@
     "loginToUpload": "Video yüklemek için giriş yap",
     "linkExternalTitle": "Harici bir profil bağla",
     "addProfile": "Profil ekle",
-    "editTitle": "Fotoğrafını, adını, biyografini ve konumunu düzenle"
+    "editTitle": "Fotoğrafını, adını, biyografini ve konumunu düzenle",
+    "more": "Daha fazla",
+    "moreActions": "@{{user}} için diğer işlemler",
+    "copyProfileLink": "Profil bağlantısını kopyala",
+    "podcastFeed": "Podcast akışı (RSS)"
   },
   "tabs": {
     "overview": "Genel Bakış",

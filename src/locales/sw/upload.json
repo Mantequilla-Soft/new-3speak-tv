@@ -438,6 +438,7 @@
     "portrait": "Wima",
     "landscape": "Mlalo",
     "autoDetect": "Gundua kiotomatiki ({{lang}})",
+    "layout": "Mpangilio",
     "presets": {
       "frontcam": "Kamera ya mbele",
       "frontcamTitle": "Ukanda mdogo chini ya lenzi ya selfie — haionekani sana kwamba unasoma",

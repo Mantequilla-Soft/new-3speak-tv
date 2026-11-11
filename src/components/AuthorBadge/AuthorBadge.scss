@@ -1,7 +1,10 @@
 @use "../../styles/v2" as v2;
 
 // Author chip (30c, 02): a surface-2 pill with the round avatar, @name in bold,
-// the follower count muted, and a small accent Follow pill at the end.
+// the follower count muted, and a small secondary Follow pill at the end. It
+// sits on tiles and rows, often several per page, so it is never a solid red
+// fill (one accent fill per view); a page that makes Follow its primary
+// action (the creator chip on the player) restyles it there.
 .author-badge {
   display: inline-flex;
   align-items: center;
@@ -83,7 +86,8 @@
     white-space: nowrap;
   }
 
-  // Follow: the small accent pill from the creator chip (02).
+  // Follow: a small secondary pill (28 tall, radius 8). On the surface-2 chip
+  // it is drawn in surface so it still reads as a button.
   .follow-btn {
     flex: none;
     align-self: center;
@@ -92,36 +96,34 @@
     padding: 0 10px;
     border: 0;
     border-radius: var(--r-sm);
-    background: var(--accent);
-    color: var(--on-accent);
+    background: var(--surface);
+    color: var(--text);
     font-family: inherit;
     font-size: 12px;
-    font-weight: 900;
+    font-weight: 700;
     white-space: nowrap;
     cursor: pointer;
-    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
-    animation: followBtnBreathe 11.2s var(--ease) infinite;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-    &:hover { background: var(--accent-hover); animation: none; }
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface)); }
     &:active { transform: scale(.98); }
 
-    // Already following: quiet, and a red hint on hover (unfollow).
+    // Already following: quiet muted text, and a red hint on hover (unfollow).
     &.following {
-      animation: none;
-      background: var(--surface);
-      color: var(--text);
-      font-weight: 700;
+      background: transparent;
+      color: var(--muted);
 
       &:hover { background: var(--accent-tint); color: var(--accent); }
     }
 
-    &:disabled { opacity: .45; cursor: not-allowed; animation: none; }
+    &:disabled { opacity: .45; cursor: not-allowed; }
   }
-}
 
-@keyframes followBtnBreathe {
-  0%, 11%, 100% { transform: scale(1); }
-  5.5% { transform: scale(1.06); }
+  // The compact chip has no fill of its own, so Follow takes surface-2.
+  &.compact .follow-btn:not(.following) {
+    background: var(--surface-2);
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  }
 }
 
 // Follow disabled because the target has no Hive account to follow. Keyed on

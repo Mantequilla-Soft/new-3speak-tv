@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Feed de quem você segue",
-    "error": "Erro ao carregar os vídeos"
+    "error": "Erro ao carregar os vídeos",
+    "emptyTitle": "Ninguém por aqui ainda",
+    "emptyBody": "Siga criadores e os envios, Snaps e lives deles aparecem aqui primeiro."
   },
   "groups": {
     "title": "Grupos",

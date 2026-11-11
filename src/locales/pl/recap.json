@@ -156,7 +156,8 @@
     "communities": "Odwiedzamy twoje społeczności…",
     "followers": "Sprawdzamy, kto cię obserwuje…",
     "watched": "Przeglądamy twoją historię oglądania…",
-    "thumbnails": "Wczytujemy miniatury… {{done}} z {{total}}"
+    "thumbnails": "Wczytujemy miniatury… {{done}} z {{total}}",
+    "thumbnailsWaiting": "Wczytywanie twoich miniatur…"
   },
   "tips": {
     "label": "Wskazówka:",

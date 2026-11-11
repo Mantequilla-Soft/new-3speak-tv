@@ -87,7 +87,7 @@
     "lookAround": "Je veux juste jeter un œil"
   },
   "interests": {
-    "saved": "Centres d'intérêt enregistrés — modifiables à tout moment dans les Paramètres",
+    "saved": "Centres d'intérêt enregistrés. Modifiez-les à tout moment dans les Paramètres",
     "saveFailed": "Impossible d'enregistrer les centres d'intérêt",
     "title": "Qu'est-ce qui vous intéresse ?",
     "body": "Choisissez quelques sujets que vous aimez et nous vous montrerons davantage de contenus qui vous plaisent. Vous pouvez les modifier à tout moment dans les <b>Paramètres</b>.",

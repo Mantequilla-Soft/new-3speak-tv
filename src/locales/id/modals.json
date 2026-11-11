@@ -54,7 +54,7 @@
     "verify": "Verifikasi"
   },
   "auth": {
-    "title": "Beri izin 3Speak!",
+    "title": "Beri izin 3Speak",
     "text": "Untuk mengunggah video di 3Speak, kami butuh otoritas posting-mu. Ini memungkinkan kami menerbitkan video yang kamu unggah ke Hive. Kamu cukup memberi kami otoritas posting sekali saja.",
     "authorize": "Beri izin"
   },
@@ -69,7 +69,7 @@
       "duplicate": "Akun ini sudah ada di daftar.",
       "invalidAccount": "Nama pengguna atau ID komunitas tidak valid.",
       "cannotIncrease": "Tidak bisa dinaikkan melebihi sisa {{percent}}%",
-      "pendingRow": "@{{account}} belum ditambahkan — klik + untuk menambahkannya, atau kosongkan kolomnya.",
+      "pendingRow": "@{{account}} belum ditambahkan. Klik + untuk menambahkannya, atau kosongkan kolomnya.",
       "atLeastOne": "Persentase reward minimal 1%",
       "maxCount": "Hive mengizinkan paling banyak {{max}} penerima manfaat per postingan."
     },
@@ -79,10 +79,10 @@
     "usernamePlaceholder": "Masukkan nama pengguna",
     "minimumReward": "Reward minimal <strong>1%</strong>",
     "checking": "Memeriksa <strong>@{{account}}</strong> di Hive…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> bukan akun Hive yang ada.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> belum ditambahkan — klik <strong>+</strong> untuk menambahkannya, atau kosongkan kolomnya.",
-    "infrastructure": "10% === Infrastruktur",
-    "videoEncoding": "Encoding Video === 1%",
+    "notExisting": "<strong>@{{account}}</strong> bukan akun Hive yang ada.",
+    "notAdded": "<strong>@{{account}}</strong> belum ditambahkan. Klik <strong>+</strong> untuk menambahkannya, atau kosongkan kolomnya.",
+    "infrastructure": "Infrastruktur: 10%",
+    "videoEncoding": "Encoding Video: 1%",
     "defaults": "Penerima Manfaat Default ({{count}})"
   },
   "qr": {

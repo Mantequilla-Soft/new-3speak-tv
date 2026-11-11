@@ -550,7 +550,7 @@
     "yesterday": "เมื่อวาน",
     "groups": {
       "video": "วิดีโอ",
-      "videoNote": "หนึ่งรายการทุก 5 นาที — ส่วนนี้ช้า",
+      "videoNote": "หนึ่งรายการทุก 5 นาที: ส่วนนี้จึงช้า",
       "short": "Shorts",
       "comment": "ความคิดเห็น",
       "vote": "ไลก์",
@@ -591,7 +591,7 @@
     "fiveMin": "5 นาที",
     "waitingTitle": "กำลังรอคนอื่น",
     "waitingText": "รายการเหล่านี้จะเผยแพร่เองเมื่อโพสต์ที่อ้างถึงขึ้นบน Hive แล้ว ระหว่างนี้ไม่มีอะไรสูญหาย",
-    "waitingFor": "<b>{{label}}</b> — กำลังรอ {{target}}",
+    "waitingFor": "<b>{{label}}</b>: กำลังรอ {{target}}",
     "andMore": "และอีก {{count}} รายการ",
     "excludedTitle": "ไม่ย้ายไป"
   }

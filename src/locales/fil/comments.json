@@ -137,6 +137,9 @@
     "uploadingImage": "Ina-upload ang larawan",
     "write": "Isulat",
     "preview": "Preview",
-    "nothingToPreview": "Wala pang mapi-preview"
+    "nothingToPreview": "Wala pang mapi-preview",
+    "creator": "Creator",
+    "empty": "Wala pang komento",
+    "emptyHint": "Lumalabas sa timeline ng video ang mga komentong nakakabit sa isang sandali."
   }
 }

@@ -38,6 +38,8 @@
     "myChannelAria": "Kênh của tôi",
     "vpTooltip": "Voting Power: mức ảnh hưởng của lượt vote tiếp theo của bạn",
     "rcTooltip": "Resource Credits: chi phí cho các thao tác của bạn trên Hive",
+    "votingPower": "Voting Power",
+    "resourceCredits": "Resource Credits",
     "myChannel": "Kênh của tôi",
     "publishBacklog": "Xuất bản video tồn đọng",
     "analytics": "Phân tích",

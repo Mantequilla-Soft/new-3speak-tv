@@ -28,6 +28,10 @@
   },
   "newFromFollowing": {
     "aria": "Novità dai creator che segui",
+    "summary_one": "{{count}} nuovo video",
+    "summary_many": "{{count}} nuovi video",
+    "summary_other": "{{count}} nuovi video",
+    "fromFollowing": "dalle persone che segui",
     "shorts_one": "{{count}} short",
     "shorts_many": "{{count}} Shorts",
     "shorts_other": "{{count}} Shorts"
@@ -49,6 +53,9 @@
     "empty": "Ancora niente da mostrare qui.",
     "viewAll": "Vedi tutti",
     "dragToReorder": "Trascina per riordinare",
+    "customize": "Personalizza",
+    "customizeTitle": "Personalizza la Home",
+    "customizeHint": "Sposta le sezioni in alto o in basso. Disattiva quelle che non vuoi.",
     "surfTitle": "Zapping: scegli un argomento e guardalo come la TV",
     "zapping": "Zapping"
   },

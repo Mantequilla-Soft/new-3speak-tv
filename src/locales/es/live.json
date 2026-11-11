@@ -55,11 +55,11 @@
       "spam": "Spam o estafa",
       "other": "Otra cosa"
     },
-    "sent": "Gracias: esta transmisión fue reportada a nuestro equipo.",
+    "sent": "Gracias, esta transmisión fue reportada a nuestro equipo.",
     "failed": "No se pudo enviar el reporte. Inténtalo de nuevo.",
     "title": "Reportar esta transmisión",
     "reporting": "Reportando a <b>@{{host}}</b>.",
-    "intro": "Cuéntanos qué pasa; nuestro equipo revisa cada reporte.",
+    "intro": "Cuéntanos qué pasa. Nuestro equipo revisa cada reporte.",
     "detailPlaceholder": "Agrega detalles (opcional)",
     "sending": "Enviando…",
     "submit": "Enviar reporte"

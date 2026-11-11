@@ -58,6 +58,7 @@
     "items_other": "{{count}} elementos",
     "created": "Creada {{when}}",
     "podcastFeed": "Feed de pódcast",
+    "playAll": "Reproducir todo",
     "podcastFeedTitle": "Sigue {{name}} en cualquier app de pódcast (feed RSS)",
     "album": {
       "genre": "<strong>Género:</strong> {{value}}",

@@ -10,7 +10,7 @@
     "optional": "Lo único opcional: podemos recordar <b>dónde te quedaste en cada video</b> para que la reproducción continúe desde ahí. Nunca sale de tu dispositivo."
   },
   "details": {
-    "essentialTitle": "Esenciales: siempre activas",
+    "essentialTitle": "Esenciales (siempre activas)",
     "essential": {
       "login": "Tu sesión iniciada",
       "settings": "Los ajustes que configuras: tema, volumen, idioma, subtítulos, preferencias del feed",

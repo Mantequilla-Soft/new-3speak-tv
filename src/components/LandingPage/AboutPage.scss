@@ -5,7 +5,8 @@
 .about {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: var(--page-pad);
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 16px;
@@ -25,7 +26,6 @@
   @include v2.mobile {
     grid-template-columns: minmax(0, 1fr);
     gap: 12px;
-    padding-bottom: calc(var(--bottom-nav-height) + 32px);
     > *, > .about-hero, > .about-hive, > .about-link-card { grid-column: auto; }
   }
 

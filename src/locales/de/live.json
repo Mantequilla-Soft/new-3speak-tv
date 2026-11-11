@@ -6,7 +6,7 @@
     "thisStreamEnded": "Dieser Stream ist beendet",
     "noLongerLive": "Er ist nicht mehr live. Starte einen neuen, wann immer du bereit bist.",
     "recordingProcessing": "Stark! Deine Aufnahme wird verarbeitet und erscheint gleich im Ankündigungspost.",
-    "thanksForLive": "Stark – danke, dass du live gegangen bist!",
+    "thanksForLive": "Stark, danke, dass du live gegangen bist!",
     "backHome": "Zurück zur Startseite",
     "howWasStream": "Wie war dein Stream?",
     "connecting": "Verbindung zu OpenPods wird hergestellt…",
@@ -54,11 +54,11 @@
       "spam": "Spam oder Betrug",
       "other": "Etwas anderes"
     },
-    "sent": "Danke – dieser Stream wurde an unser Team gemeldet.",
+    "sent": "Danke, dieser Stream wurde an unser Team gemeldet.",
     "failed": "Meldung konnte nicht gesendet werden. Bitte versuch es nochmal.",
     "title": "Diesen Stream melden",
     "reporting": "Du meldest <b>@{{host}}</b>.",
-    "intro": "Sag uns, was nicht stimmt – unser Team prüft jede Meldung.",
+    "intro": "Sag uns, was nicht stimmt. Unser Team prüft jede Meldung.",
     "detailPlaceholder": "Weitere Details (optional)",
     "sending": "Wird gesendet…",
     "submit": "Meldung senden"

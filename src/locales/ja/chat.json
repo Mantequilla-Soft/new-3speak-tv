@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "絵文字",
+    "image": "画像を追加",
     "searchEmoji": "絵文字を検索",
     "searchGifs": "GIF を検索…",
     "noGifs": "GIF が見つかりません。",
@@ -40,7 +41,7 @@
   },
   "gate": {
     "connectTitle": "3Speak チャットに接続",
-    "connectBody": "チャットは Snapie を利用しています。接続すると、Hive のポスティングキーで一度限りのログイン認証に署名します。トランザクションは発生せず、費用もかかりません。",
+    "connectBody": "チャットは Snapie を利用しています。接続すると、Hive のポスティングキーで一度限りのログイン認証に署名します（トランザクションなし、費用なし）。",
     "connecting": "接続中…",
     "connectButton": "チャットに接続",
     "cannotSign": "現在のログイン方法ではチャットの認証に署名できません。Keychain、HiveAuth、PeakVault、Ledger のいずれかを使ってください。",

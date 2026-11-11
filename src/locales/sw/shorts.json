@@ -40,12 +40,18 @@
   "glow": {
     "subtle": "Mwanga wa mazingira: hafifu",
     "vivid": "Mwanga wa mazingira: angavu",
-    "off": "Mwanga wa mazingira: umezimwa"
+    "off": "Mwanga wa mazingira: umezimwa",
+    "label": "Mwanga wa mazingira",
+    "offShort": "Imezimwa",
+    "subtleShort": "Hafifu",
+    "vividShort": "Angavu"
   },
   "playbackMode": {
     "autoReplay": "Rudia kiotomatiki",
     "autoSwipe": "Telezesha kiotomatiki",
-    "manual": "Kwa mkono"
+    "manual": "Kwa mkono",
+    "label": "Uchezaji",
+    "options": "Chaguo za uchezaji"
   },
   "subtitles": {
     "off": "Zima"

@@ -6,10 +6,12 @@
   "watchingNow_one": "{{count}} viendo ahora",
   "watchingNow_many": "{{count}} viendo ahora",
   "watchingNow_other": "{{count}} viendo ahora",
+  "previewMuted": "Vista previa · sin sonido",
   "badges": {
     "gatedTitle": "Solo para miembros. 3Speak Pro desbloquea el video completo",
     "pro": "PRO",
     "new": "NUEVO",
+    "first": "Primero",
     "live": "● EN VIVO",
     "liveChat": "● CHAT EN VIVO",
     "spotlight": "Destacado"

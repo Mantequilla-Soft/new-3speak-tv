@@ -100,7 +100,11 @@
     "chapterLink": "ลิงก์บท",
     "upNext": "ถัดไป",
     "hideIdle": "ซ่อน (คิวยังอยู่)",
-    "continueAt": "เล่นต่อที่ {{time}}"
+    "continueAt": "เล่นต่อที่ {{time}}",
+    "position": "{{current}} จาก {{total}}",
+    "playingFrom": "กำลังเล่นจาก {{name}}",
+    "atThisMoment": "ช่วงนี้",
+    "goTo": "ไปที่ {{name}}"
   },
   "share": {
     "failed": "ไม่สำเร็จ",
@@ -227,7 +231,7 @@
     },
     "source": {
       "dropHere": "วางไฟล์เสียงที่นี่ หรือคลิกเพื่อเลือกไฟล์",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — เลือกได้หลายไฟล์",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (เลือกได้หลายไฟล์)",
       "stop": "หยุด",
       "orRecord": "หรือบันทึกสด",
       "recordLimit": "สูงสุด {{minutes}} นาทีต่อการบันทึก",

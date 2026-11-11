@@ -42,7 +42,7 @@
   },
   "gate": {
     "connectTitle": "Connect to 3Speak Chat",
-    "connectBody": "Chat is powered by Snapie. Connecting signs a one-time login challenge with your Hive posting key — no transaction, no cost.",
+    "connectBody": "Chat is powered by Snapie. Connecting signs a one-time login challenge with your Hive posting key (no transaction, no cost).",
     "connecting": "Connecting…",
     "connectButton": "Connect chat",
     "cannotSign": "Your current login can’t sign the chat challenge. Use Keychain, HiveAuth, PeakVault or Ledger.",
@@ -118,7 +118,7 @@
     "deleteError": "Could not delete the message.",
     "back": "Back to conversations",
     "loading": "Loading messages…",
-    "empty": "No messages yet — say hi 👋",
+    "empty": "No messages yet. Say hi 👋",
     "editedSuffix": " · edited",
     "messageActions": "Message actions",
     "quote": "Quote",

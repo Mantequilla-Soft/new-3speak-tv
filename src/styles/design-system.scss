@@ -98,6 +98,10 @@
   --topbar-h: 64px;
   --side-panel-w: 380px;
   --bottom-nav-height: 56px;
+  /* What a fixed element at the bottom of the screen must clear: the bottom
+     bar (56 + the iPhone home-indicator area) where it shows, below 1025px;
+     0 on desktop and on the mobile Shorts view, which have no bottom bar. */
+  --bottom-bar-clearance: 0px;
 
   /* elevation: only floating layers get a shadow */
   --shadow-float: 0 20px 60px rgba(0, 0, 0, .2);
@@ -177,6 +181,10 @@
 
 @include v2.mobile {
   :root { --page-pad: 16px; }
+}
+@media (max-width: 1024px) {
+  :root { --bottom-bar-clearance: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px)); }
+  :root:has(.shorts-mobile-container) { --bottom-bar-clearance: 0px; }
 }
 
 /* ─── 3. Base ────────────────────────────────────────────────────────────── */

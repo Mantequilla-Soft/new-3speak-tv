@@ -4,10 +4,12 @@
   "thumbnailAlt": "썸네일",
   "topicTitle": "주제: {{topic}}",
   "watchingNow_other": "{{count}}명 시청 중",
+  "previewMuted": "미리보기 · 음소거",
   "badges": {
     "gatedTitle": "멤버 전용. 3Speak Pro로 전체 동영상을 볼 수 있습니다",
     "pro": "PRO",
     "new": "NEW",
+    "first": "첫 업로드",
     "live": "● LIVE",
     "liveChat": "● 라이브 채팅",
     "spotlight": "스포트라이트"

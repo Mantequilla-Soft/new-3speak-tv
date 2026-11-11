@@ -22,6 +22,8 @@
     "memoPlaceholder": "例: 素晴らしいコンテンツをありがとう！",
     "memoLinkNote": "このリンクがメモに追加されます: {{link}}",
     "send": "投げ銭を送る",
+    "sendAmount": "{{amount}} {{currency}} を送る",
+    "sentEyebrow": "投げ銭を送りました",
     "lightning": {
       "amountLabel": "金額（sats）:",
       "messageLabel": "メッセージ（任意）:",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "フィードをカスタマイズするにはログインしてください",
-    "notInterestedToast": "興味なし — この動画を非表示にします",
+    "notInterestedToast": "興味なし。この動画を非表示にします",
     "undo": "元に戻す",
     "cantHideOwn": "自分の動画は非表示にできません",
     "hidingCreatorToast": "@{{author}} さんの動画を非表示にします",
@@ -140,7 +142,8 @@
     "pickTopic": "トピックを選ぶ（100% の投票として扱われます）",
     "submitTag": "タグを送信",
     "tagThisVideoFull": "この動画にタグを付ける（100% の投票として扱われます）",
-    "justTag": "投票せずにタグだけ付ける"
+    "justTag": "投票せずにタグだけ付ける",
+    "addsAbout": "約 {{value}} 加算"
   },
   "tagsPicker": {
     "autoTagged": "自動タグ: {{tags}}",

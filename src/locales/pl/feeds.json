@@ -28,6 +28,11 @@
   },
   "newFromFollowing": {
     "aria": "Nowości od obserwowanych twórców",
+    "summary_one": "{{count}} nowy film",
+    "summary_few": "{{count}} nowe filmy",
+    "summary_many": "{{count}} nowych filmów",
+    "summary_other": "{{count}} nowego filmu",
+    "fromFollowing": "od osób, które obserwujesz",
     "shorts_one": "{{count}} short",
     "shorts_few": "{{count}} shorty",
     "shorts_many": "{{count}} shortów",
@@ -50,6 +55,9 @@
     "empty": "Nic tu jeszcze nie ma.",
     "viewAll": "Zobacz wszystko",
     "dragToReorder": "Przeciągnij, aby zmienić kolejność",
+    "customize": "Dostosuj",
+    "customizeTitle": "Dostosuj stronę główną",
+    "customizeHint": "Przesuwaj sekcje w górę lub w dół. Wyłącz te, których nie chcesz.",
     "surfTitle": "Skakanie po kanałach: wybierz temat i oglądaj jak telewizję",
     "zapping": "Zapping"
   },

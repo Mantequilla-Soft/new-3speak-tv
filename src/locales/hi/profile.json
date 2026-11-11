@@ -21,6 +21,7 @@
     "followers_one": "{{num}} फ़ॉलोअर",
     "followers_other": "{{num}} फ़ॉलोअर्स",
     "popularTitle": "लोकप्रिय क्रिएटर्स",
+    "suggestedTitle": "फ़ॉलो करने लायक क्रिएटर्स",
     "scrollLeft": "बाएँ स्क्रॉल करें",
     "scrollRight": "दाएँ स्क्रॉल करें",
     "mostlyPosts": "ज़्यादातर {{topic}} पोस्ट करते हैं"
@@ -230,7 +231,11 @@
     "loginToUpload": "वीडियो अपलोड करने के लिए लॉग इन करें",
     "linkExternalTitle": "बाहरी प्रोफ़ाइल लिंक करें",
     "addProfile": "प्रोफ़ाइल जोड़ें",
-    "editTitle": "अपनी फ़ोटो, नाम, बायो और लोकेशन एडिट करें"
+    "editTitle": "अपनी फ़ोटो, नाम, बायो और लोकेशन एडिट करें",
+    "more": "और",
+    "moreActions": "@{{user}} के लिए और विकल्प",
+    "copyProfileLink": "प्रोफ़ाइल लिंक कॉपी करें",
+    "podcastFeed": "पॉडकास्ट फ़ीड (RSS)"
   },
   "tabs": {
     "overview": "ओवरव्यू",

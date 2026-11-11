@@ -54,7 +54,7 @@
     "verify": "인증"
   },
   "auth": {
-    "title": "3Speak 권한 부여!",
+    "title": "3Speak 권한 부여",
     "text": "3Speak에 동영상을 업로드하려면 포스팅 권한이 필요해요. 이 권한으로 업로드한 동영상을 Hive에 게시할 수 있어요. 포스팅 권한은 한 번만 부여하면 돼요.",
     "authorize": "권한 부여"
   },
@@ -79,10 +79,10 @@
     "usernamePlaceholder": "사용자 이름 입력",
     "minimumReward": "최소 보상은 <strong>1%</strong>예요",
     "checking": "Hive에서 <strong>@{{account}}</strong> 확인 중…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong>은(는) 존재하지 않는 Hive 계정이에요.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong>이(가) 아직 추가되지 않았어요. <strong>+</strong>를 눌러 추가하거나 입력란을 비우세요.",
-    "infrastructure": "10% === 인프라",
-    "videoEncoding": "동영상 인코딩 === 1%",
+    "notExisting": "<strong>@{{account}}</strong>은(는) 존재하지 않는 Hive 계정이에요.",
+    "notAdded": "<strong>@{{account}}</strong>이(가) 아직 추가되지 않았어요. <strong>+</strong>를 눌러 추가하거나 입력란을 비우세요.",
+    "infrastructure": "인프라: 10%",
+    "videoEncoding": "동영상 인코딩: 1%",
     "defaults": "기본 수혜자({{count}})"
   },
   "qr": {

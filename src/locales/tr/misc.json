@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Takip Akışı",
-    "error": "Videolar alınırken hata oluştu"
+    "error": "Videolar alınırken hata oluştu",
+    "emptyTitle": "Burada henüz kimse yok",
+    "emptyBody": "İçerik üreticilerini takip et; videoları, Snaps paylaşımları ve canlı yayınları ilk burada görünsün."
   },
   "groups": {
     "title": "Gruplar",

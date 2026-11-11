@@ -16,7 +16,9 @@
     "translatedTo": "Перекладено: {{language}}",
     "showLanguage": "Показати: {{language}}",
     "showOriginal": "Показати оригінал",
-    "buttonTitle": "Короткий зміст цього відео від ШІ"
+    "buttonTitle": "Короткий зміст цього відео від ШІ",
+    "jumpTo": "Перейти до",
+    "disclaimer": "Створено на основі транскрипту. Можливі помилки."
   },
   "errors": {
     "notAvailable": "Це відео недоступне.",
@@ -38,6 +40,16 @@
     "add": "Додати реакцію"
   },
   "liveChat": "Чат наживо",
+  "side": {
+    "label": "Панелі відео"
+  },
+  "voters": {
+    "title": "Проголосували",
+    "cardLabel": "Прихильники та голосувальники",
+    "voter": "Голосувальник",
+    "weight": "Вага",
+    "value": "Вартість"
+  },
   "moreVideos": "Більше відео",
   "vote": {
     "saveFailed": "Не вдалося зберегти ваш голос"
@@ -106,7 +118,8 @@
     "members_one": "{{count}} учасник",
     "members_few": "{{count}} учасники",
     "members_many": "{{count}} учасників",
-    "members_other": "{{count}} учасника"
+    "members_other": "{{count}} учасника",
+    "postedIn": "Опубліковано в"
   },
   "tags": {
     "curated": "Добірка"

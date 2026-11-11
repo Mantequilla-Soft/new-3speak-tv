@@ -11,7 +11,9 @@
   },
   "drafts": {
     "untitled": "(walang pamagat)",
-    "empty": "Walang nahanap na video sa napiling filter."
+    "empty": "Walang nahanap na video sa napiling filter.",
+    "title": "Studio",
+    "create": "Gumawa"
   },
   "schedule": {
     "days": {

@@ -102,7 +102,11 @@
     "chapterLink": "Kiungo cha sura",
     "upNext": "Kinachofuata",
     "hideIdle": "Ficha (foleni yako inabaki)",
-    "continueAt": "Endelea kutoka {{time}}"
+    "continueAt": "Endelea kutoka {{time}}",
+    "position": "{{current}} kati ya {{total}}",
+    "playingFrom": "Inacheza kutoka {{name}}",
+    "atThisMoment": "Kwa wakati huu",
+    "goTo": "Nenda kwa {{name}}"
   },
   "share": {
     "failed": "Imeshindwa",
@@ -233,7 +237,7 @@
     },
     "source": {
       "dropHere": "Dondosha faili za sauti hapa, au bofya ili kuvinjari",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — nyingi zinaruhusiwa",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (nyingi zinaruhusiwa)",
       "stop": "Simamisha",
       "orRecord": "Au rekodi moja kwa moja",
       "recordLimit": "Hadi dakika {{minutes}} kwa kila rekodi",

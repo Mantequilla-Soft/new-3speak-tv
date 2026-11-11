@@ -436,6 +436,7 @@
     "portrait": "竖屏",
     "landscape": "横屏",
     "autoDetect": "自动检测（{{lang}}）",
+    "layout": "布局",
     "presets": {
       "frontcam": "前置镜头",
       "frontcamTitle": "自拍镜头下方的小条——最不容易看出你在读稿",

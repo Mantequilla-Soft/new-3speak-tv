@@ -87,7 +87,7 @@
     "lookAround": "Sadece etrafa bakmak istiyorum"
   },
   "interests": {
-    "saved": "İlgi alanları kaydedildi; istediğin zaman Ayarlar'dan değiştirebilirsin",
+    "saved": "İlgi alanları kaydedildi. İstediğin zaman Ayarlar'dan değiştirebilirsin",
     "saveFailed": "İlgi alanları kaydedilemedi",
     "title": "Nelerden hoşlanırsın?",
     "body": "Sevdiğin birkaç konu seç, sana beğendiğin türden daha çok içerik gösterelim. Bunları istediğin zaman <b>Ayarlar</b>'dan değiştirebilirsin.",

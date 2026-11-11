@@ -438,6 +438,7 @@
     "portrait": "Dikey",
     "landscape": "Yatay",
     "autoDetect": "Otomatik algıla ({{lang}})",
+    "layout": "Düzen",
     "presets": {
       "frontcam": "Ön kamera",
       "frontcamTitle": "Selfie lensinin altında küçük bir şerit; okuduğun en az böyle anlaşılır",

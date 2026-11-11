@@ -20,8 +20,8 @@
     "fullscreen": "Schermo intero",
     "exitFullscreen": "Esci da schermo intero",
     "markerReplies_one": "({{count}} risposta)",
-    "markerReplies_other": "({{count}} risposte)",
-    "markerReplies_many": "({{count}} risposte)"
+    "markerReplies_many": "({{count}} risposte)",
+    "markerReplies_other": "({{count}} risposte)"
   },
   "subtitles": {
     "title": "Sottotitoli",

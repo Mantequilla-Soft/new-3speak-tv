@@ -55,6 +55,7 @@
     "items_other": "{{count}} items",
     "created": "Ginawa {{when}}",
     "podcastFeed": "Podcast feed",
+    "playAll": "I-play lahat",
     "podcastFeedTitle": "Sundan ang {{name}} sa kahit anong podcast app (RSS feed)",
     "album": {
       "genre": "<strong>Genre:</strong> {{value}}",

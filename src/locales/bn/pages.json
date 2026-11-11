@@ -93,7 +93,8 @@
   "legal": {
     "pageTitle": "3Speak কীভাবে আপনার ডেটা ব্যবহার করে · 3Speak",
     "englishOnly": "এই পেজটি শুধু ইংরেজিতে পাওয়া যায়। ইংরেজি সংস্করণটিই বাধ্যতামূলক।",
-    "back": "← 3Speak-এ ফিরে যান"
+    "back": "← 3Speak-এ ফিরে যান",
+    "onThisPage": "এই পাতায়"
   },
   "notFound": {
     "imageAlt": "404",

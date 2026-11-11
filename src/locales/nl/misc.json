@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Volgend-feed",
-    "error": "Fout bij het ophalen van video's"
+    "error": "Fout bij het ophalen van video's",
+    "emptyTitle": "Nog niemand hier",
+    "emptyBody": "Volg makers en hun uploads, Snaps en livestreams verschijnen hier als eerste."
   },
   "groups": {
     "title": "Groepen",

@@ -6,7 +6,7 @@
     "thisStreamEnded": "Tapos na ang stream na ito",
     "noLongerLive": "Hindi na ito live. Magsimula ng bago kapag handa ka na.",
     "recordingProcessing": "Ang galing! Pinoproseso na ang recording mo at lalabas ito sa announcement post maya-maya.",
-    "thanksForLive": "Ang galing — salamat sa pag-live!",
+    "thanksForLive": "Ang galing, salamat sa pag-live!",
     "backHome": "Bumalik sa Home",
     "howWasStream": "Kumusta ang stream mo?",
     "connecting": "Kumokonekta sa OpenPods…",
@@ -54,11 +54,11 @@
       "spam": "Spam o scam",
       "other": "Iba pa"
     },
-    "sent": "Salamat — nai-report na sa team namin ang stream na ito.",
+    "sent": "Salamat, nai-report na sa team namin ang stream na ito.",
     "failed": "Hindi maipadala ang report. Subukan ulit.",
     "title": "I-report ang stream na ito",
     "reporting": "Nire-report si <b>@{{host}}</b>.",
-    "intro": "Sabihin sa amin kung ano ang mali — sinusuri ng team namin ang bawat report.",
+    "intro": "Sabihin sa amin kung ano ang mali. Sinusuri ng team namin ang bawat report.",
     "detailPlaceholder": "Magdagdag ng detalye (opsyonal)",
     "sending": "Ipinapadala…",
     "submit": "Isumite ang report"

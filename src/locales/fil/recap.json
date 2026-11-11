@@ -132,7 +132,8 @@
     "communities": "Binibisita ang mga community mo…",
     "followers": "Tinitingnan kung sino ang nag-follow sa iyo…",
     "watched": "Sinusuri ang mga pinanood mo…",
-    "thumbnails": "Nilo-load ang mga thumbnail mo… {{done}} ng {{total}}"
+    "thumbnails": "Nilo-load ang mga thumbnail mo… {{done}} ng {{total}}",
+    "thumbnailsWaiting": "Nilo-load ang mga thumbnail mo…"
   },
   "tips": {
     "label": "Tip:",

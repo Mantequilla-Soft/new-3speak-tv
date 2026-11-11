@@ -22,6 +22,8 @@
     "memoPlaceholder": "เช่น ขอบคุณสำหรับคอนเทนต์ดีๆ!",
     "memoLinkNote": "ลิงก์นี้จะถูกเพิ่มในบันทึก: {{link}}",
     "send": "ส่งทิป",
+    "sendAmount": "ส่ง {{amount}} {{currency}}",
+    "sentEyebrow": "ส่งทิปแล้ว",
     "lightning": {
       "amountLabel": "จำนวน (sats):",
       "messageLabel": "ข้อความ (ไม่บังคับ):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "โปรดเข้าสู่ระบบเพื่อปรับแต่งฟีดของคุณ",
-    "notInterestedToast": "ไม่สนใจ — เราจะซ่อนวิดีโอนี้",
+    "notInterestedToast": "ไม่สนใจ เราจะซ่อนวิดีโอนี้",
     "undo": "เลิกทำ",
     "cantHideOwn": "คุณซ่อนวิดีโอของตัวเองไม่ได้",
     "hidingCreatorToast": "กำลังซ่อนวิดีโอจาก @{{author}}",
@@ -140,7 +142,8 @@
     "pickTopic": "เลือกหัวข้อ (นับเป็นโหวต 100%)",
     "submitTag": "ส่งแท็ก",
     "tagThisVideoFull": "ติดแท็กวิดีโอนี้ (นับเป็นโหวต 100%)",
-    "justTag": "ไม่โหวต — ติดแท็กอย่างเดียว"
+    "justTag": "ไม่โหวต — ติดแท็กอย่างเดียว",
+    "addsAbout": "เพิ่มประมาณ {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "ติดแท็กอัตโนมัติ: {{tags}}",

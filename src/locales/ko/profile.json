@@ -19,6 +19,7 @@
     "pleaseTryAgain": "다시 시도해 주세요",
     "followers_other": "팔로워 {{num}}명",
     "popularTitle": "인기 크리에이터",
+    "suggestedTitle": "팔로우할 만한 크리에이터",
     "scrollLeft": "왼쪽으로 스크롤",
     "scrollRight": "오른쪽으로 스크롤",
     "mostlyPosts": "주로 {{topic}} 콘텐츠를 게시해요"
@@ -212,7 +213,11 @@
     "loginToUpload": "동영상을 업로드하려면 로그인하세요",
     "linkExternalTitle": "외부 프로필 연결",
     "addProfile": "프로필 추가",
-    "editTitle": "사진, 이름, 소개, 위치 수정"
+    "editTitle": "사진, 이름, 소개, 위치 수정",
+    "more": "더보기",
+    "moreActions": "@{{user}} 관련 작업 더보기",
+    "copyProfileLink": "프로필 링크 복사",
+    "podcastFeed": "팟캐스트 피드 (RSS)"
   },
   "tabs": {
     "overview": "개요",

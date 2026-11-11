@@ -93,7 +93,8 @@
   "legal": {
     "pageTitle": "3Speak의 데이터 처리 방식 · 3Speak",
     "englishOnly": "이 페이지는 영어로만 제공돼요. 법적 효력은 영어 버전에 있어요.",
-    "back": "← 3Speak로 돌아가기"
+    "back": "← 3Speak로 돌아가기",
+    "onThisPage": "이 페이지의 내용"
   },
   "notFound": {
     "imageAlt": "404",

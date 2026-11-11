@@ -5,7 +5,8 @@
 .leaderboard-page {
   max-width: 960px;
   margin: 0 auto;
-  padding: 24px var(--page-pad) 64px;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0 0 64px;
   display: flex;
   flex-direction: column;
   gap: 14px;

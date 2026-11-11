@@ -22,6 +22,8 @@
     "memoPlaceholder": "যেমন: দারুণ কনটেন্টের জন্য ধন্যবাদ!",
     "memoLinkNote": "এই লিংকটি মেমোতে যোগ করা হবে: {{link}}",
     "send": "টিপ পাঠান",
+    "sendAmount": "{{amount}} {{currency}} পাঠান",
+    "sentEyebrow": "টিপ পাঠানো হয়েছে",
     "lightning": {
       "amountLabel": "পরিমাণ (sats):",
       "messageLabel": "বার্তা (ঐচ্ছিক):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "আপনার ফিড নিজের মতো সাজাতে লগ ইন করুন",
-    "notInterestedToast": "আগ্রহী নন — আমরা এই ভিডিওটি লুকিয়ে রাখবো",
+    "notInterestedToast": "আগ্রহী নন। আমরা এই ভিডিওটি লুকিয়ে রাখবো",
     "undo": "আগের অবস্থায় ফেরান",
     "cantHideOwn": "আপনি নিজের ভিডিও লুকাতে পারবেন না",
     "hidingCreatorToast": "@{{author}}-এর ভিডিও লুকানো হচ্ছে",
@@ -142,7 +144,8 @@
     "pickTopic": "একটি বিষয় বেছে নিন (100% ভোট হিসেবে গণ্য হবে)",
     "submitTag": "ট্যাগ জমা দিন",
     "tagThisVideoFull": "এই ভিডিওটি ট্যাগ করুন (100% ভোট হিসেবে গণ্য হবে)",
-    "justTag": "ভোট নয় — শুধু ট্যাগ"
+    "justTag": "ভোট নয় — শুধু ট্যাগ",
+    "addsAbout": "প্রায় {{value}} যোগ করে"
   },
   "tagsPicker": {
     "autoTagged": "স্বয়ংক্রিয় ট্যাগ: {{tags}}",

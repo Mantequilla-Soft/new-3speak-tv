@@ -28,6 +28,8 @@
   },
   "newFromFollowing": {
     "aria": "Baru dari kreator yang kamu ikuti",
+    "summary_other": "{{count}} video baru",
+    "fromFollowing": "dari orang yang kamu ikuti",
     "shorts_other": "{{count}} Shorts"
   },
   "firstUploads": {
@@ -47,6 +49,9 @@
     "empty": "Belum ada yang bisa ditampilkan di sini.",
     "viewAll": "Lihat semua",
     "dragToReorder": "Seret untuk mengatur urutan",
+    "customize": "Sesuaikan",
+    "customizeTitle": "Sesuaikan Beranda",
+    "customizeHint": "Pindahkan bagian ke atas atau ke bawah. Matikan yang tidak kamu inginkan.",
     "surfTitle": "Channel Surfing: pilih topik dan tonton seperti TV",
     "zapping": "Zapping"
   },

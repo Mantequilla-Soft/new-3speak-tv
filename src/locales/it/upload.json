@@ -440,6 +440,7 @@
     "portrait": "Verticale",
     "landscape": "Orizzontale",
     "autoDetect": "Rilevamento automatico ({{lang}})",
+    "layout": "Layout",
     "presets": {
       "frontcam": "Fotocamera frontale",
       "frontcamTitle": "Piccola striscia sotto l'obiettivo frontale — si nota meno che stai leggendo",

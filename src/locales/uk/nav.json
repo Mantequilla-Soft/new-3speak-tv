@@ -38,6 +38,8 @@
     "myChannelAria": "Мій канал",
     "vpTooltip": "Сила голосу (Voting Power): яку вагу матиме ваш наступний голос",
     "rcTooltip": "Resource Credits (RC): скільки коштують ваші дії в Hive",
+    "votingPower": "Сила голосу",
+    "resourceCredits": "Resource Credits",
     "myChannel": "Мій канал",
     "publishBacklog": "Опублікувати архів",
     "analytics": "Аналітика",

@@ -11,7 +11,9 @@
   },
   "drafts": {
     "untitled": "(bez tytułu)",
-    "empty": "Brak filmów dla wybranego filtra."
+    "empty": "Brak filmów dla wybranego filtra.",
+    "title": "Studio",
+    "create": "Utwórz"
   },
   "schedule": {
     "days": {

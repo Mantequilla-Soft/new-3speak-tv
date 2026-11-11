@@ -52,6 +52,7 @@
     "items_other": "{{count}} 件",
     "created": "{{when}} に作成",
     "podcastFeed": "ポッドキャストフィード",
+    "playAll": "すべて再生",
     "podcastFeedTitle": "お好きなポッドキャストアプリで{{name}}をフォロー（RSSフィード）",
     "album": {
       "genre": "<strong>ジャンル:</strong> {{value}}",

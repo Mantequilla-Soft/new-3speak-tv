@@ -208,7 +208,7 @@
       "imageUploadFailed": "Görsel yüklenemedi: {{error}}",
       "tryAgain": "tekrar dene",
       "styleApplied": "Stil tüm {{type}} bloklarına uygulandı",
-      "templateApplied": "“{{name}}” uygulandı; ince ayar yap ya da Geri Al",
+      "templateApplied": "“{{name}}” uygulandı. İnce ayar yap ya da Geri Al.",
       "reverted": "Önceki tasarımına geri dönüldü",
       "saved": "Spotlight Hive profiline kaydedildi",
       "saveFailed": "Kaydedilemedi",
@@ -224,7 +224,7 @@
       "phone": "Telefon",
       "platformGroup": "Platform",
       "yourname": "kullaniciadin",
-      "platformIconHint": "Simge {{platform}} logosu; özel bir simge seçmek için “Web sitesi / URL” seçeneğine geç.",
+      "platformIconHint": "Simge {{platform}} logosu. Özel bir simge seçmek için “Web sitesi / URL” seçeneğine geç.",
       "icon": "Simge",
       "iconColor": "Simge rengi",
       "iconBg": "Simge arka planı"
@@ -266,7 +266,7 @@
       "hiveRecentHint": "En son üst düzey gönderilerin (reblog veya çapraz paylaşım yok). Otomatik güncellenir.",
       "linkPlaceholder": "Herhangi bir bağlantı yapıştır: Hive gönderisi, Instagram, X, YouTube, makale…",
       "fetching": "Önizleme alınıyor…",
-      "noPreview": "Önizleme bulunamadı; yine de bağlantı kartı olarak görünecek.",
+      "noPreview": "Önizleme bulunamadı. Yine de bağlantı kartı olarak görünecek.",
       "pasteHint": "Bir bağlantı yapıştır, başlığını, açıklamasını ve görselini biz çekelim."
     },
     "style": {
@@ -295,7 +295,7 @@
     "openPage": "Sayfayı aç",
     "templates": {
       "title": "Şablonlar",
-      "hint": "Her şeyi doldurmak için bir tasarım seç; biyografin korunur ve Geri Al yapabilirsin.",
+      "hint": "Her şeyi doldurmak için bir tasarım seç. Biyografin korunur ve Geri Al yapabilirsin.",
       "undo": "Şablonu geri al, tasarımıma dön"
     },
     "profile": {

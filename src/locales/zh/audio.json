@@ -100,7 +100,11 @@
     "chapterLink": "章节链接",
     "upNext": "接下来",
     "hideIdle": "隐藏 (队列会保留)",
-    "continueAt": "从 {{time}} 继续"
+    "continueAt": "从 {{time}} 继续",
+    "position": "{{current}} / {{total}}",
+    "playingFrom": "正在播放：{{name}}",
+    "atThisMoment": "此刻",
+    "goTo": "前往 {{name}}"
   },
   "share": {
     "failed": "失败",
@@ -227,7 +231,7 @@
     },
     "source": {
       "dropHere": "把音频文件拖到这里，或点击浏览",
-      "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC——可选多个",
+      "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC（可选多个）",
       "stop": "停止",
       "orRecord": "或者现场录制",
       "recordLimit": "每段录音最长 {{minutes}} 分钟",

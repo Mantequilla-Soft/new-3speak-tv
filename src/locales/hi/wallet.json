@@ -28,7 +28,12 @@
     "recipientPlaceholder": "Hive यूज़रनेम डालें",
     "memoLabel": "मेमो",
     "memoPlaceholder": "मेमो डालें",
-    "confirm": "ट्रांसफ़र की पुष्टि करें"
+    "confirm": "ट्रांसफ़र की पुष्टि करें",
+    "sendTo": "@{{to}} को {{amount}} {{coin}} भेजें",
+    "sendAmount": "{{amount}} {{coin}} भेजें",
+    "recent": "हाल के",
+    "activeKey": "आपकी एक्टिव की चाहिए",
+    "available": "उपलब्ध: {{balance}}"
   },
   "history": {
     "loadFailed": "ट्रांज़ैक्शन लोड नहीं हो सके",
@@ -46,5 +51,47 @@
       "received": "मिला"
     },
     "claimedRewards": "क्लेम किए गए रिवॉर्ड"
+  },
+  "total": "कुल बैलेंस",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "HBD सेविंग्स"
+  },
+  "claim": {
+    "ready": "{{amount}} क्लेम के लिए तैयार",
+    "readyShort": "{{amount}} क्लेम के लिए",
+    "button": "क्लेम करें",
+    "done": "रिवॉर्ड क्लेम हो गए",
+    "failed": "क्लेम नहीं हो सका: {{error}}"
+  },
+  "activity": {
+    "title": "एक्टिविटी",
+    "filters": {
+      "all": "सभी",
+      "rewards": "रिवॉर्ड",
+      "received": "मिले",
+      "sent": "भेजे गए"
+    },
+    "from": "@{{user}} से",
+    "sentTo": "@{{user}} को भेजा गया",
+    "emptyTitle": "अभी यहाँ कुछ नहीं है",
+    "empty": "ट्रांसफ़र और क्लेम किए गए रिवॉर्ड यहाँ दिखते हैं।"
+  },
+  "earnings": {
+    "title": "कमाई, 30 दिन",
+    "sub": "क्लेम किए गए रिवॉर्ड और मिले HIVE या HBD"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Hive पर हर एक्शन में इनका कुछ हिस्सा लगता है। ये लगभग 5 दिनों में फिर से भर जाते हैं।",
+    "posts_one": "अभी लगभग {{count}} पोस्ट के लिए काफ़ी",
+    "posts_other": "अभी लगभग {{count}} पोस्ट के लिए काफ़ी"
+  },
+  "receive": {
+    "title": "प्राप्त करें",
+    "sub": "कोई भी किसी भी Hive वॉलेट से इस अकाउंट नाम पर HIVE या HBD भेज सकता है। मेमो की ज़रूरत नहीं।",
+    "copy": "अकाउंट नाम कॉपी करें"
   }
 }

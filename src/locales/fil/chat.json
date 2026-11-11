@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Magdagdag ng larawan",
     "searchEmoji": "Maghanap ng emoji",
     "searchGifs": "Maghanap ng GIF…",
     "noGifs": "Walang nahanap na GIF.",
@@ -41,7 +42,7 @@
   },
   "gate": {
     "connectTitle": "Kumonekta sa 3Speak Chat",
-    "connectBody": "Pinapagana ng Snapie ang chat. Sa pagkonekta, magsa-sign ka ng isang beses na login challenge gamit ang Hive posting key mo — walang transaksyon, walang bayad.",
+    "connectBody": "Pinapagana ng Snapie ang chat. Sa pagkonekta, magsa-sign ka ng isang beses na login challenge gamit ang Hive posting key mo (walang transaksyon, walang bayad).",
     "connecting": "Kumokonekta…",
     "connectButton": "Ikonekta ang chat",
     "cannotSign": "Hindi kayang i-sign ng kasalukuyang login mo ang chat challenge. Gamitin ang Keychain, HiveAuth, PeakVault o Ledger.",
@@ -117,7 +118,7 @@
     "deleteError": "Hindi mabura ang mensahe.",
     "back": "Bumalik sa mga conversation",
     "loading": "Naglo-load ng mga mensahe…",
-    "empty": "Wala pang mensahe — mag-hi ka 👋",
+    "empty": "Wala pang mensahe. Mag-hi ka 👋",
     "editedSuffix": " · na-edit",
     "messageActions": "Mga aksyon sa mensahe",
     "quote": "I-quote",

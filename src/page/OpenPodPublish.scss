@@ -6,15 +6,13 @@
   box-sizing: border-box;
   max-width: 760px;
   margin: 0 auto;
-  padding: 24px var(--page-pad) 48px;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0 0 48px;
   display: flex;
   flex-direction: column;
   gap: 14px;
   color: var(--text);
 
-  @include v2.mobile {
-    padding: 16px 16px calc(var(--bottom-nav-height) + 24px + env(safe-area-inset-bottom, 0px));
-  }
 }
 
 .publish-header {

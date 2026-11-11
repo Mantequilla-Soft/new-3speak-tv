@@ -33,8 +33,8 @@ $overlay-gap: 12px;
 
   // Tablet also has the fixed BottomNav; stop above it.
   @include mix.respond(tab) {
-    bottom: calc(var(--bottom-nav-height, 56px) + #{$overlay-gap});
-    height: min(640px, calc(100dvh - var(--nav-top-offset, 60px) - var(--bottom-nav-height, 56px) - #{$overlay-gap * 2}));
+    bottom: calc(var(--bottom-bar-clearance) + #{$overlay-gap});
+    height: min(640px, calc(100dvh - var(--nav-top-offset, 60px) - var(--bottom-bar-clearance) - #{$overlay-gap * 2}));
   }
   // Phones use the /chat page (useOpenChat). If a window is narrowed with the
   // panel open, get out of the way rather than squeezing it.
@@ -67,7 +67,7 @@ $overlay-gap: 12px;
 
   // Tablet: keep the BottomNav visible too.
   @include mix.respond(tab) {
-    bottom: var(--bottom-nav-height, 56px);
+    bottom: var(--bottom-bar-clearance);
     height: auto;
   }
 }
@@ -85,7 +85,7 @@ $overlay-gap: 12px;
 
   @include mix.respond(tab) {
     bottom: auto;
-    height: min(520px, calc(100dvh - var(--nav-top-offset, 60px) - var(--bottom-nav-height, 56px) - #{$overlay-gap * 2}));
+    height: min(520px, calc(100dvh - var(--nav-top-offset, 60px) - var(--bottom-bar-clearance) - #{$overlay-gap * 2}));
   }
 
   @media (prefers-reduced-motion: reduce) {

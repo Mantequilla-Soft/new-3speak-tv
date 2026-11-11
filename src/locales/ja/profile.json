@@ -19,6 +19,7 @@
     "pleaseTryAgain": "もう一度お試しください",
     "followers_other": "フォロワー {{num}} 人",
     "popularTitle": "人気のクリエイター",
+    "suggestedTitle": "おすすめのクリエイター",
     "scrollLeft": "左にスクロール",
     "scrollRight": "右にスクロール",
     "mostlyPosts": "主に {{topic}} を投稿"
@@ -212,7 +213,11 @@
     "loginToUpload": "動画をアップロードするにはログイン",
     "linkExternalTitle": "外部プロフィールをリンク",
     "addProfile": "プロフィールを追加",
-    "editTitle": "写真、名前、自己紹介、場所を編集"
+    "editTitle": "写真、名前、自己紹介、場所を編集",
+    "more": "その他",
+    "moreActions": "@{{user}} のその他の操作",
+    "copyProfileLink": "プロフィールのリンクをコピー",
+    "podcastFeed": "ポッドキャストフィード (RSS)"
   },
   "tabs": {
     "overview": "概要",

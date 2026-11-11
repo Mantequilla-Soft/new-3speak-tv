@@ -5,7 +5,8 @@
 .yt-import {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: var(--page-pad);
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
   color: var(--text);
   text-align: left;
   display: grid;

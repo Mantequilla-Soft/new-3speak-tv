@@ -5,10 +5,12 @@
   "topicTitle": "Konu: {{topic}}",
   "watchingNow_one": "Şu an {{count}} kişi izliyor",
   "watchingNow_other": "Şu an {{count}} kişi izliyor",
+  "previewMuted": "Önizleme · sessiz",
   "badges": {
     "gatedTitle": "Yalnızca üyelere. 3Speak Pro videonun tamamını açar",
     "pro": "PRO",
     "new": "YENİ",
+    "first": "İlk",
     "live": "● CANLI",
     "liveChat": "● CANLI SOHBET",
     "spotlight": "Öne çıkan"

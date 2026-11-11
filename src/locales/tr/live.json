@@ -58,7 +58,7 @@
     "failed": "Bildirim gönderilemedi. Lütfen tekrar dene.",
     "title": "Bu yayını bildir",
     "reporting": "<b>@{{host}}</b> bildiriliyor.",
-    "intro": "Sorunun ne olduğunu anlat; ekibimiz her bildirimi inceler.",
+    "intro": "Sorunun ne olduğunu anlat. Ekibimiz her bildirimi inceler.",
     "detailPlaceholder": "Ayrıntı ekle (isteğe bağlı)",
     "sending": "Gönderiliyor…",
     "submit": "Bildirimi gönder"

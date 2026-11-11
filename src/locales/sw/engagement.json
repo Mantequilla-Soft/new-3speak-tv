@@ -22,6 +22,8 @@
     "memoPlaceholder": "k.m. Asante kwa maudhui haya mazuri!",
     "memoLinkNote": "Kiungo hiki kinaongezwa kwenye memo: {{link}}",
     "send": "Tuma bakshishi",
+    "sendAmount": "Tuma {{amount}} {{currency}}",
+    "sentEyebrow": "Bakshishi imetumwa",
     "lightning": {
       "amountLabel": "Kiasi (sats):",
       "messageLabel": "Ujumbe (si lazima):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Tafadhali ingia ili kubinafsisha mlisho wako",
-    "notInterestedToast": "Huvutiwi — tutaficha video hii",
+    "notInterestedToast": "Huvutiwi. Tutaficha video hii",
     "undo": "Tendua",
     "cantHideOwn": "Huwezi kuficha video zako mwenyewe",
     "hidingCreatorToast": "Inaficha video za @{{author}}",
@@ -142,7 +144,8 @@
     "pickTopic": "Chagua mada (inahesabiwa kama kura ya 100%)",
     "submitTag": "Wasilisha lebo",
     "tagThisVideoFull": "Weka lebo kwenye video hii (inahesabiwa kama kura ya 100%)",
-    "justTag": "Usipige kura — weka lebo tu"
+    "justTag": "Usipige kura — weka lebo tu",
+    "addsAbout": "inaongeza takriban {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "Lebo za kiotomatiki: {{tags}}",

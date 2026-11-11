@@ -9,9 +9,9 @@
 .audio-page {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 24px var(--page-pad) calc(var(--audio-np-clearance, 0px) + 48px);
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0 0 calc(var(--audio-np-clearance, 0px) + 48px);
   min-height: 100vh;
-  @include v2.mobile { padding-top: 12px; }
 }
 
 // ─── Head: the title, Player | Explore (phones), Mine | Discover | Trends ──

@@ -132,7 +132,8 @@
     "communities": "Wir besuchen deine Communities…",
     "followers": "Wir schauen, wer dir gefolgt ist…",
     "watched": "Wir gehen durch, was du geschaut hast…",
-    "thumbnails": "Wir laden deine Thumbnails… {{done}} von {{total}}"
+    "thumbnails": "Wir laden deine Thumbnails… {{done}} von {{total}}",
+    "thumbnailsWaiting": "Deine Thumbnails werden geladen…"
   },
   "tips": {
     "label": "Tipp:",

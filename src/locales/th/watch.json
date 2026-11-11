@@ -16,7 +16,9 @@
     "translatedTo": "แปลเป็น{{language}}แล้ว",
     "showLanguage": "แสดง{{language}}",
     "showOriginal": "แสดงต้นฉบับ",
-    "buttonTitle": "สรุปวิดีโอนี้ด้วย AI"
+    "buttonTitle": "สรุปวิดีโอนี้ด้วย AI",
+    "jumpTo": "ข้ามไปที่",
+    "disclaimer": "สร้างจากข้อความถอดเสียง อาจมีข้อผิดพลาด"
   },
   "errors": {
     "notAvailable": "วิดีโอนี้ไม่พร้อมใช้งาน",
@@ -38,6 +40,16 @@
     "add": "เพิ่มรีแอ็กชัน"
   },
   "liveChat": "แชตสด",
+  "side": {
+    "label": "แผงวิดีโอ"
+  },
+  "voters": {
+    "title": "ผู้โหวต",
+    "cardLabel": "ผู้สนับสนุนและผู้โหวต",
+    "voter": "ผู้โหวต",
+    "weight": "น้ำหนัก",
+    "value": "มูลค่า"
+  },
   "moreVideos": "วิดีโอเพิ่มเติม",
   "vote": {
     "saveFailed": "บันทึกโหวตของคุณไม่ได้"
@@ -103,7 +115,8 @@
     "dismiss": "ปิด"
   },
   "community": {
-    "members_other": "สมาชิก {{count}} คน"
+    "members_other": "สมาชิก {{count}} คน",
+    "postedIn": "โพสต์ใน"
   },
   "tags": {
     "curated": "คัดสรรแล้ว"

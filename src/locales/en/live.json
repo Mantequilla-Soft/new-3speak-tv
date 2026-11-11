@@ -6,7 +6,7 @@
     "thisStreamEnded": "This stream has ended",
     "noLongerLive": "It is no longer live. Start a new one whenever you are ready.",
     "recordingProcessing": "Nice one! Your recording is being processed and will appear on the announcement post shortly.",
-    "thanksForLive": "Nice one — thanks for going live!",
+    "thanksForLive": "Nice one, thanks for going live!",
     "backHome": "Back to Home",
     "howWasStream": "How was your stream?",
     "connecting": "Connecting to OpenPods…",
@@ -54,11 +54,11 @@
       "spam": "Spam or scam",
       "other": "Something else"
     },
-    "sent": "Thanks — this stream has been reported to our team.",
+    "sent": "Thanks, this stream has been reported to our team.",
     "failed": "Could not send the report. Please try again.",
     "title": "Report this stream",
     "reporting": "Reporting <b>@{{host}}</b>.",
-    "intro": "Tell us what's wrong — our team reviews every report.",
+    "intro": "Tell us what's wrong. Our team reviews every report.",
     "detailPlaceholder": "Add any details (optional)",
     "sending": "Sending…",
     "submit": "Submit report"

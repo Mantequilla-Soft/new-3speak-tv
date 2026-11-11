@@ -584,7 +584,7 @@
     "yesterday": "Kahapon",
     "groups": {
       "video": "Mga Video",
-      "videoNote": "Isa bawat 5 minuto — ito ang mabagal na bahagi.",
+      "videoNote": "Isa bawat 5 minuto: ito ang mabagal na bahagi.",
       "short": "Shorts",
       "comment": "Mga Comment",
       "vote": "Mga Like",
@@ -627,7 +627,7 @@
     "fiveMin": "5 min",
     "waitingTitle": "Naghihintay sa iba",
     "waitingText": "Kusang ipa-publish ang mga ito kapag nasa Hive na ang post na tinutukoy nila. Walang mawawala habang naghihintay.",
-    "waitingFor": "<b>{{label}}</b> — hinihintay ang {{target}}",
+    "waitingFor": "<b>{{label}}</b>: hinihintay ang {{target}}",
     "andMore": "at {{count}} pa",
     "excludedTitle": "Hindi isasama"
   }

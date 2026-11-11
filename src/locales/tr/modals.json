@@ -54,7 +54,7 @@
     "verify": "Doğrula"
   },
   "auth": {
-    "title": "3Speak'i yetkilendir!",
+    "title": "3Speak'i yetkilendir",
     "text": "3Speak'e video yükleyebilmen için posting yetkine ihtiyacımız var. Bu, yüklediğin videoları Hive'da yayınlamamızı sağlar. Posting yetkisini yalnızca bir kez vermen yeterli.",
     "authorize": "Yetkilendir"
   },
@@ -69,7 +69,7 @@
       "duplicate": "Bu hesap zaten listede.",
       "invalidAccount": "Geçersiz kullanıcı adı veya topluluk kimliği.",
       "cannotIncrease": "Kalan %{{percent}} payın ötesine çıkılamaz",
-      "pendingRow": "@{{account}} henüz eklenmedi; eklemek için + düğmesine tıkla ya da alanı temizle.",
+      "pendingRow": "@{{account}} henüz eklenmedi. Eklemek için + düğmesine tıkla ya da alanı temizle.",
       "atLeastOne": "Ödül yüzdesi en az %1 olmalı",
       "maxCount": "Hive gönderi başına en fazla {{max}} lehtara izin verir."
     },
@@ -79,10 +79,10 @@
     "usernamePlaceholder": "Kullanıcı adını gir",
     "minimumReward": "En düşük ödül <strong>%1</strong>",
     "checking": "<strong>@{{account}}</strong> Hive'da kontrol ediliyor…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> mevcut bir Hive hesabı değil.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> henüz eklenmedi; eklemek için <strong>+</strong> düğmesine tıkla ya da alanı temizle.",
-    "infrastructure": "%10 === Altyapı",
-    "videoEncoding": "Video Kodlama === %1",
+    "notExisting": "<strong>@{{account}}</strong> mevcut bir Hive hesabı değil.",
+    "notAdded": "<strong>@{{account}}</strong> henüz eklenmedi. Eklemek için <strong>+</strong> düğmesine tıkla ya da alanı temizle.",
+    "infrastructure": "Altyapı: %10",
+    "videoEncoding": "Video Kodlama: %1",
     "defaults": "Varsayılan Lehtarlar ({{count}})"
   },
   "qr": {

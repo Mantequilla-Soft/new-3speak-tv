@@ -5,10 +5,12 @@
   "topicTitle": "Thema: {{topic}}",
   "watchingNow_one": "{{count}} schaut gerade zu",
   "watchingNow_other": "{{count}} schauen gerade zu",
+  "previewMuted": "Vorschau · stumm",
   "badges": {
     "gatedTitle": "Nur für Mitglieder. 3Speak Pro schaltet das ganze Video frei",
     "pro": "PRO",
     "new": "NEU",
+    "first": "Erstes",
     "live": "● LIVE",
     "liveChat": "● LIVE-CHAT",
     "spotlight": "Im Fokus"

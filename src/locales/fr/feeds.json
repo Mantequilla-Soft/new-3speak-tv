@@ -28,6 +28,10 @@
   },
   "newFromFollowing": {
     "aria": "Nouveautés des créateurs que vous suivez",
+    "summary_one": "{{count}} nouvelle vidéo",
+    "summary_many": "{{count}} nouvelles vidéos",
+    "summary_other": "{{count}} nouvelles vidéos",
+    "fromFollowing": "de personnes que vous suivez",
     "shorts_one": "{{count}} Short",
     "shorts_many": "{{count}} Shorts",
     "shorts_other": "{{count}} Shorts"
@@ -49,6 +53,9 @@
     "empty": "Rien à afficher pour l'instant.",
     "viewAll": "Tout voir",
     "dragToReorder": "Glisser pour réorganiser",
+    "customize": "Personnaliser",
+    "customizeTitle": "Personnaliser l'accueil",
+    "customizeHint": "Déplacez les sections vers le haut ou le bas. Désactivez celles que vous ne voulez pas.",
     "surfTitle": "Zapping : choisissez un thème et regardez-le comme la télé",
     "zapping": "Zapping"
   },

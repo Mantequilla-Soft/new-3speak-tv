@@ -22,6 +22,8 @@
     "memoPlaceholder": "例如：感谢这么棒的内容！",
     "memoLinkNote": "此链接会附加到备注中：{{link}}",
     "send": "打赏",
+    "sendAmount": "发送 {{amount}} {{currency}}",
+    "sentEyebrow": "打赏已发送",
     "lightning": {
       "amountLabel": "金额（sats）：",
       "messageLabel": "留言（可选）：",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "请登录以个性化你的信息流",
-    "notInterestedToast": "不感兴趣——我们会隐藏这个视频",
+    "notInterestedToast": "不感兴趣。我们会隐藏这个视频",
     "undo": "撤销",
     "cantHideOwn": "你不能隐藏自己的视频",
     "hidingCreatorToast": "将不再显示 @{{author}} 的视频",
@@ -140,7 +142,8 @@
     "pickTopic": "选择一个话题（计为 100% 点赞）",
     "submitTag": "提交标签",
     "tagThisVideoFull": "给这个视频打标签（计为 100% 点赞）",
-    "justTag": "不点赞——只打标签"
+    "justTag": "不点赞——只打标签",
+    "addsAbout": "约增加 {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "自动标记：{{tags}}",

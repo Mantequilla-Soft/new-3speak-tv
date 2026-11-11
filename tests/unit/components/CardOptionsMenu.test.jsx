@@ -147,7 +147,7 @@ describe('the card options menu', () => {
       expect(filters.hideVideo).toHaveBeenCalledWith('alice', 'bob', 'video-1')
 
       const [, opts] = toast.success.mock.calls.at(-1)
-      expect(opts.description).toBe("Not interested — we'll hide this video")
+      expect(opts.description).toBe("Not interested. We'll hide this video")
       expect(opts.action.label).toBe('Undo')
       act(() => opts.action.onClick())
       expect(filters.unhideVideo).toHaveBeenCalledWith('alice', 'bob', 'video-1')

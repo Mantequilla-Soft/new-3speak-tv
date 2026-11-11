@@ -102,7 +102,11 @@
     "chapterLink": "Link ng kabanata",
     "upNext": "Susunod",
     "hideIdle": "Itago (mananatili ang queue mo)",
-    "continueAt": "Ituloy sa {{time}}"
+    "continueAt": "Ituloy sa {{time}}",
+    "position": "{{current}} sa {{total}}",
+    "playingFrom": "Nagpe-play mula sa {{name}}",
+    "atThisMoment": "Sa sandaling ito",
+    "goTo": "Pumunta sa {{name}}"
   },
   "share": {
     "failed": "Pumalya",
@@ -233,7 +237,7 @@
     },
     "source": {
       "dropHere": "I-drop dito ang mga audio file, o i-click para mag-browse",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — puwede ang marami",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (puwede ang marami)",
       "stop": "Itigil",
       "orRecord": "O mag-record nang live",
       "recordLimit": "Hanggang {{minutes}} min bawat recording",

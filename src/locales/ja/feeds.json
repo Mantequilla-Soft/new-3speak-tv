@@ -28,6 +28,8 @@
   },
   "newFromFollowing": {
     "aria": "フォロー中のクリエイターの新着",
+    "summary_other": "新着動画 {{count}} 本",
+    "fromFollowing": "フォロー中の人から",
     "shorts_other": "ショート {{count}} 本"
   },
   "firstUploads": {
@@ -47,6 +49,9 @@
     "empty": "まだ表示するものがありません。",
     "viewAll": "すべて表示",
     "dragToReorder": "ドラッグして並べ替え",
+    "customize": "カスタマイズ",
+    "customizeTitle": "ホームをカスタマイズ",
+    "customizeHint": "セクションを上下に移動できます。不要なものはオフにしましょう。",
     "surfTitle": "チャンネルサーフィン: トピックを選んでテレビのように見る",
     "zapping": "ザッピング"
   },

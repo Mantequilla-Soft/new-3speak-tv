@@ -55,6 +55,7 @@
     "items_other": "{{count}} öğe",
     "created": "Oluşturuldu: {{when}}",
     "podcastFeed": "Podcast akışı",
+    "playAll": "Tümünü oynat",
     "podcastFeedTitle": "{{name}} listesini istediğin podcast uygulamasında takip et (RSS akışı)",
     "album": {
       "genre": "<strong>Tür:</strong> {{value}}",

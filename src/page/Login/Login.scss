@@ -7,7 +7,8 @@
   place-items: center;
   width: 100%;
   min-height: 80vh;
-  padding: var(--page-pad);
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
 
   .main-login-keywrapper {
     @include v2.card;

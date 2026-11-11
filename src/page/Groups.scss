@@ -5,10 +5,9 @@
 .groups-page {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 32px var(--page-pad) 48px;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0 0 48px;
   color: var(--text);
-
-  @include v2.mobile { padding-top: 16px; }
 }
 
 .groups-head {

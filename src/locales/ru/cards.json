@@ -7,10 +7,12 @@
   "watchingNow_few": "{{count}} зрителя сейчас",
   "watchingNow_many": "{{count}} зрителей сейчас",
   "watchingNow_other": "{{count}} зрителя сейчас",
+  "previewMuted": "Превью · без звука",
   "badges": {
     "gatedTitle": "Только для участников. 3Speak Pro открывает полное видео",
     "pro": "PRO",
     "new": "НОВОЕ",
+    "first": "Первое",
     "live": "● ЭФИР",
     "liveChat": "● ЧАТ В ЭФИРЕ",
     "spotlight": "В фокусе"

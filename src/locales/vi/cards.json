@@ -4,10 +4,12 @@
   "thumbnailAlt": "hình thu nhỏ",
   "topicTitle": "Chủ đề: {{topic}}",
   "watchingNow_other": "{{count}} người đang xem",
+  "previewMuted": "Xem trước · tắt tiếng",
   "badges": {
     "gatedTitle": "Chỉ dành cho thành viên. 3Speak Pro mở khóa toàn bộ video",
     "pro": "PRO",
     "new": "MỚI",
+    "first": "Đầu tay",
     "live": "● TRỰC TIẾP",
     "liveChat": "● CHAT TRỰC TIẾP",
     "spotlight": "Tiêu điểm"

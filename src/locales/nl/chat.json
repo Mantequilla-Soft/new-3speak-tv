@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Afbeelding toevoegen",
     "searchEmoji": "Emoji zoeken",
     "searchGifs": "GIF's zoeken…",
     "noGifs": "Geen GIF's gevonden.",
@@ -41,7 +42,7 @@
   },
   "gate": {
     "connectTitle": "Verbinden met 3Speak Chat",
-    "connectBody": "Chat werkt met Snapie. Bij het verbinden onderteken je eenmalig een inlog-challenge met je Hive posting key — geen transactie, geen kosten.",
+    "connectBody": "Chat werkt met Snapie. Bij het verbinden onderteken je eenmalig een inlog-challenge met je Hive posting key (geen transactie, geen kosten).",
     "connecting": "Verbinden…",
     "connectButton": "Chat verbinden",
     "cannotSign": "Je huidige login kan de chat-challenge niet ondertekenen. Gebruik Keychain, HiveAuth, PeakVault of Ledger.",
@@ -117,7 +118,7 @@
     "deleteError": "Het bericht kon niet worden verwijderd.",
     "back": "Terug naar gesprekken",
     "loading": "Berichten laden…",
-    "empty": "Nog geen berichten — zeg hoi 👋",
+    "empty": "Nog geen berichten. Zeg hoi 👋",
     "editedSuffix": " · bewerkt",
     "messageActions": "Berichtacties",
     "quote": "Citeren",

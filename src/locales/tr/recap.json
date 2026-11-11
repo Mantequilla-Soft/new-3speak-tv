@@ -132,7 +132,8 @@
     "communities": "Toplulukların ziyaret ediliyor…",
     "followers": "Seni kimlerin takip ettiğine bakılıyor…",
     "watched": "İzlediklerin gözden geçiriliyor…",
-    "thumbnails": "Küçük resimler yükleniyor… {{done}} / {{total}}"
+    "thumbnails": "Küçük resimler yükleniyor… {{done}} / {{total}}",
+    "thumbnailsWaiting": "Küçük resimlerin yükleniyor…"
   },
   "tips": {
     "label": "İpucu:",

@@ -132,6 +132,9 @@
     "uploadingImage": "Đang tải hình ảnh lên",
     "write": "Viết",
     "preview": "Xem trước",
-    "nothingToPreview": "Chưa có gì để xem trước"
+    "nothingToPreview": "Chưa có gì để xem trước",
+    "creator": "Nhà sáng tạo",
+    "empty": "Chưa có bình luận nào",
+    "emptyHint": "Bình luận gắn với một khoảnh khắc sẽ hiện trên dòng thời gian của video."
   }
 }

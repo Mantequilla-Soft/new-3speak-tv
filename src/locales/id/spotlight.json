@@ -208,7 +208,7 @@
       "imageUploadFailed": "Gagal mengunggah gambar: {{error}}",
       "tryAgain": "coba lagi",
       "styleApplied": "Gaya diterapkan ke semua blok {{type}}",
-      "templateApplied": "“{{name}}” diterapkan — sesuaikan atau Urungkan",
+      "templateApplied": "“{{name}}” diterapkan. Sesuaikan atau Urungkan.",
       "reverted": "Dikembalikan ke desainmu sebelumnya",
       "saved": "Spotlight disimpan ke profil Hive-mu",
       "saveFailed": "Tidak dapat menyimpan",
@@ -224,7 +224,7 @@
       "phone": "Telepon",
       "platformGroup": "Platform",
       "yourname": "namamu",
-      "platformIconHint": "Ikonnya adalah logo {{platform}} — ganti ke “Situs web / URL” untuk memilih ikon sendiri.",
+      "platformIconHint": "Ikonnya adalah logo {{platform}}. Ganti ke “Situs web / URL” untuk memilih ikon sendiri.",
       "icon": "Ikon",
       "iconColor": "Warna ikon",
       "iconBg": "Latar ikon"
@@ -263,9 +263,9 @@
       "showPosts_other": "Tampilkan {{count}} postingan",
       "perRow": "{{value}} per baris",
       "hiveRecentHint": "Postingan tingkat atas terbarumu (tanpa reblog atau cross-post). Diperbarui otomatis.",
-      "linkPlaceholder": "Tempel tautan apa saja — postingan Hive, Instagram, X, YouTube, artikel…",
+      "linkPlaceholder": "Tempel tautan apa saja: postingan Hive, Instagram, X, YouTube, artikel…",
       "fetching": "Mengambil pratinjau…",
-      "noPreview": "Pratinjau tidak ditemukan — tetap akan tampil sebagai kartu tautan.",
+      "noPreview": "Pratinjau tidak ditemukan. Tautan tetap akan tampil sebagai kartu tautan.",
       "pasteHint": "Tempel tautan dan kami akan mengambil judul, deskripsi & gambarnya."
     },
     "style": {
@@ -294,8 +294,8 @@
     "openPage": "Buka halaman",
     "templates": {
       "title": "Template",
-      "hint": "Pilih desain untuk mengisi semuanya — bio-mu tetap disimpan, dan kamu bisa Urungkan.",
-      "undo": "Urungkan template — kembali ke desainku"
+      "hint": "Pilih desain untuk mengisi semuanya. Bio-mu tetap disimpan, dan kamu bisa Urungkan.",
+      "undo": "Urungkan template, kembali ke desainku"
     },
     "profile": {
       "title": "Profil",

@@ -41,12 +41,18 @@
   "glow": {
     "subtle": "Lumière ambiante : subtile",
     "vivid": "Lumière ambiante : vive",
-    "off": "Lumière ambiante : désactivée"
+    "off": "Lumière ambiante : désactivée",
+    "label": "Lumière ambiante",
+    "offShort": "Désactivée",
+    "subtleShort": "Subtile",
+    "vividShort": "Vive"
   },
   "playbackMode": {
     "autoReplay": "Relecture auto",
     "autoSwipe": "Défilement auto",
-    "manual": "Manuel"
+    "manual": "Manuel",
+    "label": "Lecture",
+    "options": "Options de lecture"
   },
   "subtitles": {
     "off": "Désactivés"

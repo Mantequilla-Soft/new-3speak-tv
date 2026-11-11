@@ -144,7 +144,8 @@
     "communities": "Visite de vos communautés…",
     "followers": "On regarde qui vous a suivi…",
     "watched": "On parcourt ce que vous avez regardé…",
-    "thumbnails": "Chargement de vos miniatures… {{done}} sur {{total}}"
+    "thumbnails": "Chargement de vos miniatures… {{done}} sur {{total}}",
+    "thumbnailsWaiting": "Chargement de vos miniatures…"
   },
   "tips": {
     "label": "Astuce :",

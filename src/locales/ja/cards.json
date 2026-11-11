@@ -4,10 +4,12 @@
   "thumbnailAlt": "サムネイル",
   "topicTitle": "トピック: {{topic}}",
   "watchingNow_other": "{{count}} 人が視聴中",
+  "previewMuted": "プレビュー · ミュート",
   "badges": {
     "gatedTitle": "メンバー限定。3Speak Pro で動画全編が見られます",
     "pro": "PRO",
     "new": "NEW",
+    "first": "初投稿",
     "live": "● LIVE",
     "liveChat": "● LIVE チャット",
     "spotlight": "スポットライト"

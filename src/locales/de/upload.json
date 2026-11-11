@@ -438,6 +438,7 @@
     "portrait": "Hochformat",
     "landscape": "Querformat",
     "autoDetect": "Automatisch erkennen ({{lang}})",
+    "layout": "Layout",
     "presets": {
       "frontcam": "Frontkamera",
       "frontcamTitle": "Schmaler Streifen unter der Selfie-Linse – am wenigsten auffällig, dass du abliest",

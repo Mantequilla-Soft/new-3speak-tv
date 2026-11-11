@@ -208,7 +208,7 @@
       "imageUploadFailed": "Kupakia picha kumeshindwa: {{error}}",
       "tryAgain": "jaribu tena",
       "styleApplied": "Mtindo umetumika kwa vizuizi vyote vya {{type}}",
-      "templateApplied": "“{{name}}” imetumika — irekebishe au Tendua",
+      "templateApplied": "“{{name}}” imetumika. Irekebishe au Tendua.",
       "reverted": "Imerudi kwenye muundo wako wa awali",
       "saved": "Spotlight imehifadhiwa kwenye wasifu wako wa Hive",
       "saveFailed": "Imeshindwa kuhifadhi",
@@ -224,7 +224,7 @@
       "phone": "Simu",
       "platformGroup": "Jukwaa",
       "yourname": "jinalako",
-      "platformIconHint": "Ikoni ni nembo ya {{platform}} — badili kwenda “Tovuti / URL” ili kuchagua ikoni maalum.",
+      "platformIconHint": "Ikoni ni nembo ya {{platform}}. Badili kwenda “Tovuti / URL” ili kuchagua ikoni maalum.",
       "icon": "Ikoni",
       "iconColor": "Rangi ya ikoni",
       "iconBg": "Mandharinyuma ya ikoni"
@@ -264,9 +264,9 @@
       "showPosts_other": "Onyesha machapisho {{count}}",
       "perRow": "{{value}} kwa kila safu",
       "hiveRecentHint": "Machapisho yako ya karibuni ya ngazi ya juu (bila reblogs wala machapisho mtambuka). Husasishwa kiotomatiki.",
-      "linkPlaceholder": "Bandika kiungo chochote — chapisho la Hive, Instagram, X, YouTube, makala…",
+      "linkPlaceholder": "Bandika kiungo chochote: chapisho la Hive, Instagram, X, YouTube, makala…",
       "fetching": "Inapata onyesho…",
-      "noPreview": "Hakuna onyesho lililopatikana — bado kitaonyeshwa kama kadi ya kiungo.",
+      "noPreview": "Hakuna onyesho lililopatikana. Bado kitaonyeshwa kama kadi ya kiungo.",
       "pasteHint": "Bandika kiungo na tutaleta kichwa, maelezo na picha yake."
     },
     "style": {
@@ -295,8 +295,8 @@
     "openPage": "Fungua ukurasa",
     "templates": {
       "title": "Violezo",
-      "hint": "Chagua muundo ili kujaza kila kitu — bio yako inabaki, na unaweza Kutendua.",
-      "undo": "Tendua kiolezo — rudi kwenye muundo wangu"
+      "hint": "Chagua muundo ili kujaza kila kitu. Bio yako inabaki, na unaweza Kutendua.",
+      "undo": "Tendua kiolezo, rudi kwenye muundo wangu"
     },
     "profile": {
       "title": "Wasifu",

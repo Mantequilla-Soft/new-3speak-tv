@@ -652,7 +652,7 @@
     "yesterday": "Wczoraj",
     "groups": {
       "video": "Filmy",
-      "videoNote": "Jeden co 5 minut — to ta wolna część.",
+      "videoNote": "Jeden co 5 minut: to ta wolna część.",
       "short": "Shorts",
       "comment": "Komentarze",
       "vote": "Polubienia",
@@ -699,7 +699,7 @@
     "fiveMin": "5 min",
     "waitingTitle": "Czeka na kogoś innego",
     "waitingText": "Opublikują się same, gdy post, do którego się odnoszą, pojawi się na Hive. W międzyczasie nic nie przepada.",
-    "waitingFor": "<b>{{label}}</b> — czeka na {{target}}",
+    "waitingFor": "<b>{{label}}</b>: czeka na {{target}}",
     "andMore": "i {{count}} więcej",
     "excludedTitle": "Nie zostaną przeniesione"
   }

@@ -208,7 +208,7 @@
       "imageUploadFailed": "Échec de l'envoi de l'image : {{error}}",
       "tryAgain": "réessayez",
       "styleApplied": "Style appliqué à tous les blocs {{type}}",
-      "templateApplied": "« {{name}} » appliqué — ajustez ou annulez",
+      "templateApplied": "« {{name}} » appliqué. Ajustez-le ou annulez.",
       "reverted": "Retour à votre design précédent",
       "saved": "Spotlight enregistré dans votre profil Hive",
       "saveFailed": "Impossible d'enregistrer",
@@ -224,7 +224,7 @@
       "phone": "Téléphone",
       "platformGroup": "Plateforme",
       "yourname": "votrenom",
-      "platformIconHint": "L'icône est le logo {{platform}} — passez à « Site web / URL » pour choisir une icône personnalisée.",
+      "platformIconHint": "L'icône est le logo {{platform}}. Passez à « Site web / URL » pour choisir une icône personnalisée.",
       "icon": "Icône",
       "iconColor": "Couleur de l'icône",
       "iconBg": "Fond de l'icône"
@@ -265,9 +265,9 @@
       "showPosts_other": "Afficher {{count}} publications",
       "perRow": "{{value}} par ligne",
       "hiveRecentHint": "Vos publications principales les plus récentes (sans reblogs ni cross-posts). Mise à jour automatique.",
-      "linkPlaceholder": "Collez n'importe quel lien — publication Hive, Instagram, X, YouTube, article…",
+      "linkPlaceholder": "Collez n'importe quel lien : publication Hive, Instagram, X, YouTube, article…",
       "fetching": "Récupération de l'aperçu…",
-      "noPreview": "Aucun aperçu trouvé — il s'affichera quand même comme carte de lien.",
+      "noPreview": "Aucun aperçu trouvé. Il s'affichera quand même comme carte de lien.",
       "pasteHint": "Collez un lien et nous récupérerons son titre, sa description et son image."
     },
     "style": {
@@ -296,8 +296,8 @@
     "openPage": "Ouvrir la page",
     "templates": {
       "title": "Modèles",
-      "hint": "Choisissez un design pour tout remplir — votre bio est conservée, et vous pouvez annuler.",
-      "undo": "Annuler le modèle — revenir à mon design"
+      "hint": "Choisissez un design pour tout remplir. Votre bio est conservée, et vous pouvez annuler.",
+      "undo": "Annuler le modèle, revenir à mon design"
     },
     "profile": {
       "title": "Profil",

@@ -6,7 +6,8 @@
 .edit-scheduled-page {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: var(--page-pad);
+  // The app column (or the dialog body, in EditScheduledModal) gives the padding.
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;

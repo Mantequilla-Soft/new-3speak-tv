@@ -39,12 +39,18 @@
   "glow": {
     "subtle": "アンビエントライト: 控えめ",
     "vivid": "アンビエントライト: 鮮やか",
-    "off": "アンビエントライト: オフ"
+    "off": "アンビエントライト: オフ",
+    "label": "アンビエントライト",
+    "offShort": "オフ",
+    "subtleShort": "控えめ",
+    "vividShort": "鮮やか"
   },
   "playbackMode": {
     "autoReplay": "自動リプレイ",
     "autoSwipe": "自動スワイプ",
-    "manual": "手動"
+    "manual": "手動",
+    "label": "再生",
+    "options": "再生オプション"
   },
   "subtitles": {
     "off": "オフ"

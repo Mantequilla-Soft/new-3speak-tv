@@ -142,6 +142,9 @@
     "uploadingImage": "Caricamento immagine",
     "write": "Scrivi",
     "preview": "Anteprima",
-    "nothingToPreview": "Ancora niente da mostrare in anteprima"
+    "nothingToPreview": "Ancora niente da mostrare in anteprima",
+    "creator": "Creator",
+    "empty": "Ancora nessun commento",
+    "emptyHint": "I commenti legati a un momento compaiono sulla timeline del video."
   }
 }

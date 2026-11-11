@@ -120,7 +120,8 @@
     "communities": "Đang ghé các cộng đồng của bạn…",
     "followers": "Đang xem ai đã theo dõi bạn…",
     "watched": "Đang xem lại những gì bạn đã xem…",
-    "thumbnails": "Đang tải ảnh thu nhỏ… {{done}}/{{total}}"
+    "thumbnails": "Đang tải ảnh thu nhỏ… {{done}}/{{total}}",
+    "thumbnailsWaiting": "Đang tải ảnh thu nhỏ của bạn…"
   },
   "tips": {
     "label": "Mẹo:",

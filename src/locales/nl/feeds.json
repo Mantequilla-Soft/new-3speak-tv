@@ -28,6 +28,9 @@
   },
   "newFromFollowing": {
     "aria": "Nieuw van makers die je volgt",
+    "summary_one": "{{count}} nieuwe video",
+    "summary_other": "{{count}} nieuwe video's",
+    "fromFollowing": "van mensen die je volgt",
     "shorts_one": "{{count}} short",
     "shorts_other": "{{count}} Shorts"
   },
@@ -48,6 +51,9 @@
     "empty": "Hier is nog niets te zien.",
     "viewAll": "Alles bekijken",
     "dragToReorder": "Sleep om de volgorde te wijzigen",
+    "customize": "Aanpassen",
+    "customizeTitle": "Startpagina aanpassen",
+    "customizeHint": "Zet onderdelen hoger of lager. Zet uit wat je niet wilt.",
     "surfTitle": "Zappen: kies een onderwerp en kijk zoals naar tv",
     "zapping": "Zappen"
   },

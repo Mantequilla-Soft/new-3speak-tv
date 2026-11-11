@@ -52,6 +52,7 @@
     "items_other": "{{count}} รายการ",
     "created": "สร้างเมื่อ {{when}}",
     "podcastFeed": "ฟีดพอดแคสต์",
+    "playAll": "เล่นทั้งหมด",
     "podcastFeedTitle": "ติดตาม {{name}} ในแอปพอดแคสต์ใดก็ได้ (ฟีด RSS)",
     "album": {
       "genre": "<strong>แนวเพลง:</strong> {{value}}",

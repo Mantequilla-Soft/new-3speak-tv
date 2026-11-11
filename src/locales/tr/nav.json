@@ -38,6 +38,8 @@
     "myChannelAria": "Kanalım",
     "vpTooltip": "Oy Gücü: bir sonraki oyunun ne kadar ağırlık taşıdığı",
     "rcTooltip": "Resource Credits: Hive'daki işlemlerinin maliyeti",
+    "votingPower": "Oy Gücü",
+    "resourceCredits": "Resource Credits",
     "myChannel": "Kanalım",
     "publishBacklog": "Bekleyenleri yayınla",
     "analytics": "Analiz",

@@ -5,10 +5,12 @@
   "topicTitle": "Paksa: {{topic}}",
   "watchingNow_one": "{{count}} ang nanonood ngayon",
   "watchingNow_other": "{{count}} ang nanonood ngayon",
+  "previewMuted": "Preview · naka-mute",
   "badges": {
     "gatedTitle": "Para lang sa mga miyembro. Binubuksan ng 3Speak Pro ang buong video",
     "pro": "PRO",
     "new": "BAGO",
+    "first": "Una",
     "live": "● LIVE",
     "liveChat": "● LIVE CHAT",
     "spotlight": "Tampok"

@@ -21,6 +21,7 @@
     "followers_one": "{{num}} Follower",
     "followers_other": "{{num}} Follower",
     "popularTitle": "Beliebte Creator",
+    "suggestedTitle": "Creator zum Folgen",
     "scrollLeft": "Nach links scrollen",
     "scrollRight": "Nach rechts scrollen",
     "mostlyPosts": "Postet vor allem {{topic}}"
@@ -230,7 +231,11 @@
     "loginToUpload": "Melde dich an, um ein Video hochzuladen",
     "linkExternalTitle": "Externes Profil verknüpfen",
     "addProfile": "Profil hinzufügen",
-    "editTitle": "Bild, Name, Bio und Standort bearbeiten"
+    "editTitle": "Bild, Name, Bio und Standort bearbeiten",
+    "more": "Mehr",
+    "moreActions": "Weitere Aktionen für @{{user}}",
+    "copyProfileLink": "Profillink kopieren",
+    "podcastFeed": "Podcast-Feed (RSS)"
   },
   "tabs": {
     "overview": "Übersicht",

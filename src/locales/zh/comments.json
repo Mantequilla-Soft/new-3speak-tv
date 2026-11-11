@@ -132,6 +132,9 @@
     "uploadingImage": "正在上传图片",
     "write": "编写",
     "preview": "预览",
-    "nothingToPreview": "暂无可预览的内容"
+    "nothingToPreview": "暂无可预览的内容",
+    "creator": "创作者",
+    "empty": "还没有评论",
+    "emptyHint": "关联到某个时间点的评论会显示在视频的时间轴上。"
   }
 }

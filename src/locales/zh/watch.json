@@ -16,7 +16,9 @@
     "translatedTo": "已翻译为{{language}}",
     "showLanguage": "显示{{language}}",
     "showOriginal": "显示原文",
-    "buttonTitle": "这个视频的 AI 摘要"
+    "buttonTitle": "这个视频的 AI 摘要",
+    "jumpTo": "跳转到",
+    "disclaimer": "根据文字稿生成，可能存在错误。"
   },
   "errors": {
     "notAvailable": "该视频不可用。",
@@ -38,6 +40,16 @@
     "add": "添加回应"
   },
   "liveChat": "直播聊天",
+  "side": {
+    "label": "视频面板"
+  },
+  "voters": {
+    "title": "点赞者",
+    "cardLabel": "支持者和点赞者",
+    "voter": "点赞者",
+    "weight": "权重",
+    "value": "价值"
+  },
   "moreVideos": "更多视频",
   "vote": {
     "saveFailed": "无法保存你的点赞"
@@ -103,7 +115,8 @@
     "dismiss": "关闭"
   },
   "community": {
-    "members_other": "{{count}} 位成员"
+    "members_other": "{{count}} 位成员",
+    "postedIn": "发布于"
   },
   "tags": {
     "curated": "精选"

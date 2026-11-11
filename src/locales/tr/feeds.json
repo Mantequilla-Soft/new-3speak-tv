@@ -28,6 +28,9 @@
   },
   "newFromFollowing": {
     "aria": "Takip ettiğin içerik üreticilerinden yeni",
+    "summary_one": "{{count}} yeni video",
+    "summary_other": "{{count}} yeni video",
+    "fromFollowing": "takip ettiğin kişilerden",
     "shorts_one": "{{count}} short",
     "shorts_other": "{{count}} short"
   },
@@ -48,6 +51,9 @@
     "empty": "Burada henüz gösterilecek bir şey yok.",
     "viewAll": "Tümünü gör",
     "dragToReorder": "Sıralamak için sürükle",
+    "customize": "Özelleştir",
+    "customizeTitle": "Ana sayfayı özelleştir",
+    "customizeHint": "Bölümleri yukarı veya aşağı taşı. İstemediklerini kapat.",
     "surfTitle": "Kanal Gezintisi: bir konu seç ve TV gibi izle",
     "zapping": "Zapping"
   },

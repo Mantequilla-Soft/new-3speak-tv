@@ -31,7 +31,8 @@
   padding: 8px 0 16px;
   background: var(--bg);
 
-  @include v2.mobile { top: 0; padding: 6px 0 12px; gap: 10px; }
+  // Sits under the mobile top bar too (top: 0 hid the search field behind it)
+  @include v2.mobile { padding: 6px 0 12px; gap: 10px; }
 }
 
 // ── The search field (21a): 64 tall, radius 20, accent ring while focused ──
@@ -217,6 +218,7 @@
   flex-direction: column;
   gap: 12px;
   padding: 16px;
+  margin-bottom: 16px;
   border-radius: var(--r-2xl);
   background: var(--surface);
   border: 1px solid var(--border);

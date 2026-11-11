@@ -100,7 +100,11 @@
     "chapterLink": "챕터 링크",
     "upNext": "다음 재생",
     "hideIdle": "숨기기 (대기열은 유지됨)",
-    "continueAt": "{{time}}부터 계속"
+    "continueAt": "{{time}}부터 계속",
+    "position": "{{current}} / {{total}}",
+    "playingFrom": "{{name}}에서 재생 중",
+    "atThisMoment": "지금 이 순간",
+    "goTo": "{{name}}(으)로 이동"
   },
   "share": {
     "failed": "실패",
@@ -227,7 +231,7 @@
     },
     "source": {
       "dropHere": "오디오 파일을 여기에 놓거나 클릭해서 찾아보세요",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — 여러 개 가능",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (여러 개 가능)",
       "stop": "중지",
       "orRecord": "또는 라이브로 녹음",
       "recordLimit": "녹음당 최대 {{minutes}}분",

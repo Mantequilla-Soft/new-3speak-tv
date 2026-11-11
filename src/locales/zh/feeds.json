@@ -28,6 +28,8 @@
   },
   "newFromFollowing": {
     "aria": "你关注的创作者的新内容",
+    "summary_other": "{{count}} 个新视频",
+    "fromFollowing": "来自你关注的人",
     "shorts_other": "{{count}} 个短视频"
   },
   "firstUploads": {
@@ -47,6 +49,9 @@
     "empty": "这里暂时没有内容。",
     "viewAll": "查看全部",
     "dragToReorder": "拖动以调整顺序",
+    "customize": "自定义",
+    "customizeTitle": "自定义首页",
+    "customizeHint": "上下移动各个版块，不想要的可以关闭。",
     "surfTitle": "随心换台：选个话题，像看电视一样看",
     "zapping": "换台中"
   },

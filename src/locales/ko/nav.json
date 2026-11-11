@@ -38,6 +38,8 @@
     "myChannelAria": "내 채널",
     "vpTooltip": "보팅 파워: 다음 투표가 가지는 영향력",
     "rcTooltip": "리소스 크레딧: Hive에서 하는 활동의 비용",
+    "votingPower": "보팅 파워",
+    "resourceCredits": "리소스 크레딧",
     "myChannel": "내 채널",
     "publishBacklog": "미게시 동영상 게시",
     "analytics": "분석",

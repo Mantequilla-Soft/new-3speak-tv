@@ -16,7 +16,9 @@
     "translatedTo": "Isinalin sa {{language}}",
     "showLanguage": "Ipakita sa {{language}}",
     "showOriginal": "Ipakita ang original",
-    "buttonTitle": "AI na buod ng video na ito"
+    "buttonTitle": "AI na buod ng video na ito",
+    "jumpTo": "Tumalon sa",
+    "disclaimer": "Ginawa mula sa transcript. Puwedeng may mali."
   },
   "errors": {
     "notAvailable": "Hindi available ang video na ito.",
@@ -38,6 +40,16 @@
     "add": "Magdagdag ng Reaction"
   },
   "liveChat": "Live chat",
+  "side": {
+    "label": "Mga panel ng video"
+  },
+  "voters": {
+    "title": "Mga voter",
+    "cardLabel": "Mga supporter at voter",
+    "voter": "Voter",
+    "weight": "Bigat",
+    "value": "Halaga"
+  },
   "moreVideos": "Iba pang video",
   "vote": {
     "saveFailed": "Hindi ma-save ang vote mo"
@@ -104,7 +116,8 @@
   },
   "community": {
     "members_one": "{{count}} Member",
-    "members_other": "{{count}} Members"
+    "members_other": "{{count}} Members",
+    "postedIn": "Na-post sa"
   },
   "tags": {
     "curated": "Curated"

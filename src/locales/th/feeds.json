@@ -28,6 +28,8 @@
   },
   "newFromFollowing": {
     "aria": "ใหม่จากครีเอเตอร์ที่คุณติดตาม",
+    "summary_other": "วิดีโอใหม่ {{count}} รายการ",
+    "fromFollowing": "จากคนที่คุณติดตาม",
     "shorts_other": "{{count}} Shorts"
   },
   "firstUploads": {
@@ -47,6 +49,9 @@
     "empty": "ยังไม่มีอะไรให้แสดงที่นี่",
     "viewAll": "ดูทั้งหมด",
     "dragToReorder": "ลากเพื่อจัดลำดับ",
+    "customize": "ปรับแต่ง",
+    "customizeTitle": "ปรับแต่งหน้าแรก",
+    "customizeHint": "เลื่อนส่วนต่างๆ ขึ้นหรือลง และปิดส่วนที่คุณไม่ต้องการ",
     "surfTitle": "Channel Surfing: เลือกหัวข้อแล้วดูเหมือนดูทีวี",
     "zapping": "กำลังเปลี่ยนช่อง"
   },

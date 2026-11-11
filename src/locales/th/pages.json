@@ -93,7 +93,8 @@
   "legal": {
     "pageTitle": "3Speak จัดการข้อมูลของคุณอย่างไร · 3Speak",
     "englishOnly": "หน้านี้มีเฉพาะภาษาอังกฤษ ฉบับภาษาอังกฤษเป็นฉบับที่มีผลผูกพัน",
-    "back": "← กลับไปที่ 3Speak"
+    "back": "← กลับไปที่ 3Speak",
+    "onThisPage": "ในหน้านี้"
   },
   "notFound": {
     "imageAlt": "404",

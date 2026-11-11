@@ -15,7 +15,7 @@
 
 .inc-profile-loading,
 .inc-profile-error {
-  padding: 32px var(--page-pad);
+  padding: 32px 0;
   @include v2.text(body);
   color: var(--muted);
 }

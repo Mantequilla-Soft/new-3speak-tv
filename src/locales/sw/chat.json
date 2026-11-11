@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Ongeza picha",
     "searchEmoji": "Tafuta emoji",
     "searchGifs": "Tafuta GIF…",
     "noGifs": "Hakuna GIF zilizopatikana.",
@@ -41,7 +42,7 @@
   },
   "gate": {
     "connectTitle": "Unganisha na Gumzo la 3Speak",
-    "connectBody": "Gumzo linaendeshwa na Snapie. Kuunganisha kunasaini changamoto ya kuingia ya mara moja kwa posting key yako ya Hive — hakuna muamala, hakuna gharama.",
+    "connectBody": "Gumzo linaendeshwa na Snapie. Kuunganisha kunasaini changamoto ya kuingia ya mara moja kwa posting key yako ya Hive (hakuna muamala, hakuna gharama).",
     "connecting": "Inaunganisha…",
     "connectButton": "Unganisha gumzo",
     "cannotSign": "Njia yako ya sasa ya kuingia haiwezi kusaini changamoto ya gumzo. Tumia Keychain, HiveAuth, PeakVault au Ledger.",
@@ -117,7 +118,7 @@
     "deleteError": "Imeshindwa kufuta ujumbe.",
     "back": "Rudi kwenye mazungumzo",
     "loading": "Inapakia ujumbe…",
-    "empty": "Bado hakuna ujumbe — sema habari 👋",
+    "empty": "Bado hakuna ujumbe. Sema habari 👋",
     "editedSuffix": " · imehaririwa",
     "messageActions": "Vitendo vya ujumbe",
     "quote": "Nukuu",

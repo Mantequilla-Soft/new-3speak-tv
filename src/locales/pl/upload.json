@@ -442,6 +442,7 @@
     "portrait": "Pionowo",
     "landscape": "Poziomo",
     "autoDetect": "Wykryj automatycznie ({{lang}})",
+    "layout": "Układ",
     "presets": {
       "frontcam": "Przednia kamera",
       "frontcamTitle": "Wąski pasek pod obiektywem selfie — najmniej widać, że czytasz",

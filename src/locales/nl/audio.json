@@ -102,7 +102,11 @@
     "chapterLink": "Link naar hoofdstuk",
     "upNext": "Hierna",
     "hideIdle": "Verbergen (je wachtrij blijft)",
-    "continueAt": "Verder bij {{time}}"
+    "continueAt": "Verder bij {{time}}",
+    "position": "{{current}} van {{total}}",
+    "playingFrom": "Speelt af uit {{name}}",
+    "atThisMoment": "Op dit moment",
+    "goTo": "Naar {{name}}"
   },
   "share": {
     "failed": "Mislukt",
@@ -233,7 +237,7 @@
     },
     "source": {
       "dropHere": "Zet audiobestanden hier neer, of klik om te bladeren",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — meerdere toegestaan",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (meerdere toegestaan)",
       "stop": "Stoppen",
       "orRecord": "Of neem live op",
       "recordLimit": "Maximaal {{minutes}} min per opname",

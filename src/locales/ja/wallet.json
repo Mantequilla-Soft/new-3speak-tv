@@ -28,7 +28,12 @@
     "recipientPlaceholder": "Hive ユーザー名を入力",
     "memoLabel": "メモ",
     "memoPlaceholder": "メモを入力",
-    "confirm": "送金を確定"
+    "confirm": "送金を確定",
+    "sendTo": "{{amount}} {{coin}} を @{{to}} に送る",
+    "sendAmount": "{{amount}} {{coin}} を送る",
+    "recent": "最近の送金先",
+    "activeKey": "アクティブキーが必要です",
+    "available": "利用可能: {{balance}}"
   },
   "history": {
     "loadFailed": "取引を読み込めませんでした",
@@ -46,5 +51,46 @@
       "received": "受取"
     },
     "claimedRewards": "請求した報酬"
+  },
+  "total": "残高合計",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "HBD 貯蓄"
+  },
+  "claim": {
+    "ready": "{{amount}} を受け取れます",
+    "readyShort": "{{amount}} 受取可",
+    "button": "受け取る",
+    "done": "報酬を受け取りました",
+    "failed": "受け取りに失敗しました: {{error}}"
+  },
+  "activity": {
+    "title": "アクティビティ",
+    "filters": {
+      "all": "すべて",
+      "rewards": "報酬",
+      "received": "受取",
+      "sent": "送金"
+    },
+    "from": "@{{user}} から",
+    "sentTo": "@{{user}} に送金",
+    "emptyTitle": "まだ何もありません",
+    "empty": "送金や受け取った報酬がここに表示されます。"
+  },
+  "earnings": {
+    "title": "収益（30 日間）",
+    "sub": "受け取った報酬と受け取った HIVE・HBD"
+  },
+  "rc": {
+    "title": "リソースクレジット",
+    "sub": "Hive での操作には毎回少し消費します。約 5 日で回復します。",
+    "posts_other": "今なら約 {{count}} 件投稿できます"
+  },
+  "receive": {
+    "title": "受け取る",
+    "sub": "どの Hive ウォレットからでも、このアカウント名あてに HIVE や HBD を送れます。メモは不要です。",
+    "copy": "アカウント名をコピー"
   }
 }

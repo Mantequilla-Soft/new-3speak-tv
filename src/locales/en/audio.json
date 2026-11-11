@@ -237,7 +237,7 @@
     },
     "source": {
       "dropHere": "Drop audio files here, or click to browse",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — multiple allowed",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (multiple allowed)",
       "stop": "Stop",
       "orRecord": "Or record live",
       "recordLimit": "Up to {{minutes}} min per recording",

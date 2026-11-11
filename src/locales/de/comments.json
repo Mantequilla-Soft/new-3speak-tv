@@ -137,6 +137,9 @@
     "uploadingImage": "Bild wird hochgeladen",
     "write": "Schreiben",
     "preview": "Vorschau",
-    "nothingToPreview": "Noch nichts für die Vorschau"
+    "nothingToPreview": "Noch nichts für die Vorschau",
+    "creator": "Creator",
+    "empty": "Noch keine Kommentare",
+    "emptyHint": "Kommentare zu einer bestimmten Stelle erscheinen auf der Zeitleiste des Videos."
   }
 }

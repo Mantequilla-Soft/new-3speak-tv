@@ -438,6 +438,7 @@
     "portrait": "Portrait",
     "landscape": "Landscape",
     "autoDetect": "Auto-detect ({{lang}})",
+    "layout": "Layout",
     "presets": {
       "frontcam": "Front cam",
       "frontcamTitle": "Maliit na strip sa ilalim ng selfie lens — pinakahindi halata na nagbabasa ka",

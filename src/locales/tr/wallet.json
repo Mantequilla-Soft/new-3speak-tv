@@ -28,7 +28,12 @@
     "recipientPlaceholder": "Hive kullanıcı adını gir",
     "memoLabel": "Not",
     "memoPlaceholder": "Not gir",
-    "confirm": "Transferi Onayla"
+    "confirm": "Transferi Onayla",
+    "sendTo": "@{{to}} hesabına {{amount}} {{coin}} gönder",
+    "sendAmount": "{{amount}} {{coin}} gönder",
+    "recent": "Son kullanılanlar",
+    "activeKey": "Active anahtarın gerekiyor",
+    "available": "Kullanılabilir: {{balance}}"
   },
   "history": {
     "loadFailed": "İşlemler yüklenemedi",
@@ -46,5 +51,47 @@
       "received": "Alındı"
     },
     "claimedRewards": "Alınan Ödüller"
+  },
+  "total": "Toplam bakiye",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "HBD birikimi"
+  },
+  "claim": {
+    "ready": "{{amount}} alınmaya hazır",
+    "readyShort": "Alınacak: {{amount}}",
+    "button": "Ödülleri al",
+    "done": "Ödüller alındı",
+    "failed": "Ödüller alınamadı: {{error}}"
+  },
+  "activity": {
+    "title": "Etkinlik",
+    "filters": {
+      "all": "Tümü",
+      "rewards": "Ödüller",
+      "received": "Alınan",
+      "sent": "Gönderilen"
+    },
+    "from": "@{{user}} hesabından",
+    "sentTo": "@{{user}} hesabına gönderildi",
+    "emptyTitle": "Burada henüz bir şey yok",
+    "empty": "Transferler ve alınan ödüller burada görünür."
+  },
+  "earnings": {
+    "title": "Kazançlar, 30 gün",
+    "sub": "Alınan ödüller ve gelen HIVE veya HBD"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Hive'daki her işlem bunlardan biraz kullanır. Yaklaşık 5 günde yeniden dolar.",
+    "posts_one": "Şu an yaklaşık {{count}} gönderiye yetecek kadar",
+    "posts_other": "Şu an yaklaşık {{count}} gönderiye yetecek kadar"
+  },
+  "receive": {
+    "title": "Al",
+    "sub": "Herkes herhangi bir Hive cüzdanından bu hesap adına HIVE veya HBD gönderebilir. Memo gerekmez.",
+    "copy": "Hesap adını kopyala"
   }
 }

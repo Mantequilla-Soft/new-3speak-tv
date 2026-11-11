@@ -137,6 +137,9 @@
     "uploadingImage": "Inapakia picha",
     "write": "Andika",
     "preview": "Hakiki",
-    "nothingToPreview": "Bado hakuna cha kuhakiki"
+    "nothingToPreview": "Bado hakuna cha kuhakiki",
+    "creator": "Mtayarishi",
+    "empty": "Bado hakuna maoni",
+    "emptyHint": "Maoni yaliyofungwa kwenye wakati fulani huonekana kwenye mfuatano wa muda wa video."
   }
 }

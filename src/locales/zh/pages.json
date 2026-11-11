@@ -93,7 +93,8 @@
   "legal": {
     "pageTitle": "3Speak 如何处理你的数据 · 3Speak",
     "englishOnly": "此页面仅提供英文版本。以英文版本为准。",
-    "back": "← 返回 3Speak"
+    "back": "← 返回 3Speak",
+    "onThisPage": "本页内容"
   },
   "notFound": {
     "imageAlt": "404",

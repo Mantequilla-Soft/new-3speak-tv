@@ -440,6 +440,7 @@
     "portrait": "Retrato",
     "landscape": "Paisagem",
     "autoDetect": "Detectar automaticamente ({{lang}})",
+    "layout": "Layout",
     "presets": {
       "frontcam": "Câmera frontal",
       "frontcamTitle": "Faixa pequena logo abaixo da lente da selfie — menos perceptível que você está lendo",

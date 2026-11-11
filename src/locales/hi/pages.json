@@ -93,7 +93,8 @@
   "legal": {
     "pageTitle": "3Speak आपके डेटा को कैसे संभालता है · 3Speak",
     "englishOnly": "यह पेज सिर्फ़ अंग्रेज़ी में उपलब्ध है। अंग्रेज़ी संस्करण ही मान्य है।",
-    "back": "← 3Speak पर वापस"
+    "back": "← 3Speak पर वापस",
+    "onThisPage": "इस पेज पर"
   },
   "notFound": {
     "imageAlt": "404",

@@ -38,6 +38,8 @@
     "myChannelAria": "Mi canal",
     "vpTooltip": "Poder de voto: cuánto peso tiene tu próximo voto",
     "rcTooltip": "Resource Credits (RC): lo que cuestan tus acciones en Hive",
+    "votingPower": "Poder de voto",
+    "resourceCredits": "Resource Credits",
     "myChannel": "Mi canal",
     "publishBacklog": "Publicar pendientes",
     "analytics": "Estadísticas",

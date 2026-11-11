@@ -16,7 +16,9 @@
     "translatedTo": "{{language}}-এ অনূদিত",
     "showLanguage": "{{language}} দেখান",
     "showOriginal": "মূল লেখা দেখান",
-    "buttonTitle": "এই ভিডিওর AI সারসংক্ষেপ"
+    "buttonTitle": "এই ভিডিওর AI সারসংক্ষেপ",
+    "jumpTo": "সরাসরি যান",
+    "disclaimer": "ট্রান্সক্রিপ্ট থেকে তৈরি। এতে ভুল থাকতে পারে।"
   },
   "errors": {
     "notAvailable": "এই ভিডিওটি পাওয়া যাচ্ছে না।",
@@ -38,6 +40,16 @@
     "add": "রিঅ্যাকশন যোগ করুন"
   },
   "liveChat": "লাইভ চ্যাট",
+  "side": {
+    "label": "ভিডিও প্যানেল"
+  },
+  "voters": {
+    "title": "ভোটার",
+    "cardLabel": "সমর্থক ও ভোটার",
+    "voter": "ভোটার",
+    "weight": "ওজন",
+    "value": "মূল্য"
+  },
   "moreVideos": "আরও ভিডিও",
   "vote": {
     "saveFailed": "আপনার ভোট সেভ করা যায়নি"
@@ -104,7 +116,8 @@
   },
   "community": {
     "members_one": "{{count}} জন সদস্য",
-    "members_other": "{{count}} জন সদস্য"
+    "members_other": "{{count}} জন সদস্য",
+    "postedIn": "পোস্ট করা হয়েছে"
   },
   "tags": {
     "curated": "বাছাই করা"

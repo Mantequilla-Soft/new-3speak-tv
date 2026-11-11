@@ -6,7 +6,7 @@
     "thisStreamEnded": "Siaran ini sudah berakhir",
     "noLongerLive": "Siaran ini sudah tidak live. Mulai yang baru kapan pun kamu siap.",
     "recordingProcessing": "Mantap! Rekamanmu sedang diproses dan akan segera muncul di postingan pengumuman.",
-    "thanksForLive": "Mantap — terima kasih sudah live!",
+    "thanksForLive": "Mantap, terima kasih sudah live!",
     "backHome": "Kembali ke Beranda",
     "howWasStream": "Bagaimana siaranmu?",
     "connecting": "Menghubungkan ke OpenPods…",
@@ -53,11 +53,11 @@
       "spam": "Spam atau penipuan",
       "other": "Hal lain"
     },
-    "sent": "Terima kasih — siaran ini sudah dilaporkan ke tim kami.",
+    "sent": "Terima kasih, siaran ini sudah dilaporkan ke tim kami.",
     "failed": "Laporan tidak dapat dikirim. Silakan coba lagi.",
     "title": "Laporkan siaran ini",
     "reporting": "Melaporkan <b>@{{host}}</b>.",
-    "intro": "Beri tahu kami apa masalahnya — tim kami meninjau setiap laporan.",
+    "intro": "Beri tahu kami apa masalahnya. Tim kami meninjau setiap laporan.",
     "detailPlaceholder": "Tambahkan detail (opsional)",
     "sending": "Mengirim…",
     "submit": "Kirim laporan"

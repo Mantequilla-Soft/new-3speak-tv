@@ -142,6 +142,9 @@
     "uploadingImage": "Envoi de l'image",
     "write": "Écrire",
     "preview": "Aperçu",
-    "nothingToPreview": "Rien à prévisualiser pour l'instant"
+    "nothingToPreview": "Rien à prévisualiser pour l'instant",
+    "creator": "Créateur",
+    "empty": "Aucun commentaire pour l'instant",
+    "emptyHint": "Les commentaires liés à un moment apparaissent sur la timeline de la vidéo."
   }
 }

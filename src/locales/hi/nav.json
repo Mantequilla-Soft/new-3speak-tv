@@ -38,6 +38,8 @@
     "myChannelAria": "मेरा चैनल",
     "vpTooltip": "वोटिंग पावर: आपके अगले वोट में कितना वज़न है",
     "rcTooltip": "Resource Credits: Hive पर आपके कामों की लागत",
+    "votingPower": "वोटिंग पावर",
+    "resourceCredits": "Resource Credits",
     "myChannel": "मेरा चैनल",
     "publishBacklog": "बैकलॉग पब्लिश करें",
     "analytics": "एनालिटिक्स",

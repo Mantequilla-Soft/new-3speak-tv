@@ -120,7 +120,8 @@
     "communities": "Mengunjungi komunitasmu…",
     "followers": "Memeriksa siapa yang mengikutimu…",
     "watched": "Menelusuri apa yang kamu tonton…",
-    "thumbnails": "Memuat thumbnail… {{done}} dari {{total}}"
+    "thumbnails": "Memuat thumbnail… {{done}} dari {{total}}",
+    "thumbnailsWaiting": "Memuat thumbnail-mu…"
   },
   "tips": {
     "label": "Tips:",

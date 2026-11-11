@@ -22,6 +22,8 @@
     "memoPlaceholder": "mis. Makasih untuk konten kerennya!",
     "memoLinkNote": "Tautan ini ditambahkan ke memo: {{link}}",
     "send": "Kirim Tip",
+    "sendAmount": "Kirim {{amount}} {{currency}}",
+    "sentEyebrow": "Tip terkirim",
     "lightning": {
       "amountLabel": "Jumlah (sats):",
       "messageLabel": "Pesan (opsional):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Silakan masuk untuk menyesuaikan feed-mu",
-    "notInterestedToast": "Tidak tertarik — kami akan menyembunyikan video ini",
+    "notInterestedToast": "Tidak tertarik. Kami akan menyembunyikan video ini",
     "undo": "Urungkan",
     "cantHideOwn": "Kamu tidak bisa menyembunyikan videomu sendiri",
     "hidingCreatorToast": "Menyembunyikan video dari @{{author}}",
@@ -140,7 +142,8 @@
     "pickTopic": "Pilih topik (dihitung sebagai vote 100%)",
     "submitTag": "Kirim tag",
     "tagThisVideoFull": "Beri tag video ini (dihitung sebagai vote 100%)",
-    "justTag": "Jangan vote — beri tag saja"
+    "justTag": "Jangan vote — beri tag saja",
+    "addsAbout": "menambah sekitar {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "Tag otomatis: {{tags}}",

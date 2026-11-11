@@ -58,6 +58,7 @@
     "items_other": "{{count}} éléments",
     "created": "Créée {{when}}",
     "podcastFeed": "Flux podcast",
+    "playAll": "Tout lire",
     "podcastFeedTitle": "Suivez {{name}} dans n'importe quelle application de podcast (flux RSS)",
     "album": {
       "genre": "<strong>Genre :</strong> {{value}}",

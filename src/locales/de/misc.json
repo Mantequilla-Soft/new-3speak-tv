@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Folge-ich-Feed",
-    "error": "Fehler beim Abrufen der Videos"
+    "error": "Fehler beim Abrufen der Videos",
+    "emptyTitle": "Noch niemand hier",
+    "emptyBody": "Folge Creatorn, dann erscheinen ihre Uploads, Snaps und Livestreams hier zuerst."
   },
   "groups": {
     "title": "Gruppen",

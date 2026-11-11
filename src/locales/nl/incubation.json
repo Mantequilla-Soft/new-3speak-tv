@@ -584,7 +584,7 @@
     "yesterday": "Gisteren",
     "groups": {
       "video": "Video's",
-      "videoNote": "Eén per 5 minuten — dit is het langzame deel.",
+      "videoNote": "Eén per 5 minuten: dit is het langzame deel.",
       "short": "Shorts",
       "comment": "Reacties",
       "vote": "Likes",
@@ -627,7 +627,7 @@
     "fiveMin": "5 min",
     "waitingTitle": "Wacht op iemand anders",
     "waitingText": "Deze worden vanzelf gepubliceerd zodra de post waarnaar ze verwijzen op Hive staat. Ondertussen gaat er niets verloren.",
-    "waitingFor": "<b>{{label}}</b> — wacht op {{target}}",
+    "waitingFor": "<b>{{label}}</b>: wacht op {{target}}",
     "andMore": "en nog {{count}}",
     "excludedTitle": "Gaat niet mee"
   }

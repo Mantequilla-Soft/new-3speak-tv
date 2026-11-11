@@ -6,7 +6,7 @@
     "thisStreamEnded": "本场直播已结束",
     "noLongerLive": "直播已经结束。准备好后随时可以开始新的直播。",
     "recordingProcessing": "太棒了！你的录像正在处理中，很快会出现在公告帖子上。",
-    "thanksForLive": "太棒了——感谢你的直播！",
+    "thanksForLive": "太棒了，感谢你的直播！",
     "backHome": "返回首页",
     "howWasStream": "这次直播体验如何？",
     "connecting": "正在连接 OpenPods…",
@@ -53,11 +53,11 @@
       "spam": "垃圾信息或诈骗",
       "other": "其他"
     },
-    "sent": "谢谢——此直播已举报给我们的团队。",
+    "sent": "谢谢，此直播已举报给我们的团队。",
     "failed": "举报发送失败，请重试。",
     "title": "举报此直播",
     "reporting": "正在举报 <b>@{{host}}</b>。",
-    "intro": "告诉我们哪里有问题——我们的团队会审核每一条举报。",
+    "intro": "告诉我们哪里有问题。我们的团队会审核每一条举报。",
     "detailPlaceholder": "补充详细信息（可选）",
     "sending": "发送中…",
     "submit": "提交举报"

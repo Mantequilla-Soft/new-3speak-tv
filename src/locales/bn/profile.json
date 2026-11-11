@@ -21,6 +21,7 @@
     "followers_one": "{{num}} জন ফলোয়ার",
     "followers_other": "{{num}} জন ফলোয়ার",
     "popularTitle": "জনপ্রিয় ক্রিয়েটর",
+    "suggestedTitle": "ফলো করার মতো ক্রিয়েটর",
     "scrollLeft": "বাঁয়ে স্ক্রল করুন",
     "scrollRight": "ডানে স্ক্রল করুন",
     "mostlyPosts": "বেশিরভাগ {{topic}} নিয়ে পোস্ট করেন"
@@ -230,7 +231,11 @@
     "loginToUpload": "ভিডিও আপলোড করতে লগ ইন করুন",
     "linkExternalTitle": "বাইরের একটি প্রোফাইল যুক্ত করুন",
     "addProfile": "প্রোফাইল যোগ করুন",
-    "editTitle": "আপনার ছবি, নাম, বায়ো ও অবস্থান এডিট করুন"
+    "editTitle": "আপনার ছবি, নাম, বায়ো ও অবস্থান এডিট করুন",
+    "more": "আরও",
+    "moreActions": "@{{user}}-এর জন্য আরও অপশন",
+    "copyProfileLink": "প্রোফাইলের লিংক কপি করুন",
+    "podcastFeed": "পডকাস্ট ফিড (RSS)"
   },
   "tabs": {
     "overview": "সারসংক্ষেপ",

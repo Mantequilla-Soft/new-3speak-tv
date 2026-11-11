@@ -11,7 +11,9 @@
   },
   "drafts": {
     "untitled": "（无标题）",
-    "empty": "没有符合所选筛选条件的视频。"
+    "empty": "没有符合所选筛选条件的视频。",
+    "title": "工作室",
+    "create": "创建"
   },
   "schedule": {
     "days": {

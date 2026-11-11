@@ -102,7 +102,11 @@
     "chapterLink": "चैप्टर लिंक",
     "upNext": "आगे",
     "hideIdle": "छिपाएं (आपकी कतार बनी रहेगी)",
-    "continueAt": "{{time}} से जारी रखें"
+    "continueAt": "{{time}} से जारी रखें",
+    "position": "{{total}} में से {{current}}",
+    "playingFrom": "{{name}} से चल रहा है",
+    "atThisMoment": "इस पल पर",
+    "goTo": "{{name}} पर जाएँ"
   },
   "share": {
     "failed": "फ़ेल हुआ",
@@ -233,7 +237,7 @@
     },
     "source": {
       "dropHere": "ऑडियो फ़ाइलें यहाँ छोड़ें, या ब्राउज़ करने के लिए क्लिक करें",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — एक से ज़्यादा फ़ाइलें चल सकती हैं",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (एक से ज़्यादा फ़ाइलें चल सकती हैं)",
       "stop": "रोकें",
       "orRecord": "या लाइव रिकॉर्ड करें",
       "recordLimit": "हर रिकॉर्डिंग {{minutes}} मिनट तक",

@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Tambah gambar",
     "searchEmoji": "Cari emoji",
     "searchGifs": "Cari GIF…",
     "noGifs": "GIF tidak ditemukan.",
@@ -40,7 +41,7 @@
   },
   "gate": {
     "connectTitle": "Hubungkan ke 3Speak Chat",
-    "connectBody": "Chat didukung oleh Snapie. Menghubungkan berarti menandatangani tantangan login satu kali dengan posting key Hive-mu — bukan transaksi, tanpa biaya.",
+    "connectBody": "Chat didukung oleh Snapie. Menghubungkan berarti menandatangani tantangan login satu kali dengan posting key Hive-mu (bukan transaksi, tanpa biaya).",
     "connecting": "Menghubungkan…",
     "connectButton": "Hubungkan chat",
     "cannotSign": "Login-mu saat ini tidak bisa menandatangani tantangan chat. Gunakan Keychain, HiveAuth, PeakVault, atau Ledger.",
@@ -112,7 +113,7 @@
     "deleteError": "Pesan tidak dapat dihapus.",
     "back": "Kembali ke percakapan",
     "loading": "Memuat pesan…",
-    "empty": "Belum ada pesan — sapa dulu 👋",
+    "empty": "Belum ada pesan. Sapa dulu 👋",
     "editedSuffix": " · diedit",
     "messageActions": "Aksi pesan",
     "quote": "Kutip",

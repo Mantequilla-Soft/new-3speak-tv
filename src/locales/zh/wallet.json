@@ -28,7 +28,12 @@
     "recipientPlaceholder": "输入 Hive 用户名",
     "memoLabel": "备注",
     "memoPlaceholder": "输入备注",
-    "confirm": "确认转账"
+    "confirm": "确认转账",
+    "sendTo": "向 @{{to}} 发送 {{amount}} {{coin}}",
+    "sendAmount": "发送 {{amount}} {{coin}}",
+    "recent": "最近",
+    "activeKey": "需要你的 active 密钥",
+    "available": "可用：{{balance}}"
   },
   "history": {
     "loadFailed": "交易记录加载失败",
@@ -46,5 +51,46 @@
       "received": "收到"
     },
     "claimedRewards": "已领取的奖励"
+  },
+  "total": "总余额",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "HBD 储蓄"
+  },
+  "claim": {
+    "ready": "{{amount}} 待领取",
+    "readyShort": "{{amount}} 待领取",
+    "button": "领取",
+    "done": "奖励已领取",
+    "failed": "领取失败：{{error}}"
+  },
+  "activity": {
+    "title": "动态",
+    "filters": {
+      "all": "全部",
+      "rewards": "奖励",
+      "received": "收到",
+      "sent": "已发送"
+    },
+    "from": "来自 @{{user}}",
+    "sentTo": "已发送给 @{{user}}",
+    "emptyTitle": "这里还没有内容",
+    "empty": "转账和已领取的奖励会显示在这里。"
+  },
+  "earnings": {
+    "title": "收益（30 天）",
+    "sub": "已领取的奖励及收到的 HIVE 或 HBD"
+  },
+  "rc": {
+    "title": "资源积分",
+    "sub": "在 Hive 上的每个操作都会消耗一些，大约 5 天恢复满。",
+    "posts_other": "目前大约够发 {{count}} 篇帖子"
+  },
+  "receive": {
+    "title": "收款",
+    "sub": "任何人都可以用任意 Hive 钱包向这个账号名发送 HIVE 或 HBD，无需备注。",
+    "copy": "复制账号名"
   }
 }

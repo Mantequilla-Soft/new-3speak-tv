@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Follow Feed",
-    "error": "Error sa pagkuha ng mga video"
+    "error": "Error sa pagkuha ng mga video",
+    "emptyTitle": "Wala pang tao rito",
+    "emptyBody": "Mag-follow ng mga creator at dito unang lalabas ang mga upload, Snaps at live nila."
   },
   "groups": {
     "title": "Groups",

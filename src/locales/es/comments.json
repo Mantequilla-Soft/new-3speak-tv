@@ -142,6 +142,9 @@
     "uploadingImage": "Subiendo imagen",
     "write": "Escribir",
     "preview": "Vista previa",
-    "nothingToPreview": "Aún no hay nada que previsualizar"
+    "nothingToPreview": "Aún no hay nada que previsualizar",
+    "creator": "Creador",
+    "empty": "Aún no hay comentarios",
+    "emptyHint": "Los comentarios ligados a un momento aparecen en la línea de tiempo del video."
   }
 }

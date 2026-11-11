@@ -55,6 +55,7 @@
     "items_other": "{{count}} आइटम",
     "created": "{{when}} बनाई गई",
     "podcastFeed": "पॉडकास्ट फ़ीड",
+    "playAll": "सभी चलाएँ",
     "podcastFeedTitle": "किसी भी पॉडकास्ट ऐप में {{name}} को फ़ॉलो करें (RSS फ़ीड)",
     "album": {
       "genre": "<strong>शैली:</strong> {{value}}",

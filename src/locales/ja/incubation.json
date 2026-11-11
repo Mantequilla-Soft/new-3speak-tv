@@ -550,7 +550,7 @@
     "yesterday": "昨日",
     "groups": {
       "video": "動画",
-      "videoNote": "5 分に 1 本 — ここが時間のかかる部分です。",
+      "videoNote": "5 分に 1 本ずつ。ここが時間のかかる部分です。",
       "short": "ショート",
       "comment": "コメント",
       "vote": "いいね",
@@ -591,7 +591,7 @@
     "fiveMin": "5 分",
     "waitingTitle": "ほかの人を待っています",
     "waitingText": "これらは、参照先の投稿が Hive に公開されると自動で公開されます。その間に何も失われることはありません。",
-    "waitingFor": "<b>{{label}}</b> — {{target}} を待っています",
+    "waitingFor": "<b>{{label}}</b>: {{target}} を待っています",
     "andMore": "ほか {{count}} 件",
     "excludedTitle": "移行されないもの"
   }

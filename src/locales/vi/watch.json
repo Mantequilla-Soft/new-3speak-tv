@@ -16,7 +16,9 @@
     "translatedTo": "Đã dịch sang {{language}}",
     "showLanguage": "Hiện {{language}}",
     "showOriginal": "Hiện bản gốc",
-    "buttonTitle": "Tóm tắt video này bằng AI"
+    "buttonTitle": "Tóm tắt video này bằng AI",
+    "jumpTo": "Chuyển tới",
+    "disclaimer": "Được tạo từ bản ghi lời. Có thể có sai sót."
   },
   "errors": {
     "notAvailable": "Video này không khả dụng.",
@@ -38,6 +40,16 @@
     "add": "Thêm phản ứng"
   },
   "liveChat": "Chat trực tiếp",
+  "side": {
+    "label": "Bảng video"
+  },
+  "voters": {
+    "title": "Người vote",
+    "cardLabel": "Người ủng hộ và người vote",
+    "voter": "Người vote",
+    "weight": "Mức vote",
+    "value": "Giá trị"
+  },
   "moreVideos": "Thêm video",
   "vote": {
     "saveFailed": "Không thể lưu lượt vote của bạn"
@@ -103,7 +115,8 @@
     "dismiss": "Bỏ qua"
   },
   "community": {
-    "members_other": "{{count}} thành viên"
+    "members_other": "{{count}} thành viên",
+    "postedIn": "Đăng trong"
   },
   "tags": {
     "curated": "Tuyển chọn"

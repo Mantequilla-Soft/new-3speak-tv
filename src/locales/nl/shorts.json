@@ -40,12 +40,18 @@
   "glow": {
     "subtle": "Sfeerverlichting: subtiel",
     "vivid": "Sfeerverlichting: fel",
-    "off": "Sfeerverlichting: uit"
+    "off": "Sfeerverlichting: uit",
+    "label": "Sfeerverlichting",
+    "offShort": "Uit",
+    "subtleShort": "Subtiel",
+    "vividShort": "Fel"
   },
   "playbackMode": {
     "autoReplay": "Automatisch herhalen",
     "autoSwipe": "Automatisch swipen",
-    "manual": "Handmatig"
+    "manual": "Handmatig",
+    "label": "Afspelen",
+    "options": "Afspeelopties"
   },
   "subtitles": {
     "off": "Uit"

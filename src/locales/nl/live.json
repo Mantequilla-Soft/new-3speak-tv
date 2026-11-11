@@ -6,7 +6,7 @@
     "thisStreamEnded": "Deze stream is afgelopen",
     "noLongerLive": "Hij is niet meer live. Start een nieuwe wanneer je er klaar voor bent.",
     "recordingProcessing": "Goed gedaan! Je opname wordt verwerkt en verschijnt zo bij de aankondigingspost.",
-    "thanksForLive": "Goed gedaan — bedankt dat je live ging!",
+    "thanksForLive": "Goed gedaan, bedankt dat je live ging!",
     "backHome": "Terug naar Home",
     "howWasStream": "Hoe ging je stream?",
     "connecting": "Verbinden met OpenPods…",
@@ -54,11 +54,11 @@
       "spam": "Spam of oplichting",
       "other": "Iets anders"
     },
-    "sent": "Bedankt — deze stream is gemeld bij ons team.",
+    "sent": "Bedankt, deze stream is gemeld bij ons team.",
     "failed": "Melding versturen mislukt. Probeer het opnieuw.",
     "title": "Deze stream melden",
     "reporting": "Je meldt <b>@{{host}}</b>.",
-    "intro": "Vertel ons wat er mis is — ons team bekijkt elke melding.",
+    "intro": "Vertel ons wat er mis is. Ons team bekijkt elke melding.",
     "detailPlaceholder": "Voeg details toe (optioneel)",
     "sending": "Versturen…",
     "submit": "Melding versturen"

@@ -208,7 +208,7 @@
       "imageUploadFailed": "Tải ảnh lên thất bại: {{error}}",
       "tryAgain": "thử lại",
       "styleApplied": "Đã áp dụng kiểu cho tất cả khối {{type}}",
-      "templateApplied": "Đã áp dụng “{{name}}” — hãy tinh chỉnh hoặc Hoàn tác",
+      "templateApplied": "Đã áp dụng “{{name}}”. Hãy tinh chỉnh hoặc Hoàn tác.",
       "reverted": "Đã quay lại thiết kế trước của bạn",
       "saved": "Đã lưu Spotlight vào hồ sơ Hive của bạn",
       "saveFailed": "Không thể lưu",
@@ -224,7 +224,7 @@
       "phone": "Điện thoại",
       "platformGroup": "Nền tảng",
       "yourname": "tencuaban",
-      "platformIconHint": "Biểu tượng là logo {{platform}} — chuyển sang “Trang web / URL” để chọn biểu tượng tùy chỉnh.",
+      "platformIconHint": "Biểu tượng là logo {{platform}}. Chuyển sang “Trang web / URL” để chọn biểu tượng tùy chỉnh.",
       "icon": "Biểu tượng",
       "iconColor": "Màu biểu tượng",
       "iconBg": "Nền biểu tượng"
@@ -263,9 +263,9 @@
       "showPosts_other": "Hiện {{count}} bài đăng",
       "perRow": "{{value}} mỗi hàng",
       "hiveRecentHint": "Các bài đăng cấp cao nhất gần đây nhất của bạn (không gồm reblog hay bài đăng chéo). Tự động cập nhật.",
-      "linkPlaceholder": "Dán bất kỳ liên kết nào — bài đăng Hive, Instagram, X, YouTube, bài báo…",
+      "linkPlaceholder": "Dán bất kỳ liên kết nào: bài đăng Hive, Instagram, X, YouTube, bài báo…",
       "fetching": "Đang tải bản xem trước…",
-      "noPreview": "Không tìm thấy bản xem trước — liên kết vẫn sẽ hiển thị dưới dạng thẻ liên kết.",
+      "noPreview": "Không tìm thấy bản xem trước. Liên kết vẫn sẽ hiển thị dưới dạng thẻ liên kết.",
       "pasteHint": "Dán liên kết và chúng tôi sẽ lấy tiêu đề, mô tả & hình ảnh của nó."
     },
     "style": {
@@ -294,8 +294,8 @@
     "openPage": "Mở trang",
     "templates": {
       "title": "Mẫu",
-      "hint": "Chọn một thiết kế để điền mọi thứ — tiểu sử của bạn được giữ nguyên, và bạn có thể Hoàn tác.",
-      "undo": "Hoàn tác mẫu — quay lại thiết kế của tôi"
+      "hint": "Chọn một thiết kế để điền mọi thứ. Tiểu sử của bạn được giữ nguyên và bạn có thể Hoàn tác.",
+      "undo": "Hoàn tác mẫu, quay lại thiết kế của tôi"
     },
     "profile": {
       "title": "Hồ sơ",

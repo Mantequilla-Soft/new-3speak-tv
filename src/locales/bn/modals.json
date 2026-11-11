@@ -54,7 +54,7 @@
     "verify": "যাচাই করুন"
   },
   "auth": {
-    "title": "3Speak-কে অনুমোদন দিন!",
+    "title": "3Speak-কে অনুমোদন দিন",
     "text": "3Speak-এ ভিডিও আপলোড করতে আমাদের আপনার posting authority প্রয়োজন। এর ফলে আমরা আপনার আপলোড করা ভিডিও Hive-এ প্রকাশ করতে পারি। আপনাকে মাত্র একবার আমাদের posting authority দিতে হবে।",
     "authorize": "অনুমোদন দিন"
   },
@@ -69,7 +69,7 @@
       "duplicate": "এই অ্যাকাউন্টটি ইতিমধ্যে তালিকায় যোগ করা আছে।",
       "invalidAccount": "ইউজারনেম বা কমিউনিটি ID সঠিক নয়।",
       "cannotIncrease": "বাকি থাকা {{percent}}%-এর বেশি বাড়ানো যাবে না",
-      "pendingRow": "@{{account}} এখনো যোগ করা হয়নি — যোগ করতে + চাপুন, অথবা ঘরটি খালি করুন।",
+      "pendingRow": "@{{account}} এখনো যোগ করা হয়নি। যোগ করতে + চাপুন, অথবা ঘরটি খালি করুন।",
       "atLeastOne": "রিওয়ার্ডের শতাংশ অন্তত 1% হতে হবে",
       "maxCount": "Hive প্রতি পোস্টে সর্বোচ্চ {{max}} জন বেনিফিশিয়ারি রাখতে দেয়।"
     },
@@ -79,10 +79,10 @@
     "usernamePlaceholder": "ইউজারনেম লিখুন",
     "minimumReward": "সর্বনিম্ন রিওয়ার্ড <strong>1%</strong>",
     "checking": "Hive-এ <strong>@{{account}}</strong> যাচাই করা হচ্ছে…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> কোনো বিদ্যমান Hive অ্যাকাউন্ট নয়।",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> এখনো যোগ করা হয়নি — যোগ করতে <strong>+</strong> চাপুন, অথবা ঘরটি খালি করুন।",
-    "infrastructure": "10% === অবকাঠামো",
-    "videoEncoding": "ভিডিও এনকোডিং === 1%",
+    "notExisting": "<strong>@{{account}}</strong> কোনো বিদ্যমান Hive অ্যাকাউন্ট নয়।",
+    "notAdded": "<strong>@{{account}}</strong> এখনো যোগ করা হয়নি। যোগ করতে <strong>+</strong> চাপুন, অথবা ঘরটি খালি করুন।",
+    "infrastructure": "অবকাঠামো: 10%",
+    "videoEncoding": "ভিডিও এনকোডিং: 1%",
     "defaults": "ডিফল্ট বেনিফিশিয়ারি ({{count}})"
   },
   "qr": {

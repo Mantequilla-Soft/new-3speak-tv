@@ -25,6 +25,7 @@
     "followers_many": "{{num}} підписників",
     "followers_other": "{{num}} підписника",
     "popularTitle": "Популярні автори",
+    "suggestedTitle": "На кого підписатися",
     "scrollLeft": "Прокрутити ліворуч",
     "scrollRight": "Прокрутити праворуч",
     "mostlyPosts": "Здебільшого публікує: {{topic}}"
@@ -266,7 +267,11 @@
     "loginToUpload": "Увійдіть, щоб завантажити відео",
     "linkExternalTitle": "Прив'язати зовнішній профіль",
     "addProfile": "Додати профіль",
-    "editTitle": "Змініть фото, ім'я, біо й місцезнаходження"
+    "editTitle": "Змініть фото, ім'я, біо й місцезнаходження",
+    "more": "Ще",
+    "moreActions": "Інші дії для @{{user}}",
+    "copyProfileLink": "Копіювати посилання на профіль",
+    "podcastFeed": "Стрічка подкасту (RSS)"
   },
   "tabs": {
     "overview": "Огляд",

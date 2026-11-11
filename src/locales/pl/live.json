@@ -6,7 +6,7 @@
     "thisStreamEnded": "Ta transmisja się zakończyła",
     "noLongerLive": "Nie jest już na żywo. Rozpocznij nową, kiedy tylko zechcesz.",
     "recordingProcessing": "Świetna robota! Twoje nagranie jest przetwarzane i wkrótce pojawi się w poście z zapowiedzią.",
-    "thanksForLive": "Świetna robota — dzięki za transmisję!",
+    "thanksForLive": "Świetna robota, dzięki za transmisję!",
     "backHome": "Wróć na stronę główną",
     "howWasStream": "Jak poszła transmisja?",
     "connecting": "Łączenie z OpenPods…",
@@ -56,11 +56,11 @@
       "spam": "Spam lub oszustwo",
       "other": "Coś innego"
     },
-    "sent": "Dzięki — ta transmisja została zgłoszona naszemu zespołowi.",
+    "sent": "Dzięki, ta transmisja została zgłoszona naszemu zespołowi.",
     "failed": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie.",
     "title": "Zgłoś tę transmisję",
     "reporting": "Zgłaszasz <b>@{{host}}</b>.",
-    "intro": "Napisz, co jest nie tak — nasz zespół sprawdza każde zgłoszenie.",
+    "intro": "Napisz, co jest nie tak. Nasz zespół sprawdza każde zgłoszenie.",
     "detailPlaceholder": "Dodaj szczegóły (opcjonalnie)",
     "sending": "Wysyłanie…",
     "submit": "Wyślij zgłoszenie"

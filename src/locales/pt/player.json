@@ -20,8 +20,8 @@
     "fullscreen": "Tela cheia",
     "exitFullscreen": "Sair da tela cheia",
     "markerReplies_one": "({{count}} resposta)",
-    "markerReplies_other": "({{count}} respostas)",
-    "markerReplies_many": "({{count}} respostas)"
+    "markerReplies_many": "({{count}} respostas)",
+    "markerReplies_other": "({{count}} respostas)"
   },
   "subtitles": {
     "title": "Legendas",

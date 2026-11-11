@@ -47,7 +47,7 @@
     // sheet: the player publishes their top edges (GlobalAudioPlayer.jsx), the
     // queue's wins while it's open. Never on top of either.
     bottom: max(
-      calc(var(--bottom-nav-height) + 24px + env(safe-area-inset-bottom, 0px)),
+      calc(var(--bottom-bar-clearance) + 24px),
       calc(var(--audio-queue-clearance, var(--audio-np-clearance, 0px)) + 16px)
     );
     right: calc(16px + env(safe-area-inset-right, 0px));

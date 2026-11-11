@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Feed Diikuti",
-    "error": "Gagal memuat video"
+    "error": "Gagal memuat video",
+    "emptyTitle": "Belum ada siapa pun di sini",
+    "emptyBody": "Ikuti kreator, dan unggahan, Snaps, serta siaran langsung mereka akan muncul di sini lebih dulu."
   },
   "groups": {
     "title": "Grup",

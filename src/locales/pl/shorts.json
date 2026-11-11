@@ -42,12 +42,18 @@
   "glow": {
     "subtle": "Podświetlenie otoczenia: subtelne",
     "vivid": "Podświetlenie otoczenia: intensywne",
-    "off": "Podświetlenie otoczenia: wył."
+    "off": "Podświetlenie otoczenia: wył.",
+    "label": "Podświetlenie otoczenia",
+    "offShort": "Wył.",
+    "subtleShort": "Subtelne",
+    "vividShort": "Intensywne"
   },
   "playbackMode": {
     "autoReplay": "Autopowtarzanie",
     "autoSwipe": "Autoprzewijanie",
-    "manual": "Ręcznie"
+    "manual": "Ręcznie",
+    "label": "Odtwarzanie",
+    "options": "Opcje odtwarzania"
   },
   "subtitles": {
     "off": "Wył."

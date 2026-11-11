@@ -27,13 +27,6 @@ body {
   transition: background-color var(--t-base) var(--ease), color var(--t-base) var(--ease);
 }
 
-/* Mobile Shorts: the player sits on black, under the safe areas too. */
-@media (max-width: 767px) {
-  body:has(.short-main) {
-    background-color: var(--media-black) !important;
-  }
-}
-
 a {
   text-decoration: none;
   color: var(--muted);
@@ -71,83 +64,12 @@ img {
   cursor: pointer;
 }
 
-.flex-div {
-  display: flex;
-  align-items: center;
-}
-
 .custom-toast-body {
   font-size: 14px;
-}
-
-/* This resolve zooming in Safari/iPhone-only. */
-@supports (-webkit-touch-callout: none) {
-  .ql-editor {
-    font-size: 16px !important;
-  }
-}
-
-.show {
-  display: none;
 }
 
 /* The aioha wallet modal's look lives in src/components/LoginModal/aioha-v2.scss
    (including keeping the HiveAuth QR code's own black and white fills). */
 
-/* Chevron to hide a comment, right-aligned in its header */
-.comment-collapse-chevron {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  padding: 2px 6px;
-  border-radius: var(--r-sm);
-  background: var(--surface-2);
-  color: var(--muted);
-  cursor: pointer;
-  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
-}
-.comment-collapse-chevron:hover {
-  color: var(--text);
-  background: color-mix(in srgb, var(--text) 10%, var(--surface-2));
-}
-
-/* Collapsed comment bar: a slim row with avatar + name, click to expand */
-.comment-collapsed-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 2px 0;
-  padding: 4px 10px;
-  border-radius: var(--r-sm);
-  background: var(--bg);
-  color: var(--muted);
-  font-size: 12px;
-  cursor: pointer;
-  transition: background var(--t-fast) var(--ease);
-}
-.comment-collapsed-bar:hover {
-  background: var(--bg-hover);
-}
-.comment-collapsed-bar .author-badge {
-  flex-shrink: 0;
-}
-.comment-collapsed-avatar {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  background: var(--avatar);
-}
-.comment-collapsed-name {
-  font-size: 12px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-.comment-collapsed-chevron {
-  margin-left: auto;
-  flex-shrink: 0;
-  color: var(--muted);
-  transform: rotate(180deg);
-}
+/* The collapsed-comment styles (.comment-collapse*) live with each comment
+   list: CommentSection.scss, ReactionPlayer.scss and Short.scss. */

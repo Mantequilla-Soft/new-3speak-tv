@@ -54,7 +54,7 @@
     "verify": "確認"
   },
   "auth": {
-    "title": "3Speak を承認してください！",
+    "title": "3Speak を承認",
     "text": "3Speak に動画をアップロードするには、あなたのポスティング権限が必要です。これにより、アップロードした動画を Hive に公開できます。ポスティング権限の付与は一度だけで済みます。",
     "authorize": "承認"
   },
@@ -79,10 +79,10 @@
     "usernamePlaceholder": "ユーザー名を入力",
     "minimumReward": "最小の報酬は <strong>1%</strong> です",
     "checking": "Hive で <strong>@{{account}}</strong> を確認中…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> は存在する Hive アカウントではありません。",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> はまだ追加されていません。<strong>+</strong> をクリックして追加するか、入力欄をクリアしてください。",
-    "infrastructure": "10% === インフラ",
-    "videoEncoding": "動画エンコード === 1%",
+    "notExisting": "<strong>@{{account}}</strong> は存在する Hive アカウントではありません。",
+    "notAdded": "<strong>@{{account}}</strong> はまだ追加されていません。<strong>+</strong> をクリックして追加するか、入力欄をクリアしてください。",
+    "infrastructure": "インフラ: 10%",
+    "videoEncoding": "動画エンコード: 1%",
     "defaults": "デフォルトの受益者（{{count}}）"
   },
   "qr": {

@@ -550,7 +550,7 @@
     "yesterday": "어제",
     "groups": {
       "video": "동영상",
-      "videoNote": "5분마다 하나씩 — 이 부분이 느려요.",
+      "videoNote": "5분마다 하나씩: 이 부분이 오래 걸려요.",
       "short": "쇼츠",
       "comment": "댓글",
       "vote": "좋아요",
@@ -591,7 +591,7 @@
     "fiveMin": "5분",
     "waitingTitle": "다른 게시물을 기다리는 중",
     "waitingText": "이 항목들은 가리키는 게시물이 Hive에 올라가면 자동으로 게시돼요. 그동안 잃어버리는 건 없어요.",
-    "waitingFor": "<b>{{label}}</b> — {{target}} 대기 중",
+    "waitingFor": "<b>{{label}}</b>: {{target}} 대기 중",
     "andMore": "외 {{count}}개",
     "excludedTitle": "옮겨지지 않는 항목"
   }

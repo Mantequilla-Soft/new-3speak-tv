@@ -28,6 +28,11 @@
   },
   "newFromFollowing": {
     "aria": "Новое от авторов, на которых вы подписаны",
+    "summary_one": "{{count}} новое видео",
+    "summary_few": "{{count}} новых видео",
+    "summary_many": "{{count}} новых видео",
+    "summary_other": "{{count}} нового видео",
+    "fromFollowing": "от тех, на кого вы подписаны",
     "shorts_one": "{{count}} ролик Shorts",
     "shorts_few": "{{count}} ролика Shorts",
     "shorts_many": "{{count}} роликов Shorts",
@@ -50,6 +55,9 @@
     "empty": "Здесь пока нечего показать.",
     "viewAll": "Смотреть все",
     "dragToReorder": "Перетащите, чтобы изменить порядок",
+    "customize": "Настроить",
+    "customizeTitle": "Настроить главную",
+    "customizeHint": "Перемещайте разделы вверх или вниз. Отключите те, что вам не нужны.",
     "surfTitle": "Переключение каналов: выберите тему и смотрите как ТВ",
     "zapping": "Переключаем"
   },

@@ -7,7 +7,7 @@
   display: none;
   position: fixed;
   // Sits just above the bottom app bar.
-  bottom: calc(var(--bottom-nav-height, 56px) + 8px);
+  bottom: calc(var(--bottom-bar-clearance) + 8px);
   left: 8px;
   right: 8px;
   height: 64px;

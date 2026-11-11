@@ -132,6 +132,9 @@
     "uploadingImage": "이미지 업로드 중",
     "write": "작성",
     "preview": "미리보기",
-    "nothingToPreview": "아직 미리 볼 내용이 없습니다"
+    "nothingToPreview": "아직 미리 볼 내용이 없습니다",
+    "creator": "크리에이터",
+    "empty": "아직 댓글이 없어요",
+    "emptyHint": "특정 장면에 단 댓글은 동영상 타임라인에 표시돼요."
   }
 }

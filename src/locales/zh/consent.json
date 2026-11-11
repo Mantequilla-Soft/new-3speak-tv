@@ -10,7 +10,7 @@
     "optional": "唯一的可选项：我们可以记住<b>你在每个视频中看到的位置</b>，以便继续播放。这些数据绝不会离开你的设备。"
   },
   "details": {
-    "essentialTitle": "必要 — 始终开启",
+    "essentialTitle": "必要（始终开启）",
     "essential": {
       "login": "你的登录会话",
       "settings": "你设置的选项：主题、音量、语言、字幕、信息流偏好",

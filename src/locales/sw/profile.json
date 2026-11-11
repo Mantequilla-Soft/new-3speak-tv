@@ -21,6 +21,7 @@
     "followers_one": "mfuasi {{num}}",
     "followers_other": "wafuasi {{num}}",
     "popularTitle": "Watayarishaji maarufu",
+    "suggestedTitle": "Watayarishaji wa kufuata",
     "scrollLeft": "Sogeza kushoto",
     "scrollRight": "Sogeza kulia",
     "mostlyPosts": "Huchapisha zaidi kuhusu {{topic}}"
@@ -230,7 +231,11 @@
     "loginToUpload": "Ingia ili kupakia video",
     "linkExternalTitle": "Unganisha wasifu wa nje",
     "addProfile": "Ongeza wasifu",
-    "editTitle": "Hariri picha, jina, bio na mahali pako"
+    "editTitle": "Hariri picha, jina, bio na mahali pako",
+    "more": "Zaidi",
+    "moreActions": "Vitendo zaidi kwa @{{user}}",
+    "copyProfileLink": "Nakili kiungo cha wasifu",
+    "podcastFeed": "Mlisho wa podikasti (RSS)"
   },
   "tabs": {
     "overview": "Muhtasari",

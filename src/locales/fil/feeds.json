@@ -28,6 +28,9 @@
   },
   "newFromFollowing": {
     "aria": "Bago mula sa mga creator na fina-follow mo",
+    "summary_one": "{{count}} bagong video",
+    "summary_other": "{{count}} bagong video",
+    "fromFollowing": "mula sa mga fina-follow mo",
     "shorts_one": "{{count}} short",
     "shorts_other": "{{count}} shorts"
   },
@@ -48,6 +51,9 @@
     "empty": "Wala pang maipapakita dito.",
     "viewAll": "Tingnan lahat",
     "dragToReorder": "I-drag para ayusin ang pagkakasunod",
+    "customize": "I-customize",
+    "customizeTitle": "I-customize ang Home",
+    "customizeHint": "Ilipat pataas o pababa ang mga seksyon. I-off ang mga ayaw mo.",
     "surfTitle": "Channel Surfing: pumili ng paksa at panoorin na parang TV",
     "zapping": "Zapping"
   },

@@ -9,7 +9,7 @@
     "needKeychain": "Necesitas la extensión Keychain para hacer transferencias"
   },
   "header": {
-    "mine": "MI billetera",
+    "mine": "Mi billetera",
     "ofUser": "Billetera de {{user}}"
   },
   "assets": "Activos",
@@ -28,7 +28,12 @@
     "recipientPlaceholder": "Ingresa el usuario de Hive",
     "memoLabel": "Memo",
     "memoPlaceholder": "Escribe un memo",
-    "confirm": "Confirmar transferencia"
+    "confirm": "Confirmar transferencia",
+    "sendTo": "Enviar {{amount}} {{coin}} a @{{to}}",
+    "sendAmount": "Enviar {{amount}} {{coin}}",
+    "recent": "Recientes",
+    "activeKey": "Requiere tu clave activa",
+    "available": "Disponible: {{balance}}"
   },
   "history": {
     "loadFailed": "No se pudieron cargar las transacciones",
@@ -46,5 +51,48 @@
       "received": "Recibido"
     },
     "claimedRewards": "Recompensas reclamadas"
+  },
+  "total": "Saldo total",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "Ahorros en HBD"
+  },
+  "claim": {
+    "ready": "{{amount}} listos para reclamar",
+    "readyShort": "{{amount}} por reclamar",
+    "button": "Reclamar",
+    "done": "Recompensas reclamadas",
+    "failed": "No se pudo reclamar: {{error}}"
+  },
+  "activity": {
+    "title": "Actividad",
+    "filters": {
+      "all": "Todo",
+      "rewards": "Recompensas",
+      "received": "Recibidas",
+      "sent": "Enviadas"
+    },
+    "from": "De @{{user}}",
+    "sentTo": "Enviado a @{{user}}",
+    "emptyTitle": "Aún no hay nada aquí",
+    "empty": "Aquí aparecen las transferencias y las recompensas reclamadas."
+  },
+  "earnings": {
+    "title": "Ganancias, 30 días",
+    "sub": "Recompensas reclamadas y HIVE o HBD recibidos"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Cada acción en Hive gasta un poco. Se recargan en unos 5 días.",
+    "posts_one": "Alcanza para cerca de {{count}} publicación ahora mismo",
+    "posts_many": "Alcanza para cerca de {{count}} publicaciones ahora mismo",
+    "posts_other": "Alcanza para cerca de {{count}} publicaciones ahora mismo"
+  },
+  "receive": {
+    "title": "Recibir",
+    "sub": "Cualquiera puede enviar HIVE o HBD a este nombre de cuenta desde cualquier billetera de Hive. No hace falta memo.",
+    "copy": "Copiar nombre de cuenta"
   }
 }

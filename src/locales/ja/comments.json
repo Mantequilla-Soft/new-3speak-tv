@@ -132,6 +132,9 @@
     "uploadingImage": "画像をアップロード中",
     "write": "書く",
     "preview": "プレビュー",
-    "nothingToPreview": "プレビューする内容はまだありません"
+    "nothingToPreview": "プレビューする内容はまだありません",
+    "creator": "クリエイター",
+    "empty": "まだコメントはありません",
+    "emptyHint": "特定の場面に付けたコメントは、動画のタイムラインに表示されます。"
   }
 }

@@ -10,7 +10,8 @@
   @include hh.create-form;
   box-sizing: border-box;
   min-height: calc(100vh - var(--topbar-h));
-  padding: var(--page-pad);
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
   color: var(--text);
 
   // One column for the create form; the SDK lobby and our extras share it.
@@ -22,9 +23,6 @@
     margin-inline: auto;
   }
 
-  @include v2.mobile {
-    padding: 16px 16px calc(var(--bottom-nav-height) + 24px + env(safe-area-inset-bottom, 0px));
-  }
 }
 
 .openpods-page--templates > .openpods-studio-head { max-width: 1180px; }

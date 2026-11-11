@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Thêm hình ảnh",
     "searchEmoji": "Tìm emoji",
     "searchGifs": "Tìm GIF…",
     "noGifs": "Không tìm thấy GIF nào.",
@@ -40,7 +41,7 @@
   },
   "gate": {
     "connectTitle": "Kết nối với 3Speak Chat",
-    "connectBody": "Chat được vận hành bởi Snapie. Khi kết nối, bạn ký một yêu cầu đăng nhập một lần bằng posting key Hive của mình — không có giao dịch, không mất phí.",
+    "connectBody": "Chat được vận hành bởi Snapie. Khi kết nối, bạn ký một yêu cầu đăng nhập một lần bằng posting key Hive của mình (không có giao dịch, không mất phí).",
     "connecting": "Đang kết nối…",
     "connectButton": "Kết nối chat",
     "cannotSign": "Phương thức đăng nhập hiện tại của bạn không thể ký yêu cầu chat. Hãy dùng Keychain, HiveAuth, PeakVault hoặc Ledger.",
@@ -112,7 +113,7 @@
     "deleteError": "Không thể xóa tin nhắn.",
     "back": "Quay lại cuộc trò chuyện",
     "loading": "Đang tải tin nhắn…",
-    "empty": "Chưa có tin nhắn nào — hãy chào nhau đi 👋",
+    "empty": "Chưa có tin nhắn nào. Hãy chào một tiếng 👋",
     "editedSuffix": " · đã chỉnh sửa",
     "messageActions": "Thao tác tin nhắn",
     "quote": "Trích dẫn",

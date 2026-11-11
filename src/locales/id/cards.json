@@ -4,10 +4,12 @@
   "thumbnailAlt": "thumbnail",
   "topicTitle": "Topik: {{topic}}",
   "watchingNow_other": "{{count}} sedang menonton",
+  "previewMuted": "Pratinjau · tanpa suara",
   "badges": {
     "gatedTitle": "Khusus anggota. 3Speak Pro membuka video lengkapnya",
     "pro": "PRO",
     "new": "BARU",
+    "first": "Pertama",
     "live": "● LIVE",
     "liveChat": "● CHAT LIVE",
     "spotlight": "Sorotan"

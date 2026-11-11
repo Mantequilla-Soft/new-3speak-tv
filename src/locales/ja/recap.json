@@ -120,7 +120,8 @@
     "communities": "コミュニティを巡っています…",
     "followers": "フォローしてくれた人を確認しています…",
     "watched": "視聴した動画を振り返っています…",
-    "thumbnails": "サムネイルを読み込み中… {{done}} / {{total}}"
+    "thumbnails": "サムネイルを読み込み中… {{done}} / {{total}}",
+    "thumbnailsWaiting": "サムネイルを読み込み中…"
   },
   "tips": {
     "label": "ヒント：",

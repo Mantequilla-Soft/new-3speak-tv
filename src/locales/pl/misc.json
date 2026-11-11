@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Obserwowani",
-    "error": "Błąd pobierania filmów"
+    "error": "Błąd pobierania filmów",
+    "emptyTitle": "Jeszcze nikogo tu nie ma",
+    "emptyBody": "Obserwuj twórców, a ich nowe filmy, Snaps i transmisje na żywo pojawią się tu jako pierwsze."
   },
   "groups": {
     "title": "Grupy",

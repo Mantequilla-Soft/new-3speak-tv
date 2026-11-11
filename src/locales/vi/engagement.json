@@ -22,6 +22,8 @@
     "memoPlaceholder": "ví dụ Cảm ơn vì nội dung tuyệt vời này!",
     "memoLinkNote": "Liên kết này được thêm vào ghi chú: {{link}}",
     "send": "Gửi tip",
+    "sendAmount": "Gửi {{amount}} {{currency}}",
+    "sentEyebrow": "Đã gửi tip",
     "lightning": {
       "amountLabel": "Số tiền (sats):",
       "messageLabel": "Lời nhắn (không bắt buộc):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Vui lòng đăng nhập để cá nhân hóa bảng tin của bạn",
-    "notInterestedToast": "Không quan tâm — chúng tôi sẽ ẩn video này",
+    "notInterestedToast": "Không quan tâm. Chúng tôi sẽ ẩn video này",
     "undo": "Hoàn tác",
     "cantHideOwn": "Bạn không thể ẩn video của chính mình",
     "hidingCreatorToast": "Đang ẩn video từ @{{author}}",
@@ -140,7 +142,8 @@
     "pickTopic": "Chọn một chủ đề (tính là một lượt vote 100%)",
     "submitTag": "Gửi thẻ",
     "tagThisVideoFull": "Gắn thẻ video này (tính là một lượt vote 100%)",
-    "justTag": "Không vote — chỉ gắn thẻ"
+    "justTag": "Không vote — chỉ gắn thẻ",
+    "addsAbout": "thêm khoảng {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "Tự động gắn thẻ: {{tags}}",

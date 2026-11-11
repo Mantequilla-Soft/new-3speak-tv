@@ -5,7 +5,8 @@
 .badge-page-wrap {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 24px var(--page-pad) 48px;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0 0 48px;
   display: flex;
   flex-direction: column;
   gap: 16px;

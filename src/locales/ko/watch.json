@@ -16,7 +16,9 @@
     "translatedTo": "{{language}}(으)로 번역됨",
     "showLanguage": "{{language}}(으)로 보기",
     "showOriginal": "원문 보기",
-    "buttonTitle": "이 동영상의 AI 요약"
+    "buttonTitle": "이 동영상의 AI 요약",
+    "jumpTo": "바로 가기",
+    "disclaimer": "스크립트를 바탕으로 생성되었어요. 오류가 있을 수 있어요."
   },
   "errors": {
     "notAvailable": "이 동영상은 사용할 수 없어요.",
@@ -38,6 +40,16 @@
     "add": "리액션 추가"
   },
   "liveChat": "라이브 채팅",
+  "side": {
+    "label": "동영상 패널"
+  },
+  "voters": {
+    "title": "투표자",
+    "cardLabel": "후원자와 투표자",
+    "voter": "투표자",
+    "weight": "비율",
+    "value": "금액"
+  },
   "moreVideos": "동영상 더보기",
   "vote": {
     "saveFailed": "투표를 저장하지 못했어요"
@@ -103,7 +115,8 @@
     "dismiss": "닫기"
   },
   "community": {
-    "members_other": "멤버 {{count}}명"
+    "members_other": "멤버 {{count}}명",
+    "postedIn": "게시된 곳"
   },
   "tags": {
     "curated": "큐레이션"

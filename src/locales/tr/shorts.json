@@ -40,12 +40,18 @@
   "glow": {
     "subtle": "Ortam ışığı: hafif",
     "vivid": "Ortam ışığı: canlı",
-    "off": "Ortam ışığı: kapalı"
+    "off": "Ortam ışığı: kapalı",
+    "label": "Ortam ışığı",
+    "offShort": "Kapalı",
+    "subtleShort": "Hafif",
+    "vividShort": "Canlı"
   },
   "playbackMode": {
     "autoReplay": "Otomatik Tekrar",
     "autoSwipe": "Otomatik Kaydır",
-    "manual": "Manuel"
+    "manual": "Manuel",
+    "label": "Oynatma",
+    "options": "Oynatma seçenekleri"
   },
   "subtitles": {
     "off": "Kapalı"

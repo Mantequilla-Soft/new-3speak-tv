@@ -132,7 +132,8 @@
     "communities": "Tunatembelea jumuiya zako…",
     "followers": "Tunaangalia nani alikufuata…",
     "watched": "Tunapitia ulichotazama…",
-    "thumbnails": "Tunapakia picha ndogo zako… {{done}} kati ya {{total}}"
+    "thumbnails": "Tunapakia picha ndogo zako… {{done}} kati ya {{total}}",
+    "thumbnailsWaiting": "Inapakia picha zako ndogo…"
   },
   "tips": {
     "label": "Dokezo:",

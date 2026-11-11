@@ -208,7 +208,7 @@
       "imageUploadFailed": "Bild-Upload fehlgeschlagen: {{error}}",
       "tryAgain": "versuch es nochmal",
       "styleApplied": "Stil auf alle {{type}}-Blöcke angewendet",
-      "templateApplied": "„{{name}}“ angewendet – anpassen oder rückgängig machen",
+      "templateApplied": "„{{name}}“ angewendet. Pass es an oder mach es rückgängig.",
       "reverted": "Zurück zu deinem vorherigen Design",
       "saved": "Spotlight in deinem Hive-Profil gespeichert",
       "saveFailed": "Konnte nicht gespeichert werden",
@@ -224,7 +224,7 @@
       "phone": "Telefon",
       "platformGroup": "Plattform",
       "yourname": "deinname",
-      "platformIconHint": "Das Icon ist das {{platform}}-Logo – wechsle zu „Website / URL“, um ein eigenes Icon zu wählen.",
+      "platformIconHint": "Das Icon ist das {{platform}}-Logo. Wechsle zu „Website / URL“, um ein eigenes Icon zu wählen.",
       "icon": "Icon",
       "iconColor": "Icon-Farbe",
       "iconBg": "Icon-Hintergrund"
@@ -264,9 +264,9 @@
       "showPosts_other": "{{count}} Posts anzeigen",
       "perRow": "{{value}} pro Reihe",
       "hiveRecentHint": "Deine neuesten Top-Level-Posts (keine Reblogs oder Cross-Posts). Aktualisiert sich automatisch.",
-      "linkPlaceholder": "Beliebigen Link einfügen – Hive-Post, Instagram, X, YouTube, Artikel…",
+      "linkPlaceholder": "Beliebigen Link einfügen: Hive-Post, Instagram, X, YouTube, Artikel…",
       "fetching": "Vorschau wird abgerufen…",
-      "noPreview": "Keine Vorschau gefunden – wird trotzdem als Linkkarte angezeigt.",
+      "noPreview": "Keine Vorschau gefunden. Wird trotzdem als Linkkarte angezeigt.",
       "pasteHint": "Füge einen Link ein, und wir holen Titel, Beschreibung & Bild."
     },
     "style": {
@@ -295,8 +295,8 @@
     "openPage": "Seite öffnen",
     "templates": {
       "title": "Vorlagen",
-      "hint": "Wähle ein Design, das alles ausfüllt – deine Bio bleibt erhalten, und du kannst es rückgängig machen.",
-      "undo": "Vorlage rückgängig machen – zurück zu meinem Design"
+      "hint": "Wähle ein Design, das alles ausfüllt. Deine Bio bleibt erhalten, und du kannst es rückgängig machen.",
+      "undo": "Vorlage rückgängig machen, zurück zu meinem Design"
     },
     "profile": {
       "title": "Profil",

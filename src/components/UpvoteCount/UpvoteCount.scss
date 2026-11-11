@@ -23,6 +23,23 @@
   }
 
   &.voted .upvote-icon { color: var(--accent); }
+
+  // Pill: the same 36px secondary control as the other actions on a card.
+  &.is-pill {
+    height: 36px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 12px;
+    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    &:is(button) { cursor: pointer; }
+    &:is(button):hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+    &:is(button):active { transform: scale(.98); }
+    &.voted { background: var(--accent-tint); color: var(--accent); }
+  }
 }
 
 // Full count on desktop, whole thousands on a phone (see UpvoteCount.jsx).

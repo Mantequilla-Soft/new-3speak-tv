@@ -144,7 +144,8 @@
     "communities": "Visitando suas comunidades…",
     "followers": "Vendo quem seguiu você…",
     "watched": "Revendo o que você assistiu…",
-    "thumbnails": "Carregando suas miniaturas… {{done}} de {{total}}"
+    "thumbnails": "Carregando suas miniaturas… {{done}} de {{total}}",
+    "thumbnailsWaiting": "Carregando suas miniaturas…"
   },
   "tips": {
     "label": "Dica:",

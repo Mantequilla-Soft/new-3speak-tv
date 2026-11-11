@@ -6,7 +6,7 @@
     "thisStreamEnded": "이 방송은 종료되었어요",
     "noLongerLive": "더 이상 라이브가 아니에요. 준비되면 언제든 새 방송을 시작하세요.",
     "recordingProcessing": "멋져요! 녹화본을 처리하는 중이며, 곧 공지 게시물에 표시될 거예요.",
-    "thanksForLive": "멋져요 — 라이브 방송 고마워요!",
+    "thanksForLive": "멋져요, 라이브 방송 고마워요!",
     "backHome": "홈으로 돌아가기",
     "howWasStream": "방송은 어떠셨나요?",
     "connecting": "OpenPods에 연결하는 중…",
@@ -53,7 +53,7 @@
       "spam": "스팸 또는 사기",
       "other": "기타"
     },
-    "sent": "감사합니다 — 이 방송을 운영팀에 신고했어요.",
+    "sent": "감사합니다. 이 방송을 운영팀에 신고했어요.",
     "failed": "신고를 보내지 못했어요. 다시 시도해 주세요.",
     "title": "이 방송 신고",
     "reporting": "<b>@{{host}}</b>님을 신고합니다.",

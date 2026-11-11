@@ -16,7 +16,9 @@
     "translatedTo": "{{language}} में अनुवादित",
     "showLanguage": "{{language}} दिखाएँ",
     "showOriginal": "मूल दिखाएँ",
-    "buttonTitle": "इस वीडियो का AI सारांश"
+    "buttonTitle": "इस वीडियो का AI सारांश",
+    "jumpTo": "सीधे जाएँ",
+    "disclaimer": "ट्रांसक्रिप्ट से बनाया गया। इसमें गलतियाँ हो सकती हैं।"
   },
   "errors": {
     "notAvailable": "यह वीडियो उपलब्ध नहीं है।",
@@ -38,6 +40,16 @@
     "add": "रिएक्शन जोड़ें"
   },
   "liveChat": "लाइव चैट",
+  "side": {
+    "label": "वीडियो पैनल"
+  },
+  "voters": {
+    "title": "वोटर",
+    "cardLabel": "सपोर्टर्स और वोटर",
+    "voter": "वोटर",
+    "weight": "वेट",
+    "value": "वैल्यू"
+  },
   "moreVideos": "और वीडियो",
   "vote": {
     "saveFailed": "आपका वोट सेव नहीं हो सका"
@@ -104,7 +116,8 @@
   },
   "community": {
     "members_one": "{{count}} सदस्य",
-    "members_other": "{{count}} सदस्य"
+    "members_other": "{{count}} सदस्य",
+    "postedIn": "यहाँ पोस्ट किया गया"
   },
   "tags": {
     "curated": "क्यूरेटेड"

@@ -28,6 +28,10 @@
   },
   "newFromFollowing": {
     "aria": "Novidades de criadores que você segue",
+    "summary_one": "{{count}} vídeo novo",
+    "summary_many": "{{count}} vídeos novos",
+    "summary_other": "{{count}} vídeos novos",
+    "fromFollowing": "de quem você segue",
     "shorts_one": "{{count}} Short",
     "shorts_many": "{{count}} Shorts",
     "shorts_other": "{{count}} Shorts"
@@ -49,6 +53,9 @@
     "empty": "Nada para mostrar aqui ainda.",
     "viewAll": "Ver tudo",
     "dragToReorder": "Arraste para reordenar",
+    "customize": "Personalizar",
+    "customizeTitle": "Personalizar o Início",
+    "customizeHint": "Mova as seções para cima ou para baixo. Desative as que você não quer.",
     "surfTitle": "Zapear canais: escolha um tema e assista como TV",
     "zapping": "Zapeando"
   },

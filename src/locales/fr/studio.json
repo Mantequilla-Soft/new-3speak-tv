@@ -11,7 +11,9 @@
   },
   "drafts": {
     "untitled": "(sans titre)",
-    "empty": "Aucune vidéo trouvée avec ce filtre."
+    "empty": "Aucune vidéo trouvée avec ce filtre.",
+    "title": "Studio",
+    "create": "Créer"
   },
   "schedule": {
     "days": {

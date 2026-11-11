@@ -19,6 +19,7 @@
     "pleaseTryAgain": "silakan coba lagi",
     "followers_other": "{{num}} pengikut",
     "popularTitle": "Kreator populer",
+    "suggestedTitle": "Kreator untuk diikuti",
     "scrollLeft": "Gulir ke kiri",
     "scrollRight": "Gulir ke kanan",
     "mostlyPosts": "Kebanyakan memposting {{topic}}"
@@ -212,7 +213,11 @@
     "loginToUpload": "Masuk untuk mengunggah video",
     "linkExternalTitle": "Tautkan profil eksternal",
     "addProfile": "Tambah profil",
-    "editTitle": "Edit foto, nama, bio, dan lokasimu"
+    "editTitle": "Edit foto, nama, bio, dan lokasimu",
+    "more": "Lainnya",
+    "moreActions": "Tindakan lain untuk @{{user}}",
+    "copyProfileLink": "Salin tautan profil",
+    "podcastFeed": "Feed podcast (RSS)"
   },
   "tabs": {
     "overview": "Ringkasan",

@@ -440,6 +440,7 @@
     "portrait": "Portrait",
     "landscape": "Paysage",
     "autoDetect": "Détection auto ({{lang}})",
+    "layout": "Disposition",
     "presets": {
       "frontcam": "Caméra avant",
       "frontcamTitle": "Petite bande sous l'objectif selfie — c'est là qu'on remarque le moins que vous lisez",

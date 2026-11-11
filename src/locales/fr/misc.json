@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Fil des abonnements",
-    "error": "Erreur lors de la récupération des vidéos"
+    "error": "Erreur lors de la récupération des vidéos",
+    "emptyTitle": "Personne pour l'instant",
+    "emptyBody": "Suivez des créateurs : leurs vidéos, Snaps et lives apparaîtront ici en premier."
   },
   "groups": {
     "title": "Groupes",

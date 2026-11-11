@@ -93,7 +93,8 @@
   "legal": {
     "pageTitle": "Comment 3Speak traite vos données · 3Speak",
     "englishOnly": "Cette page n'est disponible qu'en anglais. La version anglaise fait foi.",
-    "back": "← Retour à 3Speak"
+    "back": "← Retour à 3Speak",
+    "onThisPage": "Sur cette page"
   },
   "notFound": {
     "imageAlt": "404",

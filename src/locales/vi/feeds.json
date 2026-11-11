@@ -28,6 +28,8 @@
   },
   "newFromFollowing": {
     "aria": "Mới từ các nhà sáng tạo bạn theo dõi",
+    "summary_other": "{{count}} video mới",
+    "fromFollowing": "từ những người bạn theo dõi",
     "shorts_other": "{{count}} Shorts"
   },
   "firstUploads": {
@@ -47,6 +49,9 @@
     "empty": "Chưa có gì để hiển thị ở đây.",
     "viewAll": "Xem tất cả",
     "dragToReorder": "Kéo để sắp xếp lại",
+    "customize": "Tùy chỉnh",
+    "customizeTitle": "Tùy chỉnh Trang chủ",
+    "customizeHint": "Di chuyển các mục lên hoặc xuống. Tắt những mục bạn không muốn.",
     "surfTitle": "Lướt kênh: chọn một chủ đề và xem như xem TV",
     "zapping": "Đang chuyển kênh"
   },

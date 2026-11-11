@@ -100,7 +100,11 @@
     "chapterLink": "Liên kết chương",
     "upNext": "Tiếp theo",
     "hideIdle": "Ẩn (hàng đợi vẫn còn)",
-    "continueAt": "Tiếp tục từ {{time}}"
+    "continueAt": "Tiếp tục từ {{time}}",
+    "position": "{{current}} / {{total}}",
+    "playingFrom": "Đang phát từ {{name}}",
+    "atThisMoment": "Tại thời điểm này",
+    "goTo": "Đi tới {{name}}"
   },
   "share": {
     "failed": "Thất bại",
@@ -227,7 +231,7 @@
     },
     "source": {
       "dropHere": "Thả tệp âm thanh vào đây, hoặc nhấn để chọn",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — cho phép nhiều tệp",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (cho phép nhiều tệp)",
       "stop": "Dừng",
       "orRecord": "Hoặc ghi âm trực tiếp",
       "recordLimit": "Tối đa {{minutes}} phút mỗi lần ghi",

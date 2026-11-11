@@ -9,7 +9,7 @@
     "needKeychain": "Bạn cần tiện ích Keychain để chuyển tiền"
   },
   "header": {
-    "mine": "Ví CỦA TÔI",
+    "mine": "Ví của tôi",
     "ofUser": "Ví của {{user}}"
   },
   "assets": "Tài sản",
@@ -28,7 +28,12 @@
     "recipientPlaceholder": "Nhập tên người dùng Hive",
     "memoLabel": "Ghi chú",
     "memoPlaceholder": "Nhập ghi chú",
-    "confirm": "Xác nhận chuyển"
+    "confirm": "Xác nhận chuyển",
+    "sendTo": "Gửi {{amount}} {{coin}} cho @{{to}}",
+    "sendAmount": "Gửi {{amount}} {{coin}}",
+    "recent": "Gần đây",
+    "activeKey": "Cần active key của bạn",
+    "available": "Khả dụng: {{balance}}"
   },
   "history": {
     "loadFailed": "Không tải được giao dịch",
@@ -46,5 +51,46 @@
       "received": "Đã nhận"
     },
     "claimedRewards": "Phần thưởng đã nhận"
+  },
+  "total": "Tổng số dư",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "Tiết kiệm HBD"
+  },
+  "claim": {
+    "ready": "{{amount}} sẵn sàng để nhận",
+    "readyShort": "{{amount}} để nhận",
+    "button": "Nhận",
+    "done": "Đã nhận phần thưởng",
+    "failed": "Nhận thất bại: {{error}}"
+  },
+  "activity": {
+    "title": "Hoạt động",
+    "filters": {
+      "all": "Tất cả",
+      "rewards": "Phần thưởng",
+      "received": "Đã nhận",
+      "sent": "Đã gửi"
+    },
+    "from": "Từ @{{user}}",
+    "sentTo": "Đã gửi cho @{{user}}",
+    "emptyTitle": "Chưa có gì ở đây",
+    "empty": "Các giao dịch chuyển và phần thưởng đã nhận sẽ hiện ở đây."
+  },
+  "earnings": {
+    "title": "Thu nhập, 30 ngày",
+    "sub": "Phần thưởng đã nhận và HIVE hoặc HBD được gửi đến"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Mọi thao tác trên Hive đều dùng một ít. Chúng tự hồi lại trong khoảng 5 ngày.",
+    "posts_other": "Hiện đủ cho khoảng {{count}} bài đăng"
+  },
+  "receive": {
+    "title": "Nhận",
+    "sub": "Bất kỳ ai cũng có thể gửi HIVE hoặc HBD đến tên tài khoản này từ bất kỳ ví Hive nào. Không cần ghi chú.",
+    "copy": "Sao chép tên tài khoản"
   }
 }

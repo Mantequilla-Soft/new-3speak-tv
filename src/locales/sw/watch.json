@@ -16,7 +16,9 @@
     "translatedTo": "Imetafsiriwa kwa {{language}}",
     "showLanguage": "Onyesha {{language}}",
     "showOriginal": "Onyesha asili",
-    "buttonTitle": "Muhtasari wa AI wa video hii"
+    "buttonTitle": "Muhtasari wa AI wa video hii",
+    "jumpTo": "Ruka hadi",
+    "disclaimer": "Imetengenezwa kutoka kwenye nakala. Huenda ikawa na makosa."
   },
   "errors": {
     "notAvailable": "Video hii haipatikani.",
@@ -38,6 +40,16 @@
     "add": "Ongeza mwitikio"
   },
   "liveChat": "Gumzo mubashara",
+  "side": {
+    "label": "Paneli za video"
+  },
+  "voters": {
+    "title": "Wapiga kura",
+    "cardLabel": "Wafadhili na wapiga kura",
+    "voter": "Mpiga kura",
+    "weight": "Uzito",
+    "value": "Thamani"
+  },
   "moreVideos": "Video zaidi",
   "vote": {
     "saveFailed": "Imeshindwa kuhifadhi kura yako"
@@ -104,7 +116,8 @@
   },
   "community": {
     "members_one": "Mwanachama {{count}}",
-    "members_other": "Wanachama {{count}}"
+    "members_other": "Wanachama {{count}}",
+    "postedIn": "Imechapishwa katika"
   },
   "tags": {
     "curated": "Imeteuliwa"

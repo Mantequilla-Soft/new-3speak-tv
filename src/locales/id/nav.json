@@ -38,6 +38,8 @@
     "myChannelAria": "Channel-ku",
     "vpTooltip": "Voting Power: seberapa besar bobot vote-mu berikutnya",
     "rcTooltip": "Resource Credits: biaya aksi-aksimu di Hive",
+    "votingPower": "Voting Power",
+    "resourceCredits": "Resource Credits",
     "myChannel": "Channel-ku",
     "publishBacklog": "Terbitkan antrean",
     "analytics": "Analitik",

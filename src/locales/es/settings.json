@@ -4,7 +4,7 @@
     "saveFailed": "No se pudieron guardar los intereses",
     "title": "Intereses",
     "loading": "cargando…",
-    "hint": "Elige los temas que te importan; los usaremos para mostrarte más del contenido que te gusta.",
+    "hint": "Elige los temas que te importan. Los usaremos para mostrarte más del contenido que te gusta.",
     "loginHint": "Inicia sesión para elegir tus intereses.",
     "save": "Guardar intereses"
   },

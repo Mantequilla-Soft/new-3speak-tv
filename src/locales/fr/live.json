@@ -6,7 +6,7 @@
     "thisStreamEnded": "Ce live est terminé",
     "noLongerLive": "Il n'est plus en direct. Lancez-en un nouveau quand vous voulez.",
     "recordingProcessing": "Bravo ! Votre enregistrement est en cours de traitement et apparaîtra bientôt sur la publication d'annonce.",
-    "thanksForLive": "Bravo — merci d'avoir fait un live !",
+    "thanksForLive": "Bravo, merci d'avoir fait un live !",
     "backHome": "Retour à l'accueil",
     "howWasStream": "Comment s'est passé votre live ?",
     "connecting": "Connexion à OpenPods…",
@@ -55,11 +55,11 @@
       "spam": "Spam ou arnaque",
       "other": "Autre chose"
     },
-    "sent": "Merci — ce live a été signalé à notre équipe.",
+    "sent": "Merci, ce live a été signalé à notre équipe.",
     "failed": "Impossible d'envoyer le signalement. Veuillez réessayer.",
     "title": "Signaler ce live",
     "reporting": "Signalement de <b>@{{host}}</b>.",
-    "intro": "Dites-nous ce qui ne va pas — notre équipe examine chaque signalement.",
+    "intro": "Dites-nous ce qui ne va pas. Notre équipe examine chaque signalement.",
     "detailPlaceholder": "Ajoutez des détails (facultatif)",
     "sending": "Envoi…",
     "submit": "Envoyer le signalement"

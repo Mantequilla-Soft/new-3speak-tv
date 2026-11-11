@@ -41,12 +41,18 @@
   "glow": {
     "subtle": "Luz ambiental: suave",
     "vivid": "Luz ambiental: intensa",
-    "off": "Luz ambiental: desactivada"
+    "off": "Luz ambiental: desactivada",
+    "label": "Luz ambiental",
+    "offShort": "Apagada",
+    "subtleShort": "Suave",
+    "vividShort": "Intensa"
   },
   "playbackMode": {
     "autoReplay": "Repetir automáticamente",
     "autoSwipe": "Deslizar automáticamente",
-    "manual": "Manual"
+    "manual": "Manual",
+    "label": "Reproducción",
+    "options": "Opciones de reproducción"
   },
   "subtitles": {
     "off": "Desactivados"

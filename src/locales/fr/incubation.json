@@ -618,7 +618,7 @@
     "yesterday": "Hier",
     "groups": {
       "video": "Vidéos",
-      "videoNote": "Une toutes les 5 minutes — c'est la partie lente.",
+      "videoNote": "Une toutes les 5 minutes : c'est la partie lente.",
       "short": "Shorts",
       "comment": "Commentaires",
       "vote": "J'aime",
@@ -663,7 +663,7 @@
     "fiveMin": "5 min",
     "waitingTitle": "En attente de quelqu'un d'autre",
     "waitingText": "Ces éléments se publient tout seuls dès que la publication à laquelle ils renvoient est mise sur Hive. Rien n'est perdu en attendant.",
-    "waitingFor": "<b>{{label}}</b> — en attente de {{target}}",
+    "waitingFor": "<b>{{label}}</b> : en attente de {{target}}",
     "andMore": "et {{count}} de plus",
     "excludedTitle": "Ne seront pas transférés"
   }

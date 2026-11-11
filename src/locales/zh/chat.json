@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "表情",
+    "image": "添加图片",
     "searchEmoji": "搜索表情",
     "searchGifs": "搜索 GIF…",
     "noGifs": "没有找到 GIF。",
@@ -40,7 +41,7 @@
   },
   "gate": {
     "connectTitle": "连接 3Speak 聊天",
-    "connectBody": "聊天由 Snapie 提供支持。连接时会用你的 Hive posting 密钥签署一次性登录验证——不产生交易，也没有费用。",
+    "connectBody": "聊天由 Snapie 提供支持。连接时会用你的 Hive posting 密钥签署一次性登录验证（不产生交易，也没有费用）。",
     "connecting": "连接中…",
     "connectButton": "连接聊天",
     "cannotSign": "你当前的登录方式无法签署聊天验证。请使用 Keychain、HiveAuth、PeakVault 或 Ledger。",
@@ -112,7 +113,7 @@
     "deleteError": "无法删除消息。",
     "back": "返回会话列表",
     "loading": "正在加载消息…",
-    "empty": "还没有消息——打个招呼吧 👋",
+    "empty": "还没有消息。打个招呼吧 👋",
     "editedSuffix": " · 已编辑",
     "messageActions": "消息操作",
     "quote": "引用",

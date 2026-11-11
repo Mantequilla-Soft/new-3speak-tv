@@ -9,7 +9,7 @@
     "needKeychain": "Você precisa da extensão Keychain para fazer transferências"
   },
   "header": {
-    "mine": "MINHA carteira",
+    "mine": "Minha carteira",
     "ofUser": "Carteira de {{user}}"
   },
   "assets": "Ativos",
@@ -28,7 +28,12 @@
     "recipientPlaceholder": "Digite o usuário da Hive",
     "memoLabel": "Memo",
     "memoPlaceholder": "Digite o memo",
-    "confirm": "Confirmar transferência"
+    "confirm": "Confirmar transferência",
+    "sendTo": "Enviar {{amount}} {{coin}} para @{{to}}",
+    "sendAmount": "Enviar {{amount}} {{coin}}",
+    "recent": "Recentes",
+    "activeKey": "Requer sua chave active",
+    "available": "Disponível: {{balance}}"
   },
   "history": {
     "loadFailed": "Não foi possível carregar as transações",
@@ -46,5 +51,48 @@
       "received": "Recebido"
     },
     "claimedRewards": "Recompensas resgatadas"
+  },
+  "total": "Saldo total",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "Poupança em HBD"
+  },
+  "claim": {
+    "ready": "{{amount}} disponível para resgatar",
+    "readyShort": "{{amount}} para resgatar",
+    "button": "Resgatar",
+    "done": "Recompensas resgatadas",
+    "failed": "Falha ao resgatar: {{error}}"
+  },
+  "activity": {
+    "title": "Atividade",
+    "filters": {
+      "all": "Tudo",
+      "rewards": "Recompensas",
+      "received": "Recebidas",
+      "sent": "Enviadas"
+    },
+    "from": "De @{{user}}",
+    "sentTo": "Enviado para @{{user}}",
+    "emptyTitle": "Nada por aqui ainda",
+    "empty": "Transferências e recompensas resgatadas aparecem aqui."
+  },
+  "earnings": {
+    "title": "Ganhos, 30 dias",
+    "sub": "Recompensas resgatadas e HIVE ou HBD recebidos"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Toda ação na Hive usa um pouco. Eles se recarregam em cerca de 5 dias.",
+    "posts_one": "Dá para cerca de {{count}} post agora",
+    "posts_many": "Dá para cerca de {{count}} posts agora",
+    "posts_other": "Dá para cerca de {{count}} posts agora"
+  },
+  "receive": {
+    "title": "Receber",
+    "sub": "Qualquer pessoa pode enviar HIVE ou HBD para este nome de conta a partir de qualquer carteira Hive. Não precisa de memo.",
+    "copy": "Copiar nome da conta"
   }
 }

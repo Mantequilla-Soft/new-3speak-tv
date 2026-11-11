@@ -11,7 +11,9 @@
   },
   "drafts": {
     "untitled": "(tanpa judul)",
-    "empty": "Tidak ada video yang cocok dengan filter yang dipilih."
+    "empty": "Tidak ada video yang cocok dengan filter yang dipilih.",
+    "title": "Studio",
+    "create": "Buat"
   },
   "schedule": {
     "days": {

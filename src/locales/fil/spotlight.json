@@ -208,7 +208,7 @@
       "imageUploadFailed": "Pumalya ang upload ng larawan: {{error}}",
       "tryAgain": "subukan ulit",
       "styleApplied": "Na-apply ang style sa lahat ng {{type}} block",
-      "templateApplied": "Na-apply ang “{{name}}” — baguhin o i-Undo",
+      "templateApplied": "Na-apply ang “{{name}}”. Baguhin ito o i-Undo.",
       "reverted": "Ibinalik sa dati mong design",
       "saved": "Na-save sa Hive profile mo ang Spotlight",
       "saveFailed": "Hindi ma-save",
@@ -224,7 +224,7 @@
       "phone": "Telepono",
       "platformGroup": "Platform",
       "yourname": "yourname",
-      "platformIconHint": "Ang icon ay ang logo ng {{platform}} — lumipat sa “Website / URL” para pumili ng custom na icon.",
+      "platformIconHint": "Ang icon ay ang logo ng {{platform}}. Lumipat sa “Website / URL” para pumili ng custom na icon.",
       "icon": "Icon",
       "iconColor": "Kulay ng icon",
       "iconBg": "Bg ng icon"
@@ -264,9 +264,9 @@
       "showPosts_other": "Ipakita ang {{count}} posts",
       "perRow": "{{value}} bawat hanay",
       "hiveRecentHint": "Ang mga pinakabago mong top-level na post (walang reblogs o cross-posts). Kusang nag-a-update.",
-      "linkPlaceholder": "Mag-paste ng kahit anong link — Hive post, Instagram, X, YouTube, artikulo…",
+      "linkPlaceholder": "Mag-paste ng kahit anong link: Hive post, Instagram, X, YouTube, artikulo…",
       "fetching": "Kinukuha ang preview…",
-      "noPreview": "Walang nahanap na preview — lalabas pa rin ito bilang link card.",
+      "noPreview": "Walang nahanap na preview. Lalabas pa rin ito bilang link card.",
       "pasteHint": "Mag-paste ng link at kukunin namin ang pamagat, description at larawan nito."
     },
     "style": {
@@ -295,8 +295,8 @@
     "openPage": "Buksan ang page",
     "templates": {
       "title": "Mga Template",
-      "hint": "Pumili ng design para mapunan lahat — mananatili ang bio mo, at puwede kang mag-Undo.",
-      "undo": "I-undo ang template — bumalik sa design ko"
+      "hint": "Pumili ng design para mapunan lahat. Mananatili ang bio mo, at puwede kang mag-Undo.",
+      "undo": "I-undo ang template, bumalik sa design ko"
     },
     "profile": {
       "title": "Profile",

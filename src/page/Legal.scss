@@ -5,7 +5,8 @@
 .legal {
   max-width: calc(220px + 32px + 760px + 48px);
   margin: 0 auto;
-  padding: 32px var(--page-pad) 64px;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 8px 0 64px;
   display: grid;
   grid-template-columns: 220px minmax(0, 760px);
   gap: 32px;
@@ -15,11 +16,11 @@
   @media (max-width: 1023px) {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
-    padding-top: 16px;
+    padding-top: 0;
   }
 
   @include v2.mobile {
-    padding: 16px 16px calc(var(--bottom-nav-height) + 32px);
+    padding-bottom: 32px;
   }
 
   a { color: var(--cyan); font-weight: 700; text-decoration: none; &:hover { text-decoration: underline; } }

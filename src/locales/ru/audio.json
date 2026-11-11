@@ -106,7 +106,11 @@
     "chapterLink": "Ссылка на главу",
     "upNext": "Далее",
     "hideIdle": "Скрыть (очередь сохранится)",
-    "continueAt": "Продолжить с {{time}}"
+    "continueAt": "Продолжить с {{time}}",
+    "position": "{{current}} из {{total}}",
+    "playingFrom": "Играет из «{{name}}»",
+    "atThisMoment": "В этот момент",
+    "goTo": "Перейти к «{{name}}»"
   },
   "share": {
     "failed": "Ошибка",
@@ -245,7 +249,7 @@
     },
     "source": {
       "dropHere": "Перетащите аудиофайлы сюда или нажмите, чтобы выбрать",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — можно несколько",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (можно несколько)",
       "stop": "Стоп",
       "orRecord": "Или запишите вживую",
       "recordLimit": "До {{minutes}} мин на запись",
@@ -525,9 +529,9 @@
       "modeShows": "Шоу",
       "modePeople": "Люди",
       "placeholderPeople": "Имя ведущего или гостя",
+      "appearsIn_one": "В {{count}} выпуске",
       "appearsIn_few": "В {{count}} выпусках",
       "appearsIn_many": "В {{count}} выпусках",
-      "appearsIn_one": "В {{count}} выпуске",
       "appearsIn_other": "В {{count}} выпуска",
       "latestMatch": "Последний: {{title}}"
     },

@@ -208,7 +208,7 @@
       "imageUploadFailed": "Afbeelding uploaden mislukt: {{error}}",
       "tryAgain": "probeer het opnieuw",
       "styleApplied": "Stijl toegepast op alle {{type}}-blokken",
-      "templateApplied": "“{{name}}” toegepast — pas aan of maak ongedaan",
+      "templateApplied": "“{{name}}” toegepast. Pas het aan of maak het ongedaan.",
       "reverted": "Teruggezet naar je vorige ontwerp",
       "saved": "Spotlight opgeslagen in je Hive-profiel",
       "saveFailed": "Opslaan mislukt",
@@ -224,7 +224,7 @@
       "phone": "Telefoon",
       "platformGroup": "Platform",
       "yourname": "jouwnaam",
-      "platformIconHint": "Het icoon is het {{platform}}-logo — kies “Website / URL” om een eigen icoon te kiezen.",
+      "platformIconHint": "Het icoon is het {{platform}}-logo. Kies “Website / URL” om een eigen icoon te kiezen.",
       "icon": "Icoon",
       "iconColor": "Icoonkleur",
       "iconBg": "Icoonachtergrond"
@@ -264,9 +264,9 @@
       "showPosts_other": "{{count}} posts tonen",
       "perRow": "{{value}} per rij",
       "hiveRecentHint": "Je nieuwste hoofdposts (geen reblogs of crossposts). Wordt automatisch bijgewerkt.",
-      "linkPlaceholder": "Plak een link — Hive-post, Instagram, X, YouTube, artikel…",
+      "linkPlaceholder": "Plak een link: Hive-post, Instagram, X, YouTube, artikel…",
       "fetching": "Voorbeeld ophalen…",
-      "noPreview": "Geen voorbeeld gevonden — het wordt nog steeds als linkkaart getoond.",
+      "noPreview": "Geen voorbeeld gevonden. Het wordt toch als linkkaart getoond.",
       "pasteHint": "Plak een link en we halen de titel, beschrijving en afbeelding op."
     },
     "style": {
@@ -295,8 +295,8 @@
     "openPage": "Pagina openen",
     "templates": {
       "title": "Sjablonen",
-      "hint": "Kies een ontwerp om alles in te vullen — je bio blijft behouden en je kunt het ongedaan maken.",
-      "undo": "Sjabloon ongedaan maken — terug naar mijn ontwerp"
+      "hint": "Kies een ontwerp om alles in te vullen. Je bio blijft behouden en je kunt het ongedaan maken.",
+      "undo": "Sjabloon ongedaan maken, terug naar mijn ontwerp"
     },
     "profile": {
       "title": "Profiel",

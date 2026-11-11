@@ -137,6 +137,9 @@
     "uploadingImage": "Afbeelding uploaden",
     "write": "Schrijven",
     "preview": "Voorbeeld",
-    "nothingToPreview": "Nog niets om te bekijken"
+    "nothingToPreview": "Nog niets om te bekijken",
+    "creator": "Maker",
+    "empty": "Nog geen reacties",
+    "emptyHint": "Reacties bij een bepaald moment verschijnen op de tijdlijn van de video."
   }
 }

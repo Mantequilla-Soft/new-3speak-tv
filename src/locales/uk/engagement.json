@@ -22,6 +22,8 @@
     "memoPlaceholder": "напр. Дякую за чудовий контент!",
     "memoLinkNote": "Це посилання додається до мемо: {{link}}",
     "send": "Надіслати чайові",
+    "sendAmount": "Надіслати {{amount}} {{currency}}",
+    "sentEyebrow": "Чайові надіслано",
     "lightning": {
       "amountLabel": "Сума (sats):",
       "messageLabel": "Повідомлення (необов'язково):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Увійдіть, щоб налаштувати свою стрічку",
-    "notInterestedToast": "Не цікавить — ми приховаємо це відео",
+    "notInterestedToast": "Не цікавить. Ми приховаємо це відео",
     "undo": "Скасувати",
     "cantHideOwn": "Не можна приховати власні відео",
     "hidingCreatorToast": "Приховуємо відео від @{{author}}",
@@ -146,7 +148,8 @@
     "pickTopic": "Виберіть тему (зараховується як голос на 100%)",
     "submitTag": "Надіслати тег",
     "tagThisVideoFull": "Додати тег до відео (зараховується як голос на 100%)",
-    "justTag": "Без голосу — лише тег"
+    "justTag": "Без голосу — лише тег",
+    "addsAbout": "додасть близько {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "Автоматичні теги: {{tags}}",

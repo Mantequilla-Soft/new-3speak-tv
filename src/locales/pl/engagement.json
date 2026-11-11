@@ -22,6 +22,8 @@
     "memoPlaceholder": "np. Dzięki za świetne treści!",
     "memoLinkNote": "Ten link zostanie dodany do notatki: {{link}}",
     "send": "Wyślij napiwek",
+    "sendAmount": "Wyślij {{amount}} {{currency}}",
+    "sentEyebrow": "Napiwek wysłany",
     "lightning": {
       "amountLabel": "Kwota (sats):",
       "messageLabel": "Wiadomość (opcjonalnie):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Zaloguj się, aby spersonalizować swój kanał",
-    "notInterestedToast": "Nie interesuje cię — ukryjemy ten film",
+    "notInterestedToast": "Nie interesuje cię to. Ukryjemy ten film",
     "undo": "Cofnij",
     "cantHideOwn": "Nie możesz ukryć własnych filmów",
     "hidingCreatorToast": "Ukrywamy filmy od @{{author}}",
@@ -146,7 +148,8 @@
     "pickTopic": "Wybierz temat (liczy się jako głos 100%)",
     "submitTag": "Zapisz tag",
     "tagThisVideoFull": "Otaguj ten film (liczy się jako głos 100%)",
-    "justTag": "Nie głosuj — tylko otaguj"
+    "justTag": "Nie głosuj — tylko otaguj",
+    "addsAbout": "dodaje około {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "Automatyczne tagi: {{tags}}",

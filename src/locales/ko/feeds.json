@@ -28,6 +28,8 @@
   },
   "newFromFollowing": {
     "aria": "팔로우하는 크리에이터의 새 콘텐츠",
+    "summary_other": "새 동영상 {{count}}개",
+    "fromFollowing": "팔로우한 사람들이 올렸어요",
     "shorts_other": "쇼츠 {{count}}개"
   },
   "firstUploads": {
@@ -47,6 +49,9 @@
     "empty": "아직 표시할 내용이 없어요.",
     "viewAll": "모두 보기",
     "dragToReorder": "드래그해서 순서 변경",
+    "customize": "맞춤 설정",
+    "customizeTitle": "홈 맞춤 설정",
+    "customizeHint": "섹션을 위아래로 옮기세요. 필요 없는 섹션은 끄면 돼요.",
     "surfTitle": "채널 서핑: 주제를 고르고 TV처럼 시청하세요",
     "zapping": "재핑"
   },

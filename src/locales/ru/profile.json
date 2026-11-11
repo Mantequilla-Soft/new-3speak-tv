@@ -25,6 +25,7 @@
     "followers_many": "{{num}} подписчиков",
     "followers_other": "{{num}} подписчика",
     "popularTitle": "Популярные авторы",
+    "suggestedTitle": "На кого подписаться",
     "scrollLeft": "Прокрутить влево",
     "scrollRight": "Прокрутить вправо",
     "mostlyPosts": "В основном публикует: {{topic}}"
@@ -266,7 +267,11 @@
     "loginToUpload": "Войдите, чтобы загрузить видео",
     "linkExternalTitle": "Привязать внешний профиль",
     "addProfile": "Добавить профиль",
-    "editTitle": "Изменить фото, имя, описание и местоположение"
+    "editTitle": "Изменить фото, имя, описание и местоположение",
+    "more": "Ещё",
+    "moreActions": "Другие действия для @{{user}}",
+    "copyProfileLink": "Копировать ссылку на профиль",
+    "podcastFeed": "Лента подкаста (RSS)"
   },
   "tabs": {
     "overview": "Обзор",

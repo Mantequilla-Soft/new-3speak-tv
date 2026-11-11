@@ -5,10 +5,12 @@
   "topicTitle": "विषय: {{topic}}",
   "watchingNow_one": "{{count}} अभी देख रहा है",
   "watchingNow_other": "{{count}} अभी देख रहे हैं",
+  "previewMuted": "प्रीव्यू · म्यूट",
   "badges": {
     "gatedTitle": "सिर्फ़ सदस्यों के लिए। 3Speak Pro से पूरा वीडियो खुलता है",
     "pro": "PRO",
     "new": "नया",
+    "first": "पहला",
     "live": "● लाइव",
     "liveChat": "● लाइव चैट",
     "spotlight": "स्पॉटलाइट"

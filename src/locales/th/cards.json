@@ -4,10 +4,12 @@
   "thumbnailAlt": "ภาพขนาดย่อ",
   "topicTitle": "หัวข้อ: {{topic}}",
   "watchingNow_other": "กำลังดูอยู่ {{count}} คน",
+  "previewMuted": "ตัวอย่าง · ปิดเสียง",
   "badges": {
     "gatedTitle": "เฉพาะสมาชิก 3Speak Pro ปลดล็อกวิดีโอฉบับเต็ม",
     "pro": "PRO",
     "new": "ใหม่",
+    "first": "วิดีโอแรก",
     "live": "● ไลฟ์",
     "liveChat": "● แชตสด",
     "spotlight": "สปอตไลท์"

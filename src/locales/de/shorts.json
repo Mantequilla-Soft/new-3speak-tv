@@ -40,12 +40,18 @@
   "glow": {
     "subtle": "Umgebungslicht: dezent",
     "vivid": "Umgebungslicht: kräftig",
-    "off": "Umgebungslicht: aus"
+    "off": "Umgebungslicht: aus",
+    "label": "Umgebungslicht",
+    "offShort": "Aus",
+    "subtleShort": "Dezent",
+    "vividShort": "Kräftig"
   },
   "playbackMode": {
     "autoReplay": "Auto-Wiederholen",
     "autoSwipe": "Auto-Swipe",
-    "manual": "Manuell"
+    "manual": "Manuell",
+    "label": "Wiedergabe",
+    "options": "Wiedergabeoptionen"
   },
   "subtitles": {
     "off": "Aus"

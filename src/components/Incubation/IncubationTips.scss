@@ -25,7 +25,7 @@
     right: 16px;
     width: auto;
     // Clears the bottom navigation bar.
-    bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom) + 12px);
+    bottom: calc(var(--bottom-bar-clearance) + 12px);
   }
 
   p {

@@ -15,7 +15,7 @@ import useViewCounts from "../hooks/useViewCounts";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
 import { Link, useNavigate } from "react-router-dom";
 import { Icon } from "../components/v2/Icon";
-import { Chip, EmptyState, IconButton, Segmented, Toggle } from "../components/v2/ui";
+import { Button, Chip, EmptyState, IconButton, Segmented, Toggle } from "../components/v2/ui";
 import { fixVideoThumbnail, fallbackImg } from "../utils/fixThumbnails";
 import TimeAgo from "../components/TimeAgo/TimeAgo";
 import { useTranslation } from "react-i18next";
@@ -384,6 +384,7 @@ const Discover = () => {
             value={searchTerm}
             onChange={(e) => { setSearchTerm(e.target.value); setShowSuggestions(true); }}
             onFocus={() => setShowSuggestions(true)}
+            onKeyDown={(e) => { if (e.key === 'Escape' || e.key === 'Enter') setShowSuggestions(false); }}
             type="text"
             placeholder={t('feeds.discover.searchPlaceholder')}
             className="discover-search-input"
@@ -510,7 +511,10 @@ const Discover = () => {
           </div>
         )}
 
-        {/* The filter panel (34b): date, tag, community, boost recent */}
+      </div>
+
+        {/* The filter panel (34b): date, tag, community, boost recent. Outside the sticky
+            header so it scrolls away with the results instead of covering them. */}
         {isSearching && showAdvanced && (
           <div className="discover-advanced-filters">
             <div className="discover-advanced-head">
@@ -615,7 +619,6 @@ const Discover = () => {
             </div>
           </div>
         )}
-      </div>
 
       {isSearching && (
         <div className="discover-search-area">
@@ -645,7 +648,12 @@ const Discover = () => {
             )}
 
             {!searchLoading && !allExcluded && !hasResults && (
-              <EmptyState icon="search_off" title={t('feeds.discover.noResultsFor', { term: debouncedTerm })} className="discover-no-results" />
+              <EmptyState
+                icon="search_off"
+                title={t('feeds.discover.noResultsFor', { term: debouncedTerm })}
+                className="discover-no-results"
+                action={<Button size={36} onClick={() => { setSearchTerm(''); searchInputRef.current?.focus(); }}>{t('feeds.discover.clearSearch')}</Button>}
+              />
             )}
 
             {visibleTypes.map(type => {

@@ -618,7 +618,7 @@
     "yesterday": "Ieri",
     "groups": {
       "video": "Video",
-      "videoNote": "Uno ogni 5 minuti — questa è la parte lenta.",
+      "videoNote": "Uno ogni 5 minuti: questa è la parte lenta.",
       "short": "Shorts",
       "comment": "Commenti",
       "vote": "Mi piace",
@@ -663,7 +663,7 @@
     "fiveMin": "5 min",
     "waitingTitle": "In attesa di qualcun altro",
     "waitingText": "Questi vengono pubblicati da soli quando il post a cui fanno riferimento va su Hive. Nel frattempo non si perde nulla.",
-    "waitingFor": "<b>{{label}}</b> — in attesa di {{target}}",
+    "waitingFor": "<b>{{label}}</b>: in attesa di {{target}}",
     "andMore": "e altri {{count}}",
     "excludedTitle": "Non verranno trasferiti"
   }

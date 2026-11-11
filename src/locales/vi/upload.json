@@ -436,6 +436,7 @@
     "portrait": "Dọc",
     "landscape": "Ngang",
     "autoDetect": "Tự phát hiện ({{lang}})",
+    "layout": "Bố cục",
     "presets": {
       "frontcam": "Camera trước",
       "frontcamTitle": "Dải nhỏ ngay dưới ống kính selfie — ít lộ nhất là bạn đang đọc",

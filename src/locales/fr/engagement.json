@@ -22,6 +22,8 @@
     "memoPlaceholder": "ex. Merci pour ce super contenu !",
     "memoLinkNote": "Ce lien est ajouté au mémo : {{link}}",
     "send": "Envoyer le pourboire",
+    "sendAmount": "Envoyer {{amount}} {{currency}}",
+    "sentEyebrow": "Pourboire envoyé",
     "lightning": {
       "amountLabel": "Montant (sats) :",
       "messageLabel": "Message (facultatif) :",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Connectez-vous pour personnaliser votre fil",
-    "notInterestedToast": "Pas intéressé — nous masquerons cette vidéo",
+    "notInterestedToast": "Pas intéressé. Nous masquerons cette vidéo",
     "undo": "Annuler",
     "cantHideOwn": "Vous ne pouvez pas masquer vos propres vidéos",
     "hidingCreatorToast": "Vidéos de @{{author}} masquées",
@@ -144,7 +146,8 @@
     "pickTopic": "Choisissez un sujet (compte comme un vote à 100 %)",
     "submitTag": "Valider le tag",
     "tagThisVideoFull": "Taguer cette vidéo (compte comme un vote à 100 %)",
-    "justTag": "Ne pas voter — juste taguer"
+    "justTag": "Ne pas voter — juste taguer",
+    "addsAbout": "ajoute environ {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "Tags automatiques : {{tags}}",

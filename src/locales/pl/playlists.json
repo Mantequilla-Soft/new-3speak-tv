@@ -61,6 +61,7 @@
     "items_other": "{{count}} elementu",
     "created": "Utworzono {{when}}",
     "podcastFeed": "Kanał podcastu",
+    "playAll": "Odtwórz wszystko",
     "podcastFeedTitle": "Obserwuj {{name}} w dowolnej aplikacji do podcastów (kanał RSS)",
     "album": {
       "genre": "<strong>Gatunek:</strong> {{value}}",

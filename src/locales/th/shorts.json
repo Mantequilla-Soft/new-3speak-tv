@@ -39,12 +39,18 @@
   "glow": {
     "subtle": "แสงรอบข้าง: อ่อน",
     "vivid": "แสงรอบข้าง: สดใส",
-    "off": "แสงรอบข้าง: ปิด"
+    "off": "แสงรอบข้าง: ปิด",
+    "label": "แสงรอบข้าง",
+    "offShort": "ปิด",
+    "subtleShort": "อ่อน",
+    "vividShort": "สดใส"
   },
   "playbackMode": {
     "autoReplay": "เล่นซ้ำอัตโนมัติ",
     "autoSwipe": "ปัดอัตโนมัติ",
-    "manual": "ด้วยตนเอง"
+    "manual": "ด้วยตนเอง",
+    "label": "การเล่น",
+    "options": "ตัวเลือกการเล่น"
   },
   "subtitles": {
     "off": "ปิด"

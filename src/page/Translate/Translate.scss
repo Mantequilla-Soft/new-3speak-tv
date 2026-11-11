@@ -6,10 +6,9 @@
   // need the room, and translators work here for long stretches.
   max-width: 1600px;
   margin: 0 auto;
-  padding: 24px var(--page-pad) 0;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
   color: var(--text);
-
-  @include v2.mobile { padding: 16px 16px 0; }
 
   h1 {
     margin: 0;

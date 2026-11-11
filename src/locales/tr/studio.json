@@ -11,7 +11,9 @@
   },
   "drafts": {
     "untitled": "(başlıksız)",
-    "empty": "Seçilen filtreyle video bulunamadı."
+    "empty": "Seçilen filtreyle video bulunamadı.",
+    "title": "Stüdyo",
+    "create": "Oluştur"
   },
   "schedule": {
     "days": {

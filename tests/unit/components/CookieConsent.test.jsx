@@ -73,7 +73,7 @@ describe('the consent banner without third-party ads', () => {
   it('shows and hides exactly what is stored', async () => {
     const { user } = mount()
     await user.click(screen.getByRole('button', { name: 'What exactly is stored?' }))
-    expect(screen.getByText('Essential — always on')).toBeInTheDocument()
+    expect(screen.getByText('Essential (always on)')).toBeInTheDocument()
     expect(screen.getByText('Your login session')).toBeInTheDocument()
     expect(screen.getByText(/Playback position per video/)).toBeInTheDocument()
     expect(screen.queryByText(/an outside advertising company's code/)).not.toBeInTheDocument()

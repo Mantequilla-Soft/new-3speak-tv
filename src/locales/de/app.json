@@ -87,7 +87,7 @@
     "lookAround": "Ich will mich erst mal umsehen"
   },
   "interests": {
-    "saved": "Interessen gespeichert – du kannst sie jederzeit in den Einstellungen ändern",
+    "saved": "Interessen gespeichert. Du kannst sie jederzeit in den Einstellungen ändern",
     "saveFailed": "Interessen konnten nicht gespeichert werden",
     "title": "Was interessiert dich?",
     "body": "Wähle ein paar Themen, die dir gefallen, und wir zeigen dir mehr von den Inhalten, die du magst. Du kannst sie jederzeit in den <b>Einstellungen</b> ändern.",

@@ -659,7 +659,7 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
 
       <div className="snap-actions">
         <div className="snap-vote">
-          <UpvoteCount count={votes} voted={voted} onClick={() => setShowVote((v) => !v)} size={13} />
+          <UpvoteCount count={votes} voted={voted} onClick={() => setShowVote((v) => !v)} pill label={t('watch.actions.vote')} />
           {showVote && (
             <CommentVoteTooltip
               author={snap.owner}

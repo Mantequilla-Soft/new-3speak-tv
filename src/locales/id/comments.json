@@ -132,6 +132,9 @@
     "uploadingImage": "Mengunggah gambar",
     "write": "Tulis",
     "preview": "Pratinjau",
-    "nothingToPreview": "Belum ada yang bisa dipratinjau"
+    "nothingToPreview": "Belum ada yang bisa dipratinjau",
+    "creator": "Kreator",
+    "empty": "Belum ada komentar",
+    "emptyHint": "Komentar yang terkait dengan momen tertentu muncul di linimasa video."
   }
 }

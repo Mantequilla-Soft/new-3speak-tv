@@ -12,7 +12,8 @@
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 24px var(--page-pad);
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
   box-sizing: border-box;
   min-width: 0;
 

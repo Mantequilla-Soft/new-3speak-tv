@@ -22,6 +22,8 @@
     "memoPlaceholder": "bijv. Bedankt voor deze geweldige content!",
     "memoLinkNote": "Deze link wordt aan de memo toegevoegd: {{link}}",
     "send": "Fooi sturen",
+    "sendAmount": "{{amount}} {{currency}} sturen",
+    "sentEyebrow": "Fooi verstuurd",
     "lightning": {
       "amountLabel": "Bedrag (sats):",
       "messageLabel": "Bericht (optioneel):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Log in om je feed te personaliseren",
-    "notInterestedToast": "Niet geïnteresseerd — we verbergen deze video",
+    "notInterestedToast": "Niet geïnteresseerd. We verbergen deze video",
     "undo": "Ongedaan maken",
     "cantHideOwn": "Je kunt je eigen video's niet verbergen",
     "hidingCreatorToast": "Video's van @{{author}} worden verborgen",
@@ -142,7 +144,8 @@
     "pickTopic": "Kies een onderwerp (telt als een vote van 100%)",
     "submitTag": "Tag versturen",
     "tagThisVideoFull": "Tag deze video (telt als een vote van 100%)",
-    "justTag": "Niet voten — alleen taggen"
+    "justTag": "Niet voten — alleen taggen",
+    "addsAbout": "voegt ongeveer {{value}} toe"
   },
   "tagsPicker": {
     "autoTagged": "Automatisch getagd: {{tags}}",

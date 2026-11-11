@@ -54,7 +54,7 @@
     "verify": "验证"
   },
   "auth": {
-    "title": "授权 3Speak！",
+    "title": "授权 3Speak",
     "text": "要在 3Speak 上传视频，我们需要你的 posting 权限，这样我们才能把你上传的视频发布到 Hive。你只需要授予一次 posting 权限。",
     "authorize": "授权"
   },
@@ -69,7 +69,7 @@
       "duplicate": "此账号已在列表中。",
       "invalidAccount": "用户名或社区 ID 无效。",
       "cannotIncrease": "不能超过剩余的 {{percent}}%",
-      "pendingRow": "@{{account}} 还没有添加——点击 + 添加，或清空该字段。",
+      "pendingRow": "@{{account}} 还没有添加。点击 + 添加，或清空该字段。",
       "atLeastOne": "奖励百分比至少为 1%",
       "maxCount": "Hive 每篇帖子最多允许 {{max}} 位受益人。"
     },
@@ -79,10 +79,10 @@
     "usernamePlaceholder": "输入用户名",
     "minimumReward": "最低奖励为 <strong>1%</strong>",
     "checking": "正在 Hive 上检查 <strong>@{{account}}</strong>…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> 不是已存在的 Hive 账号。",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> 还没有添加——点击 <strong>+</strong> 添加，或清空该字段。",
-    "infrastructure": "10% === 基础设施",
-    "videoEncoding": "视频编码 === 1%",
+    "notExisting": "<strong>@{{account}}</strong> 不是已存在的 Hive 账号。",
+    "notAdded": "<strong>@{{account}}</strong> 还没有添加。点击 <strong>+</strong> 添加，或清空该字段。",
+    "infrastructure": "基础设施：10%",
+    "videoEncoding": "视频编码：1%",
     "defaults": "默认受益人（{{count}}）"
   },
   "qr": {

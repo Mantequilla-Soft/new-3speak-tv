@@ -22,6 +22,8 @@
     "memoPlaceholder": "напр. Спасибо за отличный контент!",
     "memoLinkNote": "Эта ссылка добавляется в мемо: {{link}}",
     "send": "Отправить чаевые",
+    "sendAmount": "Отправить {{amount}} {{currency}}",
+    "sentEyebrow": "Чаевые отправлены",
     "lightning": {
       "amountLabel": "Сумма (sats):",
       "messageLabel": "Сообщение (необязательно):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Войдите, чтобы настроить ленту под себя",
-    "notInterestedToast": "Не интересно — мы скроем это видео",
+    "notInterestedToast": "Не интересно. Мы скроем это видео",
     "undo": "Отменить",
     "cantHideOwn": "Нельзя скрыть свои собственные видео",
     "hidingCreatorToast": "Скрываем видео от @{{author}}",
@@ -146,7 +148,8 @@
     "pickTopic": "Выберите тему (считается как голос 100%)",
     "submitTag": "Отправить тег",
     "tagThisVideoFull": "Добавить тег к видео (считается как голос 100%)",
-    "justTag": "Не голосовать — только тег"
+    "justTag": "Не голосовать — только тег",
+    "addsAbout": "добавит около {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "Теги добавлены автоматически: {{tags}}",

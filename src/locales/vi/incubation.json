@@ -550,7 +550,7 @@
     "yesterday": "Hôm qua",
     "groups": {
       "video": "Video",
-      "videoNote": "Mỗi video cách nhau 5 phút — đây là phần chậm.",
+      "videoNote": "Mỗi video cách nhau 5 phút: đây là phần chậm.",
       "short": "Shorts",
       "comment": "Bình luận",
       "vote": "Lượt thích",
@@ -591,7 +591,7 @@
     "fiveMin": "5 phút",
     "waitingTitle": "Đang chờ người khác",
     "waitingText": "Các mục này sẽ tự xuất bản khi bài đăng mà chúng trỏ tới được đăng lên Hive. Trong lúc đó không có gì bị mất.",
-    "waitingFor": "<b>{{label}}</b> — đang chờ {{target}}",
+    "waitingFor": "<b>{{label}}</b>: đang chờ {{target}}",
     "andMore": "và {{count}} mục khác",
     "excludedTitle": "Không được chuyển sang"
   }

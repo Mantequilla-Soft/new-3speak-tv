@@ -436,6 +436,7 @@
     "portrait": "縦向き",
     "landscape": "横向き",
     "autoDetect": "自動検出（{{lang}}）",
+    "layout": "レイアウト",
     "presets": {
       "frontcam": "フロントカメラ",
       "frontcamTitle": "自撮りレンズの下に小さな帯を表示。読んでいることが最も気づかれにくい",

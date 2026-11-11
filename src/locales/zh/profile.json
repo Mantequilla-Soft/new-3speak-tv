@@ -19,6 +19,7 @@
     "pleaseTryAgain": "请重试",
     "followers_other": "{{num}} 位粉丝",
     "popularTitle": "热门创作者",
+    "suggestedTitle": "推荐关注的创作者",
     "scrollLeft": "向左滚动",
     "scrollRight": "向右滚动",
     "mostlyPosts": "主要发布{{topic}}内容"
@@ -212,7 +213,11 @@
     "loginToUpload": "登录后上传视频",
     "linkExternalTitle": "关联外部主页",
     "addProfile": "添加主页",
-    "editTitle": "编辑你的头像、名字、简介和所在地"
+    "editTitle": "编辑你的头像、名字、简介和所在地",
+    "more": "更多",
+    "moreActions": "@{{user}} 的更多操作",
+    "copyProfileLink": "复制主页链接",
+    "podcastFeed": "播客订阅源 (RSS)"
   },
   "tabs": {
     "overview": "概览",

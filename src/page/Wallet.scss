@@ -4,10 +4,10 @@
 .wallet-v2 {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: 32px 40px 48px;
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0 0 48px;
   color: var(--text);
-  @include v2.below-wide { padding: 24px; }
-  @include v2.mobile { padding: 0 16px 32px; }
+  @include v2.mobile { padding-bottom: 32px; }
 
   .is-narrow { display: none; }
   @include v2.mobile {

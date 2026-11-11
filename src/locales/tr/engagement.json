@@ -22,6 +22,8 @@
     "memoPlaceholder": "örn. Bu harika içerik için teşekkürler!",
     "memoLinkNote": "Bu bağlantı nota eklenir: {{link}}",
     "send": "Bahşiş Gönder",
+    "sendAmount": "{{amount}} {{currency}} gönder",
+    "sentEyebrow": "Bahşiş gönderildi",
     "lightning": {
       "amountLabel": "Tutar (sats):",
       "messageLabel": "Mesaj (isteğe bağlı):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Akışını kişiselleştirmek için giriş yap",
-    "notInterestedToast": "İlgilenmiyorsun, bu videoyu gizleyeceğiz",
+    "notInterestedToast": "İlgilenmiyorsun. Bu videoyu gizleyeceğiz",
     "undo": "Geri al",
     "cantHideOwn": "Kendi videolarını gizleyemezsin",
     "hidingCreatorToast": "@{{author}} kullanıcısının videoları gizleniyor",
@@ -142,7 +144,8 @@
     "pickTopic": "Bir konu seç (%100 oy sayılır)",
     "submitTag": "Etiketi gönder",
     "tagThisVideoFull": "Bu videoyu etiketle (%100 oy sayılır)",
-    "justTag": "Oy verme, sadece etiketle"
+    "justTag": "Oy verme, sadece etiketle",
+    "addsAbout": "yaklaşık {{value}} ekler"
   },
   "tagsPicker": {
     "autoTagged": "Otomatik etiketlendi: {{tags}}",

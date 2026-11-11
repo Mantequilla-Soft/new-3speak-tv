@@ -16,7 +16,9 @@
     "translatedTo": "Çeviri dili: {{language}}",
     "showLanguage": "{{language}} göster",
     "showOriginal": "Orijinali göster",
-    "buttonTitle": "Bu videonun yapay zekâ özeti"
+    "buttonTitle": "Bu videonun yapay zekâ özeti",
+    "jumpTo": "Şuraya git",
+    "disclaimer": "Dökümden oluşturuldu. Hatalar içerebilir."
   },
   "errors": {
     "notAvailable": "Bu video kullanılamıyor.",
@@ -38,6 +40,16 @@
     "add": "Tepki Ekle"
   },
   "liveChat": "Canlı sohbet",
+  "side": {
+    "label": "Video panelleri"
+  },
+  "voters": {
+    "title": "Oy verenler",
+    "cardLabel": "Destekçiler ve oy verenler",
+    "voter": "Oy veren",
+    "weight": "Ağırlık",
+    "value": "Değer"
+  },
   "moreVideos": "Daha fazla video",
   "vote": {
     "saveFailed": "Oyun kaydedilemedi"
@@ -104,7 +116,8 @@
   },
   "community": {
     "members_one": "{{count}} Üye",
-    "members_other": "{{count}} Üye"
+    "members_other": "{{count}} Üye",
+    "postedIn": "Paylaşıldığı yer"
   },
   "tags": {
     "curated": "Seçildi"

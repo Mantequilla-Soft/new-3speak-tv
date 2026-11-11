@@ -147,6 +147,9 @@
     "uploadingImage": "Przesyłanie obrazu",
     "write": "Pisz",
     "preview": "Podgląd",
-    "nothingToPreview": "Na razie nie ma nic do podglądu"
+    "nothingToPreview": "Na razie nie ma nic do podglądu",
+    "creator": "Twórca",
+    "empty": "Brak komentarzy",
+    "emptyHint": "Komentarze przypisane do konkretnego momentu pojawiają się na osi czasu filmu."
   }
 }

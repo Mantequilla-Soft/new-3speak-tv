@@ -39,12 +39,18 @@
   "glow": {
     "subtle": "앰비언트 조명: 은은하게",
     "vivid": "앰비언트 조명: 선명하게",
-    "off": "앰비언트 조명: 꺼짐"
+    "off": "앰비언트 조명: 꺼짐",
+    "label": "앰비언트 조명",
+    "offShort": "끄기",
+    "subtleShort": "은은하게",
+    "vividShort": "선명하게"
   },
   "playbackMode": {
     "autoReplay": "자동 반복",
     "autoSwipe": "자동 넘기기",
-    "manual": "수동"
+    "manual": "수동",
+    "label": "재생",
+    "options": "재생 옵션"
   },
   "subtitles": {
     "off": "끄기"

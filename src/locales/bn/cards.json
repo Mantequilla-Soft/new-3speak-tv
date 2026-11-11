@@ -5,10 +5,12 @@
   "topicTitle": "বিষয়: {{topic}}",
   "watchingNow_one": "এখন {{count}} জন দেখছেন",
   "watchingNow_other": "এখন {{count}} জন দেখছেন",
+  "previewMuted": "প্রিভিউ · মিউট",
   "badges": {
     "gatedTitle": "শুধু সদস্যদের জন্য। 3Speak Pro দিয়ে পুরো ভিডিও দেখা যায়",
     "pro": "PRO",
     "new": "নতুন",
+    "first": "প্রথম",
     "live": "● লাইভ",
     "liveChat": "● লাইভ চ্যাট",
     "spotlight": "স্পটলাইট"

@@ -28,7 +28,12 @@
     "recipientPlaceholder": "กรอกชื่อผู้ใช้ Hive",
     "memoLabel": "บันทึกช่วยจำ",
     "memoPlaceholder": "กรอกบันทึกช่วยจำ",
-    "confirm": "ยืนยันการโอน"
+    "confirm": "ยืนยันการโอน",
+    "sendTo": "ส่ง {{amount}} {{coin}} ให้ @{{to}}",
+    "sendAmount": "ส่ง {{amount}} {{coin}}",
+    "recent": "ล่าสุด",
+    "activeKey": "ต้องใช้ active key ของคุณ",
+    "available": "ใช้ได้: {{balance}}"
   },
   "history": {
     "loadFailed": "โหลดธุรกรรมไม่สำเร็จ",
@@ -46,5 +51,46 @@
       "received": "ได้รับ"
     },
     "claimedRewards": "รางวัลที่รับแล้ว"
+  },
+  "total": "ยอดรวมทั้งหมด",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "เงินออม HBD"
+  },
+  "claim": {
+    "ready": "{{amount}} พร้อมให้รับ",
+    "readyShort": "รับได้ {{amount}}",
+    "button": "รับ",
+    "done": "รับรางวัลแล้ว",
+    "failed": "รับไม่สำเร็จ: {{error}}"
+  },
+  "activity": {
+    "title": "กิจกรรม",
+    "filters": {
+      "all": "ทั้งหมด",
+      "rewards": "รางวัล",
+      "received": "ได้รับ",
+      "sent": "ส่งแล้ว"
+    },
+    "from": "จาก @{{user}}",
+    "sentTo": "ส่งให้ @{{user}}",
+    "emptyTitle": "ยังไม่มีอะไรที่นี่",
+    "empty": "การโอนและรางวัลที่รับแล้วจะแสดงที่นี่"
+  },
+  "earnings": {
+    "title": "รายได้ 30 วัน",
+    "sub": "รางวัลที่รับแล้วและ HIVE หรือ HBD ที่ได้รับ"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "ทุกการกระทำบน Hive จะใช้ไปบ้าง และจะเติมกลับเต็มในประมาณ 5 วัน",
+    "posts_other": "ตอนนี้พอสำหรับโพสต์ประมาณ {{count}} โพสต์"
+  },
+  "receive": {
+    "title": "รับเงิน",
+    "sub": "ใครก็ส่ง HIVE หรือ HBD มาที่ชื่อบัญชีนี้ได้จากกระเป๋าเงิน Hive ใดก็ได้ ไม่ต้องใส่บันทึกช่วยจำ",
+    "copy": "คัดลอกชื่อบัญชี"
   }
 }

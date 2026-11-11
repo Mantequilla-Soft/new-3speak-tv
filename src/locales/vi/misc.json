@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Bảng tin theo dõi",
-    "error": "Lỗi khi tải video"
+    "error": "Lỗi khi tải video",
+    "emptyTitle": "Chưa có ai ở đây",
+    "emptyBody": "Theo dõi các nhà sáng tạo để video, Snaps và buổi phát trực tiếp của họ hiện ở đây đầu tiên."
   },
   "groups": {
     "title": "Nhóm",

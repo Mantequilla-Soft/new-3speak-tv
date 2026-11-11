@@ -9,7 +9,7 @@
     "needKeychain": "Je hebt de Keychain-extensie nodig om over te maken"
   },
   "header": {
-    "mine": "MIJN wallet",
+    "mine": "Mijn wallet",
     "ofUser": "Wallet van {{user}}"
   },
   "assets": "Tegoeden",
@@ -28,7 +28,12 @@
     "recipientPlaceholder": "Hive-gebruikersnaam invullen",
     "memoLabel": "Memo",
     "memoPlaceholder": "Memo invullen",
-    "confirm": "Overboeking bevestigen"
+    "confirm": "Overboeking bevestigen",
+    "sendTo": "{{amount}} {{coin}} sturen naar @{{to}}",
+    "sendAmount": "{{amount}} {{coin}} sturen",
+    "recent": "Recent",
+    "activeKey": "Vraagt om je active key",
+    "available": "Beschikbaar: {{balance}}"
   },
   "history": {
     "loadFailed": "Transacties laden mislukt",
@@ -46,5 +51,47 @@
       "received": "Ontvangen"
     },
     "claimedRewards": "Geclaimde beloningen"
+  },
+  "total": "Totaal saldo",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "HBD-spaarrekening"
+  },
+  "claim": {
+    "ready": "{{amount}} klaar om te claimen",
+    "readyShort": "{{amount}} te claimen",
+    "button": "Claimen",
+    "done": "Beloningen geclaimd",
+    "failed": "Claimen mislukt: {{error}}"
+  },
+  "activity": {
+    "title": "Activiteit",
+    "filters": {
+      "all": "Alles",
+      "rewards": "Beloningen",
+      "received": "Ontvangen",
+      "sent": "Verstuurd"
+    },
+    "from": "Van @{{user}}",
+    "sentTo": "Verstuurd naar @{{user}}",
+    "emptyTitle": "Nog niets hier",
+    "empty": "Overboekingen en geclaimde beloningen verschijnen hier."
+  },
+  "earnings": {
+    "title": "Inkomsten, 30 dagen",
+    "sub": "Geclaimde beloningen en ontvangen HIVE of HBD"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Elke actie op Hive kost er wat van. Ze vullen zich in ongeveer 5 dagen weer aan.",
+    "posts_one": "Genoeg voor ongeveer {{count}} post op dit moment",
+    "posts_other": "Genoeg voor ongeveer {{count}} posts op dit moment"
+  },
+  "receive": {
+    "title": "Ontvangen",
+    "sub": "Iedereen kan vanuit elke Hive-wallet HIVE of HBD naar deze accountnaam sturen. Geen memo nodig.",
+    "copy": "Accountnaam kopiëren"
   }
 }

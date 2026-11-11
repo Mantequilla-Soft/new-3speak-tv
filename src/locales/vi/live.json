@@ -6,7 +6,7 @@
     "thisStreamEnded": "Buổi phát trực tiếp này đã kết thúc",
     "noLongerLive": "Buổi phát không còn trực tiếp nữa. Hãy bắt đầu buổi mới bất cứ khi nào bạn sẵn sàng.",
     "recordingProcessing": "Tuyệt lắm! Bản ghi của bạn đang được xử lý và sẽ sớm xuất hiện trên bài thông báo.",
-    "thanksForLive": "Tuyệt lắm — cảm ơn bạn đã phát trực tiếp!",
+    "thanksForLive": "Tuyệt lắm, cảm ơn bạn đã phát trực tiếp!",
     "backHome": "Về trang chủ",
     "howWasStream": "Buổi phát trực tiếp của bạn thế nào?",
     "connecting": "Đang kết nối với OpenPods…",
@@ -53,11 +53,11 @@
       "spam": "Spam hoặc lừa đảo",
       "other": "Khác"
     },
-    "sent": "Cảm ơn bạn — buổi phát này đã được báo cáo cho đội ngũ của chúng tôi.",
+    "sent": "Cảm ơn bạn, buổi phát này đã được báo cáo cho đội ngũ của chúng tôi.",
     "failed": "Không thể gửi báo cáo. Vui lòng thử lại.",
     "title": "Báo cáo buổi phát này",
     "reporting": "Đang báo cáo <b>@{{host}}</b>.",
-    "intro": "Cho chúng tôi biết có vấn đề gì — đội ngũ của chúng tôi xem xét mọi báo cáo.",
+    "intro": "Cho chúng tôi biết có vấn đề gì. Đội ngũ của chúng tôi xem xét mọi báo cáo.",
     "detailPlaceholder": "Thêm chi tiết (không bắt buộc)",
     "sending": "Đang gửi…",
     "submit": "Gửi báo cáo"

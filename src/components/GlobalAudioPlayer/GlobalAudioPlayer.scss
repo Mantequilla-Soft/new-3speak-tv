@@ -194,7 +194,7 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
     left: 8px;
     right: 8px;
     width: auto;
-    bottom: calc(var(--bottom-nav-height, 56px) + 8px);
+    bottom: calc(var(--bottom-bar-clearance) + 8px);
   }
 }
 

@@ -120,7 +120,8 @@
     "communities": "커뮤니티를 둘러보는 중…",
     "followers": "누가 팔로우했는지 확인하는 중…",
     "watched": "시청한 영상을 살펴보는 중…",
-    "thumbnails": "썸네일 불러오는 중… {{done}}/{{total}}"
+    "thumbnails": "썸네일 불러오는 중… {{done}}/{{total}}",
+    "thumbnailsWaiting": "썸네일을 불러오는 중…"
   },
   "tips": {
     "label": "팁:",

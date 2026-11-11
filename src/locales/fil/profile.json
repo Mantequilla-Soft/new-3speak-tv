@@ -21,6 +21,7 @@
     "followers_one": "{{num}} follower",
     "followers_other": "{{num}} followers",
     "popularTitle": "Mga sikat na creator",
+    "suggestedTitle": "Mga creator na puwedeng i-follow",
     "scrollLeft": "Mag-scroll pakaliwa",
     "scrollRight": "Mag-scroll pakanan",
     "mostlyPosts": "Madalas mag-post tungkol sa {{topic}}"
@@ -230,7 +231,11 @@
     "loginToUpload": "Mag-log in para mag-upload ng video",
     "linkExternalTitle": "Mag-link ng external profile",
     "addProfile": "Magdagdag ng profile",
-    "editTitle": "I-edit ang larawan, pangalan, bio at lokasyon mo"
+    "editTitle": "I-edit ang larawan, pangalan, bio at lokasyon mo",
+    "more": "Iba pa",
+    "moreActions": "Iba pang aksyon para kay @{{user}}",
+    "copyProfileLink": "Kopyahin ang link ng profile",
+    "podcastFeed": "Podcast feed (RSS)"
   },
   "tabs": {
     "overview": "Overview",

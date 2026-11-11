@@ -40,12 +40,18 @@
   "glow": {
     "subtle": "एम्बिएंट लाइट: हल्की",
     "vivid": "एम्बिएंट लाइट: तेज़",
-    "off": "एम्बिएंट लाइट: बंद"
+    "off": "एम्बिएंट लाइट: बंद",
+    "label": "एम्बिएंट लाइट",
+    "offShort": "बंद",
+    "subtleShort": "हल्की",
+    "vividShort": "तेज़"
   },
   "playbackMode": {
     "autoReplay": "ऑटो-रीप्ले",
     "autoSwipe": "ऑटो-स्वाइप",
-    "manual": "मैनुअल"
+    "manual": "मैनुअल",
+    "label": "प्लेबैक",
+    "options": "प्लेबैक विकल्प"
   },
   "subtitles": {
     "off": "बंद"

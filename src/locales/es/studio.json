@@ -11,7 +11,9 @@
   },
   "drafts": {
     "untitled": "(sin título)",
-    "empty": "No se encontraron videos con el filtro seleccionado."
+    "empty": "No se encontraron videos con el filtro seleccionado.",
+    "title": "Estudio",
+    "create": "Crear"
   },
   "schedule": {
     "days": {

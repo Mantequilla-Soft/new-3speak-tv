@@ -38,6 +38,8 @@
     "myChannelAria": "我的频道",
     "vpTooltip": "投票权重（Voting Power）：你下一次点赞的分量",
     "rcTooltip": "资源积分（Resource Credits）：你在 Hive 上操作所消耗的资源",
+    "votingPower": "投票权重",
+    "resourceCredits": "资源积分",
     "myChannel": "我的频道",
     "publishBacklog": "待发布内容",
     "analytics": "数据分析",

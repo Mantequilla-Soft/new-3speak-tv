@@ -9,7 +9,7 @@
     "needKeychain": "Kailangan mo ang Keychain extension para makapag-transfer"
   },
   "header": {
-    "mine": "AKING Wallet",
+    "mine": "Wallet ko",
     "ofUser": "Wallet ni {{user}}"
   },
   "assets": "Mga Asset",
@@ -28,7 +28,12 @@
     "recipientPlaceholder": "Ilagay ang Hive username",
     "memoLabel": "Memo",
     "memoPlaceholder": "Ilagay ang Memo",
-    "confirm": "Kumpirmahin ang Transfer"
+    "confirm": "Kumpirmahin ang Transfer",
+    "sendTo": "Ipadala ang {{amount}} {{coin}} kay @{{to}}",
+    "sendAmount": "Ipadala ang {{amount}} {{coin}}",
+    "recent": "Kamakailan",
+    "activeKey": "Kailangan ang active key mo",
+    "available": "Magagamit: {{balance}}"
   },
   "history": {
     "loadFailed": "Hindi ma-load ang mga transaksyon",
@@ -46,5 +51,47 @@
       "received": "Natanggap"
     },
     "claimedRewards": "Na-claim na Rewards"
+  },
+  "total": "Kabuuang balance",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "Savings na HBD"
+  },
+  "claim": {
+    "ready": "{{amount}} na puwedeng i-claim",
+    "readyShort": "{{amount}} na i-claim",
+    "button": "I-claim",
+    "done": "Na-claim ang mga reward",
+    "failed": "Hindi na-claim: {{error}}"
+  },
+  "activity": {
+    "title": "Activity",
+    "filters": {
+      "all": "Lahat",
+      "rewards": "Rewards",
+      "received": "Natanggap",
+      "sent": "Naipadala"
+    },
+    "from": "Mula kay @{{user}}",
+    "sentTo": "Ipinadala kay @{{user}}",
+    "emptyTitle": "Wala pang laman dito",
+    "empty": "Dito lalabas ang mga transfer at na-claim na reward."
+  },
+  "earnings": {
+    "title": "Kita, 30 araw",
+    "sub": "Mga na-claim na reward at natanggap na HIVE o HBD"
+  },
+  "rc": {
+    "title": "Resource Credits",
+    "sub": "Gumagamit nito ang bawat aksyon sa Hive. Napupuno ulit ito sa loob ng mga 5 araw.",
+    "posts_one": "Sapat para sa mga {{count}} post ngayon",
+    "posts_other": "Sapat para sa mga {{count}} post ngayon"
+  },
+  "receive": {
+    "title": "Tumanggap",
+    "sub": "Puwedeng magpadala ang kahit sino ng HIVE o HBD sa account name na ito mula sa kahit anong Hive wallet. Hindi kailangan ng memo.",
+    "copy": "Kopyahin ang account name"
   }
 }

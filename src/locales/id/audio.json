@@ -100,7 +100,11 @@
     "chapterLink": "Tautan bab",
     "upNext": "Berikutnya",
     "hideIdle": "Sembunyikan (antrean tetap ada)",
-    "continueAt": "Lanjutkan dari {{time}}"
+    "continueAt": "Lanjutkan dari {{time}}",
+    "position": "{{current}} dari {{total}}",
+    "playingFrom": "Diputar dari {{name}}",
+    "atThisMoment": "Saat ini",
+    "goTo": "Buka {{name}}"
   },
   "share": {
     "failed": "Gagal",
@@ -227,7 +231,7 @@
     },
     "source": {
       "dropHere": "Lepaskan file audio di sini, atau klik untuk memilih",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — boleh lebih dari satu",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (boleh lebih dari satu)",
       "stop": "Berhenti",
       "orRecord": "Atau rekam langsung",
       "recordLimit": "Maksimal {{minutes}} menit per rekaman",

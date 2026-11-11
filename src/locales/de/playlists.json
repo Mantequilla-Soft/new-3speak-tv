@@ -55,6 +55,7 @@
     "items_other": "{{count}} Einträge",
     "created": "Erstellt {{when}}",
     "podcastFeed": "Podcast-Feed",
+    "playAll": "Alle abspielen",
     "podcastFeedTitle": "{{name}} in jeder Podcast-App abonnieren (RSS-Feed)",
     "album": {
       "genre": "<strong>Genre:</strong> {{value}}",

@@ -93,7 +93,8 @@
   "legal": {
     "pageTitle": "Як 3Speak обробляє ваші дані · 3Speak",
     "englishOnly": "Ця сторінка доступна лише англійською. Обов'язковою є англійська версія.",
-    "back": "← Назад до 3Speak"
+    "back": "← Назад до 3Speak",
+    "onThisPage": "На цій сторінці"
   },
   "notFound": {
     "imageAlt": "404",

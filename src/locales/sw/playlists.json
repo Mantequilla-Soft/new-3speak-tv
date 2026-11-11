@@ -55,6 +55,7 @@
     "items_other": "vipengee {{count}}",
     "created": "Iliundwa {{when}}",
     "podcastFeed": "Mlisho wa podikasti",
+    "playAll": "Cheza zote",
     "podcastFeedTitle": "Fuatilia {{name}} kwenye programu yoyote ya podikasti (mlisho wa RSS)",
     "album": {
       "genre": "<strong>Aina:</strong> {{value}}",

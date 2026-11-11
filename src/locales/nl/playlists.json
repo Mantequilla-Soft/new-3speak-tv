@@ -55,6 +55,7 @@
     "items_other": "{{count}} items",
     "created": "Aangemaakt {{when}}",
     "podcastFeed": "Podcastfeed",
+    "playAll": "Alles afspelen",
     "podcastFeedTitle": "Volg {{name}} in elke podcastapp (RSS-feed)",
     "album": {
       "genre": "<strong>Genre:</strong> {{value}}",

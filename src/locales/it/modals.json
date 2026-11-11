@@ -54,8 +54,8 @@
     "verify": "Verifica"
   },
   "auth": {
-    "title": "Autorizza 3Speak!",
-    "text": "Per caricare video su 3peak ci serve la tua autorità posting. Ci permette di pubblicare su Hive i video che carichi. Devi concederci l'autorità posting una sola volta.",
+    "title": "Autorizza 3Speak",
+    "text": "Per caricare video su 3Speak ci serve la tua autorità posting. Ci permette di pubblicare su Hive i video che carichi. Devi concederci l'autorità posting una sola volta.",
     "authorize": "Autorizza"
   },
   "beneficiary": {
@@ -69,7 +69,7 @@
       "duplicate": "Questo account è già nell'elenco.",
       "invalidAccount": "Nome utente o ID community non valido.",
       "cannotIncrease": "Non puoi superare il {{percent}}% rimanente",
-      "pendingRow": "@{{account}} non è ancora stato aggiunto — fai clic su + per aggiungerlo, o svuota il campo.",
+      "pendingRow": "@{{account}} non è ancora stato aggiunto. Fai clic su + per aggiungerlo, o svuota il campo.",
       "atLeastOne": "La percentuale di ricompensa deve essere almeno dell'1%",
       "maxCount": "Hive consente al massimo {{max}} beneficiari per post."
     },
@@ -79,10 +79,10 @@
     "usernamePlaceholder": "Inserisci il nome utente",
     "minimumReward": "La ricompensa minima è <strong>1%</strong>",
     "checking": "Verifica di <strong>@{{account}}</strong> su Hive…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> non è un account Hive esistente.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> non è ancora stato aggiunto — fai clic su <strong>+</strong> per aggiungerlo, o svuota il campo.",
-    "infrastructure": "10% === Infrastruttura",
-    "videoEncoding": "Codifica video === 1%",
+    "notExisting": "<strong>@{{account}}</strong> non è un account Hive esistente.",
+    "notAdded": "<strong>@{{account}}</strong> non è ancora stato aggiunto. Fai clic su <strong>+</strong> per aggiungerlo, o svuota il campo.",
+    "infrastructure": "Infrastruttura: 10%",
+    "videoEncoding": "Codifica video: 1%",
     "defaults": "Beneficiari predefiniti ({{count}})"
   },
   "qr": {

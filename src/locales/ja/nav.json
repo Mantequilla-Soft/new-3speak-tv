@@ -38,6 +38,8 @@
     "myChannelAria": "マイチャンネル",
     "vpTooltip": "投票パワー: 次の投票にどれだけの重みがあるか",
     "rcTooltip": "リソースクレジット: Hive での操作にかかるコスト",
+    "votingPower": "投票パワー",
+    "resourceCredits": "リソースクレジット",
     "myChannel": "マイチャンネル",
     "publishBacklog": "バックログを公開",
     "analytics": "アナリティクス",

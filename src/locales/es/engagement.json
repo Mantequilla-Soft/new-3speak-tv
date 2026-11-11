@@ -22,6 +22,8 @@
     "memoPlaceholder": "p. ej. ¡Gracias por este contenido increíble!",
     "memoLinkNote": "Este enlace se añade al memo: {{link}}",
     "send": "Enviar propina",
+    "sendAmount": "Enviar {{amount}} {{currency}}",
+    "sentEyebrow": "Propina enviada",
     "lightning": {
       "amountLabel": "Cantidad (sats):",
       "messageLabel": "Mensaje (opcional):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Inicia sesión para personalizar tu feed",
-    "notInterestedToast": "No te interesa: ocultaremos este video",
+    "notInterestedToast": "No te interesa. Ocultaremos este video",
     "undo": "Deshacer",
     "cantHideOwn": "No puedes ocultar tus propios videos",
     "hidingCreatorToast": "Ocultando videos de @{{author}}",
@@ -144,7 +146,8 @@
     "pickTopic": "Elige un tema (cuenta como un voto del 100%)",
     "submitTag": "Enviar etiqueta",
     "tagThisVideoFull": "Etiquetar este video (cuenta como un voto del 100%)",
-    "justTag": "No votar, solo etiquetar"
+    "justTag": "No votar, solo etiquetar",
+    "addsAbout": "suma unos {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "Etiquetado automático: {{tags}}",

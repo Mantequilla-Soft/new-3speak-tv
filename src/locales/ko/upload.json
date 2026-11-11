@@ -436,6 +436,7 @@
     "portrait": "세로",
     "landscape": "가로",
     "autoDetect": "자동 감지({{lang}})",
+    "layout": "레이아웃",
     "presets": {
       "frontcam": "전면 카메라",
       "frontcamTitle": "셀카 렌즈 바로 아래 좁은 띠 — 읽고 있다는 티가 가장 덜 나요",

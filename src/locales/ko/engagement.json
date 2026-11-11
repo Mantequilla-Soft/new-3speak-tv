@@ -22,6 +22,8 @@
     "memoPlaceholder": "예: 멋진 콘텐츠 감사해요!",
     "memoLinkNote": "이 링크가 메모에 추가됩니다: {{link}}",
     "send": "팁 보내기",
+    "sendAmount": "{{amount}} {{currency}} 보내기",
+    "sentEyebrow": "팁 보냄",
     "lightning": {
       "amountLabel": "금액(sats):",
       "messageLabel": "메시지(선택):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "피드를 맞춤 설정하려면 로그인해 주세요",
-    "notInterestedToast": "관심 없음 — 이 동영상을 숨길게요",
+    "notInterestedToast": "관심 없음. 이 동영상을 숨길게요",
     "undo": "실행 취소",
     "cantHideOwn": "내 동영상은 숨길 수 없어요",
     "hidingCreatorToast": "@{{author}}님의 동영상을 숨기는 중",
@@ -140,7 +142,8 @@
     "pickTopic": "주제 선택(100% 투표로 계산돼요)",
     "submitTag": "태그 제출",
     "tagThisVideoFull": "이 동영상에 태그 달기(100% 투표로 계산돼요)",
-    "justTag": "투표 없이 태그만 달기"
+    "justTag": "투표 없이 태그만 달기",
+    "addsAbout": "약 {{value}} 추가"
   },
   "tagsPicker": {
     "autoTagged": "자동 태그: {{tags}}",

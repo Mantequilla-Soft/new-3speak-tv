@@ -5,10 +5,12 @@
   "topicTitle": "Mada: {{topic}}",
   "watchingNow_one": "{{count}} anatazama sasa",
   "watchingNow_other": "{{count}} wanatazama sasa",
+  "previewMuted": "Onyesho · bila sauti",
   "badges": {
     "gatedTitle": "Kwa wanachama pekee. 3Speak Pro hufungua video nzima",
     "pro": "PRO",
     "new": "MPYA",
+    "first": "Ya kwanza",
     "live": "● MUBASHARA",
     "liveChat": "● GUMZO MUBASHARA",
     "spotlight": "Kivutio"

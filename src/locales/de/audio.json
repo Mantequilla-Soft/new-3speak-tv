@@ -102,7 +102,11 @@
     "chapterLink": "Link zum Kapitel",
     "upNext": "Als Nächstes",
     "hideIdle": "Ausblenden (die Warteschlange bleibt)",
-    "continueAt": "Weiter bei {{time}}"
+    "continueAt": "Weiter bei {{time}}",
+    "position": "{{current}} von {{total}}",
+    "playingFrom": "Wiedergabe aus {{name}}",
+    "atThisMoment": "An dieser Stelle",
+    "goTo": "Zu {{name}}"
   },
   "share": {
     "failed": "Fehlgeschlagen",
@@ -233,7 +237,7 @@
     },
     "source": {
       "dropHere": "Audiodateien hier ablegen oder klicken zum Durchsuchen",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC – mehrere möglich",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (mehrere möglich)",
       "stop": "Stopp",
       "orRecord": "Oder live aufnehmen",
       "recordLimit": "Bis zu {{minutes}} Min. pro Aufnahme",

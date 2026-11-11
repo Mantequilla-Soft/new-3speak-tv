@@ -4,9 +4,10 @@
 .upload-start {
   display: flex;
   justify-content: center;
-  padding: 40px var(--page-pad);
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 16px 0;
 
-  @include v2.mobile { padding: 16px var(--page-pad); }
+  @include v2.mobile { padding: 0; }
 }
 
 .upload-start__card {

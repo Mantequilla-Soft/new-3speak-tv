@@ -102,7 +102,11 @@
     "chapterLink": "অধ্যায়ের লিংক",
     "upNext": "এরপর",
     "hideIdle": "লুকান (আপনার কিউ থাকবে)",
-    "continueAt": "{{time}} থেকে চালিয়ে যান"
+    "continueAt": "{{time}} থেকে চালিয়ে যান",
+    "position": "{{total}}টির মধ্যে {{current}}",
+    "playingFrom": "{{name}} থেকে চলছে",
+    "atThisMoment": "এই মুহূর্তে",
+    "goTo": "{{name}}-এ যান"
   },
   "share": {
     "failed": "ব্যর্থ",
@@ -233,7 +237,7 @@
     },
     "source": {
       "dropHere": "অডিও ফাইল এখানে ছাড়ুন, অথবা ক্লিক করে বাছাই করুন",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — একাধিক চলবে",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (একাধিক চলবে)",
       "stop": "থামান",
       "orRecord": "অথবা লাইভ রেকর্ড করুন",
       "recordLimit": "প্রতি রেকর্ডিং সর্বোচ্চ {{minutes}} মিনিট",

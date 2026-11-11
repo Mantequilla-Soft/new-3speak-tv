@@ -39,12 +39,18 @@
   "glow": {
     "subtle": "Ánh sáng nền: nhẹ",
     "vivid": "Ánh sáng nền: rực rỡ",
-    "off": "Ánh sáng nền: tắt"
+    "off": "Ánh sáng nền: tắt",
+    "label": "Ánh sáng nền",
+    "offShort": "Tắt",
+    "subtleShort": "Nhẹ",
+    "vividShort": "Rực rỡ"
   },
   "playbackMode": {
     "autoReplay": "Tự phát lại",
     "autoSwipe": "Tự vuốt",
-    "manual": "Thủ công"
+    "manual": "Thủ công",
+    "label": "Phát",
+    "options": "Tùy chọn phát"
   },
   "subtitles": {
     "off": "Tắt"

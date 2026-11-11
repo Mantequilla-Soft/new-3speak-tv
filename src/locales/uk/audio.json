@@ -106,7 +106,11 @@
     "chapterLink": "Посилання на розділ",
     "upNext": "Далі",
     "hideIdle": "Сховати (черга залишиться)",
-    "continueAt": "Продовжити з {{time}}"
+    "continueAt": "Продовжити з {{time}}",
+    "position": "{{current}} з {{total}}",
+    "playingFrom": "Грає з «{{name}}»",
+    "atThisMoment": "У цей момент",
+    "goTo": "Перейти до «{{name}}»"
   },
   "share": {
     "failed": "Помилка",
@@ -245,7 +249,7 @@
     },
     "source": {
       "dropHere": "Перетягніть аудіофайли сюди або натисніть, щоб вибрати",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC — можна кілька",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (можна кілька)",
       "stop": "Зупинити",
       "orRecord": "Або запишіть наживо",
       "recordLimit": "До {{minutes}} хв на один запис",
@@ -525,9 +529,9 @@
       "modeShows": "Шоу",
       "modePeople": "Люди",
       "placeholderPeople": "Ім’я ведучого або гостя",
+      "appearsIn_one": "У {{count}} випуску",
       "appearsIn_few": "У {{count}} випусках",
       "appearsIn_many": "У {{count}} випусках",
-      "appearsIn_one": "У {{count}} випуску",
       "appearsIn_other": "У {{count}} випуску",
       "latestMatch": "Останній: {{title}}"
     },

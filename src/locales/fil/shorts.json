@@ -40,12 +40,18 @@
   "glow": {
     "subtle": "Ambient light: banayad",
     "vivid": "Ambient light: matingkad",
-    "off": "Ambient light: off"
+    "off": "Ambient light: off",
+    "label": "Ambient light",
+    "offShort": "Naka-off",
+    "subtleShort": "Banayad",
+    "vividShort": "Matingkad"
   },
   "playbackMode": {
     "autoReplay": "Auto-Replay",
     "autoSwipe": "Auto-Swipe",
-    "manual": "Manual"
+    "manual": "Manual",
+    "label": "Playback",
+    "options": "Mga opsyon sa playback"
   },
   "subtitles": {
     "off": "Off"

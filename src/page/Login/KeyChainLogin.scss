@@ -8,7 +8,8 @@
   place-items: center;
   min-height: 80vh;
   min-height: 80dvh;
-  padding: var(--page-pad);
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
 }
 
 .kcl-card {

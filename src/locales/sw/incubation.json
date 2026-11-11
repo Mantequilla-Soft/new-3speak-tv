@@ -584,7 +584,7 @@
     "yesterday": "Jana",
     "groups": {
       "video": "Video",
-      "videoNote": "Moja kila dakika 5 — hii ndiyo sehemu ya polepole.",
+      "videoNote": "Moja kila dakika 5: hii ndiyo sehemu ya polepole.",
       "short": "Shorts",
       "comment": "Maoni",
       "vote": "Kupenda",
@@ -627,7 +627,7 @@
     "fiveMin": "dk 5",
     "waitingTitle": "Inamsubiri mtu mwingine",
     "waitingText": "Hivi huchapishwa vyenyewe mara chapisho vinavyoelekeza likiwekwa kwenye Hive. Hakuna kinachopotea wakati huo.",
-    "waitingFor": "<b>{{label}}</b> — inasubiri {{target}}",
+    "waitingFor": "<b>{{label}}</b>: inasubiri {{target}}",
     "andMore": "na {{count}} zaidi",
     "excludedTitle": "Havitahamishwa"
   }

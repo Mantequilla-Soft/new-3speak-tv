@@ -39,12 +39,18 @@
   "glow": {
     "subtle": "氛围光：柔和",
     "vivid": "氛围光：鲜艳",
-    "off": "氛围光：关"
+    "off": "氛围光：关",
+    "label": "氛围光",
+    "offShort": "关",
+    "subtleShort": "柔和",
+    "vividShort": "鲜艳"
   },
   "playbackMode": {
     "autoReplay": "自动重播",
     "autoSwipe": "自动下滑",
-    "manual": "手动"
+    "manual": "手动",
+    "label": "播放",
+    "options": "播放选项"
   },
   "subtitles": {
     "off": "关"

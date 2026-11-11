@@ -28,6 +28,11 @@
   },
   "newFromFollowing": {
     "aria": "Нове від авторів, на яких ви підписані",
+    "summary_one": "{{count}} нове відео",
+    "summary_few": "{{count}} нові відео",
+    "summary_many": "{{count}} нових відео",
+    "summary_other": "{{count}} нового відео",
+    "fromFollowing": "від тих, на кого ви підписані",
     "shorts_one": "{{count}} Shorts",
     "shorts_few": "{{count}} Shorts",
     "shorts_many": "{{count}} Shorts",
@@ -50,6 +55,9 @@
     "empty": "Тут поки нічого немає.",
     "viewAll": "Усі",
     "dragToReorder": "Перетягніть, щоб змінити порядок",
+    "customize": "Налаштувати",
+    "customizeTitle": "Налаштувати головну",
+    "customizeHint": "Переміщуйте розділи вгору чи вниз. Вимкніть ті, що вам не потрібні.",
     "surfTitle": "Перемикання каналів: виберіть тему й дивіться, як телевізор",
     "zapping": "Перемикання"
   },

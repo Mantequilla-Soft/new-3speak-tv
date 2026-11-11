@@ -52,6 +52,7 @@
     "items_other": "{{count}}개 항목",
     "created": "{{when}} 생성",
     "podcastFeed": "팟캐스트 피드",
+    "playAll": "모두 재생",
     "podcastFeedTitle": "어떤 팟캐스트 앱에서든 {{name}} 구독하기 (RSS 피드)",
     "album": {
       "genre": "<strong>장르:</strong> {{value}}",

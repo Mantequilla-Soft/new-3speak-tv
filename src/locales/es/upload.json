@@ -440,6 +440,7 @@
     "portrait": "Vertical",
     "landscape": "Horizontal",
     "autoDetect": "Detectar automáticamente ({{lang}})",
+    "layout": "Diseño",
     "presets": {
       "frontcam": "Cámara frontal",
       "frontcamTitle": "Franja pequeña bajo la lente selfie: lo menos evidente para que no se note que estás leyendo",

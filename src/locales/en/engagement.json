@@ -81,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Please login to personalize your feed",
-    "notInterestedToast": "Not interested — we'll hide this video",
+    "notInterestedToast": "Not interested. We'll hide this video",
     "undo": "Undo",
     "cantHideOwn": "You can't hide your own videos",
     "hidingCreatorToast": "Hiding videos from @{{author}}",

@@ -11,7 +11,9 @@
   },
   "drafts": {
     "untitled": "(chưa có tiêu đề)",
-    "empty": "Không tìm thấy video nào với bộ lọc đã chọn."
+    "empty": "Không tìm thấy video nào với bộ lọc đã chọn.",
+    "title": "Studio",
+    "create": "Tạo"
   },
   "schedule": {
     "days": {

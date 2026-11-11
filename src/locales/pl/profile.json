@@ -25,6 +25,7 @@
     "followers_many": "{{num}} obserwujących",
     "followers_other": "{{num}} obserwującego",
     "popularTitle": "Popularni twórcy",
+    "suggestedTitle": "Twórcy do obserwowania",
     "scrollLeft": "Przewiń w lewo",
     "scrollRight": "Przewiń w prawo",
     "mostlyPosts": "Publikuje głównie: {{topic}}"
@@ -266,7 +267,11 @@
     "loginToUpload": "Zaloguj się, aby przesłać film",
     "linkExternalTitle": "Połącz profil zewnętrzny",
     "addProfile": "Dodaj profil",
-    "editTitle": "Edytuj zdjęcie, nazwę, opis i lokalizację"
+    "editTitle": "Edytuj zdjęcie, nazwę, opis i lokalizację",
+    "more": "Więcej",
+    "moreActions": "Więcej działań dla @{{user}}",
+    "copyProfileLink": "Kopiuj link do profilu",
+    "podcastFeed": "Kanał podcastu (RSS)"
   },
   "tabs": {
     "overview": "Przegląd",

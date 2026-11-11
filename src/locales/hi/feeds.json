@@ -28,6 +28,9 @@
   },
   "newFromFollowing": {
     "aria": "आपके फ़ॉलो किए क्रिएटर्स से नया",
+    "summary_one": "{{count}} नया वीडियो",
+    "summary_other": "{{count}} नए वीडियो",
+    "fromFollowing": "आपके फ़ॉलो किए लोगों से",
     "shorts_one": "{{count}} शॉर्ट",
     "shorts_other": "{{count}} शॉर्ट्स"
   },
@@ -48,6 +51,9 @@
     "empty": "यहाँ दिखाने के लिए अभी कुछ नहीं है।",
     "viewAll": "सभी देखें",
     "dragToReorder": "क्रम बदलने के लिए खींचें",
+    "customize": "कस्टमाइज़ करें",
+    "customizeTitle": "होम कस्टमाइज़ करें",
+    "customizeHint": "सेक्शन ऊपर या नीचे करें। जो नहीं चाहिए, उन्हें बंद कर दें।",
     "surfTitle": "चैनल सर्फ़िंग: कोई विषय चुनें और टीवी की तरह देखें",
     "zapping": "ज़ैपिंग"
   },

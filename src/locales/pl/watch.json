@@ -16,7 +16,9 @@
     "translatedTo": "Przetłumaczono na: {{language}}",
     "showLanguage": "Pokaż: {{language}}",
     "showOriginal": "Pokaż oryginał",
-    "buttonTitle": "Podsumowanie AI tego filmu"
+    "buttonTitle": "Podsumowanie AI tego filmu",
+    "jumpTo": "Przejdź do",
+    "disclaimer": "Wygenerowano na podstawie transkrypcji. Może zawierać błędy."
   },
   "errors": {
     "notAvailable": "Ten film jest niedostępny.",
@@ -38,6 +40,16 @@
     "add": "Dodaj reakcję"
   },
   "liveChat": "Czat na żywo",
+  "side": {
+    "label": "Panele filmu"
+  },
+  "voters": {
+    "title": "Głosujący",
+    "cardLabel": "Wspierający i głosujący",
+    "voter": "Głosujący",
+    "weight": "Waga",
+    "value": "Wartość"
+  },
   "moreVideos": "Więcej filmów",
   "vote": {
     "saveFailed": "Nie udało się zapisać głosu"
@@ -106,7 +118,8 @@
     "members_one": "{{count}} członek",
     "members_few": "{{count}} członków",
     "members_many": "{{count}} członków",
-    "members_other": "{{count}} członka"
+    "members_other": "{{count}} członka",
+    "postedIn": "Opublikowano w"
   },
   "tags": {
     "curated": "Wybrane"

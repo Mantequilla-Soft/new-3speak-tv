@@ -16,7 +16,9 @@
     "translatedTo": "Переведено на: {{language}}",
     "showLanguage": "Показать: {{language}}",
     "showOriginal": "Показать оригинал",
-    "buttonTitle": "Краткое содержание видео от ИИ"
+    "buttonTitle": "Краткое содержание видео от ИИ",
+    "jumpTo": "Перейти к",
+    "disclaimer": "Создано на основе транскрипта. Возможны ошибки."
   },
   "errors": {
     "notAvailable": "Это видео недоступно.",
@@ -38,6 +40,16 @@
     "add": "Добавить реакцию"
   },
   "liveChat": "Чат эфира",
+  "side": {
+    "label": "Панели видео"
+  },
+  "voters": {
+    "title": "Проголосовавшие",
+    "cardLabel": "Поддержавшие и проголосовавшие",
+    "voter": "Голосующий",
+    "weight": "Вес",
+    "value": "Стоимость"
+  },
   "moreVideos": "Ещё видео",
   "vote": {
     "saveFailed": "Не удалось сохранить ваш голос"
@@ -106,7 +118,8 @@
     "members_one": "{{count}} участник",
     "members_few": "{{count}} участника",
     "members_many": "{{count}} участников",
-    "members_other": "{{count}} участника"
+    "members_other": "{{count}} участника",
+    "postedIn": "Опубликовано в"
   },
   "tags": {
     "curated": "Подборка"

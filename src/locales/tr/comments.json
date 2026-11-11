@@ -137,6 +137,9 @@
     "uploadingImage": "Görsel yükleniyor",
     "write": "Yaz",
     "preview": "Önizleme",
-    "nothingToPreview": "Henüz önizlenecek bir şey yok"
+    "nothingToPreview": "Henüz önizlenecek bir şey yok",
+    "creator": "İçerik üreticisi",
+    "empty": "Henüz yorum yok",
+    "emptyHint": "Belirli bir ana bağlı yorumlar videonun zaman çizelgesinde görünür."
   }
 }

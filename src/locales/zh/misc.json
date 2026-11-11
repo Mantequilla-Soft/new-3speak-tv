@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "关注动态",
-    "error": "获取视频出错"
+    "error": "获取视频出错",
+    "emptyTitle": "这里还没有内容",
+    "emptyBody": "关注创作者后，他们的上传、Snaps 和直播会最先出现在这里。"
   },
   "groups": {
     "title": "圈子",

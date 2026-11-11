@@ -54,7 +54,7 @@
     "verify": "Verificar"
   },
   "auth": {
-    "title": "¡Autoriza a 3Speak!",
+    "title": "Autoriza a 3Speak",
     "text": "Para subir videos a 3Speak necesitamos tu autoridad de publicación (posting). Esto nos permite publicar en Hive los videos que subes. Solo tienes que otorgarnos la autoridad de publicación una vez.",
     "authorize": "Autorizar"
   },
@@ -69,7 +69,7 @@
       "duplicate": "Esta cuenta ya está en la lista.",
       "invalidAccount": "Usuario o ID de comunidad no válido.",
       "cannotIncrease": "No se puede aumentar más allá del {{percent}}% disponible",
-      "pendingRow": "@{{account}} aún no se agregó: haz clic en + para agregarlo o borra el campo.",
+      "pendingRow": "@{{account}} aún no se agregó. Haz clic en + para agregarlo o borra el campo.",
       "atLeastOne": "El porcentaje de recompensa debe ser al menos 1%",
       "maxCount": "Hive permite como máximo {{max}} beneficiarios por publicación."
     },
@@ -79,10 +79,10 @@
     "usernamePlaceholder": "Ingresa el usuario",
     "minimumReward": "La recompensa mínima es <strong>1%</strong>",
     "checking": "Verificando <strong>@{{account}}</strong> en Hive…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> no es una cuenta de Hive existente.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> aún no se agregó: haz clic en <strong>+</strong> para agregarlo o borra el campo.",
-    "infrastructure": "10% === Infraestructura",
-    "videoEncoding": "Codificación de video === 1%",
+    "notExisting": "<strong>@{{account}}</strong> no es una cuenta de Hive existente.",
+    "notAdded": "<strong>@{{account}}</strong> aún no se agregó. Haz clic en <strong>+</strong> para agregarlo o borra el campo.",
+    "infrastructure": "Infraestructura: 10%",
+    "videoEncoding": "Codificación de video: 1%",
     "defaults": "Beneficiarios predeterminados ({{count}})"
   },
   "qr": {

@@ -21,6 +21,7 @@
     "followers_one": "{{num}} volger",
     "followers_other": "{{num}} volgers",
     "popularTitle": "Populaire makers",
+    "suggestedTitle": "Makers om te volgen",
     "scrollLeft": "Naar links scrollen",
     "scrollRight": "Naar rechts scrollen",
     "mostlyPosts": "Post vooral over {{topic}}"
@@ -230,7 +231,11 @@
     "loginToUpload": "Log in om een video te uploaden",
     "linkExternalTitle": "Een extern profiel koppelen",
     "addProfile": "Profiel toevoegen",
-    "editTitle": "Bewerk je foto, naam, bio en locatie"
+    "editTitle": "Bewerk je foto, naam, bio en locatie",
+    "more": "Meer",
+    "moreActions": "Meer acties voor @{{user}}",
+    "copyProfileLink": "Profiellink kopiëren",
+    "podcastFeed": "Podcastfeed (RSS)"
   },
   "tabs": {
     "overview": "Overzicht",

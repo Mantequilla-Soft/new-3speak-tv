@@ -4,10 +4,12 @@
   "thumbnailAlt": "缩略图",
   "topicTitle": "话题：{{topic}}",
   "watchingNow_other": "{{count}} 人正在观看",
+  "previewMuted": "预览 · 静音",
   "badges": {
     "gatedTitle": "仅限会员。3Speak Pro 可解锁完整视频",
     "pro": "PRO",
     "new": "新",
+    "first": "首发",
     "live": "● 直播中",
     "liveChat": "● 直播聊天",
     "spotlight": "焦点"

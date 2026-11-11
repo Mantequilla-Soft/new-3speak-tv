@@ -54,7 +54,7 @@
     "verify": "Verifiëren"
   },
   "auth": {
-    "title": "Autoriseer 3Speak!",
+    "title": "Autoriseer 3Speak",
     "text": "Om video's op 3Speak te uploaden hebben we je posting-autoriteit nodig. Daarmee kunnen we je geüploade video's op Hive publiceren. Je hoeft ons maar één keer posting-autoriteit te geven.",
     "authorize": "Autoriseren"
   },
@@ -69,7 +69,7 @@
       "duplicate": "Dit account staat al in de lijst.",
       "invalidAccount": "Ongeldige gebruikersnaam of community-ID.",
       "cannotIncrease": "Kan niet hoger dan de resterende {{percent}}%",
-      "pendingRow": "@{{account}} is nog niet toegevoegd — klik op + om het toe te voegen, of maak het veld leeg.",
+      "pendingRow": "@{{account}} is nog niet toegevoegd. Klik op + om het toe te voegen, of maak het veld leeg.",
       "atLeastOne": "Het beloningspercentage moet minstens 1% zijn",
       "maxCount": "Hive staat maximaal {{max}} begunstigden per post toe."
     },
@@ -79,10 +79,10 @@
     "usernamePlaceholder": "Gebruikersnaam invullen",
     "minimumReward": "Minimale beloning is <strong>1%</strong>",
     "checking": "<strong>@{{account}}</strong> controleren op Hive…",
-    "notExisting": "⚠️ <strong>@{{account}}</strong> is geen bestaand Hive-account.",
-    "notAdded": "⚠️ <strong>@{{account}}</strong> is nog niet toegevoegd — klik op <strong>+</strong> om het toe te voegen, of maak het veld leeg.",
-    "infrastructure": "10% === Infrastructuur",
-    "videoEncoding": "Video-encoding === 1%",
+    "notExisting": "<strong>@{{account}}</strong> is geen bestaand Hive-account.",
+    "notAdded": "<strong>@{{account}}</strong> is nog niet toegevoegd. Klik op <strong>+</strong> om het toe te voegen, of maak het veld leeg.",
+    "infrastructure": "Infrastructuur: 10%",
+    "videoEncoding": "Video-encoding: 1%",
     "defaults": "Standaardbegunstigden ({{count}})"
   },
   "qr": {

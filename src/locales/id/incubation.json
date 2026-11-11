@@ -550,7 +550,7 @@
     "yesterday": "Kemarin",
     "groups": {
       "video": "Video",
-      "videoNote": "Satu setiap 5 menit — inilah bagian yang lambat.",
+      "videoNote": "Satu setiap 5 menit: inilah bagian yang lambat.",
       "short": "Shorts",
       "comment": "Komentar",
       "vote": "Suka",
@@ -591,7 +591,7 @@
     "fiveMin": "5 mnt",
     "waitingTitle": "Menunggu yang lain",
     "waitingText": "Ini akan terbit sendiri begitu postingan yang dirujuknya naik ke Hive. Tidak ada yang hilang sementara itu.",
-    "waitingFor": "<b>{{label}}</b> — menunggu {{target}}",
+    "waitingFor": "<b>{{label}}</b>: menunggu {{target}}",
     "andMore": "dan {{count}} lainnya",
     "excludedTitle": "Tidak ikut dipindahkan"
   }

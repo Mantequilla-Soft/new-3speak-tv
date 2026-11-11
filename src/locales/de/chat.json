@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Bild hinzufügen",
     "searchEmoji": "Emoji suchen",
     "searchGifs": "GIFs suchen…",
     "noGifs": "Keine GIFs gefunden.",
@@ -41,7 +42,7 @@
   },
   "gate": {
     "connectTitle": "Mit dem 3Speak-Chat verbinden",
-    "connectBody": "Der Chat läuft über Snapie. Beim Verbinden wird eine einmalige Login-Challenge mit deinem Hive Posting Key signiert – keine Transaktion, keine Kosten.",
+    "connectBody": "Der Chat läuft über Snapie. Beim Verbinden wird eine einmalige Login-Challenge mit deinem Hive Posting Key signiert (keine Transaktion, keine Kosten).",
     "connecting": "Wird verbunden…",
     "connectButton": "Chat verbinden",
     "cannotSign": "Mit deiner aktuellen Anmeldung kann die Chat-Challenge nicht signiert werden. Nutze Keychain, HiveAuth, PeakVault oder Ledger.",
@@ -117,7 +118,7 @@
     "deleteError": "Die Nachricht konnte nicht gelöscht werden.",
     "back": "Zurück zu den Unterhaltungen",
     "loading": "Nachrichten werden geladen…",
-    "empty": "Noch keine Nachrichten – sag hallo 👋",
+    "empty": "Noch keine Nachrichten. Sag hallo 👋",
     "editedSuffix": " · bearbeitet",
     "messageActions": "Nachrichtenaktionen",
     "quote": "Zitieren",

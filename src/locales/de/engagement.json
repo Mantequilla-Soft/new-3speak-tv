@@ -22,6 +22,8 @@
     "memoPlaceholder": "z. B. Danke für diesen tollen Inhalt!",
     "memoLinkNote": "Dieser Link wird dem Memo angehängt: {{link}}",
     "send": "Trinkgeld senden",
+    "sendAmount": "{{amount}} {{currency}} senden",
+    "sentEyebrow": "Trinkgeld gesendet",
     "lightning": {
       "amountLabel": "Betrag (Sats):",
       "messageLabel": "Nachricht (optional):",
@@ -79,7 +81,7 @@
   },
   "cardMenu": {
     "loginToPersonalize": "Bitte melde dich an, um deinen Feed zu personalisieren",
-    "notInterestedToast": "Kein Interesse – wir blenden dieses Video aus",
+    "notInterestedToast": "Kein Interesse. Wir blenden dieses Video aus",
     "undo": "Rückgängig",
     "cantHideOwn": "Du kannst deine eigenen Videos nicht ausblenden",
     "hidingCreatorToast": "Videos von @{{author}} werden ausgeblendet",
@@ -142,7 +144,8 @@
     "pickTopic": "Wähle ein Thema (zählt als 100%-Vote)",
     "submitTag": "Tag senden",
     "tagThisVideoFull": "Dieses Video taggen (zählt als 100%-Vote)",
-    "justTag": "Nicht voten – nur taggen"
+    "justTag": "Nicht voten – nur taggen",
+    "addsAbout": "bringt etwa {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "Automatisch getaggt: {{tags}}",

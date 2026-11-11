@@ -10,7 +10,7 @@
     "optional": "Jedyna opcjonalna rzecz: możemy zapamiętywać, <b>w którym miejscu przerwano oglądanie każdego filmu</b>, aby odtwarzanie było wznawiane. Te dane nigdy nie opuszczają twojego urządzenia."
   },
   "details": {
-    "essentialTitle": "Niezbędne — zawsze włączone",
+    "essentialTitle": "Niezbędne (zawsze włączone)",
     "essential": {
       "login": "Twoja sesja logowania",
       "settings": "Wybrane przez ciebie ustawienia: motyw, głośność, język, napisy, preferencje kanału",

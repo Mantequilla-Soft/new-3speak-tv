@@ -16,7 +16,9 @@
     "translatedTo": "{{language}}に翻訳済み",
     "showLanguage": "{{language}}で表示",
     "showOriginal": "原文を表示",
-    "buttonTitle": "この動画の AI 要約"
+    "buttonTitle": "この動画の AI 要約",
+    "jumpTo": "ジャンプ",
+    "disclaimer": "文字起こしから生成されています。誤りを含む場合があります。"
   },
   "errors": {
     "notAvailable": "この動画は利用できません。",
@@ -38,6 +40,16 @@
     "add": "リアクションを追加"
   },
   "liveChat": "ライブチャット",
+  "side": {
+    "label": "動画パネル"
+  },
+  "voters": {
+    "title": "投票者",
+    "cardLabel": "サポーターと投票者",
+    "voter": "投票者",
+    "weight": "重み",
+    "value": "金額"
+  },
   "moreVideos": "ほかの動画",
   "vote": {
     "saveFailed": "投票を保存できませんでした"
@@ -103,7 +115,8 @@
     "dismiss": "閉じる"
   },
   "community": {
-    "members_other": "メンバー {{count}} 人"
+    "members_other": "メンバー {{count}} 人",
+    "postedIn": "投稿先"
   },
   "tags": {
     "curated": "キュレーション"

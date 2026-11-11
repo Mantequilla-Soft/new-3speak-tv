@@ -19,6 +19,7 @@
     "pleaseTryAgain": "vui lòng thử lại",
     "followers_other": "{{num}} người theo dõi",
     "popularTitle": "Nhà sáng tạo nổi bật",
+    "suggestedTitle": "Nhà sáng tạo nên theo dõi",
     "scrollLeft": "Cuộn sang trái",
     "scrollRight": "Cuộn sang phải",
     "mostlyPosts": "Chủ yếu đăng về {{topic}}"
@@ -212,7 +213,11 @@
     "loginToUpload": "Đăng nhập để tải video lên",
     "linkExternalTitle": "Liên kết hồ sơ bên ngoài",
     "addProfile": "Thêm hồ sơ",
-    "editTitle": "Chỉnh sửa ảnh, tên, tiểu sử và vị trí của bạn"
+    "editTitle": "Chỉnh sửa ảnh, tên, tiểu sử và vị trí của bạn",
+    "more": "Thêm",
+    "moreActions": "Thêm thao tác cho @{{user}}",
+    "copyProfileLink": "Sao chép liên kết hồ sơ",
+    "podcastFeed": "Nguồn podcast (RSS)"
   },
   "tabs": {
     "overview": "Tổng quan",

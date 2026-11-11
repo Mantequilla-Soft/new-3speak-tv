@@ -61,6 +61,7 @@
     "items_other": "{{count}} элемента",
     "created": "Создан {{when}}",
     "podcastFeed": "Лента подкаста",
+    "playAll": "Воспроизвести все",
     "podcastFeedTitle": "Следите за «{{name}}» в любом приложении для подкастов (RSS-лента)",
     "album": {
       "genre": "<strong>Жанр:</strong> {{value}}",

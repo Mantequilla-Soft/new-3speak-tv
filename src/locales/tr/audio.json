@@ -102,7 +102,11 @@
     "chapterLink": "Kısım bağlantısı",
     "upNext": "Sıradaki",
     "hideIdle": "Gizle (sıran kalır)",
-    "continueAt": "{{time}} noktasından devam et"
+    "continueAt": "{{time}} noktasından devam et",
+    "position": "{{current}} / {{total}}",
+    "playingFrom": "{{name}} üzerinden çalıyor",
+    "atThisMoment": "Bu anda",
+    "goTo": "{{name}} sayfasına git"
   },
   "share": {
     "failed": "Başarısız",
@@ -233,7 +237,7 @@
     },
     "source": {
       "dropHere": "Ses dosyalarını buraya bırak ya da göz atmak için tıkla",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC; birden fazla dosya olabilir",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (birden fazla dosya olabilir)",
       "stop": "Durdur",
       "orRecord": "Ya da canlı kaydet",
       "recordLimit": "Kayıt başına en fazla {{minutes}} dk",

@@ -16,7 +16,9 @@
     "translatedTo": "Vertaald naar het {{language}}",
     "showLanguage": "{{language}} tonen",
     "showOriginal": "Origineel tonen",
-    "buttonTitle": "AI-samenvatting van deze video"
+    "buttonTitle": "AI-samenvatting van deze video",
+    "jumpTo": "Ga naar",
+    "disclaimer": "Gemaakt op basis van het transcript. Kan fouten bevatten."
   },
   "errors": {
     "notAvailable": "Deze video is niet beschikbaar.",
@@ -38,6 +40,16 @@
     "add": "Reactie toevoegen"
   },
   "liveChat": "Livechat",
+  "side": {
+    "label": "Videopanelen"
+  },
+  "voters": {
+    "title": "Voters",
+    "cardLabel": "Supporters en voters",
+    "voter": "Voter",
+    "weight": "Gewicht",
+    "value": "Waarde"
+  },
   "moreVideos": "Meer video's",
   "vote": {
     "saveFailed": "Je vote kon niet worden opgeslagen"
@@ -104,7 +116,8 @@
   },
   "community": {
     "members_one": "{{count}} lid",
-    "members_other": "{{count}} leden"
+    "members_other": "{{count}} leden",
+    "postedIn": "Geplaatst in"
   },
   "tags": {
     "curated": "Geselecteerd"

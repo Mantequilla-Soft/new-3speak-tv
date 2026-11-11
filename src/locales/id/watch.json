@@ -16,7 +16,9 @@
     "translatedTo": "Diterjemahkan ke {{language}}",
     "showLanguage": "Tampilkan {{language}}",
     "showOriginal": "Tampilkan asli",
-    "buttonTitle": "Ringkasan AI untuk video ini"
+    "buttonTitle": "Ringkasan AI untuk video ini",
+    "jumpTo": "Lompat ke",
+    "disclaimer": "Dibuat dari transkrip. Mungkin ada kesalahan."
   },
   "errors": {
     "notAvailable": "Video ini tidak tersedia.",
@@ -38,6 +40,16 @@
     "add": "Tambah Reaksi"
   },
   "liveChat": "Chat live",
+  "side": {
+    "label": "Panel video"
+  },
+  "voters": {
+    "title": "Pemberi vote",
+    "cardLabel": "Pendukung dan pemberi vote",
+    "voter": "Pemberi vote",
+    "weight": "Bobot",
+    "value": "Nilai"
+  },
   "moreVideos": "Video lainnya",
   "vote": {
     "saveFailed": "Vote-mu tidak dapat disimpan"
@@ -103,7 +115,8 @@
     "dismiss": "Tutup"
   },
   "community": {
-    "members_other": "{{count}} Anggota"
+    "members_other": "{{count}} Anggota",
+    "postedIn": "Diposting di"
   },
   "tags": {
     "curated": "Dikurasi"

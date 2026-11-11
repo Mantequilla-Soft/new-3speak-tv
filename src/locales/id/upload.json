@@ -436,6 +436,7 @@
     "portrait": "Potret",
     "landscape": "Lanskap",
     "autoDetect": "Deteksi otomatis ({{lang}})",
+    "layout": "Tata letak",
     "presets": {
       "frontcam": "Kamera depan",
       "frontcamTitle": "Strip kecil di bawah lensa selfie — paling tidak kentara bahwa kamu sedang membaca",

@@ -28,7 +28,12 @@
     "recipientPlaceholder": "Hive 사용자 이름 입력",
     "memoLabel": "메모",
     "memoPlaceholder": "메모 입력",
-    "confirm": "송금 확인"
+    "confirm": "송금 확인",
+    "sendTo": "@{{to}}님에게 {{amount}} {{coin}} 보내기",
+    "sendAmount": "{{amount}} {{coin}} 보내기",
+    "recent": "최근",
+    "activeKey": "액티브 키가 필요해요",
+    "available": "사용 가능: {{balance}}"
   },
   "history": {
     "loadFailed": "거래 내역을 불러오지 못했어요",
@@ -46,5 +51,46 @@
       "received": "받음"
     },
     "claimedRewards": "수령한 보상"
+  },
+  "total": "총 잔액",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "HBD 저축"
+  },
+  "claim": {
+    "ready": "{{amount}} 수령 가능",
+    "readyShort": "{{amount}} 수령 가능",
+    "button": "수령",
+    "done": "보상을 수령했어요",
+    "failed": "수령 실패: {{error}}"
+  },
+  "activity": {
+    "title": "활동",
+    "filters": {
+      "all": "전체",
+      "rewards": "보상",
+      "received": "받음",
+      "sent": "보냄"
+    },
+    "from": "@{{user}}님에게서",
+    "sentTo": "@{{user}}님에게 보냄",
+    "emptyTitle": "아직 아무것도 없어요",
+    "empty": "송금 내역과 수령한 보상이 여기에 표시돼요."
+  },
+  "earnings": {
+    "title": "수익, 30일",
+    "sub": "수령한 보상과 받은 HIVE 또는 HBD"
+  },
+  "rc": {
+    "title": "리소스 크레딧",
+    "sub": "Hive에서 하는 모든 작업에 조금씩 쓰여요. 약 5일이면 다시 채워져요.",
+    "posts_other": "지금 약 {{count}}개의 게시물을 올릴 수 있어요"
+  },
+  "receive": {
+    "title": "받기",
+    "sub": "누구나 어떤 Hive 지갑에서든 이 계정 이름으로 HIVE나 HBD를 보낼 수 있어요. 메모는 필요 없어요.",
+    "copy": "계정 이름 복사"
   }
 }
