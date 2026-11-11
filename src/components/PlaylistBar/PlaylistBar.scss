@@ -72,6 +72,8 @@
       flex: none;
 
       .nav-btn, .close-btn {
+        // .close-btn is also a global corner button (modal base): keep it in the row.
+        position: static;
         display: inline-grid;
         place-items: center;
         width: 40px;

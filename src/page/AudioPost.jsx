@@ -1,12 +1,10 @@
+import { Icon } from '../components/v2/Icon';
 import { useEffect, useMemo, useState } from 'react';
 import { getHiveUrl } from '../utils/hiveNode';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { formatTimeAgo } from '../i18n';
-import { MdPlayArrow, MdPause, MdQueueMusic, MdThumbUp } from 'react-icons/md';
-import { BiDollar } from 'react-icons/bi';
-import { LuTimer } from 'react-icons/lu';
 import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import { CHECKER_URL, HIVE_API_URL } from '../utils/config';
@@ -128,7 +126,7 @@ function AudioPost() {
                   `${CHECKER_URL}/audio?owner=${encodeURIComponent(author)}&permlink=${encodeURIComponent(m[1])}&limit=1`
                 );
                 doc = data?.audio?.[0] || null;
-              } catch {}
+              } catch { /* not indexed yet */ }
             }
           }
         }
@@ -222,7 +220,7 @@ function AudioPost() {
             <AuthorBadge author={author} showFollow tabHint="audio" />
           </div>
           <div className="audio-post-meta-row">
-            <span className="audio-post-meta-item"><LuTimer /> {formatRelativeTime(post.created)}</span>
+            <span className="audio-post-meta-item"><Icon name="schedule" size={16} /> {formatRelativeTime(post.created)}</span>
             <span className="audio-post-meta-item"><PayoutAmount amount={videoDetails.stats.total_hive_reward} size={13} /></span>
             <span className="audio-post-meta-item">{t('common.units.votes', { count: videoDetails.stats.num_votes })}</span>
             <span className="audio-post-meta-item">{t('common.units.comments', { count: videoDetails.stats.num_comments })}</span>
@@ -237,7 +235,7 @@ function AudioPost() {
                   onClick={onTogglePlay}
                   aria-label={isThisPlaying ? t('common.actions.pause') : t('common.actions.play')}
                 >
-                  {isThisPlaying ? <MdPause size={36} /> : <MdPlayArrow size={36} />}
+                  {isThisPlaying ? <Icon name="pause" size={40} fill /> : <Icon name="play_arrow" size={40} fill />}
                 </button>
                 <div className="audio-post-time-track">
                   <span className="audio-post-time">{fmt(elapsed)}</span>
@@ -257,7 +255,7 @@ function AudioPost() {
                     toast.success(t('audio.post.addedToQueue'));
                   }}
                 >
-                  <MdQueueMusic size={18} /> {t('audio.player.queue')}
+                  <Icon name="queue_music" size={22} /> {t('audio.player.queue')}
                 </button>
                 <button
                   type="button"
@@ -267,7 +265,7 @@ function AudioPost() {
                     setShowVoteTooltip((v) => !v);
                   }}
                 >
-                  <MdThumbUp size={16} /> {voted ? t('audio.post.voted') : t('audio.post.vote')}
+                  <Icon name="thumb_up" size={22} fill={voted} /> {voted ? t('audio.post.voted') : t('audio.post.vote')}
                   {voteCount > 0 && <span className="audio-post-action-count">{voteCount}</span>}
                 </button>
                 <button
@@ -279,7 +277,7 @@ function AudioPost() {
                     setIsTipOpen(true);
                   }}
                 >
-                  <BiDollar size={18} /> {t('audio.post.tip')}
+                  <Icon name="volunteer_activism" size={22} /> {t('audio.post.tip')}
                 </button>
               </div>
             </>
@@ -290,7 +288,7 @@ function AudioPost() {
           {tags.length > 0 && (
             <div className="audio-post-tags">
               {tags.map((tag) => (
-                <Link key={tag} to={`/t/${tag}`} className="audio-post-tag">#{tag}</Link>
+                <Link key={tag} to={`/t/${tag}`} className="v2-chip h28 audio-post-tag">#{tag}</Link>
               ))}
             </div>
           )}

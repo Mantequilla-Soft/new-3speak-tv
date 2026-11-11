@@ -377,7 +377,7 @@
         cursor: pointer;
         transition: background var(--t-fast) var(--ease);
 
-        span { font-family: var(--font-mono); }
+        span:not(.material-symbols-rounded) { font-family: var(--font-mono); }
         &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
         &.voted { background: var(--accent-tint-strong); color: var(--accent); }
         &.active { background: var(--cyan-tint); color: var(--cyan); }

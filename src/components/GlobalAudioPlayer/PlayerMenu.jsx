@@ -43,8 +43,12 @@ export default function PlayerMenu({ anchor, title, onClose, children, className
   // Right-aligned with the button, kept on screen: above it, or below it when
   // the button sits in the top half (the full player's head row).
   const below = !!anchor && anchor.top < view.innerHeight / 2;
+  // A button in the left half: the menu starts at its left edge instead.
+  const left = !!anchor && anchor.left < view.innerWidth / 2;
   const style = anchor ? {
-    '--pm-right': `${Math.max(8, view.innerWidth - anchor.right)}px`,
+    ...(left
+      ? { '--pm-left': `${Math.max(8, Math.round(anchor.left))}px` }
+      : { '--pm-right': `${Math.max(8, view.innerWidth - anchor.right)}px` }),
     ...(below
       ? { '--pm-top': `${Math.round(anchor.bottom + 8)}px` }
       : { '--pm-bottom': `${Math.max(8, view.innerHeight - anchor.top + 8)}px` }),
@@ -54,7 +58,7 @@ export default function PlayerMenu({ anchor, title, onClose, children, className
     <div className="audio-pm-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div
         ref={panelRef}
-        className={`audio-pm${wide ? ' is-wide' : ''}${below ? ' is-below' : ''} ${className}`.trim()}
+        className={`audio-pm${wide ? ' is-wide' : ''}${below ? ' is-below' : ''}${left ? ' is-left' : ''} ${className}`.trim()}
         style={style}
         role="dialog"
         aria-label={title}

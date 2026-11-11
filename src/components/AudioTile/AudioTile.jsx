@@ -2,14 +2,15 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { formatTimeAgo } from '../../i18n';
-import { MdPlayArrow, MdPlaylistPlay, MdShare, MdAdd } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
 import { useAppStore } from '../../lib/store';
 import PayoutAmount from '../PayoutAmount/PayoutAmount';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
-import { audioCategoryIcon } from '../../utils/audioCategoryIcons';
-// Reuse the existing tile styles defined in Audio.scss so this component is the
-// single source of truth and stays visually identical across pages.
+import { audioCategorySymbol } from './audioSymbols';
+// The tile styles live in Audio.scss (shared with the playlist tile and the
+// audio page), so the tile looks the same on every page that shows it.
 import '../../page/Audio.scss';
 
 function audioThumb(item) {
@@ -189,12 +190,12 @@ function AudioTile({
 
   const actions = (
     <div className="audio-tile-actions" onClick={(e) => e.stopPropagation()}>
-      <button className="audio-tile-action-btn" onClick={handleQueue} title={t('audio.tile.queue')}><MdAdd size={14} /></button>
+      <button type="button" className="audio-tile-action-btn" onClick={handleQueue} title={t('audio.tile.queue')} aria-label={t('audio.tile.queue')}><Icon name="queue_music" size={16} /></button>
       {loggedIn && onAddToPlaylist && (
-        <button className="audio-tile-action-btn" onClick={(e) => { e.stopPropagation(); onAddToPlaylist(); }} title={t('audio.tile.playlist')}><MdPlaylistPlay size={14} /></button>
+        <button type="button" className="audio-tile-action-btn" onClick={(e) => { e.stopPropagation(); onAddToPlaylist(); }} title={t('audio.tile.playlist')} aria-label={t('audio.tile.playlist')}><Icon name="playlist_add" size={16} /></button>
       )}
       {onShare && (
-        <button className="audio-tile-action-btn" onClick={(e) => { e.stopPropagation(); onShare(); }} title={t('common.actions.share')}><MdShare size={14} /></button>
+        <button type="button" className="audio-tile-action-btn" onClick={(e) => { e.stopPropagation(); onShare(); }} title={t('common.actions.share')} aria-label={t('common.actions.share')}><Icon name="ios_share" size={16} /></button>
       )}
     </div>
   );
@@ -208,11 +209,10 @@ function AudioTile({
       onTouchMove={cancelLongPress}
       onContextMenu={(e) => e.preventDefault()}
     >
-      <img src={thumb} alt="" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
-      <div className="audio-tile-overlay">
-        {isPlaying ? <div className="audio-tile-eq"><span /><span /><span /></div> : <MdPlayArrow size={28} />}
-      </div>
-      <span className="audio-tile-duration">{fmt(item.duration)}</span>
+      <img src={thumb} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
+      {isPlaying && <span className="audio-tile-eq" aria-hidden="true"><span /><span /><span /></span>}
+      <span className="audio-tile-duration num">{fmt(item.duration)}</span>
+      <span className="audio-tile-play" aria-hidden="true"><Icon name={isPlaying ? 'pause' : 'play_arrow'} size={24} fill /></span>
       {actions}
     </div>
   );
@@ -220,11 +220,11 @@ function AudioTile({
   const body = (
     <div className="audio-tile-body">
       <span className="audio-tile-title" onClick={onOpen ? (e) => { e.stopPropagation(); onOpen(); } : handlePlay}>
-        {trackNumber != null && <span className="audio-tile-track-num">{trackNumber}.</span>}
+        {trackNumber != null && <span className="audio-tile-track-num num">{trackNumber}.</span>}
         {item.title || t('audio.untitled')}
       </span>
       <AuthorBadge author={item.owner} showFollow={inView && !hideFollow} compact tabHint="audio" onClick={onAuthorClick} />
-      {metaLine && <span className="audio-tile-meta"><i className={`audio-tile-meta-icon ${audioCategoryIcon(item.category)}`} /> {metaLine}</span>}
+      {metaLine && <span className="audio-tile-meta"><Icon name={audioCategorySymbol(item.category)} size={14} className="audio-tile-meta-icon" /> {metaLine}</span>}
       {/* The album (public playlist) the track belongs to, from the checker. */}
       {!hideAlbum && item.playlist_id && item.playlist_name && (
         <Link
@@ -251,7 +251,7 @@ function AudioTile({
   );
 
   return (
-    <div ref={tileRef} className={`audio-tile${isCurrent ? ' audio-tile-active' : ''}${revealed ? ' audio-tile-revealed' : ''}`}>
+    <div ref={tileRef} className={cx('audio-tile', isCurrent && 'audio-tile-active', revealed && 'audio-tile-revealed')}>
       {cover}
       {body}
     </div>
@@ -259,7 +259,13 @@ function AudioTile({
 }
 
 export function AudioTileSkeleton({ count = 5 }) {
-  return [...Array(count)].map((_, i) => <div key={i} className="audio-tile-skeleton" />);
+  return [...Array(count)].map((_, i) => (
+    <div key={i} className="audio-tile audio-tile-skeleton" aria-hidden="true">
+      <div className="v2-skeleton audio-tile-skeleton__cover" />
+      <div className="v2-skeleton is-line" />
+      <div className="v2-skeleton is-line audio-tile-skeleton__short" />
+    </div>
+  ));
 }
 
 export default AudioTile;

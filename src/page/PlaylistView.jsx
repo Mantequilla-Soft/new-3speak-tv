@@ -1056,7 +1056,7 @@ function PlaylistView() {
             ))}
           </div>
         </div>
-        <PlaylistTypePicker type={editType.type} kind={editType.kind} onChange={setEditType} disabled={isUpdating} />
+        <PlaylistTypePicker groupClass="v2-seg is-block pl-type-seg" btnClass="v2-seg__opt h32" labelClass="v2-eyebrow" iconSize={16} type={editType.type} kind={editType.kind} onChange={setEditType} disabled={isUpdating} />
         <Field id={fid('tags')} label={t('playlists.modal.tags')}>
           <div className="pv-tags v2-input">
             {editTags.map((tag) => (

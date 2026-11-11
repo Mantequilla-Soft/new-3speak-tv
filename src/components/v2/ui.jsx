@@ -8,6 +8,7 @@ import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "./Icon";
 import { cx, renderIcon } from "./helpers";
+import { useEscapeLayer } from "../../hooks/useDialog";
 
 export { Icon };
 
@@ -184,15 +185,14 @@ export const EmptyState = ({ icon, title, children, action, className }) => (
    Dialog: centered on desktop (>= 768px), bottom sheet on mobile. One component, CSS decides.
    Traps focus, closes on Esc and on a backdrop click, renders in a portal. */
 const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
-export function Dialog({ open, onClose, title, sub, children, footer, width = 440, closeLabel = "Close", className, bodyClassName, head = true, dismissible = true, leading, backdropClose = true }) {
+export function Dialog({ open, onClose, title, sub, children, footer, width = 440, closeLabel = "Close", className, bodyClassName, head = true, dismissible = true, leading, backdropClose = true, zIndex }) {
   const ref = useRef(null);
-  const onCloseRef = useRef(onClose);
-  useEffect(() => { onCloseRef.current = onClose; }, [onClose]);
+  // Escape closes only the topmost open dialog (shared layer stack with useDialog/ModalHeader).
+  useEscapeLayer(ref, onClose, { active: Boolean(open && dismissible && onClose) });
   useEffect(() => {
     if (!open) return undefined;
     const prev = document.activeElement;
     const onKey = (e) => {
-      if (e.key === "Escape" && dismissible) { e.stopPropagation(); onCloseRef.current?.(); }
       if (e.key === "Tab" && ref.current) {
         const els = [...ref.current.querySelectorAll(FOCUSABLE)];
         if (!els.length) return;
@@ -210,11 +210,11 @@ export function Dialog({ open, onClose, title, sub, children, footer, width = 44
       document.body.style.overflow = overflow;
       if (prev && prev.focus) prev.focus();
     };
-  }, [open, dismissible]);
+  }, [open]);
   if (!open) return null;
   return createPortal(
-    <div className="v2-dialog" role="presentation" onMouseDown={e => dismissible && backdropClose /* false: only X and Esc close it (a decision dialog) */ && e.target === e.currentTarget && onClose?.()}>
-      <div className={cx("v2-dialog__panel", className)} role="dialog" aria-modal="true" aria-label={typeof title === "string" ? title : undefined} tabIndex={-1} ref={ref} style={{ "--w": `${width}px` }}>
+    <div className="v2-dialog" role="presentation" style={zIndex != null ? { zIndex } : undefined} onMouseDown={e => dismissible && backdropClose /* false: only X and Esc close it (a decision dialog) */ && e.target === e.currentTarget && onClose?.()}>
+      <div className={cx("v2-dialog__panel", className)} role="dialog" aria-modal="true" data-dialog="" aria-label={typeof title === "string" ? title : undefined} tabIndex={-1} ref={ref} style={{ "--w": `${width}px` }}>
         <div className="v2-dialog__grab" aria-hidden />
         {head && (
           <div className="v2-dialog__head">

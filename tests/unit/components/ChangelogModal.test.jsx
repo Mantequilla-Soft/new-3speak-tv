@@ -87,7 +87,9 @@ describe("the what's new popup", () => {
   it('groups the changes by area, newest area first, with a count per group', () => {
     show('2.0.8')
     const heads = screen.getAllByRole('button', { expanded: true })
-    expect(heads.map((b) => b.textContent)).toEqual(['Audio2', 'All of 3Speak1'])
+    // The text a reader sees: the Material Symbols glyphs are ligature text.
+    const visible = (b) => [...b.querySelectorAll('.changelog-group-name, .changelog-group-count')].map((el) => el.textContent).join('')
+    expect(heads.map(visible)).toEqual(['Audio2', 'All of 3Speak1'])
     const audio = screen.getByRole('button', { name: /^Audio/ })
     const panel = document.getElementById(audio.getAttribute('aria-controls'))
     expect(within(panel).getAllByText(/^v2\./).map((n) => n.textContent)).toEqual(['v2.1.0', 'v2.0.9'])

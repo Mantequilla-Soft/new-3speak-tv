@@ -1,5 +1,5 @@
+import { Icon } from '../v2/Icon';
 import { useTranslation } from 'react-i18next';
-import { MdDownloadDone, MdPlayArrow, MdPause, MdDeleteOutline, MdClose } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { useDownloads, cancelDownload } from '../../lib/podcastDownloads';
 import { fmtBytes } from '../../lib/podcastLibrary';
@@ -34,7 +34,7 @@ export default function DownloadsSection({ onOpenEpisode }) {
     <section className="pod-section">
       <div className="pod-section-head">
         <h2 className="pod-section-title">
-          <MdDownloadDone size={18} />{t('audio.podcasts.downloads.title')}
+          <Icon name="download_done" size={18} />{t('audio.podcasts.downloads.title')}
           {items.length > 0 && <span className="audio-section-count">{items.length}</span>}
         </h2>
       </div>
@@ -51,7 +51,7 @@ export default function DownloadsSection({ onOpenEpisode }) {
               <span className="pod-tile-bar pod-dl-bar"><span style={{ width: `${Math.round(progress[id] * 100)}%` }} /></span>
             </span>
             <button type="button" className="pod-icon-btn" onClick={() => cancelDownload(id)} title={t('audio.podcasts.downloads.cancel')} aria-label={t('audio.podcasts.downloads.cancel')}>
-              <MdClose size={18} />
+              <Icon name="close" size={18} />
             </button>
           </li>
         ))}
@@ -61,7 +61,7 @@ export default function DownloadsSection({ onOpenEpisode }) {
             <li key={id} className="pod-dl-row">
               <button type="button" className="pod-tile-cover pod-dl-cover" onClick={() => play(track)} aria-label={playing ? t('audio.podcasts.pause') : t('audio.podcasts.play')}>
                 <PodcastArt art={track.art} px={64} />
-                <span className={`pod-tile-play${playing ? ' pod-tile-play--on' : ''}`}>{playing ? <MdPause size={20} /> : <MdPlayArrow size={20} />}</span>
+                <span className={`pod-tile-play${playing ? ' pod-tile-play--on' : ''}`}>{playing ? <Icon name="pause" size={20} fill /> : <Icon name="play_arrow" size={20} fill />}</span>
               </button>
               <span className="pod-dl-info">
                 {track.external
@@ -74,7 +74,7 @@ export default function DownloadsSection({ onOpenEpisode }) {
                 </span>
               </span>
               <button type="button" className="pod-btn pod-dl-remove" onClick={() => forgetDownload(id, t)} aria-label={t('audio.podcasts.downloads.remove')} title={t('audio.podcasts.downloads.remove')}>
-                <MdDeleteOutline size={16} /><span>{t('audio.podcasts.downloads.removeShort')}</span>
+                <Icon name="delete" size={16} /><span>{t('audio.podcasts.downloads.removeShort')}</span>
               </button>
             </li>
           );

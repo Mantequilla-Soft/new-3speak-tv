@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation, Trans } from 'react-i18next';
-import { MdCampaign, MdInfoOutline, MdCheckCircle, MdSchedule, MdCancel, MdReplay } from 'react-icons/md';
-import { FaRocket, FaLayerGroup, FaUsers, FaVideo, FaTv } from 'react-icons/fa';
+import { Icon } from '../components/v2/Icon';
 import { toastIn } from '../utils/toast';
 import { useAppStore } from '../lib/store';
 import { transferWithAioha, getOperationUser } from '../hive-api/aioha';
 import { adsEnabledFor, tickerEnabledFor, adsBetaUserFor, ENABLE_BUTRAUTH, adWizardEnabledFor } from '../utils/config';
 import { createPortal } from 'react-dom';
-import { X as CloseIcon } from 'lucide-react';
 import AdWizardFrame from '../components/ads/AdWizardFrame';
 import { formatDate } from '../i18n';
 import SEOHead from '../components/SEOHead';
@@ -238,14 +236,14 @@ function CopyButton({ value }) {
 function StatusBadge({ status }) {
   const { t } = useTranslation();
   const map = {
-    pending: { Icon: MdSchedule, label: t('ads.status.underReview') },
-    approved: { Icon: MdCheckCircle, label: t('ads.status.approved') },
-    rejected: { Icon: MdCancel, label: t('ads.status.notAccepted') },
+    pending: { icon: 'schedule', label: t('ads.status.underReview') },
+    approved: { icon: 'check_circle', label: t('ads.status.approved') },
+    rejected: { icon: 'cancel', label: t('ads.status.notAccepted') },
   };
-  const { Icon, label } = map[status] || map.pending;
+  const { icon, label } = map[status] || map.pending;
   return (
     <span className={`mkt-status mkt-status-${status}`}>
-      <Icon aria-hidden="true" /> {label}
+      <Icon name={icon} size={14} /> {label}
     </span>
   );
 }
@@ -1048,7 +1046,7 @@ function CampaignPanel({
           drift the same way twice. */}
       {prefill && prefillSeen === prefill.key && (
         <div className="mkt-note mkt-rebook-note">
-          <MdReplay aria-hidden="true" />
+          <Icon name="replay" size={18} />
           <div>
             <span>{t('ads.rebook.notice', { name: prefill.name })}</span>
             {reusable && (
@@ -1079,7 +1077,7 @@ function CampaignPanel({
 
       {awaitingApproval && (
         <p className="mkt-note">
-          <MdInfoOutline aria-hidden="true" />
+          <Icon name="info" size={18} />
           <span>
             {pricing?.slotHoldHours
               ? t('ads.book.awaitingApprovalHours', { hours: pricing.slotHoldHours })
@@ -1490,7 +1488,7 @@ function CampaignPanel({
                   <div className="mkt-pay-actions">
                     <button
                       type="button"
-                      className="mkt-outline"
+                      className="mkt-primary"
                       disabled={payBusy === c.id}
                       onClick={() => payWithWallet(c)}
                     >
@@ -1656,7 +1654,7 @@ function CampaignPanel({
                 && (pricing?.formats || []).some((f) => f.key === c.format) && (
                 <div className="mkt-rebook-row">
                   <button type="button" className="mkt-outline" onClick={() => onRebook(c)}>
-                    <MdReplay aria-hidden="true" /> {t('ads.rebook.button')}
+                    <Icon name="replay" size={18} /> {t('ads.rebook.button')}
                   </button>
                 </div>
               )}
@@ -2185,7 +2183,7 @@ function AudioSpotPanel({ reference, format = null, onCreatives }) {
       </div>
       <p className="mkt-fine">{t('ads.audio.howItPlays')}</p>
       <div className="mkt-upload-row">
-        <button type="button" className="mkt-outline" disabled={!canUpload} onClick={onUpload}>
+        <button type="button" className="mkt-primary" disabled={!canUpload} onClick={onUpload}>
           {busy ? t('ads.audio.uploading') : t('ads.audio.upload')}
         </button>
       </div>
@@ -2347,7 +2345,7 @@ function TickerPanel({ reference, account, productName, format = null, onCreativ
       />
 
       <div className="mkt-upload-row">
-        <button type="button" className="mkt-outline" disabled={!canSave} onClick={onSave}>
+        <button type="button" className="mkt-primary" disabled={!canSave} onClick={onSave}>
           {busy ? t('common.actions.saving') : (alreadySaved ? t('common.actions.saved') : t('ads.ticker.saveTicker'))}
         </button>
       </div>
@@ -2560,10 +2558,11 @@ function CreativePanel({ reference, account, maxSeconds, bannerSpec, onCreatives
         </div>
       )}
       {wizardOpen && createPortal(
-        <div style={{ position: 'fixed', inset: 0, zIndex: 100050, background: 'var(--bg-primary, #0f0f0f)' }}>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100050, background: 'var(--bg)' }}>
           <button type="button" onClick={() => setWizardOpen(false)} aria-label={t('common.actions.close')}
-            style={{ position: 'absolute', top: 6, right: 10, zIndex: 2, width: 34, height: 34, borderRadius: '50%', border: '1px solid rgba(128,128,128,.4)', background: 'transparent', color: 'inherit', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
-            <CloseIcon size={18} />
+            className="v2-iconbtn v2-btn--secondary h36 is-round"
+            style={{ position: 'absolute', top: 6, right: 10, zIndex: 2 }}>
+            <Icon name="close" size={20} />
           </button>
           <AdWizardFrame
             format={adType === 'shorts' ? 'portrait' : 'landscape'}
@@ -3158,7 +3157,7 @@ export default function Advertise({ openLoginModal }) {
             </div>
 
             <div className="mkt-actions">
-              <button type="submit" className="mkt-outline" disabled={submitting || briefLeft > 0}>
+              <button type="submit" className="mkt-primary" disabled={submitting || briefLeft > 0}>
                 {submitting ? t('ads.apply.sending') : t('ads.apply.register')}
               </button>
               <span className="mkt-fine">{t('ads.apply.reviewedByPerson')}</span>
@@ -3174,38 +3173,40 @@ export default function Advertise({ openLoginModal }) {
         url="https://3speak.tv/advertise"
         image="https://3speak.tv/og-advertise.jpg"
       />
-      <header className="mkt-header">
-        <MdCampaign className="mkt-header-icon" aria-hidden="true" />
-        <div>
-          <h1>{t('ads.page.title')}</h1>
-          <p className="mkt-lede">
-            <Trans i18nKey="ads.page.lede" components={{ b: <strong /> }} />
-          </p>
+      {/* Title and lede on the left, the page's tabs on the right (design 47a). */}
+      <div className="mkt-top">
+        <header className="mkt-header">
+          <div>
+            <h1>{t('ads.page.title')}</h1>
+            <p className="mkt-lede">
+              <Trans i18nKey="ads.page.lede" components={{ b: <strong /> }} />
+            </p>
+          </div>
+        </header>
+
+        <div className="v2-seg mkt-tabs" role="tablist" aria-label={t('ads.page.tablistLabel')}>
+          {TABS.map((tb) => (
+            <button
+              key={tb.id}
+              type="button"
+              role="tab"
+              id={`mkt-tab-${tb.id}`}
+              aria-selected={tab === tb.id}
+              aria-controls={`mkt-panel-${tb.id}`}
+              className={`v2-seg__opt h36 mkt-tab${tab === tb.id ? ' is-on selected' : ''}`}
+              onClick={() => setTab(tb.id)}
+            >
+              {tb.label}
+              {tb.id === 'mine' && myApps?.length ? (
+                <span className="v2-seg__n mkt-tab-count">{myApps.length}</span>
+              ) : null}
+            </button>
+          ))}
         </div>
-      </header>
+      </div>
 
       {/* Only for a signed-in account with an empty wallet: where HIVE comes from. */}
       <FundsNotice user={user} hbdPerHive={pricing?.hbdPerHive} />
-
-      <div className="mkt-tabs" role="tablist" aria-label={t('ads.page.tablistLabel')}>
-        {TABS.map((tb) => (
-          <button
-            key={tb.id}
-            type="button"
-            role="tab"
-            id={`mkt-tab-${tb.id}`}
-            aria-selected={tab === tb.id}
-            aria-controls={`mkt-panel-${tb.id}`}
-            className={`mkt-tab${tab === tb.id ? ' selected' : ''}`}
-            onClick={() => setTab(tb.id)}
-          >
-            {tb.label}
-            {tb.id === 'mine' && myApps?.length ? (
-              <span className="mkt-tab-count">{myApps.length}</span>
-            ) : null}
-          </button>
-        ))}
-      </div>
 
       <div
         role="tabpanel"
@@ -3219,7 +3220,7 @@ export default function Advertise({ openLoginModal }) {
           whether they were filling in a product, a video or a booking. Numbered
           because the order is real: no booking without a product. */}
       <section className="mkt-intro">
-        <h2><FaRocket aria-hidden="true" /> {t('ads.general.stepsTitle')}</h2>
+        <h2>{t('ads.general.stepsTitle')}</h2>
         <p className="mkt-intro-lede">
           {t('ads.general.stepsLede')}
         </p>
@@ -3258,12 +3259,12 @@ export default function Advertise({ openLoginModal }) {
       {/* The way in. The overview explains the thing; this is the one control that
           starts it, so it sits above the detail rather than under it. */}
       <button type="button" className="mkt-enroll-cta" onClick={() => { setWizStep(wizRef ? 2 : 1); setTab('wizard'); }}>
-        <MdCampaign aria-hidden="true" />
-        {t('ads.general.enrollCta')}
+        <span className="v2-btn__label">{t('ads.general.enrollCta')}</span>
+        <Icon name="arrow_forward" size={18} />
       </button>
 
       <section className="mkt-section">
-        <h2><FaLayerGroup aria-hidden="true" /> {t('ads.general.formatsTitle')}</h2>
+        <h2>{t('ads.general.formatsTitle')}</h2>
         <FormatTabs tabs={formatTabs} value={shownFormatTab} onChange={setFormatTab} />
         {pricing?.formats?.length ? (
           <p className="mkt-intro-lede">
@@ -3312,7 +3313,7 @@ export default function Advertise({ openLoginModal }) {
         </p>
 
         {/* The audience for the formats on this tab, not the video audience for all three. */}
-        <h2 className="mkt-tab-subhead"><FaUsers aria-hidden="true" /> {t('ads.general.audienceTitle')}</h2>
+        <h2 className="mkt-tab-subhead">{t('ads.general.audienceTitle')}</h2>
         <InventoryPanel data={inventory} isLoading={isLoading} error={error} tab={shownFormatTab} />
       </section>
 
@@ -3320,7 +3321,7 @@ export default function Advertise({ openLoginModal }) {
           length, from the same rate card the booking form quotes from. */}
       {pricing?.formats?.length ? (
         <section className="mkt-section mkt-price-explorer">
-          <h2><MdSchedule aria-hidden="true" /> {t('ads.general.explorerTitle')}</h2>
+          <h2>{t('ads.general.explorerTitle')}</h2>
           <p>{t('ads.general.explorerLede')}</p>
           <PriceExplorer pricing={pricing} />
         </section>
@@ -3331,7 +3332,7 @@ export default function Advertise({ openLoginModal }) {
           advertiser reading this page should see that the money goes somewhere real. */}
       <div className="mkt-audience-pair">
         <section className="mkt-section mkt-creators">
-          <h2><FaVideo aria-hidden="true" /> {t('ads.general.creatorTitle')}</h2>
+          <h2><Icon name="videocam" size={20} /> {t('ads.general.creatorTitle')}</h2>
           <p>
             {t('ads.prompt.lede')}
           </p>
@@ -3341,7 +3342,7 @@ export default function Advertise({ openLoginModal }) {
         </section>
 
         <section className="mkt-section mkt-viewers">
-          <h2><FaTv aria-hidden="true" /> {t('ads.general.viewerTitle')}</h2>
+          <h2><Icon name="tv" size={20} /> {t('ads.general.viewerTitle')}</h2>
           <p>
             {t('ads.general.viewerText')}
           </p>
@@ -3368,7 +3369,7 @@ export default function Advertise({ openLoginModal }) {
               const state = n < wizAt ? ' done' : (n === wizAt ? ' current' : '');
               return (
                 <li key={label} className={`mkt-wiz-step${state}`} aria-current={n === wizStep ? 'step' : undefined}>
-                  <span className="mkt-wiz-num">{n < wizStep ? '✓' : n}</span>
+                  <span className="mkt-wiz-num">{n < wizStep ? <Icon name="check" size={14} /> : n}</span>
                   <span>{t(label)}</span>
                 </li>
               );
@@ -3396,7 +3397,7 @@ export default function Advertise({ openLoginModal }) {
               <div className="mkt-wiz-actions">
                 <button
                   type="button"
-                  className="mkt-outline"
+                  className="mkt-danger"
                   disabled={wizKilling}
                   onClick={async () => {
                     setWizKilling(true);
@@ -3517,7 +3518,7 @@ export default function Advertise({ openLoginModal }) {
                     {/* Outline, not a red fill, and only once "Your ad" is complete. */}
                     <button
                       type="button"
-                      className="mkt-outline"
+                      className="mkt-primary"
                       disabled={!!adStepMissing(wizType, wizCreativeList, bookProduction)}
                       onClick={() => goStep(3)}
                     >
@@ -3746,14 +3747,14 @@ export default function Advertise({ openLoginModal }) {
                 {lookup.note ? <p className="mkt-lookup-note">{lookup.note}</p> : null}
 
                 {(lookup.status === 'pending' || lookup.status === 'approved') && (
-                  <div className="mkt-ptabs" role="tablist" aria-label={t('ads.mine.thisProduct')} ref={ptabsRef}>
+                  <div className="v2-seg is-scroll mkt-ptabs" role="tablist" aria-label={t('ads.mine.thisProduct')} ref={ptabsRef}>
                     {PRODUCT_TABS.map((tb) => (
                       <button
                         key={tb.id}
                         type="button"
                         role="tab"
                         aria-selected={ptab === tb.id}
-                        className={`mkt-ptab${ptab === tb.id ? ' selected' : ''}`}
+                        className={`v2-seg__opt mkt-ptab${ptab === tb.id ? ' is-on selected' : ''}`}
                         onClick={() => setPtab(tb.id)}
                       >
                         {tb.label}
@@ -3773,7 +3774,7 @@ export default function Advertise({ openLoginModal }) {
                           className={`mkt-wiz-step${state}`}
                           aria-current={n === bookStep ? 'step' : undefined}
                         >
-                          <span className="mkt-wiz-num">{n < bookStep ? '✓' : n}</span>
+                          <span className="mkt-wiz-num">{n < bookStep ? <Icon name="check" size={14} /> : n}</span>
                           <span>{t(label)}</span>
                         </li>
                       );
@@ -3793,7 +3794,7 @@ export default function Advertise({ openLoginModal }) {
                   <div style={{ display: ptab === 'book' && bookStep === 1 ? undefined : 'none' }}>
                   {rebook && (
                     <p className="mkt-note">
-                      <MdReplay aria-hidden="true" />
+                      <Icon name="replay" size={18} />
                       <span>{t('ads.rebook.stepAd', { name: rebook.name })}</span>
                     </p>
                   )}
@@ -3882,7 +3883,7 @@ export default function Advertise({ openLoginModal }) {
                         <>
                           <button
                             type="button"
-                            className="mkt-outline"
+                            className="mkt-primary"
                             disabled={!!missing}
                             onClick={() => setBookStep(2)}
                           >

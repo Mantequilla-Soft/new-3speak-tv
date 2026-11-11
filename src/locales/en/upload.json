@@ -438,6 +438,7 @@
     "portrait": "Portrait",
     "landscape": "Landscape",
     "autoDetect": "Auto-detect ({{lang}})",
+    "layout": "Layout",
     "presets": {
       "frontcam": "Front cam",
       "frontcamTitle": "Small strip under the selfie lens — least obvious that you're reading",

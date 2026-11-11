@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FaDiscord } from 'react-icons/fa';
-import { SiTelegram } from 'react-icons/si';
-import { IoCloudOfflineOutline } from 'react-icons/io5';
+import { Button, Icon } from '../v2/ui';
 import { useAppStore } from '../../lib/store';
 import { useSupportBlock } from '../../lib/supportBlockStore';
 import { creatorKey, isUploadBlocked, useCreatorSettings } from '../../utils/creatorSettings';
@@ -79,22 +77,24 @@ export default function UploadBlockNotice({ hidden = false }) {
   return (
     <section className="upload-block-notice" role="status">
       <div className="ubn-head">
-        <IoCloudOfflineOutline className="ubn-icon" size={20} aria-hidden="true" />
-        <h2 className="ubn-title">{t('app.supportBlock.upload.title')}</h2>
+        <span className="ubn-icon"><Icon name="upload_off" size={28} /></span>
+        <div className="ubn-head__text">
+          <h2 className="ubn-title">{t('app.supportBlock.upload.title')}</h2>
+          <p className="ubn-body">{t('app.uploadBlock.bannerBody')}</p>
+        </div>
       </div>
       {note && (
         <div className="ubn-note">
           <BlockNote note={note} />
         </div>
       )}
-      <p className="ubn-body">{t('app.uploadBlock.bannerBody')}</p>
       <div className="ubn-actions">
-        <a className="ubn-btn" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
-          <FaDiscord size={16} aria-hidden="true" /> <span>Discord</span>
-        </a>
-        <a className="ubn-btn" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
-          <SiTelegram size={16} aria-hidden="true" /> <span>Telegram</span>
-        </a>
+        <Button as="a" variant="secondary" size={44} icon="forum" trailing="open_in_new" className="ubn-btn is-next" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+          Discord
+        </Button>
+        <Button as="a" variant="secondary" size={44} icon="send" trailing="open_in_new" className="ubn-btn is-next" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
+          Telegram
+        </Button>
       </div>
     </section>
   );

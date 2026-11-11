@@ -1,164 +1,58 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// The owner's editor for a playlist's outside shows (PlaylistFeedsModal.jsx).
-// Flat --card-bg box like the other playlist dialogs; a bottom sheet on phones.
-
-.pl-feeds-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.7);
-
-  @include mix.respond(phone) {
-    align-items: flex-end;
-    padding: 0;
-  }
-}
-
+// The owner's editor for a playlist's outside shows (PlaylistFeedsModal.jsx),
+// on the v2 Dialog (a sheet on phones): a search field, results, the shows in
+// the playlist with their count, Save in the footer.
 .pl-feeds-modal {
-  width: 90%;
-  max-width: 520px;
-  max-height: 85vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 20px 24px 24px;
-  border: 1px solid var(--border-light);
-  border-radius: 16px;
-  background: var(--card-bg);
-  color: var(--text-primary);
-
-  @include mix.respond(phone) {
-    width: 100%;
-    max-width: 100%;
-    max-height: 88vh;
-    padding: 16px 16px calc(20px + env(safe-area-inset-bottom, 0px));
-    border-radius: 16px 16px 0 0;
-    animation: pl-feeds-up 0.22s ease-out;
+  // The dialog's grid would otherwise grow to the content's min-content width on phones.
+  min-width: 0;
+  .pl-feeds-intro { margin: 0; font-size: 13px; line-height: 1.45; color: var(--muted); }
+  .pl-feeds-search {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    .pod-field-row { flex: 1; }
   }
-}
-
-@keyframes pl-feeds-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-.pl-feeds-intro {
-  margin: 12px 0 14px;
-  font-size: 0.88rem;
-  line-height: 1.5;
-  color: var(--text-secondary);
-}
-
-.pl-feeds-search {
-  display: flex;
-  gap: 8px;
-
-  .pod-field-row { flex: 1; min-width: 0; }
-  input { flex: 1; min-width: 0; border: none; background: none; color: var(--text-primary); font-size: 0.9rem; outline: none; padding: 6px 0; }
-  .pod-btn { flex-shrink: 0; }
-}
-
-.pl-feeds-results {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 10px;
-}
-
-.pl-feeds-subtitle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 20px 0 8px;
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.pl-feeds-count { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
-
-.pl-feeds-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.pl-feeds-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  padding: 8px;
-  border-radius: 10px;
-  background: var(--bg-secondary);
-}
-
-.pl-feeds-art {
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-}
-
-.pl-feeds-row-body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.pl-feeds-row-title,
-.pl-feeds-row-meta {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.pl-feeds-row-title { font-size: 0.88rem; font-weight: 600; }
-.pl-feeds-row-meta { font-size: 0.76rem; color: var(--text-muted); }
-
-.pl-feeds-in {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.pl-feeds-remove {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 8px;
-  background: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-
-  &:hover:not(:disabled) { background: var(--bg-hover); color: var(--text-primary); }
-  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
-}
-
-.pl-feeds-note {
-  margin: 6px 0;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.pl-feeds-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 20px;
+  .pl-feeds-results, .pl-feeds-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pl-feeds-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 56px;
+    padding: 6px 8px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+  }
+  .pl-feeds-art { width: 44px; height: 44px; border-radius: var(--r-md); object-fit: cover; flex: none; background: var(--avatar); }
+  .pl-feeds-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .pl-feeds-row-title { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pl-feeds-row-meta { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pl-feeds-row .pod-btn { height: 32px; border-radius: v2.radius-for(32); font-size: 12px; padding: 0 10px; }
+  .pl-feeds-in { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--cyan); white-space: nowrap; }
+  .pl-feeds-note { margin: 0; padding: 8px 0; font-size: 12px; color: var(--muted); }
+  .pl-feeds-subtitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 8px 0 0;
+    @include v2.text(eyebrow);
+    color: var(--muted);
+  }
+  .pl-feeds-count { @include v2.mono(11, 700); color: var(--muted); }
+  .pl-feeds-remove {
+    @include v2.control(32);
+    width: 32px;
+    padding: 0;
+    justify-content: center;
+    background: transparent;
+    color: var(--muted);
+    &:hover { background: var(--bg-hover); color: var(--accent); }
+  }
 }

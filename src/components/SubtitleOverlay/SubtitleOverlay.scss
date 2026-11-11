@@ -5,7 +5,7 @@
    subtitle style as CSS variables (SubtitleOverlay.jsx). */
 .subtitle-overlay {
   position: absolute;
-  bottom: 72px; // above the control bar
+  bottom: 104px; // above the control bar, its chapter names and markers
   left: 0;
   right: 0;
   z-index: 8; // above the video, below the controls (10)
@@ -36,7 +36,7 @@
 // Phones: smaller text, closer to the bottom
 @include v2.mobile {
   .subtitle-overlay {
-    bottom: 24px;
+    bottom: 52px; // clear of the time pill and the corner buttons
     padding: 0 8px;
 
     .subtitle-overlay-text {
@@ -50,7 +50,7 @@
 // Fullscreen: larger text
 :fullscreen .subtitle-overlay,
 .landscape-fullscreen .subtitle-overlay {
-  bottom: 88px;
+  bottom: 120px;
 
   .subtitle-overlay-text {
     font-size: var(--sub-font-size-fullscreen, 24px);

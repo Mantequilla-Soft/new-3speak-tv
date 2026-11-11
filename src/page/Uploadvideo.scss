@@ -1,0 +1,91 @@
+@use "../styles/v2" as v2;
+
+// /upload, the studio start (UploadVideo.jsx), design 44c.
+.upload-start {
+  display: flex;
+  justify-content: center;
+  padding: 40px var(--page-pad);
+
+  @include v2.mobile { padding: 16px var(--page-pad); }
+}
+
+.upload-start__card {
+  @include v2.card;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.upload-start__title {
+  margin: 0 0 6px;
+  @include v2.text(heading);
+}
+
+.upload-start__choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--r-lg);
+  border: 2px solid transparent;
+  background: var(--bg);
+  color: var(--text);
+  text-decoration: none;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 6%, var(--bg)); color: var(--text); }
+
+  &.is-on {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    .upload-start__icon { background: var(--accent); color: var(--on-accent); }
+  }
+}
+
+.upload-start__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: v2.radius-for(44);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.upload-start__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+
+  b { @include v2.text(label); font-size: 14px; }
+  span { @include v2.text(meta); color: var(--muted); }
+}
+
+.upload-start__chev { color: var(--muted); }
+
+.upload-start__or {
+  text-align: center;
+  @include v2.text(meta);
+  color: var(--muted);
+}
+
+.upload-start__note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 0 0;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  @include v2.text(meta-sm);
+  line-height: 1.45;
+  color: var(--muted);
+  .material-symbols-rounded { color: var(--cyan); }
+}

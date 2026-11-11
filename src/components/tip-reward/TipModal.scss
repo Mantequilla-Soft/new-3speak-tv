@@ -169,7 +169,8 @@
     border-bottom: 1px solid var(--border);
     font-size: 13px;
     color: var(--muted);
-    img { display: block; height: 24px; width: auto; }
+    // The mark only: the file also carries the wordmark, cropped off here.
+    img { display: block; height: 24px; width: 28px; object-fit: cover; object-position: left center; }
   }
   &__main {
     flex: 1;

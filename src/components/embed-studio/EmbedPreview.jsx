@@ -1,8 +1,6 @@
 import React from "react";
-import "../legacy-studio/Preview.scss";
 import "./EmbedPreview.scss";
 import { Navigate, useNavigate } from "react-router-dom";
-import { CheckCircle, Upload, FileText, Info, Users, Coins, Gift, Repeat2, Tag, ShieldAlert } from "lucide-react";
 import { StepProgress } from "../legacy-studio/StepProgress";
 import EmbedUploadProgressBar from "./EmbedUploadProgressBar";
 import StepActions from "./StepActions";
@@ -10,18 +8,16 @@ import { useEmbedUpload } from "../../context/EmbedUploadContext";
 import { enforceLockedBeneficiaries } from "../../utils/beneficiaries";
 import { remixChainAuthors, remixChainMarkdown } from "../../utils/remixChain";
 import { soundCreditsMarkdown, soundAuthorsOf } from '../../utils/soundCredits';
-import "../legacy-studio/VideoUploadStatus.scss";
 import BlogContent from "../playVideo/BlogContent";
 import EmbedPreviewPlayer from "./EmbedPreviewPlayer";
 import PromoteModal from "../Promote/PromoteModal";
-import { Rocket, Star } from "lucide-react";
+import { Button, Icon, Progress, StatusPill, StepList } from "../v2/ui";
 import { useReviewModal } from "../../lib/reviewStore";
 import UploadGate from "../ads/UploadGate";
 import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from "../../lib/uploadGate";
 import { useTranslation, Trans } from "react-i18next";
 import AccountImg from "../HiveAvatar/AccountImg";
 import { timelineMeta, applyTimelineToDescription } from "../../utils/videoTimeline";
-import { MdLocalFireDepartment } from "react-icons/md";
 import { getFollowers } from "../../hive-api/api";
 import { useStoryStreak, STREAK_MIN } from "../../lib/stories";
 
@@ -39,7 +35,7 @@ function EmbedPreview() {
     prevVideoFile,
     selectedThumbnail,
     editedThumbnail,
-    uploading, setUploading,
+    uploading,
     completed,
     uploadProgress,
     statusText,
@@ -214,7 +210,7 @@ function EmbedPreview() {
       : beneficiaries
         ? JSON.parse(beneficiaries)
         : [];
-  } catch (_) {
+  } catch {
     beneList = [];
   }
   // Show what publishing will actually set: the chosen list plus the locked
@@ -291,9 +287,10 @@ function EmbedPreview() {
     // doubt: watch the spot, then publish. The publish button stays visible and
     // disabled rather than hidden, so the destination is obvious from the start.
     primary: [
-      !gateSatisfied && { key: "watch", label: t("upload.review.watchAdToPublish"), onClick: startGateAd },
+      !gateSatisfied && { key: "watch", label: t("upload.review.watchAdToPublish"), onClick: startGateAd, icon: "play_circle" },
       {
         key: "post",
+        icon: "send",
         label: fromStories ? t(isStory ? 'upload.review.postStory' : 'upload.review.postShort') : t('upload.review.postVideo'),
         onClick: handlePostVideo,
         disabled: !gateSatisfied || publishing,
@@ -303,6 +300,42 @@ function EmbedPreview() {
   };
 
 
+  // The publishing steps (31b, a StepList), read off the status line the
+  // publish flow writes: uploading, the thumbnail, posting to Hive, linking.
+  const PUBLISH_PHASES = [
+    { label: t('upload.publishing.uploadingVideo'), match: [] },
+    { label: t('upload.publishing.uploadingThumbnail'), match: [t('upload.publishing.uploadingThumbnail')] },
+    {
+      label: t('upload.publishing.postingToHive'),
+      match: [
+        t('upload.publishing.postingToHive'), t('upload.publishing.findingSnapsContainer'),
+        t('upload.publishing.checkingAuthority'), t('upload.publishing.authorizingStatus'),
+        t('upload.publishing.savingScheduled'),
+      ],
+    },
+    { label: t('upload.publishing.linkingEmbed'), match: [t('upload.publishing.linkingEmbed'), t('upload.publishing.completed')] },
+  ];
+  const phaseIdx = Math.max(0, PUBLISH_PHASES.findIndex((ph) => ph.match.includes(statusText)));
+  const publishSteps = PUBLISH_PHASES.map((ph, i) => ({
+    label: ph.label,
+    state: i < phaseIdx ? 'done' : i === phaseIdx ? 'current' : 'next',
+  }));
+
+  // A publish that failed leaves its error as the last log line: say so above
+  // the review, which is where the creator lands again (31b, failed upload).
+  const lastMessage = statusMessages[statusMessages.length - 1];
+  const failedMessage = !uploading && !completed && lastMessage?.type === 'error' ? lastMessage.message : '';
+
+  const logIcon = (msg, i) => {
+    if (msg.type === 'success') return { name: 'check_circle', tone: 'is-cyan' };
+    if (msg.type === 'error') return { name: 'error', tone: 'is-accent' };
+    if (msg.type === 'warning') return { name: 'warning', tone: 'is-accent' };
+    if (uploading && i === statusMessages.length - 1) return { name: 'progress_activity', tone: 'is-current' };
+    return { name: 'check', tone: 'is-done' };
+  };
+
+  const pageTitle = fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo");
+
   return (
     <>
       {gateAd && <UploadGate ad={gateAd} onWatched={onGateWatched} />}
@@ -310,23 +343,37 @@ function EmbedPreview() {
       {!uploading && !completed && (
         <div className="studio-main-container embed-wizard">
           <div className="studio-page-header">
-            <h1>{fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
+            <h1>{pageTitle}</h1>
           </div>
 
-          {!quickStory && <StepProgress step={step} short={fromStories} />}
+          {quickStory
+            ? <div className="ep-story-actions"><StepActions placement="top" {...actions} /></div>
+            : <StepProgress step={step} short={fromStories} actions={actions} />}
           <EmbedUploadProgressBar />
 
           <div className="studio-page-content">
-            <StepActions placement="top" {...actions} />
-            <div className="ep-review">
+            {failedMessage && (
+              <div className="v2-failure ep-failed" role="alert">
+                <div className="ep-failed__head">
+                  <Icon name="error" size={24} />
+                  <b>{failedMessage}</b>
+                </div>
+                <p className="ep-failed__help">
+                  <Trans
+                    i18nKey="upload.publishing.support"
+                    components={{ discordLink: <a href="https://discord.com/invite/NSFS2VGj83" target="_blank" rel="noopener noreferrer" /> }}
+                  />
+                </p>
+              </div>
+            )}
+
+            <div className={`ep-review${fromStories ? ' ep-review--portrait' : ''}`}>
               {/* POST PREVIEW — rendered like the final post: player (standing in
                   for the leading embed URL) → title → description body. */}
               <div className="ep-post">
-                {title && <h2 className="ep-title">{title}</h2>}
-
                 {/* One card wrapping the player + description so the video reads
                     as part of the post body, not a detached element. */}
-                <div className="ep-post-card">
+                <div className="ep-post-card v2-card">
                   <EmbedPreviewPlayer
                     file={prevVideoFile}
                     poster={editedThumbnail || selectedThumbnail}
@@ -336,10 +383,12 @@ function EmbedPreview() {
                     duration={Number(videoDuration) || 0}
                   />
 
+                  {title && <h2 className="ep-title">{title}</h2>}
+
                   {quickStory ? (
                     <div className="ep-body ep-story">
                       <textarea
-                        className="ep-story__caption"
+                        className="ep-story__caption v2-input is-area"
                         value={description}
                         onChange={(e) => setDescription(e.target.value.slice(0, STORY_CAPTION_MAX))}
                         placeholder={t("upload.story.captionPlaceholder")}
@@ -347,17 +396,20 @@ function EmbedPreview() {
                         rows={3}
                       />
                       <p className="ep-story__reach">
+                        <Icon name="notifications_active" size={18} />
                         {followers != null
                           ? t("upload.story.reach", { count: followers })
                           : t("upload.story.reachNoCount")}
                       </p>
                       <p className="ep-story__streak">
-                        <MdLocalFireDepartment aria-hidden="true" />
-                        {postedToday && streak >= STREAK_MIN
-                          ? t("upload.story.streakOn", { count: streak })
-                          : nextStreak >= STREAK_MIN
-                            ? t("upload.story.streakNext", { count: nextStreak })
-                            : t("upload.story.streakStart")}
+                        <Icon name="local_fire_department" size={28} fill />
+                        <b>
+                          {postedToday && streak >= STREAK_MIN
+                            ? t("upload.story.streakOn", { count: streak })
+                            : nextStreak >= STREAK_MIN
+                              ? t("upload.story.streakNext", { count: nextStreak })
+                              : t("upload.story.streakStart")}
+                        </b>
                       </p>
                     </div>
                   ) : (
@@ -368,12 +420,19 @@ function EmbedPreview() {
                 </div>
               </div>
 
-              {/* Everything that isn't the post body, shown below it. */}
-              <div className="ep-settings">
-                <div className="ep-settings__head">{t("upload.review.publishSettings")}</div>
+              {/* Everything that isn't the post body (35d: Publish settings). */}
+              <aside className="ep-settings v2-card">
+                <div className="ep-settings__head">
+                  <b className="ep-settings__title">{t("upload.review.publishSettings")}</b>
+                  {!quickStory && (
+                    <Button variant="ghost" size={32} icon="edit" onClick={() => navigate('/embed-studio/details')}>
+                      {t("common.actions.edit")}
+                    </Button>
+                  )}
+                </div>
 
                 <div className="ep-setting">
-                  <span className="ep-setting__icon"><Users size={18} /></span>
+                  <span className="ep-setting__icon"><Icon name="groups" size={18} /></span>
                   <span className="ep-setting__label">{t("upload.details.community.label")}</span>
                   <span className="ep-setting__value ep-setting__value--community">
                     <AccountImg account={communityDisplay.name} alt="" />
@@ -382,13 +441,13 @@ function EmbedPreview() {
                 </div>
 
                 <div className="ep-setting">
-                  <span className="ep-setting__icon"><Coins size={18} /></span>
+                  <span className="ep-setting__icon"><Icon name="payments" size={18} /></span>
                   <span className="ep-setting__label">{t("upload.review.payout")}</span>
                   <span className="ep-setting__value">{payoutLabel}</span>
                 </div>
 
                 <div className="ep-setting ep-setting--top">
-                  <span className="ep-setting__icon"><Gift size={18} /></span>
+                  <span className="ep-setting__icon"><Icon name="call_split" size={18} /></span>
                   <span className="ep-setting__label">{t("upload.details.beneficiaries.label")}</span>
                   <span className="ep-setting__value">
                     {userBeneficiaries.length === 0 ? (
@@ -396,7 +455,7 @@ function EmbedPreview() {
                     ) : (
                       <span className="ep-benes">
                         {userBeneficiaries.map((b, i) => (
-                          <span className="ep-bene" key={i}>@{b.account} · {(Number(b.weight) / 100).toFixed(0)}%</span>
+                          <span className="ep-bene" key={i}>@{b.account} · <span className="num">{(Number(b.weight) / 100).toFixed(0)}%</span></span>
                         ))}
                       </span>
                     )}
@@ -404,7 +463,7 @@ function EmbedPreview() {
                 </div>
 
                 <div className="ep-setting ep-setting--top">
-                  <span className="ep-setting__icon"><Tag size={18} /></span>
+                  <span className="ep-setting__icon"><Icon name="tag" size={18} /></span>
                   <span className="ep-setting__label">{t("upload.review.tags")}</span>
                   <span className="ep-setting__value">
                     {tagsPreview && tagsPreview.length > 0 ? (
@@ -418,96 +477,93 @@ function EmbedPreview() {
                 </div>
 
                 <div className="ep-setting">
-                  <span className="ep-setting__icon"><Repeat2 size={18} /></span>
+                  <span className="ep-setting__icon"><Icon name="content_cut" size={18} /></span>
                   <span className="ep-setting__label">{t("upload.review.remix")}</span>
                   <span className="ep-setting__value">{remixLabel}</span>
                 </div>
 
                 <div className="ep-setting">
-                  <span className="ep-setting__icon"><ShieldAlert size={18} /></span>
+                  <span className="ep-setting__icon"><Icon name="explicit" size={18} /></span>
                   <span className="ep-setting__label">{t("upload.review.nsfw")}</span>
                   <span className="ep-setting__value">
-                    {isNsfw ? <span className="ep-nsfw-on">{t("common.actions.yes")}</span> : <span className="ep-muted">{t("common.actions.no")}</span>}
+                    {isNsfw ? <StatusPill tone="accent">{t("common.actions.yes")}</StatusPill> : <span className="ep-muted">{t("common.actions.no")}</span>}
                   </span>
                 </div>
-              </div>
+
+                {/* Watch-ad-to-publish (35d): the sponsor spot this account owes,
+                    shown before the button that plays it. */}
+                {!gateSatisfied && (
+                  <div className="ep-gate">
+                    <div className="ep-gate__thumb v2-thumb r12">
+                      <span className="v2-media-pill is-tl">AD</span>
+                    </div>
+                    <span className="ep-gate__text">{t("upload.review.watchSponsorFirst")}</span>
+                  </div>
+                )}
+              </aside>
             </div>
             <StepActions placement="bottom" {...actions} />
           </div>
         </div>
       )}
 
-      {/* STATUS CONTAINER — during upload & Hive posting */}
+      {/* STATUS CONTAINER — during upload & Hive posting (31b + 35d) */}
       {uploading && (
-        <div className="status-container">
-          <div className="upload-status-container embed-status">
-            <div className="upload-icon">
-              <Upload size={30} strokeWidth={1.5} />
+        <div className="studio-main-container embed-wizard ep-status">
+          <section className="v2-card ep-publishing">
+            <div className="wizard-head is-cyan">
+              <h2 className="wizard-head__title">
+                {fromStories ? t(isStory ? 'upload.publishing.titleStory' : 'upload.publishing.titleShort') : t('upload.publishing.titleVideo')}
+              </h2>
+              <p className="wizard-head__sub">{t("upload.publishing.subtitle")}</p>
             </div>
 
-            <h2 className="upload-title">
-              {fromStories ? t(isStory ? 'upload.publishing.titleStory' : 'upload.publishing.titleShort') : t('upload.publishing.titleVideo')}
-            </h2>
-            <p className="upload-subtitle">{t("upload.publishing.subtitle")}</p>
-
-            <div className="progress-section">
-              <div className="progress-bar-container">
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill embed-fill"
-                    style={{ width: `${uploadProgress}%` }}
-                  />
-                </div>
+            <div className="ep-publishing__progress">
+              <div className="ep-publishing__progress-head">
+                <span className="ep-publishing__status">{statusText || t('upload.publishing.starting')}</span>
+                <span className="num">{uploadProgress}%</span>
               </div>
-              <div className="progress-header">
-                <span className="progress-label">{statusText || t('upload.publishing.starting')}</span>
-                <span className="progress-percentage">{uploadProgress}%</span>
-              </div>
+              <Progress value={uploadProgress} tone="cyan" label={statusText || t('upload.publishing.starting')} />
             </div>
 
-            <div className="caution-wrap">
-              {t("upload.publishing.stayOnPage")}
+            <StepList items={publishSteps} />
+
+            <div className="v2-banner is-info ep-publishing__stay">
+              <Icon name="info" size={18} className="v2-banner__icon" />
+              <div className="v2-banner__body"><b>{t("upload.publishing.stayOnPage")}</b></div>
             </div>
 
             <div className="activity-log">
-              <div className="activity-log-header">
-                <div className="wrapin">
-                  <FileText size={18} />
-                  <span>{t("upload.publishing.activityLog")}</span>
-                </div>
-                <div className="discord">
-                  <Trans
-                    i18nKey="upload.publishing.support"
-                    components={{ discordLink: <a href="https://discord.com/invite/NSFS2VGj83" target="_blank" rel="noopener noreferrer" className="discord-link" /> }}
-                  />
-                </div>
-              </div>
+              <div className="v2-eyebrow">{t("upload.publishing.activityLog")}</div>
               <div className="activity-log-content">
-                {statusMessages.map((msg, i) => (
-                  <div key={i} className={`activity-item ${msg.type === 'error' ? 'error' : msg.type === 'success' ? 'success' : 'info'}`}>
-                    <div className="activity-icon">
-                      {msg.type === 'success' ? <CheckCircle size={20} /> : <Info size={20} />}
-                    </div>
-                    <div className="activity-details">
+                {statusMessages.map((msg, i) => {
+                  const ic = logIcon(msg, i);
+                  return (
+                    <div key={i} className={`activity-item ${msg.type === 'error' ? 'error' : msg.type === 'success' ? 'success' : 'info'}`}>
+                      <Icon name={ic.name} size={16} className={`activity-icon ${ic.tone}${ic.name === 'progress_activity' ? ' v2-spin' : ''}`} />
                       <p className="activity-message">{msg.message}</p>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
+              </div>
+              <div className="discord">
+                <Trans
+                  i18nKey="upload.publishing.support"
+                  components={{ discordLink: <a href="https://discord.com/invite/NSFS2VGj83" target="_blank" rel="noopener noreferrer" className="discord-link" /> }}
+                />
               </div>
             </div>
-          </div>
+          </section>
         </div>
       )}
 
-      {/* COMPLETED */}
+      {/* COMPLETED (35d: done, with feedback) */}
       {completed && (
-        <div className="success-container">
-          <div className="success-box">
-            <div className="success-icon">
-              <CheckCircle size={34} strokeWidth={2} />
-            </div>
-            <h3>{t("upload.done.title")}</h3>
-            <p>
+        <div className="studio-main-container embed-wizard ep-status">
+          <section className="v2-success ep-done">
+            <span className="ep-done__icon"><Icon name="check" size={32} /></span>
+            <h3 className="ep-done__title">{t("upload.done.title")}</h3>
+            <p className="ep-done__text">
               {fromStories
                 ? t(isStory ? 'upload.done.storyPublished' : 'upload.done.shortPublished')
                 : (
@@ -515,13 +571,15 @@ function EmbedPreview() {
                 )}
             </p>
 
-            <div className="success-actions">
+            <div className="ep-done__actions">
               {!fromStories && publishedPermlink && (
-                <button className="promote-success-btn" onClick={() => setPromoteOpen(true)}>
-                  <Rocket size={18} /> {t("upload.done.promote")}
-                </button>
+                <Button variant="secondary" size={48} trailing="campaign" className="is-next promote-success-btn" onClick={() => setPromoteOpen(true)}>
+                  {t("upload.done.promote")}
+                </Button>
               )}
-              <button
+              <Button
+                variant="inverse"
+                size={48}
                 // Just navigate. The reset used to run 50ms later, which sent the
                 // user straight back to the uploader instead: ProfilePage is lazy,
                 // so this component is still mounted while its chunk loads, and
@@ -530,18 +588,26 @@ function EmbedPreview() {
                 // EmbedStudioPage already resets on mount when `completed`, which
                 // is the right moment for it anyway.
                 onClick={() => navigate("/profile")}
-                className="profile-btn"
+                className="is-next profile-btn"
+                trailing="arrow_forward"
               >
-                {t("upload.done.goToProfile")}
-              </button>
+                {t("upload.done.goToProfile").replace(/\s*→\s*$/, '')}
+              </Button>
             </div>
 
-            <button
-              className="review-success-btn"
-              onClick={() => openReview({ area: 'upload', username: user || null, permlink: publishedPermlink || null })}
-            >
-              <Star size={18} /> {t("upload.done.feedback")}</button>
-          </div>
+            <div className="ep-done__feedback">
+              <div className="v2-eyebrow">{t("upload.done.feedback")}</div>
+              <Button
+                variant="secondary"
+                size={44}
+                icon="sentiment_satisfied"
+                className="review-success-btn"
+                onClick={() => openReview({ area: 'upload', username: user || null, permlink: publishedPermlink || null })}
+              >
+                {t("upload.done.feedback")}
+              </Button>
+            </div>
+          </section>
         </div>
       )}
 

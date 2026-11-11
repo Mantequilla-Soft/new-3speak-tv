@@ -274,7 +274,7 @@ p { text-wrap: pretty; }
   &.h32 { height: 32px; font-size: 13px; }
   &.h44 { height: 44px; border-radius: 16px; }
   &.h48 { height: 48px; border-radius: 16px; }
-  .v2-card &, .v2-dialog__panel & { background: var(--bg); }
+  .v2-card &, .v2-dialog__panel & { background-color: var(--bg); }
 }
 // The rule above resets the select's drawn arrow inside cards and dialogs; put it back.
 .v2-card .v2-input.is-select, .v2-dialog__panel .v2-input.is-select {
@@ -410,7 +410,7 @@ p { text-wrap: pretty; }
 
 /* Overlays: dialog on desktop, bottom sheet under 768px */
 .v2-dialog { position: fixed; inset: 0; z-index: 1000; background: var(--overlay); display: grid; place-items: center; padding: 24px; animation: v2-fade var(--t-base) var(--ease); }
-.v2-dialog__panel { width: min(var(--w, 440px), 100%); max-height: calc(100vh - 48px); max-height: calc(100dvh - 48px); display: flex; flex-direction: column; background: var(--surface); color: var(--text);
+.v2-dialog__panel { width: min(var(--w, 440px), 100%); min-width: 0; max-height: calc(100vh - 48px); max-height: calc(100dvh - 48px); display: flex; flex-direction: column; background: var(--surface); color: var(--text);
   border: 1px solid var(--border); border-radius: var(--r-3xl); box-shadow: var(--shadow-sheet); outline: none; animation: v2-pop var(--t-base) var(--ease); overflow: hidden; }
 .v2-dialog__grab { display: none; }
 .v2-dialog__head { display: flex; align-items: center; gap: 8px; padding: 18px 16px 6px 20px; flex: none;

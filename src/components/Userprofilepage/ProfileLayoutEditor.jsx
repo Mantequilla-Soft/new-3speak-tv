@@ -1,17 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import {
   DndContext, DragOverlay, useDraggable, useDroppable, PointerSensor, useSensor, useSensors, pointerWithin,
 } from '@dnd-kit/core';
-import { RxDragHandleDots2 } from 'react-icons/rx';
-import {
-  FiChevronDown, FiChevronUp, FiEye, FiEyeOff, FiSettings, FiTrash2, FiPlus, FiX, FiHelpCircle, FiMonitor, FiSmartphone,
-  FiRotateCcw, FiRotateCw,
-} from 'react-icons/fi';
-import { MdViewCarousel, MdGridView } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Dialog, Toggle } from '../v2/ui';
 import { SECTION_DEFS, GRID_COLUMNS, clampSpan } from '../../lib/profileLayout';
 import { useTranslation } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
 import './ProfileLayoutEditor.scss';
 
 /**
@@ -43,14 +37,14 @@ function useIsPhone() {
 
 function Segmented({ value, options, onChange }) {
   return (
-    <div className="ple-seg" role="radiogroup">
+    <div className="v2-seg is-block ple-seg" role="radiogroup">
       {options.map((o) => (
         <button
           key={o.value}
           type="button"
           role="radio"
           aria-checked={value === o.value}
-          className={value === o.value ? 'active' : ''}
+          className={`v2-seg__opt h32${value === o.value ? ' is-on active' : ''}`}
           onClick={() => onChange(o.value)}
         >
           {o.icon}{o.label}
@@ -62,11 +56,10 @@ function Segmented({ value, options, onChange }) {
 
 function Switch({ checked, label, onChange }) {
   return (
-    <label className="ple-switch">
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
-      <span className="ple-switch-track" aria-hidden="true" />
+    <div className="ple-switch">
       <span className="ple-switch-label">{label}</span>
-    </label>
+      <Toggle checked={!!checked} label={label} onChange={onChange} />
+    </div>
   );
 }
 
@@ -85,7 +78,7 @@ function SectionSettings({ section, playlists, onPatch, mobile = false }) {
     fields.push(
       <label key="playlist" className="ple-field">
         <span>{t('profile.layout.fields.playlist')}</span>
-        <select value={section.playlistId || ''} onChange={(e) => onPatch({ playlistId: e.target.value })}>
+        <select className="v2-input is-select h32" value={section.playlistId || ''} onChange={(e) => onPatch({ playlistId: e.target.value })}>
           {!playlist ? <option value={section.playlistId || ''}>{t('profile.layout.playlistMissing')}</option> : null}
           {playlists.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
@@ -97,6 +90,7 @@ function SectionSettings({ section, playlists, onPatch, mobile = false }) {
       <label key="title" className="ple-field">
         <span>{t('profile.layout.fields.heading')}</span>
         <input
+          className="v2-input h32"
           type="text"
           maxLength={60}
           value={section.title || ''}
@@ -164,8 +158,8 @@ function SectionSettings({ section, playlists, onPatch, mobile = false }) {
           value={section.view}
           onChange={(view) => onPatch({ view })}
           options={[
-            { value: 'row', label: t('profile.layout.fields.viewRow'), icon: <MdViewCarousel size={15} /> },
-            { value: 'grid', label: t('profile.layout.fields.viewGrid'), icon: <MdGridView size={15} /> },
+            { value: 'row', label: t('profile.layout.fields.viewRow'), icon: <Icon name="view_carousel" size={16} /> },
+            { value: 'grid', label: t('profile.layout.fields.viewGrid'), icon: <Icon name="grid_view" size={16} /> },
           ]}
         />
       </div>,
@@ -217,28 +211,25 @@ function PropertiesPopover({ label, onClose, children }) {
     };
   }, [isPhone, onClose]);
 
-  const panel = (
-    <div ref={ref} className={`ple-props${isPhone ? ' ple-props--sheet' : ''}`} role="dialog" aria-label={label}>
-      {isPhone ? (
-        <ModalHeader closeOnEscape={false} className="ple-sheet-header" title={label} onClose={onClose} />
-      ) : (
-        <div className="ple-props-head">
-          <strong>{label}</strong>
-          <button type="button" className="ple-icon" onClick={onClose} aria-label={t('common.actions.close')}>
-            <FiX size={16} />
-          </button>
-        </div>
-      )}
+  // Phones: the shared v2 sheet (it portals, traps focus and closes on Esc).
+  if (isPhone) {
+    return (
+      <Dialog open onClose={onClose} title={label} closeLabel={t('common.actions.close')} className="ple-props-sheet" bodyClassName="ple-props-body">
+        {children}
+      </Dialog>
+    );
+  }
+
+  return (
+    <div ref={ref} className="ple-props" role="dialog" aria-label={label}>
+      <div className="ple-props-head">
+        <strong>{label}</strong>
+        <button type="button" className="ple-icon" onClick={onClose} aria-label={t('common.actions.close')}>
+          <Icon name="close" size={18} />
+        </button>
+      </div>
       <div className="ple-props-body">{children}</div>
     </div>
-  );
-
-  if (!isPhone) return panel;
-  return createPortal(
-    <div className="ple-sheet-overlay" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()}>{panel}</div>
-    </div>,
-    document.body,
   );
 }
 
@@ -371,7 +362,7 @@ export function LayoutDnd({ sections, onDrop, onDock, labelFor, vertical = false
       <DragOverlay dropAnimation={null}>
         {active ? (
           <div className={`ple-drag-chip${dock ? ' is-dock' : ''}`}>
-            <RxDragHandleDots2 size={16} />
+            <Icon name="drag_indicator" size={16} />
             {dock
               ? t(dock === 'left' ? 'profile.layout.dockLeft' : 'profile.layout.dockRight')
               : arming
@@ -531,7 +522,7 @@ export function EditableSection({
           {...listeners}
           {...attributes}
         >
-          <RxDragHandleDots2 size={17} />
+          <Icon name="drag_indicator" size={18} />
         </button>
         <span className="ple-tag">
           {label}
@@ -548,7 +539,7 @@ export function EditableSection({
               title={t('profile.layout.moveUp')}
               aria-label={t('profile.layout.moveUp')}
             >
-              <FiChevronUp size={16} />
+              <Icon name="arrow_upward" size={16} />
             </button>
             <button
               type="button"
@@ -558,7 +549,7 @@ export function EditableSection({
               title={t('profile.layout.moveDown')}
               aria-label={t('profile.layout.moveDown')}
             >
-              <FiChevronDown size={16} />
+              <Icon name="arrow_downward" size={16} />
             </button>
           </>
         ) : null}
@@ -569,7 +560,7 @@ export function EditableSection({
           title={section.hidden ? t('profile.layout.show') : t('profile.layout.hide')}
           aria-label={section.hidden ? t('profile.layout.show') : t('profile.layout.hide')}
         >
-          {section.hidden ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+          <Icon name={section.hidden ? 'visibility_off' : 'visibility'} size={16} />
         </button>
         <button
           type="button"
@@ -579,7 +570,7 @@ export function EditableSection({
           aria-label={t('profile.layout.settings')}
           aria-expanded={open}
         >
-          <FiSettings size={15} />
+          <Icon name="settings" size={16} />
         </button>
         {/* Removing a playlist section is a desktop-layout change; on the
             phone the eye hides it instead. */}
@@ -591,7 +582,7 @@ export function EditableSection({
             title={t('profile.layout.remove')}
             aria-label={t('profile.layout.remove')}
           >
-            <FiTrash2 size={15} />
+            <Icon name="delete" size={16} />
           </button>
         ) : null}
 
@@ -650,7 +641,7 @@ export function HiddenTray({ sections, labelFor, onShow }) {
             onClick={() => onShow(s.id)}
             title={t('profile.layout.show')}
           >
-            <FiEyeOff size={14} /> {labelFor(s)}
+            <Icon name="visibility_off" size={16} /> {labelFor(s)}
           </button>
         ))}
       </div>
@@ -676,7 +667,7 @@ export function LayoutEditBar({
             title={t('profile.layout.tour.open')}
             aria-label={t('profile.layout.tour.open')}
           >
-            <FiHelpCircle size={16} />
+            <Icon name="help" size={18} />
           </button>
         </h3>
         <p>{device === 'mobile' ? t('profile.layout.mobileHint') : t('profile.layout.hint')}</p>
@@ -688,14 +679,14 @@ export function LayoutEditBar({
             value={device}
             onChange={onDevice}
             options={[
-              { value: 'desktop', label: t('profile.layout.deviceDesktop'), icon: <FiMonitor size={14} /> },
-              { value: 'mobile', label: t('profile.layout.deviceMobile'), icon: <FiSmartphone size={14} /> },
+              { value: 'desktop', label: t('profile.layout.deviceDesktop'), icon: <Icon name="desktop_windows" size={16} /> },
+              { value: 'mobile', label: t('profile.layout.deviceMobile'), icon: <Icon name="smartphone" size={16} /> },
             ]}
           />
         ) : null}
         {addablePlaylists.length > 0 ? (
           <label className="ple-add">
-            <FiPlus size={15} />
+            <Icon name="playlist_add" size={16} />
             <select value="" onChange={(e) => onAddPlaylist(e.target.value)} aria-label={t('profile.layout.addPlaylist')}>
               <option value="">{t('profile.layout.addPlaylist')}</option>
               {addablePlaylists.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -711,7 +702,7 @@ export function LayoutEditBar({
             title={t('profile.layout.undoTitle')}
             aria-label={t('profile.layout.undo')}
           >
-            <FiRotateCcw size={16} />
+            <Icon name="undo" size={18} />
           </button>
           <button
             type="button"
@@ -721,17 +712,18 @@ export function LayoutEditBar({
             title={t('profile.layout.redoTitle')}
             aria-label={t('profile.layout.redo')}
           >
-            <FiRotateCw size={16} />
+            <Icon name="redo" size={18} />
           </button>
         </div>
-        <button type="button" className="ple-btn" onClick={onReset} disabled={saving}>
-          {device === 'mobile' ? t('profile.layout.matchDesktop') : t('profile.layout.reset')}
+        <button type="button" className="v2-btn v2-btn--secondary h40 ple-btn" onClick={onReset} disabled={saving}>
+          <span className="v2-btn__label">{device === 'mobile' ? t('profile.layout.matchDesktop') : t('profile.layout.reset')}</span>
         </button>
-        <button type="button" className="ple-btn" onClick={onCancel} disabled={saving}>
-          {t('common.actions.cancel')}
+        <button type="button" className="v2-btn v2-btn--ghost h40 ple-btn" onClick={onCancel} disabled={saving}>
+          <span className="v2-btn__label">{t('common.actions.cancel')}</span>
         </button>
-        <button type="button" className={`ple-btn ple-btn--primary${dirty ? ' dirty' : ''}`} onClick={onSave} disabled={saving}>
-          {saving ? t('profile.layout.saving') : t('profile.layout.save')}
+        <button type="button" className={`v2-btn v2-btn--primary h40 ple-btn ple-btn--primary${dirty ? ' dirty' : ''}`} onClick={onSave} disabled={saving} aria-busy={saving || undefined}>
+          <span className="v2-btn__label">{saving ? t('profile.layout.saving') : t('profile.layout.save')}</span>
+          <Icon name={saving ? 'progress_activity' : 'check'} size={16} className={saving ? 'v2-spin' : undefined} />
         </button>
       </div>
     </div>

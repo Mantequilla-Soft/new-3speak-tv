@@ -1,206 +1,162 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-/* Desktop: a card pinned bottom-left, deliberately NOT a full-screen scrim.
-   Nothing here is dangerous enough to justify blocking the whole site behind it,
-   and a modal that holds the page hostage is what pressures people into clicking
-   "Accept" without reading. */
+// Cookies and browser storage (designs 25e, 43c). Not a modal: a floating card
+// at the bottom left on desktop, across the bottom (above the bottom bar) on
+// phones and tablets. Refusing is exactly as easy as accepting: two 48 tall
+// buttons of the same width, both solid fills (secondary and inverse).
 .cookie-consent {
   position: fixed;
-  left: 16px;
-  bottom: 16px;
+  left: 24px;
+  bottom: 24px;
   z-index: 1200;
-  width: 380px;
-  max-width: calc(100vw - 32px);
-  border-radius: 14px;
-  background: var(--card-bg, #fff);
-  color: var(--text-primary, #222);
-  border: 1px solid var(--border-color, rgba(127, 127, 127, 0.25));
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
-  animation: cookie-consent-in 0.32s ease forwards;
+  width: min(440px, calc(100vw - 48px));
+  max-height: calc(100dvh - 48px);
+  display: flex;
+  @include v2.floating;
+  border-radius: var(--r-3xl);
+  color: var(--text);
+  animation: cookie-in var(--t-slow) var(--ease);
 
-  @include mix.respond(phone) {
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-    animation: cookie-consent-up 0.3s ease forwards;
+  @media (max-width: 1024px) {
+    left: 8px;
+    right: 8px;
+    bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px) + 8px);
+    width: auto;
+    max-height: calc(100dvh - var(--bottom-nav-height) - 32px);
+    margin: 0 auto;
+    max-width: 560px;
   }
-}
 
-@keyframes cookie-consent-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes cookie-consent-up {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { animation: none; }
 }
 
 .cookie-consent-inner {
-  padding: 16px;
-
-  @include mix.respond(phone) {
-    padding: 18px 16px;
-    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
-    max-height: 80vh;
-    overflow-y: auto;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  width: 100%;
+  padding: 18px;
 }
 
 .cookie-consent-text {
-  h4 {
-    margin: 0 0 8px;
-    font-size: 0.98rem;
-    font-weight: 700;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  @include v2.scroll-y;
 
   p {
-    margin: 0 0 8px;
-    font-size: 0.8rem;
+    margin: 0;
+    font-size: 13px;
     line-height: 1.5;
-    color: var(--text-muted, #555);
+    color: var(--muted);
+    strong { color: var(--text); font-weight: 700; }
   }
-
-  strong { color: var(--text-primary, #222); }
 }
 
-.cookie-consent-link {
-  padding: 0;
-  border: none;
-  background: none;
-  color: var(--accent-primary, #e23a3a);
-  font-size: 0.76rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
+.cookie-consent-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  h4 {
+    margin: 0;
+    @include v2.text(title-sm);
+  }
 }
 
+.cookie-consent-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-lg);
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+// What is stored: two bg wells (essential, optional).
 .cookie-consent-details {
-  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cookie-consent-cat {
+  @include v2.well;
   padding: 10px 12px;
-  border-radius: 10px;
-  background: var(--bg-hover, rgba(127, 127, 127, 0.08));
 
   ul {
-    margin: 4px 0 0;
+    margin: 6px 0 0;
     padding-left: 18px;
-  }
-
-  li {
-    font-size: 0.75rem;
-    line-height: 1.45;
-    color: var(--text-muted, #666);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
   }
 }
 
-.cookie-consent-cat + .cookie-consent-cat { margin-top: 10px; }
-
 .cookie-consent-cat-title {
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: var(--text-primary, #222);
+  @include v2.text(eyebrow);
+  color: var(--muted);
 }
 
 .cookie-consent-note {
-  margin: 10px 0 0 !important;
-  font-size: 0.72rem !important;
-  font-style: italic;
+  font-size: 11px !important;
 }
 
-.cookie-consent-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-
-  @include mix.respond(phone) {
-    flex-direction: column-reverse;
-  }
-}
-
-/* Reject must be as easy as accept (GDPR "freely given" consent; CNIL v Google/
-   Facebook 2022; German DSK). So both buttons are the same size, same font-weight,
-   and BOTH solid — the decline is a real, filled, clearly-clickable button, not a
-   ghost outline next to a bright Accept. A highlighted accept beside a greyed-out
-   reject is the exact asymmetry that gets enforced against. Keep them equal. */
-.cookie-consent-btn {
-  flex: 1;
-  padding: 10px 14px;
-  border-radius: 9px;
-  font-size: 0.83rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: filter 0.15s ease;
-
-  &:hover { filter: brightness(0.95); }
-
-  /* Accept — accent fill. */
-  &.primary {
-    background: transparent;
-    border: 1px solid var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-  }
-
-  /* Decline the optional category — a solid neutral fill of equal prominence, NOT a
-     transparent outline. Same visual weight as Accept; only the colour differs. */
-  &.secondary {
-    background: var(--bg-hover, rgba(127, 127, 127, 0.16));
-    color: var(--text-primary, #222);
-    border-color: var(--border-color, rgba(127, 127, 127, 0.35));
-  }
-}
-
-/* Granular toggles. Only rendered when third-party ads are switched on, because
-   until then there is exactly one optional thing and the buttons alone carry it. */
 .cookie-consent-toggles {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin: 12px 0 4px;
+  gap: 8px;
 }
 
 .cookie-consent-toggle {
-  display: flex;
   align-items: flex-start;
-  gap: 9px;
-  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  line-height: 1.4;
+  font-size: 12px;
+  color: var(--muted);
 
-  input[type="checkbox"] {
-    flex: 0 0 auto;
-    width: 16px;
-    height: 16px;
-    margin: 2px 0 0;
-    accent-color: var(--accent-primary, #e23a3a);
-    cursor: pointer;
-  }
-
-  /* Unticked by default and styled identically to each other: neither optional
-     category is presented as the expected or recommended answer. */
-  span {
-    display: block;
-    font-size: 0.75rem;
-    line-height: 1.45;
-    color: var(--text-muted, #666);
-  }
-
-  strong {
-    display: block;
-    font-size: 0.78rem;
-    color: var(--text-primary, #222);
-  }
-
-  &:hover strong { color: var(--accent-primary, #e23a3a); }
+  input { margin-top: 1px; }
+  strong { display: block; font-size: 13px; font-weight: 700; color: var(--text); }
 }
 
-/* Three actions do not fit side by side in a 380px card without truncating, and a
-   truncated "Essential only" is exactly the button that must stay legible. Stack
-   instead, reversed so the layout matches the phone breakpoint below. */
-.cookie-consent-actions.three-up {
-  flex-direction: column-reverse;
+.cookie-consent-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cyan);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover { color: var(--cyan); text-decoration: underline; }
+}
+
+.cookie-consent-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  flex: none;
+
+  &.three-up { grid-template-columns: 1fr 1fr 1fr; }
+
+  .cookie-consent-btn { width: 100%; }
+
+  @include v2.mobile {
+    &.three-up { grid-template-columns: 1fr 1fr; .primary { grid-column: 1 / -1; } }
+  }
+}
+
+@keyframes cookie-in {
+  from { opacity: 0; transform: translateY(12px); }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import "./Upload_modal.scss";
 import axios from "axios";
 import * as tus from "tus-js-client";

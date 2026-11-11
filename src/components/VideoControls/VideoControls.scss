@@ -495,7 +495,7 @@ $menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
   animation: vc-menu-in var(--t-base) var(--ease);
 }
 
-.vc-speed-menu { width: 264px; }
+.vc-speed-menu { width: 296px; }
 .vc-quality-menu { width: 240px; }
 .vc-subtitle-menu {
   width: 296px;
@@ -514,8 +514,10 @@ $menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
 .vc-tile-grid {
   display: grid;
   gap: 6px;
-  &.is-4 { grid-template-columns: repeat(4, 1fr); }
-  &.is-3 { grid-template-columns: repeat(3, 1fr); }
+  &.is-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  &.is-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  > button { padding: 0 4px; min-width: 0; }
 }
 
 // Choice tiles: 40 tall, radius 12, 2px border; the chosen one accent (speed,

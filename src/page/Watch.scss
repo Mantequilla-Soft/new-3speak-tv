@@ -13,12 +13,14 @@
   min-width: 0;
   padding-bottom: 16px;
 
-  // Above the page glow canvas (z 5).
+  // Above the page glow canvas (z 5). The player's column one higher, so its
+  // menus (the dock's More, the title's translate) open over the shelf below.
   > .play-video,
   > .watch-more {
     position: relative;
     z-index: 6;
   }
+  > .play-video { z-index: 7; }
 
   @include v2.mobile {
     gap: 24px;

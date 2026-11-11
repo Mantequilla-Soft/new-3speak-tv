@@ -36,12 +36,21 @@
   &:hover { color: var(--text); .post-view-community__text { text-decoration: underline; } }
 
   &__mark {
+    position: relative;
+    display: grid;
+    place-items: center;
     width: 28px;
     height: 28px;
     border-radius: var(--r-sm);
-    object-fit: cover;
+    overflow: hidden;
     flex: none;
     background: var(--cyan);
+    color: var(--bg);
+    @include v2.text(label);
+    font-size: 12px;
+    font-weight: 900;
+
+    img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   }
   &__text { @include v2.text(body); font-weight: 700; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -83,7 +92,7 @@
   gap: 10px;
 
   // The author: avatar with the cyan community ring, name, Follow as an inverse pill.
-  .author-badge { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+  .author-badge { display: inline-flex; align-items: center; gap: 10px; min-width: 0; padding: 0; border: 0; border-radius: 0; background: transparent; }
   .author-badge-link {
     display: inline-flex;
     align-items: center;

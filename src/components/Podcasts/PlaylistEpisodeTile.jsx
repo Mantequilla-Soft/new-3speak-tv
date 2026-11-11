@@ -1,5 +1,5 @@
+import { Icon } from '../v2/Icon';
 import { useTranslation } from 'react-i18next';
-import { MdPlayArrow, MdPause, MdAdd, MdCheck, MdPlaylistPlay } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { PODCAST_PLACEHOLDER } from '../../lib/podcasts';
 import { fmtDuration, useDateFormat } from '../../lib/podcastFormat';
@@ -46,7 +46,7 @@ export default function PlaylistEpisodeTile({ video, item, contextItems, number,
       <div className="pod-tile-top">
         <button type="button" className="pod-tile-cover" onClick={play} aria-label={playing ? t('audio.podcasts.pause') : t(music ? 'audio.podcasts.playTrack' : 'audio.podcasts.play')}>
           <img className="pod-art" src={cover} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = PODCAST_PLACEHOLDER; }} />
-          <span className={`pod-tile-play${playing ? ' pod-tile-play--on' : ''}`}>{playing ? <MdPause size={24} /> : <MdPlayArrow size={24} />}</span>
+          <span className={`pod-tile-play${playing ? ' pod-tile-play--on' : ''}`}>{playing ? <Icon name="pause" size={24} fill /> : <Icon name="play_arrow" size={24} fill />}</span>
         </button>
         <div className="pod-tile-head">
           <button type="button" className="pod-tile-title" title={video.title || item.title} onClick={onOpen}>
@@ -71,11 +71,11 @@ export default function PlaylistEpisodeTile({ video, item, contextItems, number,
           title={queued ? t('audio.podcasts.inQueue') : t('audio.podcasts.addToQueue')}
           aria-label={queued ? t('audio.podcasts.inQueue') : t('audio.podcasts.addToQueue')}
         >
-          {queued ? <MdCheck size={18} /> : <MdAdd size={18} />}
+          {queued ? <Icon name="check" size={18} /> : <Icon name="add" size={18} />}
         </button>
         {onAddToPlaylist && (
           <button type="button" className="pod-icon-btn" onClick={onAddToPlaylist} title={t('audio.tile.playlist')} aria-label={t('audio.tile.playlist')}>
-            <MdPlaylistPlay size={18} />
+            <Icon name="playlist_play" size={18} />
           </button>
         )}
       </div>

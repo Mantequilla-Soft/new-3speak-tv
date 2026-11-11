@@ -1,6 +1,6 @@
-/* The pre-upload spot. Full-screen and above everything, because it is a condition of
-   posting rather than a suggestion — but plain, because it interrupts somebody's work
-   and dressing it up would make that worse. */
+/* The pre-upload spot (design 47d, sponsor gate). Full-screen and above everything,
+   because it is a condition of posting rather than a suggestion, but plain: it
+   interrupts somebody's work. Media colours, the same in both themes. */
 .upload-gate {
   position: fixed;
   inset: 0;
@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.92);
+  background: var(--media-scrim-strong);
   padding: 16px;
 }
 
@@ -22,8 +22,8 @@
 .upload-gate-video {
   width: 100%;
   max-height: 70vh;
-  background: #000;
-  border-radius: 10px;
+  background: var(--media-black);
+  border-radius: var(--r-md);
   display: block;
 }
 
@@ -32,35 +32,46 @@
   align-items: center;
   gap: 10px;
   font-size: 13px;
-  color: #f1f1f1;
+  color: var(--on-media);
 }
 
 .upload-gate-label {
-  padding: 2px 8px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.16);
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 7px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 900;
+  letter-spacing: .04em;
   text-transform: uppercase;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .upload-gate-brand {
-  color: #f1f1f1;
+  color: var(--on-media);
+  font-weight: 700;
   text-decoration: none;
 
-  &:hover { text-decoration: underline; }
+  &:hover { color: var(--on-media); text-decoration: underline; }
 }
 
 /* Pushed to the end so the eye lands on it: it is the only number that matters here. */
 .upload-gate-count {
   margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--media-scrim);
+  font-family: var(--font-mono);
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--on-media);
 }
 
 .upload-gate-note {
   margin: 0;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--on-media);
+  opacity: .6;
 }

@@ -3,7 +3,6 @@
  * page and the market panels (components/ads/AdMarketPanels.jsx). Plain values and
  * functions only, so the component files stay components (fast refresh).
  */
-import { FaVideo, FaHeadphones, FaCloudUploadAlt } from 'react-icons/fa';
 import { t } from '../i18n';
 
 // Country breakdown and per-market targeting, hidden for now. The numbers behind
@@ -275,9 +274,10 @@ export function groupByFormat(items, keyOf) {
  * below it follow the same choice. A tab the rate card has nothing for (the audio spot
  * is beta) is left out. */
 export const FORMAT_TABS = [
-  { id: 'video', label: 'ads.rateCard.tabs.video', Icon: FaVideo },
-  { id: 'audio', label: 'ads.rateCard.tabs.audio', Icon: FaHeadphones },
-  { id: 'upload', label: 'ads.rateCard.tabs.upload', Icon: FaCloudUploadAlt },
+  // `icon`: a Material Symbols name (components/v2/Icon.jsx)
+  { id: 'video', label: 'ads.rateCard.tabs.video', icon: 'videocam' },
+  { id: 'audio', label: 'ads.rateCard.tabs.audio', icon: 'headphones' },
+  { id: 'upload', label: 'ads.rateCard.tabs.upload', icon: 'cloud_upload' },
 ];
 export const formatTabOf = (f) => (f.surface === 'audio' ? 'audio' : (f.surface === 'upload' ? 'upload' : 'video'));
 /** The tabs this rate card has formats for (Video alone while it has not loaded). */

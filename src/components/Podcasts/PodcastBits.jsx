@@ -1,6 +1,6 @@
+import { Icon } from '../v2/Icon';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdDownload, MdDownloadDone, MdClose, MdLock, MdPlayArrow, MdPause, MdSchedule, MdSensors } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { episodeNumberLabel, liveToTrack } from '../../lib/podcasts';
 import { useDownloads, cancelDownload, isDownloaded } from '../../lib/podcastDownloads';
@@ -33,7 +33,7 @@ export function PrivateBadge({ withText = false }) {
   const { t } = useTranslation();
   return (
     <span className="pod-badge pod-badge--lock" title={t('audio.podcasts.private.badgeHint')} aria-label={t('audio.podcasts.private.badge')}>
-      <MdLock size={12} />{withText && t('audio.podcasts.private.badge')}
+      <Icon name="lock" size={12} />{withText && t('audio.podcasts.private.badge')}
     </span>
   );
 }
@@ -65,7 +65,7 @@ export function DownloadButton({ track, variant = 'icon' }) {
   if (variant === 'button') {
     return (
       <button type="button" className={`pod-btn${saved ? ' pod-btn--on' : ''}`} onClick={onClick} title={label} aria-label={label}>
-        {busy ? <MdClose size={16} /> : saved ? <MdDownloadDone size={16} /> : <MdDownload size={16} />}
+        {busy ? <Icon name="close" size={16} /> : saved ? <Icon name="download_done" size={16} /> : <Icon name="download" size={16} />}
         {busy ? pctText : saved ? t('audio.podcasts.downloads.saved') : t('audio.podcasts.downloads.short')}
       </button>
     );
@@ -74,7 +74,7 @@ export function DownloadButton({ track, variant = 'icon' }) {
     <button type="button" className={`pod-icon-btn${saved ? ' pod-icon-btn--on' : ''}`} onClick={onClick} title={busy ? `${pctText} (${label})` : label} aria-label={label}>
       {busy
         ? <span className="pod-dl-pct" aria-hidden="true">{Math.round((pct || 0) * 100)}%</span>
-        : saved ? <MdDownloadDone size={18} /> : <MdDownload size={18} />}
+        : saved ? <Icon name="download_done" size={18} /> : <Icon name="download" size={18} />}
     </button>
   );
 }
@@ -156,10 +156,10 @@ export function LiveBanner({ feed }) {
         const playing = isCurrent && audioIsPlaying;
         return (
           <div key={l.id} className="pod-live-row pod-live-row--on">
-            <span className="pod-live-badge"><MdSensors size={14} /> {t('audio.podcasts.live.now')}</span>
+            <span className="pod-live-badge"><Icon name="sensors" size={14} /> {t('audio.podcasts.live.now')}</span>
             <span className="pod-live-title">{l.title || feed.title}</span>
             <button type="button" className="pod-btn pod-btn--solid" onClick={() => (isCurrent ? audioRequestToggle() : audioPlay(track))}>
-              {playing ? <MdPause size={18} /> : <MdPlayArrow size={18} />}
+              {playing ? <Icon name="pause" size={18} fill /> : <Icon name="play_arrow" size={18} fill />}
               {playing ? t('audio.podcasts.pause') : t('audio.podcasts.live.listen')}
             </button>
           </div>
@@ -167,7 +167,7 @@ export function LiveBanner({ feed }) {
       })}
       {soon.map((l) => (
         <div key={l.id} className="pod-live-row">
-          <span className="pod-live-badge pod-live-badge--soon"><MdSchedule size={14} /> {t('audio.podcasts.live.upcoming')}</span>
+          <span className="pod-live-badge pod-live-badge--soon"><Icon name="schedule" size={14} /> {t('audio.podcasts.live.upcoming')}</span>
           <span className="pod-live-title">{l.title || feed.title}</span>
           {l.start && <span className="pod-live-when">{t('audio.podcasts.live.startsAt', { time: fmtStart(l.start) })}</span>}
         </div>

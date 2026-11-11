@@ -1,64 +1,77 @@
-// The parts of the podcast tip window TipModal.scss has no use for: who gets what
-// (split preview and results) and the show's own funding links.
-.podcast-tip-modal {
-  // Up to three buttons here (cancel, browser wallet, QR code): let them wrap on phones.
-  .actions { flex-wrap: wrap; }
+@use "../../styles/v2" as v2;
 
-  .podcast-tip-split,
-  .podcast-tip-funding {
+// The podcast tip window (24b "Tip Hive Talks", 34c value for value): amount
+// tiles, the amount in mono, how the feed splits it, the note, then the QR
+// invoice or the result. Built on the v2 Dialog (a sheet on phones).
+.podcast-tip-modal {
+  // The dialog's grid would otherwise grow to the content's min-content width on phones.
+  min-width: 0;
+  .v2-dialog__body > * { min-width: 0; max-width: 100%; }
+  .v2-seg { flex: none; }
+  .podcast-tip-presets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+    gap: 8px;
+  }
+  .podcast-tip-preset {
+    @include v2.control(48);
+    justify-content: center;
+    border: 2px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    @include v2.mono(16, 700);
+    &:hover { background: var(--bg-hover); }
+    &.is-on { border-color: var(--accent); background: var(--accent-tint-strong); }
+  }
+  .v2-amount { margin-top: 8px; }
+  .podcast-tip-bolt { color: var(--accent); align-self: center; }
+
+  // Who gets what: one row per recipient, the sats in mono.
+  .podcast-tip-split {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
+    ul { list-style: none; margin: 0; padding: 10px 12px; border-radius: var(--r-md); background: var(--bg); display: flex; flex-direction: column; gap: 6px; }
+    li { display: flex; justify-content: space-between; gap: 12px; font-size: 13px;
+      span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      b { font-size: 13px; color: var(--accent); flex: none; }
+    }
   }
 
-  .podcast-tip-split-label {
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .podcast-tip-split ul,
+  .podcast-tip-done { display: flex; flex-direction: column; gap: 10px; }
+  .podcast-tip-thanks { font-size: 16px; }
   .podcast-tip-results {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-
-    li {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-
-      span:first-child {
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+    gap: 6px;
+    li { display: flex; justify-content: space-between; gap: 12px; font-size: 13px;
+      span:first-child { display: inline-flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     }
+    li.ok .material-symbols-rounded { color: var(--cyan); }
+    li.failed { color: var(--muted); .material-symbols-rounded { color: var(--accent); } }
   }
 
-  .podcast-tip-results li.ok { color: var(--text-primary); }
-  .podcast-tip-results li.failed { color: var(--text-muted); }
-
-  .podcast-tip-thanks {
-    margin: 0 0 12px;
-    font-weight: 600;
-    color: var(--text-primary);
+  .podcast-tip-invoice { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
+  .podcast-tip-note { margin: 0; font-size: 13px; color: var(--muted); }
+  .podcast-tip-qr {
+    align-self: center;
+    display: block;
+    padding: 12px;
+    border-radius: var(--r-xl);
+    background: var(--on-media);
+    line-height: 0;
   }
+  .podcast-tip-row { display: flex; gap: 8px; flex-wrap: wrap; > * { flex: 1; } }
+  .podcast-tip-waiting { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 12px; color: var(--cyan); }
 
   .podcast-tip-funding {
-    padding-top: 0;
-
-    a {
-      color: var(--accent-primary);
-      text-decoration: none;
-      overflow-wrap: anywhere;
-
-      &:hover { text-decoration: underline; }
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    a { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--cyan); text-decoration: none; overflow-wrap: anywhere;
+      &:hover { text-decoration: underline; } }
   }
 }

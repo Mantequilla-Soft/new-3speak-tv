@@ -7,6 +7,7 @@
   margin: 0 auto;
   padding: var(--page-pad);
   color: var(--text);
+  text-align: left;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 20px;
@@ -454,9 +455,11 @@
     @include v2.text(meta);
     color: var(--muted);
 
+    text-align: left;
+
     > span { flex: 1; min-width: 0; }
 
-    @include v2.mobile { flex-wrap: wrap; }
+    @include v2.mobile { flex-direction: column; align-items: flex-start; gap: 6px; }
   }
 
   &__pro {
@@ -504,7 +507,7 @@
 .yt-batch-modal {
   position: fixed;
   inset: 0;
-  z-index: 900;
+  z-index: 1000;
   display: grid;
   place-items: center;
   padding: 24px;
@@ -780,8 +783,7 @@
   // State line: mono, colored by tone (done = cyan, failed = accent, waiting = muted).
   &__state {
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+    align-items: flex-start;
     gap: 4px;
     @include v2.mono(10, 500);
     color: var(--muted);

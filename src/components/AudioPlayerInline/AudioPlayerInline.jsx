@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { needsCorsMode, setAudioSrc } from '../../lib/audioCorsMode';
+import { Icon } from '../v2/Icon';
 import './AudioPlayerInline.scss';
 
 const SPEEDS = [1, 1.5, 2];
@@ -162,7 +163,7 @@ export default function AudioPlayerInline({
             {displayArtwork ? (
               <img src={displayArtwork} alt="" />
             ) : (
-              <span>OP</span>
+              <Icon name="podcasts" size={22} />
             )}
           </div>
           <div className="apin__meta">
@@ -181,15 +182,9 @@ export default function AudioPlayerInline({
         aria-label={playing ? t('common.actions.pause') : t('common.actions.play')}
       >
         {loading ? (
-          <span className="apin__spinner" />
-        ) : playing ? (
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-          </svg>
+          <Icon name="progress_activity" size={24} className="v2-spin" />
         ) : (
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M8 5v14l11-7z"/>
-          </svg>
+          <Icon name={playing ? 'pause' : 'play_arrow'} size={28} fill />
         )}
       </button>
 
@@ -216,7 +211,8 @@ export default function AudioPlayerInline({
 
       {externalUrl && (
         <a className="apin__external" href={externalUrl} target="_blank" rel="noopener noreferrer">
-          {t('common.actions.open')}
+          <span>{t('common.actions.open')}</span>
+          <Icon name="open_in_new" size={16} />
         </a>
       )}
     </div>

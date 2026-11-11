@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { IoCloudUploadSharp } from "react-icons/io5";
-import { AudioWaveform, Clapperboard } from "lucide-react";
-import { MdGraphicEq, MdDesktopWindows, MdSmartphone, MdGroups, MdAccessTime, MdPlaylistAdd } from "react-icons/md";
-import { BiCommentDetail } from "react-icons/bi";
-import ShortsIcon from "./icons/ShortsIcon";
+import { Icon } from "./v2/Icon";
 import { FEATURE_EDITOR, openpodsEnabledFor, storiesEnabledFor } from "../utils/config";
 import { creatorKey, getCreatorSettings, isUploadBlocked } from "../utils/creatorSettings";
 import { useSupportBlock } from "../lib/supportBlockStore";
@@ -22,6 +18,16 @@ function pauseAllMedia() {
   document.querySelectorAll('video, audio').forEach((el) => {
     if (!el.paused) el.pause();
   });
+}
+
+// The entry's icon in a 32px well, tinted by category (44c): video and live in
+// the accent, audio cyan, the rest muted.
+function ItemIcon({ name, tone, className }) {
+  return (
+    <span className={`${className} share-menu-icon is-${tone}`} aria-hidden="true">
+      <Icon name={name} size={18} />
+    </span>
+  );
 }
 
 // Label plus a one-line subtitle saying what the entry makes.
@@ -87,21 +93,21 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
       <div className="share-menu-group">
         <div className="share-menu-heading">{t('misc.uploadLinks.headings.video')}</div>
         <Link to="/embed-studio" className={linkClass} title={t('misc.uploadLinks.regularVideo')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio'))}>
-          <IoCloudUploadSharp className={iconClass} /> {text('regularVideo')}
+          <ItemIcon name="smart_display" tone="accent" className={iconClass} /> {text('regularVideo')}
         </Link>
         <Link to="/embed-studio?from=shorts" className={linkClass} title={t('misc.uploadLinks.verticalShort')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=shorts'))}>
-          <ShortsIcon className={iconClass} outlineWidth={30} /> {text('verticalShort')}
+          <ItemIcon name="view_day" tone="accent" className={iconClass} /> {text('verticalShort')}
         </Link>
         {/* 24h story: a vertical short that leaves the stories row after a day.
             Any Hive account (storiesEnabledFor); the checker enforces it too. */}
         {storiesEnabledFor(user) && (
           <Link to="/embed-studio?from=story" className={linkClass} title={t('misc.uploadLinks.story')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=story'))}>
-            <MdAccessTime className={iconClass} /> {text('story')}
+            <ItemIcon name="history_toggle_off" tone="accent" className={iconClass} /> {text('story')}
           </Link>
         )}
         {FEATURE_EDITOR && (
           <a href="#" className={linkClass} title={t('misc.uploadLinks.shortsEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-shorts-editor')))}>
-            <Clapperboard className={iconClass} size={18} /> {text('shortsEditor')}
+            <ItemIcon name="movie_edit" tone="accent" className={iconClass} /> {text('shortsEditor')}
           </a>
         )}
       </div>
@@ -110,13 +116,13 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
       <div className="share-menu-group">
         <div className="share-menu-heading">{t('misc.uploadLinks.headings.audio')}</div>
         <a href="#" className={linkClass} title={t('misc.uploadLinks.musicAudio')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-audio-upload')))}>
-          <MdGraphicEq className={iconClass} /> {text('musicAudio')}
+          <ItemIcon name="graphic_eq" tone="cyan" className={iconClass} /> {text('musicAudio')}
         </a>
         {/* The video editor in audio mode: cut, clean up and level a podcast or
             song, then hand it to the audio upload (App.jsx, open-audio-editor). */}
         {FEATURE_EDITOR && (
           <a href="#" className={linkClass} title={t('misc.uploadLinks.audioEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-audio-editor')))}>
-            <AudioWaveform className={iconClass} size={18} /> {text('audioEditor')}
+            <ItemIcon name="tune" tone="cyan" className={iconClass} /> {text('audioEditor')}
           </a>
         )}
       </div>
@@ -133,9 +139,7 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
             title={t('misc.uploadLinks.goLiveNow')}
             onClick={go}
           >
-            {isMobile
-              ? <MdSmartphone className={iconClass} />
-              : <MdDesktopWindows className={iconClass} />}
+            <ItemIcon name={isMobile ? 'sensors' : 'videocam'} tone="accent" className={iconClass} />
             {' '}{text('goLiveNow')}
           </Link>
           <Link
@@ -144,7 +148,7 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
             title={t('misc.uploadLinks.groupChat')}
             onClick={go}
           >
-            <MdGroups className={iconClass} /> {text('groupChat')}
+            <ItemIcon name="groups" tone="accent" className={iconClass} /> {text('groupChat')}
           </Link>
         </div>
       )}
@@ -153,10 +157,10 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
         <div className="share-menu-group">
           <div className="share-menu-heading">{t('misc.uploadLinks.headings.others')}</div>
           <Link to={`/@${user}?tab=community`} className={linkClass} title={t('misc.uploadLinks.communitySnap')} onClick={go}>
-            <BiCommentDetail className={iconClass} /> {text('communitySnap')}
+            <ItemIcon name="bolt" tone="muted" className={iconClass} /> {text('communitySnap')}
           </Link>
           <Link to="/profile?tab=playlists&create=playlist" className={linkClass} title={t('misc.uploadLinks.playlist')} onClick={go}>
-            <MdPlaylistAdd className={iconClass} /> {text('playlist')}
+            <ItemIcon name="playlist_add" tone="muted" className={iconClass} /> {text('playlist')}
           </Link>
         </div>
       )}

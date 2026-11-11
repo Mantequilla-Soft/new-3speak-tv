@@ -1,53 +1,41 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Edit mode for the Overview tab (ProfileLayoutEditor.jsx): a sticky bar, then
-// the real sections, each in a dashed frame with its own toolbar.
-
-// Outline only: no 3Speak button has a solid red fill.
-%ple-pill {
-  padding: 0.38rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid var(--border-color);
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
+// Profile layout editor (37c, 24c): a sticky bar, then the real sections, each
+// in a frame with its own toolbar (grip, arrows, eye, gear), a width handle on
+// the right edge, the hidden tray at the bottom. All v2 tokens.
 
 .ple-bar {
   position: sticky;
-  top: calc(var(--nav-height, 60px) + 8px);
+  top: calc(var(--nav-height, 64px) + 8px);
   z-index: 20;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.6rem 1rem;
-  margin-bottom: 1rem;
-  padding: 0.7rem 0.9rem;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: var(--bg-secondary);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  gap: 8px 16px;
+  margin-bottom: 20px;
+  padding: 8px 8px 8px 14px;
+  border-radius: var(--r-xl);
+  @include v2.floating;
 
   .ple-titles {
-    flex: 1 1 240px;
+    flex: 1 1 260px;
     min-width: 0;
 
     h3 {
-      margin: 0 0 0.15rem;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0;
+      @include v2.text(title-sm);
+      color: var(--text);
     }
 
     p {
-      margin: 0;
-      font-size: 0.78rem;
-      line-height: 1.35;
-      color: var(--text-secondary);
+      margin: 2px 0 0;
+      @include v2.text(meta-sm);
+      line-height: 1.4;
+      color: var(--muted);
     }
   }
 
@@ -55,115 +43,104 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.45rem;
+    gap: 6px;
     min-width: 0;
   }
 
-  .ple-btn {
-    @extend %ple-pill;
+  .ple-seg.v2-seg { display: inline-flex; width: auto; .v2-seg__opt { flex: none; gap: 6px; } }
 
-    &:hover:not(:disabled) {
-      color: var(--text-primary);
-      border-color: var(--text-secondary);
-      background: var(--bg-hover);
-    }
+  .ple-btn.v2-btn { flex: none; }
 
-    &:disabled { opacity: 0.55; cursor: default; }
-
-    &--primary {
-      color: var(--accent-primary, #e53935);
-      border-color: var(--accent-primary, #e53935);
-
-      &:hover:not(:disabled) {
-        color: var(--accent-primary, #e53935);
-        border-color: var(--accent-primary, #e53935);
-        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-      }
-
-      // Unsaved changes: a small dot ahead of the label.
-      &.dirty::before {
-        content: '';
-        display: inline-block;
-        width: 7px;
-        height: 7px;
-        margin-right: 0.4rem;
-        border-radius: 50%;
-        background: currentColor;
-        vertical-align: 1px;
-      }
-    }
+  // Unsaved changes: a small dot ahead of the label.
+  .ple-btn--primary.dirty::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    flex: none;
   }
 
+  // "Add a playlist as a section": a select that looks like a secondary button.
   .ple-add {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: 6px;
+    height: 40px;
     max-width: 100%;
-    padding: 0.1rem 0.6rem;
-    border: 1px dashed var(--border-color);
-    border-radius: 999px;
-    color: var(--text-secondary);
+    padding: 0 6px 0 12px;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
 
     select {
       min-width: 0;
       max-width: 220px;
-      padding: 0.3rem 0.1rem;
-      border: none;
+      height: 100%;
+      padding: 0 4px;
+      border: 0;
       background: transparent;
-      color: var(--text-primary);
-      font-size: 0.8rem;
+      color: var(--text);
+      font: inherit;
+      @include v2.text(label);
+      font-size: 12px;
       cursor: pointer;
+
+      &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm); }
     }
   }
 
-  @include mix.respond(phone) {
+  @include v2.mobile {
     top: calc(var(--nav-height, 56px) + 4px);
-    padding: 0.6rem;
+    padding: 8px;
 
     .ple-titles p { display: none; }   // the frames explain themselves; keep the bar short
   }
 }
 
+// Undo / redo: 40px icon tiles.
+.ple-history {
+  display: inline-flex;
+  gap: 4px;
+
+  .ple-icon { width: 40px; height: 40px; border-radius: var(--r-md); background: var(--surface-2); color: var(--text); }
+}
+
 // ── one section in edit mode ────────────────────────────────────────────────
 .ple-frame {
   position: relative;
-  margin-bottom: 1.5rem;   // room for the outlines above and below
+  margin-bottom: 24px;   // room for the outlines above and below
   min-width: 0;
-  // The frame is drawn OUTSIDE the section (outline, no padding or border), so
-  // the section inside gets exactly the width it has on the visitor's page: a
-  // padded frame shrank it, and a grid section then fitted one card less per
-  // row and stretched the rest.
-  outline: 1px dashed var(--border-color);
-  outline-offset: 7px;
-  border-radius: 12px;
-  transition: outline-color 0.15s ease, opacity 0.15s ease;
+  // Drawn OUTSIDE the section (outline, no padding or border), so the section
+  // inside gets exactly the width it has on the visitor's page.
+  outline: 2px solid var(--border);
+  outline-offset: 8px;
+  border-radius: var(--r-xl);
+  transition: outline-color var(--t-fast) var(--ease), opacity var(--t-fast) var(--ease);
 
   &:hover,
-  &.is-open { outline-color: var(--text-secondary); }
+  &.is-open { outline-color: var(--muted); }
 
   // The section's own spacing is for the plain page; the frame has its own.
-  .ple-body .pov-section { margin-bottom: 0.25rem; }
+  .ple-body .pov-section { margin-bottom: 4px; }
 
-  &.is-hidden .ple-body {
-    opacity: 0.35;
-    filter: grayscale(0.6);
-  }
+  &.is-hidden .ple-body { opacity: .35; filter: grayscale(.6); }
 
-  &.is-dragging { opacity: 0.4; }
+  &.is-dragging { opacity: .4; }
 
-  // Where the dragged section will land: a bar on that side of this one.
-  &.is-target { outline-color: var(--accent-primary, #e53935); }
+  // Where the dragged section will land: an accent bar on that side of it.
+  &.is-target { outline-color: var(--accent); }
   &.is-target::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     right: 0;
-    height: 3px;
-    border-radius: 3px;
-    background: var(--accent-primary, #e53935);
+    height: 4px;
+    border-radius: var(--r-bar);
+    background: var(--accent);
   }
-  &.is-target--top::after { top: -12px; }
-  &.is-target--bottom::after { bottom: -12px; }
+  &.is-target--top::after { top: -14px; }
+  &.is-target--bottom::after { bottom: -14px; }
 }
 
 .ple-toolbar {
@@ -171,8 +148,8 @@
   z-index: 5;
   display: flex;
   align-items: center;
-  gap: 0.1rem;
-  margin-bottom: 0.35rem;
+  gap: 2px;
+  margin-bottom: 6px;
   min-width: 0;
 }
 
@@ -181,20 +158,17 @@
   min-width: 0;
   display: flex;
   align-items: baseline;
-  gap: 0.4rem;
-  padding: 0 0.3rem;
+  gap: 6px;
+  padding: 0 4px;
   overflow: hidden;
   white-space: nowrap;
-  font-size: 0.78rem;
+  @include v2.text(body-sm);
   font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--text);
 
   small {
-    font-weight: 500;
-    text-transform: none;
-    letter-spacing: 0;
+    @include v2.text(meta-sm);
+    color: var(--muted);
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -202,37 +176,37 @@
 
 .ple-badge {
   font-style: normal;
-  font-size: 0.66rem;
-  font-weight: 600;
-  text-transform: none;
-  padding: 0.02rem 0.45rem;
-  border-radius: 999px;
-  border: 1px solid var(--border-color);
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 7px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
 
 .ple-icon {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  border: 1px solid transparent;
-  border-radius: 7px;
+  border: 0;
+  border-radius: var(--r-md);
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--muted);
   cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-  &:hover:not(:disabled) { background: var(--bg-hover); color: var(--text-primary); }
-  &:disabled { opacity: 0.3; cursor: default; }
-  &.on {
-    color: var(--accent-primary, #e53935);
-    border-color: var(--accent-primary, #e53935);
-  }
-  &--remove:hover:not(:disabled) { color: var(--accent-primary, #e53935); }
-
-  @include mix.respond(phone) { width: 28px; }
+  &:hover:not(:disabled) { background: var(--bg-hover); color: var(--text); }
+  &:disabled { opacity: .3; cursor: default; }
+  &.on { background: var(--surface-2); color: var(--text); }
+  &--remove:hover:not(:disabled) { background: var(--accent-tint); color: var(--accent); }
 }
 
 .ple-grip {
@@ -242,14 +216,14 @@
   &:active { cursor: grabbing; }
 }
 
-// Shown in place of a section that currently renders nothing, so it can still
-// be found, moved and switched off.
+// In place of a section that renders nothing, so it can still be found, moved
+// and switched off: the striped placeholder.
 .ple-empty {
-  padding: 0.9rem;
-  border-radius: 8px;
-  background: var(--bg-hover);
-  color: var(--text-secondary);
-  font-size: 0.8rem;
+  padding: 16px;
+  border-radius: var(--r-md);
+  @include v2.thumb-placeholder;
+  @include v2.text(meta);
+  color: var(--muted);
   text-align: center;
 }
 
@@ -257,28 +231,32 @@
 .ple-drag-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 0.9rem;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 999px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  font-size: 0.85rem;
-  font-weight: 600;
+  gap: 6px;
+  height: 40px;
+  padding: 0 14px 0 10px;
+  border-radius: var(--r-md);
+  background: var(--text);
+  color: var(--bg);
+  @include v2.text(label);
   white-space: nowrap;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-float);
   cursor: grabbing;
+
+  small { margin-left: 4px; font-weight: 400; opacity: .75; }
+
+  &.is-dock { background: var(--cyan); color: var(--bg); }
 }
 
-// The links column's frame takes the column's place in the row.
+// The links column's frame takes the column's place in the row (dashed cyan:
+// a full-height column, 37c).
 .ple-frame--links {
   flex: 0 0 20%;
   max-width: 20%;
   align-self: flex-start;
   position: sticky;
-  top: calc(var(--nav-height, 60px) + 16px);
-
-  .ple-tag { text-transform: none; }
+  top: calc(var(--nav-height, 64px) + 16px);
+  outline-style: dashed;
+  outline-color: var(--cyan);
 
   .profile-links-panel {
     position: static;
@@ -296,25 +274,31 @@
   z-index: 40;
   width: min(340px, calc(100vw - 32px));
   max-height: 70vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: var(--bg-secondary);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-  text-transform: none;
+  @include v2.scroll-y;
+  border-radius: var(--r-2xl);
+  @include v2.floating;
 
   &-head {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding: 0.55rem 0.6rem 0.45rem 0.9rem;
-    border-bottom: 1px solid var(--border-color);
+    gap: 10px;
+    padding: 14px 10px 6px 16px;
+
+    // The accent tick in front of the title (37c side panel).
+    &::before {
+      content: "";
+      width: 4px;
+      height: 22px;
+      flex: none;
+      border-radius: var(--r-bar);
+      background: var(--accent);
+    }
 
     strong {
-      font-size: 0.9rem;
-      color: var(--text-primary);
+      flex: 1;
+      min-width: 0;
+      @include v2.text(title);
+      color: var(--text);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -324,109 +308,39 @@
   &-body {
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
-    padding: 0.8rem 0.9rem 0.95rem;
-  }
-
-  // Phone: a bottom sheet, portalled to <body>.
-  &--sheet {
-    position: static;
-    width: 100%;
-    max-height: 88vh;
-    border-radius: 16px 16px 0 0;
-    border-bottom: none;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    animation: ple-sheet-up 0.22s ease-out;
-
-    .ple-sheet-header {
-      padding: 12px 16px;
-      margin-bottom: 0;
-    }
+    gap: 14px;
+    padding: 8px 16px 16px;
   }
 }
 
-.ple-sheet-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  background: rgba(0, 0, 0, 0.45);
-
-  > div { width: 100%; }
-}
-
-@keyframes ple-sheet-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
+// Phones: the properties in the v2 sheet; the body keeps the same rhythm.
+.ple-props-sheet .ple-props-body { gap: 14px; }
 
 .ple-field {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 6px;
   min-width: 0;
 
-  > span {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-  }
+  > span { @include v2.text(eyebrow); color: var(--muted); }
 
-  input[type="text"],
-  select {
-    width: 100%;
-    min-width: 0;
-    padding: 0.45rem 0.6rem;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background: var(--bg-primary, transparent);
-    color: var(--text-primary);
-    font-size: 0.85rem;
-  }
+  .v2-input { width: 100%; min-width: 0; }
 
+  // Sliders: the value in the eyebrow above, the track in accent.
   input[type="range"] {
     width: 100%;
-    accent-color: var(--accent-primary, #e53935);
+    height: 6px;
+    accent-color: var(--accent);
   }
 }
 
 .ple-note {
-  font-size: 0.74rem;
-  color: var(--text-secondary);
+  @include v2.text(meta-sm);
+  line-height: 1.4;
+  color: var(--muted);
 }
 
-.ple-seg {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-
-  button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.3rem 0.75rem;
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-
-    &:hover { color: var(--text-primary); }
-
-    &.active {
-      color: var(--accent-primary, #e53935);
-      border-color: var(--accent-primary, #e53935);
-      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-    }
-  }
-}
-
-// An open popover must sit above the next section's toolbar, which comes later
-// in the page and would otherwise paint over it.
+// An open popover must sit above the next section's toolbar.
 .ple-frame.is-open .ple-toolbar { z-index: 50; }
 
 // Links column on the left: open its properties rightwards, into the page.
@@ -435,59 +349,16 @@
   left: 0;
 }
 
-// On/off switch in the properties (e.g. the trailer's description).
+// On/off settings in the properties: label on the left, the v2 toggle right.
 .ple-switch {
-  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  cursor: pointer;
-  font-size: 0.85rem;
-  color: var(--text-primary);
+  gap: 10px;
+  min-height: 32px;
+  @include v2.text(body-sm);
+  color: var(--text);
 
-  input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .ple-switch-track {
-    position: relative;
-    flex: 0 0 auto;
-    width: 34px;
-    height: 20px;
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-hover);
-    transition: all 0.15s ease;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--text-secondary);
-      transition: transform 0.15s ease, background 0.15s ease;
-    }
-  }
-
-  input:checked + .ple-switch-track {
-    border-color: var(--accent-primary, #e53935);
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 15%, transparent);
-
-    &::after {
-      transform: translateX(14px);
-      background: var(--accent-primary, #e53935);
-    }
-  }
-
-  input:focus-visible + .ple-switch-track {
-    outline: 2px solid var(--accent-primary, #e53935);
-    outline-offset: 2px;
-  }
+  .ple-switch-label { flex: 1; min-width: 0; }
 }
 
 // ── grid editing ────────────────────────────────────────────────────────────
@@ -502,63 +373,57 @@
   bottom: 0;
   left: auto;
   right: auto;
-  width: 3px;
+  width: 4px;
   height: auto;
 }
-.ple-frame.is-target--left::after { left: -12px; }
-.ple-frame.is-target--right::after { right: -12px; }
+.ple-frame.is-target--left::after { left: -14px; }
+.ple-frame.is-target--right::after { right: -14px; }
 
-// Width handle on the right edge.
+// Width handle on the right edge (37c: a 10x36 tab on the frame).
 .ple-resize {
   position: absolute;
   top: 0;
-  right: -14px;   // centred on the frame's outline (7px outside the section)
+  right: -16px;   // centred on the frame's outline
   bottom: 0;
-  width: 14px;
+  width: 16px;
   z-index: 6;
   cursor: ew-resize;
   touch-action: none;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
-    width: 6px;
-    height: 38px;
+    width: 10px;
+    height: 36px;
     transform: translate(-50%, -50%);
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    transition: all 0.15s ease;
+    border-radius: var(--r-xs);
+    background: var(--surface-2);
+    transition: background var(--t-fast) var(--ease);
   }
 
-  &:hover::before { border-color: var(--accent-primary, #e53935); }
+  &:hover::before { background: var(--muted); }
 
-  @media screen and (max-width: 767px) { display: none; }   // one column there
+  @include v2.mobile { display: none; }   // one column there
 }
 
 .ple-frame.is-resizing {
-  outline-color: var(--accent-primary, #e53935);
+  outline-color: var(--accent);
 
-  .ple-resize::before {
-    border-color: var(--accent-primary, #e53935);
-    background: var(--accent-primary, #e53935);
-  }
+  .ple-resize::before { background: var(--accent); }
 }
 
 .ple-resize-label {
   position: absolute;
-  top: 50%;
-  right: 16px;
+  top: 40%;
+  right: 18px;
   transform: translateY(-50%);
-  padding: 0.15rem 0.5rem;
-  border-radius: 999px;
-  border: 1px solid var(--accent-primary, #e53935);
-  background: var(--bg-secondary);
-  color: var(--accent-primary, #e53935);
-  font-size: 0.75rem;
-  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  background: var(--text);
+  color: var(--bg);
+  @include v2.mono(12, 700);
   white-space: nowrap;
 }
 
@@ -566,89 +431,86 @@
 .ple-free {
   align-self: stretch;
   min-height: 80px;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  color: var(--text-secondary);
-  font-size: 0.8rem;
-  font-weight: 600;
-  transition: all 0.15s ease;
+  margin-bottom: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-xl);
+  border: 2px dashed transparent;
+  @include v2.text(label);
+  font-size: 12px;
+  color: var(--muted);
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-  &.is-active { border: 1px dashed var(--text-secondary); }
+  &.is-active { border-color: var(--border); }
 
   &.is-over {
-    border: 1px dashed var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 8%, transparent);
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-tint);
   }
 
-  @media screen and (max-width: 767px) { display: none; }
+  @include v2.mobile { display: none; }
 }
 
-// Switched-off sections, under the grid.
+// Switched-off sections (37c "HIDDEN" tray), pinned to the bottom of the
+// screen while the page scrolls.
 .ple-tray {
-  // Pinned to the bottom of the screen while the page scrolls, like the edit
-  // bar at the top: switched-off sections stay one click away from anywhere.
   position: sticky;
   bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   z-index: 20;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem 0.75rem;
+  gap: 8px;
   max-height: 30vh;
-  overflow-y: auto;
-  margin: 0.25rem 0 1.5rem;
-  padding: 0.7rem 0.85rem;
-  border: 1px dashed var(--border-color);
-  border-radius: 12px;
-  background: var(--bg-secondary);
-  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.18);
+  @include v2.scroll-y;
+  margin: 4px 0 24px;
+  padding: 8px;
+  border-radius: var(--r-lg);
+  border: 2px dashed var(--border);
+  background: var(--bg);
 
   // Above the app's bottom navigation on phones.
-  @include mix.respond(phone) {
+  @include v2.mobile {
     bottom: calc(var(--bottom-nav-height, 56px) + 8px + env(safe-area-inset-bottom, 0px));
   }
 
   .ple-tray-title {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    color: var(--text-secondary);
+    padding: 0 6px;
+    @include v2.text(eyebrow);
+    font-size: 11px;
+    color: var(--muted);
   }
 
   .ple-tray-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 6px;
     min-width: 0;
   }
 
   .ple-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 6px;
     max-width: 100%;
-    padding: 0.3rem 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    font-weight: 600;
+    height: 36px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface);
+    color: var(--text);
+    @include v2.text(label);
+    font-size: 12px;
+    font-family: inherit;
+    opacity: .7;
     cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    transition: opacity var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-    &:hover {
-      color: var(--text-primary);
-      border-color: var(--text-secondary);
-      background: var(--bg-hover);
-    }
+    &:hover { opacity: 1; background: var(--surface-2); }
   }
 }
 
@@ -667,16 +529,16 @@
 }
 
 // ── docking the links page as a side column ────────────────────────────────
-// While held on a row's outer edge: a bar along that side of the grid fills up
-// over the hold time; full = release now docks it, and the whole side lights.
+// While held on a row's outer edge: a cyan bar along that side fills up over
+// the hold time; full = release now docks it, and the whole side lights up.
 .ple-dock {
   position: absolute;
   top: 0;
   bottom: 0;
   z-index: 3;
   width: 6px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--accent-primary, #e53935) 15%, transparent);
+  border-radius: var(--r-bar);
+  background: var(--cyan-tint);
   overflow: hidden;
   pointer-events: none;
 
@@ -685,19 +547,19 @@
 
   // The fill, top to bottom, over the hold time.
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
-    background: var(--accent-primary, #e53935);
+    background: var(--cyan);
     transform-origin: top;
     animation: ple-dock-fill var(--ple-dock-ms, 700ms) linear forwards;
   }
 
   &.is-ready {
     width: min(22%, 260px);
-    border-radius: 12px;
-    border: 2px dashed var(--accent-primary, #e53935);
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
+    border-radius: var(--r-xl);
+    border: 2px dashed var(--cyan);
+    background: var(--cyan-tint);
 
     &::before { display: none; }
   }
@@ -711,32 +573,10 @@
   to { transform: scaleY(1); }
 }
 
-.ple-drag-chip {
-  small {
-    margin-left: 0.35rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-  }
+.ple-tour-btn { width: 32px; height: 32px; }
 
-  &.is-dock {
-    color: var(--accent-primary, #e53935);
-  }
-}
-
-// The "?" beside the edit bar's title: opens the tour again.
-.ple-bar .ple-titles h3 {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.ple-tour-btn {
-  width: 26px;
-  height: 26px;
-}
-
-// Clicks inside a framed section are swallowed in edit mode (ProfileLayoutEditor
-// swallow()); an iframe's clicks never bubble out, so it takes none at all.
+// Clicks inside a framed section are swallowed in edit mode; an iframe's
+// clicks never bubble out, so it takes none at all.
 .ple-body iframe { pointer-events: none; }
 
 // The line between rows: a drop target for a new full-width row. No height of
@@ -747,69 +587,66 @@
   height: 0;
   z-index: 4;
 
-  @media screen and (max-width: 767px) { display: none; }
+  @include v2.mobile { display: none; }
 }
 
 .ple-rowgap-hit {
   position: absolute;
   left: 0;
   right: 0;
-  top: -22px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: -24px;
+  height: 20px;
+  display: grid;
+  place-items: center;
   pointer-events: none;
 
   &.is-active {
     pointer-events: auto;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       right: 0;
       top: 50%;
       height: 2px;
-      border-radius: 2px;
-      background: color-mix(in srgb, var(--text-secondary) 45%, transparent);
+      border-radius: var(--r-bar);
+      background: var(--border);
     }
   }
 
-  &.is-over::before {
-    height: 3px;
-    background: var(--accent-primary, #e53935);
-  }
+  &.is-over::before { height: 4px; background: var(--accent); }
 
   span {
     position: relative;
-    padding: 0.05rem 0.6rem;
-    border: 1px solid var(--accent-primary, #e53935);
-    border-radius: 999px;
-    background: var(--bg-secondary);
-    color: var(--accent-primary, #e53935);
-    font-size: 0.72rem;
-    font-weight: 700;
+    height: 20px;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 7px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
   }
 }
 
 // ── mobile mode: the phone layout inside a drawn phone ──────────────────────
 .ple-phone {
+  position: relative;
   width: 410px;
   max-width: 100%;
-  margin: 0.5rem auto 1.25rem;
-  padding: 12px;
-  border-radius: 46px;
-  background: #0b0b0d;
-  border: 1px solid color-mix(in srgb, var(--text-primary) 18%, transparent);
-  box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--text-primary) 6%, transparent),
-    0 24px 60px rgba(0, 0, 0, 0.45);
-  position: relative;
+  margin: 8px auto 20px;
+  padding: 10px;
+  border-radius: 48px;   // phone frame (mockups only)
+  background: var(--frame);
+  box-shadow: var(--shadow-float);
 
   // The camera island.
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 22px;
     left: 50%;
@@ -817,20 +654,20 @@
     width: 96px;
     height: 26px;
     transform: translateX(-50%);
-    border-radius: 999px;
-    background: #000;
+    border-radius: 13px;
+    background: var(--media-black);
   }
 }
 
 .ple-phone-screen {
-  height: min(780px, calc(100vh - var(--nav-height, 60px) - 200px));
+  height: min(780px, calc(100vh - var(--nav-height, 64px) - 200px));
   min-height: 480px;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
   padding: 52px 12px 24px;   // clear of the camera island
-  border-radius: 36px;
-  background: var(--bg-primary, #0f0f0f);
+  border-radius: 38px;
+  background: var(--bg);
   scrollbar-width: none;
 
   &::-webkit-scrollbar { display: none; }
@@ -843,8 +680,7 @@
 
   > * { grid-column: 1 / -1 !important; }
 
-
-  .pov-head h3 { font-size: 0.95rem; }
+  .pov-head h3 { @include v2.text(title-sm); }
 
   .card-container > * { width: 240px; }
   .playlist-card-container > * { width: 200px; }
@@ -861,24 +697,13 @@
   }
 
   // The trailer stacks: player, then its text.
-  .channel-trailer-row { flex-direction: column; flex-wrap: nowrap; gap: 0.75rem; }
-  .channel-trailer { width: 100%; border-radius: 10px; }
-  .channel-trailer-meta { width: 100%; height: auto; max-height: 7.5rem; overflow: hidden; }
+  .channel-trailer-row { flex-direction: column; flex-wrap: nowrap; gap: 12px; }
+  .ct-card { flex-direction: column; align-items: stretch; }
+  .channel-trailer { width: 100%; border-radius: var(--r-md); }
+  .channel-trailer-meta { width: 100%; max-height: 200px; overflow: hidden; }
 
   .ple-tag small { display: none; }
-  .ple-icon { width: 28px; }
 }
 
 // A popover inside the phone stays inside it.
 .ple-phone .ple-props { width: min(320px, calc(100% - 8px)); }
-
-// Undo / redo in the edit bar.
-.ple-history {
-  display: inline-flex;
-  gap: 0.15rem;
-  padding: 0.1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-
-  .ple-icon { border-radius: 999px; }
-}

@@ -1207,8 +1207,10 @@ function Watch({ v2 = false, routeV = null }) {
 
     // Activate the React tab in the comment section's composer (PlayVideo has
     // already opened the Discussion panel it lives in).
-    const reactTab = document.querySelector('.comment-mode-seg .v2-seg__opt:nth-child(2)')
-      || document.querySelector('.comment-tabs .comment-tab:nth-child(2)');
+    // Scoped to the main composer: an open reply box has the same switch, and
+    // in panel mode the list (and its replies) comes before the composer.
+    const reactTab = document.querySelector('.vid-comment-wrap > .add-comment-wrap .comment-mode-seg .v2-seg__opt:nth-child(2)')
+      || document.querySelector('.add-comment-wrap .comment-mode-seg .v2-seg__opt:nth-child(2)');
     if (reactTab) reactTab.click();
     // Wait for React to render the tab content, then scroll it into view
     setTimeout(() => {

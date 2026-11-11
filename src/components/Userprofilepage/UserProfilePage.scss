@@ -29,7 +29,8 @@
     position: fixed;
     inset: 0;
     background: var(--overlay);
-    z-index: 9998;
+    // Below the v2 dialogs and sheets (z 1000), above the bottom nav (100).
+    z-index: 898;
     animation: v2-fade var(--t-base) var(--ease);
   }
 }
@@ -50,7 +51,7 @@
       calc(var(--audio-queue-clearance, var(--audio-np-clearance, 0px)) + 16px)
     );
     right: calc(16px + env(safe-area-inset-right, 0px));
-    z-index: 9999;
+    z-index: 899;   // under every v2 dialog / sheet (1000)
     transition: bottom var(--t-base) var(--ease);
 
     // The opened player fills most of the screen; riding above it would put the

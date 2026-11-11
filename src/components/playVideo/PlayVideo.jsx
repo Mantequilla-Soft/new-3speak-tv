@@ -1605,7 +1605,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                   tone="accent"
                   title={t('watch.media.blockedTitle')}
                   action={onRetryPlayback && (
-                    <UiButton variant="secondary" size={36} next onClick={onRetryPlayback}>{t('common.actions.tryAgain')}</UiButton>
+                    <UiButton variant="media" size={36} next onClick={onRetryPlayback}>{t('common.actions.tryAgain')}</UiButton>
                   )}
                 >
                   {t('watch.media.blockedBody')}
@@ -1867,7 +1867,11 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               {community_id ? (
                 <>
                   <button type="button" className="wv2-community__link" onClick={() => handleCommunityNavigate(community_id)}>
-                    <AccountImg account={community_id} alt="" className="wv2-community__mark" />
+                    {/* The community's letter, under its picture (shown when there is none). */}
+                    <span className="wv2-community__mark" aria-hidden="true">
+                      {String(comunity_name || community_id).replace(/^hive-/, '').slice(0, 1).toUpperCase()}
+                      <AccountImg account={community_id} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                    </span>
                     <span className="wv2-community__text">
                       <span className="is-muted">{t('watch.community.postedIn')}</span>{' '}
                       <b>{comunity_name || community_id}</b>
@@ -1902,10 +1906,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           )}
 
           <div className="wv2-head">
-            {(scheduled || isLive) && (
+            {isLive && (
               <div className="wv2-head__pills">
-                {isLive && <StatusPill tone="live">LIVE</StatusPill>}
-                {scheduled && <StatusPill tone="cyan" icon="event">{t('watch.media.scheduledTitle')}</StatusPill>}
+                <StatusPill tone="live">{t('cards.badges.live')}</StatusPill>
               </div>
             )}
             <div className="wv2-title-row">
@@ -1920,7 +1923,7 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
 
             {/* Views · age · payout (02 meta line). The payout opens who shares it. */}
             <div className="wv2-meta">
-              <span>{t('common.units.views', { count: view || 0, formatted: compactNumber(view || 0) })}</span>
+              <span>{t('nav.search.views', { count: view || 0, formatted: compactNumber(view || 0) })}</span>
               <span aria-hidden="true">·</span>
               <span>{formatRelativeTime(videoDetails?.created_at)}</span>
               {!postIsOffChain && !scheduled && (

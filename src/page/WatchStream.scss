@@ -16,6 +16,40 @@
   color: var(--text);
 }
 
+// The SDK's "Click to enable audio" (browsers block sound until a tap): the
+// island toast, top centre, text-filled (STYLE_GUIDE §7).
+.ws-page .hh-start-audio,
+.lk-room-container:has(> .ws-shorts) > .hh-start-audio {
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 16px 0 14px;
+  border-radius: 22px;
+  background: var(--text);
+  color: var(--bg);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: var(--shadow-float);
+  animation: v2-drop var(--t-slow) var(--ease);
+
+  &::before {
+    content: "volume_up";
+    font-family: "Material Symbols Rounded";
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1;
+    font-feature-settings: "liga";
+  }
+  &:hover { background: var(--text); filter: brightness(.92); }
+}
+// Its inline style says display:block while it is needed and none after.
+.ws-page .hh-start-audio[style*="none"],
+.lk-room-container:has(> .ws-shorts) > .hh-start-audio[style*="none"] { display: none !important; }
+
 /* ── Live strip (18c): accent wash, LIVE pill, watching, tags, quality ──── */
 .ws-strip {
   display: flex;

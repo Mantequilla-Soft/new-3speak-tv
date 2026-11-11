@@ -1,8 +1,7 @@
+import { Icon } from '../v2/Icon';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdAdd, MdCheck, MdClose, MdSearch } from 'react-icons/md';
-import ModalHeader from '../ModalHeader/ModalHeader';
-import useDialog from '../../hooks/useDialog';
+import { Dialog, Button } from '../v2/ui';
 import { toastIn } from '../../utils/toast';
 import { updatePlaylist } from '../../utils/playlistOperations';
 import { resolveFeed, searchPodcasts, followErrorText, feedKey } from '../../lib/podcasts';
@@ -36,7 +35,6 @@ export default function PlaylistFeedsModal({ playlistId, user, jsonMeta, cards =
   const [searching, setSearching] = useState(false);
   const [checking, setChecking] = useState('');
   const [saving, setSaving] = useState(false);
-  const dialog = useDialog(saving ? undefined : onClose);
 
   const artByKey = useMemo(() => new Map(cards.map((c) => [feedKey(c.url), c.art])), [cards]);
   const [addedArt, setAddedArt] = useState(() => new Map());
@@ -109,14 +107,28 @@ export default function PlaylistFeedsModal({ playlistId, user, jsonMeta, cards =
   };
 
   return (
-    <div className="pl-feeds-overlay" onClick={saving ? undefined : onClose}>
-      <div className="pl-feeds-modal" {...dialog.props} onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={t('playlists.feeds.title')} titleId={dialog.titleId} onClose={saving ? undefined : onClose} />
+    <Dialog
+      open
+      onClose={saving ? undefined : onClose}
+      dismissible={!saving}
+      title={t('playlists.feeds.title')}
+      width={520}
+      closeLabel={t('common.actions.close')}
+      className="pl-feeds-modal"
+      footer={(
+        <>
+          <Button variant="secondary" onClick={onClose} disabled={saving}>{t('common.actions.cancel')}</Button>
+          <Button variant="primary" onClick={save} disabled={!changed || saving || !!checking} loading={saving}>
+            {saving ? t('playlists.view.saving') : t('playlists.view.saveChanges')}
+          </Button>
+        </>
+      )}
+    >
         <p className="pl-feeds-intro">{t('playlists.feeds.intro')}</p>
 
         <form className="pl-feeds-search" onSubmit={(e) => { e.preventDefault(); if (isLink) add(q); }}>
           <label className="pod-field-row">
-            <MdSearch className="pod-field-icon" size={18} />
+            <Icon name="search" size={18} className="pod-field-icon" />
             <input
               type="search"
               value={query}
@@ -129,7 +141,7 @@ export default function PlaylistFeedsModal({ playlistId, user, jsonMeta, cards =
           </label>
           {isLink && (
             <button type="submit" className="pod-btn pod-btn--primary" disabled={!!checking || saving || full}>
-              <MdAdd size={16} /> {checking ? t('playlists.feeds.checking') : t('playlists.feeds.add')}
+              <Icon name="add" size={16} /> {checking ? t('playlists.feeds.checking') : t('playlists.feeds.add')}
             </button>
           )}
         </form>
@@ -148,10 +160,10 @@ export default function PlaylistFeedsModal({ playlistId, user, jsonMeta, cards =
                     {r.author && <span className="pl-feeds-row-meta">{r.author}</span>}
                   </div>
                   {inList ? (
-                    <span className="pl-feeds-in"><MdCheck size={15} /> {t('playlists.feeds.inList')}</span>
+                    <span className="pl-feeds-in"><Icon name="check" size={16} /> {t('playlists.feeds.inList')}</span>
                   ) : (
                     <button type="button" className="pod-btn" disabled={!!checking || saving || full} onClick={() => add(r.url)}>
-                      <MdAdd size={16} /> {checking === withScheme(r.url) ? t('playlists.feeds.checking') : t('playlists.feeds.add')}
+                      <Icon name="add" size={16} /> {checking === withScheme(r.url) ? t('playlists.feeds.checking') : t('playlists.feeds.add')}
                     </button>
                   )}
                 </div>
@@ -185,21 +197,13 @@ export default function PlaylistFeedsModal({ playlistId, user, jsonMeta, cards =
                     aria-label={t('playlists.feeds.remove', { title: f.title || f.url })}
                     title={t('playlists.feeds.remove', { title: f.title || f.url })}
                   >
-                    <MdClose size={16} />
+                    <Icon name="close" size={16} />
                   </button>
                 </li>
               );
             })}
           </ul>
         )}
-
-        <div className="pl-feeds-actions">
-          <button type="button" className="pod-btn" onClick={onClose} disabled={saving}>{t('common.actions.cancel')}</button>
-          <button type="button" className="pod-btn pod-btn--primary" onClick={save} disabled={!changed || saving || !!checking}>
-            {saving ? t('playlists.view.saving') : t('playlists.view.saveChanges')}
-          </button>
-        </div>
-      </div>
-    </div>
+    </Dialog>
   );
 }

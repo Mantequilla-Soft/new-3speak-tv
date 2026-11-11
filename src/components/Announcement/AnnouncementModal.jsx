@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { IoOpenOutline, IoCopyOutline, IoCheckmark } from 'react-icons/io5';
+import { Dialog } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import TranslateButton from '../TranslateButton/TranslateButton';
 import { translateText, TITLE_LANGUAGES } from '../../utils/translate';
 import { useAppStore } from '../../lib/store';
@@ -175,12 +176,38 @@ function AnnouncementCard({ announcement, user, onClose }) {
     }
   };
 
+  const footer = mustSend ? (
+    <button
+      type="submit"
+      form="announcement-reply-form"
+      className="v2-btn v2-btn--primary h48 is-block is-next announcement-close announcement-close--send"
+      disabled={sendState === 'sending'}
+    >
+      <span className="v2-btn__label">{sendState === 'sending' ? t('announcement.sending') : t('common.actions.send')}</span>
+      <Icon name={sendState === 'sending' ? 'progress_activity' : 'send'} size={18} className={sendState === 'sending' ? 'v2-spin' : undefined} />
+    </button>
+  ) : (
+    <button type="button" className="v2-btn v2-btn--inverse h48 is-block announcement-close" onClick={onClose}>
+      <span className="v2-btn__label">{t('common.actions.close')}</span>
+    </button>
+  );
+
+  // The v2 Dialog (a bottom sheet on phones). Not dismissible from outside: the
+  // message is seen once, so it closes only with its own button.
   return (
-    <div className="announcement-overlay">
-      <div className="announcement-modal" role="dialog" aria-modal="true" aria-label={t('announcement.ariaLabel')}>
+    <Dialog
+      open
+      title={t('announcement.ariaLabel')}
+      head={false}
+      dismissible={false}
+      width={480}
+      className="announcement-modal"
+      bodyClassName="announcement-body"
+      footer={footer}
+    >
         <div className="announcement-header">
           <img className="announcement-logo" src={mark} alt="3Speak" />
-          {personalFor && <span className="announcement-personal">{t('announcement.personalLabel')}</span>}
+          {personalFor && <span className="v2-pill is-cyan announcement-personal">{t('announcement.personalLabel')}</span>}
         </div>
 
         {imagePath && !imageFailed && (
@@ -192,7 +219,7 @@ function AnnouncementCard({ announcement, user, onClose }) {
         <div className="announcement-tools">
           <TranslateButton onTranslate={translate} isTranslating={isTranslating} languages={TITLE_LANGUAGES} />
           <button type="button" className="comment-translate-btn announcement-copy" onClick={copy}>
-            {copied ? <IoCheckmark size={14} /> : <IoCopyOutline size={14} />}
+            <Icon name={copied ? 'check' : 'content_copy'} size={14} />
             <span>{copied ? t('common.actions.copied') : t('common.actions.copy')}</span>
           </button>
         </div>
@@ -214,28 +241,27 @@ function AnnouncementCard({ announcement, user, onClose }) {
         {translateFailed && <p className="announcement-reply-error">{t('announcement.translateFailed')}</p>}
 
         {link && (
-          // A new tab keeps the popup here until Close. Opening it counts as seen,
-          // so a 3Speak page opened by the link does not show the popup again.
           <a
-            className="announcement-link"
+            className="v2-btn v2-btn--secondary h44 is-block is-next announcement-link"
             href={link}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => markAnnouncementSeen(number, personalFor || null)}
           >
-            <span>{linkText || t('announcement.linkFallback')}</span>
-            <IoOpenOutline />
+            <span className="v2-btn__label">{linkText || t('announcement.linkFallback')}</span>
+            <Icon name="open_in_new" size={18} />
           </a>
         )}
 
         {canRespond && (
           sendState === 'sent' ? (
-            <p className="announcement-reply-done">{t('announcement.replySent')}</p>
+            <p className="announcement-reply-done"><Icon name="check_circle" size={18} />{t('announcement.replySent')}</p>
           ) : (
-            <form id="announcement-reply-form" className="announcement-reply" onSubmit={send}>
-              <label htmlFor="announcement-reply-text">{t('announcement.replyLabel')}</label>
+            <form id="announcement-reply-form" className="announcement-reply v2-field" onSubmit={send}>
+              <label className="v2-eyebrow" htmlFor="announcement-reply-text">{t('announcement.replyLabel')}</label>
               <textarea
                 id="announcement-reply-text"
+                className="v2-input is-area"
                 value={reply}
                 onChange={(e) => { setReply(e.target.value); if (sendState !== 'sending') setSendState('idle'); }}
                 placeholder={t('announcement.replyPlaceholder')}
@@ -252,22 +278,6 @@ function AnnouncementCard({ announcement, user, onClose }) {
             </form>
           )
         )}
-
-        {mustSend ? (
-          <button
-            type="submit"
-            form="announcement-reply-form"
-            className="announcement-close announcement-close--send"
-            disabled={sendState === 'sending'}
-          >
-            {sendState === 'sending' ? t('announcement.sending') : t('common.actions.send')}
-          </button>
-        ) : (
-          <button type="button" className="announcement-close" onClick={onClose}>
-            {t('common.actions.close')}
-          </button>
-        )}
-      </div>
-    </div>
+    </Dialog>
   );
 }

@@ -1,42 +1,39 @@
-/* Small "AI" pill. Deliberately quiet: it is a note about the content, not a
-   warning about the creator, so it reads like the date next to it rather than
-   like an error. */
+// "AI" pill (30c): a note about the content, not a warning about the creator,
+// so it is the quiet cyan status pill (20 tall, radius 7, 10px/900 caps).
 .ai-badge {
   display: inline-flex;
   align-items: center;
-  flex-shrink: 0;
-  padding: 1px 6px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: none;
-  color: var(--text-secondary);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  line-height: 1.45;
-  letter-spacing: 0.04em;
+  gap: 3px;
+  flex: none;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 7px;
+  background: var(--cyan-tint);
+  color: var(--cyan);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  line-height: 1;
   vertical-align: middle;
   cursor: default;
   user-select: none;
 
-  /* On top of a video the theme vars are the wrong contrast — the surface is
-     whatever frame is playing, so match the other on-video chips instead. */
+  // Over a playing video: the media scrim, like the other on-video chips.
   &--on-video {
-    border-color: rgba(255, 255, 255, 0.28);
-    color: rgba(255, 255, 255, 0.75);
+    background: var(--media-scrim);
+    color: var(--on-media);
   }
 
-  /* On a feed card's thumbnail: any image can sit behind it, so it gets its own
-     dark backing rather than relying on the frame for contrast. Bottom-left,
-     because the top corners belong to the duration, live, PRO and status chips.
-     z-index 3: the thumbnail <img> sits at 1 (see .card .wrap .play). */
+  // On a feed card's thumbnail, bottom-left (the top corners belong to the
+  // duration, live, PRO and status chips). z 3: the thumbnail img sits at 1.
   &--on-thumb {
     position: absolute;
     left: 6px;
     bottom: 6px;
     z-index: 3;
-    border-color: rgba(255, 255, 255, 0.28);
-    background: rgba(0, 0, 0, 0.6);
-    color: rgba(255, 255, 255, 0.9);
+    background: var(--media-scrim);
+    color: var(--on-media);
     pointer-events: none;
   }
 }

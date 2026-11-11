@@ -319,7 +319,7 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
               onChange={(e) => { userPickedRef.current = true; setLang(e.target.value); }}
               aria-label={t('comments.transcript.languageAria')}
             >
-              {languages.map((l) => <option key={l.lang} value={l.lang}>{l.label || l.lang}</option>)}
+              {languages.map((l) => <option key={l.lang} value={l.lang}>{l.label || languageName(l.lang, i18n.language)}</option>)}
             </select>
           )}
           <IconButton

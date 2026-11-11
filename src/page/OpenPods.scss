@@ -87,7 +87,7 @@
   border: 1px solid var(--border);
   font-size: 13px;
 
-  @include v2.mobile { flex-wrap: wrap; }
+  @include v2.mobile { &:has(> .v2-btn) { flex-wrap: wrap; } }
 }
 
 .openpods-guest-cta__icon,

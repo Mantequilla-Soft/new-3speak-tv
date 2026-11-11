@@ -1,60 +1,69 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-/* Redesigned embed-studio review/preview step, rendered to look like the final
-   post (player → title → description). It takes the wizard's full content width
-   (EmbedWizard.scss, the stepper's 1100px): on wide screens the post keeps a
-   readable column (about the old 760px) and the publish settings sit beside it;
-   below that they stack, settings under the post. */
+// Upload review, publishing and done (EmbedPreview.jsx, EmbedPreviewPlayer.jsx),
+// designs 31b + 35d. Review: the post as it will show (player, title, body) in
+// a card, the publish settings beside it as bg-filled rows. Publishing: a card
+// with the cyan bar, the step list and the activity log in mono. Done: the
+// cyan success card.
+
+// ── Review ──────────────────────────────────────────────────────────────────
 .ep-review {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--side-panel-w);
+  gap: 24px;
+  align-items: start;
   width: 100%;
   min-width: 0;
 
-  @media (min-width: 1025px) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
-    gap: 24px;
-    align-items: start;
-
-    .ep-settings { margin-top: 0; }
-    /* Narrower label column in the side panel so values keep room. */
-    .ep-setting { grid-template-columns: 22px 100px 1fr; }
-  }
+  @include v2.below-wide { grid-template-columns: minmax(0, 1fr) 340px; }
+  @media (max-width: 1024px) { grid-template-columns: minmax(0, 1fr); gap: 14px; }
 }
 
-/* ---- The post preview itself ---- */
 .ep-post {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
 }
 
-/* One card wrapping the player + description (the unified "post body"). The
-   card background/radius live here now, NOT on the inner markdown container. */
+.ep-review--portrait .ep-post { align-items: center; }
+
+// One card: the player flush at the top, then the title and the body.
 .ep-post-card {
-  background: var(--card-bg);
-  border-radius: 14px;
+  width: 100%;
+  padding: 0;
   overflow: hidden;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.12);
 
-  /* Player sits flush at the top of the card — the card clips its corners and
-     provides the shadow, so it drops its own. */
-  .ep-player {
-    border-radius: 0;
-    box-shadow: none;
-  }
+  .ep-player { border-radius: 0; }
 
-  /* Neutralise BlogContent's own card so it doesn't double up inside ours. */
+  // BlogContent brings its own card; inside ours it is plain.
   .blog-content-container {
     background-color: transparent;
     border-radius: 0;
   }
 }
 
-/* Player — stands in for the leading embed URL of the published body. */
+.ep-review--portrait .ep-post-card { max-width: 520px; }
+
+.ep-title {
+  margin: 0;
+  padding: 16px 16px 0;
+  @include v2.text(heading);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.ep-body {
+  width: 100%;
+  padding: 8px 16px 16px;
+  box-sizing: border-box;
+}
+
+// The player stands in for the leading embed URL of the published body.
 .ep-player {
   position: relative;
   overflow: hidden;
-  background: #000;
+  background: var(--media-black);
   aspect-ratio: 16 / 9;
 
   video,
@@ -68,60 +77,13 @@
 
   &--portrait {
     aspect-ratio: 9 / 16;
-    max-width: 320px;
+    max-width: 360px;
     width: 100%;
     margin: 0 auto;
   }
 }
 
-/* Chapter strip under the player: one segment per chapter, sized by length,
-   the playing one highlighted; a click seeks there. */
-.ep-chapters {
-  display: flex;
-  gap: 2px;
-  padding: 6px 8px;
-  background: var(--bg-tertiary, #eff4f5);
-  border-bottom: 1px solid var(--border-light, #e0e0e0);
-}
-
-.ep-chapters__seg {
-  flex: 1 1 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1px;
-  padding: 4px 6px;
-  border: 0;
-  border-top: 3px solid var(--border-light, #d0d0d0);
-  border-radius: 2px;
-  background: transparent;
-  color: var(--text-primary);
-  text-align: left;
-  cursor: pointer;
-  font: inherit;
-
-  &:hover { background: var(--bg-secondary, rgba(0, 0, 0, 0.04)); }
-  &:focus-visible { outline: 2px solid var(--accent-primary, #e53935); outline-offset: -2px; }
-  &.is-live { border-top-color: var(--accent-primary, #e53935); }
-}
-
-.ep-chapters__time {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-variant-numeric: tabular-nums;
-}
-
-.ep-chapters__title {
-  max-width: 100%;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Thumbnail-as-poster with a play button, shown until the user hits play. */
+// The thumbnail as poster with a play button, until the creator hits play.
 .ep-player__poster {
   position: relative;
   display: block;
@@ -130,7 +92,7 @@
   margin: 0;
   padding: 0;
   border: 0;
-  background: #000;
+  background: var(--media-black);
   cursor: pointer;
 
   img {
@@ -149,244 +111,400 @@
   margin: auto;
   width: 64px;
   height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 4px; /* optical centering of the play triangle */
+  display: grid;
+  place-items: center;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
+  background: var(--media-scrim);
+  color: var(--on-media);
   pointer-events: none;
-  transition: background 0.15s ease, transform 0.15s ease;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 }
 .ep-player__poster:hover .ep-player__play {
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid var(--accent-primary, #e53935);
-  color: var(--accent-primary, #e53935);
-  transform: scale(1.05);
+  background: var(--accent);
+  color: var(--on-accent);
+  transform: scale(1.04);
 }
 
-.ep-title {
-  font-size: 24px;
-  line-height: 1.25;
-  font-weight: 700;
-  margin: 0;
-  color: var(--text-primary, #111);
-  word-break: break-word;
+// Can't preview this file in the browser (HEVC): it still uploads.
+.ep-fallback {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 12px;
+  padding: 12px;
+  border-radius: var(--r-md);
+  background: var(--cyan-tint);
+  color: var(--text);
+  @include v2.text(meta);
+  line-height: 1.45;
+
+  p { margin: 0; }
+  .ep-fallback__icon { color: var(--cyan); }
 }
 
-/* Description rendered through the same BlogContent the watch page uses. */
-.ep-body {
-  width: 100%;
+// Chapter strip under the player: one segment per chapter, sized by length,
+// the playing one accent; a click seeks there.
+.ep-chapters {
+  display: flex;
+  gap: 3px;
+  padding: 8px;
+  background: var(--bg);
 }
 
-/* A story's caption is typed right here (it skips the details step), with what
-   the story gets the creator underneath. */
+.ep-chapters__seg {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 4px 8px;
+  border: 0;
+  border-top: 3px solid var(--surface-2);
+  border-radius: var(--r-bar);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+
+  &:hover { background: var(--bg-hover); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  &.is-live { border-top-color: var(--accent); }
+}
+
+.ep-chapters__time { @include v2.mono(11, 500); color: var(--muted); }
+.ep-chapters__title {
+  max-width: 100%;
+  @include v2.text(label);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// A story's caption is typed right here (it skips the details step), with what
+// the story gets the creator underneath (35b).
 .ep-story {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  padding-top: 16px;
+}
+
+.ep-story__caption { min-height: 72px; }
+
+.ep-story__reach {
+  display: flex;
+  align-items: center;
   gap: 8px;
-}
-
-.ep-story__caption {
-  width: 100%;
-  box-sizing: border-box;
-  resize: vertical;
-  min-height: 72px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--input-border, var(--border-color));
-  background: var(--input-bg, var(--bg-primary));
-  color: var(--text-primary);
-  font: inherit;
-  font-size: 14px;
-
-  &:focus {
-    outline: none;
-    border-color: var(--input-focus, var(--accent-primary));
-  }
-}
-
-.ep-story__reach,
-.ep-story__streak {
   margin: 0;
-  font-size: 13px;
-  color: var(--text-secondary);
+  @include v2.text(meta);
+  color: var(--muted);
+  .material-symbols-rounded { color: var(--cyan); }
 }
 
 .ep-story__streak {
   display: flex;
   align-items: center;
-  gap: 6px;
-
-  svg {
-    flex: none;
-    color: var(--accent-primary);
-    font-size: 16px;
-  }
+  gap: 12px;
+  margin: 0;
+  padding: 12px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  b { @include v2.text(label); font-size: 14px; color: var(--text); }
+  .material-symbols-rounded { color: var(--accent); }
 }
 
-.ep-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.ep-tag {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: var(--bg-primary, #f1f1f3);
-  color: var(--text-secondary, #555);
-}
-
-/* ---- Publish settings panel (below the post body) ---- */
+// Publish settings (35d): a card with bg-filled rows, label left, value right.
 .ep-settings {
-  margin-top: 26px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--bg-secondary, #fafafa);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 16px;
 
   &__head {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-secondary, #888);
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+
+    &::before {
+      content: "";
+      flex: none;
+      width: 4px;
+      height: 22px;
+      border-radius: 2px;
+      background: var(--accent);
+    }
+  }
+  &__title {
+    flex: 1;
+    @include v2.text(title);
+    color: var(--text);
   }
 }
 
 .ep-setting {
   display: grid;
-  grid-template-columns: 22px 120px 1fr;
+  grid-template-columns: 20px minmax(0, auto) minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  font-size: 14px;
-
-  & + .ep-setting {
-    border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.06));
-  }
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  @include v2.text(body-sm);
 
   &--top { align-items: start; }
 
   &__icon {
     display: flex;
-    color: var(--text-secondary, #888);
+    color: var(--muted);
   }
-  &__label {
-    font-weight: 600;
-    color: var(--text-secondary, #777);
-  }
+  &__label { color: var(--muted); }
   &__value {
-    font-weight: 600;
-    color: var(--text-primary, #111);
+    justify-self: end;
+    text-align: right;
+    font-weight: 700;
+    color: var(--text);
     min-width: 0;
-    word-break: break-word;
+    overflow-wrap: anywhere;
 
     &--community {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+
       img {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         object-fit: cover;
       }
     }
   }
-
-  @include mix.respond(phone) {
-    grid-template-columns: 22px 1fr;
-    grid-template-areas:
-      "icon label"
-      "icon value";
-    gap: 4px 12px;
-
-    .ep-setting__icon { grid-area: icon; }
-    .ep-setting__label { grid-area: label; }
-    .ep-setting__value { grid-area: value; }
-  }
 }
 
-.ep-muted { color: var(--text-secondary, #999); font-weight: 500; }
+.ep-muted { color: var(--muted); font-weight: 400; }
 
 .ep-benes {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 4px;
 }
-.ep-bene {
-  font-size: 13px;
-}
+.ep-bene { @include v2.text(meta); font-weight: 700; .num { color: var(--accent); } }
 
-.ep-nsfw-on {
-  color: var(--accent-primary, #e53935);
-  font-weight: 700;
-}
-
-/* Promote button on the upload success screen */
-// Secondary/non-prominent — the feedback button below is the only prominent CTA.
-.promote-success-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-  padding: 10px 24px;
-  border: 1px solid var(--border-light, #d1d5db);
-  border-radius: 12px;
-  background: transparent;
-  color: var(--text-secondary, #6b7280);
-  font-weight: 500;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-  &:hover { background: rgba(127, 127, 127, 0.1); border-color: var(--accent-primary, #e53935); }
-}
-
-// Success-screen action row: primary "Promote" + the now-secondary "Profile".
-.success-actions {
+.ep-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  align-items: center;
-  margin-top: 8px;
-
-  .promote-success-btn { margin-top: 0; }
+  justify-content: flex-end;
+  gap: 4px;
 }
-
-// Embed link folded into the "published" message.
-.success-embed-link {
-  color: var(--accent-primary, #e53935);
-  font-weight: 700;
-  text-decoration: underline;
-  word-break: break-all;
-  &:hover { opacity: 0.85; }
-}
-
-// The feedback prompt is now the PROMINENT call-to-action, sitting on its own
-// line below the action row.
-.review-success-btn {
+.ep-tag {
   display: inline-flex;
   align-items: center;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: v2.radius-for(24);
+  background: var(--surface-2);
+  @include v2.text(label);
+  font-size: 11px;
+  color: var(--text);
+}
+
+// Watch-ad-to-publish note (35d): a cyan wash with the AD tile.
+.ep-gate {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: var(--r-xl);
+  background: var(--cyan-wash);
+
+  .ep-gate__thumb {
+    flex: none;
+    width: 110px;
+    aspect-ratio: 16 / 9;
+    .v2-media-pill { font-family: var(--font-mono); font-weight: 900; font-size: 10px; }
+  }
+  .ep-gate__text { @include v2.text(meta); line-height: 1.4; color: var(--text); }
+}
+
+// The failed publish (31b, accent wash).
+.ep-failed {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+
+  .ep-failed__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--text);
+    .material-symbols-rounded { color: var(--accent); }
+    b { @include v2.text(label); font-size: 14px; overflow-wrap: anywhere; }
+  }
+  .ep-failed__help {
+    margin: 0 0 0 34px;
+    @include v2.text(meta);
+    color: var(--muted);
+    a { color: var(--cyan); font-weight: 700; }
+  }
+}
+
+// A story has no stepper: its action row stands alone above the post.
+.ep-story-actions {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+// ── Publishing ──────────────────────────────────────────────────────────────
+.ep-status {
+  display: flex;
   justify-content: center;
+}
+
+.ep-publishing,
+.ep-done {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+}
+
+.ep-publishing {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--r-3xl);
+
+  .wizard-head { margin: 0; }
+}
+
+.ep-publishing__progress {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
-  margin-top: 24px;
-  padding: 13px 26px;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 12px;
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  box-shadow: none;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  &:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(229, 57, 53, 0.4); }
+}
+
+.ep-publishing__progress-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  .num { @include v2.mono(14, 700); color: var(--cyan); }
+}
+
+.ep-publishing__status {
+  @include v2.text(label);
+  color: var(--text);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.activity-log {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.activity-log-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 280px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  @include v2.scroll-y;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--text);
+
+  .activity-icon {
+    margin-top: 1px;
+    &.is-cyan { color: var(--cyan); }
+    &.is-accent { color: var(--accent); }
+    &.is-current { color: var(--cyan); }
+    &.is-done { color: var(--muted); }
+  }
+  &.error { color: var(--accent); }
+}
+
+.activity-message {
+  margin: 0;
+  @include v2.mono(12, 500);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.discord {
+  @include v2.text(meta);
+  color: var(--muted);
+  a { color: var(--cyan); font-weight: 700; }
+}
+
+// ── Done ────────────────────────────────────────────────────────────────────
+.ep-done {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px;
+  border-radius: var(--r-3xl);
+  min-height: 420px;
+
+  @include v2.mobile { min-height: 0; padding: 20px; }
+}
+
+.ep-done__icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-xl);
+  background: var(--cyan);
+  color: var(--bg);
+}
+
+.ep-done__title {
+  margin: auto 0 0;
+  @include v2.text(display);
+  font-size: 32px;
+  color: var(--text);
+}
+
+.ep-done__text {
+  margin: 0;
+  @include v2.text(body);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.ep-done__actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.ep-done__feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
 }

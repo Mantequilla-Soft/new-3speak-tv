@@ -3,7 +3,7 @@
 // the support popup once per block, quoting the admin's note, and a banner with
 // the note and the Discord / Telegram links for as long as the block lasts.
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { screen, waitFor, act } from '@testing-library/react'
+import { screen, waitFor, act, within } from '@testing-library/react'
 import { renderWithProviders } from './_render.jsx'
 
 const get = vi.hoisted(() => vi.fn())
@@ -54,7 +54,7 @@ describe('a blocked warm-up user', () => {
 
     expect(popup()).toHaveTextContent('Message from the 3Speak team')
     expect(popup()).toHaveTextContent('Only post your own videos.')
-    await user.click(popup().querySelector('.app-modal-header button'))
+    await user.click(within(popup()).getByRole('button', { name: 'Close' }))
     expect(popup()).toBeNull()
     unmount()
 

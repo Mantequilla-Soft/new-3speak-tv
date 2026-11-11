@@ -171,7 +171,7 @@ function ReactionPlayer({
   const hideTimerRef = useRef(null);
 
   // Mobile collapse — respect manual override from localStorage
-  const [mobileCollapsed, setMobileCollapsed] = useState(() => {
+  const [mobileCollapsed] = useState(() => {
     const stored = localStorage.getItem('rct-collapsed');
     if (stored !== null) return stored === '1';
     // Auto-collapse if only comments without timestamps
@@ -180,7 +180,6 @@ function ReactionPlayer({
     const hasTimestamped = reactions.some(r => r.pct !== null);
     return !hasVideo && !hasTimestamped;
   });
-  const userToggledRef = useRef(false);
 
   // Dynamic height for scroll area on mobile
   const [belowMaxHeight, setBelowMaxHeight] = useState(null);
@@ -260,11 +259,11 @@ function ReactionPlayer({
           if (depth > 3) return [];
           const replies = await hiveClient.call('condenser_api', 'get_content_replies', [author, permlink]);
           return Promise.all(replies.map(async (c) => {
-            let bodyHtml = '';
+            let bodyHtml;
             if (render && c.body) {
               // Strip timestamp-linked 3speak URLs so renderer doesn't embed them
               const cleaned = c.body.replace(/\[(\d{1,2}:\d{2}(?::\d{2})?)\]\((https?:\/\/(?:3speak\.tv|play\.3speak\.tv)[^)]*)\)/g, '$1');
-              try { bodyHtml = render(cleaned); } catch (_) { bodyHtml = c.body; }
+              try { bodyHtml = render(cleaned); } catch { bodyHtml = c.body; }
             } else {
               bodyHtml = c.body || '';
             }

@@ -1,12 +1,8 @@
+import { Icon } from '../v2/Icon';
+import { Segmented, Chip } from '../v2/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  MdPlayArrow, MdPause, MdAdd, MdRssFeed, MdNotificationsActive, MdNotificationsOff, MdArrowBack, MdOpenInNew,
-  MdUploadFile, MdDownload, MdSearch, MdClose, MdCheck, MdPodcasts, MdTrendingUp, MdHistory, MdWhatshot, MdLink, MdExplore, MdLibraryMusic,
-  MdLeaderboard, MdLock, MdLockOpen, MdQueueMusic, MdFiberNew, MdCode,
-} from 'react-icons/md';
-import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
 import { toastIn } from '../../utils/toast';
 import {
@@ -83,30 +79,30 @@ function EpisodeFilters({ days, onDays, listen, onListen, range, onRange, inbox 
   const today = new Date().toISOString().slice(0, 10);
   return (
     <div className="pod-filters">
-      <div className="audio-type-filter pod-filter-listen" role="group" aria-label={t('audio.podcasts.filters.listenLabel')}>
+      <div className="audio-type-filter pod-filter-listen v2-chips" role="group" aria-label={t('audio.podcasts.filters.listenLabel')}>
         {LISTEN_FILTERS.filter((f) => inbox != null || !f.mineOnly).map((f) => (
-          <button key={f.key} type="button" className={`audio-type-chip${listen === f.key ? ' active' : ''}`} aria-pressed={listen === f.key} onClick={() => onListen(f.key)}>
+          <Chip key={f.key} selected={listen === f.key} onClick={() => onListen(f.key)} count={f.key === 'new' && inbox > 0 ? inbox : undefined}>
             {t(f.labelKey)}
-            {f.key === 'new' && inbox > 0 && <span className="pod-chip-count">{inbox}</span>}
-          </button>
+          </Chip>
         ))}
       </div>
-      <div className="audio-date-presets pod-filter-dates" role="group" aria-label={t('audio.podcasts.filters.dateLabel')}>
-        {DATE_FILTERS.map((f) => (
-          <button key={f.days} type="button" className={`audio-date-btn${days === f.days ? ' active' : ''}`} onClick={() => onDays(f.days)}>
-            {t(f.labelKey)}
-          </button>
-        ))}
-      </div>
+      <Segmented
+        className="audio-date-presets pod-filter-dates"
+        block={false}
+        label={t('audio.podcasts.filters.dateLabel')}
+        value={days}
+        onChange={onDays}
+        options={DATE_FILTERS.map((f) => ({ value: f.days, label: t(f.labelKey) }))}
+      />
       {days === 'custom' && (
         <div className="pod-filter-range">
           <label>
             <span>{t('audio.podcasts.filters.from')}</span>
-            <input type="date" value={range.from} max={range.to || today} onChange={(e) => onRange({ ...range, from: e.target.value })} />
+            <input className="v2-input h32" type="date" value={range.from} max={range.to || today} onChange={(e) => onRange({ ...range, from: e.target.value })} />
           </label>
           <label>
             <span>{t('audio.podcasts.filters.to')}</span>
-            <input type="date" value={range.to} min={range.from || undefined} max={today} onChange={(e) => onRange({ ...range, to: e.target.value })} />
+            <input className="v2-input h32" type="date" value={range.to} min={range.from || undefined} max={today} onChange={(e) => onRange({ ...range, to: e.target.value })} />
           </label>
         </div>
       )}
@@ -210,8 +206,8 @@ function PiResults({ list, followed, busy, onFollow }) {
             ) : r.episodes > 0 && <div className="pod-result-meta">{t('audio.podcasts.episodes', { count: r.episodes })}</div>}
           </div>
           {followed.has(feedKey(r.url))
-            ? <span className="pod-following"><MdCheck size={15} /> {t('audio.podcasts.following')}</span>
-            : <button type="button" className="pod-btn pod-btn--primary pod-result-follow" disabled={busy} onClick={() => onFollow([r.url])}><MdAdd size={16} /> {t('audio.podcasts.follow')}</button>}
+            ? <span className="pod-following"><Icon name="check" size={16} /> {t('audio.podcasts.following')}</span>
+            : <button type="button" className="pod-btn pod-btn--primary pod-result-follow" disabled={busy} onClick={() => onFollow([r.url])}><Icon name="add" size={16} /> {t('audio.podcasts.follow')}</button>}
         </div>
       ))}
     </div>
@@ -287,39 +283,32 @@ function DiscoverSection({ user, subscriptions, onFollowed, config }) {
   };
 
   const tabs = [
-    { key: 'charts', icon: <MdLeaderboard size={17} />, label: t('audio.podcasts.charts.title') },
-    ...(hasTrending ? [{ key: 'trending', icon: <MdWhatshot size={17} />, label: t('audio.podcasts.trending.title') }] : []),
+    { key: 'charts', icon: 'leaderboard', label: t('audio.podcasts.charts.title') },
+    ...(hasTrending ? [{ key: 'trending', icon: 'local_fire_department', label: t('audio.podcasts.trending.title') }] : []),
   ];
   const shown = all ? list : list.slice(0, DISCOVER_SHOWN);
   return (
     <section className="pod-section pod-discover">
       <div className="pod-section-head pod-section-head--filters">
-        <div className="pod-discover-tabs" role="tablist">
-          {tabs.map((x) => (
-            <button
-              key={x.key}
-              type="button"
-              role="tab"
-              aria-selected={tab === x.key}
-              className={`pod-discover-tab${tab === x.key ? ' active' : ''}`}
-              onClick={() => choose({ tab: x.key })}
-            >
-              {x.icon}{x.label}
-            </button>
-          ))}
-        </div>
+        <Segmented
+          className="pod-discover-tabs"
+          block={false}
+          value={tab}
+          onChange={(v) => choose({ tab: v })}
+          options={tabs.map((x) => ({ value: x.key, label: x.label, icon: x.icon }))}
+        />
         <div className="pod-trending-filters">
           {tab === 'charts' ? (
-            <select className="pod-select" value={pick.country} onChange={(e) => choose({ country: e.target.value })} aria-label={t('audio.podcasts.charts.country')}>
+            <select className="v2-input is-select h32 pod-select" value={pick.country} onChange={(e) => choose({ country: e.target.value })} aria-label={t('audio.podcasts.charts.country')}>
               {sortedCountries.map((c) => <option key={c} value={c}>{countryName(c)}</option>)}
             </select>
           ) : (
-            <select className="pod-select" value={pick.lang} onChange={(e) => choose({ lang: e.target.value })} aria-label={t('audio.podcasts.trending.language')}>
+            <select className="v2-input is-select h32 pod-select" value={pick.lang} onChange={(e) => choose({ lang: e.target.value })} aria-label={t('audio.podcasts.trending.language')}>
               <option value="">{t('audio.podcasts.trending.allLanguages')}</option>
               {UI_LANGUAGES.map((l) => <option key={l.code} value={l.code}>{langName(l.code)}</option>)}
             </select>
           )}
-          <select className="pod-select" value={pick.cat} onChange={(e) => choose({ cat: e.target.value })} aria-label={t('audio.podcasts.trending.category')}>
+          <select className="v2-input is-select h32 pod-select" value={pick.cat} onChange={(e) => choose({ cat: e.target.value })} aria-label={t('audio.podcasts.trending.category')}>
             <option value="">{t('audio.podcasts.trending.allCategories')}</option>
             {TRENDING_CATEGORIES.map((c) => <option key={c} value={c}>{t(`audio.podcasts.categories.${c.replace(/\s+/g, '')}`)}</option>)}
           </select>
@@ -413,7 +402,7 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
     return (
       <div className="pod-add-row">
         <button type="button" className="pod-btn" onClick={() => setOpen(true)} aria-expanded={false}>
-          <MdAdd size={18} /> {t('audio.podcasts.addExternal')}
+          <Icon name="add" size={18} /> {t('audio.podcasts.addExternal')}
         </button>
       </div>
     );
@@ -423,13 +412,13 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
     <>
       <header className="pod-hero">
         <div className="pod-hero-intro">
-          <span className="pod-hero-icon"><MdPodcasts size={28} /></span>
+          <span className="pod-hero-icon"><Icon name="podcasts" size={28} /></span>
           <div>
             <h2 className="pod-hero-title">{t('audio.podcasts.introTitle')}</h2>
             <p className="pod-hero-sub">{user ? t('audio.podcasts.heroSub') : t('audio.podcasts.introSignedOut')}</p>
           </div>
           <button type="button" className="pod-icon-btn pod-hero-close" onClick={() => setOpen(false)} aria-expanded aria-label={t('common.actions.close')} title={t('common.actions.close')}>
-            <MdClose size={18} />
+            <Icon name="close" size={18} />
           </button>
         </div>
 
@@ -440,22 +429,20 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
                 <form className="pod-field" onSubmit={search}>
                   <div className="pod-field-head">
                   <label className="pod-field-label" htmlFor="pod-search">{t('audio.podcasts.search.label')}</label>
-                  {personEnabled && <div className="pod-search-modes" role="group" aria-label={t('audio.podcasts.search.label')}>
-                    {SEARCH_MODES.map((m) => (
-                      <button
-                        key={m.key}
-                        type="button"
-                        className={`pod-search-mode${mode === m.key ? ' active' : ''}`}
-                        aria-pressed={mode === m.key}
-                        onClick={() => { setMode(m.key); setResults(null); }}
-                      >
-                        {t(m.labelKey)}
-                      </button>
-                    ))}
-                  </div>}
+                  {personEnabled && (
+                    <Segmented
+                      className="pod-search-modes"
+                      block={false}
+                      size={28}
+                      label={t('audio.podcasts.search.label')}
+                      value={mode}
+                      onChange={(v) => { setMode(v); setResults(null); }}
+                      options={SEARCH_MODES.map((m) => ({ value: m.key, label: t(m.labelKey) }))}
+                    />
+                  )}
                 </div>
                   <div className="pod-field-row">
-                    <MdSearch className="pod-field-icon" size={18} />
+                    <Icon name="search" size={18} className="pod-field-icon" />
                     <input
                       id="pod-search"
                       type="search"
@@ -473,7 +460,7 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
               <form className="pod-field" onSubmit={addFeed}>
                 <label className="pod-field-label" htmlFor="pod-rss">{t('audio.podcasts.rss.labelLink')}</label>
                 <div className="pod-field-row">
-                  <MdLink className="pod-field-icon" size={18} />
+                  <Icon name="link" size={18} className="pod-field-icon" />
                   <input
                     id="pod-rss"
                     type="url"
@@ -484,7 +471,7 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
                     autoComplete="off"
                   />
                   <button type="submit" className="pod-btn pod-btn--primary" disabled={busy || !feedUrl.trim()}>
-                    <MdAdd size={16} /> {t('audio.podcasts.follow')}
+                    <Icon name="add" size={16} /> {t('audio.podcasts.follow')}
                   </button>
                 </div>
                 <button
@@ -494,7 +481,7 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
                   aria-controls="pod-private-fields"
                   onClick={() => setPriv((p) => ({ ...p, on: !p.on }))}
                 >
-                  {priv.on ? <MdLock size={15} /> : <MdLockOpen size={15} />} {t('audio.podcasts.private.toggle')}
+                  {priv.on ? <Icon name="lock" size={16} /> : <Icon name="lock_open" size={16} />} {t('audio.podcasts.private.toggle')}
                 </button>
                 {priv.on && (
                   <div className="pod-private" id="pod-private-fields">
@@ -516,11 +503,11 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
 
             <div className="pod-hero-tools">
               <button type="button" className="pod-link-btn" onClick={() => fileRef.current?.click()} disabled={busy}>
-                <MdUploadFile size={15} /> {t('audio.podcasts.opml.import')}
+                <Icon name="upload_file" size={16} /> {t('audio.podcasts.opml.import')}
               </button>
               {subscriptions?.length > 0 && (
                 <button type="button" className="pod-link-btn" onClick={exportOpml}>
-                  <MdDownload size={15} /> {t('audio.podcasts.opml.export')}
+                  <Icon name="download" size={16} /> {t('audio.podcasts.opml.export')}
                 </button>
               )}
               <input ref={fileRef} type="file" accept=".opml,.xml,text/xml,text/x-opml,application/xml" hidden onChange={(e) => importOpml(e.target.files?.[0])} />
@@ -532,8 +519,8 @@ function PodcastHero({ user, searchEnabled, personEnabled, subscriptions, onFoll
       {results && (
         <section className="pod-section">
           <div className="pod-section-head">
-            <h2 className="pod-section-title"><MdSearch size={18} />{t('audio.podcasts.search.results', { count: results.list.length })}</h2>
-            <button type="button" className="pod-icon-btn" onClick={() => setResults(null)} aria-label={t('common.actions.close')}><MdClose size={18} /></button>
+            <h2 className="pod-section-title"><Icon name="search" size={18} />{t('audio.podcasts.search.results', { count: results.list.length })}</h2>
+            <button type="button" className="pod-icon-btn" onClick={() => setResults(null)} aria-label={t('common.actions.close')}><Icon name="close" size={18} /></button>
           </div>
           {results.list.length === 0 && <p className="pod-empty">{t('audio.podcasts.search.none')}</p>}
           <PiResults list={results.list} followed={followed} busy={busy} onFollow={follow} />
@@ -625,7 +612,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
   if (error || !feed) {
     return (
       <div className="pod-show">
-        <button type="button" className="pod-back" onClick={onBack}><MdArrowBack size={18} /> {t('common.actions.back')}</button>
+        <button type="button" className="pod-back" onClick={onBack}><Icon name="arrow_back" size={18} /> {t('common.actions.back')}</button>
         <p className="pod-empty">{t('audio.podcasts.showMissing')}</p>
       </div>
     );
@@ -648,11 +635,11 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
 
   return (
     <div className="pod-show">
-      <button type="button" className="pod-back" onClick={onBack}><MdArrowBack size={18} /> {t('audio.podcasts.allPodcasts')}</button>
+      <button type="button" className="pod-back" onClick={onBack}><Icon name="arrow_back" size={18} /> {t('audio.podcasts.allPodcasts')}</button>
       <header className="pod-show-head">
         <PodcastArt art={feed.art} fallback={episodeArt} px={512} className="pod-show-cover" />
         <div className="pod-show-info">
-          <span className="pod-show-kicker"><MdPodcasts size={14} /> {t('audio.podcasts.kicker')}{feed.private && <PrivateBadge withText />}</span>
+          <span className="pod-show-kicker"><Icon name="podcasts" size={14} /> {t('audio.podcasts.kicker')}{feed.private && <PrivateBadge withText />}</span>
           <h2 className="pod-show-title">{feed.title || feed.url}</h2>
           {feed.author && <div className="pod-show-author">{feed.author}</div>}
           <div className="pod-show-meta">
@@ -664,7 +651,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
           {feed.status === 'error' && <p className="pod-show-error">{t('audio.podcasts.feedError', { reason: followErrorText(feed.error) })}</p>}
           <div className="pod-show-actions">
             {episodes.length > 0 && (
-              <button type="button" className="pod-btn pod-btn--solid" onClick={playLatest}><MdPlayArrow size={18} /> {t('audio.podcasts.playLatest')}</button>
+              <button type="button" className="pod-btn pod-btn--solid" onClick={playLatest}><Icon name="play_arrow" size={18} fill /> {t('audio.podcasts.playLatest')}</button>
             )}
             {user && (subscription ? (
               <>
@@ -675,7 +662,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
                   onClick={() => run(() => setFeedNotify(user, feed.id, !subscription.notify), subscription.notify ? t('audio.podcasts.notifyOffDone') : t('audio.podcasts.notifyOnDone'))}
                   title={t('audio.podcasts.notifyHint')}
                 >
-                  {subscription.notify ? <MdNotificationsActive size={16} /> : <MdNotificationsOff size={16} />}
+                  {subscription.notify ? <Icon name="notifications_active" size={16} /> : <Icon name="notifications_off" size={16} />}
                   {subscription.notify ? t('audio.podcasts.notifyOn') : t('audio.podcasts.notifyOff')}
                 </button>
                 <button
@@ -685,10 +672,10 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
                   onClick={toggleAutoQueue}
                   title={t('audio.podcasts.autoQueue.hint')}
                 >
-                  <MdQueueMusic size={16} /> {t('audio.podcasts.autoQueue.label')}
+                  <Icon name="queue_music" size={16} /> {t('audio.podcasts.autoQueue.label')}
                 </button>
                 <button type="button" className="pod-btn" disabled={busy} onClick={() => run(() => unfollowFeed(user, feed.id), t('audio.podcasts.unfollowed'))}>
-                  <MdCheck size={16} /> {t('audio.podcasts.unfollow')}
+                  <Icon name="check" size={16} /> {t('audio.podcasts.unfollow')}
                 </button>
               </>
             ) : feed.url && (
@@ -696,15 +683,15 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
                 const [r] = await followFeeds(user, [feed.url]);
                 if (!r?.ok) throw new Error(followErrorText(r?.code, r));
               }, t('audio.podcasts.followed'))}>
-                <MdAdd size={16} /> {t('audio.podcasts.follow')}
+                <Icon name="add" size={16} /> {t('audio.podcasts.follow')}
               </button>
             ))}
             {feed.link && (
-              <a className="pod-btn" href={feed.link} target="_blank" rel="noopener noreferrer nofollow"><MdOpenInNew size={16} /> {t('audio.podcasts.website')}</a>
+              <a className="pod-btn" href={feed.link} target="_blank" rel="noopener noreferrer nofollow"><Icon name="open_in_new" size={16} /> {t('audio.podcasts.website')}</a>
             )}
             {/* A private feed's link is never handed out (it carries the login). */}
             {feed.url && !feed.private && (
-              <a className="pod-btn" href={feed.url} target="_blank" rel="noopener noreferrer nofollow"><MdRssFeed size={16} /> RSS</a>
+              <a className="pod-btn" href={feed.url} target="_blank" rel="noopener noreferrer nofollow"><Icon name="rss_feed" size={16} /> RSS</a>
             )}
             {/* The show in one player on another site; an embed is anonymous, so never a private feed */}
             {!feed.private && episodes.length > 0 && (
@@ -714,7 +701,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
                 onClick={() => openEmbedCode({ kind: 'podcast', id: feed.id, title: feed.title })}
                 title={t('chat.share.embedOnWebsite')}
               >
-                <MdCode size={16} /> {t('misc.embed.embed')}
+                <Icon name="code" size={16} /> {t('misc.embed.embed')}
               </button>
             )}
           </div>
@@ -726,7 +713,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
 
       {trailer && (
         <section className="pod-section">
-          <h2 className="pod-section-title"><MdFiberNew size={18} />{t('audio.podcasts.startHere')}</h2>
+          <h2 className="pod-section-title"><Icon name="fiber_new" size={18} />{t('audio.podcasts.startHere')}</h2>
           <ul className="pod-tile-grid">
             <EpisodeTile ep={trailer} feed={feed} showShow={false} onOpenEpisode={onOpenEpisode} />
           </ul>
@@ -743,7 +730,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
         </div>
         <div className="pod-show-tools">
           <label className="pod-field-row pod-episode-search">
-            <MdSearch className="pod-field-icon" size={18} />
+            <Icon name="search" size={18} className="pod-field-icon" />
             <input
               type="search"
               value={search}
@@ -754,7 +741,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode }) {
             />
           </label>
           {seasons.length > 0 && (
-            <select className="pod-select" value={season} onChange={(e) => setSeason(Number(e.target.value))} aria-label={t('audio.podcasts.seasons.label')}>
+            <select className="v2-input is-select h32 pod-select" value={season} onChange={(e) => setSeason(Number(e.target.value))} aria-label={t('audio.podcasts.seasons.label')}>
               <option value={0}>{t('audio.podcasts.seasons.all')}</option>
               {seasons.map((n) => <option key={n} value={n}>{t('audio.podcasts.seasons.season', { n })}</option>)}
             </select>
@@ -932,27 +919,23 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
 
   const followed = (id) => { invalidate(); if (id) openShow(id); };
   const views = [
-    { key: 'mine', icon: <MdLibraryMusic size={18} />, label: t('audio.podcasts.views.mine') },
-    { key: 'discover', icon: <MdExplore size={18} />, label: t('audio.podcasts.views.discover') },
-    { key: 'trends', icon: <MdWhatshot size={18} />, label: t('audio.podcasts.views.trends') },
+    { key: 'mine', label: t('audio.podcasts.views.mine') },
+    { key: 'discover', label: t('audio.podcasts.views.discover') },
+    { key: 'trends', label: t('audio.podcasts.views.trends') },
   ];
 
   return (
     <div className="pod-tab">
-      {!hideNav && <nav className="pod-views" role="tablist" aria-label={t('audio.podcasts.kicker')}>
-        {views.map((v) => (
-          <button
-            key={v.key}
-            type="button"
-            role="tab"
-            aria-selected={view === v.key}
-            className={`pod-view${view === v.key ? ' active' : ''}`}
-            onClick={() => showView(v.key)}
-          >
-            {v.icon}<span>{v.label}</span>
-          </button>
-        ))}
-      </nav>}
+      {!hideNav && (
+        <Segmented
+          className="pod-views"
+          block={false}
+          label={t('audio.podcasts.kicker')}
+          value={view}
+          onChange={showView}
+          options={views.map((v) => ({ value: v.key, label: v.label }))}
+        />
+      )}
 
       {view === 'mine' && (
         <>
@@ -962,18 +945,18 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
           {me && online && <ContinueListening user={me} />}
           {me && subsLoaded && subscriptions.length === 0 && !continueItems.length && (
             <div className="pod-mine-empty">
-              <MdPodcasts size={40} />
+              <Icon name="podcasts" size={40} />
               <p>{t('audio.podcasts.views.mineEmpty')}</p>
               <div className="pod-mine-empty-actions">
-                <button type="button" className="pod-btn pod-btn--primary" onClick={() => showView('discover')}><MdExplore size={16} /> {t('audio.podcasts.views.discover')}</button>
-                <button type="button" className="pod-btn" onClick={() => showView('trends')}><MdWhatshot size={16} /> {t('audio.podcasts.views.trends')}</button>
+                <button type="button" className="pod-btn pod-btn--primary" onClick={() => showView('discover')}><Icon name="explore" size={16} /> {t('audio.podcasts.views.discover')}</button>
+                <button type="button" className="pod-btn" onClick={() => showView('trends')}><Icon name="local_fire_department" size={16} /> {t('audio.podcasts.views.trends')}</button>
               </div>
             </div>
           )}
           {/* Offline only the saved episodes play: they come first. */}
           {me && !online && <DownloadsSection onOpenEpisode={openEpisode} />}
           <ShowRail
-            icon={<MdPodcasts size={18} />}
+            icon={<Icon name="podcasts" size={18} />}
             title={t('audio.podcasts.yourPodcasts', { count: subscriptions.length })}
             feeds={mine}
             onOpen={openShow}
@@ -984,7 +967,7 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
           {episodes.length > 0 && (
             <section className="pod-section">
               <div className="pod-section-head pod-section-head--filters">
-                <h2 className="pod-section-title"><MdPlayArrow size={18} />{t('audio.podcasts.latest')}</h2>
+                <h2 className="pod-section-title"><Icon name="play_arrow" size={18} fill />{t('audio.podcasts.latest')}</h2>
                 <EpisodeFilters
                   days={latestDays}
                   onDays={setLatestDays}
@@ -1017,9 +1000,9 @@ export default function PodcastsTab({ view: viewProp, hideNav = false }) {
       {view === 'discover' && (
         <>
           <PodcastHero user={me} searchEnabled={!!config?.search} personEnabled={!!config?.person || config?.person === undefined && !!config?.search} subscriptions={subscriptions} onFollowed={followed} />
-          <ShowRail icon={<MdTrendingUp size={18} />} title={t('audio.podcasts.topTitle')} feeds={discover?.top} onOpen={openShow} ranked artFor={artFor} />
+          <ShowRail icon={<Icon name="trending_up" size={18} />} title={t('audio.podcasts.topTitle')} feeds={discover?.top} onOpen={openShow} ranked artFor={artFor} />
           <ShowRail
-            icon={<MdHistory size={18} />}
+            icon={<Icon name="history" size={18} />}
             title={t('audio.podcasts.recentTitle')}
             feeds={discover?.recent}
             onOpen={openShow}

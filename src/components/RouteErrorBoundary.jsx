@@ -3,6 +3,7 @@ import { reloadForUpdate } from "../utils/checkLatestVersion";
 import { isChunkLoadError } from "../utils/staleChunk";
 import { reportClientError } from "../utils/reportClientError";
 import { t } from "../i18n";
+import { Icon } from "./v2/Icon";
 
 /* There was no error boundary anywhere above <Routes>, so anything a route threw
  * while rendering unmounted the whole tree and left the page background behind
@@ -56,62 +57,59 @@ export default class RouteErrorBoundary extends Component {
     const where = (componentStack.match(/at (\w+)/) || [])[1];
     const detail = `${error?.name || "Error"}: ${error?.message || String(error)}${where ? ` (${where})` : ""}`;
 
-    // Inline styles on purpose: a stylesheet chunk can fail to load for exactly
-    // the same reasons a route chunk can, and this panel has to render anyway.
+    // Design 30d. Layout is inline on purpose: a stylesheet chunk can fail to
+    // load for exactly the same reasons a route chunk can, and this panel has to
+    // render anyway. The look comes from the v2 classes and tokens, which live in
+    // the main bundle (styles/design-system.scss), not in a route chunk.
     return (
       <div
+        role="alert"
         style={{
           minHeight: "60vh",
+          maxWidth: 640,
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: "flex-start",
           justifyContent: "center",
-          gap: 14,
-          padding: "48px 20px",
-          textAlign: "center",
-          color: "var(--text-primary, #e8e8e8)",
+          gap: 12,
+          padding: "48px 0",
+          color: "var(--text)",
         }}
       >
-        <h2 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>
+        <span
+          aria-hidden="true"
+          style={{
+            width: 72, height: 72, borderRadius: 24, display: "grid", placeItems: "center",
+            background: "var(--accent-tint-strong)", color: "var(--accent)",
+          }}
+        >
+          <Icon name={isChunk ? "cloud_off" : "heart_broken"} size={40} />
+        </span>
+        <h2 className="v2-heading-lg" style={{ margin: "10px 0 0" }}>
           {isChunk ? t('misc.routeError.title') : t('misc.routeError.brokenTitle')}
         </h2>
-        <p style={{ margin: 0, maxWidth: 420, fontSize: 14, lineHeight: 1.5, opacity: 0.75 }}>
+        <p style={{ margin: 0, maxWidth: 520, fontSize: 16, lineHeight: 1.5, color: "var(--muted)" }}>
           {isChunk ? t('misc.routeError.body') : t('misc.routeError.brokenBody')}
         </p>
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
-          <button
-            onClick={() => reloadForUpdate()}
-            style={{
-              padding: "9px 20px",
-              borderRadius: 8,
-              border: "1px solid var(--accent-primary, #e53935)",
-              background: "transparent",
-              color: "var(--accent-primary, #e53935)",
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            {t('misc.routeError.reload')}
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
+          <button type="button" className="v2-btn v2-btn--primary h56 is-next" style={{ gap: 24 }} onClick={() => reloadForUpdate()}>
+            <span className="v2-btn__label">{t('misc.routeError.reload')}</span>
+            <Icon name="refresh" size={22} />
           </button>
-          <button
-            onClick={() => { window.location.href = "/"; }}
-            style={{
-              padding: "9px 20px",
-              borderRadius: 8,
-              border: "1px solid var(--border-color, #333)",
-              background: "transparent",
-              color: "var(--text-primary, #e8e8e8)",
-              fontSize: 14,
-              cursor: "pointer",
-            }}
-          >
-            {t('misc.routeError.goHome')}
+          <button type="button" className="v2-btn v2-btn--secondary h56 is-next" style={{ gap: 24 }} onClick={() => { window.location.href = "/"; }}>
+            <span className="v2-btn__label">{t('misc.routeError.goHome')}</span>
+            <Icon name="home" size={22} />
           </button>
         </div>
-        <details style={{ maxWidth: 520, fontSize: 12, opacity: 0.7, textAlign: "left" }}>
-          <summary style={{ cursor: "pointer", textAlign: "center" }}>{t('misc.routeError.details')}</summary>
-          <code style={{ display: "block", marginTop: 8, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{detail}</code>
+        <details
+          style={{
+            marginTop: 8, maxWidth: 520, padding: "8px 12px", borderRadius: 12,
+            background: "var(--surface)", border: "1px solid var(--border)",
+            fontSize: 12, color: "var(--muted)",
+          }}
+        >
+          <summary style={{ cursor: "pointer", fontWeight: 700 }}>{t('misc.routeError.details')}</summary>
+          <code className="mono" style={{ display: "block", marginTop: 8, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{detail}</code>
         </details>
       </div>
     );

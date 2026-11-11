@@ -235,8 +235,7 @@
     "more": "More",
     "moreActions": "More actions for @{{user}}",
     "copyProfileLink": "Copy profile link",
-    "podcastFeed": "Podcast feed (RSS)",
-    "editProfile": "Edit profile"
+    "podcastFeed": "Podcast feed (RSS)"
   },
   "tabs": {
     "overview": "Overview",

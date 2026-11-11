@@ -7,8 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../lib/store';
 import { CHECKER_URL, HIVE_API_URL } from '../utils/config';
 import { withViewer } from '../utils/userFilters';
-import { AUDIO_CATEGORY_ICONS } from '../utils/audioCategoryIcons';
-import { MdClose, MdArrowBack, MdExplore, MdPlayCircleOutline, MdLibraryMusic, MdWhatshot } from 'react-icons/md';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
 import AudioAuthorBadge from './AudioAuthorBadge';
 import CommentVoteTooltip from '../components/tooltip/CommentVoteTooltip';
@@ -20,6 +18,10 @@ import { useDownloads } from '../lib/podcastDownloads';
 import { useContinueListening } from '../components/Podcasts/ContinueListening';
 import useOnline from '../hooks/useOnline';
 import AudioTile, { AudioTileSkeleton } from '../components/AudioTile/AudioTile';
+import { audioCategorySymbol } from '../components/AudioTile/audioSymbols';
+import { Segmented, Chip, Button, EmptyState } from '../components/v2/ui';
+import { Icon } from '../components/v2/Icon';
+import { cx } from '../components/v2/helpers';
 import AudioPlaylistTile from '../components/AudioPlaylistTile/AudioPlaylistTile';
 import PodcastsTab, { VIEWS as EXPLORE_VIEWS, VIEW_KEY as EXPLORE_VIEW_KEY } from '../components/Podcasts/PodcastsTab';
 import { isLoggedIn } from '../hive-api/aioha';
@@ -77,12 +79,12 @@ function AudioTileRow({ count, children }) {
 }
 
 const SECTION_CONFIG = {
-  popular:       { labelKey: 'audio.page.sections.popular',     icon: 'fa-solid fa-fire' },
-  recent:        { labelKey: 'audio.page.sections.recent',      icon: 'fa-solid fa-clock' },
-  podcast:       { labelKey: 'audio.page.sections.podcasts',    icon: 'fa-solid fa-podcast' },
-  song:          { labelKey: 'audio.page.sections.songs',       icon: 'fa-solid fa-music' },
-  audiobook:     { labelKey: 'audio.page.sections.audiobooks',  icon: 'fa-solid fa-book-open' },
-  interview:     { labelKey: 'audio.page.sections.interviews',  icon: 'fa-solid fa-comments' },
+  popular:       { labelKey: 'audio.page.sections.popular' },
+  recent:        { labelKey: 'audio.page.sections.recent' },
+  podcast:       { labelKey: 'audio.page.sections.podcasts' },
+  song:          { labelKey: 'audio.page.sections.songs' },
+  audiobook:     { labelKey: 'audio.page.sections.audiobooks' },
+  interview:     { labelKey: 'audio.page.sections.interviews' },
 };
 const SECTION_ORDER = ['popular', 'recent', 'podcast', 'song', 'audiobook', 'interview'];
 
@@ -101,11 +103,11 @@ const DURATION_STOPS = [0, 5, 10, 15, 30, 45, 60, 120, 180, 300, 600, 900, 1800,
 // Available content types for the type filter (matches the existing
 // 3speak audio categories on the embed-audio docs).
 const TYPE_FILTERS = [
-  { value: 'song',          labelKey: 'audio.categories.music',      icon: AUDIO_CATEGORY_ICONS.song },
-  { value: 'podcast',       labelKey: 'audio.page.sections.podcasts',   icon: AUDIO_CATEGORY_ICONS.podcast },
-  { value: 'voice_message', labelKey: 'audio.categories.voice',      icon: AUDIO_CATEGORY_ICONS.voice_message },
-  { value: 'audiobook',     labelKey: 'audio.page.sections.audiobooks', icon: AUDIO_CATEGORY_ICONS.audiobook },
-  { value: 'interview',     labelKey: 'audio.page.sections.interviews', icon: AUDIO_CATEGORY_ICONS.interview },
+  { value: 'song',          labelKey: 'audio.categories.music',      icon: audioCategorySymbol('song') },
+  { value: 'podcast',       labelKey: 'audio.page.sections.podcasts',   icon: audioCategorySymbol('podcast') },
+  { value: 'voice_message', labelKey: 'audio.categories.voice',      icon: audioCategorySymbol('voice_message') },
+  { value: 'audiobook',     labelKey: 'audio.page.sections.audiobooks', icon: audioCategorySymbol('audiobook') },
+  { value: 'interview',     labelKey: 'audio.page.sections.interviews', icon: audioCategorySymbol('interview') },
 ];
 
 // Music genres for the dropdown when type filter = music. Same list the
@@ -491,7 +493,7 @@ function Audio() {
     const conf = SECTION_CONFIG[k];
     return (
       <section key={k} className="audio-section">
-        <h2 className="audio-section-title"><i className={conf.icon} /> {t(conf.labelKey)}</h2>
+        <h2 className="audio-section-title">{t(conf.labelKey)}</h2>
         <AudioTileRow count={items.length}>{items.map((item, idx) => <AudioTile key={item._id || idx} {...tp(item, items)} />)}</AudioTileRow>
       </section>
     );
@@ -506,88 +508,85 @@ function Audio() {
     setGenreFilter('');
   };
 
-  const views = [
-    { key: 'player', icon: <MdPlayCircleOutline size={18} />, label: t('audio.page.tabPlayer') },
-    { key: 'explore', icon: <MdExplore size={18} />, label: t('audio.page.tabExplore') },
-  ];
+  const tileGrid = (list) => (
+    <div className="audio-tile-grid">{list.map((item, idx) => <AudioTile key={item._id || idx} {...tp(item, list)} />)}</div>
+  );
+  const noResults = (text) => <EmptyState className="audio-empty" icon="graphic_eq" title={text} />;
 
   return (
-    <div className={`audio-page${playerView ? ' audio-page--player' : ''}`}>
-      {mobile && (
-        <nav className="pod-views audio-views" role="tablist" aria-label={t('audio.page.tabsLabel')}>
-          {views.map((v) => (
-            <button
-              key={v.key}
-              type="button"
-              role="tab"
-              aria-selected={(v.key === 'player') === playerView}
-              className={`pod-view${(v.key === 'player') === playerView ? ' active' : ''}`}
-              onClick={() => showPlayerTab(v.key === 'player')}
-            >
-              {v.icon}<span>{v.label}</span>
-            </button>
-          ))}
-        </nav>
-      )}
+    <div className={cx('audio-page', playerView && 'audio-page--player')}>
+      <header className="audio-page__head">
+        <h1 className="audio-page__title">{t('nav.bottom.audio')}</h1>
+        {mobile && (
+          <Segmented
+            className="audio-views"
+            block={false}
+            label={t('audio.page.tabsLabel')}
+            value={playerView ? 'player' : 'explore'}
+            onChange={(v) => showPlayerTab(v === 'player')}
+            options={[
+              { value: 'player', label: t('audio.page.tabPlayer') },
+              { value: 'explore', label: t('audio.page.tabExplore') },
+            ]}
+          />
+        )}
+        {!playerView && (
+          <Segmented
+            className="audio-explore-views"
+            block={false}
+            label={t('audio.page.exploreViews')}
+            value={exploreView}
+            onChange={showExploreView}
+            options={[
+              { value: 'mine', label: t('audio.podcasts.views.mine') },
+              { value: 'discover', label: t('audio.podcasts.views.discover') },
+              { value: 'trends', label: t('audio.podcasts.views.trends') },
+            ]}
+          />
+        )}
+      </header>
 
       {playerView ? (
         <div className="audio-player-tab" role="tabpanel">
           {audioCurrent ? <div ref={dockRef} className="audio-player-dock" /> : (
-            <div className="audio-empty audio-player-empty">
-              <MdPlayCircleOutline size={44} aria-hidden />
-              <p>{t('audio.page.nothingPlaying')}</p>
-              <button type="button" className="audio-type-chip active" onClick={() => showPlayerTab(false)}>{t('audio.page.goExplore')}</button>
-            </div>
+            <EmptyState
+              className="audio-empty audio-player-empty"
+              icon="play_circle"
+              title={t('audio.page.nothingPlaying')}
+              action={<Button variant="primary" next onClick={() => showPlayerTab(false)}>{t('audio.page.goExplore')}</Button>}
+            />
           )}
         </div>
       ) : (<>
-      {/* Header: only show back button when drilled into creator */}
+      {/* Back, only when drilled into a creator */}
       {selectedCreator && (
-        <header className="audio-header">
-          <button className="audio-back-btn" onClick={() => setSelectedCreator(null)}><MdArrowBack size={20} /> {t('common.actions.back')}</button>
-        </header>
+        <Button variant="ghost" size={36} icon="arrow_back" className="audio-back-btn" onClick={() => setSelectedCreator(null)}>{t('common.actions.back')}</Button>
       )}
 
-      <nav className="pod-views audio-explore-views" role="tablist" aria-label={t('audio.page.exploreViews')}>
-        {[
-          { key: 'mine', icon: <MdLibraryMusic size={18} />, label: t('audio.podcasts.views.mine') },
-          { key: 'discover', icon: <MdExplore size={18} />, label: t('audio.podcasts.views.discover') },
-          { key: 'trends', icon: <MdWhatshot size={18} />, label: t('audio.podcasts.views.trends') },
-        ].map((v) => (
-          <button
-            key={v.key}
-            type="button"
-            role="tab"
-            aria-selected={exploreView === v.key}
-            className={`pod-view${exploreView === v.key ? ' active' : ''}`}
-            onClick={() => showExploreView(v.key)}
-          >
-            {v.icon}<span>{v.label}</span>
-          </button>
-        ))}
-      </nav>
-
-      {/* Date presets + type / genre filters: Discover and Trends only */}
+      {/* Type chips, genre and dates: Discover and Trends only */}
       {!selectedCreator && !onMine && (
         <div className="audio-toolbar">
-          <div className="audio-type-filter">
-            <button
-              className={`audio-type-chip${typeFilter === '' && !external ? ' active' : ''}`}
+          <div className="audio-type-filter v2-chips">
+            <Chip
+              selected={typeFilter === '' && !external}
               onClick={() => { leaveExternal(); setTypeFilter(''); setGenreFilter(''); }}
-            >{t('audio.page.all')}</button>
+            >{t('audio.page.all')}</Chip>
             {TYPE_FILTERS.map((opt) => (
-              <button
+              <Chip
                 key={opt.value}
-                className={`audio-type-chip${typeFilter === opt.value && !external ? ' active' : ''}`}
+                icon={opt.icon}
+                selected={typeFilter === opt.value && !external}
                 onClick={() => {
                   leaveExternal();
                   setTypeFilter(opt.value);
                   if (opt.value !== 'song') setGenreFilter('');
                 }}
-              ><i className={`audio-type-chip-icon ${opt.icon}`} /> {t(opt.labelKey)}</button>
+              >{t(opt.labelKey)}</Chip>
             ))}
-            <button
-              className={`audio-type-chip${external ? ' active' : ''}`}
+            <Chip
+              icon="rss_feed"
+              tone="cyan"
+              selected={external}
               onClick={() => {
                 if (external) return;
                 const next = new URLSearchParams(params);
@@ -596,11 +595,11 @@ function Audio() {
                 setParams(next);
               }}
               title={t('audio.podcasts.chipHint')}
-            ><i className="audio-type-chip-icon fa-solid fa-rss" /> {t('audio.podcasts.chip')}</button>
+            >{t('audio.podcasts.chip')}</Chip>
           </div>
           {typeFilter === 'song' && !external && (
             <select
-              className="audio-genre-select"
+              className="v2-input is-select h32 audio-genre-select"
               value={genreFilter}
               onChange={(e) => setGenreFilter(e.target.value)}
               aria-label={t('audio.page.musicGenre')}
@@ -609,27 +608,29 @@ function Audio() {
               {MUSIC_GENRE_FILTERS.map((g) => <option key={g} value={g}>{g}</option>)}
             </select>
           )}
-          {!external && <div className="audio-date-presets">
-            {DATE_PRESETS.map(p => (
-              <button key={p.days} className={`audio-date-btn${datePreset === p.days ? ' active' : ''}`} onClick={() => setDatePreset(prev => prev === p.days ? DEFAULT_DATE_PRESET : p.days)}>
-                {t(p.labelKey)}
-              </button>
-            ))}
-          </div>}
+          {!external && (
+            <Segmented
+              className="audio-date-presets"
+              block={false}
+              value={datePreset}
+              onChange={(v) => setDatePreset(prev => (prev === v ? DEFAULT_DATE_PRESET : v))}
+              options={DATE_PRESETS.map(p => ({ value: p.days, label: t(p.labelKey) }))}
+            />
+          )}
         </div>
       )}
 
-      {/* Tags + duration filter row */}
+      {/* Tags + duration */}
       {!selectedCreator && !external && !item && !onMine && (
         <div className="audio-filter-row">
-          <div className="audio-topic-tags">
+          <div className="audio-topic-tags v2-chips">
             {isFiltered && (
-              <button className="audio-topic-chip audio-clear-chip" onClick={clearFilters}><MdClose size={12} /> {t('common.actions.reset')}</button>
+              <Chip size={28} icon="close" className="audio-clear-chip" onClick={clearFilters}>{t('common.actions.reset')}</Chip>
             )}
             {autoTags?.map(tag => (
-              <button key={tag.name} className={`audio-topic-chip${activeTags.includes(tag.name) ? ' active' : ''}`} onClick={() => toggleTag(tag.name)}>
-                {tag.name}
-              </button>
+              <Chip key={tag.name} size={28} selected={activeTags.includes(tag.name)} onClick={() => toggleTag(tag.name)}>
+                #{tag.name}
+              </Chip>
             ))}
           </div>
           <DurationFilter
@@ -640,7 +641,7 @@ function Audio() {
         </div>
       )}
 
-      {/* ─── Creator drill-down ──────── */}
+      {/* ─── What the chosen view shows ──────── */}
       {params.has('podcast') || params.has('episode') ? (
         <PodcastsTab view={exploreView} hideNav />
       ) : item ? (
@@ -651,37 +652,29 @@ function Audio() {
         <div className="audio-creator-view">
           <div className="audio-creator-header">
             <AuthorBadge author={selectedCreator} showFollow />
-            <span className="audio-creator-stat">{t('audio.page.tracks', { count: creatorAudio?.length || 0 })}</span>
+            <span className="audio-creator-stat num">{t('audio.page.tracks', { count: creatorAudio?.length || 0 })}</span>
           </div>
           {creatorLoading ? (
-            <div className="audio-tile-row"><AudioTileSkeleton count={5} /></div>
-          ) : creatorAudio?.length > 0 ? (
-            <div className="audio-tile-grid">{creatorAudio.map((item, idx) => <AudioTile key={item._id || idx} {...tp(item, creatorAudio)} />)}</div>
-          ) : (
-            <div className="audio-empty"><p>{t('audio.page.noTracks')}</p></div>
-          )}
+            <div className="audio-tile-grid"><AudioTileSkeleton count={5} /></div>
+          ) : creatorAudio?.length > 0 ? tileGrid(creatorAudio) : noResults(t('audio.page.noTracks'))}
         </div>
       ) : exploreView === 'trends' ? (
         /* ─── Trends: the most played for the chosen type, time and filters ─── */
         <section className="audio-section">
           <h2 className="audio-section-title">
-            <i className={SECTION_CONFIG.popular.icon} /> {t('audio.page.mostPlayed')}
+            {t('audio.page.mostPlayed')}
             {filteredAudio && <span className="audio-section-count">{t('audio.page.tracks', { count: filteredAudio.length })}</span>}
           </h2>
           {filteredLoading ? (
-            <div className="audio-tile-row"><AudioTileSkeleton count={5} /></div>
-          ) : filteredAudio?.length > 0 ? (
-            <div className="audio-tile-grid">{filteredAudio.map((item, idx) => <AudioTile key={item._id || idx} {...tp(item, filteredAudio)} />)}</div>
-          ) : (
-            <div className="audio-empty"><p>{t('audio.page.noAudioForFilters')}</p></div>
-          )}
+            <div className="audio-tile-grid"><AudioTileSkeleton count={5} /></div>
+          ) : filteredAudio?.length > 0 ? tileGrid(filteredAudio) : noResults(t('audio.page.noAudioForFilters'))}
         </section>
       ) : (
         <>
-          {/* ─── Creators section ────── */}
+          {/* ─── Creators ────── */}
           {sortedCreators.length > 0 && (
             <section className="audio-section">
-              <h2 className="audio-section-title"><i className="fa-solid fa-users" /> {t('audio.page.creators')}</h2>
+              <h2 className="audio-section-title is-cyan">{t('audio.page.creators')}</h2>
               <div className="audio-creators-row">
                 {sortedCreators.slice(0, 20).map(c => (
                   <AudioAuthorBadge
@@ -702,15 +695,15 @@ function Audio() {
           {/* ─── Albums & Playlists (artist-curated + listener-curated, combined) ─── */}
           {(() => {
             // Artist albums first, then listener playlists. Each tile shows its
-            // own kind label beneath the title so the merge stays legible.
+            // own kind label so the merge stays legible.
             const artist = (playlistGroups?.by_artist || []).map(p => ({ ...p, _kind: 'artist' }));
             const listeners = (playlistGroups?.by_listeners || []).map(p => ({ ...p, _kind: 'listener' }));
             const all = [...artist, ...listeners];
             if (all.length === 0) return null;
             return (
               <section className="audio-section">
-                <h2 className="audio-section-title">
-                  <i className="fa-solid fa-compact-disc" /> {t('audio.page.albumsPlaylists')}
+                <h2 className="audio-section-title is-cyan">
+                  {t('audio.page.albumsPlaylists')}
                   <span className="audio-section-count">{all.length}</span>
                 </h2>
                 <AudioTileRow count={all.length}>
@@ -724,16 +717,12 @@ function Audio() {
           {isFiltered ? (
             <section className="audio-section">
               <h2 className="audio-section-title">
-                {activeTags.length > 0 ? activeTags.map(tag => `#${tag}`).join(' ') : ''} {datePreset ? (() => { const preset = DATE_PRESETS.find(p => p.days === datePreset); return preset ? t(preset.labelKey) : undefined; })() : ''}
+                {[activeTags.map(tag => `#${tag}`).join(' '), datePreset ? (() => { const preset = DATE_PRESETS.find(p => p.days === datePreset); return preset ? t(preset.labelKey) : ''; })() : ''].filter(Boolean).join(' · ')}
                 {filteredAudio && <span className="audio-section-count">{t('audio.page.tracks', { count: filteredAudio.length })}</span>}
               </h2>
               {filteredLoading ? (
-                <div className="audio-tile-row"><AudioTileSkeleton count={5} /></div>
-              ) : filteredAudio?.length > 0 ? (
-                <div className="audio-tile-grid">{filteredAudio.map((item, idx) => <AudioTile key={item._id || idx} {...tp(item, filteredAudio)} />)}</div>
-              ) : (
-                <div className="audio-empty"><p>{t('audio.page.noAudioForFilters')}</p></div>
-              )}
+                <div className="audio-tile-grid"><AudioTileSkeleton count={5} /></div>
+              ) : filteredAudio?.length > 0 ? tileGrid(filteredAudio) : noResults(t('audio.page.noAudioForFilters'))}
             </section>
           ) : (
             /* ─── Grouped sections ──── */
@@ -747,7 +736,7 @@ function Audio() {
       )}
       </>)}
 
-      {/* Tile-level share overlay (the now-playing bar's share lives in <GlobalAudioPlayer />) */}
+      {/* Tile-level share (the player's own share lives in <GlobalAudioPlayer />) */}
       {shareTarget && shareTarget._id !== audioCurrent?._id && (
         <div className="audio-share-overlay" onClick={() => setShareTarget(null)}>
           <div className="audio-share-popup" onClick={e => e.stopPropagation()}>
@@ -781,6 +770,7 @@ function Audio() {
   );
 }
 
+// Duration (36b): a well with the range on a cyan track, the values in mono.
 function DurationFilter({ minIdx, maxIdx, onChange }) {
   const { t } = useTranslation();
   const max = DURATION_STOPS.length - 1;
@@ -796,6 +786,7 @@ function DurationFilter({ minIdx, maxIdx, onChange }) {
   const maxPct = (maxIdx / max) * 100;
   return (
     <div className="audio-duration-filter">
+      <Icon name="timer" size={20} className="audio-duration-icon" />
       <span className="audio-duration-label">{t('audio.page.duration.label')}</span>
       <div className="audio-duration-slider">
         <div className="audio-duration-track" />
@@ -811,7 +802,7 @@ function DurationFilter({ minIdx, maxIdx, onChange }) {
           aria-label={t('audio.page.duration.max')}
         />
       </div>
-      <span className="audio-duration-value">{fmtDur(DURATION_STOPS[minIdx], t)} – {fmtDur(DURATION_STOPS[maxIdx], t)}</span>
+      <span className="audio-duration-value num">{fmtDur(DURATION_STOPS[minIdx], t)} – {fmtDur(DURATION_STOPS[maxIdx], t)}</span>
     </div>
   );
 }

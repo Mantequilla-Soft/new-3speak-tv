@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useTranslation, Trans } from 'react-i18next';
-import { MdStar, MdStarBorder, MdThumbUp, MdThumbDown } from 'react-icons/md';
+import { Dialog } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { APP_VERSION } from '../../version';
 import { useReviewModal } from '../../lib/reviewStore';
-import ModalHeader from '../ModalHeader/ModalHeader';
 import './ReviewModal.scss';
 
 // Every toast from this module is headed "Feedback"; the message becomes the
@@ -81,7 +80,7 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
       });
       toast.success(t('comments.review.thanks'));
       onClose?.();
-    } catch (e) {
+    } catch {
       toast.error(t('comments.review.errors.sendFailed'));
     } finally {
       setSubmitting(false);
@@ -91,19 +90,32 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
   const title = t(TITLES[area] || 'comments.review.titles.fallback');
   const shown = hover || stars;
 
-  return createPortal(
-    <div className="review-overlay" onClick={onClose} onMouseDown={(e) => e.stopPropagation()}>
-      <div
+  // The v2 Dialog (a sheet on phones), designs 17i / 43c. The wrapper stops a
+  // press inside it from reaching outside-click handlers of whatever opened it
+  // (a menu or another dialog): React events bubble through the portal.
+  return (
+    <div className="review-portal-guard" onMouseDown={(e) => e.stopPropagation()}>
+      <Dialog
+        open
+        onClose={onClose}
+        title={title}
+        sub={t('comments.review.subtitle')}
+        closeLabel={t('common.actions.close')}
+        width={480}
         className="review-modal"
-        onClick={(e) => e.stopPropagation()}
-        onMouseDown={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-label={t('comments.review.sendFeedback')}
+        bodyClassName="review-body"
+        footer={(
+          <>
+            <button type="button" className="v2-btn v2-btn--secondary h44 review-cancel" onClick={onClose} disabled={submitting}>
+              <span className="v2-btn__label">{t('comments.review.notNow')}</span>
+            </button>
+            <button type="button" className="v2-btn v2-btn--primary h44 review-submit" onClick={submit} disabled={submitting || !stars}>
+              <span className="v2-btn__label">{submitting ? t('comments.review.sending') : t('comments.review.sendFeedback')}</span>
+              <Icon name={submitting ? 'progress_activity' : 'send'} size={18} className={submitting ? 'v2-spin' : undefined} />
+            </button>
+          </>
+        )}
       >
-        <ModalHeader className="review-header" title={title} onClose={onClose} />
-
-        <div className="review-body">
-          <p className="review-subtitle">{t('comments.review.subtitle')}</p>
           <div className="review-stars" role="radiogroup" aria-label={t('comments.review.starRating')}>
             {[1, 2, 3, 4, 5].map((n) => (
               <button
@@ -116,22 +128,23 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
                 aria-label={t('comments.review.starsAria', { count: n })}
                 aria-pressed={stars === n}
               >
-                {n <= shown ? <MdStar /> : <MdStarBorder />}
+                <Icon name="star" size={26} fill={n <= shown} />
               </button>
             ))}
-            <span className="star-label">{STAR_LABELS[shown] ? t(STAR_LABELS[shown]) : ''}</span>
           </div>
+          <span className="star-label" aria-live="polite">{STAR_LABELS[shown] ? t(STAR_LABELS[shown]) : ''}</span>
 
           <div className="review-field">
-            <label>
-              <Trans i18nKey="comments.review.aboutLabel" components={{ opt: <span /> }} />
+            <label className="v2-eyebrow">
+              <Trans i18nKey="comments.review.aboutLabel" components={{ opt: <span className="v2-field__opt" /> }} />
             </label>
-            <div className="review-chips">
+            <div className="review-chips v2-chips">
               {ASPECTS.map((a) => (
                 <button
                   key={a.key}
                   type="button"
-                  className={`chip ${aspects.includes(a.key) ? 'on' : ''}`}
+                  aria-pressed={aspects.includes(a.key)}
+                  className={`v2-chip chip${aspects.includes(a.key) ? ' is-on on' : ''}`}
                   onClick={() => toggleAspect(a.key)}
                 >
                   {t(a.labelKey)}
@@ -141,32 +154,36 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
           </div>
 
           <div className="review-field">
-            <label>
-              <Trans i18nKey="comments.review.recommendLabel" components={{ opt: <span /> }} />
+            <label className="v2-eyebrow">
+              <Trans i18nKey="comments.review.recommendLabel" components={{ opt: <span className="v2-field__opt" /> }} />
             </label>
             <div className="review-recommend">
               <button
                 type="button"
+                aria-pressed={recommend === true}
                 className={`rec ${recommend === true ? 'on yes' : ''}`}
                 onClick={() => setRecommend(recommend === true ? null : true)}
               >
-                <MdThumbUp /> {t('common.actions.yes')}
+                <Icon name="thumb_up" size={18} fill={recommend === true} /> {t('common.actions.yes')}
               </button>
               <button
                 type="button"
+                aria-pressed={recommend === false}
                 className={`rec ${recommend === false ? 'on no' : ''}`}
                 onClick={() => setRecommend(recommend === false ? null : false)}
               >
-                <MdThumbDown /> {t('common.actions.no')}
+                <Icon name="thumb_down" size={18} fill={recommend === false} /> {t('common.actions.no')}
               </button>
             </div>
           </div>
 
           <div className="review-field">
-            <label>
-              <Trans i18nKey="comments.review.moreLabel" components={{ opt: <span /> }} />
+            <label className="v2-eyebrow" htmlFor="review-more">
+              <Trans i18nKey="comments.review.moreLabel" components={{ opt: <span className="v2-field__opt" /> }} />
             </label>
             <textarea
+              id="review-more"
+              className="v2-input is-area"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               maxLength={4000}
@@ -174,19 +191,8 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
               placeholder={t('comments.review.placeholder')}
             />
           </div>
-        </div>
-
-        <div className="review-actions">
-          <button className="review-cancel" onClick={onClose} disabled={submitting}>
-            {t('comments.review.notNow')}
-          </button>
-          <button className="review-submit" onClick={submit} disabled={submitting || !stars}>
-            {submitting ? t('comments.review.sending') : t('comments.review.sendFeedback')}
-          </button>
-        </div>
-      </div>
-    </div>,
-    document.body
+      </Dialog>
+    </div>
   );
 }
 

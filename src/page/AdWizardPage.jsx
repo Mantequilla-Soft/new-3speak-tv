@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { X } from 'lucide-react';
+import { Icon } from '../components/v2/Icon';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../lib/store';
 import { adWizardEnabledFor } from '../utils/config';
@@ -14,10 +14,11 @@ export default function AdWizardPage() {
   const { user } = useAppStore();
   if (!adWizardEnabledFor(user)) return <Navigate to="/" replace />;
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100050, background: 'var(--bg-primary, #0f0f0f)' }}>
-      <button type="button" onClick={() => navigate(-1)} aria-label={t('common.actions.close')}
-        style={{ position: 'absolute', top: 6, right: 10, zIndex: 2, width: 34, height: 34, borderRadius: '50%', border: '1px solid rgba(128,128,128,.4)', background: 'transparent', color: 'inherit', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
-        <X size={18} />
+    <div style={{ position: 'fixed', inset: 0, zIndex: 100050, background: 'var(--bg)' }}>
+      <button type="button" onClick={() => navigate(-1)} aria-label={t('common.actions.close')} title={t('common.actions.close')}
+        className="v2-iconbtn v2-btn--secondary h36 is-round"
+        style={{ position: 'absolute', top: 6, right: 10, zIndex: 2 }}>
+        <Icon name="close" size={20} />
       </button>
       <AdWizardFrame />
     </div>

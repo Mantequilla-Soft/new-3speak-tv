@@ -1,118 +1,64 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-.changelog-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  background: var(--overlay-bg, rgba(0, 0, 0, 0.7));
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  animation: changelog-fade 0.18s ease;
-}
-
+// "We shipped an update!" (designs 25e, 44a) on the v2 Dialog: a cyan wash at
+// the top (25e's what's-new card), the version pill and title, then the changes
+// grouped by category as folding rows, and Read the code / Got it at the foot.
 .changelog-modal {
-  position: relative;
-  width: 100%;
-  max-width: 460px;
-  background: var(--card-bg, #1a1a1a);
-  color: var(--text-primary, #fff);
-  border: 1px solid var(--border-color, #3d3d3d);
-  border-radius: 18px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
-  padding: 28px 24px 22px;
-  overflow: hidden;
-  // A column: header and footer stay, the grouped list in between scrolls.
-  display: flex;
-  flex-direction: column;
-  max-height: min(86vh, 760px);
-  max-height: min(86dvh, 760px);
-  animation: changelog-pop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-
-  // Accent glow strip across the top
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--accent-primary, #e53935), var(--accent-hover, #ff1744));
-  }
-
-  @include mix.respond(phone) {
-    max-width: 100%;
-    align-self: flex-end;
-    border-radius: 18px 18px 0 0;
-    animation: changelog-slide-up 0.28s ease forwards;
-  }
+  background: linear-gradient(170deg, color-mix(in srgb, var(--cyan) 18%, var(--surface)), var(--surface) 260px);
 }
 
-.changelog-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 50%;
-  background: var(--bg-hover, rgba(255, 255, 255, 0.08));
-  color: var(--text-primary, #fff);
-  font-size: 20px;
-  cursor: pointer;
-  transition: background 0.15s ease;
-
-  &:hover { background: var(--bg-tertiary, rgba(255, 255, 255, 0.16)); }
+.changelog-scroll {
+  padding-top: 16px;
+  gap: 14px;
 }
 
 .changelog-header {
-  text-align: center;
-  margin-bottom: 18px;
-
-  .changelog-logo {
-    height: 34px;
-    width: auto;
-    max-width: 70%;
-    object-fit: contain;
-    margin-bottom: 14px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
 
   h2 {
-    margin: 0;
-    font-size: 21px;
-    font-weight: 700;
+    margin: 4px 0 0;
+    @include v2.text(heading);
   }
+}
 
-  .changelog-subtitle {
-    margin: 6px 0 0;
-    font-size: 13.5px;
-    color: var(--text-secondary, #aaa);
-  }
+.changelog-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.changelog-logo {
+  height: 28px;
+  width: auto;
+  cursor: default;
+}
+
+.changelog-version {
+  background: var(--cyan);
+  color: var(--bg);
+}
+
+.changelog-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
 }
 
 .changelog-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin: 0 -6px 18px;
-  padding: 0 6px;
-  scrollbar-width: thin;
+  gap: 6px;
 }
 
-// One category: a header to open or fold it, then its entries, newest first.
 .changelog-group {
-  flex-shrink: 0;
-  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.06));
-  border-radius: 12px;
-  background: var(--bg-tertiary, rgba(255, 255, 255, 0.04));
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  overflow: hidden;
 }
 
 .changelog-group-head {
@@ -120,150 +66,93 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding: 11px 14px;
-  border: none;
-  border-radius: 12px;
-  background: none;
-  color: var(--text-primary, #fff);
+  min-height: 48px;
+  padding: 6px 12px 6px 8px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
   font: inherit;
   text-align: left;
   cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover { background: var(--bg-hover, rgba(255, 255, 255, 0.05)); }
-  &:focus-visible { outline: 2px solid var(--accent-primary, #e53935); outline-offset: -2px; }
+  &:hover { background: var(--bg-hover); }
 }
 
 .changelog-group-icon {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-md);
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
-  border-radius: 8px;
-  color: var(--accent-primary, #e53935);
-  background: var(--accent-light, rgba(255, 82, 82, 0.15));
-  font-size: 18px;
+  background: var(--cyan-tint);
+  color: var(--cyan);
 }
 
 .changelog-group-name {
   flex: 1;
   min-width: 0;
-  font-size: 15px;
-  font-weight: 600;
+  @include v2.text(label);
 }
 
 .changelog-group-count {
   min-width: 22px;
-  padding: 1px 7px;
-  border-radius: 20px;
-  background: var(--bg-hover, rgba(255, 255, 255, 0.08));
-  color: var(--text-secondary, #aaa);
-  font-size: 12px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 7px;
+  display: inline-grid;
+  place-items: center;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 11px;
   font-weight: 700;
-  text-align: center;
 }
 
 .changelog-group-chevron {
-  flex-shrink: 0;
-  font-size: 22px;
-  color: var(--text-secondary, #aaa);
-  transition: transform 0.2s ease;
-
+  color: var(--muted);
+  transition: transform var(--t-base) var(--ease);
   .changelog-group.open & { transform: rotate(180deg); }
 }
 
 .changelog-group-list {
   display: flex;
   flex-direction: column;
-  padding: 0 14px 4px;
+  gap: 10px;
+  padding: 4px 12px 12px 50px;
 }
 
-.changelog-entry {
-  padding: 10px 0 12px;
-  border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.06));
+.changelog-entry-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
 
-  .changelog-entry-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
+.changelog-entry-version {
+  @include v2.text(eyebrow);
+  letter-spacing: .06em;
+  color: var(--cyan);
+  font-family: var(--font-mono);
+}
 
-  .changelog-entry-version {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--accent-primary, #ff5252);
-    background: var(--accent-light, rgba(255, 82, 82, 0.15));
-    padding: 2px 8px;
-    border-radius: 20px;
-  }
+.changelog-entry-date {
+  font-size: 11px;
+  color: var(--muted);
+}
 
-  .changelog-entry-date {
-    font-size: 11.5px;
-    color: var(--text-secondary, #888);
-  }
-
-  .changelog-entry-summary {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--text-primary, #eee);
-  }
+.changelog-entry-summary {
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text);
 }
 
 .changelog-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-}
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
 
-.changelog-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 12px 20px;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--accent-primary, #e53935);
-  cursor: pointer;
-  background: transparent;
-  transition: filter 0.15s ease, transform 0.05s ease;
-
-  svg { font-size: 18px; }
-
-  &:hover { filter: brightness(1.08); }
-  &:active { transform: scale(0.99); }
-}
-
-.changelog-repo {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary, #888);
-  text-decoration: none;
-  transition: color 0.15s ease;
-
-  svg { font-size: 16px; }
-
-  &:hover { color: var(--text-primary, #eee); }
-}
-
-@keyframes changelog-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes changelog-pop {
-  from { opacity: 0; transform: translateY(8px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@keyframes changelog-slide-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  .v2-btn { width: 100%; }
+  .changelog-cta { justify-content: space-between; }
 }

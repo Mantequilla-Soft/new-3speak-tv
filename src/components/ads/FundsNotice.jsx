@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FaWallet, FaExternalLinkAlt } from 'react-icons/fa';
+import { Icon } from '../v2/Icon';
 import { useTranslation, Trans } from 'react-i18next';
 import { fetchBalances } from '../../hive-api/api';
 
@@ -42,7 +42,7 @@ export default function FundsNotice({ user, hbdPerHive = null }) {
 
   return (
     <section className="mkt-panel mkt-funds" aria-labelledby="mkt-funds-title">
-      <h2 id="mkt-funds-title"><FaWallet aria-hidden="true" /> {t('ads.funds.title')}</h2>
+      <h2 id="mkt-funds-title"><Icon name="account_balance_wallet" size={20} /> {t('ads.funds.title')}</h2>
       <p>
         <Trans i18nKey="ads.funds.empty" values={{ user }} components={{ b: <strong /> }} />
       </p>
@@ -59,7 +59,7 @@ export default function FundsNotice({ user, hbdPerHive = null }) {
       <div className="mkt-funds-exchanges">
         {EXCHANGES.map((x) => (
           <a key={x.name} className="mkt-funds-btn" href={x.url} target="_blank" rel="noopener noreferrer">
-            <strong>{x.name} <FaExternalLinkAlt aria-hidden="true" /></strong>
+            <strong>{x.name} <Icon name="open_in_new" size={14} /></strong>
             <span>{x.noteKey ? t(x.noteKey) : x.note}</span>
           </a>
         ))}

@@ -1,8 +1,7 @@
-import { FaDiscord } from 'react-icons/fa';
-import { SiTelegram } from 'react-icons/si';
 import { useTranslation } from 'react-i18next';
 import { useSupportBlock } from '../../lib/supportBlockStore';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Dialog } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import BlockNote from '../UploadBlockNotice/BlockNote';
 import './SupportModal.scss';
 
@@ -33,25 +32,39 @@ export default function SupportModal() {
     hideBlock();
   };
 
+  // Design 44a (banned, upload disabled with a team note) on the v2 Dialog:
+  // the reason in an accent icon well, the team's note quoted under it, and
+  // the two places to talk to the team.
   return (
-    <div className="support-modal-overlay" onClick={hide}>
-      <div className="support-modal" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={t(copy.titleKey)} onClose={hide} />
-        <p className="support-modal-body">{t(copy.bodyKey)}</p>
-        {block.note && (
-          <div className="support-modal-note">
-            <BlockNote note={block.note} />
-          </div>
-        )}
+    <Dialog
+      open
+      onClose={hide}
+      title={t(copy.titleKey)}
+      closeLabel={t('common.actions.close')}
+      width={440}
+      className="support-modal"
+      footer={(
         <div className="support-modal-actions">
-          <a className="support-modal-btn" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
-            <FaDiscord size={20} /> <span>Discord</span>
+          <a className="v2-btn v2-btn--secondary h44 is-next support-modal-btn" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+            <Icon name="forum" size={18} /><span className="v2-btn__label">Discord</span><Icon name="open_in_new" size={16} />
           </a>
-          <a className="support-modal-btn" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
-            <SiTelegram size={20} /> <span>Telegram</span>
+          <a className="v2-btn v2-btn--secondary h44 is-next support-modal-btn" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
+            <Icon name="send" size={18} /><span className="v2-btn__label">Telegram</span><Icon name="open_in_new" size={16} />
           </a>
         </div>
+      )}
+    >
+      <div className="support-modal-lead">
+        <span className="support-modal-icon" aria-hidden="true">
+          <Icon name={block.reason === 'upload' ? 'upload_file' : 'block'} size={24} />
+        </span>
+        <p className="support-modal-body">{t(copy.bodyKey)}</p>
       </div>
-    </div>
+      {block.note && (
+        <div className="support-modal-note">
+          <BlockNote note={block.note} />
+        </div>
+      )}
+    </Dialog>
   );
 }

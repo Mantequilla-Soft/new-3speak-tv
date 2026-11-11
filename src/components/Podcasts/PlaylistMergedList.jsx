@@ -1,6 +1,6 @@
+import { Icon } from '../v2/Icon';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MdPlayArrow, MdVideocam } from 'react-icons/md';
 import BarLoader from '../Loader/BarLoader';
 import { EpisodeTile } from './EpisodeTile';
 import PlaylistEpisodeTile from './PlaylistEpisodeTile';
@@ -19,12 +19,12 @@ function PlaylistVideoTile({ video, to, state, at }) {
       <div className="pod-tile-top">
         <Link to={to} state={state} className="pod-tile-cover" aria-label={video.title}>
           <img className="pod-art" src={fixVideoThumbnail(video)} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
-          <span className="pod-tile-play"><MdPlayArrow size={24} /></span>
+          <span className="pod-tile-play"><Icon name="play_arrow" size={24} fill /></span>
         </Link>
         <div className="pod-tile-head">
           <Link to={to} state={state} className="pod-tile-title" title={video.title}>{video.title || t('audio.untitled')}</Link>
           <div className="pod-tile-meta">
-            <span className="pod-badge"><MdVideocam size={12} /> {t('playlists.feeds.video')}</span>
+            <span className="pod-badge"><Icon name="videocam" size={12} /> {t('playlists.feeds.video')}</span>
             {at > 0 && <span>{fmtDate(new Date(at).toISOString())}</span>}
             {video.duration > 0 && <span className="pod-tile-dur">{fmtDuration(video.duration)}</span>}
           </div>

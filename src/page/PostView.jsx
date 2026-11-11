@@ -452,7 +452,10 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
 
       {videoDetails.community && (
         <Link to={`/c/${videoDetails.community._id}`} className="post-view-community">
-          <AccountImg account={videoDetails.community._id} alt="" className="post-view-community__mark" />
+          <span className="post-view-community__mark" aria-hidden="true">
+            {String(videoDetails.community.title || '').slice(0, 1).toUpperCase()}
+            <AccountImg account={videoDetails.community._id} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+          </span>
           <span className="post-view-community__text">{t('posts.view.inCommunity', { community: videoDetails.community.title })}</span>
         </Link>
       )}

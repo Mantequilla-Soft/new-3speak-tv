@@ -1,64 +1,63 @@
-// Flat card like the rest of 3Speak (Audio page cards): no gradients, accent
-// red only on the icon, neutral outlined buttons.
+@use "../../styles/v2" as v2;
+
+// The upload block banner (UploadBlockNotice.jsx), design 23d "upload limits":
+// an accent wash card, the accent icon box, the admin's note, then the two
+// contact buttons.
 .upload-block-notice {
   margin: 12px 0 16px;
-  padding: 14px 16px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-light);
-  border-left: 3px solid var(--accent-primary);
-  border-radius: 12px;
-  color: var(--text-primary);
+  padding: 16px;
+  border-radius: var(--r-3xl);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  color: var(--text);
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .ubn-head {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ubn-head__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
 .ubn-icon {
+  display: grid;
+  place-items: center;
   flex: none;
-  color: var(--accent-primary);
+  width: 48px;
+  height: 48px;
+  border-radius: v2.radius-for(48);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .ubn-title {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.ubn-note {
-  margin: 10px 0 0;
+  @include v2.text(title);
 }
 
 .ubn-body {
-  margin: 10px 0 0;
-  font-size: 14px;
+  margin: 0;
+  @include v2.text(body-sm);
   line-height: 1.5;
-  color: var(--text-secondary);
+  color: var(--muted);
 }
+
+.ubn-note { min-width: 0; }
 
 .ubn-actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 220px));
   gap: 8px;
-  margin-top: 10px;
-}
 
-.ubn-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-  text-decoration: none;
-  transition: background 0.15s ease;
-
-  &:hover { background: var(--bg-hover); }
+  @include v2.mobile { grid-template-columns: 1fr 1fr; }
 }

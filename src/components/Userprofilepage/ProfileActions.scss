@@ -1,5 +1,32 @@
 @use "../../styles/v2" as v2;
 
+// The big follow button (20b): 64 tall, label flush left, icon on the right.
+.ph-follow.v2-btn {
+  height: 64px;
+  border-radius: var(--r-xl);
+  padding: 0 18px 0 22px;
+  gap: 28px;
+  justify-content: space-between;
+  font-size: 16px;
+  min-width: 160px;
+
+  @include v2.mobile { width: 100%; min-width: 0; height: 48px; border-radius: var(--r-lg); gap: 12px; font-size: 14px; }
+}
+
+// 64x64 action tiles beside it (Message, Tip, Share, More…).
+.ph-tile.v2-dock {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: var(--r-xl);
+  gap: 3px;
+  font-size: 11px;
+  text-decoration: none;
+
+  @include v2.mobile { width: 56px; height: 56px; border-radius: var(--r-lg); font-size: 10px; }
+}
+
 // "More" tile and its popover (37a).
 .ph-more {
   position: relative;
@@ -63,4 +90,13 @@
   .ph-tile--tip {
     @include v2.mobile { display: none; }
   }
+}
+
+// PlaylistTypePicker inside the v2 create / edit playlist dialogs: it draws its
+// buttons with the host form's classes (here the segmented track) and marks
+// the pick with `active`.
+.v2-dialog__panel {
+  .form-group { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .pl-type-seg .v2-seg__opt.active { background: var(--surface-2); color: var(--text); }
+  .pl-type-seg.playlist-type-kinds { flex-wrap: wrap; }
 }

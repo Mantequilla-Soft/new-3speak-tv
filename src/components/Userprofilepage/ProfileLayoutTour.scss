@@ -1,169 +1,91 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// The edit-mode tour (ProfileLayoutTour.jsx): centred on desktop, a bottom
-// sheet on phones.
-.plt-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100050;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(0, 0, 0, 0.55);
-
-  @include mix.respond(phone) {
-    align-items: flex-end;
-    padding: 0;
-  }
-}
-
-.plt-dialog {
-  position: relative;
-  width: min(460px, 100%);
-  max-height: 88vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 1.1rem 1.2rem 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-  outline: none;
-
-  @include mix.respond(phone) {
-    width: 100%;
-    border-radius: 16px 16px 0 0;
-    border-bottom: none;
-    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-    animation: plt-up 0.22s ease-out;
-  }
-}
-
-@keyframes plt-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-.plt-close {
-  position: absolute;
-  top: 0.6rem;
-  right: 0.6rem;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
-}
+// The edit-mode tour (ProfileLayoutTour.jsx, 37c) on the shared v2 dialog:
+// the animated picture, then a card like the design's tour box: a mono cyan
+// "Step 3 of 8" with Skip, the title, one muted paragraph, a step bar, and
+// Back / Next (cyan) in the footer.
+.plt-dialog .plt-body { padding-top: 20px; gap: 14px; }
 
 .plt-text {
-  margin-top: 0.9rem;
+  padding: 14px;
+  border-radius: var(--r-xl);
+  background: var(--bg);
+  border: 1px solid var(--cyan);
+
+  .plt-text-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
   .plt-count {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--accent-primary, #e53935);
+    flex: 1;
+    @include v2.mono(11, 700);
+    color: var(--cyan);
+  }
+
+  .plt-skip {
+    padding: 0;
+    border: 0;
+    background: none;
+    @include v2.text(label);
+    font-size: 11px;
+    color: var(--muted);
+    cursor: pointer;
+
+    &:hover { color: var(--text); }
   }
 
   h3 {
-    margin: 0.2rem 0 0.4rem;
-    font-size: 1.15rem;
-    font-weight: 700;
+    margin: 6px 0 4px;
+    @include v2.text(title-sm);
+    color: var(--text);
   }
 
   p {
     margin: 0;
-    min-height: 4.2em;   // steps of different length don't make the dialog jump
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: var(--text-secondary);
+    min-height: 4.4em;   // steps of different length don't make the dialog jump
+    @include v2.text(meta);
+    line-height: 1.45;
+    color: var(--muted);
+  }
+}
+
+// The step bar: 4px segments, accent up to the current step.
+.plt-dots {
+  display: flex;
+  gap: 4px;
+
+  button {
+    flex: 1;
+    height: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-bar);
+    background: var(--surface-2);
+    cursor: pointer;
+
+    &.active { background: var(--accent); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   }
 }
 
 .plt-foot {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  margin-top: 1rem;
-}
-
-.plt-dots {
-  display: flex;
-  gap: 0.35rem;
-
-  button {
-    width: 8px;
-    height: 8px;
-    padding: 0;
-    border: none;
-    border-radius: 999px;
-    background: var(--border-color);
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &.active {
-      width: 22px;
-      background: var(--accent-primary, #e53935);
-    }
-  }
-}
-
-.plt-buttons {
-  display: flex;
-  gap: 0.5rem;
-  margin-left: auto;
-}
-
-// Outline only: no 3Speak button has a solid red fill.
-.plt-btn {
-  padding: 0.45rem 1.05rem;
-  border-radius: 999px;
-  border: 1px solid var(--border-color);
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover { color: var(--text-primary); border-color: var(--text-secondary); background: var(--bg-hover); }
-
-  &--primary {
-    color: var(--accent-primary, #e53935);
-    border-color: var(--accent-primary, #e53935);
-
-    &:hover {
-      color: var(--accent-primary, #e53935);
-      border-color: var(--accent-primary, #e53935);
-      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-    }
-  }
+  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
 }
 
 // ── the pictures ────────────────────────────────────────────────────────────
 // A tiny page: two blocks side by side (a, b), one full row below (c), an
 // extra piece per step, and a pointer.
 .plt-pic {
-  --accent: var(--accent-primary, #e53935);
-  --line: color-mix(in srgb, var(--text-primary) 35%, transparent);
+  --line: color-mix(in srgb, var(--text) 35%, transparent);
   position: relative;
   height: 150px;
-  margin-top: 0.4rem;
-  border-radius: 12px;
-  background: var(--bg-primary, rgba(0, 0, 0, 0.2));
+  border-radius: var(--r-xl);
+  background: var(--bg);
   overflow: hidden;
 
   > * { position: absolute; }
@@ -172,7 +94,7 @@
 .plt-block {
   border: 1px dashed var(--line);
   border-radius: 8px;
-  background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--text) 8%, transparent);
   transition: none;
 
   // the grip
@@ -182,7 +104,7 @@
     left: 6px;
     width: 8px;
     height: 10px;
-    background-image: radial-gradient(var(--line) 1.2px, transparent 1.3px);
+    background-image: radial-gradient(var(--line) 1px, transparent 2px);
     background-size: 4px 4px;
   }
 }
@@ -262,11 +184,12 @@
 // props: the gear on a opens a small panel of settings.
 .plt-pic--props {
   .plt-a::after {
-    content: '⚙';
+    content: "settings";
+    font-family: "Material Symbols Rounded";
     position: absolute;
     top: 3px;
     right: 7px;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--accent);
   }
 
@@ -284,7 +207,7 @@
       linear-gradient(var(--line), var(--line)) 10px 30px / 80% 4px no-repeat,
       linear-gradient(var(--accent), var(--accent)) 10px 48px / 35% 10px no-repeat,
       linear-gradient(var(--line), var(--line)) 50% 48px / 35% 10px no-repeat,
-      var(--bg-secondary);
+      var(--surface);
     transform-origin: top right;
     animation: plt-pop 3s ease-in-out infinite;
   }
@@ -307,7 +230,7 @@
     width: 70px;
     height: 16px;
     border: 1px solid var(--line);
-    border-radius: 999px;
+    border-radius: var(--r-sm);
     animation: plt-hide-chip 3s ease-in-out infinite;
   }
 }
@@ -333,7 +256,7 @@
     border-radius: 8px;
     background:
       repeating-linear-gradient(to bottom, transparent 0 10px, var(--line) 10px 13px) 8px 10px / 38px calc(100% - 20px) no-repeat,
-      color-mix(in srgb, var(--accent) 10%, var(--bg-secondary));
+      color-mix(in srgb, var(--accent) 10%, var(--surface));
     animation: plt-links-col 3.6s ease-in-out infinite;
   }
 
@@ -348,7 +271,7 @@
     top: 14px;
     bottom: 14px;
     width: 4px;
-    border-radius: 999px;
+    border-radius: var(--r-sm);
     background: var(--accent);
     transform-origin: top;
     animation: plt-links-bar 3.6s linear infinite;
@@ -380,14 +303,14 @@
   z-index: 2;
   padding: 4px 14px;
   border: 1px solid var(--accent);
-  border-radius: 999px;
-  background: var(--bg-secondary);
+  border-radius: var(--r-sm);
+  background: var(--surface);
   color: var(--accent);
   font-size: 11px;
   font-weight: 700;
   animation: plt-pulse 1.6s ease-in-out infinite;
 
-  &::before { content: '✓'; }
+  &::before { content: "check"; font-family: "Material Symbols Rounded"; font-size: 12px; vertical-align: -2px; margin-right: 2px; }
 }
 
 @keyframes plt-pulse {

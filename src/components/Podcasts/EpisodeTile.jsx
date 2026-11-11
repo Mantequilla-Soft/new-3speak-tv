@@ -1,7 +1,6 @@
+import { Icon } from '../v2/Icon';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdPlayArrow, MdPause, MdOpenInNew, MdCheck } from 'react-icons/md';
-import { BiDollar } from 'react-icons/bi';
 import { useAppStore } from '../../lib/store';
 import { episodeToTrack } from '../../lib/podcasts';
 import PodcastTipModal from './PodcastTipModal';
@@ -44,7 +43,7 @@ export function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpiso
       <div className="pod-tile-top">
         <button type="button" className="pod-tile-cover" onClick={play} aria-label={playing ? t('audio.podcasts.pause') : t('audio.podcasts.play')}>
           <PodcastArt art={ep.art || feed?.art} px={128} />
-          <span className={`pod-tile-play${playing ? ' pod-tile-play--on' : ''}`}>{playing ? <MdPause size={24} /> : <MdPlayArrow size={24} />}</span>
+          <span className={`pod-tile-play${playing ? ' pod-tile-play--on' : ''}`}>{playing ? <Icon name="pause" size={24} fill /> : <Icon name="play_arrow" size={24} fill />}</span>
         </button>
         <div className="pod-tile-head">
           {showShow && feed && (
@@ -55,7 +54,7 @@ export function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpiso
             <EpisodeBadges ep={ep} />
             {ep.published_at && <span>{fmtDate(ep.published_at)}</span>}
             {ep.duration > 0 && <span className="pod-tile-dur">{fmtDuration(ep.duration)}</span>}
-            {progress?.done && <span className="pod-tile-listened"><MdCheck size={13} /> {t('audio.podcasts.listened')}</span>}
+            {progress?.done && <span className="pod-tile-listened"><Icon name="check" size={14} /> {t('audio.podcasts.listened')}</span>}
             {started && !progress.done && <span className="pod-tile-pct">{t('audio.podcasts.listenedPct', { pct: progress.pct })}</span>}
           </div>
         </div>
@@ -68,12 +67,12 @@ export function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpiso
         <DownloadButton track={track} />
         {canTipEpisode(track) && (
           <button type="button" className="pod-icon-btn pod-icon-btn--tip" onClick={() => setTipping(true)} title={t('audio.podcasts.tip.button')} aria-label={t('audio.podcasts.tip.button')}>
-            <BiDollar size={18} />
+            <Icon name="volunteer_activism" size={18} />
           </button>
         )}
         {ep.link && (
           <a className="pod-icon-btn" href={ep.link} target="_blank" rel="noopener noreferrer nofollow" title={t('audio.podcasts.episodePage')} aria-label={t('audio.podcasts.episodePage')}>
-            <MdOpenInNew size={16} />
+            <Icon name="open_in_new" size={16} />
           </a>
         )}
       </div>

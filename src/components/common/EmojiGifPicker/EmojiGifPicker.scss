@@ -55,12 +55,15 @@
   &.egp-right { right: 0; }
 
   // On phones every popup is a bottom sheet (app-wide convention).
+  // (The direction modifiers are listed so the sheet's anchors beat them.)
   @include v2.mobile {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: auto;
+    &, &.egp-open-up, &.egp-open-down, &.egp-left, &.egp-right {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: auto;
+    }
     z-index: 3000;
     border-radius: var(--r-3xl) var(--r-3xl) 0 0;
     border-bottom: 0;
@@ -72,7 +75,7 @@
     max-height: calc(var(--egp-vh, 100dvh) - 24px);
     overflow-y: auto;
     overscroll-behavior: contain;
-    &.egp-above-kb { bottom: var(--egp-kb); }
+    &.egp-above-kb, &.egp-above-kb.egp-open-up, &.egp-above-kb.egp-open-down { bottom: var(--egp-kb); }
   }
 }
 

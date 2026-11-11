@@ -743,6 +743,8 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
 
 // ─── Comments (27a side panel, 27b) ─────────────────────────────────────────
 .gap-panel .v2-seg { background: var(--surface); margin: 8px 0 4px; }
+// The comment box stays at the foot of the panel while the list scrolls.
+.gap-panel > .audio-np-comment { position: sticky; bottom: 0; z-index: 1; outline: 8px solid var(--bg); }
 .gap-comments { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .gap-comment {
   display: flex;
@@ -755,7 +757,17 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
 .gap-comment__body {
   min-width: 0;
   flex: 1;
-  p { margin: 2px 0 0; font-size: 14px; line-height: 1.4; color: var(--text); overflow-wrap: anywhere; }
+  p {
+    margin: 2px 0 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--text);
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+  }
 }
 .gap-comment__who { display: flex; align-items: center; gap: 6px; b { font-size: 12px; } }
 .gap-time {
@@ -772,6 +784,9 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   flex: none;
 }
 .gap-compose {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -994,6 +1009,7 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   animation: v2-pop var(--t-base) var(--ease);
   &.is-wide { width: min(400px, calc(100vw - 16px)); }
   &.is-below { bottom: auto; top: var(--pm-top, 96px); max-height: min(640px, calc(100vh - var(--pm-top, 96px) - 16px)); }
+  &.is-left { right: auto; left: var(--pm-left, 16px); }
 
   @include v2.mobile {
     left: 0;
@@ -1003,6 +1019,7 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
     width: 100%;
     &.is-wide { width: 100%; }
     &.is-below { top: auto; bottom: 0; max-height: 88vh; max-height: 88dvh; }
+    &.is-left { left: 0; right: 0; }
     max-height: 88vh;
     max-height: 88dvh;
     border-radius: 28px 28px 0 0;

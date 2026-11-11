@@ -849,7 +849,7 @@ function ProfilePage() {
             label={t('profile.playlists.visibility')}
           />
         </div>
-        <PlaylistTypePicker type={newPlaylistType.type} kind={newPlaylistType.kind} onChange={setNewPlaylistType} disabled={isCreating} />
+        <PlaylistTypePicker groupClass="v2-seg is-block pl-type-seg" btnClass="v2-seg__opt h32" labelClass="v2-eyebrow" iconSize={16} type={newPlaylistType.type} kind={newPlaylistType.kind} onChange={setNewPlaylistType} disabled={isCreating} />
         <Field label={t('profile.playlists.tags')} id="create-playlist-tags">
           <div className="pl-tags v2-input">
             {newPlaylistTags.map((tag) => (

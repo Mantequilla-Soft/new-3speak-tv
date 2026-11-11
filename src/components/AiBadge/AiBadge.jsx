@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getVideoTagsV2, getCachedTagsV2 } from '../../utils/tagsV2';
+import { Icon } from '../v2/Icon';
 import './AiBadge.scss';
 
 /**
@@ -54,6 +55,7 @@ export function AiPill({ className, title: titleProp }) {
       title={title}
       aria-label={title}
     >
+      <Icon name="auto_awesome" size={12} fill />
       {t('watch.aiBadge.label')}
     </span>
   );

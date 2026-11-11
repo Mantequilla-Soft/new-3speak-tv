@@ -143,7 +143,7 @@ function TransferModal({showModal, selectedCoin, balances, recent = [], prices})
         />
       </div>
 
-      <div className="transfer-v2__coins" role="radiogroup" aria-label={t('wallet.transferModal.amountLabel', { coin })}>
+      <div className="transfer-v2__coins" role="radiogroup" aria-label={t('engagement.tip.currencyLabel').replace(/:\s*$/, '')}>
         {COINS.map((c) => (
           <button key={c} type="button" role="radio" aria-checked={coin === c} className={cx('v2-chip', coin === c && 'is-on')} onClick={() => { setCoin(c); setBalErr(''); }}>
             {c}

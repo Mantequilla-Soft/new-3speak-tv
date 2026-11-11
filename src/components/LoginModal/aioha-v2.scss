@@ -459,15 +459,32 @@ $m: "#aioha-modal#aioha-modal";
 
   // ── Logged-in wallet account (UserModal) ─────────────────────────────────
   img.rounded-full { width: 72px !important; height: 72px !important; margin: 4px auto 0 !important; border-radius: 50% !important; }
+  div.text-center { padding-top: 24px !important; text-align: left !important; }
+  div.text-center > div.my-3 { text-align: center; margin: 0 0 12px !important; }
+  div.text-center h3 { @include v2.text(title); margin: 8px 0 0 !important; color: var(--text) !important; }
   div[role="group"] {
     display: flex !important;
     flex-direction: column;
     gap: 8px;
     width: 100% !important;
     box-shadow: none !important;
-    > button { width: 100% !important; justify-content: flex-start; }
-    > button:last-child { background: var(--accent-tint) !important; color: var(--accent) !important; }
+    > button { flex: none !important; height: 40px !important; width: 100% !important; justify-content: flex-start; }
+    > button::before { @include ms-glyph(18px); }
+    > button:nth-child(1)::before { content: "open_in_new"; }
+    > button:nth-child(2)::before { content: "switch_account"; }
+    > button:last-child { background: var(--accent-tint) !important; color: var(--accent) !important; &::before { content: "logout"; } }
   }
+
+  // Switch User: Edit / Add account get Material glyphs instead of aioha's svgs
+  div.my-5 > button > svg { display: none !important; }
+  div.my-5 > button::before { @include ms-glyph(18px); }
+  div.my-5 > button:first-child:has(> svg)::before { content: "edit"; }
+  div.my-5 > button:nth-child(2)::before { content: "person_add"; }
+  // row arrow / remove mark
+  tbody > tr > td:last-child > svg { display: none !important; }
+  tbody > tr > td:last-child::before { @include ms-glyph(18px); content: "chevron_right"; color: var(--muted); }
+  tbody > tr > td:last-child:has(.sr-only)::before { content: "close"; color: var(--accent); }
+  tbody > tr > td:last-child:empty::before, tbody > tr.butrauth-switch-row > td:last-child::before { content: "chevron_right"; }
 
   // Tailwind's light/dark icon pairs follow the OS, the app follows its own theme.
   .dark\:block { display: none !important; }

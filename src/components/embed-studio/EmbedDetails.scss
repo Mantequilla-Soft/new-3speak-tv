@@ -39,17 +39,13 @@
 
   // The title reads as the post's title: big, no field chrome until focused.
   .details-title-input.details-title-input {
-    height: 48px;
-    padding: 0 10px;
-    margin: 0 -10px;
-    width: calc(100% + 20px);
-    max-width: none;
-    background: transparent;
+    height: 56px;
+    padding: 0 14px;
+    background: var(--bg);
     @include v2.text(heading);
-    border-radius: v2.radius-for(48);
+    border-radius: v2.radius-for(56);
 
-    &:hover { background: var(--bg); }
-    &:focus { background: var(--bg); }
+    @include v2.mobile { height: 48px; font-size: 20px; border-radius: v2.radius-for(48); }
   }
 
   .char-counter {
@@ -163,12 +159,12 @@
     min-width: 0;
 
     > span:first-child {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+      display: block;
       @include v2.text(label);
       font-size: 14px;
       color: var(--text);
+
+      .setting-info__trigger { vertical-align: middle; margin-left: 2px; }
     }
     > span:nth-child(2) {
       @include v2.text(meta-sm);

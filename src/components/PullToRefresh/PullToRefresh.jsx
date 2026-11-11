@@ -32,7 +32,7 @@ const PullToRefresh = ({ onRefresh, children }) => {
     if (pullDistance >= THRESHOLD && !refreshing) {
       setRefreshing(true);
       setPullDistance(THRESHOLD);
-      try { await onRefresh(); } catch (_) {}
+      try { await onRefresh(); } catch { /* the caller shows its own error */ }
       setRefreshing(false);
     }
     setPullDistance(0);

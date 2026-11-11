@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { FileVideo, Play } from "lucide-react";
+import { Icon } from "../v2/Icon";
 import { useTranslation } from "react-i18next";
 import TimelineToasters from "../playVideo/TimelineToasters";
 import { chaptersWithEnds } from "../../utils/videoTimeline";
@@ -96,7 +96,7 @@ const EmbedPreviewPlayer = ({ file, poster, portrait = false, chapters = [], lin
           <img src={poster} alt="" />
           {objectUrl && (
             <span className="ep-player__play">
-              <Play size={30} fill="currentColor" />
+              <Icon name="play_arrow" size={32} fill />
             </span>
           )}
         </button>
@@ -120,8 +120,8 @@ const EmbedPreviewPlayer = ({ file, poster, portrait = false, chapters = [], lin
   // inline preview, even though the file uploads and is transcoded fine.
   if (previewError) {
     return (
-      <div className="video-preview-fallback" style={{ marginTop: 0 }}>
-        <FileVideo className="video-preview-fallback-icon" />
+      <div className="ep-fallback">
+        <Icon name="info" size={20} className="ep-fallback__icon" />
         <p>
           {t("upload.preview.cannotPreviewHevc")}
         </p>

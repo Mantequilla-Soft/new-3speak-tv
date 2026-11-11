@@ -442,6 +442,7 @@ function App() {
       updatePromptShown = true;
       toast(t('app.update.available', { version: newer }), {
         description: t('app.update.description'),
+        icon: <Icon name="system_update" size={18} />,
         duration: Infinity,
         action: { label: t('common.actions.refresh'), onClick: () => reloadForUpdate() },
       });
@@ -671,7 +672,7 @@ function App() {
       // returns BEFORE the router's Suspense below. Fallback is a bare black box
       // rather than a spinner: this renders inside an iframe on someone else's
       // page, where a flash of loading chrome is worse than nothing.
-      <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: '#000' }} />}>
+      <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'var(--media-black)' }} />}>
         <Routes>
           <Route path="/embed/:author/:permlink" element={<EmbedPlayer />} />
         </Routes>

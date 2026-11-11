@@ -26,6 +26,7 @@ import {
 } from '../../lib/adMarket';
 import '../../page/Advertise.scss';
 import { useTranslation, Trans } from 'react-i18next';
+import { Segmented } from '../v2/ui';
 
 function StatTile({ value, label, note }) {
   return (
@@ -40,22 +41,17 @@ function StatTile({ value, label, note }) {
 export function FormatTabs({ tabs, value, onChange }) {
   const { t } = useTranslation();
   if (tabs.length < 2) return null;
+  // The v2 segmented track: the only tab style (STYLE_GUIDE §6).
   return (
-    <div className="mkt-ftabs" role="tablist" aria-label={t('ads.rateCard.tabs.label')}>
-      {tabs.map(({ id, label, Icon }) => (
-        <button
-          key={id}
-          type="button"
-          role="tab"
-          aria-selected={value === id}
-          className={`mkt-ftab${value === id ? ' selected' : ''}`}
-          onClick={() => onChange(id)}
-        >
-          <Icon aria-hidden="true" />
-          {t(label)}
-        </button>
-      ))}
-    </div>
+    <Segmented
+      className="mkt-ftabs"
+      block={false}
+      size={36}
+      label={t('ads.rateCard.tabs.label')}
+      value={value}
+      onChange={onChange}
+      options={tabs.map(({ id, label, icon }) => ({ value: id, label: t(label), icon }))}
+    />
   );
 }
 

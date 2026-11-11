@@ -1,15 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
 import axios from 'axios';
 import { useTranslation, Trans } from 'react-i18next';
-import { ArrowLeft, Check, Loader2 } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { getOperationUser } from '../../hive-api/aioha';
 import { fetchBalances } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Dialog, Button, IconButton, ChoiceCard, Segmented, Field, StepBar, Icon } from '../v2/ui';
+import { cx } from '../v2/helpers';
 import './AdWizardModal.scss';
 
 // Every toast from this module is headed "Ads"; the message becomes the line under
@@ -148,150 +147,154 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
 
   const back = () => setStep((s) => Math.max(1, s - 1));
 
-  return createPortal(
-    <div className="adw-overlay" onClick={onClose}>
-      <div className="adw-modal" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader
-          title={step === 4 ? t('ads.wizard.bookedTitle') : t('ads.wizard.title')}
-          onClose={onClose}
-          leading={step > 1 && step < 4 && (
-            <button className="adw-back" onClick={back} aria-label={t('common.actions.back')}><ArrowLeft size={16} /></button>
+  const money = (n) => (n ? n.toFixed(3) : '…');
+
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title={step === 4 ? t('ads.wizard.bookedTitle') : t('ads.wizard.title')}
+      closeLabel={t('common.actions.close')}
+      width={480}
+      className="adw-v2"
+      leading={step > 1 && step < 4 && (
+        <IconButton icon="arrow_back" size={32} variant="ghost" round label={t('common.actions.back')} onClick={back} className="adw-back" />
+      )}
+    >
+      {step < 4 && <StepBar steps={3} current={step - 1} />}
+
+      {showLoading && (
+        <div className="adw-loading"><Icon name="progress_activity" size={20} className="v2-spin" /><span>{t('ads.wizard.checking')}</span></div>
+      )}
+
+      {!showLoading && !eligible && step < 4 && (
+        <div className="v2-failure"><b>{refusal}</b></div>
+      )}
+
+      {!showLoading && eligible && step === 1 && (
+        <>
+          <p className="v2-meta">
+            {t('ads.wizard.intro', { slogan: options.slogan || 'Content Creator on 3Speak' })}
+          </p>
+          <div className="v2-field">
+            <span className="v2-eyebrow">{t('ads.wizard.whereRuns')}</span>
+            <div className="adw-formats">
+              {options.formats.map((f) => (
+                <ChoiceCard
+                  key={f.key}
+                  icon={f.key === 'shorts_roll' ? 'smartphone' : 'smart_display'}
+                  selected={format === f.key}
+                  title={f.key === 'shorts_roll' ? t('ads.wizard.shortsSpot') : t('ads.wizard.videoRoll')}
+                  sub={f.key === 'shorts_roll' ? t('ads.wizard.shortsSpotDesc') : t('ads.wizard.videoRollDesc')}
+                  onClick={() => { setFormat(f.key); setSeconds(Math.min(seconds, f.maxSeconds)); }}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="v2-slider">
+            <div className="v2-slider__head">
+              <span><Trans i18nKey="ads.wizard.howMuchPlays" values={{ seconds }} components={{ b: <b /> }} /></span>
+            </div>
+            <input
+              type="range" min={1} max={fmt ? fmt.maxSeconds : 15} step={1}
+              value={seconds} onChange={(e) => setSeconds(Number(e.target.value))}
+              aria-label={t('ads.wizard.spotLength')}
+            />
+            <span className="v2-meta-sm">{t('ads.wizard.openingSeconds', { count: seconds })}</span>
+          </div>
+          <Button variant="primary" size={48} block next onClick={() => setStep(2)} disabled={!format}>{t('common.actions.continue')}</Button>
+        </>
+      )}
+
+      {!showLoading && eligible && step === 2 && (
+        <>
+          <Field
+            id="adw-start"
+            label={t('ads.wizard.startDate')}
+            type="date"
+            value={startAt}
+            min={todayISO()}
+            onChange={(e) => setStartAt(e.target.value)}
+          />
+          <div className="v2-slider">
+            <div className="v2-slider__head">
+              <span><Trans i18nKey="ads.wizard.runFor" count={days} components={{ b: <b /> }} /></span>
+              <span className="num">{options.minDays || 1}–{options.maxDays || 90}d</span>
+            </div>
+            <input
+              type="range" min={options.minDays || 1} max={options.maxDays || 90} step={1}
+              value={days} onChange={(e) => setDays(Number(e.target.value))}
+              aria-label={t('ads.wizard.runsFor')}
+            />
+          </div>
+          <div className="v2-field">
+            <span className="v2-eyebrow">{t('ads.wizard.onlyLength')} <span className="v2-field__opt">· {t('ads.wizard.optional')}</span></span>
+            <div className="adw-minmax">
+              <input className="v2-input" type="number" min="0" placeholder={t('ads.wizard.min')} aria-label={t('ads.wizard.min')} value={minMinutes} onChange={(e) => setMinMinutes(e.target.value)} />
+              <span>{t('ads.wizard.to')}</span>
+              <input className="v2-input" type="number" min="0" placeholder={t('ads.wizard.max')} aria-label={t('ads.wizard.max')} value={maxMinutes} onChange={(e) => setMaxMinutes(e.target.value)} />
+              <span className="adw-unit">{t('ads.wizard.minutes')}</span>
+            </div>
+            <span className="v2-field__hint">{t('ads.wizard.leaveEmpty')}</span>
+          </div>
+          <Button variant="primary" size={48} block next onClick={() => setStep(3)}>{t('common.actions.continue')}</Button>
+        </>
+      )}
+
+      {!showLoading && eligible && step === 3 && (
+        <>
+          <div className="adw-summary">
+            <div><span>{t('ads.wizard.format')}</span><strong>{format === 'shorts_roll' ? t('ads.wizard.shortsSpot') : t('ads.wizard.videoRoll')}</strong></div>
+            <div><span>{t('ads.wizard.spotLength')}</span><strong className="num">{seconds}s</strong></div>
+            <div><span>{t('ads.wizard.starts')}</span><strong>{new Date(startAt).toLocaleDateString()}</strong></div>
+            <div><span>{t('ads.wizard.runsFor')}</span><strong>{t('ads.wizard.days', { count: days })}</strong></div>
+          </div>
+          <div className="v2-field">
+            <span className="v2-eyebrow">{t('ads.promote.payWith')}</span>
+            <Segmented
+              block={false}
+              value={currency}
+              onChange={(c) => { if (busy || (c === 'HIVE' && !hbdPerHive)) return; setCurrency(c); }}
+              label={t('ads.promote.payWith')}
+              options={[{ value: 'HBD', label: 'HBD' }, { value: 'HIVE', label: 'HIVE', disabled: busy || !hbdPerHive }]}
+            />
+          </div>
+          <div className="adw-total">
+            <span className="v2-eyebrow">{t('ads.promote.total')}</span>
+            <b className="money">{money(amount)} <span>{currency}</span></b>
+            <span className={cx('adw-balance', insufficient && 'is-low')}>
+              {t('ads.promote.yourBalance')}: <span className="num">{walletBalance != null ? `${walletBalance.toFixed(3)} ${currency}` : '…'}</span>
+            </span>
+          </div>
+          <Button variant="primary" size={48} block className="is-next" trailing="payments" onClick={pay} disabled={busy || insufficient} loading={busy}>
+            {busy ? t('ads.wizard.working') : insufficient ? t('ads.promote.notEnough', { currency }) : t('ads.wizard.pay', { amount: amount ? amount.toFixed(3) : '', currency })}
+          </Button>
+          <p className="v2-meta-sm">
+            {t('ads.wizard.signNote', { account: options.payTo })}
+          </p>
+        </>
+      )}
+
+      {step === 4 && booked && (
+        <div className="v2-success adw-done">
+          <span className="adw-tick"><Icon name="check" size={22} /></span>
+          <b>{booked.credited ? t('ads.wizard.paymentConfirmed') : t('ads.wizard.paymentSent')}</b>
+          <p className="v2-meta">
+            {t('ads.wizard.withReviewers', { count: booked.days, date: new Date(booked.startAt).toLocaleDateString() })}
+          </p>
+          {!booked.credited && (
+            <p className="v2-meta">
+              {t('ads.wizard.paymentLag')}
+            </p>
           )}
-        />
-
-        {step < 4 && (
-          <div className="adw-steps" aria-hidden="true">
-            {[1, 2, 3].map((n) => <span key={n} className={n === step ? 'on' : (n < step ? 'done' : '')} />)}
-          </div>
-        )}
-
-        {showLoading && <div className="adw-loading"><Loader2 size={20} className="adw-spin" /><span>{t('ads.wizard.checking')}</span></div>}
-
-        {!showLoading && !eligible && step < 4 && (
-          <div className="adw-note">
-            <p>{refusal}</p>
-          </div>
-        )}
-
-        {!showLoading && eligible && step === 1 && (
-          <>
-            <p className="adw-intro">
-              {t('ads.wizard.intro', { slogan: options.slogan || 'Content Creator on 3Speak' })}
+          {options?.limitedToOwners?.length > 0 && (
+            <p className="v2-meta-sm">
+              {t('ads.wizard.betaLimited', { owners: options.limitedToOwners.map((o) => `@${o}`).join(', ') })}
             </p>
-            <div className="adw-field">
-              <label>{t('ads.wizard.whereRuns')}</label>
-              <div className="adw-formats">
-                {options.formats.map((f) => (
-                  <button
-                    key={f.key}
-                    className={`adw-format${format === f.key ? ' on' : ''}`}
-                    onClick={() => { setFormat(f.key); setSeconds(Math.min(seconds, f.maxSeconds)); }}
-                  >
-                    <strong>{f.key === 'shorts_roll' ? t('ads.wizard.shortsSpot') : t('ads.wizard.videoRoll')}</strong>
-                    <span>{f.key === 'shorts_roll' ? t('ads.wizard.shortsSpotDesc') : t('ads.wizard.videoRollDesc')}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="adw-field">
-              <label><Trans i18nKey="ads.wizard.howMuchPlays" values={{ seconds }} components={{ b: <strong /> }} /></label>
-              <input
-                type="range" min={1} max={fmt ? fmt.maxSeconds : 15} step={1}
-                value={seconds} onChange={(e) => setSeconds(Number(e.target.value))}
-              />
-              <p className="adw-hint">{t('ads.wizard.openingSeconds', { count: seconds })}</p>
-            </div>
-            <button className="adw-cta" onClick={() => setStep(2)} disabled={!format}>{t('common.actions.continue')}</button>
-          </>
-        )}
-
-        {!showLoading && eligible && step === 2 && (
-          <>
-            <div className="adw-field">
-              <label htmlFor="adw-start">{t('ads.wizard.startDate')}</label>
-              <input
-                id="adw-start" type="date" value={startAt} min={todayISO()}
-                onChange={(e) => setStartAt(e.target.value)}
-              />
-            </div>
-            <div className="adw-field">
-              <label><Trans i18nKey="ads.wizard.runFor" count={days} components={{ b: <strong /> }} /></label>
-              <input
-                type="range" min={options.minDays || 1} max={options.maxDays || 90} step={1}
-                value={days} onChange={(e) => setDays(Number(e.target.value))}
-              />
-              <div className="adw-ends"><span>{options.minDays || 1}d</span><span>{options.maxDays || 90}d</span></div>
-            </div>
-            <div className="adw-field">
-              <label>{t('ads.wizard.onlyLength')} <span className="adw-optional">{t('ads.wizard.optional')}</span></label>
-              <div className="adw-minmax">
-                <input type="number" min="0" placeholder={t('ads.wizard.min')} value={minMinutes} onChange={(e) => setMinMinutes(e.target.value)} />
-                <span>{t('ads.wizard.to')}</span>
-                <input type="number" min="0" placeholder={t('ads.wizard.max')} value={maxMinutes} onChange={(e) => setMaxMinutes(e.target.value)} />
-                <span className="adw-unit">{t('ads.wizard.minutes')}</span>
-              </div>
-              <p className="adw-hint">{t('ads.wizard.leaveEmpty')}</p>
-            </div>
-            <button className="adw-cta" onClick={() => setStep(3)}>{t('common.actions.continue')}</button>
-          </>
-        )}
-
-        {!showLoading && eligible && step === 3 && (
-          <>
-            <div className="adw-summary">
-              <div><span>{t('ads.wizard.format')}</span><strong>{format === 'shorts_roll' ? t('ads.wizard.shortsSpot') : t('ads.wizard.videoRoll')}</strong></div>
-              <div><span>{t('ads.wizard.spotLength')}</span><strong>{seconds}s</strong></div>
-              <div><span>{t('ads.wizard.starts')}</span><strong>{new Date(startAt).toLocaleDateString()}</strong></div>
-              <div><span>{t('ads.wizard.runsFor')}</span><strong>{t('ads.wizard.days', { count: days })}</strong></div>
-            </div>
-            <div className="adw-field">
-              <label>{t('ads.promote.payWith')}</label>
-              <div className="adw-currency">
-                <button className={currency === 'HBD' ? 'on' : ''} onClick={() => setCurrency('HBD')} disabled={busy}>HBD</button>
-                <button className={currency === 'HIVE' ? 'on' : ''} onClick={() => setCurrency('HIVE')} disabled={busy || !hbdPerHive}>HIVE</button>
-              </div>
-            </div>
-            <div className="adw-total">
-              <span>{t('ads.promote.total')}</span>
-              <strong>{amount ? amount.toFixed(3) : '—'} {currency}</strong>
-            </div>
-            <div className="adw-balance">
-              <span>{t('ads.promote.yourBalance')}</span>
-              <span className={insufficient ? 'low' : ''}>
-                {walletBalance != null ? `${walletBalance.toFixed(3)} ${currency}` : '…'}
-              </span>
-            </div>
-            <button className="adw-cta" onClick={pay} disabled={busy || insufficient}>
-              {busy ? t('ads.wizard.working') : insufficient ? t('ads.promote.notEnough', { currency }) : t('ads.wizard.pay', { amount: amount ? amount.toFixed(3) : '', currency })}
-            </button>
-            <p className="adw-hint adw-foot">
-              {t('ads.wizard.signNote', { account: options.payTo })}
-            </p>
-          </>
-        )}
-
-        {step === 4 && booked && (
-          <div className="adw-done">
-            <div className="adw-tick"><Check size={22} /></div>
-            <p><strong>{booked.credited ? t('ads.wizard.paymentConfirmed') : t('ads.wizard.paymentSent')}</strong></p>
-            <p className="adw-hint">
-              {t('ads.wizard.withReviewers', { count: booked.days, date: new Date(booked.startAt).toLocaleDateString() })}
-            </p>
-            {!booked.credited && (
-              <p className="adw-hint">
-                {t('ads.wizard.paymentLag')}
-              </p>
-            )}
-            {options?.limitedToOwners?.length > 0 && (
-              <p className="adw-hint adw-beta">
-                {t('ads.wizard.betaLimited', { owners: options.limitedToOwners.map((o) => `@${o}`).join(', ') })}
-              </p>
-            )}
-            <button className="adw-cta" onClick={onClose}>{t('common.actions.done')}</button>
-          </div>
-        )}
-      </div>
-    </div>,
-    document.body,
+          )}
+          <Button variant="inverse" size={48} block trailing="check" onClick={onClose}>{t('common.actions.done')}</Button>
+        </div>
+      )}
+    </Dialog>
   );
 }
