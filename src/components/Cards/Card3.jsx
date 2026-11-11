@@ -213,7 +213,7 @@ const cardHref = (linkPrefix, author, permlink, query) => (linkPrefix === '/watc
   ? watchPath(author, permlink, query)
   : `${linkPrefix}?v=${author}/${permlink}${query}`);
 
-function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null, featuredPending = false }) {
+function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, badgeLabel = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null, featuredPending = false }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
@@ -506,7 +506,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               {/* Status pills, stacked at the top-left (the options button owns
                   the top-right). LIVE and PRO are solid accent; the rest are
                   scrim pills with the tone on their icon (43c). */}
-              {(video._liveStream || gatedBadge || newBadge || video.status || video.publish_type || video.unlisted) && (
+              {(video._liveStream || gatedBadge || newBadge || badgeLabel || video.status || video.publish_type || video.unlisted) && (
                 <div className="card-badges">
                   {/* Live tile. A group-chat (conference) room reads "LIVE CHAT";
                       a standalone stream reads "LIVE". */}
@@ -522,6 +522,9 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                       <Icon name="lock" size={12} fill /> {t('cards.badges.pro')}
                     </span>
                   )}
+
+                  {/* A page-wide label, cyan (First Uploads: "First", 49c) */}
+                  {badgeLabel && <span className="card-pill card-page-badge">{badgeLabel}</span>}
 
                   {/* New since the viewer's last visit (community pages pass isNew). */}
                   {newBadge && <span className="card-pill card-new-badge">{t('cards.badges.new')}</span>}
@@ -689,6 +692,7 @@ Card3.propTypes = {
   getContentForVideo: PropTypes.func,
   isWatched: PropTypes.func,
   isNew: PropTypes.func,             // (video) => true badges the card NEW
+  badgeLabel: PropTypes.string,      // a cyan pill on every card of the page (First Uploads)
   hideWatched: PropTypes.bool,       // opt-in: drop (not just badge) already-watched videos
   watchedVersion: PropTypes.number,  // bump from useWatchHistory so the filter reacts to new data
   getViewCount: PropTypes.func,

@@ -1,6 +1,6 @@
-// HiveAvatar wraps an <img> so the premium badge can sit on top of
-// the corner. Display: inline-block + line-height: 0 prevents the
-// wrapper from adding stray bottom space inherited from text layouts.
+// HiveAvatar wraps an <img> so the Pro badge can sit on its corner.
+// Display: inline-block + line-height: 0 prevents the wrapper from adding stray
+// bottom space inherited from text layouts.
 .hive-avatar {
   position: relative;
   display: inline-block;
@@ -9,37 +9,27 @@
 
   > img {
     display: block;
-    // Sources used to be images.hive.blog/u/<name>/avatar, which is always a
-    // pre-cropped square. Now that the real profile_image is preferred (it is
-    // immutable and never stale), the source can be any shape at all — so the
-    // crop has to happen here instead of being inherited from the proxy.
+    // The real profile_image can be any shape, so the crop happens here.
     object-fit: cover;
+    background: var(--avatar);
   }
 
-  &__badge {
+  // The 3Speak Pro chip: an accent disc with the rocket in the on-accent ink,
+  // ringed in the page ground so it reads on any avatar, in both themes.
+  > .hive-avatar__badge {
     position: absolute;
-    // Chip sits at the corner of the avatar (overlapping just slightly)
-    // — scales well from 22px tile avatars up to 5rem profile avatars.
-    // FontAwesome's rocket bias is corrected by translate(-7%, 7%) on
-    // the SVG itself (see PremiumBadge.scss).
     top: -2px;
     right: -2px;
     margin: 0;
-    background: var(--accent-primary, #e53935);
-    color: #fff; // override the default red rocket — we're inside a red chip
+    padding: 3px;
     border-radius: 50%;
-    padding: 3px; // breathing room between the rocket and the chip edge
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+    background: var(--accent);
+    color: var(--on-accent);
+    box-shadow: 0 0 0 2px var(--bg);
     line-height: 1;
   }
 }
 
-// Dark mode: outlined style — card-bg bg, red (--accent-primary) outline + rocket.
-[data-theme="dark"] {
-  .hive-avatar__badge {
-    background: var(--card-bg) !important;
-    color: var(--accent-primary) !important;
-    border: 1px solid var(--accent-primary) !important;
-  }
-  .hive-avatar__badge .hh-premium-badge { color: var(--accent-primary) !important; }
-}
+// The rocket inside the chip follows the chip's ink
+.hive-avatar__badge.hh-premium-badge,
+.hive-avatar__badge .hh-premium-badge { color: var(--on-accent); }

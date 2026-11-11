@@ -1,0 +1,51 @@
+@use "../../styles/v2" as v2;
+
+// The sign-in callback pages (19j): /callback (Butter Auth, also its popup)
+// and /auth/callback (email login). Flush-left on the page ground: the mark,
+// a big status line and one status card.
+.signin-cb {
+  min-height: 80vh;
+  min-height: 80dvh;
+  display: grid;
+  place-items: center;
+  padding: 36px 28px;
+  background: var(--bg);
+  color: var(--text);
+  @include v2.mobile { padding: 28px 16px; }
+}
+
+.signin-cb__box {
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.signin-cb__mark { width: 56px; height: 56px; display: block; }
+
+.signin-cb__spin { color: var(--cyan); }
+
+.signin-cb__title {
+  margin: 8px 0 0;
+  @include v2.text(display);
+  line-height: 1.05;
+  @include v2.mobile { @include v2.text(heading-lg); }
+}
+
+.signin-cb__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+
+  > .material-symbols-rounded { color: var(--cyan); }
+  &.is-error { background: var(--accent-wash); border-color: transparent; > .material-symbols-rounded { color: var(--accent); } }
+}

@@ -26,6 +26,8 @@ export default function StoryNotifications({ stories, onOpen, variant = 'dropdow
   };
 
   return (
+    <section className={`story-notifs-section story-notifs-section--${variant}`}>
+    <div className="story-notifs-head" aria-hidden="true">{t('nav.notifications.stories.heading')}</div>
     <ul className={`story-notifs story-notifs--${variant}`} aria-label={t('nav.notifications.stories.heading')}>
       {stories.map((s) => {
         const hoursLeft = Math.max(1, Math.ceil((new Date(s.expires_at).getTime() - now) / 3600000));
@@ -60,5 +62,6 @@ export default function StoryNotifications({ stories, onOpen, variant = 'dropdow
         );
       })}
     </ul>
+    </section>
   );
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { MdOpenInNew, MdClose } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import { useTranslation } from 'react-i18next';
 import './BannerClick.scss';
 
@@ -209,7 +209,7 @@ export default function BannerClick({
         }}
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDismiss(); }}
       >
-        <MdClose aria-hidden="true" />
+        <Icon name="close" size={16} />
       </button>
     ) : null}
     {clickUrl ? (
@@ -235,7 +235,7 @@ export default function BannerClick({
           banner's top-right corner rather than the middle so it never lands on the
           advertiser's own wordmark, and it is the ONLY thing this element draws.
           aria-hidden — the anchor's label already says what happens. */}
-      <MdOpenInNew className="watch-banner-open" aria-hidden="true" />
+      <Icon name="open_in_new" size={18} className="watch-banner-open" />
     </a>
     ) : null}
     </>

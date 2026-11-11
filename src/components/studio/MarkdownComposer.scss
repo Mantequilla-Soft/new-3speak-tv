@@ -1,129 +1,114 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
+// Description composer (44c): a bg well like every field (no border at rest,
+// accent ring on focus), a toolbar of 28px icon buttons on top, the editor in
+// Roboto Mono and the preview beside or instead of it.
 .markdown-composer {
   display: flex;
   flex-direction: column;
   min-height: 120px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background-color: var(--bg-secondary);
-  // NOTE: intentionally NOT `overflow: hidden` here — it would clip the
+  border: 2px solid transparent;
+  border-radius: var(--r-md);
+  background-color: var(--bg);
+  color: var(--text);
+  transition: border-color var(--t-fast) var(--ease);
+  // NOTE: intentionally NOT `overflow: hidden` here: it would clip the
   // toolbar's emoji-picker / heading dropdowns (which pop downward). Rounded
   // corners are clipped on the toolbar (top) and content (bottom) instead.
+
+  &:focus-within { border-color: var(--accent); }
 
   // Toolbar
   .composer-toolbar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 4px;
-    padding: 8px 12px;
-    background-color: var(--bg-tertiary);
-    border-bottom: 1px solid var(--border-color);
-    border-radius: 7px 7px 0 0;
-
-    @include mix.respond(phone) {
-      padding: 6px 8px;
-      gap: 2px;
-    }
+    gap: 2px;
+    padding: 4px;
+    border-bottom: 1px solid var(--border);
+    border-radius: 10px 10px 0 0;
 
     .toolbar-group {
       display: flex;
       align-items: center;
       gap: 2px;
-      &.show{
-        display: none;  
-        }
+
+      &.show { display: none; }
 
       button {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
         padding: 0;
         border: none;
-        border-radius: 4px;
+        border-radius: var(--r-sm);
         background-color: transparent;
-        color: var(--text-secondary);
+        color: var(--muted);
+        font: inherit;
         cursor: pointer;
-        transition: all 0.15s ease;
-
-        @include mix.respond(phone) {
-          width: 28px;
-          height: 28px;
-        }
+        transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
         &:hover {
           background-color: var(--bg-hover);
-          color: var(--text-primary);
+          color: var(--text);
         }
 
         &.active {
-          background-color: var(--accent-light);
-          color: var(--accent-primary);
+          background-color: var(--surface-2);
+          color: var(--text);
         }
 
         &:disabled {
-          opacity: 0.5;
+          opacity: .45;
           cursor: not-allowed;
         }
 
-        svg {
-          width: 14px;
-          height: 14px;
-        }
-
-        // Text-label GIF toggle — the icon glyph is unreadable at 14px, so show
-        // a legible "GIF" wordmark instead (matches the comment composer button).
+        // Text-label GIF toggle: a legible "GIF" wordmark instead of a glyph
+        // (matches the comment composer button).
         &.gif-toggle-btn {
           width: auto;
-          min-width: 32px;
-          padding: 0 7px;
-          font-size: 12px;
-          font-weight: 800;
-          letter-spacing: 0.3px;
-
-          @include mix.respond(phone) {
-            min-width: 28px;
-            font-size: 11px;
-            padding: 0 6px;
-          }
+          min-width: 28px;
+          padding: 0 6px;
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: .04em;
         }
       }
     }
 
     .toolbar-divider {
       width: 1px;
-      height: 20px;
-      background-color: var(--border-color);
+      height: 16px;
+      background-color: var(--border);
       margin: 0 4px;
 
-      @include mix.respond(phone) {
-        display: none;
-      }
+      @include v2.mobile { display: none; }
     }
 
-    .toolbar-spacer {
-      flex: 1;
-    }
+    .toolbar-spacer { flex: 1; }
 
+    // View modes: a small segmented track (editor / split / preview).
     .view-toggle {
+      padding: 2px;
+      border-radius: var(--r-sm);
+      background: var(--surface);
+
       button {
+        width: 32px;
+        height: 24px;
+
         &.active {
-          background-color: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-          box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
-          color: var(--accent-primary, #e53935);
+          background-color: var(--surface-2);
+          color: var(--text);
         }
-        &.show{
-          
-        display: none;
-              
-        }
+
+        &.show { display: none; }
       }
     }
 
-    // Dropdown wrapper
+    // Popovers (headings, emoji, GIFs): menus per STYLE_GUIDE §7.
     .dropdown-wrapper {
       position: relative;
 
@@ -134,19 +119,19 @@
         z-index: 100;
         display: flex;
         flex-direction: column;
-        min-width: 60px;
-        padding: 4px;
-        margin-top: 4px;
-        background-color: var(--bg-elevated);
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        box-shadow: var(--shadow-md);
+        gap: 2px;
+        min-width: 64px;
+        margin-top: 6px;
+        @include v2.menu;
 
         button {
           width: 100%;
-          justify-content: center;
-          font-size: 12px;
-          font-weight: 600;
+          height: 32px;
+          justify-content: flex-start;
+          padding: 0 10px;
+          border-radius: var(--r-md);
+          @include v2.text(label);
+          color: var(--text);
         }
       }
 
@@ -155,84 +140,88 @@
         top: 100%;
         right: 0;
         z-index: 100;
-        margin-top: 4px;
+        margin-top: 6px;
+        border-radius: var(--r-xl);
+        box-shadow: var(--shadow-float);
 
-        @include mix.respond(phone) {
-          right: -100px;
+        @include v2.mobile { right: -100px; }
+
+        .EmojiPickerReact {
+          --epr-bg-color: var(--surface);
+          --epr-category-label-bg-color: var(--surface);
+          --epr-search-input-bg-color: var(--bg);
+          --epr-hover-bg-color: var(--surface-2);
+          --epr-focus-bg-color: var(--surface-2);
+          --epr-highlight-color: var(--accent);
+          --epr-text-color: var(--text);
+          --epr-picker-border-color: var(--border);
+          --epr-picker-border-radius: 20px;
+          --epr-search-border-color: transparent;
         }
       }
-      @media (max-width: 768px) {
+
+      @include v2.mobile {
         // emoji-picker-react sets its width inline from the `width` prop, so the
         // mobile narrowing has to win with !important.
-        .EmojiPickerReact {
-          width: 270px !important;
-        }
+        .EmojiPickerReact { width: 270px !important; }
       }
 
-      // GIF picker popover — Giphy search + grid, matching the studio toolbar look.
+      // GIF picker popover: Giphy search + grid.
       .gif-picker-container {
         position: absolute;
         top: 100%;
         right: 0;
         z-index: 100;
-        margin-top: 4px;
+        margin-top: 6px;
         width: 340px;
-        padding: 8px;
-        background: var(--bg-elevated);
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        box-shadow: var(--shadow-md);
+        @include v2.menu;
 
-        @include mix.respond(phone) {
+        @include v2.mobile {
           width: 280px;
           right: -80px;
         }
 
         .gif-picker-search {
+          @include v2.field(32);
           width: 100%;
-          box-sizing: border-box;
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
-          padding: 8px 10px;
-          color: var(--text-primary);
           font-size: 13px;
-          outline: none;
           margin-bottom: 8px;
-          &:focus { border-color: var(--accent-primary); }
         }
+
         .gif-picker-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 6px;
+          gap: 4px;
           max-height: 280px;
-          overflow-y: auto;
+          @include v2.scroll-y;
         }
+
         .gif-picker-item {
           width: 100%;
           height: auto;
           padding: 0;
           border: none;
-          background: var(--bg-tertiary);
-          border-radius: 8px;
+          @include v2.thumb-placeholder(5px);
+          border-radius: var(--r-sm);
           overflow: hidden;
           cursor: pointer;
+
           img { width: 100%; height: auto; display: block; }
-          &:hover { outline: 2px solid var(--accent-primary); }
+          &:hover { outline: 2px solid var(--accent); outline-offset: -2px; }
         }
+
         .gif-picker-status {
           grid-column: 1 / -1;
-          text-align: center;
           padding: 20px;
-          color: var(--text-secondary);
-          font-size: 13px;
+          @include v2.text(meta);
+          color: var(--muted);
         }
+
         .gif-picker-attribution {
-          text-align: center;
-          font-size: 10px;
-          color: var(--text-secondary);
           margin-top: 6px;
-          letter-spacing: 0.5px;
+          @include v2.text(meta-sm);
+          font-size: 10px;
+          color: var(--muted);
         }
       }
     }
@@ -244,31 +233,20 @@
     flex: 1;
     min-height: 0;
     overflow: hidden;
-    border-radius: 0 0 7px 7px;
+    border-radius: 0 0 10px 10px;
 
-    &.editor {
-      .editor-panel {
-        width: 100%;
-      }
-    }
-
-    &.preview {
-      .preview-panel {
-        width: 100%;
-      }
-    }
+    &.editor .editor-panel { width: 100%; }
+    &.preview .preview-panel { width: 100%; }
 
     &.split {
+      gap: 0;
+
       .editor-panel,
-      .preview-panel {
-        width: 50%;
-      }
+      .preview-panel { width: 50%; }
 
-      .editor-panel {
-        border-right: 1px solid var(--border-color);
-      }
+      .editor-panel { border-right: 1px solid var(--border); }
 
-      @include mix.respond(phone) {
+      @include v2.mobile {
         flex-direction: column;
 
         .editor-panel,
@@ -279,7 +257,7 @@
 
         .editor-panel {
           border-right: none;
-          border-bottom: 1px solid var(--border-color);
+          border-bottom: 1px solid var(--border);
         }
       }
     }
@@ -294,60 +272,42 @@
     textarea {
       width: 100%;
       min-height: 120px;
-      padding: 16px;
+      padding: 10px 12px;
       border: none;
       outline: none;
       resize: none;
       overflow-y: auto;
-      font-family: "SF Mono", "Fira Code", "Monaco", "Inconsolata", monospace;
-      font-size: 14px;
+      font-family: var(--font-mono);
+      font-size: 13px;
       line-height: 1.6;
-      background-color: var(--bg-secondary);
-      color: var(--text-primary);
+      background-color: transparent;
+      color: var(--text);
 
-      &::placeholder {
-        color: var(--text-muted);
-      }
-
-      @include mix.respond(phone) {
-        padding: 12px;
-        font-size: 13px;
-      }
+      &::placeholder { color: var(--muted); }
     }
 
-    &.drag-over {
-      textarea {
-        opacity: 0.5;
-      }
-    }
+    &.drag-over textarea { opacity: .45; }
 
     .drag-overlay,
     .upload-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      background-color: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 500;
+      gap: 8px;
+      background-color: var(--media-scrim);
+      color: var(--on-media);
+      @include v2.text(label);
       pointer-events: none;
-
-      svg {
-        opacity: 0.8;
-      }
     }
 
     .drag-overlay {
-      border: 3px dashed var(--accent-primary);
-      background-color: var(--accent-light);
-      color: var(--accent-primary);
+      border: 2px dashed var(--accent);
+      border-radius: 0 0 10px 10px;
+      background-color: var(--accent-tint);
+      color: var(--accent);
     }
   }
 
@@ -356,208 +316,161 @@
     flex: 1;
     min-width: 0;
     overflow-y: auto;
-    padding: 16px;
-    background-color: var(--bg-secondary);
-
-    @include mix.respond(phone) {
-      padding: 12px;
-    }
+    padding: 10px 12px;
 
     .preview-placeholder {
-      color: var(--text-muted);
-      font-style: italic;
+      @include v2.text(body-sm);
+      color: var(--muted);
     }
 
-    // Markdown rendered content styles
+    // Markdown rendered content
     .preview-content {
-      color: var(--text-primary);
+      color: var(--text);
       font-size: 14px;
-      line-height: 1.7;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
 
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        margin: 1.5em 0 0.5em;
-        font-weight: 600;
-        color: var(--text-primary);
+      h1, h2, h3, h4, h5, h6 {
+        margin: 16px 0 6px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--text);
       }
 
-      h1 {
-        font-size: 1.8em;
-      }
-      h2 {
-        font-size: 1.5em;
-      }
-      h3 {
-        font-size: 1.3em;
-      }
-      h4 {
-        font-size: 1.1em;
-      }
-      h5 {
-        font-size: 1em;
-      }
-      h6 {
-        font-size: 0.9em;
-      }
+      h1 { font-size: 24px; font-weight: 900; letter-spacing: -.02em; }
+      h2 { font-size: 20px; }
+      h3 { font-size: 18px; }
+      h4 { font-size: 16px; }
+      h5 { font-size: 14px; }
+      h6 { font-size: 13px; }
 
-      p {
-        margin: 0.8em 0;
-      }
+      p { margin: 8px 0; }
 
       a {
-        color: var(--accent-primary);
+        color: var(--cyan);
         text-decoration: none;
 
-        &:hover {
-          text-decoration: underline;
-        }
+        &:hover { text-decoration: underline; }
       }
 
-      ul,
-      ol {
-        margin: 0.8em 0;
-        padding-left: 2em;
-      }
-
-      li {
-        margin: 0.3em 0;
-      }
+      ul, ol { margin: 8px 0; padding-left: 24px; }
+      li { margin: 4px 0; }
 
       blockquote {
-        margin: 1em 0;
-        padding: 0.5em 1em;
-        border-left: 4px solid var(--accent-primary);
-        background-color: var(--bg-tertiary);
-        color: var(--text-secondary);
-        font-style: italic;
+        margin: 12px 0;
+        padding: 6px 12px;
+        border-left: 2px solid var(--accent);
+        background-color: var(--surface-2);
+        border-radius: 0 var(--r-sm) var(--r-sm) 0;
+        color: var(--muted);
       }
 
       code {
-        padding: 0.2em 0.4em;
-        font-family: "SF Mono", "Fira Code", monospace;
-        font-size: 0.9em;
-        background-color: var(--bg-tertiary);
-        border-radius: 4px;
+        padding: 2px 4px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        background-color: var(--surface-2);
+        border-radius: var(--r-xs);
       }
 
       pre {
-        margin: 1em 0;
-        padding: 1em;
+        margin: 12px 0;
+        padding: 10px 12px;
         overflow-x: auto;
-        background-color: var(--bg-tertiary);
-        border-radius: 6px;
+        background-color: var(--surface-2);
+        border-radius: var(--r-md);
 
-        code {
-          padding: 0;
-          background-color: transparent;
-        }
+        code { padding: 0; background-color: transparent; }
       }
 
       img {
         max-width: 100%;
         height: auto;
-        border-radius: 8px;
-        margin: 1em 0;
+        border-radius: var(--r-md);
+        margin: 12px 0;
       }
 
       iframe {
         width: 100%;
         height: auto;
         aspect-ratio: 16 / 9;
-        border-radius: 8px;
-        margin: 1em 0;
+        border: 0;
+        border-radius: var(--r-md);
+        margin: 12px 0;
       }
 
       .video-container {
         width: 100%;
         aspect-ratio: 16 / 9;
         position: relative;
-        background: #000;
-        border-radius: 8px;
+        background: var(--media-black);
+        border-radius: var(--r-md);
         overflow: hidden;
-        margin: 1em 0;
+        margin: 12px 0;
 
         iframe {
           position: absolute;
-          top: 0;
-          left: 0;
+          inset: 0;
           width: 100%;
           height: 100%;
           border: 0;
+          margin: 0;
         }
       }
 
       table {
         width: 100%;
-        margin: 1em 0;
+        margin: 12px 0;
         border-collapse: collapse;
+        font-size: 13px;
 
-        th,
-        td {
-          padding: 8px 12px;
-          border: 1px solid var(--border-color);
+        th, td {
+          padding: 8px;
+          border-bottom: 1px solid var(--border);
           text-align: left;
         }
 
         th {
-          background-color: var(--bg-tertiary);
-          font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-          background-color: var(--bg-tertiary);
+          @include v2.text(eyebrow);
+          color: var(--muted);
+          border-bottom-width: 2px;
         }
       }
 
       hr {
-        margin: 1.5em 0;
+        margin: 16px 0;
         border: none;
-        border-top: 1px solid var(--border-color);
+        border-top: 1px solid var(--border);
       }
 
-      // Spoiler/details support
+      // Spoiler/details support: a hidden block until it is opened.
       details {
-        margin: 1em 0;
-        padding: 0.5em 1em;
-        background-color: var(--bg-tertiary);
-        border-radius: 6px;
-        border: 1px solid var(--border-color);
+        margin: 12px 0;
+        padding: 8px 12px;
+        background-color: var(--surface-2);
+        border-radius: var(--r-md);
 
         summary {
           cursor: pointer;
-          font-weight: 500;
-          color: var(--accent-primary);
-
-          &:hover {
-            text-decoration: underline;
-          }
+          font-weight: 700;
+          color: var(--cyan);
         }
       }
     }
   }
 }
 
-// Close dropdowns when clicking outside
-.markdown-composer {
-  .dropdown-wrapper {
-    .dropdown-menu,
-    .emoji-picker-container {
-      animation: fadeIn 0.15s ease;
-    }
+.markdown-composer .dropdown-wrapper {
+  .dropdown-menu,
+  .emoji-picker-container,
+  .gif-picker-container {
+    animation: md-composer-pop var(--t-base) var(--ease);
   }
 }
 
-@keyframes fadeIn {
+@keyframes md-composer-pop {
   from {
     opacity: 0;
     transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

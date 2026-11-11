@@ -154,12 +154,13 @@ const back = (user) => user.click(screen.getByRole('button', { name: /Back/ }))
 const row = (name) => screen.getByText(name).closest('.audio-upload-track-row')
 const cover = () => document.querySelector('.audio-upload-post-form .audio-upload-album-thumb')
 
-// source -> mode (Standalone post) -> playlist (name) -> post
+// source -> mode (Standalone post) -> playlist (name) -> post; the modes and the
+// playlists are choice cards (role "radio")
 async function toPostStep(user, playlistName) {
   await next(user)
-  await user.click(screen.getByRole('button', { name: /Standalone post/ }))
+  await user.click(screen.getByRole('radio', { name: /Standalone post/ }))
   await next(user)
-  if (playlistName) await user.click(screen.getByRole('button', { name: new RegExp(playlistName) }))
+  if (playlistName) await user.click(screen.getByRole('radio', { name: new RegExp(playlistName) }))
   await next(user)
   await screen.findByPlaceholderText('Title (required)')
 }
@@ -244,12 +245,12 @@ describe('AudioUploadModal: covers', () => {
     expect(within(cover()).getByText('From playlist')).toBeInTheDocument()
 
     await back(user)
-    await user.click(screen.getByRole('button', { name: /Show B/ }))
+    await user.click(screen.getByRole('radio', { name: /Show B/ }))
     await next(user)
     expect(within(cover()).getByRole('img')).toHaveAttribute('src', 'https://images.hive.blog/DQmB/b.jpg')
 
     await back(user)
-    await user.click(screen.getByRole('button', { name: /No cover/ }))
+    await user.click(screen.getByRole('radio', { name: /No cover/ }))
     await next(user)
     expect(within(cover()).queryByRole('img')).toBeNull()
     expect(within(cover()).getByText('Add cover image')).toBeInTheDocument()
@@ -265,7 +266,7 @@ describe('AudioUploadModal: covers', () => {
     expect(within(cover()).queryByText('From playlist')).toBeNull()
 
     await back(user)
-    await user.click(screen.getByRole('button', { name: /Show B/ }))
+    await user.click(screen.getByRole('radio', { name: /Show B/ }))
     await next(user)
     expect(within(cover()).getByRole('img')).toHaveAttribute('src', 'https://images.hive.blog/DQmMine/mine.jpg')
   })
@@ -276,7 +277,7 @@ describe('AudioUploadModal: covers', () => {
     await toPostStep(user, 'Show A')
     await user.click(within(cover()).getByRole('button', { name: 'Remove cover' }))
     await back(user)
-    await user.click(screen.getByRole('button', { name: /Show B/ }))
+    await user.click(screen.getByRole('radio', { name: /Show B/ }))
     await next(user)
     expect(within(cover()).queryByRole('img')).toBeNull()
   })
@@ -326,7 +327,7 @@ describe('AudioUploadModal: covers', () => {
     await addFile(user, 'two.wav')
     await next(user) // mode: snaps by default
     await next(user)
-    await user.click(screen.getByRole('button', { name: /Show A/ }))
+    await user.click(screen.getByRole('radio', { name: /Show A/ }))
     await next(user) // tracks
     const cards = await waitFor(() => {
       const list = [...document.querySelectorAll('.audio-upload-title-card')].filter((c) => c.querySelector('.audio-upload-track-text'))
@@ -368,7 +369,7 @@ describe('AudioUploadModal: chapters from the editor', () => {
     await waitFor(() => row('Episode 12.mp3'))
     // Snap comments: each track's own text, on the tracks step
     await next(user)
-    await user.click(screen.getByRole('button', { name: /Snap comments/ }))
+    await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
     await next(user)
     await next(user)
     const text = () => screen.getByPlaceholderText('Text for this snap (optional)')
@@ -430,7 +431,7 @@ describe('AudioUploadModal: audiograms as Shorts', () => {
     await result({ trackId, file: new File(['ID3'], 'Episode 12.mp3', { type: 'audio/mpeg' }), durationSec: 120, audiograms: [ag(1), ag(2)] })
     await waitFor(() => row('Episode 12.mp3'))
     await next(user)
-    await user.click(screen.getByRole('button', { name: /Snap comments/ }))
+    await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
     await next(user)
     await next(user) // tracks
     const section = await screen.findByTestId('audiogram-shorts')
@@ -549,7 +550,7 @@ describe('AudioUploadModal: transcripts', () => {
     const { user } = openModal()
     await addFile(user)
     await next(user)
-    await user.click(screen.getByRole('button', { name: /Snap comments/ }))
+    await user.click(screen.getByRole('radio', { name: /Snap comments/ }))
     await next(user)
     await next(user)
     const text = () => screen.getByPlaceholderText('Text for this snap (optional)')

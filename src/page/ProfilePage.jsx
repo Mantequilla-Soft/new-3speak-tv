@@ -636,10 +636,11 @@ function ProfilePage() {
         }
         nameActions={
           <>
-            {/* Edit mode for the Overview's layout (ProfileOverview): on your
-                own channel, the one main action. */}
+            {/* Edit mode for the Overview's layout (ProfileOverview): the big
+                button on your own channel. Secondary, so the red stays free for
+                the empty tabs' upload buttons on the same screen. */}
             <Button
-              variant="primary"
+              variant="secondary"
               size={64}
               className="ph-follow"
               onClick={() => { selectTab('overview'); requestLayoutEdit(); }}

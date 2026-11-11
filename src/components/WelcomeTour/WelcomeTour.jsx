@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { START_TOUR_EVENT } from './welcomeState';
+import { Button } from '../v2/ui';
 import './WelcomeTour.scss';
 
 // A guided tour over the REAL page: each step spotlights an element that is on
@@ -207,7 +208,12 @@ export default function WelcomeTour() {
         aria-label={t('welcome.tour.aria')}
         aria-describedby="wt-text"
       >
-        <div className="wt-progress">{t('welcome.tour.progress', { current: index + 1, total: steps.length })}</div>
+        {/* Step count in mono and a cyan bar (design 33d): the tour is info,
+            so it is cyan, not the accent. */}
+        <div className="wt-progress">
+          <span className="wt-count num">{t('welcome.tour.progress', { current: index + 1, total: steps.length })}</span>
+          <span className="wt-bar" aria-hidden="true"><span style={{ width: `${((index + 1) / steps.length) * 100}%` }} /></span>
+        </div>
         <h3 className="wt-title">{t(`welcome.tour.steps.${step.titleKey || step.id}.title`)}</h3>
         {step.chips && (
           <ul className="wt-chips">
@@ -217,25 +223,24 @@ export default function WelcomeTour() {
         <p className="wt-text" id="wt-text">
           <Trans i18nKey={`welcome.tour.steps.${step.id}.text`} components={{ b: <b /> }} />
         </p>
-        <div className="wt-dots" aria-hidden="true">
-          {steps.map((s, i) => <span key={s.id} className={i === index ? 'on' : ''} />)}
-        </div>
         <div className="wt-actions">
-          {!last && (
-            <button type="button" className="wt-skip" onClick={() => close()}>{t('welcome.tour.skip')}</button>
+          {index > 0 && (
+            <Button variant="secondary" size={48} className="wt-btn" onClick={() => setIndex(index - 1)}>{t('welcome.tour.back')}</Button>
           )}
           <span className="wt-spacer" />
-          {index > 0 && (
-            <button type="button" className="wt-btn" onClick={() => setIndex(index - 1)}>{t('welcome.tour.back')}</button>
+          {!last && (
+            <Button variant="ghost" size={48} className="wt-skip" onClick={() => close()}>{t('welcome.tour.skip')}</Button>
           )}
-          <button
-            type="button"
+          <Button
             ref={nextRef}
+            variant="cyan"
+            size={48}
+            next
             className="wt-btn wt-btn--primary"
             onClick={() => (last ? close() : setIndex(index + 1))}
           >
             {last ? t('welcome.tour.done') : t('welcome.tour.next')}
-          </button>
+          </Button>
         </div>
       </div>
     </div>,

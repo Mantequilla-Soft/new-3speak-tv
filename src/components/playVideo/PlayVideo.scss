@@ -1,630 +1,700 @@
-@use "../../mixins.scss" as mix;
-.play-video{
-    flex-basis: 69%;
-    max-width: 69%;
-    min-width: 0;
-    @include mix.respond(phone) {
-        display: contents;
+@use "../../styles/v2" as v2;
 
-        // With display:contents, direct children become flex items of .play-container
-        > * {
-          width: 100%;
-          min-width: 0;
-          box-sizing: border-box;
-        }
-      }
-    
-    video{
-        width: 100%;
-    }
+/* ============================================================================
+   Watch v2 (design 02, 22a, 33a): the watch page as PlayVideo draws it.
 
-    .top-container{
-        padding: 10px;
-        background-color: var(--card-bg);
-        border-radius: 10px;
-        box-shadow: var(--card-shadow);
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        // Stacking context so glow canvas stays behind content
-        isolation: isolate;
-        overflow: hidden;
+   Wide (>= 1024px), one grid:
+       "stage side"     the player (16:9, radius 28, cyan glow) | side panel
+       "main  aside"    community, title, meta, dock, chapters, description |
+                        supporters and voters card
+   The side panel takes the player's height (its scroll area is absolutely
+   positioned, so it adds no height of its own) and never changes size.
 
-        @include mix.respond(phone) {
-            display: contents;
-        }
-        .video-loader {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 450px; // adjust as needed
-            font-size: 18px;
-            color: var(--text-secondary);
-            background-color: #000;
-            width: 100%;
-            border-radius: 8px;
+   Narrow: one column, "stage" "main" "side". The player is sticky on phones,
+   and the side panel is chip tabs over one fixed-height scroll area.
 
-            .spinner {
-    font-size: 3rem;
-    animation: spin 1s linear infinite;
-    color: var(--accent-primary);
+   The player frame and its overlays (.video-iframe-wrapper and friends, further
+   down) are shared with the chat's inline player.
+   ========================================================================== */
+
+$wide: 1024px;
+@mixin wide { @media (min-width: $wide) { @content; } }
+@mixin narrow { @media (max-width: $wide - 1) { @content; } }
+
+.play-video.wv2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "stage" "main" "side";
+  gap: 16px;
+  min-width: 0;
+  color: var(--text);
+
+  @include wide {
+    grid-template-columns: minmax(0, 1fr) var(--side-panel-w);
+    grid-template-areas: "stage side" "main aside";
+    column-gap: 20px;
+    row-gap: 20px;
+    align-items: start;
   }
-          }
-          
-        .video-title-row {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 6px;
-            margin-top: 10px;
-            position: relative;
-            z-index: 2;
 
-            @include mix.respond(phone) {
-                margin-top: 0;
-                padding: 8px 10px;
-                background-color: var(--card-bg);
-                width: 100%;
-                box-sizing: border-box;
+  // The reaction player's sizes (cycled from the player): how much room the
+  // side column gets while it shows another creator's take.
+  @include wide {
+    .reaction-medium > & { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .reaction-big > & { grid-template-columns: minmax(0, 1fr) 320px; }
+    .reaction-small > & { grid-template-columns: minmax(0, 3fr) minmax(0, 7fr); }
+    // Cinema: the player takes the whole width; the panels follow below it.
+    .reaction-cinema > & { grid-template-columns: minmax(0, 1fr); grid-template-areas: "stage" "main" "side" "aside"; }
+  }
+}
 
-                &.title-collapsed {
-                    border-radius: 0 0 10px 10px;
-                }
-            }
+/* ─── Stage: the player with its glow ─────────────────────────────────────── */
+.wv2-stage {
+  grid-area: stage;
+  position: relative;
+  min-width: 0;
+  isolation: isolate;
 
-            .video-title-col {
-                flex: 1;
-                min-width: 0;
+  // Phones: the wrapper itself is the grid item, so the sticky player can
+  // stick for the whole height of the page's grid (its parent).
+  @include v2.mobile { display: contents; }
+}
 
-                .video-title-line {
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
+// The cyan ambient glow around the player (02; STYLE_GUIDE §8).
+.wv2-glow {
+  position: absolute;
+  inset: -24px;
+  z-index: -1;
+  border-radius: 44px;
+  background: radial-gradient(60% 60% at 40% 50%, color-mix(in srgb, var(--cyan) 18%, transparent), transparent 70%);
+  pointer-events: none;
 
-                    h3 {
-                        min-width: 0;
-                    }
-                }
-            }
+  @include v2.mobile { display: none; }
+}
 
-            h3 {
-                margin: 0;
-                font-weight: 600;
-                font-size: 16px;
-                color: var(--text-primary);
-                @include mix.respond(phone) {
-                    font-size: 14px;
-                }
-            }
+.play-video.wv2 .video-iframe-wrapper {
+  border-radius: var(--r-3xl);
+  background: var(--media-black);
 
-            .mobile-title-meta {
-                display: none;
+  @include v2.mobile {
+    grid-area: stage;
+    border-radius: 0;
+    margin: 0 calc(-1 * var(--page-pad));
+    width: auto;
+  }
 
-                @include mix.respond(phone) {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    margin-top: 4px;
-                    flex-wrap: wrap;
-                }
-            }
-        }
+  &:fullscreen, &.landscape-fullscreen { border-radius: 0; margin: 0; }
+}
 
-        .mobile-title-toggle {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            flex-shrink: 0;
-            border: none;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: background 0.2s ease;
+.wv2-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--media-black);
+}
 
-            &:hover {
-                background: rgba(255, 255, 255, 0.2);
-            }
+.play-video.wv2 .video-loader {
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-3xl);
+  background: var(--media-black);
+  color: var(--accent);
+}
 
-            @include mix.respond(phone) {
-                display: flex;
-            }
-        }
+/* The creator on the player (02): avatar, name, followers, Follow, on a scrim. */
+.wv2-creator {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  z-index: 8;
+  max-width: calc(100% - 36px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-base) var(--ease);
 
-        .video-details-collapsible {
-            position: relative;
-            z-index: 2;
+  &.is-shown { opacity: 1; pointer-events: auto; }
 
-            @include mix.respond(phone) {
-                padding: 8px 10px 10px;
-                background-color: var(--card-bg);
-                width: 100%;
-                box-sizing: border-box;
-                border-radius: 0 0 10px 10px;
+  .author-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 100%;
+    padding: 6px 6px 6px 6px;
+    border-radius: 24px;
+    background: var(--media-scrim);
+    color: var(--on-media);
+  }
 
-                &.collapsed {
-                    display: none;
-                }
-            }
-        }
+  .author-badge-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    color: var(--on-media);
+    text-decoration: none;
+    padding-right: 4px;
 
-        h3{
-            margin-top: 10px;
-            font-weight: 600;
-            font-size: 16px;
-            color: var(--text-primary);
-            @include mix.respond(phone) {
-                font-size: 14px;
-              }
-        }
-        .community-tags-row {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 10px;
-
-            .mobile-only {
-                display: none;
-            }
-
-            .tag-wrapper {
-                display: contents;
-            }
-
-            @include mix.respond(phone) {
-                .mobile-only {
-                    display: inline-flex;
-                }
-                // Right-align the author tags on mobile too (desktop already does
-                // via the v2 min-width block), so everything tag-related lines up
-                // on the right.
-                justify-content: flex-end;
-            }
-        }
-
-        .tag-wrapper{
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-
-            span{
-                cursor: pointer;
-                transition: all 0.2s ease;
-                padding: 2px 10px;
-                background: transparent;
-                border: 1px solid var(--border-light);
-                border-radius: 8px;
-                margin-right: 3px;
-                font-size: 13px;
-                color: var(--text-secondary);
-
-                &:hover {
-                    background: var(--bg-tertiary);
-                    border-color: var(--border-color);
-                    color: var(--text-primary);
-                }
-
-                @include mix.respond(phone) {
-                    padding: 3px 10px;
-                    font-size: 12px;
-                }
-            }
-
-            .curated-tag {
-                display: inline-flex;
-                align-items: center;
-                gap: 4px;
-                cursor: default;
-                background: var(--bg-tertiary);
-                border-color: var(--accent-color);
-
-                .curated-tag-icon {
-                    width: 14px;
-                    height: 14px;
-                    border-radius: 2px;
-                }
-            }
-        }
-        .community-title-wrap{
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            width: fit-content;
-            padding: 1px 10px 1px 1px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-light);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-
-            &:hover {
-                background: var(--bg-hover);
-                border-color: var(--border-color);
-            }
-
-            img {
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                object-fit: cover;
-            }
-
-            .community-text {
-                display: flex;
-                flex-direction: column;
-                line-height: 1.2;
-            }
-
-            .community-name {
-                font-size: 13px;
-                font-weight: 600;
-                color: var(--text-primary);
-                white-space: nowrap;
-            }
-
-            .community-members {
-                font-size: 12px;
-                font-weight: 400;
-                color: var(--text-secondary);
-                white-space: nowrap;
-            }
-        }
-
-        .play-video-info{
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 10px;
-            font-size: 13px;
-            color: var(--text-secondary);
-
-            .info-stats-row {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
-
-            .wrap-left{
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                .wrap{
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                }
-            }
-
-            .wrap-right-stats {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                @include mix.respond(phone) {
-                    gap: 5px;
-                }
-                .wrap{
-                    display: inline-flex;
-                    align-items: center;
-                    margin-left: 10px;
-                    position: relative;
-                    @include mix.respond(phone) {
-                        margin-left: 4px;
-                    }
-                    .loader-circle{
-                        margin-right: 7px;
-                    }
-                    .icon{
-                        font-size: 20px;
-                        margin-right: 4px;
-                        color: var(--text-secondary);
-                    }
-                    .icon-red{
-                        color: var(--accent-primary);
-                        font-size: 20px;
-                        margin-right: 4px;
-                    }
-                    span{
-                        cursor: pointer;
-                    }
-                    .amount{
-                        border: none;
-                        background-color: transparent;
-                        color: var(--text-secondary);
-                        cursor: pointer;
-                    }
-                }
-            }
-
-            // ---- Action bar: one row of pills, ordered. Vote · Tip · Reshare ·
-            // Clip on the left; the rest on the right with Report always last.
-            // The left/right groups are flattened (display:contents) so every
-            // button orders within the single row.
-            .info-buttons-row {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                gap: 8px;
-
-                // On mobile the actions live in the FAB (speed-dial), so hide
-                // this inline bar entirely.
-                @include mix.respond(phone) { display: none; }
-
-                .info-buttons-left,
-                .info-buttons-right { display: contents; }
-
-                .vote-btn   { order: 1; }
-                .tip-btn    { order: 2; }
-                .reshare-btn{ order: 3; }
-                .reblog-btn { order: 3; }
-                .clip-btn   { order: 4; }
-                // Stats sits just left of Share. It carries the right-group's
-                // margin-left:auto when present; Share then drops its own so the
-                // two stay adjacent (non-owners have no Stats, so Share keeps it).
-                .stats-btn  { order: 9; margin-left: auto; }
-                .stats-btn ~ .share-btn { margin-left: 0; }
-                .share-btn  { order: 10; margin-left: auto; }
-                .promote-btn{ order: 12; }
-                .playlist-btn { order: 13; }
-                .summary-btn  { order: 14; }
-                .edit-video-btn { order: 15; }
-                .watch-later-remove-btn { order: 16; }
-                .report-btn { order: 99; }
-            }
-
-            // ====================================================================
-            // ONE button class for every action in the bar. All the per-button
-            // classes (.vote-btn, .share-btn, …) are kept ONLY for ordering/state
-            // above — the look lives here, in a single place.
-            // ====================================================================
-            .pv-btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 6px;
-                height: 36px;
-                padding: 0 14px;
-                border: none;
-                border-radius: 999px;
-                background: var(--bg-tertiary, rgba(127, 127, 127, 0.14));
-                color: var(--text-primary);
-                font-size: 14px;
-                font-weight: 500;
-                line-height: 1;
-                white-space: nowrap;
-                cursor: pointer;
-                transition: background 0.15s ease, color 0.15s ease;
-
-                svg { flex-shrink: 0; }
-                span { font-size: 14px; font-weight: 500; }
-
-                &:hover { background: var(--border-color, rgba(127, 127, 127, 0.28)); }
-                &:disabled { opacity: 0.4; cursor: not-allowed; }
-
-                // State variants
-                &.reshared { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
-                &.reported { background: rgba(227, 19, 55, 0.14); color: #e31337; }
-                &.active   { background: rgba(229, 57, 53, 0.16); color: var(--accent-primary); }
-                &.loading  { opacity: 0.5; cursor: not-allowed; }
-
-                .reshare-count { font-weight: 600; }
-
-                // Watch-later "remove" badge sitting on the clock icon.
-                .watch-later-icon-wrap {
-                    position: relative;
-                    display: inline-flex;
-                    align-items: center;
-                    .x-badge {
-                        position: absolute;
-                        top: -7px; right: -9px;
-                        width: 14px; height: 14px;
-                        display: flex; align-items: center; justify-content: center;
-                        font-size: 11px; font-weight: 700; line-height: 1;
-                        border-radius: 50%;
-                        background: var(--accent-primary); color: #fff;
-                    }
-                }
-            }
-        }
-
+    img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--on-media);
+      object-fit: cover;
+      background: var(--avatar);
+      flex: none;
     }
+  }
 
-    .tools-row-label {
-        display: inline;
-    }
+  .author-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+  .author-name-row { display: inline-flex; align-items: center; gap: 4px; min-width: 0; }
+  .author-name { @include v2.text(body); font-weight: 700; color: var(--on-media); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .followers-count { @include v2.text(meta-sm); color: var(--on-media); opacity: .75; white-space: nowrap; }
 
-    // .clip-btn styling now lives in the unified .pv-btn rule above.
-    .remix-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-        padding: 4px 8px;
-        background-color: rgba(255, 255, 255, 0.1);
-        color: var(--text-secondary);
-        border: none;
-        border-radius: 5px;
-        font-size: 13px;
-        cursor: pointer;
-        transition: all 0.2s ease;
+  .follow-btn {
+    @include v2.control(32);
+    @include v2.text(label);
+    font-size: 12px;
+    font-weight: 900;
+    flex: none;
+    background: var(--on-media);
+    color: var(--media-black);
+    &.following { background: color-mix(in srgb, var(--on-media) 16%, transparent); color: var(--on-media); }
+    &:hover { filter: brightness(.92); }
+  }
 
-        &:hover {
-          background-color: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-          box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
-          color: var(--accent-primary, #e53935);
-        }
-    }
+  @include v2.mobile {
+    left: 10px;
+    top: 10px;
 
-    .remix-dropdown-wrap {
-        position: relative;
-        display: inline-flex;
-    }
+    .author-badge { gap: 6px; padding: 4px 4px 4px 4px; border-radius: 16px; }
+    .author-badge-link { gap: 6px; img { width: 24px; height: 24px; } }
+    .author-name { font-size: 12px; }
+    .followers-count { display: none; }
+    .follow-btn { height: 28px; border-radius: 8px; padding: 0 10px; background: var(--accent); color: var(--on-accent); }
+  }
+}
 
-    .remix-dropdown {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        margin-top: 4px;
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        z-index: 100;
-        min-width: 150px;
-        overflow: hidden;
+/* Over-the-player states (33a): media gone, scheduled, a server that did not answer. */
+.wv2-media-state {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--media-black);
+  color: var(--on-media);
 
-        button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-            padding: 8px 12px;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 13px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.15s ease;
+  &__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    max-width: 440px;
+    text-align: left;
 
-            &:hover {
-                background: rgba(255, 255, 255, 0.1);
-            }
+    b { @include v2.text(title-sm); }
+    p { margin: 0; @include v2.text(meta); color: var(--on-media); opacity: .75; line-height: 1.45; }
+    .v2-btn { margin-top: 8px; }
+  }
 
-            & + button {
-                border-top: 1px solid var(--border-color);
-            }
-        }
-    }
+  &__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-lg);
+    display: grid;
+    place-items: center;
+    margin-bottom: 4px;
+    background: color-mix(in srgb, var(--on-media) 14%, transparent);
+  }
+  &.is-cyan .wv2-media-state__icon { background: var(--cyan-tint-strong); color: var(--cyan); }
+  &.is-accent .wv2-media-state__icon { background: var(--accent-tint-strong); color: var(--accent); }
 
-    .tools-row {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        margin-top: 8px;
+  @include v2.mobile {
+    padding: 16px;
+    &__card { gap: 4px; p { @include v2.text(meta-sm); } }
+    &__icon { width: 36px; height: 36px; border-radius: var(--r-md); }
+  }
+}
 
-        // The mobile clip control uses the shared .pv-btn pill, full-width.
-        .pv-btn { flex: 1; }
+/* Clip bar (33a): over the bottom of the player on a wide screen, a card under
+   it on a narrow one. */
+.wv2-clipbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  background: var(--accent-wash);
+  color: var(--text);
 
-        // The mobile-only "Clip Video" entry button is redundant — the FAB
-        // already has Clip Video (the clip controls bar is separate). Hide it.
-        &.mobile-only {
-            display: none;
-        }
-    }
+  &__icon { color: var(--accent); }
+  &__label { flex: 1; min-width: 160px; @include v2.text(body-sm); }
 
-    .clip-bar-inline {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+  &.is-over {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 64px;
+    z-index: 9;
+    background: var(--media-scrim-strong);
+    color: var(--on-media);
+  }
+}
 
-      .clip-bar-inline-label {
-        font-size: 12px;
-        color: var(--text-secondary);
-        white-space: nowrap;
-      }
+/* ─── Main column: community, title, meta, dock, chapters, description ───── */
+.wv2-main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
 
-      .clip-action-btn {
-        padding: 4px 10px;
-        background-color: transparent;
-        color: var(--accent-primary, #e53935);
-        border: 1px solid var(--accent-primary, #e53935);
-        border-radius: 5px;
-        font-size: 11px;
-        font-weight: 600;
-        cursor: pointer;
-        white-space: nowrap;
-        transition: opacity 0.2s;
+  @include v2.mobile { gap: 12px; }
+}
 
-        &:hover { opacity: 0.85; }
-      }
+// "Posted in" community strip (02): cyan wash, Join on the right.
+.wv2-community {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 10px 12px 10px 10px;
+  border-radius: var(--r-lg);
+  background: var(--cyan-wash);
+  border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
 
-      @include mix.respond(phone) {
-        display: none;
-      }
-    }
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    &:hover b { text-decoration: underline; }
+  }
+  &__mark {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-md);
+    object-fit: cover;
+    background: var(--cyan);
+    flex: none;
+  }
+  &__text {
+    min-width: 0;
+    @include v2.text(body);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    .is-muted { color: var(--muted); }
+  }
+  &__spacer { flex: 1; }
+  &__playlist {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    @include v2.text(body-sm);
+    color: var(--muted);
+    white-space: nowrap;
+    min-width: 0;
+    .material-symbols-rounded { color: var(--cyan); }
+    b { color: var(--text); overflow: hidden; text-overflow: ellipsis; }
+  }
 
-    .clip-bar {
-      display: none;
+  @include v2.mobile {
+    gap: 8px;
+    min-height: 44px;
+    padding: 6px 6px 6px 6px;
+    border-radius: var(--r-md);
+    border: 0;
 
-      @include mix.respond(phone) {
-        display: flex;
-      }
+    &__link { gap: 8px; }
+    &__mark { width: 24px; height: 24px; border-radius: var(--r-sm); }
+    &__text { @include v2.text(meta); .is-muted:first-child { display: none; } }
+    &__playlist { display: none; }
+  }
+}
 
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 14px;
-      margin-top: 8px;
-      background-color: rgba(var(--accent-primary-rgb, 255, 0, 0), 0.08);
-      border: 1px solid rgba(var(--accent-primary-rgb, 255, 0, 0), 0.25);
-      border-radius: 8px;
+.wv2-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
 
-      .clip-bar-info {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: var(--text-primary);
-        font-size: 13px;
+  &__pills { display: flex; gap: 6px; flex-wrap: wrap; }
+}
 
-        svg {
-          flex-shrink: 0;
-          color: var(--accent-primary);
-        }
-      }
+.wv2-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
 
-      .clip-bar-actions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-shrink: 0;
-      }
+  > .ai-badge, > [class*="ai-badge"] { margin-top: 4px; flex: none; }
+  .title-translate { margin-top: 0; }
+}
 
-      .clip-action-btn {
-        padding: 5px 14px;
-        background-color: transparent;
-        color: var(--accent-primary, #e53935);
-        border: 1px solid var(--accent-primary, #e53935);
-        border-radius: 5px;
-        font-size: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: opacity 0.2s;
+.wv2-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  @include v2.text(heading);
+  color: var(--text);
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
 
-        &:hover { opacity: 0.85; }
-        &:disabled { opacity: 0.5; cursor: not-allowed; }
-      }
+  @include v2.mobile { font-size: 20px; }
+}
 
-      .clip-cancel-btn {
-        padding: 5px 14px;
-        background-color: rgba(255, 255, 255, 0.1);
-        color: var(--text-secondary);
-        border: none;
-        border-radius: 5px;
-        font-size: 12px;
-        cursor: pointer;
-        transition: all 0.2s;
+.wv2-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  @include v2.text(meta);
+  color: var(--muted);
 
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.2);
-          color: var(--text-primary);
-        }
-      }
-    }
+  &__payout { display: inline-flex; align-items: center; }
+  .payout-amount-badge { font-size: 12px; }
+}
 
-    .video-iframe-wrapper {
+// Author tags, topics (with their share) and "Tag this video" (02, 33a).
+.wv2-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  @include v2.mobile { flex-wrap: nowrap; @include v2.scroll-x; margin: 0 calc(-1 * var(--page-pad)); padding: 0 var(--page-pad); }
+}
+
+.wv2-tag {
+  @include v2.control(28);
+  @include v2.text(label);
+  font-size: 12px;
+  flex: none;
+  gap: 4px;
+  background: var(--surface-2);
+  color: var(--text);
+  white-space: nowrap;
+
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+
+  &__logo { width: 16px; height: 16px; border-radius: var(--r-xs); }
+  &__n { font-size: 10px; font-weight: 500; opacity: .7; }
+
+  &.is-curated { background: var(--cyan-tint); color: var(--cyan); }
+  &.is-topic { background: transparent; box-shadow: inset 0 0 0 1px var(--border); color: var(--muted); }
+  &.is-topic.is-voted { background: var(--cyan-tint); box-shadow: inset 0 0 0 1px var(--cyan); color: var(--cyan); }
+  &.is-topic.is-mine { background: var(--cyan-tint); color: var(--cyan); }
+  &.is-add { background: transparent; box-shadow: none; outline: 2px dashed var(--border); outline-offset: -2px; color: var(--muted); }
+}
+
+// Notices in the flow (33a states): icon well in the tone, bold line, action.
+.wv2-state {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-lg);
+    display: grid;
+    place-items: center;
+    flex: none;
+    background: var(--surface-2);
+    color: var(--muted);
+  }
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 8px;
+    b { @include v2.text(body); font-weight: 700; }
+  }
+
+  &.is-cyan { border-color: color-mix(in srgb, var(--cyan) 30%, var(--border)); .wv2-state__icon { background: var(--cyan-tint-strong); color: var(--cyan); } }
+  &.is-accent { border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); .wv2-state__icon { background: var(--accent-tint-strong); color: var(--accent); } }
+  &.is-compact { padding: 8px 12px 8px 8px; .wv2-state__icon { width: 36px; height: 36px; border-radius: var(--r-md); } b { font-weight: 400; color: var(--muted); @include v2.text(body-sm); } }
+}
+
+// Chapter cards (02): the playing one in cyan.
+.wv2-chapters {
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+
+  &.is-scroll { @include v2.scroll-x; .wv2-chapter { flex: 0 0 200px; } }
+}
+
+.wv2-chapter {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 8px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 4%, var(--surface)); }
+  &.is-on { background: color-mix(in srgb, var(--cyan) 8%, var(--surface)); border-color: var(--cyan); }
+
+  &__thumb {
+    position: relative;
+    aspect-ratio: 16 / 8;
+    border-radius: var(--r-md);
+    @include v2.thumb-placeholder(6px);
+  }
+  &__row { display: flex; align-items: center; gap: 8px; padding: 8px 2px 2px; min-width: 0; }
+  &__at { @include v2.mono(11, 700); color: var(--cyan); flex: none; }
+  &__title { @include v2.text(body-sm); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+
+// Chapters as a list (narrow Chapters tab, summary sheet).
+.wv2-chapter-list { display: flex; flex-direction: column; gap: 4px; padding-top: 6px; }
+.wv2-chapter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border-radius: var(--r-lg);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover { background: var(--bg-hover); }
+  &.is-on { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 8%, transparent); }
+
+  &__thumb { width: 96px; aspect-ratio: 16 / 9; border-radius: var(--r-md); flex: none; @include v2.thumb-placeholder(6px); }
+  &__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; b { @include v2.text(body-sm); font-weight: 700; } }
+}
+
+// Description card (02).
+.wv2-desc {
+  padding: 4px 2px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  min-width: 0;
+
+  .blog-content-container { background: transparent; border-radius: 0; }
+}
+
+.watch-stats-panel {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.cinema-reactions-slot { min-width: 0; }
+
+/* ─── Aside: Supporters | Voters (02) ─────────────────────────────────────── */
+.wv2-aside { grid-area: aside; min-width: 0; scroll-margin-top: calc(var(--nav-top-offset, 64px) + 16px); }
+
+.wv2-credits {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+
+  // A fixed-height body: switching Supporters and Voters never moves the page.
+  &__body { height: 200px; margin: 0 -4px; padding: 0 4px; @include v2.scroll-y; }
+}
+
+.wv2-support-btn { margin-top: 2px; }
+
+// Rows shared by the card and the narrow tabs.
+.wv2-rows { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; &.is-loading { gap: 10px; padding-top: 8px; } }
+
+.wv2-pane-empty {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 12px 0 0;
+  @include v2.text(body-sm);
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.wv2-supporter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+
+  &__rank {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    display: grid;
+    place-items: center;
+    flex: none;
+    background: var(--surface-2);
+    @include v2.mono(12, 900);
+    &.is-top { background: var(--accent); color: var(--on-accent); }
+  }
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-md);
+    object-fit: cover;
+    flex: none;
+    background: var(--avatar);
+    &.is-bolt { display: grid; place-items: center; color: var(--accent); }
+  }
+  &__name {
+    flex: 1;
+    min-width: 0;
+    @include v2.text(body);
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover { text-decoration: underline; }
+  }
+  &__amount { font-size: 13px; flex: none; }
+}
+
+.wv2-voters__sum {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+
+  b:first-child { flex: 1; @include v2.text(body); font-weight: 700; }
+  span { @include v2.text(meta); color: var(--muted); }
+  .money { font-size: 14px; font-weight: 900; }
+}
+
+.wv2-voter {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 52px 60px;
+  gap: 10px;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+
+  &.is-head {
+    padding: 8px 0 4px;
+    border-bottom: 0;
+    @include v2.text(eyebrow);
+    color: var(--muted);
+  }
+  .is-num { text-align: right; }
+
+  &__avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--avatar); }
+  &__who {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    a { @include v2.text(body-sm); font-weight: 700; color: var(--text); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; &:hover { text-decoration: underline; } }
+    span { @include v2.text(meta-sm); color: var(--muted); }
+  }
+  &__weight { @include v2.mono(12, 700); color: var(--muted); text-align: right; }
+  &__value { @include v2.mono(12, 900); text-align: right; color: var(--text); &.is-top { color: var(--accent); } }
+}
+
+// Up next (narrow tab).
+.wv2-upnext { display: flex; flex-direction: column; gap: 10px; padding-top: 10px; }
+.wv2-upnext__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover b { text-decoration: underline; }
+}
+.wv2-upnext__thumb {
+  position: relative;
+  width: 120px;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  flex: none;
+  @include v2.thumb-placeholder(6px);
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+.wv2-upnext__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  b { @include v2.text(body-sm); font-weight: 700; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  span { @include v2.text(meta-sm); color: var(--muted); }
+}
+
+// The live chat's portal target inside the side panel.
+.wv2-chat {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+
+  .hh-chat { flex: 1; min-height: 0; background: transparent; backdrop-filter: none; border: 0; border-radius: 0; }
+  .hh-chat__header { display: none; }
+  .hh-chat__msg-name { color: var(--text); }
+  .hh-chat__msg-text { color: var(--muted); }
+  .hh-chat__input { color: var(--text); }
+  .hh-chat__input::placeholder { color: var(--muted); }
+  .hh-chat__input-row, .hh-chat__guest-prompt { border-top-color: var(--border); }
+  .hh-chat__guest-prompt, .hh-chat__empty { color: var(--muted); }
+}
+
+/* ============================================================================
+   The player frame and its overlays. Shared with the chat's inline player
+   (InlineVideoPlayer). Text over video is
+   white on scrims, in both themes.
+   ========================================================================== */
+.video-iframe-wrapper {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; // 16:9 ratio
-  overflow: hidden; // stops scrollbars
-  background: #000;
+  padding-top: 56.25%; // 16:9
+  overflow: hidden;
+  background: var(--media-black);
 
-  @include mix.respond(phone) {
+  @include v2.mobile {
     position: sticky;
     top: var(--nav-top-offset, 50px);
     z-index: 9;
     border-radius: 0;
-    transition: top 0.3s ease;
+    transition: top var(--t-slow) var(--ease);
   }
 
   &:fullscreen,
@@ -642,7 +712,7 @@
       z-index: 10;
     }
 
-    // Vertical videos: keep play/skip centered, progress + mute/fs at bottom
+    // Vertical videos: keep play/skip centred, progress + mute/fullscreen at the bottom.
     &.vertical-video .video-controls {
       top: 0;
       bottom: 0;
@@ -652,58 +722,23 @@
       justify-content: center;
       pointer-events: none;
 
-      &.visible {
-        pointer-events: auto;
-      }
+      &.visible { pointer-events: auto; }
 
       &::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(
-          rgba(0, 0, 0, 0.3) 0%,
-          rgba(0, 0, 0, 0.12) 30%,
-          rgba(0, 0, 0, 0.12) 60%,
-          rgba(0, 0, 0, 0.55) 100%
-        );
+        background: linear-gradient(rgba(0, 0, 0, .3) 0%, rgba(0, 0, 0, .12) 30%, rgba(0, 0, 0, .12) 60%, rgba(0, 0, 0, .55) 100%);
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity var(--t-slow) var(--ease);
         pointer-events: none;
       }
+      &.visible::before { opacity: 1; }
 
-      &.visible::before {
-        opacity: 1;
-      }
-
-      .vc-progress-row {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 0 8px 3px;
-        pointer-events: auto;
-        z-index: 1;
-      }
-
-      .vc-controls-row {
-        justify-content: center;
-        z-index: 1;
-      }
-
-      .vc-controls-right {
-        position: absolute;
-        bottom: 10px;
-        right: 8px;
-        z-index: 1;
-      }
-
-      .vc-time {
-        position: absolute;
-        bottom: 12px;
-        left: 8px;
-        margin-left: 0;
-        z-index: 1;
-      }
+      .vc-progress-row { position: absolute; bottom: 0; left: 0; right: 0; padding: 0 8px 3px; pointer-events: auto; z-index: 1; }
+      .vc-controls-row { justify-content: center; z-index: 1; }
+      .vc-controls-right { position: absolute; bottom: 10px; right: 8px; z-index: 1; }
+      .vc-time { position: absolute; bottom: 12px; left: 8px; margin-left: 0; z-index: 1; }
     }
   }
 
@@ -727,78 +762,52 @@
 
 .video-replay-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: 6;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--media-scrim);
   cursor: pointer;
 }
 
 .video-ended-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: 6;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 16px;
-  background: rgba(0, 0, 0, 0.65);
   padding: 16px;
+  background: var(--media-scrim-strong);
 
-  @media (max-width: 768px) {
-    flex-direction: row;
-    gap: 10px;
-    padding: 10px;
-  }
+  @include v2.mobile { flex-direction: row; gap: 10px; padding: 10px; }
 }
 
-// "Next video in 3, 2, 1": one card with a label above and Cancel below, the
-// same column on every screen size.
+// "Next video in 3, 2, 1" (02 end card): label above, Cancel below.
 .video-ended-overlay.video-next-up {
   flex-direction: column;
   gap: 10px;
 
-  .video-ended-card {
-    flex: 0 0 auto;
-    width: min(280px, 60%);
-  }
+  .video-ended-card { flex: 0 0 auto; width: min(280px, 60%); }
 }
 
 .video-next-up-label {
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
+  @include v2.text(eyebrow);
+  color: var(--on-media);
 }
 
 .video-next-up-cancel {
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-radius: 999px;
-  padding: 6px 18px;
-  font-size: 13px;
-  cursor: pointer;
-
-  &:hover { background: rgba(255, 255, 255, 0.12); }
+  @include v2.btn(media, 36);
+  background: color-mix(in srgb, var(--on-media) 14%, transparent);
+  &:hover { background: color-mix(in srgb, var(--on-media) 22%, transparent); }
 }
 
 .video-ended-mobile-card {
   display: none;
-
-  @media (max-width: 768px) {
-    display: block;
-    flex: 1;
-    min-width: 0;
-  }
+  @include v2.mobile { display: block; flex: 1; min-width: 0; }
 }
 
 .video-ended-suggestions {
@@ -806,110 +815,75 @@
   gap: 10px;
   width: 100%;
   padding: 0 16px;
-  box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
+  @include v2.mobile { display: none; }
 }
 
 .video-ended-card {
   flex: 1;
   min-width: 0;
-  border-radius: 8px;
+  padding: 6px;
+  border-radius: var(--r-xl);
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--media-scrim);
   text-decoration: none;
-  color: #fff;
+  color: var(--on-media);
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-
-  // Staggered fade + zoom-in animation from left to right
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
   opacity: 0;
-  transform: scale(0.85) translateY(8px);
-  animation: endcard-in 0.4s ease forwards;
+  transform: scale(.94) translateY(8px);
+  animation: endcard-in var(--t-slow) var(--ease) forwards;
 
   @for $i from 1 through 5 {
-    &:nth-child(#{$i}) {
-      animation-delay: #{($i - 1) * 0.08}s;
-    }
+    &:nth-child(#{$i}) { animation-delay: #{($i - 1) * .08}s; }
   }
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.18);
-    transform: scale(1.03);
-  }
+  &:hover { background: var(--media-scrim-strong); }
 
   img {
     width: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     display: block;
+    border-radius: var(--r-md);
   }
 
-  .video-ended-card-info {
-    padding: 6px 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
+  .video-ended-card-info { padding: 6px 4px 2px; display: flex; flex-direction: column; gap: 2px; }
   .video-ended-card-title {
-    font-size: 12px;
-    font-weight: 600;
+    @include v2.text(meta);
+    font-weight: 700;
     line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .video-ended-card-author { @include v2.text(meta-sm); opacity: .7; }
 
-  .video-ended-card-author {
-    font-size: 11px;
-    opacity: 0.6;
-  }
-
-  @media (max-width: 768px) {
+  @include v2.mobile {
     .video-ended-card-title { font-size: 11px; }
     .video-ended-card-author { font-size: 10px; }
   }
 }
 
-@keyframes endcard-in {
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
+@keyframes endcard-in { to { opacity: 1; transform: scale(1) translateY(0); } }
 
 .video-replay-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 72px;
-  height: 72px;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   border: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
+  background: var(--media-scrim);
+  color: var(--on-media);
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: scale(1.1);
-  }
-
-  @media (max-width: 768px) {
-    flex-shrink: 0;
-    width: 56px;
-    height: 56px;
-  }
+  &:hover { background: var(--media-scrim-strong); transform: scale(1.06); }
+  @include v2.mobile { flex-shrink: 0; width: 52px; height: 52px; }
 }
 
-// The temporary speed while the video is held down ("2x ⏭"), top-centre like
-// YouTube's, so it never covers the middle of the picture. It shows the restored
-// speed for a moment on release, fading out.
+// The temporary speed while the video is held down ("2x"), top-centre.
 .video-speed-badge {
   position: absolute;
   top: 12px;
@@ -918,34 +892,23 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--r-md);
+  background: var(--media-scrim);
+  color: var(--on-media);
+  @include v2.mono(14, 700);
   z-index: 6;
   pointer-events: none;
-  animation: video-speed-badge-in 0.12s ease-out;
+  animation: video-speed-badge-in var(--t-fast) var(--ease);
 
-  &--leaving { animation: video-speed-badge-out 0.7s ease-in forwards; }
-
-  .video-speed-badge__icon { width: 16px; height: 16px; }
+  &--leaving { animation: video-speed-badge-out .7s ease-in forwards; }
 }
 
-@keyframes video-speed-badge-in {
-  from { opacity: 0; transform: translateX(-50%) scale(0.9); }
-  to { opacity: 1; transform: translateX(-50%) scale(1); }
-}
+@keyframes video-speed-badge-in { from { opacity: 0; transform: translateX(-50%) scale(.9); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+@keyframes video-speed-badge-out { 0%, 40% { opacity: 1; } 100% { opacity: 0; } }
 
-@keyframes video-speed-badge-out {
-  0%, 40% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-// One-second confirmation of a key / click / tap on the video: play, pause,
-// skip. Centred, 20% of the player's height, never in the way of a click.
+// One-second confirmation of a key / click / tap on the video.
 .video-action-flash {
   position: absolute;
   top: 50%;
@@ -957,23 +920,19 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  background: var(--media-scrim);
+  color: var(--on-media);
   z-index: 6;
   pointer-events: none;
+  container-type: size;
   animation: video-action-flash 1s ease-out forwards;
 
-  .video-action-flash__icon {
-    width: 45%;
-    height: 45%;
-  }
-
-  // The triangle's visual centre sits left of its box.
+  .video-action-flash__icon { font-size: 48cqh !important; }
   .video-action-flash__icon--play { margin-left: 8%; }
 }
 
 @keyframes video-action-flash {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.85); }
   12% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1.08); }
@@ -987,777 +946,58 @@
   height: calc(100% - 40px);
   z-index: 5;
   cursor: pointer;
-  // A long press opens the speed menu; keep iOS from popping its own
-  // callout / text selection over it.
+  // A long press changes the speed; keep iOS from popping its own callout over it.
   -webkit-touch-callout: none;
   user-select: none;
 }
 
-
-    
-
-    
-    // hr{
-    //     border: 0;
-    //     height: 1px;
-    //     background: #ccc;
-    //     margin: 10px 0;
-    // }
-
-    .badges-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-top: 10px;
-        flex-wrap: wrap;
-
-        @include mix.respond(phone) {
-            display: none;
-        }
-    }
-
-
-
-    .description-wrap{
-        margin-top: 10px;
-        border-radius: 10px;
-        background-color: var(--card-bg);
-        box-shadow: var(--card-shadow);
-        color: var(--text-primary);
-        transition: background-color 0.3s ease;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        .description-collapsible {
-            width: 100%;
-
-            &.collapsed {
-                max-height: 0;
-                overflow: hidden;
-
-                @include mix.respond(desktop) {
-                    max-height: none;
-                    overflow: visible;
-                }
-            }
-        }
-
-        .description-toggle-btn {
-            display: inline-block;
-            padding: 8px 16px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            text-align: center;
-            transition: color 0.2s ease;
-
-            &:hover {
-                color: var(--text-primary);
-            }
-
-            @include mix.respond(desktop) {
-                display: none;
-            }
-        }
-    }
-
-    // .blog-content {
-        
-    //     font-family: 'Georgia', serif;
-    //     font-size: 13px !important;
-    //     line-height: 1.6;
-    //     color: #333;
-      
-    //     h1, h2, h3 {
-    //         font-size: 13px !important;
-    //       margin-top: 12px;
-    //       font-weight: bold;
-    //     }
-      
-    //     p {
-    //       margin-bottom: 1em;
-    //     }
-    //   }
-
-
-      .add-comment-wrap{
-        margin-top: 10px;
-        background-color: var(--card-bg);
-        border-radius: 10px;
-        box-shadow: var(--card-shadow);
-        width: 100% !important;
-        box-sizing: border-box;
-        transition: background-color 0.3s ease;
-        
-            // color: #fff;
-            &.sub{
-                border-radius: 12px;
-
-                > span {
-                    display: block;
-                    font-size: 14px;
-                    font-weight: 600;
-                    padding: 3px 20px;
-                    border-radius: 12px 12px 0 0;
-                    background-color: var(--bg-tertiary);
-                    color: var(--text-primary);
-                }
-            }
-        .comment-header-row {
-            margin-top: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            padding: 3px 20px;
-            border-radius: 10px 10px 0px 0px;
-            box-sizing: border-box;
-            background-color: var(--bg-tertiary);
-            color: var(--text-primary);
-            width: 100%;
-        }
-        .textarea-box{
-            width: 100%;
-            border: none;
-            border-radius: 4px;
-            // border: solid grey 1px;
-            margin-top: 5px;
-            min-height: 120px;
-            outline: none;
-            padding: 10px;
-            box-sizing: border-box;
-            resize: none;
-            overflow: hidden;
-            background-color: var(--card-bg);
-            color: var(--text-primary);
-            font-family: inherit;
-            @include mix.respond(phone) {
-                min-height: 60px;
-              }
-            &.sub{
-                min-height: 100px;
-                border-radius: 12px;
-            }
-            &::placeholder {
-                color: var(--text-muted);
-                font-style: italic;
-                font-size: 14px;
-                // padding: 5px;
-              }
-        }
-        .btn-wrap{
-            padding: 12px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-
-      }
-      @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-
-    // Mobile reactions slot — hidden on desktop, shown on mobile
-    .mobile-reactions-slot {
-        display: none;
-        margin-top: 10px;
-
-        @include mix.respond(phone) {
-            display: block;
-            width: 100%;
-            min-width: 0;
-            overflow: hidden;
-        }
-    }
-
-    // Cinema mode reactions slot — shown on desktop in cinema mode only
-    .cinema-reactions-slot {
-        margin-top: 16px;
-
-        @include mix.respond(phone) {
-            display: none;
-        }
-    }
-}
-
-// Tip nudge popup
+// Tip nudge at 90% of someone else's video (33a), top-right on the player.
 .tip-nudge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(8px);
-    border-radius: 10px;
-    animation: tipNudgeSlideIn 0.35s ease-out;
-    max-width: 340px;
-    pointer-events: auto;
-
-    @include mix.respond(phone) {
-        left: auto;
-        right: 6px;
-        max-width: fit-content;
-        padding: 6px 10px;
-        gap: 6px;
-
-        .hide-mobile {
-            display: none;
-        }
-    }
-}
-
-.tip-nudge-close {
-    flex-shrink: 0;
-    background: none;
-    border: none;
-    padding: 4px;
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.6);
-    border-radius: 50%;
-    line-height: 1;
-    margin-left: -4px;
-
-    &:hover {
-        color: #fff;
-        background: rgba(255, 255, 255, 0.15);
-    }
-}
-
-.tip-nudge-emoji {
-    font-size: 20px;
-    flex-shrink: 0;
-}
-
-.tip-nudge-text {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.3;
-
-    strong {
-        color: #ff6b6b;
-    }
-}
-
-.tip-nudge-btn {
-    flex-shrink: 0;
-    padding: 5px 14px;
-    background: transparent;
-    color: var(--accent-primary, #e53935);
-    border: 1px solid var(--accent-primary, #e53935);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.15s;
-
-    &:hover {
-        opacity: 0.85;
-    }
-}
-
-@keyframes tipNudgeSlideIn {
-    from {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-// FAB Speed-Dial — mobile only
-.fab-backdrop {
-    display: none;
-
-    @include mix.respond(phone) {
-        display: block;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        z-index: 49;
-        animation: fab-fade-in 0.2s ease;
-    }
-}
-
-.fab-speed-dial {
-    display: none;
-
-    @include mix.respond(phone) {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        position: fixed;
-        bottom: calc(56px + 16px + env(safe-area-inset-bottom, 0px));
-        right: calc(12px + env(safe-area-inset-right, 0px));
-        z-index: 50;
-    }
-}
-
-.fab-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 12px;
-    margin-bottom: 14px;
-    // Offset so 44px action buttons center-align with the 56px main button
-    padding-right: calc((56px - 44px) / 2);
-}
-
-.fab-action {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    opacity: 0;
-    transform: translateY(12px) scale(0.8);
-    animation: fab-action-in 0.25s ease forwards;
-
-    @for $i from 1 through 4 {
-        &:nth-last-child(#{$i}) {
-            animation-delay: #{$i * 0.04}s;
-        }
-    }
-}
-
-.fab-action-label {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-primary, #fff);
-    background: var(--bg-elevated, #2a2a2a);
-    padding: 4px 10px;
-    border-radius: 6px;
-    white-space: nowrap;
-    pointer-events: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.fab-action-btn {
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 50%;
-    background: var(--bg-elevated, #2a2a2a);
-    color: var(--text-primary, #fff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    transition: background 0.15s ease, transform 0.15s ease;
-
-    &:active {
-        transform: scale(0.9);
-    }
-
-    &--voted {
-        color: var(--accent-primary, #e53935);
-    }
-
-    &--active {
-        background: var(--accent-primary, #e53935);
-        color: #fff;
-    }
-}
-
-.fab-main {
-    width: 56px;
-    height: 56px;
-    border: none;
-    border-radius: 50%;
-    background: var(--accent-primary, #e53935);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
-    z-index: 51;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-    &:active {
-        transform: scale(0.92);
-    }
-
-    &.open {
-        transform: rotate(45deg);
-    }
-}
-
-@keyframes fab-fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fab-action-in {
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* Remix dropdown inside FAB — position to the left */
-.fab-action {
-    position: relative;
-}
-
-.remix-dropdown--fab {
-    position: absolute;
-    right: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-right: 8px;
-    background: var(--bg-elevated, #2a2a2a);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    z-index: 110;
-    min-width: 150px;
-    overflow: hidden;
-
-    button {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        width: 100%;
-        padding: 10px 14px;
-        background: none;
-        border: none;
-        color: var(--text-primary, #fff);
-        font-size: 13px;
-        cursor: pointer;
-        white-space: nowrap;
-        transition: background 0.15s ease;
-
-        &:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        & + button {
-            border-top: 1px solid var(--border-color);
-        }
-    }
-}
-
-// ===== Phone landscape overrides =====
-// When a phone rotates, width > 767px so `respond(phone)` no longer matches.
-// Use max-height to detect phone-in-landscape and replicate key mobile rules.
-@media screen and (orientation: landscape) and (max-height: 500px) {
-  .play-video {
-    flex-basis: 100% !important;
-    width: 100% !important;
-    max-width: 100% !important;
-
-    .top-container {
-      display: contents;
-    }
-
-    .video-iframe-wrapper {
-      position: relative !important;
-      z-index: auto !important;
-      border-radius: 0;
-      padding-top: 0 !important;
-      height: 100svh !important;
-      width: calc(100svh * 16 / 9) !important;
-      max-width: 100% !important;
-      margin: 0 auto;
-
-      // Replicate mobile centered controls layout in landscape
-      .video-controls,
-      .video-controls.visible {
-        top: 0;
-        bottom: 0;
-        padding: 0;
-        background: none;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .video-controls::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          rgba(0, 0, 0, 0.3) 0%,
-          rgba(0, 0, 0, 0.12) 30%,
-          rgba(0, 0, 0, 0.12) 60%,
-          rgba(0, 0, 0, 0.55) 100%
-        );
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-      }
-
-      .video-controls.visible::before {
-        opacity: 1;
-      }
-
-      .video-controls .vc-progress-row {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin-bottom: 0;
-        padding: 0 8px 3px;
-        pointer-events: auto;
-        z-index: 1;
-      }
-
-      .video-controls .vc-controls-row {
-        justify-content: center;
-        z-index: 1;
-      }
-
-      .video-controls .vc-time {
-        position: absolute;
-        bottom: 12px;
-        left: 8px;
-        margin-left: 0;
-        z-index: 1;
-      }
-
-      .video-controls .vc-controls-right {
-        position: absolute;
-        bottom: 10px;
-        right: 8px;
-        z-index: 1;
-      }
-
-      .video-controls .vc-controls-left {
-        gap: 20px;
-      }
-
-      .video-controls .vc-btn {
-        width: 36px;
-        height: 36px;
-        background: rgba(0, 0, 0, 0.35);
-
-        svg {
-          width: 75%;
-          height: 75%;
-        }
-      }
-
-      .video-controls .vc-btn--play {
-        width: 44px;
-        height: 44px;
-        background: rgba(0, 0, 0, 0.45);
-      }
-    }
-
-    .video-title-row {
-      margin-top: 0;
-      padding: 8px 10px;
-      background-color: var(--card-bg);
-
-      &.title-collapsed {
-        border-radius: 0 0 10px 10px;
-      }
-    }
-
-    .video-details-collapsible {
-      padding: 8px 10px 10px;
-      background-color: var(--card-bg);
-      width: 100%;
-      box-sizing: border-box;
-      border-radius: 0 0 10px 10px;
-
-      &.collapsed {
-        display: none;
-      }
-    }
-
-    .mobile-title-toggle {
-      display: flex;
-    }
-
-    .mobile-title-meta {
-      display: flex !important;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
-      flex-wrap: wrap;
-    }
-
-    .badges-row {
-      display: none;
-    }
-
-    .info-buttons-left {
-      display: none !important;
-    }
-
-    .mobile-reactions-slot {
-      display: block !important;
-    }
-
-    .cinema-reactions-slot {
-      display: none !important;
-    }
-  }
-
-  // Top nav in landscape on watch page: use existing nav-hidden transform logic
-  // (JS flips the scroll direction so it shows on scroll down, hides on scroll up)
-  .nav-container {
-    transition: transform 0.3s ease, margin-bottom 0.3s ease;
-    &.nav-hidden {
-      transform: translateY(-100%);
-      margin-bottom: calc(-1 * var(--nav-height, 56px));
-    }
-  }
-
-  // Show FAB in landscape phone
-  .fab-backdrop {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 49;
-  }
-
-  .fab-speed-dial {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    position: fixed;
-    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-    right: calc(12px + env(safe-area-inset-right, 0px));
-    z-index: 50;
-  }
-
-  .fab-actions {
-    flex-direction: row-reverse;
-    flex-wrap: wrap-reverse;
-    justify-content: flex-start;
-    gap: 10px;
-    max-width: calc(100vw - 80px);
-    padding-right: 0;
-  }
-
-  .fab-action {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .fab-action-label {
-    font-size: 11px;
-    padding: 2px 6px;
-    order: 1;
-  }
-
-  .fab-action-btn {
-    order: 0;
-  }
-}
-/* Scheduled-post preview notice (shown on the watch page when viewing one of
-   your own not-yet-published scheduled videos). */
-.scheduled-notice {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 8px 0 12px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: var(--text-primary, #111);
-  background: var(--bg-tertiary, #f3f3f3);
-  border: 1px solid var(--border-color, #e2e2e2);
+  gap: 10px;
+  max-width: 360px;
+  padding: 8px 8px 8px 12px;
+  border-radius: var(--r-xl);
+  background: var(--media-scrim-strong);
+  color: var(--on-media);
+  pointer-events: auto;
+  animation: tipNudgeSlideIn var(--t-slow) var(--ease);
 
-  svg { flex: 0 0 auto; color: var(--accent-primary, rgb(227, 19, 55)); }
-
-  strong { white-space: nowrap; }
-
-  .scheduled-notice-edit {
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    font: inherit;
-    font-weight: 600;
-    color: var(--accent-primary, rgb(227, 19, 55));
-    cursor: pointer;
-    text-decoration: underline;
-  }
-}
-
-/* Watch-page video-stats panel (owner/admin) — toggled by the Stats action
-   button, shown above the description. Reuses <VideoStats>. */
-.watch-stats-panel {
-  margin-top: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  background: var(--card-bg, #fff);
-  border: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
-  border-radius: 12px;
-  padding: 14px;
-}
-
-// ── DEBUG: transcription-pipeline auto-tags ─────────────────────────────────
-// Sits directly under the real tag row. Deliberately styled as *not* a real tag:
-// dashed outline + muted ink, so nobody mistakes these for the author's tags.
-// Remove this block (and the JSX in PlayVideo) when the tagger work is done.
-// Topic consensus row (viewer votes + auto tags with %). In the v2 watch layout
-// .video-details-collapsible is a flex row where badges-row=order:1 and
-// community-tags-row=order:2; without an explicit order this row defaults to 0
-// and lands LEFT of the username. order:3 + full-width basis forces it onto its
-// own line UNDER the author tags.
-// Topic chips live INSIDE .community-tags-row, next to the author tags. On
-// desktop `.topic-chips` is display:contents so its chips become direct flex
-// children of the tags row and wrap together with the author tags. On mobile
-// (below) it collapses to its own right-aligned line, keeping the old layout.
-.topic-chips {
-  display: contents;
-
-  @include mix.respond(phone) {
-    display: flex;
-    flex-basis: 100%;
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    align-items: center;
+  @include v2.mobile {
+    top: 8px;
+    right: 8px;
     gap: 6px;
-    margin-top: 6px;
+    padding: 4px 4px 4px 8px;
+    border-radius: var(--r-lg);
+    .hide-mobile { display: none; }
   }
 }
-
-// Base chip = auto-only topic (dashed, muted). Viewer-voted topics get a solid
-// accent border so you can tell crowd input from the pipeline's guess.
-.tag--topic {
-  padding: 3px 10px;
-  border-radius: 999px;
-  border: 1px dashed var(--border-color, rgba(150, 150, 150, 0.4));
+.tip-nudge-icon { color: var(--accent); }
+.tip-nudge-text { @include v2.text(body-sm); line-height: 1.3; strong { color: var(--on-media); font-weight: 700; } }
+.tip-nudge-btn { @include v2.btn(primary, 32); flex: none; }
+.tip-nudge-close {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border: 0;
+  border-radius: 50%;
   background: transparent;
-  color: var(--text-secondary, #9aa0a6);
-  font-size: 12px;
+  color: var(--on-media);
+  opacity: .7;
   cursor: pointer;
-
-  b { font-weight: 700; color: var(--text-primary, #f1f1f1); }
-
-  &:hover { border-color: var(--accent-primary, #e53935); }
-
-  &.tag--topic-voted {
-    border-style: solid;
-    border-color: var(--accent-primary, #e53935);
-    color: var(--text-primary, #f1f1f1);
-  }
+  &:hover { opacity: 1; background: color-mix(in srgb, var(--on-media) 14%, transparent); }
 }
 
-/* ── Branded preload cover ───────────────────────────────────────────────────
-   The SAME splash as the site's initial load (EmergencyScreen "checking"): the
-   3Speak logo above a TailChase spinner, on an OPAQUE --bg-primary background — so
-   the player is fully HIDDEN behind it until the first frame is ready (the onReady
-   gate in Watch.jsx). Sits inside .video-iframe-wrapper (position: relative). z-index
-   is above the <video>, the click overlay (z 5) AND the controls (z 10) so nothing
-   peeks through while loading; it's mutually exclusive with the "unavailable" overlay. */
+@keyframes tipNudgeSlideIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+
+// Branded preload cover: the site's own splash, opaque until the first frame.
 .video-preload-overlay {
   position: absolute;
   inset: 0;
@@ -1766,142 +1006,116 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 30px;
-  background: var(--bg-primary, #0f0f0f);
+  gap: 32px;
+  background: var(--bg);
   pointer-events: none;
-  animation: video-preload-fade 0.18s ease both;
+  animation: video-preload-fade var(--t-base) var(--ease) both;
 }
+.video-preload-logo { width: min(220px, 50%); height: auto; }
+@keyframes video-preload-fade { from { opacity: 0; } to { opacity: 1; } }
 
-.video-preload-logo {
-  width: min(220px, 50%);
-  height: auto;
-}
-
-@keyframes video-preload-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* Sponsored disclosure, shown only while a stitched ad is playing. Inside the
-   player frame on purpose: a filter list cannot hide it without hiding the video. */
-/* Placement only. The disclosure itself is AdOverlay, which brings its own ground,
-   padding and type — this just decides where on the video it sits. It used to carry
-   the box styling too, which would have double-framed the overlay. */
+/* Sponsored disclosure while a stitched ad plays, inside the frame on purpose (a
+   filter list cannot hide it without hiding the video). Placement only: the
+   disclosure (AdOverlay) brings its own look. z 7 beats the click surface (5). */
 .watch-sponsor-note {
   position: absolute;
   top: 12px;
   left: 12px;
-  /* Must beat .video-interact-overlay (z-index 5), the click-to-play surface that
-     spans the frame from `top: 40px` down. At z-index 4 this overlay sits at
-     `top: 12px`, so only its first 28px took a click and the rest of it — most of
-     the disclosure, including the logo and product name — toggled play/pause
-     instead of opening the advertiser's site. On touch that handler also calls
-     preventDefault(), so the tap was swallowed outright. 7, not 6, so it does not
-     tie with the replay/ended overlays and depend on DOM order to win.
-     .watch-ad-countdown stays at 4 deliberately: it has no click target, and the
-     interact overlay is transparent, so being underneath costs it nothing. */
-  z-index: 7;
-  pointer-events: none;
-  /* `right` as well as `left` on purpose. With only `left` this box is shrink-to-fit,
-     and then a max-width on it does NOT constrain a wider child: the overlay simply
-     overflowed it and stayed 340px on a 380px player. Bounding both sides gives the
-     box a real width, which the overlay fills and never exceeds. The percentage
-     resolves against the player frame, which is what it should measure against. */
   right: 12px;
-  /* Narrowed with the overlay it holds. The slot bounds the disclosure against the
-     player frame, so it has to come down too or it just leaves empty box. */
+  z-index: 7;
   max-width: min(240px, 46%);
+  pointer-events: none;
 
-  @media (max-width: 600px) {
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    /* Was 82%, which let the overlay cover most of the frame on a phone. The
-       disclosure only has to be readable. */
-    max-width: 62%;
-  }
+  @media (max-width: 600px) { top: 8px; left: 8px; right: 8px; max-width: 62%; }
 }
 
-/* "Ad in 3" — bottom-right, opposite the disclosure top-left so they never overlap.
-   Small on purpose: it is a courtesy, not an announcement. */
+/* "Ad in 3": bottom-right, a courtesy, not an announcement. */
 .watch-ad-countdown {
   position: absolute;
   right: 12px;
-  bottom: 56px; /* clear of the control bar */
+  bottom: 56px; // clear of the control bar
   z-index: 4;
+  @include v2.scrim-pill;
+  @include v2.mono(12, 700);
   padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.66);
-  backdrop-filter: blur(6px);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.4;
-  letter-spacing: 0.02em;
-  font-variant-numeric: tabular-nums;
+  border-radius: var(--r-sm);
   pointer-events: none;
 
-  @media (max-width: 600px) {
-    right: 8px;
-    bottom: 44px;
-    padding: 3px 8px;
-    font-size: 11px;
-  }
+  @media (max-width: 600px) { right: 8px; bottom: 44px; padding: 2px 8px; font-size: 11px; }
 }
 
-// Actions that need a Hive account (promote, tip, clip/remix) while the viewer
-// has none. Keyed on aria-disabled rather than :disabled on purpose: a truly
-// disabled button fires no mouse events, so its title tooltip never shows — and
-// the tooltip saying it unlocks later is the whole point of dimming it.
-.pv-btn[aria-disabled="true"],
-.fab-action-btn[aria-disabled="true"] {
-  opacity: 0.45;
+// Actions that need a Hive account while the viewer has none: dimmed but still
+// hoverable, so the title explaining why can show.
+.v2-dock[aria-disabled="true"],
+.wv2-more__tile[aria-disabled="true"],
+.pv-btn[aria-disabled="true"] {
+  opacity: .45;
   cursor: not-allowed;
-
-  // Hover and active states would otherwise still fire and make it look live.
-  &:hover,
-  &:active {
-    opacity: 0.45;
-    transform: none;
-    filter: none;
-  }
+  &:hover, &:active { transform: none; filter: none; }
 }
 
-// Phones: while a comment (or any text field below the player) is being typed,
-// the sticky player lets go so the field and the keyboard get the screen
+/* ─── Phones ───────────────────────────────────────────────────────────────── */
+// While a comment (or any field below the player) is being typed, the sticky
+// player lets go so the field and the keyboard get the screen
 // (hooks/useUnstickPlayerWhileTyping.js toggles the body class).
-@include mix.respond(phone) {
+@include v2.mobile {
   body.watch-composing .video-iframe-wrapper {
     position: relative !important;
     top: auto !important;
   }
 }
 
-// Phones, portrait: when the opened speed dial would not fit between the top
-// bar and its button (PlayVideo measures it), it wraps into the compact grid the
-// landscape layout uses: icons with small labels underneath, several per row.
-@include mix.respond(phone) {
-  .fab-actions.fab-actions--compact {
-    flex-direction: row-reverse;
-    flex-wrap: wrap-reverse;
-    justify-content: flex-start;
-    gap: 10px;
-    max-width: calc(100vw - 80px);
-    padding-right: 0;
+// Phone held sideways: the player fills the height, the page scrolls under it.
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  .play-video.wv2 { grid-template-columns: minmax(0, 1fr); grid-template-areas: "stage" "main" "side"; }
+  .wv2-stage { display: block; }
+  .wv2-glow { display: none; }
 
-    .fab-action { flex-direction: column; gap: 4px; }
-    .fab-action-label { font-size: 11px; padding: 2px 6px; order: 1; }
-    .fab-action-btn { order: 0; }
+  .video-iframe-wrapper {
+    position: relative !important;
+    z-index: auto !important;
+    border-radius: 0;
+    padding-top: 0 !important;
+    height: 100svh !important;
+    width: calc(100svh * 16 / 9) !important;
+    max-width: 100% !important;
+    margin: 0 auto;
+
+    .video-controls,
+    .video-controls.visible {
+      top: 0;
+      bottom: 0;
+      padding: 0;
+      background: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-controls::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(0, 0, 0, .3) 0%, rgba(0, 0, 0, .12) 30%, rgba(0, 0, 0, .12) 60%, rgba(0, 0, 0, .55) 100%);
+      opacity: 0;
+      transition: opacity var(--t-slow) var(--ease);
+      pointer-events: none;
+    }
+    .video-controls.visible::before { opacity: 1; }
+    .video-controls .vc-progress-row { position: absolute; bottom: 0; left: 0; right: 0; margin-bottom: 0; padding: 0 8px 3px; pointer-events: auto; z-index: 1; }
+    .video-controls .vc-controls-row { justify-content: center; z-index: 1; }
+    .video-controls .vc-time { position: absolute; bottom: 12px; left: 8px; margin-left: 0; z-index: 1; }
+    .video-controls .vc-controls-right { position: absolute; bottom: 10px; right: 8px; z-index: 1; }
+    .video-controls .vc-controls-left { gap: 20px; }
+    .video-controls .vc-btn { width: 36px; height: 36px; background: var(--media-scrim); }
+    .video-controls .vc-btn--play { width: 44px; height: 44px; background: var(--media-scrim-strong); }
   }
-}
 
-// Phones: nothing on the watch page may make the page wider than the screen.
-// When something did (a comment's action row), the browser zoomed out and every
-// fixed element (floating action button, bottom bar) slid partly off-screen.
-// `clip`, not `hidden`: hidden would make this a scroll container and break the
-// sticky player.
-@include mix.respond(phone) {
-  .play-container.watch-v2 {
-    overflow-x: clip;
+  // Top nav in landscape on the watch page: the shell's nav-hidden transform
+  // (JS flips the scroll direction so it shows on scroll down, hides on scroll up).
+  .nav-container {
+    transition: transform var(--t-slow) var(--ease), margin-bottom var(--t-slow) var(--ease);
+    &.nav-hidden {
+      transform: translateY(-100%);
+      margin-bottom: calc(-1 * var(--nav-height, 56px));
+    }
   }
 }

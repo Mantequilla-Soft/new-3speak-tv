@@ -15,6 +15,8 @@ import { SnapCard } from './CommunitySnaps';
 import TimeAgo from '../TimeAgo/TimeAgo';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
+import { Button, EmptyState, StatusPill } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import './ChannelTrailer.scss';
 
 /**
@@ -56,7 +58,7 @@ export default function ChannelTrailer({
   const author = String(trailer?.author || username || '').toLowerCase();
   const permlink = String(trailer?.permlink || '').toLowerCase();
   const valid = !!permlink
-    && /^[a-z][a-z0-9.\-]{2,15}$/.test(author)
+    && /^[a-z][a-z0-9.-]{2,15}$/.test(author)
     && /^[a-z0-9-]{1,255}$/.test(permlink);
 
   // Title + description of the trailer post, shown beside the player.
@@ -165,14 +167,19 @@ export default function ChannelTrailer({
   if (!valid) {
     if (!isOwnProfile) return null;
     return (
-      <div className="channel-trailer-empty">
-        <div className="cte-text">
-          <strong>{t('profile.trailer.addTitle')}</strong>
-          <span>{t('profile.trailer.addBody')}</span>
-        </div>
-        {/* trailer=1 preselects "Mark as channel trailer" on the upload. */}
-        <Link className="cte-btn" to="/embed-studio?trailer=1">{t('profile.trailer.upload')}</Link>
-      </div>
+      <EmptyState
+        className="channel-trailer-empty"
+        icon={<Icon name="movie" size={28} className="cte-icon" />}
+        title={t('profile.trailer.addTitle')}
+        action={
+          // trailer=1 preselects "Mark as channel trailer" on the upload.
+          <Button as={Link} to="/embed-studio?trailer=1" variant="secondary" icon="upload" next className="cte-btn">
+            {t('profile.trailer.upload')}
+          </Button>
+        }
+      >
+        {t('profile.trailer.addBody')}
+      </EmptyState>
     );
   }
 
@@ -193,48 +200,50 @@ export default function ChannelTrailer({
   // section, so the section's width in the profile grid sizes the video.
   return (
     <div className={`channel-trailer-row channel-trailer-row--${size}${!showInfo && !latestSnap ? ' channel-trailer-row--bare' : ''}`}>
-      <div className="channel-trailer">
-        <video ref={videoRef} playsInline controls muted autoPlay />
-        {muted && (
-          <button type="button" className="channel-trailer-unmute" onClick={toggleMute}>
-            🔇 {t('profile.trailer.tapForSound')}
-          </button>
-        )}
+      {/* 20b: the player and its text in one surface card. */}
+      <div className="ct-card">
+        <div className="channel-trailer">
+          <video ref={videoRef} playsInline controls muted autoPlay />
+          {muted && (
+            <button type="button" className="channel-trailer-unmute" onClick={toggleMute}>
+              <Icon name="volume_off" size={16} /> {t('profile.trailer.tapForSound')}
+            </button>
+          )}
+        </div>
+
+        {/* Text column, clipped to the player's height — however long the post
+            is, the pair stays one tidy block instead of the words running past
+            the video. Anything cut off is one click away on the watch page. */}
+        {showInfo ? (
+          <div className="channel-trailer-meta">
+            <StatusPill tone="cyan" icon="push_pin" className="ct-pill">{t('profile.layout.types.trailer')}</StatusPill>
+            {post?.title ? (
+              <Link className="ct-title" to={`/@${author}/${permlink}`}>{post.title}</Link>
+            ) : null}
+            {(views != null || post?.created_at) ? (
+              <div className="ct-sub">
+                {views != null ? <span>{t('profile.trailer.views', { count: views, num: fmtViews(views) })}</span> : null}
+                {views != null && post?.created_at ? <span className="ct-dot">·</span> : null}
+                {post?.created_at ? <TimeAgo date={post.created_at} /> : null}
+              </div>
+            ) : null}
+            {description ? <p className="ct-desc">{description}</p> : null}
+            {/* The description clips at the player's height, so a long post
+                always has a way out to the full text on the watch page — same
+                destination as clicking the title. */}
+            {description ? (
+              <Link className="ct-readmore" to={`/@${author}/${permlink}`}>{t('profile.trailer.readMore')}</Link>
+            ) : null}
+          </div>
+        ) : null}
       </div>
 
-      {/* Text column, clipped to the player's height — however long the post is,
-          the pair stays one tidy block instead of the words running past the
-          video. Anything cut off is one click away on the watch page. */}
-      {showInfo ? (
-        <div className="channel-trailer-meta">
-          {post?.title ? (
-            <Link className="ct-title" to={`/@${author}/${permlink}`}>{post.title}</Link>
-          ) : null}
-          {(views != null || post?.created_at) ? (
-            <div className="ct-sub">
-              {views != null ? <span>{t('profile.trailer.views', { count: views, num: fmtViews(views) })}</span> : null}
-              {views != null && post?.created_at ? <span className="ct-dot">·</span> : null}
-              {post?.created_at ? <TimeAgo date={post.created_at} /> : null}
-            </div>
-        ) : null}
-        {description ? <p className="ct-desc">{description}</p> : null}
-        {/* The description clips (CSS mask-fade) at the player's height, so a
-            long post always has a way out to the full text on the watch page —
-            same destination as clicking the title. */}
-        {description ? (
-          <Link className="ct-readmore" to={`/@${author}/${permlink}`}>{t('profile.trailer.readMore')}</Link>
-        ) : null}
-      </div>
-      ) : null}
-
-      {/* Newest community note fills the other half beside the player. Desktop
-          only (hidden on phones via CSS). Wrapped in .community-snaps so the
-          SnapCard picks up the same card styling the Community tab gives it —
-          those styles are scoped under that class. Clamped tighter than the
-          Community tab's own cards (maxVh 0.16 vs 0.33) so the card fits the
-          trailer row without being cropped. onOpenCommunityTab makes "Read
-          more" and the comment button hand off to the Community tab instead
-          of expanding/opening inline — there's no room for that here. */}
+      {/* Newest community note beside the trailer card. Desktop only (hidden
+          on phones via CSS). Wrapped in .community-snaps so the SnapCard picks
+          up the same card styling the Community tab gives it. Clamped tighter
+          than the Community tab's own cards (maxVh 0.16 vs 0.33) so the card
+          fits the row. onOpenCommunityTab makes "Read more" and the comment
+          button hand off to the Community tab instead of expanding inline. */}
       {latestSnap ? (
         <div className="channel-trailer-snap">
           <div className="community-snaps">

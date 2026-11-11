@@ -1,15 +1,12 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { useState, useMemo, useRef } from 'react';
-import { MdPlaylistPlay, MdClose, MdDragIndicator, MdEdit, MdLock, MdPublic, MdCloudUpload, MdRssFeed, MdPodcasts, MdLibraryMusic, MdSearch, MdCode, MdKeyboardVoice, MdGraphicEq } from 'react-icons/md';
+import { useState, useMemo, useRef, useId } from 'react';
 import PlaylistTypePicker from '../components/PlaylistTypePicker/PlaylistTypePicker';
 import { resolvePlaylistType, playlistTypeFields } from '../lib/playlistType';
-import { IoArrowBack, IoTrash, IoSave, IoReorderThree } from 'react-icons/io5';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import BarLoader from '../components/Loader/BarLoader';
-import icon from '../../public/images/stack.png';
 import { useAppStore } from '../lib/store';
 import {
   executePlaylistChanges,
@@ -21,7 +18,6 @@ import { toastIn } from '../utils/toast';
 import { useTranslation, Trans } from 'react-i18next';
 import './PlaylistView.scss';
 import { HIVE_API_URL, PLAYLISTS_READ_URL } from '../utils/config';
-import { MdPlayArrow as MdPlayIcon } from 'react-icons/md';
 import AudioTile from '../components/AudioTile/AudioTile';
 import { audioItemPath } from '../components/AudioItem/AudioItemView';
 import AddToPlaylistModal from '../components/AddToPlaylistModal/AddToPlaylistModal';
@@ -36,8 +32,11 @@ import { fetchVideosForPlaylist } from '../utils/playlistVideos';
 import useHoverPreview from '../hooks/useHoverPreview';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
 import { DATE_FILTERS, getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
-import ModalHeader from '../components/ModalHeader/ModalHeader';
-import useDialog from '../hooks/useDialog';
+import { Button, ConfirmBar, Dialog, EmptyState, Field, StatusPill } from '../components/v2/ui';
+import { Icon } from '../components/v2/Icon';
+import { cx } from '../components/v2/helpers';
+import AccountImg from '../components/HiveAvatar/AccountImg';
+import { ProfileTile } from '../components/Userprofilepage/ProfileActions';
 import { openEmbedCode } from '../components/Embed/EmbedCodeModal';
 
 // Every toast from this module is headed "Playlist"; the message becomes the
@@ -479,10 +478,16 @@ function PlaylistView() {
     }
   };
 
-  // Neither window closes mid-save (their X is hidden then too).
-  const deleteDialog = useDialog(isDeleting ? undefined : () => setShowDeleteConfirm(false), { active: showDeleteConfirm });
-  const editDialog = useDialog(isUpdating ? undefined : () => setShowEditModal(false), { active: showEditModal });
-  const fid = (name) => `${editDialog.titleId}-${name}`;
+  // Ids for the edit window's labelled fields. (The v2 Dialog brings Escape,
+  // focus trap and the bottom sheet; neither window closes mid-save.)
+  const formId = useId();
+  const fid = (name) => `${formId}-${name}`;
+
+  const goHome = (
+    <Button as={Link} to="/" variant="secondary" icon="arrow_back" className="back-link">
+      {t('playlists.view.backHome')}
+    </Button>
+  );
 
   if (playlistLoading) {
     return (
@@ -495,11 +500,8 @@ function PlaylistView() {
   if (playlistError) {
     return (
       <div className="playlist-view-container">
-        <div className="error-wrap">
-          <p>{t('playlists.view.loadError', { error: playlistError.message })}</p>
-          <Link to="/" className="back-link">
-            <IoArrowBack /> {t('playlists.view.backHome')}
-          </Link>
+        <div className="pv-state">
+          <EmptyState icon="error" title={t('playlists.view.loadError', { error: playlistError.message })} action={goHome} />
         </div>
       </div>
     );
@@ -508,12 +510,8 @@ function PlaylistView() {
   if (!playlist) {
     return (
       <div className="playlist-view-container">
-        <div className="empty-wrap">
-          <img src={icon} alt="" />
-          <span>{t('playlists.view.notFound')}</span>
-          <Link to="/" className="back-link">
-            <IoArrowBack /> {t('playlists.view.backHome')}
-          </Link>
+        <div className="pv-state">
+          <EmptyState icon="playlist_remove" title={t('playlists.view.notFound')} action={goHome} />
         </div>
       </div>
     );
@@ -525,12 +523,8 @@ function PlaylistView() {
   if (isHiddenFromViewer) {
     return (
       <div className="playlist-view-container">
-        <div className="empty-wrap">
-          <img src={icon} alt="" />
-          <span>{t('playlists.view.private')}</span>
-          <Link to="/" className="back-link">
-            <IoArrowBack /> {t('playlists.view.backHome')}
-          </Link>
+        <div className="pv-state">
+          <EmptyState icon="lock" title={t('playlists.view.private')} action={goHome} />
         </div>
       </div>
     );
@@ -538,26 +532,213 @@ function PlaylistView() {
 
   const album = playlist.metadata?.album || {};
   const feedHref = `/rss/playlist/${encodeURIComponent(playlistId)}.xml`;
+  const fmtDuration = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
+  const totalSeconds = listedVideos.reduce((n, v) => n + (Number(v.duration) || 0), 0);
+  const totalDuration = totalSeconds >= 3600
+    ? `${Math.floor(totalSeconds / 3600)}h ${Math.floor((totalSeconds % 3600) / 60)}m`
+    : totalSeconds > 0 ? fmtDuration(totalSeconds) : '';
+  const firstVideo = listedVideos.find((v) => !v.isAudio);
+  const heroCover = playlist.thumbnail
+    ? squareCover(playlist.thumbnail)
+    : firstVideo ? fixVideoThumbnail(firstVideo) : '';
+  const sharePlaylist = async () => {
+    const url = `${window.location.origin}/playlist/${encodeURIComponent(playlistId)}`;
+    try {
+      if (navigator.share && navigator.canShare?.({ url })) await navigator.share({ title: playlist.name, url });
+      else await navigator.clipboard.writeText(url);
+    } catch { /* cancelled or blocked: nothing to do */ }
+  };
   const ownerButtons = isOwner && (
     <>
-      <button type="button" className="pod-btn" onClick={handleOpenEdit} disabled={isSaving}>
-        <MdEdit size={16} /> {t('common.actions.edit')}
-      </button>
-      <button type="button" className="pod-btn" onClick={() => setShowFeedsModal(true)} disabled={isSaving}>
-        <MdPodcasts size={16} /> {t('playlists.feeds.button')}
-      </button>
-      <button type="button" className={`pod-btn${reorderMode ? ' pod-btn--on' : ''}`} onClick={() => setReorderMode(!reorderMode)} disabled={isSaving}>
-        <IoReorderThree size={16} /> {reorderMode ? t('common.actions.done') : t('playlists.view.reorder')}
-      </button>
-      <button type="button" className="pod-btn" onClick={() => setShowDeleteConfirm(true)} disabled={isSaving}>
-        <IoTrash size={16} /> {t('playlists.view.deletePlaylist')}
-      </button>
+      <Button variant="secondary" size={36} icon="edit" className="pod-btn" onClick={handleOpenEdit} disabled={isSaving}>
+        {t('common.actions.edit')}
+      </Button>
+      <Button variant="secondary" size={36} icon="podcasts" className="pod-btn" onClick={() => setShowFeedsModal(true)} disabled={isSaving}>
+        {t('playlists.feeds.button')}
+      </Button>
+      <Button variant="secondary" size={36} icon="reorder" className={cx('pod-btn', reorderMode && 'is-on')} onClick={() => setReorderMode(!reorderMode)} disabled={isSaving} aria-pressed={reorderMode}>
+        {reorderMode ? t('common.actions.done') : t('playlists.view.reorder')}
+      </Button>
+      <Button variant="danger" size={36} icon="delete" className="pod-btn" onClick={() => setShowDeleteConfirm(true)} disabled={isSaving}>
+        {t('playlists.view.deletePlaylist')}
+      </Button>
     </>
+  );
+
+  // The date filters as a segmented track. Toggle buttons (aria-pressed), not
+  // tabs: they narrow one list rather than switch between panels.
+  const dateFilters = (className) => (
+    <div className={cx('v2-seg pv-filters', className)} role="group" aria-label={t('audio.podcasts.filters.dateLabel')}>
+      {DATE_FILTERS.map((f) => (
+        <button
+          type="button"
+          key={f.key}
+          className={cx('v2-seg__opt h32 date-filter-btn', dateFilter === f.key && 'is-on active')}
+          aria-pressed={dateFilter === f.key}
+          onClick={() => setDateFilter(f.key)}
+        >
+          {t(f.labelKey)}
+        </button>
+      ))}
+    </div>
+  );
+
+  const saveBar = isOwner && hasChanges && (
+    <ConfirmBar
+      actions={(
+        <>
+          <Button variant="ghost" size={36} className="btn-discard" onClick={handleDiscardChanges} disabled={isSaving}>
+            {t('playlists.view.discard')}
+          </Button>
+          <Button variant="primary" size={36} className="btn-save" onClick={handleSaveChanges} disabled={isSaving} loading={isSaving} trailing={isSaving ? null : 'check'}>
+            {isSaving ? t('playlists.view.saving') : t('playlists.view.saveChanges')}
+          </Button>
+        </>
+      )}
+    >
+      <span>{t('playlists.view.unsaved', { count: pendingChanges.length })}</span>
+    </ConfirmBar>
+  );
+
+  const videoList = (
+    <div className="playlist-videos">
+      {hasFeeds && !reorderMode ? mergedList : videosLoading ? (
+        <BarLoader />
+      ) : displayVideos.length === 0 ? (
+        <EmptyState icon="playlist_play" title={dateFilter !== 'all' ? t('playlists.view.emptyPeriod') : t('playlists.view.empty')} className="pv-empty" />
+      ) : reorderMode ? (
+        /* Reorder: rows with a grip, dragged into place */
+        <div className="video-list">
+          {allVideos.map((video, index) => (
+            <div
+              key={`${video.author}-${video.permlink}`}
+              className={cx('video-item pv-row', draggedIndex === index && 'dragging', dragOverIndex === index && 'drag-over')}
+              draggable
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDragLeave={() => setDragOverIndex(null)}
+              onDrop={(e) => handleDrop(e, index)}
+              onDragEnd={() => { setDraggedIndex(null); setDragOverIndex(null); }}
+            >
+              <span className="drag-handle" aria-hidden="true"><Icon name="drag_indicator" size={20} /></span>
+              <span className="video-position pv-num">{String(index + 1).padStart(2, '0')}</span>
+              <Link
+                to={`/@${video.author}/${video.permlink}?playlist=${playlistId}&pos=${index}`}
+                state={{ playlist, videos: allVideos, currentIndex: index }}
+                className="video-link"
+              >
+                <div className="video-thumbnail pv-thumb">
+                  <img
+                    src={fixVideoThumbnail(video)}
+                    alt={video.title}
+                    onError={(e) => (e.currentTarget.src = fallbackImg)}
+                  />
+                  {video.duration > 0 && <span className="duration v2-media-pill is-br">{fmtDuration(video.duration)}</span>}
+                  {video.isAudio && (
+                    <span className="audio-badge v2-media-pill is-tl"><Icon name="graphic_eq" size={12} /> {t('playlists.view.audio')}</span>
+                  )}
+                </div>
+                <div className="video-info pv-info">
+                  <h3>{video.title}</h3>
+                  <p className="video-author">@{video.author}</p>
+                </div>
+              </Link>
+              <button
+                type="button"
+                className="btn-remove-video pv-remove"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleRemoveVideo(video, index);
+                }}
+                title={t('playlists.view.removeFromPlaylist')}
+                aria-label={t('playlists.view.removeFromPlaylist')}
+              >
+                <Icon name="close" size={20} />
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        /* Rows (28d): number, thumbnail, title and who, and the owner's remove */
+        <div className={cx('playlist-videos-grid pv-rows', audioTracks.length && audioTracks.length === displayVideos.length && 'playlist-videos-grid--audio')} {...containerProps}>
+          {displayVideos.map((video) => video.isAudio && video.audioDoc ? (
+            <AudioTile
+              key={`${video.author}-${video.permlink}`}
+              /* Override the per-track thumbnail with the album cover when this
+                 playlist has one — so all tracks share the album art. */
+              item={playlist?.thumbnail
+                ? { ...video.audioDoc, thumbnail_url: playlist.thumbnail }
+                : video.audioDoc}
+              contextItems={displayVideos.filter(v => v.isAudio && v.audioDoc).map(v => (
+                playlist?.thumbnail
+                  ? { ...v.audioDoc, thumbnail_url: playlist.thumbnail }
+                  : v.audioDoc
+              ))}
+              loggedIn={!!authenticatedUser}
+              trackNumber={audioTracks.indexOf(video) + 1}
+              hideAlbum
+              /* The page header already names the owner: no Follow on each of their tracks. */
+              hideFollow={video.audioDoc.owner === playlist?.owner}
+              onOpen={() => navigate(audioItemPath(video.audioDoc))}
+              onAddToPlaylist={() => setPlaylistTarget({
+                author: video.audioDoc.owner,
+                permlink: video.audioDoc.post_permlink || video.audioDoc.permlink,
+                title: video.audioDoc.title,
+                category: video.audioDoc.category || '',
+              })}
+            />
+          ) : (
+            <Link
+              key={`${video.author}-${video.permlink}`}
+              to={`/@${video.author}/${video.permlink}?playlist=${playlistId}&pos=${video.position}`}
+              state={{ playlist, videos: allVideos, currentIndex: video.position }}
+              className="playlist-video-card pv-row"
+              {...getCardProps(`${video.author}/${video.permlink}`, video.author, video.permlink, fixVideoThumbnail(video), video.status)}
+            >
+              <span className="pv-num">{String((Number.isFinite(video.position) ? video.position : allVideos.indexOf(video)) + 1).padStart(2, '0')}</span>
+              <div className="video-thumbnail pv-thumb">
+                <img
+                  src={fixVideoThumbnail(video)}
+                  alt={video.title}
+                  onError={(e) => (e.currentTarget.src = fallbackImg)}
+                />
+                {video.duration > 0 && <span className="duration v2-media-pill is-br">{fmtDuration(video.duration)}</span>}
+              </div>
+              <div className="video-meta pv-info">
+                <h3>{video.title}</h3>
+                <p className="video-author">
+                  @{video.author}
+                  <span className="added-date"> · {t('playlists.view.added', { when: formatRelativeDate(video.added_at) })}</span>
+                </p>
+              </div>
+              {isOwner && (
+                <button
+                  type="button"
+                  className="delete-btn pv-remove"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleRemoveVideo(video, allVideos.indexOf(video));
+                  }}
+                  title={t('playlists.view.removeFromPlaylist')}
+                  aria-label={t('playlists.view.removeFromPlaylist')}
+                >
+                  <Icon name="close" size={20} />
+                </button>
+              )}
+            </Link>
+          ))}
+          {overlay}
+        </div>
+      )}
+    </div>
   );
 
   return (
     <div className="playlist-view-container">
       {isAudioShow ? (
+        <>
         <header className="pod-show-head playlist-pod-head">
           <img
             className="pod-art pod-show-cover"
@@ -567,14 +748,17 @@ function PlaylistView() {
           />
           <div className="pod-show-info">
             <span className="pod-show-kicker">
-              {playlistKind === 'music' ? <MdLibraryMusic size={14} />
-                : playlistKind === 'voice' ? <MdKeyboardVoice size={14} />
-                : playlistKind === 'sounds' ? <MdGraphicEq size={14} />
-                : <MdPodcasts size={14} />}
+              <Icon
+                size={14}
+                name={playlistKind === 'music' ? 'library_music'
+                  : playlistKind === 'voice' ? 'keyboard_voice'
+                  : playlistKind === 'sounds' ? 'graphic_eq'
+                  : 'podcasts'}
+              />
               {playlistKind === 'music' ? t('audio.categories.music')
                 : playlistKind === 'voice' || playlistKind === 'sounds' ? t(`playlists.type.kinds.${playlistKind}`)
                 : t('audio.podcasts.kicker')}
-              {isPrivate && <span className="pod-badge pod-badge--lock"><MdLock size={12} />{t('playlists.private')}</span>}
+              {isPrivate && <span className="pod-badge pod-badge--lock"><Icon name="lock" size={12} />{t('playlists.private')}</span>}
             </span>
             <h1 className="pod-show-title">{playlist.name}</h1>
             <Link to={`/@${playlist.owner}`} className="pod-show-author">@{playlist.owner}</Link>
@@ -602,13 +786,13 @@ function PlaylistView() {
             {album.description && <p className="pod-show-desc">{album.description}</p>}
             <div className="pod-show-actions">
               {hasFeeds ? mergedTracks.length > 0 && (
-                <button type="button" className="pod-btn pod-btn--solid" onClick={() => audioPlay(mergedTracks[0], mergedTracks)}>
-                  <MdPlayIcon size={18} /> {t('common.actions.play')}
-                </button>
+                <Button variant="inverse" size={40} icon={<Icon name="play_arrow" size={20} fill />} className="pod-btn pod-btn--solid" onClick={() => audioPlay(mergedTracks[0], mergedTracks)}>
+                  {t('common.actions.play')}
+                </Button>
               ) : audioTracks.length > 0 && (
-                <button type="button" className="pod-btn pod-btn--solid" onClick={() => audioPlay(trackItem(audioTracks[0]), audioTracks.map(trackItem))}>
-                  <MdPlayIcon size={18} /> {t('common.actions.play')}
-                </button>
+                <Button variant="inverse" size={40} icon={<Icon name="play_arrow" size={20} fill />} className="pod-btn pod-btn--solid" onClick={() => audioPlay(trackItem(audioTracks[0]), audioTracks.map(trackItem))}>
+                  {t('common.actions.play')}
+                </Button>
               )}
               {!isPrivate && (listedVideos.length > 0 || hasFeeds) && (
                 <PlaylistFollowButton playlistId={playlistId} name={playlist.name} user={authenticatedUser} />
@@ -616,19 +800,21 @@ function PlaylistView() {
               {!isPrivate && (
                 <>
                   <link rel="alternate" type="application/rss+xml" title={playlist.name} href={`${window.location.origin}${feedHref}`} />
-                  <a className="pod-btn" href={feedHref} target="_blank" rel="noreferrer" title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}>
-                    <MdRssFeed size={16} /> RSS
-                  </a>
+                  <Button as="a" variant="secondary" size={36} icon="rss_feed" className="pod-btn" href={feedHref} target="_blank" rel="noreferrer" title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}>
+                    RSS
+                  </Button>
                   {/* Every audio track of the playlist in one player on another site */}
                   {audioTracks.length > 0 && (
-                    <button
-                      type="button"
+                    <Button
+                      variant="secondary"
+                      size={36}
+                      icon="code"
                       className="pod-btn"
                       onClick={() => openEmbedCode({ kind: 'playlist', id: playlistId, title: playlist.name })}
                       title={t('chat.share.embedOnWebsite')}
                     >
-                      <MdCode size={16} /> {t('misc.embed.embed')}
-                    </button>
+                      {t('misc.embed.embed')}
+                    </Button>
                   )}
                 </>
               )}
@@ -636,136 +822,9 @@ function PlaylistView() {
             </div>
           </div>
         </header>
-      ) : (
-      <div className="playlist-header">
-        <div className="playlist-info">
-          {playlist.thumbnail ? (
-            <div className="playlist-cover-wrap">
-              <img className="playlist-cover" src={squareCover(playlist.thumbnail)} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-            </div>
-          ) : (
-            <div className="playlist-icon-wrap">
-              <MdPlaylistPlay className="playlist-icon" />
-            </div>
-          )}
-          <div className="playlist-details">
-            <h1>{playlist.name}</h1>
-            <div className="playlist-meta">
-              <Link to={`/@${playlist.owner}`} className="owner">
-                @{playlist.owner}
-              </Link>
-              <span className="separator">•</span>
-              <span>{t('playlists.view.items', { count: listedVideos.length })}</span>
-              <span className="separator">•</span>
-              <span>{t('playlists.view.created', { when: dayjs.unix(playlist.created_at).fromNow() })}</span>
-              {/* Podcast / RSS feed for this playlist (checker routes/rss.js), so
-                  people can follow one series in a podcast app. The <link> is
-                  hoisted into <head> for feed readers, as on profiles. */}
-              {!isPrivate && (
-                <>
-                  <span className="separator">•</span>
-                  <link
-                    rel="alternate"
-                    type="application/rss+xml"
-                    title={playlist.name}
-                    href={`${window.location.origin}/rss/playlist/${encodeURIComponent(playlistId)}.xml`}
-                  />
-                  <a
-                    className="playlist-feed-link"
-                    href={`/rss/playlist/${encodeURIComponent(playlistId)}.xml`}
-                    target="_blank"
-                    rel="noreferrer"
-                    title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}
-                  >
-                    <MdRssFeed /> {t('playlists.view.podcastFeed')}
-                  </a>
-                </>
-              )}
-            </div>
-            {playlist.metadata?.album && (
-              <div className="playlist-album-meta">
-                {playlist.metadata.album.musicStyle && <span><Trans i18nKey="playlists.view.album.genre" values={{ value: playlist.metadata.album.musicStyle }} components={{ strong: <strong /> }} /></span>}
-                {playlist.metadata.album.year && <span><Trans i18nKey="playlists.view.album.year" values={{ value: playlist.metadata.album.year }} components={{ strong: <strong /> }} /></span>}
-                {playlist.metadata.album.label && <span><Trans i18nKey="playlists.view.album.label" values={{ value: playlist.metadata.album.label }} components={{ strong: <strong /> }} /></span>}
-                {playlist.metadata.album.credits && <span><Trans i18nKey="playlists.view.album.credits" values={{ value: playlist.metadata.album.credits }} components={{ strong: <strong /> }} /></span>}
-                {playlist.metadata.album.description && <p className="playlist-album-desc">{playlist.metadata.album.description}</p>}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Tags */}
-        {playlistTags.length > 0 && (
-          <div className="playlist-tags">
-            {playlistTags.map(tag => (
-              <span key={tag} className="playlist-tag">{tag}</span>
-            ))}
-          </div>
-        )}
-
-        {outsideFeeds.length > 0 && (
-          <div className="playlist-tags">
-            <span>{t('playlists.feeds.fromShows')}</span>
-            {outsideFeeds.map((f) => <Link key={f.id} to={podcastPath(f.id)} className="playlist-tag">{f.title || f.url}</Link>)}
-          </div>
-        )}
-
-        {/* Owner Actions */}
-        {isOwner && (
-          <div className="owner-actions">
-            <button
-              type="button"
-              className="btn-edit"
-              onClick={handleOpenEdit}
-              disabled={isSaving}
-            >
-              <MdEdit /> {t('common.actions.edit')}
-            </button>
-            <button
-              type="button"
-              className="btn-edit"
-              onClick={() => setShowFeedsModal(true)}
-              disabled={isSaving}
-            >
-              <MdPodcasts /> {t('playlists.feeds.button')}
-            </button>
-            <button
-              type="button"
-              className={`btn-reorder ${reorderMode ? 'active' : ''}`}
-              onClick={() => setReorderMode(!reorderMode)}
-              disabled={isSaving}
-            >
-              <IoReorderThree /> {reorderMode ? t('common.actions.done') : t('playlists.view.reorder')}
-            </button>
-            <button
-              type="button"
-              className="btn-delete-playlist"
-              onClick={() => setShowDeleteConfirm(true)}
-              disabled={isSaving}
-            >
-              <IoTrash /> {t('playlists.view.deletePlaylist')}
-            </button>
-          </div>
-        )}
-      </div>
-      )}
-
-      {/* Save Changes Bar */}
-      {isOwner && hasChanges && (
-        <div className="save-changes-bar">
-          <div className="changes-info">
-            <span>{t('playlists.view.unsaved', { count: pendingChanges.length })}</span>
-          </div>
-          <div className="changes-actions">
-            <button type="button" className="btn-discard" onClick={handleDiscardChanges} disabled={isSaving}>
-              {t('playlists.view.discard')}
-            </button>
-            <button type="button" className="btn-save" onClick={handleSaveChanges} disabled={isSaving}>
-              {isSaving ? t('playlists.view.saving') : <><IoSave /> {t('playlists.view.saveChanges')}</>}
-            </button>
-          </div>
-        </div>
-      )}
+        {saveBar}
+        </>
+      ) : null}
 
       {isAudioShow && !reorderMode ? (
         <section className="pod-section playlist-pod-episodes">
@@ -775,19 +834,13 @@ function PlaylistView() {
               {itemCount > 0 && <span className="audio-section-count">{itemCount}</span>}
             </h2>
             <div className="pod-filters">
-              <div className="audio-date-presets pod-filter-dates" role="group" aria-label={t('audio.podcasts.filters.dateLabel')}>
-                {DATE_FILTERS.map((f) => (
-                  <button type="button" key={f.key} className={`audio-date-btn${dateFilter === f.key ? ' active' : ''}`} onClick={() => setDateFilter(f.key)}>
-                    {t(f.labelKey)}
-                  </button>
-                ))}
-              </div>
+              {dateFilters('pod-filter-dates')}
             </div>
           </div>
           {itemCount > 5 && (
             <div className="pod-show-tools">
               <label className="pod-field-row pod-episode-search">
-                <MdSearch className="pod-field-icon" size={18} />
+                <Icon name="search" size={18} className="pod-field-icon" />
                 <input
                   type="search"
                   value={episodeSearch}
@@ -829,331 +882,269 @@ function PlaylistView() {
             </p>
           )}
         </section>
+      ) : isAudioShow ? (
+        <section className="pv-main pv-main--reorder">{videoList}</section>
       ) : (
-      <>
-      {/* Date filter toolbar */}
-      <div className="playlist-toolbar">
-        <div className="date-filters">
-          {DATE_FILTERS.map(f => (
-            <button
-              type="button"
-              key={f.key}
-              className={`date-filter-btn ${dateFilter === f.key ? 'active' : ''}`}
-              onClick={() => setDateFilter(f.key)}
-            >
-              {t(f.labelKey)}
-            </button>
-          ))}
-        </div>
-        {dateFilter !== 'all' && (
-          <span className="filter-count">{hasFeeds
-            ? t('playlists.view.filterCount', { shown: merged.length, count: itemCount })
-            : t('playlists.view.filterCount', { shown: displayVideos.length, count: listedVideos.length })}</span>
-        )}
-      </div>
+      <div className="pv-layout">
+        {/* 28d: the hero on the left, on a cyan wash: cover, kind, title, who,
+            then Play all and the action tiles. */}
+        <aside className="pv-hero">
+          <div className="pv-cover">
+            {heroCover ? (
+              <img src={heroCover} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+            ) : null}
+            <Icon name="playlist_play" size={48} className="pv-cover-icon" />
+            <span className="v2-media-pill is-br pv-cover-count">
+              <span>{t('playlists.view.items', { count: listedVideos.length })}</span>
+              {totalDuration ? <span> · {totalDuration}</span> : null}
+            </span>
+          </div>
+          <StatusPill tone="cyan" icon={isPrivate ? 'lock' : 'public'} className="pv-kind">
+            {t('profile.layout.types.playlist')} · {isPrivate ? t('playlists.private') : t('playlists.public')}
+          </StatusPill>
+          <h1 className="pv-title">{playlist.name}</h1>
+          <div className="pv-owner">
+            <AccountImg account={playlist.owner} alt="" className="pv-owner-avatar" />
+            <Link to={`/@${playlist.owner}`} className="owner">@{playlist.owner}</Link>
+            <span className="pv-owner-meta">· {t('playlists.view.created', { when: dayjs.unix(playlist.created_at).fromNow() })}</span>
+          </div>
 
-      {/* Videos */}
-      <div className="playlist-videos">
-        {hasFeeds && !reorderMode ? mergedList : videosLoading ? (
-          <BarLoader />
-        ) : displayVideos.length === 0 ? (
-          <div className="empty-wrap">
-            <img src={icon} alt="" />
-            <span>{dateFilter !== 'all' ? t('playlists.view.emptyPeriod') : t('playlists.view.empty')}</span>
-          </div>
-        ) : reorderMode ? (
-          /* List view for reorder mode */
-          <div className="video-list">
-            {allVideos.map((video, index) => (
-              <div
-                key={`${video.author}-${video.permlink}`}
-                className={`video-item ${draggedIndex === index ? 'dragging' : ''} ${dragOverIndex === index ? 'drag-over' : ''}`}
-                draggable
-                onDragStart={(e) => handleDragStart(e, index)}
-                onDragOver={(e) => handleDragOver(e, index)}
-                onDragLeave={() => setDragOverIndex(null)}
-                onDrop={(e) => handleDrop(e, index)}
-                onDragEnd={() => { setDraggedIndex(null); setDragOverIndex(null); }}
-              >
-                <div className="drag-handle">
-                  <MdDragIndicator />
-                </div>
-                <span className="video-position">{index + 1}</span>
-                <Link
-                  to={`/@${video.author}/${video.permlink}?playlist=${playlistId}&pos=${index}`}
-                  state={{ playlist, videos: allVideos, currentIndex: index }}
-                  className="video-link"
-                >
-                  <div className="video-thumbnail">
-                    <img
-                      src={fixVideoThumbnail(video)}
-                      alt={video.title}
-                      onError={(e) => (e.currentTarget.src = fallbackImg)}
-                    />
-                    {video.duration > 0 && (
-                      <span className="duration">
-                        {Math.floor(video.duration / 60)}:{String(Math.floor(video.duration % 60)).padStart(2, '0')}
-                      </span>
-                    )}
-                    {video.isAudio && (
-                      <span className="audio-badge"><MdPlayIcon size={12} /> {t('playlists.view.audio')}</span>
-                    )}
-                  </div>
-                  <div className="video-info">
-                    <h3>{video.title}</h3>
-                    <p className="video-author">@{video.author}</p>
-                  </div>
-                </Link>
-                <button
-                  type="button"
-                  className="btn-remove-video"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleRemoveVideo(video, index);
-                  }}
-                  title={t('playlists.view.removeFromPlaylist')}
-                >
-                  <MdClose />
-                </button>
-              </div>
-            ))}
-          </div>
-        ) : (
-          /* Grid view (default) */
-          <div className={`playlist-videos-grid${audioTracks.length && audioTracks.length === displayVideos.length ? ' playlist-videos-grid--audio' : ''}`} {...containerProps}>
-            {displayVideos.map((video) => video.isAudio && video.audioDoc ? (
-              <AudioTile
-                key={`${video.author}-${video.permlink}`}
-                /* Override the per-track thumbnail with the album cover when this
-                   playlist has one — so all tracks share the album art. */
-                item={playlist?.thumbnail
-                  ? { ...video.audioDoc, thumbnail_url: playlist.thumbnail }
-                  : video.audioDoc}
-                contextItems={displayVideos.filter(v => v.isAudio && v.audioDoc).map(v => (
-                  playlist?.thumbnail
-                    ? { ...v.audioDoc, thumbnail_url: playlist.thumbnail }
-                    : v.audioDoc
-                ))}
-                loggedIn={!!authenticatedUser}
-                trackNumber={audioTracks.indexOf(video) + 1}
-                hideAlbum
-                /* The page header already names the owner: no Follow on each of their tracks. */
-                hideFollow={video.audioDoc.owner === playlist?.owner}
-                onOpen={() => navigate(audioItemPath(video.audioDoc))}
-                onAddToPlaylist={() => setPlaylistTarget({
-                  author: video.audioDoc.owner,
-                  permlink: video.audioDoc.post_permlink || video.audioDoc.permlink,
-                  title: video.audioDoc.title,
-                  category: video.audioDoc.category || '',
-                })}
-              />
-            ) : (
-              <Link
-                key={`${video.author}-${video.permlink}`}
-                to={`/@${video.author}/${video.permlink}?playlist=${playlistId}&pos=${video.position}`}
-                state={{ playlist, videos: allVideos, currentIndex: video.position }}
-                className="playlist-video-card"
-                {...getCardProps(`${video.author}/${video.permlink}`, video.author, video.permlink, fixVideoThumbnail(video), video.status)}
-              >
-                <div className="video-thumbnail">
-                  <img
-                    src={fixVideoThumbnail(video)}
-                    alt={video.title}
-                    onError={(e) => (e.currentTarget.src = fallbackImg)}
-                  />
-                  {video.duration > 0 && (
-                    <span className="duration">
-                      {Math.floor(video.duration / 60)}:{String(Math.floor(video.duration % 60)).padStart(2, '0')}
-                    </span>
-                  )}
-                  {isOwner && (
-                    <button
-                      type="button"
-                      className="delete-btn"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleRemoveVideo(video, allVideos.indexOf(video));
-                      }}
-                      title={t('playlists.view.removeFromPlaylist')}
-                    >
-                      <MdClose />
-                    </button>
-                  )}
-                </div>
-                <div className="video-meta">
-                  <h3>{video.title}</h3>
-                  <p className="video-author">@{video.author}</p>
-                  <p className="added-date">{t('playlists.view.added', { when: formatRelativeDate(video.added_at) })}</p>
-                </div>
-              </Link>
-            ))}
-            {overlay}
-          </div>
-        )}
-      </div>
-      </>
-      )}
+          {playlist.metadata?.album && (
+            <div className="playlist-album-meta">
+              {album.musicStyle && <span><Trans i18nKey="playlists.view.album.genre" values={{ value: album.musicStyle }} components={{ strong: <strong /> }} /></span>}
+              {album.year && <span><Trans i18nKey="playlists.view.album.year" values={{ value: album.year }} components={{ strong: <strong /> }} /></span>}
+              {album.label && <span><Trans i18nKey="playlists.view.album.label" values={{ value: album.label }} components={{ strong: <strong /> }} /></span>}
+              {album.credits && <span><Trans i18nKey="playlists.view.album.credits" values={{ value: album.credits }} components={{ strong: <strong /> }} /></span>}
+              {album.description && <p className="playlist-album-desc">{album.description}</p>}
+            </div>
+          )}
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
-        <div className="delete-confirm-overlay" onClick={() => setShowDeleteConfirm(false)}>
-          <div className="delete-confirm-modal" {...deleteDialog.props} onClick={(e) => e.stopPropagation()}>
-            <ModalHeader title={t('playlists.view.deleteConfirmTitle')} titleId={deleteDialog.titleId} onClose={isDeleting ? undefined : () => setShowDeleteConfirm(false)} />
-            <p>{t('playlists.view.deleteConfirmText', { name: playlist.name })}</p>
-            <div className="modal-actions">
-              <button type="button" className="btn-cancel" onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>
-                {t('common.actions.cancel')}
-              </button>
-              <button type="button" className="btn-confirm-delete" onClick={handleDeletePlaylist} disabled={isDeleting}>
-                {isDeleting ? t('playlists.view.deleting') : t('playlists.view.deletePlaylist')}
-              </button>
+          {playlistTags.length > 0 && (
+            <div className="playlist-tags">
+              {playlistTags.map(tag => (
+                <span key={tag} className="playlist-tag">{tag}</span>
+              ))}
             </div>
-          </div>
-        </div>
-      )}
+          )}
 
-      {/* Edit Playlist Modal */}
-      {showEditModal && (
-        <div className="delete-confirm-overlay" onClick={() => setShowEditModal(false)}>
-          <div className="edit-playlist-modal" {...editDialog.props} onClick={(e) => e.stopPropagation()}>
-            <ModalHeader title={t('playlists.view.editTitle')} titleId={editDialog.titleId} onClose={isUpdating ? undefined : () => setShowEditModal(false)} />
-            <div className="form-group">
-              <label htmlFor={fid('name')}>{t('playlists.modal.name')}</label>
-              <input
-                id={fid('name')}
-                type="text"
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                placeholder={t('playlists.view.namePlaceholder')}
-                autoFocus
-              />
+          {outsideFeeds.length > 0 && (
+            <div className="playlist-tags">
+              <span className="pv-tags-label">{t('playlists.feeds.fromShows')}</span>
+              {outsideFeeds.map((f) => <Link key={f.id} to={podcastPath(f.id)} className="playlist-tag">{f.title || f.url}</Link>)}
             </div>
-            <div className="form-group">
-              <span className="form-label" id={fid('visibility')}>{t('playlists.view.visibility')}</span>
-              <div className="privacy-buttons" role="group" aria-labelledby={fid('visibility')}>
-                <button
-                  type="button"
-                  className={`privacy-btn ${editAccess === 'public' ? 'active' : ''}`}
-                  onClick={() => setEditAccess('public')}
-                >
-                  <MdPublic /> {t('playlists.public')}
-                </button>
-                <button
-                  type="button"
-                  className={`privacy-btn ${editAccess === 'private' ? 'active' : ''}`}
-                  onClick={() => setEditAccess('private')}
-                >
-                  <MdLock /> {t('playlists.private')}
-                </button>
-              </div>
-            </div>
-            <PlaylistTypePicker type={editType.type} kind={editType.kind} onChange={setEditType} disabled={isUpdating} />
-            <div className="form-group">
-              <label htmlFor={fid('tags')}>{t('playlists.modal.tags')}</label>
-              <div className="tags-input-wrap">
-                <div className="tags-list">
-                  {editTags.map((tag) => (
-                    <span key={tag} className="tag-chip">
-                      {tag}
-                      <button type="button" aria-label={t('audio.upload.mainPost.removeTag', { tag })} onClick={() => setEditTags(prev => prev.filter(x => x !== tag))}>
-                        <MdClose />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-                <input
-                  id={fid('tags')}
-                  type="text"
-                  value={editTagInput}
-                  onChange={(e) => setEditTagInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if ((e.key === 'Enter' || e.key === ',' || e.key === ' ') && editTagInput.trim()) {
-                      e.preventDefault();
-                      const tag = editTagInput.trim().toLowerCase().replace(/,/g, '');
-                      if (tag && !editTags.includes(tag)) {
-                        setEditTags(prev => [...prev, tag]);
-                      }
-                      setEditTagInput('');
-                    } else if (e.key === 'Backspace' && !editTagInput && editTags.length > 0) {
-                      setEditTags(prev => prev.slice(0, -1));
-                    }
-                  }}
-                  placeholder={editTags.length === 0 ? t('playlists.modal.tagPlaceholder') : t('playlists.modal.tagMorePlaceholder')}
-                />
-              </div>
-            </div>
-            <div className="form-group">
-              <span className="form-label">{t('playlists.view.coverImage')}</span>
-              <div
-                className={`playlist-edit-thumb${editThumb ? ' has-image' : ''}`}
-                onClick={() => !editThumbUploading && editThumbInputRef.current?.click()}
+          )}
+
+          <div className="pv-actions">
+            {firstVideo ? (
+              <Button
+                as={Link}
+                variant="inverse"
+                size={64}
+                className="pv-play"
+                to={`/@${firstVideo.author}/${firstVideo.permlink}?playlist=${playlistId}&pos=${allVideos.indexOf(firstVideo)}`}
+                state={{ playlist, videos: allVideos, currentIndex: allVideos.indexOf(firstVideo) }}
+                trailing={<Icon name="play_arrow" size={28} fill />}
               >
-                {editThumb ? (
-                  <>
-                    <img src={editThumb} alt={t('playlists.view.coverAlt')} />
-                    <button
-                      type="button"
-                      className="playlist-edit-thumb-remove"
-                      onClick={(e) => { e.stopPropagation(); setEditThumb(''); }}
-                      aria-label={t('playlists.view.removeCover')}
-                    ><MdClose size={14} /></button>
-                  </>
-                ) : (
-                  <>
-                    <MdCloudUpload size={26} />
-                    <span>{editThumbUploading ? t('playlists.view.uploading') : t('playlists.view.addCover')}</span>
-                    <small>JPG / PNG / WebP</small>
-                  </>
-                )}
-                <input
-                  ref={editThumbInputRef}
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={onEditThumbFile}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </div>
-            </div>
-            {editType.type === 'audio' && editType.kind === 'music' && (
+                {t('playlists.view.playAll')}
+              </Button>
+            ) : null}
+            <ProfileTile icon="ios_share" label={t('common.actions.share')} onClick={sharePlaylist} />
+            {/* Podcast / RSS feed for this playlist (checker routes/rss.js), so
+                people can follow one series in a podcast app. The <link> is
+                hoisted into <head> for feed readers, as on profiles. */}
+            {!isPrivate && (
               <>
-              <div className="form-group">
-                <label htmlFor={fid('genre')}>{t('playlists.view.genre')}</label>
-                <input id={fid('genre')} type="text" value={editMusicStyle} onChange={(e) => setEditMusicStyle(e.target.value)} placeholder={t('playlists.view.genrePlaceholder')} />
-              </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor={fid('year')}>{t('playlists.view.year')}</label>
-                  <input id={fid('year')} type="number" value={editYear} onChange={(e) => setEditYear(e.target.value)} placeholder="1996" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor={fid('label')}>{t('playlists.view.label')}</label>
-                  <input id={fid('label')} type="text" value={editLabel} onChange={(e) => setEditLabel(e.target.value)} placeholder={t('playlists.view.labelPlaceholder')} />
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor={fid('credits')}>{t('playlists.view.credits')}</label>
-                <input id={fid('credits')} type="text" value={editCredits} onChange={(e) => setEditCredits(e.target.value)} placeholder={t('playlists.view.creditsPlaceholder')} />
-              </div>
+                <link
+                  rel="alternate"
+                  type="application/rss+xml"
+                  title={playlist.name}
+                  href={`${window.location.origin}${feedHref}`}
+                />
+                <ProfileTile
+                  as="a"
+                  icon="rss_feed"
+                  label={t('playlists.view.podcastFeed')}
+                  className="playlist-feed-link"
+                  href={feedHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={t('playlists.view.podcastFeedTitle', { name: playlist.name })}
+                />
               </>
             )}
-            <div className="form-group">
-              <label htmlFor={fid('description')}>{t('playlists.view.description')}</label>
-              <textarea id={fid('description')} value={editDescription} onChange={(e) => setEditDescription(e.target.value)} placeholder={t('playlists.view.descriptionPlaceholder')} rows={3} maxLength={1000} />
-            </div>
-            <div className="modal-actions">
-              <button type="button" className="btn-cancel" onClick={() => setShowEditModal(false)} disabled={isUpdating}>
-                {t('common.actions.cancel')}
+          </div>
+        </aside>
+
+        <section className="pv-main">
+          <div className="playlist-toolbar">
+            {dateFilters()}
+            {dateFilter !== 'all' && (
+              <span className="filter-count">{hasFeeds
+                ? t('playlists.view.filterCount', { shown: merged.length, count: itemCount })
+                : t('playlists.view.filterCount', { shown: displayVideos.length, count: listedVideos.length })}</span>
+            )}
+            {isOwner ? <div className="owner-actions">{ownerButtons}</div> : null}
+          </div>
+          {saveBar}
+          {videoList}
+        </section>
+      </div>
+      )}
+
+      {/* Delete confirmation: the shared v2 dialog (a bottom sheet on phones). */}
+      <Dialog
+        open={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        dismissible={!isDeleting}
+        title={t('playlists.view.deleteConfirmTitle')}
+        closeLabel={t('common.actions.close')}
+        footer={(
+          <>
+            <Button variant="secondary" className="btn-cancel" onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>
+              {t('common.actions.cancel')}
+            </Button>
+            <Button variant="danger" icon="delete" className="btn-confirm-delete" onClick={handleDeletePlaylist} disabled={isDeleting} loading={isDeleting}>
+              {isDeleting ? t('playlists.view.deleting') : t('playlists.view.deletePlaylist')}
+            </Button>
+          </>
+        )}
+      >
+        <p className="pv-dialog-text">{t('playlists.view.deleteConfirmText', { name: playlist.name })}</p>
+      </Dialog>
+
+      {/* Edit playlist */}
+      <Dialog
+        open={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        dismissible={!isUpdating}
+        width={520}
+        title={t('playlists.view.editTitle')}
+        closeLabel={t('common.actions.close')}
+        className="edit-playlist-modal"
+        footer={(
+          <>
+            <Button variant="secondary" className="btn-cancel" onClick={() => setShowEditModal(false)} disabled={isUpdating}>
+              {t('common.actions.cancel')}
+            </Button>
+            <Button variant="primary" className="btn-save-edit" onClick={handleSaveEdit} disabled={isUpdating || !editName.trim()} loading={isUpdating} trailing={isUpdating ? null : 'check'}>
+              {isUpdating ? t('playlists.view.saving') : t('playlists.view.saveChanges')}
+            </Button>
+          </>
+        )}
+      >
+        <Field
+          id={fid('name')}
+          label={t('playlists.modal.name')}
+          value={editName}
+          onChange={(e) => setEditName(e.target.value)}
+          placeholder={t('playlists.view.namePlaceholder')}
+          autoFocus
+        />
+        <div className="v2-field">
+          <span className="v2-eyebrow" id={fid('visibility')}>{t('playlists.view.visibility')}</span>
+          <div className="v2-seg is-block" role="group" aria-labelledby={fid('visibility')}>
+            {[['public', 'public', t('playlists.public')], ['private', 'lock', t('playlists.private')]].map(([value, iconName, label]) => (
+              <button
+                key={value}
+                type="button"
+                className={cx('v2-seg__opt h32 privacy-btn', editAccess === value && 'is-on active')}
+                aria-pressed={editAccess === value}
+                onClick={() => setEditAccess(value)}
+              >
+                <Icon name={iconName} size={16} /> {label}
               </button>
-              <button type="button" className="btn-confirm-delete" style={{ background: 'transparent', color: 'var(--accent-primary, #e53935)', border: '1px solid var(--accent-primary, #e53935)' }} onClick={handleSaveEdit} disabled={isUpdating || !editName.trim()}>
-                {isUpdating ? t('playlists.view.saving') : t('playlists.view.saveChanges')}
-              </button>
-            </div>
+            ))}
           </div>
         </div>
-      )}
+        <PlaylistTypePicker type={editType.type} kind={editType.kind} onChange={setEditType} disabled={isUpdating} />
+        <Field id={fid('tags')} label={t('playlists.modal.tags')}>
+          <div className="pv-tags v2-input">
+            {editTags.map((tag) => (
+              <span key={tag} className="v2-chip h28 pv-tags__chip">
+                {tag}
+                <button type="button" className="pv-tags__x" aria-label={t('audio.upload.mainPost.removeTag', { tag })} onClick={() => setEditTags(prev => prev.filter(x => x !== tag))}>
+                  <Icon name="close" size={14} />
+                </button>
+              </span>
+            ))}
+            <input
+              id={fid('tags')}
+              type="text"
+              value={editTagInput}
+              onChange={(e) => setEditTagInput(e.target.value)}
+              onKeyDown={(e) => {
+                if ((e.key === 'Enter' || e.key === ',' || e.key === ' ') && editTagInput.trim()) {
+                  e.preventDefault();
+                  const tag = editTagInput.trim().toLowerCase().replace(/,/g, '');
+                  if (tag && !editTags.includes(tag)) {
+                    setEditTags(prev => [...prev, tag]);
+                  }
+                  setEditTagInput('');
+                } else if (e.key === 'Backspace' && !editTagInput && editTags.length > 0) {
+                  setEditTags(prev => prev.slice(0, -1));
+                }
+              }}
+              placeholder={editTags.length === 0 ? t('playlists.modal.tagPlaceholder') : t('playlists.modal.tagMorePlaceholder')}
+            />
+          </div>
+        </Field>
+        <div className="v2-field">
+          <span className="v2-eyebrow">{t('playlists.view.coverImage')}</span>
+          <div
+            className={cx('playlist-edit-thumb', editThumb && 'has-image')}
+            role="button"
+            tabIndex={0}
+            onClick={() => !editThumbUploading && editThumbInputRef.current?.click()}
+            onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !editThumbUploading) { e.preventDefault(); editThumbInputRef.current?.click(); } }}
+          >
+            {editThumb ? (
+              <>
+                <img src={editThumb} alt={t('playlists.view.coverAlt')} />
+                <button
+                  type="button"
+                  className="playlist-edit-thumb-remove"
+                  onClick={(e) => { e.stopPropagation(); setEditThumb(''); }}
+                  aria-label={t('playlists.view.removeCover')}
+                ><Icon name="close" size={16} /></button>
+              </>
+            ) : (
+              <>
+                <Icon name={editThumbUploading ? 'progress_activity' : 'add_photo_alternate'} size={28} className={editThumbUploading ? 'v2-spin' : undefined} />
+                <span>{editThumbUploading ? t('playlists.view.uploading') : t('playlists.view.addCover')}</span>
+                <small>JPG / PNG / WebP</small>
+              </>
+            )}
+            <input
+              ref={editThumbInputRef}
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={onEditThumbFile}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+        {editType.type === 'audio' && editType.kind === 'music' && (
+          <>
+            <Field id={fid('genre')} label={t('playlists.view.genre')} value={editMusicStyle} onChange={(e) => setEditMusicStyle(e.target.value)} placeholder={t('playlists.view.genrePlaceholder')} />
+            <div className="pv-form-row">
+              <Field id={fid('year')} type="number" label={t('playlists.view.year')} value={editYear} onChange={(e) => setEditYear(e.target.value)} placeholder="1996" />
+              <Field id={fid('label')} label={t('playlists.view.label')} value={editLabel} onChange={(e) => setEditLabel(e.target.value)} placeholder={t('playlists.view.labelPlaceholder')} />
+            </div>
+            <Field id={fid('credits')} label={t('playlists.view.credits')} value={editCredits} onChange={(e) => setEditCredits(e.target.value)} placeholder={t('playlists.view.creditsPlaceholder')} />
+          </>
+        )}
+        <Field
+          as="textarea"
+          id={fid('description')}
+          label={t('playlists.view.description')}
+          value={editDescription}
+          onChange={(e) => setEditDescription(e.target.value)}
+          placeholder={t('playlists.view.descriptionPlaceholder')}
+          rows={3}
+          maxLength={1000}
+        />
+      </Dialog>
 
       {showFeedsModal && (
         <PlaylistFeedsModal

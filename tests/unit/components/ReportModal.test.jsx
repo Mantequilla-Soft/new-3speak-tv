@@ -28,7 +28,7 @@ function mount(props = {}) {
 }
 // The reasons are radio tiles (design 07c/43b) in a group named "Reason".
 const reasonGroup = () => screen.getByRole('radiogroup', { name: 'Reason' })
-const reasonNames = () => within(reasonGroup()).getAllByRole('radio').map((o) => o.textContent)
+const reasonNames = () => within(reasonGroup()).getAllByRole('radio').map((o) => o.querySelector('b').textContent)
 const pick = (user, name) => user.click(within(reasonGroup()).getByRole('radio', { name }))
 const submit = () => screen.getByRole('button', { name: 'Submit Report' })
 

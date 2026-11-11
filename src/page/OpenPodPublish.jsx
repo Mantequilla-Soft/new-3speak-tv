@@ -4,8 +4,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toastIn } from '../utils/toast';
 import axios from 'axios';
-import { MdMic, MdPeopleAlt } from 'react-icons/md';
-import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { useAppStore } from '../lib/store';
 import { useHangout } from '../context/HangoutContext';
 import { commentWithAioha } from '../hive-api/aioha';
@@ -17,6 +15,7 @@ import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { enforceLockedBeneficiaries } from '../utils/beneficiaries';
 import './OpenPodPublish.scss';
 import AccountImg from '../components/HiveAvatar/AccountImg';
+import { Button, EmptyState, Field, Icon } from '../components/v2/ui';
 
 // Every toast from this module is headed "Live"; the message becomes the
 // line under it. See utils/toast.js.
@@ -204,11 +203,14 @@ export default function OpenPodPublish() {
   if (!authenticated) {
     return (
       <div className="openpod-publish-page">
-        <div className="publish-login-gate">
-          <MdMic className="gate-icon" />
-          <p>{t('live.publish.loginGate')}</p>
-          <button onClick={() => navigate('/login')}>{t('common.actions.login')}</button>
-        </div>
+        <EmptyState
+          icon="mic"
+          title={t('live.publish.heading')}
+          className="publish-login-gate"
+          action={<Button variant="primary" icon="login" onClick={() => navigate('/login')}>{t('common.actions.login')}</Button>}
+        >
+          {t('live.publish.loginGate')}
+        </EmptyState>
       </div>
     );
   }
@@ -220,15 +222,15 @@ export default function OpenPodPublish() {
   return (
     <div className="openpod-publish-page">
       <div className="publish-header">
-        <MdMic className="publish-mic-icon" />
+        <span className="publish-bar" aria-hidden="true" />
         <h1>{t('live.publish.heading')}</h1>
       </div>
 
       {/* Audio preview */}
       {audioUrl && (
-        <div className="publish-audio-preview">
+        <section className="publish-audio-preview">
           <div className="preview-copy">
-            <span className="preview-label">{t('live.publish.previewLabel')}</span>
+            <span className="preview-label v2-eyebrow">{t('live.publish.previewLabel')}</span>
             <p>{t('live.publish.previewHint')}</p>
           </div>
           <AudioPlayerInline
@@ -238,25 +240,24 @@ export default function OpenPodPublish() {
             artworkUrl={thumbnailUrl}
             externalUrl={audioUrl}
           />
-        </div>
+        </section>
       )}
 
       <div className="publish-form">
         {/* Title */}
-        <div className="publish-field">
-          <label>{t('live.publish.title')}</label>
-          <input
-            type="text"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            placeholder={t('live.publish.titlePlaceholder')}
-            className="publish-input"
-          />
-        </div>
+        <Field
+          label={t('live.publish.title')}
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          placeholder={t('live.publish.titlePlaceholder')}
+          className="publish-field"
+        />
 
         {/* Description */}
-        <div className="publish-field">
-          <label>{t('live.publish.description')} <span className="optional">{t('live.publish.optional')}</span></label>
+        <div className="v2-field publish-field">
+          <span className="v2-eyebrow">
+            {t('live.publish.description')} <span className="v2-field__opt optional">{t('live.publish.optional')}</span>
+          </span>
           <MarkdownComposer
             value={description}
             onChange={setDescription}
@@ -266,25 +267,25 @@ export default function OpenPodPublish() {
 
         {/* Tags */}
         <div className="publish-field">
-          <label>{t('live.publish.tags')}</label>
-          <input
-            type="text"
+          <Field
+            label={t('live.publish.tags')}
             value={tagsInput}
             onChange={e => handleTagsChange(e.target.value)}
             placeholder={t('live.publish.tagsPlaceholder')}
-            className="publish-input"
           />
-          <div className="tags-preview">
-            {tagsPreview.map((tag, i) => (
-              <span key={i} className="tag-chip">{tag}</span>
-            ))}
-          </div>
+          {tagsPreview.length > 0 && (
+            <div className="tags-preview">
+              {tagsPreview.map((tag, i) => (
+                <span key={i} className="tag-chip">#{tag}</span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="publish-row">
           {/* Community */}
-          <div className="publish-field publish-field--half">
-            <label>{t('live.announce.community')}</label>
+          <div className="v2-field publish-field publish-field--half">
+            <span className="v2-eyebrow">{t('live.announce.community')}</span>
             <button
               type="button"
               className="publish-selector"
@@ -298,14 +299,14 @@ export default function OpenPodPublish() {
                 />
               )}
               <span>{communityLabel}</span>
-              <IoIosArrowDropdownCircle size={16} className="selector-chevron" />
+              <Icon name="expand_more" size={18} className="selector-chevron" />
             </button>
           </div>
 
           {/* Rewards */}
-          <div className="publish-field publish-field--half">
-            <label>{t('live.announce.rewards')}</label>
-            <select className="publish-select" onChange={handleReward}>
+          <div className="v2-field publish-field publish-field--half">
+            <label className="v2-eyebrow" htmlFor="openpod-publish-rewards">{t('live.announce.rewards')}</label>
+            <select id="openpod-publish-rewards" className="v2-input is-select publish-select" onChange={handleReward}>
               <option value="default">{t('live.announce.rewardDefault')}</option>
               <option value="powerup">{t('live.announce.rewardPowerup')}</option>
               <option value="decline">{t('live.publish.declinePayout')}</option>
@@ -313,46 +314,51 @@ export default function OpenPodPublish() {
           </div>
         </div>
 
-        {/* Beneficiaries */}
-        <div className="publish-field">
-          <div className="bene-row">
-            <div className="bene-info">
-              <span className="bene-title">{t('live.announce.beneficiaries')}</span>
-              <span className="bene-sub">
-                {isPremium
-                  ? t('live.announce.beneProHint')
-                  : t('live.announce.beneLockedHint')}
-              </span>
-            </div>
-            <button
-              type="button"
-              className="bene-btn"
-              onClick={() => setBeneModalOpen(true)}
-            >
-              {beneList.length > 0 && <span className="bene-count">{beneList.length}</span>}
-              <MdPeopleAlt />
-              <span>{t('live.announce.beneficiaries')}</span>
-            </button>
+        {/* Beneficiaries: the locked 10% reads as a well with a lock (39a) */}
+        <div className="bene-row">
+          <Icon name={isPremium ? 'group' : 'lock'} size={18} className="bene-icon" />
+          <div className="bene-info">
+            <span className="bene-title">{t('live.announce.beneficiaries')}</span>
+            <span className="bene-sub">
+              {isPremium
+                ? t('live.announce.beneProHint')
+                : t('live.announce.beneLockedHint')}
+            </span>
           </div>
+          <Button
+            variant="secondary"
+            size={36}
+            icon="group_add"
+            className="bene-btn"
+            onClick={() => setBeneModalOpen(true)}
+          >
+            {t('live.announce.beneficiaries')}
+            {beneList.length > 0 && <span className="bene-count num">{beneList.length}</span>}
+          </Button>
         </div>
 
         {/* Submit */}
         <div className="publish-actions">
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            size={48}
+            icon="arrow_back"
             className="publish-cancel"
             onClick={() => navigate('/openpods')}
           >
             {t('live.backToOpenPods')}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="primary"
+            size={48}
+            trailing="send"
             className="publish-submit"
             onClick={handlePublish}
             disabled={publishing}
+            loading={publishing}
           >
             {publishing ? t('live.publish.publishing') : t('live.publish.submit')}
-          </button>
+          </Button>
         </div>
       </div>
 

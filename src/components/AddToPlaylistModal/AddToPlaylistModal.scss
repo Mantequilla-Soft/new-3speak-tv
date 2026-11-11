@@ -1,570 +1,214 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
-.add-to-playlist-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1100; // match the app's other modal overlays; clears the nav (1000) + sticky tabs (40)
-  padding: 20px;
-
-  @include respond(phone) {
-    align-items: flex-end;
-    padding: 0;
-  }
-}
-
+// Save to playlist (design 07a / 41d) on the v2 dialog (DialogShell).
+// Watch Later first, then the member's playlists as bg-filled rows in a list
+// of fixed height that scrolls inside, "Added" as a cyan pill; the create form
+// (name, privacy, type and kind, tags) opens below with its actions in the footer.
 .add-to-playlist-modal {
-  background: var(--card-bg, #1a1a2e);
-  border: 1px solid var(--border-light, #333);
-  border-radius: 16px;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 400px;
-  max-height: 80vh;
+  .atp-body { gap: 8px; }
 
-  @include respond(phone) {
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    min-height: 55vh;
-    max-height: 75vh;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    animation: playlist-slide-up 0.3s ease forwards;
+  .atp-eyebrow { margin-top: 6px; }
+
+  // One playlist: a bg-filled row (fills, not borders), icon well, name, meta.
+  .atp-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 52px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    flex: none;
+    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+    &:active:not(:disabled) { transform: scale(.98); }
+    &:disabled { cursor: default; }
+    &:disabled:not(.loading) { opacity: .6; }
+
+    &.added .atp-row__icon { background: var(--cyan-tint); color: var(--cyan); }
   }
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 
-  // The box has no side padding, so the shared header brings its own.
-  .atp-header {
-    flex-shrink: 0;
-    padding: 16px 20px 12px;
-    margin-bottom: 0;
+  .atp-row__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    flex: none;
+
+    &.is-cyan { color: var(--cyan); }
   }
 
-  .modal-content {
+  .atp-row__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .name {
+      @include v2.text(label);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      @include v2.text(meta-sm);
+      color: var(--muted);
+    }
+  }
+
+  .atp-row__spin { color: var(--cyan); }
+
+  // Fixed height, scrolls inside: the dialog never grows with the list.
+  .atp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: 232px;
+    @include v2.scroll-y;
+    flex: none;
+
+    &.is-short { height: 120px; }
+  }
+
+  .atp-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 120px;
+    @include v2.text(body-sm);
+    color: var(--muted);
+
+    .material-symbols-rounded { color: var(--cyan); }
+  }
+
+  .atp-empty { padding: 14px; }
+
+  // "Create new playlist": the dashed add tile of 07a.
+  .atp-new {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    height: 48px;
+    flex: none;
+    border: 2px dashed var(--border);
+    border-radius: var(--r-lg);
+    background: transparent;
+    color: var(--muted);
+    @include v2.text(label);
+    cursor: pointer;
+    transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+
+    &:hover { color: var(--text); border-color: var(--muted); }
+  }
+
+  // Create form (41d): eyebrow labels, filled fields, segmented choices.
+  .atp-create {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-label { @include v2.text(eyebrow); color: var(--muted); }
+  }
+
+  // Privacy, type and audio kind (PlaylistTypePicker draws its buttons with
+  // these classes): a segmented track, the pick on surface-2.
+  .privacy-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+  }
+
+  .privacy-btn {
+    @include v2.control(32);
+    @include v2.text(label);
     flex: 1 1 0;
-    min-height: 0;
-    overflow-y: auto;
-    padding: 16px;
+    justify-content: center;
+    min-width: 0;
+    background: transparent;
+    color: var(--muted);
+    white-space: nowrap;
 
-    /* Custom scrollbar styling */
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
+    &:hover:not(:disabled) { color: var(--text); }
+    &.active { background: var(--surface-2); color: var(--text); }
+  }
 
-    &::-webkit-scrollbar-track {
+  // Tags: chips and the text input in one filled field.
+  .tags-input-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    min-height: 40px;
+    padding: 4px 8px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg);
+
+    &:focus-within { border-color: var(--accent); }
+
+    input {
+      flex: 1;
+      min-width: 120px;
+      height: 28px;
+      border: 0;
       background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 3px;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.35);
-      }
-    }
-
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-
-    .loading {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-secondary, #aaa);
-    }
-
-    .watch-later-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      padding: 14px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: left;
-      margin-bottom: 16px;
-
-      &:hover:not(:disabled) {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
-        transform: translateY(-1px);
-      }
-
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-
-      &.added {
-        background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(56, 142, 60, 0.2) 100%);
-        border-color: rgba(76, 175, 80, 0.4);
-
-        .watch-later-icon svg {
-          color: #4caf50;
-        }
-      }
-
-      &.loading {
-        opacity: 0.7;
-        pointer-events: none;
-      }
-
-      .watch-later-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 44px;
-        height: 44px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        flex-shrink: 0;
-
-        svg {
-          font-size: 24px;
-          color: #fff;
-        }
-      }
-
-      .watch-later-info {
-        flex: 1;
-        min-width: 0;
-
-        .name {
-          display: block;
-          font-size: 15px;
-          font-weight: 600;
-          color: var(--text-primary, #fff);
-        }
-
-        .meta {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 12px;
-          color: var(--text-secondary, #aaa);
-          margin-top: 3px;
-
-          svg {
-            font-size: 14px;
-          }
-        }
-      }
-
-      .added-badge {
-        padding: 4px 10px;
-        background: #4caf50;
-        color: #fff;
-        font-size: 11px;
-        font-weight: 600;
-        border-radius: 12px;
-        flex-shrink: 0;
-      }
-
-      .loading-indicator {
-        color: var(--text-secondary, #aaa);
-        font-weight: bold;
-      }
-    }
-
-    .separator {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-
-      span {
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--text-secondary, #888);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      &::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: var(--border-light, #333);
-      }
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-
-      p {
-        color: var(--text-secondary, #aaa);
-        margin-bottom: 16px;
-      }
-
-      .create-first-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 24px;
-        background: transparent;
-        color: var(--accent-primary, #e53935);
-        border: 1px solid var(--accent-primary, #e53935);
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s ease;
-
-        &:hover {
-          background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-          border-color: var(--accent-primary, #e53935);
-          color: var(--accent-primary, #e53935);
-          transform: translateY(-2px);
-        }
-
-        svg {
-          font-size: 20px;
-        }
-      }
-    }
-
-    .playlists-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
-
-      .playlist-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-        padding: 12px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid transparent;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-align: left;
-
-        &:hover:not(:disabled) {
-          background: rgba(255, 255, 255, 0.1);
-          border-color: var(--border-light, #444);
-        }
-
-        &:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-
-        &.added {
-          background: rgba(76, 175, 80, 0.15);
-          border-color: rgba(76, 175, 80, 0.3);
-
-          .playlist-icon svg {
-            color: #4caf50;
-          }
-        }
-
-        &.loading {
-          opacity: 0.7;
-          pointer-events: none;
-        }
-
-        .playlist-icon {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 40px;
-          height: 40px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 8px;
-          flex-shrink: 0;
-
-          svg {
-            font-size: 22px;
-            color: var(--accent-primary, #e53935);
-          }
-        }
-
-        .playlist-info {
-          flex: 1;
-          min-width: 0;
-
-          .name {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-primary, #fff);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-
-          .meta {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--text-secondary, #aaa);
-            margin-top: 2px;
-
-            svg {
-              font-size: 14px;
-            }
-          }
-        }
-
-        .added-badge {
-          padding: 4px 10px;
-          background: #4caf50;
-          color: #fff;
-          font-size: 11px;
-          font-weight: 600;
-          border-radius: 12px;
-          flex-shrink: 0;
-        }
-      }
-    }
-
-    .create-new-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 12px;
-      background: transparent;
-      border: 2px dashed var(--border-light, #444);
-      border-radius: 10px;
-      color: var(--text-secondary, #aaa);
+      color: var(--text);
+      font: inherit;
       font-size: 14px;
+      outline: none;
+
+      &::placeholder { color: var(--muted); }
+    }
+  }
+
+  .tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    height: 24px;
+    padding: 0 4px 0 8px;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--text);
+    @include v2.text(label);
+    font-size: 12px;
+
+    button {
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--muted);
       cursor: pointer;
-      transition: all 0.2s ease;
 
-      &:hover {
-        border-color: var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-        background: rgba(229, 57, 53, 0.05);
-      }
-
-      svg {
-        font-size: 20px;
-      }
-    }
-
-    .create-form {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border-light, #333);
-
-      .form-group {
-        margin-bottom: 16px;
-
-        label,
-        .form-label {
-          display: block;
-          font-size: 13px;
-          font-weight: 500;
-          color: var(--text-secondary, #aaa);
-          margin-bottom: 8px;
-        }
-
-        input {
-          width: 100%;
-          padding: 12px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-light, #444);
-          border-radius: 8px;
-          color: var(--text-primary, #fff);
-          font-size: 14px;
-          box-sizing: border-box;
-
-          &::placeholder {
-            color: var(--text-muted, #666);
-          }
-
-          &:focus {
-            outline: none;
-            border-color: var(--accent-primary, #e53935);
-          }
-        }
-
-        .tags-input-wrap {
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          gap: 6px;
-          padding: 8px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-light, #444);
-          border-radius: 8px;
-          min-height: 42px;
-
-          &:focus-within {
-            border-color: var(--accent-primary, #e53935);
-          }
-
-          .tags-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-
-            .tag-chip {
-              display: inline-flex;
-              align-items: center;
-              gap: 4px;
-              padding: 4px 8px;
-              background: rgba(229, 57, 53, 0.2);
-              border: 1px solid rgba(229, 57, 53, 0.4);
-              border-radius: 6px;
-              font-size: 12px;
-              color: var(--text-primary, #fff);
-
-              button {
-                display: flex;
-                align-items: center;
-                background: none;
-                border: none;
-                color: var(--text-secondary, #aaa);
-                cursor: pointer;
-                padding: 0;
-                font-size: 14px;
-
-                &:hover {
-                  color: #e53935;
-                }
-              }
-            }
-          }
-
-          input {
-            flex: 1;
-            min-width: 80px;
-            padding: 4px;
-            background: transparent;
-            border: none;
-            color: var(--text-primary, #fff);
-            font-size: 13px;
-
-            &::placeholder {
-              color: var(--text-muted, #666);
-            }
-
-            &:focus {
-              outline: none;
-              border-color: transparent;
-            }
-          }
-        }
-
-        .privacy-options {
-          display: flex;
-          gap: 8px;
-
-          .privacy-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-light, #444);
-            border-radius: 8px;
-            color: var(--text-secondary, #aaa);
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-
-            &:hover {
-              background: rgba(255, 255, 255, 0.1);
-            }
-
-            &.active {
-              background: rgba(229, 57, 53, 0.15);
-              border-color: var(--accent-primary, #e53935);
-              color: var(--accent-primary, #e53935);
-            }
-
-            svg {
-              font-size: 18px;
-            }
-          }
-        }
-      }
-
-      .form-actions {
-        display: flex;
-        gap: 12px;
-        margin-top: 20px;
-
-        .cancel-btn {
-          flex: 1;
-          padding: 12px;
-          background: rgba(255, 255, 255, 0.1);
-          border: none;
-          border-radius: 8px;
-          color: var(--text-secondary, #aaa);
-          font-size: 14px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-
-          &:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.2);
-          }
-
-          &:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-          }
-        }
-
-        .create-btn {
-          flex: 1;
-          padding: 12px;
-          background: transparent;
-          border: 1px solid var(--accent-primary, #e53935);
-          border-radius: 8px;
-          color: var(--accent-primary, #e53935);
-          font-size: 14px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s ease;
-
-          &:hover:not(:disabled) {
-            background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-            border-color: var(--accent-primary, #e53935);
-            color: var(--accent-primary, #e53935);
-          }
-
-          &:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-          }
-        }
-      }
+      &:hover { color: var(--text); background: var(--bg-hover); }
     }
   }
-}
-
-@media screen and (max-width: 767px) {
-  .add-to-playlist-modal .modal-content {
-    min-width: 90%;
-    padding: 14px 10px;
-    max-height: 80%;
-  }
-}
-
-@keyframes playlist-slide-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
 }

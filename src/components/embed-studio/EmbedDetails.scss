@@ -1,484 +1,385 @@
+@use "../../styles/v2" as v2;
 
-/* 🔐 Guest list for supporters-only uploads. */
-.gated-guests {
-  flex-direction: column;
-  align-items: stretch;
+// Upload details (EmbedDetails.jsx), design 21c + 35c, and the shared publish
+// option tiles. The tiles (.advance-option > .beneficiary-wrap) and the sheets
+// (.option-sheet, .sheet-actions, .gated-guests) are also used by the
+// scheduled-post editor and the batch import dialog, so their old class names
+// stay and are drawn here in v2.
 
-  &__editor { margin-top: 10px; width: 100%; }
+// ── Layout: fields on the left, the post as it will show on the right ───────
+.embed-details-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--side-panel-w);
+  gap: 24px;
+  align-items: start;
 
-  &__input-row {
-    display: flex;
-    gap: 8px;
-
-    input {
-      flex: 1 1 auto;
-      min-width: 0;
-      padding: 8px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color, #333);
-      background: var(--input-bg, rgba(255, 255, 255, 0.04));
-      color: inherit;
-      font-size: 13px;
-    }
-
-    button {
-      flex: 0 0 auto;
-      padding: 8px 14px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color, #333);
-      background: transparent;
-      color: inherit;
-      font-size: 13px;
-      cursor: pointer;
-
-      &:hover { background: rgba(255, 255, 255, 0.06); }
-    }
-  }
-
-  &__chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 10px;
-  }
-
-  &__chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: rgba(245, 179, 1, 0.15);
-    border: 1px solid rgba(245, 179, 1, 0.4);
-    font-size: 12px;
-
-    button {
-      border: 0;
-      background: none;
-      color: inherit;
-      cursor: pointer;
-      font-size: 14px;
-      line-height: 1;
-      padding: 0;
-      opacity: 0.7;
-
-      &:hover { opacity: 1; }
-    }
+  @include v2.below-wide { grid-template-columns: minmax(0, 1fr) 320px; }
+  @include v2.mobile {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
   }
 }
 
-/* 🔐 Guest list for supporters-only uploads: named accounts that can watch
-   without 3Speak Pro. Stacks under the toggle rather than sitting beside it,
-   since the chip list grows. */
-.gated-guests {
+.embed-details-main {
+  display: flex;
   flex-direction: column;
-  align-items: stretch;
+  gap: 14px;
+  min-width: 0;
+}
 
+.details-card {
+  padding: 16px;
+
+  > label {
+    justify-content: space-between;
+    .details-count,
+    .tag-count { @include v2.mono(11, 700); letter-spacing: 0; text-transform: none; color: var(--muted); }
+    .tag-count.is-full { color: var(--accent); }
+  }
+
+  // The title reads as the post's title: big, no field chrome until focused.
+  .details-title-input.details-title-input {
+    height: 48px;
+    padding: 0 10px;
+    margin: 0 -10px;
+    width: calc(100% + 20px);
+    max-width: none;
+    background: transparent;
+    @include v2.text(heading);
+    border-radius: v2.radius-for(48);
+
+    &:hover { background: var(--bg); }
+    &:focus { background: var(--bg); }
+  }
+
+  .char-counter {
+    align-self: flex-end;
+    @include v2.mono(11, 700);
+    color: var(--muted);
+    &.is-near { color: var(--text); }
+    &.is-max { color: var(--accent); }
+  }
+
+  .preview-tags .item { gap: 4px; }
+}
+
+.details-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.embed-details-aside {
+  position: sticky;
+  top: calc(var(--topbar-h) + 16px);
+  min-width: 0;
+
+  @include v2.mobile {
+    position: static;
+    order: -1;
+  }
+}
+
+.details-preview {
+  padding: 0;
+  overflow: hidden;
+
+  .details-preview__thumb {
+    aspect-ratio: 16 / 9;
+    border-radius: 0;
+
+    &.is-portrait {
+      aspect-ratio: 9 / 16;
+      max-height: 420px;
+      margin: 0 auto;
+      width: auto;
+    }
+  }
+
+  .details-preview__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .details-preview__title {
+    @include v2.text(title-sm);
+    color: var(--text);
+    overflow-wrap: anywhere;
+  }
+
+  // Phones: the picture beside the text, so the form is not pushed far down.
+  @include v2.mobile {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+    .details-preview__thumb { border-radius: var(--r-md); align-self: start; &.is-portrait { max-height: 200px; width: 100%; } }
+    .details-preview__body { padding: 0; gap: 10px; }
+  }
+}
+
+// ── The publish option tiles (35c) ───────────────────────────────────────────
+.advance-option {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));
+  gap: 10px;
+
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+}
+
+.beneficiary-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  min-height: 132px;
+  padding: 14px;
+  box-sizing: border-box;
+  border-radius: var(--r-2xl);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+  --tone: var(--cyan);
+
+  &.tone-accent { --tone: var(--accent); }
+  &.is-clickable { cursor: pointer; &:hover { background: color-mix(in srgb, var(--text) 4%, var(--surface)); } }
+  &.is-on { border-color: color-mix(in srgb, var(--tone) 40%, transparent); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @include v2.mobile { min-height: 120px; padding: 12px; border-radius: var(--r-xl); }
+
+  // Name and short line. Without a head (other screens) they lead the tile;
+  // with one they sit at the bottom.
+  > .wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+
+    > span:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      @include v2.text(label);
+      font-size: 14px;
+      color: var(--text);
+    }
+    > span:nth-child(2) {
+      @include v2.text(meta-sm);
+      color: var(--muted);
+      line-height: 1.35;
+    }
+  }
+
+  // The value of a picker (community, payout, beneficiaries) and the old
+  // checkbox switch sit at the bottom.
+  > .tile-value,
+  > .toggle-switch { margin-top: auto; }
+
+  > .tile-value {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    @include v2.text(label);
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .wrap { display: flex; align-items: center; gap: 6px; min-width: 0; }
+    .wrap span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; flex: none; }
+    svg { flex: none; color: var(--muted); }
+  }
+}
+
+// The upload's own tiles carry a head: tinted icon box, then the control.
+.opt-tile {
+  .opt-tile__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .opt-tile__icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: v2.radius-for(40);
+    background: color-mix(in srgb, var(--tone) 16%, transparent);
+    color: var(--tone);
+  }
+  .opt-tile__spacer { flex: 1; }
+  .opt-tile__chev { color: var(--muted); }
+  .opt-tile__switch { display: inline-flex; }
+
+  .opt-tile__head + .wrap { margin-top: auto; }
+  > .tile-value { margin-top: 2px; }
+}
+
+// Members only: who else may watch (35c, the cyan guest list card).
+.guest-tile {
+  background: color-mix(in srgb, var(--cyan) 8%, var(--surface));
+  gap: 8px;
+
+  .guest-tile__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--cyan);
+    b { flex: 1; @include v2.text(label); color: var(--text); }
+    .num { @include v2.mono(11, 700); color: var(--muted); }
+  }
+  .guest-tile__note {
+    margin-top: auto;
+    @include v2.text(meta-sm);
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.schedule-tile__change {
+  @include v2.btn(secondary, 32);
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+// The old checkbox switch (batch import, scheduled-post editor), drawn as the
+// v2 toggle: 44 × 26, accent when on.
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+  .toggle-track {
+    display: block;
+    width: 44px;
+    height: 26px;
+    padding: 3px;
+    box-sizing: border-box;
+    border-radius: 13px;
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--border);
+    transition: background var(--t-base) var(--ease);
+  }
+  .toggle-thumb {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: transform var(--t-base) var(--ease), background var(--t-base) var(--ease);
+  }
+  input:checked + .toggle-track {
+    background: var(--accent);
+    box-shadow: none;
+    .toggle-thumb { transform: translateX(18px); background: var(--on-accent); }
+  }
+  input:focus-visible + .toggle-track { outline: 2px solid var(--accent); outline-offset: 2px; }
+  &.disabled { opacity: .45; cursor: not-allowed; }
+}
+
+// ── Sheets (rewards, schedule, guest list) ───────────────────────────────────
+.option-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-sheet__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+  strong { @include v2.text(label); }
+  span { @include v2.text(meta-sm); color: var(--muted); line-height: 1.35; }
+  &:hover { background: var(--bg-hover); }
+  &.is-active {
+    border-color: var(--cyan);
+    background: var(--cyan-tint);
+  }
+}
+
+.schedule-sheet__note {
+  margin: 10px 0 0;
+  @include v2.text(meta);
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.sheet-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.sheet-actions__ok {
+  @include v2.btn(primary, 44);
+  min-width: 120px;
+  justify-content: center;
+}
+
+.gated-guests {
   &__editor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin-top: 10px;
     width: 100%;
   }
-
   &__input-row {
     display: flex;
     gap: 8px;
-
-    input {
-      flex: 1 1 auto;
-      min-width: 0;
-      padding: 8px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color, #333);
-      background: var(--input-bg, rgba(255, 255, 255, 0.04));
-      color: inherit;
-      font-size: 13px;
-    }
-
-    button {
-      flex: 0 0 auto;
-      padding: 8px 14px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color, #333);
-      background: transparent;
-      color: inherit;
-      font-size: 13px;
-      cursor: pointer;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.06);
-      }
-    }
+    .v2-input { flex: 1; min-width: 0; }
   }
-
   &__chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 10px;
+    gap: 4px;
   }
-
   &__chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: rgba(245, 179, 1, 0.15);
-    border: 1px solid rgba(245, 179, 1, 0.4);
-    font-size: 12px;
-
-    button {
-      border: 0;
-      background: none;
-      color: inherit;
-      cursor: pointer;
-      font-size: 14px;
-      line-height: 1;
-      padding: 0;
-      opacity: 0.7;
-
-      &:hover {
-        opacity: 1;
-      }
-    }
+    gap: 2px;
+    height: 28px;
+    padding: 0 2px 0 10px;
+    border-radius: v2.radius-for(28);
+    background: var(--bg);
+    @include v2.text(meta);
+    color: var(--text);
+    .guest-tile & { padding-right: 10px; }
   }
-}
-
-/* ── Settings tiles ────────────────────────────────────────────────────────────
-   Every setting in the advanced panel is a tile: four across on desktop, two on
-   mobile, all the same height, content centred.
-
-   Selectors are deliberately tripled (`.advance-option.advance-option...`). The
-   originals in StudioPage.scss are nested several levels deep, so a plain
-   single-class rule loses on specificity and the sliders stay sliders. */
-.advance-option.advance-option.advance-option {
-  /* No outer frame: the tiles are the visual container now, and a box around a
-     grid of boxes just adds noise. */
-  border: 0 !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  /* Every row matches the tallest tile in it, so the grid stays even. */
-  grid-auto-rows: 1fr;
-  gap: 10px;
-  align-items: stretch;
-
-  > .beneficiary-wrap {
-    position: relative;
-    /* Belt and braces with grid-auto-rows: an inherited align-self elsewhere
-       would otherwise leave tiles shrink-wrapped to their content. */
-    height: 100%;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    text-align: center;
-    gap: 6px;
-    padding: 14px;
-    margin: 0;
-    min-width: 0;
-    border: 1px solid var(--border-color, #333);
-    border-radius: 10px;
-    background: var(--card-bg, rgba(255, 255, 255, 0.02));
-    transition: border-color 0.15s ease, background-color 0.15s ease;
-
-    &:hover { border-color: var(--border-light, #555); }
-
-    /* The whole tile is the click target, so it says so. Inner controls keep
-       their own cursor. */
-    &.is-clickable,
-    &:has(.toggle-switch) { cursor: pointer; }
-
-    /* ── Type scale ──────────────────────────────────────────────────────────
-       Exactly two sizes on this panel, both taken from the studio's existing
-       values rather than invented: 14px for a label and 12px for supporting
-       text. Titles carry the weight, descriptions carry the opacity, so the
-       hierarchy comes from those rather than from a third size. */
-    .wrap {
-      width: 100%;
-      min-width: 0;
-      align-items: center;
-      text-align: center;
-      padding-right: 0;
-
-      > :first-child {
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 1.3;
-      }
-
-      > :not(:first-child) {
-        font-size: 12px;
-        font-weight: 400;
-        line-height: 1.35;
-        opacity: 0.65;
-      }
-    }
-
-    /* Controls sit on the smaller size too, so the panel only ever shows two. */
-    .select-wrap select,
-    .bene-btn-wrap,
-    .bene-btn-wrap span,
-    .community-wrap,
-    .community-wrap .wrap {
-      font-size: 12px;
-      text-transform: none;
-    }
-
-    /* Controls sit at the bottom, so every tile's title starts at the same
-       height and each card ends with the same gap beneath its control. */
-    /* Every control sits on the same baseline: pushed to the bottom, one fixed
-       height, so a dropdown, a button and a checkbox all line up across the row
-       instead of each ending wherever its own box happens to. */
-    /* Every control sits on the same baseline. The three button-ish ones fill
-       the tile width; the checkbox stays its own size and centres, because a
-       full-width checkbox just pins the box to the left edge. */
-    .select-wrap,
-    .bene-btn-wrap,
-    .community-wrap,
-    .toggle-switch {
-      margin-top: auto;
-      padding-top: 10px;
-      box-sizing: border-box;
-    }
-
-    .select-wrap,
-    .bene-btn-wrap,
-    .community-wrap {
-      width: 100%;
-      /* A fixed height, not a minimum: the three controls wrap different things
-         (an avatar, a native select, a label and icon) and any difference in
-         their natural height left them ending at different points even with
-         margin-top: auto pushing each to the bottom. */
-      height: 36px;
-      min-height: 36px;
-      /* Nothing below them, so the tile's own 14px padding is the only gap. */
-      margin-bottom: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* These three tiles have no control inside them at all any more. The tile
-       IS the button, so the only thing left is the current value, rendered the
-       same way in all three: community name, rewards split, beneficiary count. */
-    .tile-value {
-      width: 100%;
-      height: 22px;
-      margin-top: auto;
-      margin-bottom: 0;
-      padding-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-primary, #eee);
-      box-sizing: content-box;
-    }
-
-    .community-value {
-      img { width: 18px; height: 18px; border-radius: 50%; }
-      svg { display: none; }
-      .wrap { flex-direction: row; align-items: center; gap: 6px; }
-      span { font-size: 12px; font-weight: 600; }
-    }
-
-    .toggle-switch {
-      width: auto;
-      align-self: center;
-    }
-
-    .select-wrap {
-      width: 100%;
-      min-width: 0;
-
-      select {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        text-align: center;
-        text-align-last: center;
-      }
-    }
-
-    /* The community picker is a control like the others, so it sits on the
-       bottom line and fills the tile width. */
-    .community-wrap {
-      margin-top: auto;
-      padding-top: 10px;
-      width: 100%;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      min-width: 0;
-
-      .wrap { flex-direction: row; align-items: center; gap: 6px; }
-      img { width: 20px; height: 20px; border-radius: 50%; }
-    }
-
-    /* The beneficiaries button matched neither the community picker nor the
-       rewards select: it was uppercase and a different size. All three controls
-       now read the same. */
-    .bene-btn-wrap {
-      text-transform: none;
-      font-size: 12px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      width: 100%;
-      box-sizing: border-box;
-      cursor: pointer;
-    }
-  }
-
-  /* Active on/off tile: red OUTLINE and a checkmark, never a red fill. Several
-     can be on at once, and a filled red card reads as an error. */
-  > .beneficiary-wrap:has(.toggle-switch input:checked) {
-    border-color: var(--accent-primary, #e53935);
-    background: rgba(229, 57, 53, 0.06);
-  }
-
-  /* The slider becomes a checkbox. Markup untouched: the track is restyled into
-     the box and the thumb into the checkmark. */
-  .beneficiary-wrap .toggle-switch {
-    .toggle-track {
-      width: 24px;
-      height: 24px;
-      border-radius: 7px;
-      background-color: transparent;
-      border: 1.5px solid var(--border-light, #666);
-      transition: border-color 0.15s ease;
-
-      .toggle-thumb {
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: inherit;
-        background-color: transparent;
-        box-shadow: none;
-        transform: none;
-        transition: none;
-
-        /* A rotated L rather than a glyph, so it renders identically anywhere. */
-        &::after {
-          content: '';
-          position: absolute;
-          /* Centred by transform rather than hand-tuned offsets: the tick's
-             optical centre sits below its bounding box once rotated, hence the
-             -55% rather than -50%. */
-          top: 50%;
-          left: 50%;
-          width: 5px;
-          height: 10px;
-          margin: -6px 0 0 -3px;
-          border: solid var(--accent-primary, #e53935);
-          border-width: 0 2px 2px 0;
-          transform: translate(0, -5%) rotate(45deg) scale(0.6);
-          opacity: 0;
-          transition: opacity 0.12s ease, transform 0.12s ease;
-        }
-      }
-    }
-
-    input:checked + .toggle-track {
-      background-color: transparent;
-      border-color: var(--accent-primary, #e53935);
-
-      .toggle-thumb {
-        transform: none;
-        &::after { opacity: 1; transform: translate(0, -5%) rotate(45deg) scale(1); }
-      }
-    }
-
-    &.disabled { opacity: 0.5; cursor: not-allowed; }
-  }
-
-  /* "Change time" sits under the checkbox on the schedule tile. Small and quiet:
-     the tile's own description already shows the chosen time. */
-  .schedule-tile__change {
-    margin-top: 6px;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--accent-primary, #e53935);
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
-  /* The guest list holds an input and a chip list that grows, so it spans the
-     whole row and keeps its left alignment. */
-  > .beneficiary-wrap.gated-guests {
-    grid-column: 1 / -1;
-    align-items: stretch;
-    text-align: left;
-
-    .wrap { align-items: flex-start; text-align: left; }
-  }
-
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    /* Rows size to their own content: with two columns the trailing rows were
-       being stretched to match the tallest tile on the page. */
-    grid-auto-rows: auto;
-  }
-}
-
-/* ── Page type scale ───────────────────────────────────────────────────────────
-   The whole details page holds to the same two sizes as the tiles: 14px for
-   anything that labels something, 12px for everything else. Both are the
-   studio's existing values, not new ones.
-
-   Hierarchy comes from weight and opacity rather than a third size, which is
-   what stops a form this dense from looking like six different components
-   bolted together. Scoped to this page so the rest of the studio is untouched. */
-.embed-details-page.embed-details-page.embed-details-page {
-  font-size: 12px;
-
-  /* Labels: the one larger size. */
-  label,
-  > .studio-page-header h1,
-  .wrap > :first-child {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.3;
-  }
-
-  /* Everything that takes or shows input, plus helper text and buttons. */
-  input,
-  textarea,
-  select,
-  button,
-  .preview-tags .item,
-  .tag-count,
-  .schedule-wrap,
-  .toggle-row,
-  .proceed-btn,
-  .studio-btn,
-  p, span, li {
-    font-size: 12px;
-  }
-
-  /* The markdown editor's own chrome: its buttons and body follow the same
-     smaller size rather than shipping a third. */
-  .markdown-composer,
-  .markdown-composer * {
-    font-size: 12px;
-  }
-
-  /* Placeholders read as supporting text, so they lean on opacity, not size. */
-  ::placeholder { font-size: 12px; opacity: 0.55; }
-
-  /* The step labels under the progress dots are labels. */
-  .step-progress span { font-size: 12px; }
 }

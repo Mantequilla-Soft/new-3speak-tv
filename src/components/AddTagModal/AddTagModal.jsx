@@ -1,22 +1,15 @@
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
-import { TailChase } from 'ldrs/react';
-import 'ldrs/react/TailChase.css';
-import { Orbit } from 'ldrs/react';
-import 'ldrs/react/Orbit.css';
 import { useAppStore } from '../../lib/store';
 import { tagVideoWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { recordViewerTag, getViewerTags, getMyViewerTag } from '../../utils/viewerTag';
 import { getVideoTagsV2, getTagLabel, getCategoryOf } from '../../utils/tagsV2';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
-import ModalHeader from '../ModalHeader/ModalHeader';
-import useDialog from '../../hooks/useDialog';
-// Reuses the vote dialog's popup shell (already a bottom sheet on mobile) and the
-// tag-tile styles, so tagging looks identical wherever it's offered.
-import '../tooltip/UpvoteTooltip.scss';
+import DialogShell from '../modal/DialogShell';
+import { Button, Eyebrow } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import './AddTagModal.scss';
 
 // Every toast from this module is headed "Video"; the message becomes the
@@ -85,9 +78,6 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
     return () => { alive = false; };
   }, [isOpen, author, permlink, user]);
 
-  // A named dialog; Escape closes it (but not mid-broadcast).
-  const dialog = useDialog(saving ? undefined : onClose, { active: isOpen });
-
   if (!isOpen) return null;
 
   const submit = async () => {
@@ -115,52 +105,51 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
     }
   };
 
-  return createPortal(
-    <div className="vote-popup-overlay" onMouseDown={() => { if (!saving) onClose(); }}>
-      <div
-        className="vote-popup add-tag-popup"
-        {...dialog.props}
-        onClick={(e) => e.stopPropagation()}
-        onMouseDown={(e) => e.stopPropagation()}
-      >
-        <ModalHeader className="vote-popup-header" title={t('modals.addTag.title')} titleId={dialog.titleId} onClose={saving ? undefined : onClose} />
-        {title && <p className="add-tag-title">{title}</p>}
-
-        {existing === undefined ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0' }}>
-            <Orbit size="24" speed="1.5" color="red" />
+  // Design 19g / 43b "tag this video": the v2 dialog (no X, Escape or backdrop
+  // while the tag is being broadcast), the video's title under the heading,
+  // the topic chips, the note about an earlier tag, and one primary action.
+  return (
+    <DialogShell
+      onClose={onClose}
+      busy={saving}
+      title={t('modals.addTag.title')}
+      sub={title || undefined}
+      width={520}
+      zIndex={1100}
+      isolate
+      overlayClassName="vote-popup-overlay"
+      className="add-tag-popup"
+      footer={existing === undefined ? null : (
+        <Button variant="primary" className="vote-popup-submit" onClick={submit} disabled={saving || !tag} loading={saving}>
+          {t('modals.addTag.submit')}
+        </Button>
+      )}
+    >
+      {existing === undefined ? (
+        <div className="add-tag-loading" role="status">
+          <Icon name="progress_activity" size={24} className="v2-spin" />
+        </div>
+      ) : (
+        <>
+          <div className="add-tag-question" onClick={(e) => e.stopPropagation()}>
+            <Eyebrow as="span">{t('modals.addTag.question')}</Eyebrow>
+            <TagsV2Picker
+              value={tag}
+              onChange={setTag}
+              tagPct={tagPct}
+              disabled={saving}
+              suggested={autoTagsV2}
+            />
           </div>
-        ) : (
-          <>
-            <div className="viewer-tag-select" onClick={(e) => e.stopPropagation()}>
-              <span>{t('modals.addTag.question')}</span>
-              <TagsV2Picker
-                value={tag}
-                onChange={setTag}
-                tagPct={tagPct}
-                disabled={saving}
-                suggested={autoTagsV2}
-              />
-            </div>
 
-            {existing && (
-              <p className="vote-popup-note">
-                <Trans i18nKey="modals.addTag.existing" values={{ label: getTagLabel(existing) }} components={{ b: <b /> }} />
-              </p>
-            )}
-
-            <button
-              className="vote-popup-submit"
-              onClick={submit}
-              disabled={saving || !tag}
-            >
-              {saving ? <TailChase size="18" speed="1.5" color="white" /> : t('modals.addTag.submit')}
-            </button>
-          </>
-        )}
-      </div>
-    </div>,
-    document.body
+          {existing && (
+            <p className="add-tag-note">
+              <Trans i18nKey="modals.addTag.existing" values={{ label: getTagLabel(existing) }} components={{ b: <b /> }} />
+            </p>
+          )}
+        </>
+      )}
+    </DialogShell>
   );
 }
 

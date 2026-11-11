@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Clapperboard, ImagePlus } from 'lucide-react';
+import { Icon } from '../v2/ui';
 import MarkdownComposer from '../studio/MarkdownComposer';
 
 export const SHORT_TEXT_MAX = 5000;
@@ -20,7 +20,7 @@ export default function AudiogramShortsSection({ track, onChange, onDesign, disa
   return (
     <div className="audio-upload-shorts" data-testid="audiogram-shorts">
       <span className="audio-upload-reward-label">
-        <Clapperboard size={13} aria-hidden="true" /> {t('audio.upload.shorts.sectionTitle', { count: list.length })}
+        <Icon name="view_day" size={16} /> {t('audio.upload.shorts.sectionTitle', { count: list.length })}
       </span>
       <p className="audio-upload-shorts-help">{t('audio.upload.shorts.sectionHelp')}</p>
       {list.map((a, i) => (
@@ -57,7 +57,7 @@ export default function AudiogramShortsSection({ track, onChange, onDesign, disa
               ? <img src={a.thumbnailUrl} alt="" />
               : <video src={`${a.url}#t=1.5`} muted playsInline preload="metadata" aria-hidden="true" />}
             <span className="audio-upload-short-thumb-label">
-              <ImagePlus size={12} aria-hidden="true" /> {a.thumbnailUrl ? t('audio.upload.shorts.editThumb') : t('audio.upload.shorts.designThumb')}
+              <Icon name="add_photo_alternate" size={14} /> {a.thumbnailUrl ? t('audio.upload.shorts.editThumb') : t('audio.upload.shorts.designThumb')}
             </span>
           </button>
         </div>

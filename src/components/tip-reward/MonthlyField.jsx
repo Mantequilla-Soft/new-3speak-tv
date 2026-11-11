@@ -11,9 +11,9 @@ export default function MonthlyField({ months, onChange, existing, recipient }) 
   const id = useId();
   const now = Date.now();
   return (
-    <div className="field">
-      <label htmlFor={id}>{t('engagement.tip.monthly.label')}</label>
-      <select id={id} value={months} onChange={(e) => onChange(Number(e.target.value))}>
+    <div className="v2-field">
+      <label htmlFor={id} className="v2-eyebrow">{t('engagement.tip.monthly.label')}</label>
+      <select id={id} className="v2-input is-select" value={months} onChange={(e) => onChange(Number(e.target.value))}>
         <option value={0}>{t('engagement.tip.monthly.once')}</option>
         {MONTH_CHOICES.map((m) => (
           <option key={m} value={m}>
@@ -21,9 +21,9 @@ export default function MonthlyField({ months, onChange, existing, recipient }) 
           </option>
         ))}
       </select>
-      {months > 0 && <div className="memo-link-note">{t('engagement.tip.monthly.note')}</div>}
+      {months > 0 && <div className="v2-field__hint">{t('engagement.tip.monthly.note')}</div>}
       {months > 0 && existing && (
-        <div className="memo-link-note">{t(isMonthly(existing) ? 'engagement.tip.monthly.replaces' : 'engagement.tip.monthly.replacesOther', { recipient })}</div>
+        <div className="v2-field__hint">{t(isMonthly(existing) ? 'engagement.tip.monthly.replaces' : 'engagement.tip.monthly.replacesOther', { recipient })}</div>
       )}
     </div>
   );

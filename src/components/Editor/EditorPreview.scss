@@ -1,156 +1,92 @@
-// EditorPreview.scss
+@use "../../styles/v2" as v2;
 
+/* Preview of a post being written (design 19b "Preview" tab): a bg well with a
+   fixed height that scrolls inside, text in the post body's v2 type. */
 .editor-preview {
-  background: #fafafa;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  @include v2.well;
   padding: 16px;
-  min-height: 200px;
-  max-height: 500px;
-  overflow-y: auto;
-  
-  [data-theme="dark"] & {
-    background: #2d2d2d;
-    border-color: #3d3d3d;
-  }
+  height: 400px;
+  @include v2.scroll-y;
+  color: var(--text);
 
   .preview-content {
     word-break: break-word;
     overflow-wrap: break-word;
-    
-    [data-theme="dark"] & {
-      color: #f1f1f1;
-    }
-    
+    color: var(--text);
+
     p {
-      font-size: 15px;
+      font-size: 16px;
       line-height: 1.6;
-      margin-bottom: 0.8em;
+      margin: 0 0 12px;
+      text-wrap: pretty;
     }
 
     h1, h2, h3, h4, h5, h6 {
-      font-weight: 700;
-      line-height: 1.65;
-      margin: 0 0 0.7em 0;
-      
-      [data-theme="dark"] & {
-        color: #f1f1f1;
-      }
+      font-weight: 900;
+      letter-spacing: -.02em;
+      line-height: 1.2;
+      margin: 0 0 10px;
+      color: var(--text);
     }
 
-    h1 { font-size: 22px; }
-    h2 { font-size: 20px; }
-    h3 { font-size: 18px; }
-    h4 { font-size: 16px; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 20px; }
+    h4 { font-size: 18px; font-weight: 700; letter-spacing: 0; }
+    h5, h6 { font-size: 16px; font-weight: 700; letter-spacing: 0; }
 
     img {
       max-width: 100%;
       height: auto;
       display: block;
       margin: 12px 0;
-      border-radius: 6px;
+      border-radius: var(--r-md);
     }
 
-    ul, ol {
-      margin: 0.5em 0;
-      padding-left: 20px;
-    }
-
+    ul, ol { margin: 8px 0; padding-left: 20px; }
     ul { list-style: disc; }
     ol { list-style: decimal; }
 
+    // Quotes: a cyan bar on a surface block (design 19b)
     blockquote {
-      padding-left: 10px;
-      border-left: 4px solid #ccc;
-      margin: 1rem 0;
-      
-      [data-theme="dark"] & {
-        border-left-color: #555;
-      }
+      margin: 12px 0;
+      padding: 14px 18px;
+      border-left: 4px solid var(--cyan);
+      border-radius: 0 var(--r-lg) var(--r-lg) 0;
+      background: var(--surface);
+      font-size: 16px;
+      line-height: 1.5;
     }
 
-    a {
-      color: rgb(59, 59, 133);
-      
-      [data-theme="dark"] & {
-        color: #6b8cff;
-      }
-    }
+    a { color: var(--cyan); }
 
     code {
-      padding: 0.2em 0.3em;
-      border-radius: 6px;
-      background: #f0f0f0;
-      font-size: 0.875rem;
-      
-      [data-theme="dark"] & {
-        background: #1a1a1a;
-        color: #f1f1f1;
-      }
+      padding: 1px 6px;
+      border-radius: var(--r-xs);
+      background: var(--surface-2);
+      font-family: var(--font-mono);
+      font-size: 13px;
     }
 
     pre {
-      overflow-x: auto;
+      @include v2.scroll-x;
       font-size: 14px;
-      padding: 15px;
-      margin: 1rem 0;
-      background: #f5f5f5;
-      border-radius: 6px;
-      
-      [data-theme="dark"] & {
-        background: #1a1a1a;
-        color: #f1f1f1;
-      }
-    }
-
-    iframe {
-      max-width: 100%;
-      border-radius: 8px;
+      padding: 12px 14px;
       margin: 12px 0;
+      background: var(--surface);
+      border-radius: var(--r-md);
+
+      code { padding: 0; background: none; }
     }
 
-    img[src*="ipfs"] {
-      border: 1px solid #eee;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      th { @include v2.text(eyebrow); color: var(--muted); text-align: left; padding: 8px; border-bottom: 2px solid var(--border); }
+      td { padding: 8px; border-bottom: 1px solid var(--border); }
     }
-  }
-}
 
-.editor-with-preview {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  padding: 24px;
-  min-height: 100vh;
-  background: #f5f7fa;
-
-  .editor-section,
-  .preview-section {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .editor-section h2 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 700;
-    color: #333;
-  }
-
-  .preview-section {
-    position: sticky;
-    top: 24px;
-    height: fit-content;
-    max-height: calc(100vh - 48px);
-  }
-
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-    
-    .preview-section {
-      position: relative;
-      top: 0;
-      max-height: none;
-    }
+    hr { border: 0; border-top: 1px solid var(--border); margin: 16px 0; }
   }
 }

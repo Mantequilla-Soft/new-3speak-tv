@@ -85,10 +85,10 @@ function Toggle({ label, checked, onChange }) {
 }
 
 // A labelled <select> in the v2 field look (eyebrow label, filled control).
-function SelectField({ label, value, onChange, children, className }) {
+function SelectField({ label, value, onChange, children, className, hideLabel }) {
   return (
     <label className={cx('v2-field sp-e-select', className)}>
-      <span className="v2-eyebrow">{label}</span>
+      <span className={cx('v2-eyebrow', hideLabel && 'sp-e-sr')}>{label}</span>
       <select className="v2-input is-select" value={value} onChange={(e) => onChange(e.target.value)}>{children}</select>
     </label>
   );
@@ -120,13 +120,13 @@ function FoldCard({ icon, title, open, onToggle, children, className }) {
 
 // Reusable motion controls (type / speed / loop / duration) — used by blocks
 // (prefix 'anim') and the avatar (prefix 'avatarAnim'). `obj` holds the *Type etc.
-function MotionControls({ prefix, obj, onChange }) {
+function MotionControls({ prefix, obj, onChange, hideLabel }) {
   const g = (k, d) => { const v = obj[`${prefix}${k}`]; return v === undefined ? d : v; };
   const { t } = useTranslation();
   const type = g('Type', 'none');
   return (
     <>
-      <SelectField label={t('spotlight.editor.motion')} value={type} onChange={(v) => onChange({ [`${prefix}Type`]: v })}>
+      <SelectField label={t('spotlight.editor.motion')} hideLabel={hideLabel} value={type} onChange={(v) => onChange({ [`${prefix}Type`]: v })}>
         {ANIM_TYPES.map((o) => <option key={o.value} value={o.value}>{t(o.labelKey)}</option>)}
       </SelectField>
       {type !== 'none' && (
@@ -549,7 +549,7 @@ function SectionCard({ section, onChange, onRemove, onApplyStyleToType, uploadin
 
               <div className="sp-e-theme-sub">{t('spotlight.editor.motion')}</div>
               <div className="sp-e-inline">
-                <MotionControls prefix="anim" obj={section} onChange={(patch) => set(patch)} />
+                <MotionControls prefix="anim" obj={section} hideLabel onChange={(patch) => set(patch)} />
                 {section.type === 'embed' && (section.source === 'hive-recent') && section.animType && section.animType !== 'none' && (
                   <Range label={t('spotlight.editor.style.cardDelayMs', { value: section.animStagger ?? 120 })} min={0} max={1000} step={20}
                     value={section.animStagger ?? 120} onChange={(v) => set({ animStagger: v })} />
@@ -665,7 +665,6 @@ export default function SpotlightEditor({ username }) {
   };
   const newBlock = (type) => ({ ...newSection(type), ...inheritedStyle(type), id: uid() });
 
-  const addSection = (type) => markDirty({ ...layout, sections: [...sections, newBlock(type)] });
   const changeSection = (next) => markDirty({ ...layout, sections: sections.map((s) => (s.id === next.id ? next : s)) });
   // Re-normalise widths after a delete so a row-mate of a removed half/third
   // reflows to fill the row (otherwise it'd keep its old width + leave a gap).

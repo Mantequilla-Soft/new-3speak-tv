@@ -92,6 +92,7 @@ function TransferModal({showModal, selectedCoin, balances, recent = [], prices})
             variant="primary"
             size={48}
             block
+            className="is-next"
             trailing="send"
             loading={sending}
             disabled={sending || !amount || !to}

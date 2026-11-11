@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import "./FirstUploads.scss"
 import CardSkeleton from "../components/Cards/CardSkeleton";
 import axios from 'axios'
@@ -11,7 +11,7 @@ import { useContentBatch } from '../hooks/useContentBatch';
 import { useWatchHistory } from '../hooks/useWatchHistory';
 import useViewCounts from '../hooks/useViewCounts';
 import PullToRefresh from '../components/PullToRefresh/PullToRefresh';
-import { FirstUploadIcon } from '../components/FeedIcons';
+import { FeedPageHeader, FirstUploadIcon } from '../components/FeedIcons';
 import { useTranslation } from 'react-i18next';
 
 const fetchVideos = async ({ pageParam = 1 }) => {
@@ -42,6 +42,22 @@ const FirstUploads = () => {
       lastPage.length === 0 ? undefined : allPages.length + 1,
   });
 
+    // Infinite scroll: the next page loads as the end of the grid comes near
+    // (49c "Loading more…"), like the other feed pages.
+    useEffect(() => {
+      const handleScroll = () => {
+        if (
+          window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
+          !isFetchingNextPage &&
+          hasNextPage
+        ) {
+          fetchNextPage();
+        }
+      };
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
+
     const videos = data?.pages.flat() || [];
     const { getContentForVideo } = useContentBatch(videos);
     const { isWatched } = useWatchHistory(videos);
@@ -54,14 +70,11 @@ const FirstUploads = () => {
   return (
     <PullToRefresh onRefresh={handleRefresh}>
     <div className='firstupload-container'>
-        <div className='feed-page-header'>
-          <FirstUploadIcon />
-          <h2>{t('feeds.firstUploads.title')}</h2>
-        </div>
-        {isLoading ? <CardSkeleton /> :  <Card3 windowed videos={videos} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />}
-    {isError && <p>{t('feeds.errors.fetchVideos')}</p>}
+        <FeedPageHeader icon={<FirstUploadIcon />} title={t('feeds.firstUploads.title')} />
+        {isLoading ? <CardSkeleton /> :  <Card3 windowed videos={videos} badgeLabel={t('cards.badges.first')} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />}
+    {isError && <p className="feed-error" role="alert">{t('feeds.errors.fetchVideos')}</p>}
       {isFetchingNextPage && (
-        <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
+        <p className="feed-loading-more">{t('feeds.loadingMore')}</p>
       )}
     </div>
     </PullToRefresh>

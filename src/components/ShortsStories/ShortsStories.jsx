@@ -2,8 +2,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaChevronLeft, FaChevronRight, FaPlus } from "react-icons/fa";
-import { MdLocalFireDepartment } from "react-icons/md";
+import { Icon } from "../v2/Icon";
 import { SHORTS_STORIES_URL, storiesEnabledFor } from "../../utils/config";
 import { useAppStore } from "../../lib/store";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
@@ -53,7 +52,7 @@ const StreakBadge = ({ streak }) => {
   if (!(streak >= STREAK_MIN)) return null;
   return (
     <div className="streak-badge" title={t("shorts.stories.streakTitle", { count: streak })}>
-      <MdLocalFireDepartment aria-hidden="true" />
+      <Icon name="local_fire_department" size={12} fill />
       {streak}
     </div>
   );
@@ -233,8 +232,8 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
     <div className={wrapperClass}>
       <div className="stories-scroll-wrapper">
         {showLeft && (
-          <button className="stories-scroll-btn left" onClick={() => scroll("left")}>
-            <FaChevronLeft />
+          <button type="button" className="stories-scroll-btn left" onClick={() => scroll("left")} aria-label={t("feeds.scrollLeft")}>
+            <Icon name="chevron_left" size={20} />
           </button>
         )}
 
@@ -276,7 +275,7 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
                       badgeSize={12}
                     />
                     <div className="add-badge">
-                      <FaPlus />
+                      <Icon name="add" size={14} weight={700} />
                     </div>
                     <StreakBadge streak={currentUserStreak} />
                   </div>
@@ -364,8 +363,8 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
         </div>
 
         {showRight && (
-          <button className="stories-scroll-btn right" onClick={() => scroll("right")}>
-            <FaChevronRight />
+          <button type="button" className="stories-scroll-btn right" onClick={() => scroll("right")} aria-label={t("feeds.scrollRight")}>
+            <Icon name="chevron_right" size={20} />
           </button>
         )}
       </div>

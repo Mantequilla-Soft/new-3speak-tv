@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlignCenter, AlignLeft, AlignRight, Plus, X } from 'lucide-react';
+import { Icon } from '../../../v2/ui';
 import { ColorPicker, Field, Hint, Segmented, Slider, ToolButton, Toggle } from './controls';
 import { BORDER_SIZE, BOX, TEXT_DEFAULTS, TEXT_SIZE, newTextLayer, removeLayer, updateLayer } from '../editState';
 import { THUMB_FONTS } from '../fonts';
@@ -42,11 +42,11 @@ export default function TextTool({ edit, onChange, selectedId, onSelect }) {
               title={t('upload.thumbnail.text.remove')}
               aria-label={t('upload.thumbnail.text.remove')}
             >
-              <X size={14} aria-hidden="true" />
+              <Icon name="close" size={16} />
             </button>
           </div>
         ))}
-        <ToolButton icon={Plus} onClick={add}>{t('upload.thumbnail.text.add')}</ToolButton>
+        <ToolButton icon="add" onClick={add}>{t('upload.thumbnail.text.add')}</ToolButton>
       </div>
 
       {!layer && (
@@ -108,9 +108,9 @@ export default function TextTool({ edit, onChange, selectedId, onSelect }) {
               value={layer.align}
               onChange={(align) => set({ align })}
               options={[
-                { value: 'left', label: t('upload.thumbnail.text.alignLeft'), icon: AlignLeft },
-                { value: 'center', label: t('upload.thumbnail.text.alignCenter'), icon: AlignCenter },
-                { value: 'right', label: t('upload.thumbnail.text.alignRight'), icon: AlignRight },
+                { value: 'left', label: t('upload.thumbnail.text.alignLeft'), icon: 'format_align_left' },
+                { value: 'center', label: t('upload.thumbnail.text.alignCenter'), icon: 'format_align_center' },
+                { value: 'right', label: t('upload.thumbnail.text.alignRight'), icon: 'format_align_right' },
               ]}
             />
           </Field>

@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { Clock, Film, Link2, Maximize2, Minimize2, Pencil, Plus, Search, Trash2, X, ZoomIn, ZoomOut } from 'lucide-react';
 import TimelineToasters from '../playVideo/TimelineToasters';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import DialogShell from '../modal/DialogShell';
+import { Button, Icon, Segmented } from '../v2/ui';
 import AccountImg from '../HiveAvatar/AccountImg';
 import { fetchLinkMeta, parseOne } from '../Chat/chatLinks';
 import { CHECKER_URL } from '../../utils/config';
@@ -96,7 +95,7 @@ function LinkSummary({ link }) {
       <span className="tle-link-sum">
         {link._thumb
           ? <img className="tle-link-sum__thumb" src={link._thumb} alt="" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
-          : <span className="tle-link-sum__icon"><Film size={16} /></span>}
+          : <span className="tle-link-sum__icon"><Icon name="movie" size={18} /></span>}
         <span className="tle-link-sum__text">
           <span className="tle-link-sum__title">{link.title || `${link.author}/${link.permlink}`}</span>
           <span className="tle-link-sum__sub">{t('watch.timeline.video')} · @{link.author}</span>
@@ -117,7 +116,7 @@ function LinkSummary({ link }) {
   }
   return (
     <span className="tle-link-sum">
-      <span className="tle-link-sum__icon"><Link2 size={16} /></span>
+      <span className="tle-link-sum__icon"><Icon name="link" size={18} /></span>
       <span className="tle-link-sum__text">
         <span className="tle-link-sum__title">{link.title || link.site || link.url}</span>
         <span className="tle-link-sum__sub">{t('watch.timeline.link')} · {link.site || siteOf(link.url)}</span>
@@ -235,11 +234,8 @@ function LinkSheet({ initial, defaultAt, duration, onSave, onClose }) {
   const videoSearch = useCheckerSearch('video', tab === 'video' ? query : '');
   const userSearch = useCheckerSearch('user', tab === 'profile' ? query : '');
 
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [onClose]);
+  // Escape is the dialog's (DialogShell): it closes only this sheet when it
+  // sits over the Edit video dialog.
 
   const resolve = async (text) => {
     if (text.trim() === resolvedText.current) return;
@@ -283,176 +279,166 @@ function LinkSheet({ initial, defaultAt, duration, onSave, onClose }) {
 
   const results = tab === 'video' ? videoSearch : userSearch;
 
-  return createPortal(
-    <div className="tle-sheet-backdrop" onClick={onClose}>
-      <div
-        className="tle-sheet"
-        role="dialog"
-        aria-modal="true"
-        aria-label={editing ? t('upload.timeline.form.editTitle') : t('upload.timeline.form.addTitle')}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <ModalHeader closeOnEscape={false}
-          className="tle-sheet__head"
-          title={editing ? t('upload.timeline.form.editTitle') : t('upload.timeline.form.addTitle')}
-          onClose={onClose}
-        />
-
-        <div className="tle-tabs" role="tablist">
-          {[
-            ['link', t('upload.timeline.form.tabLink')],
-            ['video', t('upload.timeline.form.tabVideo')],
-            ['profile', t('upload.timeline.form.tabProfile')],
-          ].map(([key, label]) => (
-            <button
-              key={key}
-              type="button"
-              role="tab"
-              aria-selected={tab === key}
-              className={`tle-tab${tab === key ? ' is-active' : ''}`}
-              onClick={() => pickTab(key)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {tab === 'link' && (
-          <div className="tle-field">
-            <input
-              type="text"
-              className="tle-input"
-              value={pasted}
-              autoFocus
-              placeholder={t('upload.timeline.form.urlPlaceholder')}
-              onChange={(e) => setPasted(e.target.value)}
-              onBlur={() => resolve(pasted)}
-              onPaste={(e) => {
-                const text = e.clipboardData?.getData('text') || '';
-                if (text) { e.preventDefault(); setPasted(text.trim()); resolve(text); }
-              }}
-              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); resolve(pasted); } }}
-            />
-            <p className="tle-hint">{t('upload.timeline.form.urlHint')}</p>
-          </div>
-        )}
-
-        {tab !== 'link' && (
-          <div className="tle-field">
-            <div className="tle-search">
-              <Search size={16} />
-              <input
-                type="search"
-                className="tle-input"
-                value={query}
-                autoFocus
-                placeholder={tab === 'video' ? t('upload.timeline.form.searchVideo') : t('upload.timeline.form.searchProfile')}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-            {query.trim().length >= 2 && (
-              <ul className="tle-results">
-                {results.loading && !results.results.length && (
-                  <li className="tle-results__note">{t('upload.timeline.form.searching')}</li>
-                )}
-                {!results.loading && !results.results.length && results.q === query.trim() && (
-                  <li className="tle-results__note">{t('upload.timeline.form.noResults')}</li>
-                )}
-                {tab === 'video' && results.results.filter((r) => r.author && r.permlink).map((r) => (
-                  <li key={`${r.author}/${r.permlink}`}>
-                    <button
-                      type="button"
-                      className="tle-result"
-                      onClick={() => {
-                        setTarget({
-                          kind: 'video', author: r.author, permlink: r.permlink, title: r.title || '',
-                          _thumb: fixVideoThumbnail(r),
-                        });
-                        setQuery('');
-                      }}
-                    >
-                      <img className="tle-link-sum__thumb" src={fixVideoThumbnail(r)} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
-                      <span className="tle-link-sum__text">
-                        <span className="tle-link-sum__title">{r.title}</span>
-                        <span className="tle-link-sum__sub">@{r.author}</span>
-                      </span>
-                    </button>
-                  </li>
-                ))}
-                {tab === 'profile' && results.results.filter((r) => ACCOUNT_RE.test(r.username || '')).map((r) => (
-                  <li key={r.username}>
-                    <button
-                      type="button"
-                      className="tle-result"
-                      onClick={() => { setTarget({ kind: 'profile', account: r.username }); setQuery(''); }}
-                    >
-                      <AccountImg className="tle-link-sum__avatar" account={r.username} alt="" loading="lazy" />
-                      <span className="tle-link-sum__text">
-                        <span className="tle-link-sum__title">{r.display_name || r.username}</span>
-                        <span className="tle-link-sum__sub">@{r.username}</span>
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
-
-        {resolving && <p className="tle-hint">{t('upload.timeline.form.checking')}</p>}
-        {error && <p className="tle-issue">{t(`upload.timeline.form.${error}`)}</p>}
-
-        {target && !resolving && (
-          <div className="tle-picked">
-            <LinkSummary link={target} />
-          </div>
-        )}
-
-        <div className="tle-sheet__times">
-          <label className="tle-labelled">
-            <span>{t('upload.timeline.links.showsAt')}</span>
-            <span className="tle-inline">
-              <TimeField value={at} max={duration} onCommit={setAt} label={t('upload.timeline.links.showsAt')} />
-              <button
-                type="button"
-                className="tle-icon-btn"
-                title={t('upload.timeline.setNow')}
-                aria-label={t('upload.timeline.setNow')}
-                onClick={() => setAt(Math.floor(defaultAt))}
-              >
-                <Clock size={16} />
-              </button>
-            </span>
-          </label>
-          <label className="tle-labelled">
-            <span>{t('upload.timeline.links.onScreen')}</span>
-            <span className="tle-inline">
-              <input
-                type="number"
-                className={`tle-input tle-input--dur${durOk ? '' : ' is-invalid'}`}
-                min={LINK_DUR_MIN}
-                max={LINK_DUR_MAX}
-                step={1}
-                value={dur}
-                onChange={(e) => setDur(e.target.value)}
-                onBlur={() => { if (!durOk) setDur(clamp(Number.isFinite(durNum) ? durNum : LINK_DUR_DEFAULT, LINK_DUR_MIN, LINK_DUR_MAX)); }}
-              />
-              <span className="tle-unit">{t('upload.timeline.links.secondsUnit')}</span>
-            </span>
-          </label>
-        </div>
-
+  const title = editing ? t('upload.timeline.form.editTitle') : t('upload.timeline.form.addTitle');
+  return (
+    <DialogShell
+      open
+      onClose={onClose}
+      title={title}
+      width={480}
+      zIndex={1200}
+      className="tle-sheet"
+      bodyClassName="tle-sheet__body"
+      footer={(
         <div className="tle-sheet__actions">
-          <button type="button" className="tle-btn tle-btn--secondary" onClick={onClose}>
+          <Button variant="secondary" size={48} onClick={onClose}>
             {t('common.actions.cancel')}
-          </button>
-          <button type="button" className="tle-btn tle-btn--primary" disabled={!canSave} onClick={save}>
+          </Button>
+          <Button variant="primary" size={48} className="is-next" trailing={editing ? 'check' : 'add_link'} disabled={!canSave} onClick={save}>
             {editing ? t('common.actions.save') : t('upload.timeline.form.addButton')}
-          </button>
+          </Button>
         </div>
+      )}
+    >
+      <Segmented
+        className="tle-tabs"
+        label={title}
+        value={tab}
+        onChange={pickTab}
+        options={[
+          { value: 'link', label: t('upload.timeline.form.tabLink') },
+          { value: 'video', label: t('upload.timeline.form.tabVideo') },
+          { value: 'profile', label: t('upload.timeline.form.tabProfile') },
+        ]}
+      />
+
+      {tab === 'link' && (
+        <div className="tle-field">
+          <input
+            type="text"
+            className="tle-input"
+            value={pasted}
+            autoFocus
+            placeholder={t('upload.timeline.form.urlPlaceholder')}
+            aria-label={t('upload.timeline.form.tabLink')}
+            onChange={(e) => setPasted(e.target.value)}
+            onBlur={() => resolve(pasted)}
+            onPaste={(e) => {
+              const text = e.clipboardData?.getData('text') || '';
+              if (text) { e.preventDefault(); setPasted(text.trim()); resolve(text); }
+            }}
+            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); resolve(pasted); } }}
+          />
+          <p className="tle-hint">{t('upload.timeline.form.urlHint')}</p>
+        </div>
+      )}
+
+      {tab !== 'link' && (
+        <div className="tle-field">
+          <div className="tle-search">
+            <Icon name="search" size={18} />
+            <input
+              type="search"
+              className="tle-input"
+              value={query}
+              autoFocus
+              placeholder={tab === 'video' ? t('upload.timeline.form.searchVideo') : t('upload.timeline.form.searchProfile')}
+              aria-label={tab === 'video' ? t('upload.timeline.form.searchVideo') : t('upload.timeline.form.searchProfile')}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          {query.trim().length >= 2 && (
+            <ul className="tle-results">
+              {results.loading && !results.results.length && (
+                <li className="tle-results__note">{t('upload.timeline.form.searching')}</li>
+              )}
+              {!results.loading && !results.results.length && results.q === query.trim() && (
+                <li className="tle-results__note">{t('upload.timeline.form.noResults')}</li>
+              )}
+              {tab === 'video' && results.results.filter((r) => r.author && r.permlink).map((r) => (
+                <li key={`${r.author}/${r.permlink}`}>
+                  <button
+                    type="button"
+                    className="tle-result"
+                    onClick={() => {
+                      setTarget({
+                        kind: 'video', author: r.author, permlink: r.permlink, title: r.title || '',
+                        _thumb: fixVideoThumbnail(r),
+                      });
+                      setQuery('');
+                    }}
+                  >
+                    <img className="tle-link-sum__thumb" src={fixVideoThumbnail(r)} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
+                    <span className="tle-link-sum__text">
+                      <span className="tle-link-sum__title">{r.title}</span>
+                      <span className="tle-link-sum__sub">@{r.author}</span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+              {tab === 'profile' && results.results.filter((r) => ACCOUNT_RE.test(r.username || '')).map((r) => (
+                <li key={r.username}>
+                  <button
+                    type="button"
+                    className="tle-result"
+                    onClick={() => { setTarget({ kind: 'profile', account: r.username }); setQuery(''); }}
+                  >
+                    <AccountImg className="tle-link-sum__avatar" account={r.username} alt="" loading="lazy" />
+                    <span className="tle-link-sum__text">
+                      <span className="tle-link-sum__title">{r.display_name || r.username}</span>
+                      <span className="tle-link-sum__sub">@{r.username}</span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {resolving && <p className="tle-hint">{t('upload.timeline.form.checking')}</p>}
+      {error && <p className="tle-issue"><Icon name="error" size={18} />{t(`upload.timeline.form.${error}`)}</p>}
+
+      {target && !resolving && (
+        <div className="tle-picked">
+          <LinkSummary link={target} />
+        </div>
+      )}
+
+      <div className="tle-sheet__times">
+        <label className="tle-labelled">
+          <span>{t('upload.timeline.links.showsAt')}</span>
+          <span className="tle-inline">
+            <TimeField value={at} max={duration} onCommit={setAt} label={t('upload.timeline.links.showsAt')} />
+            <button
+              type="button"
+              className="tle-icon-btn"
+              title={t('upload.timeline.setNow')}
+              aria-label={t('upload.timeline.setNow')}
+              onClick={() => setAt(Math.floor(defaultAt))}
+            >
+              <Icon name="schedule" size={18} />
+            </button>
+          </span>
+        </label>
+        <label className="tle-labelled">
+          <span>{t('upload.timeline.links.onScreen')}</span>
+          <span className="tle-inline">
+            <input
+              type="number"
+              className={`tle-input tle-input--dur${durOk ? '' : ' is-invalid'}`}
+              min={LINK_DUR_MIN}
+              max={LINK_DUR_MAX}
+              step={1}
+              value={dur}
+              onChange={(e) => setDur(e.target.value)}
+              onBlur={() => { if (!durOk) setDur(clamp(Number.isFinite(durNum) ? durNum : LINK_DUR_DEFAULT, LINK_DUR_MIN, LINK_DUR_MAX)); }}
+            />
+            <span className="tle-unit">{t('upload.timeline.links.secondsUnit')}</span>
+          </span>
+        </label>
       </div>
-    </div>,
-    document.body,
+    </DialogShell>
   );
 }
 
@@ -864,7 +850,7 @@ export default function TimelineEditor({
         <div className="tle-xhead">
           <h3>{t('upload.timeline.title')}</h3>
           <button type="button" className="tle-icon-btn" onClick={() => setExpanded(false)} aria-label={t('upload.timeline.collapse')} title={t('upload.timeline.collapse')}>
-            <X size={18} />
+            <Icon name="close_fullscreen" size={20} />
           </button>
         </div>
       )}
@@ -893,7 +879,7 @@ export default function TimelineEditor({
               />
             ) : (
               <div className="tle-stage__fallback">
-                <Film size={28} />
+                <Icon name="movie" size={28} />
                 <p>{src ? t('upload.timeline.previewUnavailable') : t('upload.timeline.noPreview')}</p>
               </div>
             )}
@@ -919,7 +905,7 @@ export default function TimelineEditor({
           <div className="tle-trackwrap">
             <div className="tle-zoombar">
               <button type="button" className="tle-icon-btn" onClick={() => zoomTo(zoom / 2)} disabled={zoom <= 1} aria-label={t('upload.timeline.zoomOut')} title={t('upload.timeline.zoomOut')}>
-                <ZoomOut size={16} />
+                <Icon name="zoom_out" size={20} />
               </button>
               <input
                 type="range"
@@ -933,10 +919,11 @@ export default function TimelineEditor({
                 title={t('upload.timeline.zoomHint')}
               />
               <button type="button" className="tle-icon-btn" onClick={() => zoomTo(zoom * 2)} disabled={zoom >= maxZoom} aria-label={t('upload.timeline.zoomIn')} title={t('upload.timeline.zoomIn')}>
-                <ZoomIn size={16} />
+                <Icon name="zoom_in" size={20} />
               </button>
               {zoom > 1 && (
                 <button type="button" className="tle-btn tle-btn--sm tle-zoombar__fit" onClick={() => zoomTo(1)}>
+                  <Icon name="fit_screen" size={18} />
                   {t('upload.timeline.zoomFit')}
                 </button>
               )}
@@ -947,8 +934,8 @@ export default function TimelineEditor({
                 onClick={() => setExpanded((v) => !v)}
                 aria-pressed={expanded}
               >
-                {expanded ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
-                {' '}{expanded ? t('upload.timeline.collapse') : t('upload.timeline.expand')}
+                <Icon name={expanded ? 'close_fullscreen' : 'open_in_full'} size={18} />
+                {expanded ? t('upload.timeline.collapse') : t('upload.timeline.expand')}
               </button>
             </div>
             <div
@@ -1023,7 +1010,7 @@ export default function TimelineEditor({
                       aria-valuetext={formatStamp(l.at)}
                       onKeyDown={onMarkerKey('link', l._k)}
                     >
-                      {l.kind === 'video' ? <Film size={11} /> : l.kind === 'profile' ? <span className="tle-mark__at">@</span> : <Link2 size={11} />}
+                      {l.kind === 'video' ? <Icon name="movie" size={14} /> : l.kind === 'profile' ? <span className="tle-mark__at">@</span> : <Icon name="link" size={14} />}
                       <span
                         data-tl="linkEnd"
                         data-key={l._k}
@@ -1061,11 +1048,11 @@ export default function TimelineEditor({
           <header className="tle-section__head">
             <h3>{t('upload.timeline.chapters.heading')}</h3>
             <button type="button" className="tle-btn tle-btn--primary tle-btn--sm" onClick={addChapter} disabled={chapterList.length >= MAX_CHAPTERS}>
-              <Plus size={15} /> {t('upload.timeline.chapters.add', { time: formatStamp(now) })}
+              <Icon name="add" size={18} /> {t('upload.timeline.chapters.add', { time: formatStamp(now) })}
             </button>
           </header>
           <p className="tle-hint">{t('upload.timeline.chapters.hintAll')}</p>
-          {issues.map((k) => <p key={k} className="tle-issue">{t(`upload.timeline.chapters.${k}`, { seconds: MIN_CHAPTER_SECONDS })}</p>)}
+          {issues.map((k) => <p key={k} className="tle-issue"><Icon name="error" size={18} />{t(`upload.timeline.chapters.${k}`, { seconds: MIN_CHAPTER_SECONDS })}</p>)}
           {chapterList.length >= MAX_CHAPTERS && <p className="tle-hint">{t('upload.timeline.chapters.max', { max: MAX_CHAPTERS })}</p>}
           {!chapterList.length ? (
             <p className="tle-empty">{t('upload.timeline.chapters.empty')}</p>
@@ -1107,7 +1094,7 @@ export default function TimelineEditor({
                       aria-label={t('upload.timeline.setNow')}
                       onClick={() => patchChapter(c._k, { start: now })}
                     >
-                      <Clock size={16} />
+                      <Icon name="schedule" size={18} />
                     </button>
                     <button
                       type="button"
@@ -1116,7 +1103,7 @@ export default function TimelineEditor({
                       aria-label={t('common.actions.remove')}
                       onClick={() => removeChapter(c._k)}
                     >
-                      <Trash2 size={16} />
+                      <Icon name="delete" size={18} />
                     </button>
                   </li>
                 );
@@ -1138,7 +1125,7 @@ export default function TimelineEditor({
               onClick={() => setSheet({ key: null })}
               disabled={linkList.length >= MAX_LINKS}
             >
-              <Plus size={15} /> {t('upload.timeline.links.add')}
+              <Icon name="add_link" size={18} /> {t('upload.timeline.links.add')}
             </button>
           </header>
           <p className="tle-hint">{t('upload.timeline.links.hint')}</p>
@@ -1176,7 +1163,7 @@ export default function TimelineEditor({
                         aria-label={t('upload.timeline.setNow')}
                         onClick={() => { patchLink(l._k, { at: clamp(now, 0, duration > 0 ? Math.max(0, Math.floor(duration) - 1) : now) }); }}
                       >
-                        <Clock size={16} />
+                        <Icon name="schedule" size={18} />
                       </button>
                       <button
                         type="button"
@@ -1185,7 +1172,7 @@ export default function TimelineEditor({
                         aria-label={t('common.actions.edit')}
                         onClick={() => setSheet({ key: l._k })}
                       >
-                        <Pencil size={16} />
+                        <Icon name="edit" size={18} />
                       </button>
                       <button
                         type="button"
@@ -1194,7 +1181,7 @@ export default function TimelineEditor({
                         aria-label={t('common.actions.remove')}
                         onClick={() => removeLink(l._k)}
                       >
-                        <Trash2 size={16} />
+                        <Icon name="delete" size={18} />
                       </button>
                     </span>
                     {past && <span className="tle-issue tle-row__issue">{t('upload.timeline.links.afterEnd')}</span>}

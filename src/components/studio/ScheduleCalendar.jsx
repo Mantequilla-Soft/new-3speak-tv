@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Icon } from '../v2/Icon';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '../../i18n';
 import './ScheduleCalendar.scss';
@@ -86,7 +86,7 @@ export default function ScheduleCalendar({ value, onChange, min, max }) {
           disabled={!canPrev}
           aria-label={t('common.actions.back')}
         >
-          <ChevronLeft size={16} aria-hidden="true" />
+          <Icon name="chevron_left" size={18} />
         </button>
         <span className="schedule-calendar__month">
           {formatDate(new Date(view.y, view.m, 1), { month: 'long', year: 'numeric' })}
@@ -98,7 +98,7 @@ export default function ScheduleCalendar({ value, onChange, min, max }) {
           disabled={!canNext}
           aria-label={t('common.actions.next')}
         >
-          <ChevronRight size={16} aria-hidden="true" />
+          <Icon name="chevron_right" size={18} />
         </button>
       </div>
 
@@ -138,7 +138,7 @@ export default function ScheduleCalendar({ value, onChange, min, max }) {
       </table>
 
       <label className="schedule-calendar__time">
-        <Clock size={16} aria-hidden="true" />
+        <Icon name="schedule" size={18} />
         <input type="time" value={timePart} onChange={pickTime} />
       </label>
     </div>

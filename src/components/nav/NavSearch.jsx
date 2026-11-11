@@ -4,8 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { formatNumber } from "../../i18n";
 import axios from "axios";
-import { MdMusicNote, MdVideoLibrary, MdGroup, MdCheck, MdPerson, MdClose, MdCalendarToday, MdLabel, MdSearch, MdPlaylistPlay, MdExpandMore, MdExpandLess } from "react-icons/md";
-import { RiMovieLine } from "react-icons/ri";
+import { Icon } from "../v2/Icon";
 import { CHECKER_URL } from "../../utils/config";
 import { useAppStore } from "../../lib/store";
 import { fixVideoThumbnail, fallbackImg } from "../../utils/fixThumbnails";
@@ -16,12 +15,12 @@ import AccountImg from "../HiveAvatar/AccountImg";
 const LIMIT = 50;
 
 const SEARCH_TYPES = [
-  { key: 'user', labelKey: 'nav.search.types.users', icon: <MdPerson size={16} /> },
-  { key: 'community', labelKey: 'nav.search.types.communities', icon: <MdGroup size={16} /> },
-  { key: 'video', labelKey: 'nav.search.types.videos', icon: <MdVideoLibrary size={16} /> },
-  { key: 'short', labelKey: 'nav.search.types.shorts', icon: <RiMovieLine size={16} /> },
-  { key: 'audio', labelKey: 'nav.search.types.audio', icon: <MdMusicNote size={16} /> },
-  { key: 'playlist', labelKey: 'nav.search.types.playlists', icon: <MdPlaylistPlay size={16} /> },
+  { key: 'user', labelKey: 'nav.search.types.users', icon: <Icon name="person" size={16} /> },
+  { key: 'community', labelKey: 'nav.search.types.communities', icon: <Icon name="groups" size={16} /> },
+  { key: 'video', labelKey: 'nav.search.types.videos', icon: <Icon name="video_library" size={16} /> },
+  { key: 'short', labelKey: 'nav.search.types.shorts', icon: <Icon name="smart_display" size={16} /> },
+  { key: 'audio', labelKey: 'nav.search.types.audio', icon: <Icon name="music_note" size={16} /> },
+  { key: 'playlist', labelKey: 'nav.search.types.playlists', icon: <Icon name="playlist_play" size={16} /> },
 ];
 
 const DATE_PRESETS = [
@@ -73,7 +72,6 @@ function NavSearch() {
   const [communitySearch, setCommunitySearch] = useState('');
   const [datePreset, setDatePreset] = useState(null);
   const [showCommunityDropdown, setShowCommunityDropdown] = useState(false);
-  const [showAdvanced, setShowAdvanced] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [collapsedGroups, setCollapsedGroups] = useState({});
 
@@ -280,17 +278,13 @@ function NavSearch() {
     return groups;
   }, [searchData]);
 
-  const isSearching = debouncedTerm.length >= 2;
   const allExcluded = activeTypes.length === 0;
   const hasResults = Object.keys(grouped).length > 0;
 
   return (
     <div className={`navsearch-wrap${searchTerm ? ' has-value' : ''}`} ref={panelRef}>
       <div className="navsearch-input-wrap" ref={suggestWrapRef}>
-        <svg xmlns="http://www.w3.org/2000/svg" className="navsearch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="11" cy="11" r="7" />
-          <path d="m16 16 4 4" />
-        </svg>
+        <Icon name="search" size={20} className="navsearch-icon" />
         <input
           ref={inputRef}
           value={searchTerm}
@@ -302,95 +296,115 @@ function NavSearch() {
           className="navsearch-input"
         />
         {!searchTerm && (
-          <span className="navsearch-hotkey-hint">/</span>
+          <span className="navsearch-hotkey-hint" aria-hidden="true">/</span>
         )}
         {searchTerm && (
-          <button type="button" className="navsearch-clear" onClick={() => { setSearchTerm(''); inputRef.current?.focus(); }}>
-            <MdClose size={16} />
+          <button type="button" className="navsearch-clear" aria-label={t('feeds.discover.clearSearch')} onClick={() => { setSearchTerm(''); inputRef.current?.focus(); }}>
+            <Icon name="close" size={16} />
           </button>
         )}
 
-        {showSuggestions && debouncedTerm.length >= 2 && !panelOpen && (
-          <div className="navsearch-suggest-dropdown">
-            <button className="discover-suggest-item discover-suggest-search-term" onMouseDown={(e) => { e.stopPropagation(); openPanel(); }}>
-              <MdSearch size={16} className="discover-suggest-icon" />
-              <span className="discover-suggest-primary">{t('nav.search.searchFor', { term: debouncedTerm })}</span>
-            </button>
+        {showSuggestions && debouncedTerm.length >= 2 && !panelOpen && (() => {
+          // Two columns (design 28c): what to search for on the left (titles,
+          // tags), quick results by type on the right (people, communities,
+          // playlists), and "Search …" as the forward action at the bottom.
+          const hasRight = groupedSuggestions.user?.length > 0 || groupedSuggestions.community?.length > 0 || groupedSuggestions.playlist?.length > 0;
+          const hasLeft = groupedSuggestions.title?.length > 0 || groupedSuggestions.tag?.length > 0;
+          return (
+          <div className={`navsearch-suggest-dropdown${hasLeft && hasRight ? ' is-two' : ''}`}>
+            {hasLeft && (
+            <div className="navsearch-suggest-col">
+              {groupedSuggestions.title?.length > 0 && (
+                <div className="discover-suggest-group">
+                  <span className="discover-suggest-group-label">{t('nav.search.titles')}</span>
+                  {groupedSuggestions.title.map((s, i) => (
+                    <button key={i} type="button" className="discover-suggest-item" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
+                      <Icon name="search" size={18} className="discover-suggest-icon" />
+                      <span className="discover-suggest-primary">{s.text}</span>
+                      <Icon name="north_west" size={16} className="discover-suggest-go" />
+                    </button>
+                  ))}
+                </div>
+              )}
 
-            {groupedSuggestions.user?.length > 0 && (
-              <div className="discover-suggest-group">
-                <span className="discover-suggest-group-label">{t('nav.search.types.users')}</span>
-                <div className="discover-suggest-badges">
+              {groupedSuggestions.tag?.length > 0 && (
+                <div className="discover-suggest-group">
+                  <span className="discover-suggest-group-label">{t('nav.search.tags')}</span>
+                  <div className="discover-suggest-badges">
+                    {groupedSuggestions.tag.map((s, i) => (
+                      <button key={i} type="button" className="discover-suggest-badge" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
+                        <Icon name="sell" size={14} />
+                        <span>{s.text}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            )}
+
+            {hasRight && (
+            <div className="navsearch-suggest-col">
+              {groupedSuggestions.user?.length > 0 && (
+                <div className="discover-suggest-group">
+                  <span className="discover-suggest-group-label">{t('nav.search.types.users')}</span>
                   {groupedSuggestions.user.map((s, i) => (
-                    <button key={i} className="discover-suggest-badge" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
-                      <div className="discover-suggest-badge-avatar">
-                        {s.profile_image ? <img src={s.profile_image} alt="" onError={(e) => { e.target.style.display = 'none'; }} /> : <MdPerson size={12} />}
-                      </div>
-                      <span>{s.display_name || s.username}</span>
+                    <button key={i} type="button" className="discover-suggest-quick" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
+                      <span className="discover-suggest-badge-avatar is-round">
+                        {s.profile_image ? <img src={s.profile_image} alt="" onError={(e) => { e.target.style.display = 'none'; }} /> : <Icon name="person" size={18} />}
+                      </span>
+                      <span className="discover-suggest-quick-text">
+                        <span className="discover-suggest-kind">{t('nav.search.types.users')}</span>
+                        <b>{s.display_name || s.username}</b>
+                      </span>
                     </button>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
 
-            {groupedSuggestions.tag?.length > 0 && (
-              <div className="discover-suggest-group">
-                <span className="discover-suggest-group-label">{t('nav.search.tags')}</span>
-                <div className="discover-suggest-badges">
-                  {groupedSuggestions.tag.map((s, i) => (
-                    <button key={i} className="discover-suggest-badge" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
-                      <MdLabel size={12} />
-                      <span>{s.text}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {groupedSuggestions.community?.length > 0 && (
-              <div className="discover-suggest-group">
-                <span className="discover-suggest-group-label">{t('nav.search.types.communities')}</span>
-                <div className="discover-suggest-badges">
+              {groupedSuggestions.community?.length > 0 && (
+                <div className="discover-suggest-group">
+                  <span className="discover-suggest-group-label">{t('nav.search.types.communities')}</span>
                   {groupedSuggestions.community.map((s, i) => (
-                    <button key={i} className="discover-suggest-badge" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
-                      <div className="discover-suggest-badge-avatar">
+                    <button key={i} type="button" className="discover-suggest-quick" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
+                      <span className="discover-suggest-badge-avatar">
                         <AccountImg account={s.name} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
-                      </div>
-                      <span>{s.title || s.name}</span>
+                      </span>
+                      <span className="discover-suggest-quick-text">
+                        <span className="discover-suggest-kind is-cyan">{t('nav.search.types.communities')}</span>
+                        <b>{s.title || s.name}</b>
+                      </span>
                     </button>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
 
-            {groupedSuggestions.playlist?.length > 0 && (
-              <div className="discover-suggest-group">
-                <span className="discover-suggest-group-label">{t('nav.search.types.playlists')}</span>
-                <div className="discover-suggest-badges">
+              {groupedSuggestions.playlist?.length > 0 && (
+                <div className="discover-suggest-group">
+                  <span className="discover-suggest-group-label">{t('nav.search.types.playlists')}</span>
                   {groupedSuggestions.playlist.map((s, i) => (
-                    <button key={i} className="discover-suggest-badge" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
-                      <MdPlaylistPlay size={12} />
-                      <span>{s.name}</span>
-                      <span className="discover-suggest-count">{s.video_count}</span>
+                    <button key={i} type="button" className="discover-suggest-quick" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
+                      <span className="discover-suggest-badge-avatar is-thumb"><Icon name="playlist_play" size={20} /></span>
+                      <span className="discover-suggest-quick-text">
+                        <span className="discover-suggest-kind">{t('nav.search.types.playlists')}</span>
+                        <b>{s.name}</b>
+                      </span>
+                      <span className="discover-suggest-count num">{s.video_count}</span>
                     </button>
                   ))}
                 </div>
-              </div>
+              )}
+            </div>
             )}
 
-            {groupedSuggestions.title?.length > 0 && (
-              <div className="discover-suggest-group">
-                <span className="discover-suggest-group-label">{t('nav.search.titles')}</span>
-                {groupedSuggestions.title.map((s, i) => (
-                  <button key={i} className="discover-suggest-item" onMouseDown={(e) => { e.stopPropagation(); selectSuggestion(s); }}>
-                    <MdSearch size={16} className="discover-suggest-icon" />
-                    <span className="discover-suggest-primary">{s.text}</span>
-                  </button>
-                ))}
-              </div>
-            )}
+            <button type="button" className="discover-suggest-item discover-suggest-search-term" onMouseDown={(e) => { e.stopPropagation(); openPanel(); }}>
+              <Icon name="search" size={18} className="discover-suggest-icon" />
+              <span className="discover-suggest-primary">{t('nav.search.searchFor', { term: debouncedTerm })}</span>
+              <Icon name="arrow_forward" size={18} className="discover-suggest-go" />
+            </button>
           </div>
-        )}
+          );
+        })()}
       </div>
 
       {panelOpen && (
@@ -399,7 +413,7 @@ function NavSearch() {
           <div className="navsearch-panel">
             <div className="navsearch-panel-header">
               <div className="navsearch-panel-search">
-                <MdSearch size={18} className="navsearch-panel-search-icon" />
+                <Icon name="search" size={20} className="navsearch-panel-search-icon" />
                 <input
                   type="text"
                   value={searchTerm}
@@ -410,11 +424,11 @@ function NavSearch() {
                 />
                 {searchTerm && (
                   <button type="button" className="navsearch-panel-search-clear" onClick={() => setSearchTerm('')}>
-                    <MdClose size={16} />
+                    <Icon name="close" size={16} />
                   </button>
                 )}
               </div>
-              <button type="button" className="navsearch-panel-close" onClick={closePanel}><MdClose size={20} /></button>
+              <button type="button" className="navsearch-panel-close" onClick={closePanel}><Icon name="close" size={20} /></button>
             </div>
             <div className="navsearch-panel-body">
               {/* Left sidebar: filters */}
@@ -435,7 +449,7 @@ function NavSearch() {
                 <div className="navsearch-sidebar-section">
                   <label className={`discover-filter-chip boost${boostRecent ? ' active' : ''}`}>
                     <input type="checkbox" checked={boostRecent} onChange={() => setBoostRecent(prev => !prev)} />
-                    <MdCheck size={14} className="discover-filter-check" />
+                    <Icon name="check" size={14} className="discover-filter-check" />
                     <span>{t('nav.search.boostRecent')}</span>
                   </label>
                 </div>
@@ -468,7 +482,7 @@ function NavSearch() {
                     />
                     {tagFilter && (
                       <button type="button" className="discover-advanced-clear" onClick={() => setTagFilter('')}>
-                        <MdClose size={14} />
+                        <Icon name="close" size={14} />
                       </button>
                     )}
                   </div>
@@ -484,7 +498,7 @@ function NavSearch() {
                         </div>
                         <span>{communityLabel || communityFilter}</span>
                         <button type="button" className="discover-advanced-clear" onClick={() => { setCommunityFilter(''); setCommunityLabel(''); setCommunitySearch(''); }}>
-                          <MdClose size={14} />
+                          <Icon name="close" size={14} />
                         </button>
                       </div>
                     ) : (
@@ -530,7 +544,7 @@ function NavSearch() {
 
                 {hasAdvancedFilters && (
                   <button type="button" className="discover-clear-advanced" onClick={clearAdvancedFilters}>
-                    <MdClose size={14} />
+                    <Icon name="close" size={14} />
                     {t('nav.search.clearFilters')}
                   </button>
                 )}
@@ -573,7 +587,7 @@ function NavSearch() {
                     <div key={st.key} className="discover-result-group">
                       <h3 className="discover-group-title" onClick={() => toggleGroup(st.key)}>
                         {st.icon} {t(st.labelKey)} ({items.length})
-                        {isCollapsed ? <MdExpandMore size={18} className="discover-group-toggle" /> : <MdExpandLess size={18} className="discover-group-toggle" />}
+                        {isCollapsed ? <Icon name="expand_more" size={18} className="discover-group-toggle" /> : <Icon name="expand_less" size={18} className="discover-group-toggle" />}
                       </h3>
                       {!isCollapsed && (st.key === 'community' ? (
                         <div className="discover-community-list">
@@ -598,7 +612,7 @@ function NavSearch() {
                           {items.map(u => (
                             <Link to={`/@${u.username}`} key={u.username} className="discover-user-card" onClick={closePanel}>
                               <div className="discover-user-avatar">
-                                {u.profile_image ? <img src={u.profile_image} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} /> : <MdPerson size={24} />}
+                                {u.profile_image ? <img src={u.profile_image} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} /> : <Icon name="person" size={22} />}
                               </div>
                               <div className="discover-user-info">
                                 <span className="discover-user-name">{u.display_name || u.username}</span>
@@ -613,7 +627,7 @@ function NavSearch() {
                           {items.map(p => (
                             <Link to={`/playlist/${p.id}`} key={p.id} className="discover-playlist-card" onClick={closePanel}>
                               <div className="discover-playlist-icon-wrap">
-                                <MdPlaylistPlay size={24} />
+                                <Icon name="playlist_play" size={22} />
                               </div>
                               <div className="discover-playlist-info">
                                 <span className="discover-playlist-name">{p.name}</span>

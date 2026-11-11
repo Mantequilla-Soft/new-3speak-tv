@@ -4,6 +4,9 @@ import { toastIn } from '../../utils/toast';
 import { useAppStore } from "../../lib/store"
 import { useTranslation } from "react-i18next"
 import { endWalletSession } from "../../hive-api/aioha"
+import { Icon } from "../../components/v2/ui"
+import mark from "../../assets/image/3S_mark.svg"
+import "./Callback.scss"
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -136,48 +139,34 @@ const ManteAuthCallback = () => {
     handleAuth()
   }, [])
 
+  // 19j: the mark, a big status line, then one status card.
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "87vh",
-      textAlign: "center",
-      padding: "0 20px",
-      gap: "14px",
-    }}>
-      <style>{`
-        @keyframes ba-sc-draw { to { stroke-dashoffset: 0; } }
-        @keyframes ba-sc-pop { 0%{transform:scale(.85)} 55%{transform:scale(1.06)} 100%{transform:scale(1)} }
-        .ba-sc { width:100px; height:100px; animation: ba-sc-pop .45s ease-out; }
-        .ba-sc circle { fill:none; stroke:#e8d89b; stroke-width:2.5; opacity:.5; stroke-dasharray:1; stroke-dashoffset:1; animation: ba-sc-draw .55s ease-out forwards; }
-        .ba-sc path { fill:none; stroke:#e8d89b; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1; stroke-dashoffset:1; animation: ba-sc-draw .4s .5s ease-out forwards; filter: drop-shadow(0 0 8px rgba(232,216,155,.35)); }
-        .ba-sc.err circle, .ba-sc.err path { stroke:#e05a4d; opacity:1; filter:none; }
-      `}</style>
-      {ok === false ? (
-        <>
-          <svg className="ba-sc err" viewBox="0 0 52 52" aria-hidden="true">
-            <circle pathLength="1" cx="26" cy="26" r="24" />
-            <path pathLength="1" d="M18 18 L34 34 M34 18 L18 34" />
-          </svg>
-          <h2 style={{ margin: 0 }}>{t('auth.manteCallback.loginFailed')}</h2>
-          <p style={{ margin: 0, color: "var(--text-secondary, #888)" }}>
-            {t('auth.manteCallback.closeAndRetry')}
-          </p>
-        </>
-      ) : (
-        <>
-          <svg className="ba-sc" viewBox="0 0 52 52" aria-hidden="true">
-            <circle pathLength="1" cx="26" cy="26" r="24" />
-            <path pathLength="1" d="M15 27 l7.5 7.5 L38 17" />
-          </svg>
-          <h2 style={{ margin: 0 }}>{t('auth.manteCallback.youreIn')}</h2>
-          <p style={{ margin: 0, color: "var(--text-secondary, #888)" }}>
-            {closeable ? t('auth.manteCallback.closeAndReturn') : t('auth.manteCallback.signingIn')}
-          </p>
-        </>
-      )}
+    <div className="signin-cb">
+      <div className="signin-cb__box" role="status" aria-live="polite">
+        <img className="signin-cb__mark" src={mark} alt="3Speak" />
+        {ok === false ? (
+          <>
+            <h1 className="signin-cb__title">{t('auth.manteCallback.loginFailed')}</h1>
+            <div className="signin-cb__card is-error">
+              <Icon name="error" size={24} />
+              <span>{t('auth.manteCallback.closeAndRetry')}</span>
+            </div>
+          </>
+        ) : ok === true ? (
+          <>
+            <h1 className="signin-cb__title">{t('auth.manteCallback.youreIn')}</h1>
+            <div className="signin-cb__card">
+              <Icon name="check_circle" size={24} />
+              <span>{closeable ? t('auth.manteCallback.closeAndReturn') : t('auth.manteCallback.signingIn')}</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <Icon name="progress_activity" size={28} className="v2-spin signin-cb__spin" />
+            <h1 className="signin-cb__title">{t('auth.manteCallback.signingIn')}</h1>
+          </>
+        )}
+      </div>
     </div>
   )
 }

@@ -7,7 +7,7 @@
 // account or log out.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { useState } from 'react'
-import { screen, waitFor, within } from '@testing-library/react'
+import { screen, waitFor, within, fireEvent } from '@testing-library/react'
 import { renderWithProviders, toastMessages } from './_render.jsx'
 
 const m = vi.hoisted(() => ({ butrauth: true, metamask: false }))
@@ -45,6 +45,8 @@ vi.mock('../../../src/utils/butrauthAccounts', () => ({
 vi.mock('../../../src/utils/referral', () => ({ withReferrer: (u) => `${u}&ref=badadib`, getStoredInvite: () => 'INVITE1' }))
 vi.mock('../../../src/utils/butrauthPopup', () => ({ withLocale: (u) => u }))
 vi.mock('../../../src/components/HiveAvatar/AccountImg', () => ({ default: () => <span /> }))
+// The community half of the window shows creators from the leaderboard.
+vi.mock('../../../src/lib/leaderboardData', () => ({ fetchLeaderboard: async () => ({ entries: [] }) }))
 
 const { toast } = await import('sonner')
 const { useAppStore } = await import('../../../src/lib/store')
@@ -100,7 +102,7 @@ describe('the login window: sign up or log in', () => {
     const { user, onClose } = mount()
     await user.click(screen.getByRole('button', { name: 'Cancel' }))
     await user.click(screen.getByRole('button', { name: 'Close' }))
-    await user.click(document.querySelector('.login-chooser-overlay'))
+    fireEvent.mouseDown(document.querySelector('.v2-dialog'))
     expect(onClose).toHaveBeenCalledTimes(3)
   })
 
@@ -203,10 +205,9 @@ describe('the login window: sign up or log in', () => {
     await waitFor(() => expect(onLogin).toHaveBeenCalledWith({ success: true, username: 'badadib' }))
   })
 
-  // BUG: the chooser is a plain <div> overlay: no role="dialog", no aria-modal
-  // and no Escape key (LoginModal.jsx:342-343 and :447-448), unlike aioha's own
-  // wallet modal behind it.
-  it('BUG: the chooser is a named dialog that closes on Escape', async () => {
+  // The chooser is the shared v2 Dialog: role="dialog", named by its title,
+  // Escape closes it.
+  it('the chooser is a named dialog that closes on Escape', async () => {
     const { user, onClose } = mount()
     expect(screen.getByRole('dialog', { name: 'Welcome to 3Speak' })).toBeInTheDocument()
     await user.keyboard('{Escape}')

@@ -1,56 +1,109 @@
+@use "../../styles/v2" as v2;
+
+// The Shorts loading screen (29d). Over the player's black in both themes, so
+// it reads as the player itself coming up rather than as a page.
 .shorts-loading-screen {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
   min-height: 400px;
-  background: var(--bg-primary);
-  gap: 12px;
 
-  @media (max-width: 767px) {
-    background: #000;
+  &__frame {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    height: calc(100% - 32px);
+    max-height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px) - 32px);
+    aspect-ratio: 9 / 16;
+    padding: 28px;
+    overflow: hidden;
+    border-radius: var(--r-3xl);
+    background: var(--media-black);
+    color: var(--on-media);
 
-    .shorts-loading-screen__logo { color: #fff; }
-    .shorts-loading-screen__text { color: #fff; }
-  }
+    // the faint accent glow behind the mark
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(60% 40% at 50% 40%, color-mix(in srgb, var(--accent) 25%, transparent), transparent);
+      pointer-events: none;
+    }
 
-  // Overlay variant — sits on top of the video container (stays black)
-  &--overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-    min-height: 0;
-    background: #000;
-
-    .shorts-loading-screen__logo { color: #fff; }
-    .shorts-loading-screen__text { color: #fff; }
+    > * { position: relative; }
   }
 
   &__logo {
-    color: var(--text-primary);
-    animation: shortsLoadingBreathe 2s ease-in-out infinite;
+    width: 56px;
+    height: auto;
+  }
+
+  &__title {
+    margin-top: 14px;
+    @include v2.text(heading-lg);
+  }
+
+  &__bar {
+    display: flex;
+    gap: 4px;
+    width: 100%;
+    margin-top: 14px;
+
+    span {
+      flex: 1;
+      height: 4px;
+      border-radius: var(--r-bar);
+      background: color-mix(in srgb, var(--on-media) 25%, transparent);
+      animation: shortsLoadingStep 1.8s var(--ease) infinite;
+
+      &:nth-child(2) { animation-delay: .6s; }
+      &:nth-child(3) { animation-delay: 1.2s; }
+    }
   }
 
   &__text {
-    color: var(--text-secondary, var(--text-primary));
-    font-size: 0.875rem;
-    font-family: inherit;
-    margin: 0;
-    animation: shortsLoadingPulse 1.5s ease-in-out infinite;
+    margin: 10px 0 0;
+    @include v2.text(meta);
+    opacity: .7;
+  }
+
+  // Phones: the whole screen is the player
+  @include v2.mobile {
+    background: var(--media-black);
+
+    .shorts-loading-screen__frame {
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      aspect-ratio: auto;
+      border-radius: 0;
+    }
+  }
+
+  // Overlay variant: fills the player (.videoContainer) until it is ready
+  &--overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    min-height: 0;
+
+    .shorts-loading-screen__frame {
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      aspect-ratio: auto;
+      border-radius: 0;
+    }
   }
 }
 
-@keyframes shortsLoadingBreathe {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.15); opacity: 1; }
-}
-
-@keyframes shortsLoadingPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+// One step lights up at a time, left to right
+@keyframes shortsLoadingStep {
+  0%, 100% { background: color-mix(in srgb, var(--on-media) 25%, transparent); }
+  15%, 33% { background: var(--accent); }
+  48% { background: color-mix(in srgb, var(--on-media) 25%, transparent); }
 }

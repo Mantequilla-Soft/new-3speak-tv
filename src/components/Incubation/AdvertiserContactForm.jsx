@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { FaLock } from 'react-icons/fa';
 import { fetchWarmupContact, saveWarmupContact } from '../../lib/incubation';
 import { toastIn } from '../../utils/toast';
 import { useTranslation, Trans } from 'react-i18next';
+import { Banner, Button, Field } from '../v2/ui';
 import './AdvertiserContactForm.scss';
 
 const toast = toastIn('Business contact');
@@ -63,47 +63,42 @@ export default function AdvertiserContactForm() {
 
   return (
     <form className="inc-contact" onSubmit={onSubmit}>
-      <p className="inc-contact-private">
-        <FaLock aria-hidden="true" />
-        <span>
-          <Trans i18nKey="incubation.contact.privateNote" components={{ b: <strong /> }} />
-        </span>
-      </p>
+      {/* Said first and plainly (design 46c): where these details go, and
+          where they never go. */}
+      <Banner tone="info" icon="lock" className="inc-contact-private">
+        <Trans i18nKey="incubation.contact.privateNote" components={{ b: <strong /> }} />
+      </Banner>
 
-      <label className="inc-contact-field">
-        <span>{t('incubation.contact.email')} <em>{t('incubation.contact.required')}</em></span>
-        <input
-          type="email"
-          autoComplete="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={t('incubation.contact.emailPlaceholder')}
-          required
-          disabled={!loaded}
-        />
-      </label>
+      <Field
+        label={<>{t('incubation.contact.email')} <span className="v2-field__opt">· {t('incubation.contact.required')}</span></>}
+        type="email"
+        autoComplete="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder={t('incubation.contact.emailPlaceholder')}
+        required
+        disabled={!loaded}
+      />
 
       <fieldset className="inc-contact-address" disabled={!loaded}>
-        <legend>{t('incubation.contact.address')} <em>{t('incubation.contact.addressOptional')}</em></legend>
-        <input autoComplete="address-line1" placeholder={t('incubation.contact.ph.line1')} value={address.line1} onChange={set('line1')} />
-        <input autoComplete="address-line2" placeholder={t('incubation.contact.ph.line2')} value={address.line2} onChange={set('line2')} />
-        <div className="inc-contact-row">
-          <input autoComplete="postal-code" placeholder={t('incubation.contact.ph.postalCode')} value={address.postalCode} onChange={set('postalCode')} />
-          <input autoComplete="address-level2" placeholder={t('incubation.contact.ph.city')} value={address.city} onChange={set('city')} />
+        <legend className="v2-eyebrow">{t('incubation.contact.address')} <span className="v2-field__opt">· {t('incubation.contact.addressOptional')}</span></legend>
+        <div className="inc-contact-grid">
+          <input className="v2-input" autoComplete="address-line1" placeholder={t('incubation.contact.ph.line1')} aria-label={t('incubation.contact.ph.line1')} value={address.line1} onChange={set('line1')} />
+          <input className="v2-input" autoComplete="address-line2" placeholder={t('incubation.contact.ph.line2')} aria-label={t('incubation.contact.ph.line2')} value={address.line2} onChange={set('line2')} />
+          <input className="v2-input" autoComplete="postal-code" placeholder={t('incubation.contact.ph.postalCode')} aria-label={t('incubation.contact.ph.postalCode')} value={address.postalCode} onChange={set('postalCode')} />
+          <input className="v2-input" autoComplete="address-level2" placeholder={t('incubation.contact.ph.city')} aria-label={t('incubation.contact.ph.city')} value={address.city} onChange={set('city')} />
+          <input className="v2-input" autoComplete="address-level1" placeholder={t('incubation.contact.ph.region')} aria-label={t('incubation.contact.ph.region')} value={address.region} onChange={set('region')} />
+          <input className="v2-input" autoComplete="country-name" placeholder={t('incubation.contact.ph.country')} aria-label={t('incubation.contact.ph.country')} value={address.country} onChange={set('country')} />
         </div>
-        <div className="inc-contact-row">
-          <input autoComplete="address-level1" placeholder={t('incubation.contact.ph.region')} value={address.region} onChange={set('region')} />
-          <input autoComplete="country-name" placeholder={t('incubation.contact.ph.country')} value={address.country} onChange={set('country')} />
-        </div>
-        <span className="inc-contact-hint">
+        <span className="v2-field__hint">
           {t('incubation.contact.addressHint')}
         </span>
       </fieldset>
 
-      {error ? <p className="inc-contact-error">{error}</p> : null}
-      <button type="submit" className="inc-task-cta" disabled={!emailOk || busy || !loaded}>
+      {error ? <p className="inc-contact-error" role="alert">{error}</p> : null}
+      <Button type="submit" variant="secondary" size={36} className="inc-contact-submit" disabled={!emailOk || busy || !loaded} loading={busy}>
         {busy ? t('common.actions.saving') : t('incubation.contact.save')}
-      </button>
+      </Button>
     </form>
   );
 }

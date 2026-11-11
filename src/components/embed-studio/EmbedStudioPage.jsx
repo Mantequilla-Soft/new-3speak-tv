@@ -1,14 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { getHiveUrl } from '../../utils/hiveNode';
 import "../legacy-studio/StudioPage.scss";
-import { StepProgress } from "../legacy-studio/StepProgress";
 import EmbedVideoUploadStep1 from "./EmbedVideoUploadStep1";
-import EmbedUploadProgressBar from "./EmbedUploadProgressBar";
-import Auth_modal from "../modal/Auth_modal";
 import VerifyAuthModal from "../modal/VerifyAuthModal";
 import axios from "axios";
 import { has3SpeakPostAuth } from "../../utils/hiveUtils";
-import 'ldrs/react/LineSpinner.css'
 import { useEmbedUpload } from "../../context/EmbedUploadContext";
 import { HIVE_API_URL, SHORTS_MAX_DURATION_SEC, storiesEnabledFor } from "../../utils/config";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -27,7 +23,7 @@ function EmbedStudioPage() {
     user,
     setIsChannelTrailer,
     setCommunitiesData,
-    step, setStep,
+    setStep,
     fromStories, setFromStories,
     isStory, setIsStory,
     completed,
@@ -278,10 +274,8 @@ function EmbedStudioPage() {
         <div className="studio-page-header">
           <h1>{fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo")}</h1>
         </div>
-        <StepProgress step={step} short={fromStories} />
-        {/* Hidden until the background upload runs (it starts on Details), so it
-            only shows after coming Back here, where it keeps going. */}
-        <EmbedUploadProgressBar />
+        {/* The stepper bar, the background upload card (shown after coming
+            Back here while it keeps going) and the picker: EmbedVideoUploadStep1. */}
         <div className="studio-page-content">
           <EmbedVideoUploadStep1 />
         </div>

@@ -1,387 +1,310 @@
-@use "../../mixins.scss" as mix;
+// The tip window (designs 17a, 40a, 19f) on the shared v2 Dialog, and the
+// standalone /tip page. Tokens and mixins only (src/styles/design-system.scss).
+@use "../../styles/v2" as v2;
+
+/* ─── v2 tip window ─────────────────────────────────────────────────────── */
+// It opens from the full-screen audio player too (z-index 3000), so it sits
+// above everything, as the old window did.
+.v2-dialog:has(> .tip-v2) { z-index: 9999; }
+
+.tip-v2 {
+  .v2-dialog__body { gap: 12px; }
+  &.is-success .v2-dialog__body { padding: 0; }
+
+  &__methods { flex: none; }
+
+  // Fixed minimum so switching HIVE / Lightning / More ways does not make the
+  // window jump; the body scrolls when a tab needs more.
+  &__panel {
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    &.is-done { min-height: 0; }
+    @include v2.mobile { min-height: 0; }
+  }
+
+  &__form { display: flex; flex-direction: column; gap: 12px; }
+  &__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 120px;
+    gap: 8px;
+    align-items: end;
+  }
+  .tip-v2__amount .v2-input,
+  .v2-input.tip-v2__big {
+    height: 48px;
+    border-radius: var(--r-lg);
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .tip-v2__currency .v2-input { font-weight: 700; font-family: var(--font-mono); font-size: 14px; }
+  &__balance {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: -4px;
+    font-size: 12px;
+    color: var(--muted);
+    .num { color: var(--text); font-weight: 700; }
+  }
+  &__presets { margin-bottom: 4px; .v2-chip { font-family: var(--font-mono); } }
+
+  // "You send @x 5.000 HBD every month, until …" + Stop
+  &__current {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--cyan-wash);
+    font-size: 13px;
+    line-height: 1.45;
+    > .material-symbols-rounded { color: var(--cyan); }
+    > span { flex: 1; min-width: 0; }
+  }
+  &__stop {
+    flex: none;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--accent-tint);
+    color: var(--accent);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    &:disabled { opacity: .45; cursor: not-allowed; }
+  }
+
+  // Lightning invoice: title, QR, waiting, two buttons (design 40a, column 2)
+  &__invoice {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  &__invoice-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    .material-symbols-rounded { color: var(--accent); }
+    b { font-size: 18px; font-weight: 700; }
+  }
+  &__qr {
+    align-self: center;
+    display: block;
+    line-height: 0;
+    padding: 8px;
+    border-radius: var(--r-xl);
+    background: var(--on-media);
+  }
+  &__waiting {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 13px;
+    color: var(--cyan);
+    &.is-muted { color: var(--muted); }
+  }
+  &__pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    .v2-btn { justify-content: center; }
+    @include v2.mobile { grid-template-columns: 1fr; }
+  }
+  &__links { display: flex; justify-content: space-between; gap: 8px; }
+
+  // Footer: the primary takes the room
+  .v2-dialog__foot { flex-wrap: nowrap; }
+  .v2-dialog__foot .tip-v2__send.v2-btn { flex: 1; min-width: 0; }
+
+  // Wallet picker on the /tip page (WalletTip)
+  &__wallets { display: flex; flex-direction: column; gap: 8px; }
+  &__wallet-tag { margin-left: auto; font-size: 11px; color: var(--muted); font-weight: 400; }
+
+  // The "More ways" tab (OtherWays): one big row per page
+  &__ways { display: flex; flex-direction: column; gap: 8px; }
+  &__way {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: var(--r-lg);
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background var(--t-fast) var(--ease);
+    > span { flex: 1; min-width: 0; }
+    > .material-symbols-rounded { color: var(--muted); }
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+  }
+}
+
+/* ─── /tip page (TipPopup, design 19f right) ───────────────────────────── */
+.tip-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 52px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+    img { display: block; height: 24px; width: auto; }
+  }
+  &__main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 24px 16px 32px;
+  }
+  &__card {
+    width: min(460px, 100%);
+    @include v2.card;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    @include v2.mobile { padding: 16px; }
+  }
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    h2 { flex: 1; min-width: 0; margin: 0; @include v2.text(title); }
+  }
+  &__actions {
+    display: flex;
+    gap: 8px;
+    .tip-v2__send.v2-btn { flex: 1; min-width: 0; }
+  }
+  .tip-v2__panel { min-height: 0; }
+  .tip-success { margin: -20px; @include v2.mobile { margin: -16px; } }
+}
+
+/* ─── Legacy tip window classes, still used by PodcastTipModal ─────────── */
 .tip-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #00000080;
+  inset: 0;
+  background: var(--overlay);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  @include mix.respond(phone) {
-    align-items: flex-end;
-  }
-  &.add {
-    background: transparent;
-  }
+  padding: 24px;
+  animation: v2-fade var(--t-base) var(--ease);
+  @include v2.mobile { align-items: flex-end; padding: 0; }
+  &.add { background: transparent; }
 
-  // The /tip popup: the page itself, so no dimmed backdrop, and the window
-  // centred at every width (a bottom sheet makes no sense in a popup).
-  &.tip-modal--page {
-    background: var(--bg-primary, #111);
-    align-items: center;
-    padding: 12px;
-
-    .modal-content-trx {
-      border-radius: 1rem;
-      animation: none;
-    }
-  }
-}
-
-.modal-content-trx {
-  background: var(--card-bg, #fff);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  width: 100%;
-  max-width: 32rem;
-  border: 1px solid var(--border-light, transparent);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  @include mix.respond(phone) {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
-    animation: modal-slide-up 0.3s ease forwards;
-  }
-  &.add {
-    padding: 0px;
-
-    // The success step has no box padding, so the header brings its own; the
-    // success card's own heading would repeat the header title.
-    .tip-modal-header {
-      padding: 16px 24px 12px;
-      margin-bottom: 0;
-    }
-
-    .success-page-content {
-      box-shadow: none;
-
-      .title { display: none; }
-    }
-  }
-}
-
-.tip-modal {
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-  }
-
+  .form { display: flex; flex-direction: column; gap: 12px; }
   .field {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    @include mix.respond(phone) {
-      gap: 0.35rem;
-    }
-
-    label {
-      font-weight: 500;
-      color: var(--text-primary, #333);
-      @include mix.respond(phone) {
-        font-size: 14px;
-      }
-    }
-
-    input,
-    select {
-      padding: 0.75rem;
-      border: 1px solid var(--border-light, #e1e1e1);
-      border-radius: 8px;
-      background: var(--bg-tertiary, #f5f5f5);
-      color: var(--text-primary, #333);
-      transition: border-color 0.2s;
-      @include mix.respond(phone) {
-        padding: 8px;
-        font-size: 16px;
-      }
-
-      &:focus {
-        border-color: var(--accent-primary, #e53935);
-        outline: none;
-      }
-    }
-
-    .balance-wrap {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 12.35px;
-      color: var(--text-secondary, #666);
-    }
-
-    .memo-link-note {
-      margin-top: 4px;
-      font-size: 12.35px;
-      color: var(--text-secondary, #666);
-      overflow-wrap: anywhere;
-    }
+    gap: 4px;
+    label { @include v2.text(eyebrow); color: var(--muted); }
+    input, select { @include v2.field(40); width: 100%; }
+    select { appearance: auto; }
+    .balance-wrap { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); }
+    .memo-link-note { font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
   }
-
   .actions {
     display: flex;
     justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
-
-    button {
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: transform 0.2s, background 0.15s;
-      @include mix.respond(phone) {
-        padding: 0.55rem 1.5rem;
-      }
-
-      &:hover {
-        transform: translateY(-1px);
-      }
-    }
-
-    .cancel-btn {
-      background: transparent;
-      color: var(--text-primary, #333);
-      border: 1px solid var(--border-light, #e1e1e1);
-
-      &:hover {
-        background: var(--bg-tertiary, #f5f5f5);
-      }
-    }
-
-    .send-btn {
-      background-color: transparent;
-      color: var(--accent-primary, #e53935);
-      border: 1px solid var(--accent-primary, #e53935);
-    }
+    gap: 8px;
+    margin-top: 8px;
+    > button, > a { @include v2.btn(secondary, 44); text-decoration: none; justify-content: center; }
+    .send-btn { @include v2.btn(primary, 44); justify-content: center; text-decoration: none; }
+    .cancel-btn { @include v2.btn(secondary, 44); justify-content: center; }
   }
-}
-
-.tip-modal {
   .tip-method-switch {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1.2rem;
-
+    gap: 4px;
+    padding: 4px;
+    margin-bottom: 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
     button {
+      @include v2.control(32);
+      @include v2.text(label);
       flex: 1;
-      min-width: 0;
-      padding: 0.55rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid var(--border-light, #e1e1e1);
+      justify-content: center;
       background: transparent;
-      color: var(--text-secondary, #666);
-      font-weight: 500;
-      cursor: pointer;
-
-      &.active {
-        border-color: var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-      }
+      color: var(--muted);
+      &.active { background: var(--surface-2); color: var(--text); }
     }
   }
-
-  .tip-method-note {
-    margin: 0;
-    font-size: 13px;
-    color: var(--text-secondary, #666);
-    overflow-wrap: anywhere;
-  }
-
+  .tip-method-note { margin: 0; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
   .sats-presets {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-
+    gap: 6px;
     button {
-      padding: 0.35rem 0.85rem;
-      border-radius: 999px;
-      border: 1px solid var(--border-light, #e1e1e1);
-      background: var(--bg-tertiary, #f5f5f5);
-      color: var(--text-primary, #333);
-      cursor: pointer;
-
-      &.active {
-        border-color: var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-      }
+      @include v2.control(32);
+      @include v2.text(label);
+      font-size: 12px;
+      font-family: var(--font-mono);
+      background: var(--surface-2);
+      color: var(--text);
+      &.active { background: var(--text); color: var(--bg); }
     }
   }
-
-  // The /tip page's wallet buttons (WalletTip.jsx), one per row.
-  .wallet-choices {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-
-    button {
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      background: transparent;
-      color: var(--accent-primary, #e53935);
-      border: 1px solid var(--accent-primary, #e53935);
-
-      &:disabled { opacity: 0.6; cursor: default; }
-    }
-  }
-
-  .lightning-links {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-  }
-
+  .lightning-links { display: flex; gap: 8px; justify-content: center; }
   .lightning-done {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary, #666);
-    text-decoration: underline;
-    cursor: pointer;
+    @include v2.btn(ghost, 36);
+    color: var(--muted);
   }
-
-  .lightning-actions {
-    flex-wrap: wrap;
-
-    > button {
-      flex: 1 1 auto;
-    }
-  }
-
-  .send-btn:disabled {
-    opacity: 0.6;
-    cursor: default;
-  }
-
-  // "Open in wallet" is a lightning: link; it takes the button look of the row.
-  .actions a {
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s, background 0.15s;
-    @include mix.respond(phone) {
-      padding: 0.55rem 1.5rem;
-    }
-
-    &:hover {
-      transform: translateY(-1px);
-    }
-  }
-
+  .lightning-actions { flex-wrap: wrap; > button { flex: 1 1 auto; } }
+  .send-btn:disabled { opacity: .45; cursor: not-allowed; }
   .lightning-invoice {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 12px;
     text-align: center;
-
-    .qr-wrap {
-      display: block;
-      line-height: 0;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .actions {
-      margin-top: 0;
-      width: 100%;
-      justify-content: center;
-
-      > * {
-        flex: 1;
-        font-size: 15px;
-        line-height: 1.2;
-      }
-    }
-
-    .lightning-links {
-      display: flex;
-      gap: 1.5rem;
-    }
-
-    .lightning-waiting {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 0;
-      font-size: 13px;
-      color: var(--text-secondary, #666);
-    }
-
-    .lightning-done {
-      background: transparent;
-      border: none;
-      color: var(--text-secondary, #666);
-      text-decoration: underline;
-      cursor: pointer;
-    }
+    .qr-wrap { display: block; line-height: 0; padding: 8px; border-radius: var(--r-xl); background: var(--on-media); overflow: hidden; }
+    .actions { margin-top: 0; width: 100%; justify-content: center; > * { flex: 1; } }
+    .lightning-waiting { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; color: var(--cyan); }
   }
 }
 
-/* Custom toast style */
-.tip-modal {
-  // "You send @x 5.000 HBD every month…" + Stop, above the HIVE / HBD form.
-  .tip-monthly-current {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.6rem 0.8rem;
-    border: 1px solid var(--border-light, #e1e1e1);
-    border-radius: 8px;
-    background: var(--bg-tertiary, #f5f5f5);
-    font-size: 13px;
-    color: var(--text-primary, #333);
-
-    .lightning-done { flex-shrink: 0; }
+.modal-content-trx {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3xl);
+  padding: 20px;
+  width: 100%;
+  max-width: 460px;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  box-shadow: var(--shadow-sheet);
+  animation: v2-pop var(--t-base) var(--ease);
+  @include v2.mobile {
+    max-width: 100%;
+    max-height: 88dvh;
+    border-radius: 28px 28px 0 0;
+    border-bottom: 0;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    animation: v2-up var(--t-slow) var(--ease);
   }
-
-  // The "More ways" tab (OtherWays.jsx): one big button per page, like the
-  // /tip page's wallet buttons.
-  .tip-other-ways {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-
-    a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      border: 1px solid var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      font-weight: 500;
-      text-decoration: none;
-
-      &:hover { background: var(--bg-tertiary, #f5f5f5); }
-    }
-  }
-}
-
-.toastify-custom {
-  max-width: 300px;
-  font-size: 14px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  @include mix.respond(phone) {
-    max-width: 80px;
-    font-size: 12px;
-    padding: 8px 12px;
-  }
-}
-
-@keyframes modal-slide-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
 }

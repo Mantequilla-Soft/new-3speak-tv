@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { MdUploadFile, MdVideocam, MdStop, MdFiberManualRecord } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Button, DockTile } from '../v2/ui';
 import * as tus from 'tus-js-client';
 import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
@@ -19,7 +20,7 @@ const toast = toastIn('Video');
  * Lets users pick a file or record from webcam, add a description,
  * then uploads via TUS and publishes as a comment under the parent post.
  */
-function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, onRecordStart }) {
+function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart }) {
   const { t } = useTranslation();
   const { user } = useAppStore();
 
@@ -393,22 +394,22 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
     <div className="react-video-tab">
       {/* Source selection cards */}
       <div className="rvt-source-cards">
-        <button
-          className={`rvt-source-card${source === 'upload' ? ' active' : ''}`}
-          onClick={handleUploadClick}
-          disabled={uploading}
-        >
-          <MdUploadFile size={24} />
-          <span>{t('player.reactionUpload.uploadVideo')}</span>
-        </button>
-        <button
-          className={`rvt-source-card${source === 'record' ? ' active' : ''}`}
+        <DockTile
+          className="rvt-source-card"
+          icon="videocam"
+          label={t('player.reactionUpload.recordVideo')}
+          active={source === 'record'}
           onClick={handleRecordClick}
           disabled={uploading}
-        >
-          <MdVideocam size={24} />
-          <span>{t('player.reactionUpload.recordVideo')}</span>
-        </button>
+        />
+        <DockTile
+          className="rvt-source-card"
+          icon="upload_file"
+          label={t('player.reactionUpload.uploadVideo')}
+          active={source === 'upload'}
+          onClick={handleUploadClick}
+          disabled={uploading}
+        />
       </div>
 
       {/* Hidden file input */}
@@ -433,15 +434,13 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
           <video ref={webcamRef} autoPlay muted playsInline className="rvt-video" />
           <div className="rvt-record-controls">
             {!recording ? (
-              <button className="rvt-rec-btn rvt-rec-btn--start" onClick={startRecording}>
-                <MdFiberManualRecord size={16} />
+              <Button variant="primary" size={36} icon="fiber_manual_record" className="rvt-rec-btn rvt-rec-btn--start" onClick={startRecording}>
                 {t('player.reactionUpload.startRecording')}
-              </button>
+              </Button>
             ) : (
-              <button className="rvt-rec-btn rvt-rec-btn--stop" onClick={stopRecording}>
-                <MdStop size={16} />
+              <Button variant="inverse" size={36} icon="stop_circle" className="rvt-rec-btn rvt-rec-btn--stop" onClick={stopRecording}>
                 {t('player.reactionUpload.stopRecording')}
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -457,7 +456,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
       {/* Description */}
       {hasVideo && (
         <textarea
-          className="rvt-description"
+          className="v2-input is-area rvt-description"
           placeholder={t('player.reactionUpload.descriptionPlaceholder')}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -467,7 +466,7 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
 
       {/* Short toggle */}
       {hasVideo && (
-        <label className="rvt-toggle">
+        <label className="v2-check rvt-toggle">
           <input
             type="checkbox"
             checked={isShort}
@@ -481,8 +480,8 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
       {/* Upload progress */}
       {uploading && (
         <div className="rvt-progress">
-          <div className="rvt-progress-bar">
-            <div className="rvt-progress-fill" style={{ width: `${uploadProgress}%` }} />
+          <div className="v2-progress is-thin rvt-progress-bar" role="progressbar" aria-valuenow={uploadProgress} aria-valuemin={0} aria-valuemax={100}>
+            <span className="is-cyan rvt-progress-fill" style={{ width: `${uploadProgress}%` }} />
           </div>
           <span className="rvt-progress-text">{statusText} {uploadProgress > 0 && uploadProgress < 100 ? `${uploadProgress}%` : ''}</span>
         </div>
@@ -491,18 +490,21 @@ function ReactVideoTab({ author, permlink, currentTime, formatTime, onPosted, on
       {/* Submit / @threespeak authorization gate */}
       {hasVideo && (
         needsAuth ? (
-          <div className="rvt-auth-gate">
-            <p className="rvt-auth-note">
-              <Trans i18nKey="player.reactionUpload.authNote" components={{ b: <strong /> }} />
-            </p>
-            <button className="rvt-submit" onClick={handleAuthorize} disabled={authorizing}>
-              {authorizing ? t('player.reactionUpload.authorizing') : t('player.reactionUpload.authorize')}
-            </button>
+          <div className="v2-banner is-info rvt-auth-gate">
+            <Icon name="key" size={18} className="v2-banner__icon" />
+            <div className="v2-banner__body">
+              <p className="rvt-auth-note">
+                <Trans i18nKey="player.reactionUpload.authNote" components={{ b: <strong /> }} />
+              </p>
+              <Button variant="cyan" size={32} className="rvt-submit" onClick={handleAuthorize} disabled={authorizing} loading={authorizing}>
+                {authorizing ? t('player.reactionUpload.authorizing') : t('player.reactionUpload.authorize')}
+              </Button>
+            </div>
           </div>
         ) : (
-          <button className="rvt-submit" onClick={handleSubmit} disabled={!canSubmit}>
+          <Button variant="primary" size={40} block next className="rvt-submit" onClick={handleSubmit} disabled={!canSubmit} loading={uploading}>
             {uploading ? t('player.reactionUpload.uploading') : t('player.reactionUpload.postReaction')}
-          </button>
+          </Button>
         )
       )}
     </div>

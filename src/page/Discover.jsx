@@ -14,8 +14,8 @@ import { useWatchHistory } from "../hooks/useWatchHistory";
 import useViewCounts from "../hooks/useViewCounts";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
 import { Link, useNavigate } from "react-router-dom";
-import { MdMusicNote, MdVideoLibrary, MdGroup, MdCheck, MdPerson, MdClose, MdCalendarToday, MdLabel, MdSearch, MdPlaylistPlay, MdExpandMore, MdExpandLess } from "react-icons/md";
-import { RiMovieLine } from "react-icons/ri";
+import { Icon } from "../components/v2/Icon";
+import { Chip, EmptyState, IconButton, Segmented, Toggle } from "../components/v2/ui";
 import { fixVideoThumbnail, fallbackImg } from "../utils/fixThumbnails";
 import TimeAgo from "../components/TimeAgo/TimeAgo";
 import { useTranslation } from "react-i18next";
@@ -24,13 +24,14 @@ import AccountImg from "../components/HiveAvatar/AccountImg";
 
 const LIMIT = 50;
 
+// Content types with their Material Symbols glyph (34b)
 const SEARCH_TYPES = [
-  { key: 'user', labelKey: 'feeds.discover.types.user', icon: <MdPerson size={16} /> },
-  { key: 'community', labelKey: 'feeds.discover.types.community', icon: <MdGroup size={16} /> },
-  { key: 'video', labelKey: 'feeds.discover.types.video', icon: <MdVideoLibrary size={16} /> },
-  { key: 'short', labelKey: 'feeds.discover.types.short', icon: <RiMovieLine size={16} /> },
-  { key: 'audio', labelKey: 'feeds.discover.types.audio', icon: <MdMusicNote size={16} /> },
-  { key: 'playlist', labelKey: 'feeds.discover.types.playlist', icon: <MdPlaylistPlay size={16} /> },
+  { key: 'user', labelKey: 'feeds.discover.types.user', icon: 'person' },
+  { key: 'community', labelKey: 'feeds.discover.types.community', icon: 'groups' },
+  { key: 'video', labelKey: 'feeds.discover.types.video', icon: 'smart_display' },
+  { key: 'short', labelKey: 'feeds.discover.types.short', icon: 'view_day' },
+  { key: 'audio', labelKey: 'feeds.discover.types.audio', icon: 'graphic_eq' },
+  { key: 'playlist', labelKey: 'feeds.discover.types.playlist', icon: 'playlist_play' },
 ];
 
 const DATE_PRESETS = [
@@ -81,12 +82,12 @@ function loadState() {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);
-  } catch {}
+  } catch { /* storage off */ }
   return null;
 }
 
 function saveState(state) {
-  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* storage off */ }
 }
 
 const Discover = () => {
@@ -362,15 +363,22 @@ const Discover = () => {
   const allExcluded = activeTypes.length === 0;
   const hasResults = Object.keys(grouped).length > 0;
 
+  const visibleTypes = SEARCH_TYPES.filter(type => !communityFilter || (type.key !== 'user' && type.key !== 'community'));
+  // The date range as a segmented track: "All" plus the presets (34b)
+  const dateOptions = [
+    { value: 0, label: t('feeds.dateFilters.all') },
+    ...DATE_PRESETS.map((p) => ({ value: p.days, label: t(p.labelKey) })),
+  ];
+
   return (
     <PullToRefresh onRefresh={handleRefresh}>
     <div className="discover-container">
+      <h1 className="discover-title">{t('feeds.home.sections.discover')}</h1>
+
       <div className="discover-sticky-header">
+        {/* The big search field (21a): accent ring while typing, clear and filters inside */}
         <div className="discover-search-wrapper" ref={suggestWrapRef}>
-          <svg xmlns="http://www.w3.org/2000/svg" className="discover-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="7"></circle>
-            <path d="m16 16 4 4"></path>
-          </svg>
+          <Icon name="search" size={28} className="discover-search-icon" />
           <input
             ref={searchInputRef}
             value={searchTerm}
@@ -379,22 +387,32 @@ const Discover = () => {
             type="text"
             placeholder={t('feeds.discover.searchPlaceholder')}
             className="discover-search-input"
+            aria-label={t('feeds.discover.searchPlaceholder')}
           />
           {searchTerm && (
-            <button
-              type="button"
+            <IconButton
+              icon="close"
+              size={44}
+              label={t('feeds.discover.clearSearch')}
               className="discover-search-clear"
               onClick={() => { setSearchTerm(''); searchInputRef.current?.focus(); }}
-              aria-label={t('feeds.discover.clearSearch')}
-            >
-              <MdClose size={18} />
-            </button>
+            />
+          )}
+          {isSearching && (
+            <IconButton
+              icon="tune"
+              size={44}
+              label={t('feeds.discover.filters')}
+              className={`discover-search-tune${showAdvanced ? ' is-on' : ''}${hasAdvancedFilters ? ' has-filters' : ''}`}
+              aria-pressed={showAdvanced}
+              onClick={() => setShowAdvanced(prev => !prev)}
+            />
           )}
 
           {showSuggestions && debouncedTerm.length >= 2 && (
             <div className="discover-suggest-dropdown">
-              <button className="discover-suggest-item discover-suggest-search-term" onMouseDown={() => setShowSuggestions(false)}>
-                <MdSearch size={16} className="discover-suggest-icon" />
+              <button type="button" className="discover-suggest-item discover-suggest-search-term" onMouseDown={() => setShowSuggestions(false)}>
+                <Icon name="search" size={18} className="discover-suggest-icon" />
                 <span className="discover-suggest-primary">{t('feeds.discover.searchFor', { term: debouncedTerm })}</span>
               </button>
 
@@ -403,10 +421,10 @@ const Discover = () => {
                   <span className="discover-suggest-group-label">{t('feeds.discover.types.user')}</span>
                   <div className="discover-suggest-badges">
                     {groupedSuggestions.user.map((s, i) => (
-                      <button key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
-                        <div className="discover-suggest-badge-avatar">
-                          {s.profile_image ? <img src={s.profile_image} alt="" onError={(e) => { e.target.style.display = 'none'; }} /> : <MdPerson size={12} />}
-                        </div>
+                      <button type="button" key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
+                        <span className="discover-suggest-badge-avatar">
+                          {s.profile_image ? <img src={s.profile_image} alt="" onError={(e) => { e.target.style.display = 'none'; }} /> : <Icon name="person" size={14} />}
+                        </span>
                         <span>{s.display_name || s.username}</span>
                       </button>
                     ))}
@@ -419,8 +437,8 @@ const Discover = () => {
                   <span className="discover-suggest-group-label">{t('feeds.discover.suggest.tags')}</span>
                   <div className="discover-suggest-badges">
                     {groupedSuggestions.tag.map((s, i) => (
-                      <button key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
-                        <MdLabel size={12} />
+                      <button type="button" key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
+                        <Icon name="tag" size={14} />
                         <span>{s.text}</span>
                       </button>
                     ))}
@@ -433,10 +451,10 @@ const Discover = () => {
                   <span className="discover-suggest-group-label">{t('feeds.discover.types.community')}</span>
                   <div className="discover-suggest-badges">
                     {groupedSuggestions.community.map((s, i) => (
-                      <button key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
-                        <div className="discover-suggest-badge-avatar">
+                      <button type="button" key={i} className="discover-suggest-badge is-community" onMouseDown={() => selectSuggestion(s)}>
+                        <span className="discover-suggest-badge-avatar">
                           <AccountImg account={s.name} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
-                        </div>
+                        </span>
                         <span>{s.title || s.name}</span>
                       </button>
                     ))}
@@ -449,8 +467,8 @@ const Discover = () => {
                   <span className="discover-suggest-group-label">{t('feeds.discover.types.playlist')}</span>
                   <div className="discover-suggest-badges">
                     {groupedSuggestions.playlist.map((s, i) => (
-                      <button key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
-                        <MdPlaylistPlay size={12} />
+                      <button type="button" key={i} className="discover-suggest-badge" onMouseDown={() => selectSuggestion(s)}>
+                        <Icon name="playlist_play" size={14} />
                         <span>{s.name}</span>
                         <span className="discover-suggest-count">{s.video_count}</span>
                       </button>
@@ -463,8 +481,8 @@ const Discover = () => {
                 <div className="discover-suggest-group">
                   <span className="discover-suggest-group-label">{t('feeds.discover.suggest.titles')}</span>
                   {groupedSuggestions.title.map((s, i) => (
-                    <button key={i} className="discover-suggest-item" onMouseDown={() => selectSuggestion(s)}>
-                      <MdSearch size={16} className="discover-suggest-icon" />
+                    <button type="button" key={i} className="discover-suggest-item" onMouseDown={() => selectSuggestion(s)}>
+                      <Icon name="north_west" size={18} className="discover-suggest-icon" />
                       <span className="discover-suggest-primary">{s.text}</span>
                     </button>
                   ))}
@@ -474,93 +492,79 @@ const Discover = () => {
           )}
         </div>
 
+        {/* What to show: one chip per content type (cyan = included) */}
         {isSearching && (
-          <div className="discover-filters">
-            {SEARCH_TYPES.filter(type => !communityFilter || (type.key !== 'user' && type.key !== 'community')).map(type => (
-              <label key={type.key} className={`discover-filter-chip${excludedFilters[type.key] ? ' excluded' : ''}`}>
-                <input
-                  type="checkbox"
-                  checked={!excludedFilters[type.key]}
-                  onChange={() => toggleFilter(type.key)}
-                />
-                {type.icon}
-                <span>{t(type.labelKey)}</span>
-              </label>
+          <div className="discover-filters v2-chips is-scroll" role="group" aria-label={t('feeds.discover.filters')}>
+            {visibleTypes.map(type => (
+              <Chip
+                key={type.key}
+                tone="cyan"
+                selected={!excludedFilters[type.key]}
+                icon={type.icon}
+                className={`discover-filter-chip${excludedFilters[type.key] ? ' excluded' : ''}`}
+                onClick={() => toggleFilter(type.key)}
+              >
+                {t(type.labelKey)}
+              </Chip>
             ))}
-            <label className={`discover-filter-chip boost${boostRecent ? ' active' : ''}`}>
-              <input
-                type="checkbox"
-                checked={boostRecent}
-                onChange={() => setBoostRecent(prev => !prev)}
-              />
-              <MdCheck size={14} className="discover-filter-check" />
-              <span>{t('feeds.discover.boostRecent')}</span>
-            </label>
-            <button
-              type="button"
-              className={`discover-filter-chip${showAdvanced ? ' active' : ''}${hasAdvancedFilters ? ' has-filters' : ''}`}
-              onClick={() => setShowAdvanced(prev => !prev)}
-            >
-              <MdCalendarToday size={14} />
-              <span>{t('feeds.discover.filters')}{hasAdvancedFilters ? ' *' : ''}</span>
-            </button>
           </div>
         )}
 
+        {/* The filter panel (34b): date, tag, community, boost recent */}
         {isSearching && showAdvanced && (
           <div className="discover-advanced-filters">
-            <div className="discover-advanced-row">
-              <label className="discover-advanced-label">
-                <MdCalendarToday size={14} />
-                <span>{t('feeds.discover.date')}</span>
-              </label>
-              <div className="discover-date-presets">
-                {DATE_PRESETS.map(p => (
-                  <button
-                    key={p.days}
-                    type="button"
-                    className={`discover-date-btn${datePreset === p.days ? ' active' : ''}`}
-                    onClick={() => setDatePreset(prev => prev === p.days ? null : p.days)}
-                  >
-                    {t(p.labelKey)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="discover-advanced-row">
-              <label className="discover-advanced-label">
-                <MdLabel size={14} />
-                <span>{t('feeds.discover.tag')}</span>
-              </label>
-              <input
-                type="text"
-                className="discover-advanced-input"
-                placeholder={t('feeds.discover.tagPlaceholder')}
-                value={tagFilter}
-                onChange={(e) => setTagFilter(e.target.value.trim().toLowerCase())}
-              />
-              {tagFilter && (
-                <button type="button" className="discover-advanced-clear" onClick={() => setTagFilter('')}>
-                  <MdClose size={14} />
+            <div className="discover-advanced-head">
+              <span className="discover-bar is-cyan" aria-hidden="true" />
+              <b>{t('feeds.discover.filters')}</b>
+              {hasAdvancedFilters && (
+                <button type="button" className="discover-clear-advanced" onClick={clearAdvancedFilters}>
+                  {t('feeds.discover.clearAllFilters')}
                 </button>
               )}
             </div>
 
             <div className="discover-advanced-row">
-              <label className="discover-advanced-label">
-                <MdGroup size={14} />
-                <span>{t('feeds.discover.community')}</span>
+              <span className="v2-eyebrow">{t('feeds.discover.date')}</span>
+              <Segmented
+                options={dateOptions}
+                value={datePreset || 0}
+                onChange={(v) => setDatePreset(v || null)}
+                size={32}
+                scroll
+                label={t('feeds.discover.date')}
+                className="discover-date-presets"
+              />
+            </div>
+
+            <div className="discover-advanced-wells">
+              <label className="discover-well">
+                <span className="v2-eyebrow">{t('feeds.discover.tag')}</span>
+                <span className="discover-well-input">
+                  <input
+                    type="text"
+                    className="discover-advanced-input"
+                    placeholder={t('feeds.discover.tagPlaceholder')}
+                    value={tagFilter}
+                    onChange={(e) => setTagFilter(e.target.value.trim().toLowerCase())}
+                  />
+                  {tagFilter && (
+                    <button type="button" className="discover-advanced-clear" onClick={() => setTagFilter('')} aria-label={t('common.actions.remove')}>
+                      <Icon name="close" size={16} />
+                    </button>
+                  )}
+                </span>
               </label>
-              <div className="discover-community-search" ref={communityWrapRef}>
+
+              <div className="discover-well discover-community-search" ref={communityWrapRef}>
+                <span className="v2-eyebrow">{t('feeds.discover.community')}</span>
                 {communityFilter ? (
                   <div className="discover-community-selected">
-                    <div className="discover-community-selected-avatar">
+                    <span className="discover-community-selected-avatar">
                       <AccountImg account={communityFilter} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
-                    </div>
-                    <span>{communityLabel || communityFilter}</span>
-                    <button type="button" className="discover-advanced-clear" onClick={() => { setCommunityFilter(''); setCommunityLabel(''); setCommunitySearch(''); }}>
-                      <MdClose size={14} />
+                    </span>
+                    <span className="discover-community-selected-name">{communityLabel || communityFilter}</span>
+                    <button type="button" className="discover-advanced-clear" aria-label={t('common.actions.remove')} onClick={() => { setCommunityFilter(''); setCommunityLabel(''); setCommunitySearch(''); }}>
+                      <Icon name="close" size={16} />
                     </button>
                   </div>
                 ) : (
@@ -569,6 +573,7 @@ const Discover = () => {
                       type="text"
                       className="discover-advanced-input"
                       placeholder={t('feeds.discover.communityPlaceholder')}
+                      aria-label={t('feeds.discover.community')}
                       value={communitySearch}
                       onChange={(e) => { setCommunitySearch(e.target.value); setShowCommunityDropdown(true); }}
                       onFocus={() => setShowCommunityDropdown(true)}
@@ -587,13 +592,13 @@ const Discover = () => {
                               setShowCommunityDropdown(false);
                             }}
                           >
-                            <div className="discover-suggest-avatar">
+                            <span className="discover-suggest-avatar">
                               <AccountImg account={c.name} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
-                            </div>
-                            <div className="discover-suggest-text">
+                            </span>
+                            <span className="discover-suggest-text">
                               <span className="discover-suggest-primary">{c.title || c.name}</span>
                               <span className="discover-suggest-secondary">{t('feeds.discover.subscribers', { count: c.subscribers })}</span>
-                            </div>
+                            </span>
                           </button>
                         ))}
                       </div>
@@ -603,12 +608,11 @@ const Discover = () => {
               </div>
             </div>
 
-            {hasAdvancedFilters && (
-              <button type="button" className="discover-clear-advanced" onClick={clearAdvancedFilters}>
-                <MdClose size={14} />
-                {t('feeds.discover.clearAllFilters')}
-              </button>
-            )}
+            <div className="discover-boost">
+              <Icon name="trending_up" size={20} className="discover-boost-icon" />
+              <span className="discover-boost-label">{t('feeds.discover.boostRecent')}</span>
+              <Toggle checked={boostRecent} onChange={setBoostRecent} label={t('feeds.discover.boostRecent')} />
+            </div>
           </div>
         )}
       </div>
@@ -617,7 +621,7 @@ const Discover = () => {
         <div className="discover-search-area">
           <div className="discover-results">
             {searchLoading && (
-              <div className="discover-skeleton">
+              <div className="discover-skeleton" aria-busy="true">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="discover-skeleton-row">
                     <div className="discover-skeleton-thumb skeleton" />
@@ -631,43 +635,48 @@ const Discover = () => {
             )}
 
             {!searchLoading && allExcluded && (
-              <p className="discover-no-results">
-                {t('feeds.discover.allHidden')}{' '}
-                <button className="discover-reset-filters" onClick={() => setExcludedFilters(defaultExcluded)}>
+              <div className="discover-all-hidden" role="status">
+                <Icon name="visibility_off" size={18} />
+                <span>{t('feeds.discover.allHidden')}</span>
+                <button type="button" className="discover-reset-filters" onClick={() => setExcludedFilters(defaultExcluded)}>
                   {t('feeds.discover.reenableFilters')}
                 </button>
-              </p>
+              </div>
             )}
 
             {!searchLoading && !allExcluded && !hasResults && (
-              <p className="discover-no-results">{t('feeds.discover.noResultsFor', { term: debouncedTerm })}</p>
+              <EmptyState icon="search_off" title={t('feeds.discover.noResultsFor', { term: debouncedTerm })} className="discover-no-results" />
             )}
 
-            {SEARCH_TYPES.filter(type => !communityFilter || (type.key !== 'user' && type.key !== 'community')).map(type => {
+            {visibleTypes.map(type => {
               const items = grouped[type.key];
               if (!items || items.length === 0) return null;
               const isCollapsed = !!collapsedGroups[type.key];
               return (
-                <div key={type.key} className="discover-result-group">
-                  <h3 className="discover-group-title" onClick={() => toggleGroup(type.key)}>
-                    {type.icon} {t('feeds.discover.groupTitle', { label: t(type.labelKey), count: items.length })}
-                    {isCollapsed ? <MdExpandMore size={18} className="discover-group-toggle" /> : <MdExpandLess size={18} className="discover-group-toggle" />}
+                <section key={type.key} className="discover-result-group">
+                  <h3 className="discover-group-title">
+                    <button type="button" onClick={() => toggleGroup(type.key)} aria-expanded={!isCollapsed}>
+                      <Icon name={type.icon} size={20} className="discover-group-icon" />
+                      <span className="discover-group-label">{t(type.labelKey)}</span>
+                      <span className="discover-group-count">{items.length}</span>
+                      <Icon name={isCollapsed ? 'expand_more' : 'expand_less'} size={20} className="discover-group-toggle" />
+                    </button>
                   </h3>
                   {!isCollapsed && (type.key === 'community' ? (
                     <div className="discover-community-list">
                       {items.map(c => (
                         <Link to={`/community/${c.name}`} key={c.name} className="discover-community-card">
-                          <div className="discover-community-avatar">
+                          <span className="discover-community-avatar">
                             <AccountImg account={c.name} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
-                          </div>
-                          <div className="discover-community-info">
+                          </span>
+                          <span className="discover-community-info">
                             <span className="discover-community-name">{c.title || c.name}</span>
                             <span className="discover-community-about">{c.about}</span>
-                          </div>
-                          <div className="discover-community-stats">
-                            <span>{t('feeds.discover.subscribers', { count: c.subscribers })}</span>
-                            <span>{t('feeds.discover.authors', { count: c.num_authors })}</span>
-                          </div>
+                            <span className="discover-community-stats">
+                              <span>{t('feeds.discover.subscribers', { count: c.subscribers })}</span>
+                              <span>{t('feeds.discover.authors', { count: c.num_authors })}</span>
+                            </span>
+                          </span>
                         </Link>
                       ))}
                     </div>
@@ -675,18 +684,18 @@ const Discover = () => {
                     <div className="discover-user-list">
                       {items.map(u => (
                         <Link to={`/@${u.username}`} key={u.username} className="discover-user-card">
-                          <div className="discover-user-avatar">
+                          <span className="discover-user-avatar">
                             {u.profile_image ? (
                               <img src={u.profile_image} alt="" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
                             ) : (
-                              <MdPerson size={24} />
+                              <Icon name="person" size={24} />
                             )}
-                          </div>
-                          <div className="discover-user-info">
+                          </span>
+                          <span className="discover-user-info">
                             <span className="discover-user-name">{u.display_name || u.username}</span>
                             <span className="discover-user-handle">@{u.username}</span>
                             {u.about && <span className="discover-user-about">{u.about}</span>}
-                          </div>
+                          </span>
                         </Link>
                       ))}
                     </div>
@@ -694,45 +703,45 @@ const Discover = () => {
                     <div className="discover-playlist-list">
                       {items.map(p => (
                         <Link to={`/playlist/${p.id}`} key={p.id} className="discover-playlist-card">
-                          <div className="discover-playlist-icon-wrap">
-                            <MdPlaylistPlay size={24} />
-                          </div>
-                          <div className="discover-playlist-info">
+                          <span className="discover-playlist-icon-wrap">
+                            <Icon name="playlist_play" size={24} />
+                          </span>
+                          <span className="discover-playlist-info">
                             <span className="discover-playlist-name">{p.name}</span>
                             <span className="discover-playlist-meta">@{p.owner} &middot; {t('common.units.videos', { count: p.video_count })}</span>
-                          </div>
+                          </span>
                         </Link>
                       ))}
                     </div>
                   ) : (
-                    <div className="discover-media-list">
+                    <div className={`discover-media-list discover-media-list--${type.key}`}>
                       {items.map((item, i) => (
                         <Link
                           to={type.key === 'short' ? `/shorts?v=${item.author}/${item.permlink}` : `/@${item.author}/${item.permlink}`}
                           key={`${item.author}-${item.permlink}-${i}`}
                           className="discover-media-card"
                         >
-                          {(item.images?.thumbnail || item.images?.poster) && (
-                            <div className="discover-media-thumb">
+                          <span className="discover-media-thumb">
+                            {(item.images?.thumbnail || item.images?.poster) && (
                               <img src={fixVideoThumbnail(item)} onError={(e) => { e.target.src = fallbackImg; }} alt="" loading="lazy" />
-                              {item.duration > 0 && (
-                                <span className="discover-media-duration">{formatDuration(item.duration)}</span>
-                              )}
-                            </div>
-                          )}
-                          <div className="discover-media-info">
+                            )}
+                            {item.duration > 0 && (
+                              <span className="discover-media-duration">{formatDuration(item.duration)}</span>
+                            )}
+                          </span>
+                          <span className="discover-media-info">
                             <span className="discover-media-title">{item.title}</span>
                             <span className="discover-media-author">@{item.author || item.owner}</span>
                             <span className="discover-media-meta">
                               {item.views > 0 && <span>{t('feeds.discover.views', { count: item.views, views: formatNumber(item.views) })}</span>}
                               {item.created_at && <TimeAgo date={item.created_at} short />}
                             </span>
-                          </div>
+                          </span>
                         </Link>
                       ))}
                     </div>
                   ))}
-                </div>
+                </section>
               );
             })}
           </div>
@@ -743,14 +752,18 @@ const Discover = () => {
         <>
           {/* Standalone row: trending creators the viewer doesn't follow yet. */}
           <PopularCreators />
+          <div className="discover-section-head">
+            <span className="discover-bar" aria-hidden="true" />
+            <h2>{t('common.nav.trending')}</h2>
+          </div>
           {isLoading ? (
             <CardSkeleton />
           ) : (
             <Card3 windowed videos={[...liveStreams, ...videos]} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
           )}
-          {isError && <p>{t('feeds.errors.fetchVideos')}</p>}
+          {isError && <p className="discover-error" role="alert">{t('feeds.errors.fetchVideos')}</p>}
           {isFetchingNextPage && (
-            <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
+            <p className="discover-loading-more">{t('feeds.loadingMore')}</p>
           )}
         </>
       )}

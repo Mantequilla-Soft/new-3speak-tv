@@ -1,65 +1,51 @@
 @use "../../mixins.scss" as mix;
 
+// Leaderboard standings on a profile ("Gold Videos"), design 45c's rank
+// badges: small tinted chips. Gold is the accent, silver cyan, the rest muted.
+// The tints are mixed onto the surface rather than onto transparent, so a chip
+// stays readable over a profile banner whose brightness we do not control.
 .lb-badges {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 
   .lb-badge {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    border-radius: 999px;
-    border: 1px solid transparent;
-    font-size: 12px;
+    gap: 4px;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 11px;
     font-weight: 700;
-    line-height: 1.6;
+    line-height: 1;
     text-decoration: none;
     white-space: nowrap;
-    transition: filter 0.15s;
+    transition: filter var(--t-fast) var(--ease);
 
     &:hover { filter: brightness(1.06); }
 
     .lb-badge-icon {
-      font-size: 13px;
-      flex-shrink: 0;
       @include mix.coin-spin(80px);
     }
 
     &:hover .lb-badge-icon {
       @include mix.coin-spin-hover(80px);
     }
-
-    @include mix.respond(phone) {
-      font-size: 11px;
-      padding: 2px 8px;
-    }
   }
 
-  // One neutral pill for every badge. The medal tiers (gold / silver / bronze)
-  // plus the brand-red Pro chip read as four different systems in a single row,
-  // right under a row of Hive badges that is already neutral.
-  //
-  // Colours are .hive-badge's, to the value: the two rows sit together in the
-  // same badge block, so anything but an exact match reads as a mistake.
-  // They still render over the profile BANNER, whose brightness we don't
-  // control, so the pill keeps its opaque surface — a translucent tint let the
-  // banner bleed through and killed the contrast. Only the colour-coding went.
-  .lb-badge-pro,
-  .lb-badge-top1,
-  .lb-badge-top3,
+  .lb-badge-top1 { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); color: var(--accent); }
+  .lb-badge-top3 { background: color-mix(in srgb, var(--cyan) 16%, var(--surface)); color: var(--cyan); }
   .lb-badge-top10,
-  .lb-badge-top50 {
-    background: rgba(15, 23, 42, 0.92);
-    border-color: rgba(148, 163, 184, 0.28);
-    color: #e2e8f0;
-
-    &:hover { border-color: rgba(148, 163, 184, 0.5); }
-  }
+  .lb-badge-top50 { background: var(--surface-2); color: var(--muted); }
 
   // Not a link: the Pro page lives on the owner's own wallet, so it would be a
   // dead end on someone else's profile.
-  .lb-badge-pro { cursor: default; }
+  .lb-badge-pro {
+    cursor: default;
+    .lb-badge-icon { color: var(--accent); }
+  }
 }

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Film, Link2, User, X } from 'lucide-react';
+import { Icon } from '../v2/Icon';
 import AccountImg from '../HiveAvatar/AccountImg';
 import { fetchLinkMeta } from '../Chat/chatLinks';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
@@ -52,7 +52,7 @@ export function TimelineLinkFace({ link, thumb = null }) {
     media = img ? (
       <img className="tl-toast__thumb" src={img} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
     ) : (
-      <span className="tl-toast__icon"><Film size={18} /></span>
+      <span className="tl-toast__icon"><Icon name="smart_display" size={18} /></span>
     );
   } else if (link.kind === 'profile') {
     kindLabel = t('watch.timeline.profile');
@@ -63,14 +63,14 @@ export function TimelineLinkFace({ link, thumb = null }) {
     kindLabel = t('watch.timeline.link');
     titleText = link.title || link.site || link.url;
     sub = link.site || null;
-    media = <span className="tl-toast__icon"><Link2 size={18} /></span>;
+    media = <span className="tl-toast__icon"><Icon name="link" size={18} /></span>;
   }
   return (
     <>
       {media}
       <span className="tl-toast__text">
         <span className="tl-toast__kind">
-          {link.kind === 'profile' ? <User size={11} /> : null}
+          {link.kind === 'profile' ? <Icon name="person" size={12} /> : null}
           {kindLabel}
         </span>
         <span className="tl-toast__title">{titleText}</span>
@@ -190,7 +190,7 @@ export default function TimelineToasters({
           <div key={key} className={cls}>
             {body}
             <button type="button" className="tl-toast__close" onClick={dismiss(key)} aria-label={t('watch.timeline.dismiss')}>
-              <X size={14} />
+              <Icon name="close" size={16} />
             </button>
           </div>
         );

@@ -10,6 +10,7 @@ import { getFollowers } from '../../hive-api/api';
 import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useAppStore } from '../../lib/store';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
+import { Button } from '../v2/ui';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
 import './PopularCreators.scss';
@@ -124,29 +125,42 @@ export default function PopularCreators() {
   if (!creators.length) return null;
 
   return (
-    <section className="popular-creators">
-      <h3 className="pc-title">{t('profile.creators.popularTitle')}</h3>
+    <section className="popular-creators" aria-label={t('profile.creators.popularTitle')}>
+      <div className="pc-head">
+        <span className="pc-bar" aria-hidden="true" />
+        <h3 className="pc-title">{t('profile.creators.popularTitle')}</h3>
+      </div>
       <div className="pc-row">
-        {creators.map((c) => {
+        {creators.map((c, i) => {
           const followed = !!justFollowed[c.name];
           const followers = fmtFollowers(followerCounts[c.name]);
           return (
             <div className="pc-card" key={c.name}>
-              <Link to={`/@${c.name}`} className="pc-avatar" title={`@${c.name}`}>
-                <HiveAvatar username={c.name} size={null} alt="" badgeSize={12} />
-              </Link>
-              <Link to={`/@${c.name}`} className="pc-name" title={`@${c.name}`}>@{c.name}</Link>
-              <span className="pc-followers">
-                {followers != null ? t('profile.creators.followers', { count: followerCounts[c.name], num: followers }) : ' '}
-              </span>
-              <button
-                type="button"
+              <div className="pc-who">
+                {/* Rank in the trending list, the top three in accent (21b) */}
+                <span className={`pc-rank${i < 3 ? ' is-top' : ''}`} aria-hidden="true">{i + 1}</span>
+                <Link to={`/@${c.name}`} className="pc-avatar" title={`@${c.name}`} tabIndex={-1} aria-hidden="true">
+                  <HiveAvatar username={c.name} size={null} alt="" badgeSize={10} />
+                </Link>
+                <div className="pc-who-text">
+                  <Link to={`/@${c.name}`} className="pc-name" title={`@${c.name}`}>@{c.name}</Link>
+                  <span className="pc-followers">
+                    {followers != null ? t('profile.creators.followers', { count: followerCounts[c.name], num: followers }) : '\u00a0'}
+                  </span>
+                </div>
+              </div>
+              <Button
+                variant={followed ? 'ghost' : 'secondary'}
+                size={36}
+                block
                 className={`pc-follow${followed ? ' followed' : ''}`}
+                trailing={followed ? 'check' : 'person_add'}
                 onClick={() => !followed && handleFollow(c.name)}
                 disabled={followed || !!pending[c.name]}
+                loading={!!pending[c.name]}
               >
-                {followed ? t('common.actions.following') : (pending[c.name] ? '…' : t('common.actions.follow'))}
-              </button>
+                {followed ? t('common.actions.following') : t('common.actions.follow')}
+              </Button>
             </div>
           );
         })}

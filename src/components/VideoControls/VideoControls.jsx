@@ -3,12 +3,18 @@ import useSeekPreview from '../../hooks/useSeekPreview';
 import { chapterAt } from '../../utils/timestamps';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { FaPlay, FaPause, FaExpand, FaCompress, FaVolumeUp, FaVolumeMute, FaVideo, FaCog } from 'react-icons/fa';
-import { MdClosedCaption, MdClosedCaptionOff, MdHighQuality } from 'react-icons/md';
-import { TbRewindBackward10, TbRewindForward10, TbArrowsMaximize, TbPictureInPicture, TbBulbFilled, TbMoonFilled, TbSunFilled, TbPlayerTrackNextFilled } from 'react-icons/tb';
+import { Icon } from '../v2/Icon';
 import { SUPPORTED_LANGUAGES } from '../../utils/translate';
 import { SUBTITLE_FONTS } from '../SubtitleOverlay/SubtitleOverlay';
 import './VideoControls.scss';
+
+// Volume fill drawn as the slider's background: accent up to the level, white
+// 30% after it (over video in both themes).
+const volumeFill = (pct) => `linear-gradient(to right, var(--accent) ${pct}%, color-mix(in srgb, var(--on-media) 30%, transparent) ${pct}%)`;
+
+// Subtitle sizes: five "A" tiles drawn at growing sizes (design 19a).
+const SUBTITLE_SIZES = ['small', 'medium', 'large', 'x-large', 'xx-large'];
+const SPEEDS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 
 const FONT_OPTIONS = [
   { key: 'sans-serif', labelKey: 'player.subtitles.fonts.sansSerif' },
@@ -88,7 +94,6 @@ function VideoControls({
   onReactToMoment,
   onCycleReactionSize,
   reactionSizeLabel,
-  onTogglePip,
   qualityLevels,
   currentQuality,
   onQualityChange,
@@ -140,8 +145,7 @@ function VideoControls({
     const displayVol = isMuted ? 0 : (volume ?? 1);
     volSliderRef.current.value = displayVol;
     const pct = (displayVol * 100).toFixed(0);
-    volSliderRef.current.style.background =
-      `linear-gradient(to right, var(--accent-primary, #e53935) ${pct}%, rgba(255,255,255,0.3) ${pct}%)`;
+    volSliderRef.current.style.background = volumeFill(pct);
   }, [volume, isMuted]);
   const progress = dragProgress !== null ? dragProgress : (duration > 0 ? (currentTime / duration) * 100 : 0);
   const bufferedPercent = (buffered || 0) * 100;
@@ -149,16 +153,13 @@ function VideoControls({
   // Build a heatmap gradient showing where reactions cluster
   const heatmapStyle = duration > 0 && resolvedMarkers.length > 0 ? (() => {
     // Create soft gaussian-like glows at each marker position
-    const stops = resolvedMarkers.map(m => {
-      const pos = (m.time / duration) * 100;
-      const color = m.isVideo ? 'rgba(229,57,53,0.25)' : 'rgba(255,255,255,0.12)';
-      return `${color} ${pos}%`;
-    });
     // Interleave transparent stops to create isolated glows
     const gradient = [];
     for (const m of resolvedMarkers) {
       const pos = (m.time / duration) * 100;
-      const color = m.isVideo ? 'rgba(229,57,53,0.25)' : 'rgba(255,255,255,0.12)';
+      const color = m.isVideo
+        ? 'color-mix(in srgb, var(--accent) 25%, transparent)'
+        : 'color-mix(in srgb, var(--on-media) 12%, transparent)';
       gradient.push(`transparent ${Math.max(0, pos - 3)}%`);
       gradient.push(`${color} ${pos}%`);
       gradient.push(`transparent ${Math.min(100, pos + 3)}%`);
@@ -514,14 +515,14 @@ function VideoControls({
       {/* Controls row */}
       <div className="vc-controls-row">
         <div className="vc-controls-left">
-          <button className="vc-btn" onClick={onSeekBackward} title={t('player.controls.rewind10')}>
-            <TbRewindBackward10 size={18} />
+          <button type="button" className="vc-btn vc-btn--seek" onClick={onSeekBackward} title={t('player.controls.rewind10')} aria-label={t('player.controls.rewind10')}>
+            <Icon name="replay_10" size={22} />
           </button>
-          <button className="vc-btn vc-btn--play" onClick={onTogglePlay} title={isPlaying ? t('common.actions.pause') : t('common.actions.play')}>
-            {isPlaying ? <FaPause size={14} /> : <FaPlay size={14} />}
+          <button type="button" className="vc-btn vc-btn--play" onClick={onTogglePlay} title={isPlaying ? t('common.actions.pause') : t('common.actions.play')} aria-label={isPlaying ? t('common.actions.pause') : t('common.actions.play')}>
+            <Icon name={isPlaying ? 'pause' : 'play_arrow'} size={26} fill />
           </button>
-          <button className="vc-btn" onClick={onSeekForward} title={t('player.controls.forward10')}>
-            <TbRewindForward10 size={18} />
+          <button type="button" className="vc-btn vc-btn--seek" onClick={onSeekForward} title={t('player.controls.forward10')} aria-label={t('player.controls.forward10')}>
+            <Icon name="forward_10" size={22} />
           </button>
           <div className="vc-time">
             {formatTime(currentTime)} / {formatTime(duration)}
@@ -534,13 +535,14 @@ function VideoControls({
         </div>
         <div className="vc-controls-right">
           {onReactToMoment && (
-            <button className="vc-btn vc-btn--react" onClick={onReactToMoment} title={t('player.controls.reactToMoment')}>
-              <FaVideo size={13} />
+            <button type="button" className="vc-btn vc-btn--react" onClick={onReactToMoment} title={t('player.controls.reactToMoment')} aria-label={t('player.controls.reactToMoment')}>
+              <Icon name="videocam" size={20} />
+              <span className="vc-btn-label">{t('comments.section.reactTab')}</span>
             </button>
           )}
           <div className="vc-volume-group">
-            <button className="vc-btn" onClick={onToggleMute} title={isMuted ? t('player.controls.unmute') : t('player.controls.mute')}>
-              {isMuted ? <FaVolumeMute size={14} /> : <FaVolumeUp size={14} />}
+            <button type="button" className="vc-btn" onClick={onToggleMute} title={isMuted ? t('player.controls.unmute') : t('player.controls.mute')} aria-label={isMuted ? t('player.controls.unmute') : t('player.controls.mute')}>
+              <Icon name={isMuted ? 'volume_off' : 'volume_up'} size={20} />
             </button>
             {onVolumeChange && (
               <div className="vc-volume-slider-wrap">
@@ -557,8 +559,7 @@ function VideoControls({
                   onInput={(e) => {
                     const val = parseFloat(e.target.value);
                     const pct = (val * 100).toFixed(0);
-                    e.target.style.background =
-                      `linear-gradient(to right, var(--accent-primary, #e53935) ${pct}%, rgba(255,255,255,0.3) ${pct}%)`;
+                    e.target.style.background = volumeFill(pct);
                     if (val > 0 && isMuted) onToggleMute();
                     onVolumeChange(val);
                   }}
@@ -568,44 +569,45 @@ function VideoControls({
             )}
           </div>
           {onCycleReactionSize && (
-            <button className="vc-btn vc-btn--resize" onClick={onCycleReactionSize} title={t('player.controls.playerSize', { size: reactionSizeLabel || t('player.controls.sizeStandard') })}>
-              <TbArrowsMaximize size={15} />
+            <button type="button" className="vc-btn vc-btn--resize" onClick={onCycleReactionSize} title={t('player.controls.playerSize', { size: reactionSizeLabel || t('player.controls.sizeStandard') })} aria-label={t('player.controls.playerSize', { size: reactionSizeLabel || t('player.controls.sizeStandard') })}>
+              <Icon name="open_in_full" size={18} />
               <span className="vc-size-label">{reactionSizeLabel || t('player.controls.sizeStandard')}</span>
             </button>
           )}
-          {/* {onTogglePip && (
-            <button className="vc-btn" onClick={onTogglePip} title={t('player.controls.pip')}>
-              <TbPictureInPicture size={16} />
-            </button>
-          )} */}
           {onToggleAutoplay && (
             <button
+              type="button"
               className={`vc-btn vc-btn--autoplay${autoplayNext ? ' active' : ''}`}
               onClick={onToggleAutoplay}
               title={autoplayNext ? t('player.controls.autoplayOn') : t('player.controls.autoplayOff')}
+              aria-label={autoplayNext ? t('player.controls.autoplayOn') : t('player.controls.autoplayOff')}
+              aria-pressed={!!autoplayNext}
             >
-              <TbPlayerTrackNextFilled size={15} />
+              <Icon name="skip_next" size={22} fill={!!autoplayNext} />
             </button>
           )}
           {onToggleGlow && (
             <button
+              type="button"
               className={`vc-btn vc-btn--glow${glowMode !== 'off' ? ' active' : ''}`}
               onClick={onToggleGlow}
               title={glowMode === 'off' ? t('player.controls.ambientSubtle') : glowMode === 'page' ? t('player.controls.ambientVivid') : t('player.controls.ambientOff')}
+              aria-label={glowMode === 'off' ? t('player.controls.ambientSubtle') : glowMode === 'page' ? t('player.controls.ambientVivid') : t('player.controls.ambientOff')}
             >
-              {glowMode === 'off' && <TbMoonFilled size={15} />}
-              {glowMode === 'page' && <TbBulbFilled size={15} />}
-              {glowMode === 'vivid' && <TbSunFilled size={15} />}
+              <Icon name={glowMode === 'off' ? 'dark_mode' : glowMode === 'page' ? 'light_mode' : 'wb_sunny'} size={20} fill={glowMode !== 'off'} />
             </button>
           )}
           {subtitleLanguages && subtitleLanguages.length > 0 && (
             <div className="vc-subtitle-wrap" ref={subtitleMenuRef}>
               <button
+                type="button"
                 className={`vc-btn vc-btn--subtitle${selectedSubtitleLang ? ' active' : ''}`}
                 onClick={() => { setSubtitleMenuOpen(o => !o); setQualityMenuOpen(false); }}
                 title={t('player.subtitles.title')}
+                aria-label={t('player.subtitles.title')}
+                aria-expanded={subtitleMenuOpen}
               >
-                {selectedSubtitleLang ? <MdClosedCaption size={18} /> : <MdClosedCaptionOff size={18} />}
+                <Icon name={selectedSubtitleLang ? 'closed_caption' : 'closed_caption_disabled'} size={20} fill={!!selectedSubtitleLang} />
               </button>
               {subtitleMenuOpen && (
                 <PortalIf condition={!!subtitlePortalStyle}>
@@ -614,32 +616,40 @@ function VideoControls({
                   ref={subtitlePortalStyle ? subtitlePortalRef : undefined}
                   style={subtitlePortalStyle || undefined}
                 >
-                  <button
-                    className={`vc-subtitle-item${!selectedSubtitleLang ? ' active' : ''}`}
-                    onClick={() => { onSubtitleChange?.(null); setSubtitleMenuOpen(false); }}
-                  >
-                    {t('player.subtitles.off')}
-                  </button>
-                  {subtitleLanguages.map((sub) => {
-                    const langInfo = SUPPORTED_LANGUAGES.find(l => l.code === sub.lang);
-                    const label = langInfo ? langInfo.native : sub.lang;
-                    return (
-                      <button
-                        key={sub.lang}
-                        className={`vc-subtitle-item${selectedSubtitleLang === sub.lang ? ' active' : ''}`}
-                        onClick={() => { onSubtitleChange?.(sub.lang); setSubtitleMenuOpen(false); }}
-                      >
-                        {label}
-                        {subtitleLoading && selectedSubtitleLang === sub.lang && ' ...'}
-                      </button>
-                    );
-                  })}
+                  <div className="vc-menu-head">{t('player.subtitles.title')}</div>
+                  <div className="vc-subtitle-langs">
+                    <button
+                      type="button"
+                      className={`vc-subtitle-item${!selectedSubtitleLang ? ' active' : ''}`}
+                      aria-pressed={!selectedSubtitleLang}
+                      onClick={() => { onSubtitleChange?.(null); setSubtitleMenuOpen(false); }}
+                    >
+                      {t('player.subtitles.off')}
+                    </button>
+                    {subtitleLanguages.map((sub) => {
+                      const langInfo = SUPPORTED_LANGUAGES.find(l => l.code === sub.lang);
+                      const label = langInfo ? langInfo.native : sub.lang;
+                      return (
+                        <button
+                          type="button"
+                          key={sub.lang}
+                          className={`vc-subtitle-item${selectedSubtitleLang === sub.lang ? ' active' : ''}`}
+                          aria-pressed={selectedSubtitleLang === sub.lang}
+                          onClick={() => { onSubtitleChange?.(sub.lang); setSubtitleMenuOpen(false); }}
+                        >
+                          {label}
+                          {subtitleLoading && selectedSubtitleLang === sub.lang && <Icon name="progress_activity" size={14} className="v2-spin" />}
+                        </button>
+                      );
+                    })}
+                  </div>
                   {subtitleStyle && onSubtitleStyleChange && (
                     <div className="vc-subtitle-style">
                       <div className="vc-subtitle-style-label">{t('player.subtitles.font')}</div>
                       <div className="vc-subtitle-font-list">
                         {FONT_OPTIONS.map(f => (
                           <button
+                            type="button"
                             key={f.key}
                             className={`vc-subtitle-font-btn${subtitleStyle.fontFamily === f.key ? ' active' : ''}`}
                             style={{ fontFamily: SUBTITLE_FONTS[f.key] }}
@@ -651,19 +661,16 @@ function VideoControls({
                       </div>
                       <div className="vc-subtitle-style-label">{t('player.subtitles.size')}</div>
                       <div className="vc-subtitle-style-row">
-                        {[
-                          { key: 'small', label: 'A' },
-                          { key: 'medium', label: 'A' },
-                          { key: 'large', label: 'A' },
-                          { key: 'x-large', label: 'A' },
-                          { key: 'xx-large', label: 'A' },
-                        ].map(s => (
+                        {SUBTITLE_SIZES.map((size) => (
                           <button
-                            key={s.key}
-                            className={`vc-subtitle-size-btn${subtitleStyle.fontSize === s.key ? ' active' : ''}`}
-                            onClick={() => onSubtitleStyleChange({ fontSize: s.key })}
+                            type="button"
+                            key={size}
+                            className={`vc-subtitle-size-btn${subtitleStyle.fontSize === size ? ' active' : ''}`}
+                            aria-pressed={subtitleStyle.fontSize === size}
+                            aria-label={`${t('player.subtitles.size')}: ${size}`}
+                            onClick={() => onSubtitleStyleChange({ fontSize: size })}
                           >
-                            {s.label}
+                            A
                           </button>
                         ))}
                       </div>
@@ -672,6 +679,7 @@ function VideoControls({
                         <input
                           type="color"
                           className="vc-subtitle-color-input"
+                          aria-label={t('player.subtitles.textColor')}
                           value={subtitleStyle.color || '#ffffff'}
                           onChange={(e) => onSubtitleStyleChange({ color: e.target.value })}
                         />
@@ -681,6 +689,7 @@ function VideoControls({
                       <div className="vc-subtitle-style-row">
                         {[0, 2, 4, 8].map(w => (
                           <button
+                            type="button"
                             key={w}
                             className={`vc-subtitle-bg-btn${subtitleStyle.borderWidth === w ? ' active' : ''}`}
                             onClick={() => onSubtitleStyleChange({ borderWidth: w })}
@@ -696,6 +705,7 @@ function VideoControls({
                             <input
                               type="color"
                               className="vc-subtitle-color-input"
+                              aria-label={t('player.subtitles.borderColor')}
                               value={subtitleStyle.borderColor || '#000000'}
                               onChange={(e) => onSubtitleStyleChange({ borderColor: e.target.value })}
                             />
@@ -707,6 +717,7 @@ function VideoControls({
                       <div className="vc-subtitle-style-row">
                         {[0, 0.5, 0.7, 1].map(o => (
                           <button
+                            type="button"
                             key={o}
                             className={`vc-subtitle-bg-btn${subtitleStyle.bgOpacity === o ? ' active' : ''}`}
                             onClick={() => onSubtitleStyleChange({ bgOpacity: o })}
@@ -725,11 +736,15 @@ function VideoControls({
           {onPlaybackRateChange && (
             <div className="vc-speed-wrap" ref={speedMenuRef}>
               <button
+                type="button"
                 className={`vc-btn vc-btn--speed${playbackRate !== 1 ? ' active' : ''}`}
                 onClick={() => { setSpeedMenuOpen(o => !o); setQualityMenuOpen(false); setSubtitleMenuOpen(false); }}
                 title={t('player.controls.playbackSpeed')}
+                aria-label={t('player.controls.playbackSpeed')}
+                aria-expanded={speedMenuOpen}
               >
-                {playbackRate !== 1 ? `${playbackRate}x` : '1x'}
+                <Icon name="speed" size={20} />
+                <span className="vc-btn-label">{`${playbackRate}×`}</span>
               </button>
               {speedMenuOpen && (
                 <PortalIf condition={!!speedPortalStyle}>
@@ -738,18 +753,24 @@ function VideoControls({
                   ref={speedPortalStyle ? speedPortalRef : undefined}
                   style={speedPortalStyle || undefined}
                 >
-                  {[0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].map((rate) => (
+                  <div className="vc-menu-head">{t('player.controls.playbackSpeed')}</div>
+                  <div className="vc-tile-grid is-4">
+                  {SPEEDS.map((rate) => (
                     <button
+                      type="button"
                       key={rate}
+                      aria-pressed={playbackRate === rate}
+                      title={rate === 1 ? t('player.controls.speedNormal') : undefined}
                       className={`vc-speed-item${playbackRate === rate ? ' active' : ''}`}
                       // `chosen`: a pick from this menu is a preference to remember. The
                       // press-and-hold speed-up calls the same handler without it, and a
                       // hold is only for that moment.
                       onClick={() => { onPlaybackRateChange(rate, { chosen: true }); setSpeedMenuOpen(false); }}
                     >
-                      {rate === 1 ? t('player.controls.speedNormal') : `${rate}x`}
+                      {`${rate}×`}
                     </button>
                   ))}
+                  </div>
                 </div>
                 </PortalIf>
               )}
@@ -757,8 +778,8 @@ function VideoControls({
           )}
           {qualityLevels && qualityLevels.length > 0 && (
             <div className="vc-quality-wrap" ref={qualityMenuRef}>
-              <button className="vc-btn" onClick={() => { setQualityMenuOpen(o => !o); setSubtitleMenuOpen(false); }} title={t('player.controls.quality')}>
-                <FaCog size={14} />
+              <button type="button" className="vc-btn" onClick={() => { setQualityMenuOpen(o => !o); setSubtitleMenuOpen(false); }} title={t('player.controls.quality')} aria-label={t('player.controls.quality')} aria-expanded={qualityMenuOpen}>
+                <Icon name="settings" size={20} />
               </button>
               {qualityMenuOpen && (
                 <PortalIf condition={!!qualityPortalStyle}>
@@ -767,21 +788,28 @@ function VideoControls({
                   ref={qualityPortalStyle ? qualityPortalRef : undefined}
                   style={qualityPortalStyle || undefined}
                 >
-                  <button
-                    className={`vc-quality-item${currentQuality === -1 ? ' active' : ''}`}
-                    onClick={() => { onQualityChange?.(-1); setQualityMenuOpen(false); }}
-                  >
-                    {t('player.controls.qualityAuto')}
-                  </button>
-                  {qualityLevels.map((q) => (
+                  <div className="vc-menu-head">{t('player.controls.quality')}</div>
+                  <div className="vc-tile-grid is-3">
                     <button
-                      key={q.index}
-                      className={`vc-quality-item${currentQuality === q.index ? ' active' : ''}`}
-                      onClick={() => { onQualityChange?.(q.index); setQualityMenuOpen(false); }}
+                      type="button"
+                      aria-pressed={currentQuality === -1}
+                      className={`vc-quality-item${currentQuality === -1 ? ' active' : ''}`}
+                      onClick={() => { onQualityChange?.(-1); setQualityMenuOpen(false); }}
                     >
-                      {q.label || `${q.height}p`}
+                      {t('player.controls.qualityAuto')}
                     </button>
-                  ))}
+                    {qualityLevels.map((q) => (
+                      <button
+                        type="button"
+                        key={q.index}
+                        aria-pressed={currentQuality === q.index}
+                        className={`vc-quality-item${currentQuality === q.index ? ' active' : ''}`}
+                        onClick={() => { onQualityChange?.(q.index); setQualityMenuOpen(false); }}
+                      >
+                        {q.label || `${q.height}p`}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 </PortalIf>
               )}
@@ -790,55 +818,67 @@ function VideoControls({
           {/* Mobile-only settings gear — groups speed, quality, CC, autoplay */}
           <div className="vc-mobile-settings-wrap" ref={mobileSettingsRef}>
             <button
+              type="button"
               className={`vc-btn vc-btn--mobile-settings${mobileSettingsOpen ? ' active' : ''}`}
               onClick={() => setMobileSettingsOpen(o => !o)}
               title={t('common.nav.settings')}
+              aria-label={t('common.nav.settings')}
+              aria-expanded={mobileSettingsOpen}
             >
-              <FaCog size={14} />
+              <Icon name="settings" size={20} />
             </button>
             {mobileSettingsOpen && (
               <div className="vc-mobile-settings-menu">
                 {onToggleAutoplay && (
                   <button
+                    type="button"
                     className={`vc-mobile-settings-item${autoplayNext ? ' active' : ''}`}
                     onClick={() => { onToggleAutoplay(); }}
                     title={autoplayNext ? t('player.controls.autoplayOn') : t('player.controls.autoplayOff')}
+                    aria-label={autoplayNext ? t('player.controls.autoplayOn') : t('player.controls.autoplayOff')}
+                    aria-pressed={!!autoplayNext}
                   >
-                    <TbPlayerTrackNextFilled size={15} />
+                    <Icon name="skip_next" size={20} fill={!!autoplayNext} />
                   </button>
                 )}
                 {subtitleLanguages && subtitleLanguages.length > 0 && (
                   <button
+                    type="button"
                     className={`vc-mobile-settings-item${selectedSubtitleLang ? ' active' : ''}`}
                     onClick={() => { setMobileSettingsOpen(false); setSubtitleMenuOpen(o => !o); }}
                     title={t('player.subtitles.title')}
+                    aria-label={t('player.subtitles.title')}
                   >
-                    {selectedSubtitleLang ? <MdClosedCaption size={18} /> : <MdClosedCaptionOff size={18} />}
+                    <Icon name={selectedSubtitleLang ? 'closed_caption' : 'closed_caption_disabled'} size={20} fill={!!selectedSubtitleLang} />
                   </button>
                 )}
                 {onPlaybackRateChange && (
                   <button
-                    className={`vc-mobile-settings-item${playbackRate !== 1 ? ' active' : ''}`}
+                    type="button"
+                    className={`vc-mobile-settings-item vc-mobile-settings-item--speed${playbackRate !== 1 ? ' active' : ''}`}
                     onClick={() => { setMobileSettingsOpen(false); setSpeedMenuOpen(o => !o); }}
                     title={t('player.controls.playbackSpeed')}
+                    aria-label={t('player.controls.playbackSpeed')}
                   >
-                    {playbackRate !== 1 ? `${playbackRate}x` : '1x'}
+                    {`${playbackRate}×`}
                   </button>
                 )}
                 {qualityLevels && qualityLevels.length > 0 && (
                   <button
-                    className={`vc-mobile-settings-item`}
+                    type="button"
+                    className="vc-mobile-settings-item"
                     onClick={() => { setMobileSettingsOpen(false); setQualityMenuOpen(o => !o); }}
                     title={t('player.controls.quality')}
+                    aria-label={t('player.controls.quality')}
                   >
-                    <MdHighQuality size={16} />
+                    <Icon name="high_quality" size={20} />
                   </button>
                 )}
               </div>
             )}
           </div>
-          <button className="vc-btn" onClick={onToggleFullscreen} title={isFullscreen ? t('player.controls.exitFullscreen') : t('player.controls.fullscreen')}>
-            {isFullscreen ? <FaCompress size={14} /> : <FaExpand size={14} />}
+          <button type="button" className="vc-btn vc-btn--fullscreen" onClick={onToggleFullscreen} title={isFullscreen ? t('player.controls.exitFullscreen') : t('player.controls.fullscreen')} aria-label={isFullscreen ? t('player.controls.exitFullscreen') : t('player.controls.fullscreen')}>
+            <Icon name={isFullscreen ? 'fullscreen_exit' : 'fullscreen'} size={22} />
           </button>
         </div>
       </div>

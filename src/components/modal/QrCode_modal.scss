@@ -1,3 +1,43 @@
-@use "./modal-base";
+@use "../../styles/v2" as v2;
 
-// QR Code modal specific styles (if needed)
+// QR code dialog (design 25e): a lead line, then the code on its white tile in
+// a bg well, with the "open in the app" link in cyan under it.
+.qr-modal {
+  .qr-modal__lead {
+    margin: 0;
+    @include v2.text(body);
+    color: var(--muted);
+  }
+
+  .qr-modal__well {
+    @include v2.well;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  // The scannable tile: always white, whatever the theme.
+  .qr-modal__code {
+    display: block;
+    padding: 8px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--on-media);
+    cursor: pointer;
+    line-height: 0;
+  }
+
+  .qr-modal__hint {
+    border: 0;
+    background: none;
+    padding: 4px 8px;
+    color: var(--cyan);
+    @include v2.text(label);
+    font-size: 12px;
+    cursor: pointer;
+
+    &:hover { text-decoration: underline; }
+  }
+}

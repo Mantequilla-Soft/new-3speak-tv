@@ -21,6 +21,7 @@ import {
 } from '../../lib/profileLayout';
 import { toastIn } from '../../utils/toast';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../v2/ui';
 import './ProfileOverview.scss';
 
 const toast = toastIn('Profile');
@@ -54,9 +55,9 @@ function Section({ title, count, view = 'row', className = '', onViewMore, child
       <div className="pov-head">
         <h3>{title}</h3>
         {onViewMore ? (
-          <button type="button" className="pov-more" onClick={onViewMore}>
+          <Button variant="ghost" size={32} trailing="arrow_forward" className="pov-more" onClick={onViewMore}>
             {t('profile.overview.viewMore')}
-          </button>
+          </Button>
         ) : null}
       </div>
       {children}

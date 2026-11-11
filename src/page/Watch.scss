@@ -1,313 +1,120 @@
-@use "../mixins.scss" as *;
+@use "../styles/v2" as v2;
 
-.watch-error {
+/* The watch page (Watch.jsx) around PlayVideo: the page frame, the errors, the
+   supporters-only paywall (31c), the reaction player's way back, and the More
+   videos shelf. The player, the side panel and everything under the player are
+   PlayVideo's (components/playVideo/PlayVideo.scss). */
+
+.play-container.watch-page {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  min-height: 40vh;
-  color: var(--text-secondary, #aaa);
-  font-size: 1.1rem;
+  gap: 32px;
+  min-width: 0;
+  padding-bottom: 16px;
 
-  p { margin: 0; }
-}
-
-.watch-error-retry {
-  padding: 8px 20px;
-  border: 1px solid var(--border-light, #444);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-primary, #fff);
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.15s ease;
-
-  &:hover {
-    background: var(--bg-tertiary, rgba(255, 255, 255, 0.06));
-  }
-}
-
-.play-container{
+  // Above the page glow canvas (z 5).
+  > .play-video,
+  > .watch-more {
     position: relative;
-    padding-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-
-    // Ensure all direct children sit above the page-glow-canvas (z-index: 5)
-    > .play-video,
-    > .right-column,
-    > .mobile-recommended {
-      position: relative;
-      z-index: 6;
-    }
-
-    .right-column {
-      flex-basis: 30%;
-      max-width: 30%;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-
-      @include respond(phone) {
-        display: none;
-      }
-
-      .right-column-videos {
-        h4 {
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--text-primary);
-          margin: 0 0 8px;
-        }
-
-        .card-container {
-          grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
-          grid-row-gap: 10px !important;
-
-          .card .img-wrap {
-            aspect-ratio: 16 / 9;
-
-            img {
-              height: 100% !important;
-            }
-          }
-        }
-      }
-    }
-
-    // Size variants — desktop only, mobile always uses default full-width layout
-    @media screen and (min-width: 768px) {
-      &.reaction-small {
-        .play-video {
-          flex-basis: 30%;
-          max-width: 30%;
-        }
-        .right-column {
-          flex-basis: 68%;
-          max-width: 68%;
-        }
-      }
-
-      &.reaction-medium {
-        .play-video {
-          flex-basis: 50%;
-          max-width: 50%;
-        }
-        .right-column {
-          flex-basis: 48%;
-          max-width: 48%;
-        }
-      }
-
-      // standard = default (69/30), no override needed
-
-      &.reaction-big {
-        .play-video {
-          flex-basis: 80%;
-          max-width: 80%;
-        }
-        .right-column {
-          flex-basis: 18%;
-          max-width: 18%;
-        }
-      }
-
-      &.reaction-cinema {
-        .play-video {
-          flex-basis: 100%;
-          max-width: 100%;
-        }
-        .right-column {
-          display: none;
-        }
-      }
-    }
-
-    .mobile-recommended {
-      display: none;
-      width: 100%;
-      padding: 0 8px;
-
-      @include respond(phone) {
-        display: block;
-      }
-
-      h4 {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin: 12px 0 8px;
-      }
-
-      // Let Card3's default grid handle the layout
-      .card-container {
-        grid-template-columns: repeat(2, 1fr) !important;
-        grid-row-gap: 10px !important;
-
-        .card .img-wrap {
-          aspect-ratio: 16 / 9;
-
-          img {
-            height: 100% !important;
-          }
-        }
-      }
-    }
-
-    // Phone landscape: keep mobile layout (phone height is small when rotated)
-    @media screen and (orientation: landscape) and (max-height: 500px) {
-      flex-wrap: wrap;
-
-      > .play-video {
-        flex-basis: 100% !important;
-        max-width: 100% !important;
-        width: 100% !important;
-      }
-
-      .right-column {
-        display: none !important;
-      }
-
-      .mobile-recommended {
-        display: block !important;
-      }
-    }
-
-    .show-reactions-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border: 1px solid var(--border-light, #333);
-      border-radius: 10px;
-      background: transparent;
-      color: var(--text-secondary, #aaa);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      svg {
-        vertical-align: middle;
-      }
-
-      &:hover {
-        background: var(--bg-tertiary, rgba(255, 255, 255, 0.05));
-        color: var(--text-primary, #fff);
-        border-color: var(--border-color, #555);
-      }
-    }
-}
-
-
-/* ---------------------------------------------------------------------------
-   Live chat in the right column
-   While a post is a live stream, the chat occupies the reaction panel's slot
-   (see Watch.jsx). The panel itself is portalled in from <LiveStreamPlayer> so
-   it shares the player's LiveKit connection — this is just the frame around it,
-   matching the reaction panel's card treatment so the column doesn't jump when
-   the recording publishes and reactions take over.
---------------------------------------------------------------------------- */
-.live-chat-column {
-  display: flex;
-  flex-direction: column;
-  height: 460px;
-  margin-bottom: 1rem;
-  border: 1px solid rgba(128, 128, 128, 0.2);
-  border-radius: 14px;
-  overflow: hidden;
-  /* SDK ChatPanel is styled for the studio's dark glass; use app theme vars. */
-  background: var(--bg-secondary);
-  border-color: var(--border-light);
-
-  &__head {
-    flex-shrink: 0;
-    padding: 0.6rem 0.8rem;
-    font-size: 0.72rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    opacity: 0.6;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.2);
-
-    &::before {
-      content: "● ";
-      color: #e0594b;
-    }
+    z-index: 6;
   }
 
-  /* The portal target. Empty until the room connects. */
-  &__body {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .hh-chat {
-    flex: 1;
-    min-height: 0;
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border: none;
-    border-radius: 0;
-  }
-  .hh-chat__msg-name { color: var(--text-primary); }
-  .hh-chat__msg-text { color: var(--text-secondary); }
-  .hh-chat__input { color: var(--text-primary); }
-  .hh-chat__input::placeholder { color: var(--text-secondary); opacity: 0.7; }
-  .hh-chat__input-row,
-  .hh-chat__guest-prompt { border-top-color: var(--border-light); }
-  .hh-chat__guest-prompt,
-  .hh-chat__empty { color: var(--text-secondary); }
-
-  /* The SDK panel draws its own "Chat" header; we already have one above it. */
-  .hh-chat__header {
-    display: none;
+  @include v2.mobile {
+    gap: 24px;
+    // The player meets the top bar, edge to edge: the page spans the screen and
+    // pads its own content (so the phone-width clip in WatchV2.scss keeps it).
+    margin: calc(-1 * var(--page-pad)) calc(-1 * var(--page-pad)) 0;
+    padding: 0 var(--page-pad) 16px;
   }
 }
 
-/* 🔐 Supporters-only paywall banner. Deliberately a banner and not an overlay:
-   the free preview keeps playing underneath, which is what sells the upgrade. */
+/* Not found, network error, hidden creator: an empty-state card. */
+.watch-error {
+  display: grid;
+  place-items: center;
+  min-height: 40vh;
+  padding: 24px 0;
+
+  .v2-empty { width: min(440px, 100%); }
+}
+
+/* 🔐 Supporters-only paywall (31c). A card under the player, not an overlay:
+   the free preview keeps playing above it, which is what sells the upgrade. */
 .gated-paywall {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  margin-bottom: 12px;
-  border: 1px solid var(--border-color, #333);
-  border-radius: 8px;
-  background: var(--card-bg, rgba(255, 255, 255, 0.04));
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  padding: 16px;
+  border-radius: var(--r-2xl);
+  background: var(--accent-wash);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
 
-  &__lock { font-size: 20px; line-height: 1; }
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--r-lg);
+    display: grid;
+    place-items: center;
+    flex: none;
+    background: var(--accent);
+    color: var(--on-accent);
+  }
 
   &__text {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    flex: 1 1 auto;
+    flex: 1 1 220px;
     min-width: 0;
 
-    strong { font-size: 14px; }
-    span { font-size: 13px; opacity: 0.8; }
+    strong { @include v2.text(title); }
+    span { @include v2.text(meta); color: var(--muted); line-height: 1.45; }
   }
 
-  &__cta {
-    flex: 0 0 auto;
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    background: var(--primary-color, #e23);
-    color: #fff;
+  &__cta { flex: 0 0 auto; }
 
-    &:hover { filter: brightness(1.1); }
+  @include v2.mobile {
+    &__cta { flex: 1 1 100%; }
+  }
+}
+
+/* The reaction player's way back once hidden: a secondary button with the counts. */
+.show-reactions-btn.v2-btn {
+  .v2-btn__label { display: inline-flex; align-items: center; gap: 8px; }
+}
+.watch-reaction-counts { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); }
+.watch-reaction-count { display: inline-flex; align-items: center; gap: 2px; @include v2.mono(12, 700); }
+
+/* More videos (02 "what's next" shelf): Card3's grid, a head with a rule. */
+.watch-more {
+  min-width: 0;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+
+    h2 { margin: 0; @include v2.text(title); font-size: 20px; font-weight: 900; letter-spacing: -.01em; }
+  }
+  &__rule { flex: 1; height: 1px; background: var(--border); }
+
+  // Card3 lays out its own grid; the shelf only picks the column count.
+  &--wide .card-container { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important; }
+  &--narrow .card-container { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+
+  &--narrow { display: none; }
+
+  @include v2.mobile {
+    &--wide { display: none; }
+    &--narrow { display: block; }
+  }
+
+  // Phone held sideways: the phone grid.
+  @media screen and (orientation: landscape) and (max-height: 500px) {
+    &--wide { display: none; }
+    &--narrow { display: block; }
   }
 }

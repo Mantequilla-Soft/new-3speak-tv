@@ -1,14 +1,8 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Support row in the profile's badge block: incoming chips (who tipped this
-// profile), a divider, outgoing chips (whom this profile tipped). Each chip is
-// avatar + total + a direction arrow.
-//
-// The badge block sits on the header panel, a DARK scrim over the banner in both
-// themes (ProfileHeader.scss), so nothing here uses the theme tokens: the
-// chips copy .hive-badge
-// (HiveBadges.scss) to the value, opaque surface included, so they stay
-// readable on a bright banner and match the rows above.
+// ── Support chips in the profile header (30c rings, 31e "who you support") ──
+// Each chip: the person's squircle avatar with a 2px ring (accent = tipped this
+// profile, cyan = this profile tipped them), the total in mono, a direction icon.
 .sp-badges {
   display: flex;
   flex-wrap: wrap;
@@ -20,380 +14,226 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.28);
-    background: rgba(15, 23, 42, 0.92);
-    color: #e2e8f0;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 1.6;
+    height: 32px;
+    padding: 0 10px 0 4px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
     text-decoration: none;
-    white-space: nowrap;
-    transition: filter 0.15s, border-color 0.15s;
-
-    &:hover {
-      filter: brightness(1.12);
-      border-color: rgba(148, 163, 184, 0.5);
-    }
-    &:focus-visible { outline: 2px solid #cbd5e1; outline-offset: 2px; }
-
-    @include mix.respond(phone) { font-size: 11px; }
-  }
-
-  .sp-badge {
-    padding: 3px 8px 3px 4px;
-    gap: 5px;
-
-    // Direction by shape (gift = received, hand giving a heart = given); the
-    // muted tone of the Hive row's secondary text, no colour coding.
-    .sp-badge-dir {
-      font-size: 13px;
-      flex-shrink: 0;
-      color: #94a3b8;
-    }
-
-    .sp-badge-img {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      object-fit: cover;
-      flex-shrink: 0;
-      background: rgba(148, 163, 184, 0.25);
-    }
-
-    // The anonymous Lightning chip has a bolt where the avatar would be.
-    .sp-badge-bolt {
-      padding: 3px;
-      box-sizing: border-box;
-      color: #f59e0b;
-    }
-  }
-
-  // Same as .hive-badge-more, the "Show more" chip in the Hive row above.
-  .sp-badges-all {
-    padding: 3px 12px;
-    box-shadow: none;
     font-family: inherit;
-    color: #cbd5e1;
+    white-space: nowrap;
     cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
+
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
   }
 
-  .sp-badges-more {
+  .sp-badge-img {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    border-radius: var(--r-sm);
+    object-fit: cover;
+    background: var(--avatar);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  .sp-badge--out .sp-badge-img { box-shadow: 0 0 0 2px var(--cyan); }
+
+  // Anonymous Lightning tips: a bolt in the avatar's place.
+  .sp-badge-bolt {
+    display: grid;
+    place-items: center;
+    background: var(--accent-tint-strong);
+    color: var(--accent);
+  }
+
+  .sp-badge-amount { @include v2.mono(12, 700); color: var(--accent); }
+  .sp-badge-dir { color: var(--muted); }
+
+  .sp-badges-all {
+    padding: 0 10px;
+    @include v2.text(label);
     font-size: 12px;
-    font-weight: 600;
-    color: #cbd5e1;
   }
 
-  // Between the incoming and outgoing groups.
+  .sp-badges-more { @include v2.mono(12, 700); color: var(--muted); }
+
   .sp-badges-sep {
-    align-self: center;
     width: 1px;
-    height: 16px;
+    height: 20px;
     margin: 0 4px;
-    background: rgba(148, 163, 184, 0.35);
+    background: var(--border);
   }
 }
 
-// The Supporters tab: a card per tip. Column sizing and gaps match the profile's
-// video grid (.card-container in Cards.scss); one column on phones. Cards reuse
-// the follower cards' surface tokens.
+// ── The Supporters tab (37a) ───────────────────────────────────────────────
 .sp-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 0.25rem 0 1.5rem;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 880px;
+  padding-bottom: 32px;
 }
 
-// Received / Given. Same look as the Followers / Following sub-tabs
-// (.follower-tabs in Follower.scss): plain text + accent underline. One line
-// always; on a narrow phone it scrolls sideways instead of wrapping.
 .sp-subtabs {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  border-bottom: 1px solid var(--border-light);
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
+  max-width: 100%;
 
-  @include mix.respond(phone) { gap: 16px; }
+  .v2-seg { background: var(--surface); }
 }
 
-.sp-subtab {
-  position: relative;
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  // The underline sits inside the button (bottom: 0), not below it: the row
-  // scrolls, and overflow would clip anything hanging out of it.
-  padding: 4px 2px 10px;
-  border: none;
-  background: none;
-  box-shadow: none;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.2;
-  white-space: nowrap;
-  color: var(--text-secondary);
-  transition: color 0.18s ease;
-
-  .sp-subtab-icon { font-size: 16px; flex-shrink: 0; }
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--accent-primary);
-    opacity: 0;
-    transition: opacity 0.18s ease;
-  }
-
-  &:hover { color: var(--text-primary); }
-  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: -2px; }
-
-  &.active {
-    color: var(--accent-primary);
-    font-weight: 600;
-    &::after { opacity: 1; }
-  }
-
-  @include mix.respond(phone) { font-size: 13px; }
-}
-
+// One row per tip, on bg wells inside a surface card.
 .sp-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-min-w, 280px), 1fr));
-  gap: 16px;
-
-  @include mix.respond(phone) {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  padding: 8px;
+  @include v2.card;
 }
 
 .sp-card {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   min-width: 0;
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  background: var(--bg-secondary);
-  overflow: hidden;
-  transition: border-color 0.15s ease;
+  padding: 8px;
+  border-radius: var(--r-lg);
+  @include v2.well;
+  border-radius: var(--r-lg);
 
-  &:hover { border-color: var(--text-muted); }
-
-  @include mix.respond(phone) { border-radius: 8px; }
+  @include v2.mobile { align-items: flex-start; gap: 10px; }
 }
 
 .sp-card-thumb {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  position: relative;
+  flex: none;
+  width: 96px;
   aspect-ratio: 16 / 9;
-  background: var(--bg-tertiary);
+  border-radius: var(--r-sm);
   overflow: hidden;
+  display: grid;
+  place-items: center;
+  @include v2.thumb-placeholder(6px);
 
-  // A short's thumbnail is portrait: same 16:9 box, cropped.
-  img { width: 100%; height: 100%; object-fit: cover; }
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sp-card-thumb-icon { color: var(--muted); }
 
-  .sp-card-thumb-icon { font-size: 40px; color: var(--text-muted); }
+  @include v2.mobile { width: 72px; }
 }
 
 .sp-card-body {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.6rem 0.75rem 0.75rem;
-  min-width: 0;
+  gap: 2px;
 }
 
 .sp-card-title {
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  @include v2.text(body-sm);
+  font-weight: 700;
+  color: var(--text);
   text-decoration: none;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 
-  &:hover { color: var(--text-primary); text-decoration: underline; }
+  &:hover { color: var(--text); text-decoration: underline; }
 }
 
 .sp-card-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
-  min-width: 0;
-  font-size: 0.78rem;
-  color: var(--text-muted);
+  gap: 2px 10px;
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }
 
 .sp-card-tipper {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 6px;
   min-width: 0;
-  color: var(--text-secondary);
+  color: var(--muted);
   text-decoration: none;
+  font-weight: 700;
 
   img {
-    flex: 0 0 auto;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    flex: none;
+    border-radius: var(--r-xs);
     object-fit: cover;
-    background: var(--bg-tertiary);
+    background: var(--avatar);
   }
 
-  span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  &:hover { color: var(--text); }
 
-  &:hover { color: var(--text-primary); }
-
-  // Anonymous Lightning tip: a bolt instead of an avatar, and no profile to open.
-  &--anon {
-    > svg {
-      flex: 0 0 auto;
-      width: 22px;
-      height: 22px;
-      color: #f59e0b;
-    }
-
-    &:hover { color: var(--text-secondary); }
-  }
+  &--anon { color: var(--muted); .material-symbols-rounded { color: var(--accent); } }
 }
 
-.sp-card-time { flex: 0 0 auto; margin-left: auto; white-space: nowrap; }
+.sp-card-time { white-space: nowrap; }
+.sp-card-paid { white-space: nowrap; }
 
-.sp-card-amount {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-}
+// Money: accent, Roboto Mono.
+.sp-card-amount { flex: none; }
 
-// Compact amount chip, neutral surface tokens only.
 .sp-pill {
   display: inline-flex;
   align-items: center;
-  padding: 2px 10px;
-  border: 1px solid var(--border-light);
-  border-radius: 999px;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  font-size: 0.78rem;
-  font-weight: 700;
-  white-space: nowrap;
-
-  > svg { margin-right: 3px; color: #f59e0b; }
-}
-
-.sp-card-paid {
-  font-size: 0.72rem;
-  color: var(--text-muted);
+  gap: 2px;
+  @include v2.mono(13, 900);
+  color: var(--accent);
   white-space: nowrap;
 }
 
-// The tipper's message, plain text. Two lines, the whole note on tap.
+// The tip's memo, two lines until clicked open.
 .sp-card-memo {
-  margin: 0;
-  font-size: 0.82rem;
+  margin: 4px 0 0;
+  @include v2.text(meta);
   line-height: 1.4;
-  color: var(--text-secondary);
-  white-space: pre-line;
-  overflow-wrap: anywhere;
+  color: var(--muted);
   display: -webkit-box;
-  -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   cursor: pointer;
 
-  &.is-open {
-    display: block;
-    -webkit-line-clamp: unset;
-    line-clamp: unset;
-  }
-  &:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
+  &.is-open { display: block; -webkit-line-clamp: unset; overflow: visible; }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-xs); }
 }
 
-// A tip the creator hid: still listed on their own Received tab, dimmed, with
-// the label and the Unhide button at full strength.
+// A tip the owner hid from the profile: the row dims, the eye stays sharp.
 .sp-card.is-hidden {
   .sp-card-thumb,
   .sp-card-title,
   .sp-card-meta,
   .sp-card-amount,
-  .sp-card-memo { opacity: 0.45; }
-}
-
-.sp-card-foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4rem;
-  margin-top: 0.15rem;
+  .sp-card-memo { opacity: .5; }
 }
 
 .sp-card-hidden-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
+  @include v2.text(meta-sm);
+  font-weight: 700;
+  color: var(--muted);
 }
 
-// Neutral, small, never red: it's a housekeeping action on your own card.
-.sp-card-hide {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  margin-left: auto;
-  padding: 2px 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  background: transparent;
-  box-shadow: none;
-  font-family: inherit;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
-
-  svg { font-size: 14px; flex-shrink: 0; }
-
-  &:hover { color: var(--text-primary); border-color: var(--text-secondary); }
-  &:disabled { opacity: 0.6; cursor: default; }
-  &:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
-}
+.sp-card-hide { flex: none; color: var(--muted); }
 
 .sp-list-empty {
-  padding: 2rem 1rem;
-  text-align: center;
-  color: var(--text-secondary);
-}
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 560px;
+  padding: 14px 16px;
+  border-radius: var(--r-2xl);
+  border: 2px dashed var(--border);
+  color: var(--muted);
 
-.sp-list-more {
-  align-self: stretch;
-  width: 100%;
-  margin-top: 0.5rem;
-  padding: 0.45rem 1.1rem;
-  border: 1px solid var(--border-light);
-  border-radius: 999px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  font-size: 0.85rem;
-  cursor: pointer;
-
-  &:hover { border-color: var(--accent-primary); }
-  &:disabled { opacity: 0.6; cursor: default; }
+  p { margin: 0; flex: 1; min-width: 200px; @include v2.text(body); }
 }

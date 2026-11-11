@@ -50,12 +50,17 @@
   // tabs and the right cluster, so it stays put whether the page tabs are out
   // or not. Out of the flow to do it (Nav.jsx measures its left edge to cap the
   // tab row). NavSearch.scss owns its size and look.
+  //
+  // Centred with auto margins, NOT a transform: a transform would make the
+  // wrap the containing block of the results panel, which is position: fixed.
   > .navsearch-wrap {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 44px;
+    margin: auto;
     z-index: 2;
   }
 

@@ -1,14 +1,12 @@
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   DndContext, DragOverlay, useDraggable, useDroppable,
   PointerSensor, KeyboardSensor, useSensor, useSensors, pointerWithin,
 } from '@dnd-kit/core';
-import ModalHeader from '../ModalHeader/ModalHeader';
-import { MdLock, MdAdd } from 'react-icons/md';
-import { RxDragHandleDots2 } from 'react-icons/rx';
+import { Button, Dialog } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import { toastIn } from '../../utils/toast';
 import { fetchHiveBadges, isThreeSpeakBadge, saveBadgeOrder } from '../../utils/hiveBadges';
 import { listAwardableBadges } from '../../utils/badgeAwards';
@@ -67,7 +65,7 @@ function MovableRow({ badge }) {
       className={`hbadges-row hbadges-row--movable${isDragging ? ' dragging' : ''}${isOver ? ' over' : ''}`}
     >
       <span className="hbadges-grip" {...listeners} {...attributes} title={t('badges.hive.dragToReorder')}>
-        <RxDragHandleDots2 size={16} />
+        <Icon name="drag_indicator" size={18} />
       </span>
       <BadgeRowBody badge={badge} />
     </div>
@@ -85,9 +83,9 @@ function moveBadge(list, activeId, overId) {
 }
 
 /**
- * Full badge list, opened from "Show more"
- or "Arrange". Portalled to body so
- * the profile header's backdrop-filter and stacking context can't clip it.
+ * Full badge list, opened from "Show more" or "Arrange" (design 41c). A v2
+ * Dialog: centred on desktop, a bottom sheet on a phone, Esc and focus trap
+ * included.
  *
  * On your own profile it doubles as the editor: drag the movable badges into
  * the order you want them shown, and save it to your Hive account. 3Speak's
@@ -105,12 +103,6 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor),
   );
-
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [onClose]);
 
   const active = draft.find((b) => b.account === activeId);
 
@@ -130,109 +122,102 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
 
   const rows = arranging ? draft : badges.filter((b) => !isThreeSpeakBadge(b));
 
-  return createPortal(
-    <div className="hbadges-overlay" onClick={onClose}>
-      <div
-        className="hbadges-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-label={t('badges.hive.dialogLabel', { username })}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <ModalHeader closeOnEscape={false} title={t('badges.hive.title')} onClose={onClose} />
-        <p className="hbadges-sub">
-          {arranging
-            ? t('badges.hive.arrangeHint')
-            : t('badges.hive.earnedCount', { count: badges.length, username })}
-        </p>
+  const footer = canArrange ? (
+    arranging ? (
+      <>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            setDraft(badges.filter((b) => !isThreeSpeakBadge(b)));
+            setArranging(false);
+          }}
+          disabled={saving}
+        >
+          {t('common.actions.cancel')}
+        </Button>
+        <Button variant="primary" onClick={save} disabled={saving} loading={saving}>
+          {saving ? t('common.actions.saving') : t('badges.hive.saveOrder')}
+        </Button>
+      </>
+    ) : (
+      <Button variant="secondary" icon="drag_indicator" onClick={() => setArranging(true)}>
+        {t('badges.hive.arrange')}
+      </Button>
+    )
+  ) : null;
 
-        <div className="hbadges-list">
-          {/* Pinned block renders in both modes, so the order on screen always
-              matches the order on the profile. */}
-          {pinned.map((badge) => (
-            arranging ? (
-              <div key={badge.account} className="hbadges-row hbadges-row--pinned">
-                <span className="hbadges-grip hbadges-grip--locked" title={t('badges.hive.alwaysFirst')}>
-                  <MdLock size={13} />
-                </span>
-                <BadgeRowBody badge={badge} />
-              </div>
-            ) : (
-              <Link
-                key={badge.account}
-                className="hbadges-row"
-                to={badge.url}
-                onClick={onClose}
-              >
-                <BadgeRowBody badge={badge} />
-              </Link>
-            )
-          ))}
-
-          {arranging ? (
-            <DndContext
-              sensors={sensors}
-              collisionDetection={pointerWithin}
-              onDragStart={(e) => setActiveId(e.active.id)}
-              onDragCancel={() => setActiveId(null)}
-              onDragEnd={({ active: a, over }) => {
-                setActiveId(null);
-                if (!over || over.id === a.id) return;
-                setDraft((list) => moveBadge(list, a.id, String(over.id)));
-              }}
-            >
-              {rows.map((badge) => <MovableRow key={badge.account} badge={badge} />)}
-              <DragOverlay dropAnimation={null}>
-                {active ? (
-                  <div className="hbadges-row hbadges-row--overlay">
-                    <BadgeRowBody badge={active} />
-                  </div>
-                ) : null}
-              </DragOverlay>
-            </DndContext>
-          ) : (
-            rows.map((badge) => (
-              <Link
-                key={badge.account}
-                className="hbadges-row"
-                to={badge.url}
-                onClick={onClose}
-              >
-                <BadgeRowBody badge={badge} />
-              </Link>
-            ))
-          )}
-        </div>
-
-        {canArrange && (
-          <div className="hbadges-actions">
-            {arranging ? (
-              <>
-                <button
-                  type="button"
-                  className="hbadges-btn"
-                  onClick={() => {
-                    setDraft(badges.filter((b) => !isThreeSpeakBadge(b)));
-                    setArranging(false);
-                  }}
-                  disabled={saving}
-                >
-                  {t('common.actions.cancel')}
-                </button>
-                <button type="button" className="hbadges-btn hbadges-btn--primary" onClick={save} disabled={saving}>
-                  {saving ? t('common.actions.saving') : t('badges.hive.saveOrder')}
-                </button>
-              </>
-            ) : (
-              <button type="button" className="hbadges-btn" onClick={() => setArranging(true)}>
-                <RxDragHandleDots2 size={15} /> {t('badges.hive.arrange')}
-              </button>
-            )}
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title={t('badges.hive.title')}
+      sub={arranging
+        ? t('badges.hive.arrangeHint')
+        : t('badges.hive.earnedCount', { count: badges.length, username })}
+      footer={footer}
+      width={460}
+      closeLabel={t('common.actions.close')}
+      className="hbadges-modal"
+      bodyClassName="hbadges-list"
+    >
+      {/* Pinned block renders in both modes, so the order on screen always
+          matches the order on the profile. */}
+      {pinned.map((badge) => (
+        arranging ? (
+          <div key={badge.account} className="hbadges-row hbadges-row--pinned">
+            <span className="hbadges-grip hbadges-grip--locked" title={t('badges.hive.alwaysFirst')}>
+              <Icon name="push_pin" size={18} fill />
+            </span>
+            <BadgeRowBody badge={badge} />
+            <span className="hbadges-row-note">{t('badges.hive.alwaysFirst')}</span>
           </div>
-        )}
-      </div>
-    </div>,
-    document.body,
+        ) : (
+          <Link
+            key={badge.account}
+            className="hbadges-row"
+            to={badge.url}
+            onClick={onClose}
+          >
+            <BadgeRowBody badge={badge} />
+          </Link>
+        )
+      ))}
+
+      {arranging ? (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={pointerWithin}
+          onDragStart={(e) => setActiveId(e.active.id)}
+          onDragCancel={() => setActiveId(null)}
+          onDragEnd={({ active: a, over }) => {
+            setActiveId(null);
+            if (!over || over.id === a.id) return;
+            setDraft((list) => moveBadge(list, a.id, String(over.id)));
+          }}
+        >
+          {rows.map((badge) => <MovableRow key={badge.account} badge={badge} />)}
+          <DragOverlay dropAnimation={null}>
+            {active ? (
+              <div className="hbadges-row hbadges-row--overlay">
+                <span className="hbadges-grip"><Icon name="drag_indicator" size={18} /></span>
+                <BadgeRowBody badge={active} />
+              </div>
+            ) : null}
+          </DragOverlay>
+        </DndContext>
+      ) : (
+        rows.map((badge) => (
+          <Link
+            key={badge.account}
+            className="hbadges-row"
+            to={badge.url}
+            onClick={onClose}
+          >
+            <BadgeRowBody badge={badge} />
+          </Link>
+        ))
+      )}
+    </Dialog>
   );
 }
 
@@ -337,7 +322,7 @@ function HiveBadges({ username, canArrange = false }) {
           onClick={() => setAwarding(true)}
           title={t('badges.hive.awardTitle', { username })}
         >
-          <MdAdd className="hive-badge-award-icon" aria-hidden="true" />
+          <Icon name="add" size={16} className="hive-badge-award-icon" />
           <span className="hive-badge-name">{t('badges.award.award')}</span>
         </button>
       )}

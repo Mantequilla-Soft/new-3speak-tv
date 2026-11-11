@@ -300,6 +300,8 @@
     box-shadow: none;
   }
   .hh-cd-steps__label { font-size: 13px; font-weight: 700; color: var(--muted); }
+  .hh-cd-steps__caption { margin-top: 8px; text-align: left; font-size: 13px; font-weight: 700; color: var(--text); }
+  @include v2.mobile { .hh-cd-steps__step { padding: 0 4px; } }
   .hh-cd-steps__step.is-done { border-color: transparent;
     .hh-cd-steps__ring { background: var(--cyan); color: var(--bg); @include glyph("check", 18px); }
     .hh-cd-steps__label { color: var(--text); } }
@@ -307,7 +309,7 @@
     .hh-cd-steps__ring { background: var(--accent); color: var(--on-accent); border: 0; box-shadow: none; }
     .hh-cd-steps__label { color: var(--text); font-weight: 700; } }
 
-  .hh-cd__actions--steps .hh-btn { min-width: 120px; min-height: 48px; border-radius: var(--r-lg); font-size: 14px; }
+  .hh-cd__actions--steps .hh-btn { min-width: 120px; min-height: 48px; border-radius: var(--r-lg); font-size: 14px; justify-content: flex-start; padding: 0 16px; }
   .hh-cd__actions--bottom { padding-top: 16px; border-top: 1px solid var(--border); }
   .hh-cd__next.hh-btn--primary,
   .hh-cd__submit.hh-btn--primary {

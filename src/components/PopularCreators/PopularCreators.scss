@@ -1,107 +1,95 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// "Popular creators" — a standalone horizontal row of creator cards on Discover.
+// "Popular creators" on Discover (21b "Top creators"): a heading with a cyan bar,
+// then one row of creator cards that scrolls sideways rather than wrapping.
 .popular-creators {
-  margin: 8px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 24px;
+  min-width: 0;
 
-  .pc-title {
-    margin: 0 0 10px;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text-primary);
+  .pc-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
+  .pc-bar { width: 4px; height: 22px; border-radius: var(--r-bar); background: var(--cyan); flex: none; }
+  .pc-title { flex: 1; margin: 0; @include v2.text(title); font-size: 20px; color: var(--text); }
 
-  // Scrolls sideways rather than wrapping, so the row stays one line tall.
   .pc-row {
     display: flex;
     gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: none;
-    &::-webkit-scrollbar { display: none; }
+    @include v2.scroll-x;
+    @include v2.mobile { gap: 8px; }
   }
 
   .pc-card {
     flex: 0 0 auto;
-    width: 132px;
+    width: 232px;
+    min-width: 0;
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    border-radius: var(--r-2xl);
+    border: 1px solid var(--border);
+    background: var(--surface);
+
+    @include v2.mobile { width: 200px; }
+  }
+
+  .pc-who {
+    display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 14px 10px 12px;
-    border-radius: 12px;
-    border: 1px solid var(--border-light);
-    background: var(--card-bg);
-    text-align: center;
-    transition: border-color 0.15s ease;
+    gap: 10px;
+    min-width: 0;
+  }
 
-    &:hover { border-color: var(--border-color); }
-
-    @include mix.respond(phone) {
-      width: 120px;
-      padding: 12px 8px 10px;
-    }
+  .pc-rank {
+    width: 28px;
+    height: 28px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    @include v2.mono(12, 900);
+    color: var(--text);
+    &.is-top { background: var(--accent-tint-strong); color: var(--accent); }
   }
 
   .pc-avatar {
-    display: block;
-    width: 56px;
-    height: 56px;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-md);
+    background: var(--avatar);
     line-height: 0;
+    .hive-avatar { width: 100%; height: 100%; display: block; }
+    img { width: 40px; height: 40px; border-radius: var(--r-md); object-fit: cover; }
+  }
 
-    img {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
+  .pc-who-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
   }
 
   .pc-name {
-    max-width: 100%;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
+    @include v2.text(body-sm);
+    font-weight: 700;
+    color: var(--text);
     text-decoration: none;
-    // Long Hive names must not stretch the card.
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
-    &:hover { color: var(--accent-primary); }
+    &:hover { color: var(--text); text-decoration: underline; }
   }
 
-  // Reserves its line even while the count is still loading, so cards don't jump.
-  .pc-followers {
-    min-height: 15px;
-    font-size: 11.5px;
-    color: var(--text-secondary);
-  }
+  .pc-followers { font-size: 11px; color: var(--muted); white-space: nowrap; }
 
-  // Neutral outline: a row of these read as a wall of red.
-  .pc-follow {
-    width: 100%;
-    margin-top: 2px;
-    padding: 6px 0;
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    background: transparent;
-    color: var(--text-primary);
-    font-size: 12.5px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-
-    &:hover:not(:disabled) { background: var(--bg-hover); }
-
-    // Already following: settled state, no longer the call to action.
-    &.followed {
-      border-color: transparent;
-      background: var(--bg-secondary);
-      color: var(--text-secondary);
-      cursor: default;
-    }
-
-    &:disabled:not(.followed) { opacity: 0.6; cursor: default; }
-  }
+  .pc-follow.is-block { justify-content: space-between; }
+  .pc-follow.followed { color: var(--muted); opacity: 1; }
 }

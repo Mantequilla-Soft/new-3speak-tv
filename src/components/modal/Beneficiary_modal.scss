@@ -1,255 +1,195 @@
-@use "../../mixins.scss" as mix;
-.bene-content-wrap {
-  .list-top-wrap {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid var(--border-light, grey);
-    justify-content: space-around;
-    padding-bottom: 3px;
-    font-size: 14px;
-    margin-top: 8px;
-    font-weight: 500;
-  }
-  .user-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--bg-tertiary, #eaecf4);
-    border: 1px solid var(--border-light, #d1d3e2);
-    padding: 10px 6px;
-    border-radius: 6px;
-    color: var(--text-primary, #000);
+@use "../../styles/v2" as v2;
+
+// Beneficiaries / share rewards (design 17e) on the v2 dialog (DialogShell):
+// what stays with you and the split as one bar, the collaborators as filled
+// rows, the add row (account, percent, add), then the platform defaults.
+.bene-dialog {
+  .bene-text {
+    margin: 0;
+    @include v2.text(body-sm);
+    color: var(--muted);
   }
 
-  .reward-main {
+  .bene-content-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  // You: account and the share that stays with you (money-like: mono, accent).
+  .bene-split {
+    @include v2.well;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .user-wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .bene-split__who { @include v2.text(label); }
+
+  .bene-split__pct {
+    @include v2.mono(28, 900);
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .bene-split__bar {
+    display: flex;
+    gap: 2px;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--surface-2);
+
+    span { flex-basis: 0; min-width: 2px; }
+    .is-you { background: var(--accent); }
+    .is-bene { background: var(--cyan); }
+    .is-locked { background: var(--muted); }
+  }
+
+  .beneficiary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 220px;
+    @include v2.scroll-y;
+  }
+
+  .bene-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 35px;
-    margin-top: 5px;
-    @include mix.respond(phone) {
-      gap: 3px;
-      height: 30px;
+    gap: 10px;
+    min-height: 48px;
+    padding: 6px 6px 6px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+
+    .bene-row__dot {
+      width: 6px;
+      height: 28px;
+      border-radius: 3px;
+      background: var(--cyan);
+      flex: none;
     }
-    .wrap {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      margin-top: 7px;
-      height: 100%;
-      padding: 0px 4px;
-      background-color: var(--bg-tertiary, #eaecf4);
-      border: 1px solid var(--border-light, #d1d3e2);
-      border-radius: 6px;
-      color: var(--text-primary, #000);
-      input {
-        width: 200px;
-        height: 100%;
-        border: none;
-        outline: none;
-        background-color: var(--bg-tertiary, #eaecf4);
-        color: var(--text-primary, #000);
-        padding: 1px 4px;
-        @include mix.respond(phone) {
-          width: 150px;
-          font-size: 16px;
-        }
-      }
+
+    &.is-locked .bene-row__dot { background: var(--muted); }
+
+    .bene-row__who {
+      flex: 1;
+      min-width: 0;
+      @include v2.text(label);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .num-wrap {
+
+    .bene-row__pct { @include v2.mono(14, 900); padding-right: 4px; }
+
+    .bene-row__locked {
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-top: 7px;
-      height: 100%;
-      label {
-        font-size: 14px;
-        color: var(--text-primary, #000);
-      }
-      input {
-        width: 62px; // fits 3 digits (e.g. 100) plus the number spinner
-        height: 100%;
-        border: none;
-        outline: none;
-        padding: 1px 4px;
-        border-radius: 6px;
-        -webkit-appearance: none;
-        -moz-appearance: textfield;
-        appearance: none;
-        background-color: var(--bg-tertiary, #eaecf4);
-        border: 1px solid var(--border-light, #d1d3e2);
-        color: var(--text-primary, #000);
-        @include mix.respond(phone) {
-          width: 54px;
-          font-size: 16px;
-        }
-      }
-      button {
-        padding: 10px 20px;
-        border-radius: 6px;
-        border: 1px solid var(--accent-primary, #e53935);
-        background-color: transparent;
-        color: var(--accent-primary, #e53935);
-        height: 100%;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        @include mix.respond(phone) {
-          padding: 10px 15px;
-        }
-      }
-    }
-  }
-  .beneficiary-list {
-    margin-top: 10px;
-    .wrap {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: var(--bg-tertiary, #eaecf4);
-      border-bottom: 1px solid var(--border-light, #e0e0e0);
-      padding: 10px 6px;
-      border-radius: 7px;
-      margin-bottom: 5px;
-      color: var(--text-primary, #000);
+      @include v2.text(meta);
+      color: var(--muted);
 
-      span {
-        font-size: 14px;
-      }
-      input {
-        background-color: var(--bg-secondary, #fff);
-        border: 1px solid var(--border-light, #d1d3e2);
-        border-radius: 4px;
-        color: var(--text-primary, #000);
-      }
-      .delete-icon {
-        color: #e74a3b;
-        font-size: 20px;
-        cursor: pointer;
-        transition: transform 0.2s ease;
-
-        &:hover {
-          transform: scale(1.2);
-        }
-      }
+      input { width: 64px; text-align: center; background: var(--surface); }
     }
   }
 
-  .last-btn-wrap {
+  // Add a collaborator: account field, percent field, add button.
+  .reward-main {
     display: flex;
-    justify-content: center;
-    align-self: center;
-    margin-top: 13px;
-    gap: 7px;
-    button {
-      padding: 8px 20px;
-      border-radius: 6px;
-      border: 1px solid var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      background-color: transparent;
-      cursor: pointer;
-
-      &:hover {
-        opacity: 0.9;
-      }
-    }
+    align-items: center;
+    gap: 6px;
   }
-  .default-bene-wrap {
-    margin-top: 10px;
-    border: 1px solid var(--border-light, rgba(128, 128, 128, 0.308));
-    background-color: var(--bg-tertiary, #f5f5f5);
-    border-radius: 4px;
-    padding: 5px;
-    color: var(--text-primary, #000);
-    p {
+
+  .bene-add__user,
+  .bene-add__pct {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 40px;
+    padding: 0 10px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--muted);
+
+    &:focus-within { border-color: var(--accent); }
+
+    input {
+      min-width: 0;
+      height: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
       font-size: 14px;
-      font-weight: 600;
-    }
-    .wrap {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 13.35px;
-      gap: 4px;
+      outline: none;
+
+      &::placeholder { color: var(--muted); }
     }
   }
-}
-.bene-text {
-  text-align: center;
-  font-size: 14.25px;
-  color: var(--text-secondary, #5a5a5a);
-  font-weight: 400;
-  margin: 10px 0px;
-  @include mix.respond(phone) {
-    font-size: 12.25px;
-    margin: 6px 0px;
+
+  .bene-add__user { flex: 1; min-width: 0; input { flex: 1; } }
+  .bene-add__pct { width: 88px; flex: none; input { width: 100%; font-family: var(--font-mono); } }
+
+  .bene-hint {
+    margin: -4px 0 0;
+    @include v2.text(meta-sm);
+    color: var(--accent);
+
+    strong { font-weight: 700; }
+  }
+
+  .bene-error {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    @include v2.text(meta);
+    color: var(--accent);
+  }
+
+  // A row typed but never added with the button, plus the live "does this Hive
+  // account exist?" result. Hidden while the row is empty.
+  .bene-pending {
+    padding: 8px 12px;
+    border-radius: var(--r-md);
+    background: var(--cyan-wash);
+    @include v2.text(meta);
+    color: var(--muted);
+
+    strong { font-weight: 700; color: var(--text); }
+
+    &--bad { background: var(--accent-wash); color: var(--accent); strong { color: var(--accent); } }
+  }
+
+  .default-bene-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .bene-default {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    @include v2.text(meta);
+    color: var(--muted);
   }
 }
+
+// Kept global: other forms on the same pages use the plain error line.
 .error {
-  color: red;
+  color: var(--accent);
   font-size: 12px;
-  animation: shake 0.1s ease-in-out;
-}
-
-.input-tooltip-wrap {
-  position: relative;
-  height: 100%;
-
-  .tooltip {
-    position: absolute;
-    left: 0;
-    background: #ff4d4f;
-    color: white;
-    padding: 5px 8px;
-    border-radius: 5px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 20;
-    animation: fadeIn 0.2s ease-in-out;
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 10px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #ff4d4f transparent transparent transparent;
-    }
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(3px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// Warning for a row that was typed but never committed with "+", plus the
-// live "does this Hive account exist?" result. Hidden while the row is empty.
-.bene-pending {
-  margin: 8px 0 0;
-  padding: 7px 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(224, 168, 82, 0.45);
-  background: rgba(224, 168, 82, 0.10);
-  color: #e0a852;
-  font-size: 12.5px;
-  line-height: 1.45;
-
-  strong { font-weight: 700; }
-
-  &--bad {
-    border-color: rgba(224, 82, 82, 0.5);
-    background: rgba(224, 82, 82, 0.10);
-    color: #e05252;
-  }
 }

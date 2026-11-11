@@ -55,7 +55,7 @@ export default function ChatButton() {
       onClick={onClick}
       {...(canPeek || peek.rendered ? peek.hoverProps : {})}
     >
-      <MessageCircle size={21} />
+      <Icon name="chat_bubble" size={22} fill={isOpen || peek.shown} />
       {ready && <UnreadDot />}
     </button>
   )

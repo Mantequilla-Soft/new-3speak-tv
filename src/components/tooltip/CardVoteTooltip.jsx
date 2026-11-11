@@ -1,17 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import './UpvoteTooltip.scss';
 import { useAppStore } from '../../lib/store';
-import { IoChevronUpCircleOutline } from 'react-icons/io5';
-import { ChevronUp } from 'lucide-react';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import DialogShell from '../modal/DialogShell';
+import VoteWeightPanel from './VoteWeightPanel';
 import { estimate, getUersContent, getVotePower } from '../../utils/hiveUtils';
-import { TailChase } from 'ldrs/react';
-import 'ldrs/react/TailChase.css';
 import { toastIn } from '../../utils/toast';
-import { Orbit } from 'ldrs/react';
-import 'ldrs/react/Orbit.css';
 import { voteWithAioha, isLoggedIn } from '../../hive-api/aioha';
 
 // Every toast from this module is headed "Vote"; the message becomes the
@@ -155,82 +149,41 @@ const CardVoteTooltip = ({
     }
   };
 
-  // Mobile: render as portal bottom sheet
+  const panel = (
+    <VoteWeightPanel
+      weight={weight}
+      setWeight={setWeight}
+      voteValue={voteValue}
+      isCalculating={isCalculating}
+      isLoading={isLoading}
+      onVote={handleVote}
+    />
+  );
+
+  // Mobile: the v2 bottom sheet (design 17b)
   if (showTooltip && isMobile()) {
-    return createPortal(
-      <div className="vote-popup-overlay" onMouseDown={() => setShowTooltip(false)}>
-        <div
-          className="vote-popup"
-          onClick={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-        >
-          <ModalHeader
-            className="vote-popup-header"
-            title={t('engagement.vote.weight', { weight })}
-            onClose={isLoading ? undefined : () => setShowTooltip(false)}
-          />
-
-          <input
-            type="range"
-            min="1"
-            max="100"
-            value={weight}
-            onChange={(e) => setWeight(Number(e.target.value))}
-            disabled={isLoading}
-            style={{ width: '100%' }}
-          />
-
-          <p className="vote-popup-value">
-            {isCalculating ? <Orbit size="24" speed="1.5" color="red" /> : `$${voteValue}`}
-          </p>
-
-          <button className="vote-popup-submit" onClick={handleVote} disabled={isLoading}>
-            {isLoading ? (
-              <TailChase size="18" speed="1.5" color="white" />
-            ) : (
-              <><ChevronUp size={20} /> {t('engagement.vote.vote')}</>
-            )}
-          </button>
-        </div>
-      </div>,
-      document.body
+    return (
+      <DialogShell
+        onClose={() => setShowTooltip(false)}
+        busy={isLoading}
+        title={t('engagement.vote.vote')}
+        width={420}
+        zIndex={1100}
+        isolate
+        overlayClassName="vote-popup-overlay"
+        className="vote-popup"
+      >
+        {panel}
+      </DialogShell>
     );
   }
 
-  // Desktop: inline tooltip
+  // Desktop: a floating v2 card over the vote button
   return (
     <div className="upvote-tooltip-wrap" ref={tooltipRef} onClick={(e) => e.preventDefault()}>
       {showTooltip && (
-        <div className={`tooltip-box cap ${tooltipVariant}`}>
-          <p>{t('engagement.vote.weight', { weight })}</p>
-          <div className="wrap">
-            {isLoading ? (
-              <div className='wrap-circle'>
-                <TailChase className="loader-circle" size="15" speed="1.5" color="red" />
-              </div>
-            ) : (
-              <IoChevronUpCircleOutline
-                size={30}
-                onClick={handleVote}
-                style={{ cursor: 'pointer' }}
-              />
-            )}
-            <input
-              type="range"
-              min="1"
-              max="100"
-              value={weight}
-              onChange={(e) => setWeight(Number(e.target.value))}
-              disabled={isLoading}
-            />
-            <p>
-              {isCalculating ? (
-                <Orbit size="30" speed="1.5" color="red" />
-              ) : (
-                `$${voteValue}`
-              )}
-            </p>
-          </div>
+        <div className={`tooltip-box cap ${tooltipVariant}`} role="dialog" aria-label={t('engagement.vote.weight', { weight })}>
+          {panel}
         </div>
       )}
     </div>

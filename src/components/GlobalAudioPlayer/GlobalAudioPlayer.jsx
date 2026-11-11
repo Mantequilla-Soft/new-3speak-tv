@@ -4,16 +4,6 @@ import { createPortal } from 'react-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious,
-  MdQueueMusic, MdPlaylistPlay, MdClose, MdDragIndicator, MdDelete,
-  MdSubtitles, MdShare, MdContentCopy, MdOpenInNew, MdCode,
-  MdKeyboardArrowUp, MdKeyboardArrowDown,
-  MdVolumeUp, MdVolumeOff,
-  MdBedtime, MdGraphicEq, MdCast, MdAirplay, MdDownload, MdDownloadDone,
-  MdListAlt, MdCheck, MdLink, MdChatBubbleOutline,
-} from 'react-icons/md';
-import { TbRewindBackward15, TbRewindForward15, TbPictureInPicture } from 'react-icons/tb';
 import { useAppStore } from '../../lib/store';
 import { persistAudioPosition } from '../../lib/slices/createAudioPlayerSlice';
 import { CHECKER_URL, LISTEN_BEAT_KEY } from '../../utils/config';
@@ -24,10 +14,12 @@ import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import AddToPlaylistModal from '../AddToPlaylistModal/AddToPlaylistModal';
 import TipModal from '../tip-reward/TipModal';
-import { BiDollar } from 'react-icons/bi';
 import BlogContent from '../playVideo/BlogContent';
 import Waveform from './Waveform';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import ReportModal from '../modal/ReportModal';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
+import { Button, IconButton, Segmented, DockTile, Progress } from '../v2/ui';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import PodcastTipModal from '../Podcasts/PodcastTipModal';
 import { canTipEpisode } from '../../lib/podcastTips';
@@ -43,8 +35,8 @@ import { toastIn } from '../../utils/toast';
 import useReblog from '../../hooks/useReblog';
 import AudioCommentPanel from './AudioCommentPanel';
 import AudioHypeButton from './AudioHypeButton';
+import useAudioComments from './useAudioComments';
 import { recordWatch } from '../../utils/watchHistory';
-import { Repeat2 } from 'lucide-react';
 import {
   fmt, SPEEDS, SPEED_KEY, normalizeSpeed, formatSpeed, SKIP_BACK, SKIP_FORWARD, skipTarget,
   SLEEP_OPTIONS, startSleepTimer, sleepRemainingMs, sleepFadeFactor,
@@ -71,8 +63,6 @@ const TRANSCRIPT_ON_KEY = '3speak-audio-transcript';
 const TRANSCRIPT_LANG_KEY = '3speak-audio-transcript-lang';
 // Voice boost and skip silence, as last chosen: { boost, skip }.
 const EFFECTS_KEY = '3speak-audio-effects';
-// How long the opened area takes to slide open or shut (.audio-np-expand-wrap).
-const EXPAND_MS = 260;
 
 const toast = toastIn('Podcasts');
 
@@ -152,6 +142,12 @@ function audioThumb(item) {
   return fixed;
 }
 
+// The big cover of the full player: the larger size of an outside show's art.
+function heroArt(item) {
+  if (item?.external) return item.art ? artUrl(item.art, 512) : PODCAST_PLACEHOLDER;
+  return audioThumb(item);
+}
+
 // The cover the phone's media notification and lock screen show (Media
 // Session): larger than the player's own thumbnail, and absolute so the system
 // can fetch it.
@@ -183,6 +179,31 @@ function parseSRT(srt) {
 function srtT(t) {
   const m = t.match(/(\d+):(\d+):(\d+)[,.](\d+)/);
   return m ? +m[1] * 3600 + +m[2] * 60 + +m[3] + +m[4] / 1000 : 0;
+}
+
+// A small tool button of the full player (speed, sleep timer, effects, cast,
+// offline copy): an icon, and a short value when there is one.
+function ToolChip({ icon, text, className, ...rest }) {
+  return (
+    <button type="button" {...rest} className={cx('gap-chip', className)}>
+      {icon && <Icon name={icon} size={18} />}
+      {text != null && <span>{text}</span>}
+    </button>
+  );
+}
+
+// A row of the Player menu (design 27b): icon well, label, chevron.
+function PmRow({ icon, label, sub, onClick, danger, disabled }) {
+  return (
+    <button type="button" className={cx('audio-pm-row', danger && 'is-danger')} onClick={onClick} disabled={disabled}>
+      <span className="audio-pm-row__icon"><Icon name={icon} size={20} /></span>
+      <span className="audio-pm-row__text">
+        <b>{label}</b>
+        {sub && <small>{sub}</small>}
+      </span>
+      <Icon name="chevron_right" size={20} className="audio-pm-row__go" />
+    </button>
+  );
 }
 
 function GlobalAudioPlayer() {
@@ -297,6 +318,7 @@ function GlobalAudioPlayer() {
   const [npIsVoted, setNpIsVoted] = useState(false);
   const [npVoteCount, setNpVoteCount] = useState(0);
   const [npPayout, setNpPayout] = useState(0);
+  const [npComments, setNpComments] = useState(0);
   const [npBody, setNpBody] = useState('');
   const [npTags, setNpTags] = useState([]);
   const [npMantecurated, setNpMantecurated] = useState(false);
@@ -946,7 +968,7 @@ function GlobalAudioPlayer() {
   // Fetch Hive post enrichment
   useEffect(() => {
     if (!audioCurrent?.post_permlink) {
-      setNpIsVoted(false); setNpVoteCount(0); setNpPayout(0);
+      setNpIsVoted(false); setNpVoteCount(0); setNpPayout(0); setNpComments(0);
       setNpBody(''); setNpTags([]); setNpMantecurated(false);
       return;
     }
@@ -954,6 +976,7 @@ function GlobalAudioPlayer() {
     getUersContent(audioCurrent.owner, audioCurrent.post_permlink).then(data => {
       if (cancelled || !data) return;
       setNpVoteCount(data.active_votes?.length || 0);
+      setNpComments(Number(data.children) || 0);
       setNpIsVoted(data.active_votes?.some(v => v.voter === user) || false);
       const payout = parseFloat(data.pending_payout_value || 0) > 0
         ? parseFloat(data.pending_payout_value)
@@ -1221,7 +1244,7 @@ function GlobalAudioPlayer() {
       window.removeEventListener('resize', update);
       root.style.removeProperty('--audio-np-clearance');
     };
-  }, [hasNowPlaying, docked, inPip]);
+  }, [hasNowPlaying, docked, inPip, audioExpanded]);
 
   // Same for the open queue, which on desktop sits above the player: its top
   // edge goes into --audio-queue-clearance so the Feedback FAB clears it too
@@ -1253,22 +1276,43 @@ function GlobalAudioPlayer() {
     };
   }, [audioShowQueue, hasNowPlaying, docked]);
 
-  // The opened area slides open and shut: it mounts closed and opens on the
-  // next frame, and stays mounted while it closes (EXPAND_MS, as in the SCSS).
+  // The full player: the overlay over the page (expanded), the phone's Player
+  // tab (docked) or the pop-out window. Otherwise the bar.
   const showExpanded = audioExpanded || docked;
-  const [areaMounted, setAreaMounted] = useState(showExpanded);
-  const [areaOpen, setAreaOpen] = useState(showExpanded);
+  const overlay = showExpanded && !docked;
+
+  // The full player's side panel: Queue, Comments, Chapters, Transcript or
+  // Description (design 27a). `null` picks one from what the track has.
+  const [sideTab, setSideTab] = useState(null);
+  const [commentScope, setCommentScope] = useState(null);
+  const [commentsRefresh, setCommentsRefresh] = useState(0);
+  const comments = useAudioComments(audioCurrent?.owner, audioCurrent?.post_permlink, showExpanded && !!audioCurrent?.post_permlink, commentsRefresh);
+  const [reportOpen, setReportOpen] = useState(false);
+
+  // The overlay takes the focus when it opens, and gives it back to the bar's
+  // open button when it closes; the page under it doesn't scroll meanwhile.
+  const fullRef = useRef(null);
+  const expandBtnRef = useRef(null);
+  const wasOverlay = useRef(false);
   useEffect(() => {
-    if (showExpanded) {
-      setAreaMounted(true);
-      let inner = 0;
-      const outer = requestAnimationFrame(() => { inner = requestAnimationFrame(() => setAreaOpen(true)); });
-      return () => { cancelAnimationFrame(outer); cancelAnimationFrame(inner); };
+    if (overlay && audioCurrent) {
+      wasOverlay.current = true;
+      fullRef.current?.focus({ preventScroll: true });
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = prev; };
     }
-    setAreaOpen(false);
-    const id = setTimeout(() => setAreaMounted(false), EXPAND_MS);
-    return () => clearTimeout(id);
-  }, [showExpanded]);
+    if (wasOverlay.current) {
+      wasOverlay.current = false;
+      expandBtnRef.current?.focus({ preventScroll: true });
+    }
+    return undefined;
+  }, [overlay, audioCurrent]);
+
+  // The queue window takes the focus too, so Escape and Tab start in it.
+  useEffect(() => {
+    if (audioShowQueue && !docked) queuePanelRef.current?.focus({ preventScroll: true });
+  }, [audioShowQueue, docked]);
 
   const audioEl = (
     <audio
@@ -1282,42 +1326,60 @@ function GlobalAudioPlayer() {
     />
   );
 
-  // The queue's list: in the queue window, and unfolded on the Player tab.
+  const titleOf = (item) => item?.title || t('audio.untitled');
+  const bylineOf = (item) => (item?.external ? item.show : `@${item?.owner}`);
+  const thumbFallback = (item) => (e) => { e.currentTarget.src = item?.external ? PODCAST_PLACEHOLDER : fallbackImg; };
+
+  // The queue's list: in the queue window, and in the full player's Queue panel.
   const queueList = audioQueue.length === 0 ? (
-              <p className="audio-queue-empty">{t('audio.player.queueEmpty')}</p>
-            ) : (
-              <ul className="audio-queue-list">{audioQueue.map((item, idx) => (
-                <li key={item._id} className={`audio-queue-item${audioCurrent?._id === item._id ? ' current' : ''}`}>
-                  <span className="audio-queue-drag"><MdDragIndicator size={16} /></span>
-                  <img className="audio-queue-thumb" src={audioThumb(item)} alt="" onError={e => { e.currentTarget.src = item.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
-                  <div className="audio-queue-info" onClick={() => audioPlay(item)}>
-                    <span className="audio-queue-title">{item.title || t('audio.untitled')}</span>
-                    <span className="audio-queue-author">{item.external ? item.show : `@${item.owner}`} · {item.live ? t('audio.player.live') : fmt(item.duration)}</span>
-                  </div>
-                  <div className="audio-queue-actions">
-                    {idx > 0 && <button type="button" aria-label={t('audio.player.queueMoveUp', { title: item.title || t('audio.untitled') })} onClick={() => audioMoveInQueue(idx, idx - 1)}><span aria-hidden="true">↑</span></button>}
-                    {idx < audioQueue.length - 1 && <button type="button" aria-label={t('audio.player.queueMoveDown', { title: item.title || t('audio.untitled') })} onClick={() => audioMoveInQueue(idx, idx + 1)}><span aria-hidden="true">↓</span></button>}
-                    <button type="button" aria-label={t('audio.player.queueRemove', { title: item.title || t('audio.untitled') })} onClick={() => audioRemoveFromQueue(item._id)}><MdDelete size={16} aria-hidden="true" /></button>
-                  </div>
-                </li>
-              ))}</ul>
-            );
+    <p className="audio-queue-empty"><Icon name="queue_music" size={20} />{t('audio.player.queueEmpty')}</p>
+  ) : (
+    <ul className="audio-queue-list">{audioQueue.map((item, idx) => {
+      const current = audioCurrent?._id === item._id;
+      return (
+        <li key={item._id} className={cx('audio-queue-item', current && 'current')}>
+          <span className="audio-queue-drag" aria-hidden="true"><Icon name="drag_indicator" size={18} /></span>
+          <span className="audio-queue-thumb">
+            <img src={audioThumb(item)} alt="" loading="lazy" onError={thumbFallback(item)} />
+            {current && <span className="audio-queue-now" aria-hidden="true"><Icon name="graphic_eq" size={20} /></span>}
+          </span>
+          <div className="audio-queue-info" onClick={() => audioPlay(item)}>
+            <span className="audio-queue-title">{titleOf(item)}</span>
+            <span className="audio-queue-author">{bylineOf(item)}</span>
+          </div>
+          <span className="audio-queue-dur num">{item.live ? t('audio.player.live') : fmt(item.duration)}</span>
+          <div className="audio-queue-actions">
+            {idx > 0 && <button type="button" aria-label={t('audio.player.queueMoveUp', { title: titleOf(item) })} title={t('audio.player.queueMoveUp', { title: titleOf(item) })} onClick={() => audioMoveInQueue(idx, idx - 1)}><Icon name="arrow_upward" size={16} /></button>}
+            {idx < audioQueue.length - 1 && <button type="button" aria-label={t('audio.player.queueMoveDown', { title: titleOf(item) })} title={t('audio.player.queueMoveDown', { title: titleOf(item) })} onClick={() => audioMoveInQueue(idx, idx + 1)}><Icon name="arrow_downward" size={16} /></button>}
+            <button type="button" aria-label={t('audio.player.queueRemove', { title: titleOf(item) })} title={t('audio.player.queueRemove', { title: titleOf(item) })} onClick={() => audioRemoveFromQueue(item._id)}><Icon name="close" size={16} /></button>
+          </div>
+        </li>
+      );
+    })}</ul>
+  );
   const queueClear = audioQueue.length > 0 && (
-    <button className="audio-queue-clear" onClick={audioClearQueue} title={t('audio.player.clearQueue')}>
-      <MdDelete size={16} /> {t('audio.player.clearAll')}
-    </button>
+    <Button size={32} icon="delete_sweep" className="audio-queue-clear" onClick={audioClearQueue} title={t('audio.player.clearQueue')}>
+      {t('audio.player.clearAll')}
+    </Button>
   );
 
   const queueOverlay = audioShowQueue && !docked ? (
-        <div className="audio-queue-overlay" onClick={() => audioSetShowQueue(false)}>
-          <div ref={queuePanelRef} className="audio-queue-panel" onClick={e => e.stopPropagation()}>
-            <ModalHeader closeOnEscape={false} title={t('audio.player.queue')} onClose={() => audioSetShowQueue(false)}>
-              <span className="audio-queue-count">{audioQueue.length}</span>
-              {queueClear}
-            </ModalHeader>
-            {queueList}
-          </div>
+    <div
+      className="audio-queue-overlay"
+      onClick={() => audioSetShowQueue(false)}
+      onKeyDown={(e) => { if (e.key === 'Escape') { e.stopPropagation(); audioSetShowQueue(false); } }}
+    >
+      <div ref={queuePanelRef} className="audio-queue-panel" role="dialog" aria-label={t('audio.player.queue')} tabIndex={-1} onClick={e => e.stopPropagation()}>
+        <div className="audio-pm-grab" aria-hidden="true" />
+        <div className="audio-queue-head">
+          <h2 className="audio-pm-title is-accent">{t('audio.player.queue')}</h2>
+          <span className="audio-queue-count num">{audioQueue.length}</span>
+          {queueClear}
+          <IconButton icon="close" label={t('common.actions.close')} size={32} variant="ghost" round onClick={() => audioSetShowQueue(false)} />
         </div>
+        <div className="audio-queue-scroll">{queueList}</div>
+      </div>
+    </div>
   ) : null;
 
   // Every return has the same root (the provider) with {audioEl} first, so React
@@ -1334,23 +1396,21 @@ function GlobalAudioPlayer() {
     return (
       <PortalDocContext.Provider value={inPip ? hostDoc : null}>
         {audioEl}
-        <div ref={npRef} className="audio-now-playing audio-np-idle">
-          <div className="audio-np-content">
-            <div className="audio-np-art" onClick={() => audioSetShowQueue(true)}>
-              <img className="audio-np-thumb" src={audioThumb(next)} alt="" onError={e => { e.currentTarget.src = next.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
+        <div ref={npRef} className="audio-now-playing gap-bar audio-np-idle">
+          <div className="audio-np-content gap-bar__row">
+            <div className="audio-np-art gap-bar__art" onClick={() => audioSetShowQueue(true)}>
+              <img className="audio-np-thumb" src={audioThumb(next)} alt="" onError={thumbFallback(next)} />
             </div>
-            <div className="audio-np-info" onClick={() => audioSetShowQueue(true)}>
-              <span className="audio-np-title"><span className="audio-np-title-text">{next.title || t('audio.untitled')}</span></span>
+            <div className="audio-np-info gap-bar__info" onClick={() => audioSetShowQueue(true)}>
+              <span className="audio-np-title"><span className="audio-np-title-text">{titleOf(next)}</span></span>
               <span className="audio-np-subline"><span className="audio-np-author">{idleLabel}</span></span>
             </div>
-            <div className="audio-np-controls">
-              <button className="audio-np-play-btn" onClick={playIdle} aria-label={idleLabel} title={idleLabel}><MdPlayArrow size={26} /></button>
-            </div>
-            <button className="audio-np-queue-btn" onClick={() => audioSetShowQueue(v => !v)} title={t('audio.player.queue')} aria-label={t('audio.player.queue')}>
-              <MdQueueMusic size={20} />
-              <span className="audio-np-queue-badge">{audioQueue.length}</span>
+            <button type="button" className="audio-np-play-btn gap-play" onClick={playIdle} aria-label={idleLabel} title={idleLabel}><Icon name="play_arrow" size={28} fill /></button>
+            <button type="button" className="audio-np-queue-btn gap-tool" onClick={() => audioSetShowQueue(v => !v)} title={t('audio.player.queue')} aria-label={t('audio.player.queue')}>
+              <Icon name="queue_music" size={20} />
+              <span className="audio-np-queue-badge num">{audioQueue.length}</span>
             </button>
-            <button className="audio-np-close-btn" onClick={() => { audioClearQueue(); audioSetShowQueue(false); }} title={t('audio.player.clearQueue')} aria-label={t('audio.player.clearQueue')}><MdClose size={18} /></button>
+            <button type="button" className="audio-np-close-btn gap-tool is-ghost" onClick={() => { audioClearQueue(); audioSetShowQueue(false); }} title={t('audio.player.clearQueue')} aria-label={t('audio.player.clearQueue')}><Icon name="close" size={18} /></button>
           </div>
         </div>
         {queueOverlay}
@@ -1376,6 +1436,7 @@ function GlobalAudioPlayer() {
   const dlProgress = downloads?.progress?.[dlId];
   const dlSaved = !!(downloads?.items?.some(i => i.id === dlId) || isDownloaded(dlId));
   const dlBusy = !dlSaved && (dlStarting === dlId || Number.isFinite(dlProgress));
+  const dlPct = Math.round((dlProgress || 0) * 100);
   const startDownload = () => {
     if (dlSaved || dlBusy) return;
     const track = nowPlaying;
@@ -1408,27 +1469,81 @@ function GlobalAudioPlayer() {
   const canShare = !isLive && (nowPlaying.external || nowPlaying.permlink);
   const shareOpen = menu?.name === 'share';
 
-  const shareButton = (size) => canShare && (
+  // What the track offers.
+  const post = nowPlaying.post_permlink;
+  const canTip = !!(post && user !== nowPlaying.owner) || !!(nowPlaying.external && !post && canTipEpisode(nowPlaying));
+  const openTip = () => {
+    if (post && user !== nowPlaying.owner) setTipTarget({ author: nowPlaying.owner, permlink: post });
+    else setPodcastTip(nowPlaying);
+  };
+  const canSave = loggedIn && !nowPlaying.external;
+  const openPlaylist = () => setPlaylistTarget({ author: nowPlaying.owner, permlink: post || nowPlaying.permlink, title: nowPlaying.title, category: nowPlaying.category || '' });
+  const page = pageOf(nowPlaying);
+  const openPage = (e) => {
+    if (!page) return;
+    e?.stopPropagation();
+    navigate(page);
+    audioSetExpanded(false);
+  };
+  const goCreator = (e) => {
+    e?.stopPropagation();
+    navigate(nowPlaying.external ? podcastPath(nowPlaying.show_id) : `/@${nowPlaying.owner}?tab=audio`);
+    audioSetExpanded(false);
+  };
+  const openVote = () => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: post }); setShowVoteTooltip(!showVoteTooltip); };
+
+  const shareButton = canShare && (
     <button
-      className={`audio-np-share-btn${shareOpen ? ' active' : ''}`}
+      type="button"
+      className={cx('audio-np-share-btn gap-tool', shareOpen && 'is-on')}
       onClick={toggleMenu('share')}
       title={t('common.actions.share')}
       aria-label={t('common.actions.share')}
       aria-haspopup="dialog"
       aria-expanded={shareOpen}
-    ><MdShare size={size} /></button>
+    ><Icon name="ios_share" size={20} /></button>
   );
 
   const volumeButton = (extraClass = '') => (
     <button
-      className={`audio-np-btn audio-np-vol-btn ${extraClass}`.trim()}
+      type="button"
+      className={cx('audio-np-btn audio-np-vol-btn gap-tool', volOpen && 'is-on', extraClass)}
       onClick={openVol}
       onDoubleClick={() => setMuted(m => !m)}
       title={t('audio.player.volume')}
       aria-label={t('audio.player.volume')}
     >
-      {muted || volume === 0 ? <MdVolumeOff size={20} /> : <MdVolumeUp size={20} />}
+      <Icon name={muted || volume === 0 ? 'volume_off' : 'volume_up'} size={20} />
     </button>
+  );
+
+  const pipButton = (
+    <button
+      type="button"
+      className={cx('audio-np-pip-btn gap-tool', inPip && 'is-on')}
+      onClick={togglePip}
+      title={inPip ? t('audio.player.pipClose') : t('audio.player.pipOpen')}
+      aria-label={inPip ? t('audio.player.pipClose') : t('audio.player.pipOpen')}
+      aria-pressed={inPip}
+    ><Icon name="picture_in_picture_alt" size={20} /></button>
+  );
+
+  const closePlayer = () => {
+    const el = audioRef.current;
+    if (el) {
+      try { el.pause(); el.removeAttribute('src'); el.load(); } catch { /* already empty */ }
+    }
+    if (sleepRef.current) endSleep();
+    audioStop();
+  };
+  const closeButton = (
+    <button
+      type="button"
+      className="audio-np-close-btn gap-tool is-ghost"
+      onClick={closePlayer}
+      title={t('audio.player.closePlayer')}
+      aria-label={t('audio.player.closePlayer')}
+    ><Icon name="close" size={20} /></button>
   );
 
   // Opening the player on a phone's audio page goes to its Player tab instead of
@@ -1438,319 +1553,469 @@ function GlobalAudioPlayer() {
     else audioSetExpanded(v => !v);
   };
 
-  const timeOrLive = isLive
-    ? <span className="audio-np-live-badge">{t('audio.player.live')}</span>
-    : <span className="audio-np-time">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>;
-
-  return (
-    <PortalDocContext.Provider value={inPip ? hostDoc : null}>
-      {audioEl}
-
-      {/* Left in the page while the player is in its pop-out window. */}
-      {inPip && (
-        <div ref={npRef} className="audio-now-playing audio-np-idle audio-np-pip-stub">
-          <div className="audio-np-content">
-            <div className="audio-np-art" onClick={focusPip}>
-              <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.src = nowPlaying.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
-            </div>
-            <div className="audio-np-info" onClick={focusPip} title={t('audio.player.pipActive')}>
-              <span className="audio-np-title"><span className="audio-np-title-text">{nowPlaying.title || t('audio.untitled')}</span></span>
-              <span className="audio-np-subline"><span className="audio-np-author">{t('audio.player.pipActive')}</span></span>
-            </div>
-            <div className="audio-np-controls">
-              <button className="audio-np-play-btn" onClick={togglePlay} aria-label={audioIsPlaying ? t('common.actions.pause') : t('common.actions.play')}>{audioIsPlaying ? <MdPause size={26} /> : <MdPlayArrow size={26} />}</button>
-            </div>
-            <button className="audio-np-pip-btn active" onClick={togglePip} title={t('audio.player.pipClose')} aria-label={t('audio.player.pipClose')} aria-pressed="true"><TbPictureInPicture size={19} /></button>
-          </div>
-        </div>
+  const playLabel = audioIsPlaying ? t('common.actions.pause') : t('common.actions.play');
+  const transport = (big) => (
+    <>
+      <button type="button" className="audio-np-btn audio-np-track-btn gap-tbtn" onClick={playPrev} aria-label={t('audio.player.previous')} title={t('audio.player.previous')}><Icon name="skip_previous" size={big ? 26 : 24} fill /></button>
+      {!isLive && (
+        <button type="button" className="audio-np-btn audio-np-skip-btn gap-tbtn" onClick={() => skipBy(-SKIP_BACK)} aria-label={t('audio.player.skipBack', { seconds: SKIP_BACK })} title={t('audio.player.skipBack', { seconds: SKIP_BACK })}>
+          <Icon name="replay" size={big ? 26 : 22} />
+        </button>
       )}
+      <button type="button" className="audio-np-play-btn gap-play" onClick={togglePlay} aria-label={playLabel}><Icon name={audioIsPlaying ? 'pause' : 'play_arrow'} size={big ? 44 : 28} fill /></button>
+      {!isLive && (
+        <button type="button" className="audio-np-btn audio-np-skip-btn gap-tbtn" onClick={() => skipBy(SKIP_FORWARD)} aria-label={t('audio.player.skipForward', { seconds: SKIP_FORWARD })} title={t('audio.player.skipForward', { seconds: SKIP_FORWARD })}>
+          <Icon name="replay" size={big ? 26 : 22} className="gap-mirror" />
+        </button>
+      )}
+      <button type="button" className="audio-np-btn audio-np-track-btn gap-tbtn" onClick={playNext} aria-label={t('audio.player.next')} title={t('audio.player.next')}><Icon name="skip_next" size={big ? 26 : 24} fill /></button>
+    </>
+  );
 
-      {portalIfDocked(<div ref={inPip ? undefined : npRef} className={`audio-now-playing${showExpanded ? ' audio-np-expanded' : ''}${docked ? ' audio-np-docked' : ''}${inPip ? ' audio-np-in-pip' : ''}${isLive ? ' is-live' : ''}${commentTarget ? ' has-comment' : ''}`}>
-        {commentTarget && <AudioCommentPanel {...commentTarget} onClose={() => setCommentTarget(null)} />}
-        <div className={`audio-np-progress${isLive ? ' is-live' : ''}`} onClick={isLive ? undefined : handleSeek}>
-          {!isLive && <div className="audio-np-progress-fill" style={{ width: audioDuration ? `${(audioCurrentTime / audioDuration) * 100}%` : '0%' }} />}
-          {markers.map((f, i) => <span key={i} className="audio-np-progress-marker" style={{ left: `${f * 100}%` }} aria-hidden="true" />)}
+  // The seek bar where there is no waveform (outside episodes), with chapter ticks.
+  const progressBar = (
+    <div className={cx('audio-np-progress', isLive && 'is-live')} onClick={isLive ? undefined : handleSeek}>
+      {!isLive && <div className="audio-np-progress-fill" style={{ width: audioDuration ? `${(audioCurrentTime / audioDuration) * 100}%` : '0%' }} />}
+      {markers.map((f, i) => <span key={i} className="audio-np-progress-marker" style={{ left: `${f * 100}%` }} aria-hidden="true" />)}
+    </div>
+  );
+
+  const clipChip = audioClipEnd != null && (
+    <button
+      type="button"
+      className="audio-np-clip-chip"
+      onClick={(e) => { e.stopPropagation(); audioClearClip(); }}
+      title={t('audio.player.clipClear')}
+      aria-label={`${t('audio.player.clipEnds', { time: fmt(audioClipEnd) })}. ${t('audio.player.clipClear')}`}
+    >
+      <Icon name="content_cut" size={14} />
+      <span>{t('audio.player.clipEnds', { time: fmt(audioClipEnd) })}</span>
+      <Icon name="close" size={14} />
+    </button>
+  );
+
+  // The spot being heard, written out, with its disclosure and link.
+  const adStrip = audioAd.spot && (
+    <div className="audio-np-ad">
+      <TickerCrawl
+        message={audioAd.spot.message}
+        label={audioAd.spot.label}
+        account={audioAd.spot.account}
+        productName={audioAd.spot.productName}
+        clickUrl={audioAd.spot.clickUrl}
+        durationSeconds={audioAd.spot.durationSeconds}
+        paused={!audioAd.playing}
+        tickerStyle={audioAd.spot.style}
+        compact
+      />
+      {/* The link the spot's last sentence points at. Counted once per spot, server side. */}
+      {audioAd.spot.clickUrl && (
+        <a
+          className="audio-np-ad-more"
+          href={audioAd.spot.clickUrl}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          title={audioAd.spot.productName ? t('ads.ticker.openProduct', { name: audioAd.spot.productName }) : t('ads.ticker.openLink')}
+        >
+          {t('ads.ticker.findOutMore')} <Icon name="open_in_new" size={14} />
+        </a>
+      )}
+    </div>
+  );
+
+  const transcriptPanel = showSubtitles && (subtitleData?.subtitles || hasExtTranscript) && (
+    <div className="audio-transcript-panel">
+      <div className="audio-transcript-header">
+        <span className="audio-transcript-label v2-eyebrow"><Icon name="subtitles" size={14} /> {t('audio.player.transcript')}</span>
+        <div className="audio-transcript-langs">
+          {transcriptLangs.map(l => (
+            <button type="button" key={l} className={cx('audio-lang-btn', shownLang === l && 'active')} onClick={() => setSelectedLang(l)} aria-pressed={shownLang === l}>{l.toUpperCase()}</button>
+          ))}
         </div>
+      </div>
+      {loadingSubs ? (
+        <div className="audio-transcript-loading">{t('common.status.loading')}</div>
+      ) : subtitleCues.length > 0 ? (
+        <div className="audio-transcript-cues">
+          {subtitleCues.map((cue, idx) => {
+            // A plain-text transcript has no times: a paragraph, not a seek target.
+            if (!cue.start && !cue.end) {
+              return (
+                <p key={idx} className="audio-cue audio-cue--plain">
+                  <span className="audio-cue-text">
+                    {cue.speaker && <strong className="audio-cue-speaker">{cue.speaker}: </strong>}
+                    {cue.text}
+                  </span>
+                </p>
+              );
+            }
+            return (
+              <div key={idx} ref={idx === activeCueIdx ? activeCueRef : null}
+                className={cx('audio-cue', idx === activeCueIdx && 'audio-cue-active')}
+                onClick={() => { const el = audioRef.current; if (el) { el.currentTime = cue.start; if (el.paused) el.play().catch(() => {}); } }}>
+                <span className="audio-cue-time num">{fmt(cue.start)}</span>
+                <span className="audio-cue-text">
+                  {cue.speaker && <strong className="audio-cue-speaker">{cue.speaker}: </strong>}
+                  {cue.text}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      ) : <div className="audio-transcript-loading">{t('audio.player.noCues')}</div>}
+    </div>
+  );
 
-        {/* The spot being heard, written out, with its disclosure and link. */}
-        {audioAd.spot && (
-          <div className="audio-np-ad">
-            <TickerCrawl
-              message={audioAd.spot.message}
-              label={audioAd.spot.label}
-              account={audioAd.spot.account}
-              productName={audioAd.spot.productName}
-              clickUrl={audioAd.spot.clickUrl}
-              durationSeconds={audioAd.spot.durationSeconds}
-              paused={!audioAd.playing}
-              tickerStyle={audioAd.spot.style}
-              compact
-            />
-            {/* The link the spot's last sentence points at. Counted once per spot, server side. */}
-            {audioAd.spot.clickUrl && (
-              <a
-                className="audio-np-ad-more"
-                href={audioAd.spot.clickUrl}
-                target="_blank"
-                rel="noopener noreferrer sponsored"
-                title={audioAd.spot.productName ? t('ads.ticker.openProduct', { name: audioAd.spot.productName }) : t('ads.ticker.openLink')}
-              >
-                {t('ads.ticker.findOutMore')} <MdOpenInNew size={13} aria-hidden="true" />
-              </a>
-            )}
-          </div>
-        )}
-
-        <div className="audio-np-content">
-          {/* The cover is a record sleeve: while playing, the record slides out
-              from behind it and spins, labelled with the same cover. */}
-          <div className={`audio-np-art${audioIsPlaying ? ' is-playing' : ''}`} onClick={toggleExpanded}>
-            <span className="audio-np-record" aria-hidden="true">
-              <span className="audio-np-record-disc">
-                <img className="audio-np-record-label" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.style.visibility = 'hidden'; }} />
-              </span>
-            </span>
-            <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={e => { e.currentTarget.src = nowPlaying.external ? PODCAST_PLACEHOLDER : fallbackImg; }} />
-          </div>
-          <div className="audio-np-info" onClick={toggleExpanded}>
-            <span
-              className={`audio-np-title${pageOf(nowPlaying) ? ' has-post' : ''}`}
-              onClick={(e) => {
-                if (!pageOf(nowPlaying)) return;
-                e.stopPropagation();
-                navigate(pageOf(nowPlaying));
-                audioSetExpanded(false);
-              }}
-              title={pageOf(nowPlaying) ? (nowPlaying.external ? t('audio.podcasts.openEpisode') : t('audio.player.openPost')) : ''}
-            >
-              <span className="audio-np-title-text">{nowPlaying.title || t('audio.untitled')}</span>
-              {pageOf(nowPlaying) && (
-                <MdOpenInNew className="audio-np-title-icon" size={12} aria-hidden />
-              )}
-            </span>
-            <span className="audio-np-subline">
-              {isLive && <span className="audio-np-live-badge">{t('audio.player.live')}</span>}
-              {nowPlaying.external
-                ? <span className="audio-np-author" onClick={(e) => { e.stopPropagation(); navigate(podcastPath(nowPlaying.show_id)); audioSetExpanded(false); }}>{nowPlaying.show}</span>
-                : <span className="audio-np-author" onClick={(e) => { e.stopPropagation(); navigate(`/@${nowPlaying.owner}?tab=audio`); audioSetExpanded(false); }}>@{nowPlaying.owner}</span>}
-              {curChapter?.title && <span className="audio-np-chapter-now" title={curChapter.title}>{curChapter.title}</span>}
-              {/* Where it is and how long it runs, in the bar itself. */}
-              {!isLive && <span className="audio-np-subline-time">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>}
-            </span>
-            {audioClipEnd != null && (
-              <button
-                type="button"
-                className="audio-np-clip-chip"
-                onClick={(e) => { e.stopPropagation(); audioClearClip(); }}
-                title={t('audio.player.clipClear')}
-                aria-label={`${t('audio.player.clipEnds', { time: fmt(audioClipEnd) })}. ${t('audio.player.clipClear')}`}
-              >
-                <span>{t('audio.player.clipEnds', { time: fmt(audioClipEnd) })}</span>
-                <MdClose size={12} aria-hidden />
-              </button>
-            )}
-          </div>
-
-          <div className="audio-np-desktop-meta">
-            {nowPlaying.post_permlink && <PayoutAmount amount={npPayout} size={11} />}
-            {nowPlaying.post_permlink && (
-              <UpvoteCount count={npVoteCount} voted={npIsVoted} onClick={() => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink }); setShowVoteTooltip(!showVoteTooltip); }} size={11} />
-            )}
-          </div>
-
-          <div className="audio-np-extras">
-            {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title, category: nowPlaying.category || '' })} title={t('audio.player.playlist')}><MdPlaylistPlay size={20} /></button>}
-            {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
-            {nowPlaying.post_permlink && user !== nowPlaying.owner && <button className="audio-np-tip-btn" onClick={() => setTipTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink })} title={t('audio.post.tip')}><BiDollar size={18} /></button>}
-            {nowPlaying.external && !nowPlaying.post_permlink && canTipEpisode(nowPlaying) && <button className="audio-np-tip-btn" onClick={() => setPodcastTip(nowPlaying)} title={t('audio.podcasts.tip.button')}><BiDollar size={18} /></button>}
-            {shareButton(16)}
-            {hasTranscript && <button className={`audio-np-sub-btn${showSubtitles ? ' active' : ''}`} onClick={() => setShowSubtitles(!showSubtitles)} title={t('audio.player.transcript')} aria-pressed={showSubtitles}><MdSubtitles size={18} /></button>}
-            {timeOrLive}
-          </div>
-
-          <div className={`audio-np-controls${isLive ? '' : ' has-skip'}`}>
-            <button className="audio-np-btn audio-np-track-btn" onClick={playPrev} aria-label={t('audio.player.previous')} title={t('audio.player.previous')}><MdSkipPrevious size={22} /></button>
-            {!isLive && (
-              <button className="audio-np-btn audio-np-skip-btn" onClick={() => skipBy(-SKIP_BACK)} aria-label={t('audio.player.skipBack', { seconds: SKIP_BACK })} title={t('audio.player.skipBack', { seconds: SKIP_BACK })}>
-                <TbRewindBackward15 size={21} />
-              </button>
-            )}
-            <button className="audio-np-play-btn" onClick={togglePlay} aria-label={audioIsPlaying ? t('common.actions.pause') : t('common.actions.play')}>{audioIsPlaying ? <MdPause size={26} /> : <MdPlayArrow size={26} />}</button>
-            {!isLive && (
-              <button className="audio-np-btn audio-np-skip-btn" onClick={() => skipBy(SKIP_FORWARD)} aria-label={t('audio.player.skipForward', { seconds: SKIP_FORWARD })} title={t('audio.player.skipForward', { seconds: SKIP_FORWARD })}>
-                <TbRewindForward15 size={21} />
-              </button>
-            )}
-            <button className="audio-np-btn audio-np-track-btn" onClick={playNext} aria-label={t('audio.player.next')} title={t('audio.player.next')}><MdSkipNext size={22} /></button>
-          </div>
-          <div className={`audio-np-volume${volOpen ? ' open' : ''}`}>
-            {volumeButton()}
-          </div>
-          <button
-            className={`audio-np-pip-btn${inPip ? ' active' : ''}`}
-            onClick={togglePip}
-            title={inPip ? t('audio.player.pipClose') : t('audio.player.pipOpen')}
-            aria-label={inPip ? t('audio.player.pipClose') : t('audio.player.pipOpen')}
-            aria-pressed={inPip}
-          ><TbPictureInPicture size={19} /></button>
-          <button className="audio-np-queue-btn" onClick={() => audioSetShowQueue(v => !v)} title={t('audio.player.queue')} aria-label={t('audio.player.queue')}>
-            <MdQueueMusic size={20} />
-            {audioQueue.length > 0 && <span className="audio-np-queue-badge">{audioQueue.length}</span>}
-          </button>
-          <button
-            className="audio-np-expand-btn"
-            onClick={toggleExpanded}
-            aria-label={audioExpanded ? t('audio.player.collapse') : t('audio.player.expand')}
-            aria-expanded={audioExpanded}
+  // ── The bar: docked at the foot of the page (desktop), the mini bar above the
+  // bottom navigation (phones), design 27c. ─────────────────────────────────
+  const bar = (
+    <div ref={npRef} className={cx('audio-now-playing gap-bar', isLive && 'is-live', !!transcriptPanel && 'has-panel')}>
+      {adStrip}
+      {transcriptPanel}
+      <div className="audio-np-content gap-bar__row">
+        <div className={cx('audio-np-art gap-bar__art', audioIsPlaying && 'is-playing')} onClick={toggleExpanded}>
+          <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={thumbFallback(nowPlaying)} />
+        </div>
+        <div className="audio-np-info gap-bar__info" onClick={toggleExpanded}>
+          <span
+            className={cx('audio-np-title', page && 'has-post')}
+            onClick={openPage}
+            title={page ? (nowPlaying.external ? t('audio.podcasts.openEpisode') : t('audio.player.openPost')) : ''}
           >
-            {audioExpanded ? <MdKeyboardArrowDown size={22} /> : <MdKeyboardArrowUp size={22} />}
+            <span className="audio-np-title-text">{titleOf(nowPlaying)}</span>
+          </span>
+          <span className="audio-np-subline">
+            {isLive && <span className="v2-pill is-live">{t('audio.player.live')}</span>}
+            <span className="audio-np-author" onClick={goCreator}>{bylineOf(nowPlaying)}</span>
+            {curChapter?.title && <span className="audio-np-chapter-now" title={curChapter.title}>{curChapter.title}</span>}
+            {/* Where it is and how long it runs, in the bar itself. */}
+            {!isLive && <span className="audio-np-subline-time num">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>}
+          </span>
+          {clipChip}
+        </div>
+        <div className={cx('audio-np-controls gap-bar__transport', !isLive && 'has-skip')}>
+          {transport(false)}
+        </div>
+        <div className={cx('gap-bar__seek', npWave && 'has-wave')}>
+          {!isLive && <span className="gap-bar__time num">{fmt(audioCurrentTime)}</span>}
+          {npWave && (
+            <Waveform
+              className="gap-bar__wave"
+              barPx={4}
+              samples={npWave}
+              audioRef={audioRef}
+              duration={audioDuration}
+              markers={markers}
+              onSeek={(f) => { const el = audioRef.current; if (el && audioDuration > 0) el.currentTime = f * audioDuration; }}
+            />
+          )}
+          {progressBar}
+          {!isLive && <span className="gap-bar__time num">{fmt(audioDuration)}</span>}
+        </div>
+        <div className="gap-bar__tools">
+          {post && <AudioHypeButton author={nowPlaying.owner} permlink={post} variant="icon" size={40} className="gap-bar__hype" />}
+          {shareButton}
+          {hasTranscript && (
+            <button type="button" className={cx('audio-np-sub-btn gap-tool', showSubtitles && 'is-on')} onClick={() => setShowSubtitles(!showSubtitles)} title={t('audio.player.transcript')} aria-label={t('audio.player.transcript')} aria-pressed={showSubtitles}>
+              <Icon name="subtitles" size={20} />
+            </button>
+          )}
+          {volumeButton()}
+          {pipButton}
+          <button type="button" className="audio-np-queue-btn gap-tool" onClick={() => audioSetShowQueue(v => !v)} title={t('audio.player.queue')} aria-label={t('audio.player.queue')}>
+            <Icon name="queue_music" size={20} />
+            {audioQueue.length > 0 && <span className="audio-np-queue-badge num">{audioQueue.length}</span>}
           </button>
           <button
-            className="audio-np-close-btn"
-            onClick={() => {
-              const el = audioRef.current;
-              if (el) {
-                try { el.pause(); el.removeAttribute('src'); el.load(); } catch { /* already empty */ }
-              }
-              if (sleepRef.current) endSleep();
-              audioStop();
-            }}
-            title={t('audio.player.closePlayer')}
-            aria-label={t('audio.player.closePlayer')}
-          ><MdClose size={18} /></button>
+            ref={expandBtnRef}
+            type="button"
+            className="audio-np-expand-btn gap-tool"
+            onClick={toggleExpanded}
+            title={t('audio.player.expand')}
+            aria-label={t('audio.player.expand')}
+            aria-expanded={false}
+          ><Icon name="open_in_full" size={20} /></button>
+          {closeButton}
         </div>
+      </div>
+    </div>
+  );
 
-        {(showExpanded || areaMounted) && (
-          <div className={`audio-np-expand-wrap${showExpanded && areaOpen ? ' open' : ''}`}>
-          <div className="audio-np-expanded-area">
-            {/* One line on the opened desktop card (tools left, these right);
-                elsewhere the wrapper is display: contents. */}
-            <div className="audio-np-actions">
-            <div className="audio-np-mobile-extras">
-              {nowPlaying.post_permlink && <PayoutAmount amount={npPayout} size={12} />}
-              {nowPlaying.post_permlink && (
-                <UpvoteCount count={npVoteCount} voted={npIsVoted} onClick={() => { if (!loggedIn) return; setVoteTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink }); setShowVoteTooltip(!showVoteTooltip); }} size={12} />
-              )}
-              {loggedIn && !nowPlaying.external && <button className="audio-np-playlist-btn" onClick={() => setPlaylistTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink || nowPlaying.permlink, title: nowPlaying.title, category: nowPlaying.category || '' })} title={t('audio.player.playlist')}><MdPlaylistPlay size={18} /></button>}
-              {/* A 3Speak audio's Hive post (also a 3Speak episode followed as an
-                  outside show, lib/podcasts.js threeSpeakPost): comment on it and hype it. */}
-              {loggedIn && nowPlaying.post_permlink && (
-                <button
-                  className={`audio-np-playlist-btn audio-np-comment-btn${commentTarget ? ' active' : ''}`}
-                  onClick={() => setCommentTarget(c => (c ? null : { author: nowPlaying.owner, permlink: nowPlaying.post_permlink, title: nowPlaying.title, at: isLive ? 0 : audioRef.current?.currentTime }))}
-                  aria-expanded={!!commentTarget}
-                  title={t('comments.section.commentTab')}
-                  aria-label={t('comments.section.commentTab')}
-                >
-                  <MdChatBubbleOutline size={17} />
-                </button>
-              )}
-              {nowPlaying.post_permlink && <AudioHypeButton author={nowPlaying.owner} permlink={nowPlaying.post_permlink} size={16} />}
-              {/* Signed out, the tip window opens on Lightning: no Hive account needed. */}
-              {nowPlaying.post_permlink && user !== nowPlaying.owner && <button className="audio-np-tip-btn" onClick={() => setTipTarget({ author: nowPlaying.owner, permlink: nowPlaying.post_permlink })} title={t('audio.post.tip')}><BiDollar size={16} /></button>}
-              {nowPlaying.external && !nowPlaying.post_permlink && canTipEpisode(nowPlaying) && <button className="audio-np-tip-btn" onClick={() => setPodcastTip(nowPlaying)} title={t('audio.podcasts.tip.button')}><BiDollar size={16} /></button>}
-              {shareButton(16)}
-              {hasTranscript && <button className={`audio-np-sub-btn${showSubtitles ? ' active' : ''}`} onClick={() => setShowSubtitles(!showSubtitles)} title={t('audio.player.transcript')} aria-pressed={showSubtitles}><MdSubtitles size={16} /></button>}
-              {timeOrLive}
-            </div>
+  // ── The full player (design 27a / 27d / 18b) ─────────────────────────────
+  const CATEGORY_KEYS = { podcast: 'audio.categories.podcast', voice_message: 'audio.categories.voice', song: 'audio.categories.music', music: 'audio.categories.music', audiobook: 'audio.categories.audiobook', interview: 'audio.categories.interview' };
+  const listIdx = audioAutoplayList.findIndex(x => x._id === nowPlaying._id);
+  const eyebrow = [
+    nowPlaying.external ? t('audio.categories.podcast') : t(CATEGORY_KEYS[nowPlaying.category] || 'audio.categories.voice'),
+    !nowPlaying.external && nowPlaying.genre ? String(nowPlaying.genre) : null,
+    listIdx >= 0 && audioAutoplayList.length > 1 ? t('audio.player.position', { current: listIdx + 1, total: audioAutoplayList.length }) : null,
+  ].filter(Boolean).join(' · ');
 
-            {/* Playback tools. On a narrow player the previous/next and volume
-                buttons that no longer fit in the bar move in here too. */}
-            <div className="audio-np-tools">
-              <button className="audio-np-tool audio-np-track-btn" onClick={playPrev} aria-label={t('audio.player.previous')} title={t('audio.player.previous')}><MdSkipPrevious size={18} /></button>
-              <button className="audio-np-tool audio-np-track-btn" onClick={playNext} aria-label={t('audio.player.next')} title={t('audio.player.next')}><MdSkipNext size={18} /></button>
-              {volumeButton('audio-np-tool audio-np-tools-vol')}
-              {!isLive && (
-                <button
-                  className={`audio-np-tool audio-np-speed-btn${speed !== 1 ? ' active' : ''}`}
-                  onClick={toggleMenu('speed')}
-                  aria-label={t('audio.player.speedValue', { speed: formatSpeed(speed) })}
-                  title={t('audio.player.speed')}
-                  aria-haspopup="dialog"
-                  aria-expanded={menu?.name === 'speed'}
-                >{formatSpeed(speed)}</button>
-              )}
-              <button
-                className={`audio-np-tool${sleep ? ' active' : ''}`}
-                onClick={toggleMenu('sleep')}
-                aria-label={sleepLabel ? t('audio.player.sleepLeft', { time: sleepLabel }) : t('audio.player.sleep')}
-                title={t('audio.player.sleep')}
-                aria-haspopup="dialog"
-                aria-expanded={menu?.name === 'sleep'}
-              >
-                <MdBedtime size={17} />
-                {sleep && <span className="audio-np-tool-label">{sleepLabel || t('audio.player.sleepEndShort')}</span>}
+  // Comments tied to a moment: pins on the waveform, and "At this moment".
+  const timed = comments.items.filter(c => c.at != null);
+  const pins = audioDuration > 0 ? timed.filter(c => c.at <= audioDuration).map(c => ({
+    key: c.permlink, f: c.at / audioDuration, at: c.at, label: c.author.slice(0, 1).toUpperCase(),
+    title: `@${c.author} ${fmt(c.at)}: ${c.text.slice(0, 80)}`,
+  })) : [];
+  const nearNow = timed.filter(c => Math.abs(c.at - audioCurrentTime) <= 30);
+  // "At this moment" while there are comments near the playhead, else all of them.
+  const scope = commentScope || (nearNow.length ? 'moment' : 'all');
+  const shownComments = scope === 'moment' ? nearNow : comments.items;
+  const commentCount = comments.items.length || npComments;
+
+  const hasAbout = !!(audioAd.heardSpot?.clickUrl || npTags.length || npMantecurated || post || npBody || (nowPlaying.external && nowPlaying.summary));
+  const tabs = [
+    { value: 'queue', label: t('audio.player.queue'), count: audioQueue.length || undefined },
+    post && { value: 'comments', label: t('audio.item.comments'), count: commentCount || undefined },
+    chapters.length > 0 && { value: 'chapters', label: t('audio.player.chapters') },
+    hasTranscript && { value: 'transcript', label: t('audio.player.transcript') },
+    hasAbout && { value: 'about', label: t('audio.item.description') },
+  ].filter(Boolean);
+  const autoTab = showSubtitles && hasTranscript ? 'transcript' : chapters.length ? 'chapters' : 'queue';
+  const activeTab = tabs.some(x => x.value === sideTab) ? sideTab : autoTab;
+  const pickTab = (v) => {
+    setSideTab(v);
+    if (v === 'transcript' && !showSubtitles) setShowSubtitles(true);
+  };
+  const openComments = () => {
+    pickTab('comments');
+    fullRef.current?.querySelector('.gap-side')?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
+  };
+  const panel = (name) => cx('gap-panel', activeTab === name && 'is-on');
+
+  const full = (
+    <div
+      ref={inPip ? undefined : npRef}
+      className={cx('audio-now-playing gap-full audio-np-expanded', docked && 'audio-np-docked is-docked', inPip && 'audio-np-in-pip', overlay && 'is-overlay', isLive && 'is-live')}
+      onMouseDown={overlay ? (e) => { if (e.target === e.currentTarget) audioSetExpanded(false); } : undefined}
+      onKeyDown={overlay ? (e) => { if (e.key === 'Escape' && !e.defaultPrevented) { e.stopPropagation(); audioSetExpanded(false); } } : undefined}
+    >
+      <div
+        ref={fullRef}
+        className="gap-full__panel audio-np-expanded-area"
+        role={overlay ? 'dialog' : undefined}
+        aria-modal={overlay || undefined}
+        aria-label={overlay ? titleOf(nowPlaying) : undefined}
+        tabIndex={-1}
+      >
+        <div className="gap-full__main">
+          <div className="gap-head">
+            {!docked && (
+              <button type="button" className="audio-np-expand-btn gap-tool is-lg" onClick={() => audioSetExpanded(false)} title={t('audio.player.collapse')} aria-label={t('audio.player.collapse')} aria-expanded>
+                <Icon name="keyboard_arrow_down" size={24} />
               </button>
-              {!isLive && (
-                <button
-                  className={`audio-np-tool${fxOn ? ' active' : ''}`}
-                  onClick={toggleMenu('effects')}
-                  aria-label={t('audio.player.effects')}
-                  title={t('audio.player.effects')}
-                  aria-haspopup="dialog"
-                  aria-expanded={menu?.name === 'effects'}
-                ><MdGraphicEq size={18} /></button>
-              )}
-              {castAvailable && !playingLocal && (
-                <button className="audio-np-tool" onClick={castNow} aria-label={t('audio.player.cast')} title={t('audio.player.cast')}>
-                  {HAS_AIRPLAY ? <MdAirplay size={18} /> : <MdCast size={18} />}
-                </button>
-              )}
-              {!isLive && (
-                <button
-                  className={`audio-np-tool${dlSaved ? ' active' : ''}`}
-                  onClick={startDownload}
-                  disabled={dlBusy}
-                  aria-label={dlSaved ? t('audio.player.downloaded') : dlBusy ? t('audio.player.downloading', { pct: Math.round((dlProgress || 0) * 100) }) : t('audio.player.download')}
-                  title={dlSaved ? t('audio.player.downloaded') : t('audio.player.download')}
-                >
-                  {dlSaved ? <MdDownloadDone size={18} /> : <MdDownload size={18} />}
-                  {dlBusy && <span className="audio-np-tool-label">{Math.round((dlProgress || 0) * 100)}%</span>}
-                </button>
-              )}
-            </div>
-            </div>
+            )}
+            {!nowPlaying.external && nowPlaying.playlist_id && nowPlaying.playlist_name && (
+              <button type="button" className="gap-from" onClick={() => { navigate(`/playlist/${nowPlaying.playlist_id}`); audioSetExpanded(false); }}>
+                <span className="gap-from__mark" aria-hidden="true"><Icon name="album" size={16} /></span>
+                <span className="gap-from__text">{t('audio.player.playingFrom', { name: nowPlaying.playlist_name })}</span>
+              </button>
+            )}
+            <span className="gap-head__space" />
+            {pipButton}
+            <button
+              type="button"
+              className={cx('gap-tool gap-more', menu?.name === 'player' && 'is-on')}
+              onClick={toggleMenu('player')}
+              title={t('engagement.cardMenu.moreOptions')}
+              aria-label={t('engagement.cardMenu.moreOptions')}
+              aria-haspopup="dialog"
+              aria-expanded={menu?.name === 'player'}
+            ><Icon name="more_horiz" size={24} /></button>
+            {docked && closeButton}
+          </div>
 
-            {npWave && (
+          {adStrip}
+
+          <div className="gap-hero">
+            <div className={cx('gap-hero__art', audioIsPlaying && 'is-playing')}>
+              <img src={heroArt(nowPlaying)} alt="" onError={thumbFallback(nowPlaying)} />
+            </div>
+            <div className="gap-hero__text">
+              <div className="v2-eyebrow is-cyan gap-hero__eyebrow">{eyebrow}</div>
+              <h2
+                className={cx('gap-hero__title audio-np-title', page && 'has-post')}
+                onClick={openPage}
+                title={page ? (nowPlaying.external ? t('audio.podcasts.openEpisode') : t('audio.player.openPost')) : undefined}
+              >
+                <span className="audio-np-title-text">{titleOf(nowPlaying)}</span>
+              </h2>
+              <div className="gap-hero__by">
+                <img className="gap-hero__avatar" src={nowPlaying.external ? audioThumb(nowPlaying) : `/img/u/${nowPlaying.owner}/avatar/small`} alt="" onError={thumbFallback(nowPlaying)} />
+                <b className="audio-np-author" onClick={goCreator}>{bylineOf(nowPlaying)}</b>
+                {isLive && <span className="v2-pill is-live">{t('audio.player.live')}</span>}
+                {nowPlaying.plays > 0 && <span className="gap-hero__meta">· {t('audio.tile.plays', { count: nowPlaying.plays })}</span>}
+                {post && <span className="gap-hero__meta gap-hero__money"><PayoutAmount amount={npPayout} size={12} /></span>}
+                {post && <span className="gap-hero__meta gap-hero__votes"><UpvoteCount count={npVoteCount} voted={npIsVoted} onClick={openVote} size={12} /></span>}
+              </div>
+              {clipChip}
+            </div>
+          </div>
+
+          <div className="gap-wave">
+            {npWave ? (
               <Waveform
+                className="gap-wave__canvas"
+                barPx={6}
                 samples={npWave}
                 audioRef={audioRef}
                 duration={audioDuration}
                 markers={markers}
-                onSeek={(f) => {
-                  const el = audioRef.current;
-                  if (el && audioDuration > 0) el.currentTime = f * audioDuration;
-                }}
+                playhead
+                pins={pins}
+                onPin={(p) => { seekTo(p.at); setCommentScope('moment'); pickTab('comments'); }}
+                onSeek={(f) => { const el = audioRef.current; if (el && audioDuration > 0) el.currentTime = f * audioDuration; }}
+              />
+            ) : progressBar}
+          </div>
+          {isLive ? (
+            <div className="gap-times"><span className="v2-pill is-live">{t('audio.player.live')}</span></div>
+          ) : (
+            <div className="audio-np-timeline-times gap-times num">
+              <span>{fmt(audioCurrentTime)}</span>
+              <span>{fmt(audioDuration)}</span>
+            </div>
+          )}
+
+          <div className="gap-tools">
+            {!isLive && (
+              <ToolChip
+                className={cx('audio-np-speed-btn', speed !== 1 && 'is-on')}
+                onClick={toggleMenu('speed')}
+                aria-label={t('audio.player.speedValue', { speed: formatSpeed(speed) })}
+                title={t('audio.player.speed')}
+                aria-haspopup="dialog"
+                aria-expanded={menu?.name === 'speed'}
+                icon="speed"
+                text={formatSpeed(speed)}
               />
             )}
-
-            {/* The Player tab: elapsed under the start of the timeline, the length under its end. */}
-            {docked && !isLive && (
-              <div className="audio-np-timeline-times" aria-hidden="true">
-                <span>{fmt(audioCurrentTime)}</span>
-                <span>{fmt(audioDuration)}</span>
-              </div>
+            <ToolChip
+              className={cx(sleep && 'is-on')}
+              onClick={toggleMenu('sleep')}
+              aria-label={sleepLabel ? t('audio.player.sleepLeft', { time: sleepLabel }) : t('audio.player.sleep')}
+              title={t('audio.player.sleep')}
+              aria-haspopup="dialog"
+              aria-expanded={menu?.name === 'sleep'}
+              icon="bedtime"
+              text={sleep ? (sleepLabel || t('audio.player.sleepEndShort')) : null}
+            />
+            {!isLive && (
+              <ToolChip
+                className={cx(fxOn && 'is-on')}
+                onClick={toggleMenu('effects')}
+                aria-label={t('audio.player.effects')}
+                title={t('audio.player.effects')}
+                aria-haspopup="dialog"
+                aria-expanded={menu?.name === 'effects'}
+                icon="equalizer"
+              />
             )}
+            {castAvailable && !playingLocal && (
+              <ToolChip onClick={castNow} aria-label={t('audio.player.cast')} title={t('audio.player.cast')} icon={HAS_AIRPLAY ? 'airplay' : 'cast'} />
+            )}
+            {!isLive && (
+              <ToolChip
+                className={cx(dlSaved && 'is-on')}
+                onClick={startDownload}
+                disabled={dlBusy}
+                aria-label={dlSaved ? t('audio.player.downloaded') : dlBusy ? t('audio.player.downloading', { pct: dlPct }) : t('audio.player.download')}
+                title={dlSaved ? t('audio.player.downloaded') : t('audio.player.download')}
+                icon={dlSaved ? 'download_done' : 'download'}
+                text={dlBusy ? `${dlPct}%` : null}
+              />
+            )}
+            {volumeButton('gap-chip')}
+          </div>
 
-            {/* On the Player tab the queue is part of the page, unfolded. */}
-            {docked && audioQueue.length > 0 && (
-              <section className="audio-np-queue-inline" aria-label={t('audio.player.queue')}>
-                <div className="audio-np-chapters-head">
-                  <span className="audio-transcript-label"><MdQueueMusic size={14} /> {t('audio.player.queue')} <span className="audio-queue-count">{audioQueue.length}</span></span>
-                  {queueClear}
-                </div>
-                {queueList}
+          {dlBusy && (
+            <div className="gap-dl" role="status">
+              <Icon name="download" size={18} />
+              <span>{t('audio.player.downloading', { pct: dlPct })}</span>
+              <Progress value={dlPct} tone="cyan" thin label={t('audio.player.download')} />
+            </div>
+          )}
+
+          <div className="gap-controls">
+            <div className={cx('gap-transport', !isLive && 'has-skip')}>{transport(true)}</div>
+            <div className="gap-docks">
+              {post && <AudioHypeButton author={nowPlaying.owner} permlink={post} variant="tile" />}
+              {post && <DockTile className="gap-tile" icon="chat_bubble" label={commentCount > 0 ? String(commentCount) : t('audio.item.comments')} active={activeTab === 'comments'} tone="cyan" fill={false} onClick={openComments} aria-label={t('audio.item.comments')} />}
+              {canSave && <DockTile className="gap-tile" icon="playlist_add" label={t('common.actions.save')} onClick={openPlaylist} title={t('audio.player.playlist')} />}
+              {canTip && <DockTile className="gap-tile" icon="volunteer_activism" label={t('audio.post.tip')} onClick={openTip} title={nowPlaying.external && !post ? t('audio.podcasts.tip.button') : t('audio.post.tip')} />}
+              {canShare && <DockTile className="gap-tile" icon="ios_share" label={t('common.actions.share')} active={shareOpen} tone="cyan" fill={false} onClick={toggleMenu('share')} aria-haspopup="dialog" />}
+            </div>
+          </div>
+        </div>
+
+        <aside className="gap-side">
+          <Segmented className="gap-side__tabs" options={tabs} value={activeTab} onChange={pickTab} size={36} scroll />
+          <div className="gap-side__body">
+            <section className={cx(panel('queue'), 'audio-np-queue-inline')} aria-label={t('audio.player.queue')}>
+              <div className="gap-panel__head">
+                <b>{t('audio.player.upNext')}{audioQueue.length > 0 && ` · ${t('audio.page.tracks', { count: audioQueue.length })}`}</b>
+                {queueClear}
+              </div>
+              {queueList}
+            </section>
+
+            {post && (
+              <section className={panel('comments')} aria-label={t('audio.item.comments')}>
+                <Segmented
+                  options={[
+                    { value: 'moment', label: t('audio.player.atThisMoment'), count: nearNow.length || undefined },
+                    { value: 'all', label: t('audio.page.all'), count: comments.items.length || undefined },
+                  ]}
+                  value={scope}
+                  onChange={setCommentScope}
+                  size={32}
+                  label={t('audio.item.comments')}
+                />
+                {comments.loading && !comments.items.length ? (
+                  <p className="gap-panel__note">{t('common.status.loading')}</p>
+                ) : shownComments.length ? (
+                  <ul className="gap-comments">
+                    {shownComments.map(c => (
+                      <li key={c.permlink} className="gap-comment">
+                        <img className="gap-comment__avatar" src={`/img/u/${c.author}/avatar/small`} alt="" loading="lazy" />
+                        <div className="gap-comment__body">
+                          <div className="gap-comment__who">
+                            <b>{c.author}</b>
+                            {c.at != null && <button type="button" className="gap-time" onClick={() => seekTo(c.at)}>{fmt(c.at)}</button>}
+                          </div>
+                          <p>{c.text}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="gap-panel__note">{t('comments.section.empty')}</p>
+                )}
+                {loggedIn && (commentTarget ? (
+                  <AudioCommentPanel {...commentTarget} onClose={() => { setCommentTarget(null); setCommentsRefresh(k => k + 1); }} />
+                ) : (
+                  <button
+                    type="button"
+                    className="gap-compose audio-np-comment-btn"
+                    onClick={() => setCommentTarget({ author: nowPlaying.owner, permlink: post, title: nowPlaying.title, at: isLive ? 0 : audioRef.current?.currentTime })}
+                    aria-label={t('comments.section.commentTab')}
+                  >
+                    {!isLive && <span className="gap-time">{fmt(audioCurrentTime)}</span>}
+                    <span className="gap-compose__ph">{t('comments.section.commentPlaceholder')}</span>
+                    <span className="gap-compose__send" aria-hidden="true"><Icon name="send" size={20} /></span>
+                  </button>
+                ))}
               </section>
             )}
 
             {chapters.length > 0 && (
-              <section className="audio-np-chapters" aria-label={t('audio.player.chapters')}>
+              <section className={cx(panel('chapters'), 'audio-np-chapters')} aria-label={t('audio.player.chapters')}>
                 <div className="audio-np-chapters-head">
-                  <span className="audio-transcript-label"><MdListAlt size={14} /> {t('audio.player.chapters')}</span>
-                  <div className="audio-np-chapters-jump">
-                    <button className="audio-np-tool" disabled={jumps.prev == null} onClick={() => seekTo(jumps.prev)} aria-label={t('audio.player.prevChapter')} title={t('audio.player.prevChapter')}><MdSkipPrevious size={18} /></button>
-                    <button className="audio-np-tool" disabled={jumps.next == null} onClick={() => seekTo(jumps.next)} aria-label={t('audio.player.nextChapter')} title={t('audio.player.nextChapter')}><MdSkipNext size={18} /></button>
+                  <button type="button" className="gap-tool" disabled={jumps.prev == null} onClick={() => seekTo(jumps.prev)} aria-label={t('audio.player.prevChapter')} title={t('audio.player.prevChapter')}><Icon name="skip_previous" size={20} fill /></button>
+                  <div className="audio-np-chapters-now">
+                    {curChapter && <span className="v2-eyebrow">{t('audio.player.position', { current: jumps.index + 1, total: chapters.length })}</span>}
+                    <span className="audio-np-chapter-now" title={curChapter?.title || ''}>{curChapter?.title || ''}</span>
                   </div>
+                  <button type="button" className="gap-tool" disabled={jumps.next == null} onClick={() => seekTo(jumps.next)} aria-label={t('audio.player.nextChapter')} title={t('audio.player.nextChapter')}><Icon name="skip_next" size={20} fill /></button>
                 </div>
                 {curChapter?.img && (
                   <img
@@ -1765,7 +2030,7 @@ function GlobalAudioPlayer() {
                 )}
                 {curChapter?.url && /^https?:\/\//i.test(curChapter.url) && (
                   <a className="audio-np-chapter-link" href={curChapter.url} target="_blank" rel="noopener noreferrer nofollow">
-                    <MdLink size={14} aria-hidden /> {t('audio.player.chapterLink')}
+                    <Icon name="link" size={16} /> {t('audio.player.chapterLink')}
                   </a>
                 )}
                 <div className="audio-np-chapter-list">
@@ -1773,11 +2038,11 @@ function GlobalAudioPlayer() {
                     <button
                       key={`${c.start}-${i}`}
                       type="button"
-                      className={`audio-cue${curChapter && i === jumps.index ? ' audio-cue-active' : ''}`}
+                      className={cx('audio-cue', curChapter && i === jumps.index && 'audio-cue-active')}
                       onClick={() => seekTo(c.start)}
                       aria-current={curChapter && i === jumps.index ? 'true' : undefined}
                     >
-                      <span className="audio-cue-time">{fmt(c.start)}</span>
+                      <span className="audio-cue-time num">{fmt(c.start)}</span>
                       <span className="audio-cue-text">{c.title}</span>
                     </button>
                   ))}
@@ -1785,12 +2050,18 @@ function GlobalAudioPlayer() {
               </section>
             )}
 
-            {!showSubtitles && (
-              <>
+            {hasTranscript && (
+              <section className={cx(panel('transcript'), 'gap-panel--transcript')} aria-label={t('audio.player.transcript')}>
+                {transcriptPanel || <p className="gap-panel__note">{t('common.status.loading')}</p>}
+              </section>
+            )}
+
+            {hasAbout && (
+              <section className={cx(panel('about'), 'gap-about')} aria-label={t('audio.item.description')}>
                 {/* The spot that played on this track, still one click away once it is over. */}
                 {audioAd.heardSpot?.clickUrl && (
                   <div className="audio-np-ad-card">
-                    <span className="audio-np-ad-card-label">{audioAd.heardSpot.label}</span>
+                    <span className="v2-pill is-muted audio-np-ad-card-label">{audioAd.heardSpot.label}</span>
                     {audioAd.heardSpot.account && (
                       <img className="audio-np-ad-card-avatar" src={`/img/u/${audioAd.heardSpot.account}/avatar/small`} alt="" loading="lazy" />
                     )}
@@ -1805,7 +2076,7 @@ function GlobalAudioPlayer() {
                       rel="noopener noreferrer sponsored"
                       title={audioAd.heardSpot.productName ? t('ads.ticker.openProduct', { name: audioAd.heardSpot.productName }) : t('ads.ticker.openLink')}
                     >
-                      {t('ads.ticker.findOutMore')} <MdOpenInNew size={13} aria-hidden="true" />
+                      {t('ads.ticker.findOutMore')} <Icon name="open_in_new" size={14} />
                     </a>
                   </div>
                 )}
@@ -1813,18 +2084,18 @@ function GlobalAudioPlayer() {
                   <div className="audio-np-tags">
                     {npMantecurated && <span className="audio-np-curated-badge"><img src={mantequillaLogo} alt="" /> {t('audio.player.curated')}</span>}
                     {npTags.filter(tag => tag !== 'mantecurated').slice(0, 8).map(tag => (
-                      <span key={tag} className="audio-np-tag" onClick={() => { navigate(`/audio?tag=${encodeURIComponent(tag)}`); audioSetExpanded(false); }}>#{tag}</span>
+                      <button type="button" key={tag} className="audio-np-tag" onClick={() => { navigate(`/audio?tag=${encodeURIComponent(tag)}`); audioSetExpanded(false); }}>#{tag}</button>
                     ))}
                   </div>
                 )}
-                {nowPlaying.post_permlink && (
+                {post && (
                   <div className="audio-np-body">
-                    <BlogContent author={nowPlaying.owner} permlink={nowPlaying.post_permlink} defaultExpanded />
+                    <BlogContent author={nowPlaying.owner} permlink={post} defaultExpanded />
                   </div>
                 )}
-                {!nowPlaying.post_permlink && npBody && <div className="audio-np-body">{npBody}</div>}
+                {!post && npBody && <div className="audio-np-body">{npBody}</div>}
                 {/* The full show notes are on the episode page. A 3Speak episode shows its Hive post above. */}
-                {nowPlaying.external && !isLive && !nowPlaying.post_permlink && nowPlaying.summary && (
+                {nowPlaying.external && !isLive && !post && nowPlaying.summary && (
                   <button
                     type="button"
                     className="audio-np-body audio-np-body--link"
@@ -1834,105 +2105,110 @@ function GlobalAudioPlayer() {
                     {nowPlaying.summary} <span className="audio-np-more">{t('audio.podcasts.showNotes')} →</span>
                   </button>
                 )}
-              </>
+              </section>
             )}
           </div>
-          </div>
-        )}
+        </aside>
+      </div>
+    </div>
+  );
 
-        {showSubtitles && (subtitleData?.subtitles || hasExtTranscript) && (
-          <div className="audio-transcript-panel">
-            <div className="audio-transcript-header">
-              <span className="audio-transcript-label"><MdSubtitles size={14} /> {t('audio.player.transcript')}</span>
-              <div className="audio-transcript-langs">
-                {transcriptLangs.map(l => (
-                  <button key={l} className={`audio-lang-btn${shownLang === l ? ' active' : ''}`} onClick={() => setSelectedLang(l)} aria-pressed={shownLang === l}>{l.toUpperCase()}</button>
-                ))}
-              </div>
+  // The options of the speed and sleep menus, shared with the Player menu.
+  const speedOptions = (closeAfter) => (
+    <div className="audio-pm-options audio-pm-chips" role="radiogroup" aria-label={t('audio.player.speed')}>
+      {SPEEDS.map((s) => (
+        <button
+          key={s}
+          type="button"
+          role="radio"
+          aria-checked={speed === s}
+          className={cx('audio-pm-choice', speed === s && 'is-active')}
+          onClick={() => { setSpeed(s); if (closeAfter) closeMenu(); }}
+        >{formatSpeed(s)}</button>
+      ))}
+    </div>
+  );
+  const sleepOptions = (closeAfter) => (
+    <div className="audio-pm-options audio-pm-chips is-cyan" role="radiogroup" aria-label={t('audio.player.sleep')}>
+      {SLEEP_OPTIONS.filter(o => !(o === 'end' && isLive)).map((o) => {
+        const active = o === 0 ? !sleep : o === 'end' ? sleep?.mode === 'end' : sleep?.mode === 'minutes' && sleep.minutes === o;
+        const label = o === 0 ? t('audio.player.sleepOff') : o === 'end' ? t('audio.player.sleepEnd') : t('audio.player.sleepMinutes', { minutes: o });
+        return (
+          <button
+            key={String(o)}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            className={cx('audio-pm-choice', active && 'is-active')}
+            onClick={() => {
+              if (sleepRef.current) endSleep();
+              const next = startSleepTimer(o, Date.now());
+              sleepRef.current = next;
+              setSleep(next);
+              if (closeAfter) closeMenu();
+            }}
+          >{label}</button>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <PortalDocContext.Provider value={inPip ? hostDoc : null}>
+      {audioEl}
+
+      {/* Left in the page while the player is in its pop-out window. */}
+      {inPip && (
+        <div ref={npRef} className="audio-now-playing gap-bar audio-np-idle audio-np-pip-stub">
+          <div className="audio-np-content gap-bar__row">
+            <div className="audio-np-art gap-bar__art" onClick={focusPip}>
+              <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={thumbFallback(nowPlaying)} />
             </div>
-            {loadingSubs ? (
-              <div className="audio-transcript-loading">{t('common.status.loading')}</div>
-            ) : subtitleCues.length > 0 ? (
-              <div className="audio-transcript-cues">
-                {subtitleCues.map((cue, idx) => {
-                  // A plain-text transcript has no times: a paragraph, not a seek target.
-                  if (!cue.start && !cue.end) {
-                    return (
-                      <p key={idx} className="audio-cue audio-cue--plain">
-                        <span className="audio-cue-text">
-                          {cue.speaker && <strong className="audio-cue-speaker">{cue.speaker}: </strong>}
-                          {cue.text}
-                        </span>
-                      </p>
-                    );
-                  }
-                  return (
-                    <div key={idx} ref={idx === activeCueIdx ? activeCueRef : null}
-                      className={`audio-cue${idx === activeCueIdx ? ' audio-cue-active' : ''}`}
-                      onClick={() => { const el = audioRef.current; if (el) { el.currentTime = cue.start; if (el.paused) el.play().catch(() => {}); } }}>
-                      <span className="audio-cue-time">{fmt(cue.start)}</span>
-                      <span className="audio-cue-text">
-                        {cue.speaker && <strong className="audio-cue-speaker">{cue.speaker}: </strong>}
-                        {cue.text}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : <div className="audio-transcript-loading">{t('audio.player.noCues')}</div>}
+            <div className="audio-np-info gap-bar__info" onClick={focusPip} title={t('audio.player.pipActive')}>
+              <span className="audio-np-title"><span className="audio-np-title-text">{titleOf(nowPlaying)}</span></span>
+              <span className="audio-np-subline"><span className="audio-np-author">{t('audio.player.pipActive')}</span></span>
+            </div>
+            <button type="button" className="audio-np-play-btn gap-play" onClick={togglePlay} aria-label={playLabel}><Icon name={audioIsPlaying ? 'pause' : 'play_arrow'} size={28} fill /></button>
+            <button type="button" className="audio-np-pip-btn gap-tool is-on" onClick={togglePip} title={t('audio.player.pipClose')} aria-label={t('audio.player.pipClose')} aria-pressed="true"><Icon name="picture_in_picture_alt" size={20} /></button>
           </div>
-        )}
-      </div>)}
+        </div>
+      )}
+
+      {portalIfDocked(showExpanded ? full : bar)}
 
       {toHost(<>
-      {menu?.name === 'speed' && (
-        <PlayerMenu anchor={menu.anchor} title={t('audio.player.speed')} onClose={closeMenu}>
-          <div className="audio-pm-options" role="radiogroup" aria-label={t('audio.player.speed')}>
-            {SPEEDS.map((s) => (
-              <button
-                key={s}
-                type="button"
-                role="radio"
-                aria-checked={speed === s}
-                className={`audio-share-option${speed === s ? ' is-active' : ''}`}
-                onClick={() => { setSpeed(s); closeMenu(); }}
-              >
-                <span className="audio-pm-check">{speed === s && <MdCheck size={14} />}</span>
-                <span>{formatSpeed(s)}</span>
-              </button>
-            ))}
+      {menu?.name === 'player' && (
+        <PlayerMenu anchor={menu.anchor} title={t('audio.page.tabPlayer')} onClose={closeMenu} wide>
+          {!isLive && (
+            <>
+              <div className="v2-eyebrow audio-pm-label">{t('audio.player.speed')}</div>
+              {speedOptions(false)}
+            </>
+          )}
+          <div className="v2-eyebrow audio-pm-label">{t('audio.player.sleep')}</div>
+          {sleepOptions(false)}
+          <div className="audio-pm-rows">
+            {canSave && <PmRow icon="playlist_add" label={t('audio.player.playlist')} onClick={() => { closeMenu(); openPlaylist(); }} />}
+            <PmRow icon={nowPlaying.external ? 'podcasts' : 'person'} label={t('audio.player.goTo', { name: bylineOf(nowPlaying) })} onClick={() => { closeMenu(); goCreator(); }} />
+            {!isLive && <PmRow icon={dlSaved ? 'download_done' : 'download'} label={dlSaved ? t('audio.player.downloaded') : t('audio.player.download')} onClick={startDownload} disabled={dlSaved || dlBusy} sub={dlBusy ? t('audio.player.downloading', { pct: dlPct }) : null} />}
+            {!isLive && <PmRow icon="equalizer" label={t('audio.player.effects')} onClick={() => setMenu({ name: 'effects', anchor: menu.anchor })} />}
+            {castAvailable && !playingLocal && <PmRow icon={HAS_AIRPLAY ? 'airplay' : 'cast'} label={t('audio.player.cast')} onClick={() => { closeMenu(); castNow(); }} />}
+            {canShare && <PmRow icon="ios_share" label={t('common.actions.share')} onClick={() => setMenu({ name: 'share', anchor: menu.anchor })} />}
+            {post && <PmRow icon="flag" label={t('common.actions.report')} onClick={() => { closeMenu(); setReportOpen(true); }} danger />}
           </div>
         </PlayerMenu>
       )}
 
+      {menu?.name === 'speed' && (
+        <PlayerMenu anchor={menu.anchor} title={t('audio.player.speed')} onClose={closeMenu}>
+          {speedOptions(true)}
+        </PlayerMenu>
+      )}
+
       {menu?.name === 'sleep' && (
-        <PlayerMenu anchor={menu.anchor} title={t('audio.player.sleep')} onClose={closeMenu}>
+        <PlayerMenu anchor={menu.anchor} title={t('audio.player.sleep')} onClose={closeMenu} tone="cyan">
           {sleepLabel && <p className="audio-pm-note">{t('audio.player.sleepLeft', { time: sleepLabel })}</p>}
-          <div className="audio-pm-options" role="radiogroup" aria-label={t('audio.player.sleep')}>
-            {SLEEP_OPTIONS.filter(o => !(o === 'end' && isLive)).map((o) => {
-              const active = o === 0 ? !sleep : o === 'end' ? sleep?.mode === 'end' : sleep?.mode === 'minutes' && sleep.minutes === o;
-              const label = o === 0 ? t('audio.player.sleepOff') : o === 'end' ? t('audio.player.sleepEnd') : t('audio.player.sleepMinutes', { minutes: o });
-              return (
-                <button
-                  key={String(o)}
-                  type="button"
-                  role="radio"
-                  aria-checked={active}
-                  className={`audio-share-option${active ? ' is-active' : ''}`}
-                  onClick={() => {
-                    if (sleepRef.current) endSleep();
-                    const next = startSleepTimer(o, Date.now());
-                    sleepRef.current = next;
-                    setSleep(next);
-                    closeMenu();
-                  }}
-                >
-                  <span className="audio-pm-check">{active && <MdCheck size={14} />}</span>
-                  <span>{label}</span>
-                </button>
-              );
-            })}
-          </div>
+          {sleepOptions(true)}
         </PlayerMenu>
       )}
 
@@ -1940,22 +2216,23 @@ function GlobalAudioPlayer() {
         <PlayerMenu anchor={menu.anchor} title={t('audio.player.effects')} onClose={closeMenu}>
           <div className="audio-pm-options">
             {[
-              { name: 'boost', label: t('audio.player.voiceBoost'), hint: t('audio.player.voiceBoostHint') },
-              { name: 'skip', label: t('audio.player.skipSilence'), hint: t('audio.player.skipSilenceHint') },
-            ].map(({ name, label, hint }) => (
+              { name: 'boost', icon: 'record_voice_over', label: t('audio.player.voiceBoost'), hint: t('audio.player.voiceBoostHint') },
+              { name: 'skip', icon: 'fast_forward', label: t('audio.player.skipSilence'), hint: t('audio.player.skipSilenceHint') },
+            ].map(({ name, icon, label, hint }) => (
               <button
                 key={name}
                 type="button"
                 role="switch"
                 aria-checked={fx[name]}
-                className={`audio-share-option audio-pm-switch${fx[name] ? ' is-active' : ''}`}
+                className={cx('audio-pm-switch', fx[name] && 'is-active')}
                 onClick={() => setEffect(name, !fx[name])}
               >
+                <span className="audio-pm-row__icon" aria-hidden="true"><Icon name={icon} size={20} /></span>
                 <span className="audio-pm-switch-text">
                   <span>{label}</span>
                   <small>{hint}</small>
                 </span>
-                <span className={`audio-pm-toggle${fx[name] ? ' on' : ''}`} aria-hidden="true" />
+                <span className={cx('v2-toggle', fx[name] && 'is-on')} aria-hidden="true"><span className="v2-toggle__thumb" /></span>
               </button>
             ))}
           </div>
@@ -1966,7 +2243,7 @@ function GlobalAudioPlayer() {
       )}
 
       {shareOpen && canShare && (
-        <PlayerMenu anchor={menu.anchor} title={t('common.actions.share')} onClose={closeMenu}>
+        <PlayerMenu anchor={menu.anchor} title={t('common.actions.share')} onClose={closeMenu} tone="cyan" wide>
           {nowPlaying.external
             ? <EpisodeShareOptions track={nowPlaying} at={audioCurrentTime} duration={audioDuration} onClose={closeMenu} />
             : <AudioShareDropdown item={nowPlaying} onClose={closeMenu} at={audioCurrentTime} duration={audioDuration} bare />}
@@ -2014,12 +2291,17 @@ function GlobalAudioPlayer() {
         />
       )}
 
+      {reportOpen && post && (
+        <ReportModal isOpen={reportOpen} onClose={() => setReportOpen(false)} type="post" target={{ author: nowPlaying.owner, permlink: post }} />
+      )}
+
       {volOpen && volRect && createPortal(
         <div
           ref={volPopRef}
           className="audio-np-vol-pop"
           style={{ left: volRect.cx, top: volRect.top }}
         >
+          <Icon name={muted || volume === 0 ? 'volume_off' : 'volume_up'} size={18} />
           <input
             className="audio-np-vol-slider"
             type="range"
@@ -2035,6 +2317,7 @@ function GlobalAudioPlayer() {
             }}
             aria-label={t('audio.player.volume')}
           />
+          <b className="num">{Math.round((muted ? 0 : volume) * 100)}</b>
         </div>,
         hostDoc.body
       )}
@@ -2089,30 +2372,53 @@ export function AudioShareDropdown({ item, onClose, title, at, duration, bare })
   };
 
   return (
-    <div className={`audio-share-dropdown${bare ? ' is-bare' : ''}`} ref={ref}>
-      {title && <ModalHeader closeOnEscape={false} className="audio-share-header" title={title} onClose={onClose} />}
-      {hivePermlink && <button className="audio-share-option" onClick={() => copy(`https://peakd.com/@${author}/${hivePermlink}`, t('audio.share.copiedPeakd'))}><MdContentCopy size={14} /><span>{t('audio.share.copyPeakd')}</span></button>}
-      {searching && !hivePermlink && <span className="audio-share-loading">{t('audio.share.searchingHive')}</span>}
-      {reblog.canReblog && (
-        <button
-          className={`audio-share-option${reblog.armed ? ' is-armed' : ''}`}
-          onClick={async () => { if (await reblog.press()) onClose(); }}
-          disabled={reblog.busy || reblog.reblogged}
-          title={reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title')}
-        >
-          <Repeat2 size={14} /><span>{reblog.label}</span>
-        </button>
+    <div className={cx('audio-share-dropdown', bare && 'is-bare')} ref={ref} role={bare ? undefined : 'dialog'} aria-label={bare ? undefined : title}>
+      {title && (
+        <div className="audio-pm-header audio-share-header">
+          <h2 className="audio-pm-title is-cyan">{title}</h2>
+          <IconButton icon="close" label={t('common.actions.close')} size={32} variant="ghost" round onClick={onClose} />
+        </div>
       )}
-      <button className="audio-share-option" onClick={() => copy(threeSpeakUrl, t('audio.share.copied3speak'))}><MdContentCopy size={14} /><span>{t('audio.share.copy3speak')}</span></button>
-      {at != null && <CopyAtOption url={threeSpeakUrl} at={at} onDone={onClose} />}
-      <button className="audio-share-option" onClick={() => copy(audioPlayerUrl, t('audio.share.copiedAudioPlayer'))}><MdContentCopy size={14} /><span>{t('audio.share.copyAudioPlayer')}</span></button>
-      {item?.permlink && (
-        <button
-          className="audio-share-option"
-          onClick={() => { openEmbedCode({ kind: 'audio', id: item.permlink, title: item.title }); onClose(); }}
-        ><MdCode size={14} /><span>{t('chat.share.embedOnWebsite')}</span></button>
+      {item && (
+        <div className="audio-share-track">
+          <img src={audioThumb(item)} alt="" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
+          <span className="audio-share-track__text">
+            <b>{item.title || t('audio.untitled')}</b>
+            <small>@{author}</small>
+          </span>
+        </div>
       )}
+      <div className="audio-share-list">
+        {hivePermlink && <button type="button" className="audio-share-option" onClick={() => copy(`https://peakd.com/@${author}/${hivePermlink}`, t('audio.share.copiedPeakd'))}><Icon name="content_copy" size={18} /><span>{t('audio.share.copyPeakd')}</span></button>}
+        {searching && !hivePermlink && <span className="audio-share-loading"><Icon name="progress_activity" size={16} className="v2-spin" />{t('audio.share.searchingHive')}</span>}
+        {reblog.canReblog && (
+          <button
+            type="button"
+            className={cx('audio-share-option', reblog.armed && 'is-armed')}
+            onClick={async () => { if (await reblog.press()) onClose(); }}
+            disabled={reblog.busy || reblog.reblogged}
+            title={reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title')}
+          >
+            <Icon name="repeat" size={18} /><span>{reblog.label}</span>
+          </button>
+        )}
+        {at != null && <CopyAtOption url={threeSpeakUrl} at={at} onDone={onClose} />}
+        <button type="button" className="audio-share-option" onClick={() => copy(audioPlayerUrl, t('audio.share.copiedAudioPlayer'))}><Icon name="headphones" size={18} /><span>{t('audio.share.copyAudioPlayer')}</span></button>
+        {item?.permlink && (
+          <button
+            type="button"
+            className="audio-share-option"
+            onClick={() => { openEmbedCode({ kind: 'audio', id: item.permlink, title: item.title }); onClose(); }}
+          ><Icon name="code" size={18} /><span>{t('chat.share.embedOnWebsite')}</span></button>
+        )}
+      </div>
       {at != null && <ClipForm url={threeSpeakUrl} start={Math.floor(at || 0)} duration={duration} onDone={onClose} />}
+      <div className="audio-share-link">
+        <span className="audio-share-url num" title={threeSpeakUrl}>{threeSpeakUrl.replace(/^https?:\/\//, '')}</span>
+        <Button variant="cyan" size={36} trailing="content_copy" aria-label={t('audio.share.copy3speak')} title={t('audio.share.copy3speak')} onClick={() => copy(threeSpeakUrl, t('audio.share.copied3speak'))}>
+          {t('common.actions.copy')}
+        </Button>
+      </div>
     </div>
   );
 }

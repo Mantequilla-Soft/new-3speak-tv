@@ -1,78 +1,38 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
-// A single recently-changed public playlist, rendered INSIDE the community-snaps
-// feed row (.community-snaps--row) alongside the snap cards. Self-contained so it
-// looks right wherever it's dropped; the flex sizing that lines it up with the
-// snap cards lives in CommunitySnaps.scss (.community-snaps--row .playlist-feed-card).
+// A recently changed public playlist, inside the community-snaps feed row next
+// to the snap cards (28d look; the row sizing lives in CommunitySnaps.scss).
 .playlist-feed-card {
   margin: 0;
   min-width: 0;
-  background: var(--card-bg);
-  border-radius: 12px;
-  box-shadow: var(--card-shadow);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  gap: 8px;
+  padding: 8px;
+  @include v2.card(20);
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--card-shadow-hover, 0 4px 12px rgba(0, 0, 0, 0.15));
-  }
+  &:hover { background: var(--surface-2); }
 
   .pfc-cover {
     position: relative;
     display: block;
     width: 100%;
     aspect-ratio: 16 / 9;
-    background: var(--bg-tertiary, #242424);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    @include v2.thumb-placeholder;
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-    }
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    // Count pill (bottom-right) — a "playlist" affordance like YouTube.
-    .pfc-count {
-      position: absolute;
-      right: 6px;
-      bottom: 6px;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      padding: 2px 7px;
-      border-radius: 6px;
-      background: rgba(0, 0, 0, 0.78);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-
-      svg { font-size: 15px; }
-    }
-
-    .pfc-tag {
-      position: absolute;
-      left: 6px;
-      top: 6px;
-      padding: 2px 7px;
-      border-radius: 6px;
-      background: rgba(0, 0, 0, 0.62);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
+    .pfc-tag { position: absolute; left: 6px; top: 6px; }
   }
 
   .pfc-body {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    padding: 8px 10px 10px;
+    padding: 0 4px 4px;
   }
 
   .pfc-title {
@@ -80,20 +40,15 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
-    color: var(--text-primary);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.3;
+    @include v2.text(body-sm);
+    font-weight: 700;
+    color: var(--text);
     text-decoration: none;
 
-    &:hover { color: var(--accent-primary); }
+    &:hover { color: var(--text); text-decoration: underline; }
   }
 
   .pfc-owner .author-badge { margin: 0; }
 
-  .pfc-changed {
-    margin: 0;
-    font-size: 11.5px;
-    color: var(--text-secondary);
-  }
+  .pfc-changed { margin: 0; @include v2.text(meta-sm); color: var(--muted); }
 }

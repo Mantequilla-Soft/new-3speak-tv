@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../../lib/store';
 import { formatNotifTime } from '../../utils/notificationHelpers';
 import { episodeToTrack, markPodcastNotificationsSeen, episodePath, artUrl, onArtError, PODCAST_PLACEHOLDER } from '../../lib/podcasts';
+import { Icon } from '../v2/Icon';
 import './StoryNotifications.scss';
 import './PodcastNotifications.scss';
 
@@ -41,12 +42,17 @@ export default function PodcastNotifications({ episodes, user, onOpen, variant =
   };
 
   return (
+    <section className={`story-notifs-section story-notifs-section--${variant}`}>
+    <div className="story-notifs-head" aria-hidden="true">{t('nav.notifications.podcasts.heading')}</div>
     <ul className={`story-notifs story-notifs--${variant}`} aria-label={t('nav.notifications.podcasts.heading')}>
       {episodes.map((ep) => {
         const art = ep.art || ep.feed?.art;
         return (
           <li key={ep.id} className={`story-notif podcast-notif${ep.seen ? '' : ' story-notif--unseen'}`} onClick={() => open(ep)}>
-            <img className="podcast-notif-cover" src={art ? artUrl(art, 64) : PODCAST_PLACEHOLDER} alt="" loading="lazy" onError={onArtError} />
+            <span className="podcast-notif-art">
+              <img className="podcast-notif-cover" src={art ? artUrl(art, 64) : PODCAST_PLACEHOLDER} alt="" loading="lazy" onError={onArtError} />
+              <span className="notif-kind is-cyan" aria-hidden="true"><Icon name="podcasts" size={13} fill /></span>
+            </span>
             <div className="story-notif-body">
               <div className="story-notif-msg">{t('nav.notifications.podcasts.newEpisode', { show: ep.feed?.title || '' })}</div>
               <div className="podcast-notif-title">{ep.title}</div>
@@ -61,5 +67,6 @@ export default function PodcastNotifications({ episodes, user, onOpen, variant =
         );
       })}
     </ul>
+    </section>
   );
 }

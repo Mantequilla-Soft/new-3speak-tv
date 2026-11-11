@@ -1,30 +1,62 @@
-/* The celebration, and ONLY the celebration.
-   The dialog's shape, spacing and colours stay in AdsPrompt.scss, which every
-   app-root prompt shares; this file adds one class that the graduation prompt
-   alone carries, so nothing here can leak into the ads or consent dialogs. */
+@use "../../styles/v2" as v2;
 
-.graduation-prompt {
-  /* A short arrival: up, past the resting point, and settle. This is the one
-     moment in the whole incubation flow that is unambiguously good news, and
-     the dialog was appearing with exactly as much ceremony as a cookie notice. */
-  animation: graduation-pop 380ms cubic-bezier(0.2, 0.9, 0.3, 1.35) both;
+/* The warm-up prompts on the shared v2 Dialog (designs 23b, 46c, 46d):
+   graduation, name taken, publish the backlog, reconnect. The dialog's shape
+   comes from design-system.scss; these are only the pieces inside it. */
+
+.inc-prompt-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  color: var(--text);
+
+  &.is-accent {
+    background: var(--accent-tint-strong);
+    color: var(--accent);
+  }
 }
 
-@keyframes graduation-pop {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.inc-prompt-lede {
+  margin: 0;
+  @include v2.text(body);
+  line-height: 1.5;
+  color: var(--muted);
+
+  strong { color: var(--text); font-weight: 700; }
 }
 
-/* Someone who has asked their system for less motion has asked for less motion.
-   The dialog still appears, it simply appears. */
-@media (prefers-reduced-motion: reduce) {
-  .graduation-prompt {
-    animation: none;
-  }
+.inc-prompt-text {
+  margin: 0;
+  @include v2.text(body-sm);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+// The fine print that matters (what comes across, why it is slow): a bg well.
+.inc-prompt-note {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  @include v2.text(meta);
+  line-height: 1.5;
+  color: var(--muted);
+
+  strong { color: var(--text); font-weight: 700; }
+}
+
+// The primary takes the free width of the footer, label at the left, arrow at
+// the right (STYLE_GUIDE §6).
+.v2-dialog__foot .inc-prompt-primary.v2-btn { flex: 1; }
+
+/* The one moment in the warm-up that is unambiguously good news: the §11
+   success card's accent hero tint at the top of the dialog. */
+.inc-prompt--celebrate.v2-dialog__panel {
+  background: linear-gradient(170deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface) 55%);
+
+  .inc-prompt-note { background: color-mix(in srgb, var(--bg) 80%, transparent); }
 }

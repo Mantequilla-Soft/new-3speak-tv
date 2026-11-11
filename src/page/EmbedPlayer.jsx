@@ -22,7 +22,7 @@ export default function EmbedPlayer() {
 
   const a = String(author || '').toLowerCase();
   const p = String(permlink || '').toLowerCase();
-  const valid = /^[a-z][a-z0-9.\-]{2,15}$/.test(a) && /^[a-z0-9-]{1,255}$/.test(p);
+  const valid = /^[a-z][a-z0-9.-]{2,15}$/.test(a) && /^[a-z0-9-]{1,255}$/.test(p);
 
   const {
     ref: sdkVideoRef,

@@ -1,11 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { 
-  FaBold, FaItalic, FaUnderline, FaStrikethrough, 
-  FaHeading, FaListUl, FaListOl, FaQuoteLeft, 
-  FaCode, FaLink, FaImage, FaTable, FaEyeSlash,
-  FaEye, FaEdit, FaColumns, FaSmile
-} from 'react-icons/fa';
-import { MdFormatClear } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import EmojiPicker from 'emoji-picker-react';
 import { uploadImageToHive } from '../Editor/uploadImageToHiv';
 import { toastIn } from '../../utils/toast';
@@ -282,16 +276,16 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
       <div className="composer-toolbar">
         <div className="toolbar-group">
           <button type="button" onClick={handleBold} title={t('studio.composer.bold')}>
-            <FaBold />
+            <Icon name="format_bold" size={18} />
           </button>
           <button type="button" onClick={handleItalic} title={t('studio.composer.italic')}>
-            <FaItalic />
+            <Icon name="format_italic" size={18} />
           </button>
           <button type="button" onClick={handleUnderline} title={t('studio.composer.underline')}>
-            <FaUnderline />
+            <Icon name="format_underlined" size={18} />
           </button>
           <button type="button" onClick={handleStrikethrough} title={t('studio.composer.strikethrough')}>
-            <FaStrikethrough />
+            <Icon name="strikethrough_s" size={18} />
           </button>
         </div>
 
@@ -305,7 +299,7 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
               title={t('studio.composer.headers')}
               className={showHeaderMenu ? 'active' : ''}
             >
-              <FaHeading />
+              <Icon name="title" size={18} />
             </button>
             {showHeaderMenu && (
               <div className="dropdown-menu">
@@ -322,13 +316,13 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
             )}
           </div>
           <button type="button" onClick={handleBulletList} title={t('studio.composer.bulletList')}>
-            <FaListUl />
+            <Icon name="format_list_bulleted" size={18} />
           </button>
           <button type="button" onClick={handleNumberedList} title={t('studio.composer.numberedList')}>
-            <FaListOl />
+            <Icon name="format_list_numbered" size={18} />
           </button>
           <button type="button" onClick={handleQuote} title={t('studio.composer.quote')}>
-            <FaQuoteLeft />
+            <Icon name="format_quote" size={18} />
           </button>
         </div>
 
@@ -336,10 +330,10 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
 
         <div className="toolbar-group">
           <button type="button" onClick={handleCodeBlock} title={t('studio.composer.codeBlock')}>
-            <FaCode />
+            <Icon name="code" size={18} />
           </button>
           <button type="button" onClick={handleLink} title={t('studio.composer.insertLink')}>
-            <FaLink />
+            <Icon name="link" size={18} />
           </button>
           <button 
             type="button" 
@@ -347,13 +341,13 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
             title={t('studio.composer.uploadImage')}
             disabled={isUploading}
           >
-            <FaImage />
+            <Icon name="image" size={18} />
           </button>
           <button type="button" onClick={handleTable} title={t('studio.composer.insertTable')}>
-            <FaTable />
+            <Icon name="table" size={18} />
           </button>
           <button type="button" onClick={handleSpoiler} title={t('studio.composer.spoiler')}>
-            <FaEyeSlash />
+            <Icon name="visibility_off" size={18} />
           </button>
         </div>
 
@@ -367,7 +361,7 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
               title={t('studio.composer.emoji')}
               className={showEmojiPicker ? 'active' : ''}
             >
-              <FaSmile />
+              <Icon name="mood" size={18} />
             </button>
             {showEmojiPicker && (
               <div className="emoji-picker-container">
@@ -426,7 +420,7 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
             title={t('studio.composer.editorOnly')}
             className={viewMode === 'editor' ? 'active' : ''}
           >
-            <FaEdit />
+            <Icon name="edit_note" size={18} />
           </button>
           <button 
             type="button" 
@@ -434,7 +428,7 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
             title={t('studio.composer.splitView')}
             className={`show ${viewMode === 'split' ? 'active' : ''}`}
           >
-            <FaColumns />
+            <Icon name="vertical_split" size={18} />
           </button>
           <button 
             type="button" 
@@ -442,7 +436,7 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
             title={t('studio.composer.previewOnly')}
             className={viewMode === 'preview' ? 'active' : ''}
           >
-            <FaEye />
+            <Icon name="visibility" size={18} />
           </button>
         </div>
       </div>
@@ -467,12 +461,13 @@ const MarkdownComposer = ({ value, onChange, placeholder, show, previewContext =
             />
             {isDragOver && (
               <div className="drag-overlay">
-                <FaImage size={48} />
+                <Icon name="add_photo_alternate" size={28} />
                 <span>{t('studio.composer.dropImage')}</span>
               </div>
             )}
             {isUploading && (
-              <div className="upload-overlay">
+              <div className="upload-overlay" role="status">
+                <Icon name="progress_activity" size={20} className="v2-spin" />
                 <span>{t('studio.composer.uploadingImage')}</span>
               </div>
             )}

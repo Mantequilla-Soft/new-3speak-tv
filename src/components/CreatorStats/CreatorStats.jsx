@@ -3,7 +3,7 @@ import {
   fetchCreatorOverview, fetchCreatorTimeseries, fetchCreatorDemographics, fetchVideoAnalytics,
   fmtDuration, fmtCount, timeAgo, countryFlag, countryName, countryLatLng,
 } from '../../lib/creatorStats';
-import BarLoader from '../Loader/BarLoader';
+import { Segmented, StatTile, IconButton, Icon } from '../v2/ui';
 import { Link } from 'react-router-dom';
 
 // The "Your year on 3Speak" link. OFF until the recap launches (planned with a
@@ -179,9 +179,17 @@ const Demographics = memo(function Demographics({ demo }) {
   return (
     <div className="cs-demo">
       {/* Mobile tab switcher (hidden on desktop) */}
-      <div className="cs-demo-tabs cs-seg">
-        <button className={tab === 'bars' ? 'active' : ''} onClick={() => setTab('bars')}>{t('stats.demo.breakdown')}</button>
-        <button className={tab === 'map' ? 'active' : ''} onClick={() => setTab('map')}>{t('stats.demo.map')}</button>
+      <div className="cs-demo-tabs">
+        <Segmented
+          size={28}
+          value={tab}
+          onChange={setTab}
+          label={t('stats.demo.viewerLocations')}
+          options={[
+            { value: 'map', label: t('stats.demo.map') },
+            { value: 'bars', label: t('stats.demo.breakdown') },
+          ]}
+        />
       </div>
 
       {/* Desktop: bars on the left, 50% map on the right. Mobile: one per tab. */}
@@ -246,12 +254,12 @@ function VideoDetail({ username, video, onClose }) {
   return (
     <div className="cs-detail">
       <div className="cs-detail-head">
-        <img className="cs-detail-thumb" src={video.thumbnail} alt="" />
+        <span className="cs-detail-thumb v2-thumb r8">{video.thumbnail && <img src={video.thumbnail} alt="" />}</span>
         <div className="cs-detail-title">
           <strong>{video.title || video.permlink}</strong>
           <span>{t('stats.detail.summary', { votes: fmtCount(video.votes), comments: fmtCount(video.comments), payout: Number(video.payout || 0).toFixed(2) })}{video.created ? ` · ${timeAgo(video.created)}` : ''}</span>
         </div>
-        <button className="cs-detail-close" onClick={onClose} aria-label={t('common.actions.close')}>✕</button>
+        <IconButton className="cs-detail-close" icon="close" size={32} variant="secondary" round onClick={onClose} label={t('common.actions.close')} />
       </div>
       <VideoStats username={username} permlink={video.permlink} compact />
     </div>
@@ -280,15 +288,15 @@ function CompareChart({ username, a, b }) {
     const n = vals.length; const y = (v) => (100 - (v / 100) * 92).toFixed(2);
     return `M${vals.map((v, i) => `${((i / (n - 1)) * 100).toFixed(2)},${y(v)}`).join(' L')}`;
   };
-  if (loading) return <BarLoader />;
+  if (loading) return <div className="cs-skeleton cs-skeleton--chart v2-skeleton" aria-busy="true" />;
   const sa = ra?.retention || []; const sb = rb?.retention || [];
   if (sa.length < 2 && sb.length < 2) return <div className="cs-chart-empty">{t('stats.compare.notEnough')}</div>;
 
   return (
     <div className="cs-compare">
       <div className="cs-compare-legend">
-        <span><i style={{ background: 'var(--accent-primary, #e53935)' }} />{a.title}</span>
-        <span><i style={{ background: 'rgba(120,170,255,0.95)' }} />{b.title}</span>
+        <span><i className="is-a" />{a.title}</span>
+        <span><i className="is-b" />{b.title}</span>
       </div>
       <div className="cs-compare-chart">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -333,20 +341,36 @@ export default function CreatorStats({ user }) {
 
   const filters = (
     <div className="cs-filters">
-      <div className="cs-seg">
-        {RANGES.map((r) => <button key={r.d} className={days === r.d ? 'active' : ''} onClick={() => setDays(r.d)}>{t(r.l)}</button>)}
-      </div>
-      <div className="cs-seg">
-        {CONTENTS.map((c) => <button key={c.k} className={content === c.k ? 'active' : ''} onClick={() => setContent(c.k)}>{t(c.l)}</button>)}
-      </div>
+      <Segmented
+        className="cs-seg"
+        block={false}
+        value={days}
+        onChange={setDays}
+        options={RANGES.map((r) => ({ value: r.d, label: t(r.l) }))}
+      />
+      <Segmented
+        className="cs-seg"
+        block={false}
+        value={content}
+        onChange={setContent}
+        options={CONTENTS.map((c) => ({ value: c.k, label: t(c.l) }))}
+      />
       {/* The last 12 months as a short story (page/Recap.jsx). Hidden until the
           recap launches in December (RECAP_LINK_VISIBLE). */}
       {RECAP_LINK_VISIBLE && <Link className="cs-recap-link" to="/recap">{t('recap.open')}</Link>}
     </div>
   );
 
-  if (loading) return <div className="creator-stats">{filters}<BarLoader /></div>;
-  if (err || !overview) return <div className="creator-stats">{filters}<div className="cs-chart-empty">{t('stats.loadError')}</div></div>;
+  if (loading) {
+    return (
+      <div className="creator-stats" aria-busy="true">
+        {filters}
+        <div className="cs-skeleton cs-skeleton--overview v2-skeleton" />
+        <div className="cs-skeleton cs-skeleton--section v2-skeleton" />
+      </div>
+    );
+  }
+  if (err || !overview) return <div className="creator-stats">{filters}<div className="cs-chart-empty cs-chart-empty--error" role="alert">{t('stats.loadError')}</div></div>;
 
   const totals = overview.totals || {};
   const videos = overview.videos || [];
@@ -355,6 +379,7 @@ export default function CreatorStats({ user }) {
   const cmpAVid = videos.find((v) => v.permlink === cmpA);
   const cmpBVid = videos.find((v) => v.permlink === cmpB);
   const cmpOpts = videos.map((v) => <option key={v.permlink} value={v.permlink}>{v.title}</option>);
+  const sortOptions = SORTS.map((m) => ({ value: m.key, label: t(m.label) }));
 
   return (
     <div className="creator-stats">
@@ -364,28 +389,30 @@ export default function CreatorStats({ user }) {
         <div className="cs-empty">{t('stats.emptyRange')}</div>
       ) : (
         <>
-          {/* Tiles */}
-          <div className="cs-tiles">
-            <div className="cs-tile"><span>{fmtDuration(totals.watchSeconds)}</span><label>{t('stats.metrics.watchTime')}</label></div>
-            <div className="cs-tile"><span>{fmtCount(totals.sessions)}</span><label>{t('stats.metrics.views')}</label></div>
-            {/* The "Unique viewers" tile is gone. We no longer identify a viewer across
-                visits, so it counted the same thing as Views — a duplicate number under a
-                label that promised distinct people. Dropped rather than left to mislead. */}
-            <div className="cs-tile"><span>{fmtDuration(totals.avgViewDuration)}</span><label>{t('stats.tiles.avgViewDuration')}</label></div>
-            <div className="cs-tile"><span>{totals.avgPct}%</span><label>{t('stats.tiles.avgWatched')}</label></div>
-            <div className="cs-tile"><span>{(Number(totals.engagementRate || 0) / 100).toFixed(1)}</span><label>{t('stats.tiles.reactionsPerView')}</label></div>
-          </div>
-          <p className="cs-subtotals">
-            {t('stats.subtotals', { videos: fmtCount(totals.videos), votes: fmtCount(totals.votes), comments: fmtCount(totals.comments), payout: Number(totals.payout || 0).toFixed(2), rate: totals.avgRate })}
-          </p>
+          {/* Tiles (bg wells) and the trend under them, one card (31a) */}
+          <section className="cs-section cs-overview">
+            <div className="cs-tiles v2-stats">
+              <StatTile label={t('stats.metrics.watchTime')} value={fmtDuration(totals.watchSeconds)} />
+              <StatTile label={t('stats.metrics.views')} value={fmtCount(totals.sessions)} />
+              {/* The "Unique viewers" tile is gone. We no longer identify a viewer across
+                  visits, so it counted the same thing as Views: a duplicate number under a
+                  label that promised distinct people. Dropped rather than left to mislead. */}
+              <StatTile label={t('stats.tiles.avgViewDuration')} value={fmtDuration(totals.avgViewDuration)} />
+              <StatTile label={t('stats.tiles.avgWatched')} value={`${totals.avgPct}%`} />
+              <StatTile label={t('stats.tiles.reactionsPerView')} value={(Number(totals.engagementRate || 0) / 100).toFixed(1)} />
+            </div>
+            <p className="cs-subtotals">
+              {t('stats.subtotals', { videos: fmtCount(totals.videos), votes: fmtCount(totals.votes), comments: fmtCount(totals.comments), payout: Number(totals.payout || 0).toFixed(2), rate: totals.avgRate })}
+            </p>
 
-          {/* Trend */}
-          {series && (
-            <section className="cs-section">
-              <div className="cs-section-head"><h4>{t('stats.sections.trend')}</h4></div>
-              <TrendChart series={series} />
-            </section>
-          )}
+            {/* Trend */}
+            {series && (
+              <>
+                <div className="cs-section-head"><h4>{t('stats.sections.trend')}</h4></div>
+                <TrendChart series={series} />
+              </>
+            )}
+          </section>
 
           {/* Best performing + Compare (side by side on desktop) */}
           <section className="cs-section">
@@ -395,11 +422,7 @@ export default function CreatorStats({ user }) {
 
             <div className="cs-perf-row">
               <div className="cs-list-col">
-                <div className="cs-seg cs-seg-scroll">
-                  {SORTS.map((m) => (
-                    <button key={m.key} className={sort === m.key ? 'active' : ''} onClick={() => setSort(m.key)}>{t(m.label)}</button>
-                  ))}
-                </div>
+                <Segmented className="cs-seg-scroll" size={28} scroll block={false} value={sort} onChange={setSort} options={sortOptions} />
                 <div className="cs-list">
                 {list.map((v, i) => {
                   const toggle = () => setSelected(selected?.permlink === v.permlink ? null : v);
@@ -416,7 +439,7 @@ export default function CreatorStats({ user }) {
                       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
                     >
                       <span className="cs-rank">{i + 1}</span>
-                      <img className="cs-item-thumb" src={v.thumbnail} alt="" loading="lazy" />
+                      <span className="cs-item-thumb v2-thumb r8">{v.thumbnail && <img src={v.thumbnail} alt="" loading="lazy" />}</span>
                       <span className="cs-item-info">
                         <a
                           className="cs-item-title"
@@ -426,7 +449,7 @@ export default function CreatorStats({ user }) {
                           onClick={(e) => e.stopPropagation()}
                           title={t('stats.openInNewTab')}
                         >
-                          {v.short ? '⏱ ' : ''}{v.title || v.permlink}
+                          {v.short && <Icon name="view_day" size={14} className="cs-item-short" />}{v.title || v.permlink}
                         </a>
                         {v.created && <span className="cs-item-date">{timeAgo(v.created)}</span>}
                       </span>
@@ -441,9 +464,9 @@ export default function CreatorStats({ user }) {
                 <div className="cs-perf-compare">
                   <h5>{t('stats.compare.title')}</h5>
                   <div className="cs-compare-picks">
-                    <select value={cmpA} onChange={(e) => setCmpA(e.target.value)}><option value="">{t('stats.compare.pickA')}</option>{cmpOpts}</select>
+                    <select className="v2-input is-select h32 cs-pick is-a" aria-label={t('stats.compare.pickA')} value={cmpA} onChange={(e) => setCmpA(e.target.value)}><option value="">{t('stats.compare.pickA')}</option>{cmpOpts}</select>
                     <span className="cs-compare-vs">{t('stats.compare.vs')}</span>
-                    <select value={cmpB} onChange={(e) => setCmpB(e.target.value)}><option value="">{t('stats.compare.pickB')}</option>{cmpOpts}</select>
+                    <select className="v2-input is-select h32 cs-pick is-b" aria-label={t('stats.compare.pickB')} value={cmpB} onChange={(e) => setCmpB(e.target.value)}><option value="">{t('stats.compare.pickB')}</option>{cmpOpts}</select>
                   </div>
                 </div>
               )}

@@ -45,7 +45,8 @@ describe('the embed dialog for an audio', () => {
     expect(code.value).toContain('src="https://audio.3speak.tv/play?a=my-audio&mode=full&iframe=1"')
     expect(code.value).toContain('height="180"')
     expect(code.value).toContain('title="Morning show"')
-    expect(within(dialog).getByRole('button', { name: /copy embed code/i })).toHaveTextContent('Full width, 180 px tall')
+    // The size of the snippet is spelled out under it (design 44c).
+    expect(within(dialog).getByText('Full width, 180 px tall')).toBeInTheDocument()
   })
 
   it('rebuilds the snippet for the size picked', async () => {
@@ -56,7 +57,7 @@ describe('the embed dialog for an audio', () => {
     const code = screen.getByRole('textbox', { name: 'Embed code' })
     expect(code.value).toContain('mode=minimal')
     expect(code.value).toContain('height="80"')
-    expect(screen.getByRole('button', { name: /copy embed code/i })).toHaveTextContent('80 px tall')
+    expect(screen.getByText('Full width, 80 px tall')).toBeInTheDocument()
   })
 
   it('escapes a title that would break out of the HTML attribute', () => {

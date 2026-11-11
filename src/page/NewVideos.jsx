@@ -11,7 +11,7 @@ import { useContentBatch } from "../hooks/useContentBatch";
 import { useWatchHistory } from "../hooks/useWatchHistory";
 import useViewCounts from "../hooks/useViewCounts";
 import PullToRefresh from "../components/PullToRefresh/PullToRefresh";
-import { NewContentIcon } from "../components/FeedIcons";
+import { FeedPageHeader, NewContentIcon } from "../components/FeedIcons";
 import { useTranslation } from "react-i18next";
 
 const LIMIT = 50;
@@ -80,10 +80,7 @@ const NewVideos = () => {
   return (
     <PullToRefresh onRefresh={handleRefresh}>
     <div className="firstupload-container">
-      <div className="feed-page-header">
-        <NewContentIcon />
-        <h2>{t('feeds.newVideos.title')}</h2>
-      </div>
+      <FeedPageHeader icon={<NewContentIcon />} title={t('feeds.newVideos.title')} />
 
       {isLoading ? (
         <CardSkeleton />
@@ -91,10 +88,10 @@ const NewVideos = () => {
         <Card3 windowed videos={[...liveStreams, ...videos]} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
       )}
 
-      {isError && <p>{t('feeds.errors.fetchVideos')}</p>}
+      {isError && <p className="feed-error" role="alert">{t('feeds.errors.fetchVideos')}</p>}
 
       {isFetchingNextPage && (
-        <p style={{ textAlign: "center" }}>{t('feeds.loadingMore')}</p>
+        <p className="feed-loading-more">{t('feeds.loadingMore')}</p>
       )}
     </div>
     </PullToRefresh>

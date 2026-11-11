@@ -1,608 +1,166 @@
-@use "../mixins.scss" as *;
+@use "../styles/v2" as v2;
 
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
+// Home v2 (20a, 34b): the stories row, the "new from following" strip, then the
+// feed sections as a segmented track (drag to reorder, Customize to hide), and the
+// active section's card grid below it.
 
+// Shared loading block a few screens still use (also in CardSkeleton.scss, which
+// only loads with a feed page): the striped placeholder with a soft pulse.
 .skeleton {
-  animation: shimmer 2s infinite linear;
-  background: linear-gradient(to right, #f0f0f0 4%, #e0e0e0 25%, #f0f0f0 36%);
-  background-size: 1000px 100%;
-  border-radius: 4px;
+  @include v2.thumb-placeholder(6px);
+  border-radius: var(--r-xs);
+  animation: home-skeleton-pulse 1.4s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+@keyframes home-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .6; }
 }
 
 .home-grouped-container {
-  // padding: 20px 0;
   max-width: 100%;
-  overflow-x: hidden;
-
-  // Card-size preference (desktop rails). Small is the default.
-  --home-card-w: 280px;
-  --home-title-scale: 1;
-  &[data-card-size="large"] {
-    --home-card-w: 420px;
-    --home-title-scale: 1.3;
-  }
-
-  .home-card-size-toggle {
-    display: flex;
-    justify-content: flex-end;
-    gap: 6px;
-    margin: 4px 10px 0;
-
-    button {
-      padding: 4px 14px;
-      font-size: 12.5px;
-      font-weight: 500;
-      border-radius: 8px;
-      border: 1px solid var(--border-light);
-      background: var(--card-bg);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-
-      &.active {
-        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-        border-color: var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-      }
-    }
-
-    @include respond(phone) { display: none; } // desktop-only sizing control
-  }
-
-  @include respond(phone) {
-    // padding: 15px 0;
-  }
-
-  .loading-state {
-    text-align: center;
-    padding: 40px;
-    color: var(--text-secondary);
-    font-size: 16px;
-  }
+  min-width: 0;
+  overflow-x: clip;
+  display: flex;
+  flex-direction: column;
 }
 
-.video-row {
-  margin-bottom: 10px;
+// ── Section tabs + tools, sticky under the top bar ──
+.home-tabs-row {
+  position: sticky;
+  top: var(--nav-height, 56px);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0 12px;
+  background: var(--bg);
 
-  @include respond(phone) {
-    margin-bottom: 15px;
-  }
-
-  .row-header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 6px;
-    padding: 0 10px;
-
-    @include respond(phone) {
-      margin-bottom: 4px;
-      padding: 0 6px;
-    }
-    .wrap-title{
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      svg{
-        color: var(--text-primary);
-        @include respond(phone) {
-          width: 14px;
-          height: 14px;
-        }
-      }
-    }
-
-    h2 {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin: 0;
-
-      @include respond(phone) {
-        font-size: 13px;
-      }
-    }
-
-    .view-all {
-      font-size: 12px;
-      color: var(--text-primary);
-      text-decoration: none;
-      font-weight: 500;
-      padding: 2px 4px;
-      transition: opacity 0.2s ease;
-
-      &:hover {
-        opacity: 0.7;
-        text-decoration: underline;
-      }
-
-      @include respond(phone) {
-        font-size: 11px;
-      }
-    }
-  }
-
-  .scroll-wrapper {
-    position: relative;
-    overflow: hidden;
-
-    // Gradient fade hints — only visible when scrolling in that direction is possible
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 80px;
-      pointer-events: none;
-      z-index: 4;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-
-    &::before {
-      left: 0;
-      background: linear-gradient(to right, var(--bg-primary, #0d0d0d), transparent);
-    }
-
-    &::after {
-      right: 0;
-      background: linear-gradient(to left, var(--bg-primary, #0d0d0d), transparent);
-    }
-
-    &.has-left-fade::before {
-      opacity: 1;
-    }
-
-    &.has-right-fade::after {
-      opacity: 1;
-    }
-
-    .scroll-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 5;
-      background: var(--card-bg);
-      border: 1px solid var(--border-light);
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      color: var(--text-primary);
-
-      &:hover {
-        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-        border-color: var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-        transform: translateY(-50%) scale(1.1);
-      }
-
-      &.left {
-        left: 8px;
-      }
-
-      &.right {
-        right: 8px;
-      }
-
-      @include respond(phone) {
-        width: 32px;
-        height: 32px;
-
-        &.left {
-          left: 6px;
-        }
-
-        &.right {
-          right: 6px;
-        }
-      }
-
-      svg {
-        font-size: 18px;
-
-        @include respond(phone) {
-          font-size: 14px;
-        }
-      }
-    }
-  }
-
-  .video-scroll-container-horizontal {
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    padding: 6px 10px;
-    margin: 0 -10px;
-
-    // Hide scrollbar but keep functionality
-    scrollbar-width: none; // Firefox
-    -ms-overflow-style: none; // IE/Edge
-
-    &::-webkit-scrollbar {
-      display: none; // Chrome/Safari
-    }
-
-    @include respond(phone) {
-      padding: 4px 8px;
-    }
-
-    .card-container-horizontal {
-      // Override the grid layout from Card3's Cards.scss
-      .card-container {
-        display: grid !important;
-        grid-template-columns: none !important;
-        grid-template-rows: repeat(var(--vr-rows, 3), 1fr) !important;
-        grid-auto-flow: column !important;
-        grid-auto-columns: var(--home-card-w) !important;
-        gap: 20px !important;
-        grid-column-gap: 20px !important;
-        grid-row-gap: 20px !important;
-        margin-top: 0 !important;
-
-        @include respond(phone) {
-          grid-auto-columns: 160px !important;
-        }
-
-        .card {
-          width: var(--home-card-w);
-          min-width: var(--home-card-w);
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-          // Large mode scales the WHOLE card's type, not just the title, so a
-          // home-row card stays internally uniform the way a feed card does.
-          // (This used to size only the h2, which is how the row ended up with
-          // a big title sitting on top of fixed-size metadata.)
-          --card-fs: calc(12px * var(--home-title-scale));
-          --card-icon-fs: calc(14px * var(--home-title-scale));
-
-          @include respond(phone) {
-            width: 160px;
-            min-width: 160px;
-
-            // 160px tiles are narrower than the feed's, so the token steps down
-            // one notch here. Every element in the card follows it — the long
-            // list of per-element 10px overrides that used to live here is gone.
-            --card-fs: 10px;
-            --card-icon-fs: 12px;
-
-            // Force 16:9 aspect ratio on thumbnail
-            .img-wrap img {
-              height: 90px; // 160px * 9/16 = 90px
-            }
-
-            h2 {
-              margin: 3px 0;
-              -webkit-line-clamp: 2;
-            }
-
-            .profile-view-wrap .author-badge img {
-              width: 18px;
-              height: 18px;
-            }
-
-            .bottom-action {
-              padding: 4px 3px;
-
-              .wrap-left {
-                gap: 8px;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    .skeleton-horizontal-container {
-      display: grid;
-      grid-template-rows: repeat(3, 1fr);
-      grid-auto-flow: column;
-      grid-auto-columns: var(--home-card-w);
-      gap: 20px;
-      grid-column-gap: 20px;
-      grid-row-gap: 20px;
-
-      @include respond(phone) {
-        grid-auto-columns: 160px;
-      }
-
-      .skeleton-card-horizontal {
-        width: var(--home-card-w);
-        min-width: var(--home-card-w);
-        background-color: var(--card-bg);
-        border-radius: 12px;
-        box-shadow: var(--card-shadow);
-        overflow: hidden;
-
-        @include respond(phone) {
-          width: 160px;
-          min-width: 160px;
-          border-radius: 8px;
-        }
-
-        .video-thumbnail-skeleton {
-          width: 100%;
-          aspect-ratio: 16 / 9; height: auto;
-          border-radius: 5px 5px 0 0;
-
-          @include respond(phone) {
-            height: 90px;
-          }
-        }
-
-        .title-skeleton {
-          // Match the loaded card's 2-line title block (~2.8em), scaled by size.
-          height: calc(36px * var(--home-title-scale, 1));
-          margin: 5px 4px;
-          border-radius: 4px;
-
-          @include respond(phone) {
-            height: 24px;
-          }
-        }
-
-        .skeleton-profile-row {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          padding: 4px;
-
-          .profile-avatar-skeleton {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            flex-shrink: 0;
-          }
-
-          .profile-name-skeleton {
-            height: 12px;
-            width: 50%;
-            border-radius: 4px;
-          }
-        }
-
-        .skeleton-bottom-row {
-          display: flex;
-          justify-content: space-between;
-          padding: 8px 4px;
-          border-top: 1px solid var(--border-light);
-          margin-top: 4px;
-
-          .bottom-skeleton {
-            height: 12px;
-            width: 30%;
-            border-radius: 4px;
-          }
-        }
-      }
-    }
-  }
-
+  @include v2.mobile { gap: 8px; padding: 6px 0 10px; }
 }
 
-// View All reads as a plain foreground-colored link in both themes (no red pill).
-[data-theme="dark"] {
-  .row-header .view-all {
-    background: transparent !important;
-    color: var(--text-primary) !important;
-    border: none !important;
-  }
-}
-
-// ── Mobile + Large card size: turn the horizontal rails into a full-width,
-//    single-column vertical feed (pairs with center-based autoplay). ──
-@include respond(phone) {
-  html[data-card-size="large"] {
-    .video-scroll-container-horizontal {
-      overflow-x: hidden;
-
-      .card-container-horizontal .card-container {
-        grid-template-rows: none !important;
-        grid-auto-flow: row !important;
-        grid-template-columns: 1fr !important;
-        grid-auto-columns: auto !important;
-        gap: 14px !important;
-
-        .card {
-          width: 100% !important;
-          min-width: 0 !important;
-
-          .img-wrap img {
-            aspect-ratio: 16 / 9 !important;
-            height: auto !important;
-          }
-          h2 { font-size: 14px; }
-        }
-      }
-    }
-  }
-}
-
-// ── Mobile + Large: loading skeletons match the full-width vertical feed ──
-// !important to beat the more-specific default phone skeleton rules (160px/90px).
-@include respond(phone) {
-  html[data-card-size="large"] .skeleton-horizontal-container {
-    grid-template-rows: none !important;
-    grid-auto-flow: row !important;
-    grid-template-columns: 1fr !important;
-    grid-auto-columns: auto !important;
-    gap: 14px !important;
-
-    .skeleton-card-horizontal {
-      width: 100% !important;
-      min-width: 0 !important;
-
-      .video-thumbnail-skeleton {
-        aspect-ratio: 16 / 9 !important;
-        height: auto !important;
-      }
-    }
-  }
-}
-
-// ─── Mobile: home sections as tabs (shown ≤1024px via the JS isMobile gate) ───
+// The segmented track (one style for every tab bar)
 .home-tabs {
   display: flex;
-  gap: 2px;
-  overflow-x: auto;
-  padding: 0 8px;
-  border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+  gap: 4px;
+  padding: 4px;
+  min-width: 0;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  @include v2.scroll-x;
   touch-action: pan-x; // horizontal swipe scrolls the bar
-  &::-webkit-scrollbar { display: none; }
 
   .home-tab {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     flex: 0 0 auto;
-    padding: 9px 12px;
-    border: none;
+    height: 36px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: var(--r-md);
     background: transparent;
-    color: var(--text-secondary, #888);
-    font-size: 13.5px;
-    font-weight: 600;
+    color: var(--muted);
+    font: inherit;
+    @include v2.text(body);
+    font-weight: 700;
     white-space: nowrap;
     cursor: pointer; // the tab body just selects; only the handle grabs
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px; // sit on top of the container's bottom border
     touch-action: pan-y; // vertical swipe scrolls the page; horizontal → reorder
     user-select: none;
-    transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+    transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-    .home-tab-icon { display: inline-flex; opacity: 0.9; }
+    &:hover { color: var(--text); }
 
-    // Drag handle: revealed on hover (desktop); always faintly shown where there
-    // is no hover (touch) so it can still be grabbed to reorder.
+    .home-tab-icon { display: inline-flex; }
+
+    // Drag handle: revealed on hover (desktop); on the selected tab on touch.
     .home-tab-handle {
       display: inline-flex;
       align-items: center;
-      margin-left: -3px;
-      color: var(--text-secondary, #888);
+      margin-left: -6px;
+      color: var(--muted);
       opacity: 0;
       width: 0;
       overflow: hidden;
       touch-action: none; // grabbing the handle never scrolls
       cursor: grab;
-      transition: opacity 0.12s ease, width 0.12s ease;
-
+      transition: opacity var(--t-fast) var(--ease), width var(--t-fast) var(--ease);
       &:active { cursor: grabbing; }
     }
-    &:hover .home-tab-handle { opacity: 0.7; width: 14px; }
+    &:hover .home-tab-handle { opacity: .8; width: 16px; }
 
     &.active {
-      color: var(--text-primary, #f1f1f1);
-      border-bottom-color: var(--accent-primary, #e0594b);
+      background: var(--surface-2);
+      color: var(--text);
     }
-    // The tab being dragged: lifted look; the whole bar shows the grabbing cursor.
+    // The tab being dragged
     &.dragging {
-      background: var(--bg-hover, rgba(150, 150, 150, 0.12));
-      border-radius: 6px 6px 0 0;
+      background: var(--surface-2);
+      outline: 2px solid var(--cyan);
+      outline-offset: -2px;
     }
   }
 
   &.is-dragging, &.is-dragging .home-tab { cursor: grabbing; }
 
-  // No hover (touch): show the grip only on the CURRENTLY SELECTED tab, so the
-  // bar isn't cluttered with a handle on every tab.
   @media (hover: none) {
-    .home-tab.active .home-tab-handle { opacity: 0.5; width: 14px; }
+    .home-tab.active .home-tab-handle { opacity: .6; width: 16px; }
   }
 
-  // Tighter tabs on mobile, and only the ACTIVE tab keeps its label: with every
-  // label shown the bar overflowed and pushed Surf off the right edge.
-  @include respond(phone) {
-    gap: 0;
-    padding: 0 4px;
+  // Phones: only the ACTIVE tab keeps its label, so the bar fits beside the tools.
+  @include v2.mobile {
     .home-tab {
-      padding: 8px 10px;
-      gap: 4px;
+      height: 36px;
+      padding: 0 12px;
       font-size: 13px;
-      .home-tab-icon { opacity: 1; }
       &:not(.active) .home-tab-label { display: none; }
     }
   }
 }
 
-// Channel Surf entry, pinned to the right end of the bar. Neutral outline pill.
-.home-tabs .home-tab-surf {
-  display: inline-flex;
+.home-tabs-tools {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  flex: 0 0 auto;
-  align-self: center;
+  gap: 8px;
   margin-left: auto;
-  padding: 5px 14px;
-  border: 1px solid var(--border-color, #3d3d3d);
-  border-radius: 999px;
-  color: var(--text-primary, #f1f1f1);
-  font-size: 13.5px;
-  font-weight: 700;
-  white-space: nowrap;
+  flex: none;
+}
+
+// Channel Surfing link and the Customize button: quiet surface buttons, 40 tall
+.home-tab-surf,
+.home-tab-customize {
+  @include v2.control(40);
+  @include v2.text(label);
+  padding: 0 12px;
+  background: var(--surface);
+  color: var(--muted);
   text-decoration: none;
-  transition: background 0.12s ease;
+  white-space: nowrap;
 
-  &:hover { background: var(--bg-hover, rgba(150, 150, 150, 0.12)); }
+  &:hover { color: var(--text); background: var(--surface-2); }
 
-  @include respond(phone) {
-    gap: 4px;
-    margin-left: auto;
-    padding: 4px 10px;
-    font-size: 13px;
-    // Pinned to the right edge even if the tabs still overflow (long labels,
-    // narrow phones): the bar scrolls under it instead of scrolling it away.
-    position: sticky;
-    right: 0;
-    background: var(--bg-primary, #0f0f0f);
-    box-shadow: -10px 0 10px -4px var(--bg-primary, #0f0f0f);
+  // Phones: icon only (the label stays for screen readers through the title)
+  @include v2.mobile {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    justify-content: center;
+    border-radius: var(--r-lg);
+    > span:not(.material-symbols-rounded) { display: none; }
   }
 }
 
-// Sticky tab bar at the top of the feed.
-.home-tabs--bar {
-  position: sticky;
-  top: var(--nav-height, 56px);
-  z-index: 20;
-  background: var(--bg-primary, #0f0f0f);
-  margin-bottom: 12px;
-}
-
-// The active tab's content — a normal vertical grid (Card3 self-grids). No
-// horizontal scrolling anywhere.
-.home-tab-panel { padding: 0 8px; }
+// The active section's content: a vertical grid (Card3 self-grids).
+.home-tab-panel { min-width: 0; }
 
 .home-tab-viewall {
   display: flex;
   justify-content: center;
-  padding: 18px 0 8px;
-  .view-all {
-    padding: 8px 20px;
-    border-radius: 999px;
-    border: 1px solid var(--border-color, rgba(150, 150, 150, 0.3));
-    color: var(--text-primary, #f1f1f1);
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    &:hover { border-color: var(--accent-primary, #e0594b); }
-  }
+  padding: 20px 0 8px;
 }
 
-.home-tab-empty {
-  padding: 40px 8px;
-  text-align: center;
-  color: var(--text-secondary, #888);
-  font-size: 14px;
-}
+.home-tab-empty { margin: 8px 0; }
 
 // Infinite-scroll sentinel + "loading more" indicator at the bottom of a tab.
 .home-tab-sentinel {
@@ -610,9 +168,55 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 18px 0;
+  padding: 20px 0;
+
   .home-tab-loading {
-    font-size: 13px;
-    color: var(--text-secondary, #888);
+    @include v2.text(meta);
+    color: var(--muted);
+  }
+}
+
+// ── Customize Home dialog (34b) ──
+.home-customize-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.home-customize-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 8px 10px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+
+  .home-customize-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-md);
+    display: grid;
+    place-items: center;
+    flex: none;
+    background: var(--cyan-tint);
+    color: var(--cyan);
+  }
+
+  .home-customize-label {
+    flex: 1;
+    min-width: 0;
+    @include v2.text(body);
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .v2-toggle { margin-left: 4px; }
+
+  &.is-off {
+    .home-customize-icon { background: var(--surface-2); color: var(--muted); }
+    .home-customize-label { color: var(--muted); }
   }
 }

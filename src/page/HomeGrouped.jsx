@@ -31,7 +31,9 @@ import PlaylistFeedCard from "../components/Cards/PlaylistFeedCard";
 import AudioTile from "../components/AudioTile/AudioTile";
 import { audioItemPath } from "../components/AudioItem/AudioItemView";
 import { SHORTS_API_URL } from "../utils/config";
-import { Rocket, Compass, Users, Tags, Clock, GripVertical, Tv } from "lucide-react";
+import { Icon } from "../components/v2/Icon";
+import { Button, Dialog, EmptyState, IconButton, Toggle } from "../components/v2/ui";
+import { cx } from "../components/v2/helpers";
 import { useTranslation } from "react-i18next";
 import useCardSize from "../hooks/useCardSize";
 
@@ -373,14 +375,14 @@ const deduplicateVideos = (videos) => {
   });
 };
 
-// Section icons shown in the tab bar.
+// Section icons (Material Symbols) shown in the tab bar and the Customize dialog (34b).
 const iconsByTitle = {
-  "Home Feed": <Users size={16} />,
-  "Follow Feed": <Users size={16} />,
-  "New Content": <Clock size={16} />,
-  "Promoted": <Rocket size={16} />,
-  "Discover": <Compass size={16} />,
-  "Interests": <Tags size={16} />,
+  "Home Feed": "home",
+  "Follow Feed": "subscriptions",
+  "New Content": "schedule",
+  "Promoted": "rocket_launch",
+  "Discover": "explore",
+  "Interests": "interests",
 };
 
 // ── Persisted custom tab order (array of section keys) in localStorage ──
@@ -406,6 +408,18 @@ const saveActiveTab = (key) => {
   try { localStorage.setItem(ACTIVE_TAB_KEY, key); } catch { /* ignore */ }
 };
 
+// ── Sections the viewer turned off in Customize Home (array of keys) ──
+const HIDDEN_TABS_KEY = "3speak_home_hidden_tabs";
+const loadHiddenTabs = () => {
+  try {
+    const arr = JSON.parse(localStorage.getItem(HIDDEN_TABS_KEY) || "null");
+    return Array.isArray(arr) ? arr.filter((k) => typeof k === "string") : [];
+  } catch { return []; }
+};
+const saveHiddenTabs = (keys) => {
+  try { localStorage.setItem(HIDDEN_TABS_KEY, JSON.stringify(keys)); } catch { /* ignore */ }
+};
+
 // Reorder sections by the saved order; new/unknown keys keep their natural spot.
 const applyTabOrder = (sections, order) => {
   if (!order || !order.length) return sections;
@@ -415,6 +429,66 @@ const applyTabOrder = (sections, order) => {
   for (const s of sections) if (bySection.has(s.key)) out.push(s);
   return out;
 };
+
+// Customize Home (34b): move the sections up or down and turn off the ones you
+// don't want. Mounted only while open, so it starts from the saved layout. At
+// least one section always stays on.
+function CustomizeHomeDialog({ sections, hidden, onClose, onSave }) {
+  const { t } = useTranslation();
+  const byKey = useMemo(() => new Map(sections.map((s) => [s.key, s])), [sections]);
+  const [order, setOrder] = useState(() => sections.map((s) => s.key));
+  const [off, setOff] = useState(() => new Set(hidden));
+  const onCount = order.filter((k) => !off.has(k)).length;
+  const move = (i, dir) => setOrder((prev) => {
+    const j = i + dir;
+    if (j < 0 || j >= prev.length) return prev;
+    const next = [...prev];
+    [next[i], next[j]] = [next[j], next[i]];
+    return next;
+  });
+  const toggle = (key, on) => setOff((prev) => {
+    const next = new Set(prev);
+    if (on) next.delete(key); else next.add(key);
+    return next;
+  });
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title={t('feeds.home.customizeTitle')}
+      sub={t('feeds.home.customizeHint')}
+      width={460}
+      closeLabel={t('common.actions.close')}
+      footer={(
+        <Button variant="primary" size={48} block trailing="check" onClick={() => onSave(order, [...off].filter((k) => byKey.has(k)))}>
+          {t('profile.layout.save')}
+        </Button>
+      )}
+    >
+      <div className="home-customize-list">
+        {order.map((key, i) => {
+          const s = byKey.get(key);
+          if (!s) return null;
+          const on = !off.has(key);
+          return (
+            <div key={key} className={cx('home-customize-row', !on && 'is-off')}>
+              <span className="home-customize-icon"><Icon name={iconsByTitle[s.title] || 'view_day'} size={20} /></span>
+              <b className="home-customize-label">{s.label}</b>
+              <IconButton icon="arrow_upward" label={t('profile.layout.moveUp')} size={32} variant="ghost" disabled={i === 0} onClick={() => move(i, -1)} />
+              <IconButton icon="arrow_downward" label={t('profile.layout.moveDown')} size={32} variant="ghost" disabled={i === order.length - 1} onClick={() => move(i, 1)} />
+              <Toggle
+                checked={on}
+                label={on ? t('profile.layout.hide') : t('profile.layout.show')}
+                disabled={on && onCount <= 1}
+                onChange={(v) => toggle(key, v)}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </Dialog>
+  );
+}
 
 // Bottom-of-list sentinel — fires onLoadMore when it scrolls into view (600px
 // early) so the next page is fetched before the user hits the actual end.
@@ -478,16 +552,6 @@ const HomeGrouped = () => {
   const hasInterests = Array.isArray(interests) && interests.length > 0;
   const interestsKey = hasInterests ? interests.join(',') : '';
 
-  // On mobile/tablet the stacked section rows become tabs (one section at a time).
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' && window.matchMedia('(max-width: 1024px)').matches,
-  );
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 1024px)');
-    const onChange = (e) => setIsMobile(e.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, []);
   // Null = the first tab. A saved tab that is not on offer (Interests before they
   // have loaded, or after logging out) falls back to the first one without being
   // forgotten, so it comes back once it is there again.
@@ -501,6 +565,9 @@ const HomeGrouped = () => {
   // both mouse and touch). `dragKey` = the tab being dragged, `overKey` = the tab
   // currently under the pointer (its drop position).
   const [tabOrder, setTabOrder] = useState(loadTabOrder);
+  // Sections turned off in Customize Home, and whether that dialog is open.
+  const [hiddenTabs, setHiddenTabs] = useState(loadHiddenTabs);
+  const [customizeOpen, setCustomizeOpen] = useState(false);
   const [drag, setDrag] = useState(null); // { key, overKey } | null
   const dragRef = useRef(null);           // { key, startX, startY, mode, moved }
   const tabBarRef = useRef(null);
@@ -681,8 +748,6 @@ const HomeGrouped = () => {
   if (authenticated && hasInterests) {
     baseSections.splice(2, 0, { key: 'interests', title: 'Interests', label: t('feeds.home.sections.interests'), videos: withLive(liveFollowing, leadWithPromoted(interestsData)), isLoading: interestsLoading, priority: true });
   }
-  if (authenticated) {
-  }
   // A saved tabOrder may still list the retired 'promoted' key — applyTabOrder skips
   // keys with no matching section, so old orders degrade cleanly.
   const naturalSections = baseSections;
@@ -690,8 +755,11 @@ const HomeGrouped = () => {
   // grow as pages load, and memoising on keys alone would freeze the feed at
   // page 1 (the sentinel then stays in view and loops). applyTabOrder is cheap.
   const tabSections = applyTabOrder(naturalSections, tabOrder);
+  // What the tab bar offers: everything not turned off (never nothing at all).
+  const shownSections = tabSections.filter((s) => !hiddenTabs.includes(s.key));
+  const visibleSections = shownSections.length ? shownSections : tabSections;
 
-  const activeSection = tabSections.find((s) => s.key === activeKey) || tabSections[0] || null;
+  const activeSection = visibleSections.find((s) => s.key === activeKey) || visibleSections[0] || null;
   const activeVideos = activeSection?.videos || [];
 
   // ── Metadata (payout/votes/views/watch) is fetched only for cards near the
@@ -1032,7 +1100,8 @@ const HomeGrouped = () => {
     dragRef.current = null;
     if (!d) return;
     if (drag?.order && (d.moved || d.mode === 'immediate')) {
-      const order = drag.order;
+      // Sections turned off keep their place after the ones that were dragged.
+      const order = [...drag.order, ...tabSections.map((s) => s.key).filter((k) => !drag.order.includes(k))];
       setTabOrder(order);
       saveTabOrder(order);
       // The active tab is held by key, so it stays selected wherever it moved to.
@@ -1041,7 +1110,7 @@ const HomeGrouped = () => {
     }
     setDrag(null);
     // No real drag → treat as a tab select.
-    if (tabSections.some((s) => s.key === d.key)) selectTab(d.key);
+    if (visibleSections.some((s) => s.key === d.key)) selectTab(d.key);
   };
   // Global listeners while a pointer is down on a tab.
   useEffect(() => {
@@ -1052,15 +1121,23 @@ const HomeGrouped = () => {
       window.removeEventListener('pointerup', onTabPointerUp);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [drag, tabSections, activeSection]);
+  }, [drag, tabSections, visibleSections, activeSection]);
 
   // Live-previewed tab order during a drag (falls back to the committed order).
   const displaySections = useMemo(() => {
-    if (!drag?.order) return tabSections;
-    const byKey = new Map(tabSections.map((s) => [s.key, s]));
+    if (!drag?.order) return visibleSections;
+    const byKey = new Map(visibleSections.map((s) => [s.key, s]));
     const out = drag.order.map((k) => byKey.get(k)).filter(Boolean);
-    return out.length === tabSections.length ? out : tabSections;
-  }, [tabSections, drag]);
+    return out.length === visibleSections.length ? out : visibleSections;
+  }, [visibleSections, drag]);
+
+  const saveCustomLayout = (order, hidden) => {
+    setTabOrder(order);
+    saveTabOrder(order);
+    setHiddenTabs(hidden);
+    saveHiddenTabs(hidden);
+    setCustomizeOpen(false);
+  };
 
   // Infinite query backing each paginated section (promoted isn't paginated).
   const queryByKey = { home: homeQ, discover: discoverQ, interests: interestsQ, new: newQ };
@@ -1109,7 +1186,7 @@ const HomeGrouped = () => {
       );
     }
     if (!s.videos || s.videos.length === 0) {
-      return <div className="home-tab-empty">{t('feeds.home.empty')}</div>;
+      return <EmptyState className="home-tab-empty" icon="video_library" title={t('feeds.home.empty')} />;
     }
     const q = queryByKey[s.key];
     // Only interest-having users get the "follow these" rail (it's interest-matched).
@@ -1155,7 +1232,9 @@ const HomeGrouped = () => {
           />
         )}
         {(!q || !q.hasNextPage) && s.linkTo && (
-          <div className="home-tab-viewall"><Link to={s.linkTo} className="view-all">{t('feeds.home.viewAll')}</Link></div>
+          <div className="home-tab-viewall">
+            <Button as={Link} to={s.linkTo} variant="secondary" size={40} next className="view-all">{t('feeds.home.viewAll')}</Button>
+          </div>
         )}
       </>
     );
@@ -1170,31 +1249,47 @@ const HomeGrouped = () => {
       {/* Logged-in only, and renders nothing when there's nothing unwatched. */}
       <NewFromFollowing />
 
-      <div className={`home-tabs home-tabs--bar${drag ? ' is-dragging' : ''}`} role="tablist" ref={tabBarRef}>
-        {displaySections.map((s) => (
-          <button
-            key={s.key}
-            type="button"
-            role="tab"
-            data-tab-key={s.key}
-            aria-selected={s.key === activeSection?.key}
-            className={`home-tab${s.key === activeSection?.key ? ' active' : ''}${drag?.key === s.key ? ' dragging' : ''}`}
-            aria-label={s.label}
-            title={s.label}
-            onPointerDown={onTabPointerDown(s.key)}
-          >
-            <span className="home-tab-handle" aria-hidden="true" title={t('feeds.home.dragToReorder')}><GripVertical size={14} /></span>
-            <span className="home-tab-icon">{iconsByTitle[s.title]}</span>
-            <span className="home-tab-label">{s.label}</span>
+      <div className="home-tabs-row">
+        <div className={`home-tabs home-tabs--bar${drag ? ' is-dragging' : ''}`} role="tablist" ref={tabBarRef}>
+          {displaySections.map((s) => (
+            <button
+              key={s.key}
+              type="button"
+              role="tab"
+              data-tab-key={s.key}
+              aria-selected={s.key === activeSection?.key}
+              className={`home-tab${s.key === activeSection?.key ? ' active' : ''}${drag?.key === s.key ? ' dragging' : ''}`}
+              aria-label={s.label}
+              title={s.label}
+              onPointerDown={onTabPointerDown(s.key)}
+            >
+              <span className="home-tab-handle" aria-hidden="true" title={t('feeds.home.dragToReorder')}><Icon name="drag_indicator" size={16} /></span>
+              <span className="home-tab-icon"><Icon name={iconsByTitle[s.title] || 'view_day'} size={18} fill={s.key === activeSection?.key} /></span>
+              <span className="home-tab-label">{s.label}</span>
+            </button>
+          ))}
+        </div>
+        <div className="home-tabs-tools">
+          {/* Channel Surfing lives here rather than in the top menu. A link, not a
+              tab: it leaves the page, and the reorder drag only hit-tests
+              `.home-tab`, so it can never be dragged in among the feeds. */}
+          <Link to="/surf" className="home-tab-surf" title={t('feeds.home.surfTitle')}>
+            <Icon name="live_tv" size={18} /> <span>{t('feeds.home.zapping')}</span>
+          </Link>
+          <button type="button" className="home-tab-customize" onClick={() => setCustomizeOpen(true)} title={t('feeds.home.customizeTitle')}>
+            <Icon name="tune" size={18} /> <span>{t('feeds.home.customize')}</span>
           </button>
-        ))}
-        {/* Channel Surfing lives here rather than in the top menu. A link, not a
-            tab: it leaves the page, and the reorder drag only hit-tests
-            `.home-tab`, so it can never be dragged in among the feeds. */}
-        <Link to="/surf" className="home-tab-surf" title={t('feeds.home.surfTitle')}>
-          <Tv size={16} aria-hidden="true" /> <span>{t('feeds.home.zapping')}</span>
-        </Link>
+        </div>
       </div>
+
+      {customizeOpen && (
+        <CustomizeHomeDialog
+          sections={tabSections}
+          hidden={hiddenTabs}
+          onClose={() => setCustomizeOpen(false)}
+          onSave={saveCustomLayout}
+        />
+      )}
 
       <div className="home-tab-panel" role="tabpanel" ref={panelRef}>
         {renderPanel(activeSection)}

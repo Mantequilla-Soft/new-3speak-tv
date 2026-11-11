@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MdCloudOff } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import useOnline from '../../hooks/useOnline';
 import { useDownloads } from '../../lib/podcastDownloads';
 import { useAppStore } from '../../lib/store';
@@ -30,12 +30,12 @@ export default function OfflineBanner() {
   const onDownloads = pathname === '/audio' && !/[?&](view=(discover|trends)|podcast=|episode=|play=)/.test(search);
   return (
     <div className="offline-banner" role="status">
-      <MdCloudOff size={18} aria-hidden />
+      <Icon name="wifi_off" size={22} className="offline-banner-icon" />
       <span className="offline-banner-text">{items.length ? t('audio.offline.notice') : t('audio.offline.noticeNoDownloads')}</span>
       {items.length > 0 && !onDownloads && (
         <button
           type="button"
-          className="offline-banner-link"
+          className="v2-btn v2-btn--secondary h36 offline-banner-link"
           onClick={() => { setDismissed(true); navigate('/audio?view=mine'); }}
         >
           {t('audio.offline.open')}

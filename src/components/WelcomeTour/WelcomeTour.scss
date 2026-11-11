@@ -1,6 +1,10 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Above every modal (they top out around 100050) and the cookie banner.
+// The guided tour over the real page (design 33d): the page dims, the element
+// being explained is cut out with a cyan outline, and a card beside it says
+// what it is. On a phone the card is a sheet.
+
+// Above every modal and the cookie banner.
 .wt-root {
   position: fixed;
   inset: 0;
@@ -15,32 +19,32 @@
 .wt-dim {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay);
 }
 
 // The cut-out: a transparent box whose enormous shadow darkens everything else.
 .wt-spot {
   position: fixed;
-  border-radius: 12px;
-  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
-  outline: 2px solid var(--accent-primary, #e53935);
-  outline-offset: 2px;
+  border-radius: var(--r-lg);
+  box-shadow: 0 0 0 9999px var(--overlay);
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
   pointer-events: none;
-  transition: top 0.3s ease, left 0.3s ease, width 0.3s ease, height 0.3s ease;
+  transition: top var(--t-slow) var(--ease), left var(--t-slow) var(--ease), width var(--t-slow) var(--ease), height var(--t-slow) var(--ease);
 
   @media (prefers-reduced-motion: reduce) { transition: none; }
 }
 
 .wt-card {
   position: fixed;
-  width: 340px;
+  width: 380px;
   max-width: calc(100vw - 32px);
-  padding: 18px 18px 14px;
-  border-radius: 16px;
-  background: var(--bg-elevated, var(--card-bg, #1f1f1f));
-  border: 1px solid var(--border-color);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
-  color: var(--text-primary);
+  padding: 18px;
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+  border: 1px solid var(--cyan);
+  box-shadow: var(--shadow-float);
+  color: var(--text);
 
   &--center {
     top: 50%;
@@ -55,18 +59,23 @@
     right: 0;
     width: auto;
     max-width: none;
-    padding: 18px 16px calc(14px + env(safe-area-inset-bottom));
-    border-radius: 18px 18px 0 0;
+    padding: 18px 16px calc(16px + env(safe-area-inset-bottom));
+    border: 0;
+    border-top: 1px solid var(--border);
+    border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+    box-shadow: var(--shadow-sheet);
   }
   &--bottom { bottom: 0; }
   &--top {
     top: 0;
-    border-radius: 0 0 18px 18px;
+    border-top: 0;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0 0 var(--r-3xl) var(--r-3xl);
     padding-top: calc(18px + env(safe-area-inset-top));
-    padding-bottom: 14px;
+    padding-bottom: 16px;
   }
 
-  @include mix.respond(phone) {
+  @include v2.mobile {
     &--center {
       top: auto;
       bottom: 0;
@@ -75,112 +84,93 @@
       width: auto;
       max-width: none;
       transform: none;
-      border-radius: 18px 18px 0 0;
-      padding-bottom: calc(14px + env(safe-area-inset-bottom));
+      border: 0;
+      border-top: 1px solid var(--border);
+      border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
     }
   }
 }
 
 .wt-progress {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
-.wt-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 4px 0 10px;
-  padding: 0;
-  list-style: none;
+.wt-count {
+  @include v2.mono(12, 700);
+  color: var(--cyan);
+  white-space: nowrap;
+}
 
-  li {
-    padding: 3px 10px;
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
+.wt-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: var(--r-bar);
+  background: var(--surface-2);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: var(--r-bar);
+    background: var(--cyan);
+    transition: width var(--t-slow) var(--ease);
   }
 }
 
 .wt-title {
   margin: 0 0 6px;
-  font-size: 18px;
-  font-weight: 700;
+  @include v2.text(title);
+  font-size: 20px;
+}
+
+.wt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0 10px;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--text);
+    @include v2.text(label);
+    font-size: 12px;
+    white-space: nowrap;
+  }
 }
 
 .wt-text {
   margin: 0;
-  font-size: 14.5px;
-  line-height: 1.55;
-  color: var(--text-secondary);
+  @include v2.text(body);
+  line-height: 1.5;
+  color: var(--muted);
 }
 
-.wt-text b { color: var(--text-primary); }
-
-.wt-dots {
-  display: flex;
-  gap: 5px;
-  margin: 14px 0 12px;
-
-  span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--border-color);
-    transition: width 0.2s ease, background-color 0.2s ease;
-
-    &.on {
-      width: 16px;
-      border-radius: 3px;
-      background: var(--accent-primary, #e53935);
-    }
-  }
-}
+.wt-text b { color: var(--text); }
 
 .wt-actions {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 16px;
 
   .wt-spacer { flex: 1; }
 }
 
-.wt-skip {
-  border: none;
-  background: none;
-  padding: 6px 2px;
-  font-size: 13px;
-  color: var(--text-muted);
-  cursor: pointer;
-
-  &:hover { color: var(--text-primary); }
+.wt-skip.v2-btn {
+  padding: 0 12px;
+  color: var(--muted);
+  &:hover { color: var(--text); }
 }
 
-.wt-btn {
-  padding: 7px 16px;
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
-  background: transparent;
-  color: var(--text-primary);
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-
-  &:hover { background: var(--bg-hover); }
-
-  // Red outline, never a red fill (3Speak convention).
-  &--primary {
-    border-color: var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-
-    &:hover { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
-  }
-
-  &:focus-visible { outline: 2px solid var(--accent-primary, #e53935); outline-offset: 2px; }
-}
+.wt-btn--primary.v2-btn { gap: 12px; }

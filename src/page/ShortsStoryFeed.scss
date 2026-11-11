@@ -1,3 +1,9 @@
+@use "../styles/v2" as v2;
+
+// The stories page (/shorts/stories, 30a): the creators row above the shorts
+// player on desktop, the same row ON the video on phones. Left / right (keys or
+// a sideways swipe) moves between creators. Only design-system tokens.
+
 // Remove container top padding when stories feed is active
 .container:has(.shorts-story-feed) {
   padding-top: 0 !important;
@@ -6,8 +12,8 @@
 .shorts-story-feed {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 64px);
-  max-height: calc(100vh - 64px);
+  height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px));
+  max-height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px));
   overflow: hidden;
 
   > .shorts-stories {
@@ -25,8 +31,6 @@
     }
   }
 
-
-
   &__player {
     flex: 1;
     min-height: 0;
@@ -37,47 +41,27 @@
       height: 100% !important;
       max-height: 100% !important;
 
-      // On mobile, keep short-main relative so it respects the story feed container
-      // instead of using position:fixed from Short.scss
-      @media (max-width: 767px) {
+      // On phones, keep short-main relative so it respects the story feed
+      // container instead of the position:fixed from Short.scss
+      @include v2.mobile {
         position: relative !important;
         top: auto !important;
         left: auto !important;
         right: auto !important;
         bottom: auto !important;
-        background: #000 !important;
-
-        .loadingState,
-        .emptyState,
-        .errorState {
-          background: #000;
-          color: #fff;
-          gap: 12px;
-
-          svg {
-            color: #fff;
-            fill: #fff;
-          }
-
-          p {
-            color: #fff;
-            font-size: 0.875rem;
-            font-family: inherit;
-            margin: 0;
-            animation: none;
-          }
-        }
+        background: var(--media-black) !important;
       }
     }
 
-    // Mobile overlay stories (hidden on desktop)
+    // Phones: the creators row sits ON the video, under the top controls.
+    // White on the media scrim in both themes.
     .shorts-story-feed__mobile-stories {
       display: none;
 
-      @media (max-width: 767px) {
+      @include v2.mobile {
         display: block;
         position: absolute;
-        top: 3rem; // below back/CC row
+        top: calc(60px + env(safe-area-inset-top, 0px)); // below back / CC row
         left: 0;
         right: 0;
         z-index: 11;
@@ -87,57 +71,50 @@
           margin-bottom: 0;
           padding: 0;
           background: transparent;
-          backdrop-filter: none;
+          border: 0;
           border-radius: 0;
         }
 
         .stories-row,
         .stories-skeleton-row {
           gap: 6px;
-          padding: 2px 6px;
+          padding: 2px 12px;
         }
 
-        .story-item {
-          width: 50px;
-        }
+        .story-item { width: 52px; }
 
         .story-avatar-wrap {
-          width: 42px;
-          height: 42px;
-          padding: 1.5px;
+          width: 44px;
+          height: 44px;
+          padding: 2px;
 
           .count-badge {
-            font-size: 8px;
-            min-width: 13px;
-            height: 13px;
-            border-width: 1.5px;
+            font-size: 10px;
+            min-width: 14px;
+            height: 14px;
+            border-width: 2px;
           }
 
           .add-badge {
-            width: 14px;
-            height: 14px;
-            border-width: 1.5px;
-
-            svg {
-              font-size: 6px;
-            }
+            width: 16px;
+            height: 16px;
+            border-width: 2px;
           }
         }
 
-        // White-on-video: this overlay sits ON the short, so it needs the contrast
-        // the (now theme-aware) compact variant no longer hardcodes.
         .story-username {
-          font-size: 9px;
-          color: #fff;
-          background: rgba(0, 0, 0, 0.5);
-          border-radius: 4px;
-          padding: 1px 4px;
+          max-width: 100%;
+          padding: 0 4px;
+          border-radius: var(--r-xs);
+          background: var(--media-scrim);
+          color: var(--on-media);
+          font-size: 10px;
+          font-weight: 700;
         }
 
         .story-item--active {
           .story-avatar-wrap {
-            border-color: rgba(255, 255, 255, 0.85) !important;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 255, 255, 0.12);
+            border-color: var(--on-media) !important;
           }
 
           // A story's ring is its timer (ShortsStories.scss): keep the arc.
@@ -145,36 +122,36 @@
             border-color: transparent !important;
           }
 
-          .story-username {
-            color: #fff;
-          }
+          .story-username { color: var(--on-media); }
         }
 
-        .stories-scroll-btn {
-          display: none;
-        }
+        .stories-scroll-btn { display: none; }
       }
     }
 
-    // Horizontal swipe animations
-    &.swipe-left {
-      animation: swipeLeft 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    }
-
-    &.swipe-right {
-      animation: swipeRight 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    }
+    // Horizontal swipe animations between creators
+    &.swipe-left { animation: storyFeedSwipeLeft .35s var(--ease) forwards; }
+    &.swipe-right { animation: storyFeedSwipeRight .35s var(--ease) forwards; }
   }
 
-  @media (max-width: 767px) {
+  @include v2.mobile {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 56px;
-    height: calc(100dvh - 56px);
-    max-height: calc(100dvh - 56px);
+    bottom: var(--bottom-nav-height);
+    height: calc(100dvh - var(--bottom-nav-height));
+    max-height: calc(100dvh - var(--bottom-nav-height));
     padding-top: env(safe-area-inset-top, 0px);
+    background: var(--media-black);
+
+    // No comment bar (Settings, "Comment bar on shorts" off): the app's bottom
+    // bar is hidden on Shorts, so the bottom strip would be dead space.
+    &:has(.short-main.no-bottom-bar) {
+      bottom: 0;
+      height: 100dvh;
+      max-height: 100dvh;
+    }
   }
 }
 
@@ -185,47 +162,26 @@
   }
 }
 
-@keyframes swipeLeft {
-  0% {
-    transform: translateX(30%);
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
+@keyframes storyFeedSwipeLeft {
+  0% { transform: translateX(30%); opacity: .4; }
+  100% { transform: translateX(0); opacity: 1; }
 }
 
-@keyframes swipeRight {
-  0% {
-    transform: translateX(-30%);
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
+@keyframes storyFeedSwipeRight {
+  0% { transform: translateX(-30%); opacity: .4; }
+  100% { transform: translateX(0); opacity: 1; }
 }
 
-// The comments panel is `position: fixed; top: 0; height: 100vh` (Short.scss), so on
-// the stories page it ran straight under the stories bar.
-//
-// It CANNOT be reached from inside `.shorts-story-feed`: Short.jsx portals it to
-// <body> (`.short-main.shorts-comments-portal`) so it can paint above the nav, which
-// takes it out of this page's subtree entirely. Hence matching from `body:has(...)`
-// — scoped to "the stories page is currently mounted" — and hence the CSS var living
-// on <html> instead of on the page root.
-//
-// `--stories-bar-bottom` is the bar's measured bottom edge in VIEWPORT coords, which
-// is exactly what a fixed element's `top` takes — no arithmetic against the nav
-// height needed. It falls back to 0px (= the panel's original full-height behaviour)
-// whenever the bar is hidden or not yet measured.
-//
-// Only above the mobile breakpoint: under 768px the panel is a bottom sheet
-// (`top: auto`) and the desktop bar is hidden, so there is nothing to clear.
+// The discussion panel is fixed and full-height, so on this page it would run
+// UNDER the stories bar. Short.jsx portals it to <body>, outside this page's
+// subtree, hence matching from `body:has(...)` and the CSS var on <html>
+// (`--stories-bar-bottom`, the bar's measured bottom edge in viewport coords,
+// set by ShortsStoryFeed.jsx). It falls back to the top bar's height whenever
+// the bar is hidden or not yet measured. Desktop only: on phones the panel is a
+// bottom sheet and the desktop bar is hidden.
 @media (min-width: 769px) {
   body:has(.shorts-story-feed) .shorts-comments-portal .commentsPanel {
-    top: var(--stories-bar-bottom, 0px);
-    height: calc(100vh - var(--stories-bar-bottom, 0px));
+    top: max(var(--topbar-h), var(--stories-bar-bottom, 0px));
+    height: calc(100vh - max(var(--topbar-h), var(--stories-bar-bottom, 0px)) - var(--shorts-bottom-reserve, 0px));
   }
 }

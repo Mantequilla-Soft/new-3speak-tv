@@ -1,9 +1,8 @@
-// @use "../../mixins.scss" as *;
-
-.barloader-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 85vh;
+.barloader-container {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 85vh;
 }
+
+.barloader-icon { color: var(--cyan); }

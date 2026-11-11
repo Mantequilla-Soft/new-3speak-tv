@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdContentCopy, MdContentCut, MdAccessTime } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Button } from '../v2/ui';
 import { episodePath } from '../../lib/podcasts';
 import { toastIn } from '../../utils/toast';
 import { fmt, withTimestamp, clipRange, CLIP_MIN, CLIP_MAX } from './playerMath';
@@ -33,16 +34,25 @@ export function ClipForm({ url, start, duration, onDone }) {
   if (!open) {
     return (
       <button type="button" className="audio-share-option" onClick={() => { setFrom(start); setOpen(true); }}>
-        <MdContentCut size={14} /><span>{t('audio.player.clipMake')}</span>
+        <Icon name="content_cut" size={18} /><span>{t('audio.player.clipMake')}</span>
       </button>
     );
   }
+  // The clip's place in the whole track (design 36b), when the length is known.
+  const total = Number(duration) || 0;
+  const left = total > 0 ? (range.start / total) * 100 : 0;
+  const width = total > 0 ? Math.max(1, ((range.end - range.start) / total) * 100) : 0;
   return (
     <div className="audio-np-clip-form">
-      <div className="audio-np-clip-form-row">
-        <MdContentCut size={14} aria-hidden />
-        <span>{t('audio.player.clipRange', { from: fmt(range.start), to: fmt(range.end) })}</span>
+      <div className="audio-np-clip-form-head">
+        <span className="v2-eyebrow">{t('audio.player.clipMake')}</span>
+        <span className="audio-np-clip-form-row num">{t('audio.player.clipRange', { from: fmt(range.start), to: fmt(range.end) })}</span>
       </div>
+      {total > 0 && (
+        <div className="audio-np-clip-form-bar" aria-hidden="true">
+          <span style={{ left: `${left}%`, width: `${width}%` }} />
+        </div>
+      )}
       <label className="audio-np-clip-form-len">
         <span>{t('audio.player.clipLength')}</span>
         <input
@@ -54,18 +64,20 @@ export function ClipForm({ url, start, duration, onDone }) {
           onChange={(e) => setLen(Number(e.target.value))}
           aria-valuetext={t('audio.player.clipSeconds', { seconds: len })}
         />
-        <span className="audio-np-clip-form-sec">{t('audio.player.clipSeconds', { seconds: len })}</span>
+        <b className="audio-np-clip-form-sec num">{t('audio.player.clipSeconds', { seconds: len })}</b>
       </label>
-      <button
-        type="button"
+      <Button
+        variant="primary"
+        block
         className="audio-np-clip-form-copy"
+        trailing="content_cut"
         onClick={() => {
           copyLink(withTimestamp(url, range.start, range.end), t('audio.player.clipCopied'), t('audio.player.copyFailed'));
           onDone?.();
         }}
       >
-        <MdContentCopy size={14} /> {t('audio.player.clipCopy')}
-      </button>
+        {t('audio.player.clipCopy')}
+      </Button>
     </div>
   );
 }
@@ -84,7 +96,7 @@ export function CopyAtOption({ url, at, onDone }) {
         onDone?.();
       }}
     >
-      <MdAccessTime size={14} /><span>{t('audio.player.copyAt', { time: fmt(sec) })}</span>
+      <Icon name="schedule" size={18} /><span>{t('audio.player.copyAt', { time: fmt(sec) })}</span>
     </button>
   );
 }
@@ -100,7 +112,7 @@ export function EpisodeShareOptions({ track, at, duration, onClose }) {
         className="audio-share-option"
         onClick={() => { copyLink(url, t('audio.player.copiedEpisode'), t('audio.player.copyFailed')); onClose(); }}
       >
-        <MdContentCopy size={14} /><span>{t('audio.player.copyEpisode')}</span>
+        <Icon name="link" size={18} /><span>{t('audio.player.copyEpisode')}</span>
       </button>
       <CopyAtOption url={url} at={at} onDone={onClose} />
       <ClipForm url={url} start={Math.floor(at || 0)} duration={duration} onDone={onClose} />

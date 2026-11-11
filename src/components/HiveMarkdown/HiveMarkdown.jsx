@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import { Icon } from '../v2/Icon';
 import { getPostBodyRenderer } from '../../lib/hiveRenderer';
 import './HiveMarkdown.scss';
 
@@ -9,10 +10,10 @@ import './HiveMarkdown.scss';
  * markdown needs to be displayed outside the main post body.
  *
  * When `collapsible` is set, long content is clipped to `collapsedHeight` with a
- * fade and a "Show more / Show less" toggle — the same UX as the video
- * description.
+ * "Show more / Show less" toggle, the same UX as the video description.
  */
 export default function HiveMarkdown({ body, className = '', collapsible = false, collapsedHeight = 140 }) {
+  const { t } = useTranslation();
   const [html, setHtml] = useState('');
   const [expanded, setExpanded] = useState(false);
   const [needsCollapse, setNeedsCollapse] = useState(false);
@@ -64,17 +65,17 @@ export default function HiveMarkdown({ body, className = '', collapsible = false
           style={collapsed ? { maxHeight: collapsedHeight } : undefined}
           dangerouslySetInnerHTML={{ __html: html }}
         />
-        {collapsed && <div className="hive-markdown-fade" />}
       </div>
 
       {collapsible && needsCollapse && (
         <button
           type="button"
           className="hive-markdown-toggle"
+          aria-expanded={expanded}
           onClick={() => setExpanded((e) => !e)}
         >
-          <span>{expanded ? 'Show less' : 'Show more'}</span>
-          {expanded ? <FaChevronUp /> : <FaChevronDown />}
+          <span>{expanded ? t('common.actions.showLess') : t('common.actions.showMore')}</span>
+          <Icon name={expanded ? 'expand_less' : 'expand_more'} size={18} />
         </button>
       )}
     </div>

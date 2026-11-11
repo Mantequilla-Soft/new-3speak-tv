@@ -1,20 +1,15 @@
+@use "../../styles/v2" as v2;
+
+// Linked external profiles in the profile header (37b): 32px icon wells at the
+// end of the badge row. `--column` is kept as a hook; in v2 they always run as
+// a row, since the header is flush left at every width.
 .social-links {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.4rem;
-  margin-left: 0.5rem;
+  gap: 6px;
 
-  // Stacked at the right edge of the profile header (ProfileHeader `aside`);
-  // back to a row on phones, where the header is centred.
-  &--column {
-    flex-direction: column;
-    margin-left: 0;
-    gap: 0.55rem;
-
-    @media screen and (max-width: 767px) {
-      flex-direction: row;
-    }
-  }
+  &--column { flex-direction: row; }
 
   &__chip {
     position: relative;
@@ -23,98 +18,68 @@
   }
 
   &__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 9999px;
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid #1e293b;
-    color: #cbd5e1;
-    font-size: 14px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
     text-decoration: none;
-    transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-    &:hover {
-      transform: translateY(-1px);
-      color: #fff;
-    }
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+
+    @include v2.mobile { width: 40px; height: 40px; }
   }
 
-  &__chip--youtube &__icon:hover {
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-    color: var(--accent-primary, #e53935);
-    border-color: var(--accent-primary, #e53935);
-  }
+  // Verified links: a cyan hint on hover (verified = cyan, STYLE_GUIDE §2).
+  &__chip &__icon:hover { color: var(--cyan); }
 
+  // Owner only: unlink. A small round badge on the tile's corner.
   &__remove {
     position: absolute;
-    top: -4px;
+    top: -6px;
     right: -6px;
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     padding: 0;
-    border-radius: 9999px;
-    border: 1px solid #1e293b;
-    background: rgba(15, 23, 42, 0.95);
-    color: #cbd5e1;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    background: var(--surface-2);
+    color: var(--muted);
     cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    display: grid;
+    place-items: center;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-    svg {
-      width: 10px;
-      height: 10px;
-    }
-
-    &:hover {
-      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    &:hover { background: var(--accent-tint-strong); color: var(--accent); }
+    &:disabled { opacity: .45; cursor: not-allowed; }
   }
 }
 
-// The profile header's link column: the linked channels plus the round "+"
-// that links another one (own profile). A row on phones, like the links.
+// The profile header's link group: the linked channels plus the dashed "+"
+// tile that links another one (own profile).
 .social-links-aside {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.55rem;
-
-  @media screen and (max-width: 767px) {
-    flex-direction: row;
-    justify-content: center;
-  }
+  gap: 6px;
 }
 
 .social-links__add {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  border-radius: 9999px;
+  border-radius: var(--r-md);
   background: transparent;
-  border: 1px dashed #475569;
-  color: #94a3b8;
-  font-size: 11px;
+  border: 2px dashed var(--border);
+  color: var(--muted);
   cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
 
-  &:hover {
-    color: #fff;
-    border-color: #cbd5e1;
-  }
+  &:hover { color: var(--text); border-color: var(--muted); }
+
+  @include v2.mobile { width: 40px; height: 40px; }
 }

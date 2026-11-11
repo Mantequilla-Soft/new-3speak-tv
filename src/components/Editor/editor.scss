@@ -1,232 +1,152 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
+
+/* Rich text editor (TiptapEditor), design 19b: a toolbar of 36px tool tiles on
+   surface over a fixed-height writing area that scrolls inside. */
 .editor-wrapper {
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: white;
-  position: relative; /* ensure absolute elements inside are positioned relative to wrapper */
+  position: relative; // absolute menus inside are placed against the wrapper
+  @include v2.card(16);
+  overflow: visible;
+  color: var(--text);
 }
 
 .editor-toolbar {
   display: flex;
-  gap: 25px;
-  border-bottom: 1px solid #ccc;
-  padding: 6px;
-  background: #f6f6f6;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
   position: relative;
-    @include respond(phone) {
-      padding-left: 0px;
-      gap: 15px;
-      padding: 6px 8px;
-      font-size: 15px;
-    }
 
   button {
-    font-size: 14px;
+    display: inline-grid;
+    place-items: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    font: inherit;
+    @include v2.text(label);
     cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    background: white;
+    transition: background var(--t-fast) var(--ease);
 
-
-    &.active {
-      background: #d1e3ff;
-      border-color: #609bff;
-      padding: 5px;
-    }
-
-    &:hover {
-      background: #eee;
-    }
-  }
-}
-    .wrap-in-btn{
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      color: black;
-      font-size: 16px;
-    }
-
-
-.heading-dropdown {
-  position: relative;
-
-  .heading-btn {
-    cursor: pointer;
-    border: none;
-    background: white;
-    padding: 5px 10px;
-    border-radius: 4px;
-
-    &:hover {
-      background: #eee;
-    }
-  }
-
-  .dropdown-menu {
-    display: flex;
-    flex-direction: column;
-
-    button.active {
-      background: #d1e3ff;
-    }
-
-    button:hover {
-      background: #f0f0f0;
-    }
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+    &.active { background: var(--cyan-tint); color: var(--cyan); }
   }
 }
 
-
-.editor-content {
-  position: relative;
-  min-height: 150px;
-  padding: 10px;
-  font-size: 15px;
-  line-height: 1.5;
-  height:400px;
-  outline: none;
-  border: none;
-  box-shadow: none;
-
-  strong {
-    font-weight: bold;
-  }
-
-  .ProseMirror {
-    height: 100%;           /* fixed height */
-    overflow-y: auto;       /* scroll if content exceeds height */
-    // padding: 12px;          /* inner padding */
-    box-sizing: border-box; /* include padding in height */
-    outline: none;          /* remove focus outline */
-  }
-}
-
-.editor-content img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 12px 0;
-  border-radius: 6px;
-  object-fit: contain;
-}
-
-.editor-content ul,
-.editor-content ol {
-  margin: 0;
-  padding-left: 15px;
-}
-
-
-.mention-tag {
-  background: #eef2ff;
-  padding: 3px 6px;
-  border-radius: 5px;
-  font-weight: bold;
-  color: #0047b2;
-}
-
-
-
-.emoji-container {
-  position: absolute;
-  top: 50px;
-  // left: 5px;
-  z-index: 9999;
-
-    //   @include respond(phone) {
-      
-    // }
-}
-// .em-emoji-picker{
-// position: absolute;
-// }
-
-// emoji-picker-react's root node. Sizing comes from the component's width/height
-// props; only placement lives here.
-.EmojiPickerReact {
-  position: absolute !important;
-  top: 40px !important;
-  left: 10px!important;
-  z-index: 2000 !important;
-}
-
-@media (max-width: 768px) {
-  .EmojiPickerReact {
-    left: auto !important;            /* IMPORTANT: clear left so right can take effect */
-    right: 20px !important;           /* desired mobile position */
-    top: 40px !important;             /* re-assert top in case other rules differ */
-  }
-}
-
-/* 📱 Mobile Screen */
-// @media (max-width: 600px) {
-//   em-emoji-picker {
-//     right: 20px !important;
-//   }
-// }
-
-.emoji-wrapper {
-  position: absolute;
-  top: 40px;
-  left: 10px;
-  z-index: 2000;
-  width: 100%;
-          @include respond(phone) {
-      right: 10px !important;
-    }
-}
-
-
-.upload-overlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(255,255,255,0.75);
+.wrap-in-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
+  gap: 10px;
+  color: inherit;
+  @include v2.text(label);
 }
 
+// Heading and format menus: v2 menu cards, rows 36 tall.
+.heading-dropdown,
+.format-dropdown { position: relative; }
 
+.editor-toolbar .dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 1000;
+  @include v2.menu;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
 
-.format-dropdown {
+  button {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    height: 36px;
+    padding: 0 12px;
+    background: transparent;
+
+    &:hover { background: var(--bg-hover); }
+    &.active { background: var(--surface-2); color: var(--text); }
+  }
+}
+.heading-dropdown .dropdown-menu { min-width: 96px; }
+
+// The writing area: fixed height, scrolls inside (nothing grows the page).
+.editor-content {
   position: relative;
+  height: 400px;
+  padding: 12px 14px;
+  @include v2.text(body);
+  font-size: 16px;
+  line-height: 1.6;
+  outline: none;
+  border: 0;
 
-  .format-btn {
-    cursor: pointer;
-    border: none;
-    background: white;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-weight: bold;
+  strong { font-weight: 700; }
 
-    &:hover {
-      background: #eee;
-    }
+  .ProseMirror {
+    height: 100%;
+    @include v2.scroll-y;
+    box-sizing: border-box;
+    outline: none;
   }
 
-  .dropdown-menu {
-    display: flex;
-    flex-direction: column;
+  .ProseMirror p.is-editor-empty:first-child::before { color: var(--muted); }
 
-    button {
-      background: white;
-      border: none;
-      padding: 7px 12px;
-      text-align: left;
-      cursor: pointer;
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 12px 0;
+    border-radius: var(--r-md);
+    object-fit: contain;
+  }
 
-      &.active {
-        background: #d1e3ff;
-      }
+  ul, ol { margin: 0; padding-left: 20px; }
+  mark { background: var(--cyan-tint-strong); color: var(--text); border-radius: var(--r-xs); padding: 0 2px; }
+  a { color: var(--cyan); }
+}
 
-      &:hover {
-        background: #f0f0f0;
-      }
-    }
+.mention-tag {
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+  background: var(--cyan-tint);
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+.editor-wrapper .uploading {
+  padding: 6px 14px;
+  @include v2.text(meta);
+  color: var(--cyan);
+}
+
+// emoji-picker-react under the toolbar (only inside this editor).
+.editor-wrapper .EmojiPickerReact {
+  position: absolute !important;
+  top: 44px !important;
+  left: 0 !important;
+  z-index: 2000 !important;
+  box-shadow: var(--shadow-float);
+  --epr-bg-color: var(--surface);
+  --epr-dark-bg-color: var(--surface);
+  --epr-category-label-bg-color: var(--surface);
+  --epr-dark-category-label-bg-color: var(--surface);
+  --epr-picker-border-color: var(--border);
+  --epr-dark-picker-border-color: var(--border);
+  --epr-text-color: var(--text);
+  --epr-dark-text-color: var(--text);
+  --epr-search-input-bg-color: var(--bg);
+  --epr-dark-search-input-bg-color: var(--bg);
+  --epr-highlight-color: var(--accent);
+  --epr-dark-highlight-color: var(--accent);
+
+  @include v2.mobile {
+    left: auto !important;
+    right: 0 !important;
   }
 }

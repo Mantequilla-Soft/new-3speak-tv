@@ -1,86 +1,85 @@
+@use "../../styles/v2" as v2;
+
+/* OpenPods live now (22d): a cyan wash strip with the podcasts mark, the LIVE
+   pill and a row of room tiles that scrolls sideways. */
 .openpods-live-strip {
-  margin: 0 0 20px 0;
-  padding: 0 4px;
+  margin: 0 0 20px;
 
   .strip-header {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    padding: 8px 12px 8px 10px;
+    border-radius: var(--r-lg);
+    background: var(--cyan-wash);
+    border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
     margin-bottom: 10px;
   }
 
   .strip-mic-icon {
-    color: var(--accent-primary, #e53935);
-    font-size: 18px;
-    flex-shrink: 0;
-
-    // Pulse animation to signal live activity
-    animation: mic-pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes mic-pulse {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.55; }
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    background: var(--cyan);
+    color: var(--bg);
   }
 
   .strip-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
     flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
   }
 
-  .strip-count {
-    color: var(--accent-primary, #e53935);
-  }
+  .strip-count { color: var(--cyan); }
 
   .strip-view-all {
-    font-size: 12px;
-    color: var(--accent-primary, #e53935);
+    @include v2.btn(ghost, 28);
+    color: var(--cyan);
     text-decoration: none;
     white-space: nowrap;
-    flex-shrink: 0;
-
-    &:hover { text-decoration: underline; }
+    &:hover { color: var(--cyan); }
   }
 
   .strip-cards {
     display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    scrollbar-width: none;
+    gap: 8px;
     padding-bottom: 4px;
-
-    &::-webkit-scrollbar { display: none; }
+    @include v2.scroll-x;
   }
 
   .strip-card {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: var(--bg-secondary, rgba(255, 255, 255, 0.05));
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 8px 12px;
-    cursor: pointer;
-    flex-shrink: 0;
-    max-width: 220px;
-    transition: border-color 0.15s, background 0.15s;
+    flex: none;
+    max-width: 240px;
+    min-height: 56px;
+    padding: 8px 12px 8px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
     text-align: left;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
 
-    &:hover {
-      border-color: var(--accent-primary, #e53935);
-      background: rgba(229, 57, 53, 0.06);
-    }
+    &:hover { background: var(--surface-2); }
+    &:active { transform: scale(.98); }
   }
 
   .strip-card-avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-md);
     object-fit: cover;
     flex-shrink: 0;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--avatar);
   }
 
   .strip-card-info {
@@ -90,25 +89,27 @@
   }
 
   .strip-card-title {
+    max-width: 140px;
     font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
+    font-weight: 700;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 130px;
   }
 
   .strip-card-host {
-    font-size: 11px;
-    color: var(--text-secondary, rgba(255,255,255,0.55));
+    @include v2.text(meta-sm);
+    color: var(--muted);
   }
 
   .strip-card-listeners {
-    font-size: 11px;
-    color: var(--text-secondary, rgba(255,255,255,0.55));
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
     margin-left: auto;
-    flex-shrink: 0;
     padding-left: 8px;
+    flex-shrink: 0;
+    @include v2.mono(11, 700);
+    color: var(--muted);
   }
 }

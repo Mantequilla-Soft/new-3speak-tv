@@ -24,27 +24,29 @@ function plain(body) {
  */
 export default function useAudioComments(author, permlink, enabled = true, refresh = 0) {
   const key = author && permlink ? `${author}/${permlink}` : '';
-  const [state, setState] = useState({ key: '', items: [], loading: false });
+  // The answer for `key` (and the refresh it answered); until it is in, loading.
+  const [state, setState] = useState({ key: '', refresh: -1, items: [] });
 
   useEffect(() => {
     if (!enabled || !key) return undefined;
     let live = true;
-    setState((s) => (s.key === key ? { ...s, loading: true } : { key, items: [], loading: true }));
     axios.post(getHiveUrl(), {
       jsonrpc: '2.0', id: 1, method: 'condenser_api.get_content_replies', params: [author, permlink],
     }).then(({ data }) => {
       if (!live) return;
       const list = Array.isArray(data?.result) ? data.result : [];
       const items = list.map((c) => {
-        let meta = {};
+        let meta;
         try { meta = typeof c.json_metadata === 'string' ? JSON.parse(c.json_metadata || '{}') : (c.json_metadata || {}); } catch { meta = {}; }
         const at = typeof meta.parentTimestamp === 'number' && meta.parentTimestamp >= 0 ? meta.parentTimestamp : null;
         return { author: c.author, permlink: c.permlink, text: plain(c.body), at };
       }).filter((c) => c.author && c.text);
-      setState({ key, items, loading: false });
-    }).catch(() => { if (live) setState({ key, items: [], loading: false }); });
+      setState({ key, refresh, items });
+    }).catch(() => { if (live) setState({ key, refresh, items: [] }); });
     return () => { live = false; };
   }, [key, author, permlink, enabled, refresh]);
 
-  return state.key === key ? state : { items: [], loading: false };
+  if (state.key !== key) return { items: [], loading: enabled && !!key };
+  // A refresh keeps the list it had while the new one loads.
+  return { items: state.items, loading: enabled && state.refresh !== refresh };
 }

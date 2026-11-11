@@ -65,7 +65,8 @@
   }
 
   @include v2.mobile {
-    .community-tabs { width: 100%; .v2-seg__opt { flex: 1 0 auto; padding: 0 12px; font-size: 13px; } }
+    // Four tabs fit a phone once their icons step aside.
+    .community-tabs { width: 100%; .v2-seg__opt { flex: 1 0 auto; padding: 0 10px; font-size: 13px; .material-symbols-rounded { display: none; } } }
     .community-toolbar-actions { margin-left: 0; flex: 1; .v2-btn { flex: 1; height: 44px; border-radius: var(--r-lg); } }
     .community-window { height: 44px; border-radius: var(--r-lg); }
   }

@@ -152,6 +152,11 @@
   color: var(--muted);
 }
 
+// Row text for panels that render their own rows in Settings (LanguagePicker)
+.settings-row-title { @include v2.text(body); font-weight: 700; color: var(--text); }
+.settings-row-desc { @include v2.text(meta); color: var(--muted); line-height: 1.4; }
+.settings-language { padding-top: 6px; padding-bottom: 6px; }
+
 .settings-status {
   margin: 0;
   @include v2.text(meta);
@@ -191,7 +196,7 @@
   > span { @include v2.text(meta); color: var(--muted); line-height: 1.4; }
 }
 
-.settings-ln-where { font-family: var(--font-mono); }
+.settings-ln-where { overflow-wrap: anywhere; }
 
 // The Lightning address in use, outlined like a chosen card when it is their own
 .settings-ln-now.is-own { box-shadow: inset 0 0 0 2px var(--accent); }
@@ -366,7 +371,7 @@
   .settings-referral-tile-icon { color: var(--muted); margin-bottom: 2px; }
   .settings-referral-tile-value { @include v2.mono(20, 900); line-height: 1.2; }
   .settings-referral-tile-label { @include v2.text(meta-sm); font-weight: 700; color: var(--text); line-height: 1.3; }
-  .settings-referral-tile-desc { @include v2.text(10); color: var(--muted); line-height: 1.3; }
+  .settings-referral-tile-desc { font-size: 10px; color: var(--muted); line-height: 1.3; }
 
   &.is-accent .settings-referral-tile-value { color: var(--accent); }
   &.is-cyan .settings-referral-tile-value { color: var(--cyan); }

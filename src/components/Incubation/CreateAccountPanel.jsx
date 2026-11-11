@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { MdRocketLaunch } from 'react-icons/md';
 import { fetchGraduationStatus, canCreateAccount } from '../../lib/incubation';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
 import { toastIn } from '../../utils/toast';
 import { useTranslation } from 'react-i18next';
+import { Button, Icon } from '../v2/ui';
 
 const toast = toastIn('Your account');
 
@@ -46,8 +46,8 @@ export default function CreateAccountPanel({ advertiser = false }) {
   }
 
   return (
-    <section className="inc-ready" aria-labelledby="inc-ready-title">
-      <MdRocketLaunch className="inc-ready-icon" aria-hidden="true" />
+    <section className="inc-ready v2-success is-accent" aria-labelledby="inc-ready-title">
+      <span className="inc-ready-icon" aria-hidden="true"><Icon name="rocket_launch" size={24} /></span>
       <div className="inc-ready-text">
         <h2 id="inc-ready-title">{advertiser ? t('incubation.createAccount.readyAdvertiser') : t('incubation.createAccount.ready')}</h2>
         <p>
@@ -56,9 +56,9 @@ export default function CreateAccountPanel({ advertiser = false }) {
             : t('incubation.createAccount.approved')}
         </p>
       </div>
-      <button type="button" className="inc-ready-btn" onClick={go} disabled={busy}>
+      <Button variant="primary" size={44} next className="inc-ready-btn" onClick={go} disabled={busy} loading={busy}>
         {advertiser ? t('incubation.createAccount.createAdvertiser') : t('incubation.createAccount.create')}
-      </button>
+      </Button>
     </section>
   );
 }

@@ -60,7 +60,7 @@
   color: var(--cyan);
 
   .material-symbols-rounded { position: relative; z-index: 1; }
-  .surf-tile__noise { opacity: .18; }
+  .surf-tile__noise { opacity: .1; }
 
   @include v2.mobile { width: 48px; height: 48px; border-radius: var(--r-lg); }
 }

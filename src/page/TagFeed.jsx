@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import CardSkeleton from '../components/Cards/CardSkeleton';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Card3 from '../components/Cards/Card3';
@@ -14,6 +14,8 @@ import PullToRefresh from '../components/PullToRefresh/PullToRefresh';
 import { getSinceTimestamp } from '../utils/dateFilters';
 import { FeedToolbar, Pagination } from '../components/FeedToolbar/FeedToolbar';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../i18n';
+import './FirstUploads.scss';
 import './TagFeed.scss';
 
 const LIMIT = 20;
@@ -21,6 +23,9 @@ const LIMIT = 20;
 function TagFeed() {
   const { t } = useTranslation();
   const { tag } = useParams();
+  // A community picked from the tag strip arrives with its display name.
+  const location = useLocation();
+  const communityName = location.state?.commuintyName || null;
   const queryClient = useQueryClient();
 
   // Videos, shorts or both, as last picked on any tag page.
@@ -116,7 +121,20 @@ function TagFeed() {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <div className="firstupload-container">
+    <div className="firstupload-container tag-feed">
+      {/* The tag as the page title (19c): an eyebrow, the big #tag, its counts */}
+      <header className="tag-feed-head">
+        <span className="tag-feed-eyebrow">{communityName ? t('feeds.discover.community') : t('feeds.discover.tag')}</span>
+        <h1 className="tag-feed-title">{communityName || `#${tag}`}</h1>
+        {counts && (
+          <p className="tag-feed-meta">
+            {t('common.units.videos', { count: counts.videos || 0, num: formatNumber(counts.videos || 0) })}
+            {' · '}
+            {t('feeds.newFromFollowing.shorts', { count: counts.shorts || 0 })}
+          </p>
+        )}
+      </header>
+
       <FeedToolbar
         activeTab={activeTab}
         onTabChange={handleTabChange}

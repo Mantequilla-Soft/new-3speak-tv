@@ -1,7 +1,6 @@
 import React, { useEffect, useId, useState } from 'react';
 import Success from './Success';
 import { useTranslation } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
 import WalletTip from './WalletTip';
 import MonthlyField from './MonthlyField';
 import OtherWays, { useSupportLinks } from './OtherWays';
@@ -9,8 +8,10 @@ import './TipModal.scss';
 import { fetchBalances, isAccountValid } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
 import { toastIn } from '../../utils/toast';
-import { LineSpinner } from 'ldrs/react'
-import 'ldrs/react/LineSpinner.css'
+import { formatNumber } from '../../i18n';
+import { Dialog, Button, IconButton, Segmented, Chip, Field, Banner, EmptyState, Avatar, Icon } from '../v2/ui';
+import { cx } from '../v2/helpers';
+import logo from '../../assets/image/3S_logo.svg';
 import { transferWithAioha, broadcastWithAioha, KeyTypes, isLoggedIn } from '../../hive-api/aioha';
 import { useQueryClient } from '@tanstack/react-query';
 import { queueSupport, recordSupport } from '../../lib/supports';
@@ -29,7 +30,9 @@ const toast = toastIn('Tip');
 // memo so the recipient sees what the tip was for.
 // `variant="page"`: the window is the whole page (the /tip popup), not an
 // overlay on top of one.
-const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, variant }) => {
+// Callers also pass `isOpen` and `onSendTip`; neither is read: the window is
+// mounted only while open, and sends by itself.
+const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
     const { t, i18n } = useTranslation();
     const fieldId = useId();
     const queryClient = useQueryClient();
@@ -126,8 +129,8 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
     try{
     const data = await fetchBalances(activetUser)
     setBalances(data)
-    }catch(err){
-        
+    }catch{
+        /* no balance shown; the send checks again */
     }finally{
         setLoading(false)
     }
@@ -295,31 +298,58 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
     }
   };
 
-  return (
-    <div className={`tip-modal ${step === 2 ? "add" : ""}${variant === 'page' ? ' tip-modal--page' : ''}`}>
-        <div className={`modal-content-trx ${step === 2 ? "add" : ""}`}>
-        <ModalHeader
-          className="tip-modal-header"
-          title={step === 2 ? t('engagement.tip.successTitle') : t('engagement.tip.heading', { recipient })}
-          onClose={handleClose}
-        />
-      
-        {step === 1 && !invoice && (
-          <div className="tip-method-switch" role="tablist">
-            <button type="button" role="tab" aria-selected={method === 'hive'} className={method === 'hive' ? 'active' : ''} onClick={() => setMethod('hive')}>
-              {t('engagement.tip.methodHive')}
-            </button>
-            <button type="button" role="tab" aria-selected={method === 'lightning'} className={method === 'lightning' ? 'active' : ''} onClick={() => setMethod('lightning')}>
-              ⚡ {t('engagement.tip.methodLightning')}
-            </button>
-            {supportLinks.length > 0 && (
-              <button type="button" role="tab" aria-selected={method === 'more'} className={method === 'more' ? 'active' : ''} onClick={() => setMethod('more')}>
-                {t('engagement.tip.methodMore')}
-              </button>
-            )}
-          </div>
-        )}
+  const amountNum = parseFloat(amount);
+  const sendLabel = amountNum > 0
+    ? t('engagement.tip.sendAmount', { amount: formatNumber(amountNum, { maximumFractionDigits: 3 }), currency })
+    : t('engagement.tip.send');
+  const signedIn = !!(activetUser && isLoggedIn());
+  const lightningForm = step === 1 && method === 'lightning' && !invoice;
+  const hiveForm = step === 1 && method === 'hive' && !isPage && signedIn;
 
+  // The buttons that finish the form: the dialog's footer, or the end of the
+  // card on the /tip page.
+  let actions = null;
+  if (hiveForm) {
+    actions = (
+      <>
+        <Button variant="secondary" size={48} onClick={handleClose}>{t('common.actions.cancel')}</Button>
+        <Button variant="primary" size={48} className="tip-v2__send is-next" trailing="send" onClick={handleSubmitTransfer}>{sendLabel}</Button>
+      </>
+    );
+  } else if (lightningForm) {
+    // The header's X closes the window, so no Cancel here: room for the QR
+    // button always, and the extension button when there is one.
+    actions = (
+      <>
+        {hasWebln() && (
+          <Button variant="secondary" size={48} icon="extension" onClick={() => handleLightning(true)} disabled={!!creatingInvoice} loading={creatingInvoice === 'extension'}>
+            {t('engagement.tip.lightning.payExtension')}
+          </Button>
+        )}
+        <Button variant="primary" size={48} className="tip-v2__send" icon="qr_code_2" onClick={() => handleLightning(false)} disabled={!!creatingInvoice} loading={creatingInvoice === 'qr'}>
+          {t('engagement.tip.lightning.showQr')}
+        </Button>
+      </>
+    );
+  }
+
+  const content = (
+    <>
+      {step === 1 && !invoice && (
+        <Segmented
+          className="tip-v2__methods"
+          size={36}
+          value={method}
+          onChange={setMethod}
+          options={[
+            { value: 'hive', label: t('engagement.tip.methodHive') },
+            { value: 'lightning', label: t('engagement.tip.methodLightning'), icon: 'bolt' },
+            ...(supportLinks.length > 0 ? [{ value: 'more', label: t('engagement.tip.methodMore') }] : []),
+          ]}
+        />
+      )}
+
+      <div className={cx('tip-v2__panel', step === 2 && 'is-done')}>
         {step === 1 && method === 'hive' && isPage && (
           <WalletTip
             recipient={recipient}
@@ -330,25 +360,24 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
           />
         )}
 
-        {step === 1 && method === 'hive' && !isPage && !(activetUser && isLoggedIn()) && (
-          <div className="tip-modal-in">
-            <p className="tip-method-note">{t('engagement.tip.errors.loginRequired')}</p>
-          </div>
+        {step === 1 && method === 'hive' && !isPage && !signedIn && (
+          <EmptyState icon="login" title={t('engagement.tip.errors.loginRequired')} />
         )}
 
-        {step === 1 && method === 'lightning' && !invoice && <div className="tip-modal-in">
-          <div className="form">
-            <div className="field">
-              <label htmlFor={`${fieldId}-sats`}>{t('engagement.tip.lightning.amountLabel')}</label>
-              <div className="sats-presets">
+        {lightningForm && (
+          <div className="tip-v2__form">
+            <div className="v2-field">
+              <label className="v2-eyebrow" htmlFor={`${fieldId}-sats`}>{t('engagement.tip.lightning.amountLabel')}</label>
+              <div className="v2-chips tip-v2__presets">
                 {LIGHTNING_PRESETS.map((p) => (
-                  <button type="button" key={p} className={String(p) === sats ? 'active' : ''} onClick={() => setSats(String(p))}>
+                  <Chip key={p} selected={String(p) === sats} onClick={() => setSats(String(p))}>
                     {p.toLocaleString()}
-                  </button>
+                  </Chip>
                 ))}
               </div>
               <input
                 id={`${fieldId}-sats`}
+                className="v2-input h48 tip-v2__big"
                 type="number"
                 min="1"
                 step="1"
@@ -358,159 +387,171 @@ const TipModal = ({ recipient, permlink, memoLink, isOpen, onClose, onSendTip, v
               />
             </div>
 
-            <div className="field">
-              <label htmlFor={`${fieldId}-ln-memo`}>{t('engagement.tip.lightning.messageLabel')}</label>
-              <input
-                id={`${fieldId}-ln-memo`}
-                type="text"
-                maxLength={500}
-                placeholder={t('engagement.tip.memoPlaceholder')}
-                value={memo}
-                onChange={(e) => setMemo(e.target.value)}
-              />
-              {memoLink && (
-                <div className="memo-link-note">{t('engagement.tip.memoLinkNote', { link: memoLink })}</div>
-              )}
-            </div>
+            <Field
+              id={`${fieldId}-ln-memo`}
+              label={t('engagement.tip.lightning.messageLabel')}
+              type="text"
+              maxLength={500}
+              placeholder={t('engagement.tip.memoPlaceholder')}
+              value={memo}
+              onChange={(e) => setMemo(e.target.value)}
+              hint={memoLink ? t('engagement.tip.memoLinkNote', { link: memoLink }) : undefined}
+            />
 
-            <p className="tip-method-note">
+            <Banner tone="info" icon="bolt">
               {receiver?.via === 'address'
                 ? t('engagement.tip.lightning.noteOwn', { recipient, address: receiver.address })
                 : t('engagement.tip.lightning.note', { recipient })}
-            </p>
-            <p className="tip-method-note">{t('engagement.tip.lightning.cashApp')}</p>
-
-            {/* The header's X closes the window, so no Cancel here: room for the
-                QR button always, and the extension button when there is one. */}
-            <div className="actions lightning-actions">
-              <button className="send-btn" onClick={() => handleLightning(false)} disabled={!!creatingInvoice}>
-                {creatingInvoice === 'qr'
-                  ? <LineSpinner size="14" stroke="2" speed="1" color="currentColor" />
-                  : t('engagement.tip.lightning.showQr')}
-              </button>
-              {hasWebln() && (
-                <button className="send-btn" onClick={() => handleLightning(true)} disabled={!!creatingInvoice}>
-                  {creatingInvoice === 'extension'
-                    ? <LineSpinner size="14" stroke="2" speed="1" color="currentColor" />
-                    : t('engagement.tip.lightning.payExtension')}
-                </button>
-              )}
-            </div>
+            </Banner>
+            <p className="v2-meta-sm">{t('engagement.tip.lightning.cashApp')}</p>
           </div>
-        </div>}
+        )}
 
-        {step === 1 && method === 'lightning' && invoice && <div className="tip-modal-in">
-          <div className="lightning-invoice">
-            <p className="tip-method-note">{t('engagement.tip.lightning.scan', { sats: invoice.sats.toLocaleString(), recipient })}</p>
-            <p className="tip-method-note">{t('engagement.tip.lightning.cashApp')}</p>
-            <a className="qr-wrap" href={`lightning:${invoice.pr}`} aria-label={t('engagement.tip.lightning.openWallet')}>
-              <QRCodeSVG value={`lightning:${invoice.pr}`.toUpperCase()} size={220} marginSize={2} bgColor="#ffffff" fgColor="#000000" />
-            </a>
-            <div className="actions">
-              <button className="cancel-btn" onClick={copyInvoice}>
-                {t('engagement.tip.lightning.copy')}
-              </button>
-              <a className="send-btn" href={`lightning:${invoice.pr}`}>
-                {t('engagement.tip.lightning.openWallet')}
-              </a>
+        {step === 1 && method === 'lightning' && invoice && (
+          <div className="tip-v2__invoice">
+            <div className="tip-v2__invoice-title">
+              <Icon name="bolt" size={20} />
+              <b className="num">{invoice.sats.toLocaleString()} sats</b>
             </div>
+            <p className="v2-meta">{t('engagement.tip.lightning.scan', { sats: invoice.sats.toLocaleString(), recipient })}</p>
+            <a className="tip-v2__qr" href={`lightning:${invoice.pr}`} aria-label={t('engagement.tip.lightning.openWallet')}>
+              <QRCodeSVG value={`lightning:${invoice.pr}`.toUpperCase()} size={200} marginSize={2} bgColor="white" fgColor="black" />
+            </a>
             {/* An address without a LUD-21 verify URL never tells us it was paid:
                 no spinner that would spin forever, the wallet says when it is done. */}
             {invoice.verifiable === false ? (
-              <p className="lightning-waiting">{t('engagement.tip.lightning.waitingUnverified')}</p>
+              <p className="tip-v2__waiting is-muted">{t('engagement.tip.lightning.waitingUnverified')}</p>
             ) : (
-              <p className="lightning-waiting">
-                <LineSpinner size="12" stroke="2" speed="1" color="currentColor" />
+              <p className="tip-v2__waiting">
+                <Icon name="progress_activity" size={18} className="v2-spin" />
                 {t('engagement.tip.lightning.waiting')}
               </p>
             )}
+            <div className="tip-v2__pair">
+              <Button variant="secondary" size={44} icon="content_copy" onClick={copyInvoice}>
+                {t('engagement.tip.lightning.copy')}
+              </Button>
+              <Button as="a" variant="secondary" size={44} icon="open_in_new" href={`lightning:${invoice.pr}`}>
+                {t('engagement.tip.lightning.openWallet')}
+              </Button>
+            </div>
+            <p className="v2-meta-sm">{t('engagement.tip.lightning.cashApp')}</p>
             {/* Back keeps the amount and the message, to change either and make a
                 new invoice; this one simply expires unpaid. */}
-            <div className="lightning-links">
-              <button type="button" className="lightning-done" onClick={() => setInvoice(null)}>
+            <div className="tip-v2__links">
+              <Button variant="ghost" size={40} icon="arrow_back" onClick={() => setInvoice(null)}>
                 {t('engagement.tip.lightning.back')}
-              </button>
-              <button type="button" className="lightning-done" onClick={handleClose}>
+              </Button>
+              <Button variant="ghost" size={40} onClick={handleClose}>
                 {t('engagement.tip.lightning.done')}
-              </button>
+              </Button>
             </div>
           </div>
-        </div>}
+        )}
 
-        {step === 1 && method === 'hive' && !isPage && activetUser && isLoggedIn() && <div className="tip-modal-in">
-          <div className="form">
+        {hiveForm && (
+          <div className="tip-v2__form">
             {monthly && (
-              <div className="tip-monthly-current">
+              <div className="tip-v2__current">
+                <Icon name="event_repeat" size={18} />
                 <span>{isMonthly(monthly)
                   ? t('engagement.tip.monthly.current', { recipient, amount: monthly.amount, date: formatMonth(monthly.until, i18n.language) })
                   : t('engagement.tip.monthly.currentEvery', { recipient, amount: monthly.amount, interval: formatInterval(monthly.recurrence, i18n.language), date: formatMonth(monthly.until, i18n.language) })}</span>
-                <button type="button" className="lightning-done" onClick={stopMonthly} disabled={stopping}>
-                  {stopping ? <LineSpinner size="12" stroke="2" speed="1" color="currentColor" /> : t('engagement.tip.monthly.stop')}
+                <button type="button" className="tip-v2__stop" onClick={stopMonthly} disabled={stopping} aria-busy={stopping || undefined}>
+                  {stopping ? <Icon name="progress_activity" size={16} className="v2-spin" /> : t('engagement.tip.monthly.stop')}
                 </button>
               </div>
             )}
-            <div className="field">
-              <label htmlFor={`${fieldId}-amount`}>{t('engagement.tip.amountLabel')}</label>
-              <input
+            <div className="tip-v2__row">
+              <Field
                 id={`${fieldId}-amount`}
+                className="tip-v2__amount"
+                label={t('engagement.tip.amountLabel')}
                 type="number"
+                inputMode="decimal"
+                min="0"
+                step="0.001"
                 placeholder={t('engagement.tip.amountPlaceholder')}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
+              <Field label={t('engagement.tip.currencyLabel')} id={`${fieldId}-currency`} className="tip-v2__currency">
+                <select id={`${fieldId}-currency`} className="v2-input is-select h48" value={currency} onChange={(e) => setCurrency(e.target.value)}>
+                  <option value="HIVE">HIVE</option>
+                  <option value="HBD">HBD</option>
+                </select>
+              </Field>
             </div>
-
-            <div className="field">
-              <label htmlFor={`${fieldId}-currency`}>{t('engagement.tip.currencyLabel')}</label>
-              <select id={`${fieldId}-currency`} value={currency} onChange={(e) => setCurrency(e.target.value)}>
-                <option value="HIVE">HIVE</option>
-                <option value="HBD">HBD</option>
-              </select>
-              <div className='balance-wrap'>
-                <span>{t('engagement.tip.availableBalance', { currency })}</span>
-                 {loading ? (<LineSpinner size="10" stroke="3" speed="1" color="red" /> )
-                 :
-                 <span>{currency === "HIVE" ? <div>{balances.hive}</div>: <div>{balances.hbd}</div>}</span>}</div>
+            <div className="tip-v2__balance">
+              <span>{t('engagement.tip.availableBalance', { currency })}</span>
+              {loading
+                ? <Icon name="progress_activity" size={14} className="v2-spin" />
+                : <span className="num">{currency === "HIVE" ? balances.hive : balances.hbd}</span>}
             </div>
 
             <MonthlyField months={months} onChange={setMonths} existing={monthly} recipient={recipient} />
 
-            
-             
-
-            <div className="field">
-              <label htmlFor={`${fieldId}-memo`}>{t('engagement.tip.memoLabel')}</label>
-              <input
-                id={`${fieldId}-memo`}
-                type="text"
-                placeholder={t('engagement.tip.memoPlaceholder')}
-                value={memo}
-                onChange={(e) => setMemo(e.target.value)}
-              />
-              {memoLink && (
-                <div className="memo-link-note">{t('engagement.tip.memoLinkNote', { link: memoLink })}</div>
-              )}
-            </div>
-
-            <div className="actions">
-              <button className="cancel-btn" onClick={handleClose}>
-                {t('common.actions.cancel')}
-              </button>
-              <button className="send-btn" onClick={handleSubmitTransfer}>
-                {t('engagement.tip.send')}
-              </button>
-            </div>
+            <Field
+              id={`${fieldId}-memo`}
+              label={t('engagement.tip.memoLabel')}
+              type="text"
+              placeholder={t('engagement.tip.memoPlaceholder')}
+              value={memo}
+              onChange={(e) => setMemo(e.target.value)}
+              hint={memoLink ? t('engagement.tip.memoLinkNote', { link: memoLink }) : undefined}
+            />
           </div>
-        </div>}
+        )}
         {step === 1 && method === 'more' && <OtherWays recipient={recipient} links={supportLinks} />}
-        {step === 2 && <Success 
-        amount={amount}
-        currency={currency}
-        monthly={sentMonthly}
-        onClose={handleClose}
-      />}
-        </div>
-        </div>
+        {step === 2 && <Success
+          amount={amount}
+          currency={currency}
+          recipient={recipient}
+          monthly={sentMonthly}
+          onClose={handleClose}
+        />}
+      </div>
+    </>
+  );
+
+  // The /tip popup: the page itself, no backdrop (design 19f, right).
+  if (isPage) {
+    return (
+      <div className="tip-page">
+        <header className="tip-page__bar">
+          <img src={logo} alt="3Speak" height={24} />
+          <span className="num">3speak.tv/tip/{recipient}</span>
+        </header>
+        <main className="tip-page__main">
+          <div className="tip-page__card tip-v2">
+            {step === 1 && (
+              <div className="tip-page__head">
+                <Avatar src={`/img/u/${recipient}/avatar/small`} name={recipient} size={52} ring="cyan" />
+                <h2>{t('engagement.tip.heading', { recipient })}</h2>
+                <IconButton icon="close" label={t('common.actions.close')} size={36} variant="ghost" round onClick={handleClose} />
+              </div>
+            )}
+            {content}
+            {actions && <div className="tip-page__actions">{actions}</div>}
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <Dialog
+      open
+      onClose={handleClose}
+      title={t('engagement.tip.heading', { recipient })}
+      closeLabel={t('common.actions.close')}
+      head={step !== 2}
+      width={460}
+      className={cx('tip-v2', step === 2 && 'is-success')}
+      footer={actions}
+    >
+      {content}
+    </Dialog>
   );
 };
 

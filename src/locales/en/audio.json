@@ -102,7 +102,11 @@
     "chapterLink": "Chapter link",
     "upNext": "Up next",
     "hideIdle": "Hide (your queue stays)",
-    "continueAt": "Continue at {{time}}"
+    "continueAt": "Continue at {{time}}",
+    "position": "{{current}} of {{total}}",
+    "playingFrom": "Playing from {{name}}",
+    "atThisMoment": "At this moment",
+    "goTo": "Go to {{name}}"
   },
   "share": {
     "failed": "Failed",

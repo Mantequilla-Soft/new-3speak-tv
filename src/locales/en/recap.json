@@ -132,7 +132,8 @@
     "communities": "Visiting your communities…",
     "followers": "Checking who followed you…",
     "watched": "Going through what you watched…",
-    "thumbnails": "Loading your thumbnails… {{done}} of {{total}}"
+    "thumbnails": "Loading your thumbnails… {{done}} of {{total}}",
+    "thumbnailsWaiting": "Loading your thumbnails…"
   },
   "tips": {
     "label": "Tip:",

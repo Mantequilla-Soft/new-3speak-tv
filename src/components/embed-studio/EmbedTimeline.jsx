@@ -105,14 +105,13 @@ export default function EmbedTimeline() {
       <div className="studio-page-header">
         <h1>{t('upload.page.shareVideo')}</h1>
       </div>
-      <StepProgress step={step} short={false} />
+      <StepProgress step={step} short={false} actions={actions} />
       <EmbedUploadProgressBar />
       <div className="studio-page-content">
-        <StepActions placement="top" {...actions} />
         <div className="embed-timeline">
-          <div className="embed-timeline__intro">
-            <h2>{t('upload.timeline.title')}</h2>
-            <p>{t('upload.timeline.intro')}</p>
+          <div className="wizard-head is-cyan embed-timeline__intro">
+            <h2 className="wizard-head__title">{t('upload.timeline.title')}</h2>
+            <p className="wizard-head__sub">{t('upload.timeline.intro')}</p>
           </div>
 
           <TimelineEditor

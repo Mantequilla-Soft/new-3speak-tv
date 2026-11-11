@@ -50,22 +50,22 @@ export function useSideTab(ids) {
 
 /**
  * The watch page's side panel (02, 22a): a segmented track of panels over ONE
- * fixed-height scroll area, with an optional footer pinned under it (the
- * discussion composer slot). Switching tabs never changes the panel's size.
+ * fixed-height area. Switching tabs never changes the panel's size. A `flush`
+ * tab fills the area itself (the discussion scrolls its own list and pins its
+ * composer at the bottom); the others scroll inside it.
  *
  * On a wide screen it sits beside the player and takes the player's height. On
  * a narrow one it is a row of chips above a fixed scroll area (STYLE_GUIDE §11,
  * "Mobile variant of any desktop panel").
  *
- * tabs: [{ id, label, count, icon, content, keepMounted }]. A keepMounted tab
+ * tabs: [{ id, label, count, icon, content, keepMounted, flush }]. A keepMounted tab
  * stays in the DOM while hidden: the discussion keeps its draft and the live
  * chat keeps the portal it is drawn into.
  */
-export default function WatchTabs({ tabs, active, onChange, footer = null, footerFor = [], wide, label, className, panelRef }) {
+export default function WatchTabs({ tabs, active, onChange, wide, label, className, panelRef }) {
   const list = useMemo(() => tabs.filter(Boolean), [tabs]);
   if (!list.length) return null;
   const current = list.some((tab) => tab.id === active) ? active : list[0].id;
-  const showFooter = footer && footerFor.includes(current);
 
   return (
     <section className={cx('wv2-side', wide ? 'is-wide' : 'is-narrow', className)} aria-label={label} ref={panelRef}>
@@ -109,8 +109,6 @@ export default function WatchTabs({ tabs, active, onChange, footer = null, foote
           );
         })}
       </div>
-
-      {footer && <div className="wv2-side__foot" hidden={!showFooter}>{footer}</div>}
     </section>
   );
 }

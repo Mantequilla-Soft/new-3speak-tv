@@ -1,3 +1,19 @@
+@use "../../styles/v2" as v2;
+
+/* Player controls (design 19a, 48b). Everything here is drawn over video, so it
+   uses white (--on-media) on media scrims in BOTH themes, never theme tokens:
+   - glass buttons: white 12% (cyan 25% when a toggle is on)
+   - chapter segments: radius 2, white 25% track, white 35% buffer, accent fill
+   - menus: near-black card, radius 20, choice tiles with 2px borders
+   Tints of white come from color-mix(in srgb, var(--on-media) N%, transparent). */
+
+$glass: color-mix(in srgb, var(--on-media) 12%, transparent);
+$glass-hover: color-mix(in srgb, var(--on-media) 22%, transparent);
+$on-cyan: color-mix(in srgb, var(--cyan) 25%, transparent);
+$line: color-mix(in srgb, var(--on-media) 20%, transparent);
+$dim: color-mix(in srgb, var(--on-media) 60%, transparent);
+$menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
+
 .video-controls {
   position: absolute;
   bottom: 0;
@@ -5,10 +21,11 @@
   right: 0;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
-  padding: 20px 12px 8px;
+  background: linear-gradient(transparent, var(--media-scrim-strong));
+  padding: 32px 16px 12px;
+  color: var(--on-media);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--t-slow) var(--ease);
   z-index: 10;
   pointer-events: none;
 
@@ -17,28 +34,26 @@
     pointer-events: auto;
   }
 
-  // Progress bar
+  // ── Timeline ──
   .vc-progress-row {
-    padding: 0 4px;
-    margin-bottom: 6px;
+    padding: 0;
+    margin-bottom: 8px;
   }
 
   .vc-progress-track {
     width: 100%;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
+    height: 6px;
+    background: color-mix(in srgb, var(--on-media) 25%, transparent);
+    border-radius: var(--r-bar);
     cursor: pointer;
     position: relative;
-    transition: height 0.15s ease;
+    transition: height var(--t-fast) var(--ease);
 
-    &:hover {
-      height: 6px;
-    }
+    &:hover { height: 8px; }
 
     // Invisible expanded tap/click target
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: -12px;
       bottom: -12px;
@@ -51,60 +66,52 @@
   .vc-heatmap {
     position: absolute;
     inset: 0;
-    border-radius: 2px;
+    border-radius: var(--r-bar);
     pointer-events: none;
     z-index: 0;
   }
 
-  // "Most replayed" heatmap — SVG area sitting directly above the scrubber.
-  // Subtle by default, grows + brightens when hovering the track (YouTube-style).
+  // "Most replayed": a soft white area right above the bar, taller on hover.
   .vc-replay-heatmap {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 100%;
     width: 100%;
-    height: 22px;
+    height: 24px;
     margin-bottom: 2px;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.5;
+    opacity: .6;
     overflow: visible;
-    transition: height 0.15s ease, opacity 0.15s ease;
+    transition: height var(--t-fast) var(--ease), opacity var(--t-fast) var(--ease);
 
-    path {
-      fill: rgba(255, 255, 255, 0.4);
-    }
+    path { fill: color-mix(in srgb, var(--on-media) 18%, transparent); }
   }
 
   .vc-progress-track:hover .vc-replay-heatmap {
-    height: 42px;
-    opacity: 0.95;
-
-    path {
-      fill: rgba(255, 255, 255, 0.55);
-    }
+    height: 40px;
+    opacity: 1;
+    path { fill: color-mix(in srgb, var(--on-media) 30%, transparent); }
   }
 
-  // Scrub-preview thumbnail — low-res frame at the hovered timestamp, floats
-  // above the scrubber and follows the cursor. Persists in the DOM (so the
-  // detached player stays attached); visibility toggles on hover/drag.
+  // Seek preview: the frame at the hovered time in a white-outlined card, the
+  // chapter on top and the time in mono at the bottom.
   .vc-seek-preview {
     position: absolute;
-    bottom: calc(100% + 12px);
+    bottom: calc(100% + 14px);
     z-index: 6;
-    // Explicit box size so it can never collapse to a line, regardless of any
-    // global `video { height: auto }` reset (16:9 for a 168px-wide box).
+    // Explicit box size so it can never collapse to a line (16:9 for 168px).
     height: 94px;
-    border-radius: 8px;
+    border-radius: var(--r-lg);
     overflow: hidden;
-    background: #000;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+    background: var(--media-black);
+    border: 2px solid var(--on-media);
+    box-shadow: var(--shadow-float);
     opacity: 0;
     visibility: hidden;
     transform: translateY(4px);
-    transition: opacity 0.12s ease, transform 0.12s ease;
+    transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
     pointer-events: none;
 
     &.visible {
@@ -113,31 +120,24 @@
       transform: none;
     }
 
-    // Frameless: no cheap preview rung, so we skipped the low-res stream (it would
-    // have re-downloaded the segments playback already streams). Collapse the box to
-    // just the centred timestamp pill — the 168px box stays centred on the cursor,
-    // so the pill lands under it.
+    // Frameless: no cheap preview rung, so only the time pill shows, centred
+    // under the pointer.
     &.frameless {
       height: auto;
       background: none;
-      border: none;
+      border: 0;
       box-shadow: none;
       overflow: visible;
       text-align: center;
 
       .vc-seek-preview-video { display: none; }
-
-      .vc-seek-preview-chapter {
-        position: static;
-        margin-bottom: 4px;
-      }
-
+      .vc-seek-preview-chapter { position: static; margin-bottom: 4px; }
       .vc-seek-preview-time {
         position: static;
         display: inline-block;
-        padding: 3px 8px;
-        background: rgba(0, 0, 0, 0.85);
-        border-radius: 6px;
+        padding: 2px 8px;
+        background: var(--media-scrim-strong);
+        border-radius: var(--r-sm);
       }
     }
   }
@@ -149,19 +149,38 @@
     width: 100% !important;
     height: 100% !important;
     object-fit: contain;
-    background: #000;
+    background: var(--media-black);
   }
 
   .vc-seek-preview-time {
     position: absolute;
     bottom: 4px;
-    left: 0;
-    right: 0;
-    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: var(--media-scrim);
+    @include v2.mono(11, 700);
+    color: var(--on-media);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .vc-seek-preview.frameless .vc-seek-preview-time { transform: none; }
+
+  .vc-seek-preview-chapter {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: var(--media-scrim);
     font-size: 11px;
     font-weight: 700;
-    color: #fff;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+    color: var(--on-media);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     pointer-events: none;
   }
 
@@ -170,9 +189,9 @@
     top: 0;
     left: 0;
     height: 100%;
-    background: rgba(255, 255, 255, 0.45);
-    border-radius: 2px;
-    transition: width 0.3s linear;
+    background: color-mix(in srgb, var(--on-media) 35%, transparent);
+    border-radius: var(--r-bar);
+    transition: width var(--t-slow) linear;
     pointer-events: none;
     z-index: 0;
   }
@@ -182,14 +201,26 @@
     top: 0;
     left: 0;
     height: 100%;
-    background: var(--accent-primary, #e53935);
-    border-radius: 2px;
-    transition: width 0.15s linear;
+    background: var(--accent);
+    border-radius: var(--r-bar);
+    transition: width var(--t-fast) linear;
     pointer-events: none;
     z-index: 1;
   }
 
-  // Timeline markers
+  // A chapter boundary: a 3px cut in the bar, as between the design's segments.
+  .vc-chapter-gap {
+    position: absolute;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    margin-left: -1px;
+    background: var(--media-scrim-strong);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  // ── Comment and reaction markers: avatar on a stem, reply count badge ──
   .vc-marker {
     position: absolute;
     top: 0;
@@ -202,18 +233,18 @@
 
     .vc-marker-line {
       width: 2px;
-      height: 14px;
-      background: rgba(255, 255, 255, 0.7);
+      height: 10px;
+      background: var(--on-media);
       border-radius: 1px;
       position: absolute;
       bottom: 0;
-      transition: height 0.15s ease, background 0.15s ease;
+      transition: height var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
     }
 
     .vc-marker-avatar-wrap {
       position: absolute;
-      bottom: 16px;
-      transition: transform 0.15s ease;
+      bottom: 12px;
+      transition: transform var(--t-fast) var(--ease);
     }
 
     .vc-marker-avatar {
@@ -222,247 +253,173 @@
       min-width: 24px;
       min-height: 24px;
       border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.7);
+      border: 2px solid var(--on-media);
+      background: var(--avatar);
       object-fit: cover;
       aspect-ratio: 1 / 1;
       display: block;
-      transition: border-color 0.15s ease;
+      transition: border-color var(--t-fast) var(--ease);
     }
 
     .vc-marker-reply-count {
       position: absolute;
-      top: -4px;
+      top: -6px;
       right: -6px;
       min-width: 14px;
       height: 14px;
       padding: 0 3px;
-      font-size: 9px;
-      font-weight: 700;
+      font-size: 10px;
+      font-weight: 900;
       line-height: 14px;
       text-align: center;
-      color: #fff;
-      background: var(--accent-primary, #e53935);
-      border-radius: 7px;
+      color: var(--media-black);
+      background: var(--on-media);
+      border-radius: var(--r-sm);
       pointer-events: none;
     }
 
+    // "@marta (3 replies)": a cyan chip above the marker (48b).
     .vc-marker-tooltip {
       position: absolute;
       bottom: 44px;
       white-space: nowrap;
-      font-size: 11px;
-      font-weight: 500;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.8);
+      font-size: 10px;
+      font-weight: 900;
+      color: var(--media-black);
+      background: var(--cyan);
       padding: 3px 8px;
-      border-radius: 4px;
+      border-radius: var(--r-sm);
       pointer-events: none;
     }
 
-    // Video reaction markers — red accent
-    &--video .vc-marker-avatar {
-      border-color: var(--accent-primary, #e53935);
-    }
-
-    // Comment markers — muted border
-    &--comment .vc-marker-avatar {
-      border-color: #6b7280;
-    }
-
-    &--comment .vc-marker-line {
-      background: rgba(255, 255, 255, 0.4);
-    }
+    // Video reactions in accent, comments in white.
+    &--video .vc-marker-avatar { border-color: var(--accent); }
+    &--video .vc-marker-line { background: var(--accent); }
+    &--comment .vc-marker-line { background: color-mix(in srgb, var(--on-media) 70%, transparent); }
 
     &--active, &:hover {
-      .vc-marker-line {
-        height: 18px;
-        background: var(--accent-primary, #e53935);
-      }
-
-      .vc-marker-avatar-wrap {
-        transform: scale(1.2);
-      }
-
-      .vc-marker-avatar {
-        border-color: var(--accent-primary, #e53935);
-      }
+      .vc-marker-line { height: 14px; background: var(--cyan); }
+      .vc-marker-avatar-wrap { transform: scale(1.15); }
+      .vc-marker-avatar { border-color: var(--cyan); }
     }
   }
 
-  // Controls
-  .vc-controls-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .vc-controls-left,
-  .vc-controls-right {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .vc-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: none;
-    border-radius: 50%;
-    background: transparent;
-    color: rgba(255, 255, 255, 0.85);
-    cursor: pointer;
-    transition: all 0.15s ease;
-
-    &:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    &:active {
-      transform: scale(0.92);
-    }
-
-    &--autoplay {
-      &.active {
-        color: var(--accent-primary, #e53935);
-      }
-    }
-
-    &--glow {
-      &.active {
-        color: #fbbf24;
-      }
-    }
-
-    &--play {
-      width: 36px;
-      height: 36px;
-    }
-
-    &--react {
-      color: var(--accent-primary, #e53935);
-
-      &:hover {
-        color: var(--accent-primary, #e53935);
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid var(--accent-primary, #e53935);
-      }
-    }
-
-    &--resize {
-      width: auto;
-      border-radius: 6px;
-      padding: 0 8px;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 600;
-
-      .vc-size-label {
-        font-size: 11px;
-      }
-    }
-  }
-
-  .vc-time {
-    font-size: 12px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    margin-left: 8px;
-    white-space: nowrap;
-    user-select: none;
-  }
-
-  // Current chapter, next to the clock. Long titles are cut, the full one is in
-  // the tooltip.
-  .vc-chapter-title {
-    font-size: 12px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    margin-left: 6px;
-    max-width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    user-select: none;
-
-    &::before {
-      content: '\2022';
-      margin-right: 6px;
-      opacity: 0.7;
-    }
-  }
-
-  // Chapter names under the bar. Above the track's invisible 12px hit area,
-  // which would otherwise swallow clicks on them.
+  // ── Chapter names under the bar, each under its own stretch of it ──
+  // Above the track's invisible 12px hit area, which would otherwise swallow clicks.
   .vc-chapter-labels {
     position: relative;
     z-index: 2;
     height: 16px;
-    margin-top: 5px;
+    margin-top: 6px;
   }
 
   .vc-chapter-label {
     position: absolute;
     top: 0;
     box-sizing: border-box;
-    padding: 0 4px;
+    padding: 0 6px 0 0;
     border: 0;
-    border-left: 1px solid rgba(255, 255, 255, 0.25);
     background: none;
-    color: rgba(255, 255, 255, 0.65);
+    color: color-mix(in srgb, var(--on-media) 55%, transparent);
+    font: inherit;
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 700;
     line-height: 16px;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-    transition: color 0.15s ease;
+    transition: color var(--t-fast) var(--ease);
 
-    &:first-child { border-left: 0; }
-    &:hover { color: #fff; }
+    &:hover, &.active { color: var(--on-media); }
+  }
 
-    &.active {
-      color: #fff;
-      font-weight: 600;
+  // ── Control row ──
+  .vc-controls-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .vc-controls-left,
+  .vc-controls-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  // Glass tiles: 36 square at radius 12, the play button 40 in accent.
+  .vc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-md);
+    background: $glass;
+    color: var(--on-media);
+    font: inherit;
+    cursor: pointer;
+    flex: none;
+    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    &:hover { background: $glass-hover; }
+    &:active { transform: scale(.98); }
+    &:focus-visible { outline: 2px solid var(--on-media); outline-offset: 2px; }
+
+    // Toggles that are on: cyan glass, white icon.
+    &.active { background: $on-cyan; }
+
+    &--play {
+      width: 40px;
+      height: 40px;
+      background: color-mix(in srgb, var(--accent) 90%, transparent);
+      &:hover { background: var(--accent); }
     }
+
+    &--react,
+    &--resize,
+    &--speed {
+      padding: 0 10px;
+      @include v2.mono(12, 700);
+    }
+    &--react { font-family: var(--font-sans); font-size: 12px; }
+
+    .vc-btn-label,
+    .vc-size-label { white-space: nowrap; }
   }
 
-  // A chapter boundary: a short break in the bar, over the fill and the buffer,
-  // under the comment markers.
-  .vc-chapter-gap {
-    position: absolute;
-    top: 0;
-    width: 2px;
-    height: 100%;
-    margin-left: -1px;
-    background: rgba(0, 0, 0, 0.75);
-    pointer-events: none;
-    z-index: 1;
+  .vc-time {
+    @include v2.mono(13, 700);
+    color: var(--on-media);
+    margin-left: 6px;
+    white-space: nowrap;
+    user-select: none;
   }
 
-  .vc-seek-preview-chapter {
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    right: 4px;
-    text-align: center;
-    font-size: 11px;
-    font-weight: 600;
-    color: #fff;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+  // Current chapter, next to the clock, as a glass pill. Long titles are cut;
+  // the full one is in the tooltip.
+  .vc-chapter-title {
+    padding: 3px 10px;
+    border-radius: var(--r-sm);
+    background: $glass;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--on-media);
+    max-width: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    pointer-events: none;
+    user-select: none;
   }
 
-  // Volume group — icon + slider on hover (desktop only)
+  // Volume: icon + slider that opens on hover (desktop only)
   .vc-volume-group {
     display: flex;
     align-items: center;
@@ -471,30 +428,24 @@
     .vc-volume-slider-wrap {
       width: 0;
       overflow: hidden;
-      transition: width 0.2s ease;
+      transition: width var(--t-base) var(--ease);
     }
 
-    &:hover .vc-volume-slider-wrap {
-      width: 80px;
-    }
+    &:hover .vc-volume-slider-wrap,
+    &:focus-within .vc-volume-slider-wrap { width: 84px; }
 
     .vc-volume-slider {
       -webkit-appearance: none;
       appearance: none;
-      width: 70px;
+      width: 72px;
       height: 4px;
-      margin: 0 5px;
-      border-radius: 2px;
+      margin: 0 6px;
+      border-radius: var(--r-bar);
       outline: none;
       cursor: pointer;
-      // background is set inline via style prop for dynamic fill color
+      // background is set inline (VideoControls.jsx) for the accent fill
 
-      &::-webkit-slider-runnable-track {
-        height: 4px;
-        background: transparent;
-        border-radius: 2px;
-      }
-
+      &::-webkit-slider-runnable-track { height: 4px; background: transparent; border-radius: var(--r-bar); }
       &::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
@@ -502,340 +453,231 @@
         height: 12px;
         margin-top: -4px;
         border-radius: 50%;
-        background: #fff;
+        background: var(--on-media);
         cursor: pointer;
       }
-
-      &::-moz-range-track {
-        height: 4px;
-        background: transparent;
-        border-radius: 2px;
-      }
-
+      &::-moz-range-track { height: 4px; background: transparent; border-radius: var(--r-bar); }
       &::-moz-range-thumb {
         width: 12px;
         height: 12px;
         border-radius: 50%;
-        background: #fff;
-        border: none;
+        background: var(--on-media);
+        border: 0;
         cursor: pointer;
       }
+      &:focus-visible { outline: 2px solid var(--on-media); outline-offset: 4px; }
     }
   }
-
 }
 
-// Quality picker
-.vc-quality-wrap {
-  position: relative;
-}
+/* ── Menus over the player: speed, quality, subtitles ──────────────────────
+   Outside .video-controls because they can be portalled (fullscreen, phones). */
+.vc-quality-wrap,
+.vc-speed-wrap,
+.vc-subtitle-wrap { position: relative; }
 
-.vc-quality-menu {
-  position: absolute;
-  bottom: 100%;
-  right: 0;
-  margin-bottom: 6px;
-  background: rgba(20, 20, 20, 0.95);
-  border-radius: 6px;
-  padding: 4px 0;
-  min-width: 100px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  z-index: 20;
-}
-
-.vc-quality-item {
-  display: block;
-  width: 100%;
-  padding: 6px 14px;
-  border: none;
-  background: none;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 12px;
-  font-weight: 500;
-  text-align: left;
-  cursor: pointer;
-  white-space: nowrap;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-  }
-
-  &.active {
-    color: var(--accent-primary, #e53935);
-    font-weight: 700;
-  }
-}
-
-// Speed picker — mirrors quality picker
-.vc-speed-wrap {
-  position: relative;
-}
-
-.vc-btn--speed {
-  font-size: 11px;
-  font-weight: 600;
-  min-width: 28px;
-  letter-spacing: -0.02em;
-
-  &.active {
-    color: var(--accent-primary, #e53935);
-  }
-}
-
-.vc-speed-menu {
-  position: absolute;
-  bottom: 100%;
-  right: 0;
-  margin-bottom: 6px;
-  background: rgba(20, 20, 20, 0.95);
-  border-radius: 6px;
-  padding: 4px 0;
-  min-width: 100px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  z-index: 20;
-}
-
-.vc-speed-item {
-  display: block;
-  width: 100%;
-  padding: 6px 14px;
-  border: none;
-  background: none;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 12px;
-  font-weight: 500;
-  text-align: left;
-  cursor: pointer;
-  white-space: nowrap;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-  }
-
-  &.active {
-    color: var(--accent-primary, #e53935);
-    font-weight: 700;
-  }
-}
-
-// Subtitle picker — mirrors quality picker
-.vc-subtitle-wrap {
-  position: relative;
-}
-
+.vc-quality-menu,
+.vc-speed-menu,
 .vc-subtitle-menu {
   position: absolute;
-  bottom: 100%;
+  bottom: calc(100% + 8px);
   right: 0;
-  margin-bottom: 6px;
-  background: rgba(20, 20, 20, 0.95);
-  border-radius: 6px;
-  padding: 4px 0;
-  min-width: 120px;
-  max-height: 280px;
-  overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--r-xl);
+  background: $menu-bg;
+  border: 1px solid $line;
+  box-shadow: var(--shadow-float);
+  color: var(--on-media);
   z-index: 20;
+  animation: vc-menu-in var(--t-base) var(--ease);
 }
 
-.vc-subtitle-item {
-  display: block;
-  width: 100%;
-  padding: 6px 14px;
-  border: none;
-  background: none;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 12px;
-  font-weight: 500;
-  text-align: left;
-  cursor: pointer;
-  white-space: nowrap;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-  }
-
-  &.active {
-    color: var(--accent-primary, #e53935);
-    font-weight: 700;
-  }
+.vc-speed-menu { width: 264px; }
+.vc-quality-menu { width: 240px; }
+.vc-subtitle-menu {
+  width: 296px;
+  max-height: min(420px, 70vh);
+  @include v2.scroll-y;
 }
 
-.vc-btn--subtitle {
-  &.active {
-    color: var(--accent-primary, #e53935);
-  }
-}
+@keyframes vc-menu-in { from { opacity: 0; transform: translateY(6px); } }
 
-// Subtitle style settings (inside subtitle menu)
-.vc-subtitle-style {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  margin-top: 4px;
-  padding: 8px 12px 4px;
-}
-
+.vc-menu-head,
 .vc-subtitle-style-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
+  @include v2.text(eyebrow);
+  color: $dim;
 }
+
+.vc-tile-grid {
+  display: grid;
+  gap: 6px;
+  &.is-4 { grid-template-columns: repeat(4, 1fr); }
+  &.is-3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+// Choice tiles: 40 tall, radius 12, 2px border; the chosen one accent (speed,
+// quality) or cyan (subtitle language, a secondary choice).
+.vc-speed-item,
+.vc-quality-item,
+.vc-subtitle-item,
+.vc-subtitle-size-btn,
+.vc-subtitle-bg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 8px;
+  border: 2px solid $line;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--on-media);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+  &:hover { background: $glass; }
+  &.active {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+  }
+}
+
+.vc-speed-item { @include v2.mono(13, 700); }
+
+.vc-subtitle-langs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  .vc-subtitle-item {
+    height: 36px;
+    padding: 0 12px;
+    font-weight: 500;
+
+    &.active {
+      border-color: var(--cyan);
+      background: color-mix(in srgb, var(--cyan) 16%, transparent);
+    }
+  }
+}
+
+// Subtitle styling (inside the subtitle menu)
+.vc-subtitle-style {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid $line;
+}
+
+.vc-subtitle-style-label { margin-top: 4px; }
 
 .vc-subtitle-style-row {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-bottom: 8px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
+  gap: 6px;
 }
 
-// Font list — scrollable vertical list
+// Font list: a short scrolling list, each name in its own face.
 .vc-subtitle-font-list {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  max-height: 160px;
-  overflow-y: auto;
-  margin-bottom: 8px;
+  gap: 2px;
+  height: 128px;
+  padding: 4px;
+  border-radius: var(--r-md);
+  background: $glass;
+  @include v2.scroll-y;
 }
 
 .vc-subtitle-font-btn {
   display: block;
   width: 100%;
-  padding: 4px 8px;
-  border: none;
+  min-height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--r-sm);
   background: none;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 12px;
+  color: color-mix(in srgb, var(--on-media) 80%, transparent);
+  font-size: 13px;
   text-align: left;
   cursor: pointer;
-  border-radius: 3px;
-  transition: all 0.15s ease;
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-  }
-
-  &.active {
-    background: rgba(229, 57, 53, 0.15);
-    color: var(--accent-primary, #e53935);
-    font-weight: 700;
-  }
+  &:hover { background: $glass; color: var(--on-media); }
+  &.active { background: color-mix(in srgb, var(--cyan) 25%, transparent); color: var(--on-media); }
 }
 
+// Five "A" tiles at growing sizes (10 to 18).
 .vc-subtitle-size-btn {
   flex: 1;
-  padding: 4px 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  background: none;
-  color: rgba(255, 255, 255, 0.7);
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-
-  &:nth-child(1) { font-size: 9px; }
-  &:nth-child(2) { font-size: 11px; }
-  &:nth-child(3) { font-size: 13px; }
-  &:nth-child(4) { font-size: 15px; }
-  &:nth-child(5) { font-size: 17px; }
-
-  &:hover {
-    border-color: rgba(255, 255, 255, 0.4);
-    color: #fff;
-  }
-
-  &.active {
-    border-color: var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-    font-weight: 700;
-  }
-}
-
-// Color picker input
-.vc-subtitle-color-input {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  background: none;
-  cursor: pointer;
+  height: 36px;
   padding: 0;
-  overflow: hidden;
+  font-weight: 900;
 
-  &::-webkit-color-swatch-wrapper {
-    padding: 0;
-  }
+  &:nth-child(1) { font-size: 10px; }
+  &:nth-child(2) { font-size: 12px; }
+  &:nth-child(3) { font-size: 14px; }
+  &:nth-child(4) { font-size: 16px; }
+  &:nth-child(5) { font-size: 18px; }
 
-  &::-webkit-color-swatch {
-    border: none;
-    border-radius: 50%;
-  }
-
-  &::-moz-color-swatch {
-    border: none;
-    border-radius: 50%;
-  }
-
-  &:hover {
-    border-color: rgba(255, 255, 255, 0.6);
-  }
-}
-
-.vc-subtitle-color-hex {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
-  font-family: monospace;
-  margin-left: 4px;
+  &.active { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 16%, transparent); }
 }
 
 .vc-subtitle-bg-btn {
   flex: 1;
-  padding: 3px 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
+  height: 36px;
+  padding: 0 4px;
+  @include v2.mono(11, 700);
+
+  &.active { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 16%, transparent); }
+}
+
+// Colour swatch: a 36 square tile.
+.vc-subtitle-color-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border: 2px solid $line;
+  border-radius: var(--r-md);
   background: none;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 10px;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
+  padding: 2px;
+  overflow: hidden;
 
-  &:hover {
-    border-color: rgba(255, 255, 255, 0.4);
-    color: #fff;
-  }
-
-  &.active {
-    border-color: var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-    font-weight: 700;
-  }
+  &::-webkit-color-swatch-wrapper { padding: 0; }
+  &::-webkit-color-swatch { border: 0; border-radius: var(--r-sm); }
+  &::-moz-color-swatch { border: 0; border-radius: var(--r-sm); }
+  &:hover { border-color: color-mix(in srgb, var(--on-media) 50%, transparent); }
 }
 
-// Hide mobile settings gear on desktop
-.vc-mobile-settings-wrap {
-  display: none;
+.vc-subtitle-color-hex {
+  @include v2.mono(11, 700);
+  color: $dim;
+  margin-left: 4px;
+  text-transform: uppercase;
 }
 
-// Mobile controls layout
-@media (max-width: 767px) {
+// Hide the mobile settings gear on desktop
+.vc-mobile-settings-wrap { display: none; }
+
+/* ── Phones and phone landscape: transport in the middle, the rest bottom-right,
+   menus open from a settings gear. Same layout for both, one mixin. ───────── */
+@mixin compact-controls {
   .video-controls .vc-chapter-title,
   .video-controls .vc-chapter-labels { display: none; }
 
-  // Container always visible (for progress bar) but non-interactive
+  // Container always laid out (for the bar), but only the buttons take taps.
   .video-controls,
   .video-controls.visible {
     top: 0;
@@ -848,106 +690,96 @@
   }
 
   .video-controls {
-    // Gradient overlay — fades in/out with controls
+    // Scrim that fades in with the controls
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        rgba(0, 0, 0, 0.3) 0%,
-        rgba(0, 0, 0, 0.12) 30%,
-        rgba(0, 0, 0, 0.12) 60%,
-        rgba(0, 0, 0, 0.55) 100%
-      );
+      background: linear-gradient(var(--media-scrim) 0%, transparent 30%, transparent 60%, var(--media-scrim-strong) 100%);
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity var(--t-slow) var(--ease);
       pointer-events: none;
     }
 
-    // Progress bar (playhead + heatmap) — hidden with the rest of the controls,
-    // fades in when they're shown (see &.visible below).
     .vc-progress-row {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       margin-bottom: 0;
-      padding: 0 8px 3px;
+      padding: 0 10px 4px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity var(--t-slow) var(--ease);
       z-index: 1;
     }
 
-    // Playback buttons — fade in/out, centered
+    .vc-progress-track { height: 4px; &:hover { height: 4px; } }
+
+    // Transport, centred: 40 round seek buttons around a 52 round play.
     .vc-controls-row {
       justify-content: center;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity var(--t-slow) var(--ease);
       z-index: 1;
     }
 
-    .vc-controls-left {
-      gap: 15px;
-    }
+    .vc-controls-left { gap: 24px; }
 
     .vc-btn {
-      width: 24px;
-      height: 24px;
-      background: rgba(0, 0, 0, 0.35);
-
-      svg {
-        width: 75%;
-        height: 75%;
-      }
+      min-width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--media-scrim);
     }
+
+    .vc-btn--seek { width: 44px; height: 44px; }
 
     .vc-btn--play {
-      width: 27px;
-      height: 27px;
-      background: rgba(0, 0, 0, 0.45);
+      width: 56px;
+      height: 56px;
+      background: var(--media-scrim);
     }
 
-    // Time display — fade in/out, bottom-left
+    // Time: a mono scrim pill, bottom-left
     .vc-time {
       position: absolute;
-      bottom: 12px;
-      left: 8px;
+      bottom: 14px;
+      left: 10px;
       margin-left: 0;
-      font-size: 9px;
-      background: rgba(0, 0, 0, 0.45);
-      padding: 1px 4px;
-      border-radius: 3px;
+      padding: 2px 6px;
+      border-radius: var(--r-sm);
+      background: var(--media-scrim);
+      font-size: 11px;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity var(--t-slow) var(--ease);
       z-index: 1;
     }
 
-    // Mute + fullscreen — fade in/out, bottom-right
+    // Mute, settings, fullscreen: bottom-right
     .vc-controls-right {
       position: absolute;
       bottom: 10px;
-      right: 8px;
+      right: 10px;
+      gap: 6px;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity var(--t-slow) var(--ease);
       z-index: 1;
+
+      .vc-btn { position: relative; &::after { content: ""; position: absolute; inset: -4px; } }
     }
 
-    // Hide individual trigger buttons on mobile (menus are opened via settings gear instead)
+    // Single-purpose toggles live in the settings gear on phones
     .vc-btn--resize,
     .vc-btn--glow,
-    .vc-btn--autoplay {
-      display: none;
-    }
+    .vc-btn--autoplay,
+    .vc-btn--react { display: none; }
 
-    // Hide the trigger buttons inside wraps, but keep the wraps so menus can render
+    // Hide the triggers inside the wraps, but keep the wraps so menus can render
     .vc-subtitle-wrap > .vc-btn--subtitle,
     .vc-speed-wrap > .vc-btn--speed,
-    .vc-quality-wrap > .vc-btn {
-      display: none;
-    }
+    .vc-quality-wrap > .vc-btn { display: none; }
 
-    // Wraps should take no space when their button is hidden
     .vc-subtitle-wrap,
     .vc-speed-wrap,
     .vc-quality-wrap {
@@ -955,50 +787,40 @@
       overflow: visible;
     }
 
-    .vc-volume-slider-wrap {
-      display: none !important;
-    }
+    .vc-volume-slider-wrap { display: none !important; }
 
-    // Mobile settings gear — visible only on mobile
     .vc-mobile-settings-wrap {
       position: relative;
       display: flex;
     }
 
+    // The gear's column of round buttons, above it
     .vc-mobile-settings-menu {
       position: absolute;
-      bottom: 100%;
+      bottom: calc(100% + 6px);
       right: 0;
-      margin-bottom: 4px;
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      background: none;
-      padding: 0;
+      gap: 6px;
       z-index: 100;
     }
 
     .vc-mobile-settings-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border: none;
+      display: inline-grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border: 0;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.35);
-      color: rgba(255, 255, 255, 0.85);
+      background: var(--media-scrim-strong);
+      color: var(--on-media);
       cursor: pointer;
-      font-size: 9px;
-      font-weight: 600;
-      transition: all 0.15s ease;
+      @include v2.mono(11, 700);
+      transition: background var(--t-fast) var(--ease);
 
-      &.active {
-        color: var(--accent-primary, #e53935);
-      }
+      &.active { background: color-mix(in srgb, var(--cyan) 35%, var(--media-black)); }
     }
 
-    // When visible: show gradient + controls + progress bar
     &.visible {
       &::before { opacity: 1; }
 
@@ -1010,12 +832,10 @@
       .vc-controls-row {
         opacity: 1;
         // Delay pointer-events so the tap that shows controls doesn't hit a button
-        animation: vc-enable-clicks 0s 0.35s forwards;
+        animation: vc-enable-clicks 0s .35s forwards;
       }
 
-      .vc-time {
-        opacity: 1;
-      }
+      .vc-time { opacity: 1; }
 
       .vc-controls-right {
         opacity: 1;
@@ -1023,234 +843,30 @@
       }
     }
 
-    // Subtitle, quality & speed menus — open downward on mobile
+    // Menus open downward on phones
     .vc-subtitle-menu,
     .vc-quality-menu,
     .vc-speed-menu {
       bottom: auto;
-      top: 100%;
-      margin-bottom: 0;
-      margin-top: 6px;
+      top: calc(100% + 6px);
       max-height: 60vh;
+      @include v2.scroll-y;
     }
 
-    // Simplify markers on mobile — hide avatars, keep colored lines
+    // Markers: lines only, no avatars
     .vc-marker {
       .vc-marker-avatar-wrap { display: none; }
       .vc-marker-tooltip { display: none; }
       .vc-marker-line { height: 10px; }
 
       &--active .vc-marker-line,
-      &:hover .vc-marker-line {
-        height: 14px;
-      }
+      &:hover .vc-marker-line { height: 14px; }
     }
   }
 }
 
-// Phone landscape — same mobile controls layout (settings gear instead of individual buttons)
-@media screen and (orientation: landscape) and (max-height: 500px) {
-  .video-controls .vc-chapter-title,
-  .video-controls .vc-chapter-labels { display: none; }
-
-  .video-controls,
-  .video-controls.visible {
-    top: 0;
-    padding: 0;
-    opacity: 1;
-    background: none;
-    pointer-events: none;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .video-controls {
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        rgba(0, 0, 0, 0.3) 0%,
-        rgba(0, 0, 0, 0.12) 30%,
-        rgba(0, 0, 0, 0.12) 60%,
-        rgba(0, 0, 0, 0.55) 100%
-      );
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-
-    // Progress bar (playhead + heatmap) — hidden with the rest of the controls.
-    .vc-progress-row {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin-bottom: 0;
-      padding: 0 8px 3px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 1;
-    }
-
-    .vc-controls-row {
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 1;
-    }
-
-    .vc-controls-left {
-      gap: 15px;
-    }
-
-    .vc-btn {
-      width: 24px;
-      height: 24px;
-      background: rgba(0, 0, 0, 0.35);
-
-      svg {
-        width: 75%;
-        height: 75%;
-      }
-    }
-
-    .vc-btn--play {
-      width: 27px;
-      height: 27px;
-      background: rgba(0, 0, 0, 0.45);
-    }
-
-    .vc-time {
-      position: absolute;
-      bottom: 12px;
-      left: 8px;
-      margin-left: 0;
-      font-size: 9px;
-      background: rgba(0, 0, 0, 0.45);
-      padding: 1px 4px;
-      border-radius: 3px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 1;
-    }
-
-    .vc-controls-right {
-      position: absolute;
-      bottom: 10px;
-      right: 8px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 1;
-    }
-
-    .vc-btn--resize,
-    .vc-btn--glow,
-    .vc-btn--autoplay {
-      display: none;
-    }
-
-    .vc-subtitle-wrap > .vc-btn--subtitle,
-    .vc-speed-wrap > .vc-btn--speed,
-    .vc-quality-wrap > .vc-btn {
-      display: none;
-    }
-
-    .vc-subtitle-wrap,
-    .vc-speed-wrap,
-    .vc-quality-wrap {
-      width: 0;
-      overflow: visible;
-    }
-
-    .vc-volume-slider-wrap {
-      display: none !important;
-    }
-
-    .vc-mobile-settings-wrap {
-      position: relative;
-      display: flex;
-    }
-
-    .vc-mobile-settings-menu {
-      position: absolute;
-      bottom: 100%;
-      right: 0;
-      margin-bottom: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      background: none;
-      padding: 0;
-      z-index: 100;
-    }
-
-    .vc-mobile-settings-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.35);
-      color: rgba(255, 255, 255, 0.85);
-      cursor: pointer;
-      font-size: 9px;
-      font-weight: 600;
-      transition: all 0.15s ease;
-
-      &.active {
-        color: var(--accent-primary, #e53935);
-      }
-    }
-
-    &.visible {
-      &::before { opacity: 1; }
-
-      .vc-progress-row {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      .vc-controls-row {
-        opacity: 1;
-        animation: vc-enable-clicks 0s 0.35s forwards;
-      }
-
-      .vc-time {
-        opacity: 1;
-      }
-
-      .vc-controls-right {
-        opacity: 1;
-        pointer-events: auto;
-      }
-    }
-
-    .vc-subtitle-menu,
-    .vc-quality-menu,
-    .vc-speed-menu {
-      bottom: auto;
-      top: 100%;
-      margin-bottom: 0;
-      margin-top: 6px;
-      max-height: 60vh;
-    }
-
-    .vc-marker {
-      .vc-marker-avatar-wrap { display: none; }
-      .vc-marker-tooltip { display: none; }
-      .vc-marker-line { height: 10px; }
-
-      &--active .vc-marker-line,
-      &:hover .vc-marker-line {
-        height: 14px;
-      }
-    }
-  }
-}
+@media (max-width: 767px) { @include compact-controls; }
+@media screen and (orientation: landscape) and (max-height: 500px) { @include compact-controls; }
 
 @keyframes vc-enable-clicks {
   to { pointer-events: auto; }
@@ -1258,27 +874,20 @@
 
 /* While a video roll is on screen. Hidden with visibility rather than display so
    the control bar keeps its height and nothing below it jumps as the spot starts
-   and ends. Rolls only — a banner plays over the creator's own video, which stays
+   and ends. Rolls only: a banner plays over the creator's own video, which stays
    fully scrubbable. */
 .vc-progress-row.vc-ad-locked {
   visibility: hidden;
   pointer-events: none;
 }
 
-/* The seconds BEFORE the spot, while the countdown is on screen.
- *
- * Dimmed rather than hidden, which is the whole difference between this and
- * .vc-ad-locked above. The creator's video is still playing here, so a bar that
- * vanished for three seconds and came back would read as the player glitching; a
- * bar that visibly greys out reads as "not now", which is what it means. It also
- * leaves the position indicator on screen, so the viewer can still see where they
- * are in the video while they cannot move.
- *
- * pointer-events covers the drag, the click and the scrub preview together. The
- * keyboard and every programmatic path are refused in adBreak.lockedSeekTarget —
- * CSS is the part the viewer can see, not the part that enforces anything. */
+/* The seconds BEFORE the spot, while the countdown is on screen. Dimmed rather
+ * than hidden: the creator's video is still playing, so a bar that vanished for
+ * three seconds would read as a glitch; a greyed bar reads as "not now" and keeps
+ * the position visible. pointer-events covers drag, click and scrub preview; the
+ * keyboard and every programmatic path are refused in adBreak.lockedSeekTarget. */
 .vc-progress-row.vc-ad-imminent {
   pointer-events: none;
-  opacity: 0.45;
-  transition: opacity 0.2s ease;
+  opacity: .45;
+  transition: opacity var(--t-base) var(--ease);
 }

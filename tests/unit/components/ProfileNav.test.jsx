@@ -67,7 +67,9 @@ describe('the account menu', () => {
 
   it('lists the pages every member gets, as menu items', () => {
     const { menu } = mount()
-    const items = within(menu()).getAllByRole('menuitem').map((el) => el.textContent.trim())
+    // The visible label only: the Material Symbols glyph is ligature text.
+    const label = (el) => (el.querySelector('.pn-label') || el).textContent.trim()
+    const items = within(menu()).getAllByRole('menuitem').map(label)
     expect(items).toEqual(['My Channel', 'Wallet', 'Settings', 'Analytics', 'Rankings', 'About 3Speak', 'FAQ', 'Change account'])
   })
 

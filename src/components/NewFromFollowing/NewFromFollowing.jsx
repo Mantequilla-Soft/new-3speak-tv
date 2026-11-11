@@ -1,15 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import { NEW_FROM_FOLLOWING_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
-import AuthorBadge from '../AuthorBadge/AuthorBadge';
+import HiveAvatar from '../HiveAvatar/HiveAvatar';
+import { Icon } from '../v2/Icon';
 import { useTranslation } from 'react-i18next';
 import './NewFromFollowing.scss';
 
 /**
- * "New from creators you follow" — a rail of creator badges for people whose
+ * "New from creators you follow" (19c): a cyan strip that sums it up ("6 new
+ * videos from people you follow", with their stacked avatars) above a rail of
+ * creator chips for people whose
  * recent uploads this viewer hasn't watched yet.
  *
  * The checker (`/feeds/new-from-following`) does the work: last 7 days, creators
@@ -87,31 +90,47 @@ export default function NewFromFollowing() {
   // rather than an empty box that never fills.
   if (!authenticated || !creators.length) return null;
 
-  // No visible heading by request — the badges speak for themselves. The
-  // aria-label keeps the section named for screen readers.
+  const total = creators.reduce((n, c) => n + (c.shorts || 0) + (c.videos || 0), 0);
+
   return (
     <section className="new-from-following" aria-label={t('feeds.newFromFollowing.aria')}>
+      <div className="nff-head">
+        <div className="nff-stack" aria-hidden="true">
+          {creators.slice(0, 4).map((c) => (
+            <HiveAvatar key={c.username} username={c.username} size="small" alt="" badgeSize={0} className="nff-stack-avatar" />
+          ))}
+        </div>
+        <p className="nff-summary">
+          <b>{t('feeds.newFromFollowing.summary', { count: total })}</b> {t('feeds.newFromFollowing.fromFollowing')}
+        </p>
+      </div>
       <div className="nff-wrapper">
         {showLeft && (
           <button type="button" className="nff-scroll-btn left" onClick={() => scroll('left')} aria-label={t('feeds.scrollLeft')}>
-            <FaChevronLeft />
+            <Icon name="chevron_left" size={20} />
           </button>
         )}
         {showRight && (
           <button type="button" className="nff-scroll-btn right" onClick={() => scroll('right')} aria-label={t('feeds.scrollRight')}>
-            <FaChevronRight />
+            <Icon name="chevron_right" size={20} />
           </button>
         )}
         <div className="nff-rail" ref={railRef}>
-        {creators.map((c) => (
-          <AuthorBadge
-            key={c.username}
-            author={c.username}
-            subtitle={countsLabel(c, t)}
-            // Straight to the tab that holds the new work when it's all shorts.
-            tabHint={c.videos ? undefined : 'shorts'}
-          />
-        ))}
+          {creators.map((c) => (
+            <Link
+              key={c.username}
+              // Straight to the tab that holds the new work when it's all shorts.
+              to={c.videos ? `/@${c.username}` : `/@${c.username}?tab=shorts`}
+              className="nff-chip"
+              title={`@${c.username}`}
+            >
+              <HiveAvatar username={c.username} size="small" alt="" badgeSize={9} className="nff-chip-avatar" />
+              <span className="nff-chip-text">
+                <b>@{c.username}</b>
+                <span>{countsLabel(c, t)}</span>
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

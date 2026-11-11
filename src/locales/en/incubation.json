@@ -584,7 +584,7 @@
     "yesterday": "Yesterday",
     "groups": {
       "video": "Videos",
-      "videoNote": "One every 5 minutes — this is the slow part.",
+      "videoNote": "One every 5 minutes: this is the slow part.",
       "short": "Shorts",
       "comment": "Comments",
       "vote": "Likes",
@@ -627,7 +627,7 @@
     "fiveMin": "5 min",
     "waitingTitle": "Waiting on someone else",
     "waitingText": "These publish by themselves once the post they point at goes up on Hive. Nothing is lost in the meantime.",
-    "waitingFor": "<b>{{label}}</b> — waiting for {{target}}",
+    "waitingFor": "<b>{{label}}</b>: waiting for {{target}}",
     "andMore": "and {{count}} more",
     "excludedTitle": "Not coming across"
   }

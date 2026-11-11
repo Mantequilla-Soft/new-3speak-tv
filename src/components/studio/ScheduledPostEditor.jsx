@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
@@ -9,23 +9,14 @@ import { uploadThumbnail } from '../../utils/uploadThumbnail';
 import { proveScheduledPost, scheduledPostWriteError } from '../../utils/scheduledPostProof';
 import MarkdownComposer from './MarkdownComposer';
 import Beneficiary_modal from '../modal/Beneficiary_modal';
-import StepActions from '../embed-studio/StepActions';
-import SettingInfo, { SettingSheet } from '../embed-studio/SettingInfo';
+import SettingInfo from '../embed-studio/SettingInfo';
 import { useTranslation } from 'react-i18next';
-// Same look as the uploader's details step: the legacy studio's form base
-// (.studio-main-container, .input-group, .preview-tags, …), the settings tiles and
-// page type scale from EmbedDetails.scss (`.embed-details-page`), its bottom sheets
-// (SettingSheet) and its action row (StepActions). EditScheduledPost.scss adds the
-// thumbnail row, which the uploader handles on a separate step.
-import '../legacy-studio/StudioPage.scss';
-import '../embed-studio/EmbedDetails.scss';
+import { Button, ChoiceCard, Icon } from '../v2/ui';
+import { cx } from '../v2/helpers';
+import { formatDate } from '../../i18n';
+// Edit scheduled post (44c): v2 cards, its own stylesheet. The calendar and
+// the payout choice sit inline instead of in sheets.
 import '../../page/EditScheduledPost.scss';
-
-const REWARD_LABELS = {
-  default: 'upload.details.rewards.default',
-  powerup: 'upload.details.rewards.powerup',
-  decline: 'upload.details.rewards.decline',
-};
 
 // Every toast from this module is headed "Post"; the message becomes the
 // line under it. See utils/toast.js.
@@ -120,10 +111,6 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
   const [thumbnailUploading, setThumbnailUploading] = useState(false);
   const [payoutOptions, setPayoutOptions] = useState('default');
   const [scheduleDateTime, setScheduleDateTime] = useState('');
-  // Bottom sheets, as on the uploader's details step.
-  const [rewardsOpen, setRewardsOpen] = useState(false);
-  const [scheduleOpen, setScheduleOpen] = useState(false);
-  const [scheduleDraft, setScheduleDraft] = useState('');
 
   // Beneficiary modal state — same contract as EmbedUploadContext.
   const [isBeneficiaryModalOpen, setIsBeneficiaryModalOpen] = useState(false);
@@ -188,11 +175,6 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
     } finally {
       setThumbnailUploading(false);
     }
-  }
-
-  function openSchedule() {
-    setScheduleDraft(scheduleDateTime || '');
-    setScheduleOpen(true);
   }
 
   function toggleBeneficiaryModal() {
@@ -260,25 +242,42 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
   }
 
   if (loading) {
-    return <div className="studio-main-container edit-scheduled-page embed-details-page"><p style={{ padding: 20 }}>{t('common.status.loading')}</p></div>;
+    return (
+      <div className="edit-scheduled-page is-loading" role="status">
+        <Icon name="progress_activity" size={18} className="v2-spin" />
+        <span>{t('common.status.loading')}</span>
+      </div>
+    );
   }
   if (error) {
     return (
-      <div className="studio-main-container edit-scheduled-page embed-details-page">
-        {showHeader && <div className="studio-page-header"><h1>{t('studio.scheduled.title')}</h1></div>}
-        <div className="studio-page-content"><p style={{ padding: '0 20px' }}>{error}</p></div>
+      <div className="edit-scheduled-page">
+        {showHeader && <div className="esp-head"><h1>{t('studio.scheduled.title')}</h1></div>}
+        <div className="v2-failure" role="alert"><b>{error}</b></div>
+        {showBack && (
+          <div className="esp-actions">
+            <Button variant="secondary" size={48} icon="arrow_back" onClick={() => onClose?.()}>{t('common.actions.back')}</Button>
+          </div>
+        )}
       </div>
     );
   }
   if (!post) return null;
 
   const { minFormatted, maxFormatted } = getMinMaxDates();
+  const when = scheduleDateTime ? new Date(scheduleDateTime) : null;
+  const inPast = !!when && when.getTime() < Date.now();
+  const payoutChoices = [
+    { value: 'default', label: t('upload.details.rewards.default'), hint: t('upload.details.rewards.defaultHint') },
+    { value: 'powerup', label: t('upload.details.rewards.powerup'), hint: t('upload.details.rewards.powerupHint') },
+    { value: 'decline', label: t('upload.details.rewards.decline'), hint: t('upload.details.rewards.declineHint') },
+  ];
 
   return (
     <>
-      <div className="studio-main-container edit-scheduled-page embed-details-page">
+      <div className="edit-scheduled-page">
         {showHeader && (
-          <div className="studio-page-header">
+          <div className="esp-head">
             <h1>{t('studio.scheduled.title')}</h1>
             <p className="permlink-line">
               {t('studio.scheduled.permlink')} <code>{permlink}</code>
@@ -286,158 +285,153 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
           </div>
         )}
 
-        <div className="studio-page-content">
-          <div className="video-detail-wrap">
-            <div className="video-items">
+        <div className="esp-grid">
+          <section className="esp-card">
+            <div className="v2-field">
+              <label className="v2-eyebrow" htmlFor="esp-title">{t('studio.scheduled.fields.title')}</label>
+              <input id="esp-title" className="v2-input h44" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+            </div>
 
-              <div className="input-group">
-                <label>{t('studio.scheduled.fields.title')}</label>
-                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <div className="v2-field">
+              <span className="v2-eyebrow">{t('studio.scheduled.fields.description')}</span>
+              <div className="wrap-dec">
+                <MarkdownComposer
+                  value={description}
+                  onChange={setDescription}
+                  placeholder={t('studio.scheduled.descriptionPlaceholder')}
+                />
               </div>
+            </div>
 
-              <div className="input-group">
-                <label>{t('studio.scheduled.fields.description')}</label>
-                <div className="wrap-dec">
-                  <MarkdownComposer
-                    value={description}
-                    onChange={setDescription}
-                    placeholder={t('studio.scheduled.descriptionPlaceholder')}
-                  />
-                </div>
-              </div>
-
-              <div className="input-group">
-                <label>{t('studio.scheduled.fields.thumbnail')}</label>
-                <div className="thumbnail-edit-row">
+            <div className="v2-field">
+              <span className="v2-eyebrow">{t('studio.scheduled.fields.thumbnail')}</span>
+              <div className="thumbnail-edit-row">
+                <div className="thumbnail-edit-preview v2-thumb r12">
                   {thumbnail ? (
-                    <img className="thumbnail-edit-preview" src={thumbnail} alt={t('studio.scheduled.thumbnailAlt')} />
+                    <img src={thumbnail} alt={t('studio.scheduled.thumbnailAlt')} />
                   ) : (
-                    <div className="thumbnail-edit-preview thumbnail-edit-preview--placeholder">
-                      {t('studio.scheduled.noThumbnail')}
-                    </div>
+                    <span className="thumbnail-edit-preview__empty">{t('studio.scheduled.noThumbnail')}</span>
                   )}
-                  <div className="thumbnail-edit-controls">
-                    <label className="thumbnail-edit-btn">
-                      {thumbnailUploading ? t('studio.scheduled.uploading') : (thumbnail ? t('studio.scheduled.replace') : t('common.actions.upload'))}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={onPickThumbnail}
-                        disabled={thumbnailUploading}
-                      />
-                    </label>
-                    {thumbnail && (
-                      <button
-                        type="button"
-                        className="thumbnail-edit-btn thumbnail-edit-btn--ghost"
-                        onClick={() => setThumbnail(null)}
-                        disabled={thumbnailUploading}
-                      >
-                        {t('common.actions.remove')}
-                      </button>
-                    )}
-                  </div>
                 </div>
-              </div>
-
-              <div className="input-group">
-                <label>{t('studio.scheduled.fields.tag')}</label>
-                <input type="text" value={tagsInputValue} onChange={handleTagChange} />
-                <div className="wrap">
-                  <span>{t('studio.scheduled.tagsHint')} </span> <span>{t('studio.scheduled.tagsHintKey')}</span>
-                </div>
-                <div className="preview-tags">
-                  <span>
-                    {tagsPreview.map((item, index) => (
-                      <span className="item" key={index} style={{ marginRight: '8px' }}>{item}</span>
-                    ))}
-                  </span>
-                </div>
-              </div>
-
-              <div className="advance-option">
-                <div className="beneficiary-wrap is-clickable" onClick={() => setRewardsOpen(true)}>
-                  <div className="wrap">
-                    <span>{t('upload.details.rewards.label')}<SettingInfo title={t('upload.details.rewards.label')}>{t('upload.details.rewards.info')}</SettingInfo></span>
-                    <span>{t('upload.details.rewards.hint')}</span>
-                  </div>
-                  <div className="tile-value">{t(REWARD_LABELS[payoutOptions] || REWARD_LABELS.default)}</div>
-                </div>
-                <div className="beneficiary-wrap is-clickable" onClick={toggleBeneficiaryModal}>
-                  <div className="wrap">
-                    <span>{t('upload.details.beneficiaries.label')}<SettingInfo title={t('upload.details.beneficiaries.label')}>{t('upload.details.beneficiaries.info')}</SettingInfo></span>
-                    <span>{t('upload.details.beneficiaries.hint')}</span>
-                  </div>
-                  <div className="tile-value">{list.length > 0
-                    ? t('upload.details.beneficiaries.accounts', { count: list.length })
-                    : t('upload.details.beneficiaries.none')}</div>
-                </div>
-                <div className="beneficiary-wrap schedule-tile is-clickable" onClick={openSchedule}>
-                  <div className="wrap">
-                    <span>{t('studio.scheduled.fields.scheduledFor')}</span>
-                    <span>{scheduleDateTime
-                      ? new Date(scheduleDateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
-                      : ''}</span>
-                  </div>
-                  <div className="tile-value">{t('upload.details.schedule.changeTime')}</div>
-                </div>
-              </div>
-
-              <SettingSheet title={t('upload.details.rewards.label')} open={rewardsOpen} onClose={() => setRewardsOpen(false)}>
-                <div className="option-sheet">
-                  {[
-                    { value: 'default', label: t('upload.details.rewards.default'), hint: t('upload.details.rewards.defaultHint') },
-                    { value: 'powerup', label: t('upload.details.rewards.powerup'), hint: t('upload.details.rewards.powerupHint') },
-                    { value: 'decline', label: t('upload.details.rewards.decline'), hint: t('upload.details.rewards.declineHint') },
-                  ].map((opt) => (
-                    <button
-                      type="button"
-                      key={opt.value}
-                      className={`option-sheet__item${payoutOptions === opt.value ? ' is-active' : ''}`}
-                      onClick={() => { setPayoutOptions(opt.value); setRewardsOpen(false); }}
+                <div className="thumbnail-edit-controls">
+                  <label className={cx('v2-btn v2-btn--secondary h40 thumbnail-edit-btn', thumbnailUploading && 'is-busy')} aria-disabled={thumbnailUploading || undefined}>
+                    <Icon name={thumbnailUploading ? 'progress_activity' : 'upload'} size={18} className={thumbnailUploading ? 'v2-spin' : ''} />
+                    <span className="v2-btn__label">{thumbnailUploading ? t('studio.scheduled.uploading') : (thumbnail ? t('studio.scheduled.replace') : t('common.actions.upload'))}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={onPickThumbnail}
+                      disabled={thumbnailUploading}
+                    />
+                  </label>
+                  {thumbnail && (
+                    <Button
+                      variant="ghost"
+                      icon="delete"
+                      className="thumbnail-edit-btn--ghost"
+                      onClick={() => setThumbnail(null)}
+                      disabled={thumbnailUploading}
                     >
-                      <strong>{opt.label}</strong>
-                      <span>{opt.hint}</span>
-                    </button>
+                      {t('common.actions.remove')}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="v2-field">
+              <label className="v2-eyebrow" htmlFor="esp-tags">{t('studio.scheduled.fields.tag')}</label>
+              <input id="esp-tags" className="v2-input" type="text" value={tagsInputValue} onChange={handleTagChange} />
+              <span className="v2-field__hint">{t('studio.scheduled.tagsHint')} <b>{t('studio.scheduled.tagsHintKey')}</b></span>
+              {tagsPreview.length > 0 && (
+                <div className="preview-tags">
+                  {tagsPreview.map((item, index) => (
+                    <span className="item" key={index}>{item}</span>
                   ))}
                 </div>
-              </SettingSheet>
-
-              <SettingSheet title={t('studio.scheduled.fields.scheduledFor')} open={scheduleOpen} onClose={() => setScheduleOpen(false)}>
-                <ScheduleCalendar
-                  value={scheduleDraft}
-                  min={minFormatted}
-                  max={maxFormatted}
-                  onChange={setScheduleDraft}
-                />
-                <p className="schedule-sheet__note">{t('studio.scheduled.range')}</p>
-                <div className="sheet-actions">
-                  <button
-                    type="button"
-                    className="sheet-actions__ok"
-                    disabled={!scheduleDraft}
-                    onClick={() => { setScheduleDateTime(scheduleDraft); setScheduleOpen(false); }}
-                  >
-                    {t('common.actions.ok')}
-                  </button>
-                </div>
-              </SettingSheet>
-
+              )}
             </div>
+          </section>
+
+          <div className="esp-side">
+            <section className="esp-card">
+              <h2 className="esp-card__title">{t('studio.scheduled.fields.scheduledFor')}</h2>
+              <ScheduleCalendar
+                value={scheduleDateTime}
+                min={minFormatted}
+                max={maxFormatted}
+                onChange={setScheduleDateTime}
+              />
+              {when && !inPast && (
+                <p className="esp-note is-cyan">
+                  <Icon name="schedule_send" size={16} />
+                  {t('studio.schedule.publishAt', { when: formatDate(when, { dateStyle: 'medium', timeStyle: 'short' }) })}
+                </p>
+              )}
+              {inPast && (
+                <p className="esp-note is-accent" role="alert">
+                  <Icon name="error" size={16} />
+                  {t('studio.schedule.pastWarning')}
+                </p>
+              )}
+              <p className="esp-note">{t('studio.scheduled.range')}</p>
+            </section>
+
+            <section className="esp-card">
+              <h2 className="esp-card__title">
+                {t('upload.details.rewards.label')}
+                <SettingInfo title={t('upload.details.rewards.label')}>{t('upload.details.rewards.info')}</SettingInfo>
+              </h2>
+              <div className="esp-payout" role="radiogroup" aria-label={t('upload.details.rewards.label')}>
+                {payoutChoices.map((opt) => (
+                  <ChoiceCard
+                    key={opt.value}
+                    tone="cyan"
+                    selected={(payoutOptions || 'default') === opt.value}
+                    title={opt.label}
+                    sub={opt.hint}
+                    onClick={() => setPayoutOptions(opt.value)}
+                  />
+                ))}
+              </div>
+
+              <button type="button" className="esp-bene" onClick={toggleBeneficiaryModal}>
+                <span className="esp-bene__icon"><Icon name="group" size={18} /></span>
+                <span className="esp-bene__body">
+                  <b>{t('upload.details.beneficiaries.label')}</b>
+                  <span>{t('upload.details.beneficiaries.hint')}</span>
+                </span>
+                <span className="esp-bene__value">{list.length > 0
+                  ? t('upload.details.beneficiaries.accounts', { count: list.length })
+                  : t('upload.details.beneficiaries.none')}</span>
+                <Icon name="chevron_right" size={18} className="esp-bene__go" />
+              </button>
+            </section>
           </div>
-          {/* The uploader's action row. Cancelling is a neutral outline like every
-              other secondary action: 3Speak never uses red buttons. */}
-          <StepActions
-            placement="bottom"
-            back={showBack ? { label: t('common.actions.back'), onClick: () => onClose?.(), disabled: saving } : null}
-            secondary={[{ key: 'cancel', label: t('studio.scheduled.cancelPost'), onClick: handleCancel, disabled: saving }]}
-            primary={[{
-              key: 'save',
-              label: saving ? t('common.actions.saving') : t('studio.scheduled.saveChanges'),
-              onClick: handleSave,
-              disabled: saving || thumbnailUploading,
-            }]}
-          />
+        </div>
+
+        {/* Cancelling is the destructive action, so it is the accent tint; the
+            way on (Save) is the one solid accent button. */}
+        <div className="esp-actions">
+          {showBack && (
+            <Button variant="secondary" size={48} icon="arrow_back" onClick={() => onClose?.()} disabled={saving}>
+              {t('common.actions.back')}
+            </Button>
+          )}
+          <span className="esp-actions__spacer" aria-hidden="true" />
+          <Button variant="danger" size={48} icon="event_busy" onClick={handleCancel} disabled={saving}>
+            {t('studio.scheduled.cancelPost')}
+          </Button>
+          <Button
+            variant="primary"
+            size={48}
+            trailing="check"
+            className="is-next"
+            onClick={handleSave}
+            disabled={saving || thumbnailUploading}
+          >
+            {saving ? t('common.actions.saving') : t('studio.scheduled.saveChanges')}
+          </Button>
         </div>
       </div>
 

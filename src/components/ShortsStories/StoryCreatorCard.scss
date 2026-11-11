@@ -1,4 +1,7 @@
-// The stories row's hover card. Flat, like every 3Speak card: no gradient, no blur.
+@use "../../styles/v2" as v2;
+
+// The stories row's hover card: a floating surface (menus and popovers are the
+// only cards with a shadow), radius 20, padding 14.
 .story-creator-card {
   position: fixed;
   z-index: 1200;
@@ -6,19 +9,17 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-lg);
-  color: var(--text-primary);
-  font-size: 13px;
-  line-height: 1.35;
+  padding: 14px;
+  border-radius: var(--r-xl);
+  @include v2.floating;
+  color: var(--text);
+  @include v2.text(body-sm);
+  line-height: 1.4;
   text-align: left;
   // Fades in on open; fades out with `--leaving` (CARD_FADE_MS in ShortsStories.jsx),
   // and back in if the pointer returns before it's gone.
-  animation: story-creator-card-in 0.2s ease-out;
-  transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+  animation: story-creator-card-in var(--t-base) var(--ease);
+  transition: opacity var(--t-base) ease-in, transform var(--t-base) ease-in;
 
   &--leaving {
     opacity: 0;
@@ -34,26 +35,34 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--text-secondary);
-    font-size: 12px;
-    font-weight: 600;
+    color: var(--muted);
+    @include v2.text(meta);
+    font-weight: 700;
 
+    // A live 24h story: the accent dot
     &--story::before {
       content: '';
       width: 8px;
       height: 8px;
       flex: none;
       border-radius: 50%;
-      background: var(--accent-primary);
+      background: var(--accent);
     }
   }
 
   &__left {
     margin-left: auto;
-    padding: 1px 8px;
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 7px;
+    background: var(--accent-tint);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
     white-space: nowrap;
   }
 
@@ -71,39 +80,39 @@
   }
 
   &__name {
-    font-size: 15px;
-    font-weight: 700;
+    @include v2.text(title-sm);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   &__handle {
-    color: var(--text-secondary);
+    color: var(--muted);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   &__names > &__handle:only-child {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text-primary);
+    @include v2.text(title-sm);
+    color: var(--text);
   }
 
   &__rep {
     flex: none;
-    padding: 2px 8px;
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    font-size: 12px;
-    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 7px;
+    background: var(--surface-2);
+    color: var(--muted);
+    @include v2.mono(11, 700);
   }
 
   &__bio {
     margin: 0;
-    color: var(--text-secondary);
+    color: var(--muted);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -115,23 +124,27 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4px 12px;
-    color: var(--text-secondary);
+    color: var(--muted);
+    @include v2.text(meta);
 
     strong {
-      color: var(--text-primary);
+      color: var(--text);
       margin-right: 3px;
+      font-family: var(--font-mono);
+      font-weight: 700;
     }
   }
 
   &__link {
     align-self: flex-start;
-    color: var(--accent-primary);
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--cyan);
+    @include v2.text(label);
     text-decoration: none;
 
-    &:hover {
-      text-decoration: underline;
-    }
+    &:hover { text-decoration: underline; color: var(--cyan); }
   }
 }
 

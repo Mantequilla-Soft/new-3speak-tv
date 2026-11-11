@@ -1,108 +1,19 @@
-// CommunityPage.scss
+@use "../../styles/v2" as v2;
 
-@keyframes shimmer {
-    0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
+// Placeholders for a loading community page. The stripes come from
+// .v2-skeleton; this only sizes them like the parts they stand in for.
+.com-skeleton {
+  .com-skeleton-hero { height: 136px; border-radius: var(--r-3xl); }
+  .com-skeleton-kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .com-skeleton-kpi { height: 62px; border-radius: var(--r-lg); }
+  .com-skeleton-tabs { width: 360px; max-width: 100%; height: 44px; border-radius: var(--r-lg); }
+  .com-skeleton-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .com-skeleton-card { display: flex; flex-direction: column; gap: 8px; }
+  .com-skeleton-thumb { aspect-ratio: 16 / 9; border-radius: var(--r-md); }
+  .com-skeleton-short { width: 60%; }
+
+  @include v2.mobile {
+    .com-skeleton-hero { height: 180px; }
+    .com-skeleton-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
-  
-  .skeleton {
-    animation: shimmer 2s infinite linear;
-    background: linear-gradient(to right, #f0f0f0 4%, #e0e0e0 25%, #f0f0f0 36%);
-    background-size: 1000px 100%;
-    border-radius: 4px;
-  }
-  
-  .com-profile-img-wrap-skeleton {
-    position: relative;
-    height: 200px;
-    
-    .cover-skeleton {
-      width: 100%;
-      height: 100%;
-      border-radius: 20px;
-    }
-    
-    .wrap {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      bottom: 10%;
-      left: 10px;
-      
-      .avatar-skeleton {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-      }
-      
-      .title-skeleton {
-        width: 150px;
-        height: 24px;
-      }
-    }
-  }
-  
-  .title-wrap {
-    margin: 20px 0;
-    
-    .line-skeleton {
-      height: 16px;
-      margin-bottom: 8px;
-      
-      &.mb-10 {
-        margin-bottom: 10px;
-      }
-      
-      &:last-child {
-        width: 80%;
-      }
-    }
-  }
-  
-  .search-tren-wrapper-skeleton {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    
-    .search-skeleton {
-      width: 70%;
-      height: 40px;
-    }
-    
-    .button-group-skeleton {
-      width: 200px;
-      height: 34px;
-      border-radius: 7px;
-    }
-  }
-  
-  .feed-wrap-skeleton {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    
-    .skeleton-card {
-      .video-thumbnail-skeleton {
-        width: 100%;
-        height: 180px;
-        margin-bottom: 10px;
-      }
-      
-      .line-skeleton {
-        height: 12px;
-        margin-bottom: 6px;
-        
-        &:first-child {
-          width: 80%;
-        }
-        &:last-child {
-          width: 60%;
-        }
-      }
-    }
-  }
-  
-  .skeleton-hr {
-    border-color: #f0f0f0;
-  }
+}

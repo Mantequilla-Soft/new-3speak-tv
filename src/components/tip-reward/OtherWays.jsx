@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SiKofi, SiPatreon, SiBuymeacoffee, SiPaypal, SiGithubsponsors, SiLiberapay, SiOpencollective } from 'react-icons/si';
 import { readSupportLinks } from '../../lib/supportLinks';
+import { Icon } from '../v2/Icon';
 
 // Shared with Settings > Connections (SupportLinksSection).
 export const SUPPORT_SITE_ICONS = {
@@ -32,26 +33,26 @@ export function useSupportLinks(recipient) {
   return state.recipient === recipient ? state.links : NO_LINKS;
 }
 
-// The "More ways" tab of the tip window: one big button per page.
+// The "More ways" tab of the tip window: one big row per page. The site's own
+// logo marks the row (brand marks, not UI icons); the arrow is Material.
 export default function OtherWays({ recipient, links }) {
   const { t } = useTranslation();
   return (
-    <div className="tip-modal-in">
-      <div className="form">
-        <p className="tip-method-note">{t('engagement.tip.otherWays', { recipient })}</p>
-        <div className="tip-other-ways">
-          {links.map(({ site, url }) => {
-            const Icon = SUPPORT_SITE_ICONS[site.id];
-            return (
-              <a key={url} href={url} target="_blank" rel="noopener noreferrer nofollow ugc" title={url}>
-                {Icon && <Icon size={18} />}
-                <span>{site.label}</span>
-              </a>
-            );
-          })}
-        </div>
-        <p className="tip-method-note">{t('engagement.tip.otherWaysNote')}</p>
+    <div className="tip-v2__form">
+      <p className="v2-meta">{t('engagement.tip.otherWays', { recipient })}</p>
+      <div className="tip-v2__ways">
+        {links.map(({ site, url }) => {
+          const Logo = SUPPORT_SITE_ICONS[site.id];
+          return (
+            <a key={url} className="tip-v2__way" href={url} target="_blank" rel="noopener noreferrer nofollow ugc" title={url}>
+              {Logo ? <Logo size={18} aria-hidden /> : <Icon name="link" size={18} />}
+              <span>{site.label}</span>
+              <Icon name="open_in_new" size={18} />
+            </a>
+          );
+        })}
       </div>
+      <p className="v2-meta-sm">{t('engagement.tip.otherWaysNote')}</p>
     </div>
   );
 }

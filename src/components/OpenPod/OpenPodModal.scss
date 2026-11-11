@@ -1,28 +1,31 @@
 @use '../../styles/shorts-action-rail' as rail;
+@use '../../styles/v2' as v2;
+@use '../openpods/hangouts-skin' as hh;
+
+/* The OpenPods room / stream studio (SDK HangoutsRoom) in a full-size v2 sheet,
+   plus our own states around it: connecting (39c) and stream ended (39c). */
 .openpod-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: var(--overlay);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  animation: openpod-fade-in 0.15s ease;
-}
+  padding: 16px;
+  animation: v2-fade var(--t-base) var(--ease);
 
-@keyframes openpod-fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  @include v2.mobile { padding: 0; }
 }
 
 .openpod-modal {
+  @include hh.tokens;
+  @include hh.buttons(false);
   position: relative;
-  background: var(--bg-primary, #0d0d0d);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3xl);
   width: 100%;
   height: 100%;
   max-width: none;
@@ -30,8 +33,8 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
-  animation: openpod-slide-up 0.2s ease;
+  box-shadow: var(--shadow-sheet);
+  animation: v2-pop var(--t-base) var(--ease);
 
   // Make every wrapper between the modal and .hh-room fill the modal —
   // <LiveKitRoom> renders a plain <div class="lk-room"> that would
@@ -45,118 +48,59 @@
     flex-direction: column;
   }
 
-  @media (max-width: 768px) {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: auto;
+  @include v2.mobile {
     max-height: 100vh;
+    border: 0;
     border-radius: 0;
+    animation: v2-up var(--t-slow) var(--ease);
   }
-
-  // Map SDK CSS variables onto 3speak TV theme tokens (theme-aware)
-  --hh-bg:               var(--bg-primary);
-  --hh-bg-secondary:     var(--card-bg);
-  --hh-bg-hover:         var(--bg-hover);
-  --hh-text:             var(--text-primary);
-  --hh-text-secondary:   var(--text-secondary);
-  --hh-text-muted:       var(--text-muted, var(--text-secondary));
-  --hh-border:           var(--border-color);
-  --hh-border-light:     var(--border-light);
-  --hh-input-border:     var(--border-color);
-  --hh-primary:          var(--accent-primary, #e53935);
-  --hh-primary-hover:    #c62828;
-  --hh-danger:           #e53935;
-  --hh-success:          #43a047;
-  --hh-btn-secondary-bg: var(--bg-tertiary);
-  --hh-btn-secondary-text: var(--text-primary);
-  --hh-btn-secondary-hover: var(--bg-hover);
-  --hh-shadow:           var(--card-shadow, 0 4px 16px rgba(0, 0, 0, 0.4));
 }
 
-@keyframes openpod-slide-up {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-
+// "Connecting to OpenPods…" / "Authenticating with OpenPods…" (39c).
 .openpod-connecting {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   min-height: 160px;
-  color: var(--text-secondary, rgba(255,255,255,0.5));
-  font-size: 14px;
+  color: var(--text);
+  @include v2.text(body-sm);
 }
+.openpod-connecting__spin { color: var(--cyan); }
 
-// Shown after the host ends their stream — a confirmation instead of dropping
-// straight back to the lobby.
+// Shown after the host ends their stream (or on a dead link): a success card
+// instead of dropping straight back to the lobby.
 .openpod-ended {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  gap: 0.55rem;
-  min-height: min(70vh, 420px);
-  padding: 2rem 1.5rem;
-  color: var(--text-primary);
+  padding: 24px 16px;
+  overflow-y: auto;
 
-  &__icon { font-size: 3rem; line-height: 1; }
-  &__title { margin: 0; font-size: 1.4rem; font-weight: 700; }
+  &__card {
+    width: min(440px, 100%);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  &__icon { color: var(--accent); }
+  &__title { margin: 0; @include v2.text(heading); }
   &__text {
     margin: 0;
-    max-width: 34ch;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.5;
+    @include v2.text(meta);
+    color: var(--muted);
   }
-  // Row for the two secondary "back" buttons (Home | OpenPods).
+
+  &__btn--story { margin-top: 6px; }
+
   &__actions {
     display: flex;
-    gap: 0.6rem;
+    gap: 6px;
     flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  // Secondary/non-prominent — the feedback button below is the only prominent CTA.
-  &__btn {
-    margin-top: 0.7rem;
-    padding: 0.6rem 1.5rem;
-    border: 1px solid var(--border-light, #d1d5db);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.15s ease, border-color 0.15s ease;
-
-    &:hover { background: rgba(127, 127, 127, 0.12); }
-
-    // "Post a story about it": the next thing to do, so in the accent (outline).
-    &--story {
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-    }
-  }
-
-  // Prominent CTA — matches the embed-studio success screen's feedback button.
-  &__feedback {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.2rem;
-    padding: 0.7rem 1.6rem;
-    border: 1px solid var(--accent-primary, #e53935);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--accent-primary, #e53935);
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: none;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-
-    &:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(229, 57, 53, 0.4); }
   }
 }
 
@@ -191,11 +135,12 @@
 
     // The rail always sits over live video, so it ignores the light theme.
     // The go/start glyph keeps its own colour — hence the :not().
-    color: #fff;
-    > svg:not(.hh-studio__rbtn-go-icon) { color: #fff !important; }
+    color: var(--on-media);
+    > svg:not(.hh-studio__rbtn-go-icon) { color: var(--on-media) !important; }
 
     &--on {
-      background-color: color-mix(in srgb, var(--accent-primary, #e53935) 55%, rgba(0, 0, 0, 0.22));
+      background-color: var(--accent);
+      color: var(--on-accent);
     }
   }
 }

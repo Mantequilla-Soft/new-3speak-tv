@@ -184,7 +184,7 @@ export const EmptyState = ({ icon, title, children, action, className }) => (
    Dialog: centered on desktop (>= 768px), bottom sheet on mobile. One component, CSS decides.
    Traps focus, closes on Esc and on a backdrop click, renders in a portal. */
 const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
-export function Dialog({ open, onClose, title, sub, children, footer, width = 440, closeLabel = "Close", className, bodyClassName, head = true, dismissible = true }) {
+export function Dialog({ open, onClose, title, sub, children, footer, width = 440, closeLabel = "Close", className, bodyClassName, head = true, dismissible = true, leading, backdropClose = true }) {
   const ref = useRef(null);
   const onCloseRef = useRef(onClose);
   useEffect(() => { onCloseRef.current = onClose; }, [onClose]);
@@ -213,11 +213,12 @@ export function Dialog({ open, onClose, title, sub, children, footer, width = 44
   }, [open, dismissible]);
   if (!open) return null;
   return createPortal(
-    <div className="v2-dialog" role="presentation" onMouseDown={e => dismissible && e.target === e.currentTarget && onClose?.()}>
+    <div className="v2-dialog" role="presentation" onMouseDown={e => dismissible && backdropClose /* false: only X and Esc close it (a decision dialog) */ && e.target === e.currentTarget && onClose?.()}>
       <div className={cx("v2-dialog__panel", className)} role="dialog" aria-modal="true" aria-label={typeof title === "string" ? title : undefined} tabIndex={-1} ref={ref} style={{ "--w": `${width}px` }}>
         <div className="v2-dialog__grab" aria-hidden />
         {head && (
           <div className="v2-dialog__head">
+            {leading /* optional: a back button before the title (multi-view dialogs) */}
             <h2>{title}{sub && <span className="v2-dialog__sub">{sub}</span>}</h2>
             {onClose && dismissible && <IconButton icon="close" label={closeLabel} size={32} variant="ghost" round onClick={onClose} />}
           </div>

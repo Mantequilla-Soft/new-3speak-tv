@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 import { useTranslation } from "react-i18next";
 import { getUersContent } from "../../utils/hiveUtils";
 import "./BlogContent.scss";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { Icon } from "../v2/Icon";
 import { TailChase } from 'ldrs/react';
 import AudioPlayerInline from "../AudioPlayerInline/AudioPlayerInline";
 import { getPostBodyRenderer } from "../../lib/hiveRenderer";
@@ -246,7 +246,7 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
         {loading ? (
           <div className="blog-loading">
             <div className="loader-center">
-              <TailChase size={16} speed={1.5} color="var(--accent-primary)" />
+              <TailChase size={16} speed={1.5} color="var(--accent)" />
             </div>
           </div>
         ) : (
@@ -259,10 +259,10 @@ const BlogContent = ({ author, permlink, description, alwaysExpanded = false, du
       </div>
 
       {needsExpansion && (
-        <div className="expand-toggle" onClick={toggleExpand}>
+        <button type="button" className="expand-toggle" onClick={toggleExpand} aria-expanded={isExpanded}>
           <span>{isExpanded ? t('common.actions.showLess') : t('common.actions.showMore')}</span>
-          {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
-        </div>
+          <Icon name={isExpanded ? 'expand_less' : 'expand_more'} size={18} />
+        </button>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { toastIn } from '../../utils/toast';
-import { MdPeopleAlt, MdClose } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Button, Checkbox } from '../v2/ui';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { useAppStore } from '../../lib/store';
 import { publishSnap, SNAP_TAG, MAX_USER_TAGS } from '../../lib/snaps';
@@ -109,16 +110,24 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
 
       <div className="snap-composer-row">
         <input
-          className="snap-tags-input"
+          className="snap-tags-input v2-input"
           placeholder={tags.length >= MAX_USER_TAGS ? t('profile.snaps.tagLimitReached') : t('profile.snaps.tagPlaceholder')}
           value={tagInput}
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={onTagKeyDown}
           disabled={tags.length >= MAX_USER_TAGS}
         />
-        <button type="button" className="snap-options-toggle" onClick={() => setShowOptions((v) => !v)}>
+        <Button
+          variant="ghost"
+          size={40}
+          className="snap-options-toggle"
+          icon="tune"
+          trailing={showOptions ? 'expand_less' : 'expand_more'}
+          aria-expanded={showOptions}
+          onClick={() => setShowOptions((v) => !v)}
+        >
           {showOptions ? t('profile.snaps.hideOptions') : t('profile.snaps.moreOptions')}
-        </button>
+        </Button>
       </div>
 
       <div className="snap-tag-chips">
@@ -126,7 +135,7 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
         {tags.map((tag) => (
           <span key={tag} className="snap-tag-chip">
             {tag}
-            <button type="button" onClick={() => removeTag(tag)} aria-label={t('profile.snaps.removeTag', { tag })}><MdClose /></button>
+            <button type="button" onClick={() => removeTag(tag)} aria-label={t('profile.snaps.removeTag', { tag })}><Icon name="close" size={14} /></button>
           </span>
         ))}
         <span className="snap-tag-count">{tags.length}/{MAX_USER_TAGS}</span>
@@ -136,7 +145,7 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
         <div className="snap-options">
           <label className="snap-field">
             <span className="snap-field-label">{t('profile.snaps.rewards')}</span>
-            <select value={rewards} onChange={(e) => setRewards(e.target.value)}>
+            <select className="v2-input is-select" value={rewards} onChange={(e) => setRewards(e.target.value)}>
               <option value="default">{t('profile.snaps.rewardsDefault')}</option>
               <option value="powerup">{t('profile.snaps.rewardsPowerup')}</option>
               <option value="decline">{t('profile.snaps.rewardsDecline')}</option>
@@ -147,42 +156,42 @@ export default function SnapComposer({ onPosted, community = '', placeholder }) 
             <span className="snap-field-label">{t('profile.snaps.beneficiaries')}</span>
             <div className="snap-benefic-add">
               <input
+                className="v2-input"
                 placeholder={t('profile.snaps.accountPlaceholder')}
                 value={benAccount}
                 onChange={(e) => setBenAccount(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addBeneficiary(); } }}
               />
               <input
+                className="v2-input snap-benefic-pct"
                 type="number" min="1" max="100" placeholder="%"
                 value={benPercent}
                 onChange={(e) => setBenPercent(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addBeneficiary(); } }}
               />
-              <button type="button" onClick={addBeneficiary}><MdPeopleAlt /> {t('common.actions.add')}</button>
+              <Button variant="secondary" icon="group_add" onClick={addBeneficiary}>{t('common.actions.add')}</Button>
             </div>
             {beneficiaries.length > 0 && (
               <ul className="snap-benefic-list">
                 {beneficiaries.map((b) => (
                   <li key={b.account}>
-                    <span>@{b.account} — {Math.round(b.weight / 100)}%</span>
-                    <button type="button" onClick={() => removeBeneficiary(b.account)} aria-label={t('common.actions.remove')}><MdClose /></button>
+                    <span>@{b.account}</span>
+                    <b className="num">{Math.round(b.weight / 100)}%</b>
+                    <button type="button" onClick={() => removeBeneficiary(b.account)} aria-label={t('common.actions.remove')}><Icon name="close" size={16} /></button>
                   </li>
                 ))}
               </ul>
             )}
           </div>
 
-          <label className="snap-toggle">
-            <input type="checkbox" checked={nsfw} onChange={(e) => setNsfw(e.target.checked)} />
-            <span>{t('profile.snaps.markNsfw')}</span>
-          </label>
+          <Checkbox className="snap-toggle" checked={nsfw} onChange={(e) => setNsfw(e.target.checked)} label={t('profile.snaps.markNsfw')} />
         </div>
       )}
 
       <div className="snap-composer-actions">
-        <button type="button" className="snap-post-btn" disabled={posting || !body.trim()} onClick={handlePost}>
+        <Button variant="primary" className="snap-post-btn" disabled={posting || !body.trim()} loading={posting} onClick={handlePost} trailing="send">
           {posting ? t('profile.snaps.posting') : t('profile.snaps.postSnap')}
-        </button>
+        </Button>
       </div>
     </div>
   );

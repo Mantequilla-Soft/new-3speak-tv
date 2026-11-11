@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { toastIn } from '../../utils/toast';
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../lib/store";
-import { Helix} from 'ldrs/react';
-import 'ldrs/react/Helix.css'
+import { Icon } from "../../components/v2/ui";
+import mark from "../../assets/image/3S_mark.svg";
+import "./Callback.scss";
 import {
   LOCAL_STORAGE_ACCESS_TOKEN_KEY,
   LOCAL_STORAGE_USER_ID_KEY,
@@ -58,23 +59,15 @@ const AuthCallback = () => {
     handleAuth();
   }, [navigate, initializeAuth, t]);
 
+  // 19j: same look as the Butter Auth callback.
   return (
-    <div
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "87vh",
-  }}
->
- <h2 style={{
-    marginBottom: "20px",
-    color: "red"
-  }}>{t('auth.callback.processing')}</h2>
-  <Helix size="100" speed="2.5" color="red" />
-</div>
-
+    <div className="signin-cb">
+      <div className="signin-cb__box" role="status" aria-live="polite">
+        <img className="signin-cb__mark" src={mark} alt="3Speak" />
+        <Icon name="progress_activity" size={28} className="v2-spin signin-cb__spin" />
+        <h1 className="signin-cb__title">{t('auth.callback.processing')}</h1>
+      </div>
+    </div>
   );
 };
 

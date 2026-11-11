@@ -1,13 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { getHiveClient } from '../../utils/hiveNode';
-import { createPortal } from 'react-dom';
-import { Client, PrivateKey } from '@hiveio/dhive';
+import { PrivateKey } from '@hiveio/dhive';
 import { KeyTypes, Providers } from '@aioha/aioha';
 import { useTranslation, Trans } from 'react-i18next';
 import aioha, { setActiveAuthHandler } from '../../hive-api/aioha';
-import { HIVE_API_NODES } from '../../utils/config';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Dialog, Button, ChoiceCard, Field, Banner, Icon } from '../v2/ui';
 import './ActiveAuthModal.scss';
+
+// §11 "Sign with": each wallet as a choice card with its Material Symbol.
+const WALLET_ICONS = {
+  [Providers.Keychain]: 'extension',
+  [Providers.PeakVault]: 'account_balance_wallet',
+  [Providers.HiveAuth]: 'qr_code_2',
+  [Providers.Ledger]: 'usb',
+  [Providers.HiveSigner]: 'open_in_new',
+};
 
 const client = getHiveClient();
 
@@ -52,7 +59,9 @@ export default function ActiveAuthModal() {
   // { operations, resolve, reject } while a request is in flight, else null
   const pending = useRef(null);
   const [ops, setOps] = useState(null);
-  const [method, setMethod] = useState(null); // 'wallet' | 'key'
+  const [method, setMethod] = useState(null); // null = "Sign with" list | 'key'
+  // The wallet being connected right now (its card shows as chosen).
+  const [pendingProvider, setPendingProvider] = useState(null);
   const [activeKey, setActiveKey] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -83,6 +92,7 @@ export default function ActiveAuthModal() {
         setActiveKey('');
         setError('');
         setBusy(false);
+        setPendingProvider(null);
       });
     });
     return () => setActiveAuthHandler(null);
@@ -121,14 +131,15 @@ export default function ActiveAuthModal() {
   }
 
   // "Sign with Hive Wallet": reuse the existing aioha session if there is
-  // one, otherwise show our own wallet list and log in with the known
-  // username (skips aioha's "connect / enter account" step entirely).
+  // one. Without one, the "Sign with" list of wallets is already on screen and
+  // logs in with the known username (skips aioha's "connect / enter account"
+  // step entirely).
   function startWalletSign() {
     setError('');
     if (aioha.isLoggedIn()) {
       signWithAioha();
     } else {
-      setMethod('wallet');
+      setMethod(null);
     }
   }
 
@@ -136,6 +147,7 @@ export default function ActiveAuthModal() {
     setError('');
     if (!username) { setError(t('auth.activeAuth.errors.noUsername')); return; }
     setBusy(true);
+    setPendingProvider(provider);
     // A Butter Auth login parks the user's wallet session in aioha's other
     // logins, and aioha.login() refuses a parked username ("Already logged
     // in"). Same wallet: switch back to it. Other wallet: drop the parked
@@ -163,6 +175,7 @@ export default function ActiveAuthModal() {
       }
       setError(e.message || t('auth.activeAuth.errors.connectFailed'));
       setBusy(false);
+      setPendingProvider(null);
     }
   }
 
@@ -198,83 +211,105 @@ export default function ActiveAuthModal() {
 
   if (!ops) return null;
 
-  return createPortal(
-    <div className="aauth-overlay" onClick={busy ? undefined : close}>
-      <div className="aauth-content" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={t('auth.activeAuth.title')} onClose={busy ? undefined : close} />
-        <p className="aauth-desc">
-          <Trans i18nKey="auth.activeAuth.desc" components={{ b: <strong /> }} />
-        </p>
+  // "← Choose another method": the arrow is drawn as an icon, not a character.
+  const backLabel = t('auth.activeAuth.chooseAnother').replace(/^\s*[←<]\s*/, '');
+  const walletSession = aioha.isLoggedIn();
 
-        <div className="aauth-ops">
-          {describeOps(ops, t).map((line, i) => (
-            <div key={i} className="aauth-op">{line}</div>
-          ))}
-        </div>
+  const footer = method === 'key' ? (
+    <>
+      <Button variant="ghost" icon="arrow_back" disabled={busy} onClick={() => { setError(''); setMethod(null); }}>
+        {backLabel}
+      </Button>
+      <Button variant="primary" size={40} disabled={busy || !activeKey.trim()} loading={busy} onClick={signWithKey}>
+        {busy ? t('auth.activeAuth.broadcasting') : t('auth.activeAuth.signBroadcast')}
+      </Button>
+    </>
+  ) : null;
 
-        {error && <div className="aauth-error">{error}</div>}
+  return (
+    <Dialog
+      open
+      onClose={close}
+      dismissible={!busy}
+      title={t('auth.activeAuth.title')}
+      width={460}
+      className="aauth-dialog"
+      footer={footer}
+    >
+      <p className="aauth-desc">
+        <Trans i18nKey="auth.activeAuth.desc" components={{ b: <strong /> }} />
+      </p>
 
-        {!method && (
-          <div className="aauth-choices">
-            <button className="aauth-btn primary" onClick={startWalletSign}>
-              {t('auth.activeAuth.signWithWallet')}
-            </button>
-            <button className="aauth-btn" onClick={() => { setError(''); setMethod('key'); }}>
-              {t('auth.activeAuth.signWithKey')}
-            </button>
-          </div>
-        )}
-
-        {method === 'wallet' && (
-          <div className="aauth-panel">
-            <p className="aauth-hint">
-              <Trans i18nKey="auth.activeAuth.connectingAs" values={{ username }} components={{ b: <strong /> }} />
-            </p>
-            {wallets.map((p) => (
-              <button
-                key={p}
-                className="aauth-btn"
-                disabled={busy}
-                onClick={() => loginWithProvider(p)}
-              >
-                {WALLET_LABELS[p]}
-              </button>
-            ))}
-            {busy && <p className="aauth-hint">{t('auth.activeAuth.waitingWallet')}</p>}
-            <button className="aauth-link" disabled={busy} onClick={() => setMethod(null)}>
-              {t('auth.activeAuth.chooseAnother')}
-            </button>
-          </div>
-        )}
-
-        {method === 'key' && (
-          <div className="aauth-panel">
-            <p className="aauth-hint">
-              <Trans i18nKey="auth.activeAuth.pasteKey" values={{ username }} components={{ b: <strong /> }} />
-            </p>
-            <input
-              type="password"
-              className="aauth-input"
-              autoComplete="off"
-              spellCheck={false}
-              placeholder={t('auth.activeAuth.keyPlaceholder')}
-              value={activeKey}
-              onChange={(e) => setActiveKey(e.target.value)}
-            />
-            <button
-              className="aauth-btn primary"
-              disabled={busy || !activeKey.trim()}
-              onClick={signWithKey}
-            >
-              {busy ? t('auth.activeAuth.broadcasting') : t('auth.activeAuth.signBroadcast')}
-            </button>
-            <button className="aauth-link" disabled={busy} onClick={() => setMethod(null)}>
-              {t('auth.activeAuth.chooseAnother')}
-            </button>
-          </div>
-        )}
+      <div className="v2-well aauth-ops">
+        {describeOps(ops, t).map((line, i) => (
+          <div key={i} className="aauth-op">{line}</div>
+        ))}
       </div>
-    </div>,
-    document.body
+
+      {error && method !== 'key' && <Banner tone="warn">{error}</Banner>}
+
+      {!method && (
+        <>
+          {walletSession ? (
+            // A wallet is already connected: sign with it straight away.
+            <Button variant="primary" size={48} block next loading={busy} disabled={busy} onClick={startWalletSign}>
+              {t('auth.activeAuth.signWithWallet')}
+            </Button>
+          ) : (
+            <>
+              <p className="aauth-hint">
+                <Trans i18nKey="auth.activeAuth.connectingAs" values={{ username }} components={{ b: <strong /> }} />
+              </p>
+              <div className="v2-choices is-grid aauth-wallets">
+                {wallets.map((p) => (
+                  <ChoiceCard
+                    key={p}
+                    role="button"
+                    icon={WALLET_ICONS[p] || 'account_balance_wallet'}
+                    title={WALLET_LABELS[p]}
+                    selected={pendingProvider === p}
+                    disabled={busy}
+                    onClick={() => loginWithProvider(p)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+          {busy && (
+            <div className="aauth-status" role="status">
+              <Icon name="progress_activity" size={18} className="v2-spin" />
+              <span>{t('auth.activeAuth.waitingWallet')}</span>
+            </div>
+          )}
+          <ChoiceCard
+            role="button"
+            icon="key"
+            title={t('auth.activeAuth.signWithKey')}
+            disabled={busy}
+            onClick={() => { setError(''); setMethod('key'); }}
+          />
+        </>
+      )}
+
+      {method === 'key' && (
+        <>
+          <p className="aauth-hint">
+            <Trans i18nKey="auth.activeAuth.pasteKey" values={{ username }} components={{ b: <strong /> }} />
+          </p>
+          <Field
+            type="password"
+            className="aauth-key"
+            autoComplete="off"
+            spellCheck={false}
+            aria-label={t('auth.activeAuth.keyPlaceholder')}
+            placeholder={t('auth.activeAuth.keyPlaceholder')}
+            value={activeKey}
+            error={error || undefined}
+            onChange={(e) => setActiveKey(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter' && activeKey.trim() && !busy) signWithKey(); }}
+          />
+        </>
+      )}
+    </Dialog>
   );
 }

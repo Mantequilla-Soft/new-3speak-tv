@@ -1,54 +1,65 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// ── One width for the whole upload wizard ────────────────────────────────────
+// ── One frame for the whole upload wizard ────────────────────────────────────
 // Every embed-studio step (Select, Thumbnail, Details, Timeline, Preview) puts
-// `embed-wizard` on its `.studio-main-container`. Its content then takes the
-// stepper's box exactly: the same max width (the stepper's own
-// --step-progress-max, 1100px by default), centred, with the same side padding
-// (4px, 8px on phones; StepProgress.scss). Stepper, both action rows and the
-// content therefore share one left and one right edge.
+// `embed-wizard` on its `.studio-main-container`: the v2 content width (1280)
+// with the page padding, the title flush left, then the stepper bar
+// (StepProgress with the top action row), then the step itself.
 //
 // Scoped to `.embed-wizard` so the other pages built on `.studio-main-container`
-// (legacy studio, scheduled-post editor, EditScheduledModal) are untouched.
-.studio-main-container.embed-wizard > .studio-page-content {
+// (scheduled-post editor) keep their own frame.
+.studio-main-container.embed-wizard {
   width: 100%;
-  max-width: var(--step-progress-max, 1100px);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 4px;
-  padding-right: 4px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 24px var(--page-pad);
   box-sizing: border-box;
   min-width: 0;
 
-  @include mix.respond(phone) {
-    padding-left: 8px;
-    padding-right: 8px;
+  > .studio-page-header { margin-bottom: 12px; }
+
+  > .studio-page-content {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @include v2.mobile {
+    padding-top: 16px;
   }
 }
 
-// Inner layouts fill that box instead of keeping their old fixed widths. The
-// legacy stylesheets these override are shared with the old studio, hence the
-// overrides live here, scoped, rather than in those files.
-.embed-wizard {
-  // Select: drop zone and file preview were a fixed 700px (90% on phones).
-  .file-upload,
-  .video-preview-container {
-    width: 100%;
-    box-sizing: border-box;
-  }
-  // The file preview now sits in a wide box; a letterboxed black band across
-  // the whole row reads as a broken player, so the bars go.
-  .video-preview-container .video-preview { background: transparent; }
+// A step's own heading inside the content ("Choose Thumbnail", "Chapters and
+// links"): a 4px accent mark, the title, a muted line under it.
+.wizard-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 14px;
 
-  // Thumbnail: the editor (thumbnail-editor/ThumbnailEditor.scss) takes the full row.
-  .upload-step { width: 100%; }
+  .wizard-head__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    @include v2.text(title);
+    color: var(--text);
 
-  // Details: the form card was 80% of a full-width wrapper with 16px around it.
-  .video-detail-wrap {
-    padding: 0;
-    .video-items {
-      width: 100%;
-      box-sizing: border-box;
+    &::before {
+      content: "";
+      flex: none;
+      width: 4px;
+      height: 22px;
+      border-radius: 2px;
+      background: var(--accent);
     }
+  }
+  &.is-cyan .wizard-head__title::before { background: var(--cyan); }
+
+  .wizard-head__sub {
+    margin: 0;
+    @include v2.text(body-sm);
+    color: var(--muted);
+    text-wrap: pretty;
   }
 }

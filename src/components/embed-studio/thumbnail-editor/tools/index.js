@@ -1,4 +1,4 @@
-import { Crop, Film, Smile, Type } from 'lucide-react';
+import { Icon } from '../../../v2/Icon';
 import FrameTool from './FrameTool';
 import TextTool from './TextTool';
 import PickFrameTool from './PickFrameTool';
@@ -13,12 +13,12 @@ import StickerTool from './StickerTool';
 //   needsImage  false when it works without a chosen picture (default: true)
 //   available   (props) => false hides the tab, e.g. without a video file
 export const THUMBNAIL_TOOLS = [
-  { key: 'frame', icon: Crop, labelKey: 'upload.thumbnail.tools.frame', Panel: FrameTool },
-  { key: 'text', icon: Type, labelKey: 'upload.thumbnail.tools.text', Panel: TextTool, layerType: 'text' },
-  { key: 'stickers', icon: Smile, labelKey: 'upload.thumbnail.tools.stickers', Panel: StickerTool, layerType: 'sticker' },
+  { key: 'frame', icon: Icon.of('crop'), labelKey: 'upload.thumbnail.tools.frame', Panel: FrameTool },
+  { key: 'text', icon: Icon.of('title'), labelKey: 'upload.thumbnail.tools.text', Panel: TextTool, layerType: 'text' },
+  { key: 'stickers', icon: Icon.of('mood'), labelKey: 'upload.thumbnail.tools.stickers', Panel: StickerTool, layerType: 'sticker' },
   {
     key: 'pickFrame',
-    icon: Film,
+    icon: Icon.of('photo_library'),
     labelKey: 'upload.thumbnail.tools.pickFrame',
     Panel: PickFrameTool,
     needsImage: false,

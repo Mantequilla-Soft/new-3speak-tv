@@ -1,526 +1,795 @@
-@use "../mixins.scss" as mix;
+@use "../styles/v2" as v2;
 
+// Import your videos (33c, 23d) and the batch form / status (49b).
+// Desktop: the picker on the left; the running batch in a 420 side column.
 .yt-import {
-  max-width: 1100px;
+  max-width: var(--content-max);
   margin: 0 auto;
-  padding: 24px 16px 48px;
-  color: var(--text-primary, #000);
+  padding: var(--page-pad);
+  color: var(--text);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
 
-  &__header {
-    margin-bottom: 20px;
-    h1 {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 24px;
-      margin: 0 0 4px;
+  &.has-batch {
+    grid-template-columns: minmax(0, 1fr) 420px;
+
+    @include v2.below-wide { grid-template-columns: minmax(0, 1fr) 360px; }
+    @media (max-width: 1023px) {
+      grid-template-columns: minmax(0, 1fr);
+      // The running batch first on a narrow screen: it is what the creator checks.
+      .yt-import__aside { order: -1; }
     }
-    .yt-import__muted { font-size: 15px; line-height: 1.45; }
   }
-  &__logo { color: #ff0000; }
 
-  &__muted {
-    font-size: 13px;
-    color: var(--text-secondary, #666);
-    a { color: inherit; text-decoration: underline; }
-  }
-  &__note { color: var(--text-secondary, #666); }
-  &__limits {
-    font-size: 15px;
-    line-height: 1.45;
-    color: var(--text-secondary, #666);
-    margin: -8px 0 16px;
-  }
-  // "Get 3Speak Pro" at the end of the limits line: a small pill, crown beside
-  // the label. Doubled with __btn, which is declared further down and would
-  // otherwise win with its inline-block and padding.
-  &__pro.yt-import__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-left: 10px;
-    padding: 4px 12px;
-    font-size: 13px;
-    line-height: 1.4;
-    white-space: nowrap;
-    vertical-align: middle;
-    svg { flex-shrink: 0; color: #f5b300; }
-  }
-  &__error { color: #e53935; font-size: 14px; }
-  &__paused {
-    margin: 0 0 16px;
-    padding: 10px 14px;
-    border: 1px solid rgba(251, 140, 0, 0.6);
-    border-radius: 10px;
-    font-size: 14px;
-  }
-  &__center { display: flex; justify-content: center; padding: 20px 0; }
-
-  &__empty {
+  &__main {
+    min-width: 0;
     display: flex;
     flex-direction: column;
+    gap: 14px;
+  }
+
+  &__aside {
+    min-width: 0;
+    position: sticky;
+    top: calc(var(--topbar-h) + 16px);
+
+    @media (max-width: 1023px) { position: static; }
+  }
+
+  // Signed out: header + a note, nothing else.
+  > .yt-import__header,
+  > .yt-import__signin { grid-column: 1 / -1; }
+
+  &__header {
+    display: flex;
     align-items: flex-start;
     gap: 12px;
-  }
 
-  &__channel {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 16px;
-    select { padding: 6px 8px; border-radius: 6px; }
-  }
+    h1 { @include v2.text(heading-lg); font-size: 32px; margin: 0; }
 
-  // Primary = red OUTLINE (red text + border), never a solid red fill.
-  &__btn {
-    display: inline-block;
-    background: transparent;
-    color: #e53935;
-    border: 1px solid #e53935;
-    border-radius: 8px;
-    padding: 9px 16px;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    &:hover:not(:disabled) { background: rgba(229, 57, 53, 0.08); }
-    &--outline {
-      background: transparent;
-      color: var(--text-primary, #000);
-      border-color: var(--border-color, #ccc);
-      &:hover:not(:disabled) { background: rgba(127, 127, 127, 0.08); }
+    @include v2.mobile {
+      flex-direction: column;
+      h1 { font-size: 28px; }
     }
-    &:disabled { opacity: 0.5; cursor: default; }
   }
 
-  &__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
-
-  &__progress { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
-  &__bar {
-    width: 100%;
-    height: 8px;
-    border-radius: 4px;
-    background: var(--border-color, #e0e0e0);
-    overflow: hidden;
-    span { display: block; height: 100%; background: #e53935; transition: width 0.4s ease; }
-  }
-
-  &__fallback {
-    margin-top: 12px;
-    ol { padding-left: 20px; margin: 8px 0; li { margin: 4px 0; } }
-    a { color: #e53935; text-decoration: underline; }
-  }
-
-  // Platform switch (YouTube / TikTok): pills, the active one red OUTLINE.
-  // Platform tabs on the left, "Refresh lists" on the right (below on phones).
-  &__toolbar {
+  &__header-text {
+    flex: 1;
+    min-width: 0;
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 8px 16px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
+    flex-direction: column;
+    gap: 4px;
+
+    p { margin: 0; }
   }
-  &__platforms {
+
+  &__muted {
+    @include v2.text(meta);
+    color: var(--muted);
+
+    a { color: var(--cyan); }
+  }
+
+  &__note {
+    margin: 0;
+    @include v2.text(body-sm);
+    color: var(--muted);
+  }
+
+  &__error {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--accent-wash);
+    @include v2.text(body-sm);
+    color: var(--text);
+  }
+
+  &__center {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  &__refresh.yt-import__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: auto;
-    white-space: nowrap;
-    &.is-busy svg { animation: yt-import-spin 1s linear infinite; }
-  }
-  &__refresh-note { margin: -8px 0 16px; }
-  &__platform {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--border-color, #ccc);
-    background: transparent;
-    color: var(--text-primary, #000);
-    font-weight: 600;
-    cursor: pointer;
-    &--active {
-      color: #e53935;
-      border-color: #e53935;
-      background: rgba(229, 57, 53, 0.08);
-    }
+    justify-content: center;
+    padding: 16px 0;
+
+    > .material-symbols-rounded { color: var(--cyan); }
   }
 
   &__section {
-    font-size: 16px;
-    margin: 0 0 12px;
+    margin: 4px 0 0;
+    @include v2.text(title-sm);
   }
 
+  // ── Platforms: 48 tall choice chips, cyan when picked (33c) ──
+  &__platforms {
+    display: flex;
+    gap: 6px;
+    @include v2.scroll-x;
+    padding-bottom: 2px;
+  }
+
+  &__platform {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+    height: 48px;
+    padding: 0 14px 0 8px;
+    border-radius: var(--r-lg);
+    border: 2px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    @include v2.text(label);
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+    &:hover { background: var(--bg-hover); }
+
+    &--active {
+      border-color: var(--cyan);
+      background: var(--cyan-tint-strong);
+    }
+  }
+
+  &__platform-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+
+  &__platform-linked { color: var(--cyan); }
+
+  &__refresh.is-busy .material-symbols-rounded { animation: v2-spin 1s linear infinite; }
+
+  &__tabs.v2-seg { align-self: flex-start; background: var(--surface); }
+
+  &__channel { max-width: 360px; }
+
+  // ── Paste a link ──
   &__paste {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 20px;
-    label { font-weight: 600; }
-    .yt-import__note { margin: 0; font-size: 14px; }
-    &--card {
-      padding: 14px 16px;
-      border: 1px solid var(--border-color, #ccc);
-      border-radius: 12px;
-      background: var(--bg-secondary, rgba(0, 0, 0, 0.03));
-    }
+    gap: 6px;
+    margin: 0;
+
+    p { margin: 0; }
   }
-  &__more-hint { margin-top: 16px; text-align: center; }
-  &__linkbtn {
-    background: none;
-    border: 0;
-    padding: 0;
-    color: inherit;
-    font: inherit;
-    font-weight: 600;
-    text-decoration: underline;
-    cursor: pointer;
-  }
+
   &__paste-row {
     display: flex;
     gap: 8px;
+
+    @include v2.mobile { flex-direction: column; .v2-btn { width: 100%; } }
+  }
+
+  &__paste-field {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 48px;
+    padding: 0 14px;
+    border-radius: var(--r-lg);
+    border: 2px solid transparent;
+    background: var(--surface);
+    color: var(--muted);
+
+    &:focus-within { border-color: var(--accent); }
+
     input {
       flex: 1;
       min-width: 0;
-      padding: 9px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color, #ccc);
-      background: var(--bg-primary, #fff);
-      color: var(--text-primary, #000);
-      font-size: 15px;
+      height: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      @include v2.mono(13, 500);
+
+      &::placeholder { color: var(--muted); }
     }
-    @include mix.respond(phone) { flex-direction: column; }
   }
 
-  &__tabs {
-    display: flex;
-    gap: 4px;
-    border-bottom: 1px solid var(--border-color, #e0e0e0);
-    margin-bottom: 16px;
-    overflow-x: auto;
-  }
-  &__tab {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+  &__linkbtn {
+    border: 0;
+    padding: 0;
     background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    padding: 10px 14px;
-    font-weight: 600;
-    color: var(--text-secondary, #666);
+    font: inherit;
+    font-weight: 700;
+    color: var(--cyan);
     cursor: pointer;
-    white-space: nowrap;
-    &--active { color: var(--text-primary, #000); border-bottom-color: #e53935; }
-  }
-  &__count {
-    font-size: 12px;
-    font-weight: 500;
-    padding: 1px 7px;
-    border-radius: 10px;
-    background: var(--border-color, #e0e0e0);
-    color: var(--text-primary, #000);
+
+    &:hover { text-decoration: underline; }
   }
 
+  &__empty.v2-empty p { @include v2.text(body-sm); }
+
+  // ── Video grid ──
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-    @include mix.respond(phone) { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+
+    @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   }
 
-  // Shorts are portrait: narrower cards with a 9:16 frame.
+  // Shorts are portrait: narrower tiles with a 9:16 frame.
   &__grid--shorts {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    .yt-import__thumb img { aspect-ratio: 9 / 16; }
-    @include mix.respond(phone) { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+
+    .yt-import__thumb { aspect-ratio: 9 / 16; }
+    @include v2.mobile { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 
-  // A tile: the pick button (cover, title, date); the picked one opens across
-  // its whole row with the import controls next to the cover.
+  // A tile: 2px frame (cyan when ticked for the batch), the cover, the title.
+  // The opened one spans its row with the import controls next to the cover.
   &__card {
     position: relative;
     min-width: 0;
+    padding: 4px;
     border: 2px solid transparent;
-    border-radius: 10px;
-    &--picked:not(.yt-import__card--selected) { border-color: rgba(229, 57, 53, 0.55); }
+    border-radius: var(--r-lg);
+    transition: border-color var(--t-fast) var(--ease);
+
+    &--picked { border-color: var(--cyan); }
+
     &--selected {
       grid-column: 1 / -1;
       display: flex;
       gap: 16px;
       align-items: flex-start;
-      border-color: #e53935;
-      background: var(--card-bg, transparent);
       padding: 8px;
-      .yt-import__pick { flex: 0 0 260px; padding: 0; cursor: default; }
-      @include mix.respond(phone) {
+      border-color: var(--accent);
+      background: var(--surface);
+
+      .yt-import__pick { flex: 0 0 260px; cursor: default; }
+
+      @include v2.mobile {
+        flex-direction: column;
         gap: 10px;
-        .yt-import__pick { flex-basis: 40%; }
+        .yt-import__pick { flex-basis: auto; width: 100%; }
       }
     }
   }
+
   &__grid--shorts .yt-import__card--selected .yt-import__pick { flex-basis: 170px; }
+
   &__pick {
     display: flex;
     flex-direction: column;
     gap: 4px;
     width: 100%;
-    text-align: left;
-    background: none;
+    padding: 0;
     border: 0;
-    padding: 4px;
-    cursor: pointer;
+    background: none;
     color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
     min-width: 0;
-    // Over the length limit: visible so the creator knows why, but not pickable.
-    .yt-import__card--too-long &:disabled { opacity: 0.45; cursor: not-allowed; }
-    &:disabled { opacity: 0.4; cursor: default; }
+
+    &:disabled { opacity: .45; cursor: not-allowed; }
   }
-  &__card-panel {
-    flex: 1;
-    min-width: 0;
-    padding-top: 2px;
-    .yt-import__muted { margin: 0; }
-    .yt-import__actions { margin-top: 10px; }
-  }
+
   &__thumb {
     position: relative;
-    border-radius: 8px;
-    background: rgba(127, 127, 127, 0.15);
-    img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; display: block; }
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    @include v2.thumb-placeholder(6px);
+
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
   }
-  // Already published on 3Speak from an import (green ✓), or waiting in a batch
-  // (clock, neutral).
-  &__done--waiting.yt-import__done { background: #616161; }
-  &__on-site--waiting.yt-import__on-site { color: var(--text-secondary, #666); }
-  &__done {
+
+  &__dur {
     position: absolute;
     right: 6px;
-    top: 6px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #2e7d32;
-    color: #fff;
-    font-size: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-  }
-  &__on-site {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #43a047;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 4px 0 0;
-    a { color: inherit; text-decoration: underline; }
+    bottom: 6px;
+    @include v2.scrim-pill;
   }
 
   &__too-long {
     position: absolute;
     left: 6px;
     top: 6px;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 6px;
-    border-radius: 4px;
-  }
-  &__dur {
-    position: absolute;
     right: 6px;
-    bottom: 6px;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    font-size: 12px;
-    padding: 1px 5px;
-    border-radius: 4px;
+    @include v2.scrim-pill;
+    width: fit-content;
+    max-width: calc(100% - 12px);
   }
+
+  // Already on 3Speak (cyan check) or waiting in a batch (clock, muted).
+  &__done {
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--r-sm);
+    display: grid;
+    place-items: center;
+    background: var(--cyan);
+    color: var(--bg);
+
+    &--waiting { background: var(--media-scrim); color: var(--on-media); }
+  }
+
   &__title {
-    font-size: 14px;
-    font-weight: 600;
+    @include v2.text(label);
+    font-size: 12px;
+    padding: 2px 2px 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  // Batch pick box, top left of a tile (the duration / ✓ badges sit on the right).
+  &__card .yt-import__muted { padding: 0 2px; font-size: 11px; }
+
+  // The batch tick: a 24px square top right, a cyan check when on.
   &__tick {
     position: absolute;
-    left: 10px;
     top: 10px;
-    z-index: 2;
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    border: 2px solid #fff;
-    background: rgba(0, 0, 0, 0.45);
-    color: #fff;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: var(--r-sm);
+    border: 2px solid var(--on-media);
+    background: var(--media-scrim);
+    color: var(--bg);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+
+    &.is-on { background: var(--cyan); border-color: var(--cyan); }
+    &:disabled { opacity: .45; cursor: not-allowed; }
+  }
+
+  &__card--selected > .yt-import__tick { top: 14px; right: auto; left: 14px; }
+
+  // ── The opened tile's controls ──
+  &__card-panel {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .yt-import__muted { margin: 0; }
+  }
+
+  &__on-site {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 12px;
+    gap: 6px;
+    margin: 0;
+    @include v2.text(body-sm);
+    font-weight: 700;
+
+    .material-symbols-rounded { color: var(--cyan); }
+    a { color: var(--cyan); }
+
+    &--waiting .material-symbols-rounded { color: var(--muted); }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  &__progress {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__progress-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .material-symbols-rounded { color: var(--cyan); }
+  }
+
+  // Couldn't fetch it: numbered steps and the manual-download pick (33c).
+  &__fallback {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border-radius: var(--r-xl);
+    background: var(--bg);
+
+    p { margin: 0; }
+  }
+
+  &__steps {
+    list-style: none;
+    margin: 0;
     padding: 0;
-    cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-    // Red is an outline in 3Speak, never a filled button.
-    &.is-on { background: #fff; border-color: #e53935; color: #e53935; }
-    &:disabled { opacity: 0.35; cursor: not-allowed; }
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      @include v2.text(meta);
+      color: var(--text);
+    }
+
+    .num {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--r-sm);
+      background: var(--surface-2);
+      display: grid;
+      place-items: center;
+      flex: none;
+      @include v2.mono(11, 900);
+    }
+
+    a { color: var(--cyan); }
+  }
+
+  // Limits: an info row (33c), Get Pro in the accent.
+  &__limits {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    @include v2.text(meta);
+    color: var(--muted);
+
+    > span { flex: 1; min-width: 0; }
+
+    @include v2.mobile { flex-wrap: wrap; }
+  }
+
+  &__pro {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover { color: var(--accent); text-decoration: underline; }
   }
 }
 
-// Selection bar for the batch import, pinned to the bottom of the screen.
+// Picked for a batch: an inverse bar pinned to the bottom of the list.
 .yt-batch-bar {
   position: sticky;
-  bottom: 12px;
+  bottom: 16px;
   z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  margin-top: 20px;
-  padding: 12px 16px;
-  border-radius: 12px;
-  background: var(--card-bg, #fff);
-  border: 1px solid var(--border-color, #e0e0e0);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
-  font-weight: 600;
-  &__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  padding: 8px 8px 8px 16px;
+  border-radius: var(--r-xl);
+  background: var(--text);
+  color: var(--bg);
+  box-shadow: var(--shadow-float);
+  @include v2.text(body-sm);
+
+  b { font-weight: 700; }
+  &__actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .v2-btn--ghost { color: var(--bg); &:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); color: var(--bg); } }
+
+  @include v2.mobile {
+    bottom: calc(var(--bottom-nav-height) + 12px + env(safe-area-inset-bottom));
+
+    &__actions { width: 100%; .v2-btn { flex: 1; } }
+  }
 }
 
-// One-time form: centred dialog, a bottom sheet on phones. Below the shared
-// modals (1000) so the community picker opens on top of it.
+// ── Batch form (49b): a dialog on desktop, a bottom sheet under 768px ──
 .yt-batch-modal {
   position: fixed;
   inset: 0;
   z-index: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &__overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); }
+  display: grid;
+  place-items: center;
+  padding: 24px;
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay);
+    animation: v2-fade var(--t-base) var(--ease);
+  }
+
   &__sheet {
     position: relative;
-    width: min(680px, calc(100vw - 32px));
-    max-height: calc(100vh - 48px);
-    overflow-y: auto;
-    padding: 20px;
-    border-radius: 14px;
-    background: var(--card-bg, #fff);
-    color: var(--text-primary, #000);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    width: min(560px, 100%);
+    height: min(720px, calc(100vh - 48px));
+    height: min(720px, calc(100dvh - 48px));
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--r-3xl);
+    box-shadow: var(--shadow-sheet);
+    overflow: hidden;
+    animation: v2-pop var(--t-base) var(--ease);
+
+    > .app-modal-header { padding: 18px 16px 0 20px; margin-bottom: 0; border-bottom: 0; flex: none; }
+    > .step-actions { flex: none; padding: 12px 20px 20px; margin: 0; border-top: 1px solid var(--border); }
   }
-  @include mix.respond(phone) {
-    align-items: flex-end;
-    .yt-batch-modal__sheet {
-      width: 100%;
-      max-height: 88vh;
-      border-radius: 16px 16px 0 0;
-      padding: 16px 16px 24px;
-    }
-  }
-  &__picked {
-    list-style: none;
-    padding: 0;
-    margin: 12px 0;
+
+  &__body {
+    flex: 1;
+    min-height: 0;
+    @include v2.scroll-y;
+    padding: 4px 20px 16px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    li { display: flex; align-items: center; gap: 12px; min-width: 0; }
-    img { width: 96px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: rgba(127, 127, 127, 0.2); }
-    div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-    .yt-import__muted { font-size: 12px; }
+
+    > .yt-import__note { margin: 0; }
   }
-  &__picked-title { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  // The upload wizard's settings tiles (EmbedDetails.scss). Three across in the
-  // dialog instead of four, two on phones; one more class than the wizard's
-  // tripled selector so these win.
-  &__tiles.advance-option.advance-option.advance-option {
-    margin: 14px 0;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    @include mix.respond(phone) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    &.is-busy { pointer-events: none; opacity: 0.6; }
-  }
-  // The checkbox's base shape lives in StudioPage.scss, scoped to the wizard page.
-  // Likewise the tile's text column (title over description) and the community
-  // value's avatar-beside-name row.
-  &__tiles .beneficiary-wrap .wrap {
+
+  &__picked {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    color: var(--text-secondary, #555);
+    gap: 8px;
+
+    li { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    li > div { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
   }
-  &__tiles .community-value .wrap { flex-direction: row; color: inherit; }
-  &__tiles .toggle-switch {
-    position: relative;
-    display: inline-block;
-    input { position: absolute; opacity: 0; width: 0; height: 0; }
-    .toggle-track { display: block; position: relative; }
-    .toggle-thumb { position: absolute; }
+
+  &__thumb { width: 64px; aspect-ratio: 16 / 9; flex: none; }
+
+  &__picked-title {
+    @include v2.text(body-sm);
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  &__small { font-size: 13px; margin: 6px 0 0; }
+
+  &__tiles {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    &.is-busy { opacity: .45; pointer-events: none; }
+  }
+
+  &__small {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 0;
+    @include v2.text(meta-sm);
+    color: var(--muted);
+    line-height: 1.4;
+
+    .material-symbols-rounded { margin-top: 1px; }
+  }
+
   &__grant {
-    margin: 14px 0;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(229, 57, 53, 0.4);
-    p { margin: 0 0 10px; }
+    p { margin: 0 0 8px; color: var(--text); }
+  }
+
+  @include v2.mobile {
+    place-items: end stretch;
+    padding: 0;
+
+    &__sheet {
+      width: 100%;
+      height: 88vh;
+      height: 88dvh;
+      border-radius: 28px 28px 0 0;
+      border-bottom: 0;
+      padding-bottom: env(safe-area-inset-bottom);
+      animation: v2-up var(--t-slow) var(--ease);
+
+      > .v2-dialog__grab { display: block; width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 8px auto 0; flex: none; }
+      > .app-modal-header { padding: 10px 12px 0 16px; }
+      > .step-actions { padding: 10px 16px 16px; }
+    }
+
+    &__body { padding: 4px 16px 12px; }
   }
 }
 
-// The creator's newest batch.
+// 4px step bars with their labels (Content, Settings).
+.yt-batch-steps {
+  list-style: none;
+  margin: 10px 20px 8px;
+  padding: 0;
+  display: flex;
+  gap: 4px;
+  flex: none;
+
+  li { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+
+  &__bar {
+    height: 4px;
+    border-radius: var(--r-bar);
+    background: var(--surface-2);
+  }
+
+  &__label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  li.is-on .yt-batch-steps__bar { background: var(--accent); }
+  li.is-on .yt-batch-steps__label { color: var(--text); }
+
+  @include v2.mobile { margin: 10px 16px 8px; }
+}
+
+// Settings rows: picker rows and toggle rows, filled with the ground (49b).
+.yt-batch-pick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 5%, var(--bg)); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  &.is-disabled { opacity: .45; cursor: not-allowed; }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    b { display: inline-flex; align-items: center; gap: 4px; @include v2.text(body-sm); font-weight: 700; }
+    > span { @include v2.text(meta-sm); color: var(--muted); }
+  }
+
+  &__value {
+    @include v2.text(label);
+    font-size: 12px;
+    color: var(--cyan);
+    text-align: right;
+    min-width: 0;
+
+    .community-value { display: inline-flex; align-items: center; gap: 6px; color: var(--text); }
+    img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+  }
+
+  &__go { color: var(--muted); }
+}
+
+.yt-batch-setting.v2-setting {
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  border-bottom: 0;
+
+  .v2-setting__body b { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; }
+  .v2-setting__body > span { font-size: 11px; }
+}
+
+// ── Batch status (33c aside, 49b) ──
 .yt-batch-status {
-  margin: 0 0 20px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color, #e0e0e0);
-  &__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  &__leave {
+  @include v2.card;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--text);
+
+  &__head {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin: 8px 0 4px;
-    font-size: 14px;
-    color: var(--text-secondary, #666);
-    svg { color: #43a047; flex-shrink: 0; }
+    gap: 10px;
+
+    .yt-import__section { flex: 1; margin: 0; @include v2.text(title-sm); }
   }
-  &__confirm {
-    margin: 10px 0 4px;
-    padding: 12px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color, #e0e0e0);
-    p { margin: 0; font-size: 14px; }
-    .yt-import__actions { margin-top: 10px; }
+
+  &__bar {
+    width: 4px;
+    height: 22px;
+    border-radius: var(--r-bar);
+    background: var(--cyan);
+    flex: none;
   }
-  ul { list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-direction: column; gap: 10px; }
-  &__item {
+
+  &__count { @include v2.mono(12, 700); color: var(--muted); }
+
+  &__leave {
     display: flex;
-    gap: 12px;
     align-items: flex-start;
-    img, .yt-batch-status__noimg { width: 96px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: rgba(127, 127, 127, 0.2); }
-    &.is-failed, &.is-publish_failed { .yt-import__muted { color: #e53935; } }
-    &.is-posted .yt-import__muted { color: #43a047; }
-    &.is-cancelled { opacity: 0.55; }
+    gap: 6px;
+    margin: 0;
+    @include v2.text(meta);
+    color: var(--cyan);
   }
-  &__body {
-    min-width: 0;
-    flex: 1;
+
+  &__confirm {
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--accent-wash);
+    @include v2.text(meta);
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    .yt-import__muted { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 13px; }
-    .yt-import__bar { max-width: 320px; }
-  }
-}
+    gap: 8px;
 
-@keyframes yt-import-spin { to { transform: rotate(360deg); } }
+    p { margin: 0; }
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    min-width: 0;
+  }
+
+  &__thumb { width: 56px; aspect-ratio: 16 / 9; flex: none; }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    .yt-import__title { padding: 0; -webkit-line-clamp: 1; }
+    a { color: var(--cyan); }
+    .v2-progress { margin-top: 2px; }
+    .yt-import__error { padding: 6px 8px; font-size: 11px; }
+  }
+
+  // State line: mono, colored by tone (done = cyan, failed = accent, waiting = muted).
+  &__state {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    @include v2.mono(10, 500);
+    color: var(--muted);
+
+    &.is-posted { color: var(--cyan); }
+    &.is-failed, &.is-publish_failed { color: var(--accent); }
+    &.is-downloading, &.is-uploading, &.is-scheduling { color: var(--cyan); }
+  }
+
+  &__stop { width: 100%; }
+}

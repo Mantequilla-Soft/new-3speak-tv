@@ -28,13 +28,13 @@
       object-fit: cover;
       object-position: center;
 
-      // Our own default banner is a fixed lockup, not a photo: `contain` keeps
-      // the logo and tagline whole at every width. Phones fill the height.
+      // Our own default banner is a fixed lockup, not a photo (2800 x 684, a
+      // little taller than this strip): `cover` keeps the mark centred and lets
+      // the fade take the tagline at the bottom, under the name.
       &.gradient-bg--default {
-        object-fit: contain;
+        object-fit: cover;
+        object-position: center 30%;
         background: var(--frame);
-
-        @include v2.mobile { object-fit: cover; }
       }
     }
 
@@ -236,7 +236,19 @@
     flex: none;
 
     @include v2.below-wide { flex: 1 1 100%; }
-    @include v2.mobile { width: 100%; gap: 6px; padding-bottom: 0; }
+
+    // Phones: the main button takes its own full-width row and the tiles share
+    // the row under it in equal columns, so nothing gets truncated.
+    @include v2.mobile {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
+      gap: 6px;
+      padding-bottom: 0;
+
+      > .v2-btn, > .btn-hero-follow, > .btn-hero-following { grid-column: 1 / -1; }
+      .ph-tile.v2-dock, .ph-more, .ph-more .ph-tile.v2-dock { width: 100%; }
+    }
 
     .button-group { display: contents; }
 
@@ -263,7 +275,7 @@
   font-size: 16px;
   min-width: 160px;
 
-  @include v2.mobile { flex: 1 1 auto; min-width: 0; height: 56px; gap: 12px; }
+  @include v2.mobile { width: 100%; min-width: 0; height: 48px; border-radius: var(--r-lg); gap: 12px; font-size: 14px; }
 }
 
 // 64x64 action tiles beside it (Message, Tip, Share, More…).

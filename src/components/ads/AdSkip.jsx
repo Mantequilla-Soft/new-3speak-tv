@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { MdSkipNext } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import { useTranslation, Trans } from 'react-i18next';
 import './AdSkip.scss';
 
@@ -40,7 +40,7 @@ export default function AdSkip({ secondsUntil, onSkip }) {
       onClick={(e) => { e.preventDefault(); e.stopPropagation(); onSkip(); }}
     >
       {t('ads.skip.skipAd')}
-      <MdSkipNext aria-hidden="true" />
+      <Icon name="skip_next" size={18} fill />
     </button>
   );
 }

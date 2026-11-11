@@ -1,36 +1,32 @@
+@use "../../styles/v2" as v2;
+
+// Community posts ("snaps") on a profile, in a community's Discussion tab and
+// in the home feed (20b latest snap, 37b snap options).
 .community-snaps {
   max-width: 720px;
-  margin: 0 auto;
-  padding: 8px 0 40px;
+  margin: 0;
+  padding: 0 0 40px;
 
   &--feed { padding: 0; }
 
-  // Feed mode: pack several creators' snaps into ONE full-width row when there's
-  // room, mirroring the video grid's columns so the widths line up. Falls back to
-  // a single column on phones (one snap per line).
+  // Feed mode: several creators' snaps in ONE full-width row when there's room,
+  // mirroring the video grid's columns. One column on phones.
   &--row {
     max-width: none;
     margin: 0;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; // a partial row (fewer snaps than columns) sits centered
-    align-items: flex-start; // each snap keeps its own height; no stretch-to-tallest
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: 16px;
 
-    // Base width = one video column, but let a card GROW a bit (capped) so the
-    // header row (badge + follow + label + time + ⋮ menu) fits on ONE line instead
-    // of wrapping the menu underneath. Once cards hit the cap the group still
-    // centers, so a partial row doesn't stretch edge-to-edge.
-    // Snap cards and the mixed-in playlist cards share the same flex sizing so
-    // they line up in the wrap. Playlists are capped narrower — a playlist is a
-    // thumbnail tile, not a text post, so it shouldn't blow up to 560px.
     .snap-card {
       margin: 0;
-      min-width: 0; // allow shrinking instead of overflowing
+      min-width: 0;
       flex: 1 1 var(--card-min-w, 280px);
       max-width: min(560px, 100%);
     }
-    // New audio (Discover) is a thumbnail tile too: same sizing as a playlist.
+    // Playlist and audio tiles mixed into the row are thumbnails, capped narrower.
     .playlist-feed-card,
     .audio-tile {
       flex: 1 1 var(--card-min-w, 280px);
@@ -39,63 +35,31 @@
       max-width: min(340px, 100%);
     }
 
-    @media screen and (max-width: 767px) {
+    @include v2.mobile {
       gap: 10px;
-      .snap-card { flex-basis: 100%; } // one full-width snap per line on phones
-      .playlist-feed-card, .audio-tile { flex-basis: 46%; } // two tiles per line on phones
+      .snap-card { flex-basis: 100%; }
+      .playlist-feed-card, .audio-tile { flex-basis: 46%; }
     }
   }
 
   // ── Composer ──────────────────────────────────────────────────────────────
   .snap-composer {
-    background: var(--bg-secondary, #1a1a1a);
-    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 22px;
+    @include v2.card;
+    padding: 16px;
+    margin-bottom: 20px;
 
     .snap-composer-row {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
       margin-top: 10px;
 
-      .snap-tags-input {
-        flex: 1;
-        min-width: 0;
-        padding: 9px 12px;
-        border-radius: 8px;
-        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
-        background: var(--bg-primary, #0f0f0f);
-        color: var(--text-primary, #f1f1f1);
-        font-size: 14px;
-      }
-      .snap-options-toggle {
-        flex: none;
-        background: none;
-        border: none;
-        color: var(--accent-primary, #e53935);
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        white-space: nowrap;
-      }
-
-      // Compact NSFW checkbox next to the tag input (used by the edit form).
-      .snap-toggle {
-        flex: none;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 13px;
-        color: var(--text-secondary, #9aa0a6);
-        cursor: pointer;
-        white-space: nowrap;
-        input { width: 15px; height: 15px; accent-color: var(--accent-primary, #e53935); }
-      }
+      .snap-tags-input { flex: 1; min-width: 0; }
+      .snap-options-toggle { flex: none; color: var(--muted); &:hover { color: var(--text); } }
+      .snap-toggle { flex: none; white-space: nowrap; }
     }
 
-    // Tag chips shown UNDER the tag input (built-in `community` pinned first).
+    // Tag chips under the tag input (built-in `community` pinned first).
     .snap-tag-chips {
       display: flex;
       flex-wrap: wrap;
@@ -107,42 +71,43 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
+        height: 28px;
+        padding: 0 6px 0 10px;
+        border-radius: var(--r-sm);
+        background: var(--surface-2);
+        color: var(--text);
+        @include v2.text(label);
         font-size: 12px;
-        padding: 4px 8px;
-        border-radius: 999px;
-        background: var(--bg-primary, #0f0f0f);
-        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
-        color: var(--text-primary, #f1f1f1);
 
         button {
-          display: inline-flex;
-          background: none;
-          border: none;
+          display: grid;
+          place-items: center;
+          width: 20px;
+          height: 20px;
           padding: 0;
-          color: var(--text-secondary, #9aa0a6);
+          border: 0;
+          border-radius: var(--r-xs);
+          background: none;
+          color: var(--muted);
           cursor: pointer;
-          &:hover { color: var(--accent-primary, #e53935); }
+          &:hover { color: var(--accent); }
         }
 
-        &.built-in {
-          background: var(--accent-light, rgba(229, 57, 53, 0.12));
-          border-color: transparent;
-          color: var(--accent-primary, #e53935);
-          font-weight: 600;
-        }
+        &.built-in { padding: 0 10px; background: var(--cyan-tint); color: var(--cyan); }
       }
 
       .snap-tag-count {
-        font-size: 11px;
-        color: var(--text-secondary, #9aa0a6);
         margin-left: auto;
+        @include v2.mono(11, 500);
+        color: var(--muted);
       }
     }
 
+    // More options: rewards, beneficiaries, NSFW (37b).
     .snap-options {
       margin-top: 12px;
       padding-top: 12px;
-      border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+      border-top: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       gap: 14px;
@@ -152,50 +117,17 @@
         flex-direction: column;
         gap: 6px;
 
-        .snap-field-label {
-          font-size: 13px;
-          font-weight: 600;
-          color: var(--text-secondary, #9aa0a6);
-        }
-        select {
-          padding: 9px 12px;
-          border-radius: 8px;
-          border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
-          background: var(--bg-primary, #0f0f0f);
-          color: var(--text-primary, #f1f1f1);
-          font-size: 14px;
-        }
+        .snap-field-label { @include v2.text(eyebrow); color: var(--muted); }
       }
 
       .snap-benefic-add {
         display: flex;
         gap: 8px;
 
-        input {
-          padding: 8px 10px;
-          border-radius: 8px;
-          border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
-          background: var(--bg-primary, #0f0f0f);
-          color: var(--text-primary, #f1f1f1);
-          font-size: 14px;
-          &:first-child { flex: 1; min-width: 0; }
-          &[type='number'] { width: 72px; }
-        }
-        button {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          padding: 8px 12px;
-          border: 1px solid var(--accent-primary, #e53935);
-          border-radius: 8px;
-          background: transparent;
-          color: var(--accent-primary, #e53935);
-          font-size: 13px;
-          font-weight: 600;
-          cursor: pointer;
-          white-space: nowrap;
-        }
+        .v2-input:first-child { flex: 1; min-width: 0; }
+        .snap-benefic-pct { width: 80px; flex: none; font-family: var(--font-mono); }
       }
+
       .snap-benefic-list {
         list-style: none;
         margin: 8px 0 0;
@@ -207,116 +139,85 @@
         li {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          font-size: 13px;
-          color: var(--text-primary, #f1f1f1);
-          background: var(--bg-primary, #0f0f0f);
-          border-radius: 6px;
-          padding: 6px 10px;
+          gap: 10px;
+          @include v2.well;
+          padding: 6px 6px 6px 12px;
+          @include v2.text(body-sm);
+
+          span { flex: 1; min-width: 0; font-weight: 700; }
+          b { @include v2.mono(12, 700); }
 
           button {
+            display: grid;
+            place-items: center;
+            width: 28px;
+            height: 28px;
+            border: 0;
+            border-radius: var(--r-sm);
             background: none;
-            border: none;
-            color: var(--text-secondary, #9aa0a6);
+            color: var(--muted);
             cursor: pointer;
-            display: inline-flex;
+            &:hover { color: var(--accent); background: var(--accent-tint); }
           }
         }
-      }
-
-      .snap-toggle {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 14px;
-        color: var(--text-primary, #f1f1f1);
-        cursor: pointer;
-        input { width: 16px; height: 16px; accent-color: var(--accent-primary, #e53935); }
       }
     }
 
     .snap-composer-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 8px;
       margin-top: 12px;
-
-      .snap-post-btn {
-        padding: 10px 22px;
-        border: 1px solid var(--accent-primary, #e53935);
-        border-radius: 999px;
-        background: transparent;
-        color: var(--accent-primary, #e53935);
-        font-size: 14px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: opacity 0.15s ease;
-        &:disabled { opacity: 0.5; cursor: not-allowed; }
-      }
-
-      .snap-cancel-btn {
-        padding: 10px 18px;
-        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
-        border-radius: 999px;
-        background: transparent;
-        color: var(--text-secondary, #9aa0a6);
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        &:hover { color: var(--text-primary, #f1f1f1); background: var(--bg-primary, #0f0f0f); }
-        &:disabled { opacity: 0.5; cursor: not-allowed; }
-      }
     }
   }
 
-  // The composer reused as the in-card edit form: the card supplies the frame, so
-  // drop the composer's outer margin.
+  // The composer reused as the in-card edit form: the card supplies the frame.
   .snap-edit-form {
     margin: 4px 0 8px;
+    padding: 0;
+    border: 0;
+    background: none;
   }
 
   // ── List + cards ──────────────────────────────────────────────────────────
   .snap-empty {
-    text-align: center;
-    color: var(--text-secondary, #9aa0a6);
-    padding: 40px 16px;
-    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 560px;
+    padding: 14px 16px;
+    border-radius: var(--r-2xl);
+    border: 2px dashed var(--border);
+    @include v2.text(body);
+    color: var(--muted);
   }
 
   .snap-list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
   }
 
   .snap-card {
-    background: var(--bg-secondary, #1a1a1a);
-    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-    border-radius: 12px;
-    padding: 14px 16px;
+    @include v2.card;
+    padding: 16px;
 
-    // The one card a visitor was routed to from Overview (comment button →
-    // Community tab, comments pre-opened). A brief ring, not a permanent
-    // background change — it's a "here it is", not a new steady state.
-    &--highlighted {
-      border-color: var(--accent-primary, #e53935);
-      box-shadow: 0 0 0 1px var(--accent-primary, #e53935);
-    }
+    // The one card a visitor was routed to from Overview: a 2px accent ring.
+    &--highlighted { outline: 2px solid var(--accent); outline-offset: -1px; }
 
     .snap-card-head {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
+      gap: 8px;
+      margin-bottom: 10px;
 
-      // Feed header carries the author badge (+ follow) + label + time + menu.
-      // The middle pieces shrink/ellipsize first so the ⋮ menu stays on the same
-      // row; wrapping only remains as a last resort on very narrow screens.
+      // Feed header: author badge (+ follow) + label + time + menu, the middle
+      // pieces shrinking first so the menu stays on the row.
       &--feed {
         flex-wrap: wrap;
         row-gap: 6px;
 
-        .author-badge { min-width: 0; } // its name already truncates with …
+        .author-badge { min-width: 0; }
         .snap-feed-title {
           flex: 0 1 auto;
           min-width: 0;
@@ -328,55 +229,71 @@
         .snap-menu-btn { flex: none; }
       }
 
-      // Small muted "Community snap" caption next to the author badge in the feed.
+      // Small cyan bolt in front of the time on a profile (20b "Latest snap").
+      &:not(.snap-card-head--feed)::before {
+        content: "bolt";
+        font-family: "Material Symbols Rounded";
+        font-size: 14px;
+        line-height: 22px;
+        width: 22px;
+        height: 22px;
+        flex: none;
+        text-align: center;
+        border-radius: var(--r-sm);
+        background: var(--cyan);
+        color: var(--bg);
+        font-variation-settings: 'FILL' 1;
+      }
+
       .snap-feed-title {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text-secondary, #9aa0a6);
+        @include v2.text(meta);
+        font-weight: 700;
+        color: var(--muted);
         .snap-author { font-size: inherit; }
       }
       .snap-author {
+        @include v2.text(body);
         font-weight: 700;
-        font-size: 14px;
-        color: var(--text-primary, #f1f1f1);
+        color: var(--text);
         text-decoration: none;
-        &:hover { color: var(--accent-primary, #e53935); }
+        &:hover { color: var(--accent); }
       }
       .snap-time {
-        font-size: 12px;
-        color: var(--text-secondary, #9aa0a6);
+        @include v2.text(meta);
+        color: var(--muted);
         text-decoration: none;
         white-space: nowrap;
-        margin-right: auto; // push the ⋮ menu to the far right
-        &:hover { text-decoration: underline; }
+        margin-right: auto;   // push the menu to the far right
+        &:hover { color: var(--text); text-decoration: underline; }
       }
       .snap-menu-btn {
         flex: none;
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
         background: none;
-        border: none;
-        padding: 4px;
-        border-radius: 6px;
-        color: var(--text-secondary, #9aa0a6);
+        color: var(--muted);
         cursor: pointer;
-        display: inline-flex;
-        &:hover { color: var(--text-primary, #f1f1f1); background: var(--bg-primary, #0f0f0f); }
-        svg { font-size: 18px; }
+        &:hover { color: var(--text); background: var(--bg-hover); }
       }
     }
 
     .snap-body-wrap { position: relative; }
     .snap-body {
       position: relative;
-      font-size: 15px;
-      line-height: 1.55;
-      color: var(--text-primary, #f1f1f1);
-      word-break: break-word;
+      @include v2.text(title-sm);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--text);
       overflow-wrap: anywhere;
 
-      // Clamp ONLY when the post actually overflows (JS adds `.clamped`) — a short
-      // post keeps its natural height with no fade.
+      // Clamp ONLY when the post actually overflows (JS adds `.clamped`).
       &.clamped {
-        max-height: var(--snap-clamp, 33vh); // feed = 20vh, profile tab = 33vh (set inline)
+        max-height: var(--snap-clamp, 33vh);
         overflow: hidden;
         &::after {
           content: '';
@@ -385,56 +302,61 @@
           right: 0;
           bottom: 0;
           height: 40px;
-          background: linear-gradient(to bottom, transparent, var(--bg-secondary, #1a1a1a));
+          background: linear-gradient(to bottom, transparent, var(--surface));
           pointer-events: none;
         }
       }
 
       p { margin: 0 0 10px; &:last-child { margin-bottom: 0; } }
-      a { color: var(--accent-primary, #e53935); }
-      img { max-width: 100%; height: auto; border-radius: 8px; }
-      pre { overflow-x: auto; background: var(--bg-primary, #0f0f0f); padding: 10px; border-radius: 8px; }
+      a { color: var(--cyan); }
+      img { max-width: 100%; height: auto; border-radius: var(--r-md); }
+      pre { overflow-x: auto; @include v2.well; padding: 10px 12px; font-family: var(--font-mono); font-size: 13px; }
       blockquote {
         margin: 8px 0;
         padding-left: 12px;
-        border-left: 3px solid var(--border-color, rgba(255, 255, 255, 0.2));
-        color: var(--text-secondary, #9aa0a6);
+        border-left: 2px solid var(--border);
+        color: var(--muted);
       }
     }
     .snap-readmore {
       display: inline-block;
       margin-top: 6px;
-      background: none;
-      border: none;
       padding: 0;
-      color: var(--accent-primary, #e53935);
-      font-size: 13px;
-      font-weight: 600;
+      border: 0;
+      background: none;
+      @include v2.text(label);
+      font-size: 12px;
+      color: var(--accent);
       cursor: pointer;
+      &:hover { text-decoration: underline; }
     }
 
     .snap-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
       margin-top: 12px;
 
       .snap-tag {
+        display: inline-flex;
+        align-items: center;
+        height: 28px;
+        padding: 0 10px;
+        border-radius: var(--r-sm);
+        background: var(--surface-2);
+        @include v2.text(label);
         font-size: 12px;
-        padding: 3px 10px;
-        border-radius: 999px;
-        background: var(--bg-primary, #0f0f0f);
-        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
-        color: var(--text-secondary, #9aa0a6);
+        color: var(--muted);
         text-decoration: none;
-        &:hover { color: var(--accent-primary, #e53935); border-color: var(--accent-primary, #e53935); }
+        &:hover { color: var(--text); }
       }
     }
 
+    // Vote and comment as 36px surface-2 pills (20b).
     .snap-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       margin-top: 12px;
 
       .snap-vote { position: relative; display: inline-flex; }
@@ -442,28 +364,30 @@
       .snap-action {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        padding: 6px 12px;
-        border-radius: 999px;
-        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
-        background: transparent;
-        color: var(--text-secondary, #9aa0a6);
-        font-size: 13px;
-        font-weight: 600;
+        gap: 4px;
+        height: 36px;
+        padding: 0 10px;
+        border: 0;
+        border-radius: var(--r-md);
+        background: var(--surface-2);
+        color: var(--text);
+        @include v2.text(label);
+        font-size: 12px;
+        font-family: inherit;
         cursor: pointer;
-        transition: color 0.15s ease, border-color 0.15s ease;
+        transition: background var(--t-fast) var(--ease);
 
-        svg { font-size: 16px; }
-        &:hover:not(:disabled) { color: var(--text-primary, #f1f1f1); border-color: var(--border-color, rgba(255, 255, 255, 0.28)); }
-        &.voted { color: var(--accent-primary, #e53935); border-color: var(--accent-primary, #e53935); }
-        &.active { color: var(--text-primary, #f1f1f1); }
+        span { font-family: var(--font-mono); }
+        &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+        &.voted { background: var(--accent-tint-strong); color: var(--accent); }
+        &.active { background: var(--cyan-tint); color: var(--cyan); }
       }
     }
 
     .snap-comments {
       margin-top: 14px;
       padding-top: 12px;
-      border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+      border-top: 1px solid var(--border);
 
       .snap-reply-box {
         display: flex;
@@ -472,41 +396,27 @@
         margin-bottom: 12px;
 
         textarea {
+          @include v2.field(40);
           width: 100%;
           min-width: 0;
+          height: auto;
+          min-height: 64px;
+          padding: 8px 12px;
           resize: vertical;
-          padding: 8px 10px;
-          border-radius: 8px;
-          border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
-          background: var(--bg-primary, #0f0f0f);
-          color: var(--text-primary, #f1f1f1);
-          font-size: 14px;
           font-family: inherit;
+          line-height: 1.45;
         }
         .snap-reply-actions {
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 8px;
-
-          > button {
-            flex: none;
-            padding: 8px 16px;
-            border: 1px solid var(--accent-primary, #e53935);
-            border-radius: 999px;
-            background: transparent;
-            color: var(--accent-primary, #e53935);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            &:disabled { opacity: 0.5; cursor: not-allowed; }
-          }
         }
       }
 
       .snap-comments-status {
-        font-size: 13px;
-        color: var(--text-secondary, #9aa0a6);
+        @include v2.text(body-sm);
+        color: var(--muted);
         padding: 4px 0;
       }
 
@@ -523,52 +433,53 @@
           display: flex;
           align-items: baseline;
           gap: 8px;
-          margin-bottom: 3px;
+          margin-bottom: 2px;
 
           .snap-comment-author {
+            @include v2.text(body-sm);
             font-weight: 700;
-            font-size: 13px;
-            color: var(--text-primary, #f1f1f1);
+            color: var(--text);
             text-decoration: none;
-            &:hover { color: var(--accent-primary, #e53935); }
+            &:hover { color: var(--accent); }
           }
-          .snap-comment-time { font-size: 11px; color: var(--text-secondary, #9aa0a6); }
+          .snap-comment-time { @include v2.text(meta-sm); color: var(--muted); }
         }
         .snap-comment-body {
-          font-size: 14px;
+          @include v2.text(body);
           line-height: 1.5;
-          color: var(--text-primary, #f1f1f1);
-          word-break: break-word;
+          color: var(--text);
           overflow-wrap: anywhere;
 
           p { margin: 0 0 6px; &:last-child { margin-bottom: 0; } }
-          a { color: var(--accent-primary, #e53935); }
-          img { max-width: 100%; height: auto; border-radius: 6px; }
+          a { color: var(--cyan); }
+          img { max-width: 100%; height: auto; border-radius: var(--r-sm); }
         }
 
         .snap-comment-actions {
           display: flex;
-          gap: 14px;
+          gap: 4px;
           margin-top: 4px;
 
           button {
+            height: 28px;
+            padding: 0 8px;
+            border: 0;
+            border-radius: var(--r-sm);
             background: none;
-            border: none;
-            padding: 0;
+            @include v2.text(label);
             font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary, #9aa0a6);
+            color: var(--muted);
             cursor: pointer;
-            &:hover { color: var(--accent-primary, #e53935); }
+            &:hover { color: var(--text); background: var(--bg-hover); }
           }
         }
 
-        // Nested replies — indent + a guide line down the thread.
+        // Nested replies: indent with a guide line down the thread.
         .snap-comment-list.nested {
           margin-top: 10px;
           margin-left: 12px;
           padding-left: 12px;
-          border-left: 2px solid var(--border-color, rgba(255, 255, 255, 0.1));
+          border-left: 2px solid var(--border);
           gap: 10px;
         }
       }
@@ -576,100 +487,30 @@
   }
 }
 
-// Portaled to <body> (from SnapOptionsMenu) → must be top-level, not nested.
+// Snap options (37b), portaled to <body> from SnapOptionsMenu: the v2 menu card.
 .snap-menu-backdrop {
   position: fixed;
   inset: 0;
   z-index: 9998;
 }
-.snap-menu {
+.snap-menu.v2-menu {
   position: fixed;
   z-index: 9999;
-  min-width: 200px;
-  padding: 4px;
-  background: var(--bg-secondary, #1a1a1a);
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-  overflow: hidden;
-
-  button {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: none;
-    border: none;
-    padding: 10px 12px;
-    border-radius: 6px;
-    color: var(--text-primary, #f1f1f1);
-    font-size: 14px;
-    cursor: pointer;
-    &:hover { background: var(--bg-primary, #0f0f0f); }
-  }
+  min-width: 240px;
 }
 
-// ── Feed comments popup (portaled to <body>) ─────────────────────────────────
-// Centered dialog on desktop, bottom sheet on mobile (app-wide popup convention).
-// The dialog carries .community-snaps/.snap-card only so the nested comment styles
-// apply — the overrides below strip those wrappers' page-layout chrome.
-.snap-comments-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-
-  @media screen and (max-width: 767px) {
-    align-items: flex-end; // bottom sheet
-    padding: 0;
-  }
-}
-
-.snap-comments-modal {
-  // neutralise .community-snaps page-layout defaults
+// Feed comments: the shared v2 dialog. The panel carries .community-snaps and the
+// body .snap-card only so the nested comment styles apply; strip their chrome.
+.snap-comments-modal.v2-dialog__panel {
   max-width: none;
-  margin: 0;
   padding: 0;
 
-  width: min(560px, 100%);
-  max-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-secondary, #1a1a1a);
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-  border-radius: 14px;
-  overflow: hidden;
-
-  @media screen and (max-width: 767px) {
-    width: 100%;
-    max-height: 75vh;
-    border-radius: 14px 14px 0 0; // bottom sheet: rounded top only
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-    animation: snap-sheet-up 0.25s ease;
-  }
-
-  .snap-comments-modal-head {
-    flex: none;
-    padding: 12px 16px;
-    margin-bottom: 0;
-  }
-
-  // the .snap-card wrapper only exists for the nested comment styles — the modal
-  // supplies its own frame
   .snap-comments-modal-scroll {
-    overflow-y: auto;
-    border: none;
+    border: 0;
     border-radius: 0;
-    background: transparent;
+    background: none;
+    padding: 6px 20px 16px;
   }
-}
 
-@keyframes snap-sheet-up {
-  from { transform: translateY(40%); opacity: 0.6; }
-  to { transform: none; opacity: 1; }
+  .snap-comments { margin-top: 0; padding-top: 0; border-top: 0; }
 }

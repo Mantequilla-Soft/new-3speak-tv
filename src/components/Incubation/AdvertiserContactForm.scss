@@ -1,63 +1,22 @@
-/* The advertiser's private contact form, inside its warm-up goal. */
+@use "../../styles/v2" as v2;
+
+/* The advertiser's brand profile and private contact forms, inside their
+   warm-up goals (design 46c). Fields are the v2 filled fields. */
 .inc-contact {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 560px;
   margin-top: 10px;
 
-  input,
-  textarea {
-    width: 100%;
-    min-width: 0;
-    padding: 8px 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font: inherit;
-    font-size: 13px;
-  }
-
-  em {
-    font-style: normal;
-    font-weight: 400;
-    color: var(--text-muted);
-  }
-}
-
-/* Said first and plainly: where these details go, and where they never go. */
-.inc-contact-private {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  margin: 0;
-  padding: 10px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: var(--bg-secondary);
-  font-size: 12.5px;
-  line-height: 1.5;
-  color: var(--text-secondary);
-
-  svg {
-    flex-shrink: 0;
-    margin-top: 3px;
-    color: var(--accent-primary);
-  }
-}
-
-.inc-contact-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 12.5px;
-  font-weight: 600;
+  .v2-input.is-area { min-height: 88px; }
 }
 
 .inc-contact-address {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  min-width: 0;
   margin: 0;
   padding: 0;
   border: 0;
@@ -65,59 +24,64 @@
   legend {
     margin-bottom: 4px;
     padding: 0;
-    font-size: 12.5px;
-    font-weight: 600;
   }
 }
 
-.inc-contact-row {
-  display: flex;
-  gap: 6px;
+// Six short address fields, two across.
+.inc-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
 
-  > input { flex: 1 1 0; }
-}
-
-.inc-contact-hint {
-  font-size: 12px;
-  color: var(--text-muted);
+  .v2-input { height: 36px; font-size: 13px; }
 }
 
 .inc-contact-error {
   margin: 0;
-  font-size: 12.5px;
-  color: var(--error-color, #e5484d);
+  @include v2.text(meta-sm);
+  color: var(--accent);
 }
 
-.inc-contact .inc-task-cta {
-  align-self: flex-start;
-  margin-top: 0;
-  cursor: pointer;
+.inc-contact-submit.v2-btn { align-self: flex-start; }
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: default;
-  }
-}
-
-/* The brand form's logo row: the current logo as it will be shown, beside the button. */
+/* The brand form's logo row: the current logo as it will be shown (a circle),
+   beside its label, hint and upload button. */
 .inc-brand-logo {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
 
-  img {
+  img,
+  .inc-brand-logo-blank {
     width: 48px;
     height: 48px;
+    flex: none;
     border-radius: 50%;
     object-fit: cover;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    background: var(--surface-2);
   }
+
+  .inc-brand-logo-blank {
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+  }
+}
+
+.inc-brand-logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
 }
 
 .inc-brand-upload {
-  margin-top: 0;
-  cursor: pointer;
+  @include v2.btn(secondary, 32);
+  margin-top: 2px;
 }
 
-.inc-contact textarea { resize: vertical; }
+@include v2.mobile {
+  .inc-contact-submit.v2-btn { align-self: stretch; height: 44px; }
+  .inc-brand-upload { height: 44px; border-radius: v2.radius-for(44); }
+}

@@ -1,29 +1,29 @@
+// Avatar + name link used in small author rows.
 .author-profile {
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  color: var(--text);
 
-  &:hover {
-    opacity: 0.7;
-
-    .author-name {
-      text-decoration: underline;
-    }
-  }
+  &:hover .author-name { text-decoration: underline; }
 
   .author-avatar {
-    width: 25px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
+    background: var(--avatar);
   }
 
   .author-name {
-    font-size: 12.95px;
+    font-size: 13px;
     font-weight: 400;
-    color: var(--text-primary);
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

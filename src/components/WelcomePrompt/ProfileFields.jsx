@@ -1,11 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
-import { Camera, MapPin, Loader2 } from 'lucide-react';
 import { saveProfileToHive } from '../../utils/profileMeta';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
 import { setAvatarOverride, clearAvatarOverride, useAvatarUrl } from '../../utils/avatarCache';
-import defaultCover from '../../assets/image/default-cover.svg';
+import { Icon } from '../v2/ui';
 
 // Every toast from this module is headed "Profile"; the message becomes the
 // line under it. See utils/toast.js.
@@ -129,25 +128,33 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
   // no Hive account gets a sane picture here without a special case.
   const currentAvatar = useAvatarUrl(username, null);
   const avatar = form.profile_image || currentAvatar;
-  const cover = form.cover_image || defaultCover;
+  const busyIcon = <Icon name="progress_activity" size={16} className="v2-spin" />;
 
   return (
-    <>
-      {/* Banner first: it's the biggest thing on a profile, so it reads as the
-          headline choice rather than an afterthought below the text fields. */}
+    <div className="welcome-fields">
+      {/* Banner first (design 44b): it's the biggest thing on a profile. Empty,
+          it is a dashed drop area that says the size; set, it is the picture
+          with a small "Change banner" pill over it. */}
       <div className="welcome-cover-row">
         <button
           type="button"
-          className="welcome-cover"
+          className={`welcome-cover${form.cover_image ? ' has-image' : ''}`}
           onClick={() => coverRef.current && coverRef.current.click()}
           disabled={uploading || saving}
           aria-label={t('app.profileFields.uploadBanner')}
-          style={{ backgroundImage: `url(${cover})` }}
+          style={form.cover_image ? { backgroundImage: `url(${form.cover_image})` } : undefined}
         >
-          <span className="welcome-cover-action">
-            {uploading ? <Loader2 size={15} className="welcome-spin" /> : <Camera size={15} />}
-            {form.cover_image ? t('app.profileFields.changeBanner') : t('app.profileFields.addBanner')}
-          </span>
+          {form.cover_image ? (
+            <span className="welcome-cover-action">
+              {uploading ? busyIcon : <Icon name="add_photo_alternate" size={16} />}
+              {t('app.profileFields.changeBanner')}
+            </span>
+          ) : (
+            <span className="welcome-cover-empty">
+              {uploading ? busyIcon : <Icon name="add_photo_alternate" size={18} />}
+              {t('app.profileFields.addBanner')}
+            </span>
+          )}
         </button>
         <span className="welcome-cover-hint">
           <Trans i18nKey="app.profileFields.bannerHint" components={{ b: <strong /> }} />
@@ -171,7 +178,7 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
         >
           <img src={avatar} alt="" onError={(e) => { e.target.style.visibility = 'hidden'; }} />
           <span className="welcome-avatar-badge">
-            {uploading ? <Loader2 size={15} className="welcome-spin" /> : <Camera size={15} />}
+            {uploading ? busyIcon : <Icon name="add_a_photo" size={16} />}
           </span>
         </button>
         <div className="welcome-avatar-text">
@@ -185,10 +192,11 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
         <input ref={fileRef} type="file" accept="image/*" onChange={pickImage('profile_image')} style={{ display: 'none' }} />
       </div>
 
-      <label className="welcome-field">
-        <span className="welcome-label">{t('app.profileFields.displayName')}</span>
+      <label className="welcome-field v2-field">
+        <span className="welcome-label v2-eyebrow">{t('app.profileFields.displayName')}</span>
         <input
           type="text"
+          className="v2-input"
           value={form.name}
           onChange={setField('name')}
           maxLength={NAME_MAX}
@@ -198,13 +206,14 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
         />
       </label>
 
-      <label className="welcome-field">
-        <span className="welcome-label">
+      <label className="welcome-field v2-field">
+        <span className="welcome-label v2-eyebrow">
           {t('app.profileFields.shortBio')}
-          <em>{form.about.length}/{ABOUT_MAX}</em>
+          <em className="num">{form.about.length}/{ABOUT_MAX}</em>
         </span>
         <textarea
           rows={3}
+          className="v2-input is-area"
           value={form.about}
           onChange={setField('about')}
           maxLength={ABOUT_MAX}
@@ -213,12 +222,13 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
         />
       </label>
 
-      <label className="welcome-field">
-        <span className="welcome-label">{t('app.profileFields.location')} <em>{t('app.profileFields.optional')}</em></span>
+      <label className="welcome-field v2-field">
+        <span className="welcome-label v2-eyebrow">{t('app.profileFields.location')} <em>{t('app.profileFields.optional')}</em></span>
         <div className="welcome-input-icon">
-          <MapPin size={15} />
+          <Icon name="location_on" size={18} />
           <input
             type="text"
+            className="v2-input"
             value={form.location}
             onChange={setField('location')}
             maxLength={LOCATION_MAX}
@@ -227,6 +237,6 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
           />
         </div>
       </label>
-    </>
+    </div>
   );
 }

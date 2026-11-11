@@ -1,17 +1,31 @@
 import { useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { ArrowLeft, Code2, Copy, FileText, MessageCircle, Share2 } from 'lucide-react'
+import { Icon } from '../v2/Icon'
+import { Button, Dialog, IconButton, Segmented } from '../v2/ui'
 import { toastIn } from '../../utils/toast';
 import { useChat } from '../../context/ChatContext'
 import { useOpenChat } from '../../hooks/useOpenChat'
 import { EMBED_SIZES, buildEmbedHtml } from '../../utils/embedCode'
-import ModalHeader from '../ModalHeader/ModalHeader'
 import './shareChooser.scss'
 import { useTranslation } from 'react-i18next'
 
 // Every toast from this module is headed "Chat"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Chat');
+
+// One action row of the menu (39d share): icon well, title, one muted line,
+// and a chevron when it opens another view.
+function Opt({ icon, title, sub, onClick, linkSub, more }) {
+  return (
+    <button type="button" className="share-chooser-opt" onClick={onClick}>
+      <span className="share-chooser-opt-icon" aria-hidden="true"><Icon name={icon} size={20} /></span>
+      <span className="share-chooser-opt-body">
+        <span className="share-chooser-opt-title">{title}</span>
+        <span className={`share-chooser-opt-sub${linkSub ? ' share-chooser-opt-link' : ''}`}>{sub}</span>
+      </span>
+      {more && <Icon name="chevron_right" size={20} className="share-chooser-opt-more" />}
+    </button>
+  )
+}
 
 /**
  * A small chooser shown when sharing a video/short: send it inside 3Speak Chat,
@@ -101,94 +115,66 @@ export default function ShareChooserModal({ open, url, title, embed, hivePost, o
     }
   }
 
-  return createPortal(
-    <div className="share-chooser-overlay" onClick={onClose}>
-      <div className="share-chooser" role="dialog" aria-label={t('common.actions.share')} onClick={(e) => e.stopPropagation()}>
-        <ModalHeader
-          className="share-chooser-header"
-          title={view === 'embed' ? t('chat.share.embedTitle') : t('common.actions.share')}
-          onClose={onClose}
-          leading={view === 'embed' && (
-            <button className="share-chooser-back" onClick={() => setView('menu')} aria-label={t('common.actions.back')}>
-              <ArrowLeft size={18} />
-            </button>
-          )}
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      width={440}
+      className="share-chooser"
+      title={view === 'embed' ? t('chat.share.embedTitle') : t('common.actions.share')}
+      closeLabel={t('common.actions.close')}
+      leading={view === 'embed' && (
+        <IconButton
+          className="share-chooser-back"
+          icon="arrow_back"
+          size={32}
+          variant="ghost"
+          round
+          onClick={() => setView('menu')}
+          label={t('common.actions.back')}
         />
-
-        {view === 'embed' ? (
-          <>
-            <p className="share-embed-hint">{t('chat.share.embedHint')}</p>
-            <div className="share-embed-sizes" role="group" aria-label={t('chat.share.embedSize')}>
-              {EMBED_SIZES.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  className={`share-embed-size${size === s.id ? ' active' : ''}`}
-                  aria-pressed={size === s.id}
-                  onClick={() => setSize(s.id)}
-                >
-                  {s.labelKey ? t(s.labelKey) : s.label}
-                </button>
-              ))}
-            </div>
-            <textarea
-              ref={codeRef}
-              className="share-embed-code"
-              readOnly
-              rows={6}
-              spellCheck={false}
-              value={embedCode}
-              onFocus={(e) => e.target.select()}
-              aria-label={t('chat.share.embedCode')}
-            />
-            <button className="share-chooser-opt share-embed-copy" onClick={copyEmbed}>
-              <Copy size={20} />
-              <span>
-                <span className="share-chooser-opt-title">{t('chat.share.copyEmbed')}</span>
-                <span className="share-chooser-opt-sub">
-                  {size === 'responsive' ? t('chat.share.responsiveSub') : t('chat.share.fixedSub')}
-                </span>
-              </span>
-            </button>
-          </>
-        ) : (
-          <>
-            <button className="share-chooser-opt" onClick={sendInChat}>
-              <MessageCircle size={20} />
-              <span>
-                <span className="share-chooser-opt-title">{t('chat.share.sendInChat')}</span>
-                <span className="share-chooser-opt-sub">{t('chat.share.sendInChatSub')}</span>
-              </span>
-            </button>
-            {canEmbed && (
-              <button className="share-chooser-opt" onClick={() => setView('embed')}>
-                <Code2 size={20} />
-                <span>
-                  <span className="share-chooser-opt-title">{t('chat.share.embedOnWebsite')}</span>
-                  <span className="share-chooser-opt-sub">{t('chat.share.embedOnWebsiteSub')}</span>
-                </span>
-              </button>
-            )}
-            {hivePostUrl && (
-              <button className="share-chooser-opt" onClick={copyHivePostLink}>
-                <FileText size={20} />
-                <span>
-                  <span className="share-chooser-opt-title">{t('chat.share.forHivePost')}</span>
-                  <span className="share-chooser-opt-sub share-chooser-opt-link">{hivePostUrl.replace('https://', '')}</span>
-                </span>
-              </button>
-            )}
-            <button className="share-chooser-opt" onClick={generalShare}>
-              <Share2 size={20} />
-              <span>
-                <span className="share-chooser-opt-title">{t('chat.share.generalShare')}</span>
-                <span className="share-chooser-opt-sub">{t('chat.share.generalShareSub')}</span>
-              </span>
-            </button>
-          </>
-        )}
-      </div>
-    </div>,
-    document.body
+      )}
+    >
+      {view === 'embed' ? (
+        <div className="share-embed">
+          <p className="share-embed-hint">{t('chat.share.embedHint')}</p>
+          <Segmented
+            className="share-embed-sizes"
+            label={t('chat.share.embedSize')}
+            scroll
+            value={size}
+            onChange={setSize}
+            options={EMBED_SIZES.map((s) => ({ value: s.id, label: s.labelKey ? t(s.labelKey) : s.label }))}
+          />
+          <textarea
+            ref={codeRef}
+            className="share-embed-code v2-input is-area"
+            readOnly
+            rows={6}
+            spellCheck={false}
+            value={embedCode}
+            onFocus={(e) => e.target.select()}
+            aria-label={t('chat.share.embedCode')}
+          />
+          <Button variant="primary" size={48} block icon="content_copy" className="share-embed-copy" onClick={copyEmbed}>
+            {t('chat.share.copyEmbed')}
+          </Button>
+          <p className="share-embed-sub">
+            {size === 'responsive' ? t('chat.share.responsiveSub') : t('chat.share.fixedSub')}
+          </p>
+        </div>
+      ) : (
+        <div className="share-chooser-list">
+          <Opt icon="forum" title={t('chat.share.sendInChat')} sub={t('chat.share.sendInChatSub')} onClick={sendInChat} />
+          {canEmbed && (
+            <Opt icon="code" title={t('chat.share.embedOnWebsite')} sub={t('chat.share.embedOnWebsiteSub')} onClick={() => setView('embed')} more />
+          )}
+          {hivePostUrl && (
+            <Opt icon="article" title={t('chat.share.forHivePost')} sub={hivePostUrl.replace('https://', '')} onClick={copyHivePostLink} linkSub />
+          )}
+          <Opt icon="ios_share" title={t('chat.share.generalShare')} sub={t('chat.share.generalShareSub')} onClick={generalShare} />
+        </div>
+      )}
+    </Dialog>
   )
 }

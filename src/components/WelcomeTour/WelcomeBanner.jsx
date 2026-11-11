@@ -1,11 +1,22 @@
 import { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
-import { MdClose, MdExplore, MdGroups, MdLock, MdDiversity3, MdPayments, MdPlayCircle } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { markWelcomeDone, resetWelcome, startWelcomeTour, useWelcomeDone } from './welcomeState';
 import mark from '../../assets/image/3S_mark.svg';
+import { Button, Icon, IconButton } from '../v2/ui';
 import './WelcomeBanner.scss';
+
+// What 3Speak is, one short line each (design 33d): why it exists, who runs it,
+// who earns, and what we never do with your data. Icons alternate accent
+// (money, the platform) and cyan (community, viewers).
+const POINTS = [
+  { key: 'alternative', icon: 'public', tone: 'accent' },
+  { key: 'community', icon: 'groups', tone: 'cyan' },
+  { key: 'creatorsEarn', icon: 'payments', tone: 'accent' },
+  { key: 'viewersEarn', icon: 'visibility', tone: 'cyan' },
+  { key: 'data', icon: 'lock', tone: 'accent' },
+];
 
 // Top of the home page, for logged-out visitors. Stays until they close it with
 // the X (a reload keeps it); logged-in users never see it. /?welcome=1 brings it
@@ -28,39 +39,41 @@ export default function WelcomeBanner() {
   if (!authChecked || authenticated || done) return null;
 
   return (
-    <section className="welcome-banner" aria-labelledby="welcome-banner-title">
-      <img className="welcome-banner-mark" src={mark} alt="" aria-hidden="true" />
-      <div className="welcome-banner-body">
-        <h2 id="welcome-banner-title">{t('welcome.banner.title')}</h2>
-        {/* What 3Speak is, one short line each: why it exists, who runs it, who
-            earns, and what we never do with your data. Phones too, smaller. */}
-        <ul className="welcome-banner-points">
-          <li><MdDiversity3 aria-hidden="true" /><span><Trans i18nKey="welcome.banner.points.alternative" components={{ b: <strong /> }} /></span></li>
-          <li><MdGroups aria-hidden="true" /><span><Trans i18nKey="welcome.banner.points.community" components={{ b: <strong /> }} /></span></li>
-          <li><MdPayments aria-hidden="true" /><span><Trans i18nKey="welcome.banner.points.creatorsEarn" components={{ b: <strong /> }} /></span></li>
-          <li><MdPlayCircle aria-hidden="true" /><span><Trans i18nKey="welcome.banner.points.viewersEarn" components={{ b: <strong /> }} /></span></li>
-          <li><MdLock aria-hidden="true" /><span><Trans i18nKey="welcome.banner.points.data" components={{ b: <strong /> }} /></span></li>
-        </ul>
-        {/* The sign-off, under everything else. */}
-        <p className="welcome-banner-lead">{t('welcome.banner.lead')}</p>
+    // The §11 success card with its accent hero tint (design 33d).
+    <section className="welcome-banner v2-success is-accent" aria-labelledby="welcome-banner-title">
+      <div className="welcome-banner-head">
+        <img className="welcome-banner-mark" src={mark} alt="" aria-hidden="true" />
+        <div className="welcome-banner-titles">
+          <h2 id="welcome-banner-title">{t('welcome.banner.title')}</h2>
+          <p className="welcome-banner-lead">{t('welcome.banner.lead')}</p>
+        </div>
+        <IconButton
+          icon="close"
+          label={t('welcome.banner.close')}
+          variant="ghost"
+          size={36}
+          round
+          className="welcome-banner-close"
+          onClick={markWelcomeDone}
+        />
       </div>
+      <ul className="welcome-banner-points">
+        {POINTS.map(({ key, icon, tone }) => (
+          <li key={key}>
+            <Icon name={icon} size={18} className={`is-${tone}`} />
+            <span><Trans i18nKey={`welcome.banner.points.${key}`} components={{ b: <strong /> }} /></span>
+          </li>
+        ))}
+      </ul>
       <div className="welcome-banner-actions">
-        <button type="button" className="welcome-banner-btn welcome-banner-btn--primary" onClick={startWelcomeTour}>
-          <MdExplore aria-hidden="true" />
+        <Button variant="primary" size={48} trailing="explore" className="welcome-banner-btn welcome-banner-btn--primary" onClick={startWelcomeTour}>
           <span className="welcome-banner-label--long">{t('welcome.banner.tour')}</span>
           <span className="welcome-banner-label--short">{t('welcome.banner.tourShort')}</span>
-        </button>
-        <Link to="/faq" className="welcome-banner-btn">{t('welcome.banner.faq')}</Link>
+        </Button>
+        <Button as={Link} to="/faq" variant="secondary" size={48} trailing="help" className="welcome-banner-btn">
+          {t('welcome.banner.faq')}
+        </Button>
       </div>
-      <button
-        type="button"
-        className="welcome-banner-close"
-        onClick={markWelcomeDone}
-        aria-label={t('welcome.banner.close')}
-        title={t('welcome.banner.close')}
-      >
-        <MdClose />
-      </button>
     </section>
   );
 }

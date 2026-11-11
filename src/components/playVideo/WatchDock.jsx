@@ -76,7 +76,7 @@ export default function WatchDock({ tiles, moreTiles = [], moreRows = [], wide, 
       {extraRows.length > 0 && (
         <div className="wv2-more__rows">
           {extraRows.map((item) => (
-            <MenuRow key={item.id} icon={item.icon} danger={item.danger} {...actionProps(item, runMenu(item))}>
+            <MenuRow key={item.id} icon={item.icon} danger={item.danger} on={item.active} {...actionProps(item, runMenu(item))}>
               {item.label}
             </MenuRow>
           ))}

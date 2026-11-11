@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { MdPersonAdd, MdContentCopy, MdCheck } from 'react-icons/md';
 import HiveAvatar from '../../components/HiveAvatar/HiveAvatar';
 import { useAppStore } from '../../lib/store';
 import { fetchMyInviteLinks, fetchInvitePeople } from '../../lib/referralLinks';
 import { BUTRAUTH_URL } from '../../utils/config';
 import { useTranslation, Trans } from 'react-i18next';
+import { Button, Card, Icon, Progress, StatusPill } from '../../components/v2/ui';
 import './Invite.scss';
 
 /**
- * /invite-links, the screen for people 3Speak made referrers.
+ * /invite-links, the screen for people 3Speak made referrers (42c).
  *
  * Lists the invite links 3Speak gave the signed-in account, with this month's
  * usage. Everything comes from Butter Auth through the SDK (server/index.cjs):
@@ -26,6 +26,8 @@ const STATE_LABEL_KEY = {
   warmup: 'auth.invite.state.warmup',
   signed_up: 'auth.invite.state.signedUp',
 };
+// Account made (or being made) through the link = cyan; the rest muted.
+const STATE_TONE = { fast_track: 'cyan', creating: 'cyan' };
 
 const fmtDate = (d) => (d ? new Date(d).toLocaleDateString() : '');
 
@@ -40,9 +42,9 @@ function CopyButton({ text }) {
     } catch { /* the link is selectable text as a fallback */ }
   };
   return (
-    <button type="button" className="invite-btn small" onClick={copy}>
-      {copied ? <><MdCheck /> {t('common.actions.copied')}</> : <><MdContentCopy /> {t('common.actions.copy')}</>}
-    </button>
+    <Button variant="secondary" icon={copied ? 'check' : 'content_copy'} onClick={copy}>
+      {copied ? t('common.actions.copied') : t('common.actions.copy')}
+    </Button>
   );
 }
 
@@ -66,18 +68,21 @@ function People({ linkId }) {
         <li key={i}>
           {p.name ? <HiveAvatar username={p.name} size="small" className="invite-people-avatar" /> : <span className="invite-people-avatar empty" />}
           <span className="invite-people-name">{p.name ? `@${p.name}` : t('auth.invite.noNameYet')}</span>
-          <span className="invite-muted">{fmtDate(p.invitedAt)}</span>
-          <span className={`invite-state${p.state === 'fast_track' ? ' is-fast' : ''}`}>{STATE_LABEL_KEY[p.state] ? t(STATE_LABEL_KEY[p.state]) : p.state}</span>
+          <span className="invite-people-date">{fmtDate(p.invitedAt)}</span>
+          <StatusPill tone={STATE_TONE[p.state] || 'muted'} className="invite-state">
+            {STATE_LABEL_KEY[p.state] ? t(STATE_LABEL_KEY[p.state]) : p.state}
+          </StatusPill>
         </li>
       ))}
     </ul>
   );
 }
 
-function statusText(link, t) {
-  if (link.status === 'paused') return t('auth.invite.status.pausedBy3speak');
-  if (link.pausedByReferrer) return t('auth.invite.status.pausedByYou');
-  if (link.leftThisMonth <= 0) return t('auth.invite.status.usedUp');
+// A paused or used-up link: icon + what happened (42c).
+function linkStatus(link, t) {
+  if (link.status === 'paused') return { icon: 'block', tone: 'accent', text: t('auth.invite.status.pausedBy3speak') };
+  if (link.pausedByReferrer) return { icon: 'pause_circle', tone: 'muted', text: t('auth.invite.status.pausedByYou') };
+  if (link.leftThisMonth <= 0) return { icon: 'event_busy', tone: 'muted', text: t('auth.invite.status.usedUp') };
   return null;
 }
 
@@ -105,65 +110,76 @@ export default function InviteLinks({ openLoginModal }) {
   const links = data?.links || [];
 
   return (
-    <div className="invite-page wide">
-      <div className="invite-header">
-        <MdPersonAdd className="invite-header-icon" />
-        <div>
-          <h1>{t('auth.invite.title')}</h1>
-          <p>{t('auth.invite.subtitle')}</p>
-        </div>
-      </div>
+    <div className="invite-page">
+      <header className="invite-header">
+        <h1>{t('auth.invite.title')}</h1>
+        <p>{t('auth.invite.subtitle')}</p>
+      </header>
 
       {!user && (
-        <div className="invite-card">
+        <Card className="invite-card">
           <p className="invite-text">{t('auth.invite.signInPrompt')}</p>
           <div className="invite-actions">
-            <button type="button" className="invite-btn primary" onClick={() => openLoginModal?.('login')}>{t('common.actions.login')}</button>
+            <Button variant="primary" icon="login" onClick={() => openLoginModal?.('login')}>{t('common.actions.login')}</Button>
           </div>
-        </div>
+        </Card>
       )}
 
-      {user && error && <p className="invite-muted">{error}</p>}
-      {user && !error && data === null && <p className="invite-muted">{t('common.status.loading')}</p>}
+      {user && error && (
+        <div className="v2-failure invite-card" role="alert"><b>{error}</b></div>
+      )}
+      {user && !error && data === null && (
+        <div className="v2-skeleton invite-skeleton" aria-label={t('common.status.loading')} />
+      )}
       {user && data && links.length === 0 && (
-        <div className="invite-card">
-          <p className="invite-text">
-            {t('auth.invite.noLinks')}
-          </p>
+        <div className="v2-empty">
+          <Icon name="link" size={28} />
+          <p>{t('auth.invite.noLinks')}</p>
         </div>
       )}
 
       {links.map((l) => {
         const pct = l.limit > 0 ? Math.min(100, (l.usedThisMonth / l.limit) * 100) : 100;
-        const st = statusText(l, t);
+        const st = linkStatus(l, t);
         return (
-          <div key={l.id} className="invite-card link">
+          <section key={l.id} className="invite-card link">
+            {st && (
+              <div className={`invite-status is-${st.tone}`}>
+                <Icon name={st.icon} size={20} />
+                <b>{st.text}</b>
+              </div>
+            )}
             <div className="invite-link-row">
-              <input type="text" readOnly value={l.url} onFocus={(e) => e.target.select()} aria-label={t('auth.invite.linkAria')} />
+              <input type="text" className="v2-input" readOnly value={l.url} onFocus={(e) => e.target.select()} aria-label={t('auth.invite.linkAria')} />
               <CopyButton text={l.url} />
             </div>
 
             <div className="invite-stats">
-              <div className="invite-stat"><strong>{l.leftThisMonth}</strong><span>{t('auth.invite.stats.left')}</span></div>
-              <div className="invite-stat"><strong>{l.usedThisMonth}</strong><span>{t('auth.invite.stats.usedOf', { limit: l.limit })}</span></div>
-              <div className="invite-stat"><strong>{l.accountsCreated}</strong><span>{t('auth.invite.stats.accountsCreated')}</span></div>
-              <div className="invite-stat"><strong>{l.peopleInvited}</strong><span>{t('auth.invite.stats.peopleInvited')}</span></div>
+              <div className="v2-stat"><b className="num">{l.leftThisMonth}</b><div className="v2-stat__s">{t('auth.invite.stats.left')}</div></div>
+              <div className="v2-stat"><b className="num">{l.usedThisMonth}</b><div className="v2-stat__s">{t('auth.invite.stats.usedOf', { limit: l.limit })}</div></div>
+              <div className="v2-stat"><b className="num">{l.accountsCreated}</b><div className="v2-stat__s">{t('auth.invite.stats.accountsCreated')}</div></div>
+              <div className="v2-stat"><b className="num">{l.peopleInvited}</b><div className="v2-stat__s">{t('auth.invite.stats.peopleInvited')}</div></div>
             </div>
-            <div className="invite-meter" aria-hidden="true"><span style={{ width: `${pct}%` }} /></div>
-            <p className="invite-muted">
-              {st ? `${st} · ` : ''}{t('auth.invite.resetsNote', { date: fmtDate(l.resetsAt) })}
-            </p>
+            <Progress value={pct} thin label={t('auth.invite.stats.usedOf', { limit: l.limit })} />
+            <p className="invite-muted">{t('auth.invite.resetsNote', { date: fmtDate(l.resetsAt) })}</p>
 
-            <button type="button" className="invite-btn small" onClick={() => setOpen(open === l.id ? null : l.id)}>
+            <Button
+              variant="ghost"
+              size={32}
+              className="invite-toggle"
+              trailing={open === l.id ? 'expand_less' : 'expand_more'}
+              aria-expanded={open === l.id}
+              onClick={() => setOpen(open === l.id ? null : l.id)}
+            >
               {open === l.id ? t('auth.invite.hidePeople') : t('auth.invite.whoJoined')}
-            </button>
+            </Button>
             {open === l.id && <People linkId={l.id} />}
-          </div>
+          </section>
         );
       })}
 
       {user && links.length > 0 && (
-        <p className="invite-muted">
+        <p className="invite-muted invite-dash">
           <Trans
             i18nKey="auth.invite.dashboardNote"
             components={{ dashLink: <a href={`${BUTRAUTH_URL}/dashboard?tab=referrals`} target="_blank" rel="noopener noreferrer" /> }}

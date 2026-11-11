@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { FaUserShield } from 'react-icons/fa';
 import { fetchAdvertiserAdminView } from '../../lib/incubation';
 import { getLinks, platformProfileUrl, platformLabel } from '../../utils/socialVerifier';
 import { PLATFORM_ICONS } from '../Userprofilepage/SocialLinks';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '../v2/ui';
 
 const when = (d) => (d ? new Date(d).toLocaleString() : null);
 
@@ -55,7 +55,7 @@ export default function AdvertiserAdminPanel({ handle, profile = {}, interests =
 
   return (
     <section className="inc-panel inc-admin" aria-label={t('incubation.admin.title')}>
-      <h2><FaUserShield size={14} aria-hidden="true" /> {t('incubation.admin.title')}</h2>
+      <h2><Icon name="admin_panel_settings" size={20} /> {t('incubation.admin.title')}</h2>
       <p className="inc-admin-note">{t('incubation.admin.note')}</p>
       {/* Public on the left, private on the right; stacked on narrow screens. */}
       <div className="inc-admin-cols">

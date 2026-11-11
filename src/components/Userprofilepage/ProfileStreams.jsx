@@ -5,6 +5,8 @@ import Card3 from '../Cards/Card3';
 import { MY_VIDEOS_URL } from '../../utils/config';
 import { fetchAllEndpoints } from '../../utils/hangoutsEndpoints';
 import { useTranslation } from 'react-i18next';
+import { StatusPill } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import './ProfileStreams.scss';
 
 /** Live/standby OpenPods rooms hosted by this user, on every configured
@@ -51,9 +53,9 @@ function RoomCards({ rooms }) {
             className="profile-streams__room-thumb"
             style={room.thumbnail ? { backgroundImage: `url(${room.thumbnail})` } : undefined}
           >
-            <span className={`profile-streams__badge${room.live ? '' : ' profile-streams__badge--off'}`}>
-              {room.live ? `● ${t('profile.streams.live')}` : `○ ${t('profile.streams.standby')}`}
-            </span>
+            <StatusPill tone={room.live ? 'live' : 'cyan'} icon={room.live ? 'sensors' : 'schedule'} className="profile-streams__badge">
+              {room.live ? t('profile.streams.live') : t('profile.streams.standby')}
+            </StatusPill>
           </div>
           <span className="profile-streams__room-title">{room.title || room.name}</span>
         </Link>
@@ -97,11 +99,11 @@ export default function ProfileStreams({ user, getViewCount }) {
   });
 
   if (isLoading && !liveRooms.length) {
-    return <div className="profile-streams__empty">{t('profile.streams.loading')}</div>;
+    return <div className="profile-streams__empty" role="status"><Icon name="progress_activity" size={20} className="v2-spin" />{t('profile.streams.loading')}</div>;
   }
 
   if (!liveRooms.length && !vods.length) {
-    return <div className="profile-streams__empty">{t('profile.streams.empty')}</div>;
+    return <div className="profile-streams__empty"><Icon name="sensors_off" size={24} />{t('profile.streams.empty')}</div>;
   }
 
   return (
@@ -117,7 +119,9 @@ export default function ProfileStreams({ user, getViewCount }) {
 
       {vods.length > 0 && (
         <>
-          <h3 className="profile-streams__heading">{t('profile.streams.past')}</h3>
+          <h3 className="profile-streams__heading">
+            <StatusPill tone="muted">{t('profile.streams.past')}</StatusPill>
+          </h3>
           <Card3 videos={vods} getViewCount={getViewCount} />
         </>
       )}

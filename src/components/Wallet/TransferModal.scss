@@ -84,7 +84,7 @@
     &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
   }
 
-  &__foot { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  &__foot { display: flex; flex-direction: column; gap: 10px; width: 100%; .v2-btn { flex: none; } }
   &__key {
     display: flex;
     align-items: center;

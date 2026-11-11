@@ -28,6 +28,9 @@
   },
   "newFromFollowing": {
     "aria": "New from creators you follow",
+    "summary_one": "{{count}} new video",
+    "summary_other": "{{count}} new videos",
+    "fromFollowing": "from people you follow",
     "shorts_one": "{{count}} short",
     "shorts_other": "{{count}} shorts"
   },
@@ -48,6 +51,9 @@
     "empty": "Nothing to show here yet.",
     "viewAll": "View all",
     "dragToReorder": "Drag to reorder",
+    "customize": "Customize",
+    "customizeTitle": "Customize Home",
+    "customizeHint": "Move sections up or down. Turn off the ones you don't want.",
     "surfTitle": "Channel Surfing: pick a topic and watch it like TV",
     "zapping": "Zapping"
   },

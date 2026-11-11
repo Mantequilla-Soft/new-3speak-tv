@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MdTranslate } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import { SUPPORTED_LANGUAGES, getTargetLanguage, setTargetLanguage } from '../../utils/translate';
 import './LanguageSelector.scss';
 
@@ -15,8 +15,8 @@ export default function LanguageSelector({ onChange }) {
 
   return (
     <div className="language-selector">
-      <MdTranslate size={16} />
-      <select value={lang} onChange={handleChange}>
+      <Icon name="translate" size={16} />
+      <select className="v2-input is-select" value={lang} onChange={handleChange}>
         {SUPPORTED_LANGUAGES.map(l => (
           <option key={l.code} value={l.code}>
             {l.native}

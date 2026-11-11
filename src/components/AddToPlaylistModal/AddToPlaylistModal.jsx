@@ -1,7 +1,5 @@
-import { useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useId, useState } from 'react';
 import { usePortalDoc } from '../../utils/portalDocument';
-import { MdPlaylistAdd, MdPlaylistAddCheck, MdAdd, MdClose, MdLock, MdPublic, MdWatchLater } from 'react-icons/md';
 import { toastIn } from '../../utils/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMyPlaylists, isVideoInPlaylist } from '../../hooks/useMyPlaylists';
@@ -11,8 +9,10 @@ import { trackCategoryToKind } from '../../lib/playlistType';
 import { useAppStore } from '../../lib/store';
 import { useTranslation } from 'react-i18next';
 import { formatDate as formatLocaleDate } from '../../i18n';
-import ModalHeader from '../ModalHeader/ModalHeader';
-import useDialog from '../../hooks/useDialog';
+import DialogShell from '../modal/DialogShell';
+import { Button, EmptyState, StatusPill } from '../v2/ui';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
 import './AddToPlaylistModal.scss';
 
 // Every toast from this module is headed "Playlist"; the message becomes the
@@ -48,8 +48,7 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle, aud
   const watchLaterPlaylist = playlists.find(p => p.name === WATCH_LATER_NAME);
   const isInWatchLater = watchLaterPlaylist ? isVideoInPlaylist(watchLaterPlaylist, author, permlink) : false;
 
-  const dialog = useDialog(onClose, { active: isOpen });
-  const fieldId = dialog.titleId;
+  const fieldId = useId();
 
   if (!isOpen) return null;
 
@@ -164,191 +163,192 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle, aud
     return formatLocaleDate(date, { month: 'short', day: 'numeric' });
   };
 
-  const handleOverlayClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onClose();
-  };
+  const others = playlists.filter(p => p.name !== WATCH_LATER_NAME);
+  const busy = isAddingWatchLater || isAdding !== null;
+  const stop = (fn) => (e) => { e.preventDefault(); e.stopPropagation(); fn(); };
 
-  // Portalled to <body>: rendered in place it would sit inside the hover-preview
-  // overlay (.card-hover-controls) — a z-index:4 stacking context AND
-  // pointer-events:none. That trapped its z-index under the sticky tabs/nav, and let
-  // the pointer fall through to the cards behind, which flipped the hover state and
-  // tore the modal down after ~1s. At <body> its z-index and clicks work normally.
-  return createPortal(
-    <div className="add-to-playlist-overlay" onClick={handleOverlayClick} onMouseDown={(e) => e.stopPropagation()}>
-      <div className="add-to-playlist-modal" {...dialog.props} onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-        <ModalHeader
-          className="atp-header"
-          title={t('playlists.modal.title')}
-          titleId={dialog.titleId}
-          onClose={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}
+  // Design 07a / 41d: Watch Later first, then your playlists as filled rows in
+  // a fixed-height list that scrolls inside, "Added" in cyan; creating a new
+  // playlist (name, privacy, type and audio kind, tags) opens below it with
+  // its actions in the footer.
+  // Portalled to the page's <body> (DialogShell): rendered in place it would sit
+  // inside the hover-preview overlay (.card-hover-controls), a z-index:4
+  // stacking context with pointer-events:none. `isolate` keeps clicks inside
+  // from reaching the card that opened it.
+  return (
+    <DialogShell
+      onClose={onClose}
+      title={t('playlists.modal.title')}
+      sub={videoTitle || undefined}
+      width={480}
+      zIndex={1100}
+      doc={doc}
+      isolate
+      overlayClassName="add-to-playlist-overlay"
+      className="add-to-playlist-modal"
+      bodyClassName="atp-body"
+      footer={showCreateForm ? (
+        <>
+          <Button variant="secondary" className="cancel-btn" onClick={stop(() => setShowCreateForm(false))} disabled={isCreating}>
+            {t('common.actions.cancel')}
+          </Button>
+          <Button variant="primary" className="create-btn" onClick={stop(handleCreateAndAdd)} disabled={isCreating || !newPlaylistName.trim()} loading={isCreating}>
+            {isCreating ? t('playlists.modal.creating') : t('playlists.modal.createAndAdd')}
+          </Button>
+        </>
+      ) : null}
+    >
+      {/* Watch Later - Always shown first */}
+      <button
+        type="button"
+        className={cx('atp-row', 'watch-later-btn', isInWatchLater && 'added', isAddingWatchLater && 'loading')}
+        onClick={stop(handleWatchLater)}
+        disabled={busy}
+      >
+        <span className="atp-row__icon is-cyan"><Icon name="schedule" size={18} /></span>
+        <span className="atp-row__info">
+          <span className="name">{t('playlists.watchLater')}</span>
+          <span className="meta">
+            <Icon name="lock" size={14} /> {t('playlists.private')}
+            {watchLaterPlaylist && ` · ${t('common.units.videos', { count: watchLaterPlaylist.items?.length || 0 })}`}
+          </span>
+        </span>
+        {isInWatchLater && <StatusPill tone="cyan" className="added-badge">{t('playlists.modal.added')}</StatusPill>}
+        {isAddingWatchLater && <Icon name="progress_activity" size={18} className="v2-spin atp-row__spin" />}
+      </button>
+
+      <div className="v2-eyebrow atp-eyebrow">{t('playlists.modal.yourPlaylists')}</div>
+
+      {isLoading ? (
+        <div className="atp-loading">
+          <Icon name="progress_activity" size={18} className="v2-spin" />
+          <span>{t('playlists.modal.loading')}</span>
+        </div>
+      ) : others.length === 0 && !showCreateForm ? (
+        <EmptyState
+          className="atp-empty"
+          icon="playlist_add"
+          title={t('playlists.modal.noOtherPlaylists')}
+          action={(
+            <Button variant="secondary" size={36} icon="add" className="create-first-btn" onClick={stop(() => setShowCreateForm(true))}>
+              {t('playlists.modal.createFirst')}
+            </Button>
+          )}
         />
-
-        <div className="modal-content">
-          {/* Watch Later - Always shown first */}
-          <button
-            className={`watch-later-btn ${isInWatchLater ? 'added' : ''} ${isAddingWatchLater ? 'loading' : ''}`}
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleWatchLater(); }}
-            disabled={isAddingWatchLater || isAdding !== null}
-          >
-            <div className="watch-later-icon">
-              <MdWatchLater />
+      ) : (
+        <>
+          {others.length > 0 && (
+            <div className={cx('atp-list', showCreateForm && 'is-short')}>
+              {others.map((playlist) => {
+                const alreadyAdded = isVideoInPlaylist(playlist, author, permlink);
+                return (
+                  <button
+                    type="button"
+                    key={playlist.id}
+                    className={cx('atp-row', 'playlist-item', alreadyAdded && 'added', isAdding === playlist.id && 'loading')}
+                    onClick={stop(() => handleAddToPlaylist(playlist))}
+                    disabled={isAdding !== null}
+                  >
+                    <span className="atp-row__icon"><Icon name={alreadyAdded ? 'playlist_add_check' : 'playlist_add'} size={18} /></span>
+                    <span className="atp-row__info">
+                      <span className="name">{playlist.name}</span>
+                      <span className="meta">
+                        <Icon name={playlist.access === 'private' ? 'lock' : 'public'} size={14} />
+                        {t('common.units.videos', { count: playlist.items?.length || 0 })}
+                        {playlist.updated_at && ` · ${formatDate(playlist.updated_at)}`}
+                      </span>
+                    </span>
+                    {alreadyAdded && <StatusPill tone="cyan" className="added-badge">{t('playlists.modal.added')}</StatusPill>}
+                    {isAdding === playlist.id && <Icon name="progress_activity" size={18} className="v2-spin atp-row__spin" />}
+                  </button>
+                );
+              })}
             </div>
-            <div className="watch-later-info">
-              <span className="name">{t('playlists.watchLater')}</span>
-              <span className="meta">
-                <MdLock /> {t('playlists.private')}
-                {watchLaterPlaylist && ` · ${t('common.units.videos', { count: watchLaterPlaylist.items?.length || 0 })}`}
-              </span>
-            </div>
-            {isInWatchLater && <span className="added-badge">{t('playlists.modal.added')}</span>}
-            {isAddingWatchLater && <span className="loading-indicator">...</span>}
-          </button>
+          )}
 
-          <div className="separator">
-            <span>{t('playlists.modal.yourPlaylists')}</span>
+          {!showCreateForm && (
+            <button type="button" className="atp-new create-new-btn" onClick={stop(() => setShowCreateForm(true))}>
+              <Icon name="add" size={20} /> {t('playlists.modal.createNew')}
+            </button>
+          )}
+        </>
+      )}
+
+      {showCreateForm && (
+        <div className="atp-create create-form">
+          <div className="v2-field">
+            <label className="v2-eyebrow" htmlFor={`${fieldId}-name`}>{t('playlists.modal.name')}</label>
+            <input
+              id={`${fieldId}-name`}
+              className="v2-input"
+              type="text"
+              value={newPlaylistName}
+              onChange={(e) => setNewPlaylistName(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              placeholder={t('playlists.modal.namePlaceholder')}
+              autoFocus
+            />
           </div>
-
-          {isLoading ? (
-            <div className="loading">{t('playlists.modal.loading')}</div>
-          ) : playlists.filter(p => p.name !== WATCH_LATER_NAME).length === 0 && !showCreateForm ? (
-            <div className="empty-state">
-              <p>{t('playlists.modal.noOtherPlaylists')}</p>
-              <button className="create-first-btn" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowCreateForm(true); }}>
-                <MdAdd /> {t('playlists.modal.createFirst')}
+          <div className="form-group">
+            <span className="form-label" id={`${fieldId}-privacy`}>{t('playlists.modal.privacy')}</span>
+            <div className="privacy-options" role="group" aria-labelledby={`${fieldId}-privacy`}>
+              <button
+                className={`privacy-btn ${newPlaylistAccess === 'public' ? 'active' : ''}`}
+                aria-pressed={newPlaylistAccess === 'public'}
+                onClick={stop(() => setNewPlaylistAccess('public'))}
+                type="button"
+              >
+                <Icon name="public" size={16} /> {t('playlists.public')}
+              </button>
+              <button
+                className={`privacy-btn ${newPlaylistAccess === 'private' ? 'active' : ''}`}
+                aria-pressed={newPlaylistAccess === 'private'}
+                onClick={stop(() => setNewPlaylistAccess('private'))}
+                type="button"
+              >
+                <Icon name="lock" size={16} /> {t('playlists.private')}
               </button>
             </div>
-          ) : (
-            <>
-              <div className="playlists-list">
-                {playlists.filter(p => p.name !== WATCH_LATER_NAME).map((playlist) => {
-                  const alreadyAdded = isVideoInPlaylist(playlist, author, permlink);
-                  return (
-                    <button
-                      key={playlist.id}
-                      className={`playlist-item ${alreadyAdded ? 'added' : ''} ${isAdding === playlist.id ? 'loading' : ''}`}
-                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAddToPlaylist(playlist); }}
-                      disabled={isAdding !== null}
-                    >
-                      <div className="playlist-icon">
-                        {alreadyAdded ? <MdPlaylistAddCheck /> : <MdPlaylistAdd />}
-                      </div>
-                      <div className="playlist-info">
-                        <span className="name">{playlist.name}</span>
-                        <span className="meta">
-                          {playlist.access === 'private' ? <MdLock /> : <MdPublic />}
-                          {t('common.units.videos', { count: playlist.items?.length || 0 })}
-                          {playlist.updated_at && ` · ${formatDate(playlist.updated_at)}`}
-                        </span>
-                      </div>
-                      {alreadyAdded && <span className="added-badge">{t('playlists.modal.added')}</span>}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {!showCreateForm && (
-                <button className="create-new-btn" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowCreateForm(true); }}>
-                  <MdAdd /> {t('playlists.modal.createNew')}
-                </button>
-              )}
-            </>
-          )}
-
-          {showCreateForm && (
-            <div className="create-form">
-              <div className="form-group">
-                <label htmlFor={`${fieldId}-name`}>{t('playlists.modal.name')}</label>
-                <input
-                  id={`${fieldId}-name`}
-                  type="text"
-                  value={newPlaylistName}
-                  onChange={(e) => setNewPlaylistName(e.target.value)}
-                  onClick={(e) => e.stopPropagation()}
-                  placeholder={t('playlists.modal.namePlaceholder')}
-                  autoFocus
-                />
-              </div>
-              <div className="form-group">
-                <span className="form-label" id={`${fieldId}-privacy`}>{t('playlists.modal.privacy')}</span>
-                <div className="privacy-options" role="group" aria-labelledby={`${fieldId}-privacy`}>
-                  <button
-                    className={`privacy-btn ${newPlaylistAccess === 'public' ? 'active' : ''}`}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setNewPlaylistAccess('public'); }}
-                    type="button"
-                  >
-                    <MdPublic /> {t('playlists.public')}
+          </div>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PlaylistTypePicker type={newPlaylistType.type} kind={newPlaylistType.kind} onChange={setNewPlaylistType} groupClass="privacy-options" disabled={isCreating} iconSize={16} />
+          </div>
+          <div className="v2-field">
+            <label className="v2-eyebrow" htmlFor={`${fieldId}-tags`}>{t('playlists.modal.tags')}</label>
+            <div className="tags-input-wrap">
+              {newPlaylistTags.map((tag) => (
+                <span key={tag} className="tag-chip">
+                  <span>{tag}</span>
+                  <button type="button" aria-label={t('audio.upload.mainPost.removeTag', { tag })} onClick={(e) => { e.stopPropagation(); setNewPlaylistTags(prev => prev.filter(x => x !== tag)); }}>
+                    <Icon name="close" size={14} />
                   </button>
-                  <button
-                    className={`privacy-btn ${newPlaylistAccess === 'private' ? 'active' : ''}`}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setNewPlaylistAccess('private'); }}
-                    type="button"
-                  >
-                    <MdLock /> {t('playlists.private')}
-                  </button>
-                </div>
-              </div>
-              <div onClick={(e) => e.stopPropagation()}>
-                <PlaylistTypePicker type={newPlaylistType.type} kind={newPlaylistType.kind} onChange={setNewPlaylistType} groupClass="privacy-options" disabled={isCreating} />
-              </div>
-              <div className="form-group">
-                <label htmlFor={`${fieldId}-tags`}>{t('playlists.modal.tags')}</label>
-                <div className="tags-input-wrap">
-                  <div className="tags-list">
-                    {newPlaylistTags.map((tag) => (
-                      <span key={tag} className="tag-chip">
-                        {tag}
-                        <button type="button" aria-label={t('audio.upload.mainPost.removeTag', { tag })} onClick={(e) => { e.stopPropagation(); setNewPlaylistTags(prev => prev.filter(x => x !== tag)); }}>
-                          <MdClose />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                  <input
-                    id={`${fieldId}-tags`}
-                    type="text"
-                    value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    onKeyDown={(e) => {
-                      if ((e.key === 'Enter' || e.key === ',' || e.key === ' ') && tagInput.trim()) {
-                        e.preventDefault();
-                        const tag = tagInput.trim().toLowerCase().replace(/,/g, '');
-                        if (tag && !newPlaylistTags.includes(tag)) {
-                          setNewPlaylistTags(prev => [...prev, tag]);
-                        }
-                        setTagInput('');
-                      } else if (e.key === 'Backspace' && !tagInput && newPlaylistTags.length > 0) {
-                        setNewPlaylistTags(prev => prev.slice(0, -1));
-                      }
-                    }}
-                    placeholder={newPlaylistTags.length === 0 ? t('playlists.modal.tagPlaceholder') : t('playlists.modal.tagMorePlaceholder')}
-                  />
-                </div>
-              </div>
-              <div className="form-actions">
-                <button
-                  className="cancel-btn"
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowCreateForm(false); }}
-                  disabled={isCreating}
-                >
-                  {t('common.actions.cancel')}
-                </button>
-                <button
-                  className="create-btn"
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleCreateAndAdd(); }}
-                  disabled={isCreating || !newPlaylistName.trim()}
-                >
-                  {isCreating ? t('playlists.modal.creating') : t('playlists.modal.createAndAdd')}
-                </button>
-              </div>
+                </span>
+              ))}
+              <input
+                id={`${fieldId}-tags`}
+                type="text"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => {
+                  if ((e.key === 'Enter' || e.key === ',' || e.key === ' ') && tagInput.trim()) {
+                    e.preventDefault();
+                    const tag = tagInput.trim().toLowerCase().replace(/,/g, '');
+                    if (tag && !newPlaylistTags.includes(tag)) {
+                      setNewPlaylistTags(prev => [...prev, tag]);
+                    }
+                    setTagInput('');
+                  } else if (e.key === 'Backspace' && !tagInput && newPlaylistTags.length > 0) {
+                    setNewPlaylistTags(prev => prev.slice(0, -1));
+                  }
+                }}
+                placeholder={newPlaylistTags.length === 0 ? t('playlists.modal.tagPlaceholder') : t('playlists.modal.tagMorePlaceholder')}
+              />
             </div>
-          )}
+          </div>
         </div>
-      </div>
-    </div>,
-    doc.body
+      )}
+    </DialogShell>
   );
 }
 

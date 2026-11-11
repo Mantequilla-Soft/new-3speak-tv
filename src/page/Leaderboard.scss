@@ -1,295 +1,182 @@
-@use "../mixins.scss" as mix;
+@use "../styles/v2" as v2;
 
+// Rankings (design 26b + the metrics of 45c): title and time range, the board
+// filters, the podium standing on its 3D steps, then one card per row.
 .leaderboard-page {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 20px 16px 60px;
+  padding: 24px var(--page-pad) 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--text);
 
-  @include mix.respond(phone) {
-    padding: 12px 10px 80px;
-  }
+  @include v2.mobile { padding-top: 12px; gap: 12px; }
 
+  // --- Header ---------------------------------------------------------------
   .lb-header {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 14px;
-    margin-bottom: 18px;
+    gap: 12px;
+    flex-wrap: wrap;
 
-    .lb-header-text {
-      flex: 1 1 220px;
-      min-width: 0;
-    }
-
-    .lb-header-icon {
-      flex-shrink: 0;
-      font-size: 38px;
-      color: var(--accent-primary);
-    }
+    .lb-header-text { flex: 1 1 260px; min-width: 0; }
 
     h1 {
       margin: 0;
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--text-primary);
-
-      @include mix.respond(phone) {
-        font-size: 21px;
-      }
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: 1.1;
     }
 
     p {
-      margin: 2px 0 0;
-      font-size: 14px;
-      color: var(--text-muted);
+      margin: 4px 0 0;
+      @include v2.text(body);
+      color: var(--muted);
+    }
 
-      @include mix.respond(phone) {
-        font-size: 12px;
-      }
+    @include v2.mobile {
+      h1 { font-size: 28px; }
+      p { font-size: 13px; }
     }
   }
 
-  .lb-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 10px;
-    overflow-x: auto;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar { display: none; }
-
-    .lb-tab {
-      flex-shrink: 0;
-      padding: 7px 14px;
-      border: none;
-      border-radius: 999px;
-      background: var(--bg-tertiary, #eff4f5);
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-
-      &:hover { background: var(--bg-hover); }
-
-      &.active {
-        background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-        box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
-        color: var(--accent-primary, #e53935);
-      }
-    }
-  }
-
-  // Time range, top right of the header: one compact segmented control. On a
-  // phone it drops under the title, still right-aligned.
   .lb-window-switch {
-    display: inline-flex;
-    margin-left: auto;
-    padding: 3px;
-    gap: 2px;
-    border: 1px solid var(--border-light, rgba(150, 150, 150, 0.25));
-    border-radius: 999px;
-    background: var(--bg-secondary);
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    .v2-seg__opt { padding: 0 12px; }
 
-    button {
-      padding: 5px 12px;
-      border: none;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--text-secondary);
-      font-size: 12.5px;
-      font-weight: 600;
-      white-space: nowrap;
-      cursor: pointer;
-
-      &:hover { color: var(--text-primary); }
-
-      &.active {
-        background: var(--text-primary);
-        color: var(--bg-secondary);
-      }
-    }
-
-    @include mix.respond(phone) {
-      button { padding: 5px 10px; font-size: 12px; }
-    }
+    @include v2.mobile { width: 100%; .v2-seg__opt { flex: 1 0 auto; } }
   }
 
-  // The board type: Videos / Shorts / Stories / Tags.
-  .lb-types {
-    margin-bottom: 12px;
-
-    .lb-tab {
-      padding: 8px 18px;
-      font-size: 14px;
-    }
-  }
-
-  // The measure inside the type (Count / Watch time / Streak): smaller and
-  // underlined, so it reads as belonging to the chip above.
-  .lb-subs {
+  // --- Filters (45c) --------------------------------------------------------
+  .lb-filters {
+    @include v2.card;
+    padding: 14px;
     display: flex;
-    gap: 18px;
-    margin: 0 0 16px 4px;
-
-    button {
-      padding: 2px 0 4px;
-      border: none;
-      border-bottom: 2px solid transparent;
-      background: none;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-
-      &:hover { color: var(--text-primary); }
-
-      &.active {
-        color: var(--accent-primary, #e53935);
-        border-bottom-color: var(--accent-primary, #e53935);
-      }
-    }
+    flex-direction: column;
+    gap: 10px;
   }
 
-  // All 16 topics are visible at once on desktop — they wrap onto as many rows
-  // as they need rather than hiding the tail behind a sideways scroll. On a
-  // phone there's no width for that, so it falls back to the shared .lb-tabs
-  // scroll behaviour (whose scrollbar is already hidden).
-  .lb-topics {
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-    overflow-x: visible;
-    row-gap: 8px;
-
-    @include mix.respond(phone) {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-    }
-
-    .lb-topic {
-      text-transform: capitalize;
-      background: transparent;
-      border: 1px solid var(--border-light);
-
-      &:hover { background: var(--bg-hover); }
-
-      &.active {
-        background: var(--text-primary);
-        border-color: var(--text-primary);
-        color: var(--bg-secondary);
-      }
-
-      // Expanded category — outlined only, so it reads weaker than `.active`
-      // (which marks the board actually being shown).
-      &.open:not(.active) {
-        border-color: var(--accent-primary);
-        color: var(--accent-primary);
-      }
-    }
-
-    // Second level: the topics inside the expanded category. Tucked under the
-    // category row and slightly smaller so the hierarchy is obvious.
-    &.lb-subtopics {
-      margin-top: -8px;
-      padding-left: 10px;
-      border-left: 2px solid var(--border-light);
-
-      .lb-topic {
-        font-size: 13px;
-        padding: 5px 12px;
-      }
-    }
-  }
-
-  // Watch-time only exists from the tracking start date, so longer windows are
-  // partial for those two metrics — say so rather than looking broken.
-  .lb-notice {
+  .lb-filter-row {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 8px;
-    padding: 10px 12px;
-    margin-bottom: 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border-light);
-    background: var(--accent-light);
-    color: var(--text-secondary);
-    font-size: 13px;
-    line-height: 1.4;
+    flex-wrap: wrap;
+  }
 
-    svg {
-      flex-shrink: 0;
-      margin-top: 1px;
-      font-size: 16px;
-      color: var(--accent-primary);
+  .lb-types { flex: 0 1 auto; min-width: 0; }
+
+  .lb-subs { margin-left: auto; @include v2.mobile { margin-left: 0; } }
+
+  // All topics are visible at once on desktop: they wrap onto as many rows as
+  // they need. On a phone they scroll sideways instead.
+  .lb-topics {
+    .lb-topic { text-transform: capitalize; }
+
+    @include v2.mobile { flex-wrap: nowrap; @include v2.scroll-x; }
+
+    // Second level: the topics inside the expanded category, in a well under
+    // the category row.
+    &.lb-subtopics {
+      @include v2.well;
+      padding: 8px;
+      .v2-chip:not(.is-on) { background: var(--surface); }
     }
   }
 
+  // --- Notices and states ----------------------------------------------------
+  .lb-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 0;
+  }
+
+  .lb-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .lb-skeleton-podium {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 6px;
+    align-items: end;
+
+    .v2-skeleton { height: 200px; border-radius: var(--r-2xl); }
+    .v2-skeleton:nth-child(2) { height: 240px; }
+  }
+
+  .lb-skeleton-row { height: 62px; border-radius: var(--r-xl); }
+
+  // --- Your standing -----------------------------------------------------------
   .lb-me {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    margin-bottom: 18px;
-    border-radius: 10px;
-    border: 1px solid var(--accent-primary);
-    background: var(--bg-secondary);
+    gap: 12px;
+    min-height: 60px;
+    padding: 8px 14px 8px 8px;
+    border-radius: var(--r-xl);
+    background: var(--accent-wash);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
 
     .lb-me-rank {
-      min-width: 46px;
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--accent-primary);
+      flex: none;
+      min-width: 44px;
+      height: 36px;
+      padding: 0 6px;
+      border-radius: var(--r-md);
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: var(--on-accent);
+      font-size: 13px;
+      font-weight: 900;
     }
 
-    // This card reuses .lb-row-avatar but lives outside .lb-list, so it misses
-    // the sizing rule scoped under .lb-row — without this the raw profile
-    // picture renders at its natural resolution.
     .lb-row-avatar img {
-      width: 34px;
-      height: 34px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       object-fit: cover;
+      display: block;
     }
 
+    .lb-me-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
     .lb-me-user {
-      flex: 1;
       font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
+    .lb-me-empty { font-size: 12px; color: var(--muted); }
+
     .lb-me-value {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      color: var(--text-primary);
 
-      small {
-        font-size: 11px;
-        font-weight: 500;
-        color: var(--text-muted);
-      }
-    }
-
-    .lb-me-empty {
-      flex-basis: 100%;
-      font-size: 12px;
-      color: var(--text-muted);
+      small { font-size: 11px; font-weight: 400; color: var(--muted); }
     }
   }
 
+  // --- Podium (26b) ---------------------------------------------------------------
   .lb-podium {
     position: relative; // PodiumStage measures the cards against it
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    gap: 10px;
     align-items: end;
-    margin-bottom: 22px;
+    margin: 6px 0 4px;
 
     // 3D steps are up: each card stands on its step (--lb-step, from
     // PodiumStage) and rides up with it, in the steps' order: 3rd, 2nd, winner.
@@ -297,232 +184,203 @@
       position: relative;
       z-index: 1;
       margin-bottom: var(--lb-step, 0px);
-      animation: lb-podium-ride 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+      animation: lb-podium-ride 700ms cubic-bezier(.34, 1.4, .64, 1) both;
 
-      &.lb-rank-2 { animation-delay: 0.12s; }
-      &.lb-rank-1 { animation-delay: 0.24s; }
+      &.lb-rank-2 { animation-delay: 120ms; }
+      &.lb-rank-1 { animation-delay: 240ms; }
 
       @media (prefers-reduced-motion: reduce) { animation: none; }
     }
 
-    @include mix.respond(phone) {
-      gap: 6px;
-    }
+    @include v2.mobile { gap: 6px; }
 
     .lb-podium-slot {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 16px 8px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border-light);
-      background: var(--bg-secondary);
-      box-shadow: var(--shadow-sm);
+      justify-content: flex-end;
+      gap: 6px;
+      min-width: 0;
+      padding: 16px;
+      border-radius: var(--r-2xl);
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
       text-decoration: none;
-      transition: transform 0.15s;
+      transition: transform var(--t-fast) var(--ease);
 
-      &:hover { transform: translateY(-2px); }
+      &:hover { transform: translateY(-2px); color: var(--text); }
 
-      // The winner sits in the middle and stands taller than the flanks.
+      @include v2.mobile { padding: 10px; border-radius: var(--r-lg); gap: 4px; }
+
+      // The winner sits in the middle, stands taller and carries the one accent.
       &.lb-rank-1 {
-        padding-top: 26px;
-        border-color: #e6b800;
-        box-shadow: 0 0 0 1px #e6b800 inset, var(--shadow-md);
+        padding-top: 28px;
+        background: var(--accent-tint-strong);
+        border-color: var(--accent);
 
-        .lb-podium-medal { background: #e6b800; }
+        .lb-podium-medal { background: var(--accent); color: var(--on-accent); }
+        .lb-podium-avatar img { width: 72px; height: 72px; }
+
+        @include v2.mobile {
+          padding-top: 16px;
+          .lb-podium-avatar img { width: 52px; height: 52px; }
+        }
       }
-      // Top-3 creator arrived from their own badge: they're on the podium, not
-      // in the list, so the highlight has to work here too.
-      &.focused {
-        border-color: var(--accent-primary);
-        box-shadow: 0 0 0 2px var(--accent-primary) inset, var(--shadow-md);
-      }
 
-      &.lb-rank-2 .lb-podium-medal { background: #a8b3bd; }
-      &.lb-rank-3 .lb-podium-medal { background: #c8834d; }
+      // A top-3 creator arrived from their own badge: they are on the podium,
+      // not in the list, so the highlight has to work here too.
+      &.focused { outline: 2px solid var(--cyan); outline-offset: 2px; }
 
-      // Nobody has claimed this place yet (a board with only 1–2 creators). It
-      // keeps the podium's shape without competing with the real winners.
+      // Nobody has claimed this place yet (a board with only 1 or 2 creators).
+      // It keeps the podium's shape without competing with the real winners.
       &.empty {
         border-style: dashed;
-        border-color: var(--border-color);
         background: transparent;
-        box-shadow: none;
         cursor: default;
 
         &:hover { transform: none; }
 
-        .lb-podium-medal { background: var(--border-light); color: var(--text-muted); }
         .lb-podium-user,
-        .lb-podium-value { color: var(--text-muted); }
-        .lb-podium-value { font-weight: 600; }
+        .lb-podium-value { color: var(--muted); }
       }
 
       .lb-podium-avatar-empty {
         display: block;
-        width: 56px;
-        height: 56px;
+        width: 60px;
+        height: 60px;
+        margin-top: 6px;
         border-radius: 50%;
-        border: 2px dashed var(--border-color);
+        border: 2px dashed var(--border);
 
-        @include mix.respond(phone) {
-          width: 44px;
-          height: 44px;
-        }
+        @include v2.mobile { width: 44px; height: 44px; }
       }
 
       .lb-podium-medal {
         display: grid;
         place-items: center;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        color: #fff;
-        font-size: 12px;
-        font-weight: 700;
+        width: 36px;
+        height: 36px;
+        border-radius: var(--r-md);
+        background: var(--surface-2);
+        color: var(--text);
+        font-size: 16px;
+        font-weight: 900;
+
+        @include v2.mobile { width: 28px; height: 28px; border-radius: var(--r-sm); font-size: 13px; }
       }
 
+      .lb-podium-avatar { margin-top: 6px; align-self: flex-start; }
+
       .lb-podium-avatar img {
-        width: 56px;
-        height: 56px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         object-fit: cover;
+        display: block;
 
-        @include mix.respond(phone) {
-          width: 44px;
-          height: 44px;
-        }
+        @include v2.mobile { width: 44px; height: 44px; }
       }
 
       .lb-podium-user {
         max-width: 100%;
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 700;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
 
-        @include mix.respond(phone) {
-          font-size: 11px;
-        }
+        @include v2.mobile { font-size: 12px; }
       }
 
       .lb-podium-value {
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 700;
-        color: var(--accent-primary);
 
-        @include mix.respond(phone) {
-          font-size: 13px;
-        }
+        @include v2.mobile { font-size: 12px; }
       }
 
       .lb-podium-metric {
         font-size: 11px;
-        color: var(--text-muted);
-
-        @include mix.respond(phone) {
-          font-size: 10px;
-        }
-      }
-    }
-  }
-
-  .lb-list {
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    border: 1px solid var(--border-light);
-    background: var(--bg-secondary);
-    overflow: hidden;
-
-    .lb-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      text-decoration: none;
-      border-bottom: 1px solid var(--border-light);
-      transition: background 0.12s;
-
-      &:last-child { border-bottom: none; }
-      &:hover { background: var(--bg-hover); }
-
-      &.me {
-        background: var(--accent-light);
-      }
-
-      // Arrived here from this creator's profile badge — make the row obvious
-      // after the scroll lands on it.
-      &.focused {
-        background: var(--accent-light);
-        box-shadow: inset 3px 0 0 var(--accent-primary);
-      }
-
-      .lb-row-rank {
-        min-width: 30px;
-        font-size: 14px;
-        font-weight: 700;
-        color: var(--text-muted);
-        text-align: right;
-      }
-
-      .lb-row-avatar img {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-
-      .lb-row-user {
-        flex: 1;
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--text-primary);
+        color: var(--muted);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
 
-        @include mix.respond(phone) {
-          font-size: 13px;
-        }
-      }
-
-      .lb-row-value {
-        font-size: 14px;
-        font-weight: 700;
-        color: var(--text-primary);
-        white-space: nowrap;
+        @include v2.mobile { font-size: 10px; }
       }
     }
   }
 
-  .lb-state {
-    padding: 40px 0;
-    text-align: center;
-    font-size: 14px;
-    color: var(--text-muted);
-
-    &.error { color: var(--accent-primary); }
+  // --- Rows (26b): one card per creator ------------------------------------------
+  .lb-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
-  .lb-more {
-    display: block;
-    margin: 18px auto 0;
-    padding: 9px 22px;
-    border: 1px solid var(--border-color);
-    border-radius: 999px;
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
+  .lb-row {
+    display: grid;
+    grid-template-columns: 36px 44px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 14px 8px 8px;
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+    transition: background var(--t-fast) var(--ease);
 
-    &:hover:not(:disabled) { background: var(--bg-hover); }
-    &:disabled { opacity: 0.6; cursor: default; }
+    &:hover { background: color-mix(in srgb, var(--text) 4%, var(--surface)); color: var(--text); }
+
+    &.me { background: var(--accent-wash); border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+
+    // Arrived here from this creator's profile badge: make the row obvious
+    // after the scroll lands on it.
+    &.focused { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+    .lb-row-rank {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .lb-row-avatar img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .lb-row-user {
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .lb-row-value {
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    @include v2.mobile {
+      grid-template-columns: 32px 36px minmax(0, 1fr) auto;
+      gap: 10px;
+      .lb-row-rank { width: 32px; height: 32px; font-size: 12px; }
+      .lb-row-avatar img { width: 36px; height: 36px; }
+      .lb-row-user { font-size: 13px; }
+    }
   }
+
+  .lb-more { align-self: center; min-width: 160px; }
 }
 
 // Cards start on the floor and ride up with their step (individual `translate`,

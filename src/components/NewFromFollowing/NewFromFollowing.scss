@@ -1,82 +1,116 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
+// "New from following" (19c): a cyan-tinted strip with the summary and stacked
+// avatars, then one swipeable row of creator chips. The rail scrolls rather than
+// wrapping, so the strip's height never depends on how many creators posted.
 .new-from-following {
-  margin: 0 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: var(--r-xl);
+  background: color-mix(in srgb, var(--cyan) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
+  min-width: 0;
 
-  // Holds the rail plus its arrows, which sit on top of the row edges.
-  .nff-wrapper {
-    position: relative;
+  @include v2.mobile { padding: 10px 12px; margin-bottom: 12px; }
+
+  .nff-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
   }
 
-  // Same arrows as the stories row above (see ShortsStories.scss): only rendered
-  // when there's something to scroll to, and never on a phone, where you swipe.
+  .nff-stack {
+    display: flex;
+    flex: none;
+    padding-right: 10px;
+
+    .nff-stack-avatar {
+      width: 32px;
+      height: 32px;
+      margin-right: -10px;
+      border-radius: 50%;
+      border: 2px solid var(--surface);
+      background: var(--avatar);
+      overflow: hidden;
+      > img { width: 100%; height: 100%; border-radius: 50%; }
+      .hive-avatar__badge { display: none; }
+    }
+  }
+
+  .nff-summary {
+    margin: 0;
+    min-width: 0;
+    @include v2.text(body);
+    color: var(--muted);
+    b { color: var(--text); }
+  }
+
+  .nff-wrapper { position: relative; min-width: 0; }
+
+  // Arrows over the rail's ends, only when there's something to scroll to;
+  // never on a phone, where you swipe.
   .nff-scroll-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 5;
+    z-index: 2;
     width: 32px;
     height: 32px;
+    display: grid;
+    place-items: center;
     padding: 0;
+    border: 1px solid var(--border);
     border-radius: 50%;
-    background: var(--card-bg);
-    border: 1px solid var(--border-light);
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-float);
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-
-    &:hover {
-      background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      transform: translateY(-50%) scale(1.1);
-    }
-
-    &.left { left: -10px; }
-    &.right { right: -10px; }
-
-    svg { font-size: 12px; }
-
-    @include respond(phone) {
-      display: none;
-    }
+    &:hover { background: var(--surface-2); }
+    &.left { left: -6px; }
+    &.right { right: -6px; }
+    @include v2.mobile { display: none; }
   }
 
-  // One swipeable row. Badges keep their natural width; the rail scrolls rather
-  // than wrapping, so the section height never depends on how many creators
-  // posted this week.
   .nff-rail {
     display: flex;
     gap: 8px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 2px;
+    @include v2.scroll-x;
     scroll-behavior: smooth;
     scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
+  }
 
-    // No visible scrollbar — the arrows and swipe are the affordance.
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    &::-webkit-scrollbar { display: none; }
+  .nff-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    height: 44px;
+    padding: 0 14px 0 6px;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+    scroll-snap-align: start;
+    transition: background var(--t-fast) var(--ease);
+    &:hover { background: var(--surface-2); }
 
-    .author-badge {
-      flex: 0 0 auto;
-      scroll-snap-align: start;
-      // Breathing room inside the pill. Small on the left so the round avatar
-      // isn't pushed off-centre, wider on the right where the text ends.
-      padding: 4px 14px 4px 4px;
-      gap: 8px;
+    .nff-chip-avatar {
+      width: 32px;
+      height: 32px;
+      flex: none;
+      > img { width: 100%; height: 100%; border-radius: 50%; }
     }
+  }
 
-    .author-name,
-    .followers-count {
-      font-weight: 400;
-      color: var(--text-primary);
-    }
+  .nff-chip-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    b { font-size: 13px; font-weight: 700; }
+    span { font-size: 11px; color: var(--muted); }
   }
 }

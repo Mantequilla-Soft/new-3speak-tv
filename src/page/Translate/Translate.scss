@@ -205,19 +205,6 @@
   align-items: start;
 }
 
-@media (max-width: 1023px) {
-  .translate-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  .translate-areas { display: none; }
-  .translate-areas-select { display: inline-flex; }
-}
-
-@include v2.mobile {
-  .translate-select, .translate-areas-select { flex: 1 1 100%; }
-  .translate-select .v2-input { max-width: none; }
-  .translate-select .v2-input, .translate-search .v2-input { height: 44px; border-radius: var(--r-lg); }
-  .translate-filter { height: 44px; border-radius: var(--r-lg); }
-}
-
 .translate-areas {
   @include v2.card(24);
   position: sticky;
@@ -232,6 +219,19 @@
 }
 
 .translate-areas__label { padding: 0 8px; }
+
+@media (max-width: 1023px) {
+  .translate-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .translate-areas { display: none; }
+  .translate-areas-select { display: inline-flex; }
+}
+
+@include v2.mobile {
+  .translate-select, .translate-areas-select { flex: 1 1 100%; }
+  .translate-select .v2-input { max-width: none; }
+  .translate-select .v2-input, .translate-search .v2-input { height: 44px; border-radius: var(--r-lg); }
+  .translate-filter { height: 44px; border-radius: var(--r-lg); }
+}
 
 .translate-areas-list {
   list-style: none;
@@ -329,7 +329,7 @@
 
 .translate-row {
   display: grid;
-  grid-template-columns: minmax(140px, .8fr) minmax(0, 1.2fr) minmax(0, 1.5fr);
+  grid-template-columns: minmax(150px, 200px) minmax(0, 1fr) minmax(0, 1.2fr);
   gap: 10px;
   padding: 10px 12px;
   border-bottom: 1px solid var(--border);
@@ -431,7 +431,7 @@
 
 // Proofread column: a checkbox row (36px, 44px on touch), who checked it, or "changed since check".
 .translate-rows.has-proof .translate-row {
-  grid-template-columns: minmax(140px, .7fr) minmax(0, 1.2fr) minmax(0, 1.6fr) 132px;
+  grid-template-columns: minmax(150px, 200px) minmax(0, 1fr) minmax(0, 1.2fr) 132px;
 
   @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
 }

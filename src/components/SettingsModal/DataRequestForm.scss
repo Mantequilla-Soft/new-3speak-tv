@@ -1,4 +1,6 @@
-@use "../../mixins.scss" as mix;
+// Your data (Settings > About): get or delete what 3Speak stores (38c).
+// Built from the v2 primitives; tokens only.
+@use "../../styles/v2" as v2;
 
 .drf {
   display: flex;
@@ -7,64 +9,32 @@
 }
 
 .drf-account {
-  font-size: 0.82rem;
-  color: var(--text-muted, #666);
-  strong { color: var(--text-primary, #222); }
+  @include v2.text(meta);
+  color: var(--muted);
+
+  strong { color: var(--text); }
 }
 
-.drf-signin {
-  padding: 14px;
-  border-radius: 10px;
-  background: var(--bg-hover, rgba(127, 127, 127, 0.08));
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: var(--text-primary, #222);
-}
+.drf-choice.v2-choices.is-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
-/* Segmented "Get my data" / "Delete my account data" switch. */
-.drf-choice {
-  display: flex;
-  gap: 6px;
-  padding: 4px;
-  border-radius: 10px;
-  background: var(--bg-hover, rgba(127, 127, 127, 0.1));
-}
-
-.drf-choice-btn {
-  flex: 1;
-  padding: 8px 10px;
-  border: none;
-  border-radius: 7px;
-  background: transparent;
-  color: var(--text-primary, #222);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-
-  &:hover { background: var(--card-bg, rgba(255, 255, 255, 0.5)); }
-
-  &.active {
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-    box-shadow: inset 0 0 0 1px var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-  }
+  @include v2.mobile { grid-template-columns: 1fr; }
 }
 
 .drf-lede {
-  margin: 2px 0 0;
-  font-size: 0.85rem;
+  margin: 0;
+  @include v2.text(body-sm);
   line-height: 1.45;
-  color: var(--text-primary, #222);
+  color: var(--text);
 }
 
 .drf-scope {
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: var(--bg-hover, rgba(127, 127, 127, 0.08));
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
   ul {
-    margin: 6px 0 0;
+    margin: 0;
     padding-left: 18px;
     display: flex;
     flex-direction: column;
@@ -72,126 +42,69 @@
   }
 
   li {
-    font-size: 0.78rem;
+    @include v2.text(meta);
     line-height: 1.4;
-    color: var(--text-muted, #666);
+    color: var(--muted);
   }
 
-  strong { color: var(--text-primary, #222); }
+  strong { color: var(--text); }
 }
 
-.drf-scope-title {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--text-primary, #222);
-}
-
-/* The blockchain caveat. Deliberately loud: it is the one thing a user must read
-   before asking us to delete something we cannot delete. */
+// The caveat about what lives on Hive: an accent wash banner
 .drf-warning {
-  padding: 10px 12px;
-  border-radius: 10px;
-  border-left: 3px solid #e0a12b;
-  background: rgba(224, 161, 43, 0.1);
-
   p {
     margin: 6px 0 0;
-    font-size: 0.78rem;
     line-height: 1.45;
-    color: var(--text-primary, #222);
   }
 }
 
-.drf-warning-title {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #b57611;
-}
+.drf-warning-title { display: block; }
 
-.drf-label {
-  margin-top: 4px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text-primary, #222);
-}
-
-.drf-input,
-.drf-textarea {
-  width: 100%;
-  padding: 9px 11px;
-  border: 1px solid var(--border-color, rgba(127, 127, 127, 0.3));
-  border-radius: 8px;
-  background: var(--card-bg, #fff);
-  color: var(--text-primary, #222);
-  font-size: 0.85rem;
-  font-family: inherit;
-
-  &:focus {
-    outline: none;
-    border-color: var(--accent-primary, #e23a3a);
-  }
-
-  &::placeholder { color: var(--text-muted, #999); }
-}
-
-.drf-textarea { resize: vertical; }
-
-.drf-check {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  font-size: 0.78rem;
-  line-height: 1.4;
-  color: var(--text-primary, #222);
-  cursor: pointer;
-
-  input { margin-top: 2px; flex-shrink: 0; }
-}
-
-.drf-submit {
-  margin-top: 4px;
-  padding: 10px 14px;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:disabled { opacity: 0.45; cursor: not-allowed; }
-}
+.drf-check { align-items: flex-start; line-height: 1.4; font-size: 12px; }
 
 .drf-foot {
-  margin: 2px 0 0;
-  font-size: 0.72rem;
+  margin: 0;
+  @include v2.text(meta-sm);
   line-height: 1.4;
-  color: var(--text-muted, #666);
-  text-align: center;
+  color: var(--muted);
 
-  a { color: var(--accent-primary, #e23a3a); }
+  a { color: var(--cyan); }
 }
 
+// Request received: the success card with the reference
 .drf-done {
-  padding: 14px;
-  border-radius: 10px;
-  background: var(--bg-hover, rgba(127, 127, 127, 0.08));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
 
-  h5 {
-    margin: 0 0 6px;
-    font-size: 0.95rem;
-    color: var(--text-primary, #222);
+  h4 {
+    margin: 4px 0 0;
+    @include v2.text(title);
+    font-size: 20px;
   }
 
   p {
-    margin: 0 0 6px;
-    font-size: 0.82rem;
-    line-height: 1.45;
-    color: var(--text-primary, #222);
+    margin: 0;
+    @include v2.text(body-sm);
+    line-height: 1.5;
+    color: var(--muted);
   }
+
+  strong { color: var(--text); font-family: var(--font-mono); }
 }
 
-.drf-muted {
-  color: var(--text-muted, #666) !important;
-  font-size: 0.75rem !important;
+.drf-done-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-lg);
+  display: grid;
+  place-items: center;
+  background: var(--cyan);
+  color: var(--bg);
+}
+
+.drf-done .drf-muted {
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }

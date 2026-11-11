@@ -19,11 +19,11 @@ import { useEffect, useRef } from 'react';
 // rounded bar ends, an optional 2px --text playhead, and `pins` (comments tied
 // to a moment: { f: fraction, label, title, key }) drawn as small cyan tags
 // above the bars; a pin is a button that calls onPin(pin).
-export default function Waveform({ samples, audioRef, duration, onSeek, markers, pins, onPin, playhead = false, className = '', label }) {
+export default function Waveform({ samples, audioRef, duration, onSeek, markers, pins, onPin, playhead = false, className = '', barPx = 3 }) {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
-  const stateRef = useRef({ samples, audioRef, duration, markers, playhead });
-  stateRef.current = { samples, audioRef, duration, markers, playhead };
+  const stateRef = useRef({ samples, audioRef, duration, markers, playhead, barPx });
+  stateRef.current = { samples, audioRef, duration, markers, playhead, barPx };
 
   // Drag state lives in a ref so the rAF loop can read it without
   // re-subscribing. `active` flips on pointerdown and back on pointerup;
@@ -60,6 +60,7 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers,
     const ctx = canvas.getContext('2d');
 
     let themeKey = '';
+    let paintedTheme = '';
     const readColors = () => {
       const cs = view.getComputedStyle(container);
       const a = cs.getPropertyValue('--accent').trim();
@@ -71,10 +72,10 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers,
 
     const computeBars = (samples) => {
       const N = samples.length;
-      barCount = Math.min(N, Math.max(60, Math.floor(cssW / 3)));
+      barCount = Math.min(N, Math.max(40, Math.floor(cssW / (stateRef.current.barPx || 3))));
       if (barCount <= 0) { bars = null; return; }
       barW = cssW / barCount;
-      gap = Math.max(1, barW * 0.3);
+      gap = Math.max(1, barW * (stateRef.current.barPx >= 5 ? 0.35 : 0.3));
       drawW = Math.max(1, barW - gap);
       const samplesPerBar = N / barCount;
       bars = new Float32Array(barCount);
@@ -124,10 +125,8 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers,
       const dragChanged = drag.active !== lastDragActive
         || (drag.active && drag.fraction !== lastDragFraction);
       const markersChanged = markers !== lastMarkers;
-      // A theme switch: new colors, same everything else.
-      const before = themeKey;
-      readColors();
-      const themeChanged = themeKey !== before;
+      // A theme switch (themeKey changed by the observer below): new colors.
+      const themeChanged = themeKey !== paintedTheme;
       if (!samplesChanged && !progressChanged && !dragChanged && !markersChanged && !themeChanged) return;
 
       if (samplesChanged) {
@@ -139,6 +138,7 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers,
       lastDragActive = drag.active;
       lastDragFraction = drag.fraction;
       lastMarkers = markers;
+      paintedTheme = themeKey;
 
       ctx.clearRect(0, 0, cssW, cssH);
       const playedBars = Math.min(barCount, Math.floor(progress * barCount));
@@ -212,8 +212,11 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers,
 
     const ro = new view.ResizeObserver(() => { resize(); readColors(); });
     ro.observe(container);
+    // Light or dark: the page's <html data-theme> (and the pop-out window's copy of it).
+    const mo = typeof view.MutationObserver === 'function' ? new view.MutationObserver(readColors) : null;
+    mo?.observe(canvas.ownerDocument.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
 
-    return () => { stopped = true; ro.disconnect(); };
+    return () => { stopped = true; ro.disconnect(); mo?.disconnect(); };
   }, []);
 
   // Pointer-event drag: covers click + mouse drag + touch drag in one path.
@@ -253,11 +256,6 @@ export default function Waveform({ samples, audioRef, duration, onSeek, markers,
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
-      role={label ? 'slider' : undefined}
-      aria-label={label}
-      aria-valuemin={label ? 0 : undefined}
-      aria-valuemax={label ? Math.round(duration || 0) : undefined}
-      aria-valuenow={label ? Math.round(audioRef?.current?.currentTime || 0) : undefined}
     >
       <canvas ref={canvasRef} />
       {pins?.length > 0 && (

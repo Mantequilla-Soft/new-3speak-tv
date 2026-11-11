@@ -286,6 +286,8 @@
     &::after { content: ""; flex: 1; height: 1px; background: var(--border); }
   }
   .sp-e-upload { align-self: flex-start; cursor: pointer; }
+  // Label kept for screen readers where a section heading already says it.
+  .sp-e-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
   // Page style: the three button looks as choice chips.
   .sp-e-btnstyles { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -478,13 +480,10 @@
   // ── drag to arrange (ArrangeGrid) ──
   .sp-e-arrange { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   .sp-e-arrange-hint {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 2px;
     font-size: 11px;
-    line-height: 1.4;
+    line-height: 1.5;
     color: var(--muted);
+    .material-symbols-rounded { vertical-align: -4px; }
   }
   .ag { width: 100%; display: flex; flex-direction: column; }
   .ag-row { display: flex; gap: 6px; }
@@ -597,16 +596,16 @@
     border-radius: var(--r-lg);
     background: var(--bg);
 
-    @include v2.mobile { height: 60vh; }
+    @include v2.mobile { height: 52vh; }
   }
 
   .sp-e-loading { display: flex; justify-content: center; padding: 64px; color: var(--muted); }
 
   @include v2.mobile {
     .sp-e-top-actions { width: 100%; }
-    .sp-e-url { flex: 1 1 auto; height: 44px; border-radius: var(--r-lg); }
+    .sp-e-url { flex: 1 1 100%; height: 44px; border-radius: var(--r-lg); }
     .sp-e-url .v2-iconbtn { width: 40px; height: 40px; }
-    .sp-e-save { height: 44px; border-radius: var(--r-lg); }
+    .sp-e-save { flex: 1 1 100%; height: 44px; border-radius: var(--r-lg); }
   }
 
   // React fallback preview (SpotlightPreview): kept for parity, not mounted.

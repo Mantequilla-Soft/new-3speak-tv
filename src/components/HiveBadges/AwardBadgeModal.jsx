@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { FaCheck } from 'react-icons/fa';
 import { toastIn } from '../../utils/toast';
 import { awardBadgeWithAioha } from '../../hive-api/aioha';
 import { badgeHolders } from '../../utils/badgeAwards';
 import { cachedProfileImage } from '../../utils/avatarCache';
-import { useTranslation, Trans } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { useTranslation } from 'react-i18next';
+import { Dialog } from '../v2/ui';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
 import './AwardBadgeModal.scss';
 
 // Every toast from this module is headed "Badges"; the message becomes the line
@@ -42,12 +42,6 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
     return () => { alive = false; };
   }, [badges, username]);
 
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape' && !busy) onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [busy, onClose]);
-
   const award = async (badge) => {
     setBusy(badge.account);
     try {
@@ -62,52 +56,58 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
     }
   };
 
-  return createPortal(
-    <div className="award-overlay" onClick={onClose}>
-      <div
-        className="award-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-label={t('badges.award.dialogLabel', { username })}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <ModalHeader closeOnEscape={false} className="award-header" title={t('badges.award.title')} onClose={onClose} />
-        <p className="award-sub">{t('badges.award.toUser', { username })}</p>
+  // Design 41c / 29c: a v2 Dialog (a bottom sheet on a phone) with one well row
+  // per badge, its action on the right: Award in the accent, Held muted.
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      dismissible={!busy}
+      title={t('badges.award.title')}
+      sub={t('badges.award.toUser', { username })}
+      width={440}
+      closeLabel={t('common.actions.close')}
+      className="award-modal"
+    >
+      <span className="award-sr">{t('badges.award.dialogLabel', { username })}</span>
+      <ul className="award-list">
+        {badges.map((badge) => {
+          const has = held?.[badge.account];
+          const working = busy === badge.account;
+          return (
+            <li key={badge.account}>
+              <button
+                type="button"
+                className={cx('award-item', has && 'is-held')}
+                disabled={has || !!busy || held === null}
+                onClick={() => award(badge)}
+              >
+                <img
+                  src={cachedProfileImage(badge.account, badge.image, 'small')}
+                  alt=""
+                />
+                <span className="award-item-text">
+                  <strong>{badge.title}</strong>
+                  <span>{badge.account}</span>
+                </span>
+                <span className={cx('award-item-state', has ? 'is-held' : held === null ? 'is-wait' : 'is-award')}>
+                  {working ? (
+                    <><Icon name="progress_activity" size={14} className="v2-spin" /> {t('badges.award.awarding')}</>
+                  ) : has ? (
+                    <><Icon name="check" size={14} /> {t('badges.award.held')}</>
+                  ) : held === null ? (
+                    <Icon name="progress_activity" size={14} className="v2-spin" />
+                  ) : t('badges.award.award')}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
 
-        <ul className="award-list">
-          {badges.map((badge) => {
-            const has = held?.[badge.account];
-            const working = busy === badge.account;
-            return (
-              <li key={badge.account}>
-                <button
-                  type="button"
-                  className={`award-item${has ? ' is-held' : ''}`}
-                  disabled={has || !!busy || held === null}
-                  onClick={() => award(badge)}
-                >
-                  <img
-                    src={cachedProfileImage(badge.account, badge.image, 'small')}
-                    alt=""
-                  />
-                  <span className="award-item-text">
-                    <strong>{badge.title}</strong>
-                    <span>{badge.account}</span>
-                  </span>
-                  <span className="award-item-state">
-                    {working ? t('badges.award.awarding') : has ? <><FaCheck /> {t('badges.award.held')}</> : held === null ? '…' : t('badges.award.award')}
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-
-        <p className="award-note">
-          {t('badges.award.note')}
-        </p>
-      </div>
-    </div>,
-    document.body,
+      <p className="award-note">
+        {t('badges.award.note')}
+      </p>
+    </Dialog>
   );
 }

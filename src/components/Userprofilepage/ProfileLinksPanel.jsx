@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { FiChevronLeft, FiChevronRight, FiEdit2 } from 'react-icons/fi';
+import { Icon } from '../v2/Icon';
+import { Button } from '../v2/ui';
 import { fetchSpotlight } from '../../utils/spotlight';
 import { useTranslation } from 'react-i18next';
 import './ProfileLinksPanel.scss';
@@ -30,12 +31,12 @@ function applyHostTheme(frame) {
   const v = (name, fallback) => (host.getPropertyValue(name) || '').trim() || fallback;
   const css = `
     body {
-      background: ${v('--bg-secondary', '#16181c')} !important;
-      color: ${v('--text-primary', '#f1f5f9')} !important;
+      background: ${v('--surface', 'Canvas')} !important;
+      color: ${v('--text', 'CanvasText')} !important;
     }
     /* Shadows exist to lift text off a photo background there is no longer. */
     .nm, .hd, .bio, .h { text-shadow: none !important; }
-    .hd, .bio { color: ${v('--text-secondary', '#94a3b8')} !important; }
+    .hd, .bio { color: ${v('--muted', 'GrayText')} !important; }
     /* The avatar's coloured glow ring goes with the background it was lit for. */
     .av { box-shadow: none !important; }
 
@@ -44,14 +45,14 @@ function applyHostTheme(frame) {
        inline styles by the renderer. Radius, spacing and layout are left
        alone — those are the creator's design, not its palette. */
     .lnk, .emb, .vcard, .chbtn {
-      background: ${v('--bg-tertiary', '#242424')} !important;
-      color: ${v('--text-primary', '#f1f5f9')} !important;
-      border: 1px solid ${v('--border-color', '#3d3d3d')} !important;
+      background: ${v('--surface-2', 'Canvas')} !important;
+      color: ${v('--text', 'CanvasText')} !important;
+      border: 1px solid ${v('--border', 'GrayText')} !important;
       box-shadow: none !important;
     }
     /* Icon pucks carry their own fill per link; let the card show through. */
     .ic { background: transparent !important; color: inherit !important; }
-    .emb-img { background: ${v('--bg-hover', 'rgba(255,255,255,0.08)')} !important; }
+    .emb-img { background: ${v('--surface-2', 'Canvas')} !important; }
   `;
   let style = doc.getElementById('sp-host-theme');
   if (!style) {
@@ -132,7 +133,7 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
       <aside className={`profile-links-panel profile-links-panel--empty${mod}`}>
         <div className="plp-inner">
           <p className="plp-hint">{t('profile.links.emptyHint')}</p>
-          <button type="button" className="plp-btn" onClick={() => onOpenTab?.('links')}>{t('profile.links.add')}</button>
+          <Button variant="secondary" size={36} icon="add_link" className="plp-btn" onClick={() => onOpenTab?.('links')}>{t('profile.links.add')}</Button>
         </div>
       </aside>
     );
@@ -148,7 +149,7 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
           title={t('profile.links.show', { user: username })}
           aria-label={t('profile.links.show', { user: username })}
         >
-          <FiChevronLeft size={18} />
+          <Icon name="chevron_left" size={20} />
         </button>
       </aside>
     );
@@ -166,7 +167,7 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
             title={t('profile.links.hide')}
             aria-label={t('profile.links.hide')}
           >
-            <FiChevronRight size={16} />
+            <Icon name="chevron_right" size={18} />
           </button>
         ) : null}
 
@@ -179,7 +180,7 @@ export default function ProfileLinksPanel({ username, isOwnProfile = false, onOp
             title={t('profile.links.edit')}
             aria-label={t('profile.links.edit')}
           >
-            <FiEdit2 size={14} />
+            <Icon name="edit" size={16} />
           </button>
         ) : null}
 

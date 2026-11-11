@@ -1,5 +1,5 @@
 /**
- * GDPR data-subject request form — "send me my data" (Art. 15) and "delete my
+ * GDPR data-subject request form: "send me my data" (Art. 15) and "delete my
  * account data" (Art. 17), living in Settings → About / Contact.
  *
  * The explainer is the point of this component, not the form. It has to be honest
@@ -14,6 +14,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
+import { Banner, Button, Checkbox, ChoiceCard, Field, Icon } from '../v2/ui';
 import './DataRequestForm.scss';
 
 // Every toast from this module is headed "Settings"; the message becomes the
@@ -76,9 +77,11 @@ export default function DataRequestForm() {
   };
 
   if (done) {
+    // 38c: the success card with the reference to keep
     return (
-      <div className="drf-done">
-        <h5>{t('settings.dataRequest.doneTitle')}</h5>
+      <div className="drf-done v2-success">
+        <span className="drf-done-icon"><Icon name="mark_email_read" size={28} /></span>
+        <h4>{t('settings.dataRequest.doneTitle')}</h4>
         <p>
           <Trans i18nKey="settings.dataRequest.doneBody" values={{ ref: done.ref, contact, dueBy: done.dueBy }} components={{ b: <strong /> }} />
         </p>
@@ -93,9 +96,9 @@ export default function DataRequestForm() {
   // nothing to fill in until you're logged in.
   if (!username) {
     return (
-      <div className="drf-signin">
-        <p>{t('settings.dataRequest.signIn')}</p>
-      </div>
+      <Banner tone="neutral" icon="lock" className="drf-signin">
+        {t('settings.dataRequest.signIn')}
+      </Banner>
     );
   }
 
@@ -105,25 +108,20 @@ export default function DataRequestForm() {
         <Trans i18nKey="settings.dataRequest.requestFor" values={{ username }} components={{ b: <strong /> }} />
       </div>
 
-      <div className="drf-choice" role="radiogroup" aria-label={t('settings.dataRequest.typeAria')}>
-        <button
-          type="button"
-          role="radio"
-          aria-checked={!isDelete}
-          className={`drf-choice-btn${!isDelete ? ' active' : ''}`}
+      <div className="drf-choice v2-choices is-grid" role="radiogroup" aria-label={t('settings.dataRequest.typeAria')}>
+        <ChoiceCard
+          icon="download"
+          tone="cyan"
+          selected={!isDelete}
           onClick={() => setType('export')}
-        >
-          {t('settings.dataRequest.getData')}
-        </button>
-        <button
-          type="button"
-          role="radio"
-          aria-checked={isDelete}
-          className={`drf-choice-btn${isDelete ? ' active' : ''}`}
+          title={t('settings.dataRequest.getData')}
+        />
+        <ChoiceCard
+          icon="delete"
+          selected={isDelete}
           onClick={() => setType('delete')}
-        >
-          {t('settings.dataRequest.deleteData')}
-        </button>
+          title={t('settings.dataRequest.deleteData')}
+        />
       </div>
 
       <p className="drf-lede">
@@ -133,12 +131,12 @@ export default function DataRequestForm() {
       </p>
 
       {scope.length > 0 && (
-        <div className="drf-scope">
-          <span className="drf-scope-title">{t('settings.dataRequest.covers')}</span>
+        <div className="drf-scope v2-well">
+          <span className="v2-eyebrow">{t('settings.dataRequest.covers')}</span>
           <ul>
             {scope.map((s) => (
               <li key={s.key}>
-                <strong>{s.label}</strong> — {s.detail}
+                <strong>{s.label}</strong>: {s.detail}
               </li>
             ))}
           </ul>
@@ -147,23 +145,24 @@ export default function DataRequestForm() {
 
       {/* The honest part. A front-end to a public ledger cannot unpublish from it,
           and users are entitled to know that BEFORE they ask us to try. */}
-      <div className="drf-warning">
-        <span className="drf-warning-title">{t('settings.dataRequest.cannotTitle')}</span>
-        <p>
-          <Trans i18nKey="settings.dataRequest.cannotBody" components={{ b: <strong /> }} />
-        </p>
-        <p>
-          {isDelete
-            ? t('settings.dataRequest.cannotDelete')
-            : t('settings.dataRequest.cannotExport')}
-        </p>
+      <div className="drf-warning v2-banner is-warn" role="note">
+        <Icon name="warning" size={18} className="v2-banner__icon" />
+        <div className="v2-banner__body">
+          <b className="drf-warning-title">{t('settings.dataRequest.cannotTitle')}</b>
+          <p>
+            <Trans i18nKey="settings.dataRequest.cannotBody" components={{ b: <strong /> }} />
+          </p>
+          <p>
+            {isDelete
+              ? t('settings.dataRequest.cannotDelete')
+              : t('settings.dataRequest.cannotExport')}
+          </p>
+        </div>
       </div>
 
-
-      <label className="drf-label" htmlFor="drf-contact">{t('settings.dataRequest.emailLabel')}</label>
-      <input
+      <Field
         id="drf-contact"
-        className="drf-input"
+        label={t('settings.dataRequest.emailLabel')}
         type="email"
         value={contact}
         onChange={(e) => setContact(e.target.value)}
@@ -171,10 +170,10 @@ export default function DataRequestForm() {
         autoComplete="email"
       />
 
-      <label className="drf-label" htmlFor="drf-msg">{t('settings.dataRequest.messageLabel')}</label>
-      <textarea
+      <Field
         id="drf-msg"
-        className="drf-textarea"
+        as="textarea"
+        label={t('settings.dataRequest.messageLabel')}
         rows={3}
         maxLength={2000}
         value={message}
@@ -183,21 +182,25 @@ export default function DataRequestForm() {
       />
 
       {isDelete && (
-        <label className="drf-check">
-          <input
-            type="checkbox"
-            checked={confirmed}
-            onChange={(e) => setConfirmed(e.target.checked)}
-          />
-          <span>
-            {t('settings.dataRequest.confirmLabel')}
-          </span>
-        </label>
+        <Checkbox
+          className="drf-check"
+          checked={confirmed}
+          onChange={(e) => setConfirmed(e.target.checked)}
+          label={t('settings.dataRequest.confirmLabel')}
+        />
       )}
 
-      <button type="submit" className="drf-submit" disabled={submitting || (isDelete && !confirmed)}>
+      <Button
+        type="submit"
+        variant={isDelete ? 'danger' : 'primary'}
+        size={44}
+        block
+        icon={isDelete ? 'delete' : 'download'}
+        loading={submitting}
+        disabled={submitting || (isDelete && !confirmed)}
+      >
         {submitting ? t('settings.dataRequest.sending') : isDelete ? t('settings.dataRequest.requestDeletion') : t('settings.dataRequest.requestData')}
-      </button>
+      </Button>
 
       <p className="drf-foot">
         <Trans i18nKey="settings.dataRequest.foot" components={{ mail: <a href="mailto:privacy@3speak.tv" /> }} />

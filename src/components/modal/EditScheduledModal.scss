@@ -1,85 +1,43 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-.esm-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1100;
-  background: rgba(0, 0, 0, 0.65);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 40px 16px;
-  overflow-y: auto;
-
-  @include mix.respond(phone) {
-    padding: 0;
-    align-items: stretch;
-  }
+// Edit scheduled post, over the watch page (design 17d / 44c). The frame is the
+// v2 dialog (DialogShell); this file fits the studio's ScheduledPostEditor into
+// its body.
+.esm-content .esm-body {
+  padding: 0 0 8px;
 }
 
 .esm-content {
-  position: relative;
-  width: 100%;
-  max-width: 720px;
-  background: var(--card-bg, #fff);
-  color: var(--text-primary, #000);
-  border-radius: 14px;
-  margin: auto;
-
-  @include mix.respond(phone) {
-    border-radius: 0;
-    min-height: 100%;
-  }
-
-  // The box has no padding of its own: the header brings its own.
-  .esm-header {
-    padding: 18px 22px 12px;
-    margin-bottom: 0;
-
-    @include mix.respond(phone) {
-      padding: 14px 14px 12px;
-    }
-  }
-
-  // The editor reuses the studio's full-page container styling; inside the modal
-  // it should fill the popup instead of behaving like a standalone page.
+  // The editor reuses the studio's full-page container styling; inside the
+  // dialog it fills the body instead of behaving like a standalone page.
   .studio-main-container {
     width: 100%;
     max-width: 100%;
+    min-height: 0;
     margin: 0;
-    padding: 16px 22px 18px;
+    padding: 6px 20px 16px;
     box-sizing: border-box;
 
-    @include mix.respond(phone) {
-      padding: 16px 14px 18px;
-    }
+    @include v2.mobile { padding: 6px 16px 16px; }
   }
 
-  // The legacy studio page is at least 87vh tall, which left a big empty band
-  // under the buttons inside the popup.
-  .studio-main-container {
-    min-height: 0;
-  }
-
-  // The editor's own page heading repeats the modal title here, and the
-  // permlink line under it keeps only a small gap.
+  // The editor's own page heading repeats the dialog title; the permlink line
+  // under it keeps only a small gap.
   .studio-page-header {
     h1 { display: none; }
     p { margin: 0 0 12px; }
   }
 
-  // The form card is already inside the popup's card: no second box with its
-  // own 30px padding and background, the popup's padding is the only inset.
-  // Doubled class: beats the legacy dark-theme background rule (0,3,0) whatever
-  // order the two stylesheets were injected in.
+  // The form card is already inside the dialog's surface: no second box with
+  // its own padding and background. Doubled class: beats the legacy dark-theme
+  // background rule (0,3,0) whatever order the two stylesheets load in.
   .video-detail-wrap .video-items.video-items {
     padding: 0;
     background: transparent;
   }
 
-  // The uploader's action row sits 22px below the page; in the popup it ends the
-  // box, so no extra space after it.
+  // The action row ends the dialog: no extra space after it.
   .step-actions--bottom {
-    margin: 18px 0 0;
+    margin: 16px 0 0;
   }
 }

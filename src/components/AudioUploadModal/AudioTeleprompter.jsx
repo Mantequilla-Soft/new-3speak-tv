@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdExpandLess, MdExpandMore, MdRemove, MdAdd, MdSubject } from 'react-icons/md';
+import { Icon, IconButton } from '../v2/ui';
 import { useVoiceTeleprompter } from '../../hooks/useVoiceTeleprompter';
 import { createSttStream } from '../../utils/sttClient';
 import { detectScriptLang } from '../../utils/detectLang';
@@ -130,10 +130,12 @@ export default function AudioTeleprompter({ recording, streamRef, user }) {
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
         >
-          <MdSubject size={16} />
-          <span>{t('audio.upload.teleprompter.title')}</span>
-          <small>{t('audio.upload.teleprompter.subtitle')}</small>
-          {open ? <MdExpandLess size={18} /> : <MdExpandMore size={18} />}
+          <span className="audio-tp-toggle-icon"><Icon name="subject" size={18} /></span>
+          <span className="audio-tp-toggle-text">
+            <span>{t('audio.upload.teleprompter.title')}</span>
+            <small>{t('audio.upload.teleprompter.subtitle')}</small>
+          </span>
+          <Icon name={open ? 'expand_less' : 'expand_more'} size={20} className="audio-tp-chevron" />
         </button>
       )}
 
@@ -172,9 +174,9 @@ export default function AudioTeleprompter({ recording, streamRef, user }) {
             <>
               <span>{voiceFailed ? t('audio.upload.teleprompter.voiceStopped') : t('audio.upload.teleprompter.steady')}</span>
               <span className="audio-tp-wpm">
-                <button type="button" onClick={() => changeWpm(wpm - WPM_STEP)} disabled={wpm <= WPM_MIN} aria-label={t('audio.upload.teleprompter.slower')}><MdRemove size={14} /></button>
+                <IconButton icon="remove" size={28} onClick={() => changeWpm(wpm - WPM_STEP)} disabled={wpm <= WPM_MIN} label={t('audio.upload.teleprompter.slower')} />
                 <span>{t('audio.upload.teleprompter.wpm', { n: wpm })}</span>
-                <button type="button" onClick={() => changeWpm(wpm + WPM_STEP)} disabled={wpm >= WPM_MAX} aria-label={t('audio.upload.teleprompter.faster')}><MdAdd size={14} /></button>
+                <IconButton icon="add" size={28} onClick={() => changeWpm(wpm + WPM_STEP)} disabled={wpm >= WPM_MAX} label={t('audio.upload.teleprompter.faster')} />
               </span>
             </>
           )}

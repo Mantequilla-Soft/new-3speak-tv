@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Community_modal.scss";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Users, PenLine, ChevronDown, Loader2 } from "lucide-react";
 import { CHECKER_URL } from "../../utils/config";
 import { getSubscriptions } from "../../hive-api/hiveApi";
 import { getHiveUrl } from "../../utils/hiveNode";
@@ -10,7 +9,9 @@ import { useAppStore } from "../../lib/store";
 import { useTranslation } from "react-i18next";
 import { getHiveRenderer } from '../../lib/hiveRenderer';
 import AccountImg from '../HiveAvatar/AccountImg';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import DialogShell from './DialogShell';
+import { Button } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 
 // Debounce hook
 const useDebounce = (value, delay = 300) => {
@@ -103,10 +104,10 @@ function CommunityCard({ community, onSelect }) {
           <span className="community-card-title">{community.title || community.name}</span>
           <span className="community-card-stats">
             {subs != null && (
-              <span className="community-card-stat"><Users size={13} /> {formatCount(subs)}</span>
+              <span className="community-card-stat"><Icon name="group" size={14} /> <span className="num">{formatCount(subs)}</span></span>
             )}
             {authors != null && (
-              <span className="community-card-stat"><PenLine size={13} /> {formatCount(authors)}</span>
+              <span className="community-card-stat"><Icon name="edit" size={14} /> <span className="num">{formatCount(authors)}</span></span>
             )}
           </span>
           {bio && <span className="community-card-bio">{bio}</span>}
@@ -118,14 +119,14 @@ function CommunityCard({ community, onSelect }) {
           aria-expanded={expanded}
           onClick={(e) => { e.stopPropagation(); setExpanded((v) => !v); }}
         >
-          <ChevronDown size={18} className={expanded ? "rot" : ""} />
+          <Icon name="expand_more" size={20} className={expanded ? "rot" : ""} />
         </button>
       </div>
 
       {expanded && (
         <div className="community-card-detail">
           {isFetching && (
-            <div className="community-card-loading"><Loader2 size={15} className="spin" /> {t('common.status.loading')}</div>
+            <div className="community-card-loading"><Icon name="progress_activity" size={16} className="v2-spin" /> {t('common.status.loading')}</div>
           )}
           {detail?.description && (
             <div className="community-card-section">
@@ -142,9 +143,9 @@ function CommunityCard({ community, onSelect }) {
           {!isFetching && !detail?.description && !detail?.rules && (
             <div className="community-card-loading">{t('communities.picker.noExtraInfo')}</div>
           )}
-          <button type="button" className="community-card-select" onClick={() => onSelect(community)}>
+          <Button variant="secondary" size={36} icon="check" className="community-card-select" onClick={() => onSelect(community)}>
             {t('communities.picker.selectThis')}
-          </button>
+          </Button>
         </div>
       )}
     </div>
@@ -227,14 +228,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
     staleTime: 30 * 60_000,
   });
 
-  // Lock the page behind the modal so touch-scrolling moves the modal (the
-  // mobile bottom sheet), not the page underneath it.
-  useEffect(() => {
-    if (!isOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
-  }, [isOpen]);
+  // (DialogShell locks the page behind it, so touch-scrolling moves the sheet.)
 
   // Default (no search) shows a single card: the already-selected community if
   // there is one, otherwise the 3Speak community. The rest appear on search.
@@ -292,29 +286,33 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
     close();
   };
 
+  // Design 29c / 40: the v2 dialog with a search field and a fixed-height
+  // list of community rows that scrolls inside.
   return (
-    <div className={`modal ${isOpen ? "open" : ""}`}>
-      <div className="overlay" onClick={close}></div>
-
-      <div className={`modal-content community-modal ${isOpen ? "open" : ""}`} onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={t('communities.picker.title')} onClose={close} />
-
-        <div className="modal-body">
-
+    <DialogShell
+      onClose={close}
+      title={t('communities.picker.title')}
+      width={520}
+      zIndex={1100}
+      className="community-modal"
+      bodyClassName="community-modal__body"
+    >
           {/* SEARCH INPUT */}
-          <div className="search-container">
+          <label className="search-container">
+            <Icon name="search" size={18} />
             <input
               type="text"
               placeholder={t('communities.picker.searchPlaceholder')}
+              aria-label={t('communities.picker.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
-          </div>
+          </label>
 
           {/* LOADING */}
           {(isLoading || isFetching) && debouncedQuery.trim().length >= 2 && (
-            <div className="loading-message">{t('communities.picker.searching')}</div>
+            <div className="loading-message"><Icon name="progress_activity" size={16} className="v2-spin" /> {t('communities.picker.searching')}</div>
           )}
 
           {/* LIST */}
@@ -329,7 +327,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                   />
                 ))
               ) : (
-                !isLoading && <p>{t('communities.picker.noneFound')}</p>
+                !isLoading && <p className="community-none">{t('communities.picker.noneFound')}</p>
               )
             ) : (
               <>
@@ -347,7 +345,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                 )}
                 {user && subsPending && (
                   <div className="community-card-loading">
-                    <Loader2 size={15} className="spin" /> {t('communities.picker.loadingYours')}
+                    <Icon name="progress_activity" size={16} className="v2-spin" /> {t('communities.picker.loadingYours')}
                   </div>
                 )}
                 {mySubs.map((community, index) => (
@@ -382,10 +380,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
           {!searching && (
             <p className="community-search-hint">{t('communities.picker.searchHint')}</p>
           )}
-
-        </div>
-      </div>
-    </div>
+    </DialogShell>
   );
 }
 

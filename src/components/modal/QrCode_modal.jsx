@@ -1,33 +1,23 @@
-import React from 'react'
 import "./QrCode_modal.scss"
 import { QRCodeSVG } from 'qrcode.react'
 import { useTranslation } from 'react-i18next'
-import ModalHeader from '../ModalHeader/ModalHeader'
+import DialogShell from './DialogShell'
 
-function QrCode_modal({qrCode, openKeychainApp, onClose}) {
+// Log in with Keychain on another device (design 25e, QR): the v2 dialog with
+// the code in a bg well. The code itself stays black on white so every camera
+// can read it, in both themes.
+function QrCode_modal({ qrCode, openKeychainApp, onClose }) {
   const { t } = useTranslation();
   return (
-    <div className={`modal `}>
-        <div className="overlay" onClick={onClose}></div>
-        <div
-        className={`modal-content  `}
-        onClick={(e) => e.stopPropagation()} 
-         >
-              <ModalHeader title={t('modals.qr.title')} onClose={onClose} />
-              <div style={{ textAlign: 'center' }}>
-                  <p>{t('modals.qr.scan')}</p>
-                  <div onClick={openKeychainApp} style={{ cursor: 'pointer', display: 'inline-block' }}>
-                      <div style={{ background: '#ffffff', padding: '16px', borderRadius: '8px', display: 'inline-block' }}>
-                        <QRCodeSVG value={qrCode} size={180} bgColor="#ffffff" fgColor="#000000" includeMargin={true} />
-                      </div>
-                      <p style={{ fontSize: '0.8rem', marginTop: '0.5rem', color: '#007bff' }}>
-                          {t('modals.qr.click')}
-                      </p>
-                  </div>
-              </div>
-        </div>
-        </div>
-            
+    <DialogShell onClose={onClose} title={t('modals.qr.title')} width={440} zIndex={1100} className="qr-modal">
+      <p className="qr-modal__lead">{t('modals.qr.scan')}</p>
+      <div className="qr-modal__well">
+        <button type="button" className="qr-modal__code" onClick={openKeychainApp} aria-label={t('modals.qr.click')}>
+          <QRCodeSVG value={qrCode} size={180} bgColor="white" fgColor="black" includeMargin />
+        </button>
+        <button type="button" className="qr-modal__hint" onClick={openKeychainApp}>{t('modals.qr.click')}</button>
+      </div>
+    </DialogShell>
   )
 }
 

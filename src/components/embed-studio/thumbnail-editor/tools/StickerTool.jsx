@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImagePlus, Search, Trash2 } from 'lucide-react';
+import { Icon } from '../../../v2/ui';
 import { Field, Hint, Slider, ToolButton } from './controls';
 import { STICKER_SIZE, newStickerLayer, newTextLayer, removeLayer, updateLayer } from '../editState';
 import { TEXT_PRESETS } from '../textPresets';
@@ -134,7 +134,7 @@ export default function StickerTool({ edit, onChange, selectedId, onSelect, onTo
         <div className="thumb-sticker-selected">
           <div className="thumb-sticker-selected__head">
             <span className="thumb-field__label">{t('upload.thumbnail.stickers.selected')}</span>
-            <ToolButton icon={Trash2} onClick={() => { onChange(removeLayer(edit, selected.id)); onSelect(null); }}>
+            <ToolButton icon="delete" onClick={() => { onChange(removeLayer(edit, selected.id)); onSelect(null); }}>
               {t('upload.thumbnail.stickers.remove')}
             </ToolButton>
           </div>
@@ -161,7 +161,7 @@ export default function StickerTool({ edit, onChange, selectedId, onSelect, onTo
 
       <div className="thumb-sticker-bar">
         <div className="thumb-sticker-search">
-          <Search size={15} aria-hidden="true" />
+          <Icon name="search" size={18} />
           <input
             type="search"
             value={query}
@@ -170,7 +170,7 @@ export default function StickerTool({ edit, onChange, selectedId, onSelect, onTo
             aria-label={t('upload.thumbnail.stickers.search')}
           />
         </div>
-        <ToolButton icon={ImagePlus} onClick={() => fileRef.current?.click()} title={t('upload.thumbnail.stickers.uploadHint')}>
+        <ToolButton icon="add_photo_alternate" onClick={() => fileRef.current?.click()} title={t('upload.thumbnail.stickers.uploadHint')}>
           {t('upload.thumbnail.stickers.upload')}
         </ToolButton>
         <input

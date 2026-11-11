@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { MdPlaylistPlay, MdLock, MdPublic } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { getPlaylistThumbnail } from '../../hooks/useUserPlaylists';
@@ -26,43 +26,30 @@ function PlaylistCard({ playlists = [], loading = false, error = null, showPriva
         return (
           <Link
             to={`/playlist/${playlist.id}`}
-            className="playlist-card"
+            className="playlist-card plc"
             key={playlist.id}
           >
-            {/* Thumbnail */}
-            <div className="img-wrap">
-              <img
-                src={thumbnailUrl}
-                alt={playlist.name}
-                onError={(e) => (e.currentTarget.src = img)}
-                loading="lazy"
-              />
-              <div className="playlist-overlay">
-                <span className="video-count">{itemCount}</span>
-                <MdPlaylistPlay className="playlist-icon" />
+            {/* 28d: the cover on a stack, the count in a mono scrim pill. */}
+            <div className="plc-stack">
+              <div className="img-wrap plc-art">
+                <img
+                  src={thumbnailUrl}
+                  alt={playlist.name}
+                  onError={(e) => (e.currentTarget.src = img)}
+                  loading="lazy"
+                />
+                <span className="plc-count"><Icon name="playlist_play" size={14} />{itemCount}</span>
+                {showPrivacyBadge && (
+                  <span className={`plc-privacy privacy-badge ${isPrivate ? 'private' : 'public'}`} title={isPrivate ? t('playlists.private') : t('playlists.public')}>
+                    <Icon name={isPrivate ? 'lock' : 'public'} size={14} />
+                  </span>
+                )}
               </div>
-              {showPrivacyBadge && (
-                <div className={`privacy-badge ${isPrivate ? 'private' : 'public'}`}>
-                  {isPrivate ? <MdLock /> : <MdPublic />}
-                </div>
-              )}
             </div>
 
-            {/* Title */}
-            <h2>{playlist.name}</h2>
-
-            {/* Metadata */}
-            <div className="playlist-meta">
-              <span className="owner">@{playlist.owner}</span>
-              <span className="separator">•</span>
-              <span className="item-count">
-                {t('cards.playlist.items', { count: itemCount })}
-              </span>
-            </div>
-
-            {/* Bottom info */}
-            <div className="bottom-info">
-              <p>{dayjs.unix(playlist.created_at).fromNow()}</p>
+            <h2 className="plc-title">{playlist.name}</h2>
+            <div className="plc-sub">
+              {t('cards.playlist.items', { count: itemCount })} · @{playlist.owner} · {dayjs.unix(playlist.created_at).fromNow()}
             </div>
           </Link>
         );

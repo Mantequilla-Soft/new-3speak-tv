@@ -1,210 +1,75 @@
+@use "../../styles/v2" as v2;
+
+/* Post a video reaction (design 48b / 22b): Record / Upload as dock tiles, the
+   preview in a media frame, a description field, "Show in Shorts", a cyan
+   progress bar while uploading, and the @threespeak authorization as a cyan
+   banner. Lives inside the comment composer's React tab. */
 .react-video-tab {
-  // Source selection cards
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+
   .rvt-source-cards {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
   }
 
-  .rvt-source-card {
-    flex: 1;
+  // Dock tiles (v2-dock) sit on surface here; their fill is surface-2.
+  .rvt-source-card { width: 100%; }
+
+  .rvt-preview {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 6px;
-    padding: 14px 8px;
-    border: 2px solid var(--border-light, rgba(255, 255, 255, 0.1));
-    border-radius: 10px;
-    background: transparent;
-    color: var(--text-secondary, #aaa);
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: inherit;
-    transition: all 0.2s ease;
-
-    &:hover:not(:disabled) {
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-    }
-
-    &.active {
-      border-color: var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      background: rgba(229, 57, 53, 0.08);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
-
-  // Preview
-  .rvt-preview {
-    margin-bottom: 10px;
   }
 
   .rvt-video {
     width: 100%;
-    border-radius: 8px;
-    background: #000;
     max-height: 240px;
+    border-radius: var(--r-md);
+    background: var(--media-black);
     object-fit: contain;
   }
 
   .rvt-filename {
-    font-size: 11px;
-    color: var(--text-secondary, #888);
-    margin: 6px 0 0;
-    text-align: center;
+    margin: 0;
+    @include v2.text(meta-sm);
+    color: var(--muted);
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
-  // Recording controls
-  .rvt-record-controls {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
+  .rvt-record-controls { display: flex; gap: 6px; }
 
-  .rvt-rec-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 6px 14px;
-    border: none;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    color: #fff;
-    transition: all 0.2s ease;
-
-    &--start {
-      background: transparent;
-      border: 1px solid var(--accent-primary, #e53935);
-      color: var(--accent-primary, #e53935);
-      &:hover { opacity: 0.9; }
-    }
-
-    &--stop {
-      background: #555;
-      &:hover { background: #666; }
-    }
-  }
-
-  // Description textarea
   .rvt-description {
-    width: 100%;
-    min-height: 60px;
-    padding: 8px 10px;
-    margin-bottom: 10px;
-    font-size: 13px;
-    font-family: inherit;
-    color: var(--text-primary);
-    background: var(--card-bg, #1a1a2e);
-    border: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
-    border-radius: 8px;
+    min-height: 56px;
     resize: vertical;
-    outline: none;
-    transition: border-color 0.15s ease;
-
-    &:focus {
-      border-color: var(--accent-primary, #e53935);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-    }
+    @include v2.mobile { font-size: 16px; }
   }
 
-  // Short toggle
-  .rvt-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    cursor: pointer;
+  .rvt-toggle { color: var(--text); }
 
-    input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      accent-color: var(--accent-primary, #e53935);
-      cursor: pointer;
-    }
-
-    .rvt-toggle-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-secondary, #aaa);
-    }
-  }
-
-  // Progress bar
   .rvt-progress {
-    margin-bottom: 10px;
-  }
-
-  .rvt-progress-bar {
-    width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 4px;
-  }
-
-  .rvt-progress-fill {
-    height: 100%;
-    background: var(--accent-primary, #e53935);
-    border-radius: 3px;
-    transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
   .rvt-progress-text {
-    font-size: 11px;
-    color: var(--text-secondary, #aaa);
-  }
-
-  // Submit button
-  .rvt-submit {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid var(--accent-primary, #e53935);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    font-family: inherit;
-    color: var(--accent-primary, #e53935);
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover:not(:disabled) {
-      opacity: 0.9;
-    }
-
-    &:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+    @include v2.mono(11, 700);
+    color: var(--muted);
   }
 
   .rvt-auth-gate {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    text-align: center;
+    .v2-banner__body { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
 
-    .rvt-auth-note {
-      margin: 0;
-      font-size: 0.85rem;
-      opacity: 0.85;
-    }
+  .rvt-auth-note {
+    margin: 0;
+    color: var(--muted);
+    strong { color: var(--text); }
   }
 }

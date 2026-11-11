@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState } from 'react';
 import './SettingInfo.scss';
 import { useTranslation } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import DialogShell from '../modal/DialogShell';
+import { Icon } from '../v2/ui';
 
 /**
  * The (i) beside a setting's short description, holding the long explanation.
@@ -12,70 +12,35 @@ import ModalHeader from '../ModalHeader/ModalHeader';
  * undone after upload), so the full wording has to stay reachable rather than
  * being cut.
  *
- * Rendered through a portal: the tiles sit inside a bordered panel with its own
- * stacking context, so an inline popover would be clipped by it. On phones it
- * comes up as a bottom sheet, matching the rest of the app's dialogs.
+ * The explanation is a v2 dialog (DialogShell): centred on desktop, a bottom
+ * sheet on phones, Escape closes only the topmost window.
  *
  * ⚠️ Every click inside stops propagation. A portal moves the DOM node to
  * <body>, but React still bubbles synthetic events through the REACT tree, so a
- * click on the overlay reaches the tile that renders this component — closing
- * the dialog would silently toggle whatever setting it was explaining.
+ * click in the dialog reaches the tile that renders this component — closing
+ * the dialog would silently toggle whatever setting it was explaining. The
+ * wrapper span below is the dialog's React parent and swallows those clicks.
  */
+const stop = (e) => e.stopPropagation();
 
 /**
- * The portal + overlay + sheet on its own, so any setting that needs a dialog
- * (the schedule picker, for one) gets the same behaviour as the info popup:
- * centred on desktop, a bottom sheet on phones, Escape to close, background
- * locked while open.
+ * The dialog on its own, so any setting that needs one (the schedule picker,
+ * the payout choice, the guest list) gets the same behaviour as the info popup.
  */
 export function SettingSheet({ title, open, onClose, children }) {
-  useEffect(() => {
-    if (!open) return undefined;
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
-    document.addEventListener('keydown', onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [open, onClose]);
-
   if (!open) return null;
-
-  return createPortal(
-    <div className="setting-info__overlay" onClick={(e) => { e.stopPropagation(); onClose(); }}>
-      <div
-        className="setting-info__sheet"
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <ModalHeader closeOnEscape={false} className="setting-info__head" title={title} onClose={(e) => { e.stopPropagation(); onClose(); }} />
-        <div className="setting-info__body">{children}</div>
-      </div>
-    </div>,
-    document.body,
+  return (
+    <span className="setting-info__portal" onClick={stop}>
+      <DialogShell open title={title} onClose={onClose} width={480} className="setting-info__sheet">
+        {children}
+      </DialogShell>
+    </span>
   );
 }
 
 export default function SettingInfo({ title, children }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-
-  // Escape closes it, and the background must not scroll underneath a sheet.
-  useEffect(() => {
-    if (!open) return undefined;
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
-    document.addEventListener('keydown', onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
 
   return (
     <>
@@ -85,30 +50,21 @@ export default function SettingInfo({ title, children }) {
         aria-label={t('upload.settingInfo.moreAbout', { title })}
         title={t('upload.settingInfo.moreAbout', { title })}
         onClick={(e) => {
-          // The tile itself is not clickable today, but stop this anyway so the
-          // (i) never doubles as a toggle if that changes.
+          // Keep the tile from toggling: the (i) only explains.
           e.preventDefault();
           e.stopPropagation();
           setOpen(true);
         }}
       >
-        i
+        <Icon name="info" size={16} />
       </button>
 
-      {open && createPortal(
-        <div className="setting-info__overlay" onClick={(e) => { e.stopPropagation(); setOpen(false); }}>
-          <div
-            className="setting-info__sheet"
-            role="dialog"
-            aria-modal="true"
-            aria-label={title}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <ModalHeader closeOnEscape={false} className="setting-info__head" title={title} onClose={(e) => { e.stopPropagation(); setOpen(false); }} />
+      {open && (
+        <span className="setting-info__portal" onClick={stop}>
+          <DialogShell open title={title} onClose={() => setOpen(false)} width={440} className="setting-info__sheet">
             <div className="setting-info__body">{children}</div>
-          </div>
-        </div>,
-        document.body,
+          </DialogShell>
+        </span>
       )}
     </>
   );

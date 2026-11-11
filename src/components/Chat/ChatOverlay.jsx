@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useLayoutEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Loader2 } from 'lucide-react'
+import { Icon } from '../v2/Icon'
 import { useChat } from '../../context/ChatContext'
 import { useTranslation } from 'react-i18next'
 import lazyRoute from '../../utils/lazyRoute'
@@ -57,8 +57,9 @@ export default function ChatOverlay() {
     if (!visible) return
     const onKey = (e) => {
       if (e.key !== 'Escape') return
-      // Let an open emoji/GIF picker or lightbox take the first Escape.
-      if (document.querySelector('.chat-lightbox, .chat-popover')) return
+      // Let an open emoji/GIF picker, lightbox, dialog (new room, channel
+      // browser) or confirm bar take the first Escape.
+      if (document.querySelector('.chat-lightbox, .chat-popover, .v2-dialog, .v2-confirmbar')) return
       // Fullscreen steps back to the panel before the panel closes.
       if (expanded) setExpanded(false)
       else closeOverlay()
@@ -88,7 +89,7 @@ export default function ChatOverlay() {
       <Suspense
         fallback={
           <div className="chat-overlay-loading">
-            <Loader2 size={28} className="chat-overlay-spin" />
+            <Icon name="progress_activity" size={28} className="v2-spin" />
           </div>
         }
       >

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MdRedeem, MdVolunteerActivism, MdBolt } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
 import AccountImg from '../HiveAvatar/AccountImg';
 import { useSupporters, useSupported, formatSupportTotal } from '../../lib/supports';
 import './Supporters.scss';
@@ -11,14 +11,13 @@ import './Supporters.scss';
 // a value going up or down.)
 // `account` null: the anonymous Lightning tips, all in one chip that links nowhere.
 function SupportChip({ account, total, direction, label }) {
-  const Arrow = direction === 'in' ? MdRedeem : MdVolunteerActivism;
   const inner = (
     <>
       {account
         ? <AccountImg account={account} alt="" loading="lazy" className="sp-badge-img" />
-        : <MdBolt className="sp-badge-img sp-badge-bolt" aria-hidden="true" />}
+        : <span className="sp-badge-img sp-badge-bolt"><Icon name="bolt" size={16} fill /></span>}
       <span className="sp-badge-amount">{total}</span>
-      <Arrow className="sp-badge-dir" aria-hidden="true" />
+      <Icon name={direction === 'in' ? 'redeem' : 'volunteer_activism'} size={14} className="sp-badge-dir" />
     </>
   );
   if (!account) {

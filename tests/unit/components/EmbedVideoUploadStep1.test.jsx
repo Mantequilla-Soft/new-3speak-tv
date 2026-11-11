@@ -258,7 +258,7 @@ describe('upload step 1: shorts and stories', () => {
     m.meta = { duration: 30, width: 1080, height: 1920 }
     const { user } = mount()
     await ready()
-    await user.click(screen.getByRole('checkbox', { name: /Post as a 24h story/ }))
+    await user.click(screen.getByRole('switch', { name: /Post as a 24h story/ }))
     expect(m.calls.setIsStory).toHaveBeenCalledWith(true)
     await user.upload(input(), video())
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/embed-studio/preview'))

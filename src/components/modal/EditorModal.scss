@@ -1,11 +1,12 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
+// The 3Speak video / audio editor in a window (design 19b frame, 43b render
+// flow). A large v2 dialog: surface, 1px border, radius 28, sheet shadow;
+// full screen on phones. The render steps and "Post it as" are a floating v2
+// card over the editor. The Short's text editor is ShortTextModal (DialogShell).
 .editor-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   // Above ProfileNav (100000); only the phone landscape blocker (999999) sits higher
   z-index: 100050;
 }
@@ -13,7 +14,8 @@
 .editor-modal-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: var(--overlay);
+  animation: v2-fade var(--t-base) var(--ease);
 }
 
 .editor-modal-content {
@@ -24,51 +26,21 @@
   // Desktop: roomy (settings sit beside the preview), still not fullscreen
   width: min(1280px, 92vw);
   height: 94vh;
+  height: 94dvh;
   display: flex;
   flex-direction: column;
   z-index: 1;
-  border-radius: 12px;
   overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3xl);
+  box-shadow: var(--shadow-sheet);
 
-  @media (max-width: 768px) {
+  @include v2.mobile {
     width: 100%;
     height: 100%;
+    border: 0;
     border-radius: 0;
-  }
-}
-
-.editor-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.625rem 1.25rem;
-  background: var(--card-bg);
-  border-bottom: 1px solid var(--border-color);
-  flex-shrink: 0;
-
-  h2 {
-    font-size: 1rem;
-    color: var(--text-primary);
-    margin: 0;
-    font-weight: 600;
-  }
-
-  .editor-close-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    background: var(--bg-hover);
-    border: none;
-    border-radius: 8px;
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: background 150ms;
-
-    &:hover {
-      color: var(--accent-primary);
-    }
   }
 }
 
@@ -79,138 +51,98 @@
 }
 
 .editor-iframe {
+  display: block;
   width: 100%;
   height: 100%;
   border: none;
-  background: #111;
+  background: var(--bg);
 }
 
 .editor-loading-overlay {
   position: absolute;
   inset: 0;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  background: var(--bg-primary);
-  z-index: 10;
+  gap: 16px;
+  padding: 24px;
+  background: var(--bg);
 
-  span {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
+  > span {
+    @include v2.text(body);
+    color: var(--muted);
+    text-align: center;
   }
 
   .spinner {
-    animation: editor-spin 1s linear infinite;
-    color: var(--accent-primary);
+    color: var(--cyan);
+    animation: v2-spin 1s linear infinite;
   }
 }
 
 .render-overlay {
   position: absolute;
   inset: 0;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 20;
+  padding: 16px;
+  background: var(--overlay);
 }
 
+// One floating card for every render step: flush left, status line, progress
+// or choices, actions primary-right.
 .render-status {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 2rem 2.5rem;
-  background: var(--card-bg);
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-  min-width: min(320px, calc(100vw - 32px));
+  align-items: flex-start;
+  gap: 12px;
+  width: min(400px, 100%);
+  padding: 20px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  box-shadow: var(--shadow-float);
 
-  span {
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    text-align: center;
+  > span {
+    @include v2.text(title-sm);
+    color: var(--text);
   }
 
   .spinner {
-    animation: editor-spin 1s linear infinite;
-    color: var(--accent-primary);
+    color: var(--cyan);
+    animation: v2-spin 1s linear infinite;
   }
 
-  // Short or story, after the editor's "Post to 3Speak" (outline buttons: no red fills).
+  .render-progress-bar { align-self: stretch; }
+
+  // "Post it as" (43b): story or short, as choice tiles.
   .post-target {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .post-target__btn {
-    display: flex;
     flex-direction: column;
-    gap: 2px;
-    min-width: 180px;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    border: 1px solid var(--accent-primary);
-    background: transparent;
-    color: var(--text-primary);
-    text-align: left;
-    cursor: pointer;
-
-    small {
-      opacity: 0.75;
-      font-size: 0.75rem;
-    }
-
-    &:hover {
-      background: var(--accent-light);
-    }
+    gap: 8px;
+    align-self: stretch;
   }
 
-  .post-target__back {
-    border: none;
-    background: none;
-    color: var(--text-primary);
-    opacity: 0.75;
-    text-decoration: underline;
-    cursor: pointer;
+  .post-target__btn.v2-choice { align-items: center; }
+
+  .render-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    align-self: stretch;
   }
 
-  .render-btn {
-    padding: 0.5rem 1.5rem;
-    border: 1px solid var(--accent-primary);
-    background: transparent;
-    color: var(--accent-primary);
-    border-radius: 8px;
-    font-size: 0.9rem;
-    cursor: pointer;
+  &.render-error {
+    background: var(--accent-wash);
+    border-color: transparent;
 
-    &:hover {
-      background: var(--accent-light);
-    }
-  }
-
-  &.render-error span {
-    color: #fbbf24;
-  }
-}
-
-.render-progress-bar {
-  width: 100%;
-  height: 6px;
-  background: var(--bg-tertiary);
-  border-radius: 3px;
-  overflow: hidden;
-
-  .render-progress-fill {
-    height: 100%;
-    background: var(--accent-primary);
-    border-radius: 3px;
-    transition: width 300ms ease;
+    .render-error__icon { color: var(--accent); }
+    > span { @include v2.text(body); font-weight: 700; }
   }
 }
 
@@ -219,81 +151,8 @@
   to { transform: rotate(360deg); }
 }
 
-// A Short's text (the audiograms) in our post editor, over the audio editor.
-// Flat card in the 3Speak colours; a bottom sheet on phones.
-.short-text-modal-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.short-text-modal {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: min(720px, 100%);
-  max-height: calc(100% - 32px);
-  padding: 0 16px 16px;
-  overflow-y: auto;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: var(--card-bg);
-  color: var(--text-primary);
-}
-
-.short-text-modal-hint {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
-
+// A Short's text (the audiograms) in our post editor, over the audio editor:
+// ShortTextModal on DialogShell (the v2 dialog); only the composer height here.
 .short-text-modal-composer .markdown-composer {
   max-height: 55vh;
-}
-
-.short-text-modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.short-text-modal-btn {
-  padding: 0.5rem 1.25rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  cursor: pointer;
-
-  &:hover {
-    background: var(--bg-tertiary);
-  }
-
-  &.primary {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-
-    &:hover {
-      background: var(--accent-light);
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .short-text-modal-overlay {
-    align-items: flex-end;
-    padding: 0;
-  }
-
-  .short-text-modal {
-    width: 100%;
-    max-height: 90%;
-    border-radius: 12px 12px 0 0;
-  }
 }

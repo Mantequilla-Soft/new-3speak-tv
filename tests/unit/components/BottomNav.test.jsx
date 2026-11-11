@@ -35,7 +35,9 @@ describe('the bottom navigation bar', () => {
     const { nav } = mount()
     expect(nav().parentElement).toBe(document.body)
     const links = within(nav()).getAllByRole('link')
-    expect(links.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([
+    // The visible label only: the Material Symbols glyph is ligature text.
+    const label = (a) => (a.querySelector('.bottom-nav-label') || a).textContent
+    expect(links.map((a) => [label(a), a.getAttribute('href')])).toEqual([
       ['Feeds', '/'], ['Shorts', '/shorts'], ['Groups', '/groups'], ['Audio', '/audio'], ['Login', '#'],
     ])
   })
@@ -48,7 +50,7 @@ describe('the bottom navigation bar', () => {
   ])('on %s marks %s as the current section', (route, name) => {
     const { nav } = mount({ route })
     const active = within(nav()).getAllByRole('link').filter((a) => a.classList.contains('active'))
-    expect(active.map((a) => a.textContent)).toEqual([name])
+    expect(active.map((a) => a.querySelector('.bottom-nav-label').textContent)).toEqual([name])
   })
 
   it('switches to the watch-page style on a video page', () => {

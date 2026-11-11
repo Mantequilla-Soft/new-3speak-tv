@@ -1,68 +1,32 @@
+@use "../../styles/v2" as v2;
+
+/* The language menu of the on-the-fly translate button (comments, summary,
+   captions): a v2 menu in a portal. The button's own look comes from where it
+   sits (translate-common.scss, the comment rows). */
 .translate-btn-wrap {
   position: relative;
   display: inline-flex;
 }
 
 .translate-lang-menu {
-  // Positioned via JS (portal on document.body)
-  background: var(--bg-secondary, #1a1a2e);
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-  border-radius: 8px;
-  padding: 4px 0;
-  min-width: 180px;
-  max-height: 260px;
-  overflow-y: auto;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  min-width: 220px;
+  max-height: 300px;
+  @include v2.scroll-y;
   // Only exists while open, so it goes above every modal it can be opened
   // from (support popup = 100001, editor/tour = 100050).
   z-index: 1000002;
-
-  // Scrollbar
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 3px;
-  }
 }
 
 .translate-lang-item {
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  width: 100%;
-  padding: 6px 12px;
-  border: none;
-  background: none;
-  color: var(--text-secondary, #aaa);
-  font-size: 12px;
-  font-family: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.1s ease, color 0.1s ease;
+  min-height: 36px;
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--text-primary, #fff);
-  }
+  .translate-lang-native { flex: 1; min-width: 0; text-align: left; }
+  .translate-lang-name { @include v2.text(meta-sm); color: var(--muted); }
 
   &.selected {
-    color: var(--accent-primary, #e53935);
-    font-weight: 700;
-    background: rgba(229, 57, 53, 0.08);
-  }
-
-  .translate-lang-native {
-    flex-shrink: 0;
-  }
-
-  .translate-lang-name {
-    font-size: 11px;
-    opacity: 0.6;
+    background: var(--cyan-tint);
+    color: var(--cyan);
+    .translate-lang-name { color: var(--cyan); }
   }
 }

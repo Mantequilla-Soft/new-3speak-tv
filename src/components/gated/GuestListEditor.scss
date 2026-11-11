@@ -1,103 +1,72 @@
-/* 🔐 Guest list editor, shown on the watch page to the creator of a
-   supporters-only video. Styled as a quiet panel rather than a call to action:
-   it is a management control, not something to draw the eye away from playback. */
+@use "../../styles/v2" as v2;
+
+/* 🔐 Guest list editor (31c), shown on the watch page to the creator of a
+   supporters-only video. A quiet management card, not a call to action: it
+   should not draw the eye away from playback. */
 .guest-list-editor {
-  margin: 12px 0;
-  padding: 12px 16px;
-  border: 1px solid var(--border-color, #333);
-  border-radius: 8px;
-  background: var(--card-bg, rgba(255, 255, 255, 0.03));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 
   &__head {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    margin-bottom: 10px;
+    align-items: flex-start;
+    gap: 12px;
+
+    > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   }
 
-  &__title {
-    font-size: 14px;
-    font-weight: 700;
+  &__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-md);
+    display: grid;
+    place-items: center;
+    flex: none;
+    background: var(--cyan-tint);
+    color: var(--cyan);
   }
 
-  &__hint {
-    font-size: 12px;
-    opacity: 0.75;
-  }
-
-  &__warn {
-    margin: 0 0 10px;
-    font-size: 12px;
-    color: #f5b301;
-  }
+  &__title { @include v2.text(title-sm); }
+  &__hint { @include v2.text(meta); color: var(--muted); line-height: 1.45; }
 
   &__row {
     display: flex;
     gap: 8px;
 
-    input {
-      flex: 1 1 auto;
-      min-width: 0;
-      padding: 8px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color, #333);
-      background: var(--input-bg, rgba(255, 255, 255, 0.04));
-      color: inherit;
-      font-size: 13px;
-
-      &:disabled { opacity: 0.6; }
-    }
-
-    button {
-      flex: 0 0 auto;
-      padding: 8px 14px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color, #333);
-      background: transparent;
-      color: inherit;
-      font-size: 13px;
-      cursor: pointer;
-
-      &:hover:not(:disabled) { background: rgba(255, 255, 255, 0.06); }
-      &:disabled { opacity: 0.5; cursor: default; }
-    }
+    .v2-input { flex: 1 1 auto; min-width: 0; }
   }
 
-  &__empty {
-    margin: 10px 0 0;
-    font-size: 12px;
-    opacity: 0.6;
-  }
+  &__empty { margin: 0; @include v2.text(meta); color: var(--muted); }
 
-  &__chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 10px;
-  }
+  &__chips { display: flex; flex-wrap: wrap; gap: 6px; }
 
   &__chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: rgba(245, 179, 1, 0.15);
-    border: 1px solid rgba(245, 179, 1, 0.4);
+    gap: 2px;
+    height: 32px;
+    padding: 0 4px 0 12px;
+    border-radius: var(--r-md);
+    background: var(--cyan-tint);
+    color: var(--cyan);
+    @include v2.text(label);
     font-size: 12px;
 
     button {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
       border: 0;
+      border-radius: var(--r-sm);
       background: none;
       color: inherit;
       cursor: pointer;
-      font-size: 14px;
-      line-height: 1;
-      padding: 0;
-      opacity: 0.7;
+      opacity: .75;
 
-      &:hover:not(:disabled) { opacity: 1; }
-      &:disabled { opacity: 0.3; cursor: default; }
+      &:hover:not(:disabled) { opacity: 1; background: var(--cyan-tint); }
+      &:disabled { opacity: .45; cursor: default; }
     }
   }
 }

@@ -11,6 +11,7 @@ import StreamFullscreenButton from '../openpods/StreamFullscreenButton';
 import StreamWatermark from '../openpods/StreamWatermark';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import './LiveStreamPlayer.scss';
+import { Icon } from '../v2/Icon';
 
 // Strip a trailing slash — the SDK builds `${apiBaseUrl}/rooms/...` with a raw
 // fetch, so a trailing slash yields `//rooms` and a 404.
@@ -29,7 +30,7 @@ function VodProcessingNotice({ expected }) {
   if (live || !expected) return null;
   return (
     <div className="live-stream-player__vod">
-      <span className="live-stream-player__vod-spinner" aria-hidden="true" />
+      <span className="live-stream-player__vod-spinner" aria-hidden="true"><Icon name="progress_activity" size={28} className="v2-spin" /></span>
       <strong>{t('comments.live.vodProcessing')}</strong>
       <span>
         {t('comments.live.vodProcessingHint')}
@@ -44,7 +45,7 @@ function VodProcessingNotice({ expected }) {
  * its positioned parent (`.video-iframe-wrapper`); the surrounding watch page
  * keeps rendering the real post's details, voting and comments.
  *
- * `chatSlot` (a DOM element in the watch page's right column) gets the live
+ * `chatSlot` (a DOM element in the watch page's side panel) gets the live
  * chat PORTALLED into it. A portal rather than a second <StandaloneWatch>
  * because the chat has to sit inside this component's LiveKit room context —
  * mounting the sidebar's own provider would open a second connection to the

@@ -1,150 +1,141 @@
+@use "../../styles/v2" as v2;
+
+// Payout breakdown and beneficiaries over the watch page's payout (design 17e
+// share rewards, read-only): a floating v2 menu card. Eyebrow head, the
+// curator / author split in a bg well, one row per beneficiary with its share,
+// and the total. Money is accent Roboto Mono.
 .beneficiaries-tooltip {
+  @include v2.menu;
   position: absolute;
   z-index: 9999;
-  min-width: 200px;
-  max-width: 280px;
-  background: var(--card-bg, #fff);
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
+  width: 280px;
+  max-width: calc(100vw - 16px);
+  padding: 12px;
+  color: var(--text);
+  text-align: left;
   pointer-events: none;
+  transition: opacity var(--t-fast) var(--ease);
 
-  [data-theme="dark"] & {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  &.pinned { pointer-events: auto; }
+
+  .beneficiaries-tooltip-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    > span { @include v2.text(eyebrow); color: var(--muted); }
   }
 
-  &.pinned {
-    pointer-events: auto;
+  .beneficiaries-tooltip-close {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin: -6px -6px -6px 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+
+    &:hover { background: var(--bg-hover); }
   }
-}
 
-.beneficiaries-tooltip-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-secondary, #888);
-  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
-}
-
-.beneficiaries-tooltip-close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  padding: 2px;
-  cursor: pointer;
-  color: var(--text-secondary, #888);
-  border-radius: 4px;
-
-  &:hover {
-    color: var(--text-primary, #222);
-    background: var(--border-color, rgba(0, 0, 0, 0.08));
+  .beneficiaries-tooltip-breakdown {
+    @include v2.well;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
   }
-}
 
-.beneficiaries-tooltip-breakdown {
-  padding: 6px 12px;
-  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
-}
-
-.beneficiaries-tooltip-breakdown-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 3px 0;
-  font-size: 12px;
-}
-
-.beneficiaries-tooltip-breakdown-label {
-  color: var(--text-secondary, #666);
-  font-weight: 500;
-}
-
-.beneficiaries-tooltip-breakdown-value {
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-primary, #222);
-}
-
-.beneficiaries-tooltip-section-label {
-  padding: 5px 12px 2px;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  color: var(--text-secondary, #888);
-}
-
-.beneficiaries-tooltip-list {
-  padding: 4px 0;
-}
-
-.beneficiaries-tooltip-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 12px;
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.beneficiaries-tooltip-avatar {
-  flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: var(--border-color, rgba(0, 0, 0, 0.08));
-}
-
-a.beneficiaries-tooltip-user {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 500;
-  color: var(--text-primary, #222);
-  text-decoration: none;
-
-  .pinned &:hover {
-    color: var(--accent-primary, #e53935);
-    text-decoration: underline;
+  .beneficiaries-tooltip-breakdown-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    @include v2.text(meta);
   }
-}
 
-.beneficiaries-tooltip-pct {
-  flex-shrink: 0;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-secondary, #666);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1px;
-}
+  .beneficiaries-tooltip-breakdown-label { color: var(--muted); }
 
-.beneficiaries-tooltip-amount {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-primary, #222);
-}
+  .beneficiaries-tooltip-breakdown-value {
+    @include v2.mono(12, 700);
+    color: var(--accent);
+  }
 
-.beneficiaries-tooltip-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 12px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-primary, #222);
-  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
-  background: var(--border-color, rgba(0, 0, 0, 0.03));
+  .beneficiaries-tooltip-tokens .beneficiaries-tooltip-breakdown-value { color: var(--text); }
+
+  .beneficiaries-tooltip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 220px;
+    @include v2.scroll-y;
+  }
+
+  .beneficiaries-tooltip-section-label {
+    @include v2.text(eyebrow);
+    color: var(--muted);
+    margin: 2px 0 4px;
+  }
+
+  .beneficiaries-tooltip-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+  }
+
+  .beneficiaries-tooltip-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--avatar);
+    flex: none;
+  }
+
+  .beneficiaries-tooltip-user {
+    flex: 1;
+    min-width: 0;
+    @include v2.text(label);
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:hover { color: var(--cyan); }
+  }
+
+  .beneficiaries-tooltip-pct {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    @include v2.mono(12, 700);
+    color: var(--text);
+  }
+
+  .beneficiaries-tooltip-amount {
+    @include v2.mono(11, 400);
+    color: var(--accent);
+  }
+
+  .beneficiaries-tooltip-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    @include v2.text(label);
+
+    > span:last-child { @include v2.mono(13, 900); color: var(--accent); }
+  }
 }

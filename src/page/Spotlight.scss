@@ -1,17 +1,24 @@
-@use "../mixins.scss" as *;
+@use "../styles/v2" as v2;
 
+// The creator's link page (24d), React fallback for in-app navigation; a
+// direct load of /links/<user> is served by the server renderer. Background,
+// text colour, font and block colours come from the creator's own layout
+// (inline styles), so everything here is drawn in currentColor and only the
+// app's own bits (loading, empty line, profile link, footer) use tokens.
 .spotlight-page {
-  min-height: calc(100vh - var(--nav-height, 56px));
+  min-height: calc(100vh - var(--topbar-h));
   width: 100%;
-  // Full-bleed background escaping the container's max-width/padding.
+  // Full-bleed background running up under the top bar; the content starts
+  // below it.
   margin: calc(var(--nav-top-offset, 0px) * -1) 0 0;
-  padding: 36px 16px 64px;
+  padding: calc(var(--nav-top-offset, 0px) + 32px) 16px 64px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
 
   &--plain {
-    background: var(--bg-primary, #0f0f0f);
+    background: var(--bg);
+    color: var(--muted);
     align-items: center;
   }
 
@@ -29,77 +36,77 @@
     width: 96px;
     height: 96px;
     line-height: 0;
+    border-radius: 50%;
     img {
       width: 96px;
       height: 96px;
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
   }
 
   .sp-name {
     margin: 14px 0 0;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.01em;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -.02em;
+    line-height: 1.15;
     word-break: break-word;
   }
-  .sp-handle { margin-top: 2px; font-size: 14px; opacity: 0.7; }
+  .sp-handle { margin-top: 2px; font-size: 13px; opacity: .7; }
   .sp-headline {
     margin: 10px 0 0;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.5;
-    opacity: 0.9;
+    opacity: .9;
     max-width: 440px;
     word-break: break-word;
   }
 
   .sp-sections {
     width: 100%;
-    margin-top: 26px;
+    margin-top: 24px;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 14px;
+    gap: 12px;
 
     .sp-cell { min-width: 0; grid-column: span 6; }
     .sp-cell.w-half { grid-column: span 3; }
     .sp-cell.w-third { grid-column: span 2; }
 
-    @include respond(phone) {
+    @include v2.mobile {
       grid-template-columns: repeat(2, 1fr);
       .sp-cell { grid-column: span 2; }
       .sp-cell.w-half, .sp-cell.w-third { grid-column: span 1; }
     }
   }
 
-  // ── link buttons ──
+  // ── link buttons (colours, radius and border come from the layout) ──
   .sp-link {
     display: flex;
     align-items: center;
     gap: 12px;
     width: 100%;
-    padding: 15px 18px;
+    min-height: 56px;
+    padding: 10px 16px;
     text-decoration: none;
-    font-size: 15.5px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
     border: 1px solid transparent;
-    transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+    transition: transform var(--t-fast) var(--ease), filter var(--t-fast) var(--ease);
 
-    &:hover { transform: translateY(-1px); filter: brightness(1.06); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22); }
-    &:active { transform: translateY(0); }
+    &:hover { transform: translateY(-1px); filter: brightness(1.06); }
+    &:active { transform: scale(.98); }
 
     // soft = translucent fill (default); outline = transparent + border; fill = as set.
     &--outline { background: transparent !important; border-color: currentColor; }
-    &--soft { backdrop-filter: blur(4px); }
 
     .sp-link-icon {
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px;
-      height: 34px;
+      flex: none;
+      display: inline-grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
     }
     .sp-link-title {
@@ -109,8 +116,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      // Keep the label visually centered despite the leading icon.
-      margin-right: 34px;
+      // Keep the label visually centred despite the leading icon.
+      margin-right: 36px;
     }
   }
 
@@ -119,9 +126,9 @@
     width: 100%;
     font-weight: 700;
     word-break: break-word;
-    &--lg { font-size: 22px; margin-top: 6px; }
-    &--md { font-size: 17px; opacity: 0.95; }
-    &--sm { font-size: 14px; opacity: 0.75; font-weight: 600; }
+    &--lg { font-size: 24px; font-weight: 900; margin-top: 6px; }
+    &--md { font-size: 18px; }
+    &--sm { font-size: 14px; opacity: .75; }
   }
 
   // ── image ──
@@ -130,23 +137,32 @@
 
   // ── rich-link (embed) card ──
   .sp-embed {
-    display: block; text-align: left; text-decoration: none; overflow: hidden; color: inherit;
-    border: 1px solid rgba(128, 128, 128, 0.22); transition: transform 0.12s, box-shadow 0.12s, filter 0.12s;
-    &:hover { transform: translateY(-1px); filter: brightness(1.04); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22); }
+    display: block;
+    text-align: left;
+    text-decoration: none;
+    overflow: hidden;
+    color: inherit;
+    border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    transition: transform var(--t-fast) var(--ease), filter var(--t-fast) var(--ease);
+    &:hover { transform: translateY(-1px); filter: brightness(1.04); }
   }
-  .sp-embed-img { width: 100%; aspect-ratio: 1.6 / 1; overflow: hidden; background: rgba(0, 0, 0, 0.18); }
+  .sp-embed-img { width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: color-mix(in srgb, currentColor 12%, transparent); }
   .sp-embed-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .sp-embed-b { padding: 13px 15px; }
-  .sp-embed-s { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.6; margin-bottom: 4px; }
-  .sp-embed-t { font-size: 15.5px; font-weight: 700; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .sp-embed-d { margin-top: 6px; font-size: 13px; line-height: 1.45; opacity: 0.82; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .sp-embed-b { padding: 12px 14px; }
+  .sp-embed-s { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; opacity: .6; margin-bottom: 4px; }
+  .sp-embed-t { font-size: 16px; font-weight: 700; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .sp-embed-d { margin-top: 6px; font-size: 13px; line-height: 1.45; opacity: .8; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
   // ── video (lazy embed) ──
   .sp-video-card { display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; }
   .sp-video-card.short { max-width: 340px; margin-left: auto; margin-right: auto; }
   .sp-video-title {
-    display: block; text-decoration: none; color: inherit;
-    font-weight: 600; line-height: 1.3; transition: filter 0.12s;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    font-weight: 700;
+    line-height: 1.3;
+    transition: filter var(--t-fast) var(--ease);
     &:hover { filter: brightness(1.12); }
   }
 
@@ -154,15 +170,25 @@
     width: 100%;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    background: #000;
+    background: var(--media-black);
     position: relative;
 
     &.sp-video-short { aspect-ratio: 9 / 16; max-width: 100%; }
 
+    // Spinner behind the iframe until the player paints over it.
     &::after {
-      content: ""; position: absolute; top: 50%; left: 50%; width: 38px; height: 38px;
-      margin: -19px 0 0 -19px; border: 3px solid rgba(255, 255, 255, 0.25); border-top-color: #fff;
-      border-radius: 50%; animation: sp-vspin 0.8s linear infinite; z-index: 0;
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 36px;
+      height: 36px;
+      margin: -18px 0 0 -18px;
+      border: 3px solid color-mix(in srgb, var(--on-media) 25%, transparent);
+      border-top-color: var(--on-media);
+      border-radius: 50%;
+      animation: sp-vspin .8s linear infinite;
+      z-index: 0;
     }
 
     iframe { width: 100%; height: 100%; border: 0; display: block; position: relative; z-index: 1; background: transparent; }
@@ -174,65 +200,60 @@
       border: 0;
       cursor: pointer;
       position: relative;
-      background: #000;
+      background: var(--media-black);
       img { width: 100%; height: 100%; object-fit: cover; }
     }
     .sp-video-play {
       position: absolute;
       inset: 0;
       margin: auto;
-      width: 60px;
-      height: 60px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.55);
+      width: 56px;
+      height: 56px;
+      display: inline-grid;
+      place-items: center;
+      color: var(--on-media);
+      background: var(--media-scrim);
       border-radius: 50%;
-      transition: transform 0.12s ease, background 0.12s ease;
+      transition: transform var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
     }
-    .sp-video-poster:hover .sp-video-play { transform: scale(1.08); background: rgba(0, 0, 0, 0.6); border: 1px solid var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
+    .sp-video-poster:hover .sp-video-play { transform: scale(1.08); background: var(--media-scrim-strong); }
     .sp-video-title {
       position: absolute;
-      left: 0; right: 0; bottom: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       padding: 20px 12px 10px;
       text-align: left;
-      color: #fff;
+      color: var(--on-media);
       font-size: 13px;
-      font-weight: 600;
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+      font-weight: 700;
+      background: linear-gradient(transparent, var(--media-scrim-strong));
     }
   }
 
-  .sp-empty { margin-top: 30px; opacity: 0.7; font-size: 15px; }
+  .sp-empty { margin-top: 32px; opacity: .7; font-size: 14px; }
 
   .sp-profile-link {
-    margin-top: 30px;
-    font-size: 13.5px;
-    font-weight: 600;
+    margin-top: 32px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 700;
     color: inherit;
-    opacity: 0.85;
+    opacity: .85;
     text-decoration: none;
     &:hover { opacity: 1; text-decoration: underline; }
   }
   .sp-brand {
-    margin-top: 10px;
+    margin-top: 4px;
     font-size: 12px;
-    opacity: 0.5;
+    opacity: .5;
     a { color: inherit; text-decoration: none; }
-    a:hover { opacity: 1; }
+    a:hover { text-decoration: underline; }
   }
 
-  .sp-spinner {
-    width: 34px; height: 34px;
-    border: 3px solid var(--border-light, rgba(150, 150, 150, 0.3));
-    border-top-color: var(--accent-primary, #e53935);
-    border-radius: 50%;
-    animation: sp-spin 0.8s linear infinite;
-  }
+  .sp-spinner { color: var(--muted); }
 }
-
-@keyframes sp-spin { to { transform: rotate(360deg); } }
 
 @keyframes sp-vspin { to { transform: rotate(360deg); } }

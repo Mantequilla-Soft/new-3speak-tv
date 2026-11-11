@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { MdTranslate } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
 import { SUPPORTED_LANGUAGES } from '../../utils/translate';
 import './TitleTranslate.scss';
 
-const MENU_WIDTH = 180;
+const MENU_WIDTH = 220;
 
 const langLabel = (code) => {
   const l = SUPPORTED_LANGUAGES.find((x) => x.code === code);
@@ -13,9 +14,10 @@ const langLabel = (code) => {
 };
 
 /**
- * Small translate symbol shown after a video title when title translations are
- * available. The dropdown is rendered in a portal (fixed position, anchored to
- * the button) so it can't be clipped or covered by surrounding rows.
+ * Translate the title (22a): a 32px button after the title when translations
+ * exist; while one is shown it says which, in cyan. The menu (a v2 menu) is
+ * rendered in a portal (fixed position, anchored to the button) so it can't be
+ * clipped or covered by surrounding rows.
  */
 export default function TitleTranslate({ languages, selectedLang, onSelect }) {
   const { t } = useTranslation();
@@ -56,35 +58,44 @@ export default function TitleTranslate({ languages, selectedLang, onSelect }) {
       <button
         ref={btnRef}
         type="button"
-        className={`title-translate-btn${selectedLang ? ' active' : ''}`}
+        className={cx('title-translate-btn', selectedLang && 'active')}
         onClick={() => setOpen((o) => !o)}
         title={t('watch.translate.titleButton')}
         aria-label={t('watch.translate.titleButton')}
+        aria-haspopup="menu"
+        aria-expanded={open}
       >
-        <MdTranslate size={16} />
+        <Icon name="translate" size={18} />
+        {selectedLang && <span className="title-translate-btn__lang">{langLabel(selectedLang)}</span>}
       </button>
       {open &&
         createPortal(
           <div
             ref={menuRef}
-            className="title-translate-menu"
+            className="v2-menu title-translate-menu"
+            role="menu"
             style={{ top: coords.top, left: coords.left, width: MENU_WIDTH }}
           >
             <button
               type="button"
-              className={`title-translate-item${!selectedLang ? ' active' : ''}`}
+              role="menuitemradio"
+              aria-checked={!selectedLang}
+              className={cx('v2-menu__row title-translate-item', !selectedLang && 'is-on')}
               onClick={() => {
                 onSelect(null);
                 setOpen(false);
               }}
             >
-              {t('watch.translate.original')}
+              <Icon name="undo" size={18} />
+              <span>{t('watch.translate.original')}</span>
             </button>
             {languages.map((code) => (
               <button
                 key={code}
                 type="button"
-                className={`title-translate-item${selectedLang === code ? ' active' : ''}`}
+                role="menuitemradio"
+                aria-checked={selectedLang === code}
+                className={cx('v2-menu__row title-translate-item', selectedLang === code && 'is-on')}
                 onClick={() => {
                   onSelect(code);
                   setOpen(false);

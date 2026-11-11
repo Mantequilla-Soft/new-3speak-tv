@@ -1,69 +1,70 @@
-@use "../mixins.scss" as mix;
-.firstupload-container{
-    .card-container:not(.card-container--shorts) .card .img-wrap img {
-        height: auto;
-        aspect-ratio: 16 / 9;
+@use "../styles/v2" as v2;
+
+// Shared by the plain feed pages (First Uploads, New Videos, Trending, Follow Feed,
+// tag feeds): a header with a cyan icon well, then the card grid (49c).
+.firstupload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+
+  .feed-page-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+
+    h1 {
+      flex: 1;
+      margin: 0;
+      min-width: 0;
+      @include v2.text(heading);
+      color: var(--text);
     }
 
-    .headers{
-        padding: 15px 15px;
-        background: #E32933;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 20px;
-        color: #fff;
-        @include mix.respond(phone) {
-            font-size: 16px;
-      }
+    @include v2.mobile { h1 { font-size: 20px; } }
+  }
+
+  .feed-page-header__icon {
+    width: 40px;
+    height: 40px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: var(--r-md);
+    background: var(--cyan-tint-strong);
+    color: var(--cyan);
+  }
+
+  // "Loading more…" under the grid, and the fetch error
+  .feed-loading-more {
+    margin: 0;
+    padding: 12px 0;
+    text-align: center;
+    @include v2.text(meta-sm);
+    color: var(--muted);
+  }
+
+  .feed-error {
+    margin: 0;
+    @include v2.text(meta-sm);
+    color: var(--accent);
+  }
+
+  // Follow feed with nobody followed yet (19j)
+  .feed-empty {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 0 8px;
+    max-width: 640px;
+
+    h2 {
+      margin: 0;
+      @include v2.text(heading);
+      font-size: 32px;
+      line-height: 1.05;
     }
-
-    .feed-page-header {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 0 10px;
-        margin-bottom: 6px;
-
-        svg {
-            color: var(--text-primary);
-            @include mix.respond(phone) {
-                width: 14px;
-                height: 14px;
-            }
-        }
-
-        h2 {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0;
-
-            @include mix.respond(phone) {
-                font-size: 13px;
-            }
-        }
-    }
-
-    .load-more-btn {
-        display: block;
-        margin: 30px auto;
-        padding: 12px 40px;
-        background: #E32933;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s ease;
-
-        &:hover:not(:disabled) {
-            background: #c4242c;
-        }
-
-        &:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-    }
+    p { margin: 0; @include v2.text(body); color: var(--muted); }
+  }
 }

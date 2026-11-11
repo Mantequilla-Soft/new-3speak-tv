@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { MdWatchLater, MdLock } from 'react-icons/md';
-import './WatchLaterPlaylistCard.scss';
+import { Icon } from '../v2/Icon';
+import './PlaylistCard.scss';
 import { useTranslation } from 'react-i18next';
 
 function WatchLaterPlaylistCard({ playlist, username }) {
@@ -10,32 +10,16 @@ function WatchLaterPlaylistCard({ playlist, username }) {
 
   return (
     <div className="watch-later-playlist-card-container">
-      <Link to={`/playlist/${playlist.id}`} className="watch-later-playlist-card">
-        <div className="img-wrap">
-          <div className="watch-later-icon-bg">
-            <MdWatchLater className="watch-later-icon" />
-          </div>
-          <div className="playlist-overlay">
-            <span className="video-count">{count}</span>
-          </div>
-          <div className="privacy-badge private">
-            <MdLock />
+      <Link to={`/playlist/${playlist.id}`} className="watch-later-playlist-card plc">
+        <div className="plc-stack">
+          <div className="img-wrap plc-art plc-art--accent">
+            <Icon name="schedule" size={32} />
+            <span className="plc-count"><Icon name="playlist_play" size={14} />{count}</span>
+            <span className="plc-privacy" title={t('playlists.private')}><Icon name="lock" size={14} /></span>
           </div>
         </div>
-
-        <h2>{t('cards.watchLater.title')}</h2>
-
-        <div className="playlist-meta">
-          <span className="owner">@{username}</span>
-          <span className="separator">-</span>
-          <span className="item-count">
-            {t('common.units.videos', { count })}
-          </span>
-        </div>
-
-        <div className="bottom-info">
-          <p>{t('cards.watchLater.subtitle')}</p>
-        </div>
+        <h2 className="plc-title">{t('cards.watchLater.title')}</h2>
+        <div className="plc-sub" title={t('cards.watchLater.subtitle')}>{t('common.units.videos', { count })} · @{username}</div>
       </Link>
     </div>
   );

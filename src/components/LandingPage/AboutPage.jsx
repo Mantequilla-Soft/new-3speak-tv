@@ -1,7 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import speak from "../../assets/image/3speak.png";
-import spk_network from "../../assets/image/spk_network.png";
 import hive from "../../assets/image/hive-1.jpeg";
 import { useAppStore } from '../../lib/store';
 import { Button, Icon } from '../v2/ui';
@@ -176,12 +175,7 @@ const AboutPage = () => {
                 {s.name}
               </Button>
             ))}
-            <Button as="a" href="https://spk.network/" target="_blank" rel="noopener noreferrer" variant="secondary" size={44}
-              icon={
-                // Flat PNG mask so the mark takes the text colour, like the icons beside it.
-                <span className="about-spk-mark" aria-hidden="true"
-                  style={{ WebkitMaskImage: `url(${spk_network})`, maskImage: `url(${spk_network})` }} />
-              }>
+            <Button as="a" href="https://spk.network/" target="_blank" rel="noopener noreferrer" variant="secondary" size={44} icon="lan">
               SPK Network
             </Button>
           </div>

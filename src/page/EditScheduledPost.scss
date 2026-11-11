@@ -1,118 +1,213 @@
-// Most of the form's look is inherited from legacy-studio/StudioPage.scss
-// (.studio-main-container, .input-group, .preview-tags, .advance-option,
-//  .bene-btn-wrap, .submit-btn-wrap, etc.) so the page matches the embed-studio
-// composer, plus the uploader's tiles/type scale (embed-studio/EmbedDetails.scss)
-// and action row (StepActions). We only add the bits those don't cover: the
-// thumbnail preview row and the permlink chip in the header.
+@use "../styles/v2" as v2;
 
+// Edit scheduled post (44c). Used as the /edit-scheduled page and inside the
+// watch page popup (EditScheduledModal), so the two columns only form when
+// there is room for both (auto-fit), otherwise they stack.
 .edit-scheduled-page {
-  // Fonts: only what the uploader uses (Roboto, at the details page's 12px/14px
-  // scale from EmbedDetails.scss). No monospace, no em-relative sizes.
-  .permlink-line {
-    margin-top: 4px;
-    font-size: 12px;
-    opacity: 0.75;
-    code {
-      background: rgba(127, 127, 127, 0.15);
-      padding: 1px 6px;
-      border-radius: 3px;
-      font-family: inherit;
-      font-size: inherit;
-    }
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--page-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--text);
+  text-align: left;
+
+  &.is-loading {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+
+    .material-symbols-rounded { color: var(--cyan); }
   }
 
-  // Thumbnail editor — there's no equivalent inline thumbnail field in
-  // EmbedDetails (the studio asks for it on a separate step), so we add a
-  // self-contained row here.
-  // Same as the uploader's details step (EmbedWizard.scss, scoped to
-  // .embed-wizard there): the legacy studio caps the form card at 80% of a
-  // 16px-padded wrapper. Fill the width instead.
-  .video-detail-wrap {
-    padding: 0;
-    .video-items {
-      width: 100%;
-      box-sizing: border-box;
-    }
-  }
-
-  .thumbnail-edit-row {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    margin-top: 6px;
-  }
-  .thumbnail-edit-preview {
-    width: 220px;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid rgba(127, 127, 127, 0.25);
-    background: rgba(127, 127, 127, 0.06);
-
-    &--placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(127, 127, 127, 0.8);
-      font-size: 12px;
-    }
-  }
-  .thumbnail-edit-controls {
+  .esp-head {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
+
+    h1 { @include v2.text(heading-lg); margin: 0; }
   }
-  // Neutral outline, same as the uploader's secondary buttons (StepActions.scss).
-  // "Remove" is not red: 3Speak never uses red buttons for secondary actions.
-  // Upload/Replace is a <label> (it wraps the file input), so without this it
-  // takes the form-label font, colour and 14px size while Remove next to it is a
-  // 12px Roboto button. Class x4 (+ the page scope = 0,5,0) beats EmbedDetails.scss
-  // `.embed-details-page label` (0,3,1) and the legacy dark-theme label colour (0,4,1).
-  .thumbnail-edit-btn.thumbnail-edit-btn.thumbnail-edit-btn.thumbnail-edit-btn {
-    font-family: "Roboto", "Arial", sans-serif;
-    font-size: 12px;
-    line-height: 1.2;
-    text-align: center;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 36px;
-    padding: 8px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-    background: transparent;
-    color: var(--text-primary, #111);
-    cursor: pointer;
-    font-weight: 600;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-    transition: background-color 0.15s ease;
 
-    &:hover { background: var(--bg-secondary, #f1f1f3); }
-    &[disabled] { opacity: 0.55; cursor: not-allowed; }
+  .permlink-line {
+    margin: 0;
+    @include v2.text(meta);
+    color: var(--muted);
 
-    input[type="file"] {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
+    code {
+      @include v2.mono(11, 500);
+      color: var(--muted);
+      background: none;
+      padding: 0;
     }
   }
 
-  // Three tiles (rewards, beneficiaries, schedule) rather than the uploader's
-  // eight, so three across; on narrow screens two, with the schedule tile
-  // taking the full second row. Tripled to beat EmbedDetails.scss.
-  .advance-option.advance-option.advance-option {
+  .esp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 12px;
+    align-items: start;
+
+    @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  .esp-side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .esp-card {
+    @include v2.card;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .esp-card__title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    @include v2.text(title-sm);
+  }
+
+  // Thumbnail: preview + Upload / Replace and Remove.
+  .thumbnail-edit-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .thumbnail-edit-preview {
+    width: 160px;
+    aspect-ratio: 16 / 9;
+    flex: none;
+    display: grid;
+    place-items: center;
+  }
+
+  .thumbnail-edit-preview__empty {
+    @include v2.text(meta-sm);
+    color: var(--muted);
+  }
+
+  .thumbnail-edit-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .thumbnail-edit-btn {
+    cursor: pointer;
+
+    input { display: none; }
+    &.is-busy { opacity: .45; cursor: progress; }
+  }
+
+  .preview-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+
+    .item {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: var(--r-sm);
+      background: var(--surface-2);
+      @include v2.text(meta);
+      color: var(--text);
+    }
+  }
+
+  // Schedule notes: cyan = what will happen, accent = the problem, muted = range.
+  .esp-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 0;
+    @include v2.text(meta);
+    color: var(--muted);
+
+    .material-symbols-rounded { margin-top: 1px; }
+    &.is-cyan { color: var(--cyan); }
+    &.is-accent { color: var(--accent); font-weight: 700; }
+  }
+
+  .esp-payout {
+    display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin-top: 6px;
+    gap: 6px;
 
-    @media (max-width: 600px) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .v2-choice { min-height: 64px; }
 
-      > .schedule-tile { grid-column: 1 / -1; }
+    @include v2.mobile { grid-template-columns: minmax(0, 1fr); .v2-choice { min-height: 0; } }
+  }
+
+  // Beneficiaries: a row that opens the shared beneficiary dialog.
+  .esp-bene {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
+
+    &:hover { background: color-mix(in srgb, var(--text) 5%, var(--bg)); }
+
+    &__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      display: grid;
+      place-items: center;
+      flex: none;
+    }
+
+    &__body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      b { @include v2.text(label); font-size: 14px; }
+      > span { @include v2.text(meta); color: var(--muted); }
+    }
+
+    &__value { @include v2.text(label); color: var(--cyan); white-space: nowrap; }
+    &__go { color: var(--muted); }
+  }
+
+  .esp-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    &__spacer { flex: 1; }
+
+    // Phones: the way on first, full width, like the uploader's action row.
+    @include v2.mobile {
+      .v2-btn { flex: 1 1 100%; }
+      .v2-btn--primary { order: -1; }
+      &__spacer { display: none; }
     }
   }
 }

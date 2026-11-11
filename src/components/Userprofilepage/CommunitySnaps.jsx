@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { toastIn } from '../../utils/toast';
-import { BiCommentDetail } from 'react-icons/bi';
-import { MdMoreVert, MdEdit, MdClose } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Button, Checkbox, Dialog, Menu, MenuRow } from '../v2/ui';
 import {
   fetchSnaps, fetchCommunitySnaps, SNAP_TAG, MAX_USER_TAGS, recordSnapInteraction, updateSnap,
   hideSnap, unhideSnap, hideSnapCreator, unhideSnapCreator,
@@ -26,7 +26,6 @@ import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import BarLoader from '../Loader/BarLoader';
-import ModalHeader from '../ModalHeader/ModalHeader';
 import { useTranslation } from 'react-i18next';
 import './CommunitySnaps.scss';
 
@@ -240,9 +239,9 @@ function ReplyBox({ parentAuthor, parentPermlink, onPosted, onSigned, autoFocus 
           onPickEmoji={(em) => insertAtCursor(replyRef.current, reply, em, setReply)}
           onPickGif={(url) => insertAtCursor(replyRef.current, reply, gifMarkdown(url), setReply)}
         />
-        <button type="button" onClick={submit} disabled={posting || !reply.trim()}>
+        <Button variant="primary" size={32} onClick={submit} disabled={posting || !reply.trim()} loading={posting}>
           {posting ? t('profile.snaps.posting') : t('common.actions.reply')}
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -358,7 +357,7 @@ function SnapOptionsMenu({ owner, permlink, onHidden }) {
 
   const toggle = () => {
     const r = btnRef.current?.getBoundingClientRect();
-    if (r) setPos({ top: r.bottom + 4, left: Math.min(r.left - 150, window.innerWidth - 220) });
+    if (r) setPos({ top: r.bottom + 4, left: Math.max(8, Math.min(r.right - 240, window.innerWidth - 248)) });
     setOpen((v) => !v);
   };
   const hidePost = async () => {
@@ -380,16 +379,17 @@ function SnapOptionsMenu({ owner, permlink, onHidden }) {
 
   return (
     <>
-      <button ref={btnRef} type="button" className="snap-menu-btn" onClick={toggle} aria-label={t('profile.snaps.postOptions')}>
-        <MdMoreVert />
+      <button ref={btnRef} type="button" className="snap-menu-btn" onClick={toggle} aria-label={t('profile.snaps.postOptions')} aria-haspopup="menu" aria-expanded={open}>
+        <Icon name="more_vert" size={18} />
       </button>
       {open && createPortal(
         <>
           <div className="snap-menu-backdrop" onClick={() => setOpen(false)} />
-          <div className="snap-menu" style={{ top: pos.top, left: pos.left }}>
-            <button type="button" onClick={hidePost}>{t('profile.snaps.notInterested')}</button>
-            <button type="button" onClick={hideCreator}>{t('profile.snaps.dontShowCreator')}</button>
-          </div>
+          <Menu className="snap-menu" style={{ top: pos.top, left: pos.left }}>
+            <MenuRow as={Link} to={`/post/${owner}/${permlink}`} icon="link" onClick={() => setOpen(false)}>{t('profile.snaps.viewPost')}</MenuRow>
+            <MenuRow icon="block" onClick={hidePost}>{t('profile.snaps.notInterested')}</MenuRow>
+            <MenuRow icon="person_off" onClick={hideCreator}>{t('profile.snaps.dontShowCreator')}</MenuRow>
+          </Menu>
         </>,
         document.body,
       )}
@@ -444,33 +444,30 @@ function SnapEditForm({ owner, permlink, initialBody, initialTags, initialNsfw, 
       <MarkdownComposer value={body} onChange={setBody} placeholder={t('profile.snaps.editPlaceholder')} previewContext="snap" />
       <div className="snap-composer-row">
         <input
-          className="snap-tags-input"
+          className="snap-tags-input v2-input"
           placeholder={tags.length >= MAX_USER_TAGS ? t('profile.snaps.tagLimitReached') : t('profile.snaps.tagPlaceholder')}
           value={tagInput}
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={onTagKeyDown}
           disabled={tags.length >= MAX_USER_TAGS}
         />
-        <label className="snap-toggle">
-          <input type="checkbox" checked={nsfw} onChange={(e) => setNsfw(e.target.checked)} />
-          <span>NSFW</span>
-        </label>
+        <Checkbox className="snap-toggle" checked={nsfw} onChange={(e) => setNsfw(e.target.checked)} label="NSFW" />
       </div>
       <div className="snap-tag-chips">
         <span className="snap-tag-chip built-in" title={t('profile.snaps.builtInTag')}>{SNAP_TAG}</span>
         {tags.map((tag) => (
           <span key={tag} className="snap-tag-chip">
             {tag}
-            <button type="button" onClick={() => removeTag(tag)} aria-label={t('profile.snaps.removeTag', { tag })}><MdClose /></button>
+            <button type="button" onClick={() => removeTag(tag)} aria-label={t('profile.snaps.removeTag', { tag })}><Icon name="close" size={14} /></button>
           </span>
         ))}
         <span className="snap-tag-count">{tags.length}/{MAX_USER_TAGS}</span>
       </div>
       <div className="snap-composer-actions">
-        <button type="button" className="snap-cancel-btn" onClick={onCancel} disabled={saving}>{t('common.actions.cancel')}</button>
-        <button type="button" className="snap-post-btn" disabled={saving || !body.trim()} onClick={save}>
+        <Button variant="secondary" size={36} className="snap-cancel-btn" onClick={onCancel} disabled={saving}>{t('common.actions.cancel')}</Button>
+        <Button variant="primary" size={36} className="snap-post-btn" disabled={saving || !body.trim()} loading={saving} onClick={save} trailing="check">
           {saving ? t('common.actions.saving') : t('profile.snaps.saveChanges')}
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -482,27 +479,20 @@ function SnapEditForm({ owner, permlink, initialBody, initialTags, initialNsfw, 
 // there so the nested .snap-comments styles apply inside the portal.
 function SnapCommentsModal({ owner, permlink, onClose, onCommented }) {
   const { t } = useTranslation();
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
-    document.addEventListener('keydown', onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden'; // don't scroll the feed behind the sheet
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [onClose]);
-
-  return createPortal(
-    <div className="snap-comments-modal-backdrop" onClick={onClose}>
-      <div className="community-snaps snap-comments-modal" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader closeOnEscape={false} className="snap-comments-modal-head" title={t('profile.snaps.commentsOn', { user: owner })} onClose={onClose} />
-        <div className="snap-card snap-comments-modal-scroll">
-          <SnapComments owner={owner} permlink={permlink} onCommented={onCommented} />
-        </div>
-      </div>
-    </div>,
-    document.body,
+  // The shared v2 dialog: Escape, focus trap, scroll lock and the bottom sheet
+  // under 768px all come with it.
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      width={520}
+      title={t('profile.snaps.commentsOn', { user: owner })}
+      closeLabel={t('common.actions.close')}
+      className="community-snaps snap-comments-modal"
+      bodyClassName="snap-card snap-comments-modal-scroll"
+    >
+      <SnapComments owner={owner} permlink={permlink} onCommented={onCommented} />
+    </Dialog>
   );
 }
 
@@ -635,7 +625,7 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
         </Link>
         {isOwn && !editing && (
           <button type="button" className="snap-menu-btn snap-edit-btn" onClick={() => setEditing(true)} title={t('profile.snaps.editPost')} aria-label={t('profile.snaps.editPost')}>
-            <MdEdit />
+            <Icon name="edit" size={18} />
           </button>
         )}
         {feedMode && (
@@ -697,7 +687,7 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
             ? onOpenTab(snap.permlink, { openComments: true })
             : feedMode ? setCommentsPopup(true) : setShowComments((v) => !v))}
         >
-          <BiCommentDetail />
+          <Icon name="chat_bubble" size={16} />
           <span>{comments}</span>
         </button>
       </div>
@@ -780,6 +770,7 @@ export default function CommunitySnaps({ user, community = '', canPost = false, 
       ) : snaps.length === 0 ? (
         hideEmpty ? null : (
           <div className="snap-empty">
+            <Icon name="forum" size={24} />
             {community
               ? (canPost ? t('profile.snaps.emptyDiscussionCanPost') : t('profile.snaps.emptyDiscussion'))
               : (canPost ? t('profile.snaps.emptyOwn') : t('profile.snaps.empty'))}

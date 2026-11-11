@@ -1,23 +1,40 @@
-@use "../mixins.scss" as mix;
+@use "../styles/v2" as v2;
 
-.tag-feed-section-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 20px 10px 10px;
-  padding: 0;
+// Tag feed (19c): the tag as the page title, then the toolbar card and the grid.
+.tag-feed-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding-top: 8px;
+}
 
-  &:first-of-type {
-    margin-top: 0;
-  }
+.tag-feed-eyebrow {
+  @include v2.text(eyebrow);
+  font-size: 12px;
+  letter-spacing: .1em;
+  color: var(--cyan);
+}
 
-  @include mix.respond(phone) {
-    font-size: 13px;
-  }
+.tag-feed-title {
+  margin: 0;
+  @include v2.text(display);
+  font-size: 56px;
+  letter-spacing: -.04em;
+  line-height: 1;
+  overflow-wrap: anywhere;
+
+  @include v2.mobile { font-size: 32px; }
+}
+
+.tag-feed-meta {
+  margin: 4px 0 0;
+  @include v2.text(body);
+  color: var(--muted);
 }
 
 .tag-feed-pagination-bottom {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 8px;
 }

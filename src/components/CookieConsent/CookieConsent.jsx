@@ -21,6 +21,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { hasDecided, setConsent } from '../../lib/consent';
 import { notifyAdConsentChanged, subscribeToCmp } from '../../lib/thirdPartyAds';
 import { ENABLE_THIRDPARTY_ADS } from '../../utils/config';
+import { Icon } from '../v2/Icon';
 import './CookieConsent.scss';
 
 export default function CookieConsent() {
@@ -52,7 +53,11 @@ export default function CookieConsent() {
     <div className="cookie-consent" role="dialog" aria-live="polite" aria-label={t('consent.ariaLabel')}>
       <div className="cookie-consent-inner">
         <div className="cookie-consent-text">
-          <h4>{t('consent.title')}</h4>
+          {/* Design 25e: an icon well and the title, then the plain-words copy. */}
+          <div className="cookie-consent-head">
+            <span className="cookie-consent-icon" aria-hidden="true"><Icon name="cookie" size={24} /></span>
+            <h4>{t('consent.title')}</h4>
+          </div>
 
           {ENABLE_THIRDPARTY_ADS ? (
             <>
@@ -106,7 +111,7 @@ export default function CookieConsent() {
               exactly as before. */}
           {ENABLE_THIRDPARTY_ADS && (
             <div className="cookie-consent-toggles">
-              <label className="cookie-consent-toggle">
+              <label className="cookie-consent-toggle v2-check">
                 <input
                   type="checkbox"
                   checked={functionalOn}
@@ -117,7 +122,7 @@ export default function CookieConsent() {
                   {t('consent.toggles.resumeDesc')}
                 </span>
               </label>
-              <label className="cookie-consent-toggle">
+              <label className="cookie-consent-toggle v2-check">
                 <input
                   type="checkbox"
                   checked={advertisingOn}
@@ -134,16 +139,18 @@ export default function CookieConsent() {
           <button
             type="button"
             className="cookie-consent-link"
+            aria-expanded={details}
             onClick={() => setDetails((d) => !d)}
           >
             {details ? t('consent.hideDetails') : t('consent.whatIsStored')}
+            <Icon name={details ? 'expand_less' : 'expand_more'} size={16} />
           </button>
         </div>
 
         <div className={`cookie-consent-actions${ENABLE_THIRDPARTY_ADS ? ' three-up' : ''}`}>
           <button
             type="button"
-            className="cookie-consent-btn secondary"
+            className="v2-btn v2-btn--secondary h48 cookie-consent-btn secondary"
             onClick={() => decide({ functional: false, advertising: false })}
           >
             {t('consent.essentialOnly')}
@@ -151,7 +158,7 @@ export default function CookieConsent() {
           {ENABLE_THIRDPARTY_ADS && (
             <button
               type="button"
-              className="cookie-consent-btn secondary"
+              className="v2-btn v2-btn--secondary h48 cookie-consent-btn secondary"
               onClick={() => decide({ functional: functionalOn, advertising: advertisingOn })}
             >
               {t('consent.saveChoices')}
@@ -159,7 +166,7 @@ export default function CookieConsent() {
           )}
           <button
             type="button"
-            className="cookie-consent-btn primary"
+            className="v2-btn v2-btn--inverse h48 cookie-consent-btn primary"
             onClick={() => decide({ functional: true, advertising: ENABLE_THIRDPARTY_ADS })}
           >
             {ENABLE_THIRDPARTY_ADS ? t('consent.acceptAll') : t('common.actions.accept')}

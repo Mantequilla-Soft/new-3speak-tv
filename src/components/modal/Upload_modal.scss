@@ -1,79 +1,52 @@
-.upload-wrap{
+@use "../../styles/v2" as v2;
+
+// Legacy studio upload (video + thumbnail) on the v2 dialog (DialogShell):
+// dashed drop tiles, cyan progress for the upload (system work).
+.upload-modal {
+  .upload-wrap {
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
-    text-align: center;
+    align-items: flex-start;
+    gap: 6px;
+    width: 100%;
+    padding: 16px;
+    border: 2px dashed var(--border);
+    border-radius: var(--r-lg);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
     cursor: pointer;
-    margin-bottom: 10px;
-    border-radius: 12px;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-    .thumbnail{
-      width: 120px;
-    }
-    
-}
-.progress-bar {
-    position: relative;
-    width: 100%; // Adjust width as needed
-    height: 20px; // Adjust height for desired thickness
-    background-color: #e0e0e0; // Light gray for the background
-    border-radius: 10px; // Rounded corners
-    overflow: hidden; // Ensure content doesn’t spill outside
-    margin: 10px 0;
-  
-    .progress-bar-fill {
-      height: 100%; // Matches the height of the container
-      background-color: #4caf50; // Green for the filled portion
-      width: 0; // Default width is 0%
-      transition: width 0.4s ease-in-out; // Smooth animation for progress
-      display: flex;
-      align-items: center; // Center text vertically
-      justify-content: center; // Center text horizontally
-      color: #fff; // White text for contrast
-      font-size: 14px; // Adjust text size
-      font-weight: bold;
-      border-radius: 10px; // Rounded corners for the fill (matches container)
-    }
-  
-    .progress-bar-text {
-      position: absolute; // Overlay text above the bar
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%); // Center the text
-      color: black; // White text for contrast
-      font-size: 14px; // Adjust size as needed
-      font-weight: bold;
-    }
+    &:hover { border-color: var(--muted); background: var(--bg-hover); }
+    > .material-symbols-rounded { color: var(--cyan); }
+
+    .thumbnail { width: 120px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--r-sm); }
   }
-  
-  .updateVideoInfo-btn-wrap{
+
+  .upload-wrap__title { @include v2.text(label); }
+  .upload-wrap__sub { @include v2.text(meta); color: var(--muted); }
+
+  .upload-wrap__progress {
     display: flex;
-    justify-content: center;
     align-items: center;
-    .btn{
-      padding: 10px 20px;
-      border: none;
-      background-color: #4ba1d3;
-      color: #fcffff;
-      border-radius: 7px;
-    }
+    gap: 8px;
+    width: 100%;
+
+    .v2-progress { flex: 1; }
+    .num { @include v2.mono(12, 700); color: var(--muted); }
   }
 
-  .err-upload{
-    color: #fff;
-  font-size: 14px;
-  margin: 10px 0px;
-  padding: 2px 6px;
-  border-radius: 6px;
-  text-align: center;
-  display: inline-block; /* Ensure transform affects only this text */
-  animation: shake 0.5s ease-in-out; /* Shake for 0.5s */
-  background-color: #d9534f;
-
+  .err-upload {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: var(--r-md);
+    background: var(--accent-wash);
+    color: var(--accent);
+    @include v2.text(body-sm);
+    animation: shake .5s ease-in-out;
   }
-
-  
-
-
-
+}

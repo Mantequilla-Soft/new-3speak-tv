@@ -21,6 +21,7 @@
     "followers_one": "{{num}} follower",
     "followers_other": "{{num}} followers",
     "popularTitle": "Popular creators",
+    "suggestedTitle": "Creators to follow",
     "scrollLeft": "Scroll left",
     "scrollRight": "Scroll right",
     "mostlyPosts": "Mostly posts {{topic}}"

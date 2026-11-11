@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
 import { ThreeSpeakApi } from '@mantequilla-soft/3speak-player';
-import { Loader2 } from 'lucide-react';
+import { Icon } from '../v2/Icon';
+import { Button } from '../v2/ui';
 import { useTranslation } from 'react-i18next';
 import VideoControls from '../VideoControls/VideoControls';
 import { useAdPlayback } from '../../hooks/useAdPlayback';
@@ -226,14 +227,14 @@ export default function InlineVideoPlayer({ author, permlink, poster = null, onO
       <video ref={videoRef} playsInline />
       {!ready && !failed && (
         <div className="inline-player-loading" aria-hidden="true">
-          <Loader2 size={28} className="inline-player-spin" />
+          <Icon name="progress_activity" size={28} className="v2-spin" />
         </div>
       )}
       {failed && (
         <div className="inline-player-failed">
           <span>{t('player.inline.cantPlay')}</span>
           {onOpenWatch && (
-            <button type="button" onClick={onOpenWatch}>{t('player.inline.openOnSite')}</button>
+            <Button variant="media" size={32} next onClick={onOpenWatch}>{t('player.inline.openOnSite')}</Button>
           )}
         </div>
       )}

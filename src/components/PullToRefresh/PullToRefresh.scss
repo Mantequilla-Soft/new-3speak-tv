@@ -1,25 +1,30 @@
+// Pull to refresh (design 29d): a round surface chip with the refresh glyph that
+// follows the finger down, turns cyan once far enough to let go, and spins (in
+// cyan, system work) while the feed reloads.
 .ptr-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  transition: height 0.2s ease, opacity 0.2s ease;
-  color: var(--text-secondary);
+  transition: height var(--t-base) var(--ease), opacity var(--t-base) var(--ease);
+  color: var(--muted);
 
-  &.ptr-refreshing {
-    transition: none;
-  }
+  &.ptr-refreshing { transition: none; }
 }
 
 .ptr-spinner {
-  transition: transform 0.2s ease;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-float);
+  transition: transform var(--t-base) var(--ease), color var(--t-base) var(--ease);
 
   &.ptr-active {
-    animation: ptr-spin 0.8s linear infinite;
+    color: var(--cyan);
+    .material-symbols-rounded { animation: v2-spin 1s linear infinite; }
   }
-}
-
-@keyframes ptr-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }

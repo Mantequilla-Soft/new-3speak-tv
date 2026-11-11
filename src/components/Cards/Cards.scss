@@ -229,6 +229,15 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       }
     }
 
+    // Two-up phone tiles: the creator gets the first line to itself, the
+    // views and the time share the second.
+    @include v2.mobile {
+      html[data-card-size="small"] & {
+        .card-author-group { flex-basis: 100%; }
+        .card-author-group + *::before { content: none; }
+      }
+    }
+
     .card-author-group {
       display: inline-flex;
       align-items: center;
@@ -339,6 +348,7 @@ html[data-card-size="large"] .card-container .card {
   &.card-live-badge,
   &.card-gated-badge { background: var(--accent); color: var(--on-accent); }
   &.card-new-badge { color: var(--on-media); box-shadow: inset 0 0 0 1px var(--accent); }
+  &.card-page-badge { background: var(--cyan); color: var(--bg); }
 
   // Phones: the label of a status pill folds away, the icon stays
   @include v2.mobile {

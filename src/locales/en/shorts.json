@@ -40,12 +40,18 @@
   "glow": {
     "subtle": "Ambient light: subtle",
     "vivid": "Ambient light: vivid",
-    "off": "Ambient light: off"
+    "off": "Ambient light: off",
+    "label": "Ambient light",
+    "offShort": "Off",
+    "subtleShort": "Subtle",
+    "vividShort": "Vivid"
   },
   "playbackMode": {
     "autoReplay": "Auto-Replay",
     "autoSwipe": "Auto-Swipe",
-    "manual": "Manual"
+    "manual": "Manual",
+    "label": "Playback",
+    "options": "Playback options"
   },
   "subtitles": {
     "off": "Off"

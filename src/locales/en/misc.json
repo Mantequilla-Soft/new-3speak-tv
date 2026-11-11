@@ -251,7 +251,9 @@
   },
   "followFeed": {
     "title": "Follow Feed",
-    "error": "Error fetching videos"
+    "error": "Error fetching videos",
+    "emptyTitle": "Nobody here yet",
+    "emptyBody": "Follow creators and their uploads, snaps and lives show up here first."
   },
   "groups": {
     "title": "Groups",

@@ -1,260 +1,40 @@
-/* The (i) trigger sits inline after a tile's short description. */
+@use "../../styles/v2" as v2;
+
+// The (i) beside a setting's name (SettingInfo.jsx) and the text in its dialog.
+// The dialog itself is the v2 dialog (DialogShell).
 .setting-info__trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 15px;
-  height: 15px;
-  margin-left: 5px;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin: -4px 0;
   padding: 0;
-  border: 1px solid var(--border-light, #666);
-  border-radius: 50%;
+  flex: none;
+  border: 0;
+  border-radius: v2.radius-for(24);
   background: transparent;
-  color: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  font-style: italic;
-  line-height: 1;
+  color: var(--muted);
   cursor: pointer;
-  opacity: 0.65;
-  vertical-align: middle;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-  &:hover { opacity: 1; border-color: var(--accent-primary, #e53935); }
+  &:hover { background: var(--bg-hover); color: var(--text); }
 }
 
-.setting-info__overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(0, 0, 0, 0.55);
-}
-
-.setting-info__sheet {
-  width: 100%;
-  max-width: 420px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color, #333);
-  background: var(--bg-elevated, #1c1c1c);
-  color: var(--text-primary, #eee);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
-
-  [data-theme="light"] & {
-    background: #fff;
-    color: #222;
-  }
-}
-
-/* The sheet has no padding of its own, so the shared header brings its own. */
-.setting-info__sheet .setting-info__head {
-  padding: 14px 16px 12px;
-  margin-bottom: 12px;
-}
+// The React parent of the portalled dialog; nothing of its own on screen.
+.setting-info__portal { display: contents; }
 
 .setting-info__body {
-  padding: 0 16px 16px;
-  font-size: 12px;
+  @include v2.text(body);
+  color: var(--muted);
   line-height: 1.5;
-  opacity: 0.9;
-}
+  text-wrap: pretty;
 
-/* Phones get a bottom sheet, matching the app's other dialogs. */
-@media (max-width: 720px) {
-  .setting-info__overlay {
-    align-items: flex-end;
-    padding: 0;
-  }
-
-  .setting-info__sheet {
-    max-width: none;
-    border-radius: 14px 14px 0 0;
-    border-bottom: 0;
-    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    animation: setting-info-up 0.18s ease-out;
-  }
-
-  @keyframes setting-info-up {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
-}
-
-/* The schedule picker, shown inside a SettingSheet. */
-.schedule-sheet__input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color, #333);
-  background: var(--input-bg, rgba(255, 255, 255, 0.04));
-  color: inherit;
-  font-size: 14px;
-}
-
-.schedule-sheet__note {
-  margin: 10px 0 0;
-  font-size: 12px;
-  opacity: 0.7;
-  line-height: 1.45;
-}
-
-/* Option list inside a sheet, e.g. the rewards choices on mobile. */
-.option-sheet {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  &__item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px 14px;
-    border: 1px solid var(--border-color, #333);
-    border-radius: 10px;
-    background: transparent;
-    color: inherit;
-    text-align: left;
-    cursor: pointer;
-
-    strong { font-size: 14px; font-weight: 600; }
-    span { font-size: 12px; opacity: 0.65; }
-
-    &:hover { border-color: var(--border-light, #555); }
-
-    /* Active choice, matching the tiles: red outline, never a fill. */
-    &.is-active {
-      border-color: var(--accent-primary, #e53935);
-      background: rgba(229, 57, 53, 0.06);
-    }
-  }
-}
-
-/* The guest editor now lives in a sheet rather than a tile. */
-.setting-info__body .gated-guests__editor { margin-top: 12px; }
-
-/* ── Community and beneficiary modals ─────────────────────────────────────────
-   These two predate SettingSheet and shipped their own look, so a studio that
-   otherwise uses one dialog style had three. They keep their own markup and
-   behaviour; only the shell is brought in line: same surface, same radius, same
-   two font sizes, and the same bottom-sheet treatment on phones. */
-.modal-content.community-modal,
-.modal-content.bene {
-  border-radius: 12px;
-  border: 1px solid var(--border-color, #333);
-  background: var(--bg-elevated, #1c1c1c);
-  color: var(--text-primary, #eee);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
-  font-size: 12px;
-
-  [data-theme="light"] & {
-    background: #fff;
-    color: #222;
-  }
-
-  p, span, li, label, input, button, select, textarea {
-    font-size: 12px;
-  }
-
-  /* One padding rule for the whole dialog rather than each block bringing its
-     own, which is what made the beneficiary modal look uneven: the header had
-     padding, the text and the list did not. */
-  > * {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  /* Every dialog ends with the same breathing room, so content never sits flush
-     against the bottom edge (or the home indicator on a phone). */
-  padding-bottom: 16px;
-
-  .bene-text {
-    opacity: 0.7;
-    line-height: 1.45;
-    margin: 0 0 12px;
-  }
-
-  .bene-content-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .beneficiary-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    .wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-  }
-
-  .user-wrap {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    input { flex: 1 1 auto; min-width: 0; }
-  }
-
-  .error { display: block; margin-bottom: 8px; color: var(--accent-primary, #e53935); }
-
-  input, select {
-    box-sizing: border-box;
-    padding: 8px 10px;
+  strong, b { color: var(--text); }
+  code {
+    @include v2.mono(12, 500);
+    padding: 1px 6px;
     border-radius: 6px;
-    border: 1px solid var(--border-color, #333);
-    background: var(--input-bg, rgba(255, 255, 255, 0.04));
-    color: inherit;
-  }
-}
-
-/* The overlay behind them, matched to the sheet's. */
-.modal .overlay { background: rgba(0, 0, 0, 0.55); }
-
-@media (max-width: 720px) {
-  .modal-content.community-modal,
-  .modal-content.bene {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: auto;
-    width: 100%;
-    max-width: none;
-    max-height: 85vh;
-    overflow-y: auto;
-    transform: none;
-    border-radius: 14px 14px 0 0;
-    border-bottom: 0;
-    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  }
-}
-
-/* Confirm row for sheets that stage their changes (the schedule picker). */
-.sheet-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 14px;
-
-  &__ok {
-    padding: 8px 20px;
-    border: 1px solid var(--accent-primary, #e53935);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--accent-primary, #e53935);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-
-    &:hover:not(:disabled) { filter: brightness(1.08); }
-    &:disabled { opacity: 0.45; cursor: default; }
+    background: var(--surface-2);
+    color: var(--text);
   }
 }

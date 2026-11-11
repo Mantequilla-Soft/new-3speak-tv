@@ -1,12 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { IoCloudUploadSharp } from 'react-icons/io5';
-import { MdGraphicEq } from 'react-icons/md';
-import { IoMdAdd } from 'react-icons/io';
-import ShortsIcon from '../icons/ShortsIcon';
 import { creatorKey, getCreatorSettings, isUploadBlocked } from '../../utils/creatorSettings';
 import { useSupportBlock } from '../../lib/supportBlockStore';
 import { useAppStore } from '../../lib/store';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import './ProfileEmptyState.scss';
 
 /**
@@ -22,7 +20,7 @@ import './ProfileEmptyState.scss';
  */
 const KINDS = {
   video: {
-    Icon: IoCloudUploadSharp,
+    icon: 'smart_display',
     titleKey: 'profile.empty.video.title',
     textKey: 'profile.empty.video.text',
     ctaKey: 'profile.empty.video.cta',
@@ -30,7 +28,7 @@ const KINDS = {
     visitorKey: 'profile.empty.video.visitor',
   },
   shorts: {
-    Icon: ShortsIcon,
+    icon: 'view_day',
     titleKey: 'profile.empty.shorts.title',
     textKey: 'profile.empty.shorts.text',
     ctaKey: 'profile.empty.shorts.cta',
@@ -38,7 +36,7 @@ const KINDS = {
     visitorKey: 'profile.empty.shorts.visitor',
   },
   audio: {
-    Icon: MdGraphicEq,
+    icon: 'graphic_eq',
     titleKey: 'profile.empty.audio.title',
     textKey: 'profile.empty.audio.text',
     ctaKey: 'profile.empty.audio.cta',
@@ -46,7 +44,7 @@ const KINDS = {
     visitorKey: 'profile.empty.audio.visitor',
   },
   playlists: {
-    Icon: IoMdAdd,
+    icon: 'playlist_play',
     titleKey: 'profile.empty.playlists.title',
     textKey: 'profile.empty.playlists.text',
     ctaKey: 'profile.empty.playlists.cta',
@@ -64,12 +62,12 @@ export default function ProfileEmptyState({ kind = 'video', isOwnProfile = false
   if (!isOwnProfile) {
     return (
       <div className="profile-empty">
+        <Icon name={cfg.icon} size={24} className="pe-visitor-icon" />
         <p className="pe-line">{t(cfg.visitorKey, { user: username })}</p>
       </div>
     );
   }
 
-  const Icon = cfg.Icon;
   const onClick = async (e) => {
     e.preventDefault();
     if (cfg.gated === false) { onAction?.(); return; }
@@ -85,10 +83,12 @@ export default function ProfileEmptyState({ kind = 'video', isOwnProfile = false
 
   return (
     <div className="profile-empty profile-empty--own">
-      <span className="pe-icon"><Icon size={22} /></span>
+      <span className="pe-icon"><Icon name={cfg.icon} size={24} /></span>
       <strong className="pe-title">{t(cfg.titleKey)}</strong>
       <span className="pe-text">{t(cfg.textKey)}</span>
-      <button type="button" className="pe-btn" onClick={onClick}>{t(cfg.ctaKey)}</button>
+      <Button variant="primary" size={40} trailing="add" className="pe-btn" onClick={onClick}>
+        {t(cfg.ctaKey)}
+      </Button>
     </div>
   );
 }

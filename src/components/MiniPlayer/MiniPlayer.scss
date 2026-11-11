@@ -1,36 +1,37 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
+/* Mini player (design 22b): a floating card above the bottom bar on phones and
+   tablets. Thumb with an accent progress line, title and author, then pause and
+   close as 40px tiles on surface-2. */
 .mini-player {
   display: none;
   position: fixed;
-  // Sit flush on top of the bottom app bar. The bar is `bottom:0` with height
-  // var(--bottom-nav-height,56px) and intentionally NO safe-area padding, so we
-  // match that exactly — adding env(safe-area-inset-bottom) here left a gap.
-  bottom: var(--bottom-nav-height, 56px);
-  left: 0;
-  right: 0;
-  height: 56px;
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border-light);
+  // Sits just above the bottom app bar.
+  bottom: calc(var(--bottom-nav-height, 56px) + 8px);
+  left: 8px;
+  right: 8px;
+  height: 64px;
+  padding: 6px;
+  gap: 10px;
+  @include v2.floating;
+  border-radius: var(--r-xl);
   z-index: 99;
   align-items: center;
   cursor: pointer;
   overflow: hidden;
+  color: var(--text);
 
-  @include mix.respond(phone) {
-    display: flex;
-  }
-
-  @include mix.respond(tab) {
-    display: flex;
-  }
+  // Phones and tablets only, as before (the desktop has no bottom bar).
+  @media (max-width: 1024px) { display: flex; }
 }
 
 .mini-player-video {
-  width: 100px;
-  height: 56px;
+  position: relative;
+  width: 92px;
+  height: 52px;
   flex-shrink: 0;
-  background: #000;
+  border-radius: var(--r-md);
+  background: var(--media-black);
   overflow: hidden;
 
   video {
@@ -43,24 +44,22 @@
 .mini-player-info {
   flex: 1;
   min-width: 0;
-  padding: 0 10px;
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
 .mini-player-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
+  @include v2.text(label);
+  color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .mini-player-author {
-  font-size: 11px;
-  color: var(--text-secondary);
+  @include v2.text(meta-sm);
+  color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -69,40 +68,40 @@
 .mini-player-controls {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding-right: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
 .mini-player-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: none;
-  background: none;
-  color: var(--text-primary);
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  color: var(--text);
   cursor: pointer;
-  border-radius: 50%;
-  transition: background 0.15s ease;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-  &:hover {
-    background: var(--bg-hover);
-  }
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  &:active { transform: scale(.98); }
 }
 
+// The progress line runs along the bottom of the thumbnail.
 .mini-player-progress {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--border-light);
+  left: 6px;
+  bottom: 6px;
+  width: 92px;
+  height: 3px;
+  border-radius: 0 0 var(--r-md) var(--r-md);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--on-media) 20%, transparent);
 }
 
 .mini-player-progress-bar {
   height: 100%;
-  background: var(--accent-primary);
-  transition: width 0.3s linear;
+  background: var(--accent);
+  transition: width var(--t-slow) linear;
 }

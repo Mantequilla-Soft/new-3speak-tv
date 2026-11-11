@@ -1,0 +1,15 @@
+@use "../../styles/v2" as v2;
+
+// /newlogin: a developer test page for the mobile-app API.
+.login-new {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: var(--page-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.login-new__card { display: flex; flex-direction: column; gap: 12px; }
+.login-new__title { margin: 0; @include v2.text(heading); }
+.login-new__file { padding-top: 8px; }
+.login-new__actions { display: flex; flex-wrap: wrap; gap: 8px; }

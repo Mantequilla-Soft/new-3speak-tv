@@ -320,7 +320,7 @@ function Wallet() {
                 </div>
                 <div className="wallet-v2__bars" aria-hidden>
                   {bars.map((v, i) => (
-                    <div key={i} className={cx('wallet-v2__bar', i === BAR_COUNT - 1 && 'is-now', !v && 'is-empty')}
+                    <div key={i} className={cx('wallet-v2__ebar', i === BAR_COUNT - 1 && 'is-now', !v && 'is-empty')}
                       style={{ height: barMax > 0 && v > 0 ? `${Math.max(8, (v / barMax) * 100)}%` : undefined }} />
                   ))}
                 </div>

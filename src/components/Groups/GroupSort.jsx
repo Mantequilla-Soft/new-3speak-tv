@@ -1,33 +1,41 @@
-import { MdArrowDownward, MdArrowUpward } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
+import { Chip } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import './GroupSort.scss';
 
 /**
- * One field, one direction. Deliberately not a row of filter chips: both lists
- * are a few hundred items with three or four numbers each, and every question
+ * One field, one direction. Deliberately not a row of filters: both lists are
+ * a few hundred items with three or four numbers each, and every question
  * anyone actually asks of them ("biggest", "newest", "most active") is a sort,
  * not a filter. A filter would also hide things, which is the wrong default for
  * a directory people browse to discover something.
+ *
+ * Design 40b / 19d: the fields are chips (the selected one is ink-filled), and
+ * the direction is a square button at the end of the row. Tapping the selected
+ * chip again flips the direction too.
  */
 export default function GroupSort({ options, field, direction, onFieldChange, onDirectionChange }) {
   const { t } = useTranslation();
   const current = options.find((o) => o.id === field) || options[0];
+  const flip = () => onDirectionChange(direction === 'desc' ? 'asc' : 'desc');
 
   return (
-    <div className="group-sort">
-      <label className="group-sort-label" htmlFor="group-sort-field">{t('communities.sort.sortBy')}</label>
-      <select
-        id="group-sort-field"
-        className="group-sort-select"
-        value={current.id}
-        onChange={(e) => onFieldChange(e.target.value)}
-      >
-        {options.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
-      </select>
+    <div className="group-sort" role="group" aria-label={t('communities.sort.sortBy')}>
+      <div className="v2-chips is-scroll group-sort-chips">
+        {options.map((o) => (
+          <Chip
+            key={o.id}
+            selected={o.id === current.id}
+            onClick={() => (o.id === current.id ? flip() : onFieldChange(o.id))}
+          >
+            {o.label}
+          </Chip>
+        ))}
+      </div>
       <button
         type="button"
-        className="group-sort-dir"
-        onClick={() => onDirectionChange(direction === 'desc' ? 'asc' : 'desc')}
+        className="v2-iconbtn v2-btn--secondary h32 group-sort-dir"
+        onClick={flip}
         // The label says what the button WILL do, the title says what you are
         // looking at now: an arrow on its own reads as either.
         aria-label={direction === 'desc' ? t('communities.sort.ascending') : t('communities.sort.descending')}
@@ -35,7 +43,7 @@ export default function GroupSort({ options, field, direction, onFieldChange, on
           ? t('communities.sort.highestFirst', { label: current.label })
           : t('communities.sort.lowestFirst', { label: current.label })}
       >
-        {direction === 'desc' ? <MdArrowDownward size={16} /> : <MdArrowUpward size={16} />}
+        <Icon name={direction === 'desc' ? 'arrow_downward' : 'arrow_upward'} size={18} />
       </button>
     </div>
   );

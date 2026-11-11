@@ -1,39 +1,45 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Trailer on the left, then the post's title + description, then the newest
-// community note. The PLAYER is the reference: it holds a strict 16:9 box and
-// its height sets the height of both text columns, which clip rather than
-// stretch it. (align-items: stretch would have squashed the video to whatever
-// height the text happened to want.)
+// Channel trailer (20b): the player and its text in one surface card, the
+// newest community note in a card beside it. The PLAYER is the reference: it
+// holds a strict 16:9 box and its height caps the text column, which clips
+// rather than stretching it.
 .channel-trailer-row {
-  --ct-player-w: 675px;                                  // 75% of the old 900px
+  --ct-player-w: 560px;
   --ct-player-h: calc(var(--ct-player-w) * 9 / 16);
-  --ct-gap: 1.25rem;
+  --ct-gap: 16px;
 
   display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
+  align-items: stretch;
   gap: var(--ct-gap);
-  margin: 0 auto 1.5rem;
+  margin: 0 0 24px;
 
-  @include mix.respond(phone) {
-    flex-direction: column;
-    flex-wrap: nowrap;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-  }
+  @include v2.below-wide { flex-wrap: wrap; }
+  @include v2.mobile { flex-direction: column; gap: 12px; margin-bottom: 16px; }
+}
+
+.ct-card {
+  flex: 2 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px;
+  @include v2.card;
+
+  @include v2.below-wide { flex-basis: 100%; }
+  @include v2.mobile { flex-direction: column; align-items: stretch; gap: 10px; }
 }
 
 .channel-trailer {
   position: relative;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   width: var(--ct-player-w);
   max-width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   overflow: hidden;
-  background: #000;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  background: var(--media-black);
 
   video {
     width: 100%;
@@ -42,129 +48,83 @@
     display: block;
   }
 
-  @include mix.respond(phone) {
-    width: 100%;
-    border-radius: 10px;
-  }
-}
-
-// The two side columns split what's left beside the player. Widths always match;
-// height handling differs (see each block below).
-.channel-trailer-meta,
-.channel-trailer-snap {
-  flex: 0 1 auto;
-  width: calc((100% - var(--ct-player-w) - (2 * var(--ct-gap))) / 2);
-  min-width: 240px;
-
-  @include mix.respond(phone) {
-    // Stacked: no player height to match, and the halving only makes sense
-    // side by side.
-    width: 100%;
-  }
-}
-
-// No community note beside the player (the snap column isn't rendered at all),
-// so the description takes the whole rest of the row instead of leaving the
-// other half empty.
-.channel-trailer-row:not(:has(.channel-trailer-snap)) .channel-trailer-meta {
-  width: calc(100% - var(--ct-player-w) - var(--ct-gap));
-
-  @include mix.respond(phone) {
-    width: 100%;
-  }
+  @include v2.mobile { width: 100%; border-radius: var(--r-md); }
 }
 
 .channel-trailer-meta {
+  flex: 1 1 0;
+  min-width: 200px;
+  max-height: var(--ct-player-h);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding-top: 0.15rem;
-  height: var(--ct-player-h);
+  align-items: flex-start;
+  gap: 6px;
+  padding: 4px 6px 4px 0;
 
-  @include mix.respond(phone) {
-    height: auto;
-    max-height: 7.5rem;
-    overflow: hidden;
-  }
+  @include v2.mobile { min-width: 0; max-height: 200px; padding: 0 4px 4px; overflow: hidden; }
+
+  .ct-pill { flex: none; margin-bottom: 4px; }
 
   .ct-title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    line-height: 1.25;
-    color: var(--text-primary);
+    flex: none;
+    @include v2.text(heading);
+    color: var(--text);
     text-decoration: none;
-    flex: 0 0 auto;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 
-    &:hover { color: var(--accent-primary); }
+    &:hover { color: var(--accent); }
 
-    @include mix.respond(phone) {
-      font-size: 1rem;
-    }
+    @include v2.mobile { @include v2.text(title); }
   }
 
-  // Views + age, between the title and the description. Dimmer than both: it's
-  // context, not content.
+  // Views + age: context, not content.
   .ct-sub {
+    flex: none;
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    flex: 0 0 auto;
-
-    .ct-dot { opacity: 0.7; }
+    gap: 6px;
+    @include v2.text(body-sm);
+    color: var(--muted);
   }
 
-  // The description is the only part that clips — title/sub/read-more stay put,
-  // and "Read more" (a sibling, not a mask victim) is always fully visible.
+  // Only the description clips; the title, meta and "Read more" stay put.
   .ct-desc {
-    margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: var(--text-secondary);
-    white-space: pre-line;   // keep the author's paragraph breaks
+    margin: 4px 0 0;
     flex: 1 1 auto;
     min-height: 0;
     overflow: hidden;
-    mask-image: linear-gradient(to bottom, #000 75%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent 100%);
+    @include v2.text(body-sm);
+    line-height: 1.5;
+    color: var(--muted);
+    white-space: pre-line;
+    mask-image: linear-gradient(to bottom, var(--media-black) 70%, transparent);
 
-    @include mix.respond(phone) {
-      mask-image: none;
-      -webkit-mask-image: none;
-    }
+    @include v2.mobile { mask-image: none; }
   }
 
   .ct-readmore {
-    flex: 0 0 auto;
-    align-self: flex-start;
-    background: none;
-    border: none;
-    padding: 0;
-    color: var(--accent-primary);
-    font-size: 0.82rem;
-    font-weight: 600;
+    flex: none;
+    @include v2.text(label);
+    font-size: 12px;
+    color: var(--accent);
     text-decoration: none;
-    cursor: pointer;
 
     &:hover { text-decoration: underline; }
   }
 }
 
-// SnapCard is built for a centred 720px column; here it just fills its slot.
-// Unlike .channel-trailer-meta, this ISN'T clipped to the player's height —
-// SnapCard's own body clamp (maxVh={0.16}, passed from ChannelTrailer) already
-// keeps the card short; capping the column on top of that was what cropped the
-// card's own "Read more"/actions row. A max-height safety net still applies,
-// but as a scroll, never a hard clip, so those controls stay reachable.
+// The newest community note: its own card beside the trailer card.
 .channel-trailer-snap {
-  max-height: var(--ct-player-h);
-  overflow-y: auto;
+  flex: 1 1 0;
+  min-width: 260px;
+  max-height: calc(var(--ct-player-h) + 20px);
+  @include v2.scroll-y;
 
-  // Desktop only — on phones the trailer stacks and the snap just clutters it.
-  @include mix.respond(phone) {
-    display: none;
-  }
+  // Desktop only: on phones the trailer stacks and the note just clutters it.
+  @include v2.mobile { display: none; }
 
   .community-snaps,
   .snap-card {
@@ -173,106 +133,59 @@
     width: 100%;
   }
 
-  // Strip only the container's own 8px 0 40px — the .snap-card keeps its
-  // internal 14px 16px card padding.
-  .community-snaps {
-    padding: 0;
-  }
+  .community-snaps { padding: 0; }
+  .snap-card { height: 100%; }
 }
 
 // Autoplay only works muted, so the way back to sound has to be obvious.
 .channel-trailer-unmute {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
+  top: 10px;
+  left: 10px;
   z-index: 2;
-  padding: 0.4rem 0.8rem;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 999px;
-  background: rgba(2, 6, 23, 0.7);
-  backdrop-filter: blur(6px);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--media-scrim);
+  color: var(--on-media);
+  @include v2.text(label);
+  font-size: 12px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover { background: rgba(2, 6, 23, 0.9); }
+  &:hover { background: var(--media-scrim-strong); }
 }
 
-// Owner-only prompt shown in place of the trailer when none is set.
-.channel-trailer-empty {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding: 1rem 1.1rem;
-  margin-bottom: 1rem;
-  border: 1px dashed var(--border-color);
-  border-radius: 14px;
-  background: var(--bg-secondary);
+// Owner-only prompt in place of the trailer when none is set (37b).
+.channel-trailer-empty.v2-empty {
+  margin-bottom: 16px;
 
-  .cte-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    min-width: 0;
-
-    strong { font-size: 0.95rem; color: var(--text-primary); }
-    span { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.35; }
-  }
-
-  // Red outline, never a red fill (app-wide convention for red controls).
-  .cte-btn {
-    flex: 0 0 auto;
-    padding: 0.5rem 0.9rem;
-    border-radius: 10px;
-    border: 1px solid var(--accent-primary);
-    font-size: 0.86rem;
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--accent-primary);
-    background: transparent;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-
-    &:hover { background: var(--accent-light); }
-  }
-
-  @include mix.respond(phone) {
-    align-items: stretch;
-    .cte-btn { text-align: center; }
-  }
+  .cte-icon { color: var(--accent); }
+  .cte-btn { margin-top: 6px; }
 }
 
 // ── Player size (the creator's profile layout) ─────────────────────────────
-// md is the default above. Every size keeps the player as the reference for
-// the side columns, except full width, where the text and the community note
-// share the row underneath it instead.
-.channel-trailer-row--sm { --ct-player-w: 480px; }
-.channel-trailer-row--lg { --ct-player-w: 900px; }
+// md is the default above. Full width puts the text under the player.
+.channel-trailer-row--sm { --ct-player-w: 400px; }
+.channel-trailer-row--lg { --ct-player-w: 720px; }
 
 .channel-trailer-row--full {
+  flex-wrap: wrap;
+
+  .ct-card { flex-basis: 100%; flex-direction: column; align-items: stretch; }
   .channel-trailer { width: 100%; }
-
-  .channel-trailer-meta,
-  .channel-trailer-snap {
-    width: calc((100% - var(--ct-gap)) / 2);
-    height: auto;
-    max-height: 13rem;
-  }
-
-  &:not(:has(.channel-trailer-snap)) .channel-trailer-meta { width: 100%; }
-
-  @include mix.respond(phone) {
-    .channel-trailer-meta,
-    .channel-trailer-snap { width: 100%; }
-  }
+  .channel-trailer-meta { max-height: 13rem; padding: 0 6px 6px; }
+  .channel-trailer-snap { flex-basis: 100%; max-height: 16rem; }
 }
 
 // Only the player: it fills its section (the profile grid sets the width).
 .channel-trailer-row--bare {
-  margin-bottom: 0.75rem;
+  margin-bottom: 12px;
 
-  .channel-trailer { width: 100%; }
+  .ct-card { padding: 0; border: 0; background: none; }
+  .channel-trailer { width: 100%; border-radius: var(--r-2xl); }
 }

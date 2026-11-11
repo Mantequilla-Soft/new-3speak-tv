@@ -1,376 +1,474 @@
+@use "../../styles/v2" as v2;
+
+// Creator stats (31a, 45a). Ranges and content as segmented tracks, then one
+// card per block: tiles (bg wells) + the trend, best performing + compare,
+// the audience. Chart series: accent = this / the first, cyan = the other.
 .creator-stats {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  padding: 4px 2px 24px;
-  color: var(--text-primary, #111);
+  gap: 12px;
+  color: var(--text);
 
-  .cs-empty,
-  .cs-chart-empty {
-    color: var(--text-secondary, #666);
-    font-size: 14px;
-    text-align: center;
-    padding: 28px 12px;
-  }
-
-  // ── Filters ─────────────────────────────────────────────────
   .cs-filters {
-    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+
+    // On the page ground the track is a surface (like the Studio filter).
+    .cs-seg.v2-seg { background: var(--surface); }
   }
 
   .cs-recap-link {
-    margin-left: auto;
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--accent-primary);
-    color: var(--text-primary);
-    font-size: 13px;
-    font-weight: 600;
+    @include v2.btn(secondary, 36);
     text-decoration: none;
-
-    &:hover { background: var(--bg-hover); }
   }
 
-  // ── Stat tiles ──────────────────────────────────────────────
-  .cs-tiles {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 12px;
+  .cs-skeleton {
+    border-radius: var(--r-2xl);
 
-    @media (max-width: 640px) { grid-template-columns: repeat(2, 1fr); }
+    &--overview { height: 320px; }
+    &--section { height: 360px; }
+    &--chart { height: 160px; border-radius: var(--r-md); }
   }
-  .cs-subtotals {
-    font-size: 12px; color: var(--text-secondary, #666); margin: -10px 0 0; text-align: center;
+
+  .cs-chart-empty,
+  .cs-empty {
+    @include v2.text(body-sm);
+    color: var(--muted);
+    padding: 20px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
   }
-  .cs-tile {
-    background: var(--card-bg, #fff);
-    border: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
-    border-radius: 12px;
-    padding: 14px 16px;
+
+  .cs-empty { @include v2.card; padding: 20px 16px; border-style: dashed; border-width: 2px; }
+  .cs-chart-empty--error { background: var(--accent-wash); color: var(--text); }
+
+  // Every block is a card.
+  .cs-section {
+    @include v2.card;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 12px;
+    min-width: 0;
 
-    span { font-size: 22px; font-weight: 800; line-height: 1.1; }
-    label { font-size: 12px; color: var(--text-secondary, #666); font-weight: 600; }
+    @include v2.mobile { padding: 14px; }
   }
 
-  // ── Section ─────────────────────────────────────────────────
-  .cs-section {
-    background: var(--card-bg, #fff);
-    border: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
-    border-radius: 14px;
-    padding: 16px;
-  }
   .cs-section-head {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 14px;
+    gap: 8px;
 
-    h4 { font-size: 15px; font-weight: 700; margin: 0; }
+    h4 { @include v2.text(title-sm); margin: 0; flex: 1; }
   }
 
-  // Segmented control (metric switch)
-  .cs-seg {
-    display: inline-flex;
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.05));
-    border-radius: 999px;
-    padding: 3px;
+  // ── Tiles ───────────────────────────────────────────────────
+  .cs-tiles.v2-stats {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
 
-    &.cs-seg-scroll { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    &.cs-seg-scroll button { flex: 0 0 auto; }
+    @include v2.below-wide { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-    button {
-      border: 0;
-      background: transparent;
-      color: var(--text-secondary, #666);
-      font-size: 12.5px;
-      font-weight: 600;
-      padding: 5px 12px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-
-      &.active {
-        background: var(--card-bg, #fff);
-        color: var(--text-primary, #111);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-      }
-    }
+    .v2-stat b { @include v2.mono(20, 900); }
   }
 
-  // ── Best-performing list ────────────────────────────────────
-  .cs-list { display: flex; flex-direction: column; gap: 4px; }
-  .cs-item {
-    display: grid;
-    grid-template-columns: 22px 64px 1fr auto;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    text-align: left;
-    background: transparent;
-    border: 0;
-    border-radius: 10px;
-    padding: 6px 8px;
-    cursor: pointer;
-    transition: background 0.15s;
-
-    &:hover { background: var(--bg-hover, rgba(0, 0, 0, 0.04)); }
-    &.selected { background: var(--bg-tertiary, rgba(0, 0, 0, 0.06)); }
-
-    .cs-rank { color: var(--text-muted, #999); font-weight: 700; font-size: 13px; text-align: center; }
-    .cs-item-thumb { width: 64px; height: 36px; object-fit: cover; border-radius: 6px; background: #000; }
-    .cs-item-info { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
-    .cs-item-title {
-      font-size: 13.5px; font-weight: 600; color: var(--text-primary, #111);
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      // It's a link now (opens the video in a new tab) — keep the row look, add a
-      // hover affordance so it's clear the title itself is clickable.
-      text-decoration: none; display: block; width: fit-content; max-width: 100%;
-      &:hover { color: var(--accent-primary, #e53935); text-decoration: underline; }
-    }
-    .cs-item-date { font-size: 11.5px; color: var(--text-muted, #999); }
-    .cs-item-metric { font-size: 13.5px; font-weight: 800; color: var(--text-primary, #111); }
+  .cs-subtotals {
+    margin: 0;
+    @include v2.text(meta);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
   }
 
-  // ── Per-video detail ────────────────────────────────────────
-  .cs-detail {
-    margin-top: 12px;
-    border-top: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
-    padding-top: 14px;
-  }
-  .cs-detail-head {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
-
-    .cs-detail-thumb { width: 72px; height: 40px; object-fit: cover; border-radius: 6px; background: #000; }
-    .cs-detail-title {
-      display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;
-      strong { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      span { font-size: 12px; color: var(--text-secondary, #666); }
-    }
-    .cs-detail-close {
-      border: 0; background: var(--bg-tertiary, rgba(0, 0, 0, 0.06));
-      color: var(--text-secondary, #666); width: 26px; height: 26px; border-radius: 50%;
-      cursor: pointer; font-size: 12px; flex-shrink: 0;
-    }
-  }
-  .cs-detail-stats {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px;
-    @media (max-width: 640px) { grid-template-columns: repeat(3, 1fr); }
-
-    div { display: flex; flex-direction: column; gap: 2px; }
-    span { font-size: 16px; font-weight: 800; }
-    label { font-size: 11px; color: var(--text-secondary, #666); font-weight: 600; }
-  }
-
-  .cs-chart-block {
-    margin-top: 14px;
-    h5 {
-      display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
-      font-size: 13px; font-weight: 700; margin: 0 0 8px;
-      em { font-style: normal; font-weight: 500; font-size: 11.5px; color: var(--text-muted, #999); }
-    }
-  }
-
-  // ── Position chart (retention / most-replayed) ──────────────
-  .cs-poschart {
-    position: relative;
-    height: 96px;
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.04));
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: crosshair;
-  }
-  .cs-poschart-svg {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    path { fill-opacity: 0.28; stroke-width: 0; }
-  }
-  .cs-poschart-cursor {
-    position: absolute; top: 0; bottom: 0; width: 1px;
-    background: var(--text-primary, #111); opacity: 0.35; pointer-events: none;
-  }
-  .cs-poschart-tip {
-    position: absolute; top: 6px; transform: translateX(-50%);
-    background: var(--text-primary, #111); color: var(--text-inverse, #fff);
-    border-radius: 6px; padding: 3px 7px; font-size: 11px; pointer-events: none;
-    display: flex; flex-direction: column; align-items: center; line-height: 1.3; white-space: nowrap;
-    strong { font-weight: 700; }
-    span { opacity: 0.7; font-size: 10px; }
-  }
-  .cs-poschart-axis {
-    position: absolute; left: 8px; right: 8px; bottom: 4px;
-    display: flex; justify-content: space-between;
-    font-size: 10px; color: var(--text-muted, #999); pointer-events: none;
-  }
-
-  // ── Demographics ────────────────────────────────────────────
-  .cs-demo-bars { display: flex; flex-direction: column; gap: 8px; }
-  .cs-demo-row {
-    display: grid; grid-template-columns: 140px 1fr 44px; align-items: center; gap: 10px;
-    @media (max-width: 640px) { grid-template-columns: 110px 1fr 40px; }
-
-    .cs-demo-label {
-      font-size: 13px; font-weight: 400;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .cs-demo-track { height: 10px; background: var(--bg-tertiary, rgba(0, 0, 0, 0.06)); border-radius: 999px; overflow: hidden; }
-    .cs-demo-fill { display: block; height: 100%; background: rgba(140, 145, 155, 0.85); border-radius: 999px; }
-    .cs-demo-val { font-size: 12.5px; font-weight: 700; text-align: right; color: var(--text-secondary, #666); }
-  }
-  .cs-demo-cities {
-    margin-top: 16px;
-    h5 { font-size: 12px; font-weight: 700; color: var(--text-secondary, #666); margin: 0 0 6px; }
-    .cs-demo-city {
-      display: flex; justify-content: space-between; font-size: 13px;
-      padding: 3px 0; border-bottom: 1px solid var(--border-light, rgba(0, 0, 0, 0.05));
-      span:last-child { color: var(--text-secondary, #666); font-weight: 600; }
-    }
-  }
-  .cs-demo-note { font-size: 11.5px; color: var(--text-muted, #999); margin: 10px 0 0; }
-
-  // ── Watch-time trend ────────────────────────────────────────
+  // ── Watch-time trend (accent line on a bg well) ─────────────
   .cs-trend {
-    position: relative; height: 120px;
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.04));
-    border-radius: 8px; cursor: crosshair; touch-action: none;
+    position: relative;
+    height: 180px;
+    background: var(--bg);
+    border-radius: var(--r-md);
+    cursor: crosshair;
+    touch-action: none;
+
+    @include v2.mobile { height: 140px; }
   }
+
   .cs-trend-svg {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    .cs-trend-area { fill: var(--accent-primary, #e53935); fill-opacity: 0.16; stroke: none; }
-    .cs-trend-line { fill: none; stroke: var(--accent-primary, #e53935); stroke-width: 2px; }
-  }
-  .cs-trend-cursor { position: absolute; top: 0; bottom: 16px; width: 1px; background: var(--text-primary, #111); opacity: 0.3; pointer-events: none; }
-  .cs-trend-tip {
-    position: absolute; top: 6px; transform: translateX(-50%);
-    background: var(--text-primary, #111); color: var(--text-inverse, #fff);
-    border-radius: 6px; padding: 3px 8px; font-size: 11px; pointer-events: none; white-space: nowrap;
-    display: flex; flex-direction: column; align-items: center; line-height: 1.3;
-    strong { font-weight: 700; } span { opacity: 0.7; font-size: 10px; }
-  }
-  .cs-trend-axis {
-    position: absolute; left: 8px; right: 8px; bottom: 4px;
-    display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted, #999); pointer-events: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+
+    .cs-trend-area { fill: var(--accent); fill-opacity: .14; stroke: none; }
+    .cs-trend-line { fill: none; stroke: var(--accent); stroke-width: 2px; }
   }
 
-  // ── Demographics layout ─────────────────────────────────────
-  .cs-demo { display: flex; flex-direction: column; gap: 20px; }
+  .cs-trend-cursor {
+    position: absolute;
+    top: 0;
+    bottom: 18px;
+    width: 1px;
+    background: var(--text);
+    opacity: .3;
+    pointer-events: none;
+  }
 
-  // Desktop: breakdown bars on the left, 50% map on the right.
+  .cs-trend-tip,
+  .cs-poschart-tip {
+    position: absolute;
+    top: 6px;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: var(--bg);
+    border-radius: var(--r-xs);
+    padding: 2px 8px;
+    font-size: 11px;
+    pointer-events: none;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.3;
+
+    strong { font-family: var(--font-mono); font-weight: 700; }
+    span { opacity: .7; font-size: 10px; }
+  }
+
+  .cs-trend-axis,
+  .cs-cmp-axis {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    @include v2.mono(10, 500);
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  // ── Best performing + compare ───────────────────────────────
+  .cs-perf-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 20px;
+    align-items: start;
+
+    @media (max-width: 900px) { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  }
+
+  .cs-list-col {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    > .v2-seg { align-self: flex-start; max-width: 100%; }
+  }
+
+  .cs-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Rows: rank (first in the accent) · 64 thumb · title + date · metric (mono, right).
+  .cs-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 6px 8px;
+    margin: 0 -8px;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
+
+    & + .cs-item { border-top: 1px solid var(--border); }
+    &:hover { background: var(--bg-hover); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
+    &.selected { background: var(--cyan-tint); border-top-color: transparent; }
+    &.selected + .cs-item { border-top-color: transparent; }
+  }
+
+  .cs-rank {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    display: grid;
+    place-items: center;
+    flex: none;
+    @include v2.mono(12, 900);
+  }
+
+  .cs-item:first-child .cs-rank { background: var(--accent); color: var(--on-accent); }
+
+  .cs-item-thumb {
+    width: 64px;
+    aspect-ratio: 16 / 9;
+    flex: none;
+  }
+
+  .cs-item-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cs-item-title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    @include v2.text(body-sm);
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover { color: var(--text); text-decoration: underline; }
+    .cs-item-short { color: var(--muted); }
+  }
+
+  .cs-item-date { @include v2.text(meta-sm); color: var(--muted); }
+
+  .cs-item-metric {
+    @include v2.mono(12, 700);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .cs-perf-compare {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border-radius: var(--r-xl);
+    background: var(--bg);
+
+    h5 { @include v2.text(label); margin: 0; }
+  }
+
+  .cs-compare-picks {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  // The two picks wear their series color as a 2px border (45a).
+  .cs-pick.v2-input {
+    background-color: var(--surface);
+    font-size: 12px;
+    font-weight: 700;
+
+    &.is-a { border-color: var(--accent); }
+    &.is-b { border-color: var(--cyan); }
+  }
+
+  .cs-compare-vs {
+    align-self: center;
+    @include v2.text(meta-sm);
+    color: var(--muted);
+  }
+
+  .cs-compare-result { min-width: 0; }
+
+  .cs-compare {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cs-compare-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    @include v2.text(meta);
+    color: var(--muted);
+
+    span { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+    i { width: 14px; height: 3px; border-radius: var(--r-bar); flex: none; }
+    i.is-a { background: var(--accent); }
+    i.is-b { background: var(--cyan); }
+  }
+
+  .cs-compare-chart {
+    position: relative;
+    height: 150px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+
+    svg { position: absolute; inset: 0 0 18px; width: 100%; height: calc(100% - 18px); }
+  }
+
+  .cs-cmp-a, .cs-cmp-b { fill: none; stroke-width: 2px; }
+  .cs-cmp-a { stroke: var(--accent); }
+  .cs-cmp-b { stroke: var(--cyan); }
+
+  // ── Per-video detail under the list ─────────────────────────
+  .cs-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 2px solid var(--cyan-tint-strong);
+  }
+
+  .cs-detail-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .cs-detail-thumb {
+    width: 88px;
+    aspect-ratio: 16 / 9;
+    flex: none;
+  }
+
+  .cs-detail-title {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    strong { @include v2.text(title-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    span { @include v2.text(meta); color: var(--muted); }
+  }
+
+  // ── Audience ────────────────────────────────────────────────
+  .cs-demo { display: flex; flex-direction: column; gap: 16px; }
+
+  // Desktop: breakdown on the left, the map on the right.
   .cs-demo-main {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 20px;
     align-items: start;
   }
-  .cs-demo-bars-side { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+
+  .cs-demo-bars-side {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    min-width: 0;
+  }
+
   .cs-demo-map-side { min-width: 0; }
 
-  // Mobile tab switcher — hidden on desktop.
+  // Mobile switch between the breakdown and the map; hidden on desktop.
   .cs-demo-tabs { display: none; }
 
-  @media (max-width: 768px) {
-    .cs-demo-tabs { display: inline-flex; align-self: flex-start; }
+  @include v2.mobile {
+    .cs-demo-tabs { display: flex; }
     .cs-demo-main { display: block; }
     .cs-demo-main.tab-map .cs-demo-bars-side { display: none; }
     .cs-demo-main.tab-bars .cs-demo-map-side { display: none; }
   }
 
   .cs-demo-col h5 {
-    font-size: 12.5px; font-weight: 700; margin: 0 0 8px;
-    display: flex; align-items: baseline; gap: 8px;
-    em { font-style: normal; font-weight: 500; font-size: 11px; color: var(--text-muted, #999); }
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 0 0 8px;
+    @include v2.text(eyebrow);
+    color: var(--muted);
+
+    em {
+      font-style: normal;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+      font-size: 11px;
+    }
   }
 
-  // World bubble map
-  .cs-map { border-radius: 10px; overflow: hidden; }
-  .cs-map-svg { display: block; width: 100%; height: auto; }
-  .cs-map-bg { fill: var(--bg-tertiary, rgba(0, 0, 0, 0.05)); }
-  .cs-map-land { fill: rgba(140, 145, 155, 0.28); stroke: rgba(140, 145, 155, 0.45); stroke-width: 0.3px; }
-  .cs-map-grid { stroke: var(--border-light, rgba(0, 0, 0, 0.08)); stroke-width: 0.5px; }
-  .cs-map-bubble { fill: rgba(120, 170, 255, 0.55); stroke: rgba(120, 170, 255, 0.95); stroke-width: 0.5px; }
+  .cs-demo-bars { display: flex; flex-direction: column; gap: 8px; }
 
-  // When-heatmap
-  .cs-when-grid { display: flex; flex-direction: column; gap: 2px; }
+  .cs-demo-row {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr) 48px;
+    align-items: center;
+    gap: 10px;
+
+    @include v2.mobile { grid-template-columns: 110px minmax(0, 1fr) 40px; }
+
+    .cs-demo-label {
+      @include v2.text(body-sm);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .cs-demo-track {
+      height: 8px;
+      background: var(--surface-2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .cs-demo-fill {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    .cs-demo-val {
+      @include v2.mono(12, 700);
+      text-align: right;
+      color: var(--text);
+    }
+  }
+
+  // Lower bars in each list in the info tone, so the leader stands out.
+  .cs-demo-row + .cs-demo-row .cs-demo-fill { background: var(--cyan); }
+
+  .cs-demo-note {
+    margin: 0;
+    @include v2.text(meta-sm);
+    color: var(--muted);
+  }
+
+  // World bubble map on a bg well.
+  .cs-map { border-radius: var(--r-md); overflow: hidden; background: var(--bg); }
+  .cs-map-svg { display: block; width: 100%; height: auto; }
+  .cs-map-bg { fill: var(--bg); }
+  .cs-map-land { fill: var(--surface-2); stroke: var(--border); stroke-width: .3px; }
+  .cs-map-grid { stroke: var(--border); stroke-width: .5px; }
+  .cs-map-bubble { fill: color-mix(in srgb, var(--accent) 55%, transparent); stroke: var(--accent); stroke-width: .5px; }
+
+  // When-heatmap: accent cells, stronger = more views.
+  .cs-when-grid { display: flex; flex-direction: column; gap: 3px; }
   .cs-when-row { display: flex; align-items: center; gap: 3px; }
-  .cs-when-day { width: 14px; flex: 0 0 auto; font-size: 10px; color: var(--text-muted, #999); }
+  .cs-when-day { width: 14px; flex: none; @include v2.mono(10, 700); color: var(--muted); }
   .cs-when-cell {
-    flex: 1 1 0; height: 12px; border-radius: 2px;
-    background: var(--accent-primary, #e53935);
+    flex: 1 1 0;
+    height: 14px;
+    border-radius: var(--r-xs);
+    background: var(--accent);
   }
   .cs-when-hours {
-    display: flex; justify-content: space-between; margin: 4px 0 0 17px;
-    font-size: 10px; color: var(--text-muted, #999);
+    display: flex;
+    justify-content: space-between;
+    margin: 6px 0 0 17px;
+    @include v2.mono(10, 500);
+    color: var(--muted);
   }
 
-  // New vs returning
-  .cs-nr h5 { font-size: 12.5px; font-weight: 700; margin: 0 0 8px; }
-  .cs-nr-bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: var(--bg-tertiary, rgba(0,0,0,0.06)); }
-  .cs-nr-new { background: rgba(140, 145, 155, 0.85); }
-  .cs-nr-ret { background: rgba(140, 145, 155, 0.32); }
-  .cs-nr-legend {
-    display: flex; gap: 16px; margin-top: 8px; font-size: 12.5px; color: var(--text-secondary, #666);
-    span { display: inline-flex; align-items: center; gap: 6px; }
-    .dot { width: 9px; height: 9px; border-radius: 50%; }
-    .dot.new { background: rgba(140, 145, 155, 0.85); }
-    .dot.ret { background: rgba(140, 145, 155, 0.32); }
+  .cs-footnote {
+    margin: 0;
+    @include v2.text(meta-sm);
+    color: var(--muted);
   }
-
-  // ── Best-performing + compare row ───────────────────────────
-  .cs-perf-row {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 20px;
-    align-items: start;
-
-    @media (max-width: 768px) { grid-template-columns: 1fr; gap: 16px; }
-  }
-  // Left column: the KPI (sort) switch sits above the list — not over the compare picker.
-  .cs-list-col {
-    min-width: 0; display: flex; flex-direction: column; gap: 10px;
-    > .cs-seg { align-self: flex-start; max-width: 100%; }
-  }
-  .cs-perf-compare {
-    h5 { font-size: 12.5px; font-weight: 700; margin: 0 0 8px; }
-    // stack the two pickers vertically in the narrow right column
-    .cs-compare-picks { flex-direction: column; align-items: stretch; gap: 8px; margin-bottom: 0; }
-    .cs-compare-picks select { flex: none; width: 100%; }
-    .cs-compare-vs { align-self: center; }
-  }
-  .cs-compare-result {
-    margin-top: 14px; border-top: 1px solid var(--border-light, rgba(0, 0, 0, 0.08)); padding-top: 14px;
-  }
-
-  // ── Compare videos ──────────────────────────────────────────
-  .cs-compare-picks {
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px;
-
-    select {
-      flex: 1 1 40%; min-width: 0; max-width: 100%;
-      background: var(--bg-tertiary, rgba(0, 0, 0, 0.05));
-      border: 1px solid var(--border-light, rgba(0, 0, 0, 0.08));
-      color: var(--text-primary, #111);
-      border-radius: 8px; padding: 8px 10px; font-size: 13px; cursor: pointer;
-    }
-    .cs-compare-vs { font-size: 12px; color: var(--text-muted, #999); font-weight: 700; }
-  }
-  .cs-compare-legend {
-    display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 8px;
-    span { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-secondary, #666); max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    i { width: 10px; height: 10px; border-radius: 2px; flex: 0 0 auto; }
-  }
-  .cs-compare-chart {
-    position: relative; height: 120px;
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.04)); border-radius: 8px;
-    svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .cs-cmp-a { fill: none; stroke: var(--accent-primary, #e53935); stroke-width: 2px; }
-    .cs-cmp-b { fill: none; stroke: rgba(120, 170, 255, 0.95); stroke-width: 2px; }
-    .cs-cmp-axis {
-      position: absolute; left: 8px; right: 8px; bottom: 4px;
-      display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted, #999);
-    }
-  }
-
-  .cs-footnote { font-size: 11.5px; color: var(--text-muted, #999); text-align: center; margin: 0; }
 }

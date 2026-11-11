@@ -1,14 +1,22 @@
-@use "../mixins.scss" as mix;
+@use "../styles/v2" as v2;
 
-// "Your year on 3Speak". A dark story-like stage in both themes (like the
-// shorts player), flat, with the 3D backdrop behind the text.
+// "Your year on 3Speak" (26c, 41b). The stage is a dark media surface in both
+// themes (it carries data-theme="dark", so the v2 dark tokens apply inside it):
+// the 3D backdrop (RecapScene) is drawn for a dark ground. Text sits over the
+// scene; lists, panels and tips are solid surfaces so nothing behind competes.
 .recap-page {
-  padding: 16px;
+  padding: 16px var(--page-pad);
 
-  @include mix.respond(phone) {
-    padding: 8px;
+  @include v2.mobile { padding: 8px; }
+
+  &--plain {
+    display: grid;
+    place-items: center;
+    min-height: calc(100vh - var(--topbar-h) - 32px);
   }
 }
+
+.recap-signin { width: min(440px, 100%); }
 
 .recap-stage {
   position: relative;
@@ -16,13 +24,15 @@
   height: calc(100vh - 120px);
   min-height: 480px;
   margin: 0 auto;
-  border-radius: 12px;
+  border-radius: var(--r-3xl);
   overflow: hidden;
-  background: #121212;
-  color: #f5f5f5;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
 
-  @include mix.respond(phone) {
+  @include v2.mobile {
     height: calc(100dvh - 140px);
+    border-radius: var(--r-2xl);
   }
 }
 
@@ -30,7 +40,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  transition: opacity 0.6s ease;
+  transition: opacity .6s var(--ease);
 
   // Built (and three.js loaded) during loading, but only shown once the
   // first slide is.
@@ -44,13 +54,49 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  text-align: center;
-  color: #bdbdbd;
+  color: var(--muted);
 }
 
+.recap-failure { max-width: 360px; font-size: 14px; color: var(--text); }
+
+// Loading (41b): a card with the step list and one control tip at a time.
+.recap-load-card {
+  @include v2.card;
+  width: min(340px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  text-align: left;
+
+  .v2-steplist li { font-size: 12px; }
+}
+.recap-load-title { font-size: 14px; font-weight: 700; color: var(--text); }
+
+.recap-loading-tip {
+  @include v2.well;
+  margin: 4px 0 0;
+  padding: 8px 10px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+  min-height: 48px;
+  animation: recap-tip-in .6s var(--ease) both;
+
+  .recap-loading-tip-label { color: var(--text); font-weight: 700; }
+
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+
+@keyframes recap-tip-in {
+  from { opacity: 0; translate: 0 4px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+// Story-style progress along the top.
 .recap-progress {
   position: absolute;
-  top: 12px;
+  top: 14px;
   left: 16px;
   right: 16px;
   z-index: 3;
@@ -59,11 +105,11 @@
 
   .recap-progress-bar {
     flex: 1;
-    height: 3px;
+    height: 4px;
     border-radius: 2px;
-    background: rgba(255, 255, 255, 0.2);
+    background: color-mix(in srgb, var(--text) 20%, transparent);
 
-    &.done { background: var(--accent-primary, #e53935); }
+    &.done { background: var(--accent); }
   }
 }
 
@@ -82,12 +128,13 @@
   &--prev { left: 0; }
   &--next { right: 0; }
   &:disabled { cursor: default; }
+  &:focus-visible { outline-offset: -4px; }
 }
 
 // Text sits over the tap halves but lets taps through, except on its links.
 .recap-slide {
   position: absolute;
-  inset: 40px 24px 72px;
+  inset: 40px 24px 76px;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -96,15 +143,12 @@
   gap: 10px;
   text-align: center;
   pointer-events: none;
-  animation: recap-slide-in 0.5s ease-out both;
-  // Lift the text well off the thumbnails behind it: a hard edge, a close
-  // shadow and two wide soft ones stacked.
+  animation: recap-slide-in .5s var(--ease) both;
+  // Lift the text off the thumbnails behind it (a scrim in text form).
   text-shadow:
-    0 0 2px #000,
-    0 1px 3px rgba(0, 0, 0, 1),
-    0 2px 10px rgba(0, 0, 0, 0.95),
-    0 4px 28px rgba(0, 0, 0, 0.9),
-    0 0 48px rgba(0, 0, 0, 0.75);
+    0 1px 3px var(--media-black),
+    0 2px 12px var(--media-scrim-strong),
+    0 0 40px var(--media-scrim);
 
   // Slides with a chart or grid below: text at the top, the scene underneath.
   &--top {
@@ -120,6 +164,8 @@
   @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
+
+  @include v2.mobile { inset: 36px 12px 76px; }
 }
 
 @keyframes recap-slide-in {
@@ -128,44 +174,66 @@
 }
 
 .recap-avatar img {
-  width: 88px;
-  height: 88px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  border: 3px solid #f5f5f5;
+  box-shadow: 0 0 0 2px var(--accent);
 }
 
 .recap-title {
   margin: 0;
-  font-size: clamp(1.6rem, 4vw, 2.6rem);
-  font-weight: 800;
-  line-height: 1.15;
+  @include v2.text(heading-lg);
+  @include v2.tablet-up { font-size: 40px; }
 }
 
+// Kicker: the eyebrow over a big number ("PEOPLE WATCHED YOU FOR").
 .recap-kicker {
   margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #bdbdbd;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .recap-big {
   margin: 0;
-  font-size: clamp(2.2rem, 7vw, 4.2rem);
-  font-weight: 800;
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: -.03em;
   line-height: 1.05;
 
-  &--second { font-size: clamp(1.6rem, 5vw, 2.8rem); }
+  @include v2.tablet-up { font-size: 56px; }
+  @include v2.wide { font-size: 64px; }
+
+  // Numbers (watch time, money, rank) in Roboto Mono, like every number that changes.
+  &--num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+
+  &--second {
+    font-size: 28px;
+    @include v2.tablet-up { font-size: 40px; }
+  }
 }
 
 .recap-and {
-  font-weight: 600;
-  color: #bdbdbd;
+  font-weight: 700;
+  color: var(--muted);
 }
 
 .recap-sub {
   margin: 0;
-  font-size: 1rem;
-  color: #e0e0e0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+
+  @include v2.tablet-up { font-size: 16px; }
+}
+
+.recap-note {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
 }
 
 // Hover hints make no sense without a mouse.
@@ -173,11 +241,20 @@
   @media (hover: none) { display: none; }
 }
 
-.recap-peak {
-  font-weight: 600;
+.recap-peak { font-weight: 700; }
+
+.recap-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-// Hover on a week's bar (desktop): its watch time and date.
+.recap-kicker--gap { margin-top: 14px; }
+
+// Hover on a bar, step or pillar (desktop): what it is.
 .recap-bar-tip {
   position: absolute;
   z-index: 4;
@@ -185,19 +262,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: #1e1e1e;
-  border: 1px solid #333;
-  color: #bdbdbd;
-  font-size: 12px;
-  // Wraps on narrow screens; tipStyle() keeps it inside the stage.
+  gap: 2px;
   max-width: 260px;
+  padding: 8px 10px;
   box-sizing: border-box;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-float);
+  color: var(--muted);
+  font-size: 12px;
   text-align: center;
   pointer-events: none;
 
-  strong { color: #f5f5f5; font-size: 13px; }
+  strong { @include v2.mono(13, 700); color: var(--text); }
 }
 
 // The panel on the right: follows the hover (look only), or stays open once a
@@ -208,22 +286,22 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 4;
-  width: 290px;
+  width: 300px;
   // Short and scrolling: long lists shouldn't cover the scene.
   max-height: min(52%, 420px);
   display: flex;
   flex-direction: column;
   padding: 12px;
   box-sizing: border-box;
-  border-radius: 12px;
-  background: #1e1e1e;
-  border: 1px solid #333;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-float);
   pointer-events: none;
 
   &.is-locked {
     pointer-events: auto;
-    border-color: var(--accent-primary, #e53935);
+    border-color: var(--cyan);
   }
 
   .recap-week-panel-head {
@@ -236,9 +314,8 @@
 
   .recap-week-panel-title {
     margin: 0;
-    font-size: 13px;
-    font-weight: 600;
-    color: #bdbdbd;
+    @include v2.text(eyebrow);
+    color: var(--muted);
   }
 
   // Scrolls once it holds more than fits.
@@ -249,20 +326,20 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    overflow-y: auto;
     min-height: 0;
+    @include v2.scroll-y;
   }
 
   li a {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #f5f5f5;
+    color: var(--text);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: none;
 
-    &:hover .recap-chip-title { color: var(--accent-primary, #e53935); }
+    &:hover .recap-chip-title { color: var(--accent); }
   }
 
   img,
@@ -270,21 +347,21 @@
     flex-shrink: 0;
     width: 96px;
     height: 54px;
-    border-radius: 6px;
+    border-radius: var(--r-sm);
     object-fit: cover;
-    background: #2a2a2a;
   }
+  .recap-week-panel-blank { display: block; @include v2.thumb-placeholder; }
 
   .recap-week-panel-foot {
     margin-top: 10px;
     font-size: 13px;
 
-    a { color: var(--accent-primary, #e53935); font-weight: 600; text-decoration: none; }
+    a { color: var(--cyan); font-weight: 700; text-decoration: none; &:hover { text-decoration: underline; } }
   }
 
-  @include mix.respond(phone) {
+  @include v2.mobile {
     top: auto;
-    bottom: 64px;
+    bottom: 68px;
     right: 8px;
     left: 8px;
     width: auto;
@@ -294,26 +371,7 @@
 }
 
 // Under a locked panel: a clear, full-width way back to looking around.
-.recap-panel-close-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  margin-top: 12px;
-  padding: 9px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--accent-primary, #e53935);
-  background: #262626;
-  color: #f5f5f5;
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  flex-shrink: 0;
-
-  &:hover { background: #2f2020; }
-}
+.recap-panel-close-btn { margin-top: 12px; flex-shrink: 0; }
 
 // A gallery tile as a Discover-style card.
 .recap-video-card {
@@ -323,7 +381,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    color: #f5f5f5;
+    color: var(--text);
     text-decoration: none;
   }
 
@@ -336,7 +394,7 @@
       width: 100%;
       height: auto;
       aspect-ratio: 16 / 9;
-      border-radius: 8px;
+      border-radius: var(--r-md);
     }
 
     &.is-short img,
@@ -353,16 +411,12 @@
     position: absolute;
     right: 6px;
     bottom: 6px;
-    padding: 1px 6px;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, 0.8);
-    font-size: 12px;
-    font-weight: 600;
+    @include v2.scrim-pill;
+    font-family: var(--font-mono);
   }
 
   .recap-video-card-title {
-    font-size: 15px;
-    font-weight: 700;
+    @include v2.text(title-sm);
     line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -377,24 +431,8 @@
   }
 }
 
-.recap-note {
-  margin: 0;
-  font-size: 0.8rem;
-  color: #9e9e9e;
-}
-
-.recap-link {
-  color: #f5f5f5;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.recap-kicker--gap {
-  margin-top: 14px;
-}
-
-// People, videos and communities on a slide: SOLID chips with their own shadow,
-// so nothing in the 3D scene shows through or competes with the text.
+// People, videos and communities on a slide: solid rows (no shadow), so
+// nothing in the 3D scene shows through or competes with the text.
 .recap-chips {
   list-style: none;
   margin: 0;
@@ -412,19 +450,22 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 7px 12px;
-    border-radius: 8px;
-    background: #1e1e1e;
-    border: 1px solid #333;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
-    color: #f5f5f5;
-    font-weight: 600;
+    min-height: 44px;
+    padding: 6px 12px 6px 6px;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
     text-decoration: none;
     text-shadow: none;
     text-align: left;
+    transition: border-color var(--t-fast) var(--ease);
 
-    &:hover { border-color: var(--accent-primary, #e53935); }
+    &:hover { border-color: var(--accent); }
   }
+  .recap-chip-static { padding-left: 12px; }
 
   // Ranked list (top videos): one per line, full width.
   &--list {
@@ -432,43 +473,48 @@
     flex-wrap: nowrap;
     width: min(560px, 100%);
 
-    a { width: 100%; box-sizing: border-box; }
+    a { width: 100%; box-sizing: border-box; padding-left: 10px; }
   }
 }
 
-// Rank cards (best-rank slide): buttons, the selected one outlined red.
+// Rank cards (best-rank slide): the selected one filled like a selected chip.
 .recap-chips--ranks {
   margin-top: 4px;
 
   button {
-    display: flex;
-    align-items: center;
+    @include v2.control(36);
     gap: 8px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    background: #1e1e1e;
-    border: 1px solid #333;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
-    color: #f5f5f5;
-    font: inherit;
-    font-size: 14px;
-    font-weight: 600;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
     text-shadow: none;
-    cursor: pointer;
     pointer-events: auto;
 
-    &:hover { border-color: #555; }
-    &.active { border-color: var(--accent-primary, #e53935); }
+    &:hover { border-color: color-mix(in srgb, var(--text) 30%, var(--border)); }
+    &.active {
+      background: var(--text);
+      border-color: var(--text);
+      color: var(--bg);
+      .recap-rank-badge { background: var(--accent); color: var(--on-accent); }
+    }
+
+    @include v2.mobile { height: 44px; border-radius: var(--r-lg); }
   }
 }
 
 // "#3" on one line, in a pill.
 .recap-rank-badge {
   flex-shrink: 0;
-  padding: 1px 8px;
-  border-radius: 999px;
-  border: 1px solid var(--accent-primary, #e53935);
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 7px;
+  background: var(--accent-tint-strong);
+  color: var(--accent);
+  @include v2.mono(11, 700);
   white-space: nowrap;
 }
 
@@ -476,11 +522,12 @@
   flex-shrink: 0;
   display: grid;
   place-items: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 1px solid var(--accent-primary, #e53935);
-  font-size: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--accent-tint-strong);
+  color: var(--accent);
+  @include v2.mono(12, 700);
 }
 
 .recap-chip-avatar img {
@@ -504,8 +551,8 @@
 
 .recap-chip-stats {
   font-size: 11px;
-  font-weight: 500;
-  color: #bdbdbd;
+  font-weight: 400;
+  color: var(--muted);
 }
 
 // Faces only (accounts followed).
@@ -519,21 +566,17 @@
   gap: 6px;
   max-width: 520px;
 
-  a {
-    display: block;
-    border-radius: 50%;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.7);
-  }
+  a { display: block; border-radius: 50%; }
 
   .recap-chip-avatar img {
     width: 40px;
     height: 40px;
-    border: 2px solid #1e1e1e;
+    box-shadow: 0 0 0 2px var(--surface);
   }
 }
 
-// Solid, centred cards with a heavy shadow (following slide), side by side
-// where there is room.
+// The following slide: two cards side by side where there is room, on a
+// scrim so the star graph still shows softly through.
 .recap-cards {
   display: flex;
   flex-wrap: wrap;
@@ -550,18 +593,16 @@
   gap: 8px;
   width: min(380px, 100%);
   box-sizing: border-box;
-  padding: 18px 20px;
-  border-radius: 12px;
-  // Frosted (user asked for these to be see-through and blurred, an exception
-  // to the flat house style): the star graph shows softly through.
-  background: rgba(30, 30, 30, 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 2px 6px rgba(0, 0, 0, 0.6);
+  padding: 16px 20px;
+  border-radius: var(--r-2xl);
+  background: var(--media-scrim);
+  border: 1px solid var(--border);
   pointer-events: auto;
 
-  .recap-big--second { font-size: clamp(1.4rem, 3.6vw, 2.2rem); }
+  .recap-big--second {
+    font-size: 24px;
+    @include v2.tablet-up { font-size: 32px; }
+  }
 }
 
 // A block pinned to the bottom of a top-aligned slide (supporters).
@@ -581,134 +622,54 @@
   margin-top: 8px;
 }
 
-// Outlined, never red-filled (house rule for buttons).
-.recap-btn {
-  display: inline-flex;
-  align-items: center;
+.recap-btn { text-shadow: none; }
+.recap-actions .recap-btn { min-width: 240px; }
+
+// Empty (41b): a solid card with one action.
+.recap-empty-card {
+  @include v2.card;
+  width: min(360px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 6px;
-  padding: 9px 16px;
-  border-radius: 8px;
-  border: 1px solid var(--accent-primary, #e53935);
-  // Solid, so the button reads over the thumbnails moving behind it.
-  background: #1e1e1e;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
-  color: #f5f5f5;
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-decoration: none;
+  padding: 16px;
+  text-align: left;
   text-shadow: none;
-  cursor: pointer;
+  pointer-events: auto;
 
-  &:hover { background: #2a1a1a; }
-
-  &--ghost {
-    border-color: #444;
-    &:hover { background: #262626; }
-  }
+  .recap-btn { margin-top: 6px; }
 }
+.recap-empty-title { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.3; }
+.recap-empty-sub { margin: 0; font-size: 12px; line-height: 1.45; color: var(--muted); }
 
+// Slide nav (41b): back on surface-2, forward in the inverse fill.
 .recap-nav {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 14px;
+  bottom: 16px;
   z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 12px;
 
   .recap-nav-count {
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-    font-size: 0.85rem;
-    color: #bdbdbd;
-    min-width: 44px;
+    @include v2.mono(11, 700);
+    min-width: 96px;
     text-align: center;
+    color: var(--muted);
+    text-shadow: 0 1px 3px var(--media-black);
   }
 
-  .recap-nav-btn {
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    background: rgba(0, 0, 0, 0.35);
-    color: #f5f5f5;
-    cursor: pointer;
-
-    &:disabled { opacity: 0.35; cursor: default; }
+  @include v2.mobile {
+    .recap-nav-btn { width: 44px; height: 44px; border-radius: var(--r-lg); }
   }
 }
 
-// Loading, on the first slide: a slim bar that fills per source, with a
-// bright sliver running along it so it reads as busy between steps.
-.recap-progress-load {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  width: min(320px, 80%);
-
-  .recap-progress-load-bar {
-    position: relative;
-    width: 100%;
-    height: 4px;
-    border-radius: 2px;
-    background: rgba(255, 255, 255, 0.15);
-    overflow: hidden;
-
-    span {
-      position: absolute;
-      inset: 0 auto 0 0;
-      border-radius: 2px;
-      background: var(--accent-primary, #e53935);
-      transition: width 0.4s ease;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 30%;
-      background: rgba(255, 255, 255, 0.35);
-      animation: recap-load-sweep 1.4s ease-in-out infinite;
-
-      @media (prefers-reduced-motion: reduce) { animation: none; display: none; }
-    }
-  }
-}
-
-// One control tip at a time under the loader, fading in as it changes.
-.recap-loading-tip {
-  margin: 14px 0 0;
-  max-width: 360px;
-  text-align: center;
-  font-size: 13px;
-  line-height: 1.45;
-  color: #bdbdbd;
-  animation: recap-tip-in 0.6s ease both;
-
-  .recap-loading-tip-label {
-    color: var(--accent-primary, #e53935);
-    font-weight: 700;
-  }
-
-  @media (prefers-reduced-motion: reduce) { animation: none; }
-}
-
-@keyframes recap-tip-in {
-  from { opacity: 0; translate: 0 4px; }
-  to { opacity: 1; translate: 0 0; }
-}
-
-@keyframes recap-load-sweep {
-  from { left: -30%; }
-  to { left: 100%; }
-}
-
-// Colour key for a stacked pillar (income).
+// Colour key for a stacked pillar (income). The swatches match the scene's
+// own pillar colours (red, then two greys).
 .recap-legend {
   display: flex;
   flex-wrap: wrap;
@@ -716,20 +677,20 @@
   align-items: center;
   gap: 6px 10px;
   margin: 0;
-  font-size: 13px;
-  color: #e0e0e0;
+  font-size: 12px;
+  color: var(--text);
 
-  .recap-legend-name { font-weight: 600; }
+  .recap-legend-name { font-weight: 700; }
 
   .recap-legend-swatch {
     display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
     margin-left: 6px;
 
-    &--red { background: var(--accent-primary, #e53935); }
-    &--grey { background: #3a3a3a; border: 1px solid #555; }
-    &--light { background: #6b6b6b; }
+    &--red { background: var(--accent); }
+    &--grey { background: color-mix(in srgb, var(--text) 20%, var(--surface)); }
+    &--light { background: color-mix(in srgb, var(--text) 42%, var(--surface)); }
   }
 }

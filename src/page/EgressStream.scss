@@ -8,14 +8,14 @@
   // Above the app shell: this route still renders inside it, and a nav bar
   // creeping into the recording would be baked into the VOD.
   z-index: 99999;
-  background: #000;
+  background: var(--media-black);
   overflow: hidden;
 }
 
 .egress-stream__idle {
   position: absolute;
   inset: 0;
-  background: #000;
+  background: var(--media-black);
 }
 
 .egress-stream__video,
@@ -30,5 +30,5 @@
   // the whole frame. `cover` would silently crop the broadcaster's picture out
   // of their own recording, which is unrecoverable.
   object-fit: contain;
-  background: #000;
+  background: var(--media-black);
 }

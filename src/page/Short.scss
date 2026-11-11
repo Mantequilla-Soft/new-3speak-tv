@@ -1,41 +1,76 @@
+@use '../styles/v2' as v2;
 @use '../styles/shorts-action-rail' as rail;
 @import '../components/LanguageSelector/translate-common';
 
-// Portal-rendered dropdown (on document.body, escapes all stacking contexts)
-.shortsSubtitleMenu {
-  background: rgba(20, 20, 20, 0.95);
-  border-radius: 6px;
-  padding: 4px 0;
-  min-width: 120px;
-  max-height: 280px;
-  overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
+/* ============================================================================
+   Shorts player, v2 (design 18a, 45b, 32b).
 
-.shortsSubtitleItem {
-  display: block;
-  width: 100%;
-  padding: 6px 14px;
-  border: none;
-  background: none;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 12px;
-  font-weight: 500;
-  text-align: left;
+   Desktop: [previous / up / down] [9:16 player] [dock tiles], with the
+   discussion as a fixed side panel on the right (open by default).
+   Phones (< 769px, like the JS in Short.jsx): the player fills the screen, the
+   dock is a column of tiles ON the video, discussion is a bottom sheet.
+
+   Everything drawn over the video is white on the media scrim in BOTH themes
+   (--on-media / --media-scrim). Only tokens from design-system.scss.
+
+   WatchStream.jsx imports this file and reuses its classes (.short-main,
+   .videoWrapper, .videoContainer, .bottomOverlay, .actionSidebar > .actionItem >
+   .actionButton + .actionLabel, .shortsBottomComment), so those keep working
+   with its older markup too.
+   ========================================================================== */
+
+// The JS (Short.jsx) switches comments, swipes and preload ranges at 768.
+@mixin phone { @media (max-width: 768px) { @content; } }
+@mixin desk { @media (min-width: 769px) { @content; } }
+
+// A square control drawn on the video (top-right cluster, back, stories).
+@mixin media-btn($size: 36) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $size * 1px;
+  height: $size * 1px;
+  padding: 0;
+  flex: none;
+  border: 0;
+  border-radius: var(--r-md);
+  background: var(--media-scrim);
+  color: var(--on-media);
   cursor: pointer;
-  white-space: nowrap;
+  pointer-events: auto;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-  }
-
-  &.active {
-    color: var(--accent-primary, #e53935);
-    font-weight: 700;
-  }
+  &:hover { background: var(--media-scrim-strong); }
+  &:active { transform: scale(.98); }
 }
 
+// 769-1024px: the app's bottom bar shows (BottomNav), so the player and the
+// discussion panel stop above it. Zero everywhere else.
+body { --shorts-bottom-reserve: 0px; }
+@media (min-width: 769px) and (max-width: 1024px) {
+  body { --shorts-bottom-reserve: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ─── Menus opened from the video (portals on <body>; v2-menu gives the look) ── */
+.shortsSubtitleMenu {
+  min-width: 200px;
+  max-height: 320px;
+  @include v2.scroll-y;
+}
+
+.shortsTuneMenu {
+  width: 248px;
+
+  .shortsTuneMenu__glow .v2-seg {
+    display: flex;
+    margin: 0 4px 4px;
+  }
+
+  // Ambient light is a desktop effect (AmbientGlow is off on phones).
+  @include phone { .shortsTuneMenu__glow { display: none; } }
+}
+
+/* ─── Page frame ────────────────────────────────────────────────────────── */
 .short-main {
   flex: 1;
   display: flex;
@@ -44,11 +79,44 @@
   overflow: hidden;
   padding: 0;
   position: relative;
-  height: calc(100vh - 64px);
-  max-height: calc(100vh - 64px);
+  height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px));
+  max-height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px));
   background-color: transparent;
+  transition: padding-right var(--t-slow) var(--ease);
 
-  // Landscape blocker — covers everything when phone is rotated
+  // Desktop: the discussion panel is fixed on the right; keep the player
+  // centred in what is left beside it.
+  @include desk {
+    &.with-comments { padding-right: var(--side-panel-w); }
+  }
+
+  @include phone {
+    position: absolute;
+    top: var(--topbar-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: auto;
+    max-height: none;
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  @include v2.mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: var(--bottom-nav-height);
+    height: calc(100dvh - var(--bottom-nav-height));
+    max-height: calc(100dvh - var(--bottom-nav-height));
+    background: var(--media-black);
+
+    // Safe-area top offset for all overlay controls on iPhone PWA
+    --safe-top: env(safe-area-inset-top, 0px);
+  }
+
+  // Landscape blocker: covers everything when a phone is rotated
   .landscape-block {
     display: none;
 
@@ -57,118 +125,22 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 12px;
       position: fixed;
       inset: 0;
       z-index: 999999;
-      background: #000;
+      padding: 24px;
+      background: var(--media-black);
+      color: var(--on-media);
       touch-action: none;
       user-select: none;
       -webkit-user-select: none;
 
-      svg { color: #fff; }
-
       p {
-        color: #fff;
-        font-size: 0.95rem;
         margin: 0;
+        @include v2.text(body);
+        text-align: center;
       }
-    }
-  }
-
-  @media (max-width: 768px) {
-    position: absolute;
-    top: 64px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: auto;
-    max-height: none;
-    overflow: hidden;
-    touch-action: none;
-    -webkit-overflow-scrolling: none;
-
-
-  //    top: 0px;
-  //    height: 100vh;
-  // max-height: 100vh;
-  }
-
-  @media (max-width: 767px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 56px;
-    height: calc(100dvh - 56px);
-    max-height: calc(100dvh - 56px);
-    align-items: center;
-
-    // Safe-area top offset for all overlay controls on iPhone PWA
-    --safe-top: env(safe-area-inset-top, 0px);
-  }
-
-  /* Mobile Back Button */
-  .mobileBackButton {
-    display: none;
-
-    @media (max-width: 767px) {
-      display: flex;
-      position: absolute;
-      top: calc(1rem + var(--safe-top, 0px));
-      left: 1rem;
-      z-index: 100;
-      width: 2.5rem;
-      height: 2.5rem;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(4px);
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: background-color 150ms;
-
-      svg {
-        color: white;
-        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
-      }
-
-      &:hover,
-      &:active {
-        background-color: rgba(0, 0, 0, 0.7);
-      }
-    }
-  }
-
-  .videoWrapper {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 0;
-    flex-shrink: 0;
-    transition: transform 0.3s ease;
-    height: 100%;
-    max-height: 100%;
-
-    &.with-comments {
-      transform: translateX(-200px);
-
-      @media (max-width: 1200px) {
-        transform: translateX(-150px);
-      }
-
-      @media (max-width: 768px) {
-        transform: none;
-      }
-    }
-
-    @media (max-width: 768px) {
-      gap: 0;
-      width: 100%;
-      height: 100%;
     }
   }
 
@@ -181,34 +153,93 @@
     outline: none;
   }
 
+  /* ─── Player row ──────────────────────────────────────────────────────── */
+  .videoWrapper {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0;
+    flex-shrink: 0;
+    height: 100%;
+    max-height: 100%;
+
+    @include phone {
+      gap: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  // Desktop, left of the player: the previous short + up / down.
+  .navigationArrows {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    align-self: center;
+
+    @include phone { display: none; }
+  }
+
+  .shortsPrevTile {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 96px;
+    margin-bottom: 8px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font: inherit;
+
+    @include v2.wide { display: flex; }
+
+    &__thumb {
+      display: block;
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      opacity: .5;
+      @include v2.thumb-placeholder;
+      transition: opacity var(--t-fast) var(--ease);
+
+      img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    }
+
+    &__label { @include v2.text(meta-sm); }
+
+    &:hover { color: var(--text); }
+    &:hover &__thumb { opacity: .8; }
+  }
+
+  /* ─── The player ──────────────────────────────────────────────────────── */
   .videoContainer {
     position: relative;
-    height: calc(100% - 2rem);
-    max-height: calc(100vh - 80px);
+    height: calc(100% - 32px);
+    max-height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px) - 32px);
     aspect-ratio: 9 / 16;
-    background-color: #000;
-    border-radius: 0.75rem;
+    background-color: var(--media-black);
+    border-radius: var(--r-3xl);
     overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--border-color);
+    color: var(--on-media);
 
     // Swipe transition animations
     &.swipe-up {
-      animation: swipeUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-      .bottomOverlay {
-        animation: bottomOverlayFadeIn 0.4s ease 0.15s both;
-      }
+      animation: swipeUp .35s cubic-bezier(.25, .46, .45, .94) forwards;
+      .bottomOverlay { animation: bottomOverlayFadeIn .4s ease .15s both; }
     }
     &.swipe-down {
-      animation: swipeDown 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-      .bottomOverlay {
-        animation: bottomOverlayFadeIn 0.4s ease 0.15s both;
-      }
+      animation: swipeDown .35s cubic-bezier(.25, .46, .45, .94) forwards;
+      .bottomOverlay { animation: bottomOverlayFadeIn .4s ease .15s both; }
     }
 
-
-
-    @media (max-width: 768px) {
+    @include phone {
       position: absolute;
       top: 0;
       left: 0;
@@ -216,7 +247,6 @@
       height: 100%;
       max-height: none;
       border-radius: 0;
-      border: none;
       aspect-ratio: unset;
       touch-action: pan-x;
     }
@@ -227,141 +257,97 @@
       z-index: 1;
       pointer-events: none;
       object-fit: contain;
-      background: #000;
+      background: var(--media-black);
     }
-
   }
 
-  /* Thumbnail preload while video loads */
-  .videoThumbnailPreload {
+  // Tap-to-play when the browser blocks autoplay (iOS Low Power Mode, etc.)
+  .autoplayBlocked {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 5;
-    background-color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    inset: 0;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    background: color-mix(in srgb, var(--media-black) 30%, transparent);
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: blur(20px);
-      transform: scale(1.1);
-      opacity: 0.7;
-    }
-
-    .thumbnailOverlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.3);
-
-      svg {
-        color: white;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-      }
+    &__btn {
+      display: grid;
+      place-items: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--on-media);
+      color: var(--media-black);
     }
   }
 
-  /* Skeleton loading animation */
-  .videoSkeleton {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 4;
-    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-  }
-
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
-  // An expired 24h story, in place of the video (Short.jsx). The same look as the
-  // embed player's expired clip: the empty 0h ring on the 3Speak dark. Above the
-  // gesture layer (10) but click-through, except for the button.
+  // An expired 24h story, in place of the video (45b): the hourglass card on
+  // the player's black. Above the gesture layer (10) but click-through, except
+  // for its button, so swiping on still works.
   .storyExpiredScreen {
     position: absolute;
     inset: 0;
     z-index: 11;
     pointer-events: none;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: var(--media-black);
+    color: var(--on-media);
+  }
+
+  .storyExpiredCard {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 24px;
-    text-align: center;
-    color: #fff;
-    background:
-      radial-gradient(circle at 50% 0%, rgba(229, 57, 53, 0.22), transparent 55%),
-      radial-gradient(circle at 100% 100%, rgba(40, 60, 140, 0.25), transparent 60%),
-      #0b0d14;
+    align-items: flex-start;
+    gap: 6px;
+    width: 100%;
+    max-width: 300px;
+    padding: 16px;
+    border-radius: var(--r-2xl);
+    background: color-mix(in srgb, var(--on-media) 8%, var(--media-black));
   }
 
-  .storyExpiredRing {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 6px solid rgba(255, 255, 255, 0.14);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-    font-size: 3rem;
-    font-weight: 800;
-
-    small {
-      font-size: 1.4rem;
-      color: #e53935;
-      margin-left: 2px;
-    }
-  }
+  .storyExpiredIcon { color: color-mix(in srgb, var(--on-media) 60%, transparent); }
 
   .storyExpiredTitle {
     margin: 0;
-    font-size: 1.5rem;
-    font-weight: 800;
+    @include v2.text(title-sm);
   }
 
   .storyExpiredBody {
     margin: 0;
-    max-width: 280px;
-    opacity: 0.75;
+    @include v2.text(meta);
+    color: color-mix(in srgb, var(--on-media) 70%, transparent);
   }
 
-  // Outline, not a red fill (house rule for buttons).
+  // Inverse button on media (white fill, black ink), label flush left
   .storyExpiredNext {
     pointer-events: auto;
-    margin-top: 14px;
-    padding: 8px 20px;
-    border-radius: 999px;
-    border: 1.5px solid #e53935;
-    background: transparent;
-    color: #fff;
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    margin-top: 6px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: v2.radius-for(36);
+    background: var(--on-media);
+    color: var(--media-black);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 900;
     cursor: pointer;
+    transition: transform var(--t-fast) var(--ease);
+
+    &:active { transform: scale(.98); }
   }
 
+  // The gesture layer over the whole player
   .videoOverlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -378,21 +364,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
-    height: 80px;
-    background-color: rgba(0, 0, 0, 0.6);
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
+    background: var(--media-scrim);
+    color: var(--on-media);
     opacity: 0;
-    transform: scale(0.8);
-    transition:
-      opacity 0.15s ease,
-      transform 0.15s ease;
+    transform: scale(.8);
+    transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
     pointer-events: none;
-
-    svg {
-      color: white;
-      fill: rgba(255, 255, 255, 0.9);
-    }
 
     &.visible {
       opacity: 1;
@@ -408,117 +388,57 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--accent);
     opacity: 0;
     transform: scale(0);
     pointer-events: none;
     z-index: 5;
 
-    &.visible {
-      animation: heartPop 0.8s ease forwards;
-    }
+    &.visible { animation: heartPop .8s ease forwards; }
   }
 
-  .muteIndicator,
-  .playbackModeIndicator,
-  .glowIndicator {
+  /* Top-right cluster on the video: subtitles, playback options, mute */
+  .shortsTopControls {
     position: absolute;
     top: calc(12px + var(--safe-top, 0px));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.22);
-    pointer-events: auto;
-    cursor: pointer;
-    z-index: 6;
-    transition: background 0.2s, color 0.2s;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.55);
-    }
-
-    svg {
-      color: rgba(255, 255, 255, 0.85);
-    }
-
-  }
-
-  .muteIndicator {
     right: 12px;
-  }
-
-  .playbackModeIndicator {
-    right: 56px;
-  }
-
-  .subtitleIndicator {
-    position: absolute;
-    top: calc(12px + var(--safe-top, 0px));
-    right: 144px;
+    z-index: 6;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.22);
+    gap: 4px;
     pointer-events: auto;
-    cursor: pointer;
-    z-index: 55;
-    transition: background 0.2s, color 0.2s;
+  }
 
-    &:hover {
-      background: rgba(0, 0, 0, 0.55);
-    }
+  .shortsTopBtn {
+    @include media-btn(36);
 
-    svg {
-      color: rgba(255, 255, 255, 0.85);
-    }
+    &.active { background: color-mix(in srgb, var(--on-media) 24%, transparent); }
 
-    &.active svg {
-      color: var(--accent-primary, #e53935);
-    }
-
-    // Shift left when glow button is hidden in stories mode on mobile
-    &.stories-mode {
-      @media (max-width: 767px) {
-        right: 100px;
-      }
+    @include v2.mobile {
+      width: 40px;
+      height: 40px;
     }
   }
 
-  .glowIndicator {
-    right: 100px;
-
-    &.active svg {
-      color: #fbbf24;
-    }
-
-    @media (max-width: 767px) {
-      .shorts-story-feed & {
-        display: none;
-      }
-    }
-  }
-
+  // The playback mode, said for a moment after it changes
   .modeIndicatorText {
     position: absolute;
-    top: 56px;
+    top: calc(60px + var(--safe-top, 0px));
     right: 12px;
-    padding: 6px 14px;
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: var(--r-sm);
+    background: var(--media-scrim);
+    color: var(--on-media);
+    @include v2.text(label);
+    font-size: 12px;
     white-space: nowrap;
     pointer-events: none;
     z-index: 6;
     opacity: 0;
     transform: translateY(-4px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
 
     &.visible {
       opacity: 1;
@@ -526,63 +446,50 @@
     }
   }
 
+  // Manual mode at the end of a short: replay
   .replayOverlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    inset: 0;
     z-index: 5;
+    display: grid;
+    place-items: center;
     pointer-events: auto;
     cursor: pointer;
-    background: rgba(0, 0, 0, 0.3);
+    background: color-mix(in srgb, var(--media-black) 30%, transparent);
 
-    svg {
-      color: #fff;
-      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
-      transition: transform 0.2s ease;
+    &__btn {
+      display: grid;
+      place-items: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--media-scrim);
+      color: var(--on-media);
+      transition: transform var(--t-fast) var(--ease);
     }
 
-    &:hover svg {
-      transform: scale(1.1);
-    }
+    &:hover .replayOverlay__btn { transform: scale(1.06); }
   }
 
   @keyframes heartPop {
-    0% {
-      opacity: 1;
-      transform: scale(0);
-    }
-    15% {
-      opacity: 1;
-      transform: scale(1.3);
-    }
-    30% {
-      transform: scale(1);
-    }
-    80% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(1.4);
-    }
+    0% { opacity: 1; transform: scale(0); }
+    15% { opacity: 1; transform: scale(1.3); }
+    30% { transform: scale(1); }
+    80% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.4); }
   }
 
+  /* Progress bar along the bottom edge of the player */
   .videoProgressBar {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     height: 3px;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: color-mix(in srgb, var(--on-media) 30%, transparent);
     z-index: 25;
     cursor: pointer;
-    transition: height 0.15s ease;
+    transition: height var(--t-fast) var(--ease);
 
     // Invisible hit area above the visible bar for easier clicking/tapping
     &::before {
@@ -593,7 +500,7 @@
       right: 0;
       height: 20px;
 
-      @media (max-width: 768px) {
+      @include phone {
         top: -28px;
         height: 28px;
       }
@@ -607,9 +514,8 @@
         transform: translate(-50%, -50%) scale(1);
       }
     }
-    @media (max-width: 768px) {
-      bottom: 0.5rem;
-    }
+
+    @include phone { bottom: 8px; }
   }
 
   .videoProgressFill {
@@ -617,8 +523,8 @@
     top: 0;
     left: 0;
     height: 100%;
-    background-color: var(--accent-primary);
-    border-radius: 0 2px 2px 0;
+    background-color: var(--accent);
+    border-radius: 0 var(--r-bar) var(--r-bar) 0;
     pointer-events: none;
   }
 
@@ -627,15 +533,12 @@
     top: 50%;
     width: 12px;
     height: 12px;
-    background-color: var(--accent-primary);
+    background-color: var(--accent);
     border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
     opacity: 0;
-    transition:
-      opacity 0.15s ease,
-      transform 0.15s ease;
+    transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
     pointer-events: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   // Loading overlay for short navigation
@@ -643,141 +546,150 @@
     position: absolute;
     inset: 0;
     z-index: 30;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
+    display: grid;
+    place-items: center;
+    background: var(--media-scrim);
+    color: var(--on-media);
   }
 
-  // Back button after navigating to parent short
+  // "Back" after opening a parent short from a reaction chain
   .shortBackBtn {
     position: absolute;
     top: calc(12px + var(--safe-top, 0px));
     left: 12px;
     z-index: 55;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px 8px 12px;
-    border: none;
-    border-radius: 20px;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-    transition: all 0.15s ease;
+    @include v2.control(32);
+    padding: 0 12px 0 8px;
+    background: var(--media-scrim);
+    color: var(--on-media);
+    @include v2.text(label);
+    font-size: 12px;
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: scale(1.04);
-    }
+    &:hover { background: var(--media-scrim-strong); }
 
-    &:active {
-      transform: scale(0.97);
-    }
-
+    // Phones: a square arrow at the top-left (the feed switch sits beside it)
     &.mobileOnly {
       display: none;
-      padding: 8px;
-      background: rgba(0, 0, 0, 0.2);
-      box-shadow: none;
-      // Top-left corner
-      top: calc(12px + var(--safe-top, 0px));
-      left: 12px;
-      right: auto;
 
-      @media (max-width: 767px) {
-        display: flex;
+      @include v2.mobile {
+        @include media-btn(40);
       }
     }
   }
 
-  // Stories mode button (next to back button)
+  // Stories mode: back to the shorts feed (next to the back arrow on phones)
   .shortStoriesBtn {
     position: absolute;
     top: calc(12px + var(--safe-top, 0px));
-    left: 52px;
+    left: 60px;
     z-index: 55;
     display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.2);
-    color: #fff;
-    cursor: pointer;
-    backdrop-filter: blur(8px);
-    transition: all 0.15s ease;
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: scale(1.04);
-    }
-
-    &:active {
-      transform: scale(0.97);
-    }
-
-    &.mobileOnly {
-      @media (max-width: 767px) {
-        display: flex;
-      }
+    @include v2.mobile {
+      @include media-btn(40);
     }
   }
 
-  // Reaction chain container
+  /* ─── Feed switch ON the video: Discover / My interests (segmented on scrim) ── */
+  .shortsFeedSwitch {
+    position: absolute;
+    top: calc(12px + var(--safe-top, 0px));
+    left: 12px;
+    z-index: 6;
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: var(--r-md);
+    background: var(--media-scrim);
+    pointer-events: auto;
+
+    button {
+      @include v2.control(32);
+      @include v2.text(label);
+      background: transparent;
+      color: var(--on-media);
+      opacity: .7;
+      white-space: nowrap;
+
+      &:hover { opacity: 1; }
+
+      &.active {
+        opacity: 1;
+        background: color-mix(in srgb, var(--on-media) 16%, transparent);
+      }
+    }
+
+    // Phones: the back arrow sits top-left, so the switch starts beside it
+    @include v2.mobile {
+      left: 60px;
+
+      button { font-size: 12px; padding: 0 10px; }
+    }
+
+    @media (max-width: 374px) {
+      button { height: 28px; border-radius: var(--r-sm); font-size: 11px; padding: 0 8px; }
+    }
+  }
+
+  // The desktop "Back" pill takes the top-left corner while it shows
+  .videoContainer:has(> .shortBackBtn:not(.mobileOnly)) .shortsFeedSwitch { display: none; }
+
+  /* ─── Reaction chain (reactions and remixes), top-left on the video ───── */
+  .reactionChainOverlay {
+    position: absolute;
+    top: calc(64px + var(--safe-top, 0px));
+    left: 12px;
+    right: 12px;
+    z-index: 11;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+
+    &.collapsed { flex-direction: row; }
+  }
+
   .reactionChainBreadcrumb {
     display: flex;
     flex-direction: column;
     gap: 6px;
     width: 100%;
 
-    // Force AuthorBadge colors for overlay context
+    // AuthorBadge, white on the scrim
     .author-badge {
-      padding: 1px 4px 1px 1px;
+      padding: 0;
+      background: transparent;
+      border-color: transparent;
 
-      img {
-        width: 16px;
-        height: 16px;
-      }
+      img { width: 16px; height: 16px; }
 
       .author-name {
-        font-size: 10px;
-        color: rgba(255, 255, 255, 0.85);
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--on-media);
       }
 
       .followers-count { display: none; }
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: transparent;
-      }
+      &:hover { background: transparent; border-color: transparent; }
     }
   }
 
-  // Root / origin card — 50% wide, thumb left + info right
   .chainRoot {
     display: flex;
+    align-items: center;
     gap: 8px;
-    width: 50%;
+    width: min(100%, 300px);
     padding: 6px;
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-left: 3px solid var(--accent-primary, #e53935);
-    position: relative;
+    border-radius: var(--r-md);
+    background: var(--media-scrim-strong);
+    color: var(--on-media);
   }
 
   .chainRootThumb {
-    width: 54px;
-    height: 34px;
-    border-radius: 4px;
+    width: 56px;
+    height: 32px;
+    border-radius: var(--r-sm);
     object-fit: cover;
     flex-shrink: 0;
   }
@@ -785,16 +697,15 @@
   .chainRootInfo {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
     min-width: 0;
     flex: 1;
   }
 
   .chainRootTitle {
-    font-size: 11px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.25;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -808,104 +719,82 @@
   }
 
   .chainRootTimestamp {
-    font-size: 10px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.5);
+    @include v2.mono(11, 700);
+    color: color-mix(in srgb, var(--on-media) 70%, transparent);
     white-space: nowrap;
   }
 
-  // Action button (play / open)
+  // Open / play buttons on chain cards
   .chainActionBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     width: 28px;
     height: 28px;
     flex-shrink: 0;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.15);
-    color: #fff;
+    background: color-mix(in srgb, var(--on-media) 16%, transparent);
+    color: var(--on-media);
     text-decoration: none;
-    transition: background 0.15s ease;
+    transition: background var(--t-fast) var(--ease);
     align-self: center;
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
+    &:hover { background: color-mix(in srgb, var(--on-media) 28%, transparent); color: var(--on-media); }
 
-    &--sm {
-      width: 22px;
-      height: 22px;
-    }
+    &--sm { width: 24px; height: 24px; }
   }
 
-  // Horizontal child row with dashes
   .chainChildRow {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 4px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    max-width: 100%;
+    @include v2.scroll-x;
     cursor: grab;
     user-select: none;
     -webkit-overflow-scrolling: touch;
-    &::-webkit-scrollbar { display: none; }
   }
 
+  // The link between two steps of the chain
   .chainDash {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.25);
-    padding-top: 10px;
-    user-select: none;
+    flex: none;
+    width: 8px;
+    height: 2px;
+    border-radius: 1px;
+    background: color-mix(in srgb, var(--on-media) 35%, transparent);
   }
 
-  // Child cards — ~33% wide, expand on click
   .chainChild {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
     width: 140px;
     min-width: 140px;
     flex-shrink: 0;
-    padding: 5px 6px;
-    border-radius: 6px;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 6px 8px;
+    border-radius: var(--r-md);
+    background: var(--media-scrim);
+    color: var(--on-media);
     cursor: pointer;
-    transition: width 0.2s ease, min-width 0.2s ease, background 0.15s ease;
+    transition: width var(--t-base) var(--ease), min-width var(--t-base) var(--ease), background var(--t-fast) var(--ease);
 
-    &--video {
-      border-left: 2px solid var(--accent-primary, #e53935);
-    }
+    // This short: tinted with the accent
+    &--current { background: color-mix(in srgb, var(--accent) 35%, var(--media-scrim)); }
 
-    &--comment {
-      border-left: 2px solid rgba(255, 255, 255, 0.2);
-    }
-
-    &--current {
-      border-left: 2px solid var(--accent-primary, #e53935);
-      background: rgba(229, 57, 53, 0.1);
-    }
-
+    // Remixes of this short (after it in the chain)
     &--downstream {
-      border-left: 2px dashed var(--accent-primary, #e53935);
-      opacity: 0.8;
+      outline: 1px dashed color-mix(in srgb, var(--on-media) 35%, transparent);
+      outline-offset: -1px;
+      opacity: .85;
     }
 
     &--expanded {
       width: 220px;
       min-width: 220px;
-      background: rgba(0, 0, 0, 0.8);
+      background: var(--media-scrim-strong);
     }
 
-    &:hover {
-      background: rgba(0, 0, 0, 0.8);
-    }
+    &:hover { background: var(--media-scrim-strong); }
+    &--current:hover { background: color-mix(in srgb, var(--accent) 45%, var(--media-scrim)); }
   }
 
   .chainChildHeader {
@@ -916,8 +805,8 @@
   }
 
   .chainChildTitle {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.55);
+    font-size: 11px;
+    color: color-mix(in srgb, var(--on-media) 75%, transparent);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -928,15 +817,15 @@
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.75);
+      color: var(--on-media);
     }
   }
 
   .chainChildText {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.4;
     margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
+    color: color-mix(in srgb, var(--on-media) 75%, transparent);
     display: -webkit-box;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
@@ -945,86 +834,50 @@
   }
 
   .chainChildDuration {
-    font-size: 9px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.35);
+    @include v2.mono(10, 700);
+    color: color-mix(in srgb, var(--on-media) 60%, transparent);
   }
 
-  // Reaction chain overlay
-  .reactionChainOverlay {
-    position: absolute;
-    top: 56px;
-    left: 8px;
-    right: 8px;
-    z-index: 11;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-
-    &.has-back {
-      top: 56px;
-    }
-
-    &.collapsed {
-      flex-direction: row;
-      left: 0;
-      right: 0;
-      justify-content: center;
-    }
-  }
-
+  // "show reaction chain · 3" (collapsed) / the chevron (open)
   .chainToggleBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include v2.control(28);
     gap: 4px;
-    height: 26px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 13px;
-    background: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    cursor: pointer;
+    padding: 0 8px;
+    background: var(--media-scrim);
+    color: var(--on-media);
     flex-shrink: 0;
-    padding: 0 10px;
 
-    &:hover {
-      background: rgba(0, 0, 0, 0.9);
-      border-color: rgba(255, 255, 255, 0.5);
-    }
+    &:hover { background: var(--media-scrim-strong); }
   }
 
   .chainToggleLabel {
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 700;
     white-space: nowrap;
   }
 
+  .chainToggleCount { @include v2.mono(11, 700); opacity: .7; }
+
+  /* ─── Creator, caption and sound: bottom-left on a media scrim ────────── */
   .bottomOverlay {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1rem;
-    padding-bottom: 1.25rem;
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.8),
-      rgba(0, 0, 0, 0.4),
-      transparent
-    );
-    padding-top: 6rem;
+    padding: 96px 16px 20px;
+    background: linear-gradient(to top, var(--media-scrim-strong), transparent);
+    color: var(--on-media);
     z-index: 15;
     pointer-events: none;
 
     .userRow,
-    .subscribeBtn,
     .reshareAvatars,
+    a,
     button {
       pointer-events: auto;
     }
 
-    // Subtitle overlay inside bottomOverlay — flows with content, stays above user badge
+    // Subtitles flow above the creator row and move with it
     .subtitle-overlay {
       position: relative;
       bottom: auto;
@@ -1033,217 +886,175 @@
       pointer-events: none;
     }
 
-    @media (max-width: 768px) {
-      padding-right: 5rem;
-      padding-bottom: 1.25rem;
+    // Phones: clear the dock column on the right
+    @include phone {
+      padding-right: 84px;
+      padding-bottom: 20px;
       z-index: 20;
     }
   }
 
+  // People who hyped it
   .reshareAvatars {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    gap: 0;
-    margin-bottom: 6px;
+    gap: 4px;
+    margin-bottom: 8px;
 
     .reshareAvatarWrap {
       position: relative;
       cursor: pointer;
-      margin-right: 4px;
-      transition: transform 0.15s, opacity 0.4s ease;
-      animation: reshareAvatarFadeIn 0.4s ease both;
+      transition: transform var(--t-fast) var(--ease), opacity .4s ease;
+      animation: reshareAvatarFadeIn .4s ease both;
 
       @for $i from 1 through 6 {
-        &:nth-child(#{$i}) {
-          animation-delay: #{($i - 1) * 0.07}s;
-        }
+        &:nth-child(#{$i}) { animation-delay: #{($i - 1) * .07}s; }
       }
 
-      &:hover {
-        transform: scale(1.15);
-        z-index: 1;
-      }
+      &:hover { transform: scale(1.1); z-index: 1; }
     }
 
     .reshareAvatar {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      border: 2px solid color-mix(in srgb, var(--on-media) 40%, transparent);
       object-fit: cover;
       display: block;
     }
 
     .reshareBadge {
       position: absolute;
-      top: -3px;
-      right: -3px;
-      width: 18px;
-      height: 18px;
-      background: var(--bg-primary);
+      top: -4px;
+      right: -4px;
+      display: grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
-      padding: 2px;
-      color: var(--text-primary);
-      border: 1.5px solid var(--border-light);
+      background: var(--media-scrim-strong);
+      color: var(--accent);
     }
 
     .reshareMore {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.8);
-      font-weight: 500;
-      margin-left: 10px;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-    }
-
-    @media (max-width: 768px) {
-      .reshareAvatar {
-        width: 33px;
-        height: 33px;
-      }
-
-      .reshareBadge {
-        width: 16px;
-        height: 16px;
-      }
+      margin-left: 6px;
+      @include v2.mono(12, 700);
+      color: var(--on-media);
     }
   }
 
   @keyframes bottomOverlayFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes reshareAvatarFadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.7);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+    from { opacity: 0; transform: scale(.7); }
+    to { opacity: 1; transform: scale(1); }
   }
 
+  // Creator: avatar with a white ring, name, and a white Follow button (18a)
   .userRow {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-        @media (max-width: 768px) {
-      margin-bottom: 0.35rem;
-    }
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
 
     .author-badge {
+      gap: 8px;
+      padding: 0;
       background: transparent;
       border-color: transparent;
 
-      &:hover {
-        background: transparent;
-        border-color: transparent;
-      }
+      &:hover { background: transparent; border-color: transparent; }
 
       img {
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
+        box-shadow: 0 0 0 2px var(--on-media);
       }
 
       .author-name {
-        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--on-media);
       }
 
       .followers-count {
-        color: rgba(255, 255, 255, 0.7);
+        font-size: 11px;
+        color: color-mix(in srgb, var(--on-media) 70%, transparent);
       }
-    }
 
-  }
+      .follow-btn {
+        align-self: center;
+        height: 24px;
+        margin-left: 4px;
+        padding: 0 10px;
+        border-radius: v2.radius-for(24);
+        background: var(--on-media);
+        color: var(--media-black);
+        font-size: 11px;
+        font-weight: 900;
+        animation: none;
 
-  .avatar {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 50%;
-    background-color: var(--bg-tertiary);
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+        &:hover { opacity: 1; filter: brightness(.92); }
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
+        &.following {
+          border: 0;
+          background: color-mix(in srgb, var(--on-media) 16%, transparent);
+          color: var(--on-media) !important;
 
-  .username {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: white;
-    letter-spacing: 0.025em;
-  }
-
-  .subscribeBtn {
-    background-color: white;
-    color: black;
-    padding: 0.375rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    border: none;
-    cursor: pointer;
-    margin-left: 0.25rem;
-    transition: background-color 150ms;
-    @media (max-width: 768px) {
-      padding: 0.175rem 0.75rem;
-    }
-
-    &:hover {
-      background-color: #e5e7eb;
+          &:hover { filter: none; background: color-mix(in srgb, var(--on-media) 24%, transparent); }
+        }
+      }
     }
   }
 
   .caption {
-    font-size: 0.8rem;
-    color: white;
-    font-weight: 400;
-    margin-bottom: 0.75rem;
-    line-height: 1.375;
+    @include v2.text(body-sm);
+    color: var(--on-media);
+    margin-bottom: 8px;
+    line-height: 1.4;
     cursor: pointer;
     pointer-events: auto;
-    @media (max-width: 768px) {
-      margin-bottom: 0.4rem;
-      font-size: 0.75rem;
-    }
+
+    @include phone { margin-bottom: 6px; }
 
     // A live 24h story: "Story · 5h left" above the title / caption.
     .shortsStoryBadge {
-      display: inline-block;
-      margin-bottom: 4px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(229, 57, 53, 0.9);
-      background: rgba(0, 0, 0, 0.35);
-      font-size: 0.72rem;
-      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 20px;
+      margin-bottom: 6px;
+      padding: 0 8px;
+      border-radius: 7px;
+      background: var(--media-scrim);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .shortsStoryBadge__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
     }
 
     // The creator's `## Title` line: one bold line above the caption.
     .captionTitle {
       margin: 0 0 2px;
-      font-weight: 700;
+      @include v2.text(title-sm);
+      line-height: 1.35;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    &--expanded .captionTitle {
-      white-space: normal;
-    }
+    &--expanded .captionTitle { white-space: normal; }
 
     .captionText {
       display: -webkit-box;
@@ -1253,149 +1064,119 @@
       margin: 0;
     }
 
-    // The time-ago always shows (owner, 2026-11-05); the payout next to it only
-    // once the caption is expanded, as before.
-    .captionDate {
-      font-size: 0.7rem;
-      opacity: 0.6;
-      display: inline;
-
-      .captionPayout { display: none; }
-    }
-
-    &--expanded .captionDate .captionPayout {
-      display: inline-flex;
-    }
-
-    .captionMore {
-      font-weight: 600;
-      opacity: 0.8;
-      font-size: 0.75rem;
-    }
-
     &--expanded .captionText {
       display: block;
       -webkit-line-clamp: unset;
       overflow: visible;
     }
 
+    // The time-ago always shows; the payout next to it only once the caption is expanded.
+    .captionDate {
+      font-size: 11px;
+      color: color-mix(in srgb, var(--on-media) 70%, transparent);
+      display: inline;
+
+      .captionPayout { display: none; }
+    }
+
+    &--expanded .captionDate .captionPayout { display: inline-flex; }
+
+    .captionMore {
+      margin-left: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    // Links and #tags inside the caption text
     .captionBadge {
       display: inline-block;
-      padding: 2px 8px;
-      margin: 1px 3px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.15);
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 0.75rem;
+      padding: 0 8px;
+      margin: 1px 2px;
+      border-radius: var(--r-sm);
+      background: color-mix(in srgb, var(--on-media) 16%, transparent);
+      color: var(--on-media);
+      font-size: 12px;
+      line-height: 20px;
       text-decoration: none;
       pointer-events: auto;
       white-space: nowrap;
       vertical-align: middle;
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.25);
-        color: #fff;
-      }
+      &:hover { background: color-mix(in srgb, var(--on-media) 26%, transparent); color: var(--on-media); }
     }
 
     .captionActions {
-      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
       pointer-events: auto;
 
       .comment-translate-btn {
-        color: rgba(255, 255, 255, 0.7);
-        border-color: rgba(255, 255, 255, 0.2);
+        height: 28px;
+        border-radius: var(--r-sm);
+        border: 0;
+        background: color-mix(in srgb, var(--on-media) 16%, transparent);
+        color: var(--on-media);
 
-        &:hover {
-          color: #fff;
-          background: rgba(255, 255, 255, 0.12);
-        }
+        &:hover { background: color-mix(in srgb, var(--on-media) 26%, transparent); color: var(--on-media); }
       }
     }
 
-    .shortsCuratedBadge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: none;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 6px;
-      padding: 3px 6px;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.7);
-      vertical-align: middle;
-      cursor: pointer;
-
-      img {
-        width: 14px;
-        height: 14px;
-        border-radius: 3px;
-      }
-
-      &--inline {
-        margin-left: 6px;
-      }
-    }
-
-    .captionDismissTranslation {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 12px;
-      font-family: inherit;
-      color: rgba(255, 255, 255, 0.7);
-      background: none;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 6px;
-      padding: 3px 10px;
-      cursor: pointer;
-
-      &:hover {
-        color: #fff;
-        background: rgba(255, 255, 255, 0.12);
-      }
-    }
-
+    // Small pills on the video: curated, show original, report
+    .shortsCuratedBadge,
+    .captionDismissTranslation,
     .captionReportBtn {
       display: inline-flex;
       align-items: center;
-      background: none;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 6px;
-      padding: 3px 6px;
-      color: rgba(255, 255, 255, 0.7);
+      gap: 4px;
+      height: 28px;
+      padding: 0 8px;
+      border: 0;
+      border-radius: var(--r-sm);
+      background: color-mix(in srgb, var(--on-media) 16%, transparent);
+      color: var(--on-media);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      vertical-align: middle;
       cursor: pointer;
 
-      &:hover {
-        color: #fff;
-        background: rgba(255, 255, 255, 0.12);
-      }
+      &:hover { background: color-mix(in srgb, var(--on-media) 26%, transparent); }
+    }
 
-      &.reported {
-        color: #e31337;
-        border-color: rgba(227, 19, 55, 0.4);
-      }
+    .shortsCuratedBadge {
+      img { width: 14px; height: 14px; border-radius: 4px; }
+
+      &--inline { margin-left: 6px; height: 24px; font-size: 11px; }
+    }
+
+    .captionReportBtn {
+      width: 28px;
+      padding: 0;
+      justify-content: center;
+      margin-right: 4px;
+
+      &.reported { color: var(--accent); }
     }
 
     .captionTags {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 6px;
+      margin-top: 8px;
 
       .captionTag {
-        font-size: 0.7rem;
-        color: rgba(255, 255, 255, 0.85);
-        background: rgba(255, 255, 255, 0.15);
         padding: 2px 8px;
-        border-radius: 10px;
+        border-radius: var(--r-sm);
+        background: color-mix(in srgb, var(--on-media) 16%, transparent);
+        color: var(--on-media);
+        font-size: 12px;
         text-decoration: none;
         pointer-events: auto;
 
-        &:hover {
-          background: rgba(255, 255, 255, 0.25);
-          color: #fff;
-        }
+        &:hover { background: color-mix(in srgb, var(--on-media) 26%, transparent); color: var(--on-media); }
       }
     }
   }
@@ -1403,370 +1184,143 @@
   .audioMarquee {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    opacity: 0.9;
-
-    svg {
-      width: 0.75rem;
-      height: 0.75rem;
-      color: white;
-    }
+    gap: 6px;
+    color: var(--on-media);
   }
 
   .audioText {
     overflow: hidden;
-    width: 10rem;
+    max-width: 200px;
 
     p {
-      font-size: 0.75rem;
-      color: white;
+      margin: 0;
+      font-size: 12px;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
+  /* ─── Dock: the v2 action tiles (18a) ─────────────────────────────────── */
+  // Desktop: a column of 64px tiles beside the player, bottom-aligned with it.
+  // A second column appears if the window is too short for all of them.
   .actionSidebar {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    // Desktop: bottom-align the column next to the video; gap is ~50% of the
-    // (smaller) button size.
+    flex-wrap: wrap;
+    align-content: flex-start;
     align-self: flex-end;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0;
-
-    @media (max-width: 768px) {
-      position: absolute;
-      right: 0.75rem;
-      bottom: 2rem;
-      z-index: 50;
-      align-self: auto;
-      margin-bottom: 0;
-      padding-bottom: 0;
-      gap: 0.625rem;
-    }
+    gap: 8px;
+    max-height: calc(100% - 32px);
+    margin-bottom: 16px;
   }
 
-  .actionItem {
+  .actionSidebar .actionItem {
+    position: relative;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
-    cursor: pointer;
-    position: relative;
-
-    @media (max-width: 768px) {
-      gap: 0.125rem;
-      pointer-events: auto;
-    }
-
-    // Deactivated (e.g. voting on your own short) — visible but not clickable.
-    &.disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-  }
-
-  .actionButton {
-    width: 3rem;
-    height: 3rem;
-
-    // Desktop: ~66% of the original size (icons scaled to match).
-    @media (min-width: 769px) {
-      width: 2rem;
-      height: 2rem;
-
-      svg,
-      img {
-        width: 1rem;
-        height: 1rem;
-      }
-    }
-    background-color: var(--bg-tertiary);
-    backdrop-filter: blur(4px);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    transition: background-color 150ms;
-    border: none;
+    gap: 2px;
+    width: 64px;
+    height: 64px;
+    padding: 0 4px;
+    border: 0;
+    border-radius: var(--r-xl);
+    background: var(--surface-2);
+    color: var(--text);
+    font: inherit;
     cursor: pointer;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-    :root:not([data-theme="dark"]) & {
-      background-color: rgba(0, 0, 0, 0.12);
-    }
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+    &:active { transform: scale(.98); }
 
-    [data-theme="dark"] & {
-      background-color: rgba(39, 39, 39, 0.8);
-    }
+    .material-symbols-rounded { font-size: 24px; }
 
-    &:hover {
-      background-color: var(--bg-elevated);
-
-      :root:not([data-theme="dark"]) & {
-        background-color: rgba(0, 0, 0, 0.18);
-      }
-
-      [data-theme="dark"] & {
-        background-color: #3f3f3f;
-      }
-    }
-
-    &.active {
-      background-color: var(--bg-elevated);
-
-      [data-theme="dark"] & {
-        background-color: #3f3f3f;
-      }
-    }
-
-    svg {
-      color: var(--text-primary);
-      stroke-width: 1.5;
-
-      &.flipped {
-        transform: scaleX(-1);
-      }
-    }
-
-    &.liked {
-      svg {
-        color: var(--accent-primary);
-        fill: var(--accent-primary);
-      }
-    }
-
-    &.reshared {
-      svg {
-        color: #e53935;
-      }
-
-      @media (max-width: 768px) {
-        svg {
-          color: #e53935;
-          filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
-        }
-      }
-    }
-
-    &.reported {
-      svg {
-        color: #e31337;
-      }
-
-      @media (max-width: 768px) {
-        svg {
-          color: #e31337;
-          filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
-        }
-      }
-    }
-
-    &.reward {
-      svg {
-        color: var(--text-primary);
-      }
-    }
-
-    @media (max-width: 768px) {
-      width: 2.75rem;
-      height: 2.75rem;
-      background-color: rgba(0, 0, 0, 0.20);
-      pointer-events: auto;
-
-      // Force same style in both themes on mobile (always over dark video)
-      :root:not([data-theme="dark"]) & {
-        background-color: rgba(0, 0, 0, 0.20);
-      }
-
-      [data-theme="dark"] & {
-        background-color: rgba(0, 0, 0, 0.20);
-      }
-
-      svg {
-        width: 22px;
-        height: 22px;
-        color: white !important;
-        filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
-      }
-
-      &.reward svg {
-        color: white !important;
-        filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
-      }
-    }
-  }
-
-  .remix-dropdown-short {
-    position: absolute;
-    right: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-right: 8px;
-    background: rgba(30, 30, 30, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    z-index: 100;
-    min-width: 150px;
-    overflow: hidden;
-
-    button {
+    // WatchStream's markup: the glyph sits in a .actionButton holder
+    .actionButton {
       display: flex;
       align-items: center;
-      gap: 8px;
-      width: 100%;
-      padding: 10px 14px;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 13px;
-      cursor: pointer;
+      justify-content: center;
+      height: 24px;
+      background: transparent;
+      color: inherit;
+
+      svg { width: 24px; height: 24px; color: currentColor; }
+    }
+
+    .actionLabel {
+      max-width: 100%;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: inherit;
       white-space: nowrap;
-      transition: background 0.15s ease;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-
-      & + button {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
-    }
-  }
-
-  .actionLabel {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-primary);
-
-    :root:not([data-theme="dark"]) & {
-      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    @media (max-width: 768px) {
-      font-size: 0.75rem;
-      color: white;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-
-      // Override light-theme color on mobile (always over dark video)
-      :root:not([data-theme="dark"]) & {
-        color: white;
-      }
-    }
-  }
-
-  .albumArt {
-    width: 30px;
-    height: 30px;
-    background-color: var(--bg-secondary);
-    border-radius: 0.375rem;
-    overflow: hidden;
-    margin-top: 0.5rem;
-    border: 1px solid var(--border-light);
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    // Your vote, your hype: accent tint. Saved: cyan (secondary selection).
+    &.liked,
+    &.reshared,
+    &:has(> .actionButton.liked) {
+      background: var(--accent-tint-strong);
+      color: var(--accent);
     }
 
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
-
-
-  .navigationArrows {
-    // Pinned to the far right of the screen (not next to the centered video).
-    position: fixed;
-    right: 1.25rem;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 200; // above the comments panel (150) so they stay visible
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
-
-  .navButton {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    background-color: var(--bg-tertiary);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    transition: background-color 150ms;
-    box-shadow: var(--shadow-sm);
-
-    :root:not([data-theme="dark"]) & {
-      background-color: rgba(0, 0, 0, 0.12);
+    &.saved {
+      background: var(--cyan-tint);
+      color: var(--cyan);
     }
 
-    [data-theme="dark"] & {
-      background-color: rgba(39, 39, 39, 0.8);
-    }
+    &.active { background: color-mix(in srgb, var(--text) 14%, var(--surface-2)); }
 
-    &:hover {
-      background-color: var(--bg-elevated);
-
-      :root:not([data-theme="dark"]) & {
-        background-color: rgba(0, 0, 0, 0.18);
-      }
-
-      [data-theme="dark"] & {
-        background-color: #3f3f3f;
-      }
-    }
-
-    &:disabled {
-      opacity: 0.5;
+    // Deactivated (e.g. voting on your own short): visible but not clickable.
+    &.disabled {
+      opacity: .45;
       cursor: not-allowed;
-    }
-
-    svg {
-      color: var(--text-primary);
-      stroke-width: 1.5;
+      transform: none;
     }
   }
 
-  .spinner {
-    animation: spin 1s linear infinite;
-  }
-
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
+  // Phones: the same tiles as a column ON the video (shared rail look)
+  @include phone {
+    .actionSidebar {
+      @include rail.rail-sidebar(12px, 32px);
+      flex-wrap: nowrap;
+      max-height: none;
+      margin: 0;
+      align-self: auto;
+      pointer-events: auto;
     }
-    to {
-      transform: rotate(360deg);
+
+    .actionSidebar .actionItem {
+      @include rail.rail-item;
+
+      .material-symbols-rounded,
+      .actionButton { @include rail.rail-icon; }
+      .actionLabel { @include rail.rail-label; }
+
+      &.liked,
+      &:has(> .actionButton.liked) {
+        background-color: color-mix(in srgb, var(--accent) 85%, transparent);
+        color: var(--on-media);
+      }
+
+      &.reshared {
+        background-color: var(--media-scrim);
+        .material-symbols-rounded { color: var(--accent); }
+      }
+
+      &.saved { background-color: var(--media-scrim-strong); color: var(--on-media); }
+      &.active { background-color: var(--media-scrim-strong); }
+      &.disabled { opacity: .45; }
     }
   }
 
-  .shorts-breathe-logo {
-    color: var(--text-primary, #fff);
-    margin-bottom: 1.5rem;
-    animation: breathe 2s ease-in-out infinite;
-  }
-
-  @keyframes breathe {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.15); opacity: 1; }
-  }
-
-  @keyframes pulseText {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  }
-
+  /* ─── States without a short: loading, error, empty ───────────────────── */
   .loadingState,
   .errorState,
   .emptyState {
@@ -1774,147 +1328,93 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
     height: 100%;
     min-height: 400px;
-    color: var(--text-primary);
-    gap: 1rem;
+    padding: 24px;
 
-    @media (max-width: 767px) {
-      background: #000;
-      color: #fff;
-
-      svg { color: #fff; }
+    .v2-empty {
+      width: 100%;
+      max-width: 360px;
     }
 
-    p {
-      font-size: 0.8rem;
-      font-family: inherit;
-      color: var(--text-secondary);
-      animation: pulseText 1.5s ease-in-out infinite;
-
-      @media (max-width: 767px) {
-        color: rgba(255, 255, 255, 0.7);
-      }
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-      background-color: transparent;
-      color: var(--accent-primary, #e53935);
-      border: 1px solid var(--accent-primary, #e53935);
-      border-radius: 0.5rem;
-      cursor: pointer;
-      font-size: 0.875rem;
-
-      &:hover {
-        background-color: var(--accent-hover);
-      }
-    }
+    @include v2.mobile { background: var(--media-black); }
   }
 
-  /* Loading more indicator */
-  .loadingMoreIndicator {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(8px);
-    border-radius: 9999px;
-    z-index: 100;
-    
-    span {
-      font-size: 0.875rem;
-      color: white;
-      font-weight: 500;
-    }
+  .spinner { animation: v2-spin 1s linear infinite; }
+}
 
-    svg {
-      color: white;
-    }
+// Swipe navigation animations
+@keyframes swipeUp {
+  0% { transform: translateY(30%); opacity: .4; }
+  100% { transform: translateY(0); opacity: 1; }
+}
 
-    @media (max-width: 768px) {
-      bottom: 5rem;
-      padding: 0.5rem 1rem;
-      
-      span {
-        font-size: 0.75rem;
-      }
-    }
-  }
+@keyframes swipeDown {
+  0% { transform: translateY(-30%); opacity: .4; }
+  100% { transform: translateY(0); opacity: 1; }
+}
 
-  /* ============= COMMENTS PANEL ============= */
+/* ============================================================================
+   Discussion (portaled to <body>): a fixed side panel on desktop, a bottom
+   sheet on phones.
+   ========================================================================== */
+.shorts-comments-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  z-index: 250;
+
   .commentsPanel {
     position: fixed;
-    top: 0;
-    // Desktop: sit left of the far-right nav arrows so they stay visible
-    // (arrows occupy ~1.25rem–4.25rem from the right edge). Mobile resets to 0.
-    right: 5rem;
-    width: 400px;
-    height: 100vh;
-    background-color: var(--bg-secondary);
-    border-left: 1px solid var(--border-color);
+    top: var(--topbar-h);
+    right: 0;
+    width: var(--side-panel-w);
+    height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px));
+    background: var(--surface);
+    color: var(--text);
+    border-left: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    // `translateX(100%)` slides it by its OWN WIDTH only — but the panel sits at
-    // `right: 5rem`, so its right edge starts 5rem inside the viewport and 5rem of it
-    // stayed on screen as a strip after closing. Clear the offset too.
-    transform: translateX(calc(100% + 5rem));
-    transition: transform 0.3s ease;
+    transform: translateX(100%);
+    transition: transform var(--t-slow) var(--ease);
     z-index: 150;
 
-    [data-theme="dark"] & {
-      background-color: #0f0f0f;
-      border-left-color: #272727;
-    }
+    &.open { transform: translateX(0); }
 
-    @media (max-width: 1200px) {
-      width: 350px;
-    }
-
-    @media (max-width: 768px) {
+    @include phone {
       top: auto;
       bottom: 0;
       left: 0;
       right: 0;
       width: 100%;
       height: 60vh;
-      max-height: 70vh;
-      border-left: none;
-      border-top: 1px solid #272727;
-      border-radius: 1rem 1rem 0 0;
+      max-height: 88vh;
+      border-left: 0;
+      border-top: 1px solid var(--border);
+      border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+      box-shadow: var(--shadow-sheet);
       transform: translateY(100%);
       padding-bottom: env(safe-area-inset-bottom, 0px);
-    }
 
-    &.open {
-      transform: translateX(0);
-
-      @media (max-width: 768px) {
-        transform: translateY(0);
-      }
+      &.open { transform: translateY(0); }
     }
   }
 
   .commentsOverlay {
     display: none;
 
-    @media (max-width: 768px) {
+    @include phone {
       display: block;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--overlay-bg);
+      inset: 0;
+      background: var(--overlay);
       z-index: 149;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity var(--t-slow) var(--ease);
 
       &.visible {
         opacity: 1;
@@ -1923,182 +1423,123 @@
     }
   }
 
+  // Sheet grab handle (phones), also the drag-to-close area
   .commentsPanelHandle {
     display: none;
 
-    @media (max-width: 768px) {
+    @include phone {
       display: flex;
       justify-content: center;
-      padding: 0.6rem 0;
+      flex: none;
+      padding: 8px 0 4px;
       cursor: grab;
       touch-action: none;
 
       &::before {
         content: "";
-        width: 2.5rem;
-        height: 0.25rem;
-        background-color: var(--text-muted);
-        border-radius: 9999px;
+        width: 40px;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--border);
       }
     }
   }
 
   .commentsHeader {
-    flex-shrink: 0;
-    padding: 1rem 1.25rem 0.75rem;
-    margin-bottom: 0;
+    flex: none;
+    margin: 0;
+    padding: 18px 16px 12px 20px;
 
-    @media (max-width: 768px) {
-      padding: 0.1rem 1rem 0.75rem;
-    }
+    @include phone { padding: 8px 16px 12px 20px; }
   }
 
   .commentsCount {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--text-secondary);
+    @include v2.mono(13, 700);
+    color: var(--muted);
   }
 
-  // Newest / Oldest / Popular, between the count and the close button.
   .commentsSort {
-    font-size: 0.75rem;
-    color: var(--text-primary);
-    background: transparent;
-    border: 1px solid var(--border-light, rgba(255, 255, 255, 0.15));
-    border-radius: 6px;
-    padding: 0.2rem 0.4rem;
-    cursor: pointer;
+    width: auto;
+    flex: none;
+    font-size: 12px;
 
-    option {
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-    }
+    option { background: var(--surface); color: var(--text); }
   }
 
   .commentsList {
     flex: 1;
-    overflow-y: auto;
-    padding: 0.5rem 0;
-
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: var(--bg-elevated);
-      border-radius: 4px;
-
-      [data-theme="dark"] & {
-        background-color: #3f3f3f;
-      }
-    }
+    min-height: 0;
+    padding: 0 16px 8px 20px;
+    @include v2.scroll-y;
   }
 
-  .noComments {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 1rem;
-    color: var(--text-secondary);
-    text-align: center;
-
-    p {
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
-    }
-
-    span {
-      font-size: 0.875rem;
-    }
-  }
-
+  .noComments,
   .commentsLoading {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 1rem;
-    color: var(--text-secondary);
-    text-align: center;
-    gap: 0.75rem;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 16px;
+    border-radius: var(--r-2xl);
+    border: 2px dashed var(--border);
+    color: var(--muted);
 
-    span {
-      font-size: 0.875rem;
+    p {
+      margin: 0;
+      @include v2.text(title-sm);
+      color: var(--text);
     }
+
+    span { @include v2.text(meta); }
   }
+
+  .commentsLoading {
+    flex-direction: row;
+    align-items: center;
+    border: 0;
+    padding: 16px 0;
+    color: var(--cyan);
+
+    span { color: var(--muted); }
+  }
+
+  // One comment
+  .commentWrapper:not(.nested) { border-bottom: 1px solid var(--border); }
 
   .commentItem {
     display: flex;
-    padding: 0.75rem 1.25rem;
-    gap: 0.75rem;
+    gap: 10px;
+    padding: 12px 0;
     position: relative;
-
-
-    @media (max-width: 768px) {
-      padding: 0.625rem 1rem;
-      gap: 0.625rem;
-    }
   }
 
-  .nestedComments {
-    margin-top: 0.5rem;
-  }
-
-  .commentWrapper {
-    &.nested {
-      // nested wrappers get no extra padding
-    }
-  }
+  .nestedComments .commentItem { padding: 8px 0; }
 
   .commentAvatar {
-    // It is an <a> to the author's profile, so it needs a box: an inline anchor
-    // ignores the width/height below and collapses to nothing.
+    // It is an <a> to the author's profile, so it needs a box.
     display: block;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
+    background: var(--avatar);
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    img { width: 100%; height: 100%; object-fit: cover; }
   }
 
   .commentThreadArea {
     display: flex;
-    margin-left: calc(1.25rem + 1.125rem - 1px);
-
-    @media (max-width: 768px) {
-      margin-left: calc(1rem + 1.125rem - 1px);
-    }
-  }
-
-  .commentThreadLine {
-    width: 2px;
-    flex-shrink: 0;
-    align-self: stretch;
-    background-color: var(--border-color, #ddd);
-    border-radius: 1px;
-
-    [data-theme="dark"] & {
-      background-color: #333;
-    }
+    margin-left: 15px;
+    padding-left: 14px;
+    border-left: 2px solid var(--border);
+    margin-bottom: 8px;
   }
 
   .commentThreadArea .nestedComments {
     flex: 1;
     min-width: 0;
-    padding-left: 0;
   }
 
   .commentContent {
@@ -2109,36 +1550,183 @@
   .commentMeta {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.25rem;
+    gap: 6px;
+    margin-bottom: 2px;
     flex-wrap: wrap;
   }
 
   .commentUsername {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
 
-    // Links to the author's profile: keep the comment's own color, and say so
-    // on hover rather than looking like plain text.
-    &:hover {
-      color: var(--text-primary);
-      text-decoration: underline;
-    }
+    &:hover { color: var(--text); text-decoration: underline; }
   }
 
   .commentTime {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
+    font-size: 12px;
+    color: var(--muted);
   }
 
   .commentPinned {
     display: inline-flex;
     align-items: center;
-    gap: 3px;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--accent-primary);
+    gap: 2px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .comment-collapse-chevron {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin: -4px -4px -4px auto;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+
+  // A collapsed comment: one row, tap to open it again
+  .comment-collapsed-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: 36px;
+    padding: 0 8px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    cursor: pointer;
+  }
+
+  .comment-collapsed-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--avatar);
+  }
+
+  .comment-collapsed-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .comment-collapsed-chevron { color: var(--muted); }
+
+  .commentText {
+    @include v2.text(body);
+    line-height: 1.45;
+    color: var(--text);
+    margin-bottom: 6px;
+    word-wrap: break-word;
+    overflow: hidden;
+
+    // markdown-view overrides for compact comment context
+    &.markdown-view {
+      p { margin: 0 0 .4em; &:last-child { margin-bottom: 0; } }
+      img { max-width: 100%; height: auto; border-radius: var(--r-sm); margin: 4px 0; }
+      a { color: var(--cyan); word-break: break-all; }
+      blockquote { margin: 4px 0; padding-left: 8px; border-left: 2px solid var(--border); color: var(--muted); }
+      pre, code { font-family: var(--font-mono); font-size: 12px; }
+      h1, h2, h3, h4, h5, h6 { font-size: 14px; margin: .3em 0; }
+      ul, ol { margin: .3em 0; padding-left: 1.2em; }
+    }
+  }
+
+  .comment-translation {
+    margin: 4px 0 8px;
+    padding: 8px 10px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+
+    p { margin: 0; font-size: 13px; line-height: 1.45; }
+
+    &--error p { color: var(--accent); font-size: 12px; }
+  }
+
+  .comment-translation-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+    @include v2.text(eyebrow);
+    color: var(--muted);
+  }
+
+  .comment-translation-dismiss {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    margin-left: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+
+  .commentActions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin-left: -8px;
+    position: relative;
+  }
+
+  // Small ghost buttons under a comment (28 tall)
+  .commentActionBtn,
+  .replyBtn,
+  .comment-report-btn,
+  .viewRepliesBtn {
+    @include v2.control(28);
+    gap: 4px;
+    padding: 0 8px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+
+  .commentActionBtn.liked { color: var(--accent); }
+
+  .comment-report-btn {
+    width: 28px;
+    padding: 0;
+    justify-content: center;
+
+    &.reported { color: var(--accent); }
+  }
+
+  // Comment rewards: money, so accent and mono
+  .commentReward {
+    padding: 0 8px;
+    @include v2.mono(12, 700);
+    color: var(--accent);
+  }
+
+  .viewRepliesBtn {
+    margin: 2px 0 0 -8px;
+    color: var(--text);
   }
 
   // Emoji, GIF and image buttons side by side in the reply box.
@@ -2148,201 +1736,26 @@
     gap: 2px;
   }
 
-  .commentText {
-    font-size: 0.875rem;
-    color: var(--text-primary);
-    line-height: 1.4;
-    margin-bottom: 0.5rem;
-    word-wrap: break-word;
-    overflow: hidden;
-
-    // markdown-view overrides for compact comment context
-    &.markdown-view {
-      p { margin: 0 0 0.4em; &:last-child { margin-bottom: 0; } }
-      img { max-width: 100%; height: auto; border-radius: 6px; margin: 4px 0; }
-      a { color: var(--accent-primary, #e53935); word-break: break-all; }
-      blockquote { margin: 4px 0; padding-left: 8px; border-left: 2px solid var(--border-color); color: var(--text-secondary); }
-      pre, code { font-size: 0.8rem; }
-      h1, h2, h3, h4, h5, h6 { font-size: 0.9rem; margin: 0.3em 0; }
-      ul, ol { margin: 0.3em 0; padding-left: 1.2em; }
-    }
-  }
-
-  .commentActions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    position: relative;
-  }
-
-  .commentActionBtn {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 9999px;
-    transition: background-color 150ms;
-
-    svg {
-      color: var(--text-secondary);
-    }
-
-    &:hover {
-      background-color: var(--bg-hover);
-
-      [data-theme="dark"] & {
-        background-color: #272727;
-      }
-    }
-
-    &.liked {
-      svg {
-        color: var(--accent-primary);
-        fill: var(--accent-primary);
-      }
-
-      span {
-        color: var(--accent-primary);
-      }
-    }
-
-    &.reported {
-      svg {
-        color: #e31337;
-      }
-    }
-  }
-
-  .commentReward {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-
-    svg {
-      color: var(--text-secondary);
-    }
-  }
-
-  .replyBtn {
-    background: none;
-    border: 1px solid var(--border-light, rgba(255, 255, 255, 0.15));
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    transition: all 150ms;
-
-    &:hover {
-      background-color: var(--bg-hover);
-      border-color: var(--border-color);
-      color: var(--text-primary);
-
-      [data-theme="dark"] & {
-        background-color: #272727;
-      }
-    }
-  }
-
-  .comment-report-btn {
-    display: inline-flex;
-    align-items: center;
-    background: none;
-    border: 1px solid var(--border-light, rgba(255, 255, 255, 0.15));
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    transition: all 0.2s;
-
-    &:hover {
-      background-color: var(--bg-hover);
-      border-color: var(--border-color);
-      color: var(--text-primary);
-    }
-
-    &.reported {
-      color: #e31337;
-      border-color: rgba(227, 19, 55, 0.4);
-
-      &:hover {
-        background: rgba(227, 19, 55, 0.1);
-        border-color: #e31337;
-      }
-    }
-  }
-
-  .viewRepliesBtn {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 0.8rem;
-    font-weight: 500;
-    cursor: pointer;
-    margin-top: 0.5rem;
-    padding: 0.25rem 0;
-
-    svg {
-      color: var(--text-primary);
-      transition: transform 0.2s ease;
-    }
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  /* Reply Input */
+  /* Reply box: a well under the comment */
   .replyInputWrapper {
-    margin-top: 0.75rem;
-    padding: 0.5rem;
-    background-color: var(--bg-tertiary);
-    border-radius: 0.5rem;
-
-    [data-theme="dark"] & {
-      background-color: #1a1a1a;
-    }
+    margin-top: 8px;
+    padding: 8px;
+    border-radius: var(--r-md);
+    background: var(--bg);
 
     input {
+      @include v2.field(36);
       width: 100%;
-      background: none;
-      border: none;
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-primary);
-      font-size: 0.8125rem;
-      padding: 0.5rem 0;
-      outline: none;
-
-      [data-theme="dark"] & {
-        border-bottom-color: #3f3f3f;
-      }
-
-      &::placeholder {
-        color: var(--text-muted);
-      }
-
-      &:focus {
-        border-bottom-color: #3ea6ff;
-      }
+      background: var(--surface);
+      font-size: 13px;
     }
 
     .replyBottomRow {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+      gap: 8px;
+      margin-top: 8px;
 
       .replyActions { margin-top: 0; }
     }
@@ -2350,75 +1763,39 @@
     .replyActions {
       display: flex;
       justify-content: flex-end;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+      gap: 6px;
+      margin-top: 8px;
 
       button {
-        padding: 0.375rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 500;
-        cursor: pointer;
-        border: none;
-        transition: background-color 150ms;
-
-        &:first-child {
-          background: none;
-          color: var(--text-secondary);
-
-          &:hover {
-            background-color: var(--bg-hover);
-
-            [data-theme="dark"] & {
-              background-color: #272727;
-            }
-          }
-        }
+        @include v2.btn(ghost, 32);
 
         &.submitReply {
-          background-color: #3ea6ff;
-          color: white;
-
-          &:hover {
-            background-color: #2d8fe6;
-          }
-
-          &:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-          }
+          @include v2.btn(primary, 32);
         }
       }
     }
   }
 
-  /* Comment Input */
+  /* Composer at the bottom of the panel */
   .commentInput {
+    flex: none;
     display: flex;
     align-items: flex-end;
-    gap: 0.75rem;
-    padding: 1rem 1.25rem;
-    border-top: 1px solid var(--border-color);
-    background-color: var(--bg-secondary);
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
 
-    [data-theme="dark"] & {
-      border-top-color: #272727;
-      background-color: #0f0f0f;
-    }
-
-    @media (max-width: 768px) {
-      padding: 0.75rem 1rem;
-      gap: 0.625rem;
-      padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    @include phone {
+      padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     }
 
     // Desktop: the text box gets the whole width on its own row, with the
-    // avatar (left) and emoji/GIF/image/send (right) underneath. Squeezed in
-    // one row with them it was only a few words wide (owner, 2026-11-05).
-    @media (min-width: 769px) {
+    // avatar (left) and emoji/GIF/image/send (right) underneath.
+    @include desk {
       flex-wrap: wrap;
       align-items: center;
-      row-gap: 0.5rem;
+      row-gap: 8px;
 
       .commentInputBox { order: -1; flex: 1 1 100%; }
       .commentInputAvatar { margin-right: auto; }
@@ -2426,111 +1803,70 @@
   }
 
   .commentInputAvatar {
-    width: 2rem;
-    height: 2rem;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
+    background: var(--avatar);
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    img { width: 100%; height: 100%; object-fit: cover; }
   }
 
   .commentInput textarea {
     flex: 1;
-    background: none;
-    border: none;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-primary);
-    font-size: 0.875rem;
-    font-family: inherit;
-    padding: 0.5rem 0;
-    outline: none;
+    display: block;
+    min-height: 44px;
+    max-height: 120px;
+    padding: 10px 14px;
+    border: 2px solid transparent;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    line-height: 1.4;
     resize: none;
     overflow: hidden;
-    max-height: 120px;
-    line-height: 1.4;
+    outline: none;
 
-    [data-theme="dark"] & {
-      border-bottom-color: #3f3f3f;
-    }
-
-    &::placeholder {
-      color: var(--text-secondary);
-    }
-
-    &:focus {
-      border-bottom-color: var(--text-primary);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-    }
-  }
-
-  .sendCommentBtn {
-    background: none;
-    border: none;
-    color: #3ea6ff;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 150ms;
-
-    &:hover:not(:disabled) {
-      background-color: rgba(62, 166, 255, 0.1);
-    }
-
-    &:disabled {
-      color: var(--text-muted);
-      cursor: not-allowed;
-    }
+    &::placeholder { color: var(--muted); }
+    &:focus { border-color: var(--accent); }
+    &:disabled { opacity: .45; }
   }
 }
 
-// Swipe navigation animations
-@keyframes swipeUp {
-  0% {
-    transform: translateY(30%);
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
+// Send: round accent button (shared by the panel composer and the phone bar)
+.shorts-comments-portal .sendCommentBtn,
+.shortsBottomComment .sendCommentBtn {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover:not(:disabled) { background: var(--accent-hover); }
+  &:active:not(:disabled) { transform: scale(.98); }
+
+  &:disabled {
+    background: var(--surface-2);
+    color: var(--muted);
+    cursor: not-allowed;
   }
 }
 
-@keyframes swipeDown {
-  0% {
-    transform: translateY(-30%);
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-// Portal wrapper for comments panel — ensures styles match .short-main nesting
-.shorts-comments-portal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  z-index: 250;
-}
-
-/* Mobile quick comment bar at the bottom of the shorts view (replaces the app
-   nav bar). Desktop keeps the in-panel input only. */
+/* Phone quick comment bar at the bottom of the shorts view (replaces the app
+   nav bar; Settings, "Comment bar on shorts"). Desktop keeps the panel only. */
 .shortsBottomComment { display: none; }
-@media (max-width: 768px) {
+
+@include phone {
   .shortsBottomComment {
     position: fixed;
     left: 0;
@@ -2540,226 +1876,89 @@
     display: flex;
     align-items: flex-end;
     gap: 8px;
-    padding: 8px 10px;
-    background: var(--bg-secondary, #1a1a1a);
-    border-top: 1px solid var(--border-light, #2d2d2d);
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+    background: var(--surface);
+    border-top: 1px solid var(--border);
 
     textarea {
       flex: 1;
       min-width: 0;
-      background: var(--bg-tertiary, #242424);
-      border: 1px solid var(--border-light, #2d2d2d);
-      border-radius: 18px;
+      min-height: 40px;
+      max-height: 120px;
       padding: 9px 14px;
-      color: var(--text-primary, #f1f1f1);
+      border: 2px solid transparent;
+      border-radius: var(--r-md);
+      background: var(--bg);
+      color: var(--text);
+      font: inherit;
       font-size: 14px;
-      font-family: inherit;
       line-height: 1.4;
       resize: none;
-      max-height: 120px;
       overflow-y: auto;
       outline: none;
-      &:focus { border-color: var(--accent-primary, #e53935); }
+
+      &::placeholder { color: var(--muted); }
+      &:focus { border-color: var(--accent); }
     }
-  }
-}
 
-/* ── Shorts feed switcher (top-left, ON the video): Discover ⇄ My interests ──
-   Matches the other on-video overlay controls (mute / playback / glow): same
-   translucent black, same hover, same 0.85-white text. */
-.shortsFeedSwitch {
-  position: absolute;
-  top: calc(12px + var(--safe-top, 0px));
-  left: 12px;
-  z-index: 6;
-  display: inline-flex;
-  gap: 2px;
-  padding: 3px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.22);
-  pointer-events: auto;
-  transition: background 0.2s;
-
-  &:hover { background: rgba(0, 0, 0, 0.55); }
-
-  button {
-    padding: 5px 13px;
-    border: none;
-    border-radius: 999px;
-    background: transparent;
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 13.5px;
-    font-weight: 600;
-    line-height: 1;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s ease, color 0.15s ease;
-
-    &:hover:not(.active) { color: #fff; }
-
-    /* Selected pill reads as "on" against the translucent track. */
-    &.active {
-      background: rgba(255, 255, 255, 0.9);
-      color: #111;
-    }
-  }
-
-  /* Mobile: the back arrow sits top-left (.shortBackBtn, left:12px), so shift the
-     switch clear of it instead of stacking underneath. */
-  @media screen and (max-width: 768px) {
-    left: 68px;
-    button { padding: 5px 11px; font-size: 12.5px; }
+    .sendCommentBtn { width: 40px; height: 40px; }
   }
 }
 
 /* Empty state when "My interests" has nothing to show. */
-.shortsInterestsEmpty {
-  position: absolute;
-  inset: 0;
-  z-index: 15;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 24px;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.85);
+.shortsInterestsEmpty .v2-empty { max-width: 360px; }
 
-  p { margin: 0; font-size: 15px; line-height: 1.5; max-width: 300px; }
-
-  button {
-    padding: 9px 18px;
-    border: none;
-    border-radius: 999px;
-    background: #fff;
-    color: #111;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-}
-
-/* Mobile action rail: a translucent CIRCLE around the icon AND its value.
-   `border-radius: 50%` only yields a circle on a SQUARE box — left to size itself
-   the item is as wide as its label ("Saved", "Share", "1.2K") and as tall as
-   icon+label, so every button came out a differently-shaped ellipse. Pin a fixed
-   square and centre the content inside it. */
-@media screen and (max-width: 768px) {
-  .actionSidebar .actionItem {
-    @include rail.rail-item;
-
-    /* the icon's own bubble would double up inside the circle */
-    .actionButton { @include rail.rail-icon; }
-    .actionLabel  { @include rail.rail-label; }
-  }
-}
-
-/* ── Payout shown next to the date in the description (was a button in the rail) ── */
+/* ── Payout shown next to the date in the description ── */
 .captionPayout {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   margin-left: 8px;
-  font-weight: 600;
-  opacity: 0.95;
+  @include v2.mono(11, 700);
+  color: var(--on-media);
 
   svg { flex-shrink: 0; }
 }
 
-/* ── No comment bar (Settings → "Comment bar on shorts" off) ──────────────────
-   .short-main reserves 56px at the bottom for the FIXED comment bar. With the bar
-   hidden that's just dead space, so reclaim the full height. */
-@media (max-width: 767px) {
+/* ── No comment bar (Settings, "Comment bar on shorts" off) ──
+   .short-main reserves the bottom for the FIXED bar; without the bar that's
+   dead space, so reclaim the full height. */
+@include v2.mobile {
   .short-main.no-bottom-bar {
     bottom: 0;
     height: 100dvh;
     max-height: 100dvh;
-  }
-
-  /* Ambient-glow toggle is desktop-only — on a phone it's a rarely-used control
-     eating space in the top-right cluster. */
-  .short-main .glowIndicator {
-    display: none;
-  }
-
-  /* Close the gap it leaves: the cluster is mute(12) · playback(56) · glow(100) ·
-     subtitles(144). With glow gone, pull subtitles into its slot so the row stays
-     evenly spaced instead of leaving a hole. */
-  .short-main .subtitleIndicator {
-    right: 100px;
   }
 }
 
 /* ---------------------------------------------------------------------------
    A shorts spot is on screen.
 
-   The short underneath is only PAUSED — its author, title, subscribe button and
-   action rail are all still mounted, and until this block existed they stayed
-   visible over the ad. Two things wrong with that, in order of severity:
+   The short underneath is only PAUSED: its author, title, follow button and
+   action rail are all still mounted. Shown over the ad they would attribute the
+   ad to the creator, and every control would still ACT on the short (a tap on the
+   vote tile votes on a post the viewer is not looking at). For these few seconds
+   the surface is the advertiser's, and the only control that belongs to the
+   viewer is Skip. So the byline, the dock, the comment bar, the arrows, the
+   timeline (it scrubs the paused short), the reaction chain (it names another
+   creator) and the back button (it would sit on the "Ad" tag) all go.
 
-     1. It attributes the ad to the creator. Someone swiping past sees a stranger's
-        product with @badadib's name under it, which is the one impression the
-        disclosure exists to prevent.
-     2. Every control still ACTS on the short. A tap on the heart, the comment
-        button or the comment bar votes on or replies to a post the viewer is not
-        currently looking at.
-
-   So the byline goes away entirely and the controls stand down. They are dimmed
-   rather than removed on purpose: the rail vanishing and reappearing would shift
-   the desktop layout twice per spot, and a greyed control reads as "not now"
-   rather than as a bug.
-
-   Voting also has a second route in — double-tap on the video, which the ad chrome
-   lets through because it is `pointer-events: none` so play/pause keeps working.
-   CSS cannot catch that one; quickUpvote() in Short.jsx guards it.
+   Voting also has a second route in: double-tap on the video. CSS cannot catch
+   that one; quickUpvote() in Short.jsx guards it.
    --------------------------------------------------------------------------- */
 .short-main.ad-playing {
-  /* Creator byline, title, subscribe, audio marquee, subtitles. */
-  .bottomOverlay {
-    display: none;
-  }
-
-  /* Vote, comment, reshare, save, share, remix, edit — the mobile comment bar, and the
-     desktop up/down arrows.
-     
-     Hidden rather than dimmed. They were greyed to 0.35 on the reasoning that a control
-     which vanishes is more confusing than one that looks disabled, but that argument is
-     for a control you could plausibly still want. Every one of these acts on the short
-     UNDERNEATH the spot, which is not what is on screen: a greyed comment button next to
-     somebody's ad still invites a comment on a stranger's video. For these few seconds
-     the surface is the advertiser's, and the only control that belongs to the viewer is
-     Skip. */
+  .bottomOverlay,
   .actionSidebar,
   .shortsBottomComment,
-  .navigationArrows {
-    display: none;
-  }
-
-  /* The timeline, for the same reason and one more: it scrubs the short underneath,
-     which is paused behind the spot. Dragging it moved a video nobody could see, and on
-     release the viewer landed somewhere they never chose. */
-  .videoProgressBar {
-    display: none;
-  }
-
-  /* The reaction chain names a DIFFERENT creator again — the author of the original
-     this short replied to, with their avatar and thumbnail. Same misattribution as
-     the byline, so it goes the same way. */
-  .reactionChainOverlay {
-    display: none;
-  }
-
-  /* Back button. Not a misattribution, but it is `top: 12px; left: 12px` at z-index
-     55 — which is exactly where the "Ad" tag renders, and above the overlay. It would
-     sit on the disclosure. Hidden for the length of the spot; the history it walks
-     back through is still there afterwards. */
+  .navigationArrows,
+  .videoProgressBar,
+  .reactionChainOverlay,
   .shortBackBtn {
     display: none;
   }
 }
 
-// The shorts comment boxes (panel composer and mobile quick bar) sit inside the
+// The shorts comment boxes (panel composer and phone quick bar) sit inside the
 // shared CommentDropZone wrapper (components/playVideo/commentTools.jsx); the
 // wrapper takes the row space the textarea used to take itself.
 .commentInputBox {

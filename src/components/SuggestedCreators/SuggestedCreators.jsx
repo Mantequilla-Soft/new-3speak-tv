@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { toastIn } from '../../utils/toast';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { Icon } from '../v2/Icon';
+import { Button } from '../v2/ui';
 import { SUGGESTED_CREATORS_URL } from '../../utils/config';
 import { feedParams } from '../../utils/feedParams';
 import { getFeedSeed } from '../../utils/feedSeed';
@@ -11,7 +12,7 @@ import { getFollowing } from '../../utils/hiveUtils';
 import { getFollowers } from '../../hive-api/api';
 import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { useAppStore } from '../../lib/store';
-import { getTagLabel, getTagEmoji } from '../../utils/tagsV2';
+import { getTagLabel } from '../../utils/tagsV2';
 import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
@@ -178,11 +179,15 @@ export default function SuggestedCreators({ variant = 'discover' }) {
   if (!user || !hasInterests || !creators.length) return null;
 
   return (
-    <section className="suggested-creators">
+    <section className="suggested-creators" aria-label={t('profile.creators.suggestedTitle')}>
+      <div className="sc-head">
+        <span className="sc-bar" aria-hidden="true" />
+        <h3>{t('profile.creators.suggestedTitle')}</h3>
+      </div>
       <div className="sc-scroll-wrapper">
         {showLeft && (
-          <button className="sc-scroll-btn left" onClick={() => scroll('left')} aria-label={t('profile.creators.scrollLeft')}>
-            <FaChevronLeft />
+          <button type="button" className="sc-scroll-btn left" onClick={() => scroll('left')} aria-label={t('profile.creators.scrollLeft')}>
+            <Icon name="chevron_left" size={20} />
           </button>
         )}
 
@@ -192,35 +197,41 @@ export default function SuggestedCreators({ variant = 'discover' }) {
             const followers = fmtFollowers(followerCounts[c.name]);
             return (
               <div className="sc-card" key={c.name}>
-                <Link to={`/@${c.name}`} className="sc-avatar" title={`@${c.name}`}>
-                  <HiveAvatar username={c.name} size={null} alt="" badgeSize={12} />
-                </Link>
-                <Link to={`/@${c.name}`} className="sc-name" title={`@${c.name}`}>@{c.name}</Link>
-                {c.basis && (
-                  <span className="sc-basis" title={t('profile.creators.mostlyPosts', { topic: getTagLabel(c.basis) })}>
-                    <span className="sc-basis-emoji">{getTagEmoji(c.basis)}</span>
-                    {getTagLabel(c.basis)}
-                  </span>
-                )}
-                <span className="sc-followers">
-                  {followers != null ? t('profile.creators.followers', { count: followerCounts[c.name], num: followers }) : ' '}
+                <div className="sc-who">
+                  <Link to={`/@${c.name}`} className="sc-avatar" title={`@${c.name}`} tabIndex={-1} aria-hidden="true">
+                    <HiveAvatar username={c.name} size={null} alt="" badgeSize={10} />
+                  </Link>
+                  <div className="sc-who-text">
+                    <Link to={`/@${c.name}`} className="sc-name" title={`@${c.name}`}>@{c.name}</Link>
+                    <span className="sc-followers">
+                      {followers != null ? t('profile.creators.followers', { count: followerCounts[c.name], num: followers }) : '\u00a0'}
+                    </span>
+                  </div>
+                </div>
+                {/* Why suggested: the topic most of their recent videos are in */}
+                <span className="sc-basis">
+                  {c.basis ? t('profile.creators.mostlyPosts', { topic: getTagLabel(c.basis) }) : '\u00a0'}
                 </span>
-                <button
-                  type="button"
+                <Button
+                  variant={followed ? 'ghost' : 'secondary'}
+                  size={40}
+                  block
                   className={`sc-follow${followed ? ' followed' : ''}`}
+                  trailing={followed ? 'check' : 'person_add'}
                   onClick={() => !followed && handleFollow(c.name)}
                   disabled={followed || !!pending[c.name]}
+                  loading={!!pending[c.name]}
                 >
-                  {followed ? t('common.actions.following') : (pending[c.name] ? '…' : t('common.actions.follow'))}
-                </button>
+                  {followed ? t('common.actions.following') : t('common.actions.follow')}
+                </Button>
               </div>
             );
           })}
         </div>
 
         {showRight && (
-          <button className="sc-scroll-btn right" onClick={() => scroll('right')} aria-label={t('profile.creators.scrollRight')}>
-            <FaChevronRight />
+          <button type="button" className="sc-scroll-btn right" onClick={() => scroll('right')} aria-label={t('profile.creators.scrollRight')}>
+            <Icon name="chevron_right" size={20} />
           </button>
         )}
       </div>

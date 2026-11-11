@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Edit, Save } from 'lucide-react';
 import "./EditVideo.scss";
 import { toastIn } from '../utils/toast';
 import { convert } from 'html-to-text';
@@ -12,7 +11,8 @@ import * as dhive from '@hiveio/dhive';
 import MarkdownComposer from '../components/studio/MarkdownComposer';
 import { broadcastWithAioha, isLoggedIn, KeyTypes } from '../hive-api/aioha';
 import PromoteModal from '../components/Promote/PromoteModal';
-import { Rocket } from 'lucide-react';
+import { Button, ChoiceCard, SettingRow, Toggle } from '../components/v2/ui';
+import { Icon } from '../components/v2/Icon';
 import { getPostBodyRenderer } from '../lib/hiveRenderer';
 import { setChannelTrailer, fetchChannelTrailer, trailerMatches } from '../utils/channelTrailer';
 import { useTranslation } from 'react-i18next';
@@ -272,189 +272,157 @@ const handleSubmit = async (e) => {
 
   if (loading) {
     return (
-      <div className="page-loading">
-        <div className="spinner"></div>
+      <div className="page-loading edit-loading" role="status">
+        <Icon name="progress_activity" size={20} className="v2-spin" />
         <p>{t('posts.edit.loading')}</p>
       </div>
     );
   }
 
+  const isPromoted = promotedUntil && new Date(promotedUntil).getTime() > Date.now();
+  const tagList = typeof tags === 'string'
+    ? tags.split(',').map((tag) => tag.trim()).filter(Boolean)
+    : [];
+
+  // 33b: the details and a preview on the left, visibility and the switches in
+  // the side panel, Promote + Save at its foot.
   return (
     <div className="edit-page">
-      <div className="header">
-        <h1>
-          <Edit className="edit-icon" />
-          {t('posts.edit.title')}
-        </h1>
-      </div>
+      <form className="edit-form" onSubmit={handleSubmit}>
+        <div className="edit-page__main">
+          <div className="header">
+            <h1>{t('posts.edit.title')}</h1>
+          </div>
 
-      <div className="content">
-        <div className="form-container">
-          <form className="edit-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="title">{t('posts.edit.titleLabel')}</label>
-              <input 
+          <section className="edit-sec">
+            <div className="edit-sec__head">
+              <span className="edit-sec__bar" aria-hidden="true" />
+              <h2>{t('watch.edit.tabs.details')}</h2>
+            </div>
+            <div className="v2-field form-group">
+              <label className="v2-eyebrow" htmlFor="title">{t('posts.edit.titleLabel')}</label>
+              <input
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={t('posts.edit.titlePlaceholder')}
-                className="form-input"
+                className="v2-input h44 form-input"
                 required
               />
             </div>
-            
-            <div className="form-group">
-              <label htmlFor="description">{t('posts.edit.descriptionLabel')}</label>
-              {/* <textarea 
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Video description"
-                className="form-textarea"
-                rows={8}
-              /> */}
+
+            <div className="v2-field form-group">
+              <label className="v2-eyebrow" htmlFor="description">{t('posts.edit.descriptionLabel')}</label>
               <MarkdownComposer value={description} onChange={setDescription} placeholder={t('posts.edit.descriptionPlaceholder')} show={true} />
             </div>
-            
-            <div className="form-group tap-sp">
-              <label htmlFor="tags">{t('posts.edit.tagsLabel')}</label>
+
+            <div className="v2-field form-group tap-sp">
+              <label className="v2-eyebrow" htmlFor="tags">{t('posts.edit.tagsLabel')}</label>
               <input
                 id="tags"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
                 placeholder={t('posts.edit.tagsPlaceholder')}
-                className="form-input"
+                className="v2-input form-input"
               />
             </div>
-            
-            <div className="form-group listing-toggle">
-              <button
-                type="button"
-                role="switch"
-                aria-checked={listed}
-                className={`listing-switch${listed ? ' is-on' : ''}`}
-                onClick={() => setListed(l => !l)}
-              >
-                <span className="listing-switch__track"><span className="listing-switch__thumb" /></span>
-                <span className="listing-switch__label">
-                  <strong>{listed ? t('posts.edit.listed') : t('posts.edit.unlistedLabel')}</strong>
-                  <small>
-                    {listed
-                      ? t('posts.edit.listedHint')
-                      : t('posts.edit.unlistedHint')}
-                  </small>
-                </span>
-              </button>
-            </div>
+          </section>
 
-            <div className="form-group listing-toggle">
-              <button
-                type="button"
-                role="switch"
-                aria-checked={reusable}
-                className={`listing-switch${reusable ? ' is-on' : ''}`}
-                onClick={() => setReusable(v => !v)}
-              >
-                <span className="listing-switch__track"><span className="listing-switch__thumb" /></span>
-                <span className="listing-switch__label">
-                  <strong>{t('posts.edit.allowRemix')}</strong>
-                  <small>
-                    {reusable
-                      ? t('posts.edit.remixOnHint')
-                      : t('posts.edit.remixOffHint')}
-                  </small>
-                </span>
-              </button>
+          <section className="edit-sec preview">
+            <div className="edit-sec__head">
+              <span className="edit-sec__bar is-cyan" aria-hidden="true" />
+              <h2>{t('posts.edit.preview')}</h2>
             </div>
-
-            <div className="form-group listing-toggle">
-              <button
-                type="button"
-                role="switch"
-                aria-checked={isNsfw}
-                className={`listing-switch listing-switch--danger${isNsfw ? ' is-on' : ''}`}
-                onClick={() => setIsNsfw(v => !v)}
-              >
-                <span className="listing-switch__track"><span className="listing-switch__thumb" /></span>
-                <span className="listing-switch__label">
-                  <strong>{isNsfw ? t('posts.edit.nsfw') : t('posts.edit.notNsfw')}</strong>
-                  <small>
-                    {isNsfw
-                      ? t('posts.edit.nsfwHint')
-                      : t('posts.edit.notNsfwHint')}
-                  </small>
-                </span>
-              </button>
-            </div>
-
-            {/* Landscape only: the trailer frame on Overview is 16:9. */}
-            {!isShort && trailerKnown && (
-              <div className="form-group listing-toggle">
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={isTrailer}
-                  className={`listing-switch${isTrailer ? ' is-on' : ''}`}
-                  onClick={() => setIsTrailer(v => !v)}
-                >
-                  <span className="listing-switch__track"><span className="listing-switch__thumb" /></span>
-                  <span className="listing-switch__label">
-                    <strong>{t('posts.edit.trailer')}</strong>
-                    <small>
-                      {isTrailer
-                        ? t('posts.edit.trailerOnHint')
-                        : t('posts.edit.trailerOffHint')}
-                    </small>
-                  </span>
-                </button>
+            <div className="video-preview">
+              <div className="thumbnail v2-thumb r16">
+                {thumbnailUrl && <img src={thumbnailUrl} alt={t('posts.edit.thumbnailAlt')} />}
               </div>
-            )}
-
-            <div className="form-group form-actions">
-              <button
-                type="submit"
-                className="btn btn--primary"
-              >
-                <Save />
-                {t('posts.edit.submit')}
-              </button>
-              <button
-                type="button"
-                className="btn btn--promote"
-                onClick={() => setPromoteOpen(true)}
-              >
-                <Rocket size={18} />
-                {promotedUntil && new Date(promotedUntil).getTime() > Date.now() ? t('posts.edit.promoted') : t('posts.edit.promote')}
-              </button>
+              <div className="content-pre">
+                <h3 className="title">{title}</h3>
+                <div
+                  className="markdown-view"
+                  dangerouslySetInnerHTML={{ __html: renderedHTML }}
+                />
+                {tagList.length > 0 && (
+                  <div className="tags">
+                    {tagList.map((tag, index) => (
+                      <span key={index} className="tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-          </form>
+          </section>
         </div>
 
-        <div className="preview">
-          <h2>{t('posts.edit.preview')}</h2>
-          <div className="video-preview">
-            <div className="thumbnail">
-              <img src={thumbnailUrl} alt={t('posts.edit.thumbnailAlt')} />
-            </div>
-            <div className="content-pre">
-              <h3 className="title">{title}</h3>
-              <div
-                className="markdown-view"
-                dangerouslySetInnerHTML={{ __html: renderedHTML }}
+        <aside className="edit-page__side">
+          <div className="edit-page__side-scroll">
+            <h2 className="v2-eyebrow">{t('watch.edit.sections.visibility')}</h2>
+            <div className="edit-listing" role="radiogroup" aria-label={t('watch.edit.sections.visibility')}>
+              <ChoiceCard
+                selected={listed}
+                icon="public"
+                title={t('posts.edit.listed')}
+                sub={t('posts.edit.listedHint')}
+                onClick={() => setListed(true)}
               />
-              {tags && (
-                <div className="tags">
-                  {tags.split(',').map((tag, index) => (
-                    <span key={index} className="tag">
-                      {tag.trim()}
-                    </span>
-                  ))}
-                </div>
+              <ChoiceCard
+                selected={!listed}
+                icon="link"
+                title={t('posts.edit.unlistedLabel')}
+                sub={t('posts.edit.unlistedHint')}
+                onClick={() => setListed(false)}
+              />
+            </div>
+
+            <h2 className="v2-eyebrow">{t('watch.edit.sections.content')}</h2>
+            <div className="edit-toggles">
+              <SettingRow
+                icon="content_cut"
+                title={t('posts.edit.allowRemix')}
+                sub={reusable ? t('posts.edit.remixOnHint') : t('posts.edit.remixOffHint')}
+                control={<Toggle checked={reusable} onChange={(v) => setReusable(v)} label={t('posts.edit.allowRemix')} />}
+              />
+              {/* Landscape only: the trailer frame on Overview is 16:9. */}
+              {!isShort && trailerKnown && (
+                <SettingRow
+                  icon="play_circle"
+                  title={t('posts.edit.trailer')}
+                  sub={isTrailer ? t('posts.edit.trailerOnHint') : t('posts.edit.trailerOffHint')}
+                  control={<Toggle checked={isTrailer} onChange={(v) => setIsTrailer(v)} label={t('posts.edit.trailer')} />}
+                />
               )}
+              <SettingRow
+                icon="explicit"
+                title={isNsfw ? t('posts.edit.nsfw') : t('posts.edit.notNsfw')}
+                sub={isNsfw ? t('posts.edit.nsfwHint') : t('posts.edit.notNsfwHint')}
+                control={<Toggle checked={isNsfw} onChange={(v) => setIsNsfw(v)} label={t('posts.edit.nsfw')} />}
+              />
             </div>
           </div>
-        </div>
-      </div>
+
+          <div className="form-actions">
+            <Button
+              variant="secondary"
+              size={56}
+              trailing="campaign"
+              className="btn--promote is-next"
+              onClick={() => setPromoteOpen(true)}
+            >
+              {isPromoted ? t('posts.edit.promoted') : t('posts.edit.promote')}
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              size={56}
+              trailing="check"
+              className="btn--primary is-next"
+            >
+              {t('posts.edit.submit')}
+            </Button>
+          </div>
+        </aside>
+      </form>
 
       <PromoteModal
         open={promoteOpen}

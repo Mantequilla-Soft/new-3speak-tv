@@ -151,6 +151,13 @@ function ConvAvatar({ conv, title, className }) {
 // Portalled so a transformed or clipped chat panel can't trap the fixed bar.
 function ChatConfirm({ text, confirmLabel, onConfirm, onCancel }) {
   const { t } = useTranslation()
+  const cancelRef = useRef(onCancel)
+  useEffect(() => { cancelRef.current = onCancel }, [onCancel])
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') cancelRef.current?.() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
   return createPortal(
     <ConfirmBar
       actions={(
@@ -531,7 +538,9 @@ function ConversationList() {
   // Counts come from the server on every check, never from a locally kept
   // tally that can drift (see useServerUnread). markRead still comes from the
   // SDK hook; we resync straight after using it.
-  const { markRead } = useUnreadCount()
+  // Mounted for the SDK's unread subscription; markRead itself is used per
+  // thread (see Thread) and through the raw client below.
+  useUnreadCount()
   const { unreadCount, byConversation, refresh: refreshUnread } = useServerUnread()
   const [clearing, setClearing] = useState(false)
   const groups = useGroups()
@@ -1024,9 +1033,6 @@ function Thread({ conv, headerActions = null }) {
               {timeAgo(m.createdAt)}{m.editedAt ? t('chat.thread.editedSuffix') : ''}
             </span>
           )
-          // Each action closes the strip first; the menu's own click must not
-          // reach the document listener that would close it mid-render.
-          const act = (fn) => (e) => { e.stopPropagation(); setMenuFor(null); fn(m) }
           return (
             <div key={m._id} className={`chat-msg${mine ? ' mine' : ''}${room ? ' chat-msg--room' : ''}`}>
               {room && (
@@ -1081,18 +1087,18 @@ function Thread({ conv, headerActions = null }) {
                   {menuFor === m._id && (
                     <div className={`chat-msg-menu chat-msg-menu--${menuDir}`} role="menu">
                       {mine && (
-                        <button type="button" role="menuitem" onClick={act(startEdit)}>
+                        <button type="button" role="menuitem" onClick={(e) => { e.stopPropagation(); setMenuFor(null); startEdit(m) }}>
                           <Icon name="edit" size={16} />{t('common.actions.edit')}
                         </button>
                       )}
-                      <button type="button" role="menuitem" onClick={act(startQuote)}>
+                      <button type="button" role="menuitem" onClick={(e) => { e.stopPropagation(); setMenuFor(null); startQuote(m) }}>
                         <Icon name="format_quote" size={16} />{t('chat.thread.quote')}
                       </button>
-                      <button type="button" role="menuitem" onClick={act(forwardMessage)}>
+                      <button type="button" role="menuitem" onClick={(e) => { e.stopPropagation(); setMenuFor(null); forwardMessage(m) }}>
                         <Icon name="forward" size={16} />{t('chat.thread.forward')}
                       </button>
                       {mine && (
-                        <button type="button" role="menuitem" className="chat-msg-menu-danger" onClick={act(setDeleteTarget)}>
+                        <button type="button" role="menuitem" className="chat-msg-menu-danger" onClick={(e) => { e.stopPropagation(); setMenuFor(null); setDeleteTarget(m) }}>
                           <Icon name="delete" size={16} />{t('common.actions.delete')}
                         </button>
                       )}

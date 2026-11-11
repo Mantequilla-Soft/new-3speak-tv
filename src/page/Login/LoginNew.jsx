@@ -4,6 +4,8 @@ import * as tus from "tus-js-client";
 import { getTusUploadOptions } from "../../utils/tusConfig";
 // import hive from "@hiveio/hive-js";
 import dhive from "@hiveio/dhive";
+import { Card, Field, Button } from "../../components/v2/ui";
+import "./LoginNew.scss";
 
 const client = axios.create({});
 
@@ -205,42 +207,28 @@ function LoginNew() {
     upload.start();
   }
 
+  // A developer test page for the mobile-app API (/newlogin), in v2 parts.
   return (
-    <div className="App">
-      <div>
-        <label>Username: </label>
-        <input type="text" onChange={handleUsernameChange} value={username} />
-      </div>
-      <div>
-        <label>Posting Key: </label>
-        <input
-          type="password"
-          onChange={handlePostingKeyChange}
-          value={postingKey}
-        />
-      </div>
+    <div className="login-new">
+      <Card large className="login-new__card">
+        <h1 className="login-new__title">Login</h1>
+        <Field label="Username" type="text" onChange={handleUsernameChange} value={username} />
+        <Field label="Posting Key" type="password" onChange={handlePostingKeyChange} value={postingKey} />
+        <Button variant="primary" size={48} block next onClick={logMe}>Login</Button>
+      </Card>
 
-      <div>
-        <button onClick={logMe}>Login</button>
-      </div>
-
-      <input type="file" onChange={onChange} />
-
-      <div>
-        <label>Video URL: </label>
-        <input type="text" onChange={handleVideoUrlChange} value={videoUrl} />
-      </div>
-
-      <div>
-        <label>Thumb URL: </label>
-        <input type="text" onChange={handleThumbUrlChange} value={thumbUrl} />
-      </div>
-
-      <div>
-        <button onClick={uploadInfo}>Upload Info</button>
-        <button onClick={getAllVideoStatuses}>My Videos</button>
-        <button onClick={saveDetails}>Save Details</button>
-      </div>
+      <Card large className="login-new__card">
+        <Field label="Video file">
+          <input type="file" className="v2-input login-new__file" onChange={onChange} />
+        </Field>
+        <Field label="Video URL" type="text" onChange={handleVideoUrlChange} value={videoUrl} />
+        <Field label="Thumb URL" type="text" onChange={handleThumbUrlChange} value={thumbUrl} />
+        <div className="login-new__actions">
+          <Button variant="secondary" onClick={uploadInfo}>Upload Info</Button>
+          <Button variant="secondary" onClick={getAllVideoStatuses}>My Videos</Button>
+          <Button variant="secondary" onClick={saveDetails}>Save Details</Button>
+        </div>
+      </Card>
     </div>
   );
 }

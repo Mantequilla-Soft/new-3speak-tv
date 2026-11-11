@@ -5,6 +5,7 @@
 // toast offers an Undo. Signed out, every personal action asks to log in instead.
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act, screen, waitFor } from '@testing-library/react'
+import { computeAccessibleName } from 'dom-accessibility-api'
 import { renderWithProviders, toastMessages } from './_render.jsx'
 
 const filters = vi.hoisted(() => ({}))
@@ -77,7 +78,8 @@ describe('the card options menu', () => {
     const { user, onOpenChange } = mount()
     const menu = await openMenu(user)
     expect(trigger()).toHaveAttribute('aria-expanded', 'true')
-    const items = screen.getAllByRole('menuitem').map((b) => b.textContent.trim())
+    // Accessible names: the Material Symbols glyphs are aria-hidden ligature text.
+    const items = screen.getAllByRole('menuitem').map((b) => computeAccessibleName(b))
     expect(items).toEqual(['Add to playlist', 'Add tag', 'Not interested', "Don't show @bob"])
     expect(menu.parentElement).toBe(document.body)
     expect(onOpenChange).toHaveBeenLastCalledWith(true)

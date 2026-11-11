@@ -1,8 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MdPlaylistPlay, MdSkipPrevious, MdSkipNext } from 'react-icons/md';
-import { IoClose } from 'react-icons/io5';
+import { Icon } from '../v2/Icon';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import './PlaylistBar.scss';
 
@@ -58,33 +57,40 @@ function PlaylistBar({ playlist, videos, currentIndex, onClose }) {
       {/* Header */}
       <div className="playlist-bar-header">
         <div className="playlist-info">
-          <MdPlaylistPlay className="icon" />
-          <Link to={`/playlist/${playlist.id}`} className="playlist-name">
-            {playlist.name}
-          </Link>
-          <span className="video-count">
-            {currentIndex + 1} / {videos.length}
-          </span>
+          <span className="icon" aria-hidden="true"><Icon name="playlist_play" size={24} /></span>
+          <div className="playlist-text">
+            <Link to={`/playlist/${playlist.id}`} className="playlist-name">
+              {playlist.name}
+            </Link>
+            <span className="video-count">
+              {currentIndex + 1} / {videos.length}
+              {videos[currentIndex + 1]?.title && <span className="next-title"> · {videos[currentIndex + 1].title}</span>}
+            </span>
+          </div>
         </div>
         <div className="controls">
           <button
+            type="button"
             className="nav-btn"
             onClick={handlePrevious}
             disabled={currentIndex === 0}
             title={t('player.playlist.previous')}
+            aria-label={t('player.playlist.previous')}
           >
-            <MdSkipPrevious />
+            <Icon name="skip_previous" size={20} fill />
           </button>
           <button
+            type="button"
             className="nav-btn"
             onClick={handleNext}
             disabled={currentIndex === videos.length - 1}
             title={t('player.playlist.next')}
+            aria-label={t('player.playlist.next')}
           >
-            <MdSkipNext />
+            <Icon name="skip_next" size={20} fill />
           </button>
-          <button className="close-btn" onClick={onClose} title={t('player.playlist.close')}>
-            <IoClose />
+          <button type="button" className="close-btn" onClick={onClose} title={t('player.playlist.close')} aria-label={t('player.playlist.close')}>
+            <Icon name="close" size={20} />
           </button>
         </div>
       </div>

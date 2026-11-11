@@ -1,80 +1,117 @@
-// Reusable per-video analytics styles (dashboard + watch page). Top-level so the
-// component works anywhere it's dropped in.
+@use "../../styles/v2" as v2;
+
+// Per-video analytics (45a, 23d), reused by the profile dashboard and the watch
+// page. Stat tiles (bg wells), insight chips, then two charts on bg wells:
+// retention in cyan, most replayed in the accent.
 .video-stats {
-  color: var(--text-primary, #111);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .vs-skeleton { height: 220px; border-radius: var(--r-md); }
 
   .vs-chart-empty {
-    color: var(--text-secondary, #666);
-    font-size: 13.5px;
-    text-align: center;
-    padding: 22px 12px;
+    @include v2.text(body-sm);
+    color: var(--muted);
+    padding: 20px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
   }
 
   .vs-stats {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 8px;
-    margin-bottom: 16px;
 
-    @media (max-width: 640px) { grid-template-columns: repeat(3, 1fr); }
+    @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-    div { display: flex; flex-direction: column; gap: 2px; }
-    span { font-size: 16px; font-weight: 800; }
-    label { font-size: 11px; color: var(--text-secondary, #666); font-weight: 600; }
+    .v2-stat b { @include v2.mono(16, 900); }
   }
 
-  // Both graphs sit side-by-side on desktop, stacked on mobile.
   .vs-insights {
-    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
 
     .vs-insight {
-      display: inline-flex; align-items: center; gap: 5px; flex-wrap: wrap;
-      background: var(--bg-tertiary, rgba(0, 0, 0, 0.05));
-      border-radius: 999px; padding: 5px 12px;
-      font-size: 12.5px; color: var(--text-secondary, #666);
-      b { color: var(--text-primary, #111); font-weight: 700; }
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+      min-height: 28px;
+      padding: 4px 10px;
+      border-radius: var(--r-sm);
+      background: var(--surface-2);
+      @include v2.text(meta);
+      color: var(--muted);
+
+      b { color: var(--text); font-weight: 700; font-family: var(--font-mono); }
     }
+
     .vs-ts, .vs-ts-static {
-      margin-left: 6px; font-size: 12.5px; font-weight: 700;
-      color: var(--accent-primary, #e53935);
+      margin-left: 4px;
+      @include v2.mono(12, 700);
+      color: var(--accent);
     }
-    .vs-ts { border: 0; background: none; padding: 0; cursor: pointer; text-decoration: underline; }
+
+    .vs-ts {
+      border: 0;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
 
   .vs-charts {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 14px;
+    gap: 12px;
 
-    @media (max-width: 768px) { grid-template-columns: 1fr; gap: 4px; }
+    @include v2.mobile { grid-template-columns: 1fr; }
   }
 
   .vs-chart-block {
     min-width: 0;
 
     h5 {
-      display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
-      font-size: 13px; font-weight: 700; margin: 0 0 8px;
-      em { font-style: normal; font-weight: 500; font-size: 11.5px; color: var(--text-muted, #999); }
-    }
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 0 0 6px;
+      @include v2.text(label);
+      font-size: 12px;
 
-    @media (max-width: 768px) { margin-top: 10px; }
+      em { font-style: normal; @include v2.text(meta-sm); font-size: 10px; color: var(--muted); }
+    }
   }
 
-  // Position chart (retention / most-replayed)
+  // Position chart (retention / most-replayed) on a bg well.
   .vs-poschart {
     position: relative;
-    height: 96px;
-    background: var(--bg-tertiary, rgba(0, 0, 0, 0.04));
-    border-radius: 8px;
+    height: 110px;
+    background: var(--bg);
+    border-radius: var(--r-md);
     // visible so the hover frame-preview can float above the chart
     overflow: visible;
     cursor: crosshair;
     // let a horizontal drag scrub the graph instead of scrolling the page (mobile)
     touch-action: none;
   }
-  .vs-poschart-svg { border-radius: 8px; }
+
+  .vs-poschart-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--r-md);
+    overflow: hidden;
+
+    .vs-poschart-area { fill-opacity: .22; stroke-width: 0; }
+    .vs-poschart-line { fill: none; stroke-width: 2; }
+  }
 
   // Hover frame-preview (low-res scrub thumbnail) floating above the chart.
   .vs-seek-preview {
@@ -82,63 +119,89 @@
     bottom: calc(100% + 8px);
     z-index: 6;
     height: 92px;
-    border-radius: 8px;
+    border-radius: var(--r-sm);
     overflow: hidden;
-    background: #000;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    background: var(--media-black);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-float);
     opacity: 0;
     visibility: hidden;
     transform: translateY(4px);
-    transition: opacity 0.12s ease, transform 0.12s ease;
+    transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
     pointer-events: none;
 
     &.visible { opacity: 1; visibility: visible; transform: none; }
   }
+
   .vs-seek-preview-video {
     position: absolute;
     inset: 0;
     width: 100% !important;
     height: 100% !important;
     object-fit: contain;
-    background: #000;
+    background: var(--media-black);
   }
+
   .vs-seek-preview-meta {
     position: absolute;
-    bottom: 0; left: 0; right: 0;
-    display: flex; flex-direction: column; align-items: center;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 6px 4px 4px;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
-    color: #fff; line-height: 1.2; pointer-events: none;
+    background: linear-gradient(transparent, var(--media-scrim-strong));
+    color: var(--on-media);
+    line-height: 1.2;
+    pointer-events: none;
 
     strong { font-size: 11px; font-weight: 700; }
-    span { font-size: 10px; opacity: 0.8; }
+    span { font-family: var(--font-mono); font-size: 10px; opacity: .8; }
   }
-  .vs-poschart-svg {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    path { fill-opacity: 0.28; stroke-width: 0; }
-  }
+
   .vs-poschart-cursor {
-    position: absolute; top: 0; bottom: 0; width: 1px;
-    background: var(--text-primary, #111); opacity: 0.35; pointer-events: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--accent);
+    pointer-events: none;
   }
+
   .vs-poschart-tip {
-    position: absolute; top: 6px; transform: translateX(-50%);
-    background: var(--text-primary, #111); color: var(--text-inverse, #fff);
-    border-radius: 6px; padding: 3px 7px; font-size: 11px; pointer-events: none;
-    display: flex; flex-direction: column; align-items: center; line-height: 1.3; white-space: nowrap;
+    position: absolute;
+    top: 6px;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: var(--bg);
+    border-radius: var(--r-xs);
+    padding: 2px 6px;
+    font-size: 10px;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.3;
+    white-space: nowrap;
+
     strong { font-weight: 700; }
-    span { opacity: 0.7; font-size: 10px; }
+    span { font-family: var(--font-mono); opacity: .7; }
   }
+
   .vs-poschart-axis {
-    position: absolute; left: 8px; right: 8px; bottom: 4px;
-    display: flex; justify-content: space-between;
-    font-size: 10px; color: var(--text-muted, #999); pointer-events: none;
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    @include v2.mono(10, 500);
+    color: var(--muted);
+    pointer-events: none;
   }
 
   &.compact {
-    .vs-stats { margin-bottom: 12px; }
-    .vs-stats span { font-size: 15px; }
-    .vs-poschart { height: 84px; }
+    .vs-poschart { height: 96px; }
   }
 }

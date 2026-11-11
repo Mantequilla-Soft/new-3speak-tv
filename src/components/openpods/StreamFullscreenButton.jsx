@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Maximize, Minimize } from 'lucide-react';
+import { Icon } from '../v2/ui';
 import './StreamFullscreenButton.scss';
 
 const PLAYER_BOX = '.ws-player, .live-stream-player';
@@ -59,7 +59,7 @@ export default function StreamFullscreenButton() {
       aria-label={label}
       title={label}
     >
-      {isFull ? <Minimize size={18} /> : <Maximize size={18} />}
+      <Icon name={isFull ? 'fullscreen_exit' : 'fullscreen'} size={22} />
     </button>
   );
 }

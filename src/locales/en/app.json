@@ -87,7 +87,7 @@
     "lookAround": "I just want to look around"
   },
   "interests": {
-    "saved": "Interests saved — change them anytime in Settings",
+    "saved": "Interests saved. Change them anytime in Settings",
     "saveFailed": "Could not save interests",
     "title": "What are you into?",
     "body": "Pick a few topics you enjoy and we’ll show you more of the content you like. You can change these anytime in <b>Settings</b>.",

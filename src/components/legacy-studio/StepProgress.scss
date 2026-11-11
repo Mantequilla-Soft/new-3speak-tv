@@ -108,6 +108,5 @@
     &--bar { gap: 10px; padding-bottom: 12px; }
   }
   .step-progress__container { width: 100%; }
-  .step-progress__item:has(.is-active) { flex: 1 1 auto; }
   .step-progress__actions { width: 100%; margin-left: 0; }
 }

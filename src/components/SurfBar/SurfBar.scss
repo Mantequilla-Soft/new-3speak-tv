@@ -13,7 +13,8 @@
   margin: 12px 0 4px;
   padding: 12px;
 
-  button { font: inherit; }
+  // Only the bar's own buttons; the dock tiles keep their 10px labels.
+  > button { font: inherit; }
   button:disabled { cursor: progress; }
 
   // Phones: one slim row of 44px targets (channel, Zap, CH -, CH +, Stop).
@@ -50,12 +51,14 @@
 
   &:hover { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
 
+  // Phones: just the CH badge (still opens the guide); Zap takes the room.
   @include v2.mobile {
-    flex: 1 1 auto;
+    flex: none;
     height: 44px;
-    gap: 8px;
-    padding: 0 8px 0 6px;
+    padding: 0 6px;
     border-radius: var(--r-md);
+
+    .surf-bar__text { display: none; }
   }
 }
 
@@ -170,7 +173,7 @@
   &:disabled { opacity: .7; }
 
   @include v2.mobile {
-    flex: none;
+    flex: 1 1 auto;
     max-width: none;
     height: 44px;
     gap: 4px;
@@ -227,7 +230,7 @@
 // ── Dock tiles: CH -, CH +, Stop ──────────────────────────────────────────────
 .surf-bar__docks {
   display: grid;
-  grid-template-columns: repeat(3, 64px);
+  grid-template-columns: 64px 64px 80px;
   gap: 6px;
   flex: none;
 

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { MdGraphicEq, MdRedeem, MdVolunteerActivism, MdVisibilityOff, MdVisibility, MdBolt } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { Button, IconButton, Segmented } from '../v2/ui';
 import AccountImg from '../HiveAvatar/AccountImg';
 import TimeAgo from '../TimeAgo/TimeAgo';
 import BarLoader from '../Loader/BarLoader';
@@ -75,12 +76,18 @@ function HideTipButton({ item }) {
     }
   };
   const label = hidden ? t('profile.supports.unhideTip') : t('profile.supports.hideTip');
-  const Icon = hidden ? MdVisibility : MdVisibilityOff;
+  // 37a: an eye on the row; the label is its name and tooltip.
   return (
-    <button type="button" className="sp-card-hide" onClick={onClick} disabled={busy} title={label}>
-      <Icon aria-hidden="true" />
-      <span>{label}</span>
-    </button>
+    <IconButton
+      icon={hidden ? 'visibility' : 'visibility_off'}
+      label={label}
+      variant="ghost"
+      size={36}
+      round
+      className="sp-card-hide"
+      onClick={onClick}
+      disabled={busy}
+    />
   );
 }
 
@@ -95,7 +102,7 @@ function SupportCard({ item, person, canHide }) {
   return (
     <article className={`sp-card${item.hidden ? ' is-hidden' : ''}`}>
       <Link to={link} className="sp-card-thumb" aria-label={title}>
-        {thumb ? <img src={thumb} alt="" loading="lazy" /> : <MdGraphicEq className="sp-card-thumb-icon" />}
+        {thumb ? <img src={thumb} alt="" loading="lazy" /> : <Icon name="graphic_eq" size={24} className="sp-card-thumb-icon" />}
       </Link>
       <div className="sp-card-body">
         <Link to={link} className="sp-card-title" title={title}>{title}</Link>
@@ -108,28 +115,24 @@ function SupportCard({ item, person, canHide }) {
           ) : (
             // A Lightning tip whose payer can't be told (not paid from Hive).
             <span className="sp-card-tipper sp-card-tipper--anon">
-              <MdBolt aria-hidden="true" />
+              <Icon name="bolt" size={16} fill />
               <span>{t('profile.supports.lightningSupporter')}</span>
             </span>
           )}
           <span className="sp-card-time"><TimeAgo date={item.tippedAt || item.createdAt} /></span>
-        </div>
-        <div className="sp-card-amount">
-          {item.currency === 'SATS'
-            ? <span className="sp-pill"><MdBolt aria-hidden="true" />{formatSats(item.amount)}</span>
-            : <span className="sp-pill">{formatHbd(item.hbd_value)}</span>}
           {item.currency === 'HIVE' && (
             <span className="sp-card-paid">{t('profile.supports.paidInHive', { amount: Number(item.amount).toFixed(3) })}</span>
           )}
         </div>
         {typeof item.memo === 'string' && item.memo.trim() && <TipMemo text={item.memo} />}
-        {(item.hidden || canHide) && (
-          <div className="sp-card-foot">
-            {item.hidden && <span className="sp-card-hidden-label">{t('profile.supports.hiddenLabel')}</span>}
-            {canHide && <HideTipButton item={item} />}
-          </div>
-        )}
+        {item.hidden && <span className="sp-card-hidden-label">{t('profile.supports.hiddenLabel')}</span>}
       </div>
+      <div className="sp-card-amount">
+        {item.currency === 'SATS'
+          ? <span className="sp-pill"><Icon name="bolt" size={14} fill />{formatSats(item.amount)}</span>
+          : <span className="sp-pill">{formatHbd(item.hbd_value)}</span>}
+      </div>
+      {canHide && <HideTipButton item={item} />}
     </article>
   );
 }
@@ -171,20 +174,9 @@ export default function SupportersList({ user, isOwnProfile }) {
   }, [urlDir, bothLoaded, receivedTotal, givenTotal]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const active = dir === 'given' ? given : received;
-  const subTab = (key, Icon, label, page) => (
-    <button
-      type="button"
-      role="tab"
-      aria-selected={dir === key}
-      className={`sp-subtab${dir === key ? ' active' : ''}`}
-      onClick={() => selectDir(key)}
-    >
-      <Icon className="sp-subtab-icon" aria-hidden="true" />
-      {page
-        ? t('profile.supports.subTabTotal', { label, amount: formatSupportTotal(page.total_hbd, page.total_sats) })
-        : label}
-    </button>
-  );
+  const subLabel = (label, page) => (page
+    ? t('profile.supports.subTabTotal', { label, amount: formatSupportTotal(page.total_hbd, page.total_sats) })
+    : label);
 
   const items = (active.data?.pages || []).flatMap((p) => p?.items || []);
   let body;
@@ -194,14 +186,14 @@ export default function SupportersList({ user, isOwnProfile }) {
     body = (
       <div className="sp-list-empty">
         <p>{t('common.status.error')}</p>
-        <button type="button" className="sp-list-more" onClick={() => active.refetch()}>{t('common.actions.retry')}</button>
+        <Button variant="secondary" size={36} icon="refresh" className="sp-list-more" onClick={() => active.refetch()}>{t('common.actions.retry')}</Button>
       </div>
     );
   } else if (!items.length) {
     const key = dir === 'given'
       ? (isOwnProfile ? 'profile.supports.emptyGivenOwn' : 'profile.supports.emptyGiven')
       : (isOwnProfile ? 'profile.supports.emptyReceivedOwn' : 'profile.supports.emptyReceived');
-    body = <div className="sp-list-empty"><p>{t(key, { user })}</p></div>;
+    body = <div className="sp-list-empty"><Icon name="volunteer_activism" size={24} /><p>{t(key, { user })}</p></div>;
   } else {
     body = (
       <>
@@ -216,9 +208,9 @@ export default function SupportersList({ user, isOwnProfile }) {
           ))}
         </div>
         {active.hasNextPage && (
-          <button type="button" className="sp-list-more" onClick={() => active.fetchNextPage()} disabled={active.isFetchingNextPage}>
+          <Button variant="secondary" className="sp-list-more" onClick={() => active.fetchNextPage()} disabled={active.isFetchingNextPage} loading={active.isFetchingNextPage} trailing="expand_more">
             {active.isFetchingNextPage ? t('common.status.loading') : t('common.actions.loadMore')}
-          </button>
+          </Button>
         )}
       </>
     );
@@ -226,9 +218,19 @@ export default function SupportersList({ user, isOwnProfile }) {
 
   return (
     <div className="sp-list">
-      <div className="sp-subtabs" role="tablist">
-        {subTab('received', MdRedeem, t('profile.supports.received'), firstPage(received))}
-        {subTab('given', MdVolunteerActivism, t('profile.supports.given'), firstPage(given))}
+      {/* 37a: Received / Given as a segmented track, each with its total. */}
+      <div className="sp-subtabs">
+        <Segmented
+          block={false}
+          scroll
+          value={dir}
+          onChange={selectDir}
+          label={t('profile.tabs.supporters')}
+          options={[
+            { value: 'received', icon: 'redeem', label: subLabel(t('profile.supports.received'), firstPage(received)) },
+            { value: 'given', icon: 'volunteer_activism', label: subLabel(t('profile.supports.given'), firstPage(given)) },
+          ]}
+        />
       </div>
       {body}
     </div>

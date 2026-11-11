@@ -1,51 +1,5 @@
-@use "../../mixins.scss" as *;
-.skeleton-loaders {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 20px;
-  padding: 20px;
-
-  @include respond(phone) {
-    display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-  gap: 20px;    
-  }
-
-  .skeleton-card {
-    width: fit-content;
-
-    .skeleton-img-wrap {
-      border-radius: 15%;
-      background: #e2e2ec;
-      height: 110px;
-      width: 110px;
-      margin-bottom: 8px;
-      animation: pulse 1.5s infinite ease-in-out;
-      @include respond(phone) {
-        height: 80px;
-        width: 80px;
-      }
-    }
-
-    .skeleton-title {
-      background: #e2e2ec;
-      height: 16px;
-      width: 80px;
-      margin: 10px auto;
-      border-radius: 4px;
-      animation: pulse 1.5s infinite ease-in-out;
-    }
-  }
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.6;
-  }
+// The striped look comes from .v2-skeleton (design-system.scss); this only
+// rounds the placeholders like the cards they stand in for.
+.skeleton-loaders .skeleton-card {
+  border-radius: var(--r-2xl);
 }

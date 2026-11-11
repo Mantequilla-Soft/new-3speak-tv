@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { fetchVideoAnalytics, fmtDuration, fmtCount } from '../../lib/creatorStats';
-import BarLoader from '../Loader/BarLoader';
+import { StatTile } from '../v2/ui';
 import useSeekPreview from '../../hooks/useSeekPreview';
 import './VideoStats.scss';
 import { useTranslation, Trans } from 'react-i18next';
@@ -26,11 +26,12 @@ export function PositionChart({ values, maxValue, color, duration, formatValue, 
     videoRef: previewVideoRef, preview, previewWidth, showAt, hide,
   } = useSeekPreview({ videoId, trackRef: wrapRef, duration });
 
-  const path = useMemo(() => {
-    if (!has) return '';
+  // The area (a tint) and its top edge (the line), drawn in the series color.
+  const { path, line } = useMemo(() => {
+    if (!has) return { path: '', line: '' };
     const y = (v) => (100 - Math.max(0, Math.min(1, (v || 0) / maxValue)) * 96).toFixed(2);
     const pts = values.map((v, i) => `${((i / (n - 1)) * 100).toFixed(2)},${y(v)}`).join(' L');
-    return `M0,100 L${pts} L100,100 Z`;
+    return { path: `M0,100 L${pts} L100,100 Z`, line: `M${pts}` };
   }, [values, maxValue, has, n]);
 
   // Handles both mouse hover (desktop) and touch drag (mobile — no hover there).
@@ -61,7 +62,8 @@ export function PositionChart({ values, maxValue, color, duration, formatValue, 
       onTouchCancel={onLeave}
     >
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="vs-poschart-svg" aria-hidden="true">
-        <path d={path} style={{ fill: color, stroke: color }} />
+        <path className="vs-poschart-area" d={path} style={{ fill: color }} />
+        <path className="vs-poschart-line" d={line} style={{ stroke: color }} vectorEffect="non-scaling-stroke" />
       </svg>
       {hover && <div className="vs-poschart-cursor" style={{ left: `${hover.x * 100}%` }} />}
 
@@ -155,7 +157,13 @@ export default function VideoStats({ username, permlink, compact = false, onSeek
     ? `${username}/${data?.permlink || permlink}`
     : null;
 
-  if (loading) return <div className={`video-stats${compact ? ' compact' : ''}`}><BarLoader /></div>;
+  if (loading) {
+    return (
+      <div className={`video-stats${compact ? ' compact' : ''}`} aria-busy="true">
+        <div className="vs-skeleton v2-skeleton" />
+      </div>
+    );
+  }
   if (err || !data || data.sessions === 0) {
     return <div className={`video-stats${compact ? ' compact' : ''}`}><div className="vs-chart-empty">{t('stats.video.empty')}</div></div>;
   }
@@ -163,11 +171,11 @@ export default function VideoStats({ username, permlink, compact = false, onSeek
   return (
     <div className={`video-stats${compact ? ' compact' : ''}`}>
       <div className="vs-stats">
-        <div><span>{fmtDuration(data.watchSeconds)}</span><label>{t('stats.metrics.watchTime')}</label></div>
-        <div><span>{fmtCount(data.sessions)}</span><label>{t('stats.metrics.views')}</label></div>
-        <div><span>{fmtCount(data.viewers)}</span><label>{t('stats.video.uniqueViewers')}</label></div>
-        <div><span>{data.avgPct}%</span><label>{t('stats.tiles.avgWatched')}</label></div>
-        <div><span>{data.avgRate}×</span><label>{t('stats.video.avgSpeed')}</label></div>
+        <StatTile label={t('stats.metrics.watchTime')} value={fmtDuration(data.watchSeconds)} />
+        <StatTile label={t('stats.metrics.views')} value={fmtCount(data.sessions)} />
+        <StatTile label={t('stats.video.uniqueViewers')} value={fmtCount(data.viewers)} />
+        <StatTile label={t('stats.tiles.avgWatched')} value={`${data.avgPct}%`} />
+        <StatTile label={t('stats.video.avgSpeed')} value={`${data.avgRate}×`} />
       </div>
 
       {(() => {
@@ -195,7 +203,7 @@ export default function VideoStats({ username, permlink, compact = false, onSeek
           <h5>{t('stats.video.retentionTitle')}<em>{t('stats.video.retentionSub')}</em></h5>
           <PositionChart
             values={data.retention} maxValue={100} duration={data.duration}
-            color="var(--accent-primary, #e53935)"
+            color="var(--cyan)"
             formatValue={(v) => t('stats.video.pctWatching', { pct: Math.round(v) })}
             videoId={previewId}
           />
@@ -205,7 +213,7 @@ export default function VideoStats({ username, permlink, compact = false, onSeek
           <h5>{t('stats.video.replayTitle')}<em>{t('stats.video.replaySub')}</em></h5>
           <PositionChart
             values={data.replay?.normalized || []} maxValue={1} duration={data.duration}
-            color="rgba(120,170,255,0.85)"
+            color="var(--accent)"
             formatValue={() => t('stats.video.hotSpot')}
             emptyLabel={t('stats.video.notEnoughReplays')}
             videoId={previewId}

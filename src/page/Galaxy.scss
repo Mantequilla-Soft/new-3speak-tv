@@ -6,7 +6,7 @@
 // dark ones, whatever the site theme. Tints are written with color-mix here
 // (not the --*-tint tokens) so they mix the dark values.
 $side-w: 312px;
-$left-w: 300px;
+$left-w: 312px;
 
 .container:has(.galaxy-page) { padding: 0 !important; }
 
@@ -115,13 +115,18 @@ $left-w: 300px;
 
   &:focus-within { border-color: var(--accent); }
 
-  .galaxy-depth-label { color: var(--muted); flex: none; }
+  .galaxy-depth-label { color: var(--muted); flex: none; line-height: 32px; }
 
   select {
-    all: unset;
+    appearance: none;
     flex: 1;
     min-width: 0;
-    height: 100%;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
     color: var(--text);
     font: inherit;
     font-weight: 700;
@@ -507,7 +512,7 @@ $left-w: 300px;
   right: calc(#{$side-w} + 32px);
   bottom: 16px;
   z-index: 4;
-  width: 260px;
+  width: 288px;
   padding: 12px;
   border-radius: var(--r-xl);
   @include v2.text(meta);

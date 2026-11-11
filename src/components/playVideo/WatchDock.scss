@@ -1,0 +1,82 @@
+@use "../../styles/v2" as v2;
+
+/* The action dock under the player (02): 60px tiles (the .v2-dock primitive)
+   in one row, and the "More" menu (07d) as a popover or, on a phone, a sheet. */
+.wv2-dock {
+  position: relative;
+  min-width: 0;
+
+  &__tiles {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 8px;
+
+    @include v2.mobile { gap: 6px; }
+  }
+
+  .v2-dock { min-width: 0; }
+
+  // The popover, under the tiles and flush with their right edge.
+  &__menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    width: 300px;
+    max-width: 100%;
+    padding: 12px;
+    border-radius: var(--r-2xl);
+    animation: v2-pop var(--t-base) var(--ease);
+  }
+}
+
+// The menu's contents, the same in the popover and the sheet.
+.wv2-more {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  &__tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-height: 76px;
+    padding: 12px;
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--surface-2);
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    > span:last-child { @include v2.text(body-sm); font-weight: 700; line-height: 1.25; }
+
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+    &:active { transform: scale(.98); }
+    &:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    &.is-on.is-accent { background: var(--accent-tint-strong); color: var(--accent); }
+    &.is-on.is-cyan { background: var(--cyan-tint); color: var(--cyan); }
+  }
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .v2-menu__row.is-on { background: transparent; color: var(--muted); .material-symbols-rounded { color: var(--muted); } }
+  }
+}
+
+.wv2-more-sheet .wv2-more__grid {
+  @include v2.mobile { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

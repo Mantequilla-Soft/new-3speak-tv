@@ -3,9 +3,10 @@ import { useAppStore } from '../../lib/store';
 import { fetchGraduationStatus } from '../../lib/incubation';
 import { toastIn } from '../../utils/toast';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
-// Reuses the app's one modal-dialog shape rather than inventing a second.
-import '../AdsPrompt/AdsPrompt.scss';
 import { useTranslation } from 'react-i18next';
+// The shared v2 dialog, with the same warm-up prompt pieces as graduation.
+import { Button, Dialog, Icon } from '../v2/ui';
+import './GraduationPrompt.scss';
 
 // Every toast from this module is headed "Your account"; the message becomes
 // the line under it. See utils/toast.js.
@@ -104,34 +105,28 @@ export default function IncubationSessionSync() {
   };
 
   return (
-    <div className="ads-prompt-overlay">
-      <div
-        className="ads-prompt"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="reconnect-title"
-      >
-        <header className="ads-prompt-head">
-          <div>
-            <h3 className="ads-prompt-title" id="reconnect-title">
-              {t('incubation.sessionSync.title')}
-            </h3>
-            <p className="ads-prompt-lede">
-              {t('incubation.sessionSync.lede')}
-            </p>
-          </div>
-        </header>
+    // "Reconnect your session" (design 46c). Not dismissible: nothing on the
+    // page works until it is done, and reconnecting needs no typing.
+    <Dialog
+      open
+      dismissible={false}
+      title={t('incubation.sessionSync.title')}
+      width={480}
+      className="inc-prompt"
+      footer={(
+        <Button variant="inverse" next className="inc-prompt-primary" onClick={reconnect} disabled={busy} loading={busy}>
+          {busy ? t('incubation.sessionSync.opening') : t('incubation.sessionSync.reconnect')}
+        </Button>
+      )}
+    >
+      <span className="inc-prompt-icon" aria-hidden="true"><Icon name="sync" size={28} /></span>
+      <p className="inc-prompt-lede">
+        {t('incubation.sessionSync.lede')}
+      </p>
 
-        <p className="ads-prompt-text">
-          {t('incubation.sessionSync.text')}
-        </p>
-
-        <div className="ads-prompt-actions">
-          <button type="button" className="ads-prompt-primary" onClick={reconnect} disabled={busy}>
-            {busy ? t('incubation.sessionSync.opening') : t('incubation.sessionSync.reconnect')}
-          </button>
-        </div>
-      </div>
-    </div>
+      <p className="inc-prompt-text">
+        {t('incubation.sessionSync.text')}
+      </p>
+    </Dialog>
   );
 }

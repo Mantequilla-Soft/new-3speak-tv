@@ -1,7 +1,7 @@
 import React, { useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { Check, Download } from 'lucide-react';
+import { Button } from '../../v2/ui';
 import ModalHeader from '../../ModalHeader/ModalHeader';
 import { usePortalDoc } from '../../../utils/portalDocument';
 import ThumbnailCanvas from './ThumbnailCanvas';
@@ -119,16 +119,14 @@ export default function ThumbnailEditorModal({
 
         <div className="thumb-modal__footer">
           {/* Saves the exact image that gets uploaded. */}
-          <button type="button" className="thumb-btn" onClick={onDownload} disabled={!image} title={t('upload.thumbnail.editor.downloadHint')}>
-            <Download size={15} aria-hidden="true" />
+          <Button variant="secondary" size={40} icon="download" className="thumb-btn" onClick={onDownload} disabled={!image} title={t('upload.thumbnail.editor.downloadHint')}>
             {t('upload.thumbnail.editor.download')}
-          </button>
+          </Button>
           <ResetButton onReset={onReset} disabled={!canReset} />
           <span className="thumb-tool-row__spacer" />
-          <button type="button" className="thumb-btn thumb-btn--primary" onClick={onDone || onClose} disabled={doneBusy}>
-            <Check size={15} aria-hidden="true" />
+          <Button variant="primary" size={48} trailing="check" className="thumb-btn thumb-btn--primary is-next" onClick={onDone || onClose} disabled={doneBusy} loading={doneBusy}>
             {doneBusy ? t('audio.upload.thumb.uploading') : t('upload.thumbnail.editor.done')}
-          </button>
+          </Button>
         </div>
       </div>
     </div>,

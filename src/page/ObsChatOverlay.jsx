@@ -4,6 +4,7 @@ import { useChat, resolveStreamCap } from "@snapie/hangouts-react";
 import { useTranslation } from "react-i18next";
 import { getHangoutsEndpoints, defaultEndpoint } from "../utils/hangoutsEndpoints";
 import { CHECKER_URL } from "../utils/config";
+import { Icon } from "../components/v2/Icon";
 import "./ObsChatOverlay.scss";
 
 // A streamer's live chat for OBS. The URL carries the user's chat overlay key
@@ -177,20 +178,20 @@ function DockCounters({ room }) {
   return (
     <div className="obs-chat__counters" role="status">
       <span className="obs-chat__counter" title={t("live.obs.chatOverlay.viewers")} aria-label={`${t("live.obs.chatOverlay.viewers")}: ${viewers}`}>
-        👁 {viewers}
+        <Icon name="visibility" size={16} /><span className="num">{viewers}</span>
       </span>
       {elapsed != null && (
         <span className="obs-chat__counter" title={t("live.obs.chatOverlay.liveFor")} aria-label={`${t("live.obs.chatOverlay.liveFor")}: ${clock(elapsed)}`}>
-          ⏱ {clock(elapsed)}
+          <Icon name="timer" size={16} /><span className="num">{clock(elapsed)}</span>
         </span>
       )}
       {showLeft && (
         <span className={`obs-chat__counter${left < LOW_LEFT_MS ? " is-low" : ""}`} title={t("live.obs.chatOverlay.timeLeft")} aria-label={`${t("live.obs.chatOverlay.timeLeft")}: ${clock(left)}`}>
-          ⏳ {clock(left)}
+          <Icon name="hourglass_bottom" size={16} /><span className="num">{clock(left)}</span>
         </span>
       )}
       <span className="obs-chat__counter" title={t("live.obs.chatOverlay.boosts")} aria-label={`${t("live.obs.chatOverlay.boosts")}: $${boostUsd.toFixed(2)}`}>
-        🚀 ${boostUsd.toFixed(2)}
+        <Icon name="rocket_launch" size={16} /><span className="num">${boostUsd.toFixed(2)}</span>
       </span>
     </div>
   );
@@ -219,11 +220,12 @@ export default function ObsChatOverlay() {
   const [invalid, setInvalid] = useState(false);
 
   // OBS's Browser Source injects a transparent body, but the app's own CSS
-  // may paint one. A dock gets a solid background instead.
+  // paints one. Clear it; a dock gets its solid ground from .obs-chat--dock,
+  // which covers the whole page.
   useEffect(() => {
     const els = [document.documentElement, document.body];
     const prev = els.map((el) => el.style.background);
-    els.forEach((el) => { el.style.background = opts.dock ? "#0f1117" : "transparent"; });
+    els.forEach((el) => { el.style.background = "transparent"; });
     return () => els.forEach((el, i) => { el.style.background = prev[i]; });
   }, [opts.dock]);
 
@@ -267,20 +269,20 @@ export default function ObsChatOverlay() {
   const cls = `obs-chat${opts.dock ? " obs-chat--dock" : ""}`;
 
   if (missingKey || invalid) {
-    return <div className={cls} style={style}><p className="obs-chat__invalid">{t("live.obs.chatOverlay.invalid")}</p></div>;
+    return <div className={cls} style={style} data-theme="dark"><p className="obs-chat__invalid">{t("live.obs.chatOverlay.invalid")}</p></div>;
   }
   const token = grant && grant.room === room ? grant.token : null;
   if (!room || !token) {
     // Over the video: nothing at all. In a dock: say why it's empty.
     return (
-      <div className={cls} style={style}>
+      <div className={cls} style={style} data-theme="dark">
         {opts.dock && <p className="obs-chat__status">{t("live.obs.chatOverlay.offline")}</p>}
       </div>
     );
   }
 
   return (
-    <div className={`${cls}${opts.dock ? " obs-chat--with-counters" : ""}`} style={style}>
+    <div className={`${cls}${opts.dock ? " obs-chat--with-counters" : ""}`} style={style} data-theme="dark">
       <LiveKitRoom key={room} serverUrl={livekitUrl()} token={token} connect audio={false} video={false}>
         {opts.dock && <DockCounters room={room} />}
         <ChatFeed fade={opts.fade} max={opts.max} dock={opts.dock} />

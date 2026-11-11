@@ -2,8 +2,8 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import useHoverPeek from '../../hooks/useHoverPeek';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { IoIosNotifications } from 'react-icons/io';
-import { MdNotificationsActive, MdNotificationsOff, MdDoneAll } from 'react-icons/md';
+import { Icon } from '../v2/Icon';
+import { notifTypeIcon } from './notifTypeIcon';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import {
@@ -202,18 +202,22 @@ function NotificationBell() {
     return whaleMap.get(actor)?.tier || null;
   };
 
+  const pushOn = !!push.subscribed;
+  const pushBlocked = push.permission === 'denied';
+
   return (
     <div className="notif-bell-wrapper" ref={ref} {...hoverProps}>
       <button
         type="button"
         className="notif-bell-btn"
         onClick={toggle}
+        aria-expanded={shown}
         aria-label={unseenStories
           ? t('nav.notifications.stories.ariaUnseen', { count: unseenStories })
           : unreadCount + unseenPodcasts ? t('nav.notifications.ariaUnread', { count: unreadCount + unseenPodcasts }) : t('common.nav.notifications')}
         title={t('common.nav.notifications')}
       >
-        <IoIosNotifications size={22} />
+        <Icon name="notifications" size={22} fill={shown} />
         {unreadCount > 0 && (
           <span className="notif-bell-dot" aria-hidden="true" />
         )}
@@ -225,26 +229,41 @@ function NotificationBell() {
       </button>
 
       {(shown || leaving) && (
-        <div className={`notif-dropdown${leaving ? ' notif-dropdown--leaving' : ''}`} role="menu">
+        <>
+        {/* Phones: the sheet dims the page; a tap there closes it. */}
+        {open && <div className="notif-scrim" onClick={close} aria-hidden="true" />}
+        <div className={`notif-dropdown${leaving ? ' notif-dropdown--leaving' : ''}`} role="menu" aria-label={t('common.nav.notifications')}>
+          <div className="notif-dropdown-grab" aria-hidden="true" />
           <div className="notif-dropdown-header">
             <span className="notif-dropdown-title">{t('common.nav.notifications')}</span>
+            <Link
+              to="/notifications"
+              className="notif-dropdown-seeall"
+              onClick={close}
+            >
+              {t('common.actions.seeAll')}
+              <Icon name="arrow_forward" size={16} />
+            </Link>
+          </div>
+
+          {((pushSupported() && authenticated) || anythingUnread) && (
             <div className="notif-dropdown-actions">
               {pushSupported() && authenticated && (
                 <button
                   type="button"
-                  className={`notif-push-toggle${push.subscribed ? ' on' : ''}`}
+                  className={`notif-push-toggle${pushOn ? ' on' : ''}`}
                   onClick={togglePush}
-                  disabled={pushBusy || push.permission === 'denied' || push.worker === false}
-                  title={push.permission === 'denied'
+                  disabled={pushBusy || pushBlocked || push.worker === false}
+                  title={pushBlocked
                     ? t('nav.notifications.pushBlocked')
                     : push.worker === false
                       ? t('nav.notifications.pushNoWorker')
-                      : push.subscribed
+                      : pushOn
                         ? t('nav.notifications.pushStop')
                         : t('nav.notifications.pushStart')}
                 >
-                  {push.subscribed ? <MdNotificationsActive size={15} /> : <MdNotificationsOff size={15} />}
-                  <span>{push.subscribed ? t('nav.notifications.on') : t('nav.notifications.notifyMe')}</span>
+                  <Icon name={pushOn ? 'notifications_active' : 'notifications_off'} size={16} fill={pushOn} />
+                  <span>{pushOn ? t('nav.notifications.on') : t('nav.notifications.notifyMe')}</span>
                 </button>
               )}
               {/* Same action as on /notifications, so clearing the dots doesn't need
@@ -257,22 +276,30 @@ function NotificationBell() {
                   disabled={markingAsRead}
                   title={t('notifications.markAllTitle')}
                 >
-                  <MdDoneAll size={15} />
+                  <Icon name="done_all" size={16} />
                   <span>{markingAsRead ? t('notifications.marking') : t('notifications.markAllRead')}</span>
                 </button>
               )}
-              <Link
-                to="/notifications"
-                className="notif-dropdown-seeall"
-                onClick={close}
-              >
-                {t('common.actions.seeAll')}
-              </Link>
             </div>
-          </div>
+          )}
+          {pushSupported() && authenticated && pushBlocked && (
+            <div className="notif-push-note is-blocked">
+              <Icon name="notifications_off" size={16} />
+              <span>{t('nav.notifications.pushBlocked')}</span>
+            </div>
+          )}
+          {pushSupported() && authenticated && pushOn && (
+            <div className="notif-push-note">{t('nav.notifications.pushOn')}</div>
+          )}
 
+          {/* Fixed height (NotificationBell.scss): loading, empty and full all
+              keep the panel the same size; the list scrolls inside. */}
+          <div className="notif-dropdown-body">
           {loading && notifications.length === 0 && (
-            <div className="notif-dropdown-empty">{t('common.status.loading')}</div>
+            <div className="notif-dropdown-empty">
+              <Icon name="progress_activity" size={20} className="v2-spin" />
+              <span>{t('common.status.loading')}</span>
+            </div>
           )}
 
           <StoryNotifications stories={stories} onOpen={close} />
@@ -280,7 +307,10 @@ function NotificationBell() {
           <PodcastNotifications episodes={podcastEpisodes} user={user} onOpen={close} markSeen={open} />
 
           {!loading && notifications.length === 0 && stories.length === 0 && podcastEpisodes.length === 0 && (
-            <div className="notif-dropdown-empty">{t('nav.notifications.empty')}</div>
+            <div className="notif-dropdown-empty">
+              <Icon name="notifications_none" size={28} />
+              <span>{t('nav.notifications.empty')}</span>
+            </div>
           )}
 
           {preview.length > 0 && (
@@ -306,6 +336,7 @@ function NotificationBell() {
                 const tier = getWhaleTier(actor);
                 const unread = isUnread(n);
                 const is3Speak = getIs3Speak(n);
+                const kind = notifTypeIcon(n.type);
                 return (
                   <li
                     key={group.id}
@@ -316,7 +347,7 @@ function NotificationBell() {
                       {actor && (
                         <NotifAvatar actor={actor} />
                       )}
-                      {tier && <span className={`notif-tier-badge notif-tier-${tier}`}>{tier === 'whale' ? '🐋' : '🐬'}</span>}
+                      <span className={`notif-kind is-${kind.tone}`} aria-hidden="true"><Icon name={kind.icon} size={13} fill /></span>
                     </div>
                     <div className="notif-body">
                       <div className="notif-msg">
@@ -326,6 +357,7 @@ function NotificationBell() {
                         <span className="notif-type">{getNotificationTypeLabel(n.type)}</span>
                         <span className="notif-dot">·</span>
                         <span className="notif-time">{formatNotifTime(n.date)}</span>
+                        {tier && <span className={`notif-meta-tier notif-tier-${tier}`}>{tier === 'whale' ? '🐋' : '🐬'}</span>}
                       </div>
                     </div>
                     {is3Speak && (
@@ -333,9 +365,7 @@ function NotificationBell() {
                     )}
                     {unread && <span className="notif-unread-dot" aria-hidden="true" />}
                     {/* No hover tooltip on single rows: it repeated `n.msg`, which is
-                        already the row's own text above, and restated a tier the
-                        badge beside the avatar already shows. It covered the rows
-                        below it to tell you nothing new. The GROUPED row keeps its
+                        already the row's own text above. The GROUPED row keeps its
                         tooltip because that one does add something: the collapsed
                         row says "2 Follows" without naming who. */}
                   </li>
@@ -343,7 +373,9 @@ function NotificationBell() {
               })}
             </ul>
           )}
+          </div>
         </div>
+        </>
       )}
     </div>
   );
@@ -429,6 +461,7 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick, hovered, o
       onMouseLeave={onLeave}
     >
       <div className="notif-avatar-stack">
+        <span className={`notif-kind is-${notifTypeIcon(notifType).tone}`} aria-hidden="true"><Icon name={notifTypeIcon(notifType).icon} size={13} fill /></span>
         {topActors.map((actor, i) => (
           <NotifAvatar
             key={actor}

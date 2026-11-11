@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdSubtitles, MdClose } from 'react-icons/md';
+import { Button, Icon, Progress } from '../v2/ui';
 import { sttEnabledFor } from '../../utils/config';
 import { transcriptLanguages } from '../../utils/transcribe';
 
@@ -43,25 +43,30 @@ export default function TranscriptControl({ user, track, job, hasTranscript, onS
     <div className="audio-transcript">
       {busy ? (
         <div className="audio-transcript-progress" role="status">
-          <div className="audio-transcript-bar"><div style={{ width: `${pct}%` }} /></div>
-          <span>{job.phase === 'decoding' ? t('audio.upload.transcript.reading') : t('audio.upload.transcript.writing', { percent: pct })}</span>
-          <button type="button" className="audio-transcript-cancel" onClick={onCancel}>
-            <MdClose size={14} /> {t('common.actions.cancel')}
-          </button>
+          <div className="audio-transcript-progress-head">
+            <Icon name="progress_activity" size={16} className="v2-spin audio-transcript-spin" />
+            <span>{job.phase === 'decoding' ? t('audio.upload.transcript.reading') : t('audio.upload.transcript.writing', { percent: pct })}</span>
+            <Button variant="ghost" size={28} icon="close" onClick={onCancel}>
+              {t('common.actions.cancel')}
+            </Button>
+          </div>
+          <div className="audio-transcript-bar"><Progress value={pct} tone="cyan" thin label={t('audio.upload.transcript.heading')} /></div>
         </div>
       ) : (
         <div className="audio-transcript-row">
-          <button
-            type="button"
-            className="audio-upload-btn-secondary audio-transcript-btn"
+          <Button
+            variant="secondary"
+            size={36}
+            icon="subtitles"
+            className="audio-transcript-btn"
             onClick={() => onStart(lang)}
             disabled={disabled}
           >
-            <MdSubtitles size={16} /> {hasTranscript ? t('audio.upload.transcript.again') : t('audio.upload.transcript.make')}
-          </button>
+            {hasTranscript ? t('audio.upload.transcript.again') : t('audio.upload.transcript.make')}
+          </Button>
           {langs.length > 1 && (
             <select
-              className="audio-transcript-lang"
+              className="audio-transcript-lang v2-input is-select h32"
               value={lang}
               onChange={(e) => setLang(e.target.value)}
               aria-label={t('audio.upload.transcript.language')}

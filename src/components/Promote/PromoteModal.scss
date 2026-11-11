@@ -1,170 +1,30 @@
-.promote-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 4000;
-  background: rgba(0, 0, 0, 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  backdrop-filter: blur(2px);
-}
+// Promote this video (designs 17c, 47d) on the shared v2 Dialog. Tokens only.
+@use "../../styles/v2" as v2;
 
-.promote-modal {
-  position: relative;
-  width: 100%;
-  max-width: 420px;
-  background: var(--card-bg, #fff);
-  color: var(--text-primary, #111);
-  border-radius: 16px;
-  padding: 22px 22px 18px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-}
+.promote-v2 {
+  .v2-dialog__body { gap: 14px; }
 
-.promote-intro {
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: var(--text-secondary, #666);
-  margin: 0 0 16px;
-}
+  &__form { display: flex; flex-direction: column; gap: 14px; }
 
-.promote-field {
-  margin-bottom: 16px;
-
-  label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-secondary, #777);
-    margin-bottom: 8px;
-  }
-
-  input[type="range"] {
-    width: 100%;
-    accent-color: var(--text-secondary, #888);
-  }
-}
-
-.promote-range-ends {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--text-secondary, #999);
-  margin-top: 2px;
-}
-
-.promote-currency {
-  display: flex;
-  gap: 8px;
-
-  button {
-    flex: 1;
-    padding: 9px 0;
-    border-radius: 10px;
-    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
-    background: var(--bg-primary, #f6f6f8);
-    color: var(--text-primary, #111);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s ease;
-
-    &.active {
-      border-color: var(--text-primary, #111);
-      background: var(--text-primary, #111);
-      color: var(--card-bg, #fff);
-    }
-  }
-}
-
-.promote-total {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-top: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
-  margin-bottom: 14px;
-  span { color: var(--text-secondary, #777); font-size: 13px; }
-  strong { font-size: 20px; }
-}
-
-.promote-cta {
-  width: 100%;
-  padding: 12px 0;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 12px;
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.15s ease;
-  &:hover:not(:disabled) { opacity: 0.92; }
-  &:disabled { opacity: 0.55; cursor: not-allowed; }
-}
-
-.promote-muted {
-  color: var(--text-secondary, #999);
-  font-size: 12px;
-}
-.promote-foot { text-align: center; margin: 10px 0 0; }
-
-.promote-active {
-  text-align: center;
-  padding: 12px 0 4px;
-  p { margin: 4px 0; color: var(--text-secondary, #666); font-size: 14px; }
-  strong { font-size: 16px; color: var(--text-primary, #111); }
-}
-
-.promote-balance {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 12.5px;
-  color: var(--text-secondary, #888);
-  margin: -6px 0 14px;
-
-  &--low { color: #e0a800; font-weight: 700; }
-}
-
-/* The chooser that now sits in front of the boost form. Two rows, because the two
-   products are different enough that picking between them IS the first decision. */
-.promote-choose {
-  display: grid;
-  gap: 8px;
-}
-
-.promote-choice {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  text-align: left;
-  padding: 13px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color, #e3e3e6);
-  background: none;
-  color: inherit;
-  font-family: inherit;
-  cursor: pointer;
-
-  > span {
-    flex: 1;
+  // The amount well (§11): total in Roboto Mono, then the balance
+  &__total {
+    @include v2.well;
+    padding: 12px 14px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
+    .money {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.15;
+      > span { font-size: 13px; color: var(--muted); font-weight: 700; }
+    }
+  }
+  &__balance {
+    font-size: 12px;
+    color: var(--muted);
+    &.is-low, &.is-low .num { color: var(--accent); }
   }
 
-  strong { font-size: 0.875rem; }
-
-  em {
-    font-style: normal;
-    font-size: 0.75rem;
-    line-height: 1.4;
-    color: var(--text-secondary, #888);
-  }
-
-  &:hover {
-    border-color: var(--accent-primary, #e53935);
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 6%, transparent);
-  }
+  &__foot { display: flex; flex-direction: column; gap: 8px; width: 100%; .v2-btn { flex: none; } }
 }

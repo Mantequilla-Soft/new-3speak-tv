@@ -13,34 +13,16 @@ import Highlight from "@tiptap/extension-highlight";
 import Link from "@tiptap/extension-link";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
-import { AiOutlineHighlight } from "react-icons/ai";
-import { HiMiniListBullet } from "react-icons/hi2";
-import { GoListOrdered } from "react-icons/go";
-import { GoTasklist } from "react-icons/go";
+import { Icon } from "../v2/Icon";
 import {Markdown} from "@tiptap/markdown";
 
 import EmojiPicker from "./EmojiPicker";
 import { useTranslation } from "react-i18next";
 
-import {
-  FaAlignCenter,
-  FaAlignJustify,
-  FaAlignLeft,
-  FaAlignRight,
-  FaBars,
-  FaBold,
-  FaListOl,
-  FaListUl
-} from "react-icons/fa";
-import { PiTextItalicFill } from "react-icons/pi";
-import { TbH2 } from "react-icons/tb";
-import { BsEmojiSmile, BsImage, BsThreeDots } from "react-icons/bs";
 
 import "./editor.scss";
 import { uploadImageToHive } from "./uploadImageToHiv";
 import { Plugin, PluginKey } from "prosemirror-state";
-import { FaListCheck } from "react-icons/fa6";
-import { MdFormatUnderlined, MdOutlineStrikethroughS } from "react-icons/md";
 
 // Custom extension to hide images in editor but keep them in HTML
 const ImageAsLink = Image.extend({
@@ -48,7 +30,7 @@ const ImageAsLink = Image.extend({
     return ({ node }) => {
       const dom = document.createElement('span');
       dom.textContent = node.attrs.src;
-      dom.style.color = '#0066cc';
+      dom.style.color = 'var(--cyan)';
       dom.style.textDecoration = 'underline';
       dom.style.cursor = 'pointer';
       dom.className = 'image-link-display';
@@ -202,9 +184,9 @@ export default function TiptapEditor({ value, onChange }) {
       <div className="editor-toolbar">
 
         {/* Alignment */}
-        <button onClick={() => editor.chain().focus().setTextAlign("left").run()}><FaBars /></button>
-        <button onClick={() => editor.chain().focus().setTextAlign("center").run()}><FaAlignCenter /></button>
-        <button onClick={() => editor.chain().focus().setTextAlign("right").run()}><FaAlignRight /></button>
+        <button onClick={() => editor.chain().focus().setTextAlign("left").run()}><Icon name="format_align_left" size={18} /></button>
+        <button onClick={() => editor.chain().focus().setTextAlign("center").run()}><Icon name="format_align_center" size={18} /></button>
+        <button onClick={() => editor.chain().focus().setTextAlign("right").run()}><Icon name="format_align_right" size={18} /></button>
 
         {/* Headings Dropdown */}
         <div className="heading-dropdown" style={{ position: "relative" }} ref={headingDropdownRef}>
@@ -216,17 +198,7 @@ export default function TiptapEditor({ value, onChange }) {
           </button>
           
           {showHeadingDropdown && (
-            <div className="dropdown-menu" style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              background: "white",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              zIndex: 1000,
-              padding: "5px 0",
-              minWidth: "50px"
-            }}>
+            <div className="dropdown-menu">
               {[1, 2, 3, 4, 5, 6].map(level => (
                 <button
                   key={level}
@@ -235,15 +207,6 @@ export default function TiptapEditor({ value, onChange }) {
                     setShowHeadingDropdown(false);
                   }}
                   className={editor?.isActive("heading", { level }) ? "active" : ""}
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    padding: "5px 10px",
-                    textAlign: "left",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer"
-                  }}
                 >
                   H{level}
                 </button>
@@ -253,8 +216,8 @@ export default function TiptapEditor({ value, onChange }) {
         </div>
 
         {/* Text formatting */}
-        <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor?.isActive("bold") ? "active" : ""}><FaBold /></button>
-        <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor?.isActive("italic") ? "active" : ""}><PiTextItalicFill size={22} /></button>
+        <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor?.isActive("bold") ? "active" : ""}><Icon name="format_bold" size={18} /></button>
+        <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor?.isActive("italic") ? "active" : ""}><Icon name="format_italic" size={18} /></button>
 
         {/* FORMAT DROPDOWN */}
         <div className="format-dropdown" style={{ position: "relative" }} ref={formatDropdownRef}>
@@ -262,21 +225,11 @@ export default function TiptapEditor({ value, onChange }) {
             onClick={handleFormatDropdownToggle}
             className="format-btn"
           >
-            <BsThreeDots />
+            <Icon name="more_horiz" size={18} />
           </button>
 
           {showFormatDropdown && (
-            <div className="dropdown-menu" style={{
-              position: "absolute",
-              top: "100%",
-              left: -50,
-              background: "white",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              zIndex: 1000,
-              padding: "5px 0",
-              minWidth: "140px"
-            }}>
+            <div className="dropdown-menu">
 
               {/* Underline */}
               <button
@@ -286,7 +239,7 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("underline") ? "active" : ""}
               >
-              <span className="wrap-in-btn"><MdFormatUnderlined />  <span>{t("editor.format.underline")}</span></span>
+              <span className="wrap-in-btn"><Icon name="format_underlined" size={18} />  <span>{t("editor.format.underline")}</span></span>
               </button>
 
               {/* Strike */}
@@ -297,18 +250,18 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("strike") ? "active" : ""}
               >
-                <span className="wrap-in-btn"><MdOutlineStrikethroughS />  <span>{t("editor.format.strike")}</span></span>
+                <span className="wrap-in-btn"><Icon name="strikethrough_s" size={18} />  <span>{t("editor.format.strike")}</span></span>
               </button>
 
               {/* Highlight */}
               <button
                 onClick={() => {
-                  editor.chain().focus().toggleHighlight({ color: "#FFFF00" }).run();
+                  editor.chain().focus().toggleHighlight().run();
                   setShowFormatDropdown(false);
                 }}
                 className={editor?.isActive("highlight") ? "active" : ""}
               >
-                <span className="wrap-in-btn"><AiOutlineHighlight />  <span>{t("editor.format.highlight")}</span></span>
+                <span className="wrap-in-btn"><Icon name="ink_highlighter" size={18} />  <span>{t("editor.format.highlight")}</span></span>
               </button>
 
               {/* Bullet List */}
@@ -319,7 +272,7 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("bulletList") ? "active" : ""}
               >
-                <span className="wrap-in-btn"><HiMiniListBullet />  <span>{t("editor.format.bulletList")}</span></span>
+                <span className="wrap-in-btn"><Icon name="format_list_bulleted" size={18} />  <span>{t("editor.format.bulletList")}</span></span>
               </button>
 
               {/* Ordered List */}
@@ -330,7 +283,7 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("orderedList") ? "active" : ""}
               >
-                <span className="wrap-in-btn"><GoListOrdered />  <span>{t("editor.format.orderedList")}</span></span>
+                <span className="wrap-in-btn"><Icon name="format_list_numbered" size={18} />  <span>{t("editor.format.orderedList")}</span></span>
               </button>
 
               {/* Task List */}
@@ -341,7 +294,7 @@ export default function TiptapEditor({ value, onChange }) {
                 }}
                 className={editor?.isActive("taskList") ? "active" : ""}
               >
-                <span className="wrap-in-btn"><GoTasklist />  <span>{t("editor.format.taskList")}</span></span>
+                <span className="wrap-in-btn"><Icon name="checklist" size={18} />  <span>{t("editor.format.taskList")}</span></span>
               </button>
 
             </div>
@@ -349,9 +302,9 @@ export default function TiptapEditor({ value, onChange }) {
         </div>
 
         {/* Image & Emoji */}
-        <button onClick={() => fileInputRef.current.click()}><BsImage /></button>
+        <button onClick={() => fileInputRef.current.click()}><Icon name="image" size={18} /></button>
         <div ref={emojiRef} style={{ position: "relative" }}>
-          <button onClick={handleEmojiToggle}><BsEmojiSmile /></button>
+          <button onClick={handleEmojiToggle}><Icon name="mood" size={18} /></button>
           {showEmoji && <EmojiPicker onSelect={insertEmoji} />}
         </div>
 

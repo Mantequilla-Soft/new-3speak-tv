@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import axios from 'axios';
-import { Flag } from 'lucide-react';
 import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { APP_VERSION } from '../../version';
 import { useAppStore } from '../../lib/store';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Button, Dialog, DockTile, Field, Icon } from '../v2/ui';
 import './StreamReportButton.scss';
 
 // Every toast from this module is headed "Live"; the message becomes the
@@ -58,7 +57,7 @@ export default function StreamReportButton({ roomName, host, variant = 'inline' 
       });
       toast.success(t('live.report.sent'));
       setOpen(false); setReason(''); setDetail('');
-    } catch (e) {
+    } catch {
       toast.error(t('live.report.failed'));
     } finally {
       setSending(false);
@@ -69,55 +68,58 @@ export default function StreamReportButton({ roomName, host, variant = 'inline' 
     <>
       {variant === 'sidebar' ? (
         <div className="actionItem" onClick={() => setOpen(true)} role="button" title={t('live.report.title')}>
-          <div className="actionButton"><Flag size={22} /></div>
+          <div className="actionButton"><Icon name="flag" size={24} /></div>
           <span className="actionLabel">{t('common.actions.report')}</span>
         </div>
       ) : (
-        <button type="button" className="stream-report-trigger" onClick={() => setOpen(true)} title={t('live.report.title')}>
-          <Flag size={16} /> <span>{t('common.actions.report')}</span>
-        </button>
+        <DockTile icon="flag" label={t('common.actions.report')} className="stream-report-trigger" onClick={() => setOpen(true)} title={t('live.report.title')} />
       )}
 
-      {open && (
-        <div className="stream-report" role="dialog" aria-label={t('live.report.title')} aria-modal="true">
-          <div className="stream-report__backdrop" onClick={close} />
-          <div className="stream-report__card">
-            <ModalHeader title={t('live.report.title')} onClose={sending ? undefined : close} />
-            <p className="stream-report__sub">
-              {host ? <><Trans i18nKey="live.report.reporting" values={{ host }} components={{ b: <b /> }} />{' '}</> : null}{t('live.report.intro')}
-            </p>
+      {/* 39c: reasons as a two-column grid of choices, details, then submit. */}
+      <Dialog
+        open={open}
+        onClose={close}
+        title={t('live.report.title')}
+        dismissible={!sending}
+        className="stream-report"
+        footer={(
+          <>
+            <Button variant="secondary" className="stream-report__cancel" onClick={close} disabled={sending}>{t('common.actions.cancel')}</Button>
+            <Button variant="primary" icon="flag" className="stream-report__submit" onClick={submit} disabled={!reason || sending} loading={sending}>
+              {sending ? t('live.report.sending') : t('live.report.submit')}
+            </Button>
+          </>
+        )}
+      >
+        <p className="stream-report__sub">
+          {host ? <><Trans i18nKey="live.report.reporting" values={{ host }} components={{ b: <b /> }} />{' '}</> : null}{t('live.report.intro')}
+        </p>
 
-            <div className="stream-report__reasons">
-              {REASONS.map((r) => (
-                <button
-                  key={r.value}
-                  type="button"
-                  className={`stream-report__reason${reason === r.value ? ' is-selected' : ''}`}
-                  onClick={() => setReason(r.value)}
-                  aria-pressed={reason === r.value}
-                >
-                  {t(r.labelKey)}
-                </button>
-              ))}
-            </div>
-
-            <textarea
-              className="stream-report__detail"
-              placeholder={t('live.report.detailPlaceholder')}
-              value={detail}
-              maxLength={4000}
-              onChange={(e) => setDetail(e.target.value)}
-            />
-
-            <div className="stream-report__actions">
-              <button className="stream-report__cancel" onClick={close} disabled={sending}>{t('common.actions.cancel')}</button>
-              <button className="stream-report__submit" onClick={submit} disabled={!reason || sending}>
-                {sending ? t('live.report.sending') : t('live.report.submit')}
-              </button>
-            </div>
-          </div>
+        <div className="stream-report__reasons" role="radiogroup" aria-label={t('live.report.title')}>
+          {REASONS.map((r) => (
+            <button
+              key={r.value}
+              type="button"
+              role="radio"
+              className={`stream-report__reason${reason === r.value ? ' is-selected' : ''}`}
+              onClick={() => setReason(r.value)}
+              aria-checked={reason === r.value}
+            >
+              {t(r.labelKey)}
+            </button>
+          ))}
         </div>
-      )}
+
+        <Field
+          as="textarea"
+          className="stream-report__detail"
+          aria-label={t('live.report.detailPlaceholder')}
+          placeholder={t('live.report.detailPlaceholder')}
+          value={detail}
+          maxLength={4000}
+          onChange={(e) => setDetail(e.target.value)}
+        />
+      </Dialog>
     </>
   );
 }

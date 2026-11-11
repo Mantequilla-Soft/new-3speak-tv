@@ -1,7 +1,6 @@
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { MdOutlineLeaderboard, MdInfoOutline } from 'react-icons/md';
 import HiveAvatar from '../components/HiveAvatar/HiveAvatar';
 import PodiumStage from '../components/PodiumStage/PodiumStage';
 import { useAppStore } from '../lib/store';
@@ -24,6 +23,8 @@ import {
 } from '../lib/leaderboardData';
 import { useTranslation } from 'react-i18next';
 import { t as tNow, formatDate } from '../i18n';
+import { Banner, Button, Chip, EmptyState, Segmented } from '../components/v2/ui';
+import { Icon } from '../components/v2/Icon';
 import './Leaderboard.scss';
 
 const PAGE_SIZE = 50;
@@ -70,10 +71,10 @@ function Podium({ entries, metric, focusUser }) {
           style={stepStyle(e.rank)}
           aria-hidden="true"
         >
-          <span className="lb-podium-medal">{e.rank}</span>
+          <span className="lb-podium-medal num">{e.rank}</span>
           <span className="lb-podium-avatar-empty" />
-          <span className="lb-podium-user">{t('badges.leaderboard.unclaimed')}</span>
-          <span className="lb-podium-value">—</span>
+          <b className="lb-podium-user">{t('badges.leaderboard.unclaimed')}</b>
+          <span className="lb-podium-value num">—</span>
           <span className="lb-podium-metric">{t(metric.labelKey)}</span>
         </div>
       ) : (
@@ -84,10 +85,10 @@ function Podium({ entries, metric, focusUser }) {
           className={`lb-podium-slot lb-rank-${e.rank}${e.user === focusUser ? ' focused' : ''}`}
           style={stepStyle(e.rank)}
         >
-          <span className="lb-podium-medal">{e.rank}</span>
+          <span className="lb-podium-medal num">{e.rank}</span>
           <HiveAvatar username={e.user} size="medium" className="lb-podium-avatar" badgeSize={14} />
-          <span className="lb-podium-user">@{e.user}</span>
-          <span className="lb-podium-value">{formatMetric(e[metric.id], metric.unit)}</span>
+          <b className="lb-podium-user">@{e.user}</b>
+          <span className="lb-podium-value num">{formatMetric(e[metric.id], metric.unit)}</span>
           <span className="lb-podium-metric">{t(metric.labelKey)}</span>
         </Link>
       )))}
@@ -102,10 +103,10 @@ function Row({ entry, metric, isMe, focused }) {
       id={rowId(entry.user)}
       className={`lb-row${isMe ? ' me' : ''}${focused ? ' focused' : ''}`}
     >
-      <span className="lb-row-rank">{entry.rank}</span>
+      <span className="lb-row-rank num">{entry.rank}</span>
       <HiveAvatar username={entry.user} size="small" className="lb-row-avatar" />
-      <span className="lb-row-user">@{entry.user}</span>
-      <span className="lb-row-value">{formatMetric(entry[metric.id], metric.unit)}</span>
+      <b className="lb-row-user">@{entry.user}</b>
+      <span className="lb-row-value num">{formatMetric(entry[metric.id], metric.unit)}</span>
     </Link>
   );
 }
@@ -127,14 +128,16 @@ function MyStanding({ user, window, metric }) {
   const value = data.stats?.[metric.id] || 0;
   return (
     <div className="lb-me">
-      <span className="lb-me-rank">{rank ? `#${rank}` : '—'}</span>
+      <span className="lb-me-rank num">{rank ? `#${rank}` : '—'}</span>
       <HiveAvatar username={user} size="small" className="lb-row-avatar" />
-      <span className="lb-me-user">@{user}</span>
+      <span className="lb-me-text">
+        <b className="lb-me-user">@{user}</b>
+        {!rank && <span className="lb-me-empty">{t('badges.leaderboard.noActivity')}</span>}
+      </span>
       <span className="lb-me-value">
-        {formatMetric(value, metric.unit)}
+        <span className="num">{formatMetric(value, metric.unit)}</span>
         <small>{t(metric.labelKey)}</small>
       </span>
-      {!rank && <span className="lb-me-empty">{t('badges.leaderboard.noActivity')}</span>}
     </div>
   );
 }
@@ -281,9 +284,8 @@ function Leaderboard() {
   return (
     <div className="leaderboard-page">
       {/* The time range applies to every board, so it sits with the title as the
-          page's one global filter. */}
+          page's one global filter (design 26b). */}
       <header className="lb-header">
-        <MdOutlineLeaderboard className="lb-header-icon" />
         <div className="lb-header-text">
           <h1>{t('badges.leaderboard.title')}</h1>
           <p>
@@ -292,109 +294,110 @@ function Leaderboard() {
               : t('badges.leaderboard.subtitle', { blurb: t(metric.blurbKey) })}
           </p>
         </div>
-        <div className="lb-window-switch" role="group" aria-label={t('misc.leaderboard.timeRange')}>
-          {WINDOWS.map((w) => (
-            <button
-              key={w.id}
-              type="button"
-              className={window === w.id ? 'active' : ''}
-              aria-pressed={window === w.id}
-              onClick={() => setWindow(w.id)}
-            >
-              {t(w.labelKey)}
-            </button>
-          ))}
-        </div>
+        <Segmented
+          className="lb-window-switch"
+          label={t('misc.leaderboard.timeRange')}
+          options={WINDOWS.map((w) => ({ value: w.id, label: t(w.labelKey) }))}
+          value={window}
+          onChange={setWindow}
+          size={36}
+          block={false}
+        />
       </header>
 
-      {/* What is ranked: the type as chips, then the measure inside it. */}
-      <div className="lb-tabs lb-types">
-        {shownTypes.map((bt) => (
-          <button
-            key={bt.id}
-            type="button"
-            className={`lb-tab${boardType.id === bt.id ? ' active' : ''}`}
-            onClick={() => setMetricId(metricForType(bt, metricId))}
-          >
-            {t(bt.labelKey)}
-          </button>
-        ))}
-      </div>
-
-      {boardType.metrics.length > 1 && (
-        <div className="lb-subs" role="group" aria-label={t(boardType.labelKey)}>
-          {boardType.metrics.map((m) => (
-            <button
-              key={m.id}
-              type="button"
-              className={metricId === m.id ? 'active' : ''}
-              aria-pressed={metricId === m.id}
-              onClick={() => setMetricId(m.id)}
-            >
-              {t(m.labelKey)}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Hidden entirely for Tags, which isn't tracked per topic. */}
-      {topicsAvailable && groups.length > 0 && (
-        <>
-          <div className="lb-tabs lb-topics">
-            <button
-              type="button"
-              className={`lb-tab lb-topic${!activeTopic ? ' active' : ''}`}
-              onClick={() => { setTopic(''); setOpenCat(null); }}
-            >
-              {t('badges.leaderboard.allTopics')}
-            </button>
-            {groups.map((g) => (
-              <button
-                key={g.slug}
-                type="button"
-                className={`lb-tab lb-topic${shownCat === g.slug ? ' open' : ''}${activeTopic === g.slug ? ' active' : ''}`}
-                onClick={() => {
-                  setOpenCat(g.slug);
-                  // '__other' is a UI bucket, not a real board — it only expands.
-                  if (g.slug !== '__other') setTopic(g.slug);
-                }}
+      {/* What is ranked (design 45c): the board type as chips, the measure
+          inside it as a small segmented control, then the topics. */}
+      <section className="lb-filters">
+        <div className="lb-filter-row">
+          <div className="v2-chips is-scroll lb-types">
+            {shownTypes.map((bt) => (
+              <Chip
+                key={bt.id}
+                selected={boardType.id === bt.id}
+                onClick={() => setMetricId(metricForType(bt, metricId))}
               >
-                {g.emoji} {g.label}
-              </button>
+                {t(bt.labelKey)}
+              </Chip>
             ))}
           </div>
 
-          {openGroup && (
-            <div className="lb-tabs lb-topics lb-subtopics">
-              {openGroup.topics.map((tp) => (
-                <button
-                  key={tp.slug}
-                  type="button"
-                  className={`lb-tab lb-topic${activeTopic === tp.slug ? ' active' : ''}`}
-                  onClick={() => setTopic(tp.slug)}
+          {boardType.metrics.length > 1 && (
+            <Segmented
+              className="lb-subs"
+              label={t(boardType.labelKey)}
+              options={boardType.metrics.map((m) => ({ value: m.id, label: t(m.labelKey) }))}
+              value={metricId}
+              onChange={setMetricId}
+              size={28}
+              block={false}
+              scroll
+            />
+          )}
+        </div>
+
+        {/* Hidden entirely for Tags, which isn't tracked per topic. */}
+        {topicsAvailable && groups.length > 0 && (
+          <>
+            <div className="v2-chips lb-topics">
+              <Chip
+                size={28}
+                selected={!activeTopic}
+                onClick={() => { setTopic(''); setOpenCat(null); }}
+              >
+                {t('badges.leaderboard.allTopics')}
+              </Chip>
+              {groups.map((g) => (
+                <Chip
+                  key={g.slug}
+                  size={28}
+                  // The board being shown is ink; an expanded category that is
+                  // not itself the board is cyan, so it reads weaker.
+                  selected={activeTopic === g.slug || shownCat === g.slug}
+                  tone={activeTopic === g.slug ? undefined : 'cyan'}
+                  className="lb-topic"
+                  onClick={() => {
+                    setOpenCat(g.slug);
+                    // '__other' is a UI bucket, not a real board: it only expands.
+                    if (g.slug !== '__other') setTopic(g.slug);
+                  }}
                 >
-                  {tp.label}
-                </button>
+                  {g.label}
+                </Chip>
               ))}
             </div>
-          )}
-        </>
-      )}
+
+            {openGroup && openGroup.topics.length > 0 && (
+              <div className="v2-chips lb-topics lb-subtopics">
+                {openGroup.topics.map((tp) => (
+                  <Chip
+                    key={tp.slug}
+                    size={28}
+                    selected={activeTopic === tp.slug}
+                    className="lb-topic"
+                    onClick={() => setTopic(tp.slug)}
+                  >
+                    {tp.label}
+                  </Chip>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </section>
 
       {partialWatch && trackedSince && (
-        <div className="lb-notice">
-          <MdInfoOutline /> <span>{watchNotice(trackedSince)}</span>
-        </div>
+        <Banner tone="info" className="lb-notice">{watchNotice(trackedSince)}</Banner>
       )}
 
       {seeking && (
-        <div className="lb-state">{t('badges.leaderboard.finding', { user: focusUser })}</div>
+        <div className="lb-state v2-meta">
+          <Icon name="progress_activity" size={16} className="v2-spin" /> {t('badges.leaderboard.finding', { user: focusUser })}
+        </div>
       )}
       {unreachable && (
-        <div className="lb-notice">
-          <MdInfoOutline />
-          <span>{t('badges.leaderboard.notInTop', { user: focusUser, n: MAX_AUTO_PAGES * PAGE_SIZE })}</span>
-        </div>
+        <Banner tone="neutral" className="lb-notice">
+          {t('badges.leaderboard.notInTop', { user: focusUser, n: MAX_AUTO_PAGES * PAGE_SIZE })}
+        </Banner>
       )}
 
       {/* Your-standing card is overall-only: the checker's per-user endpoint
@@ -403,11 +406,18 @@ function Leaderboard() {
           posted a story yet) a lone "you: 0" row reads as a board of one. */}
       {user && !activeTopic && entries.length > 0 && <MyStanding user={user} window={window} metric={metric} />}
 
-      {isLoading && <div className="lb-state">{t('badges.leaderboard.loading')}</div>}
-      {isError && <div className="lb-state error">{t('badges.leaderboard.loadError')}</div>}
+      {isLoading && (
+        <div className="lb-skeleton" aria-label={t('badges.leaderboard.loading')}>
+          <div className="lb-skeleton-podium">
+            {[0, 1, 2].map((i) => <div key={i} className="v2-skeleton" />)}
+          </div>
+          {[0, 1, 2, 3].map((i) => <div key={i} className="v2-skeleton lb-skeleton-row" />)}
+        </div>
+      )}
+      {isError && <div className="v2-failure lb-state-card"><b>{t('badges.leaderboard.loadError')}</b></div>}
 
       {!isLoading && !isError && entries.length === 0 && (
-        <div className="lb-state">{t('badges.leaderboard.empty', { metric: t(`misc.leaderboard.metricsInSentence.${metric.id}`) })}</div>
+        <EmptyState className="lb-state-card" icon="leaderboard" title={t('badges.leaderboard.empty', { metric: t(`misc.leaderboard.metricsInSentence.${metric.id}`) })} />
       )}
 
       {!isLoading && !isError && entries.length > 0 && (
@@ -415,7 +425,7 @@ function Leaderboard() {
           {/* Keyed by board, so switching boards raises the steps again. */}
           <Podium key={`${activeTopic}|${window}|${metricId}`} entries={podium} metric={metric} focusUser={focusUser} />
           {/* Only 1–2 creators on the board: they're all on the podium, so the
-              list would just be an empty bordered box. */}
+              list would just be an empty box. */}
           {rest.length > 0 && (
             <div className="lb-list">
               {rest.map((e) => (
@@ -430,14 +440,16 @@ function Leaderboard() {
             </div>
           )}
           {hasNextPage && (
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               className="lb-more"
               onClick={() => fetchNextPage()}
               disabled={isFetchingNextPage}
+              loading={isFetchingNextPage}
+              center
             >
               {isFetchingNextPage ? t('common.status.loading') : t('common.actions.loadMore')}
-            </button>
+            </Button>
           )}
         </>
       )}

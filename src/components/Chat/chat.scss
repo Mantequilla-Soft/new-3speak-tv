@@ -1,8 +1,11 @@
-// 3Speak Chat (Snapie @snapie/chat-client) — slide-over panel + nav button.
-@use "../../mixins.scss" as mix;
+// 3Speak Chat (Snapie @snapie/chat-client): the /chat page and everything that
+// also renders inside the floating panel (ChatOverlay.scss styles the frame).
+// v2: 26a (list + DM thread), 32a (rooms and channels), 39d (gate, new DM,
+// new room, channel browser, message actions, typing, quote), 19e (composer
+// tools, link card, image lightbox). Tokens and mixins only.
+@use "../../styles/v2" as v2;
 
-$chat-width: 380px;
-$chat-z: 1200;
+$chat-sidebar: 360px;
 
 /* ---- Nav button + unread badge ---- */
 // Moved to ChatButton.scss (imported by ChatButton) so the always-on Nav button
@@ -10,29 +13,35 @@ $chat-z: 1200;
 // unread count renders unstyled and wraps under the icon on first load.
 
 /* ---- Page layout ---- */
-// Fits the area under the sticky nav, inside `.container` (which adds ~20px top
-// + 20px bottom padding). --nav-height is set globally from JS.
+// One large panel (radius 28) under the sticky nav, inside `.container` (which
+// adds ~20px top + 20px bottom padding). --nav-height is set globally from JS.
+// Its height never follows its content: the list and the messages scroll inside.
 .chat-page {
   height: calc(100vh - var(--nav-height, 60px) - 40px);
+  height: calc(100dvh - var(--nav-height, 60px) - 40px);
   display: flex;
-  background: var(--bg-secondary);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3xl);
   overflow: hidden;
 
-  // Tablet/phone also have a fixed 56px BottomNav at the bottom — subtract it
-  // (and use dvh for the mobile URL-bar) so the composer stays above it.
-  @include mix.respond(tab) {
+  // Tablet and phone also have the fixed 56px BottomNav (shown up to 1024px):
+  // subtract it so the composer stays above it.
+  @media (max-width: 1024px) {
     height: calc(100dvh - var(--nav-height, 60px) - var(--bottom-nav-height, 56px) - 24px);
   }
-  @include mix.respond(phone) {
+  @include v2.mobile {
     height: calc(100dvh - var(--nav-height, 60px) - var(--bottom-nav-height, 56px) - 16px);
+    border-radius: var(--r-2xl);
   }
 }
 
 .chat-page.two-pane {
   .chat-page-sidebar {
-    width: $chat-width;
-    flex: 0 0 $chat-width;
-    border-right: 1px solid var(--border-light);
+    width: $chat-sidebar;
+    flex: 0 0 $chat-sidebar;
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -42,11 +51,12 @@ $chat-z: 1200;
     min-width: 0;
     display: flex;
     flex-direction: column;
+    background: var(--surface);
   }
 
   // Mobile: one pane at a time — list, or thread once a conversation is open.
-  @include mix.respond(phone) {
-    .chat-page-sidebar { width: 100%; flex: 1 1 auto; border-right: none; }
+  @include v2.mobile {
+    .chat-page-sidebar { width: 100%; flex: 1 1 auto; border-right: 0; }
     .chat-page-main { display: none; }
     &.has-active {
       .chat-page-sidebar { display: none; }
@@ -55,380 +65,402 @@ $chat-z: 1200;
   }
 }
 
-.chat-page-placeholder {
-  margin: auto;
-  max-width: 260px;
-}
-
-// The back button only matters on mobile single-pane.
-.chat-thread-back { display: none; }
-@include mix.respond(phone) {
-  .chat-thread-back { display: inline-flex; }
-}
-
-.chat-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  border-radius: 8px;
-  color: var(--text-secondary);
-  cursor: pointer;
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
-}
-
-.chat-thread-header {
+.chat-page-head {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border-light);
-  flex: 0 0 auto;
-
-  .chat-thread-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: var(--bg-tertiary); }
-  .chat-thread-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-primary);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  gap: 8px;
+  padding: 18px 16px 0;
+  flex: none;
+}
+.chat-page-title {
+  margin: 0;
+  flex: 1;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: var(--tracking-title);
+  line-height: 1.2;
 }
 
-/* ---- Connect gate ---- */
-.chat-gate {
-  flex: 1;
+.chat-page-placeholder {
+  margin: auto;
+  max-width: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 32px 28px;
   gap: 10px;
-
-  .chat-gate-icon { color: var(--accent-primary); }
-  h3 { margin: 4px 0 0; color: var(--text-primary); font-size: 18px; }
-  p { margin: 0; color: var(--text-secondary); font-size: 13.5px; line-height: 1.5; }
-  .chat-gate-error { color: var(--accent-primary); font-weight: 500; }
-  .chat-gate-hint { font-size: 12px; color: var(--text-muted); }
+  text-align: center;
+  p { margin: 0; @include v2.text(body-sm); color: var(--muted); }
 }
 
-.chat-btn-primary {
-  margin-top: 8px;
-  display: inline-flex;
-  align-items: center;
+// The back button only matters on mobile single-pane (and the small panel).
+.chat-thread-back { display: none; }
+@include v2.mobile {
+  .chat-thread-back { display: inline-flex; }
+}
+
+/* ---- Gates: log in, needs a Hive account, connect, connecting (39d) ---- */
+.chat-gate {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+.chat-gate-card {
+  width: min(400px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 8px;
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s ease;
-  &:hover:not(:disabled) { background: var(--accent-hover); }
-  &:disabled { opacity: 0.6; cursor: not-allowed; }
+  padding: 18px;
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+
+  h3 { margin: 4px 0 0; @include v2.text(title-sm); color: var(--text); }
+  p { margin: 0; @include v2.text(meta); color: var(--muted); line-height: 1.45; }
+  .chat-gate-error { color: var(--accent); font-weight: 700; }
+  .chat-gate-hint { @include v2.text(meta-sm); }
+  .chat-gate-btn { margin-top: 6px; }
+  &.is-busy { flex-direction: row; align-items: center; gap: 12px; p { @include v2.text(body-sm); } }
 }
+.chat-gate-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-lg);
+  background: var(--cyan-tint-strong);
+  color: var(--cyan);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+// Inside the floating panel the panel itself is the card.
+.chat-page--overlay .chat-gate-card { border: 0; padding: 4px; }
 
 /* ---- Conversation list ---- */
 .chat-list { display: flex; flex-direction: column; min-height: 0; flex: 1; }
 
-.chat-newdm {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border-light);
-
-  .chat-newdm-at { color: var(--text-muted); font-weight: 600; }
-  input {
-    flex: 1;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    padding: 8px 10px;
-    color: var(--text-primary);
-    font-size: 13.5px;
-    outline: none;
-    &:focus { border-color: var(--accent-primary); }
-  }
-  button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border: 1px solid var(--accent-primary, #e53935);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--accent-primary, #e53935);
-    cursor: pointer;
-    &:disabled { opacity: 0.5; cursor: not-allowed; }
-  }
-}
-
-// "New private room" + "Browse channels" share one row while both are
-// collapsed. An opened form takes a full-width row of its own below it.
-.chat-list-actions {
-  display: flex;
-  flex-wrap: wrap;
-
-  > .chat-newroom-toggle {
-    flex: 1 1 0;
-    min-width: 0;
-    justify-content: center;
-    white-space: nowrap;
-    & + .chat-newroom-toggle { border-left: 1px solid var(--border-light); }
-  }
-  > .chat-newroom,
-  > .chat-browse {
-    flex: 1 1 100%;
-    order: 1;
-  }
-}
-
-.chat-newroom-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 9px 12px;
-  border: none;
-  border-bottom: 1px solid var(--border-light);
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 13.5px;
-  font-weight: 600;
-  cursor: pointer;
-  &:hover { color: var(--accent-primary); background: var(--bg-tertiary); }
-}
-
-.chat-newroom {
+.chat-list-top {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border-light);
-
-  > input {
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    padding: 8px 10px;
-    color: var(--text-primary);
-    font-size: 13.5px;
-    outline: none;
-    &:focus { border-color: var(--accent-primary); }
-  }
-
-  .chat-newroom-members {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    padding: 6px 8px;
-    &:focus-within { border-color: var(--accent-primary); }
-
-    input {
-      flex: 1;
-      min-width: 120px;
-      background: transparent;
-      border: none;
-      padding: 2px 0;
-      color: var(--text-primary);
-      font-size: 13.5px;
-      outline: none;
-    }
-    .chat-spin { color: var(--text-muted); flex-shrink: 0; }
-  }
-
-  .chat-member-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    background: var(--accent-primary);
-    color: #fff;
-    border-radius: 999px;
-    padding: 3px 5px 3px 9px;
-    font-size: 12.5px;
-    font-weight: 600;
-    white-space: nowrap;
-
-    button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 16px;
-      height: 16px;
-      padding: 0;
-      border: none;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.25);
-      color: #fff;
-      cursor: pointer;
-      &:hover { background: rgba(255, 255, 255, 0.45); }
-    }
-  }
-
-  .chat-newroom-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    button {
-      padding: 7px 14px;
-      border-radius: 8px;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      &[type='submit'] { background: transparent; border: 1px solid var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
-      &:disabled { opacity: 0.5; cursor: not-allowed; }
-    }
-    .chat-newroom-cancel { background: var(--bg-tertiary); color: var(--text-primary); }
-  }
+  padding: 12px;
+  flex: none;
 }
 
-.chat-browse {
-  border-bottom: 1px solid var(--border-light);
-
-  .chat-browse-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px 4px;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: var(--text-muted);
-    button {
-      display: inline-flex;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      &:hover { color: var(--text-primary); }
-    }
-  }
-  .chat-browse-ul { list-style: none; margin: 0; padding: 0 0 6px; max-height: 220px; overflow-y: auto; }
-  .chat-browse-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 6px 12px;
-    .chat-browse-name { font-size: 13.5px; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    button {
-      flex-shrink: 0;
-      padding: 5px 12px;
-      border: 1px solid var(--accent-primary, #e53935);
-      border-radius: 8px;
-      background: transparent;
-      color: var(--accent-primary, #e53935);
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      &:disabled { opacity: 0.5; cursor: not-allowed; }
-    }
-  }
-}
-
-.chat-thread-leave {
-  margin-left: auto;
-  display: inline-flex;
+// "Message a Hive user…": a 44px filled field with the @ glyph and a go button.
+.chat-newdm {
+  display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 12.5px;
-  font-weight: 600;
-  cursor: pointer;
-  &:hover { color: #e05252; border-color: #e05252; }
-  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  gap: 8px;
+  height: 44px;
+  padding: 0 4px 0 12px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  border: 2px solid transparent;
+  transition: border-color var(--t-fast) var(--ease);
+  &:focus-within { border-color: var(--accent); }
+
+  .chat-newdm-at { color: var(--muted); }
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    background: transparent;
+    border: 0;
+    outline: none;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    &::placeholder { color: var(--muted); }
+  }
 }
 
-.chat-conv-ul { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
+// "New private room" + "Browse channels": two equal buttons; each opens a dialog.
+.chat-list-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px;
+
+  .chat-newroom-toggle {
+    width: 100%;
+    min-width: 0;
+    font-size: 12px;
+    padding: 0 10px;
+  }
+  @include v2.mobile {
+    .chat-newroom-toggle { height: 44px; border-radius: var(--r-lg); }
+  }
+}
+
+// The fixed list area: rows scroll here, never the panel.
+.chat-conv-scroll {
+  flex: 1;
+  min-height: 0;
+  @include v2.scroll-y;
+  padding: 0 8px 8px;
+}
+.chat-conv-ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
 
 .chat-conv-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 8px;
+  border-radius: var(--r-lg);
   cursor: pointer;
-  border-bottom: 1px solid var(--border-light);
-  transition: background 0.12s ease;
+  transition: background var(--t-fast) var(--ease);
   &:hover { background: var(--bg-hover); }
-  &.active { background: var(--bg-hover); }
-  &.unread .chat-conv-name { font-weight: 700; }
+  &.active { background: var(--surface-2); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 
-  .chat-conv-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; background: var(--bg-tertiary); }
-  .chat-conv-meta { min-width: 0; flex: 1; }
-  .chat-conv-name { color: var(--text-primary); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .chat-conv-last { color: var(--text-secondary); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .chat-conv-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-primary); flex: 0 0 auto; }
+  .chat-conv-meta { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .chat-conv-top { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+  .chat-conv-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .chat-conv-age { flex: none; @include v2.mono(10, 500); color: var(--muted); }
+  .chat-conv-last {
+    @include v2.text(meta);
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &.unread .chat-conv-last { color: var(--text); }
+
+  // Unread: a cyan count (32a), or a dot when only the server flag is known.
+  .chat-conv-dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cyan);
+    &.has-count {
+      width: auto;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 5px;
+      border-radius: var(--r-sm);
+      color: var(--bg);
+      display: grid;
+      place-items: center;
+      @include v2.mono(10, 900);
+    }
+  }
 }
 
-.chat-mark-all-read {
-  margin: 8px 12px;
-  padding: 8px 12px;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 12.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.12s ease, color 0.12s ease;
-  flex: 0 0 auto;
-
-  &:hover:not(:disabled) { background: var(--bg-hover); color: var(--text-primary); }
-  &:disabled { opacity: 0.6; cursor: default; }
+// DM avatar, or a cyan # / group tile for a channel or room. Square-rounded, as
+// in 26a: 44 → 16 radius.
+.chat-conv-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-lg);
+  object-fit: cover;
+  flex: none;
+  background: var(--avatar);
+  &.is-room { display: grid; place-items: center; background: var(--cyan-tint-strong); color: var(--cyan); }
 }
 
-.chat-empty { padding: 24px 20px; text-align: center; color: var(--text-muted); font-size: 13px; line-height: 1.5; }
+.chat-list-foot {
+  flex: none;
+  padding: 8px 12px 12px;
+  border-top: 1px solid var(--border);
+}
 
-/* ---- Thread ---- */
-.chat-thread { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.chat-empty {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  @include v2.text(body-sm);
+  color: var(--muted);
+  line-height: 1.5;
+}
 
-.chat-messages {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 14px 12px;
+/* "Choose a chat to send to" above the conversation list (share / forward) */
+.chat-share-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 12px 0;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--cyan-wash);
+  color: var(--text);
+  @include v2.text(label);
+  flex: none;
+  .material-symbols-rounded { color: var(--cyan); }
+}
+
+/* ---- New private room (dialog) ---- */
+.chat-newroom {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
+// Invites: chips and the typing box in one filled field.
+.chat-newroom-members {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+  padding: 4px 8px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  border: 2px solid transparent;
+  &:focus-within { border-color: var(--accent); }
 
+  input {
+    flex: 1;
+    min-width: 140px;
+    height: 28px;
+    background: transparent;
+    border: 0;
+    outline: none;
+    padding: 0 4px;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    &::placeholder { color: var(--muted); }
+  }
+  > .material-symbols-rounded { color: var(--muted); }
+}
+.chat-member-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  padding: 0 4px 0 10px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  button {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+}
+
+/* ---- Public channels (dialog) ---- */
+// Same height while loading, empty or full, so the sheet never jumps.
+.chat-browse { min-height: 300px; }
+.chat-browse-ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.chat-browse-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 6px 6px 6px 8px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+
+  .chat-browse-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-md);
+    background: var(--cyan-tint);
+    color: var(--cyan);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+  .chat-browse-name { flex: 1; min-width: 0; font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chat-browse-join { color: var(--cyan); font-weight: 900; &:hover { color: var(--cyan); } }
+}
+
+/* ---- Thread ---- */
+.chat-thread { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+
+.chat-thread-header { flex: none; padding: 12px 12px 0; }
+// The conversation strip (26a, 32a): a cyan-washed card with who you talk to.
+.chat-thread-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 8px 8px 8px 12px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--cyan) 9%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
+
+  .chat-thread-back { margin-left: -4px; }
+  .chat-thread-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-md);
+    object-fit: cover;
+    background: var(--avatar);
+    flex: none;
+    &.is-room { display: grid; place-items: center; background: var(--cyan-tint-strong); color: var(--cyan); }
+  }
+  .chat-thread-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &.is-room .chat-thread-title { font-size: 16px; }
+}
+
+.chat-messages {
+  flex: 1 1 auto;
+  min-height: 0;
+  @include v2.scroll-y;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  // Few messages sit at the bottom, by the composer, like the newest ones do.
+  > :first-child { margin-top: auto; }
+}
+
+// DM: bubbles (26a). Theirs on surface-2, yours in the accent.
 .chat-msg {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  // Shrink to content (don't stretch to 80%) so the timestamp lands at the end
-  // of the bubble, not the far edge of the pane.
+  // Shrink to content (don't stretch) so the timestamp lands at the end of
+  // the bubble, not the far edge of the pane.
   align-self: flex-start;
   width: fit-content;
-  max-width: 80%;
+  max-width: 75%;
 
   &.mine { align-self: flex-end; align-items: flex-end; }
 
-  .chat-msg-sender { font-size: 11px; color: var(--text-muted); margin: 0 0 2px 4px; }
+  .chat-msg-main { display: flex; flex-direction: column; align-items: inherit; min-width: 0; max-width: 100%; }
   .chat-msg-bubble {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-    padding: 8px 12px;
-    border-radius: 14px;
+    background: var(--surface-2);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 20px;
     font-size: 14px;
     line-height: 1.4;
     word-break: break-word;
@@ -437,153 +469,240 @@ $chat-z: 1200;
     // Image-only messages: drop the bubble chrome so the image stands alone.
     &.image-only { background: transparent; padding: 0; }
   }
-  // Own messages: a dim, readable grey (not the 3Speak red) — red stays for the
-  // rest of the chat UI. Translucent neutral works in both light & dark themes,
-  // and right-alignment still distinguishes them from received messages.
-  &.mine .chat-msg-bubble {
-    background: rgba(128, 128, 128, 0.2);
-    color: var(--text-primary);
-  }
+  &.mine .chat-msg-bubble { background: var(--accent); color: var(--on-accent); }
   &.mine .chat-msg-bubble.image-only { background: transparent; }
 
-  // Inline images embedded in a message.
-  .chat-msg-image-link { display: block; margin-top: 6px; &:first-child { margin-top: 0; } }
   .chat-msg-image {
     display: block;
     max-width: 240px;
     max-height: 280px;
     width: auto;
     height: auto;
-    border-radius: 12px;
+    border-radius: var(--r-md);
     object-fit: cover;
+    @include v2.thumb-placeholder;
   }
 }
 
-.chat-typing { font-size: 12px; color: var(--text-muted); font-style: italic; padding: 2px 4px; }
+// Rooms and channels: a list of posts with an avatar, name and time (32a).
+// Everyone, you included, reads from the left; there are no bubbles.
+.chat-msg.chat-msg--room {
+  flex-direction: row;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 10px;
+  width: auto;
+  max-width: 100%;
 
+  .chat-msg-avatar { width: 36px; height: 36px; border-radius: var(--r-md); object-fit: cover; background: var(--avatar); flex: none; }
+  .chat-msg-main { flex: 1; align-items: stretch; }
+  .chat-msg-head { display: flex; align-items: baseline; gap: 6px; @include v2.text(meta); color: var(--muted); }
+  .chat-msg-sender { font-size: 13px; font-weight: 700; color: var(--text); }
+  .chat-msg-content { flex: 1; align-items: flex-start; }
+  .chat-msg-bubble,
+  &.mine .chat-msg-bubble { background: transparent; color: var(--text); padding: 2px 0 0; border-radius: 0; }
+  .chat-msg-time { margin-top: 0; }
+}
+
+.chat-msg-row { position: relative; display: flex; align-items: center; gap: 4px; max-width: 100%; }
+.chat-msg.mine:not(.chat-msg--room) .chat-msg-row { flex-direction: row-reverse; }
+.chat-msg-content { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; max-width: 100%; }
+.chat-msg.mine:not(.chat-msg--room) .chat-msg-content { align-items: flex-end; }
+
+/* Small time under each bubble (in the name line for rooms) */
+.chat-msg-time {
+  margin-top: 2px;
+  @include v2.mono(10, 500);
+  color: var(--muted);
+}
+
+.chat-typing { @include v2.text(meta-sm); color: var(--muted); font-style: italic; padding: 2px 4px; }
+
+/* ---- Per-message actions (39d): a strip of Edit · Quote · Forward · Delete ---- */
+.chat-msg-actions { flex: 0 0 auto; }
+.chat-msg-menu-btn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--t-fast) var(--ease), background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+  &:hover { background: var(--bg-hover); color: var(--text); }
+  &:focus-visible, &[aria-expanded="true"] { opacity: 1; }
+}
+.chat-msg:hover .chat-msg-menu-btn { opacity: 1; }
+@media (pointer: coarse) { .chat-msg-menu-btn { opacity: .6; width: 32px; height: 32px; } }
+
+.chat-msg-menu {
+  position: absolute;
+  z-index: 30;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--r-md);
+  @include v2.floating;
+  white-space: nowrap;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 32px;
+    padding: 0 10px 0 8px;
+    border: 0;
+    border-radius: v2.radius-for(32);
+    background: var(--surface-2);
+    color: var(--text);
+    font: inherit;
+    @include v2.text(label);
+    font-size: 12px;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+    &.chat-msg-menu-danger { color: var(--accent); }
+  }
+}
+.chat-msg-menu--up { bottom: 100%; margin-bottom: 4px; }
+.chat-msg-menu--down { top: 100%; margin-top: 4px; }
+// Lined up with the bubble's outer edge: left for theirs and rooms, right for yours.
+.chat-msg .chat-msg-menu { left: 0; }
+.chat-msg.mine:not(.chat-msg--room) .chat-msg-menu { left: auto; right: 0; }
+
+/* Soft-deleted message ("[deleted]") — muted + italic */
+.chat-msg-bubble.chat-msg-deleted { font-style: italic; opacity: .6; }
+
+.chat-quote {
+  margin: 2px 0;
+  padding: 0 0 0 10px;
+  border-left: 3px solid var(--cyan);
+  color: var(--muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+
+  // Nested quotes (">>") stack: each level adds its own bar + indent, with a
+  // quieter bar so the levels stay apart.
+  .chat-quote { margin: 4px 0; border-left-color: var(--border); }
+}
+// On your accent bubble the quote stays in the bubble's ink.
+.chat-msg.mine:not(.chat-msg--room) .chat-msg-bubble .chat-quote {
+  color: color-mix(in srgb, var(--on-accent) 80%, transparent);
+  border-left-color: color-mix(in srgb, var(--on-accent) 55%, transparent);
+}
+
+.chat-msg-link {
+  color: var(--cyan);
+  text-decoration: underline;
+  word-break: break-all;
+}
+.chat-msg.mine:not(.chat-msg--room) .chat-msg-link { color: inherit; }
+
+/* ---- Composer (26a): tools, filled box, accent send ---- */
 .chat-composer {
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 10px 12px calc(16px + env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid var(--border-light);
+  gap: 8px;
+  padding: 12px 14px calc(16px + env(safe-area-inset-bottom, 0px));
 }
 
 .chat-composer-row {
   display: flex;
   align-items: flex-end;
   gap: 8px;
-
-  // Direct children only — so the emoji/GIF tool buttons (nested in popovers)
-  // keep their own styles instead of the round red send-button look.
-  > button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--accent-primary, #e53935);
-    border-radius: 50%;
-    background: transparent;
-    color: var(--accent-primary, #e53935);
-    cursor: pointer;
-    flex: 0 0 auto;
-    &:disabled { opacity: 0.5; cursor: not-allowed; }
-  }
+}
+// Phones keep the 44px tap targets and give the message box the room by
+// tightening the gaps instead.
+@include v2.mobile {
+  .chat-composer { padding-left: 10px; padding-right: 10px; }
+  .chat-composer-row { gap: 6px; }
 }
 
-/* Quote preview above the composer (the "Quote" action) */
+.chat-send {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: v2.radius-for(44);
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: pointer;
+  flex: none;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+  &:hover:not(:disabled) { background: var(--accent-hover); }
+  &:active:not(:disabled) { transform: scale(.98); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
+}
+
+/* Quote / edit strip above the composer (39d) */
 .chat-quote-preview {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
-  background: var(--bg-tertiary);
-  border-radius: 10px;
-  padding: 8px 10px;
+  padding: 6px 6px 6px 10px;
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--cyan);
+  background: var(--bg);
 
+  .chat-quote-preview-icon { color: var(--cyan); }
   .chat-quote-preview-main { flex: 1; min-width: 0; }
-  .chat-quote-preview-label { display: block; font-size: 11.5px; font-weight: 600; color: var(--accent-primary); margin-bottom: 2px; }
+  .chat-quote-preview-label { display: block; @include v2.text(meta-sm); font-weight: 700; color: var(--cyan); }
   .chat-quote-preview-text {
     margin: 0;
-    border-left: 3px solid var(--accent-primary);
-    padding: 0 0 0 8px;
-    color: var(--text-secondary);
-    font-size: 12.5px;
+    border-left: 0;
+    padding: 0;
+    @include v2.text(meta);
+    color: var(--muted);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .chat-quote-preview-close {
-    flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    border: none;
-    background: transparent;
-    color: var(--text-secondary);
-    border-radius: 6px;
-    cursor: pointer;
-    &:hover { background: var(--bg-hover); color: var(--text-primary); }
-  }
+}
+.chat-edit-preview {
+  border-left-color: var(--accent);
+  .chat-quote-preview-icon, .chat-quote-preview-label { color: var(--accent); }
 }
 
-/* "Choose a chat to share" banner above the conversation list */
-.chat-share-banner {
-  padding: 9px 12px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #fff;
-  background: var(--accent-primary);
-  text-align: center;
-}
-
-.chat-spin { animation: chat-spin 0.8s linear infinite; }
-@keyframes chat-spin { to { transform: rotate(360deg); } }
-
-/* ---- Composer tools: emoji + GIF pickers ---- */
+/* ---- Composer tools: image, GIF and emoji (19e) ---- */
 .chat-tools {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 6px;
   position: relative;
   flex: 0 0 auto;
+  @include v2.mobile { gap: 4px; }
 }
 
 .chat-tool-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 34px;
-  height: 34px;
-  padding: 0 6px;
-  border: none;
-  background: transparent;
-  border-radius: 8px;
-  color: var(--text-secondary);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: v2.radius-for(44);
+  background: var(--surface-2);
+  color: var(--muted);
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-  transition: color 0.12s ease, background 0.12s ease;
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
-  &.active { color: var(--accent-primary); }
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+  &:hover { color: var(--text); background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  &.active { background: var(--cyan-tint); color: var(--cyan); }
 }
 
+// Popovers hang over the composer: a floating menu card (radius 20).
 .chat-popover {
   position: absolute;
   bottom: calc(100% + 8px);
   left: 0;
   z-index: 20;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
-  padding: 8px;
+  @include v2.menu;
 
-  @include mix.respond(phone) {
+  @include v2.mobile {
     position: fixed;
     left: 8px;
     right: 8px;
@@ -591,65 +710,83 @@ $chat-z: 1200;
   }
 }
 
-// Emoji: the emoji-picker-react component brings its own chrome (search bar,
-// category tabs, scroll), so strip the generic popover frame around it.
+// Emoji: the emoji-picker-react component brings its own search, category
+// tabs and scroll. Its colours are mapped to the tokens so it reads as ours
+// in both themes; the popover card is the only frame.
 .chat-emoji-popover {
   width: 340px;
   padding: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-  @include mix.respond(phone) { width: auto; }
+  overflow: hidden;
+  @include v2.mobile { width: auto; }
   .EmojiPickerReact { width: 100% !important; }
+  .EmojiPickerReact,
+  .EmojiPickerReact.epr-dark-theme {
+    --epr-bg-color: var(--surface);
+    --epr-category-label-bg-color: var(--surface);
+    --epr-category-label-text-color: var(--muted);
+    --epr-text-color: var(--text);
+    --epr-hover-bg-color: var(--bg-hover);
+    --epr-hover-bg-color-reduced-opacity: var(--bg-hover);
+    --epr-focus-bg-color: var(--surface-2);
+    --epr-highlight-color: var(--accent);
+    --epr-category-icon-active-color: var(--accent);
+    --epr-search-input-bg-color: var(--bg);
+    --epr-search-input-bg-color-active: var(--bg);
+    --epr-search-input-text-color: var(--text);
+    --epr-search-input-placeholder-color: var(--muted);
+    --epr-search-input-border-radius: 12px;
+    --epr-search-border-color: transparent;
+    --epr-search-border-color-active: var(--accent);
+    --epr-picker-border-color: transparent;
+    --epr-picker-border-radius: 0;
+    --epr-skin-tone-picker-menu-color: var(--surface);
+    --epr-emoji-variation-picker-bg-color: var(--surface);
+    --epr-preview-border-color: var(--border);
+  }
 }
 
+// GIF: search on top, a fixed-height grid that scrolls (results never resize it).
 .chat-gif-popover {
   width: 380px;
-  @include mix.respond(phone) { width: auto; }
-}
-.chat-gif-search {
-  width: 100%;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  padding: 8px 10px;
-  color: var(--text-primary);
-  font-size: 13.5px;
-  outline: none;
-  margin-bottom: 8px;
-  &:focus { border-color: var(--accent-primary); }
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  @include v2.mobile { width: auto; }
 }
 .chat-gif-grid {
   // Two per row; each GIF keeps its natural aspect ratio (rectangles).
   display: grid;
   grid-template-columns: 1fr 1fr;
+  // A fixed height would otherwise squeeze auto rows to fit it.
+  grid-auto-rows: max-content;
+  align-content: start;
   gap: 6px;
-  max-height: 360px;
-  overflow-y: auto;
+  height: 340px;
+  @include v2.scroll-y;
 }
 .chat-gif-item {
-  border: none;
+  border: 0;
   padding: 0;
-  background: var(--bg-tertiary);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   overflow: hidden;
   cursor: pointer;
   width: 100%;
-  img { width: 100%; height: auto; display: block; border-radius: 8px; }
-  &:hover { outline: 2px solid var(--accent-primary); }
+  @include v2.thumb-placeholder;
+  img { width: 100%; height: auto; display: block; }
+  &:hover, &:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
 }
 .chat-gif-loading, .chat-gif-empty {
-  width: 100%;
+  grid-column: 1 / -1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
-  color: var(--text-muted);
-  font-size: 13px;
+  color: var(--muted);
+  @include v2.text(body-sm);
 }
-.chat-gif-attribution { text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 6px; letter-spacing: 0.5px; }
+.chat-gif-attribution { text-align: center; @include v2.text(eyebrow); color: var(--muted); }
 
-/* ---- Message input + inline emoji typeahead ---- */
+/* ---- Message box + inline emoji typeahead ---- */
 .chat-emoji-input {
   position: relative;
   flex: 1;
@@ -658,19 +795,22 @@ $chat-z: 1200;
 
   textarea {
     width: 100%;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-light);
-    border-radius: 18px;
-    padding: 9px 14px;
-    color: var(--text-primary);
-    font-size: 14px;
-    font-family: inherit;
-    line-height: 1.4;
-    resize: none;
+    min-height: 44px;
     max-height: 140px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 2px solid transparent;
+    border-radius: v2.radius-for(44);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 20px;
+    resize: none;
     overflow-y: auto;
     outline: none;
-    &:focus { border-color: var(--accent-primary); }
+    transition: border-color var(--t-fast) var(--ease);
+    &::placeholder { color: var(--muted); }
+    &:focus { border-color: var(--accent); }
   }
 }
 
@@ -680,266 +820,161 @@ $chat-z: 1200;
   left: 0;
   right: 0;
   max-height: 240px;
-  overflow-y: auto;
+  @include v2.scroll-y;
   list-style: none;
   margin: 0;
-  padding: 4px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  @include v2.menu;
+  padding: 6px;
   z-index: 25;
 }
 .chat-typeahead-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 10px;
-  border-radius: 8px;
+  @include v2.menu-row;
+  min-height: 36px;
+  font-weight: 400;
   cursor: pointer;
-  color: var(--text-primary);
-  font-size: 13.5px;
-  &.active { background: var(--bg-hover); }
+  &.active { background: var(--surface-2); }
 
   .chat-typeahead-emoji { font-size: 18px; line-height: 1; }
-  .chat-typeahead-name { color: var(--text-secondary); }
+  .chat-typeahead-name { color: var(--muted); font-family: var(--font-mono); font-size: 12px; }
 }
 
-/* ---- Link preview card (3Speak / Hive posts) ---- */
+/* ---- Link preview cards (19e): 3Speak / Hive posts, profiles, communities ---- */
 .chat-linkcard {
   display: flex;
-  gap: 0;
-  width: 450px;
+  flex-direction: column;
+  width: 300px;
   max-width: 100%;
   margin-top: 4px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-light);
-  border-radius: 14px;
+  background: var(--surface-2);
+  border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
   text-align: left;
-  transition: background 0.12s ease;
-  &:hover { background: var(--bg-hover); }
+  color: var(--text);
+  transition: background var(--t-fast) var(--ease);
+  &:hover { background: color-mix(in srgb, var(--text) 6%, var(--surface-2)); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
 // A video that plays in place: thumbnail (then the player) across the top, the
 // title and author under it. Only the text row opens the watch page.
 .chat-linkcard-video {
-  flex-direction: column;
   cursor: default;
-  &:hover { background: var(--bg-tertiary); }
+  &:hover { background: var(--surface-2); }
 
   .chat-linkcard-thumb--play {
-    flex: none;
     width: 100%;
     padding: 0;
-    border: none;
+    border: 0;
     cursor: pointer;
-    &:hover .chat-linkcard-play { background: rgba(0, 0, 0, 0.6); border: 1px solid var(--accent-primary, #e53935); color: var(--accent-primary, #e53935); }
+    &:hover .chat-linkcard-play { background: var(--accent); color: var(--on-accent); }
   }
-  .chat-linkcard-play { transition: background 0.15s ease; }
   .chat-linkcard-body {
-    padding: 10px 13px 11px;
     cursor: pointer;
-    &:hover .chat-linkcard-title { color: var(--accent-primary); }
+    &:hover .chat-linkcard-title { color: var(--accent); }
   }
 }
 .chat-linkcard-playerwait {
   width: 100%;
   aspect-ratio: 16 / 9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  color: #fff;
+  display: grid;
+  place-items: center;
+  background: var(--media-black);
+  color: var(--on-media);
 }
 .chat-linkcard-loading {
-  width: 330px;
-  max-width: 100%;
-  padding: 16px;
-  color: var(--text-muted);
-  font-size: 13px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  cursor: default;
+  @include v2.text(meta);
+  color: var(--muted);
+  &:hover { background: var(--surface-2); }
 }
 .chat-linkcard-thumb {
   position: relative;
-  flex: 0 0 180px;
-  width: 180px;
+  flex: none;
+  width: 100%;
   aspect-ratio: 16 / 9;
-  background: var(--bg-elevated);
+  @include v2.thumb-placeholder;
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
 .chat-linkcard-play {
   position: absolute;
-  inset: 0;
-  margin: auto;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 44px;
   height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
   border-radius: 50%;
-}
-.chat-linkcard-dur {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 5px;
+  background: var(--media-scrim);
+  color: var(--on-media);
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
 .chat-linkcard-body {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 12px 15px;
+  gap: 2px;
+  padding: 10px 12px;
 }
 .chat-linkcard-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
+  @include v2.text(label);
+  font-size: 14px;
+  color: var(--text);
   line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  transition: color var(--t-fast) var(--ease);
 }
 .chat-linkcard-meta {
   display: flex;
   align-items: center;
-  gap: 7px;
-  margin-top: 8px;
-  font-size: 14px;
-  color: var(--text-secondary);
-  .chat-linkcard-avatar { width: 22px; height: 22px; border-radius: 50%; flex: 0 0 auto; }
-  .chat-linkcard-author { font-weight: 600; color: var(--text-primary); }
-  .chat-linkcard-dot { opacity: 0.6; }
+  gap: 6px;
+  margin-top: 4px;
+  @include v2.text(meta);
+  color: var(--muted);
+  min-width: 0;
+  .chat-linkcard-avatar { width: 20px; height: 20px; border-radius: 50%; flex: none; background: var(--avatar); }
+  .chat-linkcard-author { font-weight: 700; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }
 
-/* ---- Per-message reply menu + quoted lines ---- */
-.chat-msg-row { display: flex; align-items: flex-start; gap: 4px; max-width: 100%; }
-.chat-msg.mine .chat-msg-row { flex-direction: row-reverse; }
-.chat-msg-content { display: flex; flex-direction: column; min-width: 0; max-width: 100%; }
-
-.chat-msg-actions { position: relative; flex: 0 0 auto; }
-.chat-msg-menu-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  border-radius: 6px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.12s ease, background 0.12s ease, color 0.12s ease;
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
-}
-.chat-msg:hover .chat-msg-menu-btn { opacity: 0.65; }
-@media (pointer: coarse) { .chat-msg-menu-btn { opacity: 0.5; } }
-
-.chat-msg-menu {
-  position: absolute;
-  right: 0;
-  z-index: 30;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-  padding: 4px;
-  min-width: 120px;
-
-  button {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 13.5px;
-    color: var(--text-primary);
-    &:hover { background: var(--bg-hover); }
-    &.chat-msg-menu-danger { color: #e5484d; }
-  }
-}
-.chat-msg-menu--up { bottom: 100%; margin-bottom: 4px; }
-.chat-msg-menu--down { top: 100%; margin-top: 4px; }
-.chat-msg:not(.mine) .chat-msg-menu { left: 0; right: auto; }
-
-/* Soft-deleted message ("[deleted]") — muted + italic */
-.chat-msg-bubble.chat-msg-deleted {
-  font-style: italic;
-  opacity: 0.6;
-}
-
-/* Editing-a-message banner reuses the quote-preview chrome */
-.chat-edit-preview .chat-quote-preview-label { color: var(--accent-primary); }
-
-.chat-quote {
-  margin: 2px 0;
-  padding: 1px 0 1px 8px;
-  border-left: 3px solid var(--accent-primary);
-  color: var(--text-secondary);
-  white-space: pre-wrap;
-  word-break: break-word;
-
-  // Nested quotes (">>") stack: each level adds its own bar + indent, with a
-  // slightly muted bar so the levels are visually distinct.
-  .chat-quote {
-    margin: 3px 0;
-    border-left-color: var(--text-muted);
-  }
-}
-
-/* Small "x ago" timestamp at the bottom-right of each message */
-.chat-msg-time {
-  align-self: flex-start; // received messages: time on the left
-  margin-top: 2px;
-  font-size: 10px;
-  color: var(--text-muted);
-}
-.chat-msg.mine .chat-msg-time { align-self: flex-end; } // own messages: right
-
-.chat-msg-link {
-  color: var(--accent-primary);
-  text-decoration: underline;
-  word-break: break-all;
-}
-.chat-msg.mine .chat-msg-link { color: inherit; }
-
-/* ---- Account (profile/community) + comment link cards ---- */
+// Profile and community: avatar beside the text.
 .chat-linkcard-account {
+  flex-direction: row;
   align-items: center;
-  padding: 12px 14px;
+  gap: 12px;
+  padding: 12px;
   .chat-linkcard-account-avatar {
-    width: 54px; height: 54px; border-radius: 50%; object-fit: cover;
-    flex: 0 0 auto; margin-right: 12px; background: var(--bg-elevated);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: none;
+    background: var(--avatar);
   }
   .chat-linkcard-body { padding: 0; }
 }
 .chat-linkcard-about {
   margin-top: 4px;
-  font-size: 13px;
-  color: var(--text-secondary);
+  @include v2.text(meta);
+  color: var(--muted);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.chat-linkcard-comment .chat-linkcard-body { padding: 12px 14px; }
+.chat-linkcard-comment .chat-linkcard-body { padding: 12px; }
 .chat-linkcard-excerpt {
   margin-top: 6px;
-  font-size: 14px;
-  color: var(--text-primary);
-  line-height: 1.35;
+  @include v2.text(body-sm);
+  color: var(--text);
+  line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -947,103 +982,117 @@ $chat-z: 1200;
   white-space: pre-wrap;
 }
 
-/* ---- Image lightbox ---- */
+/* ---- Image lightbox (19e) ---- */
 .chat-image-btn {
   display: block;
   margin-top: 6px;
   padding: 0;
-  border: none;
+  border: 0;
   background: transparent;
   cursor: zoom-in;
+  border-radius: var(--r-md);
   &:first-child { margin-top: 0; }
 }
 .chat-lightbox {
   position: fixed;
   inset: 0;
   z-index: 1400;
-  background: rgba(0, 0, 0, 0.85);
+  background: color-mix(in srgb, var(--media-black) 92%, transparent);
+  color: var(--on-media);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  animation: chat-fade 0.15s ease;
-}
-@keyframes chat-fade { from { opacity: 0; } to { opacity: 1; } }
-.chat-lightbox-img {
-  max-width: 95vw;
-  max-height: 88vh;
-  border-radius: 8px;
-  object-fit: contain;
+  flex-direction: column;
+  animation: v2-fade var(--t-base) var(--ease);
 }
 .chat-lightbox-bar {
-  position: absolute;
-  top: 12px;
-  right: 12px;
   display: flex;
-  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 16px;
+  padding-top: calc(16px + env(safe-area-inset-top, 0px));
+  flex: none;
+}
+.chat-lightbox-who {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex: none; background: var(--avatar); }
+  div { display: flex; flex-direction: column; min-width: 0; }
+  b { font-size: 14px; font-weight: 700; }
+  span { @include v2.mono(11, 400); opacity: .7; }
 }
 .chat-lightbox-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
+  background: transparent;
+  color: var(--on-media);
   cursor: pointer;
   text-decoration: none;
-  &:hover { background: rgba(0, 0, 0, 0.8); }
+  transition: background var(--t-fast) var(--ease);
+  &:hover { background: color-mix(in srgb, var(--on-media) 14%, transparent); color: var(--on-media); }
+}
+.chat-lightbox-stage {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 16px calc(16px + env(safe-area-inset-bottom, 0px));
+}
+.chat-lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 20px;
+  object-fit: contain;
 }
 
-/* ---- Pasted-image attachments (above the composer) ---- */
+/* ---- Pasted / picked image attachments (above the composer) ---- */
 .chat-attachments {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 2px 2px 0;
 }
 .chat-attachment {
   position: relative;
   width: 64px;
   height: 64px;
-  border-radius: 8px;
+  border-radius: var(--r-md);
   overflow: hidden;
-  background: var(--bg-tertiary);
+  @include v2.thumb-placeholder;
   flex: 0 0 auto;
 
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-  &.chat-attachment-uploading img { opacity: 0.5; }
+  &.chat-attachment-uploading img { opacity: .5; }
 }
 .chat-attachment-overlay {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
+  display: grid;
+  place-items: center;
+  color: var(--on-media);
 }
-.chat-attachment-err {
-  background: rgba(0, 0, 0, 0.5);
-  color: var(--accent-primary);
-  font-weight: 800;
-  font-size: 18px;
-}
+.chat-attachment-err { background: var(--media-scrim); color: var(--accent); }
 .chat-attachment-x {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 18px;
-  height: 18px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.65);
-  color: #fff;
+  background: var(--media-scrim);
+  color: var(--on-media);
   cursor: pointer;
-  &:hover { background: rgba(0, 0, 0, 0.85); }
+  &:hover { background: var(--media-scrim-strong); }
 }
+
+/* ---- Confirm bar text (delete a message, leave a room) ---- */
+.chat-confirm-text { max-width: 320px; line-height: 1.35; }

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { setLanguage, getAllLanguages, subscribeLanguages } from '../../i18n';
 import { fetchTranslatorStatus } from '../../lib/translatorApi';
+import { Icon } from '../v2/Icon';
 import './LanguagePicker.scss';
 
 
@@ -34,15 +35,16 @@ export default function LanguagePicker({ compact = false, onNavigate }) {
 
   return (
     <div className={`language-picker${compact ? ' language-picker--compact' : ''}`}>
+      <span className="language-picker-icon" aria-hidden="true"><Icon name="language" size={18} /></span>
       <div className="language-picker-text">
         <label className="settings-row-title" htmlFor="language-picker-select">
-          🌐 {t('common.language.label')}
+          {t('common.language.label')}
         </label>
         {!compact && <span className="settings-row-desc">{t('common.language.hint')}</span>}
       </div>
       <select
         id="language-picker-select"
-        className="language-picker-select"
+        className="v2-input is-select language-picker-select"
         value={current}
         onChange={(e) => setLanguage(e.target.value)}
       >

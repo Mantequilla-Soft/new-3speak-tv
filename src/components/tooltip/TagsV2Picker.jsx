@@ -2,9 +2,24 @@ import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import {
-  TAG_CATEGORIES, getCategoryOf, getTagLabel, getTagEmoji, isCategorySlug,
+  TAG_CATEGORIES, getCategoryOf, getTagLabel, isCategorySlug,
 } from '../../utils/tagsV2';
+import { Icon } from '../v2/Icon';
 import './TagsV2Picker.scss';
+
+// Material Symbols for the taxonomy (design 43b: the 36 topics as chips). The
+// taxonomy's own emoji are not drawn: one icon set per screen.
+const TAG_ICONS = {
+  'tech-science': 'science', technology: 'computer', education: 'school', science: 'biotech', programming: 'code',
+  'crypto-finance': 'savings', cryptocurrency: 'currency_bitcoin', finance: 'trending_up', business: 'business_center',
+  entertainment: 'movie', music: 'music_note', gaming: 'sports_esports', 'film-tv': 'theaters', lifestyle: 'auto_awesome',
+  vlog: 'videocam', comedy: 'sentiment_very_satisfied', 'story-time': 'menu_book', commercial: 'tv',
+  'arts-diy': 'palette', art: 'brush', 'diy-crafts': 'handyman', photography: 'photo_camera',
+  'food-outdoor': 'park', nature: 'forest', travel: 'flight', food: 'restaurant', pets: 'pets', gardening: 'yard',
+  'sports-health': 'emoji_events', sports: 'sports_soccer', health: 'health_and_safety', fitness: 'fitness_center',
+  'life-society': 'public', news: 'newspaper', spirituality: 'self_improvement', politics: 'gavel',
+};
+const tagIcon = (slug) => <Icon name={TAG_ICONS[slug] || 'label'} size={16} className="tagsv2-icon" />;
 
 /**
  * Two-level topic-tree picker over the v2 taxonomy (7 CATEGORIES → 27 TOPICS).
@@ -55,12 +70,12 @@ function TagsV2Picker({
       // by typing its name — the one way most people look for it.
       const catLabel = t(cat.labelKey);
       if (catLabel.toLowerCase().includes(q)) {
-        out.push({ slug: cat.slug, label: catLabel, emoji: cat.emoji, isCat: true });
+        out.push({ slug: cat.slug, label: catLabel, isCat: true });
       }
       for (const topic of cat.topics) {
         const topicLabel = t(topic.labelKey);
         if (topicLabel.toLowerCase().includes(q)) {
-          out.push({ slug: topic.slug, label: topicLabel, emoji: topic.emoji, isCat: false });
+          out.push({ slug: topic.slug, label: topicLabel, isCat: false });
         }
       }
     }
@@ -112,7 +127,7 @@ function TagsV2Picker({
         disabled={disabled}
         aria-pressed={isSel(topic.slug)}
       >
-        <span className="tagsv2-emoji">{topic.emoji}</span>
+        {tagIcon(topic.slug)}
         <span className="tagsv2-label">{t(topic.labelKey)}</span>
         {pct != null && <span className="tagsv2-pct">{pct}%</span>}
       </button>
@@ -123,7 +138,7 @@ function TagsV2Picker({
     <div className="tagsv2-picker" onClick={(e) => e.stopPropagation()}>
       {known.length > 0 && (
         <p className="tagsv2-suggested">
-          {t('engagement.tagsPicker.autoTagged', { tags: known.map((s) => `${getTagEmoji(s)} ${getTagLabel(s)}`).join(', ') })}
+          {t('engagement.tagsPicker.autoTagged', { tags: known.map((s) => getTagLabel(s)).join(', ') })}
         </p>
       )}
 
@@ -153,7 +168,7 @@ function TagsV2Picker({
                 disabled={disabled}
                 aria-pressed={isSel(m.slug)}
               >
-                <span className="tagsv2-emoji">{m.emoji}</span>
+                {tagIcon(m.slug)}
                 <span className="tagsv2-label">{m.label}</span>
               </button>
             ))}
@@ -178,7 +193,7 @@ function TagsV2Picker({
                   disabled={disabled}
                   aria-pressed={isSel(cat.slug)}
                 >
-                  <span className="tagsv2-emoji">{cat.emoji}</span>
+                  {tagIcon(cat.slug)}
                   <span className="tagsv2-label">{t(cat.labelKey)}</span>
                   {cnt > 0 && <span className="tagsv2-count">{cnt}</span>}
                   {pct != null && <span className="tagsv2-pct">{pct}%</span>}

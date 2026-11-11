@@ -1,7 +1,6 @@
-import { createPortal } from 'react-dom';
 import ScheduledPostEditor from '../studio/ScheduledPostEditor';
 import { useTranslation } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import DialogShell from './DialogShell';
 import './EditScheduledModal.scss';
 
 /**
@@ -19,19 +18,25 @@ export default function EditScheduledModal({ isOpen, permlink, onClose, onSaved,
   const { t } = useTranslation();
   if (!isOpen) return null;
 
-  return createPortal(
-    <div className="esm-overlay" onClick={onClose}>
-      <div className="esm-content" onClick={(e) => e.stopPropagation()}>
-        <ModalHeader className="esm-header" title={t('studio.scheduled.title')} onClose={onClose} />
-        <ScheduledPostEditor
-          permlink={permlink}
-          onClose={onClose}
-          onSaved={onSaved}
-          onCancelled={onCancelled}
-          showBack={false}
-        />
-      </div>
-    </div>,
-    document.body,
+  // The v2 dialog (design 17d / 44c edit scheduled post); the editor inside is
+  // the studio's ScheduledPostEditor, fitted to the dialog body below.
+  return (
+    <DialogShell
+      onClose={onClose}
+      title={t('studio.scheduled.title')}
+      width={720}
+      zIndex={1100}
+      overlayClassName="esm-overlay"
+      className="esm-content"
+      bodyClassName="esm-body"
+    >
+      <ScheduledPostEditor
+        permlink={permlink}
+        onClose={onClose}
+        onSaved={onSaved}
+        onCancelled={onCancelled}
+        showBack={false}
+      />
+    </DialogShell>
   );
 }

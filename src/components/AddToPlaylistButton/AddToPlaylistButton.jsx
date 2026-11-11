@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MdPlaylistAdd } from "react-icons/md";
+import { Icon } from "../v2/Icon";
 import { toastIn } from '../../utils/toast';
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
@@ -32,8 +32,9 @@ function AddToPlaylistButton({ author, permlink, title, size = 20, className = "
         onClick={handleClick}
         onMouseDown={(e) => e.stopPropagation()}
         title={t('playlists.addToPlaylist')}
+        aria-label={t('playlists.addToPlaylist')}
       >
-        <MdPlaylistAdd size={size} />
+        <Icon name="playlist_add" size={size} />
       </button>
 
       {isModalOpen && (

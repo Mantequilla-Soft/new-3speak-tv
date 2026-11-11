@@ -1,317 +1,328 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
+
+// The bell and its panel (designs 26a, 42b). The button's 40px shape comes from
+// nav.scss (one shape for every icon button in the top bar); here are its dots
+// and the panel. IncubationBell imports this file too, for the wrapper and button.
+//
+// The panel: a floating card under the bar at the bar's right edge, 380 wide
+// and a FIXED height, so loading, an empty list and a full one never change its
+// size; the list scrolls inside. Phones: the same panel as a bottom sheet.
 
 .notif-bell-wrapper {
   position: relative;
   display: inline-flex;
-  align-items: center;
+  flex: none;
 }
 
+// The bell outside the top bar (should it ever be mounted elsewhere) keeps the
+// same look as inside it.
 .notif-bell-btn {
+  @include v2.control(40);
+  width: 40px;
+  padding: 0;
+  justify-content: center;
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary); // match the settings (cogs) icon
-  opacity: 0.8;
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
-
-  svg {
-    transition: transform 0.2s ease;
-  }
-
-  &:hover {
-    background: var(--bg-hover, var(--sidebar-hover-bg));
-    color: var(--text-primary);
-    opacity: 1;
-
-    svg {
-      transform: rotate(-15deg); // little tilt, mirroring the settings cog
-    }
-  }
+  background: var(--surface-2);
+  color: var(--text);
 }
 
-.notif-badge {
-  position: absolute;
-  top: 2px;
-  right: 0px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 8px;
-  background: var(--accent-primary, #e53935);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  pointer-events: none;
-}
-
-// Unread indicator — a small red dot (replaces the numeric count badge).
+// Unread Hive activity: accent dot top right. New stories / podcast episodes:
+// cyan dot top left. Both ringed in the bar's colour.
 .notif-bell-dot {
   position: absolute;
-  top: 4px;
-  right: 3px;
+  top: 7px;
+  right: 7px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #e53935; // brand red — matches the Upload button (--accent-primary is pinker in dark)
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--surface-2);
   pointer-events: none;
+
+  &.notif-bell-dot--story {
+    right: auto;
+    left: 7px;
+    background: var(--cyan);
+  }
 }
 
-// An unseen 24h story or new podcast episode: top LEFT, so it never covers the
-// red unread dot (top right) and reads as its own signal.
-.notif-bell-dot--story {
-  right: auto;
-  left: 3px;
-  background: var(--story-cyan-2, #22d3ee);
-  box-shadow: 0 0 6px rgba(34, 211, 238, 0.7);
-}
+// ── The panel ────────────────────────────────────────────────────────────────
+.notif-scrim { display: none; }
 
 .notif-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
-  width: 380px;
-  max-width: calc(100vw - 24px);
-  max-height: 70vh;
-  overflow-y: scroll;
-  overscroll-behavior: contain;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: 10px;
-  box-shadow: var(--shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.2));
-  z-index: 100;
-  // Fades in on open (hover peek or click); `--leaving` fades it out
-  // (hooks/useHoverPeek.js, 200ms), back in if the mouse returns.
-  animation: notif-dropdown-in 0.18s ease-out;
-  transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+  @include v2.floating;
+  position: fixed;
+  top: calc(var(--nav-top-offset, 76px) + 8px);
+  // The bar's right edge (nav.scss: the 1280 column minus the page padding).
+  right: max(var(--page-pad), calc((100vw - var(--content-max)) / 2 + var(--page-pad)));
+  z-index: 1100;
+  width: var(--side-panel-w);
+  max-width: calc(100vw - 16px);
+  height: min(600px, calc(100dvh - var(--nav-top-offset, 76px) - 24px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 8px 8px;
+  border-radius: var(--r-2xl);
+  color: var(--text);
+  text-align: left;
+  cursor: default;
+  // Fades in on open; `--leaving` fades it out (200ms, hooks/useHoverPeek.js).
+  animation: notif-drop-in var(--t-base) var(--ease);
+  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
 
   &.notif-dropdown--leaving {
     opacity: 0;
     transform: translateY(-4px);
+    pointer-events: none;
+  }
+
+  @media (max-width: 1024px) {
+    right: 8px;
+  }
+
+  @include v2.mobile {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    max-width: none;
+    height: 88dvh;
+    padding: 0 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+    border-bottom: 0;
+    box-shadow: var(--shadow-sheet);
+    animation: notif-sheet-up var(--t-slow) var(--ease);
   }
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
     transition: none;
   }
+}
 
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-light) transparent;
-
-  &::-webkit-scrollbar { width: 8px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
-  &::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
-
-  @include mix.respond(phone) {
+@include v2.mobile {
+  .notif-scrim {
+    display: block;
     position: fixed;
-    top: calc(var(--nav-height, 50px) + 4px);
-    right: 8px;
-    left: 8px;
-    width: auto;
-    max-height: 75vh;
+    inset: 0;
+    z-index: 1099;
+    background: var(--overlay);
+    animation: v2-fade var(--t-base) var(--ease);
+  }
+}
+
+.notif-dropdown-grab {
+  display: none;
+  @include v2.mobile {
+    display: block;
+    flex: none;
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    margin: 8px auto 2px;
   }
 }
 
 .notif-dropdown-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border-light);
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: var(--bg-secondary);
+  gap: 8px;
+  padding: 0 8px;
+  flex: none;
 }
 
 .notif-dropdown-title {
-  flex-shrink: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
+  flex: 1;
+  @include v2.text(title-sm);
 }
 
 .notif-dropdown-seeall {
-  font-size: 12px;
-  color: var(--accent-primary, #e53935);
-  text-decoration: none;
-
-  &:hover { text-decoration: underline; }
-}
-
-// Header right side: the push opt-in sits next to "See all", because this
-// dropdown is where someone looks for "also tell me when I'm not on the site".
-.notif-dropdown-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px 10px;
-}
-
-// "Mark all read" shares the push toggle's pill look.
-.notif-push-toggle,
-.notif-header-pill {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 9px;
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: var(--r-md);
+  color: var(--cyan);
+  @include v2.text(label);
+  text-decoration: none;
+  &:hover { background: var(--cyan-tint); color: var(--cyan); }
+}
 
-  &:hover:not(:disabled) {
-    color: var(--text-primary);
-    border-color: var(--text-secondary);
-    background: var(--bg-hover);
+.notif-dropdown-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 8px;
+  flex: none;
+}
+
+// Push on/off and "Mark all read": 32 chips.
+.notif-push-toggle,
+.notif-header-pill {
+  @include v2.control(32);
+  @include v2.text(label);
+  font-size: 12px;
+  background: var(--surface-2);
+  color: var(--text);
+  white-space: nowrap;
+
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+}
+.notif-push-toggle.on {
+  background: var(--cyan-tint-strong);
+  color: var(--cyan);
+  font-weight: 900;
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--cyan) 22%, transparent); }
+}
+
+.notif-push-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 8px;
+  @include v2.text(meta-sm);
+  color: var(--muted);
+  flex: none;
+
+  &.is-blocked {
+    padding: 8px 10px;
+    border-radius: var(--r-md);
+    background: var(--accent-wash);
+    color: var(--text);
+    .material-symbols-rounded { color: var(--accent); }
   }
+}
 
-  // Subscribed: red OUTLINE, never a fill (app-wide convention).
-  &.on {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-  }
-
-  // Blocked at the browser level — the button can't fix that, so it says so
-  // via its title instead of pretending it can.
-  &:disabled { opacity: 0.55; cursor: not-allowed; }
+// The scrolling part: stories, podcast episodes, then the Hive list.
+.notif-dropdown-body {
+  flex: 1;
+  min-height: 0;
+  @include v2.scroll-y;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
 }
 
 .notif-dropdown-empty {
-  padding: 24px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1;
+  padding: 24px 16px;
   text-align: center;
-  font-size: 13px;
-  color: var(--text-secondary);
+  @include v2.text(body-sm);
+  color: var(--muted);
 }
 
+// ── Rows (shared look with the /notifications page) ─────────────────────────
 .notif-list {
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-// ─── Single row ──────────────────────
-.notif-row {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 14px;
-  cursor: pointer;
-  border-bottom: 1px solid var(--border-light);
-  transition: background-color 0.15s ease;
-  position: relative;
-
-  &:last-child { border-bottom: none; }
-
-  &:hover {
-    background: var(--bg-hover, var(--sidebar-hover-bg));
-  }
-
-  &.notif-row-unread {
-    background: color-mix(in srgb, var(--accent-primary, #e53935) 6%, transparent);
-  }
-
-  // ─── Whale / Orca highlight ──────
-  &.notif-whale {
-    border-left: 3px solid #1e90ff;
-    padding-left: 11px;
-  }
-
-  &.notif-orca {
-    border-left: 3px solid #20b2aa;
-    padding-left: 11px;
-  }
+  flex-direction: column;
+  gap: 2px;
 }
 
-// ─── Avatar ──────────────────────────
-// Fixed box, even when there's no avatar to show. The tier badge is positioned
-// against this wrapper (right: -4px), so with no actor image the wrapper
-// collapsed to 0 wide and threw the 🐬 / 🐋 badge out past the row's left
-// padding, where the dropdown clipped it.
+.notif-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px;
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); }
+  &:focus-visible { outline-offset: -2px; }
+
+  // Unread: a cyan wash (26a), with a dot at the end for colour-blind safety.
+  &.notif-row-unread { background: var(--cyan-tint); }
+  &.notif-row-unread:hover { background: color-mix(in srgb, var(--cyan) 20%, transparent); }
+}
+
 .notif-avatar-wrap {
   position: relative;
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  flex: none;
+  width: 40px;
+  height: 40px;
 }
 
 .notif-avatar {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  flex-shrink: 0;
-  background: var(--bg-tertiary);
+  background: var(--avatar);
+  display: block;
 }
 
-// Shown when the avatar image can't be fetched (see NotifAvatar): the account's
-// initial, so the row keeps its shape and still identifies who it was.
 .notif-avatar-fallback {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1;
-  user-select: none;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+  font-weight: 900;
+  font-size: 14px;
 }
 
-// Tucked INSIDE the avatar box rather than hanging off it: on a phone the row
-// starts at the dropdown's edge, so a badge overhanging to the left was cut off.
-.notif-tier-badge {
+// What happened, as a small chip on the avatar's corner.
+.notif-kind {
   position: absolute;
-  bottom: -1px;
-  right: -1px;
-  font-size: 12px;
-  line-height: 1;
-  // A dark disc behind the emoji so it reads against any avatar.
-  background: var(--bg-secondary);
-  border-radius: 50%;
-  padding: 1px;
+  right: -4px;
+  bottom: -4px;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+  background: var(--muted);
+  color: var(--surface);
+  box-shadow: 0 0 0 2px var(--surface);
+  z-index: 5;
+
+  &.is-accent { background: var(--accent); color: var(--on-accent); }
+  &.is-cyan { background: var(--cyan); color: var(--bg); }
 }
 
-// ─── Stacked avatars (groups) ────────
 .notif-avatar-stack {
+  position: relative;
+  flex: none;
   display: flex;
   align-items: center;
-  flex-shrink: 0;
-  min-width: 32px;
+  min-width: 40px;
+  height: 40px;
+
+  .notif-kind { right: auto; left: 18px; }
 }
 
 .notif-stacked-avatar {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--bg-secondary);
-  background: var(--bg-tertiary);
+  background: var(--avatar);
+  box-shadow: 0 0 0 2px var(--surface);
+  position: relative;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 900;
 }
 
 .notif-avatar-more {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  margin-left: 2px;
-  white-space: nowrap;
+  margin-left: 4px;
+  @include v2.mono(11, 700);
+  color: var(--muted);
 }
 
 .notif-body {
@@ -320,136 +331,80 @@
 }
 
 .notif-msg {
-  font-size: 13px;
-  color: var(--text-primary);
+  @include v2.text(body-sm);
   line-height: 1.35;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: var(--text);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  word-break: break-word;
+  overflow: hidden;
+  overflow-wrap: anywhere;
 }
 
 .notif-meta {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   margin-top: 2px;
-  font-size: 11px;
-  color: var(--text-secondary);
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }
-
 .notif-type { text-transform: capitalize; }
-.notif-dot { opacity: 0.6; }
-
-.notif-meta-tier {
-  font-size: 12px;
-  margin-left: 2px;
-}
+.notif-dot { opacity: .6; }
+.notif-time { font-family: var(--font-mono); }
+.notif-meta-tier { font-size: 12px; }
 
 .notif-unread-dot {
+  flex: none;
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--accent-primary, #e53935);
-  flex-shrink: 0;
-  margin-top: 6px;
+  background: var(--cyan);
 }
 
 .notif-3speak-icon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  margin-top: 2px;
-  object-fit: contain;
-  opacity: 0.9;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  cursor: default;
 }
 
-// ─── Group row modifier ─────────────
-.notif-row-group {
-  .notif-msg {
-    font-weight: 500;
-  }
-}
+.notif-row-group .notif-msg { font-weight: 700; }
 
-// ─── Rich preview tooltip ────────────
+// The grouped row names who, on hover: a floating card under the row.
 .notif-tooltip {
   position: absolute;
-  left: 14px;
-  top: calc(100% + 4px);
-  width: 280px;
-  max-width: calc(100vw - 48px);
-  background: var(--bg-primary, #1a1a2e);
-  color: var(--text-primary, #fff);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
+  left: 8px;
+  right: 8px;
+  top: calc(100% - 4px);
+  z-index: 20;
+  @include v2.floating;
+  border-radius: var(--r-lg);
   padding: 10px 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-  z-index: 10;
   pointer-events: none;
-  animation: notif-tooltip-in 0.15s ease;
 
-  .notif-tooltip-msg {
-    font-size: 12px;
-    line-height: 1.4;
-    margin-bottom: 4px;
-    word-break: break-word;
-  }
-
+  .notif-tooltip-msg { @include v2.text(body-sm); font-weight: 700; }
   .notif-tooltip-tier {
-    display: inline-block;
-    font-size: 11px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    margin-bottom: 6px;
+    display: block;
+    margin-top: 4px;
+    @include v2.text(meta-sm);
+    color: var(--cyan);
   }
-
   .notif-tooltip-actors {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    font-size: 11px;
-    color: var(--text-secondary);
-    max-height: 120px;
-    overflow-y: auto;
-
-    span {
-      line-height: 1.35;
-    }
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-top: 6px;
+    @include v2.text(meta-sm);
+    color: var(--muted);
   }
-
-  .notif-tooltip-actor-whale {
-    color: #1e90ff;
-    font-weight: 600;
-  }
-
-  .notif-tooltip-actor-orca {
-    color: #20b2aa;
-    font-weight: 600;
-  }
+  .notif-tooltip-actor-whale,
+  .notif-tooltip-actor-orca { color: var(--cyan); font-weight: 700; }
 }
 
-.notif-tooltip-group {
-  width: 300px;
-}
-
-@keyframes notif-tooltip-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-// Dark mode: count badge — card-bg bg, foreground text, no red border.
-[data-theme="dark"] {
-  .notif-badge {
-    background: var(--card-bg) !important;
-    color: var(--text-primary) !important;
-    border: none !important;
-  }
-}
-
-@keyframes notif-dropdown-in {
+@keyframes notif-drop-in {
   from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: none; }
+}
+@keyframes notif-sheet-up {
+  from { transform: translateY(100%); }
 }

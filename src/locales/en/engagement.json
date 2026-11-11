@@ -22,6 +22,8 @@
     "memoPlaceholder": "e.g. Thanks for this amazing content!",
     "memoLinkNote": "This link is added to the memo: {{link}}",
     "send": "Send Tip",
+    "sendAmount": "Send {{amount}} {{currency}}",
+    "sentEyebrow": "Tip sent",
     "lightning": {
       "amountLabel": "Amount (sats):",
       "messageLabel": "Message (optional):",
@@ -142,7 +144,8 @@
     "pickTopic": "Pick a topic (counts as a 100% vote)",
     "submitTag": "Submit tag",
     "tagThisVideoFull": "Tag this video (counts as a 100% vote)",
-    "justTag": "Don’t vote — just tag"
+    "justTag": "Don’t vote — just tag",
+    "addsAbout": "adds about {{value}}"
   },
   "tagsPicker": {
     "autoTagged": "Auto-tagged: {{tags}}",

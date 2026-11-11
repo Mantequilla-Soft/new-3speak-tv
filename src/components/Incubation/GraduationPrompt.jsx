@@ -8,13 +8,10 @@ import {
   fetchIncubationProgress, fetchMyIncubationProfile,
 } from '../../lib/incubation';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
-import ModalHeader from '../ModalHeader/ModalHeader';
 import { useTranslation, Trans } from 'react-i18next';
-// Reuses the ads prompt's dialog styles rather than duplicating them. That file
-// is the app's one modal-dialog shape, and a second copy would drift from it.
-import '../AdsPrompt/AdsPrompt.scss';
-// Only the celebration: the dialog's own shape stays in AdsPrompt.scss, which is
-// shared, and must not grow a second personality here.
+// The shared v2 dialog (a bottom sheet on phones); the warm-up prompts' own
+// pieces (icon well, lede, note) live in GraduationPrompt.scss.
+import { Button, Dialog, Icon } from '../v2/ui';
 import './GraduationPrompt.scss';
 
 // Every toast from this module is headed "Your account"; the message becomes
@@ -199,53 +196,52 @@ export default function GraduationPrompt() {
   } : null;
 
   return (
-    <div className="ads-prompt-overlay">
-      <div
-        className="ads-prompt graduation-prompt"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="graduation-title"
-      >
-        <ModalHeader
-          title={copy ? copy.title : t('incubation.graduation.creator.title')}
-          titleId="graduation-title"
-          onClose={() => close(true)}
-        />
-        <p className="ads-prompt-lede">
-          {copy ? copy.lede : (
-            <Trans i18nKey="incubation.graduation.creator.lede" values={{ handle: incubationHandle }} components={{ b: <strong /> }} />
-          )}
-        </p>
-
-        <p className="ads-prompt-text">
-          {copy ? copy.text : t('incubation.graduation.creator.text')}
-        </p>
-
-        {/* Said up front rather than discovered afterwards. Publishing the back
-            catalogue is slow because a new account's resource credits only allow
-            a couple of posts a day at first. Finding that out later would feel
-            like a bait and switch. */}
-        {track === 'advertiser' ? (
-          <p className="ads-prompt-note">{copy.note}</p>
-        ) : (
-        <p className="ads-prompt-note">
-          {moving
-            ? <Trans i18nKey="incubation.graduation.note.moving" values={{ moving }} components={{ b: <strong /> }} />
-            : t('incubation.graduation.note.everything')}
-          {' '}{t('incubation.graduation.note.gradual')}
-          {waiting > 0 && <>{' '}{t('incubation.graduation.note.waiting', { count: waiting })}</>}
-        </p>
-        )}
-
-        <div className="ads-prompt-actions">
-          <button type="button" className="ads-prompt-ghost" onClick={() => close(true)}>
+    // "You can create your own account now" (design 46c / 23b): the §11
+    // success card, accent hero tint, one primary.
+    <Dialog
+      open
+      onClose={() => close(true)}
+      title={copy ? copy.title : t('incubation.graduation.creator.title')}
+      closeLabel={t('common.actions.close')}
+      width={480}
+      className="inc-prompt inc-prompt--celebrate graduation-prompt"
+      footer={(
+        <>
+          <Button variant="secondary" onClick={() => close(true)}>
             {t('incubation.graduation.notYet')}
-          </button>
-          <button type="button" className="ads-prompt-primary" onClick={goCreate}>
+          </Button>
+          <Button variant="primary" next className="inc-prompt-primary" onClick={goCreate}>
             {copy ? copy.cta : t('incubation.graduation.createMyAccount')}
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </>
+      )}
+    >
+      <span className="inc-prompt-icon is-accent" aria-hidden="true"><Icon name="school" size={28} /></span>
+      <p className="inc-prompt-lede">
+        {copy ? copy.lede : (
+          <Trans i18nKey="incubation.graduation.creator.lede" values={{ handle: incubationHandle }} components={{ b: <strong /> }} />
+        )}
+      </p>
+
+      <p className="inc-prompt-text">
+        {copy ? copy.text : t('incubation.graduation.creator.text')}
+      </p>
+
+      {/* Said up front rather than discovered afterwards. Publishing the back
+          catalogue is slow because a new account's resource credits only allow
+          a couple of posts a day at first. Finding that out later would feel
+          like a bait and switch. */}
+      {track === 'advertiser' ? (
+        <p className="inc-prompt-note">{copy.note}</p>
+      ) : (
+      <p className="inc-prompt-note">
+        {moving
+          ? <Trans i18nKey="incubation.graduation.note.moving" values={{ moving }} components={{ b: <strong /> }} />
+          : t('incubation.graduation.note.everything')}
+        {' '}{t('incubation.graduation.note.gradual')}
+        {waiting > 0 && <>{' '}{t('incubation.graduation.note.waiting', { count: waiting })}</>}
+      </p>
+      )}
+    </Dialog>
   );
 }

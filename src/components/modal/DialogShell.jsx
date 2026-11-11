@@ -27,10 +27,13 @@ const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:n
  * @param {ReactNode} footer      – actions, primary last (it sits on the right)
  * @param {number}    width       – desktop max width, 440 to 520 for most dialogs
  * @param {number}    zIndex      – over another layer that sits above 1000
+ * @param {Document}  doc         – the document to portal into (usePortalDoc), default the page's
+ * @param {boolean}   isolate     – stop clicks inside from bubbling up the React tree to
+ *                                  whatever opened it (a card, a link, a hover preview)
  */
 export default function DialogShell({
   open = true, onClose, busy = false, title, sub, leading, headExtra, steps, step = 0,
-  footer, width = 480, zIndex, className, bodyClassName, overlayClassName, panelProps, children,
+  footer, width = 480, zIndex, className, bodyClassName, overlayClassName, panelProps, doc, isolate = false, children,
 }) {
   const close = busy ? undefined : onClose;
   const panelRef = useRef(null);
@@ -42,34 +45,39 @@ export default function DialogShell({
   useEffect(() => {
     if (!open) return undefined;
     const panel = panelRef.current;
-    const prev = document.activeElement;
-    if (panel && !panel.contains(document.activeElement)) panel.focus({ preventScroll: true });
+    const d = panel?.ownerDocument || document;
+    const prev = d.activeElement;
+    if (panel && !panel.contains(d.activeElement)) panel.focus({ preventScroll: true });
     const onKey = (e) => {
-      if (e.key !== "Tab" || !panel || !panel.contains(document.activeElement)) return;
+      if (e.key !== "Tab" || !panel || !panel.contains(d.activeElement)) return;
       const els = [...panel.querySelectorAll(FOCUSABLE)].filter((el) => el.getClientRects().length > 0);
       if (!els.length) return;
       const first = els[0];
       const last = els[els.length - 1];
-      if (e.shiftKey && (document.activeElement === first || document.activeElement === panel)) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      if (e.shiftKey && (d.activeElement === first || d.activeElement === panel)) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && d.activeElement === last) { e.preventDefault(); first.focus(); }
     };
-    document.addEventListener("keydown", onKey);
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    d.addEventListener("keydown", onKey);
+    const overflow = d.body.style.overflow;
+    d.body.style.overflow = "hidden";
     return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = overflow;
+      d.removeEventListener("keydown", onKey);
+      d.body.style.overflow = overflow;
       if (prev?.isConnected && typeof prev.focus === "function") prev.focus({ preventScroll: true });
     };
   }, [open, panelRef]);
 
   if (!open) return null;
+  const stop = isolate ? (e) => e.stopPropagation() : undefined;
   return createPortal(
     <div
       className={cx("v2-dialog", "dlg-shell", overlayClassName)}
       role="presentation"
       style={zIndex ? { zIndex } : undefined}
-      onMouseDown={(e) => { if (e.target === e.currentTarget) onCloseRef.current?.(); }}
+      onMouseDown={(e) => { stop?.(e); if (e.target === e.currentTarget) onCloseRef.current?.(); }}
+      onClick={stop}
+      onPointerDown={stop}
+      onTouchStart={stop}
     >
       <div
         className={cx("v2-dialog__panel", className)}
@@ -87,6 +95,6 @@ export default function DialogShell({
         {footer && <div className="v2-dialog__foot">{footer}</div>}
       </div>
     </div>,
-    document.body,
+    (doc || document).body,
   );
 }

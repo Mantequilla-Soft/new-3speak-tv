@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { IoIosNotifications } from 'react-icons/io';
-import { FaHeart, FaReply } from 'react-icons/fa';
 import { useAppStore } from '../../lib/store';
 import {
   fetchIncubationNotifications, markIncubationNotificationsRead, handleAvatar,
@@ -15,6 +13,7 @@ import '../nav/NotificationBell.scss';
 import './IncubationBell.scss';
 import { useTranslation, Trans } from 'react-i18next';
 import { formatTimeAgo } from '../../i18n';
+import { Icon } from '../v2/ui';
 
 const REFRESH_MS = 60 * 1000;
 
@@ -82,13 +81,13 @@ export default function IncubationBell() {
         onClick={toggle}
         aria-label={data.unread ? t('incubation.bell.unreadAria', { count: data.unread }) : t('common.nav.notifications')}
       >
-        <IoIosNotifications size={22} />
+        <Icon name="notifications" size={22} />
         {data.unread > 0 && <span className="inc-bell-dot">{data.unread > 9 ? '9+' : data.unread}</span>}
       </button>
 
       {open && (
-        <div className="inc-bell-menu">
-          <header>{t('common.nav.notifications')}</header>
+        <div className="inc-bell-menu" role="dialog" aria-label={t('common.nav.notifications')}>
+          <header className="v2-eyebrow">{t('common.nav.notifications')}</header>
           {data.items.length === 0 ? (
             <p className="inc-bell-empty">
               {t('incubation.bell.empty')}
@@ -110,9 +109,7 @@ export default function IncubationBell() {
                     />
                     <span className="inc-bell-text">
                       <span className="inc-bell-line">
-                        {n.type === 'reply'
-                          ? <FaReply size={11} aria-hidden="true" />
-                          : <FaHeart size={11} aria-hidden="true" />}
+                        <Icon name={n.type === 'reply' ? 'reply' : 'favorite'} size={14} fill={n.type !== 'reply'} className={n.type === 'reply' ? 'is-reply' : 'is-like'} />
                         <Trans
                           i18nKey={n.type === 'reply' ? 'incubation.bell.replied' : 'incubation.bell.liked'}
                           values={{ name: n.actor.name }}
@@ -120,7 +117,7 @@ export default function IncubationBell() {
                         />
                       </span>
                       {n.excerpt && <span className="inc-bell-excerpt">{n.excerpt}</span>}
-                      <span className="inc-bell-when">{when(n.at)}</span>
+                      <span className="inc-bell-when num">{when(n.at)}</span>
                     </span>
                   </Link>
                 </li>

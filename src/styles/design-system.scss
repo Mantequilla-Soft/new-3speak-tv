@@ -276,6 +276,11 @@ p { text-wrap: pretty; }
   &.h48 { height: 48px; border-radius: 16px; }
   .v2-card &, .v2-dialog__panel & { background: var(--bg); }
 }
+// The rule above resets the select's drawn arrow inside cards and dialogs; put it back.
+.v2-card .v2-input.is-select, .v2-dialog__panel .v2-input.is-select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat;
+}
 .v2-field.is-error .v2-input { border-color: var(--accent); }
 .v2-field__hint { font-size: 11px; color: var(--muted); line-height: 1.4; }
 .v2-field__err { font-size: 11px; color: var(--accent); line-height: 1.4; }

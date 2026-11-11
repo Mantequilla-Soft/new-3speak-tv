@@ -1,12 +1,11 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { MdHistory, MdDelete } from 'react-icons/md';
-import { IoArrowBack } from 'react-icons/io5';
 import BarLoader from '../components/Loader/BarLoader';
 import Card3 from '../components/Cards/Card3';
 import AudioTile from '../components/AudioTile/AudioTile';
-import icon from '../../public/images/stack.png';
+import { Icon } from '../components/v2/Icon';
+import { Button, IconButton, EmptyState, Toggle } from '../components/v2/ui';
 import { useAppStore } from '../lib/store';
 import { deleteWatchHistoryEntry } from '../utils/watchHistory';
 import { CHECKER_URL } from '../utils/config';
@@ -132,34 +131,33 @@ function WatchedView() {
     <div className="watched-card-footer">
       <span className="watched-date">{t(video._audio ? 'misc.watched.listenedAt' : 'misc.watched.watchedAt', { when: formatRelativeDate(video.watched_at) })}</span>
       {isOwner && (
-        <button
-          type="button"
+        <IconButton
           className="watched-remove-btn"
+          icon="close"
+          size={28}
+          variant="ghost"
+          label={t('misc.watched.removeTitle')}
           onClick={(e) => handleDelete(e, video._historyKey)}
-          title={t('misc.watched.removeTitle')}
-          aria-label={t('misc.watched.removeTitle')}
-        >
-          <MdDelete />
-        </button>
+        />
       )}
     </div>
   ), [isOwner, handleDelete, t]);
 
   return (
     <div className="watched-view-container">
-      {/* Header */}
+      {/* Header (45c): title and owner on the left; track history and back on the right */}
       <div className="watched-header">
         <div className="watched-info">
-          <div className="watched-icon-wrap">
-            <MdHistory className="watched-icon" />
-          </div>
+          <span className="watched-icon-wrap" aria-hidden="true">
+            <Icon name="history" size={24} />
+          </span>
           <div className="watched-details">
             <h1>{t('misc.watched.title')}</h1>
             <div className="watched-meta">
               <Link to={`/@${username}`} className="owner">
                 @{username}
               </Link>
-              <span className="separator">-</span>
+              <span className="separator" aria-hidden="true">·</span>
               <span>{t('misc.watched.count', { count: videosCount + shortsCount + audioCount })}</span>
             </div>
           </div>
@@ -167,18 +165,19 @@ function WatchedView() {
 
         <div className="header-actions">
           {isOwner && (
-            <label className="tracking-toggle">
-              <input
-                type="checkbox"
-                checked={watchHistoryEnabled}
-                onChange={(e) => setWatchHistoryEnabled(e.target.checked)}
-              />
+            <label className="tracking-toggle" htmlFor="watched-track-toggle">
               <span>{t('misc.watched.trackHistory')}</span>
+              <Toggle
+                id="watched-track-toggle"
+                checked={watchHistoryEnabled}
+                onChange={(on) => setWatchHistoryEnabled(on)}
+                label={t('misc.watched.trackHistory')}
+              />
             </label>
           )}
-          <button type="button" className="back-btn" onClick={() => navigate(-1)}>
-            <IoArrowBack /> {t('common.actions.back')}
-          </button>
+          <Button className="back-btn" icon="arrow_back" size={36} onClick={() => navigate(-1)}>
+            {t('common.actions.back')}
+          </Button>
         </div>
       </div>
 
@@ -204,12 +203,14 @@ function WatchedView() {
           <div className="loading-more"><BarLoader /></div>
         ) : isError ? (
           <div className="empty-wrap">
-            <span>{t('misc.watched.loadFailed')}</span>
+            <div className="v2-failure" role="alert"><b>{t('misc.watched.loadFailed')}</b></div>
           </div>
         ) : filtered.length === 0 ? (
           <div className="empty-wrap">
-            <img src={icon} alt="" />
-            <span>{activeTab === 'shorts' ? t('misc.watched.emptyShorts') : activeTab === 'audio' ? t('misc.watched.emptyAudio') : t('misc.watched.emptyVideos')}</span>
+            <EmptyState
+              icon={activeTab === 'shorts' ? 'smart_display' : activeTab === 'audio' ? 'headphones' : 'history'}
+              title={activeTab === 'shorts' ? t('misc.watched.emptyShorts') : activeTab === 'audio' ? t('misc.watched.emptyAudio') : t('misc.watched.emptyVideos')}
+            />
           </div>
         ) : activeTab === 'audio' ? (
           // The audio page's own tile (plays through the global player); the
