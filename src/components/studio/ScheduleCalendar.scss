@@ -97,7 +97,10 @@
       background: transparent;
       color: var(--text);
       @include v2.mono(14, 500);
-      color-scheme: light dark;
+      // Inherit the app theme's color-scheme (design-system.scss), so the
+      // native picker icon is light on the dark theme. "light dark" followed
+      // the OS instead and drew a dark icon on the dark field.
+      color-scheme: inherit;
     }
   }
 }

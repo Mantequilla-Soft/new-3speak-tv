@@ -1,4 +1,5 @@
 import { Icon } from '../v2/Icon';
+import { EmptyState } from '../v2/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -137,7 +138,7 @@ export default function EpisodeView({ episodeId, user, onOpenShow }) {
     return (
       <div className="pod-show">
         <button type="button" className="pod-back" onClick={() => onOpenShow(null)}><Icon name="arrow_back" size={18} /> {t('audio.podcasts.allPodcasts')}</button>
-        <p className="pod-empty">{t('audio.podcasts.episodeMissing')}</p>
+        <EmptyState className="pod-missing" icon="music_off" title={t('audio.podcasts.episodeMissing')} />
       </div>
     );
   }

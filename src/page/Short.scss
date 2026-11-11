@@ -1717,6 +1717,16 @@ body { --shorts-bottom-reserve: 0px; }
     &.reported { color: var(--accent); }
   }
 
+  // The shared translate button: a 28 ghost icon like its neighbours (and like
+  // the watch page's comment rows), not the filled chip it is elsewhere.
+  .commentActions .comment-translate-btn {
+    width: 28px;
+    padding: 0;
+    justify-content: center;
+    background: transparent;
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+
   // Comment rewards: money, so accent and mono
   .commentReward {
     padding: 0 8px;

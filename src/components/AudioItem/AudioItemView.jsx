@@ -1,4 +1,5 @@
 import { Icon } from '../v2/Icon';
+import { EmptyState } from '../v2/ui';
 import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -121,7 +122,7 @@ export default function AudioItemView({ owner, id, onBack }) {
   );
   if (isLoading) return <div className="pod-empty">{t('common.status.loading')}</div>;
   if (error || !item || (item.status && item.status !== 'published')) {
-    return <div className="pod-show">{back}<p className="pod-empty">{t('audio.item.missing')}</p></div>;
+    return <div className="pod-show">{back}<EmptyState className="pod-missing" icon="music_off" title={t('audio.item.missing')} /></div>;
   }
 
   const playing = isCurrent && audioIsPlaying;

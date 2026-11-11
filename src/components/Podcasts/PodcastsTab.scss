@@ -47,6 +47,8 @@
   color: var(--muted);
   &--center { text-align: left; }
 }
+// An episode or 3Speak audio that is gone: the v2 empty card under the back link.
+.pod-missing { margin-top: 12px; max-width: 520px; }
 .pod-more { align-self: flex-start; margin-top: 12px; }
 .pod-back {
   @include v2.btn(ghost, 36);

@@ -1,9 +1,14 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { fetchVideoAnalytics, fmtDuration, fmtCount } from '../../lib/creatorStats';
 import { StatTile } from '../v2/ui';
+import { Icon } from '../v2/Icon';
 import useSeekPreview from '../../hooks/useSeekPreview';
 import './VideoStats.scss';
 import { useTranslation, Trans } from 'react-i18next';
+
+// The insight strings open with an emoji in every locale; the chips draw a
+// Material icon instead (no emoji as icons), so the leading emoji is dropped.
+const LEAD_EMOJI = /^\s*\p{Extended_Pictographic}\uFE0F?\s*/u;
 
 function mmss(sec) {
   const s = Math.max(0, Math.round(sec || 0));
@@ -137,6 +142,7 @@ function deriveInsights(data) {
  */
 export default function VideoStats({ username, permlink, compact = false, onSeek = null }) {
   const { t } = useTranslation();
+  const tPlain = (...args) => String(t(...args)).replace(LEAD_EMOJI, '');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(false);
@@ -183,10 +189,10 @@ export default function VideoStats({ username, permlink, compact = false, onSeek
         if (!ins.biggestDrop && !ins.topMoments.length && !(data.duration <= 90 && ins.earlyDrop)) return null;
         return (
           <div className="vs-insights">
-            {ins.biggestDrop && <span className="vs-insight"><Trans i18nKey="stats.video.mostDropOff" values={{ time: mmss(ins.biggestDrop.t) }} components={{ b: <b /> }} /></span>}
-            {data.duration <= 90 && ins.earlyDrop != null && <span className="vs-insight"><Trans i18nKey="stats.video.earlyDrop" values={{ pct: ins.earlyDrop }} components={{ b: <b /> }} /></span>}
+            {ins.biggestDrop && <span className="vs-insight"><Icon name="trending_down" size={16} /><Trans t={tPlain} i18nKey="stats.video.mostDropOff" values={{ time: mmss(ins.biggestDrop.t) }} components={{ b: <b /> }} /></span>}
+            {data.duration <= 90 && ins.earlyDrop != null && <span className="vs-insight"><Icon name="bolt" size={16} /><Trans t={tPlain} i18nKey="stats.video.earlyDrop" values={{ pct: ins.earlyDrop }} components={{ b: <b /> }} /></span>}
             {ins.topMoments.length > 0 && (
-              <span className="vs-insight">{t('stats.video.replayed')}
+              <span className="vs-insight"><Icon name="replay" size={16} />{tPlain('stats.video.replayed')}
                 {ins.topMoments.map((m, i) => (
                   onSeek
                     ? <button key={i} type="button" className="vs-ts" onClick={() => onSeek(m.t)}>{mmss(m.t)}</button>
