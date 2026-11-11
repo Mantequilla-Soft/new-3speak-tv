@@ -326,6 +326,9 @@ export function formatTimeAgo(date, { style = 'long' } = {}) {
  *              Plural-correct ("mwezi 1", "miezi 5"), since Intl formats it.
  */
 const COMPACT_STYLE = {
+  // The v2 design writes card ages bare: "8h", "3d", "1w" (STYLE_GUIDE §10, boards 20a/20b).
+  // Months as "mo" so they never read as minutes.
+  en: { pattern: '{n}{u}', units: { minute: 'm', hour: 'h', day: 'd', week: 'w', month: 'mo', year: 'y' } },
   fr: { rtf: 'short' },  // narrow is "-5 j"
   ru: { rtf: 'short' },  // narrow is "-5 дн."
   de: { pattern: 'vor {n} {u}', units: { minute: 'Min.', hour: 'Std.', day: 'Tg.', week: 'Wo.', month: 'Mon.', year: 'J.' } },

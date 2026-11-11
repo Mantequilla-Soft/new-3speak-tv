@@ -27,13 +27,14 @@ const longTime = (d) => formatTimeAgo(d.toDate());
 // "vorgestern" or "letzte Woche"): the worded forms are too long for a card row there.
 const phoneTime = (d) => formatTimeAgoCompact(d.toDate());
 
-function TimeAgo({ date, unix, short }) {
+// `compact`: the bare numbers-only form at every width (cards: "8h", "3d", "1w").
+function TimeAgo({ date, unix, short, compact }) {
   // Subscribes to language changes so the label re-renders in the new language.
   useTranslation();
   const d = unix ? dayjs.unix(date).utc() : toUtc(date);
   return (
     <span className="time-ago-wrap">
-      <span className="time-long">{short ? shortTime(d) : longTime(d)}</span>
+      <span className="time-long">{compact ? phoneTime(d) : short ? shortTime(d) : longTime(d)}</span>
       <span className="time-short">{phoneTime(d)}</span>
     </span>
   );

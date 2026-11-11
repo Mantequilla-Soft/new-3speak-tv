@@ -638,7 +638,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                         : formatViewCount}
                     />
                   )}
-                  <span className="card-time"><TimeAgo date={video.created_at || video.created} short={shortTimeAgo} /></span>
+                  <span className="card-time"><TimeAgo date={video.created_at || video.created} short={shortTimeAgo} compact /></span>
                 </div>
                 {/* 1st-level v2 tag (the category the auto-tag rolls up to), in
                     cyan like a community. Hidden only on small cards on a phone. */}
