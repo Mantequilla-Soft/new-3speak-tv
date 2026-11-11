@@ -7,7 +7,6 @@ import CommunityModal from "../components/modal/Community_modal";
 import Beneficiary_modal from "../components/modal/Beneficiary_modal";
 import SettingInfo, { SettingSheet } from "../components/embed-studio/SettingInfo";
 import { createImportBatch, cancelImportBatch, fmtDuration } from "../lib/youtubeImport";
-import StepActions from "../components/embed-studio/StepActions";
 import { addThreespeakToPostingAuth, waitForThreespeakPostingAuth } from "../utils/postingAuthority";
 import { getCurrentProvider, Providers } from "../hive-api/aioha";
 import AccountImg from "../components/HiveAvatar/AccountImg";
@@ -192,7 +191,7 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
                   <span className="yt-batch-modal__thumb v2-thumb r8">{v.thumbnail && <img src={v.thumbnail} alt="" />}</span>
                   <div>
                     <span className="yt-batch-modal__picked-title">{v.title}</span>
-                    <span className="yt-import__muted num">
+                    <span className="yt-import__muted">
                       {[v.duration > 0 && fmtDuration(v.duration), v.type === 'shorts' && t('ytimport.batch.short')].filter(Boolean).join(' · ')}
                     </span>
                   </div>
@@ -270,15 +269,14 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
               </div>
             </SettingSheet>
 
+            {/* 49b: a cyan wash with the permission ask and its action inline. */}
             {!granted && (
-              <div className="yt-batch-modal__grant v2-banner is-info">
-                <Icon name="key" size={18} className="v2-banner__icon" />
-                <div className="v2-banner__body">
-                  <p>{t('ytimport.batch.grantNeeded')}</p>
-                  <Button variant="cyan" size={40} icon="verified_user" loading={granting} onClick={grant} disabled={granting}>
-                    {granting ? t('ytimport.batch.granting') : t('ytimport.batch.grantButton')}
-                  </Button>
-                </div>
+              <div className="yt-batch-modal__grant">
+                <span>{t('ytimport.batch.grantNeeded')}</span>{' '}
+                <button type="button" className="yt-batch-modal__grant-btn" onClick={grant} disabled={granting} aria-busy={granting || undefined}>
+                  {granting && <Icon name="progress_activity" size={14} className="v2-spin" />}
+                  {granting ? t('ytimport.batch.granting') : t('ytimport.batch.grantButton')}
+                </button>
               </div>
             )}
           </>
@@ -287,22 +285,22 @@ export function BatchForm({ user, videos, spacingMin, granted, onGranted, onClos
         {error && <p className="yt-import__error" role="alert">{error}</p>}
         </div>
 
-        {step === 1 ? (
-          <StepActions
-            secondary={[{ key: 'cancel', label: t('ytimport.cancel'), onClick: onClose }]}
-            primary={[{ key: 'next', label: t('common.actions.next'), onClick: () => setStep(2) }]}
-          />
-        ) : (
-          <StepActions
-            back={{ label: t('common.actions.back'), onClick: () => setStep(1), disabled: busy || granting }}
-            primary={[{
-              key: 'start',
-              label: busy ? t('ytimport.batch.starting') : t('ytimport.batch.start'),
-              onClick: start,
-              disabled: !granted || busy || granting,
-            }]}
-          />
-        )}
+        {/* 49b: Cancel and Next share the row; then Back and a wide Start import. */}
+        <div className="yt-batch-modal__foot">
+          {step === 1 ? (
+            <>
+              <Button variant="secondary" size={44} center className="is-half" onClick={onClose}>{t('ytimport.cancel')}</Button>
+              <Button variant="primary" size={44} center className="is-half" onClick={() => setStep(2)}>{t('common.actions.next')}</Button>
+            </>
+          ) : (
+            <>
+              <Button variant="secondary" size={44} onClick={() => setStep(1)} disabled={busy || granting}>{t('common.actions.back')}</Button>
+              <Button variant="primary" size={44} center className="is-wide" onClick={start} disabled={!granted || busy || granting} loading={busy}>
+                {busy ? t('ytimport.batch.starting') : t('ytimport.batch.start')}
+              </Button>
+            </>
+          )}
+        </div>
       </div>
       {communityOpen && (
         <CommunityModal isOpen={communityOpen} data={[]} close={() => setCommunityOpen(false)} setCommunity={setCommunity} selected={communityName} />
@@ -376,7 +374,7 @@ export function BatchStatus({ batch, user, onChange }) {
       <div className="yt-batch-status__head">
         <span className="yt-batch-status__bar" aria-hidden="true" />
         <h3 className="yt-import__section">{t('ytimport.batch.statusTitle')}</h3>
-        <span className="yt-batch-status__count num">{doneCount}/{batch.items.length}</span>
+        <span className="yt-batch-status__count num">{t('ytimport.batch.countOf', { done: doneCount, total: batch.items.length })}</span>
       </div>
       {stoppable && confirming && (
         <div className="yt-batch-status__confirm" role="alert">

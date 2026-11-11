@@ -170,9 +170,10 @@ $mkt-sub: 12px;
     display: flex;
     align-items: center;
     gap: 6px;
-    padding-top: 10px;
+    padding-top: 6px;
     border-top: 4px solid var(--surface-2);
     font-size: $mkt-sub;
+    font-weight: 700;
     color: var(--muted);
     min-width: 0;
 
@@ -906,6 +907,15 @@ $mkt-sub: 12px;
     .mkt-fine { margin: 0; }
   }
 
+  /* Register this product: a full-width primary with the fine print under it (47b). */
+  .mkt-form > .mkt-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+
+    > .mkt-primary { width: min(100%, 560px); height: 48px; border-radius: var(--r-lg); font-size: 14px; }
+  }
+
   /* Buttons (§6): the forward action is the accent fill, everything else is a
      surface-2 secondary; deleting is the danger tint. */
   .mkt-primary { @include v2.btn(primary, 44); }
@@ -922,12 +932,11 @@ $mkt-sub: 12px;
 
   /* Who the application will belong to. Reads as a field, is not an input. */
   .mkt-asaccount {
-    gap: 3px;
+    margin: -8px 0 0;
+    font-size: $mkt-sub;
+    color: var(--muted);
 
-    strong {
-      font-size: $mkt-text;
-      color: var(--text);
-    }
+    strong { color: var(--text); font-weight: 700; }
   }
 
   /* The rate card (design 47a): the format groups side by side as cards, each
@@ -2428,4 +2437,72 @@ $mkt-sub: 12px;
   }
 
   .mkt-book-hold { margin: 0; font-size: 11px; }
+
+  /* A flight's status in words on a tint (47c): cyan running, accent waiting on you,
+     muted once it is over. */
+  .mkt-flight-status {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 900;
+    white-space: nowrap;
+
+    &.is-cyan { background: var(--cyan-tint-strong); color: var(--cyan); }
+    &.is-accent { background: var(--accent-tint-strong); color: var(--accent); }
+  }
+
+  /* A checkbox's bold lead, then its explanation on the line under it. */
+  .mkt-check > span > .mkt-hint { display: block; margin-top: 2px; }
+
+  /* Have us make it: one row per kind, the price in mono on the right (47b). */
+  .mkt-tier-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mkt-tier-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: var(--r-md);
+    background: var(--surface);
+  }
+
+  .mkt-tier-row__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+
+    strong { font-size: 13px; color: var(--text); }
+  }
+
+  .mkt-tier-row__price {
+    flex: none;
+    max-width: 45%;
+    text-align: right;
+    @include v2.mono(12, 700);
+    color: var(--text);
+  }
+
+  /* The hidden `required` mirror of the category chips: no field look, no size. */
+  .mkt-field input.mkt-visually-hidden {
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+  }
 }

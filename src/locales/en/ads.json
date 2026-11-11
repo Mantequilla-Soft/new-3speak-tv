@@ -880,5 +880,15 @@
     "savedReview": "Audio saved. We will review it before it runs",
     "uploadFailed": "Could not upload the audio",
     "seconds": "{{seconds}}s audio clip"
+  },
+  "flightStatus": {
+    "draft": "Draft",
+    "awaiting_payment": "Waiting for your payment",
+    "scheduled": "Scheduled",
+    "running": "Running",
+    "paused": "Paused",
+    "complete": "Finished",
+    "cancelled": "Cancelled",
+    "rejected": "Rejected"
   }
 }

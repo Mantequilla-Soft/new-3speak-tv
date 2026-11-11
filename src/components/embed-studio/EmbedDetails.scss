@@ -320,7 +320,10 @@
 }
 
 // The upload's own tiles carry a head: tinted icon box, then the control.
+// 35c: 148 tall with 16 padding on desktop.
 .opt-tile {
+  @include v2.tablet-up { min-height: 148px; padding: 16px; }
+
   .opt-tile__head {
     display: flex;
     align-items: center;

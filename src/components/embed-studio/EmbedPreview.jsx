@@ -89,6 +89,18 @@ function EmbedPreview() {
   const { streak, postedToday } = useStoryStreak(quickStory ? user : null);
   // What this story makes the streak: today already counted, or one day more.
   const nextStreak = postedToday ? streak : streak + 1;
+  // 35b week strip, Monday first: the streak's days before today, today, and
+  // the days of the week still ahead. Built from the streak count alone.
+  const weekStrip = (() => {
+    const keys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    const todayIdx = (new Date().getDay() + 6) % 7;
+    const before = postedToday ? Math.max(0, streak - 1) : streak;
+    return keys.map((k, i) => ({
+      key: k,
+      label: t(`stats.days.initial.${k}`),
+      state: i === todayIdx ? 'today' : i > todayIdx ? 'next' : (todayIdx - i <= before ? 'done' : 'missed'),
+    }));
+  })();
 
   const [promoteOpen, setPromoteOpen] = React.useState(false);
   const [publishing, setPublishing] = React.useState(false);
@@ -393,7 +405,7 @@ function EmbedPreview() {
                         onChange={(e) => setDescription(e.target.value.slice(0, STORY_CAPTION_MAX))}
                         placeholder={t("upload.story.captionPlaceholder")}
                         aria-label={t("upload.story.captionPlaceholder")}
-                        rows={3}
+                        rows={1}
                       />
                       <p className="ep-story__reach">
                         <Icon name="notifications_active" size={18} />
@@ -401,16 +413,26 @@ function EmbedPreview() {
                           ? t("upload.story.reach", { count: followers })
                           : t("upload.story.reachNoCount")}
                       </p>
-                      <p className="ep-story__streak">
+                      <div className="ep-story__streak">
                         <Icon name="local_fire_department" size={28} fill />
-                        <b>
-                          {postedToday && streak >= STREAK_MIN
-                            ? t("upload.story.streakOn", { count: streak })
-                            : nextStreak >= STREAK_MIN
-                              ? t("upload.story.streakNext", { count: nextStreak })
-                              : t("upload.story.streakStart")}
-                        </b>
-                      </p>
+                        <span>
+                          <b>
+                            {postedToday && streak >= STREAK_MIN
+                              ? t("upload.story.streakOn", { count: streak })
+                              : nextStreak >= STREAK_MIN
+                                ? t("upload.story.streakNext", { count: nextStreak })
+                                : t("upload.story.streakStart")}
+                          </b>
+                          {(postedToday ? streak : nextStreak) >= STREAK_MIN && <small>{t("upload.story.keepGoing")}</small>}
+                        </span>
+                      </div>
+                      {/* This week, Monday first: the days the streak covers (tint),
+                          today with this story (solid), the days still to come. */}
+                      <div className="ep-story__week" aria-hidden="true">
+                        {weekStrip.map((d) => (
+                          <span key={d.key} className={`is-${d.state}`}>{d.label}</span>
+                        ))}
+                      </div>
                     </div>
                   ) : (
                     <div className="ep-body">
@@ -425,7 +447,7 @@ function EmbedPreview() {
                 <div className="ep-settings__head">
                   <b className="ep-settings__title">{t("upload.review.publishSettings")}</b>
                   {!quickStory && (
-                    <Button variant="ghost" size={32} icon="edit" onClick={() => navigate('/embed-studio/details')}>
+                    <Button variant="ghost" size={32} className="ep-settings__edit" onClick={() => navigate('/embed-studio/details')}>
                       {t("common.actions.edit")}
                     </Button>
                   )}
@@ -495,9 +517,11 @@ function EmbedPreview() {
                 {!gateSatisfied && (
                   <div className="ep-gate">
                     <div className="ep-gate__thumb v2-thumb r12">
-                      <span className="v2-media-pill is-tl">AD</span>
+                      <span className="v2-media-pill is-tl">
+                        AD{Number(pendingAd?.duration) > 0 ? ` ${Math.floor(pendingAd.duration / 60)}:${String(Math.round(pendingAd.duration % 60)).padStart(2, '0')}` : ''}
+                      </span>
                     </div>
-                    <span className="ep-gate__text">{t("upload.review.watchSponsorFirst")}</span>
+                    <span className="ep-gate__text">{t("upload.review.gateNote")}</span>
                   </div>
                 )}
               </aside>

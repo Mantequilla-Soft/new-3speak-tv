@@ -549,11 +549,16 @@ export default function YoutubeImportPage() {
     const isPicked = picked.some((x) => x.id === v.id);
     // The selected copy can be fresher (details looked up after the pick).
     const shown = isSelected ? { ...v, ...selected } : v;
+    // 33c: a tile that cannot go in a batch says why in a chip under its title.
+    const tag = onSite ? t('ytimport.onSite')
+      : blocked ? t('ytimport.tooLong', { minutes: blocked })
+        : waiting ? t('ytimport.inBatch')
+          : null;
     return (
       <div
         key={v.id}
         id={`yt-import-card-${v.id}`}
-        className={`yt-import__card${isSelected ? ' yt-import__card--selected' : ''}${blocked ? ' yt-import__card--too-long' : ''}${isPicked ? ' yt-import__card--picked' : ''}`}
+        className={`yt-import__card${isSelected ? ' yt-import__card--selected' : ''}${blocked ? ' yt-import__card--too-long' : ''}${isPicked ? ' yt-import__card--picked' : ''}${tag && !isSelected ? ' yt-import__card--tagged' : ''}`}
       >
         <button
           type="button"
@@ -566,20 +571,9 @@ export default function YoutubeImportPage() {
             {/* A cover that cannot be loaded leaves the striped tile, not a broken image. */}
             <img src={shown.thumbnail} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
             {shown.duration > 0 && <span className="yt-import__dur num">{fmtDuration(shown.duration)}</span>}
-            {blocked && <span className="yt-import__too-long">{t('ytimport.tooLong', { minutes: blocked })}</span>}
-            {onSite && (
-              <span className="yt-import__done" title={t('ytimport.onSite')} aria-label={t('ytimport.onSite')}>
-                <Icon name="check" size={16} />
-              </span>
-            )}
-            {waiting && (
-              <span className="yt-import__done yt-import__done--waiting" title={t('ytimport.inBatch')} aria-label={t('ytimport.inBatch')}>
-                <Icon name="schedule" size={16} />
-              </span>
-            )}
           </div>
           <span className="yt-import__title">{shown.title}</span>
-          {shown.publishedAt && <span className="yt-import__muted">{new Date(shown.publishedAt).toLocaleDateString()}</span>}
+          {tag && <span className={`yt-import__tag${onSite ? ' is-done' : ''}`}>{tag}</span>}
         </button>
         {!blocked && !tickBlocked && (
           <button
@@ -605,11 +599,13 @@ export default function YoutubeImportPage() {
       <Icon name="progress_activity" size={28} className="v2-spin" />
     </div>
   );
+  // A failed import also shows its way out in the side column (33c).
+  const fallbackAside = phase === 'failed' && !!selected;
   // A platform is "linked" when the creator has an account on it to list from.
   const isLinked = (key) => (key === 'youtube' ? !!status?.channels?.length : !!status?.links?.[key]?.length);
 
   return (
-    <div className={`yt-import${latestBatch ? ' has-batch' : ''}`}>
+    <div className={`yt-import${latestBatch || fallbackAside ? ' has-batch' : ''}${fallbackAside ? ' has-fallback' : ''}`}>
       <div className="yt-import__main">
         <Header
           t={t}
@@ -776,7 +772,7 @@ export default function YoutubeImportPage() {
             </span>
             {!status.premium && status.limits.premiumHeight > status.limits.maxHeight && ENABLE_SUBS && user && (
               <Link to={`/wallet/${user}#pro`} className="yt-import__pro">
-                <Icon name="workspace_premium" size={16} /> {t('ytimport.getPro')}
+                {t('ytimport.getPro')}
               </Link>
             )}
           </div>
@@ -798,9 +794,10 @@ export default function YoutubeImportPage() {
         )}
       </div>
 
-      {latestBatch && (
-        <aside className="yt-import__aside">
-          <BatchStatus batch={latestBatch} user={user} onChange={showBatch} />
+      {(latestBatch || fallbackAside) && (
+        <aside className={`yt-import__aside${latestBatch ? '' : ' is-fallback-only'}`}>
+          {latestBatch && <BatchStatus batch={latestBatch} user={user} onChange={showBatch} />}
+          {fallbackAside && renderFallback(selected, true)}
         </aside>
       )}
 

@@ -3,7 +3,7 @@ import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { APP_VERSION } from '../../version';
 import './EmbedUploadProgressBar.scss';
 import { useTranslation } from 'react-i18next';
-import { Button, Icon, Progress, StatusPill } from '../v2/ui';
+import { Button, Icon, Progress } from '../v2/ui';
 
 // Compact elapsed time: 45s, 4m12s, 1h05m. Short enough to sit on the fault line
 // without wrapping on a phone.
@@ -30,8 +30,9 @@ function fmtBytes(n) {
   return `${v < 10 ? v.toFixed(1) : Math.round(v)} ${units[i]}`;
 }
 
-// Cells in the chunk strip at most; longer uploads map several chunks to one.
-const MAX_CELLS = 48;
+// Cells in the chunk grid at most (35b: four columns); longer uploads map
+// several chunks to one.
+const MAX_CELLS = 24;
 
 /**
  * The background video upload that starts on the "Add details" step, as a v2
@@ -159,30 +160,36 @@ export default function EmbedUploadProgressBar({ compact = false }) {
 
   const tone = videoUploadStatus === 'error' ? 'is-error' : videoUploadStatus === 'done' ? 'is-done' : '';
 
+  // 35b: a retry in progress reads as an accent line, and the switch to the
+  // compatible method as a note, both from the status line the upload writes.
+  const unstable = videoUploadStatus === 'uploading' && !!statusText && (
+    statusText === t('upload.progress.connectionUnstable')
+    || (Number(d.attempt) > 1 && statusText === t('upload.progress.connectionUnstableAttempt', { attempt: d.attempt, attempts: d.attempts }))
+  );
+  const switching = videoUploadStatus === 'uploading' && statusText === t('upload.progress.switchingMethod');
+
   return (
     <section
       className={`embed-upload-progress embed-upload-progress--${videoUploadStatus}${compact ? ' is-compact' : ''}`}
       aria-label={label}
     >
       <div className="embed-upload-progress-head">
-        {videoUploadStatus === 'done'
-          ? <Icon name="cloud_done" size={20} className="embed-upload-progress-icon is-done" />
-          : videoUploadStatus === 'error'
-            ? <Icon name="error" size={20} className="embed-upload-progress-icon is-error" />
-            : isWaiting
-              ? <Icon name="progress_activity" size={20} className="embed-upload-progress-icon v2-spin" />
-              : <Icon name="cloud_upload" size={20} className="embed-upload-progress-icon" />}
+        {/* The tone bar (35b); a spinner while nothing has moved yet. */}
+        {isWaiting
+          ? <Icon name="progress_activity" size={20} className="embed-upload-progress-icon v2-spin" />
+          : <span className={`embed-upload-progress-bar ${tone}`} aria-hidden="true" />}
         <b className={`embed-upload-progress-label ${tone}`}>{label}</b>
         {compact && videoUploadStatus !== 'error' && <span className="embed-upload-progress-pct">{pct}%</span>}
-        {method && videoUploadStatus !== 'done' && <StatusPill tone="muted" className="embed-upload-progress-method">{method}</StatusPill>}
+        {method && videoUploadStatus !== 'done' && <span className="embed-upload-progress-method">{method}</span>}
       </div>
-      <Progress value={pct} tone={videoUploadStatus === 'error' ? 'accent' : 'cyan'} label={label} />
+      {/* Full card: accent, the creator's own action (35b). Side column: cyan (21c). */}
+      <Progress value={pct} tone={videoUploadStatus === 'error' || !compact ? 'accent' : 'cyan'} label={label} />
       {cells && (
         <div className="embed-upload-progress-chunks" aria-hidden="true">
           {cells.map((c, i) => <span key={i} className={c} />)}
         </div>
       )}
-      {(detailLine || shapeLine || faultLine || endpointHost) && (
+      {(detailLine || shapeLine || faultLine || endpointHost || unstable) && (
         <div className="embed-upload-progress-lines">
           {detailLine && <span className="embed-upload-progress-detail">{detailLine}</span>}
           {shapeLine && <span className="embed-upload-progress-detail">{shapeLine}</span>}
@@ -190,7 +197,14 @@ export default function EmbedUploadProgressBar({ compact = false }) {
           {endpointHost && (
             <span className="embed-upload-progress-endpoint">{t('upload.progress.uploadServer', { host: endpointHost })}</span>
           )}
+          {unstable && <span className="embed-upload-progress-detail is-accent">{statusText}</span>}
         </div>
+      )}
+      {switching && (
+        <span className="embed-upload-progress-waiting">
+          <Icon name="swap_horiz" size={18} />
+          {t('upload.progress.patchBlockedSwitching')}
+        </span>
       )}
       {showWaiting && (
         <span className="embed-upload-progress-waiting">

@@ -385,8 +385,8 @@ describe('settings: posting authority', () => {
 describe('settings: Connections', () => {
   beforeEach(() => signIn('listener'))
 
-  // Every card of the tab shows at once (38c); `_card` only names the one a test is about.
-  async function openConnections(user, _card) {
+  // Every card of the tab shows at once (38c), so there is no sub-tab to pick.
+  async function openConnections(user) {
     await user.click(screen.getByRole('tab', { name: 'Connections' }))
   }
 
@@ -428,21 +428,21 @@ describe('settings: Connections', () => {
 
   it('Linked profiles shows the profile links of the account', async () => {
     const { user } = mount()
-    await openConnections(user, 'Linked profiles')
+    await openConnections(user)
     expect(screen.getByText('Linked profiles of listener')).toBeInTheDocument()
   })
 
   describe('Support: the Lightning address', () => {
     it('tips go to v4v.app by default', async () => {
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       expect(await screen.findByText('Tips go to listener@v4v.app')).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
     })
 
     it('refuses something that is not a Lightning address', async () => {
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       const input = await screen.findByRole('textbox', { name: 'Your Lightning address' })
       await waitFor(() => expect(input).toBeEnabled())
       await user.type(input, 'not-an-address{Enter}')
@@ -452,7 +452,7 @@ describe('settings: Connections', () => {
 
     it('checks an address answers before saving it, lower-cased', async () => {
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       const input = await screen.findByRole('textbox', { name: 'Your Lightning address' })
       await waitFor(() => expect(input).toBeEnabled())
       await user.type(input, 'Me@Wallet.example')
@@ -466,7 +466,7 @@ describe('settings: Connections', () => {
     it('does not save an address that does not answer', async () => {
       m.checkLn = vi.fn(async () => { throw new Error('404') })
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       const input = await screen.findByRole('textbox', { name: 'Your Lightning address' })
       await waitFor(() => expect(input).toBeEnabled())
       await user.type(input, 'me@wallet.example{Enter}')
@@ -477,7 +477,7 @@ describe('settings: Connections', () => {
     it('goes back to v4v.app from an own address', async () => {
       m.readLn = vi.fn(async () => 'me@wallet.example')
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       await user.click(await screen.findByRole('button', { name: 'Use v4v.app again' }))
       expect(m.checkLn).not.toHaveBeenCalled()
       expect(m.saveLn).toHaveBeenCalledWith('listener', '')
@@ -488,7 +488,7 @@ describe('settings: Connections', () => {
   describe('Support: other ways to support', () => {
     it('adds a supported page, normalised, and clears the box', async () => {
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       const input = await screen.findByRole('textbox', { name: 'Support links' })
       await waitFor(() => expect(input).toBeEnabled())
       await user.type(input, 'www.ko-fi.com/badadib/')
@@ -502,7 +502,7 @@ describe('settings: Connections', () => {
     it('refuses a link to a site it does not know, and a duplicate', async () => {
       m.readLinks = vi.fn(async () => [{ site: { id: 'kofi', label: 'Ko-fi' }, url: 'https://ko-fi.com/badadib' }])
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       const input = await screen.findByRole('textbox', { name: 'Support links' })
       await waitFor(() => expect(input).toBeEnabled())
       await user.type(input, 'https://example.com/me{Enter}')
@@ -516,7 +516,7 @@ describe('settings: Connections', () => {
     it('removes a link from its named button', async () => {
       m.readLinks = vi.fn(async () => [{ site: { id: 'kofi', label: 'Ko-fi' }, url: 'https://ko-fi.com/badadib' }])
       const { user } = mount()
-      await openConnections(user, 'Support')
+      await openConnections(user)
       await user.click(await screen.findByRole('button', { name: 'Remove the Ko-fi link' }))
       expect(m.saveLinks).toHaveBeenCalledWith('listener', [])
       await waitFor(() => expect(screen.queryByRole('link', { name: 'ko-fi.com/badadib' })).not.toBeInTheDocument())

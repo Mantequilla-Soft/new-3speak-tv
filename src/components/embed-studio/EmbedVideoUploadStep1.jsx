@@ -14,7 +14,7 @@ import useCanImportVideos from '../../hooks/useCanImportVideos';
 import StepActions from './StepActions';
 import { StepProgress } from '../legacy-studio/StepProgress';
 import EmbedUploadProgressBar from './EmbedUploadProgressBar';
-import { Button, Icon, SettingRow, StatusPill, Toggle } from '../v2/ui';
+import { Button, Icon, StatusPill, Toggle } from '../v2/ui';
 import { SHORTS_MAX_DURATION_SEC, shortsMaxDurationLabel, cameraRecordEnabledFor, VIDEO_IMPORT_ENABLED, FEATURE_EDITOR, storiesEnabledFor } from '../../utils/config';
 import { isChromium } from '../../utils/browser';
 import { useTranslation, Trans } from 'react-i18next';
@@ -348,12 +348,13 @@ function EmbedVideoUploadStep1() {
           reaches followers as a notification, and the creator can still keep it. */}
       {fromStories && storiesEnabledFor(user) && (
         <div className={`v2-card upload-story-card${isStory ? ' is-on' : ''}`}>
-          <SettingRow
-            icon={<Icon name="history_toggle_off" size={20} className="upload-story-card__icon" />}
-            title={t("upload.select.asStory")}
-            sub={t("upload.select.asStoryHint")}
-            control={<Toggle checked={!!isStory} onChange={setIsStory} label={t("upload.select.asStory")} />}
-          />
+          {/* 35b: a cyan tone bar, the title and the switch, the hint under it. */}
+          <div className="upload-story-card__head">
+            <span className="upload-story-card__bar" aria-hidden="true" />
+            <b className="upload-story-card__title">{t("upload.select.asStory")}</b>
+            <Toggle checked={!!isStory} onChange={setIsStory} label={t("upload.select.asStory")} />
+          </div>
+          <p className="upload-story-card__hint">{t("upload.select.asStoryHint")}</p>
         </div>
       )}
 

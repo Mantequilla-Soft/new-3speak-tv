@@ -1445,7 +1445,11 @@ function CampaignPanel({
             <li key={c.id}>
               <div className="mkt-campaign-head">
                 <span className="mkt-campaign-name">{c.name}</span>
-                <span className="mkt-creative-status">{c.status.replace(/_/g, ' ')}</span>
+                {/* 47c: a tinted pill in words: cyan while it runs, accent while it
+                    waits on you, muted once it is over. */}
+                <span className={`mkt-flight-status is-${FLIGHT_TONE[c.status] || 'muted'}`}>
+                  {FLIGHT_STATUS.has(c.status) ? t(`ads.flightStatus.${c.status}`) : String(c.status || '').replace(/_/g, ' ')}
+                </span>
               </div>
               <div className="mkt-flight-body">
                 <FlightFacts c={c} />
@@ -1705,6 +1709,11 @@ function CampaignPanel({
 }
 
 // Values are i18n keys.
+// A flight's status as words and a tone (47c). Anything the checker adds later shows
+// as its raw name in muted.
+const FLIGHT_STATUS = new Set(['draft', 'awaiting_payment', 'scheduled', 'running', 'paused', 'complete', 'cancelled', 'rejected']);
+const FLIGHT_TONE = { running: 'cyan', scheduled: 'cyan', awaiting_payment: 'accent', draft: 'accent', rejected: 'accent' };
+
 const CREATIVE_STATUS = {
   pending: 'ads.creativeStatus.pending',
   review: 'ads.creativeStatus.review',
@@ -3036,13 +3045,9 @@ export default function Advertise({ openLoginModal }) {
                 invited a typo in the one field that decides who owns the application
                 and which wallet the booking is paid from. Stated plainly instead, so
                 nobody has to guess which account they are applying as. */}
-            <div className="mkt-field mkt-field-wide mkt-asaccount">
-              <span className="mkt-label">{t('ads.apply.applyingAs')}</span>
-              <strong>@{user}</strong>
-              <span className="mkt-hint">
-                {t('ads.apply.applyingAsHint')}
-              </span>
-            </div>
+            <p className="mkt-field-wide mkt-asaccount" title={t('ads.apply.applyingAsHint')}>
+              {t('ads.apply.applyingAs')} <strong>@{user}</strong>
+            </p>
 
             <div className="mkt-field">
               <label htmlFor="mkt-project">{t('ads.apply.productName')}</label>
@@ -3064,14 +3069,6 @@ export default function Advertise({ openLoginModal }) {
                 placeholder={t('ads.apply.contactPlaceholder')}
                 required
               />
-            </div>
-
-            <div className="mkt-field">
-              <label htmlFor="mkt-category">{t('ads.apply.category')}</label>
-              <select id="mkt-category" value={form.category} onChange={set('category')} required>
-                <option value="" disabled>{t('ads.attach.chooseOne')}</option>
-                {AD_CATEGORIES.map((c) => <option key={c.id} value={c.id}>{t(c.labelKey)}</option>)}
-              </select>
             </div>
 
             <div className="mkt-field">
@@ -3109,6 +3106,35 @@ export default function Advertise({ openLoginModal }) {
               </div>
             )}
 
+            {/* Categories as chips (47b), cyan when picked. The hidden input carries
+                `required`, so the form still refuses to send without one. */}
+            <div className="mkt-field mkt-field-wide">
+              <span className="mkt-label" id="mkt-category-label">{t('ads.apply.category')}</span>
+              <div className="mkt-chips" role="radiogroup" aria-labelledby="mkt-category-label">
+                {AD_CATEGORIES.map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={form.category === c.id}
+                    className={`mkt-chip${form.category === c.id ? ' selected' : ''}`}
+                    onClick={() => setForm((f) => ({ ...f, category: c.id }))}
+                  >
+                    {t(c.labelKey)}
+                  </button>
+                ))}
+              </div>
+              <input
+                id="mkt-category"
+                className="mkt-visually-hidden"
+                tabIndex={-1}
+                aria-hidden="true"
+                value={form.category}
+                onChange={() => {}}
+                required
+              />
+            </div>
+
             <div className="mkt-field mkt-field-wide">
               <label htmlFor="mkt-concept">{t('ads.apply.concept')}</label>
               <textarea
@@ -3143,24 +3169,19 @@ export default function Advertise({ openLoginModal }) {
                   knowing roughly what it costs. Which one is picked at booking. */}
               {pricing?.productionTiers?.length ? (
                 <>
-                  <table className="mkt-production-table">
-                    <thead>
-                      <tr>
-                        <th scope="col">{t('ads.production.tableKind')}</th>
-                        <th scope="col">{t('ads.production.tableDetails')}</th>
-                        <th scope="col">{t('ads.production.tablePrice')}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {pricing.productionTiers.map((tier) => (
-                        <tr key={tier.key}>
-                          <th scope="row">{t(`ads.production.tiers.${tier.key}`)}</th>
-                          <td>{t(`ads.production.tierDetails.${tier.key}`)}</td>
-                          <td>{tierPriceText(t, tier)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  {/* One row per kind (47b): name and what it is on the left, the
+                      price in mono on the right. */}
+                  <ul className="mkt-tier-rows" aria-label={t('ads.production.tableKind')}>
+                    {pricing.productionTiers.map((tier) => (
+                      <li key={tier.key} className="mkt-tier-row">
+                        <span className="mkt-tier-row__body">
+                          <strong>{t(`ads.production.tiers.${tier.key}`)}</strong>
+                          <span>{t(`ads.production.tierDetails.${tier.key}`)}</span>
+                        </span>
+                        <span className="mkt-tier-row__price">{tierPriceText(t, tier)}</span>
+                      </li>
+                    ))}
+                  </ul>
                   <span className="mkt-fine">{t('ads.production.rounds')}</span>
                 </>
               ) : null}
@@ -3376,7 +3397,6 @@ export default function Advertise({ openLoginModal }) {
               const state = n < wizAt ? ' done' : (n === wizAt ? ' current' : '');
               return (
                 <li key={label} className={`mkt-wiz-step${state}`} aria-current={n === wizStep ? 'step' : undefined}>
-                  <span className="mkt-wiz-num">{n < wizStep ? <Icon name="check" size={14} /> : n}</span>
                   <span>{t(label)}</span>
                 </li>
               );
@@ -3781,7 +3801,6 @@ export default function Advertise({ openLoginModal }) {
                           className={`mkt-wiz-step${state}`}
                           aria-current={n === bookStep ? 'step' : undefined}
                         >
-                          <span className="mkt-wiz-num">{n < bookStep ? <Icon name="check" size={14} /> : n}</span>
                           <span>{t(label)}</span>
                         </li>
                       );

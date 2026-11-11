@@ -23,7 +23,7 @@
     gap: 6px;
 
     // 21c: "Uploaded" 13/700 with the percentage in mono at the right, an 8px bar.
-    .embed-upload-progress-icon { display: none; }
+    .embed-upload-progress-icon, .embed-upload-progress-bar { display: none; }
     .embed-upload-progress-label { font-size: 13px; }
     .embed-upload-progress-method { display: none; }
     .v2-progress { height: 8px; border-radius: 4px; }
@@ -48,22 +48,44 @@
   &.is-error { color: var(--accent); }
 }
 
+// 35b: the 4 × 22 tone bar before the title (accent while it runs, cyan done).
+.embed-upload-progress-bar {
+  width: 4px;
+  height: 22px;
+  flex: none;
+  border-radius: var(--r-bar);
+  background: var(--accent);
+  &.is-done { background: var(--cyan); }
+}
+
 .embed-upload-progress-label {
   flex: 1;
   min-width: 0;
-  @include v2.text(label);
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
   color: var(--text);
   overflow-wrap: anywhere;
 
   &.is-error { color: var(--accent); }
 }
 
-.embed-upload-progress-method { font-family: var(--font-mono); }
+// RESUMABLE: mono 10/700 on surface-2.
+.embed-upload-progress-method {
+  flex: none;
+  padding: 3px 8px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  @include v2.mono(10, 700);
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.embed-upload-progress:not(.is-compact) .v2-progress { height: 10px; border-radius: 4px; }
 
 .embed-upload-progress-chunks {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 3px;
 
   span {
@@ -88,23 +110,26 @@
   color: var(--muted);
   line-height: 1.5;
   overflow-wrap: anywhere;
+
+  &.is-accent { color: var(--accent); }
 }
 
 .embed-upload-progress-waiting {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
-  padding: 10px 12px;
+  padding: 10px;
   border-radius: var(--r-md);
   background: var(--bg);
   @include v2.text(meta);
+  line-height: 1.4;
   color: var(--text);
   .material-symbols-rounded { color: var(--cyan); }
 }
 
+// 35b: a full-width 44 row, the label left and the close at the right.
 .embed-upload-progress .embed-upload-progress-cancel {
-  align-self: flex-start;
-  min-width: 180px;
+  align-self: stretch;
   gap: 18px;
 }
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button, Icon } from '../v2/ui';
+import { Icon } from '../v2/ui';
 import { useAppStore } from '../../lib/store';
 import { useSupportBlock } from '../../lib/supportBlockStore';
 import { creatorKey, isUploadBlocked, useCreatorSettings } from '../../utils/creatorSettings';
@@ -77,7 +77,7 @@ export default function UploadBlockNotice({ hidden = false }) {
   return (
     <section className="upload-block-notice" role="status">
       <div className="ubn-head">
-        <span className="ubn-icon"><Icon name="upload_off" size={28} /></span>
+        <span className="ubn-icon"><Icon name="block" size={28} /></span>
         <div className="ubn-head__text">
           <h2 className="ubn-title">{t('app.supportBlock.upload.title')}</h2>
           <p className="ubn-body">{t('app.uploadBlock.bannerBody')}</p>
@@ -88,13 +88,18 @@ export default function UploadBlockNotice({ hidden = false }) {
           <BlockNote note={note} />
         </div>
       )}
+      {/* 23d: the ways forward as tiles, icon on top and the label at the foot. */}
       <div className="ubn-actions">
-        <Button as="a" variant="secondary" size={44} icon="forum" trailing="open_in_new" className="ubn-btn is-next" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
-          Discord
-        </Button>
-        <Button as="a" variant="secondary" size={44} icon="send" trailing="open_in_new" className="ubn-btn is-next" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
-          Telegram
-        </Button>
+        <a className="ubn-tile" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+          <Icon name="forum" size={24} />
+          <b>Discord</b>
+          <Icon name="open_in_new" size={16} className="ubn-tile__out" />
+        </a>
+        <a className="ubn-tile" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
+          <Icon name="send" size={24} />
+          <b>Telegram</b>
+          <Icon name="open_in_new" size={16} className="ubn-tile__out" />
+        </a>
       </div>
     </section>
   );

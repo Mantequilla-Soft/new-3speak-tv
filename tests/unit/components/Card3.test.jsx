@@ -76,7 +76,11 @@ describe('a grid of video cards', () => {
     // The name alone, as 20a / 28b write it ("birdwatcher · 9.2K · 3w")
     expect(within(c).getByText('badadib')).toBeInTheDocument()
     expect(within(c).getByText('1.2K views')).toBeInTheDocument()
-    expect(within(c).getByText('$1.5')).toBeInTheDocument()
+    expect(within(c).getAllByText('$1.5')[0]).toBeInTheDocument()
+    // Hovering the payout explains it (28b): half to the author, half to the curators
+    const tip = within(c).getByRole('tooltip', { hidden: true })
+    expect(within(tip).getByText('Author').nextSibling).toHaveTextContent('$0.75')
+    expect(within(tip).getByText('Curators').nextSibling).toHaveTextContent('$0.75')
     expect(within(c).getByText('7 votes')).toBeInTheDocument()
     expect(within(c).getByText('2 comments')).toBeInTheDocument()
   })
@@ -84,7 +88,7 @@ describe('a grid of video cards', () => {
   it('prefers the live Hive numbers when the page has them', () => {
     mount({ videos: [video('badadib', 'lake-day')], getContentForVideo: () => ({ payout: 9.25, voters: 40, children: 12 }) })
     const c = card('Title lake-day')
-    expect(within(c).getByText('$9.25')).toBeInTheDocument()
+    expect(within(c).getAllByText('$9.25')[0]).toBeInTheDocument()
     expect(within(c).getByText('40 votes')).toBeInTheDocument()
     expect(within(c).getByText('12 comments')).toBeInTheDocument()
   })

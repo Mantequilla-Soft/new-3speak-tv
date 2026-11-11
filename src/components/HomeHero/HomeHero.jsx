@@ -95,7 +95,7 @@ export default function HomeHero({ video, pending = false }) {
   return (
     <section className="home-hero" aria-label={t("cards.badges.spotlight")}>
       <div className="home-hero__bg" aria-hidden="true">
-        {thumb && <img src={thumb} alt="" decoding="async" fetchpriority="high" />}
+        {thumb && <img src={thumb} alt="" decoding="async" fetchPriority="high" />}
       </div>
 
       <div className="home-hero__body">

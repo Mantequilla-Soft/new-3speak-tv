@@ -192,7 +192,7 @@
   padding-top: 16px;
 }
 
-.ep-story__caption { min-height: 72px; }
+.ep-story__caption.v2-input.is-area { min-height: 48px; padding: 12px; border-radius: var(--r-lg); border-color: var(--border); border-width: 1px; &:focus { border-color: var(--accent); } }
 
 .ep-story__reach {
   display: flex;
@@ -212,17 +212,39 @@
   padding: 12px;
   border-radius: var(--r-lg);
   background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  > span { display: flex; flex-direction: column; min-width: 0; }
   b { @include v2.text(label); font-size: 14px; color: var(--text); }
+  small { @include v2.text(meta-sm); color: var(--muted); }
   .material-symbols-rounded { color: var(--accent); }
+}
+
+// The week under the streak (35b): 36 tall cells, mono 10/700.
+.ep-story__week {
+  display: flex;
+  gap: 4px;
+
+  span {
+    flex: 1;
+    height: 36px;
+    border-radius: var(--r-md);
+    display: grid;
+    place-items: center;
+    @include v2.mono(10, 700);
+    background: var(--surface-2);
+    color: var(--muted);
+    &.is-done { background: var(--accent-tint-strong); color: var(--accent); }
+    &.is-today { background: var(--accent); color: var(--on-accent); }
+  }
 }
 
 // Publish settings (35d): a card with bg-filled rows, label left, value right.
 .ep-settings {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
   min-width: 0;
-  padding: 16px;
+  padding: 18px;
+  border-radius: var(--r-3xl);
 
   &__head {
     display: flex;
@@ -242,8 +264,12 @@
   &__title {
     flex: 1;
     @include v2.text(title);
+    font-size: 20px;
     color: var(--text);
   }
+
+  // 35d: "Edit" as 12/900 muted text.
+  .ep-settings__edit.v2-btn { font-size: 12px; font-weight: 900; color: var(--muted); padding: 0 8px; &:hover { color: var(--text); } }
 }
 
 .ep-setting {

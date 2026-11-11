@@ -11,14 +11,19 @@
 
   // The 24h story switch above the picker (35b: "Post as a 24h story").
   .upload-story-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin: 0 0 16px;
-    padding: 4px 16px;
+    padding: 18px;
     transition: border-color var(--t-base) var(--ease);
 
     &.is-on { border-color: color-mix(in srgb, var(--cyan) 40%, transparent); }
-    .v2-setting { border-bottom: 0; }
-    .v2-setting__icon { background: var(--cyan-tint); }
-    .upload-story-card__icon { color: var(--cyan); }
+
+    .upload-story-card__head { display: flex; align-items: center; gap: 10px; }
+    .upload-story-card__bar { width: 4px; height: 22px; flex: none; border-radius: var(--r-bar); background: var(--cyan); }
+    .upload-story-card__title { flex: 1; min-width: 0; font-size: 16px; font-weight: 700; }
+    .upload-story-card__hint { margin: 0; @include v2.text(meta); line-height: 1.5; color: var(--muted); }
   }
 
   .upload-step { width: 100%; }

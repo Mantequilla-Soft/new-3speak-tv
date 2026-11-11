@@ -1,12 +1,13 @@
 @use "../../styles/v2" as v2;
 @import "../LanguageSelector/translate-common";
 
-// The admin's block note (support popup + banner): a quoted well.
+// The admin's block note (support popup + banner), 44a: an accent-washed card
+// with "Message from the 3Speak team" as an accent eyebrow over the note.
 .block-note {
-  padding: 10px 12px;
+  padding: 12px;
   text-align: left;
-  border-radius: var(--r-md);
-  background: var(--bg);
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
   min-width: 0;
 }
 
@@ -14,7 +15,8 @@
   display: block;
   margin-bottom: 4px;
   @include v2.text(eyebrow);
-  color: var(--muted);
+  letter-spacing: .06em;
+  color: var(--accent);
 }
 
 .block-note-text {

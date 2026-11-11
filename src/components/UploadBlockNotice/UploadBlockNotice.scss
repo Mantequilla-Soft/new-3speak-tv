@@ -5,7 +5,7 @@
 // contact buttons.
 .upload-block-notice {
   margin: 12px 0 16px;
-  padding: 16px;
+  padding: 20px;
   border-radius: var(--r-3xl);
   background: color-mix(in srgb, var(--accent) 10%, var(--surface));
   border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
@@ -13,7 +13,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .ubn-head {
@@ -56,8 +56,30 @@
 
 .ubn-actions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 220px));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 
   @include v2.mobile { grid-template-columns: 1fr 1fr; }
+}
+
+// A way forward (23d): surface tile, the icon on top, the label at its foot.
+.ubn-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 88px;
+  padding: 12px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  transition: background var(--t-fast) var(--ease);
+
+  b { margin-top: auto; @include v2.text(body-sm); font-weight: 700; }
+  &:hover { background: color-mix(in srgb, var(--text) 5%, var(--surface)); color: var(--text); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .ubn-tile__out { position: absolute; top: 12px; right: 12px; color: var(--muted); }
 }
