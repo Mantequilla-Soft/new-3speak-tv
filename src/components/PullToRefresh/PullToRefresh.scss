@@ -1,30 +1,48 @@
-// Pull to refresh (design 29d): a round surface chip with the refresh glyph that
-// follows the finger down, turns cyan once far enough to let go, and spins (in
-// cyan, system work) while the feed reloads.
+// Pull to refresh (design 29d): a 44 rounded surface tile with the refresh
+// glyph over a muted line ("Release to refresh"), following the finger down.
+// The glyph turns red once far enough to let go, and spins in cyan (system
+// work) while the feed reloads.
 .ptr-indicator {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-bottom: 4px;
   overflow: hidden;
   transition: height var(--t-base) var(--ease), opacity var(--t-base) var(--ease);
-  color: var(--muted);
 
   &.ptr-refreshing { transition: none; }
 }
 
 .ptr-spinner {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-lg);
   display: grid;
   place-items: center;
   background: var(--surface);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-float);
-  transition: transform var(--t-base) var(--ease), color var(--t-base) var(--ease);
+  color: var(--muted);
+  transition: color var(--t-base) var(--ease);
 
+  &.ptr-ready { color: var(--accent); }
   &.ptr-active {
     color: var(--cyan);
     .material-symbols-rounded { animation: v2-spin 1s linear infinite; }
   }
+}
+
+.ptr-label {
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ptr-indicator { transition: none; }
+  .ptr-spinner.ptr-active .material-symbols-rounded { animation: none; }
 }

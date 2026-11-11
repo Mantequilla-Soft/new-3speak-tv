@@ -30,14 +30,14 @@ const BANNER_TONES = ['cyan', 'accent', 'ink', 'muted'];
 
 // Topic chips after the sorts (19d). Hive communities carry no topic, so a
 // topic narrows the loaded list to the ones whose title or description talks
-// about it. [tags.labels key, words that count]
+// about it. [communities.directory.topicNames key, words that count]
 const TOPICS = [
   ['nature', ['nature', 'wildlife', 'animal', 'outdoor', 'garden', 'plant', 'bird', 'hiking', 'photograph']],
   ['gaming', ['gam', 'esport', 'splinterlands', 'play']],
-  ['technology', ['tech', 'programming', 'code', 'coding', 'developer', 'software', 'linux', 'science']],
+  ['tech', ['tech', 'programming', 'code', 'coding', 'developer', 'software', 'linux', 'science']],
   ['food', ['food', 'cook', 'recipe', 'kitchen', 'eat', 'vegan', 'bak']],
   ['music', ['music', 'song', 'band', 'dj', 'beat', 'audio', 'podcast', 'sound']],
-  ['cryptocurrency', ['crypto', 'bitcoin', 'btc', 'finance', 'defi', 'token', 'trading', 'invest', 'leo']],
+  ['crypto', ['crypto', 'bitcoin', 'btc', 'finance', 'defi', 'token', 'trading', 'invest', 'leo']],
 ];
 const aboutTopic = (c, words) => {
   const hay = `${c?.title || ''} ${c?.name || ''} ${c?.about || ''}`.toLowerCase();
@@ -333,7 +333,7 @@ function CommunitiesRender({ mine: mineProp, setMine: setMineProp, joinedOnly = 
               aria-pressed={topic === id}
               onClick={() => setTopic((cur) => (cur === id ? '' : id))}
             >
-              {t(`tags.labels.${id}`)}
+              {t(`communities.directory.topicNames.${id}`)}
             </button>
           ))}
         </div>

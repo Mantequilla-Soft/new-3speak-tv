@@ -384,7 +384,8 @@ function Leaderboard() {
         <p className="lb-blurb">
           {activeTopic
             ? t('badges.leaderboard.subtitleTopic', { blurb: t(metric.blurbKey), topic: activeTopic })
-            : t('badges.leaderboard.subtitle', { blurb: t(metric.blurbKey) })}
+            // 45c: "Peak viewers: best concurrent viewers (a high-water mark, not a sum)."
+            : t('badges.leaderboard.explain', { label: t(metric.labelKey), blurb: t(`misc.leaderboard.blurbsInSentence.${metric.id}`) })}
         </p>
 
         {/* Hidden entirely for Tags, which isn't tracked per topic. */}

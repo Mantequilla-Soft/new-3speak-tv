@@ -34,7 +34,7 @@
   },
   "directory": {
     "title": "Badges",
-    "intro": "Badges are awards <b>given to you by others</b> on Hive, for events, contributions and milestones. You cannot join one: someone awards it. Open a badge to watch what its recipients publish here.",
+    "intro": "Badges are awards <b>given to you by others</b> on Hive, for events, contributions and milestones. You cannot join one: someone awards it.",
     "searchPlaceholder": "Search badges...",
     "sort": {
       "recipients": "Recipients",
@@ -86,8 +86,9 @@
     "unclaimed": "Unclaimed",
     "noActivity": "No activity in this window yet",
     "otherTopics": "Other",
-    "title": "Rankings",
+    "title": "Leaderboard",
     "subtitle": "{{blurb}}: top creators on 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
     "subtitleTopic": "{{blurb}}: top creators in {{topic}}.",
     "allTopics": "All topics",
     "finding": "Finding @{{user}} on this board…",

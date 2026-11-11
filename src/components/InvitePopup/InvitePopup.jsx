@@ -66,11 +66,12 @@ export default function InvitePopup({ openLoginModal }) {
   }
   const showSignUp = !incubationHandle || invite.fastTrack;
 
-  // 44b: the inviter's face, "@alice invited you to 3Speak", what signing up
-  // gets you, then create the account (primary) or just look around.
+  // 44b: the inviter's face (a 52 rounded square), "@alice invited you to
+  // 3Speak", what signing up gets you, then create the account (primary) or
+  // just look around, both 40 tall with the label flush left.
   const plainTitle = t('app.invite.title', { referrer: invite.referrer }).replace(/<\/?who>/g, '');
   return (
-    <Dialog open onClose={close} title={plainTitle} head={false} width={440} className="invite-pop">
+    <Dialog open onClose={close} title={plainTitle} head={false} width={400} className="invite-pop">
       <div className="invite-pop__head">
         <HiveAvatar username={invite.referrer} size="medium" className="invite-pop__avatar" />
         <IconButton icon="close" label={t('common.actions.close')} size={32} variant="ghost" round onClick={close} />
@@ -78,15 +79,17 @@ export default function InvitePopup({ openLoginModal }) {
       <h2 className="invite-pop__title">
         <Trans i18nKey="app.invite.title" values={{ referrer: invite.referrer }} components={{ who: <span className="invite-pop__who" /> }} />
       </h2>
-      <p className={incubationHandle ? 'v2-well invite-pop__note' : 'invite-pop__text'}>{text}</p>
+      {!incubationHandle && <p className="invite-pop__text">{text}</p>}
       <div className="invite-pop__actions">
         {showSignUp && (
-          <Button variant="primary" block next onClick={signUp}>
+          <Button variant="primary" size={40} block onClick={signUp}>
             {incubationHandle ? t('app.invite.createHiveAccount') : invite.fastTrack ? t('app.invite.createAccount') : t('common.actions.signUp')}
           </Button>
         )}
-        <Button variant="secondary" block onClick={close}>{t('app.invite.lookAround')}</Button>
+        <Button variant="secondary" size={40} block onClick={close}>{t('app.invite.lookAround')}</Button>
       </div>
+      {/* Already warming up: the note sits under the buttons (44b) */}
+      {incubationHandle && <p className="v2-well invite-pop__note">{text}</p>}
     </Dialog>
   );
 }

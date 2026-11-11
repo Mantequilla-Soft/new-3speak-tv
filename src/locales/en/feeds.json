@@ -92,9 +92,10 @@
     "nextVideoKey": "Next video (→)",
     "zap": "Zap",
     "findingNext": "Finding the next one…",
-    "stop": "Stop surfing",
+    "stop": "Stop",
     "stopTitle": "Stop surfing (keeps this video playing)",
-    "guide": "Channel guide"
+    "guide": "Channel guide",
+    "guideShort": "Guide"
   },
   "discover": {
     "searchPlaceholder": "Search videos, shorts, audio, communities...",

@@ -194,6 +194,9 @@
         font-size: 16px;
         font-weight: 700;
         color-scheme: inherit;
+
+        // The well is the control (17d): no second clock icon inside it.
+        &::-webkit-calendar-picker-indicator { display: none; }
       }
     }
 

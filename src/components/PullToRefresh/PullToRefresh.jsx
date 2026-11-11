@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Icon } from '../v2/Icon';
 import './PullToRefresh.scss';
 
@@ -6,6 +7,7 @@ const THRESHOLD = 70;
 const MAX_PULL = 120;
 
 const PullToRefresh = ({ onRefresh, children }) => {
+  const { t } = useTranslation();
   const [pullDistance, setPullDistance] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const startY = useRef(null);
@@ -56,13 +58,18 @@ const PullToRefresh = ({ onRefresh, children }) => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
+      {/* 29d: a 44 rounded tile with the refresh glyph over "Release to refresh" */}
       <div
         className={`ptr-indicator ${refreshing ? 'ptr-refreshing' : ''}`}
         style={{ height: pullDistance > 10 ? pullDistance : 0, opacity: pullDistance > 10 ? Math.min(pullDistance / THRESHOLD, 1) : 0 }}
+        aria-live="polite"
       >
-        <div className={`ptr-spinner ${pullDistance >= THRESHOLD || refreshing ? 'ptr-active' : ''}`}>
-          <Icon name={refreshing ? 'progress_activity' : 'refresh'} size={22} />
+        <div className={`ptr-spinner ${pullDistance >= THRESHOLD && !refreshing ? 'ptr-ready' : ''} ${refreshing ? 'ptr-active' : ''}`}>
+          <Icon name={refreshing ? 'progress_activity' : 'refresh'} size={24} />
         </div>
+        <span className="ptr-label">
+          {refreshing ? t('misc.pullToRefresh.refreshing') : pullDistance >= THRESHOLD ? t('misc.pullToRefresh.release') : t('misc.pullToRefresh.pull')}
+        </span>
       </div>
       {children}
     </div>

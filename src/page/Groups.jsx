@@ -95,7 +95,7 @@ export default function Groups() {
           aria-disabled={locked ? true : undefined}
           title={locked ? lockedText : undefined}
         >
-          {badgesTab ? t('badges.directory.create') : t('communities.directory.new')}
+          {badgesTab ? t('badges.directory.create') : t('communities.directory.create')}
         </Button>
       </header>
       {locked && (

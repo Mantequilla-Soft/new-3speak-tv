@@ -44,7 +44,7 @@ describe('the Channel Surfing remote', () => {
     expect(await within(remote).findByText('The next clip')).toBeInTheDocument()
     expect(within(remote).getByRole('button', { name: 'Previous channel' })).toBeInTheDocument()
     expect(within(remote).getByRole('button', { name: 'Next channel' })).toBeInTheDocument()
-    expect(within(remote).getByRole('button', { name: 'Stop surfing' })).toBeInTheDocument()
+    expect(within(remote).getByRole('button', { name: 'Stop' })).toBeInTheDocument()
   })
 
   it('Zap plays the video that is up next, staying on the channel', async () => {
@@ -64,7 +64,7 @@ describe('the Channel Surfing remote', () => {
 
   it('Stop keeps this video and drops surf mode', async () => {
     const { user } = mount()
-    await user.click(screen.getByRole('button', { name: 'Stop surfing' }))
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
     expect(location()).toBe('/@badadib/this-clip')
   })
 

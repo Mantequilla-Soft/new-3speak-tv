@@ -362,7 +362,7 @@ const CreateCommunity = ({ isOpen, close, kind: initialKind = 'community'}) => {
     toast.success(t('communities.create.keysDownloaded'));
   };
  
-  const createTitle = isBadge ? t('communities.create.badge.title') : t('communities.directory.new');
+  const createTitle = isBadge ? t('communities.create.badge.title') : t('communities.create.community.title');
   const headerTitle = step === 2 ? t('communities.create.saveKeysTitle') : step === 3 ? t('communities.create.signTitle') : createTitle;
 
   const spin = <Icon name="progress_activity" size={16} className="v2-spin" />;

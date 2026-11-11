@@ -156,44 +156,47 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
 
   return (
     <section className={cx('surf-bar', tuning && 'is-tuning')} aria-label={t('feeds.surf.remoteAria')}>
-      {/* The channel display opens the guide. */}
-      <button
-        type="button"
-        className="surf-bar__display"
-        onClick={() => setGuideOpen(true)}
-        title={t('feeds.surf.openGuide')}
-        aria-haspopup="dialog"
-      >
-        {/* Keyed on the video, so the static burst replays on every flip. */}
-        <span key={tuneKey} className="surf-bar__static" aria-hidden="true" />
-        <span className="surf-bar__ch">{t('feeds.surf.ch', { number: channelNumber(channel) })}</span>
-        <span className="surf-bar__text">
-          <span className="surf-bar__name">
-            {channelTitle(channel)}
+      {/* The remote (34a). Top: the channel display (opens the guide) and what
+          Zap plays next. Under it the keys, equal tiles: CH -, CH +, Zap (the
+          one accent fill), the guide and Stop. */}
+      <div className="surf-bar__top">
+        <button
+          type="button"
+          className="surf-bar__display"
+          onClick={() => setGuideOpen(true)}
+          title={t('feeds.surf.openGuide')}
+          aria-haspopup="dialog"
+        >
+          {/* Keyed on the video, so the static burst replays on every flip. */}
+          <span key={tuneKey} className="surf-bar__static" aria-hidden="true" />
+          <span className="surf-bar__ch">{t('feeds.surf.ch', { number: channelNumber(channel) })}</span>
+          <span className="surf-bar__text">
+            <span className="surf-bar__name">
+              {channelTitle(channel)}
+            </span>
+            <span className="surf-bar__live"><i aria-hidden="true" /> {tuning ? t('feeds.surf.tuningShort') : t('feeds.surf.onAir')}</span>
           </span>
-          <span className="surf-bar__live"><i aria-hidden="true" /> {tuning ? t('feeds.surf.tuningShort') : t('feeds.surf.onAir')}</span>
-        </span>
-        <Icon name="list" size={20} className="surf-bar__guide-icon" />
-      </button>
+        </button>
 
-      {/* Zap: the one primary action here. Up next rides along on wide screens. */}
-      <button type="button" className="surf-bar__flip" onClick={flip} disabled={tuning} title={t('feeds.surf.nextVideoKey')}>
-        <span className="surf-bar__flip-thumb" aria-hidden="true">
-          {upNext ? (
-            <img src={fixVideoThumbnail(upNext)} alt="" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
-          ) : <span className="surf-bar__static surf-bar__static--loop" />}
-        </span>
-        <span className="surf-bar__flip-text">
-          <span className="surf-bar__flip-label">{tuning ? t('feeds.surf.tuning') : t('feeds.surf.zap')}</span>
-          <span className="surf-bar__flip-next">{upNext?.title || t('feeds.surf.findingNext')}</span>
-        </span>
-        <Icon name="bolt" size={22} fill className="surf-bar__flip-icon" />
-      </button>
+        <div className="surf-bar__next" aria-live="polite">
+          <span className="surf-bar__flip-thumb" aria-hidden="true">
+            {upNext ? (
+              <img src={fixVideoThumbnail(upNext)} alt="" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
+            ) : <span className="surf-bar__static surf-bar__static--loop" />}
+          </span>
+          <span className="surf-bar__flip-text">
+            <span className="surf-bar__flip-label">{t('feeds.surf.nextVideo')}</span>
+            <span className="surf-bar__flip-next">{upNext?.title || t('feeds.surf.findingNext')}</span>
+          </span>
+        </div>
+      </div>
 
       <div className="surf-bar__docks" role="group" aria-label={t('feeds.surf.changeChannel')}>
         <DockTile
           icon="skip_previous"
+          fill
           label={`${t('feeds.surf.chLabel')} −`}
+          className="surf-key"
           onClick={() => changeChannel(prev.slug)}
           disabled={tuning}
           aria-label={t('feeds.surf.prevChannel')}
@@ -201,18 +204,40 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
         />
         <DockTile
           icon="skip_next"
+          fill
           label={`${t('feeds.surf.chLabel')} +`}
+          className="surf-key"
           onClick={() => changeChannel(next.slug)}
           disabled={tuning}
           aria-label={t('feeds.surf.nextChannel')}
           title={t('feeds.surf.channelHintKey', { number: chNext, title: channelTitle(next), key: '↑' })}
         />
+        {/* Zap: the one primary action here. */}
+        <DockTile
+          icon="bolt"
+          fill
+          label={tuning ? t('feeds.surf.tuningShort') : t('feeds.surf.zap')}
+          className="surf-key surf-key--zap surf-bar__flip"
+          onClick={flip}
+          disabled={tuning}
+          title={t('feeds.surf.nextVideoKey')}
+        />
+        <DockTile
+          icon="list"
+          fill
+          label={t('feeds.surf.guideShort')}
+          className="surf-key"
+          onClick={() => setGuideOpen(true)}
+          aria-label={t('feeds.surf.openGuide')}
+          aria-haspopup="dialog"
+        />
         {/* Last in the row on every screen size, so it never sits between the
             channel buttons and Zap. */}
         <DockTile
           icon="stop"
+          fill
           label={t('feeds.surf.stop')}
-          className="surf-bar__off"
+          className="surf-key surf-bar__off"
           onClick={stopSurfing}
           aria-label={t('feeds.surf.stop')}
           title={t('feeds.surf.stopTitle')}

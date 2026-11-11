@@ -98,7 +98,7 @@
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "Sorry! Page not found",
+    "title": "Sorry, page not found",
     "message": "Unfortunately, the page you are looking for is not available.",
     "goHome": "Go to home page"
   }

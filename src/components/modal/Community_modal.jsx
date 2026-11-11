@@ -295,7 +295,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
   return (
     <DialogShell
       onClose={close}
-      title={t('communities.picker.postTo')}
+      title={t('communities.picker.title')}
       side
       tone="cyan"
       width={420}

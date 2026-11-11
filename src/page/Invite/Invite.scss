@@ -3,24 +3,60 @@
 // The referrer's screen (/invite-links, 42c) and the invite popup
 // (components/InvitePopup, 44b).
 
-// ── /invite-links ───────────────────────────────────────────────────────────
+// ── /invite-links (42c) ─────────────────────────────────────────────────────
+// The links on the left; paused, used-up and "no links yet" in a 380 column
+// on the right when there are any.
 .invite-page {
-  max-width: 760px;
+  width: 100%;
+  max-width: 860px;
   margin: 0 auto;
   padding: 0 0 24px;   // the app frame already gives the page padding
-  display: flex;
-  flex-direction: column;
-  gap: 12px;   // the app frame already gives the 16px gutter
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "head" "main";
+  gap: 10px 16px;
+  align-items: start;
+
+  &.has-aside {
+    max-width: var(--content-max);
+    grid-template-columns: minmax(0, 1fr) 380px;
+    grid-template-areas: "head aside" "main aside";
+    grid-template-rows: auto 1fr;
+  }
+
+  @include v2.below-wide {
+    &.has-aside {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "head" "aside" "main";
+      grid-template-rows: none;
+    }
+  }
 }
 
 .invite-header {
+  grid-area: head;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 4px;
+  gap: 10px;
 
-  h1 { margin: 0; @include v2.text(heading); color: var(--text); }
-  p { margin: 0; max-width: 620px; font-size: 13px; line-height: 1.45; color: var(--muted); }
+  h1 { margin: 0; font-size: 24px; font-weight: 700; line-height: 1.15; color: var(--text); }
+  p { margin: 0; max-width: 620px; font-size: 12px; line-height: 1.45; color: var(--muted); }
+}
+
+.invite-main {
+  grid-area: main;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.invite-aside {
+  grid-area: aside;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .invite-card {
@@ -28,11 +64,11 @@
   flex-direction: column;
   gap: 10px;
 
+  // A link: a surface panel, no outline (42c)
   &.link {
     padding: 14px;
     border-radius: var(--r-xl);
     background: var(--surface);
-    border: 1px solid var(--border);
   }
 }
 
@@ -48,26 +84,49 @@
 .invite-muted {
   margin: 0;
   font-size: 11px;
-  line-height: 1.45;
+  line-height: 1.4;
   color: var(--muted);
-  a { color: var(--cyan); }
+  a { color: var(--cyan); text-decoration: none; &:hover { text-decoration: underline; } }
 }
-.invite-dash { font-size: 12px; }
+.invite-dash { line-height: 1.45; }
 
 .invite-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
-// Paused by you / paused by 3Speak / used up for this month
+// Paused by you / paused by 3Speak / used up for this month: a row card
 .invite-status {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
-  border-radius: var(--r-md);
-  background: var(--bg);
-  font-size: 13px;
-  b { font-weight: 700; color: var(--text); }
+  padding: 12px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  .material-symbols-rounded { flex: none; }
   &.is-muted .material-symbols-rounded { color: var(--muted); }
-  &.is-accent { background: var(--accent-wash); .material-symbols-rounded { color: var(--accent); } }
+  &.is-accent .material-symbols-rounded { color: var(--accent); }
+}
+.invite-status__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  b { font-size: 13px; font-weight: 700; color: var(--text); }
+}
+.invite-status__link {
+  @include v2.mono(11, 500);
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// No invite links yet
+.invite-none {
+  padding: 14px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  b { font-size: 13px; font-weight: 700; color: var(--text); }
+  p { margin: 2px 0 0; font-size: 11px; line-height: 1.45; color: var(--muted); }
 }
 
 .invite-link-row {
@@ -88,12 +147,35 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-  .v2-stat { border-radius: var(--r-lg); padding: 10px; }
-  .v2-stat b { margin-top: 0; }
 }
 
-.invite-toggle { align-self: flex-start; margin-left: -10px; }
+.invite-stat {
+  min-width: 0;
+  padding: 10px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  b { display: block; @include v2.mono(18, 900); line-height: 1.3; color: var(--text); }
+  span { display: block; font-size: 10px; line-height: 1.35; color: var(--muted); }
+}
+
+// "WHO JOINED · Hide people": the eyebrow line is the switch.
+.invite-who {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 4px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+  .v2-eyebrow { color: var(--muted); }
+  &:hover .v2-eyebrow, &:hover { color: var(--text); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+}
+.invite-who__hide { font-size: 10px; font-weight: 700; letter-spacing: .04em; }
 
 // Who joined: a fixed-height list that scrolls inside.
 .invite-people {
@@ -102,7 +184,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   max-height: 280px;
   @include v2.scroll-y;
 
@@ -111,7 +193,7 @@
     align-items: center;
     gap: 8px;
     min-width: 0;
-    min-height: 28px;
+    min-height: 24px;
     font-size: 12px;
   }
 
@@ -121,10 +203,10 @@
     display: inline-flex;
     width: 24px;
     height: 24px;
-    border-radius: 50%;
+    border-radius: var(--r-sm);
     overflow: hidden;
-    img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; display: block; }
-    &.empty { background: var(--avatar); }
+    background: var(--avatar);
+    img { width: 24px; height: 24px; border-radius: var(--r-sm); object-fit: cover; display: block; }
   }
 
   .invite-people-name {
@@ -135,12 +217,25 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    &.is-pending { color: var(--muted); }
   }
-  .invite-people-date { flex: none; font-size: 11px; color: var(--muted); }
-  .invite-state { flex: none; }
+
+  // The state: a small lowercase pill in a 16% tint
+  .invite-state {
+    flex: none;
+    padding: 2px 8px;
+    border-radius: var(--r-sm);
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1.4;
+    &.is-cyan { background: var(--cyan-tint-strong); color: var(--cyan); }
+    &.is-muted { background: color-mix(in srgb, var(--muted) 16%, transparent); color: var(--muted); }
+  }
 }
 
 // ── The invite popup (44b): the shared Dialog, a bottom sheet on phones ────
+.invite-pop .v2-dialog__body { gap: 8px; padding-bottom: 20px; }
+
 .invite-pop__head {
   display: flex;
   align-items: flex-start;
@@ -154,12 +249,18 @@
   flex: none;
   display: inline-flex;
   position: relative;
-  img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; display: block; }
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--avatar);
+  img { width: 52px; height: 52px; border-radius: var(--r-lg); object-fit: cover; display: block; }
 }
 
 .invite-pop__title {
   margin: 0;
-  @include v2.text(title);
+  font-size: 16px;
+  font-weight: 700;
   line-height: 1.25;
   color: var(--text);
 }
@@ -168,14 +269,17 @@
 .invite-pop__text {
   margin: 0;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.45;
   color: var(--muted);
   strong { color: var(--text); }
 }
+// Already warming up: a note in a well
 .invite-pop__note {
   margin: 0;
+  padding: 10px;
+  border-radius: var(--r-md);
   font-size: 12px;
-  line-height: 1.45;
+  line-height: 1.4;
   color: var(--muted);
   strong { color: var(--text); }
 }
@@ -184,5 +288,4 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 4px;
 }

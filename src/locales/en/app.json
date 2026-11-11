@@ -5,11 +5,11 @@
   "supportBlock": {
     "banned": {
       "title": "Your account is banned",
-      "body": "Your 3Speak account has been banned, so you can’t be logged in. If you think this is a mistake, please contact 3Speak support."
+      "body": "Your 3Speak account has been banned, so you can’t be logged in. If you think this is a mistake, contact 3Speak support."
     },
     "upload": {
       "title": "Uploading is disabled for your account",
-      "body": "Your 3Speak account isn’t allowed to upload right now. If you think this is a mistake, please contact 3Speak support."
+      "body": "Your account isn’t allowed to upload right now. If you think this is a mistake, contact 3Speak support."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "We’re having some infrastructure issues",
-    "body": "Our team is on it and working to bring 3Speak back right now. Join our Discord to reach us and get live updates — thanks for your patience.",
+    "body": "Our team is working to bring 3Speak back right now. Join our Discord for live updates.",
     "joinDiscord": "Join our Discord"
   },
   "changelog": {
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Post videos",
-        "text": "Upload long form video that stays yours, on a chain nobody can quietly delete it from."
+        "text": "Long form video that stays yours"
       },
       "filmShorts": {
         "title": "Film shorts",
-        "text": "Something quick, vertical and easy to share. Great for finding your first viewers."
+        "text": "Quick, vertical, easy to share"
       },
       "goLive": {
         "title": "Go live",
-        "text": "Stream to your people, bring guests on stage, and keep the recording afterwards."
+        "text": "Bring guests on stage, keep the recording"
       },
       "buildCommunity": {
         "title": "Build a community",
-        "text": "Start a space around what you care about, or join one that is already buzzing."
+        "text": "Start a space or join one"
       },
       "makeFriends": {
         "title": "Make real friends",
-        "text": "Comment, chat and collaborate with actual humans who show up for each other."
+        "text": "Comment, chat and collaborate"
       },
       "getInspired": {
         "title": "Get inspired, get involved",
-        "text": "Discover creators, support the ones you love, and earn while you are at it."
+        "text": "Support creators and earn too"
       }
     },
     "advertiserThings": {
@@ -196,7 +196,7 @@
     "uploadBanner": "Upload a profile banner",
     "changeBanner": "Change banner",
     "addBanner": "Add a banner",
-    "bannerHint": "Best at <b>2800 × 684</b> px (or any 4:1 image). Keep the important part centred: the sides crop on narrow screens and your name sits over the lower left.",
+    "bannerHint": "Keep the important part centred: the sides crop on narrow screens and your name sits over the lower left.",
     "uploadPicture": "Upload a profile picture",
     "pictureLabel": "Profile picture",
     "pictureHint": "A face or a logo works best. Square, 400 × 400 px or larger. Up to 8MB.",
@@ -204,7 +204,7 @@
     "namePlaceholderUser": "How should we call you? (@{{username}})",
     "namePlaceholder": "How should we call you?",
     "shortBio": "Short bio",
-    "bioPlaceholder": "What do you make, and what should people expect from you?",
+    "bioPlaceholder": "What do you make, and what should people expect?",
     "location": "Location",
     "optional": "optional",
     "locationPlaceholder": "Where in the world are you?"

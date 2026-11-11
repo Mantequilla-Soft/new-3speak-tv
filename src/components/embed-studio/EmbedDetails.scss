@@ -80,9 +80,11 @@
   flex-direction: column;
   gap: 14px;
 
+  // Phones: the preview leads the form, the settings follow it.
   @include v2.mobile {
-    position: static;
-    order: -1;
+    display: contents;
+    > .details-preview { order: -1; }
+    > .details-settings { order: 1; }
   }
 }
 
@@ -236,7 +238,7 @@
 
 .details-tags {
   .details-tags__head { justify-content: space-between; }
-  .tag-count { @include v2.mono(11, 700); color: var(--muted); &.is-full { color: var(--accent); } }
+  .tag-count { @include v2.mono(11, 700); letter-spacing: 0; text-transform: none; color: var(--muted); &.is-full { color: var(--accent); } }
 }
 
 // ── The publish option tiles (35c) ───────────────────────────────────────────

@@ -672,7 +672,7 @@ function EmbedDetails() {
                   {!fromStories ? t('upload.details.tagCountRequired', { n: allTags.length }) : t('upload.details.tagCount', { n: allTags.length })}
                 </span>
               </label>
-              <input id="ed-tags" type="text" value={tagsInputValue} onChange={handleTagChange} />
+              <input id="ed-tags" type="text" value={tagsInputValue} onChange={handleTagChange} autoFocus />
               <div className="wrap">
                 <Trans i18nKey="upload.details.tagsSeparator" components={{ text: <span />, space: <span /> }} />
               </div>

@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 days",
-      "30d": "30 days",
+      "7d": "Week",
+      "30d": "Month",
       "365d": "Year",
       "all": "All time"
     },
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "This page didn't load",
-    "body": "Part of the app failed to download. That usually means a new version was released while this tab was open. Reloading picks it up.",
+    "body": "Part of the app failed to download. Usually a new version was released while this tab was open. Reloading picks it up.",
     "brokenTitle": "Something went wrong on this page",
-    "brokenBody": "Part of this page ran into an error. Reloading usually fixes it, and the details below help us find the cause.",
+    "brokenBody": "Part of this page ran into an error. Reloading usually fixes it, and the details help us find the cause.",
     "reload": "Reload",
     "goHome": "Go home",
     "details": "Details"
@@ -219,8 +219,8 @@
   },
   "hiveAuth": {
     "waiting": "Waiting for approval on HiveAuth...",
-    "title": "HiveAuth Approval Required",
-    "hint": "Please check your HiveAuth app to approve this transaction"
+    "title": "HiveAuth approval required",
+    "hint": "Check your HiveAuth app to approve this transaction."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain did not sign the transaction",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod started, but the Hive announcement could not be posted."
   },
   "appUpdate": {
-    "updating": "Updating to the latest version ({{version}})…",
+    "updating": "Updating to {{version}}…",
     "reloadingForUpload": "Reloading so your upload runs on the newest build."
   },
   "auth": {
@@ -311,5 +311,10 @@
     "noSupporters": "No boosts yet",
     "full": "Full",
     "loginToChat": "Log in to chat"
+  },
+  "pullToRefresh": {
+    "pull": "Pull to refresh",
+    "release": "Release to refresh",
+    "refreshing": "Refreshing…"
   }
 }

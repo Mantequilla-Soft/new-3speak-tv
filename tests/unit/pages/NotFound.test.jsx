@@ -12,7 +12,7 @@ describe('the page-not-found page', () => {
   it('says the page does not exist', () => {
     renderWithProviders(<NotFound />, { route: '/no/such/page' })
     expect(screen.getByRole('img', { name: '404' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Sorry! Page not found' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Sorry, page not found' })).toBeInTheDocument()
     expect(screen.getByText('Unfortunately, the page you are looking for is not available.')).toBeInTheDocument()
   })
 
