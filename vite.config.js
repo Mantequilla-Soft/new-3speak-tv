@@ -271,7 +271,7 @@ export default defineConfig({
   },
 
   server: {
-    allowedHosts: ["3speak.okinoko.io", "preview.3speak.tv"],
+    allowedHosts: ["3speak.okinoko.io", "preview.3speak.tv", "facelift-3speak.okinoko.io"],
     // preview.3speak.tv is a PUBLIC dev server, so scanners probe it for secrets
     // (.env, .git/config, .htaccess …). Vite's own deny list already covers most
     // of those, but `.htaccess` sits inside the project root with no extension it

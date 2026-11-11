@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&display=block"><style>*,*::before,*::after{box-sizing:border-box}body{margin:0;background:#e9e8e6;font-family:Roboto,Arial,sans-serif}a{color:#e53935;text-decoration:none}a:hover{color:#c62828}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.ms{font-family:'Material Symbols Rounded';font-weight:normal;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;white-space:nowrap;font-feature-settings:'liga';-webkit-font-smoothing:antialiased;display:inline-block}</style></helmet>
+<section style="padding:40px 44px 32px" id="t7">
+<div style="display:flex;align-items:baseline;gap:10px;margin:0 0 12px"><a class="dv-tid" href="#t7">07</a><span style="font:700 16px system-ui,sans-serif;color:#1a1a1a">Dialogs v2: a 3Speak dialog style, less like YouTube</span></div>
+<div style="max-width:1000px;margin:0 0 28px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;font-size:13px;line-height:1.5;color:#2d2d2d">
+<div><b style="color:#111">Side sheets, not pop-ups.</b> On desktop, dialogs slide in from the right as a full-height sheet with the page still visible and blurred. On mobile they're bottom sheets.</div>
+<div><b style="color:#111">Context first.</b> Every sheet opens with a card showing what you're acting on (the video, creator or amount), so you never lose your place.</div>
+<div><b style="color:#111">Tiles, not lists.</b> Choices are big icon tiles in a grid instead of rows of radio buttons and checkboxes.</div>
+<div><b style="color:#111">Hive-native.</b> Share leads with Reblog and Snap, and external apps come second. The main action is a full-width bar pinned to the bottom.</div>
+</div>
+<div ref="{{ rootRef }}" style="display:grid;grid-template-columns:repeat(2,640px);gap:32px">
+
+<div id="07a" style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;align-items:baseline;gap:8px;font:12px system-ui,sans-serif;color:rgba(0,0,0,.6)"><a class="dv-oid" href="#07a">07a</a>Save to playlist: playlist tiles with covers</div>
+<div style="height:720px;position:relative;border-radius:12px;overflow:hidden;background:var(--bg,#0a0a0a);color:var(--text,#f1f1f1)">
+<div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,var(--thumbA,#1c1c1c) 0 16px,var(--thumbB,#232323) 16px 32px);filter:blur(2px);opacity:.6"></div><div style="position:absolute;inset:0;background:color-mix(in srgb,var(--bg,#0a0a0a) 55%,transparent);backdrop-filter:blur(6px)"></div>
+<div style="position:absolute;right:0;top:0;bottom:0;width:430px;background:var(--surface,#161616);border-left:1px solid var(--border,#262626);border-radius:28px 0 0 28px;box-shadow:-30px 0 80px rgba(0,0,0,.45);display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:10px;padding:22px 22px 0"><span style="width:4px;height:22px;border-radius:2px;background:var(--cyan,#22d3ee)"></span><div style="font-size:20px;font-weight:900;letter-spacing:-.01em;flex:1">Save</div><span style="width:36px;height:36px;border-radius:50%;background:var(--surface2,#1f1f1f);display:grid;place-items:center"><span class="ms" style="font-size:20px">close</span></span></div>
+<div style="margin:16px 22px 0;display:flex;gap:12px;align-items:center;padding:10px;border-radius:20px;background:var(--bg,#0a0a0a);border:1px solid var(--border,#262626)"><div style="width:96px;aspect-ratio:16/9;border-radius:12px;background:repeating-linear-gradient(135deg,var(--thumbA,#1c1c1c) 0 6px,var(--thumbB,#232323) 6px 12px);flex:none"></div><div style="min-width:0"><div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Hidden spot at a forest stream</div><div style="font-size:12px;color:var(--muted,#a3a3a3)">birdwatcher · 3:12</div></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px 22px;flex:1;min-height:0;overflow:hidden;align-content:start">
+<sc-for list="{{ lists }}" as="l" hint-placeholder-count="5"><div style="border-radius:20px;border:2px solid {{ l.b }};background:{{ l.bg }};padding:8px;position:relative"><div style="aspect-ratio:2/1;border-radius:12px;background:{{ l.cover }};display:grid;place-items:center"><span class="ms" style="font-size:28px;color:rgba(255,255,255,.85)">{{ l.icon }}</span></div><div style="padding:8px 4px 2px;font-size:14px;font-weight:700">{{ l.t }}</div><div style="padding:0 4px 4px;font-size:12px;color:var(--muted,#a3a3a3);display:flex;align-items:center;gap:4px"><span class="ms" style="font-size:14px">{{ l.lock }}</span>{{ l.n }}</div><sc-if value="{{ l.on }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:14px;top:14px;width:28px;height:28px;border-radius:50%;background:var(--cyan,#22d3ee);color:var(--bg,#0a0a0a);display:grid;place-items:center"><span class="ms" style="font-size:18px">check</span></span></sc-if></div></sc-for>
+<div style="border-radius:20px;border:2px dashed var(--border,#262626);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:700;color:var(--muted,#a3a3a3);min-height:120px"><span class="ms" style="font-size:28px">add</span>New playlist</div>
+</div>
+<div style="padding:16px 22px 22px;border-top:1px solid var(--border,#262626)"><div style="font-size:12px;color:var(--cyan,#22d3ee);margin-bottom:10px">Saved to 2 playlists</div><span style="height:52px;border-radius:16px;background:var(--text,#f1f1f1);color:var(--bg,#0a0a0a);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-weight:700">Done<span class="ms" style="font-size:24px">arrow_forward</span></span></div>
+</div>
+</div></div>
+
+<div id="07b" style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;align-items:baseline;gap:8px;font:12px system-ui,sans-serif;color:rgba(0,0,0,.6)"><a class="dv-oid" href="#07b">07b</a>Share: Hive-native first, link with QR, embed in a tab</div>
+<div style="height:720px;position:relative;border-radius:12px;overflow:hidden;background:var(--bg,#0a0a0a);color:var(--text,#f1f1f1)">
+<div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,var(--thumbA,#1c1c1c) 0 16px,var(--thumbB,#232323) 16px 32px);opacity:.6"></div><div style="position:absolute;inset:0;background:color-mix(in srgb,var(--bg,#0a0a0a) 55%,transparent);backdrop-filter:blur(6px)"></div>
+<div style="position:absolute;right:0;top:0;bottom:0;width:430px;background:var(--surface,#161616);border-left:1px solid var(--border,#262626);border-radius:28px 0 0 28px;box-shadow:-30px 0 80px rgba(0,0,0,.45);display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:10px;padding:22px 22px 0"><span style="width:4px;height:22px;border-radius:2px;background:var(--cyan,#22d3ee)"></span><div style="font-size:20px;font-weight:900;flex:1">Share</div><span style="width:36px;height:36px;border-radius:50%;background:var(--surface2,#1f1f1f);display:grid;place-items:center"><span class="ms" style="font-size:20px">close</span></span></div>
+<div style="display:flex;gap:6px;margin:16px 22px 0;padding:4px;border-radius:16px;background:var(--bg,#0a0a0a);font-size:13px;font-weight:700"><span style="flex:1;height:36px;border-radius:12px;background:var(--surface2,#1f1f1f);display:grid;place-items:center">Share</span><span style="flex:1;height:34px;display:grid;place-items:center;color:var(--muted,#a3a3a3)">Embed</span><span style="flex:1;height:34px;display:grid;place-items:center;color:var(--muted,#a3a3a3)">Clip</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 22px 0"><sc-for list="{{ hiveShare }}" as="h" hint-placeholder-count="2"><div style="padding:16px;border-radius:20px;background:{{ h.bg }};color:{{ h.fg }};display:flex;flex-direction:column;gap:10px;min-height:120px"><span class="ms" style="font-size:28px">{{ h.icon }}</span><div style="margin-top:auto"><div style="font-size:16px;font-weight:900">{{ h.t }}</div><div style="font-size:12px;opacity:.8;margin-top:2px">{{ h.s }}</div></div></div></sc-for></div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px 22px 0"><sc-for list="{{ ext }}" as="e" hint-placeholder-count="4"><div style="height:64px;border-radius:20px;background:var(--surface2,#1f1f1f);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--muted,#a3a3a3)"><span class="ms" style="font-size:24px;color:var(--text,#f1f1f1)">{{ e.icon }}</span>{{ e.t }}</div></sc-for></div>
+<div style="margin:16px 22px 0;padding:14px;border-radius:20px;background:var(--bg,#0a0a0a);border:1px solid var(--border,#262626);display:flex;gap:14px;align-items:center"><div style="width:76px;height:76px;border-radius:12px;background:#fff;padding:8px;display:grid;grid-template-columns:repeat(7,1fr);gap:2px;flex:none"><sc-for list="{{ qr }}" as="q" hint-placeholder-count="49"><span style="background:{{ q }};border-radius:1px"></span></sc-for></div><div style="min-width:0;flex:1"><div style="font:500 12px 'Roboto Mono';color:var(--muted,#a3a3a3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">3speak.tv/v/birdwatcher/hidden-spot</div><div style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px"><span style="width:18px;height:18px;border-radius:4px;background:var(--cyan,#22d3ee);color:var(--bg,#0a0a0a);display:grid;place-items:center"><span class="ms" style="font-size:14px">check</span></span>Start at <b style="font-family:'Roboto Mono'">1:13</b></div></div></div>
+<div style="flex:1"></div>
+<div style="padding:16px 22px 22px;border-top:1px solid var(--border,#262626)"><span style="height:52px;border-radius:16px;background:var(--accent,#ff5252);color:var(--onAccent,#0a0a0a);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-weight:700">Copy link<span class="ms" style="font-size:24px">content_copy</span></span></div>
+</div>
+</div></div>
+
+<div id="07c" style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;align-items:baseline;gap:8px;font:12px system-ui,sans-serif;color:rgba(0,0,0,.6)"><a class="dv-oid" href="#07c">07c</a>Report: reason tiles, then one short follow-up</div>
+<div style="height:720px;position:relative;border-radius:12px;overflow:hidden;background:var(--bg,#0a0a0a);color:var(--text,#f1f1f1)">
+<div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,var(--thumbA,#1c1c1c) 0 16px,var(--thumbB,#232323) 16px 32px);opacity:.6"></div><div style="position:absolute;inset:0;background:color-mix(in srgb,var(--bg,#0a0a0a) 55%,transparent);backdrop-filter:blur(6px)"></div>
+<div style="position:absolute;right:0;top:0;bottom:0;width:430px;background:var(--surface,#161616);border-left:1px solid var(--border,#262626);border-radius:28px 0 0 28px;box-shadow:-30px 0 80px rgba(0,0,0,.45);display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:10px;padding:22px 22px 0"><span style="width:4px;height:22px;border-radius:2px;background:var(--accent,#ff5252)"></span><div style="font-size:20px;font-weight:900;flex:1">Report</div><span style="font:700 12px 'Roboto Mono';color:var(--muted,#a3a3a3)">1 / 2</span><span style="width:36px;height:36px;border-radius:50%;background:var(--surface2,#1f1f1f);display:grid;place-items:center"><span class="ms" style="font-size:20px">close</span></span></div>
+<div style="padding:8px 22px 0;font-size:13px;color:var(--muted,#a3a3a3);line-height:1.5">Reports go to community moderators and the 3Speak team. The creator won't see who reported.</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 22px 0"><sc-for list="{{ reasons }}" as="r" hint-placeholder-count="6"><div style="padding:14px;border-radius:20px;border:2px solid {{ r.b }};background:{{ r.bg }};display:flex;flex-direction:column;gap:10px;min-height:104px"><span class="ms" style="font-size:24px;color:{{ r.ic }}">{{ r.icon }}</span><div style="font-size:14px;font-weight:700;line-height:1.25;margin-top:auto">{{ r.t }}</div></div></sc-for></div>
+<div style="margin:14px 22px 0;padding:12px 14px;border-radius:16px;background:var(--bg,#0a0a0a);border:1px solid var(--border,#262626);font-size:13px;display:flex;gap:10px;align-items:center"><span class="ms" style="font-size:20px;color:var(--cyan,#22d3ee)">groups</span><span style="flex:1">Also tell <b>Wildlife Videos</b> moderators</span><span style="width:40px;height:24px;border-radius:8px;background:var(--cyan,#22d3ee);position:relative"><span style="position:absolute;right:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff"></span></span></div>
+<div style="flex:1"></div>
+<div style="padding:16px 22px 22px;border-top:1px solid var(--border,#262626)"><span style="height:52px;border-radius:16px;background:var(--text,#f1f1f1);color:var(--bg,#0a0a0a);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-weight:700">Next: add details<span class="ms" style="font-size:24px">arrow_forward</span></span></div>
+</div>
+</div></div>
+
+<div id="07d" style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;align-items:baseline;gap:8px;font:12px system-ui,sans-serif;color:rgba(0,0,0,.6)"><a class="dv-oid" href="#07d">07d</a>Account menu as a control centre, and the video action menu as a tile grid</div>
+<div style="height:720px;position:relative;border-radius:12px;overflow:hidden;background:var(--bg,#0a0a0a);color:var(--text,#f1f1f1);display:flex;gap:20px;padding:24px;align-items:flex-start;justify-content:center">
+<div style="width:320px;border-radius:28px;background:var(--surface,#161616);border:1px solid var(--border,#262626);box-shadow:0 24px 60px rgba(0,0,0,.45);overflow:hidden">
+<div style="padding:18px;background:linear-gradient(135deg,color-mix(in srgb,#2d2d2d 80%,var(--surface,#161616)),var(--surface,#161616));display:flex;align-items:center;gap:12px"><div style="width:52px;height:52px;border-radius:50%;background:var(--accent,#ff5252);color:var(--onAccent,#0a0a0a);border:2px solid var(--cyan,#22d3ee);display:grid;place-items:center;font-weight:900;font-size:18px">B</div><div style="flex:1"><div style="font-size:16px;font-weight:900">Bia</div><div style="font-size:12px;color:var(--muted,#a3a3a3)">@birdwatcher</div></div><span style="height:32px;padding:0 12px;border-radius:12px;background:rgba(255,255,255,.12);display:grid;place-items:center;font-size:12px;font-weight:700">Switch</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:14px"><sc-for list="{{ ccTiles }}" as="t" hint-placeholder-count="6"><div style="aspect-ratio:1;border-radius:20px;background:var(--surface2,#1f1f1f);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:500"><span class="ms" style="font-size:24px;color:{{ t.c }}">{{ t.icon }}</span>{{ t.t }}</div></sc-for></div>
+<div style="margin:0 14px;padding:12px 14px;border-radius:20px;background:var(--surface2,#1f1f1f);display:flex;align-items:center;gap:12px"><span class="ms" style="font-size:24px">dark_mode</span><span style="flex:1;font-size:14px;font-weight:500">Dark theme</span><span style="width:44px;height:28px;border-radius:12px;background:var(--cyan,#22d3ee);position:relative"><span style="position:absolute;right:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span></div>
+<div style="margin:8px 14px 0;padding:12px 14px;border-radius:20px;background:var(--surface2,#1f1f1f);display:flex;align-items:center;gap:12px"><span class="ms" style="font-size:24px;color:var(--accent,#ff5252)">egg</span><div style="flex:1"><div style="font-size:14px;font-weight:500">3 of 5 to graduate</div><div style="height:4px;border-radius:2px;background:var(--bg,#0a0a0a);margin-top:6px"><div style="width:60%;height:100%;border-radius:2px;background:var(--accent,#ff5252)"></div></div></div></div>
+<div style="display:flex;align-items:center;gap:10px;padding:14px 18px;margin-top:8px;border-top:1px solid var(--border,#262626);font-size:14px;color:var(--muted,#a3a3a3)"><span class="ms" style="font-size:20px">settings</span>Settings<div style="flex:1"></div><span class="ms" style="font-size:20px">logout</span>Log out</div>
+</div>
+<div style="width:260px;border-radius:24px;background:var(--surface,#161616);border:1px solid var(--border,#262626);box-shadow:0 24px 60px rgba(0,0,0,.45);padding:12px;margin-top:90px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><sc-for list="{{ actTiles }}" as="t" hint-placeholder-count="4"><div style="padding:12px;border-radius:16px;background:var(--surface2,#1f1f1f);display:flex;flex-direction:column;gap:8px"><span class="ms" style="font-size:24px">{{ t.icon }}</span><div style="display:flex;align-items:center;font-size:13px;font-weight:700"><span style="flex:1">{{ t.t }}</span><span style="font:700 10px 'Roboto Mono';padding:2px 5px;border-radius:4px;background:var(--bg,#0a0a0a);color:var(--muted,#a3a3a3)">{{ t.k }}</span></div></div></sc-for></div>
+<div style="margin-top:10px;display:flex;flex-direction:column"><sc-for list="{{ actRows }}" as="r" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:12px;padding:10px 8px;font-size:13px;color:{{ r.c }}"><span class="ms" style="font-size:20px">{{ r.icon }}</span>{{ r.t }}</div></sc-for></div>
+</div>
+</div></div>
+
+<div id="07e" style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;align-items:baseline;gap:8px;font:12px system-ui,sans-serif;color:rgba(0,0,0,.6)"><a class="dv-oid" href="#07e">07e</a>Log in: split panel with the community, not a plain form</div>
+<div style="height:640px;position:relative;border-radius:12px;overflow:hidden;background:var(--bg,#0a0a0a);color:var(--text,#f1f1f1);display:grid;place-items:center">
+<div style="position:absolute;inset:0;background:color-mix(in srgb,var(--bg,#0a0a0a) 60%,transparent);backdrop-filter:blur(6px)"></div>
+<div style="position:relative;width:600px;height:500px;border-radius:32px;overflow:hidden;display:grid;grid-template-columns:240px minmax(0,1fr);background:var(--surface,#161616);border:1px solid var(--border,#262626);box-shadow:0 30px 80px rgba(0,0,0,.5)">
+<div style="background:linear-gradient(160deg,#2d2d2d,#0a0a0a);padding:22px;display:flex;flex-direction:column;color:#fff;position:relative;overflow:hidden"><img src="server/og-outro/3s-mark.png" alt="3Speak" style="width:36px"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:24px"><sc-for list="{{ faces }}" as="f" hint-placeholder-count="9"><div style="aspect-ratio:1;border-radius:50%;background:#2d2d2d;border:2px solid {{ f }};display:grid;place-items:center;font-size:12px;font-weight:700"></div></sc-for></div><div style="margin-top:auto;font-size:24px;font-weight:900;line-height:1.05;letter-spacing:-.02em">12,400 creators own their channel here.</div></div>
+<div style="padding:26px;display:flex;flex-direction:column">
+<div style="display:flex;justify-content:flex-end"><span class="ms" style="font-size:24px;color:var(--muted,#a3a3a3)">close</span></div>
+<div style="font-size:28px;font-weight:900;letter-spacing:-.02em">Log in</div>
+<div style="margin-top:16px;height:48px;border-radius:16px;border:1px solid var(--border,#262626);display:flex;align-items:center;gap:8px;padding:0 14px"><span style="color:var(--muted,#a3a3a3)">@</span>birdwatcher</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px"><sc-for list="{{ loginTiles }}" as="l" hint-placeholder-count="3"><div style="padding:12px 8px;border-radius:16px;border:2px solid {{ l.b }};background:{{ l.bg }};display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:700;text-align:center"><span class="ms" style="font-size:24px">{{ l.icon }}</span>{{ l.t }}</div></sc-for></div>
+<div style="flex:1"></div>
+<span style="height:48px;border-radius:16px;background:var(--accent,#ff5252);color:var(--onAccent,#0a0a0a);display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-weight:700">Continue with Keychain<span class="ms" style="font-size:24px">arrow_forward</span></span>
+<div style="font-size:13px;color:var(--muted,#a3a3a3);margin-top:12px">No account? <b style="color:var(--cyan,#22d3ee)">Get one free</b></div>
+</div>
+</div>
+</div></div>
+
+<div id="07f" style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;align-items:baseline;gap:8px;font:12px system-ui,sans-serif;color:rgba(0,0,0,.6)"><a class="dv-oid" href="#07f">07f</a>Confirm as a bottom bar, toasts as a top "island"</div>
+<div style="height:640px;position:relative;border-radius:12px;overflow:hidden;background:var(--bg,#0a0a0a);color:var(--text,#f1f1f1)">
+<div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,var(--thumbA,#1c1c1c) 0 16px,var(--thumbB,#232323) 16px 32px);opacity:.4"></div>
+<div style="position:absolute;left:50%;top:18px;transform:translateX(-50%);display:flex;flex-direction:column;gap:10px;align-items:center">
+<div style="display:flex;align-items:center;gap:12px;height:52px;padding:0 8px 0 8px;border-radius:16px;background:var(--text,#f1f1f1);color:var(--bg,#0a0a0a);box-shadow:0 12px 32px rgba(0,0,0,.35)"><span style="width:36px;height:36px;border-radius:50%;background:var(--cyan,#22d3ee);display:grid;place-items:center"><span class="ms" style="font-size:20px;color:#0a0a0a">bookmark_added</span></span><span style="font-size:14px;font-weight:700">Saved to Trail cams</span><span style="height:36px;padding:0 14px;border-radius:12px;background:color-mix(in srgb,var(--bg,#0a0a0a) 10%,transparent);display:grid;place-items:center;font-size:13px;font-weight:700">Undo</span></div>
+<div style="display:flex;align-items:center;gap:12px;height:52px;padding:0 16px 0 8px;border-radius:16px;background:var(--surface,#161616);border:1px solid var(--border,#262626);box-shadow:0 12px 32px rgba(0,0,0,.35)"><span style="width:36px;height:36px;border-radius:50%;background:conic-gradient(var(--accent,#ff5252) 0 64%,var(--surface2,#1f1f1f) 64% 100%);display:grid;place-items:center"><span style="width:28px;height:28px;border-radius:50%;background:var(--surface,#161616);display:grid;place-items:center;font:700 10px 'Roboto Mono'">64</span></span><span style="font-size:14px;font-weight:500">Encoding "Night vision"…</span></div>
+</div>
+<div style="position:absolute;left:24px;right:24px;bottom:24px;border-radius:24px;background:var(--surface,#161616);border:1px solid color-mix(in srgb,var(--accent,#ff5252) 40%,var(--border,#262626));box-shadow:0 -12px 40px rgba(0,0,0,.4);padding:18px 20px;display:flex;align-items:center;gap:16px">
+<span style="width:48px;height:48px;border-radius:16px;background:color-mix(in srgb,var(--accent,#ff5252) 15%,transparent);color:var(--accent,#ff5252);display:grid;place-items:center;flex:none"><span class="ms" style="font-size:28px">delete</span></span>
+<div style="flex:1"><div style="font-size:16px;font-weight:700">Delete "Fox kits, second litter"?</div><div style="font-size:13px;color:var(--muted,#a3a3a3);margin-top:2px">It stays on Hive but won't play on 3Speak.</div></div>
+<span style="height:44px;padding:0 18px;border-radius:16px;background:var(--surface2,#1f1f1f);display:grid;place-items:center;font-weight:500">Keep</span>
+<span style="height:44px;padding:0 18px;border-radius:16px;background:var(--accent,#ff5252);color:var(--onAccent,#0a0a0a);display:flex;align-items:center;gap:8px;font-weight:700"><span class="ms" style="font-size:18px">touch_app</span>Hold to delete</span>
+</div>
+</div></div>
+
+<div id="07g" style="grid-column:1 / span 2;display:flex;flex-direction:column;gap:9px"><div style="display:flex;align-items:baseline;gap:8px;font:12px system-ui,sans-serif;color:rgba(0,0,0,.6)"><a class="dv-oid" href="#07g">07g</a>Mobile: the same dialogs as bottom sheets</div>
+<div style="display:flex;gap:28px">
+<sc-for list="{{ sheets }}" as="s" hint-placeholder-count="3">
+<div style="width:390px;height:760px;flex:none;border-radius:48px;border:10px solid var(--frame,#000);background:var(--bg,#0a0a0a);color:var(--text,#f1f1f1);overflow:hidden;position:relative">
+<div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,var(--thumbA,#1c1c1c) 0 14px,var(--thumbB,#232323) 14px 28px);opacity:.5"></div><div style="position:absolute;inset:0;background:rgba(0,0,0,.5)"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;border-radius:32px 32px 0 0;background:var(--surface,#161616);padding:10px 18px 32px">
+<div style="width:40px;height:5px;border-radius:2px;background:var(--border,#262626);margin:0 auto 14px"></div>
+<div style="display:flex;align-items:center;gap:10px"><span style="width:4px;height:20px;border-radius:2px;background:{{ s.bar }}"></span><div style="font-size:20px;font-weight:900;flex:1">{{ s.t }}</div></div>
+<div style="margin-top:12px;display:flex;gap:10px;align-items:center;padding:8px;border-radius:16px;background:var(--bg,#0a0a0a)"><div style="width:72px;aspect-ratio:16/9;border-radius:8px;background:repeating-linear-gradient(135deg,var(--thumbA,#1c1c1c) 0 5px,var(--thumbB,#232323) 5px 10px)"></div><div style="font-size:13px;font-weight:700">Hidden spot at a forest stream</div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px"><sc-for list="{{ s.tiles }}" as="t" hint-placeholder-count="4"><div style="padding:14px;border-radius:20px;background:{{ t.bg }};color:{{ t.fg }};display:flex;flex-direction:column;gap:8px;min-height:92px"><span class="ms" style="font-size:24px">{{ t.icon }}</span><div style="font-size:14px;font-weight:700;margin-top:auto">{{ t.t }}</div></div></sc-for></div>
+<span style="margin-top:16px;height:52px;border-radius:16px;background:var(--text,#f1f1f1);color:var(--bg,#0a0a0a);display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-weight:700">{{ s.cta }}<span class="ms" style="font-size:24px">arrow_forward</span></span>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+</div>
+<p style="margin:22px 0 0;font:12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5)">Settings is unchanged in <a href="3Speak App 07 Dialogs & Settings.dc.html">07 v1</a>. If you like this style, I'll apply it to the dialogs in Rewards, Studio tools and the other files.</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Dark&quot;,&quot;Light&quot;],&quot;default&quot;:&quot;Dark&quot;,&quot;tsType&quot;:&quot;'Dark' | 'Light'&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  themes = {
+    Dark: { bg: '#0a0a0a', surface: '#161616', surface2: '#1f1f1f', text: '#f1f1f1', muted: '#a3a3a3', border: '#262626', accent: '#ff5252', onAccent: '#0a0a0a', cyan: '#22d3ee', thumbA: '#1c1c1c', thumbB: '#232323', btn: '#ffffff', btnInk: '#0a0a0a', ph: '#555555', avatar: '#2d2d2d', frame: '#000000' },
+    Light: { bg: '#f9f9f9', surface: '#ffffff', surface2: '#f1f1f1', text: '#111111', muted: '#5a5a5a', border: '#ebebeb', accent: '#e53935', onAccent: '#ffffff', cyan: '#0891b2', thumbA: '#ecebe8', thumbB: '#e4e3df', btn: '#111111', btnInk: '#ffffff', ph: '#9a9a9a', avatar: '#dcdcdc', frame: '#111111' }
+  };
+  applyTheme() {
+    const el = this.rootRef.current; if (!el) return;
+    const t = this.themes[this.props.theme ?? 'Dark'] || this.themes.Dark;
+    Object.entries(t).forEach(([k, v]) => el.style.setProperty('--' + k, v));
+  }
+  componentDidMount() { this.applyTheme(); }
+  componentDidUpdate() { this.applyTheme(); }
+  renderVals() {
+    const cyan = 'var(--cyan,#22d3ee)', red = 'var(--accent,#ff5252)', b = 'var(--border,#262626)', s2 = 'var(--surface2,#1f1f1f)';
+    const tint = c => 'color-mix(in srgb,' + c + ' 12%,transparent)';
+    let seed = 5; const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    return {
+      rootRef: this.rootRef,
+      lists: [
+        ['Watch later', 'schedule', 'lock', '12 videos', 1, 'linear-gradient(135deg,#2d2d2d,#1f1f1f)'], ['Trail cams', 'forest', 'public', '14 videos', 1, 'linear-gradient(135deg,#2d2d2d,#1f1f1f)'],
+        ['Cooking', 'restaurant', 'public', '8 videos', 0, 'linear-gradient(135deg,#262626,#1f1f1f)'], ['Tutorials', 'school', 'lock', '5 videos', 0, 'linear-gradient(135deg,#262626,#1f1f1f)'],
+        ['Favourites', 'favorite', 'lock', '31 videos', 0, 'linear-gradient(135deg,#262626,#1f1f1f)']
+      ].map(([t, icon, lock, n, on, cover]) => ({ t, icon, lock, n, on: !!on, cover, b: on ? cyan : b, bg: on ? tint(cyan) : 'transparent' })),
+      hiveShare: [{ icon: 'repeat', t: 'Reblog', s: 'To your 1,071 followers', bg: 'var(--cyan,#22d3ee)', fg: '#0a0a0a' }, { icon: 'bolt', t: 'Snap it', s: 'Add a comment and post', bg: '#2d2d2d', fg: '#fff' }],
+      ext: [['forum', 'Chat'], ['send', 'Telegram'], ['alternate_email', 'X'], ['more_horiz', 'More']].map(([icon, t]) => ({ icon, t })),
+      qr: Array.from({ length: 49 }, (_, k) => { const r = Math.floor(k / 7), c = k % 7; const corner = (r < 2 && c < 2) || (r < 2 && c > 4) || (r > 4 && c < 2); return corner ? '#0a0a0a' : (rnd() > .5 ? '#0a0a0a' : '#fff'); }),
+      reasons: [['campaign', 'Spam or scam'], ['warning', 'Violent or graphic'], ['sentiment_dissatisfied', 'Hate or harassment'], ['copyright', 'Not their content'], ['visibility_off', 'Sexual content'], ['more_horiz', 'Something else']].map(([icon, t], k) => ({ icon, t, b: k === 3 ? red : b, bg: k === 3 ? tint(red) : 'transparent', ic: k === 3 ? red : 'var(--muted,#a3a3a3)' })),
+      ccTiles: [['person', 'Channel', 'var(--text,#f1f1f1)'], ['video_library', 'Studio', red], ['account_balance_wallet', 'Wallet', 'var(--text,#f1f1f1)'], ['playlist_play', 'Playlists', cyan], ['history', 'History', 'var(--text,#f1f1f1)'], ['military_tech', 'Badges', 'var(--accent,#ff5252)']].map(([icon, t, c]) => ({ icon, t, c })),
+      actTiles: [['playlist_add', 'Save', 'S'], ['queue', 'Queue', 'Q'], ['share', 'Share', '⇧S'], ['download', 'Offline', 'D']].map(([icon, t, k]) => ({ icon, t, k })),
+      actRows: [['block', 'Not interested', 'var(--muted,#a3a3a3)'], ['person_off', 'Fewer from birdwatcher', 'var(--muted,#a3a3a3)'], ['flag', 'Report', red]].map(([icon, t, c]) => ({ icon, t, c })),
+      faces: ['#ffffff', '#ff5252', 'var(--accent,#ff5252)', 'var(--muted,#a3a3a3)', '#ffffff', 'var(--text,#f1f1f1)', '#ff5252', 'var(--accent,#ff5252)', '#ffffff'],
+      loginTiles: [['key', 'Keychain', 1], ['qr_code_2', 'HiveAuth', 0], ['lock', 'Posting key', 0]].map(([icon, t, on]) => ({ icon, t, b: on ? red : b, bg: on ? tint(red) : 'transparent' })),
+      sheets: [
+        { t: 'Save', bar: cyan, cta: 'Done', tiles: [['schedule', 'Watch later', 1], ['forest', 'Trail cams', 1], ['restaurant', 'Cooking', 0], ['add', 'New playlist', 0]].map(([icon, t, on]) => ({ icon, t, bg: on ? tint(cyan) : s2, fg: on ? cyan : 'var(--text,#f1f1f1)' })) },
+        { t: 'Share', bar: cyan, cta: 'Copy link', tiles: [{ icon: 'repeat', t: 'Reblog', bg: 'var(--cyan,#22d3ee)', fg: '#0a0a0a' }, { icon: 'bolt', t: 'Snap it', bg: '#2d2d2d', fg: '#fff' }, { icon: 'forum', t: 'Chat', bg: s2, fg: 'var(--text,#f1f1f1)' }, { icon: 'code', t: 'Embed', bg: s2, fg: 'var(--text,#f1f1f1)' }] },
+        { t: 'Report', bar: red, cta: 'Next', tiles: [['campaign', 'Spam or scam', 0], ['copyright', 'Not their content', 1], ['warning', 'Violent', 0], ['more_horiz', 'Other', 0]].map(([icon, t, on]) => ({ icon, t, bg: on ? tint(red) : s2, fg: on ? red : 'var(--text,#f1f1f1)' })) }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

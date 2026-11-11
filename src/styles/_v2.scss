@@ -1,0 +1,116 @@
+// 3Speak v2 SCSS helpers. The VALUES live in design-system.scss (CSS
+// variables); this file only adds mixins so every component shares one
+// implementation of the rules in design_handoff_3speak_v2/STYLE_GUIDE.md.
+// Usage (from any .scss file, relative path):  @use "../../styles/v2" as v2;
+// then  @include v2.text(body);
+
+$font-sizes: (10, 11, 12, 13, 14, 16, 18, 20, 24, 28, 32, 40, 48, 56, 64, 72);
+$control-heights: (24, 28, 32, 36, 40, 44, 48, 56, 64);
+
+// Breakpoints (STYLE_GUIDE §4): < 768 mobile, 768-1279 tablet, >= 1280 full layout
+$bp-mobile: 767px;
+$bp-wide: 1280px;
+@mixin mobile { @media (max-width: $bp-mobile) { @content; } }
+@mixin tablet-up { @media (min-width: $bp-mobile + 1) { @content; } }
+@mixin below-wide { @media (max-width: $bp-wide - 1) { @content; } }
+@mixin wide { @media (min-width: $bp-wide) { @content; } }
+
+// Type roles. Pick a role, not a size.
+$roles: (
+  eyebrow:   (10, 900, .08em, uppercase),  // section labels, table heads
+  meta:      (12, 400, 0, none),           // timestamps, counts, captions
+  meta-sm:   (11, 400, 0, none),
+  body:      (14, 400, 0, none),           // list rows, descriptions
+  body-sm:   (13, 400, 0, none),
+  label:     (13, 700, 0, none),           // buttons, chips, tabs
+  title-sm:  (16, 700, 0, none),           // card titles
+  title:     (18, 700, 0, none),           // dialog and sheet titles
+  heading:   (24, 900, -.02em, none),      // section / screen titles
+  heading-lg:(28, 900, -.02em, none),      // page titles
+  display:   (40, 900, -.02em, none),      // hero numbers
+);
+
+@mixin text($role) {
+  $r: map-get($roles, $role);
+  @if $r == null { @error "Unknown type role #{$role}"; }
+  font-size: nth($r, 1) * 1px;
+  font-weight: nth($r, 2);
+  letter-spacing: nth($r, 3);
+  text-transform: nth($r, 4);
+  line-height: if(nth($r, 1) >= 24, 1.15, 1.4);
+}
+
+@mixin mono($size: 12, $weight: 700) {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: $size * 1px;
+  font-weight: $weight;
+}
+
+// A control's radius follows its height. Never set the two separately.
+@function radius-for($h) {
+  @if $h <= 28 { @return 8px; }
+  @if $h <= 40 { @return 12px; }
+  @if $h <= 52 { @return 16px; }
+  @return 20px;
+}
+
+@mixin control($h: 40) {
+  @if index($control-heights, $h) == null { @error "Height #{$h} is not on the scale #{$control-heights}"; }
+  height: $h * 1px;
+  border-radius: radius-for($h);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 if($h <= 32, 10px, 14px);
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+  &:active { transform: scale(.98); }
+  &:disabled, &[aria-disabled="true"] { opacity: .45; cursor: not-allowed; transform: none; }
+}
+
+// Button looks, for markup that can't use <Button> (links styled as buttons, third-party buttons)
+@mixin btn($variant: secondary, $h: 40) {
+  @include control($h);
+  @include text(label);
+  @if $h <= 32 { font-size: 12px; }
+  @if $variant == primary { background: var(--accent); color: var(--on-accent); font-weight: 900; &:hover { background: var(--accent-hover); color: var(--on-accent); } }
+  @else if $variant == cyan { background: var(--cyan); color: var(--bg); font-weight: 900; &:hover { filter: brightness(1.08); } }
+  @else if $variant == ghost { background: transparent; color: var(--text); &:hover { background: var(--bg-hover); } }
+  @else if $variant == danger { background: var(--accent-tint); color: var(--accent); &:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); } }
+  @else if $variant == inverse { background: var(--text); color: var(--bg); font-weight: 900; }
+  @else { background: var(--surface-2); color: var(--text); &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); } }
+}
+
+// Text field look (filled, no border at rest, accent ring on focus)
+@mixin field($h: 40) {
+  background: var(--bg);
+  border: 2px solid transparent;
+  border-radius: radius-for($h);
+  height: $h * 1px;
+  padding: 0 12px;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  &::placeholder { color: var(--muted); }
+  &:focus { outline: none; border-color: var(--accent); }
+}
+
+// Surfaces
+@mixin card($r: 24) { background: var(--surface); border: 1px solid var(--border); border-radius: $r * 1px; }
+@mixin well { background: var(--bg); border-radius: var(--r-md); }   // fields and nested rows inside a card
+@mixin tint($color: accent, $pct: 14%) { background: color-mix(in srgb, var(--#{$color}) #{$pct}, transparent); }
+@mixin floating { background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-float); }
+@mixin menu { @include floating; border-radius: var(--r-xl); padding: 8px; }
+@mixin menu-row { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; border-radius: var(--r-md); @include text(label); color: var(--text); &:hover { background: var(--bg-hover); } }
+@mixin scrim-pill { background: var(--media-scrim); color: var(--on-media); border-radius: 6px; font-size: 11px; font-weight: 700; padding: 2px 6px; }
+
+// Placeholder thumbnail (until media loads)
+@mixin thumb-placeholder($step: 8px) {
+  background: repeating-linear-gradient(135deg, var(--thumb-a) 0 $step, var(--thumb-b) $step $step * 2);
+}
+
+@mixin scroll-y { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+@mixin scroll-x { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; &::-webkit-scrollbar { display: none; } }

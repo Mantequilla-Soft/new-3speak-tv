@@ -64,6 +64,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux'; // Importing the Provider from react-redux
 import Bootstrap from './components/EmergencyScreen/Bootstrap';
 import { resumePendingSupports } from './lib/supports';
+// The v2 design system (tokens, base, .v2-* primitives) loads first; every
+// other stylesheet builds on it. See src/styles/design-system.scss.
+import './styles/design-system.scss';
+import 'material-symbols/rounded.css';
 import './index.css';
 import store from '../src/redux/Store'; // Importing the Redux store (replace with your store file path)
 import { ToastContainer } from 'react-toastify';
@@ -75,6 +79,9 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import '@fontsource/roboto/900.css';
+import '@fontsource/roboto-mono/400.css';
+import '@fontsource/roboto-mono/700.css';
 import { AppProviders } from './context/Providers';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AiohaProvider } from '@aioha/react-ui';

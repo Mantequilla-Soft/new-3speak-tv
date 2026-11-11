@@ -66,6 +66,7 @@ import ChatOverlay from "./components/Chat/ChatOverlay";
 import ChatAutoOpen from "./components/Chat/ChatAutoOpen";
 const OpenPodModal = lazyRoute(() => import("./components/OpenPod/OpenPodModal"), "./components/OpenPod/OpenPodModal");
 const ObsOverlay = lazyRoute(() => import("./page/ObsOverlay"), "./page/ObsOverlay");
+const UiPlayground = lazyRoute(() => import("./components/v2/UiPlayground"), "./components/v2/UiPlayground");
 const ObsChatOverlay = lazyRoute(() => import("./page/ObsChatOverlay"), "./page/ObsChatOverlay");
 
 // Route components are code-split: only the route the visitor actually opens is
@@ -663,6 +664,16 @@ function App() {
         <Routes>
           <Route path="/embed/:author/:permlink" element={<EmbedPlayer />} />
         </Routes>
+      </Suspense>
+    );
+  }
+
+  // The v2 design system playground: every primitive in both themes, to check
+  // against design_handoff_3speak_v2/designs. Dev builds only.
+  if (import.meta.env.DEV && location.pathname === '/dev/ui') {
+    return (
+      <Suspense fallback={null}>
+        <UiPlayground />
       </Suspense>
     );
   }

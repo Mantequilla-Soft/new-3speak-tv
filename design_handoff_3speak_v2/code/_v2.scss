@@ -1,0 +1,74 @@
+// 3Speak v2 SCSS helpers. The values live in tokens.css (CSS variables);
+// this file only adds mixins so components share one implementation.
+// Usage: @use "@/styles/v2" as v2;  then  @include v2.text(14);
+
+$font-sizes: (10, 11, 12, 13, 14, 16, 18, 20, 24, 28, 32, 40, 48, 56, 64, 72);
+$control-heights: (24, 28, 32, 36, 40, 44, 48, 56, 64);
+
+// Type roles. Pick a role, not a size.
+$roles: (
+  eyebrow:   (10, 900, .08em, uppercase),  // section labels, table heads
+  meta:      (12, 400, 0, none),           // timestamps, counts, captions
+  meta-sm:   (11, 400, 0, none),
+  body:      (14, 400, 0, none),           // list rows, descriptions
+  body-sm:   (13, 400, 0, none),
+  label:     (13, 700, 0, none),           // buttons, chips, tabs
+  title-sm:  (16, 700, 0, none),           // card titles
+  title:     (18, 700, 0, none),
+  heading:   (24, 900, -.02em, none),      // section / screen titles
+  heading-lg:(28, 900, -.02em, none),
+  display:   (40, 900, -.02em, none),      // hero numbers, page titles
+);
+
+@mixin text($role) {
+  $r: map-get($roles, $role);
+  @if $r == null { @error "Unknown type role #{$role}"; }
+  font-size: nth($r, 1) * 1px;
+  font-weight: nth($r, 2);
+  letter-spacing: nth($r, 3);
+  text-transform: nth($r, 4);
+  line-height: if(nth($r, 1) >= 24, 1.15, 1.4);
+}
+
+@mixin mono($size: 12, $weight: 700) {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: $size * 1px;
+  font-weight: $weight;
+}
+
+// A control's radius follows its height. Never set the two separately.
+@function radius-for($h) {
+  @if $h <= 28 { @return 8px; }
+  @if $h <= 40 { @return 12px; }
+  @if $h <= 52 { @return 16px; }
+  @return 20px;
+}
+
+@mixin control($h: 40) {
+  @if index($control-heights, $h) == null { @error "Height #{$h} is not on the scale #{$control-heights}"; }
+  height: $h * 1px;
+  border-radius: radius-for($h);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 if($h <= 32, 10px, 14px);
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+  &:active { transform: scale(.98); }
+  &:disabled, &[aria-disabled="true"] { opacity: .45; cursor: not-allowed; transform: none; }
+}
+
+// Surfaces
+@mixin card($r: 24) { background: var(--surface); border: 1px solid var(--border); border-radius: $r * 1px; }
+@mixin well { background: var(--bg); border-radius: var(--r-md); }   // fields and nested rows inside a card
+@mixin tint($color: accent, $pct: 14%) { background: color-mix(in srgb, var(--#{$color}) #{$pct}, transparent); }
+
+// Placeholder thumbnail (until media loads)
+@mixin thumb-placeholder($step: 8px) {
+  background: repeating-linear-gradient(135deg, var(--thumb-a) 0 $step, var(--thumb-b) $step $step * 2);
+}
+
+@mixin scroll-y { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
