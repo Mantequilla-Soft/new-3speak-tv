@@ -1298,6 +1298,8 @@ function GlobalAudioPlayer() {
   const [commentsRefresh, setCommentsRefresh] = useState(0);
   const comments = useAudioComments(audioCurrent?.owner, audioCurrent?.post_permlink, showExpanded && !!audioCurrent?.post_permlink, commentsRefresh);
   const [reportOpen, setReportOpen] = useState(false);
+  // Where a touch on the bar started, for the swipe up that opens the player.
+  const swipeRef = useRef(null);
   // The full player's Repeat button (27a): the track starts over at its end.
   const [repeat, setRepeat] = useState(false);
   // A phone (< 768): the menus are bottom sheets of rows (27d).
@@ -1714,7 +1716,18 @@ function GlobalAudioPlayer() {
   // ── The bar: docked at the foot of the page (desktop), the mini bar above the
   // bottom navigation (phones), design 27c. ─────────────────────────────────
   const bar = (
-    <div ref={npRef} className={cx('audio-now-playing gap-bar', isLive && 'is-live', !!transcriptPanel && 'has-panel')}>
+    <div
+      ref={npRef}
+      className={cx('audio-now-playing gap-bar', isLive && 'is-live', !!transcriptPanel && 'has-panel')}
+      // A swipe up on the bar opens the player (27c, phones).
+      onTouchStart={(e) => { swipeRef.current = e.touches[0]?.clientY ?? null; }}
+      onTouchEnd={(e) => {
+        const from = swipeRef.current;
+        swipeRef.current = null;
+        const to = e.changedTouches[0]?.clientY;
+        if (from != null && to != null && from - to > 32) toggleExpanded();
+      }}
+    >
       {adStrip}
       {transcriptPanel}
       <div className="audio-np-content gap-bar__row">
@@ -1735,6 +1748,8 @@ function GlobalAudioPlayer() {
             {curChapter?.title && <span className="audio-np-chapter-now" title={curChapter.title}>{curChapter.title}</span>}
             {/* Where it is and how long it runs, in the bar itself. */}
             {!isLive && <span className="audio-np-subline-time num">{fmt(audioCurrentTime)} / {fmt(audioDuration)}</span>}
+            {/* Phones (27c): the bar says how to open the player. */}
+            <span className="audio-np-swipe-hint">{t('audio.player.swipeUp')}</span>
           </span>
           {clipChip}
         </div>
@@ -2047,7 +2062,7 @@ function GlobalAudioPlayer() {
                     aria-label={t('comments.section.commentTab')}
                   >
                     {!isLive && <span className="gap-time">{fmt(audioCurrentTime)}</span>}
-                    <span className="gap-compose__ph">{t('comments.section.commentPlaceholder')}</span>
+                    <span className="gap-compose__ph">{isLive ? t('comments.section.commentPlaceholder') : t('audio.player.commentAt', { time: fmt(audioCurrentTime) })}</span>
                     <span className="gap-compose__send" aria-hidden="true"><Icon name="send" size={20} /></span>
                   </button>
                 ))}
@@ -2279,7 +2294,7 @@ function GlobalAudioPlayer() {
               <PmRow
                 icon="bedtime"
                 label={t('audio.player.sleep')}
-                sub={sleepLabel ? t('audio.player.sleepLeft', { time: sleepLabel }) : sleep?.mode === 'end' ? t('audio.player.sleepEnd') : t('audio.player.sleepOff')}
+                sub={!sleep ? t('audio.player.sleepOff') : sleep.mode === 'end' ? t('audio.player.sleepEnd') : t('audio.player.sleepMinutesShort', { minutes: sleep.minutes })}
                 onClick={() => setMenu({ name: 'sleep', anchor: menu.anchor })}
               />
             )}

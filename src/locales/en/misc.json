@@ -308,6 +308,8 @@
     "watching": "{{count}} watching",
     "startedAgo": "Started {{when}}",
     "topSupporters": "Top supporters",
-    "noSupporters": "No boosts yet"
+    "noSupporters": "No boosts yet",
+    "full": "Full",
+    "loginToChat": "Log in to chat"
   }
 }

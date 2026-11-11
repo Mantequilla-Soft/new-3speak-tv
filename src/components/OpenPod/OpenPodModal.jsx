@@ -210,16 +210,16 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
           {(streamEnded || roomStatus === 'gone') ? (
             <div className="openpod-ended">
               <div className="v2-success is-accent openpod-ended__card">
+                {/* 39c: the host's own stream ends on a thank-you, with a line on
+                    the recording when there is a post for it to land on. */}
                 <h2 className="openpod-ended__title">
-                  {streamEnded ? t('live.modal.yourStreamEnded') : t('live.modal.thisStreamEnded')}
+                  {streamEnded ? t('live.modal.thanksForLive') : t('live.modal.thisStreamEnded')}
                 </h2>
-                <p className="openpod-ended__text">
-                  {!streamEnded
-                    ? t('live.modal.noLongerLive')
-                    : announceEnabled && !isUnlisted
-                      ? t('live.modal.recordingProcessing')
-                      : t('live.modal.thanksForLive')}
-                </p>
+                {(!streamEnded || (announceEnabled && !isUnlisted)) && (
+                  <p className="openpod-ended__text">
+                    {streamEnded ? t('live.modal.recordingProcessing') : t('live.modal.noLongerLive')}
+                  </p>
+                )}
                 {/* The host's own stream just ended: the moment to tell followers how
                     it went, as a 24h story recorded right now. */}
                 {streamEnded && storiesEnabledFor(username) && (

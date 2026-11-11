@@ -353,8 +353,7 @@ function AudioPost() {
           ) : <span className="audio-post-strip__space" />}
           {audioDoc?.playlist_name && (
             <Link className="audio-post-strip__album" to={audioDoc.playlist_id ? `/playlist/${audioDoc.playlist_id}` : '#'}>
-              <Icon name="album" size={16} />
-              <span>{t('audio.item.album', { name: audioDoc.playlist_name })}</span>
+              <span>{t('audio.post.albumLabel')} <b>{audioDoc.playlist_name}</b></span>
             </Link>
           )}
           {communityId && (
@@ -462,7 +461,7 @@ function AudioPost() {
             onChange={setSideTab}
             options={[
               { value: 'queue', label: t('audio.player.queue'), count: audioQueue.length || undefined },
-              { value: 'notes', label: t('audio.item.comments'), count: comments.items.length || undefined },
+              { value: 'notes', label: t('audio.post.notes'), count: comments.items.length || undefined },
             ]}
           />
           <div className="audio-post-side__body">

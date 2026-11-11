@@ -66,14 +66,15 @@ function NavUploadDropdown() {
   // Desktop dropdown: a mouse resting on Share peeks at it, a click keeps it open,
   // and it fades in and out (hooks/useHoverPeek.js). The bottom sheet is tap only.
   const menu = useHoverPeek({ enabled: !asSheet });
-  const { shown: open, close: closeMenu, hold } = menu;
+  const { shown: open, close: closeMenu, toggle: toggleMenu } = menu;
 
   // The bottom bar's red "+" (20a phone) opens this same menu: on phones the
   // top bar shows no Create button of its own.
   useEffect(() => {
-    window.addEventListener(OPEN_CREATE_EVENT, hold);
-    return () => window.removeEventListener(OPEN_CREATE_EVENT, hold);
-  }, [hold]);
+    const openIt = () => { if (!open) toggleMenu(); };
+    window.addEventListener(OPEN_CREATE_EVENT, openIt);
+    return () => window.removeEventListener(OPEN_CREATE_EVENT, openIt);
+  }, [open, toggleMenu]);
 
   useEffect(() => {
     const mq = window.matchMedia(UPLOAD_SHEET_QUERY);

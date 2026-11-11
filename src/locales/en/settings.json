@@ -6,7 +6,7 @@
     "loading": "loading…",
     "hint": "Pick the topics you care about. We’ll use them to show you more of the content you like.",
     "loginHint": "Log in to choose your interests.",
-    "save": "Save interests"
+    "save": "Save to my Hive profile"
   },
   "ads": {
     "chainNotSaved": "Saved on 3Speak, but not on your Hive account. Try again to store it there too.",
@@ -16,18 +16,18 @@
     "rollsOnToast": "Video ad rolls are on for your videos",
     "rollsOffToast": "Only banners and tickers on your videos now",
     "audio": "Ads on your audio",
-    "audioDesc": "A short spoken message from a sponsor can play during your audio, with a link listeners can open. You get a share, as with video ads. You can change this for each upload in the audio uploader.",
+    "audioDesc": "A short spoken sponsor message, with a link listeners can open.",
     "audioOnToast": "Ads are on for your audio",
     "audioOffToast": "Ads are off for your audio",
     "splitSaved": "Revenue split saved",
     "title": "Ads on your videos",
     "allow": "Allow ads",
-    "allowDesc": "A short sponsor spot can play inside your videos. You get a share of what it earns, and so does the community you posted in. Turn this off and your videos carry no ads at all — they are also removed from what we offer advertisers, so nothing is sold that you have opted out of.",
+    "allowDesc": "A short sponsor spot can play inside your videos. Off removes them from what we sell to advertisers.",
     "allowAria": "Allow ads on your videos",
     "rolls": "Video ad rolls",
-    "rollsDesc": "Short video spots that play before or during your videos. Turn this off to keep only banners and tickers, which show over the video without stopping it.",
+    "rollsDesc": "Off keeps only banners and tickers.",
     "shareTitle": "Share with the community",
-    "shareDesc": "{{pool}}% of what an ad earns is split between you and the community you posted in. Choose how much of it the community gets — leave it at zero and you keep all {{pool}}%.",
+    "shareDesc": "{{pool}}% of ad revenue is split between you and the community you posted in.",
     "youPct": "You {{pct}}%",
     "communityPct": "Community {{pct}}%",
     "shareInputLabel": "Community share, percent",
@@ -40,10 +40,10 @@
     "saveFailed": "Could not save that setting.",
     "title": "Earn while you watch",
     "rowTitle": "Viewer rewards",
-    "desc": "Earn a share of ad revenue for what you watch, paid in HBD or HIVE. You are paid on videos watched, whether or not an ad played, so it rewards watching rather than sitting through ads. Ads themselves play for everyone except 3Speak Pro subscribers. We record how much of each video you watched, on top of the watch history the Watched page already keeps, and delete it the moment you turn this off.",
+    "desc": "A share of ad revenue for what you watch, paid in HBD or HIVE. You're paid for watching, whether or not an ad played. Turning this off deletes your watch data.",
     "aria": "Earn a share of ad revenue for what you watch",
     "titleListen": "Earn while you watch and listen",
-    "listenDesc": "Listening counts too: we record how long you listen to 3Speak audio and podcast episodes on 3speak.tv. Listener rewards start once we have checked the numbers, and what you listen to from the day you turn this on counts.",
+    "listenDesc": "Audio and podcast episodes on 3speak.tv",
     "listenAlso": "Count my listening too",
     "listenOnToast": "Your listening now counts toward listener rewards",
     "onToastBoth": "Rewards for watching and listening on",
@@ -60,7 +60,7 @@
     "canPost": "@threespeak can post for you",
     "cannotPost": "@threespeak cannot post for you",
     "checkingStatus": "@threespeak …",
-    "desc": "Lets 3Speak publish your uploads and scheduled posts on your behalf, and save some settings without a wallet prompt each time. It can only post, vote and comment; it can never move funds or change your keys. Without it, uploads ask you to add it again. Changing this needs your active key.",
+    "desc": "It can only post, vote and comment. It can never move funds or change your keys. Changing it needs your active key.",
     "checking": "Checking…",
     "removing": "Removing…",
     "adding": "Adding…",
@@ -102,7 +102,7 @@
         "desc": "When someone follows you."
       },
       "votes": {
-        "title": "Upvotes",
+        "title": "Upvotes (off by default)",
         "desc": "When someone upvotes your post. Off by default — a popular post is a lot of buzzes."
       },
       "reblogs": {
@@ -124,7 +124,7 @@
     "device": "Notify this device",
     "deviceBlocked": "Blocked in your browser settings for this site — allow notifications there first.",
     "deviceNoWorker": "Not available on this build.",
-    "deviceDesc": "Get a notification even when 3Speak isn’t open. Applies to this browser only.",
+    "deviceDesc": "Even when 3Speak isn't open",
     "whatHint": "What to be notified about. These apply to every device you’ve turned on.",
     "iosNote": "On iPhone and iPad, notifications only work after you add 3Speak to the Home Screen."
   },
@@ -133,7 +133,7 @@
     "content": "Content",
     "connections": "Connections",
     "rewards": "Ads & rewards",
-    "about": "About / Version"
+    "about": "About"
   },
   "contentTabs": {
     "feed": "Feed",
@@ -150,51 +150,51 @@
     "title": "Appearance",
     "darkMode": {
       "title": "Dark mode",
-      "desc": "Use the dark colour theme across the app."
+      "desc": "Dark colour theme across the app"
     },
     "largeCards": {
       "title": "Large cards",
-      "desc": "Show bigger video cards on the home, profile and playlist pages. Turn off for smaller, more compact cards."
+      "desc": "Bigger video cards on home, profile and playlists"
     },
     "previews": {
       "title": "Video previews",
-      "desc": "Play a muted preview when you hover a video card (and, on mobile in large mode, the centred card auto-plays as you scroll)."
+      "desc": "Muted preview on hover; on mobile the centred card plays"
     },
     "simpleFeeds": {
       "title": "Simple feeds",
-      "desc": "Turn off the recommendation algorithm — Discover, Interests and Trending become plain newest-first lists instead of ranked ones."
+      "desc": "No recommendations, newest first everywhere"
     }
   },
   "shorts": {
     "commentBar": {
       "title": "Comment bar on shorts",
-      "desc": "Show a comment input under a short. Off by default — you can always open the comments panel with the comment button."
+      "desc": "A comment input under each Short"
     },
     "openOnStart": {
-      "title": "Open shorts on start",
-      "desc": "Go straight to Shorts when you open 3Speak, instead of the home feed."
+      "title": "Open Shorts on start",
+      "desc": "Go straight to Shorts when you open 3Speak"
     },
     "inFeeds": {
       "title": "Shorts inside the feeds",
-      "desc": "Show rows of shorts between the videos in the home feeds and the recommendations on a watch page. Turn off to keep those lists videos-only."
+      "desc": "Rows of Shorts between videos"
     }
   },
   "feed": {
     "nsfw": {
       "title": "Show NSFW content",
-      "desc": "Display videos and audio marked not-safe-for-work. Off by default."
+      "desc": "Off by default"
     },
     "hideWatched": {
       "title": "Hide watched videos",
-      "desc": "Leave out videos you've already watched from the home, trending and recommended feeds."
+      "desc": "In home, trending and recommended"
     },
     "hideAi": {
       "title": "Hide AI-generated videos",
-      "desc": "Leave out videos and shorts marked AI-generated, in every feed. The mark comes from an automatic check, so some may slip through."
+      "desc": "From an automatic check, some may slip through"
     },
     "privateMode": {
       "title": "Private mode",
-      "desc": "Keep your country out of creators' statistics. We never store your IP address — for anyone. It's turned into a country code the moment you press play and then discarded. With this on, not even that country is recorded for your views."
+      "desc": "Keep your country out of creators' stats. We never store your IP."
     }
   },
   "about": {
@@ -213,13 +213,13 @@
     "dataReceived": "Data request received",
     "sendFailed": "Could not send your request",
     "doneTitle": "Request received",
-    "doneBody": "Your reference is <b>{{ref}}</b>. We will reply to <b>{{contact}}</b> by <b>{{dueBy}}</b> at the latest.",
+    "doneBody": "Your reference is <b>{{ref}}</b>. We'll reply to {{contact}} by {{dueBy}} at the latest.",
     "keepRef": "Keep the reference in case you need to follow up.",
     "signIn": "Please log in to request or delete your data — a request applies to the account you're signed in as.",
     "requestFor": "Request for <b>@{{username}}</b>",
     "typeAria": "Request type",
-    "getData": "Get my data",
-    "deleteData": "Delete my account data",
+    "getData": "Export my data",
+    "deleteData": "Delete my account",
     "ledeDelete": "We will delete everything 3Speak stores about you in our own database.",
     "ledeExport": "We will send you everything 3Speak stores about you in our own database, as a JSON file.",
     "covers": "This covers:",
@@ -229,12 +229,12 @@
     "cannotExport": "Your on-chain data is already public and machine-readable via any Hive API — we will point you to it. What we send you is what we hold in addition to that.",
     "emailLabel": "Email to reply to",
     "emailPlaceholder": "you@example.com",
-    "messageLabel": "Anything to add? (optional)",
+    "messageLabel": "Anything we should know (optional)",
     "messagePlaceholder": "Optional details about your request",
     "confirmLabel": "I understand my content on the Hive blockchain is permanent and cannot be deleted by 3Speak or by anyone else.",
     "sending": "Sending…",
     "requestDeletion": "Request deletion",
-    "requestData": "Request my data",
+    "requestData": "Send request",
     "foot": "We reply within one month. You can also email <mail>privacy@3speak.tv</mail> directly.",
     "intro": "Ask for a copy of what 3Speak stores about you, or for it to be removed. Posts on Hive are public and can't be deleted."
   },
@@ -250,14 +250,14 @@
     "useV4v": "Use v4v.app again",
     "savedOwn": "Lightning tips now go to your own address",
     "savedV4v": "Lightning tips go through v4v.app again",
-    "badAddress": "That is not a Lightning address. It looks like name@wallet.com.",
+    "badAddress": "That's not a Lightning address. It looks like name@wallet.com.",
     "unreachable": "This address did not answer as a Lightning address. Check it and try again.",
     "saveFailed": "Could not save it to your Hive profile.",
-    "supportersNote": "Tips to your own address never pass through Hive, so they don't show up under Supporters.",
-    "publicNote": "Your Lightning address is saved on your Hive account, where anyone can see it."
+    "supportersNote": "Tips to your own address don't show under Supporters.",
+    "publicNote": "Saved on your Hive account, where anyone can see it."
   },
   "supportLinks": {
-    "title": "Other ways to support you",
+    "title": "Support links",
     "desc": "Your page on {{sites}}. Viewers find these links in your tip window.",
     "placeholder": "https://ko-fi.com/yourname",
     "add": "Add",
@@ -278,12 +278,12 @@
     "shareTip": "Put it in your bio, your email signature, or print it on a T-shirt. We won't judge.",
     "earnTitle": "What you earn",
     "bonusValue": "{{pct}}%",
-    "bonusLabel": "of their ad rewards",
+    "bonusLabel": "of their ad rewards, as creator, viewer or listener",
     "bonusDesc": "as a creator, viewer or listener",
     "timeValue": "{{months}} months",
     "timeLabel": "from the day they sign up",
     "adsValue": "{{pct}}%",
-    "adsLabel": "of their ad campaigns",
+    "adsLabel": "of their ad campaigns if they book ads",
     "adsDesc": "if they book ads",
     "earnOnTop": "3Speak pays this on top. The people you invite keep everything they earn.",
     "rules": "Only new accounts that sign up through your link count. Rewards arrive with the regular ad payouts, marked as a referral bonus."

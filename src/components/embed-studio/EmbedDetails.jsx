@@ -8,7 +8,7 @@ import { useEmbedUpload } from '../../context/EmbedUploadContext';
 import { useAppStore } from '../../lib/store';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { getMinMaxDates } from '../../utils/schedulingHelpers';
-import ScheduleCalendar from '../studio/ScheduleCalendar';
+import { ScheduleDayStrip, formatScheduleWhen } from '../studio/ScheduleCalendar';
 import EmbedUploadProgressBar from './EmbedUploadProgressBar';
 import StepActions from './StepActions';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
@@ -22,7 +22,6 @@ import '../legacy-studio/StudioPage.scss';
 import SettingInfo, { SettingSheet } from './SettingInfo';
 import './EmbedDetails.scss';
 import { useTranslation, Trans } from 'react-i18next';
-import AccountImg from '../HiveAvatar/AccountImg';
 import { SHORT_TITLE_MAX } from '../../utils/shortTitle';
 import { Button, Icon, IconButton, Toggle } from '../v2/ui';
 
@@ -174,6 +173,8 @@ function EmbedDetails() {
   const [scheduleDraft, setScheduleDraft] = useState('');
   const [rewardsOpen, setRewardsOpen] = useState(false);
   const [guestsOpen, setGuestsOpen] = useState(false);
+  const [tagsOpen, setTagsOpen] = useState(false);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
   // From the upload state, not 'default': this page is revisited (Back from
   // Timeline/Preview), and the tile must show what will actually be published.
   const [rewardChoice, setRewardChoice] = useState(() => (declineRewards ? 'decline' : rewardPowerup ? 'powerup' : 'default'));
@@ -354,24 +355,208 @@ function EmbedDetails() {
     setTagsPreview(uniqueTags);
   };
 
-  const openSchedule = () => {
-    const next = !isScheduled;
-    setIsScheduled(next);
-    if (next) {
-      if (!scheduleDateTime) {
-        // Prefill with the minimum so the picker is never empty.
-        const { minFormatted, minDate } = getMinMaxDates();
-        setScheduleDateTime(minFormatted || minDate?.toISOString().slice(0, 16));
-      }
-      // Turning it on is a request to pick a time, so ask now.
-      setScheduleDraft(scheduleDateTime || '');
-      setScheduleOpen(true);
-    }
+  // The Schedule row opens the 17d sheet on the chosen time, or the earliest
+  // allowed one, so the strip is never empty. Scheduling is switched on by the
+  // sheet's main action and off by its "Publish right away".
+  const openScheduleSheet = () => {
+    const { minFormatted, minDate } = getMinMaxDates();
+    setScheduleDraft((isScheduled && scheduleDateTime) || minFormatted || minDate?.toISOString().slice(0, 16) || '');
+    setScheduleOpen(true);
   };
 
   const descLen = description?.length || 0;
   const poster = editedThumbnail || selectedThumbnail;
   const pageTitle = fromStories ? t(isStory ? "upload.page.shareStory" : "upload.page.shareShort") : t("upload.page.shareVideo");
+
+  // 21c: the advanced options (35c tiles) live in a side sheet behind the
+  // "NSFW / payout" row; community and tags are tiles under the description.
+  const optionTiles = (
+    <div className="advance-option details-sheet-options">
+      <OptTile
+        icon="payments"
+        tone="accent"
+        on={rewardChoice !== 'decline'}
+        picker
+        onClick={() => setRewardsOpen(true)}
+        label={t('upload.details.rewards.label')}
+        info={t('upload.details.rewards.info')}
+        hint={t('upload.details.rewards.hint')}
+        control={chevron}
+        value={<div className="tile-value">{t(REWARD_LABELS[rewardChoice] || REWARD_LABELS.default)}</div>}
+      />
+      <OptTile
+        icon="call_split"
+        tone="accent"
+        on={list.length > 0}
+        picker
+        onClick={toggleBeneficiaryModal}
+        label={t('upload.details.beneficiaries.label')}
+        info={t('upload.details.beneficiaries.info')}
+        hint={t('upload.details.beneficiaries.hint')}
+        control={chevron}
+        value={(
+          <div className="tile-value">{list.length > 0
+            ? t('upload.details.beneficiaries.accounts', { count: list.length })
+            : t('upload.details.beneficiaries.none')}</div>
+        )}
+      />
+      <OptTile
+        icon="content_cut"
+        tone="cyan"
+        on={isRemix || reusable}
+        onClick={() => { if (!isRemix) setReusable(!reusable); }}
+        label={t('upload.details.remix.label')}
+        info={t('upload.details.remix.info')}
+        hint={t('upload.details.remix.hint')}
+        control={tileSwitch(isRemix ? true : reusable, setReusable, t('upload.details.remix.label'), isRemix)}
+      />
+      <OptTile
+        icon="explicit"
+        tone="accent"
+        on={!!isNsfw}
+        onClick={() => setIsNsfw(!isNsfw)}
+        label={t('upload.details.nsfw.label')}
+        info={<Trans i18nKey="upload.details.nsfw.info" components={{ code: <code /> }} />}
+        hint={t('upload.details.nsfw.hint')}
+        control={tileSwitch(isNsfw, setIsNsfw, t('upload.details.nsfw.label'))}
+      />
+      {/* Regular videos only: a short is a reply, not a post, so there
+          is nothing to put on a blog. */}
+      {!fromStories && (
+        <OptTile
+          icon="article"
+          tone="cyan"
+          on={!!addToBlog}
+          onClick={() => setAddToBlog(!addToBlog)}
+          label={t('upload.details.addToBlog.label')}
+          info={t('upload.details.addToBlog.info')}
+          hint={t('upload.details.addToBlog.hint')}
+          control={tileSwitch(addToBlog, setAddToBlog, t('upload.details.addToBlog.label'))}
+        />
+      )}
+      {/* Shorts and stories never carry ads, so there is nothing to switch. */}
+      {accountAdsOn && !fromStories && (
+        <OptTile
+          icon="ads_click"
+          tone="accent"
+          on={!!videoAdsEnabled}
+          onClick={() => setVideoAdsEnabled(!videoAdsEnabled)}
+          label={t('upload.details.ads.label')}
+          info={t('upload.details.ads.info')}
+          hint={videoAdsEnabled ? t('upload.details.ads.hintOn') : t('upload.details.ads.hintOff')}
+          control={tileSwitch(videoAdsEnabled, setVideoAdsEnabled, t('upload.details.ads.label'))}
+        />
+      )}
+      {accountAdsOn && accountRollsOn && videoAdsEnabled && !fromStories && (
+        <OptTile
+          icon="smart_display"
+          tone="accent"
+          on={!!videoRollsEnabled}
+          onClick={() => setVideoRollsEnabled(!videoRollsEnabled)}
+          label={t('upload.details.rolls.label')}
+          info={t('upload.details.rolls.info')}
+          hint={videoRollsEnabled ? t('upload.details.rolls.hintOn') : t('upload.details.rolls.hintOff')}
+          control={tileSwitch(videoRollsEnabled, setVideoRollsEnabled, t('upload.details.rolls.label'))}
+        />
+      )}
+      {/* 🔐 Supporters-only. Pro-gated in the UI, but the backend
+          re-checks Pro status when it mints the upload token, so
+          hiding this control is presentation, not enforcement. Not
+          offered for shorts: a paywalled short is a worse product
+          than a free one, and the preview would be most of the clip. */}
+      {/* Still under test: visible only to the team's test accounts, the
+          same list that gates OpenPods and the camera recorder. Drop
+          `isTestUser` here to open it to every Pro user. */}
+      {!fromStories && isPro && isTestUser(user) && (
+        <OptTile
+          icon="lock"
+          tone="cyan"
+          on={!!gated}
+          onClick={() => setGated(!gated)}
+          label={t('upload.details.gated.label')}
+          info={<Trans i18nKey="upload.details.gated.info" components={{ b: <strong /> }} />}
+          hint={gated && gatedAllowlist.length
+            ? t('upload.details.gated.withGuests', { count: gatedAllowlist.length })
+            : t('upload.details.gated.hint')}
+          control={tileSwitch(gated, setGated, t('upload.details.gated.label'))}
+        />
+      )}
+      {/* 🔐 Guest list. Named accounts watch without needing Pro, which
+          is what makes this usable for sending a video to specific
+          people. Stored on our servers only — never in the Hive post,
+          so the recipient list is not published on-chain. */}
+      {!fromStories && gated && isPro && isTestUser(user) && (
+        <div
+          className="beneficiary-wrap opt-tile guest-tile tone-cyan is-on is-clickable"
+          role="button"
+          tabIndex={0}
+          onClick={() => setGuestsOpen(true)}
+          onKeyDown={(e) => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setGuestsOpen(true); } }}
+        >
+          <div className="guest-tile__head">
+            <Icon name="group" size={20} />
+            <b>{t('upload.details.guests.title')}</b>
+            <span className="num">{gatedAllowlist.length}</span>
+          </div>
+          {gatedAllowlist.length > 0 && (
+            <div className="gated-guests__chips">
+              {gatedAllowlist.map((name) => <span className="gated-guests__chip" key={name}>@{name}</span>)}
+            </div>
+          )}
+          <span className="guest-tile__note">{t('upload.details.guests.note')}</span>
+        </div>
+      )}
+      {/* Not offered for shorts: the Overview trailer frame is 16:9. */}
+      {!fromStories && (
+        <OptTile
+          icon="play_circle"
+          tone="cyan"
+          on={!!isChannelTrailer}
+          onClick={() => setIsChannelTrailer(!isChannelTrailer)}
+          label={t('upload.details.trailer.label')}
+          info={<Trans i18nKey="upload.details.trailer.info" components={{ b: <strong /> }} />}
+          hint={t('upload.details.trailer.hint')}
+          control={tileSwitch(isChannelTrailer, setIsChannelTrailer, t('upload.details.trailer.label'))}
+        />
+      )}
+    </div>
+  );
+
+  const communityName = community
+    ? (community === 'hive-181335' ? 'Threespeak' : (community.title || community.name))
+    : t('upload.details.community.select');
+  const nextLabel = t('upload.details.nextStep', { step: fromStories ? t('upload.steps.previewUpload') : t('upload.steps.timeline') });
+  actions.primary = [{ key: 'proceed', label: nextLabel, onClick: process }];
+
+  const settingRows = [
+    !fromStories && {
+      key: 'schedule',
+      icon: 'event',
+      title: t('upload.details.schedule.short'),
+      sub: isScheduled && scheduleDateTime
+        ? new Date(scheduleDateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+        : t('upload.details.schedule.publishLater'),
+      on: !!isScheduled,
+      onClick: openScheduleSheet,
+    },
+    {
+      key: 'share',
+      icon: 'call_split',
+      title: t('upload.details.shareRewards'),
+      sub: list.length > 0
+        ? t('upload.details.beneficiaries.accounts', { count: list.length })
+        : t('upload.details.shareRewardsSub'),
+      on: list.length > 0,
+      onClick: toggleBeneficiaryModal,
+    },
+    {
+      key: 'advanced',
+      icon: 'visibility_off',
+      title: t('upload.details.advanced'),
+      sub: t('upload.details.advancedSub'),
+      onClick: () => setAdvancedOpen(true),
+    },
+  ].filter(Boolean);
 
   return (
     <>
@@ -386,7 +571,7 @@ function EmbedDetails() {
               {/* Shorts and stories: optional, posted as a `## Title` line on top of
                   the post and then shown as the short's title on 3Speak
                   (utils/shortTitle.js). */}
-              <section className="v2-card details-card input-group">
+              <section className="v2-card details-card details-card--title input-group">
                 <label htmlFor="ed-title">
                   <span>{fromStories ? t("upload.details.titleShort") : t("upload.details.title")}</span>
                   {fromStories && <span className="details-count num">{title.length}/{SHORT_TITLE_MAX}</span>}
@@ -417,261 +602,111 @@ function EmbedDetails() {
                 )}
               </section>
 
-              <section className="v2-card details-card input-group">
-                <label htmlFor="ed-tags">
-                  <span>{t("upload.details.tag")}</span>
-                  <span className={`tag-count num${allTags.length >= 10 ? ' is-full' : ''}`}>
-                    {!fromStories ? t('upload.details.tagCountRequired', { n: allTags.length }) : t('upload.details.tagCount', { n: allTags.length })}
-                  </span>
-                </label>
-                <input id="ed-tags" type="text" value={tagsInputValue} onChange={handleTagChange} />
-
-                <div className="wrap">
-                  <Trans i18nKey="upload.details.tagsSeparator" components={{ text: <span />, space: <span /> }} />
-                </div>
-                {/* The community (and 'short' for shorts) is added automatically —
-                    shown here as a pinned tag and counted toward the 10-tag limit. */}
-                <div className="preview-tags">
-                  <span>{allTags.map((item, index) => (
-                    <span
-                      className={`item${index < autoTags.length ? ' item--auto' : ''}`}
-                      key={index}
-                      title={index < autoTags.length ? t('upload.details.addedAutomatically') : undefined}
-                    >
-                      {index < autoTags.length && <Icon name="groups" size={14} />}
-                      {item}
-                    </span>
-                  ))}</span>
-                </div>
-              </section>
-
-              {/* Hidden, not removed, for someone with no Hive account. Community is a
-                  Hive category, and Rewards, Beneficiaries and Remix all divide a payout
-                  that an off-chain post does not have. Showing them would ask the user to
-                  configure things that cannot apply, and quietly imply their post earns.
-                  They come back by themselves once the user graduates. */}
-              {!incubationHandle && (
-              <section className="details-options">
-                <div className="v2-eyebrow">{t('upload.review.publishSettings')}</div>
-                <div className="advance-option">
-                  {!fromStories && (
-                    <OptTile
-                      className="community-tile"
-                      icon="groups"
-                      tone="cyan"
-                      on
-                      picker
-                      onClick={openCommunityModal}
-                      label={t('upload.details.community.label')}
-                      info={t('upload.details.community.info')}
-                      hint={t('upload.details.community.hint')}
-                      control={chevron}
-                      value={(
-                        <div className="tile-value community-value">
-                          {community
-                            ? (community === "hive-181335"
-                              ? <div className="wrap"><AccountImg account="hive-181335" alt="" /><span>Threespeak</span></div>
-                              : <div className="wrap"><AccountImg account={community.name} alt="" /><span>{community.title}</span></div>)
-                            : <span>{t('upload.details.community.select')}</span>}
-                        </div>
-                      )}
-                    />
-                  )}
-                  <OptTile
-                    icon="payments"
-                    tone="accent"
-                    on={rewardChoice !== 'decline'}
-                    picker
-                    onClick={() => setRewardsOpen(true)}
-                    label={t('upload.details.rewards.label')}
-                    info={t('upload.details.rewards.info')}
-                    hint={t('upload.details.rewards.hint')}
-                    control={chevron}
-                    value={<div className="tile-value">{t(REWARD_LABELS[rewardChoice] || REWARD_LABELS.default)}</div>}
-                  />
-                  <OptTile
-                    icon="call_split"
-                    tone="accent"
-                    on={list.length > 0}
-                    picker
-                    onClick={toggleBeneficiaryModal}
-                    label={t('upload.details.beneficiaries.label')}
-                    info={t('upload.details.beneficiaries.info')}
-                    hint={t('upload.details.beneficiaries.hint')}
-                    control={chevron}
-                    value={(
-                      <div className="tile-value">{list.length > 0
-                        ? t('upload.details.beneficiaries.accounts', { count: list.length })
-                        : t('upload.details.beneficiaries.none')}</div>
-                    )}
-                  />
-                  <OptTile
-                    icon="content_cut"
-                    tone="cyan"
-                    on={isRemix || reusable}
-                    onClick={() => { if (!isRemix) setReusable(!reusable); }}
-                    label={t('upload.details.remix.label')}
-                    info={t('upload.details.remix.info')}
-                    hint={t('upload.details.remix.hint')}
-                    control={tileSwitch(isRemix ? true : reusable, setReusable, t('upload.details.remix.label'), isRemix)}
-                  />
-                  <OptTile
-                    icon="explicit"
-                    tone="accent"
-                    on={!!isNsfw}
-                    onClick={() => setIsNsfw(!isNsfw)}
-                    label={t('upload.details.nsfw.label')}
-                    info={<Trans i18nKey="upload.details.nsfw.info" components={{ code: <code /> }} />}
-                    hint={t('upload.details.nsfw.hint')}
-                    control={tileSwitch(isNsfw, setIsNsfw, t('upload.details.nsfw.label'))}
-                  />
-                  {/* Regular videos only: a short is a reply, not a post, so there
-                      is nothing to put on a blog. */}
-                  {!fromStories && (
-                    <OptTile
-                      icon="article"
-                      tone="cyan"
-                      on={!!addToBlog}
-                      onClick={() => setAddToBlog(!addToBlog)}
-                      label={t('upload.details.addToBlog.label')}
-                      info={t('upload.details.addToBlog.info')}
-                      hint={t('upload.details.addToBlog.hint')}
-                      control={tileSwitch(addToBlog, setAddToBlog, t('upload.details.addToBlog.label'))}
-                    />
-                  )}
-                  {/* Shorts and stories never carry ads, so there is nothing to switch. */}
-                  {accountAdsOn && !fromStories && (
-                    <OptTile
-                      icon="ads_click"
-                      tone="accent"
-                      on={!!videoAdsEnabled}
-                      onClick={() => setVideoAdsEnabled(!videoAdsEnabled)}
-                      label={t('upload.details.ads.label')}
-                      info={t('upload.details.ads.info')}
-                      hint={videoAdsEnabled ? t('upload.details.ads.hintOn') : t('upload.details.ads.hintOff')}
-                      control={tileSwitch(videoAdsEnabled, setVideoAdsEnabled, t('upload.details.ads.label'))}
-                    />
-                  )}
-                  {accountAdsOn && accountRollsOn && videoAdsEnabled && !fromStories && (
-                    <OptTile
-                      icon="smart_display"
-                      tone="accent"
-                      on={!!videoRollsEnabled}
-                      onClick={() => setVideoRollsEnabled(!videoRollsEnabled)}
-                      label={t('upload.details.rolls.label')}
-                      info={t('upload.details.rolls.info')}
-                      hint={videoRollsEnabled ? t('upload.details.rolls.hintOn') : t('upload.details.rolls.hintOff')}
-                      control={tileSwitch(videoRollsEnabled, setVideoRollsEnabled, t('upload.details.rolls.label'))}
-                    />
-                  )}
-                  {/* 🔐 Supporters-only. Pro-gated in the UI, but the backend
-                      re-checks Pro status when it mints the upload token, so
-                      hiding this control is presentation, not enforcement. Not
-                      offered for shorts: a paywalled short is a worse product
-                      than a free one, and the preview would be most of the clip. */}
-                  {/* Still under test: visible only to the team's test accounts, the
-                      same list that gates OpenPods and the camera recorder. Drop
-                      `isTestUser` here to open it to every Pro user. */}
-                  {!fromStories && isPro && isTestUser(user) && (
-                    <OptTile
-                      icon="lock"
-                      tone="cyan"
-                      on={!!gated}
-                      onClick={() => setGated(!gated)}
-                      label={t('upload.details.gated.label')}
-                      info={<Trans i18nKey="upload.details.gated.info" components={{ b: <strong /> }} />}
-                      hint={gated && gatedAllowlist.length
-                        ? t('upload.details.gated.withGuests', { count: gatedAllowlist.length })
-                        : t('upload.details.gated.hint')}
-                      control={tileSwitch(gated, setGated, t('upload.details.gated.label'))}
-                    />
-                  )}
-                  {/* 🔐 Guest list. Named accounts watch without needing Pro, which
-                      is what makes this usable for sending a video to specific
-                      people. Stored on our servers only — never in the Hive post,
-                      so the recipient list is not published on-chain. */}
-                  {!fromStories && gated && isPro && isTestUser(user) && (
-                    <div
-                      className="beneficiary-wrap opt-tile guest-tile tone-cyan is-on is-clickable"
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => setGuestsOpen(true)}
-                      onKeyDown={(e) => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setGuestsOpen(true); } }}
-                    >
-                      <div className="guest-tile__head">
-                        <Icon name="group" size={20} />
-                        <b>{t('upload.details.guests.title')}</b>
-                        <span className="num">{gatedAllowlist.length}</span>
-                      </div>
-                      {gatedAllowlist.length > 0 && (
-                        <div className="gated-guests__chips">
-                          {gatedAllowlist.map((name) => <span className="gated-guests__chip" key={name}>@{name}</span>)}
-                        </div>
-                      )}
-                      <span className="guest-tile__note">{t('upload.details.guests.note')}</span>
-                    </div>
-                  )}
-                  {/* Not offered for shorts: the Overview trailer frame is 16:9. */}
-                  {!fromStories && (
-                    <OptTile
-                      icon="play_circle"
-                      tone="cyan"
-                      on={!!isChannelTrailer}
-                      onClick={() => setIsChannelTrailer(!isChannelTrailer)}
-                      label={t('upload.details.trailer.label')}
-                      info={<Trans i18nKey="upload.details.trailer.info" components={{ b: <strong /> }} />}
-                      hint={t('upload.details.trailer.hint')}
-                      control={tileSwitch(isChannelTrailer, setIsChannelTrailer, t('upload.details.trailer.label'))}
-                    />
-                  )}
-                  {/* Schedule — only for regular videos, not shorts. When on, the post
-                      is queued on the checker backend and broadcast at the chosen time
-                      by @threespeak (the user grants that posting auth once). The
-                      picker lives in a sheet so the tile stays the size of its
-                      neighbours instead of growing an input inline. */}
-                  {!fromStories && (
-                    <OptTile
-                      className="schedule-tile"
-                      icon="event"
-                      tone="cyan"
-                      on={!!isScheduled}
-                      onClick={openSchedule}
-                      label={t('upload.details.schedule.label')}
-                      info={t('upload.details.schedule.info')}
-                      hint={isScheduled && scheduleDateTime
-                        ? new Date(scheduleDateTime).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
-                        : t('upload.details.schedule.immediately')}
-                      control={tileSwitch(isScheduled, () => openSchedule(), t('upload.details.schedule.label'))}
-                      extra={isScheduled && (
-                        <button type="button" className="schedule-tile__change" onClick={(e) => { e.stopPropagation(); setScheduleDraft(scheduleDateTime || ''); setScheduleOpen(true); }}>
-                          <Icon name="edit_calendar" size={16} />
-                          {t('upload.details.schedule.changeTime')}
-                        </button>
-                      )}
-                    />
-                  )}
-                </div>
-              </section>
-              )}
+              {/* Choices as tiles (21c): what the post is filed under. Each opens
+                  its picker; Community is a Hive category, so it is left out for
+                  someone with no Hive account yet and for shorts. */}
+              <div className="details-meta">
+                {!fromStories && !incubationHandle && (
+                  <button type="button" className="details-meta__tile is-cyan" onClick={openCommunityModal}>
+                    <Icon name="groups" size={24} />
+                    <span className="details-meta__label">{t('upload.details.community.label')}</span>
+                    <b className="details-meta__value">{communityName}</b>
+                  </button>
+                )}
+                <button type="button" className="details-meta__tile" onClick={() => setTagsOpen(true)}>
+                  <Icon name="tag" size={24} />
+                  <span className="details-meta__label">{t('upload.review.tags')}</span>
+                  <b className="details-meta__value">{t('upload.details.tagsCount', { count: allTags.length })}</b>
+                </button>
+              </div>
             </div>
 
-            {/* Side column (21c): the thumbnail as it will show, the background
-                upload, and the way back to change the picture. */}
+            {/* Side column (21c): the post as it will show with the background
+                upload under it, then the settings, each in a side sheet. */}
             <aside className="embed-details-aside">
               <div className="v2-card details-preview">
                 <div className={`details-preview__thumb v2-thumb${fromStories ? ' is-portrait' : ''}`}>
                   {poster && <img src={poster} alt="" />}
                 </div>
                 <div className="details-preview__body">
-                  <b className="details-preview__title">{title || pageTitle}</b>
                   <EmbedUploadProgressBar compact />
-                  <Button variant="secondary" size={40} icon="image" onClick={() => navigate('/embed-studio/thumbnail')}>
-                    {t('upload.steps.chooseThumbnail')}
-                  </Button>
                 </div>
               </div>
+
+              {/* Hidden, not removed, for someone with no Hive account. Rewards,
+                  Beneficiaries and Remix all divide a payout that an off-chain post
+                  does not have. They come back by themselves once the user graduates. */}
+              {!incubationHandle && (
+                <div className="v2-card details-settings" role="list" aria-label={t('upload.review.publishSettings')}>
+                  {settingRows.map((row) => (
+                    <button type="button" role="listitem" key={row.key} className={`details-settings__row${row.on ? ' is-on' : ''}`} onClick={row.onClick}>
+                      <span className="details-settings__icon"><Icon name={row.icon} size={20} /></span>
+                      <span className="details-settings__body">
+                        <b>{row.title}</b>
+                        <span>{row.sub}</span>
+                      </span>
+                      <Icon name="chevron_right" size={20} className="details-settings__chev" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </aside>
           </div>
+
+          <SettingSheet
+            side
+            tone="cyan"
+            title={t('upload.review.tags')}
+            open={tagsOpen}
+            onClose={() => setTagsOpen(false)}
+            footer={(
+              <Button variant="inverse" size={48} block trailing="check" className="dlg-main" onClick={() => setTagsOpen(false)}>
+                {t('common.actions.done')}
+              </Button>
+            )}
+          >
+            <div className="details-tags input-group">
+              <label htmlFor="ed-tags" className="details-tags__head">
+                <span className="v2-eyebrow">{t("upload.details.tag")}</span>
+                <span className={`tag-count num${allTags.length >= 10 ? ' is-full' : ''}`}>
+                  {!fromStories ? t('upload.details.tagCountRequired', { n: allTags.length }) : t('upload.details.tagCount', { n: allTags.length })}
+                </span>
+              </label>
+              <input id="ed-tags" type="text" value={tagsInputValue} onChange={handleTagChange} />
+              <div className="wrap">
+                <Trans i18nKey="upload.details.tagsSeparator" components={{ text: <span />, space: <span /> }} />
+              </div>
+              {/* The community (and 'short' for shorts) is added automatically —
+                  shown here as a pinned tag and counted toward the 10-tag limit. */}
+              <div className="preview-tags">
+                <span>{allTags.map((item, index) => (
+                  <span
+                    className={`item${index < autoTags.length ? ' item--auto' : ''}`}
+                    key={index}
+                    title={index < autoTags.length ? t('upload.details.addedAutomatically') : undefined}
+                  >
+                    {index < autoTags.length && <Icon name="groups" size={14} />}
+                    {item}
+                  </span>
+                ))}</span>
+              </div>
+            </div>
+          </SettingSheet>
+
+          <SettingSheet
+            side
+            tone="accent"
+            title={t('upload.details.advanced')}
+            open={advancedOpen}
+            onClose={() => setAdvancedOpen(false)}
+            footer={(
+              <Button variant="inverse" size={48} block trailing="check" className="dlg-main" onClick={() => setAdvancedOpen(false)}>
+                {t('common.actions.done')}
+              </Button>
+            )}
+          >
+            {optionTiles}
+          </SettingSheet>
 
           <SettingSheet title={t('upload.details.rewards.label')} open={rewardsOpen} onClose={() => setRewardsOpen(false)}>
             <div className="option-sheet" role="radiogroup" aria-label={t('upload.details.rewards.label')}>
@@ -733,12 +768,40 @@ function EmbedDetails() {
             </div>
           </SettingSheet>
 
-          <SettingSheet title={t('upload.details.schedule.label')} open={scheduleOpen} onClose={() => setScheduleOpen(false)}>
+          {/* 17d: a strip of days, the time and the zone, and the main action
+              names the slot. The draft is only written back by that button. */}
+          <SettingSheet
+            side
+            tone="cyan"
+            title={t('upload.details.schedule.short')}
+            open={scheduleOpen}
+            onClose={() => setScheduleOpen(false)}
+            footer={(
+              <>
+                {isScheduled && (
+                  <Button variant="ghost" size={40} block icon="bolt" onClick={() => { setIsScheduled(false); setScheduleOpen(false); }}>
+                    {t('upload.details.schedule.publishNow')}
+                  </Button>
+                )}
+                <Button
+                  variant="inverse"
+                  size={48}
+                  block
+                  trailing="event"
+                  className="dlg-main"
+                  disabled={!scheduleDraft}
+                  onClick={() => { setScheduleDateTime(scheduleDraft); setIsScheduled(true); setScheduleOpen(false); }}
+                >
+                  {t('upload.details.schedule.scheduleFor', { when: formatScheduleWhen(scheduleDraft) })}
+                </Button>
+              </>
+            )}
+          >
             {(() => {
               const { minFormatted, maxFormatted } = getMinMaxDates();
               return (
                 <>
-                  <ScheduleCalendar
+                  <ScheduleDayStrip
                     value={scheduleDraft}
                     min={minFormatted}
                     max={maxFormatted}
@@ -747,16 +810,6 @@ function EmbedDetails() {
                   <p className="schedule-sheet__note">
                     {t('upload.details.schedule.note')}
                   </p>
-                  <div className="sheet-actions">
-                    <button
-                      type="button"
-                      className="sheet-actions__ok"
-                      disabled={!scheduleDraft}
-                      onClick={() => { setScheduleDateTime(scheduleDraft); setScheduleOpen(false); }}
-                    >
-                      {t('common.actions.ok')}
-                    </button>
-                  </div>
                 </>
               );
             })()}

@@ -7,7 +7,7 @@
   "watchingNow_other": "{{count}} watching now",
   "previewMuted": "Preview · muted",
   "badges": {
-    "gatedTitle": "Members only. 3Speak Pro unlocks the full video",
+    "gatedTitle": "Members only",
     "pro": "PRO",
     "new": "NEW",
     "first": "First",
@@ -18,17 +18,17 @@
   "status": {
     "scheduled": "Scheduled",
     "mobile": "Mobile",
-    "mobileTitle": "Uploaded via mobile app",
+    "mobileTitle": "Via mobile app",
     "processing": "Processing",
-    "processingTitle": "Video is being processed",
+    "processingTitle": "Being processed",
     "draft": "Draft",
-    "draftTitle": "Draft - not published yet",
+    "draftTitle": "Not published yet",
     "deleted": "Deleted",
-    "deletedTitle": "This video has been deleted",
+    "deletedTitle": "Has been deleted",
     "failed": "Failed",
-    "failedTitle": "Video processing failed",
+    "failedTitle": "Processing failed",
     "unlisted": "Unlisted",
-    "unlistedTitle": "Unlisted — hidden from feeds & search, only reachable by direct link"
+    "unlistedTitle": "Direct link only"
   },
   "playlist": {
     "loading": "Loading playlists...",

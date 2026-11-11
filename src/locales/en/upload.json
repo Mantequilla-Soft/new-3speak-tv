@@ -58,6 +58,8 @@
   },
   "progress": {
     "uploadedFinishDetails": "Video uploaded — finish your details to publish.",
+    "uploaded": "Uploaded",
+    "uploading": "Uploading",
     "backgroundFailed": "Background upload didn’t finish — it will retry when you publish.",
     "uploadingPct": "Uploading your video… {{pct}}%",
     "methodReliable": "Reliable upload",

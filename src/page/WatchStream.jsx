@@ -160,7 +160,6 @@ function keepChatScrollInside(el) {
     el.querySelectorAll('.hh-chat__messages > :last-child').forEach((node) => {
       if (node.dataset.wsPinned) return;
       node.dataset.wsPinned = '1';
-      // eslint-disable-next-line no-param-reassign
       node.scrollIntoView = function scrollListOnly() {
         const list = this.parentElement;
         if (list) list.scrollTop = list.scrollHeight;
@@ -518,7 +517,7 @@ export default function WatchStream() {
     : (
       <div className="ws-chat-signin">
         <Icon name="lock" size={24} className="ws-chat-signin__icon" />
-        <span className="ws-chat-signin__text">{t('misc.watchStream.signInToChat')}</span>
+        <span className="ws-chat-signin__text">{t('misc.watchStream.loginToChat')}</span>
         <Button variant="primary" size={40} trailing="login" onClick={() => navigate('/login')}>{t('common.actions.login')}</Button>
       </div>
     );
@@ -586,7 +585,7 @@ export default function WatchStream() {
                   <StreamBoostButton />
                   <DockTile icon={copied ? 'check' : 'ios_share'} label={copied ? t('common.actions.copied') : t('common.actions.share')} onClick={copyLink} title={t('misc.watchStream.copyLink')} />
                   <StreamReportButton roomName={streamId} host={host} />
-                  <StreamFullscreenButton variant="dock" />
+                  <StreamFullscreenButton variant="dock" label={t('misc.watchStream.full')} />
                 </div>
               </div>
             </div>

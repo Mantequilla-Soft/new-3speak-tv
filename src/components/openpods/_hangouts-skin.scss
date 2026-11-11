@@ -609,16 +609,16 @@
     font-weight: 700;
   }
   .hh-controls .hh-btn--icon { width: 48px; height: 48px; padding: 0; }
-  .hh-controls [title="Show games"] { @include glyph("sports_esports", 22px); }
-  .hh-controls [title="Boost history"] { @include glyph("history", 22px); }
-  .hh-controls [title="Boost settings"] { @include glyph("tune", 22px); }
-  .hh-controls [title="Turn off camera"] { @include glyph("videocam", 22px); }
-  .hh-controls [title="Turn on camera"] { @include glyph("videocam_off", 22px); }
+  .hh-controls [title="Show games"] { @include glyph("sports_esports", 20px); }
+  .hh-controls [title="Boost history"] { @include glyph("history", 20px); }
+  .hh-controls [title="Boost settings"] { @include glyph("tune", 20px); }
+  .hh-controls [title="Turn off camera"] { @include glyph("videocam", 20px); }
+  .hh-controls [title="Turn on camera"] { @include glyph("videocam_off", 20px); }
   .hh-controls [title="Share screen"],
-  .hh-controls [title="Stop sharing"] { @include glyph("screen_share", 22px); }
-  .hh-controls [title="Show chat"] { @include glyph("chat_bubble", 22px); position: relative; }
+  .hh-controls [title="Stop sharing"] { @include glyph("screen_share", 20px); }
+  .hh-controls [title="Show chat"] { @include glyph("chat_bubble", 20px); position: relative; }
   .hh-controls__chat-badge { font-size: 10px; }
-  .hh-controls [title^="Switch to"] { @include glyph("swap_horiz", 22px); }
+  .hh-controls [title^="Switch to"] { @include glyph("swap_horiz", 20px); }
   // Text buttons that open with an emoji or symbol: the glyph goes, the words stay.
   .hh-controls__group--left > .hh-btn:not(.hh-btn--icon):not(.hh-btn--ptt),
   .hh-controls__group--right > .hh-btn:not(.hh-btn--icon):not(.hh-end-menu__trigger):not(.hh-controls__layout),

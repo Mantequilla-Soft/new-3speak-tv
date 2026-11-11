@@ -643,7 +643,7 @@ function SupportCard({ feed }) {
     : [];
   return (
     <div className="pod-side-card pod-support">
-      <h2 className="pod-side-title">{t('audio.podcasts.tip.heading', { show: feed.title || '' })}</h2>
+      <h2 className="pod-side-title">{t('audio.podcasts.tip.support', { show: feed.title || '' })}</h2>
       {payable && (
         <div className="pod-support-amounts" role="radiogroup" aria-label={t('engagement.tip.lightning.amountLabel')}>
           {PODCAST_PRESETS.map((p) => (
@@ -819,7 +819,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode, onOpenDow
                     aria-pressed={!!subscription.notify}
                     onClick={() => run(() => setFeedNotify(user, feed.id, !subscription.notify), subscription.notify ? t('audio.podcasts.notifyOffDone') : t('audio.podcasts.notifyOnDone'))}
                     title={subscription.notify ? t('audio.podcasts.notifyOn') : t('audio.podcasts.notifyOff')}
-                    aria-label={t('audio.podcasts.notifyHint')}
+                    aria-label={t('audio.podcasts.notifyLabel')}
                   >
                     <Icon name={subscription.notify ? 'notifications_active' : 'notifications_off'} size={24} />
                   </button>
@@ -944,7 +944,7 @@ function ShowView({ feedId, user, subscription, onBack, onOpenEpisode, onOpenDow
                     <Toggle
                       checked={!!subscription.notify}
                       disabled={busy}
-                      label={t('audio.podcasts.notifyHint')}
+                      label={t('audio.podcasts.notifyLabel')}
                       onChange={(on) => run(() => setFeedNotify(user, feed.id, on), on ? t('audio.podcasts.notifyOnDone') : t('audio.podcasts.notifyOffDone'))}
                     />
                   </div>

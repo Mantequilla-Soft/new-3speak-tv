@@ -1,9 +1,11 @@
 // @vitest-environment jsdom
-// The top bar (components/nav/Nav.jsx). The logo folds the page tabs out and the
-// choice is remembered; a visitor gets FAQ, Log in and Sign up (Sign up only
-// where an account can be made); a member gets Share, which a resting mouse
-// peeks at (a bottom sheet on narrow screens), their playlists, Settings (a peek
-// under the gear, a click opens the window) and the account menu.
+// The top bar (components/nav/Nav.jsx, 20a). The logo goes home and the section
+// tabs (Home, Shorts, Live, Audio, Groups) are out, unless a member folded them
+// away from the account menu; a visitor gets FAQ, Log in, Sign up (Sign up only
+// where an account can be made) and Settings (a peek under the gear, a click
+// opens the window); a member gets Create, which a resting mouse peeks at (a
+// bottom sheet on narrow screens, also opened by the bottom bar's "+"), the
+// bell and the account menu.
 import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from 'vitest'
 import { act, screen, within } from '@testing-library/react'
 import { renderWithProviders, stubMatchMedia, useFakeClock } from './_render.jsx'
@@ -21,7 +23,6 @@ vi.mock('../../../src/utils/advertiserAccount', () => ({
   rememberAdvertiserAccount: (...a) => m.rememberAdvertiser(...a),
   hasAdvertiserProduct: async () => m.hasProduct,
 }))
-vi.mock('../../../src/hooks/useMyPlaylists', () => ({ useMyPlaylists: () => ({ data: m.playlists }) }))
 vi.mock('../../../src/components/nav/NavSearch', () => ({ default: () => <div className="navsearch-wrap"><input aria-label="Search" /></div> }))
 vi.mock('../../../src/components/UploadLinks', () => ({ default: () => <a href="/embed-studio">Upload a video</a> }))
 vi.mock('../../../src/components/Incubation/NavProgress', () => ({ default: () => null }))
@@ -55,63 +56,42 @@ function mount(props = {}, opts = {}) {
   const r = renderWithProviders(<Nav openLoginModal={openLoginModal} toggleProfileNav={toggleProfileNav} profileMenuHover={{}} {...props} />, opts)
   return { ...r, openLoginModal, toggleProfileNav }
 }
-const logo = () => screen.getByRole('button', { name: '3Speak' })
+const logo = () => screen.getAllByRole('link', { name: '3Speak' })[0]
 const signIn = (user = 'badadib') => act(() => useAppStore.setState({ authenticated: true, user, authChecked: true }))
 
 beforeEach(() => {
   stubMatchMedia((q) => q === '(min-width: 641px)')
   Object.assign(m, {
     butrauth: true, signup: { loading: false, possible: true }, rememberedAdvertiser: false, hasProduct: false,
-    rememberAdvertiser: vi.fn(), playlists: [], rows: {}, lookedUp: [],
+    rememberAdvertiser: vi.fn(), rows: {}, lookedUp: [],
   })
   useAppStore.setState({ authenticated: false, user: null, authChecked: true, incubationHandle: null, initializeTheme: () => {} })
   localStorage.clear()
 })
 
-describe('the top bar: the page tabs', () => {
-  it('keeps the tabs folded behind the logo at first', () => {
-    mount()
-    expect(logo()).toHaveAttribute('aria-expanded', 'false')
-    expect(logo()).toHaveAttribute('title', 'Show pages')
-    expect(screen.queryByRole('link', { name: /Overview/ })).not.toBeInTheDocument()
-  })
-
-  it('the logo folds the tabs out, marks the current page, and remembers it', async () => {
-    const { user } = mount({}, { route: '/audio' })
-    await user.click(logo())
-    expect(logo()).toHaveAttribute('aria-expanded', 'true')
+describe('the top bar: the section tabs', () => {
+  it('shows Home, Shorts, Live, Audio and Groups, marks the current one, and the logo goes home', () => {
+    mount({}, { route: '/audio' })
+    expect(logo()).toHaveAttribute('href', '/')
     const tabs = document.getElementById('nav-tabs')
-    expect(within(tabs).getAllByRole('link').map((a) => a.getAttribute('href'))).toEqual(['/', '/shorts', '/audio', '/groups', '/leaderboard'])
-    expect(within(tabs).getByRole('link', { name: /Audio/ })).toHaveClass('active')
-    expect(within(tabs).getByRole('link', { name: /Overview/ })).not.toHaveClass('active')
-    expect(localStorage.getItem('3speak_nav_tabs_open')).toBe('true')
+    expect(within(tabs).getAllByRole('link').map((a) => [a.textContent, a.getAttribute('href')])).toEqual([
+      ['Home', '/'], ['Shorts', '/shorts'], ['Live', '/live'], ['Audio', '/audio'], ['Groups', '/groups'],
+    ])
+    expect(within(tabs).getByRole('link', { name: 'Audio' })).toHaveClass('active')
+    expect(within(tabs).getByRole('link', { name: 'Home' })).not.toHaveClass('active')
   })
 
-  it('opens with the tabs out for someone who left them out', () => {
-    localStorage.setItem('3speak_nav_tabs_open', 'true')
+  it('a member who folded the tabs away (account menu, "Hide pages") does not see them', () => {
+    localStorage.setItem('3speak_nav_tabs_open', 'false')
+    signIn()
     mount()
-    expect(screen.getByRole('link', { name: /Overview/ })).toBeInTheDocument()
+    expect(document.getElementById('nav-tabs')).toBeNull()
   })
 
-  it('a member\'s tabs end with their playlists', async () => {
-    signIn()
-    m.playlists = [{ id: 'wl-1', name: 'Watch Later', items: [1, 2, 3] }]
-    localStorage.setItem('3speak_nav_tabs_open', 'true')
-    const { user } = mount()
-    await user.click(screen.getByRole('button', { name: /Playlists/ }))
-    expect(screen.getByRole('link', { name: 'Watch Later (3)' })).toHaveAttribute('href', '/playlist/wl-1')
-    expect(screen.getByRole('link', { name: 'Watch History' })).toHaveAttribute('href', '/watched/badadib')
-    expect(screen.getByRole('link', { name: 'All Playlists' })).toHaveAttribute('href', '/profile?tab=playlists')
-    await user.click(screen.getByRole('link', { name: 'All Playlists' }))
-    expect(screen.queryByRole('link', { name: 'Watch History' })).not.toBeInTheDocument()
-  })
-
-  it('without a Watch Later playlist, the entry leads to the playlists tab', async () => {
-    signIn()
-    localStorage.setItem('3speak_nav_tabs_open', 'true')
-    const { user } = mount()
-    await user.click(screen.getByRole('button', { name: /Playlists/ }))
-    expect(screen.getByRole('link', { name: 'Watch Later' })).toHaveAttribute('href', '/profile?tab=playlists')
+  it('a visitor always sees them', () => {
+    localStorage.setItem('3speak_nav_tabs_open', 'false')
+    mount()
+    expect(document.getElementById('nav-tabs')).not.toBeNull()
   })
 })
 
@@ -142,6 +122,29 @@ describe('the top bar for a visitor', () => {
     act(() => useAppStore.setState({ authChecked: false }))
     mount()
     expect(screen.queryByRole('button', { name: /Log in/ })).not.toBeInTheDocument()
+  })
+
+  it('a click on the gear opens the settings window', async () => {
+    const { user } = mount()
+    await user.click(document.querySelector('.nav-settings-btn'))
+    expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Close settings' }))
+    expect(screen.queryByRole('dialog', { name: 'Settings' })).not.toBeInTheDocument()
+  })
+
+  it('a mouse resting on the gear peeks at settings under it, and a click holds it there', async () => {
+    useFakeClock()
+    try {
+      const { user } = mount({}, { fakeTimers: true })
+      const gear = document.querySelector('.nav-settings-btn')
+      await user.hover(gear)
+      act(() => { vi.advanceTimersByTime(250) })
+      expect(screen.getByRole('dialog', { name: 'Settings (peek under the gear)' })).toBeInTheDocument()
+      await user.click(gear)
+      expect(screen.getByRole('dialog', { name: 'Settings (held under the gear)' })).toBeInTheDocument()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })
 
@@ -174,42 +177,42 @@ describe('the top bar for a member', () => {
     expect(toggleProfileNav).toHaveBeenCalledTimes(1)
   })
 
-  it('drops Share for a warm-up user whose ~<handle> row blocks uploads', () => {
+  it('drops Create for a warm-up user whose ~<handle> row blocks uploads', () => {
     act(() => useAppStore.setState({ user: null, incubationHandle: 'newbie' }))
     const { unmount } = mount()
-    expect(screen.getByTitle('Share')).toBeInTheDocument()
+    expect(screen.getByTitle('Create')).toBeInTheDocument()
     unmount()
     m.rows['~newbie'] = { canUpload: false }
     mount()
-    expect(screen.queryByTitle('Share')).not.toBeInTheDocument()
+    expect(screen.queryByTitle('Create')).not.toBeInTheDocument()
     expect(m.lookedUp).toContain('~newbie')
   })
 
-  it('keeps Share for a Hive account even when blocked (the entries show the support notice)', () => {
+  it('keeps Create for a Hive account even when blocked (the entries show the support notice)', () => {
     m.rows.badadib = { canUpload: false }
     mount()
-    expect(screen.getByTitle('Share')).toBeInTheDocument()
+    expect(screen.getByTitle('Create')).toBeInTheDocument()
     expect(m.lookedUp).toEqual([])
   })
 
-  it('a click on Share keeps its menu open, a second click closes it', async () => {
+  it('a click on Create keeps its menu open, a second click closes it', async () => {
     const { user } = mount()
-    const share = screen.getByTitle('Share')
+    const share = screen.getByTitle('Create')
     await user.click(share)
     expect(screen.getByRole('link', { name: 'Upload a video' })).toBeInTheDocument()
     await user.click(share)
     expect(document.querySelector('.nav-upload-flyout')).toHaveClass('nav-upload-flyout--leaving')
   })
 
-  it('a mouse resting on Share peeks at its menu', async () => {
+  it('a mouse resting on Create peeks at its menu', async () => {
     useFakeClock()
     try {
       const { user } = mount({}, { fakeTimers: true })
-      await user.hover(screen.getByTitle('Share'))
+      await user.hover(screen.getByTitle('Create'))
       expect(screen.queryByRole('link', { name: 'Upload a video' })).not.toBeInTheDocument()
       act(() => { vi.advanceTimersByTime(250) })
       expect(screen.getByRole('link', { name: 'Upload a video' })).toBeInTheDocument()
-      await user.unhover(screen.getByTitle('Share'))
+      await user.unhover(screen.getByTitle('Create'))
       act(() => { vi.advanceTimersByTime(500) })
       expect(screen.queryByRole('link', { name: 'Upload a video' })).not.toBeInTheDocument()
     } finally {
@@ -217,37 +220,14 @@ describe('the top bar for a member', () => {
     }
   })
 
-  it('on a narrow screen Share opens a bottom sheet with a close button', async () => {
+  it('on a narrow screen Create opens a bottom sheet with a close button', async () => {
     stubMatchMedia((q) => q === '(max-width: 1024px)')
     const { user } = mount()
-    await user.click(screen.getByTitle('Share'))
-    const sheet = screen.getByRole('dialog', { name: 'Share' })
+    await user.click(screen.getByTitle('Create'))
+    const sheet = screen.getByRole('dialog', { name: 'Create' })
     expect(within(sheet).getByRole('link', { name: 'Upload a video' })).toBeInTheDocument()
     await user.click(within(sheet).getByRole('button', { name: 'Close' }))
-    expect(screen.queryByRole('dialog', { name: 'Share' })).not.toBeInTheDocument()
-  })
-
-  it('a click on the gear opens the settings window', async () => {
-    const { user } = mount()
-    await user.click(document.querySelector('.nav-settings-btn'))
-    expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Close settings' }))
-    expect(screen.queryByRole('dialog', { name: 'Settings' })).not.toBeInTheDocument()
-  })
-
-  it('a mouse resting on the gear peeks at settings under it, and a click holds it there', async () => {
-    useFakeClock()
-    try {
-      const { user } = mount({}, { fakeTimers: true })
-      const gear = document.querySelector('.nav-settings-btn')
-      await user.hover(gear)
-      act(() => { vi.advanceTimersByTime(250) })
-      expect(screen.getByRole('dialog', { name: 'Settings (peek under the gear)' })).toBeInTheDocument()
-      await user.click(gear)
-      expect(screen.getByRole('dialog', { name: 'Settings (held under the gear)' })).toBeInTheDocument()
-    } finally {
-      vi.useRealTimers()
-    }
+    expect(screen.queryByRole('dialog', { name: 'Create' })).not.toBeInTheDocument()
   })
 
   // BUG: three of the bar's controls are not buttons: the Share trigger is a
@@ -255,11 +235,18 @@ describe('the top bar for a member', () => {
   // account avatar a <span onClick> (:514). None takes keyboard focus or has a
   // role, so from the keyboard there is no way to upload, open Settings or reach
   // the account menu (and log out).
-  it('BUG: Share, Settings and the account menu are buttons a keyboard can reach', () => {
+  it('BUG: Create and the account menu are buttons a keyboard can reach (Settings is in the account menu)', () => {
     mount()
-    expect(screen.getByRole('button', { name: 'Share' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Create' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Settings' })).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: /account|profile|menu/i })).toBeInTheDocument()
+  })
+
+  it('the bottom bar\'s "+" opens the Create menu', async () => {
+    stubMatchMedia((q) => q === '(max-width: 1024px)')
+    mount()
+    act(() => { window.dispatchEvent(new CustomEvent('3speak:open-create')) })
+    expect(within(screen.getByRole('dialog', { name: 'Create' })).getByRole('link', { name: 'Upload a video' })).toBeInTheDocument()
   })
 })
 

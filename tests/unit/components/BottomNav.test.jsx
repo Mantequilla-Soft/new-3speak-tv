@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
-// The phone's bottom bar (components/BottomNav/BottomNav.jsx): Feeds, Shorts,
-// Groups, Audio and the account button. The page being shown is marked active;
-// signed out, the account button opens the login dialog, signed in it opens the
-// same account menu the desktop avatar does.
+// The phone's bottom bar (components/BottomNav/BottomNav.jsx, 20a): Home,
+// Shorts, the red "+", Groups and the account button. The page being shown is
+// marked active; the "+" opens the Create menu (or the login dialog for a
+// visitor); signed out, the account button opens the login dialog, signed in it
+// opens the same account menu the desktop avatar does.
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act, screen, within } from '@testing-library/react'
 import { renderWithProviders } from './_render.jsx'
@@ -31,22 +32,22 @@ beforeEach(() => {
 })
 
 describe('the bottom navigation bar', () => {
-  it('links to the four sections, drawn straight into the page body', () => {
+  it('links to the three sections and the account, drawn straight into the page body', () => {
     const { nav } = mount()
     expect(nav().parentElement).toBe(document.body)
     const links = within(nav()).getAllByRole('link')
     // The visible label only: the Material Symbols glyph is ligature text.
     const label = (a) => (a.querySelector('.bottom-nav-label') || a).textContent
     expect(links.map((a) => [label(a), a.getAttribute('href')])).toEqual([
-      ['Feeds', '/'], ['Shorts', '/shorts'], ['Groups', '/groups'], ['Audio', '/audio'], ['Login', '#'],
+      ['Home', '/'], ['Shorts', '/shorts'], ['Groups', '/groups'], ['Login', '#'],
     ])
+    expect(within(nav()).getByRole('button', { name: 'Create' })).toBeInTheDocument()
   })
 
   it.each([
-    ['/', 'Feeds'],
+    ['/', 'Home'],
     ['/shorts/alice/clip', 'Shorts'],
     ['/groups/hive-123', 'Groups'],
-    ['/audio', 'Audio'],
   ])('on %s marks %s as the current section', (route, name) => {
     const { nav } = mount({ route })
     const active = within(nav()).getAllByRole('link').filter((a) => a.classList.contains('active'))
@@ -60,9 +61,22 @@ describe('the bottom navigation bar', () => {
 
   it('follows a tap to another section', async () => {
     const { user } = mount()
-    await user.click(screen.getByRole('link', { name: 'Audio' }))
-    expect(screen.getByTestId('location')).toHaveTextContent('/audio')
-    expect(screen.getByRole('link', { name: 'Audio' })).toHaveClass('active')
+    await user.click(screen.getByRole('link', { name: 'Groups' }))
+    expect(screen.getByTestId('location')).toHaveTextContent('/groups')
+    expect(screen.getByRole('link', { name: 'Groups' })).toHaveClass('active')
+  })
+
+  it('the red "+" opens the Create menu for a member, and the login dialog for a visitor', async () => {
+    const { user, openLoginModal } = mount()
+    await user.click(screen.getByRole('button', { name: 'Create' }))
+    expect(openLoginModal).toHaveBeenCalledTimes(1)
+    act(() => useAppStore.setState({ authenticated: true, user: 'alice' }))
+    const opened = vi.fn()
+    window.addEventListener('3speak:open-create', opened)
+    await user.click(screen.getByRole('button', { name: 'Create' }))
+    window.removeEventListener('3speak:open-create', opened)
+    expect(opened).toHaveBeenCalledTimes(1)
+    expect(openLoginModal).toHaveBeenCalledTimes(1)
   })
 
   it('signed out, the account button opens the login dialog and does not navigate', async () => {

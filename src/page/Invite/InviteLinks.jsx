@@ -4,7 +4,7 @@ import { useAppStore } from '../../lib/store';
 import { fetchMyInviteLinks, fetchInvitePeople } from '../../lib/referralLinks';
 import { BUTRAUTH_URL } from '../../utils/config';
 import { useTranslation, Trans } from 'react-i18next';
-import { Button, Card, Icon, Progress, StatusPill } from '../../components/v2/ui';
+import { Button, Card, Icon } from '../../components/v2/ui';
 import './Invite.scss';
 
 /**
@@ -42,7 +42,7 @@ function CopyButton({ text }) {
     } catch { /* the link is selectable text as a fallback */ }
   };
   return (
-    <Button variant="secondary" icon={copied ? 'check' : 'content_copy'} onClick={copy}>
+    <Button variant="secondary" size={40} onClick={copy}>
       {copied ? t('common.actions.copied') : t('common.actions.copy')}
     </Button>
   );
@@ -62,16 +62,16 @@ function People({ linkId }) {
   if (error) return <p className="invite-muted">{error}</p>;
   if (people === null) return <p className="invite-muted">{t('common.status.loading')}</p>;
   if (!people.length) return <p className="invite-muted">{t('auth.invite.nobodyYet')}</p>;
+  // 42c: a square-ish face, the name, the state as a small lowercase pill.
   return (
     <ul className="invite-people">
       {people.map((p, i) => (
-        <li key={i}>
+        <li key={i} title={fmtDate(p.invitedAt)}>
           {p.name ? <HiveAvatar username={p.name} size="small" className="invite-people-avatar" /> : <span className="invite-people-avatar empty" />}
-          <span className="invite-people-name">{p.name ? `@${p.name}` : t('auth.invite.noNameYet')}</span>
-          <span className="invite-people-date">{fmtDate(p.invitedAt)}</span>
-          <StatusPill tone={STATE_TONE[p.state] || 'muted'} className="invite-state">
+          <span className={`invite-people-name${p.name ? '' : ' is-pending'}`}>{p.name || t('auth.invite.noNameYet')}</span>
+          <span className={`invite-state is-${STATE_TONE[p.state] || 'muted'}`}>
             {STATE_LABEL_KEY[p.state] ? t(STATE_LABEL_KEY[p.state]) : p.state}
-          </StatusPill>
+          </span>
         </li>
       ))}
     </ul>
@@ -108,83 +108,94 @@ export default function InviteLinks({ openLoginModal }) {
   }, [user, t]);
 
   const links = data?.links || [];
+  const statuses = links.map((l) => ({ link: l, st: linkStatus(l, t) })).filter((x) => x.st);
+  const empty = !!user && !!data && links.length === 0;
+  // Paused, used-up and "no links yet" sit in a column of their own (42c).
+  const hasAside = statuses.length > 0 || empty;
 
   return (
-    <div className="invite-page">
+    <div className={`invite-page${hasAside ? ' has-aside' : ''}`}>
       <header className="invite-header">
         <h1>{t('auth.invite.title')}</h1>
         <p>{t('auth.invite.subtitle')}</p>
       </header>
 
-      {!user && (
-        <Card className="invite-card">
-          <p className="invite-text">{t('auth.invite.signInPrompt')}</p>
-          <div className="invite-actions">
-            <Button variant="primary" icon="login" onClick={() => openLoginModal?.('login')}>{t('common.actions.login')}</Button>
-          </div>
-        </Card>
-      )}
+      <div className="invite-main">
+        {!user && (
+          <Card className="invite-card">
+            <p className="invite-text">{t('auth.invite.signInPrompt')}</p>
+            <div className="invite-actions">
+              <Button variant="primary" icon="login" onClick={() => openLoginModal?.('login')}>{t('common.actions.login')}</Button>
+            </div>
+          </Card>
+        )}
 
-      {user && error && (
-        <div className="v2-failure invite-card" role="alert"><b>{error}</b></div>
-      )}
-      {user && !error && data === null && (
-        <div className="v2-skeleton invite-skeleton" aria-label={t('common.status.loading')} />
-      )}
-      {user && data && links.length === 0 && (
-        <div className="v2-empty">
-          <Icon name="link" size={28} />
-          <p>{t('auth.invite.noLinks')}</p>
-        </div>
-      )}
+        {user && error && (
+          <div className="v2-failure invite-card" role="alert"><b>{error}</b></div>
+        )}
+        {user && !error && data === null && (
+          <div className="v2-skeleton invite-skeleton" aria-label={t('common.status.loading')} />
+        )}
 
-      {links.map((l) => {
-        const pct = l.limit > 0 ? Math.min(100, (l.usedThisMonth / l.limit) * 100) : 100;
-        const st = linkStatus(l, t);
-        return (
+        {links.map((l) => (
           <section key={l.id} className="invite-card link">
-            {st && (
-              <div className={`invite-status is-${st.tone}`}>
-                <Icon name={st.icon} size={20} />
-                <b>{st.text}</b>
-              </div>
-            )}
             <div className="invite-link-row">
-              <input type="text" className="v2-input" readOnly value={l.url} onFocus={(e) => e.target.select()} aria-label={t('auth.invite.linkAria')} />
+              <input type="text" className="v2-input" readOnly value={l.url.replace(/^https?:\/\//, '')} onFocus={(e) => e.target.select()} aria-label={t('auth.invite.linkAria')} />
               <CopyButton text={l.url} />
             </div>
 
             <div className="invite-stats">
-              <div className="v2-stat"><b className="num">{l.leftThisMonth}</b><div className="v2-stat__s">{t('auth.invite.stats.left')}</div></div>
-              <div className="v2-stat"><b className="num">{l.usedThisMonth}</b><div className="v2-stat__s">{t('auth.invite.stats.usedOf', { limit: l.limit })}</div></div>
-              <div className="v2-stat"><b className="num">{l.accountsCreated}</b><div className="v2-stat__s">{t('auth.invite.stats.accountsCreated')}</div></div>
-              <div className="v2-stat"><b className="num">{l.peopleInvited}</b><div className="v2-stat__s">{t('auth.invite.stats.peopleInvited')}</div></div>
+              <div className="invite-stat"><b>{l.leftThisMonth}</b><span>{t('auth.invite.stats.left')}</span></div>
+              <div className="invite-stat"><b>{l.usedThisMonth}</b><span>{t('auth.invite.stats.usedOf', { limit: l.limit })}</span></div>
+              <div className="invite-stat"><b>{l.accountsCreated}</b><span>{t('auth.invite.stats.accountsCreated')}</span></div>
+              <div className="invite-stat"><b>{l.peopleInvited}</b><span>{t('auth.invite.stats.peopleInvited')}</span></div>
             </div>
-            <Progress value={pct} thin label={t('auth.invite.stats.usedOf', { limit: l.limit })} />
             <p className="invite-muted">{t('auth.invite.resetsNote', { date: fmtDate(l.resetsAt) })}</p>
 
-            <Button
-              variant="ghost"
-              size={32}
-              className="invite-toggle"
-              trailing={open === l.id ? 'expand_less' : 'expand_more'}
+            {/* "WHO JOINED · Hide people": the eyebrow is the switch */}
+            <button
+              type="button"
+              className="invite-who"
               aria-expanded={open === l.id}
               onClick={() => setOpen(open === l.id ? null : l.id)}
             >
-              {open === l.id ? t('auth.invite.hidePeople') : t('auth.invite.whoJoined')}
-            </Button>
+              <span className="v2-eyebrow">{t('auth.invite.whoJoined')}</span>
+              {open === l.id
+                ? <span className="invite-who__hide">· {t('auth.invite.hidePeople')}</span>
+                : <Icon name="expand_more" size={16} />}
+            </button>
             {open === l.id && <People linkId={l.id} />}
           </section>
-        );
-      })}
+        ))}
 
-      {user && links.length > 0 && (
-        <p className="invite-muted invite-dash">
-          <Trans
-            i18nKey="auth.invite.dashboardNote"
-            components={{ dashLink: <a href={`${BUTRAUTH_URL}/dashboard?tab=referrals`} target="_blank" rel="noopener noreferrer" /> }}
-          />
-        </p>
+        {user && links.length > 0 && (
+          <p className="invite-muted invite-dash">
+            <Trans
+              i18nKey="auth.invite.dashboardNote"
+              components={{ dashLink: <a href={`${BUTRAUTH_URL}/dashboard?tab=referrals`} target="_blank" rel="noopener noreferrer" /> }}
+            />
+          </p>
+        )}
+      </div>
+
+      {hasAside && (
+        <aside className="invite-aside">
+          {statuses.map(({ link, st }) => (
+            <div key={link.id} className={`invite-status is-${st.tone}`}>
+              <Icon name={st.icon} size={20} />
+              <span className="invite-status__text">
+                <b>{st.text}</b>
+                {links.length > 1 && <span className="invite-status__link">{link.url.replace(/^https?:\/\//, '')}</span>}
+              </span>
+            </div>
+          ))}
+          {empty && (
+            <div className="invite-none">
+              <b>{t('auth.invite.noLinksTitle')}</b>
+              <p>{t('auth.invite.noLinksBody')}</p>
+            </div>
+          )}
+        </aside>
       )}
     </div>
   );

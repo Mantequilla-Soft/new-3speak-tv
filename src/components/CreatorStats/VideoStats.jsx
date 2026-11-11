@@ -190,6 +190,13 @@ export default function VideoStats({ username, permlink, compact = false, varian
   const [err, setErr] = useState(false);
   const detail = variant === 'detail';
   const cls = `video-stats${compact ? ' compact' : ''}${detail ? ' is-detail' : ' is-panel'}`;
+  // The watch-page panel carries its own title (23d: accent bar + "Video stats").
+  const head = detail ? null : (
+    <div className="vs-head">
+      <span className="vs-head-bar" aria-hidden="true" />
+      <h3>{t('watch.actions.videoStats')}</h3>
+    </div>
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -210,12 +217,13 @@ export default function VideoStats({ username, permlink, compact = false, varian
   if (loading) {
     return (
       <div className={cls} aria-busy="true">
+        {head}
         <div className="vs-skeleton v2-skeleton" />
       </div>
     );
   }
   if (err || !data || data.sessions === 0) {
-    return <div className={cls}><div className="vs-chart-empty">{t('stats.video.empty')}</div></div>;
+    return <div className={cls}>{head}<div className="vs-chart-empty">{t('stats.video.empty')}</div></div>;
   }
 
   const ins = deriveInsights(data);
@@ -278,6 +286,7 @@ export default function VideoStats({ username, permlink, compact = false, varian
 
   return (
     <div className={cls}>
+      {head}
       <div className="vs-tiles">
         <div className="vs-tile"><span>{t('stats.metrics.views')}</span><b>{fmtCount(data.sessions)}</b></div>
         <div className="vs-tile"><span>{t('stats.tiles.avgViewDuration')}</span><b>{mmss(avgView)}</b></div>

@@ -9,11 +9,11 @@
 // ── Layout: fields on the left, the post as it will show on the right ───────
 .embed-details-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--side-panel-w);
+  grid-template-columns: minmax(0, 1fr) 400px;
   gap: 24px;
   align-items: start;
 
-  @include v2.below-wide { grid-template-columns: minmax(0, 1fr) 320px; }
+  @include v2.below-wide { grid-template-columns: minmax(0, 1fr) 340px; }
   @include v2.mobile {
     grid-template-columns: minmax(0, 1fr);
     gap: 14px;
@@ -30,22 +30,28 @@
 .details-card {
   padding: 16px;
 
+  // 21c: TITLE / DESCRIPTION read 12/900 with the eyebrow tracking.
   > label {
     justify-content: space-between;
+    font-size: 12px;
     .details-count,
     .tag-count { @include v2.mono(11, 700); letter-spacing: 0; text-transform: none; color: var(--muted); }
     .tag-count.is-full { color: var(--accent); }
   }
 
-  // The title reads as the post's title: big, no field chrome until focused.
+  // The title reads as the post's title (21c): 24/900 right in the card, no
+  // field chrome; the accent ring comes back on focus.
   .details-title-input.details-title-input {
-    height: 56px;
-    padding: 0 14px;
-    background: var(--bg);
+    height: 40px;
+    margin: 2px -12px -6px;
+    width: calc(100% + 24px);
+    max-width: none;
+    padding: 0 10px;
+    background: transparent;
     @include v2.text(heading);
-    border-radius: v2.radius-for(56);
+    border-radius: v2.radius-for(40);
 
-    @include v2.mobile { height: 48px; font-size: 20px; border-radius: v2.radius-for(48); }
+    @include v2.mobile { font-size: 20px; }
   }
 
   .char-counter {
@@ -70,6 +76,9 @@
   position: sticky;
   top: calc(var(--topbar-h) + 16px);
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 
   @include v2.mobile {
     position: static;
@@ -93,6 +102,8 @@
     }
   }
 
+  .details-preview__body:empty { display: none; }
+
   .details-preview__body {
     display: flex;
     flex-direction: column;
@@ -115,6 +126,117 @@
     .details-preview__thumb { border-radius: var(--r-md); align-self: start; &.is-portrait { max-height: 200px; width: 100%; } }
     .details-preview__body { padding: 0; gap: 10px; }
   }
+}
+
+// ── Choices as tiles (21c): community and tags under the description ────────
+.details-meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+
+  // Fewer than four: they share the row instead of leaving holes.
+  &:has(> :nth-child(2):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  &:has(> :only-child) { grid-template-columns: minmax(0, 1fr); }
+
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+}
+
+.details-meta__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  min-height: 96px;
+  padding: 14px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 4%, var(--surface)); }
+  &:active { transform: scale(.98); }
+  &.is-cyan > .material-symbols-rounded { color: var(--cyan); }
+
+  .details-meta__label {
+    margin-top: auto;
+    padding-top: 10px;
+    @include v2.text(meta-sm);
+    color: var(--muted);
+  }
+
+  .details-meta__value {
+    max-width: 100%;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// ── Settings, each in a side sheet (21c) ────────────────────────────────────
+.details-settings {
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+}
+
+.details-settings__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: var(--r-xl);
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); }
+
+  .details-settings__icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+  }
+
+  &.is-on .details-settings__icon { background: var(--cyan-tint); color: var(--cyan); }
+
+  .details-settings__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+
+    b { font-size: 14px; font-weight: 700; line-height: 1.35; }
+    span { @include v2.text(meta); color: var(--muted); overflow-wrap: anywhere; }
+  }
+
+  .details-settings__chev { color: var(--muted); }
+}
+
+// The 35c tiles inside the "NSFW / payout" side sheet: two columns.
+.advance-option.details-sheet-options {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.details-tags {
+  .details-tags__head { justify-content: space-between; }
+  .tag-count { @include v2.mono(11, 700); color: var(--muted); &.is-full { color: var(--accent); } }
 }
 
 // ── The publish option tiles (35c) ───────────────────────────────────────────

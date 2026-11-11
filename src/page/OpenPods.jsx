@@ -17,7 +17,7 @@ import MarkdownComposer from '../components/studio/MarkdownComposer';
 import { StreamTemplatesPanel, SaveAsTemplate, TemplatePicker } from '../components/openpods/StreamTemplates';
 import { applyTemplateToSetup } from '../utils/streamTemplates';
 import { toastIn } from '../utils/toast';
-import { Button, Icon, Segmented } from '../components/v2/ui';
+import { Button, Icon, IconButton, Segmented } from '../components/v2/ui';
 import './OpenPods.scss';
 
 // Strip any trailing slash — useHangoutsRoom builds `${apiBaseUrl}/rooms` with a
@@ -374,27 +374,31 @@ export default function OpenPods() {
               <span className="openpods-connecting__action">{providerSignPrompt(provider)}</span>
             </div>
           ) : canHandover ? (
+            // 39c: the mic, what it unlocks and what it needs, then the action.
             <div className="openpods-guest-cta__card">
               <Icon name="mic" size={24} className="openpods-guest-cta__icon" />
               <div className="openpods-guest-cta__body">
-                <Button
-                  variant="primary"
-                  next
-                  className="openpods-login-btn"
-                  onClick={() => {
-                    handoverTriedRef.current = null;
-                    setHandoverFailed(false);
-                    retryLogin(handoverUser);
-                  }}
-                >
-                  {t('live.lobby.enableHosting')}
-                </Button>
+                <b>{t('live.lobby.enableHosting')}</b>
+                <span className="openpods-guest-cta__sub">{t('live.lobby.enableHostingHint')}</span>
                 {handoverFailed && (
                   <p className="openpods-guest-cta__hint">
                     {t('live.lobby.handoverFailed')}
                   </p>
                 )}
               </div>
+              <IconButton
+                icon="arrow_forward"
+                variant="cyan"
+                size={40}
+                round
+                className="openpods-login-btn"
+                label={t('live.lobby.enableHosting')}
+                onClick={() => {
+                  handoverTriedRef.current = null;
+                  setHandoverFailed(false);
+                  retryLogin(handoverUser);
+                }}
+              />
             </div>
           ) : (
             <div className="openpods-guest-cta__card">

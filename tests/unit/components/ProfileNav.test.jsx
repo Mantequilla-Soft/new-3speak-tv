@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
-// The account menu the avatar opens (components/nav/ProfileNav.jsx): who is
-// signed in with their voting power and resource credits, the way to their
-// channel, wallet, settings and the other pages they can use, change account and
-// log out, and the ways it closes (Escape, the backdrop, moving to another page).
+// The account menu the avatar opens (components/nav/ProfileNav.jsx, 07d + 42b):
+// who is signed in with a Switch (change account), their voting power and
+// resource credits, their places as tiles, the theme switch, the other pages
+// they can use, the small links with "Hide pages", Settings and Log out, and the
+// ways it closes (Escape, the backdrop, moving to another page).
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { act, screen, waitFor, within } from '@testing-library/react'
 import { useNavigate } from 'react-router-dom'
@@ -22,6 +23,8 @@ vi.mock('../../../src/lib/referralLinks', () => ({ fetchMyInviteLinks: async () 
 vi.mock('../../../src/lib/translatorApi', () => ({ isTranslatorName: async () => m.translator }))
 vi.mock('../../../src/components/LeaderboardBadges/LeaderboardBadges', () => ({ default: () => <a href="/leaderboard?board=views">Top 10 views</a> }))
 vi.mock('../../../src/utils/pwaInstall', () => ({ usePwaInstall: () => m.pwa }))
+vi.mock('../../../src/context/ChatContext', () => ({ useChat: () => ({ ready: false, warmup: false }) }))
+vi.mock('../../../src/hooks/useServerUnread', () => ({ useServerUnread: () => ({ unreadCount: 0 }) }))
 vi.mock('../../../src/components/SettingsModal/SettingsModal', () => ({ default: ({ isOpen }) => (isOpen ? <div role="dialog" aria-label="Settings" /> : null) }))
 
 const { toast } = await import('sonner')
@@ -70,7 +73,10 @@ describe('the account menu', () => {
     // The visible label only: the Material Symbols glyph is ligature text.
     const label = (el) => (el.querySelector('.pn-label') || el).textContent.trim()
     const items = within(menu()).getAllByRole('menuitem').map(label)
-    expect(items).toEqual(['My Channel', 'Wallet', 'Settings', 'Analytics', 'Rankings', 'About 3Speak', 'FAQ', 'Change account'])
+    expect(items).toEqual([
+      'Switch', 'Channel', 'Studio', 'Wallet', 'Playlists', 'History', 'Badges',
+      'Analytics', 'Audio', 'Live', 'Chat', 'Rankings', 'About 3Speak', 'FAQ', 'Hide pages', 'Settings',
+    ])
   })
 
   it('adds Advertise, invite links, the translation editor and the publish backlog for those who have them', async () => {
@@ -118,7 +124,7 @@ describe('the account menu', () => {
   it('offers Logout for a Butter Auth login, which signs out and goes home', async () => {
     localStorage.setItem('manteauth_login', 'true')
     const { user, onclose } = mount()
-    await user.click(screen.getByRole('menuitem', { name: 'Logout' }))
+    await user.click(screen.getByRole('menuitem', { name: 'Log out' }))
     expect(useAppStore.getState().LogOut).toHaveBeenCalledWith('badadib')
     expect(onclose).toHaveBeenCalled()
     expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
@@ -155,6 +161,21 @@ describe('the account menu', () => {
     const { user } = mount()
     await user.click(screen.getByRole('menuitem', { name: 'Install App' }))
     expect(m.pwa.promptInstall).toHaveBeenCalledTimes(1)
+  })
+
+  it('"Hide pages" folds the top bar\'s section tabs away, and "Show pages" brings them back', async () => {
+    const { user } = mount()
+    await user.click(screen.getByRole('menuitem', { name: 'Hide pages' }))
+    expect(localStorage.getItem('3speak_nav_tabs_open')).toBe('false')
+    await user.click(screen.getByRole('menuitem', { name: 'Show pages' }))
+    expect(localStorage.getItem('3speak_nav_tabs_open')).toBe('true')
+  })
+
+  it('the theme switch turns dark mode on and off', async () => {
+    act(() => useAppStore.getState().setTheme('dark'))
+    const { user } = mount()
+    await user.click(screen.getByRole('switch', { name: 'Switch to light mode' }))
+    expect(useAppStore.getState().theme).toBe('light')
   })
 
   it('links to 3Speak on Discord, X and Telegram in new tabs', () => {

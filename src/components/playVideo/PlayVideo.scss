@@ -570,6 +570,7 @@ $wide: 1024px;
     gap: 8px;
     b { @include v2.text(body); font-weight: 700; }
   }
+  &__text { display: flex; flex-direction: column; gap: 2px; > span { @include v2.text(meta); color: var(--muted); line-height: 1.4; } }
 
   &.is-cyan { border-color: color-mix(in srgb, var(--cyan) 30%, var(--border)); .wv2-state__icon { background: var(--cyan-tint-strong); color: var(--cyan); } }
   &.is-accent { border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); .wv2-state__icon { background: var(--accent-tint-strong); color: var(--accent); } }

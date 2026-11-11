@@ -71,6 +71,7 @@ beforeEach(() => {
     switchUser: vi.fn(() => true),
     getCurrentProvider: vi.fn(() => 'keychain'),
     login: vi.fn(async () => ({ success: true, username: 'badadib' })),
+    removeOtherLogin: vi.fn(),
   }
   m.fetch = vi.fn(async () => ({ ok: true, json: async () => ({ url: 'https://butrauth.example/authorize?x=1' }) }))
   vi.stubGlobal('fetch', (...a) => m.fetch(...a))
@@ -98,12 +99,12 @@ describe('the login window: sign up or log in', () => {
     expect(screen.queryByRole('dialog', { name: 'Wallet login' })).not.toBeInTheDocument()
   })
 
-  it('closes from Cancel, the X and a click on the backdrop', async () => {
+  it('closes from the X and a click on the backdrop (07e: no Cancel button)', async () => {
     const { user, onClose } = mount()
-    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(screen.queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Close' }))
     fireEvent.mouseDown(document.querySelector('.v2-dialog'))
-    expect(onClose).toHaveBeenCalledTimes(3)
+    expect(onClose).toHaveBeenCalledTimes(2)
   })
 
   it('does not close from a click inside the chooser', async () => {
@@ -245,6 +246,16 @@ describe('the login window: signed in with Butter Auth', () => {
     await user.click(row)
     expect(m.aioha.switchUser).toHaveBeenCalledWith('second-acct')
     expect(onLogin).toHaveBeenCalledWith({ success: true, username: 'second-acct', provider: 'keychain' })
+  })
+
+  it('shows the account in use first and can forget a wallet account', async () => {
+    m.aioha.getOtherLogins.mockReturnValue({ 'second-acct': 'keychain' })
+    const { user } = mount()
+    // The account in use: not a button, marked active (42a)
+    expect(screen.getByText('Active · Butter Auth')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /@badadib/ })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Remove from this list' }))
+    expect(m.aioha.removeOtherLogin).toHaveBeenCalledWith('second-acct')
   })
 
   it('asks to log in again when that wallet login has expired', async () => {

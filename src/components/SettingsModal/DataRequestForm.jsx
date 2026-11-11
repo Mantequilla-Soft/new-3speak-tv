@@ -203,7 +203,7 @@ export default function DataRequestForm() {
         trailing={isDelete ? 'delete_forever' : 'send'}
         loading={submitting}
         disabled={submitting || (isDelete && !confirmed)}
-        className="drf-submit"
+        className="drf-submit is-next"
       >
         {submitting ? t('settings.dataRequest.sending') : isDelete ? t('settings.dataRequest.requestDeletion') : t('settings.dataRequest.requestData')}
       </Button>

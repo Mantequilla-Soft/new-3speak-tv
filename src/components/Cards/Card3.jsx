@@ -213,7 +213,7 @@ const cardHref = (linkPrefix, author, permlink, query) => (linkPrefix === '/watc
   ? watchPath(author, permlink, query)
   : `${linkPrefix}?v=${author}/${permlink}${query}`);
 
-function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, badgeLabel = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null, featuredPending = false, variant = null }) {
+function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, badgeLabel = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null, featuredPending = false, variant = null, hideAuthor = false }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
@@ -599,7 +599,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
               <div className="card-text">
                 <h2>{video.title}</h2>
                 <div className="card-meta">
-                  <span className="card-author-group">
+                  {!hideAuthor && <span className="card-author-group">
                     {/* The name alone, as 20a / 28b write it ("birdwatcher · 9.2K · 3w") */}
                     <span className="card-author" onClick={openCreator}>{cardAuthor}</span>
                     {video._incubation && (
@@ -617,7 +617,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                         <Icon name="eco" size={14} />
                       </span>
                     )}
-                  </span>
+                  </span>}
                   {video._liveStream ? (
                     /* On a live tile the slot counts people watching RIGHT NOW,
                        not lifetime views, and says so. */
@@ -630,7 +630,11 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                     <ViewCount
                       views={views}
                       watched={isWatched?.(cardAuthor, video.permlink) === true}
-                      formatViews={formatViewCount}
+                      /* Without the creator's name in the line (a channel's own
+                         grid, 20b) the count says what it counts: "2.0K views". */
+                      formatViews={hideAuthor
+                        ? (n) => (n == null ? null : t('common.units.views', { count: n }).replace(String(n), formatViewCount(n)))
+                        : formatViewCount}
                     />
                   )}
                   <span className="card-time"><TimeAgo date={video.created_at || video.created} short={shortTimeAgo} /></span>
@@ -701,6 +705,7 @@ Card3.propTypes = {
   renderFooter: PropTypes.func,      // (video) => node drawn under the card's bottom row
   windowed: PropTypes.bool,
   variant: PropTypes.oneOf(['bare']), // 'bare': no card frame, avatar or stat pills (19c tag feed, 49c First Uploads)
+  hideAuthor: PropTypes.bool,        // a channel's own grid: no name in the meta line, "2.0K views · 1w" (20b)
   featuredKey: PropTypes.string,     // "author/permlink" of a first card to draw large
   featuredPending: PropTypes.bool,   // hold that block with a skeleton until the card is there
   featuredNav: PropTypes.shape({      // the featured line-up the card's arrows / strip step through

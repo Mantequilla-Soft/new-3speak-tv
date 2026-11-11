@@ -152,10 +152,9 @@ function InterestsSection() {
       tone="cyan"
       title={<>{t('settings.interests.title')}{hydrating && <span className="settings-title-status"> · {t('settings.interests.loading')}</span>}</>}
     >
-      <p className="settings-note">
-        {t('settings.interests.hint')}
-        {!user && ` ${t('settings.interests.loginHint')}`}
-      </p>
+      {!user && (
+        <p className="settings-note">{t('settings.interests.hint')} {t('settings.interests.loginHint')}</p>
+      )}
       <div className="settings-interests" role="group" aria-label={t('settings.interests.title')}>
         {chips.map((c) => (
           <button
@@ -697,7 +696,7 @@ function LightningReceiveSection() {
             </span>
           </p>
         )}
-        <Button type="submit" variant="primary" size={44} block trailing={busy ? null : 'check'} disabled={busy || !changed} loading={busy}>
+        <Button type="submit" variant="primary" size={44} block className="is-next" trailing={busy ? null : 'check'} disabled={busy || !changed} loading={busy}>
           {busy ? t('common.actions.saving') : t('common.actions.save')}
         </Button>
       </form>
@@ -747,7 +746,7 @@ function ReferralSection() {
           id="settings-referral-link"
           type="text"
           readOnly
-          value={link}
+          value={link.replace(/^https?:\/\//, '')}
           aria-label={t('settings.referrals.linkLabel')}
           title={t('settings.referrals.shareTip')}
           onFocus={(e) => e.target.select()}
@@ -758,17 +757,17 @@ function ReferralSection() {
       </div>
       <ul className="settings-referral-tiles" aria-label={t('settings.referrals.earnTitle')}>
         {[
-          { tone: 'accent', value: t('settings.referrals.bonusValue', { pct: REFERRAL_BONUS_PCT }), label: t('settings.referrals.bonusLabel'), desc: t('settings.referrals.bonusDesc') },
+          { tone: 'accent', value: t('settings.referrals.bonusValue', { pct: REFERRAL_BONUS_PCT }), label: t('settings.referrals.bonusLabel') },
           { tone: 'cyan', value: t('settings.referrals.timeValue', { months: REFERRAL_BONUS_MONTHS }), label: t('settings.referrals.timeLabel') },
-          { tone: 'accent', value: t('settings.referrals.adsValue', { pct: ADVERTISER_REFERRAL_PCT }), label: t('settings.referrals.adsLabel'), desc: t('settings.referrals.adsDesc') },
-        ].map(({ tone, value, label, desc }) => (
+          { tone: 'accent', value: t('settings.referrals.adsValue', { pct: ADVERTISER_REFERRAL_PCT }), label: t('settings.referrals.adsLabel') },
+        ].map(({ tone, value, label }) => (
           <li key={value + label} className={cx('settings-referral-tile', `is-${tone}`)}>
             <b className="settings-referral-tile-value">{value}</b>
-            <span className="settings-referral-tile-label">{desc ? `${label}, ${desc}` : label}</span>
+            <span className="settings-referral-tile-label">{label}</span>
           </li>
         ))}
       </ul>
-      <p className="settings-hint">{t('settings.referrals.earnOnTop')} {t('settings.referrals.rules')}</p>
+      <p className="settings-hint">{t('settings.referrals.earnOnTop')}</p>
     </Section>
   );
 }
@@ -1046,7 +1045,7 @@ const TABS = [
   // Its own page: both halves are about money moving between advertisers,
   // creators and viewers. Only shown to those who have it.
   { id: 'rewards', labelKey: 'settings.tabs.rewards', icon: 'account_balance_wallet', tone: 'accent' },
-  { id: 'about', labelKey: 'settings.about.title', icon: 'info', tone: 'muted' },
+  { id: 'about', labelKey: 'settings.tabs.about', icon: 'info', tone: 'muted' },
 ];
 
 // Phones get the sheet with the sections as tiles (18d); a tile opens its

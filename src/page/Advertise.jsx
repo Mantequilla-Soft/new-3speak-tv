@@ -1073,18 +1073,10 @@ function CampaignPanel({
         </div>
       )}
 
-      {awaitingApproval && (
-        <p className="mkt-note">
-          <Icon name="info" size={18} />
-          <span>
-            {pricing?.slotHoldHours
-              ? t('ads.book.awaitingApprovalHours', { hours: pricing.slotHoldHours })
-              : t('ads.book.awaitingApproval')}
-          </span>
-        </p>
-      )}
-
       <form className="mkt-book" onSubmit={onBook}>
+        {/* 47c: the booking on the left, the forecast, the total and Book this ad in
+            their own column on the right. */}
+        <div className="mkt-book-main">
         {/* The type comes first and the rest of the form follows from it: the three
             products differ in price, in length, in what you supply and in whether a
             position is even yours to choose. */}
@@ -1221,21 +1213,57 @@ function CampaignPanel({
         <fieldset className="mkt-group">
           <legend>{t('ads.inventory.placement')}</legend>
         <div className="mkt-field">
-          <label htmlFor="mkt-slot">{takesAudio ? t('ads.book.whenInTrack') : t('ads.book.whenInVideo')}</label>
-          <select id="mkt-slot" value={chosenSlot} onChange={(e) => setSlotPct(Number(e.target.value))}>
-            {slots.map((p) => (
-              <option key={p} value={p} disabled={slotTaken(p)}>
-                {/* The "not recommended" warning is about a PRE-ROLL: an ad that plays
-                    before the video, to people who were about to leave. A banner at 0%
-                    is not that — it appears with the video, so the caveat does not
-                    apply and neither does the wording. */}
-                {slotLabel({ percent: p, banner: isBanner, audio: takesAudio })}
-                {slotTaken(p)
-                  ? t('ads.book.slotFull')
-                  : (sharingWith(p) > 0 ? t('ads.book.placesLeft', { left: sharesLeft(p), total: slotRow(p).sharesTotal }) : '')}
-              </option>
-            ))}
-          </select>
+          <span className="mkt-label" id="mkt-slot-label">{takesAudio ? t('ads.book.whenInTrack') : t('ads.book.whenInVideo')}</span>
+          {/* One row per position (47c), the places left on the right; a full one is
+              muted and cannot be picked. Arrow keys move between them like a radio group. */}
+          <div
+            id="mkt-slot"
+            className="mkt-slot-rows"
+            role="radiogroup"
+            aria-labelledby="mkt-slot-label"
+            onKeyDown={(e) => {
+              const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+              if (!step) return;
+              e.preventDefault();
+              const open = slots.filter((p) => !slotTaken(p));
+              const i = open.indexOf(chosenSlot);
+              const next = open[(i + step + open.length) % open.length];
+              if (next != null) {
+                setSlotPct(next);
+                e.currentTarget.querySelector(`[data-slot="${next}"]`)?.focus();
+              }
+            }}
+          >
+            {slots.map((p) => {
+              const full = slotTaken(p);
+              const on = p === chosenSlot;
+              // The count reads on its own on the right, so the brackets the inline
+              // (select) wording needed come off.
+              const left = full
+                ? t('ads.book.slotFull').trim()
+                : (sharingWith(p) > 0 ? t('ads.book.placesLeft', { left: sharesLeft(p), total: slotRow(p).sharesTotal }).trim().replace(/^\((.*)\)$/, '$1') : '');
+              return (
+                <button
+                  key={p}
+                  type="button"
+                  role="radio"
+                  data-slot={p}
+                  aria-checked={on}
+                  tabIndex={on ? 0 : -1}
+                  disabled={full}
+                  className={`mkt-slot-row${on ? ' is-on' : ''}${full ? ' is-full' : ''}`}
+                  onClick={() => setSlotPct(p)}
+                >
+                  {/* The "not recommended" warning is about a PRE-ROLL: an ad that plays
+                      before the video, to people who were about to leave. A banner at 0%
+                      is not that — it appears with the video, so the caveat does not
+                      apply and neither does the wording. */}
+                  <span>{slotLabel({ percent: p, banner: isBanner, audio: takesAudio })}</span>
+                  {left ? <span className="mkt-slot-left">{left}</span> : null}
+                </button>
+              );
+            })}
+          </div>
           <span className="mkt-hint">
             {/* A position is sold to one advertiser at a time, across every format —
                 so this says what is actually for sale, not what exists. */}
@@ -1320,43 +1348,8 @@ function CampaignPanel({
             </span>
           </label>
         ) : null}
+        </div>
         <div className="mkt-book-total">
-          {total != null ? (
-            <span>
-              <Trans i18nKey="ads.book.total" values={{ total }} components={{ b: <strong /> }} />
-              {hiveEquivalent(total, pricing?.hbdPerHive) != null ? (
-                <span className="mkt-hint">
-                  {' '}{t('ads.book.aboutHive', { hive: hiveEquivalent(total, pricing.hbdPerHive) })}
-                </span>
-              ) : null}
-              {productionFee > 0 ? <span className="mkt-hint"> {t('ads.book.feeSplit', { flight, fee: productionFee })}</span> : null}
-              {/* ⚠️ This used to read "{chosenLength}s x {days} days at {rate} HBD per
-                  second per day", which is a multiplication that no longer reproduces
-                  the total: the day rate falls with the length of the flight. Quoting
-                  the EFFECTIVE day rate keeps the line arithmetically honest and shows
-                  the discount at the same time. */}
-              <span className="mkt-hint">
-                {' '}· {fmt ? `${fmt.label}, ` : ''}{t('ads.book.secondsOverDays', { seconds: chosenLength, count: Number(days) })}
-                {fmt?.rateIsCustom ? t('ads.book.atAgreedRate') : ', '}
-                {t('ads.book.perSecondPerDay', { rate: effectiveDayRate != null ? effectiveDayRate : rate })}
-                {daysSaving ? t('ads.book.singleDayRate', { rate, saving: daysSaving }) : ''}
-              </span>
-              {/* What they will actually be asked to transfer. The server spends the
-                  balance when the campaign is created, so quoting only the total
-                  would overstate what this booking costs them. Mirrors the same
-                  min(balance, price) the backend applies — matching `total` works
-                  because priceHbd there is likewise flight + production fee. */}
-              {balanceHbd > 0 ? (
-                <span className="mkt-hint">
-                  {' '}· <Trans
-                    i18nKey="ads.book.creditApplied"
-                    values={{ credit: Math.min(balanceHbd, total), send: Math.round(Math.max(0, total - balanceHbd) * 1000) / 1000 }}
-                    components={{ b: <strong /> }}
-                  />
-                </span>
-              ) : null}
-            </span>
-          ) : null}
           {shownQuote ? (
             <div className={`mkt-forecast${quoteStale ? ' mkt-forecast--stale' : ''}`} aria-live="polite">
               <span className="mkt-forecast-label">{t('ads.book.forecastLabel')}</span>
@@ -1367,6 +1360,46 @@ function CampaignPanel({
               <span className="mkt-hint">{t('ads.book.forecastNote')}</span>
             </div>
           ) : null}
+          {total != null ? (
+            <div className="mkt-book-sum">
+              {/* 47c: the total on its own line in mono, the arithmetic under it, then
+                  the credit in cyan. */}
+              <span className="mkt-book-sum-total">
+                <Trans i18nKey="ads.book.total" values={{ total }} components={{ b: <strong /> }} />
+                {hiveEquivalent(total, pricing?.hbdPerHive) != null ? (
+                  <span className="mkt-book-sum-hive">
+                    {' '}{t('ads.book.aboutHive', { hive: hiveEquivalent(total, pricing.hbdPerHive) })}
+                  </span>
+                ) : null}
+              </span>
+              {productionFee > 0 ? <span className="mkt-hint">{t('ads.book.feeSplit', { flight, fee: productionFee })}</span> : null}
+              {/* ⚠️ This used to read "{chosenLength}s x {days} days at {rate} HBD per
+                  second per day", which is a multiplication that no longer reproduces
+                  the total: the day rate falls with the length of the flight. Quoting
+                  the EFFECTIVE day rate keeps the line arithmetically honest and shows
+                  the discount at the same time. */}
+              <span className="mkt-hint">
+                {fmt ? `${fmt.label}, ` : ''}{t('ads.book.secondsOverDays', { seconds: chosenLength, count: Number(days) })}
+                {fmt?.rateIsCustom ? t('ads.book.atAgreedRate') : ' · '}
+                {t('ads.book.perSecondPerDay', { rate: effectiveDayRate != null ? effectiveDayRate : rate })}
+                {daysSaving ? t('ads.book.singleDayRate', { rate, saving: daysSaving }) : ''}
+              </span>
+              {/* What they will actually be asked to transfer. The server spends the
+                  balance when the campaign is created, so quoting only the total
+                  would overstate what this booking costs them. Mirrors the same
+                  min(balance, price) the backend applies — matching `total` works
+                  because priceHbd there is likewise flight + production fee. */}
+              {balanceHbd > 0 ? (
+                <span className="mkt-book-sum-credit">
+                  <Trans
+                    i18nKey="ads.book.creditApplied"
+                    values={{ credit: Math.min(balanceHbd, total), send: Math.round(Math.max(0, total - balanceHbd) * 1000) / 1000 }}
+                    components={{ b: <strong /> }}
+                  />
+                </span>
+              ) : null}
+            </div>
+          ) : null}
           <button
             type="submit"
             className="mkt-primary"
@@ -1375,6 +1408,13 @@ function CampaignPanel({
           >
             {busy ? t('ads.book.booking') : t('ads.book.bookThis')}
           </button>
+          {awaitingApproval && (
+            <p className="mkt-fine mkt-book-hold">
+              {pricing?.slotHoldHours
+                ? t('ads.book.awaitingApprovalHours', { hours: pricing.slotHoldHours })
+                : t('ads.book.awaitingApproval')}
+            </p>
+          )}
         </div>
       </form>
       {error ? <p className="mkt-upload-error">{error}</p> : null}

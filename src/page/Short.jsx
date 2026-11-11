@@ -3747,7 +3747,7 @@ const VideoShort = () => {
                     </>
                   ) : (
                     <span className="shortsPeek__line">
-                      {currentVideo.hivePostMissing ? t('shorts.comments.unavailable') : t('shorts.comments.joinPlaceholder')}
+                      {currentVideo.hivePostMissing ? t('shorts.comments.unavailable') : t('shorts.comments.addPlaceholder')}
                     </span>
                   )}
                 </span>
@@ -4722,7 +4722,7 @@ const VideoShort = () => {
               // comment..." and simply refused to focus, which reads as broken.
               currentVideo.hivePostMissing
                 ? t('shorts.comments.unavailable')
-                : (user || incubationHandle) ? t('shorts.comments.joinPlaceholder') : t('shorts.comments.loginPlaceholder')
+                : (user || incubationHandle) ? t('shorts.comments.addPlaceholder') : t('shorts.comments.loginPlaceholder')
             }
             value={newComment}
             onChange={(e) => {

@@ -86,7 +86,7 @@ export function ClipForm({ url, start, duration, onDone }) {
     return (
       <button type="button" className="audio-np-clip-well" onClick={() => { setFrom(start); setOpen(true); }} aria-label={t('audio.player.clipMake')}>
         <span className="audio-np-clip-form-head">
-          <span className="v2-eyebrow">{t('audio.player.clipMake')}</span>
+          <span className="v2-eyebrow">{t('watch.clip.clip')}</span>
           <span className="audio-np-clip-form-row num">{fmt(range.start)} → {fmt(range.end)}</span>
         </span>
         {bar}

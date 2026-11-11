@@ -21,9 +21,10 @@ const boxOf = (el) => el?.closest(PLAYER_BOX) || el?.closest('.ws-page')?.queryS
  * Renders nothing where the browser cannot fullscreen an element (iPhone
  * Safari), rather than a button that does nothing.
  *
- * `variant="dock"`: the "Full" tile in the stream page's dock (30b).
+ * `variant="dock"`: the "Full" tile in the stream page's dock (30b); `label`
+ * is its short caption.
  */
-export default function StreamFullscreenButton({ variant = 'overlay' }) {
+export default function StreamFullscreenButton({ variant = 'overlay', label: tileLabel }) {
   const { t } = useTranslation();
   const ref = useRef(null);
   const [isFull, setIsFull] = useState(false);
@@ -56,7 +57,7 @@ export default function StreamFullscreenButton({ variant = 'overlay' }) {
   if (variant === 'dock') {
     return (
       <span ref={ref} className="stream-fs-tile">
-        <DockTile icon="fullscreen" label={t('player.controls.fullscreen')} onClick={toggle} title={label} aria-label={label} />
+        <DockTile icon="fullscreen" label={tileLabel || t('player.controls.fullscreen')} onClick={toggle} title={label} aria-label={label} />
       </span>
     );
   }

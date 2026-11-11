@@ -2066,13 +2066,16 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
             <div className="wv2-state is-cyan">
               <span className="wv2-state__icon"><Icon name="event" size={24} /></span>
               <div className="wv2-state__body">
-                <b>
-                  <Trans
-                    i18nKey="watch.scheduled.notice"
-                    values={{ date: scheduledOn ? new Date(scheduledOn).toLocaleString() : t('watch.scheduled.futureDate') }}
-                    components={{ b: <span /> }}
-                  />
-                </b>
+                <span className="wv2-state__text">
+                  <b>
+                    <Trans
+                      i18nKey="watch.scheduled.notice"
+                      values={{ date: scheduledOn ? new Date(scheduledOn).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : t('watch.scheduled.futureDate') }}
+                      components={{ b: <span /> }}
+                    />
+                  </b>
+                  <span>{t('watch.scheduled.notPublished')}</span>
+                </span>
                 {(authenticated && user === author) && onEditScheduled && (
                   <UiButton variant="secondary" size={36} next onClick={() => onEditScheduled()} title={t('watch.scheduled.editTitle')}>
                     {t('watch.scheduled.edit')}

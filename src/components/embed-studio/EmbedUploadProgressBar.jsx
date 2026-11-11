@@ -64,12 +64,14 @@ export default function EmbedUploadProgressBar({ compact = false }) {
 
   const pct = videoUploadStatus === 'done' ? 100 : Math.max(0, Math.min(100, uploadProgress || 0));
 
+  // The details step's side column (21c) names the work in one word and puts
+  // the percentage at the right in mono; the full card (35b) says it in a line.
   const label =
     videoUploadStatus === 'done'
-      ? t('upload.progress.uploadedFinishDetails')
+      ? (compact ? t('upload.progress.uploaded') : t('upload.progress.uploadedFinishDetails'))
       : videoUploadStatus === 'error'
         ? (statusText || t('upload.progress.backgroundFailed'))
-        : t('upload.progress.uploadingPct', { pct });
+        : compact ? t('upload.progress.uploading') : t('upload.progress.uploadingPct', { pct });
 
   // Show just the hostname of the chosen upload server.
   const endpointHost = selectedEndpoint
@@ -171,6 +173,7 @@ export default function EmbedUploadProgressBar({ compact = false }) {
               ? <Icon name="progress_activity" size={20} className="embed-upload-progress-icon v2-spin" />
               : <Icon name="cloud_upload" size={20} className="embed-upload-progress-icon" />}
         <b className={`embed-upload-progress-label ${tone}`}>{label}</b>
+        {compact && videoUploadStatus !== 'error' && <span className="embed-upload-progress-pct">{pct}%</span>}
         {method && videoUploadStatus !== 'done' && <StatusPill tone="muted" className="embed-upload-progress-method">{method}</StatusPill>}
       </div>
       <Progress value={pct} tone={videoUploadStatus === 'error' ? 'accent' : 'cyan'} label={label} />

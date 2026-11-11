@@ -249,7 +249,7 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
           {/* The theme, as a switch on its own tile (07d) */}
           <div className="pn-theme">
             <Icon name="dark_mode" size={24} />
-            <span className="pn-theme-label">{t('settings.appearance.darkMode.title')}</span>
+            <span className="pn-theme-label">{t('nav.profile.darkTheme')}</span>
             <Toggle
               checked={dark}
               label={dark ? t('nav.theme.switchToLight') : t('nav.theme.switchToDark')}

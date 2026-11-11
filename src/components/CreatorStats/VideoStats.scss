@@ -20,6 +20,19 @@
     background: var(--bg);
   }
 
+  // Panel head (23d): a 4px accent bar and the 20px title.
+  .vs-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    h3 { margin: 0; flex: 1; font-size: 20px; font-weight: 700; line-height: 1.2; }
+  }
+
+  .vs-head-bar { width: 4px; height: 22px; border-radius: var(--r-bar); background: var(--accent); flex: none; }
+
+  &.is-panel { gap: 14px; }
+
   // Panel (watch page, 23d): three tiles, radius 20, bg + border, 24/900.
   .vs-tiles {
     display: grid;

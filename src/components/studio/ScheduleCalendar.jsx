@@ -178,7 +178,7 @@ export function ScheduleDayStrip({ value, onChange, min, max }) {
   const minDay = (min || '').slice(0, 10);
   const maxDay = (max || '').slice(0, 10);
   const stripRef = useRef(null);
-  const zone = useMemo(localZoneLabel, []);
+  const zone = useMemo(() => localZoneLabel(), []);
 
   const days = useMemo(() => {
     const now = new Date();
@@ -195,9 +195,7 @@ export function ScheduleDayStrip({ value, onChange, min, max }) {
   useEffect(() => {
     const el = stripRef.current?.querySelector('.is-on');
     if (el && stripRef.current) stripRef.current.scrollLeft = Math.max(0, el.offsetLeft - stripRef.current.offsetLeft - 54);
-    // only on open
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // only on open
 
   const clamp = (next) => {
     if (min && next < min) return min;

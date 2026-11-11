@@ -2289,4 +2289,143 @@ $mkt-sub: 12px;
     .mkt-explorer { flex: 1; }
     .mkt-enroll-cta { margin-top: auto; }
   }
+
+  /* ── Book a slot, 47c ──────────────────────────────────────── */
+  /* The booking on the left; the forecast, the total and Book this ad on the right. */
+  .mkt-book {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+
+    @media (min-width: 960px) { grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); }
+  }
+
+  .mkt-book-main {
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 12px;
+
+    > .mkt-ticker-preview, > .mkt-dayrate, > .mkt-check, > .mkt-locked-format, > .mkt-formats { flex: 1 1 100%; width: 100%; }
+    > .mkt-locked-format { margin: 0; }
+  }
+
+  /* Field groups read as eyebrow-labelled fields, not boxes (47c). */
+  .mkt-book .mkt-group {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    gap: 10px;
+
+    legend {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+  }
+
+  /* Positions as rows: the label, and the places left on the right (47c). */
+  .mkt-slot-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mkt-slot-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+    > span:first-child { flex: 1; min-width: 0; }
+
+    &:hover:not(:disabled) { background: var(--bg-hover); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    &.is-on {
+      border-color: var(--accent);
+      background: var(--accent-tint-strong);
+    }
+
+    &.is-full,
+    &:disabled {
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+  }
+
+  .mkt-slot-left {
+    flex: none;
+    font-size: 12px;
+    color: inherit;
+  }
+
+  /* The side column: a bg well with the forecast, the sum and the one money action. */
+  .mkt-book .mkt-book-total {
+    max-width: none;
+    gap: 10px;
+    padding: 16px;
+    border-radius: var(--r-xl);
+    background: var(--bg);
+
+    @media (min-width: 960px) { position: sticky; top: 88px; }
+
+    > .mkt-primary { height: 48px; border-radius: var(--r-lg); }
+
+    .mkt-forecast {
+      padding: 0 0 12px;
+      border-radius: 0;
+      background: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mkt-forecast-value { @include v2.mono(28, 900); }
+    .mkt-forecast-over { font-size: 12px; color: var(--muted); }
+  }
+
+  .mkt-book-sum {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .mkt-book-sum-total {
+    color: var(--text);
+    @include v2.mono(18, 700);
+
+    strong { font-weight: 700; }
+  }
+
+  .mkt-book-sum-hive {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .mkt-book-sum-credit {
+    color: var(--cyan);
+    strong { color: var(--cyan); }
+  }
+
+  .mkt-book-hold { margin: 0; font-size: 11px; }
 }

@@ -1,11 +1,12 @@
-// "Verifying authorization" (42a): a small status card while the grant is checked.
+// "Verifying authorization" (42a): a small status card while the grant is
+// checked: the cyan spinner beside a bold line and a muted one.
 .verify-auth {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 8px 0;
 
-  > .material-symbols-rounded { color: var(--cyan); }
+  > .material-symbols-rounded { flex: none; color: var(--cyan); }
 
   b { display: block; font-size: 14px; font-weight: 700; color: var(--text); }
   p { margin: 2px 0 0; font-size: 12px; line-height: 1.45; color: var(--muted); }

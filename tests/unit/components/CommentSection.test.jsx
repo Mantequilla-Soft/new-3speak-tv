@@ -91,7 +91,7 @@ describe('the comments under a video', () => {
     mount()
     await loaded()
     expect(m.call).toHaveBeenCalledWith('condenser_api', 'get_content_replies', ['badadib', 'my-video'])
-    expect(screen.getByRole('heading', { name: '3 Comments' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '3 comments' })).toBeInTheDocument()
     expect(screen.getByText('Body of c2')).toBeInTheDocument()
     expect(within(commentOf('Body of c1')).getByText('Body of r1')).toBeInTheDocument()
     expect(within(commentOf('Body of c1')).getAllByRole('button', { name: 'Vote' })[0]).toHaveTextContent('1')
@@ -112,7 +112,7 @@ describe('the comments under a video', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {})
     mount()
     expect(await screen.findByText('Off-chain hello')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '1 Comment' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '1 comment' })).toBeInTheDocument()
   })
 
   it('sorts newest first by default and remembers another order', async () => {
@@ -203,7 +203,7 @@ describe('writing a comment', () => {
     await waitFor(() => expect(within(first).getByText('Great video')).toBeInTheDocument())
     expect(within(first).getByRole('link', { name: 'listener' })).toBeInTheDocument()
     expect(composer()).toHaveValue('')
-    expect(screen.getByRole('heading', { name: '4 Comments' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '4 comments' })).toBeInTheDocument()
   })
 
   it('ties the comment to the moment it was written at, and links timestamps in it', async () => {

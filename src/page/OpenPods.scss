@@ -97,10 +97,12 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
+  gap: 2px;
 
-  b { font-size: 14px; font-weight: 700; }
+  b { font-size: 13px; font-weight: 700; }
 }
+
+.openpods-guest-cta__sub { @include v2.text(meta); color: var(--muted); }
 
 // Shown when the automatic @threespeak handover failed: usually because the
 // user never granted posting authority. Explains the fix.

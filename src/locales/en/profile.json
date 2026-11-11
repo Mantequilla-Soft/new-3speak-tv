@@ -10,8 +10,8 @@
     "unknownError": "Unknown error"
   },
   "authorBadge": {
-    "followers_one": "{{count}} Follower",
-    "followers_other": "{{count}} Followers"
+    "followers_one": "{{count}} follower",
+    "followers_other": "{{count}} followers"
   },
   "creators": {
     "loginRequired": "Please login to follow creators",

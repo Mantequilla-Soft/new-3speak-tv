@@ -2012,7 +2012,7 @@ function Watch({ v2 = false, routeV = null }) {
             <div className="gated-paywall__text">
               <strong>{gatedPlayback.state === 'error' ? t('watch.gated.title') : t('watch.gated.preview')}</strong>
               <span>
-                {gatedPlayback.state === 'error' ? t('watch.gated.checkFailed') : t('watch.gated.subscribersOnly')}
+                {gatedPlayback.state === 'error' ? t('watch.gated.checkFailed') : t('watch.gated.previewSub')}
               </span>
               <Button as="a" href="/wallet" variant="primary" size={36} next className="gated-paywall__cta">{t('watch.gated.cta')}</Button>
             </div>

@@ -45,6 +45,7 @@ import MarkdownComposer from '../studio/MarkdownComposer';
 import { sanitizeAudiograms, publishAudiogramShorts } from '../../utils/audiogramShorts';
 import { playlistTypeFields, trackCategoryToKind, storedPlaylistType } from '../../lib/playlistType';
 import AudioClip from '../AudioClip/AudioClip';
+import { audioCategorySymbol } from '../AudioTile/audioSymbols';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -2457,48 +2458,161 @@ function ThumbPicker({ value, uploading, onPick, onClear, label, onDesign = null
   );
 }
 
-// Per-track content-type + music fields (shared by Mode/MainPost/Tracks).
-function TrackTypeFields({ track, patchTrack, disabled }) {
+// The kinds in the order the tiles show them (24a: Music, Podcast, Voice note, then the rest).
+const KIND_ORDER = ['song', 'podcast', 'voice_message', 'audiobook', 'interview'];
+const KINDS = KIND_ORDER.map((v) => TRACK_TYPES.find((x) => x.value === v)).filter(Boolean);
+// The genres offered as chips (34c); any other one can be typed.
+const GENRE_CHIPS = ['Ambient', 'Electronic', 'Hip-Hop', 'Jazz', 'Rock', 'Classical'];
+
+// Per-track content type + music fields (shared by MainPost and Tracks).
+// `tiles`: the 24a kind tiles (the post step); otherwise the 34c category chips.
+function TrackTypeFields({ track, patchTrack, disabled, tiles = false }) {
   const { t } = useTranslation();
+  const type = track.type || 'voice_message';
+  const genre = String(track.genre || '');
+  const setType = (value) => patchTrack(track.id, { type: value });
   return (
-    <>
-      <div className="audio-upload-title-row">
-        <select
-          className="audio-upload-type-select"
-          value={track.type || 'voice_message'}
-          onChange={(e) => patchTrack(track.id, { type: e.target.value })}
-          disabled={disabled}
-        >
-          {TRACK_TYPES.map((opt) => (
-            <option key={opt.value} value={opt.value}>{t(opt.labelKey)}</option>
+    <div className="audio-upload-kind">
+      {tiles ? (
+        <div className="audio-upload-kind-tiles" role="radiogroup" aria-label={t('audio.upload.mainPost.whatKind')}>
+          {KINDS.map((opt) => (
+            <button
+              type="button"
+              key={opt.value}
+              role="radio"
+              aria-checked={type === opt.value}
+              className={cx('audio-upload-kind-tile', type === opt.value && 'is-on')}
+              onClick={() => setType(opt.value)}
+              disabled={disabled}
+            >
+              <Icon name={audioCategorySymbol(opt.value)} size={24} />
+              <b>{t(opt.labelKey)}</b>
+            </button>
           ))}
-        </select>
-      </div>
-      {track.type === 'song' && (
-        <div className="audio-upload-music-row">
-          <input
-            type="text"
-            className="audio-upload-genre-input"
-            value={track.genre || ''}
-            onChange={(e) => patchTrack(track.id, { genre: e.target.value })}
-            placeholder={t('audio.upload.fields.genre')}
-            list="audio-upload-genre-options"
-            maxLength={60}
-            disabled={disabled}
-          />
-          <input
-            type="number"
-            className="audio-upload-bpm-input"
-            value={track.bpm || ''}
-            onChange={(e) => patchTrack(track.id, { bpm: e.target.value })}
-            placeholder={t('audio.upload.fields.bpm')}
-            min="20"
-            max="400"
-            disabled={disabled}
-          />
         </div>
+      ) : (
+        <>
+          <span className="audio-upload-chip-label" id={`kind-${track.id}`}>{t('audio.upload.fields.category')}</span>
+          <div className="audio-upload-pick-chips" role="radiogroup" aria-labelledby={`kind-${track.id}`}>
+            {KINDS.map((opt) => (
+              <button
+                type="button"
+                key={opt.value}
+                role="radio"
+                aria-checked={type === opt.value}
+                className={cx('audio-upload-pick-chip', type === opt.value && 'is-on')}
+                onClick={() => setType(opt.value)}
+                disabled={disabled}
+              >
+                {t(opt.labelKey)}
+              </button>
+            ))}
+          </div>
+        </>
       )}
-    </>
+      {type === 'song' && (
+        <>
+          <span className="audio-upload-chip-label" id={`genre-${track.id}`}>{t('audio.upload.fields.musicGenre')}</span>
+          <div className="audio-upload-pick-chips" role="radiogroup" aria-labelledby={`genre-${track.id}`}>
+            {GENRE_CHIPS.map((g) => {
+              const on = genre.toLowerCase() === g.toLowerCase();
+              return (
+                <button
+                  type="button"
+                  key={g}
+                  role="radio"
+                  aria-checked={on}
+                  className={cx('audio-upload-pick-chip', on && 'is-on')}
+                  onClick={() => patchTrack(track.id, { genre: on ? '' : g })}
+                  disabled={disabled}
+                >
+                  {g}
+                </button>
+              );
+            })}
+          </div>
+          <div className="audio-upload-music-row">
+            <input
+              type="text"
+              className="audio-upload-genre-input"
+              value={genre}
+              onChange={(e) => patchTrack(track.id, { genre: e.target.value })}
+              placeholder={t('audio.upload.fields.genre')}
+              aria-label={t('audio.upload.fields.genre')}
+              list="audio-upload-genre-options"
+              maxLength={60}
+              disabled={disabled}
+            />
+            <input
+              type="number"
+              className="audio-upload-bpm-input"
+              value={track.bpm || ''}
+              onChange={(e) => patchTrack(track.id, { bpm: e.target.value })}
+              placeholder={t('audio.upload.fields.bpm')}
+              aria-label={t('audio.upload.fields.bpm')}
+              min="20"
+              max="400"
+              disabled={disabled}
+            />
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// 90 bars of the track's loudness for the 24a track card. Decoded at 8 kHz in
+// an offline context so it stays light, and only for files of a sensible size;
+// without it (too long, or no Web Audio) the card shows the player instead.
+const WAVE_BARS = 90;
+function useWavePeaks(blob, durationSec) {
+  // Kept with the blob they were read from, so a new file never shows old bars.
+  const [wave, setWave] = useState({ blob: null, peaks: null });
+  useEffect(() => {
+    const Ctx = typeof window !== 'undefined' ? (window.OfflineAudioContext || window.webkitOfflineAudioContext) : null;
+    if (!Ctx || !blob || blob.size > 40e6 || !(durationSec > 0) || durationSec > 1200) return undefined;
+    let live = true;
+    (async () => {
+      try {
+        const ctx = new Ctx(1, 8000, 8000);
+        const audio = await ctx.decodeAudioData(await blob.arrayBuffer());
+        const data = audio.getChannelData(0);
+        const step = Math.max(1, Math.floor(data.length / WAVE_BARS));
+        const out = [];
+        for (let b = 0; b < WAVE_BARS; b++) {
+          let max = 0;
+          for (let i = b * step, end = Math.min(data.length, (b + 1) * step); i < end; i += 4) {
+            const v = Math.abs(data[i]);
+            if (v > max) max = v;
+          }
+          out.push(max);
+        }
+        const top = Math.max(...out, 0.0001);
+        if (live) setWave({ blob, peaks: out.map((v) => v / top) });
+      } catch { /* no waveform: the player stands in */ }
+    })();
+    return () => { live = false; };
+  }, [blob, durationSec]);
+  return wave.blob === blob ? wave.peaks : null;
+}
+
+function TrackCard({ track }) {
+  const { t } = useTranslation();
+  const peaks = useWavePeaks(track.blob, track.durationSec);
+  return (
+    <div className="audio-upload-track-card">
+      <div className="audio-upload-track-card-head">
+        <span>{t('audio.upload.fields.track')}</span>
+        <span className="audio-upload-track-card-len">{fmtTime(track.durationSec)}</span>
+      </div>
+      {peaks ? (
+        <div className="audio-upload-wave" aria-hidden="true">
+          {peaks.map((v, i) => <span key={i} style={{ height: `${Math.round(6 + v * 50)}px` }} />)}
+        </div>
+      ) : (
+        <AudioClip src={track.objectUrl} className="audio-upload-track-card-player" />
+      )}
+    </div>
   );
 }
 
@@ -2604,94 +2718,99 @@ function MainPostStep({
 }) {
   const { t } = useTranslation();
   const isAlbum = variant === 'album';
+  // 24a: the cover on the left; the title, what kind of audio and the track on
+  // the right; the post text and the rest under it.
   return (
     <div className="audio-upload-review audio-upload-post-form">
-      <p className="audio-upload-step-help">
-        {isAlbum
-          ? t('audio.upload.mainPost.helpAlbum')
-          : t('audio.upload.mainPost.helpSingle')}
-      </p>
-
-      {/* Cover on the left, what the post is called and where it goes on the right (24a) */}
       <div className="audio-upload-post-top">
-        <ThumbPicker
-          value={thumb}
-          uploading={thumbUploading}
-          onPick={onPickThumb}
-          onClear={() => setThumb('')}
-          onDesign={onDesignThumb}
-          fromPlaylist={thumbFromPlaylist}
-        />
+        <div className="audio-upload-cover-col">
+          <ThumbPicker
+            value={thumb}
+            uploading={thumbUploading}
+            onPick={onPickThumb}
+            onClear={() => setThumb('')}
+            onDesign={onDesignThumb}
+            fromPlaylist={thumbFromPlaylist}
+          />
+        </div>
         <div className="audio-upload-post-fields">
-          <input
-            type="text"
-            className="audio-upload-post-tags audio-upload-post-title"
-            placeholder={t('audio.upload.mainPost.titlePlaceholder')}
-            aria-label={t('audio.upload.mainPost.titlePlaceholder')}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <label className="audio-upload-title-box">
+            <span className="audio-upload-box-eyebrow">{t('upload.details.title')}</span>
+            <input
+              type="text"
+              className="audio-upload-post-title"
+              placeholder={t('audio.upload.mainPost.titlePlaceholder')}
+              aria-label={t('audio.upload.mainPost.titlePlaceholder')}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </label>
 
-          <button
-            type="button"
-            className="audio-upload-community-btn"
-            onClick={() => setCommunityOpen(true)}
-          >
-            {community
-              ? <><AccountImg account={community.name} alt="" />{community.title || community.name}</>
-              : <><Icon name="groups" size={20} className="audio-upload-community-icon" />{t('audio.upload.mainPost.selectCommunity')}</>}
-            <span className="audio-upload-community-change">{t('audio.upload.mainPost.change')}</span>
-          </button>
+          {!isAlbum && singleTrack && (
+            <TrackTypeFields track={singleTrack} patchTrack={patchTrack} tiles />
+          )}
+          {!isAlbum && singleTrack && <TrackCard track={singleTrack} />}
 
-          <TagChipsInput
-            value={tagsInput}
-            onChange={setTagsInput}
-            placeholder={t('audio.upload.mainPost.tagsPlaceholder')}
-          />
+          <div className="audio-upload-where">
+            <button
+              type="button"
+              className="audio-upload-community-btn"
+              onClick={() => setCommunityOpen(true)}
+            >
+              {community
+                ? <><AccountImg account={community.name} alt="" />{community.title || community.name}</>
+                : <><Icon name="groups" size={20} className="audio-upload-community-icon" />{t('audio.upload.mainPost.selectCommunity')}</>}
+              <span className="audio-upload-community-change">{t('audio.upload.mainPost.change')}</span>
+            </button>
+
+            <TagChipsInput
+              value={tagsInput}
+              onChange={setTagsInput}
+              placeholder={t('audio.upload.mainPost.tagsPlaceholder')}
+            />
+          </div>
         </div>
       </div>
 
       {/* The same composer as a video post: toolbar, emoji, GIFs, images and a preview */}
-      <div className="audio-upload-post-composer">
-        <MarkdownComposer
-          value={description}
-          onChange={setDescription}
-          placeholder={t('audio.upload.fields.descriptionOptional')}
-        />
-      </div>
-      {!isAlbum && transcript && <TranscriptControl {...transcript} disabled={shortsLocked} />}
-
-      {!isAlbum && singleTrack && (
-        <div className="audio-upload-title-card">
-          <span className="audio-upload-reward-label">{t('audio.upload.mainPost.whatKind')}</span>
-          <TrackTypeFields track={singleTrack} patchTrack={patchTrack} />
+      <section className="audio-upload-card audio-upload-desc-card">
+        <span className="audio-upload-box-eyebrow">{t('upload.details.description')}</span>
+        <p className="audio-upload-step-help">
+          {isAlbum ? t('audio.upload.mainPost.helpAlbum') : t('audio.upload.mainPost.helpSingle')}
+        </p>
+        <div className="audio-upload-post-composer">
+          <MarkdownComposer
+            value={description}
+            onChange={setDescription}
+            placeholder={t('audio.upload.fields.descriptionOptional')}
+          />
         </div>
-      )}
+        {!isAlbum && transcript && <TranscriptControl {...transcript} disabled={shortsLocked} />}
+      </section>
 
       {/* The audiograms going out as Shorts with it (not for warm-up: Shorts need the Hive account) */}
-      {!isAlbum && singleTrack && !warmup && onShortsChange && (
-        <AudiogramShortsSection
-          track={singleTrack}
-          onChange={(list) => onShortsChange(singleTrack.id, list)}
-          onDesign={(url) => onDesignShortThumb(singleTrack.id, url)}
-          disabled={shortsLocked}
-        />
+      {!isAlbum && singleTrack && !warmup && onShortsChange && singleTrack.audiograms?.length > 0 && (
+        <section className="audio-upload-card">
+          <AudiogramShortsSection
+            track={singleTrack}
+            onChange={(list) => onShortsChange(singleTrack.id, list)}
+            onDesign={(url) => onDesignShortThumb(singleTrack.id, url)}
+            disabled={shortsLocked}
+          />
+        </section>
       )}
 
       {/* A warm-up post has no payout and no blog yet: those come with the Hive account. */}
       {!warmup && (
-        <>
-        <RewardRow payout={payout} setPayout={setPayout} beneCount={beneCount} onOpenBene={onOpenBene} />
-
-        <div className="audio-upload-setting-card">
+        <section className="audio-upload-card">
+          <RewardRow payout={payout} setPayout={setPayout} beneCount={beneCount} onOpenBene={onOpenBene} />
           <SettingRow
             icon="dynamic_feed"
             title={t('audio.upload.mainPost.addToBlog')}
             sub={t('audio.upload.mainPost.addToBlogHint')}
             control={<Toggle checked={!!addToBlog} onChange={setAddToBlog} label={t('audio.upload.mainPost.addToBlog')} />}
           />
-        </div>
-        </>
+        </section>
       )}
     </div>
   );
@@ -2783,7 +2902,9 @@ function TracksStep({
       </p>
 
       <div className="audio-upload-title-card">
-        <span className="audio-upload-reward-label">{t('audio.upload.tracks.applyToAllHeading')}</span>
+        <p className="audio-upload-apply-note">
+          <Trans i18nKey="audio.upload.tracks.applyNote" count={tracks.length} components={{ b: <b /> }} />
+        </p>
         <textarea
           className="audio-upload-post-desc"
           placeholder={t('audio.upload.tracks.sharedDescription')}
@@ -2927,6 +3048,8 @@ function ReviewStep({
       : t('audio.upload.review.snapComments', { count: tracks.length });
   return (
     <div className="audio-upload-review">
+      <section className="audio-upload-card">
+      <h3 className="audio-upload-card-title">{t('audio.upload.steps.review')}</h3>
       <p className="audio-upload-step-help">
         {chosen
           ? t('audio.upload.review.readyToPlaylist', { count: tracks.length, name: chosen.name })
@@ -2956,6 +3079,7 @@ function ReviewStep({
           </div>
         )}
       </div>
+      </section>
 
       {published && (
         <div className="audio-upload-done v2-success">
@@ -2997,7 +3121,7 @@ function ReviewStep({
         <div className="audio-upload-review-failed-banner">
           <Icon name="error" size={18} className="audio-upload-review-error-icon" />
           <span>{t('audio.upload.review.failedCount', { count: failedCount })}</span>
-          <Button variant="danger" size={32} icon="refresh" onClick={onRetryAll} disabled={isPublishing}>
+          <Button variant="ghost" size={28} className="audio-upload-retry-link" onClick={onRetryAll} disabled={isPublishing}>
             {t('audio.upload.review.retryAllFailed')}
           </Button>
         </div>

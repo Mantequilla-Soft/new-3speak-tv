@@ -9,7 +9,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import   {KeyTypes, Providers } from '@aioha/aioha'
 import aioha from "../../hive-api/aioha";
 import { useTranslation } from 'react-i18next';
-import { Dialog, ChoiceCard } from '../v2/ui';
+import { Dialog, Button, Icon } from '../v2/ui';
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -24,6 +24,8 @@ function AddAccount_modal({ isOpen, close}) {
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
     const [hasKeychain, setHasKeychain] = useState(false);
+    // The wallet to log in with: Keychain when it is installed, else HiveAuth.
+    const [method, setMethod] = useState(null);
 
 
     useEffect(() => {
@@ -189,10 +191,22 @@ function AddAccount_modal({ isOpen, close}) {
   };
 
 
-  // 07e / 23b: "@ handle" field, then the wallet to log in with as choice
-  // cards, and HiveAuth's QR in a well while it waits for the phone.
+  // 07e: the "@ handle" field, the wallets as tiles three across (icon over
+  // the name, the chosen one outlined in red), then "Continue with …". While
+  // HiveAuth waits for the phone, its QR sits in a well (42a, Keychain QR).
+  const methods = [
+    ...(hasKeychain ? [{ id: 'keychain', icon: 'key', label: 'Keychain', run: logMe }] : []),
+    { id: 'hiveauth', icon: 'qr_code_2', label: 'HiveAuth', run: handleLoginWithHiveAuth },
+  ];
+  const chosen = methods.find((m) => m.id === method) || methods[0];
   return (
-    <Dialog open={!!isOpen} onClose={close} title={t('modals.addAccount.title')} width={440} className="addacct">
+    <Dialog open={!!isOpen} onClose={close} title={t('modals.addAccount.title')} width={440} className="addacct"
+      footer={(
+        <Button variant="primary" size={48} block next onClick={() => chosen.run()}>
+          {t('modals.addAccount.continueWith', { method: chosen.label })}
+        </Button>
+      )}
+    >
       <label className="addacct-handle">
         <span className="addacct-handle__at" aria-hidden="true">@</span>
         <input
@@ -205,14 +219,24 @@ function AddAccount_modal({ isOpen, close}) {
           spellCheck={false}
           value={username}
           onChange={(e) => setUsername(e.target.value.toLowerCase())}
+          onKeyDown={(e) => { if (e.key === 'Enter' && username) chosen.run(); }}
         />
       </label>
 
-      <div className="v2-choices is-grid addacct-wallets">
-        {hasKeychain && (
-          <ChoiceCard role="button" icon="extension" title="Keychain" onClick={logMe} />
-        )}
-        <ChoiceCard role="button" icon="qr_code_2" title="HiveAuth" onClick={handleLoginWithHiveAuth} />
+      <div className="addacct-wallets" role="radiogroup" aria-label={t('modals.addAccount.title')}>
+        {methods.map((m) => (
+          <button
+            key={m.id}
+            type="button"
+            role="radio"
+            aria-checked={chosen.id === m.id}
+            className={`addacct-wallet${chosen.id === m.id ? ' is-on' : ''}`}
+            onClick={() => setMethod(m.id)}
+          >
+            <Icon name={m.icon} size={24} />
+            <span>{m.label}</span>
+          </button>
+        ))}
       </div>
 
       {qrCode && showModal && (

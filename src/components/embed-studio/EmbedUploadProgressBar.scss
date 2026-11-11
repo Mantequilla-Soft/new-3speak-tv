@@ -20,8 +20,20 @@
     border: 0;
     background: transparent;
     border-radius: 0;
-    gap: 8px;
+    gap: 6px;
+
+    // 21c: "Uploaded" 13/700 with the percentage in mono at the right, an 8px bar.
+    .embed-upload-progress-icon { display: none; }
+    .embed-upload-progress-label { font-size: 13px; }
+    .embed-upload-progress-method { display: none; }
+    .v2-progress { height: 8px; border-radius: 4px; }
   }
+}
+
+.embed-upload-progress-pct {
+  @include v2.mono(12, 500);
+  color: var(--muted);
+  flex: none;
 }
 
 .embed-upload-progress-head {

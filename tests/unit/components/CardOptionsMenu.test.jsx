@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 // The "more options" menu on a video card (components/CardOptionsMenu/CardOptionsMenu.jsx):
-// add to playlist, add a tag, "not interested" and "don't show this creator".
+// save to a playlist, add a tag, "not interested", "don't show this creator"
+// and report (28b).
 // Hiding drops the card at once through onDismiss, saves the choice, and the
 // toast offers an Undo. Signed out, every personal action asks to log in instead.
 import { describe, it, expect, vi, beforeEach } from 'vitest'
@@ -25,6 +26,9 @@ vi.mock('../../../src/components/AddToPlaylistModal/AddToPlaylistModal', () => (
       <button type="button" onClick={onClose}>Done</button>
     </div>
   ) : null),
+}))
+vi.mock('../../../src/components/modal/ReportModal', () => ({
+  default: ({ isOpen, target }) => (isOpen ? <div role="dialog" aria-label="Report video">{`${target.author}/${target.permlink}`}</div> : null),
 }))
 vi.mock('../../../src/components/AddTagModal/AddTagModal', () => ({
   default: ({ isOpen }) => (isOpen ? <div role="dialog" aria-label="Tag this video" /> : null),
@@ -74,13 +78,13 @@ describe('the card options menu', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument()
   })
 
-  it('opens the four actions, naming the creator', async () => {
+  it('opens the five actions, naming the creator', async () => {
     const { user, onOpenChange } = mount()
     const menu = await openMenu(user)
     expect(trigger()).toHaveAttribute('aria-expanded', 'true')
     // Accessible names: the Material Symbols glyphs are aria-hidden ligature text.
     const items = screen.getAllByRole('menuitem').map((b) => computeAccessibleName(b))
-    expect(items).toEqual(['Add to playlist', 'Add tag', 'Not interested', "Don't show @bob"])
+    expect(items).toEqual(['Save to playlist', 'Add tag', 'Not interested', "Don't show @bob", 'Report'])
     expect(menu.parentElement).toBe(document.body)
     expect(onOpenChange).toHaveBeenLastCalledWith(true)
   })
@@ -121,7 +125,7 @@ describe('the card options menu', () => {
     it.each([
       ['Not interested', 'Please login to personalize your feed'],
       ["Don't show @bob", 'Please login to personalize your feed'],
-      ['Add to playlist', 'Please login to add videos to playlists'],
+      ['Save to playlist', 'Please login to add videos to playlists'],
       ['Add tag', 'Please login to tag videos'],
     ])('"%s" asks to log in and changes nothing', async (item, message) => {
       const { user, onDismiss } = mount()
@@ -189,10 +193,10 @@ describe('the card options menu', () => {
       expect(filters.hideCreator).not.toHaveBeenCalled()
     })
 
-    it('"Add to playlist" opens the playlist dialog for this video', async () => {
+    it('"Save to playlist" opens the playlist dialog for this video', async () => {
       const { user, onOpenChange } = mount()
       await openMenu(user)
-      await user.click(screen.getByRole('menuitem', { name: 'Add to playlist' }))
+      await user.click(screen.getByRole('menuitem', { name: 'Save to playlist' }))
       const dialog = screen.getByRole('dialog', { name: 'Add to playlist dialog' })
       expect(dialog).toHaveTextContent("bob/video-1: Bob's video")
       expect(screen.queryByRole('menu')).not.toBeInTheDocument()
@@ -212,6 +216,13 @@ describe('the card options menu', () => {
       await openMenu(user)
       await user.click(screen.getByRole('menuitem', { name: 'Add tag' }))
       expect(screen.getByRole('dialog', { name: 'Tag this video' })).toBeInTheDocument()
+    })
+
+    it('"Report" opens the report dialog for this video', async () => {
+      const { user } = mount()
+      await openMenu(user)
+      await user.click(screen.getByRole('menuitem', { name: 'Report' }))
+      expect(screen.getByRole('dialog', { name: 'Report video' })).toHaveTextContent('bob/')
     })
   })
 })

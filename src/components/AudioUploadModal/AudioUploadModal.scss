@@ -21,20 +21,40 @@
 
 .audio-upload-modal {
   position: relative;
-  width: min(760px, 100%);
-  // Fixed: moving between steps never resizes the window; the body scrolls.
-  height: min(860px, calc(100vh - 48px));
-  height: min(860px, calc(100dvh - 48px));
+  // 24a: a 1280 × 720 frame on the ground colour, cards on it, the side panel on
+  // the right. Fixed size: moving between steps never resizes it.
+  width: min(1280px, 100%);
+  height: min(720px, calc(100vh - 48px));
+  height: min(720px, calc(100dvh - 48px));
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--surface);
+  background: var(--bg);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--r-3xl);
   box-shadow: var(--shadow-sheet);
   text-align: left;
   animation: v2-pop var(--t-base) var(--ease);
+
+  // Full layout: main column (steps + the step) | side panel 460 (shorts,
+  // where it goes, the primary action at its foot).
+  @include v2.wide {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 460px;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "top side"
+      "body side"
+      "body foot";
+
+    &.is-gated {
+      grid-template-areas:
+        "top top"
+        "body body"
+        "body body";
+    }
+  }
 
   @include v2.mobile {
     width: 100%;
@@ -61,101 +81,133 @@
   }
 }
 
-.audio-upload-header {
+// ─── Top row: close, then the step tiles ───
+.audio-upload-top {
+  grid-area: top;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex: none;
-  padding: 18px 16px 12px 20px;
+  min-width: 0;
+  padding: 24px 24px 0;
 
-  h2 {
-    flex: 1;
-    min-width: 0;
-    margin: 0;
-    @include v2.text(title);
+  @include v2.mobile { padding: 10px 16px 0; gap: 8px; }
+}
+
+.audio-upload-close { flex: none; }
+
+.audio-upload-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  @include v2.text(title);
+
+  // The steps say where you are; the title stays for screen readers.
+  &.is-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
-
-  @include v2.mobile { padding: 10px 12px 10px 16px; }
 }
 
-.audio-upload-header-icon {
-  width: 36px;
-  height: 36px;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border-radius: var(--r-md);
-  background: var(--accent-tint-strong);
-  color: var(--accent);
-}
-
-// ─── Step bar: 4px per step, labels under it ───
+// ─── Steps as tiles (36a): done = cyan check, current = accent, next = outline ───
 .audio-upload-steps {
-  display: grid;
-  grid-template-columns: repeat(var(--steps, 5), minmax(0, 1fr));
-  gap: 4px;
-  flex: none;
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
   list-style: none;
   margin: 0;
-  padding: 0 20px 14px;
-
-  @include v2.mobile { padding: 0 16px 12px; }
+  padding: 0;
+  @include v2.scroll-x;
 }
 
 .audio-upload-step {
+  flex: none;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px 0 6px;
+  box-sizing: border-box;
+  border-radius: var(--r-lg);
+  border: 2px solid transparent;
+  @include v2.text(label);
+  color: var(--text);
+  white-space: nowrap;
 
-  .audio-upload-step-bar {
-    display: block;
-    height: 4px;
-    border-radius: 2px;
-    background: var(--surface-2);
-    transition: background var(--t-base) var(--ease);
+  .audio-upload-step-n {
+    width: 32px;
+    height: 32px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: var(--r-md);
+    @include v2.mono(12, 900);
   }
 
-  .audio-upload-step-label {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    min-width: 0;
-    @include v2.text(meta-sm);
-    font-weight: 700;
+  &.is-done .audio-upload-step-n { background: var(--cyan); color: var(--bg); }
+
+  &.is-current {
+    border-color: var(--accent);
+    background: var(--accent-tint-strong);
+
+    .audio-upload-step-n { background: var(--accent); color: var(--on-accent); }
+  }
+
+  &.is-next {
+    border-color: var(--border);
     color: var(--muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 
-    .material-symbols-rounded { color: var(--cyan); }
-  }
-
-  &.active,
-  &.done {
-    .audio-upload-step-bar { background: var(--accent); }
-  }
-
-  &.active .audio-upload-step-label { color: var(--text); }
-
-  @include v2.mobile {
-    .audio-upload-step-label { font-size: 10px; }
-    &:not(.active) .audio-upload-step-label .material-symbols-rounded { display: none; }
+    .audio-upload-step-n { background: var(--surface-2); color: var(--muted); }
   }
 }
 
-// ─── Body ───
-.audio-upload-body {
+// ─── Scroll area: the step, then (below 1280) the side panel ───
+.audio-upload-scroll {
   flex: 1;
   min-height: 0;
-  @include v2.scroll-y;
-  padding: 16px 20px 20px;
-  border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  @include v2.scroll-y;
 
-  @include v2.mobile { padding: 14px 16px 16px; }
+  @include v2.wide { display: contents; }
+}
+
+.audio-upload-body {
+  grid-area: body;
+  flex: none;
+  padding: 14px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @include v2.wide {
+    min-height: 0;
+    @include v2.scroll-y;
+  }
+
+  &.is-gate { flex: 1; min-height: 0; @include v2.scroll-y; }
+
+  @include v2.mobile { padding: 12px 16px 16px; }
+}
+
+// A card on the ground (36a): surface, 1px border, radius 24, a 16px title
+.audio-upload-card {
+  @include v2.card;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  min-width: 0;
+}
+
+.audio-upload-card-title {
+  margin: 0;
+  @include v2.text(title-sm);
 }
 
 .audio-upload-step-help {
@@ -169,6 +221,149 @@
   margin: -6px 0 0;
   @include v2.text(meta);
   color: var(--muted);
+}
+
+// ─── Side panel (24a) ───
+.audio-upload-aside {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 24px 24px;
+  padding: 16px;
+  border-radius: var(--r-2xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+
+  @include v2.wide {
+    min-height: 0;
+    margin: 0;
+    padding: 22px 22px 16px;
+    border-width: 0 0 0 1px;
+    border-radius: var(--r-3xl) 0 0 0;
+    @include v2.scroll-y;
+  }
+
+  @include v2.mobile { margin: 0 16px 16px; }
+}
+
+.audio-upload-side-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.audio-upload-side-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  b { flex: 1; min-width: 0; font-size: 20px; font-weight: 700; line-height: 1.2; }
+}
+
+.audio-upload-side-bar {
+  width: 4px;
+  height: 22px;
+  flex: none;
+  border-radius: 2px;
+  background: var(--cyan);
+}
+
+.audio-upload-side-count { @include v2.mono(12, 700); color: var(--cyan); white-space: nowrap; }
+
+.audio-upload-side-help {
+  margin: -2px 0 6px;
+  @include v2.text(body-sm);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.audio-upload-side-grams {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.audio-upload-side-gram {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid var(--cyan);
+  border-radius: var(--r-xl);
+  background: var(--media-black);
+  color: var(--on-media);
+  cursor: pointer;
+  transition: transform var(--t-fast) var(--ease);
+
+  img,
+  video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  &:active:not(:disabled) { transform: scale(.98); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
+}
+
+.audio-upload-side-gram-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  background: var(--cyan);
+  color: var(--bg);
+}
+
+.audio-upload-side-gram-time {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  @include v2.scrim-pill;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.audio-upload-side-eyebrow {
+  margin-top: 4px;
+  @include v2.text(eyebrow);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.audio-upload-dest {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.audio-upload-dest-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--border);
+  color: var(--muted);
+
+  b {
+    min-width: 0;
+    @include v2.text(label);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &.is-on {
+    border-color: var(--cyan);
+    background: var(--cyan-tint-strong);
+    color: var(--text);
+  }
 }
 
 // ─── The posting-authority / RC gate ───
@@ -214,61 +409,70 @@
 }
 
 // ─── Source (36a) ───
-.audio-upload-source-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 12px;
-
-  @include v2.mobile { grid-template-columns: 1fr; }
-}
-
 .audio-upload-dropzone {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
   gap: 2px;
-  min-height: 132px;
-  padding: 14px;
+  min-height: 110px;
+  padding: 12px;
+  box-sizing: border-box;
   border-radius: var(--r-xl);
   border: 2px dashed var(--border);
-  background: var(--bg);
+  background: transparent;
   cursor: pointer;
   transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-  .audio-upload-dropzone-icon { color: var(--cyan); margin-bottom: auto; }
-  p { margin: 8px 0 0; @include v2.text(body-sm); font-weight: 700; color: var(--text); }
-  small { @include v2.text(meta-sm); color: var(--muted); }
+  .audio-upload-dropzone-icon { color: var(--cyan); margin-bottom: 2px; }
+  p { margin: 0; @include v2.text(body-sm); font-weight: 700; color: var(--text); }
+  small { font-size: 10px; color: var(--muted); }
 
   &:hover { border-color: var(--cyan); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   &.dragging { border-color: var(--cyan); background: var(--cyan-wash); }
 }
 
+// "Or record live": a bg row, the accent mic square, the limit under it
 .audio-upload-recorder {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 132px;
-  padding: 14px;
-  border-radius: var(--r-xl);
+  gap: 10px;
+  width: 100%;
+  min-height: 60px;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--r-lg);
   background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+
+  &:is(button) {
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
+
+    &:hover { background: color-mix(in srgb, var(--text) 5%, var(--bg)); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  }
 
   &.recording { background: var(--accent-wash); }
-
-  @include v2.mobile { min-height: 0; }
 }
 
 .audio-upload-rec-icon {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   flex: none;
   display: grid;
   place-items: center;
-  border-radius: var(--r-lg);
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-md);
   background: var(--accent);
   color: var(--on-accent);
 
-  .audio-upload-recorder.recording & { background: var(--accent-tint-strong); }
+  &:is(button) { cursor: pointer; &:hover { background: var(--accent-hover); } }
 }
 
 .audio-upload-rec-text {
@@ -278,13 +482,15 @@
   flex-direction: column;
   gap: 2px;
 
-  p { margin: 0; @include v2.text(body-sm); font-weight: 700; }
+  > b:not(.audio-upload-rec-time) { @include v2.text(body-sm); font-weight: 700; }
   small { @include v2.text(meta-sm); color: var(--muted); }
 }
 
 .audio-upload-rec-dot {
   width: 14px;
   height: 14px;
+  flex: none;
+  margin-right: 6px;
   border-radius: 50%;
   background: var(--accent);
   animation: audio-upload-pulse 1.1s ease-in-out infinite;
@@ -297,32 +503,31 @@
   50% { transform: scale(1.25); opacity: .6; }
 }
 
-// Added tracks
+// The added files: one bg row each (title · kind · length), 36a
 .audio-upload-track-list {
   display: flex;
   flex-direction: column;
   gap: 6px;
-
-  h4 { margin: 4px 0 2px; }
 }
 
 .audio-upload-track-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 48px;
-  padding: 6px 6px 6px 12px;
+  gap: 6px;
+  min-height: 36px;
+  padding: 4px 4px 4px 8px;
+  box-sizing: border-box;
   border-radius: var(--r-md);
   background: var(--bg);
-  @include v2.text(body-sm);
+  font-size: 12px;
 
-  .audio-upload-track-source { display: inline-flex; color: var(--muted); }
   .audio-upload-track-name { flex: 1; min-width: 0; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .audio-upload-track-meta { flex: none; @include v2.mono(12, 500); color: var(--muted); }
+  .audio-upload-track-kind { flex: none; width: 70px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .audio-upload-track-meta { flex: none; min-width: 48px; @include v2.mono(12, 500); color: var(--muted); }
 
   @include v2.mobile {
     flex-wrap: wrap;
-    .audio-upload-track-name { flex-basis: calc(100% - 80px); }
+    .audio-upload-track-name { flex-basis: calc(100% - 40px); }
   }
 }
 
@@ -370,15 +575,13 @@
   background-repeat: no-repeat;
 }
 
-// A card that holds one track or one group of settings
+// A card that holds one track or one group of settings (radius 24, as every card)
 .audio-upload-title-card {
+  @include v2.card;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 14px;
-  border-radius: var(--r-xl);
-  border: 1px solid var(--border);
-  background: var(--surface);
+  padding: 16px;
 }
 
 .audio-upload-titles { display: flex; flex-direction: column; gap: 12px; }
@@ -496,13 +699,74 @@
   right: 8px;
 }
 
-// Album details: credits / year / label
+// Album details (36a): Year · Label · Credits, each a bg well with its label
 .audio-upload-album-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1.5fr;
-  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
 
   @include v2.mobile { grid-template-columns: 1fr; }
+}
+
+.audio-upload-album-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px;
+  border-radius: var(--r-md);
+  border: 2px solid transparent;
+  background: var(--bg);
+  cursor: text;
+
+  &:focus-within { border-color: var(--accent); }
+
+  > span { font-size: 10px; color: var(--muted); }
+
+  input {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+
+    &::placeholder { color: var(--muted); font-weight: 400; }
+    &:focus { outline: none; }
+  }
+}
+
+// The cover beside the name + Public / Private
+.audio-upload-album-head {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.audio-upload-album-name {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+
+  .audio-upload-album-name-input { font-size: 13px; font-weight: 700; &::placeholder { font-weight: 400; } }
+  .audio-upload-playlist-access { display: flex; width: 100%; padding: 3px; .v2-seg__opt { flex: 1; font-size: 11px; } }
+}
+
+.audio-upload-album-thumb.is-small {
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-lg);
+
+  .audio-upload-thumb-icon { margin: 0; }
+  &.has-image { border-radius: var(--r-lg); }
 }
 
 // ─── Playlist (36a) ───
@@ -577,7 +841,7 @@
 .audio-upload-review {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .audio-upload-reward {
@@ -591,37 +855,83 @@
   color: var(--text);
 }
 
+.audio-upload-mode-list { gap: 8px; }
+
+// Icon and title on one line, the description under both (36a)
+.audio-upload-mode-opt.v2-choice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 8px;
+  padding: 12px;
+
+  .v2-choice__body { display: contents; }
+  .v2-choice__body > b { grid-column: 2; }
+  .v2-choice__body > span { grid-column: 1 / -1; margin-top: 4px; }
+  .v2-choice__icon { margin: 0; color: var(--text); }
+  &.is-on .v2-choice__icon { color: var(--accent); }
+}
+
+.audio-upload-mode-earn {
+  margin: 6px 0 0;
+  @include v2.text(body);
+  font-weight: 700;
+}
+
 .audio-upload-earn-grid.v2-choices {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
 
   @include v2.mobile { grid-template-columns: 1fr; }
 }
 
-.audio-upload-reward-opt .v2-choice__body > span { line-height: 1.4; }
+.audio-upload-earn-opt.v2-choice {
+  padding: 10px;
 
-// On/off rows (ads on this audio, add to my blog): SettingRow in a card
-.audio-upload-setting-card {
-  padding: 0 14px;
-  border-radius: var(--r-xl);
-  border: 1px solid var(--border);
-  background: var(--surface);
+  .v2-choice__body > b { font-size: 12px; }
+  .v2-choice__body > span { font-size: 10px; line-height: 1.3; margin-top: 2px; }
 }
 
-// ─── Post details (24a) ───
+// The spoken sponsor switch: one line (36a)
+.audio-upload-sponsor-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 12px;
+
+  .audio-upload-sponsor-icon { color: var(--muted); }
+  .audio-upload-sponsor-label { flex: 1; min-width: 0; }
+}
+
+// ─── Post details (24a): cover 280 | title, kind, track ───
 .audio-upload-post-top {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: 14px;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 20px;
   align-items: start;
 
-  .audio-upload-album-thumb { min-height: 220px; }
+  @include v2.below-wide { grid-template-columns: 220px minmax(0, 1fr); gap: 14px; }
 
   @include v2.mobile {
     grid-template-columns: 1fr;
 
-    .audio-upload-album-thumb { min-height: 132px; }
-    .audio-upload-album-thumb.has-image { max-width: 240px; }
+    .audio-upload-cover-col { max-width: 240px; }
+  }
+}
+
+.audio-upload-cover-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+
+  // The cover is the big square of the board (radius 24)
+  .audio-upload-album-thumb {
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+    border-radius: var(--r-2xl);
   }
 }
 
@@ -631,6 +941,160 @@
   gap: 10px;
   min-width: 0;
 }
+
+// TITLE card: eyebrow, then the title at 20/900
+.audio-upload-title-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: text;
+
+  &:focus-within { border-color: var(--accent); }
+}
+
+.audio-upload-box-eyebrow {
+  @include v2.text(eyebrow);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.audio-upload-title-box .audio-upload-post-title {
+  width: 100%;
+  min-width: 0;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 20px;
+  font-weight: 900;
+
+  &::placeholder { color: var(--muted); font-weight: 400; }
+  &:focus { outline: none; }
+}
+
+// What kind of audio: tiles (24a) in the post step, chips (34c) per track
+.audio-upload-kind {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.audio-upload-kind-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.audio-upload-kind-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 92px;
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius: var(--r-xl);
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+  b { margin-top: auto; @include v2.text(label); }
+
+  &:hover { background: var(--bg-hover); }
+  &.is-on { border-color: var(--accent); background: var(--accent-tint-strong); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
+}
+
+.audio-upload-chip-label {
+  @include v2.text(eyebrow);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.audio-upload-pick-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.audio-upload-pick-chip {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); }
+  &.is-on { border-color: var(--cyan); background: var(--cyan-tint-strong); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
+}
+
+// TRACK card: eyebrow + length, then the waveform (or the player)
+.audio-upload-track-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.audio-upload-track-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  @include v2.text(eyebrow);
+  font-size: 12px;
+  color: var(--muted);
+
+  .audio-upload-track-card-len { font-family: var(--font-mono); text-transform: none; letter-spacing: 0; }
+}
+
+.audio-upload-wave {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  span {
+    flex: 1;
+    min-width: 1px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--text) 25%, transparent);
+  }
+}
+
+// Community + tags, under the track
+.audio-upload-where {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.audio-upload-desc-card { gap: 8px; }
 
 .audio-upload-community-btn {
   display: flex;
@@ -855,8 +1319,7 @@
 }
 
 // Failure: accent wash, what went wrong, and a retry (§11)
-.audio-upload-review-error,
-.audio-upload-review-failed-banner {
+.audio-upload-review-error {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -867,6 +1330,39 @@
   font-weight: 700;
 
   > span { flex: 1; min-width: 0; }
+}
+
+// "1 track failed" + Retry all failed as accent text (36a)
+.audio-upload-review-failed-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--r-lg);
+  background: var(--accent-wash);
+  font-size: 11px;
+
+  > span { flex: 1; min-width: 0; }
+
+  .audio-upload-retry-link.v2-btn {
+    padding: 0 6px;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+  }
+}
+
+// "Apply to all N tracks: …" (36a): a cyan wash on the ground
+.audio-upload-apply-note {
+  margin: 0;
+  padding: 10px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--cyan) 10%, var(--bg));
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+
+  b { color: var(--text); font-weight: 700; }
 }
 
 .audio-upload-review-error-icon { color: var(--accent); }
@@ -908,22 +1404,34 @@
   gap: 8px;
 }
 
-// ─── Footer: Back left, Next / Publish right ───
+// ─── Footer: the side panel's foot (24a): Back, then the primary action ───
 .audio-upload-footer {
+  grid-area: foot;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 8px;
   flex: none;
-  padding: 12px 20px 16px;
+  padding: 12px 24px 16px;
   border-top: 1px solid var(--border);
+  background: var(--surface);
 
-  @include v2.mobile {
-    padding: 10px 16px 12px;
+  .audio-upload-primary.v2-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 0 20px;
+    border-radius: var(--r-xl);
+    font-size: 16px;
 
-    .v2-btn { flex: 1; }
-    > span:first-child { display: none; }
+    > .material-symbols-rounded:last-child { font-size: 24px !important; }
   }
+
+  @include v2.wide {
+    padding: 16px 22px 22px;
+    border-left: 1px solid var(--border);
+    border-radius: 0 0 0 var(--r-3xl);
+  }
+
+  @include v2.mobile { padding: 10px 16px 12px; }
 }
 
 // ─── Discard confirmation, over the dialog ───

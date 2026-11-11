@@ -7,7 +7,6 @@ import axios from 'axios';
 import { API_URL_FROM_WEST, CHECKER_URL, CHECKER_API_KEY } from '../utils/config';
 import { getHiveClient } from '../utils/hiveNode';
 import { useAppStore } from '../lib/store';
-import * as dhive from '@hiveio/dhive';
 import MarkdownComposer from '../components/studio/MarkdownComposer';
 import { broadcastWithAioha, isLoggedIn, KeyTypes } from '../hive-api/aioha';
 import PromoteModal from '../components/Promote/PromoteModal';
@@ -29,12 +28,11 @@ const EditVideo = () => {
   const location = useLocation();
   const {user} = useAppStore()
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState('');
   const [thumbnailUrl, setThumbnailUrl] = useState('');
-  const [date, setDate] = useState('');
   const [permlink, setPermlink] = useState("")
   const [ id, setId ] = useState("");
   const [listed, setListed] = useState(true);
@@ -55,7 +53,6 @@ const EditVideo = () => {
   const [promoteOpen, setPromoteOpen] = useState(false);
   const [promotedUntil, setPromotedUntil] = useState(null);
   const [renderedHTML, setRenderedHTML] = useState('');
-  const accessToken = localStorage.getItem("access_token");
 
   const video = location.state?.video;
 
@@ -83,7 +80,6 @@ const EditVideo = () => {
       setDescription(plainText.trim());
       setTags(Array.isArray(video.tags) ? video.tags.join(', ') : (video.tags || ''));
       setThumbnailUrl(video.thumbUrl || video.images?.thumbnail || video.thumbnail || '');
-      setDate(video.created || video.created_at);
       setPermlink(video.permlink)
       setId(video._id || video.video_id)
       const isListed = video.listed_on_3speak !== false && video.unlisted !== true;
@@ -124,7 +120,7 @@ const EditVideo = () => {
         const post = await client.call('condenser_api', 'get_content', [user, permlink]);
         if (cancelled || !post) return;
         let meta = {};
-        try { meta = JSON.parse(post.json_metadata || '{}'); } catch (_) {}
+        try { meta = JSON.parse(post.json_metadata || '{}'); } catch { /* keep {} */ }
         originalMetaRef.current = meta;
         const r = meta.video?.reusable !== false;
         setReusable(r);
@@ -149,7 +145,7 @@ const EditVideo = () => {
           initialTrailerRef.current = on;
           setTrailerKnown(true);
         } catch { /* couldn't read it — leave the row out entirely */ }
-      } catch (_) { /* best-effort */ }
+      } catch { /* best-effort */ }
     })();
     return () => { cancelled = true; };
   }, [user, permlink]);

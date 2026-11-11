@@ -31,7 +31,8 @@
   "gated": {
     "title": "Members only",
     "checkFailed": "We could not confirm your subscription just now. Try again in a moment.",
-    "preview": "You are watching a free preview. 3Speak Pro unlocks the full video.",
+    "preview": "You're watching a free preview",
+    "previewSub": "3Speak Pro unlocks the full video.",
     "subscribersOnly": "This video is available to 3Speak Pro subscribers.",
     "cta": "Get 3Speak Pro"
   },
@@ -81,14 +82,14 @@
     "loginRequired": "Log in to clip",
     "cancel": "Cancel clip",
     "clipVideo": "Clip video",
-    "label": "Clip Video",
+    "label": "Clip video",
     "clip": "Clip",
     "seekToStart": "Seek to start",
-    "setStart": "Set Start",
-    "setEnd": "Set End",
-    "createClip": "Create Clip",
+    "setStart": "Set start",
+    "setEnd": "Set end",
+    "createClip": "Create clip",
     "barStart": "Seek to the start of your clip",
-    "barEnd": "Start: {{start}} — Now seek to the end",
+    "barEnd": "Start {{start}} · now seek to the end",
     "barDone": "Clip: {{start}} – {{end}}"
   },
   "share": {
@@ -106,19 +107,19 @@
   },
   "media": {
     "unavailableTitle": "This video is no longer available",
-    "unavailableBody": "The media for this older upload could not be found on the network. The post still exists on the blockchain, but the video can no longer be played.",
+    "unavailableBody": "The media for this older upload couldn't be found. The post still exists on Hive.",
     "scheduledTitle": "This post is scheduled",
     "scheduledBody": "It will be published on {{date}}. The video can be watched from then on.",
     "blockedTitle": "Couldn't load the video right now",
-    "blockedBody": "One of our video servers didn't respond. The video itself is fine, so please try again."
+    "blockedBody": "One of our video servers didn't respond. The video is fine."
   },
   "tipNudge": {
     "text": "Enjoyed this?<hide> Send <b>@{{author}}</b> a tip!</hide>",
     "dismiss": "Dismiss"
   },
   "community": {
-    "members_one": "{{count}} Member",
-    "members_other": "{{count}} Members",
+    "members_one": "{{count}} member",
+    "members_other": "{{count}} members",
     "postedIn": "Posted in",
     "partOf": "Part of",
     "position": "{{current}} of {{total}}"
@@ -137,7 +138,8 @@
     "openTagFeed": "Open tag feed"
   },
   "scheduled": {
-    "notice": "Scheduled for <b>{{date}}</b> — not published yet.",
+    "notice": "Scheduled for <b>{{date}}</b>",
+    "notPublished": "Not published yet.",
     "futureDate": "a future date",
     "edit": "Edit, reschedule or cancel",
     "editTitle": "Edit scheduled post (details, date, or cancel)"

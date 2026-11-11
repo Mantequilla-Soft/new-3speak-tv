@@ -5,6 +5,20 @@
 // Pro), so its layer sits above all of them and above the login window.
 .v2-dialog:has(> .aauth-dialog) { z-index: 100001; }
 
+// 23b "Active key needed": outlined in a red tint, a lock in a red well
+// beside the title.
+.v2-dialog__panel.aauth-dialog { border-color: color-mix(in srgb, var(--accent) 35%, var(--border)); }
+.aauth-lock {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-lg);
+  display: grid;
+  place-items: center;
+  background: var(--accent-tint-strong);
+  color: var(--accent);
+}
+
 .aauth-desc {
   margin: 0;
   font-size: 13px;
@@ -13,16 +27,28 @@
   strong { color: var(--text); font-weight: 700; }
 }
 
-// What is being signed: mono, in a well.
+// What is being signed: mono, in a well; a memo on a muted line under it.
 .aauth-ops {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  padding: 10px;
   @include v2.mono(12, 700);
   line-height: 1.45;
   color: var(--text);
   overflow-wrap: anywhere;
 }
+.aauth-op__memo {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+// The two ways to sign: the wallet (primary), a pasted key (secondary).
+.aauth-methods { display: flex; flex-direction: column; gap: 8px; }
 
 .aauth-hint {
   margin: 0;
@@ -50,3 +76,6 @@
 .v2-choices.is-grid.aauth-wallets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .aauth-wallets .v2-choice { align-items: center; min-height: 48px; }
 .aauth-dialog .v2-choice { align-items: center; }
+
+// "← Choose another method" at the left, the action at the right.
+.aauth-dialog .v2-dialog__foot { justify-content: space-between; }

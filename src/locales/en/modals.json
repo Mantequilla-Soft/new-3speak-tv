@@ -17,7 +17,8 @@
     "loginFailed": "Login failed: {{error}}",
     "logoAlt": "3Speak Logo",
     "title": "Login with your username",
-    "usernamePlaceholder": "Username"
+    "usernamePlaceholder": "Username",
+    "continueWith": "Continue with {{method}}"
   },
   "socialLink": {
     "hashCopied": "Hash copied",
@@ -55,7 +56,7 @@
   },
   "auth": {
     "title": "Authorize 3Speak",
-    "text": "To upload video on 3Speak we require your posting authority. This allows us to publish your uploaded videos to hive. You only have to grant us posting authority once.",
+    "text": "To upload we need your posting authority, so we can publish your videos to Hive. You only grant it once.",
     "authorize": "Authorize"
   },
   "beneficiary": {
@@ -104,8 +105,8 @@
     "gotIt": "Got it"
   },
   "verifyAuth": {
-    "title": "Verifying Authorization",
-    "text": "Please wait while we verify that authorization was granted..."
+    "title": "Verifying authorization",
+    "text": "Checking that it was granted…"
   },
   "editor": {
     "confirmLeave": "The editor is still open. Leaving this page will close the editor and unsaved changes will be lost.\n\nOK = Close editor & leave\nCancel = Stay on this page",

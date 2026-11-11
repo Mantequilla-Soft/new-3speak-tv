@@ -261,6 +261,7 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
 }
 .audio-np-chapter-now { color: var(--muted); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .audio-np-subline-time { display: none; color: var(--muted); font-family: var(--font-mono); font-weight: 700; flex: none; }
+.audio-np-swipe-hint { display: none; color: var(--cyan); font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
 
 // Previous, play, next: 48 square tiles, radius 16 (27c).
 .gap-bar__transport {
@@ -336,7 +337,11 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   .gap-bar__row { height: 64px; padding: 0 8px; gap: 10px; }
   .gap-bar__art { width: 48px; height: 48px; }
   .gap-bar__info { flex: 1; }
-  .audio-np-subline-time { display: inline; }
+  // "Swipe up for the player" under the title (27c); a swipe up opens it.
+  .gap-bar:not(.audio-np-idle) {
+    .audio-np-swipe-hint { display: inline; }
+    .audio-np-subline .audio-np-author { display: none; }
+  }
   .audio-np-chapter-now { display: none; }
   .gap-bar__transport .gap-tbtn { display: none; }
   .gap-bar__seek {
