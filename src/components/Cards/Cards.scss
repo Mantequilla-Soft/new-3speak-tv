@@ -333,6 +333,35 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         background: var(--accent-tint-strong);
         color: var(--accent);
       }
+
+      // The payout's breakdown (28b): a floating card under the chip, 240
+      // wide, radius 20, padding 14; rows 12 muted with the value in mono ink.
+      .card-payout {
+        position: relative;
+        display: inline-flex;
+        &:hover .card-payout-tip { display: flex; }
+      }
+      .card-payout-tip {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        z-index: 8;
+        width: 240px;
+        flex-direction: column;
+        padding: 14px;
+        @include v2.floating;
+        border-radius: var(--r-xl);
+        color: var(--muted);
+        font-size: 12px;
+        pointer-events: none;
+
+        > b { display: flex; align-items: center; gap: 4px; margin-bottom: 4px; font-size: 13px; font-weight: 700; color: var(--text); }
+        > span { display: flex; justify-content: space-between; padding: 5px 0; }
+        .payout-amount-badge,
+        .num { height: auto; padding: 0; background: none; color: var(--text); font-family: var(--font-mono); font-weight: 700; font-size: 12px; }
+        > b .payout-amount-badge { font-size: 13px; }
+      }
     }
   }
 }

@@ -21,8 +21,8 @@ const PLATFORM_TABS = [
   { key: 'youtube', icon: 'smart_display' },
   { key: 'tiktok', icon: 'music_note' },
   { key: 'instagram', icon: 'photo_camera' },
-  { key: 'rumble', icon: 'live_tv' },
   { key: 'bitchute', icon: 'play_circle' },
+  { key: 'rumble', icon: 'live_tv' },
 ];
 // Everything but YouTube: a grid plus a paste-a-link box. TikTok / Instagram list
 // only their newest few; BitChute / Rumble page through the whole channel.
@@ -425,7 +425,7 @@ export default function YoutubeImportPage() {
   if (!authenticated || !user) {
     return (
       <div className="yt-import">
-        <Header t={t} />
+        <Header t={t} sub />
         <Banner tone="info" className="yt-import__signin">{t('ytimport.errors.signIn')}</Banner>
       </div>
     );
@@ -433,6 +433,48 @@ export default function YoutubeImportPage() {
 
   const busy = ['starting', 'server', 'transfer', 'handoff'].includes(phase);
   const group = groups[activeType];
+
+  // Couldn't fetch it: what went wrong, the manual-download steps and the file
+  // pick (33c). Inside the opened tile, and on wide screens as its own card in
+  // the side column (CSS shows one of the two).
+  const renderFallback = (v, card = false) => (
+    <div className={card ? 'yt-import__fallback yt-import__fallback--card' : 'yt-import__fallback'}>
+      {card && <h3 className="yt-import__fallback-title">{t('ytimport.fallback.title')}</h3>}
+      <p className="yt-import__error" role={card ? undefined : 'alert'}>
+        {failure?.code === 'bot_check' ? t('ytimport.errors.blocked')
+          : failure?.code === 'proxy_paused' ? t('ytimport.errors.proxyPaused')
+            : failure?.message}
+      </p>
+      <p className="yt-import__muted">{t('ytimport.fallback.intro')}</p>
+      {v.platform !== 'youtube' ? (
+        <ol className="yt-import__steps">
+          <li><span className="num">1</span><span>{t(`ytimport.${v.platform}.fallbackStep1`)}</span></li>
+          <li><span className="num">2</span><span>{t(`ytimport.${v.platform}.fallbackStep2`)}</span></li>
+          <li><span className="num">3</span><span>{t('ytimport.fallback.step3')}</span></li>
+        </ol>
+      ) : (
+        <ol className="yt-import__steps">
+          <li>
+            <span className="num">1</span>
+            <span>
+              {t('ytimport.fallback.step1')}{' '}
+              <a href={youtubeStudioUrl(v.id)} target="_blank" rel="noopener noreferrer">YouTube Studio</a>
+            </span>
+          </li>
+          <li><span className="num">2</span><span>{t('ytimport.fallback.step2')}</span></li>
+          <li><span className="num">3</span><span>{t('ytimport.fallback.step3')}</span></li>
+        </ol>
+      )}
+      <div className="yt-import__actions">
+        <Button variant="inverse" size={48} trailing="upload_file" className="is-next" onClick={() => fileInputRef.current?.click()}>
+          {t('ytimport.fallback.pickFile')}
+        </Button>
+        <Button variant="secondary" size={48} icon="refresh" onClick={() => startImport(v)}>
+          {t('ytimport.retry')}
+        </Button>
+      </div>
+    </div>
+  );
 
   // The import controls of the picked video; they live inside its tile.
   const renderPanel = (v) => (
@@ -491,43 +533,7 @@ export default function YoutubeImportPage() {
         </div>
       )}
 
-      {phase === 'failed' && (
-        <div className="yt-import__fallback">
-          <p className="yt-import__error" role="alert">
-            {failure?.code === 'bot_check' ? t('ytimport.errors.blocked')
-              : failure?.code === 'proxy_paused' ? t('ytimport.errors.proxyPaused')
-                : failure?.message}
-          </p>
-          <p className="yt-import__muted">{t('ytimport.fallback.intro')}</p>
-          {v.platform !== 'youtube' ? (
-            <ol className="yt-import__steps">
-              <li><span className="num">1</span><span>{t(`ytimport.${v.platform}.fallbackStep1`)}</span></li>
-              <li><span className="num">2</span><span>{t(`ytimport.${v.platform}.fallbackStep2`)}</span></li>
-              <li><span className="num">3</span><span>{t('ytimport.fallback.step3')}</span></li>
-            </ol>
-          ) : (
-            <ol className="yt-import__steps">
-              <li>
-                <span className="num">1</span>
-                <span>
-                  {t('ytimport.fallback.step1')}{' '}
-                  <a href={youtubeStudioUrl(v.id)} target="_blank" rel="noopener noreferrer">YouTube Studio</a>
-                </span>
-              </li>
-              <li><span className="num">2</span><span>{t('ytimport.fallback.step2')}</span></li>
-              <li><span className="num">3</span><span>{t('ytimport.fallback.step3')}</span></li>
-            </ol>
-          )}
-          <div className="yt-import__actions">
-            <Button variant="inverse" size={44} trailing="upload_file" className="is-next" onClick={() => fileInputRef.current?.click()}>
-              {t('ytimport.fallback.pickFile')}
-            </Button>
-            <Button variant="secondary" size={44} icon="refresh" onClick={() => startImport(v)}>
-              {t('ytimport.retry')}
-            </Button>
-          </div>
-        </div>
-      )}
+      {phase === 'failed' && renderFallback(v)}
     </div>
   );
 
@@ -813,12 +819,14 @@ export default function YoutubeImportPage() {
   );
 }
 
-function Header({ t, action = null }) {
+// 33c: the title and Refresh lists; the line under the title only for the
+// signed-out view, where it is all there is.
+function Header({ t, action = null, sub = false }) {
   return (
     <div className="yt-import__header">
       <div className="yt-import__header-text">
         <h1>{t('ytimport.title')}</h1>
-        <p className="yt-import__muted">{t('ytimport.subtitle')}</p>
+        {sub && <p className="yt-import__muted">{t('ytimport.subtitle')}</p>}
       </div>
       {action}
     </div>

@@ -217,7 +217,7 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
           icon="bolt"
           fill
           label={tuning ? t('feeds.surf.tuningShort') : t('feeds.surf.zap')}
-          className="surf-key surf-key--zap surf-bar__flip"
+          className="surf-key surf-key--zap"
           onClick={flip}
           disabled={tuning}
           title={t('feeds.surf.nextVideoKey')}

@@ -179,7 +179,7 @@ export default function HomeActivity() {
   ];
   const seeAll = tab === "live" ? "/live" : tab === "groups" ? "/groups" : null;
 
-  let list = null;
+  let list;
   if (tab === "community") {
     list = community.rows.length ? community.rows.map((r) => {
       if (r.kind === "audio") {

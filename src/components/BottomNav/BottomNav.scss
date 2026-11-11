@@ -8,8 +8,9 @@
 .bottom-nav {
   display: none;
   position: fixed;
-  left: 10px;
-  right: 10px;
+  // 10px in on a phone; on a tablet it keeps a phone's width, centred.
+  left: max(10px, calc(50% - 280px));
+  right: max(10px, calc(50% - 280px));
   bottom: var(--bottom-nav-float-gap);
   z-index: 100;
   height: var(--bottom-nav-float-h);

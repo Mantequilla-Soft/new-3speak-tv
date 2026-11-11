@@ -655,7 +655,29 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                   {/* An off-chain post has no payout and never will until it is
                       republished to Hive, so the slot is omitted rather than left
                       showing a placeholder that reads as "still loading". */}
-                  {!video._incubation && <PayoutAmount amount={payout != null ? Number(payout) : null} />}
+                  {!video._incubation && (
+                    /* 28b: hovering the payout shows how it splits and when it
+                       pays out (Hive pays half to the author, half to the
+                       curators, 7 days after posting). */
+                    <span className="card-payout">
+                      <PayoutAmount amount={payout != null ? Number(payout) : null} />
+                      {payout != null && Number(payout) > 0 && (() => {
+                        const total = Number(payout);
+                        const created = new Date(video.created_at || video.created).getTime();
+                        const daysLeft = created ? Math.ceil((created + 7 * 864e5 - Date.now()) / 864e5) : 0;
+                        return (
+                          <span className="card-payout-tip" role="tooltip">
+                            <b>{t('cards.payout.title')} · <PayoutAmount amount={total} /></b>
+                            <span><span>{t('cards.payout.author')}</span><PayoutAmount amount={total / 2} /></span>
+                            <span><span>{t('cards.payout.curators')}</span><PayoutAmount amount={total / 2} /></span>
+                            {daysLeft > 0 && (
+                              <span><span>{t('cards.payout.paysOutIn')}</span><b className="num">{t('cards.payout.days', { count: daysLeft })}</b></span>
+                            )}
+                          </span>
+                        );
+                      })()}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

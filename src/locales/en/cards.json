@@ -54,5 +54,13 @@
     "label": "Change size",
     "small": "Small",
     "medium": "Medium"
+  },
+  "payout": {
+    "title": "Payout",
+    "author": "Author",
+    "curators": "Curators",
+    "paysOutIn": "Pays out in",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days"
   }
 }

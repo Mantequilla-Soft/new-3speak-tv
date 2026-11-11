@@ -7,30 +7,30 @@
 .surf-bar {
   @include v2.card;
   display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  gap: 8px;
+  flex-direction: column;
+  gap: 12px;
   margin: 12px 0 4px;
-  padding: 12px;
+  padding: 14px;
 
-  // Only the bar's own buttons; the dock tiles keep their 10px labels.
   > button { font: inherit; }
   button:disabled { cursor: progress; }
 
-  // Phones: one slim row of 44px targets (channel, Zap, CH -, CH +, Stop).
-  // The up-next thumbnail and title, the "On air" line and the dock labels
-  // are dropped; the static burst on the display still marks each flip.
   @include v2.mobile {
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 6px;
+    gap: 8px;
     margin: 8px 0 2px;
-    padding: 8px;
-    border-radius: var(--r-lg);
+    padding: 10px;
+    border-radius: var(--r-xl);
   }
 }
 
-// ── Channel display ──────────────────────────────────────────────────────────
+// The channel display and what plays next, side by side (34a's top row).
+.surf-bar__top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
 .surf-bar__display {
   position: relative;
   overflow: hidden;
@@ -53,12 +53,8 @@
 
   // Phones: just the CH badge (still opens the guide); Zap takes the room.
   @include v2.mobile {
-    flex: none;
-    height: 44px;
-    padding: 0 6px;
-    border-radius: var(--r-md);
-
-    .surf-bar__text { display: none; }
+    height: 52px;
+    padding: 0 10px 0 6px;
   }
 }
 
@@ -116,14 +112,6 @@
   @include v2.mobile { display: none; }
 }
 
-.surf-bar__guide-icon {
-  position: relative;
-  z-index: 2;
-  color: var(--muted);
-
-  @include v2.mobile { display: none; }
-}
-
 // TV static in the theme's own ink: a short burst over the display on every
 // flip, and a loop in the thumbnail slot while the next video is being found.
 .surf-bar__static {
@@ -147,42 +135,15 @@
 }
 
 // ── Zap ──────────────────────────────────────────────────────────────────────
-.surf-bar__flip {
+// What Zap plays next: the poster and the title, muted (34a "next in").
+.surf-bar__next {
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 10px;
-  flex: 1 1 260px;
-  max-width: 380px;
-  min-width: 0;
-  height: 60px;
-  padding: 0 14px 0 8px;
-  border: 0;
-  border-radius: var(--r-lg);
-  background: var(--accent);
-  color: var(--on-accent);
-  text-align: left;
-  cursor: pointer;
-  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-  &:hover:not(:disabled) {
-    background: var(--accent-hover);
-
-    .surf-bar__flip-icon { animation: surf-nudge .5s var(--ease); }
-  }
-  &:active:not(:disabled) { transform: scale(.98); }
-  &:disabled { opacity: .7; }
-
-  @include v2.mobile {
-    flex: 1 1 auto;
-    max-width: none;
-    height: 44px;
-    gap: 4px;
-    padding: 0 10px 0 14px;
-    border-radius: var(--r-lg);
-
-    .surf-bar__flip-thumb,
-    .surf-bar__flip-next { display: none; }
-  }
+  @include v2.mobile { display: none; }
 }
 
 .surf-bar__flip-thumb {
@@ -211,39 +172,45 @@
 }
 
 .surf-bar__flip-label {
-  font-size: 14px;
-  font-weight: 900;
-  line-height: 1.2;
+  @include v2.text(eyebrow);
+  color: var(--muted);
   white-space: nowrap;
 }
 
 .surf-bar__flip-next {
-  @include v2.text(meta-sm);
-  opacity: .85;
+  @include v2.text(body-sm);
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.surf-bar__flip-icon { flex: none; }
-
 // ── Dock tiles: CH -, CH +, Stop ──────────────────────────────────────────────
+// The keys (34a): five equal tiles, 60 tall at radius 20, the icon filled;
+// Zap is the one accent fill.
 .surf-bar__docks {
   display: grid;
-  grid-template-columns: 64px 64px 80px;
-  gap: 6px;
-  flex: none;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+
+  .surf-key.v2-dock {
+    height: 60px;
+    border-radius: var(--r-xl);
+    font-weight: 900;
+
+    .material-symbols-rounded { font-size: 24px !important; } // the Icon sets its size inline
+  }
+
+  .surf-key--zap.v2-dock {
+    background: var(--accent);
+    color: var(--on-accent);
+    &:hover:not(:disabled) { background: var(--accent-hover); }
+    &:hover:not(:disabled) .material-symbols-rounded { animation: surf-nudge .5s var(--ease); }
+  }
 
   @include v2.mobile {
-    grid-template-columns: repeat(3, 44px);
-
-    .v2-dock {
-      height: 44px;
-      padding: 0;
-      border-radius: var(--r-lg);
-
-      > span:last-child { display: none; }
-    }
+    gap: 6px;
+    .surf-key.v2-dock { height: 56px; border-radius: var(--r-xl); padding: 0 2px; }
   }
 }
 
@@ -329,14 +296,30 @@
 }
 
 // ── Channel guide (Dialog; a bottom sheet under 768px) ───────────────────────
+// The channel guide (34a): on a tablet or wider a 440 panel down the right
+// edge, rounded on its open side; one channel per row. A sheet on a phone.
 .surf-guide {
   .v2-dialog__body { gap: 16px; }
 
-  .v2-dialog__foot { justify-content: flex-start; }
+  .v2-dialog__foot { justify-content: flex-start; border-top: 0; }
 
   @include v2.mobile {
     .v2-dialog__foot { display: none; }
   }
+}
+
+@include v2.tablet-up {
+  .v2-dialog:has(> .surf-guide) { place-items: stretch end; padding: 0; }
+
+  .surf-guide.v2-dialog__panel {
+    width: 440px;
+    height: 100%;
+    max-height: none;
+    border-right: 0;
+    border-radius: var(--r-3xl) 0 0 var(--r-3xl);
+  }
+
+  .surf-guide .surf-guide__grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 .surf-guide__top { display: flex; }
@@ -357,11 +340,11 @@
 
 .surf-guide__ch {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 64px minmax(0, 1fr);
   gap: 10px;
   align-items: center;
-  height: 56px;
-  padding: 4px;
+  height: 64px;
+  padding: 8px;
   border-radius: var(--r-lg);
   border: 2px solid transparent;
   background: var(--bg);
@@ -393,15 +376,16 @@
   display: grid;
   place-items: center;
   height: 44px;
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
   background: var(--surface-2);
-  @include v2.mono(14, 900);
+  @include v2.mono(16, 900);
 
   @include v2.mobile { height: 40px; @include v2.mono(13, 900); }
 }
 
 .surf-guide__label {
-  @include v2.text(label);
+  @include v2.text(body);
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
