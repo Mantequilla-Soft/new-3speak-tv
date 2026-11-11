@@ -1,381 +1,572 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
+
+/* Comments (CommentSection.jsx), v2: design 28a (full comments) and 43a
+   (composer, pinned, translation), dense rows from 02 in the side panel.
+
+   Two layouts:
+   - .is-page  (posts, audio, and the watch page until the side panel hosts it):
+     composer card on top, the list flows with the page, each comment a card.
+   - .is-panel (the watch page's fixed-height side panel): header, a list that
+     scrolls inside, and the composer pinned at the bottom; rows with dividers.
+   Text over media never appears here, so everything is theme tokens. */
+
 .vid-comment-wrap {
-  padding-left: 20px;
-  margin: 15px 0;
-  @include respond(phone) {
-      padding-left: 0px;
-    }
-  p {
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: var(--text-secondary);
-  }
-  .textarea-box {
-    width: 100%;
-    border: none;
-    border-radius: 4px;
-    margin-top: 5px;
-    min-height: 120px;
-    outline: none;
-    padding: 10px;
-    box-sizing: border-box;
-    resize: none;
-    overflow: hidden;
-    background-color: var(--card-bg);
-    color: var(--text-primary);
-    font-family: inherit;
-    font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  color: var(--text);
 
-    @include respond(phone) {
-      font-size: 16px;
-      min-height: 80px;
-    }
+  &.is-page { margin: 16px 0 0; }
 
-    &.sub {
-      min-height: 100px;
-      border-radius: 12px;
-    }
-
-    &::placeholder {
-      color: var(--text-muted);
-      font-style: italic;
-      font-size: 14px;
-    }
-  }
-  h4 {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin-top: 15px;
+  &.is-panel {
+    height: 100%;
+    min-height: 0;
+    gap: 0;
   }
 
+  // ── Header: count + sort ──
   .comments-header-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 15px;
+    gap: 8px;
+    flex: none;
 
     h4 {
-      margin-top: 0;
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+      @include v2.text(title-sm);
+      color: var(--text);
     }
   }
+  &.is-panel .comments-header-row { padding: 12px 16px 8px; }
 
   .comment-sort {
+    position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--text-secondary);
+    flex: none;
+
+    > .material-symbols-rounded {
+      position: absolute;
+      left: 10px;
+      color: var(--muted);
+      pointer-events: none;
+    }
 
     select {
+      width: auto;
+      padding-left: 32px;
       font-size: 12px;
-      color: var(--text-primary);
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-light);
-      border-radius: 8px;
-      padding: 4px 8px;
-      cursor: pointer;
+      font-weight: 700;
+      background-color: var(--surface);
+    }
+  }
+  &.is-panel .comment-sort select { background-color: var(--bg); }
+
+  // Kept for screen readers (it names the select), hidden on screen: the icon
+  // and the chosen order say it.
+  .comment-sort-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  // ── Composer (top-level, reply and edit share it) ──
+  .comment-composer {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 12px;
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    flex: none;
+
+    // Reply and edit boxes live inside a comment: a well, not a second card.
+    &.is-reply,
+    &.comment-edit-wrap {
+      margin-top: 8px;
+      padding: 10px;
+      border: 0;
+      border-radius: var(--r-lg);
+      background: var(--bg);
+
+      .textarea-box { background: var(--surface); }
+      .comment-preview { background: var(--surface); }
+      .v2-seg { background: var(--surface); }
     }
   }
 
-  // Emoji, GIF and image buttons, side by side left of Cancel / Comment.
+  &.is-panel > .comment-composer {
+    border: 0;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    padding: 12px 16px;
+
+    .textarea-box { max-height: 160px; }
+  }
+
+  .textarea-box {
+    display: block;
+    width: 100%;
+    min-height: 56px;
+    max-height: 240px;
+    padding: 10px 12px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    @include v2.text(body);
+    line-height: 1.45;
+    resize: none;
+    overflow-y: auto;
+    outline: none;
+    transition: border-color var(--t-fast) var(--ease);
+
+    &::placeholder { color: var(--muted); }
+    &:focus { border-color: var(--accent); }
+    &:disabled { opacity: .45; }
+
+    // 16px stops iOS from zooming the page when the box is focused.
+    @include v2.mobile { font-size: 16px; }
+  }
+
+  // Tools on the left (emoji, GIF, image, the moment), actions on the right.
+  .comment-form-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
   .comment-compose-tools {
     display: inline-flex;
     align-items: center;
-    gap: 2px;
+    gap: 4px;
+    min-width: 0;
   }
+
+  .btn-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  .comment-react-pane { min-width: 0; }
+
+  // The moment a comment refers to: a cyan mono chip you can type into.
+  .comment-timestamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 4px;
+  }
+
+  .comment-timestamp-label {
+    @include v2.text(meta-sm);
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  .comment-timestamp-input {
+    width: 64px;
+    height: 32px;
+    padding: 0 6px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--cyan-tint);
+    color: var(--cyan);
+    @include v2.mono(12, 700);
+    text-align: center;
+    outline: none;
+
+    &:focus { border-color: var(--accent); }
+  }
+
+  // A reply's moment comes from its parent and can't be changed: a plain chip.
+  .comment-timestamp--fixed {
+    height: 28px;
+    padding: 0 8px;
+    border-radius: var(--r-sm);
+    background: var(--cyan-tint);
+    color: var(--cyan);
+    @include v2.mono(11, 700);
+  }
+  .comment-write-tabs .comment-timestamp--fixed { margin-left: auto; }
+
+  // ── The list ──
+  .comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &.is-panel .comment-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 0;
+    padding: 0 16px 8px;
+    @include v2.scroll-y;
+  }
+
+  .comments-loading {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .comment-skeleton {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .comment-skeleton-avatar { width: 32px; height: 32px; border-radius: 50%; flex: none; }
+  .comment-skeleton-lines {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 4px;
+    .is-line:last-child { width: 60%; }
+  }
+
+  .comments-empty { margin: 4px 0; }
+  &.is-panel .comments-empty { margin: 12px 0; }
+
+  // ── One comment ──
+  .comment-container {
+    min-width: 0;
+
+    // Replies: indented with a 2px thread line, so the depth reads at a glance.
+    &.is-reply {
+      margin-left: 12px;
+      padding-left: 12px;
+      border-left: 2px solid var(--border);
+    }
+  }
+
+  .nested-comments {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  &.is-panel .nested-comments { gap: 0; margin-top: 0; }
+
+  .comment {
+    margin: 0;
+    padding: 12px;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    min-width: 0;
+
+    &.is-creator { border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+    &.is-pinned {
+      background: color-mix(in srgb, var(--cyan) 8%, var(--surface));
+      border-color: color-mix(in srgb, var(--cyan) 25%, transparent);
+    }
+  }
+
+  &.is-panel .comment {
+    padding: 12px 0;
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    background: transparent;
+
+    &.is-pinned {
+      margin: 8px 0;
+      padding: 12px;
+      border: 0;
+      border-radius: var(--r-lg);
+      background: color-mix(in srgb, var(--cyan) 8%, transparent);
+    }
+  }
+
+  .comment-content { min-width: 0; }
 
   .comment-pinned-badge {
     display: inline-flex;
     align-items: center;
-    gap: 3px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--accent-primary);
+    gap: 4px;
+    margin-bottom: 6px;
+    @include v2.text(eyebrow);
+    color: var(--cyan);
     white-space: nowrap;
   }
-}
-/* Loader for comments */
-.vid-comment-wrap {
-  .comments-loading {
-    padding: 12px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
-    .loader-center {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .spinner {
-      font-size: 20px;
-      animation: spin 1s linear infinite;
-    }
-  }
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.comment {
-  margin: 20px 0;
-  padding: 10px;
-  background-color: var(--card-bg);
-  border-radius: 10px;
-  box-shadow: var(--card-shadow);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  // Content images should display normally (scoped to markdown only)
-  .markdown-view img {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 8px 0;
-  }
   .comment-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-    .comment-date {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-    .comment-edited {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-style: italic;
-    }
-    .comment-timestamp-badge {
-      margin-left: auto;
-      font-size: 11px;
-      font-weight: 400;
-      color: var(--text-muted);
-      white-space: nowrap;
-      cursor: pointer;
-
-      &:hover {
-        color: var(--text-secondary);
-      }
-    }
-  }
-  // One size for the whole comment: the body, the date and the controls under
-  // it. The body was 16px against a 12px timestamp, which made every comment
-  // read as loud as the post's own description and pushed the thread long.
-  // Scoped to .comment, so the same markdown renderer keeps its size on a post.
-  .comment-content .markdown-view {
-    font-size: 12px;
-  }
-
-  // Wraps instead of overflowing: on a phone (and deeper in a reply thread) the
-  // vote/reply/translate/report row did not fit, widened the whole page past the
-  // screen and made the browser zoom out, which pushed the fixed buttons
-  // (floating action button) half off-screen.
-  .comment-action {
-    display: flex;
     flex-wrap: wrap;
+    gap: 6px;
     min-width: 0;
-    align-items: center;
-    gap: 12px;
-    margin: 8px 0;
-    font-size: 12px;
-    color: var(--text-secondary);
-  }
+    @include v2.text(meta);
+    color: var(--muted);
 
-  // .btn-default is a site-wide class, so this is deliberately reached through
-  // .comment-action-right rather than restyled globally.
-  .comment-action-right {
-    .btn-default,
-    .comment-translate-btn,
-    .comment-shorts-link {
-      font-size: 12px;
+    // The shared author chip, flattened to a name with a small avatar here.
+    .author-badge {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      min-width: 0;
+      &:hover { background: transparent; }
+      img { width: 28px; height: 28px; }
+      .author-name { @include v2.text(label); color: var(--text); }
     }
+
+    .comment-date,
+    .comment-edited { @include v2.text(meta); color: var(--muted); }
   }
 
-  .comment-action-right {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    min-width: 0;
-    align-items: center;
-    gap: 8px;
-    margin-left: auto;
-  }
+  .comment-creator-pill { height: 18px; padding: 0 6px; }
 
-  .comment-report-btn {
-    appearance: none;
+  .comment-timestamp-badge {
     display: inline-flex;
     align-items: center;
-    padding: 4px 10px;
-    font-size: 13px;
-    border-radius: 6px;
+    height: 20px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: var(--cyan-tint);
+    color: var(--cyan);
+    @include v2.mono(11, 700);
+    white-space: nowrap;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background var(--t-fast) var(--ease);
+
+    &:hover { background: var(--cyan-tint-strong); }
+  }
+
+  .comment-collapse-chevron {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin-left: auto;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-sm);
     background: transparent;
-    border: 1px solid var(--border-light);
-    color: var(--text-secondary);
+    color: var(--muted);
+    cursor: pointer;
 
-    &:hover {
-      background: var(--bg-tertiary);
-      border-color: var(--border-color);
-      color: var(--text-primary);
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+
+  // The body: comment text is body size (14), images round and inside the row.
+  .comment-content .markdown-view {
+    margin-top: 6px;
+    @include v2.text(body);
+    line-height: 1.5;
+    color: var(--text);
+    overflow-wrap: anywhere;
+
+    p { margin: 0 0 6px; color: var(--text); font-size: 14px; &:last-child { margin-bottom: 0; } }
+    img {
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--r-md);
+      margin: 6px 0;
     }
+    a { color: var(--cyan); }
+  }
 
-    &.reported {
-      color: #e31337;
-      border-color: rgba(227, 19, 55, 0.4);
+  // ── Actions under a comment ──
+  .comment-action {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    min-width: 0;
+    margin-top: 8px;
+  }
 
-      &:hover {
-        background: rgba(227, 19, 55, 0.1);
-        border-color: #e31337;
-        color: #e31337;
-      }
-    }
+  .comment-vote {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 28px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--muted);
+    @include v2.mono(12, 700);
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+
+    &:hover { background: var(--bg-hover); color: var(--text); }
+    &:active { transform: scale(.98); }
+    &.is-voted { background: var(--accent-tint); color: var(--accent); }
+  }
+
+  // Money is accent and mono; the shared badge's brand icon is left out here.
+  .payout-amount-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 6px;
+    background: transparent;
+    border: 0;
+    color: var(--accent);
+    @include v2.mono(12, 700);
+    svg { display: none; }
+  }
+
+  .comment-act {
+    color: var(--muted);
+    &:hover { color: var(--text); }
+    &.is-on { color: var(--cyan); }
+  }
+
+  .comment-action-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: auto;
+    min-width: 0;
   }
 
   .comment-shorts-link {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text-secondary, #aaa);
+    height: 28px;
+    padding: 0 8px;
+    border-radius: var(--r-sm);
+    @include v2.text(label);
+    font-size: 12px;
+    color: var(--muted);
     text-decoration: none;
-    padding: 4px 16px;
-    border: 1px solid var(--border-light);
-    border-radius: 6px;
     white-space: nowrap;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-    &:hover {
-      color: var(--text-primary, #fff);
-      background: rgba(255, 255, 255, 0.08);
-    }
+    &:hover { background: var(--bg-hover); color: var(--text); }
   }
 
-  // On mobile: hide button text labels, show icons only
-  @include respond(phone) {
-    .comment-btn-label {
-      display: none;
+  // The shared translate button, as a 28px ghost icon button in this row.
+  .translate-btn-wrap { display: inline-flex; }
+  .comment-translate-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--muted);
+
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+
+  .comment-report-btn {
+    color: var(--muted);
+    &:hover { color: var(--text); }
+    &.reported { color: var(--accent); }
+  }
+
+  // ── A folded comment ──
+  .comment-collapsed-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    padding: 6px 12px;
+    border-radius: var(--r-lg);
+    border: 1px dashed var(--border);
+    background: var(--surface);
+    @include v2.text(body-sm);
+    color: var(--muted);
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
+
+    &:hover { background: var(--bg-hover); }
+
+    .author-badge {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      img { width: 22px; height: 22px; }
+      .author-name { @include v2.text(label); color: var(--text); }
     }
 
+    .comment-collapsed-chevron { margin-left: auto; color: var(--muted); }
+  }
+  &.is-panel .comment-collapsed-bar { margin: 8px 0; background: transparent; }
+
+  // ── Translation under a comment ──
+  .comment-translation {
+    margin: 8px 0 0;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--bg);
+
+    .comment-translation-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      @include v2.text(eyebrow);
+      color: var(--muted);
+    }
+
+    .comment-translation-dismiss {
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      margin-left: auto;
+      padding: 0;
+      border: 0;
+      border-radius: var(--r-sm);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+
+      &:hover { background: var(--bg-hover); color: var(--text); }
+    }
+
+    p { margin: 0; @include v2.text(body-sm); color: var(--text); }
+
+    &.comment-translation--error {
+      background: var(--accent-wash);
+      p { color: var(--accent); font-weight: 700; font-size: 12px; }
+    }
+  }
+  &.is-page .comment .comment-translation { background: var(--bg); }
+
+  // ── Phones: 44px tap targets without making the rows taller ──
+  @include v2.mobile {
+    .comment-vote,
+    .comment-act,
     .comment-shorts-link,
-    .comment-translate-btn {
-      padding: 4px 8px;
+    .comment-translate-btn,
+    .comment-report-btn,
+    .comment-collapse-chevron,
+    .comment-timestamp-badge {
+      position: relative;
+      &::after { content: ""; position: absolute; inset: -8px -2px; }
     }
+
+    // Icons only, the words would wrap the row.
+    .comment-btn-label { display: none; }
   }
-}
-
-.btn-wrap {
-  display: flex;
-  gap: 8px;
-}
-
-// Give the tab content some breathing room
-.comment-tabs-bar + .add-comment-wrap {
-  padding-top: 10px;
-}
-
-// Tab bar: tabs on left, timestamp on right
-.comment-tabs-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 2px solid var(--border-light, rgba(255, 255, 255, 0.1));
-}
-
-.comment-tabs {
-  display: flex;
-  gap: 0;
-}
-
-.comment-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: inherit;
-  color: var(--text-secondary, #aaa);
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-
-  &:hover {
-    color: var(--text-primary, #fff);
-  }
-
-  &.active {
-    color: var(--accent-primary, #e53935);
-    border-bottom-color: var(--accent-primary, #e53935);
-  }
-}
-
-// Prominent timestamp — right side of tab bar
-.comment-timestamp {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 4px 2px 0;
-}
-
-.comment-timestamp-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary, #aaa);
-}
-
-.comment-timestamp-input {
-  width: 72px;
-  padding: 5px 8px;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: inherit;
-  color: var(--text-primary, #fff);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1.5px solid var(--border-light, #333);
-  border-radius: 6px;
-  text-align: center;
-  outline: none;
-  transition: all 0.15s ease;
-
-  &:focus {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
-  }
-}
-
-// Compact reply variant — constrain to parent width despite the margin-left inset
-// Inline editor that takes the place of a comment's body while editing it.
-.add-comment-wrap.comment-edit-wrap {
-  margin: 6px 0 4px;
-}
-
-.add-comment-wrap.sub {
-  max-width: calc(100% - 40px);
-
-  .comment-tabs-bar {
-    border-bottom-width: 1px;
-  }
-}
-
-// Row below textarea: emoji/GIF picker on left, buttons on right
-.comment-form-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 8px;
-  flex-wrap: wrap;
 }
 
 @import '../LanguageSelector/translate-common';
-

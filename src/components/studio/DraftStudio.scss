@@ -1,0 +1,103 @@
+@use "../../styles/v2" as v2;
+
+// Studio v2 (21d): title + Create, 28-day tiles, a segmented filter, then
+// content as cards (VideoCard.scss), not a table.
+.studio {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--page-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: var(--text);
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__title {
+    @include v2.text(display);
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+  }
+
+  &__tiles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  // Loading rows keep the height of a real row (thumb 160 at 16:9 + padding).
+  &__ghost {
+    height: 106px;
+    border-radius: var(--r-2xl);
+  }
+
+  &__empty { align-self: stretch; }
+
+  @include v2.mobile {
+    gap: 16px;
+
+    &__title { @include v2.text(heading-lg); }
+    &__create.v2-btn { height: 48px; border-radius: 16px; }
+    &__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    &__ghost { height: 140px; }
+  }
+}
+
+// A tile is a button: it opens the Analytics tab with the full picture.
+.studio-tile {
+  @include v2.card;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 16px;
+  min-width: 0;
+  font: inherit;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 4%, var(--surface)); }
+
+  &__label {
+    @include v2.text(meta);
+    color: var(--muted);
+  }
+
+  &__value {
+    @include v2.mono(28, 900);
+    line-height: 1.15;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__range {
+    display: inline-block;
+    margin-top: 2px;
+    padding: 2px 8px;
+    border-radius: var(--r-sm);
+    background: var(--cyan-tint-strong);
+    color: var(--cyan);
+    @include v2.mono(11, 700);
+  }
+
+  @include v2.mobile {
+    padding: 12px;
+
+    &__value { @include v2.mono(20, 900); }
+  }
+}

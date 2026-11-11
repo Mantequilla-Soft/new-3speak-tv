@@ -1,0 +1,66 @@
+@use "../../styles/v2" as v2;
+
+// "More" tile and its popover (37a).
+.ph-more {
+  position: relative;
+  flex: none;
+
+  .ph-more__menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 260px;
+  }
+}
+
+.ph-more__sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 8px;
+
+  .v2-menu__row { min-height: 48px; }
+}
+
+// Tabs: one segmented track on a surface tray, scrolling sideways (37a).
+.ph-tabs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 16px;
+  min-width: 0;
+
+  @include v2.mobile { margin: 16px 0 12px; gap: 8px; }
+
+  .ph-tabs__track.v2-seg {
+    flex: 0 1 auto;
+    min-width: 0;
+    background: var(--surface);
+    border-radius: var(--r-lg);
+
+    .v2-seg__opt { flex: none; gap: 6px; }
+  }
+
+  .ph-tabs__wallet { margin-left: auto; color: var(--muted); &:hover { color: var(--text); } }
+
+  @include v2.mobile {
+    .ph-tabs__wallet .v2-btn__label { display: none; }
+    .ph-tabs__wallet { width: 40px; padding: 0; justify-content: center; }
+  }
+}
+
+// Shared by both profile pages (UserProfilePage and page/ProfilePage).
+.profile-page-container {
+  // A tab's own row of actions (Create playlist), flush left above its content.
+  .profile-tab-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  // Phones tip from the speed-dial, which already has Tip.
+  .ph-tile--tip {
+    @include v2.mobile { display: none; }
+  }
+}

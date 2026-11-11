@@ -34,7 +34,8 @@ import {
 } from '../../lib/translatorApi';
 import { AREA_INFO } from './areaInfo';
 import { toastIn } from '../../utils/toast';
-import ModalHeader from '../../components/ModalHeader/ModalHeader';
+import { Button, Checkbox, Dialog, Field, Icon, StatusPill } from '../../components/v2/ui';
+import { cx } from '../../components/v2/helpers';
 import './Translate.scss';
 
 const toast = toastIn('Settings');
@@ -65,7 +66,16 @@ export default function Translate() {
   }, []);
   useEffect(() => { refresh(); }, [refresh, user]);
 
-  if (!status) return <div className="translate-page"><p className="translate-muted">{t('translator.loading')}</p></div>;
+  if (!status) {
+    return (
+      <div className="translate-page translate-gate">
+        <div className="v2-card translate-gate__card" role="status">
+          <Icon name="progress_activity" size={20} className="v2-spin translate-gate__spin" />
+          <p className="translate-muted">{t('translator.loading')}</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!status.translator) {
     // Signed in here but the server cannot see a proven session yet: a wallet
@@ -80,20 +90,24 @@ export default function Translate() {
     };
     return (
       <div className="translate-page translate-gate">
-        <h1>{t('translator.notAvailable.title')}</h1>
-        {canVerify ? (
-          <>
-            <p>{t('translator.verify.body')}</p>
-            <button type="button" className="translate-btn primary" onClick={verify} disabled={verifying}>
-              {verifying ? t('translator.loading') : t('translator.verify.button')}
-            </button>
-          </>
-        ) : (
-          <>
-            <p>{t('translator.notAvailable.body')}</p>
-            <a href={CONTRIBUTE_URL} target="_blank" rel="noopener noreferrer">{t('translator.notAvailable.contribute')}</a>
-          </>
-        )}
+        <div className="v2-card translate-gate__card">
+          <span className="translate-gate__icon" aria-hidden="true"><Icon name="translate" size={22} /></span>
+          <h1>{t('translator.notAvailable.title')}</h1>
+          <p className="translate-muted">{t('translator.notAvailable.body')}</p>
+          <a className="translate-gate__link" href={CONTRIBUTE_URL} target="_blank" rel="noopener noreferrer">
+            {t('translator.notAvailable.contribute')}
+            <Icon name="open_in_new" size={14} />
+          </a>
+          {canVerify && (
+            <>
+              <hr className="v2-divider" />
+              <p className="translate-muted">{t('translator.verify.body')}</p>
+              <Button variant="inverse" size={40} block loading={verifying} disabled={verifying} onClick={verify}>
+                {verifying ? t('translator.loading') : t('translator.verify.button')}
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     );
   }
@@ -512,16 +526,49 @@ function Editor({ me }) {
   const errors = { ...serverErrors, ...clientErrors };
   const shown = visible.slice(0, limit);
 
+  const errorCount = Object.keys(errors).length;
+  const filters = [
+    { id: 'missing', label: t('translator.missingOnly'), on: missingOnly, set: setMissingOnly },
+    { id: 'community', label: t('translator.communityOnly'), on: communityOnly, set: setCommunityOnly },
+    ...(showProof ? [{ id: 'proof', label: t('translator.proofread.filter'), on: unproofreadOnly, set: setUnproofreadOnly }] : []),
+  ];
+
   return (
     <div className="translate-page">
       <header className="translate-header">
-        <div>
-          <h1>{t('translator.title')}</h1>
-          <p className="translate-muted">{t('translator.intro')}</p>
+        <div className="translate-header__title">
+          <h1>{t('translator.title')}{langInfo ? <span className="translate-header__lang" lang={langInfo.code}> · {langInfo.native}</span> : null}</h1>
+          <p className="translate-muted small">{t('translator.intro')}</p>
         </div>
-        <div className="translate-lang">
-          <label htmlFor="translate-lang-select">{t('translator.language')}</label>
-          <select id="translate-lang-select" value={lang} onChange={(e) => changeLanguage(e.target.value)}>
+        {showProof && (
+          <div className="translate-proof-progress">
+            <span className="translate-proof-progress__text">
+              {t('translator.proofread.progress', {
+                count: proof.total,
+                done: formatNumber(proof.done),
+                total: formatNumber(proof.total),
+                percent: percent(proof.done, proof.total),
+              })}
+            </span>
+            <span
+              className="translate-proof-bar"
+              role="progressbar"
+              aria-label={t('translator.proofread.progressLabel')}
+              aria-valuemin={0}
+              aria-valuemax={proof.total}
+              aria-valuenow={proof.done}
+            >
+              <span style={{ width: `${proof.total ? (proof.done / proof.total) * 100 : 100}%` }} />
+            </span>
+          </div>
+        )}
+      </header>
+
+      <div className="translate-toolbar">
+        <label className="translate-select" htmlFor="translate-lang-select">
+          <span className="translate-sr-only">{t('translator.language')}</span>
+          <Icon name="language" size={16} aria-hidden="true" />
+          <select id="translate-lang-select" className="v2-input is-select h32" value={lang} onChange={(e) => changeLanguage(e.target.value)}>
             {!lang && <option value="" />}
             {targets.map((l) => (
               <option key={l.code} value={l.code} lang={l.code}>
@@ -530,35 +577,11 @@ function Editor({ me }) {
             ))}
             <option value="__add">+ {t('translator.addLanguage')}</option>
           </select>
-        </div>
-      </header>
-
-      {showProof && (
-        <div className="translate-proof-progress">
-          <span>
-            {t('translator.proofread.progress', {
-              count: proof.total,
-              done: formatNumber(proof.done),
-              total: formatNumber(proof.total),
-              percent: percent(proof.done, proof.total),
-            })}
-          </span>
-          <span
-            className="translate-proof-bar"
-            role="progressbar"
-            aria-label={t('translator.proofread.progressLabel')}
-            aria-valuemin={0}
-            aria-valuemax={proof.total}
-            aria-valuenow={proof.done}
-          >
-            <span style={{ width: `${proof.total ? (proof.done / proof.total) * 100 : 100}%` }} />
-          </span>
-        </div>
-      )}
-
-      <div className="translate-layout">
-        <nav className="translate-areas" aria-label={t('translator.areas')}>
-          <select className="translate-areas-select" value={area} onChange={(e) => setArea(e.target.value)} aria-label={t('translator.areas')}>
+        </label>
+        <label className="translate-select translate-areas-select">
+          <span className="translate-sr-only">{t('translator.areas')}</span>
+          <Icon name="folder_open" size={16} aria-hidden="true" />
+          <select className="v2-input is-select h32" value={area} onChange={(e) => setArea(e.target.value)} aria-label={t('translator.areas')}>
             {areas.map((a) => {
               const pa = showProof ? (proof.areas[a] || { done: 0, total: 0 }) : null;
               return (
@@ -569,6 +592,31 @@ function Editor({ me }) {
               );
             })}
           </select>
+        </label>
+        <label className="translate-search">
+          <Icon name="search" size={16} aria-hidden="true" />
+          <input
+            type="search"
+            className="v2-input h32"
+            placeholder={t('translator.search')}
+            aria-label={t('translator.search')}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </label>
+        <div className="translate-filters">
+          {filters.map((f) => (
+            <button key={f.id} type="button" className={cx('translate-filter', f.on && 'is-on')} aria-pressed={f.on} onClick={() => f.set(!f.on)}>
+              <Icon name={f.on ? 'check_box' : 'check_box_outline_blank'} size={16} />
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="translate-layout">
+        <nav className="translate-areas" aria-label={t('translator.areas')}>
+          <div className="v2-eyebrow translate-areas__label">{t('translator.areas')}</div>
           <ul className="translate-areas-list">
             {areas.map((a) => {
               const p = progress[a] || { done: 0, total: 0 };
@@ -587,7 +635,7 @@ function Editor({ me }) {
                           <span style={{ width: `${pa.total ? (pa.done / pa.total) * 100 : 100}%` }} />
                         </span>
                         <span className="translate-area-pct is-proof" title={proofLabel}>
-                          <span aria-hidden="true">✓ </span>{formatNumber(pa.done)}/{formatNumber(pa.total)}
+                          <Icon name="check" size={12} />{formatNumber(pa.done)}/{formatNumber(pa.total)}
                           <span className="translate-sr-only"> {proofLabel}</span>
                         </span>
                       </>
@@ -600,31 +648,6 @@ function Editor({ me }) {
         </nav>
 
         <main className="translate-main">
-          <div className="translate-toolbar">
-            <input
-              type="search"
-              className="translate-search"
-              placeholder={t('translator.search')}
-              aria-label={t('translator.search')}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <label className="translate-check">
-              <input type="checkbox" checked={missingOnly} onChange={(e) => setMissingOnly(e.target.checked)} />
-              {t('translator.missingOnly')}
-            </label>
-            <label className="translate-check">
-              <input type="checkbox" checked={communityOnly} onChange={(e) => setCommunityOnly(e.target.checked)} />
-              {t('translator.communityOnly')}
-            </label>
-            {showProof && (
-              <label className="translate-check">
-                <input type="checkbox" checked={unproofreadOnly} onChange={(e) => setUnproofreadOnly(e.target.checked)} />
-                {t('translator.proofread.filter')}
-              </label>
-            )}
-          </div>
-
           {!q && area && (
             <div className="translate-area-head">
               <h2>{area}</h2>
@@ -633,7 +656,10 @@ function Editor({ me }) {
           )}
 
           {loading ? (
-            <p className="translate-muted">{t('translator.loading')}</p>
+            <div className="translate-loading" role="status">
+              <Icon name="progress_activity" size={18} className="v2-spin" />
+              <span>{t('translator.loading')}</span>
+            </div>
           ) : (
             <>
               <div className={`translate-rows${showProof ? ' has-proof' : ''}`} role="list" onKeyDown={onRowsKeyDown}>
@@ -660,8 +686,8 @@ function Editor({ me }) {
                     <div key={r.key} role="listitem" className={`translate-row${isDirty ? ' is-dirty' : ''}${err ? ' has-error' : ''}`}>
                       <div className="translate-key">
                         <code>{r.key}</code>
-                        {r.plural && <span className="translate-tag">{t('translator.pluralForm', { category: r.plural })}</span>}
-                        {edited && <span className="translate-tag is-community">{t('translator.editedBadge')}</span>}
+                        {r.plural && <span className="translate-plural">{t('translator.pluralForm', { category: r.plural })}</span>}
+                        {edited && <StatusPill tone="cyan" className="translate-tag is-community">{t('translator.editedBadge')}</StatusPill>}
                       </div>
                       <div className="translate-english" lang="en" dir="ltr">{r.english}</div>
                       <div className="translate-cell">
@@ -677,12 +703,12 @@ function Editor({ me }) {
                         {pendingReset && <p className="translate-muted small">{t('translator.pendingReset')}</p>}
                         <div className="translate-row-actions">
                           {isDirty && (
-                            <button type="button" className="translate-btn small" onClick={() => discard(r.key)}>{t('translator.undo')}</button>
+                            <Button variant="secondary" size={28} icon="undo" onClick={() => discard(r.key)}>{t('translator.undo')}</Button>
                           )}
                           {edited && !pendingReset && (
-                            <button type="button" className="translate-btn small danger" title={t('translator.resetTitle')} onClick={() => edit(r.key, null)}>
+                            <Button variant="danger" size={28} icon="restart_alt" title={t('translator.resetTitle')} onClick={() => edit(r.key, null)}>
                               {t('translator.reset')}
-                            </button>
+                            </Button>
                           )}
                         </div>
                       </div>
@@ -698,11 +724,13 @@ function Editor({ me }) {
                             />
                             <span aria-hidden="true">{t('translator.proofread.checkbox')}</span>
                           </label>
+                          {proofed && mark && <span className="translate-proof-by">{proofTitle(mark)}</span>}
                           {stale && (
                             <span
                               className="translate-tag is-stale"
                               title={t('translator.proofread.changedTitle', { user: mark.by, when: formatTimeAgo(mark.at) })}
                             >
+                              <Icon name="sync_problem" size={14} />
                               {t('translator.proofread.changed')}
                             </span>
                           )}
@@ -712,11 +740,16 @@ function Editor({ me }) {
                   );
                 })}
               </div>
-              {!visible.length && <p className="translate-muted">{t('translator.noRows')}</p>}
+              {!visible.length && (
+                <div className="v2-empty translate-empty">
+                  <Icon name="filter_alt_off" size={28} />
+                  <p>{t('translator.noRows')}</p>
+                </div>
+              )}
               {visible.length > shown.length && (
                 <div className="translate-more">
-                  <span className="translate-muted">{t('translator.showing', { shown: shown.length, total: visible.length })}</span>
-                  <button type="button" className="translate-btn" onClick={showMore}>{t('translator.showMore')}</button>
+                  <span className="translate-muted small">{t('translator.showing', { shown: shown.length, total: visible.length })}</span>
+                  <Button variant="secondary" size={36} icon="expand_more" onClick={showMore}>{t('translator.showMore')}</Button>
                 </div>
               )}
             </>
@@ -724,11 +757,12 @@ function Editor({ me }) {
         </main>
       </div>
 
-      <div className="translate-savebar">
-        <span className="translate-muted">{t('translator.unsaved', { count: dirtyKeys.length })}</span>
-        <button type="button" className="translate-btn primary" onClick={save} disabled={saving || !dirtyKeys.length}>
+      <div className={cx('translate-savebar', dirtyKeys.length > 0 && 'is-dirty')}>
+        <b className="translate-savebar__count">{t('translator.unsaved', { count: dirtyKeys.length })}</b>
+        {errorCount > 0 && <span className="translate-savebar__err">{t('translator.fixErrors')}</span>}
+        <Button variant="cyan" size={36} icon="save" onClick={save} loading={saving} disabled={saving || !dirtyKeys.length}>
           {saving ? t('translator.saving') : t('translator.save')}
-        </button>
+        </Button>
       </div>
 
       {showAdd && (
@@ -754,13 +788,11 @@ function AddLanguage({ onClose, onAdded }) {
   const [form, setForm] = useState({ code: '', native: '', english: '', rtl: false });
   const [errors, setErrors] = useState({});
   const [busy, setBusy] = useState(false);
+  const codeRef = useRef(null);
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
 
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [onClose]);
+  // The dialog focuses itself when it opens; the code field is where typing starts.
+  useEffect(() => { codeRef.current?.focus(); }, []);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -794,43 +826,51 @@ function AddLanguage({ onClose, onAdded }) {
   };
 
   return (
-    <div className="translate-modal-backdrop" onClick={onClose} role="presentation">
-      <form
-        className="translate-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="translate-add-title"
-        onClick={(e) => e.stopPropagation()}
-        onSubmit={submit}
-      >
-        <ModalHeader closeOnEscape={false} className="translate-modal-header" title={t('translator.add.title')} titleId="translate-add-title" onClose={onClose} />
-        <label>
-          <span>{t('translator.add.code')}</span>
-          <input value={form.code} onChange={set('code')} maxLength={6} autoCapitalize="none" autoCorrect="off" spellCheck={false} autoFocus />
-          <small className="translate-muted">{t('translator.add.codeHint')}</small>
-          {errors.code && <small className="translate-error">{errors.code}</small>}
-        </label>
-        <label>
-          <span>{t('translator.add.native')}</span>
-          <input value={form.native} onChange={set('native')} maxLength={40} dir={form.rtl ? 'rtl' : 'auto'} />
-          <small className="translate-muted">{t('translator.add.nativeHint')}</small>
-          {errors.native && <small className="translate-error">{errors.native}</small>}
-        </label>
-        <label>
-          <span>{t('translator.add.english')}</span>
-          <input value={form.english} onChange={set('english')} maxLength={40} />
-          {errors.english && <small className="translate-error">{errors.english}</small>}
-        </label>
-        <label className="translate-check">
-          <input type="checkbox" checked={form.rtl} onChange={set('rtl')} />
-          {t('translator.add.rtl')}
-        </label>
-        {errors.dir && <small className="translate-error">{errors.dir}</small>}
-        <div className="translate-modal-actions">
-          <button type="button" className="translate-btn" onClick={onClose}>{t('translator.add.cancel')}</button>
-          <button type="submit" className="translate-btn primary" disabled={busy}>{t('translator.add.submit')}</button>
-        </div>
+    <Dialog
+      open
+      onClose={onClose}
+      title={t('translator.add.title')}
+      closeLabel={t('translator.add.cancel')}
+      footer={(
+        <>
+          <Button variant="secondary" onClick={onClose}>{t('translator.add.cancel')}</Button>
+          <Button variant="primary" type="submit" form="translate-add-form" loading={busy} disabled={busy}>{t('translator.add.submit')}</Button>
+        </>
+      )}
+    >
+      <form id="translate-add-form" className="translate-add" onSubmit={submit} noValidate>
+        <Field
+          label={t('translator.add.code')}
+          hint={t('translator.add.codeHint')}
+          error={errors.code}
+          ref={codeRef}
+          value={form.code}
+          onChange={set('code')}
+          maxLength={6}
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
+          className="translate-add__code"
+        />
+        <Field
+          label={t('translator.add.native')}
+          hint={t('translator.add.nativeHint')}
+          error={errors.native}
+          value={form.native}
+          onChange={set('native')}
+          maxLength={40}
+          dir={form.rtl ? 'rtl' : 'auto'}
+        />
+        <Field
+          label={t('translator.add.english')}
+          error={errors.english}
+          value={form.english}
+          onChange={set('english')}
+          maxLength={40}
+        />
+        <Checkbox label={t('translator.add.rtl')} checked={form.rtl} onChange={set('rtl')} />
+        {errors.dir && <p className="translate-error" role="alert">{errors.dir}</p>}
       </form>
-    </div>
+    </Dialog>
   );
 }

@@ -1,5 +1,9 @@
+@use "../../styles/v2" as v2;
+
 /* Comment box wrapper shared by the watch page and Shorts (commentTools.jsx):
-   the "drop image here" hint and the image preview strip. */
+   the Write / Preview track, the "drop image here" hint and the image strip.
+   v2 (STYLE_GUIDE 43a): a segmented track above a bg well, image tiles 56x56
+   at radius 8 with a round remove button. */
 
 .comment-drop-zone {
   position: relative;
@@ -17,12 +21,12 @@
   justify-content: center;
   gap: 6px;
   padding: 4px 8px;
-  border: 2px dashed var(--accent-primary);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--bg-secondary, #1f1f1f) 88%, transparent);
-  color: var(--accent-primary);
-  font-size: 12px;
-  font-weight: 600;
+  border: 2px dashed var(--accent);
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  color: var(--accent);
+  @include v2.text(meta);
+  font-weight: 700;
   text-align: center;
   pointer-events: none;
 }
@@ -31,16 +35,16 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .comment-image-preview {
   position: relative;
   width: 56px;
   height: 56px;
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   overflow: hidden;
-  background: var(--bg-hover, rgba(255, 255, 255, 0.08));
+  @include v2.thumb-placeholder(6px);
   flex: 0 0 auto;
 
   img {
@@ -50,81 +54,64 @@
     display: block;
   }
 
-  &.is-uploading img { opacity: 0.45; }
+  &.is-uploading img { opacity: .45; }
 
   .comment-image-spinner {
     position: absolute;
     top: 50%;
     left: 50%;
-    margin: -8px 0 0 -8px;
-    color: #fff;
+    margin: -9px 0 0 -9px;
+    color: var(--on-media);
   }
 }
 
 .comment-image-remove {
   position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 18px;
-  height: 18px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  display: inline-grid;
+  place-items: center;
   padding: 0;
-  border: none;
+  border: 0;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.65);
-  color: #fff;
+  background: var(--media-scrim);
+  color: var(--on-media);
   cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
 
-  &:hover { background: rgba(0, 0, 0, 0.85); }
+  &:hover { background: var(--media-scrim-strong); }
 }
 
-// Write / Preview: a compact version of the watch page's Comment / React tabs
-// (CommentSection.scss .comment-tab), same underline language, smaller.
+// Write / Preview: a small segmented track (tabs are never underlined). With a
+// lead (the watch page's Comment / React switch) both share one row.
 .comment-write-tabs {
   display: flex;
-  gap: 2px;
-  margin-bottom: 6px;
-  border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
-}
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  min-width: 0;
 
-.comment-write-tab {
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  font-family: inherit;
-  color: var(--text-secondary, #aaa);
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
-
-  &:hover { color: var(--text-primary); }
-
-  &.active {
-    color: var(--text-primary);
-    border-bottom-color: var(--accent-primary);
-  }
+  &.has-lead .comment-write-seg { margin-left: auto; }
+  .v2-seg { flex: none; }
 }
 
 // The preview pane stands where the box was, at least as tall as an empty box,
 // so switching tabs does not make the composer jump.
 .comment-preview {
-  min-height: 44px;
-  padding: 8px 10px;
-  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.1));
-  border-radius: 10px;
+  min-height: 56px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
   overflow-wrap: anywhere;
+  @include v2.text(body);
 
-  img { max-width: 100%; height: auto; }
+  img { max-width: 100%; height: auto; border-radius: var(--r-sm); }
 }
 
 .comment-preview-empty {
   margin: 0;
-  font-size: 12px;
-  font-style: italic;
-  color: var(--text-muted, var(--text-secondary));
+  @include v2.text(meta);
+  color: var(--muted);
 }

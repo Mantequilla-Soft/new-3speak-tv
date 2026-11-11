@@ -2,7 +2,7 @@
 // columns, sizes and gaps of the cards that replace them and nothing jumps.
 // Styles: Cards.scss (.card--skeleton).
 
-/** One card: thumbnail, two title lines, the author row. */
+/** One card: thumbnail, then the avatar beside two title lines and the meta line. */
 export function SkeletonCard() {
   return (
     <div className="card card--skeleton" aria-hidden="true">
@@ -33,11 +33,11 @@ export function SpotlightSkeleton({ layout }) {
 function SkeletonBody() {
   return (
     <div className="card-skeleton-body">
-      <div className="card-skeleton-block card-skeleton-line" />
-      <div className="card-skeleton-block card-skeleton-line card-skeleton-line--short" />
-      <div className="card-skeleton-author">
-        <span className="card-skeleton-block card-skeleton-avatar" />
-        <span className="card-skeleton-block card-skeleton-name" />
+      <span className="card-skeleton-block card-skeleton-avatar" />
+      <div className="card-skeleton-lines">
+        <div className="card-skeleton-block card-skeleton-line" />
+        <div className="card-skeleton-block card-skeleton-line card-skeleton-line--short" />
+        <div className="card-skeleton-block card-skeleton-line card-skeleton-line--meta" />
       </div>
     </div>
   );

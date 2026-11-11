@@ -1,102 +1,53 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Upload wizard action row (StepActions.jsx). Lives inside the wizard's
-// `.studio-page-content`, which EmbedWizard.scss caps to the stepper's width, so
-// the row's outer edges are the stepper's edges.
-//
-// Accent = OUTLINE (accent text + accent border, transparent fill): 3Speak never
-// uses a red-filled button. Secondary = neutral outline.
+// Upload wizard action row (StepActions.jsx), built from v2 Buttons (48 tall):
+// Back and extras secondary, the way on the one accent button. The top row sits
+// in the stepper bar (StepProgress.scss), the bottom one ends the page.
 .step-actions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  column-gap: 10px;
-  row-gap: 10px;
+  gap: 8px;
   width: 100%;
-  box-sizing: border-box;
+  min-width: 0;
 
-  &--top { margin: 4px 0 18px; }
-  &--bottom { margin: 22px 0 8px; }
+  &--top { width: auto; }
+  &--bottom {
+    margin: 20px 0 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
 }
 
 .step-actions__break { flex: 1 1 auto; }
+.step-actions--top .step-actions__break { flex: 0 0 auto; }
 
-// Selectors doubled on purpose: the Details page scales every `button` inside it
-// down to 12px with a tripled class (EmbedDetails.scss, 0,3,1), and the row has
-// to look the same on every step.
-.step-actions.step-actions.step-actions .step-actions__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  min-height: 44px;
-  padding: 10px 22px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
-  background: transparent;
-  color: var(--text-primary, #111);
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.2;
-  text-align: center;
-  cursor: pointer;
-  box-sizing: border-box;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
-
-  svg { flex-shrink: 0; }
-
-  &:hover { background: var(--bg-secondary, #f1f1f3); }
-
-  &:focus-visible {
-    outline: 2px solid var(--accent-primary, #e53935);
-    outline-offset: 2px;
-  }
-
-  &--back { padding-left: 14px; }
-
-  &--primary {
-    border-color: var(--accent-primary, #e53935);
-    color: var(--accent-primary, #e53935);
-
-    &:hover { background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent); }
-  }
-
-  // After the variants so it wins at equal specificity; `:hover` still matches a
-  // disabled button, hence the explicit pair.
-  &:disabled,
-  &:disabled:hover {
-    background: transparent;
-    color: var(--text-secondary, #6b7280);
-    border-color: var(--border-color, #d1d5db);
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
+.step-actions .step-actions__btn {
+  max-width: 100%;
+  &.is-next { min-width: 180px; gap: 18px; }
 }
 
 // Phones: primary action(s) on top at full width (two of them split it), Back
 // and the secondary actions share the line below. The zero-height break element
-// forces that second line; `row-gap` is halved because it sits on both sides of it.
-@include mix.respond(phone) {
+// forces that second line.
+@include v2.mobile {
   .step-actions {
-    row-gap: 5px;
-
-    &--top { margin: 0 0 14px; }
-    &--bottom { margin: 18px 0 4px; }
+    gap: 6px;
+    &--top { width: 100%; }
+    &--bottom { margin: 16px 0 4px; padding-top: 12px; }
   }
 
-  .step-actions__break {
+  .step-actions__break,
+  .step-actions--top .step-actions__break {
     order: -1;
     flex: 0 0 100%;
     height: 0;
   }
 
-  .step-actions.step-actions.step-actions .step-actions__btn {
+  .step-actions .step-actions__btn {
     flex: 1 1 0;
     min-width: 0;
-    padding: 10px 12px;
-    font-size: 14px;
-
+    &.is-next { min-width: 0; }
     &--primary { order: -2; }
   }
 

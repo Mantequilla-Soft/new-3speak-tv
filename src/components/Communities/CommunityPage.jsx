@@ -5,7 +5,6 @@ import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { formatNumber, formatDate } from "../../i18n";
 import { toastIn } from '../../utils/toast';
-import { Clock, TrendingUp, Trophy, MessagesSquare, Users, PenLine, FileText, Coins, CalendarDays, Check, Plus, Tv, Upload } from 'lucide-react';
 import "./CommunityPage.scss";
 import axios from "axios";
 import { FEED_URL } from '../../utils/config'
@@ -13,14 +12,18 @@ import { feedParams } from '../../utils/feedParams'
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Card3 from "../Cards/Card3";
 import CardSkeleton from "../Cards/CardSkeleton";
-import ProfileHeader from "../ProfileHeader/ProfileHeader";
 import HiveMarkdown from "../HiveMarkdown/HiveMarkdown";
 import { useContentBatch } from "../../hooks/useContentBatch";
 import { useWatchHistory } from "../../hooks/useWatchHistory";
 import useViewCounts from "../../hooks/useViewCounts";
 import { useAppStore } from "../../lib/store";
 import { useRewardDisplay } from "../../utils/hivePrice";
-import { customJsonWithAioha, isLoggedIn, KeyTypes } from "../../hive-api/aioha";
+import { isLoggedIn } from "../../hive-api/aioha";
+import { useAvatarUrl } from "../../utils/avatarCache";
+import { Button, EmptyState, Segmented, StatTile } from "../v2/ui";
+import { Icon } from "../v2/Icon";
+import GroupHero, { GroupHeroJoin } from "../Groups/GroupHero";
+import { canSubscribe, setCommunitySubscription } from "./communitySubscribe";
 import CommunitySnaps from "../Userprofilepage/CommunitySnaps";
 import { CommunityPinned, CommunityTopCreators, CommunityTeam, CommunityRules } from "./CommunityExtras";
 import { findNextOnChannel, rememberCommunityChannel, surfUrl } from "../../utils/surf";
@@ -39,10 +42,10 @@ const fmtNum = (n) => (typeof n === 'number' ? formatNumber(n) : '—');
 const PAGE_LIMIT = 100;
 
 const TABS = [
-  { key: 'new', labelKey: 'communities.page.tabs.new', icon: <Clock size={16} /> },
-  { key: 'trending', labelKey: 'communities.page.tabs.trending', icon: <TrendingUp size={16} /> },
-  { key: 'top', labelKey: 'communities.page.tabs.top', icon: <Trophy size={16} /> },
-  { key: 'discussion', labelKey: 'communities.page.tabs.discussion', icon: <MessagesSquare size={16} /> },
+  { key: 'new', labelKey: 'communities.page.tabs.new', icon: 'schedule' },
+  { key: 'trending', labelKey: 'communities.page.tabs.trending', icon: 'trending_up' },
+  { key: 'top', labelKey: 'communities.page.tabs.top', icon: 'trophy' },
+  { key: 'discussion', labelKey: 'communities.page.tabs.discussion', icon: 'forum' },
 ];
 const TOP_WINDOWS = [
   { key: '7d', labelKey: 'communities.page.windows.week' },
@@ -143,13 +146,11 @@ function CommunityPage() {
     return () => { alive = false; };
   }, [incubationHandle, id]);
 
-  // Subscribe / unsubscribe via the on-chain `community` custom_json (posting auth).
+  // Subscribe / unsubscribe via the on-chain `community` custom_json (posting
+  // auth), or off-chain for an incubating user (see communitySubscribe.js).
   const handleSubscribe = async () => {
     if (subLoading) return;
-    // isLoggedIn() is the wallet check, and an incubating user has no wallet.
-    // Testing it alone told the one group who cannot subscribe on chain to log
-    // in, while they were already logged in.
-    if (!authenticated || (!incubationHandle && !isLoggedIn())) {
+    if (!canSubscribe({ authenticated, incubationHandle })) {
       toast.error(t('communities.page.loginToSubscribe'));
       return;
     }
@@ -157,26 +158,17 @@ function CommunityPage() {
     setSubLoading(true);
     try {
       const label = dataMain?.title || id;
-      if (incubationHandle) {
-        const { subscribeIncubation } = await import('../../lib/incubation');
-        await subscribeIncubation(id, next);
-        setSubscribed(next);
-        // The subscriber count is Hive's, and this subscription is not on Hive
-        // yet, so it is left alone rather than shown a number that no other
-        // client would agree with.
-        toast.success(next ? t('communities.page.subscribedTo', { label }) : t('communities.page.unsubscribedFrom', { label }));
-        setSubLoading(false);
-        return;
-      }
-      const json = JSON.stringify([next ? 'subscribe' : 'unsubscribe', { community: id }]);
-      await customJsonWithAioha(
-        KeyTypes.Posting,
-        'community',
-        json,
-        next ? t('communities.page.subscribeTo', { label }) : t('communities.page.unsubscribeFrom', { label })
-      );
+      const { onChain } = await setCommunitySubscription({
+        id,
+        next,
+        incubationHandle,
+        prompt: next ? t('communities.page.subscribeTo', { label }) : t('communities.page.unsubscribeFrom', { label }),
+      });
       setSubscribed(next);
-      setSubCount((c) => (typeof c === 'number' ? Math.max(0, c + (next ? 1 : -1)) : c));
+      // The subscriber count is Hive's. An off-chain (incubation) subscription
+      // is not on Hive yet, so the count is left alone rather than shown a
+      // number that no other client would agree with.
+      if (onChain) setSubCount((c) => (typeof c === 'number' ? Math.max(0, c + (next ? 1 : -1)) : c));
       toast.success(next ? t('communities.page.subscribedTo', { label }) : t('communities.page.unsubscribedFrom', { label }));
     } catch (err) {
       console.error('Community subscribe error:', err);
@@ -184,6 +176,20 @@ function CommunityPage() {
     } finally {
       setSubLoading(false);
     }
+  };
+
+  // Share tile: the system share sheet where there is one, else copy the link.
+  const handleShare = async () => {
+    const url = `${window.location.origin}/community/${id}`;
+    try {
+      if (navigator.share) { await navigator.share({ title: communityTitle, url }); return; }
+    } catch (err) {
+      if (err?.name === 'AbortError') return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t('common.actions.copied'));
+    } catch { /* nothing to copy into */ }
   };
 
   // ---------------------------
@@ -297,142 +303,140 @@ function CommunityPage() {
   })();
 
   const kpis = dataMain ? [
-    { key: 'subs', icon: <Users size={16} />, label: t('communities.page.kpis.subscribers'), value: fmtNum(subCount ?? dataMain.subscribers) },
-    { key: 'authors', icon: <PenLine size={16} />, label: t('communities.page.kpis.authors'), value: fmtNum(dataMain.num_authors) },
+    { key: 'subs', label: t('communities.page.kpis.subscribers'), value: fmtNum(subCount ?? dataMain.subscribers) },
+    { key: 'authors', label: t('communities.page.kpis.authors'), value: fmtNum(dataMain.num_authors) },
     // num_pending counts posts still inside Hive's 7-day payout window, not the
     // community's whole history.
-    { key: 'posts', icon: <FileText size={16} />, label: t('communities.page.kpis.posts'), value: fmtNum(dataMain.num_pending) },
-    { key: 'rewards', icon: <Coins size={16} />, label: t('communities.page.kpis.rewards'), value: typeof dataMain.sum_pending === 'number' ? rewardLabel(dataMain.sum_pending) : '—' },
-    { key: 'since', icon: <CalendarDays size={16} />, label: t('communities.page.kpis.created'), value: createdLabel },
+    { key: 'posts', label: t('communities.page.kpis.posts'), value: fmtNum(dataMain.num_pending) },
+    { key: 'rewards', label: t('communities.page.kpis.rewards'), value: typeof dataMain.sum_pending === 'number' ? rewardLabel(dataMain.sum_pending) : '—', money: true },
+    { key: 'since', label: t('communities.page.kpis.created'), value: createdLabel },
   ] : [];
 
-  // Rendered in two spots: the desktop sidebar, and — on mobile — beside the
-  // description box above the tabs. Same markup, so it stays row-styled in both.
+  // Design 40b: five KPI tiles in a row under the header. On a phone the row
+  // scrolls sideways instead of wrapping, so it stays one line tall.
   const kpiBlock = kpis.length ? (
     <div className="community-kpis">
       {kpis.map((k) => (
-        <div className="community-kpi" key={k.key}>
-          <span className="community-kpi-icon">{k.icon}</span>
-          <span className="community-kpi-text">
-            <span className="community-kpi-value">{k.value}</span>
-            <span className="community-kpi-label">{k.label}</span>
-          </span>
-        </div>
+        <StatTile key={k.key} className="community-kpi" label={k.label} value={k.value} money={k.money} />
       ))}
     </div>
   ) : null;
+
+  const communityAvatar = useAvatarUrl(id, 'large');
+  const subscribers = subCount ?? dataMain?.subscribers;
+  const heroMeta = dataMain ? (
+    <>
+      {typeof subscribers === 'number' && (
+        <b>{t('communities.directory.subscribers', { count: subscribers, n: formatNumber(subscribers) })}</b>
+      )}
+      {typeof dataMain.num_authors === 'number' && (
+        <span>{t('communities.directory.authors', { count: dataMain.num_authors, n: formatNumber(dataMain.num_authors) })}</span>
+      )}
+    </>
+  ) : null;
+
+  // The About card: the one-line "about" and the longer description the mods
+  // wrote (markdown, folded when long).
+  const aboutCard = (dataMain?.about || dataMain?.description) ? (
+    <div className="community-card community-about">
+      <h3 className="community-card-title"><Icon name="info" size={18} /> {t('communities.picker.about')}</h3>
+      {dataMain.about ? <p className="community-about-line">{dataMain.about}</p> : null}
+      {dataMain.description ? (
+        <HiveMarkdown body={dataMain.description} className="community-description" collapsible />
+      ) : null}
+    </div>
+  ) : null;
+
+  const tabOptions = TABS.map((tb) => ({
+    value: tb.key,
+    label: t(tb.labelKey),
+    icon: tb.icon,
+    count: tb.key === 'new' && newCount > 0 ? newCount : undefined,
+  }));
 
   return (
     <div className="community-page-wrap">
       <Helmet>
         <title>{`3S | ${communityTitle}`}</title>
       </Helmet>
-      <ProfileHeader
-        username={id}
-        name={dataMain?.title || id}
-        bio={dataMain?.about}
-        // nameActions, not actions: subscribing is the thing a visitor came to
-        // this page to decide, and in the actions group it sat below the fold of
-        // the header as one control among several. Beside the name is where a
-        // profile puts Follow, and this is the same decision about a community.
-        //
-        // The profile's own hero classes, so the two read as one control in two
-        // places rather than two that happen to look similar.
-        nameActions={
-          authenticated && (isLoggedIn() || incubationHandle) ? (
-            <button
-              className={`btn ${subscribed ? 'btn-hero-following' : 'btn-hero-follow'} community-sub-btn`}
-              onClick={handleSubscribe}
-              disabled={subLoading}
-            >
-              {subLoading
-                ? t('common.status.loading')
-                : subscribed
-                  ? <><Check size={16} /> {t('communities.page.subscribed')}</>
-                  : <><Plus size={16} /> {t('common.actions.subscribe')}</>}
-            </button>
-          ) : null
-        }
+
+      <GroupHero
+        avatar={communityAvatar}
+        eyebrow={t('communities.page.fallbackTitle')}
+        title={dataMain?.title || id}
+        meta={heroMeta}
+        // Subscribing is the thing a visitor came to this page to decide, so it
+        // is the one big button beside the name.
+        action={canSubscribe({ authenticated, incubationHandle }) ? (
+          <GroupHeroJoin
+            joined={subscribed}
+            busy={subLoading}
+            onClick={handleSubscribe}
+            label={t('common.actions.subscribe')}
+            joinedLabel={t('communities.page.subscribed')}
+            busyLabel={t('common.status.loading')}
+          />
+        ) : null}
+        tiles={[{ icon: 'ios_share', label: t('common.actions.share'), onClick: handleShare }]}
       />
 
-      {/* Mobile-only: description keeps its spot above the tabs, with the stats
-          row sitting to its right (hidden on desktop — sidebar carries them). */}
-      {(dataMain?.description || kpiBlock) ? (
-        <div className="community-intro">
-          {dataMain?.description ? (
-            <div className="community-intro-desc">
-              <HiveMarkdown
-                body={dataMain.description}
-                className="community-description community-description--mobile"
-                collapsible
-              />
-            </div>
-          ) : null}
-          {kpiBlock ? <div className="community-intro-stats">{kpiBlock}</div> : null}
-        </div>
-      ) : null}
+      {kpiBlock}
 
-      {/* Mobile-only: top creators, team + rules (the desktop sidebar carries them). */}
+      {/* Phones have no sidebar: the about card, top creators, team and rules
+          sit above the tabs instead, rules folded. */}
       {dataMain ? (
         <div className="community-about--mobile">
+          {aboutCard}
           <CommunityTopCreators id={id} />
           <CommunityTeam id={id} team={dataMain.team} />
           <CommunityRules text={dataMain.flag_text} collapsible />
         </div>
       ) : null}
 
-      <div className="community-actions">
-        <button type="button" className="community-action" onClick={startSurf} disabled={surfing} title={t('communities.page.surfTitle')}>
-          <Tv size={16} /> {surfing ? t('communities.page.tuning') : t('communities.page.surf')}
-        </button>
-        {canUpload && (
-          <Link className="community-action" to={uploadHref}>
-            <Upload size={16} /> {t('communities.page.uploadHere')}
-          </Link>
-        )}
-      </div>
-
-      <CommunityPinned id={id} />
-
-      {/* Real tabs, matching the home feed tab bar. */}
-      <div className="community-tabs" role="tablist">
-        {TABS.map((tb) => (
-          <button
-            key={tb.key}
-            type="button"
-            role="tab"
-            aria-selected={tab === tb.key}
-            className={`community-tab${tab === tb.key ? ' active' : ''}`}
-            onClick={() => setTab(tb.key)}
+      <div className="community-toolbar">
+        <Segmented
+          className="community-tabs"
+          options={tabOptions}
+          value={tab}
+          onChange={(key) => setTab(key)}
+          size={36}
+          block={false}
+          scroll
+          label={communityTitle}
+        />
+        {tab === 'top' && (
+          <select
+            className="v2-input is-select community-window"
+            aria-label={t('communities.page.timeRange')}
+            value={topWindow}
+            onChange={(e) => setTab('top', { window: e.target.value })}
           >
-            <span className="community-tab-icon">{tb.icon}</span>
-            <span className="community-tab-label">{t(tb.labelKey)}</span>
-            {tb.key === 'new' && newCount > 0 && (
-              <span className="community-tab-count" title={t('communities.page.newSinceVisit')}>{newCount}</span>
-            )}
-          </button>
-        ))}
+            {TOP_WINDOWS.map((w) => <option key={w.key} value={w.key}>{t(w.labelKey)}</option>)}
+          </select>
+        )}
+        <div className="community-toolbar-actions">
+          <Button variant="secondary" icon="live_tv" onClick={startSurf} disabled={surfing} loading={surfing} title={t('communities.page.surfTitle')}>
+            {surfing ? t('communities.page.tuning') : t('communities.page.surf')}
+          </Button>
+          {canUpload && (
+            <Button as={Link} to={uploadHref} variant="primary" icon="upload">
+              {t('communities.page.uploadHere')}
+            </Button>
+          )}
+        </div>
       </div>
 
-      {tab === 'top' && (
-        <div className="community-windows" role="group" aria-label={t('communities.page.timeRange')}>
-          {TOP_WINDOWS.map((w) => (
-            <button
-              key={w.key}
-              type="button"
-              className={`community-window${topWindow === w.key ? ' active' : ''}`}
-              aria-pressed={topWindow === w.key}
-              onClick={() => setTab('top', { window: w.key })}
-            >
-              {t(w.labelKey)}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Video grid + right sidebar (KPIs, team, rules, description on desktop). */}
+      {/* Video grid + right sidebar (about, rules, top creators, team). */}
       <div className="community-body">
         <div className="community-feed">
+          <CommunityPinned id={id} />
+
+          {tab === 'new' && newCount > 0 && (
+            <div className="v2-eyebrow is-accent community-new-since">
+              {t('communities.page.newSinceVisit')} · <span className="num">{newCount}</span>
+            </div>
+          )}
+
           {tab === 'discussion' ? (
             <CommunitySnaps
               community={id}
@@ -443,11 +447,16 @@ function CommunityPage() {
           ) : isLoading ? (
             <CardSkeleton />
           ) : isError ? (
-            <p>{t('communities.page.errorVideos')}</p>
+            <div className="v2-failure community-state"><b>{t('communities.page.errorVideos')}</b></div>
           ) : videos.length === 0 ? (
-            <p className="community-empty">
-              {tab === 'top' ? t('communities.page.emptyRange') : t('communities.page.empty')}
-            </p>
+            <EmptyState
+              className="community-state"
+              icon="video_library"
+              title={tab === 'top' ? t('communities.page.emptyRange') : t('communities.page.empty')}
+              action={canUpload ? (
+                <Button as={Link} to={uploadHref} variant="secondary" size={36} icon="upload">{t('communities.page.uploadHere')}</Button>
+              ) : null}
+            />
           ) : (
             <Card3 windowed
               videos={videos}
@@ -459,24 +468,18 @@ function CommunityPage() {
             />
           )}
 
-          {videoTab && isFetchingNextPage && <p style={{ textAlign: "center" }}>{t('communities.page.loadingMore')}</p>}
+          {videoTab && isFetchingNextPage && (
+            <p className="community-loading-more v2-meta">
+              <Icon name="progress_activity" size={16} className="v2-spin" /> {t('communities.page.loadingMore')}
+            </p>
+          )}
         </div>
 
         <aside className="community-side">
-          {kpiBlock}
-
+          {aboutCard}
+          {dataMain ? <CommunityRules text={dataMain.flag_text} /> : null}
           <CommunityTopCreators id={id} side />
           {dataMain ? <CommunityTeam id={id} team={dataMain.team} /> : null}
-          {dataMain ? <CommunityRules text={dataMain.flag_text} /> : null}
-
-          {/* Desktop-only: the description moved off the top, beside the grid. */}
-          {dataMain?.description ? (
-            <HiveMarkdown
-              body={dataMain.description}
-              className="community-description community-description--side"
-              collapsible
-            />
-          ) : null}
         </aside>
       </div>
     </div>

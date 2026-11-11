@@ -1,89 +1,33 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// "What brings you to 3Speak?" Three cards; the current answer is outlined in
-// the accent colour rather than filled, like every other choice on 3Speak.
+// "What brings you to 3Speak?" (design 46a): stacked choice cards, the current
+// answer outlined in accent with a 16% tint (the v2 choice card). Sized by
+// where it is placed, not by the screen: one per row in a dialog or a narrow
+// column, a grid once the container is wide enough.
 .track-chooser {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  // Sized by where it is placed, not by the screen: three across in the main
-  // column or a dialog, one per row in the narrow profile sidebar.
   container-type: inline-size;
 }
 
 .track-chooser-options {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-
-  @container (max-width: 520px) {
-    grid-template-columns: 1fr;
+  @container (min-width: 600px) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
 
-  @include mix.respond(phone) {
-    grid-template-columns: 1fr;
-  }
-}
+  // Tap targets stay comfortable on a phone.
+  .track-option { min-height: 56px; }
 
-.track-option {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: transparent;
-  color: var(--text-primary);
-  text-align: left;
-  cursor: pointer;
-  transition: border-color 0.15s ease;
-
-  &:hover:not(:disabled) {
-    border-color: var(--accent-primary);
-  }
-
-  &:disabled {
-    cursor: default;
-    opacity: 0.7;
-  }
-
-  &.is-current {
-    border-color: var(--accent-primary);
-    box-shadow: inset 0 0 0 1px var(--accent-primary);
-  }
-}
-
-.track-option-icon {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1px solid var(--border-color);
-  color: var(--accent-primary);
-}
-
-.track-option-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-
-  strong {
-    font-size: 14px;
-  }
-
-  span {
-    font-size: 12px;
-    line-height: 1.4;
-    color: var(--text-secondary);
-  }
+  // A disabled card while ANOTHER one saves keeps full colour: only the
+  // pressed card says it is busy.
+  .track-option:disabled { opacity: 1; cursor: progress; }
+  .track-option.is-saving .v2-choice__icon { animation: v2-spin 1s linear infinite; color: var(--cyan); }
 }
 
 .track-chooser-error {
   margin: 0;
-  font-size: 13px;
-  color: var(--accent-primary);
+  @include v2.text(meta-sm);
+  color: var(--accent);
 }

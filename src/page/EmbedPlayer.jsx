@@ -4,6 +4,7 @@ import { usePlayer } from '@mantequilla-soft/3speak-player/react';
 import { getPlayerUrl } from '../utils/playerUrl';
 import { withGatewayFallback } from '../lib/hlsGatewayFallback.js';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '../components/v2/Icon';
 import './EmbedPlayer.scss';
 
 // Bare, chrome-free 3Speak player used INSIDE the Spotlight /links page (iframed).
@@ -60,7 +61,14 @@ export default function EmbedPlayer() {
     loadVideo(`${a}/${p}`).catch(() => {});
   }, [valid, a, p, player, attached, loadVideo]);
 
-  if (!valid) return <div className="emb-player emb-player--err">{t('misc.embedPlayer.unavailable')}</div>;
+  if (!valid) {
+    return (
+      <div className="emb-player emb-player--err" role="status">
+        <Icon name="videocam_off" size={28} />
+        <span>{t('misc.embedPlayer.unavailable')}</span>
+      </div>
+    );
+  }
 
   return (
     <div className={`emb-player${isShort ? ' short' : ''}`}>

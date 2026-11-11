@@ -1,40 +1,19 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
-// Card-size preference (set on <html> from the store). Large is the default.
-// Kept in sync with the home screen's --home-card-w (HomeGrouped.scss) so the
-// "View All" feed grids render the same card size as the home rows.
-html[data-card-size="small"] { --card-min-w: 280px; }
+// Video card grid (Card3), v2 (designs 20a, 28b, 43c).
+// A card is a surface tile (1px border, radius 20, padding 8): a 16:9 thumbnail at
+// radius 12 on the striped placeholder, then the creator's avatar beside the
+// title, a muted meta line, the topic in cyan and the stat pills (votes,
+// comments, payout in accent + mono). Feeds lay cards out in auto-fill grids.
+
+// Card-size preference (set on <html> from the store). Small is the v2 default
+// grid (minmax(240px, 1fr)); large keeps wide tiles for big screens.
+html[data-card-size="small"] { --card-min-w: 240px; }
 html[data-card-size="large"] { --card-min-w: 420px; }
-
-// ONE type size per card. Every text element under .card reads --card-fs and
-// every icon reads --card-icon-fs, so a card can never mix sizes again — the
-// old spread of 10 / 10.4 / 10.5 / 11 / 12 / 12.95 / 13 / 14px inside a single
-// tile is what made one card look like several different fonts.
-// Weight is title-only: the <h2> is 700, everything else stays 400.
-// Phones shift BOTH tokens together (two-up tiles have half the width), so the
-// card stays internally uniform at every breakpoint.
-.card {
-  // 12px is what the comment / upvote / payout badges always used — the card
-  // now takes that as its single size rather than the old 13px title size.
-  --card-fs: 12px;
-  --card-icon-fs: 14px;
-  // The duration pill is the ONE deliberate exception to the single size. It is
-  // the only dark-on-light element on the card (black on a white pill, over the
-  // thumbnail); at an identical 12px that contrast makes it read a size larger
-  // than the gray-on-dark text around it. One step down cancels that out.
-  --card-duration-fs: 10px;
-  @include respond(phone) {
-    --card-fs: 10px;
-    --card-icon-fs: 12px;
-    --card-duration-fs: 9px;
-  }
-}
 
 // A card is a cell (.card) holding its link (.card-link) and, beside it, the
 // controls drawn on the card (.card-controls, touch screens). The link fills the
-// cell and lays the card's content out exactly as the cell would, so every rule
-// written for `.card` keeps applying. Its colour stays the link colour the card
-// always had (when the cell itself was the <a>).
+// cell and lays the card's content out exactly as the cell would.
 .card > .card-link {
   display: flex;
   flex-direction: inherit;
@@ -44,509 +23,345 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
+  color: inherit;
+  text-decoration: none;
+  border-radius: inherit;
+
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
 
 // Zero height, first in the cell, so it takes no room: the options button keeps
-// its place over the thumbnail's top-left corner (CardOptionsMenu.scss) and its
-// z-index above the thumbnail image (z-index 1, see CardThumbnail).
+// its place over the thumbnail's top-right corner and its z-index above the image.
 .card > .card-controls {
   position: relative;
   height: 0;
   flex: 0 0 0;
+  z-index: 3;
+
+  .card-options-btn { top: 8px; right: 8px; }
+}
+
+// Loading / error line when a grid has nothing to show yet
+.card-grid-status {
+  @include v2.text(body);
+  color: var(--muted);
+  padding: 24px 0;
+  &.is-error { color: var(--accent); }
 }
 
 .card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-min-w, 280px), 1fr));
-  grid-column-gap: 16px;
-  // Match the vertical gap to the horizontal one on desktop (was a roomier 30px).
-  // Mobile keeps its own tighter row-gap in the phone block below.
-  grid-row-gap: 16px;
-  margin-top: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-min-w, 240px), 1fr));
+  gap: 20px 16px;
+  margin-top: 0;
   position: relative; // anchor for the single hover-preview overlay
-  @include respond(phone) {
-    grid-row-gap: 10px;
+
+  @include v2.mobile {
+    gap: 12px 10px;
     // Mobile: small = compact 2-up, large = full-width single column.
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    html[data-card-size="large"] & {
-      grid-template-columns: 1fr;
-    }
+    html[data-card-size="large"] & { grid-template-columns: 1fr; }
   }
 
   .card {
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    box-shadow: var(--card-shadow);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-    @include respond(phone) {
-      border-radius: 8px;
-      min-width: 0;
-      overflow: hidden;
-   }
+    justify-content: flex-start;
+    min-width: 0;
+    padding: 8px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    transition: border-color var(--t-fast) var(--ease), outline-color var(--t-fast) var(--ease);
+    outline: 2px solid transparent;
+    outline-offset: -1px;
 
-    // Subtle but visible hover: a small zoom + soft shadow (light theme keeps
-    // its background). Dark theme also lifts the background a touch. Guarded to
-    // hover-capable devices so it doesn't stick on mobile taps.
-    @media (hover: hover) {
-      &:hover {
-        transform: scale(1.015);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-      }
-      [data-theme="dark"] &:hover {
-        background-color: #242424;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-      }
+    @include v2.mobile {
+      padding: 6px;
+      border-radius: 16px;
     }
 
+    // Hover = the cyan ring of 28b ("hover · preview"). An outline, so the
+    // card never changes size and no transform makes it a stacking context.
+    @media (hover: hover) {
+      &:hover { border-color: var(--cyan); outline-color: var(--cyan); }
+    }
+  }
+
+  // Everything inside a card is scoped to .card, so rows interleaved into the
+  // grid (shorts, creators, community posts) keep their own styles.
+  .card {
+    // ── Thumbnail ──
     .img-wrap {
-      // width: 270px;
-      width: 100%;
       position: relative;
-      // Neutral skeleton behind the thumbnail so a slow/loading image reads as a
-      // placeholder rather than a stark white box.
-      background: var(--skeleton-bg, rgba(150, 150, 150, 0.14));
-      border-radius: 5px;
+      width: 100%;
       aspect-ratio: 16 / 9;
+      border-radius: 12px;
       overflow: hidden;
+      flex-shrink: 0;
+      @include v2.thumb-placeholder;
+      @include v2.mobile { border-radius: 8px; }
 
       img {
-        // width: 100%;
-
-        // height: 170px;
-        // border-radius: 5px;
-        // background-position: center;
-        // background-size: cover;
-
         width: 100%;
-        aspect-ratio: 16 / 9; /* always 16:9 regardless of card width */
-        height: auto;
-        border-radius: 5px;
-        object-fit: cover; /* Ensures the image maintains its aspect ratio */
-        object-position: center; /* Centers the image within its container */
-        background-position: center;
-        background-size: cover;
+        height: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        object-position: center;
+        display: block;
       }
 
-      .buttom-title {
-        position: absolute;
-        bottom: 1%;
-        width: -webkit-fill-available;
-        padding: 12px 4px;
-        background-color: var(--overlay-bg);
-        backdrop-filter: var(--backdrop-blur);
-        color: var(--text-inverse);
-        p {
-          font-size: var(--card-fs);
-        }
+      // A deleted video (43c): the thumbnail sits back at 45%.
+      &--dim img { opacity: .45 !important; }
+    }
+
+    // Length, bottom-right scrim pill in mono
+    .card-duration {
+      position: absolute;
+      right: 6px;
+      bottom: 6px;
+      z-index: 3;
+      @include v2.scrim-pill;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      pointer-events: none;
+    }
+
+    // Status pills, stacked at the top-left (LIVE, PRO, NEW, Scheduled…)
+    .card-badges {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 48px;
+      z-index: 3;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 4px;
+      pointer-events: none;
+    }
+
+    // ── Creator, title, meta ──
+    .card-body {
+      display: flex;
+      gap: 10px;
+      padding: 10px 4px 4px;
+      min-width: 0;
+      flex: 1 1 auto;
+
+      @include v2.mobile { gap: 8px; padding: 8px 2px 2px; }
+    }
+
+    .card-avatar {
+      flex: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      background: var(--avatar);
+      cursor: pointer;
+
+      .hive-avatar {
+        width: 100%;
+        height: 100%;
+        display: block;
+        > img { width: 100%; height: 100%; border-radius: 12px; }
       }
+      .hive-avatar__badge { top: -4px; right: -4px; }
 
-      // Add to Playlist button (appears on hover)
-      .add-to-playlist-btn {
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, 0.75);
-        backdrop-filter: blur(4px);
-        border: none;
-        border-radius: 6px;
-        color: #fff;
-        cursor: pointer;
-        opacity: 0;
-        transform: translateY(-5px);
-        transition: all 0.2s ease;
-        z-index: 3;
-
-        &:hover {
-          background: rgba(0, 0, 0, 0.6);
-          border: 1px solid var(--accent-primary, #e53935);
-          color: var(--accent-primary, #e53935);
-          transform: translateY(0);
-        }
-      }
-
-      &:hover .add-to-playlist-btn {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      // Options-menu trigger — same reveal, but it renders ABOVE the hover-preview
-      // overlay (see CardOptionsMenu.scss) instead of being painted over by it,
-      // which is what made the old bare playlist button useless mid-preview.
-      &:hover .card-options-btn {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .scheduled-badge {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: linear-gradient(135deg, rgba(255, 193, 7, 0.95), rgba(255, 152, 0, 0.95));
-        backdrop-filter: blur(8px);
-        color: #fff;
-        padding: 6px 8px;
-        border-radius: 6px;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-size: var(--card-fs);
-        font-weight: 400;
-        box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        z-index: 2;
-
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(255, 152, 0, 0.6);
-        }
-
-        @include respond(phone) {
-          padding: 5px 7px;
-        }
-      }
-
-      // Status badges for different video states
-      .status-badge {
-        position: absolute;
-        top: 8px;
-        right: 4px;
-        backdrop-filter: blur(8px);
-        color: #fff;
-        padding: 6px 10px;
-        border-radius: 6px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: var(--card-fs);
-        font-weight: 400;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        z-index: 2;
-
-        &:hover {
-          transform: translateY(-2px);
-        }
-
-        &.scheduled {
-          background: linear-gradient(135deg, rgba(255, 193, 7, 0.95), rgba(255, 152, 0, 0.95));
-          box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
-          
-          &:hover {
-            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.6);
-          }
-        }
-
-        &.manual {
-          background: linear-gradient(135deg, rgba(156, 39, 176, 0.95), rgba(123, 31, 162, 0.95));
-          box-shadow: 0 2px 8px rgba(156, 39, 176, 0.4);
-          
-          &:hover {
-            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.6);
-          }
-        }
-
-        &.encoding {
-          background: linear-gradient(135deg, rgba(33, 150, 243, 0.95), rgba(3, 169, 244, 0.95));
-          box-shadow: 0 2px 8px rgba(33, 150, 243, 0.4);
-          
-          &:hover {
-            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.6);
-          }
-
-          .spin-icon {
-            animation: spin 2s linear infinite;
-          }
-        }
-
-        &.draft {
-          background: linear-gradient(135deg, rgba(158, 158, 158, 0.95), rgba(117, 117, 117, 0.95));
-          box-shadow: 0 2px 8px rgba(117, 117, 117, 0.4);
-
-          &:hover {
-            box-shadow: 0 4px 12px rgba(117, 117, 117, 0.6);
-          }
-        }
-
-        &.unlisted {
-          background: linear-gradient(135deg, rgba(66, 66, 66, 0.95), rgba(33, 33, 33, 0.95));
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
-
-          &:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-          }
-        }
-
-        &.deleted {
-          background: linear-gradient(135deg, rgba(244, 67, 54, 0.95), rgba(211, 47, 47, 0.95));
-          box-shadow: 0 2px 8px rgba(244, 67, 54, 0.4);
-          
-          &:hover {
-            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.6);
-          }
-        }
-
-        &.failed {
-          background: linear-gradient(135deg, rgba(255, 87, 34, 0.95), rgba(230, 74, 25, 0.95));
-          box-shadow: 0 2px 8px rgba(255, 87, 34, 0.4);
-          
-          &:hover {
-            box-shadow: 0 4px 12px rgba(255, 87, 34, 0.6);
-          }
-        }
-
-        @include respond(phone) {
-          padding: 5px 8px;
-          gap: 4px;
-
-          span {
-            display: none; // Hide text on mobile, show only icon
-          }
-        }
-      }
-
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
+      // Two-up phone tiles are too narrow for an avatar column
+      @include v2.mobile {
+        html[data-card-size="small"] & { display: none; }
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        .hive-avatar > img { border-radius: 8px; }
       }
     }
-    h2{
-      padding: 0px 4px;
+
+    .card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    h2 {
+      margin: 0;
+      @include v2.text(body);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text);
       overflow: hidden;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
-      color: var(--text-primary);
-      font-size: var(--card-fs);
-      font-weight: 700;
-      line-height: 1.4;
-      min-height: 2.8em;
-      margin: 5px 0;
+      min-height: 2.6em;
+      overflow-wrap: anywhere;
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
-      @include respond(phone) {
-        -webkit-line-clamp: 1;
-        min-height: 1.4em;
+
+      @include v2.mobile {
+        font-size: 13px;
+        html[data-card-size="small"] & { -webkit-line-clamp: 2; }
       }
     }
-    .profile-view-wrap{
+
+    .card-meta {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0px 4px;
-      .profile-wrapper{
-        display: flex;
-        align-items: center;
-        gap: 2px;
-        text-decoration: none;
-        transition: opacity 0.2s ease;
+      flex-wrap: wrap;
+      column-gap: 6px;
+      row-gap: 2px;
+      min-width: 0;
+      @include v2.text(meta);
+      color: var(--muted);
 
-        &:hover {
-          opacity: 0.7;
+      @include v2.mobile { font-size: 11px; column-gap: 4px; }
 
-
-        }
-
-        .profile-img{
-          width: 25px;
-          height: 25px;
-          border-radius: 50%;
-          object-fit: cover;
-          display: inline-block;
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position: 50% 50%;
-
-        }
-        h2 {
-          font-size: var(--card-fs);
-          font-weight: 400;
-          color: var(--text-primary);
-          margin: 5px 0;
-        }
-      }
-      .view-wrap{
-        display: flex;
-        align-items: center;
-        gap: 2px;
-        background: var(--accent-primary);
-        color: var(--text-inverse);
-        padding: 2px 8px;
-        border-radius: 24px;
-        // font-size: 4.02px;
-        .icon{
-          font-size: var(--card-icon-fs);
-        }
-        p{
-          font-size: var(--card-fs);
-        }
-
-      }
-
-      .view-count-badge {
-        flex-shrink: 0;
-      }
-  
-    }
-    
-    .wrap {
-      .user-wrap {
-        position: absolute;
-        // Above the thumbnail. CardThumbnail gives the <img> `position: relative;
-        // z-index: 1` for its fade-in, so an overlay without a z-index of its own
-        // is painted UNDER the image and only becomes visible while the image is
-        // still loading or has failed. .card-live-badge already got this right.
-        z-index: 3;
-        top: 4%;
-        left: 1%;
-        gap: 5px;
-        padding: 3px 7px;
-        border-radius: 12px;
-        color: var(--text-inverse);
-        background: var(--accent-primary);
-        img {
-          width: 15px;
-          height: 15px;
-          border-radius: 50%;
-        }
-        span {
-          font-size: var(--card-fs);
-        }
-      }
-
-      .play {
-        position: absolute;
-        z-index: 3;   // see .user-wrap above — the thumbnail sits at z-index 1
-        top: 4%;
-        right: 1%;
-        font-size: var(--card-duration-fs);
-        padding: 3px 7px;
-        border-radius: 12px;
-        font-weight: 400;
-        color: #000;
-        background: rgba(255, 255, 255, 0.7);
+      // Separators between the meta items
+      > * + *::before {
+        content: "·";
+        margin-right: 6px;
+        color: var(--muted);
+        @include v2.mobile { margin-right: 4px; }
       }
     }
 
-    h3 {
-      font-size: var(--card-fs);
-      font-weight: 400;
-      color: var(--text-secondary);
-      margin: 6px 0;
-      padding: 0px 4px;
-    }
-    p {
-      font-size: var(--card-fs);
-      color: var(--text-secondary);
+    .card-author-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+      max-width: 100%;
     }
 
-    .bottom-action {
+    .card-author {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+      &:hover { color: var(--text); }
+    }
+
+    .card-incubation-leaf {
+      display: inline-flex;
+      align-items: center;
+      flex: none;
+      color: var(--cyan);
+      cursor: help;
+    }
+
+    .card-watching { color: var(--accent); font-weight: 700; }
+
+    .card-time { white-space: nowrap; }
+
+    // 1st-level v2 tag (the category), cyan like a community (20a)
+    .card-topic-chip {
+      align-self: flex-start;
+      max-width: 100%;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--cyan);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    // Stat pills: votes, comments, payout (28b)
+    .card-stats {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      // Metrics and date are the same size now, so nothing but this gap keeps
-      // them apart on a narrow two-up phone tile.
-      column-gap: 8px;
-      padding: 5px 4px;
-      // border-radius: 5px;
-      border-top: 1px solid var(--border-light);
+      flex-wrap: wrap;
+      gap: 6px;
       margin-top: 2px;
-      border-top-width: 1px;
-      // border: 1px solid grey;
-      @include respond(phone) {
-        padding: 7px 4px;
+      min-width: 0;
+
+      @include v2.mobile { gap: 4px; }
+
+      .upvote-count-badge,
+      .comment-count-badge,
+      .payout-amount-badge {
+        height: 20px;
+        padding: 0 7px;
+        border-radius: 8px;
+        background: var(--surface-2);
+        color: var(--text);
+        font-size: 11px;
+        gap: 3px;
+
+        @include v2.mobile { padding: 0 5px; font-size: 10px; }
       }
-
-      p {
-        font-size: var(--card-fs);
-        color: var(--text-secondary);
-        white-space: nowrap;
-        flex: 0 0 auto;
-      }
-
-      .wrap-left {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: var(--card-fs);
-        margin-bottom: 2px;
-        color: var(--text-secondary);
-        // Phones show two cards per row, so this strip has roughly half the
-        // width it was measured at — halve the gap so payout/votes/comments
-        // stop wrapping or crowding the edge. AFTER the declarations above:
-        // sass warns about declarations that follow a nested rule.
-        @include respond(phone) {
-          gap: 4px;
-        }
-        // Never let the metrics push the date off the tile; they ellipsize first.
-        min-width: 0;
-        .flex-div {
-          gap: 2px;
-
-          span {
-            font-size: var(--card-fs);
-          }
-
-          .icon {
-            font-size: var(--card-icon-fs);
-            color: var(--text-secondary);
-            &:hover {
-              color: var(--accent-primary);
-            }
-            &.voted {
-              color: var(--accent-primary);
-            }
-          }
-          .icon-heart{
-            font-size: var(--card-icon-fs);
-            &:hover {
-              color: var(--accent-primary);
-            }
-          }
-        }
-      }
-
-      // The phone shrink that used to live here (10.4px text / 9.6px badges)
-      // is gone: --card-fs already drops to 11px on phones and every element
-      // in the strip reads it, so the whole card scales as one.
-      @include respond(phone) {
-        .wrap-left .flex-div { gap: 2px; }
+      .payout-amount-badge {
+        background: var(--accent-tint-strong);
+        color: var(--accent);
       }
     }
   }
 }
 
+// Large cards on big screens get a little more air
+html[data-card-size="large"] .card-container .card {
+  @include v2.tablet-up {
+    h2 { font-size: 16px; }
+  }
+}
 
-// Shorts grid: 9:16 vertical thumbnails
-// A SINGLE short inside an ordinary grid (profile feeds mix the two). The
-// all-shorts container below makes every card portrait; this makes just the
-// ones that are. Kept next to it so the two stay in step.
-//
-// Rows are as tall as their tallest card, so a portrait card sets the height of
-// its row and the landscape ones sit at the top of it. That is the honest
-// result of mixing aspect ratios, and it beats cropping a 9:16 video into a
-// 16:9 letterbox.
-// A MIXED feed: shorts and videos in one row, every card the same HEIGHT and
-// each its own WIDTH. A fixed-column grid cannot do that -- every column is the
-// same width by definition -- so the mixed case lays out as a justified row
-// instead: the thumbnail height is set, and each card's width follows from its
-// own aspect ratio. A short comes out narrow and portrait, a video wide and
-// landscape, and their tops and bottoms line up.
-//
-// Only applies to a container that actually holds both. Every other grid on the
-// site is untouched.
-@media screen and (min-width: 768px) {
+// Desktop always has room for the topic, a two-up phone tile does not
+@include v2.mobile {
+  :root[data-card-size="small"] .card-topic-chip { display: none; }
+}
+
+// ── Pills drawn over the thumbnail (43c) ──
+// Scrim pills with white text and the tone on the icon; LIVE and PRO are solid accent.
+.card-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: var(--media-scrim-strong);
+  color: var(--on-media);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  max-width: 100%;
+
+  > span:not(.material-symbols-rounded) { overflow: hidden; text-overflow: ellipsis; }
+
+  &.is-cyan .material-symbols-rounded { color: var(--cyan); }
+  &.is-accent .material-symbols-rounded { color: var(--accent); }
+  &.card-live-badge,
+  &.card-gated-badge { background: var(--accent); color: var(--on-accent); }
+  &.card-new-badge { color: var(--on-media); box-shadow: inset 0 0 0 1px var(--accent); }
+
+  // Phones: the label of a status pill folds away, the icon stays
+  @include v2.mobile {
+    &.status-badge > span:not(.material-symbols-rounded) { display: none; }
+  }
+}
+
+// "Preview · muted" while the hover preview plays (inside the overlay controls)
+.card-preview-pill {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  @include v2.scrim-pill;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  pointer-events: none;
+}
+
+// ── Mixed feed (shorts beside videos on a profile) ──
+// Every card the same HEIGHT and each its own WIDTH: a justified row.
+@include v2.tablet-up {
   .card-container--mixed {
     --mixed-row-h: 300px;
 
@@ -561,7 +376,6 @@ html[data-card-size="large"] { --card-min-w: 420px; }
     }
 
     .card .img-wrap {
-      // Height fixed, width derived: this is what makes the row justified.
       height: var(--mixed-row-h);
       width: auto;
       aspect-ratio: 16 / 9;
@@ -569,24 +383,18 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       img {
         width: 100%;
         height: 100%;
-        // The base rule pins every thumbnail to 16:9; here the WRAPPER carries
-        // the ratio, so the image must not also assert one.
         aspect-ratio: auto;
         object-fit: cover;
-        object-position: center;
       }
     }
 
-    .card.card--short .img-wrap {
-      aspect-ratio: 9 / 16;
-    }
+    .card.card--short .img-wrap { aspect-ratio: 9 / 16; }
   }
 }
 
-// Below that there is no room for a 530px-wide card beside anything, so the
-// mixed container stays the ordinary grid it inherits: equal boxes, with a
-// short's portrait image contained inside one rather than cropped to fit.
-@include respond(phone) {
+// Below that the mixed container stays the ordinary grid: a short's portrait
+// image is contained inside an equal box rather than cropped to fit.
+@include v2.mobile {
   .card-container--mixed .card.card--short .img-wrap img {
     width: auto;
     max-width: 100%;
@@ -598,56 +406,28 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   }
 }
 
-// The featured video: the first card of the home Discover tab, two columns wide
-// (Card3 sets the span inline). Spanning two rows it has more height than a 16:9
-// thumbnail needs, so the title gets a bigger font and a third line, and the stats
-// row sits at the bottom of the card.
+// ── The featured video (Spotlight): first card of the Discover tab, two or three
+// columns wide (Card3 sets the span inline). ──
 .card-container .card.card--featured {
-  h2 {
-    font-size: calc(var(--card-fs) + 4px);
-  }
+  h2 { font-size: 18px; min-height: 0; }
+
   &.card--featured-tall {
-    justify-content: flex-start;
-    // Hard 16:9. The thumbnail (and the strip) clip their content, which lets a
-    // flex column squash them below their own height when the card's content is
-    // taller than its two rows, and the picture stopped being 16:9. They never
-    // shrink now; if it ever does not fit, the row grows a little instead.
     .img-wrap,
-    .featured-strip-wrap {
-      flex-shrink: 0;
-    }
+    .featured-strip-wrap { flex-shrink: 0; }
+
     // Browsing the line-up: the new thumbnail turns in like a flipped card,
     // from the side the arrow / strip pick pointed to (Card3 FEATURED_FLIP_MS).
-    .img-wrap--flip-next {
-      animation: spotlight-flip-next 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
-    }
-    .img-wrap--flip-prev {
-      animation: spotlight-flip-prev 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
-    }
+    .img-wrap--flip-next { animation: spotlight-flip-next .45s var(--ease) both; }
+    .img-wrap--flip-prev { animation: spotlight-flip-prev .45s var(--ease) both; }
     @media (prefers-reduced-motion: reduce) {
       .img-wrap--flip-next,
-      .img-wrap--flip-prev {
-        animation: none;
-      }
+      .img-wrap--flip-prev { animation: none; }
     }
-    h2 {
-      -webkit-line-clamp: 3;
-      margin-top: 4px;
-    }
-    .bottom-action {
-      margin-top: auto;
-    }
+    h2 { -webkit-line-clamp: 3; }
   }
 
-  // No hover zoom here: the transform would make the card its own stacking context
-  // and put the arrows under the hover preview (z-index 4).
-  @media (hover: hover) {
-    &:hover { transform: none; }
-  }
-
-  // "Spotlight" over the top-left of the big thumbnail; above the hover preview
-  // like the arrows, so it stays while the preview plays. A PRO badge moves
-  // below it.
+  // "Spotlight" over the top-left of the big thumbnail, above the hover preview
+  // like the arrows, so it stays while the preview plays.
   .card-spotlight {
     position: absolute;
     top: 8px;
@@ -659,181 +439,131 @@ html[data-card-size="large"] { --card-min-w: 420px; }
     pointer-events: none;
   }
   .card-spotlight-badge {
-    padding: 3px 10px;
-    border-radius: 999px;
-    // The theme's own surface and text, light or dark, rather than the accent
-    background: var(--bg-elevated);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 10px;
+    border-radius: 8px;
+    background: var(--cyan);
+    color: var(--bg);
     font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    font-weight: 900;
+    letter-spacing: .06em;
     text-transform: uppercase;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
   }
-  // The size toggle beside it, same look
+  // The size toggle beside it
   .card-spotlight-size {
     width: 24px;
     height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     padding: 0;
-    border-radius: 50%;
-    background: var(--bg-elevated);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
-    font-size: 13px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--media-scrim-strong);
+    color: var(--on-media);
     cursor: pointer;
     pointer-events: auto;
-    // Solid on hover too: --bg-hover is a see-through tint, which over a
-    // thumbnail made the button look like it was fading away
-    &:hover { background: color-mix(in srgb, var(--bg-elevated) 85%, var(--text-primary)); }
-    &:focus-visible { outline: 2px solid var(--accent-primary); }
+    &:hover { background: var(--media-black); }
   }
-  .card-gated-badge {
-    top: 38px;
-  }
+  // Status pills move below the Spotlight row
+  .card-badges { top: 40px; }
 
   .featured-arrow {
     position: absolute;
     top: 50%;
     z-index: 7; // above the hover preview (4) and its controls
     transform: translateY(-50%);
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 0;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
-    font-size: 20px;
+    background: var(--media-scrim);
+    color: var(--on-media);
     cursor: pointer;
     opacity: 0;
-    transition: opacity 0.15s ease, background-color 0.15s ease;
+    transition: opacity var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
     &--prev { left: 8px; }
     &--next { right: 8px; }
-    &:hover { background: rgba(0, 0, 0, 0.8); }
-    &:focus-visible { opacity: 1; outline: 2px solid var(--accent-primary); }
+    &:hover { background: var(--media-scrim-strong); }
+    &:focus-visible { opacity: 1; }
   }
   &:hover .featured-arrow { opacity: 1; }
 
-  // Under the stats, filling the height that is left in the card: the thumbnails
-  // are exactly that tall and 16:9 wide, so how many show depends on the room,
-  // and the rest scroll sideways. The list itself is out of the flow, so the strip
-  // never makes the rows taller; it only takes the room they leave (48px at least).
-  &:has(.featured-strip) .bottom-action {
-    margin-top: 0;
-  }
+  // Under the stats, filling the height left in the card; the list is out of
+  // the flow, so the strip never makes the rows taller (48px at least).
   .featured-strip-wrap {
     position: relative;
     flex: 1 1 0;
     min-height: 48px;
-    padding: 8px 0;
+    padding: 8px 0 0;
   }
-  // Semi-transparent, over the ends of the list
   .featured-strip-arrow {
     position: absolute;
-    top: 50%;
+    top: calc(50% + 4px);
     z-index: 2;
     transform: translateY(-50%);
-    width: 26px;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border: 0;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.45);
-    color: #fff;
-    font-size: 16px;
+    background: var(--media-scrim);
+    color: var(--on-media);
     cursor: pointer;
-    transition: background-color 0.15s ease;
     &--prev { left: 2px; }
     &--next { right: 2px; }
-    &:hover { background: rgba(0, 0, 0, 0.75); }
-    &:focus-visible { outline: 2px solid var(--accent-primary); }
+    &:hover { background: var(--media-scrim-strong); }
   }
   .featured-strip {
-    --strip-gap: 6px;
     position: absolute;
-    inset: 8px 0;
+    inset: 8px 0 0;
     display: flex;
-    gap: var(--strip-gap);
-    padding: 0 4px;
+    gap: 6px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     overscroll-behavior-x: contain;
+    &::-webkit-scrollbar { display: none; }
   }
-  // With the strip there the title keeps to two lines, so the card still fits
-  // its two rows
-  &.card--featured-tall:has(.featured-strip) h2 {
-    -webkit-line-clamp: 2;
-  }
+  // With the strip there the title keeps to two lines, so the card fits its rows
+  &.card--featured-tall:has(.featured-strip) h2 { -webkit-line-clamp: 2; }
   .featured-strip-item {
-    // As tall as the strip, 16:9 wide
     flex: 0 0 auto;
     height: 100%;
     aspect-ratio: 16 / 9;
     scroll-snap-align: start;
     padding: 0;
-    border: none;
-    border-radius: 4px;
+    border: 0;
+    border-radius: 8px;
     overflow: hidden;
-    background: var(--skeleton-bg, rgba(150, 150, 150, 0.14));
+    @include v2.thumb-placeholder(6px);
     cursor: pointer;
-    opacity: 0.8;
-    transition: opacity 0.15s ease;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    &:hover { opacity: 1; }
+    opacity: .8;
+    transition: opacity var(--t-fast) var(--ease);
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    &:hover, &:focus-visible { opacity: 1; }
   }
 }
 
+// ── Shorts grid: 9:16 portrait thumbnails ──
 .card-container--shorts {
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); // ~1.5x larger
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 
-  @include respond(phone) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   .card .img-wrap {
-    // 9:16 aspect ratio container
     aspect-ratio: 9 / 16;
     height: auto;
     width: 100%;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
+    img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-// ── Hover-to-play preview overlay (single, reused; positioned over a card) ──
+// ── Hover-to-play preview overlay (single, reused; positioned over a thumbnail) ──
 // Global (not scoped to .card-container) so any grid can host it (e.g. playlists).
 .card-hover-overlay {
   position: absolute;
@@ -841,20 +571,19 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   left: 0;
   width: 0;
   height: 0;
-  border-radius: 5px;
+  border-radius: 12px;
   overflow: hidden;
   z-index: 4;
   visibility: hidden;
   pointer-events: none; // hover + clicks pass through to the card beneath
+  background: var(--media-black);
 
   &.active { visibility: visible; }
 
   // A preview that just ended fades out (FADE_OUT_MS in useHoverPreview.jsx).
-  // Only this state has a transition, so a new preview shows at once.
   &.leaving {
     opacity: 0;
-    transition: opacity 0.3s ease-in;
-
+    transition: opacity .3s ease-in;
     .card-hover-bar { pointer-events: none; }
   }
 
@@ -864,21 +593,17 @@ html[data-card-size="large"] { --card-min-w: 420px; }
     object-fit: cover;
     display: block;
     background: transparent;
-    opacity: 0; // hidden (instant) until ready — the poster covers this gap
+    opacity: 0; // hidden (instant) until ready, the poster covers this gap
     transform: scale(1.04);
   }
-  // Fades in from the thumbnail and settles from a slight zoom. The transitions
-  // live on the ready state only, so leaving it (moving to the next card) is
-  // instant and the previous clip's last frame never shows through.
   &.ready .card-hover-video {
     opacity: 1;
     transform: none;
-    transition: opacity 0.45s ease-out, transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+    transition: opacity .45s ease-out, transform .6s var(--ease);
   }
 
-  // Poster = the hovered card's thumbnail, covering the (reused) video until the
-  // new clip is actually playing. Prevents the previous clip's last frame from
-  // flashing when moving between cards, and shows the thumbnail while loading.
+  // Poster = the hovered card's thumbnail, covering the reused video until the
+  // new clip is actually playing.
   .card-hover-poster {
     position: absolute;
     inset: 0;
@@ -890,12 +615,12 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   }
   &.ready .card-hover-poster {
     opacity: 0;
-    transition: opacity 0.45s ease-out;
+    transition: opacity .45s ease-out;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .card-hover-video { transform: none; }
-    &.ready .card-hover-video { transition: opacity 0.2s linear; }
+    &.ready .card-hover-video { transition: opacity .2s linear; }
   }
 
   // Subtitles, sized + positioned for the small preview (above the scrub bar).
@@ -903,21 +628,16 @@ html[data-card-size="large"] { --card-min-w: 420px; }
     bottom: 22px;
     padding: 0 6px;
     z-index: 5;
-
-    .subtitle-overlay-text {
-      font-size: 16px; // ~1.5x larger
-      padding: 3px 8px;
-    }
+    .subtitle-overlay-text { font-size: 16px; padding: 3px 8px; }
   }
 
-  // Scrub bar — the only interactive part of the overlay. Lifted off the very
-  // bottom edge so the track + handle aren't clipped by the overlay's overflow.
+  // Scrub bar: the only interactive part of the overlay (4px accent, 28b)
   .card-hover-bar {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 26px; // generous hit area
+    height: 24px; // generous hit area
     display: none;
     cursor: pointer;
     pointer-events: auto;
@@ -928,10 +648,9 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       position: absolute;
       left: 0;
       right: 0;
-      bottom: 9px;
-      height: 5px;
-      border-radius: 3px;
-      background: rgba(255, 255, 255, 0.35);
+      bottom: 0;
+      height: 4px;
+      background: color-mix(in srgb, var(--on-media) 20%, transparent);
     }
   }
   &.ready .card-hover-bar { display: block; }
@@ -939,237 +658,77 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   .card-hover-bar-fill {
     position: absolute;
     left: 0;
-    bottom: 9px;
-    height: 5px;
-    border-radius: 3px;
-    background: var(--accent-primary, #e53935);
+    bottom: 0;
+    height: 4px;
+    background: var(--accent);
   }
   .card-hover-bar-handle {
     position: absolute;
-    bottom: 5px;
-    width: 13px;
-    height: 13px;
+    bottom: -4px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+    background: var(--accent);
     transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity var(--t-fast) var(--ease);
   }
+  .card-hover-bar:hover .card-hover-bar-handle { opacity: 1; }
 }
 
-// Loading spinner shown over a thumbnail until its first bits decode (or it
-// falls back). Sits on the neutral skeleton background of .img-wrap.
-@keyframes card-thumb-spin { to { transform: rotate(360deg); } }
-.card-thumb-spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 24px;
-  height: 24px;
-  margin: -12px 0 0 -12px;
-  border-radius: 50%;
-  border: 2px solid rgba(150, 150, 150, 0.35);
-  border-top-color: var(--accent-primary, #e0594b);
-  animation: card-thumb-spin 0.7s linear infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Live-stream tile badge (top-right) — streams rendered as regular cards */
-.card .img-wrap .card-live-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 3;
-  background: linear-gradient(135deg, #ff2a4a, #c00e2c);
-  color: #fff;
-  font-size: var(--card-fs);
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
-  box-shadow: 0 0 10px rgba(227, 19, 55, 0.5);
-  pointer-events: none;
-}
-
-// 1st-level v2 tag (category) on large cards, sitting left of the view count.
-.card-topic-chip {
-  flex: 0 0 auto;
-  // `margin-left: auto` absorbs the row's free space (which is why the parent's
-  // space-between leaves none), so the chip and the view count end up flush —
-  // the right margin is what actually separates them.
-  margin-left: auto;
-  margin-right: 8px;
-  // Plain text, not a pill — it sits in the same muted stats row as the view
-  // count, so a bordered chip made it read as a button.
-  color: var(--text-secondary);
-  font-size: var(--card-fs);
-  font-weight: 400;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 46%;
-}
-
-// Desktop always has room, so the chip shows whatever the card layout. Only a
-// phone running the SMALL card layout hides it — there the tile is too tight.
-// `data-card-size` is set on <html> by App.jsx, so this needs no JS or resize
-// handling; toggling the setting or rotating the device just works.
-@media screen and (max-width: 767px) {
-  :root[data-card-size="small"] .card-topic-chip { display: none; }
-}
-
-
-
-/* 🔐 Supporters-only (gated) tile badge.
-   Top-LEFT on purpose: the live badge owns the top-right, and the card options
-   menu sits there too on touch devices. Mirrors the live badge's shape so the
-   two read as the same family of tile markers. */
-.card .img-wrap .card-gated-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  background: linear-gradient(135deg, #f5b301, #d18700);
-  color: #1a1a1a;
-  font-size: var(--card-fs);
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
-  box-shadow: 0 0 10px rgba(245, 179, 1, 0.45);
-  pointer-events: none;
-}
-
-
-/* "NEW since your last visit" tile badge (community pages). Same family as the
-   gated badge; the accent is a border + text, never a red fill. */
-.card .img-wrap .card-new-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 3;
-  background: rgba(0, 0, 0, 0.72);
-  color: #fff;
-  border: 1px solid var(--accent-primary, #e0594b);
-  font-size: var(--card-fs);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  padding: 0.15rem 0.5rem;
-  border-radius: 999px;
-  pointer-events: none;
-
-  &.card-new-badge--below { top: 36px; }
-}
-
-// The payout / upvote / comment / view badges are shared components (they also
-// render on the watch page and in recommendations) and each carries its own
-// `font-size: 12px`. Inside a card they follow the card's single size instead.
-// Scoped to .card on purpose — this must not change them anywhere else.
-.card {
-  .payout-amount-badge,
-  .upvote-count-badge,
-  .comment-count-badge,
-  .view-count-badge {
-    font-size: var(--card-fs);
-    font-weight: 400;
-
-    svg {
-      font-size: var(--card-icon-fs);
-      width: var(--card-icon-fs);
-      height: var(--card-icon-fs);
-    }
-  }
-
-  // AuthorBadge is a shared component and hardcodes `.author-name` to 13px/600.
-  // That single rule is why the creator name kept reading a size larger than
-  // the rest of the tile, most obviously on phones where everything else had
-  // stepped down. Two classes, so it beats the component's own one-class rule.
-  .author-badge .author-name,
-  .author-name {
-    font-size: var(--card-fs);
-    font-weight: 400;
-  }
-}
-
-// Warm-up user (on 3Speak, not on Hive yet): a small leaf right after the author
-// name. The group keeps the two together, since `.profile-view-wrap` spreads its
-// children with space-between. The leaf carries the hint (title attribute).
-.card .card-author-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  min-width: 0;
-}
-
-.card .card-incubation-leaf {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  color: #3a9d5d;
-  cursor: help;
-
-  [data-theme="dark"] & { color: #5cc47f; }
-}
-
-// Loading stand-ins in the card grid (GridSkeleton.jsx): the home tabs while
-// their first page loads, and the Discover Spotlight's block until its videos
-// arrive. Same grid cell, thumbnail shape and spacing as a real card.
+// ── Loading stand-ins in the card grid (GridSkeleton.jsx): same cell, thumbnail
+// shape and spacing as a real card, on the striped placeholder. ──
 .card-container .card.card--skeleton {
   pointer-events: none;
   justify-content: flex-start;
-  box-shadow: none;
 
   .card-skeleton-block {
     display: block;
-    background: var(--skeleton-bg, rgba(150, 150, 150, 0.14));
     border-radius: 6px;
+    @include v2.thumb-placeholder(6px);
     animation: card-skeleton-pulse 1.4s ease-in-out infinite;
   }
   .card-skeleton-thumb {
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-radius: 5px;
+    border-radius: 12px;
     flex-shrink: 0;
+    @include v2.thumb-placeholder;
   }
   .card-skeleton-body {
     display: flex;
+    gap: 10px;
+    padding: 10px 4px 4px;
+  }
+  .card-skeleton-lines {
+    display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: 12px 4px;
+    flex: 1;
+    min-width: 0;
   }
   .card-skeleton-line {
     height: 12px;
     width: 85%;
     &--short { width: 55%; }
-  }
-  .card-skeleton-author {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 4px;
+    &--meta { height: 10px; width: 40%; }
   }
   .card-skeleton-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
     flex-shrink: 0;
-  }
-  .card-skeleton-name {
-    height: 10px;
-    width: 40%;
+    @include v2.mobile { html[data-card-size="small"] & { display: none; } }
   }
 
   @media (hover: hover) {
-    &:hover { transform: none; box-shadow: none; }
+    &:hover { border-color: var(--border); outline-color: transparent; }
   }
 }
 
 @keyframes card-skeleton-pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.55; }
+  50% { opacity: .6; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1177,11 +736,11 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 }
 
 @keyframes spotlight-flip-next {
-  from { transform: perspective(1600px) rotateY(-90deg); filter: brightness(0.5); }
+  from { transform: perspective(1600px) rotateY(-90deg); filter: brightness(.5); }
   to { transform: perspective(1600px) rotateY(0deg); filter: brightness(1); }
 }
 
 @keyframes spotlight-flip-prev {
-  from { transform: perspective(1600px) rotateY(90deg); filter: brightness(0.5); }
+  from { transform: perspective(1600px) rotateY(90deg); filter: brightness(.5); }
   to { transform: perspective(1600px) rotateY(0deg); filter: brightness(1); }
 }

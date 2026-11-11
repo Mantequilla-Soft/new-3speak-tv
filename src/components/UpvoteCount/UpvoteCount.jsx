@@ -1,22 +1,29 @@
-import { FaHeart } from 'react-icons/fa';
+import { Icon } from '../v2/Icon';
 import { formatCountCompact } from '../../i18n';
 import './UpvoteCount.scss';
 
+// Vote count with the upvote arrow (the v2 vote glyph). `voted` fills the arrow
+// in accent. `onClick` makes the arrow vote; `children` stand in for it while a
+// vote is being sent (`loading`).
 function UpvoteCount({ count, voted, onClick, loading, onCountEnter, onCountLeave, onCountClick, size, children }) {
-  const iconSize = size ? Math.round(size * 1.08) : undefined;
+  const iconSize = size ? Math.round(size * 1.15) : 14;
 
   return (
     <div className={`upvote-count-badge${voted ? ' voted' : ''}`} style={size ? { fontSize: size } : undefined}>
       {loading ? (
         children
       ) : (
-        <FaHeart
+        <Icon
+          name="arrow_upward"
+          size={iconSize}
+          fill={!!voted}
+          weight={voted ? 700 : 500}
           className={`upvote-icon${onClick ? ' clickable' : ''}`}
-          size={iconSize || undefined}
           onClick={onClick}
         />
       )}
       <span
+        className="upvote-count-num"
         onMouseEnter={onCountEnter}
         onMouseLeave={onCountLeave}
         onClick={onCountClick}

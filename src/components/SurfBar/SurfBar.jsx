@@ -2,18 +2,18 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { MdSkipNext, MdKeyboardArrowUp, MdKeyboardArrowDown, MdClose } from 'react-icons/md';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { TAG_CATEGORIES } from '../../utils/tagsV2';
 import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import { fetchVideoDetails } from '../../lib/videoData';
 import {
-  getChannel, channelNumber, channelTitle, stepChannel, findNextOnChannel,
+  CHANNELS, getChannel, channelNumber, channelTitle, stepChannel, findNextOnChannel,
   markSeen, saveLastChannel, surfUrl, videoAuthor,
 } from '../../utils/surf';
 import { useTranslation } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Button, Dialog, DockTile, Eyebrow, Icon } from '../v2/ui';
+import { cx } from '../v2/helpers';
 import './SurfBar.scss';
 
 const toast = toastIn('Channel Surfing');
@@ -113,12 +113,13 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
 
   const stopSurfing = () => navigate(`/@${author}/${permlink}`, { replace: true });
 
-  useEffect(() => {
-    if (!guideOpen) return undefined;
-    const onKey = (e) => { if (e.key === 'Escape') setGuideOpen(false); };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [guideOpen]);
+  // Surprise me from the guide: one of your interests, or any channel.
+  const interests = useAppStore((st) => st.interests);
+  const surprise = () => {
+    const yours = Array.isArray(interests) ? interests.map(getChannel).filter((c) => c && !c.isCommunity) : [];
+    const pool = yours.length ? yours : CHANNELS;
+    changeChannel(pool[Math.floor(Math.random() * pool.length)].slug);
+  };
 
   const prev = stepChannel(slug, -1);
   const next = stepChannel(slug, 1);
@@ -150,36 +151,32 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
 
   if (!channel) return null;
 
+  const chNext = channelNumber(next);
+  const chPrev = channelNumber(prev);
+
   return (
-    <section className={`surf-bar${tuning ? ' is-tuning' : ''}`} aria-label={t('feeds.surf.remoteAria')}>
-      <div className="surf-bar__tuner">
-        <button
-          type="button"
-          className="surf-bar__display"
-          onClick={() => setGuideOpen(true)}
-          title={t('feeds.surf.openGuide')}
-        >
-          {/* Keyed on the video, so the static burst replays on every flip. */}
-          <span key={tuneKey} className="surf-bar__static" aria-hidden="true" />
-          <span className="surf-bar__ch">{t('feeds.surf.ch', { number: channelNumber(channel) })}</span>
+    <section className={cx('surf-bar', tuning && 'is-tuning')} aria-label={t('feeds.surf.remoteAria')}>
+      {/* The channel display opens the guide. */}
+      <button
+        type="button"
+        className="surf-bar__display"
+        onClick={() => setGuideOpen(true)}
+        title={t('feeds.surf.openGuide')}
+        aria-haspopup="dialog"
+      >
+        {/* Keyed on the video, so the static burst replays on every flip. */}
+        <span key={tuneKey} className="surf-bar__static" aria-hidden="true" />
+        <span className="surf-bar__ch">{t('feeds.surf.ch', { number: channelNumber(channel) })}</span>
+        <span className="surf-bar__text">
           <span className="surf-bar__name">
             <span aria-hidden="true">{channel.emoji}</span> {channelTitle(channel)}
           </span>
           <span className="surf-bar__live"><i aria-hidden="true" /> {tuning ? t('feeds.surf.tuningShort') : t('feeds.surf.onAir')}</span>
-        </button>
+        </span>
+        <Icon name="list" size={20} className="surf-bar__guide-icon" />
+      </button>
 
-        <div className="surf-bar__rocker" role="group" aria-label={t('feeds.surf.changeChannel')}>
-          <button type="button" onClick={() => changeChannel(next.slug)} disabled={tuning} title={t('feeds.surf.channelHintKey', { number: channelNumber(next), title: channelTitle(next), key: '↑' })}>
-            <MdKeyboardArrowUp aria-hidden="true" /><span className="sr-only">{t('feeds.surf.nextChannel')}</span>
-          </button>
-          <span className="surf-bar__rocker-label">{t('feeds.surf.chLabel')}</span>
-          <button type="button" onClick={() => changeChannel(prev.slug)} disabled={tuning} title={t('feeds.surf.channelHintKey', { number: channelNumber(prev), title: channelTitle(prev), key: '↓' })}>
-            <MdKeyboardArrowDown aria-hidden="true" /><span className="sr-only">{t('feeds.surf.prevChannel')}</span>
-          </button>
-        </div>
-
-      </div>
-
+      {/* Zap: the one primary action here. Up next rides along on wide screens. */}
       <button type="button" className="surf-bar__flip" onClick={flip} disabled={tuning} title={t('feeds.surf.nextVideoKey')}>
         <span className="surf-bar__flip-thumb" aria-hidden="true">
           {upNext ? (
@@ -190,58 +187,92 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
           <span className="surf-bar__flip-label">{tuning ? t('feeds.surf.tuning') : t('feeds.surf.zap')}</span>
           <span className="surf-bar__flip-next">{upNext?.title || t('feeds.surf.findingNext')}</span>
         </span>
-        <MdSkipNext className="surf-bar__flip-icon" aria-hidden="true" />
+        <Icon name="bolt" size={22} fill className="surf-bar__flip-icon" />
       </button>
 
-      {/* Last in the row on every screen size, so it never sits between the
-          channel rocker and Zap. */}
-      <button type="button" className="surf-bar__off" onClick={stopSurfing} title={t('feeds.surf.stopTitle')}>
-        <MdClose aria-hidden="true" /><span className="sr-only">{t('feeds.surf.stop')}</span>
-      </button>
+      <div className="surf-bar__docks" role="group" aria-label={t('feeds.surf.changeChannel')}>
+        <DockTile
+          icon="skip_previous"
+          label={`${t('feeds.surf.chLabel')} −`}
+          onClick={() => changeChannel(prev.slug)}
+          disabled={tuning}
+          aria-label={t('feeds.surf.prevChannel')}
+          title={t('feeds.surf.channelHintKey', { number: chPrev, title: channelTitle(prev), key: '↓' })}
+        />
+        <DockTile
+          icon="skip_next"
+          label={`${t('feeds.surf.chLabel')} +`}
+          onClick={() => changeChannel(next.slug)}
+          disabled={tuning}
+          aria-label={t('feeds.surf.nextChannel')}
+          title={t('feeds.surf.channelHintKey', { number: chNext, title: channelTitle(next), key: '↑' })}
+        />
+        {/* Last in the row on every screen size, so it never sits between the
+            channel buttons and Zap. */}
+        <DockTile
+          icon="stop"
+          label={t('feeds.surf.stop')}
+          className="surf-bar__off"
+          onClick={stopSurfing}
+          aria-label={t('feeds.surf.stop')}
+          title={t('feeds.surf.stopTitle')}
+        />
+      </div>
 
       {overlayTarget && createPortal(
-        <div className={`surf-fs${overlayVisible ? ' is-visible' : ''}${tuning ? ' is-tuning' : ''}`} role="group" aria-label={t('feeds.surf.remoteAria')}>
+        <div className={cx('surf-fs', overlayVisible && 'is-visible', tuning && 'is-tuning')} role="group" aria-label={t('feeds.surf.remoteAria')}>
           <span className="surf-fs__ch">{t('feeds.surf.ch', { number: channelNumber(channel) })}</span>
           <span className="surf-fs__name">{channelTitle(channel)}</span>
-          <button type="button" onClick={() => changeChannel(prev.slug)} disabled={tuning} title={t('feeds.surf.channelHint', { number: channelNumber(prev), title: channelTitle(prev) })}>
-            <MdKeyboardArrowDown aria-hidden="true" /><span className="sr-only">{t('feeds.surf.prevChannel')}</span>
+          <button type="button" onClick={() => changeChannel(prev.slug)} disabled={tuning} title={t('feeds.surf.channelHint', { number: chPrev, title: channelTitle(prev) })} aria-label={t('feeds.surf.prevChannel')}>
+            <Icon name="skip_previous" size={20} fill />
           </button>
-          <button type="button" onClick={() => changeChannel(next.slug)} disabled={tuning} title={t('feeds.surf.channelHint', { number: channelNumber(next), title: channelTitle(next) })}>
-            <MdKeyboardArrowUp aria-hidden="true" /><span className="sr-only">{t('feeds.surf.nextChannel')}</span>
+          <button type="button" onClick={() => changeChannel(next.slug)} disabled={tuning} title={t('feeds.surf.channelHint', { number: chNext, title: channelTitle(next) })} aria-label={t('feeds.surf.nextChannel')}>
+            <Icon name="skip_next" size={20} fill />
           </button>
           <button type="button" className="surf-fs__flip" onClick={flip} disabled={tuning} title={t('feeds.surf.nextVideo')}>
-            {tuning ? t('feeds.surf.tuning') : t('feeds.surf.zap')} <MdSkipNext aria-hidden="true" />
+            {tuning ? t('feeds.surf.tuning') : t('feeds.surf.zap')} <Icon name="bolt" size={18} fill />
           </button>
         </div>,
         overlayTarget,
       )}
 
-      {guideOpen && createPortal(
-        <div className="surf-guide-overlay" onClick={() => setGuideOpen(false)}>
-          <div className="surf-guide" role="dialog" aria-label={t('feeds.surf.guide')} onClick={(e) => e.stopPropagation()}>
-            <ModalHeader closeOnEscape={false} title={t('feeds.surf.guide')} onClose={() => setGuideOpen(false)} />
-            {TAG_CATEGORIES.map((cat) => (
-              <div className="surf-guide__group" key={cat.slug}>
-                <div className="surf-guide__grid">
-                  {[cat.slug, ...cat.topics.map((topic) => topic.slug)].map(getChannel).map((c) => (
-                    <button
-                      key={c.slug}
-                      type="button"
-                      className={`surf-guide__ch${c.isCategory ? ' surf-guide__ch--category' : ''}${c.slug === slug ? ' is-current' : ''}`}
-                      onClick={() => changeChannel(c.slug)}
-                    >
-                      <span className="surf-guide__num">{channelNumber(c)}</span>
-                      <span className="surf-guide__emoji" aria-hidden="true">{c.emoji}</span>
-                      <span className="surf-guide__label">{channelTitle(c)}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
+      <Dialog
+        open={guideOpen}
+        onClose={() => setGuideOpen(false)}
+        title={t('feeds.surf.guide')}
+        closeLabel={t('common.actions.close')}
+        width={720}
+        className="surf-guide"
+        footer={(
+          <div className="surf-guide__keys" aria-hidden="true">
+            <span>↑ ↓ {t('feeds.surf.changeChannel')}</span>
+            <span>→ {t('feeds.surf.nextVideo')}</span>
           </div>
-        </div>,
-        document.body,
-      )}
+        )}
+      >
+        <div className="surf-guide__top">
+          <Button variant="primary" size={40} icon="casino" onClick={surprise}>{t('feeds.surf.surprise')}</Button>
+        </div>
+        {TAG_CATEGORIES.map((cat) => (
+          <div className="surf-guide__group" key={cat.slug}>
+            <Eyebrow>{t(cat.labelKey)}</Eyebrow>
+            <div className="surf-guide__grid">
+              {[cat.slug, ...cat.topics.map((topic) => topic.slug)].map(getChannel).map((c) => (
+                <button
+                  key={c.slug}
+                  type="button"
+                  className={cx('surf-guide__ch', c.isCategory && 'surf-guide__ch--category', c.slug === slug && 'is-current')}
+                  aria-current={c.slug === slug || undefined}
+                  onClick={() => changeChannel(c.slug)}
+                >
+                  <span className="surf-guide__num">{channelNumber(c)}</span>
+                  <span className="surf-guide__label"><span aria-hidden="true">{c.emoji}</span> {channelTitle(c)}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </Dialog>
     </section>
   );
 }

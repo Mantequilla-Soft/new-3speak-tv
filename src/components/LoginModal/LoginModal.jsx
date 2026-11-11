@@ -4,8 +4,6 @@ import { withReferrer, getStoredInvite } from '../../utils/referral';
 import { withLocale } from '../../utils/butrauthPopup';
 import { AiohaModal, useAioha } from "@aioha/react-ui";
 import { Providers, KeyTypes } from "@aioha/aioha";
-import { IoPower } from "react-icons/io5";
-import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useTranslation, Trans } from "react-i18next";
 import { ENABLE_METAMASK_SNAP, ENABLE_BUTRAUTH } from "../../utils/config";
@@ -13,10 +11,11 @@ import { useAppStore } from "../../lib/store";
 import AccountImg from "../HiveAvatar/AccountImg";
 import { listButrauthAccounts, forgetButrauthAccount } from "../../utils/butrauthAccounts";
 import { toastIn } from "../../utils/toast";
-import ModalHeader from "../ModalHeader/ModalHeader";
-import useDialog from "../../hooks/useDialog";
+import { Dialog, Button, IconButton, Banner, Icon } from "../v2/ui";
+import CommunityPanel from "./CommunityPanel";
 import "./LoginModal.scss";
-import mark from "../../assets/image/3S_mark.svg";
+// The look of aioha's own wallet modal (#aioha-modal), in the v2 design.
+import "./aioha-v2.scss";
 
 const toast = toastIn('Sign in');
 
@@ -26,12 +25,25 @@ const PROVIDER_NAMES = {
   peakvault: 'PeakVault', metamasksnap: 'MetaMask', custom: 'Wallet',
 };
 
+// The wallets on the "Log in" tile of the chooser (42a). Proper names, not copy.
+const WALLET_LIST = ['Keychain', 'HiveAuth', 'HiveSigner', 'PeakVault', 'Ledger', ...(ENABLE_METAMASK_SNAP ? ['MetaMask Snap'] : [])].join(', ');
+
+// aioha's provider tiles, by the name it prints → the Material Symbol shown in
+// place of its logo (§11 "Sign with": one icon set on the screen).
+const PROVIDER_ICONS = {
+  keychain: 'extension', 'peak vault': 'account_balance_wallet', peakvault: 'account_balance_wallet',
+  hiveauth: 'qr_code_2', hivesigner: 'open_in_new', ledger: 'usb', metamask: 'wallet',
+  'metamask snap': 'wallet', 'view only': 'visibility',
+};
+
 /**
  * Custom login modal wrapper that adds Butter Auth + MetaMask Snap login options to AiohaModal
  */
-function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, intent }) {
+function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
   const { t } = useTranslation();
   const [topContainer, setTopContainer] = useState(null);
+  const [bottomContainer, setBottomContainer] = useState(null);
+  const [asideContainer, setAsideContainer] = useState(null);
   // 'choose' = sign-up / log-in chooser screen; 'providers' = wallet/provider list.
   const [step, setStep] = useState('choose');
   const { aioha } = useAioha();
@@ -120,7 +132,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       // works only for whichever button the user happened to press.
       const url = withLocale(withReferrer(data.url));
       // Sized to the screen (capped) rather than a fixed 480x720: the signup
-      // flow is tall — explainer, provider buttons, captcha — and was scrolling
+      // flow is tall (explainer, provider buttons, captcha) and was scrolling
       // inside a small popup.
       const w = Math.min(640, Math.max(420, Math.round(window.screen.availWidth * 0.42)));
       const h = Math.min(980, Math.max(660, Math.round(window.screen.availHeight * 0.92)));
@@ -128,7 +140,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       const top = window.screenY + Math.max(0, (window.outerHeight - h) / 2);
       const popup = window.open(url, 'butrauth-login', `width=${w},height=${h},left=${left},top=${top}`);
       if (!popup) { window.location.href = url; return; } // popup blocked → full-page redirect
-      // Keep a handle so the opener can close the popup once login completes —
+      // Keep a handle so the opener can close the popup once login completes,
       // more reliable than the popup closing itself after the cross-origin hop.
       window.__butrauthLoginPopup = popup;
     } catch (err) {
@@ -141,35 +153,53 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
   useEffect(() => {
     if (!displayed || step !== 'providers') {
       setTopContainer(null);
+      setBottomContainer(null);
+      setAsideContainer(null);
       return;
     }
 
-    const replaceHiveAuthQRText = () => {
+    // aioha's own English → the app's words (and the app's language).
+    const replaceAiohaText = () => {
       const modal = document.querySelector('#aioha-modal');
       if (!modal) return;
-      const originalText = 'Scan the QR code using a HiveAuth-compatible mobile app.';
-      const newText = t('auth.loginModal.hiveAuthQrHint');
+      const swaps = {
+        'Scan the QR code using a HiveAuth-compatible mobile app.': t('auth.loginModal.hiveAuthQrHint'),
+        'Connect with one of our available Hive wallet providers.': t('auth.loginModal.loginWithWallet'),
+      };
       modal.querySelectorAll('p').forEach((p) => {
-        if (p.textContent.trim() === originalText) {
-          p.textContent = newText;
-        }
+        const next = swaps[p.textContent.trim()];
+        if (next) p.textContent = next;
       });
     };
 
-    const styleHiveAuthQR = () => {
-      const modal = document.querySelector('#aioha-modal');
-      if (!modal) return;
-      // The QR is inside a class-less <a> wrapping a div with w-64/aspect-square
-      modal.querySelectorAll('a:not([class])').forEach((a) => {
-        const inner = a.querySelector('div.aspect-square');
-        if (!inner) return;
-        a.style.display = 'block';
-        a.style.textAlign = 'center';
-        inner.style.width = '256px';
-        inner.style.maxWidth = '100%';
-        inner.style.marginLeft = 'auto';
-        inner.style.marginRight = 'auto';
+    // aioha's provider tiles are <a>s without an href: not reachable by keyboard.
+    // Make each one a focusable button, and tag it with the Material Symbol
+    // that replaces its logo (aioha-v2.scss draws it from data-icon).
+    const tagProviders = () => {
+      document.querySelectorAll('#aioha-modal ul > li > a').forEach((a) => {
+        if (a.dataset.v2) return;
+        a.dataset.v2 = '1';
+        const name = (a.querySelector('span.flex-1')?.textContent || a.textContent || '').trim().toLowerCase();
+        if (PROVIDER_ICONS[name]) a.dataset.icon = PROVIDER_ICONS[name];
+        a.setAttribute('role', 'button');
+        a.tabIndex = 0;
+        a.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); a.click(); }
+        });
       });
+    };
+
+    // The community half of the split login window (07e), on every aioha page.
+    const injectAside = () => {
+      const panel = document.querySelector('#aioha-modal > div > div');
+      if (!panel) return;
+      let aside = [...panel.children].find((c) => c.classList.contains('login-aside'));
+      if (!aside) {
+        aside = document.createElement('div');
+        aside.className = 'login-aside';
+      }
+      if (panel.firstChild !== aside) panel.insertBefore(aside, panel.firstChild);
+      setAsideContainer(aside);
     };
 
     const injectMetaMaskButton = () => {
@@ -191,7 +221,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
       a.innerHTML = `
         <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg"
              alt="MetaMask" style="width:32px;height:32px;" />
-        <span class="flex-1 ms-3 whitespace-nowrap" style="font-size:14px;font-weight:500;">MetaMask Snap</span>
+        <span class="flex-1 ms-3 whitespace-nowrap">MetaMask Snap</span>
       `;
       a.classList.add('metamask-snap-item');
       a.addEventListener('click', async (e) => {
@@ -201,7 +231,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
         const username = prompt(t('auth.loginModal.enterUsername'));
         if (!username) return;
         try {
-          // MetaMask Snap must login with Active key — contract calls require
+          // MetaMask Snap must login with Active key: contract calls require
           // Active authority and the snap derives different keys per role.
           const result = await aioha.login(Providers.MetaMaskSnap, username.trim(), {
             msg: loginOptions?.msg || 'Login',
@@ -244,7 +274,7 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
           if (tr.cells[2]) tr.cells[2].innerHTML = '';
         } else {
           tr = document.createElement('tr');
-          tr.innerHTML = '<td style="padding:16px 20px;font-size:14px;font-weight:500"></td><td style="padding:16px 12px;font-size:12px;opacity:.7">butter auth</td>';
+          tr.innerHTML = '<td></td><td><span>butter auth</span></td>';
           tr.cells[0].textContent = acc.name;
         }
         tr.classList.add('butrauth-switch-row');
@@ -274,25 +304,28 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
 
     const injectButton = () => {
       watchModal();
+      injectAside();
       injectButrauthAccounts();
-      replaceHiveAuthQRText();
-      styleHiveAuthQR();
+      replaceAiohaText();
       if (ENABLE_METAMASK_SNAP) injectMetaMaskButton();
+      tagProviders();
       const modalContent = document.querySelector('#aioha-modal > div > div');
       if (modalContent) {
         // Only show on provider selection page (check for provider list)
         const providerList = modalContent.querySelector('ul');
         if (!providerList) {
-          // Not on provider selection page — tear the injected section back down.
+          // Not on provider selection page: tear the injected sections back down.
           modalContent.querySelector('.login-top-section')?.remove();
+          modalContent.querySelector('.login-bottom-section')?.remove();
           setTopContainer(null);
+          setBottomContainer(null);
           return;
         }
 
-        // TOP section (Recommended + ButrAuth + "General Hive Logins" heading)
-        // goes ABOVE the wallet-provider list so ButrAuth is the prominent,
-        // first-seen option. Insert into the list's ACTUAL parent — the <ul> is
-        // a descendant of modalContent, not necessarily a direct child.
+        // TOP section (Recommended + ButrAuth) goes ABOVE the wallet-provider
+        // list so ButrAuth is the prominent, first-seen option. Insert into the
+        // list's ACTUAL parent: the <ul> is a descendant of modalContent, not
+        // necessarily a direct child.
         const listParent = providerList.parentNode;
         let top = modalContent.querySelector('.login-top-section');
         if (!top) {
@@ -303,6 +336,17 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
           listParent.insertBefore(top, providerList);
         }
         setTopContainer(top);
+
+        // BOTTOM section ("No account? Sign up", 07e) right after the list.
+        let bottom = modalContent.querySelector('.login-bottom-section');
+        if (!bottom) {
+          bottom = document.createElement('div');
+          bottom.className = 'login-bottom-section';
+        }
+        if (listParent && providerList.nextElementSibling !== bottom) {
+          listParent.insertBefore(bottom, providerList.nextSibling);
+        }
+        setBottomContainer(bottom);
       }
     };
 
@@ -326,171 +370,216 @@ function LoginModal({ displayed, onLogin, onClose, loginTitle, loginOptions, int
     };
   }, [displayed, step, t]);
 
+  // aioha's wallet modal has no Escape key of its own; ours do (Dialog).
+  useEffect(() => {
+    if (!displayed || step !== 'providers') return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') onClose?.(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [displayed, step, onClose]);
+
   // Butter Auth is offered on the provider list in every state, also on "Change
   // account" from a wallet session: a Butter Auth login ends the wallet session
   // (endWalletSession, called where the login completes).
   const showLoginExtras = displayed && step === 'providers';
   // Asked once per page load and shared by every entry point.
   const signupPossible = useSignupPossible();
-  // Our own two screens (the chooser and the signup fallback); aioha's wallet
-  // modal is a dialog of its own.
-  const dialog = useDialog(onClose, { active: displayed && (step === 'choose' || step === 'signup') });
+  // "No account? Sign up" under the wallets: only for somebody signed out.
+  const offerSignupOnWallets = ENABLE_BUTRAUTH && signupPossible.possible && !currentName && !isManteAuth && !aioha.isLoggedIn();
+
+  const chooserOpen = !!displayed && (step === 'choose' || step === 'signup');
+  const chooserTitle = step === 'signup'
+    ? t('auth.loginModal.openingSignup')
+    : isManteAuth ? t('auth.loginModal.signedInTitle') : t('auth.loginModal.welcomeTitle');
+
+  const cancel = <Button variant="ghost" block className="login-split__cancel" onClick={onClose}>{t('common.actions.cancel')}</Button>;
+
+  // The "You're signed in" change-account screen for Butter Auth users (42a).
+  const signedInBody = (
+    <>
+      <p className="login-split__sub">
+        {user
+          ? <Trans i18nKey="auth.loginModal.signedInAs" values={{ user }} components={{ b: <strong /> }} />
+          : t('auth.loginModal.signedIn')}
+      </p>
+      {(walletAccounts.length > 0 || butrAccounts.length > 0) && (
+        <div className="login-switch">
+          <div className="v2-eyebrow">{t('auth.loginModal.switchTo')}</div>
+          <ul className="login-switch__list">
+            {walletAccounts.map((a) => (
+              <li key={`w:${a.name}`} className="login-switch__row">
+                <button type="button" className="login-switch__item" onClick={() => switchToWallet(a.name)}>
+                  <AccountImg className="login-switch__avatar" account={a.name} alt="" />
+                  <span className="login-switch__text">
+                    <span className="login-switch__name">@{a.name}</span>
+                    <span className="login-switch__via">{PROVIDER_NAMES[a.provider] || a.provider}</span>
+                  </span>
+                  <Icon name="chevron_right" size={18} className="login-switch__go" />
+                </button>
+              </li>
+            ))}
+            {butrAccounts.map((a) => (
+              <li key={`b:${a.name}`} className="login-switch__row">
+                <button type="button" className="login-switch__item" onClick={() => startButrauthFlow()}>
+                  {a.incubation
+                    ? <span className="login-switch__avatar login-switch__avatar--initial">{a.name.charAt(0).toUpperCase()}</span>
+                    : <AccountImg className="login-switch__avatar" account={a.name} alt="" />}
+                  <span className="login-switch__text">
+                    <span className="login-switch__name">{a.incubation ? a.name : `@${a.name}`}</span>
+                    <span className="login-switch__via">Butter Auth</span>
+                  </span>
+                </button>
+                <IconButton
+                  icon="close"
+                  size={32}
+                  variant="ghost"
+                  round
+                  className="login-switch__forget"
+                  onClick={() => forgetButr(a.name)}
+                  label={t('auth.loginModal.forgetAccount')}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <Button variant="secondary" block icon="person_add" onClick={() => setStep('providers')}>
+        {t('auth.loginModal.addAccount')}
+      </Button>
+      <Button variant="danger" block icon="logout" onClick={handleLogout}>
+        {t('common.actions.logout')}
+      </Button>
+      <div className="login-split__spacer" />
+      {cancel}
+    </>
+  );
+
+  // "Welcome to 3Speak": sign up (recommended) or log in (42a).
+  const welcomeBody = (
+    <>
+      <p className="login-split__sub">
+        {ENABLE_BUTRAUTH ? t('auth.loginModal.welcomeSubSignup') : t('auth.loginModal.welcomeSubLogin')}
+      </p>
+
+      {/* Hidden when Butter Auth says no account can be created from this
+          address: a capped network, or a VPN. Offering the button anyway means
+          somebody signs in, picks a name, generates keys and is refused at the
+          last step. The check fails OPEN, so a failed request still shows it. */}
+      {ENABLE_BUTRAUTH && signupPossible.possible && (
+        <button type="button" className="login-option is-recommended" onClick={() => startButrauthFlow(true)}>
+          <Icon name="person_add" size={22} className="login-option__icon" />
+          <span className="login-option__body">
+            <b>{t('common.actions.signUp')} <span className="login-option__aside">{t('auth.loginModal.recommended')}</span></b>
+            <span>{t('auth.loginModal.signupSubtitle')}</span>
+          </span>
+          <Icon name="arrow_forward" size={18} className="login-option__go" />
+        </button>
+      )}
+      {ENABLE_BUTRAUTH && !signupPossible.possible && (
+        <Banner tone="warn" icon={signupPossible.reason === 'datacenter_ip' ? 'vpn_lock' : 'public_off'}>
+          {signupPossible.reason === 'datacenter_ip'
+            ? t('auth.loginModal.signupBlockedVpn')
+            : t('auth.loginModal.signupBlockedNetwork')}
+        </Banner>
+      )}
+
+      <button type="button" className="login-option" onClick={() => setStep('providers')}>
+        <Icon name="login" size={22} className="login-option__icon" />
+        <span className="login-option__body">
+          <b>{ENABLE_BUTRAUTH ? t('auth.loginModal.loginWithButrauthOrWallet') : t('auth.loginModal.loginWithWallet')}</b>
+          <span>{WALLET_LIST}</span>
+        </span>
+        <Icon name="arrow_forward" size={18} className="login-option__go" />
+      </button>
+      <div className="login-split__spacer" />
+      {cancel}
+    </>
+  );
+
+  // Signup intent from the nav: the Butter Auth account-creation popup is
+  // already opening; this is just the fallback if it was blocked.
+  const signupBody = (
+    <>
+      <div className="login-split__status">
+        <Icon name="progress_activity" size={18} className="v2-spin" />
+        <span>{t('auth.loginModal.openingSignupHint')}</span>
+      </div>
+      <Button variant="secondary" block icon="open_in_new" onClick={() => startButrauthFlow(true)}>
+        {t('auth.loginModal.reopenSignup')}
+      </Button>
+      <Button variant="secondary" block icon="login" onClick={() => setStep('providers')}>
+        {t('auth.loginModal.loginInstead')}
+      </Button>
+      <div className="login-split__spacer" />
+      {cancel}
+    </>
+  );
 
   return (
     <>
       {/* Chooser: the "You're signed in" change-account screen for Butter Auth
           users, and (for logged-out users with no explicit nav intent, i.e.
           mobile bottom-nav / the /login route) the Welcome login-or-signup pick.
-          Desktop nav buttons pass an intent and skip this entirely. */}
-      {displayed && step === 'choose' && (
-        <div className="login-chooser-overlay" onMouseDown={onClose}>
-          <div className="login-chooser" {...dialog.props} onMouseDown={(e) => e.stopPropagation()}>
-            <ModalHeader
-              title={isManteAuth ? t('auth.loginModal.signedInTitle') : t('auth.loginModal.welcomeTitle')}
-              titleId={dialog.titleId}
-              onClose={onClose}
-            />
-            <img className="login-chooser-mark" src={mark} alt="3Speak" />
-            {isManteAuth ? (
-              <>
-                <p className="login-chooser-sub">
-                  {user
-                    ? <Trans i18nKey="auth.loginModal.signedInAs" values={{ user }} components={{ b: <strong /> }} />
-                    : t('auth.loginModal.signedIn')}
-                </p>
-                {(walletAccounts.length > 0 || butrAccounts.length > 0) && (
-                  <div className="login-switch">
-                    <div className="login-switch__label">{t('auth.loginModal.switchTo')}</div>
-                    <ul className="login-switch__list">
-                      {walletAccounts.map((a) => (
-                        <li key={`w:${a.name}`} className="login-switch__row">
-                          <button type="button" className="login-switch__item" onClick={() => switchToWallet(a.name)}>
-                            <AccountImg className="login-switch__avatar" account={a.name} alt="" />
-                            <span className="login-switch__name">@{a.name}</span>
-                            <span className="login-switch__via">{PROVIDER_NAMES[a.provider] || a.provider}</span>
-                          </button>
-                        </li>
-                      ))}
-                      {butrAccounts.map((a) => (
-                        <li key={`b:${a.name}`} className="login-switch__row">
-                          <button type="button" className="login-switch__item" onClick={() => startButrauthFlow()}>
-                            {a.incubation
-                              ? <span className="login-switch__avatar login-switch__avatar--initial">{a.name.charAt(0).toUpperCase()}</span>
-                              : <AccountImg className="login-switch__avatar" account={a.name} alt="" />}
-                            <span className="login-switch__name">{a.incubation ? a.name : `@${a.name}`}</span>
-                            <span className="login-switch__via">Butter Auth</span>
-                          </button>
-                          <button
-                            type="button"
-                            className="login-switch__forget"
-                            onClick={() => forgetButr(a.name)}
-                            aria-label={t('auth.loginModal.forgetAccount')}
-                            title={t('auth.loginModal.forgetAccount')}
-                          >
-                            <X size={14} />
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                <button className="login-chooser-login" onClick={() => setStep('providers')}>
-                  <span style={{ display: 'block' }}>{t('auth.loginModal.addAccount')}</span>
-                  <span style={{ display: 'block', fontWeight: 400, fontSize: '12.5px', opacity: 0.7, marginTop: '2px' }}>
-                    {ENABLE_BUTRAUTH ? t('auth.loginModal.loginWithButrauthOrWallet') : t('auth.loginModal.loginWithWallet')}
-                  </span>
-                </button>
-                <button className="login-chooser-login" onClick={handleLogout}>
-                  <IoPower style={{ marginRight: 8, verticalAlign: 'middle' }} /> {t('common.actions.logout')}
-                </button>
-                <button className="login-chooser-cancel" onClick={onClose}>{t('common.actions.cancel')}</button>
-              </>
-            ) : (
-              <>
-                <p className="login-chooser-sub">
-                  {ENABLE_BUTRAUTH
-                    ? t('auth.loginModal.welcomeSubSignup')
-                    : t('auth.loginModal.welcomeSubLogin')}
-                </p>
-
-                {/* Hidden when Butter Auth says no account can be created from
-                    this address -- a capped network, or a VPN. Offering the
-                    button anyway means somebody signs in, picks a name,
-                    generates keys and is refused at the last step. The check
-                    fails OPEN, so a failed request still shows the button. */}
-                {ENABLE_BUTRAUTH && signupPossible.possible && (
-                  <button className="login-chooser-signup" onClick={() => startButrauthFlow(true)}>
-                    <span className="butrauth-text">
-                      <span className="butrauth-title">{t('common.actions.signUp')}</span>
-                      <span className="butrauth-subtitle">{t('auth.loginModal.signupSubtitle')}</span>
-                    </span>
-                  </button>
-                )}
-                {ENABLE_BUTRAUTH && !signupPossible.possible && (
-                  <p className="login-chooser-sub" style={{ marginTop: 0 }}>
-                    {signupPossible.reason === 'datacenter_ip'
-                      ? t('auth.loginModal.signupBlockedVpn')
-                      : t('auth.loginModal.signupBlockedNetwork')}
-                  </p>
-                )}
-
-                <button className="login-chooser-login" onClick={() => setStep('providers')}>
-                  <span style={{ display: 'block' }}>{t('common.actions.login')}</span>
-                  <span style={{ display: 'block', fontWeight: 400, fontSize: '12.5px', opacity: 0.7, marginTop: '2px' }}>
-                    {ENABLE_BUTRAUTH ? t('auth.loginModal.loginWithButrauthOrWallet') : t('auth.loginModal.loginWithWallet')}
-                  </span>
-                </button>
-                <button className="login-chooser-cancel" onClick={onClose}>{t('common.actions.cancel')}</button>
-              </>
-            )}
+          Desktop nav buttons pass an intent and skip this entirely. Same split
+          window (07e) as the wallet list it leads to, so nothing jumps. */}
+      <Dialog
+        open={chooserOpen}
+        onClose={onClose}
+        title={chooserTitle}
+        head={false}
+        width={640}
+        className="login-split"
+        bodyClassName="login-split__body"
+      >
+        <CommunityPanel />
+        <div className="login-split__main">
+          <div className="login-split__head">
+            <h2 className="login-split__title">{chooserTitle}</h2>
+            <IconButton icon="close" label={t('common.actions.close')} variant="ghost" round onClick={onClose} />
+          </div>
+          <div className="login-split__content">
+            {step === 'signup' ? signupBody : isManteAuth ? signedInBody : welcomeBody}
           </div>
         </div>
-      )}
-      {/* Signup intent from the nav: the Butter Auth account-creation popup is
-          already opening; this is just the fallback if it was blocked. */}
-      {displayed && step === 'signup' && (
-        <div className="login-chooser-overlay" onMouseDown={onClose}>
-          <div className="login-chooser" {...dialog.props} onMouseDown={(e) => e.stopPropagation()}>
-            <ModalHeader title={t('auth.loginModal.openingSignup')} titleId={dialog.titleId} onClose={onClose} />
-            <img className="login-chooser-mark" src={mark} alt="3Speak" />
-            <p className="login-chooser-sub">
-              {t('auth.loginModal.openingSignupHint')}
-            </p>
-            <button className="login-chooser-login" onClick={() => startButrauthFlow(true)}>
-              <span style={{ display: 'block' }}>{t('auth.loginModal.reopenSignup')}</span>
-            </button>
-            <button className="login-chooser-login" onClick={() => setStep('providers')}>
-              <span style={{ display: 'block' }}>{t('auth.loginModal.loginInstead')}</span>
-            </button>
-            <button className="login-chooser-cancel" onClick={onClose}>{t('common.actions.cancel')}</button>
-          </div>
-        </div>
-      )}
+      </Dialog>
       <AiohaModal
         key={aiohaKey}
         displayed={displayed && step === 'providers'}
         onLogin={onLogin}
         onClose={onClose}
-        loginTitle={loginTitle}
+        loginTitle={t('common.actions.login')}
         loginOptions={loginOptions}
       />
-      {showLoginExtras && topContainer && createPortal(
-        <>
-          {ENABLE_BUTRAUTH && (
+      {showLoginExtras && asideContainer && createPortal(<CommunityPanel />, asideContainer)}
+      {showLoginExtras && topContainer && ENABLE_BUTRAUTH && createPortal(
+        <button
+          type="button"
+          className="butrauth-login-btn"
+          onClick={(e) => { e.stopPropagation(); startButrauthFlow(); }}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          <img src="/butrauth-logo.png" alt="" width={28} height={28} />
+          <span className="butrauth-text">
+            <span className="butrauth-title">Butter Auth <span className="recommended-suffix">{t('auth.loginModal.recommended')}</span></span>
+            <span className="butrauth-subtitle">{t('auth.loginModal.butrauthSubtitle')}</span>
+          </span>
+          <Icon name="arrow_forward" size={18} className="butrauth-go" />
+        </button>,
+        topContainer
+      )}
+      {showLoginExtras && bottomContainer && offerSignupOnWallets && createPortal(
+        <p className="login-signup-line">
+          {t('auth.loginModal.noAccount')}{' '}
           <button
-            className="butrauth-login-btn"
-            onClick={(e) => { e.stopPropagation(); startButrauthFlow(); }}
+            type="button"
+            className="login-signup-line__link"
+            onClick={(e) => { e.stopPropagation(); setStep('signup'); startButrauthFlow(true); }}
             onMouseDown={(e) => e.stopPropagation()}
           >
-            <img src="/butrauth-logo.png" alt="" width={32} height={32} />
-            <span className="butrauth-text">
-              <span className="butrauth-title">Butter Auth <span className="recommended-suffix">{t('auth.loginModal.recommended')}</span></span>
-              <span className="butrauth-subtitle">{t('auth.loginModal.butrauthSubtitle')}</span>
-            </span>
+            {t('common.actions.signUp')}
           </button>
-          )}
-        </>,
-        topContainer
+        </p>,
+        bottomContainer
       )}
     </>
   );

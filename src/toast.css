@@ -1,128 +1,149 @@
 /* ───────────────────────────────────────────────────────────────────────────
-   3Speak-styled sonner toasts (configured on the <Toaster/> in App.jsx).
-   card-bg surface · type-coloured rail down the left edge · icon on the left
-   beside the text · inline close (×) · swipe-right to dismiss.
+   Toasts = the top "island" (STYLE_GUIDE §7, designs 07f · 17i · 34d).
+   One shape for every toast: a text-filled pill at the top centre, 44 tall,
+   the category (utils/toast.js puts it in the title) as a small label over the
+   message, and an icon in a round chip whose colour comes from the type:
+   success and info = cyan, error and warning = accent, loading = muted.
 
-   The rail carries the status so the colour is readable before the words are,
-   without washing the whole surface in it — which stops mattering after one
-   toast and starts shouting at six, and six is what visibleToasts allows.
-
-   Positioning lives on the <Toaster/>, not here: the `offset` prop hangs off
-   --nav-top-offset so the stack always clears the title bar. Toasts used to
-   land on top of the user icon, which is exactly what someone is reaching for
-   when the login messages fire.
+   The <Toaster/> props in App.jsx place it (top-center, under the top bar via
+   --nav-top-offset) and set the icons (Material Symbols). Sonner styles its
+   toasts with [data-styled] attribute selectors; the selectors here carry one
+   more attribute so they win without !important wherever possible.
    ─────────────────────────────────────────────────────────────────────────── */
 
-.ts-toast {
-  position: relative;
-  display: flex !important;
-  align-items: flex-start !important;
-  gap: 11px !important;
-  /* Extra left padding is the rail's 3px plus the same 12px everything else
-     gets, so the icon sits on one vertical line with the text below it. */
-  padding: 12px 14px 12px 15px !important;
-  background: var(--card-bg) !important;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28) !important;
-  overflow: hidden;
-  font-size: 13.5px;
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast {
+  --ts-tone: color-mix(in srgb, var(--bg) 70%, var(--text));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 6px 8px 6px 6px;
+  border: 0;
+  border-radius: 22px;
+  background: var(--text);
+  color: var(--bg);
+  box-shadow: var(--shadow-float);
+  font-family: var(--font-sans);
+  font-size: 13px;
 }
 
-/* Lighter drop on the light theme: the dark theme's shadow reads as a smudge
-   on a white page rather than as elevation. */
-[data-theme='light'] .ts-toast {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10) !important;
+/* A toast with no icon (plain toast()) keeps the text off the pill's edge. */
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast:not(:has([data-icon])) {
+  padding-left: 16px;
 }
 
-/* The rail. Full bleed top to bottom, so a two-line toast gets a taller one
-   rather than a stub floating beside the first line. */
-.ts-toast::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 3px;
-  background: var(--ts-accent, var(--border-color));
+/* One custom property per type feeds the icon chip. */
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='success'],
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='info'] { --ts-tone: var(--cyan); }
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='error'],
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='warning'] { --ts-tone: var(--accent); }
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='loading'] { --ts-tone: color-mix(in srgb, var(--bg) 70%, var(--text)); }
+
+/* Icon chip: 32 round, filled with the type colour, the glyph in the ground
+   colour (dark on the light pill, light on the dark one). */
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-icon].ts-toast-icon {
+  order: 1;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--ts-tone);
+  color: var(--bg);
+}
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-icon].ts-toast-icon > * {
+  flex: none;
+}
+/* Sonner's own spinner for loading toasts, drawn in the ground colour. */
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-icon] .sonner-loading-bar {
+  background: var(--bg);
 }
 
-/* One custom property per type feeds both the rail and the icon, so those two
-   can never drift apart. A plain toast() with no type gets the neutral
-   fallback above rather than borrowing a status colour it did not ask for. */
-.ts-toast[data-type='success'] { --ts-accent: #22c55e; }
-.ts-toast[data-type='error']   { --ts-accent: var(--accent-primary); }
-.ts-toast[data-type='warning'] { --ts-accent: #f5a623; }
-.ts-toast[data-type='info']    { --ts-accent: #3b9df8; }
-.ts-toast[data-type='loading'] { --ts-accent: var(--text-secondary); }
-
-/* Icon left, text, close right. Sonner renders the close button first in the
-   DOM (it is absolutely positioned in its own stylesheet), so the running
-   order has to be stated rather than inherited. */
-.ts-toast-icon {
-  order: 1 !important;
-  margin: 1px 0 0 !important;
-  width: 20px !important;
-  height: 20px !important;
-  flex-shrink: 0;
-  color: var(--ts-accent, var(--text-secondary));
-}
-.ts-toast-icon svg {
-  width: 20px;
-  height: 20px;
-  display: block;
-}
-
-.ts-toast [data-content] {
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-content] {
   order: 2;
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-}
-.ts-toast-title {
-  color: var(--text-primary) !important;
-  font-weight: 600;
-  font-size: 13.5px;
-  line-height: 1.4;
-}
-.ts-toast-desc {
-  color: var(--text-secondary) !important;
-  font-size: 12.5px;
-  line-height: 1.45;
+  gap: 1px;
 }
 
-/* Close (×) — inline at the far right, not sonner's default corner badge.
-   Aligned to the top so it stays put whether the toast is one line or three. */
-.ts-toast-close {
-  order: 3 !important;
-  position: static !important;
-  transform: none !important;
-  top: auto !important;
-  right: auto !important;
-  left: auto !important;
-  margin: 1px 0 0 !important;
-  width: 22px !important;
-  height: 22px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: none !important;
-  border-radius: 7px !important;
-  background: transparent !important;
-  color: var(--text-secondary) !important;
-  opacity: 0.6;
-  transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+/* The category, as an eyebrow over the message. */
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-title].ts-toast-title {
+  color: color-mix(in srgb, var(--bg) 62%, var(--text));
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  line-height: 1.3;
 }
-.ts-toast-close:hover {
-  opacity: 1;
-  background: var(--bg-hover) !important;
-  color: var(--text-primary) !important;
+/* A toast that is only a title (no category, no description) reads as the message. */
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-title].ts-toast-title:only-child {
+  color: var(--bg);
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 700;
+  line-height: 1.4;
 }
-.ts-toast-close svg {
+
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-description].ts-toast-desc {
+  color: var(--bg);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+/* Action ("Refresh", "Undo", "View"): a small filled button on the pill. */
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-button] {
+  order: 3;
+  flex: none;
+  height: 32px;
+  margin: 0;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--bg) 14%, transparent);
+  color: var(--bg);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+}
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-button]:hover {
+  background: color-mix(in srgb, var(--bg) 24%, transparent);
+}
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-cancel] {
+  background: transparent;
+  color: color-mix(in srgb, var(--bg) 70%, var(--text));
+}
+
+/* Close: inline at the right end of the pill, not sonner's corner badge. */
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-close-button].ts-toast-close {
+  order: 4;
+  position: static;
+  transform: none;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: color-mix(in srgb, var(--bg) 70%, var(--text));
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-close-button].ts-toast-close:hover {
+  background: color-mix(in srgb, var(--bg) 14%, transparent);
+  color: var(--bg);
+}
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-close-button].ts-toast-close svg {
   width: 14px;
   height: 14px;
 }
@@ -130,16 +151,14 @@
 /* ───────────────────────────────────────────────────────────────────────────
    Out of the way of the nav panels.
 
-   The right-hand nav (profile, notifications, chat, Share) drops its panels
-   into the same corner the toasts stack in, so utils/toast.js flags <html>
-   while one is open and the whole stack fades out. Faded rather than removed:
-   an upload still running keeps ticking underneath and comes back when the
-   panel closes. pointer-events go with it, so an invisible toast can never
-   swallow a click meant for the menu.
+   The bar's panels (profile, notifications, chat, Share) open under it, where
+   the island sits, so utils/toast.js flags <html> while one is open and the
+   whole stack fades out. Faded rather than removed: an upload still running
+   keeps ticking underneath and comes back when the panel closes.
    ─────────────────────────────────────────────────────────────────────────── */
 
 [data-sonner-toaster] {
-  transition: opacity 0.14s ease;
+  transition: opacity var(--t-fast) var(--ease);
 }
 
 [data-toasts-hidden] [data-sonner-toaster] {

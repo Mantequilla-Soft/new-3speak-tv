@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
-import { MdExplore, MdHelpOutline, MdLink } from 'react-icons/md';
 import { useAppStore } from '../lib/store';
 import { openpodsEnabledFor, VIDEO_IMPORT_ENABLED, SHORTS_MAX_DURATION_SEC } from '../utils/config';
 import { toastIn } from '../utils/toast';
 import { startWelcomeTour } from '../components/WelcomeTour/welcomeState';
+import { Button, Icon, IconButton } from '../components/v2/ui';
+import { cx } from '../components/v2/helpers';
 import './Faq.scss';
 
 const toast = toastIn('3Speak');
@@ -39,6 +40,7 @@ export default function Faq() {
   const { t } = useTranslation();
   const { user } = useAppStore();
   const { hash } = useLocation();
+  const [activeGroup, setActiveGroup] = useState(GROUPS[0].id);
 
   // Features that are not open everywhere answer "coming soon" instead of
   // pointing at a button the visitor cannot see.
@@ -58,6 +60,24 @@ export default function Faq() {
     el.scrollIntoView({ block: 'start', behavior: 'smooth' });
   }, [hash]);
 
+  // The group list follows the reader: the group nearest the top is marked.
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') return undefined;
+    const inView = new Set();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? inView.add(e.target.dataset.group) : inView.delete(e.target.dataset.group)));
+      const first = GROUPS.find((g) => inView.has(g.id));
+      if (first) setActiveGroup(first.id);
+    }, { rootMargin: '-80px 0px -60% 0px' });
+    document.querySelectorAll('.faq-group[data-group]').forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  const goToGroup = (id) => {
+    setActiveGroup(id);
+    document.getElementById(`faq-group-${id}`)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  };
+
   const copyLink = (id) => {
     const url = `${window.location.origin}/faq#${id}`;
     navigator.clipboard?.writeText(url)
@@ -67,46 +87,73 @@ export default function Faq() {
 
   return (
     <div className="faq-page">
-      <header className="faq-header">
-        <MdHelpOutline className="faq-header-icon" aria-hidden="true" />
-        <div>
+      <aside className="faq-side">
+        <header className="faq-header">
           <h1>{t('faq.title')}</h1>
           <p>{t('faq.subtitle')}</p>
-        </div>
-        <button type="button" className="faq-tour-btn" onClick={startWelcomeTour}>
-          <MdExplore aria-hidden="true" /> {t('welcome.banner.tour')}
-        </button>
-      </header>
-
-      {GROUPS.map((group) => (
-        <section key={group.id} className="faq-group" aria-labelledby={`faq-group-${group.id}`}>
-          <h2 id={`faq-group-${group.id}`}>{t(`faq.groups.${group.id}`)}</h2>
-          {group.items.map((id) => (
-            <details key={id} id={`faq-${id}`} className="faq-item">
-              <summary>
-                <span className="faq-q">{t(`faq.items.${id}.q`)}</span>
-              </summary>
-              <div className="faq-a">
-                <p>
-                  <Trans
-                    i18nKey={`faq.items.${id}.${answerKey(id)}`}
-                    values={{ shortMinutes: Math.round(SHORTS_MAX_DURATION_SEC / 60) }}
-                    components={TAGS}
-                  />
-                </p>
-                <button type="button" className="faq-copy" onClick={() => copyLink(id)} title={t('faq.copyLink')} aria-label={t('faq.copyLink')}>
-                  <MdLink />
-                </button>
-              </div>
-            </details>
+        </header>
+        <Button variant="secondary" size={36} icon="explore" className="faq-tour-btn" onClick={startWelcomeTour}>
+          {t('welcome.banner.tour')}
+        </Button>
+        <nav className="faq-groups" aria-label={t('faq.title')}>
+          {GROUPS.map((g) => (
+            <button
+              key={g.id}
+              type="button"
+              className={cx('faq-groups__row', activeGroup === g.id && 'is-on')}
+              aria-current={activeGroup === g.id ? 'true' : undefined}
+              onClick={() => goToGroup(g.id)}
+            >
+              <span>{t(`faq.groups.${g.id}`)}</span>
+              <span className="faq-groups__n">{g.items.length}</span>
+            </button>
           ))}
-        </section>
-      ))}
+        </nav>
+      </aside>
 
-      <section className="faq-more">
-        <h2>{t('faq.more.title')}</h2>
-        <p><Trans i18nKey="faq.more.text" components={TAGS} /></p>
-      </section>
+      <div className="faq-main">
+        {GROUPS.map((group) => (
+          <section key={group.id} className="faq-group" data-group={group.id} aria-labelledby={`faq-group-${group.id}`}>
+            <h2 id={`faq-group-${group.id}`} className="v2-eyebrow">{t(`faq.groups.${group.id}`)}</h2>
+            {group.items.map((id) => (
+              <div key={id} className="faq-item">
+                <details id={`faq-${id}`}>
+                  <summary>
+                    <span className="faq-q">{t(`faq.items.${id}.q`)}</span>
+                    <Icon name="expand_more" size={20} className="faq-chev" />
+                  </summary>
+                  <div className="faq-a">
+                    <p>
+                      <Trans
+                        i18nKey={`faq.items.${id}.${answerKey(id)}`}
+                        values={{ shortMinutes: Math.round(SHORTS_MAX_DURATION_SEC / 60) }}
+                        components={TAGS}
+                      />
+                    </p>
+                  </div>
+                </details>
+                <IconButton
+                  icon="link"
+                  size={32}
+                  variant="ghost"
+                  round
+                  className="faq-copy"
+                  label={t('faq.copyLink')}
+                  onClick={() => copyLink(id)}
+                />
+              </div>
+            ))}
+          </section>
+        ))}
+
+        <section className="faq-more">
+          <Icon name="help" size={20} className="faq-more__icon" />
+          <p>
+            <b>{t('faq.more.title')}</b>{' '}
+            <span><Trans i18nKey="faq.more.text" components={TAGS} /></span>
+          </p>
+        </section>
+      </div>
     </div>
   );
 }

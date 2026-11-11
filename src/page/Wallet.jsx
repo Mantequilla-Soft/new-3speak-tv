@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import './Wallet.scss';
-// import Skeleton, { SkeletonLoader } from '../components/Wallet/Skeleton';
 import TrxHistory from '../components/Wallet/TrxHistory';
 import { useAppStore } from '../lib/store';
 import { Client } from '@hiveio/dhive';
 import TransferModal from '../components/Wallet/TransferModal';
 import ProPlansPanel from '../components/Wallet/ProPlansPanel';
 import { useParams } from 'react-router-dom';
+import { QRCodeSVG } from 'qrcode.react';
 import { toastIn } from '../utils/toast';
-import { HIVE_API_NODES, ENABLE_SUBS } from '../utils/config';
+import { ENABLE_SUBS } from '../utils/config';
 import { IS_VSC_TESTNET, HIVE_TESTNET_NODES } from '../utils/vscContract';
 import { getHiveClient } from '../utils/hiveNode';
+import { getRcStatus, estimatePostRcCost } from '../utils/rcCheck';
+import { broadcastWithAioha, KeyTypes } from '../hive-api/aioha';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../i18n';
+import { Button, IconButton, Dialog, Icon } from '../components/v2/ui';
+import { cx } from '../components/v2/helpers';
 
 // Every toast from this module is headed "Wallet"; the message becomes the
 // line under it. See utils/toast.js.
@@ -22,21 +27,25 @@ const client = IS_VSC_TESTNET
   ? new Client(HIVE_TESTNET_NODES, { timeout: 3000, failoverThreshold: 2, consoleOnFailover: true })
   : getHiveClient();
 
-const WALLET_TABS = [
-  { id: 'overview', labelKey: 'wallet.tabs.overview' },
-  { id: 'transactions', labelKey: 'wallet.tabs.transactions' },
-];
+const usd = (n) => formatNumber(n, { style: 'currency', currency: 'USD' });
+const amt = (n, digits = 3) => formatNumber(n, { minimumFractionDigits: digits, maximumFractionDigits: digits });
+
+// The earnings chart: 15 bars of two days each, the newest on the right.
+const BAR_DAYS = 2;
+const BAR_COUNT = 15;
 
 function Wallet() {
   const { t } = useTranslation();
   const { user: currentUser } = useAppStore();
-  const [activeTab, setActiveTab] = useState('overview');
-  const {user} = useParams()
+  const { user } = useParams();
+  const own = !!user && currentUser === user;
   const [showTransferModal, setShowTransferModal] = useState(false);
+  const [showReceive, setShowReceive] = useState(false);
   const [selectedCoin, setSelectedCoin] = useState(null);
-  const [amount, setAmount] = useState('');
-  const [recipient, setRecipient] = useState('');
   const [hasKeychain, setHasKeychain] = useState(false);
+  const [claiming, setClaiming] = useState(false);
+  const [txns, setTxns] = useState(null);
+  const [rc, setRc] = useState(null);
 
   const [balances, setBalances] = useState({
     hp: 0,
@@ -44,6 +53,8 @@ function Wallet() {
     hive: 0,
     savings_hbd: 0
   });
+  // Unclaimed author and curation rewards, straight from the account object.
+  const [pending, setPending] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [usdPrices, setUsdPrices] = useState({
@@ -52,10 +63,26 @@ function Wallet() {
   });
 
   useEffect(() => {
-    
-
     if (user) fetchBalances();
     fetchPrices();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  // Resource credits, for the card beside the activity. Read only.
+  useEffect(() => {
+    if (!user || IS_VSC_TESTNET) return undefined;
+    let alive = true;
+    (async () => {
+      const status = await getRcStatus(user);
+      if (!alive || !status) return;
+      let posts = null;
+      try {
+        const cost = await estimatePostRcCost();
+        if (cost > 0) posts = Math.floor(status.currentMana / cost);
+      } catch { /* the percentage alone is enough */ }
+      if (alive) setRc({ pct: Math.max(0, Math.min(100, status.percentage)), posts });
+    })();
+    return () => { alive = false; };
   }, [user]);
 
   // /wallet/<user>#pro (the importer's Pro button, for one) lands on the Pro
@@ -67,17 +94,17 @@ function Wallet() {
   }, [isLoading]);
 
   // Detect Hive Keychain extension presence (poll briefly to catch late installs)
-    useEffect(() => {
-      const check = () => setHasKeychain(typeof window !== 'undefined' && !!window.hive_keychain);
-      check();
-      const id = setInterval(check, 1000);
-      // stop polling after 10s
-      const stopId = setTimeout(() => clearInterval(id), 10000);
-      return () => {
-        clearInterval(id);
-        clearTimeout(stopId);
-      };
-    }, []);
+  useEffect(() => {
+    const check = () => setHasKeychain(typeof window !== 'undefined' && !!window.hive_keychain);
+    check();
+    const id = setInterval(check, 1000);
+    // stop polling after 10s
+    const stopId = setTimeout(() => clearInterval(id), 10000);
+    return () => {
+      clearInterval(id);
+      clearTimeout(stopId);
+    };
+  }, []);
 
   const fetchBalances = async () => {
     try {
@@ -98,6 +125,19 @@ function Wallet() {
         savings_hbd: parseFloat(account.savings_hbd_balance.split(' ')[0])
       });
 
+      const num = (v) => parseFloat(String(v || '0').split(' ')[0]) || 0;
+      setPending({
+        hive: num(account.reward_hive_balance),
+        hbd: num(account.reward_hbd_balance),
+        hp: num(account.reward_vesting_hive),
+        // the exact assets the claim op has to name
+        raw: {
+          reward_hive: account.reward_hive_balance,
+          reward_hbd: account.reward_hbd_balance,
+          reward_vests: account.reward_vesting_balance,
+        },
+      });
+
     } catch (err) {
       setError(t('wallet.errors.fetchBalances'));
       console.error(err);
@@ -109,7 +149,7 @@ function Wallet() {
   const fetchPrices = async () => {
     try {
       const marketData = await client.call('market_history_api', 'get_ticker', {});
-      
+
       // Extract the latest market price
       const hivePrice = parseFloat(marketData.latest);
 
@@ -127,122 +167,208 @@ function Wallet() {
       name: 'HIVE',
       balance: balances.hive,
       usdPrice: usdPrices.HP,
-      color: '#4F46E5',
-      chartData: [] // Add real chart data implementation
     },
     {
       name: 'HBD',
       balance: balances.hbd,
       usdPrice: usdPrices.HBD,
-      color: '#06B6D4',
-      chartData: [] // Add real chart data implementation
     }
   ];
 
   const handleTransfer = (coinType) => {
-    console.log(coinType)
+    if (!hasKeychain) {
+      toast.error(t('wallet.errors.needKeychain'));
+      return;
+    }
     const coin = coins.find(c => c.name === coinType);
     setSelectedCoin(coin);
     setShowTransferModal(true);
   };
 
+  const total = balances.hive * usdPrices.HP + balances.hp * usdPrices.HP + balances.hbd * usdPrices.HBD + balances.savings_hbd * usdPrices.HBD;
+  const pendingUsd = pending ? pending.hbd * usdPrices.HBD + (pending.hive + pending.hp) * usdPrices.HP : 0;
+  const hasPending = own && pending && (pending.hbd > 0 || pending.hive > 0 || pending.hp > 0);
 
+  const claim = async () => {
+    if (!pending?.raw || claiming) return;
+    setClaiming(true);
+    try {
+      await broadcastWithAioha([['claim_reward_balance', { account: user, ...pending.raw }]], KeyTypes.Posting);
+      toast.success(t('wallet.claim.done'));
+      fetchBalances();
+    } catch (err) {
+      console.error('Claim failed:', err);
+      toast.error(t('wallet.claim.failed', { error: err?.message || '' }));
+    } finally {
+      setClaiming(false);
+    }
+  };
 
-//   if (isLoading) return <SkeletonLoader count={2}><Skeleton type="card" /></SkeletonLoader>;
-  if (error) return <div className="error">{error}</div>;
+  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Earnings, 30 days: rewards claimed and HIVE/HBD received, from the
+  // activity the list below already loaded.
+  const bars = useMemo(() => {
+    const out = Array.from({ length: BAR_COUNT }, () => 0);
+    if (!txns) return out;
+    const now = txns.at;
+    for (const tx of txns.list) {
+      if (tx.type === 'send') continue;
+      const days = (now - tx.date.getTime()) / 86400000;
+      const slot = BAR_COUNT - 1 - Math.floor(days / BAR_DAYS);
+      if (slot < 0 || slot >= BAR_COUNT) continue;
+      const value = tx.type === 'claim'
+        ? tx.amount.HBD * usdPrices.HBD + (tx.amount.HIVE + tx.amount.HP) * usdPrices.HP
+        : tx.amount * (tx.coin === 'HBD' ? usdPrices.HBD : usdPrices.HP);
+      out[slot] += value || 0;
+    }
+    return out;
+  }, [txns, usdPrices]);
+  const barMax = Math.max(...bars);
+  const earned = bars.reduce((a, b) => a + b, 0);
+  const onLoaded = useCallback((list) => setTxns({ list, at: Date.now() }), []);
+
+  const acts = own ? [
+    { id: 'send', icon: 'send', label: t('common.actions.send'), onClick: () => handleTransfer(balances.hbd > 0 ? 'HBD' : 'HIVE'), primary: true },
+    { id: 'receive', icon: 'qr_code_2', label: t('wallet.receive.title'), onClick: () => setShowReceive(true) },
+    { id: 'history', icon: 'history', label: t('wallet.activity.title'), onClick: () => scrollTo('wallet-activity') },
+    ...(ENABLE_SUBS ? [{ id: 'pro', icon: 'workspace_premium', label: t('wallet.pro'), onClick: () => scrollTo('pro') }] : []),
+  ] : [];
+
+  const cards = [
+    { id: 'hive', sym: 'H', name: 'HIVE', value: balances.hive * usdPrices.HP, amount: amt(balances.hive), send: 'HIVE' },
+    { id: 'hbd', sym: '$', name: 'HBD', value: balances.hbd * usdPrices.HBD, amount: amt(balances.hbd), send: 'HBD' },
+    { id: 'hp', sym: 'HP', name: t('wallet.coins.hp'), value: balances.hp * usdPrices.HP, amount: amt(balances.hp) },
+    { id: 'savings', icon: 'savings', name: t('wallet.coins.savings'), value: balances.savings_hbd * usdPrices.HBD, amount: amt(balances.savings_hbd) },
+  ];
 
   return (
-    <div className="wallet-container">
-      <div className="main-content">
-        <div className="wallet-header">
-          <div className="wrap"><h1>{user === currentUser ? t('wallet.header.mine') : t('wallet.header.ofUser', { user })}</h1></div>
-        </div>
+    <div className="wallet-v2">
+      <header className="wallet-v2__bar">
+        <h1>{own ? t('wallet.header.mine') : t('wallet.header.ofUser', { user })}</h1>
+        <IconButton icon="history" size={40} label={t('wallet.activity.title')} onClick={() => scrollTo('wallet-activity')} className="wallet-v2__bar-btn" />
+      </header>
 
-        <div className="wallet-tabs" role="tablist" aria-label={t('wallet.tabs.aria')}>
-          {WALLET_TABS.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              id={`wallet-tab-${tab.id}`}
-              aria-selected={activeTab === tab.id}
-              aria-controls={`wallet-panel-${tab.id}`}
-              tabIndex={activeTab === tab.id ? 0 : -1}
-              className={`wallet-tab${activeTab === tab.id ? ' wallet-tab--active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-              onKeyDown={(e) => {
-                const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-                if (!d) return;
-                e.preventDefault();
-                const i = WALLET_TABS.findIndex((x) => x.id === activeTab);
-                const next = WALLET_TABS[(i + d + WALLET_TABS.length) % WALLET_TABS.length];
-                setActiveTab(next.id);
-                document.getElementById(`wallet-tab-${next.id}`)?.focus();
-              }}
-            >
-              {t(tab.labelKey)}
-            </button>
-          ))}
-        </div>
-
-        {activeTab === 'overview' && (
-        <div id="wallet-panel-overview" role="tabpanel" aria-labelledby="wallet-tab-overview">
-        <h2 className="wallet-section-title">{t('wallet.assets')}</h2>
-        <div className="coins-grid">
-          {coins.map((coin) => (
-            <div key={coin.name} className="coin-card">
-              <div className="coin-header">
-                <div className="coin-info">
-                  <h2>{coin.name}</h2>
-                </div>
-                {currentUser === user && (
-                  <button
-                    className="transfer-btn"
-                    onClick={() => {
-                      if (!hasKeychain) {
-                        toast.error(t('wallet.errors.needKeychain'));
-                        return;
-                      }
-                      handleTransfer(coin.name);
-                    }}
-                  >
-                    {t('wallet.transfer')}
-                  </button>
-                )}
-              </div>
-
-              <div className="balance-section">
-                <div className="balance-amount">
-                  {coin.balance.toFixed(3)}
-                  <span>{coin.name}</span>
-                </div>
-                <p className="usd-value">
-                  ≈ ${(coin.balance * coin.usdPrice).toFixed(2)} USD
-                </p>
-              </div>
+      {error ? (
+        <div className="v2-failure wallet-v2__error" role="alert"><b>{error}</b></div>
+      ) : (
+        <>
+          <section className="wallet-v2__hero">
+            <div className="wallet-v2__hero-main">
+              <div className="wallet-v2__label">{t('wallet.total')}</div>
+              {isLoading
+                ? <div className="v2-skeleton wallet-v2__total-skel" aria-hidden />
+                : <div className="wallet-v2__total num">{usd(total)}</div>}
+              {usdPrices.HP > 0 && (
+                <span className="wallet-v2__rate num">{t('wallet.rate', { price: usd(usdPrices.HP) })}</span>
+              )}
             </div>
-          ))}
-        </div>
+            {acts.length > 0 && (
+              <div className="wallet-v2__acts">
+                {acts.map((a) => (
+                  <button key={a.id} type="button" className={cx('wallet-v2__act', a.primary && 'is-primary')} onClick={a.onClick}>
+                    <Icon name={a.icon} size={28} />
+                    <span>{a.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </section>
 
-        {ENABLE_SUBS && currentUser === user && <div id="pro"><ProPlansPanel /></div>}
-        </div>
-        )}
+          {hasPending && (
+            <section className="wallet-v2__claim">
+              <Icon name="redeem" size={32} className="wallet-v2__claim-icon" />
+              <div className="wallet-v2__claim-body">
+                <b className="is-wide">{t('wallet.claim.ready', { amount: usd(pendingUsd) })}</b>
+                <b className="is-narrow">{t('wallet.claim.readyShort', { amount: usd(pendingUsd) })}</b>
+                <span className="num">
+                  {[pending.hbd > 0 && `${amt(pending.hbd)} HBD`, pending.hive > 0 && `${amt(pending.hive)} HIVE`, pending.hp > 0 && `${amt(pending.hp)} HP`].filter(Boolean).join(' · ')}
+                </span>
+              </div>
+              <Button variant="primary" size={56} className="wallet-v2__claim-btn" loading={claiming} disabled={claiming} onClick={claim} trailing="arrow_forward">
+                {t('wallet.claim.button')}
+              </Button>
+            </section>
+          )}
 
-        {activeTab === 'transactions' && (
-          <div id="wallet-panel-transactions" role="tabpanel" aria-labelledby="wallet-tab-transactions">
-            <TrxHistory user={user} />
+          <section className="wallet-v2__balances" aria-label={t('wallet.assets')}>
+            {cards.map((c) => (
+              <div key={c.id} className="wallet-v2__coin">
+                <div className="wallet-v2__coin-head">
+                  <span className="wallet-v2__sym">{c.icon ? <Icon name={c.icon} size={18} /> : c.sym}</span>
+                  <div className="wallet-v2__coin-name">
+                    <b>{c.name}</b>
+                    <span className="wallet-v2__coin-amt is-narrow num">{isLoading ? '…' : c.amount}</span>
+                  </div>
+                  {own && c.send && (
+                    <IconButton icon="send" size={32} variant="ghost" label={`${t('wallet.transfer')} ${c.name}`} onClick={() => handleTransfer(c.send)} className="wallet-v2__coin-send" />
+                  )}
+                </div>
+                <div className="wallet-v2__coin-usd">{isLoading ? <span className="v2-skeleton is-line" aria-hidden /> : usd(c.value)}</div>
+                <div className="wallet-v2__coin-amt is-wide num">{isLoading ? '' : c.amount}</div>
+              </div>
+            ))}
+          </section>
+
+          <div className="wallet-v2__grid">
+            <TrxHistory user={user} onLoaded={onLoaded} />
+            <aside className="wallet-v2__side">
+              <div className="wallet-v2__card">
+                <div className="wallet-v2__card-head">
+                  <b>{t('wallet.earnings.title')}</b>
+                  {txns && <span className="money">{usd(earned)}</span>}
+                </div>
+                <div className="wallet-v2__bars" aria-hidden>
+                  {bars.map((v, i) => (
+                    <div key={i} className={cx('wallet-v2__bar', i === BAR_COUNT - 1 && 'is-now', !v && 'is-empty')}
+                      style={{ height: barMax > 0 && v > 0 ? `${Math.max(8, (v / barMax) * 100)}%` : undefined }} />
+                  ))}
+                </div>
+                <div className="wallet-v2__card-sub">{txns ? t('wallet.earnings.sub') : t('common.status.loading')}</div>
+              </div>
+              {rc && (
+                <div className="wallet-v2__card">
+                  <div className="wallet-v2__card-head">
+                    <b>{t('wallet.rc.title')}</b>
+                    <span className="wallet-v2__rc-pct num">{Math.round(rc.pct)}%</span>
+                  </div>
+                  <div className="wallet-v2__rc"><span style={{ width: `${rc.pct}%` }} /></div>
+                  <div className="wallet-v2__card-sub">
+                    {rc.posts != null ? t('wallet.rc.posts', { count: rc.posts }) : t('wallet.rc.sub')}
+                  </div>
+                </div>
+              )}
+            </aside>
           </div>
-        )}
 
-        {showTransferModal && selectedCoin && ( <TransferModal 
-        showModal={setShowTransferModal} 
-        selectedCoin={selectedCoin}
-        balances={balances}
-        fetchBalances={fetchBalances} />)}
-      </div>
+          {ENABLE_SUBS && own && <div id="pro" className="wallet-v2__pro"><ProPlansPanel /></div>}
+        </>
+      )}
+
+      {showTransferModal && selectedCoin && (
+        <TransferModal
+          showModal={setShowTransferModal}
+          selectedCoin={selectedCoin}
+          balances={balances}
+          recent={(txns?.list || []).filter((tx) => tx.type === 'send').map((tx) => tx.address)}
+          prices={{ HIVE: usdPrices.HP, HBD: usdPrices.HBD }}
+          fetchBalances={fetchBalances} />
+      )}
+
+      <Dialog open={showReceive} onClose={() => setShowReceive(false)} title={t('wallet.receive.title')} closeLabel={t('common.actions.close')} width={400}>
+        <div className="wallet-v2__receive">
+          <div className="wallet-v2__qr"><QRCodeSVG value={user || ''} size={168} bgColor="white" fgColor="black" includeMargin /></div>
+          <div className="v2-well wallet-v2__receive-name num">@{user}</div>
+          <p className="v2-meta">{t('wallet.receive.sub')}</p>
+        </div>
+        <Button variant="primary" size={48} block icon="content_copy" onClick={() => {
+          navigator.clipboard?.writeText(user || '').then(() => toast.success(t('common.actions.copied'))).catch(() => {});
+        }}>
+          {t('wallet.receive.copy')}
+        </Button>
+      </Dialog>
     </div>
   );
 }
 
 export default Wallet;
-

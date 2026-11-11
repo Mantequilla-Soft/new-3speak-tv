@@ -5,6 +5,7 @@
   "topicTitle": "Topic: {{topic}}",
   "watchingNow_one": "{{count}} watching now",
   "watchingNow_other": "{{count}} watching now",
+  "previewMuted": "Preview · muted",
   "badges": {
     "gatedTitle": "Members only. 3Speak Pro unlocks the full video",
     "pro": "PRO",

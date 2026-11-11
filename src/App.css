@@ -1,75 +1,70 @@
+/* ─── The app frame (STYLE_GUIDE §4) ───────────────────────────────────────
+   Every route renders inside .container: the content column, max 1280 wide,
+   centred, with the page padding (24 on desktop, 16 under 768). Below 1025px
+   the fixed bottom bar (56 + the safe area) sits over the end of the page, so
+   the column leaves room for it. The top bar (Nav) is the sticky strip above.
+
+   `large-container` and `sidebar-fully-hidden` are kept on the element only
+   because other stylesheets still select on them; they add nothing here. */
 .container {
-  background: var(--bg-primary);
-  padding-left: 15%;
-  padding-right: 2%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  transition: background-color 0.3s ease;
-}
-.large-container {
-  padding-left: 4%;
-
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--page-pad);
+  background: var(--bg);
+  min-width: 0;
 }
 
-/* Sidebar fully removed via the profile-menu switch — collapse the leftover gap */
-.container.sidebar-fully-hidden {
-  padding-left: 1%;
+/* Full-bleed pages: the player, the map and the link page draw edge to edge
+   under the bar and own their padding. */
+.container.is-bleed,
+.container:has(.short-main),
+.container:has(.galaxy-page),
+.container:has(.shorts-story-feed),
+.container:has(.spotlight-page) {
+  max-width: none;
+  padding: 0;
 }
 
-/* Shorts mobile container - full screen with no padding */
+/* Mobile Shorts and the live-stream view hide the bars entirely. */
 .shorts-mobile-container {
+  max-width: none;
   padding: 0 !important;
   margin: 0 !important;
 }
 
-/* Remove container padding when Shorts page is active */
-.container:has(.short-main) {
-  padding: 0 !important;
-}
-
+/* Under 768px the Shorts player sits on black, edge to edge. */
 @media (max-width: 767px) {
   .container:has(.short-main) {
-    background: #000 !important;
+    background: var(--media-black);
   }
 }
 
-@media (max-width: 767px) {
-  .container {
-    padding-left: 2%;
-    padding-top: 10px;
-    padding-bottom: 70px;
-  }
-  .large-container {
-    padding-left: 2%;
-  }
-  .shorts-mobile-container {
-    padding: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  .container {
-    padding-bottom: 70px;
-  }
-}
-
+/* Room for the bottom bar wherever it shows. */
 @media (max-width: 1024px) {
   .container {
-    padding-left: 2%;
-    padding-right: 2%;
-    padding-top: 10px;
+    padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px) + var(--page-pad));
   }
-  .large-container {
-    padding-left: 2%;
+  .container.is-bleed,
+  .container:has(.short-main),
+  .container:has(.galaxy-page),
+  .container:has(.shorts-story-feed),
+  .container:has(.spotlight-page) {
+    padding-bottom: 0;
   }
 }
 
-/* Phone landscape: remove container padding so video fills the viewport height */
+/* Phone landscape on the watch page: the video fills the viewport height. */
 @media screen and (orientation: landscape) and (max-height: 500px) {
   .container {
     padding-top: 0;
     padding-bottom: 0;
   }
+}
+
+/* While a lazy route arrives, hold the page height so the bottom bar and
+   footer do not jump up and back. */
+.route-suspense-fallback {
+  min-height: 60vh;
 }

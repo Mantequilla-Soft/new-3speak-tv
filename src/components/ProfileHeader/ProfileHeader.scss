@@ -1,601 +1,281 @@
+@use "../../styles/v2" as v2;
 @use "../../mixins.scss" as mix;
 
-// Canonical banner header shared by the user-profile and community pages.
-// (Lifted from the old per-page profile-card styles; the outlined
-// -webkit-text-stroke name treatment is replaced with the default 3Speak font,
-// just larger, and the banner now always has a faded bottom.)
+// Channel header (design 20b), shared by the user profile, your own profile,
+// community and badge pages. The cover runs across the top and fades into the
+// page; the avatar, the name and the actions sit on its lower edge. Everything
+// here reads the v2 tokens in styles/design-system.scss.
 .profile-card {
   position: relative;
-  border: 1px solid #0f172a;
-  overflow: hidden;
-  border-radius: 16px;
-  background: rgba(2, 6, 23, 0.8);
+  // --panel-scrim comes from ProfileHeader: the cover's median luminance. A pale
+  // cover gets a stronger fade so the name stays readable where it overlaps.
+  --ph-fade: calc(var(--panel-scrim, .6) * 100%);
 
-  // The cover fills the WHOLE card rather than a fixed 10rem strip, so it ends
-  // where the profile panel ends instead of being cut off behind it. The band
-  // of bare image above the panel is made by .profile-body's top padding.
   .profile-header {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    position: relative;
+    height: 260px;
+    border-radius: var(--r-2xl);
+    overflow: hidden;
+    @include v2.thumb-placeholder(16px);
 
-    // No fade-to-black any more: the banner is shown in full, and readability
-    // comes from the translucent panel the profile data sits in (.profile-body)
-    // rather than from erasing the bottom of the creator's artwork.
+    @include v2.mobile { height: 132px; border-radius: var(--r-xl); }
 
     .gradient-bg {
       position: absolute;
       inset: 0;
-      opacity: 1;
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center;
-      @include mix.respond(phone) {
-        height: 100%;
-      }
 
-      // Our own default banner is a fixed lockup, not a photo: `cover` crops the
-      // sides on a narrow card and the top and bottom on a wide one, which cuts
-      // the logo or the tagline. `contain` keeps all of it visible at every
-      // width, and since the image's own background matches the colour below,
-      // the letterboxing is invisible. Nested so it beats the `cover` above
-      // regardless of source order.
+      // Our own default banner is a fixed lockup, not a photo: `contain` keeps
+      // the logo and tagline whole at every width. Phones fill the height.
       &.gradient-bg--default {
         object-fit: contain;
-        background: #22262b;
+        background: var(--frame);
 
-        // Phone: the card turns portrait (roughly 378x495), so fitting the WIDTH
-        // would leave the banner as a thin strip floating in empty space. Fill
-        // the height instead and let the sides crop — the mark is centred and
-        // narrow enough to survive it.
-        @include mix.respond(phone) {
-          object-fit: cover;
-        }
+        @include v2.mobile { object-fit: cover; }
       }
+    }
+
+    // A media scrim, not decoration: transparent at the top, the page colour
+    // at the bottom edge, where the header content overlaps it.
+    .profile-header__fade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        transparent 40%,
+        color-mix(in srgb, var(--bg) var(--ph-fade), transparent) 78%,
+        var(--bg)
+      );
+      pointer-events: none;
     }
   }
 
   .profile-body {
     position: relative;
     z-index: 2;
+    padding: 0 40px;
+    margin-top: -80px;
 
-    // Top padding is the visible band of cover image above the panel (the image
-    // itself now spans the whole card, see .profile-header). On a phone top and
-    // bottom match so the panel sits centred in the card.
-    padding: 2.75rem 0.6rem 2.75rem;
+    @include v2.below-wide { padding: 0 24px; }
+    @include v2.mobile { padding: 0 4px; margin-top: -48px; }
+  }
 
-    @media (min-width: 640px) {
-      padding: 7rem 1rem 1.6rem;
+  .top-section {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+
+    @include v2.below-wide { flex-wrap: wrap; row-gap: 16px; }
+    @include v2.mobile { gap: 12px; align-items: flex-start; flex-direction: column; }
+  }
+
+  // ── Avatar: a 136 squircle with a 3px cyan ring and a page-coloured gap ──
+  .avatar {
+    position: relative;
+    flex: none;
+    width: 136px;
+    height: 136px;
+    padding: 3px;
+    border-radius: 40px;
+    background: var(--cyan);
+
+    @include v2.mobile { width: 88px; height: 88px; border-radius: var(--r-3xl); }
+
+    .avatar__inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 37px;
+      border: 4px solid var(--bg);
+      background: var(--avatar);
+      overflow: hidden;
+
+      @include v2.mobile { border-radius: 25px; border-width: 3px; }
     }
 
-    .top-section {
-      // The panel provides the banner overlap now, so the row itself no longer
-      // pulls upward — otherwise the two stack and the avatar rides too high.
-      margin-top: 0;
+    .hive-avatar {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      line-height: 0;
+
+      > img { width: 100%; height: 100%; object-fit: cover; }
+    }
+
+    // The Pro badge sits on the ring, outside the clipped picture.
+    .hive-avatar__badge { top: 4px; right: 4px; }
+
+    // Badge page: the badge's medal spins like a coin on hover.
+    &--coin {
+      @include mix.coin-spin(700px);
+      &:hover { @include mix.coin-spin-hover(700px); }
+    }
+
+    // Own profile: the avatar opens the edit dialog.
+    &--clickable {
+      cursor: pointer;
+      transition: background var(--t-fast) var(--ease);
+
+      &:hover, &:focus-visible { background: var(--accent); }
+      &:hover .avatar-edit-overlay,
+      &:focus-visible .avatar-edit-overlay { opacity: 1; }
+    }
+
+    .avatar-edit-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      background: var(--media-scrim);
+      color: var(--on-media);
+      opacity: 0;
+      transition: opacity var(--t-base) var(--ease);
+      pointer-events: none;
+    }
+  }
+
+  // ── Name, @handle and location, then the stat chips ──
+  .user-meta {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-bottom: 4px;
+
+    @include v2.below-wide { flex-basis: 320px; }
+    @include v2.mobile { flex-basis: auto; width: 100%; padding-bottom: 0; }
+  }
+
+  .name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    h2 {
+      margin: 0;
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: var(--tracking-title);
+      line-height: 1.1;
+      color: var(--text);
+      overflow-wrap: anywhere;
+
+      @include v2.below-wide { font-size: 40px; }
+      @include v2.mobile { font-size: 28px; }
+    }
+  }
+
+  .profile-sub {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    margin: 4px 0 0;
+    @include v2.text(body);
+    color: var(--muted);
+  }
+
+  .profile-handle { overflow-wrap: anywhere; }
+
+  .profile-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    // Kept for screen readers; the pin says the same thing to the eye.
+    .profile-location-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+  }
+
+  .profile-bio {
+    margin: 16px 0 0;
+    max-width: 72ch;
+    @include v2.text(body);
+    line-height: 1.5;
+    color: var(--muted);
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+
+  // Hive badges, ours, supporter rings and the linked profiles: one wrapping row.
+  .user-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+
+    .own-badges {
       display: flex;
-      gap: 1rem;
-      flex-direction: column;
-
-      @media (min-width: 640px) {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-top: 0;
-      }
-
-      // ONLY the identity block gets the translucent panel — it hugs the avatar
-      // and text instead of running the full width, so the banner stays visible
-      // to the right of it. The buttons on the right carry their own chip
-      // backgrounds and are legible over the image as they are.
-      .left-info {
-        align-self: flex-start;
-        border-radius: 14px;
-        padding: 0.75rem 1rem;
-
-        // The `aside` slot (linked channels) lives INSIDE this panel: a column
-        // on its right edge, with room reserved so it never sits on the text.
-        // Phones: a centred row at the bottom of the panel instead.
-        &.left-info--has-aside {
-          position: relative;
-          padding-right: 3.6rem;
-
-          @include mix.respond(phone) {
-            padding-right: 1rem;
-          }
-        }
-        .header-aside {
-          position: absolute;
-          top: 50%;
-          right: 0.9rem;
-          transform: translateY(-50%);
-
-          @include mix.respond(phone) {
-            position: static;
-            transform: none;
-            display: flex;
-            justify-content: center;
-            margin-top: 0.75rem;
-          }
-        }
-
-        // Phone: the panel is the whole screen's worth of width anyway, so it
-        // centres — avatar above the text, every row centred under it.
-        @include mix.respond(phone) {
-          align-self: center;
-          align-items: center;
-          text-align: center;
-
-          // (.identity-row's phone stacking lives inside its own rule below —
-          // declaring it here loses to the base rule on source order.)
-          .name-row,
-          .profile-stats,
-          // Each group inside .user-badges is its own wrapping flex row, so
-          // centring the parent alone leaves their second lines hanging left.
-          .user-badges .own-badges,
-          .user-badges .lb-badges,
-          .user-badges .hive-badges,
-          .user-badges .sp-badges,
-          .user-badges .social-links {
-            justify-content: center;
-          }
-
-          // .user-badges is a column, so centring its rows is the CROSS axis.
-          .user-badges {
-            align-items: center;
-          }
-
-          .profile-bio,
-          .profile-location {
-            max-width: 34ch;
-          }
-        }
-        // Light veil: enough to hold the text against a busy cover, not enough
-        // to hide the artwork behind it. The blur does most of the work.
-        //
-        // --panel-scrim is set inline by ProfileHeader from the MEDIAN luminance
-        // of the cover image (see utils/imageLuminance): a pale banner pushes it
-        // toward 0.82 so white text stays readable, a dark one stays at 0.42 and
-        // the artwork shows through. The 0.42 here is the fallback for covers we
-        // can't sample (missing image, or a host that blocks canvas reads).
-        background: rgba(2, 6, 23, var(--panel-scrim, 0.42));
-        transition: background 0.35s ease;
-        backdrop-filter: blur(14px);
-        border: 1px solid rgba(148, 163, 184, 0.14);
-
-        display: flex;
-        flex-direction: column;
-
-        // Avatar + the identity lines only. The avatar stretches to THIS row,
-        // so it spans display name / @handle / bio / location and stops there;
-        // the badges sit underneath it, outside the stretch.
-        .identity-row {
-          display: flex;
-          gap: 1rem;
-          align-items: flex-start;
-          // Small, even offset inside the panel. (It used to be ~50px to clear
-          // the banner overlap; the panel owns that now.)
-          margin-top: 0.25rem;
-
-          // Phone: avatar above the text, both centred. MUST live here rather
-          // than in the .left-info phone block above — that compiles to the
-          // same selector, and a media query adds no specificity, so the
-          // flex-start on this line simply won on source order.
-          @include mix.respond(phone) {
-            flex-direction: column;
-            align-items: center;
-            gap: 0.6rem;
-          }
-
-        .avatar {
-          // Size is set inline by ProfileHeader, which measures the identity
-          // lines next to it (flexbox can't do "square as tall as my sibling":
-          // it resolves width from content before stretching height, which
-          // gives a capsule). min-* is the old fixed size and the pre-measure
-          // fallback, so it never renders smaller than it used to.
-          position: relative;
-          align-self: flex-start;
-          // align-self on the item overrides align-items on the row, so the row
-          // centring above cannot move it without this.
-          @include mix.respond(phone) {
-            align-self: center;
-          }
-          box-sizing: border-box;
-          min-height: 5rem;
-          min-width: 5rem;
-          border-radius: 999px;
-          border: 4px solid #020617;
-          background: #0f172a;
-          // overflow stays VISIBLE so the premium badge isn't clipped.
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
-          flex-shrink: 0;
-
-          // On a phone the text block wraps to many lines, and a square that
-          // tall would eat the width the text needs. Cap it there only.
-          @media (max-width: 639px) {
-            max-height: 7rem;
-            max-width: 7rem;
-          }
-
-          @media (min-width: 640px) {
-            min-height: 6rem;
-            min-width: 6rem;
-          }
-
-          // Badge page: the badge's medal spins like a coin on hover.
-          &--coin {
-            @include mix.coin-spin(700px);
-            &:hover { @include mix.coin-spin-hover(700px); }
-          }
-
-          // Own profile: the avatar opens the edit dialog.
-          &--clickable {
-            cursor: pointer;
-            transition: border-color 0.2s ease;
-
-            &:hover,
-            &:focus-visible {
-              border-color: var(--accent-primary, #e53935);
-            }
-
-            &:hover .avatar-edit-overlay,
-            &:focus-visible .avatar-edit-overlay {
-              opacity: 1;
-            }
-          }
-
-          .avatar-edit-overlay {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(2, 6, 23, 0.55);
-            color: #fff;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            pointer-events: none;
-          }
-
-          // Out of flow on purpose: in flow, the source image's intrinsic size
-          // (avatars are 500px squares) becomes the box's content width, and
-          // with aspect-ratio that made the whole row 500px tall. Absolute
-          // means the box is sized only by the row, and the image follows it.
-          .hive-avatar {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-          }
-
-          img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-          }
-        }
-
-        .user-meta {
-          min-width: 0;
-
-          // Name — default 3Speak font (Roboto), just bigger. Replaces the old
-          // outlined / uppercase text-stroke treatment.
-          h2 {
-            // No top margin: the row's margin-top covers it, and this way the
-            // measured block height is exactly the text lines.
-            margin-top: 0;
-            font-size: 34px;
-            font-weight: 700;
-            color: #fff;
-            line-height: 1.15;
-            word-break: break-word;
-            @include mix.respond(phone) {
-              font-size: 24px;
-            }
-          }
-
-          // Name + the two primary actions on one line. They wrap under the
-          // name on narrow screens rather than squeezing it.
-          .name-row {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem 0.9rem;
-          }
-
-          // Deliberately NOT the brand red: the header already carries red in
-          // the Pro chip and the avatar ring, and three reds in one block fight
-          // each other. These earn their prominence from SIZE and contrast
-          // instead — they're a step larger than the utility buttons on the
-          // right (share / report / hide).
-          .name-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-
-            .btn {
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              gap: 6px;
-              padding: 0.5rem 1.15rem;
-              border-radius: 999px;
-              font-size: 0.9rem;
-              font-weight: 600;
-              line-height: 1.1;
-              white-space: nowrap;
-              cursor: pointer;
-              border: 1px solid transparent;
-              transition: all 0.2s ease;
-
-              svg { font-size: 16px; }
-
-              &:disabled { opacity: 0.6; cursor: not-allowed; }
-
-              @include mix.respond(phone) {
-                padding: 0.45rem 0.95rem;
-                font-size: 0.85rem;
-              }
-            }
-
-            // Follow — the one filled control in the header.
-            .btn-hero-follow {
-              background: #f1f5f9;
-              color: #0f172a;
-              border-color: #f1f5f9;
-
-              &:hover { background: #fff; border-color: #fff; }
-            }
-
-            // Already following: quiet outline, turns to "unfollow" red on hover
-            // (the only place red belongs here, as a destructive hint).
-            .btn-hero-following {
-              background: rgba(15, 23, 42, 0.85);
-              border-color: #475569;
-              color: #e2e8f0;
-
-              &:hover {
-                border-color: #ef4444;
-                color: #ef4444;
-                background: rgba(239, 68, 68, 0.1);
-              }
-            }
-
-            .btn-hero-message {
-              background: rgba(15, 23, 42, 0.85);
-              border-color: #475569;
-              color: #e2e8f0;
-
-              &:hover {
-                background: rgba(148, 163, 184, 0.18);
-                border-color: #94a3b8;
-                color: #fff;
-              }
-            }
-
-            // Phones tip from the profile speed-dial, which already has Tip.
-            .btn-hero-tip {
-              @include mix.respond(phone) { display: none; }
-            }
-
-            // A third action (ProfileLinksButton, narrow screens only) belongs
-            // directly UNDER Message rather than wrapped onto a line of its
-            // own: two columns, and the extra button claims column 2's second
-            // row, so it sits under Message and matches its width. :has keeps
-            // every profile without a links page on the plain flex row.
-            @media screen and (max-width: 1024px) {
-              &:has(.profile-links-btn) {
-                display: grid;
-                grid-template-columns: auto auto;
-                align-items: center;
-              }
-
-              .profile-links-btn {
-                grid-column: 2;
-                justify-self: stretch;
-              }
-            }
-          }
-
-          // @account, directly under a display name.
-          .profile-handle {
-            display: block;
-            margin-top: 0.15rem;
-            color: #94a3b8;
-            font-size: 0.95rem;
-            font-weight: 500;
-            line-height: 1.2;
-            word-break: break-all;
-            @include mix.respond(phone) {
-              font-size: 0.85rem;
-            }
-          }
-
-          // Bio / about, directly under the name.
-          .profile-bio {
-            margin-top: 0.35rem;
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            max-width: 60ch;
-          }
-
-          // Location, under the bio.
-          .profile-location {
-            margin-top: 0.25rem;
-            color: #cbd5e1;
-            font-size: 0.85rem;
-            line-height: 1.4;
-
-            .profile-location-label {
-              color: #94a3b8;
-            }
-          }
-
-          }
-        }
-
-        // Under the avatar + identity row, so the avatar never stretches to
-        // cover the badges.
-        // A COLUMN of groups, not one wrapping row. .left-info is shrink-to-fit,
-        // and a wrapping flex row reports its max-content as every chip on one
-        // line — so with the Hive badge row in here the panel stretched to the
-        // full banner width even though it visually wrapped. Stacking the groups
-        // makes the panel only as wide as the WIDEST row.
-        .user-badges {
-            margin-top: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.5rem;
-            color: #94a3b8;
-            font-size: 0.75rem;
-
-            // 3Speak's own badges + social links + "Add profile" share one
-            // wrapping row, below the Hive badges.
-            .own-badges {
-              display: flex;
-              flex-wrap: wrap;
-              align-items: center;
-              gap: 0.5rem;
-            }
-
-            .divider {
-              margin: 0 4px;
-            }
-        }
-      }
-
-      // Utility actions (hide / share / report) live in the banner's top-right
-      // corner, out of the identity block's way. Absolute against .profile-body,
-      // whose top edge IS the card's top edge (the band of cover image above the
-      // panel is this element's top padding).
-      .button-group {
-        position: absolute;
-        top: 0.75rem;
-        right: 0.75rem;
-        z-index: 3;
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-
-        @include mix.respond(phone) {
-          top: 0.5rem;
-          right: 0.5rem;
-          gap: 0.35rem;
-        }
-
-        .btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 999px;
-          padding: 0.35rem 0.75rem;
-          font-size: 0.75rem;
-          border: 1px solid #334155;
-          background: rgba(2, 6, 23, 0.9);
-          cursor: pointer;
-          transition: all 0.2s ease;
-          color: #f1f5f9;
-          white-space: nowrap;
-
-          &:hover {
-            border-color: #64748b;
-            background: #0f172a;
-          }
-
-          .icon {
-            width: 14px;
-            height: 14px;
-            margin-right: 6px;
-            stroke: currentColor;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-          }
-        }
-
-        .btn.reported {
-          color: #e31337;
-          border-color: rgba(227, 19, 55, 0.4);
-          background: rgba(227, 19, 55, 0.1);
-
-          &:hover {
-            background: rgba(227, 19, 55, 0.2);
-            border-color: #e31337;
-          }
-        }
-
-        .btn-follow {
-          background: transparent;
-          border-color: var(--accent-primary, #e53935);
-          color: var(--accent-primary, #e53935);
-          font-weight: 600;
-
-          &:hover {
-            background: color-mix(in srgb, var(--accent-primary, #e53935) 10%, transparent);
-            color: var(--accent-primary, #e53935);
-            border-color: var(--accent-primary, #e53935);
-          }
-
-          &:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-          }
-        }
-
-        .btn-following {
-          background: rgba(15, 23, 42, 0.9);
-          border-color: #34d399;
-          color: #34d399;
-
-          &:hover {
-            border-color: #ef4444;
-            color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-          }
-
-          &:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-          }
-        }
-
-        // Message sits next to Follow as the second real action: outlined in the
-        // accent rather than filled, so the pair reads as primary + secondary
-        // instead of competing.
-        .btn-message {
-          gap: 5px;
-          border-color: var(--accent-primary, #e53935);
-          color: var(--accent-primary, #e53935);
-          background: transparent;
-          font-weight: 600;
-
-          svg { font-size: 14px; }
-
-          &:hover {
-            background: var(--accent-light, rgba(229, 57, 53, 0.1));
-            border-color: var(--accent-primary, #e53935);
-          }
-        }
-      }
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
     }
+  }
+
+  .header-aside {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  // ── Actions: the one primary button, then 64px tiles ──
+  .name-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 4px;
+    flex: none;
+
+    @include v2.below-wide { flex: 1 1 100%; }
+    @include v2.mobile { width: 100%; gap: 6px; padding-bottom: 0; }
+
+    .button-group { display: contents; }
+
+    // Older callers (community and badge pages) still pass plain buttons with
+    // these classes. Give them the v2 look until they move to the primitives.
+    .btn-hero-follow,
+    .btn-hero-following,
+    .btn-hero-message {
+      @include v2.btn(secondary, 48);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn-hero-follow { @include v2.btn(primary, 48); }
   }
 }
 
-// Dark mode: outlined style — card-bg bg, red (--accent-primary) outline + text.
-[data-theme="dark"] {
-  .btn-follow {
-    background: var(--card-bg) !important;
-    color: var(--accent-primary) !important;
-    border: 1px solid var(--accent-primary) !important;
-  }
+// The big follow button (20b): 64 tall, label flush left, icon on the right.
+.ph-follow.v2-btn {
+  height: 64px;
+  border-radius: var(--r-xl);
+  padding: 0 18px 0 22px;
+  gap: 28px;
+  justify-content: space-between;
+  font-size: 16px;
+  min-width: 160px;
+
+  @include v2.mobile { flex: 1 1 auto; min-width: 0; height: 56px; gap: 12px; }
+}
+
+// 64x64 action tiles beside it (Message, Tip, Share, More…).
+.ph-tile.v2-dock {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: var(--r-xl);
+  gap: 3px;
+  font-size: 11px;
+  text-decoration: none;
+
+  @include v2.mobile { width: 56px; height: 56px; border-radius: var(--r-lg); font-size: 10px; }
 }

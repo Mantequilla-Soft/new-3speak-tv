@@ -1,21 +1,16 @@
-import "./CardSkeleton.scss"
+import { SkeletonCard } from "./GridSkeleton";
+import "./Cards.scss";
+import "./CardSkeleton.scss";
 
-function CardSkeleton() {
+// A page of loading cards for feeds that have not drawn their first grid yet.
+// The same grid and card shapes as Card3 (Cards.scss .card--skeleton), so the
+// real cards replace them without anything jumping.
+function CardSkeleton({ count = 12 }) {
   return (
-    <div className="feed-wrap-skeleton-in">
-      {[...Array(12)].map((_, i) => (
-        <div key={i} className="skeleton-card">
-          <div className="skeleton video-thumbnail-skeleton"></div>
-          <div className="skeleton line-skeleton"></div>
-          <div className="skeleton line-skeleton"></div>
-          <div className="skeleton-avatar-row">
-            <div className="skeleton skeleton-avatar"></div>
-            <div className="skeleton skeleton-text-sm"></div>
-          </div>
-        </div>
-      ))}
+    <div className="card-container feed-wrap-skeleton-in" aria-busy="true">
+      {Array.from({ length: count }, (_, i) => <SkeletonCard key={i} />)}
     </div>
-  )
+  );
 }
 
-export default CardSkeleton
+export default CardSkeleton;

@@ -4,25 +4,21 @@ import "./nav.scss";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../lib/store";
-import { IoCloudUploadSharp } from "react-icons/io5";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import NavSearch from "./NavSearch";
-import { MdOutlineSearch, MdGraphicEq, MdPlaylistPlay, MdWatchLater, MdHistory, MdKeyboardArrowDown, MdAdd, MdHomeFilled, MdChevronRight, MdGroups, MdCampaign, MdHelpOutline } from "react-icons/md";
-import { FaMedal } from "react-icons/fa6";
+import { Icon } from "../v2/Icon";
 import { useMyPlaylists } from "../../hooks/useMyPlaylists";
-import ShortsIcon from "../icons/ShortsIcon";
 import UploadLinks from "../UploadLinks";
 import { creatorKey, isUploadBlocked, useCreatorSettings } from "../../utils/creatorSettings";
 import useHoverPeek from "../../hooks/useHoverPeek";
-import ModalHeader from "../ModalHeader/ModalHeader";
+import { Dialog } from "../v2/ui";
 import NavProgress from '../Incubation/NavProgress';
 import IncubationBell from '../Incubation/IncubationBell';
 import NotificationBell from "./NotificationBell";
 import { hideToastLayer, showToastLayer } from "../../utils/toast";
 import ChatButton from "../Chat/ChatButton";
 import PremiumBadge from "../PremiumBadge/PremiumBadge";
-import { FiSettings, FiLogIn } from "react-icons/fi";
 import SettingsModal from "../SettingsModal/SettingsModal";
 import { ENABLE_BUTRAUTH } from "../../utils/config";
 import { useAvatarUrl } from "../../utils/avatarCache";
@@ -79,10 +75,10 @@ function NavPlaylistsDropdown({ user, scrollerRef }) {
 
   return (
     <div className="nav-playlists-wrapper" ref={ref}>
-      <button type="button" title={t('nav.playlists.tooltip')} className={`nav-tab nav-playlists-trigger${open ? ' open' : ''}`} onClick={() => setOpen((v) => !v)}>
-        <MdPlaylistPlay className="nav-tab-icon" />
+      <button type="button" title={t('nav.playlists.tooltip')} className={`nav-tab nav-playlists-trigger${open ? ' open' : ''}`} onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+        <Icon name="playlist_play" size={18} className="nav-tab-icon" />
         <span>{t('nav.playlists.label')}</span>
-        <MdKeyboardArrowDown className={`nav-playlists-chevron${open ? ' open' : ''}`} size={16} />
+        <Icon name="expand_more" size={18} className={`nav-playlists-chevron${open ? ' open' : ''}`} />
       </button>
       {open && createPortal(
         <div
@@ -91,18 +87,19 @@ function NavPlaylistsDropdown({ user, scrollerRef }) {
           style={{ top: `${pos.top}px`, left: `${pos.left}px` }}
           onClick={() => setOpen(false)}
         >
+          <div className="nav-playlists-flyout-label" aria-hidden="true">{t('nav.playlists.label')}</div>
           <Link to={watchLaterLink} className="nav-playlists-flyout-item">
-            <MdWatchLater className="nav-playlists-flyout-icon" />
+            <Icon name="schedule" size={18} className="nav-playlists-flyout-icon" />
             <span>{watchLater?.items?.length > 0 ? t('nav.playlists.watchLaterCount', { n: watchLater.items.length }) : t('nav.playlists.watchLater')}</span>
           </Link>
           {user && (
             <Link to={`/watched/${user}`} className="nav-playlists-flyout-item">
-              <MdHistory className="nav-playlists-flyout-icon" />
+              <Icon name="history" size={18} className="nav-playlists-flyout-icon" />
               <span>{t('nav.playlists.watchHistory')}</span>
             </Link>
           )}
           <Link to="/profile?tab=playlists" className="nav-playlists-flyout-item">
-            <MdPlaylistPlay className="nav-playlists-flyout-icon" />
+            <Icon name="video_library" size={18} className="nav-playlists-flyout-icon" />
             <span>{t('nav.playlists.all')}</span>
           </Link>
         </div>,
@@ -133,8 +130,8 @@ function NavAdvertiseButton({ user }) {
   }, [user]);
   if (!show) return null;
   return (
-    <Link to="/advertise" className="nav-advertise-btn" title={t('nav.advertise')}>
-      <MdCampaign size={18} aria-hidden="true" />
+    <Link to="/advertise" className="v2-btn v2-btn--secondary h40 nav-advertise-btn" title={t('nav.advertise')}>
+      <Icon name="campaign" size={18} />
       <span className="nav-advertise-label">{t('nav.advertise')}</span>
     </Link>
   );
@@ -169,6 +166,7 @@ function NavUploadDropdown() {
     // before the link's click lands).
     const handleClickOutside = (e) => {
       if (ref.current?.contains(e.target) || sheetRef.current?.contains(e.target)) return;
+      if (e.target instanceof Element && e.target.closest('.nav-upload-sheet')) return;
       closeMenu();
     };
     if (open) document.addEventListener("mousedown", handleClickOutside);
@@ -177,36 +175,39 @@ function NavUploadDropdown() {
 
   return (
     <div className="nav-upload-wrapper" ref={ref} {...menu.hoverProps}>
-      {/* Two icons, one shown per breakpoint: the labelled cloud button on
-          desktop, a bare "+" on mobile where this replaces the bottom bar's
-          centre item and has to fit next to the avatar. */}
+      {/* The labelled primary button on desktop; below 1025px the label hides
+          and it is a square "+" (nav.scss), next to the avatar-less bar. */}
       <button
         type="button"
-        className="btn-reset nav-upload-btn"
+        className="btn-reset v2-btn v2-btn--primary h40 nav-upload-btn"
         onClick={menu.toggle}
         title={t('common.actions.share')}
         aria-label={t('common.actions.share')}
         aria-expanded={open}
       >
-        <IoCloudUploadSharp size={18} className="nav-upload-icon-desktop" />
-        <MdAdd size={21} className="nav-upload-icon-mobile" />
         <span className="nav-upload-label">{t('common.actions.share')}</span>
+        <Icon name="add" size={20} className="nav-upload-icon" />
       </button>
       {menu.rendered && !asSheet && (
         <div className={`nav-upload-flyout${menu.leaving ? ' nav-upload-flyout--leaving' : ''}`} onClick={menu.close}>
           <UploadLinks linkClass="nav-upload-flyout-item" iconClass="nav-upload-flyout-icon" />
         </div>
       )}
-      {/* Portalled: the nav bar gets a transform when it auto-hides on scroll,
-          which would otherwise drag a position:fixed sheet along with it. */}
-      {open && asSheet && createPortal(
-        <div className="nav-upload-sheet-overlay" onClick={menu.close}>
-          <div className="nav-upload-sheet" ref={sheetRef} role="dialog" aria-label={t('common.actions.share')}>
-            <ModalHeader className="nav-upload-sheet-header" title={t('common.actions.share')} onClose={menu.close} />
+      {/* The v2 Dialog: a bottom sheet under 768px, a centred dialog on a
+          tablet. Portalled, so the bar's own transform never drags it along. */}
+      {asSheet && (
+        <Dialog
+          open={open}
+          onClose={menu.close}
+          title={t('common.actions.share')}
+          closeLabel={t('common.actions.close')}
+          width={520}
+          className="nav-upload-sheet"
+        >
+          <div ref={sheetRef} onClick={(e) => { if (e.target.closest('a')) menu.close(); }}>
             <UploadLinks linkClass="nav-upload-flyout-item" iconClass="nav-upload-flyout-icon" />
           </div>
-        </div>,
-        document.body,
+        </Dialog>
       )}
     </div>
   );
@@ -275,12 +276,12 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
   const settingsGear = (
     <button
       type="button"
-      className="btn-reset nav-settings-btn"
+      className="btn-reset nav-icon-btn nav-settings-btn"
       {...settingsGearProps}
       title={t('common.nav.settings')}
       aria-label={t('common.nav.settings')}
     >
-      <FiSettings size={19} aria-hidden="true" />
+      <Icon name="settings" size={22} />
     </button>
   );
   const navContainerRef = useRef(null);
@@ -458,130 +459,138 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
 
 
   return (
+    // The strip (nav-container) is the sticky, page-coloured band; the bar itself
+    // is the 64px surface card inside it (STYLE_GUIDE §4, designs 02/20a/28c).
+    // --nav-height is measured off the strip, so sticky rows below it land
+    // right under the card.
     <nav ref={navContainerRef} className={`nav-container${navHidden ? ' nav-hidden' : ''}`}>
-      <div className="nav-left flex-dev">
-        {/* The logo opens the pages instead of going home — "Overview" below is
-            the way home now. A button, not a link: it goes nowhere, and shipping
-            it as an <a> would put it in the tab order promising navigation. */}
-        <button
-          type="button"
-          className={`nav-logo-btn${tabsOpen ? ' is-open' : ''}`}
-          aria-expanded={tabsOpen}
-          aria-controls="nav-tabs"
-          title={tabsOpen ? t('nav.hidePages') : t('nav.showPages')}
-          onClick={toggleTabs}
-        >
-          <img className="logo" src={mark} alt="3Speak" />
-          {/* The hint that the logo does something, on the side the tabs come out
-              of. Inside the button on purpose: it has to be clickable, and a
-              second button beside it would be two tab stops and two screen-reader
-              announcements for one action. */}
-          <MdChevronRight className="nav-logo-chevron" aria-hidden="true" />
-        </button>
-      </div>
-
-      {tabsOpen && (
-      <div className="nav-tabs flex-dev" id="nav-tabs" ref={navTabsRef}>
-        {/* What the logo used to do. First in the row, so the way home is the
-            first thing under the cursor once the group opens. */}
-        <NavLink to="/" end title={t('nav.tabs.overviewTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-          <MdHomeFilled className="nav-tab-icon" /> <span>{t('nav.tabs.overview')}</span>
-        </NavLink>
-        <NavLink to="/shorts" title={t('nav.tabs.shortsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-          <ShortsIcon className="nav-tab-icon" outlineWidth={30} /> <span>{t('common.nav.shorts')}</span>
-        </NavLink>
-        <NavLink to="/audio" title={t('nav.tabs.audioTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-          <MdGraphicEq className="nav-tab-icon" /> <span>{t('nav.bottom.audio')}</span>
-        </NavLink>
-        {/* Groups, not Badges: badges are one tab of it, alongside communities.
-            Both lost their menu entry when the sidebar went, and one word in the
-            bar covers what were two. */}
-        <NavLink to="/groups" title={t('nav.tabs.groupsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-          {/* A group of people, not the badge medal this tab inherited when it
-              was the Badges tab: badges are one thing inside it now. */}
-          <MdGroups className="nav-tab-icon" /> <span>{t('nav.bottom.groups')}</span>
-        </NavLink>
-        {/* "Rankings" rather than "Leaderboard": the page ranks creators by
-            several measures, and the route keeps its old name so existing links
-            still work. */}
-        <NavLink to="/leaderboard" title={t('nav.tabs.rankingsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-          <FaMedal className="nav-tab-icon nav-tab-icon--medal" /> <span>{t('app.routes.rankings')}</span>
-        </NavLink>
-        {/* Last, and only when signed in: it is the one tab that lists YOUR
-            things rather than the site's. */}
-        {authenticated && <NavPlaylistsDropdown user={user} scrollerRef={navTabsRef} />}
-      </div>
-      )}
-
-      <div className="phone-nav-left">
-        <Link to="/"><img className="logo" src={mark} alt="3Speak" /></Link>
-      </div>
-      {/* Search sits next to the nav tabs on desktop (after the logo on tablet) */}
-      <NavSearch />
-
-      {authenticated ? (
-        <div className="nav-right flex-div" onClickCapture={hideToastLayer}>
-          {/* Incubating users only; renders nothing for everyone else. */}
-          <NavProgress />
-          {/* Hive accounts only: an incubating user cannot book ads yet. */}
-          {!incubationHandle && <NavAdvertiseButton user={user} />}
-          {/* Hidden outright for a warm-up user blocked from uploads (their
-              `~<handle>` row has canUpload: false). A Hive account keeps it and
-              gets the "contact support" popup from the entries instead. */}
-          {!warmupUploadBlocked && <NavUploadDropdown />}
-          <Link to="/discover" className="nav-mobile-discover" title={t('app.routes.discover')}>
-            <MdOutlineSearch size={19} />
-          </Link>
-          <ChatButton />
-          {/* One bell or the other. Hive's notifications need a Hive account,
-              so an incubating user's bell reads from the incubation service
-              instead of showing them a permanently empty one. */}
-          {incubationHandle ? <IncubationBell /> : <NotificationBell />}
-          {settingsGear}
+      <div className="nav-bar">
+        <div className="nav-left">
+          {/* The logo opens the pages instead of going home — "Overview" below is
+              the way home now. A button, not a link: it goes nowhere, and shipping
+              it as an <a> would put it in the tab order promising navigation. */}
           <button
             type="button"
-            className="btn-reset nav-avatar-wrap"
-            onClick={toggleProfileNav}
-            {...profileMenuHover}
-            aria-label={t('nav.profile.accountMenu')}
-            aria-haspopup="menu"
+            className={`nav-logo-btn${tabsOpen ? ' is-open' : ''}`}
+            aria-expanded={tabsOpen}
+            aria-controls="nav-tabs"
+            title={tabsOpen ? t('nav.hidePages') : t('nav.showPages')}
+            onClick={toggleTabs}
           >
-            <img src={myAvatar} alt="" />
-            <PremiumBadge username={user} size={10} className="nav-avatar-premium" />
+            <img className="logo" src={mark} alt="3Speak" />
+            {/* The hint that the logo does something, on the side the tabs come out
+                of. Inside the button on purpose: it has to be clickable, and a
+                second button beside it would be two tab stops and two screen-reader
+                announcements for one action. */}
+            <Icon name="chevron_right" size={20} className="nav-logo-chevron" />
           </button>
         </div>
-      ) : (
-        <div className="nav-right flex-div" onClickCapture={hideToastLayer}>
-          <Link to="/discover" className="nav-mobile-discover" title={t('app.routes.discover')}>
-            <MdOutlineSearch size={19} />
-          </Link>
-          {/* Help for first-time visitors: a pill on desktop, a bare ? icon
-              on phones and tablets, where the pill is hidden. */}
-          <Link to="/faq" className="nav-mobile-discover nav-guest-faq-icon" title={t('nav.faqAria')} aria-label={t('nav.faqAria')}>
-            <MdHelpOutline size={19} />
-          </Link>
-          <Link to="/faq" className="nav-guest-about" aria-label={t('nav.faqAria')}>{t('nav.faqLink')}</Link>
-          {/* No guest buttons until the stored session has been read: a logged-in
-              refresh otherwise flashes Log in before the avatar replaces it. */}
-          {authChecked && (<>
-          {/* Sign up is dropped when Butter Auth says no account can be created
-              from this address, leaving the single Log in button the
-              butrauth-disabled build shows -- so the bar has no gap where a
-              button used to be. Fails open: a failed check still offers it.
-              Not shown while the check is in flight: for someone it refuses
-              (a VPN, say) it flashed in on every load and then vanished. */}
-          {ENABLE_BUTRAUTH && !signupPossible.loading && signupPossible.possible ? (
-            <>
-              <button className="nav-guest-login nav-guest-login--secondary" onClick={() => openLoginModal('login')}><FiLogIn /> {t('common.actions.login')}</button>
-              <button className="nav-guest-signup" onClick={() => openLoginModal('signup')}>{t('common.actions.signUp')}</button>
-            </>
-          ) : (
-            <button className="nav-guest-login" onClick={() => openLoginModal('login')}><FiLogIn /> {t('common.actions.login')}</button>
-          )}
-          </>)}
-          {settingsGear}
+
+        {tabsOpen && (
+        <div className="nav-tabs" id="nav-tabs" ref={navTabsRef}>
+          {/* What the logo used to do. First in the row, so the way home is the
+              first thing under the cursor once the group opens. */}
+          <NavLink to="/" end title={t('nav.tabs.overviewTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+            <Icon name="home" size={18} className="nav-tab-icon" /><span>{t('nav.tabs.overview')}</span>
+          </NavLink>
+          <NavLink to="/shorts" title={t('nav.tabs.shortsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+            <Icon name="smart_display" size={18} className="nav-tab-icon" /><span>{t('common.nav.shorts')}</span>
+          </NavLink>
+          <NavLink to="/audio" title={t('nav.tabs.audioTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+            <Icon name="graphic_eq" size={18} className="nav-tab-icon" /><span>{t('nav.bottom.audio')}</span>
+          </NavLink>
+          {/* Groups, not Badges: badges are one tab of it, alongside communities. */}
+          <NavLink to="/groups" title={t('nav.tabs.groupsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+            <Icon name="groups" size={18} className="nav-tab-icon" /><span>{t('nav.bottom.groups')}</span>
+          </NavLink>
+          {/* "Rankings" rather than "Leaderboard": the page ranks creators by
+              several measures, and the route keeps its old name so existing links
+              still work. */}
+          <NavLink to="/leaderboard" title={t('nav.tabs.rankingsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
+            <Icon name="leaderboard" size={18} className="nav-tab-icon" /><span>{t('app.routes.rankings')}</span>
+          </NavLink>
+          {/* Last, and only when signed in: it is the one tab that lists YOUR
+              things rather than the site's. */}
+          {authenticated && <NavPlaylistsDropdown user={user} scrollerRef={navTabsRef} />}
         </div>
-      )}
+        )}
+
+        <div className="phone-nav-left">
+          <Link to="/" aria-label="3Speak"><img className="logo" src={mark} alt="" /></Link>
+        </div>
+        {/* Centred on the bar on desktop (nav.scss), after the logo on tablet */}
+        <NavSearch />
+
+        {authenticated ? (
+          <div className="nav-right" onClickCapture={hideToastLayer}>
+            {/* Incubating users only; renders nothing for everyone else. */}
+            <NavProgress />
+            {/* Hive accounts only: an incubating user cannot book ads yet. */}
+            {!incubationHandle && <NavAdvertiseButton user={user} />}
+            {/* Hidden outright for a warm-up user blocked from uploads (their
+                `~<handle>` row has canUpload: false). A Hive account keeps it and
+                gets the "contact support" popup from the entries instead. */}
+            {!warmupUploadBlocked && <NavUploadDropdown />}
+            <Link to="/discover" className="nav-icon-btn nav-mobile-discover" title={t('app.routes.discover')} aria-label={t('app.routes.discover')}>
+              <Icon name="search" size={22} />
+            </Link>
+            <ChatButton />
+            {/* One bell or the other. Hive's notifications need a Hive account,
+                so an incubating user's bell reads from the incubation service
+                instead of showing them a permanently empty one. */}
+            {incubationHandle ? <IncubationBell /> : <NotificationBell />}
+            {settingsGear}
+            <button
+              type="button"
+              className="btn-reset nav-avatar-wrap"
+              onClick={toggleProfileNav}
+              {...profileMenuHover}
+              aria-label={t('nav.profile.accountMenu')}
+              aria-haspopup="menu"
+            >
+              <img src={myAvatar} alt="" />
+              <PremiumBadge username={user} size={10} className="nav-avatar-premium" />
+            </button>
+          </div>
+        ) : (
+          <div className="nav-right" onClickCapture={hideToastLayer}>
+            <Link to="/discover" className="nav-icon-btn nav-mobile-discover" title={t('app.routes.discover')} aria-label={t('app.routes.discover')}>
+              <Icon name="search" size={22} />
+            </Link>
+            {/* Help for first-time visitors: a button on desktop, a bare ? icon
+                on phones and tablets, where the button is hidden. */}
+            <Link to="/faq" className="nav-icon-btn nav-mobile-discover nav-guest-faq-icon" title={t('nav.faqAria')} aria-label={t('nav.faqAria')}>
+              <Icon name="help" size={22} />
+            </Link>
+            <Link to="/faq" className="v2-btn v2-btn--ghost h40 nav-guest-about" aria-label={t('nav.faqAria')}>{t('nav.faqLink')}</Link>
+            {/* No guest buttons until the stored session has been read: a logged-in
+                refresh otherwise flashes Log in before the avatar replaces it. */}
+            {authChecked && (<>
+            {/* Sign up is dropped when Butter Auth says no account can be created
+                from this address, leaving the single Log in button the
+                butrauth-disabled build shows -- so the bar has no gap where a
+                button used to be. Fails open: a failed check still offers it.
+                Not shown while the check is in flight: for someone it refuses
+                (a VPN, say) it flashed in on every load and then vanished. */}
+            {ENABLE_BUTRAUTH && !signupPossible.loading && signupPossible.possible ? (
+              <>
+                <button type="button" className="v2-btn v2-btn--secondary h40 nav-guest-login nav-guest-login--secondary" onClick={() => openLoginModal('login')}>
+                  <Icon name="login" size={18} /><span className="v2-btn__label">{t('common.actions.login')}</span>
+                </button>
+                <button type="button" className="v2-btn v2-btn--primary h40 nav-guest-signup" onClick={() => openLoginModal('signup')}>
+                  <span className="v2-btn__label">{t('common.actions.signUp')}</span>
+                </button>
+              </>
+            ) : (
+              <button type="button" className="v2-btn v2-btn--primary h40 nav-guest-login" onClick={() => openLoginModal('login')}>
+                <Icon name="login" size={18} /><span className="v2-btn__label">{t('common.actions.login')}</span>
+              </button>
+            )}
+            </>)}
+            {settingsGear}
+          </div>
+        )}
+      </div>
 
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
       {!settingsOpen && settingsPeek.rendered && settingsRect && (

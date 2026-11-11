@@ -1,7 +1,6 @@
-// The button IS the Message button: `.name-actions .btn.btn-hero-message` in
-// ProfileHeader.scss styles it, and the same file places it in the row below
-// (the action row's own specificity is far too high to override from here).
-// All that's left is undoing what an <a> brings along.
-.profile-links-btn {
+// The Links tile wears the header's .ph-tile look (ProfileHeader.scss); an <a>
+// only needs its underline and link colour undone.
+.profile-links-btn.ph-tile {
   text-decoration: none;
+  color: var(--text);
 }

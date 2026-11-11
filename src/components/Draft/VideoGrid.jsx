@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import VideoCard, { VideoData } from './VideoCard';
+import VideoCard from './VideoCard';
 import FilterBar from './FilterBar';
 // import { toast } from 'sonner';
 import { toastIn } from '../../utils/toast';
 import 'react-toastify/dist/ReactToastify.css';
 import "./VideoGrid.scss"
 import { useTranslation } from 'react-i18next';
+import { EmptyState } from '../v2/ui';
 
 // Every toast from this module is headed "Video"; the message becomes the
 // line under it. See utils/toast.js.
@@ -24,19 +25,19 @@ const VideoGrid = ({ videos }) => {
     setFilter(newFilter);
   };
 
-  const handleEdit = (id) => {
+  const handleEdit = () => {
     toast.info(t('upload.drafts.comingSoon.edit'));
   };
 
-  const handleView = (id) => {
+  const handleView = () => {
     toast.info(t('upload.drafts.comingSoon.view'));
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = () => {
     toast.error(t('upload.drafts.comingSoon.delete'));
   };
 
-  const handlePublish = (id) => {
+  const handlePublish = () => {
     toast.success(t('upload.drafts.comingSoon.publish'));
   };
 
@@ -47,9 +48,7 @@ const VideoGrid = ({ videos }) => {
       <FilterBar onFilterChange={handleFilterChange} activeFilter={filter} />
       
       {filteredVideos.length === 0 ? (
-        <div className="no-videos fade-in">
-          <p>{t('upload.drafts.emptyFiltered')}</p>
-        </div>
+        <EmptyState icon="video_library" title={t('upload.drafts.emptyFiltered')} />
       ) : (
         <div className="video-grid">
           {filteredVideos.map(video => (

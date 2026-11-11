@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom';
 import { getFollowers, getRelationshipBetweenAccounts, isAccountValid } from '../../hive-api/api';
 // Aliased: this component already has a local `isCreatorHidden` boolean (the
@@ -15,14 +15,7 @@ import { useInfiniteQuery, useQuery, useQueryClient as useReactQueryClient } fro
 import axios from 'axios';
 import { MY_VIDEOS_URL, CHECKER_URL } from '../../utils/config';
 import Card3 from '../Cards/Card3';
-import { IoMdShare, IoMdAdd } from 'react-icons/io';
-import { MdRssFeed } from 'react-icons/md';
-import { MdAdd, MdClose, MdPlayArrow, MdFlag, MdChatBubbleOutline } from 'react-icons/md';
 import ReportModal, { isReported } from '../modal/ReportModal';
-import { RiUserFollowLine, RiUserUnfollowLine } from 'react-icons/ri';
-import { BiDollar } from 'react-icons/bi';
-import { Gift } from 'lucide-react';
-import { IoBanOutline, IoEyeOutline, IoPlanetOutline } from 'react-icons/io5';
 import useGalaxyFits from '../../hooks/useGalaxyFits';
 import { getHidden, hideCreator, unhideCreator, refreshRailsAfterHide } from '../../utils/userFilters';
 import Follower from './Follower';
@@ -37,7 +30,6 @@ import { useContentBatch } from '../../hooks/useContentBatch';
 import { useWatchHistory } from '../../hooks/useWatchHistory';
 import useViewCounts from '../../hooks/useViewCounts';
 import { fetchUserShortsWithDetails } from '../../hive-api/hiveApi';
-import ShortsIcon from '../icons/ShortsIcon';
 import TipModal from '../tip-reward/TipModal';
 import UserAudioList from './UserAudioList';
 import CommunitySnaps from './CommunitySnaps';
@@ -55,7 +47,9 @@ import ProfileStats from '../ProfileHeader/ProfileStats';
 import ProfileOverview from './ProfileOverview';
 import ProfileLinksButton from './ProfileLinksButton';
 import ProfileEmptyState from './ProfileEmptyState';
-import ModalHeader from '../ModalHeader/ModalHeader';
+import { Button, Dialog, Field, Segmented, EmptyState } from '../v2/ui';
+import { Icon } from '../v2/Icon';
+import { ProfileTile, ProfileMoreMenu, ProfileTabs } from './ProfileActions';
 import { useTranslation, Trans } from 'react-i18next';
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -129,15 +123,6 @@ function UserProfilePage({ user: userProp }) {
     // The specific snap an Overview card routed here for (if any).
     const targetSnap = searchParams.get('snap') || null;
     const openSnapComments = searchParams.get('comments') === '1';
-
-    // Tabs are a horizontal scroll rail, so the selected one can start out
-    // off-screen — most obviously when a deep link lands on a late tab like
-    // Analytics. Bring it into view on change.
-    const tabsRef = useRef(null);
-    useEffect(() => {
-      const active = tabsRef.current?.querySelector('span.active');
-      active?.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });
-    }, [show]);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [newPlaylistName, setNewPlaylistName] = useState('');
@@ -539,6 +524,30 @@ const {
         navigate(`/wallet/${user}`)
       }
     
+  const profileUrl = `${window.location.origin}/@${user}`;
+  const copyProfileLink = async () => {
+    try {
+      await navigator.clipboard.writeText(profileUrl);
+      toast.success(t('profile.page.linkCopied'));
+    } catch { /* clipboard blocked: nothing to do */ }
+  };
+  const shareProfile = async () => {
+    const shareData = { title: t('profile.page.onThreeSpeak', { user }), text: t('profile.page.shareText', { user }), url: profileUrl };
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(profileUrl);
+        toast.success(t('profile.page.linkCopied'));
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        await navigator.clipboard.writeText(profileUrl);
+        toast.success(t('profile.page.linkCopied'));
+      }
+    }
+  };
+
   if (userExists === null && !isOwnProfile) {
     return <div className="profile-page-container"><BarLoader /></div>;
   }
@@ -546,14 +555,14 @@ const {
   if (userExists === false) {
     return (
       <div className="profile-page-container">
-        <div className="empty-wrap" style={{ padding: '4rem 1rem', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>404</h2>
-          <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+        <div className="profile-missing">
+          <EmptyState
+            icon="person_off"
+            title="404"
+            action={<Button variant="secondary" next onClick={() => navigate('/')}>{t('profile.page.goHome')}</Button>}
+          >
             <Trans i18nKey="profile.page.userNotFound" values={{ user }} components={{ b: <strong /> }} />
-          </p>
-          <button onClick={() => navigate('/')} style={{ padding: '10px 24px', borderRadius: '8px', background: 'transparent', color: 'var(--accent-primary, #e53935)', border: '1px solid var(--accent-primary, #e53935)', cursor: 'pointer', fontSize: '14px' }}>
-            {t('profile.page.goHome')}
-          </button>
+          </EmptyState>
         </div>
       </div>
     );
@@ -563,20 +572,42 @@ const {
   if (isHiddenProfile) {
     return (
       <div className="profile-page-container">
-        <div className="empty-wrap" style={{ padding: '4rem 1rem', textAlign: 'center' }}>
-          <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-            {t('profile.page.notAvailable')}
-          </p>
-          <button onClick={() => navigate('/')} style={{ padding: '10px 24px', borderRadius: '8px', background: 'transparent', color: 'var(--accent-primary, #e53935)', border: '1px solid var(--accent-primary, #e53935)', cursor: 'pointer', fontSize: '14px' }}>
-            {t('profile.page.goHome')}
-          </button>
+        <div className="profile-missing">
+          <EmptyState
+            icon="visibility_off"
+            title={t('profile.page.notAvailable')}
+            action={<Button variant="secondary" next onClick={() => navigate('/')}>{t('profile.page.goHome')}</Button>}
+          />
         </div>
       </div>
     );
   }
 
+  const tabs = [
+    { value: 'overview', label: t('profile.tabs.overview') },
+    { value: 'video', label: t('profile.tabs.videos'), count: videoCount },
+    { value: 'shorts', label: t('profile.tabs.shorts'), count: shortsCount },
+    { value: 'audio', label: t('profile.tabs.audio'), count: audioCount },
+    hasGated && { value: 'members', label: t('profile.tabs.members'), count: gatedVideos.length, icon: 'lock' },
+    (supporterCount > 0 || hasGivenTips || isOwnProfile) && { value: 'supports', label: t('profile.tabs.supporters'), count: supporterCount },
+    streamCount > 0 && { value: 'streams', label: t('profile.tabs.streams'), count: streamCount },
+    { value: 'community', label: t('profile.tabs.community'), count: snapCount },
+    { value: 'playlists', label: t('profile.tabs.playlists'), count: playlists.length },
+    isOwnProfile && { value: 'links', label: t('profile.tabs.links') },
+    canSeeStats && { value: 'stats', label: t('profile.tabs.analytics') },
+  ].filter(Boolean);
+
   return (
     <div className="profile-page-container">
+      {/* Podcast / RSS feed for the channel. React 19 hoists the <link> into
+          <head>, which is what makes browsers and feed readers auto-discover
+          it; the More menu has the link for people who want the URL. */}
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        title={t('profile.page.onThreeSpeak', { user })}
+        href={`${window.location.origin}/rss/${user}.xml`}
+      />
       <ProfileHeader
         username={user}
         name={user}
@@ -585,39 +616,58 @@ const {
         meta={<ProfileStats username={user} followers={follower?.follower_count} onFollowersClick={() => setShow("follower")} />}
         nameActions={!isOwnProfile ? (
           <>
-            {/* Own classes, not btn-follow: a global
-                `[data-theme="dark"] .btn-follow` rule forces the red outline
-                with !important, and these are deliberately not red. */}
-            <button
-              className={`btn ${isFollowing ? 'btn-hero-following' : 'btn-hero-follow'}`}
+            {/* Follow is the point of a profile, so it is the one red button
+                (20b). Signed-out visitors get it too; it asks them to sign in. */}
+            <Button
+              variant={isFollowing ? 'secondary' : 'primary'}
+              size={64}
+              className="ph-follow"
               onClick={handleFollowToggle}
               disabled={followLoading}
+              loading={followLoading}
+              trailing={followLoading ? null : <Icon name={isFollowing ? 'how_to_reg' : 'person_add'} size={24} />}
             >
               {followLoading ? t('common.status.loading') : isFollowing ? t('common.actions.following') : t('common.actions.follow')}
-            </button>
-            <button
-              className="btn btn-hero-message"
+            </Button>
+            <ProfileTile
+              icon="chat_bubble"
+              label={t('profile.page.message')}
               title={t('profile.page.messageTitle', { user })}
               onClick={() => {
                 if (!authenticated) { toast.error(t('profile.page.messageLogin')); return; }
                 openChat({ dm: user });
               }}
-            >
-              <MdChatBubbleOutline /> {t('profile.page.message')}
-            </button>
-            {/* Signed out too: the tip window opens on Lightning. Phones get
-                Tip from the speed-dial instead (ProfileHeader.scss hides this). */}
-            <button
-              className="btn btn-hero-message btn-hero-tip"
+            />
+            {/* Signed out too: the tip window opens on Lightning. Phones tip
+                from the speed-dial instead (UserProfilePage.scss hides this). */}
+            <ProfileTile
+              icon="volunteer_activism"
+              label={t('profile.fab.tip')}
               title={t('profile.fab.tipCreator')}
+              className="ph-tile--tip"
               onClick={() => setIsTipModalOpen(true)}
-            >
-              <Gift size={16} /> {t('profile.fab.tip')}
-            </button>
+            />
+            <ProfileTile icon="ios_share" label={t('common.actions.share')} onClick={shareProfile} />
             {/* Narrow screens only: below 1025px the framed links page beside
-                Overview isn't rendered, so this is the way through to it. It
-                sits directly under Message (see ProfileLinksButton.scss). */}
+                Overview isn't rendered, so this is the way through to it. */}
             <ProfileLinksButton username={user} />
+            <ProfileMoreMenu
+              title={t('profile.page.moreActions', { user })}
+              items={[
+                { icon: 'link', label: t('profile.page.copyProfileLink'), onClick: copyProfileLink },
+                { icon: 'rss_feed', label: t('profile.page.podcastFeed'), href: `/rss/${user}.xml`, external: true, title: t('profile.page.podcastFeedTitle', { user }) },
+                // This channel's Hive galaxy: who they follow and who those follow (page/Galaxy.jsx).
+                { icon: 'hub', label: t('galaxy.profileButton', { user }), href: `/galaxy/${user}`, hidden: !galaxyFits },
+                {
+                  icon: isCreatorHidden ? 'visibility' : 'visibility_off',
+                  label: hideLoading ? t('common.status.loading') : isCreatorHidden ? t('profile.page.unhideTitle', { user }) : t('profile.page.hideTitle', { user }),
+                  onClick: handleHideToggle,
+                  disabled: hideLoading,
+                  hidden: !authenticated,
+                },
+                { icon: 'flag', label: t('profile.page.reportUser'), onClick: () => setIsReportOpen(true), danger: true, title: isReported('user', user) ? t('profile.page.reportUser') : undefined },
+              ]}
+            />
           </>
         ) : null}
         badges={
@@ -631,133 +681,15 @@ const {
           </>
         }
         aside={<SocialLinks hiveUsername={user} column />}
-        actions={
-          <>
-            {/* The follower pill is gone — the count lives in the stat line
-                under the bio, which opens this same list when clicked. */}
-            {authenticated && !isOwnProfile && (
-              <button
-                className={`btn ${isCreatorHidden ? 'btn-hidden-creator' : 'btn-secondary'}`}
-                onClick={handleHideToggle}
-                disabled={hideLoading}
-                title={isCreatorHidden
-                  ? t('profile.page.unhideTitle', { user })
-                  : t('profile.page.hideTitle', { user })}
-              >
-                {hideLoading
-                  ? t('common.status.loading')
-                  : isCreatorHidden
-                    ? <><IoEyeOutline /> {t('profile.page.unhide')}</>
-                    : <><IoBanOutline /> {t('profile.page.hide')}</>}
-              </button>
-            )}
-            {/* This channel's Hive galaxy: who they follow and who those follow (page/Galaxy.jsx). */}
-            {galaxyFits && (
-              <Link
-                className="btn btn-secondary"
-                to={`/galaxy/${user}`}
-                title={t('galaxy.profileButton', { user })}
-                aria-label={t('galaxy.profileButton', { user })}
-              >
-                <IoPlanetOutline />
-              </Link>
-            )}
-            {/* Podcast / RSS feed for the channel. React 19 hoists the <link>
-                into <head>, which is what makes browsers and feed readers
-                auto-discover it; the button is for people who already know
-                what to do with a feed URL. */}
-            <link
-              rel="alternate"
-              type="application/rss+xml"
-              title={t('profile.page.onThreeSpeak', { user })}
-              href={`${window.location.origin}/rss/${user}.xml`}
-            />
-            <a
-              className="btn btn-secondary"
-              href={`/rss/${user}.xml`}
-              target="_blank"
-              rel="noreferrer"
-              title={t('profile.page.podcastFeedTitle', { user })}
-            >
-              <MdRssFeed />
-            </a>
-            <button
-              className="btn btn-secondary"
-              onClick={async () => {
-                const profileUrl = `${window.location.origin}/@${user}`;
-                const shareData = { title: t('profile.page.onThreeSpeak', { user }), text: t('profile.page.shareText', { user }), url: profileUrl };
-                try {
-                  if (navigator.share && navigator.canShare?.(shareData)) {
-                    await navigator.share(shareData);
-                  } else {
-                    await navigator.clipboard.writeText(profileUrl);
-                    toast.success(t('profile.page.linkCopied'));
-                  }
-                } catch (err) {
-                  if (err.name !== 'AbortError') {
-                    await navigator.clipboard.writeText(profileUrl);
-                    toast.success(t('profile.page.linkCopied'));
-                  }
-                }
-              }}
-            >
-              <IoMdShare />
-            </button>
-            <button
-              className={`btn btn-secondary${isReported('user', user) ? ' reported' : ''}`}
-              onClick={() => setIsReportOpen(true)}
-              title={t('profile.page.reportUser')}
-            >
-              <MdFlag />
-            </button>
-          </>
-        }
       />
-      <div className="toggle-wrap">
-        <div className="wrap" ref={tabsRef}>
-          <span className={show === "overview" ? "active" : ""} onClick={() => selectTab("overview")}>{t('profile.tabs.overview')}</span>
-          <span className={show === "video" ? "active" : ""} onClick={() => selectTab("video")}>
-            {t('profile.tabs.videos')} {videoCount > 0 && `(${videoCount})`}
-          </span>
-          <span className={show === "shorts" ? "active" : ""} onClick={() => selectTab("shorts")}>
-            {t('profile.tabs.shorts')} {shortsCount > 0 && `(${shortsCount})`}
-          </span>
-          <span className={show === "audio" ? "active" : ""} onClick={() => selectTab("audio")}>
-            {t('profile.tabs.audio')} {audioCount > 0 && `(${audioCount})`}
-          </span>
-          {hasGated && (
-            <span className={show === "members" ? "active" : ""} onClick={() => selectTab("members")}>
-              🔒 {t('profile.tabs.members')} ({gatedVideos.length})
-            </span>
-          )}
-          {(supporterCount > 0 || hasGivenTips || isOwnProfile) && (
-            <span className={show === "supports" ? "active" : ""} onClick={() => selectTab("supports")}>
-              {t('profile.tabs.supporters')} {supporterCount > 0 && `(${supporterCount})`}
-            </span>
-          )}
-          {streamCount > 0 && (
-            <span className={show === "streams" ? "active" : ""} onClick={() => selectTab("streams")}>
-              {t('profile.tabs.streams')} ({streamCount})
-            </span>
-          )}
-          <span className={show === "community" ? "active" : ""} onClick={() => selectTab("community")}>
-            {t('profile.tabs.community')} {snapCount > 0 && `(${snapCount})`}
-          </span>
-          <span className={show === "playlists" ? "active" : ""} onClick={() => selectTab("playlists")}>
-            {t('profile.tabs.playlists')} {playlists.length > 0 && `(${playlists.length})`}
-          </span>
-          {isOwnProfile && (
-            <span className={show === "links" ? "active" : ""} onClick={() => selectTab("links")}>{t('profile.tabs.links')}</span>
-          )}
-          {canSeeStats && (
-            <span className={show === "stats" ? "active" : ""} onClick={() => selectTab("stats")}>{t('profile.tabs.analytics')}</span>
-          )}
-          {/* Wallet navigates away rather than switching tabs, but it lives IN
-              the tab flow: floated outside it, it took its own line on a phone
-              and pushed the last tab onto a third. */}
-          <span className="tab-wallet" onClick={()=>{handleWalletNavigate(user)}}>{t('common.nav.wallet')}</span>
-        </div>
-      </div>
+      <ProfileTabs
+        tabs={tabs}
+        value={show}
+        onChange={(v) => selectTab(v)}
+        label={t('profile.layout.title')}
+        walletLabel={t('common.nav.wallet')}
+        onWallet={() => handleWalletNavigate(user)}
+      />
       <div className="container-video">
   {show === "overview" ? (
     <ProfileOverview
@@ -809,9 +741,11 @@ const {
   ) : show === "playlists" ? (
     <>
       {isOwnProfile && (
-        <button className="create-playlist-btn" onClick={() => setShowCreateModal(true)}>
-          <IoMdAdd /> {t('profile.playlists.create')}
-        </button>
+        <div className="profile-tab-actions">
+          <Button variant="secondary" icon="playlist_add" onClick={() => setShowCreateModal(true)}>
+            {t('profile.playlists.create')}
+          </Button>
+        </div>
       )}
       {playlistsLoading ? (
         <BarLoader />
@@ -831,57 +765,68 @@ const {
   )}
 </div>
 
-      {/* Create Playlist Modal */}
-      {showCreateModal && (
-        <div className="create-playlist-modal-overlay" onClick={() => setShowCreateModal(false)}>
-          <div className="create-playlist-modal" onClick={(e) => e.stopPropagation()}>
-            <ModalHeader title={t('profile.playlists.modalTitle')} onClose={isCreating ? undefined : () => setShowCreateModal(false)} />
-            <div className="form-group">
-              <label>{t('profile.playlists.nameLabel')}</label>
-              <input
-                type="text"
-                value={newPlaylistName}
-                onChange={(e) => setNewPlaylistName(e.target.value)}
-                placeholder={t('profile.playlists.namePlaceholder')}
-                autoFocus
-              />
-            </div>
-            <div className="form-group">
-              <label>{t('profile.playlists.visibility')}</label>
-              <select
-                value={newPlaylistAccess}
-                onChange={(e) => setNewPlaylistAccess(e.target.value)}
-              >
-                <option value="public">{t('profile.playlists.public')}</option>
-                <option value="private">{t('profile.playlists.private')}</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>{t('playlists.type.label')}</label>
-              <select value={newPlaylistType} onChange={(e) => setNewPlaylistType(e.target.value)}>
-                <option value="video">{t('playlists.type.video')}</option>
-                <option value="audio">{t('playlists.type.audio')}</option>
-              </select>
-            </div>
-            {newPlaylistType === 'audio' && (
-              <div className="form-group">
-                <label>{t('playlists.type.kindLabel')}</label>
-                <select value={newPlaylistKind} onChange={(e) => setNewPlaylistKind(e.target.value)}>
-                  {AUDIO_KINDS.map((k) => <option key={k} value={k}>{t(`playlists.type.kinds.${k}`)}</option>)}
-                </select>
-              </div>
-            )}
-            <div className="modal-actions">
-              <button className="btn-cancel" onClick={() => setShowCreateModal(false)} disabled={isCreating}>
-                {t('common.actions.cancel')}
-              </button>
-              <button className="btn-create" onClick={handleCreatePlaylist} disabled={isCreating}>
-                {isCreating ? t('profile.playlists.creating') : t('profile.playlists.create')}
-              </button>
-            </div>
-          </div>
+      {/* Create playlist: the shared v2 dialog (a bottom sheet on phones). */}
+      <Dialog
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        dismissible={!isCreating}
+        title={t('profile.playlists.modalTitle')}
+        closeLabel={t('common.actions.close')}
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setShowCreateModal(false)} disabled={isCreating}>
+              {t('common.actions.cancel')}
+            </Button>
+            <Button variant="primary" onClick={handleCreatePlaylist} disabled={isCreating} loading={isCreating} trailing="check">
+              {isCreating ? t('profile.playlists.creating') : t('profile.playlists.create')}
+            </Button>
+          </>
+        }
+      >
+        <Field
+          label={t('profile.playlists.nameLabel')}
+          value={newPlaylistName}
+          onChange={(e) => setNewPlaylistName(e.target.value)}
+          placeholder={t('profile.playlists.namePlaceholder')}
+          autoFocus
+        />
+        <div className="v2-field">
+          <span className="v2-eyebrow">{t('profile.playlists.visibility')}</span>
+          <Segmented
+            options={[
+              { value: 'public', label: t('profile.playlists.public'), icon: 'public' },
+              { value: 'private', label: t('profile.playlists.private'), icon: 'lock' },
+            ]}
+            value={newPlaylistAccess}
+            onChange={setNewPlaylistAccess}
+            label={t('profile.playlists.visibility')}
+          />
         </div>
-      )}
+        <div className="v2-field">
+          <span className="v2-eyebrow">{t('playlists.type.label')}</span>
+          <Segmented
+            options={[
+              { value: 'video', label: t('playlists.type.video'), icon: 'smart_display' },
+              { value: 'audio', label: t('playlists.type.audio'), icon: 'graphic_eq' },
+            ]}
+            value={newPlaylistType}
+            onChange={setNewPlaylistType}
+            label={t('playlists.type.label')}
+          />
+        </div>
+        {newPlaylistType === 'audio' && (
+          <Field label={t('playlists.type.kindLabel')} id="create-playlist-kind">
+            <select
+              id="create-playlist-kind"
+              className="v2-input is-select"
+              value={newPlaylistKind}
+              onChange={(e) => setNewPlaylistKind(e.target.value)}
+            >
+              {AUDIO_KINDS.map((k) => <option key={k} value={k}>{t(`playlists.type.kinds.${k}`)}</option>)}
+            </select>
+          </Field>
+        )}
+      </Dialog>
 
       {/* Tip Modal — only mount when open */}
       {isTipModalOpen && (
@@ -892,7 +837,8 @@ const {
         />
       )}
 
-      {/* Mobile FAB — speed-dial for quick actions on other users' profiles */}
+      {/* Mobile action button (37b): a speed-dial for quick actions on other
+          users' profiles. */}
       {createPortal(
         <>
           {fabOpen && (
@@ -912,7 +858,7 @@ const {
                       disabled={followLoading}
                       aria-label={isFollowing ? t('common.actions.unfollow') : t('common.actions.follow')}
                     >
-                      {isFollowing ? <RiUserUnfollowLine size={20} /> : <RiUserFollowLine size={20} />}
+                      <Icon name={isFollowing ? 'person_remove' : 'person_add'} size={24} />
                     </button>
                   </div>
                 )}
@@ -920,13 +866,13 @@ const {
                 {/* Signed out too: the tip window opens on Lightning. */}
                 {!isOwnProfile && (
                   <div className="profile-fab-action">
-                    <span className="profile-fab-action-label">{t('profile.fab.tip')}</span>
+                    <span className="profile-fab-action-label">{t('profile.fab.tipCreator')}</span>
                     <button
                       className="profile-fab-action-btn"
                       onClick={() => { setIsTipModalOpen(true); setFabOpen(false); }}
                       aria-label={t('profile.fab.tipCreator')}
                     >
-                      <BiDollar size={20} />
+                      <Icon name="volunteer_activism" size={24} />
                     </button>
                   </div>
                 )}
@@ -942,7 +888,7 @@ const {
                       }}
                       aria-label={t('profile.fab.watchLatestVideo')}
                     >
-                      <MdPlayArrow size={22} />
+                      <Icon name="smart_display" size={24} />
                     </button>
                   </div>
                 )}
@@ -958,7 +904,7 @@ const {
                       }}
                       aria-label={t('profile.fab.watchLatestShort')}
                     >
-                      <ShortsIcon className="profile-fab-shorts-icon" outlineWidth={30} />
+                      <Icon name="view_day" size={24} />
                     </button>
                   </div>
                 )}
@@ -969,8 +915,9 @@ const {
               className="profile-fab-main"
               onClick={() => setFabOpen(prev => !prev)}
               aria-label={fabOpen ? t('profile.fab.closeMenu') : t('profile.fab.openActions')}
+              aria-expanded={fabOpen}
             >
-              {fabOpen ? <MdClose size={24} /> : <MdAdd size={24} />}
+              <Icon name={fabOpen ? 'close' : 'add'} size={32} />
             </button>
           </div>
         </>,

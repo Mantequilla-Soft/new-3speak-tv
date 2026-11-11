@@ -1,108 +1,116 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import Transcript from './Transcript';
-import { listSubtitleLanguages } from '../../hooks/useSubtitles';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { cx } from '../v2/helpers';
+import { Icon } from '../v2/Icon';
 import './WatchTabs.scss';
 
-// The side tab last picked on the watch page ('reactions' | 'transcript').
+// The side tab last picked on the watch page ('discussion' | 'transcript' | ...).
 const WATCH_TAB_KEY = '3speak-watch-side-tab';
 
-/**
- * The top of the watch page's right column: reactions and the transcript,
- * one at a time, above the recommendations.
- *
- * The transcript used to sit under the comments, where nobody scrolled to it.
- * It belongs beside the video, next to the other "more about this video" panel,
- * and sharing the column with reactions costs neither of them any room.
- *
- * DESKTOP ONLY for the transcript. On a phone the right column stacks under
- * everything else and a wall of subtitle lines between the video and the
- * recommendations is in the way rather than useful — so on mobile this renders
- * the reaction panel exactly as it did before, with no tab bar at all. Same
- * when a video has no subtitles: one thing to show means no tabs to pick from.
- */
-export default function WatchTabs({ reactionPanel, author, permlink, currentTime = 0, onSeek }) {
-  const { t } = useTranslation();
-  const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches,
+// The two-column watch layout starts here (Watch v2, 02). Below it the page is one
+// column and the side panels become a row of chips above one scroll area.
+export const WATCH_WIDE_QUERY = '(min-width: 1024px)';
+
+export function useWideWatch() {
+  const [wide, setWide] = useState(
+    () => typeof window !== 'undefined' && !!window.matchMedia?.(WATCH_WIDE_QUERY).matches,
   );
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)');
-    const on = () => setIsDesktop(mq.matches);
+    const mq = window.matchMedia?.(WATCH_WIDE_QUERY);
+    if (!mq) return undefined;
+    const on = () => setWide(mq.matches);
     mq.addEventListener('change', on);
     return () => mq.removeEventListener('change', on);
   }, []);
+  return wide;
+}
 
-  // One cheap list call decides whether there's a transcript to offer; the
-  // panel itself only mounts once its tab is chosen.
-  const [hasSubtitles, setHasSubtitles] = useState(false);
-  useEffect(() => {
-    if (!isDesktop) { setHasSubtitles(false); return undefined; }
-    let alive = true;
-    setHasSubtitles(false);
-    listSubtitleLanguages(author, permlink)
-      .then((list) => { if (alive) setHasSubtitles(list.length > 0); })
-      .catch(() => {});
-    return () => { alive = false; };
-  }, [author, permlink, isDesktop]);
-
-  const tabs = useMemo(() => {
-    const out = [];
-    if (reactionPanel) out.push('reactions');
-    if (isDesktop && hasSubtitles) out.push('transcript');
-    return out;
-  }, [reactionPanel, isDesktop, hasSubtitles]);
-
+/**
+ * Which side tab is open. The tab last picked wins whenever this video has it
+ * (the transcript tab arrives after the subtitles do, so without that a
+ * transcript reader landed on Discussion every time); otherwise the current one
+ * stays, else the first.
+ */
+export function useSideTab(ids) {
+  const key = ids.join('|');
   const [active, setActive] = useState(null);
-  // Keep the selection valid as tabs appear and disappear (resizing across the
-  // breakpoint, subtitles arriving late, reactions being closed). The tab last
-  // picked wins whenever this video has it: the transcript tab arrives after the
-  // subtitles do, so without that a transcript reader landed on Reactions every time.
   useEffect(() => {
     let pref = null;
     try { pref = localStorage.getItem(WATCH_TAB_KEY); } catch { /* storage off */ }
-    setActive((cur) => (pref && tabs.includes(pref)
+    setActive((cur) => (pref && ids.includes(pref)
       ? pref
-      : (cur && tabs.includes(cur) ? cur : tabs[0] || null)));
-  }, [tabs]);
-  const pickTab = (tab) => {
-    setActive(tab);
-    try { localStorage.setItem(WATCH_TAB_KEY, tab); } catch { /* storage off */ }
-  };
+      : (cur && ids.includes(cur) ? cur : ids[0] || null)));
+  }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
+  const pick = useCallback((id, { remember = true } = {}) => {
+    setActive(id);
+    if (!remember) return;
+    try { localStorage.setItem(WATCH_TAB_KEY, id); } catch { /* storage off */ }
+  }, []);
+  return [active, pick];
+}
 
-  if (!tabs.length) return null;
-  // Nothing to choose between: render exactly what was there before.
-  if (tabs.length === 1 && tabs[0] === 'reactions') return reactionPanel;
+/**
+ * The watch page's side panel (02, 22a): a segmented track of panels over ONE
+ * fixed-height scroll area, with an optional footer pinned under it (the
+ * discussion composer slot). Switching tabs never changes the panel's size.
+ *
+ * On a wide screen it sits beside the player and takes the player's height. On
+ * a narrow one it is a row of chips above a fixed scroll area (STYLE_GUIDE §11,
+ * "Mobile variant of any desktop panel").
+ *
+ * tabs: [{ id, label, count, icon, content, keepMounted }]. A keepMounted tab
+ * stays in the DOM while hidden: the discussion keeps its draft and the live
+ * chat keeps the portal it is drawn into.
+ */
+export default function WatchTabs({ tabs, active, onChange, footer = null, footerFor = [], wide, label, className, panelRef }) {
+  const list = useMemo(() => tabs.filter(Boolean), [tabs]);
+  if (!list.length) return null;
+  const current = list.some((tab) => tab.id === active) ? active : list[0].id;
+  const showFooter = footer && footerFor.includes(current);
 
   return (
-    <div className="watch-tabs">
-      <div className="watch-tabs-bar" role="tablist">
-        {tabs.map((tab) => (
-          <button
-            key={tab}
-            type="button"
-            role="tab"
-            aria-selected={active === tab}
-            className={`watch-tab${active === tab ? ' active' : ''}`}
-            onClick={() => pickTab(tab)}
-          >
-            {tab === 'reactions' ? t('comments.tabs.reactions') : t('comments.tabs.transcript')}
-          </button>
-        ))}
+    <section className={cx('wv2-side', wide ? 'is-wide' : 'is-narrow', className)} aria-label={label} ref={panelRef}>
+      <div className={cx('wv2-side__tabs', wide ? 'v2-seg is-block' : 'is-chips')} role="tablist" aria-label={label}>
+        {list.map((tab) => {
+          const on = tab.id === current;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              id={`wv2-tab-${tab.id}`}
+              aria-selected={on}
+              aria-controls={`wv2-panel-${tab.id}`}
+              className={cx(wide ? 'v2-seg__opt h36' : 'v2-chip wv2-side__chip', on && 'is-on')}
+              onClick={() => onChange?.(tab.id)}
+            >
+              {tab.icon && <Icon name={tab.icon} size={16} />}
+              {tab.label}
+              {tab.count != null && tab.count !== 0 && <span className={wide ? 'v2-seg__n' : 'v2-chip__n'}>{tab.count}</span>}
+            </button>
+          );
+        })}
       </div>
 
-      <div className="watch-tabs-panel" role="tabpanel">
-        {active === 'reactions' && reactionPanel}
-        {active === 'transcript' && (
-          <Transcript
-            author={author}
-            permlink={permlink}
-            currentTime={currentTime}
-            onSeek={onSeek}
-            embedded
-          />
-        )}
+      <div className="wv2-side__body">
+        {list.map((tab) => {
+          const on = tab.id === current;
+          if (!on && !tab.keepMounted) return null;
+          return (
+            <div
+              key={tab.id}
+              id={`wv2-panel-${tab.id}`}
+              role="tabpanel"
+              aria-labelledby={`wv2-tab-${tab.id}`}
+              className={cx('wv2-side__scroll', tab.flush && 'is-flush')}
+              hidden={!on}
+            >
+              {tab.content}
+            </div>
+          );
+        })}
       </div>
-    </div>
+
+      {footer && <div className="wv2-side__foot" hidden={!showFooter}>{footer}</div>}
+    </section>
   );
 }

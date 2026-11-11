@@ -1,7 +1,11 @@
+// Settings (18d, 29b, 38a-c): a dialog with a segmented tab track, its body a
+// fixed-height scroll area of cards on the page ground. On a phone it is a
+// bottom sheet that opens on the sections as tiles. Tokens and mixins only.
+@use "../../styles/v2" as v2;
+
 .settings-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
   // Must clear the page FABs, which sit far above the old 2000: the profile FAB is
   // 9998/9999 (UserProfilePage.scss) and the watch FAB is 49-51 (PlayVideo.scss).
   // At 2000 the profile FAB punched straight through this sheet.
@@ -12,43 +16,520 @@
   // (ProfileNav/BottomNav are 100000 but close their menus before opening this, so
   // they never compete.)
   z-index: 99999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--overlay);
+  animation: v2-fade var(--t-base) var(--ease);
 }
 
 .settings-modal {
-  background: var(--card-bg, #1a1a2e);
-  color: var(--text-primary, #fff);
-  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.12));
-  border-radius: 14px;
-  width: 520px;   // wider on desktop; the mobile sheet overrides to 100% below
-  max-width: 100%;
-  padding: 18px 20px 22px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  // Never taller than the viewport — scroll inside if the content overflows.
-  max-height: min(86vh, 720px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  width: min(680px, 100%);
+  // Fixed: a tab switch never resizes or moves the window; the body scrolls.
+  height: min(720px, calc(100vh - 48px));
+  height: min(720px, calc(100dvh - 48px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-3xl);
+  box-shadow: var(--shadow-sheet);
+  outline: none;
+  text-align: left;
+  animation: v2-pop var(--t-base) var(--ease);
 }
 
-// Hover peek from the top bar's gear (SettingsModal `dropdown`): hung under the
-// gear (top/left/width inline), no backdrop. A peek lets the page under it work;
-// once held, a see-through layer catches the click outside that closes it.
-// `--leaving` fades it out (200ms, hooks/useHoverPeek.js). Desktop/tablet only:
-// the gear never peeks at phone widths.
+.settings-grab { display: none; }
+
+.settings-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  padding: 18px 16px 10px 20px;
+
+  .settings-head-title {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    @include v2.text(title);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// The main tabs: one segmented track under the title (38a)
+.settings-tabs.v2-seg {
+  flex: none;
+  margin: 0 20px 12px;
+}
+
+.settings-body {
+  flex: 1;
+  min-height: 0;
+  @include v2.scroll-y;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px 20px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+// Sub-tabs (Content, Connections): a track on the ground, the chosen one raised
+.settings-subtabs.v2-seg {
+  flex: none;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+// ─── Cards ───
+.settings-section {
+  @include v2.card;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  min-width: 0;
+}
+
+.settings-section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .settings-section-title { flex: 1; min-width: 0; }
+}
+
+// The title with its 4px bar (also used by panels that render their own title
+// inside Settings, e.g. Linked profiles)
+.settings-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  @include v2.text(title-sm);
+  color: var(--text);
+
+  &::before {
+    content: "";
+    flex: none;
+    width: 4px;
+    height: 22px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  &.is-cyan::before { background: var(--cyan); }
+}
+
+.settings-title-status {
+  @include v2.text(meta);
+  color: var(--muted);
+}
+
+// Rows inside a card: SettingRow already divides them; keep them flush.
+.settings-section .v2-setting {
+  padding: 12px 0;
+
+  .v2-setting__body > span { line-height: 1.4; }
+}
+
+.settings-section-head + .v2-setting { padding-top: 4px; }
+
+.settings-note {
+  margin: 0;
+  @include v2.text(meta);
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.settings-hint {
+  @include v2.text(meta-sm);
+  color: var(--muted);
+}
+
+.settings-status {
+  margin: 0;
+  @include v2.text(meta);
+  color: var(--muted);
+}
+
+// A well row: icon tile, text, control (device, posting authority, Lightning)
+.settings-well-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.settings-well-icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  color: var(--muted);
+
+  &.is-cyan { background: var(--cyan-tint); color: var(--cyan); }
+  &.is-accent { background: var(--accent-tint); color: var(--accent); }
+}
+
+.settings-well-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  b { @include v2.text(body-sm); font-weight: 700; color: var(--text); overflow-wrap: anywhere; }
+  > span { @include v2.text(meta); color: var(--muted); line-height: 1.4; }
+}
+
+.settings-ln-where { font-family: var(--font-mono); }
+
+// The Lightning address in use, outlined like a chosen card when it is their own
+.settings-ln-now.is-own { box-shadow: inset 0 0 0 2px var(--accent); }
+
+// Label + field + button on one line
+.settings-inline-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.settings-inline-form-row {
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+
+  .v2-input { flex: 1; min-width: 0; }
+}
+
+.settings-section .v2-input {
+  background: var(--bg);
+
+  &.is-error { border-color: var(--accent); }
+  &:disabled { opacity: .6; }
+}
+
+.settings-mono-input { font-family: var(--font-mono); font-size: 13px; }
+
+// ─── Ads: the community share (38a) ───
+.settings-split {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+}
+
+.settings-split-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.settings-split-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  b { @include v2.text(body-sm); font-weight: 700; }
+  span { @include v2.text(meta-sm); color: var(--muted); line-height: 1.4; }
+}
+
+.settings-split-control {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.settings-split-input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 2px solid transparent;
+  @include v2.mono(14, 700);
+  color: var(--muted);
+
+  &:focus-within { border-color: var(--accent); }
+  &.is-error { border-color: var(--accent); }
+
+  input {
+    width: 44px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: right;
+    outline: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  }
+}
+
+.settings-split-bar {
+  height: 10px;
+  border-radius: var(--r-xs);
+  overflow: hidden;
+  background: var(--cyan);
+
+  span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    transition: width var(--t-base) var(--ease);
+  }
+}
+
+.settings-split-legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  @include v2.mono(12, 700);
+
+  .is-you { color: var(--accent); }
+  .is-community { color: var(--cyan); }
+}
+
+.settings-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ─── Referrals (38a) ───
+.settings-copy-well {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 6px 0 12px;
+  border-radius: var(--r-lg);
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    @include v2.mono(12, 700);
+    outline: none;
+    text-overflow: ellipsis;
+  }
+}
+
+.settings-earn-title { margin-top: 4px; }
+
+.settings-referral-tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+
+  @include v2.mobile { grid-template-columns: 1fr; }
+}
+
+.settings-referral-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  min-width: 0;
+
+  .settings-referral-tile-icon { color: var(--muted); margin-bottom: 2px; }
+  .settings-referral-tile-value { @include v2.mono(20, 900); line-height: 1.2; }
+  .settings-referral-tile-label { @include v2.text(meta-sm); font-weight: 700; color: var(--text); line-height: 1.3; }
+  .settings-referral-tile-desc { @include v2.text(10); color: var(--muted); line-height: 1.3; }
+
+  &.is-accent .settings-referral-tile-value { color: var(--accent); }
+  &.is-cyan .settings-referral-tile-value { color: var(--cyan); }
+}
+
+.settings-referral-ontop {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  @include v2.text(meta);
+  font-weight: 700;
+  color: var(--text);
+
+  .material-symbols-rounded { color: var(--cyan); }
+}
+
+// ─── Support links (31e) ───
+.settings-support-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 6px 6px 12px;
+    border-radius: var(--r-lg);
+    min-width: 0;
+  }
+
+  .settings-support-icon { color: var(--cyan); }
+}
+
+.settings-support-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+
+  b { @include v2.text(body-sm); font-weight: 700; }
+
+  a {
+    @include v2.mono(11, 500);
+    color: var(--muted);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover { color: var(--cyan); }
+  }
+}
+
+// ─── Notifications (38b) ───
+.settings-kind-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-kind-group-label { margin: 6px 0 0; }
+
+// ─── Interests ───
+.settings-interests-picker { min-width: 0; }
+
+// ─── About (38c) ───
+.settings-kv {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  min-width: 0;
+
+  > span { flex: none; @include v2.text(meta); color: var(--muted); }
+  > b {
+    flex: 1;
+    min-width: 0;
+    text-align: right;
+    @include v2.mono(12, 700);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// ─── Phone: tiles (18d) ───
+.settings-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+
+  b { @include v2.text(title-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+.settings-account-avatar { width: 48px; height: 48px; }
+
+.settings-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.settings-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 96px;
+  padding: 14px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 4%, var(--surface)); }
+  &:active { transform: scale(.98); }
+
+  b { margin-top: auto; @include v2.text(body); font-weight: 700; }
+}
+
+.settings-tile-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+
+  &.is-accent { background: var(--accent-tint-strong); color: var(--accent); }
+  &.is-cyan { background: var(--cyan-tint-strong); color: var(--cyan); }
+  &.is-muted { background: var(--surface-2); color: var(--muted); }
+}
+
+// ─── Hover peek from the top bar's gear (SettingsModal `dropdown`) ───
+// Hung under the gear (top/left/width inline), no backdrop. A peek lets the page
+// under it work; once held, a see-through layer catches the click outside that
+// closes it. `--leaving` fades it out (200ms, hooks/useHoverPeek.js).
 .settings-modal-overlay--dropdown {
-  background: transparent;
   display: block;
   padding: 0;
+  background: transparent;
   pointer-events: none;
+  animation: none;
 
   .settings-modal {
     pointer-events: auto;
-    box-shadow: var(--shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.2));
-    animation: settings-dropdown-in 0.18s ease-out;
-    transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+    height: min(640px, calc(100vh - 96px));
+    box-shadow: var(--shadow-float);
+    animation: settings-dropdown-in var(--t-base) var(--ease);
+    transition: opacity var(--t-base) ease-in, transform var(--t-base) ease-in;
 
     @media (prefers-reduced-motion: reduce) {
       animation: none;
@@ -67,601 +548,47 @@
     }
   }
 }
+
 @keyframes settings-dropdown-in {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: none; }
 }
 
-// Mobile: bottom sheet instead of a centred popup (convention: all popups are
-// bottom modals on mobile).
-@media (max-width: 640px) {
-  .settings-modal-overlay {
-    align-items: flex-end;
+// ─── Mobile: bottom sheet ───
+@include v2.mobile {
+  .settings-modal-overlay:not(.settings-modal-overlay--dropdown) {
+    place-items: end stretch;
     padding: 0;
-  }
-  .settings-modal {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 16px 16px 0 0;
-    border-bottom: none;
-    max-height: 88vh;
-    // No env(safe-area-inset-bottom): Android Chrome reports its system bar's
-    // height there even though the page ends above it, which left a band of empty
-    // sheet under the tab bar (same reason BottomNav leaves it out).
-    padding-bottom: 12px;
-    animation: settings-sheet-up 0.28s ease forwards;
 
-    // Flex so we can reorder: on a bottom sheet the tab bar belongs at the BOTTOM,
-    // within thumb reach, not up at the top edge of the screen.
-    display: flex;
-    flex-direction: column;
-
-    // The sheet scrolls; its children must not shrink to fit it instead. A flex
-    // item that scrolls on its own (the tab bar, overflow-x: auto) has no minimum
-    // height, so once a tab grew taller than the sheet the bar was squeezed down
-    // to its 10px of padding and the tabs vanished.
-    > * { flex-shrink: 0; }
-  }
-
-  // DOM order is header → tabs → panel. `order` moves the bar past the panel
-  // without touching the markup, which must stay tabs-before-panel for a11y.
-  // `.settings-modal` in front: the base .settings-tabs rule (margin-bottom: 18px)
-  // comes later in this file and used to win, leaving a gap under the bar.
-  .settings-modal .settings-tabs {
-    order: 2;
-    margin: 16px 0 0;
-
-    // Sticky, not merely last: on a long tab (Interests) the bar would otherwise
-    // sit below the fold and you'd have to scroll the sheet just to change tabs.
-    position: sticky;
-    bottom: 0;
-    z-index: 1;
-
-    // The bar is a translucent pill, so scrolling content would show through it
-    // and around its rounded corners. The tint goes over the sheet's own colour
-    // (one flat colour, layered), and a spread shadow in that colour is the plate
-    // that bleeds into the sheet's padding so content
-    // passes cleanly under. Not a ::before plate: the bar scrolls sideways
-    // (overflow-x: auto), which clips its own pseudo-elements to the bar.
-    background:
-      linear-gradient(var(--bg-tertiary, rgba(255, 255, 255, 0.05)), var(--bg-tertiary, rgba(255, 255, 255, 0.05))),
-      var(--card-bg, #1a1a2e);
-    box-shadow:
-      0 0 0 12px var(--card-bg, #1a1a2e),
-      0 8px 0 20px var(--card-bg, #1a1a2e);
-  }
-}
-
-@keyframes settings-sheet-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-.settings-section {
-  margin-top: 16px;
-}
-
-.settings-section-title {
-  margin: 0 0 6px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-secondary, #9aa);
-}
-
-// Explanatory line inside a section, between the switches.
-.settings-kind-group {
-  margin-bottom: 6px;
-}
-
-.settings-kind-group-label {
-  display: block;
-  margin: 12px 2px 2px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-muted, var(--text-secondary));
-}
-
-.settings-note {
-  margin: 6px 2px 10px;
-  font-size: 12.5px;
-  line-height: 1.45;
-  color: var(--text-secondary);
-}
-
-.settings-modal-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 12px 0;
-
-  & + & { border-top: 1px solid var(--border-light, rgba(255, 255, 255, 0.08)); }
-}
-
-.settings-row-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-}
-
-.settings-row-title {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.settings-row-desc {
-  font-size: 12px;
-  line-height: 1.4;
-  color: var(--text-secondary, #9aa);
-}
-
-// A small outlined action under a setting's text (e.g. "Count my listening too").
-.settings-inline-btn {
-  align-self: flex-start;
-  margin-top: 4px;
-  padding: 5px 12px;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:disabled { opacity: 0.6; cursor: default; }
-}
-
-// ─── Compact switch ───
-.settings-switch {
-  flex-shrink: 0;
-  width: 38px;
-  height: 22px;
-  border-radius: 11px;
-  border: none;
-  padding: 0;
-  position: relative;
-  cursor: pointer;
-  background: var(--border-light, rgba(255, 255, 255, 0.2));
-  transition: background 0.15s ease;
-
-  &.on { background: var(--accent-primary, #e0594b); }
-}
-
-.settings-switch-knob {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #fff;
-  transition: transform 0.15s ease;
-
-  .settings-switch.on & { transform: translateX(16px); }
-}
-
-// ─── Interests picker ───
-.settings-interests-status {
-  font-weight: 400;
-  font-size: 12px;
-  color: var(--text-muted, #888);
-}
-
-.settings-interests-hint {
-  margin: 0 0 12px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--text-secondary, #aaa);
-}
-
-.settings-interests-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.settings-interest-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 13px;
-  border-radius: 999px;
-  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.2));
-  background: transparent;
-  color: var(--text-primary, #f1f1f1);
-  font-size: 13.5px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
-
-  .settings-interest-emoji { font-size: 15px; line-height: 1; }
-
-  &:hover:not(:disabled) { border-color: var(--accent-primary, #e0594b); }
-
-  &.selected {
-    border-color: var(--accent-primary, #e0594b);
-    color: var(--accent-primary, #e0594b);
-    box-shadow: inset 0 0 0 1px var(--accent-primary, #e0594b);
-  }
-
-  &:disabled { opacity: 0.5; cursor: not-allowed; }
-}
-
-.settings-interests-actions {
-  margin-top: 14px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.settings-interests-save {
-  padding: 8px 18px;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  font-size: 13.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.12s ease;
-
-  &:disabled { opacity: 0.45; cursor: not-allowed; }
-}
-
-// ─── Tabs ───
-.settings-tabs {
-  display: flex;
-  gap: 4px;
-  padding: 4px;
-  margin-bottom: 18px;
-  background: var(--bg-tertiary, rgba(255, 255, 255, 0.05));
-  border-radius: 10px;
-
-  /* Six tabs overflow even on a desktop modal, so the row scrolls rather than
-     wrapping or crushing the labels.
-
-     The scrollbar is SHOWN. It used to be hidden, which left the last tab
-     ("About / Contact") cut off at the edge with nothing to say the row moved
-     at all -- a scrollable thing that looks unscrollable is just a thing with
-     a missing tab. Slim and quiet, so it reads as an affordance rather than
-     furniture. */
-  overflow-x: auto;
-  padding-bottom: 6px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-color) transparent;
-
-  &::-webkit-scrollbar { height: 6px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-
-  &::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 999px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
-}
-
-@media (max-width: 480px) {
-  .settings-tab {
-    font-size: 13px;
-    padding: 8px 10px;
-  }
-}
-
-/* The row inside Content. Deliberately a different shape from the tab bar
-   above it -- underlined text rather than a filled pill -- so two rows of tabs
-   stacked on each other read as a hierarchy instead of a repeat. */
-.settings-subtabs {
-  display: flex;
-  gap: 4px;
-  margin: -8px 0 14px;
-  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
-  overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar { display: none; }
-}
-
-.settings-subtab {
-  flex: 0 0 auto;
-  padding: 8px 12px;
-  margin-bottom: -1px;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  background: none;
-  color: var(--text-secondary, #aaa);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover { color: var(--text-primary, #f1f1f1); }
-
-  &.is-active {
-    color: var(--text-primary, #f1f1f1);
-    border-bottom-color: var(--accent-primary, #e53935);
-  }
-}
-
-.settings-tab {
-  /* 5 tabs now (was 2). Don't let them squeeze to unreadable widths — shrink is
-     capped and the row scrolls instead. */
-  flex: 1 1 auto;
-  min-width: max-content;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-secondary, #aaa);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.12s ease, color 0.12s ease;
-
-  &:hover:not(.active) { color: var(--text-primary, #f1f1f1); }
-
-  &.active {
-    background: var(--bg-secondary, #1e1e1e);
-    color: var(--text-primary, #f1f1f1);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
-  }
-}
-
-/* Status line under the ads toggle — loading, saving, or why a save failed. */
-.settings-ads-status {
-  margin: 6px 0 0;
-  padding: 0 4px;
-  font-size: 12px;
-  line-height: 1.45;
-  color: var(--text-muted);
-
-  &.error {
-    color: var(--accent-primary);
-  }
-}
-
-/* Community revenue-share editor, under the ads toggle. */
-.settings-ads-split {
-  align-items: flex-start;
-  gap: 14px;
-}
-
-.settings-ads-breakdown {
-  margin-top: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-primary);
-}
-
-.settings-ads-share-control {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.settings-ads-input {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--text-muted);
-
-  input {
-    width: 68px;
-    padding: 7px 9px;
-    border: 1px solid var(--input-border);
-    border-radius: 8px;
-    background: var(--input-bg);
-    color: var(--text-primary);
-    font-family: inherit;
-    font-size: 14px;
-    font-variant-numeric: tabular-nums;
-    text-align: right;
-
-    &:focus-visible {
-      outline: 2px solid var(--accent-primary);
-      outline-offset: 1px;
+    .settings-modal {
+      width: 100%;
+      height: 88vh;
+      height: 88dvh;
+      border-radius: var(--r-3xl) var(--r-3xl) 0 0;
+      border-bottom: 0;
+      animation: v2-up var(--t-slow) var(--ease);
     }
 
-    &[aria-invalid="true"] {
-      border-color: var(--accent-primary);
+    .settings-grab {
+      display: block;
+      flex: none;
+      width: 40px;
+      height: 4px;
+      margin: 8px auto 0;
+      border-radius: 2px;
+      background: var(--border);
     }
-  }
-}
 
-.settings-ads-save {
-  padding: 6px 14px;
-  border: 1px solid var(--accent-primary, #e53935);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--accent-primary, #e53935);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover:not(:disabled) { background: var(--accent-hover); }
-  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
-  &:disabled { opacity: 0.55; cursor: not-allowed; }
-}
-
-.settings-visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* @threespeak posting authority buttons. Remove stays neutral on purpose, so it
-   does not draw the eye; Add is the red one, outlined rather than filled. */
-.settings-auth-btn {
-  flex-shrink: 0;
-  padding: 6px 14px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-primary);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
-  &:disabled { opacity: 0.55; cursor: not-allowed; }
-}
-
-.settings-auth-add {
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
-}
-
-// Lightning tips: the address field sits under the row's text, full width.
-.settings-lightning .settings-row-text { flex: 1; gap: 6px; }
-
-.settings-lightning-form {
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-
-  input {
-    flex: 1;
-    min-width: 0;
-    padding: 7px 9px;
-    border: 1px solid var(--input-border);
-    border-radius: 8px;
-    background: var(--input-bg);
-    color: var(--text-primary);
-    font-family: inherit;
-    font-size: 13px;
-
-    &:focus { outline: none; border-color: var(--accent-primary); }
-  }
-}
-
-// Referrals: what an invite earns, as three flat tiles (Settings > Connections).
-.settings-referral-tiles {
-  list-style: none;
-  margin: 6px 0 2px;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 8px;
-}
-
-.settings-referral-tile {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 12px;
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
-  border-radius: 12px;
-  background: var(--card-bg, #1a1a2e);
-}
-
-.settings-referral-tile-icon {
-  font-size: 20px;
-  color: var(--accent-primary, #e53935);
-  margin-bottom: 4px;
-}
-
-.settings-referral-tile-value {
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.1;
-  color: var(--text-primary);
-}
-
-.settings-referral-tile-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.settings-referral-tile-desc {
-  font-size: 11px;
-  line-height: 1.35;
-  color: var(--text-secondary, #9aa);
-}
-
-.settings-referral-ontop {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-primary);
-
-  svg { flex: none; font-size: 16px; color: var(--accent-primary, #e53935); }
-}
-
-// Other ways to support you: one saved link per row, X to remove.
-.settings-support-links {
-  list-style: none;
-  margin: 2px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px;
-    border: 1px solid var(--input-border);
-    border-radius: 8px;
-    font-size: 13px;
-
-    svg { flex-shrink: 0; }
+    .settings-head { padding: 10px 12px 10px 16px; }
+    .settings-tabs.v2-seg { margin: 0 16px 12px; }
+    .settings-body { padding: 16px 16px calc(20px + env(safe-area-inset-bottom)); }
   }
 
-  a {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: var(--text-primary);
-    text-decoration: none;
+  .settings-section { padding: 14px; }
 
-    &:hover { text-decoration: underline; }
-  }
-
-  button {
-    display: inline-flex;
-    padding: 2px;
-    border: none;
-    background: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-
-    &:hover { color: var(--text-primary); }
-    &:disabled { opacity: 0.55; cursor: not-allowed; }
-  }
+  .settings-split-head { flex-direction: column; }
 }
 
-.settings-lightning-reset {
-  align-self: flex-start;
-  padding: 0;
-  border: none;
-  background: none;
-  color: var(--accent-primary);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:disabled { opacity: 0.55; cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) {
+  .settings-modal-overlay, .settings-modal { animation: none; }
 }

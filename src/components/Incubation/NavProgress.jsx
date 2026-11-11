@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppStore } from '../../lib/store';
 import {
-  fetchIncubationProgress, progressHue, progressFraction, onIncubationProgress,
+  fetchIncubationProgress, progressFraction, onIncubationProgress,
 } from '../../lib/incubation';
+import { Icon } from '../v2/ui';
 import { useTranslation } from 'react-i18next';
 import './NavProgress.scss';
 
@@ -155,6 +156,7 @@ export default function NavProgress() {
   if (progress.needsTrack) {
     return (
       <Link to="/profile" className="nav-progress is-choose" title={t('incubation.navProgress.chooseTitle')}>
+        <Icon name="explore" size={18} />
         <span className="nav-progress-count">{t('incubation.progress.choosePath')}</span>
       </Link>
     );
@@ -188,13 +190,20 @@ export default function NavProgress() {
         ? t('incubation.navProgress.ariaComplete', { count: total })
         : t('incubation.navProgress.ariaProgress', { pct: pctLabel, done, count: total })}
     >
-      <span className="nav-progress-bar" aria-hidden="true">
-        <span
-          className="nav-progress-fill"
-          style={{ width: `${pct}%`, '--bar-hue': progressHue(filled) }}
-        />
+      {/* The progress ring (design 46a): accent arc on a surface-2 track, cyan
+          with a check once every goal is done. Drawn as an SVG stroke with a
+          circumference of 100, so the dash length IS the percentage. */}
+      <span className="nav-progress-ring" aria-hidden="true">
+        <svg viewBox="0 0 36 36">
+          <circle className="nav-progress-track" cx="18" cy="18" r="15.9155" />
+          <circle className="nav-progress-arc" cx="18" cy="18" r="15.9155" strokeDasharray={`${Math.min(100, pct)} 100`} />
+        </svg>
+        {complete && <Icon name="check" size={14} weight={700} />}
       </span>
-      <span className="nav-progress-count">{done}/{total}</span>
+      <span className="nav-progress-count">
+        <b className="num">{pctLabel}%</b>
+        <span className="num">{done}/{total}</span>
+      </span>
       {celebrating && (
         <span className="nav-progress-sparks" aria-hidden="true">
           {SPARKS.map((i) => <span key={i} className="nav-progress-spark" />)}

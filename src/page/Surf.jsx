@@ -1,6 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MdCasino, MdPlayArrow } from 'react-icons/md';
 import { useAppStore } from '../lib/store';
 import { TAG_CATEGORIES } from '../utils/tagsV2';
 import { toastIn } from '../utils/toast';
@@ -8,6 +7,8 @@ import {
   CHANNELS, getChannel, channelLabel, channelNumber, channelTitle, findNextOnChannel, loadLastChannel, surfUrl,
 } from '../utils/surf';
 import { useTranslation, Trans } from 'react-i18next';
+import { Button, Eyebrow, Icon } from '../components/v2/ui';
+import { cx } from '../components/v2/helpers';
 import './Surf.scss';
 
 const toast = toastIn('Channel Surfing');
@@ -53,32 +54,40 @@ function Surf() {
     tuneIn(pool[Math.floor(Math.random() * pool.length)].slug);
   };
 
-  const tile = (c) => (
-    <button
-      key={c.slug}
-      type="button"
-      className={`surf-tile${c.isCategory ? ' surf-tile--category' : ''}${tuning === c.slug ? ' is-tuning' : ''}`}
-      onClick={() => tuneIn(c.slug)}
-      disabled={!!tuning}
-    >
-      <span className="surf-tile__screen">
-        <span className="surf-tile__emoji" aria-hidden="true">{c.emoji}</span>
-        <span className="surf-tile__noise" aria-hidden="true" />
-      </span>
-      <span className="surf-tile__meta">
-        <span className="surf-tile__num">{t('feeds.surf.ch', { number: channelNumber(c) })}</span>
-        <span className="surf-tile__label">{tuning === c.slug ? t('feeds.surf.tuning') : channelTitle(c)}</span>
-      </span>
-    </button>
-  );
+  // A row of the TV-style guide (34a): the channel number in a box, then the
+  // channel. The channel you were on last is marked in cyan; the one being
+  // tuned to shows static.
+  const tile = (c) => {
+    const isTuning = tuning === c.slug;
+    return (
+      <button
+        key={c.slug}
+        type="button"
+        className={cx('surf-tile', c.isCategory && 'surf-tile--category', isTuning && 'is-tuning', last?.slug === c.slug && 'is-last')}
+        onClick={() => tuneIn(c.slug)}
+        disabled={!!tuning}
+      >
+        <span className="surf-tile__num">
+          {channelNumber(c)}
+          {isTuning && <span className="surf-tile__noise" aria-hidden="true" />}
+        </span>
+        <span className="surf-tile__body">
+          <span className="surf-tile__label">
+            <span aria-hidden="true">{c.emoji}</span> {channelTitle(c)}
+          </span>
+          {isTuning && <span className="surf-tile__sub">{t('feeds.surf.tuning')}</span>}
+        </span>
+      </button>
+    );
+  };
 
   return (
     <div className="surf-page">
       <header className="surf-hero">
-        <div className="surf-hero__tv" aria-hidden="true">
-          <span className="surf-hero__antenna" />
-          <span className="surf-hero__screen"><span className="surf-hero__noise" />📺</span>
-        </div>
+        <span className="surf-hero__icon" aria-hidden="true">
+          <Icon name="live_tv" size={28} />
+          <span className="surf-tile__noise" />
+        </span>
         <div className="surf-hero__text">
           <h1>{t('feeds.surf.pageTitle')}</h1>
           <p>
@@ -87,26 +96,26 @@ function Surf() {
         </div>
         <div className="surf-hero__actions">
           {last && (
-            <button type="button" className="surf-btn surf-btn--primary" onClick={() => tuneIn(last.slug)} disabled={!!tuning}>
-              <MdPlayArrow aria-hidden="true" /> {t('feeds.surf.backTo', { number: channelNumber(last), emoji: last.emoji, title: channelTitle(last) })}
-            </button>
+            <Button variant="primary" size={44} icon="play_arrow" onClick={() => tuneIn(last.slug)} disabled={!!tuning}>
+              {t('feeds.surf.backTo', { number: channelNumber(last), emoji: last.emoji, title: channelTitle(last) })}
+            </Button>
           )}
-          <button type="button" className={`surf-btn${last ? '' : ' surf-btn--primary'}`} onClick={surprise} disabled={!!tuning}>
-            <MdCasino aria-hidden="true" /> {t('feeds.surf.surprise')}
-          </button>
+          <Button variant={last ? 'secondary' : 'primary'} size={44} icon="casino" onClick={surprise} disabled={!!tuning}>
+            {t('feeds.surf.surprise')}
+          </Button>
         </div>
       </header>
 
       {yours.length > 0 && (
         <section className="surf-section">
-          <h2>{t('feeds.surf.yourChannels')}</h2>
+          <Eyebrow as="h2" className="surf-section__title">{t('feeds.surf.yourChannels')}</Eyebrow>
           <div className="surf-grid">{yours.map(tile)}</div>
         </section>
       )}
 
       {TAG_CATEGORIES.map((cat) => (
         <section className="surf-section" key={cat.slug}>
-          <h2><span aria-hidden="true">{cat.emoji}</span> {t(cat.labelKey)}</h2>
+          <Eyebrow as="h2" className="surf-section__title">{t(cat.labelKey)}</Eyebrow>
           <div className="surf-grid">
             {[cat.slug, ...cat.topics.map((topic) => topic.slug)].map((slug) => tile(getChannel(slug)))}
           </div>

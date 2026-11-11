@@ -1,937 +1,464 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Mobile form of the top-bar Share control: a "+" in the same red ring as the
-// desktop button, shrunk to the footprint of the search / settings icons beside
-// it (a ring needs a couple of px more than a bare glyph, hence 26 not 19).
-// Included inside .nav-upload-wrapper under the phone/tab breakpoints.
-@mixin nav-upload-compact {
-  .nav-upload-btn {
-    width: 26px;
-    height: 26px;
-    padding: 0;
-    gap: 0;
-    border-radius: 50%;   // border + colour stay inherited from the base rule
+// ─── The app's top bar (STYLE_GUIDE §4, designs 02 / 20a / 28c headers) ──────
+// A sticky, page-coloured strip (.nav-container) holding the bar itself
+// (.nav-bar): a 64px surface card, radius 20, 1px border, lined up with the
+// 1280px content column. Every control in it is 40 tall.
+//
+// Below 1025px the bottom bar (BottomNav) carries the sections and the account
+// entry, so the top bar drops to logo + search + icon buttons. Under 768px it
+// loses its card frame and sits flush, 56 tall.
+
+// Where the bottom bar takes over (same range as BottomNav and the Share sheet).
+@mixin compact { @media (max-width: 1024px) { @content; } }
+@mixin wide-bar { @media (min-width: 1025px) { @content; } }
+
+.nav-container {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg);
+  padding: calc(12px + env(safe-area-inset-top, 0px)) var(--page-pad) 0;
+  transition: transform var(--t-slow) var(--ease), margin-bottom var(--t-slow) var(--ease);
+
+  // Only ever hidden for immersive landscape video on the watch page (Nav.jsx).
+  &.nav-hidden {
+    transform: translateY(-100%);
+    margin-bottom: calc(-1 * var(--nav-height, 76px));
   }
 
-  .nav-upload-label,
-  .nav-upload-icon-desktop { display: none; }
-
-  .nav-upload-icon-mobile {
-    display: block;
-    width: 18px;
-    height: 18px;
+  @include v2.mobile {
+    padding: env(safe-area-inset-top, 0px) 0 0;
   }
 }
 
-// Share menu rows, used by the desktop flyout and the mobile bottom sheet.
-@mixin nav-upload-items {
+.nav-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--topbar-h);
+  max-width: calc(var(--content-max) - 2 * var(--page-pad));
+  margin: 0 auto;
+  padding: 0 12px 0 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  color: var(--text);
+
+  // The search box is centred on the BAR, not on what is left over after the
+  // tabs and the right cluster, so it stays put whether the page tabs are out
+  // or not. Out of the flow to do it (Nav.jsx measures its left edge to cap the
+  // tab row). NavSearch.scss owns its size and look.
+  > .navsearch-wrap {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 2;
+  }
+
+  @include v2.mobile {
+    height: 56px;
+    max-width: none;
+    padding: 0 12px 0 16px;
+    border: 0;
+    border-radius: 0;
+    background: var(--bg);
+  }
+}
+
+// ── Left: the logo, which folds the page tabs out ────────────────────────────
+.nav-left {
+  display: flex;
+  align-items: center;
+  flex: none;
+
+  @include compact { display: none; }
+
+  .logo {
+    height: 34px;
+    width: auto;
+    display: block;
+  }
+}
+
+.phone-nav-left {
+  display: none;
+  align-items: center;
+  flex: none;
+  position: relative;
+  z-index: 3;
+
+  @include compact { display: flex; }
+
+  a { display: flex; border-radius: var(--r-sm); }
+  .logo { height: 32px; width: auto; display: block; }
+}
+
+// The logo is the disclosure for the page tabs, so it has to look pressable
+// without becoming a second button in a bar that already has plenty.
+.nav-logo-btn {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 40px;
+  padding: 0 4px 0 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: var(--r-md);
+  transition: color var(--t-fast) var(--ease);
+
+  &:hover { color: var(--text); }
+
+  // Points at the space the tabs will fill, and turns back once they are there.
+  .nav-logo-chevron { transition: transform var(--t-base) var(--ease); }
+  &.is-open .nav-logo-chevron { transform: rotate(180deg); }
+}
+
+// ── The page tabs: a segmented track (never underlined) ──────────────────────
+.nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  flex: none;
+  // Opens from under the logo, so the row reads as belonging to it.
+  animation: nav-tabs-in var(--t-base) var(--ease);
+
+  // Never runs under the search box. --nav-tabs-max is the gap between the
+  // start of this row and the box's left edge, measured in Nav.jsx. Past that
+  // width the row scrolls sideways instead of hiding pills behind the box.
+  max-width: var(--nav-tabs-max, none);
+  @include v2.scroll-x;
+  overflow-y: hidden;
+  transition: max-width var(--t-base) var(--ease);
+  scroll-behavior: smooth;
+
+  > * { flex: 0 0 auto; }
+
+  // Fade the cut edge, so a half-shown tab reads as "there is more this way".
+  // Classes are set by the scroll handler in Nav.jsx.
+  &.can-scroll-right { mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%); }
+  &.can-scroll-left { mask-image: linear-gradient(to right, transparent 0, black 28px); }
+  &.can-scroll-left.can-scroll-right { mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%); }
+
+  @include compact { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    scroll-behavior: auto;
+  }
+}
+
+.nav-tab {
+  @include v2.control(32);
+  @include v2.text(label);
+  padding: 0 12px 0 10px;
+  background: transparent;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover { color: var(--text); }
+  &.active,
+  &.open { background: var(--surface-2); color: var(--text); }
+  &:focus-visible { outline-offset: -2px; }
+
+  .nav-tab-icon { flex: none; }
+}
+
+.nav-playlists-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.nav-playlists-trigger {
+  .nav-playlists-chevron {
+    margin-left: -2px;
+    transition: transform var(--t-fast) var(--ease);
+    &.open { transform: rotate(180deg); }
+  }
+}
+
+// Portalled to <body> (the tab row scrolls, and a scroll container would clip
+// a flyout hanging out of it), so it is placed from the trigger's rect.
+.nav-playlists-flyout {
+  @include v2.menu;
+  position: fixed;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 1100;
+  animation: nav-drop var(--t-base) var(--ease);
+}
+
+.nav-playlists-flyout-label {
+  @include v2.text(eyebrow);
+  color: var(--muted);
+  padding: 6px 12px 4px;
+}
+
+.nav-playlists-flyout-item {
+  @include v2.menu-row;
+  text-decoration: none;
+  white-space: nowrap;
+
+  .nav-playlists-flyout-icon { color: var(--muted); }
+  &:hover { color: var(--text); }
+  &.active { background: var(--surface-2); }
+}
+
+// ── Right: actions, bell, settings, account ──────────────────────────────────
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex: none;
+  position: relative;
+  z-index: 3;
+
+  @include v2.mobile { gap: 6px; }
+}
+
+// One shape for every icon control in the bar: 40 square, radius 12, filled.
+// The bell (NotificationBell) and the chat button share it, see below.
+.nav-icon-btn,
+.nav-container .chat-nav-btn,
+.nav-container .notif-bell-btn {
+  @include v2.control(40);
+  width: 40px;
+  padding: 0;
+  justify-content: center;
+  flex: none;
+  position: relative;
+  background: var(--surface-2);
+  color: var(--text);
+  opacity: 1;
+  text-decoration: none;
+
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+  &.open,
+  &[aria-expanded="true"] { background: var(--text); color: var(--bg); }
+
+  // Unread counts ride the top-right corner, ringed in the bar's colour.
+  .chat-nav-badge {
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 18px;
+    box-shadow: 0 0 0 2px var(--surface);
+  }
+}
+
+// Search and FAQ shortcuts: only where the search box and the FAQ button are not.
+.nav-mobile-discover {
+  display: none;
+  @include compact { display: inline-flex; }
+}
+
+.nav-settings-btn {
+  .material-symbols-rounded { transition: transform var(--t-base) var(--ease); }
+  &:hover .material-symbols-rounded { transform: rotate(30deg); }
+}
+
+// Share: the bar's one primary button. Label + trailing "+" on desktop, a
+// square "+" wherever the bottom bar is showing.
+.nav-upload-wrapper {
+  position: relative;
+
+  .nav-upload-btn {
+    padding: 0 10px 0 14px;
+    gap: 6px;
+  }
+
+  @include compact {
+    .nav-upload-btn {
+      width: 40px;
+      padding: 0;
+      justify-content: center;
+    }
+    .nav-upload-label { display: none; }
+  }
+}
+
+// Advertise (advertiser accounts only): secondary, so Share stays the one red fill.
+.nav-advertise-btn {
+  @include compact {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+    .nav-advertise-label { display: none; }
+  }
+}
+
+// The account avatar (desktop; the bottom bar has the entry below 1025px).
+.nav-avatar-wrap {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--avatar);
+  cursor: pointer;
+  transition: transform var(--t-fast) var(--ease);
+
+  &:active { transform: scale(.98); }
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @include compact { display: none; }
+}
+
+.nav-avatar-premium {
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  margin: 0;
+  padding: 2px;
+  line-height: 1;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 0 0 2px var(--surface);
+}
+
+// Visitors: FAQ (ghost), Log in (secondary next to Sign up, else primary),
+// Sign up (primary). Phones and tablets get the bottom bar's Login instead.
+.nav-guest-about,
+.nav-guest-login,
+.nav-guest-signup {
+  @include compact { display: none !important; }
+}
+
+// ── The Share menu (UploadLinks inside) ──────────────────────────────────────
+// Rows of the menu, used by the desktop flyout and the narrow-screen sheet.
+@mixin share-items {
+  .share-menu-heading {
+    @include v2.text(eyebrow);
+    color: var(--muted);
+    opacity: 1;
+    padding: 8px 12px 4px;
+  }
+
   .nav-upload-flyout-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 16px;
-    color: var(--text-primary);
-    font-size: 14px;
-    font-weight: 500;
+    min-height: 44px;
+    padding: 6px 12px;
+    border-radius: var(--r-md);
+    color: var(--text);
+    @include v2.text(label);
     text-decoration: none;
-    white-space: nowrap;
     cursor: pointer;
-    transition: background-color 0.15s ease;
+    transition: background var(--t-fast) var(--ease);
 
     .nav-upload-flyout-icon {
-      flex-shrink: 0;
-      width: 18px;
-      height: 18px;
-    }
-
-    &:hover {
-      background-color: var(--bg-hover, var(--sidebar-hover-bg));
-      color: var(--accent-primary);
-    }
-  }
-}
-
-.nav-container {
-  display: flex;
-  align-items: center;
-  padding: 10px 2% 10px 1%;
-  padding-top: calc(10px + env(safe-area-inset-top, 0px));
-  box-shadow: var(--nav-shadow);
-  // Fades away from the screen edge, so the bar looks lit from the top rather
-  // than being a flat slab against the content. --nav-fade-to carries the theme
-  // difference; see index.css.
-  background: linear-gradient(180deg, var(--nav-bg) 0%, var(--nav-fade-to) 100%);
-  position: sticky;
-  top: 0px;
-  z-index: 1000;
-
-  // Anchor everything left after the logo; the right cluster floats out
-  > .nav-right {
-    margin-left: auto;
-  }
-
-  // Search bar is centred on the BAR, not on what is left over after the tabs and
-  // the right cluster — so it stays put whether the page tabs are folded away or
-  // open. Taken out of the flow to do it: with it in the row, the centre moved
-  // every time the group opened or the right cluster changed width.
-  //
-  // .nav-container is sticky, which makes it the containing block, so 50% here is
-  // half the bar. The z-index keeps the input clickable if a long tab row ever
-  // reaches under it.
-  > .navsearch-wrap {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-left: 0;
-    z-index: 2;
-  }
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-
-  // Auto-hide on mobile scroll — margin-bottom collapses the sticky space
-  @include mix.respond(phone) {
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, margin-bottom 0.3s ease;
-    &.nav-hidden { transform: translateY(-100%); margin-bottom: calc(-1 * var(--nav-height, 56px)); }
-  }
-  @include mix.respond(tab) {
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, margin-bottom 0.3s ease;
-    &.nav-hidden { transform: translateY(-100%); margin-bottom: calc(-1 * var(--nav-height, 56px)); }
-  }
-
-  .nav-left {
-    display: flex;
-    align-items: center;
-    @include mix.respond(phone) {
-      display: none;
-    }
-
-    @include mix.respond(tab) {
-      display: none;
-    }
-    .logo {
-      // The mark, not the wordmark: sized against the bar's height rather than
-      // set to a fixed width, which was the wordmark's measurement.
-      height: 34px;
-      width: auto;
-      cursor: pointer;
-    }
-  }
-  .phone-nav-left {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    @include mix.respond(desktop) {
-      display: none;
-    }
-
-    .logo {
-      height: 30px;
-      width: auto;
-    }
-  }
-
-  // The logo is the disclosure for the page tabs, so it has to look pressable
-  // without becoming a second button in a bar that already has plenty.
-  .nav-logo-btn {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    padding: 0;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: opacity 0.15s ease;
-
-    &:hover { opacity: 0.75; }
-    // Deliberately NO dimming while open. Fading the logo for as long as the
-    // tabs are showing left the brand mark looking disabled during the state it
-    // is most often in, and the state is already said by the chevron below,
-    // which turns to point back at the logo.
-    &:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 3px; }
-
-    // Points at the space the tabs will fill, and turns to point back at the
-    // logo once they are there — so it reads as the control that put them
-    // there rather than as decoration beside the mark.
-    .nav-logo-chevron {
-      flex-shrink: 0;
+      flex: none;
+      width: 20px;
+      height: 20px;
       font-size: 20px;
-      color: var(--text-secondary);
-      transition: transform 0.18s ease, color 0.15s ease;
+      color: var(--muted);
     }
 
-    &:hover .nav-logo-chevron { color: var(--text-primary); }
-    &.is-open .nav-logo-chevron { transform: rotate(180deg); }
-
-    @media (prefers-reduced-motion: reduce) {
-      .nav-logo-chevron { transition: none; }
+    .share-menu-sub {
+      font-size: 11px;
+      color: var(--muted);
     }
-  }
-
-  .nav-tabs {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-left: 16px;
-    flex-shrink: 0;
-    // Opens from under the logo rather than appearing fully formed, so the row
-    // reads as belonging to the button that revealed it.
-    animation: nav-tabs-in 0.16s ease;
-
-    // Never runs under the search box. --nav-tabs-max is the gap between the
-    // start of this row and the box's left edge, measured in Nav.jsx: the box is
-    // centred on the bar and out of the flow, so the row is free to grow under
-    // it and the stylesheet has no way to know where it starts. Past that width
-    // the row scrolls sideways instead of hiding pills behind the box.
-    max-width: var(--nav-tabs-max, none);
-    overflow-x: auto;
-    overflow-y: hidden;
-    // Rides the box's own 0.18s grow-on-focus rather than snapping narrower.
-    transition: max-width 0.18s ease;
-    // Programmatic scrolls only (scrolling the active pill into view); wheel and
-    // touch are unaffected.
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;          // Firefox
-    -ms-overflow-style: none;       // old Edge
-    &::-webkit-scrollbar { display: none; } // WebKit
-
-    // Room for a focus ring inside the clip, taken straight back off so the bar
-    // is the height it always was.
-    padding-block: 3px;
-    margin-block: -3px;
-
-    // Pills keep their own size; the row scrolls instead of squashing them into
-    // ellipsised stubs.
-    > * { flex: 0 0 auto; }
-
-    // Fade the cut edge, so a half-shown pill reads as "there is more this way"
-    // rather than as a clipping bug. Classes are set by the scroll handler in
-    // Nav.jsx; masking the scroll container itself (not a pseudo-element inside
-    // it) keeps the fade pinned to the edge while the content moves under it.
-    &.can-scroll-right {
-      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
-      mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
-    }
-    &.can-scroll-left {
-      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 28px);
-      mask-image: linear-gradient(to right, transparent 0, #000 28px);
-    }
-    &.can-scroll-left.can-scroll-right {
-      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
-      mask-image: linear-gradient(to right, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      animation: none;
-      transition: none;
-      scroll-behavior: auto;
-    }
-
-    @include mix.respond(tab) { display: none; }
-    @include mix.respond(phone) { display: none; }
-  }
-
-  // Mobile-only Discover shortcut in the top bar, sits next to upload in nav-right
-  .nav-mobile-discover {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    height: 34px;
-    padding: 0 12px;
-    border: 1px solid var(--border-light, #444);
-    border-radius: 17px;
-    color: var(--text-secondary); // dim, matching the desktop settings icon
-    opacity: 0.8;
-    text-decoration: none;
-    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
 
     &:hover {
       background: var(--bg-hover);
-      border-color: var(--text-secondary);
-      color: var(--text-primary);
-      opacity: 1;
-    }
-
-    .nav-mobile-discover-label {
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    // Borderless icon on mobile (matches the bare search/settings icons)
-    @include mix.respond(phone) { display: inline-flex; border: none; padding: 0 6px; }
-    @include mix.respond(tab)   { display: inline-flex; border: none; padding: 0 6px; }
-  }
-
-  // Settings (cogs) on the right — shown on all sizes; opens the settings modal directly
-  .nav-settings-btn {
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    color: var(--text-secondary);
-    opacity: 0.8;
-    margin-left: 8px;
-    transition: color 0.15s ease, opacity 0.15s ease, transform 0.2s ease;
-    &:hover { color: var(--text-primary); opacity: 1; transform: rotate(25deg); }
-  }
-
-
-  .nav-tab {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    height: 34px;
-    padding: 0 12px;
-    border: 1px solid var(--border-light, #444);
-    border-radius: 17px;
-    background-color: transparent;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
-    white-space: nowrap;
-
-    .nav-tab-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-    }
-
-    // The medal glyph is solid and fills its box, so it reads larger than the
-    // outline icons — trim it so it sits visually level with its neighbours.
-    .nav-tab-icon--medal {
-      font-size: 14px;
-      width: 14px;
-      height: 14px;
-    }
-
-    .nav-tab-live-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ff3b30;
-      box-shadow: 0 0 0 2px var(--bg-secondary, #1a1a1a);
-      animation: nav-tab-live-pulse 1.6s ease-in-out infinite;
-    }
-  }
-
-  // Playlists dropdown — matches the .nav-tab pill style
-  .nav-playlists-wrapper {
-    position: relative;
-    display: inline-flex;
-  }
-
-  .nav-playlists-trigger {
-    cursor: pointer;
-    // Inherit family/style only — .nav-tab supplies size/weight + border/padding.
-    font-family: inherit;
-    font-style: inherit;
-
-    &.open {
-      color: var(--text-primary);
-      background: var(--bg-hover);
-      border-color: var(--text-secondary);
-    }
-
-    .nav-playlists-chevron {
-      flex-shrink: 0;
-      transition: transform 0.15s ease;
-      &.open { transform: rotate(180deg); }
-    }
-  }
-
-  .nav-middle {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    padding: 0 16px;
-
-    @include mix.respond(tab) {
-      position: relative;
-    }
-
-    .search-wrapper {
-      position: relative;
-      width: 400px;
-      max-width: 40rem;
-      @include mix.respond(phone) {
-        display: none;
-      }
-
-      .search-icon {
-        pointer-events: none;
-        position: absolute;
-        inset: 0;
-        left: 0.75rem;
-        display: flex;
-        align-items: center;
-        color: var(--text-muted);
-
-        .icon {
-          width: 1rem;
-          height: 1rem;
-        }
-      }
-
-      .search-input {
-        width: 100%;
-        border-radius: 9999px;
-        border: 1px solid var(--border-light);
-        box-shadow: var(--shadow-md);
-        background: var(--input-bg);
-        color: var(--text-primary);
-        padding: 0.5rem 0.75rem;
-        padding-left: 2.25rem;
-        font-size: 0.875rem;
-        transition: background-color 0.3s ease, border-color 0.3s ease,
-          color 0.3s ease;
-
-        &::placeholder {
-          color: var(--text-muted);
-        }
-
-        &:focus {
-          outline: none;
-          border-color: var(--accent-primary);
-          box-shadow: 0 0 0 2px var(--input-focus);
-        }
-      }
-    }
-  }
-
-  .nav-right {
-    gap: 8px;
-
-    /* "Advertise", left of Share, for advertiser accounts (NavAdvertiseButton).
-       Same pill as Share but neutral: one red button in the bar is enough. */
-    .nav-advertise-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      height: 34px;
-      padding: 0 12px;
-      border: 1px solid var(--border-color);
-      border-radius: 17px;
-      color: var(--text-primary);
-      text-decoration: none;
-      white-space: nowrap;
-      transition: background 0.15s ease;
-
-      .nav-advertise-label { font-size: 13px; font-weight: 500; }
-
-      &:hover { background: var(--bg-hover); }
-
-      // Round and icon-only wherever Share shrinks to its "+", so the two match.
-      @include mix.respond(phone) { width: 26px; height: 26px; padding: 0; border-radius: 50%; .nav-advertise-label { display: none; } }
-      @include mix.respond(tab)   { width: 26px; height: 26px; padding: 0; border-radius: 50%; .nav-advertise-label { display: none; } }
-    }
-
-    .nav-upload-wrapper {
-      position: relative;
-
-      // The "+" lives up here on mobile now (the bottom bar's centre item is
-      // Chat), so it shows at every width — just in a compact round form below
-      // the bottom-nav breakpoint (see the overrides at the end of this block).
-      .nav-upload-icon-mobile { display: none; }
-
-      .nav-upload-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        height: 34px;
-        padding: 0 12px;
-        border: 1px solid #e53935;
-        border-radius: 17px;
-        background-color: transparent;
-        color: #e53935;
-        cursor: pointer;
-        transition: background 0.15s ease, border-color 0.15s ease;
-        white-space: nowrap;
-
-        .nav-upload-label {
-          font-size: 13px;
-          font-weight: 500;
-          padding: 0;
-          border-radius: 0;
-          background: transparent;
-          color: inherit;
-        }
-
-        &:hover {
-          background: var(--bg-hover);
-          border-color: #c62828;
-        }
-      }
-
-      // Wide screens only (below 1025px it's the bottom sheet, Nav.jsx), so
-      // the categories sit side by side: one column each, divider between.
-      .nav-upload-flyout {
-        position: absolute;
-        top: calc(100% + 6px);
-        right: 0;
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: 230px;
-        max-width: calc(100vw - 32px);
-        background: var(--bg-secondary);
-        border-radius: 8px;
-        box-shadow: var(--shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.2));
-        border: 1px solid var(--border-light);
-        padding: 6px 0;
-        z-index: 100;
-        // Fades in on open (hover peek or click); `--leaving` fades it out
-        // (200ms, hooks/useHoverPeek.js), back in if the mouse returns.
-        animation: nav-upload-flyout-in 0.18s ease-out;
-        transition: opacity 0.2s ease-in, transform 0.2s ease-in;
-
-        &.nav-upload-flyout--leaving {
-          opacity: 0;
-          transform: translateY(-4px);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          animation: none;
-          transition: none;
-        }
-
-        @include nav-upload-items;
-
-        // narrow columns: long labels (some languages) wrap instead of
-        // running into the next column
-        .nav-upload-flyout-item {
-          white-space: normal;
-        }
-
-        // the layout box steps aside: every category is a flyout column
-        .share-menu-layout {
-          display: contents;
-        }
-
-        .share-menu-group + .share-menu-group {
-          border-left: 1px solid var(--border-light);
-        }
-
-        // every column starts level: no extra lead-in above any heading
-        .share-menu-group > .share-menu-heading {
-          padding-top: 0.15rem;
-        }
-      }
-
-      // Compact "+" wherever the bottom nav is shown. Placed AFTER .nav-upload-btn
-      // on purpose: a media query adds no specificity, so an earlier block would
-      // lose to the base rule below it.
-      @include mix.respond(phone) { @include nav-upload-compact; }
-      @include mix.respond(tab)   { @include nav-upload-compact; }
-    }
-
-    > span {
-      padding: 5px 20px;
-      border-radius: 15px;
-      background-color: var(--bg-tertiary);
-      color: var(--text-primary);
-      font-size: 14px;
-      font-weight: 500;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      @include mix.respond(phone) {
-        display: none;
-      }
-    }
-    .profile {
-      width: 40px;
-    }
-    // ⚠️ Scoped to the nav's OWN avatar. As a bare `img` this matched every
-    // image inside .nav-right — including all the avatars and icons in the
-    // notifications dropdown, which sits in this subtree — so on phone and
-    // tablet every notification row lost its avatar and its 3Speak icon.
-    // The avatar itself is still hidden on mobile on purpose: the bottom bar
-    // carries the profile entry there.
-    > img,
-    > .nav-avatar-wrap img {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      @include mix.respond(phone) {
-        display: none;
-      }
-      @include mix.respond(tab) {
-        display: none;
-      }
-    }
-    // Wrapper around the avatar img + premium overlay in the top nav.
-    // Pinned to 35×35 + align-self:center so the flex parent doesn't
-    // stretch it. Hidden on narrow viewports to match the bare-img rule
-    // above.
-    .nav-avatar-wrap {
-      position: relative;
-      display: inline-block;
-      line-height: 0;
-      width: 35px;
-      height: 35px;
-      flex: 0 0 35px;
-      align-self: center;
-      // Extra breathing room between the settings cog and the avatar (desktop only).
-      margin-left: 8px;
-      cursor: pointer;
-      // The legacy `.nav-right > span { padding/background/border-radius }`
-      // rule below this block targets span children of .nav-right. Our
-      // wrap IS a span — explicitly reset its inherited pill styling so
-      // we don't end up with a gray padded rectangle where the avatar
-      // should be.
-      padding: 0;
-      background: transparent;
-      border-radius: 0;
-      transition: none;
-      @include mix.respond(phone) { display: none; }
-      @include mix.respond(tab)   { display: none; }
-    }
-    .nav-avatar-premium {
-      position: absolute;
-      right: -4px;
-      top: -4px;
-      margin: 0;
-      background: var(--accent-primary, #e53935);
-      color: #fff;
-      border-radius: 50%;
-      padding: 2px;
-      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
-      line-height: 1;
-    }
-  }
-  // 🚨 Every :not(.x) adds a class's worth of specificity, so this rule OUTRANKS
-  // `button.nav-guest-login` below whatever the source order. The guest buttons are
-  // excluded here instead of relying on order: the second :not() is what turned
-  // Log in into a grey 5px box. The bell dropdown's own small pills (Notify me,
-  // Mark all read) are excluded for the same reason.
-  // `.btn-reset` (Share, the cog, the avatar: real buttons that keep their own
-  // look) shares the first :not() on purpose: a :not() list weighs only its
-  // heaviest entry, so this adds no specificity.
-  > .nav-right button:not(.notif-bell-btn, .btn-reset):not(.chat-nav-btn):not(.nav-guest-login):not(.nav-guest-signup):not(.notif-dropdown button) {
-    padding: 7px 25px;
-    border-radius: 5px;
-    font-weight: 500;
-    font-size: 14px;
-    color: var(--text-primary);
-    border: none;
-    background-color: var(--bg-secondary);
-    box-shadow: var(--shadow-md);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    [data-theme="dark"] & {
-      background: #3a3939c9;
-      border: solid 1px rgba(128, 128, 128, 0.144);
-    }
-    &:hover {
-      border: 1px solid #1e293b;
-    }
-  }
-
-  // Login button (desktop only): pill shape, transparent bg, door/login icon in front.
-  // The generic button rule above excludes it, see the note there.
-  > .nav-right button.nav-guest-login {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 18px;
-    border-radius: 20px;
-    background: transparent;
-    border: 1px solid var(--accent-primary);
-    box-shadow: none;
-    color: var(--accent-primary);
-    font-weight: 600;
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-
-    svg { font-size: 17px; } // inherits the red via currentColor
-
-    &:hover {
-      background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
-      border: 1px solid var(--accent-primary);
-    }
-
-    [data-theme="dark"] & {
-      background: transparent;
-      border: 1px solid var(--accent-primary);
-      color: var(--accent-primary);
-    }
-
-    @include mix.respond(phone) { display: none; }
-    @include mix.respond(tab)   { display: none; }
-  }
-
-  // "FAQ" pill for logged-out users (class name kept from the old About pill),
-  // left of the login button.
-  // Neutral (secondary) styling so the red login pill stays the primary action.
-  > .nav-right a.nav-guest-about {
-    display: inline-flex;
-    align-items: center;
-    padding: 7px 18px;
-    border-radius: 20px;
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    font-weight: 600;
-    font-size: 14px;
-    text-decoration: none;
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-
-    &:hover {
-      color: var(--text-primary);
-      border-color: var(--text-secondary);
-      background: var(--bg-hover);
-    }
-
-    @include mix.respond(phone) { display: none; }
-    @include mix.respond(tab)   { display: none; }
-  }
-
-  // "Sign up" pill (shown next to Log in when Butter Auth is active) — the
-  // primary, welcoming CTA. Red OUTLINE per our convention (never solid fill).
-  > .nav-right button.nav-guest-signup {
-    display: inline-flex;
-    align-items: center;
-    padding: 7px 18px;
-    border-radius: 20px;
-    background: transparent;
-    border: 1px solid var(--accent-primary);
-    box-shadow: none;
-    color: var(--accent-primary);
-    font-weight: 600;
-    font-size: 14px;
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-
-    &:hover { background: color-mix(in srgb, var(--accent-primary) 12%, transparent); }
-
-    // Beat the generic dark-theme nav-button fill (higher specificity) so the
-    // red OUTLINE holds in dark mode too (per our red = outline, not fill rule).
-    [data-theme="dark"] & {
-      background: transparent;
-      border: 1px solid var(--accent-primary);
-      color: var(--accent-primary);
-    }
-
-    @include mix.respond(phone) { display: none; }
-    @include mix.respond(tab)   { display: none; }
-  }
-
-  // When Butter Auth is active, Log in steps down to a neutral secondary so the
-  // red "Sign up" pill reads as the single primary action.
-  > .nav-right button.nav-guest-login.nav-guest-login--secondary {
-    border-color: var(--border-color);
-    color: var(--text-secondary);
-
-    &:hover {
-      color: var(--text-primary);
-      border-color: var(--text-secondary);
-      background: var(--bg-hover);
-    }
-
-    [data-theme="dark"] & {
-      border-color: var(--border-color);
-      color: var(--text-secondary);
-    }
-  }
-
-  > .nav-right button.manteauth-btn {
-    background: #e8d89b;
-    color: #161107;
-    font-weight: 600;
-    border: none;
-    &:hover {
-      background: #d4c488;
-      border: none;
-    }
-  }
-
-  // Sits on the edge the drawer slides back to, and is given a real surface:
-  // the old × was an 18px glyph at text colour on a blurred backdrop, which is
-  // why nobody could find it.
-  .dropdown-menu {
-    position: absolute;
-    right: 10px;
-    top: 50px;
-    width: 12rem;
-    background-color: var(--bg-secondary);
-    border-radius: 0.5rem;
-    box-shadow: var(--shadow-lg);
-    padding: 0.5rem 0;
-    border: 1px solid var(--border-light);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-
-    .list {
-      display: block;
-      padding: 0.5rem 1rem;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 13.5px;
-
-      &:hover {
-        background-color: var(--bg-hover);
-        color: var(--accent-primary);
-      }
+      color: var(--text);
+      .nav-upload-flyout-icon { color: var(--text); }
     }
   }
 }
 
-// Portaled to <body> (see Nav.jsx: the tab row scrolls, and a scroll container
-// would clip a flyout hanging out of it), so these rules sit outside
-// .nav-container and the box is placed from the trigger's rect. Above the bar's
-// own z-index: 1000.
-.nav-playlists-flyout {
-  position: fixed;
-  min-width: 200px;
-  background: var(--bg-secondary);
-  border-radius: 8px;
-  box-shadow: var(--shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.2));
-  border: 1px solid var(--border-light);
-  padding: 6px 0;
+// Wide screens only (below 1025px it is the sheet, Nav.jsx): the categories
+// sit side by side, one column each, a divider between.
+.nav-upload-flyout {
+  @include v2.menu;
+  position: absolute;
+  top: calc(100% + 20px);
+  right: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 220px;
+  gap: 4px;
+  max-width: calc(100vw - 32px);
   z-index: 1100;
-}
+  // Fades in on open (hover peek or click); `--leaving` fades it out (200ms,
+  // hooks/useHoverPeek.js), back in if the mouse returns.
+  animation: nav-drop var(--t-base) var(--ease);
+  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
 
-.nav-playlists-flyout-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-
-  .nav-playlists-flyout-icon {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
+  &.nav-upload-flyout--leaving {
+    opacity: 0;
+    transform: translateY(-4px);
   }
 
-  &:hover {
-    color: var(--text-primary);
-    background: var(--bg-hover, var(--sidebar-hover-bg));
-  }
+  @include share-items;
 
-  &.active {
-    color: var(--text-primary);
-    background: var(--bg-tertiary);
+  .nav-upload-flyout-item { white-space: normal; }
+  .share-menu-layout { display: contents; }
+  .share-menu-group { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .share-menu-group + .share-menu-group { border-left: 1px solid var(--border); padding-left: 4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    transition: none;
   }
 }
 
-@keyframes nav-tab-live-pulse {
-  0%, 100% { box-shadow: 0 0 0 2px var(--bg-secondary, #1a1a1a), 0 0 0 0 rgba(255, 59, 48, 0.55); }
-  50%      { box-shadow: 0 0 0 2px var(--bg-secondary, #1a1a1a), 0 0 0 5px rgba(255, 59, 48, 0); }
+// The same menu as a v2 Dialog (bottom sheet on phones, dialog on tablets).
+.nav-upload-sheet {
+  @include share-items;
+
+  .share-menu-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+  }
+
+  .share-menu-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .nav-upload-flyout-item { white-space: normal; }
 }
 
 @keyframes nav-tabs-in {
   from { opacity: 0; transform: translateX(-6px); }
-  to   { opacity: 1; transform: translateX(0); }
 }
 
-// Share menu on phone + tab: a bottom sheet, portalled to <body> (see
-// NavUploadDropdown). Above the bottom nav and ProfileNav (100000).
-.nav-upload-sheet-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100001;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
-  animation: nav-upload-sheet-fade 0.2s ease;
-}
-
-.nav-upload-sheet {
-  width: 100%;
-  max-width: 480px;
-  max-height: 88vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  border-bottom: none;
-  border-radius: 16px 16px 0 0;
-  box-shadow: var(--shadow-lg, 0 -4px 16px rgba(0, 0, 0, 0.2));
-  padding: 6px 0 calc(10px + env(safe-area-inset-bottom, 0px));
-  animation: nav-upload-sheet-up 0.25s ease;
-
-  @include nav-upload-items;
-
-  // The sheet has no side padding of its own (rows run edge to edge).
-  .nav-upload-sheet-header {
-    padding: 10px 16px 12px;
-    margin-bottom: 4px;
-  }
-
-  // Phones: two columns, Video | Audio on top, Live | Others under them
-  // (Others moves up a slot when Live isn't shown). Labels wrap.
-  .share-menu-layout {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .share-menu-group {
-    min-width: 0;
-    padding-bottom: 6px;
-
-    &:nth-child(even) {
-      border-left: 1px solid var(--border-light);
-    }
-
-    &:nth-child(n + 3) {
-      padding-top: 6px;
-      border-top: 1px solid var(--border-light);
-    }
-
-    > .share-menu-heading {
-      padding: 0.15rem 12px 0.25rem;
-    }
-  }
-
-  .share-menu-layout .nav-upload-flyout-item {
-    gap: 8px;
-    padding: 9px 12px;
-    font-size: 13px;
-    white-space: normal;
-  }
-
-  // Tablets: a wider sheet, every category its own column.
-  @media (min-width: 600px) {
-    max-width: 820px;
-
-    .share-menu-layout {
-      grid-template-columns: none;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(0, 1fr);
-    }
-
-    .share-menu-group {
-      &:nth-child(n + 3) {
-        padding-top: 0;
-        border-top: none;
-      }
-
-      + .share-menu-group {
-        border-left: 1px solid var(--border-light);
-      }
-    }
-  }
-}
-
-@keyframes nav-upload-sheet-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-@keyframes nav-upload-sheet-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes nav-upload-flyout-in {
+@keyframes nav-drop {
   from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: none; }
 }

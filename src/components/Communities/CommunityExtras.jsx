@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { Pin, Crown, ShieldCheck, ScrollText, ChevronDown, ChevronUp } from 'lucide-react';
 import { getHiveClient } from '../../utils/hiveNode';
 import { FEED_URL } from '../../utils/config';
 import { useAvatarUrl } from '../../utils/avatarCache';
-import { fallbackImg } from '../../utils/fixThumbnails';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
+import { Icon } from '../v2/Icon';
+import { StatusPill } from '../v2/ui';
 
 const fmtNum = (n) => (typeof n === 'number' ? formatNumber(n) : '—');
 
@@ -68,32 +68,35 @@ export function CommunityPinned({ id }) {
 
   if (!pinned.length) return null;
 
+  // Design 40b: one cyan-washed row per pinned post, "Start here" first.
   return (
     <section className="community-pinned" aria-label={t('communities.page.pinnedAria')}>
-      <h3 className="community-section-title"><Pin size={15} /> {t('communities.page.startHere')}</h3>
-      <div className="community-pinned-row">
-        {pinned.map((p) => {
-          const meta = metaOf(p);
-          const video = isVideoPost(meta);
-          const thumb = pinnedThumb(meta);
-          return (
-            <Link
-              key={`${p.author}/${p.permlink}`}
-              className="community-pinned-card"
-              to={video ? `/@${p.author}/${p.permlink}` : `/post/${p.author}/${p.permlink}`}
-            >
-              <div className="community-pinned-thumb">
-                {thumb
-                  ? <img src={thumb} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
-                  : <span className="community-pinned-thumb-text">{video ? '▶' : 'Aa'}</span>}
-                <span className="community-pinned-badge"><Pin size={11} /> {t('communities.page.pinned')}</span>
-              </div>
-              <div className="community-pinned-title">{p.title || t('communities.page.untitled')}</div>
-              <div className="community-pinned-author">@{p.author}</div>
-            </Link>
-          );
-        })}
-      </div>
+      {pinned.map((p, i) => {
+        const meta = metaOf(p);
+        const video = isVideoPost(meta);
+        const thumb = pinnedThumb(meta);
+        return (
+          <Link
+            key={`${p.author}/${p.permlink}`}
+            className="community-pinned-row"
+            to={video ? `/@${p.author}/${p.permlink}` : `/post/${p.author}/${p.permlink}`}
+          >
+            <Icon name="push_pin" size={20} fill className="community-pinned-icon" />
+            {thumb && (
+              <span className="community-pinned-thumb">
+                <img src={thumb} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
+              </span>
+            )}
+            <span className="community-pinned-text">
+              <b className="community-pinned-title">
+                {i === 0 ? `${t('communities.page.startHere')}: ` : ''}{p.title || t('communities.page.untitled')}
+              </b>
+              <span className="community-pinned-author">@{p.author}</span>
+            </span>
+            <span className="community-pinned-badge">{t('communities.page.pinned')}</span>
+          </Link>
+        );
+      })}
     </section>
   );
 }
@@ -124,18 +127,18 @@ function CreatorChip({ c, rank }) {
   const avatar = useAvatarUrl(c.name);
   return (
     <Link className="community-creator" to={`/@${c.name}`} title={t('communities.page.creatorTitle', { name: c.name, views: fmtNum(c.views), count: c.videos })}>
+      <span className="community-creator-rank num">{rank}</span>
       <span className="community-creator-avatar">
         <img src={avatar} alt="" loading="lazy" />
-        {rank <= 3 && <span className={`community-creator-rank rank-${rank}`}>{rank}</span>}
       </span>
-      <span className="community-creator-name">{c.name}</span>
+      <b className="community-creator-name">{c.name}</b>
       <span className="community-creator-stat">{t('communities.page.creatorViews', { views: fmtNum(c.views) })}</span>
     </Link>
   );
 }
 
-// `side` renders it as a sidebar card (a ranked list); the default is the
-// horizontal strip phones get, where there is no sidebar.
+// `side` renders it as a sidebar card (a ranked list, design 40b); the default
+// is the horizontal strip phones get, where there is no sidebar.
 export function CommunityTopCreators({ id, side = false }) {
   const { t } = useTranslation();
   const { data: creators = [] } = useQuery({
@@ -165,12 +168,10 @@ export function CommunityTopCreators({ id, side = false }) {
 
   return (
     <section
-      className={`community-top-creators${side ? ' community-card community-top-creators--side' : ''}`}
+      className={`community-card community-top-creators${side ? ' community-top-creators--side' : ''}`}
       aria-label={t('communities.page.topCreators')}
     >
-      {side
-        ? <h4 className="community-card-title"><Crown size={15} /> {t('communities.page.topCreators')}</h4>
-        : <h3 className="community-section-title"><Crown size={15} /> {t('communities.page.topCreators')}</h3>}
+      <h3 className="community-card-title"><Icon name="trophy" size={18} /> {t('communities.page.topCreators')}</h3>
       <div className="community-creators-row">
         {creators.map((c, i) => <CreatorChip key={c.name} c={c} rank={i + 1} />)}
       </div>
@@ -183,16 +184,22 @@ const ROLE_ORDER = { owner: 0, admin: 1, mod: 2 };
 const ROLE_LABEL_KEY = { owner: 'communities.page.roles.owner', admin: 'communities.page.roles.admin', mod: 'communities.page.roles.mod' };
 const TEAM_PREVIEW = 6;
 
+// Role pills (design 40b): owner in accent, admin in cyan, moderator muted.
+const ROLE_TONE = { owner: 'accent', admin: 'cyan', mod: 'muted' };
+
 function TeamMember({ name, role, title }) {
   const { t } = useTranslation();
   const avatar = useAvatarUrl(name);
+  const roleLabel = ROLE_LABEL_KEY[role] ? t(ROLE_LABEL_KEY[role]) : role;
   return (
     <Link className="community-team-member" to={`/@${name}`}>
       <img src={avatar} alt="" loading="lazy" />
       <span className="community-team-text">
-        <span className="community-team-name">{name}</span>
-        <span className="community-team-role">{title || (ROLE_LABEL_KEY[role] ? t(ROLE_LABEL_KEY[role]) : role)}</span>
+        <b className="community-team-name">{name}</b>
+        {/* A custom title the mods gave this person ("Founder"), when there is one. */}
+        {title && title !== roleLabel ? <span className="community-team-title">{title}</span> : null}
       </span>
+      <StatusPill tone={ROLE_TONE[role] || 'muted'} className="community-team-role">{roleLabel}</StatusPill>
     </Link>
   );
 }
@@ -211,7 +218,7 @@ export function CommunityTeam({ id, team }) {
 
   return (
     <div className="community-card community-team">
-      <h4 className="community-card-title"><ShieldCheck size={15} /> {t('communities.page.team')}</h4>
+      <h3 className="community-card-title"><Icon name="shield_person" size={18} /> {t('communities.page.team')}</h3>
       <div className="community-team-list">
         {shown.map(([name, role, title]) => (
           <TeamMember key={name} name={name} role={role} title={title} />
@@ -220,13 +227,15 @@ export function CommunityTeam({ id, team }) {
       {members.length > TEAM_PREVIEW && (
         <button type="button" className="community-card-more" onClick={() => setAll((v) => !v)}>
           {all ? t('common.actions.showLess') : t('communities.page.showAll', { count: members.length })}
+          <Icon name={all ? 'expand_less' : 'expand_more'} size={18} />
         </button>
       )}
     </div>
   );
 }
 
-// `flag_text` is free text the mods write, usually one rule per line.
+// `flag_text` is free text the mods write, usually one rule per line. Each rule
+// gets a numbered cyan square (design 20c).
 export function CommunityRules({ text, collapsible = false }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(!collapsible);
@@ -237,15 +246,17 @@ export function CommunityRules({ text, collapsible = false }) {
     <div className="community-card community-rules">
       {collapsible ? (
         <button type="button" className="community-card-title community-card-toggle" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
-          <ScrollText size={15} /> {t('communities.page.rulesCount', { count: rules.length })}
-          {open ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+          <Icon name="gavel" size={18} /> <span>{t('communities.page.rulesCount', { count: rules.length })}</span>
+          <Icon name={open ? 'expand_less' : 'expand_more'} size={20} className="community-card-chevron" />
         </button>
       ) : (
-        <h4 className="community-card-title"><ScrollText size={15} /> {t('communities.page.rules')}</h4>
+        <h3 className="community-card-title"><Icon name="gavel" size={18} /> {t('communities.page.rules')}</h3>
       )}
       {open && (
         <ol className="community-rules-list">
-          {rules.map((r, i) => <li key={i}>{r}</li>)}
+          {rules.map((r, i) => (
+            <li key={i}><span className="community-rule-n num">{i + 1}</span><span>{r}</span></li>
+          ))}
         </ol>
       )}
     </div>

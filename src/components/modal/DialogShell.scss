@@ -1,0 +1,8 @@
+@use "../../styles/v2" as v2;
+
+// DialogShell (DialogShell.jsx) renders the v2 dialog classes from
+// design-system.scss; this file only adds the step bar slot under the head.
+.dlg-shell__steps {
+  flex: none;
+  padding: 4px 20px 6px;
+}

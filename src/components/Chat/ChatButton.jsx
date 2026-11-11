@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom'
-import { MessageCircle } from 'lucide-react'
+import { Icon } from '../v2/Icon'
 import { useServerUnread } from '../../hooks/useServerUnread'
 import { useChat } from '../../context/ChatContext'
 import { useOpenChat, isPhoneWidth } from '../../hooks/useOpenChat'

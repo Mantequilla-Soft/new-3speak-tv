@@ -1,0 +1,321 @@
+// The @snapie/hangouts SDK in the v2 look (live area only).
+//
+// The SDK ships its own CSS driven by --hh-* variables and fixed class names
+// (hh-btn, hh-cd, hh-chat...). These mixins point those variables at the v2
+// tokens and re-skin the SDK pieces that sit on 3Speak's live surfaces: the
+// Stream Studio create form (/openpods), the room/studio modal, the stream watch
+// page chat and the boost dialog. Only tokens from design-system.scss.
+//
+// Usage:  @use "../components/openpods/hangouts-skin" as hh;
+//         .my-root { @include hh.tokens; @include hh.buttons; }
+@use "../../styles/v2" as v2;
+
+// The SDK reads these everywhere. Fields are fills, not borders, so the input
+// border is transparent and the SDK's bg fill does the work.
+@mixin tokens {
+  --hh-bg: var(--bg);
+  --hh-bg-secondary: var(--surface);
+  --hh-bg-hover: var(--bg-hover);
+  --hh-bg-input: var(--bg);
+  --hh-surface: var(--surface);
+  --hh-text: var(--text);
+  --hh-text-secondary: var(--muted);
+  --hh-text-muted: var(--muted);
+  --hh-border: var(--border);
+  --hh-border-light: var(--border);
+  --hh-input-border: transparent;
+  --hh-primary: var(--accent);
+  --hh-primary-hover: var(--accent-hover);
+  --hh-accent: var(--accent);
+  --hh-danger: var(--accent);
+  --hh-success: var(--cyan);
+  --hh-btn-secondary-bg: var(--surface-2);
+  --hh-btn-secondary-text: var(--text);
+  --hh-btn-secondary-hover: color-mix(in srgb, var(--text) 10%, var(--surface-2));
+  --hh-shadow: transparent;
+  // Pro is marked in the accent, not a gold of its own (no other hues).
+  --hh-pro-gold: var(--accent);
+  --hh-pro-gold-soft: var(--accent-tint);
+  --hh-pro-gold-strong: var(--accent-tint-strong);
+  font-family: var(--font-sans);
+}
+
+// Draws a Material Symbols glyph in place of an SDK emoji: the emoji text is
+// hidden and the ligature is drawn by ::before, so a screen never mixes icon sets.
+@mixin glyph($name, $size: 20px) {
+  font-size: 0;
+  &::before {
+    content: $name;
+    display: inline-block;
+    font-family: "Material Symbols Rounded";
+    font-size: $size;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    direction: ltr;
+    font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+// SDK buttons as v2 buttons: flat fills, radius by height, no lift or glow.
+// $sized: false keeps the SDK's own heights (the studio lays out around them).
+@mixin buttons($sized: true) {
+  .hh-btn {
+    font-family: inherit;
+    font-weight: 700;
+    letter-spacing: 0;
+    border: 0;
+    border-radius: var(--r-md);
+    box-shadow: none;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+    @if $sized {
+      min-height: 40px;
+      padding: 0 14px;
+      font-size: 13px;
+    }
+
+    &:hover:not(:disabled) { transform: none; box-shadow: none; }
+    &:active:not(:disabled) { transform: scale(.98); box-shadow: none; }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: none; border-color: transparent; }
+    &:disabled { opacity: .45; }
+  }
+  .hh-btn--primary { background: var(--accent); color: var(--on-accent); font-weight: 900;
+    &:hover:not(:disabled) { background: var(--accent-hover); color: var(--on-accent); } }
+  .hh-btn--secondary { background: var(--surface-2); color: var(--text);
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); } }
+  .hh-btn--ghost { background: transparent; color: var(--text);
+    &:hover:not(:disabled) { background: var(--bg-hover); } }
+  .hh-btn--danger { background: var(--accent-tint); color: var(--accent);
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--accent); } }
+  @if $sized {
+    .hh-btn--small { min-height: 32px; padding: 0 10px; font-size: 12px; }
+    .hh-btn--icon { width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 50%; }
+  }
+}
+
+// A field: bg fill, no border at rest, accent ring on focus.
+@mixin field($h: 40) {
+  box-sizing: border-box;
+  min-height: $h * 1px;
+  padding: 0 12px;
+  border: 2px solid transparent;
+  border-radius: v2.radius-for($h);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  box-shadow: none;
+  &::placeholder { color: var(--muted); }
+  &:focus { outline: none; border-color: var(--accent); box-shadow: none; }
+}
+
+// The live chat (ChatPanel) inside a v2 surface: messages scroll inside, the
+// composer is a 44px filled field over a divider.
+@mixin chat {
+  .hh-chat {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .hh-chat__header { display: none; }
+  .hh-chat__messages {
+    padding: 8px 16px;
+    gap: 10px;
+    @include v2.scroll-y;
+  }
+  .hh-chat__msg { gap: 8px; }
+  .hh-chat__msg-avatar { width: 24px; height: 24px; border-radius: 50%; }
+  .hh-chat__msg-name { color: var(--text); font-size: 14px; font-weight: 700; }
+  .hh-chat__msg-text { color: var(--text); font-size: 14px; line-height: 1.4; }
+  .hh-chat__mention { color: var(--cyan); font-weight: 700; }
+  .hh-chat__msg--mentioned { background: var(--cyan-wash); border-radius: var(--r-md); }
+  .hh-chat__empty { color: var(--muted); font-size: 13px; padding: 24px 0; }
+  .hh-chat__compose { border-top: 1px solid var(--border); }
+  .hh-chat__input-row { padding: 12px; gap: 8px; align-items: center; border-top-color: var(--border); }
+  .hh-chat__compose .hh-chat__input-row { border-top: 0; }
+  .hh-chat__input {
+    @include field(44);
+    height: 44px;
+    background: var(--surface-2);
+  }
+  .hh-chat__input-row .hh-btn { min-height: 44px; height: 44px; border-radius: var(--r-lg); padding: 0 14px; }
+  .hh-chat__emoji-toggle {
+    width: 44px;
+    height: 44px;
+    flex: none;
+    border: 0;
+    border-radius: 50%;
+    background: var(--surface-2);
+    color: var(--muted);
+    cursor: pointer;
+    @include glyph("mood", 20px);
+  }
+  .hh-chat__emoji-tray { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .hh-chat__emoji-btn { border-radius: var(--r-sm); &:hover { background: var(--bg-hover); } }
+  .hh-chat__mention-tray { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .hh-chat__mention-candidate { border-radius: var(--r-sm); color: var(--text); &:hover { background: var(--bg-hover); } }
+  .hh-chat__guest-prompt {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: left;
+  }
+}
+
+// The quality <select> (StreamQualityControl): a small filled select.
+@mixin quality-select {
+  .hh-stream-quality select {
+    @include field(32);
+    height: 32px;
+    padding: 0 28px 0 10px;
+    font-size: 12px;
+    font-weight: 700;
+    appearance: none;
+    cursor: pointer;
+    background-color: var(--surface-2);
+    background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+    option { background: var(--surface); color: var(--text); }
+  }
+}
+
+// The Stream Studio create form (RoomLobby + CreateRoomDialog), design 39a:
+// a card, eyebrow labels, step chips, choice tiles, filled fields, v2 toggles.
+@mixin create-form {
+  .hh-lobby { max-width: none; margin: 0; padding: 0; font-family: inherit; color: var(--text); }
+  .hh-lobby__header { margin-bottom: 16px; }
+  .hh-lobby__title { @include v2.text(heading); }
+  .hh-lobby__empty { color: var(--muted); }
+
+  .hh-cd {
+    @include v2.card;
+    padding: 20px;
+    gap: 16px;
+    @include v2.mobile { padding: 16px; }
+  }
+  .hh-cd__intro-title { @include v2.text(heading); }
+  .hh-cd__intro-desc { color: var(--muted); font-size: 13px; }
+  .hh-cd__beta { background: var(--cyan-tint); color: var(--cyan); border-radius: 7px; font-size: 10px; font-weight: 900; }
+  .hh-cd__section { gap: 8px; }
+  .hh-cd__label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-cd__label-note { font-size: 11px; font-weight: 400; }
+
+  // Choice tiles: 2px border, cyan when chosen (a secondary choice, 39a).
+  .hh-cd__tiles { gap: 8px; }
+  .hh-cd__tile {
+    align-items: flex-start;
+    text-align: left;
+    gap: 2px;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-lg);
+    background: transparent;
+    color: var(--text);
+    box-shadow: none;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+    &:hover { transform: none; border-color: var(--border); background: var(--bg-hover); }
+    &.is-active { border-color: var(--cyan); background: var(--cyan-tint); box-shadow: none; .hh-cd__tile-icon { color: var(--cyan); } }
+  }
+  .hh-cd__tile-icon { color: var(--muted); margin-bottom: 6px; line-height: 1; }
+  .hh-cd__tile-title { font-size: 13px; font-weight: 700; }
+  .hh-cd__tile-desc { font-size: 11px; color: var(--muted); line-height: 1.35; }
+  // Mode tiles (group chat / stream) and visibility tiles, in the SDK's order.
+  .hh-cd__tiles:not(.hh-cd__tiles--3) .hh-cd__tile:nth-child(1) .hh-cd__tile-icon { @include glyph("groups", 24px); }
+  .hh-cd__tiles:not(.hh-cd__tiles--3) .hh-cd__tile:nth-child(2) .hh-cd__tile-icon { @include glyph("sensors", 24px); }
+  .hh-cd__tiles--3 .hh-cd__tile:nth-child(1) .hh-cd__tile-icon { @include glyph("public", 24px); }
+  .hh-cd__tiles--3 .hh-cd__tile:nth-child(2) .hh-cd__tile-icon { @include glyph("key", 24px); }
+  .hh-cd__tiles--3 .hh-cd__tile:nth-child(3) .hh-cd__tile-icon { @include glyph("link", 24px); }
+
+  .hh-cd__input, .hh-cd__select { @include field(40); height: 40px; }
+  .hh-cd__textarea { @include field(40); min-height: 88px; padding: 10px 12px; line-height: 1.45; }
+  .hh-cd__tags { @include field(40); display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 4px 6px; height: auto; }
+  .hh-cd__tag { height: 28px; padding: 0 6px 0 10px; border-radius: var(--r-sm); background: var(--surface-2); color: var(--text); font-size: 12px; font-weight: 700;
+    button { color: var(--muted); &:hover { color: var(--accent); } } }
+  .hh-cd__tag-input { font-size: 14px; color: var(--text); }
+  .hh-cd__field-error { font-size: 11px; color: var(--accent); }
+
+  // Switch → v2 toggle (44 x 26, accent when on).
+  .hh-cd__switch { gap: 12px; }
+  .hh-cd__switch-track { width: 44px; height: 26px; border-radius: 13px; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--border); }
+  .hh-cd__switch-thumb { top: 3px; left: 3px; width: 20px; height: 20px; background: var(--muted); box-shadow: none; }
+  .hh-cd__switch input:checked + .hh-cd__switch-track { background: var(--accent); box-shadow: none; }
+  .hh-cd__switch input:checked + .hh-cd__switch-track .hh-cd__switch-thumb { background: var(--on-accent); transform: translateX(18px); }
+  .hh-cd__switch input:focus-visible + .hh-cd__switch-track { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .hh-cd__switch-label { font-size: 14px; font-weight: 700; }
+  .hh-cd__check, .hh-cd__reccheck { font-size: 13px; input { accent-color: var(--accent); width: 18px; height: 18px; } }
+  .hh-cd__reccheck em { font-size: 11px; color: var(--muted); opacity: 1; }
+  .hh-cd__row2 { gap: 10px; @include v2.mobile { grid-template-columns: 1fr; } }
+
+  .hh-cd__announce { margin-top: 4px; padding: 12px; border: 0; border-radius: var(--r-lg); background: var(--bg); gap: 10px; }
+  .hh-cd__seg { gap: 4px; padding: 4px; border-radius: var(--r-md); background: var(--surface); }
+  .hh-cd__seg button { height: 32px; padding: 0 10px; border: 0; border-radius: var(--r-md); background: transparent; color: var(--muted); font-size: 13px; font-weight: 700; box-shadow: none;
+    &:hover { color: var(--text); }
+    &.is-active { background: var(--surface-2); color: var(--text); border: 0; box-shadow: none; } }
+  .hh-cd__announce-hint { font-size: 11px; color: var(--muted); }
+  .hh-cd__announce-hint--solo { font-size: 13px; color: var(--muted); }
+  .hh-cd__limit-hint { padding: 10px 12px; border-radius: var(--r-md); background: var(--bg); color: var(--muted); font-size: 12px; opacity: 1; }
+  .hh-cd__unlock { @include v2.btn(danger, 32); align-self: flex-start; }
+  .hh-cd__create-error { border: 0; border-radius: var(--r-2xl); background: var(--accent-wash); padding: 12px 14px; font-size: 13px; }
+  .hh-cd__create-error--limit { border: 0; background: var(--accent-wash); }
+  .hh-bg-picker__upload-btn { min-height: 48px; border: 2px dashed var(--border); border-radius: var(--r-lg); background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700;
+    &:hover:not(:disabled) { background: var(--bg-hover); color: var(--text); } }
+  .hh-bg-picker__preview { border-radius: var(--r-md); }
+  .hh-bg-picker__error { color: var(--accent); font-size: 11px; }
+
+  // Steps (39a): 44px chips with a 32px numbered square. Done = cyan check,
+  // current = accent tint and border, next = outlined and muted.
+  .hh-cd-steps__row { gap: 6px; @include v2.scroll-x; }
+  .hh-cd-steps__item, .hh-cd-steps__item:last-child { flex: 0 0 auto; }
+  .hh-cd-steps__line { display: none; }
+  .hh-cd-steps__step {
+    height: 44px;
+    padding: 0 14px 0 6px;
+    gap: 8px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-lg);
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-lg); }
+  }
+  .hh-cd-steps__ring {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--muted);
+    @include v2.mono(12, 900);
+    box-shadow: none;
+  }
+  .hh-cd-steps__label { font-size: 13px; font-weight: 700; color: var(--muted); }
+  .hh-cd-steps__step.is-done { border-color: transparent;
+    .hh-cd-steps__ring { background: var(--cyan); color: var(--bg); @include glyph("check", 18px); }
+    .hh-cd-steps__label { color: var(--text); } }
+  .hh-cd-steps__step.is-active { border-color: var(--accent); background: var(--accent-tint-strong);
+    .hh-cd-steps__ring { background: var(--accent); color: var(--on-accent); border: 0; box-shadow: none; }
+    .hh-cd-steps__label { color: var(--text); font-weight: 700; } }
+
+  .hh-cd__actions--steps .hh-btn { min-width: 120px; min-height: 48px; border-radius: var(--r-lg); font-size: 14px; }
+  .hh-cd__actions--bottom { padding-top: 16px; border-top: 1px solid var(--border); }
+  .hh-cd__next.hh-btn--primary,
+  .hh-cd__submit.hh-btn--primary {
+    background: var(--accent);
+    color: var(--on-accent);
+    border: 0;
+    font-weight: 900;
+    padding: 0 16px;
+    &:hover:not(:disabled) { background: var(--accent-hover); }
+  }
+}

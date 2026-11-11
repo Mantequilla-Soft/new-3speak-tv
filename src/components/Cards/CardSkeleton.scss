@@ -1,75 +1,20 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-.feed-wrap-skeleton-in {
-  margin-top: 10px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-
-  @include mix.respond(phone) {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
-  }
-
-  .skeleton-card {
-    .video-thumbnail-skeleton {
-      width: 100%;
-      height: 180px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-
-      @include mix.respond(phone) {
-        height: 100px;
-      }
-    }
-
-    .line-skeleton {
-      height: 12px;
-      margin-bottom: 6px;
-      border-radius: 6px;
-
-      &:first-child {
-        width: 80%;
-      }
-      &:last-child {
-        width: 60%;
-      }
-    }
-
-    .skeleton-avatar-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .skeleton-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .skeleton-text-sm {
-      height: 10px;
-      width: 40%;
-      border-radius: 4px;
-    }
-  }
-}
-
+// The card grid's loading page reuses the card skeleton (Cards.scss, imported by
+// CardSkeleton.jsx). This file
+// keeps the shared `.skeleton` block a few other screens still use: the striped
+// placeholder with a soft pulse instead of the old shimmer.
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--bg-tertiary, #2a2a3e) 25%,
-    var(--bg-hover, #3a3a4e) 50%,
-    var(--bg-tertiary, #2a2a3e) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  @include v2.thumb-placeholder(6px);
+  border-radius: var(--r-xs);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
 }
 
-@keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
 }

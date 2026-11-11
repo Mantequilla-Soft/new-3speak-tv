@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MdClose, MdLightbulbOutline } from 'react-icons/md';
 import { useAppStore } from '../../lib/store';
 import { isAnyPromptActive } from '../../utils/welcomeGate';
 import { TIPS } from './incubationTips';
+import { Icon, IconButton } from '../v2/ui';
 import { useTranslation } from 'react-i18next';
 import './IncubationTips.scss';
 
@@ -76,19 +76,20 @@ export default function IncubationTips() {
 
   return (
     <aside className="inct" role="note" aria-label={t('incubation.tipCard.aria')}>
-      <button type="button" className="inct-close" onClick={dismiss} aria-label={t('incubation.tipCard.dismiss')}>
-        <MdClose size={16} />
-      </button>
-      <div className="inct-icon" aria-hidden="true"><MdLightbulbOutline size={18} /></div>
-      <div className="inct-text">
+      {/* Tip card (design 46a): bulb in cyan, bold title, close on the right,
+          a muted line and an optional cyan link. */}
+      <div className="inct-head">
+        <Icon name="lightbulb" size={18} className="inct-icon" />
         <strong>{t(tip.titleKey)}</strong>
-        <p>{t(tip.bodyKey)}</p>
-        {tip.to && (
-          <Link to={tip.to} className="inct-cta" onClick={dismiss}>
-            {tip.ctaKey ? t(tip.ctaKey) : t('incubation.tipCard.takeALook')}
-          </Link>
-        )}
+        <IconButton icon="close" label={t('incubation.tipCard.dismiss')} size={28} variant="ghost" round className="inct-close" onClick={dismiss} />
       </div>
+      <p>{t(tip.bodyKey)}</p>
+      {tip.to && (
+        <Link to={tip.to} className="inct-cta" onClick={dismiss}>
+          {tip.ctaKey ? t(tip.ctaKey) : t('incubation.tipCard.takeALook')}
+          <Icon name="arrow_forward" size={14} />
+        </Link>
+      )}
     </aside>
   );
 }

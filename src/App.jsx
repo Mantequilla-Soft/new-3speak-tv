@@ -42,7 +42,7 @@ import { Toaster } from 'sonner';
 import { toastIn } from './utils/toast';
 import { useTranslation } from 'react-i18next';
 import { t } from './i18n';
-import { CircleCheck, CircleX, TriangleAlert, Info } from 'lucide-react'
+import { Icon } from './components/v2/Icon'
 import './toast.css'
 import { fetchNewerVersion, reloadForUpdate } from './utils/checkLatestVersion'
 // Retired alongside the legacy /studio flow — kept here as comments for ease of
@@ -292,6 +292,15 @@ const LoginRedirect = ({ openLoginModal }) => {
   return null;
 };
 
+// The island toast's parts (toast.css), shared by both <Toaster/>s.
+const TOAST_CLASSNAMES = {
+  toast: 'ts-toast',
+  title: 'ts-toast-title',
+  description: 'ts-toast-desc',
+  icon: 'ts-toast-icon',
+  closeButton: 'ts-toast-close',
+};
+
 // Survives StrictMode's double mount and any remount, so the refresh prompt is
 // raised at most once per page load.
 let updatePromptShown = false;
@@ -349,6 +358,8 @@ function App() {
   }, []);
 
   const hideNavOnMobile = isShorts && isMobile;
+  // Pages that draw edge to edge under the bar instead of in the 1280 column.
+  const isBleedRoute = isShorts || /^\/(galaxy|egress-stream)(\/|$)/.test(location.pathname);
 
   // Apply the saved theme on every route — Nav (which also calls this) isn't
   // rendered on the mobile shorts view, so a fresh /shorts deep link would
@@ -704,7 +715,7 @@ function App() {
   if (location.pathname.startsWith('/tip/')) {
     return (
       <Suspense fallback={null}>
-        <Toaster position="top-center" expand visibleToasts={3} />
+        <Toaster position="top-center" expand visibleToasts={3} toastOptions={{ classNames: TOAST_CLASSNAMES }} />
         <Routes>
           <Route path="/tip/:author/:permlink?" element={<TipPopup />} />
         </Routes>
@@ -733,41 +744,33 @@ function App() {
     <ChatProvider>
     <div onClick={()=> {setGlobalCloseRender(true)}}>
       <Toaster
-        position="top-right"
-        /* Below the title bar, never on top of it. The user icon sits in the
-           top-right corner, so a toast landing there made the avatar unclickable for
-           as long as any message was on screen — and the messages that fire most
-           often are the login ones, i.e. exactly when someone is reaching for it.
+        /* The island (STYLE_GUIDE §7, designs 07f/17i/34d): top centre, just
+           under the top bar, never a corner toast. Centred, it also stays off
+           the avatar and the bell at the bar's right end.
 
            Driven by --nav-top-offset, which Nav.jsx sets from the bar's OWN measured
            height (and 0 when the bar is hidden or unmounted), so this tracks the real
            bar instead of a hardcoded guess that goes wrong the moment it reflows. */
-        offset={{ top: 'calc(var(--nav-top-offset, 50px) + 12px)', right: '16px' }}
-        mobileOffset={{ top: 'calc(var(--nav-top-offset, 50px) + 8px)', right: '8px', left: '8px' }}
+        position="top-center"
+        offset={{ top: 'calc(var(--nav-top-offset, 76px) + 8px)' }}
+        mobileOffset={{ top: 'calc(var(--nav-top-offset, 56px) + 8px)', right: '16px', left: '16px' }}
+        style={{ '--width': '420px' }}
         containerAriaLabel={t('app.toastsRegion')}
         expand
-        visibleToasts={6}
-        gap={12}
+        visibleToasts={4}
+        gap={8}
         closeButton
-        swipeDirections={['right']}
-        /* 20px to match the rail-style toast in toast.css — the icon now sits
-           beside the text rather than out on its own, so it reads as part of
-           the line instead of a badge. */
+        swipeDirections={['top', 'left', 'right']}
+        /* Material Symbols in a round chip coloured by type (toast.css). */
         icons={{
-          success: <CircleCheck size={20} strokeWidth={2.25} />,
-          error: <CircleX size={20} strokeWidth={2.25} />,
-          warning: <TriangleAlert size={20} strokeWidth={2.25} />,
-          info: <Info size={20} strokeWidth={2.25} />,
+          success: <Icon name="check" size={20} weight={700} />,
+          error: <Icon name="priority_high" size={20} weight={700} />,
+          warning: <Icon name="warning" size={18} fill />,
+          info: <Icon name="info" size={20} />,
+          loading: <Icon name="progress_activity" size={20} className="v2-spin" />,
+          close: <Icon name="close" size={16} />,
         }}
-        toastOptions={{
-          classNames: {
-            toast: 'ts-toast',
-            title: 'ts-toast-title',
-            description: 'ts-toast-desc',
-            icon: 'ts-toast-icon',
-            closeButton: 'ts-toast-close',
-          },
-        }}
+        toastOptions={{ classNames: TOAST_CLASSNAMES }}
       />
       <ChangelogModal />
       <AnnouncementModal />
@@ -781,12 +784,13 @@ function App() {
       {!hideNavOnMobile && (
         <Nav toggleProfileNav={toggleProfileNav} profileMenuHover={profileMenu.hoverProps} globalClose={globalCloseRender} setGlobalClose={setGlobalCloseRender} openLoginModal={openLoginModal} />
       )}
-      <div>
-        {/* The left sidebar is gone. The content keeps the classes it wore
-            when the sidebar was hidden -- large-container plus
-            sidebar-fully-hidden -- which is now simply what the layout is,
-            rather than one of three states it could be in. */}
-        <div className={`container large-container sidebar-fully-hidden ${hideNavOnMobile ? "shorts-mobile-container" : ""}`}>
+      <div className="app-shell">
+        {/* The content column (App.css): max 1280 wide, page padding, room for
+            the bottom bar. There is no left sidebar; the sections live in the
+            top bar's tabs and the bottom bar. large-container and
+            sidebar-fully-hidden stay only because other stylesheets select on
+            them. Full-bleed routes drop the column (is-bleed). */}
+        <div className={`container large-container sidebar-fully-hidden${isBleedRoute ? " is-bleed" : ""}${hideNavOnMobile ? " shorts-mobile-container" : ""}`}>
           <ScrollToTop />
           {/* A creator blocked from uploading: popup once, banner while it lasts.
               No banner over the full-screen mobile shorts player. */}

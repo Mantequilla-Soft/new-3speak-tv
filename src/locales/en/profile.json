@@ -230,7 +230,12 @@
     "loginToUpload": "Login to upload video",
     "linkExternalTitle": "Link an external profile",
     "addProfile": "Add profile",
-    "editTitle": "Edit your picture, name, bio and location"
+    "editTitle": "Edit your picture, name, bio and location",
+    "more": "More",
+    "moreActions": "More actions for @{{user}}",
+    "copyProfileLink": "Copy profile link",
+    "podcastFeed": "Podcast feed (RSS)",
+    "editProfile": "Edit profile"
   },
   "tabs": {
     "overview": "Overview",

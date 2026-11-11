@@ -1,98 +1,127 @@
-import React from 'react';
-import "./VideoCard.scss"
+import "./VideoCard.scss";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fixVideoThumbnail } from '../../utils/fixThumbnails';
 import fallbackImg from '../../assets/image/speak.jpg';
 import { useTranslation } from 'react-i18next';
+import { DockTile, StatusPill } from '../v2/ui';
 dayjs.extend(utc);
-const VideoCard = ({  video, onEdit, onView, onDelete, onPublish}) => {
+
+// 1:13 / 1:02:03 for the duration under the title (Roboto Mono).
+function fmtLength(sec) {
+  const s = Math.round(Number(sec) || 0);
+  if (s <= 0) return '';
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const r = String(s % 60).padStart(2, '0');
+  return h ? `${h}:${String(m).padStart(2, '0')}:${r}` : `${m}:${r}`;
+}
+
+// Relative under 7 days, a date after that (STYLE_GUIDE §10).
+function fmtWhen(date) {
+  if (!date) return '';
+  const d = dayjs(date);
+  if (!d.isValid()) return '';
+  return dayjs().diff(d, 'day') < 7 ? d.fromNow() : d.format('D MMM YYYY');
+}
+
+// One row of the Studio list (21d): content as a card, not a table row.
+// thumb · title + date and length · status pill · action tiles.
+const VideoCard = ({ video, onEdit, onStats }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate()
-  const handleNavigate = ()=>{
-    navigate(`/@${video?.owner}/${video.permlink ?? "unknown"}`)
-  }
-  const getStatusLabel = (status) => {
-  switch (status) {
-    case 'published':
-      return t('upload.drafts.status.published');
-    case 'scheduled':
-      return t('upload.drafts.status.scheduled');
-    case 'failed':
-    case 'publish_manual':
-      return t('upload.drafts.status.failed');
-    default:
-      return status;
-  }
-};
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    navigate(`/@${video?.owner}/${video.permlink ?? "unknown"}`);
+  };
 
-
-  // console.log(video)
+  // Status: tone per STYLE_GUIDE §2 (approved = cyan, failed = accent, pending = muted).
+  const status = (() => {
+    switch (video.status) {
+      case 'published':
+        return { tone: 'cyan', label: t('upload.drafts.status.published') };
+      case 'scheduled':
+        return { tone: 'muted', label: t('upload.drafts.status.scheduled') };
+      case 'failed':
+      case 'publish_manual':
+        return { tone: 'accent', label: t('upload.drafts.status.failed') };
+      case 'draft':
+        return { tone: 'muted', label: t('cards.status.draft') };
+      case 'deleted':
+        return { tone: 'muted', label: t('cards.status.deleted') };
+      case 'encoding':
+      case 'processing':
+      case 'uploaded':
+        return { tone: 'accent', label: t('cards.status.processing') };
+      default:
+        return { tone: 'muted', label: video.status };
+    }
+  })();
+  const unlisted = video.unlisted === true || video.listed_on_3speak === false;
+  const length = fmtLength(video.duration);
+  const when = fmtWhen(video.created_at);
+  const published = video.status === 'published';
+  const editable = published || video.status === 'scheduled';
 
   return (
-    <div className="video-card">
-      <div className="thumbnail">
-        <img src={fixVideoThumbnail(video)} alt={video.title} onError={(e) => (e.currentTarget.src = fallbackImg)} />
+    <article className="studio-row">
+      <div className="studio-row__thumb v2-thumb r16">
+        <img
+          src={fixVideoThumbnail(video)}
+          alt=""
+          loading="lazy"
+          onError={(e) => (e.currentTarget.src = fallbackImg)}
+        />
+        {length && <span className="v2-media-pill is-br num">{length}</span>}
       </div>
-      <div className="content">
-        <h3 className="title">{video.title || ""}</h3>
-        <div className="metas">
-          <span className="date">{dayjs(video.created_at).fromNow()}</span>
-          <span className={`status status--${video.status}`}>
-            {getStatusLabel(video.status)}
-          </span>
+
+      <div className="studio-row__main">
+        <h3 className="studio-row__title" title={video.title || ''}>{video.title || ""}</h3>
+        <div className="studio-row__meta">
+          {when}
+          {when && length && ' · '}
+          {length && <span className="num">{length}</span>}
         </div>
         {video.status === 'scheduled' && video.publish_data && (
-          <div className="scheduled-date">
+          <div className="studio-row__when">
             {t('upload.drafts.publishesAt', { date: dayjs(typeof video.publish_data === 'number' ? video.publish_data * 1000 : video.publish_data).format('MMM D, YYYY [at] h:mm A') })}
           </div>
         )}
-        <div className="actions">
-          {(video.status === 'published' || video.status === 'scheduled') ? (
-            <>
-              <button
-                className="btn btn--secondary btn--sm"
-                onClick={() => onEdit(video.id)}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                </svg>
-                {t('common.actions.edit')}
-              </button>
-              {/* Scheduled posts don't have a public URL yet, so only show "View" for published. */}
-              {video.status === 'published' && (
-                <button
-                  className="btn btn--secondary btn--sm"
-                  onClick={handleNavigate}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                  {t('common.actions.view')}
-                </button>
-              )}
-              {/* <button 
-                className="btn btn--danger btn--sm" 
-                onClick={() => onDelete(video.id)}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="3 6 5 6 21 6" />
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                  <line x1="10" y1="11" x2="10" y2="17" />
-                  <line x1="14" y1="11" x2="14" y2="17" />
-                </svg>
-                Delete
-              </button> */}
-            </>
-          ) : (
-            ""
-          )}
-        </div>
       </div>
-    </div>
+
+      <div className="studio-row__status">
+        <StatusPill tone={status.tone}>{status.label}</StatusPill>
+        {unlisted && <StatusPill tone="muted" icon="link">{t('cards.status.unlisted')}</StatusPill>}
+      </div>
+
+      <div className="studio-row__acts">
+        {editable && (
+          <DockTile
+            className="studio-row__act"
+            icon="edit"
+            label={t('common.actions.edit')}
+            onClick={() => onEdit(video.id)}
+          />
+        )}
+        {/* Scheduled posts don't have a public URL yet, so only published ones get View and Stats. */}
+        {published && (
+          <DockTile
+            className="studio-row__act"
+            icon="visibility"
+            label={t('common.actions.view')}
+            onClick={handleNavigate}
+          />
+        )}
+        {published && onStats && (
+          <DockTile
+            className="studio-row__act"
+            icon="bar_chart"
+            label={t('nav.profile.analytics')}
+            onClick={() => onStats(video)}
+          />
+        )}
+      </div>
+    </article>
   );
 };
 

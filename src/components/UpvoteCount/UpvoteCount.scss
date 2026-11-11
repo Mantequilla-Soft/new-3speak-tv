@@ -1,34 +1,33 @@
-@use "../../mixins.scss" as *;
+@use "../../styles/v2" as v2;
 
+// Votes: arrow + count in mono, muted; accent once voted.
 .upvote-count-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 12px;
-  color: var(--text-secondary);
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+  flex: none;
 
   .upvote-icon {
-    transition: color 0.2s ease;
+    transition: color var(--t-fast) var(--ease);
 
     &.clickable {
       cursor: pointer;
-
-      &:hover {
-        color: var(--accent-primary, #e53935);
-      }
+      &:hover { color: var(--accent); }
     }
   }
 
-  &.voted {
-    .upvote-icon {
-      color: var(--accent-primary, #e53935);
-    }
-  }
+  &.voted .upvote-icon { color: var(--accent); }
 }
 
 // Full count on desktop, whole thousands on a phone (see UpvoteCount.jsx).
 .upvote-count-compact { display: none; }
-@include respond(phone) {
+@include v2.mobile {
   .upvote-count-full { display: none; }
   .upvote-count-compact { display: inline; }
 }

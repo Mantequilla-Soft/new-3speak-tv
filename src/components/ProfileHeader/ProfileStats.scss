@@ -1,42 +1,41 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
-// Stat line under the bio. Deliberately plain text, not chips: the badge row
-// right below is already chip-shaped, and two rows of pills read as noise.
+// Stat chips under the channel name (20b, 37a): surface pills with a 1px
+// border, the number bold in ink and the word muted.
 .profile-stats {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.35rem 0.9rem;
-  margin-top: 0.4rem;
-  font-size: 0.85rem;
-  color: #94a3b8;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
 
-  strong {
-    color: #e2e8f0;
-    font-weight: 600;
+  .profile-stat {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: var(--r-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    @include v2.text(body-sm);
+    color: var(--muted);
+    white-space: nowrap;
+
+    strong {
+      color: var(--text);
+      font-weight: 700;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    @include v2.mobile { padding: 4px 10px; font-size: 12px; }
   }
 
-  .profile-stat--since {
-    font-size: 0.8rem;
-  }
-
-  // The follower count opens the follower list (the pill that used to do that
-  // is gone). Hovering any stat shows its exact figure via the title attribute.
+  // The follower count opens the follower list.
   .profile-stat--action {
     cursor: pointer;
-    border-radius: 6px;
-    transition: color 0.15s ease;
+    transition: background var(--t-fast) var(--ease);
 
-    &:hover,
-    &:focus-visible {
-      color: #e2e8f0;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-  }
-
-  @include mix.respond(phone) {
-    gap: 0.25rem 0.7rem;
-    font-size: 0.8rem;
+    &:hover { background: var(--surface-2); }
   }
 }

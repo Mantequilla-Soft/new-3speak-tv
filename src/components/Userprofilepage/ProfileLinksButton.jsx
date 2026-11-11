@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { FaLink } from 'react-icons/fa6';
 import { fetchSpotlight } from '../../utils/spotlight';
 import { useTranslation } from 'react-i18next';
+import { ProfileTile } from './ProfileActions';
 import './ProfileLinksButton.scss';
 
 /**
- * "Links" button under the Message button, on narrow screens.
+ * "Links" tile in the profile header, on narrow screens.
  *
  * The framed links page beside the Overview tab (ProfileLinksPanel) only exists
  * from 1025px up, so below that a visitor had no way to reach the page at all.
@@ -15,9 +15,6 @@ import './ProfileLinksButton.scss';
  * empty one is worse than no button. It lives in the header's `nameActions`,
  * which only exists on someone else's profile, so the own-profile case is
  * handled for free (the Links tab is right there anyway).
- *
- * Wears `btn btn-hero-message` so it IS the Message button visually, and its
- * own class only places it in the row below.
  */
 export default function ProfileLinksButton({ username }) {
   const { t } = useTranslation();
@@ -46,8 +43,6 @@ export default function ProfileLinksButton({ username }) {
   // Plain anchor, not a router Link: /links/<user> is standalone HTML served by
   // nginx, and it carries its own way back to the profile.
   return (
-    <a className="btn btn-hero-message profile-links-btn" href={`/links/${username}`}>
-      <FaLink /> {t('profile.links.button')}
-    </a>
+    <ProfileTile as="a" icon="link" label={t('profile.links.button')} className="profile-links-btn" href={`/links/${username}`} />
   );
 }

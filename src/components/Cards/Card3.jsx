@@ -7,12 +7,10 @@ import { getCategoryOf, getTagLabel } from "../../utils/tagsV2";
 import ViewCount from "../ViewCount/ViewCount";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { IoCalendarOutline } from "react-icons/io5";
 dayjs.extend(utc);
-import { MdDelete, MdError, MdPhoneIphone, MdVisibilityOff } from "react-icons/md";
-import { FaCog, FaFileAlt } from "react-icons/fa";
-import { IoChevronBack, IoChevronForward, IoExpandOutline, IoContractOutline } from "react-icons/io5";
-import { Leaf } from "lucide-react";
+import { Icon } from "../v2/Icon";
+import HiveAvatar from "../HiveAvatar/HiveAvatar";
+import { NO_ACCOUNT_AVATAR } from "../../utils/avatarCache";
 import CardOptionsMenu from "../CardOptionsMenu/CardOptionsMenu";
 import TimeAgo from "../TimeAgo/TimeAgo";
 import { Link, useNavigate } from "react-router-dom";
@@ -23,7 +21,6 @@ import img from "../../assets/image/speak.jpg";
 import CardThumbnail from "./CardThumbnail";
 import { SpotlightSkeleton } from "./GridSkeleton";
 import { fixVideoThumbnail, LANDSCAPE_LARGE } from "../../utils/fixThumbnails";
-import AuthorBadge from "../AuthorBadge/AuthorBadge";
 import ProfileModal from "../modal/ProfileModal";
 import useHoverPreview from "../../hooks/useHoverPreview";
 import { useCardWindowing, useWindowedCard } from "../../hooks/useCardWindowing";
@@ -185,7 +182,7 @@ function FeaturedStrip({ items, index, onPick }) {
     <div className="featured-strip-wrap">
       {ends.left && (
         <button type="button" className="featured-strip-arrow featured-strip-arrow--prev" aria-label={t('feeds.scrollLeft')} onClick={(e) => page(e, -1)}>
-          <IoChevronBack aria-hidden="true" />
+          <Icon name="chevron_left" size={18} />
         </button>
       )}
       <div className="featured-strip" ref={ref}>
@@ -204,7 +201,7 @@ function FeaturedStrip({ items, index, onPick }) {
       </div>
       {ends.right && (
         <button type="button" className="featured-strip-arrow featured-strip-arrow--next" aria-label={t('feeds.scrollRight')} onClick={(e) => page(e, 1)}>
-          <IoChevronForward aria-hidden="true" />
+          <Icon name="chevron_right" size={18} />
         </button>
       )}
     </div>
@@ -247,15 +244,19 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
   // (that card has no hover zoom, so the row already draws above the preview).
   const renderCardControls = useCallback(({ author, permlink, title, setLock }) => (
     featuredKey && `${author}/${permlink}` === featuredKey ? null : (
-      <CardOptionsMenu
-        author={author}
-        permlink={permlink}
-        title={title}
-        onDismiss={handleDismiss}
-        onOpenChange={setLock}
-      />
+      <>
+        {/* The hover preview plays without sound: say so, top-left (28b) */}
+        <span className="card-preview-pill" aria-hidden="true">{t('cards.previewMuted')}</span>
+        <CardOptionsMenu
+          author={author}
+          permlink={permlink}
+          title={title}
+          onDismiss={handleDismiss}
+          onOpenChange={setLock}
+        />
+      </>
     )
-  ), [handleDismiss, featuredKey]);
+  ), [handleDismiss, featuredKey, t]);
 
   const { containerProps, getCardProps, overlay, canHover, startPreview } = useHoverPreview({
     renderControls: renderCardControls,
@@ -364,8 +365,8 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [featuredFirstKey]);
 
-  if (loading && videos.length === 0) return <div>{t('cards.loading')}</div>;
-  if (error) return <div>{t('cards.error', { error })}</div>;
+  if (loading && videos.length === 0) return <div className="card-grid-status">{t('cards.loading')}</div>;
+  if (error) return <div className="card-grid-status is-error" role="alert">{t('cards.error', { error })}</div>;
 
   return (
     <div
@@ -412,10 +413,35 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                 onDismiss={handleDismiss}
               />
             ) : undefined}
-            render={() => (<>
+            render={() => {
+              const shortCard = isShortCard(video, shortsGrid);
+              const duration = Number(video.spkvideo?.duration || video.duration) || 0;
+              const gatedBadge = video.gated && !shortCard;
+              const newBadge = !!isNew?.(video);
+              const views = (() => {
+                // Prefer the count already in the feed payload (the only source that
+                // resolves embed videos — /views can't look them up by hive permlink).
+                // Fall back to the batched /views fetch for legacy videos.
+                const feedViews = video.views ?? video.stats?.num_views;
+                const fetchedViews = getViewCount?.(cardAuthor, video.permlink);
+                return feedViews != null ? feedViews : fetchedViews;
+              })();
+              const content = getContentForVideo?.(cardAuthor, video.permlink);
+              const payout = content?.payout ?? video.stats?.total_hive_reward;
+              const category = getCategoryOf(video.tag_v2);
+              // The avatar and the name open the creator's channel. They sit inside
+              // the card's link, so they stop it and navigate themselves (spans,
+              // never buttons: no control may be nested in the link).
+              const openCreator = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigate(`/@${cardAuthor}`);
+              };
+              return (<>
             {/* Thumbnail — fast fallback so a dead image host can't leave the
-                card blank for ~a minute (see CardThumbnail). */}
-            <div className={`img-wrap${video._featured && featuredFlip?.key === postKey ? ` img-wrap--flip-${featuredFlip.dir}` : ''}`}>
+                card blank for ~a minute (see CardThumbnail). The striped
+                placeholder behind it shows while it loads. */}
+            <div className={`img-wrap${video._featured && featuredFlip?.key === postKey ? ` img-wrap--flip-${featuredFlip.dir}` : ''}${video.status === 'deleted' ? ' img-wrap--dim' : ''}`}>
               <CardThumbnail
                 src={video._processedThumbnail}
                 fallback={img}
@@ -433,9 +459,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); featuredNav.onCycleSize(); }}
                     >
                       {/* Shows what a click does: grow while small, shrink while medium */}
-                      {featuredNav.size === 'medium'
-                        ? <IoContractOutline aria-hidden="true" />
-                        : <IoExpandOutline aria-hidden="true" />}
+                      <Icon name={featuredNav.size === 'medium' ? 'close_fullscreen' : 'open_in_full'} size={14} />
                     </button>
                   )}
                   {/* The card menu, next to the size button */}
@@ -456,7 +480,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                     aria-label={t('player.playlist.previous')}
                     onClick={(e) => selectFeatured(e, featuredNav.index - 1)}
                   >
-                    <IoChevronBack aria-hidden="true" />
+                    <Icon name="chevron_left" size={22} />
                   </button>
                   <button
                     type="button"
@@ -464,203 +488,168 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                     aria-label={t('player.playlist.next')}
                     onClick={(e) => selectFeatured(e, featuredNav.index + 1)}
                   >
-                    <IoChevronForward aria-hidden="true" />
+                    <Icon name="chevron_right" size={22} />
                   </button>
                 </>
               )}
-              {!isShortCard(video, shortsGrid) && !video._liveStream && (
-                <div className="wrap">
-                  <span className="play">
-                    {Math.floor((video.spkvideo?.duration || video.duration) / 60)}:
-                    {Math.floor((video.spkvideo?.duration || video.duration) % 60)
-                      .toString()
-                      .padStart(2, "0")}
-                  </span>
-                </div>
-              )}
 
-              {/* 🔐 Supporters-only tile → lock badge (top-left, so it never
-                  collides with the live badge or the options menu on the right).
-                  Presentation only: the gate re-checks entitlement on every
-                  manifest and key request, so hiding this badge would not grant
-                  anyone access. Shorts are never gated. */}
-              {video.gated && !isShortCard(video, shortsGrid) && (
-                <div className="card-gated-badge" title={t('cards.badges.gatedTitle')}>
-                  <span aria-hidden="true">🔒</span> {t('cards.badges.pro')}
-                </div>
-              )}
-
-              {/* New since the viewer's last visit (community pages pass isNew).
-                  Top-left like the PRO badge, and below it when both apply. */}
-              {isNew?.(video) && (
-                <div className={`card-new-badge${video.gated && !isShortCard(video, shortsGrid) ? ' card-new-badge--below' : ''}`}>
-                  {t('cards.badges.new')}
-                </div>
+              {/* Length: a scrim pill at the bottom-right, in mono. */}
+              {!shortCard && !video._liveStream && duration > 0 && (
+                <span className="card-duration">
+                  {Math.floor(duration / 60)}:{Math.floor(duration % 60).toString().padStart(2, "0")}
+                </span>
               )}
 
               {/* AI-generated → small pill, bottom-left of the thumbnail. */}
               {isAiCard(video) && <AiPill className="ai-badge--on-thumb" />}
 
-              {/* Live tile → badge (top-right). A group-chat (conference) room
-                  reads "LIVE CHAT"; a standalone stream reads "LIVE". */}
-              {video._liveStream && (
-                <div className="card-live-badge">{video._openpodRoom ? t('cards.badges.liveChat') : t('cards.badges.live')}</div>
-              )}
+              {/* Status pills, stacked at the top-left (the options button owns
+                  the top-right). LIVE and PRO are solid accent; the rest are
+                  scrim pills with the tone on their icon (43c). */}
+              {(video._liveStream || gatedBadge || newBadge || video.status || video.publish_type || video.unlisted) && (
+                <div className="card-badges">
+                  {/* Live tile. A group-chat (conference) room reads "LIVE CHAT";
+                      a standalone stream reads "LIVE". */}
+                  {video._liveStream && (
+                    <span className="card-pill card-live-badge">{video._openpodRoom ? t('cards.badges.liveChat') : t('cards.badges.live')}</span>
+                  )}
 
-              {/* Status Badges */}
-              {video.status === 'scheduled' && video.publish_type === 'schedule' && (
-                <div className="status-badge scheduled">
-                  <IoCalendarOutline size={18} />
-                  <span>
-                    {video.publish_data
-                      ? formatDate(typeof video.publish_data === 'number' ? video.publish_data * 1000 : video.publish_data, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
-                      : t('cards.status.scheduled')}
-                  </span>
-                </div>
-              )}
+                  {/* Supporters-only tile. Presentation only: the gate re-checks
+                      entitlement on every manifest and key request, so hiding this
+                      badge would not grant anyone access. Shorts are never gated. */}
+                  {gatedBadge && (
+                    <span className="card-pill card-gated-badge" title={t('cards.badges.gatedTitle')}>
+                      <Icon name="lock" size={12} fill /> {t('cards.badges.pro')}
+                    </span>
+                  )}
 
-              {video.publish_type === 'publish_manual' && (
-                <div className="status-badge manual" title={t('cards.status.mobileTitle')}>
-                  <MdPhoneIphone size={18} />
-                  <span>{t('cards.status.mobile')}</span>
-                </div>
-              )}
+                  {/* New since the viewer's last visit (community pages pass isNew). */}
+                  {newBadge && <span className="card-pill card-new-badge">{t('cards.badges.new')}</span>}
 
-              {video.status === 'encoding' && (
-                <div className="status-badge encoding" title={t('cards.status.processingTitle')}>
-                  <FaCog size={16} className="spin-icon" />
-                  <span>{t('cards.status.processing')}</span>
-                </div>
-              )}
+                  {video.status === 'scheduled' && video.publish_type === 'schedule' && (
+                    <span className="card-pill status-badge scheduled is-cyan">
+                      <Icon name="event" size={12} />
+                      <span>
+                        {video.publish_data
+                          ? formatDate(typeof video.publish_data === 'number' ? video.publish_data * 1000 : video.publish_data, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+                          : t('cards.status.scheduled')}
+                      </span>
+                    </span>
+                  )}
 
-              {video.status === 'draft' && (
-                <div className="status-badge draft" title={t('cards.status.draftTitle')}>
-                  <FaFileAlt size={16} />
-                  <span>{t('cards.status.draft')}</span>
-                </div>
-              )}
+                  {video.publish_type === 'publish_manual' && (
+                    <span className="card-pill status-badge manual" title={t('cards.status.mobileTitle')}>
+                      <Icon name="smartphone" size={12} />
+                      <span>{t('cards.status.mobile')}</span>
+                    </span>
+                  )}
 
-              {video.status === 'deleted' && (
-                <div className="status-badge deleted" title={t('cards.status.deletedTitle')}>
-                  <MdDelete size={18} />
-                  <span>{t('cards.status.deleted')}</span>
-                </div>
-              )}
+                  {video.status === 'encoding' && (
+                    <span className="card-pill status-badge encoding is-cyan" title={t('cards.status.processingTitle')}>
+                      <Icon name="progress_activity" size={12} className="v2-spin" />
+                      <span>{t('cards.status.processing')}</span>
+                    </span>
+                  )}
 
-              {video.status === 'failed' && (
-                <div className="status-badge failed" title={t('cards.status.failedTitle')}>
-                  <MdError size={18} />
-                  <span>{t('cards.status.failed')}</span>
-                </div>
-              )}
+                  {video.status === 'draft' && (
+                    <span className="card-pill status-badge draft" title={t('cards.status.draftTitle')}>
+                      <Icon name="draft" size={12} />
+                      <span>{t('cards.status.draft')}</span>
+                    </span>
+                  )}
 
-              {video.unlisted && (
-                <div className="status-badge unlisted" title={t('cards.status.unlistedTitle')}>
-                  <MdVisibilityOff size={18} />
-                  <span>{t('cards.status.unlisted')}</span>
+                  {video.status === 'deleted' && (
+                    <span className="card-pill status-badge deleted is-accent" title={t('cards.status.deletedTitle')}>
+                      <Icon name="delete" size={12} />
+                      <span>{t('cards.status.deleted')}</span>
+                    </span>
+                  )}
+
+                  {video.status === 'failed' && (
+                    <span className="card-pill status-badge failed is-accent" title={t('cards.status.failedTitle')}>
+                      <Icon name="error" size={12} />
+                      <span>{t('cards.status.failed')}</span>
+                    </span>
+                  )}
+
+                  {video.unlisted && (
+                    <span className="card-pill status-badge unlisted" title={t('cards.status.unlistedTitle')}>
+                      <Icon name="visibility_off" size={12} />
+                      <span>{t('cards.status.unlisted')}</span>
+                    </span>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Title */}
-            <h2>{video.title}</h2>
-
-            {/* Author */}
-            <div className="profile-view-wrap">
-              {video._incubation ? (
-                /* A warm-up user (on 3Speak, not on Hive yet): a leaf next to the
-                   name, its hint the same title + line the old "new on 3Speak"
-                   section used as its heading. Next to the author, not on the
-                   thumbnail, because the hover preview covers the thumbnail and
-                   would hide the hint. */
-                <span className="card-author-group">
-                  <AuthorBadge author={cardAuthor} noLink compact offChainAuthor />
-                  <span
-                    className="card-incubation-leaf"
-                    role="img"
-                    aria-label={t('incubation.rail.aria')}
-                    title={`${t('incubation.rail.title')}\n${t('incubation.rail.body')}`}
-                  >
-                    <Leaf size={14} aria-hidden="true" />
+            {/* Creator, title and meta: the avatar on the left, the text beside it (20a) */}
+            <div className="card-body">
+              <span className="card-avatar" onClick={openCreator} aria-hidden="true">
+                <HiveAvatar
+                  username={cardAuthor}
+                  size="small"
+                  alt=""
+                  badgeSize={9}
+                  srcOverride={video._incubation ? NO_ACCOUNT_AVATAR : undefined}
+                />
+              </span>
+              <div className="card-text">
+                <h2>{video.title}</h2>
+                <div className="card-meta">
+                  <span className="card-author-group">
+                    <span className="card-author" onClick={openCreator}>@{cardAuthor}</span>
+                    {video._incubation && (
+                      /* A warm-up user (on 3Speak, not on Hive yet): a leaf next to
+                         the name, its hint the same title + line the old "new on
+                         3Speak" section used as its heading. Next to the author, not
+                         on the thumbnail, because the hover preview covers the
+                         thumbnail and would hide the hint. */
+                      <span
+                        className="card-incubation-leaf"
+                        role="img"
+                        aria-label={t('incubation.rail.aria')}
+                        title={`${t('incubation.rail.title')}\n${t('incubation.rail.body')}`}
+                      >
+                        <Icon name="eco" size={14} />
+                      </span>
+                    )}
                   </span>
-                </span>
-              ) : (
-                <AuthorBadge
-                  author={video.author?.username || video.author || video.owner}
-                  noLink
-                  compact
-                />
-              )}
-              {/* 1st-level v2 tag (the category the auto-tag rolls up to), left of
-                  the view count. Visibility is CSS-driven (see .card-topic-chip):
-                  shown on desktop whatever the layout, and on large cards
-                  everywhere — hidden only on small cards on a phone. */}
-              {(() => {
-                const cat = getCategoryOf(video.tag_v2);
-                if (!cat) return null;
-                return (
-                  <span className="card-topic-chip" title={t('cards.topicTitle', { topic: getTagLabel(cat) })}>
-                    {getTagLabel(cat)}
+                  {video._liveStream ? (
+                    /* On a live tile the slot counts people watching RIGHT NOW,
+                       not lifetime views, and says so. */
+                    views != null && (
+                      <span className="card-watching" title={t('cards.watchingNow', { count: views })}>
+                        {t('cards.watchingNow', { count: views })}
+                      </span>
+                    )
+                  ) : views != null && (
+                    <ViewCount
+                      views={views}
+                      watched={isWatched?.(cardAuthor, video.permlink) === true}
+                      formatViews={formatViewCount}
+                    />
+                  )}
+                  <span className="card-time"><TimeAgo date={video.created_at || video.created} short={shortTimeAgo} /></span>
+                </div>
+                {/* 1st-level v2 tag (the category the auto-tag rolls up to), in
+                    cyan like a community. Hidden only on small cards on a phone. */}
+                {category && (
+                  <span className="card-topic-chip" title={t('cards.topicTitle', { topic: getTagLabel(category) })}>
+                    {getTagLabel(category)}
                   </span>
-                );
-              })()}
-              {(() => {
-                const vcAuthor = video.author?.username || video.author || video.owner;
-                // Prefer the count already in the feed payload (the only source that
-                // resolves embed videos — /views can't look them up by hive permlink).
-                // Fall back to the batched /views fetch for legacy videos.
-                const feedViews = video.views ?? video.stats?.num_views;
-                const fetchedViews = getViewCount?.(vcAuthor, video.permlink);
-                const resolvedViews = feedViews != null ? feedViews : fetchedViews;
-                if (resolvedViews == null) return null;
-                return (
-                  <ViewCount
-                    views={resolvedViews}
-                    watched={!video._liveStream && isWatched?.(vcAuthor, video.permlink) === true}
-                    formatViews={formatViewCount}
-                    /* On a live tile the same slot counts people watching RIGHT
-                       NOW, not lifetime views — say so on hover, since the bare
-                       number next to a LIVE badge reads as either. */
-                    title={video._liveStream
-                      ? t('cards.watchingNow', { count: resolvedViews })
-                      : undefined}
-                  />
-                );
-              })()}
-            </div>
-
-            {/* Bottom actions */}
-            <div className="bottom-action">
-              <div className="wrap-left">
-                {/* An off-chain post has no payout and never will until it is
-                    republished to Hive, so the slot is omitted rather than left
-                    showing a placeholder that reads as "still loading". */}
-                {!video._incubation && <PayoutAmount
-                  amount={(() => {
-                    const author = video.author?.username || video.author || video.owner;
-                    const content = getContentForVideo?.(author, video.permlink);
-                    const val = content?.payout ?? video.stats?.total_hive_reward;
-                    return val != null ? Number(val) : null;
-                  })()}
-                />}
-                <UpvoteCount
-                  count={(() => {
-                    const author = video.author?.username || video.author || video.owner;
-                    const content = getContentForVideo?.(author, video.permlink);
-                    return content?.voters ?? video.stats?.num_votes ?? null;
-                  })()}
-                />
-                <CommentCount
-                  count={(() => {
-                    const author = video.author?.username || video.author || video.owner;
-                    // Fall back to the feed's cached count (video-stats), same as
-                    // payout/votes above — feed items have has_stats:true so the
-                    // client-side content batch skips them and children is absent.
-                    return getContentForVideo?.(author, video.permlink)?.children ?? video.stats?.num_comments ?? null;
-                  })()}
-                />
+                )}
+                <div className="card-stats bottom-action">
+                  <UpvoteCount count={content?.voters ?? video.stats?.num_votes ?? null} />
+                  {/* Fall back to the feed's cached count (video-stats), same as
+                      payout/votes — feed items have has_stats:true so the
+                      client-side content batch skips them and children is absent. */}
+                  <CommentCount count={content?.children ?? video.stats?.num_comments ?? null} />
+                  {/* An off-chain post has no payout and never will until it is
+                      republished to Hive, so the slot is omitted rather than left
+                      showing a placeholder that reads as "still loading". */}
+                  {!video._incubation && <PayoutAmount amount={payout != null ? Number(payout) : null} />}
+                </div>
               </div>
-              <p><TimeAgo date={video.created_at || video.created} short={shortTimeAgo} /></p>
             </div>
 
             {/* The rest of the featured line-up, small, at the bottom of the card. */}
@@ -672,7 +661,8 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                 watched, and its remove button). Anything clickable in it must
                 stop the event, or the click also follows the card's link. */}
             {renderFooter?.(video)}
-            </>)}
+            </>);
+            }}
           />
         );
       })], [

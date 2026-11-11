@@ -4,6 +4,7 @@
   },
   "tools": {
     "emoji": "Emoji",
+    "image": "Add image",
     "searchEmoji": "Search emoji",
     "searchGifs": "Search GIFs…",
     "noGifs": "No GIFs found.",

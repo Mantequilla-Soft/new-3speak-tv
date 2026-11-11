@@ -9,7 +9,7 @@
     "needKeychain": "You need Keychain extension to make transfer"
   },
   "header": {
-    "mine": "MY Wallet",
+    "mine": "My wallet",
     "ofUser": "{{user}} Wallet"
   },
   "assets": "Assets",
@@ -28,7 +28,12 @@
     "recipientPlaceholder": "Enter Hive username",
     "memoLabel": "Memo",
     "memoPlaceholder": "Enter Memo",
-    "confirm": "Confirm Transfer"
+    "confirm": "Confirm Transfer",
+    "sendTo": "Send {{amount}} {{coin}} to @{{to}}",
+    "sendAmount": "Send {{amount}} {{coin}}",
+    "recent": "Recent",
+    "activeKey": "Needs your active key",
+    "available": "Available: {{balance}}"
   },
   "history": {
     "loadFailed": "Failed to load transactions",
@@ -46,5 +51,47 @@
       "received": "Received"
     },
     "claimedRewards": "Claimed Rewards"
+  },
+  "total": "Total balance",
+  "rate": "1 HIVE = {{price}}",
+  "pro": "Pro",
+  "coins": {
+    "hp": "Hive Power",
+    "savings": "HBD savings"
+  },
+  "claim": {
+    "ready": "{{amount}} ready to claim",
+    "readyShort": "{{amount}} to claim",
+    "button": "Claim",
+    "done": "Rewards claimed",
+    "failed": "Claim failed: {{error}}"
+  },
+  "activity": {
+    "title": "Activity",
+    "filters": {
+      "all": "All",
+      "rewards": "Rewards",
+      "received": "Received",
+      "sent": "Sent"
+    },
+    "from": "From @{{user}}",
+    "sentTo": "Sent to @{{user}}",
+    "emptyTitle": "Nothing here yet",
+    "empty": "Transfers and claimed rewards show up here."
+  },
+  "earnings": {
+    "title": "Earnings, 30 days",
+    "sub": "Claimed rewards and HIVE or HBD received"
+  },
+  "rc": {
+    "title": "Resource credits",
+    "sub": "Every action on Hive uses some. They refill in about 5 days.",
+    "posts_one": "Enough for about {{count}} post right now",
+    "posts_other": "Enough for about {{count}} posts right now"
+  },
+  "receive": {
+    "title": "Receive",
+    "sub": "Anyone can send HIVE or HBD to this account name from any Hive wallet. No memo needed.",
+    "copy": "Copy account name"
   }
 }

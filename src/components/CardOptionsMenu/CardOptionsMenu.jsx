@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import { MdPlaylistAdd, MdMoreVert } from "react-icons/md";
-import { IoBanOutline, IoEyeOffOutline, IoPricetagOutline } from "react-icons/io5";
+import { Icon } from "../v2/Icon";
+import { Sheet } from "../v2/ui";
 import { toastIn } from '../../utils/toast';
 import PropTypes from "prop-types";
 import { isLoggedIn } from "../../hive-api/aioha";
@@ -17,8 +17,13 @@ import "./CardOptionsMenu.scss";
 // line under it. See utils/toast.js.
 const toast = toastIn('Video');
 
+// Under 768px the menu is a bottom sheet (STYLE_GUIDE §7); above it a popover.
+const SHEET_QUERY = "(max-width: 767px)";
+const wantsSheet = () => typeof window !== "undefined" && !!window.matchMedia?.(SHEET_QUERY).matches;
+
 /**
- * The "⋮" menu on a thumbnail card. It replaces the old bare add-to-playlist
+ * The "⋮" menu on a thumbnail card, drawn as a tile-grid menu (07d / 28b): the
+ * two "do something with it" actions as tiles, then the feed-tuning rows. It replaces the old bare add-to-playlist
  * button, which sat at z-index 3 and so was painted over by the hover-preview
  * overlay (z-index 4) the moment the preview started — making it unusable.
  *
@@ -53,7 +58,7 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
   // Close on outside click, Escape, scroll or resize (the menu is position:fixed,
   // so it would otherwise detach from its card as the page moves).
   useEffect(() => {
-    if (!open) return undefined;
+    if (!open || coords?.sheet) return undefined;
     const onDown = (e) => {
       if (menuRef.current?.contains(e.target) || btnRef.current?.contains(e.target)) return;
       close();
@@ -69,19 +74,28 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
       window.removeEventListener("scroll", close, true);
       window.removeEventListener("resize", close);
     };
-  }, [open, close]);
+  }, [open, close, coords?.sheet]);
 
   const toggle = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (open) return close();
+    if (wantsSheet()) {
+      setCoords({ sheet: true });
+      setOpen(true);
+      return;
+    }
     const r = btnRef.current?.getBoundingClientRect();
     if (r) {
-      const MENU_W = 232;
-      // Flip left/up when we'd overflow the viewport.
-      const left = Math.min(r.left, window.innerWidth - MENU_W - 8);
-      const openUp = window.innerHeight - r.bottom < 180;
-      setCoords({ left: Math.max(8, left), top: openUp ? r.top - 8 : r.bottom + 6, openUp });
+      const MENU_W = 260;
+      const MENU_H = 210;
+      // Right-aligned to the trigger (it sits at the card's top-right); flip
+      // left / up when we would overflow the viewport.
+      const left = Math.min(Math.max(8, r.right - MENU_W), window.innerWidth - MENU_W - 8);
+      const openUp = window.innerHeight - r.bottom < MENU_H;
+      setCoords({ left: Math.max(8, left), top: openUp ? r.top - 6 : r.bottom + 6, openUp });
+    } else {
+      setCoords({ left: 8, top: 8, openUp: false });
     }
     setOpen(true);
   };
@@ -151,43 +165,80 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
     setTagOpen(true);
   };
 
+  // The menu's content: two tiles, then the rows (07d). Shared by the popover
+  // and the phone sheet.
+  const items = (
+    <>
+      <div className="card-menu-tiles">
+        <button type="button" role="menuitem" className="card-menu-tile" onClick={(e) => act(e, onAddToPlaylist)}>
+          <Icon name="playlist_add" size={24} />
+          <span>{t('engagement.cardMenu.addToPlaylist')}</span>
+        </button>
+        <button type="button" role="menuitem" className="card-menu-tile" onClick={(e) => act(e, onAddTag)}>
+          <Icon name="sell" size={24} />
+          <span>{t('engagement.cardMenu.addTag')}</span>
+        </button>
+      </div>
+      <div className="card-menu-rows">
+        <button type="button" role="menuitem" className="card-menu-row" onClick={(e) => act(e, onNotInterested)}>
+          <Icon name="block" size={20} />
+          <span>{t('engagement.cardMenu.notInterested')}</span>
+        </button>
+        <button type="button" role="menuitem" className="card-menu-row" onClick={(e) => act(e, onHideCreator)}>
+          <Icon name="person_off" size={20} />
+          <span>{t('engagement.cardMenu.dontShowCreator', { author })}</span>
+        </button>
+      </div>
+    </>
+  );
+
   return (
     <>
       <button
         ref={btnRef}
+        type="button"
         className={`card-options-btn ${open ? "open" : ""} ${className}`}
         onClick={toggle}
         onMouseDown={(e) => e.stopPropagation()}
         aria-haspopup="menu"
         aria-expanded={open}
+        aria-label={t('engagement.cardMenu.moreOptions')}
         title={t('engagement.cardMenu.moreOptions')}
       >
-        <MdMoreVert size={20} />
+        <Icon name="more_vert" size={18} />
       </button>
 
-      {open && coords && createPortal(
+      {open && coords && !coords.sheet && createPortal(
         <div
           ref={menuRef}
           className={`card-options-menu ${coords.openUp ? "up" : ""}`}
           style={{ left: coords.left, top: coords.top }}
           role="menu"
+          aria-label={t('engagement.cardMenu.moreOptions')}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >
-          <button role="menuitem" onClick={(e) => act(e, onAddToPlaylist)}>
-            <MdPlaylistAdd size={19} /> {t('engagement.cardMenu.addToPlaylist')}
-          </button>
-          <button role="menuitem" onClick={(e) => act(e, onAddTag)}>
-            <IoPricetagOutline size={17} /> {t('engagement.cardMenu.addTag')}
-          </button>
-          <button role="menuitem" onClick={(e) => act(e, onNotInterested)}>
-            <IoEyeOffOutline size={17} /> {t('engagement.cardMenu.notInterested')}
-          </button>
-          <button role="menuitem" onClick={(e) => act(e, onHideCreator)}>
-            <IoBanOutline size={17} /> {t('engagement.cardMenu.dontShowCreator', { author })}
-          </button>
+          {items}
         </div>,
         document.body
+      )}
+
+      {open && coords?.sheet && (
+        // The sheet is portalled, but React events still bubble through this
+        // component to the card: keep them from reaching the card's link.
+        <span className="card-options-guard" onClick={(e) => e.stopPropagation()}>
+        <Sheet open onClose={close} title={title || t('engagement.cardMenu.moreOptions')} width={440} className="card-options-sheet">
+          <div
+            ref={menuRef}
+            className="card-options-menu card-options-menu--sheet"
+            role="menu"
+            aria-label={t('engagement.cardMenu.moreOptions')}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {items}
+          </div>
+        </Sheet>
+        </span>
       )}
 
       {playlistOpen && (

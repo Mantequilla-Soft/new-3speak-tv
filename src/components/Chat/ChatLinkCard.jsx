@@ -1,6 +1,6 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Play, Loader2 } from 'lucide-react'
+import { Icon } from '../v2/Icon'
 import { fetchLinkMeta, formatDuration, timeAgo } from './chatLinks'
 import { useTranslation } from 'react-i18next'
 import lazyRoute from '../../utils/lazyRoute'
@@ -35,7 +35,14 @@ export default function ChatLinkCard({ link }) {
   }, [link.kind, link.author, link.permlink, link.community])
 
   if (failed) return null
-  if (!meta) return <div className="chat-linkcard chat-linkcard-loading">{t('chat.linkCard.loadingPreview')}</div>
+  if (!meta) {
+    return (
+      <div className="chat-linkcard chat-linkcard-loading" role="status">
+        <Icon name="progress_activity" size={16} className="v2-spin" />
+        {t('chat.linkCard.loadingPreview')}
+      </div>
+    )
+  }
 
   const open = () => {
     if (meta.kind === 'profile') navigate(`/@${meta.author}`)
@@ -92,7 +99,7 @@ export default function ChatLinkCard({ link }) {
     return (
       <div className="chat-linkcard chat-linkcard-video">
         {playing ? (
-          <Suspense fallback={<div className="chat-linkcard-playerwait"><Loader2 size={24} className="chat-spin" /></div>}>
+          <Suspense fallback={<div className="chat-linkcard-playerwait"><Icon name="progress_activity" size={24} className="v2-spin" /></div>}>
             <InlineVideoPlayer
               author={meta.author}
               permlink={meta.permlink}
@@ -111,8 +118,8 @@ export default function ChatLinkCard({ link }) {
               <img src={meta.thumbnail} alt="" loading="lazy"
                 onError={(e) => { e.currentTarget.style.visibility = 'hidden' }} />
             )}
-            <span className="chat-linkcard-play"><Play size={22} fill="#fff" /></span>
-            {dur && <span className="chat-linkcard-dur">{dur}</span>}
+            <span className="chat-linkcard-play"><Icon name="play_arrow" size={28} fill /></span>
+            {dur && <span className="chat-linkcard-dur v2-media-pill is-br">{dur}</span>}
           </button>
         )}
         <div className="chat-linkcard-body" {...cardProps}>
@@ -133,8 +140,8 @@ export default function ChatLinkCard({ link }) {
         <div className="chat-linkcard-thumb">
           <img src={meta.thumbnail} alt="" loading="lazy"
             onError={(e) => { e.currentTarget.parentElement.style.display = 'none' }} />
-          {meta.isVideo && <span className="chat-linkcard-play"><Play size={22} fill="#fff" /></span>}
-          {dur && <span className="chat-linkcard-dur">{dur}</span>}
+          {meta.isVideo && <span className="chat-linkcard-play"><Icon name="play_arrow" size={28} fill /></span>}
+          {dur && <span className="chat-linkcard-dur v2-media-pill is-br">{dur}</span>}
         </div>
       )}
       <div className="chat-linkcard-body">

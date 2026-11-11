@@ -1,498 +1,131 @@
-@use "../../mixins.scss" as mix;
+@use "../../styles/v2" as v2;
 
+// The bottom bar (STYLE_GUIDE §4, designs 20a / 42b): phones and tablets, below
+// 1025px, where the top bar drops its tabs and avatar. 56 tall plus the safe
+// area, a surface strip with a 1px top border. Each tab: icon 24 over a 10/700
+// label; the current section is drawn in the accent with a filled icon.
 .bottom-nav {
   display: none;
   position: fixed;
-  bottom: 0;
   left: 0;
   right: 0;
+  bottom: 0;
   z-index: 100;
-  // Mirrored: the light edge meets the content above, the flat tone sits at the
-  // screen edge below, so the two bars frame the page the same way.
-  background: linear-gradient(0deg, var(--nav-bg) 0%, var(--nav-fade-to) 100%);
-  border-top: 1px solid var(--border-light);
-  height: var(--bottom-nav-height, 56px);
-  align-items: center;
+  height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  padding: 0 4px env(safe-area-inset-bottom, 0px);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  align-items: stretch;
   justify-content: space-around;
-  padding: 0 4px;
-  // No `padding-bottom: env(safe-area-inset-bottom)` — that adds empty
-  // space *inside* the bar below the icons (the icons stay in the upper
-  // 56px content area while the bar grows taller). The visible result is
-  // icons that look pushed up.
-  transition: background-color 0.3s ease;
 
-  @include mix.respond(phone) {
-    display: flex;
-  }
-
-  @include mix.respond(tab) {
-    display: flex;
-  }
+  @media (max-width: 1024px) { display: flex; }
 }
 
 .bottom-nav-item {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: var(--bottom-nav-height);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
-  flex: 1;
   gap: 2px;
-  padding: 6px 0;
-  color: var(--text-secondary);
+  color: var(--muted);
   text-decoration: none;
-  transition: color 0.2s ease;
   -webkit-tap-highlight-color: transparent;
+  transition: color var(--t-fast) var(--ease);
 
-  span {
-    font-size: 10px;
-    font-weight: 500;
-    line-height: 1;
-  }
+  &:hover { color: var(--text); }
+  &:active .bottom-nav-icon-wrap { transform: scale(.94); }
 
-  &.active {
-    color: var(--text-primary);
+  &.active { color: var(--accent); }
 
-    .bottom-nav-icon {
-      color: var(--text-primary);
-    }
-
-    .bottom-nav-avatar {
-      border-color: var(--text-primary);
-    }
-
-    // Active dot indicator
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 2px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--accent-primary);
-    }
-  }
-
-  &:hover {
-    color: var(--text-primary);
-  }
-}
-
-.bottom-nav-icon {
-  width: 26px;
-  height: 26px;
-  font-size: 26px;
-  color: inherit;
-  transition: color 0.2s ease;
-}
-
-// The medal glyph is solid and fills its box, so it reads larger than the
-// outline icons — trim it so it sits visually level with its neighbours.
-.bottom-nav-icon--medal {
-  width: 22px;
-  height: 22px;
-  font-size: 22px;
-}
-
-// The bar-chart glyph is solid and fills its box, so it reads larger than the
-// outline icons — trim it (centred in the 26px slot) to sit level with them.
-.bottom-nav-icon--feeds {
-  width: 22px;
-  height: 22px;
-  font-size: 22px;
-}
-
-// Shorts glyph nudged down a touch as well, centred in the same 26px slot.
-.bottom-nav-icon--shorts {
-  width: 23px;
-  height: 23px;
-  font-size: 23px;
+  &:focus-visible { outline-offset: -4px; border-radius: var(--r-md); }
 }
 
 .bottom-nav-icon-wrap {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  // Match Home's icon slot (26px) so the medal — sized smaller as a solid
-  // glyph — still occupies the same height, keeping the label aligned and the
-  // icon→label gap identical to the other tabs.
-  height: 26px;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  transition: transform var(--t-fast) var(--ease);
 }
 
-.bottom-nav-live-dot {
-  position: absolute;
-  top: -2px;
-  right: -3px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ff3b30;
-  box-shadow: 0 0 0 2px var(--nav-bg, #1a1a1a);
-  animation: bottom-nav-live-pulse 1.6s ease-in-out infinite;
-}
-
-// Unread count on the centre Chat item. Same pill as the top bar's chat badge,
-// ringed in the bar's own background so it stays legible over the icon.
-.bottom-nav-chat-badge {
-  position: absolute;
-  top: -3px;
-  right: -8px;
-  min-width: 15px;
-  height: 15px;
-  padding: 0 4px;
-  border-radius: 8px;
-  background: var(--accent-primary, #e53935);
-  color: #fff;
-  font-size: 9px;
+.bottom-nav-label {
+  max-width: 100%;
+  font-size: 10px;
   font-weight: 700;
-  line-height: 15px;
-  text-align: center;
-  box-shadow: 0 0 0 2px var(--nav-bg, #1a1a1a);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-@keyframes bottom-nav-live-pulse {
-  0%, 100% { box-shadow: 0 0 0 2px var(--nav-bg, #1a1a1a), 0 0 0 0 rgba(255, 59, 48, 0.55); }
-  50%      { box-shadow: 0 0 0 2px var(--nav-bg, #1a1a1a), 0 0 0 5px rgba(255, 59, 48, 0); }
-}
-
-.upload-item {
-  .upload-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 32px;
-    color: var(--accent-primary);
-  }
-
-  &.active .upload-icon {
-    color: var(--accent-primary);
-  }
-}
-
+// The signed-in account tab: the avatar instead of an icon, ringed in the
+// accent while the account menu is open.
 .bottom-nav-avatar {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid transparent;
-  transition: border-color 0.2s ease;
+  background: var(--avatar);
+  display: block;
 }
+.bottom-nav-item.active .bottom-nav-avatar { box-shadow: 0 0 0 2px var(--accent); }
 
-.bottom-nav-avatar-wrap {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  // Same 26px icon slot as the rest — the 24px avatar sits centred inside it
-  // so the "Profile" label lines up with the others.
-  height: 26px;
-}
-
-.bottom-nav-avatar-premium,
-.bottom-nav-menu-avatar-premium {
+.bottom-nav-avatar-premium {
   position: absolute;
   right: -4px;
   top: -4px;
   margin: 0;
-  background: var(--accent-primary, #e53935);
-  color: #fff; // override the default red rocket — we're inside a red chip
-  border-radius: 50%;
   padding: 2px;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
-}
-
-.bottom-nav-menu-avatar-wrap {
-  position: relative;
-  display: inline-flex;
-}
-
-.bottom-nav-avatar-placeholder {
-  width: 26px;
-  height: 26px;
   border-radius: 50%;
-  background: var(--bg-tertiary);
-  border: 2px solid var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  font-size: 14px;
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 0 0 2px var(--surface);
 }
 
-// Share = a red-outlined "+" create button (outline, not fill — matches the
-// app-wide convention for red controls). 26px keeps it level with the other
-// tab icons; the "+" sits centred inside the ring.
-.bottom-nav-share-plus {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 2px solid var(--accent-primary, #e53935);
-  color: var(--accent-primary, #e53935);
-
-  svg {
-    width: 15px;
-    height: 15px;
-    font-size: 15px;
-  }
-}
-
-// Upload button wrapper (needed for dropdown positioning)
-.bottom-nav-upload-wrap {
-  position: relative;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-}
-
-// Share popup: reuse the profile dropdown's look (.bottom-nav-menu) but anchor
-// it centred over the middle Share button instead of the bottom-right corner.
-// Scoped under the wrap so it outranks .bottom-nav-menu (defined later), whose
-// `right: 8px` / bottom-right animation would otherwise win on equal specificity.
-.bottom-nav-upload-wrap .bottom-nav-upload-menu {
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
-  transform-origin: bottom center;
-  max-width: calc(100vw - 16px);
-  animation: bottomNavUploadMenuIn 0.2s ease forwards;
-}
-
-// Compact dropdown menu
+// Visitor's menu (install the app + log in), above the account tab.
 .bottom-nav-menu {
   position: absolute;
-  bottom: calc(100% + 8px);
   right: 8px;
-  min-width: 220px;
-  max-height: calc(100vh - var(--bottom-nav-height, 56px) - 24px);
-  overflow-y: auto;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  box-shadow: var(--shadow-lg);
-  padding: 6px 0;
-  z-index: 200;
-  // Entrance animation
-  animation: bottomNavMenuIn 0.2s ease forwards;
+  bottom: calc(var(--bottom-nav-height) + 8px);
+  width: min(300px, calc(100vw - 16px));
+  max-height: calc(100dvh - var(--bottom-nav-height) - 24px);
+  @include v2.scroll-y;
+  animation: bottom-nav-menu-in var(--t-base) var(--ease);
+  transform-origin: bottom right;
+
+  .bottom-nav-install { color: var(--text); .material-symbols-rounded { color: var(--accent); } }
 }
 
-// Upload collapsible (mirrors the desktop profile sidebar)
-.bottom-nav-menu-chevron {
-  margin-left: auto;
-  font-size: 18px;
-  color: var(--text-secondary);
-}
-
-.bottom-nav-menu-subitems {
-  padding-left: 18px;
-
-  .bottom-nav-menu-subitem {
-    font-size: 13px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-}
-
-// Logo + social row at the foot of the menu (mirrors desktop sidebar)
-.bottom-nav-menu-logo {
+.bottom-nav-ios-hint {
   display: flex;
-  justify-content: center;
-  padding: 12px 14px 6px;
-
-  img {
-    width: 55%;
-    max-width: 130px;
-  }
-}
-
-.bottom-nav-menu-social {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  padding: 4px 14px 12px;
-
-  a {
-    color: var(--text-secondary);
-    transition: color 0.15s ease;
-    &:hover { color: var(--text-primary); }
-  }
-}
-
-@keyframes bottomNavMenuIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes bottomNavUploadMenuIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) scale(0.9) translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) scale(1) translateY(0);
-  }
-}
-
-.bottom-nav-menu-header {
-  display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
-  padding: 10px 14px;
-}
-
-.bottom-nav-menu-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.bottom-nav-menu-user {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.bottom-nav-menu-divider {
-  height: 1px;
-  background: var(--border-light);
-  margin: 4px 0;
-}
-
-.bottom-nav-menu-footer {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 8px 14px 4px;
-  font-size: 11px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  font-size: 12px;
   line-height: 1.4;
-  color: var(--text-secondary);
-  word-break: break-all;
+  color: var(--muted);
+
+  .material-symbols-rounded { color: var(--accent); }
+  strong { color: var(--text); font-weight: 700; }
 }
 
-.bottom-nav-menu-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
-  text-decoration: none;
-  transition: background-color 0.15s ease;
-
-  &:hover {
-    background-color: var(--bg-hover);
-    color: var(--accent-primary);
-  }
+@keyframes bottom-nav-menu-in {
+  from { opacity: 0; transform: translateY(8px) scale(.98); }
 }
 
-.bottom-nav-menu-icon {
-  width: 18px;
-  height: 18px;
-  color: var(--text-secondary);
-  flex-shrink: 0;
-}
-
-// NSFW toggle in bottom nav menu
-.bottom-nav-menu .nsfw-toggle-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  user-select: none;
-  background: none;
-  border: none;
-  width: 100%;
-  padding: 10px 16px;
-  font: inherit;
-
-  .nsfw-label {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-}
-
-// Segmented LabeledToggle rows in bottom-nav profile menu
-.bottom-nav-menu .bottom-nav-menu-toggle {
-  display: block;
-  padding: 8px 16px;
-  cursor: default;
-
-  &:hover { background: transparent; }
-}
-
-.bottom-nav-menu .nsfw-toggle {
-  width: 36px;
-  height: 20px;
-  border-radius: 10px;
-  background: var(--border-color, #ccc);
-  position: relative;
-  transition: background 0.2s ease;
-  flex-shrink: 0;
-
-  &.on {
-    background: var(--accent-primary, #e53935);
-  }
-
-  .nsfw-toggle-thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #fff;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    transition: left 0.2s ease;
-  }
-
-  &.on .nsfw-toggle-thumb {
-    left: 18px;
-  }
-}
-
-// Install app item
-.bottom-nav-install {
-  color: var(--accent-primary) !important;
-  flex-wrap: wrap;
-
-  .bottom-nav-menu-icon {
-    color: var(--accent-primary);
-  }
-
-  .bottom-nav-install-label {
-    flex: 1;
-  }
-
-  .bottom-nav-install-hint {
-    font-size: 11px;
-    color: var(--text-muted);
-    width: 100%;
-    padding-left: 28px; // align with text after icon
-  }
-}
-
-// Bottom nav in landscape on watch page: hidden by default, slides in on scroll up
+// Landscape phones on the watch page: the bar may slide away (PlayVideo).
 @media screen and (orientation: landscape) and (max-height: 500px) {
-  .bottom-nav--watch {
-    transition: transform 0.3s ease;
-  }
+  .bottom-nav--watch { transition: transform var(--t-slow) var(--ease); }
+  .bottom-nav--watch.bottom-nav--landscape-hidden { transform: translateY(100%); }
+}
 
-  .bottom-nav--watch.bottom-nav--landscape-hidden {
-    transform: translateY(100%);
-  }
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav-menu { animation: none; }
 }

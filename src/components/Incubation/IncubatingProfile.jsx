@@ -1,11 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MdVerified, MdEdit } from 'react-icons/md';
-import {
-  FaFilm, FaUnlockAlt, FaUserPlus, FaCoins, FaCloudUploadAlt, FaThumbsUp,
-  FaKey, FaGlobeAmericas, FaUserCheck, FaBullhorn, FaWallet, FaChartLine, FaComments,
-  FaUsers, FaLayerGroup,
-} from 'react-icons/fa';
 import Card3 from '../Cards/Card3';
 import { useAppStore } from '../../lib/store';
 import ProfileEditModal from '../WelcomePrompt/ProfileEditModal';
@@ -16,10 +10,11 @@ import AdvertiserAdminPanel from './AdvertiserAdminPanel';
 import CreateAccountPanel from './CreateAccountPanel';
 import { InventoryPanel, RateCard } from '../ads/AdMarketPanels';
 import { fetchInventory, fetchPricing } from '../../lib/advertiseData';
+import { Button, Icon, Segmented, StatusPill } from '../v2/ui';
 import {
   fetchIncubationProfile, fetchIncubationPosts, handleAvatar,
   fetchMyIncubationProfile, saveIncubationProfile, followIncubationUser,
-  fetchIncubationProgress, onIncubationProgress,
+  fetchIncubationProgress, onIncubationProgress, progressFraction,
 } from '../../lib/incubation';
 import { useTranslation, Trans } from 'react-i18next';
 import './IncubatingProfile.scss';
@@ -28,22 +23,22 @@ import './IncubatingProfile.scss';
 // list was long enough that repeating the markup five times hid the copy.
 // Text is i18n keys, translated at render.
 const UNLOCKS = [
-  { Icon: FaCoins, titleKey: 'incubation.profile.unlocks.earn.title', bodyKey: 'incubation.profile.unlocks.earn.body' },
-  { Icon: FaCloudUploadAlt, titleKey: 'incubation.profile.unlocks.publish.title', bodyKey: 'incubation.profile.unlocks.publish.body' },
-  { Icon: FaThumbsUp, titleKey: 'incubation.profile.unlocks.buttons.title', bodyKey: 'incubation.profile.unlocks.buttons.body' },
-  { Icon: FaKey, titleKey: 'incubation.profile.unlocks.keys.title', bodyKey: 'incubation.profile.unlocks.keys.body' },
-  { Icon: FaGlobeAmericas, titleKey: 'incubation.profile.unlocks.ecosystem.title', bodyKey: 'incubation.profile.unlocks.ecosystem.body' },
+  { icon: 'payments', titleKey: 'incubation.profile.unlocks.earn.title', bodyKey: 'incubation.profile.unlocks.earn.body' },
+  { icon: 'publish', titleKey: 'incubation.profile.unlocks.publish.title', bodyKey: 'incubation.profile.unlocks.publish.body' },
+  { icon: 'thumb_up', titleKey: 'incubation.profile.unlocks.buttons.title', bodyKey: 'incubation.profile.unlocks.buttons.body' },
+  { icon: 'key', titleKey: 'incubation.profile.unlocks.keys.title', bodyKey: 'incubation.profile.unlocks.keys.body' },
+  { icon: 'public', titleKey: 'incubation.profile.unlocks.ecosystem.title', bodyKey: 'incubation.profile.unlocks.ecosystem.body' },
 ];
 
 // The same tiles for an ADVERTISER. They are not here to earn from posts: the Hive
 // account is the account they book and pay for ads with. Talking to customers is
 // in the list, but as the optional extra it is for them.
 const ADVERTISER_UNLOCKS = [
-  { Icon: FaBullhorn, titleKey: 'incubation.profile.advertiserUnlocks.book.title', bodyKey: 'incubation.profile.advertiserUnlocks.book.body' },
-  { Icon: FaWallet, titleKey: 'incubation.profile.advertiserUnlocks.pay.title', bodyKey: 'incubation.profile.advertiserUnlocks.pay.body' },
-  { Icon: FaChartLine, titleKey: 'incubation.profile.advertiserUnlocks.results.title', bodyKey: 'incubation.profile.advertiserUnlocks.results.body' },
-  { Icon: FaComments, titleKey: 'incubation.profile.advertiserUnlocks.customers.title', bodyKey: 'incubation.profile.advertiserUnlocks.customers.body' },
-  { Icon: FaKey, titleKey: 'incubation.profile.advertiserUnlocks.keys.title', bodyKey: 'incubation.profile.advertiserUnlocks.keys.body' },
+  { icon: 'campaign', titleKey: 'incubation.profile.advertiserUnlocks.book.title', bodyKey: 'incubation.profile.advertiserUnlocks.book.body' },
+  { icon: 'account_balance_wallet', titleKey: 'incubation.profile.advertiserUnlocks.pay.title', bodyKey: 'incubation.profile.advertiserUnlocks.pay.body' },
+  { icon: 'insights', titleKey: 'incubation.profile.advertiserUnlocks.results.title', bodyKey: 'incubation.profile.advertiserUnlocks.results.body' },
+  { icon: 'forum', titleKey: 'incubation.profile.advertiserUnlocks.customers.title', bodyKey: 'incubation.profile.advertiserUnlocks.customers.body' },
+  { icon: 'key', titleKey: 'incubation.profile.advertiserUnlocks.keys.title', bodyKey: 'incubation.profile.advertiserUnlocks.keys.body' },
 ];
 
 /**
@@ -201,7 +196,7 @@ export default function IncubatingProfile({ handle, own = false }) {
   const shortCards = useMemo(() => cards.filter((c) => c._short), [cards]);
 
   if (error) return <p className="inc-profile-error">{error}</p>;
-  if (!profile) return <p className="desc" style={{ padding: 32 }}>{t('common.status.loading')}</p>;
+  if (!profile) return <p className="inc-profile-loading">{t('common.status.loading')}</p>;
 
   const p = profile.profile || {};
   const graduated = profile.status === 'graduated' && profile.hiveUsername;
@@ -211,24 +206,72 @@ export default function IncubatingProfile({ handle, own = false }) {
   // and their videos are the optional extra rather than the point.
   const advertiser = showSidebar && progress?.track === 'advertiser';
   const unlocks = advertiser ? ADVERTISER_UNLOCKS : UNLOCKS;
+  // The owner's avatar wears their progress (design 19h): a cyan ring around
+  // the picture, the same equal-share figure the nav ring and the goal bar use.
+  const ringPct = showSidebar && Array.isArray(progress?.tasks) && progress.tasks.length
+    ? Math.min(100, progressFraction(progress.tasks) * 100)
+    : null;
+  const badge = graduated ? t('incubation.profile.badge.onHive') : (advertiser ? t('incubation.profile.badge.advertiser') : t('incubation.profile.badge.gettingStarted'));
+  const visitorTabs = [
+    // 'Uploads', not the 'Videos and Shorts' the owner's strip uses: four
+    // labels share this row at phone width, and the grid heading directly
+    // below already names the two things in it.
+    ['posts', t('incubation.profile.tabs.uploads'), profile?.counts?.posts],
+    ['comments', t('incubation.profile.tabs.comments'), commentCount],
+    ['followers', t('incubation.profile.tabs.followers'), profile?.counts?.followers],
+    ['following', t('incubation.profile.tabs.following'), profile?.counts?.following],
+  ].map(([value, label, count]) => ({
+    value,
+    label,
+    // A count only when we have one. `> 0` rather than != null, so a tab does
+    // not advertise "0" before anyone has looked.
+    count: count > 0 ? count : undefined,
+  }));
+
+  const toggleFollow = async () => {
+    if (followBusy) return;
+    const next = !following;
+    setFollowBusy(true);
+    setFollowing(next);
+    try {
+      await followIncubationUser(handle, next);
+      setProfile((p2) => (p2 ? {
+        ...p2,
+        counts: {
+          ...p2.counts,
+          followers: Math.max(0, (p2.counts?.followers || 0) + (next ? 1 : -1)),
+        },
+      } : p2));
+    } catch {
+      setFollowing(!next);
+    } finally {
+      setFollowBusy(false);
+    }
+  };
 
   return (
     <div className="inc-profile">
-      {/* has-cover, so the name is only given a shadow when there is actually an
-          image under it. On the plain tinted header a shadow just looks smudged. */}
+      {/* Profile card (design 46b): striped band (or their banner), the avatar
+          overlapping it, name with a cyan status pill, counts, and the one
+          action for whoever is looking. */}
       <header className={`inc-hero${p.cover_image ? ' has-cover' : ''}`}>
-        {p.cover_image && <div className="inc-hero-cover" style={{ backgroundImage: `url(${p.cover_image})` }} />}
+        <div className="inc-hero-cover" style={p.cover_image ? { backgroundImage: `url(${p.cover_image})` } : undefined} />
         <div className="inc-hero-body">
-          <img className="inc-hero-avatar" src={p.profile_image || handleAvatar(handle)} alt="" />
+          <span className={`inc-hero-avatar-wrap${ringPct != null ? ' has-ring' : ''}`}>
+            {ringPct != null && (
+              <svg className="inc-hero-ring" viewBox="0 0 36 36" aria-hidden="true">
+                <circle className="inc-hero-ring-track" cx="18" cy="18" r="16" />
+                <circle className="inc-hero-ring-arc" cx="18" cy="18" r="16" pathLength="100" strokeDasharray={`${ringPct} 100`} />
+              </svg>
+            )}
+            <img className="inc-hero-avatar" src={p.profile_image || handleAvatar(handle)} alt="" />
+          </span>
           <div className="inc-hero-text">
             <h1>{p.name || `@${handle}`}</h1>
             <p className="inc-hero-handle">
               {/* Only when a display name exists, or the heading already said it. */}
               {p.name && <span>@{handle}</span>}
-              <span className="inc-badge">
-                <MdVerified size={13} aria-hidden="true" />
-                {graduated ? t('incubation.profile.badge.onHive') : (advertiser ? t('incubation.profile.badge.advertiser') : t('incubation.profile.badge.gettingStarted'))}
-              </span>
+              <StatusPill tone="cyan" icon={graduated ? 'verified' : 'eco'} className="inc-badge">{badge}</StatusPill>
             </p>
             {p.about && <p className="inc-hero-about">{p.about}</p>}
             {profile.interests?.length > 0 && (
@@ -247,142 +290,88 @@ export default function IncubatingProfile({ handle, own = false }) {
             // the account does not exist on chain, so the ordinary follow was
             // broadcast at nothing. These are stored off-chain, and the creator
             // is told about them.
-            <button
-              type="button"
+            <Button
+              variant={following ? 'secondary' : 'primary'}
               className={`inc-follow-btn${following ? ' is-following' : ''}`}
-              onClick={async () => {
-                if (followBusy) return;
-                const next = !following;
-                setFollowBusy(true);
-                setFollowing(next);
-                try {
-                  await followIncubationUser(handle, next);
-                  setProfile((p2) => (p2 ? {
-                    ...p2,
-                    counts: {
-                      ...p2.counts,
-                      followers: Math.max(0, (p2.counts?.followers || 0) + (next ? 1 : -1)),
-                    },
-                  } : p2));
-                } catch {
-                  setFollowing(!next);
-                } finally {
-                  setFollowBusy(false);
-                }
-              }}
+              icon={following ? 'how_to_reg' : 'person_add'}
+              onClick={toggleFollow}
+              aria-pressed={following}
             >
-              {following ? <FaUserCheck size={13} aria-hidden="true" /> : <FaUserPlus size={13} aria-hidden="true" />}
               {following ? t('common.actions.following') : t('common.actions.follow')}
-            </button>
+            </Button>
           )}
           {own && (
-            <button type="button" className="inc-edit-btn" onClick={() => setEditing(true)}>
-              <MdEdit size={15} aria-hidden="true" />
+            <Button variant="secondary" size={36} icon="edit" className="inc-edit-btn" onClick={() => setEditing(true)}>
               {t('incubation.profile.editProfile')}
-            </button>
+            </Button>
           )}
         </div>
+        {/* The note sits in the card as a well (design 46b): it explains the
+            page, it is not something to act on. */}
+        <p className="inc-note">
+          {graduated ? (
+            <Trans i18nKey="incubation.profile.note.graduated" values={{ user: profile.hiveUsername }} components={{ userLink: <Link to={`/@${profile.hiveUsername}`} /> }} />
+          ) : advertiser ? (
+            <>{t('incubation.profile.note.advertiser')}</>
+          ) : own ? (
+            // Per track: a viewer has no videos to move over, so their note talks
+            // about comments and follows instead (owner 2026-10-06).
+            <>{t(progress?.track === 'viewer' ? 'incubation.profile.note.ownViewer' : 'incubation.profile.note.ownCreator')}</>
+          ) : (
+            <>{t('incubation.profile.note.visitor')}</>
+          )}
+        </p>
       </header>
 
-      <p className="inc-note">
-        {graduated ? (
-          <Trans i18nKey="incubation.profile.note.graduated" values={{ user: profile.hiveUsername }} components={{ userLink: <Link to={`/@${profile.hiveUsername}`} /> }} />
-        ) : advertiser ? (
-          <>{t('incubation.profile.note.advertiser')}</>
-        ) : own ? (
-          // Per track: a viewer has no videos to move over, so their note talks
-          // about comments and follows instead (owner 2026-10-06).
-          <>{t(progress?.track === 'viewer' ? 'incubation.profile.note.ownViewer' : 'incubation.profile.note.ownCreator')}</>
-        ) : (
-          <>{t('incubation.profile.note.visitor')}</>
-        )}
-      </p>
 
       {/* Approved and not yet on Hive: the way to the account, always on their own
           page, so "Not yet" on the popup never leaves them hunting for it. */}
       {showSidebar && <CreateAccountPanel advertiser={advertiser} />}
 
       {showSidebar && !advertiser && (
-        // Only rendered when there IS a second panel to switch to. Below the
-        // split the goals sit above the feed, so reaching your own videos meant
-        // scrolling past the whole checklist every time.
-        <div className="inc-tabs" role="tablist" aria-label={t('incubation.profile.tabs.aria')}>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mobileTab === 'progress'}
-            className={mobileTab === 'progress' ? 'is-active' : ''}
-            onClick={() => setMobileTab('progress')}
-          >
-            {t('incubation.profile.tabs.goals')}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mobileTab === 'posts'}
-            className={mobileTab === 'posts' ? 'is-active' : ''}
-            onClick={() => setMobileTab('posts')}
-          >
-            {t('incubation.profile.videosAndShorts')}
-          </button>
-        </div>
+        // Only rendered when there IS a second panel to switch to, and only
+        // shown below the split (see .inc-tabs). Reaching your own videos
+        // otherwise meant scrolling past the whole checklist every time.
+        <Segmented
+          className="inc-tabs"
+          label={t('incubation.profile.tabs.aria')}
+          value={mobileTab}
+          onChange={setMobileTab}
+          options={[
+            { value: 'progress', label: t('incubation.profile.tabs.goals') },
+            { value: 'posts', label: t('incubation.profile.videosAndShorts') },
+          ]}
+        />
       )}
 
       {!own && (
-        // Same control as the owner's mobile switcher above -- one tab strip on
-        // this page, not two that look alike. The two can never both render:
-        // showSidebar requires `own` and this requires `!own`.
-        <div className="inc-tabs inc-tabs--visitor" role="tablist" aria-label={t('incubation.profile.tabs.aria')}>
-          {[
-            // 'Uploads', not the 'Videos and Shorts' the owner's strip uses:
-            // four labels share this row at phone width, and the grid heading
-            // directly below already names the two things in it.
-            ['posts', t('incubation.profile.tabs.uploads'), profile?.counts?.posts],
-            ['comments', t('incubation.profile.tabs.comments'), commentCount],
-            ['followers', t('incubation.profile.tabs.followers'), profile?.counts?.followers],
-            ['following', t('incubation.profile.tabs.following'), profile?.counts?.following],
-          ].map(([id, label, count]) => (
-            <button
-              key={id}
-              type="button"
-              role="tab"
-              aria-selected={visitorTab === id}
-              className={visitorTab === id ? 'is-active' : ''}
-              onClick={() => setVisitorTab(id)}
-            >
-              {label}
-              {/* A count only when we have one. `> 0` rather than != null, so a
-                  tab does not advertise "(0)" before anyone has looked. */}
-              {count > 0 ? ` (${count})` : ''}
-            </button>
-          ))}
-        </div>
+        // The visitor's page navigation, at every width. The two strips can
+        // never both render: showSidebar requires `own` and this requires `!own`.
+        <Segmented
+          className="inc-tabs inc-tabs--visitor"
+          scroll
+          label={t('incubation.profile.tabs.aria')}
+          value={visitorTab}
+          onChange={setVisitorTab}
+          options={visitorTabs}
+        />
       )}
 
-      {/* An advertiser's page is ONE column: their checklist leads it (below), and
-          nothing sits beside it. */}
       {/* One column for everyone. The owner's checklist sits in it, between their
           uploads and "What a Hive account gets you" (owner 2026-10-06: the list
           belongs in the middle, not in a sidebar). On a phone the tabs above
           show the goals or the uploads, see .inc-cols--goals. */}
       <div className={`inc-cols${showSidebar && !advertiser ? ` inc-cols--goals inc-show-${mobileTab}` : ''}`}>
         <main className="inc-main">
-          {/* Wrapped so the mobile tabs can hide the FEED without hiding the
-              whole column. "What a Hive account gets you" sits below it, in
-              this same column, and hiding .inc-main took that with it -- so the
-              one panel that explains why the checklist is worth doing was
-              missing from the tab showing the checklist. A child of a
-              display:none parent cannot be shown again, so the hiding has to
-              happen at this level instead. */}
           {/* For 3Speak's admins visiting someone else's warm-up page: the private
               details only they may see. Renders nothing for anyone else. */}
           {!own && <AdvertiserAdminPanel handle={handle} profile={p} interests={profile.interests || []} counts={profile.counts || {}} />}
-          {/* An advertiser's checklist leads the wide column, then the market they
-              are working towards: who they would reach, and what they can book. */}
+          {/* An advertiser's checklist leads the column, then the market they are
+              working towards: who they would reach, and what they can book. */}
           {advertiser && <IncubationProgressPanel />}
           {advertiser && (
             <section className="inc-panel inc-market">
-              <h2><FaUsers size={14} aria-hidden="true" /> {t('incubation.profile.market.audience')}</h2>
+              <h2><Icon name="groups" size={20} /> {t('incubation.profile.market.audience')}</h2>
               <div className="mkt-page mkt-embed">
                 <InventoryPanel data={market.inventory} isLoading={market.loading} error={market.error} />
               </div>
@@ -390,7 +379,7 @@ export default function IncubatingProfile({ handle, own = false }) {
           )}
           {advertiser && market.pricing?.formats?.length > 0 && (
             <section className="inc-panel inc-market">
-              <h2><FaLayerGroup size={14} aria-hidden="true" /> {t('incubation.profile.market.format')}</h2>
+              <h2><Icon name="view_agenda" size={20} /> {t('incubation.profile.market.format')}</h2>
               <div className="mkt-page mkt-embed">
                 <RateCard pricing={market.pricing} />
               </div>
@@ -409,14 +398,17 @@ export default function IncubatingProfile({ handle, own = false }) {
           ) : (
           <>
           {advertiser && (
-            <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> {t('incubation.profile.brandVideos')} <span className="inc-subhead-note">{t('incubation.profile.optional')}</span></h2>
+            <h2 className="inc-subhead"><Icon name="movie" size={20} /> {t('incubation.profile.brandVideos')} <span className="inc-subhead-note">{t('incubation.profile.optional')}</span></h2>
           )}
           {nothingYet && (
-            <p className="desc">
-              {advertiser
-                ? t('incubation.profile.empty.advertiser')
-                : own ? t('incubation.profile.empty.own') : t('incubation.profile.empty.visitor')}
-            </p>
+            <div className="v2-empty inc-empty">
+              <Icon name="video_library" size={28} />
+              <p>
+                {advertiser
+                  ? t('incubation.profile.empty.advertiser')
+                  : own ? t('incubation.profile.empty.own') : t('incubation.profile.empty.visitor')}
+              </p>
+            </div>
           )}
 
           {/* Deliberately NOT linkPrefix="/shorts" on the shorts anywhere below:
@@ -431,13 +423,13 @@ export default function IncubatingProfile({ handle, own = false }) {
             <>
               {videoCards.length > 0 && (
                 <>
-                  <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> {t('incubation.profile.videos')}</h2>
+                  <h2 className="inc-subhead"><Icon name="movie" size={20} /> {t('incubation.profile.videos')}</h2>
                   <Card3 videos={videoCards} />
                 </>
               )}
               {shortCards.length > 0 && (
                 <>
-                  <h2 className="inc-subhead">{t('common.nav.shorts')}</h2>
+                  <h2 className="inc-subhead"><Icon name="view_day" size={20} /> {t('common.nav.shorts')}</h2>
                   <Card3 videos={shortCards} shortsGrid />
                 </>
               )}
@@ -446,13 +438,10 @@ export default function IncubatingProfile({ handle, own = false }) {
             <>
               {/* Names the two things in the feed, since they share one grid
                   rather than sitting under separate headings. */}
-              {!advertiser && <h2 className="inc-subhead"><FaFilm size={15} aria-hidden="true" /> {t('incubation.profile.videosAndShorts')}</h2>}
+              {!advertiser && <h2 className="inc-subhead"><Icon name="movie" size={20} /> {t('incubation.profile.videosAndShorts')}</h2>}
               <Card3 videos={cards} />
             </>
           ))}
-          {/* Below the feed rather than in the sidebar: it is the reward for
-              the checklist, so it reads better after the work than beside it,
-              and it leaves the goals alone at the top of the column. */}
           </>
           )}
           </div>
@@ -466,13 +455,15 @@ export default function IncubatingProfile({ handle, own = false }) {
             </div>
           )}
           {showSidebar && (
+            // "What a Hive account gets you" (design 46b): accent icon, bold
+            // lead-in, muted rest. Below the checklist: it is the reward for it.
             <section className="inc-panel inc-unlocks">
-              <h2><FaUnlockAlt size={14} aria-hidden="true" /> {advertiser ? t('incubation.profile.unlocksTitleAdvertiser') : t('incubation.profile.unlocksTitle')}</h2>
+              <h2><Icon name="lock_open" size={20} /> {advertiser ? t('incubation.profile.unlocksTitleAdvertiser') : t('incubation.profile.unlocksTitle')}</h2>
               <ul>
-                {unlocks.map(({ Icon, titleKey, bodyKey }) => (
+                {unlocks.map(({ icon, titleKey, bodyKey }) => (
                   <li key={titleKey}>
-                    <strong><Icon size={13} aria-hidden="true" />{t(titleKey)}</strong>
-                    {t(bodyKey)}
+                    <Icon name={icon} size={18} className="inc-unlock-icon" />
+                    <span><strong>{t(titleKey)}</strong> {t(bodyKey)}</span>
                   </li>
                 ))}
               </ul>

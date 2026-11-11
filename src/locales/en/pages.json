@@ -93,7 +93,8 @@
   "legal": {
     "pageTitle": "How 3Speak handles your data · 3Speak",
     "englishOnly": "This page is only available in English. The English version is the binding one.",
-    "back": "← Back to 3Speak"
+    "back": "← Back to 3Speak",
+    "onThisPage": "On this page"
   },
   "notFound": {
     "imageAlt": "404",

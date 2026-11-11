@@ -1,16 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
-import { MdOutlineDownload, MdGraphicEq, MdGroups } from "react-icons/md";
-import { IoAddCircleOutline, IoCloudUploadSharp } from "react-icons/io5";
-import { IoMdPerson } from "react-icons/io";
-import { GiAstronautHelmet } from "react-icons/gi";
-import { FaChartBar } from "react-icons/fa6";
-import { Clapperboard } from "lucide-react";
 import { useAppStore } from "../../lib/store";
-import ShortsIcon from "../icons/ShortsIcon";
-import { FEATURE_EDITOR } from "../../utils/config";
-import { APP_VERSION } from "../../version";
-import { getHiveUrl } from "../../utils/hiveNode";
+import { Icon } from "../v2/Icon";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import PremiumBadge from "../PremiumBadge/PremiumBadge";
@@ -71,42 +62,27 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
     }
   };
 
+  // One tab: a Material Symbols icon (filled when it is the current section)
+  // over its label. The label is its own span so the link's text is exactly it.
+  const tab = (to, icon, label, active) => (
+    <Link to={to} className={`bottom-nav-item${active ? " active" : ""}`} aria-current={active ? "page" : undefined}>
+      <span className="bottom-nav-icon-wrap"><Icon name={icon} size={24} fill={active} className="bottom-nav-icon" /></span>
+      <span className="bottom-nav-label">{label}</span>
+    </Link>
+  );
+
   return createPortal(
-    <>
     <nav className={`bottom-nav${isWatchPath(path) ? ' bottom-nav--watch' : ''}`} ref={menuRef}>
-      <Link to="/" className={`bottom-nav-item ${isActive("/") ? "active" : ""}`}>
-        <span className="bottom-nav-icon-wrap">
-          <FaChartBar className="bottom-nav-icon bottom-nav-icon--feeds" />
-        </span>
-        <span>{t('nav.bottom.feeds')}</span>
-      </Link>
-
-      <Link to="/shorts" className={`bottom-nav-item ${isShortsActive ? "active" : ""}`}>
-        <span className="bottom-nav-icon-wrap">
-          <ShortsIcon className="bottom-nav-icon bottom-nav-icon--shorts" outlineWidth={isShortsActive ? 40 : 30} />
-        </span>
-        <span>{t('common.nav.shorts')}</span>
-      </Link>
-
+      {tab("/", "home", t('nav.bottom.feeds'), isActive("/"))}
+      {tab("/shorts", "smart_display", t('common.nav.shorts'), isShortsActive)}
       {/* Groups takes the slot chat used to hold. Chat is not gone: it moved to
-          the top bar, which now shows its button at every width instead of
-          hiding it below 1024px, so the unread badge went with it and is no
-          longer mounted in two places. */}
-      <Link to="/groups" className={`bottom-nav-item ${isGroupsActive ? "active" : ""}`}>
-        <span className="bottom-nav-icon-wrap">
-          <MdGroups className="bottom-nav-icon" />
-        </span>
-        <span>{t('nav.bottom.groups')}</span>
-      </Link>
+          the top bar, which shows its button at every width. */}
+      {tab("/groups", "groups", t('nav.bottom.groups'), isGroupsActive)}
+      {tab("/audio", "graphic_eq", t('nav.bottom.audio'), isActive("/audio"))}
 
-      <Link to="/audio" className={`bottom-nav-item ${isActive("/audio") ? "active" : ""}`}>
-        <MdGraphicEq className="bottom-nav-icon" />
-        <span>{t('nav.bottom.audio')}</span>
-      </Link>
-
-      <a href="#" className={`bottom-nav-item ${menuOpen || profileMenuOpen ? "active" : ""}`} onClick={handleProfileClick}>
+      <a href="#" className={`bottom-nav-item${menuOpen || profileMenuOpen ? " active" : ""}`} onClick={handleProfileClick}>
         {authenticated ? (
-          <span className="bottom-nav-avatar-wrap">
+          <span className="bottom-nav-icon-wrap bottom-nav-avatar-wrap">
             <img
               src={`/img/u/${user}/avatar/small`}
               alt={user}
@@ -115,33 +91,30 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
             <PremiumBadge username={user} size={10} className="bottom-nav-avatar-premium" />
           </span>
         ) : (
-          <div className="bottom-nav-avatar-placeholder">
-            <GiAstronautHelmet />
-          </div>
+          <span className="bottom-nav-icon-wrap"><Icon name="account_circle" size={24} className="bottom-nav-icon" /></span>
         )}
-        <span>{authenticated ? t('common.nav.profile') : t('nav.bottom.login')}</span>
+        <span className="bottom-nav-label">{authenticated ? t('common.nav.profile') : t('nav.bottom.login')}</span>
       </a>
 
       {menuOpen && !authenticated && showInstallOption && (
-        <div className="bottom-nav-menu">
+        <div className="bottom-nav-menu v2-menu" role="menu">
           {installPrompt ? (
-            <a href="#" className="bottom-nav-menu-item bottom-nav-install" onClick={handleInstallClick}>
-              <MdOutlineDownload className="bottom-nav-menu-icon" /> {t('nav.installApp')}
+            <a href="#" className="v2-menu__row bottom-nav-install" role="menuitem" onClick={handleInstallClick}>
+              <Icon name="install_mobile" size={18} /> <span>{t('nav.installApp')}</span>
             </a>
           ) : isIOS ? (
-            <div className="bottom-nav-menu-item bottom-nav-install bottom-nav-ios-hint">
-              <MdOutlineDownload className="bottom-nav-menu-icon" />
+            <div className="bottom-nav-ios-hint">
+              <Icon name="install_mobile" size={18} />
               <span><Trans i18nKey="nav.iosInstallHint" components={{ b: <strong /> }} /></span>
             </div>
           ) : null}
-          <div className="bottom-nav-menu-divider" />
-          <a href="#" className="bottom-nav-menu-item" onClick={(e) => { e.preventDefault(); setMenuOpen(false); openLoginModal(); }}>
-            <IoMdPerson className="bottom-nav-menu-icon" /> {t('nav.bottom.login')}
+          <div className="v2-menu__sep" />
+          <a href="#" className="v2-menu__row" role="menuitem" onClick={(e) => { e.preventDefault(); setMenuOpen(false); openLoginModal(); }}>
+            <Icon name="login" size={18} /> <span>{t('nav.bottom.login')}</span>
           </a>
         </div>
       )}
-    </nav>
-    </>,
+    </nav>,
     document.body
   );
 };

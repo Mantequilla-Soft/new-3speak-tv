@@ -1,6 +1,10 @@
-// Full-bleed player for the iframed Spotlight /links embed. Fills whatever aspect
-// the parent iframe is (16:9 for video, 9:16 for a short). Transparent until the
-// video paints so the parent's .vid::after loading spinner shows through.
+@use "../styles/v2" as v2;
+
+// Full-bleed player for the iframed Spotlight /links embed (25d, 49c). Fills
+// whatever aspect the parent iframe is (16:9 for video, 9:16 for a short).
+// Chrome-free: no header, no buttons of our own; the SDK paints the poster and
+// play affordance. Transparent until the video paints so the parent's
+// .vid::after loading spinner shows through.
 .emb-player {
   position: fixed;
   inset: 0;
@@ -23,8 +27,15 @@
   // A short's source is already 9:16, so fill the vertical frame edge-to-edge.
   &.short video { object-fit: cover; }
 
+  // Video unavailable: a quiet surface with one muted line (49c).
   &--err {
-    color: #9aa0a6;
-    font: 500 14px/1.4 system-ui, -apple-system, sans-serif;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background: var(--surface);
+    color: var(--muted);
+    font-family: var(--font-sans);
+    @include v2.text(meta);
+    text-align: center;
   }
 }

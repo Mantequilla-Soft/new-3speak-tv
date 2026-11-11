@@ -137,6 +137,9 @@
     "uploadingImage": "Uploading image",
     "write": "Write",
     "preview": "Preview",
-    "nothingToPreview": "Nothing to preview yet"
+    "nothingToPreview": "Nothing to preview yet",
+    "creator": "Creator",
+    "empty": "No comments yet",
+    "emptyHint": "Comments tied to a moment show up on the video's timeline."
   }
 }

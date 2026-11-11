@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { getHiveClient } from '../../utils/hiveNode';
 import "./TrxHistory.scss";
-import { Client } from "@hiveio/dhive";
 import Skeleton from "./Skeleton";
-import { HIVE_API_NODES } from "../../utils/config";
 import { useTranslation } from "react-i18next";
-import { formatDate } from "../../i18n";
+import { formatDate, formatTimeAgoCompact, formatNumber } from "../../i18n";
+import { Segmented, EmptyState, Icon } from "../v2/ui";
+import { cx } from "../v2/helpers";
 
 const client = getHiveClient();
 
@@ -84,11 +84,27 @@ async function fetchAllTransactions(username) {
   return transactions.sort((a, b) => b.date - a.date);
 }
 
-function TrxHistory({ user }) {
+const amt = (n) => formatNumber(n, { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+
+const FILTERS = ["all", "rewards", "received", "sent"];
+const MATCH = {
+  all: () => true,
+  rewards: (tx) => tx.type === "claim",
+  received: (tx) => tx.type === "receive",
+  sent: (tx) => tx.type === "send",
+};
+
+/**
+ * The wallet's Activity list (design 21e, 25c): transfers in and out and
+ * claimed rewards, newest first, in a fixed-height panel that scrolls inside.
+ * `onLoaded(list)` hands the loaded list to the page (the earnings chart).
+ */
+function TrxHistory({ user, onLoaded }) {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(null);
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     const loadTransactions = async () => {
@@ -97,6 +113,7 @@ function TrxHistory({ user }) {
         if (user) {
           const txns = await fetchAllTransactions(user);
           setTransactions(txns);
+          onLoaded?.(txns);
         }
       } catch (err) {
         setError(t('wallet.history.loadFailed'));
@@ -107,89 +124,74 @@ function TrxHistory({ user }) {
     };
 
     loadTransactions();
-  }, [user, t]);
+  }, [user, t, onLoaded]);
+
+  const shown = useMemo(() => transactions.filter(MATCH[filter]), [transactions, filter]);
 
   return (
-    <div className="transaction-history">
-      <h2>{t('wallet.history.title')}</h2>
-      <div className="history-table">
+    <section className="trx" id="wallet-activity" aria-labelledby="wallet-activity-title">
+      <div className="trx__head">
+        <h2 id="wallet-activity-title">{t('wallet.activity.title')}</h2>
+        <Segmented
+          block={false}
+          size={28}
+          className="trx__filter"
+          label={t('wallet.activity.title')}
+          value={filter}
+          onChange={setFilter}
+          options={FILTERS.map((f) => ({ value: f, label: t(`wallet.activity.filters.${f}`) }))}
+        />
+      </div>
+      <div className="trx__list">
         {isLoading ? (
           <Skeleton />
         ) : error ? (
-          <div className="error-message">{error}</div>
+          <div className="v2-failure" role="alert"><b>{error}</b></div>
+        ) : shown.length === 0 ? (
+          <EmptyState icon="receipt_long" title={t('wallet.activity.emptyTitle')}>{t('wallet.activity.empty')}</EmptyState>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>{t('wallet.history.cols.type')}</th>
-                <th>{t('wallet.history.cols.amount')}</th>
-                <th>{t('wallet.history.cols.account')}</th>
-                <th>{t('wallet.history.cols.date')}</th>
-                <th>{t('wallet.history.cols.memo')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.map((transaction) => (
-                <tr key={transaction.id}>
-                  <td>
-                    <div className="tx-type">
-                      <span className={`tx-icon ${transaction.type}`}>
-                        <i
-                          className={`fas fa-${
-                            transaction.type === "send"
-                              ? "arrow-up"
-                              : transaction.type === "claim"
-                              ? "gift"
-                              : "arrow-down"
-                          }`}
-                        ></i>
-                      </span>
-                      {transaction.type === "send"
-                        ? t('wallet.history.types.transfer')
-                        : transaction.type === "claim"
-                        ? t('wallet.history.types.claim')
-                        : t('wallet.history.types.received')}
-                    </div>
-                  </td>
-                  <td>
-                    {transaction.type === "claim" ? (
-                      <span className="tx-amount">
-                        {transaction.amount.HBD > 0 &&
-                          `${transaction.amount.HBD.toFixed(3)} HBD `}
-                        {transaction.amount.HP > 0 &&
-                          `${transaction.amount.HP.toFixed(3)} HP `}
-                        {transaction.amount.HIVE > 0 &&
-                          `${transaction.amount.HIVE.toFixed(3)} HIVE`}
-                      </span>
-                    ) : (
-                      <span className="tx-amount">
-                        {transaction.amount.toFixed(3)} {transaction.coin}
-                      </span>
-                    )}
-                  </td>
-                  <td>
-                    <span className="tx-address">
-                      {transaction.address || "-"}
-                    </span>
-                  </td>
-                  <td>
-                    {formatDate(transaction.date, {
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </td>
-                  <td>
-                    <span className="memo">{(transaction.type === "claim" ? t('wallet.history.claimedRewards') : transaction.memo) || "-"}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          shown.map((transaction) => {
+            const incoming = transaction.type !== "send";
+            const when = (
+              <time dateTime={transaction.date.toISOString()} title={formatDate(transaction.date, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}>
+                {formatTimeAgoCompact(transaction.date)}
+              </time>
+            );
+            if (transaction.type === "claim") {
+              const parts = [
+                transaction.amount.HBD > 0 && `${amt(transaction.amount.HBD)} HBD`,
+                transaction.amount.HP > 0 && `${amt(transaction.amount.HP)} HP`,
+                transaction.amount.HIVE > 0 && `${amt(transaction.amount.HIVE)} HIVE`,
+              ].filter(Boolean);
+              return (
+                <div key={transaction.id} className="trx__row">
+                  <span className="trx__icon is-in"><Icon name="redeem" size={24} /></span>
+                  <div className="trx__body">
+                    <b>{t('wallet.history.claimedRewards')}</b>
+                    <span>{t('wallet.history.types.claim')} · {when}</span>
+                  </div>
+                  <span className="trx__amt is-in">{parts.length ? parts.map((p) => <span key={p}>+{p}</span>) : "-"}</span>
+                </div>
+              );
+            }
+            return (
+              <div key={transaction.id} className="trx__row">
+                <span className={cx("trx__icon", incoming && "is-in")}>
+                  <Icon name={incoming ? "south_west" : "send"} size={24} />
+                </span>
+                <div className="trx__body">
+                  <b>{incoming ? t('wallet.activity.from', { user: transaction.address || "-" }) : t('wallet.activity.sentTo', { user: transaction.address || "-" })}</b>
+                  <span>{transaction.memo ? <>{transaction.memo} · </> : null}{when}</span>
+                </div>
+                <span className={cx("trx__amt", incoming && "is-in")}>
+                  {incoming ? "+" : "−"}{amt(transaction.amount)} {transaction.coin}
+                </span>
+              </div>
+            );
+          })
         )}
       </div>
-    </div>
+    </section>
   );
 }
 

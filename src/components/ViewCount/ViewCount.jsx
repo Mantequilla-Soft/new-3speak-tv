@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { IoEye, IoEyeOutline } from 'react-icons/io5';
+import { Icon } from '../v2/Icon';
 import axios from 'axios';
 import { useAppStore } from '../../lib/store';
 import { batchCheckWatched } from '../../utils/watchHistory';
@@ -39,11 +39,12 @@ function ViewCount({ views, watched, formatViews, author, permlink, size, title 
   const isWatched = watched ?? selfWatched;
   const displayViews = views ?? selfViews;
   const display = formatViews ? formatViews(displayViews) : displayViews?.toLocaleString() ?? '0';
-  const iconSize = size ? Math.round(size * 1.15) : undefined;
+  const iconSize = size ? Math.round(size * 1.15) : 14;
 
+  // Watched: the eye fills in, in cyan (a state, not money or an action).
   return (
     <div className={`view-count-badge${isWatched ? ' watched' : ''}`} title={title} style={size ? { fontSize: size } : undefined}>
-      {isWatched ? <IoEye size={iconSize} className="view-icon" /> : <IoEyeOutline size={iconSize} className="view-icon" />}
+      <Icon name="visibility" size={iconSize} fill={isWatched} className="view-icon" />
       <span>{display}</span>
     </div>
   );

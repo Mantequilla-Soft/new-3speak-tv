@@ -1,11 +1,10 @@
-import { useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useId, useState } from 'react';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { REPORT_API_URL, REPORT_API_SECRET } from '../../utils/config';
 import { useTranslation } from 'react-i18next';
-import ModalHeader from '../ModalHeader/ModalHeader';
-import useDialog from '../../hooks/useDialog';
+import DialogShell from './DialogShell';
+import { Button, ChoiceCard, Eyebrow, Field } from '../v2/ui';
 import './ReportModal.scss';
 
 // Every toast from this module is headed "Report"; the message becomes the
@@ -57,6 +56,19 @@ const REPORT_REASONS = {
     { value: 'scam', labelKey: 'modals.report.reasons.scam' },
     { value: 'other', labelKey: 'modals.report.reasons.other' },
   ],
+};
+
+// Material Symbols per reason (design 07c: reason tiles with an icon).
+const REASON_ICONS = {
+  spam: 'campaign',
+  harassment: 'sentiment_dissatisfied',
+  hate_speech: 'block',
+  violence: 'warning',
+  sexual: 'visibility_off',
+  copyright: 'copyright',
+  scam: 'gpp_bad',
+  impersonation: 'person_off',
+  other: 'more_horiz',
 };
 
 /**
@@ -138,60 +150,61 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
     onClose();
   };
 
-  const dialog = useDialog(handleClose, { active: isOpen });
-  const reasonId = `${dialog.titleId}-reason`;
-  const detailsId = `${dialog.titleId}-details`;
-
+  const uid = useId();
   if (!isOpen) return null;
 
   const title = type === 'user' ? t('modals.report.titles.user') : type === 'comment' ? t('modals.report.titles.comment') : type === 'short' ? t('modals.report.titles.short') : type === 'post' ? t('modals.report.titles.post') : t('modals.report.titles.video');
+  const formId = `${uid}-form`;
+  const reasonLabelId = `${uid}-reason`;
 
-  return createPortal(
-    <div className="report-modal-overlay" onClick={handleClose}>
-      <div className="report-modal-content" {...dialog.props} onClick={(e) => e.stopPropagation()}>
-        <ModalHeader title={title} titleId={dialog.titleId} onClose={handleClose} />
-
-        {target?.author && (
-          <p className="report-target">
-            @{target.author}{target.permlink ? ` / ${target.permlink}` : ''}
-          </p>
-        )}
-
-        <form onSubmit={handleSubmit} className="report-form">
-          <label className="report-label" htmlFor={reasonId}>{t('modals.report.reason')}</label>
-          <select
-            id={reasonId}
-            className="report-select"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-          >
-            <option value="">{t('modals.report.selectReason')}</option>
-            {reasons.map((r) => (
-              <option key={r.value} value={r.value}>{t(r.labelKey)}</option>
-            ))}
-          </select>
-
-          <label className="report-label" htmlFor={detailsId}>{t('modals.report.details')}</label>
-          <textarea
-            id={detailsId}
-            className="report-textarea"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder={t('modals.report.detailsPlaceholder')}
-            rows={3}
-            maxLength={500}
-          />
-
-          <button
-            type="submit"
-            className="report-submit-btn"
-            disabled={submitting || !reason}
-          >
+  return (
+    <DialogShell
+      open
+      onClose={handleClose}
+      title={title}
+      width={520}
+      overlayClassName="report-modal-overlay"
+      className="report-modal-content"
+      footer={(
+        <>
+          <Button variant="secondary" onClick={handleClose}>{t('common.actions.cancel')}</Button>
+          <Button variant="primary" type="submit" form={formId} disabled={submitting || !reason} loading={submitting}>
             {submitting ? t('modals.report.submitting') : t('modals.report.submit')}
-          </button>
-        </form>
-      </div>
-    </div>,
-    document.body
+          </Button>
+        </>
+      )}
+    >
+      {target?.author && (
+        <p className="report-target">
+          @{target.author}{target.permlink ? ` / ${target.permlink}` : ''}
+        </p>
+      )}
+
+      <form id={formId} onSubmit={handleSubmit} className="report-form">
+        <Eyebrow id={reasonLabelId}>{t('modals.report.reason')}</Eyebrow>
+        <div className="report-reasons" role="radiogroup" aria-labelledby={reasonLabelId}>
+          {reasons.map((r) => (
+            <ChoiceCard
+              key={r.value}
+              className="report-reason"
+              selected={reason === r.value}
+              icon={REASON_ICONS[r.value] || 'flag'}
+              title={t(r.labelKey)}
+              onClick={() => setReason(r.value)}
+            />
+          ))}
+        </div>
+
+        <Field
+          as="textarea"
+          label={t('modals.report.details')}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder={t('modals.report.detailsPlaceholder')}
+          rows={3}
+          maxLength={500}
+        />
+      </form>
+    </DialogShell>
   );
 }
