@@ -1,9 +1,10 @@
 @use "../../styles/v2" as v2;
 
-// Two-step topic picker (7 categories, then an optional topic), design 43b
-// "tag this video": chips with a 2px border that wrap flush left. The pick is
-// an accent border on a 16% accent tint; the open category keeps a muted border
-// so the path stays visible.
+// Two-step topic picker (7 categories, then an optional topic): chips with a
+// 2px border that wrap flush left, text only (38, 40a, 43b). A pick is a
+// secondary selection, so it is cyan: a cyan border on a 16% cyan tint, the
+// label stays in text. The open category keeps a muted border so the path
+// stays visible.
 .tagsv2-picker {
   display: flex;
   flex-direction: column;
@@ -37,17 +38,15 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-    padding-top: 8px;
-    border-top: 1px solid var(--border);
   }
 
-  // One chip: categories and topics share the look.
+  // One chip: categories and topics share the look (32 tall, radius 12, 12/700).
   .tagsv2-cat,
   .tagsv2-topic {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    min-height: 36px;
+    min-height: 32px;
     padding: 0 10px;
     border: 2px solid var(--border);
     border-radius: var(--r-md);
@@ -60,7 +59,6 @@
     cursor: pointer;
     transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-    .tagsv2-icon { color: var(--muted); }
     .tagsv2-label { overflow-wrap: anywhere; }
 
     .tagsv2-pct {
@@ -71,11 +69,11 @@
     &:hover:not(:disabled) { background: var(--bg-hover); }
 
     &.selected {
-      border-color: var(--accent);
-      background: var(--accent-tint-strong);
-      color: var(--accent);
+      border-color: var(--cyan);
+      background: var(--cyan-tint-strong);
+      color: var(--text);
 
-      .tagsv2-icon, .tagsv2-pct { color: var(--accent); }
+      .tagsv2-pct { color: var(--cyan); }
     }
 
     &:disabled { opacity: .45; cursor: not-allowed; }
@@ -88,6 +86,13 @@
     border-color: var(--muted);
   }
 
+  // Picking one tag (40a): the category of the picked topic is part of the
+  // pick, so it is cyan too ("Nature" › "Wildlife").
+  &:not(.is-multi) .tagsv2-cat.open {
+    border-color: var(--cyan);
+    background: var(--cyan-tint-strong);
+  }
+
   .tagsv2-count {
     display: inline-grid;
     place-items: center;
@@ -95,22 +100,9 @@
     height: 18px;
     padding: 0 5px;
     border-radius: 9px;
-    background: var(--accent);
-    color: var(--on-accent);
+    background: var(--cyan);
+    color: var(--bg);
     @include v2.mono(10, 700);
-  }
-
-  // Interests (multi mode, designs 23a and 38): picking topics you like is a
-  // secondary selection, so the picks are cyan, not the accent of a video's tag.
-  &.is-multi {
-    .tagsv2-cat.selected,
-    .tagsv2-topic.selected {
-      border-color: var(--cyan);
-      background: var(--cyan-tint);
-      color: var(--cyan);
-      .tagsv2-icon, .tagsv2-pct { color: var(--cyan); }
-    }
-    .tagsv2-count { background: var(--cyan); color: var(--bg); }
   }
 }
 
@@ -146,5 +138,46 @@
       color: var(--text);
       .tagsv2-pct { color: var(--cyan); }
     }
+  }
+}
+
+// 23a interests (layout="tiles"): a 2-column grid of tiles, padding 12,
+// radius 20, a 2px border, a cyan 24 icon over the 14/700 name. A pick is a
+// cyan border on a 16% cyan tint.
+.tagsv2-picker.is-tiles {
+  gap: 10px;
+
+  .tagsv2-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .tagsv2-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-height: 84px;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-xl);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    .tagsv2-icon { color: var(--cyan); }
+    .tagsv2-label { margin-top: auto; @include v2.text(body); font-weight: 700; overflow-wrap: anywhere; }
+    .tagsv2-count { position: absolute; top: 10px; right: 10px; }
+
+    &:hover:not(:disabled) { background: var(--bg-hover); }
+    &:active:not(:disabled) { transform: scale(.98); }
+    &.open:not(.selected), &.has-selected:not(.selected) { border-color: var(--muted); }
+    &.selected { border-color: var(--cyan); background: var(--cyan-tint-strong); }
+    &:disabled { opacity: .45; cursor: not-allowed; }
   }
 }

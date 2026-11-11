@@ -148,7 +148,10 @@ export default function UploadGate({ ad, onWatched }) {
   const brand = ad?.brand;
   return (
     <div className="upload-gate" role="dialog" aria-modal="true" aria-label={t('ads.gate.ariaLabel')}>
+      {/* 47d: a card with the SPONSORED eyebrow, the spot, then the one line that
+          says why it is here; the brand and the seconds left sit with that line. */}
       <div className="upload-gate-inner">
+        <span className="upload-gate-label">{ad?.label || t('ads.gate.sponsored')}</span>
         <video
           ref={videoRef}
           className="upload-gate-video"
@@ -159,7 +162,7 @@ export default function UploadGate({ ad, onWatched }) {
           onError={() => { setFailed(true); finish(false); }}
         />
         <div className="upload-gate-bar">
-          <span className="upload-gate-label">{ad?.label || t('ads.gate.sponsored')}</span>
+          <p className="upload-gate-note">{t('ads.gate.note')}</p>
           {brand?.productName && (
             brand.clickUrl
               ? <a className="upload-gate-brand" href={brand.clickUrl} target="_blank" rel="noopener noreferrer sponsored">{brand.productName}</a>
@@ -169,7 +172,6 @@ export default function UploadGate({ ad, onWatched }) {
             {playing ? `${left}s` : t('ads.gate.loading')}
           </span>
         </div>
-        <p className="upload-gate-note">{t('ads.gate.note')}</p>
       </div>
     </div>
   );

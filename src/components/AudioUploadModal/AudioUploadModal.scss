@@ -560,7 +560,6 @@
   &:disabled { opacity: .55; }
 }
 
-.audio-upload-post-title { height: 48px; border-radius: var(--r-lg); font-size: 16px; font-weight: 700; &::placeholder { font-weight: 400; } }
 
 .audio-upload-type-select {
   @include v2.field(40);

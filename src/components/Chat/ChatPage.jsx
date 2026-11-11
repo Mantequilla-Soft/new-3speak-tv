@@ -147,9 +147,10 @@ function ConvAvatar({ conv, title, className }) {
   )
 }
 
-// The confirm bar (07f) for small confirmations, in place of window.confirm.
+// The confirm bar (07f) for small confirmations, in place of window.confirm:
+// the card variant, an accent icon tile and the question as its title.
 // Portalled so a transformed or clipped chat panel can't trap the fixed bar.
-function ChatConfirm({ text, confirmLabel, onConfirm, onCancel }) {
+function ChatConfirm({ text, icon, confirmLabel, onConfirm, onCancel }) {
   const { t } = useTranslation()
   const cancelRef = useRef(onCancel)
   useEffect(() => { cancelRef.current = onCancel }, [onCancel])
@@ -160,15 +161,15 @@ function ChatConfirm({ text, confirmLabel, onConfirm, onCancel }) {
   }, [])
   return createPortal(
     <ConfirmBar
+      icon={icon}
+      title={text}
       actions={(
         <>
-          <Button variant="ghost" size={32} onClick={onCancel}>{t('common.actions.cancel')}</Button>
-          <Button variant="primary" size={32} onClick={onConfirm}>{confirmLabel}</Button>
+          <Button variant="secondary" size={44} onClick={onCancel}>{t('common.actions.cancel')}</Button>
+          <Button variant="primary" size={44} icon={icon} onClick={onConfirm}>{confirmLabel}</Button>
         </>
       )}
-    >
-      <span className="chat-confirm-text">{text}</span>
-    </ConfirmBar>,
+    />,
     document.body
   )
 }
@@ -791,6 +792,7 @@ function LeaveButton({ conv }) {
       />
       {asking && (
         <ChatConfirm
+          icon="logout"
           text={kind === 'room' ? t('chat.leave.confirmRoom') : t('chat.leave.confirmChannel')}
           confirmLabel={t('chat.leave.button')}
           onConfirm={leave}
@@ -1202,6 +1204,7 @@ function Thread({ conv, headerActions = null }) {
 
       {deleteTarget && (
         <ChatConfirm
+          icon="delete"
           text={t('chat.thread.deleteConfirm')}
           confirmLabel={t('common.actions.delete')}
           onConfirm={() => deleteMessage(deleteTarget)}

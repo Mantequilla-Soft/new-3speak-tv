@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Icon } from "./v2/Icon";
 import { FEATURE_EDITOR, openpodsEnabledFor, storiesEnabledFor } from "../utils/config";
@@ -46,20 +45,6 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
   const navigate = useNavigate();
   const user = useAppStore((s) => s.user);
 
-  // "Go Live" on a phone, "Stream Studio" on desktop. Same destination — the
-  // wording just matches what the two studios actually feel like: a phone user
-  // taps and is broadcasting, while the desktop studio is a scene/source
-  // console you set up first. 767px is the app's mobile breakpoint (App.jsx).
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia?.('(max-width: 767px)').matches,
-  );
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    const onChange = (e) => setIsMobile(e.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, []);
-
   // Plain navigation entries (Go Live, Community Snap) — no upload gate, just
   // pause any playing media and close the dropdown, then let the Link navigate.
   const go = (e) => { pauseAllMedia(); if (onClick) onClick(e); };
@@ -98,17 +83,17 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
         <Link to="/embed-studio?from=shorts" className={linkClass} title={t('misc.uploadLinks.verticalShort')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=shorts'))}>
           <ItemIcon name="view_day" tone="accent" className={iconClass} /> {text('verticalShort')}
         </Link>
+        {FEATURE_EDITOR && (
+          <a href="#" className={linkClass} title={t('misc.uploadLinks.shortsEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-shorts-editor')))}>
+            <ItemIcon name="movie_edit" tone="accent" className={iconClass} /> {text('shortsEditor')}
+          </a>
+        )}
         {/* 24h story: a vertical short that leaves the stories row after a day.
             Any Hive account (storiesEnabledFor); the checker enforces it too. */}
         {storiesEnabledFor(user) && (
           <Link to="/embed-studio?from=story" className={linkClass} title={t('misc.uploadLinks.story')} onClick={(e) => gatedGo(e, () => navigate('/embed-studio?from=story'))}>
             <ItemIcon name="history_toggle_off" tone="accent" className={iconClass} /> {text('story')}
           </Link>
-        )}
-        {FEATURE_EDITOR && (
-          <a href="#" className={linkClass} title={t('misc.uploadLinks.shortsEditor')} onClick={(e) => gatedGo(e, () => window.dispatchEvent(new CustomEvent('open-shorts-editor')))}>
-            <ItemIcon name="movie_edit" tone="accent" className={iconClass} /> {text('shortsEditor')}
-          </a>
         )}
       </div>
 
@@ -139,7 +124,7 @@ export default function UploadLinks({ linkClass, iconClass = "icon", onClick }) 
             title={t('misc.uploadLinks.goLiveNow')}
             onClick={go}
           >
-            <ItemIcon name={isMobile ? 'sensors' : 'videocam'} tone="accent" className={iconClass} />
+            <ItemIcon name="sensors" tone="accent" className={iconClass} />
             {' '}{text('goLiveNow')}
           </Link>
           <Link

@@ -481,10 +481,11 @@ export default function BackfillTable() {
                           )}
                         </span>
                         <span className="backfill-row-date">{rowDate(item.createdAt, t)}</span>
+                        {/* 46d: sentence-case pills, the word only ("Publishing…", "On 3Speak only"). */}
                         <StatusPill
                           tone={STATUS_TONE[st]}
+                          caps={false}
                           className={`backfill-status is-${st}`}
-                          icon={done ? 'check' : st === 'publishing' ? <Icon name="progress_activity" size={12} className="v2-spin" /> : null}
                         >
                           {t(STATUS_KEY[st])}
                         </StatusPill>

@@ -1,6 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Icon } from '../v2/Icon';
-import { Button, DockTile } from '../v2/ui';
+import { Button, DockTile, Segmented } from '../v2/ui';
 import * as tus from 'tus-js-client';
 import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
@@ -16,10 +15,18 @@ import './ReactVideoModal.scss';
 const toast = toastIn('Video');
 
 /**
- * Inline "React" tab panel — sits inside the comment input container.
- * Lets users pick a file or record from webcam, add a description,
- * then uploads via TUS and publishes as a comment under the parent post.
+ * Inline "React" tab panel — sits inside the comment input container, beside
+ * the original (the watch page's player). Lets users record from the webcam or
+ * pick a file, add a description, then uploads via TUS and publishes as a
+ * comment under the parent post.
+ *
+ * Design 48b "Post a video reaction" (Record Video / Upload Video, Start
+ * Recording, the description, Show in 3Speak Shorts, the @threespeak
+ * authorization as a cyan wash) and 22b while recording (the camera in an
+ * accent frame with a REC timer, Mic / Camera / Restart tiles, Stop and review).
  */
+const fmtClock = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
+
 function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart }) {
   const { t } = useTranslation();
   const { user } = useAppStore();
@@ -35,6 +42,13 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
   const [recording, setRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState(null);
   const [recordedUrl, setRecordedUrl] = useState(null);
+  // "Start Recording" before the camera is open: open it, then start.
+  const [autoStart, setAutoStart] = useState(false);
+  // Seconds since the recorder started (the REC pill, 22b).
+  const [recSeconds, setRecSeconds] = useState(0);
+  // Mic / Camera tiles: enable or mute the live tracks.
+  const [micOn, setMicOn] = useState(true);
+  const [camOn, setCamOn] = useState(true);
 
   // Description & options
   const [description, setDescription] = useState('');
@@ -56,6 +70,10 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
   const chunksRef = useRef([]);
   const webcamRef = useRef(null);
   const tusUploadRef = useRef(null);
+  // Restart: stop the recorder without keeping what it recorded.
+  const discardRef = useRef(false);
+  // The Mic / Camera / Restart / Stop row, brought into view when recording starts.
+  const recRowRef = useRef(null);
 
   // -- Cleanup helpers --
   const stopStream = useCallback(() => {
@@ -79,6 +97,24 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
       webcamRef.current.srcObject = stream;
     }
   }, [stream]);
+
+  // A new camera starts with the mic and the picture on.
+  useEffect(() => {
+    if (!stream) return;
+    setMicOn(true);
+    setCamOn(true);
+  }, [stream]);
+
+  // The REC timer runs while the recorder does.
+  useEffect(() => {
+    if (!recording) return undefined;
+    // In the side panel the tab scrolls: keep Stop and review in reach.
+    recRowRef.current?.scrollIntoView?.({ block: 'nearest' });
+    setRecSeconds(0);
+    const started = Date.now();
+    const id = setInterval(() => setRecSeconds(Math.floor((Date.now() - started) / 1000)), 500);
+    return () => clearInterval(id);
+  }, [recording]);
 
   // Check the @threespeak posting-auth grant for aioha logins (eagerly, so the
   // gate is resolved by the time a video is ready to post).
@@ -165,9 +201,20 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
     } catch (err) {
       console.error('Webcam access denied:', err);
       toast.error(t('player.reactionUpload.webcamDenied'));
+      setAutoStart(false);
       setSource(null);
     }
   }, [videoPreviewUrl, recordedUrl]);
+
+  // The Record Video / Upload Video track (48b). Record shows Start Recording;
+  // the camera opens when recording starts. Upload opens the file picker.
+  const handleSourceChange = useCallback((next) => {
+    if (next === 'upload') { handleUploadClick(); return; }
+    if (source === 'record') return;
+    setVideoFile(null);
+    if (videoPreviewUrl) { URL.revokeObjectURL(videoPreviewUrl); setVideoPreviewUrl(null); }
+    setSource('record');
+  }, [source, videoPreviewUrl, handleUploadClick]);
 
   const startRecording = useCallback(() => {
     if (!stream) return;
@@ -182,6 +229,13 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
       if (e.data.size > 0) chunksRef.current.push(e.data);
     };
     recorder.onstop = async () => {
+      // Restart: drop this take and record again on the same camera.
+      if (discardRef.current) {
+        discardRef.current = false;
+        chunksRef.current = [];
+        setAutoStart(true);
+        return;
+      }
       const blob = new Blob(chunksRef.current, { type: mimeType || 'video/webm' });
       setRecordedBlob(blob);
       setRecordedUrl(URL.createObjectURL(blob));
@@ -207,6 +261,43 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
     }
     setRecording(false);
   }, []);
+
+  // Start Recording: on the open camera, or open it first and start once it is live.
+  const handleStartClick = useCallback(() => {
+    if (stream) { startRecording(); return; }
+    setAutoStart(true);
+    handleRecordClick();
+  }, [stream, startRecording, handleRecordClick]);
+
+  useEffect(() => {
+    if (!autoStart || !stream || recording) return;
+    setAutoStart(false);
+    startRecording();
+  }, [autoStart, stream, recording, startRecording]);
+
+  // Restart (22b): while recording, throw the take away and start over; after
+  // a take, record a new one.
+  const handleRestart = useCallback(() => {
+    if (recording) {
+      discardRef.current = true;
+      stopRecording();
+      return;
+    }
+    setAutoStart(true);
+    handleRecordClick();
+  }, [recording, stopRecording, handleRecordClick]);
+
+  const toggleMic = useCallback(() => {
+    const next = !micOn;
+    stream?.getAudioTracks().forEach((track) => { track.enabled = next; });
+    setMicOn(next);
+  }, [micOn, stream]);
+
+  const toggleCam = useCallback(() => {
+    const next = !camOn;
+    stream?.getVideoTracks().forEach((track) => { track.enabled = next; });
+    setCamOn(next);
+  }, [camOn, stream]);
 
   // -- TUS Upload to embed.3speak.tv + Hive comment --
   const handleSubmit = useCallback(async () => {
@@ -389,28 +480,25 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
 
   const hasVideo = !!(videoFile || recordedBlob);
   const canSubmit = hasVideo && !uploading;
+  const mode = source || 'record';
+  const cameraLive = mode === 'record' && !!stream && !recordedBlob;
 
   return (
     <div className="react-video-tab">
-      {/* Source selection cards */}
-      <div className="rvt-source-cards">
-        <DockTile
-          className="rvt-source-card"
-          icon="videocam"
-          label={t('player.reactionUpload.recordVideo')}
-          active={source === 'record'}
-          onClick={handleRecordClick}
-          disabled={uploading}
-        />
-        <DockTile
-          className="rvt-source-card"
-          icon="upload_file"
-          label={t('player.reactionUpload.uploadVideo')}
-          active={source === 'upload'}
-          onClick={handleUploadClick}
-          disabled={uploading}
-        />
-      </div>
+      <b className="rvt-title">{t('player.reactionUpload.title')}</b>
+
+      {/* Record Video / Upload Video (48b) */}
+      <Segmented
+        className="rvt-source"
+        size={32}
+        label={t('player.reactionUpload.title')}
+        value={mode}
+        onChange={uploading ? undefined : handleSourceChange}
+        options={[
+          { value: 'record', label: t('player.reactionUpload.recordVideo') },
+          { value: 'upload', label: t('player.reactionUpload.uploadVideo') },
+        ]}
+      />
 
       {/* Hidden file input */}
       <input
@@ -421,61 +509,84 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
         onChange={handleFileChange}
       />
 
-      {/* Preview area */}
-      {source === 'upload' && videoFile && videoPreviewUrl && (
+      {/* Upload: the picked file, or the way to pick one */}
+      {mode === 'upload' && (videoFile && videoPreviewUrl ? (
         <div className="rvt-preview">
           <video src={videoPreviewUrl} controls muted className="rvt-video" />
           <p className="rvt-filename">{videoFile.name}</p>
         </div>
-      )}
+      ) : (
+        <Button variant="secondary" size={32} icon="upload_file" className="rvt-pick" onClick={handleUploadClick} disabled={uploading}>
+          {t('player.reactionUpload.uploadVideo')}
+        </Button>
+      ))}
 
-      {source === 'record' && stream && !recordedBlob && (
-        <div className="rvt-preview">
+      {/* Record: the camera in an accent frame with the REC timer while it runs (22b) */}
+      {cameraLive && (
+        <div className={`rvt-cam${recording ? ' is-rec' : ''}`}>
           <video ref={webcamRef} autoPlay muted playsInline className="rvt-video" />
-          <div className="rvt-record-controls">
-            {!recording ? (
-              <Button variant="primary" size={36} icon="fiber_manual_record" className="rvt-rec-btn rvt-rec-btn--start" onClick={startRecording}>
-                {t('player.reactionUpload.startRecording')}
-              </Button>
-            ) : (
-              <Button variant="inverse" size={36} icon="stop_circle" className="rvt-rec-btn rvt-rec-btn--stop" onClick={stopRecording}>
-                {t('player.reactionUpload.stopRecording')}
-              </Button>
-            )}
-          </div>
+          {recording && (
+            <span className="rvt-rec" role="status">
+              <span className="rvt-rec__dot" aria-hidden="true" />
+              {t('player.reactionUpload.rec', { time: fmtClock(recSeconds) })}
+            </span>
+          )}
         </div>
       )}
 
-      {source === 'record' && recordedBlob && recordedUrl && (
+      {mode === 'record' && recordedBlob && recordedUrl && (
         <div className="rvt-preview">
           <video src={recordedUrl} controls className="rvt-video" />
           <p className="rvt-filename">{t('player.reactionUpload.recordedVideo')}</p>
         </div>
       )}
 
-      {/* Description */}
-      {hasVideo && (
-        <textarea
-          className="v2-input is-area rvt-description"
-          placeholder={t('player.reactionUpload.descriptionPlaceholder')}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          disabled={uploading}
-        />
+      {/* While recording (22b): Mic / Camera / Restart, then Stop and review on the
+          same row. After a take: Restart to record a new one. */}
+      {mode === 'record' && (recording || recordedBlob) && (
+        <div className="rvt-row" ref={recRowRef}>
+          {recording && (
+            <>
+              <DockTile iconSize={24} icon={micOn ? 'mic' : 'mic_off'} label={t('player.reactionUpload.mic')} active={!micOn} onClick={toggleMic} aria-label={micOn ? t('player.controls.mute') : t('player.controls.unmute')} />
+              <DockTile iconSize={24} icon={camOn ? 'videocam' : 'videocam_off'} label={t('player.reactionUpload.camera')} active={!camOn} onClick={toggleCam} />
+            </>
+          )}
+          <DockTile iconSize={24} icon="replay" label={t('player.reactionUpload.restart')} onClick={handleRestart} disabled={uploading} />
+          {recording && (
+            <Button variant="primary" size={64} trailing="stop_circle" className="rvt-rec-btn rvt-rec-btn--stop" onClick={stopRecording}>
+              {t('player.reactionUpload.stopRecording')}
+            </Button>
+          )}
+        </div>
       )}
 
-      {/* Short toggle */}
-      {hasVideo && (
-        <label className="v2-check rvt-toggle">
-          <input
-            type="checkbox"
-            checked={isShort}
-            onChange={(e) => setIsShort(e.target.checked)}
-            disabled={uploading}
-          />
-          <span className="rvt-toggle-label">{t('player.reactionUpload.showInShorts')}</span>
-        </label>
+      {mode === 'record' && !recordedBlob && !recording && (
+        <Button variant="primary" size={32} block icon="fiber_manual_record" className="rvt-rec-btn rvt-rec-btn--start" onClick={handleStartClick} disabled={autoStart}>
+          {t('player.reactionUpload.startRecording')}
+        </Button>
       )}
+
+      {!recording && (
+      <>
+      {/* Description */}
+      <textarea
+        className="v2-input is-area rvt-description"
+        placeholder={t('player.reactionUpload.descriptionPlaceholder')}
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        disabled={uploading}
+      />
+
+      {/* Short toggle */}
+      <label className="v2-check rvt-toggle">
+        <input
+          type="checkbox"
+          checked={isShort}
+          onChange={(e) => setIsShort(e.target.checked)}
+          disabled={uploading}
+        />
+        <span className="rvt-toggle-label">{t('player.reactionUpload.showInShorts')}</span>
+      </label>
 
       {/* Upload progress */}
       {uploading && (
@@ -487,25 +598,20 @@ function ReactVideoTab({ author, permlink, currentTime, onPosted, onRecordStart 
         </div>
       )}
 
-      {/* Submit / @threespeak authorization gate */}
-      {hasVideo && (
-        needsAuth ? (
-          <div className="v2-banner is-info rvt-auth-gate">
-            <Icon name="key" size={18} className="v2-banner__icon" />
-            <div className="v2-banner__body">
-              <p className="rvt-auth-note">
-                <Trans i18nKey="player.reactionUpload.authNote" components={{ b: <strong /> }} />
-              </p>
-              <Button variant="cyan" size={32} className="rvt-submit" onClick={handleAuthorize} disabled={authorizing} loading={authorizing}>
-                {authorizing ? t('player.reactionUpload.authorizing') : t('player.reactionUpload.authorize')}
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <Button variant="primary" size={40} block next className="rvt-submit" onClick={handleSubmit} disabled={!canSubmit} loading={uploading}>
-            {uploading ? t('player.reactionUpload.uploading') : t('player.reactionUpload.postReaction')}
-          </Button>
-        )
+      {/* @threespeak authorization (48b: a cyan wash with the link inline), or Post */}
+      {needsAuth ? (
+        <div className="rvt-auth-gate" role="note">
+          <Trans i18nKey="player.reactionUpload.authNote" components={{ b: <strong /> }} />{' '}
+          <button type="button" className="rvt-auth-link" onClick={handleAuthorize} disabled={authorizing} aria-busy={authorizing || undefined}>
+            {authorizing ? t('player.reactionUpload.authorizing') : t('player.reactionUpload.authorize')}
+          </button>
+        </div>
+      ) : hasVideo && (
+        <Button variant="primary" size={40} block next className="rvt-submit" onClick={handleSubmit} disabled={!canSubmit} loading={uploading}>
+          {uploading ? t('player.reactionUpload.uploading') : t('player.reactionUpload.postReaction')}
+        </Button>
+      )}
+      </>
       )}
     </div>
   );

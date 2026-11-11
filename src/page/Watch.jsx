@@ -1221,8 +1221,14 @@ function Watch({ v2 = false, routeV = null }) {
     }, 100);
   }, []);
 
-  const REACTION_SIZES = ['medium', 'standard', 'big', 'cinema'];
-  const REACTION_SIZE_LABEL_KEYS = { medium: 'player.reactions.sizeNames.medium', standard: 'player.reactions.sizeNames.standard', big: 'player.reactions.sizeNames.big', cinema: 'player.reactions.sizeNames.cinema' };
+  // The player sizes beside the reactions (48b: S / M / Std / Big / Cin).
+  const REACTION_SIZES = ['small', 'medium', 'standard', 'big', 'cinema'];
+  const REACTION_SIZE_LABEL_KEYS = { small: 'player.reactions.sizeNames.small', medium: 'player.reactions.sizeNames.medium', standard: 'player.reactions.sizeNames.standard', big: 'player.reactions.sizeNames.big', cinema: 'player.reactions.sizeNames.cinema' };
+  // A size picked straight from the reactions panel's size track.
+  const chooseReactionSize = useCallback((next) => {
+    setReactionSize(next);
+    localStorage.setItem('3speak-reaction-size', next);
+  }, []);
   const cycleReactionSize = useCallback(() => {
     setReactionSize(prev => {
       const idx = REACTION_SIZES.indexOf(prev);
@@ -1912,7 +1918,7 @@ function Watch({ v2 = false, routeV = null }) {
         onSelectReaction={handleSelectReaction}
         onClose={() => setReactionsVisible(false)}
         size={reactionSize}
-        onCycleSize={cycleReactionSize}
+        onSetSize={chooseReactionSize}
         currentTime={playerState.currentTime}
         duration={playerState.duration}
         mainIsPlaying={!playerState.paused}

@@ -736,7 +736,7 @@ function ProfilePage() {
             ) : videoListItems.length === 0 ? (
               <ProfileEmptyState kind="video" isOwnProfile username={user} />
             ) : (
-              <Card3 windowed videos={videoListItems} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+              <Card3 windowed videos={videoListItems} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} hideAuthor />
             )}
           </>
         ) : show === "shorts" ? (
@@ -751,7 +751,7 @@ function ProfilePage() {
           isGatedLoading ? (
             <BarLoader />
           ) : (
-            <Card3 videos={gatedVideos} getViewCount={getViewCount} />
+            <Card3 videos={gatedVideos} getViewCount={getViewCount} hideAuthor />
           )
         ) : show === "audio" ? (
           <UserAudioList user={user} isOwnProfile />

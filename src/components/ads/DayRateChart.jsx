@@ -60,6 +60,14 @@ export default function DayRateChart({ rate, dayCurveK, minDays = 1, maxDays = 9
     ro?.observe(el);
     return () => ro?.disconnect();
   }, []);
+  // A chart first drawn inside a hidden tab measured 0 and fell back to 560; catch up
+  // on the next render once it is visible, in case the observer did not report it.
+  // Every render on purpose; it only sets state when the width really changed.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => {
+    const w = wrapRef.current?.clientWidth || 0;
+    if (w > 0 && Math.abs(Math.max(240, w) - width) > 1) setWidth(Math.max(240, w));
+  });
 
   const lo = Math.max(1, Math.floor(Number(minDays) || 1));
   const hi = Math.max(lo + 1, Math.floor(Number(maxDays) || 90));

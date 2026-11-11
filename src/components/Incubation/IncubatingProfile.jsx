@@ -307,7 +307,7 @@ export default function IncubatingProfile({ handle, own = false }) {
             <div className="inc-hero-text">
               <h1>
                 <span className="inc-hero-name">{p.name || `@${handle}`}</span>
-                <StatusPill tone="cyan" icon={graduated ? 'verified' : 'eco'} className="inc-badge">{badge}</StatusPill>
+                <StatusPill tone="cyan" caps={false} icon={graduated ? 'verified' : null} className="inc-badge">{badge}</StatusPill>
               </h1>
               {/* The counts as one line under the name (46b), then the handle when
                   a display name took the heading. */}

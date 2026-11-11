@@ -172,7 +172,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
   const [videoUploadPct, setVideoUploadPct] = useState(0);
   const [videoUploading, setVideoUploading] = useState(false);
   const [newAsset, setNewAsset] = useState(null); // { embedUrl, owner, permlink }
-  const [newDuration, setNewDuration] = useState(0);
+  const [, setNewDuration] = useState(0);
   // Which embed host the pool picked for this upload — shown while it runs, so a
   // misbehaving upload can be traced to an endpoint without opening devtools.
   const [uploadHost, setUploadHost] = useState('');
@@ -264,7 +264,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
         }
 
         let meta = {};
-        try { meta = JSON.parse(post.json_metadata || '{}'); } catch (_) {}
+        try { meta = JSON.parse(post.json_metadata || '{}'); } catch { /* keep {} */ }
 
         // Extract current thumbnail
         let currentThumb = '';
@@ -347,7 +347,7 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
             setIsNsfw(tagNsfw);
             initialNsfwRef.current = tagNsfw;
           }
-        } catch (_) {
+        } catch {
           if (!cancelled) { setIsNsfw(tagNsfw); initialNsfwRef.current = tagNsfw; }
         }
 
@@ -1219,8 +1219,9 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                 </div>
               </section>
 
+              {/* 33b: one group, "Content, ads and promotion"; the ad rows join it. */}
               <section className="evm-group">
-                <h4 className="evm-group__title v2-eyebrow">{t('watch.edit.sections.content')}</h4>
+                <h4 className="evm-group__title v2-eyebrow">{t('watch.edit.sections.contentAds')}</h4>
                 <div className="evm-toggle-row">
                   {!isShort && (
                     <SettingRow
@@ -1241,37 +1242,33 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
                     />
                   )}
 
-                  <SettingRow
-                    icon="explicit"
-                    title={isNsfw ? t('watch.edit.nsfw') : t('watch.edit.notNsfw')}
-                    sub={isNsfw ? t('watch.edit.nsfwHint') : t('watch.edit.notNsfwHint')}
-                    control={<Toggle checked={isNsfw} onChange={(v) => setIsNsfw(v)} label={t('watch.edit.nsfw')} disabled={saving} />}
-                  />
-                </div>
-              </section>
-
-              {/* Shorts and stories never carry ads, so there is nothing to switch. */}
-              {isOwner && accountAds.ads && !isShort && !docShort && (
-                <section className="evm-group">
-                  <h4 className="evm-group__title v2-eyebrow">{t('watch.edit.sections.ads')}</h4>
-                  <div className="evm-toggle-row">
+                  {/* Shorts and stories never carry ads, so there is nothing to switch. */}
+                  {isOwner && accountAds.ads && !isShort && !docShort && (
                     <SettingRow
                       icon="ads_click"
                       title={t('watch.edit.adsOnVideo')}
                       sub={videoAds ? t('watch.edit.adsOnHint') : t('watch.edit.adsOffHint')}
                       control={<Toggle checked={videoAds} onChange={(v) => setVideoAds(v)} label={t('watch.edit.adsOnVideo')} disabled={saving} />}
                     />
-                    {accountAds.rolls && videoAds && (
-                      <SettingRow
-                        icon="smart_display"
-                        title={t('watch.edit.rollsOnVideo')}
-                        sub={videoRolls ? t('watch.edit.rollsOnHint') : t('watch.edit.rollsOffHint')}
-                        control={<Toggle checked={videoRolls} onChange={(v) => setVideoRolls(v)} label={t('watch.edit.rollsOnVideo')} disabled={saving} />}
-                      />
-                    )}
-                  </div>
-                </section>
-              )}
+                  )}
+                  {isOwner && accountAds.ads && !isShort && !docShort && accountAds.rolls && videoAds && (
+                    <SettingRow
+                      icon="smart_display"
+                      title={t('watch.edit.rollsOnVideo')}
+                      sub={videoRolls ? t('watch.edit.rollsOnHint') : t('watch.edit.rollsOffHint')}
+                      control={<Toggle checked={videoRolls} onChange={(v) => setVideoRolls(v)} label={t('watch.edit.rollsOnVideo')} disabled={saving} />}
+                    />
+                  )}
+
+                  {/* 33b: the row keeps its name; the line says what the switch does. */}
+                  <SettingRow
+                    icon="explicit"
+                    title={t('watch.edit.nsfw')}
+                    sub={isNsfw ? t('watch.edit.nsfwHint') : t('watch.edit.nsfwOffHint')}
+                    control={<Toggle checked={isNsfw} onChange={(v) => setIsNsfw(v)} label={t('watch.edit.nsfw')} disabled={saving} />}
+                  />
+                </div>
+              </section>
 
             </div>
           )}
@@ -1279,12 +1276,13 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
 
         {/* One Save for every tab, as before: only what changed is written. */}
         <footer className="v2-dialog__foot evm-footer">
+          {/* 33b: Promote and Save side by side, 56 tall, labels flush left; the X closes. */}
           {!isShort && (
             <Button
               variant="secondary"
-              size={48}
-              icon="campaign"
-              className={cx('evm-promote-btn', isPromoted && 'is-promoted')}
+              size={56}
+              trailing="campaign"
+              className={cx('evm-promote-btn is-next', isPromoted && 'is-promoted')}
               onClick={() => setPromoteOpen(true)}
               disabled={saving || !ready}
               title={t('watch.edit.sections.promotion')}
@@ -1293,21 +1291,12 @@ export default function EditVideoModal({ isOpen, onClose, author, permlink, onSa
             </Button>
           )}
           <Button
-            variant="ghost"
-            size={48}
-            className="edit-video-btn-secondary"
-            onClick={onClose}
-            disabled={saving}
-          >
-            {t('common.actions.cancel')}
-          </Button>
-          <Button
             type="submit"
             variant="primary"
-            size={48}
+            size={56}
             trailing="check"
             loading={saving}
-            className={cx('edit-video-btn-primary', errorTab && 'is-blocked')}
+            className={cx('edit-video-btn-primary is-next', errorTab && 'is-blocked')}
             disabled={!ready || !isDirty || saving || videoUploading}
             aria-disabled={errorTab ? 'true' : undefined}
           >

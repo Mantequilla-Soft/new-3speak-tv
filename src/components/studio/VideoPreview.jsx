@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { Banner } from "../v2/ui";
 import "./Select.scss";
 
 const VideoPreview = ({ file }) => {
-  const { t } = useTranslation();
+  useTranslation();
   const [objectUrl, setObjectUrl] = useState(null);
   const [previewError, setPreviewError] = useState(false);
 
@@ -24,7 +24,7 @@ const VideoPreview = ({ file }) => {
   if (previewError) {
     return (
       <Banner tone="neutral" icon="movie_off" className="video-preview-fallback studio-preview-note">
-        {t('studio.preview.cannotPreview')}
+        <Trans i18nKey="studio.preview.cannotPreview" components={{ b: <b /> }} />
       </Banner>
     );
   }

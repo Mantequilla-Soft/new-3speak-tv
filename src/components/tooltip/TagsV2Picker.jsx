@@ -2,13 +2,14 @@ import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import {
-  TAG_CATEGORIES, getCategoryOf, getTagLabel, isCategorySlug,
+  TAG_CATEGORIES, getCategoryOf, getTagLabel,
 } from '../../utils/tagsV2';
 import { Icon } from '../v2/Icon';
 import './TagsV2Picker.scss';
 
-// Material Symbols for the taxonomy (design 43b: the 36 topics as chips). The
-// taxonomy's own emoji are not drawn: one icon set per screen.
+// Material Symbols for the taxonomy, drawn on the 23a interest tiles
+// (layout="tiles"). The chips (38, 40a, 43b) are text only. The taxonomy's own
+// emoji are not drawn: one icon set per screen.
 const TAG_ICONS = {
   'tech-science': 'science', technology: 'computer', education: 'school', science: 'biotech', programming: 'code',
   'crypto-finance': 'savings', cryptocurrency: 'currency_bitcoin', finance: 'trending_up', business: 'business_center',
@@ -19,7 +20,7 @@ const TAG_ICONS = {
   'sports-health': 'emoji_events', sports: 'sports_soccer', health: 'health_and_safety', fitness: 'fitness_center',
   'life-society': 'public', news: 'newspaper', spirituality: 'self_improvement', politics: 'gavel',
 };
-const tagIcon = (slug) => <Icon name={TAG_ICONS[slug] || 'label'} size={16} className="tagsv2-icon" />;
+const tagIcon = (slug, size = 16) => <Icon name={TAG_ICONS[slug] || 'label'} size={size} className="tagsv2-icon" />;
 
 /**
  * Two-level topic-tree picker over the v2 taxonomy (7 CATEGORIES → 27 TOPICS).
@@ -34,6 +35,11 @@ const tagIcon = (slug) => <Icon name={TAG_ICONS[slug] || 'label'} size={16} clas
  *
  * `searchable` adds a filter box that flattens the tree to the matching topics
  * (and, in single mode, categories) so a topic can be found without navigating.
+ *
+ * `layout`: 'tree' (chips, the default), 'groups' (43b: every category as an
+ * eyebrow over its topics) or 'tiles' (23a, multi mode: the categories as a
+ * 2-column grid of tiles with an icon, the open one's topics as tiles below).
+ * Picks are cyan everywhere (38, 40a, 43b, 23a): a topic is a secondary choice.
  */
 function TagsV2Picker({
   value, onChange, tagPct = {}, disabled = false, suggested = [],
@@ -127,12 +133,76 @@ function TagsV2Picker({
         disabled={disabled}
         aria-pressed={isSel(topic.slug)}
       >
-        {tagIcon(topic.slug)}
         <span className="tagsv2-label">{t(topic.labelKey)}</span>
         {pct != null && <span className="tagsv2-pct">{pct}%</span>}
       </button>
     );
   };
+
+  // A 23a tile: icon on top, the name under it; a category shows how many of
+  // its topics are picked.
+  const renderTile = ({ slug, label, isCat, count = 0 }) => (
+    <button
+      type="button"
+      key={slug}
+      className={`tagsv2-tile${isSel(slug) ? ' selected' : ''}${isCat && activeCategory === slug ? ' open' : ''}${count > 0 ? ' has-selected' : ''}`}
+      onClick={() => (isCat ? pickCategory(slug) : pickTopic(slug))}
+      disabled={disabled}
+      aria-pressed={isSel(slug)}
+      aria-expanded={isCat ? activeCategory === slug : undefined}
+    >
+      {tagIcon(slug, 24)}
+      <span className="tagsv2-label">{label}</span>
+      {count > 0 && <span className="tagsv2-count">{count}</span>}
+    </button>
+  );
+
+  const search = searchable && (
+    <input
+      type="search"
+      className="tagsv2-search"
+      placeholder={t('engagement.tagsPicker.searchPlaceholder')}
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      disabled={disabled}
+      aria-label={t('engagement.tagsPicker.searchAria')}
+    />
+  );
+
+  if (layout === 'tiles' && multi) {
+    return (
+      <div className="tagsv2-picker is-multi is-tiles" onClick={(e) => e.stopPropagation()}>
+        {search}
+        {q ? (
+          matches.length === 0 ? (
+            <p className="tagsv2-hint">{t('engagement.tagsPicker.noMatches', { query })}</p>
+          ) : (
+            <div className="tagsv2-tiles">
+              {matches.map((m) => renderTile({ slug: m.slug, label: m.label, isCat: false }))}
+            </div>
+          )
+        ) : (
+          <>
+            <div className="tagsv2-tiles">
+              {TAG_CATEGORIES.map((cat) => renderTile({ slug: cat.slug, label: t(cat.labelKey), isCat: true, count: catCount(cat) }))}
+            </div>
+            {openCategory && (
+              <div className="tagsv2-topics">
+                <p className="tagsv2-hint">
+                  {isSel(openCategory.slug)
+                    ? t('engagement.tagsPicker.allSelected', { category: t(openCategory.labelKey) })
+                    : t('engagement.tagsPicker.orPickTopics')}
+                </p>
+                <div className="tagsv2-tiles">
+                  {openCategory.topics.map((topic) => renderTile({ slug: topic.slug, label: t(topic.labelKey), isCat: false }))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    );
+  }
 
   // `layout="groups"` (43b "tag this video", single mode): every category at
   // once as an eyebrow over its topic chips. The eyebrow itself picks the
@@ -172,17 +242,7 @@ function TagsV2Picker({
         </p>
       )}
 
-      {searchable && (
-        <input
-          type="search"
-          className="tagsv2-search"
-          placeholder={t('engagement.tagsPicker.searchPlaceholder')}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          disabled={disabled}
-          aria-label={t('engagement.tagsPicker.searchAria')}
-        />
-      )}
+      {search}
 
       {q ? (
         matches.length === 0 ? (
@@ -198,7 +258,6 @@ function TagsV2Picker({
                 disabled={disabled}
                 aria-pressed={isSel(m.slug)}
               >
-                {tagIcon(m.slug)}
                 <span className="tagsv2-label">{m.label}</span>
               </button>
             ))}
@@ -223,7 +282,6 @@ function TagsV2Picker({
                   disabled={disabled}
                   aria-pressed={isSel(cat.slug)}
                 >
-                  {tagIcon(cat.slug)}
                   <span className="tagsv2-label">{t(cat.labelKey)}</span>
                   {cnt > 0 && <span className="tagsv2-count">{cnt}</span>}
                   {pct != null && <span className="tagsv2-pct">{pct}%</span>}
@@ -232,20 +290,22 @@ function TagsV2Picker({
             })}
           </div>
 
+          {/* The open category's topics. In multi mode the hint leads into
+              them; picking one tag (40a) it follows them: "Good enough, or get
+              more specific (optional)". */}
           {openCategory && (
             <div className="tagsv2-topics">
-              <p className="tagsv2-hint">
-                {multi
-                  ? (isSel(openCategory.slug)
-                      ? t('engagement.tagsPicker.allSelected', { category: t(openCategory.labelKey) })
-                      : t('engagement.tagsPicker.orPickTopics'))
-                  : isCategorySlug(value)
-                    ? t('engagement.tagsPicker.goodEnough')
-                    : t('engagement.tagsPicker.moreSpecific')}
-              </p>
+              {multi && (
+                <p className="tagsv2-hint">
+                  {isSel(openCategory.slug)
+                    ? t('engagement.tagsPicker.allSelected', { category: t(openCategory.labelKey) })
+                    : t('engagement.tagsPicker.orPickTopics')}
+                </p>
+              )}
               <div className="tagsv2-row">
                 {openCategory.topics.map(renderTopic)}
               </div>
+              {!multi && <p className="tagsv2-hint">{t('engagement.tagsPicker.goodEnough')}</p>}
             </div>
           )}
         </>
@@ -262,7 +322,7 @@ TagsV2Picker.propTypes = {
   suggested: PropTypes.array,
   multi: PropTypes.bool,
   searchable: PropTypes.bool,
-  layout: PropTypes.oneOf(['tree', 'groups']),
+  layout: PropTypes.oneOf(['tree', 'groups', 'tiles']),
 };
 
 export default TagsV2Picker;

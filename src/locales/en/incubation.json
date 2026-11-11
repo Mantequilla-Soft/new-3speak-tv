@@ -503,7 +503,10 @@
     "approvedAdvertiser": "The team has approved your brand. Create your Hive account, for free, to book and pay for ads.",
     "approved": "The team has approved you. Create your Hive account, for free: it is yours alone.",
     "createAdvertiser": "Create my advertiser account",
-    "create": "Create my Hive account"
+    "create": "Create my Hive account",
+    "handleLabel": "Handle",
+    "nextLabel": "Next",
+    "nextKeys": "Back up your keys"
   },
   "graduatedFollows": {
     "message": "@{{handle}} now has a Hive account as @{{hiveUsername}}.",

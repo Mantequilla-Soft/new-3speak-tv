@@ -242,7 +242,7 @@ describe('upload step 1: shorts and stories', () => {
     const { user } = mount()
     await ready()
     await user.upload(input(), video())
-    await waitFor(() => expect(toastMessages(toast.error)).toEqual([expect.stringMatching(/vertical \(portrait\) format/)]))
+    await waitFor(() => expect(toastMessages(toast.error)).toEqual([expect.stringMatching(/must be vertical/)]))
   })
 
   it('takes a vertical short as a short', async () => {

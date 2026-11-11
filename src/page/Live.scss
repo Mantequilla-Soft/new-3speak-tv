@@ -1,67 +1,169 @@
 @use "../styles/v2" as v2;
 
-// /live (26b "Live"): the title (40/900) with Go live (56, accent) beside it,
-// a segmented track, then the stream cards in a grid, or the OpenPods rooms as
-// cyan-washed rows with a Listen action.
+// /live, the Live grid of 26b: the title (40/900) with Go live (56, accent)
+// beside it, a Streams | OpenPods | Scheduled track on a surface pill, the
+// streams as tiles (surface, radius 20, padding 8; 16:9 thumb at radius 16
+// with the LIVE pill and the watching count), then the OPENPODS eyebrow over
+// the rooms as cyan-washed rows with a Listen action.
 .live-page {
   display: flex;
   flex-direction: column;
-  gap: 20px;
   min-width: 0;
 }
 
 .live-page-head {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 
   h1 {
     flex: 1;
+    min-width: 0;
     margin: 0;
-    @include v2.text(display);
-    @include v2.mobile { font-size: 32px; }
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -.03em;
+    line-height: 1.1;
+    @include v2.mobile { font-size: 28px; }
   }
 }
 
-.live-page-go { gap: 12px; }
+// Go live: 56 tall, radius 20, the label at 16/900 and the icon 16 apart.
+.live-page-go.v2-btn {
+  gap: 16px;
+  padding: 0 16px 0 20px;
+  font-size: 16px;
+  .material-symbols-rounded { font-size: 24px; }
+  @include v2.mobile { height: 48px; border-radius: v2.radius-for(48); font-size: 14px; padding: 0 12px 0 16px; gap: 12px; }
+}
 
-.live-page > .v2-seg { align-self: flex-start; }
+// The tab track sits on the page, so it is a surface pill (radius 16).
+.live-page-tabs.v2-seg {
+  align-self: flex-start;
+  margin-top: 16px;
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  .v2-seg__opt { padding: 0 12px; flex: 0 0 auto; }
+}
 
-.live-page-rooms {
+.live-page > .v2-empty { margin-top: 14px; }
+
+// --- Stream tiles -------------------------------------------------------------
+.live-grid {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.live-tile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 8px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color var(--t-fast) var(--ease);
+
+  &:hover { color: var(--text); border-color: color-mix(in srgb, var(--text) 24%, var(--border)); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
+
+.live-tile-pill { position: absolute; left: 8px; top: 8px; border-radius: var(--r-sm); }
+
+.live-tile-count {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  height: 20px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--r-sm);
+  background: var(--media-scrim-strong);
+  color: var(--on-media);
+  @include v2.mono(10, 700);
+}
+
+.live-tile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 4px 2px;
+
+  b {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  > span {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cyan);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// --- OpenPods rooms -----------------------------------------------------------
+.live-section { margin-top: 20px; }
+
+.live-eyebrow {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.live-rooms {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  .live-page > & { margin-top: 14px; }
 }
 
-.live-page-room {
+.live-room {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 10px;
   border-radius: var(--r-xl);
-  background: var(--cyan-wash);
-  border: 1px solid color-mix(in srgb, var(--cyan) 30%, var(--border));
+  background: color-mix(in srgb, var(--cyan) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
   color: var(--text);
   text-decoration: none;
 
   &:hover { color: var(--text); border-color: var(--cyan); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
 
-.live-page-room-icon {
+.live-room-icon {
   flex: none;
   width: 44px;
   height: 44px;
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
   display: grid;
   place-items: center;
   background: var(--cyan);
   color: var(--bg);
 }
 
-.live-page-room-text {
+.live-room-text {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -72,15 +174,15 @@
   > span { @include v2.mono(11, 500); color: var(--muted); }
 }
 
-.live-page-room-go {
+.live-room-go {
   flex: none;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 36px;
+  gap: 10px;
+  height: 40px;
   padding: 0 12px;
   border-radius: var(--r-md);
   background: var(--surface-2);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 900;
 }

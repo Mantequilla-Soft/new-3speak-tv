@@ -155,7 +155,7 @@
     "taggedAlreadyVoted": "Tagged “{{tag}}” — your {{weight}}% vote was already cast.",
     "votingClosed": "Voting closed — tag this video",
     "youTagged": "You tagged this as <b>{{tag}}</b>.",
-    "pickTopic": "Pick a topic (counts as a 100% vote)",
+    "pickTopic": "Picking a topic counts as a 100% vote.",
     "submitTag": "Submit tag",
     "tagThisVideoFull": "Tag this video (counts as a 100% vote)",
     "justTag": "Don’t vote — just tag",
@@ -172,7 +172,7 @@
     "noMatches": "No topics match “{{query}}”.",
     "allSelected": "All of {{category}} is selected. Add individual topics only to go narrower:",
     "orPickTopics": "Or pick individual topics:",
-    "goodEnough": "Good enough — or get more specific (optional):",
+    "goodEnough": "Good enough, or get more specific (optional)",
     "moreSpecific": "More specific:"
   }
 }

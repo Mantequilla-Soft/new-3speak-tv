@@ -197,7 +197,7 @@ export function ProfileSearchResults({
         <EmptyState icon="search_off" title={t('profile.search.empty', { query: query.trim() })} />
       ) : null}
       {foundVideos.length ? (
-        <Card3 videos={foundVideos} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+        <Card3 videos={foundVideos} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} hideAuthor />
       ) : null}
       {foundShorts.length ? (
         <div className="ph-results__shorts">

@@ -1,0 +1,102 @@
+@use "../../styles/v2" as v2;
+
+// "Your Hive account is ready" (CreateAccountPanel), in the look of the
+// sign-up screens of design 29a: the 3Speak mark 40, a 32/900 heading
+// (-.03em, tight), a 14px muted line, then labelled rows (radius 16, padding
+// 12/14, a 2px outline, icon 24, an 11/900 label over a 14/700 value) and the
+// 56-tall primary (radius 20) with its trailing arrow 24.
+// On the page it sits in a card: rows are filled with the ground (STYLE_GUIDE
+// §1.3, fills inside a surface card).
+
+.inc-ca {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: var(--r-2xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.inc-ca__mark {
+  display: block;
+  width: 40px;
+  height: auto;
+}
+
+.inc-ca__title {
+  margin: 16px 0 0;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.inc-ca__sub {
+  margin: 8px 0 0;
+  @include v2.text(body);
+  line-height: 1.5;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.inc-ca__rows {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+}
+
+.inc-ca__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--border);
+  background: var(--bg);
+}
+
+.inc-ca__row-icon { flex: none; color: var(--muted); }
+
+.inc-ca__row-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inc-ca__row-label {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.inc-ca__row-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &.is-mono { @include v2.mono(14, 700); }
+}
+
+.inc-ca .inc-ca__cta {
+  margin-top: 20px;
+  padding: 0 18px;
+  font-size: 16px;
+  > .material-symbols-rounded:last-child { font-size: 24px !important; }
+}
+
+@include v2.mobile {
+  .inc-ca { padding: 16px; }
+}

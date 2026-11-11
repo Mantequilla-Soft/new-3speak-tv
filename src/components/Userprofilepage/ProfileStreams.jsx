@@ -122,7 +122,7 @@ export default function ProfileStreams({ user, getViewCount }) {
           <h3 className="profile-streams__heading">
             <StatusPill tone="muted">{t('profile.streams.past')}</StatusPill>
           </h3>
-          <Card3 videos={vods} getViewCount={getViewCount} />
+          <Card3 videos={vods} getViewCount={getViewCount} hideAuthor />
         </>
       )}
     </div>

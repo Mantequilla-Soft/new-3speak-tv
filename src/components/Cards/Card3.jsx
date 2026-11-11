@@ -586,8 +586,9 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
             </div>
 
             {/* Creator, title and meta: the avatar on the left, the text beside it (20a) */}
-            <div className="card-body">
-              <span className="card-avatar" onClick={openCreator} aria-hidden="true">
+            <div className={hideAuthor ? 'card-body is-own-channel' : 'card-body'}>
+              {/* A channel's own grid (20b): every card is this creator's, so no avatar either. */}
+              {!hideAuthor && <span className="card-avatar" onClick={openCreator} aria-hidden="true">
                 <HiveAvatar
                   username={cardAuthor}
                   size="small"
@@ -595,7 +596,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                   badgeSize={9}
                   srcOverride={video._incubation ? NO_ACCOUNT_AVATAR : undefined}
                 />
-              </span>
+              </span>}
               <div className="card-text">
                 <h2>{video.title}</h2>
                 <div className="card-meta">

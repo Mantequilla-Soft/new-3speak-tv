@@ -516,6 +516,16 @@ $gap: 10px;
   scrollbar-width: thin;
 }
 
+// 23c: the fonts as "Aa" tiles, four to a row; the name is the tooltip.
+.thumb-modal .thumb-fonts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex: 1 1 auto;
+  width: 100%;
+  max-height: 128px;
+}
+.thumb-modal .thumb-font { height: 56px; border-radius: var(--r-lg); font-size: 20px; padding: 0; }
+
 .thumb-font {
   height: 48px;
   padding: 0 12px;
@@ -551,6 +561,7 @@ $gap: 10px;
   border-radius: v2.radius-for(44);
   cursor: pointer;
 
+  // 23c: the picked swatch in an accent ring.
   &.is-active {
     outline: 3px solid var(--accent);
     outline-offset: 2px;
@@ -635,10 +646,11 @@ $gap: 10px;
   .thumb-field__value { min-width: 7.5em; }
 }
 
-// ── Editor popup ────────────────────────────────────────────────────────────
-// Canvas left (the pictures to start from under it), tools right, so every
-// setting sits beside the picture it changes. Phones: a full-height sheet,
-// canvas on top and the tools scrolling under it.
+// ── Editor popup (23c) ──────────────────────────────────────────────────────
+// One column like the board: the accent-barred head with the Download and
+// Reset tiles, the canvas (radius 20), the pictures to start from, the tool
+// track, the open tool's panel (it scrolls), one full-width primary.
+// Phones: a full-height sheet, the canvas sticking on top.
 
 .thumb-modal-overlay {
   position: fixed;
@@ -654,9 +666,9 @@ $gap: 10px;
 .thumb-modal {
   display: flex;
   flex-direction: column;
-  width: min(1280px, 100%);
-  height: min(880px, 100%);
-  padding: 16px 20px 20px;
+  width: min(560px, 100%);
+  max-height: min(920px, 100%);
+  padding: 20px;
   box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: var(--r-3xl);
@@ -665,15 +677,24 @@ $gap: 10px;
   box-shadow: var(--shadow-sheet);
   overflow: hidden;
 
-  .thumb-modal__header { margin-bottom: 12px; }
+  .thumb-modal__header {
+    margin-bottom: 14px;
+    padding: 0;
+    gap: 6px;
+    .app-modal-header-title { font-size: 20px; font-weight: 900; }
+  }
+  .thumb-modal__headbtn { flex: none; }
 }
+
+// Shorts and covers are taller pictures: a little more room.
+.thumb-modal--portrait { width: min(520px, 100%); }
 
 .thumb-modal__body {
   flex: 1 1 auto;
   min-height: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 400px;
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .thumb-modal__stage {
@@ -681,14 +702,14 @@ $gap: 10px;
   flex-direction: column;
   gap: $gap;
   min-width: 0;
-  min-height: 0;
+  flex: none;
 }
 
-// The canvas keeps its aspect and takes as much of this box as fits.
+// The canvas keeps its aspect at the panel's width.
 .thumb-modal__canvas {
   position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
+  width: 100%;
+  aspect-ratio: 16 / 9;
 
   .thumb-canvas {
     position: absolute;
@@ -702,10 +723,13 @@ $gap: 10px;
   }
 
   .thumb-studio__empty {
+    height: 100%;
     border-radius: var(--r-xl);
     background: var(--media-black);
   }
 }
+.thumb-modal--portrait .thumb-modal__canvas { aspect-ratio: auto; height: min(42vh, 420px); }
+.thumb-modal--square .thumb-modal__canvas { aspect-ratio: auto; height: min(40vh, 400px); }
 
 .thumb-modal__sources {
   flex: 0 0 auto;
@@ -717,47 +741,42 @@ $gap: 10px;
 
   .thumb-option {
     flex: 0 0 auto;
-    width: 112px;
+    width: 88px;
     height: auto;
     aspect-ratio: 16 / 9;
   }
 }
 
 .thumb-modal--portrait .thumb-modal__sources .thumb-option {
-  width: 54px;
+  width: 44px;
   aspect-ratio: 9 / 16;
 }
 
 .thumb-modal--square .thumb-modal__sources .thumb-option {
-  width: 72px;
+  width: 56px;
   aspect-ratio: 1;
 }
 
+// The tools under the picture: the track, then the panel scrolling inside.
 .thumb-modal__side {
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  padding-left: 20px;
-  border-left: 1px solid var(--border);
+  flex: 1 1 auto;
+  min-height: 140px;
 
-  // The column is narrow: the picker's video goes above its controls.
+  .thumb-tools__tabs { background: var(--bg); border-radius: var(--r-lg); }
   .thumb-pick { grid-template-columns: minmax(0, 1fr); }
 }
 
 .thumb-modal__footer {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
 }
 
-@media (max-width: 900px) {
-  .thumb-modal__body { grid-template-columns: minmax(0, 1fr) 320px; }
-  .thumb-field { grid-template-columns: minmax(0, 1fr); gap: 6px; }
-}
+// The panel is narrow: labels over their controls.
+.thumb-modal .thumb-field { grid-template-columns: minmax(0, 1fr); gap: 6px; }
 
 // Phones: one scrolling sheet. The preview sticks to the top while the
 // pictures, the tool tabs (one row that swipes) and the settings scroll under

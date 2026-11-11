@@ -11,7 +11,7 @@ import { soundCreditsMarkdown, soundAuthorsOf } from '../../utils/soundCredits';
 import BlogContent from "../playVideo/BlogContent";
 import EmbedPreviewPlayer from "./EmbedPreviewPlayer";
 import PromoteModal from "../Promote/PromoteModal";
-import { Button, Icon, Progress, StatusPill, StepList } from "../v2/ui";
+import { Button, Icon, Progress, StatusPill } from "../v2/ui";
 import { useReviewModal } from "../../lib/reviewStore";
 import UploadGate from "../ads/UploadGate";
 import { fetchUploadGateAd, confirmUploadGatePost, gateSessionId } from "../../lib/uploadGate";
@@ -552,7 +552,20 @@ function EmbedPreview() {
               <Progress value={uploadProgress} tone="cyan" label={statusText || t('upload.publishing.starting')} />
             </div>
 
-            <StepList items={publishSteps} />
+            {/* 31b: the broadcast steps as bg rows: done a cyan check, the one
+                running the spinner, the rest an empty circle. */}
+            <ul className="ep-steps">
+              {publishSteps.map((st, i) => (
+                <li key={i} className={`ep-steps__row is-${st.state}`}>
+                  <Icon
+                    name={st.state === 'done' ? 'check_circle' : st.state === 'current' ? 'progress_activity' : 'radio_button_unchecked'}
+                    size={20}
+                    className={st.state === 'current' ? 'v2-spin' : undefined}
+                  />
+                  <span>{st.label}</span>
+                </li>
+              ))}
+            </ul>
 
             <div className="activity-log">
               <div className="v2-eyebrow">{t("upload.publishing.activityLog")}</div>

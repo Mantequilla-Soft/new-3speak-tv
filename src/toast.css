@@ -175,3 +175,61 @@
 @media (prefers-reduced-motion: reduce) {
   [data-sonner-toaster] { transition: none; }
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   "A new version is available" (designs 32g, 44a; components/UpdateNotice):
+   a cyan notice in the island's place. Radius 20, padding 12/12/12/14, a 16%
+   cyan wash on the ground with a 30% cyan outline; the update icon 28 in cyan,
+   the title 14/700 over a 12px muted line, then Refresh: 40 tall, radius 12,
+   cyan fill with ground ink, 12/900 and a trailing arrow 16.
+
+   It is a sonner custom toast, so the island rules above reach its <li> too
+   (sonner marks it data-styled="false", which [data-styled] still matches);
+   the first rules here take the island's fill and type off again.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-update-toast {
+  display: block;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text);
+}
+/* Sonner sizes only its own styled toasts; this one takes the island's width
+   (on phones sonner's full-width rule applies). */
+@media (min-width: 601px) {
+  [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-update-toast { width: var(--width); }
+}
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-update-toast [data-content] {
+  display: block;
+  padding: 0;
+}
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-update-toast [data-title].ts-toast-title {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.4;
+}
+
+.ts-update {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px 12px 14px;
+  border-radius: var(--r-xl);
+  background: color-mix(in srgb, var(--cyan) 16%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--cyan) 30%, transparent);
+  box-shadow: var(--shadow-float);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+.ts-update__icon { flex: none; color: var(--cyan); }
+.ts-update__text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.ts-update__title { font-size: 14px; font-weight: 700; line-height: 1.35; color: var(--text); text-wrap: pretty; }
+.ts-update__sub { font-size: 12px; font-weight: 400; line-height: 1.4; color: var(--muted); text-wrap: pretty; }
+.ts-update .ts-update__btn { flex: none; gap: 8px; padding: 0 12px; font-size: 12px; font-weight: 900; }
+.ts-update .ts-update__close { flex: none; margin-left: -6px; color: var(--muted); }
+.ts-update .ts-update__close:hover { color: var(--text); }

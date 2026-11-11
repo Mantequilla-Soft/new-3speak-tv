@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom"
-import { useTranslation } from "react-i18next"
-import { Icon } from "../components/v2/Icon"
+import { useTranslation, Trans } from "react-i18next"
 import "./Uploadvideo.scss"
 
 // /upload: the studio start (design 44c). Continue the draft, or start a new
@@ -12,31 +11,27 @@ function UploadVideo() {
   return (
     <div className="upload-start">
       <div className="upload-start__card">
+        {/* 44c draws the two choices and the note only; the name stays for screen readers. */}
         <h1 className="upload-start__title">{t("upload.page.shareVideo")}</h1>
 
         <Link to="/draft" className="upload-start__choice">
-          <span className="upload-start__icon"><Icon name="edit_note" size={22} /></span>
           <span className="upload-start__text">
             <b>{t("studio.select.editDraft")}</b>
             <span>{t("studio.select.editDraftDesc")}</span>
           </span>
-          <Icon name="chevron_right" size={20} className="upload-start__chev" />
         </Link>
 
         <div className="upload-start__or">{t("studio.select.or")}</div>
 
         <Link to="/studio" className="upload-start__choice is-on">
-          <span className="upload-start__icon"><Icon name="upload" size={22} /></span>
           <span className="upload-start__text">
             <b>{t("studio.select.createNew")}</b>
             <span>{t("studio.select.createNewDesc")}</span>
           </span>
-          <Icon name="arrow_forward" size={20} className="upload-start__chev" />
         </Link>
 
         <p className="upload-start__note">
-          <Icon name="info" size={18} />
-          <span>{t("upload.preview.cannotPreviewHevc")}</span>
+          <span><Trans i18nKey="studio.preview.cannotPreview" components={{ b: <b /> }} /></span>
         </p>
       </div>
     </div>

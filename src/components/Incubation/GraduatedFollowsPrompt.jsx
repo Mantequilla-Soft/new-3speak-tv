@@ -1,9 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { fetchGraduatedFollows, ackGraduatedFollow } from '../../lib/incubation';
 import { followWithAioha } from '../../hive-api/aioha';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../v2/ui';
+import './GraduatedFollowsPrompt.scss';
 
 const toast = toastIn('Follows');
 
@@ -15,9 +18,13 @@ const toast = toastIn('Follows');
  * So the moment that creator graduates, the follow is stranded and neither side
  * knows. This is the only thing that closes that loop.
  *
- * Renders nothing. It asks once per session, per signed-in viewer, and speaks
- * through a toast with the action attached, so it never competes for the modal
- * slot the welcome and graduation prompts share.
+ * It asks once per session, per signed-in viewer, as the 46c card: a small
+ * floating card in the corner (never the modal slot the welcome and graduation
+ * prompts share), one upgraded account at a time, "Got it" beside a cyan
+ * "Follow for real". "Got it" is an answer too: asking again every session for
+ * someone they have decided not to follow would be nagging. An incubating
+ * viewer cannot sign a follow, so they only get the news and "Got it"; their
+ * own follow moves on chain when they graduate and replay it.
  */
 export default function GraduatedFollowsPrompt() {
   const { t } = useTranslation();
@@ -25,6 +32,8 @@ export default function GraduatedFollowsPrompt() {
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const askedRef = useRef(false);
+  const [queue, setQueue] = useState([]);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (!authenticated || askedRef.current) return undefined;
@@ -34,35 +43,54 @@ export default function GraduatedFollowsPrompt() {
     let alive = true;
     fetchGraduatedFollows()
       .then(({ items }) => {
-        if (!alive || !items?.length) return;
-        for (const it of items) {
-          toast(t('incubation.graduatedFollows.message', { handle: it.handle, hiveUsername: it.hiveUsername }), {
-            title: t('incubation.graduatedFollows.title'),
-            duration: 15000,
-            action: {
-              // Only a Hive user can sign a real follow. An incubating follower
-              // gets the news and the name; their own follow moves on chain when
-              // they graduate and replay it.
-              label: user ? t('incubation.graduatedFollows.followForReal') : t('incubation.graduatedFollows.gotIt'),
-              onClick: async () => {
-                try {
-                  if (user) await followWithAioha(it.hiveUsername, true);
-                  await ackGraduatedFollow(it.handle);
-                  if (user) toast.success(t('incubation.graduatedFollows.nowFollowing', { hiveUsername: it.hiveUsername }));
-                } catch (err) {
-                  toast.error(err?.message || t('incubation.graduatedFollows.followFailed'));
-                }
-              },
-            },
-            // Dismissing is an answer too: asking again every session for
-            // someone they have decided not to follow would be nagging.
-            onDismiss: () => { ackGraduatedFollow(it.handle).catch(() => {}); },
-          });
-        }
+        if (alive && items?.length) setQueue(items);
       })
       .catch(() => { /* nothing to say if we cannot ask */ });
     return () => { alive = false; };
-  }, [authenticated, user, incubationHandle, t]);
+  }, [authenticated, user, incubationHandle]);
 
-  return null;
+  const current = queue[0];
+  if (!current) return null;
+
+  const next = () => setQueue((q) => q.slice(1));
+
+  const gotIt = () => {
+    ackGraduatedFollow(current.handle).catch(() => {});
+    next();
+  };
+
+  const followForReal = async () => {
+    setBusy(true);
+    try {
+      await followWithAioha(current.hiveUsername, true);
+      await ackGraduatedFollow(current.handle);
+      toast.success(t('incubation.graduatedFollows.nowFollowing', { hiveUsername: current.hiveUsername }));
+      next();
+    } catch (err) {
+      toast.error(err?.message || t('incubation.graduatedFollows.followFailed'));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const title = t('incubation.graduatedFollows.title');
+  return createPortal(
+    <section className="grad-follows" role="status" aria-label={title}>
+      <b className="grad-follows__title">{title}</b>
+      <p className="grad-follows__text">
+        {t('incubation.graduatedFollows.message', { handle: current.handle, hiveUsername: current.hiveUsername })}
+      </p>
+      <div className="grad-follows__actions">
+        <Button variant="secondary" size={36} center onClick={gotIt} disabled={busy}>
+          {t('incubation.graduatedFollows.gotIt')}
+        </Button>
+        {user && (
+          <Button variant="cyan" size={36} center onClick={followForReal} disabled={busy} loading={busy}>
+            {t('incubation.graduatedFollows.followForReal')}
+          </Button>
+        )}
+      </div>
+    </section>,
+    document.body,
+  );
 }

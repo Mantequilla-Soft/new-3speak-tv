@@ -21,16 +21,22 @@
   box-sizing: border-box;
 }
 
+// Named for screen readers only: 44c shows the choices alone.
 .upload-start__title {
-  margin: 0 0 6px;
-  @include v2.text(heading);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  margin: 0;
 }
 
 .upload-start__choice {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px;
+  padding: 12px 14px;
   border-radius: var(--r-lg);
   border: 2px solid transparent;
   background: var(--bg);
@@ -88,5 +94,5 @@
   @include v2.text(meta-sm);
   line-height: 1.45;
   color: var(--muted);
-  .material-symbols-rounded { color: var(--cyan); }
+  b { color: var(--text); font-weight: 700; }
 }

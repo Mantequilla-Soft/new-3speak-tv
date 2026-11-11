@@ -257,5 +257,14 @@
       "desc": "With 3Speak Pro you can go live straight from OBS using your templates. Without Pro, your templates still work in the Stream Studio in your browser.",
       "cta": "Get 3Speak Pro"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_one": "{{count}} listening",
+    "listening_other": "{{count}} listening",
+    "emptySub": "Streams and OpenPods show up here the moment they start.",
+    "emptyRooms": "No OpenPods are open right now.",
+    "emptyScheduled": "Nothing is scheduled right now.",
+    "emptyScheduledSub": "Rooms that are open but not live yet show up here."
   }
 }

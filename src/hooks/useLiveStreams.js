@@ -17,8 +17,11 @@ import { FEED_EXCLUDED_HOSTS } from '../utils/config';
  * Hosts in FEED_EXCLUDED_HOSTS are dropped by default, since every caller but
  * one is a discovery feed. `includeAllHosts: true` opts out — used by the
  * watch-page pager, which navigates between streams rather than surfacing them.
+ *
+ * `standby: true` also keeps the rooms that are open but not broadcasting yet
+ * (the /live page's Scheduled tab), each marked `_standby`.
  */
-export function useLiveStreams({ following = false, includeAllHosts = false } = {}) {
+export function useLiveStreams({ following = false, includeAllHosts = false, standby = false } = {}) {
   const [streams, setStreams] = useState([]);
   const [followSet, setFollowSet] = useState(null); // null = not loaded
   const user = useAppStore((s) => s.user);
@@ -40,7 +43,7 @@ export function useLiveStreams({ following = false, includeAllHosts = false } = 
       // Aggregated across every configured OpenPods deployment, so the feeds
       // show live sessions wherever they're hosted.
       fetchAllEndpoints('/streams')
-        .then((list) => { if (alive) setStreams((Array.isArray(list) ? list : []).filter((s) => s.live)); })
+        .then((list) => { if (alive) setStreams(Array.isArray(list) ? list : []); })
         .catch(() => { if (alive) setStreams([]); });
     };
     load();
@@ -49,7 +52,7 @@ export function useLiveStreams({ following = false, includeAllHosts = false } = 
   }, []);
 
   return useMemo(() => {
-    let list = streams;
+    let list = standby ? streams : streams.filter((s) => s.live);
     // Hive-only rooms are for signed-in Hive users; a guest shouldn't even see
     // them in discovery. Public rooms show to everyone. (Unlisted never reaches
     // the client — the server drops it from /streams.)
@@ -74,6 +77,7 @@ export function useLiveStreams({ following = false, includeAllHosts = false } = 
       // Lands in Card3's normal view-count slot, where it reads as "watching
       // now" rather than lifetime views (the card labels it, see Card3).
       views: s.viewers ?? 0,
+      ...(standby ? { _standby: !s.live } : {}),
     }));
-  }, [streams, following, followSet, authenticated, includeAllHosts]);
+  }, [streams, following, followSet, authenticated, includeAllHosts, standby]);
 }

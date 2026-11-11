@@ -377,7 +377,7 @@ const handleSubmit = async (e) => {
               />
             </div>
 
-            <h2 className="v2-eyebrow">{t('watch.edit.sections.content')}</h2>
+            <h2 className="v2-eyebrow">{t('watch.edit.sections.contentAds')}</h2>
             <div className="edit-toggles">
               <SettingRow
                 icon="content_cut"
@@ -394,10 +394,11 @@ const handleSubmit = async (e) => {
                   control={<Toggle checked={isTrailer} onChange={(v) => setIsTrailer(v)} label={t('posts.edit.trailer')} />}
                 />
               )}
+              {/* 33b: the row keeps its name; the line says what the switch does. */}
               <SettingRow
                 icon="explicit"
-                title={isNsfw ? t('posts.edit.nsfw') : t('posts.edit.notNsfw')}
-                sub={isNsfw ? t('posts.edit.nsfwHint') : t('posts.edit.notNsfwHint')}
+                title={t('posts.edit.nsfw')}
+                sub={isNsfw ? t('posts.edit.nsfwHint') : t('watch.edit.nsfwOffHint')}
                 control={<Toggle checked={isNsfw} onChange={(v) => setIsNsfw(v)} label={t('posts.edit.nsfw')} />}
               />
             </div>

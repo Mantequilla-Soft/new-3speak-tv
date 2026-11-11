@@ -151,11 +151,15 @@
   &:disabled { opacity: .45; cursor: not-allowed; }
 }
 
+// Vote with a topic (40a): a 16/700 title, a muted line, then the chips.
 .cvt-tag {
   display: flex;
   flex-direction: column;
   gap: 6px;
   text-align: left;
+
+  &__title { @include v2.text(title-sm); color: var(--text); }
+  &__sub { @include v2.text(meta); color: var(--muted); margin-bottom: 2px; }
 }
 
 
@@ -226,9 +230,25 @@
 }
 
 .cvt-dialog.is-post {
+  .cvt-thumb { border-radius: 50%; } // 17b: a round white thumb (28a keeps radius 8)
   .cvt-pct { font-size: 64px; }
   .cvt-big { min-height: 88px; }
   .cvt-preset { height: 48px; border-radius: var(--r-lg); font-family: var(--font-sans); font-weight: 900; font-size: 14px; }
+}
+
+// 17b head: the accent bar, a 20/900 "Vote" and a round 36 close on surface-2.
+.cvt-dialog.is-post .cvt-header {
+  gap: 10px;
+  .app-modal-header-title { font-size: 20px; font-weight: 900; letter-spacing: -.01em; line-height: 1.2; }
+  .app-modal-header-close {
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    background: var(--surface-2);
+    .material-symbols-rounded { font-size: 20px !important; }
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+    &::after { inset: -4px; }
+  }
 }
 
 @include v2.tablet-up {

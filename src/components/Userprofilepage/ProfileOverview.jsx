@@ -370,7 +370,7 @@ export default function ProfileOverview({
             bare={isDefaultLayout && !editing}
             onViewMore={() => onOpenTab('video')}
           >
-            <Card3 videos={list} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+            <Card3 videos={list} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} hideAuthor />
           </Section>
         );
       }

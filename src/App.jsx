@@ -44,7 +44,8 @@ import { useTranslation } from 'react-i18next';
 import { t } from './i18n';
 import { Icon } from './components/v2/Icon'
 import './toast.css'
-import { fetchNewerVersion, reloadForUpdate } from './utils/checkLatestVersion'
+import { fetchNewerVersion } from './utils/checkLatestVersion'
+import UpdateNotice from './components/UpdateNotice/UpdateNotice'
 // Retired alongside the legacy /studio flow — kept here as comments for ease of
 // roll-back; the embed-studio equivalents at /embed-studio/{thumbnail,details,preview}
 // are what users hit now.
@@ -442,12 +443,12 @@ function App() {
       const newer = await fetchNewerVersion();
       if (!newer) return;
       updatePromptShown = true;
-      toast(t('app.update.available', { version: newer }), {
-        description: t('app.update.description'),
-        icon: <Icon name="system_update" size={18} />,
-        duration: Infinity,
-        action: { label: t('common.actions.refresh'), onClick: () => reloadForUpdate() },
-      });
+      // The cyan notice of 32g/44a: icon, title, line, Refresh (UpdateNotice).
+      // It stays until Refresh or close.
+      toast.custom(
+        (id) => <UpdateNotice version={newer} onDismiss={() => toast.dismiss(id)} />,
+        { duration: Infinity, className: 'ts-update-toast' },
+      );
     };
     promptIfNewer();
     const onFocus = () => promptIfNewer();

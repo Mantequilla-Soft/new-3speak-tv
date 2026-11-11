@@ -1751,6 +1751,8 @@ function GlobalAudioPlayer() {
             {/* Phones (27c): the bar says how to open the player. */}
             <span className="audio-np-swipe-hint">{t('audio.player.swipeUp')}</span>
           </span>
+          {/* Wider screens (20a): the title over a 4px progress line. */}
+          <div className="gap-bar__line" onClick={(e) => e.stopPropagation()}>{progressBar}</div>
           {clipChip}
         </div>
         <div className={cx('audio-np-controls gap-bar__transport', !isLive && 'has-skip')}>
@@ -1796,6 +1798,17 @@ function GlobalAudioPlayer() {
             aria-expanded={false}
           ><Icon name="open_in_full" size={20} /></button>
           {closeButton}
+          {/* Wider screens (20a): the bar is cover, title, previous, play and
+              next; everything else is in this menu and the full player. */}
+          <button
+            type="button"
+            className={cx('gap-tbtn gap-bar__more', menu?.name === 'bar' && 'is-on')}
+            onClick={toggleMenu('bar')}
+            title={t('engagement.cardMenu.moreOptions')}
+            aria-label={t('engagement.cardMenu.moreOptions')}
+            aria-haspopup="dialog"
+            aria-expanded={menu?.name === 'bar'}
+          ><Icon name="more_horiz" size={24} /></button>
         </div>
       </div>
     </div>
@@ -2272,8 +2285,27 @@ function GlobalAudioPlayer() {
       {portalIfDocked(inPip ? pipCard : showExpanded ? full : bar)}
 
       {toHost(<>
-      {menu?.name === 'player' && (
+      {(menu?.name === 'player' || menu?.name === 'bar') && (
         <PlayerMenu anchor={menu.anchor} title={phone ? titleOf(nowPlaying) : t('audio.page.tabPlayer')} onClose={closeMenu} wide>
+          {/* From the bar (20a): what its tiles used to hold comes first. */}
+          {menu.name === 'bar' && (
+            <div className="audio-pm-rows">
+              <PmRow icon="open_in_full" label={t('audio.player.expand')} onClick={() => { closeMenu(); toggleExpanded(); }} />
+              <PmRow icon="queue_music" label={t('audio.player.queue')} sub={audioQueue.length ? String(audioQueue.length) : null} onClick={() => { closeMenu(); audioSetShowQueue(true); }} />
+              <PmRow
+                icon={muted || volume === 0 ? 'volume_off' : 'volume_up'}
+                label={t('audio.player.volume')}
+                sub={`${Math.round((muted ? 0 : volume) * 100)}%`}
+                onClick={() => {
+                  const a = menu.anchor;
+                  closeMenu();
+                  setVolRect({ cx: a.left + a.width / 2, top: a.top });
+                  setVolOpen(true);
+                }}
+              />
+              {hasTranscript && <PmRow icon="subtitles" label={t('audio.player.transcript')} onClick={() => { closeMenu(); setShowSubtitles(!showSubtitles); }} />}
+            </div>
+          )}
           {/* A desktop popover holds the speed and sleep choices; the phone's
               sheet lists them as rows that open their own sheets (27b, 27d). */}
           {!phone && !isLive && (

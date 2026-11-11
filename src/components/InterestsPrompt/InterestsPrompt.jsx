@@ -171,11 +171,13 @@ export default function InterestsPrompt() {
       <p className="interests-prompt-text">
         <Trans i18nKey="app.interests.body" components={{ b: <strong /> }} />
       </p>
-      {/* Same picker (and search box) as Settings → Interests, so the two
-          screens look and behave identically. Values are topic slugs. */}
+      {/* Same picker (and search box) as Settings → Interests, drawn as the
+          23a tiles: the areas in two columns, the open one's topics under
+          them. Values are topic (or whole-area) slugs. */}
       <TagsV2Picker
         multi
         searchable
+        layout="tiles"
         value={selected}
         onChange={setSelected}
         disabled={saving}

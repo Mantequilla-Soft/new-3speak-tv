@@ -157,6 +157,14 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       flex: 1 1 auto;
 
       @include v2.mobile { gap: 8px; padding: 8px 2px 2px; }
+
+      // A channel's own grid (20b, Card3 hideAuthor): the title, then
+      // "2.0K views · 1w"; no avatar, name, topic or stat pills.
+      &.is-own-channel {
+        .card-topic-chip, .card-stats { display: none; }
+        .card-text { gap: 2px; }
+        h2 { min-height: 0; }
+      }
     }
 
     .card-avatar {

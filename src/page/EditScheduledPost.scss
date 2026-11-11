@@ -142,14 +142,24 @@
     &.is-accent { color: var(--accent); font-weight: 700; }
   }
 
+  // 44c: three chips, 36 tall; the picked one a cyan outline on its tint.
   .esp-payout {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 6px;
+  }
 
-    .v2-choice { min-height: 64px; }
+  .esp-payout__chip {
+    @include v2.control(36);
+    @include v2.text(label);
+    font-size: 12px;
+    border: 2px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    white-space: nowrap;
 
-    @include v2.mobile { grid-template-columns: minmax(0, 1fr); .v2-choice { min-height: 0; } }
+    &:hover { background: var(--bg-hover); }
+    &.is-on { border-color: var(--cyan); background: var(--cyan-tint); }
   }
 
   // Beneficiaries: a row that opens the shared beneficiary dialog.

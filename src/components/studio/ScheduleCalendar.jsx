@@ -242,3 +242,52 @@ export function ScheduleDayStrip({ value, onChange, min, max }) {
     </div>
   );
 }
+
+/**
+ * 44c "Or enter date manually": day, month, year, the time and AM/PM as five
+ * wells under the calendar. Same value format as ScheduleCalendar; nothing is
+ * clamped here, so a time in the past shows the editor's warning instead.
+ */
+export function ScheduleManualDate({ value, onChange }) {
+  const { t } = useTranslation();
+  const [datePart = '', timePart = ''] = (value || '').split('T');
+  const [y = '', m = '', d = ''] = datePart.split('-');
+  const [hh = '', mm = ''] = timePart.split(':');
+  const h24 = Number(hh);
+  const pm = Number.isFinite(h24) && h24 >= 12;
+  const h12 = Number.isFinite(h24) && hh !== '' ? String(((h24 + 11) % 12) + 1).padStart(2, '0') : '';
+  const [draft, setDraft] = useState(null); // the field being typed in, until it is whole
+
+  const emit = (next) => {
+    const yy = String(next.y || '').padStart(4, '0');
+    const mo = Number(next.m);
+    const dd = Number(next.d);
+    const [th, tm] = String(next.time || '').split(':').map(Number);
+    if (!/^\d{4}$/.test(yy) || !(mo >= 1 && mo <= 12) || !(dd >= 1 && dd <= 31) || !Number.isFinite(th) || !Number.isFinite(tm)) return;
+    if (new Date(Number(yy), mo - 1, dd).getMonth() !== mo - 1) return; // 31 Feb and the like
+    const hour = ((th % 12) + (next.pm ? 12 : 0)) % 24;
+    onChange(`${yy}-${pad(mo)}-${pad(dd)}T${pad(hour)}:${pad(tm)}`);
+  };
+  const base = { y, m, d, time: h12 && mm ? `${h12}:${mm}` : '', pm };
+  const field = (key, val) => (draft && draft.key === key ? draft.val : val);
+  const onField = (key) => (e) => {
+    const val = e.target.value.replace(/[^\d:]/g, '');
+    setDraft({ key, val });
+    emit({ ...base, [key]: val });
+  };
+
+  return (
+    <div className="schedule-manual">
+      <div className="schedule-manual__label">{t('studio.schedule.manualDate')}</div>
+      <div className="schedule-manual__row" onBlur={() => setDraft(null)}>
+        <input className="schedule-manual__well" inputMode="numeric" maxLength={2} placeholder={t('studio.schedule.dd')} aria-label={t('studio.schedule.dd')} value={field('d', d)} onChange={onField('d')} />
+        <input className="schedule-manual__well" inputMode="numeric" maxLength={2} placeholder={t('studio.schedule.mm')} aria-label={t('studio.schedule.mm')} value={field('m', m)} onChange={onField('m')} />
+        <input className="schedule-manual__well is-year" inputMode="numeric" maxLength={4} placeholder={t('studio.schedule.yyyy')} aria-label={t('studio.schedule.yyyy')} value={field('y', y)} onChange={onField('y')} />
+        <input className="schedule-manual__well is-time" inputMode="numeric" maxLength={5} placeholder="hh:mm" aria-label={t('studio.scheduled.fields.scheduledFor')} value={field('time', base.time)} onChange={onField('time')} />
+        <button type="button" className="schedule-manual__well is-ampm" onClick={() => emit({ ...base, pm: !pm })} aria-label={pm ? t('studio.schedule.pm') : t('studio.schedule.am')}>
+          {pm ? t('studio.schedule.pm') : t('studio.schedule.am')}
+        </button>
+      </div>
+    </div>
+  );
+}

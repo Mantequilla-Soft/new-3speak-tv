@@ -1,29 +1,46 @@
 @use "../../styles/v2" as v2;
 @import '../LanguageSelector/translate-common';
 
-/* Reactions panel on the watch page (design 48b): a surface card with the
-   reactor, previous / count / next tiles, the reaction itself in a 16:9 media
-   frame (video, or the comment thread), and a sideways list of reactors.
-   Overlays on the reaction video are white on media scrims in both themes. */
+/* Reactions panel on the watch page (design 48b): "Reactions" with the player
+   size track (S / M / Std / Big / Cin) and Hide, the reaction in a media frame
+   (radius 12) with a "Video Reaction" pill top-left, then Previous / Next, the
+   thread under a video reaction, and the strip of reactors. It sits in the
+   side panel's Reactions tab (the panel is its card), or full width under the
+   description at the cinema size, where it is a card of its own. Overlays on
+   the reaction video are white on media scrims in both themes. */
 
 $glass: color-mix(in srgb, var(--on-media) 12%, transparent);
 $glass-hover: color-mix(in srgb, var(--on-media) 22%, transparent);
 
 .reaction-player {
-  @include v2.card;
-  margin-bottom: 12px;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   min-width: 0;
   max-width: 100%;
   color: var(--text);
+
+  .rct-scroll-area { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 
   // 16:9 frame for the reaction (the player handles vertical video inside)
   .reaction-video-wrap {
     position: relative;
     width: 100%;
     padding-top: 56.25%;
+    border-radius: var(--r-md);
     background: var(--media-black);
     overflow: hidden;
+
+    &.is-comment { background: var(--bg); }
+  }
+
+  // "Video Reaction" / "Comment", top-left on the media (48b).
+  .rct-type-pill {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 6;
+    pointer-events: none;
   }
 
   // Preloaded iframes: all absolute, only the active one visible
@@ -52,7 +69,7 @@ $glass-hover: color-mix(in srgb, var(--on-media) 22%, transparent);
     height: 100%;
     display: flex;
     align-items: flex-start;
-    background: var(--surface);
+    background: var(--bg);
     @include v2.scroll-y;
     z-index: 1;
 
@@ -63,7 +80,7 @@ $glass-hover: color-mix(in srgb, var(--on-media) 22%, transparent);
       left: auto;
       height: auto;
       max-height: 300px;
-      border-top: 1px solid var(--border);
+      border-radius: var(--r-md);
 
       .rct-comment-thread { padding-top: 4px; }
     }
@@ -73,6 +90,8 @@ $glass-hover: color-mix(in srgb, var(--on-media) 22%, transparent);
     padding: 12px 14px;
     width: 100%;
   }
+  // In the frame, the thread starts under the type pill.
+  .reaction-video-wrap .rct-comment-thread { padding-top: 36px; }
 
   .rct-thread-comment {
     padding: 8px 0;
@@ -224,69 +243,6 @@ $glass-hover: color-mix(in srgb, var(--on-media) 22%, transparent);
     cursor: pointer;
   }
 
-  // Size / close tiles over the video, top-right: scrim pills
-  .overlay-buttons {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 8;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    opacity: 0;
-    transition: opacity var(--t-base) var(--ease);
-  }
-
-  .reaction-video-wrap:hover .overlay-buttons,
-  .reaction-video-wrap:focus-within .overlay-buttons { opacity: 1; }
-
-  // Prev / count / next over the video: phones only
-  .mobile-overlay-nav {
-    display: none;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .overlay-count {
-    @include v2.scrim-pill;
-    font-family: var(--font-mono);
-  }
-
-  .size-overlay-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    height: 32px;
-    padding: 0 10px;
-    border: 0;
-    border-radius: var(--r-md);
-    background: var(--media-scrim);
-    color: var(--on-media);
-    cursor: pointer;
-    font: inherit;
-    font-size: 11px;
-    font-weight: 700;
-    transition: background var(--t-fast) var(--ease);
-
-    &:hover:not(:disabled) { background: var(--media-scrim-strong); }
-    &:disabled { opacity: .45; cursor: not-allowed; }
-
-    // Phone-only arrows (prev/next) and close
-    &--nav,
-    &--close {
-      display: none;
-
-      @include v2.mobile {
-        display: inline-grid;
-        place-items: center;
-        width: 36px;
-        height: 36px;
-        padding: 0;
-        border-radius: 50%;
-      }
-    }
-  }
-
   // Player controls over a video reaction
   .rct-controls {
     position: absolute;
@@ -383,96 +339,72 @@ $glass-hover: color-mix(in srgb, var(--on-media) 22%, transparent);
     user-select: none;
   }
 
-  // Head: the reactor, then previous / count / next / hide tiles
+  // Head (48b): "Reactions", the size track, Hide.
   .reaction-player-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     gap: 8px;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
+    min-width: 0;
 
-    .reaction-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
+    .rct-title { flex: 1; min-width: 0; @include v2.text(title-sm); }
+
+    // The sizes only change the layout at 1280 and up.
+    .rct-sizes {
+      flex: none;
+      @include v2.below-wide { display: none; }
     }
 
-    .reactor-avatar {
-      width: 32px;
+    .rct-hide {
+      flex: none;
       height: 32px;
-      border-radius: 50%;
-      background: var(--avatar);
-      object-fit: cover;
-      flex-shrink: 0;
-    }
-
-    .reactor-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-      min-width: 0;
-    }
-
-    .reactor-name {
-      @include v2.text(label);
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .reaction-label {
-      @include v2.text(eyebrow);
-      color: var(--accent);
-    }
-
-    .reaction-controls {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-
-    .reaction-count {
-      @include v2.mono(12, 700);
-      color: var(--muted);
-      padding: 0 4px;
-      white-space: nowrap;
-    }
-
-    .nav-btn,
-    .close-btn {
-      // .close-btn is also a global corner button (modal base): keep it in the row.
-      position: static;
-      display: inline-grid;
-      place-items: center;
-      width: 32px;
-      height: 32px;
-      padding: 0;
+      padding: 0 8px;
       border: 0;
       border-radius: var(--r-md);
-      background: var(--surface-2);
-      color: var(--text);
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      @include v2.text(label);
+      font-size: 12px;
       cursor: pointer;
-      transition: background var(--t-fast) var(--ease);
-
-      &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
-      &:disabled { opacity: .45; cursor: not-allowed; }
+      &:hover { background: var(--bg-hover); color: var(--text); }
+      @include v2.mobile { height: 44px; }
     }
+  }
 
-    .close-btn {
-      display: none;
-      @include v2.mobile { display: inline-grid; }
-    }
+  // Previous / Next under the media (48b): text buttons, the unavailable one muted.
+  .rct-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .rct-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 32px;
+    padding: 0 8px;
+    margin: 0 -8px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    @include v2.text(label);
+    font-size: 12px;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+
+    &:hover:not(:disabled) { background: var(--bg-hover); }
+    &:disabled { color: var(--muted); cursor: default; }
+    @include v2.mobile { height: 44px; }
   }
 
   // Sideways list of reactors
   .reaction-list {
     display: flex;
     gap: 6px;
-    padding: 10px 12px;
     max-width: 100%;
     @include v2.scroll-x;
   }
@@ -566,44 +498,16 @@ $glass-hover: color-mix(in srgb, var(--on-media) 22%, transparent);
     &.active { opacity: .7; }
   }
 
-  // Phones
+  // Phones (when a caller passes `mobile`): video and comments scroll together.
   &--mobile {
-    margin: 8px 0;
     width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    border-radius: var(--r-xl);
-    box-sizing: border-box;
-
-    // The full head is replaced by the overlay nav on phones
-    .reaction-player-header { display: none; }
-
-    // Video and comments scroll together
     .rct-scroll-area { @include v2.scroll-y; }
-
-    // The comment panel inside the scroll area has no scroll of its own
-    .rct-comment-panel--below {
-      max-height: none;
-      overflow-y: visible;
-    }
-
-    // Always show the overlay tiles (no hover on touch)
-    .overlay-buttons { opacity: 1; }
-    .mobile-overlay-nav { display: flex; }
-    .size-overlay-btn--resize { display: none; }
-
-    .reaction-item {
-      min-width: 52px;
-      padding: 6px 4px 4px;
-    }
-
-    .reaction-item-avatar { width: 28px; height: 28px; }
-    .reaction-item-name { max-width: 44px; }
-
-    .reaction-list {
-      padding: 8px;
-      gap: 6px;
-      box-sizing: border-box;
-    }
+    .rct-comment-panel--below { max-height: none; overflow-y: visible; }
   }
+}
+
+// Cinema size: full width under the description, a card of its own.
+.cinema-reactions-slot > .reaction-player {
+  @include v2.card;
+  padding: 16px;
 }

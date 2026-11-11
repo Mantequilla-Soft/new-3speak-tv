@@ -177,15 +177,17 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   &:hover { color: var(--accent-hover); }
 }
 
-// ─── The bar (27c) ──────────────────────────────────────────────────────────
-// Desktop: a frosted bar floating at the foot of the page, centred (20a, 27c).
+// ─── The bar (20a, 27c) ─────────────────────────────────────────────────────
+// Desktop and tablet: a frosted bar floating at the foot of the page, centred,
+// 620 wide (20a): cover, the title over a 4px progress line, previous, play,
+// next, and a "more" tile for the rest (the full player has it all too).
 .audio-now-playing.gap-bar {
   position: fixed;
   z-index: 100;
   left: 50%;
   bottom: 20px;
   translate: -50% 0;
-  width: min(800px, calc(100vw - 48px));
+  width: min(620px, calc(100vw - 48px));
   background: color-mix(in srgb, var(--surface) 85%, transparent);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -196,12 +198,13 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   color: var(--text);
   animation: gap-rise var(--t-slow) var(--ease);
 
-  @media (max-width: $wide - 1) {
+  // Above the bottom navigation where it shows.
+  @media (max-width: $wide - 1) { bottom: calc(var(--bottom-bar-clearance) + 12px); }
+  @include v2.mobile {
     left: 10px;
     right: 10px;
     translate: none;
     width: auto;
-    bottom: calc(var(--bottom-bar-clearance) + 12px);
   }
 }
 
@@ -209,13 +212,13 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 76px;
-  padding: 0 12px;
+  height: 66px;
+  padding: 0 10px;
   min-width: 0;
 }
 .gap-bar__art {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--r-lg);
   overflow: hidden;
   flex: none;
@@ -224,7 +227,7 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
 .gap-bar__info {
-  flex: 0 1 180px;
+  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -284,24 +287,40 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
 }
 .gap-bar__time { @include v2.mono(11, 700); color: var(--muted); flex: none; }
 .gap-bar__wave { flex: 1; height: 24px; min-width: 0; }
-// Hype, queue, volume, open: 40 square tiles on surface-2 (27c). Share, the
-// pop-out and the transcript live in the full player; the transcript button
-// stays while the transcript shows, so it can be folded away again.
+// Desktop and tablet (20a): only the "more" tile shows here; it opens the
+// Player menu with the expand, queue, volume and transcript rows on top (the
+// buttons stay in the markup for the phone's mini bar and keyboard tests).
 .gap-bar__tools {
   display: flex;
   align-items: center;
   gap: 10px;
   flex: none;
-  .gap-tool:not(.is-ghost), .gap-hype-icon { width: 40px; height: 40px; border-radius: v2.radius-for(40); }
   .gap-hype-icon { background: var(--surface-2); color: var(--accent); }
-  .audio-np-share-btn, .audio-np-pip-btn, .audio-np-sub-btn:not(.is-on) { display: none; }
-  .audio-np-close-btn { width: 32px; height: 32px; border-radius: v2.radius-for(32); margin-left: -4px; }
+}
+.gap-bar__more {
+  width: 48px; height: 48px; border-radius: v2.radius-for(48); background: var(--surface-2);
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  &.is-on { background: var(--cyan-tint); color: var(--cyan); }
+}
+.gap-bar__line {
+  margin-top: 6px;
+  .audio-np-progress { height: 4px; border-radius: 2px; }
+  .audio-np-progress-fill { border-radius: 2px; }
+}
+@include v2.tablet-up {
+  .gap-bar__tools > :not(.gap-bar__more) { display: none; }
+  // The time, the waveform and the seek line under the row are the phone's
+  // (the thin line along the mini bar's foot); here it is .gap-bar__line.
+  .gap-bar__seek { display: none; }
+  // One line under the title: the LIVE pill when there is one, nothing else.
+  .gap-bar:not(.audio-np-idle) .audio-np-subline:not(:has(.v2-pill)) { display: none; }
+  .gap-bar:not(.audio-np-idle) .audio-np-subline > :not(.v2-pill) { display: none; }
 }
 
 // The idle bar ("Up next" / "Continue at"): cyan, and smaller.
 .audio-now-playing.gap-bar.audio-np-idle {
   width: min(520px, calc(100vw - 32px));
-  @media (max-width: $wide - 1) { width: auto; }
+  @include v2.mobile { width: auto; }
   .gap-bar__row { height: 64px; }
   .gap-bar__art { width: 44px; height: 44px; border-radius: var(--r-md); }
   .gap-bar__info { flex: 1; }
@@ -312,16 +331,6 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
 .gap-bar .audio-transcript-panel {
   border-bottom: 1px solid var(--border);
   .audio-transcript-cues { max-height: 168px; }
-}
-
-// Tablet: the bar sits above the bottom navigation; the wider tools live in
-// the full player.
-@include tablet {
-  .gap-bar .audio-np-skip-btn,
-  .gap-bar .audio-np-share-btn,
-  .gap-bar .audio-np-sub-btn,
-  .gap-bar .audio-np-pip-btn { display: none; }
-  .gap-bar__info { flex: 1 1 160px; }
 }
 
 // Phones: the mini bar (27c right): cover, title, hype, play, close, and the
@@ -337,6 +346,7 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   .gap-bar__row { height: 64px; padding: 0 8px; gap: 10px; }
   .gap-bar__art { width: 48px; height: 48px; }
   .gap-bar__info { flex: 1; }
+  .gap-bar__line { display: none; }
   // "Swipe up for the player" under the title (27c); a swipe up opens it.
   .gap-bar:not(.audio-np-idle) {
     .audio-np-swipe-hint { display: inline; }

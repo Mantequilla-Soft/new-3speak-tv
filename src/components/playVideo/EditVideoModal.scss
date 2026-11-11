@@ -366,21 +366,30 @@
   flex-direction: column;
 }
 
+// 33b: Promote (1) and Save changes (2) fill the row, 56 tall.
 .evm-footer.v2-dialog__foot {
   align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
 
   .evm-promote-btn {
-    margin-right: auto;
+    flex: 1 1 0;
+    min-width: 0;
+    font-size: 16px;
+    font-weight: 700;
 
     &.is-promoted { color: var(--accent); }
+  }
+
+  .edit-video-btn-primary {
+    flex: 2 1 0;
+    min-width: 0;
+    font-size: 16px;
   }
 
   .edit-video-btn-primary.is-blocked { opacity: .45; }
 
   @include v2.mobile {
     padding: 10px 16px 16px;
-
-    .edit-video-btn-secondary { display: none; }
-    .evm-promote-btn { margin-right: 0; }
   }
 }

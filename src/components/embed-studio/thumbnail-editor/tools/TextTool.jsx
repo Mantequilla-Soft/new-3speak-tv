@@ -77,8 +77,11 @@ export default function TextTool({ edit, onChange, selectedId, onSelect }) {
                   className={`thumb-font${layer.font === f.key ? ' is-active' : ''}`}
                   style={{ fontFamily: `"${f.family}", sans-serif`, fontWeight: f.weight }}
                   onClick={() => set({ font: f.key })}
+                  title={f.family}
+                  aria-label={f.family}
                 >
-                  {f.family}
+                  {/* 23c: each font as an "Aa" tile. */}
+                  Aa
                 </button>
               ))}
             </div>

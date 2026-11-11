@@ -203,3 +203,36 @@
     &.is-zone { padding: 0 10px; }
   }
 }
+
+// 44c manual date: five bg wells in a row (day, month, year, time, AM/PM).
+.schedule-manual {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+
+  &__label { @include v2.text(meta); color: var(--muted); }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.6fr 1.3fr 1fr;
+    gap: 6px;
+  }
+
+  &__well {
+    min-width: 0;
+    height: 40px;
+    padding: 0 6px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+    text-align: center;
+    @include v2.mono(13, 700);
+    outline: none;
+
+    &::placeholder { color: var(--muted); font-weight: 500; }
+    &:focus { border-color: var(--accent); }
+    &.is-ampm { cursor: pointer; font-family: var(--font-sans); &:hover { background: color-mix(in srgb, var(--text) 6%, var(--bg)); } }
+  }
+}

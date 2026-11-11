@@ -203,13 +203,13 @@
       "regularVideo": "Classic video for your channel",
       "verticalShort": "Portrait clip for the Shorts feed",
       "shortsEditor": "Record and edit a short in your browser",
-      "story": "Short clip that stays up for 24 hours",
+      "story": "Stays up for 24 hours",
       "musicAudio": "Songs, podcasts and other audio",
-      "audioEditor": "Cut, clean up and level podcasts and music",
+      "audioEditor": "Cut, clean up and level",
       "groupChat": "Live room you host with guests",
       "goLiveNow": "Stream live to your followers",
       "communitySnap": "Quick post on your community tab",
-      "playlist": "Group videos into a list you can share"
+      "playlist": "Group videos into a shareable list"
     }
   },
   "chat": {

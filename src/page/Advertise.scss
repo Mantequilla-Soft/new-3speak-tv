@@ -157,6 +157,7 @@ $mkt-sub: 12px;
 
   /* ── the enrollment wizard: a 4px step bar with labels (§11) ── */
   .mkt-wiz-nav {
+    width: 100%;
     list-style: none;
     margin: 0 0 22px;
     padding: 0;
@@ -348,78 +349,58 @@ $mkt-sub: 12px;
   /* ── empty wallet: where HIVE comes from (FundsNotice, design 47c) ── */
   .mkt-funds {
     margin-bottom: 24px;
-    padding: 20px;
+    padding: 16px;
 
     h2 {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 8px;
-      @include v2.text(title);
-
-      .material-symbols-rounded { color: var(--accent); }
+      margin: 0 0 6px;
+      @include v2.text(title-sm);
     }
 
     // Section labels: eyebrows.
     h3 {
-      margin: 20px 0 10px;
+      margin: 16px 0 8px;
       @include v2.text(eyebrow);
       color: var(--muted);
     }
 
-    > p { margin: 0; line-height: 1.5; color: var(--muted); }
+    > p { margin: 0; line-height: 1.45; font-size: 13px; color: var(--muted); }
+    > p strong { color: var(--text); }
   }
 
+  /* Two even wells: what HBD is, and today's HIVE price (47c). */
   .mkt-funds-rates {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    gap: 6px;
     margin-top: 10px !important;
+
+    @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
   }
 
   .mkt-funds-pill {
-    padding: 6px 10px;
-    border-radius: var(--r-md);
+    padding: 8px 10px;
+    border-radius: var(--r-sm);
     background: var(--bg);
     color: var(--text);
-    font-family: var(--font-mono);
     font-size: $mkt-sub;
-    font-weight: 700;
 
-    &.is-muted { color: var(--muted); font-weight: 500; }
+    &.is-muted { color: var(--text); }
   }
 
-  // Even tiles: the name on top, the market under it. Neutral: these leave 3Speak
-  // for somebody else's site.
+  // One chip per exchange (47c). Neutral: these leave 3Speak for somebody else's site.
   .mkt-funds-exchanges {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
   .mkt-funds-btn {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 10px 12px;
-    border-radius: var(--r-md);
+    @include v2.control(32);
+    @include v2.text(label);
+    font-size: 12px;
     background: var(--surface-2);
     color: var(--text);
     text-decoration: none;
-    transition: background var(--t-fast) var(--ease);
-
-    strong {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      font-size: 13px;
-      font-weight: 700;
-
-      .material-symbols-rounded { color: var(--muted); }
-    }
-
-    span { font-size: 11px; color: var(--muted); }
 
     &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
   }
@@ -456,11 +437,10 @@ $mkt-sub: 12px;
     }
   }
 
-  // The disclaimer, set apart from the instructions it qualifies.
+  // The disclaimer, under the steps (47c).
   .mkt-funds .mkt-fine {
-    margin-top: 18px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
+    margin-top: 14px;
+    font-size: 11px;
   }
 
   /* ── sections ───────────────────────────────────────────── */
@@ -1332,8 +1312,10 @@ $mkt-sub: 12px;
   .mkt-tab-subhead { margin-top: 32px; }
 
   /* One product's three jobs: the same segmented track, sized down. */
+  /* A product's three views (47c): a full-width bg track inside the card. */
   .mkt-ptabs { margin: 0 0 20px; }
-  .mkt-ptab { height: 32px; font-size: 12px; }
+  .mkt-ptabs.v2-seg { display: flex; width: 100%; background: var(--bg); border-radius: var(--r-md); }
+  .mkt-ptab { flex: 1 0 auto; height: 32px; font-size: 12px; }
 
   .mkt-split-nav {
     min-width: 0;
@@ -1587,7 +1569,7 @@ $mkt-sub: 12px;
      edge off both of its users once they became outlined ones — the border now comes
      from whichever button class it is paired with. */
   .mkt-upload-btn {
-    display: inline-block;
+    display: inline-flex;
     cursor: pointer;
 
     &.disabled { opacity: 0.55; cursor: not-allowed; }
@@ -1629,22 +1611,25 @@ $mkt-sub: 12px;
       border-radius: var(--r-md);
       background: var(--bg);
       font-size: 13px;
+
+      // 31d: what it is on the left, its status at the right end of the row.
+      > .mkt-creative-meta { flex: 1 1 200px; min-width: 0; color: var(--text); }
+      > .mkt-creative-status { order: 9; margin-left: auto; }
     }
   }
 
   /* Status pills (§6): cyan approved, accent changes needed, muted in review. */
+  /* Sentence case on a tint (31d): "Approved", "Waiting for review", "Changes needed". */
   .mkt-creative-status {
     display: inline-flex;
     align-items: center;
-    min-height: 20px;
+    min-height: 22px;
     padding: 0 8px;
-    border-radius: 7px;
+    border-radius: var(--r-sm);
     background: var(--surface-2);
     color: var(--muted);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 900;
-    letter-spacing: .04em;
-    text-transform: uppercase;
     white-space: nowrap;
   }
 
@@ -2280,7 +2265,7 @@ $mkt-sub: 12px;
 
     .mkt-table {
       th, td {
-        height: 34px;
+        height: 36px;
         padding: 6px 12px;
         font-size: 12px;
         border-bottom: 0;
@@ -2575,6 +2560,7 @@ $mkt-sub: 12px;
   .mkt-tier-own {
     position: relative;
     display: inline;
+    font-size: inherit;
     font-weight: 700;
     color: var(--cyan);
     cursor: pointer;
@@ -2590,5 +2576,38 @@ $mkt-sub: 12px;
     display: inline-flex;
     @include v2.text(label);
     color: var(--text);
+  }
+
+  /* A checkbox inside a field (Automatic length) is a control, not the eyebrow. */
+  .mkt-field label.mkt-check {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--text);
+  }
+
+  /* A native file input in a field: the well, with its button as a secondary chip. */
+  .mkt-field input[type="file"] {
+    height: auto;
+    min-height: 44px;
+    padding: 4px 6px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+
+    &::file-selector-button {
+      height: 32px;
+      margin-right: 10px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
   }
 }

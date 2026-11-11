@@ -4,14 +4,14 @@ import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { CHECKER_API_KEY } from '../../utils/config';
 import { getMinMaxDates, formatDateTimeLocal } from '../../utils/schedulingHelpers';
-import ScheduleCalendar from './ScheduleCalendar';
+import ScheduleCalendar, { ScheduleManualDate } from './ScheduleCalendar';
 import { uploadThumbnail } from '../../utils/uploadThumbnail';
 import { proveScheduledPost, scheduledPostWriteError } from '../../utils/scheduledPostProof';
 import MarkdownComposer from './MarkdownComposer';
 import Beneficiary_modal from '../modal/Beneficiary_modal';
 import SettingInfo from '../embed-studio/SettingInfo';
 import { useTranslation } from 'react-i18next';
-import { Button, ChoiceCard, Icon } from '../v2/ui';
+import { Button, Icon } from '../v2/ui';
 import { cx } from '../v2/helpers';
 import { formatDate } from '../../i18n';
 // Edit scheduled post (44c): v2 cards, its own stylesheet. The calendar and
@@ -362,6 +362,7 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
                 max={maxFormatted}
                 onChange={setScheduleDateTime}
               />
+              <ScheduleManualDate value={scheduleDateTime} onChange={setScheduleDateTime} />
               {when && !inPast && (
                 <p className="esp-note is-cyan">
                   <Icon name="schedule_send" size={16} />
@@ -382,18 +383,23 @@ export default function ScheduledPostEditor({ permlink, onClose, onSaved, onCanc
                 {t('upload.details.rewards.label')}
                 <SettingInfo title={t('upload.details.rewards.label')}>{t('upload.details.rewards.info')}</SettingInfo>
               </h2>
+              {/* 44c: the three payouts as chips, the picked one cyan; its hint under them. */}
               <div className="esp-payout" role="radiogroup" aria-label={t('upload.details.rewards.label')}>
                 {payoutChoices.map((opt) => (
-                  <ChoiceCard
+                  <button
+                    type="button"
                     key={opt.value}
-                    tone="cyan"
-                    selected={(payoutOptions || 'default') === opt.value}
-                    title={opt.label}
-                    sub={opt.hint}
+                    role="radio"
+                    aria-checked={(payoutOptions || 'default') === opt.value}
+                    className={cx('esp-payout__chip', (payoutOptions || 'default') === opt.value && 'is-on')}
+                    title={opt.hint}
                     onClick={() => setPayoutOptions(opt.value)}
-                  />
+                  >
+                    {opt.label}
+                  </button>
                 ))}
               </div>
+              <p className="esp-note">{(payoutChoices.find((o) => o.value === (payoutOptions || 'default')) || payoutChoices[0]).hint}</p>
 
               <button type="button" className="esp-bene" onClick={toggleBeneficiaryModal}>
                 <span className="esp-bene__icon"><Icon name="group" size={18} /></span>

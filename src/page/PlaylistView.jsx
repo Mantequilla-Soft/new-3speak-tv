@@ -597,21 +597,24 @@ function PlaylistView() {
     </div>
   );
 
+  // The unsaved-changes bar (41d) as the 07f card: a cyan icon tile, the
+  // count as its title, Discard and a cyan Save changes.
   const saveBar = isOwner && hasChanges && (
     <ConfirmBar
+      tone="cyan"
+      icon="edit_note"
+      title={t('playlists.view.unsaved', { count: pendingChanges.length })}
       actions={(
         <>
-          <Button variant="ghost" size={36} className="btn-discard" onClick={handleDiscardChanges} disabled={isSaving}>
+          <Button variant="secondary" size={44} className="btn-discard" onClick={handleDiscardChanges} disabled={isSaving}>
             {t('playlists.view.discard')}
           </Button>
-          <Button variant="primary" size={36} className="btn-save" onClick={handleSaveChanges} disabled={isSaving} loading={isSaving} trailing={isSaving ? null : 'check'}>
+          <Button variant="cyan" size={44} className="btn-save" onClick={handleSaveChanges} disabled={isSaving} loading={isSaving}>
             {isSaving ? t('playlists.view.saving') : t('playlists.view.saveChanges')}
           </Button>
         </>
       )}
-    >
-      <span>{t('playlists.view.unsaved', { count: pendingChanges.length })}</span>
-    </ConfirmBar>
+    />
   );
 
   const videoList = (

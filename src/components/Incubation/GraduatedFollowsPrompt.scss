@@ -1,0 +1,50 @@
+@use "../../styles/v2" as v2;
+
+/* "Someone you follow got upgraded" (46c): a surface card, radius 20, the
+   16/700 title, one muted line, then "Got it" and the cyan "Follow for real"
+   side by side. It floats in the bottom-right corner (a floating layer, so it
+   gets the float shadow) and, on a phone, sits above the bottom bar. */
+.grad-follows {
+  position: fixed;
+  right: 24px;
+  bottom: calc(24px + var(--bottom-bar-clearance) + env(safe-area-inset-bottom, 0px));
+  z-index: 990;
+  width: min(360px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border-radius: var(--r-xl);
+  @include v2.floating;
+  color: var(--text);
+  animation: grad-follows-in var(--t-slow) var(--ease);
+
+  @include v2.mobile {
+    right: 16px;
+    left: 16px;
+    width: auto;
+    bottom: calc(16px + var(--bottom-bar-clearance));
+  }
+
+  &__title { @include v2.text(title-sm); }
+
+  &__text {
+    margin: 0;
+    @include v2.text(body-sm);
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+
+    > .v2-btn { flex: 1; min-width: 0; }
+    @include v2.mobile { > .v2-btn { height: 44px; border-radius: var(--r-lg); } }
+  }
+}
+
+@keyframes grad-follows-in { from { transform: translateY(12px); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) { .grad-follows { animation: none; } }

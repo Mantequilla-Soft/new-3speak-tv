@@ -1,6 +1,9 @@
-/* The pre-upload spot (design 47d, sponsor gate). Full-screen and above everything,
-   because it is a condition of posting rather than a suggestion, but plain: it
-   interrupts somebody's work. Media colours, the same in both themes. */
+@use "../../styles/v2" as v2;
+
+/* The pre-upload spot (design 47d, sponsor gate): a card over a scrim, because it
+   is a condition of posting rather than a suggestion, but plain: it interrupts
+   somebody's work. The SPONSORED eyebrow, the spot on a 16:9 well, then the line
+   that says why it is here with the brand and the seconds left. */
 .upload-gate {
   position: fixed;
   inset: 0;
@@ -16,62 +19,60 @@
   width: min(880px, 100%);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-sheet);
+  color: var(--text);
+}
+
+.upload-gate-label {
+  @include v2.text(eyebrow);
+  color: var(--muted);
 }
 
 .upload-gate-video {
   width: 100%;
+  aspect-ratio: 16 / 9;
   max-height: 70vh;
-  background: var(--media-black);
+  @include v2.thumb-placeholder(6px);
   border-radius: var(--r-md);
   display: block;
+  object-fit: contain;
 }
 
 .upload-gate-bar {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 13px;
-  color: var(--on-media);
-}
-
-.upload-gate-label {
-  display: inline-flex;
-  align-items: center;
-  height: 20px;
-  padding: 0 8px;
-  border-radius: 7px;
-  background: var(--accent);
-  color: var(--on-accent);
-  font-weight: 900;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  font-size: 10px;
-}
-
-.upload-gate-brand {
-  color: var(--on-media);
-  font-weight: 700;
-  text-decoration: none;
-
-  &:hover { color: var(--on-media); text-decoration: underline; }
-}
-
-/* Pushed to the end so the eye lands on it: it is the only number that matters here. */
-.upload-gate-count {
-  margin-left: auto;
-  padding: 2px 8px;
-  border-radius: 6px;
-  background: var(--media-scrim);
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  color: var(--on-media);
+  min-width: 0;
 }
 
 .upload-gate-note {
+  flex: 1;
+  min-width: 0;
   margin: 0;
   font-size: 12px;
-  color: var(--on-media);
-  opacity: .6;
+  color: var(--muted);
+}
+
+.upload-gate-brand {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover { color: var(--text); text-decoration: underline; }
+}
+
+/* The only number that matters here. */
+.upload-gate-count {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  @include v2.mono(12, 700);
+  color: var(--text);
 }

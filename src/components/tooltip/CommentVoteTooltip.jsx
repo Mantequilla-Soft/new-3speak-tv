@@ -538,6 +538,7 @@ const CommentVoteTooltip = ({
           >
             <ModalHeader closeOnEscape={false}
               className="cvt-header"
+              tone="accent"
               title={tagOnlyMode
                 ? t('engagement.vote.votingClosed')
                 : t('engagement.vote.vote')}
@@ -566,7 +567,7 @@ const CommentVoteTooltip = ({
                 ) : (
                   <>
                     <div className="cvt-tag" onClick={(e) => e.stopPropagation()}>
-                      <span className="v2-eyebrow">{t('engagement.vote.pickTopic')}</span>
+                      <span className="cvt-tag__sub">{t('engagement.vote.pickTopic')}</span>
                       <TagsV2Picker
                         value={viewerTag}
                         onChange={setViewerTag}
@@ -624,8 +625,11 @@ const CommentVoteTooltip = ({
 
                 {enableViewerTag && (
                   <>
+                    {/* Vote with a topic (40a): "Tag this video", what a topic
+                        counts as, the chips, then Just tag / Vote and tag. */}
                     <div className="cvt-tag" onClick={(e) => e.stopPropagation()}>
-                      <span className="v2-eyebrow">{t('engagement.vote.tagThisVideo')}</span>
+                      <b className="cvt-tag__title">{t('engagement.vote.tagThisVideo')}</b>
+                      <span className="cvt-tag__sub">{t('engagement.vote.pickTopic')}</span>
                       <TagsV2Picker
                         value={viewerTag}
                         onChange={setViewerTag}
@@ -644,7 +648,7 @@ const CommentVoteTooltip = ({
                   return vp != null && Number.isFinite(vp) ? (
                     <div className="cvt-vp">
                       <Icon name="battery_horiz_075" size={20} />
-                      <span>{t('nav.votingPower')}</span>
+                      <span>{t('nav.profile.votingPower')}</span>
                       <b className="num">{Math.round(vp)}%</b>
                     </div>
                   ) : null;

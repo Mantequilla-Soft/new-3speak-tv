@@ -210,8 +210,10 @@ function EmbedCameraRecord() {
   useEffect(() => { try { localStorage.setItem('tp-menu-collapsed', JSON.stringify({ v: menuCollapsed })); } catch { /* ignore */ } }, [menuCollapsed]);
 
   // Draggable widgets (positions persisted).
-  const menu = useMovable('tp-menu-pos', () => ({ x: 12, y: 70 }));
-  const settingsMov = useMovable('tp-settings-pos', () => ({ x: 12, y: 120 }));
+  // Defaults sit under the script box (it starts at 6% and is 38% of the stage
+  // tall), at the left like the 35a rail, so they never cover the first words.
+  const menu = useMovable('tp-menu-pos', () => ({ x: 12, y: Math.round(winH() * 0.47) }));
+  const settingsMov = useMovable('tp-settings-pos', () => ({ x: 12, y: Math.round(winH() * 0.47) + 56 }));
 
   // Orientation: shorts (?from=stories) → portrait; longform → landscape. Follows
   // the source until the user flips it, then sticks.

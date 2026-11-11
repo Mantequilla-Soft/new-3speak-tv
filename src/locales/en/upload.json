@@ -109,7 +109,7 @@
       "frame": "Frame",
       "text": "Text",
       "pickFrame": "Pick frame",
-      "stickers": "Stickers"
+      "stickers": "Sticker"
     },
     "frame": {
       "zoom": "Zoom",
@@ -163,8 +163,9 @@
     "editor": {
       "open": "Thumbnail editor",
       "openHint": "Text, stickers, zoom, any frame",
-      "title": "Thumbnail editor",
+      "title": "Thumbnail",
       "done": "Done",
+      "useThumbnail": "Use thumbnail",
       "sources": "Pictures to start from",
       "pickPrompt": "Pick a frame from your video",
       "download": "Download",
@@ -436,7 +437,7 @@
   },
   "record": {
     "speechErrors": {
-      "network": "Speech service unreachable — recognition needs an internet connection (Chrome sends audio to Google to transcribe).",
+      "network": "Voice scrolling needs internet. Scroll the script by hand.",
       "audioCapture": "No audio reached recognition — the mic may be busy. Try a headset.",
       "notAllowed": "Microphone permission is blocked for speech recognition.",
       "generic": "Speech recognition error: {{err}}"
@@ -455,9 +456,9 @@
     "layout": "Layout",
     "presets": {
       "frontcam": "Front cam",
-      "frontcamTitle": "Small strip under the selfie lens — least obvious that you're reading",
+      "frontcamTitle": "Small strip under the lens",
       "max": "Max size",
-      "maxTitle": "Large type for reading from a distance",
+      "maxTitle": "Big type from a distance",
       "top": "Top lines",
       "topTitle": "Several lines across the top"
     },
@@ -478,11 +479,11 @@
     "startingMic": "Starting mic…",
     "leave": {
       "title": "Leave the camera?",
-      "sub": "Go back to your script, stay here, or close (nothing is saved).",
+      "sub": "Nothing is saved yet.",
       "backToScript": "Back to script",
       "stay": "Stay"
     },
-    "experimentalTitle": "Experimental teleprompter",
+    "experimentalTitle": "Teleprompter",
     "scriptPlaceholder": "Write or paste your script here. During recording it scrolls automatically as you read it aloud.",
     "orientation": "Orientation",
     "continueToCamera": "Continue to camera",
@@ -495,14 +496,14 @@
     "cameraN": "Camera {{n}}",
     "flipRotationTitle": "If the picture is upside down, flip the 90° rotation",
     "flipRotation": "Flip rotation",
-    "stopVoiceTest": "Stop voice test",
+    "stopVoiceTest": "Stop test",
     "testVoice": "Test voice",
     "stopRecording": "Stop recording",
     "startRecording": "Start recording",
     "script": "Script",
     "reRecord": "Re-record",
     "preparing": "Preparing…",
-    "useThisVideo": "Use this video"
+    "useThisVideo": "Use video"
   },
   "errors": {
     "patchBlocked": "PATCH appears blocked (no chunk acknowledged)",

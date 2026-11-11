@@ -56,6 +56,13 @@ describe('useLiveStreams', () => {
     expect(result.current).toEqual([])
   })
 
+  it('with standby, keeps rooms that are open but not live yet, marked _standby', async () => {
+    deps.fetchAllEndpoints.mockResolvedValue([room({ name: 'on' }), room({ name: 'off', live: false })])
+    const { result } = renderHook(() => useLiveStreams({ standby: true }))
+    await flush()
+    expect(result.current.map((s) => [s.roomName, s._standby])).toEqual([['on', false], ['off', true]])
+  })
+
   it('hides Hive-only rooms from guests', async () => {
     store.authenticated = false
     deps.fetchAllEndpoints.mockResolvedValue([room({ name: 'pub' }), room({ name: 'hive', visibility: 'hive-internal' })])

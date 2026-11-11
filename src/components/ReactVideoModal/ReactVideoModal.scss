@@ -1,23 +1,23 @@
 @use "../../styles/v2" as v2;
 
-/* Post a video reaction (design 48b / 22b): Record / Upload as dock tiles, the
-   preview in a media frame, a description field, "Show in Shorts", a cyan
-   progress bar while uploading, and the @threespeak authorization as a cyan
-   banner. Lives inside the comment composer's React tab. */
+/* Post a video reaction, in the comment composer's React tab beside the
+   original on the watch page.
+   48b: a 16/700 title, Record Video / Upload Video as a segmented track, the
+   accent Start Recording, the description field, Show in 3Speak Shorts, and
+   the @threespeak authorization as a cyan wash with the link inline.
+   22b while recording: the camera in a 2px accent frame (radius 20) with the
+   accent REC timer pill top-left, Mic / Camera / Restart as 64 tiles, and the
+   accent Stop and review with its stop icon on the right. */
 .react-video-tab {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
 
-  .rvt-source-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-  }
+  // Inside the fixed-height panel the tab scrolls; nothing in it shrinks.
+  > * { flex-shrink: 0; }
 
-  // Dock tiles (v2-dock) sit on surface here; their fill is surface-2.
-  .rvt-source-card { width: 100%; }
+  .rvt-title { @include v2.text(title-sm); color: var(--text); }
 
   .rvt-preview {
     display: flex;
@@ -26,11 +26,41 @@
   }
 
   .rvt-video {
+    display: block;
     width: 100%;
     max-height: 240px;
     border-radius: var(--r-md);
     background: var(--media-black);
     object-fit: contain;
+  }
+
+  // The live camera (22b): an avatar-grey frame, accent-bordered while recording.
+  .rvt-cam {
+    position: relative;
+    border: 2px solid transparent;
+    border-radius: var(--r-xl);
+    background: var(--avatar);
+    overflow: hidden;
+
+    .rvt-video { max-height: 180px; border-radius: 0; background: transparent; object-fit: cover; aspect-ratio: 16 / 10; }
+
+    &.is-rec { border-color: var(--accent); }
+  }
+
+  .rvt-rec {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: var(--r-sm);
+    background: var(--accent);
+    color: var(--on-accent);
+    @include v2.mono(11, 900);
+
+    &__dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
   }
 
   .rvt-filename {
@@ -42,7 +72,40 @@
     text-overflow: ellipsis;
   }
 
-  .rvt-record-controls { display: flex; gap: 6px; }
+  // Mic / Camera / Restart (22b): 64 tiles, radius 20, icon 24 over an 11/700
+  // label, and Stop and review filling the rest of the row.
+  .rvt-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+
+    .v2-dock {
+      width: 64px;
+      height: 64px;
+      flex: none;
+      border-radius: var(--r-xl);
+      gap: 3px;
+      font-size: 11px;
+      &:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+    }
+
+    // Beside the tiles when it fits, otherwise a full-width row under them.
+    .rvt-rec-btn--stop { flex: 1 1 160px; min-width: 0; padding: 0 14px 0 16px; }
+    @include v2.mobile { .v2-dock { width: 56px; height: 56px; } .rvt-rec-btn--stop { height: 56px; } }
+  }
+
+  .rvt-rec-btn {
+    @include v2.mobile { height: 44px; border-radius: var(--r-lg); }
+  }
+  // Stop and review: the label flush left, the stop icon (24) at the far right (22b).
+  .rvt-rec-btn--stop {
+    justify-content: space-between;
+    .v2-btn__label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    > .material-symbols-rounded:last-child { font-size: 24px !important; }
+  }
+
+  .rvt-pick { align-self: flex-start; }
 
   .rvt-description {
     min-height: 56px;
@@ -50,7 +113,7 @@
     @include v2.mobile { font-size: 16px; }
   }
 
-  .rvt-toggle { color: var(--text); }
+  .rvt-toggle { color: var(--text); min-height: 32px; }
 
   .rvt-progress {
     display: flex;
@@ -63,13 +126,36 @@
     color: var(--muted);
   }
 
+  // 48b: a 10% cyan wash on bg, the note in text, "Authorize @threespeak" in cyan.
   .rvt-auth-gate {
-    .v2-banner__body { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--cyan-wash);
+    @include v2.text(body-sm);
+    line-height: 1.4;
+    color: var(--text);
+    strong { font-weight: 700; }
   }
 
-  .rvt-auth-note {
-    margin: 0;
-    color: var(--muted);
-    strong { color: var(--text); }
+  .rvt-auth-link {
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--cyan);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    &:hover:not(:disabled) { text-decoration: underline; }
+    &:disabled { opacity: .45; cursor: progress; }
   }
+}
+
+// In the watch page's side panel the composer is pinned under the list: with
+// the React tab open it may take up to three quarters of the panel and
+// scrolls inside, so the panel never grows.
+.vid-comment-wrap.is-panel > .comment-composer:has(.react-video-tab) {
+  flex: none;
+  max-height: 75%;
+  @include v2.scroll-y;
 }

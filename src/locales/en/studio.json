@@ -7,7 +7,7 @@
     "createNewDesc": "Upload and share your content with the world"
   },
   "preview": {
-    "cannotPreview": "Your browser can't preview this video — this is common for HEVC/H.265 clips (e.g. iPhone “High Efficiency” recordings). That's fine: it will still upload and be converted so it plays for everyone."
+    "cannotPreview": "<b>Can’t preview this video.</b> Common for HEVC / H.265 clips such as iPhone High Efficiency recordings. It will still upload and be converted so it plays for everyone."
   },
   "drafts": {
     "untitled": "(untitled)",
