@@ -67,6 +67,8 @@
     @include v2.well;
     display: block;
     width: 100%;
+    // Grows to the snippet (Chromium); `rows` is the fallback elsewhere.
+    field-sizing: content;
     min-height: 0;
     padding: 8px;
     border: 2px solid transparent;

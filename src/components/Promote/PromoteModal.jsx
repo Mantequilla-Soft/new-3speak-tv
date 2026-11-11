@@ -8,7 +8,6 @@ import { fetchBalances } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
 import AdWizardModal from './AdWizardModal';
 import { Button, Segmented, Banner } from '../v2/ui';
-import { Icon } from '../v2/Icon';
 import { cx } from '../v2/helpers';
 import DialogShell, { SheetContext } from '../modal/DialogShell';
 import usePostThumb from '../modal/usePostThumb';
@@ -144,7 +143,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
       onClose={onClose}
       side
       tone="accent"
-      title={t('watch.actions.promote')}
+      title={t('ads.promote.title')}
       width={420}
       className="promote-v2"
       footer={mode === 'boost' && !isActive ? (
@@ -171,17 +170,18 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
     >
       <SheetContext thumb={post.thumbnail} title={post.title || permlink} meta={author ? `@${author}` : undefined} />
 
+      {/* Boost in feeds or run it as an ad (47d): two stacked choice rows,
+          the picked one in an accent border and tint. */}
       {showChoices && (
         <div className="promote-v2__modes" role="radiogroup" aria-label={t('ads.promote.title')}>
           {[
-            { id: 'boost', icon: 'trending_up', title: t('ads.promote.boostTitle'), sub: t('ads.promote.boostDesc') },
+            { id: 'boost', title: t('ads.promote.boostTitle'), sub: t('ads.promote.boostDesc') },
             // Beta testers only (selfPromoEnabledFor), even with ads public: it
             // sells at a testing price while in beta. Where those ads may SHOW is a
             // separate, server-side limit (AD_SELFPROMO_ALLOWED_OWNERS on the checker).
-            { id: 'ad', icon: 'campaign', title: t('ads.promote.adTitle'), sub: t('ads.promote.adDesc') },
+            { id: 'ad', title: t('ads.promote.adTitle'), sub: t('ads.promote.adDesc') },
           ].map((o) => (
             <button key={o.id} type="button" role="radio" aria-checked={mode === o.id} className={cx('promote-v2__tile', mode === o.id && 'is-on')} onClick={() => setMode(o.id)}>
-              <Icon name={o.icon} size={24} />
               <b>{o.title}</b>
               <span>{o.sub}</span>
             </button>
@@ -197,10 +197,6 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
 
       {mode === 'boost' && !isActive && (
         <div className="promote-v2__form">
-          <p className="v2-meta">
-            {t('ads.promote.intro', { cost: quote ? quote.costPer24hHbd : '…' })}
-          </p>
-
           <div className="promote-v2__days" role="group" aria-label={t('ads.promote.duration', { count: days }).replace(/<\/?b>/g, '')}>
             {dayTiles.map((d) => {
               const cost = quote ? d * quote.costPer24hHbd : 0;
@@ -215,10 +211,6 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
           </div>
 
           <div className="v2-slider">
-            <div className="v2-slider__head">
-              <span><Trans i18nKey="ads.promote.duration" count={days} components={{ b: <b /> }} /></span>
-              <span className="num">{days} / {maxDays}</span>
-            </div>
             <input
               type="range" min={1} max={maxDays} step={1}
               value={days} onChange={e => setDays(Number(e.target.value))}
@@ -227,9 +219,12 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
             />
           </div>
 
-          <div className="promote-v2__total">
-            <div className="promote-v2__total-head">
-              <span>{t('ads.promote.total')}</span>
+          {/* The summary line (47d): Duration · Pay with HBD | HIVE · Total. */}
+          <div className="promote-v2__summary">
+            <span><Trans i18nKey="ads.promote.duration" count={days} components={{ b: <b /> }} /></span>
+            <span className="promote-v2__pay">
+              <span className="promote-v2__dot" aria-hidden="true">·</span>
+              {t('ads.promote.payWith')}
               <Segmented
                 block={false}
                 size={28}
@@ -238,10 +233,10 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
                 label={t('ads.promote.payWith')}
                 options={[{ value: 'HBD', label: 'HBD' }, { value: 'HIVE', label: 'HIVE' }]}
               />
-            </div>
-            <b className="money">{money(amount)} <span>{currency}</span></b>
-            <p className="v2-meta-sm">{t('ads.promote.signNote', { account: quote?.account || 'threespeakfund' })}</p>
+            </span>
+            <span><span className="promote-v2__dot" aria-hidden="true">·</span> {t('ads.promote.total')} <b className="num">{money(amount)} {currency}</b></span>
           </div>
+          <p className="v2-meta-sm">{t('ads.promote.signNote', { account: quote?.account || 'threespeakfund' })}</p>
         </div>
       )}
     </DialogShell>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { saveCreatorAdSettings } from '../../utils/adSettings';
-import { Dialog, Button, StepBar, SettingRow, Toggle } from '../v2/ui';
+import { Dialog, Button, SettingRow, Toggle } from '../v2/ui';
 import './AdsPrompt.scss';
 
 // Every toast from this module is headed "Advertising"; the message becomes the
@@ -73,6 +73,10 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, initi
   // written to the creator's own Hive account, and losing a half-made choice to
   // a stray click beside the card is a bad trade for the convenience. The ways
   // out are the X, Esc and the explicit "Not now" button.
+  // Design 47d: "Step 1 of 2" beside the title; step one is the split as a
+  // labelled bar and the four points, step two the two switches and the
+  // community share.
+  const segLabel = (pct, label) => (pct >= 12 ? label : null);
   return (
     <Dialog
       open
@@ -80,9 +84,10 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, initi
       dismissible={!saving}
       backdropClose={false}
       title={t('ads.prompt.title')}
+      sub={t('ads.prompt.stepOf', { step: step + 1, total: 2 })}
       closeLabel={t('common.actions.close')}
       width={480}
-      className="ads-prompt-v2"
+      className="ads-prompt-v2 ads-prompt-v2--settings"
       footer={step === 0 ? (
         <>
           <Button variant="secondary" size={44} onClick={() => onDismiss()}>
@@ -103,33 +108,24 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, initi
         </>
       )}
     >
-      {/* The header and lede stay put across both steps: the step titles below
-          say where you are, the header says what the whole thing is. */}
-      <p className="v2-meta">{t('ads.prompt.lede')}</p>
-
-      <div className="ads-prompt-v2__steps">
-        <StepBar steps={2} current={step} />
-        <span className="v2-eyebrow num">{t('ads.prompt.stepOf', { step: step + 1, total: 2 })}</span>
-      </div>
-
       {step === 0 ? (
         <>
-          <p className="ads-prompt-v2__text">{t('ads.prompt.intro')}</p>
-
-          {/* The numbers sit in the key under the bar: at 5% of the width there is
-              no room to print "5%" inside a segment. */}
+          {/* The split, labelled inside its parts: creator side (accent),
+              the people watching (cyan), keeping 3Speak running (the rest).
+              A part too narrow for its label carries it as a tooltip. */}
           <div className="ads-prompt-v2__bar" aria-hidden="true">
-            <span className="is-creators" style={{ width: `${pool}%` }} />
-            {viewers > 0 ? <span className="is-viewers" style={{ width: `${viewers}%` }} /> : null}
-            <span className="is-platform" />
-          </div>
-          <ul className="ads-prompt-v2__key">
-            <li className="is-creators"><span>{t('ads.prompt.creatorSide')}</span><b className="num">{pool}%</b></li>
+            <span className="is-creators" style={{ width: `${pool}%` }} title={`${t('ads.prompt.creatorSide')} ${pool}%`}>
+              {segLabel(pool, `${t('ads.prompt.creatorSide')} ${pool}%`)}
+            </span>
             {viewers > 0 ? (
-              <li className="is-viewers"><span>{t('ads.prompt.peopleWatching')}</span><b className="num">{viewers}%</b></li>
+              <span className="is-viewers" style={{ width: `${viewers}%` }} title={`${t('ads.prompt.peopleWatching')} ${viewers}%`}>
+                {segLabel(viewers, t('ads.prompt.peopleWatching'))}
+              </span>
             ) : null}
-            <li className="is-platform"><span>{t('ads.prompt.keeping3speak')}</span><b className="num">{platform}%</b></li>
-          </ul>
+            <span className="is-platform" title={`${t('ads.prompt.keeping3speak')} ${platform}%`}>
+              {segLabel(platform, t('ads.prompt.keeping3speak'))}
+            </span>
+          </div>
 
           <ul className="ads-prompt-v2__points">
             <li><Trans i18nKey="ads.prompt.pointPool" values={{ pool, rest: 100 - pool }} components={{ b: <strong /> }} /></li>
@@ -142,10 +138,7 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, initi
         </>
       ) : (
         <>
-          <h3 className="ads-prompt-v2__title">{t('ads.prompt.yourChoice')}</h3>
-          <p className="ads-prompt-v2__text">
-            <Trans i18nKey="ads.prompt.changeAnytime" components={{ b: <strong /> }} />
-          </p>
+          <span className="v2-eyebrow">{t('ads.prompt.yourChoice')}</span>
 
           <div className="ads-prompt-v2__rows">
             <SettingRow
@@ -164,11 +157,17 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, initi
 
           {adsEnabled && (
             <div className="v2-slider ads-prompt-v2__share">
-              <div className="v2-slider__head">
+              {/* "Share with the community · 35% you · 15% community · 20% viewers":
+                  the three-way breakdown, because "15%" on its own reads differently
+                  depending on whether you think it is a share of the pool or of everything. */}
+              <p className="ads-prompt-v2__breakdown">
                 <label htmlFor="ads-prompt-community">{t('ads.prompt.shareCommunity')}</label>
-                <b>{community}%</b>
-              </div>
-              <span className="v2-meta-sm">{t('ads.prompt.shareCommunityDesc', { pool })}</span>
+                <span className="num">
+                  {' · '}<Trans i18nKey="ads.prompt.breakdownYou" values={{ pct: mine }} components={{ b: <span /> }} />
+                  {' · '}<Trans i18nKey="ads.prompt.breakdownCommunity" values={{ pct: community }} components={{ b: <span /> }} />
+                  {viewers > 0 ? <>{' · '}<Trans i18nKey="ads.prompt.breakdownViewers" values={{ pct: viewers }} components={{ b: <span /> }} /></> : null}
+                </span>
+              </p>
               <input
                 id="ads-prompt-community"
                 type="range"
@@ -179,16 +178,7 @@ export default function AdSettingsDialog({ user, split, initialAdsEnabled, initi
                 disabled={saving}
                 onChange={(e) => setCommunity(parseInt(e.target.value, 10))}
               />
-              {/* The three-way breakdown, because "25%" on its own reads differently
-                  depending on whether you think it is a share of the pool or of everything. */}
-              <div className="ads-prompt-v2__breakdown">
-                <span><Trans i18nKey="ads.prompt.breakdownYou" values={{ pct: mine }} components={{ b: <b /> }} /></span>
-                <span><Trans i18nKey="ads.prompt.breakdownCommunity" values={{ pct: community }} components={{ b: <b /> }} /></span>
-                {viewers > 0 ? (
-                  <span className="is-muted"><Trans i18nKey="ads.prompt.breakdownViewers" values={{ pct: viewers }} components={{ b: <b /> }} /></span>
-                ) : null}
-                <span className="is-muted"><b>{platform}%</b> 3Speak</span>
-              </div>
+              <span className="v2-meta-sm">{t('ads.prompt.shareCommunityDesc', { pool })}</span>
             </div>
           )}
           <p className="v2-meta-sm">{t('ads.prompt.savingNote')}</p>

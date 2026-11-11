@@ -1,9 +1,8 @@
 @use "../../styles/v2" as v2;
 
-// Per-video analytics, reused by the profile dashboard (45a, `is-detail`) and the
-// watch page (23d, `is-panel`). Panel: three tiles, retention as cyan bars with the
-// most replayed moment in the accent. Detail: four wells, the retention curve with
-// the biggest drop-off marked, most replayed as bars.
+// Per-video analytics, reused by the profile dashboard and the watch page
+// (`is-panel`), both drawn as 45a: four wells, the retention curve with the
+// biggest drop-off marked, the insights line, most replayed as bars.
 .video-stats {
   color: var(--text);
   display: flex;
@@ -20,41 +19,11 @@
     background: var(--bg);
   }
 
-  // Panel head (23d): a 4px accent bar and the 20px title.
-  .vs-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  // Watch-page panel title (45a): 16/700.
+  .vs-title { margin: 0; @include v2.text(title-sm); line-height: 1.25; }
 
-    h3 { margin: 0; flex: 1; font-size: 20px; font-weight: 700; line-height: 1.2; }
-  }
-
-  .vs-head-bar { width: 4px; height: 22px; border-radius: var(--r-bar); background: var(--accent); flex: none; }
-
-  &.is-panel { gap: 14px; }
-
-  // Panel (watch page, 23d): three tiles, radius 20, bg + border, 24/900.
-  .vs-tiles {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .vs-tile {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-    padding: 12px;
-    border-radius: var(--r-xl);
-    background: var(--bg);
-    border: 1px solid var(--border);
-
-    span { @include v2.text(meta-sm); color: var(--muted); }
-    b { font-size: 24px; font-weight: 900; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    @include v2.mobile { padding: 10px; b { font-size: 20px; } }
-  }
+  // The private footnote under the watch-page panel (45a).
+  .vs-foot { margin: 0; font-size: 10px; line-height: 1.4; color: var(--muted); }
 
   // Detail (profile, 45a): four small wells, numbers in mono.
   .vs-wells {
@@ -125,7 +94,8 @@
     }
   }
 
-  // 45a: the insights are one plain 11px line, not chips.
+  // 45a: the insights are one plain 11px line, not chips; the replayed
+  // times in bold (a link to that moment on the watch page).
   &.is-detail .vs-insights {
     gap: 4px 12px;
 
@@ -136,6 +106,9 @@
       font-size: 11px;
       color: var(--text);
     }
+
+    .vs-ts, .vs-ts-static { @include v2.mono(11, 700); color: var(--text); }
+    .vs-ts { text-decoration: none; &:hover { text-decoration: underline; } }
   }
 
   // Position chart (retention / most-replayed) on a bg well.
@@ -260,15 +233,6 @@
     @include v2.mono(10, 700);
     white-space: nowrap;
     pointer-events: none;
-  }
-
-  .vs-axis-below {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    margin-top: -6px;
-    @include v2.mono(11, 700);
-    color: var(--muted);
   }
 
   .vs-poschart-cursor {

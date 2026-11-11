@@ -8,7 +8,7 @@ import { fetchAdAccess, fetchViewerAdPrefs, setViewerAdPrefs, setListenerAdPrefs
 import { resetViewerRewards } from '../../utils/viewerRewards';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { isAdvertiserAccount } from '../../utils/advertiserAccount';
-import { Dialog, Button, Icon } from '../v2/ui';
+import { Dialog, Button } from '../v2/ui';
 import './AdsPrompt.scss';
 
 // Every toast from this module is headed "Advertising"; the message becomes the
@@ -118,13 +118,15 @@ export default function ViewerRewardsPrompt() {
   const listen = open === 'listen';
   // No X and no backdrop close: both ways out record an answer (yes or no), and
   // closing without one would only bring the question back.
+  // Design 47d: the title, one muted paragraph, then No thanks | Yes side by side
+  // (cyan for listening). The consent fine print stays under the paragraph.
   return (
     <Dialog
       open
       dismissible={false}
       title={listen ? t('ads.listenPrompt.title') : t('ads.viewerPrompt.titleBoth')}
       width={460}
-      className="ads-prompt-v2"
+      className="ads-prompt-v2 ads-prompt-v2--answer"
       footer={(
         <>
           <Button variant="secondary" size={44} onClick={() => answer(false)} disabled={saving}>
@@ -136,21 +138,16 @@ export default function ViewerRewardsPrompt() {
         </>
       )}
     >
-      <div className={listen ? 'ads-prompt-v2__badge is-cyan' : 'ads-prompt-v2__badge'} aria-hidden>
-        <Icon name={listen ? 'headphones' : 'payments'} size={24} />
-      </div>
       {listen ? (
         <>
-          <p className="ads-prompt-v2__text">{t('ads.listenPrompt.text')}</p>
+          <p className="ads-prompt-v2__lede">{t('ads.listenPrompt.text')}</p>
           <p className="v2-meta-sm">{t('ads.listenPrompt.note')}</p>
         </>
       ) : (
         <>
           <p className="ads-prompt-v2__lede">
-            <Trans i18nKey="ads.viewerPrompt.lede" components={{ b: <strong /> }} />
+            <Trans i18nKey="ads.viewerPrompt.lede" components={{ b: <span /> }} />
           </p>
-          <p className="ads-prompt-v2__text">{t('ads.viewerPrompt.text')}</p>
-          <p className="v2-meta-sm">{t('ads.viewerPrompt.listenNote')}</p>
           <p className="v2-meta-sm">{t('ads.viewerPrompt.note')}</p>
         </>
       )}

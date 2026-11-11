@@ -7,55 +7,33 @@
   .v2-dialog__foot { flex-wrap: nowrap; }
   .v2-dialog__foot .ads-prompt-v2__main.v2-btn { flex: 1; min-width: 0; }
 
-  &__steps { display: flex; flex-direction: column; gap: 6px; }
+  &__lede { margin: 0; @include v2.text(body-sm); line-height: 1.45; color: var(--muted); }
 
-  &__title { margin: 0; @include v2.text(title-sm); }
-  &__lede { margin: 0; font-size: 14px; line-height: 1.5; strong { font-weight: 700; } }
-  &__text {
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--muted);
-    strong { color: var(--text); font-weight: 700; }
-  }
-
-  &__badge {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--r-lg);
-    display: grid;
-    place-items: center;
-    background: var(--accent-tint-strong);
-    color: var(--accent);
-    &.is-cyan { background: var(--cyan-tint-strong); color: var(--cyan); }
-  }
-
-  // The split: creator side (accent), viewers (cyan), 3Speak (surface-2)
+  // The split (47d): creator side (accent), watching (cyan), 3Speak
+  // (surface-2), each part labelled inside in 10/900.
   &__bar {
     display: flex;
-    height: 28px;
+    height: 24px;
     border-radius: var(--r-sm);
     overflow: hidden;
     background: var(--surface-2);
-    > span { display: block; height: 100%; }
-    .is-creators { background: var(--accent); }
-    .is-viewers { background: var(--cyan); }
-    .is-platform { flex: 1; }
-  }
-  &__key {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 14px;
-    font-size: 12px;
-    color: var(--muted);
-    li { display: flex; align-items: center; gap: 6px; }
-    li::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--surface-2); }
-    li.is-creators::before { background: var(--accent); }
-    li.is-viewers::before { background: var(--cyan); }
-    b { color: var(--text); font-size: 12px; }
+    > span {
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      height: 100%;
+      padding: 0 4px;
+      overflow: hidden;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1.1;
+      text-align: center;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .is-creators { background: var(--accent); color: var(--on-accent); }
+    .is-viewers { background: var(--cyan); color: var(--bg); }
+    .is-platform { flex: 1; color: var(--text); }
   }
   &__points {
     margin: 0;
@@ -70,14 +48,27 @@
 
   &__rows { display: flex; flex-direction: column; }
 
-  &__share { @include v2.well; padding: 12px; label { font-weight: 700; color: var(--text); font-size: 13px; } }
+  &__share { gap: 6px; }
   &__breakdown {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 12px;
-    font-size: 12px;
-    color: var(--text);
-    b { font-family: var(--font-mono); font-weight: 700; }
-    .is-muted { color: var(--muted); }
+    margin: 0;
+    @include v2.text(body-sm);
+    label { font-weight: 700; color: var(--text); }
+    .num { @include v2.mono(12, 400); color: var(--muted); }
   }
+
+  // "Step 1 of 2" (47d): mono 12/700 muted at the right of the title.
+  &--settings .v2-dialog__head h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    .v2-dialog__sub {
+      margin-left: auto;
+      @include v2.mono(12, 700);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+  }
+
+  // Viewer and listener rewards (47d): the two answers side by side, equal.
+  &--answer .v2-dialog__foot .v2-btn { flex: 1 1 0; min-width: 0; }
 }

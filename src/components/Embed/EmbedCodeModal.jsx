@@ -112,7 +112,7 @@ function EmbedCodeModal({ target, onClose }) {
         ref={codeRef}
         className="embed-code-text"
         readOnly
-        rows={4}
+        rows={5}
         spellCheck={false}
         value={code}
         onFocus={(e) => e.target.select()}

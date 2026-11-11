@@ -1,22 +1,17 @@
 @use "../../styles/v2" as v2;
 
-// Description composer (44c): a bg well like every field (no border at rest,
-// accent ring on focus), a toolbar of 28px icon buttons on top, the editor in
-// Roboto (mono only for code) and the preview beside or instead of it.
+// Description composer (44c): a column of bg wells. The toolbar's fourteen
+// 28px icon buttons in one well, Editor Only | Split View | Preview Only on a
+// 28px segmented track, the editor and the preview as their own wells (side
+// by side in Split View), and the Emoji | GIFs picker as a well under them.
 .markdown-composer {
   display: flex;
   flex-direction: column;
-  min-height: 120px;
-  border: 2px solid transparent;
-  border-radius: var(--r-md);
-  background-color: var(--bg);
+  gap: 8px;
+  min-width: 0;
   color: var(--text);
-  transition: border-color var(--t-fast) var(--ease);
   // NOTE: intentionally NOT `overflow: hidden` here: it would clip the
-  // toolbar's emoji-picker / heading dropdowns (which pop downward). Rounded
-  // corners are clipped on the toolbar (top) and content (bottom) instead.
-
-  &:focus-within { border-color: var(--accent); }
+  // headings dropdown, which pops downward from the toolbar.
 
   // Toolbar
   .composer-toolbar {
@@ -25,90 +20,37 @@
     align-items: center;
     gap: 2px;
     padding: 4px;
-    border-bottom: 1px solid var(--border);
-    border-radius: 10px 10px 0 0;
+    border-radius: var(--r-md);
+    background: var(--bg);
 
-    .toolbar-group {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-
-      &.show { display: none; }
-
-      button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        padding: 0;
-        border: none;
-        border-radius: var(--r-sm);
-        background-color: transparent;
-        color: var(--muted);
-        font: inherit;
-        cursor: pointer;
-        transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
-
-        &:hover {
-          background-color: var(--bg-hover);
-          color: var(--text);
-        }
-
-        &.active {
-          background-color: var(--surface-2);
-          color: var(--text);
-        }
-
-        &:disabled {
-          opacity: .45;
-          cursor: not-allowed;
-        }
-
-        // Text-label GIF toggle: a legible "GIF" wordmark instead of a glyph
-        // (matches the comment composer button).
-        &.gif-toggle-btn {
-          width: auto;
-          min-width: 28px;
-          padding: 0 6px;
-          font-size: 11px;
-          font-weight: 900;
-          letter-spacing: .04em;
-        }
-      }
-    }
-
-    .toolbar-divider {
-      width: 1px;
-      height: 16px;
-      background-color: var(--border);
-      margin: 0 4px;
-
-      @include v2.mobile { display: none; }
-    }
-
-    .toolbar-spacer { flex: 1; }
-
-    // View modes: a small segmented track (editor / split / preview).
-    .view-toggle {
-      padding: 2px;
+    button {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: none;
       border-radius: var(--r-sm);
-      background: var(--surface);
+      background-color: transparent;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+      transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-      button {
-        width: 32px;
-        height: 24px;
+      &:hover { background-color: var(--bg-hover); }
 
-        &.active {
-          background-color: var(--surface-2);
-          color: var(--text);
-        }
+      &.active {
+        background-color: var(--surface-2);
+        color: var(--text);
+      }
 
-        &.show { display: none; }
+      &:disabled {
+        opacity: .45;
+        cursor: not-allowed;
       }
     }
 
-    // Popovers (headings, emoji, GIFs): menus per STYLE_GUIDE §7.
+    // The headings popover: a menu per STYLE_GUIDE §7.
     .dropdown-wrapper {
       position: relative;
 
@@ -123,156 +65,68 @@
         min-width: 64px;
         margin-top: 6px;
         @include v2.menu;
+        animation: md-composer-pop var(--t-base) var(--ease);
 
         button {
           width: 100%;
           height: 32px;
           justify-content: flex-start;
+          place-items: center start;
           padding: 0 10px;
           border-radius: var(--r-md);
           @include v2.text(label);
           color: var(--text);
         }
       }
-
-      .emoji-picker-container {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        z-index: 100;
-        margin-top: 6px;
-        border-radius: var(--r-xl);
-        box-shadow: var(--shadow-float);
-
-        @include v2.mobile { right: -100px; }
-
-        .EmojiPickerReact {
-          --epr-bg-color: var(--surface);
-          --epr-category-label-bg-color: var(--surface);
-          --epr-search-input-bg-color: var(--bg);
-          --epr-hover-bg-color: var(--surface-2);
-          --epr-focus-bg-color: var(--surface-2);
-          --epr-highlight-color: var(--accent);
-          --epr-text-color: var(--text);
-          --epr-picker-border-color: var(--border);
-          --epr-picker-border-radius: 20px;
-          --epr-search-border-color: transparent;
-        }
-      }
-
-      @include v2.mobile {
-        // emoji-picker-react sets its width inline from the `width` prop, so the
-        // mobile narrowing has to win with !important.
-        .EmojiPickerReact { width: 270px !important; }
-      }
-
-      // GIF picker popover: Giphy search + grid.
-      .gif-picker-container {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        z-index: 100;
-        margin-top: 6px;
-        width: 340px;
-        @include v2.menu;
-
-        @include v2.mobile {
-          width: 280px;
-          right: -80px;
-        }
-
-        .gif-picker-search {
-          @include v2.field(32);
-          width: 100%;
-          font-size: 13px;
-          margin-bottom: 8px;
-        }
-
-        .gif-picker-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 4px;
-          max-height: 280px;
-          @include v2.scroll-y;
-        }
-
-        .gif-picker-item {
-          width: 100%;
-          height: auto;
-          padding: 0;
-          border: none;
-          @include v2.thumb-placeholder(5px);
-          border-radius: var(--r-sm);
-          overflow: hidden;
-          cursor: pointer;
-
-          img { width: 100%; height: auto; display: block; }
-          &:hover { outline: 2px solid var(--accent); outline-offset: -2px; }
-        }
-
-        .gif-picker-status {
-          grid-column: 1 / -1;
-          padding: 20px;
-          @include v2.text(meta);
-          color: var(--muted);
-        }
-
-        .gif-picker-attribution {
-          margin-top: 6px;
-          @include v2.text(meta-sm);
-          font-size: 10px;
-          color: var(--muted);
-        }
-      }
     }
   }
 
-  // Content area
+  // Editor Only | Split View | Preview Only (v2-seg, 28px options)
+  .composer-modes {
+    .v2-seg__opt { min-width: 0; }
+  }
+
+  // Content area: one bg well per panel.
   .composer-content {
     display: flex;
-    flex: 1;
+    gap: 6px;
+    flex: 1 1 auto;
     min-height: 0;
-    overflow: hidden;
-    border-radius: 0 0 10px 10px;
 
     &.editor .editor-panel { width: 100%; }
     &.preview .preview-panel { width: 100%; }
 
     &.split {
-      gap: 0;
-
       .editor-panel,
       .preview-panel { width: 50%; }
-
-      .editor-panel { border-right: 1px solid var(--border); }
 
       @include v2.mobile {
         flex-direction: column;
 
         .editor-panel,
-        .preview-panel {
-          width: 100%;
-          height: 50%;
-        }
-
-        .editor-panel {
-          border-right: none;
-          border-bottom: 1px solid var(--border);
-        }
+        .preview-panel { width: 100%; }
       }
     }
   }
 
-  // Editor panel
+  // Editor panel: the field (no border at rest, accent ring on focus).
   .editor-panel {
     position: relative;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    overflow: hidden;
+    transition: border-color var(--t-fast) var(--ease);
+
+    &:focus-within { border-color: var(--accent); }
 
     textarea {
       width: 100%;
-      min-height: 120px;
-      padding: 10px 12px;
+      min-height: 110px;
+      padding: 8px 10px;
       border: none;
       outline: none;
       resize: none;
@@ -306,18 +160,123 @@
 
     .drag-overlay {
       border: 2px dashed var(--accent);
-      border-radius: 0 0 10px 10px;
+      border-radius: var(--r-md);
       background-color: var(--accent-tint);
       color: var(--accent);
     }
   }
 
-  // Preview panel
+  // Emoji | GIFs: a bg well, tabs on top, a fixed-height body.
+  .composer-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    animation: md-composer-pop var(--t-base) var(--ease);
+
+    &__tabs {
+      display: flex;
+      gap: 4px;
+
+      button {
+        height: 24px;
+        padding: 0 8px;
+        border: 0;
+        border-radius: var(--r-sm);
+        background: transparent;
+        color: var(--muted);
+        font: inherit;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+
+        &:hover { color: var(--text); }
+        &.is-on { background: var(--surface-2); color: var(--text); }
+      }
+    }
+
+    &__body { height: 260px; }
+
+    .emoji-picker-container .EmojiPickerReact {
+      --epr-bg-color: var(--bg);
+      --epr-category-label-bg-color: var(--bg);
+      --epr-search-input-bg-color: var(--surface);
+      --epr-hover-bg-color: var(--surface-2);
+      --epr-focus-bg-color: var(--surface-2);
+      --epr-highlight-color: var(--accent);
+      --epr-text-color: var(--text);
+      --epr-picker-border-color: transparent;
+      --epr-picker-border-radius: 8px;
+      --epr-search-border-color: transparent;
+      --epr-search-input-height: 28px;
+      --epr-search-input-border-radius: 8px;
+    }
+
+    .gif-picker-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .gif-picker-search {
+      @include v2.field(28);
+      flex: none;
+      width: 100%;
+      padding: 0 8px;
+      background: var(--surface);
+      font-size: 11px;
+    }
+
+    .gif-picker-grid {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      // Four across in a narrow card (44c), more as the composer widens.
+      grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+      grid-auto-rows: min-content;
+      gap: 4px;
+      @include v2.scroll-y;
+    }
+
+    .gif-picker-item {
+      aspect-ratio: 1;
+      width: 100%;
+      padding: 0;
+      border: none;
+      @include v2.thumb-placeholder(5px);
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      cursor: pointer;
+
+      img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      &:hover { outline: 2px solid var(--accent); outline-offset: -2px; }
+    }
+
+    .gif-picker-status {
+      grid-column: 1 / -1;
+      padding: 20px 4px;
+      @include v2.text(meta);
+      color: var(--muted);
+    }
+
+    .gif-picker-attribution {
+      flex: none;
+      font-size: 10px;
+      color: var(--muted);
+    }
+  }
+
+  // Preview panel: a bg well beside (or instead of) the editor.
   .preview-panel {
     flex: 1;
     min-width: 0;
+    min-height: 110px;
     overflow-y: auto;
     padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--bg);
 
     .preview-placeholder {
       @include v2.text(body-sm);
@@ -458,14 +417,6 @@
         }
       }
     }
-  }
-}
-
-.markdown-composer .dropdown-wrapper {
-  .dropdown-menu,
-  .emoji-picker-container,
-  .gif-picker-container {
-    animation: md-composer-pop var(--t-base) var(--ease);
   }
 }
 

@@ -7,7 +7,7 @@ import { transferWithAioha, isLoggedIn } from '../../hive-api/aioha';
 import { getOperationUser } from '../../hive-api/aioha';
 import { fetchBalances } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
-import { Dialog, Button, IconButton, ChoiceCard, Segmented, Field, StepBar, Icon } from '../v2/ui';
+import { Dialog, Button, IconButton, Segmented, Field, StepBar, Icon } from '../v2/ui';
 import { cx } from '../v2/helpers';
 import './AdWizardModal.scss';
 
@@ -147,13 +147,19 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
 
   const back = () => setStep((s) => Math.max(1, s - 1));
 
-  const money = (n) => (n ? n.toFixed(3) : '…');
+  // "17 Nov": day and short month in the reader's locale.
+  const shortDate = (iso) => new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+  // "Only on videos 2 to 30 minutes" (either end may be left empty).
+  const lengthLine = minMinutes && maxMinutes ? t('ads.wizard.onlyOnVideos', { min: minMinutes, max: maxMinutes })
+    : minMinutes ? t('ads.wizard.onlyOnVideosMin', { min: minMinutes })
+      : maxMinutes ? t('ads.wizard.onlyOnVideosMax', { max: maxMinutes })
+        : '';
 
   return (
     <Dialog
       open
       onClose={onClose}
-      title={step === 4 ? t('ads.wizard.bookedTitle') : t('ads.wizard.title')}
+      title={t('ads.wizard.title')}
       closeLabel={t('common.actions.close')}
       width={480}
       className="adw-v2"
@@ -178,16 +184,19 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
           </p>
           <div className="v2-field">
             <span className="v2-eyebrow">{t('ads.wizard.whereRuns')}</span>
-            <div className="adw-formats">
+            <div className="adw-formats" role="radiogroup" aria-label={t('ads.wizard.whereRuns')}>
               {options.formats.map((f) => (
-                <ChoiceCard
+                <button
                   key={f.key}
-                  icon={f.key === 'shorts_roll' ? 'smartphone' : 'smart_display'}
-                  selected={format === f.key}
-                  title={f.key === 'shorts_roll' ? t('ads.wizard.shortsSpot') : t('ads.wizard.videoRoll')}
-                  sub={f.key === 'shorts_roll' ? t('ads.wizard.shortsSpotDesc') : t('ads.wizard.videoRollDesc')}
+                  type="button"
+                  role="radio"
+                  aria-checked={format === f.key}
+                  className={cx('adw-format', format === f.key && 'is-on')}
                   onClick={() => { setFormat(f.key); setSeconds(Math.min(seconds, f.maxSeconds)); }}
-                />
+                >
+                  <b>{f.key === 'shorts_roll' ? t('ads.wizard.shortsSpot') : t('ads.wizard.videoRoll')}</b>
+                  <span>{f.key === 'shorts_roll' ? t('ads.wizard.shortsSpotDesc') : t('ads.wizard.videoRollDesc')}</span>
+                </button>
               ))}
             </div>
           </div>
@@ -243,25 +252,24 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
 
       {!showLoading && eligible && step === 3 && (
         <>
-          <div className="adw-summary">
-            <div><span>{t('ads.wizard.format')}</span><strong>{format === 'shorts_roll' ? t('ads.wizard.shortsSpot') : t('ads.wizard.videoRoll')}</strong></div>
-            <div><span>{t('ads.wizard.spotLength')}</span><strong className="num">{seconds}s</strong></div>
-            <div><span>{t('ads.wizard.starts')}</span><strong>{new Date(startAt).toLocaleDateString()}</strong></div>
-            <div><span>{t('ads.wizard.runsFor')}</span><strong>{t('ads.wizard.days', { count: days })}</strong></div>
-          </div>
-          <div className="v2-field">
+          {/* One line (47d): what runs, then Start · Run for · Only on videos. */}
+          <p className="adw-summary">
+            <b>{format === 'shorts_roll' ? t('ads.wizard.shortsSpot') : t('ads.wizard.videoRoll')}</b>
+            {' · '}<span className="num">{seconds}s</span>
+            {' · '}{t('ads.wizard.starts')} {shortDate(startAt)}
+            {' · '}<Trans i18nKey="ads.wizard.runFor" count={days} components={{ b: <b /> }} />
+            {lengthLine ? <>{' · '}{lengthLine}</> : null}
+          </p>
+          <div className="adw-pay">
             <span className="v2-eyebrow">{t('ads.promote.payWith')}</span>
             <Segmented
               block={false}
+              size={28}
               value={currency}
               onChange={(c) => { if (busy || (c === 'HIVE' && !hbdPerHive)) return; setCurrency(c); }}
               label={t('ads.promote.payWith')}
               options={[{ value: 'HBD', label: 'HBD' }, { value: 'HIVE', label: 'HIVE', disabled: busy || !hbdPerHive }]}
             />
-          </div>
-          <div className="adw-total">
-            <span className="v2-eyebrow">{t('ads.promote.total')}</span>
-            <b className="money">{money(amount)} <span>{currency}</span></b>
             <span className={cx('adw-balance', insufficient && 'is-low')}>
               {t('ads.promote.yourBalance')}: <span className="num">{walletBalance != null ? `${walletBalance.toFixed(3)} ${currency}` : '…'}</span>
             </span>
@@ -276,14 +284,13 @@ export default function AdWizardModal({ open, onClose, author, permlink }) {
       )}
 
       {step === 4 && booked && (
-        <div className="v2-success adw-done">
-          <span className="adw-tick"><Icon name="check" size={22} /></span>
-          <b>{booked.credited ? t('ads.wizard.paymentConfirmed') : t('ads.wizard.paymentSent')}</b>
-          <p className="v2-meta">
-            {t('ads.wizard.withReviewers', { count: booked.days, date: new Date(booked.startAt).toLocaleDateString() })}
+        <div className="adw-done">
+          <p className="adw-booked" role="status">
+            <b>{t('ads.wizard.bookedTitle')}.</b>{' '}
+            <span>{t('ads.wizard.withReviewers', { count: booked.days, date: shortDate(booked.startAt) })}</span>
           </p>
           {!booked.credited && (
-            <p className="v2-meta">
+            <p className="v2-meta-sm">
               {t('ads.wizard.paymentLag')}
             </p>
           )}

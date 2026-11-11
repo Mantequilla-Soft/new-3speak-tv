@@ -55,7 +55,7 @@ describe('UploadLinks: Audio editor entry', () => {
     const at = links.indexOf('Music / Audio')
     expect(at).toBeGreaterThanOrEqual(0)
     expect(links[at + 1]).toBe('Audio Editor')
-    expect(entry()).toHaveTextContent('Cut, clean up and level podcasts and music')
+    expect(entry()).toHaveTextContent('Cut, clean up and level')
   })
 
   it('the video entries sit under Video, audio upload and the audio editor under their own Audio category', () => {

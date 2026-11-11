@@ -677,10 +677,11 @@ $wide: 1024px;
   }
 }
 
+// The per-video stats under the player (45a, CreatorStats/VideoStats).
 .watch-stats-panel {
   width: 100%;
-  padding: 14px;
-  border-radius: var(--r-2xl);
+  padding: 20px;
+  border-radius: var(--r-3xl);
   background: var(--surface);
   border: 1px solid var(--border);
 }

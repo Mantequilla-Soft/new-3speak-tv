@@ -14,11 +14,32 @@
     font-size: 13px;
   }
 
+  // Where it runs (47d): two icon-less choice cards, radius 12, a 2px border,
+  // the bold title over a muted line; picked = accent + tint.
   .adw-formats {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
+    gap: 6px;
+  }
+  .adw-format {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+    b { @include v2.text(label); }
+    span { @include v2.text(meta-sm); line-height: 1.35; color: var(--muted); }
+    &:hover { background: var(--bg-hover); }
+    &.is-on { border-color: var(--accent); background: var(--accent-tint-strong); }
   }
 
   .adw-minmax {
@@ -31,31 +52,21 @@
   }
   .adw-unit { flex: none; }
 
+  // Start · Run for · Only on videos (47d): one wrapping line.
   .adw-summary {
-    @include v2.well;
-    padding: 10px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    > div { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; }
-    span { color: var(--muted); }
-    strong { font-weight: 700; }
+    margin: 0;
+    @include v2.text(body-sm);
+    line-height: 1.5;
+    b { font-weight: 700; }
   }
 
-  // The amount well (§11): total in Roboto Mono, then the balance
-  .adw-total {
-    @include v2.well;
-    padding: 12px 14px;
+  .adw-pay {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    .money {
-      font-size: 28px;
-      font-weight: 900;
-      line-height: 1.15;
-      > span { font-size: 13px; color: var(--muted); font-weight: 700; }
-    }
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
   }
+
   .adw-balance {
     font-size: 12px;
     color: var(--muted);
@@ -65,19 +76,19 @@
   .adw-done {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     gap: 8px;
-    b { font-size: 16px; font-weight: 700; }
     p { margin: 0; }
     .v2-btn { margin-top: 8px; }
   }
-  .adw-tick {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    background: var(--cyan-tint-strong);
-    color: var(--cyan);
+
+  // "Your ad is booked." (47d): a cyan wash on bg, bold lead, muted rest.
+  .adw-booked {
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: color-mix(in srgb, var(--cyan) 10%, var(--bg));
+    @include v2.text(body-sm);
+    line-height: 1.45;
+    b { font-weight: 700; color: var(--text); }
+    span { color: var(--muted); }
   }
 }

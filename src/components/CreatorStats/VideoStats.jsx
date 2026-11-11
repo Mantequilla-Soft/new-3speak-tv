@@ -168,35 +168,33 @@ function deriveInsights(data) {
 }
 
 /**
- * Per-video watch analytics, reused by the profile dashboard AND the watch page.
+ * Per-video watch analytics, reused by the profile dashboard AND the watch page,
+ * both drawn as 45a: four wells (unique viewers, avg view duration, avg watched,
+ * avg speed), the retention curve with the biggest drop-off marked, the insights
+ * line, most replayed as bars.
  *
- * variant "detail" (profile, 45a): four wells (views, avg view duration, avg
- *   watched, avg speed), the retention curve with the biggest drop-off marked,
- *   the insights line, most replayed as bars.
- * default (watch page, 23d): three tiles, retention as bars with the most
- *   replayed moment in the accent, the axis under it, the insight chips.
+ * variant "detail" (profile): the body only; the dashboard has its own title
+ *   and footnote.
+ * default (watch page, `.watch-stats-panel`): with the 16/700 title over it and
+ *   the private footnote under it.
  *
  * @param {string} username  video owner (Hive author)
  * @param {string} permlink  asset OR Hive permlink (the API resolves either)
  * @param {boolean} compact  tighter layout for inline use (watch page)
  * @param {string} variant   "detail" for the profile dashboard
+ * @param {string} title     optional panel title (the video's); defaults to "Video stats"
  * @param {function} onSeek  optional — makes replay timestamps clickable (seek the player)
  */
-export default function VideoStats({ username, permlink, compact = false, variant = 'panel', onSeek = null }) {
+export default function VideoStats({ username, permlink, compact = false, variant = 'panel', title = '', onSeek = null }) {
   const { t } = useTranslation();
   const tPlain = (...args) => String(t(...args)).replace(LEAD_EMOJI, '');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(false);
   const detail = variant === 'detail';
-  const cls = `video-stats${compact ? ' compact' : ''}${detail ? ' is-detail' : ' is-panel'}`;
-  // The watch-page panel carries its own title (23d: accent bar + "Video stats").
-  const head = detail ? null : (
-    <div className="vs-head">
-      <span className="vs-head-bar" aria-hidden="true" />
-      <h3>{t('watch.actions.videoStats')}</h3>
-    </div>
-  );
+  const cls = `video-stats is-detail${compact ? ' compact' : ''}${detail ? '' : ' is-panel'}`;
+  // The watch-page panel carries its own title (45a: 16/700, the video's name).
+  const head = detail ? null : <h3 className="vs-title">{title || t('watch.actions.videoStats')}</h3>;
 
   useEffect(() => {
     let cancelled = false;
@@ -230,9 +228,7 @@ export default function VideoStats({ username, permlink, compact = false, varian
   const showEarly = data.duration <= 90 && ins.earlyDrop != null;
   const hasInsights = ins.biggestDrop || ins.topMoments.length || showEarly;
   const avgView = data.sessions ? data.watchSeconds / data.sessions : 0;
-  // The most replayed bucket (0..1), for the accent bar on the retention bars.
   const norm = data.replay?.normalized || [];
-  const peak = norm.length ? norm.indexOf(Math.max(...norm)) / norm.length : null;
 
   const insights = hasInsights ? (
     <div className="vs-insights">
@@ -250,64 +246,37 @@ export default function VideoStats({ username, permlink, compact = false, varian
     </div>
   ) : null;
 
-  if (detail) {
-    return (
-      <div className={cls}>
-        <div className="vs-wells">
-          <div className="vs-well"><span>{t('stats.metrics.views')}</span><b>{fmtCount(data.sessions)}</b></div>
-          <div className="vs-well"><span>{t('stats.tiles.avgViewDuration')}</span><b>{mmss(avgView)}</b></div>
-          <div className="vs-well"><span>{t('stats.tiles.avgWatched')}</span><b>{`${Math.round(data.avgPct)}%`}</b></div>
-          <div className="vs-well"><span>{t('stats.video.avgSpeed')}</span><b>{`${data.avgRate}×`}</b></div>
-        </div>
-
-        <h5 className="vs-h">{t('stats.video.retentionTitle')}<em>{t('stats.video.retentionSub')}</em></h5>
-        <PositionChart
-          values={data.retention} maxValue={100} duration={data.duration}
-          color="var(--cyan)"
-          formatValue={(v) => t('stats.video.pctWatching', { pct: Math.round(v) })}
-          videoId={previewId}
-          marker={ins.biggestDrop ? { x: ins.biggestDrop.x, label: t('stats.video.pctWatching', { pct: Math.round(ins.biggestDrop.left ?? 0) }) } : null}
-        />
-        {insights}
-
-        <h5 className="vs-h">{t('stats.video.replayTitle')}<em>{t('stats.video.replaySub')}</em></h5>
-        <PositionChart
-          values={norm} maxValue={1} duration={data.duration}
-          color="color-mix(in srgb, var(--text) 28%, transparent)"
-          formatValue={() => t('stats.video.hotSpot')}
-          emptyLabel={t('stats.video.notEnoughReplays')}
-          videoId={previewId}
-          bars={30}
-          axis={false}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className={cls}>
       {head}
-      <div className="vs-tiles">
-        <div className="vs-tile"><span>{t('stats.metrics.views')}</span><b>{fmtCount(data.sessions)}</b></div>
-        <div className="vs-tile"><span>{t('stats.tiles.avgViewDuration')}</span><b>{mmss(avgView)}</b></div>
-        <div className="vs-tile"><span>{t('stats.tiles.avgWatched')}</span><b>{`${Math.round(data.avgPct)}%`}</b></div>
+      <div className="vs-wells">
+        <div className="vs-well"><span>{t('stats.video.uniqueViewers')}</span><b>{fmtCount(data.viewers ?? data.sessions)}</b></div>
+        <div className="vs-well"><span>{t('stats.tiles.avgViewDuration')}</span><b>{mmss(avgView)}</b></div>
+        <div className="vs-well"><span>{t('stats.tiles.avgWatched')}</span><b>{`${Math.round(data.avgPct)}%`}</b></div>
+        <div className="vs-well"><span>{t('stats.video.avgSpeed')}</span><b>{`${data.avgRate}×`}</b></div>
       </div>
 
+      <h5 className="vs-h">{t('stats.video.retentionTitle')}<em>{t('stats.video.retentionSub')}</em></h5>
       <PositionChart
         values={data.retention} maxValue={100} duration={data.duration}
-        color="color-mix(in srgb, var(--cyan) 45%, transparent)"
+        color="var(--cyan)"
         formatValue={(v) => t('stats.video.pctWatching', { pct: Math.round(v) })}
         videoId={previewId}
-        bars={24}
-        hotIndex={peak}
+        marker={ins.biggestDrop ? { x: ins.biggestDrop.x, label: t('stats.video.pctWatching', { pct: Math.round(ins.biggestDrop.left ?? 0) }) } : null}
+      />
+      {insights}
+
+      <h5 className="vs-h">{t('stats.video.replayTitle')}<em>{t('stats.video.replaySub')}</em></h5>
+      <PositionChart
+        values={norm} maxValue={1} duration={data.duration}
+        color="color-mix(in srgb, var(--text) 28%, transparent)"
+        formatValue={() => t('stats.video.hotSpot')}
+        emptyLabel={t('stats.video.notEnoughReplays')}
+        videoId={previewId}
+        bars={30}
         axis={false}
       />
-      <div className="vs-axis-below">
-        <span>0:00</span>
-        <span>{t('stats.video.retentionTitle')}</span>
-        <span>{mmss(data.duration)}</span>
-      </div>
-      {insights}
+      {!detail && <p className="vs-foot">{t('stats.footnote')}</p>}
     </div>
   );
 }
