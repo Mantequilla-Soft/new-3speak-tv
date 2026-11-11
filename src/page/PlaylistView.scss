@@ -458,7 +458,15 @@
   // The Follow / Open podcast pair sits in the action row like the other buttons.
   .playlist-follow { display: contents; }
 
-  .pod-show-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pod-show-actions {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    // Phones: Play across the top, the tiles in a grid under it (the show page's row).
+    @include v2.mobile { display: grid; }
+    // The Button size classes (h36/h40) would squash the icon-over-label tiles:
+    // keep them 64 tall like the podcast show page (24b, 36d).
+    .pod-btn.v2-btn { height: 64px; border-radius: var(--r-xl); }
+    @include v2.mobile { .pod-btn--solid.v2-btn { height: 56px; border-radius: var(--r-xl); } }
+  }
 }
 
 .playlist-pod-episodes {

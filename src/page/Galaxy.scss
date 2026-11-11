@@ -20,7 +20,7 @@ $left-w: 312px;
 
   // Tablets also have the fixed bottom nav.
   @media (min-width: 768px) and (max-width: 1024px) {
-    height: calc(100dvh - var(--nav-height, var(--topbar-h)) - var(--bottom-nav-height));
+    height: calc(100dvh - var(--nav-height, var(--topbar-h)) - var(--bottom-bar-clearance));
   }
 
   .galaxy-overlay {

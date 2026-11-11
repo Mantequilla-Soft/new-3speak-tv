@@ -71,7 +71,8 @@ function AudioAuthorBadge({ author, tracks, isFollowing: isFollowingProp, onClic
       {showFollowBtn && (
         <Button
           size={28}
-          variant={following ? 'secondary' : 'inverse'}
+          // A row of creators: Follow is secondary (never a fill per tile), Following quiet.
+          variant={following ? 'ghost' : 'secondary'}
           className={`audio-author-follow-btn${following ? ' following' : ''}`}
           onClick={handleFollow}
           disabled={loading}

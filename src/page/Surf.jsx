@@ -73,7 +73,8 @@ function Surf() {
         </span>
         <span className="surf-tile__body">
           <span className="surf-tile__label">
-            <span aria-hidden="true">{c.emoji}</span> {channelTitle(c)}
+            {/* The channel number is the tile's mark (design 34); no emoji icons. */}
+            {channelTitle(c)}
           </span>
           {isTuning && <span className="surf-tile__sub">{t('feeds.surf.tuning')}</span>}
         </span>
@@ -97,7 +98,7 @@ function Surf() {
         <div className="surf-hero__actions">
           {last && (
             <Button variant="primary" size={44} icon="play_arrow" onClick={() => tuneIn(last.slug)} disabled={!!tuning}>
-              {t('feeds.surf.backTo', { number: channelNumber(last), emoji: last.emoji, title: channelTitle(last) })}
+              {t('feeds.surf.backTo', { number: channelNumber(last), emoji: '', title: channelTitle(last) })}
             </Button>
           )}
           <Button variant={last ? 'secondary' : 'primary'} size={44} icon="casino" onClick={surprise} disabled={!!tuning}>

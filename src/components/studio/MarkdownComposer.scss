@@ -2,7 +2,7 @@
 
 // Description composer (44c): a bg well like every field (no border at rest,
 // accent ring on focus), a toolbar of 28px icon buttons on top, the editor in
-// Roboto Mono and the preview beside or instead of it.
+// Roboto (mono only for code) and the preview beside or instead of it.
 .markdown-composer {
   display: flex;
   flex-direction: column;
@@ -277,9 +277,10 @@
       outline: none;
       resize: none;
       overflow-y: auto;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      line-height: 1.6;
+      // Body text, like every field (STYLE_GUIDE §3); mono stays for code.
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
       background-color: transparent;
       color: var(--text);
 

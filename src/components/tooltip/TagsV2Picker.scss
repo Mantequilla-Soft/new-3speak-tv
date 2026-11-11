@@ -99,4 +99,17 @@
     color: var(--on-accent);
     @include v2.mono(10, 700);
   }
+
+  // Interests (multi mode, designs 23a and 38): picking topics you like is a
+  // secondary selection, so the picks are cyan, not the accent of a video's tag.
+  &.is-multi {
+    .tagsv2-cat.selected,
+    .tagsv2-topic.selected {
+      border-color: var(--cyan);
+      background: var(--cyan-tint);
+      color: var(--cyan);
+      .tagsv2-icon, .tagsv2-pct { color: var(--cyan); }
+    }
+    .tagsv2-count { background: var(--cyan); color: var(--bg); }
+  }
 }

@@ -29,10 +29,10 @@ $chat-sidebar: 360px;
   // Tablet and phone also have the fixed 56px BottomNav (shown up to 1024px):
   // subtract it so the composer stays above it.
   @media (max-width: 1024px) {
-    height: calc(100dvh - var(--nav-height, 60px) - var(--bottom-nav-height, 56px) - 24px);
+    height: calc(100dvh - var(--nav-height, 60px) - var(--bottom-bar-clearance) - 24px);
   }
   @include v2.mobile {
-    height: calc(100dvh - var(--nav-height, 60px) - var(--bottom-nav-height, 56px) - 16px);
+    height: calc(100dvh - var(--nav-height, 60px) - var(--bottom-bar-clearance) - 16px);
     border-radius: var(--r-2xl);
   }
 }

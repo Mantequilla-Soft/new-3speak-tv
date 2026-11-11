@@ -60,6 +60,7 @@
   --cyan-tint-strong: color-mix(in srgb, var(--cyan) 16%, transparent);
   --cyan-wash: color-mix(in srgb, var(--cyan) 9%, var(--bg));
   --text-tint: color-mix(in srgb, var(--text) 8%, transparent);
+  --bg-hover: color-mix(in srgb, var(--text) 5%, transparent);   /* hover wash on ghost rows and buttons (8% in dark) */
 
   /* type */
   --font-sans: "Roboto", "Arial", sans-serif;
@@ -113,12 +114,13 @@
   --t-base: 200ms;
   --t-slow: 320ms;
 
-  /* ─── 2. Legacy aliases (old index.css names → v2). Delete each once unused ─── */
+  /* ─── 2. Legacy aliases (old index.css names → v2). No mounted screen reads
+     these any more (only the dead files listed in CLAUDE.md's cleanup step);
+     use the v2 names above, and delete this block in migration step 12. ─── */
   --bg-primary: var(--bg);
   --bg-secondary: var(--surface);
   --bg-tertiary: var(--surface-2);
   --bg-elevated: var(--surface);
-  --bg-hover: color-mix(in srgb, var(--text) 5%, transparent);
   --text-primary: var(--text);
   --text-secondary: var(--muted);
   --text-muted: var(--muted);

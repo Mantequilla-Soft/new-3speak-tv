@@ -157,6 +157,9 @@
   height: 300px;
   @include v2.scroll-y;
   align-content: start;
+  // A fixed-height grid shrinks auto rows to their minimum (0 for the clipped
+  // tiles), so size the rows to the tiles and let the grid scroll.
+  grid-auto-rows: max-content;
   // Room left for the grid once the search field and attribution are in.
   @include v2.mobile {
     grid-template-columns: repeat(3, 1fr);
@@ -173,6 +176,7 @@
   overflow: hidden;
   cursor: pointer;
   width: 100%;
+  // Each GIF keeps its own shape, like the chat picker (.chat-gif-item).
   img { width: 100%; height: auto; display: block; }
   &:hover, &:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
 }

@@ -58,6 +58,10 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    // Keep the height of the Videos/Shorts panel (types + topics) when Stories or
+    // Tags show fewer rows, so the podium under it does not jump on a tab switch.
+    min-height: 104px;
+    @include v2.mobile { min-height: 144px; }
   }
 
   .lb-filter-row {
@@ -134,8 +138,10 @@
       border-radius: var(--r-md);
       display: grid;
       place-items: center;
-      background: var(--accent);
-      color: var(--on-accent);
+      // A tint, not a second solid red: the podium medal and the page action own the fills
+      background: var(--accent-tint-strong);
+      color: var(--accent);
+      font-family: var(--font-mono);
       font-size: 13px;
       font-weight: 900;
     }

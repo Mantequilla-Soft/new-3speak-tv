@@ -23,7 +23,7 @@ describe('the page-not-found page', () => {
 
   it('takes the visitor back to the home page', async () => {
     const { user } = renderWithProviders(<NotFound />, { route: '/no/such/page' })
-    await user.click(screen.getByRole('button', { name: 'GO TO HOME PAGE' }))
+    await user.click(screen.getByRole('button', { name: 'Go to home page' }))
     expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
   })
 

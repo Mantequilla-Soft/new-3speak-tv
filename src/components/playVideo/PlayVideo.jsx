@@ -32,7 +32,6 @@ import axios from "axios";
 import { useTranslation, Trans } from "react-i18next";
 import { formatTimeAgo } from "../../i18n";
 import mantequillaLogo from "../../assets/mantequilla-logo.png";
-import threespeakLogo from "../../assets/image/3S_logo.svg";
 import threespeakLogoDark from "../../assets/image/3S_logodark.png";
 import { HIVE_API_URL, CHECKER_URL, FEATURE_EDITOR } from '../../utils/config';
 import { getViewerTags, getMyViewerTag } from '../../utils/viewerTag';
@@ -179,8 +178,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     : {};
   const interests = useAppStore((s) => s.interests);
   const setInterests = useAppStore((s) => s.setInterests);
-  const theme = useAppStore((s) => s.theme);
-  const isDarkTheme = theme !== 'light'; // dark is the default (matches EmergencyScreen)
 
   // Add a topic to the user's interests (from the topic popup), persisting to Hive.
   const addToInterests = useCallback(async (tag) => {
@@ -1576,7 +1573,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
                 <div className="video-preload-overlay" aria-hidden="true">
                   <img
                     className="video-preload-logo"
-                    src={isDarkTheme ? threespeakLogoDark : threespeakLogo}
+                    // The player is a media surface in both themes (STYLE_GUIDE §2),
+                    // so its splash is the dark one: the light-on-dark mark.
+                    src={threespeakLogoDark}
                     alt="3Speak"
                   />
                   <TailChase size="42" speed="1.75" color="var(--accent)" />

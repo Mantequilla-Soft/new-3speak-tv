@@ -458,7 +458,8 @@
 
     text-align: left;
 
-    > span { flex: 1; min-width: 0; }
+    // The text takes the room; the info icon (also a span) keeps its own width.
+    > span:not(.material-symbols-rounded) { flex: 1; min-width: 0; }
 
     @include v2.mobile { flex-direction: column; align-items: flex-start; gap: 6px; }
   }
@@ -479,7 +480,7 @@
 // Picked for a batch: an inverse bar pinned to the bottom of the list.
 .yt-batch-bar {
   position: sticky;
-  bottom: 16px;
+  bottom: calc(var(--bottom-bar-clearance) + 16px);   // clear of the bottom bar on tablets too
   z-index: 50;
   display: flex;
   align-items: center;
@@ -498,7 +499,7 @@
   .v2-btn--ghost { color: var(--bg); &:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); color: var(--bg); } }
 
   @include v2.mobile {
-    bottom: calc(var(--bottom-nav-height) + 12px + env(safe-area-inset-bottom));
+    bottom: calc(var(--bottom-bar-clearance) + 12px);
 
     &__actions { width: 100%; .v2-btn { flex: 1; } }
   }

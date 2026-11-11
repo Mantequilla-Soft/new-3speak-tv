@@ -92,7 +92,7 @@
 
   // Lift above the bottom bar wherever it is shown (below 1025px).
   @media (max-width: 1024px) {
-    bottom: max(calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px) + 16px), calc(var(--audio-np-clearance, 0px) + 12px));
+    bottom: max(calc(var(--bottom-bar-clearance) + 16px), calc(var(--audio-np-clearance, 0px) + 12px));
     &.review-fab--mini { bottom: max(132px, calc(var(--audio-np-clearance, 0px) + 12px)); }
   }
 

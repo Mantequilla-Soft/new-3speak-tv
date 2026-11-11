@@ -169,7 +169,7 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
         <span className="surf-bar__ch">{t('feeds.surf.ch', { number: channelNumber(channel) })}</span>
         <span className="surf-bar__text">
           <span className="surf-bar__name">
-            <span aria-hidden="true">{channel.emoji}</span> {channelTitle(channel)}
+            {channelTitle(channel)}
           </span>
           <span className="surf-bar__live"><i aria-hidden="true" /> {tuning ? t('feeds.surf.tuningShort') : t('feeds.surf.onAir')}</span>
         </span>
@@ -266,7 +266,7 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
                   onClick={() => changeChannel(c.slug)}
                 >
                   <span className="surf-guide__num">{channelNumber(c)}</span>
-                  <span className="surf-guide__label"><span aria-hidden="true">{c.emoji}</span> {channelTitle(c)}</span>
+                  <span className="surf-guide__label">{channelTitle(c)}</span>
                 </button>
               ))}
             </div>

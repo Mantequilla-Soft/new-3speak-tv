@@ -394,5 +394,7 @@
     .community-team-title { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   }
 
-  .community-feed .community-snaps { margin-top: 0; }
+  // Full feed width, like the video tabs: the snaps list caps itself at 720px
+  // elsewhere, and a narrower Discussion column made the panel jump on tab switch.
+  .community-feed .community-snaps { margin-top: 0; max-width: none; }
 }

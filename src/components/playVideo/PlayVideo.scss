@@ -287,7 +287,8 @@ $wide: 1024px;
     font: inherit;
     text-align: left;
     cursor: pointer;
-    &:hover b { text-decoration: underline; }
+    // No underline (and no sticky hover on touch screens): the name takes the cyan.
+    @media (hover: hover) { &:hover b { color: var(--cyan); } }
   }
   &__mark {
     position: relative;
@@ -574,7 +575,8 @@ $wide: 1024px;
     flex: none;
     background: var(--surface-2);
     @include v2.mono(12, 900);
-    &.is-top { background: var(--accent); color: var(--on-accent); }
+    // A tint, not a fill: the one solid accent in the view is the primary action.
+    &.is-top { background: var(--accent-tint-strong); color: var(--accent); }
   }
   &__avatar {
     width: 36px;
@@ -1021,7 +1023,7 @@ $wide: 1024px;
   align-items: center;
   justify-content: center;
   gap: 32px;
-  background: var(--bg);
+  background: var(--media-black);   // the player stays a dark media surface in both themes
   pointer-events: none;
   animation: video-preload-fade var(--t-base) var(--ease) both;
 }

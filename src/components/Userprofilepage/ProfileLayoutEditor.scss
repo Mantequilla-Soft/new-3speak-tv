@@ -472,7 +472,7 @@
 
   // Above the app's bottom navigation on phones.
   @include v2.mobile {
-    bottom: calc(var(--bottom-nav-height, 56px) + 8px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(var(--bottom-bar-clearance) + 8px);
   }
 
   .ple-tray-title {

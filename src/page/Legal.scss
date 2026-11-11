@@ -289,11 +289,11 @@
   flex-wrap: wrap;
   gap: 6px;
 
+  // Filled chips (49a), not outlined boxes: fills, not borders
   .legal-body & li {
     padding: 6px 10px;
     border-radius: var(--r-sm);
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: var(--surface-2);
     @include v2.text(meta);
     color: var(--text);
   }

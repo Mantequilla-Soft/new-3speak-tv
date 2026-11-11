@@ -324,6 +324,9 @@
 .notifications-time { font-family: var(--font-mono); }
 .notifications-meta-tier { font-size: 12px; }
 .notifications-expand-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   margin-left: 4px;
   color: var(--cyan);
   font-weight: 700;

@@ -91,9 +91,10 @@
 .bottom-nav-menu {
   position: absolute;
   right: 8px;
-  bottom: calc(var(--bottom-nav-height) + 8px);
+  // 8 above the bar's top edge (the bar's box includes the safe area).
+  bottom: calc(100% + 8px);
   width: min(300px, calc(100vw - 16px));
-  max-height: calc(100dvh - var(--bottom-nav-height) - 24px);
+  max-height: calc(100dvh - var(--bottom-bar-clearance) - 24px);
   @include v2.scroll-y;
   animation: bottom-nav-menu-in var(--t-base) var(--ease);
   transform-origin: bottom right;

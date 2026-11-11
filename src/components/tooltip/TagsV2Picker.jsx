@@ -135,7 +135,7 @@ function TagsV2Picker({
   };
 
   return (
-    <div className="tagsv2-picker" onClick={(e) => e.stopPropagation()}>
+    <div className={`tagsv2-picker${multi ? ' is-multi' : ''}`} onClick={(e) => e.stopPropagation()}>
       {known.length > 0 && (
         <p className="tagsv2-suggested">
           {t('engagement.tagsPicker.autoTagged', { tags: known.map((s) => getTagLabel(s)).join(', ') })}

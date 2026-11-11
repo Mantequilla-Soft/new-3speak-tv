@@ -30,7 +30,7 @@
 
   // Stop at the top of the bottom bar, so the bar stays uncovered.
   @media (max-width: 1024px) {
-    bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+    bottom: var(--bottom-bar-clearance);
   }
   // Phones: the page behind the sheet dims, like every sheet.
   @include v2.mobile {
@@ -63,7 +63,7 @@
     right: 8px;
     bottom: 8px;
     width: min(340px, calc(100vw - 16px));
-    max-height: calc(100dvh - var(--bottom-nav-height) - env(safe-area-inset-bottom, 0px) - 24px);
+    max-height: calc(100dvh - var(--bottom-bar-clearance) - 24px);
     transform-origin: bottom right;
     animation-name: pn-rise-in;
   }
@@ -146,6 +146,8 @@
     flex-wrap: nowrap;
     @include v2.scroll-x;
   }
+  // Denser than on the profile: 28 tall chips in the menu card.
+  .lb-badge { height: 28px; border-radius: var(--r-sm); font-size: 11px; }
 }
 
 // Voting power (accent) and resource credits (cyan), side by side.

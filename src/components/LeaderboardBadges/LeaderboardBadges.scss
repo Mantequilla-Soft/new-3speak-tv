@@ -13,13 +13,13 @@
   .lb-badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    height: 24px;
-    padding: 0 8px;
-    border-radius: var(--r-sm);
+    gap: 6px;
+    height: 32px;   // the profile badge row's chip height (41c)
+    padding: 0 10px;
+    border-radius: var(--r-md);
     background: var(--surface-2);
     color: var(--text);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     line-height: 1;
     text-decoration: none;

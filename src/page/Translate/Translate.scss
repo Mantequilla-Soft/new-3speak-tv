@@ -523,7 +523,7 @@
 /* ── Unsaved bar ── */
 .translate-savebar {
   position: sticky;
-  bottom: 12px;
+  bottom: calc(var(--bottom-bar-clearance) + 12px);   // clear of the bottom bar on tablets too
   z-index: 5;
   display: flex;
   align-items: center;
@@ -542,7 +542,7 @@
   }
 
   @include v2.mobile {
-    bottom: calc(var(--bottom-nav-height) + 8px + env(safe-area-inset-bottom));
+    bottom: calc(var(--bottom-bar-clearance) + 8px);
     .v2-btn { height: 44px; border-radius: var(--r-lg); }
   }
 }

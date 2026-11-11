@@ -11,7 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 const toast = toastIn('Community');
 
 // Quick links into a few communities' tag feeds, as v2 filter chips, with the
-// upload shortcut at the end. [label, tag, community name, hide class]
+// upload shortcut at the end (secondary: the top bar's Create is the red action).
+// [label, tag, community name, hide class]
 const TAGS = [
   ['splinterlands', 'hive-13323', 'Splinterlands', ''],
   ['vibes', 'hive-140169', 'Vibes', ''],
@@ -51,7 +52,7 @@ function CommunitiesTags() {
 
       <button
         type="button"
-        className="v2-iconbtn v2-btn--primary h32 is-round wrap-upload-video"
+        className="v2-iconbtn v2-btn--secondary h32 is-round wrap-upload-video"
         onClick={handleNavigate}
         aria-label={t('common.actions.upload')}
         title={t('common.actions.upload')}

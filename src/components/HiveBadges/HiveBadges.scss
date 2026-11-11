@@ -18,10 +18,12 @@
     align-items: center;
     gap: 6px;
     max-width: 200px;
-    height: 28px;
+    // 32 tall like every other chip in the profile's badge row (supporters,
+    // socials, rankings), design 41c.
+    height: 32px;
     padding: 0 10px 0 4px;
     border: 0;
-    border-radius: var(--r-sm);
+    border-radius: var(--r-md);
     background: var(--surface-2);
     color: var(--text);
     font-family: inherit;
@@ -37,8 +39,8 @@
   }
 
   .hive-badge-img {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;

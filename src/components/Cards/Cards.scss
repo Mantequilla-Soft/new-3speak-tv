@@ -46,7 +46,8 @@ html[data-card-size="large"] { --card-min-w: 420px; }
   @include v2.text(body);
   color: var(--muted);
   padding: 24px 0;
-  &.is-error { color: var(--accent); }
+  // Failure pattern (STYLE_GUIDE §11): an accent wash card, not bare red text.
+  &.is-error { padding: 16px; border-radius: var(--r-2xl); background: var(--accent-wash); color: var(--text); }
 }
 
 .card-container {

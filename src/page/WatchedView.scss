@@ -90,6 +90,9 @@
     }
   }
 
+  // The grid sits 16px under the toolbar card, like the tag feed (19c).
+  .watched-content { margin-top: 16px; }
+
   // Pagination bottom
   .watched-pagination-bottom {
     display: flex;
@@ -104,7 +107,7 @@
   }
 
   // Audio tab: the audio page's tiles, with the history line under each.
-  .watched-audio-grid { margin-top: 8px; }
+  .watched-audio-grid { margin-top: 0; }
 
   .watched-audio-item {
     display: flex;

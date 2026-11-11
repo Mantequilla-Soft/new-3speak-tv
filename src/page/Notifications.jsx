@@ -742,7 +742,11 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onOpen }) {
             <span className="notifications-time">{formatNotifTime(date)}</span>
             {topTier && <span className="notifications-meta-tier">{topTier === 'whale' ? '🐋' : '🐬'}</span>}
             {items.length > 1 && (
-              <span className="notifications-expand-hint">{expanded ? t('notifications.group.collapse') : t('notifications.group.expand')}</span>
+              <span className="notifications-expand-hint">
+                {/* A Material chevron instead of the ▸/▾ glyph the string starts with */}
+                <Icon name={expanded ? 'expand_less' : 'expand_more'} size={16} />
+                <span>{(expanded ? t('notifications.group.collapse') : t('notifications.group.expand')).replace(/^[▸▾►▼]\s*/, '')}</span>
+              </span>
             )}
           </div>
         </div>

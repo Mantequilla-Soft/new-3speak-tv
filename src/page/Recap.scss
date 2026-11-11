@@ -5,9 +5,8 @@
 // the 3D backdrop (RecapScene) is drawn for a dark ground. Text sits over the
 // scene; lists, panels and tips are solid surfaces so nothing behind competes.
 .recap-page {
-  padding: 16px var(--page-pad);
-
-  @include v2.mobile { padding: 8px; }
+  // The app column (.container, App.css) already gives the page padding.
+  padding: 0;
 
   &--plain {
     display: grid;
