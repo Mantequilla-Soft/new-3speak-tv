@@ -1,56 +1,71 @@
 @use "../../styles/v2" as v2;
 
-// The bottom bar (STYLE_GUIDE §4, designs 20a / 42b): phones and tablets, below
-// 1025px, where the top bar drops its tabs and avatar. 56 tall plus the safe
-// area, a surface strip with a 1px top border. Each tab: icon 24 over a 10/700
-// label; the current section is drawn in the accent with a filled icon.
+// The bottom bar (20a phone): phones and tablets, below 1025px. A floating
+// card 10px in from the sides, 68 tall, radius 24, a 90% surface wash with a
+// 20px blur and a 1px border. Five equal slots: Home, Shorts, the red "+",
+// Groups, You. Each tab is an icon 24 over a 10/700 label in muted; the
+// current one sits on a 52px surface-2 tile (radius 16) in ink.
 .bottom-nav {
   display: none;
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 10px;
+  right: 10px;
+  bottom: var(--bottom-nav-float-gap);
   z-index: 100;
-  height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
-  padding: 0 4px env(safe-area-inset-bottom, 0px);
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  align-items: stretch;
-  justify-content: space-around;
+  height: var(--bottom-nav-float-h);
+  padding: 0;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
 
-  @media (max-width: 1024px) { display: flex; }
+  @media (max-width: 1024px) { display: grid; }
 }
 
 .bottom-nav-item {
   position: relative;
-  flex: 1;
   min-width: 0;
-  height: var(--bottom-nav-height);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
   color: var(--muted);
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
   transition: color var(--t-fast) var(--ease);
 
   &:hover { color: var(--text); }
-  &:active .bottom-nav-icon-wrap { transform: scale(.94); }
+  &:active .bottom-nav-tile { transform: scale(.98); }
 
-  &.active { color: var(--accent); }
+  &.active { color: var(--text); }
+  &.active .bottom-nav-tile { background: var(--surface-2); }
 
-  &:focus-visible { outline-offset: -4px; border-radius: var(--r-md); }
+  &:focus-visible { outline: none; .bottom-nav-tile { outline: 2px solid var(--accent); outline-offset: 2px; } }
+}
+
+// 52 square, radius 16: transparent at rest, surface-2 when current.
+.bottom-nav-tile {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 }
 
 .bottom-nav-icon-wrap {
   position: relative;
   display: inline-grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
-  transition: transform var(--t-fast) var(--ease);
+  width: 24px;
+  height: 24px;
 }
 
 .bottom-nav-label {
@@ -63,17 +78,35 @@
   text-overflow: ellipsis;
 }
 
+// The red "+": 52 square, radius 16, accent fill, add 28.
+.bottom-nav-create {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-lg);
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { background: var(--accent-hover); }
+  &:active { transform: scale(.98); }
+}
+
 // The signed-in account tab: the avatar instead of an icon, ringed in the
 // accent while the account menu is open.
 .bottom-nav-avatar {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   object-fit: cover;
   background: var(--avatar);
   display: block;
 }
-.bottom-nav-item.active .bottom-nav-avatar { box-shadow: 0 0 0 2px var(--accent); }
+.bottom-nav-item.active .bottom-nav-avatar { box-shadow: 0 0 0 2px var(--cyan); }
 
 .bottom-nav-avatar-premium {
   position: absolute;

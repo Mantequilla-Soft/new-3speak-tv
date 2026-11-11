@@ -20,6 +20,7 @@ import { estimate, getVotePower } from '../../utils/hiveUtils';
 import { markByReputation, getUserReputation } from '../../utils/reputation';
 import { markByHidden } from '../../utils/hiddenCreators';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
+import AccountImg from '../HiveAvatar/AccountImg';
 import PayoutAmount from '../PayoutAmount/PayoutAmount';
 import { commentWithAioha } from '../../hive-api/aioha';
 import { HIVE_API_NODES } from '../../utils/config';
@@ -115,6 +116,9 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   const { translate, getTranslation, clearTranslation, translating } = useTranslation();
   const [commentInfo, setCommentInfo] = useState('');
   const [activeTab, setActiveTab] = useState('comment'); // 'comment' | 'react'
+  // The side panel's composer rests as one line (02: the moment, "Join the
+  // discussion…", send) and opens into the full one (43a) when used.
+  const [composerOpen, setComposerOpen] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [activeReply, setActiveReply] = useState(null);
   const [replyToComment, setReplyToComment] = useState(null);
@@ -697,9 +701,57 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
 
   const commentCount = countComments(commentList);
 
-  const composer = (
+  const composerCompact = panel && !composerOpen && !commentInfo && activeTab === 'comment'
+    && !(commentImages.pending?.length) && !commentImages.uploading;
+  const openComposer = useCallback(() => setComposerOpen(true), []);
+  // Opened from the one-line box: the full box takes the focus over.
+  const wasCompact = useRef(composerCompact);
+  useEffect(() => {
+    if (wasCompact.current && !composerCompact && activeTab === 'comment') {
+      commentInputRef.current?.focus({ preventScroll: true });
+    }
+    wasCompact.current = composerCompact;
+  }, [composerCompact, activeTab]);
+  // Back to one line once focus leaves an empty box (not into its own popovers).
+  const onComposerBlur = (e) => {
+    if (!panel || commentInfo || activeTab !== 'comment') return;
+    const next = e.relatedTarget;
+    if (next && (e.currentTarget.contains(next) || next.closest?.('.egp-emoji-popover, .egp-gif-popover'))) return;
+    setTimeout(() => {
+      const el = commentInputRef.current;
+      if (el && document.activeElement === el) return;
+      if (document.activeElement?.closest?.('.egp-emoji-popover, .egp-gif-popover, .add-comment-wrap')) return;
+      setComposerOpen(false);
+    }, 0);
+  };
+
+  const compactComposer = (
+    // The same hooks as the full box: `add-comment-wrap .textarea-box` (focused
+    // by the dock's Comment tile) and the Comment / React switch (pressed by the
+    // player's "React to this moment"), kept in the DOM while hidden.
+    <div className="comment-composer add-comment-wrap is-compact">
+      <div hidden><ComposerModeTabs value={activeTab} onChange={(v) => { setActiveTab(v); setComposerOpen(true); }} /></div>
+      <button type="button" className="comment-moment-chip num" onClick={openComposer} title={t('comments.section.at')}>
+        {timelineInput || '0:00'}
+      </button>
+      <textarea
+        ref={commentInputRef}
+        rows={1}
+        readOnly
+        placeholder={t('comments.section.joinPlaceholder')}
+        aria-label={t('comments.section.commentPlaceholder')}
+        className="textarea-box"
+        value=""
+        onFocus={() => { handleTextareaFocus(); openComposer(); }}
+        onClick={openComposer}
+      />
+      <IconButton icon="send" round size={40} variant="primary" className="comment-send" label={t('comments.section.commentButton')} onClick={openComposer} />
+    </div>
+  );
+
+  const composer = composerCompact ? compactComposer : (
     // `add-comment-wrap` stays: PostView's Reply button finds the box through it.
-    <div className={cx('comment-composer add-comment-wrap', activeTab === 'react' && 'is-react')}>
+    <div className={cx('comment-composer add-comment-wrap', activeTab === 'react' && 'is-react')} onBlur={onComposerBlur}>
       {activeTab === 'comment' ? (
         <>
           <CommentDropZone
@@ -753,10 +805,11 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
               </div>
             </div>
             <div className="btn-wrap">
-              {commentInfo && (
+              {(commentInfo || panel) && (
                 <Button variant="ghost" size={32} onClick={() => {
                   setCommentInfo('');
                   setReplyToComment(null);
+                  setComposerOpen(false);
                 }}>{t('common.actions.cancel')}</Button>
               )}
               <Button variant="primary" size={32} trailing="send" onClick={() => {
@@ -861,7 +914,8 @@ function CommentSection({ videoDetails, author, permlink, currentTime, duration,
   return (
     <div className={cx('vid-comment-wrap', panel ? 'is-panel' : 'is-page')}>
       <div className="comments-header-row">
-        <h4>{t('comments.section.count', { count: commentCount })}</h4>
+        {/* The panel's tab already carries the count (02). */}
+        <h4 className={cx(panel && 'is-sr')}>{t('comments.section.count', { count: commentCount })}</h4>
         <label className="comment-sort">
           <Icon name="sort" size={16} />
           <span className="comment-sort-label">{t('comments.section.sortBy')}</span>
@@ -971,6 +1025,9 @@ function Comment({
   }, [editing]);
   const [replyTab, setReplyTab] = useState('comment');
   const [collapsed, setCollapsed] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+  // Replying here opens the thread, so the new reply lands in view.
+  useEffect(() => { if (isReplying) setShowReplies(true); }, [isReplying]);
   const [translatedText, setTranslatedText] = useState(null);
   const [translateError, setTranslateError] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -1029,20 +1086,33 @@ function Comment({
     );
   }
 
+  // Panel (02): replies fold under an "N replies" link; on a page they show.
+  const visibleReplies = (comment.children || []).filter((c) => !c.isLowReputation && !c.isHidden).length;
+
   return (
     <div className={cx('comment-container', depth > 0 && 'is-reply')}>
       <div className={cx('comment', isPinned && 'is-pinned', isCreator && 'is-creator')}>
+        {/* The avatar in its own column, the text beside it (02, 28a). */}
+        <Link to={`/@${username}`} className="comment-avatar" tabIndex={-1} aria-hidden="true">
+          <AccountImg account={username} alt="" loading="lazy" />
+        </Link>
         <div className="comment-content">
           {isPinned && (
             <span className="comment-pinned-badge"><Icon name="push_pin" size={12} fill />{t('comments.section.pinnedByCreator')}</span>
           )}
           <div className="comment-header">
-            <AuthorBadge author={username} reputation={comment?.author?.reputation} noLink />
+            <Link to={`/@${username}`} className="comment-author">{username}</Link>
             {isCreator && <span className="v2-pill is-accent comment-creator-pill">{t('comments.section.creator')}</span>}
             <span className="comment-date"><TimeAgo date={comment?.created_at} /></span>
             {comment?.edited && <span className="comment-edited">{t('comments.section.edited')}</span>}
             {comment?.parentTimestamp != null && (
-              <button type="button" className="comment-timestamp-badge" onClick={() => onSeek?.(comment.parentTimestamp)}>{t('comments.section.atTime', { time: formatTimeInput(comment.parentTimestamp) })}</button>
+              <button
+                type="button"
+                className="comment-timestamp-badge"
+                aria-label={t('comments.section.atTime', { time: formatTimeInput(comment.parentTimestamp) })}
+                title={t('comments.section.atTime', { time: formatTimeInput(comment.parentTimestamp) })}
+                onClick={() => onSeek?.(comment.parentTimestamp)}
+              >{formatTimeInput(comment.parentTimestamp)}</button>
             )}
             <button
               type="button"
@@ -1136,7 +1206,7 @@ function Comment({
               <Icon name="arrow_upward" size={16} fill={!!comment.has_voted} />
               <span className="num">{comment?.stats?.num_likes ?? 0}</span>
             </button>
-            <PayoutAmount amount={comment?.stats?.total_hive_reward} />
+            {Number(comment?.stats?.total_hive_reward) > 0 && <PayoutAmount amount={comment?.stats?.total_hive_reward} />}
             <Button variant="ghost" size={28} icon="reply" className="comment-act" onClick={() => {
               setCommentInfo("");
               setReplyText("");
@@ -1155,6 +1225,16 @@ function Comment({
                 onClick={() => onTogglePin(comment)}
                 disabled={pinBusy}
               >{isPinned ? t('comments.section.unpin') : t('comments.section.pin')}</Button>
+            )}
+            {panel && visibleReplies > 0 && (
+              <button
+                type="button"
+                className="comment-replies-toggle"
+                aria-expanded={showReplies}
+                onClick={() => setShowReplies((v) => !v)}
+              >
+                {t('comments.section.replies', { count: visibleReplies })}
+              </button>
             )}
             <div className="comment-action-right">
               {comment.hasVideo && (
@@ -1275,7 +1355,7 @@ function Comment({
         </div>
       )}
 
-      {comment.children && comment.children.length > 0 && (
+      {comment.children && comment.children.length > 0 && (!panel || showReplies) && (
         <div className="nested-comments">
           {comment.children.map((child, index) => (
             <Comment

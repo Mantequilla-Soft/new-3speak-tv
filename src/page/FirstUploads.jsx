@@ -71,7 +71,7 @@ const FirstUploads = () => {
     <PullToRefresh onRefresh={handleRefresh}>
     <div className='firstupload-container'>
         <FeedPageHeader icon={<FirstUploadIcon />} title={t('feeds.firstUploads.title')} />
-        {isLoading ? <CardSkeleton /> :  <Card3 windowed videos={videos} badgeLabel={t('cards.badges.first')} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />}
+        {isLoading ? <CardSkeleton /> :  <Card3 windowed variant="bare" videos={videos} badgeLabel={t('cards.badges.first')} loading={isFetchingNextPage} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />}
     {isError && <p className="feed-error" role="alert">{t('feeds.errors.fetchVideos')}</p>}
       {isFetchingNextPage && (
         <p className="feed-loading-more">{t('feeds.loadingMore')}</p>

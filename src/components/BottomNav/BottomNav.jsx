@@ -8,12 +8,19 @@ import PremiumBadge from "../PremiumBadge/PremiumBadge";
 import { usePwaInstall } from "../../utils/pwaInstall";
 import "./BottomNav.scss";
 import { isWatchPath } from '../../utils/urls';
+import { OPEN_CREATE_EVENT } from "../nav/navTabsPref";
+import { creatorKey, isUploadBlocked, useCreatorSettings } from "../../utils/creatorSettings";
 
 
 const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const { authenticated, user } = useAppStore();
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  // Same rule as the top bar's Create: a warm-up user blocked from uploads gets
+  // no "+" (their `~<handle>` row has canUpload: false).
+  const warmupKey = !user && incubationHandle ? creatorKey(null, incubationHandle) : null;
+  const createBlocked = isUploadBlocked(useCreatorSettings(warmupKey));
   const path = location.pathname;
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -64,36 +71,55 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
 
   // One tab: a Material Symbols icon (filled when it is the current section)
   // over its label. The label is its own span so the link's text is exactly it.
+  // The current one sits on a 52px surface-2 tile (20a phone).
   const tab = (to, icon, label, active) => (
     <Link to={to} className={`bottom-nav-item${active ? " active" : ""}`} aria-current={active ? "page" : undefined}>
-      <span className="bottom-nav-icon-wrap"><Icon name={icon} size={24} fill={active} className="bottom-nav-icon" /></span>
-      <span className="bottom-nav-label">{label}</span>
+      <span className="bottom-nav-tile">
+        <span className="bottom-nav-icon-wrap"><Icon name={icon} size={24} fill={active} className="bottom-nav-icon" /></span>
+        <span className="bottom-nav-label">{label}</span>
+      </span>
     </Link>
   );
 
+  // The red "+" in the middle opens the Create menu (Nav.jsx owns it), or the
+  // login dialog for a visitor.
+  const onCreate = () => {
+    if (!authenticated) { openLoginModal(); return; }
+    window.dispatchEvent(new CustomEvent(OPEN_CREATE_EVENT));
+  };
+
   return createPortal(
     <nav className={`bottom-nav${isWatchPath(path) ? ' bottom-nav--watch' : ''}`} ref={menuRef}>
-      {tab("/", "home", t('nav.bottom.feeds'), isActive("/"))}
+      {tab("/", "home", t('common.nav.home'), isActive("/"))}
       {tab("/shorts", "smart_display", t('common.nav.shorts'), isShortsActive)}
-      {/* Groups takes the slot chat used to hold. Chat is not gone: it moved to
-          the top bar, which shows its button at every width. */}
+      {!createBlocked ? (
+        <span className="bottom-nav-item bottom-nav-create-slot">
+          <button type="button" className="bottom-nav-create" onClick={onCreate} aria-label={t('nav.create')} title={t('nav.create')}>
+            <Icon name="add" size={28} />
+          </button>
+        </span>
+      ) : <span className="bottom-nav-item" aria-hidden="true" />}
+      {/* Groups takes the slot chat used to hold. Chat is in the account menu
+          on phones and in the top bar from tablets up. */}
       {tab("/groups", "groups", t('nav.bottom.groups'), isGroupsActive)}
-      {tab("/audio", "graphic_eq", t('nav.bottom.audio'), isActive("/audio"))}
 
-      <a href="#" className={`bottom-nav-item${menuOpen || profileMenuOpen ? " active" : ""}`} onClick={handleProfileClick}>
-        {authenticated ? (
-          <span className="bottom-nav-icon-wrap bottom-nav-avatar-wrap">
-            <img
-              src={`/img/u/${user}/avatar/small`}
-              alt={user}
-              className="bottom-nav-avatar"
-            />
-            <PremiumBadge username={user} size={10} className="bottom-nav-avatar-premium" />
-          </span>
-        ) : (
-          <span className="bottom-nav-icon-wrap"><Icon name="account_circle" size={24} className="bottom-nav-icon" /></span>
-        )}
-        <span className="bottom-nav-label">{authenticated ? t('common.nav.profile') : t('nav.bottom.login')}</span>
+      <a href="#" className={`bottom-nav-item${menuOpen || profileMenuOpen ? " active" : ""}`} onClick={handleProfileClick}
+        aria-label={authenticated ? t('common.nav.profile') : t('nav.bottom.login')}>
+        <span className="bottom-nav-tile">
+          {authenticated ? (
+            <span className="bottom-nav-icon-wrap bottom-nav-avatar-wrap">
+              <img
+                src={`/img/u/${user}/avatar/small`}
+                alt={user}
+                className="bottom-nav-avatar"
+              />
+              <PremiumBadge username={user} size={10} className="bottom-nav-avatar-premium" />
+            </span>
+          ) : (
+            <span className="bottom-nav-icon-wrap"><Icon name="person" size={24} className="bottom-nav-icon" /></span>
+          )}
+          <span className="bottom-nav-label">{authenticated ? t('nav.bottom.you') : t('nav.bottom.login')}</span>
+        </span>
       </a>
 
       {menuOpen && !authenticated && showInstallOption && (

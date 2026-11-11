@@ -1,35 +1,82 @@
 @use "../../styles/v2" as v2;
 
-// Report (design 07c / 43b): what is reported, reason tiles, one short
-// follow-up field. The frame is the v2 dialog (DialogShell).
+// Report (design 07c, 07g; reasons per type in 43b) on the v2 side sheet:
+// what is reported, a short note, reason tiles in two columns, then one
+// follow-up step for the details. "1 / 2" sits in the head.
 .report-modal-overlay { z-index: 1100; }
 
-.report-target {
-  margin: 0;
-  @include v2.mono(12, 400);
-  color: var(--muted);
-  overflow-wrap: anywhere;
-}
+.report-step { @include v2.mono(12, 700); color: var(--muted); flex: none; }
+.report-back { margin-left: -6px; }
+.report-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.report-target .dlg-ctx__title { @include v2.mono(12, 500); }
 
 .report-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
+}
+
+.report-intro {
+  margin: 0;
+  @include v2.text(body-sm);
+  line-height: 1.5;
+  color: var(--muted);
 }
 
 .report-reasons {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
-  margin-bottom: 6px;
-
-  @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
+  gap: 10px;
 }
 
-.report-reason.v2-choice {
-  align-items: center;
-  min-height: 44px;
-  padding: 8px 10px;
+.report-reason {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 104px;
+  padding: 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--r-xl);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-  .v2-choice__icon { margin-top: 0; }
+  .material-symbols-rounded { color: var(--muted); }
+  b { margin-top: auto; @include v2.text(body); font-weight: 700; line-height: 1.25; }
+  &:hover { background: var(--bg-hover); }
+  &:active { transform: scale(.98); }
+  &.is-on {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    .material-symbols-rounded { color: var(--accent); }
+  }
+}
+
+.report-picked {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  b { @include v2.text(body); font-weight: 700; color: var(--text); }
+}
+
+// The phone sheet (07g): filled tiles, no border; picked = accent tint and ink.
+@include v2.mobile {
+  .report-reasons { gap: 10px; }
+  .report-reason {
+    min-height: 92px;
+    gap: 8px;
+    border: 0;
+    background: var(--surface-2);
+    .material-symbols-rounded { color: var(--text); }
+    &.is-on { color: var(--accent); .material-symbols-rounded { color: var(--accent); } }
+  }
 }

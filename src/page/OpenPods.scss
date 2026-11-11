@@ -112,3 +112,101 @@
 }
 
 .openpods-connecting__action { color: var(--text); font-weight: 700; }
+
+/* ── Stream Studio, wide (39a) ────────────────────────────────────────────
+   From 1280 up the New stream form is a page of its own: the steps under the
+   title, the template picker, the step's fields on the page ground, and the
+   step buttons in a 420px column on the right (Next on top, 56 tall, Back or
+   Cancel under it, "Save as template" below them on the last step). The SDK's
+   lobby wrapper and form become `display: contents` so their parts can be
+   placed on this grid; the form element itself still submits as before. */
+@include v2.wide {
+  .openpods-page.openpods-page--studio {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 420px;
+    column-gap: 20px;
+    align-content: start;
+    max-width: var(--content-max);
+    margin-inline: auto;
+
+    > * { grid-column: 1; min-width: 0; max-width: none; margin-inline: 0; }
+    > .openpods-studio-head { order: -3; margin-bottom: 0; }
+    > .openpods-template-pick { order: -1; margin: 12px 0 0; }
+    > .openpods-guest-cta { margin-top: 16px; }
+
+    .hh-lobby--direct,
+    .hh-cd--stepped { display: contents; }
+
+    .hh-cd--stepped > * { grid-column: 1; min-width: 0; margin-top: 14px; }
+    .hh-cd--stepped > .hh-cd-steps { order: -2; }
+    .hh-cd-steps__caption { display: none; }
+    .hh-cd__actions--top { display: none; }
+
+    // The step's controls sit on the page ground: rows and the announce box
+    // become surfaces, the fields inside them bg fills.
+    .hh-cd__switch,
+    .hh-cd__check,
+    .hh-cd__reccheck { background: var(--surface); }
+    .hh-cd__announce { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-2xl); padding: 16px; }
+    .hh-cd__announce .hh-announce-opts {
+      .hh-announce-opts__selector,
+      .hh-announce-opts__select.v2-input,
+      .hh-announce-opts__bene { background-color: var(--bg); }
+    }
+    .hh-cd__tags { background: var(--surface); }
+    .hh-cd__input,
+    .hh-cd__select,
+    .hh-cd__textarea { background: var(--surface); }
+
+    // The right column: Next (or Open Stream Studio) on top, Back or Cancel under it.
+    .hh-cd__actions--bottom {
+      grid-column: 2;
+      grid-row: 1 / span 40;
+      align-self: start;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 8px;
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+
+      > span:empty { display: none; }
+      .hh-btn {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        height: 48px;
+        justify-content: flex-start;
+        padding: 0 16px;
+        border-radius: var(--r-lg);
+        font-size: 13px;
+      }
+      .hh-btn--primary {
+        min-height: 56px;
+        height: 56px;
+        padding: 0 18px;
+        border-radius: var(--r-xl);
+        font-size: 16px;
+        font-weight: 900;
+      }
+      // "📡 Open Stream Studio": a block so its leading emoji can be dropped
+      // (::first-letter). "Creating…" is disabled and keeps every letter.
+      .hh-cd__submit:not(:disabled) {
+        display: block;
+        line-height: 56px;
+        text-align: left;
+        &::first-letter { font-size: 0; margin-right: -4px; }
+      }
+    }
+
+    // Last step: "Save as template" under the buttons (56 + 8 + 48 + 12).
+    .hh-cd--stepped > .st-save {
+      grid-column: 2;
+      grid-row: 1 / span 40;
+      align-self: start;
+      margin-top: 124px;
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
+}

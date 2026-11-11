@@ -3,7 +3,7 @@ import { useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-quer
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./HomeGrouped.scss";
-import { SkeletonCard, SpotlightSkeleton } from "../components/Cards/GridSkeleton";
+import { SkeletonCard } from "../components/Cards/GridSkeleton";
 import Card3 from "../components/Cards/Card3";
 import { FEED_URL, TRENDING_SORTED_URL, FOLLOW_FEED_URL, DISCOVER_FEED_URL, INTERESTS_FEED_URL, NEW_CONTENT_URL, CHECKER_URL, appendNsfw, warmupRailEnabledFor } from "../utils/config";
 import { useContentBatch } from "../hooks/useContentBatch";
@@ -36,6 +36,8 @@ import { Button, Dialog, EmptyState, IconButton, Toggle } from "../components/v2
 import { cx } from "../components/v2/helpers";
 import { useTranslation } from "react-i18next";
 import useCardSize from "../hooks/useCardSize";
+import HomeHero from "../components/HomeHero/HomeHero";
+import HomeActivity from "../components/HomeActivity/HomeActivity";
 
 // Extra feed params for the logged-in user: interests (checker weights the feed
 // toward them), currentuser (needed for BOTH the always-on dismissals and
@@ -183,25 +185,20 @@ const orderFeatured = (pool, seed) => (pool || [])
   .sort((a, b) => a.r - b.r)
   .map(({ v }) => v);
 
-// Phones get no featured card at all: their feed stays exactly as it was. Same
-// breakpoint as the `respond(phone)` mixin.
-const PHONE_QUERY = "(max-width: 767px)";
-const useIsPhone = () => {
-  const [isPhone, setIsPhone] = useState(() => typeof window !== "undefined" && !!window.matchMedia?.(PHONE_QUERY).matches);
+// From 1280px up the activity panel sits beside the feed (20a) and takes over
+// the community posts the feed otherwise mixes in (v2.wide).
+const WIDE_QUERY = "(min-width: 1280px)";
+const useMedia = (query) => {
+  const [on, setOn] = useState(() => typeof window !== "undefined" && !!window.matchMedia?.(query).matches);
   useEffect(() => {
-    const mq = window.matchMedia?.(PHONE_QUERY);
+    const mq = window.matchMedia?.(query);
     if (!mq) return undefined;
-    const onChange = () => setIsPhone(mq.matches);
+    const onChange = () => setOn(mq.matches);
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
-  }, []);
-  return isPhone;
+  }, [query]);
+  return on;
 };
-
-const EMPTY_FEATURED = [];
-// Spotlight sizes, in toggle order: cards wide. A saved size that is no longer
-// here (there was a 4-wide 'large') falls back to small.
-const SPOTLIGHT_SPANS = { small: 2, medium: 3 };
 
 // "Interests" row: ONLY videos whose winning topic is in the user's interests,
 // re-ranked by retention with older ones sprinkled in. Empty with no interests.
@@ -542,8 +539,6 @@ const HomeGrouped = () => {
   const { authenticated, user, showNsfw, hideWatched, hideAi, interests, simpleFeed } = useAppStore();
   const navigate = useNavigate();
   const homeCardSize = useCardSize(); // large only on mobile, see hooks/useCardSize
-  const spotlightSize = useAppStore((st) => st.spotlightSize);
-  const setSpotlightSize = useAppStore((st) => st.setSpotlightSize);
   // Who is looking, for feature gates that are keyed on a name. A warm-up user
   // has a handle and no Hive username, so `user` alone is null for them.
   const incubationHandle = useAppStore((st) => st.incubationHandle);
@@ -683,53 +678,22 @@ const HomeGrouped = () => {
     [promotedData, warmupVideos],
   );
 
-  // The featured video (see fetchFeatured / orderFeatured), leading the Discover tab.
-  const isPhone = useIsPhone();
+  // The featured video (see fetchFeatured / orderFeatured): the Spotlight hero
+  // at the top of Home (20a), on every width.
+  const isWide = useMedia(WIDE_QUERY);
   const { data: featuredPool, isLoading: featuredLoading } = useQuery({
     queryKey: ["featured", showNsfw, gateViewer || null, hideAi],
     queryFn: () => fetchFeatured(gateViewer, hideAi),
-    enabled: !isPhone,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
   // The seed is read at render, so pull-to-refresh (which draws a new one) reshuffles.
   const feedSeed = getFeedSeed();
-  const featuredItems = useMemo(
-    () => (isPhone ? EMPTY_FEATURED : orderFeatured(featuredPool, feedSeed)),
-    [isPhone, featuredPool, feedSeed],
-  );
-  // Which of them the arrows / strip have selected. Kept as a position, so when the
-  // featured video is watched and leaves the list, the next one moves into it.
-  const [featuredIndex, setFeaturedIndex] = useState(0);
-  const featuredAt = featuredItems.length ? featuredIndex % featuredItems.length : 0;
-  const featured = featuredItems[featuredAt] || null;
-  const featuredKey = featured ? featuredKeyOf(featured) : null;
-  // Still on its way: the grid holds its block with a skeleton, so the Spotlight
-  // drops into place instead of shoving the first rows aside when it arrives.
-  const spotlightPending = !isPhone && featuredLoading;
-  // The size toggle on the card: small <-> medium. Hidden in
-  // large-card mode, where the width is fixed.
-  const featuredNav = useMemo(() => ({
-    items: featuredItems,
-    index: featuredAt,
-    onSelect: setFeaturedIndex,
-    size: homeCardSize === 'large' ? null : (SPOTLIGHT_SPANS[spotlightSize] ? spotlightSize : 'small'),
-    onCycleSize: () => {
-      const order = Object.keys(SPOTLIGHT_SPANS);
-      const at = order.indexOf(spotlightSize);
-      setSpotlightSize(order[(at + 1) % order.length]);
-    },
-  }), [featuredItems, featuredAt, homeCardSize, spotlightSize, setSpotlightSize]);
-  // The rest of the feed leaves out EVERY video in the line-up, not just the one
-  // that is big right now: browsing the Spotlight then only swaps the first card,
-  // and nothing below it moves (the shown one used to drop out of its place and
-  // the previous one come back into its own, shifting every card after them).
-  const featuredKeys = useMemo(
-    () => new Set(featuredItems.map((v) => featuredKeyOf(v).toLowerCase())),
-    [featuredItems],
-  );
-  const withFeatured = (vids) => (featured
-    ? [featured, ...vids.filter((v) => !featuredKeys.has(featuredKeyOf(v).toLowerCase()))]
+  const featured = useMemo(() => orderFeatured(featuredPool, feedSeed)[0] || null, [featuredPool, feedSeed]);
+  // The hero's video is not repeated in the grid below it.
+  const featuredKey = featured ? featuredKeyOf(featured).toLowerCase() : null;
+  const withFeatured = (vids) => (featuredKey
+    ? vids.filter((v) => featuredKeyOf(v).toLowerCase() !== featuredKey)
     : vids);
 
   // Live OpenPods streams, prepended into the grids as regular cards. "all"
@@ -740,13 +704,13 @@ const HomeGrouped = () => {
 
   // ── Build the section list (natural order), then apply the user's saved order ──
   const baseSections = [
-    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(discoverData))), isLoading: discoverLoading, priority: true },
-    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), videos: withLive(authenticated ? liveFollowing : liveAll, authenticated ? leadWithPromoted(placeByDate(homeData, followedWarmupVideos, homeQ.hasNextPage === false), EMPTY_VIDEOS) : leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
-    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), videos: withLive(liveAll, leadWithPromoted(placeByDate(newContentData, warmupVideos, newQ.hasNextPage === false), EMPTY_VIDEOS)), linkTo: '/new', isLoading: newContentLoading },
+    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), tab: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(discoverData))), isLoading: discoverLoading, priority: true },
+    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), tab: authenticated ? t('feeds.home.tabFollowing') : t('common.nav.trending'), videos: withLive(authenticated ? liveFollowing : liveAll, authenticated ? leadWithPromoted(placeByDate(homeData, followedWarmupVideos, homeQ.hasNextPage === false), EMPTY_VIDEOS) : leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
+    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), tab: t('common.nav.new'), videos: withLive(liveAll, leadWithPromoted(placeByDate(newContentData, warmupVideos, newQ.hasNextPage === false), EMPTY_VIDEOS)), linkTo: '/new', isLoading: newContentLoading },
   ];
   // Interests row (logged-in + has interests): between the follow feed and New.
   if (authenticated && hasInterests) {
-    baseSections.splice(2, 0, { key: 'interests', title: 'Interests', label: t('feeds.home.sections.interests'), videos: withLive(liveFollowing, leadWithPromoted(interestsData)), isLoading: interestsLoading, priority: true });
+    baseSections.splice(2, 0, { key: 'interests', title: 'Interests', label: t('feeds.home.sections.interests'), tab: t('feeds.home.sections.interests'), videos: withLive(liveFollowing, leadWithPromoted(interestsData)), isLoading: interestsLoading, priority: true });
   }
   // A saved tabOrder may still list the retired 'promoted' key — applyTabOrder skips
   // keys with no matching section, so old orders degrade cleanly.
@@ -818,24 +782,6 @@ const HomeGrouped = () => {
 
   // Live column count of the card grid — drives "a shorts rail every 2 rows".
   const gridCols = useGridColumns(panelRef, `${activeSection?.key}:${activeVideos.length}`);
-  // How big the featured card is: several columns by two rows, or a full-width
-  // single row on a two-column grid. The thumbnail is always 16:9; at three columns
-  // it is taller than two normal rows hold, so those rows grow to fit it. `weight` is how many normal cards it counts as for the rails: so
-  // little that its block (it plus the cards beside it) counts as NOTHING. The
-  // rails then start counting below the block, and the feed under it looks like a
-  // feed without it: a row, the follow suggestions, a row, the first shorts rail.
-  // No rail can land inside the block either, which would leave holes in the grid.
-  // Width: the viewer's Spotlight size (2 or 3 cards, toggled on the card), or
-  // always two in large-card mode (its tiles are already big), and always at least
-  // one column left beside it.
-  const featuredLayout = useMemo(() => {
-    if (gridCols < 2) return null;
-    if (gridCols === 2) return { span: 2, rows: 1, weight: 0 };
-    const wanted = homeCardSize === 'large' ? 2 : (SPOTLIGHT_SPANS[spotlightSize] || 2);
-    const span = Math.min(wanted, gridCols - 1);
-    // The block is two full rows; minus what the cards beside it fill, it counts as nothing
-    return { span, rows: 2, weight: 2 * span - 2 * gridCols };
-  }, [gridCols, homeCardSize, spotlightSize]);
   // How many narrow creator tiles fit across the grid — the "follow these" rail uses
   // this to fill its row exactly on desktop (no horizontal scroll). Mobile ignores it
   // (that rail stays a scroller); it's only >0 once the grid is measured, which also
@@ -861,11 +807,13 @@ const HomeGrouped = () => {
   // Discover + New → any fresh community post; Interests + Follow → only from people
   // you follow. null = none for this section.
   const communityMode = useMemo(() => {
+    // From 1280px up the activity panel beside the feed shows these instead.
+    if (isWide) return null;
     const k = activeSection?.key;
     if (k === 'discover' || k === 'new') return 'all';
     if ((k === 'interests' || k === 'home') && authenticated && user) return 'following';
     return null;
-  }, [activeSection?.key, authenticated, user]);
+  }, [activeSection?.key, authenticated, user, isWide]);
 
   // Discover is a browse surface, so it gets a TIGHTER freshness window than the
   // other sections: community posts from the last 3 days, playlist changes from
@@ -1077,10 +1025,9 @@ const HomeGrouped = () => {
 
   const onTabPointerDown = (key) => (e) => {
     if (e.button != null && e.button !== 0) return;
-    const onHandle = !!e.target.closest?.('.home-tab-handle');
-    const isTouch = e.pointerType === 'touch';
-    // handle → drag now; touch body → drag after a small move; mouse body → select only.
-    const mode = onHandle ? 'immediate' : (isTouch ? 'threshold' : 'select');
+    // No grip any more (20a draws plain text tabs): a drag of a few px on the
+    // tab reorders, with a mouse or a finger; anything less is a select.
+    const mode = 'threshold';
     dragRef.current = { key, startX: e.clientX, startY: e.clientY, mode, moved: false };
     if (mode === 'immediate') { startDrag(key); e.preventDefault(); }
   };
@@ -1175,12 +1122,9 @@ const HomeGrouped = () => {
       && s.key === activeSection?.key
       && shortsQ.isLoading;
     if (waitingForShorts || (s.isLoading && (!s.videos || s.videos.length === 0))) {
-      // Skeleton cards in the real card grid (same columns as what follows, and
-      // measurable for featuredLayout), the Spotlight's block reserved on Discover
-      const withSpotlight = s.key === 'discover' && !isPhone && !!featuredLayout && (spotlightPending || !!featured);
+      // Skeleton cards in the real card grid (same columns as what follows)
       return (
         <div className="card-container">
-          {withSpotlight && <SpotlightSkeleton layout={featuredLayout} />}
           {Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={i} />)}
         </div>
       );
@@ -1204,10 +1148,6 @@ const HomeGrouped = () => {
           watchedVersion={watchedVersion}
           getViewCount={getViewCount}
           priority={s.priority}
-          featuredKey={s.key === 'discover' ? featuredKey : null}
-          featuredLayout={featuredLayout}
-          featuredNav={featuredNav}
-          featuredPending={s.key === 'discover' && spotlightPending}
           /* A shorts rail after every 2 REAL rows of videos, on any feed that has a
              shorts source (see shortsMode). `gridCols` is measured from the live
              grid, so this lands on a row boundary at every breakpoint (2 cols on
@@ -1245,54 +1185,64 @@ const HomeGrouped = () => {
     <div className="home-grouped-container home-tabbed" data-card-size={homeCardSize || 'small'}>
       {/* Logged-out first visits only. */}
       <WelcomeBanner />
-      <ShortsStories />
+      {/* The Spotlight (20a): the featured video, full width under the bar. */}
+      <HomeHero video={featured} pending={featuredLoading && !featured} />
+      <ShortsStories tiles />
       {/* Logged-in only, and renders nothing when there's nothing unwatched. */}
       <NewFromFollowing />
 
-      <div className="home-tabs-row">
-        <div className={`home-tabs home-tabs--bar${drag ? ' is-dragging' : ''}`} role="tablist" ref={tabBarRef}>
-          {displaySections.map((s) => (
-            <button
-              key={s.key}
-              type="button"
-              role="tab"
-              data-tab-key={s.key}
-              aria-selected={s.key === activeSection?.key}
-              className={`home-tab${s.key === activeSection?.key ? ' active' : ''}${drag?.key === s.key ? ' dragging' : ''}`}
-              aria-label={s.label}
-              title={s.label}
-              onPointerDown={onTabPointerDown(s.key)}
-            >
-              <span className="home-tab-handle" aria-hidden="true" title={t('feeds.home.dragToReorder')}><Icon name="drag_indicator" size={16} /></span>
-              <span className="home-tab-icon"><Icon name={iconsByTitle[s.title] || 'view_day'} size={18} fill={s.key === activeSection?.key} /></span>
-              <span className="home-tab-label">{s.label}</span>
-            </button>
-          ))}
-        </div>
-        <div className="home-tabs-tools">
-          {/* Channel Surfing lives here rather than in the top menu. A link, not a
-              tab: it leaves the page, and the reorder drag only hit-tests
-              `.home-tab`, so it can never be dragged in among the feeds. */}
-          <Link to="/surf" className="home-tab-surf" title={t('feeds.home.surfTitle')}>
-            <Icon name="live_tv" size={18} /> <span>{t('feeds.home.zapping')}</span>
-          </Link>
-          <button type="button" className="home-tab-customize" onClick={() => setCustomizeOpen(true)} title={t('feeds.home.customizeTitle')}>
-            <Icon name="tune" size={18} /> <span>{t('feeds.home.customize')}</span>
-          </button>
-        </div>
-      </div>
+      {/* The feed and, from 1280px up, the activity panel beside it (20a:
+          minmax(0,1fr) 340px, gap 32). */}
+      <div className="home-layout">
+        <div className="home-main">
+          <div className="home-tabs-row">
+            <div className={`home-tabs home-tabs--bar${drag ? ' is-dragging' : ''}`} role="tablist" ref={tabBarRef}>
+              {displaySections.map((s) => (
+                <button
+                  key={s.key}
+                  type="button"
+                  role="tab"
+                  data-tab-key={s.key}
+                  aria-selected={s.key === activeSection?.key}
+                  className={`home-tab${s.key === activeSection?.key ? ' active' : ''}${drag?.key === s.key ? ' dragging' : ''}`}
+                  title={`${s.label} · ${t('feeds.home.dragToReorder')}`}
+                  onPointerDown={onTabPointerDown(s.key)}
+                >
+                  <span className="home-tab-label">{s.tab || s.label}</span>
+                </button>
+              ))}
+            </div>
+            <div className="home-tabs-tools">
+              {/* Channel Surfing lives here rather than in the top menu. A link, not a
+                  tab: it leaves the page, and the reorder drag only hit-tests
+                  `.home-tab`, so it can never be dragged in among the feeds. */}
+              <Link to="/surf" className="home-tab-tool home-tab-surf" title={t('feeds.home.surfTitle')}>
+                <Icon name="live_tv" size={18} /> <span>{t('feeds.home.zapping')}</span>
+              </Link>
+              <button type="button" className="home-tab-tool home-tab-customize" onClick={() => setCustomizeOpen(true)} title={t('feeds.home.customizeTitle')}>
+                <Icon name="tune" size={18} /> <span>{t('feeds.home.customize')}</span>
+              </button>
+            </div>
+          </div>
 
-      {customizeOpen && (
-        <CustomizeHomeDialog
-          sections={tabSections}
-          hidden={hiddenTabs}
-          onClose={() => setCustomizeOpen(false)}
-          onSave={saveCustomLayout}
-        />
-      )}
+          {customizeOpen && (
+            <CustomizeHomeDialog
+              sections={tabSections}
+              hidden={hiddenTabs}
+              onClose={() => setCustomizeOpen(false)}
+              onSave={saveCustomLayout}
+            />
+          )}
 
-      <div className="home-tab-panel" role="tabpanel" ref={panelRef}>
-        {renderPanel(activeSection)}
+          <div className="home-tab-panel" role="tabpanel" ref={panelRef}>
+            {renderPanel(activeSection)}
+          </div>
+        </div>
+        {isWide && (
+          <aside className="home-aside">
+            <HomeActivity />
+          </aside>
+        )}
       </div>
     </div>
     </PullToRefresh>

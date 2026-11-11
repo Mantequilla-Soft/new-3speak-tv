@@ -11,36 +11,45 @@
 .not-found-card {
   @include v2.card;
   width: min(440px, 100%);
+  border-radius: var(--r-3xl);
   padding: 22px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
   color: var(--text);
+}
 
-  h3 {
-    margin: 0 0 16px;
-    @include v2.text(heading);
-  }
+// 26d: the big code, a 24 bold line, one muted sentence, then the two ways out.
+.not-found-title {
+  margin: 16px 0 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+}
+
+.not-found-sub {
+  margin: 6px 0 0;
+  @include v2.text(body-sm);
+  line-height: 1.5;
+  color: var(--muted);
 }
 
 .not-found-code {
   font-size: 72px;
   font-weight: 900;
-  line-height: .9;
+  line-height: .85;
   letter-spacing: -.06em;
   color: var(--accent);
 }
 
-.not-found-eyebrow {
-  margin: 12px 0 0;
-  @include v2.text(eyebrow);
-  color: var(--muted);
-}
-
 .not-found-actions {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
   width: 100%;
+  margin-top: 24px;
+
+  .v2-btn { padding: 0 14px; }
+  .v2-btn--secondary { font-weight: 700; }
 }

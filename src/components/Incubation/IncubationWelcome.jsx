@@ -177,18 +177,19 @@ export default function IncubationWelcome() {
 
   return (
     // The warm-up intro (design 46a). No close button, no Esc, no click-outside:
-    // the only way out is picking a path. A 4px step bar on top (§11).
+    // the only way out is picking a path. A 4px step bar on top (§11). Under
+    // 768px a full-screen step page (.v2-onboard, 23a).
     <Dialog
       open
       dismissible={false}
       head={false}
       title={t('incubation.welcome.what.title')}
       width={520}
-      className="incw"
+      className="incw v2-onboard"
       footer={(
         <>
           {step > 0 && (
-            <Button variant="secondary" onClick={() => setStep((n) => n - 1)}>
+            <Button variant="secondary" className="v2-onboard__skip" onClick={() => setStep((n) => n - 1)}>
               {t('common.actions.back')}
             </Button>
           )}
@@ -209,10 +210,10 @@ export default function IncubationWelcome() {
       )}
     >
       <StepBar steps={STEPS.length} current={step} />
-      <h2 className="incw-title">
-        <span className="incw-head-icon" aria-hidden="true"><Icon name={current.icon} size={20} /></span>
-        {t(current.titleKey)}
-      </h2>
+      <div className="v2-onboard__eyebrow">
+        {step === 0 ? t('app.welcome.eyebrow') : t('app.welcome.stepOf', { n: step + 1, total: STEPS.length })}
+      </div>
+      <h2 className="incw-title">{t(current.titleKey)}</h2>
       <div className="incw-body">
         {current.body(t)}
       </div>

@@ -11,6 +11,8 @@
       "transferFailed": "Transfer failed: {{message}}"
     },
     "heading": "Send a Tip to @{{recipient}}",
+    "pageTitle": "Tip @{{recipient}}",
+    "pageSub": "Opened from a stream overlay or a link",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "More ways",
@@ -23,7 +25,16 @@
     "memoLinkNote": "This link is added to the memo: {{link}}",
     "send": "Send Tip",
     "sendAmount": "Send {{amount}} {{currency}}",
+    "paidIn": "Paid in {{currency}} · no fees",
+    "forTitle": "for “{{title}}”",
+    "presets": {
+      "coffee": "A coffee",
+      "popular": "Most popular",
+      "thanks": "Big thanks",
+      "superFan": "Super fan"
+    },
     "sentEyebrow": "Tip sent",
+    "sentTo": "{{amount}} to @{{recipient}}",
     "lightning": {
       "amountLabel": "Amount (sats):",
       "messageLabel": "Message (optional):",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "How often",
       "once": "Once",
+      "oneTime": "One time",
+      "monthly": "Monthly",
       "until": "Every month, until {{date}}",
       "note": "Hive sends it by itself every 30 days, the first one right now. You can stop it any time.",
       "replaces": "This replaces the monthly support you already send @{{recipient}}.",
@@ -91,7 +104,8 @@
     "addToPlaylist": "Add to playlist",
     "addTag": "Add tag",
     "notInterested": "Not interested",
-    "dontShowCreator": "Don't show @{{author}}"
+    "dontShowCreator": "Don't show @{{author}}",
+    "saveToPlaylist": "Save to playlist"
   },
   "guestList": {
     "loadFailed": "Could not load the current guest list",

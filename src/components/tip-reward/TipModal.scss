@@ -2,16 +2,67 @@
 // standalone /tip page. Tokens and mixins only (src/styles/design-system.scss).
 @use "../../styles/v2" as v2;
 
-/* ─── v2 tip window ─────────────────────────────────────────────────────── */
+/* ─── v2 tip sheet (17a; 40a states) ──────────────────────────────────── */
 // It opens from the full-screen audio player too (z-index 3000), so it sits
-// above everything, as the old window did.
-.v2-dialog:has(> .tip-v2) { z-index: 9999; }
+// above everything (DialogShell zIndex 9999), as the old window did.
 
 .tip-v2 {
-  .v2-dialog__body { gap: 12px; }
+  .v2-dialog__body { gap: 14px; }
+  &.is-success { position: relative; }
+  &.is-success > .app-modal-header { position: absolute; top: 0; right: 0; z-index: 1; .app-modal-header-bar, .app-modal-header-title { display: none; } }
   &.is-success .v2-dialog__body { padding: 0; }
 
-  &__methods { flex: none; }
+  &__methods { flex: none; padding: 4px; gap: 6px; border-radius: var(--r-lg); }
+
+  // Labels kept for screen readers; the sheet shows the fields bare (17a).
+  .tip-v2__sr-label > label, .tip-v2__until-label {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+
+  &__tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  &__tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 84px;
+    padding: 12px 14px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-xl);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+    b { font-family: var(--font-sans); font-size: 24px; font-weight: 900; line-height: 1.1; display: flex; align-items: baseline; gap: 4px; }
+    small { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--muted); }
+    > span { @include v2.text(meta); color: var(--muted); }
+    &:hover { background: var(--bg-hover); }
+    &:active { transform: scale(.98); }
+    &.is-on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+  }
+
+  // The /tip page's quick amounts (19f right): four pills in a row.
+  &__quick { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  &__pill {
+    height: 56px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-xl);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+    &:hover { background: var(--bg-hover); }
+    &.is-on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+  }
+
+  &__often { gap: 6px; .v2-seg { padding: 4px; gap: 6px; border-radius: var(--r-lg); } }
+  &__memo .v2-input.is-area { min-height: 76px; border-radius: var(--r-lg); }
+  &__note { .tip-v2__balance { margin: 0; } }
 
   // Fixed minimum so switching HIVE / Lightning / More ways does not make the
   // window jump; the body scrolls when a tab needs more.
@@ -42,12 +93,11 @@
   .tip-v2__currency .v2-input { font-weight: 700; font-family: var(--font-mono); font-size: 14px; }
   &__balance {
     display: flex;
-    gap: 6px;
+    gap: 4px;
     align-items: center;
-    margin-top: -4px;
     font-size: 12px;
     color: var(--muted);
-    .num { color: var(--text); font-weight: 700; }
+    .num { color: var(--muted); }
   }
   &__presets { margin-bottom: 4px; .v2-chip { font-family: var(--font-mono); } }
 
@@ -122,9 +172,7 @@
   }
   &__links { display: flex; justify-content: space-between; gap: 8px; }
 
-  // Footer: the primary takes the room
-  .v2-dialog__foot { flex-wrap: nowrap; }
-  .v2-dialog__foot .tip-v2__send.v2-btn { flex: 1; min-width: 0; }
+  .v2-dialog__foot .dlg-row .tip-v2__send.v2-btn { flex: 1; min-width: 0; }
 
   // Wallet picker on the /tip page (WalletTip)
   &__wallets { display: flex; flex-direction: column; gap: 8px; }
@@ -179,27 +227,36 @@
     align-items: flex-start;
     padding: 24px 16px 32px;
   }
+  // The page itself is the window (19f right): no card around it.
   &__card {
-    width: min(460px, 100%);
-    @include v2.card;
-    padding: 20px;
+    width: min(420px, 100%);
+    padding: 4px 0 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    @include v2.mobile { padding: 16px; }
+    gap: 14px;
   }
   &__head {
     display: flex;
     align-items: center;
     gap: 12px;
-    h2 { flex: 1; min-width: 0; margin: 0; @include v2.text(title); }
+    margin-bottom: 4px;
   }
+  &__titles {
+    flex: 1;
+    min-width: 0;
+    h2 { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: -.01em; line-height: 1.2; }
+    p { margin: 2px 0 0; @include v2.text(body-sm); color: var(--muted); }
+  }
+  &__close { align-self: flex-start; }
   &__actions {
     display: flex;
     gap: 8px;
     .tip-v2__send.v2-btn { flex: 1; min-width: 0; }
   }
   .tip-v2__panel { min-height: 0; }
+  // No card here, so fields and tracks sit on the page ground: lift them to surface.
+  .v2-input, .v2-input.is-select, .v2-seg { background-color: var(--surface); }
+  .v2-seg .v2-seg__opt.is-on { background: var(--surface-2); }
   .tip-success { margin: -20px; @include v2.mobile { margin: -16px; } }
 }
 

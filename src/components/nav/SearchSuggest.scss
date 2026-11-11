@@ -1,0 +1,213 @@
+@use "../../styles/v2" as v2;
+
+// The search dropdown (design 28c): a floating surface card, radius 24,
+// padding 10, two equal columns. Positioned by whoever hangs it
+// (NavSearch.scss in the top bar, Discover.scss under the page's field).
+.search-suggest {
+  @include v2.floating;
+  border-radius: var(--r-2xl);
+  padding: 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  color: var(--text);
+  text-align: left;
+  animation: search-suggest-in var(--t-base) var(--ease);
+
+  &.is-two { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+
+  @include v2.mobile {
+    &.is-two { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+
+.search-suggest__col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  &.is-quick { gap: 6px; }
+}
+
+// A suggestion: icon, the text with the typed part bold, and the north-west arrow.
+.search-suggest__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover,
+  &:focus-visible { background: var(--surface-2); }
+
+  .search-suggest__icon,
+  .search-suggest__go { color: var(--muted); flex: none; }
+}
+
+.search-suggest__text {
+  flex: 1;
+  min-width: 0;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  b { font-weight: 700; }
+}
+
+.search-suggest__eyebrow {
+  @include v2.text(eyebrow);
+  font-size: 11px;
+  color: var(--muted);
+  padding: 12px 10px 6px;
+}
+
+.search-suggest__recent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 10px 4px;
+}
+
+// A recent search: the term searches again, the x forgets it.
+.search-suggest__chip {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  font-size: 12px;
+  max-width: 100%;
+
+  button {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    height: 100%;
+  }
+
+  .search-suggest__chip-term {
+    padding: 0 4px 0 10px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: var(--r-md) 0 0 var(--r-md);
+  }
+
+  .search-suggest__chip-x {
+    display: grid;
+    place-items: center;
+    padding: 0 8px 0 2px;
+    color: var(--muted);
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    &:hover { color: var(--text); }
+  }
+
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+}
+
+// Quick results: a bordered well with the picture, the kind and the name.
+.search-suggest__quick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 6px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease);
+
+  &:hover,
+  &:focus-visible { border-color: color-mix(in srgb, var(--text) 24%, transparent); }
+}
+
+.search-suggest__media {
+  position: relative;
+  flex: none;
+  height: 44px;
+  width: 78px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--avatar);
+  color: var(--text);
+  font-weight: 900;
+  font-size: 16px;
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &.is-square { width: 44px; border-radius: var(--r-lg); }
+  &.is-thumb { @include v2.thumb-placeholder(5px); border-radius: var(--r-md); }
+  &.is-cyan { background: var(--cyan); color: var(--bg); }
+  &.is-icon { background: var(--surface-2); color: var(--muted); }
+}
+
+.search-suggest__quick-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+
+  b {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.search-suggest__kind {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+
+  &.is-cyan { color: var(--cyan); }
+  &.is-accent { color: var(--accent); }
+}
+
+// "All results for …": the way forward, a 44 secondary row with the arrow.
+.search-suggest__all {
+  @include v2.control(44);
+  @include v2.text(label);
+  width: 100%;
+  justify-content: space-between;
+  background: var(--surface-2);
+  color: var(--text);
+
+  span { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+}
+
+@keyframes search-suggest-in {
+  from { opacity: 0; transform: translateY(-4px); }
+}

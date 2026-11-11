@@ -1550,10 +1550,10 @@ $mkt-sub: 12px;
     flex-direction: column;
     gap: 6px;
     margin: 8px 0;
-    audio { width: 100%; max-width: 420px; }
+    .audio-clip { max-width: 420px; }
   }
-  .mkt-audio-item audio,
-  .mkt-flight-audio { width: 100%; max-width: 420px; }
+  .mkt-audio-item .audio-clip,
+  .mkt-flight-audio { max-width: 420px; }
 
   /* A <label> wearing a button's clothes, so the file input can stay hidden. It used
      to force `border: none`, which suited a filled button and silently stripped the

@@ -36,9 +36,16 @@
     "embedOnWebsite": "Embed on a website",
     "embedOnWebsiteSub": "Copy the HTML for your own site or blog",
     "forHivePost": "For Hive post",
+    "forHivePostSub": "Copy the link for a Hive post",
     "hivePostCopied": "Link copied. Paste it into your Hive post.",
     "generalShare": "Share / copy link",
-    "generalShareSub": "Other apps, or copy the link"
+    "generalShareSub": "Other apps, or copy the link",
+    "embed": "Embed",
+    "chat": "Chat",
+    "more": "More",
+    "startAt": "Start at",
+    "toFollowers_one": "To your {{n}} follower",
+    "toFollowers_other": "To your {{n}} followers"
   },
   "gate": {
     "connectTitle": "Connect to 3Speak Chat",

@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { useParams, useNavigate, Navigate } from 'react-router-dom';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { useParams, useNavigate, Navigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import {
-  HangoutsProvider, StandaloneWatch, StreamVideo, StreamViewerCount, StreamQualityControl, ChatPanel, CollabRequest, useIsMobile, useChat,
+  HangoutsProvider, StandaloneWatch, StreamVideo, StreamViewerCount, StreamQualityControl, ChatPanel, CollabRequest, useIsMobile, useChat, useBoostStore,
 } from '@snapie/hangouts-react';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import StreamBoostButton from '../components/openpods/StreamBoostButton';
@@ -24,7 +24,9 @@ import SEOHead from '../components/SEOHead';
 import BarLoader from '../components/Loader/BarLoader';
 import Card3 from '../components/Cards/Card3';
 import AuthorBadge from '../components/AuthorBadge/AuthorBadge';
-import { Button, DockTile, EmptyState, Icon, StatusPill } from '../components/v2/ui';
+import { Button, DockTile, EmptyState, Icon, Segmented, StatusPill } from '../components/v2/ui';
+import { useAvatarUrl } from '../utils/avatarCache';
+import { formatTimeAgo } from '../i18n';
 
 import { TAG_FEED_URL } from '../utils/config';
 import { useTranslation } from 'react-i18next';
@@ -88,6 +90,89 @@ function StreamChatBar({ canChat, needsSignIn = false, onSignIn, signingIn = fal
   );
 }
 
+/** Time on air for the live strip (18c): "1:24:08", from the server's go-live
+ *  stamp. Nothing while the host has not pressed Start yet. */
+function LiveClock({ since }) {
+  const start = since ? new Date(since).getTime() : NaN;
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!Number.isFinite(start)) return undefined;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [start]);
+  if (!Number.isFinite(start)) return null;
+  const s = Math.max(0, Math.floor((now - start) / 1000));
+  const pad = (n) => String(n).padStart(2, '0');
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  return <span className="ws-clock" role="timer">{h > 0 ? `${h}:${pad(m)}:${pad(s % 60)}` : `${m}:${pad(s % 60)}`}</span>;
+}
+
+function SupporterRow({ rank, name, usd }) {
+  const avatar = useAvatarUrl(name, 'small');
+  return (
+    <li className="ws-supporters__row">
+      <span className="ws-supporters__rank">{rank}</span>
+      <img className="ws-supporters__avatar" src={avatar} alt="" loading="lazy" />
+      <Link className="ws-supporters__name" to={`/@${name}`}>@{name}</Link>
+      <span className="ws-supporters__usd money">${usd.toFixed(2)}</span>
+    </li>
+  );
+}
+
+/** "Top supporters" beside the chat (18c): the boosts sent during this stream,
+ *  summed per sender. The SDK already keeps the room's boost list
+ *  (BoostStoreProvider inside StandaloneWatch); nothing is fetched here. */
+function TopSupporters() {
+  const { t } = useTranslation();
+  const boosts = useBoostStore();
+  const rows = useMemo(() => {
+    const bySender = new Map();
+    for (const b of boosts || []) {
+      if (!b?.sender) continue;
+      const row = bySender.get(b.sender) || { name: b.sender, usd: 0 };
+      row.usd += Number(b.usdAmount) || 0;
+      bySender.set(b.sender, row);
+    }
+    return [...bySender.values()].sort((a, b) => b.usd - a.usd);
+  }, [boosts]);
+  if (!rows.length) {
+    return <EmptyState icon="rocket_launch" title={t('misc.watchStream.noSupporters')} className="ws-supporters__empty" />;
+  }
+  return (
+    <ol className="ws-supporters">
+      {rows.map((r, i) => <SupporterRow key={r.name} rank={i + 1} name={r.name} usd={r.usd} />)}
+    </ol>
+  );
+}
+
+/**
+ * The SDK's ChatPanel keeps its list on the newest message with
+ * `bottomRef.scrollIntoView()`, which scrolls every scrollable ancestor too:
+ * with the chat beside the player, the PAGE jumped down on load and again on
+ * every new message. This ref callback gives that one node a scrollIntoView
+ * that only scrolls the message list. The observer re-applies it if the SDK
+ * remounts the list.
+ */
+function keepChatScrollInside(el) {
+  if (!el) return undefined;
+  const patch = () => {
+    el.querySelectorAll('.hh-chat__messages > :last-child').forEach((node) => {
+      if (node.dataset.wsPinned) return;
+      node.dataset.wsPinned = '1';
+      // eslint-disable-next-line no-param-reassign
+      node.scrollIntoView = function scrollListOnly() {
+        const list = this.parentElement;
+        if (list) list.scrollTop = list.scrollHeight;
+      };
+    });
+  };
+  patch();
+  const mo = new MutationObserver(patch);
+  mo.observe(el, { childList: true, subtree: true });
+  return () => mo.disconnect();
+}
+
 export default function WatchStream() {
   const { t } = useTranslation();
   const { streamId } = useParams();
@@ -97,6 +182,8 @@ export default function WatchStream() {
   const [state, setState] = useState({ status: 'loading', room: null, hivePost: null });
   const [endpoint, setEndpoint] = useState(() => defaultEndpoint());
   const [copied, setCopied] = useState(false);
+  // Desktop side panel: the chat, or who boosted the stream the most (18c).
+  const [chatTab, setChatTab] = useState('chat');
   const [recommended, setRecommended] = useState({ loading: false, videos: [] });
   // Phones get a shorts-style full-bleed player rather than the desktop grid.
   const isMobile = useIsMobile();
@@ -422,6 +509,19 @@ export default function WatchStream() {
   }
 
   const notLiveTitle = t('misc.watchStream.notAvailableLive');
+  const startedAt = room.liveAt || state.hivePost?.created_at || null;
+
+  // Logged out: the chat's composer slot invites a log in (30b). Signed in to
+  // 3Speak but still a guest in the room: one tap signs them into the room.
+  const chatNotice = needsSignIn
+    ? <StreamSignInButton label={t('misc.watchStream.signInToChat')} onSignIn={signIn} busy={signingIn} />
+    : (
+      <div className="ws-chat-signin">
+        <Icon name="lock" size={24} className="ws-chat-signin__icon" />
+        <span className="ws-chat-signin__text">{t('misc.watchStream.signInToChat')}</span>
+        <Button variant="primary" size={40} trailing="login" onClick={() => navigate('/login')}>{t('common.actions.login')}</Button>
+      </div>
+    );
 
   return (
     <div className="ws-page">
@@ -437,17 +537,11 @@ export default function WatchStream() {
         {!connectReady ? <BarLoader /> : (
 
         <StandaloneWatch key={joinKey} roomName={streamId} connecting={<BarLoader />} audioMuted={prerollHold}>
-          {/* Live strip (18c): LIVE, who is watching, the tags, playback quality. */}
+          {/* Live strip (18c): LIVE, time on air, who is watching, playback quality. */}
           <div className="ws-strip">
             <StatusPill tone="live" className="ws-live-tag">{t('feeds.live.badge')}</StatusPill>
-            <StreamViewerCount render={(c) => <span className="ws-watching">{t('misc.watchStream.watchingNow', { count: c })}</span>} />
-            {tags.length > 0 && (
-              <span className="ws-strip__tags">
-                {tags.map((tag, i) => (
-                  <button key={i} type="button" className="ws-strip__tag" onClick={() => navigate(`/t/${tag}`)}>#{tag}</button>
-                ))}
-              </span>
-            )}
+            <LiveClock since={room.liveAt} />
+            <StreamViewerCount render={(c) => <span className="ws-watching">{t('misc.watchStream.watching', { count: c })}</span>} />
             <span className="ws-strip__spacer" />
             <div className="ws-quality-slot">
               <StreamQualityControl />
@@ -455,37 +549,80 @@ export default function WatchStream() {
           </div>
 
           <div className="ws-grid">
-            {/* Main column */}
+            {/* Main column: the player, then the title with the tile dock beside it. */}
             <div className="ws-col-main">
               <div className="ws-player">
                 <StreamVideo showLiveBadge={false} />
                 <StreamWatermark show={showWatermark} />
                 <LiveAdLayer host={host} room={streamId} onPreroll={setPrerollHold} />
+                {/* The creator on the player, with Follow (18c). */}
+                <div className="ws-creator">
+                  <AuthorBadge author={host} showFollow subtitle={title} />
+                </div>
+                {/* Only shown in fullscreen: the dock's Full tile is out of reach there. */}
                 <StreamFullscreenButton />
               </div>
 
-              <div className="ws-info">
-                <h1 className="ws-title">{title}</h1>
-                <div className="ws-author-row">
-                  <AuthorBadge author={host} showFollow fetchFollowers />
+              <div className="ws-head">
+                <div className="ws-head__text">
+                  <h1 className="ws-title">{title}</h1>
+                  <div className="ws-meta">
+                    {startedAt && <span>{t('misc.watchStream.startedAgo', { when: formatTimeAgo(startedAt, { style: 'narrow' }) })}</span>}
+                    {startedAt && tags.length > 0 && <span aria-hidden="true"> · </span>}
+                    {tags.map((tag) => (
+                      <Link key={tag} className="ws-meta__tag" to={`/t/${tag}`}>#{tag}</Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Tile dock (18c, 30b): vote, taking part, clip, boost, share,
+                    report, fullscreen. */}
+                <div className="ws-dock">
+                  <DockTile icon="arrow_upward" label={t('misc.watchStream.vote')} disabled title={notLiveTitle} />
+                  {needsSignIn
+                    ? <StreamSignInButton variant="dock" label={t('misc.watchStream.signInRaiseHand')} onSignIn={signIn} busy={signingIn} />
+                    : <CollabRequest canRequest={canInteract} />}
+                  <StreamClipButton roomName={streamId} />
+                  <StreamBoostButton />
+                  <DockTile icon={copied ? 'check' : 'ios_share'} label={copied ? t('common.actions.copied') : t('common.actions.share')} onClick={copyLink} title={t('misc.watchStream.copyLink')} />
+                  <StreamReportButton roomName={streamId} host={host} />
+                  <StreamFullscreenButton variant="dock" />
                 </div>
               </div>
+            </div>
 
-              {/* Tile dock (18c, 30b): taking part, boost, share, then what a
-                  live stream can't do yet, then clip and report. */}
-              <div className="ws-dock">
-                {needsSignIn
-                  ? <StreamSignInButton variant="dock" label={t('misc.watchStream.signInRaiseHand')} onSignIn={signIn} busy={signingIn} />
-                  : <CollabRequest canRequest={canInteract} />}
-                <StreamBoostButton />
-                <DockTile icon={copied ? 'check' : 'share'} label={copied ? t('common.actions.copied') : t('common.actions.share')} onClick={copyLink} title={t('misc.watchStream.copyLink')} />
-                <DockTile icon="thumb_up" label={t('misc.watchStream.vote')} disabled title={notLiveTitle} />
-                <DockTile icon="chat_bubble" label={t('misc.watchStream.comment')} disabled title={notLiveTitle} />
-                <DockTile icon="bookmark" label={t('common.actions.save')} disabled title={notLiveTitle} />
-                <StreamClipButton roomName={streamId} />
-                <StreamReportButton roomName={streamId} host={host} />
+            {/* Side column: the chat, always beside the stream (18c). */}
+            <aside className="ws-col-side">
+              <div className="ws-chat">
+                <div className="ws-chat__tabs">
+                  <Segmented
+                    size={36}
+                    label={t('misc.watchStream.liveChat')}
+                    value={chatTab}
+                    onChange={setChatTab}
+                    options={[
+                      { value: 'chat', label: t('misc.watchStream.chat') },
+                      { value: 'supporters', label: t('misc.watchStream.topSupporters') },
+                    ]}
+                  />
+                </div>
+                {/* Stays mounted on the other tab, so the conversation is still there. */}
+                <div className="ws-chat__pane" hidden={chatTab !== 'chat'} ref={keepChatScrollInside}>
+                  <ChatPanel
+                    readOnly={!canInteract}
+                    readOnlyNotice={chatNotice}
+                    onMessageSent={mirrorChatToHive}
+                  />
+                </div>
+                {chatTab === 'supporters' && (
+                  <div className="ws-chat__pane ws-chat__pane--supporters">
+                    <TopSupporters />
+                  </div>
+                )}
               </div>
+            </aside>
 
+            <div className="ws-more">
               {description && (
                 <div className="ws-desc">{description}</div>
               )}
@@ -497,23 +634,6 @@ export default function WatchStream() {
                 </section>
               )}
             </div>
-
-            {/* Side column: the chat, always beside the stream (18c). */}
-            <aside className="ws-col-side">
-              <div className="ws-chat">
-                <div className="ws-chat-head">
-                  <Icon name="forum" size={18} />
-                  <span>{t('misc.watchStream.liveChat')}</span>
-                </div>
-                <ChatPanel
-                  readOnly={!canInteract}
-                  readOnlyNotice={needsSignIn
-                    ? <StreamSignInButton label={t('misc.watchStream.signInToChat')} onSignIn={signIn} busy={signingIn} />
-                    : t('misc.watchStream.signInToJoin')}
-                  onMessageSent={mirrorChatToHive}
-                />
-              </div>
-            </aside>
           </div>
         </StandaloneWatch>
         )}

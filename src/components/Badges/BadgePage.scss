@@ -43,7 +43,7 @@
     align-self: flex-start;
     background: var(--surface);
     border-radius: var(--r-lg);
-    .v2-seg__opt { font-size: 14px; padding: 0 14px; }
+    .v2-seg__opt { font-size: 14px; padding: 0 16px; }
 
     @include v2.mobile { align-self: stretch; .v2-seg__opt { flex: 1 0 auto; font-size: 13px; } }
   }
@@ -71,19 +71,20 @@
     color: var(--muted);
   }
 
+  // 41c: rows of a 28px rounded-square face, the name, and the video count.
   .badge-recipients {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 0 16px;
+    gap: 2px 16px;
   }
 
   .badge-recipient {
     display: flex;
     align-items: center;
-    gap: 10px;
-    min-height: 48px;
+    gap: 8px;
+    min-height: 40px;
     padding: 6px 4px;
-    border-bottom: 1px solid var(--border);
+    border-radius: var(--r-md);
     color: var(--text);
     text-decoration: none;
     min-width: 0;
@@ -91,21 +92,15 @@
     &:hover { background: var(--bg-hover); color: var(--text); }
 
     .badge-recipient-avatar img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--r-sm);
       object-fit: cover;
       display: block;
       background: var(--avatar);
     }
 
-    .badge-recipient-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
-
-    .badge-recipient-name,
-    .badge-recipient-handle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-    .badge-recipient-name { font-size: 13px; font-weight: 700; }
-    .badge-recipient-handle { font-size: 11px; color: var(--muted); }
+    .badge-recipient-name { flex: 1; min-width: 0; font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .badge-recipient-count { flex: none; font-size: 11px; font-weight: 500; color: var(--muted); }
   }
 }

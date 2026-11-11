@@ -584,34 +584,41 @@
 /* "Start from a template" above the New stream form (39a): a 48px surface bar
    with the picker on the right. */
 .st-picker {
+  position: relative;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 10px;
-  min-height: 48px;
-  padding: 4px 4px 4px 14px;
+  gap: 8px;
+  height: 48px;
+  padding: 0 14px;
   box-sizing: border-box;
   border-radius: var(--r-lg);
   background: var(--surface);
-  border: 1px solid var(--border);
   font-size: 13px;
-  font-weight: 700;
   color: var(--text);
+  cursor: pointer;
 
-  > span:not(.material-symbols-rounded) { flex: 1 1 auto; }
+  &:hover { background: color-mix(in srgb, var(--text) 4%, var(--surface)); }
+  &:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
 
-  select.v2-input {
-    flex: 1 1 220px;
-    max-width: 360px;
-    height: 40px;
-    background-color: var(--bg);
-    font-weight: 500;
-  }
+.st-picker__text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  b { font-weight: 700; }
+}
 
-  @include v2.mobile {
-    padding: 10px 10px 10px 14px;
-    select.v2-input { max-width: none; }
-  }
+// The real control: a select over the whole bar, not drawn.
+.st-picker__select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 16px;   // no zoom on focus in iOS
 }
 
 .st-picker__icon { color: var(--cyan); }

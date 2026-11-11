@@ -11,6 +11,7 @@ import { aiKey, useAiFlags } from '../../utils/aiFlags';
 import { hiveAuthorOf, isAiShort } from '../../hooks/useAiFilteredShorts';
 import './ShortsRow.scss';
 import { shortHeading } from '../../utils/shortTitle';
+import { formatNumber } from '../../i18n';
 
 /**
  * ONE FULL ROW of shorts dropped INTO the video grid every few rows (see
@@ -114,7 +115,10 @@ function ShortsRow({ shorts, columns, heading = true }) {
               {isAiShort(s) && <AiPill className="ai-badge--on-thumb" />}
               <div className="shorts-row-meta">
                 <h2>{title || `@${finalAuthor}`}</h2>
-                <span className="shorts-row-author">@{finalAuthor}</span>
+                {/* 28b: the view count under the caption; the creator when there is none */}
+                <span className="shorts-row-author">
+                  {s.views > 0 ? formatNumber(s.views, { compact: true }) : `@${finalAuthor}`}
+                </span>
               </div>
             </div>
           </Link>

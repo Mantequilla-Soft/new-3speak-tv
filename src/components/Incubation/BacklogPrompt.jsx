@@ -4,7 +4,7 @@ import { useAppStore } from '../../lib/store';
 import { usePromptsActive, setPromptActive } from '../../utils/welcomeGate';
 import { fetchBackfillSummary, claimAssetsOnce } from '../../lib/incubation';
 import { useTranslation, Trans } from 'react-i18next';
-import { Button, Dialog, Icon } from '../v2/ui';
+import { Button, Dialog } from '../v2/ui';
 import './GraduationPrompt.scss';
 
 const SNOOZE_KEY = 'backlog_prompt_snoozed_until';
@@ -87,12 +87,11 @@ export default function BacklogPrompt() {
             className="inc-prompt-primary"
             onClick={() => { close(); navigate('/publish-backlog'); }}
           >
-            {t('incubation.tipCard.takeALook')}
+            {t('nav.profile.publishBacklog')}
           </Button>
         </>
       )}
     >
-      <span className="inc-prompt-icon" aria-hidden="true"><Icon name="cloud_upload" size={28} /></span>
       <p className="inc-prompt-lede">
         <Trans i18nKey="incubation.backlog.lede" count={n} values={{ user }} components={{ b: <strong /> }} />
       </p>

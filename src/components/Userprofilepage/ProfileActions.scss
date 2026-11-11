@@ -8,7 +8,6 @@
   gap: 28px;
   justify-content: space-between;
   font-size: 16px;
-  min-width: 160px;
 
   @include v2.mobile { width: 100%; min-width: 0; height: 48px; border-radius: var(--r-lg); gap: 12px; font-size: 14px; }
 }
@@ -49,15 +48,16 @@
   .v2-menu__row { min-height: 48px; }
 }
 
-// Tabs: one segmented track on a surface tray, scrolling sideways (37a).
+// Tabs: one segmented track on a surface tray (20b): 36px options, 14/700,
+// scrolling sideways, then "Search this channel" at the end of the row.
 .ph-tabs {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 24px 0 16px;
+  margin: 24px 0 20px;
   min-width: 0;
 
-  @include v2.mobile { margin: 16px 0 12px; gap: 8px; }
+  @include v2.mobile { margin: 16px 0 12px; gap: 8px; flex-wrap: wrap; }
 
   .ph-tabs__track.v2-seg {
     flex: 0 1 auto;
@@ -65,14 +65,81 @@
     background: var(--surface);
     border-radius: var(--r-lg);
 
-    .v2-seg__opt { flex: none; gap: 6px; }
+    .v2-seg__opt { flex: none; padding: 0 14px; font-size: 14px; }
+
+    @include v2.mobile {
+      flex-basis: 100%;
+      .v2-seg__opt { padding: 0 12px; font-size: 13px; }
+    }
+  }
+}
+
+// "Search this channel": 280 x 40 on the surface, icon and text muted.
+.ph-search {
+  margin-left: auto;
+  flex: 0 0 280px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px 0 14px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--muted);
+  border: 2px solid transparent;
+  transition: border-color var(--t-fast) var(--ease);
+
+  &:focus-within { border-color: var(--accent); }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+
+    &::placeholder { color: var(--muted); }
+    &::-webkit-search-cancel-button { display: none; }
   }
 
-  .ph-tabs__wallet { margin-left: auto; color: var(--muted); &:hover { color: var(--text); } }
+  .ph-search__clear {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
 
-  @include v2.mobile {
-    .ph-tabs__wallet .v2-btn__label { display: none; }
-    .ph-tabs__wallet { width: 40px; padding: 0; justify-content: center; }
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+
+  @include v2.below-wide { flex-basis: 220px; }
+  @include v2.mobile { flex: 1 1 100%; margin-left: 0; height: 44px; border-radius: var(--r-lg); }
+}
+
+// The search results replace the tab's content while there is a query.
+.ph-results {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+
+  .ph-results__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 32px;
+
+    h3 { margin: 0; @include v2.text(title); color: var(--text); }
   }
 }
 
@@ -84,6 +151,18 @@
     flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 16px;
+  }
+
+  // Everything under the header lines up with the name column (20b: the
+  // tabs and the grid sit 64px in from the cover's edge on a 1280 frame).
+  > .ph-tabs,
+  > .container-video,
+  > .active-renders {
+    margin-left: 40px;
+    margin-right: 40px;
+
+    @include v2.below-wide { margin-left: 24px; margin-right: 24px; }
+    @include v2.mobile { margin-left: 0; margin-right: 0; }
   }
 
   // Phones tip from the speed-dial, which already has Tip.

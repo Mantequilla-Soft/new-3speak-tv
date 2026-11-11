@@ -2,12 +2,11 @@
 
 /* Playlist bar on the watch page (design 22b): a cyan-washed card with a cyan
    icon well, the playlist name, "3 / 14 · next title" in mono, and previous /
-   next / close tiles; the videos scroll sideways under it. */
+   next / close tiles. The next videos are the "Next in" shelf (Watch.scss). */
 .playlist-bar {
   background: color-mix(in srgb, var(--cyan) 9%, var(--surface));
   border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
   border-radius: var(--r-2xl);
-  margin-bottom: 20px;
   overflow: hidden;
   color: var(--text);
 
@@ -88,95 +87,6 @@
         &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
         &:active:not(:disabled) { transform: scale(.98); }
         &:disabled { opacity: .45; cursor: not-allowed; }
-      }
-    }
-  }
-
-  .playlist-bar-videos {
-    display: flex;
-    gap: 10px;
-    padding: 0 10px 10px;
-    scroll-behavior: smooth;
-    @include v2.scroll-x;
-
-    .playlist-video-item {
-      display: flex;
-      flex-direction: column;
-      min-width: 160px;
-      max-width: 160px;
-      padding: 6px;
-      text-decoration: none;
-      border-radius: var(--r-lg);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      transition: background var(--t-fast) var(--ease);
-
-      &:hover { background: var(--surface-2); }
-
-      &.active {
-        outline: 2px solid var(--accent);
-        outline-offset: -1px;
-
-        .thumbnail-wrap .position { background: var(--accent); color: var(--on-accent); }
-      }
-
-      .thumbnail-wrap {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16/9;
-        border-radius: var(--r-sm);
-        overflow: hidden;
-        @include v2.thumb-placeholder(6px);
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
-        }
-
-        .position {
-          position: absolute;
-          top: 6px;
-          left: 6px;
-          min-width: 20px;
-          height: 20px;
-          padding: 0 4px;
-          display: inline-grid;
-          place-items: center;
-          @include v2.scrim-pill;
-          font-family: var(--font-mono);
-        }
-
-        .duration {
-          position: absolute;
-          bottom: 6px;
-          right: 6px;
-          @include v2.scrim-pill;
-          font-family: var(--font-mono);
-        }
-      }
-
-      .video-info {
-        padding: 8px 2px 2px;
-
-        h4 {
-          @include v2.text(body-sm);
-          font-weight: 700;
-          color: var(--text);
-          margin: 0 0 2px;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          line-height: 1.3;
-        }
-
-        p {
-          @include v2.text(meta-sm);
-          color: var(--muted);
-          margin: 0;
-        }
       }
     }
   }

@@ -508,7 +508,8 @@ function SnapCommentsModal({ owner, permlink, onClose, onCommented }) {
 // `showAuthor` names the author like the feed does but keeps the profile tab's
 // behaviour otherwise (inline comments, full clamp) — a community Discussion tab
 // is a list of many authors that is still a page of its own, not a feed rail.
-export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove, onOpenTab, maxVh, autoOpenComments = false }) {
+// `label` names the card in front of its time ("Latest snap · 2h", 20b).
+export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove, onOpenTab, maxVh, autoOpenComments = false, label = null }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const incubationHandle = useAppStore((s) => s.incubationHandle);
@@ -616,6 +617,7 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
           <AuthorBadge author={snap.owner} showFollow compact tabHint="community" />
         )}
         {feedMode && <span className="snap-feed-title">{t('profile.snaps.communitySnap')}</span>}
+        {label && !feedMode ? <span className="snap-label">{label} ·</span> : null}
         <Link
           className="snap-time"
           to={feedMode ? `/@${snap.owner}?tab=community` : `/post/${snap.owner}/${snap.permlink}`}

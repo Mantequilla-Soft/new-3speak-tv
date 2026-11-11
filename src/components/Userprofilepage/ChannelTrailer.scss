@@ -12,7 +12,7 @@
   display: flex;
   align-items: stretch;
   gap: var(--ct-gap);
-  margin: 0 0 24px;
+  margin: 0 0 20px;
 
   @include v2.below-wide { flex-wrap: wrap; }
   @include v2.mobile { flex-direction: column; gap: 12px; margin-bottom: 16px; }
@@ -51,6 +51,8 @@
   @include v2.mobile { width: 100%; border-radius: var(--r-md); }
 }
 
+// Pill, title (24/900), views and age (13 muted), as drawn in 20b; a short
+// description under them when the post has one.
 .channel-trailer-meta {
   flex: 1 1 0;
   min-width: 200px;
@@ -58,15 +60,23 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
   padding: 4px 6px 4px 0;
+  overflow: hidden;
 
-  @include v2.mobile { min-width: 0; max-height: 200px; padding: 0 4px 4px; overflow: hidden; }
+  @include v2.mobile { min-width: 0; max-height: none; padding: 0 4px 4px; }
 
-  .ct-pill { flex: none; margin-bottom: 4px; }
+  .ct-pill {
+    flex: none;
+    height: 20px;
+    padding: 0 9px;
+    border-radius: var(--r-sm);
+    font-size: 11px;
+    letter-spacing: 0;
+  }
 
   .ct-title {
     flex: none;
+    margin-top: 10px;
     @include v2.text(heading);
     color: var(--text);
     text-decoration: none;
@@ -86,33 +96,22 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    margin-top: 6px;
     @include v2.text(body-sm);
     color: var(--muted);
   }
 
-  // Only the description clips; the title, meta and "Read more" stay put.
   .ct-desc {
-    margin: 4px 0 0;
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: hidden;
+    margin: 10px 0 0;
+    flex: none;
     @include v2.text(body-sm);
     line-height: 1.5;
     color: var(--muted);
-    white-space: pre-line;
-    mask-image: linear-gradient(to bottom, var(--media-black) 70%, transparent);
-
-    @include v2.mobile { mask-image: none; }
-  }
-
-  .ct-readmore {
-    flex: none;
-    @include v2.text(label);
-    font-size: 12px;
-    color: var(--accent);
-    text-decoration: none;
-
-    &:hover { text-decoration: underline; }
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -169,7 +168,25 @@
 }
 
 // ── Player size (the creator's profile layout) ─────────────────────────────
-// md is the default above. Full width puts the text under the player.
+// md (the default) splits the card like 20b: the player takes 1.2 parts, the
+// text 1. sm and lg are fixed player widths; full puts the text underneath.
+.channel-trailer-row--md:not(.channel-trailer-row--bare) {
+  .channel-trailer { width: auto; flex: 1.2 1 0; }
+  .channel-trailer-meta { flex: 1 1 0; max-height: none; align-self: center; }
+  // Side by side, the note takes the trailer card's height and scrolls inside
+  // it (its height can't come from a fixed player width here).
+  @include v2.wide {
+    .channel-trailer-snap {
+      position: relative;
+      max-height: none;
+      overflow: visible;
+
+      > .community-snaps { position: absolute; inset: 0; @include v2.scroll-y; }
+    }
+  }
+
+  @include v2.mobile { .channel-trailer { width: 100%; flex: none; } }
+}
 .channel-trailer-row--sm { --ct-player-w: 400px; }
 .channel-trailer-row--lg { --ct-player-w: 720px; }
 

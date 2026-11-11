@@ -200,6 +200,14 @@ export default function Legal() {
               Clauses or an adequacy decision.
             </p>
           </section>
+
+          <section className="legal-card" id="legal-automated">
+            <h2>8. No automated decisions with legal effect</h2>
+            <p>
+              Our feeds rank videos by popularity and your chosen interests, but this does not produce
+              any decision with a legal or similarly significant effect on you (Art. 22).
+            </p>
+          </section>
         </div>
 
         <section className="legal-section" id="legal-retention">
@@ -227,14 +235,6 @@ export default function Legal() {
             You also have the right to lodge a complaint with a data protection supervisory
             authority, in particular in the EU member state where you live or work, or where you
             believe the issue occurred.
-          </p>
-        </section>
-
-        <section className="legal-card" id="legal-automated">
-          <h2>8. No automated decisions with legal effect</h2>
-          <p>
-            Our feeds rank videos by popularity and your chosen interests, but this does not produce
-            any decision with a legal or similarly significant effect on you (Art. 22).
           </p>
         </section>
 

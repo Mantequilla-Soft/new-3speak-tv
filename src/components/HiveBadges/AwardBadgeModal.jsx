@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { toastIn } from '../../utils/toast';
 import { awardBadgeWithAioha } from '../../hive-api/aioha';
 import { badgeHolders } from '../../utils/badgeAwards';
-import { cachedProfileImage } from '../../utils/avatarCache';
+import { cachedProfileImage, useAvatarUrl } from '../../utils/avatarCache';
 import { useTranslation } from 'react-i18next';
-import { Dialog } from '../v2/ui';
+import DialogShell, { SheetContext } from '../modal/DialogShell';
+import { Button } from '../v2/ui';
 import { Icon } from '../v2/Icon';
 import { cx } from '../v2/helpers';
 import './AwardBadgeModal.scss';
@@ -28,6 +29,9 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
   const { t } = useTranslation();
   const [held, setHeld] = useState(null); // null = still looking
   const [busy, setBusy] = useState('');
+  // 29c: pick a badge tile, then award it with the one main action.
+  const [picked, setPicked] = useState('');
+  const avatar = useAvatarUrl(username);
 
   useEffect(() => {
     let alive = true;
@@ -56,58 +60,73 @@ export default function AwardBadgeModal({ username, badges, onClose, onAwarded }
     }
   };
 
-  // Design 41c / 29c: a v2 Dialog (a bottom sheet on a phone) with one well row
-  // per badge, its action on the right: Award in the accent, Held muted.
+  const choice = badges.find((b) => b.account === picked && !held?.[b.account]);
+
+  // Design 29c / 41c: the 17 sheet (docked right on desktop, a bottom sheet on
+  // a phone) with an accent bar: who gets it, a grid of your badge tiles (Held
+  // ones muted), and one accent action that names the badge.
   return (
-    <Dialog
-      open
+    <DialogShell
       onClose={onClose}
-      dismissible={!busy}
+      busy={!!busy}
+      side
+      tone="accent"
       title={t('badges.award.title')}
-      sub={t('badges.award.toUser', { username })}
-      width={440}
-      closeLabel={t('common.actions.close')}
+      width={420}
       className="award-modal"
+      panelProps={{ 'aria-label': t('badges.award.dialogLabel', { username }) }}
+      footer={(
+        <Button
+          variant="primary"
+          size={56}
+          block
+          className="dlg-main award-main"
+          disabled={!choice || !!busy}
+          loading={!!busy}
+          trailing={busy ? null : <Icon name="workspace_premium" size={24} />}
+          onClick={() => choice && award(choice)}
+        >
+          {busy ? t('badges.award.awarding') : choice ? t('badges.award.awardNamed', { title: choice.title }) : t('badges.award.award')}
+        </Button>
+      )}
     >
-      <span className="award-sr">{t('badges.award.dialogLabel', { username })}</span>
-      <ul className="award-list">
+      <SheetContext
+        avatar={<span className="award-who">{avatar ? <img src={avatar} alt="" /> : null}</span>}
+        title={username}
+        meta={t('badges.award.toUser', { username })}
+      />
+      <div className="award-grid" role="radiogroup" aria-label={t('badges.award.title')}>
         {badges.map((badge) => {
           const has = held?.[badge.account];
-          const working = busy === badge.account;
+          const on = picked === badge.account && !has;
           return (
-            <li key={badge.account}>
-              <button
-                type="button"
-                className={cx('award-item', has && 'is-held')}
-                disabled={has || !!busy || held === null}
-                onClick={() => award(badge)}
-              >
-                <img
-                  src={cachedProfileImage(badge.account, badge.image, 'small')}
-                  alt=""
-                />
-                <span className="award-item-text">
-                  <strong>{badge.title}</strong>
-                  <span>{badge.account}</span>
-                </span>
-                <span className={cx('award-item-state', has ? 'is-held' : held === null ? 'is-wait' : 'is-award')}>
-                  {working ? (
-                    <><Icon name="progress_activity" size={14} className="v2-spin" /> {t('badges.award.awarding')}</>
-                  ) : has ? (
-                    <><Icon name="check" size={14} /> {t('badges.award.held')}</>
-                  ) : held === null ? (
-                    <Icon name="progress_activity" size={14} className="v2-spin" />
-                  ) : t('badges.award.award')}
-                </span>
-              </button>
-            </li>
+            <button
+              key={badge.account}
+              type="button"
+              role="radio"
+              aria-checked={on}
+              className={cx('award-tile', on && 'is-on', has && 'is-held')}
+              disabled={has || !!busy || held === null}
+              onClick={() => setPicked(badge.account)}
+              title={badge.account}
+            >
+              <span className="award-tile-pic">
+                <img src={cachedProfileImage(badge.account, badge.image, 'small')} alt="" />
+              </span>
+              <b>{badge.title}</b>
+              {has ? (
+                <span className="award-tile-state"><Icon name="check" size={12} /> {t('badges.award.held')}</span>
+              ) : held === null ? (
+                <Icon name="progress_activity" size={12} className="v2-spin award-tile-state" />
+              ) : null}
+            </button>
           );
         })}
-      </ul>
+      </div>
 
       <p className="award-note">
         {t('badges.award.note')}
       </p>
-    </Dialog>
+    </DialogShell>
   );
 }

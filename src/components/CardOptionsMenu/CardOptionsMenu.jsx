@@ -9,6 +9,7 @@ import { isLoggedIn } from "../../hive-api/aioha";
 import { useAppStore } from "../../lib/store";
 import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import AddTagModal from "../AddTagModal/AddTagModal";
+import ReportModal from "../modal/ReportModal";
 import { useQueryClient } from "@tanstack/react-query";
 import { hideVideo, unhideVideo, hideCreator, unhideCreator, refreshRailsAfterHide } from "../../utils/userFilters";
 import "./CardOptionsMenu.scss";
@@ -22,8 +23,8 @@ const SHEET_QUERY = "(max-width: 767px)";
 const wantsSheet = () => typeof window !== "undefined" && !!window.matchMedia?.(SHEET_QUERY).matches;
 
 /**
- * The "⋮" menu on a thumbnail card, drawn as a tile-grid menu (07d / 28b): the
- * two "do something with it" actions as tiles, then the feed-tuning rows. It replaces the old bare add-to-playlist
+ * The "⋮" menu on a thumbnail card (28b): a floating card of rows (save to a
+ * playlist, tag, the feed-tuning rows, report). It replaces the old bare add-to-playlist
  * button, which sat at z-index 3 and so was painted over by the hover-preview
  * overlay (z-index 4) the moment the preview started — making it unusable.
  *
@@ -39,6 +40,7 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
   const [open, setOpen] = useState(false);
   const [playlistOpen, setPlaylistOpen] = useState(false);
   const [tagOpen, setTagOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
   const [coords, setCoords] = useState(null);
   const btnRef = useRef(null);
   const menuRef = useRef(null);
@@ -47,7 +49,7 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
   // Tell the host (the hover-preview overlay) to hold the preview open while a
   // popup of ours is up — otherwise moving into the portalled dropdown counts as
   // leaving the card and unmounts us mid-click. Also released on unmount.
-  const anyOpen = open || playlistOpen || tagOpen;
+  const anyOpen = open || playlistOpen || tagOpen || reportOpen;
   useEffect(() => {
     onOpenChange?.(anyOpen);
   }, [anyOpen, onOpenChange]);
@@ -87,8 +89,8 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
     }
     const r = btnRef.current?.getBoundingClientRect();
     if (r) {
-      const MENU_W = 260;
-      const MENU_H = 210;
+      const MENU_W = 220;
+      const MENU_H = 230;
       // Right-aligned to the trigger (it sits at the card's top-right); flip
       // left / up when we would overflow the viewport.
       const left = Math.min(Math.max(8, r.right - MENU_W), window.innerWidth - MENU_W - 8);
@@ -167,29 +169,21 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
 
   // The menu's content: two tiles, then the rows (07d). Shared by the popover
   // and the phone sheet.
+  // 28b: one list of rows, the report row last and in the accent.
+  const row = (icon, label, onClick, danger) => (
+    <button type="button" role="menuitem" className={`card-menu-row${danger ? " is-danger" : ""}`} onClick={(e) => act(e, onClick)}>
+      <Icon name={icon} size={18} />
+      <span>{label}</span>
+    </button>
+  );
   const items = (
-    <>
-      <div className="card-menu-tiles">
-        <button type="button" role="menuitem" className="card-menu-tile" onClick={(e) => act(e, onAddToPlaylist)}>
-          <Icon name="playlist_add" size={24} />
-          <span>{t('engagement.cardMenu.addToPlaylist')}</span>
-        </button>
-        <button type="button" role="menuitem" className="card-menu-tile" onClick={(e) => act(e, onAddTag)}>
-          <Icon name="sell" size={24} />
-          <span>{t('engagement.cardMenu.addTag')}</span>
-        </button>
-      </div>
-      <div className="card-menu-rows">
-        <button type="button" role="menuitem" className="card-menu-row" onClick={(e) => act(e, onNotInterested)}>
-          <Icon name="block" size={20} />
-          <span>{t('engagement.cardMenu.notInterested')}</span>
-        </button>
-        <button type="button" role="menuitem" className="card-menu-row" onClick={(e) => act(e, onHideCreator)}>
-          <Icon name="person_off" size={20} />
-          <span>{t('engagement.cardMenu.dontShowCreator', { author })}</span>
-        </button>
-      </div>
-    </>
+    <div className="card-menu-rows">
+      {row("playlist_add", t('engagement.cardMenu.saveToPlaylist'), onAddToPlaylist)}
+      {row("sell", t('engagement.cardMenu.addTag'), onAddTag)}
+      {row("block", t('engagement.cardMenu.notInterested'), onNotInterested)}
+      {row("person_off", t('engagement.cardMenu.dontShowCreator', { author }), onHideCreator)}
+      {row("flag", t('common.actions.report'), () => setReportOpen(true), true)}
+    </div>
   );
 
   return (
@@ -248,6 +242,15 @@ function CardOptionsMenu({ author, permlink, title, onDismiss, onOpenChange, cla
           author={author}
           permlink={permlink}
           videoTitle={title}
+        />
+      )}
+
+      {reportOpen && (
+        <ReportModal
+          isOpen={reportOpen}
+          onClose={() => setReportOpen(false)}
+          type="video"
+          target={{ author, permlink }}
         />
       )}
 

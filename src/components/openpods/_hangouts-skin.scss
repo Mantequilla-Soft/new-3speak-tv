@@ -267,7 +267,19 @@
     &.is-active { background: var(--surface-2); color: var(--text); border: 0; box-shadow: none; } }
   .hh-cd__announce-hint { font-size: 11px; color: var(--muted); }
   .hh-cd__announce-hint--solo { font-size: 13px; color: var(--muted); }
-  .hh-cd__limit-hint { padding: 10px 12px; border-radius: var(--r-md); background: var(--bg); color: var(--muted); font-size: 12px; opacity: 1; }
+  // The free plan note (39a): an accent wash card, "3Speak Pro" in the accent.
+  .hh-cd__limit-hint {
+    margin: 0;
+    padding: 16px;
+    border-radius: var(--r-2xl);
+    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.45;
+    opacity: 1;
+    strong { color: var(--accent); font-weight: 700; }
+  }
   .hh-cd__unlock { @include v2.btn(danger, 32); align-self: flex-start; }
   .hh-cd__create-error { border: 0; border-radius: var(--r-2xl); background: var(--accent-wash); padding: 12px 14px; font-size: 13px; }
   .hh-cd__create-error--limit { border: 0; background: var(--accent-wash); }
@@ -303,7 +315,8 @@
   .hh-cd-steps__caption { margin-top: 8px; text-align: left; font-size: 13px; font-weight: 700; color: var(--text); }
   @include v2.mobile { .hh-cd-steps__step { padding: 0 4px; } }
   .hh-cd-steps__step.is-done { border-color: transparent;
-    .hh-cd-steps__ring { background: var(--cyan); color: var(--bg); @include glyph("check", 18px); }
+    .hh-cd-steps__ring { background: var(--cyan); color: var(--bg); @include glyph("check", 18px);
+      svg { display: none; } }
     .hh-cd-steps__label { color: var(--text); } }
   .hh-cd-steps__step.is-active { border-color: var(--accent); background: var(--accent-tint-strong);
     .hh-cd-steps__ring { background: var(--accent); color: var(--on-accent); border: 0; box-shadow: none; }
@@ -320,4 +333,70 @@
     padding: 0 16px;
     &:hover:not(:disabled) { background: var(--accent-hover); }
   }
+
+  // Switches and checkboxes as setting rows (39a): the label on the left (13/700,
+  // a muted line under it where the SDK gives one), a v2 toggle on the right.
+  // A well on the form card; the wide studio page draws them as surfaces.
+  .hh-cd__switch,
+  .hh-cd__check,
+  .hh-cd__reccheck {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .hh-cd__switch-label { font-size: 13px; font-weight: 700; }
+  .hh-cd__reccheck > span { display: block; flex: 1; min-width: 0; }
+  .hh-cd__reccheck em { display: block; margin-top: 2px; font-size: 11px; font-weight: 400; color: var(--muted); opacity: 1; }
+  .hh-cd__reccheck--locked { opacity: .5; > span { opacity: 1; } }
+  .hh-cd__check > span { flex: 1; min-width: 0; }
+  .hh-cd__check input,
+  .hh-cd__reccheck input {
+    appearance: none;
+    position: relative;
+    flex: none;
+    width: 44px;
+    height: 26px;
+    margin: 0;
+    border-radius: 13px;
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--border);
+    cursor: pointer;
+    transition: background var(--t-base) var(--ease);
+    &::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: transform var(--t-base) var(--ease), background var(--t-base) var(--ease);
+    }
+    &:checked { background: var(--accent); box-shadow: none; }
+    &:checked::before { transform: translateX(18px); background: var(--on-accent); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    &:disabled { cursor: not-allowed; }
+  }
+
+  // The SDK starts these labels with an emoji. Hidden (the first letter of a
+  // block is the emoji), so a screen never mixes icon sets. Only where the
+  // text ALWAYS starts with one: elsewhere it would eat a real letter.
+  .hh-cd__switch-label,
+  .hh-cd__check > span,
+  .hh-cd__reccheck > span,
+  .hh-cd__limit-hint,
+  .hh-cd__create-error--limit p { display: block; &::first-letter { font-size: 0; margin-right: -3px; } }
+  .hh-cd__unlock { display: inline-block; line-height: 32px; &::first-letter { font-size: 0; } }
+  .hh-bg-picker__upload-btn:not(:disabled) { display: block; width: 100%; &::first-letter { font-size: 0; } }
 }

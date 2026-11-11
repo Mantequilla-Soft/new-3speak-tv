@@ -10,19 +10,22 @@
   .v2-seg { flex: none; }
   .podcast-tip-presets {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
   }
+  // The amount tiles of 24b: 56 tall, a 2px border, the picked one in accent.
   .podcast-tip-preset {
-    @include v2.control(48);
+    @include v2.control(56);
     justify-content: center;
+    padding: 0;
     border: 2px solid var(--border);
     background: transparent;
     color: var(--text);
-    @include v2.mono(16, 700);
+    @include v2.mono(18, 900);
     &:hover { background: var(--bg-hover); }
     &.is-on { border-color: var(--accent); background: var(--accent-tint-strong); }
   }
+  .v2-dialog__foot .v2-btn--primary { justify-content: space-between; }
   .v2-amount { margin-top: 8px; }
   .podcast-tip-bolt { color: var(--accent); align-self: center; }
 

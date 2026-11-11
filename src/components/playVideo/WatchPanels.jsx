@@ -28,13 +28,42 @@ export const clockTime = (sec) => {
 // Hive answers vote times in UTC without the zone mark.
 const hiveDate = (s) => (s ? new Date(String(s).endsWith('Z') ? s : `${s}Z`) : null);
 
-/** The creator's biggest supporters (22b): rank, avatar, name, total. */
-export function SupportersPane({ author }) {
+/**
+ * The creator's biggest supporters. `avatars` (02): a wrap of 40px avatars, the
+ * top one ringed in accent and the next two in cyan; name and total in the
+ * tooltip. Otherwise (22b): rank, avatar, name, total.
+ */
+export function SupportersPane({ author, avatars = false }) {
   const { t } = useTranslation();
   const { data, isLoading } = useSupporters(author);
   const list = data?.supporters || [];
   if (isLoading) return <div className="wv2-rows is-loading" aria-busy="true"><span className="v2-skeleton is-line" /><span className="v2-skeleton is-line" /></div>;
   if (!list.length) return <p className="wv2-pane-empty">{t('profile.supports.emptyReceived', { user: author })}</p>;
+  if (avatars) {
+    return (
+      <ol className="wv2-supporter-grid">
+        {list.map((s, i) => {
+          const amount = formatSupportTotal(s.hbd_total, s.sats_total);
+          const name = s.tipper;
+          const label = `${name ? `@${name}` : t('profile.supports.lightningSupporter')} · ${amount}`;
+          const ring = i === 0 ? 'is-top' : i < 3 ? 'is-next' : '';
+          return (
+            <li key={name || `lightning-${i}`}>
+              {name ? (
+                <Link to={`/@${name}`} className={cx('wv2-supporter-dot', ring)} title={label} aria-label={label}>
+                  <AccountImg account={name} alt="" loading="lazy" />
+                </Link>
+              ) : (
+                <span className={cx('wv2-supporter-dot is-bolt', ring)} title={label} aria-label={label} role="img">
+                  <Icon name="bolt" size={18} />
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    );
+  }
   return (
     <ol className="wv2-rows wv2-supporters">
       {list.map((s, i) => {
@@ -128,7 +157,7 @@ export function ChapterCards({ chapters, current, onSeek }) {
           onClick={() => onSeek?.(c.start)}
           aria-current={i === current ? 'true' : undefined}
         >
-          <span className="wv2-chapter__thumb" aria-hidden="true"><span className="v2-media-pill is-tl num">{String(i + 1).padStart(2, '0')}</span></span>
+          <span className="wv2-chapter__thumb" aria-hidden="true" />
           <span className="wv2-chapter__row">
             <span className="wv2-chapter__at num">{clockTime(c.start)}</span>
             <span className="wv2-chapter__title">{c.title}</span>

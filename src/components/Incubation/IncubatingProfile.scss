@@ -11,6 +11,24 @@
   max-width: var(--content-max);
   margin: 0 auto;
   padding: 8px 0 64px;
+
+  // The owner's page on a wide screen (46b): the goal list in a 420 column on
+  // the left, the profile and its tabs on the right.
+  &.has-side {
+    display: grid;
+    grid-template-columns: 420px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+}
+
+.inc-side { min-width: 0; }
+
+.inc-maincol {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .inc-profile-loading,
@@ -24,21 +42,23 @@
 
 /* ---------------------------------------------------------------- hero --- */
 
+// The profile card (46b): a striped band, the avatar over its lower edge with
+// the name, the badge and the counts beside it, the note, then the tabs.
 .inc-hero {
   @include v2.card;
   overflow: hidden;
+  padding-bottom: 16px;
 }
 
 // Striped band when there is no banner, so the header has a shape instead of
 // collapsing onto the avatar. Their own banner replaces the stripes.
 .inc-hero-cover {
-  height: 120px;
+  height: 90px;
   @include v2.thumb-placeholder(10px);
-
-  @include v2.mobile { height: 96px; }
 }
 
 .inc-hero.has-cover .inc-hero-cover {
+  height: 120px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -46,9 +66,10 @@
 
 .inc-hero-body {
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 12px 20px 0;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 0 18px;
+  margin-top: -28px;
 }
 
 // The avatar overlaps the band. For the owner it wears a cyan progress ring.
@@ -57,24 +78,23 @@
   flex: none;
   display: grid;
   place-items: center;
-  width: 88px;
-  height: 88px;
-  margin-top: -52px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background: var(--surface);
 }
 
 .inc-hero-avatar {
-  width: 80px;
-  height: 80px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   object-fit: cover;
   background: var(--avatar);
 }
 
 .inc-hero-avatar-wrap.has-ring .inc-hero-avatar {
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
 }
 
 .inc-hero-ring {
@@ -98,30 +118,50 @@
 .inc-hero-text {
   flex: 1;
   min-width: 0;
+  padding-bottom: 2px;
 
   h1 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 8px;
     margin: 0;
-    @include v2.text(heading);
+    @include v2.text(title);
     color: var(--text);
-    overflow-wrap: anywhere;
   }
 }
 
-.inc-hero-handle {
+.inc-hero-name { overflow-wrap: anywhere; }
+
+// "4 posts · 12 followers · 31 following", the numbers in bold.
+.inc-hero-stats {
   display: flex;
-  align-items: center;
-  gap: 8px;
   flex-wrap: wrap;
-  margin: 6px 0 0;
-  @include v2.text(body-sm);
+  margin: 2px 0 0;
+  @include v2.text(meta);
   color: var(--muted);
+
+  > span + span::before { content: "·"; margin: 0 6px; }
+
+  strong {
+    margin-right: .25em;
+    font-weight: 700;
+    color: var(--text);
+  }
 }
 
 .inc-hero-about {
-  margin: 8px 0 0;
-  @include v2.text(body);
+  margin: 0;
+  @include v2.text(body-sm);
   line-height: 1.5;
   color: var(--muted);
+}
+
+.inc-hero-more {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 18px 0;
 }
 
 .inc-chips {
@@ -130,7 +170,7 @@
   flex-wrap: wrap;
   gap: 6px;
   padding: 0;
-  margin: 10px 0 0;
+  margin: 0;
 
   li {
     display: inline-flex;
@@ -145,41 +185,17 @@
   }
 }
 
-// Counts as small stat columns: the number in mono, the word as an eyebrow.
-.inc-hero-stats {
-  display: flex;
-  gap: 20px;
-  padding-top: 4px;
-
-  span {
-    display: flex;
-    flex-direction: column;
-    @include v2.text(eyebrow);
-    letter-spacing: .06em;
-    color: var(--muted);
-  }
-
-  strong {
-    @include v2.mono(18, 900);
-    letter-spacing: 0;
-    color: var(--text);
-  }
-}
-
 .inc-follow-btn,
-.inc-edit-btn {
-  align-self: flex-start;
-  margin-top: 2px;
-}
+.inc-edit-btn { flex: none; }
 
 // The note under the header: a bg well inside the card.
 .inc-note {
-  margin: 14px 20px 18px;
+  margin: 12px 18px 0;
   padding: 10px 12px;
   border-radius: var(--r-lg);
   background: var(--bg);
-  @include v2.text(body-sm);
-  line-height: 1.5;
+  @include v2.text(meta);
+  line-height: 1.45;
   color: var(--muted);
 
   a { color: var(--cyan); font-weight: 700; }
@@ -188,20 +204,16 @@
 @include v2.mobile {
   .inc-hero-body {
     flex-wrap: wrap;
-    gap: 12px;
-    padding: 10px 16px 0;
+    padding: 0 16px;
   }
 
-  .inc-hero-avatar-wrap { margin-top: -48px; }
-
-  // Name and handle under the avatar, then counts, then the action, full width.
+  // Name and counts under the avatar, then the action, full width.
   .inc-hero-text { flex: 1 0 100%; order: 1; }
-  .inc-hero-text h1 { font-size: 20px; }
-  .inc-hero-stats { order: 2; gap: 16px; }
   .inc-follow-btn,
-  .inc-edit-btn { order: 3; flex: 1 0 100%; height: 44px; border-radius: v2.radius-for(44); }
+  .inc-edit-btn { order: 2; flex: 1 0 100%; height: 44px; border-radius: v2.radius-for(44); }
 
-  .inc-note { margin: 12px 16px 16px; }
+  .inc-hero-more { padding: 10px 16px 0; }
+  .inc-note { margin: 12px 16px 0; }
 }
 
 /* ------------------------------------------------------------- panels --- */
@@ -244,22 +256,16 @@
 
 /* ----------------------------------------------------------------- tabs --- */
 
-// Segmented tracks sit on the page here, so the track is surface rather than
-// bg. The owner's switch only exists below the split (see the layout rules).
+// The sections as a segmented track at the foot of the profile card (46b).
 .inc-tabs.v2-seg {
-  display: none;
-  background: var(--surface);
-}
+  margin: 12px 18px 0;
 
-.inc-tabs--visitor.v2-seg { display: flex; }
+  .v2-seg__opt { flex: 1 0 auto; }
+
+  @include v2.mobile { margin: 12px 16px 0; }
+}
 
 /* --------------------------------------------------------------- layout --- */
-
-.inc-cols {
-  display: grid;
-  gap: 12px;
-  align-items: start;
-}
 
 // min-width 0: the card grid inside would otherwise push the column wider than
 // the page instead of wrapping.
@@ -271,16 +277,6 @@
 }
 
 .inc-feed { min-width: 0; }
-
-// Below the split the two halves take turns, chosen by the tabs above. Both
-// stay mounted, so switching back does not refetch the feed. "What a Hive
-// account gets you" stays on both tabs, under whichever is open.
-@media (max-width: 1000px) {
-  .inc-tabs.v2-seg { display: flex; }
-
-  .inc-cols--goals.inc-show-progress .inc-feed { display: none; }
-  .inc-cols--goals.inc-show-posts .inc-goals { display: none; }
-}
 
 /* ------------------------------------------- "Your path to a Hive account" --- */
 

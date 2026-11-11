@@ -16,9 +16,9 @@
   gap: 16px;
   margin-bottom: 20px;
 
-  .groups-head-text { flex: 1; min-width: 0; }
-
   h1 {
+    flex: 1;
+    min-width: 0;
     margin: 0;
     font-size: 48px;
     font-weight: 900;
@@ -26,20 +26,40 @@
     line-height: 1.1;
   }
 
-  p {
-    margin: 6px 0 0;
-    @include v2.text(body);
-    color: var(--muted);
+  // "New community": a 44px cyan fill with a 16px label (19d).
+  .groups-create {
+    flex: none;
+    padding: 0 18px;
+    font-size: 16px;
+    font-weight: 700;
+    // aria-disabled rather than `disabled`, so it can still be hovered and
+    // explain itself.
+    &.is-locked { opacity: .45; cursor: not-allowed; filter: none; }
   }
 
   @include v2.mobile {
-    flex-direction: column;
-    align-items: stretch;
+    flex-wrap: wrap;
     gap: 12px;
     margin-bottom: 14px;
 
     h1 { font-size: 28px; }
+    .groups-tabs { order: 3; width: 100%; }
+    .groups-create { height: 40px; border-radius: var(--r-md); font-size: 13px; padding: 0 14px; }
   }
+}
+
+// 40b: the lock note, a quiet surface strip.
+.groups-locked {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: -8px 0 16px;
+  padding: 10px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
 }
 
 .groups-tabs {
@@ -47,7 +67,7 @@
   background: var(--surface);
   border-radius: var(--r-lg);
 
-  .v2-seg__opt { font-size: 14px; padding: 0 16px; }
+  .v2-seg__opt { font-size: 14px; padding: 0 16px; flex: 0 0 auto; }
 
   @include v2.mobile {
     .v2-seg__opt { flex: 1 0 auto; }

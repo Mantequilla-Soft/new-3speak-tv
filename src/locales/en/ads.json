@@ -322,6 +322,8 @@
     "intro": "A promoted video appears first in recommendations and in the home Promoted section. Pay with your own wallet — {{cost}} HBD buys 24h.",
     "duration_one": "Duration: <b>{{count}} day</b>",
     "duration_other": "Duration: <b>{{count}} days</b>",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
     "payWith": "Pay with",
     "total": "Total",
     "yourBalance": "Your balance",

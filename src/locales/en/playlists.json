@@ -23,6 +23,9 @@
     "noOtherPlaylists": "You don't have any other playlists yet",
     "createFirst": "Create a playlist",
     "createNew": "Create new playlist",
+    "newPlaylist": "New playlist",
+    "savedTo_one": "Saved to {{count}} playlist",
+    "savedTo_other": "Saved to {{count}} playlists",
     "name": "Name",
     "namePlaceholder": "My awesome playlist",
     "privacy": "Privacy",
@@ -96,12 +99,15 @@
     "description": "Description",
     "descriptionPlaceholder": "About this album (optional)",
     "filterCount_one": "{{shown}} of {{count}} item",
-    "filterCount_other": "{{shown}} of {{count}} items"
+    "filterCount_other": "{{shown}} of {{count}} items",
+    "shuffle": "Shuffle"
   },
   "type": {
     "label": "Type",
     "video": "Video",
     "audio": "Audio",
+    "videoSub": "Long-form",
+    "audioSub": "Tracks & podcasts",
     "kindLabel": "What kind of audio?",
     "kinds": {
       "podcast": "Podcast",

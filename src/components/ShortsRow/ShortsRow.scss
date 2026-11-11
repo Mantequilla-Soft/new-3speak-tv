@@ -57,7 +57,7 @@
    `grid-template-columns`; the gaps match what that hook measures with. */
 .shorts-row {
   display: grid;
-  gap: 16px;
+  gap: 10px;
   min-width: 0;
 
   @include v2.mobile { gap: 10px; }
@@ -120,6 +120,7 @@
     font-weight: 700;
     line-height: 1.25;
     color: var(--on-media);
+    text-shadow: 0 1px 4px var(--media-scrim-strong);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;

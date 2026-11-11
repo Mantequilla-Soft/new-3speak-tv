@@ -3,8 +3,11 @@ import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { REPORT_API_URL, REPORT_API_SECRET } from '../../utils/config';
 import { useTranslation } from 'react-i18next';
-import DialogShell from './DialogShell';
-import { Button, ChoiceCard, Eyebrow, Field } from '../v2/ui';
+import DialogShell, { SheetContext } from './DialogShell';
+import usePostThumb from './usePostThumb';
+import { Avatar, Button, Field, IconButton } from '../v2/ui';
+import { Icon } from '../v2/Icon';
+import { cx } from '../v2/helpers';
 import './ReportModal.scss';
 
 // Every toast from this module is headed "Report"; the message becomes the
@@ -85,6 +88,9 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
   const [reason, setReason] = useState('');
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // 07c: step 1 picks the reason (tiles), step 2 adds the details and sends.
+  const [step, setStep] = useState(0);
+  const thumb = usePostThumb(target?.author, target?.permlink, isOpen && type !== 'user' && !!target?.permlink);
 
   const reasons = REPORT_REASONS[type] || REPORT_REASONS.video;
 
@@ -147,6 +153,7 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
   const handleClose = () => {
     setReason('');
     setComment('');
+    setStep(0);
     onClose();
   };
 
@@ -156,54 +163,80 @@ export default function ReportModal({ isOpen, onClose, type = 'video', target })
   const title = type === 'user' ? t('modals.report.titles.user') : type === 'comment' ? t('modals.report.titles.comment') : type === 'short' ? t('modals.report.titles.short') : type === 'post' ? t('modals.report.titles.post') : t('modals.report.titles.video');
   const formId = `${uid}-form`;
   const reasonLabelId = `${uid}-reason`;
+  const targetLine = target?.author ? `@${target.author}${target.permlink ? ` / ${target.permlink}` : ''}` : '';
 
   return (
     <DialogShell
       open
       onClose={handleClose}
+      side
+      tone="accent"
       title={title}
-      width={520}
+      width={430}
       overlayClassName="report-modal-overlay"
       className="report-modal-content"
-      footer={(
-        <>
-          <Button variant="secondary" onClick={handleClose}>{t('common.actions.cancel')}</Button>
-          <Button variant="primary" type="submit" form={formId} disabled={submitting || !reason} loading={submitting}>
-            {submitting ? t('modals.report.submitting') : t('modals.report.submit')}
-          </Button>
-        </>
+      leading={step === 1 ? (
+        <IconButton icon="arrow_back" label={t('common.actions.back')} size={32} variant="ghost" round className="report-back" onClick={() => setStep(0)} disabled={submitting} />
+      ) : undefined}
+      headExtra={<span className="report-step num" aria-hidden="true">{step + 1} / 2</span>}
+      footer={step === 0 ? (
+        <Button variant="inverse" size={48} block next className="dlg-main report-next" disabled={!reason} onClick={() => setStep(1)}>
+          {t('modals.report.nextDetails')}
+        </Button>
+      ) : (
+        <Button variant="primary" size={48} block trailing="flag" className="dlg-main" type="submit" form={formId} disabled={submitting || !reason} loading={submitting}>
+          {submitting ? t('modals.report.submitting') : t('modals.report.submit')}
+        </Button>
       )}
     >
-      {target?.author && (
-        <p className="report-target">
-          @{target.author}{target.permlink ? ` / ${target.permlink}` : ''}
-        </p>
+      {targetLine && (
+        <SheetContext
+          className="report-target"
+          avatar={type === 'user' ? <Avatar size={40} name={target.author} src={`https://images.hive.blog/u/${target.author}/avatar/small`} /> : undefined}
+          thumb={thumb.thumbnail}
+          title={targetLine}
+        />
       )}
 
       <form id={formId} onSubmit={handleSubmit} className="report-form">
-        <Eyebrow id={reasonLabelId}>{t('modals.report.reason')}</Eyebrow>
-        <div className="report-reasons" role="radiogroup" aria-labelledby={reasonLabelId}>
-          {reasons.map((r) => (
-            <ChoiceCard
-              key={r.value}
-              className="report-reason"
-              selected={reason === r.value}
-              icon={REASON_ICONS[r.value] || 'flag'}
-              title={t(r.labelKey)}
-              onClick={() => setReason(r.value)}
+        {step === 0 ? (
+          <>
+            <p className="report-intro">{t('modals.report.intro')}</p>
+            <span id={reasonLabelId} className="report-sr">{t('modals.report.reason')}</span>
+            <div className="report-reasons" role="radiogroup" aria-labelledby={reasonLabelId}>
+              {reasons.map((r) => (
+                <button
+                  key={r.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={reason === r.value}
+                  className={cx('report-reason', reason === r.value && 'is-on')}
+                  onClick={() => setReason(r.value)}
+                >
+                  <Icon name={REASON_ICONS[r.value] || 'flag'} size={24} />
+                  <b>{t(r.labelKey)}</b>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="report-picked">
+              <Icon name={REASON_ICONS[reason] || 'flag'} size={20} />
+              <b>{t(reasons.find((r) => r.value === reason)?.labelKey || 'modals.report.reason')}</b>
+            </div>
+            <Field
+              as="textarea"
+              label={t('modals.report.details')}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder={t('modals.report.detailsPlaceholder')}
+              rows={4}
+              maxLength={500}
+              autoFocus
             />
-          ))}
-        </div>
-
-        <Field
-          as="textarea"
-          label={t('modals.report.details')}
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          placeholder={t('modals.report.detailsPlaceholder')}
-          rows={3}
-          maxLength={500}
-        />
+          </>
+        )}
       </form>
     </DialogShell>
   );

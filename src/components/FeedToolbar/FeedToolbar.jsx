@@ -63,8 +63,10 @@ export function Pagination({ page, totalPages, onPageChange }) {
   );
 }
 
-// The feed toolbar (19c): a surface card with the content types as chips (the
-// selected one in ink), the date range as a segmented track, and the pages.
+// The feed toolbar (19c): one surface card. The content types are 40px chips on
+// the left (the selected one in ink); the filters sit on the right as filled
+// chips (the date range is one, a native select so it works the same with a
+// keyboard and on a phone). The pages follow when the caller passes them.
 export function FeedToolbar({ activeTab, onTabChange, dateFilter, onDateFilterChange, tabs = DEFAULT_TABS, page, totalPages, onPageChange }) {
   const { t } = useTranslation();
   return (
@@ -85,19 +87,19 @@ export function FeedToolbar({ activeTab, onTabChange, dateFilter, onDateFilterCh
         ))}
       </div>
       <div className="feed-toolbar-right">
-        <div className="feed-toolbar-date-filters v2-seg" role="group">
-          {DATE_FILTERS.map(f => (
-            <button
-              key={f.key}
-              type="button"
-              aria-pressed={dateFilter === f.key}
-              className={`date-filter-btn v2-seg__opt h32${dateFilter === f.key ? ' active is-on' : ''}`}
-              onClick={() => onDateFilterChange(f.key)}
-            >
-              {t(f.labelKey)}
-            </button>
-          ))}
-        </div>
+        <label className={`feed-toolbar-chip${dateFilter && dateFilter !== 'all' ? ' is-set' : ''}`}>
+          <Icon name="event" size={18} />
+          <select
+            className="feed-toolbar-select"
+            value={dateFilter}
+            aria-label={t('feeds.discover.date')}
+            onChange={(e) => onDateFilterChange(e.target.value)}
+          >
+            {DATE_FILTERS.map(f => (
+              <option key={f.key} value={f.key}>{t(f.labelKey)}</option>
+            ))}
+          </select>
+        </label>
         {page != null && totalPages != null && (
           <Pagination page={page} totalPages={totalPages} onPageChange={onPageChange} />
         )}

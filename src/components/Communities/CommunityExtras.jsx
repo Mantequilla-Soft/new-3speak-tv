@@ -11,7 +11,6 @@ import { useAvatarUrl } from '../../utils/avatarCache';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
 import { Icon } from '../v2/Icon';
-import { StatusPill } from '../v2/ui';
 
 const fmtNum = (n) => (typeof n === 'number' ? formatNumber(n) : '—');
 
@@ -30,11 +29,6 @@ const metaOf = (p) => {
 // A 3Speak video opens on the watch page; anything else a mod pinned (rules,
 // announcements, often written on PeakD/Ecency) opens as a post.
 const isVideoPost = (meta) => /^3speak/i.test(String(meta.app || '')) || !!meta.video;
-
-function pinnedThumb(meta) {
-  const v = meta.video && typeof meta.video === 'object' ? meta.video : null;
-  return (typeof v?.thumbnail === 'string' && v.thumbnail) || (Array.isArray(meta.image) && meta.image[0]) || null;
-}
 
 export function CommunityPinned({ id }) {
   const { t } = useTranslation();
@@ -74,25 +68,17 @@ export function CommunityPinned({ id }) {
       {pinned.map((p, i) => {
         const meta = metaOf(p);
         const video = isVideoPost(meta);
-        const thumb = pinnedThumb(meta);
         return (
           <Link
             key={`${p.author}/${p.permlink}`}
             className="community-pinned-row"
             to={video ? `/@${p.author}/${p.permlink}` : `/post/${p.author}/${p.permlink}`}
+            title={`@${p.author}`}
           >
-            <Icon name="push_pin" size={20} fill className="community-pinned-icon" />
-            {thumb && (
-              <span className="community-pinned-thumb">
-                <img src={thumb} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
-              </span>
-            )}
-            <span className="community-pinned-text">
-              <b className="community-pinned-title">
-                {i === 0 ? `${t('communities.page.startHere')}: ` : ''}{p.title || t('communities.page.untitled')}
-              </b>
-              <span className="community-pinned-author">@{p.author}</span>
-            </span>
+            <Icon name="push_pin" size={20} className="community-pinned-icon" />
+            <b className="community-pinned-title">
+              {i === 0 ? `${t('communities.page.startHere')}: ` : ''}{p.title || t('communities.page.untitled')}
+            </b>
             <span className="community-pinned-badge">{t('communities.page.pinned')}</span>
           </Link>
         );
@@ -132,16 +118,15 @@ function CreatorChip({ c, rank }) {
         <img src={avatar} alt="" loading="lazy" />
       </span>
       <b className="community-creator-name">{c.name}</b>
-      <span className="community-creator-stat">{t('communities.page.creatorViews', { views: fmtNum(c.views) })}</span>
+      <span className="community-creator-stat">{t('communities.page.creatorViews', { views: fmtNum(c.views) })} · {fmtNum(c.videos)}</span>
     </Link>
   );
 }
 
 // `side` renders it as a sidebar card (a ranked list, design 40b); the default
 // is the horizontal strip phones get, where there is no sidebar.
-export function CommunityTopCreators({ id, side = false }) {
-  const { t } = useTranslation();
-  const { data: creators = [] } = useQuery({
+export function useCommunityTopCreators(id) {
+  return useQuery({
     queryKey: ['community-top-creators', id],
     queryFn: async () => {
       const videos = await fetchMonthTop(id);
@@ -162,6 +147,11 @@ export function CommunityTopCreators({ id, side = false }) {
     enabled: !!id,
     staleTime: 10 * 60_000,
   });
+}
+
+export function CommunityTopCreators({ id, side = false }) {
+  const { t } = useTranslation();
+  const { data: creators = [] } = useCommunityTopCreators(id);
 
   // One name is not a leaderboard; it just repeats the grid.
   if (creators.length < 2) return null;
@@ -171,7 +161,7 @@ export function CommunityTopCreators({ id, side = false }) {
       className={`community-card community-top-creators${side ? ' community-top-creators--side' : ''}`}
       aria-label={t('communities.page.topCreators')}
     >
-      <h3 className="community-card-title"><Icon name="trophy" size={18} /> {t('communities.page.topCreators')}</h3>
+      <h3 className="community-card-title">{t('communities.page.topCreators')}</h3>
       <div className="community-creators-row">
         {creators.map((c, i) => <CreatorChip key={c.name} c={c} rank={i + 1} />)}
       </div>
@@ -199,7 +189,7 @@ function TeamMember({ name, role, title }) {
         {/* A custom title the mods gave this person ("Founder"), when there is one. */}
         {title && title !== roleLabel ? <span className="community-team-title">{title}</span> : null}
       </span>
-      <StatusPill tone={ROLE_TONE[role] || 'muted'} className="community-team-role">{roleLabel}</StatusPill>
+      <span className={`community-team-role is-${ROLE_TONE[role] || 'muted'}`}>{roleLabel}</span>
     </Link>
   );
 }
@@ -218,7 +208,7 @@ export function CommunityTeam({ id, team }) {
 
   return (
     <div className="community-card community-team">
-      <h3 className="community-card-title"><Icon name="shield_person" size={18} /> {t('communities.page.team')}</h3>
+      <h3 className="community-card-title">{t('communities.page.team')}</h3>
       <div className="community-team-list">
         {shown.map(([name, role, title]) => (
           <TeamMember key={name} name={name} role={role} title={title} />
@@ -246,11 +236,11 @@ export function CommunityRules({ text, collapsible = false }) {
     <div className="community-card community-rules">
       {collapsible ? (
         <button type="button" className="community-card-title community-card-toggle" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
-          <Icon name="gavel" size={18} /> <span>{t('communities.page.rulesCount', { count: rules.length })}</span>
+          <span>{t('communities.page.rulesCount', { count: rules.length })}</span>
           <Icon name={open ? 'expand_less' : 'expand_more'} size={20} className="community-card-chevron" />
         </button>
       ) : (
-        <h3 className="community-card-title"><Icon name="gavel" size={18} /> {t('communities.page.rules')}</h3>
+        <h3 className="community-card-title">{t('communities.page.rules')}</h3>
       )}
       {open && (
         <ol className="community-rules-list">

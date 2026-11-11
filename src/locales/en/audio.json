@@ -106,7 +106,10 @@
     "position": "{{current}} of {{total}}",
     "playingFrom": "Playing from {{name}}",
     "atThisMoment": "At this moment",
-    "goTo": "Go to {{name}}"
+    "goTo": "Go to {{name}}",
+    "shuffle": "Shuffle",
+    "repeat": "Repeat this track",
+    "sleepMinutesShort": "{{minutes}} min"
   },
   "share": {
     "failed": "Failed",
@@ -116,7 +119,16 @@
     "copied3speak": "3Speak link copied!",
     "copyAudioPlayer": "Copy audio player link",
     "copiedAudioPlayer": "Audio player link copied!",
-    "searchingHive": "Searching Hive…"
+    "searchingHive": "Searching Hive…",
+    "title": "Share track",
+    "atTime": "At {{time}}",
+    "peakd": "PeakD",
+    "player": "Player link",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "Email",
+    "qr": "QR code",
+    "episode": "Episode link"
   },
   "post": {
     "notFound": "Post not found",
@@ -434,6 +446,7 @@
   "podcasts": {
     "chip": "External",
     "chipHint": "Podcasts from any RSS feed, outside 3Speak",
+    "on3speak": "On 3Speak",
     "follow": "Follow",
     "following": "Following",
     "unfollow": "Unfollow",
@@ -480,6 +493,7 @@
     "notifyOnDone": "You will be notified about new episodes",
     "notifyOffDone": "No more notifications for this podcast",
     "notifyHint": "Get a notification when a new episode comes out",
+    "notifyLabel": "Notify about new episodes",
     "search": {
       "button": "Search",
       "results_one": "{{count}} podcast found",
@@ -679,6 +693,7 @@
       "startsAt": "Starts {{time}}"
     },
     "private": {
+      "title": "Add a private feed",
       "toggle": "This is a private feed (needs a login)",
       "username": "Username",
       "password": "Password",

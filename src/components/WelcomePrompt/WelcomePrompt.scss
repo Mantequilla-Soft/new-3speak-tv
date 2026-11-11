@@ -22,25 +22,14 @@
 
 .welcome-hero {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  flex-direction: column;
+  gap: 6px;
 
   h2 {
-    margin: 2px 0 4px;
+    margin: 0;
     @include v2.text(title);
     color: var(--text);
   }
-}
-
-.welcome-wave {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  flex: none;
-  border-radius: var(--r-lg);
-  background: var(--accent-tint-strong);
-  color: var(--accent);
 }
 
 .welcome-hero-sub {
@@ -124,6 +113,11 @@
   gap: 6px;
 }
 
+.welcome-cover-wrap {
+  position: relative;
+  margin-bottom: 26px;   // room for the picture hanging under the banner
+}
+
 .welcome-cover {
   position: relative;
   display: grid;
@@ -185,24 +179,17 @@
   strong { color: var(--text); font-family: var(--font-mono); }
 }
 
-.welcome-avatar-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 10px 12px;
-  border-radius: var(--r-lg);
-  background: var(--bg);
-}
-
 .welcome-avatar {
-  position: relative;
+  position: absolute;
+  left: 16px;
+  bottom: -26px;
   flex: none;
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   padding: 0;
-  border: 0;
+  border: 3px solid var(--surface);
   border-radius: 50%;
-  background: var(--avatar);
+  background: var(--surface-2);
   cursor: pointer;
 
   &:disabled { cursor: default; opacity: .8; }
@@ -225,19 +212,9 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 3px solid var(--bg);
+  border: 3px solid var(--surface);
   background: var(--surface-2);
   color: var(--text);
-}
-
-.welcome-avatar-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-
-  strong { @include v2.text(body-sm); font-weight: 700; color: var(--text); }
-  span { @include v2.text(meta); line-height: 1.4; color: var(--muted); }
 }
 
 // Eyebrow label above a filled field; the counter or "optional" on the right.
@@ -261,21 +238,6 @@
   }
 }
 
-.welcome-input-icon {
-  position: relative;
-  display: flex;
-  align-items: center;
-
-  .material-symbols-rounded {
-    position: absolute;
-    left: 10px;
-    color: var(--muted);
-    pointer-events: none;
-  }
-
-  .v2-input { padding-left: 34px; }
-}
-
 .welcome-fineprint {
   margin: 0;
   @include v2.text(meta-sm);
@@ -284,18 +246,74 @@
 
 /* ---------- footers ---------- */
 
-.welcome-modal .v2-dialog__foot .welcome-primary.v2-btn { flex: 1; }
+// 44b: the actions sit under the content, flush left, with no divider and no
+// arrows: "Maybe later" and "Set up my profile" at their own width, the
+// profile and interests steps as two equal halves.
+@include v2.tablet-up {
+  .welcome-modal .v2-dialog__foot {
+    border-top: 0;
+    padding-top: 4px;
+    justify-content: flex-start;
+
+    .v2-btn.is-next { justify-content: flex-start; }
+    .v2-btn.is-next > .material-symbols-rounded:last-child { display: none; }
+  }
+  .welcome-modal:not(.is-step-0) .v2-dialog__foot .v2-btn { flex: 1; }
+}
 
 /* ------------------------------------------------- phone trims --- */
 
-/* On a phone the prose that explains the pickers goes, so the step fits:
-   the pickers are self-evident once tapped. The CONTROLS are unchanged. */
+/* On a phone (23a) every step is a full-screen page: a 32 headline, the
+   muted line under it, then tiles with a 2px outline. The prose that explains
+   the pickers goes, so the step fits: the pickers are self-evident once tapped. */
 @include v2.mobile {
-  .welcome-cover-hint { display: none; }
-  .welcome-avatar-text span { display: none; }
-  .welcome-field .v2-input.is-area { min-height: 64px; }
+  .welcome-modal .v2-dialog__body { gap: 0; }
+  .welcome-modal .v2-steps { margin-bottom: 0; }
 
-  // Six cards two across: titles only, the sentence under each goes.
-  .welcome-card p { display: none; }
+  .welcome-hero,
+  .welcome-head {
+    margin-top: 8px;
+
+    h2 {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: 1.02;
+    }
+  }
+
+  .welcome-hero-sub,
+  .welcome-head p {
+    margin-top: 10px;
+    @include v2.text(body);
+    line-height: 1.5;
+  }
+
+  .welcome-grid,
+  .welcome-fields,
+  .welcome-modal .tagsv2-picker,
+  .welcome-modal .welcome-fineprint { margin-top: 20px; }
+
+  // Six tiles two across: a 2px outline, the icon on top, the title at the bottom.
+  .welcome-card {
+    min-height: 84px;
+    padding: 12px;
+    gap: 6px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-xl);
+    background: transparent;
+
+    h4 { margin-top: auto; @include v2.text(body); font-weight: 700; }
+    p { display: none; }
+  }
+  .welcome-card-icon { font-size: 24px !important; } // the Icon sets its size inline
+
+  .welcome-cover-hint { display: none; }
+  .welcome-field .v2-input.is-area { min-height: 64px; }
+  .welcome-cover-wrap { margin-bottom: 22px; }
+  .welcome-avatar { width: 52px; height: 52px; left: 12px; bottom: -22px; }
+  .v2-onboard .welcome-avatar,
+  .v2-onboard .welcome-avatar-badge { border-color: var(--bg); }
+  .v2-onboard .tagsv2-search { background: var(--surface); }
   .welcome-note { display: none; }
 }

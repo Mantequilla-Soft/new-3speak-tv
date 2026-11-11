@@ -2,9 +2,8 @@
 
 // FAQ (48c): group list on the left, questions as cards on the right.
 .faq-page {
-  max-width: 1040px;
-  margin: 0 auto;
-  // The app column (.container, App.css) already gives the page padding.
+  // The app column (.container, App.css) already gives the 1280 frame and
+  // the page padding; the FAQ fills it (48c: 240 + 20 + the questions).
   padding: 0 0 64px;
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
@@ -120,7 +119,8 @@
   position: relative;
   border-radius: var(--r-lg);
   background: var(--surface);
-  border: 1px solid var(--border);
+  // Fills, not borders (48c): only the open question gets a cyan ring (26d).
+  border: 1px solid transparent;
   transition: border-color var(--t-fast) var(--ease);
 
   &:has(details[open]) { border-color: var(--cyan); }
@@ -161,7 +161,7 @@
 }
 
 .faq-chev {
-  color: var(--muted);
+  color: var(--text);
   transition: transform var(--t-base) var(--ease);
 
   details[open] & { transform: rotate(180deg); color: var(--text); }
@@ -206,8 +206,6 @@
   padding: 14px;
   border-radius: var(--r-lg);
   background: color-mix(in srgb, var(--accent) 10%, var(--surface));
-
-  .faq-more__icon { color: var(--accent); margin-top: 1px; }
 
   p {
     margin: 0;

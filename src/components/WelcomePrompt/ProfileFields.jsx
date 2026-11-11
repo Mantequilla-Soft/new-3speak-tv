@@ -134,28 +134,44 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
     <div className="welcome-fields">
       {/* Banner first (design 44b): it's the biggest thing on a profile. Empty,
           it is a dashed drop area that says the size; set, it is the picture
-          with a small "Change banner" pill over it. */}
+          with a small "Change banner" pill over it. The picture sits over its
+          lower left corner, where it sits on the profile itself. */}
       <div className="welcome-cover-row">
-        <button
-          type="button"
-          className={`welcome-cover${form.cover_image ? ' has-image' : ''}`}
-          onClick={() => coverRef.current && coverRef.current.click()}
-          disabled={uploading || saving}
-          aria-label={t('app.profileFields.uploadBanner')}
-          style={form.cover_image ? { backgroundImage: `url(${form.cover_image})` } : undefined}
-        >
-          {form.cover_image ? (
-            <span className="welcome-cover-action">
-              {uploading ? busyIcon : <Icon name="add_photo_alternate" size={16} />}
-              {t('app.profileFields.changeBanner')}
+        <div className="welcome-cover-wrap">
+          <button
+            type="button"
+            className={`welcome-cover${form.cover_image ? ' has-image' : ''}`}
+            onClick={() => coverRef.current && coverRef.current.click()}
+            disabled={uploading || saving}
+            aria-label={t('app.profileFields.uploadBanner')}
+            style={form.cover_image ? { backgroundImage: `url(${form.cover_image})` } : undefined}
+          >
+            {form.cover_image ? (
+              <span className="welcome-cover-action">
+                {uploading ? busyIcon : <Icon name="add_photo_alternate" size={16} />}
+                {t('app.profileFields.changeBanner')}
+              </span>
+            ) : (
+              <span className="welcome-cover-empty">
+                {uploading ? busyIcon : <Icon name="add_photo_alternate" size={18} />}
+                {t('app.profileFields.addBanner')} · <span className="num">2800 × 684</span>
+              </span>
+            )}
+          </button>
+          <button
+            type="button"
+            className="welcome-avatar"
+            onClick={() => fileRef.current && fileRef.current.click()}
+            disabled={uploading || saving}
+            aria-label={t('app.profileFields.uploadPicture')}
+            title={`${t('app.profileFields.pictureLabel')}: ${t('app.profileFields.pictureHint')}`}
+          >
+            <img src={avatar} alt="" onError={(e) => { e.target.style.visibility = 'hidden'; }} />
+            <span className="welcome-avatar-badge">
+              {uploading ? busyIcon : <Icon name="add_a_photo" size={16} />}
             </span>
-          ) : (
-            <span className="welcome-cover-empty">
-              {uploading ? busyIcon : <Icon name="add_photo_alternate" size={18} />}
-              {t('app.profileFields.addBanner')}
-            </span>
-          )}
-        </button>
+          </button>
+        </div>
         <span className="welcome-cover-hint">
           <Trans i18nKey="app.profileFields.bannerHint" components={{ b: <strong /> }} />
         </span>
@@ -166,29 +182,6 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
           onChange={pickImage('cover_image')}
           style={{ display: 'none' }}
         />
-      </div>
-
-      <div className="welcome-avatar-row">
-        <button
-          type="button"
-          className="welcome-avatar"
-          onClick={() => fileRef.current && fileRef.current.click()}
-          disabled={uploading || saving}
-          aria-label={t('app.profileFields.uploadPicture')}
-        >
-          <img src={avatar} alt="" onError={(e) => { e.target.style.visibility = 'hidden'; }} />
-          <span className="welcome-avatar-badge">
-            {uploading ? busyIcon : <Icon name="add_a_photo" size={16} />}
-          </span>
-        </button>
-        <div className="welcome-avatar-text">
-          <strong>{t('app.profileFields.pictureLabel')}</strong>
-          <span>
-            {uploading
-              ? t('app.welcome.uploading')
-              : t('app.profileFields.pictureHint')}
-          </span>
-        </div>
         <input ref={fileRef} type="file" accept="image/*" onChange={pickImage('profile_image')} style={{ display: 'none' }} />
       </div>
 
@@ -223,19 +216,18 @@ export default function ProfileFields({ username, form, setField, pickImage, upl
       </label>
 
       <label className="welcome-field v2-field">
-        <span className="welcome-label v2-eyebrow">{t('app.profileFields.location')} <em>{t('app.profileFields.optional')}</em></span>
-        <div className="welcome-input-icon">
-          <Icon name="location_on" size={18} />
-          <input
-            type="text"
-            className="v2-input"
-            value={form.location}
-            onChange={setField('location')}
-            maxLength={LOCATION_MAX}
-            placeholder={t('app.profileFields.locationPlaceholder')}
-            disabled={saving}
-          />
-        </div>
+        <span className="welcome-label v2-eyebrow">
+          <span>{t('app.profileFields.location')} · {t('app.profileFields.optional')}</span>
+        </span>
+        <input
+          type="text"
+          className="v2-input"
+          value={form.location}
+          onChange={setField('location')}
+          maxLength={LOCATION_MAX}
+          placeholder={t('app.profileFields.locationPlaceholder')}
+          disabled={saving}
+        />
       </label>
     </div>
   );

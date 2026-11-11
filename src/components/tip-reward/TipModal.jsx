@@ -3,14 +3,17 @@ import Success from './Success';
 import { useTranslation } from 'react-i18next';
 import WalletTip from './WalletTip';
 import MonthlyField from './MonthlyField';
+import { TIP_PRESETS } from './tipPresets';
 import OtherWays, { useSupportLinks } from './OtherWays';
 import './TipModal.scss';
 import { fetchBalances, isAccountValid } from '../../hive-api/api';
 import { useAppStore } from '../../lib/store';
 import { toastIn } from '../../utils/toast';
 import { formatNumber } from '../../i18n';
-import { Dialog, Button, IconButton, Segmented, Chip, Field, Banner, EmptyState, Avatar, Icon } from '../v2/ui';
+import { Button, IconButton, Segmented, Chip, Field, Banner, EmptyState, Avatar, Icon } from '../v2/ui';
 import { cx } from '../v2/helpers';
+import DialogShell, { SheetContext } from '../modal/DialogShell';
+import usePostThumb from '../modal/usePostThumb';
 import logo from '../../assets/image/3S_logo.svg';
 import { transferWithAioha, broadcastWithAioha, KeyTypes, isLoggedIn } from '../../hive-api/aioha';
 import { useQueryClient } from '@tanstack/react-query';
@@ -70,6 +73,8 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
   // depends on it; the server picks the route for the invoice itself.
   const [receiver, setReceiver] = useState(null);
   const supportLinks = useSupportLinks(recipient);
+  // The context card (17a): the creator, and the post the tip is for.
+  const post = usePostThumb(recipient, permlink, !isPage && !!permlink);
   useEffect(() => {
     if (method !== 'lightning' || !recipient) return undefined;
     let alive = true;
@@ -310,26 +315,35 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
   // card on the /tip page.
   let actions = null;
   if (hiveForm) {
+    const bal = currency === 'HIVE' ? balances.hive : balances.hbd;
     actions = (
       <>
-        <Button variant="secondary" size={48} onClick={handleClose}>{t('common.actions.cancel')}</Button>
-        <Button variant="primary" size={48} className="tip-v2__send is-next" trailing="send" onClick={handleSubmitTransfer}>{sendLabel}</Button>
+        <div className="dlg-note tip-v2__note">
+          <span>{t('engagement.tip.paidIn', { currency })}</span>
+          <span className="tip-v2__balance">
+            <span>{t('engagement.tip.availableBalance', { currency })}</span>
+            {loading
+              ? <Icon name="progress_activity" size={14} className="v2-spin" />
+              : <span className="num">{bal}</span>}
+          </span>
+        </div>
+        <Button variant="primary" size={48} block className="dlg-main tip-v2__send" trailing="volunteer_activism" onClick={handleSubmitTransfer}>{sendLabel}</Button>
       </>
     );
   } else if (lightningForm) {
     // The header's X closes the window, so no Cancel here: room for the QR
     // button always, and the extension button when there is one.
     actions = (
-      <>
+      <div className={cx(hasWebln() && 'dlg-row')}>
         {hasWebln() && (
           <Button variant="secondary" size={48} icon="extension" onClick={() => handleLightning(true)} disabled={!!creatingInvoice} loading={creatingInvoice === 'extension'}>
             {t('engagement.tip.lightning.payExtension')}
           </Button>
         )}
-        <Button variant="primary" size={48} className="tip-v2__send" icon="qr_code_2" onClick={() => handleLightning(false)} disabled={!!creatingInvoice} loading={creatingInvoice === 'qr'}>
+        <Button variant="primary" size={48} block className="dlg-main tip-v2__send" trailing="qr_code_2" onClick={() => handleLightning(false)} disabled={!!creatingInvoice} loading={creatingInvoice === 'qr'}>
           {t('engagement.tip.lightning.showQr')}
         </Button>
-      </>
+      </div>
     );
   }
 
@@ -462,10 +476,21 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
                 </button>
               </div>
             )}
+            <div className="tip-v2__tiles" role="group" aria-label={t('engagement.tip.amountLabel')}>
+              {TIP_PRESETS.map((p) => {
+                const on = parseFloat(amount) === p.value;
+                return (
+                  <button key={p.value} type="button" className={cx('tip-v2__tile', on && 'is-on')} aria-pressed={on} onClick={() => setAmount(String(p.value))}>
+                    <b className="num">{p.value}<small>{currency}</small></b>
+                    <span>{t(`engagement.tip.presets.${p.key}`)}</span>
+                  </button>
+                );
+              })}
+            </div>
             <div className="tip-v2__row">
               <Field
                 id={`${fieldId}-amount`}
-                className="tip-v2__amount"
+                className="tip-v2__amount tip-v2__sr-label"
                 label={t('engagement.tip.amountLabel')}
                 type="number"
                 inputMode="decimal"
@@ -475,26 +500,22 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
-              <Field label={t('engagement.tip.currencyLabel')} id={`${fieldId}-currency`} className="tip-v2__currency">
+              <Field label={t('engagement.tip.currencyLabel')} id={`${fieldId}-currency`} className="tip-v2__currency tip-v2__sr-label">
                 <select id={`${fieldId}-currency`} className="v2-input is-select h48" value={currency} onChange={(e) => setCurrency(e.target.value)}>
                   <option value="HIVE">HIVE</option>
                   <option value="HBD">HBD</option>
                 </select>
               </Field>
             </div>
-            <div className="tip-v2__balance">
-              <span>{t('engagement.tip.availableBalance', { currency })}</span>
-              {loading
-                ? <Icon name="progress_activity" size={14} className="v2-spin" />
-                : <span className="num">{currency === "HIVE" ? balances.hive : balances.hbd}</span>}
-            </div>
 
             <MonthlyField months={months} onChange={setMonths} existing={monthly} recipient={recipient} />
 
             <Field
               id={`${fieldId}-memo`}
+              as="textarea"
+              rows={3}
+              className="tip-v2__memo tip-v2__sr-label"
               label={t('engagement.tip.memoLabel')}
-              type="text"
               placeholder={t('engagement.tip.memoPlaceholder')}
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
@@ -527,8 +548,11 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
             {step === 1 && (
               <div className="tip-page__head">
                 <Avatar src={`/img/u/${recipient}/avatar/small`} name={recipient} size={52} ring="cyan" />
-                <h2>{t('engagement.tip.heading', { recipient })}</h2>
-                <IconButton icon="close" label={t('common.actions.close')} size={36} variant="ghost" round onClick={handleClose} />
+                <div className="tip-page__titles">
+                  <h2>{t('engagement.tip.pageTitle', { recipient })}</h2>
+                  <p>{t('engagement.tip.pageSub')}</p>
+                </div>
+                <IconButton icon="close" label={t('common.actions.close')} size={36} variant="ghost" round onClick={handleClose} className="tip-page__close" />
               </div>
             )}
             {content}
@@ -540,18 +564,28 @@ const TipModal = ({ recipient, permlink, memoLink, onClose, variant }) => {
   }
 
   return (
-    <Dialog
+    <DialogShell
       open
       onClose={handleClose}
-      title={t('engagement.tip.heading', { recipient })}
-      closeLabel={t('common.actions.close')}
-      head={step !== 2}
-      width={460}
+      side
+      tone="accent"
+      title={t('watch.actions.tip')}
+      width={420}
+      zIndex={9999}
+      overlayClassName={cx('tip-v2-overlay', step === 2 && 'is-success')}
       className={cx('tip-v2', step === 2 && 'is-success')}
       footer={actions}
     >
+      {step === 1 && (
+        <SheetContext
+          className="tip-v2__ctx"
+          avatar={<Avatar src={`/img/u/${recipient}/avatar/small`} name={recipient} size={44} ring="cyan" />}
+          title={`@${recipient}`}
+          meta={post.title ? t('engagement.tip.forTitle', { title: post.title }) : undefined}
+        />
+      )}
       {content}
-    </Dialog>
+    </DialogShell>
   );
 };
 

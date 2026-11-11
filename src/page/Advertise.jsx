@@ -68,6 +68,7 @@ import {
   tickerMinSeconds,
   formatTabsFor,
 } from '../lib/adMarket';
+import AudioClip from '../components/AudioClip/AudioClip';
 import './Advertise.scss';
 
 // Every toast from this module is headed "Advertising"; the message becomes the
@@ -2042,7 +2043,7 @@ function FlightCreative({ c, account, productName, reference, onChanged }) {
         </>
       ) : cr.kind === 'audio' && cr.audioPath ? (
         <>
-          <audio className="mkt-flight-audio" controls preload="none" src={checkerUrl(cr.audioPath)} />
+          <AudioClip className="mkt-flight-audio" preload="none" src={checkerUrl(cr.audioPath)} />
           {cr.clickUrl ? (
             <span className="mkt-creative-meta">
               {t('ads.flight.linksTo')}{' '}
@@ -2093,7 +2094,7 @@ function ListenButton({ reference, message, clickUrl, disabled = false }) {
     <div className="mkt-listen">
       {current ? (
         <>
-          <audio controls autoPlay src={current.url} preload="auto" />
+          <AudioClip src={current.url} preload="auto" autoPlay />
           <span className="mkt-hint">{t('ads.ticker.listenSays', { text: current.text })}</span>
         </>
       ) : (
@@ -2198,7 +2199,7 @@ function AudioSpotPanel({ reference, format = null, onCreatives }) {
                 {t('ads.audio.seconds', { seconds: Math.ceil(c.durationSeconds || 0) })}
                 {c.note && !rejectedWithNote(c) ? ` · ${c.note}` : ''}
               </span>
-              {c.audioPath ? <audio controls preload="none" src={checkerUrl(c.audioPath)} /> : null}
+              {c.audioPath ? <AudioClip preload="none" src={checkerUrl(c.audioPath)} /> : null}
               {c.clickUrl ? <a href={c.clickUrl} target="_blank" rel="noopener noreferrer">{t('ads.ticker.checkLink')}</a> : null}
             </li>
           ))}

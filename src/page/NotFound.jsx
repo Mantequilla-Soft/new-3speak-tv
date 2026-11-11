@@ -20,8 +20,8 @@ function NotFound() {
       </Helmet>
       <div className="not-found-card">
         <div className="not-found-code" role="img" aria-label={t('pages.notFound.imageAlt')}>404</div>
-        <p className="not-found-eyebrow">{t('pages.notFound.title')}</p>
-        <h3>{t('pages.notFound.message')}</h3>
+        <h1 className="not-found-title">{t('pages.notFound.title')}</h1>
+        <p className="not-found-sub">{t('pages.notFound.message')}</p>
         {/* One control: a <button> inside a <Link> was two tab stops for one action. */}
         <div className="not-found-actions">
           <button type="button" className="v2-btn v2-btn--inverse h48 is-block is-next" onClick={() => navigate('/')}>

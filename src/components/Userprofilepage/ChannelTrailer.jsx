@@ -216,7 +216,7 @@ export default function ChannelTrailer({
             the video. Anything cut off is one click away on the watch page. */}
         {showInfo ? (
           <div className="channel-trailer-meta">
-            <StatusPill tone="cyan" icon="push_pin" className="ct-pill">{t('profile.layout.types.trailer')}</StatusPill>
+            <StatusPill tone="cyan" icon={<Icon name="push_pin" size={14} />} className="ct-pill">{t('profile.trailer.label')}</StatusPill>
             {post?.title ? (
               <Link className="ct-title" to={`/@${author}/${permlink}`}>{post.title}</Link>
             ) : null}
@@ -227,13 +227,9 @@ export default function ChannelTrailer({
                 {post?.created_at ? <TimeAgo date={post.created_at} /> : null}
               </div>
             ) : null}
+            {/* Two lines at most: the title (a link to the watch page) leads
+                to the rest. */}
             {description ? <p className="ct-desc">{description}</p> : null}
-            {/* The description clips at the player's height, so a long post
-                always has a way out to the full text on the watch page — same
-                destination as clicking the title. */}
-            {description ? (
-              <Link className="ct-readmore" to={`/@${author}/${permlink}`}>{t('profile.trailer.readMore')}</Link>
-            ) : null}
           </div>
         ) : null}
       </div>
@@ -247,7 +243,7 @@ export default function ChannelTrailer({
       {latestSnap ? (
         <div className="channel-trailer-snap">
           <div className="community-snaps">
-            <SnapCard snap={latestSnap} maxVh={0.16} onOpenTab={onOpenCommunityTab} />
+            <SnapCard snap={latestSnap} maxVh={0.16} onOpenTab={onOpenCommunityTab} label={t('profile.overview.latestSnap')} />
           </div>
         </div>
       ) : null}

@@ -1,114 +1,109 @@
 @use "../../styles/v2" as v2;
 
-// Save to playlist (design 07a / 41d) on the v2 dialog (DialogShell).
-// Watch Later first, then the member's playlists as bg-filled rows in a list
-// of fixed height that scrolls inside, "Added" as a cyan pill; the create form
-// (name, privacy, type and kind, tags) opens below with its actions in the footer.
+// Save to playlist (design 07a, its states in 41d and 19g) on the v2 side
+// sheet (DialogShell `side`): the context card, then Watch Later and your
+// playlists as tiles with covers in two columns, the dashed "New playlist"
+// tile last; saved tiles get a cyan border, tint and check. The create view
+// (19g): name, type tiles, audio kind chips, Public | Private, tags.
 .add-to-playlist-modal {
-  .atp-body { gap: 8px; }
+  .atp-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-  .atp-eyebrow { margin-top: 6px; }
+  .atp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-content: start;
+    padding-top: 2px;
+  }
 
-  // One playlist: a bg-filled row (fills, not borders), icon well, name, meta.
-  .atp-row {
+  .atp-tile {
+    position: relative;
     display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    min-height: 52px;
-    padding: 8px 10px;
-    border: 0;
-    border-radius: var(--r-md);
-    background: var(--bg);
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 0;
+    padding: 8px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-xl);
+    background: transparent;
     color: var(--text);
     font: inherit;
     text-align: left;
     cursor: pointer;
-    flex: none;
-    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-    &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+    &:hover:not(:disabled) { background: var(--bg-hover); }
     &:active:not(:disabled) { transform: scale(.98); }
     &:disabled { cursor: default; }
-    &:disabled:not(.loading) { opacity: .6; }
+    &:disabled:not(.loading):not(.is-on) { opacity: .6; }
 
-    &.added .atp-row__icon { background: var(--cyan-tint); color: var(--cyan); }
+    &.is-on {
+      border-color: var(--cyan);
+      background: color-mix(in srgb, var(--cyan) 12%, transparent);
+    }
+    &.is-skeleton { cursor: default; min-height: 150px; }
   }
 
-  .atp-row__icon {
-    width: 32px;
-    height: 32px;
-    border-radius: var(--r-md);
-    background: var(--surface-2);
-    color: var(--text);
+  .atp-tile__cover {
     display: grid;
     place-items: center;
-    flex: none;
+    aspect-ratio: 2 / 1;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--avatar), var(--surface-2));
+    color: var(--text);
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .is-skeleton & { @include v2.thumb-placeholder; }
+  }
+  // The icon is drawn on the cover on desktop and alone on the phone tile (07g).
+  .atp-tile__icon { display: none; }
 
-    &.is-cyan { color: var(--cyan); }
+  .atp-tile__name {
+    padding: 8px 4px 2px;
+    @include v2.text(body);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .atp-row__info {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-
-    .name {
-      @include v2.text(label);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .meta {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      @include v2.text(meta-sm);
-      color: var(--muted);
-    }
-  }
-
-  .atp-row__spin { color: var(--cyan); }
-
-  // Fixed height, scrolls inside: the dialog never grows with the list.
-  .atp-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    height: 232px;
-    @include v2.scroll-y;
-    flex: none;
-
-    &.is-short { height: 120px; }
-  }
-
-  .atp-loading {
+  .atp-tile__meta {
     display: flex;
     align-items: center;
-    gap: 8px;
-    min-height: 120px;
-    @include v2.text(body-sm);
+    gap: 4px;
+    padding: 0 4px 4px;
+    @include v2.text(meta);
     color: var(--muted);
-
-    .material-symbols-rounded { color: var(--cyan); }
+    white-space: nowrap;
+    overflow: hidden;
   }
 
-  .atp-empty { padding: 14px; }
+  .atp-tile__check {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--cyan);
+    color: var(--bg);
+    display: grid;
+    place-items: center;
+  }
 
-  // "Create new playlist": the dashed add tile of 07a.
+  .atp-tile__spin { position: absolute; top: 18px; right: 18px; color: var(--cyan); }
+
+  // "New playlist": the dashed add tile.
   .atp-new {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    width: 100%;
-    height: 48px;
-    flex: none;
+    min-height: 120px;
+    padding: 12px;
     border: 2px dashed var(--border);
-    border-radius: var(--r-lg);
+    border-radius: var(--r-xl);
     background: transparent;
     color: var(--muted);
     @include v2.text(label);
@@ -118,41 +113,54 @@
     &:hover { color: var(--text); border-color: var(--muted); }
   }
 
-  // Create form (41d): eyebrow labels, filled fields, segmented choices.
-  .atp-create {
+  .atp-empty-note { grid-column: 1 / -1; margin: 0; @include v2.text(meta); color: var(--muted); }
+
+  .atp-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 150px;
+    @include v2.text(body-sm);
+    color: var(--muted);
+    .material-symbols-rounded { color: var(--cyan); }
+  }
+
+  .atp-back { margin-left: -6px; }
+
+  // Create view (19g / 41d).
+  .atp-create { display: flex; flex-direction: column; gap: 14px; }
+  .atp-create__name { font-size: 16px; font-weight: 700; }
+
+  .atp-types { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .atp-type {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding-top: 6px;
-    border-top: 1px solid var(--border);
-
-    .form-group { display: flex; flex-direction: column; gap: 4px; }
-    .form-label { @include v2.text(eyebrow); color: var(--muted); }
-  }
-
-  // Privacy, type and audio kind (PlaylistTypePicker draws its buttons with
-  // these classes): a segmented track, the pick on surface-2.
-  .privacy-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    padding: 4px;
-    border-radius: var(--r-md);
-    background: var(--bg);
-  }
-
-  .privacy-btn {
-    @include v2.control(32);
-    @include v2.text(label);
-    flex: 1 1 0;
-    justify-content: center;
-    min-width: 0;
+    align-items: flex-start;
+    min-height: 110px;
+    padding: 14px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-xl);
     background: transparent;
-    color: var(--muted);
-    white-space: nowrap;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-    &:hover:not(:disabled) { color: var(--text); }
-    &.active { background: var(--surface-2); color: var(--text); }
+    .material-symbols-rounded { color: var(--muted); }
+    b { margin-top: auto; @include v2.text(body); font-weight: 700; }
+    span:last-child { @include v2.text(meta-sm); color: var(--muted); margin-top: 2px; }
+    &:hover:not(:disabled) { background: var(--bg-hover); }
+    &.is-on { border-color: var(--accent); background: var(--accent-tint-strong); .material-symbols-rounded { color: var(--accent); } }
+    &:disabled { opacity: .45; cursor: not-allowed; }
+  }
+
+  .atp-privacy {
+    padding: 4px;
+    gap: 6px;
+    border-radius: var(--r-lg);
+    .v2-seg__opt { gap: 4px; }
   }
 
   // Tags: chips and the text input in one filled field.
@@ -210,5 +218,28 @@
 
       &:hover { color: var(--text); background: var(--bg-hover); }
     }
+  }
+}
+
+// The phone sheet (07g): tiles without covers, the icon on top and the name at
+// the bottom on a filled tile; saved = cyan tint and cyan ink.
+@include v2.mobile {
+  .add-to-playlist-modal {
+    .atp-grid { gap: 10px; }
+    .atp-tile {
+      min-height: 92px;
+      padding: 14px;
+      gap: 8px;
+      border: 0;
+      background: var(--surface-2);
+      &.is-on { background: color-mix(in srgb, var(--cyan) 12%, transparent); color: var(--cyan); .atp-tile__meta { color: var(--cyan); } }
+    }
+    .atp-tile__cover { display: none; }
+    .atp-tile__icon { display: block; }
+    .atp-tile__name { margin-top: auto; padding: 0; }
+    .atp-tile__meta { display: none; }
+    .atp-tile__check { top: 10px; right: 10px; width: 24px; height: 24px; }
+    .atp-new { min-height: 92px; align-items: flex-start; justify-content: space-between; padding: 14px; border: 0; background: var(--surface-2); color: var(--text); }
+    .atp-loading { min-height: 92px; }
   }
 }

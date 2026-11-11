@@ -1,0 +1,271 @@
+@use "../../styles/v2" as v2;
+
+// The Spotlight hero (20a). The picture runs the full width of the window and
+// up under the floating top bar (560 tall from the top of the window, 420 on
+// phones), washed by two gradients into the page ground: down (40% at the top,
+// clear from 20% to 50%, solid at the bottom) and across (92% at the left, 45%
+// at 42%, clear from 68%). The text sits 96px under the bar, 64 in from the
+// frame's edge (HomeGrouped adds the 40 on top of the page padding).
+
+// The picture is 100vw wide; keep that from adding a sideways scroll.
+:root:has(.home-hero) body { overflow-x: clip; }
+
+.home-hero {
+  --hero-h: 560px;
+  position: relative;
+  // Up under the bar and the page's top padding.
+  margin-top: calc(-1 * (var(--nav-height, 78px) + var(--page-pad)));
+  padding-top: calc(var(--nav-height, 78px) + 96px);
+  color: var(--text);
+
+  @include v2.mobile {
+    --hero-h: 420px;
+    padding-top: calc(var(--nav-height, 52px) + 170px);
+  }
+}
+
+.home-hero__bg {
+  position: absolute;
+  top: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  height: var(--hero-h);
+  z-index: 0;
+  pointer-events: none;
+  @include v2.thumb-placeholder(16px);
+  @include v2.mobile { @include v2.thumb-placeholder(14px); }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--bg) 40%, transparent) 0%, transparent 20%, transparent 50%, var(--bg) 100%),
+      linear-gradient(90deg, color-mix(in srgb, var(--bg) 92%, transparent) 0%, color-mix(in srgb, var(--bg) 45%, transparent) 42%, transparent 68%);
+
+    @include v2.mobile {
+      background: linear-gradient(180deg, transparent 40%, var(--bg));
+    }
+  }
+}
+
+// The hero is anchored to the 1280 frame, not the 100vw picture: on a window
+// wider than the frame the left wash starts at the window's edge.
+@include v2.wide {
+  .home-hero__bg::after {
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--bg) 40%, transparent) 0%, transparent 20%, transparent 50%, var(--bg) 100%),
+      linear-gradient(90deg, color-mix(in srgb, var(--bg) 92%, transparent) 0%, color-mix(in srgb, var(--bg) 92%, transparent) calc(50vw - 640px), color-mix(in srgb, var(--bg) 45%, transparent) calc(50vw - 640px + 538px), transparent calc(50vw - 640px + 870px));
+  }
+}
+
+// 720 wide in the frame, less its 64px inset: the text keeps to the washed side.
+.home-hero__body {
+  position: relative;
+  z-index: 1;
+  max-width: 656px;
+  @include v2.mobile { max-width: none; }
+}
+
+// "Spotlight in Wildlife Videos · 3:12": cyan 16% wash, radius 12, 13/700.
+.home-hero__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 12px 6px 6px;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--cyan) 16%, transparent);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  .is-narrow { display: none; }
+
+  @include v2.mobile {
+    gap: 6px;
+    padding: 4px 10px 4px 4px;
+    font-size: 12px;
+    background: color-mix(in srgb, var(--cyan) 18%, transparent);
+    .is-wide, .home-hero__chip-time { display: none; }
+    .is-narrow { display: inline; }
+  }
+}
+
+.home-hero__chip-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.home-hero__chip-tile {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  background: var(--cyan);
+  color: var(--bg);
+  font-size: 11px;
+  font-weight: 900;
+
+  @include v2.mobile { width: 20px; height: 20px; font-size: 10px; }
+}
+
+.home-hero__chip-time { color: var(--muted); font-weight: 500; }
+
+.home-hero__title {
+  margin: 16px 0 0;
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -.035em;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-wrap: balance;
+
+  a { color: inherit; text-decoration: none; &:hover { color: inherit; } }
+
+  @include v2.below-wide { font-size: 56px; }
+  @include v2.mobile {
+    margin-top: 10px;
+    font-size: 32px;
+    letter-spacing: -.03em;
+  }
+}
+
+// The creator: a 32 avatar in a cyan ring, the name 14/700, followers 13 muted.
+.home-hero__creator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  min-width: 0;
+
+  @include v2.mobile { display: none; }
+}
+
+.home-hero__avatar {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 2px solid var(--cyan);
+  border-radius: 50%;
+  background: var(--avatar);
+  overflow: hidden;
+  cursor: pointer;
+
+  .hive-avatar, img { width: 100%; height: 100%; display: block; border-radius: 50%; object-fit: cover; }
+  .hive-avatar__badge { display: none; }
+}
+
+.home-hero__name {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover { text-decoration: underline; }
+}
+
+.home-hero__followers { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+// Play (an ink slab, 64 tall, radius 20, label left and the arrow right) and
+// two 64px tiles on a 12% ink wash. Phones: 60 tall, the tiles icon only.
+.home-hero__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 22px;
+
+  @include v2.mobile {
+    display: grid;
+    grid-template-columns: 1fr 60px 60px;
+    margin-top: 14px;
+  }
+}
+
+.home-hero__play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  height: 64px;
+  padding: 0 20px 0 24px;
+  border-radius: var(--r-xl);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 16px;
+  font-weight: 900;
+  text-decoration: none;
+  transition: filter var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { color: var(--bg); filter: brightness(.92); }
+  &:active { transform: scale(.98); }
+
+  @include v2.mobile {
+    height: 60px;
+    padding: 0 16px 0 20px;
+    .material-symbols-rounded { font-size: 28px !important; }
+  }
+}
+
+.home-hero__tile {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-xl);
+  background: color-mix(in srgb, var(--text) 12%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 18%, transparent); }
+  &:active { transform: scale(.98); }
+
+  @include v2.mobile {
+    width: 60px;
+    height: 60px;
+    > span:not(.material-symbols-rounded) { display: none; }
+  }
+}
+
+// While the featured video is on its way: the stripes, and blocks where the
+// chip, the title and Play will be.
+.home-hero.is-pending {
+  .home-hero__ph {
+    display: block;
+    border-radius: var(--r-md);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+
+    &.is-chip { width: 220px; height: 36px; }
+    &.is-title { width: min(560px, 100%); height: 56px; margin-top: 16px; &.is-short { width: min(380px, 70%); margin-top: 8px; } }
+    &.is-play { width: 168px; height: 64px; margin-top: 22px; border-radius: var(--r-xl); }
+
+    @include v2.mobile {
+      &.is-title { height: 30px; }
+      &.is-play { width: 100%; height: 60px; }
+    }
+  }
+}

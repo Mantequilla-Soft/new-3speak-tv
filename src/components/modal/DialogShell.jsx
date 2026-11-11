@@ -27,6 +27,11 @@ const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:n
  * @param {ReactNode} footer      – actions, primary last (it sits on the right)
  * @param {number}    width       – desktop max width, 440 to 520 for most dialogs
  * @param {number}    zIndex      – over another layer that sits above 1000
+ * @param {boolean}   side        – the 07/17 sheet: on desktop a full-height sheet docked to the
+ *                                  right (page blurred behind it), head with a tone bar and a
+ *                                  20/900 title, main action pinned full width at the bottom;
+ *                                  a bottom sheet under 768px like every dialog
+ * @param {string}    tone        – the bar before the title: 'accent' | 'cyan' | 'text'
  * @param {Document}  doc         – the document to portal into (usePortalDoc), default the page's
  * @param {boolean}   isolate     – stop clicks inside from bubbling up the React tree to
  *                                  whatever opened it (a card, a link, a hover preview)
@@ -34,6 +39,7 @@ const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:n
 export default function DialogShell({
   open = true, onClose, busy = false, title, sub, leading, headExtra, steps, step = 0,
   footer, width = 480, zIndex, className, bodyClassName, overlayClassName, panelProps, doc, isolate = false, children,
+  side = false, tone,
 }) {
   const close = busy ? undefined : onClose;
   const panelRef = useRef(null);
@@ -71,7 +77,7 @@ export default function DialogShell({
   const stop = isolate ? (e) => e.stopPropagation() : undefined;
   return createPortal(
     <div
-      className={cx("v2-dialog", "dlg-shell", overlayClassName)}
+      className={cx("v2-dialog", "dlg-shell", side && "is-side", overlayClassName)}
       role="presentation"
       style={zIndex ? { zIndex } : undefined}
       onMouseDown={(e) => { stop?.(e); if (e.target === e.currentTarget) onCloseRef.current?.(); }}
@@ -87,7 +93,7 @@ export default function DialogShell({
         style={{ "--w": `${width}px`, ...panelProps?.style }}
       >
         <div className="v2-dialog__grab" aria-hidden="true" />
-        <ModalHeader title={title} sub={sub} titleId={titleId} onClose={close} leading={leading}>
+        <ModalHeader title={title} sub={sub} titleId={titleId} onClose={close} leading={leading} tone={tone}>
           {headExtra}
         </ModalHeader>
         {steps > 1 && <div className="dlg-shell__steps"><StepBar steps={steps} current={step} /></div>}
@@ -96,5 +102,28 @@ export default function DialogShell({
       </div>
     </div>,
     (doc || document).body,
+  );
+}
+
+/**
+ * "Context first" (07, 17): the card at the top of a sheet that shows what you
+ * act on: a video (16:9 thumb), a creator (avatar) or an amount.
+ *   <SheetContext thumb={url} title="…" meta="@author · 3:12" />
+ *   <SheetContext avatar={<Avatar … />} title="@name" meta="for …" />
+ */
+export function SheetContext({ thumb, avatar, title, meta, trailing, className }) {
+  return (
+    <div className={cx("dlg-ctx", className)}>
+      {avatar ?? (
+        <span className="dlg-ctx__thumb" aria-hidden="true">
+          {thumb ? <img src={thumb} alt="" loading="lazy" /> : null}
+        </span>
+      )}
+      <span className="dlg-ctx__body">
+        <b className="dlg-ctx__title">{title}</b>
+        {meta && <span className="dlg-ctx__meta">{meta}</span>}
+      </span>
+      {trailing}
+    </div>
   );
 }

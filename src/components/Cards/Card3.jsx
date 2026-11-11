@@ -213,7 +213,7 @@ const cardHref = (linkPrefix, author, permlink, query) => (linkPrefix === '/watc
   ? watchPath(author, permlink, query)
   : `${linkPrefix}?v=${author}/${permlink}${query}`);
 
-function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, badgeLabel = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null, featuredPending = false }) {
+function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0, renderInterleave = null, communityEvery = 0, renderCommunity = null, creatorsEvery = 0, renderCreators = null, getContentForVideo = null, isWatched = null, getViewCount = null, isNew = null, badgeLabel = null, linkPrefix = '/watch', linkQuery = '', shortTimeAgo = true, shortsGrid = false, priority = false, hideWatched = false, watchedVersion = 0, renderFooter = null, windowed = false, featuredKey = null, featuredLayout = null, featuredNav = null, featuredPending = false, variant = null }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
@@ -372,7 +372,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
     <div
       className={`card-container${shortsGrid ? ' card-container--shorts' : ''}${
         mixed ? ' card-container--mixed' : ''
-      }`}
+      }${variant === 'bare' ? ' card-container--bare' : ''}`}
       {...containerProps}
     >
       {withInterleave([...(featuredPlaceholder ? [featuredPlaceholder] : []), ...processedVideos.map((video, index) => {
@@ -600,7 +600,8 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                 <h2>{video.title}</h2>
                 <div className="card-meta">
                   <span className="card-author-group">
-                    <span className="card-author" onClick={openCreator}>@{cardAuthor}</span>
+                    {/* The name alone, as 20a / 28b write it ("birdwatcher · 9.2K · 3w") */}
+                    <span className="card-author" onClick={openCreator}>{cardAuthor}</span>
                     {video._incubation && (
                       /* A warm-up user (on 3Speak, not on Hive yet): a leaf next to
                          the name, its hint the same title + line the old "new on
@@ -699,6 +700,7 @@ Card3.propTypes = {
   linkPrefix: PropTypes.string,
   renderFooter: PropTypes.func,      // (video) => node drawn under the card's bottom row
   windowed: PropTypes.bool,
+  variant: PropTypes.oneOf(['bare']), // 'bare': no card frame, avatar or stat pills (19c tag feed, 49c First Uploads)
   featuredKey: PropTypes.string,     // "author/permlink" of a first card to draw large
   featuredPending: PropTypes.bool,   // hold that block with a skeleton until the card is there
   featuredNav: PropTypes.shape({      // the featured line-up the card's arrows / strip step through

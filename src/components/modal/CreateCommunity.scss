@@ -1,10 +1,12 @@
 @use "../../styles/v2" as v2;
 
-// Create a community or a badge account (design 17g / 40c) on the v2 dialog
-// (DialogShell) with a 4-step bar: the look (banner, picture, name and
-// description), save the keys, sign with the active key and the 3 HIVE fee,
-// then done (success card) or failed (accent wash). Community = cyan.
+// Create a community or a badge account (design 17g / 40c) on the 17 sheet
+// (DialogShell side) with a 4-step bar: the look (kind, banner, picture, name
+// and description), save the keys, sign with the active key and the 3 HIVE
+// fee, then done (success card) or failed (accent wash). Community = cyan.
 .create-com {
+  .cc-kind .v2-seg__opt { flex: 1 1 0; }
+
   .cc-step {
     display: flex;
     flex-direction: column;
@@ -19,28 +21,37 @@
     strong { color: var(--text); font-weight: 700; }
   }
 
-  // Banner with the picture over its lower-left edge.
-  .cc-cover { display: flex; flex-direction: column; }
+  // The preview card (17g): a banner fading from cyan, the picture riding over
+  // its lower edge, and the name beside it.
+  .cc-cover {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--r-xl);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    overflow: hidden;
+    padding-bottom: 14px;
+  }
 
   .cc-banner {
     position: relative;
-    height: 96px;
+    height: 72px;
     width: 100%;
     padding: 0;
     border: 0;
-    border-radius: var(--r-xl);
-    @include v2.thumb-placeholder;
+    background: linear-gradient(135deg, var(--cyan), var(--frame));
     background-size: cover;
     background-position: center;
     cursor: pointer;
 
+    &.has-image { background-color: var(--surface-2); }
     &:disabled { cursor: progress; }
   }
 
   .cc-banner-action {
     position: absolute;
     right: 8px;
-    bottom: 8px;
+    top: 8px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -57,19 +68,19 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    margin-top: -24px;
-    padding-left: 12px;
+    margin-top: -26px;
+    padding: 0 14px;
   }
 
   .cc-avatar {
     position: relative;
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
     padding: 0;
-    border: 3px solid var(--surface);
-    border-radius: var(--r-xl);
-    background: var(--surface-2);
-    color: var(--muted);
+    border: 3px solid var(--bg);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    color: var(--text);
     display: grid;
     place-items: center;
     overflow: hidden;
@@ -92,12 +103,33 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding-top: 30px;
     min-width: 0;
+    padding-top: 30px;
 
-    strong { @include v2.text(label); }
-    span { @include v2.text(meta-sm); color: var(--muted); }
+    strong { font-size: 16px; font-weight: 900; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; &.is-empty { color: var(--muted); } }
+    span { @include v2.text(meta); color: var(--muted); }
   }
+
+  .cc-name { font-size: 13px; font-weight: 700; }
+
+  // The generated password in a mono well (40c).
+  .cc-password {
+    @include v2.well;
+    display: block;
+    padding: 10px 12px;
+    @include v2.mono(12, 700);
+    overflow-wrap: anywhere;
+    user-select: all;
+  }
+
+  .cc-key-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    .v2-btn { justify-content: center; }
+  }
+
+  .cc-fine { margin: 0; @include v2.text(meta-sm); color: var(--muted); }
 
   .cc-field em { font-style: normal; text-transform: none; letter-spacing: 0; font-weight: 400; }
   .cc-mono { font-family: var(--font-mono); font-size: 13px; }
@@ -113,34 +145,6 @@
     &.is-bad { color: var(--accent); }
   }
 
-  .cc-meta {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .cc-meta-item {
-    @include v2.well;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 10px 12px;
-    min-width: 0;
-  }
-
-  .cc-meta-value {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    @include v2.text(label);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    img { width: 20px; height: 20px; border-radius: 50%; background: var(--avatar); flex: none; }
-    &.money { @include v2.mono(14, 900); color: var(--accent); }
-  }
-
   .cc-copy-row {
     display: flex;
     gap: 6px;
@@ -148,7 +152,15 @@
     .v2-input { flex: 1; min-width: 0; }
   }
 
-  .cc-provider-tag { color: var(--cyan); }
+  // A wallet row (40c): icon, name, and its state in cyan at the end.
+  .cc-provider {
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: var(--r-md);
+    .cc-provider-name { flex: 1; min-width: 0; font-size: 13px; font-weight: 700; }
+    .v2-choice__icon { margin-top: 0; color: var(--text); }
+  }
+  .cc-provider-tag { flex: none; font-size: 11px; font-weight: 700; color: var(--cyan); }
 
   .cc-or {
     display: flex;
@@ -170,16 +182,12 @@
     h3 { margin: 4px 0 0; @include v2.text(title-sm); }
   }
 
-  .cc-done-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--r-md);
-    display: grid;
-    place-items: center;
-    background: var(--cyan-tint);
-    color: var(--cyan);
-
-    &.is-bad { background: var(--accent-tint); color: var(--accent); }
+  // Failed (40c): an accent wash, the bold one-liner, then what was not done.
+  .cc-failed {
+    padding: 14px;
+    border-radius: var(--r-2xl);
+    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+    b { color: var(--text); }
   }
 
   .cc-done-name { margin: 0; @include v2.mono(13, 700); color: var(--muted); }

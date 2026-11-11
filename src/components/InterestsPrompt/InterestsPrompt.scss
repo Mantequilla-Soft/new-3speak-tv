@@ -3,6 +3,14 @@
 /* "What are you into?" on the shared v2 Dialog (a bottom sheet under 768px).
    520 wide, like the Settings dialog, so the shared TagsV2Picker gets the
    same room and the two screens read identically. */
+.interests-prompt .v2-dialog__body { padding-top: 20px; }
+
+.interests-prompt-title {
+  margin: 0;
+  @include v2.text(title);
+  color: var(--text);
+}
+
 .interests-prompt-text {
   margin: 0;
   @include v2.text(body-sm);
@@ -12,4 +20,17 @@
   strong { color: var(--text); font-weight: 700; }
 }
 
-.interests-prompt .v2-dialog__foot .interests-prompt-save.v2-btn { flex: 1; }
+@include v2.tablet-up {
+  .interests-prompt .v2-dialog__foot .interests-prompt-save.v2-btn { flex: 1; }
+}
+
+// 23a on a phone: the 32 headline and the 14 muted line under it.
+@include v2.mobile {
+  .interests-prompt-title {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -.03em;
+    line-height: 1.02;
+  }
+  .interests-prompt-text { @include v2.text(body); line-height: 1.5; }
+}

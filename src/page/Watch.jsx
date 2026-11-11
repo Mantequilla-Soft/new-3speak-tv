@@ -6,7 +6,7 @@ import PlayVideo from '../components/playVideo/PlayVideo';
 import SEOHead from '../components/SEOHead';
 import Card3 from '../components/Cards/Card3';
 import { useContentBatch } from '../hooks/useContentBatch';
-import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import { useSearchParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchVideoDetails, fetchPlaySource, fetchTrendingFeed, fetchAuthorVideos, fetchRelatedFeed } from '../lib/videoData';
@@ -43,7 +43,7 @@ import SurfBar from '../components/SurfBar/SurfBar';
 import { SURF_PARAM, getChannel } from '../utils/surf';
 import { ThreeSpeakApi } from '@mantequilla-soft/3speak-player';
 import { recordView } from '../lib/recordView';
-import { fixVideoThumbnail } from '../utils/fixThumbnails';
+import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { reportVideoUnavailable } from '../lib/reportUnavailable';
 import { useDeadVideos, videoKey } from '../lib/deadVideos';
 import { notifyMediaPlay, onMediaPlay } from '../utils/mediaCoordinator';
@@ -2003,28 +2003,32 @@ function Watch({ v2 = false, routeV = null }) {
         {isGatedPost && user && author && user.toLowerCase() === String(author).toLowerCase() && (
           <GuestListEditor permlink={gateVideoId || permlink} />
         )}
-        {/* 🔐 Paywall banner for supporters-only posts. Below the player rather
-            than covering it: what is playing above is the free preview, and
-            hiding that would remove the very thing meant to sell the
-            subscription. */}
-        {isGatedPost && gatedPlayback.isLocked && (
+        {/* 🔐 Supporters-only posts. With a free preview playing above, a state
+            card (33a "You're watching a free preview"); with nothing to play, the
+            lock is drawn over the player (31c) and this is its one action. */}
+        {isGatedPost && gatedPlayback.isLocked && (gatedPlayback.previewUrl || gatedPlayback.state === 'error' ? (
           <div className="gated-paywall" role="status">
-            <span className="gated-paywall__icon" aria-hidden="true"><Icon name="workspace_premium" size={28} /></span>
+            <span className="gated-paywall__icon" aria-hidden="true"><Icon name="workspace_premium" size={24} /></span>
             <div className="gated-paywall__text">
-              <strong>{t('watch.gated.title')}</strong>
+              <strong>{gatedPlayback.state === 'error' ? t('watch.gated.title') : t('watch.gated.preview')}</strong>
               <span>
-                {gatedPlayback.state === 'error'
-                  ? t('watch.gated.checkFailed')
-                  : gatedPlayback.previewUrl
-                    ? t('watch.gated.preview')
-                    : t('watch.gated.subscribersOnly')}
+                {gatedPlayback.state === 'error' ? t('watch.gated.checkFailed') : t('watch.gated.subscribersOnly')}
               </span>
+              <Button as="a" href="/wallet" variant="primary" size={36} next className="gated-paywall__cta">{t('watch.gated.cta')}</Button>
             </div>
-            <Button as="a" href="/wallet" variant="primary" size={48} next className="gated-paywall__cta">{t('watch.gated.cta')}</Button>
           </div>
-        )}
+        ) : (
+          <Button as="a" href="/wallet" variant="primary" size={48} block trailing="workspace_premium" className="gated-lock-cta">{t('watch.gated.cta')}</Button>
+        ))}
           </>
         )}
+        playerOverlay={isGatedPost && gatedPlayback.isLocked && !gatedPlayback.previewUrl && gatedPlayback.state !== 'error' ? (
+          <div className="gated-lock" role="status">
+            <span className="gated-lock__icon" aria-hidden="true"><Icon name="workspace_premium" size={28} /></span>
+            <b>{t('watch.gated.title')}</b>
+            <span>{t('watch.gated.subscribersOnly')}</span>
+          </div>
+        ) : null}
         videoDetails={videoDetails}
         author={author}
         permlink={permlink}
@@ -2139,6 +2143,8 @@ function Watch({ v2 = false, routeV = null }) {
           onMarkerSelect: handleSelectReaction,
           onCycleReactionSize: isReactionPlayerVisible && reactions.length > 0 ? cycleReactionSize : null,
           reactionSizeLabel: REACTION_SIZE_LABEL_KEYS[reactionSize] ? t(REACTION_SIZE_LABEL_KEYS[reactionSize]) : reactionSize,
+          // The button's own short label (19a: "Std"); the full name is its tooltip.
+          reactionSizeShort: t(`player.reactions.sizes.${reactionSize}`, { defaultValue: '' }),
           onTogglePip: handleTogglePip,
           videoEnded,
           onReplay: handleReplay,
@@ -2190,6 +2196,54 @@ function Watch({ v2 = false, routeV = null }) {
         upNext={suggestedVideos.slice(0, 10)}
         cinemaReactionPanel={reactionSize === 'cinema' && reactions.length > 0 ? reactionPanel : null}
       />
+
+      {/* Next in the playlist (02): the next five from the same playlist, then
+          the playlist page behind the chevron. */}
+      {showPlaylist && playlistData?.playlist && Array.isArray(playlistData.videos) && playlistData.currentIndex != null
+        && playlistData.videos.length > playlistData.currentIndex + 1 && (() => {
+        const { playlist, videos, currentIndex } = playlistData;
+        const first = currentIndex + 1;
+        const next = videos.slice(first, first + 5);
+        const name = playlist.name || playlist.title;
+        const from = videoDetails?.community?.title;
+        return (
+          <section className="watch-more watch-next" aria-label={t('watch.nextIn', { name })}>
+            <div className="watch-more__head">
+              <h2>{t('watch.nextIn', { name })}</h2>
+              <span className="watch-more__count num">{first + 1} / {videos.length}</span>
+              <span className="watch-more__rule" aria-hidden="true" />
+              {from && <span className="watch-more__from">{t('watch.fromCommunity', { name: from })}</span>}
+              {playlist.id && (
+                <Link to={`/playlist/${playlist.id}`} className="watch-more__all" aria-label={name} title={name}>
+                  <Icon name="chevron_right" size={20} />
+                </Link>
+              )}
+            </div>
+            <div className="watch-next__grid">
+              {next.map((v, i) => {
+                const pos = first + i;
+                const d = Number(v.duration) || 0;
+                return (
+                  <Link
+                    key={`${v.author}-${v.permlink}`}
+                    to={`/@${v.author}/${v.permlink}?playlist=${playlist.id}&pos=${pos}`}
+                    state={{ playlist, videos, currentIndex: pos }}
+                    className="watch-next__card"
+                  >
+                    <span className="watch-next__thumb">
+                      <img src={fixVideoThumbnail(v)} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
+                      <span className="watch-next__n num">{String(pos + 1).padStart(2, '0')}</span>
+                      {d > 0 && <span className="watch-next__d num">{Math.floor(d / 60)}:{String(Math.floor(d % 60)).padStart(2, '0')}</span>}
+                    </span>
+                    <b className="watch-next__title">{v.title}</b>
+                    <span className="watch-next__author">{v.author}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })()}
 
       {/* More videos (02 "what's next" shelf), with a shorts rail every few rows.
           The wide grid and the phone grid are BOTH mounted (CSS picks one), so

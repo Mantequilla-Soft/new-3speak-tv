@@ -394,7 +394,7 @@ function EmbedCameraRecord() {
   // ---- draggable record/stop button (tap = action, drag = move) ------------
   const recordRef = useRef(null);
   const recordDrag = useRef(null);
-  const [recordPos, setRecordPos] = useState(() => loadJson('tp-record-pos', { x: winW() - 84, y: winH() - 168 }));
+  const [recordPos, setRecordPos] = useState(() => loadJson('tp-record-pos', { x: winW() - 96, y: winH() - 168 })); // 80px button, 16px from the edge
   const recordPosRef = useRef(recordPos);
   recordPosRef.current = recordPos;
 

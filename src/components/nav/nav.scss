@@ -17,64 +17,70 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--bg);
-  padding: calc(12px + env(safe-area-inset-top, 0px)) var(--page-pad) 0;
+  // No band of its own: the bar floats over the page (and over the Home hero,
+  // which runs up under it, 20a).
+  background: transparent;
+  pointer-events: none;
+  padding: calc(16px + env(safe-area-inset-top, 0px)) var(--page-pad) 0;
   transition: transform var(--t-slow) var(--ease), margin-bottom var(--t-slow) var(--ease);
+
+  > * { pointer-events: auto; }
 
   // Only ever hidden for immersive landscape video on the watch page (Nav.jsx).
   &.nav-hidden {
     transform: translateY(-100%);
-    margin-bottom: calc(-1 * var(--nav-height, 76px));
+    margin-bottom: calc(-1 * var(--nav-height, 78px));
   }
 
+  @include compact {
+    padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  }
   @include v2.mobile {
     padding: env(safe-area-inset-top, 0px) 0 0;
   }
 }
 
+// 20a: radius 20, a 60% surface wash with a 20px blur, a 1px ink line at 10%,
+// 10/16/10/20 padding around 40px controls, 20 between the groups.
 .nav-bar {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  height: var(--topbar-h);
+  gap: 20px;
   max-width: calc(var(--content-max) - 2 * var(--page-pad));
   margin: 0 auto;
-  padding: 0 12px 0 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  padding: 10px 16px 10px 20px;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
   border-radius: var(--r-xl);
   color: var(--text);
 
-  // The search box is centred on the BAR, not on what is left over after the
-  // tabs and the right cluster, so it stays put whether the page tabs are out
-  // or not. Out of the flow to do it (Nav.jsx measures its left edge to cap the
-  // tab row). NavSearch.scss owns its size and look.
-  //
-  // Centred with auto margins, NOT a transform: a transform would make the
-  // wrap the containing block of the results panel, which is position: fixed.
-  > .navsearch-wrap {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    height: 44px;
-    margin: auto;
-    z-index: 2;
-  }
+  @include compact { gap: 12px; padding: 8px 12px 8px 16px; }
 
+  // Phones (20a phone): no card, logo + two 40px buttons on 6/16 padding,
+  // over the page (or the hero) behind it.
   @include v2.mobile {
-    height: 56px;
     max-width: none;
-    padding: 0 12px 0 16px;
+    padding: 6px 16px;
+    gap: 8px;
     border: 0;
     border-radius: 0;
-    background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
   }
+
+  // The search box is an ordinary flex item after the section tabs (20a:
+  // pushed right, next to Create). NavSearch.scss owns its size, position
+  // and focus growth.
 }
 
-// ── Left: the logo, which folds the page tabs out ────────────────────────────
+// Over the Home hero the phone bar is see-through (HomeGrouped sets the flag).
+@include v2.mobile {
+  :root[data-home-hero] .nav-bar { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+
+// ── Left: the logo (home) ────────────────────────────────────────────────────
 .nav-left {
   display: flex;
   align-items: center;
@@ -83,8 +89,8 @@
   @include compact { display: none; }
 
   .logo {
-    height: 34px;
-    width: auto;
+    width: 34px;
+    height: auto;
     display: block;
   }
 }
@@ -99,159 +105,96 @@
   @include compact { display: flex; }
 
   a { display: flex; border-radius: var(--r-sm); }
-  .logo { height: 32px; width: auto; display: block; }
+  .logo { width: 28px; height: auto; display: block; }
 }
 
-// The logo is the disclosure for the page tabs, so it has to look pressable
-// without becoming a second button in a bar that already has plenty.
 .nav-logo-btn {
   display: flex;
   align-items: center;
-  gap: 2px;
   height: 40px;
-  padding: 0 4px 0 0;
-  border: 0;
-  background: none;
-  color: var(--muted);
-  cursor: pointer;
   border-radius: var(--r-md);
-  transition: color var(--t-fast) var(--ease);
-
-  &:hover { color: var(--text); }
-
-  // Points at the space the tabs will fill, and turns back once they are there.
-  .nav-logo-chevron { transition: transform var(--t-base) var(--ease); }
-  &.is-open .nav-logo-chevron { transform: rotate(180deg); }
 }
 
-// ── The page tabs: a segmented track (never underlined) ──────────────────────
+// ── The section tabs: a segmented track (20a), never underlined ──────────────
+// 3px inside a half-ground track, radius 16; options 8/14, radius 12, 14/700;
+// the current one on a 14% ink wash.
 .nav-tabs {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px;
-  border-radius: var(--r-md);
-  background: var(--bg);
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--bg) 50%, transparent);
   flex: none;
-  // Opens from under the logo, so the row reads as belonging to it.
+  min-width: 0;
   animation: nav-tabs-in var(--t-base) var(--ease);
-
-  // Never runs under the search box. --nav-tabs-max is the gap between the
-  // start of this row and the box's left edge, measured in Nav.jsx. Past that
-  // width the row scrolls sideways instead of hiding pills behind the box.
-  max-width: var(--nav-tabs-max, none);
-  @include v2.scroll-x;
-  overflow-y: hidden;
-  transition: max-width var(--t-base) var(--ease);
-  scroll-behavior: smooth;
 
   > * { flex: 0 0 auto; }
 
-  // Fade the cut edge, so a half-shown tab reads as "there is more this way".
-  // Classes are set by the scroll handler in Nav.jsx.
-  &.can-scroll-right { mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%); }
-  &.can-scroll-left { mask-image: linear-gradient(to right, transparent 0, black 28px); }
-  &.can-scroll-left.can-scroll-right { mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%); }
-
   @include compact { display: none; }
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    scroll-behavior: auto;
-  }
+  @media (prefers-reduced-motion: reduce) { animation: none; }
 }
 
 .nav-tab {
-  @include v2.control(32);
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--r-md);
   @include v2.text(label);
-  padding: 0 12px 0 10px;
+  font-size: 14px;
   background: transparent;
   color: var(--muted);
   text-decoration: none;
   white-space: nowrap;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
   &:hover { color: var(--text); }
-  &.active,
-  &.open { background: var(--surface-2); color: var(--text); }
+  &.active { background: color-mix(in srgb, var(--text) 14%, transparent); color: var(--text); }
   &:focus-visible { outline-offset: -2px; }
-
-  .nav-tab-icon { flex: none; }
 }
 
-.nav-playlists-wrapper {
-  position: relative;
-  display: inline-flex;
-}
-
-.nav-playlists-trigger {
-  .nav-playlists-chevron {
-    margin-left: -2px;
-    transition: transform var(--t-fast) var(--ease);
-    &.open { transform: rotate(180deg); }
-  }
-}
-
-// Portalled to <body> (the tab row scrolls, and a scroll container would clip
-// a flyout hanging out of it), so it is placed from the trigger's rect.
-.nav-playlists-flyout {
-  @include v2.menu;
-  position: fixed;
-  min-width: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  z-index: 1100;
-  animation: nav-drop var(--t-base) var(--ease);
-}
-
-.nav-playlists-flyout-label {
-  @include v2.text(eyebrow);
-  color: var(--muted);
-  padding: 6px 12px 4px;
-}
-
-.nav-playlists-flyout-item {
-  @include v2.menu-row;
-  text-decoration: none;
-  white-space: nowrap;
-
-  .nav-playlists-flyout-icon { color: var(--muted); }
-  &:hover { color: var(--text); }
-  &.active { background: var(--surface-2); }
-}
-
-// ── Right: actions, bell, settings, account ──────────────────────────────────
+// ── Right: Create, bell, account ─────────────────────────────────────────────
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-left: auto;
+  gap: 20px;
   flex: none;
   position: relative;
   z-index: 3;
 
-  @include v2.mobile { gap: 6px; }
+  @include compact { gap: 8px; margin-left: auto; }
+  @include v2.mobile { gap: 8px; }
 }
 
-// One shape for every icon control in the bar: 40 square, radius 12, filled.
-// The bell (NotificationBell) and the chat button share it, see below.
+// One shape for every icon control in the bar (20a bell): 40 square, radius
+// 16, an 8% ink wash, icon 24. Chat and the guest gear share it.
 .nav-icon-btn,
 .nav-container .chat-nav-btn,
 .nav-container .notif-bell-btn {
-  @include v2.control(40);
+  display: inline-grid;
+  place-items: center;
   width: 40px;
+  height: 40px;
   padding: 0;
-  justify-content: center;
+  border: 0;
+  border-radius: var(--r-lg);
   flex: none;
   position: relative;
-  background: var(--surface-2);
+  background: color-mix(in srgb, var(--text) 8%, transparent);
   color: var(--text);
   opacity: 1;
+  cursor: pointer;
   text-decoration: none;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+  &:hover { background: color-mix(in srgb, var(--text) 14%, transparent); color: var(--text); }
+  &:active { transform: scale(.98); }
   &.open,
   &[aria-expanded="true"] { background: var(--text); color: var(--bg); }
+
+  .material-symbols-rounded { font-size: 24px; }
 
   // Unread counts ride the top-right corner, ringed in the bar's colour.
   .chat-nav-badge {
@@ -270,10 +213,25 @@
   }
 }
 
+// Over the Home hero on a phone the buttons are media scrims (20a phone).
+@include v2.mobile {
+  :root[data-home-hero] .nav-container {
+    .nav-icon-btn, .chat-nav-btn, .notif-bell-btn {
+      background: var(--media-scrim);
+      color: var(--on-media);
+    }
+  }
+}
+
 // Search and FAQ shortcuts: only where the search box and the FAQ button are not.
 .nav-mobile-discover {
   display: none;
-  @include compact { display: inline-flex; }
+  @include compact { display: inline-grid; }
+}
+
+// Phones (20a): search and the bell only. Chat moves into the account menu.
+@include v2.mobile {
+  .nav-container .chat-nav-btn { display: none; }
 }
 
 .nav-settings-btn {
@@ -286,18 +244,18 @@
 .nav-upload-wrapper {
   position: relative;
 
+  // 20a: 40 tall, 16/12 padding, radius 12, 14/700, a trailing "+" (20).
   .nav-upload-btn {
-    padding: 0 10px 0 14px;
-    gap: 6px;
+    padding: 0 12px 0 16px;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
   }
 
+  // Phones and tablets: the bottom bar's red "+" opens this menu instead
+  // (its sheet still lives here), so the bar shows no button.
   @include compact {
-    .nav-upload-btn {
-      width: 40px;
-      padding: 0;
-      justify-content: center;
-    }
-    .nav-upload-label { display: none; }
+    .nav-upload-btn { display: none; }
   }
 }
 
@@ -321,8 +279,10 @@
   flex: none;
   padding: 0;
   border: 0;
-  border-radius: 50%;
-  background: var(--avatar);
+  // 20a: a rounded square, not a circle, like the bell beside it.
+  border-radius: var(--r-lg);
+  background: var(--accent);
+  color: var(--on-accent);
   cursor: pointer;
   transition: transform var(--t-fast) var(--ease);
 
@@ -331,10 +291,12 @@
   img {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: var(--r-lg);
     object-fit: cover;
     display: block;
   }
+
+  .nav-avatar-initial { font-size: 14px; font-weight: 900; }
 
   @include compact { display: none; }
 }

@@ -7,7 +7,7 @@ import { openButrauthPopup } from '../../utils/butrauthPopup';
 import { toastIn } from '../../utils/toast';
 import { useTranslation, Trans } from 'react-i18next';
 // The shared v2 dialog, with the same warm-up prompt pieces as graduation.
-import { Button, Dialog, Icon } from '../v2/ui';
+import { Button, Dialog } from '../v2/ui';
 import './GraduationPrompt.scss';
 
 // Every toast from this module is headed "Your name"; the message becomes the
@@ -122,7 +122,6 @@ export default function HandleTakenPrompt() {
         </>
       )}
     >
-      <span className="inc-prompt-icon is-accent" aria-hidden="true"><Icon name="person_off" size={28} /></span>
       <p className="inc-prompt-lede">
         <Trans i18nKey="incubation.handleTaken.lede" components={{ b: <strong /> }} />
       </p>

@@ -3,7 +3,7 @@
 // The bar above both Groups lists (communities and badges). It lives with the
 // sort control because BOTH tabs use it.
 
-// Intro sentence above the bar.
+// Intro sentence above the bar (the Badges tab, 41c).
 .groups-intro {
   margin: 0 0 14px;
   max-width: 680px;
@@ -12,7 +12,50 @@
   b, strong { color: var(--text); font-weight: 700; }
 }
 
-// Search on the left, the create button on the right (19d / 40b).
+// 19d: one wrapping row of 36px controls: the sorts, a divider, the topics,
+// and the search at the end.
+.groups-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+
+  .group-sort { margin: 0; }
+
+  &__sep { align-self: stretch; width: 1px; min-height: 36px; margin: 0 4px; background: var(--border); }
+
+  @include v2.mobile {
+    flex-wrap: nowrap;
+    @include v2.scroll-x;
+    margin-bottom: 16px;
+    .groups-search { order: -1; }
+    // One scroller for the whole row: the sorts inside it do not scroll again.
+    .group-sort, .group-sort-chips { flex: none; overflow: visible; }
+  }
+}
+
+.groups-topics { display: flex; flex-wrap: wrap; gap: 8px; @include v2.mobile { flex-wrap: nowrap; } }
+
+.groups-topic {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  flex: none;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  &:hover { background: var(--bg-hover); }
+  &:active { transform: scale(.98); }
+  &.is-on { border-color: var(--cyan); background: var(--cyan-tint); color: var(--cyan); font-weight: 700; }
+}
+
+// Search, the last control of the row (and the first of the Badges bar).
 .groups-bar {
   display: flex;
   align-items: center;
@@ -23,14 +66,15 @@
 }
 
 .groups-search {
-  flex: 0 1 400px;
+  flex: 0 1 240px;
+  margin-left: auto;
   min-width: 0;
-  height: 44px;
+  height: 36px;
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  border-radius: var(--r-lg);
+  border-radius: var(--r-md);
   background: var(--surface);
   border: 2px solid transparent;
   color: var(--muted);
@@ -46,36 +90,27 @@
     background: transparent;
     color: var(--text);
     font: inherit;
-    font-size: 14px;
+    font-size: 13px;
     outline: none;
     &::placeholder { color: var(--muted); }
   }
 
-  @include v2.mobile { flex: 1 1 100%; }
+  @include v2.mobile { flex: 0 0 200px; margin-left: 0; }
 }
 
-.groups-create {
-  margin-left: auto;
-
-  // A locked create button. aria-disabled rather than `disabled`, so it can
-  // still be hovered and explain itself.
-  &.is-locked { opacity: .45; cursor: not-allowed; filter: none; }
-
-  @include v2.mobile { margin-left: 0; flex: 1; }
-}
-
-.groups-locked { margin-bottom: 10px; }
-
-// Sort: a chip per field, then the direction.
+// Sort: a chip per field (36 tall, 13px bold, 19d), then the direction.
 .group-sort {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   margin-bottom: 16px;
   min-width: 0;
+
+  .v2-chip { height: 36px; border-radius: var(--r-md); padding: 0 14px; font-size: 13px; }
+  .group-sort-dir { width: 36px; height: 36px; border-radius: var(--r-md); }
 }
 
-.group-sort-chips { flex: 0 1 auto; min-width: 0; }
+.group-sort-chips { flex: 0 1 auto; min-width: 0; gap: 8px; }
 
 .group-sort-dir { flex: none; }
 

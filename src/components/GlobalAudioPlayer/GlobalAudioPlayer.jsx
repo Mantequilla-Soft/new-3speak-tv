@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo, useSyncExternalStore } from 'react';
 import { getHiveUrl } from '../../utils/hiveNode';
 import { createPortal } from 'react-dom';
 import axios from 'axios';
@@ -35,6 +35,7 @@ import { toastIn } from '../../utils/toast';
 import useReblog from '../../hooks/useReblog';
 import AudioCommentPanel from './AudioCommentPanel';
 import AudioHypeButton from './AudioHypeButton';
+import FollowChip from './FollowChip';
 import useAudioComments from './useAudioComments';
 import { recordWatch } from '../../utils/watchHistory';
 import {
@@ -47,7 +48,8 @@ import { attach, detach, canRoute, markNoCors, webAudioSupported, warmUp } from 
 import PlayerMenu from './PlayerMenu';
 import { openAudioPip, watchAudioPip, useAudioPipWindow } from './AudioPip';
 import { PortalDocContext } from '../../utils/portalDocument';
-import { ClipForm, CopyAtOption, EpisodeShareOptions } from './PlayerShare';
+import { ClipForm, CopyAtOption, EpisodeShareOptions, ShareTile, AppShareTiles } from './PlayerShare';
+import { QRCodeSVG } from 'qrcode.react';
 import { openEmbedCode } from '../Embed/EmbedCodeModal';
 import { notifyMediaPlay, onMediaPlay } from '../../utils/mediaCoordinator';
 import { trackArtist } from '../../utils/audioTrack';
@@ -181,6 +183,14 @@ function srtT(t) {
   return m ? +m[1] * 3600 + +m[2] * 60 + +m[3] + +m[4] / 1000 : 0;
 }
 
+const PHONE_QUERY = '(max-width: 767px)';
+const subscribePhone = (cb) => {
+  const m = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia(PHONE_QUERY) : null;
+  m?.addEventListener?.('change', cb);
+  return () => m?.removeEventListener?.('change', cb);
+};
+const isPhone = () => !!(typeof window !== 'undefined' && window.matchMedia?.(PHONE_QUERY)?.matches);
+
 // A small tool button of the full player (speed, sleep timer, effects, cast,
 // offline copy): an icon, and a short value when there is one.
 function ToolChip({ icon, text, className, ...rest }) {
@@ -201,7 +211,7 @@ function PmRow({ icon, label, sub, onClick, danger, disabled }) {
         <b>{label}</b>
         {sub && <small>{sub}</small>}
       </span>
-      <Icon name="chevron_right" size={20} className="audio-pm-row__go" />
+      <Icon name="chevron_right" size={18} className="audio-pm-row__go" />
     </button>
   );
 }
@@ -1288,6 +1298,10 @@ function GlobalAudioPlayer() {
   const [commentsRefresh, setCommentsRefresh] = useState(0);
   const comments = useAudioComments(audioCurrent?.owner, audioCurrent?.post_permlink, showExpanded && !!audioCurrent?.post_permlink, commentsRefresh);
   const [reportOpen, setReportOpen] = useState(false);
+  // The full player's Repeat button (27a): the track starts over at its end.
+  const [repeat, setRepeat] = useState(false);
+  // A phone (< 768): the menus are bottom sheets of rows (27d).
+  const phone = useSyncExternalStore(subscribePhone, isPhone, () => false);
 
   // The overlay takes the focus when it opens, and gives it back to the bar's
   // open button when it closes; the page under it doesn't scroll meanwhile.
@@ -1322,8 +1336,32 @@ function GlobalAudioPlayer() {
       // The routed element always asks for CORS: a host without it then still plays on
       // the plain one. On the plain one setAudioSrc decides per source.
       crossOrigin={routed ? 'anonymous' : undefined}
+      loop={repeat}
       style={audioCurrent ? undefined : { display: 'none' }}
     />
+  );
+
+  // Shuffle what is up next (27a): the playing track keeps its place, the rest
+  // get a new order, made of the usual moves so the queue is saved as always.
+  const shuffleable = audioQueue.filter(i => i._id !== audioCurrent?._id).length > 1;
+  const shuffleQueue = () => {
+    const { audioQueue: q, audioCurrent: cur } = useAppStore.getState();
+    const keep = q.findIndex(i => i._id === cur?._id);
+    const rest = q.filter((_, i) => i !== keep);
+    for (let i = rest.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [rest[i], rest[j]] = [rest[j], rest[i]];
+    }
+    const order = keep >= 0 ? [...rest.slice(0, keep), q[keep], ...rest.slice(keep)] : rest;
+    order.forEach((item, k) => {
+      const from = useAppStore.getState().audioQueue.findIndex(i => i._id === item._id);
+      if (from >= 0 && from !== k) audioMoveInQueue(from, k);
+    });
+  };
+  const shuffleButton = (
+    <Button size={32} icon="shuffle" className="audio-queue-shuffle" onClick={shuffleQueue} disabled={!shuffleable} title={t('audio.player.shuffle')}>
+      {t('audio.player.shuffle')}
+    </Button>
   );
 
   const titleOf = (item) => item?.title || t('audio.untitled');
@@ -1554,23 +1592,30 @@ function GlobalAudioPlayer() {
   };
 
   const playLabel = audioIsPlaying ? t('common.actions.pause') : t('common.actions.play');
-  const transport = (big) => (
+  // The bar (27c): previous, play, next. The full player (27a): shuffle, back
+  // 10, play, forward 10, repeat; a live stream keeps previous and next there.
+  const playButton = (big) => (
+    <button type="button" className="audio-np-play-btn gap-play" onClick={togglePlay} aria-label={playLabel}><Icon name={audioIsPlaying ? 'pause' : 'play_arrow'} size={big ? 44 : 28} fill /></button>
+  );
+  const transport = (big) => (big && !isLive ? (
+    <>
+      <button type="button" className="audio-np-btn audio-np-shuffle-btn gap-tbtn" onClick={shuffleQueue} disabled={!shuffleable} aria-label={t('audio.player.shuffle')} title={t('audio.player.shuffle')}><Icon name="shuffle" size={24} /></button>
+      <button type="button" className="audio-np-btn audio-np-skip-btn gap-tbtn" onClick={() => skipBy(-SKIP_BACK)} aria-label={t('audio.player.skipBack', { seconds: SKIP_BACK })} title={t('audio.player.skipBack', { seconds: SKIP_BACK })}>
+        <Icon name={`replay_${SKIP_BACK}`} size={26} />
+      </button>
+      {playButton(true)}
+      <button type="button" className="audio-np-btn audio-np-skip-btn gap-tbtn" onClick={() => skipBy(SKIP_FORWARD)} aria-label={t('audio.player.skipForward', { seconds: SKIP_FORWARD })} title={t('audio.player.skipForward', { seconds: SKIP_FORWARD })}>
+        <Icon name={`forward_${SKIP_FORWARD}`} size={26} />
+      </button>
+      <button type="button" className={cx('audio-np-btn audio-np-repeat-btn gap-tbtn', repeat && 'is-on')} onClick={() => setRepeat(r => !r)} aria-pressed={repeat} aria-label={t('audio.player.repeat')} title={t('audio.player.repeat')}><Icon name={repeat ? 'repeat_one' : 'repeat'} size={24} /></button>
+    </>
+  ) : (
     <>
       <button type="button" className="audio-np-btn audio-np-track-btn gap-tbtn" onClick={playPrev} aria-label={t('audio.player.previous')} title={t('audio.player.previous')}><Icon name="skip_previous" size={big ? 26 : 24} fill /></button>
-      {!isLive && (
-        <button type="button" className="audio-np-btn audio-np-skip-btn gap-tbtn" onClick={() => skipBy(-SKIP_BACK)} aria-label={t('audio.player.skipBack', { seconds: SKIP_BACK })} title={t('audio.player.skipBack', { seconds: SKIP_BACK })}>
-          <Icon name="replay" size={big ? 26 : 22} />
-        </button>
-      )}
-      <button type="button" className="audio-np-play-btn gap-play" onClick={togglePlay} aria-label={playLabel}><Icon name={audioIsPlaying ? 'pause' : 'play_arrow'} size={big ? 44 : 28} fill /></button>
-      {!isLive && (
-        <button type="button" className="audio-np-btn audio-np-skip-btn gap-tbtn" onClick={() => skipBy(SKIP_FORWARD)} aria-label={t('audio.player.skipForward', { seconds: SKIP_FORWARD })} title={t('audio.player.skipForward', { seconds: SKIP_FORWARD })}>
-          <Icon name="replay" size={big ? 26 : 22} className="gap-mirror" />
-        </button>
-      )}
+      {playButton(big)}
       <button type="button" className="audio-np-btn audio-np-track-btn gap-tbtn" onClick={playNext} aria-label={t('audio.player.next')} title={t('audio.player.next')}><Icon name="skip_next" size={big ? 26 : 24} fill /></button>
     </>
-  );
+  ));
 
   // The seek bar where there is no waveform (outside episodes), with chapter ticks.
   const progressBar = (
@@ -1846,6 +1891,7 @@ function GlobalAudioPlayer() {
                 {nowPlaying.plays > 0 && <span className="gap-hero__meta">· {t('audio.tile.plays', { count: nowPlaying.plays })}</span>}
                 {post && <span className="gap-hero__meta gap-hero__money"><PayoutAmount amount={npPayout} size={12} /></span>}
                 {post && <span className="gap-hero__meta gap-hero__votes"><UpvoteCount count={npVoteCount} voted={npIsVoted} onClick={openVote} size={12} /></span>}
+                {!nowPlaying.external && loggedIn && <FollowChip author={nowPlaying.owner} className="gap-hero__follow" />}
               </div>
               {clipChip}
             </div>
@@ -1939,7 +1985,7 @@ function GlobalAudioPlayer() {
             <div className={cx('gap-transport', !isLive && 'has-skip')}>{transport(true)}</div>
             <div className="gap-docks">
               {post && <AudioHypeButton author={nowPlaying.owner} permlink={post} variant="tile" />}
-              {post && <DockTile className="gap-tile" icon="chat_bubble" label={commentCount > 0 ? String(commentCount) : t('audio.item.comments')} active={activeTab === 'comments'} tone="cyan" fill={false} onClick={openComments} aria-label={t('audio.item.comments')} />}
+              {post && <DockTile className="gap-tile" icon="chat_bubble" label={String(commentCount || 0)} active={activeTab === 'comments'} tone="cyan" fill={false} onClick={openComments} aria-label={t('audio.item.comments')} />}
               {canSave && <DockTile className="gap-tile" icon="playlist_add" label={t('common.actions.save')} onClick={openPlaylist} title={t('audio.player.playlist')} />}
               {canTip && <DockTile className="gap-tile" icon="volunteer_activism" label={t('audio.post.tip')} onClick={openTip} title={nowPlaying.external && !post ? t('audio.podcasts.tip.button') : t('audio.post.tip')} />}
               {canShare && <DockTile className="gap-tile" icon="ios_share" label={t('common.actions.share')} active={shareOpen} tone="cyan" fill={false} onClick={toggleMenu('share')} aria-haspopup="dialog" />}
@@ -1953,6 +1999,7 @@ function GlobalAudioPlayer() {
             <section className={cx(panel('queue'), 'audio-np-queue-inline')} aria-label={t('audio.player.queue')}>
               <div className="gap-panel__head">
                 <b>{t('audio.player.upNext')}{audioQueue.length > 0 && ` · ${t('audio.page.tracks', { count: audioQueue.length })}`}</b>
+                {audioQueue.length > 1 && shuffleButton}
                 {queueClear}
               </div>
               {queueList}
@@ -2113,6 +2160,35 @@ function GlobalAudioPlayer() {
     </div>
   );
 
+  // ── The pop-out window (27c, 24b): cover, title, progress, four buttons ──
+  const backToPage = () => { togglePip(); audioSetExpanded(true); };
+  const pipCard = (
+    <div className={cx('audio-now-playing gap-pip', isLive && 'is-live')}>
+      <div className={cx('gap-pip__art', audioIsPlaying && 'is-playing')}>
+        <img src={heroArt(nowPlaying)} alt="" onError={thumbFallback(nowPlaying)} />
+        <button type="button" className="gap-pip__open" onClick={backToPage} aria-label={t('audio.player.pipClose')} title={t('audio.player.pipClose')}>
+          <Icon name="open_in_full" size={18} />
+        </button>
+      </div>
+      <b className="gap-pip__title" title={titleOf(nowPlaying)}>{titleOf(nowPlaying)}</b>
+      {progressBar}
+      <div className="gap-pip__btns">
+        {!isLive && (
+          <button type="button" className="gap-pip__btn" onClick={() => skipBy(-SKIP_BACK)} aria-label={t('audio.player.skipBack', { seconds: SKIP_BACK })} title={t('audio.player.skipBack', { seconds: SKIP_BACK })}>
+            <Icon name={`replay_${SKIP_BACK}`} size={24} fill />
+          </button>
+        )}
+        <button type="button" className="gap-pip__btn is-play" onClick={togglePlay} aria-label={playLabel}><Icon name={audioIsPlaying ? 'pause' : 'play_arrow'} size={24} fill /></button>
+        {!isLive && (
+          <button type="button" className="gap-pip__btn" onClick={() => skipBy(SKIP_FORWARD)} aria-label={t('audio.player.skipForward', { seconds: SKIP_FORWARD })} title={t('audio.player.skipForward', { seconds: SKIP_FORWARD })}>
+            <Icon name={`forward_${SKIP_FORWARD}`} size={24} fill />
+          </button>
+        )}
+        <button type="button" className="gap-pip__btn" onClick={togglePip} aria-label={t('audio.player.pipClose')} title={t('audio.player.pipClose')}><Icon name="close" size={24} /></button>
+      </div>
+    </div>
+  );
+
   // The options of the speed and sleep menus, shared with the Player menu.
   const speedOptions = (closeAfter) => (
     <div className="audio-pm-options audio-pm-chips" role="radiogroup" aria-label={t('audio.player.speed')}>
@@ -2133,11 +2209,15 @@ function GlobalAudioPlayer() {
       {SLEEP_OPTIONS.filter(o => !(o === 'end' && isLive)).map((o) => {
         const active = o === 0 ? !sleep : o === 'end' ? sleep?.mode === 'end' : sleep?.mode === 'minutes' && sleep.minutes === o;
         const label = o === 0 ? t('audio.player.sleepOff') : o === 'end' ? t('audio.player.sleepEnd') : t('audio.player.sleepMinutes', { minutes: o });
+        // The chips show the short form (27b: "15 min", "End"); the full one is their name.
+        const short = o === 0 ? label : o === 'end' ? t('audio.player.sleepEndShort') : t('audio.player.sleepMinutesShort', { minutes: o });
         return (
           <button
             key={String(o)}
             type="button"
             role="radio"
+            aria-label={label}
+            title={label}
             aria-checked={active}
             className={cx('audio-pm-choice', active && 'is-active')}
             onClick={() => {
@@ -2147,7 +2227,7 @@ function GlobalAudioPlayer() {
               setSleep(next);
               if (closeAfter) closeMenu();
             }}
-          >{label}</button>
+          >{short}</button>
         );
       })}
     </div>
@@ -2174,27 +2254,43 @@ function GlobalAudioPlayer() {
         </div>
       )}
 
-      {portalIfDocked(showExpanded ? full : bar)}
+      {portalIfDocked(inPip ? pipCard : showExpanded ? full : bar)}
 
       {toHost(<>
       {menu?.name === 'player' && (
-        <PlayerMenu anchor={menu.anchor} title={t('audio.page.tabPlayer')} onClose={closeMenu} wide>
-          {!isLive && (
+        <PlayerMenu anchor={menu.anchor} title={phone ? titleOf(nowPlaying) : t('audio.page.tabPlayer')} onClose={closeMenu} wide>
+          {/* A desktop popover holds the speed and sleep choices; the phone's
+              sheet lists them as rows that open their own sheets (27b, 27d). */}
+          {!phone && !isLive && (
             <>
               <div className="v2-eyebrow audio-pm-label">{t('audio.player.speed')}</div>
               {speedOptions(false)}
             </>
           )}
-          <div className="v2-eyebrow audio-pm-label">{t('audio.player.sleep')}</div>
-          {sleepOptions(false)}
+          {!phone && (
+            <>
+              <div className="v2-eyebrow audio-pm-label">{t('audio.player.sleep')}</div>
+              {sleepOptions(false)}
+            </>
+          )}
           <div className="audio-pm-rows">
-            {canSave && <PmRow icon="playlist_add" label={t('audio.player.playlist')} onClick={() => { closeMenu(); openPlaylist(); }} />}
+            {phone && !isLive && <PmRow icon="speed" label={t('audio.player.speed')} sub={formatSpeed(speed)} onClick={() => setMenu({ name: 'speed', anchor: menu.anchor })} />}
+            {phone && (
+              <PmRow
+                icon="bedtime"
+                label={t('audio.player.sleep')}
+                sub={sleepLabel ? t('audio.player.sleepLeft', { time: sleepLabel }) : sleep?.mode === 'end' ? t('audio.player.sleepEnd') : t('audio.player.sleepOff')}
+                onClick={() => setMenu({ name: 'sleep', anchor: menu.anchor })}
+              />
+            )}
+            {canSave && <PmRow icon="playlist_add" label={t('engagement.cardMenu.addToPlaylist')} onClick={() => { closeMenu(); openPlaylist(); }} />}
             <PmRow icon={nowPlaying.external ? 'podcasts' : 'person'} label={t('audio.player.goTo', { name: bylineOf(nowPlaying) })} onClick={() => { closeMenu(); goCreator(); }} />
             {!isLive && <PmRow icon={dlSaved ? 'download_done' : 'download'} label={dlSaved ? t('audio.player.downloaded') : t('audio.player.download')} onClick={startDownload} disabled={dlSaved || dlBusy} sub={dlBusy ? t('audio.player.downloading', { pct: dlPct }) : null} />}
             {!isLive && <PmRow icon="equalizer" label={t('audio.player.effects')} onClick={() => setMenu({ name: 'effects', anchor: menu.anchor })} />}
             {castAvailable && !playingLocal && <PmRow icon={HAS_AIRPLAY ? 'airplay' : 'cast'} label={t('audio.player.cast')} onClick={() => { closeMenu(); castNow(); }} />}
             {canShare && <PmRow icon="ios_share" label={t('common.actions.share')} onClick={() => setMenu({ name: 'share', anchor: menu.anchor })} />}
             {post && <PmRow icon="flag" label={t('common.actions.report')} onClick={() => { closeMenu(); setReportOpen(true); }} danger />}
+            <PmRow icon="close" label={t('audio.player.closePlayer')} onClick={() => { closeMenu(); closePlayer(); }} />
           </div>
         </PlayerMenu>
       )}
@@ -2243,7 +2339,7 @@ function GlobalAudioPlayer() {
       )}
 
       {shareOpen && canShare && (
-        <PlayerMenu anchor={menu.anchor} title={t('common.actions.share')} onClose={closeMenu} tone="cyan" wide>
+        <PlayerMenu anchor={menu.anchor} title={t('audio.share.title')} onClose={closeMenu} tone="cyan" wide>
           {nowPlaying.external
             ? <EpisodeShareOptions track={nowPlaying} at={audioCurrentTime} duration={audioDuration} onClose={closeMenu} />
             : <AudioShareDropdown item={nowPlaying} onClose={closeMenu} at={audioCurrentTime} duration={audioDuration} bare />}
@@ -2255,7 +2351,7 @@ function GlobalAudioPlayer() {
       {shareTarget && shareTarget._id !== audioCurrent?._id && (
         <div className="audio-share-overlay" onClick={() => setShareTarget(null)}>
           <div className="audio-share-popup" onClick={e => e.stopPropagation()}>
-            <AudioShareDropdown item={shareTarget} onClose={() => setShareTarget(null)} title={t('common.actions.share')} />
+            <AudioShareDropdown item={shareTarget} onClose={() => setShareTarget(null)} title={t('audio.share.title')} />
           </div>
         </div>
       )}
@@ -2338,6 +2434,7 @@ export function AudioShareDropdown({ item, onClose, title, at, duration, bare })
   const audioPlayerUrl = `https://audio.3speak.tv/play?a=${item?.permlink}`;
   const [hivePermlink, setHivePermlink] = useState(item?.post_permlink || null);
   const [searching, setSearching] = useState(false);
+  const [showQr, setShowQr] = useState(false);
   // Reblog onto the listener's own Hive blog (two taps, hooks/useReblog.js).
   const reblogToast = useMemo(() => toastIn('Audio'), []);
   const reblog = useReblog(author, hivePermlink, reblogToast);
@@ -2388,31 +2485,35 @@ export function AudioShareDropdown({ item, onClose, title, at, duration, bare })
           </span>
         </div>
       )}
+      {at != null && <ClipForm url={threeSpeakUrl} start={Math.floor(at || 0)} duration={duration} onDone={onClose} />}
+      {/* Share targets as tiles (27b): Hive first in cyan, then the links and apps. */}
       <div className="audio-share-list">
-        {hivePermlink && <button type="button" className="audio-share-option" onClick={() => copy(`https://peakd.com/@${author}/${hivePermlink}`, t('audio.share.copiedPeakd'))}><Icon name="content_copy" size={18} /><span>{t('audio.share.copyPeakd')}</span></button>}
-        {searching && !hivePermlink && <span className="audio-share-loading"><Icon name="progress_activity" size={16} className="v2-spin" />{t('audio.share.searchingHive')}</span>}
         {reblog.canReblog && (
-          <button
-            type="button"
-            className={cx('audio-share-option', reblog.armed && 'is-armed')}
+          <ShareTile
+            icon="repeat"
+            tone="cyan"
+            className={cx(reblog.armed && 'is-armed')}
+            label={reblog.label}
+            name={reblog.reblogged ? t('common.reblog.reblogged') : reblog.label}
             onClick={async () => { if (await reblog.press()) onClose(); }}
             disabled={reblog.busy || reblog.reblogged}
-            title={reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title')}
-          >
-            <Icon name="repeat" size={18} /><span>{reblog.label}</span>
-          </button>
+          />
         )}
         {at != null && <CopyAtOption url={threeSpeakUrl} at={at} onDone={onClose} />}
-        <button type="button" className="audio-share-option" onClick={() => copy(audioPlayerUrl, t('audio.share.copiedAudioPlayer'))}><Icon name="headphones" size={18} /><span>{t('audio.share.copyAudioPlayer')}</span></button>
+        {hivePermlink && <ShareTile icon="content_copy" label={t('audio.share.peakd')} name={t('audio.share.copyPeakd')} onClick={() => copy(`https://peakd.com/@${author}/${hivePermlink}`, t('audio.share.copiedPeakd'))} />}
+        <ShareTile icon="headphones" label={t('audio.share.player')} name={t('audio.share.copyAudioPlayer')} onClick={() => copy(audioPlayerUrl, t('audio.share.copiedAudioPlayer'))} />
         {item?.permlink && (
-          <button
-            type="button"
-            className="audio-share-option"
-            onClick={() => { openEmbedCode({ kind: 'audio', id: item.permlink, title: item.title }); onClose(); }}
-          ><Icon name="code" size={18} /><span>{t('chat.share.embedOnWebsite')}</span></button>
+          <ShareTile icon="code" label={t('chat.share.embed')} name={t('chat.share.embedOnWebsite')} onClick={() => { openEmbedCode({ kind: 'audio', id: item.permlink, title: item.title }); onClose(); }} />
         )}
+        <AppShareTiles url={threeSpeakUrl} title={item?.title} />
+        <ShareTile icon="qr_code_2" label={t('audio.share.qr')} name={t('audio.share.qr')} pressed={showQr} onClick={() => setShowQr(v => !v)} />
       </div>
-      {at != null && <ClipForm url={threeSpeakUrl} start={Math.floor(at || 0)} duration={duration} onDone={onClose} />}
+      {searching && !hivePermlink && <span className="audio-share-loading"><Icon name="progress_activity" size={16} className="v2-spin" />{t('audio.share.searchingHive')}</span>}
+      {showQr && (
+        <div className="audio-share-qr">
+          <QRCodeSVG value={threeSpeakUrl} size={160} bgColor="transparent" fgColor="currentColor" />
+        </div>
+      )}
       <div className="audio-share-link">
         <span className="audio-share-url num" title={threeSpeakUrl}>{threeSpeakUrl.replace(/^https?:\/\//, '')}</span>
         <Button variant="cyan" size={36} trailing="content_copy" aria-label={t('audio.share.copy3speak')} title={t('audio.share.copy3speak')} onClick={() => copy(threeSpeakUrl, t('audio.share.copied3speak'))}>

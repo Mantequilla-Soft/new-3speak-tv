@@ -170,9 +170,10 @@ export const Thumb = ({ src, ratio = "16/9", children, radius = 12, alt = "", pl
 );
 
 // DockTile: the action tile grid under the player (vote, comment, tip, save, share…)
-export const DockTile = ({ icon, label, active, tone = "accent", fill, className, ...rest }) => (
+// iconSize: 22 by default; the watch dock (02) draws 24.
+export const DockTile = ({ icon, label, active, tone = "accent", fill, iconSize = 22, className, ...rest }) => (
   <button type="button" className={cx("v2-dock", active && `is-on is-${tone}`, className)} aria-pressed={active ?? undefined} {...rest}>
-    {typeof icon === "string" ? <Icon name={icon} size={22} fill={fill ?? active} /> : renderIcon(icon, 22)}
+    {typeof icon === "string" ? <Icon name={icon} size={iconSize} fill={fill ?? active} /> : renderIcon(icon, iconSize)}
     <span>{label}</span>
   </button>
 );

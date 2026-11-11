@@ -44,7 +44,7 @@
 /* Room for the bottom bar wherever it shows. */
 @media (max-width: 1024px) {
   .container {
-    padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px) + var(--page-pad));
+    padding-bottom: calc(var(--bottom-bar-clearance) + var(--page-pad));
   }
   .container.is-bleed,
   .container:has(.short-main),

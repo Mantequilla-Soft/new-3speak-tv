@@ -6,16 +6,14 @@ import GroupSort, { sortBy } from '../Groups/GroupSort';
 import SkeletonLoader from './SkeletonLoader';
 import './CommunitiesRender.scss';
 import { Link } from 'react-router-dom';
-import CreateCommunity from '../modal/CreateCommunity';
 import { FEED_URL, CHECKER_URL } from '../../utils/config';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import AccountImg from '../HiveAvatar/AccountImg';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
-import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import { toastIn } from '../../utils/toast';
-import { Banner, Button, EmptyState, StatusPill } from '../v2/ui';
+import { Button, EmptyState } from '../v2/ui';
 import { Icon } from '../v2/Icon';
 import { cx } from '../v2/helpers';
 import useJoinedCommunities from '../Groups/useJoinedCommunities';
@@ -25,9 +23,26 @@ import { canSubscribe, setCommunitySubscription } from './communitySubscribe';
 const toast = toastIn('Community');
 
 // The banner strip on top of each card (19d). Bridge's community list carries
-// no cover image, so each card gets one of four flat washes, picked from the
-// name so a community keeps its colour between visits.
+// no cover image, so each card gets one of four colours, drawn as a 135deg
+// fade to the frame colour and picked from the name so a community keeps its
+// colour between visits. The Join button wears the same colour.
 const BANNER_TONES = ['cyan', 'accent', 'ink', 'muted'];
+
+// Topic chips after the sorts (19d). Hive communities carry no topic, so a
+// topic narrows the loaded list to the ones whose title or description talks
+// about it. [tags.labels key, words that count]
+const TOPICS = [
+  ['nature', ['nature', 'wildlife', 'animal', 'outdoor', 'garden', 'plant', 'bird', 'hiking', 'photograph']],
+  ['gaming', ['gam', 'esport', 'splinterlands', 'play']],
+  ['technology', ['tech', 'programming', 'code', 'coding', 'developer', 'software', 'linux', 'science']],
+  ['food', ['food', 'cook', 'recipe', 'kitchen', 'eat', 'vegan', 'bak']],
+  ['music', ['music', 'song', 'band', 'dj', 'beat', 'audio', 'podcast', 'sound']],
+  ['cryptocurrency', ['crypto', 'bitcoin', 'btc', 'finance', 'defi', 'token', 'trading', 'invest', 'leo']],
+];
+const aboutTopic = (c, words) => {
+  const hay = `${c?.title || ''} ${c?.name || ''} ${c?.about || ''}`.toLowerCase();
+  return words.some((w) => new RegExp(`\\b${w}`).test(hay));
+};
 const toneOf = (name = '') => BANNER_TONES[[...name].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7) % BANNER_TONES.length];
 
 const client = getHiveClient();
@@ -90,7 +105,7 @@ function CommunitiesRender({ mine: mineProp, setMine: setMineProp, joinedOnly = 
   });
 
   const [searchQuery, setSearchQuery] = useState(''); // Search query state
-  const [openModal, setOpenModal] = useState(false)
+  const [topic, setTopic] = useState('');
 
   // Fetch communities data
   const generate = async () => {
@@ -262,10 +277,6 @@ function CommunitiesRender({ mine: mineProp, setMine: setMineProp, joinedOnly = 
     }
   };
 
-  const toggleModal = ()=>{
-    setOpenModal( (prev)=> !prev)
-  }
-
   // What the list can be ordered by. Every one of these comes straight from
   // bridge.list_communities, so nothing extra is fetched to offer them.
   // "Videos this week" is the one sort that is not from bridge: it comes from
@@ -281,21 +292,51 @@ function CommunitiesRender({ mine: mineProp, setMine: setMineProp, joinedOnly = 
   ];
 
 
-  const locked = !!incubationHandle;
   const sorted = sortBy(filteredData || [], SORTS, sortField, sortDir, { ids: mine, idOf: (c) => c.name });
-  const shown = joinedOnly ? sorted.filter((c) => mine.has(c.name)) : sorted;
+  const topicWords = TOPICS.find(([id]) => id === topic)?.[1];
+  const shown = sorted
+    .filter((c) => !joinedOnly || mine.has(c.name))
+    .filter((c) => !topicWords || aboutTopic(c, topicWords));
+
+  // The second figure on a card follows the sort, so the number the list is
+  // ordered by is the one you can read; posts this week otherwise (19d).
+  const secondFigure = (c) => {
+    const a = activity[c.name];
+    switch (sortField) {
+      case 'active': return a ? t('communities.directory.videosWeek', { count: a.week || 0, n: formatNumber(a.week || 0) }) : null;
+      case 'authors': return typeof c.num_authors === 'number' ? t('communities.directory.authors', { count: c.num_authors, n: formatNumber(c.num_authors) }) : null;
+      case 'pending': return c.sum_pending > 0 ? <span className="money">{t('communities.directory.pending', { amount: formatNumber(Math.round(c.sum_pending)) })}</span> : null;
+      case 'created': return c.created_at ? <TimeAgo date={c.created_at} short /> : null;
+      default: return typeof c.num_pending === 'number' ? t('communities.page.postsWeek', { count: c.num_pending, n: formatNumber(c.num_pending) }) : null;
+    }
+  };
 
   return (
     <>
     <div className="communities-render">
-      {/* Says what a community IS. The tab label alone assumes you already
-          know, and this list is mostly read by people who do not yet. */}
-      <p className="groups-intro">
-        <Trans i18nKey="communities.directory.intro" components={{ strong: <strong /> }} />
-      </p>
-
-      {/* Search on the left, the create button on the right. */}
-      <div className="groups-bar">
+      {/* 19d: the sorts, a divider, the topics; the search at the end. */}
+      <div className="groups-filters">
+        <GroupSort
+          options={SORTS}
+          field={sortField}
+          direction={sortDir}
+          onFieldChange={setSortField}
+          onDirectionChange={setSortDir}
+        />
+        <span className="groups-filters__sep" aria-hidden="true" />
+        <div className="groups-topics" role="group" aria-label={t('communities.directory.topics')}>
+          {TOPICS.map(([id]) => (
+            <button
+              key={id}
+              type="button"
+              className={cx('groups-topic', topic === id && 'is-on')}
+              aria-pressed={topic === id}
+              onClick={() => setTopic((cur) => (cur === id ? '' : id))}
+            >
+              {t(`tags.labels.${id}`)}
+            </button>
+          ))}
+        </div>
         <label className="groups-search">
           <Icon name="search" size={18} />
           <input
@@ -306,33 +347,7 @@ function CommunitiesRender({ mine: mineProp, setMine: setMineProp, joinedOnly = 
             onChange={handleSearch}
           />
         </label>
-        {/* Creating one is an account_create paid from a Hive account with an
-            active key. An incubating user has neither, so the button says so
-            (and the note under it) rather than failing at the last step of a
-            five-step dialog. */}
-        <Button
-          variant="cyan"
-          size={44}
-          icon="add"
-          className={cx('groups-create', locked && 'is-locked')}
-          onClick={locked ? undefined : toggleModal}
-          aria-disabled={locked ? true : undefined}
-          title={locked ? t('communities.directory.createLocked') : undefined}
-        >
-          {t('communities.directory.create')}
-        </Button>
       </div>
-      {locked && (
-        <Banner tone="neutral" icon="lock" className="groups-locked">{t('communities.directory.createLocked')}</Banner>
-      )}
-
-      <GroupSort
-        options={SORTS}
-        field={sortField}
-        direction={sortDir}
-        onFieldChange={setSortField}
-        onDirectionChange={setSortDir}
-      />
 
       {loading ? (
         <SkeletonLoader />
@@ -364,28 +379,19 @@ function CommunitiesRender({ mine: mineProp, setMine: setMineProp, joinedOnly = 
                   </h3>
                   {community.about && <p className="group-card__about">{community.about}</p>}
                   <div className="group-card__foot">
-                    <div className="group-card__meta">
-                      {/* Each number is dropped rather than shown as zero when
-                          the API omits it: "0 authors" and "we were not told"
-                          are different statements. */}
-                      <div className="group-card__line">
-                        {typeof community.subscribers === 'number' && (
-                          <b>{t('communities.directory.subscribers', { count: community.subscribers, n: formatNumber(community.subscribers) })}</b>
-                        )}
-                        {typeof community.num_authors === 'number' && (
-                          <span>{t('communities.directory.authors', { count: community.num_authors, n: formatNumber(community.num_authors) })}</span>
-                        )}
-                      </div>
-                      <div className="group-card__line is-sub">
-                        {community.sum_pending > 0 && (
-                          <span className="money">{t('communities.directory.pending', { amount: formatNumber(Math.round(community.sum_pending)) })}</span>
-                        )}
-                        {community.created_at && <TimeAgo date={community.created_at} short />}
-                      </div>
-                    </div>
+                    {/* Each number is dropped rather than shown as zero when
+                        the API omits it: "0 authors" and "we were not told"
+                        are different statements. */}
+                    <span className="group-card__meta">
+                      {typeof community.subscribers === 'number' && (
+                        <span>{t('communities.directory.subscribers', { count: community.subscribers, n: formatNumber(community.subscribers) })}</span>
+                      )}
+                      {secondFigure(community) ? <span>{secondFigure(community)}</span> : null}
+                    </span>
                     {joined ? (
-                      // Says why it is at the top of the list.
-                      <StatusPill tone="cyan" icon="check" className="blog-mine">{t('communities.directory.joined')}</StatusPill>
+                      // Leaving a community is a decision for its own page,
+                      // not a stray tap here, so this is a label, not a button.
+                      <span className="group-card__joined blog-mine">{t('communities.directory.joined')}</span>
                     ) : (
                       <Button
                         variant="cyan"
@@ -395,43 +401,10 @@ function CommunitiesRender({ mine: mineProp, setMine: setMineProp, joinedOnly = 
                         disabled={!!joining}
                         onClick={() => handleJoin(community)}
                       >
-                        {t('common.actions.subscribe')}
+                        {t('communities.directory.join')}
                       </Button>
                     )}
                   </div>
-
-                  {/* What is happening there on 3Speak right now: counts, then
-                      the newest videos. Absent for a community with no videos
-                      in the last 30 days, so a quiet card stays compact. */}
-                  {a && (
-                    <div className="group-card__activity">
-                      <div className="group-card__counts">
-                        {a.today > 0 && <span className="is-today">{t('communities.directory.videosToday', { count: a.today, n: formatNumber(a.today) })}</span>}
-                        {a.week > 0
-                          ? <span>{t('communities.directory.videosWeek', { count: a.week, n: formatNumber(a.week) })}</span>
-                          : <span>{t('communities.directory.videosMonth', { count: a.month, n: formatNumber(a.month) })}</span>}
-                      </div>
-                      <div className="group-card__strip">
-                        {a.latest.map((v) => (
-                          <Link
-                            key={`${v.author}/${v.permlink}`}
-                            to={`/@${v.author}/${v.permlink}`}
-                            className="group-card__thumb"
-                            title={t('communities.directory.videoBy', { title: v.title, author: v.author })}
-                          >
-                            {/* The image is the link's only content, so its alt
-                                is the link text. */}
-                            <img
-                              src={fixVideoThumbnail(v)}
-                              alt={v.title || ''}
-                              loading="lazy"
-                              onError={(e) => { e.currentTarget.src = fallbackImg; }}
-                            />
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
               </article>
             );
@@ -439,7 +412,6 @@ function CommunitiesRender({ mine: mineProp, setMine: setMineProp, joinedOnly = 
         </div>
       )}
     </div>
-    {openModal && <CreateCommunity close={toggleModal} isOpen={openModal} /> }
     </>
   );
 }

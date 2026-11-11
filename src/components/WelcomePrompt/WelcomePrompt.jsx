@@ -210,8 +210,11 @@ export default function WelcomePrompt() {
   // Welcome (design 44b / 23a): a step bar on top (§11), the six things, the
   // profile, then interests. No close button and no click-outside: a stray
   // click would burn the one welcome this account ever gets. Escape still
-  // closes it (the listener above).
+  // closes it (the listener above). Under 768px it is a full-screen step page
+  // (.v2-onboard, 23a): cyan bar and eyebrow, a big headline, the primary at
+  // the bottom and the way out as a text link under it.
   const steps = advertiser ? 2 : 3;
+  const skipCls = 'welcome-skip v2-onboard__skip';
 
   return (
     <Dialog
@@ -220,10 +223,10 @@ export default function WelcomePrompt() {
       head={false}
       title={t('app.welcome.title')}
       width={600}
-      className="welcome-modal"
+      className={`welcome-modal v2-onboard is-step-${step}`}
       footer={step === 0 ? (
         <>
-          <Button variant="secondary" className="welcome-skip" onClick={finish}>{t('app.welcome.maybeLater')}</Button>
+          <Button variant="secondary" className={skipCls} onClick={finish}>{t('app.welcome.maybeLater')}</Button>
           <Button variant="primary" next className="welcome-primary" onClick={() => setStep(1)}>
             {advertiser ? t('app.welcome.checkBrandProfile') : t('app.welcome.setUpProfile')}
           </Button>
@@ -233,7 +236,7 @@ export default function WelcomePrompt() {
           // No interests step for an advertiser: they came to book ads, and
           // their feed is not what this account is for.
           <>
-            <Button variant="ghost" className="welcome-skip" onClick={finish} disabled={saving}>
+            <Button variant="ghost" className={skipCls} onClick={finish} disabled={saving}>
               {t('app.welcome.skipForNow')}
             </Button>
             <Button variant="secondary" className="welcome-back" onClick={() => submitBrand()} disabled={saving || uploading}>
@@ -245,7 +248,7 @@ export default function WelcomePrompt() {
           </>
         ) : (
           <>
-            <Button variant="secondary" className="welcome-skip" onClick={finish} disabled={saving}>
+            <Button variant="secondary" className={skipCls} onClick={finish} disabled={saving}>
               {t('app.welcome.skipForNow')}
             </Button>
             <Button variant="primary" next className="welcome-primary" onClick={() => setStep(2)} disabled={uploading} loading={uploading}>
@@ -255,7 +258,7 @@ export default function WelcomePrompt() {
         )
       ) : (
         <>
-          <Button variant="secondary" className="welcome-back" onClick={() => setStep(1)} disabled={saving}>
+          <Button variant="secondary" className={`welcome-back ${skipCls}`} onClick={() => setStep(1)} disabled={saving}>
             {t('common.actions.back')}
           </Button>
           <Button variant="primary" next className="welcome-primary" onClick={submit} disabled={saving || uploading} loading={saving}>
@@ -265,20 +268,20 @@ export default function WelcomePrompt() {
       )}
     >
       <StepBar steps={steps} current={step} />
+      <div className="v2-onboard__eyebrow">
+        {step === 0 ? t('app.welcome.eyebrow') : t('app.welcome.stepOf', { n: step + 1, total: steps })}
+      </div>
       {step === 0 ? (
         <>
           <div className="welcome-hero">
-            <span className="welcome-wave" aria-hidden="true"><Icon name="waving_hand" size={24} /></span>
-            <div>
-              <h2>{advertiser && form.name ? t('app.welcome.titleNamed', { name: form.name }) : t('app.welcome.title')}</h2>
-              <p className="welcome-hero-sub">
-                {advertiser ? (
-                  <Trans i18nKey="app.welcome.advertiserReady" values={{ user }} components={{ b: <strong /> }} />
-                ) : (
-                  <Trans i18nKey="app.welcome.heyUser" values={{ user }} components={{ b: <strong /> }} />
-                )}
-              </p>
-            </div>
+            <h2>{form.name ? t('app.welcome.titleNamed', { name: form.name }) : t('app.welcome.title')}</h2>
+            <p className="welcome-hero-sub">
+              {advertiser ? (
+                <Trans i18nKey="app.welcome.advertiserReady" values={{ user }} components={{ b: <strong /> }} />
+              ) : (
+                <Trans i18nKey="app.welcome.heyUser" values={{ user }} components={{ b: <strong /> }} />
+              )}
+            </p>
           </div>
 
           <div className="welcome-grid">
@@ -319,6 +322,8 @@ export default function WelcomePrompt() {
             uploading={uploading}
             saving={saving}
           />
+
+          {!advertiser && <p className="welcome-fineprint">{t('app.welcome.profileFineprint')}</p>}
         </>
       ) : (
         <>

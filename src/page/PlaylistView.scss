@@ -60,14 +60,15 @@
     }
   }
 
-  .pv-kind { align-self: flex-start; }
+  // "PLAYLIST · PUBLIC": 11/900 on a cyan tint, radius 8 (28d).
+  .pv-kind { align-self: flex-start; height: 20px; padding: 0 9px; border-radius: var(--r-sm); font-size: 11px; letter-spacing: 0; }
 
   .pv-title {
     margin: 0;
     font-size: 40px;
     font-weight: 900;
-    letter-spacing: var(--tracking-title);
-    line-height: 1.05;
+    letter-spacing: -.035em;   // 28d: set as tight as the channel name
+    line-height: 1;
     color: var(--text);
     overflow-wrap: anywhere;
 
@@ -187,12 +188,14 @@
   }
 }
 
+// The list's track (28d): a 16-radius surface tray, 13/700 options.
 .pv-filters.v2-seg {
   background: var(--surface);
+  border-radius: var(--r-lg);
   max-width: 100%;
   @include v2.scroll-x;
 
-  .v2-seg__opt { flex: none; }
+  .v2-seg__opt { flex: none; padding: 0 12px; }
 }
 
 // The owner's Reorder toggle while it is on.

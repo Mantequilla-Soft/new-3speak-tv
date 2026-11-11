@@ -108,8 +108,26 @@
     border-radius: 2px;
     background: color-mix(in srgb, var(--text) 20%, transparent);
 
-    &.done { background: var(--accent); }
+    // 26c: the story's segments are ink, the ones still to come faint.
+    &.done { background: var(--text); }
   }
+}
+
+// 26c: the 3S mark and "Your year on 3Speak" under the segments.
+.recap-brand {
+  position: absolute;
+  top: 30px;
+  left: 16px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  pointer-events: none;
+
+  img { width: 20px; height: 20px; display: block; }
 }
 
 // Invisible halves: tap left to go back, right to go on.

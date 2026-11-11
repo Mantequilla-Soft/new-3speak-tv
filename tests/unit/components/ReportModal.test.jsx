@@ -29,7 +29,12 @@ function mount(props = {}) {
 // The reasons are radio tiles (design 07c/43b) in a group named "Reason".
 const reasonGroup = () => screen.getByRole('radiogroup', { name: 'Reason' })
 const reasonNames = () => within(reasonGroup()).getAllByRole('radio').map((o) => o.querySelector('b').textContent)
-const pick = (user, name) => user.click(within(reasonGroup()).getByRole('radio', { name }))
+// 07c: step 1 picks the reason, "Next: add details" opens step 2 with the
+// details box and the send button.
+const pick = async (user, name) => {
+  await user.click(within(reasonGroup()).getByRole('radio', { name }))
+  await user.click(screen.getByRole('button', { name: 'Next: add details' }))
+}
 const submit = () => screen.getByRole('button', { name: 'Submit Report' })
 
 beforeEach(() => {
@@ -61,9 +66,10 @@ describe('the report window', () => {
     expect(reasonNames()).toEqual(reasons)
   })
 
-  it('cannot be sent without a reason', () => {
+  it('cannot go on to the details without a reason', () => {
     mount()
-    expect(submit()).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Next: add details' })).toBeDisabled()
+    expect(screen.queryByRole('button', { name: 'Submit Report' })).not.toBeInTheDocument()
   })
 
   it('sends the report with its details, remembers it, confirms and closes', async () => {
@@ -124,7 +130,7 @@ describe('the report window', () => {
 
   it('closing forgets the half-filled form', async () => {
     const { user, onClose } = mount()
-    await pick(user, 'Spam or misleading')
+    await user.click(within(reasonGroup()).getByRole('radio', { name: 'Spam or misleading' }))
     expect(within(reasonGroup()).getByRole('radio', { name: 'Spam or misleading' })).toHaveAttribute('aria-checked', 'true')
     await user.click(screen.getByRole('button', { name: 'Close' }))
     expect(onClose).toHaveBeenCalledTimes(1)
@@ -146,6 +152,7 @@ describe('the report window', () => {
   it('BUG: the fields are labelled and the window is a dialog Escape closes', async () => {
     const { user, onClose } = mount()
     expect(reasonGroup()).toBeInTheDocument()
+    await pick(user, 'Other')
     expect(screen.getByRole('textbox', { name: 'Additional details (optional)' })).toBeInTheDocument()
     expect(screen.getByRole('dialog', { name: 'Report Video' })).toBeInTheDocument()
     await user.keyboard('{Escape}')

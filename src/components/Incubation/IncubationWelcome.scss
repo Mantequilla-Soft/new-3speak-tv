@@ -10,23 +10,9 @@
 }
 
 .incw-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin: 4px 0 0;
   @include v2.text(title);
   color: var(--text);
-}
-
-.incw-head-icon {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  flex: none;
-  border-radius: var(--r-md);
-  background: var(--accent-tint-strong);
-  color: var(--accent);
 }
 
 .incw-body {
@@ -98,4 +84,33 @@
 .incw-choose { margin: 6px 0 0; }
 
 // The primary takes the free width of the footer (label left, arrow right).
-.incw .v2-dialog__foot .incw-primary.v2-btn { flex: 1; }
+// 46a: the actions close the card, with no divider above them.
+@include v2.tablet-up {
+  .incw .v2-dialog__foot { border-top: 0; padding-top: 4px; }
+  .incw .v2-dialog__foot .incw-primary.v2-btn { flex: 1; }
+}
+
+// On a phone (23a): a full-screen step page. The step title is the 32
+// headline, its copy the 14 muted line, and the tracks become outlined tiles.
+@include v2.mobile {
+  .incw .v2-dialog__body { gap: 0; }
+
+  .incw-title {
+    margin-top: 8px;
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -.03em;
+    line-height: 1.02;
+  }
+
+  .incw-body {
+    margin-top: 10px;
+
+    p { @include v2.text(body); line-height: 1.5; }
+  }
+
+  .incw-list li { @include v2.text(body); }
+  .incw-body p.incw-aside { @include v2.text(meta); }
+  .incw-choose { margin-top: 20px; }
+  .incw .track-chooser { margin-top: 8px; }
+}

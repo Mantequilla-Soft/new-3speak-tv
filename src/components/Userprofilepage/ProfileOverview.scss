@@ -182,6 +182,36 @@
   }
 }
 
+// ── The channel's own videos (20b) ─────────────────────────────────────────
+// Every card is this creator's, so the creator line, the topic and the stat
+// pills go: a 16px-radius thumbnail, the title, then views and age. As a grid
+// they run four to a row at the full width, 14px apart. "Search this channel"
+// shows its results the same way (.ph-results).
+.profile-overview .pov-section--channel,
+.ph-results {
+  .card-container.card-container { gap: 14px; }
+  &.pov-section--grid .card-container,
+  > .card-container { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+  .card {
+    .img-wrap { border-radius: var(--r-lg); }
+    .card-duration { right: 8px; bottom: 8px; border-radius: var(--r-sm); }
+    .card-avatar,
+    .card-author-group,
+    .card-topic-chip,
+    .card-stats { display: none; }
+    .card-meta > .card-author-group + *::before { content: none; margin: 0; }
+    .card-text { gap: 2px; }
+    h2 { min-height: 0; }
+  }
+
+  @include v2.mobile {
+    &.pov-section--grid .card-container,
+    > .card-container { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .card .img-wrap { border-radius: var(--r-md); }
+  }
+}
+
 // ── The 12-column grid ──────────────────────────────────────────────────────
 // Sections carry a span (lib/profileLayoutGrid.js); narrower ones share a row.
 // Phones and tablets keep one column: every section takes the full row there.

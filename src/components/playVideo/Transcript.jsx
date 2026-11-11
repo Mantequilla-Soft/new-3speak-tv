@@ -228,7 +228,7 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
     el?.scrollIntoView({ block: 'center' });
   }, [matches]);
 
-  useEffect(() => { if (searchOpen) searchRef.current?.focus(); }, [searchOpen]);
+  useEffect(() => { if (searchOpen && !embedded) searchRef.current?.focus(); }, [searchOpen, embedded]);
   // A new video starts with no search.
   useEffect(() => { setSearchOpen(false); setQuery(''); setDraft(null); }, [author, permlink]);
 
@@ -306,12 +306,79 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
     ? t('common.actions.copied')
     : (withTimes ? t('comments.transcript.copyWithTimes') : t('comments.transcript.copyText'));
 
+  // In the side panel (22a) the search is a field that is always there, with the
+  // language at its end; the copy format, copy and edit sit on one row under it.
+  const searchShown = embedded ? !editing : searchOpen;
+  const langSelect = languages.length > 1 && (
+    <select
+      className={cx('v2-input is-select transcript-lang', embedded && 'is-inline')}
+      value={lang || ''}
+      disabled={editing}
+      onChange={(e) => { userPickedRef.current = true; setLang(e.target.value); }}
+      aria-label={t('comments.transcript.languageAria')}
+    >
+      {languages.map((l) => (
+        <option key={l.lang} value={l.lang}>
+          {embedded ? String(l.lang).toUpperCase() : (l.label || languageName(l.lang, i18n.language))}
+        </option>
+      ))}
+    </select>
+  );
+  const timesToggle = !editing && (expanded || embedded) && (
+    <button
+      type="button"
+      className={cx('transcript-times', withTimes && 'active')}
+      onClick={toggleTimes}
+      aria-pressed={withTimes}
+      title={withTimes ? t('comments.transcript.copyingWithTimes') : t('comments.transcript.copyingTextOnly')}
+    >
+      <Icon name={withTimes ? 'toggle_on' : 'toggle_off'} size={24} fill={withTimes} className="transcript-times-switch" />
+      <span className="transcript-times-label">{t('comments.transcript.timecodes')}</span>
+      <span className="transcript-times-state">
+        {withTimes ? t('comments.transcript.copyingWithTimes') : t('comments.transcript.copyingTextOnly')}
+      </span>
+    </button>
+  );
+  const searchField = searchShown && (
+    <div className="transcript-search">
+      <Icon name="search" size={embedded ? 18 : 16} className="transcript-search-icon" />
+      <input
+        ref={searchRef}
+        type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') { if (embedded) setQuery(''); else closeSearch(); }
+          if (e.key === 'Enter' && matches?.length) pick(matches[0]);
+        }}
+        placeholder={embedded ? t('comments.transcript.search') : t('comments.transcript.searchPlaceholder')}
+        aria-label={t('comments.transcript.search')}
+      />
+      {matches && (
+        <span className="transcript-search-count" aria-live="polite">
+          {t('comments.transcript.searchResults', { count: matches.length })}
+        </span>
+      )}
+      {embedded ? langSelect : (
+        <IconButton
+          icon="close"
+          size={28}
+          variant="ghost"
+          className="transcript-search-close"
+          onClick={closeSearch}
+          label={t('comments.transcript.closeSearch')}
+        />
+      )}
+    </div>
+  );
+
   return (
     <section className={cx('transcript', expanded && 'expanded', embedded && 'embedded', editing && 'is-editing')}>
+      {embedded && searchField}
       <div className="transcript-head">
-        {embedded ? null : <h3>{t('comments.transcript.title')}</h3>}
+        {embedded ? timesToggle : <h3>{t('comments.transcript.title')}</h3>}
         <div className="transcript-actions">
-          {languages.length > 1 && (
+          {embedded ? (editing && langSelect) : languages.length > 1 && (
             <select
               className="v2-input is-select transcript-lang"
               value={lang || ''}
@@ -322,7 +389,7 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
               {languages.map((l) => <option key={l.lang} value={l.lang}>{l.label || languageName(l.lang, i18n.language)}</option>)}
             </select>
           )}
-          <IconButton
+          {!embedded && <IconButton
             icon="search"
             size={32}
             variant={searchOpen ? 'secondary' : 'ghost'}
@@ -331,7 +398,7 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
             onClick={() => (searchOpen ? closeSearch() : (setSearchOpen(true), setExpanded(true)))}
             aria-pressed={searchOpen}
             label={t('comments.transcript.search')}
-          />
+          />}
           <IconButton
             icon={copied ? 'check' : 'content_copy'}
             size={32}
@@ -354,52 +421,9 @@ export default function Transcript({ author, permlink, currentTime = 0, onSeek, 
       </div>
 
       {/* Copy format: a switch that says what the copy will carry, before the paste. */}
-      {expanded && !editing && (
-        <button
-          type="button"
-          className={cx('transcript-times', withTimes && 'active')}
-          onClick={toggleTimes}
-          aria-pressed={withTimes}
-          title={withTimes ? t('comments.transcript.copyingWithTimes') : t('comments.transcript.copyingTextOnly')}
-        >
-          <Icon name={withTimes ? 'toggle_on' : 'toggle_off'} size={24} fill={withTimes} className="transcript-times-switch" />
-          <span className="transcript-times-label">{t('comments.transcript.timecodes')}</span>
-          <span className="transcript-times-state">
-            {withTimes ? t('comments.transcript.copyingWithTimes') : t('comments.transcript.copyingTextOnly')}
-          </span>
-        </button>
-      )}
+      {!embedded && timesToggle}
 
-      {searchOpen && (
-        <div className="transcript-search">
-          <Icon name="search" size={16} className="transcript-search-icon" />
-          <input
-            ref={searchRef}
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Escape') closeSearch();
-              if (e.key === 'Enter' && matches?.length) pick(matches[0]);
-            }}
-            placeholder={t('comments.transcript.searchPlaceholder')}
-            aria-label={t('comments.transcript.search')}
-          />
-          {matches && (
-            <span className="transcript-search-count" aria-live="polite">
-              {t('comments.transcript.searchResults', { count: matches.length })}
-            </span>
-          )}
-          <IconButton
-            icon="close"
-            size={28}
-            variant="ghost"
-            className="transcript-search-close"
-            onClick={closeSearch}
-            label={t('comments.transcript.closeSearch')}
-          />
-        </div>
-      )}
+      {!embedded && searchField}
 
       {editing && (
         <div className="transcript-edit-bar">

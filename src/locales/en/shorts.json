@@ -31,7 +31,7 @@
     "interestsTitle": "Only shorts matching your interests",
     "pickInterestsFirst": "Pick some interests first",
     "noInterests": "You haven't picked any interests yet — choose them in Settings",
-    "interestsExhausted": "That's all the shorts for your interests — showing Discover",
+    "interestsExhausted": "That's all the shorts for your interests. Showing Discover.",
     "noInterestMatches": "No shorts match your interests right now.",
     "switchToDiscover": "Switch to Discover",
     "empty": "No shorts available",
@@ -122,7 +122,8 @@
     "viewReplies_one": "View {{count}} reply",
     "viewReplies_other": "View {{count}} replies",
     "hideReplies_one": "Hide {{count}} reply",
-    "hideReplies_other": "Hide {{count}} replies"
+    "hideReplies_other": "Hide {{count}} replies",
+    "joinPlaceholder": "Join the discussion…"
   },
   "storyExpired": {
     "title": "This story has expired",
@@ -147,5 +148,9 @@
   "audiogram": {
     "fullEpisode": "Full episode",
     "listen": "Listen to the full episode: {{title}}"
+  },
+  "panel": {
+    "discussion": "Discussion",
+    "upNext": "Up next"
   }
 }

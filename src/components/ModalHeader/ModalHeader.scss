@@ -24,6 +24,17 @@
     overflow-wrap: anywhere;
   }
 
+  // The 07/17 sheet head: a 4px tone bar before the title.
+  .app-modal-header-bar {
+    width: 4px;
+    height: 22px;
+    border-radius: var(--r-bar);
+    flex: none;
+    background: var(--text);
+    &.is-accent { background: var(--accent); }
+    &.is-cyan { background: var(--cyan); }
+  }
+
   .app-modal-header-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
   .app-modal-header-sub { margin: 0; @include v2.text(meta); color: var(--muted); }
 

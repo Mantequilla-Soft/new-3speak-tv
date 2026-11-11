@@ -304,6 +304,10 @@
     "moreTag": "More #{{tag}}",
     "moreVideos": "More videos",
     "hideControls": "Hide controls",
-    "showControls": "Show controls"
+    "showControls": "Show controls",
+    "watching": "{{count}} watching",
+    "startedAgo": "Started {{when}}",
+    "topSupporters": "Top supporters",
+    "noSupporters": "No boosts yet"
   }
 }

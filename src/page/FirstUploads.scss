@@ -1,11 +1,11 @@
 @use "../styles/v2" as v2;
 
 // Shared by the plain feed pages (First Uploads, New Videos, Trending, Follow Feed,
-// tag feeds): a header with a cyan icon well, then the card grid (49c).
+// tag feeds): a header with a cyan icon well, then the card grid, 12px apart (49c).
 .firstupload-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
 
   .feed-page-header {
@@ -19,6 +19,7 @@
       margin: 0;
       min-width: 0;
       @include v2.text(heading);
+      font-weight: 700; // 49c: 24 bold beside the icon well
       color: var(--text);
     }
 

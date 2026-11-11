@@ -12,8 +12,8 @@
 .shorts-story-feed {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px));
-  max-height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px));
+  height: calc(100vh - var(--shorts-top, var(--topbar-h)) - var(--shorts-bottom-reserve, 0px));
+  max-height: calc(100vh - var(--shorts-top, var(--topbar-h)) - var(--shorts-bottom-reserve, 0px));
   overflow: hidden;
 
   > .shorts-stories {
@@ -181,7 +181,7 @@
 // bottom sheet and the desktop bar is hidden.
 @media (min-width: 769px) {
   body:has(.shorts-story-feed) .shorts-comments-portal .commentsPanel {
-    top: max(var(--topbar-h), var(--stories-bar-bottom, 0px));
-    height: calc(100vh - max(var(--topbar-h), var(--stories-bar-bottom, 0px)) - var(--shorts-bottom-reserve, 0px));
+    top: max(var(--shorts-top, var(--topbar-h)), var(--stories-bar-bottom, 0px));
+    height: calc(100vh - max(var(--shorts-top, var(--topbar-h)), var(--stories-bar-bottom, 0px)) - var(--shorts-bottom-reserve, 0px));
   }
 }

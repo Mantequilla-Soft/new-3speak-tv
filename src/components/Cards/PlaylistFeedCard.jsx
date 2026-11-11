@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Icon } from '../v2/Icon';
 import { getHiveUrl } from '../../utils/hiveNode';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import fallback from '../../assets/image/speak.jpg';
@@ -63,7 +62,7 @@ function PlaylistFeedCard({ playlist }) {
           loading="lazy"
           onError={(e) => { e.currentTarget.src = fallback; }}
         />
-        <span className="pfc-count plc-count"><Icon name="playlist_play" size={14} />{itemCount}</span>
+        <span className="pfc-count plc-count">{itemCount}</span>
         <span className="pfc-tag v2-pill is-media">{t('cards.playlist.tag')}</span>
       </Link>
 

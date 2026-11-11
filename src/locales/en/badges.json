@@ -58,6 +58,7 @@
     "awarding": "Awarding…",
     "held": "Held",
     "award": "Award",
+    "awardNamed": "Award \"{{title}}\"",
     "note": "The badge follows them on Hive, which is what holding it means. You can take it back from the badge’s own page."
   },
   "hive": {

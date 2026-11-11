@@ -51,6 +51,8 @@
     "value": "Value"
   },
   "moreVideos": "More videos",
+  "nextIn": "Next in {{name}}",
+  "fromCommunity": "From {{name}}",
   "vote": {
     "saveFailed": "Could not save your vote"
   },
@@ -117,7 +119,9 @@
   "community": {
     "members_one": "{{count}} Member",
     "members_other": "{{count}} Members",
-    "postedIn": "Posted in"
+    "postedIn": "Posted in",
+    "partOf": "Part of",
+    "position": "{{current}} of {{total}}"
   },
   "tags": {
     "curated": "Curated"
@@ -160,7 +164,8 @@
     "toggleDetails": "Toggle details",
     "followCreator": "Follow creator",
     "closeMenu": "Close menu",
-    "openActions": "Open actions"
+    "openActions": "Open actions",
+    "support": "Support {{name}}"
   },
   "description": {
     "hide": "Hide description",

@@ -3,7 +3,6 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { useAppStore } from '../../lib/store';
 import { markWelcomeDone, resetWelcome, startWelcomeTour, useWelcomeDone } from './welcomeState';
-import mark from '../../assets/image/3S_mark.svg';
 import { Button, Icon, IconButton } from '../v2/ui';
 import './WelcomeBanner.scss';
 
@@ -39,10 +38,11 @@ export default function WelcomeBanner() {
   if (!authChecked || authenticated || done) return null;
 
   return (
-    // The §11 success card with its accent hero tint (design 33d).
-    <section className="welcome-banner v2-success is-accent" aria-labelledby="welcome-banner-title">
+    // The welcome card (design 33d): a 520 wide card with the accent hero
+    // tint, floating in the lower right of a wide screen; in the page above
+    // the feeds on narrower ones.
+    <section className="welcome-banner" aria-labelledby="welcome-banner-title">
       <div className="welcome-banner-head">
-        <img className="welcome-banner-mark" src={mark} alt="" aria-hidden="true" />
         <div className="welcome-banner-titles">
           <h2 id="welcome-banner-title">{t('welcome.banner.title')}</h2>
           <p className="welcome-banner-lead">{t('welcome.banner.lead')}</p>

@@ -24,7 +24,6 @@ import SocialLinks from "../components/Userprofilepage/SocialLinks";
 import LeaderboardBadges from "../components/LeaderboardBadges/LeaderboardBadges";
 import SupportersBadges from "../components/Supporters/SupportersBadges";
 import SupportersList from "../components/Supporters/SupportersList";
-import { useSupporters } from "../lib/supports";
 import HiveBadges from "../components/HiveBadges/HiveBadges";
 import ProfileStreams, { ProfileLiveNow } from "../components/Userprofilepage/ProfileStreams";
 import AddSocialLink_modal, { SOCIAL_LINKS_CHANGED } from "../components/modal/AddSocialLink_modal";
@@ -52,7 +51,7 @@ import ProfileEmptyState from "../components/Userprofilepage/ProfileEmptyState";
 import ProfileEditModal from "../components/WelcomePrompt/ProfileEditModal";
 import { Button, Dialog, Field, Segmented, Progress } from "../components/v2/ui";
 import { Icon } from "../components/v2/Icon";
-import { ProfileTile, ProfileMoreMenu, ProfileTabs } from "../components/Userprofilepage/ProfileActions";
+import { ProfileTile, ProfileMoreMenu, ProfileTabs, ProfileSearch, ProfileSearchResults } from "../components/Userprofilepage/ProfileActions";
 import { requestLayoutEdit } from "../lib/profileLayout";
 import { useTranslation } from "react-i18next";
 
@@ -73,6 +72,8 @@ function ProfilePage() {
   const [searchParams] = useSearchParams();
 
   const [follower, setFollower] = useState(null);
+  // "Search this channel" (20b): filters the uploads this page has loaded.
+  const [channelQuery, setChannelQuery] = useState('');
   const [show, setShow] = useState(() => {
     // Initialize show based on URL tab parameter
     const tab = searchParams.get('tab');
@@ -111,6 +112,7 @@ function ProfilePage() {
   // — see ProfileOverview's openCommunityTab and SnapCard's onOpenTab.
   const selectTab = useCallback((tab, permlink, opts) => {
     setShow(tab);
+    setChannelQuery((q) => (q ? '' : q));
     const params = new URLSearchParams();
     if (tab && tab !== 'overview') params.set('tab', tab);
     if (permlink) params.set('snap', permlink);
@@ -375,16 +377,6 @@ function ProfilePage() {
   });
   const snapCount = snapCountData?.total || 0;
 
-  // Video/shorts counts for their tab headers — SAME query key ProfileStats
-  // uses for the "50 videos / 14 shorts" stat line, so this is a cache hit,
-  // not a second request.
-  const { data: profileCounts } = useQuery({
-    queryKey: ["profile-counts", user],
-    queryFn: async () => (await axios.get(`${CHECKER_URL}/user/${encodeURIComponent(user)}/counts`)).data,
-    enabled: !!user,
-    staleTime: 5 * 60 * 1000,
-    retry: 1,
-  });
   // 🔐 Members-only shelf. Public and unfiltered by entitlement on purpose:
   // it exists to show non-subscribers what they are missing. The tab is hidden
   // entirely when the creator has none, so nobody sees an empty paywall pitch.
@@ -399,24 +391,10 @@ function ProfilePage() {
   const gatedVideos = gatedData?.videos || [];
   const hasGated = gatedVideos.length > 0;
 
-  // Tips on your videos. Always a tab here: this page is
-  // only ever your own profile, so it's where you find out the feature exists.
-  const { data: supportersData } = useSupporters(user);
-  const supporterCount = supportersData?.total || 0;
+  // Tips on your videos: always a tab here (this page is only ever your own
+  // profile, so it's where you find out the feature exists).
 
-  const videoCount = profileCounts?.videos || 0;
-  const shortsCount = profileCounts?.shorts || 0;
 
-  // Audio count for its tab header — the /audio endpoint already returns a
-  // `total` alongside the page of items; limit=1 keeps this a count-only call.
-  const { data: audioCountData } = useQuery({
-    queryKey: ["audio-count", user],
-    queryFn: async () => (await axios.get(`${CHECKER_URL}/audio?owner=${encodeURIComponent(user)}&limit=1`)).data,
-    enabled: !!user,
-    staleTime: 5 * 60 * 1000,
-    retry: 1,
-  });
-  const audioCount = audioCountData?.total || 0;
 
   // Streams tab only exists when there's something to show — a running
   // OpenPods session, or the VOD of a finished one. Counts both.
@@ -494,7 +472,7 @@ function ProfilePage() {
     // The Overview's Shorts section reads this same list. Gated on the Shorts
     // tab alone, the Overview only showed shorts after that tab had been
     // opened in the same visit, and the section vanished again on reload.
-    enabled: !!user && (show === 'shorts' || show === 'overview'),
+    enabled: !!user && (show === 'shorts' || show === 'overview' || !!channelQuery.trim()),
   });
 
   const shortsVideos = useMemo(() => (
@@ -560,16 +538,17 @@ function ProfilePage() {
     } catch { /* clipboard blocked: nothing to do */ }
   };
 
+  // The order of the boards (37a), no counts on the tabs (20b).
   const tabs = [
     { value: 'overview', label: t('profile.tabs.overview') },
-    { value: 'video', label: t('profile.tabs.videos'), count: videoCount },
-    { value: 'shorts', label: t('profile.tabs.shorts'), count: shortsCount },
-    { value: 'audio', label: t('profile.tabs.audio'), count: audioCount },
-    hasGated && { value: 'members', label: t('profile.tabs.members'), count: gatedVideos.length, icon: 'lock' },
-    { value: 'supports', label: t('profile.tabs.supporters'), count: supporterCount },
-    streamCount > 0 && { value: 'streams', label: t('profile.tabs.streams'), count: streamCount },
-    { value: 'community', label: t('profile.tabs.community'), count: snapCount },
+    { value: 'video', label: t('profile.tabs.videos') },
+    { value: 'shorts', label: t('profile.tabs.shorts') },
+    { value: 'audio', label: t('profile.tabs.audio') },
     { value: 'playlists', label: t('profile.tabs.playlists') },
+    { value: 'community', label: t('profile.tabs.community') },
+    streamCount > 0 && { value: 'streams', label: t('profile.tabs.streams') },
+    { value: 'supports', label: t('profile.tabs.supporters') },
+    hasGated && { value: 'members', label: t('profile.tabs.members') },
     { value: 'links', label: t('profile.tabs.links') },
     { value: 'stats', label: t('profile.tabs.analytics') },
   ].filter(Boolean);
@@ -660,6 +639,8 @@ function ProfilePage() {
               title={t('profile.page.more')}
               items={[
                 { icon: 'link', label: t('profile.page.copyProfileLink'), onClick: copyProfileLink },
+                // Wallet left the tab row for "Search this channel" (20b).
+                { icon: 'account_balance_wallet', label: t('common.nav.wallet'), onClick: () => navigate(`/wallet/${user}`) },
                 { icon: 'rss_feed', label: t('profile.page.podcastFeed'), href: `/rss/${user}.xml`, external: true, title: t('profile.page.podcastFeedTitle', { user }), hidden: !user },
                 { icon: 'add_link', label: t('profile.page.linkExternalTitle'), onClick: () => setShowSocialLinkModal(true) },
                 // Your Hive galaxy, same entry as on public profiles (UserProfilePage).
@@ -676,8 +657,7 @@ function ProfilePage() {
         value={show}
         onChange={(v) => selectTab(v)}
         label={t('profile.layout.title')}
-        walletLabel={t('common.nav.wallet')}
-        onWallet={() => navigate(`/wallet/${user}`)}
+        search={<ProfileSearch value={channelQuery} onChange={setChannelQuery} />}
       />
 
       {/* Uploads still encoding (37a): one card, a cyan spinner and a bar each. */}
@@ -711,7 +691,23 @@ function ProfilePage() {
 
       {/* ================= VIDEO LIST / PLAYLISTS ================= */}
       <div className="container-video">
-        {show === "overview" ? (
+        {channelQuery.trim() ? (
+          <ProfileSearchResults
+            query={channelQuery}
+            videos={videoListItems}
+            shorts={shortsVideos}
+            hasMore={!!hasNextPage || !!hasNextShortsPage}
+            loadingMore={isFetchingNextPage || isFetchingNextShortsPage}
+            onMore={() => {
+              if (hasNextPage) fetchNextPage();
+              if (hasNextShortsPage) fetchNextShortsPage();
+            }}
+            getContentForVideo={getContentForVideo}
+            isWatched={isWatched}
+            getViewCount={getViewCount}
+            username={user}
+          />
+        ) : show === "overview" ? (
           <ProfileOverview
             username={user}
             /* /profile IS the signed-in user's own profile, and /p/<self>
@@ -778,21 +774,7 @@ function ProfilePage() {
               <BarLoader />
             ) : (
               <>
-                {/* Special playlists row: Watch Later and Watched */}
-                <div className="special-playlists-row">
-                  {/* Watch Later playlist */}
-                  {playlists.find(p => p.name === WATCH_LATER_NAME) && (
-                    <WatchLaterPlaylistCard
-                      playlist={playlists.find(p => p.name === WATCH_LATER_NAME)}
-                      username={user}
-                    />
-                  )}
-                  {/* Watched Videos pseudo-playlist */}
-                  {watchedCount > 0 && (
-                    <WatchedPlaylistCard count={watchedCount} username={user} />
-                  )}
-                </div>
-                {/* Regular playlists (excluding Watch Later) */}
+                {/* Watch Later and Watched lead the same grid as the rest (28d). */}
                 {playlists.filter(p => p.name !== WATCH_LATER_NAME).length === 0 && watchedCount === 0 && !playlists.find(p => p.name === WATCH_LATER_NAME) ? (
                   <ProfileEmptyState
                     kind="playlists"
@@ -801,7 +783,24 @@ function ProfilePage() {
                     onAction={() => setShowCreateModal(true)}
                   />
                 ) : (
-                  <PlaylistCard playlists={playlists.filter(p => p.name !== WATCH_LATER_NAME)} loading={playlistsLoading} showPrivacyBadge={true} />
+                  <PlaylistCard
+                    playlists={playlists.filter(p => p.name !== WATCH_LATER_NAME)}
+                    loading={playlistsLoading}
+                    showPrivacyBadge={true}
+                    leading={(
+                      <>
+                        {playlists.find(p => p.name === WATCH_LATER_NAME) && (
+                          <WatchLaterPlaylistCard
+                            playlist={playlists.find(p => p.name === WATCH_LATER_NAME)}
+                            username={user}
+                          />
+                        )}
+                        {watchedCount > 0 && (
+                          <WatchedPlaylistCard count={watchedCount} username={user} />
+                        )}
+                      </>
+                    )}
+                  />
                 )}
               </>
             )}

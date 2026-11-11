@@ -258,6 +258,13 @@
         text-decoration: none;
         &:hover { color: var(--accent); }
       }
+      // "Latest snap ·" before the time (20b): the head tightens to the drawn 6px.
+      &:has(.snap-label) { gap: 6px; }
+      .snap-label {
+        @include v2.text(meta);
+        color: var(--muted);
+        white-space: nowrap;
+      }
       .snap-time {
         @include v2.text(meta);
         color: var(--muted);

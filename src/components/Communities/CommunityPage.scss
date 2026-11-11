@@ -44,25 +44,28 @@
     margin-top: 4px;
   }
 
+  // 20c: a surface track (radius 16) of text-only options, 14px bold.
   .community-tabs {
     background: var(--surface);
     border-radius: var(--r-lg);
-    .v2-seg__opt { font-size: 14px; padding: 0 14px; }
+    .v2-seg__opt { font-size: 14px; padding: 0 14px; flex: 0 0 auto; }
     .v2-seg__n { color: var(--accent); opacity: 1; font-family: var(--font-mono); font-weight: 700; }
   }
 
   .community-window {
     width: auto;
-    min-width: 140px;
+    min-width: 128px;
     background-color: var(--surface);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
   }
 
+  // 40b: Surf (secondary) and Upload here (primary), 40 tall with 12px labels.
   .community-toolbar-actions {
     display: flex;
     gap: 8px;
     margin-left: auto;
+    .v2-btn { font-size: 12px; padding: 0 12px; }
   }
 
   @include v2.mobile {
@@ -147,19 +150,9 @@
 
   .community-pinned-icon { color: var(--cyan); }
 
-  .community-pinned-thumb {
-    flex: none;
-    width: 64px;
-    aspect-ratio: 16 / 9;
-    border-radius: var(--r-sm);
-    overflow: hidden;
-    @include v2.thumb-placeholder(6px);
-    img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  }
-
-  .community-pinned-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-
   .community-pinned-title {
+    flex: 1;
+    min-width: 0;
     font-size: 13px;
     font-weight: 700;
     line-height: 1.35;
@@ -167,8 +160,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
-  .community-pinned-author { font-size: 11px; color: var(--muted); }
 
   .community-pinned-badge {
     flex: none;
@@ -188,12 +179,11 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       font-size: 16px;
       font-weight: 900;
+      line-height: 1.3;
       color: var(--text);
-
-      .material-symbols-rounded { color: var(--cyan); }
     }
 
     .community-card-toggle {
@@ -233,6 +223,7 @@
 
   .community-about-line {
     margin: 0 0 8px;
+    line-height: 1.5;
     @include v2.text(body);
     color: var(--muted);
   }
@@ -254,7 +245,7 @@
 
     li {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 10px;
       padding: 8px 0;
       font-size: 14px;
@@ -274,7 +265,6 @@
     color: var(--cyan);
     font-size: 12px;
     font-weight: 700;
-    margin-top: -4px;
   }
 
   // Top creators: a ranked list in the sidebar, a sideways strip on phones.
@@ -352,8 +342,9 @@
       &:hover { background: var(--bg-hover); }
     }
 
-    .community-creator-rank { position: static; width: 16px; text-align: right; flex: none; }
-    .community-creator-avatar img { width: 28px; height: 28px; }
+    .community-creator-rank { display: none; }
+    .community-creator-avatar img { width: 28px; height: 28px; border-radius: var(--r-sm); }
+    .community-creator-name { font-size: 12px; }
     .community-creator-name { flex: 1; min-width: 0; text-align: left; }
   }
 
@@ -375,7 +366,7 @@
     img {
       width: 28px;
       height: 28px;
-      border-radius: 50%;
+      border-radius: var(--r-sm);
       object-fit: cover;
       flex: none;
       background: var(--avatar);
@@ -392,6 +383,19 @@
     }
 
     .community-team-title { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  }
+
+  // Role pill (40b): sentence case, 10/900 on its own tint.
+  .community-team-role {
+    flex: none;
+    padding: 2px 7px;
+    border-radius: var(--r-sm);
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1.4;
+    &.is-accent { background: var(--accent-tint-strong); color: var(--accent); }
+    &.is-cyan { background: var(--cyan-tint-strong); color: var(--cyan); }
+    &.is-muted { background: var(--surface-2); color: var(--muted); }
   }
 
   // Full feed width, like the video tabs: the snaps list caps itself at 720px

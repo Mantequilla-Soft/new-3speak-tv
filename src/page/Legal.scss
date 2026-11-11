@@ -3,9 +3,8 @@
 // How 3Speak handles your data (49a): a sticky table of contents on the left,
 // the document on the right (max 760 wide).
 .legal {
-  max-width: calc(220px + 32px + 760px + 48px);
-  margin: 0 auto;
-  // The app column (.container, App.css) already gives the page padding.
+  // 49a: flush left in the 1280 frame (the app column gives the padding),
+  // the contents at 220, the document at 760.
   padding: 8px 0 64px;
   display: grid;
   grid-template-columns: 220px minmax(0, 760px);
@@ -240,11 +239,13 @@
 
 .legal-body .legal-note { @include v2.text(meta); line-height: 1.5; }
 
-// Short sections as cards side by side.
+// Short sections as cards, two by two (49a: 3, 4, 5 and 8).
 .legal-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+
+  @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
 }
 
 .legal-card {

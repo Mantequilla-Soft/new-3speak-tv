@@ -23,7 +23,7 @@ const actionProps = (item, onClick) => ({
  *
  * tiles / moreTiles / moreRows: [{ id, icon, label, onClick(e, close), active,
  * tone, fill, title, ariaLabel, disabled, lock, danger, wideOnly, narrowOnly,
- * keepOpen }]. `keepOpen` leaves the menu open after the click (the reblog's
+ * keepOpen, primary }]. A `primary` tile is tinted at rest. `keepOpen` leaves the menu open after the click (the reblog's
  * first tap only arms it); the handler gets `close` to shut it itself.
  */
 export default function WatchDock({ tiles, moreTiles = [], moreRows = [], wide, className }) {
@@ -92,11 +92,14 @@ export default function WatchDock({ tiles, moreTiles = [], moreRows = [], wide, 
           <DockTile
             key={item.id}
             icon={item.icon}
+            iconSize={24}
             label={item.label}
             active={item.active}
             tone={item.tone}
             fill={item.fill}
-            className={cx(`wv2-dock__${item.id}`)}
+            // The primary tile (vote) wears the accent tint at rest (02);
+            // aria-pressed still says whether it is on.
+            className={cx(`wv2-dock__${item.id}`, item.primary && 'is-on is-accent', item.primary && item.active && 'is-voted')}
             {...actionProps(item, (e) => item.onClick?.(e, close))}
           />
         ))}

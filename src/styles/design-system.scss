@@ -99,6 +99,10 @@
   --topbar-h: 64px;
   --side-panel-w: 380px;
   --bottom-nav-height: 56px;
+  /* The phone bottom bar floats (20a): 68 tall, this far above the bottom edge
+     (into the home-indicator area on iPhones, 10px elsewhere). */
+  --bottom-nav-float-h: 68px;
+  --bottom-nav-float-gap: max(10px, calc(env(safe-area-inset-bottom, 0px) - 12px));
   /* What a fixed element at the bottom of the screen must clear: the bottom
      bar (56 + the iPhone home-indicator area) where it shows, below 1025px;
      0 on desktop and on the mobile Shorts view, which have no bottom bar. */
@@ -185,7 +189,7 @@
   :root { --page-pad: 16px; }
 }
 @media (max-width: 1024px) {
-  :root { --bottom-bar-clearance: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px)); }
+  :root { --bottom-bar-clearance: calc(var(--bottom-nav-float-h) + var(--bottom-nav-float-gap) + 8px); }
   :root:has(.shorts-mobile-container) { --bottom-bar-clearance: 0px; }
 }
 
@@ -434,6 +438,26 @@ p { text-wrap: pretty; }
   .v2-dialog__panel { width: 100%; max-height: 88vh; max-height: 88dvh; border-radius: 28px 28px 0 0; border-bottom: 0; animation: v2-up var(--t-slow) var(--ease); padding-bottom: env(safe-area-inset-bottom); }
   .v2-dialog__grab { display: block; width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 8px auto 0; flex: none; }
   .v2-dialog__foot .v2-btn { flex: 1; }
+}
+/* Onboarding steps (23a): on desktop an ordinary dialog; under 768px a full
+   screen page on bg instead of a bottom sheet: cyan step bar, a cyan eyebrow
+   (.v2-onboard__eyebrow), a 32 headline, the 56 primary at the bottom and the
+   way out (.v2-onboard__skip) as a muted text link under it. */
+.v2-onboard__eyebrow { display: none; }
+@include v2.mobile {
+  .v2-dialog__panel.v2-onboard { height: 100%; max-height: none; border: 0; border-radius: 0; background: var(--bg); padding-top: env(safe-area-inset-top); }
+  .v2-onboard {
+    .v2-dialog__grab { display: none; }
+    .v2-dialog__body { padding: 32px 20px 12px; }
+    .v2-steps span.is-on { background: var(--cyan); }
+    .v2-onboard__eyebrow { display: block; margin: 20px 0 -4px; font-size: 12px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; color: var(--cyan); }
+    .v2-dialog__foot { flex-direction: column-reverse; align-items: stretch; gap: 0; border-top: 0; padding: 8px 20px calc(12px + env(safe-area-inset-bottom)); }
+    .v2-dialog__foot .v2-btn { flex: none; height: 56px; border-radius: 20px; padding: 0 18px; font-size: 16px; }
+    .v2-dialog__foot .v2-btn + .v2-btn:not(.v2-onboard__skip) { margin-bottom: 8px; }
+    .v2-dialog__foot .v2-btn.v2-onboard__skip { height: 44px; padding: 0; background: transparent; color: var(--muted); font-size: 13px; font-weight: 700; justify-content: flex-start; }
+    .v2-dialog__foot .v2-btn.is-next > .material-symbols-rounded:last-child { font-size: 24px !important; }
+    .v2-input { background-color: var(--surface); } // on bg, fields fill with surface
+  }
 }
 .v2-confirmbar { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 1001; display: flex; align-items: center; gap: 12px; max-width: calc(100vw - 32px);
   padding: 10px 10px 10px 16px; border-radius: var(--r-xl); background: var(--text); color: var(--bg); font-size: 13px; font-weight: 700; box-shadow: var(--shadow-float); animation: v2-rise var(--t-slow) var(--ease);

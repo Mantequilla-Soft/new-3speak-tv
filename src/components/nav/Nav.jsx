@@ -4,11 +4,10 @@ import "./nav.scss";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../lib/store";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef, useState } from "react";
 import NavSearch from "./NavSearch";
 import { Icon } from "../v2/Icon";
-import { useMyPlaylists } from "../../hooks/useMyPlaylists";
+import { OPEN_CREATE_EVENT, useNavTabsOpen } from "./navTabsPref";
 import UploadLinks from "../UploadLinks";
 import { creatorKey, isUploadBlocked, useCreatorSettings } from "../../utils/creatorSettings";
 import useHoverPeek from "../../hooks/useHoverPeek";
@@ -24,90 +23,6 @@ import { ENABLE_BUTRAUTH } from "../../utils/config";
 import { useAvatarUrl } from "../../utils/avatarCache";
 import { isRememberedAdvertiser, rememberAdvertiserAccount, hasAdvertiserProduct } from "../../utils/advertiserAccount";
 import { isWatchPath } from '../../utils/urls';
-
-function NavPlaylistsDropdown({ user, scrollerRef }) {
-  const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
-  const [pos, setPos] = useState({ top: 0, left: 0 });
-  const ref = useRef(null);
-  const flyoutRef = useRef(null);
-  const { data: playlists = [] } = useMyPlaylists({ enabled: !!user });
-  const watchLater = playlists.find((p) => p.name === 'Watch Later');
-  const watchLaterLink = watchLater ? `/playlist/${watchLater.id}` : '/profile?tab=playlists';
-
-  // The tab row scrolls sideways once it runs out of room, and a scroll
-  // container clips BOTH axes — an absolutely positioned flyout under this
-  // trigger would be sliced off at the row's edge. So it hangs off <body> and
-  // is placed from the trigger's box instead.
-  const updatePos = useCallback(() => {
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const width = flyoutRef.current?.offsetWidth || 200; // min-width, before it has rendered
-    setPos({
-      top: Math.round(rect.bottom + 6),
-      // Stays on screen when the trigger has been scrolled near the right edge.
-      left: Math.round(Math.max(8, Math.min(rect.left, window.innerWidth - width - 8))),
-    });
-  }, []);
-
-  // Layout effect, not an effect: placed before the first paint, so it never
-  // flashes in the corner on its way to the trigger.
-  useLayoutEffect(() => {
-    if (!open) return;
-    updatePos();
-    const handleClickOutside = (e) => {
-      // The flyout is no longer inside `ref`, so it has to be excused by hand —
-      // closing on mousedown would unmount the link before its click landed.
-      if (ref.current?.contains(e.target) || flyoutRef.current?.contains(e.target)) return;
-      setOpen(false);
-    };
-    const scroller = scrollerRef?.current;
-    document.addEventListener('mousedown', handleClickOutside);
-    window.addEventListener('resize', updatePos);
-    scroller?.addEventListener('scroll', updatePos, { passive: true });
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      window.removeEventListener('resize', updatePos);
-      scroller?.removeEventListener('scroll', updatePos);
-    };
-  }, [open, updatePos, scrollerRef]);
-
-  return (
-    <div className="nav-playlists-wrapper" ref={ref}>
-      <button type="button" title={t('nav.playlists.tooltip')} className={`nav-tab nav-playlists-trigger${open ? ' open' : ''}`} onClick={() => setOpen((v) => !v)} aria-expanded={open}>
-        <Icon name="playlist_play" size={18} className="nav-tab-icon" />
-        <span>{t('nav.playlists.label')}</span>
-        <Icon name="expand_more" size={18} className={`nav-playlists-chevron${open ? ' open' : ''}`} />
-      </button>
-      {open && createPortal(
-        <div
-          className="nav-playlists-flyout"
-          ref={flyoutRef}
-          style={{ top: `${pos.top}px`, left: `${pos.left}px` }}
-          onClick={() => setOpen(false)}
-        >
-          <div className="nav-playlists-flyout-label" aria-hidden="true">{t('nav.playlists.label')}</div>
-          <Link to={watchLaterLink} className="nav-playlists-flyout-item">
-            <Icon name="schedule" size={18} className="nav-playlists-flyout-icon" />
-            <span>{watchLater?.items?.length > 0 ? t('nav.playlists.watchLaterCount', { n: watchLater.items.length }) : t('nav.playlists.watchLater')}</span>
-          </Link>
-          {user && (
-            <Link to={`/watched/${user}`} className="nav-playlists-flyout-item">
-              <Icon name="history" size={18} className="nav-playlists-flyout-icon" />
-              <span>{t('nav.playlists.watchHistory')}</span>
-            </Link>
-          )}
-          <Link to="/profile?tab=playlists" className="nav-playlists-flyout-item">
-            <Icon name="video_library" size={18} className="nav-playlists-flyout-icon" />
-            <span>{t('nav.playlists.all')}</span>
-          </Link>
-        </div>,
-        document.body
-      )}
-    </div>
-  );
-}
 
 /**
  * "Advertise", left of Share, for advertiser accounts only: one that graduated from
@@ -151,7 +66,14 @@ function NavUploadDropdown() {
   // Desktop dropdown: a mouse resting on Share peeks at it, a click keeps it open,
   // and it fades in and out (hooks/useHoverPeek.js). The bottom sheet is tap only.
   const menu = useHoverPeek({ enabled: !asSheet });
-  const { shown: open, close: closeMenu } = menu;
+  const { shown: open, close: closeMenu, hold } = menu;
+
+  // The bottom bar's red "+" (20a phone) opens this same menu: on phones the
+  // top bar shows no Create button of its own.
+  useEffect(() => {
+    window.addEventListener(OPEN_CREATE_EVENT, hold);
+    return () => window.removeEventListener(OPEN_CREATE_EVENT, hold);
+  }, [hold]);
 
   useEffect(() => {
     const mq = window.matchMedia(UPLOAD_SHEET_QUERY);
@@ -181,11 +103,11 @@ function NavUploadDropdown() {
         type="button"
         className="btn-reset v2-btn v2-btn--primary h40 nav-upload-btn"
         onClick={menu.toggle}
-        title={t('common.actions.share')}
-        aria-label={t('common.actions.share')}
+        title={t('nav.create')}
+        aria-label={t('nav.create')}
         aria-expanded={open}
       >
-        <span className="nav-upload-label">{t('common.actions.share')}</span>
+        <span className="nav-upload-label">{t('nav.create')}</span>
         <Icon name="add" size={20} className="nav-upload-icon" />
       </button>
       {menu.rendered && !asSheet && (
@@ -199,7 +121,7 @@ function NavUploadDropdown() {
         <Dialog
           open={open}
           onClose={menu.close}
-          title={t('common.actions.share')}
+          title={t('nav.create')}
           closeLabel={t('common.actions.close')}
           width={520}
           className="nav-upload-sheet"
@@ -213,15 +135,21 @@ function NavUploadDropdown() {
   );
 }
 
-// Per-browser, like the theme: a choice about how this person wants the bar to
-// look, not something to sync anywhere.
-const NAV_TABS_KEY = '3speak_nav_tabs_open';
+// The section tabs of the bar (20a): a segmented track, text only.
+// Live leads to the live grid; the rest are the app's main sections.
+const SECTION_TABS = [
+  { to: '/', end: true, label: (t) => t('common.nav.home'), tip: 'nav.tabs.overviewTooltip' },
+  { to: '/shorts', label: (t) => t('common.nav.shorts'), tip: 'nav.tabs.shortsTooltip' },
+  { to: '/live', label: (t) => t('nav.tabs.live'), tip: 'nav.tabs.liveTooltip' },
+  { to: '/audio', label: (t) => t('nav.bottom.audio'), tip: 'nav.tabs.audioTooltip' },
+  { to: '/groups', label: (t) => t('nav.bottom.groups'), tip: 'nav.tabs.groupsTooltip' },
+];
 
 function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
   const { t } = useTranslation();
-  const { authenticated, LogOut, user, initializeTheme } = useAppStore();
+  const { authenticated, user, initializeTheme } = useAppStore();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
-  // Only a warm-up user is looked up here; a Hive account always keeps Share.
+  // Only a warm-up user is looked up here; a Hive account always keeps Create.
   const warmupKey = !user && incubationHandle ? creatorKey(null, incubationHandle) : null;
   const warmupUploadBlocked = isUploadBlocked(useCreatorSettings(warmupKey));
   const authChecked = useAppStore((s) => s.authChecked);
@@ -231,34 +159,16 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
   const myAvatar = useAvatarUrl(user, 'small');
   const location = useLocation();
   const [navHidden, setNavHidden] = useState(false);
-  // The page tabs are folded away behind the logo, and whether they are out is
-  // remembered per browser — so someone who wants them can set it once instead of
-  // reaching for the logo on every visit.
-  //
-  // Read in the initialiser rather than in an effect, so the first paint is
-  // already right: setting it afterwards makes the row flick into place on every
-  // load for the people who chose to keep it.
-  const [tabsOpen, setTabsOpen] = useState(() => {
-    try {
-      return localStorage.getItem(NAV_TABS_KEY) === 'true';
-    } catch {
-      // Private mode, or storage switched off. Not being able to remember the
-      // preference is not a reason to fail to render a nav bar.
-      return false;
-    }
-  });
-
-  const toggleTabs = () => {
-    setTabsOpen((open) => {
-      const next = !open;
-      try { localStorage.setItem(NAV_TABS_KEY, String(next)); } catch { /* see above */ }
-      return next;
-    });
-  };
+  // The section tabs are out unless a member folded them away from the
+  // account menu ("Hide pages", 42b). A visitor has no such menu, so always
+  // sees them.
+  const tabsPref = useNavTabsOpen();
+  const tabsOpen = authenticated ? tabsPref : true;
   const [settingsOpen, setSettingsOpen] = useState(false);
   // A mouse resting on the gear peeks at Settings, hung under it (SettingsModal
   // `dropdown`); typing in it, or a click on the gear, keeps it there. A click on the gear with nothing
   // showing opens the usual centred dialog. Never at phone widths (bottom sheet).
+  // Visitors only: a member reaches Settings from the account menu (07d).
   const settingsPeek = useHoverPeek({
     enabled: typeof window !== 'undefined' && !!window.matchMedia?.('(min-width: 641px)').matches,
   });
@@ -272,7 +182,6 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
     onPointerLeave: settingsPeek.hoverProps.onPointerLeave,
   };
   // A real button around the cog, so Settings is reachable from the keyboard.
-  // It carries the class the bare icon had: same box, same look.
   const settingsGear = (
     <button
       type="button"
@@ -281,11 +190,10 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
       title={t('common.nav.settings')}
       aria-label={t('common.nav.settings')}
     >
-      <Icon name="settings" size={22} />
+      <Icon name="settings" size={24} />
     </button>
   );
   const navContainerRef = useRef(null);
-  const navTabsRef = useRef(null);
 
   // Measure nav height and set CSS variables globally
   useEffect(() => {
@@ -306,105 +214,9 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
     document.documentElement.style.setProperty('--nav-top-offset', navHidden ? '0px' : 'var(--nav-height, 50px)');
   }, [navHidden]);
 
-  // Cap the page-tab row at the search box's left edge, and let it scroll
-  // sideways under that cap.
-  //
-  // The search box is centred on the BAR and taken out of the flow (see
-  // nav.scss), so it costs the row no width and CSS here has no way to work out
-  // where its left edge lands — the answer moves with the window, with the
-  // logo/menu cluster to the row's left, and with the box itself, which grows
-  // from 220px to 420px while it has focus. So it is measured, and handed to
-  // the stylesheet as --nav-tabs-max. Without it the last pills simply run
-  // under the box: the row is flex-shrink: 0 and the box paints on top.
-  useEffect(() => {
-    const navEl = navContainerRef.current;
-    const tabsEl = navTabsRef.current;
-    if (!navEl || !tabsEl) return;
-    const searchEl = navEl.querySelector('.navsearch-wrap');
-    if (!searchEl) return;
-
-    // Clear of the box's shadow, and wide enough to swallow the 6px the opening
-    // animation borrows from the row's left edge.
-    const GUTTER = 16;
-    let lastAvail = null;
-
-    // Which way there is more to see, for the fade at the cut edge.
-    const updateEdges = () => {
-      const max = tabsEl.scrollWidth - tabsEl.clientWidth;
-      tabsEl.classList.toggle('can-scroll-left', tabsEl.scrollLeft > 1);
-      tabsEl.classList.toggle('can-scroll-right', tabsEl.scrollLeft < max - 1);
-    };
-
-    const measure = () => {
-      // display: none below the desktop breakpoint — nothing to cap, and every
-      // measurement would read zero.
-      if (!tabsEl.offsetParent) return;
-      // offsetLeft rather than the rect: on the frame the row opens it is
-      // mid-slide, and a rect would read 6px further left than it ends up.
-      const rowLeft = tabsEl.offsetParent === navEl
-        ? navEl.getBoundingClientRect().left + tabsEl.offsetLeft
-        : tabsEl.getBoundingClientRect().left;
-      const avail = Math.max(0, Math.round(searchEl.getBoundingClientRect().left - rowLeft - GUTTER));
-      // Guard the write: the box's width transition fires this a dozen times a
-      // second, and re-setting the same value would notify the observer again.
-      if (avail !== lastAvail) {
-        lastAvail = avail;
-        navEl.style.setProperty('--nav-tabs-max', `${avail}px`);
-      }
-      updateEdges();
-    };
-
-    // A plain mouse only has a vertical wheel. Chrome does hand deltaY to a
-    // scroller that can only move sideways, but hiding this row's vertical
-    // overflow opts it out of that (measured: deltaX scrolls it, deltaY does
-    // nothing), which would leave the pills past the cut edge reachable by
-    // keyboard and trackpad only. Native listener, not onWheel: React's wheel
-    // handlers are passive, so preventDefault there is ignored.
-    const onWheel = (e) => {
-      if (e.deltaX) return; // a trackpad is already scrolling it sideways
-      const max = tabsEl.scrollWidth - tabsEl.clientWidth;
-      if (max <= 0) return;
-      const next = Math.max(0, Math.min(max, tabsEl.scrollLeft + e.deltaY));
-      if (next === tabsEl.scrollLeft) return; // at either end: the page can have it
-      e.preventDefault();
-      // 'instant', not 'auto': 'auto' means "whatever CSS scroll-behavior says",
-      // which here is smooth — every wheel notch would restart a 300ms animation
-      // and the row would crawl. Smooth is wanted only for the active-pill jump.
-      tabsEl.scrollTo({ left: next, behavior: 'instant' });
-    };
-
-    measure();
-    // navEl for the window width, searchEl for the focus grow, tabsEl for the
-    // cap landing (its own width never feeds back into the number above).
-    const ro = new ResizeObserver(measure);
-    ro.observe(navEl);
-    ro.observe(searchEl);
-    ro.observe(tabsEl);
-    tabsEl.addEventListener('scroll', updateEdges, { passive: true });
-    tabsEl.addEventListener('wheel', onWheel, { passive: false });
-    return () => {
-      ro.disconnect();
-      tabsEl.removeEventListener('scroll', updateEdges);
-      tabsEl.removeEventListener('wheel', onWheel);
-    };
-  }, [tabsOpen, authenticated]);
-
-  // The page you are on should be the one you can see, even when it sits past
-  // the right edge of a scrolled row.
-  useEffect(() => {
-    const tabsEl = navTabsRef.current;
-    if (!tabsEl || !tabsEl.offsetParent) return;
-    tabsEl.querySelector('.nav-tab.active')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-  }, [tabsOpen, location.pathname]);
-
-  // Deliberately nothing closes this but the logo. It used to shut on an outside
-  // click and on choosing a page, which is right for a popover but wrong for a
-  // remembered setting: both of them fired within a click or two of opening it,
-  // so the stored value would have been "closed" almost every time it was read.
-
   // Toasts get out of the way of the right-hand nav's panels, and come back on
   // the next click anywhere else. Bound on the document rather than on each
-  // panel because those panels own their open state privately (the Share
+  // panel because those panels own their open state privately (the Create
   // flyout, the bell, the profile drawer) and threading a callback through all
   // of them would be four places to keep in step for one visual rule.
   //
@@ -446,79 +258,50 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
     return () => landscapeQuery.removeEventListener('change', apply);
   }, [location.pathname]);
 
-
-
-   // Initialize theme on mount
-   useEffect(() => {
+  // Initialize theme on mount
+  useEffect(() => {
     initializeTheme();
-   }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-
-
-
-
+  // The account button: the picture, or the first letter on the accent while
+  // there is none (20a draws the "B" tile).
+  const initial = String(user || incubationHandle || '').slice(0, 1).toUpperCase();
 
   return (
-    // The strip (nav-container) is the sticky, page-coloured band; the bar itself
-    // is the 64px surface card inside it (STYLE_GUIDE §4, designs 02/20a/28c).
-    // --nav-height is measured off the strip, so sticky rows below it land
-    // right under the card.
+    // The bar (20a): a translucent card floating 16px under the top of the
+    // window, lined up with the 1280 frame, over whatever is behind it (the
+    // Home hero runs up under it). --nav-height is measured off the strip, so
+    // sticky rows below it land right under the card.
     <nav ref={navContainerRef} className={`nav-container${navHidden ? ' nav-hidden' : ''}`}>
       <div className="nav-bar">
         <div className="nav-left">
-          {/* The logo opens the pages instead of going home — "Overview" below is
-              the way home now. A button, not a link: it goes nowhere, and shipping
-              it as an <a> would put it in the tab order promising navigation. */}
-          <button
-            type="button"
-            className={`nav-logo-btn${tabsOpen ? ' is-open' : ''}`}
-            aria-expanded={tabsOpen}
-            aria-controls="nav-tabs"
-            title={tabsOpen ? t('nav.hidePages') : t('nav.showPages')}
-            onClick={toggleTabs}
-          >
-            <img className="logo" src={mark} alt="3Speak" />
-            {/* The hint that the logo does something, on the side the tabs come out
-                of. Inside the button on purpose: it has to be clickable, and a
-                second button beside it would be two tab stops and two screen-reader
-                announcements for one action. */}
-            <Icon name="chevron_right" size={20} className="nav-logo-chevron" />
-          </button>
+          {/* The logo goes home. Class kept for the welcome tour. */}
+          <Link to="/" className="nav-logo-btn" aria-label="3Speak" title={t('common.nav.home')}>
+            <img className="logo" src={mark} alt="" />
+          </Link>
         </div>
 
         {tabsOpen && (
-        <div className="nav-tabs" id="nav-tabs" ref={navTabsRef}>
-          {/* What the logo used to do. First in the row, so the way home is the
-              first thing under the cursor once the group opens. */}
-          <NavLink to="/" end title={t('nav.tabs.overviewTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-            <Icon name="home" size={18} className="nav-tab-icon" /><span>{t('nav.tabs.overview')}</span>
-          </NavLink>
-          <NavLink to="/shorts" title={t('nav.tabs.shortsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-            <Icon name="smart_display" size={18} className="nav-tab-icon" /><span>{t('common.nav.shorts')}</span>
-          </NavLink>
-          <NavLink to="/audio" title={t('nav.tabs.audioTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-            <Icon name="graphic_eq" size={18} className="nav-tab-icon" /><span>{t('nav.bottom.audio')}</span>
-          </NavLink>
-          {/* Groups, not Badges: badges are one tab of it, alongside communities. */}
-          <NavLink to="/groups" title={t('nav.tabs.groupsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-            <Icon name="groups" size={18} className="nav-tab-icon" /><span>{t('nav.bottom.groups')}</span>
-          </NavLink>
-          {/* "Rankings" rather than "Leaderboard": the page ranks creators by
-              several measures, and the route keeps its old name so existing links
-              still work. */}
-          <NavLink to="/leaderboard" title={t('nav.tabs.rankingsTooltip')} className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}>
-            <Icon name="leaderboard" size={18} className="nav-tab-icon" /><span>{t('app.routes.rankings')}</span>
-          </NavLink>
-          {/* Last, and only when signed in: it is the one tab that lists YOUR
-              things rather than the site's. */}
-          {authenticated && <NavPlaylistsDropdown user={user} scrollerRef={navTabsRef} />}
-        </div>
+          <div className="nav-tabs" id="nav-tabs">
+            {SECTION_TABS.map((tab) => (
+              <NavLink
+                key={tab.to}
+                to={tab.to}
+                end={tab.end}
+                title={t(tab.tip)}
+                className={({ isActive }) => `nav-tab${isActive ? ' active' : ''}`}
+              >
+                {tab.label(t)}
+              </NavLink>
+            ))}
+          </div>
         )}
 
         <div className="phone-nav-left">
           <Link to="/" aria-label="3Speak"><img className="logo" src={mark} alt="" /></Link>
         </div>
-        {/* Centred on the bar on desktop (nav.scss), after the logo on tablet */}
+        {/* In the flow after the tabs, pushed right next to Create (NavSearch.scss) */}
         <NavSearch />
 
         {authenticated ? (
@@ -532,14 +315,13 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
                 gets the "contact support" popup from the entries instead. */}
             {!warmupUploadBlocked && <NavUploadDropdown />}
             <Link to="/discover" className="nav-icon-btn nav-mobile-discover" title={t('app.routes.discover')} aria-label={t('app.routes.discover')}>
-              <Icon name="search" size={22} />
+              <Icon name="search" size={24} />
             </Link>
             <ChatButton />
             {/* One bell or the other. Hive's notifications need a Hive account,
                 so an incubating user's bell reads from the incubation service
                 instead of showing them a permanently empty one. */}
             {incubationHandle ? <IncubationBell /> : <NotificationBell />}
-            {settingsGear}
             <button
               type="button"
               className="btn-reset nav-avatar-wrap"
@@ -548,19 +330,19 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
               aria-label={t('nav.profile.accountMenu')}
               aria-haspopup="menu"
             >
-              <img src={myAvatar} alt="" />
+              {myAvatar ? <img src={myAvatar} alt="" /> : <span className="nav-avatar-initial" aria-hidden="true">{initial}</span>}
               <PremiumBadge username={user} size={10} className="nav-avatar-premium" />
             </button>
           </div>
         ) : (
           <div className="nav-right" onClickCapture={hideToastLayer}>
             <Link to="/discover" className="nav-icon-btn nav-mobile-discover" title={t('app.routes.discover')} aria-label={t('app.routes.discover')}>
-              <Icon name="search" size={22} />
+              <Icon name="search" size={24} />
             </Link>
             {/* Help for first-time visitors: a button on desktop, a bare ? icon
                 on phones and tablets, where the button is hidden. */}
             <Link to="/faq" className="nav-icon-btn nav-mobile-discover nav-guest-faq-icon" title={t('nav.faqAria')} aria-label={t('nav.faqAria')}>
-              <Icon name="help" size={22} />
+              <Icon name="help" size={24} />
             </Link>
             <Link to="/faq" className="v2-btn v2-btn--ghost h40 nav-guest-about" aria-label={t('nav.faqAria')}>{t('nav.faqLink')}</Link>
             {/* No guest buttons until the stored session has been read: a logged-in

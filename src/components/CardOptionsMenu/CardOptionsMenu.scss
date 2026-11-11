@@ -62,19 +62,19 @@
   }
 }
 
-// The menu: a floating card of two tiles, then rows (07d). Portalled to <body>
-// so the card's overflow and stacking context can't clip it.
+// The menu (28b): a floating card, 220 wide, radius 20, padding 6; rows of an
+// 18px icon and a 13/700 label (padding 8, radius 12), Report in the accent.
+// Portalled to <body> so the card's overflow and stacking context can't clip it.
 .card-options-menu {
   position: fixed;
   z-index: 2147483000; // above the app, below the emergency takeover
-  width: 260px;
+  width: 220px;
   max-width: calc(100vw - 16px);
   @include v2.floating;
-  border-radius: var(--r-2xl);
-  padding: 12px;
+  border-radius: var(--r-xl);
+  padding: 6px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
   animation: card-menu-in var(--t-base) var(--ease);
 
   &.up { transform: translateY(-100%); animation: none; }
@@ -92,36 +92,6 @@
   }
 }
 
-.card-menu-tiles {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.card-menu-tile {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  min-width: 0;
-  padding: 12px;
-  border: 0;
-  border-radius: var(--r-lg);
-  background: var(--surface-2);
-  color: var(--text);
-  font: inherit;
-  @include v2.text(label);
-  text-align: left;
-  cursor: pointer;
-  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
-
-  > span:last-child { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-  &:hover,
-  &:focus-visible { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
-  &:active { transform: scale(.98); }
-}
-
 .card-menu-rows {
   display: flex;
   flex-direction: column;
@@ -130,15 +100,16 @@
 .card-menu-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 40px;
-  padding: 0 8px;
+  gap: 10px;
+  padding: 8px;
   border: 0;
   border-radius: var(--r-md);
   background: transparent;
-  color: var(--muted);
+  color: var(--text);
   font: inherit;
-  @include v2.text(body-sm);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
   text-align: left;
   cursor: pointer;
   white-space: nowrap;
@@ -148,7 +119,8 @@
   > span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
   &:hover,
-  &:focus-visible { background: var(--bg-hover); color: var(--text); }
+  &:focus-visible { background: var(--bg-hover); }
+  &.is-danger { color: var(--accent); }
 
   @include v2.mobile { min-height: 48px; }
 }

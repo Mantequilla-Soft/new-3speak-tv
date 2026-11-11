@@ -1,7 +1,7 @@
 @use "../../styles/v2" as v2;
 
-// Community directory cards (design 19d): a banner wash, the picture riding
-// over it, name, about, counts with the Join button, then what is new there.
+// Community directory cards (design 19d): a banner fading from the card's
+// colour, the picture riding over it, name, about, then counts and Join.
 .communities-render { color: var(--text); }
 
 .group-card {
@@ -15,14 +15,18 @@
   &:hover { border-color: color-mix(in srgb, var(--cyan) 40%, var(--border)); }
   &:focus-within { border-color: var(--cyan); }
 
+  // The card's colour: the banner fades from it, the Join button wears it.
+  --tone: var(--cyan);
+  --tone-ink: var(--bg);
+  &.tone-accent { --tone: var(--accent); --tone-ink: var(--on-accent); }
+  &.tone-ink { --tone: var(--on-media); }
+  &.tone-muted { --tone: var(--muted); }
+
   &__banner {
     height: 72px;
     flex: none;
-    background: color-mix(in srgb, var(--cyan) 22%, var(--surface));
+    background: linear-gradient(135deg, var(--tone), var(--frame));
   }
-  &.tone-accent .group-card__banner { background: color-mix(in srgb, var(--accent) 20%, var(--surface)); }
-  &.tone-ink .group-card__banner { background: color-mix(in srgb, var(--text) 14%, var(--surface)); }
-  &.tone-muted .group-card__banner { background: var(--surface-2); }
 
   &__body {
     flex: 1;
@@ -65,6 +69,7 @@
 
   &__about {
     margin: 4px 0 0;
+    text-wrap: pretty;
     font-size: 13px;
     line-height: 1.4;
     color: var(--muted);
@@ -78,67 +83,44 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: 14px;
+    margin-top: auto;
+    padding-top: 14px;
   }
 
   &__meta {
     flex: 1;
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
     font-size: 12px;
     color: var(--muted);
-    b { color: var(--text); font-weight: 700; }
-  }
-
-  &__line {
-    display: flex;
-    align-items: center;
-    min-width: 0;
     white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
 
-    > * + *::before { content: "·"; margin: 0 6px; color: var(--muted); font-family: var(--font-sans); font-weight: 400; }
-    &.is-sub { font-size: 11px; }
-    &:empty { display: none; }
-    .money { font-size: 11px; }
+    > * + *::before { content: " · "; }
+    .money { font-size: 12px; }
   }
 
-  &__join, .blog-mine { position: relative; z-index: 1; flex: none; }
+  &__join, &__joined { position: relative; z-index: 1; flex: none; }
 
-  &__activity {
-    margin-top: 14px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
+  // 36px, 13/900, in the card's colour.
+  &__join.v2-btn {
+    padding: 0 14px;
+    font-size: 13px;
+    background: var(--tone);
+    color: var(--tone-ink);
+    &:hover { background: var(--tone); color: var(--tone-ink); filter: brightness(1.08); }
   }
+  &.tone-ink &__join.v2-btn { background: var(--text); color: var(--bg); }
 
-  &__counts {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 8px;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--muted);
-    .is-today { color: var(--accent); }
-  }
-
-  &__strip {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 6px;
-  }
-
-  &__thumb {
-    position: relative;
-    z-index: 1;
-    display: block;
-    aspect-ratio: 16 / 9;
-    border-radius: var(--r-sm);
-    overflow: hidden;
-    @include v2.thumb-placeholder(6px);
-
-    img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--t-base) var(--ease); }
-    &:hover img { transform: scale(1.04); }
+  &__joined {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 900;
   }
 }

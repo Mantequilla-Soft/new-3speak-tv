@@ -24,17 +24,22 @@ $wide: 1024px;
 .play-video.wv2 {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: "stage" "main" "side";
+  grid-template-areas: "stage" "strip" "main" "side";
   gap: 16px;
   min-width: 0;
   color: var(--text);
 
+  @include v2.mobile { gap: 12px; }
+
   @include wide {
     grid-template-columns: minmax(0, 1fr) var(--side-panel-w);
-    grid-template-areas: "stage side" "main aside";
+    grid-template-areas: "strip strip" "stage side" "main aside";
     column-gap: 20px;
     row-gap: 20px;
     align-items: start;
+
+    // The strip sits 16 above the player (02), the rows below are 20 apart.
+    > .wv2-community { margin-bottom: -4px; }
   }
 
   // The reaction player's sizes (cycled from the player): how much room the
@@ -44,7 +49,7 @@ $wide: 1024px;
     .reaction-big > & { grid-template-columns: minmax(0, 1fr) 320px; }
     .reaction-small > & { grid-template-columns: minmax(0, 3fr) minmax(0, 7fr); }
     // Cinema: the player takes the whole width; the panels follow below it.
-    .reaction-cinema > & { grid-template-columns: minmax(0, 1fr); grid-template-areas: "stage" "main" "side" "aside"; }
+    .reaction-cinema > & { grid-template-columns: minmax(0, 1fr); grid-template-areas: "strip" "stage" "main" "side" "aside"; }
   }
 }
 
@@ -73,7 +78,7 @@ $wide: 1024px;
 }
 
 .play-video.wv2 .video-iframe-wrapper {
-  border-radius: var(--r-3xl);
+  border-radius: var(--r-2xl);
   background: var(--media-black);
 
   // Phones: edge to edge. The 16:9 comes from aspect-ratio here, not the
@@ -103,7 +108,7 @@ $wide: 1024px;
   aspect-ratio: 16 / 9;
   display: grid;
   place-items: center;
-  border-radius: var(--r-3xl);
+  border-radius: var(--r-2xl);
   background: var(--media-black);
   color: var(--accent);
 }
@@ -263,12 +268,15 @@ $wide: 1024px;
   @include v2.mobile { gap: 12px; }
 }
 
-// "Posted in" community strip (02): cyan wash, Join on the right.
+// "Posted in" community strip (02): cyan wash, the playlist and Join on the
+// right; the title's translation (22a) as a pill before Join.
 .wv2-community {
+  grid-area: strip;
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 52px;
+  min-width: 0;
+  min-height: 54px;
   padding: 10px 12px 10px 10px;
   border-radius: var(--r-lg);
   background: var(--cyan-wash);
@@ -312,42 +320,107 @@ $wide: 1024px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    b { font-weight: 700; }
     .is-muted { color: var(--muted); }
+    .is-narrow-only { display: none; }
   }
   &__spacer { flex: 1; }
   &__playlist {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    flex: none;
     @include v2.text(body-sm);
     color: var(--muted);
     white-space: nowrap;
     min-width: 0;
     .material-symbols-rounded { color: var(--cyan); }
-    b { color: var(--text); overflow: hidden; text-overflow: ellipsis; }
+    b { color: var(--text); font-weight: 700; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
   }
+  // "Translated to … · Show original" (22a): a surface pill; the click shows the original.
+  &__translated {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    height: 32px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease);
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  }
+  &__join { flex: none; font-weight: 900; }
 
+  // Phones (02 mobile): a slim strip, "Wildlife Videos · Trail cams 3/14", Join as cyan text.
   @include v2.mobile {
     gap: 8px;
-    min-height: 44px;
-    padding: 6px 6px 6px 6px;
+    min-height: 36px;
+    padding: 6px 10px 6px 6px;
     border-radius: var(--r-md);
     border: 0;
 
     &__link { gap: 8px; }
-    &__mark { width: 24px; height: 24px; border-radius: var(--r-sm); }
-    &__text { @include v2.text(meta); .is-muted:first-child { display: none; } }
+    &__mark { width: 24px; height: 24px; border-radius: var(--r-sm); font-size: 11px; }
+    &__text {
+      @include v2.text(meta);
+      .is-posted, .is-members { display: none; }
+      .is-narrow-only { display: inline; }
+    }
     &__playlist { display: none; }
+    &__translated { height: 28px; padding: 0 8px; border-radius: var(--r-sm); font-size: 11px; > span:not(:first-of-type) { display: none; } }
+    &__join.v2-btn {
+      height: 28px;
+      padding: 0 4px;
+      background: transparent;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 900;
+      // A 44px tap target without a taller strip.
+      position: relative;
+      &::after { content: ""; position: absolute; inset: -8px -6px; }
+      &[aria-pressed="true"] { color: var(--muted); }
+    }
+  }
+}
+
+// Title, meta and tags, with the dock beside them (02). The column decides:
+// side by side once it is wide enough for a 2-line title next to six tiles.
+.wv2-main { container-type: inline-size; container-name: wv2main; }
+
+.wv2-headrow {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+
+  @container wv2main (min-width: 720px) {
+    &:not(.is-solo) {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 20px;
+      > .wv2-head { flex: 1; }
+      > .wv2-dock { flex: none; }
+    }
   }
 }
 
 .wv2-head {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   min-width: 0;
 
   &__pills { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  @include v2.mobile { gap: 4px; }
 }
 
 .wv2-title-row {
@@ -356,63 +429,116 @@ $wide: 1024px;
   gap: 8px;
   min-width: 0;
 
-  > .ai-badge, > [class*="ai-badge"] { margin-top: 4px; flex: none; }
-  .title-translate { margin-top: 0; }
+  > .ai-badge, > [class*="ai-badge"] { margin-top: 6px; flex: none; }
+  .title-translate { margin-top: 2px; }
 }
 
 .wv2-title {
   flex: 1;
   min-width: 0;
   margin: 0;
-  @include v2.text(heading);
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -.025em;
+  line-height: 1.1;
   color: var(--text);
   overflow-wrap: anywhere;
   text-wrap: pretty;
 
-  @include v2.mobile { font-size: 20px; }
+  @include v2.below-wide { font-size: 28px; }
+  @include v2.mobile { font-size: 20px; letter-spacing: -.02em; line-height: 1.15; }
 }
 
+// "9.2K views · 3 weeks ago" and the tags as chips, one wrapping row (02).
 .wv2-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
-  @include v2.text(meta);
+  gap: 8px;
+  @include v2.text(body-sm);
   color: var(--muted);
 
   &__payout { display: inline-flex; align-items: center; }
-  .payout-amount-badge { font-size: 12px; }
+  .payout-amount-badge { font-size: 13px; }
+
+  @include v2.mobile { gap: 4px 6px; @include v2.text(meta); .payout-amount-badge { font-size: 12px; } }
 }
 
-// Author tags, topics (with their share) and "Tag this video" (02, 33a).
-.wv2-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-
-  @include v2.mobile { flex-wrap: nowrap; @include v2.scroll-x; margin: 0 calc(-1 * var(--page-pad)); padding: 0 var(--page-pad); }
-}
+// The author's tags (02), chips in the meta row.
 
 .wv2-tag {
-  @include v2.control(28);
-  @include v2.text(label);
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-md);
+  font: inherit;
+  @include v2.text(body-sm);
   flex: none;
   gap: 4px;
   background: var(--surface-2);
   color: var(--text);
   white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
 
   &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  &:active { transform: scale(.98); }
+
+
+  // Phones (02 mobile): the author's tags read as words in the meta line.
+  @include v2.mobile {
+    height: auto;
+    padding: 0;
+    background: transparent;
+    color: var(--muted);
+    @include v2.text(meta);
+    position: relative;
+    &::after { content: ""; position: absolute; inset: -12px -2px; }
+  }
+}
+
+// Curated, topics and "Tag this video" (33a): 36px chips; curated outlined in
+// cyan, your interests on a cyan tint, the rest on surface-2.
+.wv2-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  @include v2.mobile { flex-wrap: nowrap; @include v2.scroll-x; margin: 4px calc(-1 * var(--page-pad)) 0; padding: 0 var(--page-pad); }
+}
+
+.wv2-topic {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  flex: none;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  &:active { transform: scale(.98); }
 
   &__logo { width: 16px; height: 16px; border-radius: var(--r-xs); }
-  &__n { font-size: 10px; font-weight: 500; opacity: .7; }
+  &__n { @include v2.mono(10, 500); opacity: .7; }
 
-  &.is-curated { background: var(--cyan-tint); color: var(--cyan); }
-  &.is-topic { background: transparent; box-shadow: inset 0 0 0 1px var(--border); color: var(--muted); }
-  &.is-topic.is-voted { background: var(--cyan-tint); box-shadow: inset 0 0 0 1px var(--cyan); color: var(--cyan); }
-  &.is-topic.is-mine { background: var(--cyan-tint); color: var(--cyan); }
-  &.is-add { background: transparent; box-shadow: none; outline: 2px dashed var(--border); outline-offset: -2px; color: var(--muted); }
+  &.is-curated { background: var(--cyan-tint); border-color: var(--cyan); color: var(--cyan); }
+  &.is-mine { background: var(--cyan-tint); color: var(--cyan); }
+  &.is-auto:not(.is-voted):not(.is-mine) { color: var(--muted); }
+  &.is-add { background: transparent; border: 2px dashed var(--border); color: var(--muted); &:hover { color: var(--text); } }
+
+  @include v2.mobile { height: 32px; }
 }
 
 // Notices in the flow (33a states): icon well in the tone, bold line, action.
@@ -511,15 +637,43 @@ $wide: 1024px;
   &__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; b { @include v2.text(body-sm); font-weight: 700; } }
 }
 
-// Description card (02).
+// Description card (02): 14px muted text, two lines, then a bold "Show more".
+// Phones: no card, 13px, two lines and the toggle under them.
 .wv2-desc {
-  padding: 4px 2px;
+  padding: 16px 18px;
   border-radius: var(--r-xl);
   background: var(--surface);
   border: 1px solid var(--border);
   min-width: 0;
 
   .blog-content-container { background: transparent; border-radius: 0; }
+  .blog-content-container .markdown-view { padding: 0; }
+  .markdown-view, .markdown-view p, .markdown-view li { color: var(--muted); font-size: 14px; line-height: 1.6; }
+  .content-wrapper.collapsed { max-height: 46px; }
+  .content-wrapper .fade-overlay { height: 22px; }
+  .blog-content-container .expand-toggle {
+    height: 24px;
+    margin: 2px 0 0;
+    padding: 0;
+    gap: 0;
+    @include v2.text(body);
+    font-weight: 700;
+    color: var(--text);
+    &:hover { background: transparent; text-decoration: underline; }
+    .material-symbols-rounded { display: none; }
+  }
+
+  @include v2.mobile {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+
+    .markdown-view, .markdown-view p, .markdown-view li { font-size: 13px; line-height: 1.45; }
+    .content-wrapper.collapsed { max-height: 38px; }
+    .content-wrapper .fade-overlay { background: linear-gradient(to bottom, transparent, var(--bg)); }
+    .blog-content-container .expand-toggle { @include v2.text(meta); font-weight: 700; height: 28px; }
+  }
 }
 
 .watch-stats-panel {
@@ -541,11 +695,45 @@ $wide: 1024px;
   gap: 12px;
   padding: 18px;
 
+  > .v2-seg { padding: 4px; border-radius: var(--r-md); }
+
   // A fixed-height body: switching Supporters and Voters never moves the page.
   &__body { height: 200px; margin: 0 -4px; padding: 0 4px; @include v2.scroll-y; }
 }
 
 .wv2-support-btn { margin-top: 2px; }
+
+// Supporters as avatars (02): 40px, the top one ringed in accent, the next two in cyan.
+.wv2-supporter-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 2px 0 0;
+  list-style: none;
+
+  @include v2.mobile { padding-top: 12px; }
+}
+.wv2-supporter-dot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--avatar);
+  color: var(--accent);
+  overflow: hidden;
+  text-decoration: none;
+
+  img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  &.is-top { border-color: var(--accent); }
+  &.is-next { border-color: var(--cyan); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
+.wv2-side .wv2-support-btn { margin-top: 14px; }
 
 // Rows shared by the card and the narrow tabs.
 .wv2-rows { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; &.is-loading { gap: 10px; padding-top: 8px; } }
@@ -976,10 +1164,13 @@ $wide: 1024px;
   display: flex;
   align-items: center;
   gap: 10px;
-  max-width: 360px;
-  padding: 8px 8px 8px 12px;
+  max-width: 420px;
+  padding: 12px;
+  gap: 12px;
   border-radius: var(--r-xl);
-  background: var(--media-scrim-strong);
+  // 33a: the accent card, drawn over the video on its scrim.
+  background: color-mix(in srgb, var(--accent) 12%, var(--media-scrim-strong));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   color: var(--on-media);
   pointer-events: auto;
   animation: tipNudgeSlideIn var(--t-slow) var(--ease);
@@ -994,8 +1185,8 @@ $wide: 1024px;
   }
 }
 .tip-nudge-icon { color: var(--accent); }
-.tip-nudge-text { @include v2.text(body-sm); line-height: 1.3; strong { color: var(--on-media); font-weight: 700; } }
-.tip-nudge-btn { @include v2.btn(primary, 32); flex: none; }
+.tip-nudge-text { @include v2.text(body); line-height: 1.3; strong { color: var(--on-media); font-weight: 700; } }
+.tip-nudge-btn { @include v2.btn(primary, 40); font-size: 12px; flex: none; @include v2.mobile { height: 32px; border-radius: var(--r-md); } }
 .tip-nudge-close {
   display: grid;
   place-items: center;

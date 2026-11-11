@@ -67,7 +67,8 @@
     "tapForSound": "Tap for sound",
     "views_one": "{{num}} view",
     "views_other": "{{num}} views",
-    "readMore": "Read more"
+    "readMore": "Read more",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Read more",
@@ -187,7 +188,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Community",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "latestSnap": "Latest snap"
   },
   "streams": {
     "loading": "Loading streams…",
@@ -414,5 +416,13 @@
   },
   "audioTab": {
     "files": "Audio files"
+  },
+  "search": {
+    "placeholder": "Search this channel",
+    "clear": "Clear search",
+    "results_one": "{{count}} result for “{{query}}”",
+    "results_other": "{{count}} results for “{{query}}”",
+    "empty": "Nothing on this channel matches “{{query}}”.",
+    "older": "Search older uploads"
   }
 }

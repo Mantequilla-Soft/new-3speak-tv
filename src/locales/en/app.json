@@ -174,7 +174,10 @@
     "uploading": "Uploading…",
     "interestsHint": "We use these to pick what shows up on your home page. Choose as many as you like, or none, and change them whenever you want.",
     "interestsFineprint": "Saved to your Hive account, so every Hive app shows the same profile and the same interests.",
-    "saveAndExplore": "Save and start exploring"
+    "saveAndExplore": "Save and start exploring",
+    "eyebrow": "Welcome",
+    "stepOf": "Step {{n}} of {{total}}",
+    "profileFineprint": "Saved to your Hive account, so every Hive app shows the same profile."
   },
   "profileEdit": {
     "updated": "Profile updated",

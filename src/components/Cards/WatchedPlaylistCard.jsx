@@ -12,11 +12,11 @@ function WatchedPlaylistCard({ count, username }) {
         <div className="plc-stack">
           <div className="img-wrap plc-art plc-art--neutral">
             <Icon name="history" size={32} />
-            <span className="plc-count"><Icon name="playlist_play" size={14} />{count}</span>
+            <span className="plc-count">{count}</span>
           </div>
         </div>
         <h2 className="plc-title">{t('cards.watched.title')}</h2>
-        <div className="plc-sub" title={t('cards.watched.subtitle')}>{t('common.units.videos', { count })} · @{username}</div>
+        <div className="plc-sub" title={t('cards.watched.subtitle')}>{t('common.units.videos', { count })} · {t('cards.playlist.history')}</div>
       </Link>
     </div>
   );

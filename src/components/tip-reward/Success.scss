@@ -1,4 +1,6 @@
-// Tip sent (design 19f, middle): the §11 success card in accent.
+// Tip sent (design 19f, middle): an accent wash from the top, the avatar in an
+// accent ring, the eyebrow, the amount and name as one display line, a
+// sentence, and Done pinned at the bottom.
 @use "../../styles/v2" as v2;
 
 .tip-success {
@@ -6,20 +8,24 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  padding: 24px;
+  flex: 1;
+  min-height: 100%;
+  padding: 28px;
   border: 0;
+  border-radius: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface) 60%);
 
-  &__avatar { margin-bottom: 12px; }
-  &__title { margin: 0; @include v2.text(heading); }
-  &__amount {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 10px;
-    margin-top: 4px;
-    .money { font-size: 40px; font-weight: 900; letter-spacing: -.02em; line-height: 1.1; @include v2.mobile { font-size: 32px; } }
+  &__avatar { margin-bottom: 20px; }
+  &__title {
+    margin: 0;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+    @include v2.mobile { font-size: 40px; }
   }
-  &__to { @include v2.text(title); color: var(--text); }
-  &__msg { margin: 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
-  &__btn { margin-top: 16px; }
+  &__msg { margin: 4px 0 0; font-size: 16px; line-height: 1.5; color: var(--muted); }
+  &__btn { margin-top: auto; }
+  @include v2.mobile { min-height: 420px; padding: 24px 18px; }
 }

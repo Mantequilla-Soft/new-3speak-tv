@@ -17,6 +17,7 @@ import { fetchHiveYear, fetchNewFollowers, fetchCommunityPosts, fetchIncomeYear,
 import { fetchUploadsYear, fetchWatchedYear, usableThumb } from '../lib/recapData';
 import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
 import { formatDate, formatNumber, formatTimeAgo } from '../i18n';
+import recapMark from '../assets/image/3S_mark.svg';
 import './Recap.scss';
 
 // The recap covers the last 12 months: the checker's 365-day leaderboard window
@@ -657,6 +658,12 @@ export default function Recap() {
               {slides.map((s, i) => (
                 <span key={s.id} className={`recap-progress-bar${i <= at ? ' done' : ''}`} />
               ))}
+            </div>
+            {/* 26c: the story's label under the progress, the 3S mark and the
+                recap's name. */}
+            <div className="recap-brand" aria-hidden="true">
+              <img src={recapMark} alt="" />
+              <span>{t('recap.open')}</span>
             </div>
 
             {/* Tap left / right half to step, like stories. Not where the scene

@@ -40,7 +40,17 @@
       color: var(--text);
     }
   }
-  &.is-panel .comments-header-row { padding: 12px 16px 8px; }
+  // The panel's count lives in its tab (02): only the sort shows, on the right.
+  &.is-panel .comments-header-row { padding: 8px 16px 0; justify-content: flex-end; }
+  .comments-header-row h4.is-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  &.is-panel .comment-sort select { height: 28px; border-radius: var(--r-sm); font-size: 11px; }
 
   .comment-sort {
     position: relative;
@@ -110,6 +120,45 @@
 
     // One line to start with, so the list keeps the room; it grows as you type.
     .textarea-box { min-height: 44px; max-height: 160px; }
+  }
+
+  // At rest (02): the moment, "Join the discussion…" and a round send, one line.
+  &.is-panel > .comment-composer.is-compact {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+
+    .textarea-box {
+      flex: 1;
+      min-width: 0;
+      height: 40px;
+      min-height: 40px;
+      padding: 0 14px;
+      line-height: 36px;
+      border-color: transparent;
+      background: var(--surface-2);
+      overflow: hidden;
+      white-space: nowrap;
+      cursor: text;
+    }
+    .comment-send { flex: none; }
+
+    @include v2.mobile {
+      .comment-send { display: none; }
+    }
+  }
+
+  .comment-moment-chip {
+    flex: none;
+    height: 28px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--cyan);
+    @include v2.mono(11, 700);
+    cursor: pointer;
   }
 
   .textarea-box {
@@ -266,6 +315,10 @@
   &.is-panel .nested-comments { gap: 0; margin-top: 0; }
 
   .comment {
+    position: relative;
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 12px;
     margin: 0;
     padding: 12px;
     border-radius: var(--r-lg);
@@ -297,6 +350,32 @@
   }
 
   .comment-content { min-width: 0; }
+
+  // The avatar column: 40px, radius 12 on a page (28a); 32 round in the panel (02).
+  .comment-avatar {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    background: var(--avatar);
+
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+  &.is-panel .comment { grid-template-columns: 32px minmax(0, 1fr); gap: 10px; }
+  &.is-panel .comment-avatar { width: 32px; height: 32px; border-radius: 50%; }
+
+  .comment-author {
+    @include v2.text(label);
+    color: var(--text);
+    text-decoration: none;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &:hover { text-decoration: underline; }
+  }
+  &.is-panel .comment-author { font-size: 12px; }
 
   .comment-pinned-badge {
     display: inline-flex;
@@ -369,7 +448,7 @@
 
   // The body: comment text is body size (14), images round and inside the row.
   .comment-content .markdown-view {
-    margin-top: 6px;
+    margin-top: 4px;
     @include v2.text(body);
     line-height: 1.5;
     color: var(--text);
@@ -432,6 +511,32 @@
     color: var(--muted);
     &:hover { color: var(--text); }
     &.is-on { color: var(--cyan); }
+  }
+
+  // "4 replies" (02): cyan, opens the thread under the comment.
+  .comment-replies-toggle {
+    height: 28px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--cyan);
+    font: inherit;
+    @include v2.text(meta);
+    font-weight: 500;
+    cursor: pointer;
+    &:hover { background: var(--bg-hover); }
+    &[aria-expanded="true"] { color: var(--muted); }
+  }
+
+  // The panel's actions read as words (02): ↑ count, Reply, replies.
+  &.is-panel .comment-action {
+    margin-top: 4px;
+    gap: 6px;
+    margin-left: -6px;
+
+    .comment-vote { padding: 0 6px; gap: 3px; font-family: var(--font-sans); font-size: 12px; font-weight: 400; }
+    .comment-act.v2-btn { padding: 0 6px; font-size: 12px; font-weight: 400; .material-symbols-rounded { display: none; } }
   }
 
   .comment-action-right {
@@ -551,6 +656,14 @@
     }
   }
   &.is-page .comment .comment-translation { background: var(--bg); }
+
+  // Phones, in the panel (02 mobile): 28px avatars, no dividers, 13px text.
+  @include v2.mobile {
+    &.is-panel .comment { grid-template-columns: 28px minmax(0, 1fr); padding: 12px 0 4px; border-bottom: 0; }
+    &.is-panel .comment-avatar { width: 28px; height: 28px; }
+    &.is-panel .comment-content .markdown-view { margin-top: 2px; font-size: 13px; line-height: 1.4; p { font-size: 13px; } }
+    &.is-panel > .comment-composer.is-compact { padding: 10px 12px; }
+  }
 
   // ── Phones: 44px tap targets without making the rows taller ──
   @include v2.mobile {

@@ -32,10 +32,17 @@
     "summary_other": "{{count}} new videos",
     "fromFollowing": "from people you follow",
     "shorts_one": "{{count}} short",
-    "shorts_other": "{{count}} shorts"
+    "shorts_other": "{{count}} shorts",
+    "show": "Show",
+    "hide": "Hide"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} video",
+    "videos_other": "{{num}} videos",
+    "thisWeek": "{{num}} this week"
   },
   "firstUploads": {
-    "title": "First Time Uploads"
+    "title": "First Uploads"
   },
   "newVideos": {
     "title": "New Videos"
@@ -55,7 +62,11 @@
     "customizeTitle": "Customize Home",
     "customizeHint": "Move sections up or down. Turn off the ones you don't want.",
     "surfTitle": "Channel Surfing: pick a topic and watch it like TV",
-    "zapping": "Zapping"
+    "zapping": "Zapping",
+    "hero": {
+      "spotlightIn": "Spotlight in {{community}}"
+    },
+    "tabFollowing": "Following"
   },
   "surf": {
     "pageTitle": "Channel Surfing",
@@ -124,6 +135,32 @@
     "authors_one": "{{count}} author",
     "authors_other": "{{count}} authors",
     "views_one": "{{views}} view",
-    "views_other": "{{views}} views"
+    "views_other": "{{views}} views",
+    "topCreator": "Top creator",
+    "creators": "Creators",
+    "relatedTags": "Related tags",
+    "trendingTags": "Trending tags",
+    "topCreators": "Top creators",
+    "categories": "Categories",
+    "show": "Show",
+    "boostRecentHint": "Favour newer videos in results",
+    "showResults_one": "Show {{count}} result",
+    "showResults_other": "Show {{count}} results",
+    "resultTypes": "Result types"
+  },
+  "activity": {
+    "aria": "Activity on 3Speak",
+    "community": "Community",
+    "verbs": {
+      "snap": "snap",
+      "audio": "new audio",
+      "playlist": "playlist",
+      "live": "is live",
+      "group_one": "{{count}} new video this week",
+      "group_other": "{{count}} new videos this week"
+    },
+    "emptyCommunity": "Nothing new from the community in the last few days.",
+    "emptyLive": "Nobody is live right now.",
+    "emptyGroups": "No group activity this week yet."
   }
 }

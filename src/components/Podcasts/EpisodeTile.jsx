@@ -92,3 +92,56 @@ export function EpisodeTile({ ep, feed, showShow = true, onOpenShow, onOpenEpiso
     </li>
   );
 }
+
+/**
+ * One episode as a row of a show's list (36d): play, the badges and title, how
+ * far you got, and the download. The title opens the episode page, where the
+ * tip, the chapters and the show notes are. `pinned`: the trailer on top ("Start here").
+ */
+export function EpisodeRow({ ep, feed, onOpenEpisode, pinned = false }) {
+  const { t } = useTranslation();
+  const fmtDate = useDateFormat();
+  const audioCurrent = useAppStore((s) => s.audioCurrent);
+  const audioIsPlaying = useAppStore((s) => s.audioIsPlaying);
+  const audioPlayQueued = useAppStore((s) => s.audioPlayQueued);
+  const audioRequestToggle = useAppStore((s) => s.audioRequestToggle);
+  const track = useMemo(() => episodeToTrack(ep, feed), [ep, feed]);
+  const isCurrent = audioCurrent?._id === ep.id;
+  const playing = isCurrent && audioIsPlaying;
+  const progress = progressOf(ep.id);
+  const started = !!progress && !progress.done && progress.pct > 0;
+  const pct = progress?.done ? 100 : started ? progress.pct : 0;
+  const left = started && progress.dur > 0 ? Math.max(1, Math.ceil((progress.dur - progress.pos) / 60)) : null;
+  const state = progress?.done
+    ? t('audio.podcasts.listened')
+    : started ? (left ? t('audio.podcasts.continue.left', { minutes: left }) : t('audio.podcasts.listenedPct', { pct }))
+      : t('audio.podcasts.filters.unplayed');
+
+  const play = () => {
+    if (isCurrent) { audioRequestToggle(); return; }
+    if (useAppStore.getState().audioQueueIfPlaying(track)) return;
+    audioPlayQueued(track);
+  };
+
+  return (
+    <li className={`pod-row${isCurrent ? ' pod-row--current' : ''}${progress?.done ? ' pod-row--done' : ''}`}>
+      <button type="button" className={`pod-row-play${playing ? ' is-on' : ''}`} onClick={play} aria-label={playing ? t('audio.podcasts.pause') : t('audio.podcasts.play')}>
+        <Icon name={playing ? 'pause' : 'play_arrow'} size={24} fill />
+      </button>
+      <div className="pod-row-body">
+        <div className="pod-row-head">
+          <EpisodeBadges ep={ep} pinned={pinned} />
+          <button type="button" className="pod-row-title" title={ep.title} onClick={() => onOpenEpisode?.(ep.id)}>{ep.title || t('audio.untitled')}</button>
+        </div>
+        <div className="pod-row-meta">
+          {[ep.duration > 0 ? fmtDuration(ep.duration) : null, ep.published_at ? fmtDate(ep.published_at) : null].filter(Boolean).join(' · ')}
+        </div>
+      </div>
+      <div className="pod-row-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct} aria-label={state}>
+        <span className="pod-row-bar"><span style={{ width: `${pct}%` }} /></span>
+        <span className="pod-row-state">{state}</span>
+      </div>
+      <DownloadButton track={track} variant="square" />
+    </li>
+  );
+}

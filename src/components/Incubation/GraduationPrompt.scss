@@ -4,22 +4,6 @@
    graduation, name taken, publish the backlog, reconnect. The dialog's shape
    comes from design-system.scss; these are only the pieces inside it. */
 
-.inc-prompt-icon {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  flex: none;
-  border-radius: var(--r-lg);
-  background: var(--surface-2);
-  color: var(--text);
-
-  &.is-accent {
-    background: var(--accent-tint-strong);
-    color: var(--accent);
-  }
-}
-
 .inc-prompt-lede {
   margin: 0;
   @include v2.text(body);
@@ -36,12 +20,10 @@
   color: var(--muted);
 }
 
-// The fine print that matters (what comes across, why it is slow): a bg well.
+// The fine print that matters (what comes across, why it is slow): plain
+// muted text with the counts in bold (46c).
 .inc-prompt-note {
   margin: 0;
-  padding: 10px 12px;
-  border-radius: var(--r-md);
-  background: var(--bg);
   @include v2.text(meta);
   line-height: 1.5;
   color: var(--muted);
@@ -49,14 +31,19 @@
   strong { color: var(--text); font-weight: 700; }
 }
 
-// The primary takes the free width of the footer, label at the left, arrow at
-// the right (STYLE_GUIDE §6).
+// 46c / 46d: the actions close the card with no divider above them; the
+// primary takes the free width of the row, its label flush left.
+.inc-prompt .v2-dialog__foot {
+  border-top: 0;
+  padding-top: 4px;
+
+  .v2-btn.is-next { justify-content: flex-start; }
+  .v2-btn.is-next > .material-symbols-rounded:last-child { display: none; }
+}
 .v2-dialog__foot .inc-prompt-primary.v2-btn { flex: 1; }
 
 /* The one moment in the warm-up that is unambiguously good news: the §11
    success card's accent hero tint at the top of the dialog. */
 .inc-prompt--celebrate.v2-dialog__panel {
-  background: linear-gradient(170deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface) 55%);
-
-  .inc-prompt-note { background: color-mix(in srgb, var(--bg) 80%, transparent); }
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface) 70%);
 }

@@ -1,7 +1,7 @@
 @use "../../styles/v2" as v2;
 
 // Stat chips under the channel name (20b, 37a): surface pills with a 1px
-// border, the number bold in ink and the word muted.
+// border, the number bold in ink and the word muted (both in Roboto, as drawn).
 .profile-stats {
   display: flex;
   flex-wrap: wrap;
@@ -24,7 +24,6 @@
     strong {
       color: var(--text);
       font-weight: 700;
-      font-family: var(--font-mono);
       font-variant-numeric: tabular-nums;
     }
 

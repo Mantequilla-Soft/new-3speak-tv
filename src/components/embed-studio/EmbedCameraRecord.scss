@@ -126,11 +126,13 @@
     .cr-listen { background: var(--media-scrim); color: var(--on-media); opacity: 0.8; &--on { opacity: 1; color: var(--cyan); } }
   }
 
+  // Phones in portrait only. Flush left and clear of the record button's
+  // column on the right (80 + 16 gutter), so the two never overlap.
   .cr-rotate-hint {
     position: absolute;
-    left: 50%;
+    left: 16px;
     bottom: 96px;
-    transform: translateX(-50%);
+    max-width: calc(100% - 128px);
     z-index: 14;
     display: inline-flex;
     align-items: center;
@@ -139,7 +141,7 @@
     padding: 6px 12px;
     border-radius: v2.radius-for(32);
     @include v2.text(meta);
-    white-space: nowrap;
+    .material-symbols-rounded { flex: none; }
   }
 
   // ---- draggable + resizable teleprompter box ----

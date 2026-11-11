@@ -2,7 +2,7 @@
 
 // Video card grid (Card3), v2 (designs 20a, 28b, 43c).
 // A card is a surface tile (1px border, radius 20, padding 8): a 16:9 thumbnail at
-// radius 12 on the striped placeholder, then the creator's avatar beside the
+// radius 16 on the striped placeholder, then the creator's avatar beside the
 // title, a muted meta line, the topic in cyan and the stat pills (votes,
 // comments, payout in accent + mono). Feeds lay cards out in auto-fill grids.
 
@@ -53,7 +53,7 @@ html[data-card-size="large"] { --card-min-w: 420px; }
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--card-min-w, 240px), 1fr));
-  gap: 20px 16px;
+  gap: 14px;
   margin-top: 0;
   position: relative; // anchor for the single hover-preview overlay
 
@@ -98,11 +98,11 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
       flex-shrink: 0;
-      @include v2.thumb-placeholder;
-      @include v2.mobile { border-radius: 8px; }
+      @include v2.thumb-placeholder(10px);
+      @include v2.mobile { border-radius: 12px; }
 
       img {
         width: 100%;
@@ -117,14 +117,19 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       &--dim img { opacity: .45 !important; }
     }
 
-    // Length, bottom-right scrim pill in mono
+    // Length, bottom-right (20a / 28b: 8px in, padding 2/6, radius 8, 11px)
     .card-duration {
       position: absolute;
-      right: 6px;
-      bottom: 6px;
+      right: 8px;
+      bottom: 8px;
       z-index: 3;
-      @include v2.scrim-pill;
-      font-family: var(--font-mono);
+      padding: 2px 6px;
+      border-radius: var(--r-sm);
+      background: var(--media-scrim-strong);
+      color: var(--on-media);
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 1.4;
       font-variant-numeric: tabular-nums;
       pointer-events: none;
     }
@@ -132,8 +137,8 @@ html[data-card-size="large"] { --card-min-w: 420px; }
     // Status pills, stacked at the top-left (LIVE, PRO, NEW, Scheduled…)
     .card-badges {
       position: absolute;
-      top: 6px;
-      left: 6px;
+      top: 8px;
+      left: 8px;
       right: 48px;
       z-index: 3;
       display: flex;
@@ -264,9 +269,25 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       cursor: help;
     }
 
-    .card-watching { color: var(--accent); font-weight: 700; }
+    // "312 watching" on a live tile reads like the views it stands in for (20a)
+    .card-watching { color: inherit; }
 
-    .card-time { white-space: nowrap; }
+    // Views without the eye (20a / 28b "birdwatcher · 9.2K · 3w"); a video you
+    // watched keeps the cyan eye.
+    .view-count-badge {
+      font-family: inherit;
+      font-size: inherit;
+      gap: 2px;
+      .view-icon { display: none; }
+      &.watched .view-icon { display: inline-block; }
+    }
+
+    // The compact age everywhere ("8h", "1d", "3w"), not "yesterday"
+    .card-time {
+      white-space: nowrap;
+      .time-long { display: none; }
+      .time-short { display: inline; }
+    }
 
     // 1st-level v2 tag (the category), cyan like a community (20a)
     .card-topic-chip {
@@ -280,7 +301,7 @@ html[data-card-size="large"] { --card-min-w: 420px; }
       text-overflow: ellipsis;
     }
 
-    // Stat pills: votes, comments, payout (28b)
+    // Stat pills: votes, comments, payout (28b: 2/7 padding, radius 8, 11/700 mono)
     .card-stats {
       display: flex;
       align-items: center;
@@ -299,8 +320,12 @@ html[data-card-size="large"] { --card-min-w: 420px; }
         border-radius: 8px;
         background: var(--surface-2);
         color: var(--text);
+        font-family: var(--font-mono);
         font-size: 11px;
+        font-weight: 700;
         gap: 3px;
+
+        .material-symbols-rounded { font-size: 13px !important; width: 13px; height: 13px; }
 
         @include v2.mobile { padding: 0 5px; font-size: 10px; }
       }
@@ -349,7 +374,8 @@ html[data-card-size="large"] .card-container .card {
   &.card-live-badge,
   &.card-gated-badge { background: var(--accent); color: var(--on-accent); }
   &.card-new-badge { color: var(--on-media); box-shadow: inset 0 0 0 1px var(--accent); }
-  &.card-page-badge { background: var(--cyan); color: var(--bg); }
+  // A page-wide label (49c "FIRST"): solid cyan, radius 4
+  &.card-page-badge { background: var(--cyan); color: var(--bg); border-radius: 4px; height: 16px; padding: 0 5px; letter-spacing: .02em; }
 
   // Phones: the label of a status pill folds away, the icon stays
   @include v2.mobile {
@@ -582,7 +608,7 @@ html[data-card-size="large"] .card-container .card {
   left: 0;
   width: 0;
   height: 0;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   z-index: 4;
   visibility: hidden;
@@ -702,7 +728,7 @@ html[data-card-size="large"] .card-container .card {
   .card-skeleton-thumb {
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-radius: 12px;
+    border-radius: 16px;
     flex-shrink: 0;
     @include v2.thumb-placeholder;
   }
@@ -754,4 +780,32 @@ html[data-card-size="large"] .card-container .card {
 @keyframes spotlight-flip-prev {
   from { transform: perspective(1600px) rotateY(90deg); filter: brightness(.5); }
   to { transform: perspective(1600px) rotateY(0deg); filter: brightness(1); }
+}
+
+// ── Bare tiles (19c tag feed, 49c First Uploads): no card frame, avatar or
+// stat pills; the thumbnail (radius 16), the 14/700 title 10px under it, the
+// muted meta line. 24 between rows, 16 between columns. ──
+.card-container.card-container--bare {
+  gap: 24px 16px;
+
+  @include v2.mobile { gap: 16px 10px; }
+
+  .card {
+    padding: 0;
+    border: 0;
+    border-radius: 16px;
+    background: transparent;
+    outline: 0;
+
+    @media (hover: hover) {
+      &:hover { border-color: transparent; outline: 0; .img-wrap { outline: 2px solid var(--cyan); outline-offset: 0; } }
+    }
+
+    .card-body { padding: 10px 0 0; gap: 0; }
+    .card-avatar,
+    .card-stats,
+    .card-topic-chip { display: none; }
+    .card-text { gap: 4px; }
+    h2 { min-height: 0; -webkit-line-clamp: 2; }
+  }
 }

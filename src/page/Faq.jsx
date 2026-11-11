@@ -147,7 +147,6 @@ export default function Faq() {
         ))}
 
         <section className="faq-more">
-          <Icon name="help" size={20} className="faq-more__icon" />
           <p>
             <b>{t('faq.more.title')}</b>{' '}
             <span><Trans i18nKey="faq.more.text" components={TAGS} /></span>

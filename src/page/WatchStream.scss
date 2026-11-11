@@ -51,40 +51,29 @@
 .ws-page .hh-start-audio[style*="none"],
 .lk-room-container:has(> .ws-shorts) > .hh-start-audio[style*="none"] { display: none !important; }
 
-/* ── Live strip (18c): accent wash, LIVE pill, watching, tags, quality ──── */
+/* ── Live strip (18c): accent wash, LIVE pill, time on air, watching, quality ── */
 .ws-strip {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 52px;
-  padding: 8px 12px 8px 10px;
+  min-height: 44px;
+  padding: 6px 12px 6px 10px;
   box-sizing: border-box;
   border-radius: var(--r-lg);
   background: color-mix(in srgb, var(--accent) 9%, var(--bg));
   border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   flex-wrap: wrap;
+
+  // The board's LIVE tag: 11/900, a touch roomier than the default pill.
+  .ws-live-tag { height: 22px; padding: 0 9px; border-radius: var(--r-sm); font-size: 11px; letter-spacing: .06em; }
 }
+
+.ws-clock { @include v2.mono(13, 700); color: var(--text); }
 
 .ws-watching {
   @include v2.text(body);
   color: var(--muted);
   white-space: nowrap;
-}
-
-.ws-strip__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  min-width: 0;
-}
-
-.ws-strip__tag {
-  @include v2.control(28);
-  @include v2.text(label);
-  font-size: 12px;
-  background: var(--surface-2);
-  color: var(--text);
-  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
 }
 
 .ws-strip__spacer { flex: 1; }
@@ -94,12 +83,13 @@
   align-items: center;
 }
 
-/* ── Grid: player column + 380px chat column (STYLE_GUIDE §4) ──────────── */
+/* ── Grid: player column + 380px chat column (STYLE_GUIDE §4) ──────────────
+   Row 1 is the player with its title and dock, and the chat beside it at the
+   same height. Row 2 (description, more videos) runs the full width. */
 .ws-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--side-panel-w);
   gap: 20px;
-  align-items: start;
   margin-top: 16px;
 }
 
@@ -113,14 +103,111 @@
   background: var(--media-black);
   border-radius: var(--r-2xl);
   overflow: hidden;
+
+  // The fullscreen corner button only matters in fullscreen, where the dock's
+  // Full tile can't be reached.
+  &:not(:fullscreen) .stream-fs-btn { display: none; }
 }
 
-.ws-info {
+/* The creator on the player (18c): avatar ringed in the live red, the name, the
+   stream title, and a white Follow, on the media scrim. */
+.ws-creator {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  z-index: 8;
+  max-width: calc(100% - 36px);
+
+  .author-badge {
+    gap: 10px;
+    max-width: 100%;
+    min-height: 0;
+    padding: 6px 6px 6px 6px;
+    border-radius: var(--r-2xl);
+    background: var(--media-scrim);
+    &:hover { background: var(--media-scrim-strong); }
+  }
+  .author-badge-link { gap: 10px; min-width: 0; color: var(--on-media); padding-right: 4px; }
+  .author-badge img {
+    width: 36px;
+    height: 36px;
+    box-sizing: border-box;
+    border: 2px solid var(--accent);
+  }
+  .author-text { line-height: 1.25; }
+  .author-name { @include v2.text(body); font-weight: 700; color: var(--on-media); }
+  .followers-count { @include v2.text(meta-sm); color: var(--on-media); opacity: .75; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+  .follow-btn {
+    @include v2.control(32);
+    @include v2.text(label);
+    font-size: 12px;
+    font-weight: 900;
+    margin-left: 6px;
+    background: var(--on-media);
+    color: var(--media-black);
+    &:hover { background: var(--on-media); filter: brightness(.92); }
+    &.following { background: color-mix(in srgb, var(--on-media) 16%, transparent); color: var(--on-media); }
+  }
+}
+
+/* A boost over the stream, drawn by the SDK (BoostOverlay): the 18c money
+   toast, bottom-left on the media scrim, a rocket in an accent square, who sent
+   it in bold and the amount above in mono. */
+.ws-player .hh-boost-overlay {
+  top: auto;
+  right: auto;
+  left: 18px;
+  bottom: 18px;
+  z-index: 9;
+  max-width: min(420px, calc(100% - 36px));
+}
+.ws-page .hh-boost-overlay__item,
+.ws-shorts .hh-boost-overlay__item {
+  min-height: 52px;
+  box-sizing: border-box;
+  padding: 8px 32px 8px 54px;
+  border: 0;
+  border-radius: var(--r-xl);
+  background: var(--media-scrim);
+  box-shadow: none;
+  color: var(--on-media);
+
+  &::before {
+    content: "rocket_launch";
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--r-md);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-family: "Material Symbols Rounded";
+    font-size: 20px;
+    line-height: 1;
+    font-feature-settings: "liga";
+  }
+  // "🚀 Boost": the rocket square says it, without the emoji.
+  .hh-boost-overlay__label { display: none; }
+  .hh-boost-overlay__top { margin: 0; }
+  .hh-boost-overlay__amount { @include v2.mono(12, 700); color: var(--on-media); opacity: .75; }
+  .hh-boost-overlay__from { margin: 0; color: var(--on-media); font-size: 14px; font-weight: 700; }
+  .hh-boost-overlay__message { color: var(--on-media); font-size: 14px; }
+  .hh-boost-overlay__dismiss { color: var(--on-media); opacity: .6; &:hover { opacity: 1; background: transparent; } }
+}
+
+/* Title and meta on the left, the tile dock on the right (18c). */
+.ws-head {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
   margin-top: 16px;
 }
+
+.ws-head__text { flex: 1 1 280px; min-width: 0; }
 
 .ws-title {
   margin: 0;
@@ -128,19 +215,38 @@
   overflow-wrap: anywhere;
 }
 
-.ws-author-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
+.ws-meta {
+  margin-top: 4px;
+  @include v2.text(body-sm);
+  color: var(--muted);
 }
 
-/* ── Tile dock (18c, 30b): 60px tiles, icon over label ─────────────────── */
+.ws-meta__tag {
+  color: var(--muted);
+  text-decoration: none;
+  & + & { margin-left: 4px; }
+  &:hover { color: var(--text); }
+}
+
+/* ── Tile dock (18c, 30b): 64px tiles, icon 24 over an 11px label ────────── */
 .ws-dock {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
-  gap: 6px;
-  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  .v2-dock {
+    width: 64px;
+    height: 64px;
+    flex: none;
+    gap: 3px;
+    padding: 0 4px;
+    border-radius: var(--r-xl);
+    font-size: 11px;
+    // DockTile draws its icon at 22 (inline); the board's live dock is 24.
+    > .material-symbols-rounded { font-size: 24px !important; }
+  }
+
+  .stream-fs-tile { display: contents; }
 
   // The SDK's "raise hand" button joins the dock as a tile of its own.
   .hh-collab__btn {
@@ -148,21 +254,22 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    height: 60px;
-    min-width: 0;
-    padding: 0 6px;
+    gap: 3px;
+    width: 64px;
+    height: 64px;
+    flex: none;
+    padding: 0 4px;
     border: 0;
-    border-radius: var(--r-lg);
+    border-radius: var(--r-xl);
     background: var(--surface-2);
     color: var(--text);
     font: inherit;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     cursor: pointer;
     transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-    > span:first-child { @include hh.glyph("back_hand", 22px); }
+    > span:first-child { @include hh.glyph("back_hand", 24px); }
     > span:last-child { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
     &:active { transform: scale(.98); }
@@ -170,12 +277,15 @@
     &:disabled { opacity: .45; cursor: not-allowed; }
   }
 
-  // A longer label ("Sign in to raise your hand") gets two tiles of room.
-  .stream-signin--dock { grid-column: span 2; }
+  // A longer label ("Sign in to raise your hand") gets the room it needs.
+  .stream-signin--dock.v2-dock { width: auto; max-width: 200px; padding: 0 12px; }
 }
 
+/* Row 2: the description and more videos, full width. */
+.ws-more { grid-column: 1 / -1; min-width: 0; }
+.ws-more:empty { display: none; }
+
 .ws-desc {
-  margin-top: 14px;
   padding: 12px 14px;
   border-radius: var(--r-md);
   background: var(--surface);
@@ -186,44 +296,111 @@
 }
 
 .ws-recommended { margin-top: 24px; }
+.ws-desc + .ws-recommended { margin-top: 24px; }
+.ws-more > .ws-recommended:first-child { margin-top: 8px; }
 
 .ws-recommended-head {
   margin: 0 0 12px;
   @include v2.text(title);
 }
 
-/* ── Chat panel: fixed height, scrolls inside (18c) ─────────────────────── */
+/* ── Chat panel (18c): beside the player at its height, scrolls inside ──── */
 .ws-col-side {
   min-width: 0;
-  position: sticky;
-  top: calc(var(--topbar-h) + 16px);
+  position: relative;
 }
 
 .ws-chat {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  height: min(720px, calc(100vh - var(--topbar-h) - 48px));
-  height: min(720px, calc(100dvh - var(--topbar-h) - 48px));
-  min-height: 420px;
   border-radius: var(--r-2xl);
   background: var(--surface);
   border: 1px solid var(--border);
   overflow: hidden;
 
   @include hh.chat;
+
+  // Messages read as one line: the name in bold cyan, then the text (18c).
+  .hh-chat__messages { justify-content: flex-start; }
+  .hh-chat__messages > :first-child { margin-top: auto; }
+  .hh-chat__msg { display: block; padding: 0; }
+  .hh-chat__msg-avatar { display: none; }
+  .hh-chat__msg-body { display: inline; }
+  .hh-chat__msg-name { display: inline; margin-right: 4px; color: var(--cyan); font-size: 14px; font-weight: 700; }
+  .hh-chat__msg-name--tappable { padding: 0; border: 0; background: none; cursor: pointer; font: inherit; font-weight: 700; color: var(--cyan); }
+  .hh-chat__msg-text { display: inline; }
+  .hh-chat__empty { padding: 0 0 4px; }
+
+  // Send: the round 44 accent button.
+  .hh-chat__input-row .hh-btn--primary {
+    width: 44px;
+    min-width: 44px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+    @include hh.glyph("send", 20px);
+  }
 }
 
-.ws-chat-head {
+.ws-chat__tabs {
+  flex: none;
+  margin: 12px 12px 0;
+
+  .v2-seg { padding: 6px; border-radius: var(--r-lg); }
+  .v2-seg__opt { flex: 1 1 0; }
+}
+
+.ws-chat__pane {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+  &[hidden] { display: none; }
+}
+
+// Logged out: the composer's place holds the log-in prompt (30b).
+.ws-chat .hh-chat__guest-prompt { padding: 12px; }
+.ws-chat-signin {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex: none;
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid var(--border);
-  @include v2.text(title-sm);
-
-  .material-symbols-rounded { color: var(--accent); }
+  gap: 10px;
+  min-height: 44px;
+  color: var(--text);
 }
+.ws-chat-signin__icon { color: var(--muted); }
+.ws-chat-signin__text { flex: 1; min-width: 0; @include v2.text(body-sm); }
+
+/* Top supporters (18c): rank, avatar, name, total boosted. */
+.ws-supporters {
+  list-style: none;
+  margin: 0;
+  padding: 8px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  @include v2.scroll-y;
+}
+
+.ws-supporters__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 10px;
+  border-radius: var(--r-lg);
+  &:first-child { background: var(--accent-tint); }
+}
+
+.ws-supporters__rank { @include v2.mono(12, 900); width: 16px; color: var(--muted); }
+.ws-supporters__row:first-child .ws-supporters__rank { color: var(--accent); }
+.ws-supporters__avatar { width: 32px; height: 32px; flex: none; border-radius: 50%; object-fit: cover; background: var(--avatar); }
+.ws-supporters__name { flex: 1; min-width: 0; @include v2.text(body); font-weight: 700; color: var(--text); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; &:hover { color: var(--cyan); } }
+.ws-supporters__usd { @include v2.mono(13, 700); }
+
+.ws-supporters__empty { margin: 12px; }
 
 /* ── Not live / not found (45c) ────────────────────────────────────────── */
 .ws-error {
@@ -247,7 +424,7 @@
 @media (max-width: 980px) {
   .ws-grid { grid-template-columns: 1fr; }
   .ws-col-side { position: static; }
-  .ws-chat { height: 480px; min-height: 0; }
+  .ws-chat { position: relative; inset: auto; height: 480px; min-height: 0; }
 }
 
 // ===========================================================================

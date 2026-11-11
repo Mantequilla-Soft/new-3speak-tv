@@ -8,6 +8,8 @@ import { CHECKER_URL } from '../../utils/config';
 import { toastIn } from '../../utils/toast';
 import { recurrentTransferOp, findMonthlySupport, MONTH_HOURS, isMonthly } from '../../lib/recurringTip';
 import MonthlyField from './MonthlyField';
+import { TIP_PRESETS } from './tipPresets';
+import { cx } from '../v2/helpers';
 
 const toast = toastIn('Tip');
 
@@ -221,6 +223,16 @@ export default function WalletTip({ recipient, permlink, memoLink, onSent, onClo
 
   return (
     <div className="tip-v2__form">
+      <div className="tip-v2__quick" role="group" aria-label={t('engagement.tip.amountLabel')}>
+        {TIP_PRESETS.map((p) => {
+          const on = parseFloat(amount) === p.value;
+          return (
+            <button key={p.value} type="button" className={cx('tip-v2__pill', on && 'is-on')} aria-pressed={on} title={t(`engagement.tip.presets.${p.key}`)} onClick={() => setAmount(String(p.value))}>
+              <span className="num">{p.value}</span>
+            </button>
+          );
+        })}
+      </div>
       <Field
         label={t('engagement.tip.wallet.usernameLabel')}
         type="text"

@@ -11,11 +11,24 @@
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);
     gap: 8px;
-
-    @include v2.mobile { gap: 6px; }
   }
 
-  .v2-dock { min-width: 0; }
+  // Beside the title (wide column): fixed 64px squares.
+  @container wv2main (min-width: 720px) {
+    .wv2-headrow > & .wv2-dock__tiles { grid-auto-columns: 64px; }
+  }
+
+  // 02: 64px tiles, radius 20, a 24 icon over an 11/700 label; the vote tile
+  // in the accent tint. Phones: 60 tall, 10px labels.
+  .v2-dock {
+    min-width: 0;
+    height: 64px;
+    gap: 3px;
+    border-radius: var(--r-xl);
+    font-size: 11px;
+
+    @include v2.mobile { height: 60px; gap: 2px; font-size: 10px; }
+  }
 
   // The popover, under the tiles and flush with their right edge.
   &__menu {

@@ -10,10 +10,10 @@ import { useTranslation } from 'react-i18next';
 import './NewFromFollowing.scss';
 
 /**
- * "New from creators you follow" (19c): a cyan strip that sums it up ("6 new
- * videos from people you follow", with their stacked avatars) above a rail of
- * creator chips for people whose
- * recent uploads this viewer hasn't watched yet.
+ * "New from creators you follow" (19c): one cyan strip that sums it up ("6 new
+ * videos from people you follow", with their stacked avatars) and a cyan Show,
+ * which opens the rail of creator chips for people whose recent uploads this
+ * viewer hasn't watched yet.
  *
  * The checker (`/feeds/new-from-following`) does the work: last 7 days, creators
  * from the viewer's Hive following list, minus anything already in watch_history
@@ -54,6 +54,8 @@ export default function NewFromFollowing() {
   });
 
   const creators = data?.creators || [];
+  // Folded to the one-line strip until asked for (19c).
+  const [open, setOpen] = useState(false);
 
   // Arrow controls, same behaviour as the stories row above: each arrow only
   // appears when there's actually something to scroll to on that side.
@@ -80,7 +82,7 @@ export default function NewFromFollowing() {
       el.removeEventListener('scroll', checkArrows);
       ro?.disconnect();
     };
-  }, [checkArrows, creators.length]);
+  }, [checkArrows, creators.length, open]);
 
   const scroll = (direction) => {
     railRef.current?.scrollBy({ left: direction === 'left' ? -240 : 240, behavior: 'smooth' });
@@ -103,7 +105,17 @@ export default function NewFromFollowing() {
         <p className="nff-summary">
           <b>{t('feeds.newFromFollowing.summary', { count: total })}</b> {t('feeds.newFromFollowing.fromFollowing')}
         </p>
+        <button
+          type="button"
+          className="nff-toggle"
+          aria-expanded={open}
+          aria-controls="nff-rail"
+          onClick={() => setOpen((v) => !v)}
+        >
+          {open ? t('feeds.newFromFollowing.hide') : t('feeds.newFromFollowing.show')}
+        </button>
       </div>
+      {open && (
       <div className="nff-wrapper">
         {showLeft && (
           <button type="button" className="nff-scroll-btn left" onClick={() => scroll('left')} aria-label={t('feeds.scrollLeft')}>
@@ -115,7 +127,7 @@ export default function NewFromFollowing() {
             <Icon name="chevron_right" size={20} />
           </button>
         )}
-        <div className="nff-rail" ref={railRef}>
+        <div className="nff-rail" id="nff-rail" ref={railRef}>
           {creators.map((c) => (
             <Link
               key={c.username}
@@ -133,6 +145,7 @@ export default function NewFromFollowing() {
           ))}
         </div>
       </div>
+      )}
     </section>
   );
 }

@@ -1,15 +1,61 @@
-// Promote this video (designs 17c, 47d) on the shared v2 Dialog. Tokens only.
+// Promote this video (designs 17c, 47d) on the v2 side sheet: the video,
+// boost or ad as tiles, the run length as price tiles, the total well, the
+// balance over "Promote for …" at the bottom. Tokens only.
 @use "../../styles/v2" as v2;
 
 .promote-v2 {
-  .v2-dialog__body { gap: 14px; }
-
   &__form { display: flex; flex-direction: column; gap: 14px; }
 
-  // The amount well (§11): total in Roboto Mono, then the balance
+  &__modes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  &__tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-height: 100px;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-lg);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+    b { margin-top: auto; @include v2.text(label); }
+    > span:last-child { @include v2.text(meta-sm); color: var(--muted); }
+    &:hover { background: var(--bg-hover); }
+    &.is-on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+  }
+
+  &__days { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  &__day {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: var(--r-lg);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    min-width: 0;
+    b { font-size: 20px; font-weight: 900; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+    span { @include v2.text(meta-sm); color: var(--muted); }
+    &:hover:not(:disabled) { background: var(--bg-hover); }
+    &.is-on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+    &:disabled { opacity: .45; cursor: not-allowed; }
+  }
+
+  // The amount well (§11): total in Roboto Mono with HBD | HIVE beside it.
   &__total {
-    @include v2.well;
-    padding: 12px 14px;
+    padding: 14px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    border: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -19,12 +65,8 @@
       line-height: 1.15;
       > span { font-size: 13px; color: var(--muted); font-weight: 700; }
     }
+    p { margin: 4px 0 0; }
   }
-  &__balance {
-    font-size: 12px;
-    color: var(--muted);
-    &.is-low, &.is-low .num { color: var(--accent); }
-  }
-
-  &__foot { display: flex; flex-direction: column; gap: 8px; width: 100%; .v2-btn { flex: none; } }
+  &__total-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; @include v2.text(meta); color: var(--muted); .v2-seg { background: var(--surface); } }
+  &__balance { &.is-low, &.is-low .num { color: var(--accent); } }
 }

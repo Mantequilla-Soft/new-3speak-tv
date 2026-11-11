@@ -1,66 +1,64 @@
 @use "../styles/v2" as v2;
 
-// Discover v2 (21b) and its search (21a), with the filter panel of 34b.
-// A big page title, one big search field; while searching, the content-type
-// chips and the filter card, then the results grouped by type. Otherwise the
-// popular creators and the trending grid.
+// Discover v2 (21b) and the search page (21a), with the filters sheet of 34b.
+// Browse: a 56px title, the topic tiles, then the ranked trending list beside
+// a 380 column of trending tags and top creators. Search: the big field, the
+// result tabs, then results beside a 340 column of communities and tags.
 
 .discover-container {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  padding: 8px 0 48px;
+
+  @include v2.mobile { padding: 4px 0 32px; }
 }
 
 .discover-title {
-  margin: 8px 0 16px;
-  @include v2.text(display);
+  margin: 0;
   font-size: 56px;
+  font-weight: 900;
   letter-spacing: -.04em;
-  line-height: 1;
+  line-height: 1.1;
 
-  @include v2.mobile { font-size: 32px; margin: 4px 0 12px; }
+  @include v2.mobile { font-size: 40px; }
 }
 
-.discover-sticky-header {
-  position: sticky;
-  top: var(--nav-top-offset, 56px);
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 8px 0 16px;
-  background: var(--bg);
-
-  // Sits under the mobile top bar too (top: 0 hid the search field behind it)
-  @include v2.mobile { padding: 6px 0 12px; gap: 10px; }
-}
-
-// ── The search field (21a): 64 tall, radius 20, accent ring while focused ──
-.discover-search-wrapper {
+// ── The search field (21a): 64 tall, radius 20, surface, 2px accent ring ────
+.discover-search {
   position: relative;
+  z-index: 40;
+
+  // Browse on desktop: the top bar's field is the way in (21b draws none).
+  &.is-idle {
+    margin-top: 16px;
+    @media (min-width: 1025px) { display: none; }
+  }
+}
+
+.discover-search__field {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   height: 64px;
   padding: 0 10px 0 20px;
   border-radius: var(--r-xl);
   background: var(--surface);
-  border: 2px solid var(--border);
-  transition: border-color var(--t-fast) var(--ease);
+  border: 2px solid var(--accent);
+  color: var(--text);
 
-  &:focus-within { border-color: var(--accent); }
-
-  @include v2.mobile {
-    height: 56px;
-    padding: 0 6px 0 14px;
+  .discover-search.is-idle & {
+    border-color: var(--border);
+    &:focus-within { border-color: var(--accent); }
   }
 
-  .discover-search-icon { color: var(--muted); flex: none; @include v2.mobile { font-size: 24px !important; } }
+  .discover-search__icon { color: var(--muted); flex: none; }
 
-  .discover-search-input {
+  .discover-search__input {
     flex: 1;
     min-width: 0;
     height: 100%;
+    padding: 0;
     border: 0;
     outline: none;
     background: transparent;
@@ -68,20 +66,18 @@
     font: inherit;
     font-size: 20px;
     font-weight: 700;
+    appearance: none;
 
-    &::placeholder { color: var(--muted); font-weight: 400; }
-
-    @include v2.mobile { font-size: 16px; }
+    &::placeholder { color: var(--muted); font-weight: 400; opacity: 1; }
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-decoration { appearance: none; display: none; }
   }
 
-  .discover-search-clear,
-  .discover-search-tune {
+  .discover-search__btn {
     border-radius: var(--r-lg);
-  }
-  .discover-search-tune {
     position: relative;
-    &.is-on { background: var(--cyan-tint); color: var(--cyan); }
-    // A dot when any filter in the panel is set
+
+    // A filter is set: a small accent dot on the tune button.
     &.has-filters::after {
       content: "";
       position: absolute;
@@ -90,163 +86,620 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--cyan);
+      background: var(--accent);
     }
+  }
+
+  @include v2.mobile {
+    height: 56px;
+    gap: 8px;
+    padding: 0 6px 0 14px;
+    border-radius: var(--r-xl);
+
+    .discover-search__input { font-size: 16px; }
   }
 }
 
-// ── Suggestions under the field (a floating menu card) ──
-.discover-suggest-dropdown {
+.discover-search__suggest {
   position: absolute;
-  top: calc(100% + 8px);
   left: 0;
   right: 0;
-  z-index: 50;
-  max-height: min(420px, 60vh);
+  top: calc(100% + 8px);
+  max-height: 70vh;
   @include v2.scroll-y;
-  @include v2.menu;
-  border-radius: var(--r-2xl);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  z-index: 60;
 }
 
-.discover-suggest-item {
-  @include v2.menu-row;
-  width: 100%;
-  border: 0;
-  background: transparent;
-  font: inherit;
-  @include v2.text(body);
-  text-align: left;
-  cursor: pointer;
-  min-width: 0;
-
-  .discover-suggest-icon { color: var(--muted); flex: none; }
-  .discover-suggest-primary { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-  &.discover-suggest-search-term .discover-suggest-primary { font-weight: 700; }
-}
-
-.discover-suggest-group {
+// ── Segmented tracks: result tabs, the trending range, the date filter ──────
+.discover-track {
   display: flex;
-  flex-direction: column;
   gap: 4px;
-  padding: 4px 0;
-  border-top: 1px solid var(--border);
-}
-
-.discover-suggest-group-label {
-  @include v2.text(eyebrow);
-  color: var(--muted);
-  padding: 6px 12px 2px;
-}
-
-.discover-suggest-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 8px 4px;
-}
-
-.discover-suggest-badge {
-  @include v2.control(32);
-  @include v2.text(label);
-  font-size: 12px;
-  padding: 0 10px 0 4px;
-  background: var(--surface-2);
-  color: var(--text);
+  padding: 4px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
   max-width: 100%;
+  @include v2.scroll-x;
 
-  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  &.is-tabs { width: max-content; margin-top: 16px; }
+  &.is-small { flex: none; }
+  &.is-fill { background: var(--bg); }
 
-  > span:not(.discover-suggest-badge-avatar):not(.material-symbols-rounded) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .discover-track__opt {
+    flex: 1 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 8px 14px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 
-  // Without an avatar the tag / playlist glyph gets the padding back
-  > .material-symbols-rounded:first-child { margin-left: 6px; color: var(--muted); }
+    &:hover { color: var(--text); }
+    &.is-on { background: var(--surface-2); color: var(--text); }
+    &:focus-visible { outline-offset: -2px; }
+  }
 
-  &.is-community { color: var(--cyan); }
+  &.is-small .discover-track__opt { min-height: 32px; padding: 7px 12px; font-size: 13px; }
+  &.is-fill .discover-track__opt { flex: 1 1 0; min-height: 32px; padding: 0 8px; font-size: 12px; }
+
+  .discover-track__n {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    opacity: .6;
+  }
 }
 
-.discover-suggest-badge-avatar {
-  width: 24px;
-  height: 24px;
-  flex: none;
+// ── Two columns: results or the trending list, and the side column ─────────
+.discover-grid {
   display: grid;
-  place-items: center;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--avatar);
-  color: var(--muted);
-  img { width: 100%; height: 100%; object-fit: cover; }
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 24px;
+  align-items: start;
+  margin-top: 36px;
 
-  .is-community & { border-radius: var(--r-sm); }
+  &.is-search {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 1024px) {
+    &,
+    &.is-search { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  @include v2.mobile { margin-top: 24px; gap: 20px; &.is-search { margin-top: 16px; } }
 }
 
-.discover-suggest-count {
-  @include v2.mono(11, 700);
-  color: var(--muted);
-}
-
-.discover-suggest-avatar {
-  width: 32px;
-  height: 32px;
-  flex: none;
-  border-radius: var(--r-sm);
-  overflow: hidden;
-  background: var(--avatar);
-  img { width: 100%; height: 100%; object-fit: cover; }
-}
-
-.discover-suggest-text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  line-height: 1.3;
-}
-
-.discover-suggest-secondary { @include v2.text(meta-sm); color: var(--muted); }
-
-// ── Content-type chips (cyan = included) ──
-.discover-filters {
-  .discover-filter-chip.excluded { color: var(--muted); }
-}
-
-// ── The filter card (34b) ──
-.discover-advanced-filters {
+.discover-main {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+  min-width: 0;
+}
+
+.discover-main__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2px;
+
+  h2 {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    @include v2.text(heading);
+  }
+}
+
+.discover-list,
+.discover-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.discover-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+// ── A row card: rank (browse only), 16:9 thumbnail, text, action ────────────
+.discover-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr) 56px;
+  gap: 16px;
+  align-items: center;
+  padding: 8px;
   border-radius: var(--r-2xl);
   background: var(--surface);
   border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color var(--t-fast) var(--ease);
 
-  @include v2.mobile { padding: 14px; }
+  &:hover { border-color: color-mix(in srgb, var(--text) 20%, transparent); color: var(--text); }
+
+  // The whole result opens it; the save button stays its own target above.
+  .discover-row__link {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: 1;
+  }
+
+  .discover-row__save { position: relative; z-index: 2; border-radius: var(--r-lg); }
+
+  @include v2.mobile {
+    grid-template-columns: 128px minmax(0, 1fr) 44px;
+    gap: 12px;
+    padding: 6px;
+    border-radius: var(--r-xl);
+
+    .discover-row__save { width: 44px; height: 44px; }
+  }
 }
 
-.discover-advanced-head {
+.discover-row__thumb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  @include v2.thumb-placeholder(10px);
+  color: var(--muted);
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &.is-icon { background: var(--surface-2); }
+
+  @include v2.mobile { border-radius: var(--r-md); }
+}
+
+// Scrim pills over the thumbnail: the kind top-left, the duration bottom-right.
+.discover-row__kind,
+.discover-row__dur {
+  position: absolute;
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  background: var(--media-scrim);
+  color: var(--on-media);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.discover-row__kind {
+  left: 8px;
+  top: 8px;
+
+  &.is-live { background: var(--accent); color: var(--on-accent); font-weight: 900; }
+  @include v2.mobile { left: 4px; top: 4px; padding: 1px 6px; font-size: 10px; }
+}
+
+.discover-row__dur {
+  right: 8px;
+  bottom: 8px;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  @include v2.mobile { right: 4px; bottom: 4px; }
+}
+
+.discover-row__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.discover-row__title {
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
+
+  &.is-trend { font-size: 16px; line-height: 1.3; }
+
+  @include v2.mobile { font-size: 14px; font-weight: 700; }
+}
+
+.discover-row__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+
+  > * + *::before { content: "·"; margin: 0 4px; }
+
+  .discover-trend & { margin-top: 4px; font-size: 12px; }
+  @include v2.mobile { margin-top: 4px; font-size: 12px; }
+}
+
+// Browse rows: a 64 rank tile, a 220 thumbnail, the text.
+.discover-trend {
+  grid-template-columns: 64px 220px minmax(0, 1fr);
+
+  @include v2.mobile { grid-template-columns: 44px 120px minmax(0, 1fr); }
+}
+
+.discover-trend__rank {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-xl);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 900;
+
+  &.is-first { background: var(--accent); color: var(--on-accent); }
+  &.is-podium { background: var(--accent-tint-strong); color: var(--accent); }
+  &.is-live { background: var(--accent); color: var(--on-accent); }
+
+  @include v2.mobile { width: 44px; height: 44px; border-radius: var(--r-lg); font-size: 20px; }
+}
+
+.discover-row.is-skeleton {
+  pointer-events: none;
+
+  .discover-row__body { gap: 8px; }
+  .v2-skeleton.is-short { width: 50%; }
+  .discover-trend__rank { @include v2.thumb-placeholder(8px); }
+}
+
+// ── A creator (21a): 80 picture ringed cyan, eyebrow, name, Follow ──────────
+.discover-creator {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  min-width: 0;
+
+  @include v2.mobile { gap: 12px; padding: 12px; flex-wrap: wrap; }
+}
+
+.discover-creator__pic {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  padding: 3px;
+  border-radius: var(--r-xl);
+  background: var(--cyan);
+  text-decoration: none;
+
+  .is-top & { width: 80px; height: 80px; border-radius: var(--r-3xl); }
+  @include v2.mobile { .is-top & { width: 64px; height: 64px; border-radius: var(--r-xl); } }
+}
+
+.discover-creator__inner {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r-lg);
+  border: 3px solid var(--surface);
+  background: var(--avatar);
+  color: var(--text);
+  overflow: hidden;
+  font-size: 20px;
+  font-weight: 900;
+
+  img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .is-top & { border-radius: var(--r-2xl); font-size: 28px; }
+}
+
+.discover-creator__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.discover-creator__eyebrow {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+.discover-creator__name {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  .is-top & { font-size: 24px; letter-spacing: -.02em; margin-top: 2px; }
+  &:hover { color: var(--text); text-decoration: underline; }
+}
+
+.discover-creator__meta {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.discover-creator__follow {
+  flex: none;
+  .is-top & { gap: 22px; padding: 0 16px 0 20px; }
+
+  @include v2.mobile { width: 100%; justify-content: space-between; }
+}
+
+// ── Side panels (21a communities + tags, 21b trending tags + top creators) ──
+.discover-panel {
+  padding: 16px;
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  &.is-list { gap: 12px; }
+}
+
+.discover-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  h2 {
+    flex: 1;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 900;
+  }
+}
+
+.discover-panel__link {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cyan);
+  text-decoration: none;
+  &:hover { color: var(--cyan); text-decoration: underline; }
+}
+
+.discover-panel__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 0;
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover { color: var(--text); .discover-panel__name { text-decoration: underline; } }
+}
+
+.discover-panel__n {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+
+  &.is-first { background: var(--accent); color: var(--on-accent); font-weight: 900; }
+  &.is-podium { background: var(--accent-tint-strong); color: var(--accent); font-weight: 900; }
+}
+
+.discover-panel__pic {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  background: var(--avatar);
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 900;
+
+  img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+}
+
+.discover-panel__name {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.discover-panel__value {
+  flex: none;
+  font-size: 12px;
+  color: var(--muted);
+
+  &.is-cyan { color: var(--cyan); font-weight: 700; }
+}
+
+// A community (21a aside and the Groups tab): 48 picture, name, Join.
+.discover-community {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+
+  & + & { margin-top: 12px; }
+  .is-list & + & { margin-top: 0; }
+}
+
+.discover-community__pic {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-lg);
+  background: var(--cyan);
+  color: var(--bg);
+  overflow: hidden;
+  font-size: 18px;
+  font-weight: 900;
+  text-decoration: none;
+
+  img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+}
+
+.discover-community__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.discover-community__name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &:hover { color: var(--text); text-decoration: underline; }
+}
+
+.discover-community__meta { font-size: 12px; color: var(--muted); }
+
+.discover-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.discover-tag {
+  @include v2.control(36);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+}
+
+// ── Topic tiles (21b): 6 across, 96 tall, radius 20; picked = cyan tint ─────
+.discover-cats {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+
+  @media (max-width: 1024px) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  @include v2.mobile {
+    display: flex;
+    gap: 8px;
+    margin: 16px calc(-1 * var(--page-pad)) 0;
+    padding: 0 var(--page-pad);
+    @include v2.scroll-x;
+  }
+}
+
+.discover-cat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 96px;
+  padding: 14px;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  b { font-size: 16px; font-weight: 700; }
+
+  &:hover { background: color-mix(in srgb, var(--text) 5%, var(--surface)); }
+  &:active { transform: scale(.98); }
+  &.is-on { background: var(--cyan-tint-strong); color: var(--cyan); }
+
+  @include v2.mobile { flex: 0 0 112px; height: 88px; padding: 12px; }
+}
+
+// ── Filters sheet (34b): 460 wide, radius 28 ────────────────────────────────
+.discover-sheet {
+  .v2-dialog__body { padding: 20px 20px 4px; gap: 10px; }
+  .v2-dialog__foot { border-top: 0; padding: 12px 20px 20px; }
+  .v2-dialog__foot .v2-btn { border-radius: var(--r-lg); }
+}
+
+.discover-bar {
+  flex: none;
+  width: 4px;
+  height: 22px;
+  border-radius: var(--r-bar);
+  background: var(--accent);
+
+  &.is-cyan { background: var(--cyan); }
+}
+
+.discover-sheet__head {
   display: flex;
   align-items: center;
   gap: 10px;
 
-  b { flex: 1; @include v2.text(title); }
+  h2 {
+    flex: 1;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+  }
 }
 
-.discover-bar {
-  width: 4px;
-  height: 22px;
-  flex: none;
-  border-radius: var(--r-bar);
-  background: var(--accent);
-  &.is-cyan { background: var(--cyan); }
-}
-
-.discover-clear-advanced {
+.discover-sheet__clear {
   border: 0;
-  background: transparent;
-  padding: 4px 0;
+  background: none;
+  padding: 4px;
   color: var(--cyan);
   font: inherit;
   font-size: 12px;
@@ -255,63 +708,109 @@
   &:hover { text-decoration: underline; }
 }
 
-.discover-advanced-row {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-
-  .discover-date-presets { background: var(--bg); }
+.discover-sheet__eyebrow {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
 }
 
-.discover-advanced-wells {
+.discover-types {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
 
-  @include v2.mobile { grid-template-columns: 1fr; }
+.discover-type {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 10px;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 0;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+  span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  &:hover { background: var(--bg-hover); }
+  &.is-on { border-color: var(--cyan); background: var(--cyan-tint-strong); }
+}
+
+.discover-wells {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+
+  @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
 }
 
 .discover-well {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 0;
   padding: 10px 12px;
   border-radius: var(--r-lg);
   background: var(--bg);
   border: 1px solid var(--border);
+  min-width: 0;
+
   &:focus-within { border-color: var(--accent); }
 }
 
-.discover-well-input {
+.discover-well__label {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.discover-well__input {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  margin-top: 2px;
+  min-height: 20px;
+
+  input {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    &::placeholder { color: var(--muted); }
+  }
 }
 
-.discover-advanced-input {
+.discover-well__value {
   flex: 1;
   min-width: 0;
-  height: 24px;
-  border: 0;
-  outline: none;
-  padding: 0;
-  background: transparent;
-  color: var(--text);
-  font: inherit;
   font-size: 13px;
-  &::placeholder { color: var(--muted); }
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.discover-advanced-clear {
-  width: 24px;
-  height: 24px;
+.discover-well__clear {
   flex: none;
   display: grid;
   place-items: center;
-  padding: 0;
+  width: 24px;
+  height: 24px;
   border: 0;
   border-radius: var(--r-sm);
   background: transparent;
@@ -320,47 +819,33 @@
   &:hover { background: var(--bg-hover); color: var(--text); }
 }
 
-.discover-community-selected {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  height: 24px;
-  font-size: 13px;
+.discover-well__menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  max-height: 260px;
+  @include v2.scroll-y;
 }
 
-.discover-community-selected-avatar {
-  width: 20px;
-  height: 20px;
+.discover-well__option { gap: 10px; min-height: 44px; }
+
+.discover-well__option-pic {
   flex: none;
-  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--cyan);
   overflow: hidden;
-  background: var(--cyan-tint);
   img { width: 100%; height: 100%; object-fit: cover; }
 }
 
-.discover-community-selected-name {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--cyan);
-  font-weight: 700;
-}
-
-.discover-community-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
-  z-index: 60;
-  max-height: 280px;
-  @include v2.scroll-y;
-  @include v2.menu;
+.discover-well__option-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  min-width: 0;
+  b { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  span { font-size: 11px; font-weight: 400; color: var(--muted); }
 }
 
 .discover-boost {
@@ -371,329 +856,59 @@
   border-radius: var(--r-lg);
   background: var(--bg);
 
-  .discover-boost-icon { color: var(--cyan); }
-  .discover-boost-label { flex: 1; @include v2.text(body-sm); font-weight: 700; }
+  .discover-boost__icon { color: var(--cyan); flex: none; }
+  .v2-toggle.is-on { background: var(--cyan); }
+  .v2-toggle.is-on .v2-toggle__thumb { background: var(--bg); }
 }
 
-// ── Results ──
-.discover-search-area { min-width: 0; }
-
-.discover-results {
+.discover-boost__text {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding-bottom: 24px;
+  font-size: 13px;
+
+  b { font-weight: 700; }
+  span { font-size: 11px; color: var(--muted); }
 }
 
-.discover-all-hidden {
+// All content types off: an accent wash with "Re-enable all".
+.discover-hidden {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
   border-radius: var(--r-lg);
-  background: var(--accent-wash);
-  @include v2.text(meta);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  font-size: 12px;
   color: var(--text);
 
-  .material-symbols-rounded { color: var(--accent); }
-  span:not(.material-symbols-rounded) { flex: 1; }
-}
-
-.discover-reset-filters {
-  border: 0;
-  background: transparent;
-  padding: 0;
-  color: var(--accent);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  &:hover { text-decoration: underline; }
-}
-
-.discover-result-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 0;
-}
-
-.discover-group-title {
-  margin: 0;
+  .material-symbols-rounded { color: var(--accent); flex: none; }
+  span { flex: 1; min-width: 0; }
 
   button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    padding: 0;
     border: 0;
-    background: transparent;
-    color: var(--text);
+    background: none;
+    padding: 4px;
+    color: var(--accent);
     font: inherit;
-    text-align: left;
+    font-weight: 700;
     cursor: pointer;
-  }
-
-  .discover-group-icon { color: var(--muted); }
-  .discover-group-label { @include v2.text(title); }
-  .discover-group-count {
-    @include v2.mono(12, 700);
-    color: var(--muted);
-    flex: 1;
-  }
-  .discover-group-toggle { color: var(--muted); }
-}
-
-// Videos, shorts and audio: one result row card each (21a)
-.discover-media-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(560px, 100%), 1fr));
-  gap: 10px;
-}
-
-.discover-media-card {
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  gap: 16px;
-  align-items: center;
-  padding: 8px;
-  border-radius: var(--r-2xl);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  text-decoration: none;
-  transition: border-color var(--t-fast) var(--ease);
-
-  &:hover { border-color: var(--cyan); color: var(--text); }
-  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-  @include v2.mobile {
-    grid-template-columns: 128px minmax(0, 1fr);
-    gap: 10px;
-    padding: 6px;
-    border-radius: var(--r-lg);
+    &:hover { text-decoration: underline; }
   }
 }
 
-.discover-media-thumb {
-  position: relative;
-  display: block;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  @include v2.thumb-placeholder;
-
-  img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-  @include v2.mobile { border-radius: var(--r-sm); }
-}
-
-.discover-media-duration {
-  position: absolute;
-  right: 6px;
-  bottom: 6px;
-  @include v2.scrim-pill;
-  font-family: var(--font-mono);
-}
-
-.discover-media-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.discover-media-title {
-  @include v2.text(title);
-  font-weight: 900;
-  line-height: 1.25;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-
-  @include v2.mobile { font-size: 14px; font-weight: 700; }
-}
-
-.discover-media-author {
-  @include v2.text(body-sm);
-  color: var(--muted);
-}
-
-.discover-media-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  @include v2.text(meta);
-  color: var(--muted);
-
-  > * + *::before { content: "·"; margin-right: 4px; }
-}
-
-// Users
-.discover-user-list,
-.discover-community-list,
-.discover-playlist-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 10px;
-
-  @include v2.mobile { grid-template-columns: 1fr; }
-}
-
-.discover-user-card,
-.discover-community-card,
-.discover-playlist-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-  padding: 14px;
-  border-radius: var(--r-2xl);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  text-decoration: none;
-  transition: border-color var(--t-fast) var(--ease);
-
-  &:hover { border-color: var(--cyan); color: var(--text); }
-  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-}
-
-.discover-user-avatar {
-  width: 52px;
-  height: 52px;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--avatar);
-  color: var(--muted);
-  img { width: 100%; height: 100%; object-fit: cover; }
-}
-
-.discover-user-info,
-.discover-community-info,
-.discover-playlist-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.discover-user-name,
-.discover-community-name,
-.discover-playlist-name {
-  @include v2.text(body);
-  font-weight: 700;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.discover-user-handle { @include v2.text(meta); color: var(--muted); }
-
-.discover-user-about,
-.discover-community-about {
-  @include v2.text(meta);
-  color: var(--muted);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-// Communities: cyan, like every community (21a)
-.discover-community-avatar {
-  width: 48px;
-  height: 48px;
-  flex: none;
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  background: var(--cyan-tint);
-  img { width: 100%; height: 100%; object-fit: cover; }
-}
-
-.discover-community-name { color: var(--cyan); }
-
-.discover-community-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-  @include v2.text(meta-sm);
-  color: var(--muted);
-}
-
-// Playlists
-.discover-playlist-icon-wrap {
-  width: 48px;
-  height: 48px;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border-radius: var(--r-lg);
-  background: var(--surface-2);
-  color: var(--text);
-}
-
-.discover-playlist-meta { @include v2.text(meta); color: var(--muted); }
-
-// Loading rows while a search runs
-.discover-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.discover-skeleton-row {
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  gap: 16px;
-  align-items: center;
-  padding: 8px;
-  border-radius: var(--r-2xl);
-  background: var(--surface);
-  border: 1px solid var(--border);
-
-  @include v2.mobile { grid-template-columns: 128px minmax(0, 1fr); gap: 10px; }
-}
-
-.discover-skeleton-thumb { aspect-ratio: 16 / 9; border-radius: var(--r-lg); }
-
-.discover-skeleton-info {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.discover-skeleton-line {
-  height: 14px;
-  width: 80%;
-  &.short { width: 45%; height: 10px; }
-}
-
-// ── Not searching: the trending grid ──
-.discover-section-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-
-  h2 { margin: 0; @include v2.text(heading); }
-}
+.discover-empty { margin-top: 4px; }
 
 .discover-error {
-  margin: 8px 0 0;
-  @include v2.text(meta-sm);
+  margin: 12px 0 0;
+  font-size: 12px;
   color: var(--accent);
 }
 
 .discover-loading-more {
-  margin: 0;
-  padding: 16px 0;
-  text-align: center;
-  @include v2.text(meta-sm);
+  margin: 12px 0 0;
+  font-size: 12px;
   color: var(--muted);
+  text-align: center;
 }

@@ -20,26 +20,62 @@
 .home-grouped-container {
   max-width: 100%;
   min-width: 0;
-  overflow-x: clip;
   display: flex;
   flex-direction: column;
+  // 20a lines the hero, the stories and the feed up 64px in from the 1280
+  // frame's edge: the page padding (24) plus this.
+  padding-inline: var(--home-inset, 0px);
+
+  @include v2.wide { --home-inset: 40px; }
 }
 
-// ── Section tabs + tools, sticky under the top bar ──
-.home-tabs-row {
+// The stories row: 48 under the hero (20a), above the "new from following" strip.
+.home-grouped-container > .shorts-stories {
+  margin-top: 48px;
+  margin-bottom: 0;
+  @include v2.mobile { margin-top: 20px; }
+}
+.home-grouped-container > .shorts-stories:first-child,
+.home-grouped-container > .welcome-banner + .shorts-stories { margin-top: 0; }
+
+.home-grouped-container > .new-from-following { margin-top: 20px; }
+
+// The feed and, from 1280px up, the activity panel beside it.
+.home-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+  padding-top: 36px;
+  min-width: 0;
+
+  @include v2.wide { grid-template-columns: minmax(0, 1fr) 340px; }
+  @include v2.mobile { padding-top: 20px; }
+}
+
+.home-main { min-width: 0; }
+
+// The panel stays in view while the feed scrolls past it.
+.home-aside {
   position: sticky;
-  top: var(--nav-height, 56px);
-  z-index: 20;
+  top: calc(var(--nav-height, 78px) + 16px);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+// ── Section tabs + tools (20a) ──
+.home-tabs-row {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 0 12px;
-  background: var(--bg);
+  margin-bottom: 18px;
 
-  @include v2.mobile { gap: 8px; padding: 6px 0 10px; }
+  @include v2.mobile { gap: 8px; margin-bottom: 12px; }
 }
 
-// The segmented track (one style for every tab bar)
+// The segmented track: surface, radius 16, padding 4; options 8/14, radius 12,
+// 14/700, the current one on surface-2. Phones: full width, 32 tall, 13/700.
 .home-tabs {
   display: flex;
   gap: 4px;
@@ -53,7 +89,7 @@
   .home-tab {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
     flex: 0 0 auto;
     height: 36px;
     padding: 0 14px;
@@ -62,33 +98,15 @@
     background: transparent;
     color: var(--muted);
     font: inherit;
-    @include v2.text(body);
+    font-size: 14px;
     font-weight: 700;
     white-space: nowrap;
-    cursor: pointer; // the tab body just selects; only the handle grabs
+    cursor: pointer;
     touch-action: pan-y; // vertical swipe scrolls the page; horizontal → reorder
     user-select: none;
     transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
     &:hover { color: var(--text); }
-
-    .home-tab-icon { display: inline-flex; }
-
-    // Drag handle: revealed on hover (desktop); on the selected tab on touch.
-    .home-tab-handle {
-      display: inline-flex;
-      align-items: center;
-      margin-left: -6px;
-      color: var(--muted);
-      opacity: 0;
-      width: 0;
-      overflow: hidden;
-      touch-action: none; // grabbing the handle never scrolls
-      cursor: grab;
-      transition: opacity var(--t-fast) var(--ease), width var(--t-fast) var(--ease);
-      &:active { cursor: grabbing; }
-    }
-    &:hover .home-tab-handle { opacity: .8; width: 16px; }
 
     &.active {
       background: var(--surface-2);
@@ -104,17 +122,13 @@
 
   &.is-dragging, &.is-dragging .home-tab { cursor: grabbing; }
 
-  @media (hover: none) {
-    .home-tab.active .home-tab-handle { opacity: .6; width: 16px; }
-  }
-
-  // Phones: only the ACTIVE tab keeps its label, so the bar fits beside the tools.
   @include v2.mobile {
+    flex: 1;
     .home-tab {
-      height: 36px;
-      padding: 0 12px;
+      flex: 1 0 auto;
+      height: 32px;
+      padding: 0 10px;
       font-size: 13px;
-      &:not(.active) .home-tab-label { display: none; }
     }
   }
 }
@@ -125,28 +139,36 @@
   gap: 8px;
   margin-left: auto;
   flex: none;
+
+  @include v2.mobile { gap: 6px; }
 }
 
-// Channel Surfing link and the Customize button: quiet surface buttons, 40 tall
-.home-tab-surf,
-.home-tab-customize {
-  @include v2.control(40);
-  @include v2.text(label);
+// Channel Surfing and Customize: 40 tall, radius 12, surface, 13px muted, an
+// 18px icon (20a "Customize").
+.home-tab-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
   padding: 0 12px;
+  border: 0;
+  border-radius: var(--r-md);
   background: var(--surface);
   color: var(--muted);
+  font: inherit;
+  font-size: 13px;
   text-decoration: none;
   white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
   &:hover { color: var(--text); background: var(--surface-2); }
 
-  // Phones: icon only (the label stays for screen readers through the title)
+  // Phones: icon only beside the full-width track (the title names it).
   @include v2.mobile {
-    width: 44px;
-    height: 44px;
+    width: 40px;
     padding: 0;
     justify-content: center;
-    border-radius: var(--r-lg);
     > span:not(.material-symbols-rounded) { display: none; }
   }
 }

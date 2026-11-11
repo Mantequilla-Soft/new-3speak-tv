@@ -157,7 +157,7 @@
       margin: 0;
       font-size: 48px;
       font-weight: 900;
-      letter-spacing: var(--tracking-title);
+      letter-spacing: -.035em;   // 20b: the channel name is set tighter than other titles
       line-height: 1.1;
       color: var(--text);
       overflow-wrap: anywhere;

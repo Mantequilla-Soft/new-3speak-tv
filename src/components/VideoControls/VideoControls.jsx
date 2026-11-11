@@ -94,6 +94,7 @@ function VideoControls({
   onReactToMoment,
   onCycleReactionSize,
   reactionSizeLabel,
+  reactionSizeShort,
   qualityLevels,
   currentQuality,
   onQualityChange,
@@ -571,7 +572,7 @@ function VideoControls({
           {onCycleReactionSize && (
             <button type="button" className="vc-btn vc-btn--resize" onClick={onCycleReactionSize} title={t('player.controls.playerSize', { size: reactionSizeLabel || t('player.controls.sizeStandard') })} aria-label={t('player.controls.playerSize', { size: reactionSizeLabel || t('player.controls.sizeStandard') })}>
               <Icon name="open_in_full" size={18} />
-              <span className="vc-size-label">{reactionSizeLabel || t('player.controls.sizeStandard')}</span>
+              <span className="vc-size-label">{reactionSizeShort || reactionSizeLabel || t('player.controls.sizeStandard')}</span>
             </button>
           )}
           {onToggleAutoplay && (

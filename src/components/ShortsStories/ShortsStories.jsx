@@ -77,8 +77,10 @@ const CARD_FADE_MS = 200;
  *                    If not provided, defaults to navigating to the shorts / story viewer
  * - compact: boolean — smaller avatars for the shorts player context
  * - hiddenOnMobile: boolean — hide the entire bar on mobile (for shorts player, where swipe is used instead)
+ * - tiles: boolean — the Home row (20a): a dashed "+" tile, then 64px rounded
+ *          tiles in cyan rings, names kept for screen readers only
  */
-const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, compact = false, hiddenOnMobile = false }) => {
+const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, compact = false, hiddenOnMobile = false, tiles = false }) => {
   const { t } = useTranslation();
   const { authenticated, user } = useAppStore();
   const navigate = useNavigate();
@@ -225,6 +227,7 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
   const wrapperClass = [
     "shorts-stories",
     compact && "shorts-stories--compact",
+    tiles && "shorts-stories--tiles",
     hiddenOnMobile && "shorts-stories--hidden-mobile",
   ].filter(Boolean).join(" ");
 
@@ -257,7 +260,24 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
           ) : (
             <div className="stories-row">
               {/* Current user avatar — always first */}
-              {authenticated && (
+              {authenticated && tiles && (
+                <div
+                  className="story-item own-story own-story--add"
+                  role="button"
+                  tabIndex={0}
+                  onClick={handleOwnAvatarClick}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleOwnAvatarClick(); } }}
+                  aria-label={t("shorts.stories.you")}
+                  title={t("shorts.stories.you")}
+                >
+                  <div className="story-add-tile">
+                    <Icon name="add" size={24} />
+                    <StreakBadge streak={currentUserStreak} />
+                  </div>
+                  <span className="story-username">{t("shorts.stories.you")}</span>
+                </div>
+              )}
+              {authenticated && !tiles && (
                 <div className="story-item own-story" onClick={handleOwnAvatarClick}>
                   <div
                     className={`story-avatar-wrap ${

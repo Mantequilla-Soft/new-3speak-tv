@@ -273,6 +273,90 @@
   }
 }
 
+// ── The Home row (20a) ──
+// A dashed "+" tile (2px, ink at 30%), then 64px tiles, radius 20: a 2px cyan
+// ring around a 3px ground gap around the picture. Gap 10, no names (they stay
+// for screen readers). A 24h story already watched keeps a quiet ring.
+.shorts-stories--tiles {
+  --story-size: 64px;
+  --story-r: 20px;
+  @include v2.mobile { --story-size: 64px; }
+
+  .stories-row,
+  .stories-skeleton-row { gap: 10px; padding: 0; }
+
+  .story-item {
+    width: var(--story-size);
+    gap: 0;
+  }
+
+  .story-username,
+  .story-name-skeleton {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .story-avatar-wrap {
+    padding: 2px;
+    border: 0;
+    background: var(--cyan);
+
+    &.story-timer::before { content: none; }
+    &.story-timer--seen { background: color-mix(in srgb, var(--text) 30%, transparent); }
+
+    .hive-avatar {
+      border: 3px solid var(--bg);
+      border-radius: var(--story-r);
+      background: var(--avatar);
+      overflow: hidden;
+    }
+
+    .story-avatar { border-radius: calc(var(--story-r) - 3px); }
+  }
+
+  .skeleton-story .story-avatar-wrap { background: transparent; padding: 0; }
+
+  .story-add-tile {
+    position: relative;
+    width: var(--story-size);
+    height: var(--story-size);
+    display: grid;
+    place-items: center;
+    border-radius: var(--story-r);
+    border: 2px dashed color-mix(in srgb, var(--text) 30%, transparent);
+    color: var(--text);
+    transition: background var(--t-fast) var(--ease);
+
+    .streak-badge {
+      position: absolute;
+      bottom: -4px;
+      left: -4px;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      height: 18px;
+      padding: 0 5px 0 3px;
+      border-radius: var(--r-sm);
+      border: 2px solid var(--bg);
+      background: var(--surface);
+      color: var(--text);
+      @include v2.mono(10, 700);
+      line-height: 1;
+      .material-symbols-rounded { color: var(--accent); }
+    }
+  }
+  .own-story--add:hover .story-add-tile { background: var(--bg-hover); }
+  .own-story--add:focus-visible { outline: none; .story-add-tile { outline: 2px solid var(--accent); outline-offset: 2px; } }
+
+  .story-item {
+    position: relative;
+  }
+}
+
 // The turnaround, for the avatars that open a creator card (not your own "+").
 .shorts-stories .story-item:not(.own-story):hover .story-avatar-wrap .hive-avatar {
   @include mix.coin-spin-hover(220px);

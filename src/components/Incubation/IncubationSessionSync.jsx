@@ -5,7 +5,7 @@ import { toastIn } from '../../utils/toast';
 import { openButrauthPopup } from '../../utils/butrauthPopup';
 import { useTranslation } from 'react-i18next';
 // The shared v2 dialog, with the same warm-up prompt pieces as graduation.
-import { Button, Dialog, Icon } from '../v2/ui';
+import { Button, Dialog } from '../v2/ui';
 import './GraduationPrompt.scss';
 
 // Every toast from this module is headed "Your account"; the message becomes
@@ -119,7 +119,6 @@ export default function IncubationSessionSync() {
         </Button>
       )}
     >
-      <span className="inc-prompt-icon" aria-hidden="true"><Icon name="sync" size={28} /></span>
       <p className="inc-prompt-lede">
         {t('incubation.sessionSync.lede')}
       </p>

@@ -71,6 +71,20 @@
     .material-symbols-rounded { color: var(--muted); }
   }
 
+  // 20c: a row of 28px faces, each ringed in the card colour, overlapping by 8.
+  &__stack { display: inline-flex; margin-right: 8px; }
+  &__face {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    background: var(--avatar);
+    border: 2px solid var(--surface);
+    margin-right: -8px;
+    overflow: hidden;
+    flex: none;
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+
   &__about {
     margin: 8px 0 0;
     max-width: 720px;

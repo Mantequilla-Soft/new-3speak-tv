@@ -247,7 +247,10 @@ export default function OpenPods() {
   };
 
   return (
-    <div className={`openpods-page${tab === 'templates' ? ' openpods-page--templates' : ''}`} data-hh-theme={hhTheme}>
+    <div
+      className={`openpods-page${tab === 'templates' ? ' openpods-page--templates' : ''}${studioTabs && tab === 'new' ? ' openpods-page--studio' : ''}`}
+      data-hh-theme={hhTheme}
+    >
       {studioTabs && (
         <header className="openpods-studio-head">
           <h1>{t('live.obs.tabs.label')}</h1>

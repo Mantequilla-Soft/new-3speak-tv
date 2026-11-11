@@ -16,10 +16,11 @@ import './PodcastTipModal.scss';
  * Tip an outside podcast episode the way its own RSS feed asks (lib/podcastTips.js).
  *
  * Props: track (episodeToTrack() shape: title, show, value, funding, feed_url),
- * onClose. Shows nothing to pay when the feed has neither a value block nor a
- * Hive account, apart from the show's own funding links.
+ * initialSats (the amount picked before it opened, e.g. on the show page), onClose.
+ * Shows nothing to pay when the feed has neither a value block nor a Hive
+ * account, apart from the show's own funding links.
  */
-export default function PodcastTipModal({ track, onClose }) {
+export default function PodcastTipModal({ track, initialSats, onClose }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const value = track?.value || null;
@@ -27,7 +28,7 @@ export default function PodcastTipModal({ track, onClose }) {
   const { recipients, single, payable } = useMemo(() => tipOptions(value), [value]);
   const webln = hasWebln();
   const [method, setMethod] = useState(payable ? 'lightning' : hiveAccount ? 'hive' : 'lightning');
-  const [sats, setSats] = useState(String(PODCAST_PRESETS[1]));
+  const [sats, setSats] = useState(String(initialSats || PODCAST_PRESETS[1]));
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
   const [invoice, setInvoice] = useState(null);
@@ -117,18 +118,19 @@ export default function PodcastTipModal({ track, onClose }) {
 
   const title = t('audio.podcasts.tip.heading', { show: track.show || track.title });
   // Footer actions of the amount step: cancel, then the browser wallet and/or the QR code.
+  // The send button runs the width of the window, label left, icon right (24b);
+  // the close button in the head cancels.
   const footer = !results && !invoice && payable ? (
     <>
-      <Button variant="secondary" onClick={onClose}>{t('common.actions.cancel')}</Button>
       {webln && (
-        <Button variant="primary" onClick={payWebln} disabled={busy} loading={busy} trailing="bolt">
+        <Button variant="primary" size={48} block onClick={payWebln} disabled={busy} loading={busy} trailing="bolt">
           {t('audio.podcasts.tip.sendWebln')}
         </Button>
       )}
       {/* The QR code stays on offer next to a browser wallet: people pay from
           their phone or v4v.app as well. */}
       {qrTarget && (
-        <Button variant={webln ? 'secondary' : 'primary'} onClick={payQr} disabled={busy} loading={busy && !webln} trailing={webln ? 'qr_code_2' : 'bolt'}>
+        <Button variant={webln ? 'secondary' : 'primary'} size={48} block onClick={payQr} disabled={busy} loading={busy && !webln} trailing={webln ? 'qr_code_2' : 'bolt'}>
           {!single
             ? t('audio.podcasts.tip.payMainOnly', { name: qrTarget.name || qrTarget.address })
             : webln ? t('audio.podcasts.tip.showQr') : t('engagement.tip.lightning.send')}
@@ -198,8 +200,8 @@ export default function PodcastTipModal({ track, onClose }) {
             <span className="v2-eyebrow">{t('engagement.tip.lightning.amountLabel').replace(/:\s*$/, '')}</span>
             <div className="podcast-tip-presets">
               {PODCAST_PRESETS.map((p) => (
-                <button type="button" key={p} className={`podcast-tip-preset num${String(p) === sats ? ' is-on' : ''}`} aria-pressed={String(p) === sats} onClick={() => setSats(String(p))}>
-                  {p.toLocaleString()}
+                <button type="button" key={p} className={`podcast-tip-preset num${String(p) === sats ? ' is-on' : ''}`} aria-pressed={String(p) === sats} onClick={() => setSats(String(p))} aria-label={t('audio.podcasts.tip.sats', { count: p })}>
+                  {p >= 1000 ? `${Number((p / 1000).toFixed(1))}K` : p}
                 </button>
               ))}
             </div>

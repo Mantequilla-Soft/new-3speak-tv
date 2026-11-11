@@ -1,40 +1,46 @@
 @use "../../styles/v2" as v2;
 
-// The welcome on top of the home page for logged-out visitors (design 33d):
-// the success card with an accent hero tint. Desktop: title block, the points
-// in two columns, the two buttons stacked on the right. Narrower, the buttons
-// drop under the points; a phone stacks everything.
+// The welcome for logged-out visitors (design 33d): one card with the accent
+// hero tint (160deg, 22%). The title and its lead with the close on the right,
+// the points two across as tinted wells, then "Take the tour" taking the row
+// and FAQ beside it. On a wide screen it floats in the lower right, 520 wide;
+// narrower, it sits in the page above the feeds.
 .welcome-banner {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr) 200px;
-  grid-template-areas: "head points actions";
-  align-items: center;
-  gap: 14px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   margin: 0 0 16px;
   padding: 20px;
   border-radius: var(--r-3xl);
+  border: 1px solid var(--border);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface));
+  color: var(--text);
 
-  @include v2.below-wide {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "head" "points" "actions";
+  @include v2.wide {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 900;
+    width: 520px;
+    margin: 0;
+    box-shadow: var(--shadow-float);
+    animation: v2-pop var(--t-base) var(--ease);
   }
 
   @include v2.mobile { padding: 16px; }
 }
 
+// The feedback button shares that corner: it waits until the card is closed.
+@include v2.wide {
+  body:has(.welcome-banner) .review-fab { display: none; }
+}
+
 .welcome-banner-head {
-  grid-area: head;
   display: flex;
   align-items: flex-start;
   gap: 12px;
   min-width: 0;
-}
-
-.welcome-banner-mark {
-  width: 44px;
-  height: 44px;
-  flex: none;
 }
 
 .welcome-banner-titles {
@@ -54,23 +60,13 @@
   color: var(--muted);
 }
 
-// On desktop the close sits in the card's top-right corner; below that it
-// stays in the head row.
 .welcome-banner-close.v2-iconbtn {
   flex: none;
-  margin: -6px -6px 0 0;
+  margin: -6px -8px 0 0;
   color: var(--muted);
-
-  @include v2.wide {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    margin: 0;
-  }
 }
 
 .welcome-banner-points {
-  grid-area: points;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -86,33 +82,27 @@
     gap: 8px;
     padding: 10px;
     border-radius: var(--r-lg);
-    background: color-mix(in srgb, var(--text) 6%, transparent);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
     @include v2.text(meta);
-    line-height: 1.4;
-    color: var(--muted);
+    line-height: 1.35;
+    color: var(--text);
+
+    // An odd last point takes the whole row.
+    &:last-child:nth-child(odd) { grid-column: 1 / -1; }
   }
 
-  strong { font-weight: 700; color: var(--text); }
+  strong { font-weight: 700; }
   .is-accent { color: var(--accent); }
   .is-cyan { color: var(--cyan); }
 }
 
 .welcome-banner-actions {
-  grid-area: actions;
   display: flex;
-  flex-direction: column;
   gap: 8px;
 
-  .welcome-banner-btn.v2-btn { justify-content: space-between; }
-
-  @include v2.below-wide {
-    flex-direction: row;
-    .welcome-banner-btn--primary.v2-btn { flex: 1; }
-  }
-
-  @include v2.wide {
-    margin-right: 28px;   // clear of the close button
-  }
+  .welcome-banner-btn.v2-btn { justify-content: space-between; gap: 12px; }
+  .welcome-banner-btn--primary.v2-btn { flex: 1; }
+  .welcome-banner-btn:not(.welcome-banner-btn--primary) { font-weight: 700; }
 }
 
 // Phones get the one-word tour label.

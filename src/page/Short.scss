@@ -46,7 +46,9 @@
 
 // 769-1024px: the app's bottom bar shows (BottomNav), so the player and the
 // discussion panel stop above it. Zero everywhere else.
-body { --shorts-bottom-reserve: 0px; }
+// --shorts-top: where the page starts under the app's top bar. Nav.jsx measures the
+// bar's strip into --nav-height (it floats 16px down from the top on desktop).
+body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(--nav-height, var(--topbar-h)); }
 @media (min-width: 769px) and (max-width: 1024px) {
   body { --shorts-bottom-reserve: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px)); }
 }
@@ -58,12 +60,37 @@ body { --shorts-bottom-reserve: 0px; }
   @include v2.scroll-y;
 }
 
+// 45b: a radius 24 card with 10px padding; 36px rows, the picked one on
+// surface-2; Ambient light as three 28px options, the picked one in a 2px cyan
+// border on its tint.
 .shortsTuneMenu {
   width: 248px;
+  padding: 10px;
+  border-radius: var(--r-2xl);
+
+  .v2-menu__label { padding: 6px 8px; }
+
+  .v2-menu__row {
+    min-height: 36px;
+    padding: 0 8px;
+    font-weight: 400;
+
+    .material-symbols-rounded { color: var(--text); }
+  }
 
   .shortsTuneMenu__glow .v2-seg {
     display: flex;
-    margin: 0 4px 4px;
+    margin: 0 6px 6px;
+    padding: 0;
+    background: transparent;
+
+    .v2-seg__opt {
+      flex: 1 1 0;
+      border: 2px solid var(--border);
+      color: var(--text);
+
+      &.is-on { border-color: var(--cyan); background: var(--cyan-tint-strong); }
+    }
   }
 
   // Ambient light is a desktop effect (AmbientGlow is off on phones).
@@ -79,15 +106,19 @@ body { --shorts-bottom-reserve: 0px; }
   overflow: hidden;
   padding: 0;
   position: relative;
-  height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px));
-  max-height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px));
+  height: calc(100vh - var(--shorts-top) - var(--shorts-bottom-reserve, 0px));
+  max-height: calc(100vh - var(--shorts-top) - var(--shorts-bottom-reserve, 0px));
   background-color: transparent;
   transition: padding-right var(--t-slow) var(--ease);
 
-  // Desktop: the discussion panel is fixed on the right; keep the player
-  // centred in what is left beside it.
+  // Desktop (18a): the strip on top, the player row under it (padding 16 24 24);
+  // the discussion panel is fixed on the right, so the column keeps clear of it.
   @include desk {
-    &.with-comments { padding-right: var(--side-panel-w); }
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 24px 24px;
+
+    &.with-comments { padding-right: calc(var(--shorts-panel-w) + 24px); }
   }
 
   @include phone {
@@ -153,6 +184,70 @@ body { --shorts-bottom-reserve: 0px; }
     outline: none;
   }
 
+  /* ─── Strip over the player (desktop, 18a) ─────────────────────────────── */
+  .shortsStrip {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 10px 12px 10px 10px;
+    border-radius: var(--r-lg);
+    background: color-mix(in srgb, var(--cyan) 9%, var(--bg));
+    border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
+    color: var(--text);
+    font-size: 14px;
+
+    &__mark { width: 28px; height: auto; flex: none; }
+    &__sep { width: 1px; height: 22px; flex: none; background: var(--border); }
+    &__title { font-weight: 700; }
+    &__muted { color: var(--muted); font-weight: 400; }
+    &__space { flex: 1; }
+
+    &__who {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      color: var(--text);
+      text-decoration: none;
+
+      &:hover b { text-decoration: underline; }
+    }
+
+    &__avatar {
+      display: block;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--r-sm);
+      object-fit: cover;
+      background: var(--avatar);
+    }
+
+    // The feed switch, as a segmented on the page ground (3px track, 8px options)
+    .shortsFeedSwitch {
+      position: static;
+      padding: 3px;
+      gap: 4px;
+      border-radius: var(--r-md);
+      background: var(--bg);
+
+      button {
+        height: auto;
+        padding: 6px 12px;
+        border-radius: var(--r-sm);
+        background: transparent;
+        color: var(--muted);
+        opacity: 1;
+        font-size: 13px;
+        font-weight: 700;
+
+        &:hover { color: var(--text); }
+        &.active { background: var(--surface-2); color: var(--text); }
+      }
+    }
+  }
+
   /* ─── Player row ──────────────────────────────────────────────────────── */
   .videoWrapper {
     position: relative;
@@ -164,6 +259,14 @@ body { --shorts-bottom-reserve: 0px; }
     flex-shrink: 0;
     height: 100%;
     max-height: 100%;
+
+    @include desk {
+      flex: 1;
+      min-height: 0;
+      height: auto;
+      margin-top: 16px;
+      align-self: center;
+    }
 
     @include phone {
       gap: 0;
@@ -221,8 +324,8 @@ body { --shorts-bottom-reserve: 0px; }
   /* ─── The player ──────────────────────────────────────────────────────── */
   .videoContainer {
     position: relative;
-    height: calc(100% - 32px);
-    max-height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px) - 32px);
+    height: 100%;
+    max-height: 100%;
     aspect-ratio: 9 / 16;
     background-color: var(--media-black);
     border-radius: var(--r-3xl);
@@ -515,6 +618,17 @@ body { --shorts-bottom-reserve: 0px; }
       }
     }
 
+    // Desktop (18a): a white bar inside the caption area, 16px from the edges
+    @include desk {
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      border-radius: var(--r-bar);
+
+      .videoProgressFill { background-color: var(--on-media); border-radius: var(--r-bar); }
+      .videoProgressHandle { background-color: var(--on-media); }
+    }
+
     @include phone { bottom: 8px; }
   }
 
@@ -619,20 +733,187 @@ body { --shorts-bottom-reserve: 0px; }
       }
     }
 
-    // Phones: the back arrow sits top-left, so the switch starts beside it
-    @include v2.mobile {
+    // Phones (18a): a full-width track beside the back arrow, 3px padding,
+    // equal 32px options; the picked one on a 16% white wash.
+    @include phone {
       left: 60px;
+      right: 12px;
+      display: flex;
+      padding: 3px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
 
-      button { font-size: 12px; padding: 0 10px; }
+      button {
+        flex: 1 1 0;
+        justify-content: center;
+        height: 32px;
+        padding: 0 8px;
+        border-radius: var(--r-md);
+      }
     }
 
     @media (max-width: 374px) {
-      button { height: 28px; border-radius: var(--r-sm); font-size: 11px; padding: 0 8px; }
+      button { font-size: 12px; }
+    }
+  }
+
+  // Phones: with the feed switch across the top, the subtitles / playback / mute
+  // buttons drop to a row under it, on the right.
+  @include phone {
+    .videoOverlay:has(> .shortsFeedSwitch) > .shortsTopControls { top: calc(60px + var(--safe-top, 0px)); }
+  }
+
+  // "That's all the shorts for your interests. Showing Discover." (45b)
+  .shortsFeedNote {
+    position: absolute;
+    top: calc(60px + var(--safe-top, 0px));
+    left: 12px;
+    right: 12px;
+    z-index: 7;
+    padding: 8px 10px;
+    border-radius: var(--r-md);
+    background: var(--media-scrim-strong);
+    color: var(--on-media);
+    @include v2.text(meta);
+    line-height: 1.35;
+    pointer-events: none;
+    animation: v2-fade var(--t-base) var(--ease);
+  }
+
+  @include phone {
+    .videoOverlay:has(> .shortsFeedSwitch) > .shortsFeedNote { top: calc(108px + var(--safe-top, 0px)); }
+  }
+
+  // Phones (18a): the discussion bar at the foot of the short
+  .shortsPeek {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    z-index: 26;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 72px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: var(--r-xl);
+    background: var(--media-scrim-strong);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: var(--on-media);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    &__text {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    &__meta { font-size: 12px; opacity: .7; }
+
+    &__line {
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__count { font-size: 12px; font-weight: 700; }
+
+    @include desk { display: none; }
+  }
+
+  // With the bar, the creator / caption and the dock sit above it (bottom 118)
+  // and the progress line runs just over it.
+  @include phone {
+    &.has-peek {
+      .bottomOverlay { padding-bottom: calc(118px + env(safe-area-inset-bottom, 0px)); }
+      .actionSidebar { bottom: calc(118px + env(safe-area-inset-bottom, 0px)); }
+      .videoProgressBar { bottom: calc(106px + env(safe-area-inset-bottom, 0px)); left: 12px; right: 12px; }
     }
   }
 
   // The desktop "Back" pill takes the top-left corner while it shows
   .videoContainer:has(> .shortBackBtn:not(.mobileOnly)) .shortsFeedSwitch { display: none; }
+
+  /* ─── Desktop top-left (18a): [back] + the creator chip on the media scrim ── */
+  .shortsTopLeft {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 132px; // clear of the top-right cluster
+    z-index: 55;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+
+    > * { pointer-events: auto; }
+
+    .shortBackBtn.is-inline { position: static; flex: none; }
+  }
+
+  .shortsCreatorChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    max-width: 100%;
+    padding: 4px 12px 4px 4px;
+    border-radius: var(--r-xl);
+    background: var(--media-scrim);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--on-media);
+
+    .author-badge {
+      gap: 8px;
+      min-width: 0;
+      padding: 0;
+      background: transparent;
+      border-color: transparent;
+
+      &:hover { background: transparent; border-color: transparent; }
+
+      img {
+        width: 32px;
+        height: 32px;
+        box-shadow: 0 0 0 2px var(--on-media);
+      }
+
+      .author-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--on-media);
+      }
+
+      .follow-btn {
+        align-self: center;
+        height: 24px;
+        margin-left: 0;
+        padding: 0 10px;
+        border-radius: v2.radius-for(24);
+        background: var(--on-media);
+        color: var(--media-black);
+        font-size: 11px;
+        font-weight: 900;
+        animation: none;
+
+        &:hover { opacity: 1; filter: brightness(.92); }
+
+        &.following {
+          border: 0;
+          background: color-mix(in srgb, var(--on-media) 16%, transparent);
+          color: var(--on-media) !important;
+        }
+      }
+    }
+  }
 
   /* ─── Reaction chain (reactions and remixes), top-left on the video ───── */
   .reactionChainOverlay {
@@ -864,8 +1145,8 @@ body { --shorts-bottom-reserve: 0px; }
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 96px 16px 20px;
-    background: linear-gradient(to top, var(--media-scrim-strong), transparent);
+    padding: 60px 16px 28px;
+    background: linear-gradient(transparent, var(--media-scrim-strong));
     color: var(--on-media);
     z-index: 15;
     pointer-events: none;
@@ -1064,6 +1345,26 @@ body { --shorts-bottom-reserve: 0px; }
       margin: 0;
     }
 
+    // Desktop (18a): the caption is the short's title, 16/700 on two lines;
+    // under a `## Title` it is the plain line below it.
+    @include desk {
+      .captionText {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.35;
+        -webkit-line-clamp: 2;
+      }
+
+      .captionTitle + .captionText {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.4;
+        -webkit-line-clamp: 1;
+      }
+    }
+
+    @include phone { font-size: 14px; }
+
     &--expanded .captionText {
       display: block;
       -webkit-line-clamp: unset;
@@ -1181,24 +1482,41 @@ body { --shorts-bottom-reserve: 0px; }
     }
   }
 
-  .audioMarquee {
+  // Tags and the sound as small chips under the caption (18a)
+  .shortsChips {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     gap: 6px;
-    color: var(--on-media);
+    margin-top: 8px;
+    min-width: 0;
   }
 
-  .audioText {
-    overflow: hidden;
-    max-width: 200px;
+  .shortsChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    max-width: 100%;
+    min-width: 0;
+    padding: 2px 8px;
+    border-radius: var(--r-sm);
+    background: color-mix(in srgb, var(--on-media) 16%, transparent);
+    color: var(--on-media);
+    font-size: 12px;
+    line-height: 1.4;
+    text-decoration: none;
+    pointer-events: auto;
 
-    p {
-      margin: 0;
-      font-size: 12px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    &[href]:hover { color: var(--on-media); background: color-mix(in srgb, var(--on-media) 26%, transparent); }
+  }
+
+  .audioMarquee { color: var(--on-media); }
+
+  .audioText {
+    min-width: 0;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* ─── Dock: the v2 action tiles (18a) ─────────────────────────────────── */
@@ -1209,10 +1527,9 @@ body { --shorts-bottom-reserve: 0px; }
     flex-direction: column;
     flex-wrap: wrap;
     align-content: flex-start;
-    align-self: flex-end;
+    align-self: center;
     gap: 8px;
-    max-height: calc(100% - 32px);
-    margin-bottom: 16px;
+    max-height: 100%;
   }
 
   .actionSidebar .actionItem {
@@ -1262,12 +1579,22 @@ body { --shorts-bottom-reserve: 0px; }
       text-overflow: ellipsis;
     }
 
-    // Your vote, your hype: accent tint. Saved: cyan (secondary selection).
+    // The vote is the dock's primary: always in the accent tint (18a, like the
+    // watch page's dock). Your hype / reblog: accent tint. Saved and a reblog
+    // waiting for its second tap: cyan (secondary selection).
+    &.actionItem--vote,
     &.liked,
     &.reshared,
     &:has(> .actionButton.liked) {
       background: var(--accent-tint-strong);
       color: var(--accent);
+
+      &:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+    }
+
+    &.armed {
+      background: var(--cyan-tint);
+      color: var(--cyan);
     }
 
     &.saved {
@@ -1303,11 +1630,14 @@ body { --shorts-bottom-reserve: 0px; }
       .actionButton { @include rail.rail-icon; }
       .actionLabel { @include rail.rail-label; }
 
+      &.actionItem--vote,
       &.liked,
       &:has(> .actionButton.liked) {
         background-color: color-mix(in srgb, var(--accent) 85%, transparent);
         color: var(--on-media);
       }
+
+      &.armed { background-color: color-mix(in srgb, var(--cyan) 85%, transparent); }
 
       &.reshared {
         background-color: var(--media-scrim);
@@ -1369,10 +1699,10 @@ body { --shorts-bottom-reserve: 0px; }
 
   .commentsPanel {
     position: fixed;
-    top: var(--topbar-h);
+    top: var(--shorts-top);
     right: 0;
-    width: var(--side-panel-w);
-    height: calc(100vh - var(--topbar-h) - var(--shorts-bottom-reserve, 0px));
+    width: var(--shorts-panel-w);
+    height: calc(100vh - var(--shorts-top) - var(--shorts-bottom-reserve, 0px));
     background: var(--surface);
     color: var(--text);
     border-left: 1px solid var(--border);
@@ -1448,9 +1778,91 @@ body { --shorts-bottom-reserve: 0px; }
   .commentsHeader {
     flex: none;
     margin: 0;
-    padding: 18px 16px 12px 20px;
+    padding: 8px 16px 4px 20px;
+  }
 
-    @include phone { padding: 8px 16px 12px 20px; }
+  // Discussion | Up next (18a): a 6px bg track, radius 16, 36 tall options
+  .shortsSideTabs {
+    flex: none;
+    margin: 16px 16px 0;
+    padding: 6px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+
+    .v2-seg__opt { flex: 1 1 0; }
+    .v2-seg__n { margin-left: 4px; font-size: 13px; opacity: 1; }
+
+    @include phone { margin-top: 8px; }
+  }
+
+  .commentsListHead {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 8px;
+
+    .commentsSort { height: 28px; border-radius: v2.radius-for(28); font-size: 12px; }
+  }
+
+  // The shorts after this one, in feed order
+  .shortsUpNext {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 10px;
+    @include v2.scroll-y;
+
+    &__row {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      width: 100%;
+      padding: 6px 8px;
+      border: 0;
+      border-radius: var(--r-lg);
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background var(--t-fast) var(--ease);
+
+      &:hover { background: var(--text-tint); }
+    }
+
+    &__thumb {
+      display: block;
+      width: 44px;
+      aspect-ratio: 9 / 16;
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      @include v2.thumb-placeholder(5px);
+
+      img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    }
+
+    &__text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+
+      b {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      span { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+
+    &__empty { margin: 8px; @include v2.text(meta); color: var(--muted); }
   }
 
   .commentsCount {
@@ -1469,7 +1881,7 @@ body { --shorts-bottom-reserve: 0px; }
   .commentsList {
     flex: 1;
     min-height: 0;
-    padding: 0 16px 8px 20px;
+    padding: 4px 16px 8px;
     @include v2.scroll-y;
   }
 
@@ -1508,10 +1920,35 @@ body { --shorts-bottom-reserve: 0px; }
   .commentWrapper:not(.nested) { border-bottom: 1px solid var(--border); }
 
   .commentItem {
-    display: flex;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 28px;
     gap: 10px;
     padding: 12px 0;
     position: relative;
+
+    // The collapsed bar spans the row
+    > .comment-collapsed-bar { grid-column: 1 / -1; }
+  }
+
+  // The vote column on the right of a comment: arrow over the count (18a)
+  .commentVote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: start;
+    gap: 0;
+    width: 28px;
+    padding: 2px 0;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+
+    &:hover { color: var(--text); background: var(--bg-hover); }
+    &.liked { color: var(--accent); }
   }
 
   .nestedComments .commentItem { padding: 8px 0; }
@@ -1550,13 +1987,13 @@ body { --shorts-bottom-reserve: 0px; }
   .commentMeta {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 2px;
+    gap: 4px;
+    margin-bottom: 3px;
     flex-wrap: wrap;
   }
 
   .commentUsername {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--text);
 
@@ -1800,17 +2237,21 @@ body { --shorts-bottom-reserve: 0px; }
       padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     }
 
-    // Desktop: the text box gets the whole width on its own row, with the
-    // avatar (left) and emoji/GIF/image/send (right) underneath.
-    @include desk {
-      flex-wrap: wrap;
-      align-items: center;
-      row-gap: 8px;
-
-      .commentInputBox { order: -1; flex: 1 1 100%; }
-      .commentInputAvatar { margin-right: auto; }
-    }
   }
+
+  // Emoji, GIF and image: out of the way until the box is in use (18a draws
+  // only the box and send).
+  .commentInputTools {
+    display: none;
+    align-items: center;
+    gap: 2px;
+    flex: none;
+
+    &.is-shown { display: inline-flex; }
+  }
+
+  .commentInput:focus-within .commentInputTools,
+  .commentInput:has(.egp-btn.active) .commentInputTools { display: inline-flex; }
 
   .commentInputAvatar {
     width: 32px;
@@ -1831,7 +2272,7 @@ body { --shorts-bottom-reserve: 0px; }
     padding: 10px 14px;
     border: 2px solid transparent;
     border-radius: var(--r-lg);
-    background: var(--bg);
+    background: var(--surface-2);
     color: var(--text);
     font: inherit;
     font-size: 14px;
@@ -1958,6 +2399,8 @@ body { --shorts-bottom-reserve: 0px; }
    --------------------------------------------------------------------------- */
 .short-main.ad-playing {
   .bottomOverlay,
+  .shortsTopLeft,
+  .shortsPeek,
   .actionSidebar,
   .shortsBottomComment,
   .navigationArrows,

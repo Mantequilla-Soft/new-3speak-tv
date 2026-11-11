@@ -36,7 +36,11 @@
     "items_other": "{{count}} items",
     "openAria": "Open playlist {{name}}",
     "tag": "Playlist",
-    "updated": "Updated {{when}}"
+    "updated": "Updated {{when}}",
+    "public": "public",
+    "private": "private",
+    "history": "history",
+    "audio": "audio"
   },
   "watchLater": {
     "title": "Watch Later",

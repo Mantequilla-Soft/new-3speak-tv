@@ -42,7 +42,7 @@
       color: var(--text);
     }
   }
-  &.embedded .transcript-head { justify-content: flex-end; }
+  &.embedded .transcript-head { justify-content: space-between; .transcript-times { width: auto; flex: 1; min-width: 0; } }
 
   .transcript-actions {
     display: flex;
@@ -50,7 +50,7 @@
     gap: 2px;
     min-width: 0;
   }
-  &.embedded .transcript-actions { flex: 1; }
+  &.embedded .transcript-actions { flex: none; }
 
   // Language: a 28px select, the first thing in the row in the panel.
   .transcript-lang {
@@ -140,6 +140,44 @@
   }
 
   .transcript-search-close { color: var(--muted); }
+
+  // The panel's search (22a): a 40px surface-2 field, the language at its end.
+  &.embedded .transcript-search {
+    height: 40px;
+    padding: 0 6px 0 12px;
+    gap: 8px;
+    background: var(--surface-2);
+    input { @include v2.text(body-sm); }
+  }
+  .transcript-lang.is-inline {
+    margin: 0;
+    height: 28px;
+    padding: 0 22px 0 8px;
+    background-color: transparent;
+    @include v2.mono(11, 700);
+    color: var(--muted);
+    background-position: right 6px center;
+  }
+
+  // Lines (22a): a 52px time column, 14px text; the playing one on a cyan tint.
+  &.embedded {
+    gap: 10px;
+    padding: 12px 12px 8px;
+
+    .transcript-head { padding: 0 2px; }
+    .transcript-line {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 8px;
+      padding: 9px 10px;
+      @include v2.text(body);
+      line-height: 1.45;
+      color: var(--muted);
+      &.active { color: var(--text); }
+    }
+    .transcript-time { min-width: 0; font-size: 12px; padding-top: 1px; }
+    .transcript-body { margin: 0; padding: 0; }
+  }
 
   .transcript-body {
     // Closed: present, measurable, invisible. Open: a fixed-height scroll area,

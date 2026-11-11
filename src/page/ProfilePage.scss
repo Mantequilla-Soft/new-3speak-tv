@@ -3,21 +3,6 @@
 // Your own profile (/profile). The header lives in ProfileHeader.scss, the tab
 // track and the classes both profile pages share in ProfileActions.scss.
 
-// Special playlists row (Watch Later + Watched) above your other playlists.
-.special-playlists-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-
-  &:empty { display: none; }
-
-  @include v2.mobile { grid-template-columns: 1fr; }
-
-  // The cards bring their own wrapper; let them sit in this grid directly.
-  > div { display: contents; }
-}
-
 // Uploads still encoding (37a "Processing your videos").
 .active-renders {
   display: flex;

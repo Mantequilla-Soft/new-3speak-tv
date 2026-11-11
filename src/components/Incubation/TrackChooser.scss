@@ -31,3 +31,18 @@
   @include v2.text(meta-sm);
   color: var(--accent);
 }
+
+// On a phone (23a) the paths are tiles: a 2px outline at radius 20, the icon
+// on top, the title and its line under it.
+@include v2.mobile {
+  .track-chooser-options .track-option {
+    flex-direction: column;
+    gap: 6px;
+    min-height: 76px;
+    padding: 12px;
+    border-radius: var(--r-xl);
+
+    .v2-choice__icon { font-size: 24px !important; margin: 0; } // the Icon sets its size inline
+    .v2-choice__body b { @include v2.text(body); font-weight: 700; }
+  }
+}

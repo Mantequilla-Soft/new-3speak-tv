@@ -69,6 +69,7 @@
   &--primary { background: var(--accent); color: var(--on-accent); font-weight: 900; &:hover { background: var(--accent-hover); color: var(--on-accent); } }
   &--solid { background: var(--accent); color: var(--on-accent); font-weight: 900; &:hover { background: var(--accent-hover); color: var(--on-accent); } }
   &--on { background: var(--cyan-tint); color: var(--cyan); &:hover { background: var(--cyan-tint-strong); color: var(--cyan); } }
+  &--hot { background: var(--accent-tint-strong); color: var(--accent); &:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--accent); } }
 }
 .pod-icon-btn {
   @include v2.control(36);
@@ -82,6 +83,8 @@
   &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
   &--on { background: var(--cyan-tint); color: var(--cyan); &:hover { color: var(--cyan); } }
   &--tip { color: var(--accent); }
+  // The 44px action square of a show's episode row (36d).
+  &--lg { width: 44px; height: 44px; border-radius: v2.radius-for(44); }
 }
 .pod-link-btn {
   @include v2.btn(ghost, 32);
@@ -108,6 +111,8 @@
   white-space: nowrap;
   flex: none;
   &--accent { background: var(--accent-tint-strong); color: var(--accent); }
+  &--cyan { background: var(--cyan-tint-strong); color: var(--cyan); }
+  &--live { background: var(--accent); color: var(--on-accent); }
   &--lock { color: var(--muted); }
 }
 .pod-chip {
@@ -284,38 +289,49 @@
 .pod-trending-filters { display: flex; gap: 8px; flex-wrap: wrap; align-self: flex-start; }
 .pod-results {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
   @include v2.mobile { grid-template-columns: 1fr; }
 }
 .pod-result {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
-  padding: 8px 10px 8px 8px;
-  @include v2.card(20);
+  padding: 6px 10px 6px 6px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
 }
-.pod-result-cover { position: relative; flex: none; }
-.pod-result-art { width: 52px; height: 52px; border-radius: var(--r-md); object-fit: cover; display: block; background: var(--avatar); }
 .pod-result-rank {
-  position: absolute;
-  left: -4px;
-  top: -4px;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 5px;
+  width: 28px;
+  height: 28px;
+  flex: none;
   border-radius: var(--r-sm);
-  background: var(--text);
-  color: var(--bg);
+  background: var(--surface-2);
+  color: var(--text);
   display: grid;
   place-items: center;
-  @include v2.mono(11, 900);
+  @include v2.mono(12, 900);
+  &.is-first { background: var(--accent); color: var(--on-accent); }
 }
+.pod-result-art { width: 40px; height: 40px; flex: none; border-radius: var(--r-md); object-fit: cover; display: block; background: var(--avatar); }
 .pod-result-body { flex: 1; min-width: 0; }
-.pod-result-title { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pod-result-title { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pod-result-meta { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; &--accent { color: var(--cyan); font-weight: 700; } }
-.pod-result-follow { height: 32px; border-radius: v2.radius-for(32); font-size: 12px; padding: 0 10px; background: var(--cyan-tint); color: var(--cyan); font-weight: 700; &:hover { background: var(--cyan-tint-strong); color: var(--cyan); } }
+.pod-follow-link {
+  flex: none;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--cyan);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+  &:hover { text-decoration: underline; }
+  &:disabled { opacity: .45; cursor: not-allowed; }
+}
+.pod-result .pod-following { font-size: 11px; }
 
 // ─── Episode tiles (36d rows) ───────────────────────────────────────────────
 .pod-tile-grid {
@@ -651,26 +667,64 @@ button.pod-show-kicker { cursor: pointer; &:hover { text-decoration: underline; 
 .pod-episode .pod-episode-bar { max-width: 360px; }
 
 // ─── Mine: continue listening, downloads, empty (24b) ──────────────────────
-.pod-continue .pod-rail { grid-auto-columns: 280px; @include v2.mobile { grid-auto-columns: 240px; } }
+// Three cards across, the rest a scroll away.
+.pod-continue-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 20px) / 3);
+  gap: 10px;
+  @include v2.scroll-x;
+  @include v2.below-wide { grid-auto-columns: 280px; }
+  @include v2.mobile { grid-auto-columns: 85%; }
+}
 .pod-continue-card {
   position: relative;
-  display: grid;
-  grid-template-columns: 80px minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  column-gap: 12px;
-  align-items: center;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
   padding: 8px;
   @include v2.card(20);
+  color: var(--text);
   cursor: pointer;
-  &:hover { background: var(--surface-2); }
+  &:hover { background: color-mix(in srgb, var(--text) 4%, var(--surface)); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   &--current { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
-  .pod-card-art { grid-row: 1 / span 2; width: 80px; margin: 0; border-radius: var(--r-lg); }
-  .pod-card-title { align-self: end; -webkit-line-clamp: 1; }
-  .pod-card-meta { align-self: start; font-family: var(--font-mono); }
-  .pod-tile-play { opacity: 1; background: transparent; place-items: end; padding: 6px;
-    .material-symbols-rounded { width: 32px; height: 32px; border-radius: var(--r-sm); background: var(--accent); color: var(--on-accent); display: grid; place-items: center; font-size: 24px !important; } }
-  .pod-tile-bar { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 0; height: 4px; background: var(--media-scrim); }
 }
+.pod-continue-art {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex: none;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  @include v2.thumb-placeholder(6px);
+  img, .pod-art { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+.pod-continue-play {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid;
+  place-items: center;
+}
+.pod-continue-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pod-continue-title { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pod-continue-from { margin-top: 2px; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pod-continue-bar {
+  display: block;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 2px;
+  background: var(--surface-2);
+  overflow: hidden;
+  > span { display: block; height: 100%; border-radius: 2px; background: var(--accent); }
+}
+.pod-continue-left { margin-top: 4px; @include v2.mono(10, 500); color: var(--muted); }
 .pod-continue-actions {
   position: absolute;
   top: 4px;
@@ -682,9 +736,10 @@ button.pod-show-kicker { cursor: pointer; &:hover { text-decoration: underline; 
   .pod-continue-card:hover &, .pod-continue-card--revealed &, &:focus-within { opacity: 1; }
 }
 
-.pod-dl-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 12px; padding: 10px 12px; border-radius: var(--r-lg); background: var(--surface); border: 1px solid var(--border); font-size: 13px; }
-.pod-dl-note { font-size: 11px; color: var(--muted); flex-basis: 100%; }
-.pod-dl-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; max-width: 860px; }
+// Downloaded: the eyebrow with the room they take, then one row each (24b).
+.pod-downloads-head { margin-bottom: 10px; .pod-app-title { margin: 0; } }
+.pod-downloads-size { @include v2.mono(12, 700); color: var(--muted); }
+.pod-dl-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .pod-dl-row {
   display: flex;
   align-items: center;
@@ -692,11 +747,23 @@ button.pod-show-kicker { cursor: pointer; &:hover { text-decoration: underline; 
   padding: 8px;
   @include v2.card(20);
 }
-.pod-dl-cover { width: 48px; height: 48px; border-radius: var(--r-md); }
+.pod-dl-cover { width: 48px; height: 48px; flex: none; border-radius: var(--r-lg); }
+.pod-dl-cover--busy { display: grid; place-items: center; color: var(--cyan); @include v2.thumb-placeholder(5px); }
 .pod-dl-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .pod-dl-title { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -webkit-line-clamp: 1; }
+.pod-dl-sub { @include v2.mono(11, 500); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pod-dl-bar { margin-top: 4px; > span { background: var(--cyan); } }
-.pod-dl-remove { height: 36px; border-radius: var(--r-md); font-size: 12px; @include v2.mobile { span { display: none; } width: 36px; padding: 0; justify-content: center; } }
+.pod-dl-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 8px 0 0;
+  padding: 12px;
+  @include v2.card(20);
+  font-size: 12px;
+  > .material-symbols-rounded { color: var(--cyan); flex: none; }
+}
+.pod-dl-note { display: block; margin-top: 2px; font-size: 11px; color: var(--muted); }
 
 .pod-mine-empty {
   display: flex;
@@ -716,3 +783,470 @@ button.pod-show-kicker { cursor: pointer; &:hover { text-decoration: underline; 
 // Follow a playlist as a show (PlaylistFollowButton).
 .playlist-follow__btn.is-on { background: var(--cyan-tint); color: var(--cyan); &:hover { background: var(--cyan-tint-strong); color: var(--cyan); } }
 .pl-merged-more { display: flex; margin-top: 12px; }
+
+
+// ─── The podcast app layout: main column + 400px side (36c, 36d) ────────────
+.pod-app {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 20px;
+  align-items: start;
+  @include v2.below-wide { grid-template-columns: minmax(0, 1fr); }
+}
+.pod-app-main { min-width: 0; display: flex; flex-direction: column; }
+.pod-app-side { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.pod-side-card {
+  @include v2.card(24);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.pod-side-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+  &.is-barred::before { content: ""; width: 4px; height: 22px; border-radius: 2px; background: var(--cyan); flex: none; }
+}
+.pod-side-eyebrow { margin-top: 4px; font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pod-side-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  > .material-symbols-rounded { color: var(--muted); flex: none; }
+  > div { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  b { font-size: 13px; font-weight: 700; }
+  span { font-size: 11px; color: var(--muted); line-height: 1.4; }
+}
+.pod-side-highlight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  > .material-symbols-rounded { color: var(--accent); flex: none; }
+  b { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .num { @include v2.mono(11, 500); color: var(--muted); flex: none; }
+  &:hover { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+}
+.pod-side-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  @include v2.card(20);
+  font-size: 12px;
+  > .material-symbols-rounded { color: var(--cyan); flex: none; }
+  > span { flex: 1; min-width: 0; }
+  button { flex: none; padding: 0; border: 0; background: none; color: var(--text); font: inherit; font-weight: 700; cursor: pointer; &:hover { text-decoration: underline; } }
+  &.is-offline { border-color: transparent; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); > .material-symbols-rounded { color: var(--accent); } }
+}
+
+// Hosts and guests as the side card: the face ringed in the role's color.
+.pod-persons-card {
+  .pod-persons { gap: 10px; margin-top: 2px; }
+  .pod-person { width: auto; max-width: 72px; gap: 4px; }
+  .pod-person-img { width: 48px; height: 48px; border-radius: var(--r-lg); box-shadow: none; border: 2px solid var(--muted); &--initial { font-size: 18px; } }
+  .pod-person-name, .pod-person-role { font-size: 10px; font-weight: 700; }
+  .pod-person-role { color: var(--muted); }
+  .pod-person.is-accent { .pod-person-img { border-color: var(--accent); } .pod-person-role { color: var(--accent); } }
+  .pod-person.is-cyan { .pod-person-img { border-color: var(--cyan); } .pod-person-role { color: var(--cyan); } }
+  .pod-person:hover .pod-person-img { box-shadow: none; filter: brightness(1.1); }
+}
+
+// "Support <show>": amounts, the feed's split, send (36d).
+.pod-support-amounts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.pod-support-amount {
+  height: 44px;
+  border-radius: v2.radius-for(44);
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  @include v2.mono(12, 900);
+  cursor: pointer;
+  &:hover { background: var(--bg-hover); }
+  &.is-on { border-color: var(--accent); background: var(--accent-tint-strong); }
+}
+.pod-support-split {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  li { display: flex; align-items: center; gap: 8px; font-size: 12px; span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
+  b { @include v2.mono(12, 700); }
+}
+.pod-support-send {
+  @include v2.btn(primary, 48);
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 4px;
+}
+
+// ─── One show (36d) ─────────────────────────────────────────────────────────
+.pod-showhead {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 18px;
+  align-items: end;
+  @include v2.mobile { grid-template-columns: 112px minmax(0, 1fr); gap: 14px; }
+}
+.pod-showhead-art { width: 100%; aspect-ratio: 1; height: auto; border-radius: var(--r-2xl); object-fit: cover; display: block; background: var(--avatar); }
+.pod-showhead-info { min-width: 0; display: flex; flex-direction: column; }
+.pod-showhead-badges { display: flex; flex-wrap: wrap; gap: 6px; .pod-badge { height: auto; padding: 2px 8px; border-radius: var(--r-sm); } .pod-badge:not(.pod-badge--live):not(.pod-badge--cyan) { color: var(--text); } }
+.pod-showhead-title { margin: 6px 0 0; font-size: 32px; font-weight: 700; letter-spacing: -.03em; line-height: 1.15; overflow-wrap: anywhere; @include v2.mobile { font-size: 24px; } }
+.pod-showhead-meta { font-size: 12px; color: var(--muted); }
+.pod-showhead-desc {
+  margin: 6px 0 0;
+  max-width: 640px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.pod-showhead .pod-show-error { margin-top: 8px; }
+.pod-showhead-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  @include v2.mobile { grid-column: 1 / -1; }
+}
+.pod-show-play {
+  @include v2.btn(primary, 48);
+  gap: 14px;
+  padding: 0 14px 0 16px;
+  font-size: 13px;
+}
+.pod-show-follow {
+  @include v2.control(48);
+  @include v2.text(label);
+  background: var(--cyan-tint);
+  color: var(--cyan);
+  &:hover { background: var(--cyan-tint-strong); }
+}
+.pod-show-tile {
+  @include v2.control(48);
+  width: 48px;
+  padding: 0;
+  justify-content: center;
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+  &.is-on { background: var(--cyan-tint-strong); color: var(--cyan); }
+}
+.pod-show--app .pod-live { margin: 16px 0 0; }
+
+// Season, listening state, date and search in one row (36d).
+.pod-show-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  min-width: 0;
+  @include v2.below-wide { flex-wrap: wrap; }
+}
+.pod-show-select {
+  @include v2.control(40);
+  appearance: none;
+  field-sizing: content;
+  flex: none;
+  max-width: 100%;
+  padding: 0 28px 0 10px;
+  background-color: var(--surface);
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 15px) 50%, calc(100% - 10px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
+.pod-show-listen.v2-seg {
+  flex: none;
+  max-width: 100%;
+  background: var(--surface);
+  border-radius: var(--r-md);
+  .v2-seg__opt, .v2-seg__opt.h28 { padding: 0 10px; font-size: 12px; }
+}
+.pod-show-search {
+  flex: 1 1 200px;
+  min-width: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-radius: v2.radius-for(40);
+  background: var(--surface);
+  border: 2px solid transparent;
+  color: var(--muted);
+  &:focus-within { border-color: var(--accent); }
+  input { flex: 1; min-width: 0; height: 100%; border: 0; outline: none; background: transparent; color: var(--text); font: inherit; font-size: 12px; &::placeholder { color: var(--muted); } }
+}
+.pod-show-range { margin-top: 8px; }
+
+// The episode list as rows (36d).
+.pod-rows { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.pod-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 110px 44px;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  @include v2.card(20);
+  &--current { border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+  &--done .pod-row-title { color: var(--muted); }
+  @include v2.mobile {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    row-gap: 6px;
+    .pod-row-progress { grid-column: 2; grid-row: 2; }
+  }
+}
+.pod-row-play {
+  @include v2.control(44);
+  width: 44px;
+  padding: 0;
+  justify-content: center;
+  background: var(--surface-2);
+  color: var(--text);
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  &.is-on { background: var(--accent); color: var(--on-accent); &:hover { background: var(--accent-hover); } }
+}
+.pod-row-body { min-width: 0; }
+.pod-row-head { display: flex; align-items: center; gap: 6px; min-width: 0; .pod-badge { height: auto; padding: 1px 6px; border-radius: var(--r-sm); } }
+.pod-row-title {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  &:hover { text-decoration: underline; text-underline-offset: 2px; }
+}
+.pod-row-meta { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pod-row-progress { min-width: 0; }
+.pod-row-bar {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface-2);
+  overflow: hidden;
+  > span { display: block; height: 100%; border-radius: 2px; background: var(--accent); }
+}
+.pod-row-state { display: block; margin-top: 4px; @include v2.mono(10, 500); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+
+// ─── Discover and Trends (36c) ──────────────────────────────────────────────
+.pod-app-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+  &.is-eyebrow { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+}
+.pod-app-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-bottom: 10px;
+  .pod-app-title { margin: 0; }
+}
+.pod-pill-select {
+  @include v2.control(36);
+  appearance: none;
+  // As wide as the chosen option, like the board's "English ▾" pills.
+  field-sizing: content;
+  max-width: 100%;
+  padding: 0 26px 0 10px;
+  background-color: var(--surface);
+  background-image: linear-gradient(45deg, transparent 50%, var(--text) 50%), linear-gradient(135deg, var(--text) 50%, transparent 50%);
+  background-position: calc(100% - 14px) 50%, calc(100% - 10px) 50%;
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
+// Five covers across on a desktop, the rest a scroll away.
+.pod-rail--five {
+  grid-auto-columns: calc((100% - 40px) / 5);
+  gap: 10px;
+  @include v2.below-wide { grid-auto-columns: 168px; }
+  @include v2.mobile { grid-auto-columns: 140px; }
+}
+.pod-rail {
+  .pod-card-art { border-radius: var(--r-xl); margin-bottom: 2px; }
+  .pod-card-title { font-size: 12px; }
+  .pod-card-meta { font-size: 10px; }
+  .pod-follow-link, .pod-following { align-self: flex-start; }
+}
+.pod-card-chips { position: absolute; left: 8px; top: 8px; right: 8px; display: flex; flex-wrap: wrap; gap: 4px; pointer-events: none; }
+.pod-card-chip {
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+  background: var(--media-scrim);
+  color: var(--on-media);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.pod-card-chips .pod-card-rank { position: static; min-width: 0; height: auto; padding: 2px 6px; @include v2.mono(10, 900); }
+
+// Find a show: Shows | People, the field, Add by link.
+.pod-finder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  min-width: 0;
+  @include v2.mobile { flex-wrap: wrap; }
+}
+.pod-finder-modes.v2-seg {
+  flex: none;
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  .v2-seg__opt { padding: 0 12px; font-size: 12px; }
+}
+.pod-finder-field {
+  flex: 1 1 240px;
+  min-width: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px 0 12px;
+  border-radius: v2.radius-for(44);
+  background: var(--surface);
+  border: 2px solid transparent;
+  color: var(--muted);
+  &:focus-within { border-color: var(--accent); }
+  input { flex: 1; min-width: 0; height: 100%; border: 0; outline: none; background: transparent; color: var(--text); font: inherit; font-size: 13px; &::placeholder { color: var(--muted); } }
+}
+.pod-finder-go {
+  @include v2.control(32);
+  width: 32px;
+  padding: 0;
+  justify-content: center;
+  flex: none;
+  background: var(--surface-2);
+  color: var(--text);
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+}
+.pod-finder-link {
+  @include v2.control(44);
+  flex: none;
+  padding: 0 12px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  &.is-on { background: var(--cyan-tint); color: var(--cyan); }
+}
+
+// The side: your podcasts and OPML, a private feed, the last link's problem.
+.pod-opml { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.pod-opml-btn {
+  @include v2.control(44);
+  justify-content: space-between;
+  padding: 0 12px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+}
+.pod-side-info { margin: 2px 0 0; padding: 10px; border-radius: var(--r-lg); background: color-mix(in srgb, var(--cyan) 10%, var(--bg)); font-size: 12px; line-height: 1.4; }
+.pod-side-switch { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.pod-side-card .pod-private-fields { grid-template-columns: 1fr 1fr; gap: 6px; .pod-input { background: var(--bg); font-size: 12px; } }
+.pod-side-card .pod-private-hint { line-height: 1.4; }
+.pod-side-alert {
+  padding: 14px;
+  border-radius: var(--r-2xl);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.pod-side-muted { color: var(--muted); }
+
+
+// ─── One episode as a card (24b) ────────────────────────────────────────────
+.pod-epcard {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 16px;
+  @include v2.card(24);
+  @include v2.mobile { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}
+.pod-epcard-art {
+  width: 100%;
+  aspect-ratio: 1;
+  height: auto;
+  border-radius: var(--r-xl);
+  object-fit: cover;
+  display: block;
+  background: var(--avatar);
+  @include v2.mobile { width: 160px; }
+}
+.pod-epcard-info { min-width: 0; display: flex; flex-direction: column; }
+.pod-epcard-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cyan);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  &:hover span { text-decoration: underline; }
+}
+.pod-epcard-title { margin: 6px 0 0; @include v2.text(heading); overflow-wrap: anywhere; }
+.pod-epcard-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; margin-top: 6px; font-size: 13px; color: var(--muted); }
+.pod-epcard .pod-episode-bar { max-width: 360px; margin-top: 10px; }
+.pod-epcard-actions { margin-top: auto; padding-top: 12px; }

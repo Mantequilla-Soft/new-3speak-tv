@@ -137,20 +137,22 @@ export default function InterestsPrompt() {
   };
 
   // "What are you into?" (design 44b / 23a) on the shared v2 Dialog: a click
-  // outside, Escape or the X just close it (see close above); only "Not now"
-  // is an answer.
+  // outside or Escape just close it (see close above); only "Not now" is an
+  // answer. Under 768px a full-screen step page (.v2-onboard, 23a), so the
+  // title is a headline in the body rather than a dialog head.
   return (
     <Dialog
       open
       onClose={close}
       dismissible={!saving}
+      head={false}
       title={t('app.interests.title')}
       closeLabel={t('common.actions.close')}
       width={520}
-      className="interests-prompt"
+      className="interests-prompt v2-onboard"
       footer={(
         <>
-          <Button variant="secondary" className="interests-prompt-cancel" onClick={decline} disabled={saving}>
+          <Button variant="secondary" className="interests-prompt-cancel v2-onboard__skip" onClick={decline} disabled={saving}>
             {t('app.interests.notNow')}
           </Button>
           <Button
@@ -165,6 +167,7 @@ export default function InterestsPrompt() {
         </>
       )}
     >
+      <h2 className="interests-prompt-title">{t('app.interests.title')}</h2>
       <p className="interests-prompt-text">
         <Trans i18nKey="app.interests.body" components={{ b: <strong /> }} />
       </p>

@@ -1,34 +1,14 @@
-import { useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '../v2/Icon';
-import { fixVideoThumbnail, fallbackImg } from '../../utils/fixThumbnails';
 import './PlaylistBar.scss';
 
+// The playlist bar (22b): which playlist, where you are in it and the next
+// title, with previous / next / close. The next videos are the "Next in" shelf
+// under the page (Watch.jsx, 02).
 function PlaylistBar({ playlist, videos, currentIndex, onClose }) {
   const { t } = useTranslation();
-  const scrollContainerRef = useRef(null);
-  const currentItemRef = useRef(null);
   const navigate = useNavigate();
-
-  // Scroll to current video when component mounts or currentIndex changes
-  useEffect(() => {
-    if (currentItemRef.current && scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const item = currentItemRef.current;
-
-      // Calculate scroll position to center the current item
-      const containerWidth = container.offsetWidth;
-      const itemLeft = item.offsetLeft;
-      const itemWidth = item.offsetWidth;
-      const scrollPosition = itemLeft - containerWidth / 2 + itemWidth / 2;
-
-      container.scrollTo({
-        left: Math.max(0, scrollPosition),
-        behavior: 'smooth',
-      });
-    }
-  }, [currentIndex]);
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
@@ -95,36 +75,6 @@ function PlaylistBar({ playlist, videos, currentIndex, onClose }) {
         </div>
       </div>
 
-      {/* Horizontal scrollable video list */}
-      <div className="playlist-bar-videos" ref={scrollContainerRef}>
-        {videos.map((video, index) => (
-          <Link
-            key={`${video.author}-${video.permlink}`}
-            to={`/@${video.author}/${video.permlink}?playlist=${playlist.id}&pos=${index}`}
-            state={{ playlist, videos, currentIndex: index }}
-            className={`playlist-video-item ${index === currentIndex ? 'active' : ''}`}
-            ref={index === currentIndex ? currentItemRef : null}
-          >
-            <div className="thumbnail-wrap">
-              <img
-                src={fixVideoThumbnail(video)}
-                alt={video.title}
-                onError={(e) => (e.currentTarget.src = fallbackImg)}
-              />
-              <span className="position">{index + 1}</span>
-              {video.duration > 0 && (
-                <span className="duration">
-                  {Math.floor(video.duration / 60)}:{String(Math.floor(video.duration % 60)).padStart(2, '0')}
-                </span>
-              )}
-            </div>
-            <div className="video-info">
-              <h4>{video.title}</h4>
-              <p>@{video.author}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
     </div>
   );
 }

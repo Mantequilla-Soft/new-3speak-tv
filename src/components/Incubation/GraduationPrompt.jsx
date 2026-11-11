@@ -11,7 +11,7 @@ import { openButrauthPopup } from '../../utils/butrauthPopup';
 import { useTranslation, Trans } from 'react-i18next';
 // The shared v2 dialog (a bottom sheet on phones); the warm-up prompts' own
 // pieces (icon well, lede, note) live in GraduationPrompt.scss.
-import { Button, Dialog, Icon } from '../v2/ui';
+import { Button, Dialog } from '../v2/ui';
 import './GraduationPrompt.scss';
 
 // Every toast from this module is headed "Your account"; the message becomes
@@ -216,7 +216,6 @@ export default function GraduationPrompt() {
         </>
       )}
     >
-      <span className="inc-prompt-icon is-accent" aria-hidden="true"><Icon name="school" size={28} /></span>
       <p className="inc-prompt-lede">
         {copy ? copy.lede : (
           <Trans i18nKey="incubation.graduation.creator.lede" values={{ handle: incubationHandle }} components={{ b: <strong /> }} />

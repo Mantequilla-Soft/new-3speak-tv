@@ -243,10 +243,9 @@ function BadgeView({ account }) {
       <Segmented
         className="badge-tabs"
         options={[
-          { value: 'videos', label: t('badges.page.tabs.videos'), icon: 'smart_display' },
+          { value: 'videos', label: t('badges.page.tabs.videos') },
           {
             value: 'recipients',
-            icon: 'workspace_premium',
             label: badge?.recipients
               ? t('badges.page.tabs.recipientsWithCount', { num: fmtNum(badge.recipients) })
               : t('badges.page.tabs.recipients'),
@@ -327,12 +326,9 @@ function RecipientList({ data, error }) {
       </p>
       <div className="badge-recipients">
         {data.recipients.map(r => (
-          <Link className="badge-recipient" to={`/@${r.account}`} key={r.account}>
+          <Link className="badge-recipient" to={`/@${r.account}`} key={r.account} title={`@${r.account}`}>
             <HiveAvatar username={r.account} size="small" className="badge-recipient-avatar" />
-            <span className="badge-recipient-text">
-              <b className="badge-recipient-name">{r.displayName || r.account}</b>
-              <span className="badge-recipient-handle">@{r.account}</span>
-            </span>
+            <b className="badge-recipient-name">{r.displayName || r.account}</b>
             <span className="badge-recipient-count num">
               {r.videos > 0 ? t('badges.page.recipientVideos', { count: r.videos, num: fmtNum(r.videos) }) : t('badges.page.recipientNoVideos')}
             </span>

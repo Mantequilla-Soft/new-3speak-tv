@@ -1,25 +1,26 @@
 @use "../../styles/v2" as v2;
 
-// "New from following" (19c): a cyan-tinted strip with the summary and stacked
-// avatars, then one swipeable row of creator chips. The rail scrolls rather than
-// wrapping, so the strip's height never depends on how many creators posted.
+// "New from following" (19c): one cyan-tinted strip (padding 14/16, radius
+// 20): stacked avatars, the summary, and a cyan Show that opens one swipeable
+// row of creator chips under it. The rail scrolls rather than wrapping, so the
+// strip's height never depends on how many creators posted.
 .new-from-following {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin: 0 0 16px;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: var(--r-xl);
   background: color-mix(in srgb, var(--cyan) 8%, var(--surface));
   border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
   min-width: 0;
 
-  @include v2.mobile { padding: 10px 12px; margin-bottom: 12px; }
+  @include v2.mobile { padding: 12px 14px; margin-bottom: 12px; }
 
   .nff-head {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     min-width: 0;
   }
 
@@ -29,8 +30,8 @@
     padding-right: 10px;
 
     .nff-stack-avatar {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       margin-right: -10px;
       border-radius: 50%;
       border: 2px solid var(--surface);
@@ -39,14 +40,38 @@
       > img { width: 100%; height: 100%; border-radius: 50%; }
       .hive-avatar__badge { display: none; }
     }
+
+    @include v2.mobile {
+      .nff-stack-avatar { width: 32px; height: 32px; }
+    }
   }
 
   .nff-summary {
+    flex: 1;
     margin: 0;
     min-width: 0;
     @include v2.text(body);
-    color: var(--muted);
-    b { color: var(--text); }
+    color: var(--text);
+    b { font-weight: 700; }
+
+    @include v2.mobile { font-size: 13px; }
+  }
+
+  // Show / Hide: cyan text, a 44px tap target that does not grow the strip.
+  .nff-toggle {
+    flex: none;
+    margin: -12px -10px -12px 0;
+    min-height: 44px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--cyan);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    @media (hover: hover) { &:hover { background: var(--cyan-tint); } }
   }
 
   .nff-wrapper { position: relative; min-width: 0; }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Icon } from '../v2/Icon';
 import { cx } from '../v2/helpers';
+import { useAvatarUrl } from '../../utils/avatarCache';
 import './GroupHero.scss';
 
 /**
@@ -17,11 +18,22 @@ import './GroupHero.scss';
  *   coin      the picture spins like a coin on hover (badge pages)
  *   eyebrow   "COMMUNITY", "BADGE"
  *   meta      the line under the name (counts, issuer)
+ *   stack     up to five account names drawn as a row of overlapping faces
+ *             before the meta line (20c: the people of the group)
  *   about     an optional sentence under the meta line
  *   action    the main button (render <GroupHeroJoin/> or nothing)
  *   tiles     [{ icon, label, onClick, href, title, disabled, active }]
  */
-export default function GroupHero({ avatar, round = false, coin = false, eyebrow, title, meta, about, action, tiles = [], className }) {
+function StackFace({ name }) {
+  const src = useAvatarUrl(name);
+  return (
+    <span className="group-hero__face" title={`@${name}`}>
+      {src ? <img src={src} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} /> : null}
+    </span>
+  );
+}
+
+export default function GroupHero({ avatar, round = false, coin = false, eyebrow, title, meta, stack = [], about, action, tiles = [], className }) {
   const [failed, setFailed] = useState(false);
   const letter = String(title || '?').trim().slice(0, 1).toUpperCase();
   return (
@@ -34,7 +46,16 @@ export default function GroupHero({ avatar, round = false, coin = false, eyebrow
       <div className="group-hero__text">
         {eyebrow && <div className="group-hero__eyebrow">{eyebrow}</div>}
         <h1 className="group-hero__title">{title}</h1>
-        {meta && <div className="group-hero__meta">{meta}</div>}
+        {(meta || stack.length > 0) && (
+          <div className="group-hero__meta">
+            {stack.length > 0 && (
+              <span className="group-hero__stack" aria-hidden="true">
+                {stack.slice(0, 5).map((n) => <StackFace key={n} name={n} />)}
+              </span>
+            )}
+            {meta}
+          </div>
+        )}
         {about && <p className="group-hero__about">{about}</p>}
       </div>
       {(action || tiles.length > 0) && (

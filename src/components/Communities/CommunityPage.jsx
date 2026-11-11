@@ -25,7 +25,7 @@ import { Icon } from "../v2/Icon";
 import GroupHero, { GroupHeroJoin } from "../Groups/GroupHero";
 import { canSubscribe, setCommunitySubscription } from "./communitySubscribe";
 import CommunitySnaps from "../Userprofilepage/CommunitySnaps";
-import { CommunityPinned, CommunityTopCreators, CommunityTeam, CommunityRules } from "./CommunityExtras";
+import { CommunityPinned, CommunityTopCreators, CommunityTeam, CommunityRules, useCommunityTopCreators } from "./CommunityExtras";
 import { findNextOnChannel, rememberCommunityChannel, surfUrl } from "../../utils/surf";
 import { creatorKey, isUploadBlocked, useCreatorSettings } from "../../utils/creatorSettings";
 
@@ -323,23 +323,28 @@ function CommunityPage() {
   ) : null;
 
   const communityAvatar = useAvatarUrl(id, 'large');
+  const { data: topCreators = [] } = useCommunityTopCreators(id);
   const subscribers = subCount ?? dataMain?.subscribers;
+  // 20c: one line under the name, "<b>N subscribers</b> · N posts this week".
+  // num_pending is the posts still inside Hive's 7-day payout window.
   const heroMeta = dataMain ? (
-    <>
+    <span className="community-hero-meta">
       {typeof subscribers === 'number' && (
         <b>{t('communities.directory.subscribers', { count: subscribers, n: formatNumber(subscribers) })}</b>
       )}
-      {typeof dataMain.num_authors === 'number' && (
-        <span>{t('communities.directory.authors', { count: dataMain.num_authors, n: formatNumber(dataMain.num_authors) })}</span>
+      {typeof dataMain.num_pending === 'number' && (
+        <>{typeof subscribers === 'number' ? ' · ' : ''}{t('communities.page.postsWeek', { count: dataMain.num_pending, n: formatNumber(dataMain.num_pending) })}</>
       )}
-    </>
+    </span>
   ) : null;
+  // The faces in front of it: this month's top creators, else the team.
+  const heroStack = (topCreators.length ? topCreators.map((c) => c.name) : (dataMain?.team || []).map(([n]) => n).filter((n) => n && n !== id)).slice(0, 5);
 
   // The About card: the one-line "about" and the longer description the mods
   // wrote (markdown, folded when long).
   const aboutCard = (dataMain?.about || dataMain?.description) ? (
     <div className="community-card community-about">
-      <h3 className="community-card-title"><Icon name="info" size={18} /> {t('communities.picker.about')}</h3>
+      <h3 className="community-card-title">{t('communities.picker.about')}</h3>
       {dataMain.about ? <p className="community-about-line">{dataMain.about}</p> : null}
       {dataMain.description ? (
         <HiveMarkdown body={dataMain.description} className="community-description" collapsible />
@@ -350,7 +355,6 @@ function CommunityPage() {
   const tabOptions = TABS.map((tb) => ({
     value: tb.key,
     label: t(tb.labelKey),
-    icon: tb.icon,
     count: tb.key === 'new' && newCount > 0 ? newCount : undefined,
   }));
 
@@ -365,6 +369,7 @@ function CommunityPage() {
         eyebrow={t('communities.page.fallbackTitle')}
         title={dataMain?.title || id}
         meta={heroMeta}
+        stack={heroStack}
         // Subscribing is the thing a visitor came to this page to decide, so it
         // is the one big button beside the name.
         action={canSubscribe({ authenticated, incubationHandle }) ? (

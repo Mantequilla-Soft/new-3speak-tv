@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DockTile, Menu, MenuRow, Segmented } from '../v2/ui';
+import { Button, Dialog, DockTile, EmptyState, Menu, MenuRow, Segmented } from '../v2/ui';
+import Card3 from '../Cards/Card3';
 import { Icon } from '../v2/Icon';
 import { cx } from '../v2/helpers';
 import useLayoutMediaQuery from '../../hooks/useLayoutMediaQuery';
@@ -96,11 +97,11 @@ export function ProfileMoreMenu({ items, title }) {
 }
 
 /**
- * The profile tabs as one segmented track that scrolls sideways (37a), with
- * Wallet at the end: it navigates away, so it is a quiet button, not a tab.
- * `tabs` are { value, label, count?, icon? }.
+ * The profile tabs as one segmented track that scrolls sideways (20b, 37a),
+ * with "Search this channel" at the end of the row. `tabs` are { value, label }.
+ * The boards draw the tabs without counts or icons, so none are shown.
  */
-export function ProfileTabs({ tabs, value, onChange, walletLabel, onWallet, label }) {
+export function ProfileTabs({ tabs, value, onChange, label, search }) {
   const ref = useRef(null);
   // A deep link can land on a late tab: bring the selected one into view.
   useEffect(() => {
@@ -110,20 +111,99 @@ export function ProfileTabs({ tabs, value, onChange, walletLabel, onWallet, labe
   return (
     <div className="ph-tabs" ref={ref}>
       <Segmented
-        options={tabs.map((tb) => ({ ...tb, count: tb.count > 0 ? tb.count : undefined }))}
+        options={tabs.map(({ value: v, label: l, disabled }) => ({ value: v, label: l, disabled }))}
         value={value}
         onChange={onChange}
         block={false}
         scroll
+        size={36}
         label={label}
         className="ph-tabs__track"
       />
-      {onWallet ? (
-        <button type="button" className="v2-btn v2-btn--ghost h40 ph-tabs__wallet" onClick={onWallet} aria-label={walletLabel} title={walletLabel}>
-          <Icon name="account_balance_wallet" size={18} />
-          <span className="v2-btn__label">{walletLabel}</span>
+      {search}
+    </div>
+  );
+}
+
+/**
+ * "Search this channel" (20b): a 40px field at the right of the tab row. It
+ * filters what the page has already loaded; the results replace the tab's
+ * content while there is a query (ProfileSearchResults).
+ */
+export function ProfileSearch({ value, onChange }) {
+  const { t } = useTranslation();
+  const label = t('profile.search.placeholder');
+  return (
+    <div className="ph-search" role="search">
+      <Icon name="search" size={20} />
+      <input
+        type="search"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Escape' && value) { e.preventDefault(); onChange(''); } }}
+        placeholder={label}
+        aria-label={label}
+        enterKeyHint="search"
+      />
+      {value ? (
+        <button type="button" className="ph-search__clear" onClick={() => onChange('')} aria-label={t('profile.search.clear')} title={t('profile.search.clear')}>
+          <Icon name="close" size={16} />
         </button>
       ) : null}
     </div>
+  );
+}
+
+const fold = (s) => String(s || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const searchText = (v) => fold([
+  v.title,
+  Array.isArray(v.tags) ? v.tags.join(' ') : v.tags,
+  v.category,
+].filter(Boolean).join(' '));
+
+/** Loaded videos and Shorts whose title or tags hold every word of `query`. */
+export function matchChannel(list, query) {
+  const words = fold(query).split(/\s+/).filter(Boolean);
+  if (!words.length) return [];
+  return list.filter((v) => {
+    const hay = searchText(v);
+    return words.every((w) => hay.includes(w));
+  });
+}
+
+/**
+ * What "Search this channel" found among the uploads the page holds. Older
+ * uploads are one click away while the list has more pages.
+ */
+export function ProfileSearchResults({
+  query, videos = [], shorts = [], hasMore = false, loadingMore = false, onMore,
+  getContentForVideo, isWatched, getViewCount, username,
+}) {
+  const { t } = useTranslation();
+  const foundVideos = useMemo(() => matchChannel(videos, query), [videos, query]);
+  const foundShorts = useMemo(() => matchChannel(shorts, query), [shorts, query]);
+  const total = foundVideos.length + foundShorts.length;
+  return (
+    <section className="ph-results" aria-live="polite">
+      <div className="ph-results__head">
+        <h3>{t('profile.search.results', { count: total, query: query.trim() })}</h3>
+        {hasMore ? (
+          <Button variant="secondary" size={32} icon="history" loading={loadingMore} onClick={onMore}>
+            {t('profile.search.older')}
+          </Button>
+        ) : null}
+      </div>
+      {total === 0 ? (
+        <EmptyState icon="search_off" title={t('profile.search.empty', { query: query.trim() })} />
+      ) : null}
+      {foundVideos.length ? (
+        <Card3 videos={foundVideos} getContentForVideo={getContentForVideo} isWatched={isWatched} getViewCount={getViewCount} />
+      ) : null}
+      {foundShorts.length ? (
+        <div className="ph-results__shorts">
+          <Card3 videos={foundShorts} shortsGrid linkPrefix="/shorts" linkQuery={username ? `&user=${username}` : ''} getViewCount={getViewCount} />
+        </div>
+      ) : null}
+    </section>
   );
 }

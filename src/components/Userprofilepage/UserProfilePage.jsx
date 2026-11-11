@@ -49,7 +49,7 @@ import ProfileLinksButton from './ProfileLinksButton';
 import ProfileEmptyState from './ProfileEmptyState';
 import { Button, Dialog, Field, Segmented, EmptyState } from '../v2/ui';
 import { Icon } from '../v2/Icon';
-import { ProfileTile, ProfileMoreMenu, ProfileTabs } from './ProfileActions';
+import { ProfileTile, ProfileMoreMenu, ProfileTabs, ProfileSearch, ProfileSearchResults } from './ProfileActions';
 import { useTranslation, Trans } from 'react-i18next';
 
 // Every toast from this module is headed "Profile"; the message becomes the
@@ -112,6 +112,7 @@ function UserProfilePage({ user: userProp }) {
     // — see ProfileOverview's openCommunityTab and SnapCard's onOpenTab.
     const selectTab = useCallback((tab, permlink, opts) => {
       setShow(tab);
+      setSearch((sr) => (sr.q ? { ...sr, q: '' } : sr));
       const params = new URLSearchParams();
       if (tab && tab !== 'overview') params.set('tab', tab);
       if (permlink) params.set('snap', permlink);
@@ -137,6 +138,11 @@ function UserProfilePage({ user: userProp }) {
     // covers the player, so the player can't open while the menu is up.)
     const audioExpanded = useAppStore((st) => st.audioExpanded);
     const [isTipModalOpen, setIsTipModalOpen] = useState(false);
+    // "Search this channel" (20b): filters the uploads this page has loaded.
+    // Tied to the profile it was typed on, so another channel starts empty.
+    const [search, setSearch] = useState({ user: null, q: '' });
+    const channelQuery = search.user === user ? search.q : '';
+    const setChannelQuery = (q) => setSearch({ user, q });
 
     // Check if viewing own profile and redirect to /profile
     const isOwnProfile = authenticatedUser && authenticatedUser.toLowerCase() === user?.toLowerCase();
@@ -166,29 +172,7 @@ function UserProfilePage({ user: userProp }) {
     });
     const snapCount = snapCountData?.total || 0;
 
-    // Video/shorts counts for their tab headers — SAME query key ProfileStats
-    // uses for the "50 videos / 14 shorts" stat line, so this is a cache hit,
-    // not a second request.
-    const { data: profileCounts } = useQuery({
-      queryKey: ['profile-counts', user],
-      queryFn: async () => (await axios.get(`${CHECKER_URL}/user/${encodeURIComponent(user)}/counts`)).data,
-      enabled: !!user && user !== 'unknown',
-      staleTime: 5 * 60 * 1000,
-      retry: 1,
-    });
-    const videoCount = profileCounts?.videos || 0;
-    const shortsCount = profileCounts?.shorts || 0;
 
-    // Audio count for its tab header — the /audio endpoint already returns a
-    // `total` alongside the page of items; limit=1 keeps this a count-only call.
-    const { data: audioCountData } = useQuery({
-      queryKey: ['audio-count', user],
-      queryFn: async () => (await axios.get(`${CHECKER_URL}/audio?owner=${encodeURIComponent(user)}&limit=1`)).data,
-      enabled: !!user && user !== 'unknown',
-      staleTime: 5 * 60 * 1000,
-      retry: 1,
-    });
-    const audioCount = audioCountData?.total || 0;
 
     // 🔐 Members-only shelf. Public and unfiltered by entitlement on purpose:
     // it exists to show non-subscribers what they are missing. The tab is hidden
@@ -583,16 +567,18 @@ const {
     );
   }
 
+  // The order of the boards (37a): what a channel makes first, then the
+  // people around it, then the owner's own pages.
   const tabs = [
     { value: 'overview', label: t('profile.tabs.overview') },
-    { value: 'video', label: t('profile.tabs.videos'), count: videoCount },
-    { value: 'shorts', label: t('profile.tabs.shorts'), count: shortsCount },
-    { value: 'audio', label: t('profile.tabs.audio'), count: audioCount },
-    hasGated && { value: 'members', label: t('profile.tabs.members'), count: gatedVideos.length, icon: 'lock' },
-    (supporterCount > 0 || hasGivenTips || isOwnProfile) && { value: 'supports', label: t('profile.tabs.supporters'), count: supporterCount },
-    streamCount > 0 && { value: 'streams', label: t('profile.tabs.streams'), count: streamCount },
-    { value: 'community', label: t('profile.tabs.community'), count: snapCount },
-    { value: 'playlists', label: t('profile.tabs.playlists'), count: playlists.length },
+    { value: 'video', label: t('profile.tabs.videos') },
+    { value: 'shorts', label: t('profile.tabs.shorts') },
+    { value: 'audio', label: t('profile.tabs.audio') },
+    { value: 'playlists', label: t('profile.tabs.playlists') },
+    { value: 'community', label: t('profile.tabs.community') },
+    streamCount > 0 && { value: 'streams', label: t('profile.tabs.streams') },
+    (supporterCount > 0 || hasGivenTips || isOwnProfile) && { value: 'supports', label: t('profile.tabs.supporters') },
+    hasGated && { value: 'members', label: t('profile.tabs.members') },
     isOwnProfile && { value: 'links', label: t('profile.tabs.links') },
     canSeeStats && { value: 'stats', label: t('profile.tabs.analytics') },
   ].filter(Boolean);
@@ -655,6 +641,8 @@ const {
               title={t('profile.page.moreActions', { user })}
               items={[
                 { icon: 'link', label: t('profile.page.copyProfileLink'), onClick: copyProfileLink },
+                // Wallet left the tab row for "Search this channel" (20b).
+                { icon: 'account_balance_wallet', label: t('common.nav.wallet'), onClick: () => handleWalletNavigate(user) },
                 { icon: 'rss_feed', label: t('profile.page.podcastFeed'), href: `/rss/${user}.xml`, external: true, title: t('profile.page.podcastFeedTitle', { user }) },
                 // This channel's Hive galaxy: who they follow and who those follow (page/Galaxy.jsx).
                 { icon: 'hub', label: t('galaxy.profileButton', { user }), href: `/galaxy/${user}`, hidden: !galaxyFits },
@@ -687,11 +675,26 @@ const {
         value={show}
         onChange={(v) => selectTab(v)}
         label={t('profile.layout.title')}
-        walletLabel={t('common.nav.wallet')}
-        onWallet={() => handleWalletNavigate(user)}
+        search={<ProfileSearch value={channelQuery} onChange={setChannelQuery} />}
       />
       <div className="container-video">
-  {show === "overview" ? (
+  {channelQuery.trim() ? (
+    <ProfileSearchResults
+      query={channelQuery}
+      videos={videos}
+      shorts={shortsVideos}
+      hasMore={!!hasNextPage || !!hasNextShortsPage}
+      loadingMore={isFetchingNextPage || isFetchingNextShortsPage}
+      onMore={() => {
+        if (hasNextPage) fetchNextPage();
+        if (hasNextShortsPage) fetchNextShortsPage();
+      }}
+      getContentForVideo={getContentForVideo}
+      isWatched={isWatched}
+      getViewCount={getViewCount}
+      username={user}
+    />
+  ) : show === "overview" ? (
     <ProfileOverview
       username={user}
       isOwnProfile={isOwnProfile}

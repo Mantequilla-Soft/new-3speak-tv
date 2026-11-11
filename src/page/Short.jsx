@@ -101,6 +101,9 @@ import StoryOwnerTools from '../components/StoryOwnerTools/StoryOwnerTools';
 import ModalHeader from '../components/ModalHeader/ModalHeader';
 import { Icon } from '../components/v2/Icon';
 import { Button, IconButton, EmptyState, MenuRow, Segmented } from '../components/v2/ui';
+import useReblog from '../hooks/useReblog';
+import useLayoutMediaQuery from '../hooks/useLayoutMediaQuery';
+import shortsMark from '../assets/image/3S_mark.svg';
 
 import { soundLabel } from '../utils/soundCredits';
 // Every toast from this module is headed "Shorts"; the message becomes the
@@ -117,6 +120,17 @@ const PREFETCH_GRACE_MS = 4000;
 // the player: the expired screen stands in for it, so this does not depend on the
 // embed player's own expired clip being deployed.
 const isExpiredStory = (v) => !!v?.storyExpiresAt && new Date(v.storyExpiresAt).getTime() <= Date.now();
+
+// A comment's body as one plain line (the phone discussion bar): no images,
+// link text only, no markup.
+const plainCommentText = (body = '') => String(body)
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+  .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/^\s*(#+|>)\s*/gm, '')
+  .replace(/\*\*|__|`/g, '')
+  .replace(/\s+/g, ' ')
+  .trim();
 
 // The Watch Later playlist is identified by NAME — same convention as the watch
 // page and the add-to-playlist modal. Private, and created on first save.
@@ -2070,6 +2084,38 @@ const VideoShort = () => {
     prefetchVideoTagsV2(currentVideo?.author, currentVideo?.hivePermlink);
   }, [currentVideo?.author, currentVideo?.hivePermlink]);
 
+  // The Hive reblog tile of the dock (18a), the same two-tap button as the watch
+  // page's dock (hooks/useReblog.js). Not the 3Speak hype, which keeps its tile.
+  const reblog = useReblog(
+    currentVideo?.author,
+    currentVideo && !currentVideo.hivePostMissing ? currentVideo.hivePermlink : null,
+    toast,
+  );
+
+  // Desktop (18a) draws the creator as a chip on the player and the feed switch
+  // in the strip above it; phones keep both on the video. Same 768 split as the
+  // rest of this page.
+  const isDeskLayout = useLayoutMediaQuery('(min-width: 769px)');
+  // The side panel's tabs (18a): the discussion, or the shorts coming up next.
+  const [sideTab, setSideTab] = useState('discussion');
+  // A note on the video for a moment (45b): "That's all the shorts for your
+  // interests. Showing Discover."
+  const [feedNote, setFeedNote] = useState(null);
+  useEffect(() => {
+    if (!feedNote) return undefined;
+    const id = setTimeout(() => setFeedNote(null), 6000);
+    return () => clearTimeout(id);
+  }, [feedNote]);
+  // Phones (18a): with the sheet closed, a bar at the foot of the short shows its
+  // newest comment, so the discussion stays in view. Not with the optional quick
+  // comment bar (Settings), which takes that spot.
+  const showPeek = !isDeskLayout && !showComments && !shortsCommentBar;
+  useEffect(() => {
+    if (showPeek && videos[currentIndex] && !videos[currentIndex].commentsLoaded) {
+      fetchComments();
+    }
+  }, [showPeek, currentIndex, videos, fetchComments]);
+
   /* ---------- COMMENT SORT, PINS, IMAGES (shared with the watch page) ---------- */
   const [commentSort, setCommentSort] = useState(readCommentSort);
   const changeCommentSort = (v) => { setCommentSort(v); saveCommentSort(v); };
@@ -2676,7 +2722,7 @@ const VideoShort = () => {
       // the last one. Guarded on interestsMode, which flips false the moment we
       // switch, so this can't fire twice.
       if (interestsMode && !feedUser && !hasMore && !loadingMoreRef.current) {
-        toast.info(t('shorts.feed.interestsExhausted'));
+        setFeedNote(t('shorts.feed.interestsExhausted'));
         switchFeedMode('discover');
       }
       return;
@@ -2692,6 +2738,16 @@ const VideoShort = () => {
     }
   };
   handleNextRef.current = handleNext;
+
+  // Straight to a short further down the feed (the side panel's Up next list).
+  const jumpTo = (idx) => {
+    if (idx === currentIndex || idx < 0 || idx >= videos.length) return;
+    endAdForNavigation();
+    shortHistoryRef.current = [];
+    triggerSwipeAnimation(idx > currentIndex ? 'up' : 'down');
+    setCurrentIndex(idx);
+    if (idx >= videos.length - 7 && hasMore) loadMoreVideos();
+  };
 
   // Keyboard navigation: ArrowUp = previous, ArrowDown = next
   useEffect(() => {
@@ -3298,9 +3354,50 @@ const VideoShort = () => {
   const playbackModeIcon = playbackMode === 'auto-replay' ? 'replay' : playbackMode === 'auto-swipe' ? 'swipe_up' : 'touch_app';
   const formatDuration = (sec) => `${Math.floor(sec / 60)}:${Math.floor(sec % 60).toString().padStart(2, '0')}`;
 
+  // Discover / My interests. Touch events are stopped so tapping it never
+  // registers as a swipe.
+  const feedSwitch = !feedUser && !isStoriesMode ? (
+    <div
+      className="shortsFeedSwitch"
+      role="tablist"
+      aria-label={t('shorts.feed.ariaLabel')}
+      onTouchStart={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+      onTouchEnd={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
+      <button
+        type="button"
+        role="tab"
+        aria-selected={shortsFeedMode !== 'interests'}
+        className={shortsFeedMode !== 'interests' ? 'active' : ''}
+        onClick={(e) => { e.stopPropagation(); switchFeedMode('discover'); }}
+      >
+        {t('shorts.feed.discover')}
+      </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={shortsFeedMode === 'interests'}
+        className={shortsFeedMode === 'interests' ? 'active' : ''}
+        onClick={(e) => {
+          e.stopPropagation();
+          if (!hasInterests) {
+            toast.error(t('shorts.feed.noInterests'));
+            return;
+          }
+          switchFeedMode('interests');
+        }}
+        title={hasInterests ? t('shorts.feed.interestsTitle') : t('shorts.feed.pickInterestsFirst')}
+      >
+        {t('shorts.feed.myInterests')}
+      </button>
+    </div>
+  ) : null;
+
   return (
     <>
-    <main className={`short-main${shortsCommentBar ? '' : ' no-bottom-bar'}${adPlaying ? ' ad-playing' : ''}${commentsVisible ? ' with-comments' : ''}`}>
+    <main className={`short-main${shortsCommentBar ? '' : ' no-bottom-bar'}${adPlaying ? ' ad-playing' : ''}${commentsVisible ? ' with-comments' : ''}${showPeek ? ' has-peek' : ''}`}>
       <div className="landscape-block"
         onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
         onTouchStart={(e) => { e.stopPropagation(); e.preventDefault(); }}
@@ -3332,6 +3429,24 @@ const VideoShort = () => {
         className="keyboard-capture"
         aria-hidden="true"
       />
+      {/* Desktop strip over the player (18a): the mark, whose shorts these are,
+          and the feed switch. The stories view has its own bar there instead. */}
+      {isDeskLayout && !isStoriesMode && (
+        <div className="shortsStrip">
+          <img className="shortsStrip__mark" src={shortsMark} alt="3Speak" />
+          <span className="shortsStrip__sep" aria-hidden="true" />
+          {feedUser ? (
+            <Link to={`/@${feedUser}`} className="shortsStrip__who">
+              <HiveAvatar username={feedUser} size={null} alt="" imgClassName="shortsStrip__avatar" />
+              <span><b>@{feedUser}</b> <span className="shortsStrip__muted">· {t('common.nav.shorts')}</span></span>
+            </Link>
+          ) : (
+            <b className="shortsStrip__title">{t('common.nav.shorts')}</b>
+          )}
+          <span className="shortsStrip__space" />
+          {feedSwitch}
+        </div>
+      )}
       <div className={`videoWrapper ${commentsVisible ? 'with-comments' : ''}`}>
 
         {/* NAVIGATION (desktop): the previous short as a small tile, then up / down.
@@ -3492,49 +3607,11 @@ const VideoShort = () => {
               <Icon name="favorite" size={80} fill />
             </div>
 
-            {/* Feed switcher: sits ON the video (top-left), inside the overlay like the
-                other on-video controls, so it lines up with the player instead of the
-                full-width page. Main feed only: a creator's shorts (?user=…) and the
-                stories view keep their own feeds, so it's hidden there.
-                Touch events are stopped so tapping it never registers as a swipe. */}
-            {!feedUser && !isStoriesMode && (
-              <div
-                className="shortsFeedSwitch"
-                role="tablist"
-                aria-label={t('shorts.feed.ariaLabel')}
-                onTouchStart={(e) => e.stopPropagation()}
-                onTouchMove={(e) => e.stopPropagation()}
-                onTouchEnd={(e) => e.stopPropagation()}
-                onMouseDown={(e) => e.stopPropagation()}
-              >
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={shortsFeedMode !== 'interests'}
-                  className={shortsFeedMode !== 'interests' ? 'active' : ''}
-                  onClick={(e) => { e.stopPropagation(); switchFeedMode('discover'); }}
-                >
-                  {t('shorts.feed.discover')}
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={shortsFeedMode === 'interests'}
-                  className={shortsFeedMode === 'interests' ? 'active' : ''}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (!hasInterests) {
-                      toast.error(t('shorts.feed.noInterests'));
-                      return;
-                    }
-                    switchFeedMode('interests');
-                  }}
-                  title={hasInterests ? t('shorts.feed.interestsTitle') : t('shorts.feed.pickInterestsFirst')}
-                >
-                  {t('shorts.feed.myInterests')}
-                </button>
-              </div>
-            )}
+            {/* Feed switcher (Discover / My interests): on the video on phones; on
+                desktop it sits in the strip above the player (18a). Main feed only:
+                a creator's shorts (?user=…) and the stories view keep their own feeds. */}
+            {!isDeskLayout && feedSwitch}
+            {feedNote && <div className="shortsFeedNote" role="status">{feedNote}</div>}
 
             {/* Top-right controls on the video: subtitles, playback options
                 (playback mode and ambient light, 45b), mute. Touch events stop here so
@@ -3611,6 +3688,39 @@ const VideoShort = () => {
               </div>
             )}
           </div>
+
+          {/* Phones (18a): the discussion at the foot of the short, its newest
+              comment and the count. Tap for the sheet. */}
+          {showPeek && (() => {
+            const latest = sortedComments[0];
+            const latestAuthor = latest ? (typeof latest.author === 'string' ? latest.author : latest.author?.username || '') : '';
+            const latestText = latest ? plainCommentText(latest.body) : '';
+            return (
+              <button
+                type="button"
+                className="shortsPeek"
+                onClick={(e) => { e.stopPropagation(); handleToggleComments(); }}
+                onTouchStart={(e) => e.stopPropagation()}
+                onTouchEnd={(e) => e.stopPropagation()}
+                aria-label={t('shorts.comments.title')}
+              >
+                <Icon name="chat_bubble" size={20} />
+                <span className="shortsPeek__text">
+                  {latest && latestText ? (
+                    <>
+                      <span className="shortsPeek__meta">{latestAuthor.replace(/^@/, '')}{latest.timeAgo ? ` · ${latest.timeAgo}` : ''}</span>
+                      <span className="shortsPeek__line">{latestText}</span>
+                    </>
+                  ) : (
+                    <span className="shortsPeek__line">
+                      {currentVideo.hivePostMissing ? t('shorts.comments.unavailable') : t('shorts.comments.joinPlaceholder')}
+                    </span>
+                  )}
+                </span>
+                <span className="shortsPeek__count">{formatNumber(currentVideo.stats.comments || 0)}</span>
+              </button>
+            );
+          })()}
 
           {/* Progress bar */}
           <div
@@ -3746,12 +3856,40 @@ const VideoShort = () => {
             document.body
           )}
 
-          {/* Back button (visible after navigating to a parent short) */}
-          {shortHistoryRef.current.length > 0 && (
+          {/* Back button (visible after navigating to a parent short). On desktop it
+              leads the creator chip in the top-left group below. */}
+          {shortHistoryRef.current.length > 0 && !isDeskLayout && (
             <button type="button" className="shortBackBtn" onClick={(e) => { e.stopPropagation(); handleShortBack(); }}>
               <Icon name="arrow_back" size={18} />
               <span>{t('common.actions.back')}</span>
             </button>
+          )}
+
+          {/* Desktop (18a): the creator as a chip at the top-left of the player,
+              avatar, name and Follow on the media scrim. Phones keep the creator
+              above the caption (.userRow). */}
+          {isDeskLayout && (
+            <div className="shortsTopLeft" onClick={(e) => e.stopPropagation()}>
+              {shortHistoryRef.current.length > 0 && (
+                <button type="button" className="shortBackBtn is-inline" onClick={(e) => { e.stopPropagation(); handleShortBack(); }}>
+                  <Icon name="arrow_back" size={18} />
+                  <span>{t('common.actions.back')}</span>
+                </button>
+              )}
+              <div className="shortsCreatorChip">
+                <AuthorBadge
+                  author={currentVideo.author}
+                  showFollow
+                  color="var(--on-media)"
+                />
+                <AiBadge
+                  key={`${currentVideo.author}/${currentVideo.permlink}`}
+                  author={currentVideo.author}
+                  permlink={currentVideo.permlink}
+                  className="ai-badge--on-video"
+                />
+              </div>
+            </div>
           )}
 
           {/* Reaction chain overlay (for reactions and remixes) */}
@@ -3965,26 +4103,26 @@ const VideoShort = () => {
                 )}
               </div>
             )}
-            <div className="userRow" onClick={(e) => e.stopPropagation()}>
-              <AuthorBadge
-                author={currentVideo.author}
-                showFollow
-                followersCount={currentVideo.user.followersCount}
-                reputation={currentVideo.user.reputation}
-                color="var(--on-media)"
-              />
-              {/* Sits here rather than in the caption row because the caption
-                  collapses and this should not depend on it being open.
-                  The ASSET permlink, not the hive one: subtitles-tags is keyed by
-                  owner + asset id, so this is the direct hit, and it still works
-                  for a short that has no Hive post to resolve through. */}
-              <AiBadge
-                key={`${currentVideo.author}/${currentVideo.permlink}`}
-                author={currentVideo.author}
-                permlink={currentVideo.permlink}
-                className="ai-badge--on-video"
-              />
-            </div>
+            {!isDeskLayout && (
+              <div className="userRow" onClick={(e) => e.stopPropagation()}>
+                <AuthorBadge
+                  author={currentVideo.author}
+                  showFollow
+                  color="var(--on-media)"
+                />
+                {/* Sits here rather than in the caption row because the caption
+                    collapses and this should not depend on it being open.
+                    The ASSET permlink, not the hive one: subtitles-tags is keyed by
+                    owner + asset id, so this is the direct hit, and it still works
+                    for a short that has no Hive post to resolve through. */}
+                <AiBadge
+                  key={`${currentVideo.author}/${currentVideo.permlink}`}
+                  author={currentVideo.author}
+                  permlink={currentVideo.permlink}
+                  className="ai-badge--on-video"
+                />
+              </div>
+            )}
             <div className={`caption${captionExpanded ? ' caption--expanded' : ''}`} onClick={(e) => { e.stopPropagation(); setCaptionExpanded(prev => !prev); }}>
               {!captionExpanded && !currentVideo.caption?.trim() && (
                 <button
@@ -4090,11 +4228,16 @@ const VideoShort = () => {
                 <span className="captionMore">{t('shorts.caption.more')}</span>
               )}
             </div>
-            <div className="audioMarquee">
-              <Icon name="music_note" size={14} />
-              <div className="audioText">
-                <p>{currentVideo.audio}</p>
-              </div>
+            {/* Chips under the caption (18a): the first tags, then the sound. With the
+                caption open, every tag is listed in it instead. */}
+            <div className="shortsChips">
+              {!captionExpanded && (currentVideo.tags || []).slice(0, 2).map((tag) => (
+                <Link key={tag} to={`/t/${tag}`} className="shortsChip" onClick={(e) => e.stopPropagation()}>#{tag}</Link>
+              ))}
+              <span className="shortsChip audioMarquee">
+                <Icon name="music_note" size={14} />
+                <span className="audioText">{currentVideo.audio}</span>
+              </span>
             </div>
           </div>
         </div>
@@ -4115,7 +4258,7 @@ const VideoShort = () => {
               toggleVoteTooltip(currentVideo.author, currentVideo.hivePermlink);
             }}
           >
-            <Icon name="favorite" size={24} fill={!!currentVideo.isLiked} />
+            <Icon name="arrow_upward" size={24} fill />
             <span className="actionLabel">{formatNumber(currentVideo.stats.likes)}</span>
           </button>
           {/* The vote popup is a portal; rendered beside the tile, not inside it,
@@ -4142,6 +4285,8 @@ const VideoShort = () => {
             postCreatedAt={currentVideo.createdAt || currentVideo.created}
           />
 
+          {/* Phones show the discussion in the bar at the foot of the short instead. */}
+          {!showPeek && (
           <button
             type="button"
             className={`actionItem${showComments ? ' active' : ''}`}
@@ -4152,17 +4297,33 @@ const VideoShort = () => {
             <Icon name="chat_bubble" size={24} fill={!!showComments} />
             <span className="actionLabel">{currentVideo.stats.comments}</span>
           </button>
+          )}
 
+          {/* Reblog onto the viewer's Hive blog: two taps, like the watch page's
+              dock (hooks/useReblog.js). Not for a signed-out viewer or their own short. */}
+          {reblog.canReblog && (
+            <button
+              type="button"
+              className={`actionItem${reblog.reblogged ? ' reshared' : ''}${reblog.armed ? ' armed' : ''}`}
+              aria-pressed={!!reblog.reblogged}
+              disabled={reblog.busy}
+              title={reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title')}
+              onClick={(e) => { e.stopPropagation(); reblog.press(); }}
+            >
+              <Icon name="repeat" size={24} />
+              <span className="actionLabel">{reblog.label}</span>
+            </button>
+          )}
+
+          {/* Watch Later: one tap adds/removes this short from the playlist. */}
           <button
             type="button"
-            className={`actionItem${hasReshared ? ' reshared' : ''}`}
-            aria-pressed={!!hasReshared}
-            title={hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
-            aria-label={hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
-            onClick={(e) => { e.stopPropagation(); handleReshare(); }}
+            className={`actionItem${isInWatchLater ? ' saved' : ''}`}
+            aria-pressed={!!isInWatchLater}
+            onClick={(e) => { e.stopPropagation(); toggleWatchLater(); }}
           >
-            <Icon name="local_fire_department" size={24} fill={!!hasReshared} />
-            <span className="actionLabel">{reshareCount || 0}</span>
+            <Icon name="bookmark" size={24} fill={!!isInWatchLater} />
+            <span className="actionLabel">{isInWatchLater ? t('common.actions.saved') : t('common.actions.save')}</span>
           </button>
 
           {/* Tip: not on your own short, and only with a Hive post: a warm-up
@@ -4179,17 +4340,6 @@ const VideoShort = () => {
             </button>
           )}
 
-          {/* Watch Later: one tap adds/removes this short from the playlist. */}
-          <button
-            type="button"
-            className={`actionItem${isInWatchLater ? ' saved' : ''}`}
-            aria-pressed={!!isInWatchLater}
-            onClick={(e) => { e.stopPropagation(); toggleWatchLater(); }}
-          >
-            <Icon name="bookmark" size={24} fill={!!isInWatchLater} />
-            <span className="actionLabel">{isInWatchLater ? t('common.actions.saved') : t('common.actions.save')}</span>
-          </button>
-
           <button
             type="button"
             className="actionItem"
@@ -4199,11 +4349,24 @@ const VideoShort = () => {
             <span className="actionLabel">{t('common.actions.share')}</span>
           </button>
 
+          {/* Hype (3Speak only, not a Hive reblog) */}
+          <button
+            type="button"
+            className={`actionItem${hasReshared ? ' reshared' : ''}`}
+            aria-pressed={!!hasReshared}
+            title={hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
+            aria-label={hasReshared ? t('common.hype.hyped') : t('common.hype.title')}
+            onClick={(e) => { e.stopPropagation(); handleReshare(); }}
+          >
+            <Icon name="local_fire_department" size={24} fill={!!hasReshared} />
+            <span className="actionLabel">{reshareCount || 0}</span>
+          </button>
+
           {FEATURE_EDITOR && authenticated && (() => {
             const vid = videos[currentIndex];
             return vid?.reusable === true ? (
               <button type="button" className="actionItem" onClick={(e) => { e.stopPropagation(); handleRemix('video'); }}>
-                <Icon name="repeat" size={24} />
+                <Icon name="movie_edit" size={24} />
                 <span className="actionLabel">{t('shorts.actions.remix')}</span>
               </button>
             ) : null;
@@ -4298,21 +4461,62 @@ const VideoShort = () => {
           onTouchEnd={handleCommentsDragEnd}
         />
 
-        <ModalHeader className="commentsHeader" title={t('shorts.comments.title')} onClose={handleToggleComments}>
-          <span className="commentsCount">{currentVideo.stats.comments}</span>
-          <select
-            className="commentsSort v2-input is-select h32"
-            value={commentSort}
-            onChange={(e) => changeCommentSort(e.target.value)}
-            aria-label={t('comments.section.sortBy')}
-          >
-            <option value="newest">{t('comments.section.sortNewest')}</option>
-            <option value="oldest">{t('comments.section.sortOldest')}</option>
-            <option value="popular">{t('comments.section.sortPopular')}</option>
-          </select>
-        </ModalHeader>
+        {/* Phones: the sheet's title bar. Desktop's panel is always there (18a),
+            so it has no title or close, only its tabs. */}
+        {!isDeskLayout && (
+          <ModalHeader className="commentsHeader" title={t('shorts.panel.discussion')} onClose={handleToggleComments} />
+        )}
+        <Segmented
+          className="shortsSideTabs"
+          size={36}
+          label={t('shorts.comments.title')}
+          value={sideTab}
+          onChange={setSideTab}
+          options={[
+            { value: 'discussion', label: t('shorts.panel.discussion'), count: currentVideo.stats.comments || undefined },
+            { value: 'next', label: t('shorts.panel.upNext') },
+          ]}
+        />
 
+        {sideTab === 'next' ? (
+          <div className="shortsUpNext">
+            {videos.slice(currentIndex + 1, currentIndex + 13).map((v, k) => (
+              <button
+                key={v.id || `${v.author}/${v.permlink}`}
+                type="button"
+                className="shortsUpNext__row"
+                onClick={() => jumpTo(currentIndex + 1 + k)}
+              >
+                <span className="shortsUpNext__thumb">
+                  {v.thumbnailUrl && <img src={v.thumbnailUrl} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.display = 'none'; }} />}
+                </span>
+                <span className="shortsUpNext__text">
+                  <b>{v.heading || v.caption || v.title || t('shorts.chain.thisVideo')}</b>
+                  <span>@{v.author}{v.timeAgo && !String(v.timeAgo).includes('NaN') ? ` · ${v.timeAgo}` : ''}</span>
+                </span>
+              </button>
+            ))}
+            {videos.length - 1 <= currentIndex && (
+              <p className="shortsUpNext__empty">{hasMore ? t('shorts.loading') : t('shorts.feed.empty')}</p>
+            )}
+          </div>
+        ) : (
+        <>
         <div className="commentsList">
+          {currentVideo.comments?.length > 1 && (
+            <div className="commentsListHead">
+              <select
+                className="commentsSort v2-input is-select h32"
+                value={commentSort}
+                onChange={(e) => changeCommentSort(e.target.value)}
+                aria-label={t('comments.section.sortBy')}
+              >
+                <option value="newest">{t('comments.section.sortNewest')}</option>
+                <option value="oldest">{t('comments.section.sortOldest')}</option>
+                <option value="popular">{t('comments.section.sortPopular')}</option>
+              </select>
+            </div>
+          )}
           {commentsLoading ? (
             <div className="commentsLoading">
               <Icon name="progress_activity" size={24} className="v2-spin" />
@@ -4370,17 +4574,16 @@ const VideoShort = () => {
         </div>
 
         {/* Comment Input */}
+        {/* One row (18a): the box, then send. Write / Preview only once there is
+            something to preview. */}
         <div className="commentInput">
-          <div className="commentInputAvatar">
-            <HiveAvatar username={user || incubationHandle || 'guest'} srcOverride={!user && incubationHandle ? handleAvatar(incubationHandle) : undefined} size={null} alt="" badgeSize={11} />
-          </div>
           <CommentDropZone
             className="commentInputBox"
             images={mainCommentImages}
             value={newComment}
             setValue={setNewComment}
             disabled={!(user || incubationHandle) || postingComment || currentVideo.hivePostMissing}
-            toHtml={shortsCommentPreviewHtml}
+            toHtml={newComment ? shortsCommentPreviewHtml : null}
             previewMarkdownClass="commentText"
           >
           <textarea
@@ -4392,7 +4595,7 @@ const VideoShort = () => {
               // comment..." and simply refused to focus, which reads as broken.
               currentVideo.hivePostMissing
                 ? t('shorts.comments.unavailable')
-                : (user || incubationHandle) ? t('shorts.comments.addPlaceholder') : t('shorts.comments.loginPlaceholder')
+                : (user || incubationHandle) ? t('shorts.comments.joinPlaceholder') : t('shorts.comments.loginPlaceholder')
             }
             value={newComment}
             onChange={(e) => {
@@ -4410,7 +4613,7 @@ const VideoShort = () => {
           {mainCommentEmoji.popup}
           </CommentDropZone>
           {(user || incubationHandle) && !currentVideo.hivePostMissing && (
-            <>
+            <span className={`commentInputTools${newComment ? ' is-shown' : ''}`}>
               <EmojiGifPicker
                 align="right"
                 openDirection="up"
@@ -4418,7 +4621,7 @@ const VideoShort = () => {
                 onPickGif={(url) => insertAtCursor(mainCommentRef.current, newComment, gifMarkdown(url), setNewComment)}
               />
               <CommentImageButton uploading={mainCommentImages.uploading} onFiles={mainCommentImages.upload} />
-            </>
+            </span>
           )}
           <button
             type="button"
@@ -4430,6 +4633,8 @@ const VideoShort = () => {
             {postingComment ? <Icon name="progress_activity" size={20} className="v2-spin" /> : <Icon name="send" size={20} />}
           </button>
         </div>
+        </>
+        )}
       </div>
       </div>,
       document.body
@@ -4622,11 +4827,11 @@ const CommentItem = ({
         <div className="commentContent">
           <div className="commentMeta">
             {authorName ? (
-              <Link to={`/@${authorName}`} className="commentUsername" onClick={(e) => e.stopPropagation()}>@{authorName}</Link>
+              <Link to={`/@${authorName}`} className="commentUsername" onClick={(e) => e.stopPropagation()}>{authorName}</Link>
             ) : (
               <span className="commentUsername">{comment.user?.username}</span>
             )}
-            <span className="commentTime">{comment.timeAgo}</span>
+            {comment.timeAgo && <span className="commentTime">· {comment.timeAgo}</span>}
             {isPinned && (
               <span className="commentPinned"><Icon name="push_pin" size={12} fill />{t('comments.section.pinnedByCreator')}</span>
             )}
@@ -4655,16 +4860,6 @@ const CommentItem = ({
               <Icon name="flag" size={16} fill={isReported('comment', `${comment.author}/${comment.permlink}`)} />
             </button>
             <TranslateButton onTranslate={handleTranslate} isTranslating={!!translating?.[comment.permlink]} compact />
-            <button
-              type="button"
-              className={`commentActionBtn ${comment.has_voted ? 'liked' : ''}`}
-              onClick={() => toggleVoteTooltip(comment.author, comment.permlink)}
-              aria-pressed={!!comment.has_voted}
-              aria-label={t('watch.actions.vote')}
-            >
-              <Icon name="favorite" size={16} fill={!!comment.has_voted} />
-              <span>{comment.stats?.num_likes ?? 0}</span>
-            </button>
             <span className="commentReward">{rewardLabel(comment.stats?.total_hive_reward ?? 0)}</span>
             <button
               type="button"
@@ -4765,6 +4960,17 @@ const CommentItem = ({
             </button>
           )}
         </div>
+        {/* The vote, in its own column on the right (18a) */}
+        <button
+          type="button"
+          className={`commentVote${comment.has_voted ? ' liked' : ''}`}
+          onClick={() => toggleVoteTooltip(comment.author, comment.permlink)}
+          aria-pressed={!!comment.has_voted}
+          aria-label={t('watch.actions.vote')}
+        >
+          <Icon name="arrow_upward" size={18} fill={!!comment.has_voted} />
+          <span>{comment.stats?.num_likes ?? 0}</span>
+        </button>
       </div>
 
       {/* Nested replies — outside the flex row, with thread line */}

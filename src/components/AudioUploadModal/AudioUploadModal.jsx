@@ -44,6 +44,7 @@ import PlaylistTypePicker from '../PlaylistTypePicker/PlaylistTypePicker';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import { sanitizeAudiograms, publishAudiogramShorts } from '../../utils/audiogramShorts';
 import { playlistTypeFields, trackCategoryToKind, storedPlaylistType } from '../../lib/playlistType';
+import AudioClip from '../AudioClip/AudioClip';
 
 // Every toast from this module is headed "Upload"; the message becomes the
 // line under it. See utils/toast.js.
@@ -2947,7 +2948,7 @@ function ReviewStep({
               </div>
             )}
 
-            <audio controls preload="metadata" src={tr.objectUrl} className="audio-upload-review-player" />
+            <AudioClip src={tr.objectUrl} className="audio-upload-review-player" />
 
             {/* Its audiograms: posted as Shorts together with it, each with its own state */}
             {showShorts && tr.audiograms?.length > 0 && (

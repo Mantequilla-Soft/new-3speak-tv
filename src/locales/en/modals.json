@@ -176,7 +176,9 @@
     "details": "Additional details (optional)",
     "detailsPlaceholder": "Provide more context...",
     "submitting": "Submitting...",
-    "submit": "Submit Report"
+    "submit": "Submit Report",
+    "intro": "Reports go to the 3Speak team. The creator won't see who reported.",
+    "nextDetails": "Next: add details"
   },
   "upload": {
     "missingInfo": "Missing video or thumbnail information.",

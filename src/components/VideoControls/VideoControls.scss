@@ -22,7 +22,7 @@ $menu-bg: color-mix(in srgb, var(--media-black) 90%, transparent);
   display: flex;
   flex-direction: column;
   background: linear-gradient(transparent, var(--media-scrim-strong));
-  padding: 32px 16px 12px;
+  padding: 40px 20px 14px;
   color: var(--on-media);
   opacity: 0;
   transition: opacity var(--t-slow) var(--ease);

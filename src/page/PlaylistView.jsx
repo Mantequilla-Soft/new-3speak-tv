@@ -541,6 +541,20 @@ function PlaylistView() {
   const heroCover = playlist.thumbnail
     ? squareCover(playlist.thumbnail)
     : firstVideo ? fixVideoThumbnail(firstVideo) : '';
+  // The videos in a random order, handed to the watch page like "Play all"
+  // hands it the playlist (its bar then steps through this order).
+  const shuffleable = listedVideos.filter((v) => !v.isAudio);
+  const playShuffled = () => {
+    const order = [...shuffleable];
+    for (let i = order.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    const first = order[0];
+    navigate(`/@${first.author}/${first.permlink}?playlist=${playlistId}&pos=0`, {
+      state: { playlist, videos: order, currentIndex: 0 },
+    });
+  };
   const sharePlaylist = async () => {
     const url = `${window.location.origin}/playlist/${encodeURIComponent(playlistId)}`;
     try {
@@ -550,16 +564,16 @@ function PlaylistView() {
   };
   const ownerButtons = isOwner && (
     <>
-      <Button variant="secondary" size={36} icon="edit" className="pod-btn" onClick={handleOpenEdit} disabled={isSaving}>
+      <Button variant="secondary" size={40} icon="edit" className="pod-btn" onClick={handleOpenEdit} disabled={isSaving}>
         {t('common.actions.edit')}
       </Button>
-      <Button variant="secondary" size={36} icon="podcasts" className="pod-btn" onClick={() => setShowFeedsModal(true)} disabled={isSaving}>
+      <Button variant="secondary" size={40} icon="podcasts" className="pod-btn" onClick={() => setShowFeedsModal(true)} disabled={isSaving}>
         {t('playlists.feeds.button')}
       </Button>
-      <Button variant="secondary" size={36} icon="reorder" className={cx('pod-btn', reorderMode && 'is-on')} onClick={() => setReorderMode(!reorderMode)} disabled={isSaving} aria-pressed={reorderMode}>
+      <Button variant="secondary" size={40} icon="reorder" className={cx('pod-btn', reorderMode && 'is-on')} onClick={() => setReorderMode(!reorderMode)} disabled={isSaving} aria-pressed={reorderMode}>
         {reorderMode ? t('common.actions.done') : t('playlists.view.reorder')}
       </Button>
-      <Button variant="danger" size={36} icon="delete" className="pod-btn" onClick={() => setShowDeleteConfirm(true)} disabled={isSaving}>
+      <Button variant="danger" size={40} icon="delete" className="pod-btn" onClick={() => setShowDeleteConfirm(true)} disabled={isSaving}>
         {t('playlists.view.deletePlaylist')}
       </Button>
     </>
@@ -899,7 +913,7 @@ function PlaylistView() {
               {totalDuration ? <span> · {totalDuration}</span> : null}
             </span>
           </div>
-          <StatusPill tone="cyan" icon={isPrivate ? 'lock' : 'public'} className="pv-kind">
+          <StatusPill tone="cyan" className="pv-kind">
             {t('profile.layout.types.playlist')} · {isPrivate ? t('playlists.private') : t('playlists.public')}
           </StatusPill>
           <h1 className="pv-title">{playlist.name}</h1>
@@ -948,6 +962,10 @@ function PlaylistView() {
                 {t('playlists.view.playAll')}
               </Button>
             ) : null}
+            {/* Shuffle (28d): the same playlist, in a random order, from the top. */}
+            {shuffleable.length > 1 ? (
+              <ProfileTile icon="shuffle" label={t('playlists.view.shuffle')} onClick={playShuffled} />
+            ) : null}
             <ProfileTile icon="ios_share" label={t('common.actions.share')} onClick={sharePlaylist} />
             {/* Podcast / RSS feed for this playlist (checker routes/rss.js), so
                 people can follow one series in a podcast app. The <link> is
@@ -960,10 +978,12 @@ function PlaylistView() {
                   title={playlist.name}
                   href={`${window.location.origin}${feedHref}`}
                 />
+                {/* "RSS" fits the 64px tile; the full name is its accessible name. */}
                 <ProfileTile
                   as="a"
                   icon="rss_feed"
-                  label={t('playlists.view.podcastFeed')}
+                  label="RSS"
+                  aria-label={t('playlists.view.podcastFeed')}
                   className="playlist-feed-link"
                   href={feedHref}
                   target="_blank"

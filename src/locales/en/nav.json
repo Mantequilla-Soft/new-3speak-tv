@@ -7,7 +7,8 @@
     "feeds": "Feeds",
     "groups": "Groups",
     "audio": "Audio",
-    "login": "Login"
+    "login": "Login",
+    "you": "You"
   },
   "installApp": "Install App",
   "iosInstallHint": "Tap <b>Share</b> then <b>Add to Home Screen</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Short vertical videos, one after another",
     "audioTooltip": "Podcasts, music and other audio published on 3Speak",
     "groupsTooltip": "Communities you can join, and badges people are awarded",
-    "rankingsTooltip": "The creators earning and being watched most right now"
+    "rankingsTooltip": "The creators earning and being watched most right now",
+    "live": "Live",
+    "liveTooltip": "Streams and rooms that are live right now"
   },
   "aboutLink": "About 3Speak",
   "faqLink": "FAQ",
@@ -130,6 +133,17 @@
     "views_other": "{{formatted}} views",
     "tags": "Tags",
     "titles": "Titles",
-    "placeholder": "Search..."
-  }
+    "placeholder": "Search...",
+    "recent": "Recent",
+    "allResultsFor": "All results for “{{term}}”",
+    "kinds": {
+      "creator": "Creator",
+      "community": "Community",
+      "video": "Video",
+      "short": "Short",
+      "audio": "Audio",
+      "playlist": "Playlist"
+    }
+  },
+  "create": "Create"
 }

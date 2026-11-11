@@ -1,64 +1,147 @@
-// Share chooser (39d share, 19e): the shared v2 Dialog (a bottom sheet under
-// 768px) with a list of action rows, and the embed view behind one of them.
+// The share sheet (07b; 07g on the phone; 39d share, 19e): DialogShell's side
+// sheet. Tabs Share | Embed | Clip, two big Hive tiles, a row of app tiles, the
+// link with its QR code and start time, Copy link pinned at the bottom.
 @use "../../styles/v2" as v2;
 
-// It opens over the watch page and the shorts player, which keep their own
-// stacks up to 1200; the old overlay sat at 1300, so the dialog does too.
-.v2-dialog:has(> .share-chooser) { z-index: 1300; }
+.share-chooser {
+  // The context card is drawn on the phone sheet only (07g); on desktop the
+  // video stays visible beside the sheet (07b).
+  .share-ctx { display: none; }
 
-.share-chooser .v2-dialog__head .share-chooser-back { margin-left: -8px; }
+  .share-tabs {
+    padding: 4px;
+    gap: 6px;
+    border-radius: var(--r-lg);
+    flex: none;
+  }
 
-.share-chooser-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-bottom: 4px;
-}
+  .share-hive-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: none;
+    &.is-single { grid-template-columns: 1fr; }
+  }
 
-// One action: a bg-filled row inside the surface dialog (fills, not borders).
-.share-chooser-opt {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  min-height: 64px;
-  padding: 10px 12px;
-  border: 0;
-  border-radius: var(--r-lg);
-  background: var(--bg);
-  color: var(--text);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
-
-  &:hover { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
-  &:active { transform: scale(.98); }
-
-  .share-chooser-opt-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--r-md);
-    background: var(--surface-2);
+  .share-hive {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    min-height: 120px;
+    padding: 16px;
+    border: 0;
+    border-radius: var(--r-xl);
+    background: var(--avatar);
     color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: filter var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    &:hover:not(:disabled) { filter: brightness(1.08); }
+    &:active:not(:disabled) { transform: scale(.98); }
+    &:disabled { cursor: default; }
+    &.is-cyan { background: var(--cyan); color: var(--bg); }
+    &.is-cyan:disabled { opacity: .7; }
+    &.is-cyan[aria-pressed="true"]:not(:disabled) { box-shadow: inset 0 0 0 2px var(--text); }
+
+    .share-hive__text { margin-top: auto; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    b { font-size: 16px; font-weight: 900; line-height: 1.25; }
+    .share-hive__text > span { @include v2.text(meta); opacity: .8; }
+  }
+
+  .share-apps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    flex: none;
+  }
+
+  .share-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 64px;
+    min-width: 0;
+    border: 0;
+    border-radius: var(--r-xl);
+    background: var(--surface-2);
+    color: var(--muted);
+    font: inherit;
+    @include v2.text(meta-sm);
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    .material-symbols-rounded { color: var(--text); }
+    > span:last-child { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; }
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+    &:active { transform: scale(.98); }
+  }
+
+  .share-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: var(--r-xl);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    flex: none;
+    min-width: 0;
+  }
+  // The code stays dark on white in both themes so any camera reads it.
+  .share-link__qr {
+    width: 76px;
+    height: 76px;
+    padding: 8px;
+    border-radius: var(--r-md);
+    background: var(--on-media);
+    flex: none;
+    svg { display: block; width: 60px; height: 60px; }
+  }
+  .share-link__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+  .share-link__url { @include v2.mono(12, 500); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .share-link__start {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    @include v2.text(body-sm);
+    color: var(--text);
+    cursor: pointer;
+
+    input { position: absolute; opacity: 0; width: 18px; height: 18px; margin: 0; cursor: pointer; }
+    b { @include v2.mono(13, 700); }
+  }
+  .share-link__box {
+    width: 18px;
+    height: 18px;
+    border-radius: var(--r-xs);
+    border: 2px solid var(--muted);
     display: grid;
     place-items: center;
     flex: none;
+    color: transparent;
   }
-  .share-chooser-opt-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-  .share-chooser-opt-title { @include v2.text(label); font-size: 14px; }
-  .share-chooser-opt-sub { @include v2.text(meta); color: var(--muted); }
-  // The literal link: long permlinks must wrap, not push the dialog wider.
-  .share-chooser-opt-link { @include v2.mono(11, 400); word-break: break-all; }
-  .share-chooser-opt-more { color: var(--muted); }
+  .share-link__start input:checked + .share-link__box { background: var(--cyan); border-color: var(--cyan); color: var(--bg); }
+  .share-link__start input:focus-visible + .share-link__box { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @include v2.mobile {
+    .share-ctx { display: flex; }
+    .share-hive { min-height: 92px; padding: 14px; gap: 8px; }
+    .share-hive b { font-size: 14px; font-weight: 700; }
+    .share-link { display: none; }
+  }
 }
 
-/* --- Embed view (share menu → "Embed on a website") --- */
+/* --- Embed tab --- */
 .share-embed {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-bottom: 4px;
 }
 
 .share-embed-hint,
@@ -71,7 +154,7 @@
 .share-embed-code {
   display: block;
   width: 100%;
-  min-height: 120px;
+  min-height: 160px;
   @include v2.mono(12, 400);
   line-height: 1.5;
   // Wrapped, not scrolled sideways: the box is only ~350px wide on a phone, and

@@ -90,11 +90,12 @@ function useDialogFrame(ref) {
  * @param {ReactNode} children  – optional extra controls, shown before the X
  * @param {string}    className – extra class for per-modal spacing tweaks
  * @param {string}    titleId   – id for the heading, for aria-labelledby
+ * @param {string}    tone      – optional 4px bar before the title (07/17 sheets): accent | cyan | text
  * @param {boolean}   closeOnEscape – Escape runs onClose (default). Pass false
  *                    where the window handles Escape itself (editors, menus).
  *                    Inside a useDialog box the box owns Escape, not the header.
  */
-export default function ModalHeader({ title, sub, onClose, leading, children, className = "", titleId, closeOnEscape = true }) {
+export default function ModalHeader({ title, sub, onClose, leading, children, className = "", titleId, closeOnEscape = true, tone }) {
   const { t } = useTranslation();
   const ref = useRef(null);
   useEscapeLayer(ref, onClose, { active: Boolean(onClose) && closeOnEscape, skipInsideDialog: true });
@@ -103,6 +104,7 @@ export default function ModalHeader({ title, sub, onClose, leading, children, cl
     <div ref={ref} className={`app-modal-header ${className}`.trim()}>
       <span className="app-modal-header-grab" aria-hidden="true" />
       {leading}
+      {tone && <span className={`app-modal-header-bar is-${tone}`} aria-hidden="true" />}
       {sub ? (
         <div className="app-modal-header-text">
           <h2 className="app-modal-header-title" id={titleId}>{title}</h2>

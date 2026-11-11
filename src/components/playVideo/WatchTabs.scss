@@ -70,8 +70,10 @@
   font-size: 13px;
   padding: 0 12px;
   gap: 5px;
-  // Filled chips, no outline (fills, not borders): surface-2 reads on the bg ground in both themes.
-  background: var(--surface-2);
+  // Filled chips, no outline (fills, not borders): surface on the bg ground (02),
+  // the open one inverse.
+  background: var(--surface);
+  color: var(--text);
   &.is-on { background: var(--text); color: var(--bg); }
 }
 

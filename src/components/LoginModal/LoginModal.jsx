@@ -170,6 +170,20 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
         const next = swaps[p.textContent.trim()];
         if (next) p.textContent = next;
       });
+      // Its button labels and the "Switch User" heading are Title Case English;
+      // swap only the text node, so the element keeps its markup and handlers.
+      const labels = {
+        'View In Explorer': t('auth.loginModal.viewInExplorer'),
+        'Switch User': t('auth.loginModal.changeAccount'),
+        'Logout': t('common.actions.logout'),
+      };
+      modal.querySelectorAll('button, h2, h3').forEach((b) => {
+        b.childNodes.forEach((n) => {
+          if (n.nodeType !== 3) return;
+          const next = labels[n.nodeValue.trim()];
+          if (next) n.nodeValue = next;
+        });
+      });
     };
 
     // aioha's provider tiles are <a>s without an href: not reachable by keyboard.

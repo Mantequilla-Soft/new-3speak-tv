@@ -980,6 +980,8 @@ export function StreamTemplatesPanel({ token, user, isPremium, premiumKnown = tr
 export function TemplatePicker({ token, onPick }) {
   const { t } = useTranslation();
   const [templates, setTemplates] = useState([]);
+  // The template last loaded into the form, named in the bar (39a).
+  const [picked, setPicked] = useState('');
   useEffect(() => {
     if (!token) return undefined;
     let alive = true;
@@ -989,16 +991,21 @@ export function TemplatePicker({ token, onPick }) {
     return () => { alive = false; };
   }, [token]);
   if (!templates.length) return null;
+  // One 48px bar: the native select covers it (invisible), so it keeps the
+  // keyboard and screen reader behaviour of a select.
   return (
     <label className="st-picker">
       <Icon name="bookmarks" size={18} className="st-picker__icon" />
-      <span>{t('live.obs.pickTemplate')}</span>
+      <span className="st-picker__text">
+        {t('live.obs.pickTemplate')}: <b>{picked || t('live.obs.pickTemplatePlaceholder')}</b>
+      </span>
+      <Icon name="expand_more" size={18} className="st-picker__chev" />
       <select
-        className="v2-input is-select"
+        className="st-picker__select"
         value=""
         onChange={(e) => {
           const tpl = templates.find((x) => x.id === e.target.value);
-          if (tpl) onPick(tpl);
+          if (tpl) { setPicked(tpl.name); onPick(tpl); }
         }}
       >
         <option value="">{t('live.obs.pickTemplatePlaceholder')}</option>

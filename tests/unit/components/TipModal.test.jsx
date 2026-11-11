@@ -56,7 +56,7 @@ function mount(props = {}, opts) {
   return { ...r, onClose }
 }
 const signIn = () => { m.loggedIn = true; act(() => useAppStore.setState({ user: 'listener' })) }
-const field = (label) => screen.getByText(label).parentElement.querySelector('input, select')
+const field = (label) => screen.getByText(label).parentElement.querySelector('input, select, textarea')
 
 beforeEach(() => {
   Object.assign(m, {
@@ -80,7 +80,8 @@ afterEach(() => vi.useRealTimers())
 describe('the tip window for a visitor: Lightning', () => {
   it('opens on Lightning, the one way that needs no Hive account', async () => {
     mount()
-    expect(screen.getByRole('heading', { name: 'Send a Tip to @badadib' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Tip' })).toBeInTheDocument()
+    expect(screen.getByText('@badadib')).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: /Lightning/ })).toHaveAttribute('aria-selected', 'true')
     expect(await screen.findByText(/Goes to @badadib through v4v.app/)).toBeInTheDocument()
     expect(m.receiver).toHaveBeenCalledWith('badadib')
@@ -142,7 +143,7 @@ describe('the tip window for a visitor: Lightning', () => {
     await screen.findByText(/Scan with any Lightning wallet/)
     await act(async () => { await vi.advanceTimersByTimeAsync(3100) })
     expect(m.paid).toHaveBeenCalledWith('h1')
-    expect(await screen.findByRole('heading', { name: 'Tip Sent Successfully!', level: 1 })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: '1000 sats to @badadib', level: 1 })).toBeInTheDocument()
     expect(screen.getByText('You have successfully sent 1000 sats as a tip. Thank you for your support!')).toBeInTheDocument()
   })
 
@@ -270,6 +271,8 @@ describe('the tip window for a member: HIVE and HBD', () => {
     const { user } = mount()
     await screen.findByText('25')
     await user.type(field('Amount:'), '3')
+    expect(screen.queryByRole('combobox', { name: 'How often' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('tab', { name: 'Monthly' }))
     await user.selectOptions(screen.getByRole('combobox', { name: 'How often' }), '6')
     expect(screen.getByText(/Hive sends it by itself every 30 days/)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Send 3 HIVE' }))
@@ -290,11 +293,19 @@ describe('the tip window for a member: HIVE and HBD', () => {
     expect(toastMessages(toast.success)).toContain('Monthly support stopped')
   })
 
-  it('Cancel and the X close the window', async () => {
+  it('the X closes the window', async () => {
     const { user, onClose } = mount()
-    await user.click(screen.getByRole('button', { name: 'Cancel' }))
     await user.click(screen.getByRole('button', { name: 'Close' }))
-    expect(onClose).toHaveBeenCalledTimes(2)
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('an amount tile fills the amount (17a)', async () => {
+    const { user } = mount()
+    await screen.findByText('25')
+    await user.click(screen.getByRole('button', { name: /Most popular/ }))
+    expect(field('Amount:')).toHaveValue(5)
+    expect(screen.getByRole('button', { name: /Most popular/ })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: 'Send 5 HIVE' })).toBeInTheDocument()
   })
 
   // BUG: an amount of 0 (or a negative one) passes every check (TipModal.jsx:206
