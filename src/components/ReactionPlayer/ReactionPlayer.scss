@@ -31,7 +31,8 @@ $glass-hover: color-mix(in srgb, var(--on-media) 22%, transparent);
     background: var(--media-black);
     overflow: hidden;
 
-    &.is-comment { background: var(--bg); }
+    // A comment needs no 16:9 picture: at the cinema size it stops at 280 tall.
+    &.is-comment { padding-top: min(56.25%, 280px); background: var(--bg); }
   }
 
   // "Video Reaction" / "Comment", top-left on the media (48b).

@@ -49,6 +49,7 @@ import VideoPlaylists from "../VideoPlaylists/VideoPlaylists";
 import PlaylistBar from "../PlaylistBar/PlaylistBar";
 import { useMyPlaylists, isVideoInPlaylist } from "../../hooks/useMyPlaylists";
 import { removeFromPlaylist } from "../../utils/playlistOperations";
+import { hideVideo, unhideVideo, hideCreator, unhideCreator, refreshRailsAfterHide } from "../../utils/userFilters";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import AuthorBadge from "../AuthorBadge/AuthorBadge";
 import useReblog from '../../hooks/useReblog';
@@ -394,6 +395,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   flashActionRef.current = flashAction;
   const adLockedRef = useRef(adLocked);
   adLockedRef.current = adLocked || adPlaying;
+  // S saves, Shift+S shares: the keys the action menu shows on its tiles (07d).
+  // Filled in below, once the handlers exist.
+  const menuKeysRef = useRef({});
   // Frame length, measured from the decoder while the video plays (the smallest
   // gap between two presented frames: a dropped frame only makes a gap larger).
   const frameSecRef = useRef(1 / 30);
@@ -455,6 +459,14 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           e.preventDefault(); // and don't scroll the page
           flashActionRef.current(vc.isPlaying ? 'pause' : 'play');
           vc.onTogglePlay?.();
+          break;
+        }
+        case 's':
+        case 'S': {
+          const run = e.shiftKey ? menuKeysRef.current.share : menuKeysRef.current.save;
+          if (!run) break;
+          e.preventDefault();
+          run();
           break;
         }
         case ',':
@@ -1319,10 +1331,53 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
     { ...tipTile, wideOnly: true },
   ].filter(Boolean);
 
-  // The video action menu (07d): extras as tiles, then rows.
+  // The video action menu (07d): Save and Share first, with their keys, then
+  // the extras as tiles; then the feed-tuning rows and Report.
+  const saveAction = loggedInOnChain ? () => setIsPlaylistModalOpen(true) : needPlaylistLogin;
+  menuKeysRef.current = {
+    save: () => {
+      if (loggedInOnChain && lockedForIncubation) { toast.info(LOCKED_TITLE); return; }
+      saveAction();
+    },
+    share: () => setShareChooserOpen(true),
+  };
+  // "Not interested" and "Don't show @creator": the card menu's feed tuning
+  // (CardOptionsMenu), here for the video being watched.
+  const feedTuningOk = () => {
+    if (isLoggedIn() && user) return true;
+    toast.error(t('engagement.cardMenu.loginToPersonalize'));
+    return false;
+  };
+  const onNotInterested = () => {
+    if (!feedTuningOk()) return;
+    hideVideo(user, author, permlink);
+    toast.success(t('engagement.cardMenu.notInterestedToast'), {
+      action: { label: t('engagement.cardMenu.undo'), onClick: () => unhideVideo(user, author, permlink) },
+    });
+  };
+  const onHideCreator = () => {
+    if (!feedTuningOk()) return;
+    hideCreator(user, author).then((ok) => { if (ok) refreshRailsAfterHide(queryClient); });
+    toast.success(t('engagement.cardMenu.hidingCreatorToast', { author }), {
+      action: {
+        label: t('engagement.cardMenu.undo'),
+        onClick: () => { unhideCreator(user, author).then((ok) => { if (ok) refreshRailsAfterHide(queryClient); }); },
+      },
+    });
+  };
   const moreTiles = [
+    {
+      id: 'save',
+      icon: 'playlist_add',
+      label: t('common.actions.save'),
+      kbd: isLive ? null : 'S',
+      keys: isLive ? null : 'S',
+      title: t('watch.actions.addToPlaylist'),
+      lock: loggedInOnChain ? lockProps : undefined,
+      onClick: saveAction,
+    },
+    { ...shareTile, kbd: isLive ? null : '⇧S', keys: isLive ? null : 'Shift+S' },
     { ...tipTile, narrowOnly: true },
-    reblogInDock && shareTile,
     !isLive && { id: 'react', icon: 'videocam', label: t('comments.section.reactTab'), title: t('player.controls.reactToMoment'), onClick: () => { openSide('discussion'); onReact?.(); } },
     titleMeta.hasSummary && { id: 'summary', icon: 'auto_awesome', label: t('watch.summary.title'), title: t('watch.summary.buttonTitle'), onClick: () => setSummaryOpen(true) },
     {
@@ -1371,6 +1426,8 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
       disabled: isRemovingWatchLater,
       onClick: handleRemoveFromWatchLater,
     },
+    !isOwner && { id: 'not-interested', icon: 'block', label: t('engagement.cardMenu.notInterested'), muted: true, onClick: onNotInterested },
+    !isOwner && { id: 'hide-creator', icon: 'person_off', label: t('engagement.cardMenu.dontShowCreator', { author }), muted: true, onClick: onHideCreator },
     {
       id: 'report',
       icon: 'flag',

@@ -102,6 +102,14 @@ describe('a grid of video cards', () => {
     expect(within(card('Title b')).getByText('999 views (watched)')).toBeInTheDocument()
   })
 
+  it('a channel\'s own grid leaves out the creator: no name, no avatar (20b)', () => {
+    mount({ videos: [video('badadib', 'lake-day')], hideAuthor: true })
+    const c = card('Title lake-day')
+    expect(within(c).queryByText('badadib')).not.toBeInTheDocument()
+    expect(c.querySelector('.card-avatar')).toBeNull()
+    expect(c.querySelector('.card-body.is-own-channel')).not.toBeNull()
+  })
+
   it('uses another link form for other prefixes, with the page\'s query', () => {
     mount({ videos: [video('badadib', 'clip')], linkPrefix: '/shorts', linkQuery: '&from=feed' })
     expect(card('Title clip')).toHaveAttribute('href', '/shorts?v=badadib/clip&from=feed')

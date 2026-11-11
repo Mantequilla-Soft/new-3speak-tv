@@ -142,7 +142,7 @@ export default function PodcastTipModal({ track, initialSats, onClose }) {
   ) : null;
 
   return (
-    <Dialog open onClose={onClose} title={title} width={460} footer={footer} closeLabel={t('common.actions.close')} className="podcast-tip-modal">
+    <Dialog open onClose={onClose} title={title} tone="accent" width={460} footer={footer} closeLabel={t('common.actions.close')} className="podcast-tip-modal">
       {!results && !invoice && (payable && hiveAccount) && (
         <Segmented
           options={[

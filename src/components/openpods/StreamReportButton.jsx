@@ -79,6 +79,7 @@ export default function StreamReportButton({ roomName, host, variant = 'inline' 
       <Dialog
         open={open}
         onClose={close}
+        tone="accent" // 39: "Report this stream" with the accent bar
         title={t('live.report.title')}
         dismissible={!sending}
         className="stream-report"

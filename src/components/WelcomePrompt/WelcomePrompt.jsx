@@ -335,10 +335,11 @@ export default function WelcomePrompt() {
           </div>
 
           {/* The SAME picker as Settings → Interests and the interests prompt:
-              one picker, one taxonomy (v2 topic slugs). */}
+              one picker, one taxonomy (v2 topic slugs), drawn as the 23a tiles. */}
           <TagsV2Picker
             multi
             searchable
+            layout="tiles"
             value={interests}
             onChange={setInterests}
             disabled={saving}

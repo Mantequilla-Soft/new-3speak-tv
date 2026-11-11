@@ -636,6 +636,20 @@ describe('the audio player: the opened player and its menus', () => {
     expect(screen.getByRole('button', { name: 'Playback speed: 1×' })).toBeInTheDocument()
   })
 
+  it('the bar\'s "more" tile holds what its tiles used to (20a): open, queue, volume', async () => {
+    const { user } = mount()
+    play(A)
+    await user.click(screen.getByRole('button', { name: 'More options' }))
+    const menu = screen.getByRole('dialog')
+    expect(within(menu).getByRole('button', { name: /Queue/ })).toBeInTheDocument()
+    expect(within(menu).getByRole('button', { name: /Close player/ })).toBeInTheDocument()
+    await user.click(within(menu).getByRole('button', { name: /Volume/ }))
+    expect(screen.getByRole('slider', { name: 'Volume' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'More options' }))
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: /Expand player/ }))
+    expect(store().audioExpanded).toBe(true)
+  })
+
   it('opening on a phone audio page goes to its Player tab instead', async () => {
     const opener = vi.fn()
     act(() => useAppStore.setState({ audioDockOpener: opener }))

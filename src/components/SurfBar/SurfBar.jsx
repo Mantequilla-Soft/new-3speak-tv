@@ -264,6 +264,7 @@ function SurfBar({ channel: slug, author, permlink, flipRef, overlayTarget = nul
       <Dialog
         open={guideOpen}
         onClose={() => setGuideOpen(false)}
+        tone="cyan" // 34: the channel guide's cyan bar
         title={t('feeds.surf.guide')}
         closeLabel={t('common.actions.close')}
         width={720}

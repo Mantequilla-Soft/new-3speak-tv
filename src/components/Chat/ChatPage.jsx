@@ -367,6 +367,7 @@ function NewRoomForm() {
       <Dialog
         open={open}
         onClose={busy ? undefined : close}
+        tone="cyan" // 32: the "New room" sheet's cyan bar
         title={t('chat.newRoom.toggle')}
         closeLabel={t('common.actions.close')}
         footer={(

@@ -66,7 +66,7 @@
       color: var(--muted);
     }
 
-    &:hover:not(:disabled) { background: var(--bg-hover); }
+    &:hover:not(:disabled):not(.selected) { background: var(--bg-hover); }
 
     &.selected {
       border-color: var(--cyan);
@@ -174,7 +174,7 @@
     .tagsv2-label { margin-top: auto; @include v2.text(body); font-weight: 700; overflow-wrap: anywhere; }
     .tagsv2-count { position: absolute; top: 10px; right: 10px; }
 
-    &:hover:not(:disabled) { background: var(--bg-hover); }
+    &:hover:not(:disabled):not(.selected) { background: var(--bg-hover); }
     &:active:not(:disabled) { transform: scale(.98); }
     &.open:not(.selected), &.has-selected:not(.selected) { border-color: var(--muted); }
     &.selected { border-color: var(--cyan); background: var(--cyan-tint-strong); }

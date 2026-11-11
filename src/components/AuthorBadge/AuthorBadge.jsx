@@ -18,8 +18,8 @@ const toast = toastIn('Profile');
 // `followLockedReason` disables Follow and explains why. Following writes a
 // custom_json naming the target account, so it cannot work when that account
 // does not exist on chain yet — the caller knows that, this component does not.
-// `reputation` is accepted for older callers and not drawn (no board shows a score).
-function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFollow, isFollowing: isFollowingProp, onFollow, noLink, compact, reputation: _reputation, color, tabHint, subtitle, followLockedReason = null, offChainAuthor = false }) {
+// A `reputation` prop from older callers is ignored: no board shows a score.
+function AuthorBadge({ author, onClick, followersCount, fetchFollowers, showFollow, isFollowing: isFollowingProp, onFollow, noLink, compact, color, tabHint, subtitle, followLockedReason = null, offChainAuthor = false }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAppStore();

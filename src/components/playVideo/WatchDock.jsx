@@ -22,8 +22,10 @@ const actionProps = (item, onClick) => ({
  * screen the menu is a popover under the tile; on a narrow one it is a sheet.
  *
  * tiles / moreTiles / moreRows: [{ id, icon, label, onClick(e, close), active,
- * tone, fill, title, ariaLabel, disabled, lock, danger, wideOnly, narrowOnly,
- * keepOpen, primary }]. A `primary` tile is tinted at rest. `keepOpen` leaves the menu open after the click (the reblog's
+ * tone, fill, title, ariaLabel, disabled, lock, danger, muted, wideOnly,
+ * narrowOnly, keepOpen, primary, kbd, keys }]. `kbd` is the key chip a menu
+ * tile shows ("S"), `keys` its aria-keyshortcuts ("Shift+S"); `muted` greys a
+ * row (the feed-tuning rows of 07d). A `primary` tile is tinted at rest. `keepOpen` leaves the menu open after the click (the reblog's
  * first tap only arms it); the handler gets `close` to shut it itself.
  */
 export default function WatchDock({ tiles, moreTiles = [], moreRows = [], wide, className }) {
@@ -65,10 +67,14 @@ export default function WatchDock({ tiles, moreTiles = [], moreRows = [], wide, 
               type="button"
               role="menuitem"
               className={cx('wv2-more__tile', item.active && `is-on is-${item.tone || 'accent'}`)}
+              aria-keyshortcuts={item.keys || undefined}
               {...actionProps(item, runMenu(item))}
             >
               <Icon name={item.icon} size={24} fill={!!item.active} />
-              <span>{item.label}</span>
+              <span className="wv2-more__label">
+                <span>{item.label}</span>
+                {item.kbd && <kbd className="wv2-more__kbd" aria-hidden="true">{item.kbd}</kbd>}
+              </span>
             </button>
           ))}
         </div>
@@ -76,7 +82,7 @@ export default function WatchDock({ tiles, moreTiles = [], moreRows = [], wide, 
       {extraRows.length > 0 && (
         <div className="wv2-more__rows">
           {extraRows.map((item) => (
-            <MenuRow key={item.id} icon={item.icon} danger={item.danger} on={item.active} {...actionProps(item, runMenu(item))}>
+            <MenuRow key={item.id} icon={<Icon name={item.icon} size={20} />} danger={item.danger} on={item.active} className={cx(item.muted && 'is-muted')} {...actionProps(item, runMenu(item))}>
               {item.label}
             </MenuRow>
           ))}
