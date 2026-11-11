@@ -26,7 +26,7 @@ export default function usePostThumb(author, permlink, enabled = true) {
     queryFn: async () => {
       const res = await axios.post(getHiveUrl(), { jsonrpc: '2.0', method: 'condenser_api.get_content', params: [author, permlink], id: 1 });
       const raw = res.data?.result?.json_metadata;
-      let meta = {};
+      let meta;
       try { meta = typeof raw === 'string' ? JSON.parse(raw || '{}') : (raw || {}); } catch { meta = {}; }
       const ipfs = meta.video?.info?.ipfsThumbnail;
       return {

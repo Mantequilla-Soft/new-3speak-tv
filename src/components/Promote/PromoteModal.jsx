@@ -144,7 +144,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
       onClose={onClose}
       side
       tone="accent"
-      title={t('ads.promote.title')}
+      title={t('watch.actions.promote')}
       width={420}
       className="promote-v2"
       footer={mode === 'boost' && !isActive ? (
@@ -208,7 +208,7 @@ export default function PromoteModal({ open, onClose, author, permlink, promoted
               return (
                 <button key={d} type="button" className={cx('promote-v2__day', days === d && 'is-on')} aria-pressed={days === d} disabled={busy} onClick={() => setDays(d)}>
                   <b className="num">{money(shown)}</b>
-                  <span>{t('ads.promote.days', { count: d })}</span>
+                  <span>{t('ads.promote.days', { count: d })} · {currency}</span>
                 </button>
               );
             })}

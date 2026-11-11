@@ -42,27 +42,22 @@ export default function PodcastNotifications({ episodes, user, onOpen, variant =
   };
 
   return (
-    <section className={`story-notifs-section story-notifs-section--${variant}`}>
-    <div className="story-notifs-head" aria-hidden="true">{t('nav.notifications.podcasts.heading')}</div>
+    <section className={`story-notifs-section podcast-notifs-section story-notifs-section--${variant}`}>
     <ul className={`story-notifs story-notifs--${variant}`} aria-label={t('nav.notifications.podcasts.heading')}>
       {episodes.map((ep) => {
         const art = ep.art || ep.feed?.art;
         return (
-          <li key={ep.id} className={`story-notif podcast-notif${ep.seen ? '' : ' story-notif--unseen'}`} onClick={() => open(ep)}>
+          <li key={ep.id} className={`podcast-notif${ep.seen ? '' : ' podcast-notif--unseen'}`} onClick={() => open(ep)}>
             <span className="podcast-notif-art">
               <img className="podcast-notif-cover" src={art ? artUrl(art, 64) : PODCAST_PLACEHOLDER} alt="" loading="lazy" onError={onArtError} />
               <span className="notif-kind is-cyan" aria-hidden="true"><Icon name="podcasts" size={13} fill /></span>
             </span>
-            <div className="story-notif-body">
-              <div className="story-notif-msg">{t('nav.notifications.podcasts.newEpisode', { show: ep.feed?.title || '' })}</div>
-              <div className="podcast-notif-title">{ep.title}</div>
-              <div className="story-notif-meta">
-                <span className="story-notif-type">{t('nav.notifications.podcasts.type')}</span>
-                <span>·</span>
-                <span>{formatNotifTime(ep.first_seen_at)}</span>
+            <div className="podcast-notif-body">
+              <div className="podcast-notif-msg">
+                <b>{t('nav.notifications.podcasts.newEpisode', { show: ep.feed?.title || '' })}</b>{ep.title ? `: ${ep.title}` : ''}
               </div>
+              <div className="podcast-notif-age">{formatNotifTime(ep.first_seen_at)}</div>
             </div>
-            {!ep.seen && <span className="story-notif-dot" aria-hidden="true" />}
           </li>
         );
       })}

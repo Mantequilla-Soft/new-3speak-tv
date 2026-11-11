@@ -11,7 +11,7 @@ import { useAppStore } from "../../lib/store";
 import AccountImg from "../HiveAvatar/AccountImg";
 import { listButrauthAccounts, forgetButrauthAccount } from "../../utils/butrauthAccounts";
 import { toastIn } from "../../utils/toast";
-import { Dialog, Button, IconButton, Banner, Icon } from "../v2/ui";
+import { Dialog, Button, IconButton, Icon } from "../v2/ui";
 import CommunityPanel from "./CommunityPanel";
 import "./LoginModal.scss";
 // The look of aioha's own wallet modal (#aioha-modal), in the v2 design.
@@ -31,7 +31,7 @@ const WALLET_LIST = ['Keychain', 'HiveAuth', 'HiveSigner', 'PeakVault', 'Ledger'
 // aioha's provider tiles, by the name it prints → the Material Symbol shown in
 // place of its logo (§11 "Sign with": one icon set on the screen).
 const PROVIDER_ICONS = {
-  keychain: 'extension', 'peak vault': 'account_balance_wallet', peakvault: 'account_balance_wallet',
+  keychain: 'key', 'peak vault': 'account_balance_wallet', peakvault: 'account_balance_wallet',
   hiveauth: 'qr_code_2', hivesigner: 'open_in_new', ledger: 'usb', metamask: 'wallet',
   'metamask snap': 'wallet', 'view only': 'visibility',
 };
@@ -94,6 +94,13 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
 
   const forgetButr = (name) => {
     forgetButrauthAccount(name);
+    setAccountsVersion((v) => v + 1);
+  };
+
+  // "Remove from this list" on a wallet account: aioha forgets that login
+  // (the same thing its own Switch User page does in Edit mode).
+  const forgetWallet = (name) => {
+    try { aioha.removeOtherLogin?.(name); } catch { /* already gone */ }
     setAccountsVersion((v) => v + 1);
   };
 
@@ -406,9 +413,9 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
     ? t('auth.loginModal.openingSignup')
     : isManteAuth ? t('auth.loginModal.signedInTitle') : t('auth.loginModal.welcomeTitle');
 
-  const cancel = <Button variant="ghost" block className="login-split__cancel" onClick={onClose}>{t('common.actions.cancel')}</Button>;
-
-  // The "You're signed in" change-account screen for Butter Auth users (42a).
+  // The "You're signed in" change-account screen for Butter Auth users (42a,
+  // 23b): the account in use first (outlined, "Active · Butter Auth"), then the
+  // others to switch to, each with "Remove from this list", then add one.
   const signedInBody = (
     <>
       <p className="login-split__sub">
@@ -416,59 +423,80 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
           ? <Trans i18nKey="auth.loginModal.signedInAs" values={{ user }} components={{ b: <strong /> }} />
           : t('auth.loginModal.signedIn')}
       </p>
-      {(walletAccounts.length > 0 || butrAccounts.length > 0) && (
-        <div className="login-switch">
+      <div className="login-switch">
+        {(walletAccounts.length > 0 || butrAccounts.length > 0) && (
           <div className="v2-eyebrow">{t('auth.loginModal.switchTo')}</div>
-          <ul className="login-switch__list">
-            {walletAccounts.map((a) => (
-              <li key={`w:${a.name}`} className="login-switch__row">
-                <button type="button" className="login-switch__item" onClick={() => switchToWallet(a.name)}>
-                  <AccountImg className="login-switch__avatar" account={a.name} alt="" />
-                  <span className="login-switch__text">
-                    <span className="login-switch__name">@{a.name}</span>
-                    <span className="login-switch__via">{PROVIDER_NAMES[a.provider] || a.provider}</span>
-                  </span>
-                  <Icon name="chevron_right" size={18} className="login-switch__go" />
-                </button>
-              </li>
-            ))}
-            {butrAccounts.map((a) => (
-              <li key={`b:${a.name}`} className="login-switch__row">
-                <button type="button" className="login-switch__item" onClick={() => startButrauthFlow()}>
-                  {a.incubation
-                    ? <span className="login-switch__avatar login-switch__avatar--initial">{a.name.charAt(0).toUpperCase()}</span>
-                    : <AccountImg className="login-switch__avatar" account={a.name} alt="" />}
-                  <span className="login-switch__text">
-                    <span className="login-switch__name">{a.incubation ? a.name : `@${a.name}`}</span>
-                    <span className="login-switch__via">Butter Auth</span>
-                  </span>
-                </button>
-                <IconButton
-                  icon="close"
-                  size={32}
-                  variant="ghost"
-                  round
-                  className="login-switch__forget"
-                  onClick={() => forgetButr(a.name)}
-                  label={t('auth.loginModal.forgetAccount')}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <Button variant="secondary" block icon="person_add" onClick={() => setStep('providers')}>
-        {t('auth.loginModal.addAccount')}
-      </Button>
+        )}
+        <ul className="login-switch__list">
+          {currentName && (
+            <li className="login-switch__row is-current">
+              <div className="login-switch__item" aria-current="true">
+                <AccountImg className="login-switch__avatar" account={currentName} alt="" />
+                <span className="login-switch__text">
+                  <span className="login-switch__name">@{currentName}</span>
+                  <span className="login-switch__via is-active">{t('auth.loginModal.active')} · Butter Auth</span>
+                </span>
+                <Icon name="check_circle" size={20} className="login-switch__check" />
+              </div>
+            </li>
+          )}
+          {walletAccounts.map((a) => (
+            <li key={`w:${a.name}`} className="login-switch__row">
+              <button type="button" className="login-switch__item" onClick={() => switchToWallet(a.name)}>
+                <AccountImg className="login-switch__avatar" account={a.name} alt="" />
+                <span className="login-switch__text">
+                  <span className="login-switch__name">@{a.name}</span>
+                  <span className="login-switch__via">{PROVIDER_NAMES[a.provider] || a.provider}</span>
+                </span>
+              </button>
+              <IconButton
+                icon="close"
+                size={32}
+                variant="ghost"
+                round
+                className="login-switch__forget"
+                onClick={() => forgetWallet(a.name)}
+                label={t('auth.loginModal.forgetAccount')}
+              />
+            </li>
+          ))}
+          {butrAccounts.map((a) => (
+            <li key={`b:${a.name}`} className="login-switch__row">
+              <button type="button" className="login-switch__item" onClick={() => startButrauthFlow()}>
+                {a.incubation
+                  ? <span className="login-switch__avatar login-switch__avatar--initial">{a.name.charAt(0).toUpperCase()}</span>
+                  : <AccountImg className="login-switch__avatar" account={a.name} alt="" />}
+                <span className="login-switch__text">
+                  <span className="login-switch__name">{a.incubation ? a.name : `@${a.name}`}</span>
+                  <span className="login-switch__via">Butter Auth</span>
+                </span>
+              </button>
+              <IconButton
+                icon="close"
+                size={32}
+                variant="ghost"
+                round
+                className="login-switch__forget"
+                onClick={() => forgetButr(a.name)}
+                label={t('auth.loginModal.forgetAccount')}
+              />
+            </li>
+          ))}
+        </ul>
+        <button type="button" className="login-switch__add" onClick={() => setStep('providers')}>
+          <Icon name="person_add" size={20} />
+          <span>{t('auth.loginModal.addAccount')}</span>
+        </button>
+      </div>
+      <div className="login-split__spacer" />
       <Button variant="danger" block icon="logout" onClick={handleLogout}>
         {t('common.actions.logout')}
       </Button>
-      <div className="login-split__spacer" />
-      {cancel}
     </>
   );
 
-  // "Welcome to 3Speak": sign up (recommended) or log in (42a).
+  // "Welcome to 3Speak": sign up (recommended) or log in (42a). Plain tiles:
+  // a bold line and a muted one, the recommended one outlined in red.
   const welcomeBody = (
     <>
       <p className="login-split__sub">
@@ -481,32 +509,31 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
           last step. The check fails OPEN, so a failed request still shows it. */}
       {ENABLE_BUTRAUTH && signupPossible.possible && (
         <button type="button" className="login-option is-recommended" onClick={() => startButrauthFlow(true)}>
-          <Icon name="person_add" size={22} className="login-option__icon" />
           <span className="login-option__body">
             <b>{t('common.actions.signUp')} <span className="login-option__aside">{t('auth.loginModal.recommended')}</span></b>
             <span>{t('auth.loginModal.signupSubtitle')}</span>
           </span>
-          <Icon name="arrow_forward" size={18} className="login-option__go" />
         </button>
       )}
+
       {ENABLE_BUTRAUTH && !signupPossible.possible && (
-        <Banner tone="warn" icon={signupPossible.reason === 'datacenter_ip' ? 'vpn_lock' : 'public_off'}>
-          {signupPossible.reason === 'datacenter_ip'
-            ? t('auth.loginModal.signupBlockedVpn')
-            : t('auth.loginModal.signupBlockedNetwork')}
-        </Banner>
+        <div className="login-split__blocked" role="status">
+          <Icon name={signupPossible.reason === 'datacenter_ip' ? 'vpn_lock' : 'public_off'} size={18} />
+          <span>
+            {signupPossible.reason === 'datacenter_ip'
+              ? t('auth.loginModal.signupBlockedVpn')
+              : t('auth.loginModal.signupBlockedNetwork')}
+          </span>
+        </div>
       )}
 
       <button type="button" className="login-option" onClick={() => setStep('providers')}>
-        <Icon name="login" size={22} className="login-option__icon" />
         <span className="login-option__body">
           <b>{ENABLE_BUTRAUTH ? t('auth.loginModal.loginWithButrauthOrWallet') : t('auth.loginModal.loginWithWallet')}</b>
           <span>{WALLET_LIST}</span>
         </span>
-        <Icon name="arrow_forward" size={18} className="login-option__go" />
       </button>
-      <div className="login-split__spacer" />
-      {cancel}
+
     </>
   );
 
@@ -514,8 +541,8 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
   // already opening; this is just the fallback if it was blocked.
   const signupBody = (
     <>
-      <div className="login-split__status">
-        <Icon name="progress_activity" size={18} className="v2-spin" />
+      <div className="login-split__status" role="status">
+        <Icon name="progress_activity" size={16} className="v2-spin" />
         <span>{t('auth.loginModal.openingSignupHint')}</span>
       </div>
       <Button variant="secondary" block icon="open_in_new" onClick={() => startButrauthFlow(true)}>
@@ -524,8 +551,6 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
       <Button variant="secondary" block icon="login" onClick={() => setStep('providers')}>
         {t('auth.loginModal.loginInstead')}
       </Button>
-      <div className="login-split__spacer" />
-      {cancel}
     </>
   );
 
@@ -541,15 +566,16 @@ function LoginModal({ displayed, onLogin, onClose, loginOptions, intent }) {
         onClose={onClose}
         title={chooserTitle}
         head={false}
-        width={640}
+        width={600}
         className="login-split"
         bodyClassName="login-split__body"
       >
         <CommunityPanel />
         <div className="login-split__main">
+          {/* 07e: the close button on its own row, the title under it */}
           <div className="login-split__head">
-            <h2 className="login-split__title">{chooserTitle}</h2>
             <IconButton icon="close" label={t('common.actions.close')} variant="ghost" round onClick={onClose} />
+            <h2 className="login-split__title">{chooserTitle}</h2>
           </div>
           <div className="login-split__content">
             {step === 'signup' ? signupBody : isManteAuth ? signedInBody : welcomeBody}

@@ -6,10 +6,12 @@ import { timeAgo } from './chatLinks'
 
 /**
  * Full-screen viewer for a chat image (19e): who sent it and when on the left
- * of the top bar, open-in-new-tab and close on the right, the image below.
- * `sender` and `createdAt` are optional.
+ * of the top bar, open-in-new-tab and close on the right, the image below,
+ * and the conversation's other images as a strip of thumbnails at the foot.
+ * `sender`, `createdAt` and `items` ([{ url, sender, createdAt }]) are optional;
+ * `onPick(item)` switches to another one.
  */
-export default function ChatImageLightbox({ url, sender, createdAt, onClose }) {
+export default function ChatImageLightbox({ url, sender, createdAt, items = [], onPick, onClose }) {
   const { t } = useTranslation()
   useEffect(() => {
     if (!url) return
@@ -49,6 +51,21 @@ export default function ChatImageLightbox({ url, sender, createdAt, onClose }) {
       <div className="chat-lightbox-stage">
         <img className="chat-lightbox-img" src={url} alt="" onClick={(e) => e.stopPropagation()} />
       </div>
+      {items.length > 1 && onPick && (
+        <div className="chat-lightbox-strip" onClick={(e) => e.stopPropagation()}>
+          {items.map((it, i) => (
+            <button
+              type="button"
+              key={`${it.url}-${i}`}
+              className={`chat-lightbox-thumb${it.url === url ? ' is-on' : ''}`}
+              aria-current={it.url === url || undefined}
+              onClick={() => onPick(it)}
+            >
+              <img src={it.url} alt="" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      )}
     </div>,
     document.body
   )

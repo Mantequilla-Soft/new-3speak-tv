@@ -1,6 +1,7 @@
-// Settings (18d, 29b, 38a-c): a dialog with a segmented tab track, its body a
-// fixed-height scroll area of cards on the page ground. On a phone it is a
-// bottom sheet that opens on the sections as tiles. Tokens and mixins only.
+// Settings (18d, 29b, 32g, 38a-c): a wide window on the page ground with the
+// title and the tab track on one line, each tab a grid of cards (three across on
+// a desktop). On a phone it is a bottom sheet that opens on the sections as
+// tiles (18d). Tokens and mixins only.
 @use "../../styles/v2" as v2;
 
 .settings-modal-overlay {
@@ -23,15 +24,16 @@
   animation: v2-fade var(--t-base) var(--ease);
 }
 
+// The window: the board's frame (38a), page ground with surface cards on it.
 .settings-modal {
-  width: min(680px, 100%);
+  width: min(1280px, 100%);
   // Fixed: a tab switch never resizes or moves the window; the body scrolls.
-  height: min(720px, calc(100vh - 48px));
-  height: min(720px, calc(100dvh - 48px));
+  height: min(880px, calc(100vh - 48px));
+  height: min(880px, calc(100dvh - 48px));
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--surface);
+  background: var(--bg);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--r-3xl);
@@ -43,47 +45,53 @@
 
 .settings-grab { display: none; }
 
+// "Settings" 32/900 at the left, the tab track at the right (38a)
 .settings-head {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   flex: none;
-  padding: 18px 16px 10px 20px;
+  padding: 24px 24px 0;
 
   .settings-head-title {
     flex: 1;
     min-width: 0;
     margin: 0;
-    @include v2.text(title);
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: var(--tracking-title);
+    line-height: 1.15;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 }
 
-// The main tabs: one segmented track under the title (38a)
+// The tabs: a segmented track on the surface, options 32 tall (38a)
 .settings-tabs.v2-seg {
-  flex: none;
-  margin: 0 20px 12px;
+  flex: 0 1 auto;
+  min-width: 0;
+  background: var(--surface);
+  border-radius: var(--r-lg);
+
+  .v2-seg__opt { padding: 0 14px; }
 }
 
 .settings-body {
   flex: 1;
   min-height: 0;
   @include v2.scroll-y;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px 20px 20px;
-  background: var(--bg);
-  border-top: 1px solid var(--border);
+  padding: 16px 24px 24px;
 }
 
-// Sub-tabs (Content, Connections): a track on the ground, the chosen one raised
-.settings-subtabs.v2-seg {
-  flex: none;
-  background: var(--surface);
-  box-shadow: inset 0 0 0 1px var(--border);
+// Three cards across (38a-c), two on a tablet, one in the peek and on a phone
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+
+  @media (max-width: 1099px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 // ─── Cards ───
@@ -131,31 +139,46 @@
   color: var(--muted);
 }
 
-// Rows inside a card: SettingRow already divides them; keep them flush.
+// Switch rows (38b): 13/700 title, 11px muted line, divided by 1px lines
 .settings-section .v2-setting {
-  padding: 12px 0;
+  gap: 10px;
+  padding: 10px 4px;
 
-  .v2-setting__body > span { line-height: 1.4; }
+  .v2-setting__body {
+    b { font-size: 13px; }
+    > span { font-size: 11px; line-height: 1.35; }
+  }
 }
 
-.settings-section-head + .v2-setting { padding-top: 4px; }
+// Each switch in its own well (the ads card, 38a)
+.settings-section .v2-setting.is-well {
+  padding: 10px;
+  border-bottom: 0;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+}
+
+// Title-only switches without lines (the notification kinds, 38b)
+.settings-section .v2-setting.is-plain {
+  padding: 6px 4px;
+  border-bottom: 0;
+
+  .v2-setting__body b { font-size: 12px; }
+}
 
 .settings-note {
   margin: 0;
   @include v2.text(meta);
   color: var(--muted);
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .settings-hint {
+  margin: 0;
   @include v2.text(meta-sm);
   color: var(--muted);
+  line-height: 1.4;
 }
-
-// Row text for panels that render their own rows in Settings (LanguagePicker)
-.settings-row-title { @include v2.text(body); font-weight: 700; color: var(--text); }
-.settings-row-desc { @include v2.text(meta); color: var(--muted); line-height: 1.4; }
-.settings-language { padding-top: 6px; padding-bottom: 6px; }
 
 .settings-status {
   margin: 0;
@@ -163,27 +186,32 @@
   color: var(--muted);
 }
 
-// A well row: icon tile, text, control (device, posting authority, Lightning)
-.settings-well-row {
+// Why a save failed: an accent wash with the error icon (38c)
+.settings-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  @include v2.text(meta);
+  line-height: 1.4;
+  color: var(--text);
+
+  .settings-error-icon { flex: none; color: var(--accent); }
+}
+
+// A well row: icon, text, control (device, listening, posting authority)
+.settings-well-row.v2-well {
   display: flex;
   align-items: center;
   gap: 10px;
   min-width: 0;
+  padding: 10px;
+  border-radius: var(--r-lg);
 }
 
-.settings-well-icon {
-  flex: none;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--r-md);
-  display: grid;
-  place-items: center;
-  background: var(--surface-2);
-  color: var(--muted);
-
-  &.is-cyan { background: var(--cyan-tint); color: var(--cyan); }
-  &.is-accent { background: var(--accent-tint); color: var(--accent); }
-}
+.settings-well-icon { flex: none; color: var(--text); }
 
 .settings-well-body {
   flex: 1;
@@ -193,19 +221,16 @@
   gap: 2px;
 
   b { @include v2.text(body-sm); font-weight: 700; color: var(--text); overflow-wrap: anywhere; }
-  > span { @include v2.text(meta); color: var(--muted); line-height: 1.4; }
+  > span { @include v2.text(meta-sm); color: var(--muted); line-height: 1.35; }
+  .is-cyan { color: var(--cyan); }
 }
 
 .settings-ln-where { overflow-wrap: anywhere; }
 
-// The Lightning address in use, outlined like a chosen card when it is their own
-.settings-ln-now.is-own { box-shadow: inset 0 0 0 2px var(--accent); }
-
-// Label + field + button on one line
 .settings-inline-form {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
   min-width: 0;
 }
 
@@ -224,14 +249,64 @@
   &:disabled { opacity: .6; }
 }
 
-.settings-mono-input { font-family: var(--font-mono); font-size: 13px; }
+// ─── Lightning (38c, 31e): the address well with its label inside ───
+.settings-addr {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  border: 2px solid transparent;
+  cursor: text;
+  transition: border-color var(--t-fast) var(--ease);
+
+  &:focus-within { border-color: var(--accent); }
+  &.is-ok { border-color: var(--cyan); }
+  &.is-error { border-color: var(--accent); }
+}
+
+.settings-addr-label {
+  @include v2.text(eyebrow);
+  letter-spacing: .06em;
+  color: var(--muted);
+}
+
+.settings-addr-input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  @include v2.mono(14, 700);
+  outline: none;
+
+  &::placeholder { color: var(--muted); font-weight: 500; }
+  &:disabled { opacity: .6; }
+}
+
+// Where tips go now, in cyan with a check (31e)
+.settings-ok-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  @include v2.text(meta);
+  font-weight: 700;
+  color: var(--cyan);
+  min-width: 0;
+
+  .material-symbols-rounded { flex: none; }
+}
 
 // ─── Ads: the community share (38a) ───
 .settings-split {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 12px;
+
+  &.v2-well { padding: 12px; border-radius: var(--r-lg); }
 }
 
 .settings-split-head {
@@ -325,8 +400,53 @@
   border: 0;
 }
 
+// ─── Posting authority as its own card (32g) ───
+.settings-auth-card { gap: 12px; }
+
+.settings-auth-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-auth-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-lg);
+  display: grid;
+  place-items: center;
+  background: var(--cyan-tint-strong);
+  color: var(--cyan);
+}
+
+.settings-auth-title {
+  margin: 0;
+  @include v2.text(title);
+}
+
+.settings-auth-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    @include v2.text(body-sm);
+    color: var(--text);
+  }
+
+  .is-cyan { color: var(--cyan); }
+  .is-accent { color: var(--accent); }
+}
+
 // ─── Referrals (38a) ───
-.settings-copy-well {
+.settings-copy-well.v2-well {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -346,8 +466,6 @@
   }
 }
 
-.settings-earn-title { margin-top: 4px; }
-
 .settings-referral-tiles {
   list-style: none;
   margin: 0;
@@ -355,8 +473,6 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
-
-  @include v2.mobile { grid-template-columns: 1fr; }
 }
 
 .settings-referral-tile {
@@ -368,28 +484,14 @@
   background: var(--bg);
   min-width: 0;
 
-  .settings-referral-tile-icon { color: var(--muted); margin-bottom: 2px; }
-  .settings-referral-tile-value { @include v2.mono(20, 900); line-height: 1.2; }
-  .settings-referral-tile-label { @include v2.text(meta-sm); font-weight: 700; color: var(--text); line-height: 1.3; }
-  .settings-referral-tile-desc { font-size: 10px; color: var(--muted); line-height: 1.3; }
+  .settings-referral-tile-value { @include v2.mono(20, 900); line-height: 1.2; overflow-wrap: anywhere; }
+  .settings-referral-tile-label { font-size: 10px; color: var(--muted); line-height: 1.3; }
 
   &.is-accent .settings-referral-tile-value { color: var(--accent); }
   &.is-cyan .settings-referral-tile-value { color: var(--cyan); }
 }
 
-.settings-referral-ontop {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin: 0;
-  @include v2.text(meta);
-  font-weight: 700;
-  color: var(--text);
-
-  .material-symbols-rounded { color: var(--cyan); }
-}
-
-// ─── Support links (31e) ───
+// ─── Support links (31e): site, address in mono, remove ───
 .settings-support-links {
   list-style: none;
   margin: 0;
@@ -398,37 +500,36 @@
   flex-direction: column;
   gap: 6px;
 
-  li {
+  li.v2-well {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 6px 6px 6px 12px;
+    padding: 6px 6px 6px 10px;
     border-radius: var(--r-lg);
     min-width: 0;
   }
 
-  .settings-support-icon { color: var(--cyan); }
+  .settings-support-icon { flex: none; color: var(--text); }
 }
 
-.settings-support-text {
+.settings-support-site {
   flex: 1;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
+  @include v2.text(body-sm);
+  font-weight: 700;
+}
 
-  b { @include v2.text(body-sm); font-weight: 700; }
+.settings-support-url {
+  min-width: 0;
+  max-width: 55%;
+  @include v2.mono(11, 500);
+  color: var(--muted);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
-  a {
-    @include v2.mono(11, 500);
-    color: var(--muted);
-    text-decoration: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    &:hover { color: var(--cyan); }
-  }
+  &:hover { color: var(--cyan); }
 }
 
 // ─── Notifications (38b) ───
@@ -437,23 +538,52 @@
   flex-direction: column;
 }
 
-.settings-kind-group-label { margin: 6px 0 0; }
+.settings-kind-group-label { margin: 2px 4px 4px; }
 
-// ─── Interests ───
-.settings-interests-picker { min-width: 0; }
+// ─── Interests (38b): chips, cyan when picked ───
+.settings-interests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
 
-// ─── About (38c) ───
-.settings-kv {
+.settings-interest {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--r-md);
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); }
+  &:active { transform: scale(.98); }
+  &.is-on { border-color: var(--cyan); background: var(--cyan-tint-strong); }
+  &:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+}
+
+.settings-interests-save { margin-top: 2px; }
+
+// ─── About (38c): label, value in mono, a trailing icon ───
+.settings-kv.v2-well {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
+  gap: 6px;
+  min-height: 40px;
+  padding: 4px 12px;
   border-radius: var(--r-lg);
   min-width: 0;
+  border: 0;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
 
-  > span { flex: none; @include v2.text(meta); color: var(--muted); }
+  > span { flex: 1; min-width: 0; @include v2.text(meta); color: var(--muted); }
   > b {
-    flex: 1;
     min-width: 0;
     text-align: right;
     @include v2.mono(12, 700);
@@ -461,22 +591,51 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  > .material-symbols-rounded { flex: none; color: var(--muted); }
+  > .v2-iconbtn { margin-right: -8px; color: var(--muted); }
+
+  &.is-link {
+    width: 100%;
+    cursor: pointer;
+
+    &:hover { background: color-mix(in srgb, var(--text) 4%, var(--bg)); }
+  }
 }
 
-// ─── Phone: tiles (18d) ───
+// ─── Phone: the account card and the sections as tiles (18d) ───
 .settings-account {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-bottom: 12px;
   padding: 14px;
   border-radius: var(--r-xl);
   background: var(--surface);
   border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
 
-  b { @include v2.text(title-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  &:hover { color: var(--text); }
 }
 
-.settings-account-avatar { width: 48px; height: 48px; }
+.settings-account-avatar {
+  flex: none;
+  width: 48px;
+  height: 48px;
+}
+
+.settings-account-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  b { @include v2.text(title-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  span { @include v2.text(meta); color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+.settings-account-chev { flex: none; color: var(--muted); }
 
 .settings-tiles {
   display: grid;
@@ -515,13 +674,27 @@
 
   &.is-accent { background: var(--accent-tint-strong); color: var(--accent); }
   &.is-cyan { background: var(--cyan-tint-strong); color: var(--cyan); }
-  &.is-muted { background: var(--surface-2); color: var(--muted); }
+  &.is-muted { background: color-mix(in srgb, var(--muted) 16%, transparent); color: var(--muted); }
 }
 
 // ─── Hover peek from the top bar's gear (SettingsModal `dropdown`) ───
 // Hung under the gear (top/left/width inline), no backdrop. A peek lets the page
 // under it work; once held, a see-through layer catches the click outside that
-// closes it. `--leaving` fades it out (200ms, hooks/useHoverPeek.js).
+// closes it. `--leaving` fades it out (200ms, hooks/useHoverPeek.js). One column,
+// the tab track on its own line under the title.
+.settings-modal.is-dropdown {
+  .settings-head {
+    flex-wrap: wrap;
+    padding: 16px 16px 0 20px;
+
+    .settings-head-title { @include v2.text(heading); }
+  }
+
+  .settings-tabs.v2-seg { order: 3; flex: 1 1 100%; }
+  .settings-body { padding: 12px 16px 16px; }
+  .settings-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+}
+
 .settings-modal-overlay--dropdown {
   display: block;
   padding: 0;
@@ -559,7 +732,13 @@
   to { opacity: 1; transform: none; }
 }
 
-// ─── Mobile: bottom sheet ───
+// ─── Tablet: the tabs under the title when they no longer fit beside it ───
+@media (max-width: 1099px) {
+  .settings-modal:not(.is-dropdown) .settings-head { flex-wrap: wrap; }
+  .settings-modal:not(.is-dropdown) .settings-tabs.v2-seg { order: 3; flex: 1 1 100%; }
+}
+
+// ─── Mobile: bottom sheet, sections as tiles (18d) ───
 @include v2.mobile {
   .settings-modal-overlay:not(.settings-modal-overlay--dropdown) {
     place-items: end stretch;
@@ -584,16 +763,30 @@
       background: var(--border);
     }
 
-    .settings-head { padding: 10px 12px 10px 16px; }
-    .settings-tabs.v2-seg { margin: 0 16px 12px; }
+    .settings-head {
+      padding: 12px 12px 0 20px;
+
+      .settings-head-title { @include v2.text(heading); }
+    }
+
+    // The tiles screen: "Settings" 32/900, as on the board
+    .is-tiles .settings-head .settings-head-title { font-size: 32px; }
+
     .settings-body { padding: 16px 16px calc(20px + env(safe-area-inset-bottom)); }
   }
 
+  .settings-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .settings-section { padding: 14px; }
-
   .settings-split-head { flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .settings-modal-overlay, .settings-modal { animation: none; }
+}
+
+// ─── Your data: once sent, the card is the cyan success card (38c) ───
+.settings-data:has(.drf-done) {
+  background: linear-gradient(170deg, color-mix(in srgb, var(--cyan) 18%, var(--surface)), var(--surface));
+
+  .settings-section-head { display: none; }
 }

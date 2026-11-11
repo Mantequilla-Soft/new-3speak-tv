@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import useHoverPeek from '../../hooks/useHoverPeek';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -37,6 +38,24 @@ import './NotificationBell.scss';
 const toast = toastIn('Notifications');
 
 const PREVIEW_LIMIT = 20;
+
+// The sheet's tabs (26a). Hive has no "upload" notification: Uploads are the 24h
+// stories of people you follow, Pods the new episodes of podcasts you follow.
+const TABS = ['all', 'mentions', 'follows', 'uploads', 'pods'];
+const TAB_TYPES = {
+  mentions: new Set(['reply', 'reply_comment', 'mention']),
+  follows: new Set(['follow']),
+};
+
+// "@jza voted on your post ($0.12)" → the name in bold, then the rest (26a).
+function ActorMsg({ actor, msg }) {
+  const text = String(msg || '');
+  const lead = actor ? `@${actor}` : null;
+  if (lead && text.toLowerCase().startsWith(lead.toLowerCase())) {
+    return <><b>{actor}</b>{text.slice(lead.length)}</>;
+  }
+  return text;
+}
 const MAX_STACKED_AVATARS = 4;
 
 function NotificationBell() {
@@ -91,7 +110,11 @@ function NotificationBell() {
     }
   };
   const [hoveredId, setHoveredId] = useState(null);
+  const [tab, setTab] = useState('all');
   const ref = useRef(null);
+  // The sheet is portalled to <body> (the bar's backdrop blur would otherwise
+  // be the containing block of its position: fixed), so it is outside `ref`.
+  const sheetRef = useRef(null);
   const navigate = useNavigate();
 
   const {
@@ -120,7 +143,13 @@ function NotificationBell() {
 
   // Grouping
   const grouped = useMemo(() => groupNotifications(notifications), [notifications]);
-  const preview = grouped.slice(0, PREVIEW_LIMIT);
+  const preview = useMemo(() => {
+    if (tab === 'uploads' || tab === 'pods') return [];
+    const types = TAB_TYPES[tab];
+    return (types ? grouped.filter((g) => types.has(g.notifType)) : grouped).slice(0, PREVIEW_LIMIT);
+  }, [grouped, tab]);
+  const showStories = tab === 'all' || tab === 'uploads';
+  const showPods = tab === 'all' || tab === 'pods';
 
   // 3Speak detection
   const postKeys = notifications.map(getNotificationPostKey).filter(Boolean);
@@ -161,7 +190,8 @@ function NotificationBell() {
   useEffect(() => {
     if (!shown) return;
     const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) close();
+      if (ref.current?.contains(e.target) || sheetRef.current?.contains(e.target)) return;
+      close();
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
@@ -217,71 +247,75 @@ function NotificationBell() {
           : unreadCount + unseenPodcasts ? t('nav.notifications.ariaUnread', { count: unreadCount + unseenPodcasts }) : t('common.nav.notifications')}
         title={t('common.nav.notifications')}
       >
-        <Icon name="notifications" size={22} fill={shown} />
-        {unreadCount > 0 && (
+        <Icon name="notifications" size={24} fill={shown} />
+        {/* One cyan dot (20a) for anything new: Hive activity, stories, episodes */}
+        {anythingUnread && (
           <span className="notif-bell-dot" aria-hidden="true" />
-        )}
-        {/* Its own dot (top left) for the cyan rows (new stories, new podcast episodes),
-            so they still show next to unread Hive activity. */}
-        {(unseenStories > 0 || unseenPodcasts > 0) && (
-          <span className="notif-bell-dot notif-bell-dot--story" aria-hidden="true" />
         )}
       </button>
 
-      {(shown || leaving) && (
+      {(shown || leaving) && createPortal(
         <>
         {/* Phones: the sheet dims the page; a tap there closes it. */}
         {open && <div className="notif-scrim" onClick={close} aria-hidden="true" />}
-        <div className={`notif-dropdown${leaving ? ' notif-dropdown--leaving' : ''}`} role="menu" aria-label={t('common.nav.notifications')}>
+        <div ref={sheetRef} className={`notif-dropdown${leaving ? ' notif-dropdown--leaving' : ''}`} role="menu" aria-label={t('common.nav.notifications')} {...hoverProps}>
           <div className="notif-dropdown-grab" aria-hidden="true" />
+          {/* 26a: a cyan bar, the title 20/700, then 40px buttons */}
           <div className="notif-dropdown-header">
+            <span className="notif-dropdown-bar" aria-hidden="true" />
             <span className="notif-dropdown-title">{t('common.nav.notifications')}</span>
+            {pushSupported() && authenticated && (
+              <button
+                type="button"
+                className={`notif-push-toggle${pushOn ? ' on' : ''}`}
+                onClick={togglePush}
+                disabled={pushBusy || pushBlocked || push.worker === false}
+                title={pushBlocked
+                  ? t('nav.notifications.pushBlocked')
+                  : push.worker === false
+                    ? t('nav.notifications.pushNoWorker')
+                    : pushOn
+                      ? t('nav.notifications.pushStop')
+                      : t('nav.notifications.pushStart')}
+              >
+                <Icon name={pushOn ? 'notifications_active' : 'notifications_off'} size={16} fill={pushOn} />
+                <span>{pushOn ? t('nav.notifications.on') : t('nav.notifications.notifyMe')}</span>
+              </button>
+            )}
+            {/* Same action as on /notifications, so clearing the dots doesn't need
+                a trip to the full page. */}
+            {anythingUnread && (
+              <button
+                type="button"
+                className="notif-header-btn"
+                onClick={markEverythingRead}
+                disabled={markingAsRead}
+                aria-label={markingAsRead ? t('notifications.marking') : t('notifications.markAllRead')}
+                title={t('notifications.markAllTitle')}
+              >
+                <Icon name="done_all" size={20} />
+              </button>
+            )}
             <Link
               to="/notifications"
-              className="notif-dropdown-seeall"
+              className="notif-header-btn notif-dropdown-seeall"
               onClick={close}
+              aria-label={t('common.actions.seeAll')}
+              title={t('common.actions.seeAll')}
             >
-              {t('common.actions.seeAll')}
-              <Icon name="arrow_forward" size={16} />
+              <Icon name="open_in_full" size={20} />
             </Link>
           </div>
 
-          {((pushSupported() && authenticated) || anythingUnread) && (
-            <div className="notif-dropdown-actions">
-              {pushSupported() && authenticated && (
-                <button
-                  type="button"
-                  className={`notif-push-toggle${pushOn ? ' on' : ''}`}
-                  onClick={togglePush}
-                  disabled={pushBusy || pushBlocked || push.worker === false}
-                  title={pushBlocked
-                    ? t('nav.notifications.pushBlocked')
-                    : push.worker === false
-                      ? t('nav.notifications.pushNoWorker')
-                      : pushOn
-                        ? t('nav.notifications.pushStop')
-                        : t('nav.notifications.pushStart')}
-                >
-                  <Icon name={pushOn ? 'notifications_active' : 'notifications_off'} size={16} fill={pushOn} />
-                  <span>{pushOn ? t('nav.notifications.on') : t('nav.notifications.notifyMe')}</span>
-                </button>
-              )}
-              {/* Same action as on /notifications, so clearing the dots doesn't need
-                  a trip to the full page. */}
-              {anythingUnread && (
-                <button
-                  type="button"
-                  className="notif-header-pill"
-                  onClick={markEverythingRead}
-                  disabled={markingAsRead}
-                  title={t('notifications.markAllTitle')}
-                >
-                  <Icon name="done_all" size={16} />
-                  <span>{markingAsRead ? t('notifications.marking') : t('notifications.markAllRead')}</span>
-                </button>
-              )}
-            </div>
-          )}
+          <div className="notif-tabs" role="tablist" aria-label={t('common.nav.notifications')}>
+            {TABS.map((k) => (
+              <button key={k} type="button" role="tab" aria-selected={tab === k}
+                className={`notif-tab${tab === k ? ' is-on' : ''}`} onClick={() => setTab(k)}>
+                {t(`nav.notifications.tabs.${k}`)}
+              </button>
+            ))}
+          </div>
+
           {pushSupported() && authenticated && pushBlocked && (
             <div className="notif-push-note is-blocked">
               <Icon name="notifications_off" size={16} />
@@ -302,11 +336,11 @@ function NotificationBell() {
             </div>
           )}
 
-          <StoryNotifications stories={stories} onOpen={close} />
+          {showStories && <StoryNotifications stories={stories} onOpen={close} />}
           {/* A peek is not "seen": only a dropdown opened with a click marks episodes. */}
-          <PodcastNotifications episodes={podcastEpisodes} user={user} onOpen={close} markSeen={open} />
+          {showPods && <PodcastNotifications episodes={podcastEpisodes} user={user} onOpen={close} markSeen={open} />}
 
-          {!loading && notifications.length === 0 && stories.length === 0 && podcastEpisodes.length === 0 && (
+          {!loading && preview.length === 0 && !(showStories && stories.length) && !(showPods && podcastEpisodes.length) && (
             <div className="notif-dropdown-empty">
               <Icon name="notifications_none" size={28} />
               <span>{t('nav.notifications.empty')}</span>
@@ -351,11 +385,9 @@ function NotificationBell() {
                     </div>
                     <div className="notif-body">
                       <div className="notif-msg">
-                        {formatNotificationMsg(n.msg) || getNotificationTypeLabel(n.type)}
+                        {formatNotificationMsg(n.msg) ? <ActorMsg actor={actor} msg={formatNotificationMsg(n.msg)} /> : getNotificationTypeLabel(n.type)}
                       </div>
                       <div className="notif-meta">
-                        <span className="notif-type">{getNotificationTypeLabel(n.type)}</span>
-                        <span className="notif-dot">·</span>
                         <span className="notif-time">{formatNotifTime(n.date)}</span>
                         {tier && <span className={`notif-meta-tier notif-tier-${tier}`}>{tier === 'whale' ? '🐋' : '🐬'}</span>}
                       </div>
@@ -375,7 +407,8 @@ function NotificationBell() {
           )}
           </div>
         </div>
-        </>
+        </>,
+        document.body,
       )}
     </div>
   );
@@ -474,11 +507,17 @@ function GroupRow({ group, isUnread, is3Speak, getWhaleTier, onClick, hovered, o
       </div>
       <div className="notif-body">
         <div className="notif-msg">{label}</div>
+        {/* 42b: who is in the group, in cyan, without needing a hover */}
+        {(topTier || remaining > 0) && (
+          <div className="notif-group-who">
+            {[
+              topTier && (topTier === 'whale' ? t('nav.notifications.group.includesWhale') : t('nav.notifications.group.includesOrca')),
+              remaining > 0 && t('nav.notifications.group.andMore', { count: remaining }),
+            ].filter(Boolean).join(' · ')}
+          </div>
+        )}
         <div className="notif-meta">
-          <span className="notif-type">{t('nav.notifications.group.typeCount', { count: items.length, type: notifType })}</span>
-          <span className="notif-dot">·</span>
           <span className="notif-time">{formatNotifTime(date)}</span>
-          {topTier && <span className="notif-meta-tier">{topTier === 'whale' ? '🐋' : '🐬'}</span>}
         </div>
       </div>
       {is3Speak && (

@@ -108,8 +108,7 @@ function Labeled({ label, children, className }) {
 function FoldCard({ icon, title, open, onToggle, children, className }) {
   return (
     <section className={cx('v2-card sp-e-card sp-e-fold', open && 'is-open', className)}>
-      <button type="button" className="sp-e-fold-head" aria-expanded={open} onClick={onToggle}>
-        <Icon name={icon} size={18} className="sp-e-fold-ic" />
+      <button type="button" className="sp-e-fold-head" aria-expanded={open} onClick={onToggle} data-icon={icon}>
         <b>{title}</b>
         <Icon name="expand_more" size={20} className="sp-e-chev" />
       </button>
@@ -573,11 +572,12 @@ export default function SpotlightEditor({ username }) {
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [uploading, setUploading] = useState(() => new Set());
-  const [showTheme, setShowTheme] = useState(false);
+  // 41a draws Templates and Page style open; both still fold from their head.
+  const [showTheme, setShowTheme] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [displayName, setDisplayName] = useState('');
   const [previewHtml, setPreviewHtml] = useState('');
-  const [showTemplates, setShowTemplates] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(true);
   const [preTpl, setPreTpl] = useState(null);   // snapshot before a template (for Undo)
   const [appliedTpl, setAppliedTpl] = useState(null); // the template last applied (shown selected)
   const baseline = useRef('');
@@ -626,8 +626,7 @@ export default function SpotlightEditor({ username }) {
         setLayout(l);
         baseline.current = JSON.stringify(l);
         setDirty(false);
-        // New page (no Spotlight yet) → open the template gallery to get them started.
-        setShowTemplates(!r.exists);
+        // The template gallery starts open (41a) for every page, new or not.
       })
       .catch(() => { if (alive) { setLayout(emptyLayout()); } })
       .finally(() => { if (alive) setLoading(false); });
@@ -793,7 +792,7 @@ export default function SpotlightEditor({ username }) {
       <div className="sp-e-controls">
       {/* Profile — bio, avatar & the always-present channel button, front and centre. */}
       <section className="v2-card sp-e-card sp-e-profile">
-        <div className="sp-e-card-head"><Icon name="person" size={18} /><b>{t('spotlight.editor.profile.title')}</b></div>
+        <div className="sp-e-card-head"><b>{t('spotlight.editor.profile.title')}</b></div>
         <input className="v2-input sp-e-headline" placeholder={t('spotlight.editor.profile.headlinePlaceholder')} value={headline} maxLength={200}
           onChange={(e) => markDirty({ ...layout, headline: e.target.value })} />
         <div className="sp-e-inline">
@@ -927,13 +926,11 @@ export default function SpotlightEditor({ username }) {
       <div className="sp-e-side">
         <section className="v2-card sp-e-preview-card">
           <div className="sp-e-preview-label">
-            <span className="sp-e-live-dot" aria-hidden="true" />
             <span className="v2-eyebrow">{t('spotlight.editor.livePreview')}</span>
             <a className="sp-e-preview-open" href={`/links/${user}`} target="_blank" rel="noreferrer">
               {t('spotlight.editor.openPage')} <Icon name="open_in_new" size={14} />
             </a>
           </div>
-          <div className="sp-e-preview-bar"><span className="sp-e-preview-url">3speak.tv/links/{user}</span></div>
           <iframe ref={frameRef} className="sp-e-preview-frame" title={t('spotlight.editor.previewTitle')} srcDoc={previewHtml}
             onLoad={() => { try { const w = frameRef.current?.contentWindow; if (w && scrollRef.current) w.scrollTo(0, scrollRef.current); } catch { /* cross-doc */ } }} />
         </section>

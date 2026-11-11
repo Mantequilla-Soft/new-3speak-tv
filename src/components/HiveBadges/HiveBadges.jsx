@@ -122,23 +122,13 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
 
   const rows = arranging ? draft : badges.filter((b) => !isThreeSpeakBadge(b));
 
+  // 41c: while arranging, one primary "Save order" across the foot (closing
+  // the dialog drops the draft); otherwise the Arrange button.
   const footer = canArrange ? (
     arranging ? (
-      <>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            setDraft(badges.filter((b) => !isThreeSpeakBadge(b)));
-            setArranging(false);
-          }}
-          disabled={saving}
-        >
-          {t('common.actions.cancel')}
-        </Button>
-        <Button variant="primary" onClick={save} disabled={saving} loading={saving}>
-          {saving ? t('common.actions.saving') : t('badges.hive.saveOrder')}
-        </Button>
-      </>
+      <Button variant="primary" block onClick={save} disabled={saving} loading={saving} className="hbadges-save">
+        {saving ? t('common.actions.saving') : t('badges.hive.saveOrder')}
+      </Button>
     ) : (
       <Button variant="secondary" icon="drag_indicator" onClick={() => setArranging(true)}>
         {t('badges.hive.arrange')}
@@ -157,7 +147,7 @@ function AllBadgesModal({ username, badges, canArrange, startArranging, onClose,
       footer={footer}
       width={460}
       closeLabel={t('common.actions.close')}
-      className="hbadges-modal"
+      className={`hbadges-modal${arranging ? ' is-arranging' : ''}`}
       bodyClassName="hbadges-list"
     >
       {/* Pinned block renders in both modes, so the order on screen always

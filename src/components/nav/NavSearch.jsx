@@ -65,7 +65,12 @@ function NavSearch() {
   }, [goTo]);
 
   return (
-    <div className={`navsearch-wrap${open ? ' is-open' : ''}${term ? ' has-value' : ''}`} ref={wrapRef}>
+    <div
+      className={`navsearch-wrap${open ? ' is-open' : ''}${term ? ' has-value' : ''}`}
+      ref={wrapRef}
+      // Tabbing out of the field and its dropdown closes it, like a click outside.
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setOpen(false); }}
+    >
       <div className="navsearch-field">
         <Icon name="search" size={20} className="navsearch-icon" />
         <input

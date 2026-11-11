@@ -9,36 +9,69 @@
   gap: 14px;
 }
 
-.review-stars {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+.review-rating {
+  display: flex;
+  align-items: center;
   gap: 6px;
+}
+
+// 43c: five filled stars, accent up to the rating and surface-2 after it.
+.review-stars {
+  display: flex;
+  gap: 4px;
 
   .star {
-    height: 52px;
-    border: 2px solid transparent;
-    border-radius: var(--r-lg);
-    background: var(--bg);
-    color: var(--muted);
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-md);
+    background: none;
+    color: var(--surface-2);
     display: grid;
     place-items: center;
     cursor: pointer;
-    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+    transition: color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
 
-    &:hover { color: var(--accent); }
+    &:hover { color: color-mix(in srgb, var(--accent) 60%, var(--surface-2)); }
     &:active { transform: scale(.96); }
-    &.on { color: var(--accent); background: var(--accent-tint); }
-    &[aria-pressed="true"] { border-color: var(--accent); }
+    &.on { color: var(--accent); }
+
+    @include v2.mobile { width: 44px; height: 44px; }
   }
 }
 
 .star-label {
-  display: block;
-  min-height: 18px;
-  margin-top: -6px;
-  font-size: 12px;
+  @include v2.text(meta);
   font-weight: 700;
-  color: var(--accent);
+  color: var(--text);
+}
+
+// "What's this about?": outlined 28 chips, the picked ones in cyan (43c).
+.review-chips {
+  gap: 4px;
+
+  .v2-chip {
+    height: 28px;
+    border-radius: var(--r-sm);
+    padding: 0 8px;
+    border: 2px solid var(--border);
+    background: transparent;
+    font-size: 11px;
+
+    &:hover { background: var(--bg-hover); }
+    &.is-on { border-color: var(--cyan); background: var(--cyan-tint-strong); color: var(--text); }
+
+    @include v2.mobile { height: 36px; }
+  }
+}
+
+// No divider above the two buttons; they share the row equally (43c).
+.review-modal .v2-dialog__foot {
+  border-top: 0;
+  padding-top: 4px;
+
+  .v2-btn { flex: 1; }
 }
 
 .review-field {

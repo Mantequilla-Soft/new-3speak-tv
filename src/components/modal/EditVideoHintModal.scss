@@ -1,72 +1,64 @@
 @use "../../styles/v2" as v2;
 
-// The edit-video hint (design 19g / 43b): the v2 dialog (DialogShell) with a
-// mock of the watch-page dock in a bg well, the pen ringed in cyan.
+// The edit-video hint (design 19g / 43b): a cyan hint card. The pen in a cyan
+// icon well, the title 16/900, one muted sentence and "Got it" in cyan. The
+// dialog head stays for screen readers and the X; the card carries the title.
+.evh-content.v2-dialog__panel {
+  position: relative;
+  background: color-mix(in srgb, var(--cyan) 10%, var(--surface));
+  border-color: color-mix(in srgb, var(--cyan) 35%, transparent);
+
+  > .app-modal-header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 12px;
+    .app-modal-header-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  }
+  > .v2-dialog__body { padding: 18px; }
+}
+
 .evh-content {
+  .evh-card { display: flex; gap: 14px; padding-right: 32px; }
+
+  .evh-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-lg);
+    background: var(--cyan);
+    color: var(--bg);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+
+  .evh-body { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+  .evh-title { font-size: 16px; font-weight: 900; line-height: 1.3; }
+
   .evh-text {
-    margin: 0;
-    @include v2.text(body);
+    margin: 4px 0 0;
+    @include v2.text(body-sm);
+    line-height: 1.45;
     color: var(--muted);
 
     strong { color: var(--text); font-weight: 700; }
   }
 
-  .evh-mock {
-    @include v2.well;
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 6px;
-    padding: 12px;
-  }
-
-  .evh-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    height: 48px;
-    border-radius: var(--r-lg);
-    background: var(--surface-2);
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 700;
-
-    &--tip { color: var(--accent); }
-
-    // The one the hint is about: cyan ring, a gentle pulse.
-    &--pen {
-      color: var(--cyan);
-      background: var(--cyan-tint);
-      outline: 2px solid var(--cyan);
-      outline-offset: 2px;
-      animation: evh-pulse 1.8s var(--ease) infinite;
-    }
-  }
-
-  .evh-caption {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0;
-    @include v2.text(meta);
-    color: var(--muted);
-
-    .evh-caption-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--cyan);
-      flex: none;
-    }
+  .evh-got {
+    margin-top: 10px;
+    padding: 0;
+    min-height: 24px;
+    border: 0;
+    background: transparent;
+    color: var(--cyan);
+    font: inherit;
+    @include v2.text(body-sm);
+    font-weight: 900;
+    cursor: pointer;
+    &:hover { text-decoration: underline; }
   }
 }
 
-@keyframes evh-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .evh-content .evh-btn--pen { animation: none; }
+@include v2.mobile {
+  .evh-content .evh-got { min-height: 44px; }
 }

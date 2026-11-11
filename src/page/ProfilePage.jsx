@@ -84,6 +84,7 @@ function ProfilePage() {
     if (tab === 'supports' || tab === 'supporters') return 'supports';
     if (tab === 'audio') return 'audio';
     if (tab === 'community') return 'community';
+    if (tab === 'streams') return 'streams';
     if (tab === 'links') return 'links';
     if (tab === 'stats') return 'stats';
     if (tab === 'video') return 'video';
@@ -99,6 +100,7 @@ function ProfilePage() {
     else if (tab === 'supports' || tab === 'supporters') setShow('supports');
     else if (tab === 'audio') setShow('audio');
     else if (tab === 'community') setShow('community');
+    else if (tab === 'streams') setShow('streams');
     else if (tab === 'links') setShow('links');
     else if (tab === 'stats') setShow('stats');
     else if (tab === 'video') setShow('video');

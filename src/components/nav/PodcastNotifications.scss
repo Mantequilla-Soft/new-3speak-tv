@@ -14,16 +14,10 @@
 .podcast-notif-cover {
   width: 44px;
   height: 44px;
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
   object-fit: cover;
   background: var(--avatar);
   display: block;
 }
 
-.podcast-notif-title {
-  @include v2.text(meta);
-  color: var(--muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+

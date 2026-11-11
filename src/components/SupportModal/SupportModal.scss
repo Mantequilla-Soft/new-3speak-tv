@@ -10,14 +10,12 @@
   gap: 12px;
 }
 
+.support-modal-lead { flex-direction: column; gap: 6px; }
+
+// 44a: the reason as a bare accent icon above the line, no tile.
 .support-modal-icon {
   flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--r-lg);
   display: grid;
-  place-items: center;
-  background: var(--accent-tint);
   color: var(--accent);
 }
 

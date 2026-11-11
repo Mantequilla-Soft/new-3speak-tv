@@ -216,7 +216,7 @@ export default function AddSocialLink_modal({ isOpen, onClose, hiveUsername, onC
         {t('common.actions.back')}
       </Button>
       <Button
-        variant="primary"
+        variant="cyan"
         className="social-link-btn-primary"
         onClick={handleVerify}
         disabled={submitting || !platformUsername.trim()}

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DialogShell from './DialogShell';
 import { Button } from '../v2/ui';
 import MarkdownComposer from '../studio/MarkdownComposer';
+import './ShortTextModal.scss';
 
 /**
  * The text of a Short made from an audiogram, written in our own post editor
@@ -18,7 +19,9 @@ export default function ShortTextModal({ value, maxLength = 5000, onDone, onCanc
   return (
     <DialogShell
       onClose={onCancel}
+      tone="accent"
       title={t('modals.editor.shortText.title')}
+      headExtra={<span className="short-text-count num" aria-hidden="true">{text.length}/{maxLength}</span>}
       sub={t('modals.editor.shortText.hint')}
       width={720}
       // Over the audio editor (EditorModal sits at 100050).
@@ -27,8 +30,8 @@ export default function ShortTextModal({ value, maxLength = 5000, onDone, onCanc
       className="short-text-modal"
       footer={(
         <>
-          <Button variant="secondary" onClick={onCancel}>{t('common.actions.cancel')}</Button>
-          <Button variant="primary" onClick={() => onDone(text)}>{t('common.actions.done')}</Button>
+          <Button variant="secondary" size={44} trailing="close" className="short-text-btn" onClick={onCancel}>{t('common.actions.cancel')}</Button>
+          <Button variant="primary" size={44} trailing="check" className="short-text-btn" onClick={() => onDone(text)}>{t('common.actions.done')}</Button>
         </>
       )}
     >

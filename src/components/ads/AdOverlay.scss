@@ -11,12 +11,12 @@
      max-width resolved against that wrapper instead of against the video and
      collapsed the overlay to a sliver. The wrapper carries the responsive cap.
      It has to be readable, not prominent: a required disclosure on somebody's video. */
-  max-width: 240px;
-  padding: 8px 12px 10px;
-  border-radius: var(--r-md);
-  /* The media scrim, no backdrop blur: whatever the advertiser put in that corner
-     (a URL, a price, a face) stays visible through it. */
-  background: var(--media-scrim);
+  max-width: 260px;
+  padding: 8px 14px 8px 8px;
+  border-radius: var(--r-lg);
+  /* The strong media scrim (25b), no backdrop blur: whatever the advertiser put in
+     that corner (a URL, a price, a face) stays visible through it. */
+  background: var(--media-scrim-strong);
   /* Anchors the open icon on the link variant. */
   position: relative;
   color: var(--on-media);
@@ -24,6 +24,7 @@
 }
 
 .brandmark-from {
+  padding-left: 6px;
   font-size: 11px;
   line-height: 1.3;
   color: var(--on-media);
@@ -35,6 +36,7 @@
 /* When the content comes back. Sits under the brand block so the eye reads who the
    ad is from first and the wait second. */
 .brandmark-resume {
+  padding-left: 6px;
   font-size: 11px;
   line-height: 1.3;
   color: var(--on-media);
@@ -52,11 +54,11 @@
 
 .brandmark-logo {
   flex: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
   object-fit: cover;
-  background: color-mix(in srgb, var(--on-media) 12%, transparent);
+  background: var(--on-media);
 }
 
 /* No logo yet: hold the space so the text column does not jump when one is added. */
@@ -81,7 +83,7 @@
 .brandmark-slogan {
   font-size: 11px;
   line-height: 1.3;
-  opacity: .9;
+  opacity: .7;
   /* Two lines, hard. A long slogan must not grow the overlay over the video. */
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -141,7 +143,7 @@
   .brandmark-open { right: 6px; font-size: 14px !important; }
   .brandmark-from { font-size: 10px; line-height: 1.25; }
   .brandmark-body { gap: 8px; }
-  .brandmark-logo { width: 28px; height: 28px; }
+  .brandmark-logo { width: 28px; height: 28px; border-radius: var(--r-sm); }
   .brandmark-name { font-size: 11px; line-height: 1.2; }
   .brandmark-slogan {
     font-size: 10px;

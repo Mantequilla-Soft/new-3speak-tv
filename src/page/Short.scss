@@ -50,7 +50,8 @@
 // bar's strip into --nav-height (it floats 16px down from the top on desktop).
 body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(--nav-height, var(--topbar-h)); }
 @media (min-width: 769px) and (max-width: 1024px) {
-  body { --shorts-bottom-reserve: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px)); }
+  // The floating bottom bar (BottomNav.scss): its height, its gap, 8px air.
+  body { --shorts-bottom-reserve: calc(var(--bottom-nav-float-h, var(--bottom-nav-height)) + var(--bottom-nav-float-gap, 0px) + 8px); }
 }
 
 /* ─── Menus opened from the video (portals on <body>; v2-menu gives the look) ── */
@@ -113,10 +114,14 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
 
   // Desktop (18a): the strip on top, the player row under it (padding 16 24 24);
   // the discussion panel is fixed on the right, so the column keeps clear of it.
+  // (WatchStream.jsx reuses .short-main for its phone layout as .ws-shorts, up
+  // to 820px and in phone landscape: it keeps its own frame.)
   @include desk {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 16px 24px 24px;
+    &:not(.ws-shorts) {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 16px 24px 24px;
+    }
 
     &.with-comments { padding-right: calc(var(--shorts-panel-w) + 24px); }
   }
@@ -260,14 +265,6 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
     height: 100%;
     max-height: 100%;
 
-    @include desk {
-      flex: 1;
-      min-height: 0;
-      height: auto;
-      margin-top: 16px;
-      align-self: center;
-    }
-
     @include phone {
       gap: 0;
       width: 100%;
@@ -324,8 +321,8 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
   /* ─── The player ──────────────────────────────────────────────────────── */
   .videoContainer {
     position: relative;
-    height: 100%;
-    max-height: 100%;
+    height: calc(100% - 32px);
+    max-height: calc(100vh - var(--shorts-top) - var(--shorts-bottom-reserve, 0px) - 32px);
     aspect-ratio: 9 / 16;
     background-color: var(--media-black);
     border-radius: var(--r-3xl);
@@ -618,17 +615,6 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
       }
     }
 
-    // Desktop (18a): a white bar inside the caption area, 16px from the edges
-    @include desk {
-      left: 16px;
-      right: 16px;
-      bottom: 16px;
-      border-radius: var(--r-bar);
-
-      .videoProgressFill { background-color: var(--on-media); border-radius: var(--r-bar); }
-      .videoProgressHandle { background-color: var(--on-media); }
-    }
-
     @include phone { bottom: 8px; }
   }
 
@@ -778,6 +764,18 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
     line-height: 1.35;
     pointer-events: none;
     animation: v2-fade var(--t-base) var(--ease);
+
+    // With an icon (the remix limits): icon in its tone, then the line
+    &.has-icon {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: var(--r-lg);
+    }
+
+    &.is-accent .material-symbols-rounded { color: var(--accent); }
+    &.is-cyan .material-symbols-rounded { color: var(--cyan); }
   }
 
   @include phone {
@@ -1145,8 +1143,8 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 60px 16px 28px;
-    background: linear-gradient(transparent, var(--media-scrim-strong));
+    padding: 96px 16px 20px;
+    background: linear-gradient(to top, var(--media-scrim-strong), transparent);
     color: var(--on-media);
     z-index: 15;
     pointer-events: none;
@@ -1347,23 +1345,6 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
 
     // Desktop (18a): the caption is the short's title, 16/700 on two lines;
     // under a `## Title` it is the plain line below it.
-    @include desk {
-      .captionText {
-        font-size: 16px;
-        font-weight: 700;
-        line-height: 1.35;
-        -webkit-line-clamp: 2;
-      }
-
-      .captionTitle + .captionText {
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 1.4;
-        -webkit-line-clamp: 1;
-      }
-    }
-
-    @include phone { font-size: 14px; }
 
     &--expanded .captionText {
       display: block;
@@ -1527,9 +1508,10 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
     flex-direction: column;
     flex-wrap: wrap;
     align-content: flex-start;
-    align-self: center;
+    align-self: flex-end;
     gap: 8px;
-    max-height: 100%;
+    max-height: calc(100% - 32px);
+    margin-bottom: 16px;
   }
 
   .actionSidebar .actionItem {
@@ -1648,6 +1630,156 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
       &.active { background-color: var(--media-scrim-strong); }
       &.disabled { opacity: .45; }
     }
+  }
+
+  /* ─── A 24h story on a phone (30a, 24d) ────────────────────────────────── */
+  // Segments and the creator across the top, pause and close on the right
+  .storyHead {
+    position: absolute;
+    top: calc(8px + var(--safe-top, 0px));
+    left: 12px;
+    right: 12px;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    pointer-events: auto;
+    color: var(--on-media);
+
+    &__segs { display: flex; gap: 3px; }
+
+    &__seg {
+      position: relative;
+      flex: 1;
+      height: 3px;
+      border-radius: var(--r-bar);
+      background: color-mix(in srgb, var(--on-media) 30%, transparent);
+
+      &.is-done { background: var(--on-media); }
+
+      // The live progress line of the story on screen
+      .videoProgressBar {
+        position: absolute;
+        inset: 0;
+        height: 3px;
+        border-radius: var(--r-bar);
+        background: transparent;
+
+        &::before { top: -14px; height: 14px; }
+        &:hover { height: 3px; }
+      }
+
+      .videoProgressFill { background-color: var(--on-media); border-radius: var(--r-bar); }
+      .videoProgressHandle { display: none; }
+    }
+
+    &__row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &__who {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--on-media);
+      text-decoration: none;
+
+      &:hover { color: var(--on-media); }
+    }
+
+    &__avatar {
+      display: block;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--r-md);
+      border: 2px solid var(--cyan);
+      object-fit: cover;
+      background: var(--avatar);
+    }
+
+    &__names {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+
+      b { font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      span { font-size: 11px; opacity: .7; }
+    }
+
+    &__btn { @include media-btn(36); }
+  }
+
+  // The foot: the reply bar, or the owner's panel
+  .storyFoot {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    z-index: 60;
+    pointer-events: auto;
+  }
+
+  .storyReply {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+
+    &__box { flex: 1; min-width: 0; }
+
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 48px;
+      max-height: 120px;
+      padding: 13px 14px;
+      border: 1px solid color-mix(in srgb, var(--on-media) 40%, transparent);
+      border-radius: var(--r-lg);
+      background: transparent;
+      color: var(--on-media);
+      font: inherit;
+      font-size: 14px;
+      line-height: 1.4;
+      resize: none;
+      overflow-y: auto;
+      outline: none;
+
+      &::placeholder { color: color-mix(in srgb, var(--on-media) 85%, transparent); }
+      &:focus { border-color: var(--on-media); }
+      &:disabled { opacity: .45; }
+    }
+
+    &__btn {
+      display: grid;
+      place-items: center;
+      flex: none;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border: 0;
+      border-radius: var(--r-lg);
+      background: color-mix(in srgb, var(--on-media) 16%, transparent);
+      color: var(--on-media);
+      cursor: pointer;
+      transition: transform var(--t-fast) var(--ease), filter var(--t-fast) var(--ease);
+
+      &:active:not(:disabled) { transform: scale(.98); }
+      &:disabled { opacity: .45; cursor: not-allowed; }
+
+      &.is-heart {
+        background: color-mix(in srgb, var(--accent) 90%, transparent);
+        color: var(--media-black);
+      }
+    }
+  }
+
+  &.is-story-view {
+    .actionSidebar { display: none; }
+    .bottomOverlay { padding-right: 16px; padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+    &:has(.storyOwnerPanel) .bottomOverlay { padding-bottom: calc(168px + env(safe-area-inset-bottom, 0px)); }
   }
 
   /* ─── States without a short: loading, error, empty ───────────────────── */
@@ -2421,5 +2553,68 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
   textarea {
     width: 100%;
     box-sizing: border-box;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The shorts page itself (not the live stream page, .ws-shorts, which reuses
+   these classes for its phone layout): design 18a.
+   --------------------------------------------------------------------------- */
+.short-main:not(.ws-shorts) {
+  // Desktop: the player row fills what is left under the strip, centred; the
+  // dock is centred beside the player.
+  @media (min-width: 769px) {
+    .videoWrapper {
+      flex: 1;
+      min-height: 0;
+      height: auto;
+      margin-top: 16px;
+      align-self: center;
+    }
+
+    .videoContainer { height: 100%; max-height: 100%; }
+
+    .actionSidebar {
+      align-self: center;
+      max-height: 100%;
+      margin-bottom: 0;
+    }
+
+    // A white bar inside the caption area, 16px from the edges
+    .videoProgressBar {
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      border-radius: var(--r-bar);
+
+      .videoProgressFill { background-color: var(--on-media); border-radius: var(--r-bar); }
+      .videoProgressHandle { background-color: var(--on-media); }
+    }
+
+    // The caption is the short's title, 16/700 on two lines; under a
+    // `## Title` it is the plain line below it.
+    .caption .captionText {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.35;
+      -webkit-line-clamp: 2;
+    }
+
+    .caption .captionTitle + .captionText {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.4;
+      -webkit-line-clamp: 1;
+    }
+  }
+
+  // Desktop: the caption block on the scrim, 60px of fade, 16px sides, 28 at
+  // the foot (above the progress line)
+  @media (min-width: 769px) {
+    .bottomOverlay { padding: 60px 16px 28px; }
+  }
+
+  @media (max-width: 768px) {
+    .caption { font-size: 14px; }
   }
 }

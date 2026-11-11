@@ -137,6 +137,15 @@
     align-self: stretch;
   }
 
+  // The render flow (43b): title, step list, accent bar, two equal actions.
+  &.render-flow {
+    gap: 10px;
+    .render-flow__title { @include v2.text(title-sm); }
+    .v2-steplist { align-self: stretch; }
+    .render-progress-bar { margin-top: 4px; }
+    .render-flow__actions { display: grid; grid-template-columns: 1fr 1fr; margin-top: 4px; .v2-btn { justify-content: center; } }
+  }
+
   &.render-error {
     background: var(--accent-wash);
     border-color: transparent;

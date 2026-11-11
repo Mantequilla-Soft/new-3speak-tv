@@ -74,8 +74,8 @@
     flex: 1 1 auto;
     min-width: 0;
 
-    strong { @include v2.text(body); font-weight: 700; }
-    span { @include v2.text(meta); color: var(--muted); line-height: 1.4; }
+    > strong { @include v2.text(body); font-weight: 700; }
+    > span { @include v2.text(meta); color: var(--muted); line-height: 1.4; }
   }
 
   &__cta { margin-top: 6px; }
@@ -104,8 +104,8 @@
     background: var(--accent);
     color: var(--on-accent);
   }
-  b { @include v2.text(title); }
-  span:last-child { @include v2.text(meta); opacity: .8; }
+  > b { @include v2.text(title); }
+  > span:last-child { @include v2.text(meta); opacity: .8; }
 }
 
 .gated-lock-cta.v2-btn { font-weight: 900; }

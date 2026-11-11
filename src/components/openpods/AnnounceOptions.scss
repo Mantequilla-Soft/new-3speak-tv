@@ -17,7 +17,7 @@
     font-size: 14px;
     font-weight: 700;
 
-    > span { flex: 1; min-width: 0; }
+    > span { flex: 1; min-width: 0; text-align: start; }
   }
   &__toggle-icon { color: var(--muted); }
 

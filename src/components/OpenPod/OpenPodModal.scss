@@ -21,6 +21,8 @@
 .openpod-modal {
   @include hh.tokens;
   @include hh.buttons(false);
+  @include hh.studio;
+  @include hh.room;
   position: relative;
   background: var(--bg);
   color: var(--text);
@@ -56,15 +58,24 @@
   }
 }
 
-// "Connecting to OpenPods…" / "Authenticating with OpenPods…" (39c).
+// "Connecting to OpenPods…" / "Authenticating with OpenPods…" (39c): a small
+// surface row with the cyan spinner, centred in the sheet.
 .openpod-connecting {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
   min-height: 160px;
+  padding: 16px;
+}
+.openpod-connecting__card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
   color: var(--text);
-  @include v2.text(body-sm);
+  @include v2.text(meta);
 }
 .openpod-connecting__spin { color: var(--cyan); }
 
@@ -85,9 +96,10 @@
     align-items: stretch;
     gap: 10px;
     padding: 20px;
+    // The board's wash runs the whole card (39c).
+    background: linear-gradient(170deg, color-mix(in srgb, var(--accent) 24%, var(--surface)), var(--surface));
   }
 
-  &__icon { color: var(--accent); }
   &__title { margin: 0; @include v2.text(heading); }
   &__text {
     margin: 0;
@@ -144,3 +156,6 @@
     }
   }
 }
+
+// The SDK portals its OBS Browser Source panel to <body>, outside the modal.
+@include hh.obs-panel;

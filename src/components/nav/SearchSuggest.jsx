@@ -110,10 +110,10 @@ export default function SearchSuggest({ term, onSearch, onNavigate, className = 
 
   const hasRight = typed;
   return (
-    <div className={`search-suggest${hasRight ? ' is-two' : ''} ${className}`} role="listbox" aria-label={t('nav.search.placeholder')}>
+    <div className={`search-suggest${hasRight ? ' is-two' : ''} ${className}`} role="group" aria-label={t('common.actions.search')}>
       <div className="search-suggest__col">
         {left.map((s, i) => (
-          <button key={`${s.type}-${i}`} type="button" role="option" aria-selected={false} className="search-suggest__row" {...press(() => pickLeft(s))}>
+          <button key={`${s.type}-${i}`} type="button" className="search-suggest__row" {...press(() => pickLeft(s))}>
             <Icon name={s.icon} size={20} className="search-suggest__icon" />
             <span className="search-suggest__text"><Highlight text={s.text} term={term} /></span>
             <Icon name="north_west" size={16} className="search-suggest__go" />
@@ -174,7 +174,7 @@ export default function SearchSuggest({ term, onSearch, onNavigate, className = 
               title = it.title;
             }
             return (
-              <button key={q.key} type="button" role="option" aria-selected={false} className="search-suggest__quick" {...press(() => openQuick(q))}>
+              <button key={q.key} type="button" className="search-suggest__quick" {...press(() => openQuick(q))}>
                 {media}
                 <span className="search-suggest__quick-text">
                   <span className={`search-suggest__kind is-${q.tone}`}>{q.kind}</span>

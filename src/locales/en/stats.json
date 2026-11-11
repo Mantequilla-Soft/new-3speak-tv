@@ -16,7 +16,9 @@
     "avgPct": "Avg %",
     "votes": "Votes",
     "comments": "Comments",
-    "payout": "Payout"
+    "payout": "Payout",
+    "followers": "Followers",
+    "earned": "Earned"
   },
   "days": {
     "short": {
@@ -70,7 +72,8 @@
     "sub": "UTC · darker = more views",
     "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} view",
     "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} views",
-    "hour": "{{hour}}h"
+    "hour": "{{hour}}h",
+    "best": "Best time: <b>{{day}} {{from}}–{{to}} UTC</b>"
   },
   "detail": {
     "summary": "{{votes}} votes · {{comments}} comments · ${{payout}}"
@@ -83,7 +86,8 @@
     "title": "Compare videos",
     "pickA": "Pick a video…",
     "vs": "vs",
-    "pickB": "Pick another…"
+    "pickB": "Pick another…",
+    "lastPeriod": "Compare to last period"
   },
   "loadError": "Couldn’t load your stats right now.",
   "emptyRange": "No watch data in this range yet — try “All”, or wait for people to watch your videos.",
@@ -96,7 +100,8 @@
   "sections": {
     "trend": "Watch time over time",
     "best": "Best performing",
-    "audience": "Your audience"
+    "audience": "Your audience",
+    "top": "Top content"
   },
   "openInNewTab": "Open the video in a new tab",
   "footnote": "Watch stats are from preview tracking and visible only to you.",
@@ -115,5 +120,15 @@
     "replaySub": "sections viewers watch and rewatch most",
     "hotSpot": "hot spot",
     "notEnoughReplays": "Not enough replays yet"
+  },
+  "title": "Channel stats",
+  "legend": {
+    "current": "This period",
+    "previous": "Previous"
+  },
+  "audience": {
+    "title": "Audience",
+    "topCountry": "Top country",
+    "topDevice": "Top device"
   }
 }

@@ -106,16 +106,18 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
         bodyClassName="review-body"
         footer={(
           <>
-            <button type="button" className="v2-btn v2-btn--secondary h44 review-cancel" onClick={onClose} disabled={submitting}>
+            <button type="button" className="v2-btn v2-btn--secondary h40 is-center review-cancel" onClick={onClose} disabled={submitting}>
               <span className="v2-btn__label">{t('comments.review.notNow')}</span>
             </button>
-            <button type="button" className="v2-btn v2-btn--primary h44 review-submit" onClick={submit} disabled={submitting || !stars}>
+            <button type="button" className="v2-btn v2-btn--primary h40 is-center review-submit" onClick={submit} disabled={submitting || !stars}>
               <span className="v2-btn__label">{submitting ? t('comments.review.sending') : t('comments.review.sendFeedback')}</span>
               <Icon name={submitting ? 'progress_activity' : 'send'} size={18} className={submitting ? 'v2-spin' : undefined} />
             </button>
           </>
         )}
       >
+          {/* Five stars in a row with the word for the rating beside them (43c). */}
+          <div className="review-rating">
           <div className="review-stars" role="radiogroup" aria-label={t('comments.review.starRating')}>
             {[1, 2, 3, 4, 5].map((n) => (
               <button
@@ -128,11 +130,12 @@ function ReviewModal({ area = 'global', username = null, permlink = null, onClos
                 aria-label={t('comments.review.starsAria', { count: n })}
                 aria-pressed={stars === n}
               >
-                <Icon name="star" size={26} fill={n <= shown} />
+                <Icon name="star" size={28} fill />
               </button>
             ))}
           </div>
           <span className="star-label" aria-live="polite">{STAR_LABELS[shown] ? t(STAR_LABELS[shown]) : ''}</span>
+          </div>
 
           <div className="review-field">
             <label className="v2-eyebrow">

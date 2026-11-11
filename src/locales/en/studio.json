@@ -13,7 +13,13 @@
     "untitled": "(untitled)",
     "empty": "No videos found with the selected filter.",
     "title": "Studio",
-    "create": "Create"
+    "create": "Create",
+    "views28": "Views, 28 days",
+    "newFollowers": "New followers",
+    "views": "views",
+    "stats": "Stats",
+    "more": "More",
+    "public": "Public"
   },
   "schedule": {
     "days": {
@@ -32,6 +38,7 @@
     "am": "AM",
     "pm": "PM",
     "pastWarning": "This date and time is in the past. Please select a future date and time.",
+    "pickDay": "Pick a day",
     "publishAt": "Your video will be published automatically at {{when}}"
   },
   "scheduled": {

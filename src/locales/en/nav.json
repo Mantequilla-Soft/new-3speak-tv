@@ -52,7 +52,12 @@
     "logout": "Logout",
     "onDiscord": "3Speak on Discord",
     "onX": "3Speak on X",
-    "onTelegram": "3Speak on Telegram"
+    "onTelegram": "3Speak on Telegram",
+    "switch": "Switch",
+    "tiles": {
+      "channel": "Channel",
+      "history": "History"
+    }
   },
   "notifications": {
     "pushOff": "Notifications turned off for this device",
@@ -96,6 +101,13 @@
       "heading": "New episodes of podcasts you follow",
       "newEpisode": "New episode of {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "All",
+      "mentions": "Mentions",
+      "follows": "Follows",
+      "uploads": "Uploads",
+      "pods": "Pods"
     }
   },
   "search": {

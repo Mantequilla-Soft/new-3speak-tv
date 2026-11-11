@@ -2099,7 +2099,8 @@ const VideoShort = () => {
   // The side panel's tabs (18a): the discussion, or the shorts coming up next.
   const [sideTab, setSideTab] = useState('discussion');
   // A note on the video for a moment (45b): "That's all the shorts for your
-  // interests. Showing Discover."
+  // interests. Showing Discover.", or why this short can't be remixed.
+  // { text, icon?, tone?: 'accent' | 'cyan' }
   const [feedNote, setFeedNote] = useState(null);
   useEffect(() => {
     if (!feedNote) return undefined;
@@ -2109,7 +2110,11 @@ const VideoShort = () => {
   // Phones (18a): with the sheet closed, a bar at the foot of the short shows its
   // newest comment, so the discussion stays in view. Not with the optional quick
   // comment bar (Settings), which takes that spot.
-  const showPeek = !isDeskLayout && !showComments && !shortsCommentBar;
+  const showPeek = !isDeskLayout && !showComments && !shortsCommentBar && !storyMode;
+  // Watching a 24h story on a phone (30a, 24d): segments and the creator across
+  // the top with pause and close, and a reply bar (or, on your own story, its
+  // tools) at the foot instead of the dock.
+  const isStoryView = storyMode && !isDeskLayout;
   useEffect(() => {
     if (showPeek && videos[currentIndex] && !videos[currentIndex].commentsLoaded) {
       fetchComments();
@@ -2522,7 +2527,13 @@ const VideoShort = () => {
         { user, isPremium },
       );
       if (blocked) {
-        toast.info(remixBlockedMessage(blocked, t));
+        // Said on the video (45b): no room left in the chain, or no room for
+        // one more creator to be paid.
+        setFeedNote({
+          text: remixBlockedMessage(blocked, t),
+          icon: blocked === 'full' ? 'link_off' : 'workspace_premium',
+          tone: blocked === 'full' ? 'accent' : 'cyan',
+        });
         return;
       }
 
@@ -2722,7 +2733,7 @@ const VideoShort = () => {
       // the last one. Guarded on interestsMode, which flips false the moment we
       // switch, so this can't fire twice.
       if (interestsMode && !feedUser && !hasMore && !loadingMoreRef.current) {
-        setFeedNote(t('shorts.feed.interestsExhausted'));
+        setFeedNote({ text: t('shorts.feed.interestsExhausted') });
         switchFeedMode('discover');
       }
       return;
@@ -3395,9 +3406,25 @@ const VideoShort = () => {
     </div>
   ) : null;
 
+  // The scrubbable progress line (refs: updated straight from the player).
+  const progressBar = (
+    <div
+      className="videoProgressBar"
+      ref={progressBarRef}
+      onMouseDown={handleProgressMouseDown}
+      onClick={(e) => e.stopPropagation()}
+      onTouchStart={(e) => { e.stopPropagation(); setIsScrubbing(true); isScrubbingRef.current = true; handleProgressBarInteraction(e.touches[0]); }}
+      onTouchMove={(e) => { e.stopPropagation(); if (isScrubbingRef.current) handleProgressBarInteraction(e.touches[0]); }}
+      onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); setIsScrubbing(false); isScrubbingRef.current = false; }}
+    >
+      <div className="videoProgressFill" ref={progressFillRef} style={{ width: '0%' }} />
+      <div className="videoProgressHandle" ref={progressHandleRef} style={{ left: '0%' }} />
+    </div>
+  );
+
   return (
     <>
-    <main className={`short-main${shortsCommentBar ? '' : ' no-bottom-bar'}${adPlaying ? ' ad-playing' : ''}${commentsVisible ? ' with-comments' : ''}${showPeek ? ' has-peek' : ''}`}>
+    <main className={`short-main${shortsCommentBar ? '' : ' no-bottom-bar'}${adPlaying ? ' ad-playing' : ''}${commentsVisible ? ' with-comments' : ''}${showPeek ? ' has-peek' : ''}${isStoryView ? ' is-story-view' : ''}`}>
       <div className="landscape-block"
         onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
         onTouchStart={(e) => { e.stopPropagation(); e.preventDefault(); }}
@@ -3611,55 +3638,62 @@ const VideoShort = () => {
                 desktop it sits in the strip above the player (18a). Main feed only:
                 a creator's shorts (?user=…) and the stories view keep their own feeds. */}
             {!isDeskLayout && feedSwitch}
-            {feedNote && <div className="shortsFeedNote" role="status">{feedNote}</div>}
+            {feedNote && (
+              <div className={`shortsFeedNote${feedNote.icon ? ` has-icon is-${feedNote.tone || 'muted'}` : ''}`} role="status">
+                {feedNote.icon && <Icon name={feedNote.icon} size={18} />}
+                <span>{feedNote.text}</span>
+              </div>
+            )}
 
             {/* Top-right controls on the video: subtitles, playback options
                 (playback mode and ambient light, 45b), mute. Touch events stop here so
                 a tap never registers as a swipe; touchend opens/toggles directly
                 (and preventDefault stops the click that would follow). */}
-            <div className={`shortsTopControls${isStoriesMode ? ' stories-mode' : ''}`}>
-              {subtitleLanguages && subtitleLanguages.length > 0 && (
+            {!isStoryView && (
+              <div className={`shortsTopControls${isStoriesMode ? ' stories-mode' : ''}`}>
+                {subtitleLanguages && subtitleLanguages.length > 0 && (
+                  <button
+                    type="button"
+                    className={`shortsTopBtn subtitleIndicator${selectedSubtitleLang ? ' active' : ''}`}
+                    ref={subtitleMenuRef}
+                    aria-label={t('player.subtitles.title')}
+                    title={t('player.subtitles.title')}
+                    aria-haspopup="menu"
+                    aria-expanded={subtitleMenuOpen}
+                    onClick={(e) => { e.stopPropagation(); openSubtitleMenu(); }}
+                    onTouchStart={(e) => e.stopPropagation()}
+                    onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); openSubtitleMenu(); }}
+                  >
+                    <Icon name={selectedSubtitleLang ? 'closed_caption' : 'closed_caption_disabled'} size={20} fill={!!selectedSubtitleLang} />
+                  </button>
+                )}
                 <button
                   type="button"
-                  className={`shortsTopBtn subtitleIndicator${selectedSubtitleLang ? ' active' : ''}`}
-                  ref={subtitleMenuRef}
-                  aria-label={t('player.subtitles.title')}
-                  title={t('player.subtitles.title')}
+                  className={`shortsTopBtn playbackModeIndicator${tuneMenuOpen ? ' active' : ''}`}
+                  ref={tuneBtnRef}
+                  aria-label={t('shorts.playbackMode.options')}
+                  title={t('shorts.playbackMode.options')}
                   aria-haspopup="menu"
-                  aria-expanded={subtitleMenuOpen}
-                  onClick={(e) => { e.stopPropagation(); openSubtitleMenu(); }}
+                  aria-expanded={tuneMenuOpen}
+                  onClick={(e) => { e.stopPropagation(); openTuneMenu(); }}
                   onTouchStart={(e) => e.stopPropagation()}
-                  onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); openSubtitleMenu(); }}
+                  onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); openTuneMenu(); }}
                 >
-                  <Icon name={selectedSubtitleLang ? 'closed_caption' : 'closed_caption_disabled'} size={20} fill={!!selectedSubtitleLang} />
+                  <Icon name={playbackModeIcon} size={20} />
                 </button>
-              )}
-              <button
-                type="button"
-                className={`shortsTopBtn playbackModeIndicator${tuneMenuOpen ? ' active' : ''}`}
-                ref={tuneBtnRef}
-                aria-label={t('shorts.playbackMode.options')}
-                title={t('shorts.playbackMode.options')}
-                aria-haspopup="menu"
-                aria-expanded={tuneMenuOpen}
-                onClick={(e) => { e.stopPropagation(); openTuneMenu(); }}
-                onTouchStart={(e) => e.stopPropagation()}
-                onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); openTuneMenu(); }}
-              >
-                <Icon name={playbackModeIcon} size={20} />
-              </button>
-              <button
-                type="button"
-                className="shortsTopBtn muteIndicator"
-                aria-label={(isMuted || unmutePending) ? t('player.controls.unmute') : t('player.controls.mute')}
-                title={(isMuted || unmutePending) ? t('player.controls.unmute') : t('player.controls.mute')}
-                onClick={(e) => { e.stopPropagation(); toggleMute(); }}
-                onTouchStart={(e) => e.stopPropagation()}
-                onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); toggleMute(); }}
-              >
-                <Icon name={(isMuted || unmutePending) ? 'volume_off' : 'volume_up'} size={20} />
-              </button>
-            </div>
+                <button
+                  type="button"
+                  className="shortsTopBtn muteIndicator"
+                  aria-label={(isMuted || unmutePending) ? t('player.controls.unmute') : t('player.controls.mute')}
+                  title={(isMuted || unmutePending) ? t('player.controls.unmute') : t('player.controls.mute')}
+                  onClick={(e) => { e.stopPropagation(); toggleMute(); }}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); toggleMute(); }}
+                >
+                  <Icon name={(isMuted || unmutePending) ? 'volume_off' : 'volume_up'} size={20} />
+                </button>
+              </div>
+            )}
             {/* Playback mode fading text indicator */}
             <div className={`modeIndicatorText ${showModeIndicator ? 'visible' : ''}`}>
               <Icon name={playbackModeIcon} size={16} />
@@ -3722,19 +3756,37 @@ const VideoShort = () => {
             );
           })()}
 
-          {/* Progress bar */}
-          <div
-            className="videoProgressBar"
-            ref={progressBarRef}
-            onMouseDown={handleProgressMouseDown}
-            onClick={(e) => e.stopPropagation()}
-            onTouchStart={(e) => { e.stopPropagation(); setIsScrubbing(true); isScrubbingRef.current = true; handleProgressBarInteraction(e.touches[0]); }}
-            onTouchMove={(e) => { e.stopPropagation(); if (isScrubbingRef.current) handleProgressBarInteraction(e.touches[0]); }}
-            onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); setIsScrubbing(false); isScrubbingRef.current = false; }}
-          >
-            <div className="videoProgressFill" ref={progressFillRef} style={{ width: '0%' }} />
-            <div className="videoProgressHandle" ref={progressHandleRef} style={{ left: '0%' }} />
-          </div>
+          {/* Progress bar. Watching a story on a phone (30a), it is the current one of
+              the story segments across the top, under the creator. */}
+          {isStoryView ? (
+            <div
+              className="storyHead"
+              onClick={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+            >
+              <div className="storyHead__segs">
+                {videos.map((v, i) => (i === currentIndex
+                  ? <div key={v.id || i} className="storyHead__seg is-current">{progressBar}</div>
+                  : <span key={v.id || i} className={`storyHead__seg${i < currentIndex ? ' is-done' : ''}`} />))}
+              </div>
+              <div className="storyHead__row">
+                <Link to={`/@${currentVideo.author}`} className="storyHead__who">
+                  <HiveAvatar username={currentVideo.author} size={null} alt="" imgClassName="storyHead__avatar" />
+                  <span className="storyHead__names">
+                    <b>{isOwnShort ? t('shorts.stories.you') : currentVideo.author}</b>
+                    {currentVideo.timeAgo && !String(currentVideo.timeAgo).includes('NaN') && <span>{currentVideo.timeAgo}</span>}
+                  </span>
+                </Link>
+                <button type="button" className="storyHead__btn" onClick={togglePlayPause} aria-label={isPlaying ? t('common.actions.pause') : t('common.actions.play')}>
+                  <Icon name={isPlaying ? 'pause' : 'play_arrow'} size={20} fill />
+                </button>
+                <button type="button" className="storyHead__btn" onClick={() => navigate(-1)} aria-label={t('common.actions.close')}>
+                  <Icon name="close" size={20} />
+                </button>
+              </div>
+            </div>
+          ) : progressBar}
 
           {/* Loading overlay for short navigation */}
           {shortNavLoading && (
@@ -3744,7 +3796,7 @@ const VideoShort = () => {
           )}
 
           {/* Mobile back button (left of the feed switch) */}
-          {shortHistoryRef.current.length === 0 && (
+          {shortHistoryRef.current.length === 0 && !isStoryView && (
             <button
               type="button"
               className="shortBackBtn mobileOnly"
@@ -3756,7 +3808,7 @@ const VideoShort = () => {
           )}
 
           {/* Stories mode button (next to back button on mobile): only in stories mode */}
-          {isStoriesMode && (
+          {isStoriesMode && !isStoryView && (
             <button
               type="button"
               className="shortStoriesBtn mobileOnly"
@@ -4103,7 +4155,7 @@ const VideoShort = () => {
                 )}
               </div>
             )}
-            {!isDeskLayout && (
+            {!isDeskLayout && !isStoryView && (
               <div className="userRow" onClick={(e) => e.stopPropagation()}>
                 <AuthorBadge
                   author={currentVideo.author}
@@ -4143,7 +4195,7 @@ const VideoShort = () => {
                 </span>
               )}
               {/* The poster's own live story: who saw it, and keeping it as a short. */}
-              {storyHoursLeft > 0 && user && currentVideo.author === user && currentVideo.hivePermlink && (
+              {storyHoursLeft > 0 && user && currentVideo.author === user && currentVideo.hivePermlink && !isStoryView && (
                 <StoryOwnerTools
                   author={currentVideo.author}
                   hivePermlink={currentVideo.hivePermlink}
@@ -4401,6 +4453,77 @@ const VideoShort = () => {
 
         </div>
 
+        {/* The foot of a story on a phone. Your own live story: who saw it, keep
+            it, share it (24d). Somebody else's: reply, vote, send (30a). */}
+        {isStoryView && !adPlaying && (
+          isOwnShort ? (
+            storyHoursLeft > 0 && currentVideo.hivePermlink && (
+              <div className="storyFoot" onClick={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} onTouchEnd={(e) => e.stopPropagation()}>
+                <StoryOwnerTools
+                  variant="panel"
+                  author={currentVideo.author}
+                  hivePermlink={currentVideo.hivePermlink}
+                  onShare={() => setShareChooserOpen(true)}
+                  onKept={() => {
+                    const kept = currentVideo;
+                    setVideos((list) => list.map((v) => (v === kept ? { ...v, storyExpiresAt: null } : v)));
+                  }}
+                />
+              </div>
+            )
+          ) : (
+            <div className="storyFoot storyReply" onClick={(e) => e.stopPropagation()} onTouchStart={(e) => e.stopPropagation()} onTouchEnd={(e) => e.stopPropagation()}>
+              <CommentDropZone
+                className="storyReply__box"
+                images={bottomCommentImages}
+                value={newComment}
+                setValue={setNewComment}
+                disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
+              >
+                <textarea
+                  ref={bottomCommentRef}
+                  rows={1}
+                  placeholder={
+                    currentVideo.hivePostMissing
+                      ? t('shorts.comments.unavailable')
+                      : (user || incubationHandle) ? t('shorts.stories.replyTo', { user: currentVideo.author }) : t('shorts.comments.loginPlaceholder')
+                  }
+                  value={newComment}
+                  onChange={(e) => {
+                    setNewComment(bottomCommentEmoji.change(e));
+                    e.target.style.height = 'auto';
+                    e.target.style.height = e.target.scrollHeight + 'px';
+                  }}
+                  onKeyDown={bottomCommentEmoji.keyDown}
+                  onBlur={bottomCommentEmoji.blur}
+                  disabled={!(user || incubationHandle) || currentVideo.hivePostMissing}
+                  onPaste={bottomCommentImages.onPaste}
+                />
+                {bottomCommentEmoji.popup}
+              </CommentDropZone>
+              <button
+                type="button"
+                className={`storyReply__btn is-heart${currentVideo.isLiked ? ' is-on' : ''}`}
+                aria-pressed={!!currentVideo.isLiked}
+                aria-label={t('watch.actions.vote')}
+                disabled={currentVideo.hivePostMissing}
+                onClick={() => toggleVoteTooltip(currentVideo.author, currentVideo.hivePermlink)}
+              >
+                <Icon name="favorite" size={24} fill />
+              </button>
+              <button
+                type="button"
+                className="storyReply__btn"
+                onClick={() => handlePostComment(currentVideo.author, currentVideo.hivePermlink || currentVideo.permlink, newComment, false, !!currentVideo._incubation)}
+                disabled={!(user || incubationHandle) || !newComment.trim() || postingComment || currentVideo.hivePostMissing}
+                aria-label={t('shorts.comments.send')}
+              >
+                {postingComment ? <Icon name="progress_activity" size={24} className="v2-spin" /> : <Icon name="send" size={24} fill />}
+              </button>
+            </div>
+          )
+        )}
+
         <ShareChooserModal
           open={shareChooserOpen}
           url={`${window.location.origin}/shorts?v=${currentVideo.author}/${currentVideo.permlink}`}
@@ -4461,24 +4584,28 @@ const VideoShort = () => {
           onTouchEnd={handleCommentsDragEnd}
         />
 
-        {/* Phones: the sheet's title bar. Desktop's panel is always there (18a),
-            so it has no title or close, only its tabs. */}
-        {!isDeskLayout && (
-          <ModalHeader className="commentsHeader" title={t('shorts.panel.discussion')} onClose={handleToggleComments} />
+        {/* Phones: a sheet with its title bar (27d style); you swipe to the next
+            short there, so no Up next. Desktop's panel is always there (18a): no
+            title or close, only its tabs. */}
+        {isDeskLayout ? (
+          <Segmented
+            className="shortsSideTabs"
+            size={36}
+            label={t('shorts.comments.title')}
+            value={sideTab}
+            onChange={setSideTab}
+            options={[
+              { value: 'discussion', label: t('shorts.panel.discussion'), count: currentVideo.stats.comments || undefined },
+              { value: 'next', label: t('shorts.panel.upNext') },
+            ]}
+          />
+        ) : (
+          <ModalHeader className="commentsHeader" tone="cyan" title={t('shorts.comments.title')} onClose={handleToggleComments}>
+            <span className="commentsCount">{currentVideo.stats.comments}</span>
+          </ModalHeader>
         )}
-        <Segmented
-          className="shortsSideTabs"
-          size={36}
-          label={t('shorts.comments.title')}
-          value={sideTab}
-          onChange={setSideTab}
-          options={[
-            { value: 'discussion', label: t('shorts.panel.discussion'), count: currentVideo.stats.comments || undefined },
-            { value: 'next', label: t('shorts.panel.upNext') },
-          ]}
-        />
 
-        {sideTab === 'next' ? (
+        {sideTab === 'next' && isDeskLayout ? (
           <div className="shortsUpNext">
             {videos.slice(currentIndex + 1, currentIndex + 13).map((v, k) => (
               <button
@@ -4655,7 +4782,7 @@ const VideoShort = () => {
       {/* Mobile-only quick comment bar at the bottom (replaces the app nav bar
           on the shorts view). Hidden while the full comments panel is open, and
           OFF by default: enable it in Settings ("Comment bar on shorts"). */}
-      {!showComments && shortsCommentBar && (
+      {!showComments && shortsCommentBar && !isStoryView && (
         <div className="shortsBottomComment">
           <CommentDropZone
             className="commentInputBox"

@@ -159,7 +159,11 @@
     "submitTag": "Submit tag",
     "tagThisVideoFull": "Tag this video (counts as a 100% vote)",
     "justTag": "Don’t vote — just tag",
-    "addsAbout": "adds about {{value}}"
+    "justTagShort": "Just tag",
+    "voteAndTag": "Vote and tag",
+    "addsAbout": "adds about {{value}}",
+    "postSoFar_one": "{{value}} so far · {{count}} vote",
+    "postSoFar_other": "{{value}} so far · {{count}} votes"
   },
   "tagsPicker": {
     "autoTagged": "Auto-tagged: {{tags}}",

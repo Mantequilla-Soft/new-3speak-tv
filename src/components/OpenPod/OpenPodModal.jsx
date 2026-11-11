@@ -210,7 +210,6 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
           {(streamEnded || roomStatus === 'gone') ? (
             <div className="openpod-ended">
               <div className="v2-success is-accent openpod-ended__card">
-                <Icon name={streamEnded ? 'check_circle' : 'stop_circle'} size={28} className="openpod-ended__icon" />
                 <h2 className="openpod-ended__title">
                   {streamEnded ? t('live.modal.yourStreamEnded') : t('live.modal.thisStreamEnded')}
                 </h2>
@@ -306,8 +305,10 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
             />
           ) : (
             <div className="openpod-connecting" role="status">
-              <Icon name="progress_activity" size={20} className="v2-spin openpod-connecting__spin" />
-              <span>{sessionToken ? t('live.modal.connecting') : t('live.modal.authenticating')}</span>
+              <div className="openpod-connecting__card">
+                <Icon name="progress_activity" size={20} className="v2-spin openpod-connecting__spin" />
+                <span>{sessionToken ? t('live.modal.connecting') : t('live.modal.authenticating')}</span>
+              </div>
             </div>
           )}
         </HangoutsProvider>

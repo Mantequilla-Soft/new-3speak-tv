@@ -427,14 +427,21 @@ const applyTabOrder = (sections, order) => {
   return out;
 };
 
-// Customize Home (34b): move the sections up or down and turn off the ones you
-// don't want. Mounted only while open, so it starts from the saved layout. At
-// least one section always stays on.
+// Customize Home (34b): drag the sections by their grip (or move them with the
+// arrows, which show on keyboard focus), and turn off the ones you don't want.
+// Below the feeds, two switches for what the feeds mix in: the Shorts rails
+// (the same setting as in Settings) and live streams. Mounted only while open,
+// so it starts from the saved layout. At least one feed always stays on.
 function CustomizeHomeDialog({ sections, hidden, onClose, onSave }) {
   const { t } = useTranslation();
+  const inlineShorts = useAppStore((st) => st.inlineShorts);
+  const setInlineShorts = useAppStore((st) => st.setInlineShorts);
   const byKey = useMemo(() => new Map(sections.map((s) => [s.key, s])), [sections]);
   const [order, setOrder] = useState(() => sections.map((s) => s.key));
   const [off, setOff] = useState(() => new Set(hidden));
+  const [shortsOn, setShortsOn] = useState(inlineShorts !== false);
+  const [dragKey, setDragKey] = useState(null);
+  const listRef = useRef(null);
   const onCount = order.filter((k) => !off.has(k)).length;
   const move = (i, dir) => setOrder((prev) => {
     const j = i + dir;
@@ -448,40 +455,81 @@ function CustomizeHomeDialog({ sections, hidden, onClose, onSave }) {
     if (on) next.delete(key); else next.add(key);
     return next;
   });
+  // Drag by the grip: the row under the pointer's height takes the dragged one.
+  const onGripDown = (key) => (e) => {
+    if (e.button != null && e.button !== 0) return;
+    e.preventDefault();
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    setDragKey(key);
+  };
+  const onGripMove = (e) => {
+    if (!dragKey || !listRef.current) return;
+    const rows = [...listRef.current.querySelectorAll('[data-section-key]')];
+    const over = rows.find((r) => {
+      const b = r.getBoundingClientRect();
+      return e.clientY >= b.top && e.clientY <= b.bottom;
+    });
+    const target = over?.dataset.sectionKey;
+    if (!target || target === dragKey) return;
+    setOrder((prev) => {
+      const next = prev.filter((k) => k !== dragKey);
+      next.splice(prev.indexOf(target), 0, dragKey);
+      return next;
+    });
+  };
+  const onGripUp = () => setDragKey(null);
+  const save = () => {
+    if (shortsOn !== (inlineShorts !== false)) setInlineShorts(shortsOn);
+    onSave(order, [...off].filter((k) => byKey.has(k) || k === 'live'));
+  };
+  const row = ({ key, icon, label, on, onChange, canDisable = true, grip = true, i }) => (
+    <div key={key} data-section-key={grip ? key : undefined} className={cx('home-customize-row', !on && 'is-off', dragKey === key && 'is-dragging')}>
+      {grip ? (
+        <span className="home-customize-grip" aria-hidden="true" title={t('feeds.home.dragToReorder')}
+          onPointerDown={onGripDown(key)} onPointerMove={onGripMove} onPointerUp={onGripUp} onPointerCancel={onGripUp}>
+          <Icon name="drag_indicator" size={20} />
+        </span>
+      ) : <span className="home-customize-grip is-blank" aria-hidden="true" />}
+      <span className="home-customize-icon"><Icon name={icon} size={20} /></span>
+      <b className="home-customize-label">{label}</b>
+      {grip && (
+        <span className="home-customize-moves">
+          <IconButton icon="arrow_upward" label={t('profile.layout.moveUp')} size={32} variant="ghost" disabled={i === 0} onClick={() => move(i, -1)} />
+          <IconButton icon="arrow_downward" label={t('profile.layout.moveDown')} size={32} variant="ghost" disabled={i === order.length - 1} onClick={() => move(i, 1)} />
+        </span>
+      )}
+      <Toggle
+        checked={on}
+        label={on ? t('profile.layout.hide') : t('profile.layout.show')}
+        disabled={on && !canDisable}
+        onChange={onChange}
+      />
+    </div>
+  );
   return (
     <Dialog
       open
       onClose={onClose}
       title={t('feeds.home.customizeTitle')}
-      sub={t('feeds.home.customizeHint')}
       width={460}
+      className="home-customize-dialog"
       closeLabel={t('common.actions.close')}
       footer={(
-        <Button variant="primary" size={48} block trailing="check" onClick={() => onSave(order, [...off].filter((k) => byKey.has(k)))}>
+        <Button variant="primary" size={48} block trailing="check" className="home-customize-save" onClick={save}>
           {t('profile.layout.save')}
         </Button>
       )}
     >
-      <div className="home-customize-list">
+      <p className="home-customize-hint">{t('feeds.home.customizeHint')}</p>
+      <div className="home-customize-list" ref={listRef}>
         {order.map((key, i) => {
           const s = byKey.get(key);
           if (!s) return null;
           const on = !off.has(key);
-          return (
-            <div key={key} className={cx('home-customize-row', !on && 'is-off')}>
-              <span className="home-customize-icon"><Icon name={iconsByTitle[s.title] || 'view_day'} size={20} /></span>
-              <b className="home-customize-label">{s.label}</b>
-              <IconButton icon="arrow_upward" label={t('profile.layout.moveUp')} size={32} variant="ghost" disabled={i === 0} onClick={() => move(i, -1)} />
-              <IconButton icon="arrow_downward" label={t('profile.layout.moveDown')} size={32} variant="ghost" disabled={i === order.length - 1} onClick={() => move(i, 1)} />
-              <Toggle
-                checked={on}
-                label={on ? t('profile.layout.hide') : t('profile.layout.show')}
-                disabled={on && onCount <= 1}
-                onChange={(v) => toggle(key, v)}
-              />
-            </div>
-          );
+          return row({ key, icon: iconsByTitle[s.title] || 'view_day', label: s.label, on, i, canDisable: onCount > 1, onChange: (v) => toggle(key, v) });
         })}
+        {row({ key: 'shorts', icon: 'view_day', label: t('feeds.tabs.shorts'), on: shortsOn, grip: false, onChange: setShortsOn })}
+        {row({ key: 'live', icon: 'sensors', label: t('feeds.live.title'), on: !off.has('live'), grip: false, onChange: (v) => toggle('live', v) })}
       </div>
     </Dialog>
   );
@@ -700,7 +748,9 @@ const HomeGrouped = () => {
   // for public feeds; "following" for the follow feed / personalised tabs.
   const liveAll = useLiveStreams();
   const liveFollowing = useLiveStreams({ following: true });
-  const withLive = (live, vids) => (live.length ? [...live, ...vids] : vids);
+  // "Live now" switched off in Customize Home (34b) keeps live tiles out.
+  const liveOff = hiddenTabs.includes('live');
+  const withLive = (live, vids) => (!liveOff && live.length ? [...live, ...vids] : vids);
 
   // ── Build the section list (natural order), then apply the user's saved order ──
   const baseSections = [

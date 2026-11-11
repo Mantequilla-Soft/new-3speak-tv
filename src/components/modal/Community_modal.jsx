@@ -55,7 +55,7 @@ function MarkdownText({ text }) {
   return <div className="community-card-text markdown-view" dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
-function CommunityCard({ community, onSelect }) {
+function CommunityCard({ community, onSelect, selected = false, joined = false }) {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const cardRef = useRef(null);
@@ -87,11 +87,17 @@ function CommunityCard({ community, onSelect }) {
   });
 
   const subs = community.subscribers ?? detail?.subscribers;
-  const authors = community.num_authors ?? detail?.num_authors;
   const bio = community.about || detail?.about;
 
+  // 32c: a 2px-outlined row: the picture, the name, "Joined · 4.2K members",
+  // and a cyan check on the one already picked. The about text sits in the
+  // folded detail.
+  const sub = [
+    joined ? t('communities.directory.joined') : null,
+    subs != null ? t('communities.picker.members', { count: subs, n: formatCount(subs) }) : null,
+  ].filter(Boolean).join(' · ');
   return (
-    <div ref={cardRef} className={`community-card${expanded ? " expanded" : ""}`}>
+    <div ref={cardRef} className={`community-card${expanded ? " expanded" : ""}${selected ? " is-on" : ""}`} title={bio || undefined}>
       <div className="community-card-main" onClick={() => onSelect(community)}>
         <AccountImg
           className="community-card-avatar"
@@ -102,16 +108,9 @@ function CommunityCard({ community, onSelect }) {
         />
         <div className="community-card-info">
           <span className="community-card-title">{community.title || community.name}</span>
-          <span className="community-card-stats">
-            {subs != null && (
-              <span className="community-card-stat"><Icon name="group" size={14} /> <span className="num">{formatCount(subs)}</span></span>
-            )}
-            {authors != null && (
-              <span className="community-card-stat"><Icon name="edit" size={14} /> <span className="num">{formatCount(authors)}</span></span>
-            )}
-          </span>
-          {bio && <span className="community-card-bio">{bio}</span>}
+          {sub && <span className="community-card-sub">{sub}</span>}
         </div>
+        {selected && <Icon name="check_circle" size={20} className="community-card-check" />}
         <button
           type="button"
           className="community-card-toggle"
@@ -125,6 +124,7 @@ function CommunityCard({ community, onSelect }) {
 
       {expanded && (
         <div className="community-card-detail">
+          {bio && <p className="community-card-text">{bio}</p>}
           {isFetching && (
             <div className="community-card-loading"><Icon name="progress_activity" size={16} className="v2-spin" /> {t('common.status.loading')}</div>
           )}
@@ -140,7 +140,7 @@ function CommunityCard({ community, onSelect }) {
               <MarkdownText text={toBulletList(detail.rules)} />
             </div>
           )}
-          {!isFetching && !detail?.description && !detail?.rules && (
+          {!isFetching && !bio && !detail?.description && !detail?.rules && (
             <div className="community-card-loading">{t('communities.picker.noExtraInfo')}</div>
           )}
           <Button variant="secondary" size={36} icon="check" className="community-card-select" onClick={() => onSelect(community)}>
@@ -279,6 +279,10 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
     .slice(0, POPULAR_LIMIT);
   const showPopular = noSubs && popular.length > 0;
 
+  const selectedName = typeof selected === "string" ? selected : selected?.name;
+  const joinedSet = new Set(subscriptions.map((c) => c.name));
+  const cardProps = (community) => ({ selected: !!selectedName && community.name === selectedName, joined: joinedSet.has(community.name) });
+
   if (!isOpen) return null;
 
   const onSelect = (community) => {
@@ -291,8 +295,10 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
   return (
     <DialogShell
       onClose={close}
-      title={t('communities.picker.title')}
-      width={520}
+      title={t('communities.picker.postTo')}
+      side
+      tone="cyan"
+      width={420}
       zIndex={1100}
       className="community-modal"
       bodyClassName="community-modal__body"
@@ -324,6 +330,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                     key={community.name || index}
                     community={community}
                     onSelect={onSelect}
+                    {...cardProps(community)}
                   />
                 ))
               ) : (
@@ -336,6 +343,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                   key={defaultCommunity.name}
                   community={defaultCommunity}
                   onSelect={onSelect}
+                  {...cardProps(defaultCommunity)}
                 />
 
                 {/* The user's own subscriptions, listed up front so posting to
@@ -353,6 +361,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                     key={community.name || index}
                     community={community}
                     onSelect={onSelect}
+                    {...cardProps(community)}
                   />
                 ))}
                 {user && !subsPending && subsError && (
@@ -369,6 +378,7 @@ function CommunitieModal({ isOpen, data, close, setCommunity, selected }) {
                         key={community.name || index}
                         community={community}
                         onSelect={onSelect}
+                        {...cardProps(community)}
                       />
                     ))}
                   </>

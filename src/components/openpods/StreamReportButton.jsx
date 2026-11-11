@@ -83,12 +83,10 @@ export default function StreamReportButton({ roomName, host, variant = 'inline' 
         dismissible={!sending}
         className="stream-report"
         footer={(
-          <>
-            <Button variant="secondary" className="stream-report__cancel" onClick={close} disabled={sending}>{t('common.actions.cancel')}</Button>
-            <Button variant="primary" icon="flag" className="stream-report__submit" onClick={submit} disabled={!reason || sending} loading={sending}>
-              {sending ? t('live.report.sending') : t('live.report.submit')}
-            </Button>
-          </>
+          // One 48px submit with the flag at its end (39c); the sheet's X cancels.
+          <Button variant="primary" size={48} block next={false} trailing="flag" className="stream-report__submit is-next" onClick={submit} disabled={!reason || sending} loading={sending}>
+            {sending ? t('live.report.sending') : t('live.report.submit')}
+          </Button>
         )}
       >
         <p className="stream-report__sub">

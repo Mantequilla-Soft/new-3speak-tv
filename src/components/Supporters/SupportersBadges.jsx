@@ -5,19 +5,24 @@ import AccountImg from '../HiveAvatar/AccountImg';
 import { useSupporters, useSupported, formatSupportTotal } from '../../lib/supports';
 import './Supporters.scss';
 
-// One chip: the other account's avatar, the total, and an icon whose SHAPE
-// says which way the support went, so it reads without colour: a gift for
-// support received, a hand giving a heart for support given. (Arrows read as
-// a value going up or down.)
-// `account` null: the anonymous Lightning tips, all in one chip that links nowhere.
+// One supporter ring (30c): the other account's squircle avatar inside a 3px
+// ring, a corner badge whose SHAPE says which way the support went (a hand
+// giving a heart for a tip to this profile, a heart for a creator this profile
+// tipped) so it reads without colour, and the total under it in mono. Accent
+// = tipped this profile, cyan = this profile tipped them.
+// `account` null: the anonymous Lightning tips, all in one ring that links nowhere.
 function SupportChip({ account, total, direction, label }) {
   const inner = (
     <>
-      {account
-        ? <AccountImg account={account} alt="" loading="lazy" className="sp-badge-img" />
-        : <span className="sp-badge-img sp-badge-bolt"><Icon name="bolt" size={16} fill /></span>}
+      <span className="sp-ring-av">
+        {account
+          ? <AccountImg account={account} alt="" loading="lazy" className="sp-badge-img" />
+          : <span className="sp-badge-img sp-badge-bolt"><Icon name="bolt" size={18} fill /></span>}
+        <span className="sp-ring-badge" aria-hidden="true">
+          <Icon name={direction === 'in' ? 'volunteer_activism' : 'favorite'} size={12} fill />
+        </span>
+      </span>
       <span className="sp-badge-amount">{total}</span>
-      <Icon name={direction === 'in' ? 'redeem' : 'volunteer_activism'} size={14} className="sp-badge-dir" />
     </>
   );
   if (!account) {

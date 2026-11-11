@@ -49,7 +49,6 @@
   h2 {
     margin: 0;
     @include v2.text(heading);
-    font-size: 20px;
     color: var(--text);
   }
 
@@ -104,7 +103,29 @@
 .backfill-bar-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+}
+
+// "Select all · Clear": two small muted text buttons (46d).
+.backfill-bar-links {
+  display: inline-flex;
+  align-items: center;
+
+  button {
+    min-height: 32px;
+    padding: 0 2px;
+    border: 0;
+    background: none;
+    font: inherit;
+    @include v2.text(meta-sm);
+    color: var(--muted);
+    cursor: pointer;
+
+    &:hover:not(:disabled) { color: var(--text); }
+    &:disabled { opacity: .45; cursor: not-allowed; }
+  }
+
+  button + button::before { content: "·"; margin-right: 4px; color: var(--muted); }
 }
 
 // Each qualification on its own line: they are conditions, and run together
@@ -122,6 +143,7 @@
   .backfill-bar-count { margin-left: 0; }
   .backfill-bar-actions { flex: 1 0 100%; flex-wrap: wrap; }
   .backfill-bar-actions .v2-btn { height: 44px; border-radius: v2.radius-for(44); }
+  .backfill-bar-links button { min-height: 44px; }
   .backfill-publish.v2-btn { flex: 1; }
 }
 
@@ -289,49 +311,24 @@
   overflow: hidden;
 }
 
-.backfill-row-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  @include v2.text(meta-sm);
-  color: var(--muted);
-}
-
-.backfill-tag {
-  display: inline-flex;
-  align-items: center;
-  height: 18px;
-  padding: 0 6px;
-  border-radius: 6px;
-  background: var(--surface-2);
-  font-size: 10px;
-  font-weight: 700;
-}
-
 .backfill-row-error {
   @include v2.text(meta);
   color: var(--accent);
 }
 
-/* The face of the account a follow is for. HiveAvatar wraps the <img>, so the
-   image itself has to be the round one. */
-.backfill-row-avatar {
-  flex: none;
-  width: 28px;
-  height: 28px;
+.backfill-row-icon { flex: none; color: var(--muted); }
 
-  > img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    background: var(--avatar);
-  }
+// The row's own date, on the right before the status (46d).
+.backfill-row-date {
+  flex: none;
+  @include v2.text(meta-sm);
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 @include v2.mobile {
-  // The status pill drops under the label, lined up with it.
-  .backfill-status { margin-left: 28px; }
+  // The date and the status pill drop under the label, lined up with it.
+  .backfill-row-date { margin-left: 56px; }
 }
 
 /* ------------------------------------------------------- side column --- */

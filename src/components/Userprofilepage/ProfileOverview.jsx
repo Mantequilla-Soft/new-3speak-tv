@@ -466,17 +466,17 @@ export default function ProfileOverview({
               saving={saving}
               onSave={saveDraft}
               onCancel={stopEditing}
-              onReset={() => (editDevice === 'mobile'
-                ? commit((c) => ({ ...c, mobile: null }))   // phones follow the desktop again
-                : updateDraft(() => normalizeLayout(DEFAULT_SECTIONS)))}
+              // The standard page again, on phones as well.
+              onReset={() => commit(() => ({ sections: normalizeLayout(DEFAULT_SECTIONS), mobile: null }))}
+              // Phones follow the desktop layout again (37c "devices").
+              onMatchDesktop={() => commit((c) => ({ ...c, mobile: null }))}
+              canMatchDesktop={!!edit?.mobile}
               canUndo={!!edit?.past.length}
               canRedo={!!edit?.future.length}
               onUndo={undo}
               onRedo={redo}
               device={editDevice}
               onDevice={isPhoneWidth ? null : setDevice}
-              addablePlaylists={addablePlaylists}
-              onAddPlaylist={addPlaylistSection}
               onTour={() => setTourOpen(true)}
             />
             {tourOpen ? <ProfileLayoutTour onClose={() => setTourOpen(false)} /> : null}
@@ -542,6 +542,8 @@ export default function ProfileOverview({
               sections={draft.filter((s) => s.hidden && !isSideColumn(s))}
               labelFor={editLabel}
               onShow={(id) => patchSection(id, { hidden: false })}
+              addablePlaylists={addablePlaylists}
+              onAddPlaylist={addPlaylistSection}
             />
             </>
             )}

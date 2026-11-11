@@ -1,16 +1,18 @@
 @use "../../styles/v2" as v2;
 
-// Voters / topic tooltip over the watch page (design 02 voters, STYLE_GUIDE §11
-// "a long list in a panel"): a floating v2 menu card with an eyebrow head, a
-// list of fixed height that scrolls inside, avatar + @name rows, and the
-// reward (money: accent mono) or weight on the right.
+// Voters / topic tooltip over the watch page (design 40a "Top voters", 02
+// voters, STYLE_GUIDE §11 "a long list in a panel"): a floating v2 card with
+// the title and the count in mono, a list of fixed height that scrolls inside,
+// rounded-square avatars + names, the weight in muted mono and the reward
+// (money: accent mono) on the right.
 .votes-tooltip {
   @include v2.menu;
   position: absolute;
   z-index: 9999;
-  min-width: 220px;
-  max-width: 300px;
-  padding: 8px;
+  min-width: 260px;
+  max-width: 320px;
+  padding: 10px;
+  border-radius: var(--r-2xl);
   color: var(--text);
   pointer-events: none;
   transition: opacity var(--t-fast) var(--ease);
@@ -25,8 +27,10 @@
   gap: 8px;
   padding: 4px 4px 6px 6px;
 
-  > span { @include v2.text(eyebrow); color: var(--muted); }
+  > span:first-child { flex: 1; @include v2.text(title-sm); color: var(--text); }
 }
+
+.votes-tooltip-count { @include v2.mono(12, 700); color: var(--muted); }
 
 .votes-tooltip-close {
   display: grid;
@@ -53,8 +57,8 @@
 .votes-tooltip-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 36px;
+  gap: 10px;
+  min-height: 40px;
   padding: 0 6px;
   border-radius: var(--r-md);
 
@@ -62,9 +66,9 @@
 }
 
 .votes-tooltip-avatar {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
   object-fit: cover;
   background: var(--avatar);
   flex: none;
@@ -81,6 +85,12 @@
   text-overflow: ellipsis;
 
   &:hover { color: var(--cyan); }
+}
+
+.votes-tooltip-pct {
+  @include v2.mono(12, 700);
+  color: var(--muted);
+  flex: none;
 }
 
 .votes-tooltip-reward {

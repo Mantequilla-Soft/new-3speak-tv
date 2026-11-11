@@ -429,6 +429,7 @@ function PodcastFinder({ user, searchEnabled, personEnabled, subscriptions, onFo
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState(null);
   const fileRef = useRef(null);
+  const inputRef = useRef(null);
   const followed = useFollowedKeys(subscriptions);
   const asLink = linkMode || !searchEnabled;
 
@@ -506,6 +507,7 @@ function PodcastFinder({ user, searchEnabled, personEnabled, subscriptions, onFo
             <label className="pod-finder-field">
               <Icon name={asLink ? 'link' : 'search'} size={18} />
               <input
+                ref={inputRef}
                 type={asLink ? 'url' : 'search'}
                 inputMode={asLink ? 'url' : undefined}
                 value={query}
@@ -531,7 +533,7 @@ function PodcastFinder({ user, searchEnabled, personEnabled, subscriptions, onFo
                 type="button"
                 className={`pod-finder-link${asLink ? ' is-on' : ''}`}
                 aria-pressed={asLink}
-                onClick={() => { setLinkMode((v) => !v); setResults(null); }}
+                onClick={() => { setLinkMode((v) => !v); setResults(null); inputRef.current?.focus(); }}
               >
                 <Icon name="rss_feed" size={18} /> {t('audio.podcasts.rss.labelLink')}
               </button>

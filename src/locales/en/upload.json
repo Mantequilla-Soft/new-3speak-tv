@@ -325,9 +325,20 @@
       "info": "Queues the post and publishes it automatically at the time you choose, at least 15 minutes from now and up to 90 days out. It is broadcast by @threespeak on your behalf, so you will be asked to authorize that once.",
       "immediately": "Publish immediately.",
       "changeTime": "Change time",
-      "note": "At least 15 minutes from now, up to 90 days. Posted automatically by @threespeak on your behalf — you will be asked to authorize this once."
+      "note": "At least 15 minutes from now, up to 90 days. Posted automatically by @threespeak on your behalf — you will be asked to authorize this once.",
+      "short": "Schedule",
+      "publishLater": "Publish later",
+      "scheduleFor": "Schedule for {{when}}",
+      "publishNow": "Publish right away"
     },
-    "proceed": "Proceed"
+    "proceed": "Proceed",
+    "nextStep": "Next: {{step}}",
+    "tagsCount_one": "{{count}} tag",
+    "tagsCount_other": "{{count}} tags",
+    "shareRewards": "Share rewards",
+    "shareRewardsSub": "Split with collaborators",
+    "advanced": "NSFW / payout",
+    "advancedSub": "Advanced"
   },
   "review": {
     "payoutDeclined": "Declined (rewards burned)",

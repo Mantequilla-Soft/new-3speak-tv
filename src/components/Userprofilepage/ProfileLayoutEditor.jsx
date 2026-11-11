@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   DndContext, DragOverlay, useDraggable, useDroppable, PointerSensor, useSensor, useSensors, pointerWithin,
 } from '@dnd-kit/core';
@@ -14,13 +15,13 @@ import './ProfileLayoutEditor.scss';
  * properties (gear) icon that opens that section's settings. Owner only; see
  * ProfileOverview for how the pieces are put together.
  *
- *   LayoutEditBar   sticky bar: add a playlist section, reset, cancel, save
+ *   LayoutEditBar   sticky bar: device, undo/redo, match desktop, reset, cancel, save
  *   LayoutDnd       drag context around the 12-column grid
  *   EditableSection the frame around one section (incl. its width handle)
  *   FreeCell        a row's empty columns, as a drop target
  *   RowGap          the line between rows: drop for a new full-width row
  *   DockGuide       the side column the links page will become, while held
- *   HiddenTray      the switched-off sections, below the grid
+ *   HiddenTray      the switched-off sections and "add a playlist", below the grid
  */
 
 const PHONE_MQ = '(max-width: 640px)';
@@ -101,14 +102,24 @@ function SectionSettings({ section, playlists, onPatch, mobile = false }) {
     );
   }
   if (def.size && !mobile) {
+    // Four tiles in a row, the picked one in accent (37c "Video size").
     fields.push(
       <div key="size" className="ple-field">
         <span>{t('profile.layout.fields.size')}</span>
-        <Segmented
-          value={section.size}
-          onChange={(size) => onPatch({ size })}
-          options={def.size.slice(0, -1).map((v) => ({ value: v, label: t(`profile.layout.fields.size_${v}`) }))}
-        />
+        <div className="ple-sizes" role="radiogroup" aria-label={t('profile.layout.fields.size')}>
+          {def.size.slice(0, -1).map((v) => (
+            <button
+              key={v}
+              type="button"
+              role="radio"
+              aria-checked={section.size === v}
+              className={`ple-size${section.size === v ? ' is-on' : ''}`}
+              onClick={() => onPatch({ size: v })}
+            >
+              {t(`profile.layout.fields.size_${v}`)}
+            </button>
+          ))}
+        </div>
       </div>,
     );
   }
@@ -187,13 +198,17 @@ function SectionSettings({ section, playlists, onPatch, mobile = false }) {
 }
 
 /**
- * The properties of one section. Anchored under its gear on desktop; a bottom
- * sheet on phones (portalled, so no transformed ancestor can trap `fixed`).
+ * The properties of one section: a panel docked to the right of the page on
+ * desktop (37c), a bottom sheet on phones.
  */
 function PropertiesPopover({ label, onClose, children }) {
   const { t } = useTranslation();
   const isPhone = useIsPhone();
   const ref = useRef(null);
+
+  // The panel is portalled away from its gear: take focus so the keyboard
+  // lands in it.
+  useEffect(() => { if (!isPhone) ref.current?.focus(); }, [isPhone]);
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -220,16 +235,19 @@ function PropertiesPopover({ label, onClose, children }) {
     );
   }
 
-  return (
-    <div ref={ref} className="ple-props" role="dialog" aria-label={label}>
+  // Desktop: the settings panel docked to the right of the page (37c), in a
+  // portal so no transformed ancestor can trap `fixed`.
+  return createPortal(
+    <div ref={ref} className="ple-props" role="dialog" aria-label={label} tabIndex={-1}>
       <div className="ple-props-head">
         <strong>{label}</strong>
         <button type="button" className="ple-icon" onClick={onClose} aria-label={t('common.actions.close')}>
-          <Icon name="close" size={18} />
+          <Icon name="close" size={20} />
         </button>
       </div>
       <div className="ple-props-body">{children}</div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -533,7 +551,7 @@ export function EditableSection({
           <>
             <button
               type="button"
-              className="ple-icon"
+              className="ple-icon ple-move"
               onClick={onMoveEarlier}
               disabled={isFirst}
               title={t('profile.layout.moveUp')}
@@ -543,7 +561,7 @@ export function EditableSection({
             </button>
             <button
               type="button"
-              className="ple-icon"
+              className="ple-icon ple-move"
               onClick={onMoveLater}
               disabled={isLast}
               title={t('profile.layout.moveDown')}
@@ -626,52 +644,69 @@ export function EditableSection({
  * the edit view lays out exactly like the page visitors get; the eye puts one
  * back where it was in the order.
  */
-export function HiddenTray({ sections, labelFor, onShow }) {
+export function HiddenTray({ sections, labelFor, onShow, addablePlaylists = [], onAddPlaylist }) {
   const { t } = useTranslation();
-  if (!sections.length) return null;
+  const canAdd = addablePlaylists.length > 0 && !!onAddPlaylist;
+  if (!sections.length && !canAdd) return null;
   return (
     <div className="ple-tray">
-      <span className="ple-tray-title">{t('profile.layout.hiddenTitle')}</span>
-      <div className="ple-tray-list">
-        {sections.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            className="ple-chip"
-            onClick={() => onShow(s.id)}
-            title={t('profile.layout.show')}
-          >
-            <Icon name="visibility_off" size={16} /> {labelFor(s)}
-          </button>
-        ))}
-      </div>
+      {sections.length ? (
+        <>
+          <span className="ple-tray-title">{t('profile.layout.hiddenTitle')}</span>
+          <div className="ple-tray-list">
+            {sections.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className="ple-chip"
+                onClick={() => onShow(s.id)}
+                title={t('profile.layout.show')}
+              >
+                <Icon name="visibility_off" size={16} /> {labelFor(s)}
+              </button>
+            ))}
+          </div>
+        </>
+      ) : null}
+      {/* 37c: "Add a playlist as a section" at the end of the tray. */}
+      {canAdd ? (
+        <label className="ple-add">
+          <Icon name="playlist_add" size={16} />
+          <select value="" onChange={(e) => onAddPlaylist(e.target.value)} aria-label={t('profile.layout.addPlaylist')}>
+            <option value="">{t('profile.layout.addPlaylist')}</option>
+            {addablePlaylists.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+          </select>
+        </label>
+      ) : null}
     </div>
   );
 }
 
-/** Sticky bar over the Overview while editing. */
+/**
+ * Sticky bar over the Overview while editing (37c): the title and its tour,
+ * then Desktop | Mobile, undo, redo, match desktop, reset, cancel and save.
+ */
 export function LayoutEditBar({
-  dirty, saving, onSave, onCancel, onReset, addablePlaylists = [], onAddPlaylist, onTour,
+  dirty, saving, onSave, onCancel, onReset, onTour, onMatchDesktop = null, canMatchDesktop = false,
   device = 'desktop', onDevice = null, canUndo = false, canRedo = false, onUndo, onRedo,
 }) {
   const { t } = useTranslation();
   return (
     <div className="ple-bar">
-      <div className="ple-titles">
-        <h3>
-          {t('profile.layout.title')}
-          <button
-            type="button"
-            className="ple-icon ple-tour-btn"
-            onClick={onTour}
-            title={t('profile.layout.tour.open')}
-            aria-label={t('profile.layout.tour.open')}
-          >
-            <Icon name="help" size={18} />
-          </button>
-        </h3>
-        <p>{device === 'mobile' ? t('profile.layout.mobileHint') : t('profile.layout.hint')}</p>
-      </div>
+      <h3 className="ple-title">
+        {t('profile.layout.title')}
+        <button
+          type="button"
+          className="ple-icon ple-tour-btn"
+          onClick={onTour}
+          title={t('profile.layout.tour.open')}
+          aria-label={t('profile.layout.tour.open')}
+        >
+          <Icon name="help" size={18} />
+        </button>
+      </h3>
+      {/* How it works, for screen readers; the tour shows it to everyone. */}
+      <p className="ple-hint">{device === 'mobile' ? t('profile.layout.mobileHint') : t('profile.layout.hint')}</p>
       <div className="ple-buttons">
         {/* No switch on a phone: there is only the phone layout to edit. */}
         {onDevice ? (
@@ -679,19 +714,10 @@ export function LayoutEditBar({
             value={device}
             onChange={onDevice}
             options={[
-              { value: 'desktop', label: t('profile.layout.deviceDesktop'), icon: <Icon name="desktop_windows" size={16} /> },
-              { value: 'mobile', label: t('profile.layout.deviceMobile'), icon: <Icon name="smartphone" size={16} /> },
+              { value: 'desktop', label: t('profile.layout.deviceDesktop') },
+              { value: 'mobile', label: t('profile.layout.deviceMobile') },
             ]}
           />
-        ) : null}
-        {addablePlaylists.length > 0 ? (
-          <label className="ple-add">
-            <Icon name="playlist_add" size={16} />
-            <select value="" onChange={(e) => onAddPlaylist(e.target.value)} aria-label={t('profile.layout.addPlaylist')}>
-              <option value="">{t('profile.layout.addPlaylist')}</option>
-              {addablePlaylists.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-            </select>
-          </label>
         ) : null}
         <div className="ple-history">
           <button
@@ -714,9 +740,21 @@ export function LayoutEditBar({
           >
             <Icon name="redo" size={18} />
           </button>
+          {onMatchDesktop ? (
+            <button
+              type="button"
+              className="ple-icon"
+              onClick={onMatchDesktop}
+              disabled={!canMatchDesktop || saving}
+              title={t('profile.layout.matchDesktop')}
+              aria-label={t('profile.layout.matchDesktop')}
+            >
+              <Icon name="devices" size={18} />
+            </button>
+          ) : null}
         </div>
         <button type="button" className="v2-btn v2-btn--secondary h40 ple-btn" onClick={onReset} disabled={saving}>
-          <span className="v2-btn__label">{device === 'mobile' ? t('profile.layout.matchDesktop') : t('profile.layout.reset')}</span>
+          <span className="v2-btn__label">{t('profile.layout.reset')}</span>
         </button>
         <button type="button" className="v2-btn v2-btn--ghost h40 ple-btn" onClick={onCancel} disabled={saving}>
           <span className="v2-btn__label">{t('common.actions.cancel')}</span>

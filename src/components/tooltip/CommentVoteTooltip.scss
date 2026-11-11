@@ -158,7 +158,6 @@
   text-align: left;
 }
 
-.cvt-just-tag { color: var(--muted); }
 
 .cvt-note {
   margin: 0;
@@ -178,4 +177,92 @@
     .cvt-pct { font-size: 40px; }
     .cvt-big { min-height: 64px; }
   }
+}
+
+/* The video vote (17b): a side sheet from the right on a wide screen (a bottom
+   sheet on a phone), the video as a card on top, a 64px weight, 48px presets,
+   the voting power in a well above the button. */
+.cvt-post {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: var(--r-xl);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  flex: none;
+
+  &__thumb {
+    width: 88px;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    flex: none;
+    @include v2.thumb-placeholder(6px);
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    b { @include v2.text(body); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    span { @include v2.text(meta); color: var(--muted); }
+  }
+}
+
+.cvt-vp {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  @include v2.text(body-sm);
+
+  .material-symbols-rounded { color: var(--cyan); }
+  span:not(.material-symbols-rounded) { flex: 1; }
+  b { font-weight: 700; }
+}
+
+.cvt-dialog.is-post {
+  .cvt-pct { font-size: 64px; }
+  .cvt-big { min-height: 88px; }
+  .cvt-preset { height: 48px; border-radius: var(--r-lg); font-family: var(--font-sans); font-weight: 900; font-size: 14px; }
+}
+
+@include v2.tablet-up {
+  .cvt-overlay:has(> .cvt-dialog.is-post) {
+    place-items: stretch end;
+    padding: 0;
+  }
+  .cvt-dialog.is-post {
+    width: 420px;
+    height: 100%;
+    max-height: 100dvh;
+    padding: 22px;
+    gap: 16px;
+    border-right: 0;
+    border-radius: var(--r-3xl) 0 0 var(--r-3xl);
+    animation: cvt-sheet-in var(--t-slow) var(--ease);
+
+    // The buttons sit at the foot of the sheet.
+    .cvt-actions { margin-top: auto; }
+    > .cvt-submit { margin-top: auto; flex: none; }
+  }
+}
+
+@keyframes cvt-sheet-in { from { transform: translateX(24px); opacity: 0; } }
+
+// Vote, or "Just tag" beside "Vote and tag" once a topic is picked (40a).
+.cvt-actions {
+  display: flex;
+  flex: none;
+
+  &.is-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+  }
+  .cvt-submit { margin-top: 0; }
 }

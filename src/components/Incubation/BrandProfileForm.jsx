@@ -57,18 +57,20 @@ export default function BrandProfileForm() {
       {/* "Your brand" (design 46c): the logo as it will be shown, then the
           three fields, then the one save. */}
       <div className="inc-brand-logo">
-        {form.profile_image
-          ? <img src={form.profile_image} alt="" />
-          : <span className="inc-brand-logo-blank" aria-hidden="true"><Icon name="add_photo_alternate" size={20} /></span>}
-        <div className="inc-brand-logo-text">
-          <span className="v2-eyebrow">{t('incubation.brand.logo')}</span>
-          <span className="v2-field__hint">{t('incubation.brand.logoHint')}</span>
-          <label className="inc-brand-upload">
-            {uploading ? <Icon name="progress_activity" size={16} className="v2-spin" /> : <Icon name="upload" size={16} />}
-            {uploading ? t('incubation.brand.uploading') : (form.profile_image ? t('incubation.brand.replaceLogo') : t('incubation.brand.uploadLogo'))}
-            <input type="file" accept="image/*" onChange={pickImage('profile_image')} disabled={!loaded || uploading} hidden />
-          </label>
-        </div>
+        {/* The circle is the upload button: the logo as it will be shown. */}
+        <label
+          className="inc-brand-logo-pick"
+          aria-label={form.profile_image ? t('incubation.brand.replaceLogo') : t('incubation.brand.uploadLogo')}
+          title={form.profile_image ? t('incubation.brand.replaceLogo') : t('incubation.brand.uploadLogo')}
+        >
+          {uploading
+            ? <span className="inc-brand-logo-blank" aria-hidden="true"><Icon name="progress_activity" size={20} className="v2-spin" /></span>
+            : form.profile_image
+              ? <img src={form.profile_image} alt="" />
+              : <span className="inc-brand-logo-blank" aria-hidden="true"><Icon name="add_photo_alternate" size={20} /></span>}
+          <input type="file" accept="image/*" onChange={pickImage('profile_image')} disabled={!loaded || uploading} hidden />
+        </label>
+        <span className="inc-brand-logo-hint">{uploading ? t('incubation.brand.uploading') : t('incubation.brand.logoHint')}</span>
       </div>
 
       <Field
@@ -104,7 +106,7 @@ export default function BrandProfileForm() {
         error={!websiteOk ? t('incubation.brand.websiteInvalid') : null}
       />
 
-      <Button type="submit" variant="primary" size={36} className="inc-contact-submit" disabled={!loaded || saving || uploading || !websiteOk} loading={saving}>
+      <Button type="submit" variant="primary" size={40} block className="inc-contact-submit" disabled={!loaded || saving || uploading || !websiteOk} loading={saving}>
         {saving ? t('common.actions.saving') : t('incubation.brand.save')}
       </Button>
     </form>

@@ -124,7 +124,6 @@
 
     &:hover { background: var(--bg-hover); }
     b { flex: 1; min-width: 0; font-size: 14px; font-weight: 700; }
-    .sp-e-fold-ic { color: var(--muted); }
     .sp-e-chev { color: var(--muted); transition: transform var(--t-base) var(--ease); }
   }
   .sp-e-fold.is-open .sp-e-chev { transform: rotate(180deg); }
@@ -566,7 +565,6 @@
     gap: 8px;
     .v2-eyebrow { flex: 1; }
   }
-  .sp-e-live-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); }
   .sp-e-preview-open {
     display: inline-flex;
     align-items: center;
@@ -576,17 +574,6 @@
     color: var(--cyan);
     text-decoration: none;
     &:hover { text-decoration: underline; }
-  }
-  .sp-e-preview-url {
-    @include v2.well;
-    display: block;
-    padding: 6px 12px;
-    @include v2.mono(11, 400);
-    color: var(--muted);
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
   .sp-e-preview-frame {
     display: block;

@@ -185,3 +185,9 @@
     height: calc(100vh - max(var(--shorts-top, var(--topbar-h)), var(--stories-bar-bottom, 0px)) - var(--shorts-bottom-reserve, 0px));
   }
 }
+
+// Watching a 24h story on a phone (30a): the story's own head (segments, the
+// creator, pause, close) takes the top, so the creators row steps aside.
+@include v2.mobile {
+  .shorts-story-feed:has(.short-main.is-story-view) .shorts-story-feed__mobile-stories { display: none !important; }
+}

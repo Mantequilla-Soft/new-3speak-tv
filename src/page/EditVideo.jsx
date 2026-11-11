@@ -58,28 +58,34 @@ const EditVideo = () => {
   const accessToken = localStorage.getItem("access_token");
 
   const video = location.state?.video;
-  console.log(id)
-  console.log(video)
 
   useEffect(() => {
     if (video) {
-      setTitle(video.title);
+      setTitle(video.title || '');
 
-      const plainText = convert(video.description, {
-        wordwrap: false,
-        selectors: [
-          { selector: 'br', format: 'block' },
-          { selector: 'p', format: 'block' },
-          { selector: 'sub', format: 'inline' }
-        ]
-      });
+      // The Studio list (my-videos API) sends the post as `body` (markdown),
+      // `images.thumbnail`, `video_id` and a tags array; older callers sent
+      // `description` (HTML), `thumbUrl`, `_id` and a comma string. Accept both.
+      const rawDescription = String(video.description ?? video.body ?? '');
+      // Only HTML bodies (what this page saves) go through html-to-text: it
+      // folds the newlines of a markdown body into one line.
+      const plainText = /^\s*<(p|div|h[1-6]|br)\b/i.test(rawDescription)
+        ? convert(rawDescription, {
+          wordwrap: false,
+          selectors: [
+            { selector: 'br', format: 'block' },
+            { selector: 'p', format: 'block' },
+            { selector: 'sub', format: 'inline' }
+          ]
+        })
+        : rawDescription;
 
       setDescription(plainText.trim());
-      setTags(video.tags);
-      setThumbnailUrl(video.thumbUrl);
-      setDate(video.created);
+      setTags(Array.isArray(video.tags) ? video.tags.join(', ') : (video.tags || ''));
+      setThumbnailUrl(video.thumbUrl || video.images?.thumbnail || video.thumbnail || '');
+      setDate(video.created || video.created_at);
       setPermlink(video.permlink)
-      setId(video._id)
+      setId(video._id || video.video_id)
       const isListed = video.listed_on_3speak !== false && video.unlisted !== true;
       setListed(isListed);
       initialListedRef.current = isListed;

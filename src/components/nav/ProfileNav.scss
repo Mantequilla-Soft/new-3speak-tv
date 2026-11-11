@@ -47,12 +47,13 @@
   right: max(var(--page-pad), calc((100vw - var(--content-max)) / 2 + var(--page-pad)));
   width: 320px;
   max-height: calc(100dvh - var(--nav-top-offset, 76px) - 24px);
-  @include v2.scroll-y;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 8px;
-  border-radius: var(--r-2xl);
+  padding: 0;
+  overflow: hidden;
+  // 07d: radius 28, the sheet shadow
+  border-radius: var(--r-3xl);
+  box-shadow: var(--shadow-sheet);
   color: var(--text);
   transform-origin: top right;
   animation: pn-drop-in var(--t-base) var(--ease);
@@ -77,7 +78,7 @@
     max-height: 88dvh;
     border-radius: var(--r-3xl) var(--r-3xl) 0 0;
     border-bottom: 0;
-    padding: 0 12px 12px;
+    padding: 0 0 env(safe-area-inset-bottom, 0px);
     box-shadow: var(--shadow-sheet);
     animation-name: pn-sheet-up;
     animation-duration: var(--t-slow);
@@ -102,12 +103,16 @@
   }
 }
 
-// Who is signed in: avatar, name and handle, and the theme switch.
+// Who is signed in (07d): padding 18 on a 135° wash from the avatar grey,
+// a 52px avatar in a 2px cyan ring, the name 16/900, the handle 12 muted, and
+// Switch (32 tall, radius 12, a 12% ink wash).
 .pn-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 8px 4px;
+  padding: 18px;
+  flex: none;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--avatar) 80%, var(--surface)), var(--surface));
 }
 .pn-avatar-link {
   flex: none;
@@ -115,19 +120,26 @@
   border-radius: 50%;
 }
 .pn-avatar {
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
-  background: var(--avatar);
-  box-shadow: 0 0 0 2px var(--cyan);
+  background: var(--accent);
+  border: 2px solid var(--cyan);
+
+  &.is-initial {
+    display: grid;
+    place-items: center;
+    color: var(--on-accent);
+    font-size: 18px;
+    font-weight: 900;
+  }
 }
 .pn-identity {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
 }
 .pn-name,
 .pn-handle {
@@ -135,12 +147,39 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.pn-name { @include v2.text(title-sm); font-weight: 900; }
-.pn-handle { @include v2.text(meta); color: var(--muted); }
+.pn-name { font-size: 16px; font-weight: 900; line-height: 1.3; }
+.pn-handle { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+.pn-switch {
+  flex: none;
+  height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--text) 12%, transparent);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+  &:hover { background: color-mix(in srgb, var(--text) 18%, transparent); }
+}
+
+// Everything between the header and the footer scrolls.
+.pn-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  @include v2.scroll-y;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 0 8px;
+}
 
 // Automatic badges (Pro, leaderboard standings), one scrolling row.
 .pn-badges {
-  padding: 0 8px;
+  padding: 0 14px;
   &:empty { display: none; }
   .lb-badges {
     flex-wrap: nowrap;
@@ -150,12 +189,12 @@
   .lb-badge { height: 28px; border-radius: var(--r-sm); font-size: 11px; }
 }
 
-// Voting power (accent) and resource credits (cyan), side by side.
+// Voting power (accent) and resource credits (cyan), side by side (42b).
 .pn-meters {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  padding: 0 8px 4px;
+  padding: 0 14px;
 }
 .pn-meter { min-width: 0; }
 .pn-meter-head {
@@ -172,7 +211,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  strong { @include v2.mono(11, 700); color: var(--text); }
+  strong { @include v2.mono(10, 700); color: var(--text); }
 }
 .pn-meter-track {
   height: 5px;
@@ -189,29 +228,30 @@
   .is-rc & { background: var(--cyan); }
 }
 
-// The three main places, as tiles.
+// Your places (07d): a 3-column grid of square tiles, radius 20, surface-2;
+// the icon 24 in its tone over a 12/500 label.
 .pn-tiles {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
+  padding: 0 14px;
 }
 .pn-tile {
+  aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 6px;
   min-width: 0;
-  height: 72px;
   padding: 0 6px;
   border: 0;
-  border-radius: var(--r-lg);
+  border-radius: var(--r-xl);
   background: var(--surface-2);
   color: var(--text);
   font: inherit;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
   text-decoration: none;
   cursor: pointer;
   transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
@@ -219,31 +259,62 @@
   &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
   &:active { transform: scale(.98); }
   .pn-label { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pn-tile-icon.is-accent { color: var(--accent); }
+  .pn-tile-icon.is-cyan { color: var(--cyan); }
 }
 
-// Rows (40 tall, icon 18 + label), grouped with a divider between groups.
+// The theme on its own tile (07d): radius 20, padding 12/14, icon 24, 14/500,
+// and a 44 × 28 switch, cyan when on.
+.pn-theme {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 14px;
+  padding: 12px 14px;
+  border-radius: var(--r-xl);
+  background: var(--surface-2);
+
+  .pn-theme-label { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; }
+
+  .v2-toggle {
+    height: 28px;
+    padding: 4px;
+    border-radius: var(--r-md);
+    box-shadow: none;
+    background: var(--bg);
+    .v2-toggle__thumb { background: var(--muted); }
+    &.is-on { background: var(--cyan); .v2-toggle__thumb { background: var(--on-media); transform: translateX(16px); } }
+  }
+}
+
+// Rows (42b: 40 tall, radius 12, icon 18 + a 13px label).
 .pn-section {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
+  padding: 0 8px;
   &:empty { display: none; }
 }
 
 .pn-item {
-  @include v2.menu-row;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: var(--r-md);
   width: 100%;
   border: 0;
   background: transparent;
-  font-family: inherit;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
   text-align: left;
   text-decoration: none;
   cursor: pointer;
 
-  .pn-icon { color: var(--muted); }
+  .pn-icon { color: var(--text); }
   .pn-label { flex: 1; min-width: 0; }
-  &:hover { color: var(--text); .pn-icon { color: var(--text); } }
+  &:hover { background: var(--bg-hover); color: var(--text); }
 
   &.is-danger,
   &.is-danger:hover { color: var(--accent); .pn-icon { color: var(--accent); } }
@@ -254,6 +325,14 @@
 // Only where the top bar has no tabs (the bottom bar is showing).
 .pn-phone-only {
   @media (min-width: 1025px) { display: none; }
+}
+// Only where the top bar has no chat button (phones).
+.pn-mobile-only {
+  @include v2.tablet-up { display: none; }
+}
+// Only where the top bar shows its section tabs.
+.pn-desktop-only {
+  @media (max-width: 1024px) { display: none; }
 }
 
 .profilenav-count {
@@ -269,13 +348,35 @@
   font-weight: 700;
 }
 
-// Footer: the Hive node in use, and 3Speak's socials as chips.
-.pn-footer {
+// 42b: the small links line, then the socials.
+.pn-links {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin: 0 14px;
   padding: 8px 4px 0;
   border-top: 1px solid var(--border);
+
+  .pn-links-gap { flex: 1; }
+}
+.pn-link {
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 11px;
+  text-decoration: none;
+  cursor: pointer;
+  &:hover { color: var(--text); text-decoration: underline; }
+  &.is-strong { color: var(--text); font-weight: 700; }
+}
+
+.pn-socials {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
   flex-wrap: wrap;
 }
 .rpc-node-line {
@@ -283,8 +384,8 @@
   min-width: 0;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 6px;
-  padding-left: 4px;
 
   .rpc-node-dot {
     flex: none;
@@ -294,7 +395,7 @@
     background: var(--cyan);
   }
   .rpc-node-host {
-    @include v2.mono(11, 500);
+    @include v2.mono(10, 500);
     color: var(--muted);
     white-space: nowrap;
     overflow: hidden;
@@ -318,6 +419,34 @@
   text-decoration: none;
   transition: background var(--t-fast) var(--ease);
   &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+}
+
+// 07d footer: a 1px line, padding 14/18, Settings left and Log out right, 14 muted.
+.pn-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-top: 1px solid var(--border);
+  flex: none;
+}
+.pn-foot-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); color: var(--text); }
+  &.is-logout { margin-left: auto; }
 }
 
 @keyframes pn-drop-in {

@@ -51,6 +51,7 @@
     @include v2.mobile { display: none; }
   }
 
+  // 28b: padding 14, radius 24; as many across as fit (--sc-per-row), else 220.
   .sc-card {
     flex: 0 0 auto;
     width: 220px;
@@ -64,6 +65,12 @@
     background: var(--surface);
 
     @include v2.mobile { width: 188px; padding: 12px; }
+  }
+  @include v2.tablet-up {
+    .sc-row[style] .sc-card {
+      width: calc((100% - (var(--sc-per-row) - 1) * 10px) / var(--sc-per-row));
+      min-width: 198px;
+    }
   }
 
   .sc-who {
@@ -90,6 +97,35 @@
     flex-direction: column;
     gap: 2px;
     min-width: 0;
+    flex: 1;
+  }
+
+  .sc-dismiss {
+    flex: none;
+    align-self: center;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    margin-right: -4px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+
+  // Their latest video: the strip three square thumbnails take on the board.
+  .sc-thumb {
+    display: block;
+    aspect-ratio: 3 / 1;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    @include v2.thumb-placeholder(5px);
+
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
   }
 
   .sc-name {
@@ -120,7 +156,8 @@
     white-space: nowrap;
   }
 
-  .sc-follow.is-block { justify-content: space-between; }
+  // Follow: 44 tall, radius 16, accent, 13/900, the label left and the icon right
+  .sc-follow.is-block { justify-content: space-between; font-size: 13px; font-weight: 900; padding: 0 14px; }
   .sc-follow.followed { color: var(--muted); opacity: 1; }
 }
 

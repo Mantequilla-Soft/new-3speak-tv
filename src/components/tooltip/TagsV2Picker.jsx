@@ -37,7 +37,7 @@ const tagIcon = (slug) => <Icon name={TAG_ICONS[slug] || 'label'} size={16} clas
  */
 function TagsV2Picker({
   value, onChange, tagPct = {}, disabled = false, suggested = [],
-  multi = false, searchable = false,
+  multi = false, searchable = false, layout = 'tree',
 }) {
   const { t } = useTranslation();
   const selectedArr = multi && Array.isArray(value) ? value : [];
@@ -133,6 +133,36 @@ function TagsV2Picker({
       </button>
     );
   };
+
+  // `layout="groups"` (43b "tag this video", single mode): every category at
+  // once as an eyebrow over its topic chips. The eyebrow itself picks the
+  // coarser category tag.
+  if (layout === 'groups' && !multi) {
+    return (
+      <div className="tagsv2-picker is-groups" onClick={(e) => e.stopPropagation()}>
+        {TAG_CATEGORIES.map((cat) => {
+          const pct = tagPct[cat.slug];
+          return (
+            <div key={cat.slug} className="tagsv2-group">
+              <button
+                type="button"
+                className={`tagsv2-group__head${isSel(cat.slug) ? ' selected' : ''}`}
+                onClick={() => pickCategory(cat.slug)}
+                disabled={disabled}
+                aria-pressed={isSel(cat.slug)}
+              >
+                {t(cat.labelKey)}
+                {pct != null && <span className="tagsv2-pct">{pct}%</span>}
+              </button>
+              <div className="tagsv2-row">
+                {cat.topics.map(renderTopic)}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
 
   return (
     <div className={`tagsv2-picker${multi ? ' is-multi' : ''}`} onClick={(e) => e.stopPropagation()}>
@@ -232,6 +262,7 @@ TagsV2Picker.propTypes = {
   suggested: PropTypes.array,
   multi: PropTypes.bool,
   searchable: PropTypes.bool,
+  layout: PropTypes.oneOf(['tree', 'groups']),
 };
 
 export default TagsV2Picker;

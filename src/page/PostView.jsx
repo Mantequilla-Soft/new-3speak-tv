@@ -393,6 +393,12 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
 
   // The action dock (19b): a column of tiles beside the text on a wide screen,
   // a row under it on a phone. Same handlers as before.
+  // "6 min read" in the strip (19b): about 200 words a minute.
+  const readMinutes = (() => {
+    const words = String(post?.body || post?._prefilledBody || '').replace(/<[^>]+>|!\[[^\]]*\]\([^)]*\)|[#*_>`~-]/g, ' ').split(/\s+/).filter(Boolean).length;
+    return words > 0 ? Math.max(1, Math.round(words / 200)) : 0;
+  })();
+
   const dock = [
     {
       id: 'vote', icon: 'arrow_upward', label: voteCount > 0 ? compact(voteCount) : t('watch.actions.vote'),
@@ -407,15 +413,15 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
       active: reblog.reblogged || reblog.armed, tone: reblog.armed ? 'cyan' : 'accent', disabled: reblog.busy,
       title: reblog.reblogged ? t('common.reblog.reblogged') : t('common.reblog.title'), onClick: reblog.press,
     },
+    authenticated && !isOwnPost && {
+      id: 'tip', icon: 'volunteer_activism', label: t('watch.actions.tip'), title: t('posts.view.tipCreator'), onClick: handleTip,
+    },
     {
       // isLoggedIn() is the wallet check, which an incubating user never
       // passes. The reshare itself does not need one.
       id: 'hype', icon: 'local_fire_department', label: reshareCount > 0 ? compact(reshareCount) : t('common.hype.hype'),
       active: hasReshared, disabled: !authenticated || (!isLoggedIn() && !incubationHandle),
       title: !authenticated ? t('common.hype.loginRequired') : hasReshared ? t('common.hype.hyped') : t('common.hype.title'), onClick: handleReshare,
-    },
-    authenticated && !isOwnPost && {
-      id: 'tip', icon: 'volunteer_activism', label: t('watch.actions.tip'), title: t('posts.view.tipCreator'), onClick: handleTip,
     },
     { id: 'share', icon: 'share', label: t('common.actions.share'), title: t('common.actions.share'), onClick: handleShare },
     {
@@ -456,7 +462,10 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
             {String(videoDetails.community.title || '').slice(0, 1).toUpperCase()}
             <AccountImg account={videoDetails.community._id} alt="" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
           </span>
-          <span className="post-view-community__text">{t('posts.view.inCommunity', { community: videoDetails.community.title })}</span>
+          <span className="post-view-community__text">
+            <span className="is-muted">{t('watch.community.postedIn')}</span> <b>{videoDetails.community.title}</b>
+          </span>
+          {readMinutes > 0 && <span className="post-view-community__read">{t('posts.view.readTime', { count: readMinutes })}</span>}
         </Link>
       )}
 
@@ -498,13 +507,15 @@ function PostView({ author: authorProp, permlink: permlinkProp }) {
             <DockTile
               key={d.id}
               icon={d.icon}
+              iconSize={24}
               label={d.label}
               active={!!d.active}
               tone={d.tone}
               title={d.title}
               aria-label={d.title}
               disabled={d.disabled}
-              className={cx(`post-view-dock__${d.id}`, d.id === 'report' && d.active && 'is-reported')}
+              // Vote is the dock's primary: the accent tint at rest (19b).
+              className={cx(`post-view-dock__${d.id}`, d.id === 'vote' && 'is-on is-accent', d.id === 'report' && d.active && 'is-reported')}
               onClick={d.onClick}
             />
           ))}

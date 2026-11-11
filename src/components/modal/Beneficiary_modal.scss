@@ -1,106 +1,104 @@
 @use "../../styles/v2" as v2;
 
-// Beneficiaries / share rewards (design 17e) on the v2 dialog (DialogShell):
-// what stays with you and the split as one bar, the collaborators as filled
-// rows, the add row (account, percent, add), then the platform defaults.
+// Share rewards / beneficiaries (design 17e) on the v2 side sheet: the split
+// as a ring with what stays with you in the middle, every share as a tile
+// (accent bar = you, cyan = a collaborator, muted + lock = a platform split),
+// "Add a collaborator" as a dashed button that opens the add row, then the
+// platform defaults. "Save split" is pinned at the bottom.
 .bene-dialog {
   .bene-text {
     margin: 0;
-    @include v2.text(body-sm);
+    @include v2.text(meta);
     color: var(--muted);
   }
 
-  .bene-content-wrap {
+  .bene-ring {
+    position: relative;
+    align-self: center;
+    width: 172px;
+    height: 172px;
+    border-radius: 50%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    margin: 4px 0 6px;
+  }
+  .bene-ring__hole {
+    width: 116px;
+    height: 116px;
+    border-radius: 50%;
+    background: var(--surface);
     display: flex;
     flex-direction: column;
-    gap: 10px;
-  }
-
-  // You: account and the share that stays with you (money-like: mono, accent).
-  .bene-split {
-    @include v2.well;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 12px 14px;
-  }
-
-  .user-wrap {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .bene-split__who { @include v2.text(label); }
-
-  .bene-split__pct {
-    @include v2.mono(28, 900);
-    color: var(--accent);
-    line-height: 1;
-  }
-
-  .bene-split__bar {
-    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 2px;
-    height: 6px;
-    border-radius: 3px;
-    overflow: hidden;
-    background: var(--surface-2);
-
-    span { flex-basis: 0; min-width: 2px; }
-    .is-you { background: var(--accent); }
-    .is-bene { background: var(--cyan); }
-    .is-locked { background: var(--muted); }
+    b { font-family: var(--font-sans); font-size: 32px; font-weight: 900; letter-spacing: -.02em; line-height: 1; }
+    span { @include v2.text(meta-sm); color: var(--muted); }
   }
 
-  .beneficiary-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-height: 220px;
-    @include v2.scroll-y;
+  .bene-tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 
-  .bene-row {
+  .bene-tile {
     display: flex;
     align-items: center;
     gap: 10px;
-    min-height: 48px;
-    padding: 6px 6px 6px 12px;
-    border-radius: var(--r-md);
+    min-height: 56px;
+    padding: 8px 8px 8px 12px;
+    border-radius: var(--r-lg);
     background: var(--bg);
+    border: 1px solid var(--border);
+    min-width: 0;
 
-    .bene-row__dot {
-      width: 6px;
-      height: 28px;
-      border-radius: 3px;
-      background: var(--cyan);
-      flex: none;
-    }
+    .bene-tile__bar { width: 6px; height: 32px; border-radius: 3px; background: var(--cyan); flex: none; }
+    &.is-you .bene-tile__bar { background: var(--accent); }
+    &.is-locked .bene-tile__bar { background: var(--muted); }
 
-    &.is-locked .bene-row__dot { background: var(--muted); }
-
-    .bene-row__who {
-      flex: 1;
-      min-width: 0;
-      @include v2.text(label);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .bene-row__pct { @include v2.mono(14, 900); padding-right: 4px; }
-
-    .bene-row__locked {
+    .bene-tile__body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .bene-tile__who { @include v2.text(meta); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bene-tile__pct { font-family: var(--font-sans); font-size: 16px; font-weight: 900; line-height: 1.2; }
+    .bene-tile__edit {
       display: flex;
-      align-items: center;
-      gap: 6px;
-      @include v2.text(meta);
-      color: var(--muted);
-
-      input { width: 64px; text-align: center; background: var(--surface); }
+      align-items: baseline;
+      font-size: 16px;
+      font-weight: 900;
+      input {
+        min-width: 1.5ch;
+        padding: 0;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        color: var(--text);
+        font-family: var(--font-sans);
+        font-size: 16px;
+        font-weight: 900;
+        outline: none;
+        -moz-appearance: textfield;
+        &::-webkit-inner-spin-button, &::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        &:focus { border-bottom-color: var(--accent); }
+      }
     }
+    .bene-tile__lock { color: var(--muted); margin-right: 4px; }
+  }
+
+  .bene-addbtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    border: 2px dashed var(--border);
+    border-radius: var(--r-lg);
+    background: transparent;
+    color: var(--muted);
+    @include v2.text(label);
+    cursor: pointer;
+    transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+    &:hover { color: var(--text); border-color: var(--muted); }
   }
 
   // Add a collaborator: account field, percent field, add button.

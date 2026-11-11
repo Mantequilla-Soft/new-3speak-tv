@@ -110,14 +110,23 @@
 
 .st-secret__desc {
   margin: 0;
-  @include v2.text(meta);
+  @include v2.text(meta-sm);
   color: var(--muted);
 }
 
 .st-secret__actions {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
+  flex: none;
+
+  .v2-btn { font-size: 12px; }
+  .v2-btn--danger { font-weight: 900; }
+}
+
+// Phones: the actions go under the name, each a third of the row.
+@include v2.mobile {
+  .st-secret__head { flex-wrap: wrap; }
+  .st-secret__actions { flex: 1 1 100%; .v2-btn { flex: 1; justify-content: center; } }
 }
 
 /* ── Chat dock URL: a cyan wash row (39b) ───────────────────────────────── */
@@ -138,12 +147,12 @@
 .st-chatbox__text {
   flex: 1;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  b { font-size: 13px; font-weight: 700; }
-  span { @include v2.text(meta-sm); color: var(--muted); }
+  margin: 0;
+  @include v2.text(body-sm);
+  b { font-weight: 700; }
 }
+
+.st-chatbox .v2-btn { font-size: 12px; font-weight: 900; }
 
 /* ── OBS is Pro: the accent wash notice (the free plan note in 39a) ────── */
 .st-pro {
@@ -375,12 +384,11 @@
 
 .st-card__actions {
   display: flex;
-  flex-wrap: wrap;
   gap: 6px;
   margin-top: auto;
 
-  .st-card__use { flex: 1 1 100%; }
-  .st-card__copy { flex: 1 1 auto; }
+  .st-card__copy { flex: 1 1 auto; min-width: 0; font-size: 11px; }
+  .v2-iconbtn .material-symbols-rounded { font-size: 16px !important; }
 }
 
 /* ── Sheets: the v2 Dialog; just the footer error and the body text ────── */

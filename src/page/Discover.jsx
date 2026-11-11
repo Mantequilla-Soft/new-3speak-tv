@@ -1030,7 +1030,7 @@ const Discover = () => {
           <div className="discover-grid">
             <div className="discover-main">
               <div className="discover-main__head">
-                <h2>{topic ? t(`tags.labels.${topic}`) : t('common.nav.trending')}</h2>
+                <h2>{t('common.nav.trending')}</h2>
                 <div className="discover-track is-small" role="tablist" aria-label={t('common.nav.trending')}>
                   {RANGES.map((r) => (
                     <button key={r.value} type="button" role="tab" aria-selected={range === r.value} className={cx('discover-track__opt', range === r.value && 'is-on')} onClick={() => { setRange(r.value); setRangeSince(r.ms ? Date.now() - r.ms : 0); }}>

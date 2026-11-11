@@ -52,12 +52,10 @@ import {
   slotLabel,
   countryName,
 } from '../lib/advertiseData';
-import { InventoryPanel, RateCard, FormatTabs } from '../components/ads/AdMarketPanels';
+import { InventoryPanel, RateCard } from '../components/ads/AdMarketPanels';
 import {
   SHOW_MARKETS,
   SITE_ONLY_SURFACES,
-  EXAMPLE_SECONDS,
-  EXAMPLE_DAYS,
   flightPrice,
   hivePayable,
   hiveEquivalent,
@@ -66,7 +64,6 @@ import {
   savingAt,
   groupByFormat,
   tickerMinSeconds,
-  formatTabsFor,
 } from '../lib/adMarket';
 import AudioClip from '../components/AudioClip/AudioClip';
 import './Advertise.scss';
@@ -2870,11 +2867,6 @@ export default function Advertise({ openLoginModal }) {
     const showBeta = (f) => (f.key === 'video_ticker' ? tickerEnabledFor(user) : adsBetaUserFor(user));
     return { ...rawPricing, formats: rawPricing.formats.filter((f) => !f.beta || showBeta(f)) };
   }, [rawPricing, user]);
-  // Video / Audio / Upload on the overview: the rate card and the audience follow it.
-  const [formatTab, setFormatTab] = useState('video');
-  const formatTabs = formatTabsFor(pricing);
-  // A tab that disappeared (the audio spot hidden from a non-tester) falls back to Video.
-  const shownFormatTab = formatTabs.some((tb) => tb.id === formatTab) ? formatTab : 'video';
 
   // The page was one long scroll that mixed three unrelated jobs: reading what is
   // for sale, filling in a form, and managing work already in flight. Tabs so each
@@ -3194,7 +3186,7 @@ export default function Advertise({ openLoginModal }) {
               id={`mkt-tab-${tb.id}`}
               aria-selected={tab === tb.id}
               aria-controls={`mkt-panel-${tb.id}`}
-              className={`v2-seg__opt h36 mkt-tab${tab === tb.id ? ' is-on selected' : ''}`}
+              className={`v2-seg__opt mkt-tab${tab === tb.id ? ' is-on selected' : ''}`}
               onClick={() => setTab(tb.id)}
             >
               {tb.label}
@@ -3220,11 +3212,8 @@ export default function Advertise({ openLoginModal }) {
           say what the nouns WERE, and the page is full of them: people could not tell
           whether they were filling in a product, a video or a booking. Numbered
           because the order is real: no booking without a product. */}
-      <section className="mkt-intro">
-        <h2>{t('ads.general.stepsTitle')}</h2>
-        <p className="mkt-intro-lede">
-          {t('ads.general.stepsLede')}
-        </p>
+      <section className="mkt-intro" aria-labelledby="mkt-steps-title">
+        <h2 id="mkt-steps-title" className="mkt-visually-hidden">{t('ads.general.stepsTitle')}</h2>
         <ol className="mkt-steps">
           <li>
             <strong>{t('ads.general.product.title')}</strong>
@@ -3252,39 +3241,15 @@ export default function Advertise({ openLoginModal }) {
             </span>
           </li>
         </ol>
-        <p className="mkt-fine">
-          {t('ads.general.pricedNote')}
-        </p>
       </section>
 
-      {/* The way in. The overview explains the thing; this is the one control that
-          starts it, so it sits above the detail rather than under it. */}
-      <button type="button" className="mkt-enroll-cta" onClick={() => { setWizStep(wizRef ? 2 : 1); setTab('wizard'); }}>
-        <span className="v2-btn__label">{t('ads.general.enrollCta')}</span>
-        <Icon name="arrow_forward" size={18} />
-      </button>
-
-      <section className="mkt-section">
-        <h2>{t('ads.general.formatsTitle')}</h2>
-        <FormatTabs tabs={formatTabs} value={shownFormatTab} onChange={setFormatTab} />
+      {/* Every format at once, grouped by how the viewer meets it (47a): one card per
+          group in a row. Every number comes from /advertise/pricing rather than the
+          copy: a hardcoded price is a promise the server has no idea it made. */}
+      <section className="mkt-formats-all" aria-labelledby="mkt-formats-title">
+        <h2 id="mkt-formats-title" className="mkt-visually-hidden">{t('ads.general.formatsTitle')}</h2>
         {pricing?.formats?.length ? (
-          <p className="mkt-intro-lede">
-            {savingAt(7, pricing)
-              ? t('ads.general.pricingIntroSaving', { week: savingAt(7, pricing), month: savingAt(30, pricing) })
-              : t('ads.general.pricingIntro')}
-            {/* Named in real numbers rather than described. "Cheaper for longer" is a
-                claim every rate card makes; a week at 25% off is a reason to book a
-                week. Both figures come from the server's own curve, so they cannot
-                drift from what the booking form will quote. */}
-            {' '}{t(pricing.minDays
-              ? (pricing.maxDays ? 'ads.general.examplesFromTo' : 'ads.general.examplesFrom')
-              : (pricing.maxDays ? 'ads.general.examplesTo' : 'ads.general.examples'), {
-              seconds: EXAMPLE_SECONDS,
-              days: Math.max(EXAMPLE_DAYS, pricing.minDays || 0),
-              count: pricing.minDays || 0,
-              max: pricing.maxDays,
-            })}
-          </p>
+          <RateCard pricing={pricing} />
         ) : pricing?.pricePerSecondDayHbd ? (
           // Fallback for a checker too old to send the rate card: one product, one price.
           <p className="mkt-headline-price">
@@ -3303,30 +3268,31 @@ export default function Advertise({ openLoginModal }) {
             ) : null}
           </p>
         ) : null}
-        {/* Every number here comes from /advertise/pricing rather than the copy: a
-            hardcoded price is a promise the server has no idea it made. */}
-        <RateCard pricing={pricing} tab={shownFormatTab} />
-        <p>
-          {t('ads.general.flatBooking')}
-        </p>
-        <p>
-          {t('ads.general.quotedForecast')}
-        </p>
-
-        {/* The audience for the formats on this tab, not the video audience for all three. */}
-        <h2 className="mkt-tab-subhead">{t('ads.general.audienceTitle')}</h2>
-        <InventoryPanel data={inventory} isLoading={isLoading} error={error} tab={shownFormatTab} />
       </section>
 
-      {/* Work the price out before booking: any format, any length, every flight
-          length, from the same rate card the booking form quotes from. */}
-      {pricing?.formats?.length ? (
-        <section className="mkt-section mkt-price-explorer">
-          <h2>{t('ads.general.explorerTitle')}</h2>
-          <p>{t('ads.general.explorerLede')}</p>
-          <PriceExplorer pricing={pricing} />
+      {/* The audience on the left, the price on the right, and the way in at the foot
+          of the price: the one primary action on the page (47a). */}
+      <div className="mkt-general-pair">
+        <section className="mkt-card mkt-audience-card" aria-labelledby="mkt-audience-title">
+          <h2 id="mkt-audience-title">{t('ads.general.audienceTitle')}</h2>
+          <InventoryPanel
+            data={inventory}
+            isLoading={isLoading}
+            error={error}
+            withAudio={!!pricing?.formats?.some((f) => f.key === 'audio_spot')}
+          />
         </section>
-      ) : null}
+
+        <section className="mkt-card mkt-price-explorer" aria-labelledby="mkt-explorer-title">
+          <h2 id="mkt-explorer-title">{t('ads.general.explorerTitle')}</h2>
+          {pricing?.formats?.length ? <PriceExplorer pricing={pricing} compact /> : null}
+          <p className="mkt-fine">{t('ads.general.flatBookingShort')}</p>
+          <button type="button" className="mkt-enroll-cta" onClick={() => { setWizStep(wizRef ? 2 : 1); setTab('wizard'); }}>
+            <span className="v2-btn__label">{t('ads.general.enrollCta')}</span>
+            <Icon name="arrow_forward" size={18} />
+          </button>
+        </section>
+      </div>
 
       {/* Two audiences who are not buying anything, side by side: the people whose
           videos carry the ads and the people who watch them. Both are paid, and an

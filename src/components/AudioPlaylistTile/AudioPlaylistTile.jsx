@@ -45,8 +45,12 @@ export default function AudioPlaylistTile({ playlist, kind }) {
 
   // Through the /img/ cache in the tile's 16:9 shape: covers are stored as the
   // full-size upload.
-  const rawCover = playlist.thumbnail || playlist.tracks?.find(tr => tr.thumbnail_url)?.thumbnail_url;
-  const cover = rawCover ? fixVideoThumbnail({ thumbnail: rawCover }) : fallbackImg;
+  // The cover is a 2 by 2 collage of four different track covers (28e); with
+  // fewer, the playlist's own cover (or the first track's) fills the square.
+  const trackCovers = [...new Set((playlist.tracks || []).map(tr => tr.thumbnail_url).filter(Boolean))]
+    .slice(0, 4).map(u => fixVideoThumbnail({ thumbnail: u }));
+  const own = playlist.thumbnail ? fixVideoThumbnail({ thumbnail: playlist.thumbnail }) : null;
+  const collage = trackCovers.length >= 4 ? trackCovers : [own || trackCovers[0] || null];
   const tracks = oldestFirst(playlist.tracks);
   const freshTracks = () => tracks.filter((tr) => !isListened(useAppStore.getState().user, tr._id));
   const open = (e) => { e?.stopPropagation(); navigate(`/playlist/${playlist.id}`); };
@@ -84,9 +88,13 @@ export default function AudioPlaylistTile({ playlist, kind }) {
         onPointerDown={(e) => { touchRef.current = e.pointerType !== 'mouse'; }}
         onClick={onCover}
       >
-        <img src={cover} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
-        <span className="audio-playlist-count num"><Icon name="library_music" size={14} /> {playlist.trackCount}</span>
-        <span className="audio-tile-play" aria-hidden="true"><Icon name="play_arrow" size={24} fill /></span>
+        <span className={`audio-playlist-collage${collage.length === 1 ? ' is-single' : ''}`} aria-hidden="true">
+          {collage.map((src, i) => (
+            <span key={i} className="audio-playlist-collage__cell">
+              {src && <img src={src} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />}
+            </span>
+          ))}
+        </span>
         {tracks.length > 0 && (
           <div className="audio-playlist-adds" onClick={(e) => e.stopPropagation()}>
             <button type="button" className="audio-playlist-add-btn is-primary" onClick={addAll}
@@ -107,10 +115,10 @@ export default function AudioPlaylistTile({ playlist, kind }) {
           </span>
         )}
         <span className="audio-tile-title" title={playlist.name} onClick={open}>{playlist.name}</span>
-        <span className="audio-tile-author" onClick={open}>@{playlist.owner}<PremiumBadge username={playlist.owner} size={11} /></span>
-        {playlist.album?.musicStyle && (
-          <span className="audio-tile-meta">{playlist.album.musicStyle}</span>
-        )}
+        <span className="audio-playlist-meta num" onClick={open}>
+          {t('audio.page.tracks', { count: playlist.trackCount ?? tracks.length })}
+          <span className="audio-playlist-owner">· @{playlist.owner}<PremiumBadge username={playlist.owner} size={11} /></span>
+        </span>
       </div>
       <Dialog open={asking} onClose={() => setAsking(false)} title={playlist.name} sub={t('audio.page.tracks', { count: tracks.length })} closeLabel={t('common.actions.close')} className="audio-playlist-ask">
         <button type="button" className="v2-choice audio-playlist-ask-option" onClick={addAll}>

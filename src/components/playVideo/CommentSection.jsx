@@ -1026,6 +1026,7 @@ function Comment({
   const [replyTab, setReplyTab] = useState('comment');
   const [collapsed, setCollapsed] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
+  const [revealHidden, setRevealHidden] = useState(false);
   // Replying here opens the thread, so the new reply lands in view.
   useEffect(() => { if (isReplying) setShowReplies(true); }, [isReplying]);
   const [translatedText, setTranslatedText] = useState(null);
@@ -1056,7 +1057,23 @@ function Comment({
     if (isReplying) setReplyTab('comment');
   }, [isReplying]);
 
-  if (comment.isLowReputation || comment.isHidden) return null;
+  // Hidden (a low score, or a creator you hid): a one-line bar with Show (28a, 43a).
+  if ((comment.isLowReputation || comment.isHidden) && !revealHidden) {
+    return (
+      <div className={cx('comment-container', depth > 0 && 'is-reply')}>
+        <div className="comment-hidden-bar">
+          <Icon name="visibility_off" size={18} />
+          <span>{comment.isLowReputation ? t('comments.section.hiddenLowScore') : t('comments.section.hiddenComment')}</span>
+          <button
+            type="button"
+            className="comment-hidden-show"
+            aria-label={t('comments.section.showComment', { user: comment?.author?.username || '' })}
+            onClick={() => setRevealHidden(true)}
+          >{t('comments.section.show')}</button>
+        </div>
+      </div>
+    );
+  }
 
   const username = comment?.author?.username;
   // The video's own creator, marked like the 28a "CREATOR" pill.

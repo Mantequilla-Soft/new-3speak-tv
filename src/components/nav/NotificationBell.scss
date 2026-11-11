@@ -26,59 +26,52 @@
   color: var(--text);
 }
 
-// Unread Hive activity: accent dot top right. New stories / podcast episodes:
-// cyan dot top left. Both ringed in the bar's colour.
+// Anything new (Hive activity, stories, podcast episodes): one cyan dot, 8px,
+// 6px in from the top-right corner (20a).
 .notif-bell-dot {
   position: absolute;
-  top: 7px;
-  right: 7px;
+  top: 6px;
+  right: 6px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 2px var(--surface-2);
+  background: var(--cyan);
   pointer-events: none;
-
-  &.notif-bell-dot--story {
-    right: auto;
-    left: 7px;
-    background: var(--cyan);
-  }
 }
 
 // ── The panel ────────────────────────────────────────────────────────────────
 .notif-scrim { display: none; }
 
+// 26a: a sheet docked to the side of the window, 440 wide, full height, its
+// inner corners at 28. The list scrolls inside; loading, an empty list and a
+// full one never change its size.
 .notif-dropdown {
-  @include v2.floating;
   position: fixed;
-  top: calc(var(--nav-top-offset, 76px) + 8px);
-  // The bar's right edge (nav.scss: the 1280 column minus the page padding).
-  right: max(var(--page-pad), calc((100vw - var(--content-max)) / 2 + var(--page-pad)));
+  top: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1100;
-  width: var(--side-panel-w);
-  max-width: calc(100vw - 16px);
-  height: min(600px, calc(100dvh - var(--nav-top-offset, 76px) - 24px));
+  width: 440px;
+  max-width: 100vw;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 14px 8px 8px;
-  border-radius: var(--r-2xl);
+  gap: 0;
+  padding: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  border-radius: var(--r-3xl) 0 0 var(--r-3xl);
+  box-shadow: var(--shadow-sheet);
   color: var(--text);
   text-align: left;
   cursor: default;
-  // Fades in on open; `--leaving` fades it out (200ms, hooks/useHoverPeek.js).
-  animation: notif-drop-in var(--t-base) var(--ease);
+  // Slides in on open; `--leaving` slides it out (200ms, hooks/useHoverPeek.js).
+  animation: notif-side-in var(--t-slow) var(--ease);
   transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
 
   &.notif-dropdown--leaving {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translateX(16px);
     pointer-events: none;
-  }
-
-  @media (max-width: 1024px) {
-    right: 8px;
   }
 
   @include v2.mobile {
@@ -89,10 +82,10 @@
     width: auto;
     max-width: none;
     height: 88dvh;
-    padding: 0 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    padding: 0 0 env(safe-area-inset-bottom, 0px);
+    border-left: 0;
+    border-top: 1px solid var(--border);
     border-radius: var(--r-3xl) var(--r-3xl) 0 0;
-    border-bottom: 0;
-    box-shadow: var(--shadow-sheet);
     animation: notif-sheet-up var(--t-slow) var(--ease);
   }
 
@@ -129,43 +122,56 @@
 .notif-dropdown-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 8px;
+  gap: 10px;
+  padding: 22px 22px 0;
   flex: none;
+
+  @include v2.mobile { padding: 14px 16px 0; }
+}
+
+.notif-dropdown-bar {
+  flex: none;
+  width: 4px;
+  height: 22px;
+  border-radius: var(--r-bar);
+  background: var(--cyan);
 }
 
 .notif-dropdown-title {
   flex: 1;
-  @include v2.text(title-sm);
+  min-width: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-.notif-dropdown-seeall {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  height: 32px;
-  padding: 0 8px;
-  border-radius: var(--r-md);
-  color: var(--cyan);
-  @include v2.text(label);
-  text-decoration: none;
-  &:hover { background: var(--cyan-tint); color: var(--cyan); }
-}
-
-.notif-dropdown-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 8px;
+// Mark all read and See all: 40 square, radius 12, surface-2, icon 20.
+.notif-header-btn {
   flex: none;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
 }
 
-// Push on/off and "Mark all read": 32 chips.
-.notif-push-toggle,
-.notif-header-pill {
+// Push on/off (42b): a 32 chip, cyan 16% with an "On" when it is on.
+.notif-push-toggle {
   @include v2.control(32);
-  @include v2.text(label);
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 0 10px;
+  gap: 4px;
   background: var(--surface-2);
   color: var(--text);
   white-space: nowrap;
@@ -175,16 +181,46 @@
 .notif-push-toggle.on {
   background: var(--cyan-tint-strong);
   color: var(--cyan);
-  font-weight: 900;
   &:hover:not(:disabled) { background: color-mix(in srgb, var(--cyan) 22%, transparent); }
+}
+
+// All · Mentions · Follows · Uploads · Pods: a segmented track on the ground,
+// radius 16, 12/700, options 32 tall.
+.notif-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin: 14px 22px 0;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  flex: none;
+
+  @include v2.mobile { margin: 12px 16px 0; }
+}
+.notif-tab {
+  flex: 1;
+  height: 32px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  &:hover { color: var(--text); }
+  &.is-on { background: var(--surface-2); color: var(--text); }
 }
 
 .notif-push-note {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  margin: 0 8px;
-  @include v2.text(meta-sm);
+  margin: 10px 22px 0;
+  font-size: 10px;
+  line-height: 1.4;
   color: var(--muted);
   flex: none;
 
@@ -205,8 +241,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding-top: 4px;
-  border-top: 1px solid var(--border);
+  padding: 10px 14px 14px;
 }
 
 .notif-dropdown-empty {
@@ -229,17 +264,19 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 6px;
 }
 
+// 26a rows: a 44px rounded avatar with a 22px kind chip, the text 13/1.35 (the
+// name in bold), the age in mono 11; padding 8, radius 20; unread on a cyan wash.
 .notif-row {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 56px;
+  gap: 10px;
+  min-height: 60px;
   padding: 8px;
-  border-radius: var(--r-lg);
+  border-radius: var(--r-xl);
   cursor: pointer;
   transition: background var(--t-fast) var(--ease);
 
@@ -254,14 +291,14 @@
 .notif-avatar-wrap {
   position: relative;
   flex: none;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
 }
 
 .notif-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-lg);
   object-fit: cover;
   background: var(--avatar);
   display: block;
@@ -280,14 +317,14 @@
   position: absolute;
   right: -4px;
   bottom: -4px;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: var(--r-sm);
   display: grid;
   place-items: center;
   background: var(--muted);
   color: var(--surface);
-  box-shadow: 0 0 0 2px var(--surface);
+  border: 2px solid var(--surface);
   z-index: 5;
 
   &.is-accent { background: var(--accent); color: var(--on-accent); }
@@ -331,8 +368,9 @@
 }
 
 .notif-msg {
-  @include v2.text(body-sm);
+  font-size: 13px;
   line-height: 1.35;
+  b { font-weight: 700; }
   color: var(--text);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -351,7 +389,15 @@
 }
 .notif-type { text-transform: capitalize; }
 .notif-dot { opacity: .6; }
-.notif-time { font-family: var(--font-mono); }
+.notif-time { font-family: var(--font-mono); font-size: 11px; font-weight: 500; }
+
+// 42b: a group of votes names its whales and how many more, in cyan.
+.notif-group-who {
+  margin-top: 2px;
+  font-size: 10px;
+  line-height: 1.4;
+  color: var(--cyan);
+}
 .notif-meta-tier { font-size: 12px; }
 
 .notif-unread-dot {
@@ -402,8 +448,8 @@
   .notif-tooltip-actor-orca { color: var(--cyan); font-weight: 700; }
 }
 
-@keyframes notif-drop-in {
-  from { opacity: 0; transform: translateY(-4px); }
+@keyframes notif-side-in {
+  from { opacity: 0; transform: translateX(24px); }
 }
 @keyframes notif-sheet-up {
   from { transform: translateY(100%); }

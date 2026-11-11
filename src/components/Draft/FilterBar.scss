@@ -1,12 +1,25 @@
 @use "../../styles/v2" as v2;
 
-// Studio filter track (21d): a segmented track on the page ground, so the
-// track itself is a surface and the selected option surface-2.
+// Studio filter track (21d): a surface track (radius 16) on the page ground,
+// options 14/700 with padding 8/14 at radius 12, the count inline ("Published 136").
 .studio-filter {
   display: flex;
   min-width: 0;
 
   .v2-seg {
     background: var(--surface);
+    border-radius: var(--r-lg);
+  }
+
+  .v2-seg__opt.h36 {
+    padding: 0 14px;
+    font-size: 14px;
+    font-weight: 700;
+    gap: 5px;
+  }
+
+  .v2-seg__n {
+    font-size: 14px;
+    opacity: 1;
   }
 }

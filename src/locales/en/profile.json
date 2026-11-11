@@ -169,7 +169,8 @@
       "text": "Group your videos into a playlist people can watch in order.",
       "cta": "Create your first playlist",
       "visitor": "@{{user}} has no public playlists."
-    }
+    },
+    "visitorPreview": "Visitors see: “{{text}}”"
   },
   "links": {
     "button": "Links",
@@ -303,7 +304,10 @@
     "hiddenToast": "Tip hidden from your profile",
     "unhiddenToast": "Tip shown on your profile again",
     "hideFailed": "Could not change this tip. Please try again.",
-    "hideWalletPrompt": "Sign to change which tips show on your profile"
+    "hideWalletPrompt": "Sign to change which tips show on your profile",
+    "whoTitle": "@{{user}} supports",
+    "tipped_one": "Tipped {{count}}×",
+    "tipped_other": "Tipped {{count}}×"
   },
   "layout": {
     "customize": "Customize profile",

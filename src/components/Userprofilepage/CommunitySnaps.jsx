@@ -26,6 +26,7 @@ import UpvoteCount from '../UpvoteCount/UpvoteCount';
 import AuthorBadge from '../AuthorBadge/AuthorBadge';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import BarLoader from '../Loader/BarLoader';
+import ReportModal from '../modal/ReportModal';
 import { useTranslation } from 'react-i18next';
 import './CommunitySnaps.scss';
 
@@ -333,10 +334,14 @@ function SnapComments({ owner, permlink, onCommented, autoFocus = false }) {
 }
 
 // Card3-style ⋮ menu, but hides go to the SNAP hide list only (not video hides).
-function SnapOptionsMenu({ owner, permlink, onHidden }) {
+// 37b: your own post gets Edit post and View post; anyone else's View post,
+// Not interested, Don't show this creator and Report.
+function SnapOptionsMenu({ owner, permlink, onHidden, onEdit = null }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [open, setOpen] = useState(false);
+  const [reporting, setReporting] = useState(false);
+  const isOwn = !!user && user === owner;
   const [pos, setPos] = useState({ top: 0, left: 0 });
   const btnRef = useRef(null);
 
@@ -386,13 +391,24 @@ function SnapOptionsMenu({ owner, permlink, onHidden }) {
         <>
           <div className="snap-menu-backdrop" onClick={() => setOpen(false)} />
           <Menu className="snap-menu" style={{ top: pos.top, left: pos.left }}>
+            {isOwn && onEdit ? (
+              <MenuRow icon="edit" onClick={() => { setOpen(false); onEdit(); }}>{t('profile.snaps.editPost')}</MenuRow>
+            ) : null}
             <MenuRow as={Link} to={`/post/${owner}/${permlink}`} icon="link" onClick={() => setOpen(false)}>{t('profile.snaps.viewPost')}</MenuRow>
-            <MenuRow icon="block" onClick={hidePost}>{t('profile.snaps.notInterested')}</MenuRow>
-            <MenuRow icon="person_off" onClick={hideCreator}>{t('profile.snaps.dontShowCreator')}</MenuRow>
+            {!isOwn ? (
+              <>
+                <MenuRow icon="block" onClick={hidePost}>{t('profile.snaps.notInterested')}</MenuRow>
+                <MenuRow icon="person_off" onClick={hideCreator}>{t('profile.snaps.dontShowCreator')}</MenuRow>
+                <MenuRow icon="flag" danger onClick={() => { setOpen(false); setReporting(true); }}>{t('common.actions.report')}</MenuRow>
+              </>
+            ) : null}
           </Menu>
         </>,
         document.body,
       )}
+      {reporting ? (
+        <ReportModal isOpen onClose={() => setReporting(false)} type="post" target={{ author: owner, permlink }} />
+      ) : null}
     </>
   );
 }
@@ -625,14 +641,16 @@ export function SnapCard({ snap, feedMode = false, showAuthor = false, onRemove,
         >
           {hiveTime(snap.created)}
         </Link>
-        {isOwn && !editing && (
-          <button type="button" className="snap-menu-btn snap-edit-btn" onClick={() => setEditing(true)} title={t('profile.snaps.editPost')} aria-label={t('profile.snaps.editPost')}>
-            <Icon name="edit" size={18} />
-          </button>
-        )}
-        {feedMode && (
-          <SnapOptionsMenu owner={snap.owner} permlink={snap.permlink} onHidden={() => onRemove?.(snap)} />
-        )}
+        {/* The ⋮ menu (37b): Edit post on your own, the hide options and
+            Report on someone else's in the feed. */}
+        {(isOwn && !editing) || feedMode ? (
+          <SnapOptionsMenu
+            owner={snap.owner}
+            permlink={snap.permlink}
+            onHidden={() => onRemove?.(snap)}
+            onEdit={isOwn && !editing ? () => setEditing(true) : null}
+          />
+        ) : null}
       </div>
 
       {editing ? (

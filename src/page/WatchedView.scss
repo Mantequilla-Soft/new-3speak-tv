@@ -1,8 +1,8 @@
 @use "../styles/v2" as v2;
 
-// Watch history (45c): videos, shorts and audio someone watched, with "Track
-// history" for the owner and a remove button under each card. The cards are
-// the main feed's (Card3 / AudioTile); the tabs and dates are FeedToolbar.
+// Watch history (45c, 24d): videos, shorts and audio someone watched, as rows
+// (thumbnail, title, "@author · Watched 2h ago", remove), with "Track history"
+// for the owner. The tabs and dates are FeedToolbar.
 .watched-view-container {
   max-width: var(--content-max);
   margin: 0 auto;
@@ -25,15 +25,15 @@
       min-width: 0;
     }
 
-    .watched-icon-wrap {
-      display: grid;
-      place-items: center;
+    // The section mark of the boards: a 4px accent bar beside the title
+    .watched-bar {
       flex: none;
-      width: 44px;
-      height: 44px;
-      border-radius: var(--r-lg);
-      background: var(--surface-2);
-      color: var(--text);
+      align-self: flex-start;
+      width: 4px;
+      height: 28px;
+      margin-top: 2px;
+      border-radius: var(--r-bar);
+      background: var(--accent);
     }
 
     .watched-details {
@@ -100,45 +100,98 @@
     margin-top: 20px;
   }
 
-  // Grids wrap Card3, which lays out its own grid
-  .watched-videos-grid,
-  .watched-shorts-grid {
-    position: relative;
-  }
-
-  // Audio tab: the audio page's tiles, with the history line under each.
-  .watched-audio-grid { margin-top: 0; }
-
-  .watched-audio-item {
+  // The rows, in one card
+  .watched-list {
+    list-style: none;
+    margin: 0;
+    padding: 8px 16px;
     display: flex;
     flex-direction: column;
-    min-width: 0;
+    @include v2.card(24);
 
-    .audio-tile { width: auto; min-width: 0; }
+    @include v2.mobile { padding: 4px 12px; }
   }
 
-  // Under each card: when it was watched, and (own history) remove
-  .watched-card-footer {
+  .watched-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 8px;
-    min-height: 28px;
-    padding: 4px 0 0;
+    padding: 8px 0;
+    min-width: 0;
 
-    .watched-date {
-      @include v2.text(meta-sm);
-      color: var(--muted);
+    & + & { border-top: 1px solid var(--border); }
+
+    &__main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+
+      &:hover b { text-decoration: underline; }
     }
 
-    .watched-remove-btn {
-      color: var(--muted);
+    // 16:9 at radius 12 (8 when small); the striped placeholder until it loads
+    &__thumb {
+      flex: none;
+      width: 160px;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--r-md);
+      overflow: hidden;
+      @include v2.thumb-placeholder(6px);
 
-      &:hover,
-      &:focus-visible {
-        background: var(--accent-tint);
-        color: var(--accent);
+      img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+      @include v2.mobile { width: 110px; border-radius: var(--r-sm); }
+    }
+
+    &__text {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      b {
+        @include v2.text(body);
+        font-weight: 700;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+
+        @include v2.mobile { font-size: 13px; }
       }
+
+      span {
+        @include v2.text(meta);
+        color: var(--muted);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        @include v2.mobile { font-size: 11px; }
+      }
+    }
+  }
+
+  .watched-remove-btn {
+    flex: none;
+    color: var(--muted);
+
+    &:hover,
+    &:focus-visible {
+      background: var(--accent-tint);
+      color: var(--accent);
     }
   }
 

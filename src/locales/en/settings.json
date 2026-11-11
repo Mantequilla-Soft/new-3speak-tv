@@ -47,7 +47,8 @@
     "listenAlso": "Count my listening too",
     "listenOnToast": "Your listening now counts toward listener rewards",
     "onToastBoth": "Rewards for watching and listening on",
-    "offToastBoth": "Rewards off, and your watch and listening data has been deleted"
+    "offToastBoth": "Rewards off, and your watch and listening data has been deleted",
+    "listenOffToast": "Your listening no longer counts toward listener rewards"
   },
   "postingAuth": {
     "updateFailed": "Could not update your posting authority.",
@@ -62,7 +63,13 @@
     "desc": "Lets 3Speak publish your uploads and scheduled posts on your behalf, and save some settings without a wallet prompt each time. It can only post, vote and comment; it can never move funds or change your keys. Without it, uploads ask you to add it again. Changing this needs your active key.",
     "checking": "Checking…",
     "removing": "Removing…",
-    "adding": "Adding…"
+    "adding": "Adding…",
+    "letTitle": "Let 3Speak post for you",
+    "letDesc": "Needed to publish videos and Shorts without signing each one. You can take it back any time.",
+    "canPublish": "Publish posts and videos",
+    "canVote": "Vote and comment",
+    "never": "Never send tokens or change keys",
+    "grantWith": "Grant with {{wallet}}"
   },
   "notifications": {
     "kinds": {
@@ -118,7 +125,8 @@
     "deviceBlocked": "Blocked in your browser settings for this site — allow notifications there first.",
     "deviceNoWorker": "Not available on this build.",
     "deviceDesc": "Get a notification even when 3Speak isn’t open. Applies to this browser only.",
-    "whatHint": "What to be notified about. These apply to every device you’ve turned on."
+    "whatHint": "What to be notified about. These apply to every device you’ve turned on.",
+    "iosNote": "On iPhone and iPad, notifications only work after you add 3Speak to the Home Screen."
   },
   "tabs": {
     "general": "General",
@@ -194,7 +202,8 @@
     "version": "App version",
     "rpcNode": "Hive RPC node",
     "yourData": "Your data",
-    "privacyLink": "How 3Speak handles your data"
+    "privacyLink": "How 3Speak handles your data",
+    "getOrDelete": "Get or delete"
   },
   "dataRequest": {
     "emailRequired": "Enter an email address so we can reply",
@@ -226,7 +235,8 @@
     "sending": "Sending…",
     "requestDeletion": "Request deletion",
     "requestData": "Request my data",
-    "foot": "We reply within one month. You can also email <mail>privacy@3speak.tv</mail> directly."
+    "foot": "We reply within one month. You can also email <mail>privacy@3speak.tv</mail> directly.",
+    "intro": "Ask for a copy of what 3Speak stores about you, or for it to be removed. Posts on Hive are public and can't be deleted."
   },
   "lightning": {
     "title": "Lightning tips",

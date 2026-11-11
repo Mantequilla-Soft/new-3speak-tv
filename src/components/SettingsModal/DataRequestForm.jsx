@@ -14,7 +14,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { toastIn } from '../../utils/toast';
 import { CHECKER_URL } from '../../utils/config';
 import { useAppStore } from '../../lib/store';
-import { Banner, Button, Checkbox, ChoiceCard, Field, Icon } from '../v2/ui';
+import { Banner, Button, Checkbox, ChoiceCard, Icon } from '../v2/ui';
 import './DataRequestForm.scss';
 
 // Every toast from this module is headed "Settings"; the message becomes the
@@ -77,9 +77,9 @@ export default function DataRequestForm() {
   };
 
   if (done) {
-    // 38c: the success card with the reference to keep
+    // 38c: the success card with the reference to keep (Settings tints the card)
     return (
-      <div className="drf-done v2-success">
+      <div className="drf-done">
         <span className="drf-done-icon"><Icon name="mark_email_read" size={28} /></span>
         <h4>{t('settings.dataRequest.doneTitle')}</h4>
         <p>
@@ -102,83 +102,88 @@ export default function DataRequestForm() {
     );
   }
 
+  // 19j: what this is, the two requests as tiles, the address to reply to and an
+  // optional note, then one inverse button at the bottom.
   return (
     <form className="drf" onSubmit={handleSubmit}>
+      <p className="drf-intro">{t('settings.dataRequest.intro')}</p>
       <div className="drf-account">
         <Trans i18nKey="settings.dataRequest.requestFor" values={{ username }} components={{ b: <strong /> }} />
       </div>
 
-      <div className="drf-choice v2-choices is-grid" role="radiogroup" aria-label={t('settings.dataRequest.typeAria')}>
+      <div className="drf-choice" role="radiogroup" aria-label={t('settings.dataRequest.typeAria')}>
         <ChoiceCard
-          icon="download"
+          icon={<Icon name="download" size={28} className="v2-choice__icon" />}
           tone="cyan"
           selected={!isDelete}
           onClick={() => setType('export')}
           title={t('settings.dataRequest.getData')}
+          className="drf-tile"
         />
         <ChoiceCard
-          icon="delete"
+          icon={<Icon name="delete_forever" size={28} className="v2-choice__icon" />}
           selected={isDelete}
           onClick={() => setType('delete')}
           title={t('settings.dataRequest.deleteData')}
+          className="drf-tile is-delete"
         />
       </div>
 
-      <p className="drf-lede">
-        {isDelete
-          ? t('settings.dataRequest.ledeDelete')
-          : t('settings.dataRequest.ledeExport')}
-      </p>
-
-      {scope.length > 0 && (
-        <div className="drf-scope v2-well">
-          <span className="v2-eyebrow">{t('settings.dataRequest.covers')}</span>
-          <ul>
-            {scope.map((s) => (
-              <li key={s.key}>
-                <strong>{s.label}</strong>: {s.detail}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <details className="drf-scope">
+        <summary>
+          {isDelete
+            ? t('settings.dataRequest.ledeDelete')
+            : t('settings.dataRequest.ledeExport')}
+        </summary>
+        {scope.length > 0 && (
+          <div className="v2-well">
+            <span className="v2-eyebrow">{t('settings.dataRequest.covers')}</span>
+            <ul>
+              {scope.map((s) => (
+                <li key={s.key}>
+                  <strong>{s.label}</strong>: {s.detail}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </details>
 
       {/* The honest part. A front-end to a public ledger cannot unpublish from it,
           and users are entitled to know that BEFORE they ask us to try. */}
-      <div className="drf-warning v2-banner is-warn" role="note">
-        <Icon name="warning" size={18} className="v2-banner__icon" />
-        <div className="v2-banner__body">
-          <b className="drf-warning-title">{t('settings.dataRequest.cannotTitle')}</b>
-          <p>
-            <Trans i18nKey="settings.dataRequest.cannotBody" components={{ b: <strong /> }} />
-          </p>
-          <p>
-            {isDelete
-              ? t('settings.dataRequest.cannotDelete')
-              : t('settings.dataRequest.cannotExport')}
-          </p>
+      {isDelete && (
+        <div className="drf-warning v2-banner is-warn" role="note">
+          <Icon name="warning" size={18} className="v2-banner__icon" />
+          <div className="v2-banner__body">
+            <b className="drf-warning-title">{t('settings.dataRequest.cannotTitle')}</b>
+            <p>
+              <Trans i18nKey="settings.dataRequest.cannotBody" components={{ b: <strong /> }} />
+            </p>
+            <p>{t('settings.dataRequest.cannotDelete')}</p>
+          </div>
         </div>
-      </div>
+      )}
 
-      <Field
+      <input
         id="drf-contact"
-        label={t('settings.dataRequest.emailLabel')}
+        className="drf-input"
         type="email"
         value={contact}
         onChange={(e) => setContact(e.target.value)}
-        placeholder={t('settings.dataRequest.emailPlaceholder')}
+        placeholder={t('settings.dataRequest.emailLabel')}
+        aria-label={t('settings.dataRequest.emailLabel')}
         autoComplete="email"
       />
 
-      <Field
+      <textarea
         id="drf-msg"
-        as="textarea"
-        label={t('settings.dataRequest.messageLabel')}
+        className="drf-input is-area"
         rows={3}
         maxLength={2000}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder={t('settings.dataRequest.messagePlaceholder')}
+        placeholder={t('settings.dataRequest.messageLabel')}
+        aria-label={t('settings.dataRequest.messageLabel')}
       />
 
       {isDelete && (
@@ -192,12 +197,13 @@ export default function DataRequestForm() {
 
       <Button
         type="submit"
-        variant={isDelete ? 'danger' : 'primary'}
-        size={44}
+        variant={isDelete ? 'danger' : 'inverse'}
+        size={48}
         block
-        icon={isDelete ? 'delete' : 'download'}
+        trailing={isDelete ? 'delete_forever' : 'send'}
         loading={submitting}
         disabled={submitting || (isDelete && !confirmed)}
+        className="drf-submit"
       >
         {submitting ? t('settings.dataRequest.sending') : isDelete ? t('settings.dataRequest.requestDeletion') : t('settings.dataRequest.requestData')}
       </Button>

@@ -65,6 +65,7 @@ function ToolTip({
             ? (pinnedTitle || t('engagement.voters.pinnedTitle', { count: tooltipVoters.length }))
             : (title || t('engagement.voters.topVoters'))}
         </span>
+        {!pinned && tooltipVoters.length > 0 && <span className="votes-tooltip-count">{tooltipVoters.length}</span>}
         {pinned && (
           <button type="button" className="votes-tooltip-close" onClick={onClose} aria-label={t('common.actions.close')}>
             <Icon name="close" size={16} />
@@ -88,6 +89,10 @@ function ToolTip({
             >
               @{voter.username}
             </a>
+            {/* 40a: the voter's weight in muted mono beside what the vote is worth */}
+            {voter.reward != null && voter.weight != null && (
+              <span className="votes-tooltip-pct">{Math.round(voter.weight)}%</span>
+            )}
             {voter.reward != null && (
               <span className="votes-tooltip-reward">${voter.reward.toFixed(3)}</span>
             )}

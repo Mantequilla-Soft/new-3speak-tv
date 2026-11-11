@@ -1,11 +1,12 @@
 @use "../styles/v2" as v2;
 
-// An audio's Hive post page (/audio/:author/:permlink), the Audio v2 look of
-// 18b: a surface card with the cover, the big title, the creator, the play
-// button with its timeline, and the actions as dock tiles; then the post and
-// its comments. Tokens and mixins only.
+// An audio's Hive post page (/audio/:author/:permlink), design 18b: the
+// community strip, then the player card (cover, eyebrow, the big title, the
+// creator, the waveform with the notes left at a moment, play and the dock)
+// with the queue beside it; then the post and its comments. Tokens and mixins
+// only.
 .audio-post-page {
-  max-width: 1000px;
+  max-width: 1280px;
   margin: 0 auto;
   // The app column (.container, App.css) already gives the page padding.
   padding: 0 0 calc(var(--audio-np-clearance, 0px) + 48px);
@@ -21,56 +22,189 @@
   a { @include v2.btn(secondary, 40); text-decoration: none; }
 }
 
-// ─── Hero ───────────────────────────────────────────────────────────────────
+// ─── Community strip ────────────────────────────────────────────────────────
+.audio-post-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 10px 12px 10px 10px;
+  margin-bottom: 16px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--cyan) 9%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
+  @include v2.mobile { flex-wrap: wrap; gap: 8px 12px; }
+}
+.audio-post-strip__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  &:hover b { text-decoration: underline; text-underline-offset: 2px; }
+  @include v2.mobile { flex-basis: 100%; }
+}
+.audio-post-strip__space { flex: 1; }
+.audio-post-strip__mark {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--cyan);
+  color: var(--bg);
+  display: grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 900;
+  img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+}
+.audio-post-strip__text {
+  min-width: 0;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  .is-muted { color: var(--muted); }
+}
+.audio-post-strip__album {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  &:hover { color: var(--text); }
+}
+.audio-post-strip__join { flex: none; @include v2.mobile { margin-left: auto; } }
+
+// ─── The player card and the queue beside it ────────────────────────────────
+.audio-post-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 20px;
+  align-items: start;
+  @media (max-width: 1024px) { grid-template-columns: minmax(0, 1fr); }
+}
+.audio-post-card {
+  min-width: 0;
+  padding: 24px;
+  @include v2.card(24);
+  @include v2.mobile { padding: 16px; }
+}
 .audio-post-hero {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: 200px minmax(0, 1fr);
   gap: 24px;
-  align-items: start;
-  padding: 20px;
-  margin-bottom: 20px;
-  @include v2.card(28);
-  @include v2.mobile { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 16px; border-radius: var(--r-2xl); }
+  align-items: end;
+  @include v2.mobile { grid-template-columns: minmax(0, 1fr); gap: 20px; }
 }
 .audio-post-cover {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: var(--r-2xl);
-  background: var(--avatar);
+  border-radius: var(--r-xl);
+  @include v2.thumb-placeholder(10px);
   display: block;
-  @include v2.mobile { width: min(100%, 320px); justify-self: center; }
+  @include v2.mobile { border-radius: var(--r-2xl); }
 }
-.audio-post-hero-body { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.audio-post-hero-body { min-width: 0; }
+.audio-post-eyebrow { font-size: 12px; letter-spacing: .1em; }
 .audio-post-title {
-  margin: 0;
-  font-size: 40px;
+  margin: 10px 0 0;
+  font-size: 48px;
   font-weight: 900;
-  letter-spacing: var(--tracking-title);
-  line-height: 1.1;
+  letter-spacing: -.035em;
+  line-height: 1;
   overflow-wrap: anywhere;
-  @include v2.mobile { font-size: 28px; }
+  text-wrap: balance;
+  @media (max-width: 1279px) { font-size: 40px; }
+  @include v2.mobile { margin-top: 4px; font-size: 24px; letter-spacing: var(--tracking-title); line-height: 1.15; }
 }
-.audio-post-author-row { display: flex; align-items: center; gap: 10px; min-width: 0; .author-badge { margin: 0; } }
-.audio-post-meta-row {
+.audio-post-by {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 6px 14px;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-top: 14px;
+  min-width: 0;
   font-size: 13px;
   color: var(--muted);
 }
-.audio-post-meta-item { display: inline-flex; align-items: center; gap: 4px; }
+.audio-post-by__who {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--text);
+  text-decoration: none;
+  b { font-size: 14px; }
+  &:hover b { text-decoration: underline; text-underline-offset: 2px; }
+}
+.audio-post-by__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--avatar);
+  box-shadow: 0 0 0 2px var(--cyan);
+  flex: none;
+}
+.audio-post-by__meta { display: inline-flex; gap: 4px; }
+.audio-post-by__money { color: var(--accent); }
+.audio-post-follow.v2-btn { padding: 0 12px; font-size: 12px; }
 
-// Play, and the timeline beside it.
+// The waveform with the notes over it (pins), and the times under it.
+.audio-post-wave {
+  position: relative;
+  margin-top: 36px;
+  .audio-np-waveform { height: 96px; }
+  .audio-np-wave-pins { top: -26px; }
+  .audio-np-wave-pin-tag { border-radius: 50%; font-size: 10px; }
+  @include v2.mobile {
+    margin-top: 32px;
+    .audio-np-waveform { height: 44px; }
+  }
+}
+.audio-post-progress {
+  position: relative;
+  height: 6px;
+  margin: 20px 0;
+  border-radius: 3px;
+  background: var(--surface-2);
+  cursor: pointer;
+  &::before { content: ""; position: absolute; inset: -10px 0; }
+}
+.audio-post-progress-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+.audio-post-times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  @include v2.mono(12, 700);
+  color: var(--muted);
+  > span:first-child { color: var(--accent); }
+}
+
+// Play 64 (the board's 72, on the control scale), back and forward 56, then the dock of 64 tiles (18b).
 .audio-post-controls {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 10px;
-  border-radius: var(--r-xl);
-  background: var(--bg);
+  flex-wrap: wrap;
+  gap: 16px 8px;
+  margin-top: 20px;
+  @include v2.mobile { justify-content: center; gap: 10px; }
 }
+.audio-post-controls__space { flex: 1; @include v2.mobile { display: none; } }
 .audio-post-play-btn {
   @include v2.control(64);
   width: 64px;
@@ -81,57 +215,117 @@
   color: var(--on-accent);
   &:hover { background: var(--accent-hover); }
 }
-.audio-post-time-track { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; }
-.audio-post-time { @include v2.mono(12, 700); color: var(--muted); flex: none; }
-.audio-post-progress {
-  position: relative;
-  flex: 1;
-  height: 6px;
-  border-radius: 3px;
-  background: var(--surface-2);
-  cursor: pointer;
-  &::before { content: ""; position: absolute; inset: -10px 0; }
-}
-.audio-post-progress-fill { height: 100%; border-radius: 3px; background: var(--accent); }
-.audio-post-no-audio { margin: 0; padding: 10px 12px; border-radius: var(--r-md); background: var(--cyan-wash); font-size: 13px; color: var(--text); }
-
-// The actions: dock tiles, icon over label.
-.audio-post-actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 6px; }
-.audio-post-action-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.audio-post-skip {
+  @include v2.control(56);
+  width: 56px;
+  padding: 0;
   justify-content: center;
-  gap: 2px;
-  height: 60px;
-  padding: 0 6px;
-  border: 0;
-  border-radius: var(--r-lg);
+  flex: none;
   background: var(--surface-2);
   color: var(--text);
-  font: inherit;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
-  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
-  &:active { transform: scale(.98); }
-  &.is-voted { background: var(--accent-tint-strong); color: var(--accent); }
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  @include v2.mobile { width: 52px; height: 52px; border-radius: v2.radius-for(52); }
 }
-.audio-post-action-count { font-family: var(--font-mono); opacity: .8; }
+.audio-post-dock {
+  display: flex;
+  gap: 8px;
+  .v2-dock { width: 64px; height: 64px; border-radius: var(--r-xl); font-size: 11px; gap: 3px; }
+  @include v2.mobile {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    .v2-dock { width: auto; height: 56px; font-size: 10px; }
+  }
+}
+.audio-post-no-audio { margin: 20px 0 0; padding: 10px 12px; border-radius: var(--r-md); background: var(--cyan-wash); font-size: 13px; color: var(--text); }
 
-.audio-post-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+// The side card: Queue | Comments on a bg track, a fixed height scrolling inside.
+.audio-post-side {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  @include v2.card(24);
+  overflow: hidden;
+}
+.audio-post-side__tabs.v2-seg { margin: 12px 12px 0; padding: 6px; border-radius: var(--r-lg); background: var(--bg); }
+.audio-post-side__body {
+  height: 420px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 8px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  @include v2.mobile { height: 360px; }
+}
+.audio-post-side__note { display: flex; align-items: center; gap: 8px; margin: 0; padding: 16px 8px; font-size: 13px; color: var(--muted); }
+.audio-post-side__add { flex: none; }
+.audio-post-queue { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.audio-post-queue__row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 40px;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 8px;
+  border: 0;
+  border-radius: var(--r-lg);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  &:hover { background: var(--bg-hover); }
+  &.is-current { background: var(--accent-tint-strong); .audio-post-queue__text b { color: var(--accent); } }
+}
+.audio-post-queue__thumb {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  @include v2.thumb-placeholder(5px);
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+.audio-post-queue__now { position: absolute; inset: 0; display: grid; place-items: center; background: var(--media-scrim); color: var(--accent); }
+.audio-post-queue__text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  b { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  span { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+.audio-post-queue__dur { @include v2.mono(12, 500); color: var(--muted); text-align: right; }
+.audio-post-notes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.audio-post-note { display: flex; gap: 10px; padding: 10px 4px; border-bottom: 1px solid var(--border); &:last-child { border-bottom: 0; } }
+.audio-post-note__avatar { width: 36px; height: 36px; border-radius: var(--r-md); object-fit: cover; background: var(--avatar); flex: none; }
+.audio-post-note__body { min-width: 0; flex: 1; p { margin: 2px 0 0; font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; } }
+.audio-post-note__who { display: flex; align-items: center; gap: 6px; b { font-size: 12px; } }
+.audio-post-note__time {
+  height: 20px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--cyan-tint);
+  color: var(--cyan);
+  @include v2.mono(11, 700);
+  cursor: pointer;
+}
+
+.audio-post-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
 .audio-post-tag { text-decoration: none; color: var(--text); &:hover { color: var(--text); } }
 
 // ─── The post and the comments ──────────────────────────────────────────────
 .audio-post-body {
-  margin-bottom: 20px;
+  margin: 16px 0 20px;
   padding: 20px;
   @include v2.card(24);
   @include v2.mobile { padding: 16px; }
 }
 .audio-post-comments {
   padding: 20px;
+  scroll-margin-top: 88px;
   @include v2.card(24);
   @include v2.mobile { padding: 16px; }
 }

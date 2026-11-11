@@ -710,14 +710,22 @@ $chat-sidebar: 360px;
   }
 }
 
+// 19e: one picker card (radius 20) for both tools: an Emoji / GIF track on
+// top, the same width either way so switching tabs never resizes it.
+.chat-picker {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  @include v2.mobile { width: auto; }
+}
+.chat-picker-head { display: flex; align-items: center; }
+
 // Emoji: the emoji-picker-react component brings its own search, category
 // tabs and scroll. Its colours are mapped to the tokens so it reads as ours
 // in both themes; the popover card is the only frame.
 .chat-emoji-popover {
-  width: 340px;
-  padding: 0;
   overflow: hidden;
-  @include v2.mobile { width: auto; }
   .EmojiPickerReact { width: 100% !important; }
   .EmojiPickerReact,
   .EmojiPickerReact.epr-dark-theme {
@@ -746,13 +754,7 @@ $chat-sidebar: 360px;
 }
 
 // GIF: search on top, a fixed-height grid that scrolls (results never resize it).
-.chat-gif-popover {
-  width: 380px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  @include v2.mobile { width: auto; }
-}
+.chat-gif-popover { overflow: hidden; }
 .chat-gif-grid {
   // Two per row; each GIF keeps its natural aspect ratio (rectangles).
   display: grid;
@@ -761,7 +763,7 @@ $chat-sidebar: 360px;
   grid-auto-rows: max-content;
   align-content: start;
   gap: 6px;
-  height: 340px;
+  height: 290px;
   @include v2.scroll-y;
 }
 .chat-gif-item {
@@ -1049,6 +1051,29 @@ $chat-sidebar: 360px;
   max-height: 100%;
   border-radius: 20px;
   object-fit: contain;
+}
+
+// 19e: the conversation's images, 56px tiles (radius 16), the open one ringed.
+.chat-lightbox-strip {
+  flex: none;
+  display: flex;
+  justify-content: safe center;
+  gap: 8px;
+  padding: 0 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  @include v2.scroll-x;
+}
+.chat-lightbox-thumb {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--on-media) 12%, transparent);
+  overflow: hidden;
+  cursor: pointer;
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  &.is-on { border-color: var(--on-media); }
 }
 
 /* ---- Pasted / picked image attachments (above the composer) ---- */

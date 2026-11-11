@@ -28,16 +28,20 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: .4em;
+  gap: .5em;
 }
+
+// Over the video (19i) the lines carry no avatar; the dock keeps them.
+.obs-chat:not(.obs-chat--dock) .obs-chat__avatar { display: none; }
 
 .obs-chat__msg {
   display: flex;
   align-items: flex-start;
   gap: .5em;
   max-width: 100%;
-  padding: .5em .8em .5em .5em;
-  border-radius: 1em;
+  // 19i: a 20px-radius bubble at the default 16px text, name then message.
+  padding: .625em .875em;
+  border-radius: 1.25em;
   background: var(--media-scrim-strong);
   align-self: flex-start;
   animation: obs-chat-in var(--t-slow) var(--ease);
@@ -74,9 +78,11 @@
 
 .obs-chat__name {
   font-weight: 700;
-  color: var(--cyan);
-  margin-right: .4em;
+  color: var(--on-media);
+  margin-right: .3em;
 }
+
+.obs-chat--dock .obs-chat__name { color: var(--cyan); }
 
 // OBS Custom Browser Dock: read by the streamer, never on the video.
 .obs-chat--dock {
@@ -85,6 +91,8 @@
   padding: 8px;
 
   .obs-chat__msg {
+    padding: .5em .8em .5em .5em;
+    border-radius: 1em;
     background: var(--surface);
     animation: none;
   }

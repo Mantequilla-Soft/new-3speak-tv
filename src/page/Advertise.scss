@@ -38,8 +38,8 @@ $mkt-sub: 12px;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 20px;
+    gap: 16px;
+    margin-bottom: 14px;
 
     @include v2.mobile {
       flex-direction: column;
@@ -55,11 +55,10 @@ $mkt-sub: 12px;
     min-width: 0;
 
     h1 {
-      margin: 0 0 8px;
+      margin: 0 0 4px;
       @include v2.text(heading-lg);
-      font-size: 32px;
 
-      @include mix.respond(phone) { font-size: 28px; }
+      @include mix.respond(phone) { font-size: 24px; }
     }
   }
 
@@ -67,16 +66,16 @@ $mkt-sub: 12px;
   .mkt-lede {
     margin: 0;
     color: var(--muted);
-    font-size: $mkt-text;
-    line-height: 1.5;
-    max-width: 68ch;
+    font-size: 13px;
+    line-height: 1.45;
+    max-width: 640px;
 
     strong { color: var(--text); font-weight: 700; }
   }
 
   /* ── how it works, above the tabs ───────────────────────── */
   .mkt-intro {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 
     h2 {
       margin: 0 0 4px;
@@ -103,7 +102,7 @@ $mkt-sub: 12px;
   /* Three cards for product, ads, bookings, each with its number in accent (47a). */
   .mkt-steps {
     list-style: none;
-    margin: 0 0 12px;
+    margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
@@ -117,20 +116,20 @@ $mkt-sub: 12px;
       counter-increment: mkt-step;
       padding: 16px;
       border: 1px solid var(--border);
-      border-radius: var(--r-2xl);
+      border-radius: var(--r-xl);
       background: var(--surface);
       display: flex;
       flex-direction: column;
+      gap: 2px;
 
       /* The number is the whole point of the ordering. */
       &::before {
         content: counter(mkt-step);
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
         color: var(--accent);
-        font-size: 24px;
-        font-weight: 900;
-        line-height: 1;
+        @include v2.mono(24, 900);
+        line-height: 1.15;
       }
 
       strong {
@@ -308,11 +307,11 @@ $mkt-sub: 12px;
 
   /* The way in, from the overview: the page's one primary action (design 47a). */
   .mkt-enroll-cta {
-    @include v2.btn(primary, 56);
+    @include v2.btn(primary, 48);
     display: flex;
-    width: min(100%, 560px);
+    width: 100%;
     justify-content: space-between;
-    margin: 4px 0 28px;
+    margin: 4px 0 0;
     font-size: 14px;
   }
 
@@ -327,7 +326,13 @@ $mkt-sub: 12px;
 
     @include v2.mobile { display: flex; }
   }
-  .mkt-tab { flex: 1 0 auto; }
+  .mkt-tabs.v2-seg { border-radius: var(--r-md); }
+  .mkt-tabs .mkt-tab {
+    flex: 1 0 auto;
+    padding: 0 12px;
+    border-radius: var(--r-sm);
+    font-size: 12px;
+  }
 
   /* The last section in a panel should not add a gap above the page padding. */
   [role="tabpanel"] > .mkt-section:last-child { margin-bottom: 0; }
@@ -940,18 +945,20 @@ $mkt-sub: 12px;
   .mkt-format-groups {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 12px;
+    gap: 10px;
     margin: 0 0 14px;
-    align-items: start;
+    align-items: stretch;
 
     .mkt-ratecard { margin: 0; }
   }
 
   .mkt-format-group {
     min-width: 0;
+    display: flex;
+    flex-direction: column;
     padding: 14px;
     border: 1px solid var(--border);
-    border-radius: var(--r-2xl);
+    border-radius: var(--r-xl);
     background: var(--surface);
   }
 
@@ -1047,6 +1054,14 @@ $mkt-sub: 12px;
   }
 
   .mkt-rc-blurb {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+
+  /* The one line under a format's name (47a): what you hand over. */
+  .mkt-rc-supply {
     margin: 0;
     font-size: 11px;
     line-height: 1.4;
@@ -1232,10 +1247,6 @@ $mkt-sub: 12px;
 
   /* The price explorer: a card with the chart on a bg well (design 47a). */
   .mkt-price-explorer {
-    padding: 16px;
-    border: 1px solid var(--border);
-    border-radius: var(--r-2xl);
-    background: var(--surface);
     .mkt-dayrate-plot { background: var(--bg); }
   }
 
@@ -2168,3 +2179,114 @@ $mkt-sub: 12px;
     .mkt-section { margin-bottom: 0; }
   }
 
+/* ── the General tab, 47a ─────────────────────────────────── */
+.mkt-page {
+  /* Every format group in one row of cards on a wide screen (two on a tablet). */
+  .mkt-formats-all {
+    margin-bottom: 10px;
+
+    .mkt-format-groups {
+      margin: 0;
+      @media (min-width: 1100px) {
+        grid-template-columns: repeat(var(--mkt-groups, 4), minmax(0, 1fr));
+      }
+    }
+  }
+
+  /* The audience on the left, the price on the right. */
+  .mkt-general-pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+    align-items: stretch;
+
+    @media (min-width: 960px) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  }
+
+  .mkt-card {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-xl);
+    background: var(--surface);
+
+    > h2 {
+      margin: 0;
+      @include v2.text(title-sm);
+    }
+
+    > .mkt-fine { margin: 0; font-size: 11px; line-height: 1.4; }
+  }
+
+  /* Inside the audience card: stat wells, the table on a bg well, the quality note
+     as plain fine print rather than a banner. */
+  .mkt-audience-card {
+    .mkt-inventory { gap: 10px; }
+
+    .mkt-stats {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+
+      @include v2.mobile { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .mkt-stat {
+      padding: 10px 12px;
+      border: 0;
+      border-radius: var(--r-md);
+      background: var(--bg);
+
+      .mkt-stat-value { @include v2.mono(20, 900); }
+      .mkt-stat-label { font-size: 12px; font-weight: 400; }
+      .mkt-stat-note { font-size: 11px; }
+    }
+
+    .mkt-slots h3 {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .mkt-table-wrap {
+      padding: 0;
+      border: 0;
+      border-radius: var(--r-md);
+      background: var(--bg);
+    }
+
+    .mkt-table {
+      th, td {
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 12px;
+        border-bottom: 0;
+        border-top: 1px solid var(--border);
+      }
+      th { border-top: 0; font-size: 10px; letter-spacing: .06em; text-align: left; }
+      th.num { text-align: left; }
+      .num { text-align: left; }
+      td:last-child { color: var(--muted); }
+    }
+
+    .mkt-note {
+      padding: 0;
+      background: none;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+  }
+
+  /* The price card's chart sits on a bg well; the CTA closes the card. */
+  .mkt-price-explorer {
+    .mkt-explorer { flex: 1; }
+    .mkt-enroll-cta { margin-top: auto; }
+  }
+}

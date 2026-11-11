@@ -30,6 +30,8 @@
     "showParent": "Show Parent Comment",
     "untitledReply": "(untitled reply)",
     "inCommunity": "in {{community}}",
+    "readTime_one": "{{count}} min read",
+    "readTime_other": "{{count}} min read",
     "adjustVote": "Adjust vote",
     "upvote": "Upvote",
     "tipCreator": "Tip creator",

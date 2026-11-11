@@ -1177,7 +1177,8 @@ function Thread({ conv, headerActions = null }) {
           />
           <EmojiTextInput
             className="chat-msg-input"
-            placeholder={t('chat.thread.placeholder')}
+            // 26a / 32a: "Message pancasona", "Message #sightings".
+            placeholder={title ? t('chat.thread.placeholderTo', { name: conv.type === 'channel' ? `#${title}` : title }) : t('chat.thread.placeholder')}
             value={draft}
             onChange={(v) => { updateDraft(v); setTyping(v.length > 0) }}
             onSubmit={send}
@@ -1212,6 +1213,9 @@ function Thread({ conv, headerActions = null }) {
         url={lightbox?.url}
         sender={lightbox?.sender}
         createdAt={lightbox?.createdAt}
+        // 19e: every image in this conversation, as the strip under the photo.
+        items={lightbox ? messages.flatMap((m) => findImageUrls(m.content).map((u) => ({ url: u, sender: m.sender, createdAt: m.createdAt }))) : []}
+        onPick={setLightbox}
         onClose={() => setLightbox(null)}
       />
     </div>
@@ -1339,6 +1343,16 @@ export function ChatPanel({ overlay = false, expanded = false, onToggleExpand })
         {!overlay && (
           <div className="chat-page-head">
             <h1 className="chat-page-title">{t('chat.button.label')}</h1>
+            {/* 26a: the accent "new chat" square; it takes you to the
+                "Message a Hive user" field below. */}
+            <IconButton
+              icon="edit_square"
+              size={40}
+              variant="primary"
+              label={t('chat.newDm.start')}
+              className="chat-page-new"
+              onClick={(e) => e.currentTarget.closest('.chat-page-sidebar')?.querySelector('.chat-newdm input')?.focus()}
+            />
           </div>
         )}
         <ConversationList />

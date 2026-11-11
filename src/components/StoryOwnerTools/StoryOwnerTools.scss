@@ -110,3 +110,130 @@
     color: var(--muted);
   }
 }
+
+// The panel at the foot of your own story on a phone (24d): a 24px scrim card,
+// "Seen by N" with the first faces, then 56px tiles. White on the scrim in both
+// themes (it sits over the video).
+.storyOwnerPanel {
+  padding: 10px;
+  border-radius: var(--r-2xl);
+  background: var(--media-scrim-strong);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--on-media);
+
+  &__seen {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 32px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    b { flex: 1; font-size: 14px; font-weight: 700; }
+  }
+
+  &__eye { color: var(--cyan); }
+
+  &__faces {
+    display: flex;
+    padding-left: 6px;
+
+    .hive-avatar { margin-left: -6px; }
+  }
+
+  &__face {
+    display: block;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    border: 2px solid var(--media-black);
+    object-fit: cover;
+    background: var(--avatar);
+  }
+
+  &__tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    grid-auto-flow: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  &__tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    height: 56px;
+    padding: 0 4px;
+    border: 0;
+    border-radius: var(--r-xl);
+    background: color-mix(in srgb, var(--on-media) 10%, transparent);
+    color: var(--on-media);
+    font: inherit;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+
+    span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    &:hover { background: color-mix(in srgb, var(--on-media) 18%, transparent); }
+    &:active { transform: scale(.98); }
+  }
+
+  // "Keep as short" asked (45b): the hint, the question on a well, two answers
+  &__confirm {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  &__hint {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.4;
+    color: color-mix(in srgb, var(--on-media) 70%, transparent);
+  }
+
+  &__q {
+    padding: 10px;
+    border-radius: var(--r-md);
+    background: color-mix(in srgb, var(--media-black) 60%, transparent);
+    font-size: 13px;
+  }
+
+  &__answers {
+    display: flex;
+    gap: 6px;
+  }
+
+  &__answer {
+    @include v2.control(32);
+    flex: 1;
+    justify-content: center;
+    background: color-mix(in srgb, var(--on-media) 10%, transparent);
+    color: var(--on-media);
+    font-size: 12px;
+    font-weight: 700;
+
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--on-media) 18%, transparent); }
+
+    &.is-primary {
+      background: var(--accent);
+      color: var(--on-accent);
+      font-weight: 900;
+
+      &:hover:not(:disabled) { background: var(--accent-hover); }
+    }
+  }
+}

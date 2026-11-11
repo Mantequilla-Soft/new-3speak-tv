@@ -19,6 +19,7 @@
     "communityWithSubscribers_one": "Community · {{formatted}} subscriber",
     "communityWithSubscribers_other": "Community · {{formatted}} subscribers",
     "commentFallback": "(comment)",
+    "videoKind": "3Speak · Video",
     "play": "Play {{title}}"
   },
   "share": {
@@ -137,7 +138,8 @@
     "quoting": "Quoting @{{user}}",
     "cancelQuote": "Cancel quote",
     "removeImage": "Remove image",
-    "placeholder": "Type a message…"
+    "placeholder": "Type a message…",
+    "placeholderTo": "Message {{name}}"
   },
   "page": {
     "chooseTarget": "Choose a chat to send to.",

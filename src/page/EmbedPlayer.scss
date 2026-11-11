@@ -27,15 +27,39 @@
   // A short's source is already 9:16, so fill the vertical frame edge-to-edge.
   &.short video { object-fit: cover; }
 
+  // The play mark in the middle of the poster until the first play (49c):
+  // white over the picture, in both themes.
+  .emb-player__play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--on-media);
+    cursor: pointer;
+    filter: drop-shadow(0 2px 8px var(--media-scrim));
+
+    &:hover { transform: translate(-50%, -50%) scale(1.04); }
+  }
+
   // Video unavailable: a quiet surface with one muted line (49c).
   &--err {
     flex-direction: column;
     gap: 8px;
     padding: 16px;
+    border-radius: var(--r-md);
     background: var(--surface);
     color: var(--muted);
     font-family: var(--font-sans);
     @include v2.text(meta);
+    font-size: 12px;
     text-align: center;
   }
 }

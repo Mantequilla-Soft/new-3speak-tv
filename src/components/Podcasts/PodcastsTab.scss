@@ -24,8 +24,7 @@
   // Title on its own line, the filters in one row under it (36d).
   // (nowrap: a wrapping column would size its line, and so the filters, by their content)
   &--filters { flex-direction: column; flex-wrap: nowrap; align-items: stretch; }
-  &--filters > .pod-section-title { align-self: flex-start; }
-  &--filters > .pod-discover-tabs { align-self: flex-start; }
+  &--filters > .pod-section-title, &--filters > .pod-app-title { align-self: flex-start; }
 }
 .pod-section-title {
   display: flex;
@@ -86,12 +85,6 @@
   // The 44px action square of a show's episode row (36d).
   &--lg { width: 44px; height: 44px; border-radius: v2.radius-for(44); }
 }
-.pod-link-btn {
-  @include v2.btn(ghost, 32);
-  padding: 0 8px;
-  color: var(--cyan);
-  &:hover { color: var(--cyan); }
-}
 .pod-dl-pct { @include v2.mono(10, 700); color: var(--cyan); }
 .pod-btn-count { margin-left: 2px; font-family: var(--font-mono); opacity: .8; }
 
@@ -147,7 +140,6 @@
   label { display: flex; flex-direction: column; gap: 4px; span { @include v2.text(eyebrow); color: var(--muted); } }
   .v2-input { background: var(--surface); }
 }
-.pod-select.v2-input { width: auto; min-width: 140px; max-width: 100%; background-color: var(--surface-2); }
 
 // ─── Show cards and rails (36c) ─────────────────────────────────────────────
 .pod-rail {
@@ -222,37 +214,7 @@
 }
 .pod-card-meta { display: block; max-width: 100%; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-// ─── Discover: add a show, search, OPML, private feed (36c) ───────────────
-.pod-add-row { display: flex; gap: 8px; margin-bottom: 24px; }
-.pod-hero {
-  @include v2.card;
-  padding: 20px;
-  margin-bottom: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  @include v2.mobile { padding: 16px; }
-}
-.pod-hero-intro { display: flex; align-items: flex-start; gap: 12px; }
-.pod-hero-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--r-lg);
-  background: var(--cyan-tint);
-  color: var(--cyan);
-  display: grid;
-  place-items: center;
-  flex: none;
-}
-.pod-hero-title { margin: 0; @include v2.text(heading); @include v2.mobile { font-size: 20px; } }
-.pod-hero-sub { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
-.pod-hero-close { margin-left: auto; background: transparent; }
-.pod-hero-body { display: flex; flex-direction: column; gap: 12px; }
-.pod-hero-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; &--single { grid-template-columns: 1fr; } @include v2.below-wide { grid-template-columns: 1fr; } }
-.pod-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.pod-field-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-.pod-field-label { @include v2.text(eyebrow); color: var(--muted); }
-.pod-search-modes { background: var(--bg); }
+// ─── A search field inside a card (the playlist's feeds window, a playlist page) ──
 .pod-field-row {
   display: flex;
   align-items: center;
@@ -278,15 +240,10 @@
   .pod-btn { height: 36px; border-radius: var(--r-md); }
 }
 .pod-field-icon { color: var(--muted); flex: none; }
-.pod-private-toggle { align-self: flex-start; }
-.pod-private { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: var(--r-lg); background: var(--cyan-wash); }
 .pod-private-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; @include v2.mobile { grid-template-columns: 1fr; } .pod-input { background: var(--surface); } }
 .pod-private-hint { margin: 0; font-size: 11px; color: var(--muted); }
-.pod-hero-tools { display: flex; gap: 8px; flex-wrap: wrap; }
 
-// Results from Podcast Index / Apple (search, trending, top charts).
-.pod-discover-tabs { background: var(--surface); }
-.pod-trending-filters { display: flex; gap: 8px; flex-wrap: wrap; align-self: flex-start; }
+// Results from Podcast Index / Apple (search, top charts): two rows across (36c).
 .pod-results {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -905,9 +862,9 @@ button.pod-show-kicker { cursor: pointer; &:hover { text-decoration: underline; 
   grid-template-columns: 160px minmax(0, 1fr);
   gap: 18px;
   align-items: end;
-  @include v2.mobile { grid-template-columns: 112px minmax(0, 1fr); gap: 14px; }
+  @include v2.mobile { grid-template-columns: minmax(0, 1fr); gap: 14px; }
 }
-.pod-showhead-art { width: 100%; aspect-ratio: 1; height: auto; border-radius: var(--r-2xl); object-fit: cover; display: block; background: var(--avatar); }
+.pod-showhead-art { width: 100%; aspect-ratio: 1; height: auto; border-radius: var(--r-2xl); object-fit: cover; display: block; background: var(--avatar); @include v2.mobile { width: 120px; } }
 .pod-showhead-info { min-width: 0; display: flex; flex-direction: column; }
 .pod-showhead-badges { display: flex; flex-wrap: wrap; gap: 6px; .pod-badge { height: auto; padding: 2px 8px; border-radius: var(--r-sm); } .pod-badge:not(.pod-badge--live):not(.pod-badge--cyan) { color: var(--text); } }
 .pod-showhead-title { margin: 6px 0 0; font-size: 32px; font-weight: 700; letter-spacing: -.03em; line-height: 1.15; overflow-wrap: anywhere; @include v2.mobile { font-size: 24px; } }
@@ -929,7 +886,6 @@ button.pod-show-kicker { cursor: pointer; &:hover { text-decoration: underline; 
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 10px;
-  @include v2.mobile { grid-column: 1 / -1; }
 }
 .pod-show-play {
   @include v2.btn(primary, 48);

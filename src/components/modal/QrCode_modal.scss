@@ -1,43 +1,50 @@
 @use "../../styles/v2" as v2;
 
-// QR code dialog (design 25e): a lead line, then the code on its white tile in
-// a bg well, with the "open in the app" link in cyan under it.
+// QR code dialog (design 25e): the code on a white tile (radius 24, padding 12)
+// on the left; what to do with it and the one action on the right. Stacked on
+// a phone. The tile stays white whatever the theme, so every camera reads it.
 .qr-modal {
-  .qr-modal__lead {
-    margin: 0;
-    @include v2.text(body);
-    color: var(--muted);
-  }
-
-  .qr-modal__well {
-    @include v2.well;
+  .qr-modal__row {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    padding: 16px;
+    gap: 16px;
+
+    @include v2.mobile { flex-direction: column; align-items: stretch; }
   }
 
-  // The scannable tile: always white, whatever the theme.
   .qr-modal__code {
+    flex: none;
     display: block;
-    padding: 8px;
+    align-self: center;
+    padding: 12px;
     border: 0;
-    border-radius: var(--r-md);
+    border-radius: var(--r-2xl);
     background: var(--on-media);
     cursor: pointer;
     line-height: 0;
   }
 
-  .qr-modal__hint {
-    border: 0;
-    background: none;
-    padding: 4px 8px;
-    color: var(--cyan);
-    @include v2.text(label);
-    font-size: 12px;
-    cursor: pointer;
+  .qr-modal__side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+  }
 
-    &:hover { text-decoration: underline; }
+  .qr-modal__lead {
+    margin: 0;
+    @include v2.text(body-sm);
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .qr-modal__hint.v2-btn {
+    gap: 12px;
+    max-width: 100%;
+    white-space: normal;
+
+    .v2-btn__label { white-space: normal; text-align: left; }
+    @include v2.mobile { width: 100%; justify-content: space-between; }
   }
 }

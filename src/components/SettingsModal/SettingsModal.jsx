@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { toastIn } from '../../utils/toast';
 import { useAppStore } from '../../lib/store';
 import { APP_VERSION } from '../../version';
@@ -19,7 +20,9 @@ import {
   waitForThreespeakPostingAuth,
 } from '../../utils/postingAuthority';
 import { LIGHTNING_ADDRESS_RE, checkLightningAddress, readOwnLightningAddress, saveOwnLightningAddress } from '../../lib/lightningTip';
-import TagsV2Picker from '../tooltip/TagsV2Picker';
+import { TAG_OPTIONS, getTagLabel } from '../../utils/tagsV2';
+import { friendlyProviderName } from '../../utils/aiohaProviderUi';
+import { useGetMyQuery } from '../../hooks/getUserDetails';
 import DataRequestForm from './DataRequestForm';
 import LanguagePicker from '../LanguagePicker/LanguagePicker';
 import useDialog from '../../hooks/useDialog';
@@ -41,9 +44,9 @@ const sameSet = (a, b) =>
 // One card of settings (38a-c): a 4px bar in the section's tone and its title,
 // then the rows. On/off rows are SettingRow + Toggle, divided by 1px lines
 // (STYLE_GUIDE §11). `aside` sits at the right of the title.
-function Section({ title, tone = 'accent', aside, children, className }) {
+function Section({ title, tone = 'accent', aside, children, className, id }) {
   return (
-    <section className={cx('settings-section', className)}>
+    <section className={cx('settings-section', className)} id={id}>
       {(title || aside) && (
         <div className="settings-section-head">
           {title && <h3 className={cx('settings-section-title', tone === 'cyan' && 'is-cyan')}>{title}</h3>}
@@ -55,21 +58,33 @@ function Section({ title, tone = 'accent', aside, children, className }) {
   );
 }
 
-// A switch row: the title doubles as the switch's accessible name.
-function Row({ title, desc, checked, onChange, disabled, icon }) {
+// A switch row: the title doubles as the switch's accessible name (or `label`).
+// `variant`: rows divided by 1px lines (default, 38b), each row in its own well
+// ('well', the ads card in 38a), or title-only rows without lines ('plain', the
+// notification kinds in 38b). `tone="cyan"` for the feed and notification
+// switches the boards draw in cyan.
+function Row({ title, desc, checked, onChange, disabled, icon, tone, variant, label }) {
   return (
     <SettingRow
       title={title}
       sub={desc}
       icon={icon}
-      control={<Toggle checked={!!checked} onChange={onChange} label={title} disabled={disabled} />}
+      className={cx('settings-row', variant && `is-${variant}`)}
+      control={<Toggle checked={!!checked} onChange={onChange} label={label || title} disabled={disabled} tone={tone} />}
     />
   );
 }
 
-// Loading / saving, or why a save failed (accent banner).
+// Loading / saving, or why a save failed (an accent wash with the reason, 38c).
 function Status({ error, children }) {
-  if (error) return <Banner tone="warn" icon="error">{error}</Banner>;
+  if (error) {
+    return (
+      <div className="settings-error" role="alert">
+        <Icon name="error" size={18} className="settings-error-icon" />
+        <span>{error}</span>
+      </div>
+    );
+  }
   if (!children) return null;
   return <p className="settings-status">{children}</p>;
 }
@@ -119,6 +134,19 @@ function InterestsSection() {
     }
   };
 
+  // The topics as one row of chips (38b), plus any older pick that is not in
+  // the taxonomy any more, so it can still be taken off.
+  const picked = interests || [];
+  const known = new Set(TAG_OPTIONS.map((o) => o.id));
+  const chips = [
+    ...TAG_OPTIONS.map((o) => ({ id: o.id, label: t(o.labelKey) })),
+    ...picked.filter((id) => !known.has(id)).map((id) => ({ id, label: getTagLabel(id) || id })),
+  ];
+  const toggleInterest = (id) => {
+    setJustSaved(false);
+    setInterests(picked.includes(id) ? picked.filter((x) => x !== id) : [...picked, id]);
+  };
+
   return (
     <Section
       tone="cyan"
@@ -128,14 +156,19 @@ function InterestsSection() {
         {t('settings.interests.hint')}
         {!user && ` ${t('settings.interests.loginHint')}`}
       </p>
-      <div className="settings-interests-picker">
-        <TagsV2Picker
-          multi
-          searchable
-          value={interests || []}
-          onChange={(next) => { setJustSaved(false); setInterests(next); }}
-          disabled={!user || saving}
-        />
+      <div className="settings-interests" role="group" aria-label={t('settings.interests.title')}>
+        {chips.map((c) => (
+          <button
+            key={c.id}
+            type="button"
+            className={cx('settings-interest', picked.includes(c.id) && 'is-on')}
+            aria-pressed={picked.includes(c.id)}
+            disabled={!user || saving}
+            onClick={() => toggleInterest(c.id)}
+          >
+            {c.label}
+          </button>
+        ))}
       </div>
       {/* Only shown when there's something to save, while saving, or right after
           a save (the transient "Saved" confirmation). Hidden otherwise. */}
@@ -275,16 +308,12 @@ function AdsSection() {
 
   return (
     <Section title={t('settings.ads.title')}>
-      <SettingRow
-        title={t('settings.ads.allow')}
-        sub={t('settings.ads.allowDesc')}
-        control={<Toggle checked={adsEnabled} onChange={onToggle} label={t('settings.ads.allowAria')} />}
-      />
+      <Row variant="well" title={t('settings.ads.allow')} desc={t('settings.ads.allowDesc')} checked={adsEnabled} onChange={onToggle} label={t('settings.ads.allowAria')} />
       {adsEnabled && (
-        <Row title={t('settings.ads.rolls')} desc={t('settings.ads.rollsDesc')} checked={rollsEnabled} onChange={onToggleRolls} />
+        <Row variant="well" title={t('settings.ads.rolls')} desc={t('settings.ads.rollsDesc')} checked={rollsEnabled} onChange={onToggleRolls} />
       )}
       {adsEnabled && (
-        <Row title={t('settings.ads.audio')} desc={t('settings.ads.audioDesc')} checked={audioEnabled} onChange={onToggleAudio} />
+        <Row variant="well" title={t('settings.ads.audio')} desc={t('settings.ads.audioDesc')} checked={audioEnabled} onChange={onToggleAudio} />
       )}
       {adsEnabled && split && (
         <div className="settings-split v2-well">
@@ -346,7 +375,9 @@ function AdsSection() {
  * is really "may we store your username against what you watch" — and the copy
  * says that plainly rather than hiding it behind the word "rewards".
  */
-function ViewerRewardsSection() {
+// `children`: the posting authority row, which the board (38a) draws inside this
+// card: the switches here are saved without a wallet prompt once it is granted.
+function ViewerRewardsSection({ children }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const [enabled, setEnabled] = useState(false);
@@ -408,22 +439,39 @@ function ViewerRewardsSection() {
     }, () => setListen(false));
   }
 
+  // Listening on its own (38a: "Count my listening too" as a switch). Off is the
+  // same listener record the main switch writes when it turns everything off.
+  function onToggleListen(next) {
+    if (next) return addListening();
+    setListen(false);
+    return save(async () => {
+      await setListenerAdPrefs(user, { listenEnabled: false });
+      toast.success(t('settings.viewerRewards.listenOffToast'));
+    }, () => setListen(true));
+  }
+
   return (
-    <Section tone="cyan" title={t('settings.viewerRewards.titleListen')}>
-      <SettingRow
-        title={t('settings.viewerRewards.rowTitle')}
-        sub={t('settings.viewerRewards.desc')}
-        control={<Toggle checked={enabled} onChange={onToggle} label={t('settings.viewerRewards.aria')} />}
-      />
+    <Section
+      tone="cyan"
+      title={t('settings.viewerRewards.titleListen')}
+      aside={<Toggle tone="cyan" checked={enabled} onChange={onToggle} label={t('settings.viewerRewards.aria')} />}
+    >
+      <p className="settings-note">{t('settings.viewerRewards.desc')}</p>
       <div className="settings-well-row v2-well">
-        <span className={cx('settings-well-icon', listen && 'is-cyan')}><Icon name="headphones" size={20} /></span>
-        <div className="settings-well-body"><span>{t('settings.viewerRewards.listenDesc')}</span></div>
+        <Icon name="headphones" size={20} className="settings-well-icon" />
+        <div className="settings-well-body">
+          <b>{t('settings.viewerRewards.listenAlso')}</b>
+          <span>{t('settings.viewerRewards.listenDesc')}</span>
+        </div>
+        <Toggle
+          tone="cyan"
+          checked={enabled && listen}
+          onChange={onToggleListen}
+          label={t('settings.viewerRewards.listenAlso')}
+          disabled={!enabled || loading || saving}
+        />
       </div>
-      {enabled && !listen && !loading && (
-        <Button variant="secondary" size={44} block icon="headphones" onClick={addListening} disabled={saving}>
-          {t('settings.viewerRewards.listenAlso')}
-        </Button>
-      )}
+      {children}
       {(loading || saving || error) && (
         <Status error={error}>{saving ? t('common.actions.saving') : t('settings.ads.loadingSetting')}</Status>
       )}
@@ -437,8 +485,11 @@ function ViewerRewardsSection() {
  * there was nowhere to see whether it is granted or to take it back.
  *
  * Both directions are an account_update2 signed with the ACTIVE key.
+ *
+ * `variant="row"`: one well row inside the rewards card (38a). Otherwise its own
+ * card, "Let 3Speak post for you" with what it can and cannot do (32g).
  */
-function PostingAuthoritySection() {
+function PostingAuthoritySection({ variant = 'card' }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   // null = checking, true/false = on chain, 'unavailable' = no Hive account to read
@@ -493,29 +544,61 @@ function PostingAuthoritySection() {
     }
   }
 
-  return (
-    <Section tone="cyan" title={t('settings.postingAuth.title')}>
-      <div className="settings-well-row v2-well">
-        <span className={cx('settings-well-icon', granted === true && 'is-cyan')}><Icon name="verified_user" size={20} /></span>
-        <div className="settings-well-body">
-          <b>
-            {granted === true ? t('settings.postingAuth.canPost') : granted === false ? t('settings.postingAuth.cannotPost') : t('settings.postingAuth.checkingStatus')}
-          </b>
+  const status = granted === true ? t('settings.postingAuth.canPost') : granted === false ? t('settings.postingAuth.cannotPost') : t('settings.postingAuth.checkingStatus');
+  const removeButton = granted === true && (
+    <Button variant="secondary" size={36} onClick={() => change(false)} disabled={!!busy} loading={!!busy}>
+      {busy === 'confirming' ? t('settings.postingAuth.checking') : busy ? t('settings.postingAuth.removing') : t('common.actions.remove')}
+    </Button>
+  );
+  const addLabel = busy === 'confirming' ? t('settings.postingAuth.checking') : busy ? t('settings.postingAuth.adding') : t('common.actions.add');
+
+  if (variant === 'row') {
+    return (
+      <>
+        <div className="settings-well-row v2-well">
+          <Icon name="verified_user" size={20} className="settings-well-icon" />
+          <div className="settings-well-body">
+            <b>{t('settings.postingAuth.title')}</b>
+            <span className={cx(granted === true && 'is-cyan')}>{status}</span>
+          </div>
+          {removeButton}
+          {granted === false && (
+            <Button variant="cyan" size={36} onClick={() => change(true)} disabled={!!busy} loading={!!busy}>{addLabel}</Button>
+          )}
         </div>
-        {granted === true && (
-          <Button variant="secondary" size={36} onClick={() => change(false)} disabled={!!busy} loading={!!busy}>
-            {busy === 'confirming' ? t('settings.postingAuth.checking') : busy ? t('settings.postingAuth.removing') : t('common.actions.remove')}
-          </Button>
-        )}
-        {granted === false && (
-          <Button variant="primary" size={36} onClick={() => change(true)} disabled={!!busy} loading={!!busy}>
-            {busy === 'confirming' ? t('settings.postingAuth.checking') : busy ? t('settings.postingAuth.adding') : t('common.actions.add')}
-          </Button>
-        )}
+        <p className="settings-hint">{t('settings.postingAuth.desc')}</p>
+        {error && <Status error={error} />}
+      </>
+    );
+  }
+
+  // The wallet the grant is signed with, named on the button when we know it.
+  const wallet = friendlyProviderName(getCurrentProvider());
+  return (
+    <section className="settings-section settings-auth-card">
+      <div className="settings-auth-head">
+        <span className="settings-auth-icon"><Icon name="verified_user" size={24} /></span>
+        <h3 className="settings-auth-title">{t('settings.postingAuth.letTitle')}</h3>
       </div>
-      <p className="settings-note">{t('settings.postingAuth.desc')}</p>
+      <p className="settings-note">{t('settings.postingAuth.letDesc')}</p>
+      <ul className="settings-auth-list">
+        <li><Icon name="check" size={18} className="is-cyan" />{t('settings.postingAuth.canPublish')}</li>
+        <li><Icon name="check" size={18} className="is-cyan" />{t('settings.postingAuth.canVote')}</li>
+        <li><Icon name="block" size={18} className="is-accent" />{t('settings.postingAuth.never')}</li>
+      </ul>
+      {granted !== false && (
+        <div className="settings-well-row v2-well">
+          <div className="settings-well-body"><b className={cx(granted === true && 'is-cyan')}>{status}</b></div>
+          {removeButton}
+        </div>
+      )}
+      {granted === false && (
+        <Button variant="cyan" size={48} block trailing="key" onClick={() => change(true)} disabled={!!busy} loading={!!busy}>
+          {busy ? addLabel : wallet ? t('settings.postingAuth.grantWith', { wallet }) : t('common.actions.add')}
+        </Button>
+      )}
       {error && <Status error={error} />}
-    </Section>
+    </section>
   );
 }
 
@@ -576,28 +659,21 @@ function LightningReceiveSection() {
     }
   }
 
+  // 38c / 31e: the address in a well with its label inside, outlined in accent
+  // when it is wrong and in cyan while it is the saved own address; under it
+  // either why it was refused or where tips go now.
   return (
     <Section title={t('settings.lightning.title')}>
-      <div className={cx('settings-well-row v2-well settings-ln-now', saved && 'is-own')}>
-        <span className="settings-well-icon is-accent"><Icon name="bolt" size={20} /></span>
-        <div className="settings-well-body">
-          <b className="settings-ln-where">
-            {saved === null ? t('settings.lightning.checking')
-              : saved ? t('settings.lightning.toOwn', { address: saved })
-              : t('settings.lightning.toV4v', { account: user })}
-          </b>
-          <span>{saved ? t('settings.lightning.ownDesc') : t('settings.lightning.v4vDesc')}</span>
-        </div>
-      </div>
+      <p className="settings-note">{saved ? t('settings.lightning.ownDesc') : t('settings.lightning.v4vDesc')}</p>
       <form
         className="settings-inline-form"
         onSubmit={(e) => { e.preventDefault(); if (changed) save(next); }}
       >
-        <label className="v2-eyebrow" htmlFor="settings-ln-address">{t('settings.lightning.inputLabel')}</label>
-        <div className="settings-inline-form-row">
+        <label className={cx('settings-addr', error && 'is-error', saved && !changed && !error && 'is-ok')} htmlFor="settings-ln-address">
+          <span className="settings-addr-label">{t('settings.lightning.inputLabel')}</span>
           <input
             id="settings-ln-address"
-            className={cx('v2-input settings-mono-input', error && 'is-error')}
+            className="settings-addr-input"
             type="text"
             inputMode="email"
             autoComplete="off"
@@ -610,18 +686,27 @@ function LightningReceiveSection() {
             onChange={(e) => { setDraft(e.target.value); setError(null); }}
             disabled={busy || saved === null}
           />
-          <Button type="submit" variant="primary" size={40} disabled={busy || !changed} loading={busy}>
-            {busy ? t('common.actions.saving') : t('common.actions.save')}
-          </Button>
-        </div>
+        </label>
+        {error ? <Status error={error} /> : (
+          <p className="settings-ok-line">
+            <Icon name={saved === null ? 'progress_activity' : 'check_circle'} size={18} className={cx(saved === null && 'v2-spin')} />
+            <span className="settings-ln-where">
+              {saved === null ? t('settings.lightning.checking')
+                : saved ? t('settings.lightning.toOwn', { address: saved })
+                : t('settings.lightning.toV4v', { account: user })}
+            </span>
+          </p>
+        )}
+        <Button type="submit" variant="primary" size={44} block trailing={busy ? null : 'check'} disabled={busy || !changed} loading={busy}>
+          {busy ? t('common.actions.saving') : t('common.actions.save')}
+        </Button>
       </form>
-      {error && <Status error={error} />}
+      <p className="settings-hint">{t('settings.lightning.publicNote')} {t('settings.lightning.supportersNote')}</p>
       {saved && (
         <Button variant="secondary" size={44} block trailing="swap_horiz" className="is-next" onClick={() => save('')} disabled={busy}>
           {t('settings.lightning.useV4v')}
         </Button>
       )}
-      <p className="settings-note">{t('settings.lightning.publicNote')} {t('settings.lightning.supportersNote')}</p>
     </Section>
   );
 }
@@ -653,46 +738,37 @@ function ReferralSection() {
     }
   }
 
+  // 38a: the link in a well with Copy, what a referral earns as three tiles,
+  // and the fine print.
   return (
     <Section title={t('settings.referrals.title')}>
-      <p className="settings-note">{t('settings.referrals.intro')}</p>
-      <div className="settings-inline-form">
-        <label className="v2-eyebrow" htmlFor="settings-referral-link">{t('settings.referrals.linkLabel')}</label>
-        <div className="settings-copy-well v2-well">
-          <input
-            id="settings-referral-link"
-            type="text"
-            readOnly
-            value={link}
-            aria-label={t('settings.referrals.linkLabel')}
-            onFocus={(e) => e.target.select()}
-          />
-          <Button variant="primary" size={36} icon="content_copy" onClick={copy}>
-            {t('settings.referrals.copy')}
-          </Button>
-        </div>
-        <span className="settings-hint">{t('settings.referrals.shareTip')}</span>
+      <div className="settings-copy-well v2-well">
+        <input
+          id="settings-referral-link"
+          type="text"
+          readOnly
+          value={link}
+          aria-label={t('settings.referrals.linkLabel')}
+          title={t('settings.referrals.shareTip')}
+          onFocus={(e) => e.target.select()}
+        />
+        <Button variant="primary" size={36} onClick={copy}>
+          {t('settings.referrals.copy')}
+        </Button>
       </div>
-      <div className="v2-eyebrow settings-earn-title">{t('settings.referrals.earnTitle')}</div>
-      <ul className="settings-referral-tiles">
+      <ul className="settings-referral-tiles" aria-label={t('settings.referrals.earnTitle')}>
         {[
-          { icon: 'redeem', tone: 'accent', value: t('settings.referrals.bonusValue', { pct: REFERRAL_BONUS_PCT }), label: t('settings.referrals.bonusLabel'), desc: t('settings.referrals.bonusDesc') },
-          { icon: 'calendar_month', tone: 'cyan', value: t('settings.referrals.timeValue', { months: REFERRAL_BONUS_MONTHS }), label: t('settings.referrals.timeLabel') },
-          { icon: 'campaign', tone: 'accent', value: t('settings.referrals.adsValue', { pct: ADVERTISER_REFERRAL_PCT }), label: t('settings.referrals.adsLabel'), desc: t('settings.referrals.adsDesc') },
-        ].map(({ icon, tone, value, label, desc }) => (
+          { tone: 'accent', value: t('settings.referrals.bonusValue', { pct: REFERRAL_BONUS_PCT }), label: t('settings.referrals.bonusLabel'), desc: t('settings.referrals.bonusDesc') },
+          { tone: 'cyan', value: t('settings.referrals.timeValue', { months: REFERRAL_BONUS_MONTHS }), label: t('settings.referrals.timeLabel') },
+          { tone: 'accent', value: t('settings.referrals.adsValue', { pct: ADVERTISER_REFERRAL_PCT }), label: t('settings.referrals.adsLabel'), desc: t('settings.referrals.adsDesc') },
+        ].map(({ tone, value, label, desc }) => (
           <li key={value + label} className={cx('settings-referral-tile', `is-${tone}`)}>
-            <Icon name={icon} size={18} className="settings-referral-tile-icon" />
             <b className="settings-referral-tile-value">{value}</b>
-            <span className="settings-referral-tile-label">{label}</span>
-            {desc && <span className="settings-referral-tile-desc">{desc}</span>}
+            <span className="settings-referral-tile-label">{desc ? `${label}, ${desc}` : label}</span>
           </li>
         ))}
       </ul>
-      <p className="settings-referral-ontop">
-        <Icon name="check_circle" size={18} />
-        <span>{t('settings.referrals.earnOnTop')}</span>
-      </p>
-      <p className="settings-note">{t('settings.referrals.rules')}</p>
+      <p className="settings-hint">{t('settings.referrals.earnOnTop')} {t('settings.referrals.rules')}</p>
     </Section>
   );
 }
@@ -760,10 +836,8 @@ function SupportLinksSection() {
           {links.map((l) => (
             <li key={l.url} className="v2-well">
               <Icon name={SUPPORT_SITE_ICON[l.site.id] || 'link'} size={20} className="settings-support-icon" />
-              <span className="settings-support-text">
-                <b>{l.site.label}</b>
-                <a href={l.url} target="_blank" rel="noopener noreferrer">{l.url.replace(/^https:\/\//, '')}</a>
-              </span>
+              <b className="settings-support-site">{l.site.label}</b>
+              <a className="settings-support-url" href={l.url} target="_blank" rel="noopener noreferrer">{l.url.replace(/^https:\/\//, '')}</a>
               <IconButton
                 icon="close"
                 size={32}
@@ -801,7 +875,7 @@ function SupportLinksSection() {
         </form>
       )}
       {error && <Status error={error} />}
-      <p className="settings-note">{t('settings.supportLinks.publicNote')}</p>
+      <p className="settings-hint">{t('settings.supportLinks.publicNote')}</p>
     </Section>
   );
 }
@@ -911,7 +985,7 @@ function NotificationsSection() {
       ) : (
         <>
           <div className="settings-well-row v2-well">
-            <span className={cx('settings-well-icon', state.subscribed && 'is-cyan')}><Icon name="devices" size={20} /></span>
+            <Icon name="devices" size={20} className="settings-well-icon" />
             <div className="settings-well-body">
               <b>{t('settings.notifications.device')}</b>
               <span>
@@ -923,6 +997,7 @@ function NotificationsSection() {
               </span>
             </div>
             <Toggle
+              tone="cyan"
               checked={state.subscribed}
               onChange={busy || blocked || noWorker ? () => {} : toggleDevice}
               label={t('settings.notifications.device')}
@@ -930,9 +1005,7 @@ function NotificationsSection() {
             />
           </div>
 
-          <p className="settings-note">
-            {t('settings.notifications.whatHint')}
-          </p>
+          {/* 38b: the kinds as title-only switches under their group, in cyan. */}
           {KIND_GROUPS.map(({ labelKey, kinds: group }) => {
             // Only offer what the server actually supports, so an older backend
             // can't leave dead switches on the page.
@@ -944,8 +1017,9 @@ function NotificationsSection() {
                 {available.map((k) => (
                   <Row
                     key={k}
+                    variant="plain"
+                    tone="cyan"
                     title={t(KIND_COPY[k].titleKey)}
-                    desc={t(KIND_COPY[k].descKey)}
                     checked={prefs[k] !== false}
                     onChange={(v) => toggleKind(k, v)}
                   />
@@ -953,46 +1027,26 @@ function NotificationsSection() {
               </div>
             );
           })}
+          <p className="settings-hint">{t('settings.notifications.iosNote')}</p>
         </>
       )}
     </Section>
   );
 }
 
+// The tabs as in 38a. Notifications sit on General (38b), next to Appearance
+// and Language. `tone` colours the section tile on a phone (18d).
 const TABS = [
   { id: 'general', labelKey: 'settings.tabs.general', icon: 'tune', tone: 'accent' },
-  // Shorts and Interests are sub-tabs of this one now. Seven top-level tabs
-  // overflowed the row even on desktop, and the three of them were all answering
-  // "what shows up in my feeds" from separate pages.
+  // Shorts, Feed and Interests: what shows up in my feeds.
   { id: 'content', labelKey: 'settings.tabs.content', icon: 'play_circle', tone: 'accent' },
   // What the Hive account is tied to outside 3Speak: the Lightning address tips
-  // go to, and verified channels on other platforms. Hive accounts only.
+  // go to, other ways to support, and verified channels. Hive accounts only.
   { id: 'connections', labelKey: 'settings.tabs.connections', icon: 'link', tone: 'cyan' },
-  // Hive accounts only: every setting behind it is about notifications that come
-  // from the chain, so for anyone else it was a page of switches that could not
-  // do anything.
-  { id: 'notifications', labelKey: 'common.nav.notifications', icon: 'notifications', tone: 'cyan' },
-  // Its own page rather than a tail on Content. Both halves are about money moving
-  // between advertisers, creators and viewers, and they were the two longest things on
-  // a page otherwise made of one-line switches. Only shown to those who have it.
+  // Its own page: both halves are about money moving between advertisers,
+  // creators and viewers. Only shown to those who have it.
   { id: 'rewards', labelKey: 'settings.tabs.rewards', icon: 'account_balance_wallet', tone: 'accent' },
-  { id: 'about', labelKey: 'settings.tabs.about', icon: 'info', tone: 'muted' },
-];
-
-// The panels behind Connections: their referral link (first, and what the tab
-// opens on), where money reaches the creator, and their verified channels.
-const CONNECTIONS_TABS = [
-  { id: 'referrals', labelKey: 'settings.connectionsTabs.referrals' },
-  { id: 'support', labelKey: 'settings.connectionsTabs.support' },
-  { id: 'profiles', labelKey: 'settings.connectionsTabs.profiles' },
-];
-
-// The three panels behind Content. Kept as data so the sub-tab bar and the
-// panels below cannot fall out of step.
-const CONTENT_TABS = [
-  { id: 'feed', labelKey: 'settings.contentTabs.feed' },
-  { id: 'shorts', labelKey: 'common.nav.shorts' },
-  { id: 'interests', labelKey: 'settings.interests.title' },
+  { id: 'about', labelKey: 'settings.about.title', icon: 'info', tone: 'muted' },
 ];
 
 // Phones get the sheet with the sections as tiles (18d); a tile opens its
@@ -1059,22 +1113,23 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   const visibleTabs = useMemo(
     () => TABS.filter((tb) => {
       if (tb.id === 'rewards') return rewardsVisible;
-      if (tb.id === 'notifications') return notificationsVisible;
       if (tb.id === 'connections') return notificationsVisible;
       return true;
     }),
     [rewardsVisible, notificationsVisible],
   );
   const [tab, setTab] = useState('general');
-  const [contentTab, setContentTab] = useState('feed');
-  const [connectionsTab, setConnectionsTab] = useState('referrals');
   // Losing the group (or logging out) while standing on that page would leave the modal
   // with no tab selected and nothing rendered.
   useEffect(() => {
     if (tab === 'rewards' && !rewardsVisible) setTab('general');
-    if (tab === 'notifications' && !notificationsVisible) setTab('general');
     if (tab === 'connections' && !notificationsVisible) setTab('general');
   }, [tab, rewardsVisible, notificationsVisible]);
+  // The phone's account card (18d): the name on the Hive profile, the handle and
+  // the wallet the session signs with.
+  const my = useGetMyQuery();
+  const profileName = (settingsUser && my?.profile?.username === settingsUser && my.profile.name) || settingsUser;
+  const walletName = settingsUser ? friendlyProviderName(getCurrentProvider()) : null;
 
   // Phone sheet: the tiles first, a section once one is tapped. Every opening
   // starts on the tiles again.
@@ -1129,6 +1184,20 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   // The centred window is a dialog of its own, Escape included.
   const dialog = useDialog(onClose, { active: isOpen && !dropdown, ref: modalRef });
 
+  // About: copy the version (for bug reports), and "Your data" brings the
+  // request card into view (it is the next card on a desktop, below on a phone).
+  const copyVersion = async () => {
+    try {
+      await navigator.clipboard.writeText(`v${APP_VERSION}`);
+      toast.success(t('common.actions.copied'));
+    } catch { /* nothing to copy into; the version stays readable */ }
+  };
+  const showDataCard = () => {
+    const card = modalRef.current?.querySelector('#settings-your-data');
+    card?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
+    card?.querySelector('input, button')?.focus({ preventScroll: true });
+  };
+
   if (!isOpen) return null;
 
   // Previews only work on touch devices in large mode, so hide the toggle when
@@ -1163,10 +1232,169 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   const showTiles = tiles && !sectionOpen;
   const closable = !(dropdown && !dropdown.held);
 
+  // Each tab is a grid of cards (38a-c): three across on a desktop window, two on
+  // a tablet, one in the peek and on a phone. Posting authority sits in the
+  // rewards card when that tab exists (38a), else on General as its own card
+  // (32g); the referral card likewise on Ads & rewards, else on Connections.
+  const panels = {
+    general: (
+      <>
+        {settingsUser && <NotificationsSection />}
+        <Section title={t('settings.appearance.title')}>
+          <Row
+            title={t('settings.appearance.darkMode.title')}
+            desc={t('settings.appearance.darkMode.desc')}
+            checked={theme === 'dark'}
+            onChange={(wantDark) => { if ((theme === 'dark') !== wantDark) toggleTheme(); }}
+          />
+          {/* Large cards are a phone thing: desktop always uses small ones (hooks/useCardSize). */}
+          {cardSizeMobile && (
+            <Row
+              title={t('settings.appearance.largeCards.title')}
+              desc={t('settings.appearance.largeCards.desc')}
+              checked={homeCardSize === 'large'}
+              onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
+            />
+          )}
+          {showPreviewSetting && (
+            <Row
+              title={t('settings.appearance.previews.title')}
+              desc={t('settings.appearance.previews.desc')}
+              checked={previewEnabled !== false}
+              onChange={(v) => setPreviewEnabled(v)}
+            />
+          )}
+          <Row
+            title={t('settings.appearance.simpleFeeds.title')}
+            desc={t('settings.appearance.simpleFeeds.desc')}
+            checked={!!simpleFeed}
+            onChange={(v) => setSimpleFeed(v)}
+          />
+        </Section>
+        <Section tone="cyan" title={t('common.language.label')} className="settings-language">
+          <LanguagePicker onNavigate={onClose} />
+        </Section>
+        {!rewardsVisible && <PostingAuthoritySection />}
+      </>
+    ),
+    content: (
+      <>
+        <Section title={t('common.nav.shorts')}>
+          {/* Comment bar is only rendered under 768px, so it's hidden on desktop. */}
+          {showShortsCommentBarSetting && (
+            <Row
+              title={t('settings.shorts.commentBar.title')}
+              desc={t('settings.shorts.commentBar.desc')}
+              checked={!!shortsCommentBar}
+              onChange={(v) => setShortsCommentBar(v)}
+            />
+          )}
+          <Row
+            title={t('settings.shorts.openOnStart.title')}
+            desc={t('settings.shorts.openOnStart.desc')}
+            checked={!!openShortsOnStart}
+            onChange={(v) => setOpenShortsOnStart(v)}
+          />
+          <Row
+            title={t('settings.shorts.inFeeds.title')}
+            desc={t('settings.shorts.inFeeds.desc')}
+            checked={inlineShorts !== false}
+            onChange={(v) => setInlineShorts(v)}
+          />
+        </Section>
+        <Section tone="cyan" title={t('settings.contentTabs.feed')}>
+          <Row
+            tone="cyan"
+            title={t('settings.feed.nsfw.title')}
+            desc={t('settings.feed.nsfw.desc')}
+            checked={showNsfw}
+            onChange={(v) => setShowNsfw(v)}
+          />
+          <Row
+            tone="cyan"
+            title={t('settings.feed.hideWatched.title')}
+            desc={t('settings.feed.hideWatched.desc')}
+            checked={!!hideWatched}
+            onChange={(v) => setHideWatched(v)}
+          />
+          <Row
+            tone="cyan"
+            title={t('settings.feed.hideAi.title')}
+            desc={t('settings.feed.hideAi.desc')}
+            checked={!!hideAi}
+            onChange={(v) => setHideAi(v)}
+          />
+          <Row
+            tone="cyan"
+            title={t('settings.feed.privateMode.title')}
+            desc={t('settings.feed.privateMode.desc')}
+            checked={!!privateMode}
+            onChange={(v) => setPrivateMode(v)}
+          />
+        </Section>
+        <InterestsSection />
+      </>
+    ),
+    connections: (
+      <>
+        <LightningReceiveSection />
+        <SupportLinksSection />
+        {settingsUser && <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />}
+        {!rewardsVisible && <ReferralSection />}
+      </>
+    ),
+    rewards: (
+      <>
+        <AdsSection />
+        <ViewerRewardsSection>
+          <PostingAuthoritySection variant="row" />
+        </ViewerRewardsSection>
+        <ReferralSection />
+      </>
+    ),
+    about: (
+      <>
+        <Section tone="cyan" title={t('settings.about.title')}>
+          <div className="settings-kv v2-well">
+            <span>{t('settings.about.version')}</span>
+            <b className="mono">v{APP_VERSION}</b>
+            <IconButton icon="content_copy" size={28} variant="ghost" label={t('common.actions.copy')} onClick={copyVersion} />
+          </div>
+          <div className="settings-kv v2-well" onClick={handleButrUnlockTap}>
+            <span>{t('settings.about.rpcNode')}</span>
+            <b className="mono">{getHiveUrl()}</b>
+          </div>
+          <button type="button" className="settings-kv v2-well is-link" onClick={showDataCard}>
+            <span>{t('settings.about.yourData')}</span>
+            <b>{t('settings.about.getOrDelete')}</b>
+            <Icon name="chevron_right" size={16} />
+          </button>
+          <Button
+            as="a"
+            href="/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="secondary"
+            size={44}
+            block
+            className="is-next"
+            trailing="open_in_new"
+          >
+            {t('settings.about.privacyLink')}
+          </Button>
+        </Section>
+
+        <Section tone="cyan" title={t('settings.about.yourData')} className="settings-data" id="settings-your-data">
+          <DataRequestForm />
+        </Section>
+      </>
+    ),
+  };
+
   return createPortal(
     <div className={overlayClass} onClick={onClose}>
       <div
-        className={cx('settings-modal', dropdown && 'is-dropdown', tiles && 'is-sheet')}
+        className={cx('settings-modal', dropdown && 'is-dropdown', tiles && 'is-sheet', showTiles && 'is-tiles')}
         ref={modalRef}
         onClick={(e) => e.stopPropagation()}
         {...(dropdown ? { ...hoverProps, ...typingProps } : dialog.props)}
@@ -1180,30 +1408,34 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
           <h2 className="settings-head-title" id={dialog.titleId}>
             {tiles && sectionOpen ? t(current.labelKey) : t('common.nav.settings')}
           </h2>
+          {!tiles && (
+            <Segmented
+              className="settings-tabs"
+              label={t('common.nav.settings')}
+              scroll
+              block={false}
+              value={tab}
+              onChange={setTab}
+              options={visibleTabs.map(({ id, labelKey }) => ({ value: id, label: t(labelKey) }))}
+            />
+          )}
           {closable && (
             <IconButton icon="close" label={t('common.actions.close')} size={36} variant="ghost" round onClick={onClose} />
           )}
         </div>
 
-        {!tiles && (
-          <Segmented
-            className="settings-tabs"
-            label={t('common.nav.settings')}
-            scroll
-            value={tab}
-            onChange={setTab}
-            options={visibleTabs.map(({ id, labelKey }) => ({ value: id, label: t(labelKey) }))}
-          />
-        )}
-
         <div className="settings-body">
           {showTiles && (
             <>
               {settingsUser && (
-                <div className="settings-account">
+                <Link to={`/p/${encodeURIComponent(settingsUser)}`} className="settings-account" onClick={onClose}>
                   <span className="v2-avatar settings-account-avatar"><AccountImg account={settingsUser} alt="" /></span>
-                  <b>@{settingsUser}</b>
-                </div>
+                  <span className="settings-account-text">
+                    <b>{profileName}</b>
+                    <span>@{settingsUser}{walletName ? ` · ${walletName}` : ''}</span>
+                  </span>
+                  <Icon name="chevron_right" size={20} className="settings-account-chev" />
+                </Link>
               )}
               <div className="settings-tiles">
                 {visibleTabs.map((tb) => (
@@ -1217,170 +1449,9 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
           )}
 
           {!showTiles && (
-            <>
-              {tab === 'general' && (
-                <section className="settings-section settings-language">
-                  <LanguagePicker onNavigate={onClose} />
-                </section>
-              )}
-              {tab === 'general' && (
-                <Section title={t('settings.appearance.title')}>
-                  <Row
-                    title={t('settings.appearance.darkMode.title')}
-                    desc={t('settings.appearance.darkMode.desc')}
-                    checked={theme === 'dark'}
-                    onChange={(wantDark) => { if ((theme === 'dark') !== wantDark) toggleTheme(); }}
-                  />
-                  {/* Large cards are a phone thing: desktop always uses small ones (hooks/useCardSize). */}
-                  {cardSizeMobile && (
-                    <Row
-                      title={t('settings.appearance.largeCards.title')}
-                      desc={t('settings.appearance.largeCards.desc')}
-                      checked={homeCardSize === 'large'}
-                      onChange={(large) => setHomeCardSize(large ? 'large' : 'small')}
-                    />
-                  )}
-                  {showPreviewSetting && (
-                    <Row
-                      title={t('settings.appearance.previews.title')}
-                      desc={t('settings.appearance.previews.desc')}
-                      checked={previewEnabled !== false}
-                      onChange={(v) => setPreviewEnabled(v)}
-                    />
-                  )}
-                  <Row
-                    title={t('settings.appearance.simpleFeeds.title')}
-                    desc={t('settings.appearance.simpleFeeds.desc')}
-                    checked={!!simpleFeed}
-                    onChange={(v) => setSimpleFeed(v)}
-                  />
-                </Section>
-              )}
-              {tab === 'general' && <PostingAuthoritySection />}
-
-              {tab === 'connections' && (
-                <Segmented
-                  className="settings-subtabs"
-                  label={t('settings.connectionsTabs.aria')}
-                  value={connectionsTab}
-                  onChange={setConnectionsTab}
-                  options={CONNECTIONS_TABS.map((ct) => ({ value: ct.id, label: t(ct.labelKey) }))}
-                />
-              )}
-              {tab === 'connections' && connectionsTab === 'support' && <LightningReceiveSection />}
-              {tab === 'connections' && connectionsTab === 'support' && <SupportLinksSection />}
-              {tab === 'connections' && connectionsTab === 'referrals' && <ReferralSection />}
-              {tab === 'connections' && connectionsTab === 'profiles' && settingsUser && (
-                <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />
-              )}
-
-              {tab === 'content' && (
-                <Segmented
-                  className="settings-subtabs"
-                  label={t('settings.contentTabs.aria')}
-                  value={contentTab}
-                  onChange={setContentTab}
-                  options={CONTENT_TABS.map((ct) => ({ value: ct.id, label: t(ct.labelKey) }))}
-                />
-              )}
-
-              {tab === 'content' && contentTab === 'shorts' && (
-                <Section title={t('common.nav.shorts')}>
-                  {/* Comment bar is only rendered under 768px, so it's hidden on desktop. */}
-                  {showShortsCommentBarSetting && (
-                    <Row
-                      title={t('settings.shorts.commentBar.title')}
-                      desc={t('settings.shorts.commentBar.desc')}
-                      checked={!!shortsCommentBar}
-                      onChange={(v) => setShortsCommentBar(v)}
-                    />
-                  )}
-                  <Row
-                    title={t('settings.shorts.openOnStart.title')}
-                    desc={t('settings.shorts.openOnStart.desc')}
-                    checked={!!openShortsOnStart}
-                    onChange={(v) => setOpenShortsOnStart(v)}
-                  />
-                  <Row
-                    title={t('settings.shorts.inFeeds.title')}
-                    desc={t('settings.shorts.inFeeds.desc')}
-                    checked={inlineShorts !== false}
-                    onChange={(v) => setInlineShorts(v)}
-                  />
-                </Section>
-              )}
-
-              {tab === 'content' && contentTab === 'feed' && (
-                <Section tone="cyan" title={t('settings.contentTabs.feed')}>
-                  <Row
-                    title={t('settings.feed.nsfw.title')}
-                    desc={t('settings.feed.nsfw.desc')}
-                    checked={showNsfw}
-                    onChange={(v) => setShowNsfw(v)}
-                  />
-                  <Row
-                    title={t('settings.feed.hideWatched.title')}
-                    desc={t('settings.feed.hideWatched.desc')}
-                    checked={!!hideWatched}
-                    onChange={(v) => setHideWatched(v)}
-                  />
-                  <Row
-                    title={t('settings.feed.hideAi.title')}
-                    desc={t('settings.feed.hideAi.desc')}
-                    checked={!!hideAi}
-                    onChange={(v) => setHideAi(v)}
-                  />
-                  <Row
-                    title={t('settings.feed.privateMode.title')}
-                    desc={t('settings.feed.privateMode.desc')}
-                    checked={!!privateMode}
-                    onChange={(v) => setPrivateMode(v)}
-                  />
-                </Section>
-              )}
-
-              {tab === 'rewards' && (
-                <>
-                  <AdsSection />
-                  <ViewerRewardsSection />
-                </>
-              )}
-
-              {tab === 'content' && contentTab === 'interests' && <InterestsSection />}
-              {tab === 'notifications' && <NotificationsSection />}
-
-              {tab === 'about' && (
-                <>
-                  <Section tone="cyan" title={t('settings.about.title')}>
-                    <div className="settings-kv v2-well">
-                      <span>{t('settings.about.version')}</span>
-                      <b className="mono">v{APP_VERSION}</b>
-                    </div>
-                    <div className="settings-kv v2-well" onClick={handleButrUnlockTap}>
-                      <span>{t('settings.about.rpcNode')}</span>
-                      <b className="mono">{getHiveUrl()}</b>
-                    </div>
-                    <Button
-                      as="a"
-                      href="/privacy"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      variant="secondary"
-                      size={44}
-                      block
-                      className="is-next"
-                      trailing="open_in_new"
-                    >
-                      {t('settings.about.privacyLink')}
-                    </Button>
-                  </Section>
-
-                  <Section title={t('settings.about.yourData')}>
-                    <DataRequestForm />
-                  </Section>
-                </>
-              )}
-            </>
+            <div className="settings-grid" role="tabpanel" aria-label={t(current.labelKey)}>
+              {panels[current.id]}
+            </div>
           )}
         </div>
       </div>

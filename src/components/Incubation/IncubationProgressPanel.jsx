@@ -251,14 +251,6 @@ function taskCounts(task, minCommentChars, t) {
   return (TASK_COPY[task.type]?.countsKeys || []).map((k) => t(k));
 }
 
-/** How far along one task is, 0-100, for the fill behind its card. */
-function taskPct(t) {
-  // Shared with the nav pill and the overall bar, so a goal cannot be drawn as
-  // one amount here and counted as another there. It is also what makes the
-  // time goal move smoothly instead of in thirds.
-  return Math.max(0, Math.min(100, taskFraction(t) * 100));
-}
-
 function taskAmount(task, t) {
   if (task.unit === 'seconds') return `${asDuration(Math.min(task.have, task.need), t)} / ${asDuration(task.need, t)}`;
   // A percentage, not a day count. The server floors days so that "three days"
@@ -409,17 +401,15 @@ export default function IncubationProgressPanel() {
         {progress.track && trackTitleKey(progress.track) && (
           <span className="inc-track-current">{t(trackTitleKey(progress.track))}</span>
         )}
-        <Button
-          variant="ghost"
-          size={32}
+        <button
+          type="button"
           className="inc-tasks-toggle"
-          icon={tasksOpen ? 'expand_less' : 'expand_more'}
           onClick={toggleTasks}
           aria-expanded={tasksOpen}
           aria-controls="inc-task-list"
         >
           {tasksOpen ? t('incubation.progress.hideDetails') : t('incubation.progress.showLeft')}
-        </Button>
+        </button>
       </div>
 
       {tasksOpen && (
@@ -470,10 +460,23 @@ export default function IncubationProgressPanel() {
                               <span className="inc-goal-count num">{taskAmount(task, t)}</span>
                             </span>
                             <span className="inc-goal-hint">{task.done && !open ? t('incubation.progress.goalDone') : taskHint(task, progress.minCommentChars, t)}</span>
-                            {!task.done && <Progress value={taskPct(task)} tone="cyan" thin />}
                           </span>
-                          <Icon name="expand_more" size={18} className="inc-goal-chevron" />
                         </button>
+
+                        {/* The next step as a cyan text link under the hint (46b).
+                            None on a finished goal: it would invite work that
+                            earns nothing. */}
+                        {copy.cta && !task.done && (copy.cta.event ? (
+                          <button
+                            type="button"
+                            className="inc-goal-cta"
+                            onClick={() => window.dispatchEvent(new CustomEvent(copy.cta.event))}
+                          >
+                            {t(copy.cta.labelKey)}
+                          </button>
+                        ) : (
+                          <Link className="inc-goal-cta" to={copy.cta.to}>{t(copy.cta.labelKey)}</Link>
+                        ))}
 
                         {open && (
                           <div className="inc-task-detail inc-goal-detail" id={`inc-task-${task.type}`}>
@@ -491,23 +494,6 @@ export default function IncubationProgressPanel() {
                                 when done, so they can still be corrected. */}
                             {task.type === 'profile' && <BrandProfileForm />}
                             {task.type === 'contact' && <AdvertiserContactForm />}
-                            {/* No call to action on a finished goal: it would
-                                invite work that earns nothing. */}
-                            {copy.cta && !task.done && (copy.cta.event ? (
-                              <Button
-                                variant="secondary"
-                                size={36}
-                                next
-                                className="inc-task-cta"
-                                onClick={() => window.dispatchEvent(new CustomEvent(copy.cta.event))}
-                              >
-                                {t(copy.cta.labelKey)}
-                              </Button>
-                            ) : (
-                              <Button as={Link} variant="secondary" size={36} next className="inc-task-cta" to={copy.cta.to}>
-                                {t(copy.cta.labelKey)}
-                              </Button>
-                            ))}
                           </div>
                         )}
                       </li>
@@ -544,7 +530,6 @@ export default function IncubationProgressPanel() {
 function WarmupSocialTask() {
   const { t } = useTranslation();
   const [links, setLinks] = useState(null);
-  const [open, setOpen] = useState(false);
   const [dialog, setDialog] = useState(false);
   const load = useCallback(() => {
     warmupSocial.load().then((d) => setLinks(d?.links || [])).catch(() => setLinks([]));
@@ -557,35 +542,18 @@ function WarmupSocialTask() {
     <>
       <Eyebrow as="h5" className="inc-optional-title">{t('incubation.progress.optional.title')}</Eyebrow>
       {/* One well row (design 46b "Optional"): link icon, what it is, and the
-          way to do it. "Why" folds out under it. */}
-      <div className={`inc-optional${done ? ' is-done' : ''}${open ? ' is-open' : ''}`}>
-        <button
-          type="button"
-          className="inc-optional-head"
-          onClick={() => setOpen((o) => !o)}
-          aria-expanded={open}
-          aria-controls="inc-task-social"
-        >
-          <Icon name={done ? 'check_circle' : 'link'} size={20} fill={done} className="inc-optional-icon" />
-          <span className="inc-optional-text">
-            <strong>{t('incubation.progress.optional.social.label')}</strong>
-            <span>
-              {done
-                ? t('incubation.progress.optional.social.linked', { platforms: [...new Set(verified.map((l) => platformLabel(l.platform)))].join(', ') })
-                : t('incubation.progress.optional.social.hint')}
-            </span>
-          </span>
-          <span className="inc-goal-count num">{done ? verified.length : 0}/1</span>
-          <Icon name="expand_more" size={18} className="inc-goal-chevron" />
+          way to do it as a cyan text button on the right. */}
+      <div className={`inc-optional${done ? ' is-done' : ''}`}>
+        <Icon name={done ? 'check_circle' : 'link'} size={18} fill={done} className="inc-optional-icon" />
+        <span className="inc-optional-text" title={t('incubation.progress.optional.social.why')}>
+          <strong>{t('incubation.progress.optional.social.label')}</strong>
+          {done && (
+            <span>{t('incubation.progress.optional.social.linked', { platforms: [...new Set(verified.map((l) => platformLabel(l.platform)))].join(', ') })}</span>
+          )}
+        </span>
+        <button type="button" className="inc-optional-cta" onClick={() => setDialog(true)}>
+          {t('incubation.progress.optional.social.cta')}
         </button>
-        {open && (
-          <div className="inc-task-detail" id="inc-task-social">
-            <p className="inc-task-why">{t('incubation.progress.optional.social.why')}</p>
-            <Button variant="secondary" size={36} icon="add_link" className="inc-task-cta" onClick={() => setDialog(true)}>
-              {t('incubation.progress.optional.social.cta')}
-            </Button>
-          </div>
-        )}
       </div>
       <AddSocialLink_modal isOpen={dialog} onClose={() => setDialog(false)} onChange={load} warmup />
     </>

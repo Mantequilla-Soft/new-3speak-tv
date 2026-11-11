@@ -357,7 +357,6 @@ function CommunitiesRender({ mine: mineProp, setMine: setMineProp, joinedOnly = 
         <div className="groups-grid">
           {shown.map((community, index) => {
             const joined = mine.has(community.name);
-            const a = activity[community.name];
             return (
               <article key={community.name || index} className={`group-card tone-${toneOf(community.name)}`}>
                 <div className="group-card__banner" aria-hidden="true" />

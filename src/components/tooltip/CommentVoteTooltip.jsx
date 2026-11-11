@@ -14,13 +14,16 @@ import { getVideoTagsV2, getCachedTagsV2, getTagLabel, getCategoryOf } from '../
 import { getSavedVoteWeight, saveVoteWeight } from '../../utils/voteWeight';
 import TagsV2Picker from './TagsV2Picker';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import { useRewardDisplay } from '../../utils/hivePrice';
 
 // Every toast from this module is headed "Vote"; the message becomes the
 // line under it. See utils/toast.js.
 const toast = toastIn('Vote');
 
-// One-tap weights under the slider (design 17b / 28a).
+// One-tap weights under the slider: 10 / 25 / 50 / 100 on a comment (28a),
+// 25 / 50 / 75 / 100 on a video (17b).
 const PRESETS = [10, 25, 50, 100];
+const POST_PRESETS = [25, 50, 75, 100];
 
 // Hive posts pay out (and voting stops mattering) 7 days after creation.
 const PAYOUT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
@@ -66,15 +69,19 @@ const CommentVoteTooltip = ({
   // Which remembered vote weight this dialog uses. Posts and comments keep
   // separate values (see utils/voteWeight.js).
   voteKind = 'post',
+  // The video being voted on (17b): { title, thumbnail, payout, votes }. Shown
+  // as a card on top; the dialog is then a side sheet with the voting power.
+  post = null,
 }) => {
   const { t } = useTranslation();
+  const { label: moneyLabel } = useRewardDisplay();
+  const presets = post ? POST_PRESETS : PRESETS;
   const doc = usePortalDoc();
   const { user, authenticated } = useAppStore();
   const [isLoading, setIsLoading] = useState(false);
   const [initializing, setInitializing] = useState(false);
   // "Don't vote — just tag": record the topic tag without casting a Hive vote,
   // even while the vote window is still open. Only offered when tagging is enabled.
-  const [justTag, setJustTag] = useState(false);
   // Optional topic the viewer assigns to the video (interest taxonomy). '' = none.
   const [viewerTag, setViewerTag] = useState('');
   // Current crowd consensus (tag -> pct), so the dropdown can show each tag's share.
@@ -188,9 +195,12 @@ const CommentVoteTooltip = ({
   const cachedDynamicPropsRef = useRef(null);
 
   // Update all DOM elements for a given weight (no React re-render)
+  // "Vote 75%" on the video vote's button (17b), kept in step with the slider.
+  const submitWeightRef = useRef(null);
   const updateSliderDOM = useCallback((w) => {
     weightRef.current = w;
     if (labelRef.current) labelRef.current.textContent = `${w}%`;
+    if (submitWeightRef.current) submitWeightRef.current.textContent = `${w}%`;
     if (fillRef.current) fillRef.current.style.width = `${w}%`;
     if (thumbRef.current) {
       thumbRef.current.style.left = `${w}%`;
@@ -217,6 +227,7 @@ const CommentVoteTooltip = ({
     const startWeight = getSavedVoteWeight(voteKind);
     weightRef.current = startWeight;
     if (labelRef.current) labelRef.current.textContent = `${startWeight}%`;
+    if (submitWeightRef.current) submitWeightRef.current.textContent = `${startWeight}%`;
     // Keep the parent's state in step so the rendered label and the estimate
     // agree with the slider we just built.
     if (startWeight !== parentWeight) setParentWeight(startWeight);
@@ -520,7 +531,7 @@ const CommentVoteTooltip = ({
           if (!isLoadingRef.current) close();
         }}>
           <div
-            className={cx('cvt-dialog', compact && 'is-compact')}
+            className={cx('cvt-dialog', compact && 'is-compact', post && 'is-post')}
             ref={tooltipRef}
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
@@ -529,9 +540,19 @@ const CommentVoteTooltip = ({
               className="cvt-header"
               title={tagOnlyMode
                 ? t('engagement.vote.votingClosed')
-                : justTag ? t('engagement.vote.tagThisVideo') : t('engagement.vote.vote')}
+                : t('engagement.vote.vote')}
               onClose={isLoading ? undefined : close}
             />
+
+            {post && (
+              <div className="cvt-post">
+                <span className="cvt-post__thumb">{post.thumbnail && <img src={post.thumbnail} alt="" loading="lazy" />}</span>
+                <span className="cvt-post__text">
+                  <b>{post.title}</b>
+                  <span>{t('engagement.vote.postSoFar', { value: moneyLabel(post.payout || 0), count: post.votes || 0 })}</span>
+                </span>
+              </div>
+            )}
 
             {tagOnlyMode ? (
               // ── Payout window closed: no voting, tag-only (one-shot) ──
@@ -574,7 +595,7 @@ const CommentVoteTooltip = ({
               <>
                 {/* Vote-weight UI: kept mounted (so the slider effect stays intact)
                     but hidden when "just tag" is on, since there's no vote then. */}
-                <div className="cvt-weight" style={justTag ? { display: 'none' } : undefined}>
+                <div className="cvt-weight">
                   <div className="cvt-big">
                     <b className="cvt-pct" ref={labelRef}>{parentWeight}%</b>
                     <span className="cvt-value" ref={valueRef}>
@@ -587,7 +608,7 @@ const CommentVoteTooltip = ({
                   <div ref={sliderContainerRef} className="cvt-slider" />
 
                   <div className="cvt-presets" ref={presetsRef}>
-                    {PRESETS.map((p) => (
+                    {presets.map((p) => (
                       <button
                         key={p}
                         type="button"
@@ -604,7 +625,7 @@ const CommentVoteTooltip = ({
                 {enableViewerTag && (
                   <>
                     <div className="cvt-tag" onClick={(e) => e.stopPropagation()}>
-                      <span className="v2-eyebrow">{justTag ? t('engagement.vote.tagThisVideoFull') : t('engagement.vote.tagThisVideo')}</span>
+                      <span className="v2-eyebrow">{t('engagement.vote.tagThisVideo')}</span>
                       <TagsV2Picker
                         value={viewerTag}
                         onChange={setViewerTag}
@@ -615,33 +636,49 @@ const CommentVoteTooltip = ({
                       />
                     </div>
 
-                    <label className="v2-check cvt-just-tag" onClick={(e) => e.stopPropagation()}>
-                      <input
-                        type="checkbox"
-                        checked={justTag}
-                        onChange={(e) => setJustTag(e.target.checked)}
-                        disabled={isLoading}
-                      />
-                      <span>{t('engagement.vote.justTag')}</span>
-                    </label>
                   </>
                 )}
 
-                <button
-                  type="button"
-                  className="v2-btn v2-btn--primary h48 is-block is-next cvt-submit"
-                  onClick={justTag ? handleTagOnly : handleVote}
-                  disabled={isLoading || (justTag ? !viewerTag : initializing)}
-                  aria-busy={isLoading || undefined}
-                >
-                  {isLoading ? (
-                    <Icon name="progress_activity" size={20} className="v2-spin" />
-                  ) : justTag ? (
-                    <><span className="v2-btn__label">{t('engagement.vote.submitTag')}</span><Icon name="sell" size={20} /></>
-                  ) : (
-                    <><span className="v2-btn__label">{t('engagement.vote.vote')}</span><Icon name="arrow_upward" size={20} /></>
+                {post && accountData && (() => {
+                  const vp = (() => { try { return votingPower(accountData); } catch { return null; } })();
+                  return vp != null && Number.isFinite(vp) ? (
+                    <div className="cvt-vp">
+                      <Icon name="battery_horiz_075" size={20} />
+                      <span>{t('nav.votingPower')}</span>
+                      <b className="num">{Math.round(vp)}%</b>
+                    </div>
+                  ) : null;
+                })()}
+
+                {/* With a topic picked (40a): "Just tag" (no vote) beside "Vote and tag". */}
+                <div className={cx('cvt-actions', enableViewerTag && viewerTag && 'is-split')}>
+                  {enableViewerTag && viewerTag && (
+                    <button
+                      type="button"
+                      className="v2-btn v2-btn--secondary h48 cvt-just-tag"
+                      onClick={handleTagOnly}
+                      disabled={isLoading}
+                      title={t('engagement.vote.justTag')}
+                    >
+                      <span className="v2-btn__label">{t('engagement.vote.justTagShort')}</span>
+                    </button>
                   )}
-                </button>
+                  <button
+                    type="button"
+                    className="v2-btn v2-btn--primary h48 is-block is-next cvt-submit"
+                    onClick={handleVote}
+                    disabled={isLoading || initializing}
+                    aria-busy={isLoading || undefined}
+                  >
+                    {isLoading ? (
+                      <Icon name="progress_activity" size={20} className="v2-spin" />
+                    ) : enableViewerTag && viewerTag ? (
+                      <><span className="v2-btn__label">{t('engagement.vote.voteAndTag')}</span><Icon name="arrow_upward" size={20} /></>
+                    ) : (
+                      <><span className="v2-btn__label">{t('engagement.vote.vote')}{post && <> <span className="num" ref={submitWeightRef}>{parentWeight}%</span></>}</span><Icon name="arrow_upward" size={20} /></>
+                    )}
+                  </button>
+                </div>
               </>
             )}
           </div>

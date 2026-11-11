@@ -10,6 +10,19 @@
   margin-top: 10px;
 
   .v2-input.is-area { min-height: 88px; }
+
+  // 46c: "WEBSITE · OPTIONAL IF YOU GIVE AN ADDRESS", the whole label one eyebrow.
+  .v2-field__opt { text-transform: inherit; letter-spacing: inherit; font-weight: inherit; }
+}
+
+// The address grid has no visible heading (46c); the legend stays for screen readers.
+.inc-contact-legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .inc-contact-address {
@@ -42,20 +55,26 @@
   color: var(--accent);
 }
 
-.inc-contact-submit.v2-btn { align-self: flex-start; }
+.inc-contact-submit.v2-btn { margin-top: 6px; }
 
-/* The brand form's logo row: the current logo as it will be shown (a circle),
-   beside its label, hint and upload button. */
+/* The brand form's logo row (46c): the logo as it will be shown, a circle that
+   is also the upload button, beside its one-line hint. */
 .inc-brand-logo {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
+}
+
+.inc-brand-logo-pick {
+  flex: none;
+  cursor: pointer;
+  border-radius: 50%;
 
   img,
   .inc-brand-logo-blank {
-    width: 48px;
-    height: 48px;
-    flex: none;
+    display: block;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
     background: var(--surface-2);
@@ -66,22 +85,17 @@
     place-items: center;
     color: var(--muted);
   }
+
+  &:hover .inc-brand-logo-blank { color: var(--text); }
+  &:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
 
-.inc-brand-logo-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  min-width: 0;
-}
-
-.inc-brand-upload {
-  @include v2.btn(secondary, 32);
-  margin-top: 2px;
+.inc-brand-logo-hint {
+  @include v2.text(meta-sm);
+  line-height: 1.4;
+  color: var(--muted);
 }
 
 @include v2.mobile {
-  .inc-contact-submit.v2-btn { align-self: stretch; height: 44px; }
-  .inc-brand-upload { height: 44px; border-radius: v2.radius-for(44); }
+  .inc-contact-submit.v2-btn { height: 44px; border-radius: v2.radius-for(44); }
 }

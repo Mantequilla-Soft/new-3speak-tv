@@ -7,8 +7,7 @@ import { Button, IconButton, Segmented } from '../v2/ui';
 import AccountImg from '../HiveAvatar/AccountImg';
 import TimeAgo from '../TimeAgo/TimeAgo';
 import BarLoader from '../Loader/BarLoader';
-import { fixVideoThumbnail } from '../../utils/fixThumbnails';
-import { fetchSupports, fetchSupportsGiven, supportItemLink, formatHbd, formatSats, formatSupportTotal } from '../../lib/supports';
+import { fetchSupports, fetchSupportsGiven, supportItemLink, formatHbd, formatSats, formatSupportTotal, useSupported } from '../../lib/supports';
 import { setSupportHidden } from '../../lib/supportsHide';
 import { toastIn } from '../../utils/toast';
 import './Supporters.scss';
@@ -91,33 +90,35 @@ function HideTipButton({ item }) {
   );
 }
 
-// One tip as a card. `person` is the other side: the tipper on Received, the
-// creator who got it on Given. `canHide`: your own Received tab.
+// One tip as a row (37a): the other side's squircle avatar, their name, the
+// video and when, the amount in accent mono, and the owner's eye. `person` is
+// the tipper on Received, the creator who got it on Given. `canHide`: your
+// own Received tab.
 function SupportCard({ item, person, canHide }) {
   const { t } = useTranslation();
   const link = supportItemLink(item);
-  const isAudio = item.kind === 'audio';
-  const thumb = !isAudio && item.video?.thumbnail ? fixVideoThumbnail({ thumbnail: item.video.thumbnail }) : null;
   const title = item.video?.title || t('profile.supports.untitled');
   return (
     <article className={`sp-card${item.hidden ? ' is-hidden' : ''}`}>
-      <Link to={link} className="sp-card-thumb" aria-label={title}>
-        {thumb ? <img src={thumb} alt="" loading="lazy" /> : <Icon name="graphic_eq" size={24} className="sp-card-thumb-icon" />}
-      </Link>
+      {person ? (
+        <Link to={`/@${person}`} className="sp-card-av" aria-hidden="true" tabIndex={-1}>
+          <AccountImg account={person} alt="" loading="lazy" />
+        </Link>
+      ) : (
+        // A Lightning tip whose payer can't be told (not paid from Hive).
+        <span className="sp-card-av sp-card-av--anon" aria-hidden="true"><Icon name="bolt" size={18} fill /></span>
+      )}
       <div className="sp-card-body">
-        <Link to={link} className="sp-card-title" title={title}>{title}</Link>
+        {person ? (
+          <Link to={`/@${person}`} className="sp-card-name">@{person}</Link>
+        ) : (
+          <span className="sp-card-name">{t('profile.supports.lightningSupporter')}</span>
+        )}
         <div className="sp-card-meta">
-          {person ? (
-            <Link to={`/@${person}`} className="sp-card-tipper">
-              <AccountImg account={person} alt="" loading="lazy" />
-              <span>@{person}</span>
-            </Link>
+          {item.hidden ? (
+            <span className="sp-card-hidden-label">{t('profile.supports.hiddenLabel')}</span>
           ) : (
-            // A Lightning tip whose payer can't be told (not paid from Hive).
-            <span className="sp-card-tipper sp-card-tipper--anon">
-              <Icon name="bolt" size={16} fill />
-              <span>{t('profile.supports.lightningSupporter')}</span>
-            </span>
+            <Link to={link} className="sp-card-title" title={title}>{title}</Link>
           )}
           <span className="sp-card-time"><TimeAgo date={item.tippedAt || item.createdAt} /></span>
           {item.currency === 'HIVE' && (
@@ -125,7 +126,6 @@ function SupportCard({ item, person, canHide }) {
           )}
         </div>
         {typeof item.memo === 'string' && item.memo.trim() && <TipMemo text={item.memo} />}
-        {item.hidden && <span className="sp-card-hidden-label">{t('profile.supports.hiddenLabel')}</span>}
       </div>
       <div className="sp-card-amount">
         {item.currency === 'SATS'
@@ -134,6 +134,34 @@ function SupportCard({ item, person, canHide }) {
       </div>
       {canHide && <HideTipButton item={item} />}
     </article>
+  );
+}
+
+// "Who @user supports" (31e): the creators this profile tipped, each once,
+// with a cyan ring, how often and how much. Above the Given list.
+function SupportsSummary({ user }) {
+  const { t } = useTranslation();
+  const { data } = useSupported(user);
+  const list = data?.supported || [];
+  if (!list.length) return null;
+  return (
+    <section className="sp-who v2-card">
+      <div className="sp-who-head">
+        <h3>{t('profile.supports.whoTitle', { user })}</h3>
+        <span className="sp-who-count">{data?.total ?? list.length}</span>
+      </div>
+      <div className="sp-who-grid">
+        {list.map((s, i) => (
+          <Link key={s.author} to={`/@${s.author}`} className="sp-who-row">
+            <span className={`sp-who-av ${i % 2 ? 'is-cyan' : 'is-accent'}`}><AccountImg account={s.author} alt="" loading="lazy" /></span>
+            <span className="sp-who-text">
+              <b>@{s.author}</b>
+              <span>{t('profile.supports.tipped', { count: s.count || 1 })} · {formatSupportTotal(s.hbd_total, s.sats_total)}</span>
+            </span>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -218,21 +246,27 @@ export default function SupportersList({ user, isOwnProfile }) {
 
   return (
     <div className="sp-list">
-      {/* 37a: Received / Given as a segmented track, each with its total. */}
-      <div className="sp-subtabs">
-        <Segmented
-          block={false}
-          scroll
-          value={dir}
-          onChange={selectDir}
-          label={t('profile.tabs.supporters')}
-          options={[
-            { value: 'received', icon: 'redeem', label: subLabel(t('profile.supports.received'), firstPage(received)) },
-            { value: 'given', icon: 'volunteer_activism', label: subLabel(t('profile.supports.given'), firstPage(given)) },
-          ]}
-        />
-      </div>
-      {body}
+      {dir === 'given' ? <SupportsSummary user={user} /> : null}
+      {/* 37a: one card, "Supporters" with Received / Given (each with its
+          total) on the right, then a row per tip. */}
+      <section className="sp-panel v2-card">
+        <div className="sp-panel-head">
+          <h3>{t('profile.tabs.supporters')}</h3>
+          <Segmented
+            block={false}
+            scroll
+            value={dir}
+            onChange={selectDir}
+            label={t('profile.tabs.supporters')}
+            className="sp-subtabs"
+            options={[
+              { value: 'received', label: subLabel(t('profile.supports.received'), firstPage(received)) },
+              { value: 'given', label: subLabel(t('profile.supports.given'), firstPage(given)) },
+            ]}
+          />
+        </div>
+        {body}
+      </section>
     </div>
   );
 }

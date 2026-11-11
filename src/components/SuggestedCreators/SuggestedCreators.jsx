@@ -57,7 +57,7 @@ function seededShuffle(arr, seed) {
  * Behaves like the shorts-stories row: a swipe-able scroller with a hidden scrollbar
  * and prev/next arrows on desktop (mobile uses swipe). Hidden entirely when logged out.
  */
-export default function SuggestedCreators({ variant = 'discover' }) {
+export default function SuggestedCreators({ variant = 'discover', perRow = 0 }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
   const interests = useAppStore((s) => s.interests);
@@ -67,6 +67,8 @@ export default function SuggestedCreators({ variant = 'discover' }) {
   const [justFollowed, setJustFollowed] = useState({});  // name -> true
   const [pending, setPending] = useState({});
   const [followerCounts, setFollowerCounts] = useState({});
+  // Suggestions closed with the card's X (28b): gone for this visit only.
+  const [dismissed, setDismissed] = useState(() => new Set());
 
   // Horizontal scroller with prev/next arrows — same pattern as ShortsStories.
   const scrollRef = useRef(null);
@@ -115,10 +117,12 @@ export default function SuggestedCreators({ variant = 'discover' }) {
         displayName: c.display_name || c.author,
         avatar: c.avatar,
         basis: c.basisTopic || (Array.isArray(c.matchedTopics) ? c.matchedTopics[0] : null),
+        sample: c.sample || null,
       }))
       .filter((c) => c.name && c.name !== (user || '').toLowerCase())
-      .filter((c) => !followSet.has(c.name) || justFollowed[c.name]);
-  }, [suggested, followSet, user, justFollowed]);
+      .filter((c) => !followSet.has(c.name) || justFollowed[c.name])
+      .filter((c) => !dismissed.has(c.name));
+  }, [suggested, followSet, user, justFollowed, dismissed]);
 
   // What renders: discover reshuffles (seeded, stable per session); interests keeps order.
   const creators = useMemo(() => {
@@ -191,7 +195,8 @@ export default function SuggestedCreators({ variant = 'discover' }) {
           </button>
         )}
 
-        <div className="sc-row" ref={scrollRef}>
+        {/* As many cards as fit across, edge to edge (HomeGrouped measures). */}
+        <div className="sc-row" ref={scrollRef} style={perRow > 0 ? { '--sc-per-row': perRow } : undefined}>
           {creators.map((c) => {
             const followed = !!justFollowed[c.name];
             const followers = fmtFollowers(followerCounts[c.name]);
@@ -202,19 +207,32 @@ export default function SuggestedCreators({ variant = 'discover' }) {
                     <HiveAvatar username={c.name} size={null} alt="" badgeSize={10} />
                   </Link>
                   <div className="sc-who-text">
-                    <Link to={`/@${c.name}`} className="sc-name" title={`@${c.name}`}>@{c.name}</Link>
+                    <Link to={`/@${c.name}`} className="sc-name" title={`@${c.name}`}>{c.name}</Link>
                     <span className="sc-followers">
                       {followers != null ? t('profile.creators.followers', { count: followerCounts[c.name], num: followers }) : '\u00a0'}
                     </span>
                   </div>
+                  <button
+                    type="button"
+                    className="sc-dismiss"
+                    aria-label={t('common.actions.close')}
+                    title={t('common.actions.close')}
+                    onClick={() => setDismissed((d) => new Set(d).add(c.name))}
+                  >
+                    <Icon name="close" size={18} />
+                  </button>
                 </div>
                 {/* Why suggested: the topic most of their recent videos are in */}
                 <span className="sc-basis">
                   {c.basis ? t('profile.creators.mostlyPosts', { topic: getTagLabel(c.basis) }) : '\u00a0'}
                 </span>
+                {/* Their latest video (the one the suggestion came with) */}
+                <Link to={c.sample?.permlink ? `/@${c.name}/${c.sample.permlink}` : `/@${c.name}`} className="sc-thumb" tabIndex={-1} aria-hidden="true">
+                  {c.sample?.thumbnail && <img src={c.sample.thumbnail} alt="" loading="lazy" />}
+                </Link>
                 <Button
-                  variant={followed ? 'ghost' : 'secondary'}
-                  size={40}
+                  variant={followed ? 'secondary' : 'primary'}
+                  size={44}
                   block
                   className={`sc-follow${followed ? ' followed' : ''}`}
                   trailing={followed ? 'check' : 'person_add'}

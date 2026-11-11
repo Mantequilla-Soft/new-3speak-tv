@@ -321,6 +321,7 @@ p { text-wrap: pretty; }
   box-shadow: inset 0 0 0 1px var(--border);
   .v2-toggle__thumb { display: block; width: 20px; height: 20px; border-radius: 50%; background: var(--muted); transition: transform var(--t-base) var(--ease), background var(--t-base) var(--ease); }
   &.is-on { background: var(--accent); box-shadow: none; .v2-toggle__thumb { transform: translateX(18px); background: var(--on-accent); } }
+  &.is-cyan.is-on { background: var(--cyan); .v2-toggle__thumb { background: var(--bg); } }
   &:disabled { opacity: .45; cursor: not-allowed; }
 }
 .v2-setting { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border);
@@ -464,10 +465,31 @@ p { text-wrap: pretty; }
   .v2-confirmbar__actions { display: flex; gap: 6px; }
   .v2-btn--ghost { color: var(--bg); &:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); } }
 }
-.v2-island { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 1002; display: flex; align-items: center; gap: 10px; min-height: 44px; max-width: calc(100vw - 32px);
-  padding: 8px 10px 8px 14px; border-radius: 22px; background: var(--text); color: var(--bg); font-size: 13px; font-weight: 700; box-shadow: var(--shadow-float); animation: v2-drop var(--t-slow) var(--ease);
-  &.is-accent .material-symbols-rounded, &.is-accent svg { color: var(--accent); } &.is-cyan .material-symbols-rounded, &.is-cyan svg { color: var(--cyan); } }
+/* The island (07f, 17i): a text-filled bar at the top centre, 52 tall, radius 16,
+   padding 0/16/0/8; a 36px round chip in the tone (accent by default) holds the
+   icon in the ground colour; the text 14/700; an action 36 tall on a 10% wash. */
+.v2-island { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 1002; display: flex; align-items: center; gap: 10px; min-height: 52px; max-width: calc(100vw - 32px);
+  padding: 0 16px 0 8px; border-radius: var(--r-lg); background: var(--text); color: var(--bg); font-size: 14px; font-weight: 700; white-space: nowrap; box-shadow: var(--shadow-float); animation: v2-drop var(--t-slow) var(--ease);
+  --island-tone: var(--accent);
+  &.is-cyan { --island-tone: var(--cyan); }
+  .v2-island__icon { width: 36px; height: 36px; border-radius: 50%; flex: none; display: grid; place-items: center; background: var(--island-tone); color: var(--bg); }
+  > span:not(.v2-island__icon) { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  &:has(.v2-btn) { padding-right: 8px; }
+  .v2-btn { height: 36px; border-radius: var(--r-md); background: color-mix(in srgb, var(--bg) 10%, transparent); color: var(--bg); font-size: 13px; font-weight: 700; } }
 
+/* 07f: the confirm bar as a card (ConfirmBar with a title): left and right 24
+   on desktop, a surface bar, radius 24, a 1px border with 40% of the tone,
+   padding 18/20; a 48px tinted icon tile (radius 16), the title 16/700 over a
+   13px muted line, then the actions (44 tall). */
+.v2-confirmbar.is-card { left: 24px; right: 24px; transform: none; max-width: 1232px; margin: 0 auto; gap: 16px; padding: 18px 20px; border-radius: var(--r-2xl);
+  background: var(--surface); color: var(--text); font-weight: 400; border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border)); box-shadow: var(--shadow-sheet); animation-name: v2-rise-card;
+  &.is-cyan { border-color: color-mix(in srgb, var(--cyan) 40%, var(--border)); .v2-confirmbar__icon { background: var(--cyan-tint); color: var(--cyan); } }
+  .v2-confirmbar__icon { width: 48px; height: 48px; border-radius: var(--r-lg); display: grid; place-items: center; flex: none; background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); }
+  .v2-confirmbar__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; b { font-size: 16px; font-weight: 700; } > span { font-size: 13px; color: var(--muted); } }
+  .v2-confirmbar__actions { gap: 8px; .v2-btn { height: 44px; border-radius: 16px; } }
+  @include v2.mobile { left: 12px; right: 12px; bottom: calc(var(--bottom-bar-clearance) + 12px); flex-wrap: wrap; padding: 14px 16px; .v2-confirmbar__actions { width: 100%; .v2-btn { flex: 1; } } }
+}
+@keyframes v2-rise-card { from { opacity: 0; transform: translateY(12px); } }
 @keyframes v2-fade { from { opacity: 0; } }
 @keyframes v2-pop { from { opacity: 0; transform: translateY(8px) scale(.98); } }
 @keyframes v2-up { from { transform: translateY(100%); } }

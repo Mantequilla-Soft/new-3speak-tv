@@ -17,7 +17,8 @@
       "rep": "Rep {{rep}}",
       "repTitle": "Hive reputation",
       "viewProfile": "View profile"
-    }
+    },
+    "replyTo": "Reply to {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Voting isn't available for this post",
@@ -137,7 +138,7 @@
     "seenNote": "Signed-in viewers who keep their watch history on.",
     "seenEmpty": "Nobody has seen it yet.",
     "keep": "Keep as short",
-    "keepHint": "It stays on your channel after the 24 hours",
+    "keepHint": "It stays on your channel after the 24 hours.",
     "keepConfirm": "Keep it for good?",
     "keepYes": "Keep it",
     "keeping": "Keeping…",

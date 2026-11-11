@@ -86,6 +86,14 @@
 
 .hbadges-list.v2-dialog__body { gap: 6px; }
 
+// 41c: while arranging, each row is the grip, the name and (pinned) its note;
+// the artwork and the description step aside so the order is what you read.
+.hbadges-modal.is-arranging {
+  .hbadges-row { min-height: 40px; padding: 6px 10px 6px 6px; }
+  .hbadges-row-img, .hbadges-row-about { display: none; }
+  .hbadges-save { justify-content: flex-start; }
+}
+
 .hbadges-row {
   display: flex;
   align-items: center;

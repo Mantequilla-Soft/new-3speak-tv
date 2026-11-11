@@ -186,7 +186,9 @@ function AddToPlaylistModal({ isOpen, onClose, author, permlink, videoTitle, aud
       aria-pressed={added}
     >
       <span className="atp-tile__cover" aria-hidden="true">
-        {cover ? <img src={cover} alt="" loading="lazy" /> : <Icon name={icon} size={28} />}
+        <Icon name={icon} size={28} />
+        {/* Over the icon; a cover that fails to load leaves the icon showing. */}
+        {cover && <img src={cover} alt="" loading="lazy" onError={(e) => { e.currentTarget.style.display = 'none'; }} />}
       </span>
       <span className="atp-tile__icon" aria-hidden="true"><Icon name={icon} size={24} /></span>
       <span className="atp-tile__name name">{name}</span>

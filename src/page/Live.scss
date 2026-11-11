@@ -1,0 +1,86 @@
+@use "../styles/v2" as v2;
+
+// /live (26b "Live"): the title (40/900) with Go live (56, accent) beside it,
+// a segmented track, then the stream cards in a grid, or the OpenPods rooms as
+// cyan-washed rows with a Listen action.
+.live-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.live-page-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  h1 {
+    flex: 1;
+    margin: 0;
+    @include v2.text(display);
+    @include v2.mobile { font-size: 32px; }
+  }
+}
+
+.live-page-go { gap: 12px; }
+
+.live-page > .v2-seg { align-self: flex-start; }
+
+.live-page-rooms {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.live-page-room {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: var(--r-xl);
+  background: var(--cyan-wash);
+  border: 1px solid color-mix(in srgb, var(--cyan) 30%, var(--border));
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover { color: var(--text); border-color: var(--cyan); }
+}
+
+.live-page-room-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  background: var(--cyan);
+  color: var(--bg);
+}
+
+.live-page-room-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  b { font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  > span { @include v2.mono(11, 500); color: var(--muted); }
+}
+
+.live-page-room-go {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  font-size: 12px;
+  font-weight: 700;
+}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from '../v2/Icon';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '../../i18n';
@@ -141,6 +141,106 @@ export default function ScheduleCalendar({ value, onChange, min, max }) {
         <Icon name="schedule" size={18} />
         <input type="time" value={timePart} onChange={pickTime} />
       </label>
+    </div>
+  );
+}
+
+// "Sat 18:00" for the sheet's main action ("Schedule for Sat 18:00").
+export function formatScheduleWhen(value) {
+  if (!value) return '';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return '';
+  return `${formatDate(d, { weekday: 'short' })} ${String(value).slice(11, 16)}`;
+}
+
+// The viewer's time zone as "Berlin (CET)": the schedule is in local time.
+function localZoneLabel() {
+  try {
+    const id = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    const city = id.includes('/') ? id.split('/').pop().replace(/_/g, ' ') : '';
+    const short = new Intl.DateTimeFormat(undefined, { timeZoneName: 'short' })
+      .formatToParts(new Date())
+      .find((p) => p.type === 'timeZoneName')?.value || '';
+    return city && short ? `${city} (${short})` : (city || short || id);
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * The 17d schedule sheet's picker: a strip of day tiles (the whole allowed
+ * range, scrolling sideways; the picked one cyan), then the time and the time
+ * zone as two wells. Same value format and props as ScheduleCalendar.
+ */
+export function ScheduleDayStrip({ value, onChange, min, max }) {
+  const { t } = useTranslation();
+  const [datePart = '', timePart = ''] = (value || '').split('T');
+  const minDay = (min || '').slice(0, 10);
+  const maxDay = (max || '').slice(0, 10);
+  const stripRef = useRef(null);
+  const zone = useMemo(localZoneLabel, []);
+
+  const days = useMemo(() => {
+    const now = new Date();
+    const first = minDay ? new Date(`${minDay}T00:00`) : new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const last = maxDay ? new Date(`${maxDay}T00:00`) : new Date(first.getFullYear(), first.getMonth(), first.getDate() + 90);
+    const out = [];
+    for (let d = new Date(first); d <= last && out.length < 400; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
+      out.push({ iso: ymd(d.getFullYear(), d.getMonth(), d.getDate()), date: d });
+    }
+    return out;
+  }, [minDay, maxDay]);
+
+  // Bring the picked day into view when the sheet opens on a later week.
+  useEffect(() => {
+    const el = stripRef.current?.querySelector('.is-on');
+    if (el && stripRef.current) stripRef.current.scrollLeft = Math.max(0, el.offsetLeft - stripRef.current.offsetLeft - 54);
+    // only on open
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const clamp = (next) => {
+    if (min && next < min) return min;
+    if (max && next > max) return max;
+    return next;
+  };
+
+  const pickDay = (iso) => {
+    const time = timePart || (min ? min.slice(11, 16) : '12:00');
+    onChange(clamp(`${iso}T${time}`));
+  };
+
+  const pickTime = (e) => {
+    const time = e.target.value;
+    if (!time) return;
+    onChange(clamp(`${datePart || minDay}T${time}`));
+  };
+
+  return (
+    <div className="schedule-strip">
+      <div className="schedule-strip__label">{t('studio.schedule.pickDay')}</div>
+      <div className="schedule-strip__days" ref={stripRef}>
+        {days.map(({ iso, date }) => (
+          <button
+            type="button"
+            key={iso}
+            className={`schedule-strip__day${iso === datePart ? ' is-on' : ''}`}
+            aria-pressed={iso === datePart}
+            aria-label={formatDate(date, { dateStyle: 'full' })}
+            onClick={() => pickDay(iso)}
+          >
+            <span>{formatDate(date, { weekday: 'short' })}</span>
+            <b>{date.getDate()}</b>
+          </button>
+        ))}
+      </div>
+      <div className="schedule-strip__row">
+        <label className="schedule-strip__well is-time">
+          <Icon name="schedule" size={18} />
+          <input type="time" value={timePart} onChange={pickTime} aria-label={t('studio.scheduled.fields.scheduledFor')} />
+        </label>
+        <span className="schedule-strip__well is-zone" title={Intl.DateTimeFormat().resolvedOptions().timeZone}>{zone}</span>
+      </div>
     </div>
   );
 }

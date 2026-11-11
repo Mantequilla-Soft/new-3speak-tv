@@ -14,16 +14,17 @@
      here would toggle playback instead. */
   z-index: 7;
 
+  /* 25b: a 48px scrim pill, "Skip ad" 14/900 and the skip glyph at 24. */
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 36px;
-  padding: 0 12px;
-  border-radius: var(--r-md);
-  background: var(--media-scrim);
+  gap: 14px;
+  height: 48px;
+  padding: 0 12px 0 16px;
+  border-radius: var(--r-lg);
+  background: var(--media-scrim-strong);
   color: var(--on-media);
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1;
   /* So the countdown does not jitter the box width as it ticks. */
@@ -34,29 +35,32 @@
   @media (max-width: 600px) {
     right: 8px;
     bottom: 44px;
-    height: 32px;
-    padding: 0 10px;
-    font-size: 12px;
+    gap: 8px;
+    height: 40px;
+    padding: 0 10px 0 12px;
+    border-radius: var(--r-md);
+    font-size: 13px;
   }
 }
 
 /* Waiting: present, readable, and plainly not yet pressable. */
 .ad-skip-waiting {
   pointer-events: none;
+  color: color-mix(in srgb, var(--on-media) 75%, transparent);
 
   strong { font-family: var(--font-mono); font-weight: 700; }
 }
 
-/* Ready: the inverse pill, so the change from "wait" to "press" is unmistakable. */
+/* Ready (25b): full-white ink at 900 and the skip glyph, so "press" reads at once. */
 .ad-skip-ready {
   pointer-events: auto;
   cursor: pointer;
-  background: var(--on-media);
-  color: var(--media-black);
+  color: var(--on-media);
   font-weight: 900;
-  transition: transform var(--t-fast) var(--ease), filter var(--t-fast) var(--ease);
+  transition: transform var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
-  &:hover { filter: brightness(.92); }
+  .material-symbols-rounded { font-size: 24px !important; }
+  &:hover { background: var(--media-black); }
   &:active { transform: scale(.98); }
   &:focus-visible { outline: 2px solid var(--on-media); outline-offset: 2px; }
 }

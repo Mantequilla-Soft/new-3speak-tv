@@ -23,6 +23,9 @@ import './StreamTemplates.scss';
 const toast = toastIn('Live');
 const IMAGE_KEY = import.meta.env.VITE_IMAGE_SERVER_API_KEY;
 const STATUS_POLL_MS = 5000;
+// From 1280 up the OBS guide stands open beside the templates (39b); on smaller
+// screens it starts folded under them.
+const WIDE_QUERY = () => typeof window !== 'undefined' && !!window.matchMedia?.('(min-width: 1280px)').matches;
 
 // Same broadcast languages as the browser create-stream form (stored as the
 // short code). Names come from Intl in the reader's own language.
@@ -139,6 +142,7 @@ function SecretBox({ token }) {
 
   return (
     <section className="st-card-box st-secret">
+      {/* One row (39b): the key, the name and the masked secret, then the actions. */}
       <div className="st-secret__head">
         <Icon name="key" size={24} className="st-secret__icon" />
         <div className="st-secret__text">
@@ -147,19 +151,19 @@ function SecretBox({ token }) {
             {revealed && secret ? secret : '•••• •••• •••• •••• ••••'}
           </code>
         </div>
+        <div className="st-secret__actions">
+          <Button variant="secondary" onClick={reveal} disabled={busy}>
+            {revealed ? t('live.obs.secret.hide') : t('live.obs.secret.reveal')}
+          </Button>
+          <Button variant="secondary" onClick={copy} disabled={busy}>
+            {t('common.actions.copy')}
+          </Button>
+          <Button variant="danger" onClick={() => setConfirmReset(true)} disabled={busy}>
+            {t('common.actions.reset')}
+          </Button>
+        </div>
       </div>
       <p className="st-secret__desc">{t('live.obs.secret.desc')}</p>
-      <div className="st-secret__actions">
-        <Button variant="secondary" icon={revealed ? 'visibility_off' : 'visibility'} onClick={reveal} disabled={busy}>
-          {revealed ? t('live.obs.secret.hide') : t('live.obs.secret.reveal')}
-        </Button>
-        <Button variant="secondary" icon="content_copy" onClick={copy} disabled={busy}>
-          {t('common.actions.copy')}
-        </Button>
-        <Button variant="danger" icon="refresh" onClick={() => setConfirmReset(true)} disabled={busy}>
-          {t('common.actions.reset')}
-        </Button>
-      </div>
       {confirmReset && (
         <ConfirmSheet
           title={t('live.obs.secret.resetTitle')}
@@ -192,11 +196,11 @@ function ChatUrlBox({ overlayKey }) {
   return (
     <section className="st-chatbox">
       <Icon name="forum" size={24} className="st-chatbox__icon" />
-      <div className="st-chatbox__text">
+      <p className="st-chatbox__text">
         <b>{t('live.obs.chatBox.title')}</b>
-        <span>{t('live.obs.chatBox.desc')}</span>
-      </div>
-      <Button variant="cyan" size={36} icon="content_copy" onClick={copy}>{t('live.obs.chatBox.copy')}</Button>
+        <span> · {t('live.obs.chatBox.desc')}</span>
+      </p>
+      <Button variant="cyan" size={36} onClick={copy}>{t('live.obs.chatBox.copy')}</Button>
     </section>
   );
 }
@@ -287,6 +291,9 @@ function TemplateCard({ tpl, token, obsAllowed, onEdit, onDelete, onUse }) {
   const ref = useRef(null);
   const visible = useVisible(ref);
   const [status, setStatus] = useState(null);
+  // The address is copied with a button; it is only spelled out when copying
+  // failed, so it can be selected by hand.
+  const [showUrl, setShowUrl] = useState(false);
 
   useEffect(() => {
     if (!visible || !token) return undefined;
@@ -307,7 +314,7 @@ function TemplateCard({ tpl, token, obsAllowed, onEdit, onDelete, onUse }) {
 
   const copyUrl = async () => {
     if (await copyText(tpl.whipUrl || '')) toast.success(t('live.obs.card.urlCopied'));
-    else toast.error(t('live.obs.copyFailed'));
+    else { setShowUrl(true); toast.error(t('live.obs.copyFailed')); }
   };
 
   // Offline / Connecting / Live / Ending (39b): live is the solid pill,
@@ -324,33 +331,29 @@ function TemplateCard({ tpl, token, obsAllowed, onEdit, onDelete, onUse }) {
     <article ref={ref} className={cx('st-card', `st-card--${state}`)}>
       <div className="st-card__top">
         <div className="st-card__thumb">
-          {tpl.thumbnail ? <img src={tpl.thumbnail} alt="" loading="lazy" /> : <Icon name="sensors" size={24} />}
+          {tpl.thumbnail ? <img src={tpl.thumbnail} alt="" loading="lazy" /> : null}
         </div>
         <div className="st-card__head">
-          <div className="st-card__name">{tpl.name}</div>
-          <div className="st-card__title">{tpl.title}</div>
+          <div className="st-card__name" title={tpl.title || undefined}>{tpl.name}</div>
           <div className="st-card__meta">
-            {lastLive
-              ? t('live.obs.card.lastLive', { date: lastLive.toLocaleString(getLanguage(), { dateStyle: 'medium', timeStyle: 'short' }) })
-              : t('live.obs.card.neverLive')}
+            {state === 'live'
+              ? t('feeds.live.title')
+              : lastLive
+                ? t('live.obs.card.lastLive', { date: lastLive.toLocaleDateString(getLanguage(), { day: 'numeric', month: 'short' }) })
+                : t('live.obs.card.neverLive')}
           </div>
         </div>
         <StatusPill tone={pillTone} className={cx('st-badge', `st-badge--${state}`)}>
           {t(`live.obs.state.${state}`, { defaultValue: state })}
         </StatusPill>
       </div>
-      {obsAllowed && <code className="st-card__url" title={tpl.whipUrl}>{tpl.whipUrl}</code>}
+      {obsAllowed && showUrl && <code className="st-card__url" title={tpl.whipUrl}>{tpl.whipUrl}</code>}
       {state === 'live' && ingress && (
         <div className="st-card__ingress">
           {[ingress.width && ingress.height ? `${ingress.width}×${ingress.height}` : null,
             ingress.bitrate ? `${Math.round(ingress.bitrate / 1000)} kbps` : null,
             ingress.fps ? `${Math.round(ingress.fps)} fps` : null].filter(Boolean).join(' · ')}
         </div>
-      )}
-      {state === 'live' && status?.room && (
-        <Button as={Link} variant="secondary" size={36} icon="play_arrow" className="st-card__watch" to={`/watch/${encodeURIComponent(status.room)}`}>
-          {t('live.obs.card.watch')}
-        </Button>
       )}
       {warn && <div className="st-card__warn">{warn}</div>}
       {/* We gave up on the session, but OBS may still think it is live. */}
@@ -366,20 +369,26 @@ function TemplateCard({ tpl, token, obsAllowed, onEdit, onDelete, onUse }) {
       {state === 'idle' && status?.lastEnd?.reason === 'pro_required' && (
         <div className="st-card__warn">{t('live.obs.card.proRequired')}</div>
       )}
+      {/* One row (39b): copy the server URL, then the small square actions. */}
       <div className="st-card__actions">
-        {/* The browser studio, no OBS: fills "New stream" from this template. */}
-        {onUse && (
-          <Button variant="secondary" size={36} icon="videocam" className="st-card__use" onClick={() => onUse(tpl)}>
+        {obsAllowed ? (
+          <Button variant="secondary" size={36} center className="st-card__copy" onClick={copyUrl}>
+            {t('live.obs.card.copyUrl')}
+          </Button>
+        ) : onUse && (
+          <Button variant="secondary" size={36} center className="st-card__copy" onClick={() => onUse(tpl)}>
             {t('live.obs.card.useInStudio')}
           </Button>
         )}
-        {obsAllowed && (
-          <Button variant="secondary" size={36} icon="content_copy" className="st-card__copy" onClick={copyUrl}>
-            {t('live.obs.card.copyUrl')}
-          </Button>
+        {/* The browser studio, no OBS: fills "New stream" from this template. */}
+        {obsAllowed && onUse && (
+          <IconButton icon="videocam" label={t('live.obs.card.useInStudio')} className="st-card__use" onClick={() => onUse(tpl)} />
+        )}
+        {state === 'live' && status?.room && (
+          <IconButton as={Link} icon="play_arrow" label={t('live.obs.card.watch')} className="st-card__watch" to={`/watch/${encodeURIComponent(status.room)}`} />
         )}
         <IconButton icon="edit" label={t('common.actions.edit')} onClick={() => onEdit(tpl)} />
-        <IconButton icon="delete" variant="danger" label={t('common.actions.delete')} onClick={() => onDelete(tpl)} disabled={state === 'live'} />
+        <IconButton icon="delete" label={t('common.actions.delete')} onClick={() => onDelete(tpl)} disabled={state === 'live'} />
       </div>
     </article>
   );
@@ -941,7 +950,7 @@ export function StreamTemplatesPanel({ token, user, isPremium, premiumKnown = tr
 
       {obsReady && (
         <aside className="st-aside">
-          <ObsGuide isPremium={isPremium} defaultOpen={data.status === 'ready' && data.templates.length === 0} />
+          <ObsGuide isPremium={isPremium} defaultOpen={WIDE_QUERY() || (data.status === 'ready' && data.templates.length === 0)} />
         </aside>
       )}
 

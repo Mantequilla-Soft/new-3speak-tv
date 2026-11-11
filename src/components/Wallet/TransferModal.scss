@@ -1,8 +1,8 @@
-// Send / transfer (design 17f) on the shared v2 Dialog. Tokens only.
+// Send / transfer (design 17f) on the v2 side sheet (DialogShell). Tokens only.
 @use "../../styles/v2" as v2;
 
 .transfer-v2 {
-  .v2-dialog__body { gap: 14px; }
+  .v2-dialog__body { gap: 16px; }
 
   &__recent { display: flex; flex-direction: column; gap: 8px; }
   &__people {
@@ -31,18 +31,21 @@
     &.is-on .v2-avatar { box-shadow: 0 0 0 2px var(--text); }
   }
 
-  // The amount: big Roboto Mono in a well, the one thing this dialog is about
+  // The amount: one big number, the thing this sheet is about (17f)
   &__amount {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    > label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     input {
-      @include v2.well;
-      border: 2px solid transparent;
+      background: transparent;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      border-radius: 0;
       width: 100%;
-      padding: 8px 12px;
+      padding: 0 0 4px;
       color: var(--text);
-      font-family: var(--font-mono);
+      font-family: var(--font-sans);
       font-size: 56px;
       font-weight: 900;
       letter-spacing: -.02em;
@@ -51,8 +54,8 @@
       -moz-appearance: textfield;
       &::-webkit-outer-spin-button, &::-webkit-inner-spin-button { appearance: none; margin: 0; }
       &::placeholder { color: var(--muted); opacity: .5; }
-      &:focus { outline: none; border-color: var(--accent); }
-      @include v2.mobile { font-size: 40px; }
+      &:focus { outline: none; border-bottom-color: var(--accent); }
+      @include v2.mobile { font-size: 48px; }
     }
     &.is-error input { border-color: var(--accent); }
   }
@@ -86,12 +89,9 @@
 
   &__foot { display: flex; flex-direction: column; gap: 10px; width: 100%; .v2-btn { flex: none; } }
   &__key {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--muted);
+    > span { display: inline-flex; align-items: center; gap: 8px; }
     .material-symbols-rounded { color: var(--accent); }
   }
-  .v2-dialog__foot { border-top: 1px solid var(--border); }
+  // The memo is the only bordered field (17f): a well with an outline.
+  .v2-input { border-color: var(--border); border-width: 1px; height: 48px; border-radius: var(--r-lg); &:focus { border-color: var(--accent); } }
 }

@@ -5,8 +5,8 @@ import { fetchLeaderboard } from '../../lib/leaderboardData';
 import { cx } from '../v2/helpers';
 import mark from '../../assets/image/3S_mark.svg';
 
-// Which faces get a ring (design 07e): a few red, the rest plain.
-const RINGS = ['', 'accent', '', '', '', 'accent', '', 'accent', ''];
+// The ring around each face (design 07e): white, red or grey, in this order.
+const RINGS = ['white', 'accent', 'accent', 'muted', 'white', 'white', 'accent', 'accent', 'white'];
 
 /**
  * The left half of the login window (07e): "the community, not a plain form".
@@ -31,7 +31,7 @@ export default function CommunityPanel() {
       <img className="login-community__mark" src={mark} alt="" />
       <div className="login-community__faces">
         {RINGS.map((ring, i) => (
-          <span key={i} className={cx('login-community__face', ring && `is-${ring}`)}>
+          <span key={i} className={cx('login-community__face', `is-${ring}`)}>
             {names[i] && <AccountImg account={names[i]} alt="" loading="lazy" />}
           </span>
         ))}

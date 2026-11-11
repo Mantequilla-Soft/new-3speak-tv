@@ -56,7 +56,7 @@ export default function SupportModal() {
     >
       <div className="support-modal-lead">
         <span className="support-modal-icon" aria-hidden="true">
-          <Icon name={block.reason === 'upload' ? 'upload_file' : 'block'} size={24} />
+          <Icon name={block.reason === 'upload' ? 'file_upload_off' : 'block'} size={24} />
         </span>
         <p className="support-modal-body">{t(copy.bodyKey)}</p>
       </div>

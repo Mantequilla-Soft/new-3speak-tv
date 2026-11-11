@@ -21,7 +21,7 @@ import "./ObsChatOverlay.scss";
 //    messages fade, and offline it renders nothing.
 //
 // Query options: fade (seconds before a message fades, 0 = never), max
-// (lines), size (text px). Defaults: dock 0 / 50 / 14, overlay 30 / 10 / 20.
+// (lines), size (text px). Defaults: dock 0 / 50 / 14, overlay 30 / 10 / 16.
 
 const API = (import.meta.env.VITE_HANGOUTS_TEMPLATES_API_URL || import.meta.env.VITE_HANGOUTS_API_URL || "")
   .replace(/\/$/, "");
@@ -45,7 +45,7 @@ function readOptions() {
     dock,
     fade: clampInt(p.get("fade"), 0, 3600, dock ? 0 : 30),
     max: clampInt(p.get("max"), 1, 50, dock ? 50 : 10),
-    size: clampInt(p.get("size"), 10, 64, dock ? 14 : 20),
+    size: clampInt(p.get("size"), 10, 64, dock ? 14 : 16),
   };
 }
 

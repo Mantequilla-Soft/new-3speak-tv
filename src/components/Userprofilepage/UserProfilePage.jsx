@@ -79,6 +79,7 @@ function UserProfilePage({ user: userProp }) {
       if (tab === 'shorts') return 'shorts';
       if (tab === 'audio') return 'audio';
       if (tab === 'community') return 'community';
+      if (tab === 'streams') return 'streams';
       if (tab === 'links') return 'links';
       if (tab === 'stats') return 'stats';
       if (tab === 'video') return 'video';
@@ -97,6 +98,7 @@ function UserProfilePage({ user: userProp }) {
       else if (tab === 'shorts') setShow('shorts');
       else if (tab === 'audio') setShow('audio');
       else if (tab === 'community') setShow('community');
+      else if (tab === 'streams') setShow('streams');
       else if (tab === 'links') setShow('links');
       else if (tab === 'stats') setShow('stats');
       else if (tab === 'video') setShow('video');

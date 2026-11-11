@@ -113,3 +113,38 @@
     .tagsv2-count { background: var(--cyan); color: var(--bg); }
   }
 }
+
+// 43b "tag this video" (layout="groups"): every category as an eyebrow over
+// its topics as small 28px chips; the pick is cyan (a topic, not a payout).
+.tagsv2-picker.is-groups {
+  gap: 14px;
+
+  .tagsv2-group { display: flex; flex-direction: column; gap: 6px; }
+  .tagsv2-group__head {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    @include v2.text(eyebrow);
+    color: var(--muted);
+    cursor: pointer;
+    &:hover:not(:disabled) { color: var(--text); }
+    &.selected { color: var(--cyan); .tagsv2-pct { color: var(--cyan); } }
+  }
+  .tagsv2-topic {
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: var(--r-sm);
+    font-size: 11px;
+    .tagsv2-icon { display: none; }
+    &.selected {
+      border-color: var(--cyan);
+      background: var(--cyan-tint);
+      color: var(--text);
+      .tagsv2-pct { color: var(--cyan); }
+    }
+  }
+}

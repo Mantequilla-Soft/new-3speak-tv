@@ -115,6 +115,8 @@ const NewVideos = lazyRoute(() => import("./page/NewVideos"), "./page/NewVideos"
 const Notifications = lazyRoute(() => import("./page/Notifications"), "./page/Notifications");
 const OpenPodPublish = lazyRoute(() => import("./page/OpenPodPublish"), "./page/OpenPodPublish");
 const OpenPods = lazyRoute(() => import("./page/OpenPods"), "./page/OpenPods");
+// The top bar's Live tab (20a): what is live right now.
+const Live = lazyRoute(() => import("./page/Live"), "./page/Live");
 const PlaylistView = lazyRoute(() => import("./page/PlaylistView"), "./page/PlaylistView");
 const PostView = lazyRoute(() => import("./page/PostView"), "./page/PostView");
 const ProfileModal = lazyRoute(() => import("./components/modal/ProfileModal"), "./components/modal/ProfileModal");
@@ -906,6 +908,7 @@ function App() {
               <Route path="/wallet/:user" element={<Wallet />} />
               <Route path="/test" element={<ProfileModal />} />
               <Route path="/image" element={<HiveImageUploader />} />
+              <Route path="/live" element={<Live />} />
               <Route path="/openpods" element={<OpenPods />} />
               <Route path="/openpods/publish" element={<OpenPodPublish />} />
               {/* Old address of the OBS templates, now the Stream Studio's

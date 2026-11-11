@@ -43,13 +43,13 @@ export default function AudiogramEpisodeLink({ author, permlink, className = '' 
       data-testid="audiogram-episode-link"
     >
       <span className="audiogramEpisodeLink__cover" aria-hidden="true">
-        {data?.cover ? <img src={data.cover} alt="" loading="lazy" /> : <Icon name="headphones" size={20} />}
+        {data?.cover ? <img src={data.cover} alt="" loading="lazy" /> : <Icon name="headphones" size={16} />}
       </span>
       <span className="audiogramEpisodeLink__text">
         <small>{t('shorts.audiogram.fullEpisode')}</small>
+        <span aria-hidden="true"> · </span>
         <strong>{data?.title || `@${author}`}</strong>
       </span>
-      <Icon name="chevron_right" size={20} className="audiogramEpisodeLink__go" />
     </Link>
   );
 }

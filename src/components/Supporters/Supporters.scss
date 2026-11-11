@@ -1,69 +1,104 @@
 @use "../../styles/v2" as v2;
 
-// ── Support chips in the profile header (30c rings, 31e "who you support") ──
-// Each chip: the person's squircle avatar with a 2px ring (accent = tipped this
-// profile, cyan = this profile tipped them), the total in mono, a direction icon.
+// ── Supporter rings in the profile header (30c) ────────────────────────────
+// Each ring: the person's squircle avatar in a 3px ring with a page-coloured
+// gap (accent = tipped this profile, cyan = this profile tipped them), a
+// corner badge in the ring's colour, and the total under it in mono. Drawn at
+// 44px here (60 on the board), same proportions.
 .sp-badges {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
+  align-items: flex-start;
+  gap: 10px;
 
-  .sp-badge,
+  .sp-badge {
+    --ring: var(--accent);
+    --ring-ink: var(--on-accent);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 44px;
+    color: var(--text);
+    text-decoration: none;
+
+    &:hover .sp-ring-av { filter: brightness(1.08); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-md); }
+  }
+
+  .sp-badge--out { --ring: var(--cyan); --ring-ink: var(--bg); }
+
+  .sp-ring-av {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    padding: 2px;
+    border-radius: var(--r-lg);
+    background: var(--ring);
+    transition: filter var(--t-fast) var(--ease);
+  }
+
+  .sp-badge-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--r-md);
+    border: 2px solid var(--bg);
+    object-fit: cover;
+    background: var(--avatar);
+  }
+
+  // Anonymous Lightning tips: a bolt in the avatar's place (an opaque wash,
+  // or the ring's colour would show through it).
+  .sp-badge-bolt {
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--accent) 16%, var(--bg));
+    color: var(--accent);
+  }
+
+  .sp-ring-badge {
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--r-sm);
+    border: 2px solid var(--bg);
+    background: var(--ring);
+    color: var(--ring-ink);
+  }
+
+  .sp-badge-amount { @include v2.mono(11, 700); color: var(--text); white-space: nowrap; }
+
   .sp-badges-all {
+    align-self: center;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
     height: 32px;
-    padding: 0 10px 0 4px;
+    padding: 0 10px;
     border: 0;
     border-radius: var(--r-md);
     background: var(--surface-2);
     color: var(--text);
-    text-decoration: none;
     font-family: inherit;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: background var(--t-fast) var(--ease);
-
-    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); color: var(--text); }
-  }
-
-  .sp-badge-img {
-    width: 24px;
-    height: 24px;
-    flex: none;
-    border-radius: var(--r-sm);
-    object-fit: cover;
-    background: var(--avatar);
-    box-shadow: 0 0 0 2px var(--accent);
-  }
-
-  .sp-badge--out .sp-badge-img { box-shadow: 0 0 0 2px var(--cyan); }
-
-  // Anonymous Lightning tips: a bolt in the avatar's place.
-  .sp-badge-bolt {
-    display: grid;
-    place-items: center;
-    background: var(--accent-tint-strong);
-    color: var(--accent);
-  }
-
-  .sp-badge-amount { @include v2.mono(12, 700); color: var(--accent); }
-  .sp-badge-dir { color: var(--muted); }
-
-  .sp-badges-all {
-    padding: 0 10px;
     @include v2.text(label);
     font-size: 12px;
+    cursor: pointer;
+
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
   }
 
-  .sp-badges-more { @include v2.mono(12, 700); color: var(--muted); }
+  .sp-badges-more { align-self: center; @include v2.mono(12, 700); color: var(--muted); }
 
   .sp-badges-sep {
+    align-self: center;
     width: 1px;
-    height: 20px;
-    margin: 0 4px;
+    height: 32px;
+    margin: 0 2px;
     background: var(--border);
   }
 }
@@ -72,56 +107,66 @@
 .sp-list {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 12px;
   max-width: 880px;
   padding-bottom: 32px;
 }
 
-.sp-subtabs {
-  max-width: 100%;
-
-  .v2-seg { background: var(--surface); }
+// One card: "Supporters" and the Received / Given track, then the rows.
+.sp-panel.v2-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
 }
 
-// One row per tip, on bg wells inside a surface card.
+.sp-panel-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  h3 { flex: 1; margin: 0; @include v2.text(title-sm); color: var(--text); }
+
+  .sp-subtabs.v2-seg {
+    max-width: 100%;
+    background: var(--bg);
+
+    .v2-seg__opt { height: 28px; padding: 0 10px; border-radius: var(--r-sm); font-size: 12px; }
+  }
+}
+
 .sp-grid {
   display: flex;
   flex-direction: column;
   gap: 6px;
   width: 100%;
-  padding: 8px;
-  @include v2.card;
 }
 
+// A row on the page colour: avatar, name and what, amount, eye.
 .sp-card {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
   padding: 8px;
-  border-radius: var(--r-lg);
   @include v2.well;
   border-radius: var(--r-lg);
 
-  @include v2.mobile { align-items: flex-start; gap: 10px; }
+  @include v2.mobile { align-items: flex-start; }
 }
 
-.sp-card-thumb {
-  position: relative;
+.sp-card-av {
   flex: none;
-  width: 96px;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--r-sm);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
   overflow: hidden;
-  display: grid;
-  place-items: center;
-  @include v2.thumb-placeholder(6px);
+  background: var(--avatar);
 
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .sp-card-thumb-icon { color: var(--muted); }
 
-  @include v2.mobile { width: 72px; }
+  &--anon { display: grid; place-items: center; background: var(--accent-tint-strong); color: var(--accent); }
 }
 
 .sp-card-body {
@@ -129,10 +174,10 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
-.sp-card-title {
+.sp-card-name {
   @include v2.text(body-sm);
   font-weight: 700;
   color: var(--text);
@@ -148,38 +193,30 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 2px 10px;
+  gap: 0 6px;
+  min-width: 0;
   @include v2.text(meta-sm);
   color: var(--muted);
+
+  > * + *::before { content: "·"; margin-right: 6px; }
 }
 
-.sp-card-tipper {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.sp-card-title {
   min-width: 0;
+  max-width: 100%;
   color: var(--muted);
   text-decoration: none;
-  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-  img {
-    width: 20px;
-    height: 20px;
-    flex: none;
-    border-radius: var(--r-xs);
-    object-fit: cover;
-    background: var(--avatar);
-  }
-
-  &:hover { color: var(--text); }
-
-  &--anon { color: var(--muted); .material-symbols-rounded { color: var(--accent); } }
+  &:hover { color: var(--text); text-decoration: underline; }
 }
 
 .sp-card-time { white-space: nowrap; }
 .sp-card-paid { white-space: nowrap; }
 
-// Money: accent, Roboto Mono.
+// Money: accent, Roboto Mono, 13/900.
 .sp-card-amount { flex: none; }
 
 .sp-pill {
@@ -207,20 +244,14 @@
   &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-xs); }
 }
 
-// A tip the owner hid from the profile: the row dims, the eye stays sharp.
+// A tip the owner hid from the profile: the row at half strength, the eye sharp.
 .sp-card.is-hidden {
-  .sp-card-thumb,
-  .sp-card-title,
-  .sp-card-meta,
-  .sp-card-amount,
-  .sp-card-memo { opacity: .5; }
+  .sp-card-av,
+  .sp-card-body,
+  .sp-card-amount { opacity: .5; }
 }
 
-.sp-card-hidden-label {
-  @include v2.text(meta-sm);
-  font-weight: 700;
-  color: var(--muted);
-}
+.sp-card-hidden-label { white-space: nowrap; }
 
 .sp-card-hide { flex: none; color: var(--muted); }
 
@@ -229,11 +260,72 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
-  max-width: 560px;
   padding: 14px 16px;
-  border-radius: var(--r-2xl);
+  border-radius: var(--r-xl);
   border: 2px dashed var(--border);
   color: var(--muted);
 
   p { margin: 0; flex: 1; min-width: 200px; @include v2.text(body); }
+}
+
+.sp-list-more { align-self: flex-start; }
+
+// ── Who this profile supports (31e) ────────────────────────────────────────
+// The card's title with the accent tick, the count in mono, then a two-column
+// grid of rows: a ringed avatar, the name, how often and how much.
+.sp-who.v2-card { display: flex; flex-direction: column; gap: 12px; }
+
+.sp-who-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  &::before { content: ""; width: 4px; height: 22px; flex: none; border-radius: var(--r-bar); background: var(--accent); }
+
+  h3 { flex: 1; margin: 0; @include v2.text(title); color: var(--text); }
+  .sp-who-count { @include v2.mono(12, 700); color: var(--muted); }
+}
+
+.sp-who-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+
+  @include v2.mobile { grid-template-columns: 1fr; }
+}
+
+.sp-who-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px;
+  @include v2.well;
+  border-radius: var(--r-lg);
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover { background: color-mix(in srgb, var(--text) 5%, var(--bg)); color: var(--text); }
+}
+
+.sp-who-av {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--avatar);
+  box-shadow: 0 0 0 2px var(--accent);
+
+  &.is-cyan { box-shadow: 0 0 0 2px var(--cyan); }
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+
+.sp-who-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  b { @include v2.text(body-sm); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  span { @include v2.mono(11, 400); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }

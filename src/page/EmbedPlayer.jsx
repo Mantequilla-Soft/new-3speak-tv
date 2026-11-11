@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { usePlayer } from '@mantequilla-soft/3speak-player/react';
 import { getPlayerUrl } from '../utils/playerUrl';
@@ -19,6 +19,9 @@ export default function EmbedPlayer() {
   const [sp] = useSearchParams();
   const isShort = sp.get('short') === '1';
   const [attached, setAttached] = useState(false);
+  // Until the first play, a big play mark sits in the middle of the poster (49c).
+  const [started, setStarted] = useState(false);
+  const elRef = useRef(null);
 
   const a = String(author || '').toLowerCase();
   const p = String(permlink || '').toLowerCase();
@@ -53,8 +56,17 @@ export default function EmbedPlayer() {
     } catch {
       /* player already destroyed — nothing left to detach from */
     }
+    elRef.current = el;
     setAttached(!!el);
   }, [sdkVideoRef]);
+
+  useEffect(() => {
+    const el = elRef.current;
+    if (!el) return undefined;
+    const onPlay = () => setStarted(true);
+    el.addEventListener('play', onPlay);
+    return () => el.removeEventListener('play', onPlay);
+  }, [attached]);
 
   useEffect(() => {
     if (!valid || !player || !attached) return;
@@ -64,7 +76,6 @@ export default function EmbedPlayer() {
   if (!valid) {
     return (
       <div className="emb-player emb-player--err" role="status">
-        <Icon name="videocam_off" size={28} />
         <span>{t('misc.embedPlayer.unavailable')}</span>
       </div>
     );
@@ -73,6 +84,16 @@ export default function EmbedPlayer() {
   return (
     <div className={`emb-player${isShort ? ' short' : ''}`}>
       <video ref={videoRef} playsInline controls loop={isShort} />
+      {!started && (
+        <button
+          type="button"
+          className="emb-player__play"
+          aria-label={t('common.actions.play')}
+          onClick={() => { const pr = elRef.current?.play?.(); if (pr?.catch) pr.catch(() => {}); }}
+        >
+          <Icon name="play_circle" size={isShort ? 40 : 48} />
+        </button>
+      )}
     </div>
   );
 }

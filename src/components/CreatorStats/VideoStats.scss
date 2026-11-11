@@ -1,8 +1,9 @@
 @use "../../styles/v2" as v2;
 
-// Per-video analytics (45a, 23d), reused by the profile dashboard and the watch
-// page. Stat tiles (bg wells), insight chips, then two charts on bg wells:
-// retention in cyan, most replayed in the accent.
+// Per-video analytics, reused by the profile dashboard (45a, `is-detail`) and the
+// watch page (23d, `is-panel`). Panel: three tiles, retention as cyan bars with the
+// most replayed moment in the accent. Detail: four wells, the retention curve with
+// the biggest drop-off marked, most replayed as bars.
 .video-stats {
   color: var(--text);
   display: flex;
@@ -19,14 +20,60 @@
     background: var(--bg);
   }
 
-  .vs-stats {
+  // Panel (watch page, 23d): three tiles, radius 20, bg + border, 24/900.
+  .vs-tiles {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
+  }
+
+  .vs-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    padding: 12px;
+    border-radius: var(--r-xl);
+    background: var(--bg);
+    border: 1px solid var(--border);
+
+    span { @include v2.text(meta-sm); color: var(--muted); }
+    b { font-size: 24px; font-weight: 900; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    @include v2.mobile { padding: 10px; b { font-size: 20px; } }
+  }
+
+  // Detail (profile, 45a): four small wells, numbers in mono.
+  .vs-wells {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
 
     @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
 
-    .v2-stat b { @include v2.mono(16, 900); }
+  .vs-well {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 8px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+
+    span { font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    b { @include v2.mono(16, 900); }
+  }
+
+  .vs-h {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+
+    em { font-style: normal; font-weight: 400; font-size: 10px; color: var(--muted); }
   }
 
   .vs-insights {
@@ -65,27 +112,16 @@
     }
   }
 
-  .vs-charts {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+  // 45a: the insights are one plain 11px line, not chips.
+  &.is-detail .vs-insights {
+    gap: 4px 12px;
 
-    @include v2.mobile { grid-template-columns: 1fr; }
-  }
-
-  .vs-chart-block {
-    min-width: 0;
-
-    h5 {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin: 0 0 6px;
-      @include v2.text(label);
-      font-size: 12px;
-
-      em { font-style: normal; @include v2.text(meta-sm); font-size: 10px; color: var(--muted); }
+    .vs-insight {
+      min-height: 0;
+      padding: 0;
+      background: none;
+      font-size: 11px;
+      color: var(--text);
     }
   }
 
@@ -161,6 +197,67 @@
     span { font-family: var(--font-mono); font-size: 10px; opacity: .8; }
   }
 
+  // Bars (23d retention, 45a most replayed); the hot one in the accent.
+  .vs-poschart.is-bars {
+    background: none;
+    border-radius: 0;
+    height: 120px;
+  }
+
+  .vs-bars {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+
+    span {
+      flex: 1;
+      min-width: 0;
+      border-radius: 4px 4px 0 0;
+
+      &.is-hot { background: var(--accent); }
+    }
+  }
+
+  &.is-detail .vs-poschart.is-bars {
+    height: 40px;
+
+    .vs-bars { gap: 2px; }
+    .vs-bars span { border-radius: 2px; }
+  }
+
+  // The biggest drop-off: a dashed accent line with its label (45a).
+  .vs-marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px dashed var(--accent);
+    pointer-events: none;
+  }
+
+  .vs-marker-label {
+    position: absolute;
+    top: 8px;
+    margin-left: 8px;
+    padding: 2px 6px;
+    border-radius: var(--r-xs);
+    background: var(--accent);
+    color: var(--on-accent);
+    @include v2.mono(10, 700);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .vs-axis-below {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: -6px;
+    @include v2.mono(11, 700);
+    color: var(--muted);
+  }
+
   .vs-poschart-cursor {
     position: absolute;
     top: 0;
@@ -202,7 +299,6 @@
     pointer-events: none;
   }
 
-  &.compact {
-    .vs-poschart { height: 96px; }
-  }
+  &.is-detail { gap: 10px; }
+  &.is-detail .vs-poschart:not(.is-bars) { height: 110px; }
 }

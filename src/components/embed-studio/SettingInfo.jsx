@@ -27,11 +27,13 @@ const stop = (e) => e.stopPropagation();
  * The dialog on its own, so any setting that needs one (the schedule picker,
  * the payout choice, the guest list) gets the same behaviour as the info popup.
  */
-export function SettingSheet({ title, open, onClose, children }) {
+// `side`: the 21c/17 settings sheet docked to the right on desktop (a bottom
+// sheet on phones), with a `tone` bar before the title and a pinned `footer`.
+export function SettingSheet({ title, open, onClose, children, side = false, tone, footer, width = 480 }) {
   if (!open) return null;
   return (
     <span className="setting-info__portal" onClick={stop}>
-      <DialogShell open title={title} onClose={onClose} width={480} className="setting-info__sheet">
+      <DialogShell open title={title} onClose={onClose} width={side ? 430 : width} className="setting-info__sheet" side={side} tone={tone} footer={footer}>
         {children}
       </DialogShell>
     </span>

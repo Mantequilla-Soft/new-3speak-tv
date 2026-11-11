@@ -1,14 +1,15 @@
 /* ───────────────────────────────────────────────────────────────────────────
-   Toasts = the top "island" (STYLE_GUIDE §7, designs 07f · 17i · 34d).
-   One shape for every toast: a text-filled pill at the top centre, 44 tall,
-   the category (utils/toast.js puts it in the title) as a small label over the
-   message, and an icon in a round chip whose colour comes from the type:
-   success and info = cyan, error and warning = accent, loading = muted.
+   Toasts = the top island (STYLE_GUIDE §7, designs 07f · 17i · 34d), the same
+   shape as .v2-island: a text-filled bar at the top centre under the top bar,
+   52 tall, radius 16, padding 0/8; a 36px round chip in the tone holding the
+   category's icon in the ground colour (34d: icon and colour come from the
+   category); the category as a small eyebrow over the message (14/700); an
+   action 36 tall, radius 12, on a 10% wash.
 
-   The <Toaster/> props in App.jsx place it (top-center, under the top bar via
-   --nav-top-offset) and set the icons (Material Symbols). Sonner styles its
-   toasts with [data-styled] attribute selectors; the selectors here carry one
-   more attribute so they win without !important wherever possible.
+   utils/toast.js picks the icon and adds .ts-tone-{accent|cyan|muted}; errors
+   and warnings are always accent. The <Toaster/> props in App.jsx place it.
+   Sonner styles its toasts with [data-styled] attribute selectors; the
+   selectors here carry one more attribute so they win without !important.
    ─────────────────────────────────────────────────────────────────────────── */
 
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast {
@@ -16,36 +17,37 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  min-height: 44px;
-  padding: 6px 8px 6px 6px;
+  min-height: 52px;
+  padding: 6px 8px;
   border: 0;
-  border-radius: 22px;
+  border-radius: var(--r-lg);
   background: var(--text);
   color: var(--bg);
   box-shadow: var(--shadow-float);
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
 }
 
-/* A toast with no icon (plain toast()) keeps the text off the pill's edge. */
+/* A toast with no icon keeps the text off the bar's edge. */
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast:not(:has([data-icon])) {
   padding-left: 16px;
 }
 
-/* One custom property per type feeds the icon chip. */
+/* The tone: from the category (utils/toast.js), else from the type. */
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='success'],
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='info'] { --ts-tone: var(--cyan); }
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='error'],
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='warning'] { --ts-tone: var(--accent); }
-[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='loading'] { --ts-tone: color-mix(in srgb, var(--bg) 70%, var(--text)); }
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-tone-accent { --ts-tone: var(--accent); }
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-tone-cyan { --ts-tone: var(--cyan); }
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-tone-muted { --ts-tone: color-mix(in srgb, var(--bg) 55%, var(--text)); }
 
-/* Icon chip: 32 round, filled with the type colour, the glyph in the ground
-   colour (dark on the light pill, light on the dark one). */
+/* Icon chip: 36 round, filled with the tone, the glyph in the ground colour. */
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-icon].ts-toast-icon {
   order: 1;
   flex: none;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   margin: 0;
   border-radius: 50%;
   display: grid;
@@ -55,6 +57,9 @@
 }
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-icon].ts-toast-icon > * {
   flex: none;
+}
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-icon].ts-toast-icon .material-symbols-rounded {
+  font-size: 20px !important;
 }
 /* Sonner's own spinner for loading toasts, drawn in the ground colour. */
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-icon] .sonner-loading-bar {
@@ -68,9 +73,10 @@
   display: flex;
   flex-direction: column;
   gap: 1px;
+  padding-right: 6px;
 }
 
-/* The category, as an eyebrow over the message. */
+/* The category, as a small eyebrow over the message. */
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-title].ts-toast-title {
   color: color-mix(in srgb, var(--bg) 62%, var(--text));
   font-size: 10px;
@@ -82,7 +88,7 @@
 /* A toast that is only a title (no category, no description) reads as the message. */
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-title].ts-toast-title:only-child {
   color: var(--bg);
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 0;
   text-transform: none;
   font-weight: 700;
@@ -91,38 +97,38 @@
 
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-description].ts-toast-desc {
   color: var(--bg);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.35;
   text-wrap: pretty;
 }
 
-/* Action ("Refresh", "Undo", "View"): a small filled button on the pill. */
+/* Action ("Undo", "View", "Refresh"): 36 tall, radius 12, a 10% wash (07f). */
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-button] {
   order: 3;
   flex: none;
-  height: 32px;
+  height: 36px;
   margin: 0;
-  padding: 0 12px;
+  padding: 0 14px;
   border: 0;
   border-radius: var(--r-md);
-  background: color-mix(in srgb, var(--bg) 14%, transparent);
+  background: color-mix(in srgb, var(--bg) 10%, transparent);
   color: var(--bg);
   font-family: inherit;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   transition: background var(--t-fast) var(--ease);
 }
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-button]:hover {
-  background: color-mix(in srgb, var(--bg) 24%, transparent);
+  background: color-mix(in srgb, var(--bg) 20%, transparent);
 }
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-cancel] {
   background: transparent;
   color: color-mix(in srgb, var(--bg) 70%, var(--text));
 }
 
-/* Close: inline at the right end of the pill, not sonner's corner badge. */
+/* Close: inline at the right end of the bar, not sonner's corner badge. */
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-close-button].ts-toast-close {
   order: 4;
   position: static;
@@ -140,7 +146,7 @@
   transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-close-button].ts-toast-close:hover {
-  background: color-mix(in srgb, var(--bg) 14%, transparent);
+  background: color-mix(in srgb, var(--bg) 12%, transparent);
   color: var(--bg);
 }
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-close-button].ts-toast-close svg {

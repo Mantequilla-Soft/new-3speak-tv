@@ -10,11 +10,10 @@
   bottom: calc(var(--bottom-bar-clearance) + 8px);
   left: 8px;
   right: 8px;
-  height: 64px;
-  padding: 6px;
+  padding: 8px;
   gap: 10px;
   @include v2.floating;
-  border-radius: var(--r-xl);
+  border-radius: var(--r-2xl);
   z-index: 99;
   align-items: center;
   cursor: pointer;
@@ -27,10 +26,10 @@
 
 .mini-player-video {
   position: relative;
-  width: 92px;
-  height: 52px;
+  width: 112px;
+  aspect-ratio: 16 / 9;
   flex-shrink: 0;
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
   background: var(--media-black);
   overflow: hidden;
 
@@ -91,11 +90,11 @@
 // The progress line runs along the bottom of the thumbnail.
 .mini-player-progress {
   position: absolute;
-  left: 6px;
-  bottom: 6px;
-  width: 92px;
+  left: 8px;
+  bottom: 8px;
+  width: 112px;
   height: 3px;
-  border-radius: 0 0 var(--r-md) var(--r-md);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
   overflow: hidden;
   background: color-mix(in srgb, var(--on-media) 20%, transparent);
 }

@@ -1,14 +1,20 @@
 import "./VideoCard.scss";
+import { useEffect, useRef, useState } from 'react';
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
 import { useNavigate } from 'react-router-dom';
 import { fixVideoThumbnail } from '../../utils/fixThumbnails';
 import fallbackImg from '../../assets/image/speak.jpg';
 import { useTranslation } from 'react-i18next';
-import { DockTile, StatusPill } from '../v2/ui';
+import { DockTile, Menu, MenuRow } from '../v2/ui';
+import { useEscapeLayer } from '../../hooks/useDialog';
+import { fmtCount } from '../../lib/creatorStats';
+import { toastIn } from '../../utils/toast';
 dayjs.extend(utc);
 
-// 1:13 / 1:02:03 for the duration under the title (Roboto Mono).
+const toast = toastIn('Video');
+
+// 1:13 / 1:02:03 for the duration next to the date.
 function fmtLength(sec) {
   const s = Math.round(Number(sec) || 0);
   if (s <= 0) return '';
@@ -18,28 +24,45 @@ function fmtLength(sec) {
   return h ? `${h}:${String(m).padStart(2, '0')}:${r}` : `${m}:${r}`;
 }
 
-// Relative under 7 days, a date after that (STYLE_GUIDE §10).
+// Relative under 7 days, a date after that (STYLE_GUIDE §10): "Oct 20".
 function fmtWhen(date) {
   if (!date) return '';
   const d = dayjs(date);
   if (!d.isValid()) return '';
-  return dayjs().diff(d, 'day') < 7 ? d.fromNow() : d.format('D MMM YYYY');
+  if (dayjs().diff(d, 'day') < 7) return d.fromNow();
+  return d.format(d.year() === dayjs().year() ? 'MMM D' : 'MMM D, YYYY');
 }
 
 // One row of the Studio list (21d): content as a card, not a table row.
-// thumb · title + date and length · status pill · action tiles.
-const VideoCard = ({ video, onEdit, onStats }) => {
+// thumb 160 · title + date · status · views · Edit / Stats / More tiles.
+// `views`: views in the last 28 days (null while unknown or not published).
+const VideoCard = ({ video, onEdit, onStats, views = null }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const handleNavigate = () => {
-    navigate(`/@${video?.owner}/${video.permlink ?? "unknown"}`);
-  };
+  const [menuOpen, setMenuOpen] = useState(false);
+  const moreRef = useRef(null);
+  const menuRef = useRef(null);
+  const watchPath = `/@${video?.owner}/${video.permlink ?? "unknown"}`;
 
-  // Status: tone per STYLE_GUIDE §2 (approved = cyan, failed = accent, pending = muted).
+  useEscapeLayer(menuRef, () => setMenuOpen(false), { active: menuOpen });
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const onDown = (e) => {
+      if (moreRef.current?.contains(e.target) || menuRef.current?.contains(e.target)) return;
+      setMenuOpen(false);
+    };
+    document.addEventListener('pointerdown', onDown);
+    return () => document.removeEventListener('pointerdown', onDown);
+  }, [menuOpen]);
+
+  const unlisted = video.unlisted === true || video.listed_on_3speak === false;
+  // Status tone per STYLE_GUIDE §2: live/public = cyan, failed or busy = accent, the rest muted.
   const status = (() => {
     switch (video.status) {
       case 'published':
-        return { tone: 'cyan', label: t('upload.drafts.status.published') };
+        return unlisted
+          ? { tone: 'muted', label: t('cards.status.unlisted') }
+          : { tone: 'cyan', label: t('studio.drafts.public') };
       case 'scheduled':
         return { tone: 'muted', label: t('upload.drafts.status.scheduled') };
       case 'failed':
@@ -57,11 +80,18 @@ const VideoCard = ({ video, onEdit, onStats }) => {
         return { tone: 'muted', label: video.status };
     }
   })();
-  const unlisted = video.unlisted === true || video.listed_on_3speak === false;
   const length = fmtLength(video.duration);
   const when = fmtWhen(video.created_at);
   const published = video.status === 'published';
   const editable = published || video.status === 'scheduled';
+
+  const copyLink = async () => {
+    setMenuOpen(false);
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}${watchPath}`);
+      toast.success(t('common.actions.copied'));
+    } catch { /* clipboard blocked: nothing to undo */ }
+  };
 
   return (
     <article className="studio-row">
@@ -72,7 +102,6 @@ const VideoCard = ({ video, onEdit, onStats }) => {
           loading="lazy"
           onError={(e) => (e.currentTarget.src = fallbackImg)}
         />
-        {length && <span className="v2-media-pill is-br num">{length}</span>}
       </div>
 
       <div className="studio-row__main">
@@ -80,7 +109,7 @@ const VideoCard = ({ video, onEdit, onStats }) => {
         <div className="studio-row__meta">
           {when}
           {when && length && ' · '}
-          {length && <span className="num">{length}</span>}
+          {length}
         </div>
         {video.status === 'scheduled' && video.publish_data && (
           <div className="studio-row__when">
@@ -89,37 +118,53 @@ const VideoCard = ({ video, onEdit, onStats }) => {
         )}
       </div>
 
-      <div className="studio-row__status">
-        <StatusPill tone={status.tone}>{status.label}</StatusPill>
-        {unlisted && <StatusPill tone="muted" icon="link">{t('cards.status.unlisted')}</StatusPill>}
+      <span className={`studio-row__status is-${status.tone}`}>{status.label}</span>
+
+      <div className="studio-row__views">
+        <b>{published && views != null ? fmtCount(views) : '–'}</b>
+        <span>{t('studio.drafts.views')}</span>
       </div>
 
       <div className="studio-row__acts">
-        {editable && (
+        <DockTile
+          className="studio-row__act"
+          icon="edit"
+          iconSize={20}
+          label={t('common.actions.edit')}
+          disabled={!editable}
+          onClick={() => onEdit(video.id)}
+        />
+        {/* Scheduled posts don't have a public URL yet, so only published ones get Stats and View. */}
+        <DockTile
+          className="studio-row__act"
+          icon="bar_chart"
+          iconSize={20}
+          label={t('studio.drafts.stats')}
+          disabled={!published || !onStats}
+          onClick={() => onStats?.(video)}
+        />
+        <div className="studio-row__more" ref={moreRef}>
           <DockTile
             className="studio-row__act"
-            icon="edit"
-            label={t('common.actions.edit')}
-            onClick={() => onEdit(video.id)}
+            icon="more_horiz"
+            iconSize={20}
+            label={t('studio.drafts.more')}
+            disabled={!published}
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
           />
-        )}
-        {/* Scheduled posts don't have a public URL yet, so only published ones get View and Stats. */}
-        {published && (
-          <DockTile
-            className="studio-row__act"
-            icon="visibility"
-            label={t('common.actions.view')}
-            onClick={handleNavigate}
-          />
-        )}
-        {published && onStats && (
-          <DockTile
-            className="studio-row__act"
-            icon="bar_chart"
-            label={t('nav.profile.analytics')}
-            onClick={() => onStats(video)}
-          />
-        )}
+          {menuOpen && (
+            <Menu className="studio-row__menu" ref={menuRef}>
+              <MenuRow icon="visibility" onClick={() => { setMenuOpen(false); navigate(watchPath); }}>
+                {t('common.actions.view')}
+              </MenuRow>
+              <MenuRow icon="link" onClick={copyLink}>
+                {t('common.actions.copyLink')}
+              </MenuRow>
+            </Menu>
+          )}
+        </div>
       </div>
     </article>
   );

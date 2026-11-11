@@ -123,6 +123,8 @@ export default function ChatLinkCard({ link }) {
           </button>
         )}
         <div className="chat-linkcard-body" {...cardProps}>
+          {/* 19e: what it is, as a cyan eyebrow over the title. */}
+          <div className="v2-eyebrow is-cyan chat-linkcard-kind">{t('chat.linkCard.videoKind')}</div>
           <div className="chat-linkcard-title">{meta.title}</div>
           <div className="chat-linkcard-meta">
             <img className="chat-linkcard-avatar" src={avatarSmall(meta.author)} alt="" />
@@ -145,6 +147,7 @@ export default function ChatLinkCard({ link }) {
         </div>
       )}
       <div className="chat-linkcard-body">
+        {meta.isVideo && <div className="v2-eyebrow is-cyan chat-linkcard-kind">{t('chat.linkCard.videoKind')}</div>}
         <div className="chat-linkcard-title">{meta.title}</div>
         <div className="chat-linkcard-meta">
           <img className="chat-linkcard-avatar" src={avatarSmall(meta.author)} alt="" />

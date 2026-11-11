@@ -17,15 +17,18 @@ const toast = toastIn('Profile');
 export default function FollowChip({ author, size = 36, className }) {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
-  const [following, setFollowing] = useState(null);
+  // Whether you follow `author`, kept with the pair it answers for.
+  const key = `${user || ''}>${author || ''}`;
+  const [known, setKnown] = useState({ key: '', following: null });
+  const following = known.key === key ? known.following : null;
+  const setFollowing = (v) => setKnown({ key, following: v });
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    setFollowing(null);
     if (!author || !user || author === user) return undefined;
     let live = true;
     getRelationshipBetweenAccounts(user, author).then((r) => {
-      if (live && r?.follows != null) setFollowing(!!r.follows);
+      if (live && r?.follows != null) setKnown({ key: `${user}>${author}`, following: !!r.follows });
     }).catch(() => {});
     return () => { live = false; };
   }, [author, user]);
@@ -40,7 +43,8 @@ export default function FollowChip({ author, size = 36, className }) {
       .then(() => toast.success(willFollow ? t('audio.author.followed', { author }) : t('audio.author.unfollowed', { author })))
       .catch((err) => { setFollowing(!willFollow); toast.error(err?.message || t('audio.author.failed')); })
       .finally(() => setBusy(false));
-  }, [author, following, busy, user, t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [author, following, busy, user, t, key]);
 
   if (!author || !user || author === user) return null;
   return (

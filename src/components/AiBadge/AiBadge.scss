@@ -1,19 +1,18 @@
-// "AI" pill (30c): a note about the content, not a warning about the creator,
-// so it is the quiet cyan status pill (20 tall, radius 7, 10px/900 caps).
+// "AI" chip (30c "Badges next to names and titles"): a note about the
+// content, not a warning about the creator, so it is a quiet cyan chip:
+// 32 tall, radius 12, 11/900, the filled sparkle at 16.
 .ai-badge {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   flex: none;
-  height: 20px;
-  padding: 0 7px;
-  border-radius: 7px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--r-md);
   background: var(--cyan-tint);
   color: var(--cyan);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 900;
-  letter-spacing: .04em;
-  text-transform: uppercase;
   line-height: 1;
   vertical-align: middle;
   cursor: default;
@@ -21,6 +20,12 @@
 
   // Over a playing video: the media scrim, like the other on-video chips.
   &--on-video {
+    height: 20px;
+    padding: 0 7px;
+    border-radius: 7px;
+    gap: 3px;
+    font-size: 10px;
+    letter-spacing: .04em;
     background: var(--media-scrim);
     color: var(--on-media);
   }
@@ -32,6 +37,12 @@
     left: 6px;
     bottom: 6px;
     z-index: 3;
+    height: 20px;
+    padding: 0 7px;
+    border-radius: 7px;
+    gap: 3px;
+    font-size: 10px;
+    letter-spacing: .04em;
     background: var(--media-scrim);
     color: var(--on-media);
     pointer-events: none;

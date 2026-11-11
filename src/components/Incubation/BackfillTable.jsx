@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import BarLoader from '../Loader/BarLoader';
-import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import { toastIn } from '../../utils/toast';
 import { checkPostingRc, formatDuration } from '../../utils/rcCheck';
 import { useAppStore } from '../../lib/store';
@@ -52,6 +51,20 @@ function previewHref(item, username) {
 }
 
 const MODE_KEY = 'backfill_group_mode';
+
+/** "Today" / "Yesterday" / "12 Nov" for a row's own date (46d). */
+function rowDate(iso, t) {
+  const d = iso ? new Date(iso) : null;
+  if (!d || Number.isNaN(d.getTime())) return t('incubation.backfill.noDate');
+  const startOfDay = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+  const diffDays = Math.round((startOfDay(new Date()) - startOfDay(d)) / 86400000);
+  if (diffDays === 0) return t('incubation.backfill.today');
+  if (diffDays === 1) return t('incubation.backfill.yesterday');
+  return formatDate(d, { day: 'numeric', month: 'short' });
+}
+
+/** The type icon a row wears (46d): the same icons as the "By type" sections. */
+const rowIcon = (item) => GROUPS.find((g) => g.match(item))?.icon || 'more_horiz';
 
 /** "Today" / "Yesterday" / "4 September 2026" for a YYYY-MM-DD key. */
 function dayLabel(key, t) {
@@ -236,7 +249,11 @@ export default function BackfillTable() {
     }));
   }, [items, t]);
 
-  const grouped = mode === 'day' ? byDay : byType;
+  // The timeline is one list (46d), each row carrying its own date; by type
+  // keeps its sections, each with its own "Select all".
+  const grouped = mode === 'day'
+    ? [{ id: 'all', flat: true, rows: byDay.flatMap((g) => g.rows) }]
+    : byType;
 
   // Only a definite "cannot afford it" blocks. Unknown stays out of the way.
   const rcBlocked = !!rc && rc.unknown === false && rc.ok === false;
@@ -340,8 +357,8 @@ export default function BackfillTable() {
               onChange={chooseMode}
               className="backfill-modes"
               options={[
-                { value: 'day', label: t('incubation.backfill.timeline'), icon: 'schedule' },
-                { value: 'type', label: t('incubation.backfill.byType'), icon: 'category' },
+                { value: 'day', label: t('incubation.backfill.timeline') },
+                { value: 'type', label: t('incubation.backfill.byType') },
               ]}
             />
             {!rcBlocked && (
@@ -350,26 +367,25 @@ export default function BackfillTable() {
                   <Trans i18nKey="incubation.backfill.selected" values={{ count: chosen.length }} components={{ b: <strong className="num" /> }} />
                 </span>
                 <div className="backfill-bar-actions">
-                  <Button
-                    variant="ghost"
-                    size={32}
-                    onClick={() => setSelected(new Set(pending.map(i => i.id)))}
-                    disabled={running}
-                  >
-                    {t('incubation.backfill.selectAll')}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size={32}
-                    onClick={() => setSelected(new Set())}
-                    disabled={running || !selected.size}
-                  >
-                    {t('incubation.backfill.clear')}
-                  </Button>
+                  <span className="backfill-bar-links">
+                    <button
+                      type="button"
+                      onClick={() => setSelected(new Set(pending.map(i => i.id)))}
+                      disabled={running}
+                    >
+                      {t('incubation.backfill.selectAll')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelected(new Set())}
+                      disabled={running || !selected.size}
+                    >
+                      {t('incubation.backfill.clear')}
+                    </button>
+                  </span>
                   <Button
                     variant="primary"
-                    size={36}
-                    icon="publish"
+                    size={40}
                     className="backfill-publish"
                     onClick={run}
                     disabled={running || !chosen.length}
@@ -393,21 +409,12 @@ export default function BackfillTable() {
           )}
         </div>
 
-        {/* Out of resource credits (design 46d): the accent wash, said as a wait
-            rather than a failure, in place of the publish controls. */}
-        {rcBlocked && (
-          <div className="backfill-rc" role="status">
-            {rcWait
-              ? <Trans i18nKey="incubation.backfill.rcBlockedIn" values={{ wait: rcWait }} components={{ b: <strong /> }} />
-              : <Trans i18nKey="incubation.backfill.rcBlockedLater" components={{ b: <strong /> }} />}
-          </div>
-        )}
-
         {grouped.map(group => {
           const selectable = group.rows.filter(r => status[r.id] !== 'done');
           const allOn = selectable.length > 0 && selectable.every(r => selected.has(r.id));
           return (
-            <section key={group.id} className="backfill-group">
+            <section key={group.id} className={`backfill-group${group.flat ? ' is-flat' : ''}`}>
+              {!group.flat && (
               <header className="backfill-group-head">
                 <Icon name={group.icon} size={18} />
                 <h3>{group.titleKey ? t(group.titleKey) : group.title}</h3>
@@ -425,6 +432,7 @@ export default function BackfillTable() {
                   </Button>
                 )}
               </header>
+              )}
 
               <ul className="backfill-rows">
                 {group.rows.map(item => {
@@ -441,17 +449,8 @@ export default function BackfillTable() {
                           disabled={running || done}
                           aria-label={t('incubation.backfill.selectItem', { label: item.label })}
                         />
-                        {/* A face beats another line of "Follow @name": the
-                            decision is about a person, and people are recognised
-                            by picture far faster than by handle. */}
-                        {item.account && (
-                          <HiveAvatar
-                            username={item.account}
-                            size="small"
-                            className="backfill-row-avatar"
-                            alt=""
-                          />
-                        )}
+                        {/* What kind of thing it is, as its icon (46d). */}
+                        <Icon name={rowIcon(item)} size={18} className="backfill-row-icon" />
                         <span className="backfill-row-main">
                           {/* Videos and shorts link to themselves: until it is
                               published this page is the only way to reach the
@@ -477,14 +476,11 @@ export default function BackfillTable() {
                           {item.excerpt && (
                             <span className="backfill-row-excerpt">{item.excerpt}</span>
                           )}
-                          <span className="backfill-row-meta">
-                            <span className="num">{item.createdAt ? new Date(item.createdAt).toLocaleDateString() : t('incubation.backfill.noDate')}</span>
-                            {item.isRootPost && <span className="backfill-tag num">{t('incubation.backfill.fiveMin')}</span>}
-                          </span>
                           {errors[item.id] && (
                             <span className="backfill-row-error">{errors[item.id]}</span>
                           )}
                         </span>
+                        <span className="backfill-row-date">{rowDate(item.createdAt, t)}</span>
                         <StatusPill
                           tone={STATUS_TONE[st]}
                           className={`backfill-status is-${st}`}
@@ -508,6 +504,16 @@ export default function BackfillTable() {
         <div className="backfill-card backfill-note">
           <Trans i18nKey="incubation.backfill.note" components={{ b: <strong /> }} />
         </div>
+        {/* Out of resource credits (design 46d): the accent wash in the side
+            column, said as a wait rather than a failure. The publish controls
+            step aside while it shows. */}
+        {rcBlocked && (
+          <div className="backfill-rc" role="status">
+            {rcWait
+              ? <Trans i18nKey="incubation.backfill.rcBlockedIn" values={{ wait: rcWait }} components={{ b: <strong /> }} />
+              : <Trans i18nKey="incubation.backfill.rcBlockedLater" components={{ b: <strong /> }} />}
+          </div>
+        )}
         {waiting.length > 0 && <Waiting waiting={waiting} />}
         {excluded.length > 0 && <Excluded excluded={excluded} />}
       </aside>

@@ -65,12 +65,13 @@ export default function AdvertiserContactForm() {
     <form className="inc-contact" onSubmit={onSubmit}>
       {/* Said first and plainly (design 46c): where these details go, and
           where they never go. */}
-      <Banner tone="info" icon="lock" className="inc-contact-private">
+      <Banner tone="info" icon={false} className="inc-contact-private">
         <Trans i18nKey="incubation.contact.privateNote" components={{ b: <strong /> }} />
       </Banner>
 
+      {/* No label above the email (46c): the placeholder says what goes in it. */}
       <Field
-        label={<>{t('incubation.contact.email')} <span className="v2-field__opt">· {t('incubation.contact.required')}</span></>}
+        aria-label={`${t('incubation.contact.email')} (${t('incubation.contact.required')})`}
         type="email"
         autoComplete="email"
         value={email}
@@ -81,7 +82,7 @@ export default function AdvertiserContactForm() {
       />
 
       <fieldset className="inc-contact-address" disabled={!loaded}>
-        <legend className="v2-eyebrow">{t('incubation.contact.address')} <span className="v2-field__opt">· {t('incubation.contact.addressOptional')}</span></legend>
+        <legend className="inc-contact-legend">{t('incubation.contact.address')} · {t('incubation.contact.addressOptional')}</legend>
         <div className="inc-contact-grid">
           <input className="v2-input" autoComplete="address-line1" placeholder={t('incubation.contact.ph.line1')} aria-label={t('incubation.contact.ph.line1')} value={address.line1} onChange={set('line1')} />
           <input className="v2-input" autoComplete="address-line2" placeholder={t('incubation.contact.ph.line2')} aria-label={t('incubation.contact.ph.line2')} value={address.line2} onChange={set('line2')} />
@@ -96,7 +97,7 @@ export default function AdvertiserContactForm() {
       </fieldset>
 
       {error ? <p className="inc-contact-error" role="alert">{error}</p> : null}
-      <Button type="submit" variant="secondary" size={36} className="inc-contact-submit" disabled={!emailOk || busy || !loaded} loading={busy}>
+      <Button type="submit" variant="secondary" size={40} block className="inc-contact-submit" disabled={!emailOk || busy || !loaded} loading={busy}>
         {busy ? t('common.actions.saving') : t('incubation.contact.save')}
       </Button>
     </form>

@@ -127,7 +127,7 @@
     .home-tab {
       flex: 1 0 auto;
       height: 32px;
-      padding: 0 10px;
+      padding: 0 8px;
       font-size: 13px;
     }
   }
@@ -164,12 +164,14 @@
 
   &:hover { color: var(--text); background: var(--surface-2); }
 
-  // Phones: icon only beside the full-width track (the title names it).
+  // Phones: icon only beside the full-width track (the title names it), and
+  // only Customize: Channel Surfing is a big-screen thing.
   @include v2.mobile {
     width: 40px;
     padding: 0;
     justify-content: center;
     > span:not(.material-symbols-rounded) { display: none; }
+    &.home-tab-surf { display: none; }
   }
 }
 
@@ -199,6 +201,32 @@
 }
 
 // ── Customize Home dialog (34b) ──
+// 460 wide: a 4px accent bar before the 20/700 title, a 13px muted hint, rows
+// on the ground (padding 8/10, radius 16, a 2px border that turns accent while
+// dragged): the grip, a 36px cyan icon tile, the 14/700 label and a cyan
+// switch. Save layout: 52 tall, radius 16, accent.
+.home-customize-dialog {
+  .v2-dialog__head {
+    padding: 20px 16px 0 20px;
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      &::before { content: ""; flex: none; width: 4px; height: 22px; border-radius: var(--r-bar); background: var(--accent); }
+    }
+  }
+  .v2-dialog__body { padding: 8px 20px 16px; gap: 8px; }
+  .v2-dialog__foot { border-top: 0; padding: 4px 20px 20px; }
+  .home-customize-save { height: 52px; border-radius: var(--r-lg); padding: 0 18px; justify-content: space-between; }
+}
+
+.home-customize-hint {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
 .home-customize-list {
   display: flex;
   flex-direction: column;
@@ -208,11 +236,26 @@
 .home-customize-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 56px;
+  gap: 12px;
   padding: 8px 10px;
   border-radius: var(--r-lg);
+  border: 2px solid transparent;
   background: var(--bg);
+  transition: border-color var(--t-fast) var(--ease);
+
+  &.is-dragging { border-color: var(--accent); }
+
+  .home-customize-grip {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    color: var(--muted);
+    cursor: grab;
+    touch-action: none;
+    &:active { cursor: grabbing; }
+    &.is-blank { cursor: default; }
+  }
 
   .home-customize-icon {
     width: 36px;
@@ -221,21 +264,34 @@
     display: grid;
     place-items: center;
     flex: none;
-    background: var(--cyan-tint);
+    background: var(--cyan-tint-strong);
     color: var(--cyan);
   }
 
   .home-customize-label {
     flex: 1;
     min-width: 0;
-    @include v2.text(body);
+    font-size: 14px;
     font-weight: 700;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .v2-toggle { margin-left: 4px; }
+  // The arrows only take room while one has keyboard focus.
+  .home-customize-moves {
+    display: flex;
+    gap: 2px;
+    &:not(:focus-within) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+  }
+
+  .v2-toggle.is-on { background: var(--cyan); .v2-toggle__thumb { background: var(--bg); } }
 
   &.is-off {
     .home-customize-icon { background: var(--surface-2); color: var(--muted); }

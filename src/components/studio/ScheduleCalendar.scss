@@ -104,3 +104,99 @@
     }
   }
 }
+
+// 17d day strip (ScheduleDayStrip): eyebrow, 48 wide day tiles on bg (picked =
+// cyan with bg ink), then the time and the time zone as two 48 wells.
+.schedule-strip {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--text);
+
+  &__label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  &__days {
+    display: flex;
+    gap: 6px;
+    min-width: 0;
+    @include v2.scroll-x;
+    scroll-snap-type: x proximity;
+  }
+
+  &__day {
+    flex: none;
+    width: 48px;
+    padding: 10px 0;
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-family: inherit;
+    cursor: pointer;
+    scroll-snap-align: start;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+
+    span { font-size: 11px; line-height: 1.3; }
+    b { font-size: 16px; font-weight: 900; line-height: 1.3; }
+
+    &:hover:not(.is-on) { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+    &.is-on { background: var(--cyan); color: var(--bg); }
+  }
+
+  &__row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  &__well {
+    flex: 1;
+    min-width: 0;
+    height: 48px;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    &.is-time {
+      cursor: text;
+      &:focus-within { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+
+      input {
+        width: auto;
+        min-width: 0;
+        max-width: 110px;
+        border: 0;
+        outline: none;
+        padding: 0;
+        background: transparent;
+        color: var(--text);
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 700;
+        color-scheme: inherit;
+      }
+    }
+
+    &.is-zone { padding: 0 10px; }
+  }
+}

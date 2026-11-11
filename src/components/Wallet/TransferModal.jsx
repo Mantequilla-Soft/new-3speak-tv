@@ -5,8 +5,9 @@ import { transferWithAioha, isLoggedIn } from "../../hive-api/aioha"
 import { toastIn } from '../../utils/toast';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
-import { Dialog, Button, Field, Icon, Avatar } from '../v2/ui';
+import { Button, Field, Icon, Avatar } from '../v2/ui';
 import { cx } from '../v2/helpers';
+import DialogShell from '../modal/DialogShell';
 
 // Every toast from this module is headed "Wallet"; the message becomes the
 // line under it. See utils/toast.js.
@@ -78,21 +79,22 @@ function TransferModal({showModal, selectedCoin, balances, recent = [], prices})
     const recents = [...new Set(recent.filter(Boolean))].slice(0, 5);
 
   return (
-    <Dialog
+    <DialogShell
       open
       onClose={() => showModal(false)}
+      side
+      tone="text"
       title={t('common.actions.send')}
-      closeLabel={t('common.actions.close')}
-      width={480}
+      width={420}
       className="transfer-v2"
       footer={(
-        <div className="transfer-v2__foot">
-          <div className="transfer-v2__key"><Icon name="key" size={18} />{t('wallet.transferModal.activeKey')}</div>
+        <>
+          <div className="dlg-note transfer-v2__key"><span><Icon name="key" size={16} />{t('wallet.transferModal.activeKey')}</span></div>
           <Button
-            variant="primary"
+            variant="inverse"
             size={48}
             block
-            className="is-next"
+            className="dlg-main"
             trailing="send"
             loading={sending}
             disabled={sending || !amount || !to}
@@ -100,7 +102,7 @@ function TransferModal({showModal, selectedCoin, balances, recent = [], prices})
           >
             {label}
           </Button>
-        </div>
+        </>
       )}
     >
       {recents.length > 0 && (
@@ -164,7 +166,7 @@ function TransferModal({showModal, selectedCoin, balances, recent = [], prices})
         onChange={(e) => setMemo(e.target.value)}
         placeholder={t('wallet.transferModal.memoPlaceholder')}
       />
-    </Dialog>
+    </DialogShell>
   )
 }
 

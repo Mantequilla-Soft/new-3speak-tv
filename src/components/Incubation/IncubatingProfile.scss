@@ -280,6 +280,8 @@
 
 /* ------------------------------------------- "Your path to a Hive account" --- */
 
+.inc-panel.inc-progress { padding: 16px; }
+
 .inc-progress-head {
   display: flex;
   align-items: baseline;
@@ -296,28 +298,34 @@
 }
 
 .inc-progress-count {
-  @include v2.mono(12, 700);
+  @include v2.mono(11, 700);
   color: var(--accent);
   white-space: nowrap;
 }
 
+// "Creator path · Hide the details" (46b): one muted line under the bar.
 .inc-progress-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 32px;
-  margin: 6px 0 8px;
+  flex-wrap: wrap;
+  margin: 8px 0 4px;
+  @include v2.text(meta-sm);
+  color: var(--muted);
 }
 
 // Which path they picked (viewer, creator, advertiser).
-.inc-track-current {
-  @include v2.text(meta);
-  color: var(--muted);
-}
+.inc-track-current + .inc-tasks-toggle::before { content: "·"; margin: 0 6px; }
 
-.inc-tasks-toggle.v2-btn {
-  margin-left: auto;
+.inc-tasks-toggle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
   color: var(--muted);
+  cursor: pointer;
   &:hover { color: var(--text); }
 }
 
@@ -440,10 +448,23 @@
   color: var(--muted);
 }
 
-.inc-goal-chevron {
-  color: var(--muted);
-  transition: transform var(--t-base) var(--ease);
-  .is-open > button > & { transform: rotate(180deg); }
+// The next step as a cyan text link under the hint (46b), lined up with the
+// goal's label.
+.inc-goal-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  margin: -8px 0 8px 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  @include v2.text(meta-sm);
+  font-weight: 900;
+  color: var(--cyan);
+  text-decoration: none;
+  cursor: pointer;
+  &:hover { text-decoration: underline; color: var(--cyan); }
 }
 
 // The open goal: what counts (accent eyebrow), why, the form or the next step.
@@ -494,14 +515,18 @@
 .inc-task-cta.v2-btn { margin-top: 10px; }
 
 // The optional goal under the list (it never holds up a review).
-.inc-optional-title { margin: 16px 0 6px; }
+.inc-optional-title { margin: 14px 0 6px; }
 
 .inc-optional {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 10px;
   border-radius: var(--r-md);
   background: var(--bg);
 
   &.is-done .inc-optional-icon { color: var(--cyan); }
-  &.is-open .inc-goal-chevron { transform: rotate(180deg); }
 }
 
 .inc-optional-icon { color: var(--text); }
@@ -513,8 +538,22 @@
   flex-direction: column;
   gap: 2px;
 
-  strong { @include v2.text(body-sm); font-weight: 700; color: var(--text); }
-  span { @include v2.text(meta); color: var(--muted); }
+  strong { @include v2.text(meta); font-weight: 400; color: var(--text); }
+  span { @include v2.text(meta-sm); color: var(--muted); }
+}
+
+.inc-optional-cta {
+  flex: none;
+  min-height: 32px;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  font: inherit;
+  @include v2.text(meta);
+  font-weight: 900;
+  color: var(--cyan);
+  cursor: pointer;
+  &:hover { text-decoration: underline; }
 }
 
 .inc-review {

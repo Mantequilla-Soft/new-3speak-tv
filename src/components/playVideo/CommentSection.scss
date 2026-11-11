@@ -615,6 +615,37 @@
   }
   &.is-panel .comment-collapsed-bar { margin: 8px 0; background: transparent; }
 
+  // ── A hidden comment (28a): one muted line, Show on the right ──
+  .comment-hidden-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    padding: 6px 6px 6px 12px;
+    border-radius: var(--r-lg);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    @include v2.text(body-sm);
+    color: var(--muted);
+
+    > span { flex: 1; min-width: 0; }
+  }
+  &.is-panel .comment-hidden-bar { margin: 8px 0; background: transparent; }
+
+  .comment-hidden-show {
+    height: 28px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    @include v2.text(label);
+    font-size: 12px;
+    cursor: pointer;
+    &:hover { background: var(--bg-hover); }
+  }
+
   // ── Translation under a comment ──
   .comment-translation {
     margin: 8px 0 0;
@@ -656,6 +687,38 @@
     }
   }
   &.is-page .comment .comment-translation { background: var(--bg); }
+
+  // On a page (28a): "42 comments" big, the vote as a 40px tile on the right
+  // with its count under it, the actions as small filled chips.
+  &.is-page {
+    .comments-header-row h4 { font-size: 24px; font-weight: 700; letter-spacing: -.01em; }
+    .comment { padding-right: 64px; }
+    .comment-vote {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      flex-direction: column;
+      gap: 4px;
+      height: auto;
+      padding: 0;
+      background: transparent;
+      color: var(--text);
+
+      .material-symbols-rounded {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--r-md);
+        display: grid;
+        place-items: center;
+        background: var(--surface-2);
+      }
+      &:hover { background: transparent; .material-symbols-rounded { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); } }
+      &.is-voted { background: transparent; color: var(--text); .material-symbols-rounded { background: var(--accent); color: var(--on-accent); } }
+    }
+    .comment-action { gap: 6px; margin-top: 10px; }
+    .comment-act.v2-btn { background: var(--surface-2); color: var(--text); &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); } &.is-on { color: var(--cyan); } }
+    .comment-author { font-size: 13px; }
+  }
 
   // Phones, in the panel (02 mobile): 28px avatars, no dividers, 13px text.
   @include v2.mobile {

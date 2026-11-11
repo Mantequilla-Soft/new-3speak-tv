@@ -87,7 +87,6 @@ export default function IncubationTips() {
       {tip.to && (
         <Link to={tip.to} className="inct-cta" onClick={dismiss}>
           {tip.ctaKey ? t(tip.ctaKey) : t('incubation.tipCard.takeALook')}
-          <Icon name="arrow_forward" size={14} />
         </Link>
       )}
     </aside>

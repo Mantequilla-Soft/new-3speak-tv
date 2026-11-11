@@ -74,6 +74,11 @@
       "maxCount": "Hive allows at most {{max}} beneficiaries per post."
     },
     "title": "Beneficiaries",
+    "shareRewards": "Share rewards",
+    "you": "you",
+    "toYou": "to you",
+    "addCollaborator": "Add a collaborator",
+    "saveSplit": "Save split",
     "intro": "Add a user you want to automatically receive a portion of the rewards for this post.",
     "minPercent": "% (min {{percent}}%)",
     "usernamePlaceholder": "Enter username",

@@ -29,6 +29,9 @@
     }
   }
   &__bar-btn { @include v2.tablet-up { display: none; } }
+  // 21e: on desktop your own wallet opens straight on the total; the title
+  // stays for screen readers (someone else's wallet keeps its "Wallet of @x").
+  &__bar.is-own { @include v2.tablet-up { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); margin: 0; } }
 
   &__error { margin-top: 8px; }
 

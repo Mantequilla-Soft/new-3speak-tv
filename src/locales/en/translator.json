@@ -67,6 +67,7 @@
     "checkboxFor": "Mark {{key}} as proofread",
     "checkedBy": "Checked by @{{user}}, {{when}}",
     "notChecked": "Tick once you have checked this translation",
+    "notCheckedShort": "Not checked",
     "noText": "Nothing to proofread: this string has no translation yet",
     "saveFirst": "Save your edit first. Saving marks the string as proofread.",
     "changed": "changed since check",

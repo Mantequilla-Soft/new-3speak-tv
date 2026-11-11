@@ -1,63 +1,47 @@
 @use "../../styles/v2" as v2;
 
-// The episode card on a Short made from an audiogram (28e, 45b): it sits over
-// the video, so white on the media scrim in both themes, the cover as a small
-// accent tile.
+// The episode pill on a Short made from an audiogram (45b): an accent pill
+// over the video with the episode's cover (or headphones) and "Full episode ·
+// title" on one line, in the accent's ink.
 .audiogramEpisodeLink {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   max-width: 100%;
-  min-height: 48px;
+  min-height: 36px;
   margin: 0 0 8px;
-  padding: 6px 8px 6px 6px;
-  border-radius: var(--r-lg);
-  background: var(--media-scrim);
-  color: var(--on-media);
+  padding: 6px 10px 6px 6px;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--accent) 85%, transparent);
+  color: var(--on-accent);
   text-decoration: none;
   pointer-events: auto;
   transition: background var(--t-fast) var(--ease);
 
-  &:hover { background: var(--media-scrim-strong); color: var(--on-media); }
-  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  &:hover { background: var(--accent); color: var(--on-accent); }
+  &:focus-visible { outline: 2px solid var(--on-media); outline-offset: 2px; }
 }
 
 .audiogramEpisodeLink__cover {
   flex: none;
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   overflow: hidden;
   border-radius: var(--r-sm);
-  background: var(--accent);
-  color: var(--on-media);
 
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
 
 .audiogramEpisodeLink__text {
-  display: flex;
-  flex-direction: column;
   min-width: 0;
+  font-size: 12px;
+  font-weight: 900;
   line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-  small {
-    @include v2.text(eyebrow);
-    color: color-mix(in srgb, var(--on-media) 75%, transparent);
-  }
-
-  strong {
-    font-size: 13px;
-    font-weight: 700;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-.audiogramEpisodeLink__go {
-  flex: none;
-  margin-left: auto;
-  opacity: .8;
+  small, strong { font-size: inherit; font-weight: inherit; }
 }

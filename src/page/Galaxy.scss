@@ -14,7 +14,8 @@ $left-w: 312px;
   position: relative;
   height: calc(100dvh - var(--nav-height, var(--topbar-h)));
   overflow: hidden;
-  background: var(--bg);
+  // The sky (48a): a faint cyan glow behind the centre, fading to the ground.
+  background: radial-gradient(ellipse at 45% 50%, color-mix(in srgb, var(--cyan) 12%, var(--bg)) 0%, var(--bg) 70%);
   color: var(--text);
   font-family: var(--font-sans);
 

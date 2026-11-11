@@ -11,32 +11,34 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px 16px;
+  gap: 8px;
   margin-bottom: 20px;
-  padding: 8px 8px 8px 14px;
+  padding: 8px;
   border-radius: var(--r-xl);
   @include v2.floating;
 
-  .ple-titles {
-    flex: 1 1 260px;
+  // "Customize your profile" 16/700 and the tour's "?" (37c).
+  .ple-title {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 2px;
     min-width: 0;
+    margin: 0;
+    padding: 0 0 0 6px;
+    @include v2.text(title-sm);
+    color: var(--text);
+  }
 
-    h3 {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin: 0;
-      @include v2.text(title-sm);
-      color: var(--text);
-    }
-
-    p {
-      margin: 2px 0 0;
-      @include v2.text(meta-sm);
-      line-height: 1.4;
-      color: var(--muted);
-    }
+  // Read out, not shown: the tour says the same with pictures of it.
+  .ple-hint {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    margin: 0;
   }
 
   .ple-buttons {
@@ -47,9 +49,19 @@
     min-width: 0;
   }
 
-  .ple-seg.v2-seg { display: inline-flex; width: auto; .v2-seg__opt { flex: none; gap: 6px; } }
+  // Desktop | Mobile: a small track on the page colour, 12/700 options.
+  .ple-seg.v2-seg {
+    display: inline-flex;
+    width: auto;
+    gap: 4px;
+    padding: 3px;
+    background: var(--bg);
 
-  .ple-btn.v2-btn { flex: none; }
+    .v2-seg__opt { flex: none; height: 28px; padding: 0 10px; border-radius: var(--r-sm); font-size: 12px; }
+  }
+
+  .ple-btn.v2-btn { flex: none; font-size: 12px; }
+  .ple-btn--primary.v2-btn { font-weight: 900; }
 
   // Unsaved changes: a small dot ahead of the label.
   .ple-btn--primary.dirty::before {
@@ -61,40 +73,39 @@
     flex: none;
   }
 
-  // "Add a playlist as a section": a select that looks like a secondary button.
-  .ple-add {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    height: 40px;
-    max-width: 100%;
-    padding: 0 6px 0 12px;
-    border-radius: var(--r-md);
-    background: var(--surface-2);
-    color: var(--text);
-
-    select {
-      min-width: 0;
-      max-width: 220px;
-      height: 100%;
-      padding: 0 4px;
-      border: 0;
-      background: transparent;
-      color: var(--text);
-      font: inherit;
-      @include v2.text(label);
-      font-size: 12px;
-      cursor: pointer;
-
-      &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm); }
-    }
-  }
-
   @include v2.mobile {
     top: calc(var(--nav-height, 56px) + 4px);
-    padding: 8px;
+  }
+}
 
-    .ple-titles p { display: none; }   // the frames explain themselves; keep the bar short
+// "Add a playlist as a section": a select that looks like a 36px secondary
+// button, at the end of the hidden tray (37c).
+.ple-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  max-width: 100%;
+  margin-left: auto;
+  padding: 0 6px 0 10px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text);
+
+  select {
+    min-width: 0;
+    max-width: 240px;
+    height: 100%;
+    padding: 0 4px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    @include v2.text(label);
+    font-size: 12px;
+    cursor: pointer;
+
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm); }
   }
 }
 
@@ -118,8 +129,10 @@
   border-radius: var(--r-xl);
   transition: outline-color var(--t-fast) var(--ease), opacity var(--t-fast) var(--ease);
 
-  &:hover,
-  &.is-open { outline-color: var(--muted); }
+  &:hover { outline-color: var(--muted); }
+  // The section whose settings are open: accent frame and handle (37c).
+  &.is-open { outline-color: var(--accent); }
+  &.is-open .ple-resize::before { background: var(--accent); }
 
   // The section's own spacing is for the plain page; the frame has its own.
   .ple-body .pov-section { margin-bottom: 4px; }
@@ -162,8 +175,8 @@
   padding: 0 4px;
   overflow: hidden;
   white-space: nowrap;
-  @include v2.text(body-sm);
-  font-weight: 700;
+  @include v2.text(label);
+  font-size: 12px;
   color: var(--text);
 
   small {
@@ -207,6 +220,12 @@
   &:disabled { opacity: .3; cursor: default; }
   &.on { background: var(--surface-2); color: var(--text); }
   &--remove:hover:not(:disabled) { background: var(--accent-tint); color: var(--accent); }
+}
+
+// The board draws a frame's head as grip, name, eye and gear. The up/down
+// arrows (the keyboard's way to move a section) appear on hover and focus.
+@media (hover: hover) {
+  .ple-frame:not(:hover):not(:focus-within) .ple-move { display: none; }
 }
 
 .ple-grip {
@@ -268,21 +287,28 @@
 
 // ── properties ──────────────────────────────────────────────────────────────
 .ple-props {
-  position: absolute;
-  top: calc(100% + 6px);
+  position: fixed;
+  top: calc(var(--nav-height, 64px) + 24px);
   right: 0;
-  z-index: 40;
-  width: min(340px, calc(100vw - 32px));
-  max-height: 70vh;
+  bottom: 16px;
+  z-index: 60;
+  width: min(380px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
   @include v2.scroll-y;
-  border-radius: var(--r-2xl);
-  @include v2.floating;
+  padding: 20px;
+  border-radius: var(--r-3xl) 0 0 var(--r-3xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-right: 0;
+  box-shadow: var(--shadow-sheet);
+  outline: none;
+  animation: ple-props-in var(--t-base) var(--ease);
 
   &-head {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 10px 6px 16px;
 
     // The accent tick in front of the title (37c side panel).
     &::before {
@@ -308,9 +334,39 @@
   &-body {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    padding: 8px 16px 16px;
+    gap: 10px;
+    padding-top: 10px;
   }
+}
+
+@keyframes ple-props-in { from { opacity: 0; transform: translateX(12px); } }
+
+// "Video size": four 40px tiles, the picked one with an accent border.
+.ple-sizes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.ple-size {
+  height: 40px;
+  min-width: 0;
+  padding: 0 4px;
+  border: 2px solid var(--border);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  @include v2.text(label);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); }
+  &.is-on { border-color: var(--accent); background: var(--accent-tint-strong); }
 }
 
 // Phones: the properties in the v2 sheet; the body keeps the same rhythm.
@@ -322,7 +378,7 @@
   gap: 6px;
   min-width: 0;
 
-  > span { @include v2.text(eyebrow); color: var(--muted); }
+  > span { @include v2.text(eyebrow); font-size: 11px; color: var(--muted); }
 
   .v2-input { width: 100%; min-width: 0; }
 
@@ -344,10 +400,6 @@
 .ple-frame.is-open .ple-toolbar { z-index: 50; }
 
 // Links column on the left: open its properties rightwards, into the page.
-.profile-overview--links-left .ple-frame--links .ple-props {
-  right: auto;
-  left: 0;
-}
 
 // On/off settings in the properties: label on the left, the v2 toggle right.
 .ple-switch {
@@ -706,4 +758,4 @@
 }
 
 // A popover inside the phone stays inside it.
-.ple-phone .ple-props { width: min(320px, calc(100% - 8px)); }
+

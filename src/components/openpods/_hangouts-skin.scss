@@ -400,3 +400,322 @@
   .hh-cd__unlock { display: inline-block; line-height: 32px; &::first-letter { font-size: 0; } }
   .hh-bg-picker__upload-btn:not(:disabled) { display: block; width: 100%; &::first-letter { font-size: 0; } }
 }
+
+// The browser Stream Studio (SDK StandaloneStudio inside HangoutsRoom), design
+// 22c: v2 tokens instead of the SDK's gradients and glows, Roboto, the preview
+// in a 24-radius frame, the side panel's tabs as a segmented track, and the go
+// live button as the 56px accent button. The SDK draws the layout (scenes,
+// preview, mixer, side panel); only its look is changed here.
+@mixin studio {
+  .hh-studio {
+    --st-glow: transparent;
+    --st-amber: var(--accent);
+    --st-green: var(--cyan);
+    --st-radius: 24px;
+    background: var(--bg);
+    font-family: var(--font-sans);
+  }
+  .hh-studio__header { gap: 12px; padding: 12px 16px; backdrop-filter: none; }
+  .hh-studio__live {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: var(--r-sm);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .06em;
+    box-shadow: none;
+    animation: none;
+  }
+  .hh-studio__live--standby { background: var(--surface-2); color: var(--muted); }
+  .hh-studio__live--paused { background: var(--accent-tint-strong); color: var(--accent); }
+  .hh-studio__title { @include v2.text(title-sm); }
+  .hh-studio__warn { color: var(--accent); font-size: 12px; font-weight: 700; }
+  .hh-studio__warn-icon { @include glyph("warning", 20px); color: var(--accent); }
+  .hh-studio__viewers { display: inline-block; @include v2.mono(14, 700); &::first-letter { font-size: 0; } }
+  .hh-studio__close {
+    @include v2.btn(secondary, 32);
+    border: 0;
+    &:hover { color: var(--text); }
+  }
+
+  // Scenes and sources: 40px rows, the active scene in the accent (22c layout tiles).
+  .hh-studio__panel-head,
+  .hh-studio__rail-label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-studio__scene {
+    min-height: 40px;
+    padding: 0 12px;
+    border: 2px solid transparent;
+    border-radius: var(--r-md);
+    background: var(--surface);
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: none;
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 6%, var(--surface)); }
+  }
+  .hh-studio__scene--active { border-color: var(--accent); background: var(--accent-tint-strong); box-shadow: none; }
+  // "＋ Add source": the fullwidth plus is dropped (not every font has it).
+  .hh-studio__scene--add { display: block; border: 2px dashed var(--border); background: transparent; line-height: 36px; text-align: center; &::first-letter { font-size: 0; } }
+  .hh-studio__error { color: var(--accent); font-size: 11px; }
+
+  // The preview: a 24-radius frame on black, the tag as a media pill.
+  .hh-studio__frame { border: 0; border-radius: var(--r-2xl); box-shadow: none; background: var(--media-black); }
+  .hh-studio__preview-tag {
+    padding: 4px 9px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: var(--media-scrim);
+    color: var(--on-media);
+    font-size: 11px;
+    font-weight: 700;
+    backdrop-filter: none;
+  }
+  .hh-studio__mixer { border: 1px solid var(--border); border-radius: var(--r-xl); background: var(--surface); }
+  .hh-studio__mixer-empty { color: var(--muted); font-size: 12px; }
+
+  // Side panel: tabs as one segmented track, the emoji in front dropped.
+  .hh-studio__tabs { gap: 4px; padding: 4px; border-radius: var(--r-md); background: var(--surface); }
+  .hh-studio__tab {
+    display: block;
+    height: 32px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: center;
+    white-space: nowrap;
+    &::first-letter { font-size: 0; }
+    &:hover { color: var(--text); }
+  }
+  .hh-studio__tab--active { background: var(--surface-2); color: var(--text); border: 0; }
+  .hh-studio__chat .hh-chat { border-color: var(--border); border-radius: var(--r-2xl); }
+
+  // The post tab: v2 fields and eyebrows.
+  .hh-post { gap: 8px; padding: 16px; border: 1px solid var(--border); border-radius: var(--r-2xl); background: var(--surface); }
+  .hh-post__title-label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-post__saved { color: var(--muted); font-size: 11px; }
+  .hh-post__input,
+  .hh-post__tag-input { @include field(40); height: 40px; }
+  .hh-post__desc-input { @include field(40); min-height: 88px; padding: 10px 12px; line-height: 1.45; }
+  .hh-post__thumb-add { border: 2px dashed var(--border); border-radius: var(--r-lg); background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; }
+  .hh-post__tag { height: 28px; padding: 0 6px 0 10px; border-radius: var(--r-sm); background: var(--surface-2); color: var(--text); font-size: 12px; font-weight: 700; }
+  .hh-post__extras { border-top-color: var(--border); }
+
+  // Go live: the 56px accent button, sentence-sized, no glow or pulse.
+  .hh-studio__go-btn,
+  .hh-studio__pause-btn,
+  .hh-studio__end-btn {
+    min-height: 56px;
+    padding: 0 20px;
+    border-radius: var(--r-xl);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-align: left;
+    box-shadow: none;
+    animation: none;
+  }
+  .hh-studio__go-btn {
+    display: block;
+    background: var(--accent);
+    color: var(--on-accent);
+    // "🔴 START STREAM": the leading emoji goes, the words stay.
+    &:not(:disabled)::first-letter { font-size: 0; }
+    &:hover:not(:disabled) { background: var(--accent-hover); filter: none; }
+  }
+  .hh-studio__pause-btn { background: var(--surface-2); color: var(--text); }
+  .hh-studio__end-btn {
+    min-height: 44px;
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--accent-tint);
+    color: var(--accent);
+    font-size: 13px;
+    &:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+  }
+}
+
+// The OpenPod audio room (SDK HangoutsRoom, conference), design 22d: Roboto on
+// the page ground, the title at 32/900, stage tiles as surface cards with the
+// cyan ring for whoever is speaking, the audience as rounded avatar squares,
+// and the controls as a row of 48px tiles with Material glyphs in place of the
+// SDK's emoji. "Raise hand" is the cyan "ask to speak" button.
+@mixin room {
+  .hh-room {
+    padding: 16px 20px;
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+  }
+  .hh-room__header { align-items: center; gap: 12px; margin-bottom: 16px; }
+  .hh-room__title { margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -.02em; line-height: 1.15; color: var(--text); text-shadow: none; }
+  .hh-room__description { color: var(--muted); font-size: 13px; text-shadow: none; }
+  .hh-room__count { @include v2.text(body-sm); color: var(--muted); text-shadow: none; }
+  .hh-room__share {
+    display: inline-block;
+    min-height: 36px;
+    line-height: 36px;
+    padding: 0 12px;
+    border-radius: var(--r-md);
+    font-size: 12px;
+    &::first-letter { font-size: 0; }
+  }
+
+  // Audience: "LISTENING" with rounded avatar squares (22d).
+  .hh-room__listeners { padding: 12px 8px; border: 0; border-radius: var(--r-2xl); background: var(--surface); backdrop-filter: none; }
+  .hh-audience__label { @include v2.text(eyebrow); color: var(--muted); text-shadow: none; }
+  .hh-tile--small .hh-tile__avatar-wrap { width: 44px; height: 44px; }
+  .hh-tile--small .hh-tile__avatar,
+  .hh-tile--small .hh-tile__video { border-radius: var(--r-lg); background: var(--surface-2); }
+  .hh-tile--small.hh-tile--speaking .hh-tile__avatar { border-color: var(--cyan); box-shadow: none; }
+  .hh-tile--small .hh-tile__name { font-size: 11px; font-weight: 700; color: var(--text); text-shadow: none; }
+
+  // Stage: surface cards, the speaker ringed in cyan, the avatar a 64 square.
+  .hh-tile { border-radius: var(--r-xl); background: var(--surface); box-shadow: none; }
+  .hh-tile--speaking { border-color: var(--cyan); box-shadow: none; }
+  .hh-tile__placeholder .hh-tile__avatar { width: 64px; border: 0; border-radius: var(--r-lg); box-shadow: none; background: var(--surface-2); }
+  .hh-tile__overlay { background: var(--media-scrim); }
+  .hh-tile__overlay .hh-tile__name { font-size: 13px; font-weight: 700; text-shadow: none; }
+  .hh-tile__overlay .hh-tile__role { border-radius: var(--r-sm); background: var(--cyan-tint); color: var(--cyan); font-size: 10px; font-weight: 900; }
+  .hh-tile__hand { @include glyph("back_hand", 16px); color: var(--cyan); background: var(--media-scrim); }
+
+  // Controls: 48px tiles on the page ground, no glass bar.
+  .hh-controls {
+    gap: 8px;
+    margin-top: 12px;
+    padding: 12px 0 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    background: transparent;
+    backdrop-filter: none;
+  }
+  .hh-controls__group { gap: 8px; }
+  .hh-controls__group--right { border-left-color: var(--border); }
+  .hh-controls .hh-btn,
+  .hh-controls .hh-recording-idle select {
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: var(--r-lg);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .hh-controls .hh-btn--icon { width: 48px; height: 48px; padding: 0; }
+  .hh-controls [title="Show games"] { @include glyph("sports_esports", 22px); }
+  .hh-controls [title="Boost history"] { @include glyph("history", 22px); }
+  .hh-controls [title="Boost settings"] { @include glyph("tune", 22px); }
+  .hh-controls [title="Turn off camera"] { @include glyph("videocam", 22px); }
+  .hh-controls [title="Turn on camera"] { @include glyph("videocam_off", 22px); }
+  .hh-controls [title="Share screen"],
+  .hh-controls [title="Stop sharing"] { @include glyph("screen_share", 22px); }
+  .hh-controls [title="Show chat"] { @include glyph("chat_bubble", 22px); position: relative; }
+  .hh-controls__chat-badge { font-size: 10px; }
+  .hh-controls [title^="Switch to"] { @include glyph("swap_horiz", 22px); }
+  // Text buttons that open with an emoji or symbol: the glyph goes, the words stay.
+  .hh-controls__group--left > .hh-btn:not(.hh-btn--icon):not(.hh-btn--ptt),
+  .hh-controls__group--right > .hh-btn:not(.hh-btn--icon):not(.hh-end-menu__trigger):not(.hh-controls__layout),
+  .hh-recording-idle > button {
+    display: inline-block;
+    line-height: 48px;
+    &::first-letter { font-size: 0; }
+  }
+  // Raise hand, the listener's way on stage: the cyan button (22d "Ask to speak").
+  .hh-controls__group--left > .hh-btn.hh-btn--secondary:not(.hh-btn--icon) {
+    background: var(--cyan);
+    color: var(--bg);
+    font-weight: 900;
+    &:hover:not(:disabled) { background: var(--cyan); filter: brightness(1.08); color: var(--bg); }
+  }
+  .hh-controls__layout-value { display: inline-block; &::first-letter { font-size: 0; } }
+  .hh-controls__layout-label { color: var(--muted); }
+  .hh-controls__layout-chevron,
+  .hh-end-menu__chevron { @include glyph("expand_more", 18px); }
+
+  // The restream panel (SDK StreamingPanel, "Go Live" to YouTube or Twitch), 29d:
+  // anchored to the controls bar (it was placed against the room's content box
+  // and opened above the top of the sheet), a v2 surface card with filled fields.
+  .hh-controls { position: relative; }
+  .hh-streaming-panel {
+    width: 320px;
+    gap: 12px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-3xl);
+    background: var(--surface);
+    box-shadow: var(--shadow-float);
+  }
+  .hh-streaming-panel__header {
+    font-size: 18px;
+    font-weight: 700;
+    &::before { content: ""; width: 4px; height: 22px; margin-right: 10px; border-radius: var(--r-bar); background: var(--accent); }
+    > span { flex: 1; }
+    .hh-btn--icon { width: 32px; height: 32px; min-height: 32px; border-radius: 50%; background: transparent; }
+  }
+  .hh-streaming-panel__tabs { gap: 4px; padding: 4px; border-radius: var(--r-md); background: var(--bg);
+    .hh-btn { flex: 1; min-height: 32px; height: 32px; justify-content: center; border-radius: var(--r-md); font-size: 13px; }
+    .hh-btn--secondary { background: transparent; color: var(--muted); }
+    .hh-btn--primary { background: var(--surface-2); color: var(--text); font-weight: 700; } }
+  .hh-streaming-panel__label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-streaming-panel__input { @include field(40); height: 40px; }
+  .hh-streaming-panel__error { color: var(--accent); font-size: 11px; }
+  .hh-streaming-panel .hh-btn--full { min-height: 48px; border-radius: var(--r-lg); font-size: 14px; font-weight: 900; }
+  .hh-streaming-panel .hh-btn--primary.hh-btn--full:enabled { display: block; line-height: 48px; &::first-letter { font-size: 0; } }
+
+  // The room's chat panel: a v2 surface with a filled composer.
+  .hh-room__sidebar .hh-chat {
+    border: 1px solid var(--border);
+    border-radius: var(--r-2xl);
+    background: var(--surface);
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  .hh-room__sidebar .hh-chat__header { border-bottom-color: var(--border); }
+  .hh-room__sidebar .hh-chat__title { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-room__sidebar .hh-chat__input { @include field(44); height: 44px; background: var(--surface-2); }
+  .hh-room__sidebar .hh-chat__emoji-toggle { width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--surface-2); color: var(--muted); @include glyph("mood", 20px); }
+  .hh-room__sidebar .hh-chat__input-row .hh-btn--primary { width: 44px; min-height: 44px; height: 44px; padding: 0; border-radius: 50%; @include glyph("send", 20px); }
+}
+
+// The OBS Browser Source panel (SDK ObsPanel, the room's OBS button), in the
+// 32e "Stream with OBS" card look: a surface sheet, the title behind a 4px
+// accent bar, wells for the URL, cyan for what is switched on. The SDK injects
+// its own <style>, hence the extra parent in each selector.
+@mixin obs-panel {
+  .hh-obs-panel.hh-obs-panel {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-3xl);
+    background: var(--surface);
+    box-shadow: var(--shadow-float);
+    font-family: var(--font-sans);
+    color: var(--text);
+    backdrop-filter: none;
+  }
+  .hh-obs-panel .hh-obs-panel__title { gap: 10px; color: var(--text); font-size: 18px; font-weight: 700; letter-spacing: 0; text-transform: none; }
+  .hh-obs-panel .hh-obs-panel__title-dot { width: 4px; height: 22px; border-radius: var(--r-bar); background: var(--accent); box-shadow: none; animation: none; }
+  .hh-obs-panel .hh-obs-panel__close { width: 32px; height: 32px; border-radius: 50%; background: transparent; color: var(--text); font-size: 14px;
+    &:hover { background: var(--bg-hover); color: var(--text); } }
+  .hh-obs-panel .hh-obs-panel__divider { background: var(--border); }
+  .hh-obs-panel .hh-obs-panel__label { @include v2.text(eyebrow); color: var(--muted); }
+  .hh-obs-panel .hh-obs-panel__check { min-height: 32px; border: 0; border-radius: var(--r-md); background: var(--surface-2); color: var(--muted); font-family: inherit; font-size: 12px; font-weight: 700;
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); } }
+  .hh-obs-panel .hh-obs-panel__check--on { background: var(--cyan-tint); color: var(--cyan);
+    &:hover { background: var(--cyan-tint-strong); } }
+  .hh-obs-panel .hh-obs-panel__box { border-color: var(--muted); border-radius: var(--r-xs); }
+  .hh-obs-panel .hh-obs-panel__check--on .hh-obs-panel__box { background: var(--cyan); border-color: var(--cyan); }
+  .hh-obs-panel .hh-obs-panel__check-icon { color: var(--bg); }
+  .hh-obs-panel .hh-obs-panel__url { padding: 12px 14px; border: 0; border-radius: var(--r-lg); background: var(--bg); color: var(--text); @include v2.mono(12, 700); line-height: 1.5; box-shadow: none; }
+  .hh-obs-panel .hh-obs-panel__url--invalid { color: var(--muted); font-family: inherit; font-weight: 400; }
+  .hh-obs-panel .hh-obs-panel__copy { min-height: 48px; border-radius: var(--r-lg); background: var(--accent); color: var(--on-accent); font-family: inherit; font-size: 14px; font-weight: 900; box-shadow: none;
+    &:hover:not(:disabled) { background: var(--accent-hover); box-shadow: none; transform: none; } }
+  .hh-obs-panel .hh-obs-panel__copy--copied { background: var(--cyan) !important; color: var(--bg); }
+  .hh-obs-panel .hh-obs-panel__hint { color: var(--muted); font-size: 11px; }
+}

@@ -377,8 +377,9 @@ function CommunityPage() {
             joined={subscribed}
             busy={subLoading}
             onClick={handleSubscribe}
-            label={t('common.actions.subscribe')}
-            joinedLabel={t('communities.page.subscribed')}
+            // 20c: "Join", and "Joined" once you are in (the directory's words).
+            label={t('communities.directory.join')}
+            joinedLabel={t('communities.directory.joined')}
             busyLabel={t('common.status.loading')}
           />
         ) : null}

@@ -18,8 +18,16 @@
     gap: 12px;
   }
 
+  // 21d: the 3Speak mark (36) before a 40/900 title.
+  &__mark {
+    width: 36px;
+    height: auto;
+    flex: none;
+  }
+
   &__title {
     @include v2.text(display);
+    letter-spacing: -.03em;
     flex: 1;
     min-width: 0;
     margin: 0;
@@ -49,6 +57,7 @@
     gap: 16px;
 
     &__title { @include v2.text(heading-lg); }
+    &__mark { width: 28px; }
     &__create.v2-btn { height: 48px; border-radius: 16px; }
     &__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     &__ghost { height: 140px; }
@@ -78,7 +87,8 @@
   }
 
   &__value {
-    @include v2.mono(28, 900);
+    font-size: 32px;
+    font-weight: 900;
     line-height: 1.15;
     max-width: 100%;
     overflow: hidden;
@@ -86,7 +96,8 @@
     white-space: nowrap;
   }
 
-  &__range {
+  // The change against the 28 days before (cyan; accent when it fell).
+  &__delta {
     display: inline-block;
     margin-top: 2px;
     padding: 2px 8px;
@@ -94,11 +105,15 @@
     background: var(--cyan-tint-strong);
     color: var(--cyan);
     @include v2.mono(11, 700);
+
+    &.is-down { background: var(--accent-tint-strong); color: var(--accent); }
+    // Nothing to compare yet: the range, muted, so the tile keeps its height.
+    &.is-empty { background: var(--surface-2); color: var(--muted); }
   }
 
   @include v2.mobile {
     padding: 12px;
 
-    &__value { @include v2.mono(20, 900); }
+    &__value { font-size: 24px; }
   }
 }

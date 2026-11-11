@@ -2205,7 +2205,9 @@ function Watch({ v2 = false, routeV = null }) {
         const first = currentIndex + 1;
         const next = videos.slice(first, first + 5);
         const name = playlist.name || playlist.title;
-        const from = videoDetails?.community?.title;
+        // The community's name; a bare id (hive-123456) says nothing, so leave it out.
+        const fromTitle = videoDetails?.community?.title;
+        const from = fromTitle && !/^hive-\d+$/.test(fromTitle) ? fromTitle : null;
         return (
           <section className="watch-more watch-next" aria-label={t('watch.nextIn', { name })}>
             <div className="watch-more__head">

@@ -170,7 +170,8 @@
     "creatorsNote": "different accounts in the last {{days}} days",
     "uploadsFine": "Counted from uploads on 3speak.tv. The spot plays before every video, short and audio upload.",
     "uploadNone": "Could not load the upload numbers right now. Try again in a moment.",
-    "videosShortsAudio": "Videos / shorts / audio a day"
+    "videosShortsAudio": "Videos / shorts / audio a day",
+    "audioRow": "{{label}} (audio)"
   },
   "rateCard": {
     "perSecDay": " /sec /day",
@@ -811,7 +812,10 @@
     "creatorNote": "Switch them off any time in Settings. Your videos are then removed from what we offer advertisers too.",
     "viewerTitle": "If you are a viewer",
     "viewerText": "You earn a share too, for the videos you actually watch. Paid in HBD or HIVE, same as everyone else.",
-    "viewerNote": "Opt in from Settings. We only count a video once you have watched most of it."
+    "viewerNote": "Opt in from Settings. We only count a video once you have watched most of it.",
+    "explorerLength": "Ad length",
+    "explorerUnit": "s",
+    "flatBookingShort": "A flat booking: your spot runs across the network for a fixed period at a fixed price. No CPM. Fall short of the forecast and the difference comes back as credit."
   },
   "wiz": {
     "workingOn": "Working on <b>{{name}}</b>",

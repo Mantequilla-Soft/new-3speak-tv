@@ -30,40 +30,46 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 6px;
+}
+
+// Stories: one row of tiles that scrolls sideways (26a).
+.story-notifs-section:not(.podcast-notifs-section) {
+  .story-notifs-head { display: none; }
+  .story-notifs {
+    flex-direction: row;
+    gap: 10px;
+    padding: 6px 8px 4px;
+    @include v2.scroll-x;
+  }
 }
 
 .story-notif {
+  flex: none;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  min-height: 56px;
-  padding: 8px;
-  border-radius: var(--r-lg);
+  gap: 4px;
+  width: 56px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
   cursor: pointer;
-  transition: background var(--t-fast) var(--ease);
 
-  &:hover { background: var(--bg-hover); }
-
-  &--unseen { background: var(--cyan-tint); }
-  &--unseen:hover { background: color-mix(in srgb, var(--cyan) 20%, transparent); }
+  &:hover .story-notif-name { color: var(--text); }
 }
 
-// A conic gradient showing through the padding around the avatar: accent for
-// the share of the 24h still left (`--story-left`, 0..1), a faint track for the rest.
+// 52px, radius 16: a 2px cyan ring around a 3px gap in the sheet's colour.
 .story-notif-ring {
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-lg);
   padding: 2px;
-  box-sizing: border-box;
-  background: conic-gradient(
-    color-mix(in srgb, var(--text) 12%, transparent) calc((1 - var(--story-left, 1)) * 360deg),
-    var(--accent) 0
-  );
+  background: var(--cyan);
 
-  &--seen { opacity: .5; }
+  &--seen { background: color-mix(in srgb, var(--text) 30%, transparent); }
 
   .hive-avatar {
     display: block;
@@ -74,56 +80,66 @@
   .story-notif-avatar {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
+    border-radius: var(--r-lg);
     object-fit: cover;
-    border: 2px solid var(--surface);
+    border: 3px solid var(--surface);
     box-sizing: border-box;
     background: var(--avatar);
   }
+  .hive-avatar__badge { display: none; }
 }
 
-.story-notif-body {
+.story-notif-name,
+.story-notif-left {
+  max-width: 100%;
+  font-size: 10px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.story-notif-name { color: var(--muted); }
+.story-notif--unseen .story-notif-name { color: var(--text); font-weight: 700; }
+.story-notif-left { color: var(--muted); opacity: .8; }
+
+// Podcast episodes: rows shaped like the notification rows (26a "Hive Talks
+// new episode: …"): a 44px rounded cover with the cyan podcasts chip, the
+// show in bold with the episode, the age in mono; unseen on a cyan wash.
+.podcast-notif {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 60px;
+  padding: 8px;
+  border-radius: var(--r-xl);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); }
+  &.podcast-notif--unseen { background: var(--cyan-tint); }
+  &.podcast-notif--unseen:hover { background: color-mix(in srgb, var(--cyan) 20%, transparent); }
+}
+
+.podcast-notif-body {
   flex: 1;
   min-width: 0;
 }
 
-.story-notif-msg {
-  @include v2.text(body-sm);
-  font-weight: 700;
-  color: var(--text);
+.podcast-notif-msg {
+  font-size: 13px;
   line-height: 1.35;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  b { font-weight: 700; }
 }
 
-.story-notif-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+.podcast-notif-age {
   margin-top: 2px;
-  @include v2.text(meta-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
   color: var(--muted);
-}
-
-.story-notif-type {
-  color: var(--cyan);
-  font-weight: 700;
-}
-
-.story-notif-thumb {
-  flex: none;
-  width: 28px;
-  height: 44px;
-  border-radius: var(--r-sm);
-  object-fit: cover;
-  background: var(--avatar);
-}
-
-.story-notif-dot {
-  flex: none;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--cyan);
 }

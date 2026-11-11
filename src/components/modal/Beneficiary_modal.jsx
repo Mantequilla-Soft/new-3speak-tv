@@ -48,6 +48,8 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
   // 'checking', 'valid', 'invalid'. Debounced so we don't hit the API on every
   // keystroke. handleBeneficairy still re-checks authoritatively on add.
   const [acctStatus, setAcctStatus] = useState('idle');
+  // "Add a collaborator" opens the add row (17e).
+  const [adding, setAdding] = useState(false);
 
 
   useEffect(() => {
@@ -160,6 +162,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     // Clear inputs
     setAccount('');
     setPercent(0);
+    setAdding(false);
   };
 
   const handleDelete = (index) => {
@@ -227,77 +230,79 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
     return entries;
   })();
 
-  // Design 17e (share rewards): what stays with you, the split as one bar,
-  // the collaborators as filled rows, the add row, then the platform defaults.
+  // Design 17e (share rewards): the split as a ring with what stays with you
+  // in the middle, everyone's share as tiles (you, collaborators with an X,
+  // locked platform splits with a lock), "Add a collaborator", then the
+  // platform defaults; "Save split" pinned at the bottom.
+  const shares = [
+    { key: 'you', tone: 'you', name: t('modals.beneficiary.you'), percent: remaingPercent },
+    ...list.map((item, index) => ({ key: `${item.account}-${index}`, tone: item.locked ? 'locked' : 'bene', name: item.account, percent: item.percent, item, index })),
+  ];
+  // The ring: a conic gradient, one arc per share in the order of the tiles.
+  let at = 0;
+  const arcs = shares.map((sh) => {
+    const from = at;
+    at += Math.max(0, Number(sh.percent) || 0);
+    const color = sh.tone === 'you' ? 'var(--accent)' : sh.tone === 'bene' ? 'var(--cyan)' : 'var(--muted)';
+    return `${color} ${from}% ${Math.min(100, at)}%`;
+  });
+  const ring = `conic-gradient(${arcs.join(', ')}${at < 100 ? `, var(--surface-2) ${at}% 100%` : ''})`;
+
   return (
     <DialogShell
       open={isOpen}
       onClose={cancel}
-      title={t('modals.beneficiary.title')}
-      width={480}
+      side
+      tone="cyan"
+      title={t('modals.beneficiary.shareRewards')}
+      width={420}
       zIndex={1100}
       className="bene-dialog"
       footer={(
-        <>
-          <Button variant="secondary" onClick={cancel}>{t('common.actions.cancel')}</Button>
-          <Button variant="primary" onClick={handleSave}>{t('common.actions.ok')}</Button>
-        </>
+        <Button variant="inverse" size={48} block trailing="check" className="dlg-main" onClick={handleSave}>{t('modals.beneficiary.saveSplit')}</Button>
       )}
     >
-      <p className="bene-text">{t('modals.beneficiary.intro')}</p>
+      <div className="bene-ring" style={{ background: ring }} role="img" aria-label={`@${user} ${remaingPercent}%`}>
+        <span className="bene-ring__hole">
+          <b className="num">{remaingPercent}%</b>
+          <span>{t('modals.beneficiary.toYou')}</span>
+        </span>
+      </div>
 
-      <div className="bene-content-wrap">
-        <div className="bene-split">
-          <div className="user-wrap">
-            <span className="bene-split__who">@{user}</span>
-            <span className="bene-split__pct">{remaingPercent}%</span>
+      <div className="bene-tiles beneficiary-list">
+        {shares.map((sh) => (
+          <div key={sh.key} className={`bene-tile is-${sh.tone}${sh.item?.locked ? ' is-locked' : ''}`}>
+            <span className="bene-tile__bar" aria-hidden="true" />
+            <span className="bene-tile__body">
+              <span className="bene-tile__who">{sh.name}</span>
+              {sh.item?.locked ? (
+                <span className="bene-tile__edit">
+                  <input
+                    type="number"
+                    className="bene-tile__pct-input num"
+                    style={{ width: `${String(sh.item.percent).length + 0.5}ch` }}
+                    value={sh.item.percent}
+                    min={sh.item.minPercent || 1}
+                    step="1"
+                    aria-label={`@${sh.item.account} %`}
+                    title={t('modals.beneficiary.minPercent', { percent: sh.item.minPercent })}
+                    onChange={(e) => handleLockedPercentChange(sh.index, e.target.value)}
+                  />
+                  <span aria-hidden="true">%</span>
+                </span>
+              ) : (
+                <b className="bene-tile__pct num">{sh.percent}%</b>
+              )}
+            </span>
+            {sh.tone === 'bene' && (
+              <IconButton icon="close" label={t('common.actions.remove')} size={32} variant="ghost" round className="delete-icon" onClick={() => handleDelete(sh.index)} />
+            )}
+            {sh.item?.locked && <Icon name="lock" size={18} className="bene-tile__lock" />}
           </div>
-          <div className="bene-split__bar" aria-hidden="true">
-            <span className="is-you" style={{ flexGrow: Math.max(0, remaingPercent) }} />
-            {list.map((item, index) => (
-              <span key={index} className={item.locked ? 'is-locked' : 'is-bene'} style={{ flexGrow: Math.max(0, item.percent) }} />
-            ))}
-          </div>
-        </div>
+        ))}
+      </div>
 
-        {list.length > 0 && (
-          <div className="beneficiary-list">
-            {list.map((item, index) => (
-              <div className={`bene-row${item.locked ? ' is-locked' : ''}`} key={index}>
-                <span className="bene-row__dot" aria-hidden="true" />
-                <span className="bene-row__who">@{item.account}</span>
-                {item.locked ? (
-                  <span className="bene-row__locked">
-                    <input
-                      type="number"
-                      className="v2-input h32"
-                      value={item.percent}
-                      min={item.minPercent || 1}
-                      step="1"
-                      aria-label={`@${item.account} %`}
-                      onChange={(e) => handleLockedPercentChange(index, e.target.value)}
-                    />
-                    <span>{t('modals.beneficiary.minPercent', { percent: item.minPercent })}</span>
-                  </span>
-                ) : (
-                  <>
-                    <span className="bene-row__pct">{item.percent}%</span>
-                    <IconButton
-                      icon="close"
-                      label={t('common.actions.remove')}
-                      size={32}
-                      variant="ghost"
-                      round
-                      className="delete-icon"
-                      onClick={() => handleDelete(index)}
-                    />
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
+      {adding || hasPendingRow ? (
         <div className="reward-main">
           <label className="bene-add__user">
             <span aria-hidden="true">@</span>
@@ -307,6 +312,7 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
               placeholder={t('modals.beneficiary.usernamePlaceholder')}
               aria-label={t('modals.beneficiary.usernamePlaceholder')}
               onChange={(e) => setAccount(e.target.value.toLowerCase())}
+              autoFocus
             />
           </label>
           <label className="bene-add__pct">
@@ -332,40 +338,47 @@ function Beneficiary_modal({ isOpen, close, setBeneficiaries, setBeneficiaryList
           </label>
           <IconButton icon="person_add" label={t('common.actions.add')} size={40} variant="secondary" onClick={handleBeneficairy} />
         </div>
+      ) : (
+        <button type="button" className="bene-addbtn" onClick={() => setAdding(true)}>
+          <Icon name="person_add" size={18} />
+          {t('modals.beneficiary.addCollaborator')}
+        </button>
+      )}
 
-        {percent > 0 && percent < 1 && (
-          <p className="bene-hint">
-            <Trans i18nKey="modals.beneficiary.minimumReward" components={{ strong: <strong /> }} />
-          </p>
-        )}
+      {percent > 0 && percent < 1 && (
+        <p className="bene-hint">
+          <Trans i18nKey="modals.beneficiary.minimumReward" components={{ strong: <strong /> }} />
+        </p>
+      )}
 
-        {error && <div className="error bene-error" role="alert"><Icon name="error" size={16} />{error}</div>}
+      {error && <div className="error bene-error" role="alert"><Icon name="error" size={16} />{error}</div>}
 
-        {/* Typed but not committed with "+": say so, and report whether the
-            account actually exists on Hive. Nothing shows while the row is
-            empty. */}
-        {hasPendingRow && (
-          <div className={`bene-pending${acctStatus === 'invalid' ? ' bene-pending--bad' : ''}`}>
-            {acctStatus === 'checking' && <Trans i18nKey="modals.beneficiary.checking" values={{ account: account.trim() }} components={{ strong: <strong /> }} />}
-            {acctStatus === 'invalid' && <Trans i18nKey="modals.beneficiary.notExisting" values={{ account: account.trim() }} components={{ strong: <strong /> }} />}
-            {(acctStatus === 'valid' || acctStatus === 'idle') && (
-              <Trans i18nKey="modals.beneficiary.notAdded" values={{ account: account.trim() }} components={{ strong: <strong /> }} />
-            )}
-          </div>
-        )}
+      {/* Typed but not committed with "+": say so, and report whether the
+          account actually exists on Hive. Nothing shows while the row is
+          empty. */}
+      {hasPendingRow && (
+        <div className={`bene-pending${acctStatus === 'invalid' ? ' bene-pending--bad' : ''}`}>
+          {acctStatus === 'checking' && <Trans i18nKey="modals.beneficiary.checking" values={{ account: account.trim() }} components={{ strong: <strong /> }} />}
+          {acctStatus === 'invalid' && <Trans i18nKey="modals.beneficiary.notExisting" values={{ account: account.trim() }} components={{ strong: <strong /> }} />}
+          {(acctStatus === 'valid' || acctStatus === 'idle') && (
+            <Trans i18nKey="modals.beneficiary.notAdded" values={{ account: account.trim() }} components={{ strong: <strong /> }} />
+          )}
+        </div>
+      )}
 
-        {defaults.length > 0 && (
-          <div className="default-bene-wrap">
-            <Eyebrow>{t('modals.beneficiary.defaults', { count: defaults.length })}</Eyebrow>
-            {defaults.map((d) => (
-              <div key={d.key} className="bene-default">
-                <Icon name="lock" size={14} />
-                <span>{d.account ? `${d.account} · ${d.label}` : d.label}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <p className="bene-text">{t('modals.beneficiary.intro')}</p>
+
+      {defaults.length > 0 && (
+        <div className="default-bene-wrap">
+          <Eyebrow>{t('modals.beneficiary.defaults', { count: defaults.length })}</Eyebrow>
+          {defaults.map((d) => (
+            <div key={d.key} className="bene-default">
+              <Icon name="lock" size={14} />
+              <span>{d.account ? `${d.account} · ${d.label}` : d.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </DialogShell>
   );
 }

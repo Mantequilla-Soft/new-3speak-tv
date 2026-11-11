@@ -167,8 +167,8 @@
   .v2-input { font-weight: 400; font-size: 13px; }
 }
 
-// The area list sits on the left on wide screens; the select stands in below that.
-.translate-areas-select { display: none; }
+// Areas are a select in the toolbar at every width (45d: "Areas: shorts").
+.translate-areas-select { display: inline-flex; }
 
 .translate-filters {
   display: flex;
@@ -176,12 +176,13 @@
   gap: 6px;
 }
 
-// Filter toggles: 2px outline, cyan when on (secondary selection).
+// Filter toggles: 2px outline, cyan when on (secondary selection). No box
+// icon: the outline is the state (45d).
 .translate-filter {
-  @include v2.control(32);
+  @include v2.control(36);
   @include v2.text(label);
   font-size: 12px;
-  padding: 0 10px;
+  padding: 0 12px;
   background: transparent;
   color: var(--text);
   box-shadow: inset 0 0 0 2px var(--border);
@@ -196,15 +197,17 @@
   }
 }
 
-/* ── Layout: areas on the left, rows on the right ── */
+/* ── Layout: the rows take the page (45d); the area list stays in the markup
+   for the select's sake but is not shown. ── */
 .translate-layout {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   align-items: start;
 }
 
 .translate-areas {
+  display: none !important;
   @include v2.card(24);
   position: sticky;
   top: calc(var(--topbar-h) + 12px);
@@ -220,9 +223,7 @@
 .translate-areas__label { padding: 0 8px; }
 
 @media (max-width: 1023px) {
-  .translate-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  .translate-areas { display: none; }
-  .translate-areas-select { display: inline-flex; }
+  .translate-layout { gap: 12px; }
 }
 
 @include v2.mobile {
@@ -448,11 +449,11 @@
   align-items: center;
   gap: 6px;
   min-height: 32px;
-  padding: 0 10px 0 6px;
+  padding: 0 6px 0 0;
   border-radius: var(--r-sm);
-  background: var(--surface-2);
-  @include v2.text(label);
-  font-size: 12px;
+  background: transparent;
+  @include v2.text(meta-sm);
+  line-height: 1.3;
   color: var(--muted);
   cursor: pointer;
   user-select: none;
@@ -480,7 +481,7 @@
     }
   }
 
-  &.is-checked { background: var(--cyan-tint); color: var(--cyan); }
+  &.is-checked { color: var(--cyan); }
   &:has(input:disabled) { opacity: .45; cursor: not-allowed; }
   &:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
 

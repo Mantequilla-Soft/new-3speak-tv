@@ -91,9 +91,10 @@ export const ChoiceCard = ({ selected, icon, title, sub, tone = "accent", onClic
   </button>
 );
 
-export const Toggle = ({ checked, onChange, label, disabled, id }) => (
+// tone: accent (default) | cyan (community, feed and notification choices, 38b)
+export const Toggle = ({ checked, onChange, label, disabled, id, tone }) => (
   <button type="button" role="switch" id={id} aria-checked={!!checked} aria-label={label} disabled={disabled}
-    className={cx("v2-toggle", checked && "is-on")} onClick={() => onChange?.(!checked)}>
+    className={cx("v2-toggle", checked && "is-on", tone === "cyan" && "is-cyan")} onClick={() => onChange?.(!checked)}>
     <span className="v2-toggle__thumb" />
   </button>
 );
@@ -234,11 +235,19 @@ export function Dialog({ open, onClose, title, sub, children, footer, width = 44
 export const Sheet = Dialog;
 
 // ConfirmBar: small confirmations as a bottom bar, not a modal (07f)
-export const ConfirmBar = ({ children, actions }) => <div className="v2-confirmbar" role="alertdialog">{children}<div className="v2-confirmbar__actions">{actions}</div></div>;
+// With `title` (and optionally `icon`, `sub`, `tone`) it is the 07f card: a
+// surface bar with a tinted icon tile, a 16/700 title and a muted line.
+export const ConfirmBar = ({ children, actions, icon, title, sub, tone = "accent" }) => (title ? (
+  <div className={cx("v2-confirmbar", "is-card", `is-${tone}`)} role="alertdialog" aria-label={typeof title === "string" ? title : undefined}>
+    {icon && <span className="v2-confirmbar__icon">{renderIcon(icon, 28)}</span>}
+    <div className="v2-confirmbar__text"><b>{title}</b>{sub && <span>{sub}</span>}{children}</div>
+    <div className="v2-confirmbar__actions">{actions}</div>
+  </div>
+) : <div className="v2-confirmbar" role="alertdialog">{children}<div className="v2-confirmbar__actions">{actions}</div></div>);
 
 // Island: the top toast (07f).
 export const Island = ({ icon, children, action, tone = "neutral" }) => (
-  <div className={cx("v2-island", `is-${tone}`)} role="status">{renderIcon(icon, 18)}<span>{children}</span>{action}</div>
+  <div className={cx("v2-island", `is-${tone}`)} role="status">{icon && <span className="v2-island__icon">{renderIcon(icon, 20)}</span>}<span>{children}</span>{action}</div>
 );
 
 // Menu: a popover card of rows. Position it yourself (absolute/fixed).

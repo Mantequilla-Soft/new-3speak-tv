@@ -2,9 +2,6 @@ import { useState, useCallback, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import BarLoader from '../components/Loader/BarLoader';
-import Card3 from '../components/Cards/Card3';
-import AudioTile from '../components/AudioTile/AudioTile';
-import { Icon } from '../components/v2/Icon';
 import { Button, IconButton, EmptyState, Toggle } from '../components/v2/ui';
 import { useAppStore } from '../lib/store';
 import { deleteWatchHistoryEntry } from '../utils/watchHistory';
@@ -13,6 +10,8 @@ import { fetchIncubationPost } from '../lib/incubation';
 import { toastIn } from '../utils/toast';
 import { getSinceTimestamp, formatRelativeDate } from '../utils/dateFilters';
 import { FeedToolbar, Pagination } from '../components/FeedToolbar/FeedToolbar';
+import { fixVideoThumbnail, fallbackImg } from '../utils/fixThumbnails';
+import { watchPath } from '../utils/urls';
 import { useTranslation } from 'react-i18next';
 import './WatchedView.scss';
 
@@ -57,6 +56,65 @@ async function fetchWatchedPage(username, type, since, page) {
     counts: { videos: 0, shorts: 0, audio: 0, ...(data.counts || {}) },
     totalPages: data.totalPages || 1,
   };
+}
+
+const authorOf = (v) => String(v.author?.username || v.author || v.owner || '').replace(/^@/, '');
+
+/**
+ * One history row (45c, 24d): the thumbnail, the title, "@author · Watched 2h
+ * ago", and (own history) remove. A video opens its watch page, a short the
+ * shorts player; an audio row plays through the global player like the audio
+ * page's tile.
+ */
+function WatchedRow({ item, kind, contextItems, canRemove, onRemove }) {
+  const { t } = useTranslation();
+  const audioPlay = useAppStore((s) => s.audioPlay);
+  const author = authorOf(item);
+  const title = item.title || item.hive_title || item.permlink;
+  const thumb = kind === 'audio'
+    ? (item.thumbnail_url ? fixVideoThumbnail({ thumbnail_url: item.thumbnail_url }) : fallbackImg)
+    : fixVideoThumbnail(item, kind === 'shorts');
+  const when = t(item._audio ? 'misc.watched.listenedAt' : 'misc.watched.watchedAt', { when: formatRelativeDate(item.watched_at) });
+
+  const body = (
+    <>
+      <span className={`watched-row__thumb${kind === 'shorts' ? ' is-short' : ''}`}>
+        <img src={thumb} alt="" loading="lazy" onError={(e) => { e.currentTarget.src = fallbackImg; }} />
+      </span>
+      <span className="watched-row__text">
+        <b>{title}</b>
+        <span>@{author} · {when}</span>
+      </span>
+    </>
+  );
+
+  const play = () => {
+    // While something else plays, a click lines it up at the end of the queue.
+    if (useAppStore.getState().audioQueueIfPlaying?.(item)) return;
+    audioPlay(item, contextItems);
+  };
+
+  return (
+    <li className="watched-row">
+      {kind === 'audio' ? (
+        <button type="button" className="watched-row__main" onClick={play}>{body}</button>
+      ) : (
+        <Link className="watched-row__main" to={kind === 'shorts' ? `/shorts?v=${author}/${item.permlink}` : watchPath(author, item.permlink)}>
+          {body}
+        </Link>
+      )}
+      {canRemove && (
+        <IconButton
+          className="watched-remove-btn"
+          icon="close"
+          size={32}
+          variant="ghost"
+          label={t('misc.watched.removeTitle')}
+          onClick={(e) => onRemove(e, item._historyKey)}
+        />
+      )}
+    </li>
+  );
 }
 
 function WatchedView() {
@@ -127,30 +185,13 @@ function WatchedView() {
     }
   }, [username, queryClient, t]);
 
-  const renderFooter = useCallback((video) => (
-    <div className="watched-card-footer">
-      <span className="watched-date">{t(video._audio ? 'misc.watched.listenedAt' : 'misc.watched.watchedAt', { when: formatRelativeDate(video.watched_at) })}</span>
-      {isOwner && (
-        <IconButton
-          className="watched-remove-btn"
-          icon="close"
-          size={28}
-          variant="ghost"
-          label={t('misc.watched.removeTitle')}
-          onClick={(e) => handleDelete(e, video._historyKey)}
-        />
-      )}
-    </div>
-  ), [isOwner, handleDelete, t]);
 
   return (
     <div className="watched-view-container">
       {/* Header (45c): title and owner on the left; track history and back on the right */}
       <div className="watched-header">
         <div className="watched-info">
-          <span className="watched-icon-wrap" aria-hidden="true">
-            <Icon name="history" size={24} />
-          </span>
+          <span className="watched-bar" aria-hidden="true" />
           <div className="watched-details">
             <h1>{t('misc.watched.title')}</h1>
             <div className="watched-meta">
@@ -212,31 +253,19 @@ function WatchedView() {
               title={activeTab === 'shorts' ? t('misc.watched.emptyShorts') : activeTab === 'audio' ? t('misc.watched.emptyAudio') : t('misc.watched.emptyVideos')}
             />
           </div>
-        ) : activeTab === 'audio' ? (
-          // The audio page's own tile (plays through the global player); the
-          // history line and remove button sit under each.
-          <div className="audio-tile-grid watched-audio-grid">
-            {filtered.map((item) => (
-              <div key={item._historyKey} className="watched-audio-item">
-                <AudioTile item={item} contextItems={filtered} />
-                {renderFooter(item)}
-              </div>
-            ))}
-          </div>
-        ) : activeTab === 'shorts' ? (
-          <div className="watched-shorts-grid">
-            <Card3 windowed
-              videos={filtered}
-              linkPrefix="/shorts"
-              shortsGrid
-              renderFooter={renderFooter}
-            />
-          </div>
         ) : (
-          <div className="watched-videos-grid">
-            {/* The main feed's card, so history looks and behaves like every feed. */}
-            <Card3 windowed videos={filtered} renderFooter={renderFooter} />
-          </div>
+          <ul className={`watched-list is-${apiType}`}>
+            {filtered.map((item) => (
+              <WatchedRow
+                key={item._historyKey}
+                item={item}
+                kind={apiType}
+                contextItems={filtered}
+                canRemove={isOwner}
+                onRemove={handleDelete}
+              />
+            ))}
+          </ul>
         )}
       </div>
 

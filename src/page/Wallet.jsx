@@ -5,7 +5,7 @@ import { useAppStore } from '../lib/store';
 import { Client } from '@hiveio/dhive';
 import TransferModal from '../components/Wallet/TransferModal';
 import ProPlansPanel from '../components/Wallet/ProPlansPanel';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { toastIn } from '../utils/toast';
 import { ENABLE_SUBS } from '../utils/config';
@@ -39,6 +39,7 @@ function Wallet() {
   const { user: currentUser } = useAppStore();
   const { user } = useParams();
   const own = !!user && currentUser === user;
+  const navigate = useNavigate();
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [showReceive, setShowReceive] = useState(false);
   const [selectedCoin, setSelectedCoin] = useState(null);
@@ -244,7 +245,8 @@ function Wallet() {
 
   return (
     <div className="wallet-v2">
-      <header className="wallet-v2__bar">
+      <header className={cx('wallet-v2__bar', own && 'is-own')}>
+        <IconButton icon="arrow_back" size={40} label={t('common.actions.back')} onClick={() => navigate(-1)} className="wallet-v2__bar-btn" />
         <h1>{own ? t('wallet.header.mine') : t('wallet.header.ofUser', { user })}</h1>
         <IconButton icon="history" size={40} label={t('wallet.activity.title')} onClick={() => scrollTo('wallet-activity')} className="wallet-v2__bar-btn" />
       </header>

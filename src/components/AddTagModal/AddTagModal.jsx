@@ -8,7 +8,7 @@ import { recordViewerTag, getViewerTags, getMyViewerTag } from '../../utils/view
 import { getVideoTagsV2, getTagLabel, getCategoryOf } from '../../utils/tagsV2';
 import TagsV2Picker from '../tooltip/TagsV2Picker';
 import DialogShell from '../modal/DialogShell';
-import { Button, Eyebrow } from '../v2/ui';
+import { Button } from '../v2/ui';
 import { Icon } from '../v2/Icon';
 import './AddTagModal.scss';
 
@@ -105,26 +105,29 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
     }
   };
 
-  // Design 19g / 43b "tag this video": the v2 dialog (no X, Escape or backdrop
-  // while the tag is being broadcast), the video's title under the heading,
-  // the topic chips, the note about an earlier tag, and one primary action.
+  // Design 43b "tag this video" on the 07/17 side sheet: the question under
+  // the heading, the note about an earlier tag, every category with its topic
+  // chips, and "Submit tag" pinned at the bottom (no X, Escape or backdrop
+  // while the tag is being broadcast).
   return (
     <DialogShell
       onClose={onClose}
       busy={saving}
+      side
+      tone="cyan"
       title={t('modals.addTag.title')}
-      sub={title || undefined}
-      width={520}
+      width={420}
       zIndex={1100}
       isolate
       overlayClassName="vote-popup-overlay"
       className="add-tag-popup"
       footer={existing === undefined ? null : (
-        <Button variant="primary" className="vote-popup-submit" onClick={submit} disabled={saving || !tag} loading={saving}>
+        <Button variant="primary" size={48} block trailing="sell" className="dlg-main vote-popup-submit" onClick={submit} disabled={saving || !tag} loading={saving}>
           {t('modals.addTag.submit')}
         </Button>
       )}
     >
+      {title && <p className="add-tag-title">{title}</p>}
       {existing === undefined ? (
         <div className="add-tag-loading" role="status">
           <Icon name="progress_activity" size={24} className="v2-spin" />
@@ -132,21 +135,21 @@ function AddTagModal({ isOpen, onClose, author, permlink, title }) {
       ) : (
         <>
           <div className="add-tag-question" onClick={(e) => e.stopPropagation()}>
-            <Eyebrow as="span">{t('modals.addTag.question')}</Eyebrow>
+            <p className="add-tag-ask">{t('modals.addTag.question')}</p>
+            {existing && (
+              <p className="add-tag-note">
+                <Trans i18nKey="modals.addTag.existing" values={{ label: getTagLabel(existing) }} components={{ b: <b /> }} />
+              </p>
+            )}
             <TagsV2Picker
               value={tag}
               onChange={setTag}
               tagPct={tagPct}
               disabled={saving}
               suggested={autoTagsV2}
+              layout="groups"
             />
           </div>
-
-          {existing && (
-            <p className="add-tag-note">
-              <Trans i18nKey="modals.addTag.existing" values={{ label: getTagLabel(existing) }} components={{ b: <b /> }} />
-            </p>
-          )}
         </>
       )}
     </DialogShell>

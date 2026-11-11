@@ -1,5 +1,55 @@
+import { createElement } from 'react';
 import { toast as sonner } from 'sonner';
 import { t } from '../i18n';
+import { Icon } from '../components/v2/Icon';
+
+/**
+ * The look of each category (34d: "one toast shape whose icon and colour come
+ * from the category"): its Material Symbol and its tone. Accent = uploads,
+ * money, votes and live; cyan = publishing, people, playlists and the rest of
+ * the app talking; muted = reports. Errors and warnings always read in the
+ * accent, whatever their category.
+ */
+const CATEGORY_STYLE = {
+  '3Speak': ['info', 'cyan'],
+  Ads: ['campaign', 'accent'],
+  Advertising: ['campaign', 'accent'],
+  App_update: ['install_mobile', 'cyan'],
+  Audio: ['graphic_eq', 'cyan'],
+  Badges: ['military_tech', 'cyan'],
+  Business_contact: ['business_center', 'cyan'],
+  Captions: ['subtitles', 'cyan'],
+  Channel_Surfing: ['live_tv', 'cyan'],
+  Chat: ['chat_bubble', 'cyan'],
+  Comment: ['chat', 'cyan'],
+  Community: ['groups', 'cyan'],
+  Feedback: ['rate_review', 'cyan'],
+  Following: ['person_add', 'cyan'],
+  Follows: ['person_add', 'cyan'],
+  Gated_video: ['lock', 'accent'],
+  Install: ['install_mobile', 'cyan'],
+  Live: ['sensors', 'accent'],
+  Notifications: ['notifications', 'cyan'],
+  Playlist: ['playlist_add', 'cyan'],
+  Podcasts: ['podcasts', 'cyan'],
+  Post: ['edit_note', 'cyan'],
+  Profile: ['person', 'cyan'],
+  Promotion: ['rocket_launch', 'accent'],
+  Publish_to_Hive: ['send', 'cyan'],
+  Report: ['flag', 'muted'],
+  Settings: ['settings', 'cyan'],
+  Shorts: ['smart_display', 'cyan'],
+  Sign_in: ['login', 'cyan'],
+  Spotlight: ['auto_awesome', 'cyan'],
+  Supporters: ['favorite', 'accent'],
+  Tip: ['volunteer_activism', 'accent'],
+  Upload: ['cloud_upload', 'accent'],
+  Video: ['movie', 'cyan'],
+  Vote: ['arrow_upward', 'accent'],
+  Wallet: ['account_balance_wallet', 'accent'],
+  Your_account: ['manage_accounts', 'cyan'],
+  Your_name: ['badge', 'cyan'],
+};
 
 /**
  * Toasts with a category header.
@@ -47,24 +97,36 @@ const TEXT_METHODS = ['success', 'error', 'warning', 'info', 'loading', 'message
 export function toastIn(englishCategory) {
   // Keys are the English category with anything but letters/digits/_/- turned into
   // "_" ("Sign in" → Sign_in): the translation editor only accepts plain key names.
-  const key = `toastCategories.${String(englishCategory).replace(/[^\w-]/g, '_')}`;
+  const slug = String(englishCategory).replace(/[^\w-]/g, '_');
+  const key = `toastCategories.${slug}`;
   const heading = () => t(key, { defaultValue: englishCategory });
+  const [iconName, categoryTone] = CATEGORY_STYLE[slug] || ['info', 'cyan'];
 
-  const headed = (send) => (message, options) => {
+  // The category's icon and tone (34d), unless the caller chose an icon of
+  // their own. A loading toast keeps its spinner. The tone rides on a class
+  // (toast.css: .ts-tone-*).
+  const styled = (method, opts) => {
+    const tone = method === 'error' || method === 'warning' ? 'accent' : categoryTone;
+    const out = { ...opts, className: [opts.className, 'ts-cat', `ts-tone-${tone}`].filter(Boolean).join(' ') };
+    if (out.icon === undefined && method !== 'loading') out.icon = createElement(Icon, { name: iconName, size: 24 });
+    return out;
+  };
+
+  const headed = (send, method) => (message, options) => {
     const opts = options || {};
 
     // A caller who already wrote a two-line toast keeps the shape they wrote.
     // Their title stays the title; we do not push a third line in above it.
-    if (opts.description !== undefined) return send(message, opts);
+    if (opts.description !== undefined) return send(message, styled(method, opts));
 
     // `title` is the per-call escape hatch for a module that spans two areas.
     const { title, ...rest } = opts;
-    return send(title || heading(), { ...rest, description: message });
+    return send(title || heading(), styled(method, { ...rest, description: message }));
   };
 
-  const api = headed((message, options) => sonner(message, options));
+  const api = headed((message, options) => sonner(message, options), 'default');
   for (const name of TEXT_METHODS) {
-    api[name] = headed((message, options) => sonner[name](message, options));
+    api[name] = headed((message, options) => sonner[name](message, options), name);
   }
 
   // Pass-throughs. Bound rather than assigned so `this` is still sonner's own

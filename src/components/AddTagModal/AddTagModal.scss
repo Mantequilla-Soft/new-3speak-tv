@@ -1,9 +1,19 @@
 @use "../../styles/v2" as v2;
 
-// "Tag this video" from the card menu (design 19g / 43b) on the v2 dialog
-// (DialogShell): the question as an eyebrow, the topic chips, and the note
-// about an earlier tag.
+// "Tag this video" from the card menu (design 43b) on the v2 side sheet
+// (DialogShell `side`): the video, the question, the note about an earlier
+// tag, every category with its topic chips, "Submit tag" at the bottom.
 .add-tag-popup {
+  .add-tag-title {
+    margin: -8px 0 0;
+    @include v2.text(body-sm);
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .add-tag-loading {
     display: grid;
     place-items: center;
@@ -17,13 +27,19 @@
     gap: 6px;
   }
 
-  .add-tag-note {
-    @include v2.well;
+  .add-tag-ask {
     margin: 0;
-    padding: 10px 12px;
-    @include v2.text(body-sm);
+    @include v2.text(meta);
     color: var(--muted);
-
-    b { color: var(--text); text-transform: capitalize; }
   }
+
+  .add-tag-note {
+    margin: 0 0 6px;
+    @include v2.text(meta);
+    color: var(--text);
+
+    b { font-weight: 700; text-transform: capitalize; }
+  }
+
+  .tagsv2-suggested { display: none; }
 }

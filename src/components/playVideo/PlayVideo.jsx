@@ -2104,6 +2104,12 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
               setAccountData={setAccountData}
               compact
               enableViewerTag
+              post={{
+                title: titleMeta.translatedTitle || videoDetails?.title,
+                thumbnail: fixVideoThumbnail(videoDetails),
+                payout: videoDetails?.stats?.total_hive_reward ?? 0,
+                votes: voteCount,
+              }}
               postCreatedAt={videoDetails?.created || videoDetails?.created_at}
               onVoteSuccess={(a, p, isNewVote) => {
                 setIsVoted(true);
@@ -2191,6 +2197,9 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
         embed={!scheduled && !isLive ? { author, permlink } : null}
         /* Not for a scheduled post: the link would be dead in a post until it publishes. */
         hivePost={!scheduled ? { author, permlink } : null}
+        // 07b: "Start at" the moment you are at, and the Clip tab (when clipping is on).
+        startAt={!isLive && !scheduled ? videoControls?.currentTime : undefined}
+        onClip={FEATURE_EDITOR && canRemixClip && authenticated && !lockedForIncubation && !clipMode ? handleStartClipMode : undefined}
         onClose={() => setShareChooserOpen(false)}
         onGeneralShare={handleShare}
       />

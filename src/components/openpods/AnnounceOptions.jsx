@@ -150,6 +150,9 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
   const communityLabel = typeof community === 'string'
     ? (community === 'hive-181335' ? '3Speak (hive-181335)' : community)
     : community?.title || community?.name || t('live.announce.selectCommunity');
+  // The string starts with an emoji (📣); the row already has its campaign
+  // icon, so it is drawn without one (one icon set per screen).
+  const shareLabel = t('live.announce.shareToggle').replace(/^\p{Extended_Pictographic}\uFE0F?\s*/u, '');
 
   return (
     <div className="hh-announce-opts">
@@ -160,10 +163,10 @@ export default function AnnounceOptions({ announceType, isPremium = false, onCha
       {showAnnounceToggle && (
         <div className="hh-announce-opts__toggle">
           <Icon name="campaign" size={20} className="hh-announce-opts__toggle-icon" />
-          <span>{t('live.announce.shareToggle')}</span>
+          <span>{shareLabel}</span>
           <Toggle
             checked={announceEnabled}
-            label={t('live.announce.shareToggle')}
+            label={shareLabel}
             onChange={(on) => setAnnounceEnabled(on)}
           />
         </div>

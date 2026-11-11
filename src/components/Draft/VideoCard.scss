@@ -1,11 +1,11 @@
 @use "../../styles/v2" as v2;
 
 // Studio row (21d): a card per piece of content.
-// thumb 160 · title/meta · status · action tiles (52 square, radius 16).
+// thumb 160 · title/meta · status 120 · views 120 · action tiles 176 (52 square, radius 16).
 .studio-row {
   @include v2.card;
   display: grid;
-  grid-template-columns: 160px minmax(0, 1fr) 140px auto;
+  grid-template-columns: 160px minmax(0, 1fr) 120px 120px 176px;
   gap: 16px;
   align-items: center;
   padding: 8px;
@@ -42,12 +42,32 @@
     color: var(--cyan);
   }
 
+  // 12/900 sentence-case pill: public = cyan, busy or failed = accent, the rest muted.
   &__status {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    align-items: center;
     justify-self: start;
+    padding: 4px 10px;
+    border-radius: var(--r-sm);
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1.4;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: var(--surface-2);
+    color: var(--muted);
+
+    &.is-cyan { background: var(--cyan-tint-strong); color: var(--cyan); }
+    &.is-accent { background: var(--accent-tint-strong); color: var(--accent); }
+  }
+
+  &__views {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    b { font-size: 16px; font-weight: 700; line-height: 1.3; }
+    span { @include v2.text(meta-sm); color: var(--muted); }
   }
 
   &__acts {
@@ -61,21 +81,39 @@
   &__act.v2-dock {
     min-width: 52px;
     height: 52px;
-    padding: 0 8px;
+    padding: 0 6px;
     flex: none;
+  }
+
+  &__more {
+    position: relative;
+    display: flex;
+  }
+
+  &__menu.v2-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 200px;
+  }
+
+  @include v2.below-wide {
+    grid-template-columns: 160px minmax(0, 1fr) auto auto 176px;
   }
 
   @include v2.mobile {
     grid-template-columns: 112px minmax(0, 1fr);
     grid-template-areas:
       "thumb main"
-      "status acts";
-    gap: 10px 12px;
+      "status acts"
+      "views acts";
+    gap: 6px 12px;
 
     &__thumb { grid-area: thumb; }
     &__main { grid-area: main; }
-    &__status { grid-area: status; }
-    &__acts { grid-area: acts; }
+    &__status { grid-area: status; align-self: end; }
+    &__views { grid-area: views; flex-direction: row; align-items: baseline; gap: 4px; }
+    &__acts { grid-area: acts; align-self: center; }
 
     &__title {
       @include v2.text(body-sm);
@@ -85,6 +123,8 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
+
+    &__views b { font-size: 14px; }
 
     &__act.v2-dock {
       min-width: 48px;

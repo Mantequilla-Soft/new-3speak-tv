@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { Button, Progress } from '../v2/ui';
+import { Button, Progress, StepList } from '../v2/ui';
 import { Icon } from '../v2/Icon';
 import { generateVideoThumbnailsAt } from '../../utils/videoThumbnails';
 import { getEditorUrl, STT_WS_URL, EMBED_API_KEY, sttEnabledFor, storiesEnabledFor, PLAYLISTS_READ_URL } from '../../utils/config';
@@ -713,30 +713,44 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
           {/* Render status overlay */}
           {renderStatus && (
             <div className="render-overlay">
-              {renderStatus === 'sending' && (
-                <div className="render-status">
-                  <Icon name="progress_activity" size={32} className="spinner" />
-                  <span>{t('modals.editor.sending')}</span>
-                </div>
-              )}
-              {renderStatus === 'rendering' && (
-                <div className="render-status">
-                  <span>{t('modals.editor.rendering', { percent: Math.round(renderProgress) })}</span>
-                  <div className="render-progress-bar">
-                    <Progress value={renderProgress} tone="cyan" label={t('modals.editor.rendering', { percent: Math.round(renderProgress) })} />
+              {['sending', 'rendering', 'complete', 'preparing'].includes(renderStatus) && (() => {
+                // 43b: the render flow as one card: the step list (done in muted,
+                // the current step in cyan with a spinner, the next ones as rings),
+                // the progress bar, and Use Video once the render is done.
+                const order = ['finding', 'sending', 'rendering', 'preparing'];
+                const at = renderStatus === 'complete' ? 3 : order.indexOf(renderStatus);
+                const pct = Math.round(renderProgress);
+                const label = {
+                  finding: t('modals.editor.finding'),
+                  sending: t('modals.editor.sending'),
+                  rendering: renderStatus === 'complete' ? t('modals.editor.complete') : t('modals.editor.rendering', { percent: pct }),
+                  preparing: t(audioMode ? 'modals.editor.preparingAudio' : 'modals.editor.preparing'),
+                };
+                const items = order.map((k, i) => ({
+                  label: label[k],
+                  state: i < at || (renderStatus === 'complete' && k === 'rendering') ? 'done' : i === at && renderStatus !== 'complete' ? 'current' : 'next',
+                }));
+                const value = renderStatus === 'sending' ? 0 : renderStatus === 'rendering' ? renderProgress : 100;
+                return (
+                  <div className="render-status render-flow">
+                    <b className="render-flow__title">{t(audioMode ? 'modals.editor.iframeTitleAudio' : 'modals.editor.iframeTitle')}</b>
+                    <StepList items={items} />
+                    <div className="render-progress-bar">
+                      <Progress value={value} tone="accent" label={label[order[Math.min(at, 3)]]} />
+                    </div>
+                    {renderStatus === 'complete' && (
+                      <div className="render-actions render-flow__actions">
+                        <Button variant="secondary" size={44} className="render-btn" onClick={() => setRenderStatus(null)}>
+                          {t('modals.editor.backToEditor')}
+                        </Button>
+                        <Button variant="primary" size={44} className="render-btn" onClick={handleUseRenderedVideo}>
+                          {t('modals.editor.useVideo')}
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                </div>
-              )}
-              {renderStatus === 'complete' && (
-                <div className="render-status">
-                  <span>{t('modals.editor.complete')}</span>
-                  <div className="render-actions">
-                    <Button variant="primary" className="render-btn" onClick={handleUseRenderedVideo}>
-                      {t('modals.editor.useVideo')}
-                    </Button>
-                  </div>
-                </div>
-              )}
+                );
+              })()}
               {renderStatus === 'choose-target' && pendingPost && (
                 <div className="render-status">
                   <span>{t('modals.editor.postAs')}</span>
@@ -755,12 +769,6 @@ function EditorModal({ isOpen, onClose, videoUrl, videoName, videoType, clipStar
                       {t('modals.editor.backToEditor')}
                     </Button>
                   </div>
-                </div>
-              )}
-              {renderStatus === 'preparing' && (
-                <div className="render-status">
-                  <Icon name="progress_activity" size={32} className="spinner" />
-                  <span>{t(audioMode ? 'modals.editor.preparingAudio' : 'modals.editor.preparing')}</span>
                 </div>
               )}
               {renderStatus === 'error' && (

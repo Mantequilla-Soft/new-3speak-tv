@@ -89,6 +89,8 @@ export default function ProfileEmptyState({ kind = 'video', isOwnProfile = false
       <Button variant="primary" size={40} trailing="add" className="pe-btn" onClick={onClick}>
         {t(cfg.ctaKey)}
       </Button>
+      {/* What the same tab says to everyone else (37b). */}
+      <span className="pe-visitor">{t('profile.empty.visitorPreview', { text: t(cfg.visitorKey, { user: username }) })}</span>
     </div>
   );
 }

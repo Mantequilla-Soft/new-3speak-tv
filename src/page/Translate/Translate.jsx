@@ -607,7 +607,6 @@ function Editor({ me }) {
         <div className="translate-filters">
           {filters.map((f) => (
             <button key={f.id} type="button" className={cx('translate-filter', f.on && 'is-on')} aria-pressed={f.on} onClick={() => f.set(!f.on)}>
-              <Icon name={f.on ? 'check_box' : 'check_box_outline_blank'} size={16} />
               {f.label}
             </button>
           ))}
@@ -722,9 +721,11 @@ function Editor({ me }) {
                               aria-label={t('translator.proofread.checkboxFor', { key: r.key })}
                               onChange={(e) => toggleProof(r.key, e.target.checked)}
                             />
-                            <span aria-hidden="true">{t('translator.proofread.checkbox')}</span>
+                            {/* Who checked it and when, or that nobody has (45d). */}
+                            <span aria-hidden="true">
+                              {proofed && mark ? proofTitle(mark) : proofed ? t('translator.proofread.checkbox') : t('translator.proofread.notCheckedShort')}
+                            </span>
                           </label>
-                          {proofed && mark && <span className="translate-proof-by">{proofTitle(mark)}</span>}
                           {stale && (
                             <span
                               className="translate-tag is-stale"
@@ -760,7 +761,13 @@ function Editor({ me }) {
       <div className={cx('translate-savebar', dirtyKeys.length > 0 && 'is-dirty')}>
         <b className="translate-savebar__count">{t('translator.unsaved', { count: dirtyKeys.length })}</b>
         {errorCount > 0 && <span className="translate-savebar__err">{t('translator.fixErrors')}</span>}
-        <Button variant="cyan" size={36} icon="save" onClick={save} loading={saving} disabled={saving || !dirtyKeys.length}>
+        {/* Undo drops every unsaved edit at once (45d); each row keeps its own. */}
+        {dirtyKeys.length > 0 && (
+          <Button variant="ghost" size={36} onClick={() => { setDrafts({}); setServerErrors({}); }} disabled={saving}>
+            {t('translator.undo')}
+          </Button>
+        )}
+        <Button variant="cyan" size={36} onClick={save} loading={saving} disabled={saving || !dirtyKeys.length}>
           {saving ? t('translator.saving') : t('translator.save')}
         </Button>
       </div>

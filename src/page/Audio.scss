@@ -27,11 +27,14 @@
   margin: 0;
   font-size: 48px;
   font-weight: 900;
-  letter-spacing: var(--tracking-title);
+  letter-spacing: -.04em;
   line-height: 1.1;
-  @include v2.mobile { font-size: 28px; }
+  @include v2.mobile { font-size: 28px; letter-spacing: var(--tracking-title); }
+  &.is-podcasts { font-size: 32px; letter-spacing: -.03em; @include v2.mobile { font-size: 24px; } }
 }
 .audio-page__head .v2-seg { background: var(--surface); }
+// Upload audio (28e): the page's one primary button, label left, icon right.
+.audio-upload-btn.v2-btn { gap: 16px; padding: 0 14px 0 18px; @include v2.mobile { height: 40px; border-radius: v2.radius-for(40); } }
 @media (max-width: 1024px) {
   // Under the Player | Explore tabs, the views take the whole row.
   .audio-page__head .audio-explore-views { order: 3; flex-basis: 100%; display: flex; .v2-seg__opt { flex: 1; } }
@@ -215,32 +218,127 @@
 .audio-tile-row,
 .audio-tile-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px 12px;
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 8px; }
+}
+// The six big tiles on top of Discover (28e): one row of six.
+.audio-tile-grid--six {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  @media (max-width: 1279px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.audio-section--top { margin-bottom: 28px; }
+
+// Popular ranked, beside the albums and playlists (28e): 1fr | 380.
+.audio-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 20px;
+  align-items: start;
+  &.is-single { grid-template-columns: minmax(0, 1fr); }
+  @media (max-width: 1024px) { grid-template-columns: minmax(0, 1fr); }
+}
+.audio-rank-list { display: flex; flex-direction: column; gap: 6px; }
+.audio-rank-row {
+  display: grid;
+  grid-template-columns: 36px 52px minmax(0, 1fr) 140px 60px 44px;
   gap: 12px;
-  @include v2.mobile { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  align-items: center;
+  padding: 6px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  &.is-current { background: var(--accent-tint-strong); .audio-rank-row__text b { color: var(--accent); } }
+  @include v2.mobile { grid-template-columns: 28px 48px minmax(0, 1fr) auto 40px; gap: 10px; .audio-rank-row__wave { display: none; } }
+}
+.audio-rank-row__n {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  @include v2.mono(12, 900);
+  &.is-first { background: var(--accent); color: var(--on-accent); }
+  @include v2.mobile { width: 28px; height: 28px; border-radius: var(--r-sm); }
+}
+.audio-rank-row__cover {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  cursor: pointer;
+  @include v2.thumb-placeholder(5px);
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @include v2.mobile { width: 48px; height: 48px; }
+}
+.audio-rank-row__text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  b { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; &:hover { text-decoration: underline; text-underline-offset: 2px; } }
+  span { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+.audio-rank-row__wave {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  span { flex: 1; border-radius: 1px; background: color-mix(in srgb, var(--text) 30%, transparent); }
+}
+.audio-rank-row__dur { @include v2.mono(12, 500); color: var(--muted); }
+.audio-rank-row__add {
+  @include v2.control(44);
+  width: 44px;
+  padding: 0;
+  justify-content: center;
+  background: var(--surface-2);
+  color: var(--text);
+  &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  @include v2.mobile { width: 40px; height: 40px; border-radius: v2.radius-for(40); }
 }
 
-// ─── The audio tile (AudioTile, AudioPlaylistTile) ─────────────────────────
-// A tile card like the feed's playlist card: 16:9 cover with the duration and
-// the accent play button (28e), the title, the creator, the type line.
+// Albums and playlists beside the ranked list: two to a row, scrolling inside.
+.audio-playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-height: 640px;
+  @include v2.scroll-y;
+  // Below the ranked list (phones, tablets): one row scrolling sideways.
+  @media (max-width: 1024px) {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 168px;
+    max-height: none;
+    overflow-y: visible;
+    @include v2.scroll-x;
+  }
+}
+
+// ─── The audio tile (AudioTile) ─────────────────────────────────────────────
+// 28e: a square cover (radius 24) with the accent play tile, the title under
+// it and the creator · length on one line. No card around it. Playing: a 2px
+// accent outline on the cover.
 .audio-tile {
   position: relative;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 8px;
-  @include v2.card(20);
-  transition: background var(--t-fast) var(--ease);
-
-  &:hover { background: var(--surface-2); }
-  &.audio-tile-active { outline: 2px solid var(--accent); outline-offset: -2px; }
+  &.audio-tile-active .audio-tile-cover { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
 
 .audio-tile-cover {
   position: relative;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--r-lg);
+  aspect-ratio: 1;
+  border-radius: var(--r-2xl);
   overflow: hidden;
   cursor: pointer;
   @include v2.thumb-placeholder;
@@ -251,29 +349,20 @@
 
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
-.audio-tile-duration {
-  position: absolute;
-  left: 6px;
-  bottom: 6px;
-  @include v2.scrim-pill;
-  font-family: var(--font-mono);
-}
 .audio-tile-play {
   position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 40px;
-  height: 40px;
-  border-radius: v2.radius-for(40);
+  right: 10px;
+  bottom: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: v2.radius-for(44);
   display: grid;
   place-items: center;
   background: var(--accent);
   color: var(--on-accent);
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
-  .audio-tile:hover &, .audio-tile-active &, .audio-tile-revealed & { opacity: 1; transform: none; }
-  @media (hover: none) { opacity: 1; transform: none; width: 36px; height: 36px; }
+  transition: background var(--t-fast) var(--ease);
+  .audio-tile-cover:hover & { background: var(--accent-hover); }
+  @include v2.mobile { right: 8px; bottom: 8px; width: 40px; height: 40px; border-radius: v2.radius-for(40); }
 }
 // Playing: three bars over the cover, top left.
 .audio-tile-eq {
@@ -324,12 +413,8 @@
 .audio-tile-body {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   min-width: 0;
-  padding: 0 4px 4px;
-
-  // AuthorBadge (with its follow button) from the video cards.
-  .author-badge { margin: 0; max-width: 100%; }
 }
 .audio-tile-title {
   display: -webkit-box;
@@ -338,7 +423,7 @@
   overflow: hidden;
   font-size: 14px;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.25;
   color: var(--text);
   cursor: pointer;
   overflow-wrap: anywhere;
@@ -346,28 +431,31 @@
   .audio-tile-active & { color: var(--accent); }
 }
 .audio-tile-track-num { color: var(--muted); margin-right: 4px; }
+.audio-tile-by {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
 .audio-tile-author {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  min-width: 0;
+  > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   &:hover { color: var(--text); }
 }
-.audio-tile-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  color: var(--muted);
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  .audio-tile-meta-icon { color: var(--muted); }
-}
+.audio-tile-avatar { width: 18px; height: 18px; border-radius: var(--r-sm); object-fit: cover; background: var(--avatar); flex: none; }
+.audio-tile-dur { font-family: var(--font-mono); flex: none; }
 .audio-tile-album {
   font-size: 11px;
   font-weight: 700;
@@ -378,36 +466,48 @@
   text-overflow: ellipsis;
   &:hover { color: var(--cyan); text-decoration: underline; }
 }
-.audio-tile-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 2px;
-  font-size: 11px;
-  color: var(--muted);
-}
-.audio-tile-footer-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.audio-tile-time { white-space: nowrap; }
 
 .audio-tile-skeleton {
   pointer-events: none;
-  .audio-tile-skeleton__cover { aspect-ratio: 16 / 9; border-radius: var(--r-lg); }
+  .audio-tile-skeleton__cover { aspect-ratio: 1; border-radius: var(--r-2xl); }
   .audio-tile-skeleton__short { width: 60%; }
 }
 
-// ─── The playlist tile: track count, Add all / Add new (36b) ───────────────
-.audio-playlist-count {
-  position: absolute;
-  left: 6px;
-  bottom: 6px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  @include v2.scrim-pill;
-  font-family: var(--font-mono);
+// ─── The playlist tile (28e): a 2 by 2 collage, the name, the count; Add all
+// and Add new on the cover with a mouse (36b) ────────────────────────────────
+.audio-playlist-tile {
+  padding: 8px;
+  @include v2.card(20);
+  gap: 0;
+  .audio-tile-cover { aspect-ratio: 1; border-radius: var(--r-lg); background: none; }
+  .audio-tile-kind { margin: 8px 4px 0; }
+  .audio-tile-title { padding: 2px 4px 0; font-size: 13px; -webkit-line-clamp: 1; }
 }
+.audio-playlist-collage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  &.is-single { grid-template-columns: 1fr; }
+}
+.audio-playlist-collage__cell {
+  position: relative;
+  overflow: hidden;
+  @include v2.thumb-placeholder(6px);
+  img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+}
+.audio-playlist-meta {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+  padding: 2px 4px 0;
+  @include v2.mono(11, 500);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.audio-playlist-owner { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-sans); display: inline-flex; align-items: center; gap: 2px; }
 // The two buttons on the cover, for a mouse only. A tap asks in a sheet, so a
 // hover state stuck after a tap never puts a button under the next tap.
 .audio-playlist-adds {
@@ -420,7 +520,6 @@
 @media (hover: hover) and (pointer: fine) {
   .audio-playlist-tile:hover .audio-playlist-adds,
   .audio-playlist-adds:focus-within { display: flex; }
-  .audio-playlist-tile:hover .audio-tile-play { opacity: 0; }
 }
 .audio-playlist-add-btn {
   @include v2.control(28);

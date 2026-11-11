@@ -17,7 +17,7 @@ import { usePodcastSubscriptions } from '../lib/podcasts';
 import { useDownloads } from '../lib/podcastDownloads';
 import { useContinueListening } from '../components/Podcasts/ContinueListening';
 import useOnline from '../hooks/useOnline';
-import AudioTile, { AudioTileSkeleton } from '../components/AudioTile/AudioTile';
+import AudioTile, { AudioTileSkeleton, AudioRankRow } from '../components/AudioTile/AudioTile';
 import { audioCategorySymbol } from '../components/AudioTile/audioSymbols';
 import { Segmented, Chip, Button, EmptyState } from '../components/v2/ui';
 import { Icon } from '../components/v2/Icon';
@@ -25,6 +25,8 @@ import { cx } from '../components/v2/helpers';
 import AudioPlaylistTile from '../components/AudioPlaylistTile/AudioPlaylistTile';
 import PodcastsTab, { VIEWS as EXPLORE_VIEWS, VIEW_KEY as EXPLORE_VIEW_KEY } from '../components/Podcasts/PodcastsTab';
 import { isLoggedIn } from '../hive-api/aioha';
+import { creatorKey, getCreatorSettings, isUploadBlocked } from '../utils/creatorSettings';
+import { useSupportBlock } from '../lib/supportBlockStore';
 
 import './Audio.scss';
 
@@ -218,6 +220,7 @@ function Audio() {
   const mineKnown = (!me || (mineSubs.isSuccess && !mineContinue.isPending)) && mineDownloads.ready;
   const mineEmpty = mineKnown && !(mineSubs.data || []).length && !mineDownloads.items.length && !(mineContinue.data || []).length;
   const insideMine = params.has('podcast') || params.has('episode') || params.has('play');
+  const inShow = params.has('podcast') || params.has('episode');
   useEffect(() => {
     if (!onMine || !mineEmpty || insideMine || !online) return;
     const next = new URLSearchParams(params);
@@ -508,6 +511,27 @@ function Audio() {
     setGenreFilter('');
   };
 
+  // The audio upload, gated like the Create menu's (components/UploadLinks.jsx).
+  const uploadAudio = async () => {
+    const st = useAppStore.getState();
+    const settings = await getCreatorSettings(creatorKey(st.user, st.incubationHandle));
+    if (isUploadBlocked(settings)) {
+      const note = settings?.uploadBlockedReason;
+      useSupportBlock.getState().showSupportBlock('upload', note ? { note } : undefined);
+      return;
+    }
+    window.dispatchEvent(new CustomEvent('open-audio-upload'));
+  };
+
+  // Discover (28e): six new releases as big tiles, then the popular list
+  // ranked beside the albums and playlists, then the other sections.
+  const recentList = grouped?.recent || [];
+  const popularList = grouped?.popular || [];
+  const playlistTiles = [
+    ...(playlistGroups?.by_artist || []).map(p => ({ ...p, _kind: 'artist' })),
+    ...(playlistGroups?.by_listeners || []).map(p => ({ ...p, _kind: 'listener' })),
+  ];
+
   const tileGrid = (list) => (
     <div className="audio-tile-grid">{list.map((item, idx) => <AudioTile key={item._id || idx} {...tp(item, list)} />)}</div>
   );
@@ -516,7 +540,10 @@ function Audio() {
   return (
     <div className={cx('audio-page', playerView && 'audio-page--player')}>
       <header className="audio-page__head">
-        <h1 className="audio-page__title">{t('nav.bottom.audio')}</h1>
+        {/* The podcast views name themselves (24b "Podcasts", 36c "Podcasts from anywhere"). */}
+        <h1 className={cx('audio-page__title', !playerView && external && !inShow && 'is-podcasts')}>
+          {playerView ? t('nav.bottom.audio') : external && !inShow ? t('audio.podcasts.introTitle') : onMine && !inShow ? t('audio.page.sections.podcasts') : t('nav.bottom.audio')}
+        </h1>
         {mobile && (
           <Segmented
             className="audio-views"
@@ -543,6 +570,12 @@ function Audio() {
               { value: 'trends', label: t('audio.podcasts.views.trends') },
             ]}
           />
+        )}
+        {/* Upload audio (28e): the Create menu's audio upload, with its checks. */}
+        {loggedIn && !playerView && !external && !onMine && (
+          <Button variant="primary" size={48} trailing="upload" className="audio-upload-btn" onClick={uploadAudio}>
+            {t('audio.upload.title')}
+          </Button>
         )}
       </header>
 
@@ -671,66 +704,93 @@ function Audio() {
         </section>
       ) : (
         <>
-          {/* ─── Creators ────── */}
-          {sortedCreators.length > 0 && (
-            <section className="audio-section">
-              <h2 className="audio-section-title is-cyan">{t('audio.page.creators')}</h2>
-              <div className="audio-creators-row">
-                {sortedCreators.slice(0, 20).map(c => (
-                  <AudioAuthorBadge
-                    key={c.owner}
-                    author={c.owner}
-                    tracks={c.tracks}
-                    isFollowing={followingList?.includes(c.owner) || false}
-                    onClick={() => setSelectedCreator(c.owner)}
-                  />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* ─── Popular (above the albums) ────── */}
-          {!isFiltered && renderGroupedSection('popular')}
-
-          {/* ─── Albums & Playlists (artist-curated + listener-curated, combined) ─── */}
-          {(() => {
-            // Artist albums first, then listener playlists. Each tile shows its
-            // own kind label so the merge stays legible.
-            const artist = (playlistGroups?.by_artist || []).map(p => ({ ...p, _kind: 'artist' }));
-            const listeners = (playlistGroups?.by_listeners || []).map(p => ({ ...p, _kind: 'listener' }));
-            const all = [...artist, ...listeners];
-            if (all.length === 0) return null;
-            return (
-              <section className="audio-section">
-                <h2 className="audio-section-title is-cyan">
-                  {t('audio.page.albumsPlaylists')}
-                  <span className="audio-section-count">{all.length}</span>
-                </h2>
-                <AudioTileRow count={all.length}>
-                  {all.map(p => <AudioPlaylistTile key={p.id} playlist={p} kind={p._kind} />)}
-                </AudioTileRow>
-              </section>
-            );
-          })()}
-
-          {/* ─── Filtered results ────── */}
           {isFiltered ? (
+            /* ─── Filtered results ────── */
             <section className="audio-section">
               <h2 className="audio-section-title">
                 {[activeTags.map(tag => `#${tag}`).join(' '), datePreset ? (() => { const preset = DATE_PRESETS.find(p => p.days === datePreset); return preset ? t(preset.labelKey) : ''; })() : ''].filter(Boolean).join(' · ')}
                 {filteredAudio && <span className="audio-section-count">{t('audio.page.tracks', { count: filteredAudio.length })}</span>}
               </h2>
               {filteredLoading ? (
-                <div className="audio-tile-grid"><AudioTileSkeleton count={5} /></div>
+                <div className="audio-tile-grid"><AudioTileSkeleton count={6} /></div>
               ) : filteredAudio?.length > 0 ? tileGrid(filteredAudio) : noResults(t('audio.page.noAudioForFilters'))}
             </section>
+          ) : groupedLoading ? (
+            <section className="audio-section"><div className="audio-tile-grid audio-tile-grid--six"><AudioTileSkeleton count={6} /></div></section>
           ) : (
-            /* ─── Grouped sections ──── */
-            groupedLoading ? (
-              SECTION_ORDER.slice(0, 3).map(k => <section key={k} className="audio-section"><div className="audio-tile-row"><AudioTileSkeleton count={5} /></div></section>)
-            ) : grouped && SECTION_ORDER
-              .filter(k => k !== 'popular' && grouped[k]?.length > 0) // popular is rendered above the albums
-              .map(k => renderGroupedSection(k))
+            <>
+              {/* ─── New releases, as the big tiles on top ────── */}
+              {recentList.length > 0 && (
+                <section className="audio-section audio-section--top" aria-label={t(SECTION_CONFIG.recent.labelKey)}>
+                  <div className="audio-tile-grid audio-tile-grid--six">
+                    {recentList.slice(0, 6).map((item, idx) => <AudioTile key={item._id || idx} {...tp(item, recentList)} />)}
+                  </div>
+                </section>
+              )}
+
+              {/* ─── Popular, ranked, beside the albums and playlists ────── */}
+              {(popularList.length > 0 || playlistTiles.length > 0) && (
+                <div className={cx('audio-split', !(popularList.length && playlistTiles.length) && 'is-single')}>
+                  {popularList.length > 0 && (
+                    <section className="audio-section">
+                      <h2 className="audio-section-title">{t(SECTION_CONFIG.popular.labelKey)}</h2>
+                      <div className="audio-rank-list">
+                        {popularList.slice(0, 10).map((item, idx) => (
+                          <AudioRankRow
+                            key={item._id || idx}
+                            item={item}
+                            rank={idx + 1}
+                            contextItems={popularList}
+                            onAddToQueue={() => audioAddToQueue(item)}
+                            onOpen={() => openItem(item)}
+                          />
+                        ))}
+                      </div>
+                    </section>
+                  )}
+                  {playlistTiles.length > 0 && (
+                    <section className="audio-section">
+                      <h2 className="audio-section-title is-cyan">
+                        {t('audio.page.albumsPlaylists')}
+                        <span className="audio-section-count">{playlistTiles.length}</span>
+                      </h2>
+                      <div className="audio-playlist-grid">
+                        {playlistTiles.map(p => <AudioPlaylistTile key={p.id} playlist={p} kind={p._kind} />)}
+                      </div>
+                    </section>
+                  )}
+                </div>
+              )}
+
+              {/* ─── Creators ────── */}
+              {sortedCreators.length > 0 && (
+                <section className="audio-section">
+                  <h2 className="audio-section-title is-cyan">{t('audio.page.creators')}</h2>
+                  <div className="audio-creators-row">
+                    {sortedCreators.slice(0, 20).map(c => (
+                      <AudioAuthorBadge
+                        key={c.owner}
+                        author={c.owner}
+                        tracks={c.tracks}
+                        isFollowing={followingList?.includes(c.owner) || false}
+                        onClick={() => setSelectedCreator(c.owner)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* ─── The rest of the new releases, then the other sections ─── */}
+              {recentList.length > 6 && (
+                <section className="audio-section">
+                  <h2 className="audio-section-title">{t(SECTION_CONFIG.recent.labelKey)}</h2>
+                  <AudioTileRow count={recentList.length - 6}>{recentList.slice(6).map((item, idx) => <AudioTile key={item._id || idx} {...tp(item, recentList)} />)}</AudioTileRow>
+                </section>
+              )}
+              {grouped && SECTION_ORDER
+                .filter(k => k !== 'popular' && k !== 'recent' && grouped[k]?.length > 0)
+                .map(k => renderGroupedSection(k))}
+            </>
           )}
         </>
       )}

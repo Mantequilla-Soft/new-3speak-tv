@@ -10,7 +10,7 @@
   flex-direction: column;
   gap: 8px;
   padding: 14px;
-  border-radius: var(--r-xl);
+  border-radius: var(--r-2xl);
   @include v2.floating;
   color: var(--text);
   @include v2.text(body-sm);
@@ -31,83 +31,77 @@
     transition: none;
   }
 
-  &__when {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--muted);
-    @include v2.text(meta);
-    font-weight: 700;
-
-    // A live 24h story: the accent dot
-    &--story::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      flex: none;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-  }
-
-  &__left {
-    margin-left: auto;
-    display: inline-flex;
-    align-items: center;
-    height: 20px;
-    padding: 0 8px;
-    border-radius: 7px;
-    background: var(--accent-tint);
-    color: var(--accent);
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
+  // The ringed avatar beside the name and the streak (45b)
   &__head {
     display: flex;
-    align-items: flex-start;
-    gap: 8px;
+    align-items: center;
+    gap: 10px;
+  }
+
+  // A 2px ring with a 2px gap: accent on a live story, the border colour otherwise
+  &__ring {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 2px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+
+    &.is-story { border-color: var(--accent); }
+
+    .hive-avatar { display: block; width: 100%; height: 100%; }
+  }
+
+  &__avatar {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--avatar);
   }
 
   &__names {
     display: flex;
     flex-direction: column;
+    gap: 2px;
     min-width: 0;
     flex: 1;
   }
 
   &__name {
-    @include v2.text(title-sm);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &__streak {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 900;
   }
 
   &__handle {
     color: var(--muted);
+    @include v2.text(meta);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  &__names > &__handle:only-child {
-    @include v2.text(title-sm);
-    color: var(--text);
-  }
-
-  &__rep {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    height: 20px;
-    padding: 0 8px;
-    border-radius: 7px;
-    background: var(--surface-2);
+  // "Story posted 3h ago · Last short 2d ago · Rep 71"
+  &__when {
+    margin: 0;
     color: var(--muted);
-    @include v2.mono(11, 700);
+    @include v2.text(meta);
   }
 
   &__bio {
@@ -142,6 +136,7 @@
     gap: 4px;
     color: var(--cyan);
     @include v2.text(label);
+    font-size: 12px;
     text-decoration: none;
 
     &:hover { text-decoration: underline; color: var(--cyan); }

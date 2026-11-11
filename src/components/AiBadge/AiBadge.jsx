@@ -49,13 +49,15 @@ export default function AiBadge({ author, permlink, className, title }) {
 export function AiPill({ className, title: titleProp }) {
   const { t } = useTranslation();
   const title = titleProp || t('watch.aiBadge.title');
+  // Over a thumbnail or a video it stays the small scrim pill.
+  const onMedia = /--on-/.test(className || '');
   return (
     <span
       className={`ai-badge${className ? ` ${className}` : ''}`}
       title={title}
       aria-label={title}
     >
-      <Icon name="auto_awesome" size={12} fill />
+      <Icon name="auto_awesome" size={onMedia ? 12 : 16} fill />
       {t('watch.aiBadge.label')}
     </span>
   );
