@@ -216,7 +216,7 @@
 // Over the Home hero on a phone the buttons are media scrims (20a phone).
 @include v2.mobile {
   :root[data-home-hero] .nav-container {
-    .nav-icon-btn, .chat-nav-btn, .notif-bell-btn {
+    .nav-icon-btn, .chat-nav-btn, .notif-bell-btn, .nav-advertise-btn.v2-btn {
       background: var(--media-scrim);
       color: var(--on-media);
     }
@@ -264,11 +264,16 @@
 }
 
 // Advertise (advertiser accounts only): secondary, so Share stays the one red fill.
-.nav-advertise-btn {
+// Below 1025px it is an icon button like its neighbours (owner 2026-11-12):
+// the same 40px square, tint and radius, and the media scrim over the hero.
+.nav-right .nav-advertise-btn.v2-btn {
   @include compact {
     width: 40px;
     padding: 0;
     justify-content: center;
+    border-radius: var(--r-lg);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+    color: var(--text);
     .nav-advertise-label { display: none; }
   }
 }
@@ -318,6 +323,14 @@
   // Phones and tablets: the avatar is in the bottom bar, so the warm-up ring
   // goes around it there (BottomNav); the "choose your path" prompt stays.
   @include compact { > .nav-progress:not(.is-choose) { display: none; } }
+}
+
+// Phones: wrappers whose content is hidden there (the account button, the
+// Create button) must not take a slot in the row, or its 8px gap pushes the
+// bell away from the bar's edge (owner 2026-11-12).
+@include v2.mobile {
+  .nav-right > .nav-avatar-group,
+  .nav-right > .nav-upload-wrapper { display: contents; }
 }
 @include wide-bar {
   .nav-avatar-group:has(> .nav-progress:not(.is-choose)) {
