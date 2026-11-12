@@ -784,3 +784,19 @@
 
   .settings-section-head { display: none; }
 }
+
+// Interests in Settings: the popup's tile picker, compact (owner 2026-11-12):
+// 44px tiles with the icon beside the name; the "2/5" sits at the end.
+.settings-interests-picker .tagsv2-picker.is-tiles .tagsv2-tile {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border-radius: var(--r-lg);
+
+  .tagsv2-icon { flex: none; }
+  .tagsv2-label { margin-top: 0; font-size: 13px; line-height: 1.25; }
+  .tagsv2-count { position: static; margin-left: auto; }
+  &.is-partial > .tagsv2-count { position: static; }
+}

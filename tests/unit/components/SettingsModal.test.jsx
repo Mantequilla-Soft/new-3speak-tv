@@ -276,11 +276,13 @@ describe('settings: General and Content', () => {
     expect(useAppStore.getState().shortsCommentBar).toBe(true)
   })
 
-  it('Interests: signed out, the chips are disabled with a hint to log in', async () => {
+  // The same tile picker as the interests popup (owner 2026-11-12): categories
+  // as tiles, their topics under the open one.
+  it('Interests: signed out, the tiles are disabled with a hint to log in', async () => {
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
     expect(screen.getByText(/Log in to choose your interests/)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Music' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /^Entertainment/ })).toBeDisabled()
   })
 
   it('Interests: loads the saved topics from Hive and saves a change back', async () => {
@@ -288,7 +290,9 @@ describe('settings: General and Content', () => {
     signIn()
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
+    // A category with a pick opens on its own, its topics below it.
     await waitFor(() => expect(screen.getByRole('button', { name: 'Gaming' })).toHaveAttribute('aria-pressed', 'true'))
+    expect(screen.getByRole('button', { name: /^Entertainment/ })).toHaveAttribute('aria-pressed', 'mixed')
     expect(screen.getByRole('button', { name: 'Music' })).toHaveAttribute('aria-pressed', 'false')
     expect(screen.queryByRole('button', { name: 'Save to my Hive profile' })).not.toBeInTheDocument()
 
@@ -304,8 +308,9 @@ describe('settings: General and Content', () => {
     signIn()
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))
-    await user.click(screen.getByRole('button', { name: 'Music' }))
+    await user.click(screen.getByRole('button', { name: /^Entertainment/ }))   // the whole category
     await user.click(screen.getByRole('button', { name: 'Save to my Hive profile' }))
+    expect(m.saveInterestsToHive).toHaveBeenCalledWith('listener', ['entertainment'])
     await waitFor(() => expect(toastMessages(toast.error)).toContain('Keychain said no'))
     expect(screen.getByRole('button', { name: 'Save to my Hive profile' })).toBeEnabled()
   })

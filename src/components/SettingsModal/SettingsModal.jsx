@@ -20,7 +20,8 @@ import {
   waitForThreespeakPostingAuth,
 } from '../../utils/postingAuthority';
 import { LIGHTNING_ADDRESS_RE, checkLightningAddress, readOwnLightningAddress, saveOwnLightningAddress } from '../../lib/lightningTip';
-import { TAG_OPTIONS, getTagLabel } from '../../utils/tagsV2';
+import { TAG_OPTIONS, TAG_CATEGORIES, getTagLabel } from '../../utils/tagsV2';
+import TagsV2Picker from '../tooltip/TagsV2Picker';
 import { friendlyProviderName } from '../../utils/aiohaProviderUi';
 import { useGetMyQuery } from '../../hooks/getUserDetails';
 import DataRequestForm from './DataRequestForm';
@@ -134,17 +135,16 @@ function InterestsSection() {
     }
   };
 
-  // The topics as one row of chips (38b), plus any older pick that is not in
-  // the taxonomy any more, so it can still be taken off.
+  // The same picker as the interests popup (owner 2026-11-12): search, the
+  // categories as tiles with their topics, partial fills and Clear. Any older
+  // pick that is no longer in the taxonomy stays below as a chip, so it can
+  // still be taken off.
   const picked = interests || [];
-  const known = new Set(TAG_OPTIONS.map((o) => o.id));
-  const chips = [
-    ...TAG_OPTIONS.map((o) => ({ id: o.id, label: t(o.labelKey) })),
-    ...picked.filter((id) => !known.has(id)).map((id) => ({ id, label: getTagLabel(id) || id })),
-  ];
-  const toggleInterest = (id) => {
+  const known = new Set([...TAG_OPTIONS.map((o) => o.id), ...TAG_CATEGORIES.flatMap((c) => [c.slug, ...c.topics.map((x) => x.slug)])]);
+  const legacy = picked.filter((id) => !known.has(id));
+  const change = (next) => {
     setJustSaved(false);
-    setInterests(picked.includes(id) ? picked.filter((x) => x !== id) : [...picked, id]);
+    setInterests(next);
   };
 
   return (
@@ -155,20 +155,26 @@ function InterestsSection() {
       {!user && (
         <p className="settings-note">{t('settings.interests.hint')} {t('settings.interests.loginHint')}</p>
       )}
-      <div className="settings-interests" role="group" aria-label={t('settings.interests.title')}>
-        {chips.map((c) => (
-          <button
-            key={c.id}
-            type="button"
-            className={cx('settings-interest', picked.includes(c.id) && 'is-on')}
-            aria-pressed={picked.includes(c.id)}
-            disabled={!user || saving}
-            onClick={() => toggleInterest(c.id)}
-          >
-            {c.label}
-          </button>
-        ))}
+      {/* Compact tiles here (owner 2026-11-12): icon and name side by side. */}
+      <div className="settings-interests-picker">
+        <TagsV2Picker multi searchable layout="tiles" value={picked} onChange={change} disabled={!user || saving} />
       </div>
+      {legacy.length > 0 && (
+        <div className="settings-interests" role="group" aria-label={t('settings.interests.title')}>
+          {legacy.map((id) => (
+            <button
+              key={id}
+              type="button"
+              className="settings-interest is-on"
+              aria-pressed
+              disabled={!user || saving}
+              onClick={() => change(picked.filter((x) => x !== id))}
+            >
+              {getTagLabel(id) || id}
+            </button>
+          ))}
+        </div>
+      )}
       {/* Only shown when there's something to save, while saving, or right after
           a save (the transient "Saved" confirmation). Hidden otherwise. */}
       {user && (dirty || saving || justSaved) && (
@@ -1238,7 +1244,10 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   const panels = {
     general: (
       <>
-        {settingsUser && <NotificationsSection />}
+        {/* Order (owner 2026-11-12): language, appearance, notifications. */}
+        <Section tone="cyan" title={t('common.language.label')} className="settings-language">
+          <LanguagePicker onNavigate={onClose} />
+        </Section>
         <Section title={t('settings.appearance.title')}>
           <Row
             title={t('settings.appearance.darkMode.title')}
@@ -1264,37 +1273,13 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
             />
           )}
         </Section>
-        <Section tone="cyan" title={t('common.language.label')} className="settings-language">
-          <LanguagePicker onNavigate={onClose} />
-        </Section>
+        {settingsUser && <NotificationsSection />}
         {!rewardsVisible && <PostingAuthoritySection />}
       </>
     ),
     content: (
       <>
-        <Section title={t('common.nav.shorts')}>
-          {/* Comment bar is only rendered under 768px, so it's hidden on desktop. */}
-          {showShortsCommentBarSetting && (
-            <Row
-              title={t('settings.shorts.commentBar.title')}
-              desc={t('settings.shorts.commentBar.desc')}
-              checked={!!shortsCommentBar}
-              onChange={(v) => setShortsCommentBar(v)}
-            />
-          )}
-          <Row
-            title={t('settings.shorts.openOnStart.title')}
-            desc={t('settings.shorts.openOnStart.desc')}
-            checked={!!openShortsOnStart}
-            onChange={(v) => setOpenShortsOnStart(v)}
-          />
-          <Row
-            title={t('settings.shorts.inFeeds.title')}
-            desc={t('settings.shorts.inFeeds.desc')}
-            checked={inlineShorts !== false}
-            onChange={(v) => setInlineShorts(v)}
-          />
-        </Section>
+        {/* Order (owner 2026-11-12): feed, shorts, interests. */}
         <Section tone="cyan" title={t('settings.contentTabs.feed')}>
           <Row
             tone="cyan"
@@ -1325,14 +1310,38 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
             onChange={(v) => setPrivateMode(v)}
           />
         </Section>
+        <Section title={t('common.nav.shorts')}>
+          {/* Comment bar is only rendered under 768px, so it's hidden on desktop. */}
+          {showShortsCommentBarSetting && (
+            <Row
+              title={t('settings.shorts.commentBar.title')}
+              desc={t('settings.shorts.commentBar.desc')}
+              checked={!!shortsCommentBar}
+              onChange={(v) => setShortsCommentBar(v)}
+            />
+          )}
+          <Row
+            title={t('settings.shorts.openOnStart.title')}
+            desc={t('settings.shorts.openOnStart.desc')}
+            checked={!!openShortsOnStart}
+            onChange={(v) => setOpenShortsOnStart(v)}
+          />
+          <Row
+            title={t('settings.shorts.inFeeds.title')}
+            desc={t('settings.shorts.inFeeds.desc')}
+            checked={inlineShorts !== false}
+            onChange={(v) => setInlineShorts(v)}
+          />
+        </Section>
         <InterestsSection />
       </>
     ),
     connections: (
       <>
-        <LightningReceiveSection />
-        <SupportLinksSection />
+        {/* Order (owner 2026-11-12): linked profiles, support links, Lightning. */}
         {settingsUser && <AddSocialLink_modal isOpen inline hiveUsername={settingsUser} onClose={() => {}} />}
+        <SupportLinksSection />
+        <LightningReceiveSection />
         {!rewardsVisible && <ReferralSection />}
       </>
     ),

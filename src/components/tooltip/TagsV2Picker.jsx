@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import {
@@ -61,6 +61,14 @@ function TagsV2Picker({
     const cat = TAG_CATEGORIES.find((c) => c.topics.some((topic) => selectedSet.has(topic.slug)));
     return cat ? cat.slug : null;
   });
+  // Picks that arrive after the first render (Settings reads them from Hive)
+  // open their category too, as long as nothing was opened or closed by hand.
+  const handOpened = useRef(false);
+  useEffect(() => {
+    if (!multi || handOpened.current || openCatMulti) return;
+    const cat = TAG_CATEGORIES.find((c) => selectedSet.has(c.slug) || c.topics.some((topic) => selectedSet.has(topic.slug)));
+    if (cat) setOpenCatMulti(cat.slug);
+  }, [multi, selectedSet, openCatMulti]);
   const activeCategory = multi ? openCatMulti : getCategoryOf(value);
   const openCategory = TAG_CATEGORIES.find((c) => c.slug === activeCategory) || null;
 
@@ -124,6 +132,7 @@ function TagsV2Picker({
   const pickCategory = (slug) => {
     if (disabled) return;
     if (multi) {
+      handOpened.current = true;
       const cat = catOf(slug);
       if (cat && picksIn(cat) === 0) {
         onChange([...selectedArr, slug]);
