@@ -6,6 +6,7 @@ import { createLowResPreviewPlayer } from "../lib/lowResPreviewPlayer";
 import { useAppStore } from "../lib/store";
 import useCardSize from "./useCardSize";
 import useSubtitles, { prefetchSubtitles } from "./useSubtitles";
+import { heroReady } from "../lib/heroPriority";
 import SubtitleOverlay from "../components/SubtitleOverlay/SubtitleOverlay";
 
 // Statuses with no playable stream — never preview these.
@@ -155,7 +156,9 @@ export default function useHoverPreview({ renderControls } = {}) {
     if (sources.has(key) || inflight.has(key)) return;
     const ctrl = new AbortController();
     inflight.set(key, ctrl);
-    apiRef.current.fetchSource(author, permlink)
+    // The Spotlight's video first (lib/heroPriority.js), then the cards.
+    heroReady()
+      .then(() => (ctrl.signal.aborted ? Promise.reject(new Error("aborted")) : apiRef.current.fetchSource(author, permlink)))
       .then((src) => {
         if (ctrl.signal.aborted) return;
         sources.set(key, src);

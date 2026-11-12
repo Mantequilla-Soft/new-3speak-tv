@@ -11,7 +11,8 @@ import { watchPath } from "../../utils/urls";
 import { getPostDetails } from "../../hive-api/hiveApi";
 import { getFollowers } from "../../hive-api/api";
 import { formatNumber } from "../../i18n";
-import { Player } from "@mantequilla-soft/3speak-player";
+import { Player, ThreeSpeakApi } from "@mantequilla-soft/3speak-player";
+import { holdForHero, releaseHero } from "../../lib/heroPriority";
 import { getPlayerUrl } from "../../utils/playerUrl";
 import { withGatewayFallback } from "../../lib/hlsGatewayFallback.js";
 import "./HomeHero.scss";
@@ -34,6 +35,50 @@ const reducedMotion = () => !!window.matchMedia?.("(prefers-reduced-motion: redu
 // Owner trial 2026-11-12: each slide plays its video, muted, over the (slightly
 // blurred) picture. Set to false to go back to the blurred picture alone.
 const HERO_PREVIEW = true;
+// Resolved stream sources, kept a day: the hero hands the player a source
+// instead of making it look one up first (one round trip less per slide).
+const SRC_CACHE = "hero-sources-v1";
+const SRC_TTL = 24 * 60 * 60 * 1000;
+const readSources = () => {
+  try { return JSON.parse(localStorage.getItem(SRC_CACHE) || "{}") || {}; } catch { return {}; }
+};
+const cachedSource = (ref) => {
+  const hit = readSources()[ref];
+  return hit && Date.now() - hit.t < SRC_TTL && hit.s?.url ? hit.s : null;
+};
+const storeSource = (ref, source) => {
+  try {
+    const all = readSources();
+    all[ref] = { t: Date.now(), s: { url: source.url, fallbacks: source.fallbacks || [] } };
+    const keep = Object.entries(all).sort((a, b) => b[1].t - a[1].t).slice(0, 60);
+    localStorage.setItem(SRC_CACHE, JSON.stringify(Object.fromEntries(keep)));
+  } catch { /* storage full or blocked: look it up next time */ }
+};
+let heroApi = null;
+const resolveSource = async (ref) => {
+  const hit = cachedSource(ref);
+  if (hit) return hit;
+  if (!heroApi) heroApi = new ThreeSpeakApi(getPlayerUrl());
+  const [author, permlink] = ref.split("/");
+  const source = await heroApi.fetchSource(author, permlink);
+  if (source?.url) storeSource(ref, source);
+  return source;
+};
+// Open the connection to the player API early (it serves the stream lookups
+// and playlists), before the first slide asks for anything.
+if (typeof document !== "undefined") {
+  try {
+    const origin = new URL(getPlayerUrl()).origin;
+    if (!document.querySelector(`link[rel="preconnect"][href="${origin}"]`)) {
+      const l = document.createElement("link");
+      l.rel = "preconnect";
+      l.href = origin;
+      l.crossOrigin = "anonymous";
+      document.head.appendChild(l);
+    }
+  } catch { /* no player URL: nothing to warm */ }
+}
+
 // Desktop only, never on a data saver or with reduced motion: a full-width
 // stream is a lot to pull on a phone plan.
 const previewAllowed = () => HERO_PREVIEW
@@ -173,10 +218,13 @@ export default function HomeHero({ videos = [], pending = false }) {
       loop: true,
       poster: false,
       debug: false,
-      hlsConfig: withGatewayFallback({ maxBufferLength: 12, backBufferLength: 10, capLevelToPlayerSize: true }),
+      // Start on the smallest rendition (a low first estimate, as the card
+      // previews do) so the first frame comes quickly, then climb as far as the
+      // hero's size allows; the blur hides the first seconds.
+      hlsConfig: withGatewayFallback({ maxBufferLength: 12, backBufferLength: 10, capLevelToPlayerSize: true, abrEwmaDefaultEstimate: 300000 }),
     });
     player.attach(el);
-    el.addEventListener("playing", () => setSlotOn(i, true));
+    el.addEventListener("playing", () => { setSlotOn(i, true); releaseHero(); });
     players.current[i] = player;
     return player;
   }, [setSlotOn]);
@@ -185,8 +233,9 @@ export default function HomeHero({ videos = [], pending = false }) {
     if (!player) return;
     slotSrc.current[i] = src;
     setSlotOn(i, false);
-    player.load(src)
-      .then(() => { if (autoplay && !player.destroyed && slotSrc.current[i] === src) player.play().catch(() => {}); })
+    resolveSource(src)
+      .then((source) => (slotSrc.current[i] === src && !player.destroyed ? player.load(source) : null))
+      .then((loaded) => { if (loaded && autoplay && !player.destroyed && slotSrc.current[i] === src) player.play().catch(() => {}); })
       .catch(() => {});
   }, [ensurePlayer, setSlotOn]);
 
@@ -215,6 +264,32 @@ export default function HomeHero({ videos = [], pending = false }) {
     const giveUp = setTimeout(() => { if (!el || el.paused || el.readyState < 2) setFailed(true); }, 6000);
     return () => { clearTimeout(swap); clearTimeout(giveUp); };
   }, [previewSrc, loadInto]);
+
+  // Once a video plays, the rest of the Spotlight's sources are looked up
+  // quietly, one at a time, so the next visit starts every slide from the
+  // cache (the order is reshuffled per page load).
+  const anyOn = onAir[0] || onAir[1];
+  const warmed = useRef(false);
+  useEffect(() => {
+    if (!previewOn || !anyOn || warmed.current) return undefined;
+    warmed.current = true;
+    let stop = false;
+    const refs = videos.map((v) => `${authorOf(v)}/${v.permlink}`).filter((r) => !cachedSource(r));
+    (async () => {
+      for (const ref of refs) {
+        if (stop) return;
+        await resolveSource(ref).catch(() => null);
+        await new Promise((r) => setTimeout(r, 250));
+      }
+    })();
+    return () => { stop = true; };
+  }, [previewOn, anyOn, videos]);
+
+  // The cards' previews wait for the hero's first video (lib/heroPriority.js).
+  useEffect(() => {
+    if (!previewOn) return undefined;
+    return holdForHero();
+  }, [previewOn]);
 
   // A hidden tab stops the one in front; coming back starts it again.
   useEffect(() => {

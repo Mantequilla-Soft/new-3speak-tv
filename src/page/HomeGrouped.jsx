@@ -168,6 +168,21 @@ const fetchFeatured = async (viewer, hideAi) => {
   })));
 };
 
+// The last Spotlight pool for this viewer and these filters, so a returning
+// visitor's hero shows at once while the fresh pool loads (owner 2026-11-12:
+// the landing page should load faster). Shown as placeholder data only: the
+// real fetch always runs, and HomeHero keeps its slide when the order changes.
+const FEATURED_CACHE = "featured-pool-v1";
+const readFeaturedCache = (key) => {
+  try {
+    const c = JSON.parse(localStorage.getItem(FEATURED_CACHE) || "null");
+    return c && c.key === key && Array.isArray(c.pool) && c.pool.length ? c.pool : undefined;
+  } catch { return undefined; }
+};
+const writeFeaturedCache = (key, pool) => {
+  try { localStorage.setItem(FEATURED_CACHE, JSON.stringify({ key, at: Date.now(), pool: (pool || []).slice(0, 30) })); } catch { /* full or blocked */ }
+};
+
 // The top FEATURED_TOP in a random order fixed for the page load: each candidate's
 // place comes from hashing the session seed with its key, so a reload (new seed)
 // shuffles again, while watching the featured video (it leaves the pool) hands
@@ -729,9 +744,16 @@ const HomeGrouped = () => {
   // The featured video (see fetchFeatured / orderFeatured): the Spotlight hero
   // at the top of Home (20a), on every width.
   const isWide = useMedia(WIDE_QUERY);
+  const featuredCacheKey = JSON.stringify([showNsfw, gateViewer || null, hideAi]);
+  const featuredCached = useMemo(() => readFeaturedCache(featuredCacheKey), [featuredCacheKey]);
   const { data: featuredPool, isLoading: featuredLoading } = useQuery({
     queryKey: ["featured", showNsfw, gateViewer || null, hideAi],
-    queryFn: () => fetchFeatured(gateViewer, hideAi),
+    queryFn: async () => {
+      const pool = await fetchFeatured(gateViewer, hideAi);
+      writeFeaturedCache(featuredCacheKey, pool);
+      return pool;
+    },
+    placeholderData: featuredCached,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
