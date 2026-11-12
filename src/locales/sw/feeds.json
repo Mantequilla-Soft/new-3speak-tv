@@ -34,7 +34,8 @@
     "shorts_one": "short {{count}}",
     "shorts_other": "Shorts {{count}}",
     "show": "Onyesha",
-    "hide": "Ficha"
+    "hide": "Ficha",
+    "markSeen": "Weka zote kuwa zimeonekana"
   },
   "tagMeta": {
     "videos_one": "video {{num}}",

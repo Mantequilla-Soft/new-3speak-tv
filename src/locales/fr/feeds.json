@@ -36,7 +36,8 @@
     "shorts_many": "{{count}} Shorts",
     "shorts_other": "{{count}} Shorts",
     "show": "Afficher",
-    "hide": "Masquer"
+    "hide": "Masquer",
+    "markSeen": "Tout marquer comme vu"
   },
   "tagMeta": {
     "videos_one": "{{num}} vidéo",

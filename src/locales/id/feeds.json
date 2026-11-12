@@ -32,7 +32,8 @@
     "fromFollowing": "dari orang yang kamu ikuti",
     "shorts_other": "{{count}} Shorts",
     "show": "Tampilkan",
-    "hide": "Sembunyikan"
+    "hide": "Sembunyikan",
+    "markSeen": "Tandai semua sudah dilihat"
   },
   "tagMeta": {
     "videos_other": "{{num}} video",

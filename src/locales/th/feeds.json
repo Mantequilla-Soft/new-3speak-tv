@@ -32,7 +32,8 @@
     "fromFollowing": "จากคนที่คุณติดตาม",
     "shorts_other": "{{count}} Shorts",
     "show": "แสดง",
-    "hide": "ซ่อน"
+    "hide": "ซ่อน",
+    "markSeen": "ทำเครื่องหมายว่าดูแล้วทั้งหมด"
   },
   "tagMeta": {
     "videos_other": "{{num}} วิดีโอ",

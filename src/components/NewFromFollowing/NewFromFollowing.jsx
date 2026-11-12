@@ -25,6 +25,15 @@ import './NewFromFollowing.scss';
 
 const REFRESH_MS = 5 * 60 * 1000;
 
+// "Mark all as seen" (owner 2026-11-12): the moment it was clicked, per viewer
+// and per browser. The checker then counts only uploads after it (`since`);
+// a checker without `since` still gets the creators filtered by their latest
+// upload below, so the strip stays away until someone posts again.
+const SEEN_KEY = (user) => `nff-seen-until:${user}`;
+const readSeen = (user) => {
+  try { return localStorage.getItem(SEEN_KEY(user)) || null; } catch { return null; }
+};
+
 // "3 shorts / 2 videos", dropping whichever side is zero, singular when it's one.
 function countsLabel({ shorts = 0, videos = 0 }, t) {
   const parts = [];
@@ -38,9 +47,11 @@ export default function NewFromFollowing() {
   const authenticated = useAppStore((s) => s.authenticated);
   const user = useAppStore((s) => s.user);
   const showNsfw = useAppStore((s) => s.showNsfw);
+  const [seenUntil, setSeenUntil] = useState(() => (user ? readSeen(user) : null));
+  useEffect(() => { setSeenUntil(user ? readSeen(user) : null); }, [user]);
 
   const { data } = useQuery({
-    queryKey: ['new-from-following', user, showNsfw],
+    queryKey: ['new-from-following', user, showNsfw, seenUntil],
     enabled: !!authenticated && !!user,
     staleTime: REFRESH_MS,
     gcTime: 2 * REFRESH_MS,
@@ -48,12 +59,20 @@ export default function NewFromFollowing() {
     queryFn: async () => {
       const params = { currentuser: user, limit: 30 };
       if (showNsfw) params.nsfw = 'true';
+      if (seenUntil) params.since = seenUntil;
       const res = await axios.get(NEW_FROM_FOLLOWING_URL, { params });
       return res.data;
     },
   });
 
-  const creators = data?.creators || [];
+  const seenTime = seenUntil ? new Date(seenUntil).getTime() : 0;
+  const creators = (data?.creators || []).filter((c) => !seenTime || !c.latest_at || new Date(c.latest_at).getTime() > seenTime);
+  const markAllSeen = () => {
+    const now = new Date().toISOString();
+    try { localStorage.setItem(SEEN_KEY(user), now); } catch { /* blocked: this visit only */ }
+    setSeenUntil(now);
+    setOpen(false);
+  };
   // Folded to the one-line strip until asked for (19c).
   const [open, setOpen] = useState(false);
 
@@ -105,6 +124,16 @@ export default function NewFromFollowing() {
         <p className="nff-summary">
           <b>{t('feeds.newFromFollowing.summary', { count: total })}</b> {t('feeds.newFromFollowing.fromFollowing')}
         </p>
+        <button
+          type="button"
+          className="nff-seen"
+          onClick={markAllSeen}
+          title={t('feeds.newFromFollowing.markSeen')}
+          aria-label={t('feeds.newFromFollowing.markSeen')}
+        >
+          <Icon name="done_all" size={18} />
+          <span className="nff-seen-label">{t('feeds.newFromFollowing.markSeen')}</span>
+        </button>
         <button
           type="button"
           className="nff-toggle"

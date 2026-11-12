@@ -32,7 +32,8 @@
     "fromFollowing": "フォロー中の人から",
     "shorts_other": "ショート {{count}} 本",
     "show": "表示",
-    "hide": "非表示"
+    "hide": "非表示",
+    "markSeen": "すべて既読にする"
   },
   "tagMeta": {
     "videos_other": "動画 {{num}} 本",

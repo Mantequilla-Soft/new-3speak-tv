@@ -32,7 +32,8 @@
     "fromFollowing": "来自你关注的人",
     "shorts_other": "{{count}} 个短视频",
     "show": "显示",
-    "hide": "隐藏"
+    "hide": "隐藏",
+    "markSeen": "全部标为已看"
   },
   "tagMeta": {
     "videos_other": "{{num}} 个视频",

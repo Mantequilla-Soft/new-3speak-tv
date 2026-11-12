@@ -38,7 +38,8 @@
     "shorts_many": "{{count}} Shorts",
     "shorts_other": "{{count}} Shorts",
     "show": "Показати",
-    "hide": "Сховати"
+    "hide": "Сховати",
+    "markSeen": "Позначити все як переглянуте"
   },
   "tagMeta": {
     "videos_one": "{{num}} відео",

@@ -32,7 +32,8 @@
     "fromFollowing": "từ những người bạn theo dõi",
     "shorts_other": "{{count}} Shorts",
     "show": "Hiện",
-    "hide": "Ẩn"
+    "hide": "Ẩn",
+    "markSeen": "Đánh dấu tất cả là đã xem"
   },
   "tagMeta": {
     "videos_other": "{{num}} video",

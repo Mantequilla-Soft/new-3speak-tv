@@ -34,7 +34,8 @@
     "shorts_one": "{{count}} Short",
     "shorts_other": "{{count}} Shorts",
     "show": "Anzeigen",
-    "hide": "Ausblenden"
+    "hide": "Ausblenden",
+    "markSeen": "Alle als gesehen markieren"
   },
   "tagMeta": {
     "videos_one": "{{num}} Video",

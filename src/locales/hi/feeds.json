@@ -34,7 +34,8 @@
     "shorts_one": "{{count}} शॉर्ट",
     "shorts_other": "{{count}} शॉर्ट्स",
     "show": "दिखाएँ",
-    "hide": "छिपाएँ"
+    "hide": "छिपाएँ",
+    "markSeen": "सभी को देखा हुआ मार्क करें"
   },
   "tagMeta": {
     "videos_one": "{{num}} वीडियो",

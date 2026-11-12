@@ -38,7 +38,8 @@
     "shorts_many": "{{count}} shortów",
     "shorts_other": "{{count}} shorta",
     "show": "Pokaż",
-    "hide": "Ukryj"
+    "hide": "Ukryj",
+    "markSeen": "Oznacz wszystko jako obejrzane"
   },
   "tagMeta": {
     "videos_one": "{{num}} film",

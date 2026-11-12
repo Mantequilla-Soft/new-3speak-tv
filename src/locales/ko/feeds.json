@@ -32,7 +32,8 @@
     "fromFollowing": "팔로우한 사람들이 올렸어요",
     "shorts_other": "쇼츠 {{count}}개",
     "show": "보기",
-    "hide": "숨기기"
+    "hide": "숨기기",
+    "markSeen": "모두 본 것으로 표시"
   },
   "tagMeta": {
     "videos_other": "동영상 {{num}}개",

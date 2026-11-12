@@ -34,7 +34,8 @@
     "shorts_one": "{{count}} short",
     "shorts_other": "{{count}} shorts",
     "show": "Ipakita",
-    "hide": "Itago"
+    "hide": "Itago",
+    "markSeen": "Markahang nakita na lahat"
   },
   "tagMeta": {
     "videos_one": "{{num}} video",
