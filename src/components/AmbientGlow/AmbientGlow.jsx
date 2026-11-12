@@ -9,13 +9,25 @@ const FPS_INTERVAL = 1000 / 10; // ~10 fps for smooth glow transitions
 
 // Modes: 'off' → 'page' (subtle) → 'vivid' (bright) → 'off'
 const MODES = ['off', 'page', 'vivid'];
+// Subtle is the default (owner 2026-11-12).
+export const DEFAULT_GLOW = 'page';
+// Once per browser, whatever was stored before is set back to subtle; this
+// marker records that it happened, so the viewer's own choice sticks after.
+export const GLOW_RESET_KEY = '3speak-ambient-glow-reset-2026-11';
 
-const readStoredMode = () => {
-  const stored = localStorage.getItem(GLOW_STORAGE_KEY);
-  if (MODES.includes(stored)) return stored;
-  // Legacy values
-  if (stored === '1' || stored === 'card') return 'page';
-  return 'off';
+export const readStoredMode = () => {
+  try {
+    if (localStorage.getItem(GLOW_RESET_KEY) !== '1') {
+      localStorage.setItem(GLOW_STORAGE_KEY, DEFAULT_GLOW);
+      localStorage.setItem(GLOW_RESET_KEY, '1');
+      return DEFAULT_GLOW;
+    }
+    const stored = localStorage.getItem(GLOW_STORAGE_KEY);
+    if (MODES.includes(stored)) return stored;
+    // Legacy values
+    if (stored === '1' || stored === 'card') return 'page';
+  } catch { /* storage blocked: the default */ }
+  return DEFAULT_GLOW;
 };
 
 export const useAmbientGlow = () => {
@@ -25,7 +37,7 @@ export const useAmbientGlow = () => {
     setGlowMode(prev => {
       const idx = MODES.indexOf(prev);
       const next = MODES[(idx + 1) % MODES.length];
-      localStorage.setItem(GLOW_STORAGE_KEY, next);
+      try { localStorage.setItem(GLOW_STORAGE_KEY, next); } catch { /* not kept */ }
       return next;
     });
   }, []);
@@ -80,7 +92,7 @@ const AmbientGlow = ({ getVideoEl, glowMode }) => {
 
       try {
         ctx.drawImage(videoEl, 0, 0, CANVAS_W, CANVAS_H);
-      } catch (e) {
+      } catch {
         // CORS / SecurityError — ignore
       }
     };
