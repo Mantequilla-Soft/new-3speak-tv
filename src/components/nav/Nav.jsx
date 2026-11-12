@@ -1,7 +1,7 @@
 import mark from "../../assets/image/3S_mark.svg";
 import { useSignupPossible } from '../../utils/signupPossible';
 import "./nav.scss";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../lib/store";
 import { useEffect, useRef, useState } from "react";
@@ -11,7 +11,8 @@ import { OPEN_CREATE_EVENT, useNavTabsOpen } from "./navTabsPref";
 import UploadLinks from "../UploadLinks";
 import { creatorKey, isUploadBlocked, useCreatorSettings } from "../../utils/creatorSettings";
 import useHoverPeek from "../../hooks/useHoverPeek";
-import { Dialog } from "../v2/ui";
+import { Dialog, Menu, MenuRow } from "../v2/ui";
+import { useMyPlaylists } from "../../hooks/useMyPlaylists";
 import NavProgress from '../Incubation/NavProgress';
 import IncubationBell from '../Incubation/IncubationBell';
 import NotificationBell from "./NotificationBell";
@@ -131,6 +132,58 @@ function NavUploadDropdown() {
             <UploadLinks linkClass="nav-upload-flyout-item" iconClass="nav-upload-flyout-icon" />
           </div>
         </Dialog>
+      )}
+    </div>
+  );
+}
+
+// "Playlists", last in the section tabs (owner 2026-11-12): a menu with Watch
+// Later, Watch History and All Playlists. Hive accounts only (they are where
+// playlists live); opens on hover like the other bar menus, or on a click.
+function PlaylistsMenu() {
+  const { t } = useTranslation();
+  const user = useAppStore((s) => s.user);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const ref = useRef(null);
+  const menu = useHoverPeek();
+  const { shown, close } = menu;
+  // Only asked once the menu has shown: Watch Later is one of their playlists.
+  const [asked, setAsked] = useState(false);
+  useEffect(() => { if (shown) setAsked(true); }, [shown]);
+  const { data: mine = [] } = useMyPlaylists({ enabled: !!user && asked });
+  useEffect(() => {
+    if (!shown) return undefined;
+    const outside = (e) => { if (!ref.current?.contains(e.target)) close(); };
+    document.addEventListener("mousedown", outside);
+    return () => document.removeEventListener("mousedown", outside);
+  }, [shown, close]);
+  if (!user) return null;
+
+  const watchLater = mine.find((p) => p.name === "Watch Later");
+  const go = (to) => { close(); navigate(to); };
+  const active = pathname.startsWith("/playlist/") || pathname.startsWith("/watched/");
+  return (
+    <div className="nav-tab-menu" ref={ref} {...menu.hoverProps}>
+      <button
+        type="button"
+        className={`nav-tab nav-tab--menu${active ? " active" : ""}`}
+        onClick={menu.toggle}
+        aria-haspopup="menu"
+        aria-expanded={shown}
+        title={t("nav.playlists.tooltip")}
+      >
+        {t("nav.playlists.label")}
+        <Icon name="expand_more" size={18} />
+      </button>
+      {menu.rendered && (
+        <Menu className={`nav-tab-menu__list${menu.leaving ? " is-leaving" : ""}`} {...menu.hoverProps}>
+          <MenuRow icon="watch_later" onClick={() => go(watchLater ? `/playlist/${watchLater.id}` : "/profile?tab=playlists")}>
+            {t("nav.playlists.watchLater")}
+          </MenuRow>
+          <MenuRow icon="history" onClick={() => go(`/watched/${user}`)}>{t("nav.playlists.watchHistory")}</MenuRow>
+          <MenuRow icon="playlist_play" onClick={() => go("/profile?tab=playlists")}>{t("nav.playlists.all")}</MenuRow>
+        </Menu>
       )}
     </div>
   );
@@ -296,6 +349,7 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
                 {tab.label(t)}
               </NavLink>
             ))}
+            <PlaylistsMenu />
           </div>
         )}
 

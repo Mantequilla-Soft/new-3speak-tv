@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '../v2/Icon';
 import { Toggle } from '../v2/ui';
 import { useGetMyQuery } from '../../hooks/getUserDetails';
-import { readNavTabsOpen, setNavTabsOpen, useNavTabsOpen } from './navTabsPref';
 import { useChat } from '../../context/ChatContext';
 import { useServerUnread } from '../../hooks/useServerUnread';
 import { getVotePower } from '../../utils/hiveUtils';
@@ -46,7 +45,6 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
   const { user, LogOut } = useAppStore();
   const effectiveTheme = useAppStore((s) => s.getEffectiveTheme?.() || s.theme);
   const setTheme = useAppStore((s) => s.setTheme);
-  const tabsOpen = useNavTabsOpen();
   const chat = useChat();
   const my = useGetMyQuery();
   const incubationHandle = useAppStore((s) => s.incubationHandle);
@@ -353,21 +351,11 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
             )}
           </div>
 
-          {/* 42b: the small links, and the switch for the bar's section tabs */}
-          <div className="pn-links">
-            <Link to="/about" className="pn-link" role="menuitem" onClick={onclose}>{t('nav.aboutLink')}</Link>
-            <Link to="/faq" className="pn-link" role="menuitem" onClick={onclose}>{t('nav.faqLink')}</Link>
-            <span className="pn-links-gap" />
-            <button
-              type="button"
-              className="pn-link is-strong pn-desktop-only"
-              role="menuitem"
-              aria-pressed={!tabsOpen}
-              onClick={() => setNavTabsOpen(!readNavTabsOpen())}
-            >
-              {tabsOpen ? t('nav.hidePages') : t('nav.showPages')}
-            </button>
-          </div>
+          {/* Settings here, About and FAQ along the bottom (owner 2026-11-12:
+              flipped; "Hide pages" removed, the bar's sections always show). */}
+          <button type="button" className="pn-item" role="menuitem" onClick={() => { setSettingsOpen(true); onclose(); }}>
+            {row('settings', t('common.nav.settings'))}
+          </button>
 
           <div className="pn-socials">
             {/* Brand names, not words to translate; the aria labels say where they go. */}
@@ -391,9 +379,12 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
 
         {/* 07d: Settings and Log out along the bottom */}
         <div className="pn-footer">
-          <button type="button" className="pn-foot-btn" role="menuitem" onClick={() => { setSettingsOpen(true); onclose(); }}>
-            <Icon name="settings" size={20} /><span className="pn-label">{t('common.nav.settings')}</span>
-          </button>
+          <Link to="/about" className="pn-foot-btn" role="menuitem" onClick={onclose}>
+            <Icon name="info" size={20} /><span className="pn-label">{t('nav.aboutLink')}</span>
+          </Link>
+          <Link to="/faq" className="pn-foot-btn" role="menuitem" onClick={onclose}>
+            <Icon name="help" size={20} /><span className="pn-label">{t('nav.faqLink')}</span>
+          </Link>
           {isManteAuth && (
             <button type="button" className="pn-foot-btn is-logout" role="menuitem" onClick={() => { LogOut(user); onclose(); navigate('/'); }}>
               <Icon name="logout" size={20} /><span className="pn-label">{t('nav.profile.logout')}</span>

@@ -136,6 +136,32 @@
   @media (prefers-reduced-motion: reduce) { animation: none; }
 }
 
+// "Playlists" (Nav.jsx PlaylistsMenu): a tab with a chevron and a menu hung
+// under it, fading like the other bar menus.
+.nav-tab-menu {
+  position: relative;
+
+  .nav-tab--menu {
+    gap: 2px;
+    padding-right: 8px;
+    border: 0;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .nav-tab-menu__list {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 0;
+    min-width: 220px;
+    z-index: 1100;
+    animation: nav-drop var(--t-base) var(--ease);
+    transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+
+    &.is-leaving { opacity: 0; transform: translateY(-4px); }
+  }
+}
+
 .nav-tab {
   display: inline-flex;
   align-items: center;

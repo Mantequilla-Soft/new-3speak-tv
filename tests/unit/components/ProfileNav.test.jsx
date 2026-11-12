@@ -81,7 +81,8 @@ describe('the account menu', () => {
     const items = within(menu()).getAllByRole('menuitem').map(label)
     expect(items).toEqual([
       'Switch', 'Channel', 'Studio', 'Wallet', 'Playlists', 'History', 'Badges',
-      'Analytics', 'Groups', 'Live', 'Chat', 'Rankings', 'About 3Speak', 'FAQ', 'Hide pages', 'Settings',
+      // Settings as a row, About and FAQ along the bottom (owner 2026-11-12).
+      'Analytics', 'Groups', 'Live', 'Chat', 'Rankings', 'Settings', 'About 3Speak', 'FAQ',
     ])
   })
 
@@ -183,12 +184,9 @@ describe('the account menu', () => {
     expect(m.pwa.promptInstall).toHaveBeenCalledTimes(1)
   })
 
-  it('"Hide pages" folds the top bar\'s section tabs away, and "Show pages" brings them back', async () => {
-    const { user } = mount()
-    await user.click(screen.getByRole('menuitem', { name: 'Hide pages' }))
-    expect(localStorage.getItem('3speak_nav_tabs_open')).toBe('false')
-    await user.click(screen.getByRole('menuitem', { name: 'Show pages' }))
-    expect(localStorage.getItem('3speak_nav_tabs_open')).toBe('true')
+  it('has no "Hide pages" switch any more (owner 2026-11-12)', () => {
+    mount()
+    expect(screen.queryByRole('menuitem', { name: /Hide pages|Show pages/ })).toBeNull()
   })
 
   it('the theme switch turns dark mode on and off', async () => {

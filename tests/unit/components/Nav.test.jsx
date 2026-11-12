@@ -26,6 +26,7 @@ vi.mock('../../../src/utils/advertiserAccount', () => ({
 vi.mock('../../../src/components/nav/NavSearch', () => ({ default: () => <div className="navsearch-wrap"><input aria-label="Search" /></div> }))
 vi.mock('../../../src/components/UploadLinks', () => ({ default: () => <a href="/embed-studio">Upload a video</a> }))
 vi.mock('../../../src/components/Incubation/NavProgress', () => ({ default: () => null }))
+vi.mock('../../../src/hooks/useMyPlaylists', () => ({ useMyPlaylists: () => ({ data: [{ id: 'wl1', name: 'Watch Later' }] }) }))
 vi.mock('../../../src/components/Incubation/IncubationBell', () => ({ default: () => <span>Incubation bell</span> }))
 // Creator rows by key; only the lookup is faked, the key rule is the real one.
 vi.mock('../../../src/utils/creatorSettings', async (importOriginal) => ({
@@ -81,11 +82,25 @@ describe('the top bar: the section tabs', () => {
     expect(within(tabs).getByRole('link', { name: 'Home' })).not.toHaveClass('active')
   })
 
-  it('a member who folded the tabs away (account menu, "Hide pages") does not see them', () => {
+  // "Hide pages" is gone (owner 2026-11-12): an old saved choice is ignored.
+  it('a member who once folded the tabs away sees them again', () => {
     localStorage.setItem('3speak_nav_tabs_open', 'false')
     signIn()
     mount()
-    expect(document.getElementById('nav-tabs')).toBeNull()
+    expect(document.getElementById('nav-tabs')).not.toBeNull()
+  })
+
+  it('a member gets a Playlists menu after the sections: Watch Later, Watch History, All Playlists', async () => {
+    signIn()
+    const { user } = mount()
+    await user.click(screen.getByRole('button', { name: /^Playlists/ }))
+    const rows = screen.getAllByRole('menuitem').map((el) => el.textContent.replace(/^[a-z_]+/, '').trim())
+    expect(rows).toEqual(expect.arrayContaining(['Watch Later', 'Watch History', 'All Playlists']))
+  })
+
+  it('a visitor has no Playlists menu', () => {
+    mount()
+    expect(screen.queryByRole('button', { name: /^Playlists/ })).toBeNull()
   })
 
   it('a visitor always sees them', () => {

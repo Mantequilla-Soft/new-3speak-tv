@@ -12,14 +12,10 @@ export const OPEN_CREATE_EVENT = '3speak:open-create';
 export const NAV_TABS_KEY = '3speak_nav_tabs_open';
 const EVENT = '3speak:nav-tabs';
 
+// "Hide pages" is gone (owner 2026-11-12): the sections always show, also for
+// anyone who had hidden them (their saved "false" is no longer read).
 export function readNavTabsOpen() {
-  try {
-    // Only an explicit "false" hides them: anyone who never chose sees the tabs.
-    return localStorage.getItem(NAV_TABS_KEY) !== 'false';
-  } catch {
-    // Private mode, or storage switched off: show them.
-    return true;
-  }
+  return true;
 }
 
 export function setNavTabsOpen(open) {

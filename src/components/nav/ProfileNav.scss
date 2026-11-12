@@ -431,6 +431,7 @@
   flex: none;
 }
 .pn-foot-btn {
+  text-decoration: none;   // About and FAQ are links (owner 2026-11-12)
   display: inline-flex;
   align-items: center;
   gap: 10px;
