@@ -1160,7 +1160,8 @@ const HomeGrouped = () => {
     // Still filling: don't paint a partial rail we're about to have more shorts for.
     if (slice.length < shortsPerRow && (shortsQ.hasNextPage || shortsQ.isFetchingNextPage)) return null;
     if (slice.length < Math.min(shortsPerRow, MIN_RAIL_SHORTS)) return null;
-    return <ShortsRow shorts={slice} columns={shortsPerRow} />;
+    // No heading inside the grid (owner 2026-11-12); the watch page keeps its own.
+    return <ShortsRow shorts={slice} columns={shortsPerRow} heading={false} />;
   }, [feedShorts, shortsPerRow, shortsQ.hasNextPage, shortsQ.isFetchingNextPage]);
 
   const renderPanel = (s) => {

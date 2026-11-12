@@ -184,10 +184,6 @@ export default function SuggestedCreators({ variant = 'discover', perRow = 0 }) 
 
   return (
     <section className="suggested-creators" aria-label={t('profile.creators.suggestedTitle')}>
-      <div className="sc-head">
-        <span className="sc-bar" aria-hidden="true" />
-        <h3>{t('profile.creators.suggestedTitle')}</h3>
-      </div>
       <div className="sc-scroll-wrapper">
         {showLeft && (
           <button type="button" className="sc-scroll-btn left" onClick={() => scroll('left')} aria-label={t('profile.creators.scrollLeft')}>

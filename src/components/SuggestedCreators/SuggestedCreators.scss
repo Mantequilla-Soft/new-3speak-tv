@@ -1,21 +1,14 @@
 @use "../../styles/v2" as v2;
 
-// "Creators to follow" (28b): a heading with a cyan bar, then a swipeable row of
-// creator cards interleaved into the Discover / Interests grids.
+// "Creators to follow" (28b): a swipeable row of creator cards interleaved into
+// the Discover / Interests grids. No heading in the grid (owner 2026-11-12); the
+// section keeps its name for screen readers.
 .suggested-creators {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin: 4px 0;
   min-width: 0;
-
-  .sc-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    h3 { flex: 1; margin: 0; @include v2.text(title); font-size: 20px; }
-  }
-  .sc-bar { width: 4px; height: 22px; border-radius: var(--r-bar); background: var(--cyan); flex: none; }
 
   .sc-scroll-wrapper { position: relative; min-width: 0; }
 
