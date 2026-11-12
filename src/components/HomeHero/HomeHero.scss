@@ -1,7 +1,7 @@
 @use "../../styles/v2" as v2;
 
 // The Spotlight hero (20a). The picture runs the full width of the window and
-// up under the floating top bar (560 tall from the top of the window, 350 on
+// up under the floating top bar (560 tall from the top of the window, 280 on
 // phones), washed by two gradients into the page ground: down (40% at the top,
 // clear from 20% to 50%, solid at the bottom) and across (92% at the left, 45%
 // at 42%, clear from 68%). The text sits 96px under the bar, 64 in from the
@@ -18,10 +18,11 @@
   padding-top: calc(var(--nav-height, 78px) + 96px);
   color: var(--text);
 
-  // Phones: 70px shorter than 20a (owner 2026-11-12, "a bit smaller").
+  // Phones: two thirds of 20a's 420 (owner 2026-11-12). The text needs 176
+  // (chip, two title lines, Play) under the 52px bar, so this is about the floor.
   @include v2.mobile {
-    --hero-h: 350px;
-    padding-top: calc(var(--nav-height, 52px) + 100px);
+    --hero-h: 280px;
+    padding-top: calc(var(--nav-height, 52px) + 44px);
   }
 }
 
