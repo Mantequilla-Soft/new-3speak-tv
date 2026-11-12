@@ -70,7 +70,8 @@
     "surfTitle": "Переключение каналов: выберите тему и смотрите как ТВ",
     "zapping": "Переключаем",
     "hero": {
-      "spotlightIn": "В фокусе: {{community}}"
+      "spotlightIn": "В фокусе: {{community}}",
+      "slide": "В фокусе: {{index}} из {{count}}"
     },
     "tabFollowing": "Подписки"
   },

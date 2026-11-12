@@ -172,7 +172,7 @@ const fetchFeatured = async (viewer, hideAi) => {
 // place comes from hashing the session seed with its key, so a reload (new seed)
 // shuffles again, while watching the featured video (it leaves the pool) hands
 // over to the one that was already next, instead of reshuffling the rest. The
-// first is featured; the arrows and the strip under it step through the others.
+// hero (HomeHero) starts on the first and slides through the others.
 const featuredKeyOf = (v) => `${v.author?.username || v.author || v.owner}/${v.permlink}`;
 const seededRank = (seed, key) => {
   let h = 2166136261 ^ seed; // FNV-1a
@@ -737,11 +737,12 @@ const HomeGrouped = () => {
   });
   // The seed is read at render, so pull-to-refresh (which draws a new one) reshuffles.
   const feedSeed = getFeedSeed();
-  const featured = useMemo(() => orderFeatured(featuredPool, feedSeed)[0] || null, [featuredPool, feedSeed]);
-  // The hero's video is not repeated in the grid below it.
-  const featuredKey = featured ? featuredKeyOf(featured).toLowerCase() : null;
-  const withFeatured = (vids) => (featuredKey
-    ? vids.filter((v) => featuredKeyOf(v).toLowerCase() !== featuredKey)
+  // The hero slides through all of them (owner 2026-11-12), in this order.
+  const spotlight = useMemo(() => orderFeatured(featuredPool, feedSeed), [featuredPool, feedSeed]);
+  // The hero's videos are not repeated in the grid below it.
+  const spotlightKeys = useMemo(() => new Set(spotlight.map((v) => featuredKeyOf(v).toLowerCase())), [spotlight]);
+  const withFeatured = (vids) => (spotlightKeys.size
+    ? vids.filter((v) => !spotlightKeys.has(featuredKeyOf(v).toLowerCase()))
     : vids);
 
   // Live OpenPods streams, prepended into the grids as regular cards. "all"
@@ -1235,8 +1236,8 @@ const HomeGrouped = () => {
     <div className="home-grouped-container home-tabbed" data-card-size={homeCardSize || 'small'}>
       {/* Logged-out first visits only. */}
       <WelcomeBanner />
-      {/* The Spotlight (20a): the featured video, full width under the bar. */}
-      <HomeHero video={featured} pending={featuredLoading && !featured} />
+      {/* The Spotlight (20a): the featured videos, full width under the bar. */}
+      <HomeHero videos={spotlight} pending={featuredLoading && !spotlight.length} />
       <ShortsStories tiles />
       {/* Logged-in only, and renders nothing when there's nothing unwatched. */}
       <NewFromFollowing />

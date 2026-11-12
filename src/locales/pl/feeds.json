@@ -70,7 +70,8 @@
     "surfTitle": "Skakanie po kanałach: wybierz temat i oglądaj jak telewizję",
     "zapping": "Zapping",
     "hero": {
-      "spotlightIn": "Wyróżnione w {{community}}"
+      "spotlightIn": "Wyróżnione w {{community}}",
+      "slide": "Wyróżnione {{index}} z {{count}}"
     },
     "tabFollowing": "Obserwowani"
   },

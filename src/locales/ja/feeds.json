@@ -61,7 +61,8 @@
     "surfTitle": "チャンネルサーフィン: トピックを選んでテレビのように見る",
     "zapping": "ザッピング",
     "hero": {
-      "spotlightIn": "{{community}} のスポットライト"
+      "spotlightIn": "{{community}} のスポットライト",
+      "slide": "スポットライト {{count}} 件中 {{index}} 件目"
     },
     "tabFollowing": "フォロー中"
   },

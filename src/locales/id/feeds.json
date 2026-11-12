@@ -61,7 +61,8 @@
     "surfTitle": "Channel Surfing: pilih topik dan tonton seperti TV",
     "zapping": "Zapping",
     "hero": {
-      "spotlightIn": "Sorotan di {{community}}"
+      "spotlightIn": "Sorotan di {{community}}",
+      "slide": "Sorotan {{index}} dari {{count}}"
     },
     "tabFollowing": "Mengikuti"
   },

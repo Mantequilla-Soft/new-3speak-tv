@@ -61,7 +61,8 @@
     "surfTitle": "채널 서핑: 주제를 고르고 TV처럼 시청하세요",
     "zapping": "재핑",
     "hero": {
-      "spotlightIn": "{{community}}의 스포트라이트"
+      "spotlightIn": "{{community}}의 스포트라이트",
+      "slide": "스포트라이트 {{count}}개 중 {{index}}번째"
     },
     "tabFollowing": "팔로잉"
   },

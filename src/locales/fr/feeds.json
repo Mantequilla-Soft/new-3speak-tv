@@ -67,7 +67,8 @@
     "surfTitle": "Zapping : choisissez un thème et regardez-le comme la télé",
     "zapping": "Zapping",
     "hero": {
-      "spotlightIn": "À la une dans {{community}}"
+      "spotlightIn": "À la une dans {{community}}",
+      "slide": "À la une, {{index}} sur {{count}}"
     },
     "tabFollowing": "Abonnements"
   },

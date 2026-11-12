@@ -64,7 +64,8 @@
     "surfTitle": "Zappen: kies een onderwerp en kijk zoals naar tv",
     "zapping": "Zappen",
     "hero": {
-      "spotlightIn": "In de kijker in {{community}}"
+      "spotlightIn": "In de kijker in {{community}}",
+      "slide": "In de kijker {{index}} van {{count}}"
     },
     "tabFollowing": "Volgend"
   },

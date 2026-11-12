@@ -67,7 +67,8 @@
     "surfTitle": "Zapear canais: escolha um tema e assista como TV",
     "zapping": "Zapeando",
     "hero": {
-      "spotlightIn": "Destaque em {{community}}"
+      "spotlightIn": "Destaque em {{community}}",
+      "slide": "Destaque {{index}} de {{count}}"
     },
     "tabFollowing": "Seguindo"
   },

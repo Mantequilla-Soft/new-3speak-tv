@@ -61,7 +61,8 @@
     "surfTitle": "Channel Surfing: เลือกหัวข้อแล้วดูเหมือนดูทีวี",
     "zapping": "กำลังเปลี่ยนช่อง",
     "hero": {
-      "spotlightIn": "สปอตไลท์ใน {{community}}"
+      "spotlightIn": "สปอตไลท์ใน {{community}}",
+      "slide": "สปอตไลท์ {{index}} จาก {{count}}"
     },
     "tabFollowing": "กำลังติดตาม"
   },

@@ -67,7 +67,8 @@
     "surfTitle": "Zapping: scegli un argomento e guardalo come la TV",
     "zapping": "Zapping",
     "hero": {
-      "spotlightIn": "In evidenza in {{community}}"
+      "spotlightIn": "In evidenza in {{community}}",
+      "slide": "In evidenza {{index}} di {{count}}"
     },
     "tabFollowing": "Seguiti"
   },

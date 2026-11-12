@@ -61,7 +61,8 @@
     "surfTitle": "随心换台：选个话题，像看电视一样看",
     "zapping": "换台中",
     "hero": {
-      "spotlightIn": "{{community}} 中的焦点"
+      "spotlightIn": "{{community}} 中的焦点",
+      "slide": "焦点 第 {{index}} 个，共 {{count}} 个"
     },
     "tabFollowing": "关注"
   },

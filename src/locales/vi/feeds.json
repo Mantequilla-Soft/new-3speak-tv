@@ -61,7 +61,8 @@
     "surfTitle": "Lướt kênh: chọn một chủ đề và xem như xem TV",
     "zapping": "Đang chuyển kênh",
     "hero": {
-      "spotlightIn": "Tiêu điểm trong {{community}}"
+      "spotlightIn": "Tiêu điểm trong {{community}}",
+      "slide": "Tiêu điểm {{index}} trên {{count}}"
     },
     "tabFollowing": "Đang theo dõi"
   },

@@ -64,7 +64,8 @@
     "surfTitle": "চ্যানেল সার্ফিং: একটি বিষয় বেছে নিন আর টিভির মতো দেখুন",
     "zapping": "জ্যাপিং",
     "hero": {
-      "spotlightIn": "{{community}}-এ স্পটলাইট"
+      "spotlightIn": "{{community}}-এ স্পটলাইট",
+      "slide": "স্পটলাইট {{count}}টির মধ্যে {{index}}"
     },
     "tabFollowing": "ফলো করছেন"
   },

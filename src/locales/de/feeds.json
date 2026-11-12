@@ -64,7 +64,8 @@
     "surfTitle": "Channel Surfing: Wähl ein Thema und schau es wie Fernsehen",
     "zapping": "Zappen",
     "hero": {
-      "spotlightIn": "Im Fokus in {{community}}"
+      "spotlightIn": "Im Fokus in {{community}}",
+      "slide": "Im Fokus: {{index}} von {{count}}"
     },
     "tabFollowing": "Gefolgt"
   },

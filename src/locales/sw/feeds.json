@@ -64,7 +64,8 @@
     "surfTitle": "Kuvinjari chaneli: chagua mada na uitazame kama TV",
     "zapping": "Inabadilisha",
     "hero": {
-      "spotlightIn": "Kivutio katika {{community}}"
+      "spotlightIn": "Kivutio katika {{community}}",
+      "slide": "Kivutio {{index}} kati ya {{count}}"
     },
     "tabFollowing": "Unaowafuata"
   },

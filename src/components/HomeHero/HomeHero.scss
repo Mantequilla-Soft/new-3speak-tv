@@ -36,16 +36,22 @@
   @include v2.mobile { @include v2.thumb-placeholder(14px); }
 
   img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
 
+  // The slider's cross-fade: the last picture stays under the new one.
+  img.is-cur { animation: home-hero-fade var(--t-slow) var(--ease) both; }
+
   &::after {
     content: "";
     position: absolute;
     inset: 0;
+    z-index: 1;
     background:
       linear-gradient(180deg, color-mix(in srgb, var(--bg) 40%, transparent) 0%, transparent 20%, transparent 50%, var(--bg) 100%),
       linear-gradient(90deg, color-mix(in srgb, var(--bg) 92%, transparent) 0%, color-mix(in srgb, var(--bg) 45%, transparent) 42%, transparent 68%);
@@ -67,11 +73,22 @@
 }
 
 // 720 wide in the frame, less its 64px inset: the text keeps to the washed side.
+// The body keeps the height of a two-line title, with the buttons at its
+// bottom, so the page under the hero does not jump as the slider moves on to a
+// title of another length: chip 36 + 16 + title 2 x 64 + 16 + creator 32 + 22 +
+// Play 64 (56px titles under 1280; phones: chip 28 + 10 + 2 x 32 + 14 + 60).
 .home-hero__body {
   position: relative;
   z-index: 1;
   max-width: 656px;
-  @include v2.mobile { max-width: none; }
+  min-height: 314px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  > .home-hero__chip { align-self: flex-start; }
+
+  @include v2.below-wide { min-height: 298px; }
+  @include v2.mobile { max-width: none; min-height: 176px; }
 }
 
 // "Spotlight in Wildlife Videos · 3:12": cyan 16% wash, radius 12, 13/700.
@@ -268,4 +285,88 @@
       &.is-play { width: 100%; height: 60px; }
     }
   }
+}
+
+// ── The slider (owner 2026-11-12): each video fades in, and a row of segments
+// under the buttons shows where it is, like the stories. The active segment
+// fills over SLIDE_MS (HomeHero.jsx); its animationend steps to the next, so
+// .is-paused holds both. Reduced motion: nothing fades or fills, so the hero
+// stays put and the segments only jump.
+@keyframes home-hero-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes home-hero-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.home-hero__body { animation: home-hero-fade var(--t-slow) var(--ease) both; }
+
+.home-hero__slides {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 656px;
+  margin-top: 24px;
+
+  @include v2.mobile { max-width: none; margin-top: 16px; }
+
+  .v2-iconbtn { flex: none; }
+}
+
+.home-hero__segs {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 4px;
+}
+
+// A 24px hit area around a 4px bar.
+.home-hero__seg {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 40px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+}
+
+.home-hero__seg-track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text) 24%, transparent);
+  transition: background var(--t-fast) var(--ease);
+
+  .home-hero__seg:hover & { background: color-mix(in srgb, var(--text) 40%, transparent); }
+  .home-hero__seg.is-done & { background: color-mix(in srgb, var(--text) 64%, transparent); }
+}
+
+.home-hero__seg-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--text);
+  transform-origin: left center;
+  animation-name: home-hero-fill;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+
+  .home-hero.is-paused & { animation-play-state: paused; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero__bg img.is-cur,
+  .home-hero__body { animation: none; }
+  .home-hero__seg-fill { animation: none; transform: none; }
 }

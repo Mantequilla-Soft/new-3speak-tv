@@ -64,7 +64,8 @@
     "surfTitle": "Channel Surfing: pick a topic and watch it like TV",
     "zapping": "Zapping",
     "hero": {
-      "spotlightIn": "Spotlight in {{community}}"
+      "spotlightIn": "Spotlight in {{community}}",
+      "slide": "Spotlight {{index}} of {{count}}"
     },
     "tabFollowing": "Following"
   },

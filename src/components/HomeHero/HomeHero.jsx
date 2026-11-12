@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../v2/Icon";
+import { IconButton } from "../v2/ui";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
 import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import ShareChooserModal from "../Chat/ShareChooserModal";
@@ -15,6 +16,14 @@ import "./HomeHero.scss";
 
 // The picture behind the hero is drawn full width, so it asks for a big crop.
 const HERO_SIZE = { w: 1280, h: 720 };
+
+// How long each video stays in the Spotlight before the next slides in. The
+// timer is the fill animation of the active segment (HomeHero.scss), so pausing
+// it holds the progress and reduced motion (no animation) stops the sliding.
+const SLIDE_MS = 7000;
+const keyOf = (v) => `${v.author?.username || v.author || v.owner}/${v.permlink}`;
+const authorOf = (v) => (v ? (v.author?.username || v.author || v.owner) : null);
+const SWIPE_PX = 48;
 
 const clock = (sec) => {
   const n = Math.floor(Number(sec) || 0);
@@ -31,16 +40,47 @@ const clock = (sec) => {
  * community it was posted in, the title at 64/900, the creator with their
  * follower count, then Play (an ink slab) and Save / Share tiles.
  *
- * `video` is the featured video (HomeGrouped picks it). While it is on its way
- * (`pending`) the hero holds its space with the striped placeholder.
+ * `videos` are the featured videos in order (HomeGrouped picks them). The hero
+ * slides through them on its own (owner 2026-11-12): a row of segments under the
+ * buttons, like the stories, fills for the active one; a segment jumps to its
+ * video, phones swipe, and it holds while the pointer or keyboard focus is on
+ * it, a dialog is open, the tab is hidden, or the viewer paused it. While they
+ * are on their way (`pending`) the hero holds its space with the placeholder.
  */
-export default function HomeHero({ video, pending = false }) {
+export default function HomeHero({ videos = [], pending = false }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [saveOpen, setSaveOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
 
-  const author = video ? (video.author?.username || video.author || video.owner) : null;
+  // The active video by key, so a refetched pool keeps it in place. When it
+  // leaves the pool (watched), the one that took its place is shown.
+  const count = videos.length;
+  const [activeKey, setActiveKey] = useState(null);
+  const lastIdx = useRef(0);
+  let idx = activeKey ? videos.findIndex((v) => keyOf(v) === activeKey) : 0;
+  if (idx < 0) idx = Math.min(lastIdx.current, Math.max(0, count - 1));
+  lastIdx.current = idx;
+  const video = videos[idx] || null;
+  const go = useCallback((i) => {
+    const next = videos[((i % count) + count) % count];
+    if (next) setActiveKey(keyOf(next));
+  }, [videos, count]);
+
+  // What holds the sliding.
+  const [hover, setHover] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
+  const [tabHidden, setTabHidden] = useState(() => typeof document !== "undefined" && document.hidden);
+  useEffect(() => {
+    const onVis = () => setTabHidden(document.hidden);
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+  const paused = userPaused || hover || focused || tabHidden || saveOpen || shareOpen;
+
+  const author = authorOf(video);
   const permlink = video?.permlink || null;
 
   // The community the post sits in and the creator's follower count: one read
@@ -57,6 +97,35 @@ export default function HomeHero({ video, pending = false }) {
     enabled: !!author,
     staleTime: 10 * 60 * 1000,
   });
+
+  // The next one's picture, community and followers load ahead of it.
+  const nextVideo = count > 1 ? videos[(idx + 1) % count] : null;
+  useEffect(() => {
+    if (!nextVideo) return;
+    const a = authorOf(nextVideo);
+    const src = fixVideoThumbnail(nextVideo, false, HERO_SIZE);
+    if (src) { const img = new Image(); img.decoding = "async"; img.src = src; }
+    queryClient.prefetchQuery({ queryKey: ["hero-post", a, nextVideo.permlink], queryFn: () => getPostDetails(a, nextVideo.permlink), staleTime: 10 * 60 * 1000 });
+    queryClient.prefetchQuery({ queryKey: ["hero-followers", a], queryFn: () => getFollowers(a), staleTime: 10 * 60 * 1000 });
+  }, [nextVideo, queryClient]);
+
+  // The picture cross-fades: the last one stays underneath while the new one fades in.
+  const thumb = video ? fixVideoThumbnail(video, false, HERO_SIZE) : null;
+  const [bg, setBg] = useState({ cur: thumb, prev: null });
+  useEffect(() => {
+    setBg((b) => (b.cur === thumb ? b : { cur: thumb, prev: b.cur }));
+  }, [thumb]);
+
+  const touch = useRef(null);
+  const onTouchStart = (e) => { const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY }; };
+  const onTouchEnd = (e) => {
+    const start = touch.current;
+    touch.current = null;
+    if (!start || count < 2) return;
+    const p = e.changedTouches[0];
+    const dx = p.clientX - start.x;
+    if (Math.abs(dx) > SWIPE_PX && Math.abs(dx) > Math.abs(p.clientY - start.y)) go(idx + (dx < 0 ? 1 : -1));
+  };
 
   // Let the phone top bar go see-through while the hero is under it (nav.scss).
   const shown = !!video || pending;
@@ -83,7 +152,6 @@ export default function HomeHero({ video, pending = false }) {
   }
 
   const href = watchPath(author, permlink);
-  const thumb = fixVideoThumbnail(video, false, HERO_SIZE);
   const duration = clock(video.spkvideo?.duration || video.duration);
   const community = post?.community_title || null;
   const followers = follow?.follower_count;
@@ -93,12 +161,22 @@ export default function HomeHero({ video, pending = false }) {
   const openCreator = () => navigate(`/@${author}`);
 
   return (
-    <section className="home-hero" aria-label={t("cards.badges.spotlight")}>
+    <section
+      className={`home-hero${paused ? " is-paused" : ""}`}
+      aria-label={t("cards.badges.spotlight")}
+      onPointerEnter={(e) => { if (e.pointerType === "mouse") setHover(true); }}
+      onPointerLeave={() => setHover(false)}
+      onFocus={(e) => { if (e.target.matches?.(":focus-visible")) setFocused(true); }}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
       <div className="home-hero__bg" aria-hidden="true">
-        {thumb && <img src={thumb} alt="" decoding="async" fetchPriority="high" />}
+        {bg.prev && bg.prev !== thumb && <img key={bg.prev} className="is-prev" src={bg.prev} alt="" decoding="async" />}
+        {thumb && <img key={thumb} className="is-cur" src={thumb} alt="" decoding="async" fetchPriority="high" />}
       </div>
 
-      <div className="home-hero__body">
+      <div className="home-hero__body" key={keyOf(video)}>
         <div className="home-hero__chip">
           <span className="home-hero__chip-tile" aria-hidden="true">
             {(community || t("cards.badges.spotlight")).slice(0, 1).toUpperCase()}
@@ -137,6 +215,44 @@ export default function HomeHero({ video, pending = false }) {
           </button>
         </div>
       </div>
+
+      {count > 1 && (
+        <div className="home-hero__slides">
+          <IconButton
+            icon={userPaused ? "play_arrow" : "pause"}
+            label={userPaused ? t("common.actions.play") : t("common.actions.pause")}
+            size={24}
+            variant="ghost"
+            round
+            fill
+            aria-pressed={userPaused}
+            onClick={() => setUserPaused((p) => !p)}
+          />
+          <div className="home-hero__segs">
+            {videos.map((v, i) => (
+              <button
+                key={keyOf(v)}
+                type="button"
+                className={`home-hero__seg${i < idx ? " is-done" : ""}${i === idx ? " is-on" : ""}`}
+                aria-label={t("feeds.home.hero.slide", { index: i + 1, count })}
+                aria-current={i === idx ? "true" : undefined}
+                onClick={() => go(i)}
+              >
+                <span className="home-hero__seg-track">
+                  {i === idx && (
+                    <span
+                      key={keyOf(v)}
+                      className="home-hero__seg-fill"
+                      style={{ animationDuration: `${SLIDE_MS}ms` }}
+                      onAnimationEnd={() => go(idx + 1)}
+                    />
+                  )}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <AddToPlaylistModal
         isOpen={saveOpen}

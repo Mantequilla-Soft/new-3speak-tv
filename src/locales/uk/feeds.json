@@ -70,7 +70,8 @@
     "surfTitle": "Перемикання каналів: виберіть тему й дивіться, як телевізор",
     "zapping": "Перемикання",
     "hero": {
-      "spotlightIn": "У фокусі: {{community}}"
+      "spotlightIn": "У фокусі: {{community}}",
+      "slide": "У фокусі: {{index}} з {{count}}"
     },
     "tabFollowing": "Підписки"
   },

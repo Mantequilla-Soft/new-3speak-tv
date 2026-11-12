@@ -64,7 +64,8 @@
     "surfTitle": "Kanal Gezintisi: bir konu seç ve TV gibi izle",
     "zapping": "Zapping",
     "hero": {
-      "spotlightIn": "{{community}} içinde öne çıkan"
+      "spotlightIn": "{{community}} içinde öne çıkan",
+      "slide": "Öne çıkan {{index}} / {{count}}"
     },
     "tabFollowing": "Takip edilenler"
   },

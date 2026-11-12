@@ -64,7 +64,8 @@
     "surfTitle": "Channel Surfing: pumili ng paksa at panoorin na parang TV",
     "zapping": "Zapping",
     "hero": {
-      "spotlightIn": "Tampok sa {{community}}"
+      "spotlightIn": "Tampok sa {{community}}",
+      "slide": "Tampok {{index}} sa {{count}}"
     },
     "tabFollowing": "Fina-follow"
   },
