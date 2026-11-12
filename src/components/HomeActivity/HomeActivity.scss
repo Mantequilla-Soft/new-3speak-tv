@@ -42,9 +42,13 @@
   &.is-on { background: var(--surface-2); color: var(--text); }
 }
 
-// Fixed height (never set by what is loaded); the rows scroll inside.
+// Fixed height (never set by what is loaded); the rows scroll inside. The
+// panel is sticky beside the feed, so the list takes the window height left
+// under the nav (16px gap above and below) minus the panel's own chrome
+// (2 border + 12 padding + 40 tabs + 44 "See all" = 98), never under 360px
+// (owner 2026-11-12: show more entries).
 .home-activity__list {
-  height: 360px;
+  height: max(360px, calc(100dvh - var(--nav-height, 78px) - 32px - 98px));
   @include v2.scroll-y;
 }
 

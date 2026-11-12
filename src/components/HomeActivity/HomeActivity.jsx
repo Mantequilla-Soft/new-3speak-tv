@@ -20,7 +20,8 @@ import "./HomeActivity.scss";
 // Service accounts whose audio and playlists never show in the feed (the same
 // list as HomeGrouped / Audio.jsx).
 const HIDDEN_OWNERS = new Set(["badadib"]);
-const ROWS = 12;
+// Enough to fill the tall list and still scroll a little (owner 2026-11-12).
+const ROWS = 24;
 
 const hiveDate = (d) => (d && !/Z$|[+-]\d{2}:\d{2}$/.test(String(d)) ? `${d}Z` : d);
 const ageOf = (d) => (d ? formatTimeAgoCompact(hiveDate(d)) : "");
