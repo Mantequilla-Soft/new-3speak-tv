@@ -31,7 +31,8 @@
   "gated": {
     "title": "Só para membros",
     "checkFailed": "Não conseguimos confirmar sua assinatura agora. Tente de novo daqui a pouco.",
-    "preview": "Você está assistindo a uma prévia grátis. O 3Speak Pro libera o vídeo completo.",
+    "preview": "Você está vendo uma prévia gratuita",
+    "previewSub": "O 3Speak Pro libera o vídeo completo.",
     "subscribersOnly": "Este vídeo está disponível para assinantes do 3Speak Pro.",
     "cta": "Assinar o 3Speak Pro"
   },
@@ -51,6 +52,8 @@
     "value": "Valor"
   },
   "moreVideos": "Mais vídeos",
+  "nextIn": "Próximo em {{name}}",
+  "fromCommunity": "De {{name}}",
   "vote": {
     "saveFailed": "Não foi possível salvar seu voto"
   },
@@ -86,7 +89,7 @@
     "setEnd": "Definir fim",
     "createClip": "Criar clipe",
     "barStart": "Vá até o início do seu clipe",
-    "barEnd": "Início: {{start}} — Agora vá até o fim",
+    "barEnd": "Início {{start}} · agora avance até o fim",
     "barDone": "Clipe: {{start}} – {{end}}"
   },
   "share": {
@@ -104,11 +107,11 @@
   },
   "media": {
     "unavailableTitle": "Este vídeo não está mais disponível",
-    "unavailableBody": "A mídia deste envio antigo não foi encontrada na rede. O post ainda existe na blockchain, mas o vídeo não pode mais ser reproduzido.",
+    "unavailableBody": "A mídia deste envio antigo não foi encontrada. O post continua existindo na Hive.",
     "scheduledTitle": "Esta publicação está agendada",
     "scheduledBody": "Ela será publicada em {{date}}. O vídeo poderá ser assistido a partir daí.",
     "blockedTitle": "Não foi possível carregar o vídeo agora",
-    "blockedBody": "Um dos nossos servidores de vídeo não respondeu. O vídeo em si está bem, então tente de novo."
+    "blockedBody": "Um dos nossos servidores de vídeo não respondeu. O vídeo está bem."
   },
   "tipNudge": {
     "text": "Curtiu?<hide> Mande uma gorjeta para <b>@{{author}}</b>!</hide>",
@@ -118,7 +121,9 @@
     "members_one": "{{count}} membro",
     "members_many": "{{count}} membros",
     "members_other": "{{count}} membros",
-    "postedIn": "Publicado em"
+    "postedIn": "Publicado em",
+    "partOf": "Parte de",
+    "position": "{{current}} de {{total}}"
   },
   "tags": {
     "curated": "Curadoria"
@@ -135,7 +140,8 @@
     "openTagFeed": "Abrir feed da tag"
   },
   "scheduled": {
-    "notice": "Agendado para <b>{{date}}</b> — ainda não publicado.",
+    "notice": "Agendado para <b>{{date}}</b>",
+    "notPublished": "Ainda não publicado.",
     "futureDate": "uma data futura",
     "edit": "Editar, reagendar ou cancelar",
     "editTitle": "Editar post agendado (detalhes, data ou cancelar)"
@@ -162,7 +168,8 @@
     "toggleDetails": "Mostrar/ocultar detalhes",
     "followCreator": "Seguir criador",
     "closeMenu": "Fechar menu",
-    "openActions": "Abrir ações"
+    "openActions": "Abrir ações",
+    "support": "Apoiar {{name}}"
   },
   "description": {
     "hide": "Ocultar descrição",
@@ -202,26 +209,27 @@
     "markdownHint": "Aceita markdown.",
     "listed": "Listado",
     "unlistedLabel": "Não listado",
-    "listedHint": "Aparece nos feeds, na busca e no seu perfil.",
-    "unlistedHint": "Oculto dos feeds e da busca — ainda toca pelo link direto e continua no seu perfil (com indicação).",
-    "allowRemix": "Permitir remix/clipe",
-    "remixOn": "Outras pessoas podem criar remixes/clipes; você recebe o crédito como autor original.",
+    "listedHint": "Nos feeds, na busca e no seu perfil",
+    "unlistedHint": "Só pelo link direto, com selo no seu perfil",
+    "allowRemix": "Permitir remix e clipe",
+    "remixOn": "Você aparece como autor original",
     "remixOff": "Outras pessoas não podem fazer remix nem clipes deste vídeo.",
     "adsOnVideo": "Anúncios neste vídeo",
     "adsOnHint": "Este vídeo pode exibir anúncios.",
     "adsOffHint": "Sem anúncios neste vídeo.",
     "rollsOnVideo": "Spots em vídeo",
     "rollsOnHint": "Spots, banners e tickers podem aparecer.",
-    "rollsOffHint": "Só banners e tickers neste vídeo.",
+    "rollsOffHint": "Caso contrário, só banners e tickers",
     "trailer": "Trailer do canal",
     "trailerOn": "Toca automaticamente no topo da aba Visão geral do seu perfil, substituindo qualquer trailer definido antes.",
-    "trailerOff": "Faça deste o vídeo que toca automaticamente no topo da aba Visão geral do seu perfil.",
+    "trailerOff": "Toca automaticamente no topo do seu perfil",
     "nsfw": "Adulto / NSFW",
     "notNsfw": "Não adulto",
     "nsfwHint": "Oculto dos feeds e da busca, a menos que o espectador tenha ativado NSFW; marcado com nsfw na Hive.",
     "notNsfwHint": "Conteúdo normal, exibido para todos.",
+    "nsfwOffHint": "Oculto, a menos que quem assiste tenha ativado NSFW",
     "promoted": "Promovido",
-    "promote": "Promover vídeo",
+    "promote": "Promover",
     "saveChanges": "Salvar alterações",
     "noChanges": "Nenhuma alteração para salvar.",
     "thumbUploaded": "Miniatura enviada.",
@@ -266,7 +274,8 @@
       "visibility": "Visibilidade",
       "content": "Conteúdo",
       "ads": "Anúncios",
-      "promotion": "Promoção"
+      "promotion": "Promoção",
+      "contentAds": "Conteúdo, anúncios e promoção"
     },
     "chaptersNoteAll": "A lista de capítulos é escrita na descrição ao salvar.",
     "editChapters": "Editar capítulos",

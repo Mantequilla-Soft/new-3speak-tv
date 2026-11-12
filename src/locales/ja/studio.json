@@ -7,13 +7,19 @@
     "createNewDesc": "コンテンツをアップロードして世界に共有しましょう"
   },
   "preview": {
-    "cannotPreview": "お使いのブラウザではこの動画をプレビューできません。これは HEVC/H.265 の動画（iPhone の「高効率」で録画したものなど）でよくあることです。問題ありません。アップロードは可能で、誰でも再生できるように変換されます。"
+    "cannotPreview": "<b>この動画はプレビューできません。</b>iPhone の「高効率」で録画したものなど、HEVC / H.265 の動画でよくあることです。アップロードは可能で、誰でも再生できるように変換されます。"
   },
   "drafts": {
     "untitled": "（無題）",
     "empty": "選択したフィルターに一致する動画はありません。",
     "title": "スタジオ",
-    "create": "作成"
+    "create": "作成",
+    "views28": "視聴回数（28 日間）",
+    "newFollowers": "新しいフォロワー",
+    "views": "回視聴",
+    "stats": "統計",
+    "more": "その他",
+    "public": "公開"
   },
   "schedule": {
     "days": {
@@ -32,6 +38,7 @@
     "am": "午前",
     "pm": "午後",
     "pastWarning": "この日時は過去です。未来の日時を選んでください。",
+    "pickDay": "日付を選択",
     "publishAt": "動画は {{when}} に自動で公開されます"
   },
   "scheduled": {
@@ -101,6 +108,7 @@
     "insertTable": "表を挿入",
     "spoiler": "ネタバレ / 隠しテキスト",
     "emoji": "絵文字",
+    "gifs": "GIF",
     "searchEmoji": "絵文字を検索",
     "searchGifs": "GIF を検索…",
     "noGifs": "GIF が見つかりません。",

@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 hari",
-      "30d": "30 hari",
+      "7d": "Minggu",
+      "30d": "Bulan",
       "365d": "Setahun",
       "all": "Sepanjang waktu"
     },
@@ -155,9 +155,9 @@
     "audioFull": "Dengan judul",
     "audioCompact": "Ringkas",
     "audioMinimal": "Minimal",
-    "heightSub": "Lebar penuh, tinggi {{height}} px",
+    "heightSub": "Lebar penuh, tinggi {{height}} px · Responsif",
     "podcastTitle": "Sematkan podcast ini",
-    "podcastHint": "Tempel ini di situs web atau postingan blog mana pun. Ini memutar semua episode acara, termasuk episode baru begitu terbit."
+    "podcastHint": "Memutar semua episode acara, termasuk episode baru begitu terbit."
   },
   "incubation": {
     "requestFailed": "Permintaan gagal ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "Halaman ini gagal dimuat",
-    "body": "Sebagian aplikasi gagal diunduh. Biasanya ini berarti versi baru dirilis saat tab ini masih terbuka. Memuat ulang akan mengambil versi tersebut.",
+    "body": "Sebagian aplikasi gagal diunduh. Biasanya versi baru dirilis saat tab ini terbuka. Memuat ulang akan mengambilnya.",
     "brokenTitle": "Terjadi masalah di halaman ini",
-    "brokenBody": "Sebagian halaman ini mengalami galat. Memuat ulang biasanya memperbaikinya, dan detail di bawah membantu kami menemukan penyebabnya.",
+    "brokenBody": "Sebagian halaman ini mengalami galat. Memuat ulang biasanya memperbaikinya, dan detailnya membantu kami menemukan penyebabnya.",
     "reload": "Muat ulang",
     "goHome": "Ke beranda",
     "details": "Detail"
@@ -203,9 +203,9 @@
       "regularVideo": "Video klasik untuk kanalmu",
       "verticalShort": "Klip vertikal untuk feed Shorts",
       "shortsEditor": "Rekam dan edit short di browser",
-      "story": "Klip pendek yang tayang selama 24 jam",
+      "story": "Tayang selama 24 jam",
       "musicAudio": "Lagu, podcast, dan audio lainnya",
-      "audioEditor": "Potong, rapikan, dan seimbangkan podcast serta musik",
+      "audioEditor": "Potong, rapikan, dan seimbangkan",
       "groupChat": "Ruang live yang kamu pandu bersama tamu",
       "goLiveNow": "Siaran langsung untuk pengikutmu",
       "communitySnap": "Postingan cepat di tab komunitasmu",
@@ -219,8 +219,8 @@
   },
   "hiveAuth": {
     "waiting": "Menunggu persetujuan di HiveAuth...",
-    "title": "Perlu Persetujuan HiveAuth",
-    "hint": "Silakan cek aplikasi HiveAuth-mu untuk menyetujui transaksi ini"
+    "title": "Perlu persetujuan HiveAuth",
+    "hint": "Cek aplikasi HiveAuth-mu untuk menyetujui transaksi ini."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain tidak menandatangani transaksi",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod sudah dimulai, tetapi pengumuman di Hive tidak dapat diposting."
   },
   "appUpdate": {
-    "updating": "Memperbarui ke versi terbaru ({{version}})…",
+    "updating": "Memperbarui ke {{version}}…",
     "reloadingForUpload": "Memuat ulang agar unggahanmu berjalan di build terbaru."
   },
   "auth": {
@@ -303,6 +303,17 @@
     "moreTag": "Lebih banyak #{{tag}}",
     "moreVideos": "Video lainnya",
     "hideControls": "Sembunyikan kontrol",
-    "showControls": "Tampilkan kontrol"
+    "showControls": "Tampilkan kontrol",
+    "watching": "{{count}} menonton",
+    "startedAgo": "Dimulai {{when}}",
+    "topSupporters": "Pendukung teratas",
+    "noSupporters": "Belum ada boost",
+    "full": "Layar penuh",
+    "loginToChat": "Masuk untuk chat"
+  },
+  "pullToRefresh": {
+    "pull": "Tarik untuk memuat ulang",
+    "release": "Lepaskan untuk memuat ulang",
+    "refreshing": "Memuat ulang…"
   }
 }

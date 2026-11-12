@@ -34,7 +34,7 @@
   },
   "directory": {
     "title": "Badges",
-    "intro": "Badges sind Auszeichnungen, die <b>dir von anderen</b> auf Hive verliehen werden – für Events, Beiträge und Meilensteine. Du kannst keinem Badge beitreten: Jemand verleiht es dir. Öffne ein Badge, um zu sehen, was seine Empfänger hier veröffentlichen.",
+    "intro": "Badges sind Auszeichnungen, die <b>dir von anderen</b> auf Hive verliehen werden, für Events, Beiträge und Meilensteine. Du kannst keinem Badge beitreten: Jemand verleiht es dir.",
     "searchPlaceholder": "Badges suchen...",
     "sort": {
       "recipients": "Empfänger",
@@ -58,7 +58,8 @@
     "awarding": "Wird verliehen…",
     "held": "Erhalten",
     "award": "Verleihen",
-    "note": "Das Badge folgt der Person auf Hive – genau das bedeutet es, ein Badge zu haben. Du kannst es auf der Seite des Badges wieder entziehen."
+    "awardNamed": "„{{title}}“ verleihen",
+    "note": "Das Badge folgt der Person auf Hive: Genau das bedeutet es, ein Badge zu haben. Du kannst es auf der Seite des Badges wieder entziehen."
   },
   "hive": {
     "dragToReorder": "Zum Sortieren ziehen",
@@ -85,8 +86,9 @@
     "unclaimed": "Nicht beansprucht",
     "noActivity": "In diesem Zeitraum noch keine Aktivität",
     "otherTopics": "Sonstige",
-    "title": "Rankings",
+    "title": "Bestenliste",
     "subtitle": "{{blurb}}: Top-Creator auf 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
     "subtitleTopic": "{{blurb}}: Top-Creator in {{topic}}.",
     "allTopics": "Alle Themen",
     "finding": "@{{user}} wird in dieser Rangliste gesucht…",

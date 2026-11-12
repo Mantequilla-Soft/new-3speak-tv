@@ -9,7 +9,7 @@
     },
     "upload": {
       "title": "Las subidas están desactivadas para tu cuenta",
-      "body": "Tu cuenta de 3Speak no puede subir contenido en este momento. Si crees que es un error, contacta al soporte de 3Speak."
+      "body": "Tu cuenta no puede subir contenido en este momento. Si crees que es un error, contacta al soporte de 3Speak."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "Estamos teniendo problemas de infraestructura",
-    "body": "Nuestro equipo ya está trabajando para que 3Speak vuelva a funcionar. Únete a nuestro Discord para contactarnos y recibir novedades en vivo. Gracias por tu paciencia.",
+    "body": "Nuestro equipo está trabajando ahora mismo para que 3Speak vuelva. Únete a nuestro Discord para recibir novedades en vivo.",
     "joinDiscord": "Únete a nuestro Discord"
   },
   "changelog": {
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Publica videos",
-        "text": "Sube videos largos que siguen siendo tuyos, en una cadena de la que nadie puede borrarlos a escondidas."
+        "text": "Videos largos que siguen siendo tuyos"
       },
       "filmShorts": {
         "title": "Graba Shorts",
-        "text": "Algo rápido, vertical y fácil de compartir. Ideal para conseguir tus primeros espectadores."
+        "text": "Rápidos, verticales y fáciles de compartir"
       },
       "goLive": {
         "title": "Transmite en vivo",
-        "text": "Transmite para tu gente, sube invitados al escenario y quédate con la grabación después."
+        "text": "Sube invitados al escenario y quédate con la grabación"
       },
       "buildCommunity": {
         "title": "Crea una comunidad",
-        "text": "Abre un espacio sobre lo que te importa, o únete a uno que ya esté en plena actividad."
+        "text": "Abre un espacio o únete a uno"
       },
       "makeFriends": {
         "title": "Haz amigos de verdad",
-        "text": "Comenta, chatea y colabora con personas reales que se apoyan entre sí."
+        "text": "Comenta, chatea y colabora"
       },
       "getInspired": {
         "title": "Inspírate y participa",
-        "text": "Descubre creadores, apoya a los que te encantan y gana mientras tanto."
+        "text": "Apoya a creadores y gana tú también"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Subiendo…",
     "interestsHint": "Los usamos para elegir lo que aparece en tu página de inicio. Elige todos los que quieras, o ninguno, y cámbialos cuando quieras.",
     "interestsFineprint": "Se guardan en tu cuenta de Hive, así que todas las apps de Hive muestran el mismo perfil y los mismos intereses.",
-    "saveAndExplore": "Guardar y empezar a explorar"
+    "saveAndExplore": "Guardar y empezar a explorar",
+    "eyebrow": "Bienvenida",
+    "stepOf": "Paso {{n}} de {{total}}",
+    "profileFineprint": "Se guarda en tu cuenta de Hive, así todas las apps de Hive muestran el mismo perfil."
   },
   "profileEdit": {
     "updated": "Perfil actualizado",
@@ -193,7 +196,7 @@
     "uploadBanner": "Sube un banner de perfil",
     "changeBanner": "Cambiar banner",
     "addBanner": "Agregar un banner",
-    "bannerHint": "Queda mejor a <b>2800 × 684</b> px (o cualquier imagen 4:1). Mantén lo importante centrado: los lados se recortan en pantallas angostas y tu nombre va sobre la parte inferior izquierda.",
+    "bannerHint": "Mantén lo importante centrado: los lados se recortan en pantallas estrechas y tu nombre va sobre la parte inferior izquierda.",
     "uploadPicture": "Sube una foto de perfil",
     "pictureLabel": "Foto de perfil",
     "pictureHint": "Una cara o un logo funcionan mejor. Cuadrada, de 400 × 400 px o más. Hasta 8 MB.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "¿Cómo te llamamos? (@{{username}})",
     "namePlaceholder": "¿Cómo te llamamos?",
     "shortBio": "Biografía corta",
-    "bioPlaceholder": "¿Qué creas y qué puede esperar la gente de ti?",
+    "bioPlaceholder": "¿Qué creas y qué puede esperar la gente?",
     "location": "Ubicación",
     "optional": "opcional",
     "locationPlaceholder": "¿En qué parte del mundo estás?"

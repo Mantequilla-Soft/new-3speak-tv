@@ -17,7 +17,8 @@
     "loginFailed": "Logowanie nie powiodło się: {{error}}",
     "logoAlt": "Logo 3Speak",
     "title": "Zaloguj się nazwą użytkownika",
-    "usernamePlaceholder": "Nazwa użytkownika"
+    "usernamePlaceholder": "Nazwa użytkownika",
+    "continueWith": "Kontynuuj przez {{method}}"
   },
   "socialLink": {
     "hashCopied": "Skopiowano hash",
@@ -55,7 +56,7 @@
   },
   "auth": {
     "title": "Autoryzuj 3Speak",
-    "text": "Aby przesyłać filmy na 3Speak, potrzebujemy twoich uprawnień posting. Dzięki nim możemy publikować przesłane przez ciebie filmy na Hive. Uprawnienia posting przyznajesz nam tylko raz.",
+    "text": "Do przesyłania potrzebujemy twoich uprawnień posting, abyśmy mogli publikować twoje filmy na Hive. Przyznajesz je tylko raz.",
     "authorize": "Autoryzuj"
   },
   "beneficiary": {
@@ -74,6 +75,11 @@
       "maxCount": "Hive pozwala na maksymalnie {{max}} beneficjentów na post."
     },
     "title": "Beneficjenci",
+    "shareRewards": "Podziel nagrody",
+    "you": "ty",
+    "toYou": "dla ciebie",
+    "addCollaborator": "Dodaj współtwórcę",
+    "saveSplit": "Zapisz podział",
     "intro": "Dodaj użytkownika, który ma automatycznie otrzymywać część nagród za ten post.",
     "minPercent": "% (min. {{percent}}%)",
     "usernamePlaceholder": "Wpisz nazwę użytkownika",
@@ -100,7 +106,7 @@
   },
   "verifyAuth": {
     "title": "Weryfikacja autoryzacji",
-    "text": "Poczekaj, aż sprawdzimy, czy autoryzacja została przyznana..."
+    "text": "Sprawdzanie, czy została przyznana…"
   },
   "editor": {
     "confirmLeave": "Edytor jest nadal otwarty. Opuszczenie tej strony zamknie edytor, a niezapisane zmiany zostaną utracone.\n\nOK = Zamknij edytor i wyjdź\nAnuluj = Zostań na tej stronie",
@@ -176,7 +182,9 @@
     "details": "Dodatkowe szczegóły (opcjonalnie)",
     "detailsPlaceholder": "Podaj więcej kontekstu...",
     "submitting": "Wysyłanie...",
-    "submit": "Wyślij zgłoszenie"
+    "submit": "Wyślij zgłoszenie",
+    "intro": "Zgłoszenia trafiają do zespołu 3Speak. Twórca nie zobaczy, kto zgłosił.",
+    "nextDetails": "Dalej: dodaj szczegóły"
   },
   "upload": {
     "missingInfo": "Brak informacji o filmie lub miniaturze.",

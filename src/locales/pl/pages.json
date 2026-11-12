@@ -98,8 +98,8 @@
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "PRZEPRASZAMY! NIE ZNALEZIONO STRONY",
+    "title": "Przepraszamy, nie znaleziono strony",
     "message": "Niestety strona, której szukasz, nie jest dostępna.",
-    "goHome": "PRZEJDŹ NA STRONĘ GŁÓWNĄ"
+    "goHome": "Przejdź na stronę główną"
   }
 }

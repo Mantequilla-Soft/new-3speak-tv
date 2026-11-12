@@ -79,6 +79,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Опубликовать видеореакцию",
+    "rec": "REC {{time}}",
+    "mic": "Микрофон",
+    "camera": "Камера",
+    "restart": "Заново",
     "authorized": "@threespeak авторизован — теперь вы можете опубликовать реакцию",
     "authFailed": "Авторизация не удалась. Попробуйте ещё раз.",
     "webcamDenied": "Нет доступа к веб-камере",
@@ -92,7 +97,7 @@
     "uploadVideo": "Загрузить видео",
     "recordVideo": "Записать видео",
     "startRecording": "Начать запись",
-    "stopRecording": "Остановить запись",
+    "stopRecording": "Остановить и просмотреть",
     "recordedVideo": "Записанное видео",
     "descriptionPlaceholder": "Добавьте описание к видеореакции...",
     "showInShorts": "Показать в 3Speak Shorts",

@@ -11,6 +11,8 @@
       "transferFailed": "送金に失敗しました: {{message}}"
     },
     "heading": "@{{recipient}} さんに投げ銭を送る",
+    "pageTitle": "@{{recipient}} に投げ銭",
+    "pageSub": "配信オーバーレイまたはリンクから開きました",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "ほかの方法",
@@ -23,7 +25,16 @@
     "memoLinkNote": "このリンクがメモに追加されます: {{link}}",
     "send": "投げ銭を送る",
     "sendAmount": "{{amount}} {{currency}} を送る",
+    "paidIn": "{{currency}} で支払い · 手数料なし",
+    "forTitle": "「{{title}}」へ",
+    "presets": {
+      "coffee": "コーヒー 1 杯",
+      "popular": "いちばん人気",
+      "thanks": "大感謝",
+      "superFan": "大ファン"
+    },
     "sentEyebrow": "投げ銭を送りました",
+    "sentTo": "@{{recipient}} に {{amount}}",
     "lightning": {
       "amountLabel": "金額（sats）:",
       "messageLabel": "メッセージ（任意）:",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "頻度",
       "once": "1回のみ",
+      "oneTime": "1 回のみ",
+      "monthly": "毎月",
       "until": "毎月、{{date}}まで",
       "note": "Hive が30日ごとに自動で送ります。初回はいますぐです。いつでも停止できます。",
       "replaces": "@{{recipient}} にすでに送っている毎月の応援は、これに置き換わります。",
@@ -91,7 +104,8 @@
     "addToPlaylist": "再生リストに追加",
     "addTag": "タグを追加",
     "notInterested": "興味なし",
-    "dontShowCreator": "@{{author}} さんを表示しない"
+    "dontShowCreator": "@{{author}} さんを表示しない",
+    "saveToPlaylist": "再生リストに保存"
   },
   "guestList": {
     "loadFailed": "現在のゲストリストを読み込めませんでした",
@@ -132,18 +146,21 @@
     "tagged": "「{{tag}}」のタグを付けました。",
     "vote": "投票",
     "tagThisVideo": "この動画にタグを付ける",
-    "tagOptional": "— 任意 —",
+    "tagOptional": "任意",
     "pickTopicFirst": "先にトピックを選んでください",
     "taggedNoDot": "「{{tag}}」のタグを付けました",
     "tagFailed": "タグ付けに失敗しました: {{message}}",
-    "taggedAlreadyVoted": "「{{tag}}」のタグを付けました。{{weight}}% の投票はすでに完了しています。",
-    "votingClosed": "投票は締め切られました — この動画にタグを付ける",
+    "taggedAlreadyVoted": "「{{tag}}」のタグを付けました。{{weight}}% の投票はすでに済んでいます。",
+    "votingClosed": "投票は締め切られました: この動画にタグを付ける",
     "youTagged": "この動画に <b>{{tag}}</b> のタグを付けました。",
-    "pickTopic": "トピックを選ぶ（100% の投票として扱われます）",
+    "pickTopic": "トピックを選ぶと 100% の投票になります。",
     "submitTag": "タグを送信",
     "tagThisVideoFull": "この動画にタグを付ける（100% の投票として扱われます）",
-    "justTag": "投票せずにタグだけ付ける",
-    "addsAbout": "約 {{value}} 加算"
+    "justTag": "投票せず、タグだけ付ける",
+    "justTagShort": "タグだけ",
+    "voteAndTag": "投票してタグ付け",
+    "addsAbout": "約 {{value}} 加算",
+    "postSoFar_other": "現在 {{value}} · {{count}} 票"
   },
   "tagsPicker": {
     "autoTagged": "自動タグ: {{tags}}",
@@ -152,7 +169,7 @@
     "noMatches": "「{{query}}」に一致するトピックはありません。",
     "allSelected": "{{category}} のすべてが選択されています。さらに絞り込む場合のみ、個別のトピックを追加してください:",
     "orPickTopics": "または個別のトピックを選ぶ:",
-    "goodEnough": "これで十分です。さらに絞り込むこともできます（任意）:",
+    "goodEnough": "これで十分、またはさらに絞り込む（任意）",
     "moreSpecific": "さらに詳しく:"
   }
 }

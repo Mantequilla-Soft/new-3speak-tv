@@ -31,7 +31,8 @@
   "gated": {
     "title": "Tylko dla członków",
     "checkFailed": "Nie udało się teraz potwierdzić twojej subskrypcji. Spróbuj za chwilę.",
-    "preview": "Oglądasz darmowy podgląd. 3Speak Pro odblokowuje cały film.",
+    "preview": "Oglądasz darmowy podgląd",
+    "previewSub": "3Speak Pro odblokowuje cały film.",
     "subscribersOnly": "Ten film jest dostępny dla subskrybentów 3Speak Pro.",
     "cta": "Kup 3Speak Pro"
   },
@@ -51,6 +52,8 @@
     "value": "Wartość"
   },
   "moreVideos": "Więcej filmów",
+  "nextIn": "Następne w {{name}}",
+  "fromCommunity": "Z {{name}}",
   "vote": {
     "saveFailed": "Nie udało się zapisać głosu"
   },
@@ -79,14 +82,14 @@
     "loginRequired": "Zaloguj się, aby tworzyć klipy",
     "cancel": "Anuluj klip",
     "clipVideo": "Utwórz klip z filmu",
-    "label": "Klip z filmu",
+    "label": "Utwórz klip z filmu",
     "clip": "Klip",
     "seekToStart": "Przewiń do początku",
     "setStart": "Ustaw początek",
     "setEnd": "Ustaw koniec",
     "createClip": "Utwórz klip",
     "barStart": "Przewiń do początku klipu",
-    "barEnd": "Początek: {{start}} — teraz przewiń do końca",
+    "barEnd": "Początek {{start}} · teraz przewiń do końca",
     "barDone": "Klip: {{start}} – {{end}}"
   },
   "share": {
@@ -104,11 +107,11 @@
   },
   "media": {
     "unavailableTitle": "Ten film nie jest już dostępny",
-    "unavailableBody": "Nie udało się znaleźć w sieci plików tego starszego filmu. Post nadal istnieje w blockchainie, ale filmu nie da się już odtworzyć.",
+    "unavailableBody": "Nie znaleziono plików tego starszego filmu. Post nadal istnieje na Hive.",
     "scheduledTitle": "Ten post jest zaplanowany",
     "scheduledBody": "Zostanie opublikowany {{date}}. Od tego momentu będzie można obejrzeć wideo.",
     "blockedTitle": "Nie udało się teraz wczytać filmu",
-    "blockedBody": "Jeden z naszych serwerów wideo nie odpowiedział. Z samym filmem wszystko w porządku, więc spróbuj ponownie."
+    "blockedBody": "Jeden z naszych serwerów wideo nie odpowiedział. Z filmem wszystko w porządku."
   },
   "tipNudge": {
     "text": "Podobało ci się?<hide> Wyślij <b>@{{author}}</b> napiwek!</hide>",
@@ -119,7 +122,9 @@
     "members_few": "{{count}} członków",
     "members_many": "{{count}} członków",
     "members_other": "{{count}} członka",
-    "postedIn": "Opublikowano w"
+    "postedIn": "Opublikowano w",
+    "partOf": "Część",
+    "position": "{{current}} z {{total}}"
   },
   "tags": {
     "curated": "Wybrane"
@@ -137,7 +142,8 @@
     "openTagFeed": "Otwórz kanał tagu"
   },
   "scheduled": {
-    "notice": "Zaplanowano na <b>{{date}}</b> — jeszcze nieopublikowane.",
+    "notice": "Zaplanowano na <b>{{date}}</b>",
+    "notPublished": "Jeszcze nieopublikowane.",
     "futureDate": "przyszłą datę",
     "edit": "Edytuj, zmień termin lub anuluj",
     "editTitle": "Edytuj zaplanowany post (szczegóły, datę lub anuluj)"
@@ -164,7 +170,8 @@
     "toggleDetails": "Pokaż/ukryj szczegóły",
     "followCreator": "Obserwuj twórcę",
     "closeMenu": "Zamknij menu",
-    "openActions": "Otwórz akcje"
+    "openActions": "Otwórz akcje",
+    "support": "Wesprzyj {{name}}"
   },
   "description": {
     "hide": "Ukryj opis",
@@ -206,26 +213,27 @@
     "markdownHint": "Obsługuje markdown.",
     "listed": "Publiczny",
     "unlistedLabel": "Niepubliczny",
-    "listedHint": "Widoczny w kanałach, wyszukiwaniu i na twoim profilu.",
-    "unlistedHint": "Ukryty w kanałach i wyszukiwaniu — nadal odtwarza się przez bezpośredni link i zostaje na twoim profilu (z oznaczeniem).",
-    "allowRemix": "Zezwól na remiks/klip",
-    "remixOn": "Inni mogą tworzyć remiksy/klipy; jako autor oryginału widniejesz ty.",
+    "listedHint": "W kanałach, wyszukiwaniu i na twoim profilu",
+    "unlistedHint": "Tylko przez bezpośredni link, z oznaczeniem na profilu",
+    "allowRemix": "Zezwól na remiks i klip",
+    "remixOn": "Widniejesz jako autor oryginału",
     "remixOff": "Inni nie mogą remiksować ani wycinać klipów z tego filmu.",
     "adsOnVideo": "Reklamy w tym filmie",
     "adsOnHint": "W tym filmie mogą pojawiać się reklamy.",
     "adsOffHint": "Brak reklam w tym filmie.",
     "rollsOnVideo": "Spoty w filmach",
     "rollsOnHint": "Mogą pojawić się spoty, banery i paski.",
-    "rollsOffHint": "W tym filmie tylko banery i paski.",
+    "rollsOffHint": "W przeciwnym razie tylko banery i paski",
     "trailer": "Zwiastun kanału",
     "trailerOn": "Odtwarza się automatycznie na górze zakładki Przegląd na twoim profilu, zastępując poprzedni zwiastun.",
-    "trailerOff": "Ustaw ten film jako automatycznie odtwarzany na górze zakładki Przegląd na twoim profilu.",
+    "trailerOff": "Odtwarza się automatycznie na górze profilu",
     "nsfw": "Dla dorosłych / NSFW",
     "notNsfw": "Nie dla dorosłych",
     "nsfwHint": "Ukryty w kanałach i wyszukiwaniu, chyba że widz włączył NSFW; otagowany jako nsfw na Hive.",
     "notNsfwHint": "Zwykła treść, widoczna dla wszystkich.",
+    "nsfwOffHint": "Ukryte, chyba że widz włączył NSFW",
     "promoted": "Promowany",
-    "promote": "Promuj film",
+    "promote": "Promuj",
     "saveChanges": "Zapisz zmiany",
     "noChanges": "Brak zmian do zapisania.",
     "thumbUploaded": "Miniatura przesłana.",
@@ -270,7 +278,8 @@
       "visibility": "Widoczność",
       "content": "Treść",
       "ads": "Reklamy",
-      "promotion": "Promocja"
+      "promotion": "Promocja",
+      "contentAds": "Treść, reklamy i promocja"
     },
     "chaptersNoteAll": "Lista rozdziałów trafia do opisu przy zapisie.",
     "editChapters": "Edytuj rozdziały",

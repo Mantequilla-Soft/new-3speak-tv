@@ -81,7 +81,8 @@
     "views_one": "{{num}} vue",
     "views_many": "{{num}} vues",
     "views_other": "{{num}} vues",
-    "readMore": "Lire la suite"
+    "readMore": "Lire la suite",
+    "label": "Bande-annonce"
   },
   "snaps": {
     "readMore": "Lire la suite",
@@ -186,7 +187,8 @@
       "text": "Regroupez vos vidéos dans une playlist à regarder dans l'ordre.",
       "cta": "Créer votre première playlist",
       "visitor": "@{{user}} n'a aucune playlist publique."
-    }
+    },
+    "visitorPreview": "Les visiteurs voient : « {{text}} »"
   },
   "links": {
     "button": "Liens",
@@ -205,7 +207,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Communauté",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "latestSnap": "Dernier snap"
   },
   "streams": {
     "loading": "Chargement des lives…",
@@ -320,7 +323,11 @@
     "hiddenToast": "Pourboire masqué sur ton profil",
     "unhiddenToast": "Le pourboire est de nouveau visible sur ton profil",
     "hideFailed": "Impossible de modifier ce pourboire. Réessaie.",
-    "hideWalletPrompt": "Signe pour choisir les pourboires affichés sur ton profil"
+    "hideWalletPrompt": "Signe pour choisir les pourboires affichés sur ton profil",
+    "whoTitle": "@{{user}} soutient",
+    "tipped_one": "{{count}} pourboire",
+    "tipped_many": "{{count}} pourboires",
+    "tipped_other": "{{count}} pourboires"
   },
   "layout": {
     "customize": "Personnaliser le profil",
@@ -435,5 +442,14 @@
   },
   "audioTab": {
     "files": "Fichiers audio"
+  },
+  "search": {
+    "placeholder": "Rechercher dans cette chaîne",
+    "clear": "Effacer la recherche",
+    "results_one": "{{count}} résultat pour « {{query}} »",
+    "results_many": "{{count}} résultats pour « {{query}} »",
+    "results_other": "{{count}} résultats pour « {{query}} »",
+    "empty": "Rien sur cette chaîne ne correspond à « {{query}} ».",
+    "older": "Rechercher dans les anciennes vidéos"
   }
 }

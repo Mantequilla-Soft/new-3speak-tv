@@ -20,6 +20,7 @@
     "communityWithSubscribers_many": "Comunidade · {{formatted}} inscritos",
     "communityWithSubscribers_other": "Comunidade · {{formatted}} inscritos",
     "commentFallback": "(comentário)",
+    "videoKind": "3Speak · Vídeo",
     "play": "Reproduzir {{title}}"
   },
   "share": {
@@ -33,22 +34,30 @@
     "responsiveSub": "Se ajusta à página onde estiver",
     "fixedSub": "Iframe de tamanho fixo",
     "sendInChat": "Enviar no chat do 3Speak",
-    "sendInChatSub": "Mande para alguém no 3Speak",
+    "sendInChatSub": "Mande para alguém",
     "embedOnWebsite": "Incorporar em um site",
-    "embedOnWebsiteSub": "Copie o HTML para seu site ou blog",
-    "forHivePost": "Para post no Hive",
+    "embedOnWebsiteSub": "Responsivo ou tamanho fixo",
+    "forHivePost": "Para um post na Hive",
+    "forHivePostSub": "Copie o link para colar",
     "hivePostCopied": "Link copiado. Cole-o no seu post do Hive.",
-    "generalShare": "Compartilhar / copiar link",
-    "generalShareSub": "Outros apps, ou copiar o link"
+    "generalShare": "Compartilhar ou copiar link",
+    "generalShareSub": "Outros apps",
+    "embed": "Incorporar",
+    "chat": "Chat",
+    "more": "Mais",
+    "startAt": "Começar em",
+    "toFollowers_one": "Para seu {{n}} seguidor",
+    "toFollowers_many": "Para seus {{n}} seguidores",
+    "toFollowers_other": "Para seus {{n}} seguidores"
   },
   "gate": {
     "connectTitle": "Conectar ao chat do 3Speak",
-    "connectBody": "O chat funciona com o Snapie. Ao conectar, você assina um desafio de login único com sua chave de postagem da Hive (sem transação, sem custo).",
+    "connectBody": "O chat funciona com o Snapie. Ao conectar, você assina um desafio de login único com sua chave de postagem. Sem transação, sem custo.",
     "connecting": "Conectando…",
     "connectButton": "Conectar chat",
     "cannotSign": "Seu login atual não consegue assinar o desafio do chat. Use Keychain, HiveAuth, PeakVault ou Ledger.",
-    "needsAccountTitle": "O chat precisa de uma conta da Hive",
-    "needsAccountBody": "As mensagens são assinadas com as chaves da sua própria conta, então o chat é liberado junto com todo o resto quando sua conta estiver pronta. Conclua as metas no seu perfil e a equipe cuida do resto.",
+    "needsAccountTitle": "O chat precisa de uma conta da Hive.",
+    "needsAccountBody": "Ele é liberado junto com todo o resto quando você concluir o aquecimento.",
     "loginTitle": "Entre para usar o chat",
     "loginBody": "Entre com sua conta da Hive para enviar e receber mensagens.",
     "connectingToChat": "Conectando ao chat…"
@@ -100,8 +109,8 @@
     "serverRejectedServerMap_other": "O servidor rejeitou todas as {{count}} solicitações (ids do mapa de não lidas do próprio servidor)",
     "failed": "Não foi possível marcar tudo como lido",
     "marking": "Marcando como lido…",
-    "button": "Marcar tudo como lido",
-    "buttonCount": "Marcar tudo como lido ({{count}})"
+    "button": "Marcar tudo lido",
+    "buttonCount": "Marcar tudo lido ({{count}})"
   },
   "list": {
     "chooseTarget": "Escolha um chat para enviar",
@@ -136,7 +145,8 @@
     "quoting": "Citando @{{user}}",
     "cancelQuote": "Cancelar citação",
     "removeImage": "Remover imagem",
-    "placeholder": "Digite uma mensagem…"
+    "placeholder": "Digite uma mensagem…",
+    "placeholderTo": "Mensagem para {{name}}"
   },
   "page": {
     "chooseTarget": "Escolha um chat para enviar.",

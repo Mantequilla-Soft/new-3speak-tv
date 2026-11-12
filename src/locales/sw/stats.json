@@ -16,7 +16,9 @@
     "avgPct": "Wastani %",
     "votes": "Kura",
     "comments": "Maoni",
-    "payout": "Malipo"
+    "payout": "Malipo",
+    "followers": "Wafuasi",
+    "earned": "Mapato"
   },
   "days": {
     "short": {
@@ -70,7 +72,8 @@
     "sub": "UTC · rangi nzito = mitazamo zaidi",
     "cellTitle_one": "{{day}} {{hour}}:00 — mtazamo {{count}}",
     "cellTitle_other": "{{day}} {{hour}}:00 — mitazamo {{count}}",
-    "hour": "saa {{hour}}"
+    "hour": "saa {{hour}}",
+    "best": "Muda bora: <b>{{day}} {{from}}–{{to}} UTC</b>"
   },
   "detail": {
     "summary": "kura {{votes}} · maoni {{comments}} · ${{payout}}"
@@ -83,7 +86,8 @@
     "title": "Linganisha video",
     "pickA": "Chagua video…",
     "vs": "dhidi ya",
-    "pickB": "Chagua nyingine…"
+    "pickB": "Chagua nyingine…",
+    "lastPeriod": "Linganisha na kipindi kilichopita"
   },
   "loadError": "Imeshindwa kupakia takwimu zako kwa sasa.",
   "emptyRange": "Bado hakuna data ya kutazama katika kipindi hiki — jaribu “Zote”, au subiri watu watazame video zako.",
@@ -96,7 +100,8 @@
   "sections": {
     "trend": "Muda wa kutazama kadiri muda unavyokwenda",
     "best": "Zinazofanya vizuri zaidi",
-    "audience": "Hadhira yako"
+    "audience": "Hadhira yako",
+    "top": "Maudhui bora"
   },
   "openInNewTab": "Fungua video kwenye kichupo kipya",
   "footnote": "Takwimu za kutazama zinatoka kwenye ufuatiliaji wa majaribio na zinaonekana kwako tu.",
@@ -105,9 +110,9 @@
     "empty": "Bado hakuna data ya kutazama kwa video hii.",
     "uniqueViewers": "Watazamaji wa kipekee",
     "avgSpeed": "Kasi ya wastani",
-    "mostDropOff": "📉 Wengi wanaondoka saa <b>{{time}}</b>",
-    "earlyDrop": "⚡ <b>{{pct}}%</b> waliondoka katika sekunde 3 za kwanza",
-    "replayed": "🔁 Ilichezwa tena:",
+    "mostDropOff": "Wengi wanaondoka kwenye <b>{{time}}</b>",
+    "earlyDrop": "<b>{{pct}}%</b> waliondoka katika sekunde 3 za kwanza",
+    "replayed": "Ilichezwa tena:",
     "retentionTitle": "Uhifadhi wa hadhira",
     "retentionSub": "sehemu ya watazamaji ambao bado wanatazama katika kila wakati",
     "pctWatching": "{{pct}}% wanatazama",
@@ -115,5 +120,15 @@
     "replaySub": "sehemu ambazo watazamaji hutazama na kurudia zaidi",
     "hotSpot": "sehemu maarufu",
     "notEnoughReplays": "Bado hakuna marudio ya kutosha"
+  },
+  "title": "Takwimu za chaneli",
+  "legend": {
+    "current": "Kipindi hiki",
+    "previous": "Kilichopita"
+  },
+  "audience": {
+    "title": "Hadhira",
+    "topCountry": "Nchi inayoongoza",
+    "topDevice": "Kifaa kinachoongoza"
   }
 }

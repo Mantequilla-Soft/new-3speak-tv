@@ -23,6 +23,9 @@
     "noOtherPlaylists": "Du hast noch keine anderen Playlists",
     "createFirst": "Playlist erstellen",
     "createNew": "Neue Playlist erstellen",
+    "newPlaylist": "Neue Playlist",
+    "savedTo_one": "In {{count}} Playlist gespeichert",
+    "savedTo_other": "In {{count}} Playlists gespeichert",
     "name": "Name",
     "namePlaceholder": "Meine geniale Playlist",
     "privacy": "Sichtbarkeit",
@@ -96,12 +99,15 @@
     "description": "Beschreibung",
     "descriptionPlaceholder": "Über dieses Album (optional)",
     "filterCount_one": "{{shown}} von {{count}} Eintrag",
-    "filterCount_other": "{{shown}} von {{count}} Einträgen"
+    "filterCount_other": "{{shown}} von {{count}} Einträgen",
+    "shuffle": "Zufällig"
   },
   "type": {
     "label": "Art",
     "video": "Video",
     "audio": "Audio",
+    "videoSub": "Lange Videos",
+    "audioSub": "Tracks und Podcasts",
     "kindLabel": "Was für Audio?",
     "kinds": {
       "podcast": "Podcast",

@@ -5,8 +5,8 @@
     "yourStreamEnded": "Dein Stream ist beendet",
     "thisStreamEnded": "Dieser Stream ist beendet",
     "noLongerLive": "Er ist nicht mehr live. Starte einen neuen, wann immer du bereit bist.",
-    "recordingProcessing": "Stark! Deine Aufnahme wird verarbeitet und erscheint gleich im Ankündigungspost.",
-    "thanksForLive": "Stark, danke, dass du live gegangen bist!",
+    "recordingProcessing": "Deine Aufnahme wird verarbeitet und erscheint gleich im Ankündigungspost.",
+    "thanksForLive": "Stark, danke, dass du live warst",
     "backHome": "Zurück zur Startseite",
     "howWasStream": "Wie war dein Stream?",
     "connecting": "Verbindung zu OpenPods wird hergestellt…",
@@ -41,13 +41,13 @@
     "slowDown": "Warte kurz und clippe dann nochmal.",
     "failed": "Clip konnte nicht erstellt werden. Versuch es in ein paar Sekunden nochmal.",
     "title": "Die letzten 30 Sekunden clippen",
-    "label": "30 s",
+    "label": "Clip",
     "clipping": "Wird geclippt…"
   },
   "report": {
     "reasons": {
       "harassment": "Belästigung oder Hass",
-      "sexual": "Sexuelle oder explizite Inhalte",
+      "sexual": "Sexuell oder explizit",
       "violence": "Gewalt oder gefährliche Handlungen",
       "selfharm": "Selbstverletzung",
       "illegal": "Illegale Inhalte",
@@ -58,7 +58,7 @@
     "failed": "Meldung konnte nicht gesendet werden. Bitte versuch es nochmal.",
     "title": "Diesen Stream melden",
     "reporting": "Du meldest <b>@{{host}}</b>.",
-    "intro": "Sag uns, was nicht stimmt. Unser Team prüft jede Meldung.",
+    "intro": "Unser Team prüft jede Meldung.",
     "detailPlaceholder": "Weitere Details (optional)",
     "sending": "Wird gesendet…",
     "submit": "Meldung senden"
@@ -91,7 +91,8 @@
   },
   "lobby": {
     "descriptionPlaceholder": "Worum geht es in dieser Session? Füg Shownotes, Links oder eine Zusammenfassung hinzu…",
-    "enableHosting": "Hosten & Sprechen aktivieren",
+    "enableHosting": "Hosten und Sprechen aktivieren",
+    "enableHostingHint": "Braucht die Posting-Berechtigung von @threespeak",
     "handoverFailed": "Hosten konnte nicht automatisch aktiviert werden. OpenPods postet über @threespeak in deinem Namen – prüfe, ob du die Posting-Berechtigung erteilt hast, und versuch es dann nochmal.",
     "signInToHost": "Melde dich mit Hive an, um zu hosten oder zu sprechen"
   },
@@ -131,8 +132,8 @@
     },
     "chatBox": {
       "title": "Dein Chat in OBS",
-      "desc": "Ein Link für alle deine Streams. Füge ihn in OBS als Dock hinzu, um neue Nachrichten zu lesen, während du live bist. Die Anleitung unten zeigt, wie.",
-      "copy": "Chat-URL für OBS kopieren",
+      "desc": "als benutzerdefiniertes Browser-Dock hinzufügen",
+      "copy": "Chat-URL kopieren",
       "copied": "Chat-URL kopiert"
     },
     "card": {
@@ -143,26 +144,26 @@
       "watch": "Stream ansehen",
       "notAnnounced": "Dieser Stream wurde nicht auf Hive angekündigt.",
       "notAnnouncedAuth": "Nicht auf Hive angekündigt: 3Speak darf noch nicht für dich posten. Bearbeite die Vorlage, um es zu erlauben.",
-      "stuck": "OBS hat sich verbunden, aber bei uns kam kein Video an, deshalb ist der Stream nicht gestartet. Beende das Streamen in OBS und starte es erneut.",
-      "dailyLimit": "OBS konnte nicht live gehen: Kostenlose Konten können einen Stream pro Tag starten. Versuche es 24 Stunden nach dem Start deines letzten Streams erneut oder hol dir 3Speak Pro, um ohne Tageslimit zu streamen.",
+      "stuck": "OBS ist verbunden, aber bei uns kam kein Video an. Beende das Streamen und starte es erneut.",
+      "dailyLimit": "Kostenlose Konten können einen Stream pro Tag starten. Versuch es 24 Stunden nach dem Start deines letzten Streams erneut oder hol dir Pro.",
       "useInStudio": "Im Stream Studio verwenden",
       "proRequired": "OBS konnte nicht live gehen: Streamen aus OBS ist Teil von 3Speak Pro."
     },
     "guide": {
       "title": "So richtest du OBS ein",
-      "step1": "Nutze OBS Studio 30 oder neuer und öffne Einstellungen, dann Stream.",
-      "step2": "Setze Dienst auf \"WHIP\".",
-      "step3": "Server: Füg die Server-URL der gewünschten Vorlage ein (\"Server-URL kopieren\" auf ihrer Karte). Jede Vorlage hat ihre eigene.",
-      "step4": "Bearer Token: Füg dein Stream-Secret von oben auf dieser Seite ein. Es ist für jede Vorlage gleich.",
-      "step5": "Klick in OBS auf \"Start Streaming\" und du bist mit dieser Vorlage live auf 3Speak. \"Stop Streaming\" beendet den Stream.",
-      "outputTitle": "Empfohlene Ausgabe-Einstellungen",
-      "keyframe": "Keyframe-Intervall: 1 bis 2 Sekunden",
-      "bitrate": "Ratensteuerung CBR, 2500 bis 6000 kbps",
-      "encoder": "Encoder: x264 oder dein Hardware-Encoder",
-      "audio": "Audio-Abtastrate: 48 kHz",
-      "bframes": "Keine B-frames (stell sie auf 0, wenn dein Encoder das anbietet)",
+      "step1": "OBS Studio 30 oder neuer: Einstellungen → Stream",
+      "step2": "Setze Dienst auf „WHIP“",
+      "step3": "Server: Füg die Server-URL der Vorlage ein",
+      "step4": "Bearer Token: Füg dein Stream-Secret ein",
+      "step5": "Starte den Stream in OBS. Du bist live auf 3Speak.",
+      "outputTitle": "Empfohlene Ausgabe",
+      "keyframe": "Keyframe 1–2 s",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / Hardware",
+      "audio": "48-kHz-Audio",
+      "bframes": "Keine B-Frames",
       "chatTitle": "Den Chat in OBS sehen",
-      "chatCopy": "Klicke oben auf dieser Seite unter \"Dein Chat in OBS\" auf \"Chat-URL für OBS kopieren\". Es ist ein Link für alle deine Streams.",
+      "chatCopy": "Klicke oben auf dieser Seite unter „Dein Chat in OBS“ auf „Chat-URL kopieren“. Es ist ein Link für alle deine Streams.",
       "chat2": "Öffne in OBS das Menü \"Docks\" und wähle \"Custom Browser Docks\". Gib einen Namen wie \"3Speak Chat\" ein, füge die URL ein und klicke auf \"Apply\". Neue Nachrichten erscheinen in diesem Fenster, solange du live bist. Zuschauer sehen es nie.",
       "chat3": "Zuschauer sehen den Chat bereits neben deinem Stream, du musst ihn also nicht ins Video einbauen. Nur wenn du den Stream auch anderswo teilst: Füge dieselbe URL als \"Browser\"-Quelle hinzu und entferne \"&dock=1\" am Ende. Dann schweben die Nachrichten über dem Video und blenden nach 30 Sekunden aus.",
       "chatOptions": "Optional, ans Ende der URL anhängen: &max=10 zeigt weniger Zeilen, &size=18 macht die Schrift größer, &fade=0 lässt Nachrichten im Video stehen.",
@@ -256,5 +257,14 @@
       "desc": "Mit 3Speak Pro kannst du mit deinen Vorlagen direkt aus OBS live gehen. Ohne Pro funktionieren deine Vorlagen weiterhin im Stream Studio in deinem Browser.",
       "cta": "3Speak Pro holen"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_one": "{{count}} hört zu",
+    "listening_other": "{{count}} hören zu",
+    "emptySub": "Streams und OpenPods erscheinen hier, sobald sie starten.",
+    "emptyRooms": "Gerade ist kein OpenPod offen.",
+    "emptyScheduled": "Gerade ist nichts geplant.",
+    "emptyScheduledSub": "Räume, die offen, aber noch nicht live sind, erscheinen hier."
   }
 }

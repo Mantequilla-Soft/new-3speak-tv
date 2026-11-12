@@ -48,7 +48,7 @@
     "curated": "Imeteuliwa",
     "noCues": "Hakuna vidokezo.",
     "clearQueue": "Futa foleni",
-    "clearAll": "Futa zote",
+    "clearAll": "Futa",
     "queueMoveUp": "Sogeza {{title}} juu",
     "queueMoveDown": "Sogeza {{title}} chini",
     "queueRemove": "Ondoa {{title}} kwenye foleni",
@@ -59,7 +59,7 @@
     "collapse": "Kunja kicheza",
     "skipBack": "Rudi nyuma sekunde {{seconds}}",
     "skipForward": "Songa mbele sekunde {{seconds}}",
-    "speed": "Kasi ya uchezaji",
+    "speed": "Kasi",
     "speedValue": "Kasi ya uchezaji: {{speed}}",
     "sleep": "Kipima muda cha kulala",
     "sleepOff": "Imezimwa",
@@ -76,8 +76,8 @@
     "effectsChecking": "Inakagua kama kipindi hiki kinaauni hili…",
     "timeSaved": "Muda uliookolewa: {{time}}",
     "cast": "Cheza kwenye kifaa kingine",
-    "download": "Hifadhi usikilize bila mtandao",
-    "downloading": "Inahifadhi: {{pct}}%",
+    "download": "Pakua",
+    "downloading": "Inahifadhi kwa matumizi bila mtandao: {{pct}}%",
     "downloaded": "Imehifadhiwa bila mtandao",
     "downloadDone": "Imehifadhiwa kwa kusikiliza bila mtandao",
     "downloadFailed": "Imeshindwa kuhifadhi kipindi hiki",
@@ -101,12 +101,17 @@
     "nextChapter": "Sura inayofuata",
     "chapterLink": "Kiungo cha sura",
     "upNext": "Kinachofuata",
-    "hideIdle": "Ficha (foleni yako inabaki)",
+    "hideIdle": "Ficha · foleni inabaki",
     "continueAt": "Endelea kutoka {{time}}",
     "position": "{{current}} kati ya {{total}}",
     "playingFrom": "Inacheza kutoka {{name}}",
     "atThisMoment": "Kwa wakati huu",
-    "goTo": "Nenda kwa {{name}}"
+    "goTo": "Nenda kwa {{name}}",
+    "shuffle": "Changanya",
+    "repeat": "Rudia wimbo huu",
+    "sleepMinutesShort": "Dak {{minutes}}",
+    "swipeUp": "Telezesha juu kwa kicheza",
+    "commentAt": "Toa maoni kwenye {{time}}…"
   },
   "share": {
     "failed": "Imeshindwa",
@@ -116,7 +121,16 @@
     "copied3speak": "Kiungo cha 3Speak kimenakiliwa!",
     "copyAudioPlayer": "Nakili kiungo cha kicheza sauti",
     "copiedAudioPlayer": "Kiungo cha kicheza sauti kimenakiliwa!",
-    "searchingHive": "Inatafuta kwenye Hive…"
+    "searchingHive": "Inatafuta kwenye Hive…",
+    "title": "Shiriki wimbo",
+    "atTime": "Kuanzia {{time}}",
+    "peakd": "PeakD",
+    "player": "Kiungo cha kicheza",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "Barua pepe",
+    "qr": "QR",
+    "episode": "Kiungo cha kipindi"
   },
   "post": {
     "notFound": "Chapisho halikupatikana",
@@ -130,6 +144,8 @@
     "vote": "Piga kura",
     "signInToTip": "Ingia ili kutoa bakshishi",
     "tip": "Bakshishi",
+    "albumLabel": "Albamu",
+    "notes": "Madokezo",
     "stillIndexing": "Sauti ya chapisho hili bado inaorodheshwa — jaribu tena baada ya dakika chache."
   },
   "page": {
@@ -162,7 +178,7 @@
     "tracks_other": "nyimbo {{count}}",
     "noTracks": "Hakuna nyimbo zilizopatikana.",
     "creators": "Watayarishaji",
-    "albumsPlaylists": "Albamu na orodha za kucheza",
+    "albumsPlaylists": "Orodha za kucheza za sauti",
     "noAudioForFilters": "Hakuna sauti iliyopatikana kwa vichujio hivi.",
     "tabsLabel": "Mionekano ya sauti",
     "tabExplore": "Vinjari",
@@ -175,6 +191,25 @@
   "upload": {
     "title": "Pakia sauti",
     "publishing": "Inachapisha…",
+    "nextTo": "Inayofuata: {{step}}",
+    "publishAlbum_one": "Chapisha albamu · wimbo {{count}}",
+    "publishAlbum_other": "Chapisha albamu · nyimbo {{count}}",
+    "publishWithShorts_one": "Chapisha sauti + Short {{count}}",
+    "publishWithShorts_other": "Chapisha sauti + Shorts {{count}}",
+    "side": {
+      "publishTo": "Chapisha kwenye",
+      "shortsTitle": "Shorts za audiogram",
+      "clips_one": "klipu {{count}}",
+      "clips_other": "klipu {{count}}",
+      "tracks_one": "wimbo {{count}}",
+      "tracks_other": "nyimbo {{count}}",
+      "audio": "Sauti",
+      "shorts": "Shorts",
+      "snaps": "Snaps",
+      "community": "Jumuiya",
+      "rss": "Mlisho wa RSS",
+      "clipLabel": "Picha ndogo ya Short {{n}}: {{title}}"
+    },
     "failed": "Imeshindwa",
     "unknown": "haijulikani",
     "unknownError": "hitilafu isiyojulikana",
@@ -195,7 +230,7 @@
       "review": "Kagua"
     },
     "trackTypes": {
-      "voiceSnap": "Sauti / Snap"
+      "voiceSnap": "Ujumbe wa sauti"
     },
     "toasts": {
       "pickImage": "Chagua faili ya picha",
@@ -236,8 +271,8 @@
       "discard": "Tupa"
     },
     "source": {
-      "dropHere": "Dondosha faili za sauti hapa, au bofya ili kuvinjari",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (nyingi zinaruhusiwa)",
+      "dropHere": "Dondosha faili za sauti, au vinjari",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · kadhaa kwa wakati mmoja",
       "stop": "Simamisha",
       "orRecord": "Au rekodi moja kwa moja",
       "recordLimit": "Hadi dakika {{minutes}} kwa kila rekodi",
@@ -251,7 +286,10 @@
       "trackTitle": "Kichwa cha wimbo",
       "genre": "Aina ya muziki",
       "bpm": "BPM",
-      "descriptionOptional": "Maelezo (si lazima)"
+      "descriptionOptional": "Maelezo (si lazima)",
+      "track": "Wimbo",
+      "category": "Kategoria",
+      "musicGenre": "Aina ya muziki"
     },
     "playlist": {
       "helpRequired": "Inahitajika — chagua au unda orodha ya kucheza. Machapisho ya albamu huishi ndani ya orodha ya kucheza ili nyimbo zake zibaki pamoja ndani ya albamu ya 3Speak. Hii husaidia kuonekana zaidi na kupata nafasi maarufu zaidi kwenye ukurasa wa sauti.",
@@ -265,6 +303,7 @@
       "items_one": "kipengee {{count}}",
       "items_other": "vipengee {{count}}",
       "newPlaylist": "Orodha mpya ya kucheza ya sauti",
+      "newAlbum": "Albamu mpya",
       "namePlaceholder": "Jina la orodha ya kucheza",
       "public": "Ya umma",
       "private": "Binafsi",
@@ -272,6 +311,9 @@
       "creditsPlaceholder": "Wahusika (si lazima)",
       "yearPlaceholder": "Mwaka",
       "labelPlaceholder": "Lebo ya muziki (si lazima)",
+      "fieldYear": "Mwaka",
+      "fieldLabel": "Lebo ya muziki",
+      "fieldCredits": "Wahusika",
       "thumbAlt": "Picha ndogo ya albamu",
       "removeThumb": "Ondoa picha ndogo",
       "creating": "Inaunda…",
@@ -295,20 +337,21 @@
       "help_other": "Nyimbo {{count}} zimeongezwa. Chagua jinsi zitakavyotoka.",
       "howPublished": "Hii ichapishwe vipi?",
       "snapsTitle": "Maoni ya Snap",
-      "snapsDesc": "Kila sauti huchapishwa kama jibu chini ya kontena la karibuni la peak.snaps — huonekana kwenye mlisho wa Snaps (chaguo-msingi).",
+      "snapsDesc": "Kila sauti ni jibu chini ya uzi wa karibuni wa snaps. Inaonekana kwenye mlisho wa Snaps.",
       "singleTitle": "Chapisho la kujitegemea",
       "singleTitleSingleOnly": "Chapisho la kujitegemea (faili moja tu)",
-      "singleDesc": "Sauti moja katika chapisho lake la Hive la ngazi ya juu, pamoja na kichwa, jumuiya, lebo na jalada.",
+      "singleDesc": "Sauti moja kwenye chapisho lake lenye kichwa, jumuiya, lebo na jalada.",
       "albumTitle": "Chapisho la albamu",
       "albumTitleNeeds2": "Chapisho la albamu (linahitaji faili 2+)",
-      "albumDesc": "Chapisho kuu moja (bila sauti) linalotumika kama ukurasa wa kutua; kila wimbo huchapishwa kama jibu la maoni lenye jalada, maelezo, malipo na wanufaika wake.",
-      "howEarn": "Sauti hii ipate mapato vipi?",
-      "postRewardsTitle": "Zawadi za chapisho (mara moja)",
-      "postRewardsDesc": "Unapokea malipo ya kawaida ya mwandishi wa Hive — yanalipwa mara moja, takriban siku 7 baada ya kuchapisha.",
-      "pplTitle": "Malipo kwa kila usikilizaji (maisha yote)",
-      "pplDesc": "Zawadi zote za machapisho ya sauti huenda kwa @{{account}}. Badala ya malipo ya mara moja, programu ya 3Speak inakulipa kwa kila usikilizaji katika maisha yote ya wimbo.",
+      "albumDesc": "Chapisho kuu la kutua, kila wimbo ukiwa jibu lenye jalada na malipo yake.",
+      "howEarn": "Ipate mapato vipi?",
+      "postRewardsTitle": "Zawadi za chapisho",
+      "postRewardsDesc": "Malipo ya kawaida ya Hive, mara moja, takriban siku 7 baada ya kuchapisha",
+      "pplTitle": "Malipo kwa kila usikilizaji",
+      "pplDesc": "Programu ya 3Speak inakulipa kwa kila usikilizaji katika maisha yote ya wimbo. Zawadi za chapisho huenda kwa @{{account}}.",
       "adsTitle": "Matangazo kwenye sauti hii",
-      "adsHint": "Ujumbe mfupi wa mdhamini unaosomwa kwa sauti unaweza kucheza wakati wa sauti hii, na unapata sehemu. Huanza na mpangilio wa akaunti yako; ubadilishe hapa kwa upakiaji huu tu."
+      "adsHint": "Ujumbe mfupi wa mdhamini unaosomwa kwa sauti unaweza kucheza wakati wa sauti hii, na unapata sehemu. Huanza na mpangilio wa akaunti yako; ubadilishe hapa kwa upakiaji huu tu.",
+      "adsSpoken": "Ujumbe wa mdhamini unaosomwa kwa sauti ndani ya sauti hii"
     },
     "reward": {
       "distribution": "Mgawanyo wa zawadi",
@@ -334,6 +377,8 @@
       "helpAlbum": "Kila wimbo huchapishwa kama maoni chini ya chapisho kuu. Weka thamani za pamoja mara moja na uzitumie kwa zote, kisha ubadilishe kwa kila wimbo.",
       "helpSnaps": "Kila wimbo huchapishwa kama snap yake. Weka thamani za pamoja mara moja na uzitumie kwa zote, kisha ubadilishe kwa kila wimbo.",
       "applyToAllHeading": "Tumia kwa nyimbo zote",
+      "applyNote_one": "<b>Tumia kwa wimbo wote {{count}}:</b> maelezo na jalada la pamoja, kisha badilisha wimbo wowote peke yake.",
+      "applyNote_other": "<b>Tumia kwa nyimbo zote {{count}}:</b> maelezo na jalada la pamoja, kisha badilisha wimbo wowote peke yake.",
       "sharedDescription": "Maelezo ya pamoja (si lazima)",
       "sharedCover": "Picha ya jalada ya pamoja",
       "applyToAll_one": "Tumia kwa wimbo {{count}}",
@@ -434,6 +479,7 @@
   "podcasts": {
     "chip": "Za nje",
     "chipHint": "Podikasti kutoka mlisho wowote wa RSS, nje ya 3Speak",
+    "on3speak": "Kwenye 3Speak",
     "follow": "Fuata",
     "following": "Unafuata",
     "unfollow": "Acha kufuata",
@@ -480,6 +526,7 @@
     "notifyOnDone": "Utaarifiwa kuhusu vipindi vipya",
     "notifyOffDone": "Hakuna arifa tena za podikasti hii",
     "notifyHint": "Pata arifa kipindi kipya kinapotoka",
+    "notifyLabel": "Arifu kuhusu vipindi vipya",
     "search": {
       "button": "Tafuta",
       "results_one": "Podikasti {{count}} imepatikana",
@@ -500,8 +547,8 @@
       "export": "Hamisha OPML",
       "invalid": "Hii si faili ya OPML.",
       "empty": "Hakuna milisho ya podikasti katika faili hii.",
-      "imported_one": "Podikasti {{count}} imefuatwa, {{failed}} hazikuweza kuongezwa. Milisho mipya itapakia katika dakika chache zijazo.",
-      "imported_other": "Podikasti {{count}} zimefuatwa, {{failed}} hazikuweza kuongezwa. Milisho mipya itapakia katika dakika chache zijazo."
+      "imported_one": "Podikasti {{count}} imefuatwa, {{failed}} hazikuweza kuongezwa. Milisho mipya inapakia katika dakika chache zijazo.",
+      "imported_other": "Podikasti {{count}} zimefuatwa, {{failed}} hazikuweza kuongezwa. Milisho mipya inapakia katika dakika chache zijazo."
     },
     "errors": {
       "signIn": "Ingia ili kufuata podikasti.",
@@ -522,7 +569,8 @@
     },
     "tip": {
       "button": "Saidia podikasti hii",
-      "heading": "Saidia {{show}}",
+      "heading": "Bakshishi kwa {{show}}",
+      "support": "Saidia {{show}}",
       "hive": "Bakshishi ya Hive kwa @{{account}}",
       "messageLabel": "Ujumbe kwa mwandaaji wa podikasti (si lazima):",
       "messagePlaceholder": "Kipindi kizuri sana!",
@@ -620,7 +668,7 @@
     "downloads": {
       "title": "Vipakuliwa",
       "download": "Pakua ili usikilize nje ya mtandao",
-      "short": "Pakua",
+      "short": "Hifadhi",
       "downloading": "Inapakua {{pct}}%",
       "cancel": "Ghairi upakuaji",
       "saved": "Kimehifadhiwa nje ya mtandao",
@@ -629,7 +677,7 @@
       "removed": "Kipakuliwa kimeondolewa",
       "done": "Kimehifadhiwa ili kisikilizwe nje ya mtandao",
       "total": "Imehifadhiwa: {{size}}",
-      "storage": "tovuti hii inatumia {{used}} kati ya {{quota}} kwenye kivinjari hiki",
+      "storage": "inatumia {{used}} kati ya {{quota}} kwenye kivinjari hiki",
       "perBrowser": "Vipakuliwa hubaki kwenye kivinjari hiki, bila kujali nani ameingia.",
       "errors": {
         "tooLarge": "Kipindi hiki ni kikubwa mno kuhifadhiwa.",
@@ -641,7 +689,7 @@
     },
     "autoQueue": {
       "label": "Ongeza vipindi vipya kwenye foleni kiotomatiki",
-      "hint": "Vipindi vipya vya podikasti hii huenda mwisho wa foleni yako vinapotoka",
+      "hint": "Vinaenda mwisho wa foleni yako",
       "onDone": "Vipindi vipya vya podikasti hii vitaenda kwenye foleni yako",
       "offDone": "Vipindi vipya vya podikasti hii havitaenda tena kwenye foleni yako",
       "added_one": "Kipindi {{count}} kipya kimeongezwa kwenye foleni yako",
@@ -679,6 +727,7 @@
       "startsAt": "Kuanza: {{time}}"
     },
     "private": {
+      "title": "Ongeza mlisho binafsi",
       "toggle": "Huu ni mlisho binafsi (unahitaji kuingia)",
       "username": "Jina la mtumiaji",
       "password": "Nenosiri",

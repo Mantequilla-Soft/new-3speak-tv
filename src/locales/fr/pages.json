@@ -98,8 +98,8 @@
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "DÉSOLÉ ! PAGE INTROUVABLE",
+    "title": "Désolé, page introuvable",
     "message": "Malheureusement, la page que vous cherchez n'est pas disponible.",
-    "goHome": "RETOUR À L'ACCUEIL"
+    "goHome": "Aller à l'accueil"
   }
 }

@@ -22,6 +22,8 @@
     "noOtherPlaylists": "Kamu belum punya playlist lain",
     "createFirst": "Buat playlist",
     "createNew": "Buat playlist baru",
+    "newPlaylist": "Playlist baru",
+    "savedTo_other": "Disimpan ke {{count}} playlist",
     "name": "Nama",
     "namePlaceholder": "Playlist kerenku",
     "privacy": "Privasi",
@@ -91,12 +93,15 @@
     "creditsPlaceholder": "Diproduksi oleh…",
     "description": "Deskripsi",
     "descriptionPlaceholder": "Tentang album ini (opsional)",
-    "filterCount_other": "{{shown}} dari {{count}} item"
+    "filterCount_other": "{{shown}} dari {{count}} item",
+    "shuffle": "Acak"
   },
   "type": {
     "label": "Jenis",
     "video": "Video",
     "audio": "Audio",
+    "videoSub": "Video panjang",
+    "audioSub": "Lagu & podcast",
     "kindLabel": "Audio jenis apa?",
     "kinds": {
       "podcast": "Podcast",

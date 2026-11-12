@@ -50,7 +50,7 @@
     "curated": "Curadoria",
     "noCues": "Sem marcações.",
     "clearQueue": "Limpar fila",
-    "clearAll": "Limpar tudo",
+    "clearAll": "Limpar",
     "queueMoveUp": "Mover {{title}} para cima",
     "queueMoveDown": "Mover {{title}} para baixo",
     "queueRemove": "Remover {{title}} da fila",
@@ -78,8 +78,8 @@
     "effectsChecking": "Verificando se este episódio é compatível…",
     "timeSaved": "Tempo economizado: {{time}}",
     "cast": "Tocar em outro dispositivo",
-    "download": "Salvar offline",
-    "downloading": "Salvando: {{pct}}%",
+    "download": "Baixar",
+    "downloading": "Salvando para ouvir offline: {{pct}}%",
     "downloaded": "Salvo offline",
     "downloadDone": "Salvo para ouvir offline",
     "downloadFailed": "Não foi possível salvar este episódio",
@@ -103,12 +103,17 @@
     "nextChapter": "Próximo capítulo",
     "chapterLink": "Link do capítulo",
     "upNext": "A seguir",
-    "hideIdle": "Ocultar (sua fila continua)",
+    "hideIdle": "Ocultar · a fila continua",
     "continueAt": "Continuar em {{time}}",
     "position": "{{current}} de {{total}}",
     "playingFrom": "Tocando de {{name}}",
     "atThisMoment": "Neste momento",
-    "goTo": "Ir para {{name}}"
+    "goTo": "Ir para {{name}}",
+    "shuffle": "Aleatório",
+    "repeat": "Repetir esta faixa",
+    "sleepMinutesShort": "{{minutes}} min",
+    "swipeUp": "Deslize para cima para abrir o player",
+    "commentAt": "Comentar em {{time}}…"
   },
   "share": {
     "failed": "Falhou",
@@ -118,7 +123,16 @@
     "copied3speak": "Link do 3Speak copiado!",
     "copyAudioPlayer": "Copiar link do player de áudio",
     "copiedAudioPlayer": "Link do player de áudio copiado!",
-    "searchingHive": "Pesquisando na Hive…"
+    "searchingHive": "Pesquisando na Hive…",
+    "title": "Compartilhar faixa",
+    "atTime": "Em {{time}}",
+    "peakd": "PeakD",
+    "player": "Link do player",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "E-mail",
+    "qr": "QR",
+    "episode": "Link do episódio"
   },
   "post": {
     "notFound": "Post não encontrado",
@@ -132,6 +146,8 @@
     "vote": "Votar",
     "signInToTip": "Entre para dar gorjeta",
     "tip": "Gorjeta",
+    "albumLabel": "Álbum",
+    "notes": "Notas",
     "stillIndexing": "O áudio deste post ainda está sendo indexado — tente de novo em alguns minutos."
   },
   "page": {
@@ -165,7 +181,7 @@
     "tracks_other": "{{count}} faixas",
     "noTracks": "Nenhuma faixa encontrada.",
     "creators": "Criadores",
-    "albumsPlaylists": "Álbuns e playlists",
+    "albumsPlaylists": "Playlists de áudio",
     "noAudioForFilters": "Nenhum áudio encontrado com esses filtros.",
     "tabsLabel": "Vistas de áudio",
     "tabExplore": "Explorar",
@@ -178,6 +194,29 @@
   "upload": {
     "title": "Enviar áudio",
     "publishing": "Publicando…",
+    "nextTo": "Próximo: {{step}}",
+    "publishAlbum_one": "Publicar álbum · {{count}} faixa",
+    "publishAlbum_many": "Publicar álbum · {{count}} faixas",
+    "publishAlbum_other": "Publicar álbum · {{count}} faixas",
+    "publishWithShorts_one": "Publicar áudio + {{count}} Short",
+    "publishWithShorts_many": "Publicar áudio + {{count}} Shorts",
+    "publishWithShorts_other": "Publicar áudio + {{count}} Shorts",
+    "side": {
+      "publishTo": "Publicar em",
+      "shortsTitle": "Shorts de audiograma",
+      "clips_one": "{{count}} clipe",
+      "clips_many": "{{count}} clipes",
+      "clips_other": "{{count}} clipes",
+      "tracks_one": "{{count}} faixa",
+      "tracks_many": "{{count}} faixas",
+      "tracks_other": "{{count}} faixas",
+      "audio": "Áudio",
+      "shorts": "Shorts",
+      "snaps": "Snaps",
+      "community": "Comunidade",
+      "rss": "Feed RSS",
+      "clipLabel": "Miniatura do Short {{n}}: {{title}}"
+    },
     "failed": "Falhou",
     "unknown": "desconhecido",
     "unknownError": "erro desconhecido",
@@ -198,7 +237,7 @@
       "review": "Revisão"
     },
     "trackTypes": {
-      "voiceSnap": "Voz / Snap"
+      "voiceSnap": "Nota de voz"
     },
     "toasts": {
       "pickImage": "Escolha um arquivo de imagem",
@@ -242,8 +281,8 @@
       "discard": "Descartar"
     },
     "source": {
-      "dropHere": "Solte arquivos de áudio aqui ou clique para procurar",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (vários permitidos)",
+      "dropHere": "Solte arquivos de áudio ou procure",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · vários de uma vez",
       "stop": "Parar",
       "orRecord": "Ou grave ao vivo",
       "recordLimit": "Até {{minutes}} min por gravação",
@@ -257,7 +296,10 @@
       "trackTitle": "Título da faixa",
       "genre": "Gênero",
       "bpm": "BPM",
-      "descriptionOptional": "Descrição (opcional)"
+      "descriptionOptional": "Descrição (opcional)",
+      "track": "Faixa",
+      "category": "Categoria",
+      "musicGenre": "Gênero musical"
     },
     "playlist": {
       "helpRequired": "Obrigatório — escolha ou crie uma playlist. Posts de álbum ficam dentro de uma playlist para que as faixas continuem agrupadas em um álbum do 3Speak. Isso ajuda na visibilidade e dá mais destaque na página de áudio.",
@@ -272,6 +314,7 @@
       "items_many": "{{count}} itens",
       "items_other": "{{count}} itens",
       "newPlaylist": "Nova playlist de áudio",
+      "newAlbum": "Novo álbum",
       "namePlaceholder": "Nome da playlist",
       "public": "Pública",
       "private": "Privada",
@@ -279,6 +322,9 @@
       "creditsPlaceholder": "Créditos (opcional)",
       "yearPlaceholder": "Ano",
       "labelPlaceholder": "Gravadora (opcional)",
+      "fieldYear": "Ano",
+      "fieldLabel": "Gravadora",
+      "fieldCredits": "Créditos",
       "thumbAlt": "Miniatura do álbum",
       "removeThumb": "Remover miniatura",
       "creating": "Criando…",
@@ -303,20 +349,21 @@
       "help_other": "{{count}} faixas adicionadas. Escolha como elas serão publicadas.",
       "howPublished": "Como isto deve ser publicado?",
       "snapsTitle": "Comentários de snap",
-      "snapsDesc": "Cada áudio é publicado como resposta no container peak.snaps mais recente — aparece no feed de Snaps (padrão).",
+      "snapsDesc": "Cada áudio é uma resposta no tópico de snaps mais recente. Aparece no feed de Snaps.",
       "singleTitle": "Post individual",
       "singleTitleSingleOnly": "Post individual (só um arquivo)",
-      "singleDesc": "Um áudio em um post próprio na Hive, com título, comunidade, tags e capa.",
+      "singleDesc": "Um áudio em um post próprio, com título, comunidade, tags e capa.",
       "albumTitle": "Post de álbum",
       "albumTitleNeeds2": "Post de álbum (precisa de 2+ arquivos)",
-      "albumDesc": "Um post principal (sem áudio) que serve como página de entrada; cada faixa é publicada como comentário de resposta, com capa, descrição, pagamento e beneficiários próprios.",
-      "howEarn": "Como este áudio deve render?",
-      "postRewardsTitle": "Recompensas do post (uma vez)",
-      "postRewardsDesc": "Você recebe o pagamento normal de autor da Hive — pago uma única vez, ~7 dias após a publicação.",
-      "pplTitle": "Pagamento por audição (vitalício)",
-      "pplDesc": "Todas as recompensas do post de áudio vão para @{{account}}. Em vez de um pagamento único, um programa do 3Speak paga você por audição durante toda a vida da faixa.",
+      "albumDesc": "Um post principal de entrada e cada faixa como resposta, com capa e pagamento próprios.",
+      "howEarn": "Como ele deve render?",
+      "postRewardsTitle": "Recompensas do post",
+      "postRewardsDesc": "Pagamento normal da Hive, uma única vez, cerca de 7 dias após publicar",
+      "pplTitle": "Pagamento por audição",
+      "pplDesc": "Um programa do 3Speak paga você por audição durante toda a vida da faixa. As recompensas do post vão para @{{account}}.",
       "adsTitle": "Anúncios neste áudio",
-      "adsHint": "Uma breve mensagem falada de um patrocinador pode tocar durante este áudio, e você recebe uma parte. Começa com a configuração da sua conta; mude aqui só para este envio."
+      "adsHint": "Uma breve mensagem falada de um patrocinador pode tocar durante este áudio, e você recebe uma parte. Começa com a configuração da sua conta; mude aqui só para este envio.",
+      "adsSpoken": "Mensagem de patrocínio falada neste áudio"
     },
     "reward": {
       "distribution": "Distribuição de recompensas",
@@ -342,6 +389,9 @@
       "helpAlbum": "Cada faixa é publicada como comentário no post principal. Defina os valores comuns uma vez, aplique a todas e depois ajuste faixa por faixa.",
       "helpSnaps": "Cada faixa é publicada como um snap próprio. Defina os valores comuns uma vez, aplique a todas e depois ajuste faixa por faixa.",
       "applyToAllHeading": "Aplicar a todas as faixas",
+      "applyNote_one": "<b>Aplicar a {{count}} faixa:</b> descrição e capa compartilhadas, depois altere qualquer faixa separadamente.",
+      "applyNote_many": "<b>Aplicar às {{count}} faixas:</b> descrição e capa compartilhadas, depois altere qualquer faixa separadamente.",
+      "applyNote_other": "<b>Aplicar às {{count}} faixas:</b> descrição e capa compartilhadas, depois altere qualquer faixa separadamente.",
       "sharedDescription": "Descrição comum (opcional)",
       "sharedCover": "Imagem de capa comum",
       "applyToAll_one": "Aplicar à {{count}} faixa",
@@ -449,6 +499,7 @@
   "podcasts": {
     "chip": "Externos",
     "chipHint": "Podcasts de qualquer feed RSS, fora do 3Speak",
+    "on3speak": "No 3Speak",
     "follow": "Seguir",
     "following": "Seguindo",
     "unfollow": "Deixar de seguir",
@@ -497,7 +548,8 @@
     "notifyOff": "Notificações desativadas",
     "notifyOnDone": "Você será avisado sobre novos episódios",
     "notifyOffDone": "Sem mais notificações deste podcast",
-    "notifyHint": "Receba uma notificação quando sair um novo episódio",
+    "notifyHint": "Receba uma notificação quando sair um",
+    "notifyLabel": "Avisar sobre novos episódios",
     "search": {
       "button": "Pesquisar",
       "results_one": "{{count}} podcast encontrado",
@@ -520,9 +572,9 @@
       "export": "Exportar OPML",
       "invalid": "Este não é um arquivo OPML.",
       "empty": "Nenhum feed de podcast encontrado neste arquivo.",
-      "imported_one": "{{count}} podcast seguido, não adicionados: {{failed}}. Os novos feeds carregam nos próximos minutos.",
-      "imported_many": "{{count}} podcasts seguidos, não adicionados: {{failed}}. Os novos feeds carregam nos próximos minutos.",
-      "imported_other": "{{count}} podcasts seguidos, não adicionados: {{failed}}. Os novos feeds carregam nos próximos minutos."
+      "imported_one": "{{count}} podcast seguido, {{failed}} não puderam ser adicionados. Os novos feeds carregam nos próximos minutos.",
+      "imported_many": "{{count}} podcasts seguidos, {{failed}} não puderam ser adicionados. Os novos feeds carregam nos próximos minutos.",
+      "imported_other": "{{count}} podcasts seguidos, {{failed}} não puderam ser adicionados. Os novos feeds carregam nos próximos minutos."
     },
     "errors": {
       "signIn": "Entre para seguir podcasts.",
@@ -543,7 +595,8 @@
     },
     "tip": {
       "button": "Apoiar este podcast",
-      "heading": "Apoie {{show}}",
+      "heading": "Dar gorjeta a {{show}}",
+      "support": "Apoie {{show}}",
       "hive": "Gorjeta Hive para @{{account}}",
       "messageLabel": "Mensagem para o podcaster (opcional):",
       "messagePlaceholder": "Ótimo episódio!",
@@ -643,7 +696,7 @@
     "downloads": {
       "title": "Downloads",
       "download": "Baixar para ouvir offline",
-      "short": "Baixar",
+      "short": "Salvar",
       "downloading": "Baixando {{pct}}%",
       "cancel": "Cancelar download",
       "saved": "Salvo offline",
@@ -652,7 +705,7 @@
       "removed": "Download removido",
       "done": "Salvo para ouvir offline",
       "total": "{{size}} salvos",
-      "storage": "este site usa {{used}} de {{quota}} neste navegador",
+      "storage": "usa {{used}} de {{quota}} neste navegador",
       "perBrowser": "Os downloads ficam neste navegador, não importa quem esteja conectado.",
       "errors": {
         "tooLarge": "Este episódio é grande demais para ser salvo.",
@@ -664,7 +717,7 @@
     },
     "autoQueue": {
       "label": "Adicionar novos episódios à fila automaticamente",
-      "hint": "Novos episódios deste programa vão para o fim da sua fila quando saem",
+      "hint": "Eles vão para o fim da sua fila",
       "onDone": "Novos episódios deste programa irão para a sua fila",
       "offDone": "Novos episódios deste programa não vão mais para a sua fila",
       "added_one": "{{count}} novo episódio adicionado à sua fila",
@@ -703,6 +756,7 @@
       "startsAt": "Início: {{time}}"
     },
     "private": {
+      "title": "Adicionar um feed privado",
       "toggle": "Este é um feed privado (exige login)",
       "username": "Nome de usuário",
       "password": "Senha",

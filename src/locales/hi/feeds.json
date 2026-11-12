@@ -32,10 +32,17 @@
     "summary_other": "{{count}} नए वीडियो",
     "fromFollowing": "आपके फ़ॉलो किए लोगों से",
     "shorts_one": "{{count}} शॉर्ट",
-    "shorts_other": "{{count}} शॉर्ट्स"
+    "shorts_other": "{{count}} शॉर्ट्स",
+    "show": "दिखाएँ",
+    "hide": "छिपाएँ"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} वीडियो",
+    "videos_other": "{{num}} वीडियो",
+    "thisWeek": "इस हफ़्ते {{num}}"
   },
   "firstUploads": {
-    "title": "पहली बार के अपलोड"
+    "title": "पहले अपलोड"
   },
   "newVideos": {
     "title": "नए वीडियो"
@@ -53,9 +60,13 @@
     "dragToReorder": "क्रम बदलने के लिए खींचें",
     "customize": "कस्टमाइज़ करें",
     "customizeTitle": "होम कस्टमाइज़ करें",
-    "customizeHint": "सेक्शन ऊपर या नीचे करें। जो नहीं चाहिए, उन्हें बंद कर दें।",
+    "customizeHint": "क्रम बदलने के लिए खींचें। जो सेक्शन नहीं चाहिए, उन्हें बंद करें।",
     "surfTitle": "चैनल सर्फ़िंग: कोई विषय चुनें और टीवी की तरह देखें",
-    "zapping": "ज़ैपिंग"
+    "zapping": "ज़ैपिंग",
+    "hero": {
+      "spotlightIn": "{{community}} में स्पॉटलाइट"
+    },
+    "tabFollowing": "फ़ॉलोइंग"
   },
   "surf": {
     "pageTitle": "चैनल सर्फ़िंग",
@@ -81,9 +92,10 @@
     "nextVideoKey": "अगला वीडियो (→)",
     "zap": "ज़ैप",
     "findingNext": "अगला वीडियो ढूँढ रहे हैं…",
-    "stop": "सर्फ़िंग बंद करें",
+    "stop": "रोकें",
     "stopTitle": "सर्फ़िंग बंद करें (यह वीडियो चलता रहेगा)",
-    "guide": "चैनल गाइड"
+    "guide": "चैनल गाइड",
+    "guideShort": "गाइड"
   },
   "discover": {
     "searchPlaceholder": "वीडियो, शॉर्ट्स, ऑडियो, कम्युनिटी खोजें...",
@@ -124,6 +136,32 @@
     "authors_one": "{{count}} लेखक",
     "authors_other": "{{count}} लेखक",
     "views_one": "{{views}} व्यू",
-    "views_other": "{{views}} व्यू"
+    "views_other": "{{views}} व्यू",
+    "topCreator": "टॉप क्रिएटर",
+    "creators": "क्रिएटर्स",
+    "relatedTags": "संबंधित टैग",
+    "trendingTags": "ट्रेंडिंग टैग",
+    "topCreators": "टॉप क्रिएटर्स",
+    "categories": "कैटेगरी",
+    "show": "दिखाएँ",
+    "boostRecentHint": "नतीजों में नए वीडियो को प्राथमिकता दें",
+    "showResults_one": "{{count}} नतीजा दिखाएँ",
+    "showResults_other": "{{count}} नतीजे दिखाएँ",
+    "resultTypes": "नतीजों के प्रकार"
+  },
+  "activity": {
+    "aria": "3Speak पर गतिविधि",
+    "community": "कम्युनिटी",
+    "verbs": {
+      "snap": "Snap",
+      "audio": "नया ऑडियो",
+      "playlist": "प्लेलिस्ट",
+      "live": "लाइव है",
+      "group_one": "इस हफ़्ते {{count}} नया वीडियो",
+      "group_other": "इस हफ़्ते {{count}} नए वीडियो"
+    },
+    "emptyCommunity": "पिछले कुछ दिनों में कम्युनिटी से कुछ नया नहीं।",
+    "emptyLive": "अभी कोई लाइव नहीं है।",
+    "emptyGroups": "इस हफ़्ते अभी कोई ग्रुप गतिविधि नहीं।"
   }
 }

@@ -11,6 +11,8 @@
       "transferFailed": "转账失败：{{message}}"
     },
     "heading": "打赏 @{{recipient}}",
+    "pageTitle": "打赏 @{{recipient}}",
+    "pageSub": "从直播叠加层或链接打开",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "更多方式",
@@ -23,7 +25,16 @@
     "memoLinkNote": "此链接会附加到备注中：{{link}}",
     "send": "打赏",
     "sendAmount": "发送 {{amount}} {{currency}}",
+    "paidIn": "以 {{currency}} 支付 · 无手续费",
+    "forTitle": "为“{{title}}”",
+    "presets": {
+      "coffee": "一杯咖啡",
+      "popular": "最受欢迎",
+      "thanks": "非常感谢",
+      "superFan": "超级粉丝"
+    },
     "sentEyebrow": "打赏已发送",
+    "sentTo": "{{amount}} 给 @{{recipient}}",
     "lightning": {
       "amountLabel": "金额（sats）：",
       "messageLabel": "留言（可选）：",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "频率",
       "once": "一次",
+      "oneTime": "一次性",
+      "monthly": "每月",
       "until": "每月，直到 {{date}}",
       "note": "Hive 每 30 天自动发送，第一笔立即发出。你可以随时停止。",
       "replaces": "这将替换你已经发给 @{{recipient}} 的每月支持。",
@@ -91,7 +104,8 @@
     "addToPlaylist": "添加到播放列表",
     "addTag": "添加标签",
     "notInterested": "不感兴趣",
-    "dontShowCreator": "不再显示 @{{author}}"
+    "dontShowCreator": "不再显示 @{{author}}",
+    "saveToPlaylist": "保存到播放列表"
   },
   "guestList": {
     "loadFailed": "无法加载当前的嘉宾名单",
@@ -132,18 +146,21 @@
     "tagged": "已标记为“{{tag}}”。",
     "vote": "点赞",
     "tagThisVideo": "给这个视频打标签",
-    "tagOptional": "— 可选 —",
+    "tagOptional": "可选",
     "pickTopicFirst": "请先选择一个话题",
     "taggedNoDot": "已标记为“{{tag}}”",
     "tagFailed": "打标签失败：{{message}}",
-    "taggedAlreadyVoted": "已标记为“{{tag}}”——你的 {{weight}}% 点赞此前已经投出。",
-    "votingClosed": "点赞已关闭——给这个视频打标签",
+    "taggedAlreadyVoted": "已标记为“{{tag}}”。你的 {{weight}}% 点赞此前已经投出。",
+    "votingClosed": "点赞已关闭：给这个视频打标签",
     "youTagged": "你把它标记为 <b>{{tag}}</b>。",
-    "pickTopic": "选择一个话题（计为 100% 点赞）",
+    "pickTopic": "选择一个话题计为 100% 点赞。",
     "submitTag": "提交标签",
     "tagThisVideoFull": "给这个视频打标签（计为 100% 点赞）",
-    "justTag": "不点赞——只打标签",
-    "addsAbout": "约增加 {{value}}"
+    "justTag": "不点赞，只打标签",
+    "justTagShort": "只打标签",
+    "voteAndTag": "点赞并打标签",
+    "addsAbout": "约增加 {{value}}",
+    "postSoFar_other": "目前 {{value}} · {{count}} 个赞"
   },
   "tagsPicker": {
     "autoTagged": "自动标记：{{tags}}",
@@ -152,7 +169,7 @@
     "noMatches": "没有与“{{query}}”匹配的话题。",
     "allSelected": "已选中整个{{category}}分类。只有想进一步细分时才需要添加单个话题：",
     "orPickTopics": "或者选择单个话题：",
-    "goodEnough": "这样就可以了——也可以更具体（可选）：",
+    "goodEnough": "这样就可以，或者更具体一点（可选）",
     "moreSpecific": "更具体："
   }
 }

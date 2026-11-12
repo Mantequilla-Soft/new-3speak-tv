@@ -36,7 +36,16 @@
     "shorts_one": "{{count}} ролик Shorts",
     "shorts_few": "{{count}} ролика Shorts",
     "shorts_many": "{{count}} роликов Shorts",
-    "shorts_other": "{{count}} ролика Shorts"
+    "shorts_other": "{{count}} ролика Shorts",
+    "show": "Показать",
+    "hide": "Скрыть"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} видео",
+    "videos_few": "{{num}} видео",
+    "videos_many": "{{num}} видео",
+    "videos_other": "{{num}} видео",
+    "thisWeek": "{{num}} за неделю"
   },
   "firstUploads": {
     "title": "Первые загрузки"
@@ -57,9 +66,13 @@
     "dragToReorder": "Перетащите, чтобы изменить порядок",
     "customize": "Настроить",
     "customizeTitle": "Настроить главную",
-    "customizeHint": "Перемещайте разделы вверх или вниз. Отключите те, что вам не нужны.",
+    "customizeHint": "Перетаскивайте, чтобы изменить порядок. Отключите ненужные разделы.",
     "surfTitle": "Переключение каналов: выберите тему и смотрите как ТВ",
-    "zapping": "Переключаем"
+    "zapping": "Переключаем",
+    "hero": {
+      "spotlightIn": "В фокусе: {{community}}"
+    },
+    "tabFollowing": "Подписки"
   },
   "surf": {
     "pageTitle": "Переключение каналов",
@@ -85,9 +98,10 @@
     "nextVideoKey": "Следующее видео (→)",
     "zap": "Дальше",
     "findingNext": "Ищем следующее…",
-    "stop": "Выключить",
+    "stop": "Стоп",
     "stopTitle": "Выключить переключение (это видео продолжит играть)",
-    "guide": "Телепрограмма"
+    "guide": "Телепрограмма",
+    "guideShort": "Программа"
   },
   "discover": {
     "searchPlaceholder": "Поиск видео, Shorts, аудио, сообществ...",
@@ -134,6 +148,36 @@
     "views_one": "{{views}} просмотр",
     "views_few": "{{views}} просмотра",
     "views_many": "{{views}} просмотров",
-    "views_other": "{{views}} просмотра"
+    "views_other": "{{views}} просмотра",
+    "topCreator": "Топ-автор",
+    "creators": "Авторы",
+    "relatedTags": "Похожие теги",
+    "trendingTags": "Теги в тренде",
+    "topCreators": "Топ-авторы",
+    "categories": "Категории",
+    "show": "Показать",
+    "boostRecentHint": "Поднимать новые видео в результатах",
+    "showResults_one": "Показать {{count}} результат",
+    "showResults_few": "Показать {{count}} результата",
+    "showResults_many": "Показать {{count}} результатов",
+    "showResults_other": "Показать {{count}} результата",
+    "resultTypes": "Типы результатов"
+  },
+  "activity": {
+    "aria": "Активность на 3Speak",
+    "community": "Сообщество",
+    "verbs": {
+      "snap": "snap",
+      "audio": "новое аудио",
+      "playlist": "плейлист",
+      "live": "в эфире",
+      "group_one": "{{count}} новое видео за неделю",
+      "group_few": "{{count}} новых видео за неделю",
+      "group_many": "{{count}} новых видео за неделю",
+      "group_other": "{{count}} нового видео за неделю"
+    },
+    "emptyCommunity": "За последние дни в сообществе ничего нового.",
+    "emptyLive": "Сейчас никто не в эфире.",
+    "emptyGroups": "На этой неделе в группах пока тихо."
   }
 }

@@ -7,13 +7,19 @@
     "createNewDesc": "Sube y comparte tu contenido con el mundo"
   },
   "preview": {
-    "cannotPreview": "Tu navegador no puede mostrar una vista previa de este video; es común con clips HEVC/H.265 (p. ej. grabaciones de iPhone en “Alta eficiencia”). No pasa nada: se subirá igual y se convertirá para que todos puedan verlo."
+    "cannotPreview": "<b>No se puede previsualizar este video.</b> Es habitual en clips HEVC/H.265, como las grabaciones de iPhone en Alta eficiencia. Se subirá igualmente y se convertirá para que todos puedan verlo."
   },
   "drafts": {
     "untitled": "(sin título)",
     "empty": "No se encontraron videos con el filtro seleccionado.",
     "title": "Estudio",
-    "create": "Crear"
+    "create": "Crear",
+    "views28": "Vistas, 28 días",
+    "newFollowers": "Nuevos seguidores",
+    "views": "vistas",
+    "stats": "Estadísticas",
+    "more": "Más",
+    "public": "Público"
   },
   "schedule": {
     "days": {
@@ -32,6 +38,7 @@
     "am": "AM",
     "pm": "PM",
     "pastWarning": "Esta fecha y hora ya pasaron. Elige una fecha y hora futuras.",
+    "pickDay": "Elige un día",
     "publishAt": "Tu video se publicará automáticamente el {{when}}"
   },
   "scheduled": {
@@ -101,6 +108,7 @@
     "insertTable": "Insertar tabla",
     "spoiler": "Spoiler/texto oculto",
     "emoji": "Emoji",
+    "gifs": "GIFs",
     "searchEmoji": "Buscar emoji",
     "searchGifs": "Buscar GIFs…",
     "noGifs": "No se encontraron GIFs.",

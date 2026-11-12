@@ -5,8 +5,8 @@
     "yourStreamEnded": "Siaranmu sudah berakhir",
     "thisStreamEnded": "Siaran ini sudah berakhir",
     "noLongerLive": "Siaran ini sudah tidak live. Mulai yang baru kapan pun kamu siap.",
-    "recordingProcessing": "Mantap! Rekamanmu sedang diproses dan akan segera muncul di postingan pengumuman.",
-    "thanksForLive": "Mantap, terima kasih sudah live!",
+    "recordingProcessing": "Rekamanmu sedang diproses dan akan segera muncul di postingan pengumuman.",
+    "thanksForLive": "Mantap, terima kasih sudah live",
     "backHome": "Kembali ke Beranda",
     "howWasStream": "Bagaimana siaranmu?",
     "connecting": "Menghubungkan ke OpenPods…",
@@ -40,13 +40,13 @@
     "slowDown": "Tunggu sebentar, lalu klip lagi.",
     "failed": "Klip tidak dapat dibuat. Coba lagi dalam beberapa detik.",
     "title": "Klip 30 detik terakhir",
-    "label": "30 dtk",
+    "label": "Klip",
     "clipping": "Membuat klip…"
   },
   "report": {
     "reasons": {
       "harassment": "Pelecehan atau kebencian",
-      "sexual": "Konten seksual atau eksplisit",
+      "sexual": "Seksual atau eksplisit",
       "violence": "Kekerasan atau tindakan berbahaya",
       "selfharm": "Menyakiti diri sendiri",
       "illegal": "Konten ilegal",
@@ -57,7 +57,7 @@
     "failed": "Laporan tidak dapat dikirim. Silakan coba lagi.",
     "title": "Laporkan siaran ini",
     "reporting": "Melaporkan <b>@{{host}}</b>.",
-    "intro": "Beri tahu kami apa masalahnya. Tim kami meninjau setiap laporan.",
+    "intro": "Tim kami meninjau setiap laporan.",
     "detailPlaceholder": "Tambahkan detail (opsional)",
     "sending": "Mengirim…",
     "submit": "Kirim laporan"
@@ -73,7 +73,7 @@
     },
     "published": "Rekaman diterbitkan ke Hive!",
     "loginGate": "Masuk untuk menerbitkan rekamanmu.",
-    "heading": "Terbitkan Rekaman OpenPod",
+    "heading": "Terbitkan rekaman OpenPod",
     "previewLabel": "Pratinjau rekaman",
     "previewHint": "Periksa audionya sebelum diterbitkan. Ini pemutar yang sama dengan yang akan dilihat pembaca di postingan.",
     "recordingFallback": "Rekaman OpenPod",
@@ -86,11 +86,12 @@
     "tagsPlaceholder": "Tag dipisahkan spasi",
     "declinePayout": "Tolak Payout",
     "publishing": "Menerbitkan…",
-    "submit": "Terbitkan Rekaman"
+    "submit": "Terbitkan rekaman"
   },
   "lobby": {
     "descriptionPlaceholder": "Sesi ini tentang apa? Tambahkan catatan acara, tautan, atau ringkasan…",
-    "enableHosting": "Aktifkan hosting & berbicara",
+    "enableHosting": "Aktifkan hosting dan berbicara",
+    "enableHostingHint": "Butuh otoritas posting @threespeak",
     "handoverFailed": "Hosting tidak dapat diaktifkan secara otomatis. OpenPods memposting atas namamu lewat @threespeak — pastikan kamu sudah memberinya otoritas posting, lalu coba lagi.",
     "signInToHost": "Masuk dengan Hive untuk menjadi host atau berbicara"
   },
@@ -130,8 +131,8 @@
     },
     "chatBox": {
       "title": "Obrolanmu di OBS",
-      "desc": "Satu tautan untuk semua siaranmu. Tambahkan di OBS sebagai dock untuk membaca pesan baru selama kamu live. Panduan di bawah menunjukkan caranya.",
-      "copy": "Salin URL obrolan untuk OBS",
+      "desc": "tambahkan sebagai dock browser kustom",
+      "copy": "Salin URL obrolan",
       "copied": "URL obrolan disalin"
     },
     "card": {
@@ -142,26 +143,26 @@
       "watch": "Tonton siaran",
       "notAnnounced": "Siaran ini tidak diumumkan di Hive.",
       "notAnnouncedAuth": "Tidak diumumkan di Hive: 3Speak belum boleh memposting untukmu. Edit template untuk mengizinkannya.",
-      "stuck": "OBS sudah terhubung, tetapi tidak ada video yang sampai ke kami, jadi siaran tidak dimulai. Hentikan streaming di OBS lalu mulai lagi.",
-      "dailyLimit": "OBS tidak bisa siaran: akun gratis bisa memulai satu siaran per hari. Coba lagi 24 jam setelah siaran terakhirmu dimulai, atau gunakan 3Speak Pro untuk siaran tanpa batas harian.",
+      "stuck": "OBS sudah terhubung, tetapi tidak ada video yang sampai ke kami. Hentikan lalu mulai streaming lagi.",
+      "dailyLimit": "Akun gratis bisa memulai satu siaran per hari. Coba lagi 24 jam setelah siaran terakhirmu dimulai, atau dapatkan Pro.",
       "useInStudio": "Gunakan di Stream Studio",
       "proRequired": "OBS tidak bisa mulai siaran: streaming dari OBS adalah bagian dari 3Speak Pro."
     },
     "guide": {
       "title": "Cara menyiapkan OBS",
-      "step1": "Gunakan OBS Studio 30 atau lebih baru, lalu buka Settings, lalu Stream.",
-      "step2": "Atur Service ke \"WHIP\".",
-      "step3": "Server: tempel URL server dari template yang kamu mau (\"Salin URL server\" di kartunya). Setiap template punya URL sendiri.",
-      "step4": "Bearer Token: tempel kunci rahasia siaran dari bagian atas halaman ini. Sama untuk setiap template.",
-      "step5": "Klik \"Start Streaming\" di OBS dan kamu langsung live di 3Speak dengan template itu. \"Stop Streaming\" mengakhiri siaran.",
-      "outputTitle": "Pengaturan output yang disarankan",
-      "keyframe": "Interval keyframe: 1 sampai 2 detik",
-      "bitrate": "Rate control CBR, 2500 sampai 6000 kbps",
-      "encoder": "Encoder: x264 atau encoder hardware kamu",
-      "audio": "Sample rate audio: 48 kHz",
-      "bframes": "Tanpa B-frames (atur ke 0 jika encoder-mu menyediakannya)",
+      "step1": "Gunakan OBS Studio 30 atau lebih baru: Settings → Stream",
+      "step2": "Atur Service ke \"WHIP\"",
+      "step3": "Server: tempel URL server dari template",
+      "step4": "Bearer Token: tempel kunci rahasia siaranmu",
+      "step5": "Klik Start Streaming di OBS. Kamu langsung live di 3Speak.",
+      "outputTitle": "Output yang disarankan",
+      "keyframe": "Keyframe 1–2 dtk",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / hardware",
+      "audio": "Audio 48 kHz",
+      "bframes": "Tanpa B-frames",
       "chatTitle": "Lihat obrolan di OBS",
-      "chatCopy": "Di bagian atas halaman ini, di bawah \"Obrolanmu di OBS\", klik \"Salin URL obrolan untuk OBS\". Ini satu tautan untuk semua siaranmu.",
+      "chatCopy": "Di bagian atas halaman ini, di bawah \"Obrolanmu di OBS\", klik \"Salin URL obrolan\". Ini satu tautan untuk semua siaranmu.",
       "chat2": "Di OBS, buka menu \"Docks\" lalu pilih \"Custom Browser Docks\". Isi nama seperti \"Obrolan 3Speak\", tempel URL-nya, lalu klik \"Apply\". Pesan baru muncul di panel itu selama kamu live. Penonton tidak pernah melihatnya.",
       "chat3": "Penonton sudah melihat obrolan di samping siaranmu, jadi kamu tidak perlu memasukkannya ke video. Hanya jika kamu juga membagikan siaran di tempat lain: tambahkan URL yang sama sebagai sumber \"Browser\" dan hapus \"&dock=1\" di akhirnya. Pesan pun tampil di atas video dan memudar setelah 30 detik.",
       "chatOptions": "Opsional, tambahkan di akhir URL: &max=10 menampilkan lebih sedikit baris, &size=18 memperbesar teks, &fade=0 membuat pesan tetap di video.",
@@ -255,5 +256,13 @@
       "desc": "Dengan 3Speak Pro kamu bisa siaran langsung dari OBS memakai template milikmu. Tanpa Pro, template kamu tetap bisa dipakai di Stream Studio di browser.",
       "cta": "Dapatkan 3Speak Pro"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_other": "{{count}} mendengarkan",
+    "emptySub": "Siaran dan OpenPods muncul di sini begitu dimulai.",
+    "emptyRooms": "Tidak ada OpenPods yang terbuka saat ini.",
+    "emptyScheduled": "Tidak ada yang dijadwalkan saat ini.",
+    "emptyScheduledSub": "Ruang yang sudah terbuka tetapi belum live muncul di sini."
   }
 }

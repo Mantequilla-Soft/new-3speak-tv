@@ -16,7 +16,8 @@
       "rep": "Uy tín {{rep}}",
       "repTitle": "Uy tín trên Hive",
       "viewProfile": "Xem trang cá nhân"
-    }
+    },
+    "replyTo": "Trả lời {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Không thể vote cho bài đăng này",
@@ -30,7 +31,7 @@
     "interestsTitle": "Chỉ các Shorts phù hợp với sở thích của bạn",
     "pickInterestsFirst": "Hãy chọn một vài sở thích trước",
     "noInterests": "Bạn chưa chọn sở thích nào — hãy chọn trong Cài đặt",
-    "interestsExhausted": "Đã hết Shorts theo sở thích của bạn — đang hiển thị Khám phá",
+    "interestsExhausted": "Đã hết Shorts theo sở thích của bạn. Đang hiển thị Khám phá.",
     "noInterestMatches": "Hiện chưa có Shorts nào phù hợp với sở thích của bạn.",
     "switchToDiscover": "Chuyển sang Khám phá",
     "empty": "Không có Shorts nào",
@@ -88,7 +89,7 @@
     "noUrl": "Không thể xác định URL video để remix",
     "loadFailed": "Không tải được video để remix",
     "chainFull": "Video này đã được tạo từ {{max}} video trước đó nên không thể remix thêm nữa.",
-    "chainNoSlots": "Chuỗi remix này đã chia thưởng cho quá nhiều nhà sáng tạo nên không còn chỗ trên Hive cho một bản remix mới. Với 3Speak Pro, bạn vẫn có thể remix."
+    "chainNoSlots": "Chuỗi này đã chia thưởng cho quá nhiều nhà sáng tạo nên một bản remix sẽ không còn chỗ trên Hive. Với 3Speak Pro, bạn vẫn có thể remix."
   },
   "watchLater": {
     "loginRequired": "Đăng nhập để lưu Shorts",
@@ -105,7 +106,7 @@
     "postRemoved": "Bài đăng Hive của Short này đã bị gỡ, nên không thể nhận thêm bình luận hay vote.",
     "beFirst": "Hãy là người đầu tiên bình luận!",
     "unavailable": "Không thể bình luận bài đăng này",
-    "addPlaceholder": "Thêm bình luận...",
+    "addPlaceholder": "Tham gia thảo luận…",
     "addPlaceholderBar": "Thêm bình luận…",
     "loginPlaceholder": "Đăng nhập để bình luận",
     "send": "Gửi bình luận",
@@ -132,7 +133,7 @@
     "seenNote": "Người xem đã đăng nhập và bật lịch sử xem.",
     "seenEmpty": "Chưa có ai xem.",
     "keep": "Giữ thành Shorts",
-    "keepHint": "Vẫn ở trên kênh của bạn sau 24 giờ",
+    "keepHint": "Tin vẫn ở trên kênh của bạn sau 24 giờ.",
     "keepConfirm": "Giữ lại vĩnh viễn?",
     "keepYes": "Giữ lại",
     "keeping": "Đang giữ…",
@@ -143,5 +144,9 @@
   "audiogram": {
     "fullEpisode": "Tập đầy đủ",
     "listen": "Nghe tập đầy đủ: {{title}}"
+  },
+  "panel": {
+    "discussion": "Thảo luận",
+    "upNext": "Tiếp theo"
   }
 }

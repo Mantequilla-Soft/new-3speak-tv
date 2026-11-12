@@ -25,6 +25,11 @@
     "noOtherPlaylists": "У вас ще немає інших плейлистів",
     "createFirst": "Створити плейлист",
     "createNew": "Створити новий плейлист",
+    "newPlaylist": "Новий плейлист",
+    "savedTo_one": "Збережено в {{count}} плейлист",
+    "savedTo_few": "Збережено в {{count}} плейлисти",
+    "savedTo_many": "Збережено в {{count}} плейлистів",
+    "savedTo_other": "Збережено в {{count}} плейлиста",
     "name": "Назва",
     "namePlaceholder": "Мій чудовий плейлист",
     "privacy": "Доступ",
@@ -106,12 +111,15 @@
     "filterCount_one": "{{shown}} з {{count}} елемента",
     "filterCount_few": "{{shown}} з {{count}} елементів",
     "filterCount_many": "{{shown}} з {{count}} елементів",
-    "filterCount_other": "{{shown}} з {{count}} елемента"
+    "filterCount_other": "{{shown}} з {{count}} елемента",
+    "shuffle": "Перемішати"
   },
   "type": {
     "label": "Тип",
     "video": "Відео",
     "audio": "Аудіо",
+    "videoSub": "Довгі відео",
+    "audioSub": "Треки й подкасти",
     "kindLabel": "Яке це аудіо?",
     "kinds": {
       "podcast": "Подкаст",

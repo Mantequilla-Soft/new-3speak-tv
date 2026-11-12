@@ -34,7 +34,7 @@
   },
   "directory": {
     "title": "Badges",
-    "intro": "Badges zijn onderscheidingen die je op Hive <b>van anderen krijgt</b>, voor evenementen, bijdragen en mijlpalen. Je kunt er niet zelf lid van worden: iemand reikt ze uit. Open een badge om te zien wat de ontvangers hier publiceren.",
+    "intro": "Badges zijn onderscheidingen die je op Hive <b>van anderen krijgt</b>, voor evenementen, bijdragen en mijlpalen. Je kunt er niet zelf lid van worden: iemand reikt ze uit.",
     "searchPlaceholder": "Badges zoeken...",
     "sort": {
       "recipients": "Ontvangers",
@@ -58,6 +58,7 @@
     "awarding": "Uitreiken…",
     "held": "In bezit",
     "award": "Uitreiken",
+    "awardNamed": "“{{title}}” uitreiken",
     "note": "De badge volgt diegene op Hive, en dat is wat het hebben van een badge betekent. Je kunt hem terugnemen op de pagina van de badge zelf."
   },
   "hive": {
@@ -85,8 +86,9 @@
     "unclaimed": "Niet geclaimd",
     "noActivity": "Nog geen activiteit in deze periode",
     "otherTopics": "Overig",
-    "title": "Ranglijsten",
+    "title": "Ranglijst",
     "subtitle": "{{blurb}}: topmakers op 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
     "subtitleTopic": "{{blurb}}: topmakers in {{topic}}.",
     "allTopics": "Alle onderwerpen",
     "finding": "@{{user}} zoeken op deze ranglijst…",

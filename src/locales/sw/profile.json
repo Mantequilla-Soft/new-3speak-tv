@@ -10,8 +10,8 @@
     "unknownError": "Hitilafu isiyojulikana"
   },
   "authorBadge": {
-    "followers_one": "Mfuasi {{count}}",
-    "followers_other": "Wafuasi {{count}}"
+    "followers_one": "mfuasi {{count}}",
+    "followers_other": "wafuasi {{count}}"
   },
   "creators": {
     "loginRequired": "Tafadhali ingia ili kufuata watayarishaji",
@@ -67,7 +67,8 @@
     "tapForSound": "Gusa ili usikie sauti",
     "views_one": "mtazamo {{num}}",
     "views_other": "mitazamo {{num}}",
-    "readMore": "Soma zaidi"
+    "readMore": "Soma zaidi",
+    "label": "Kionjo"
   },
   "snaps": {
     "readMore": "Soma zaidi",
@@ -168,7 +169,8 @@
       "text": "Panga video zako katika orodha ya kucheza ambayo watu wanaweza kutazama kwa mfuatano.",
       "cta": "Unda orodha yako ya kwanza ya kucheza",
       "visitor": "@{{user}} hana orodha za kucheza za umma."
-    }
+    },
+    "visitorPreview": "Wageni wanaona: “{{text}}”"
   },
   "links": {
     "button": "Viungo",
@@ -187,7 +189,8 @@
     "shorts": "Shorts",
     "audio": "Sauti",
     "community": "Jumuiya",
-    "playlists": "Orodha za kucheza"
+    "playlists": "Orodha za kucheza",
+    "latestSnap": "Snap ya karibuni"
   },
   "streams": {
     "loading": "Inapakia mitiririko…",
@@ -301,7 +304,10 @@
     "hiddenToast": "Tip imefichwa kwenye wasifu wako",
     "unhiddenToast": "Tip inaonekana tena kwenye wasifu wako",
     "hideFailed": "Imeshindikana kubadilisha tip hii. Tafadhali jaribu tena.",
-    "hideWalletPrompt": "Saini ili kubadilisha tip zipi zinaonekana kwenye wasifu wako"
+    "hideWalletPrompt": "Saini ili kubadilisha tip zipi zinaonekana kwenye wasifu wako",
+    "whoTitle": "@{{user}} anawaunga mkono",
+    "tipped_one": "Ametoa bakshishi {{count}}×",
+    "tipped_other": "Ametoa bakshishi {{count}}×"
   },
   "layout": {
     "customize": "Badilisha wasifu",
@@ -414,5 +420,13 @@
   },
   "audioTab": {
     "files": "Faili za sauti"
+  },
+  "search": {
+    "placeholder": "Tafuta kwenye chaneli hii",
+    "clear": "Futa utafutaji",
+    "results_one": "Tokeo {{count}} la “{{query}}”",
+    "results_other": "Matokeo {{count}} ya “{{query}}”",
+    "empty": "Hakuna kwenye chaneli hii kinacholingana na “{{query}}”.",
+    "older": "Tafuta upakiaji wa zamani"
   }
 }

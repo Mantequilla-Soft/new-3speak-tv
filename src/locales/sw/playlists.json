@@ -23,6 +23,9 @@
     "noOtherPlaylists": "Bado huna orodha nyingine za kucheza",
     "createFirst": "Unda orodha ya kucheza",
     "createNew": "Unda orodha mpya ya kucheza",
+    "newPlaylist": "Orodha mpya ya kucheza",
+    "savedTo_one": "Imehifadhiwa kwenye orodha {{count}} ya kucheza",
+    "savedTo_other": "Imehifadhiwa kwenye orodha {{count}} za kucheza",
     "name": "Jina",
     "namePlaceholder": "Orodha yangu bora ya kucheza",
     "privacy": "Faragha",
@@ -96,12 +99,15 @@
     "description": "Maelezo",
     "descriptionPlaceholder": "Kuhusu albamu hii (si lazima)",
     "filterCount_one": "{{shown}} kati ya kipengee {{count}}",
-    "filterCount_other": "{{shown}} kati ya vipengee {{count}}"
+    "filterCount_other": "{{shown}} kati ya vipengee {{count}}",
+    "shuffle": "Changanya"
   },
   "type": {
     "label": "Aina",
     "video": "Video",
     "audio": "Sauti",
+    "videoSub": "Video ndefu",
+    "audioSub": "Nyimbo na podikasti",
     "kindLabel": "Ni sauti ya aina gani?",
     "kinds": {
       "podcast": "Podikasti",

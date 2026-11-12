@@ -31,7 +31,7 @@
   },
   "directory": {
     "title": "배지",
-    "intro": "배지는 이벤트, 기여, 기념할 만한 성과에 대해 Hive에서 <b>다른 사람이 수여하는</b> 상이에요. 직접 가입할 수는 없고, 누군가가 수여해야 해요. 배지를 열면 받은 사람들이 이곳에 게시한 콘텐츠를 볼 수 있어요.",
+    "intro": "배지는 이벤트, 기여, 성과에 대해 Hive에서 <b>다른 사람이 수여하는</b> 상이에요. 직접 가입할 수는 없고, 누군가가 수여해야 해요.",
     "searchPlaceholder": "배지 검색...",
     "sort": {
       "recipients": "받은 사람",
@@ -54,6 +54,7 @@
     "awarding": "수여 중…",
     "held": "보유 중",
     "award": "수여",
+    "awardNamed": "“{{title}}” 수여",
     "note": "배지 계정이 Hive에서 상대방을 팔로우하며, 이것이 배지를 보유한다는 의미예요. 배지 페이지에서 언제든지 회수할 수 있어요."
   },
   "hive": {
@@ -79,8 +80,9 @@
     "unclaimed": "미수령",
     "noActivity": "이 기간에는 아직 활동이 없어요",
     "otherTopics": "기타",
-    "title": "순위",
+    "title": "리더보드",
     "subtitle": "{{blurb}}: 3Speak 상위 크리에이터.",
+    "explain": "{{label}}: {{blurb}}.",
     "subtitleTopic": "{{blurb}}: {{topic}} 분야 상위 크리에이터.",
     "allTopics": "모든 주제",
     "finding": "순위표에서 @{{user}}님을 찾는 중…",

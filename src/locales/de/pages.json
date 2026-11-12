@@ -9,7 +9,7 @@
       "q6": "Unwissende freie Rede wendet sich oft gegen den Redner. Das ist einer von mehreren Gründen, warum man ihr freien Lauf lassen muss, statt sie zu unterdrücken.",
       "q7": "Zur Redefreiheit gehört auch die Freiheit, Menschen zu kränken.",
       "q8": "Zwischen freier Rede und Hassrede verläuft ein schmaler Grat. Freie Rede fördert die Debatte, Hassrede dagegen stachelt zu Gewalt an.",
-      "q9": "Redefreiheit bedeutet, dass man Menschen nichts antun darf – weder für die Ansichten, die sie haben, noch für die Ansichten, die sie äußern, noch für die Worte, die sie sprechen oder schreiben."
+      "q9": "Redefreiheit bedeutet, dass man Menschen nichts antun darf, weder für die Ansichten, die sie haben, noch für die Ansichten, die sie äußern, noch für die Worte, die sie sprechen oder schreiben."
     },
     "hero": {
       "tagline1": "SCHÜTZE DEINE INHALTE",
@@ -74,7 +74,7 @@
     },
     "guidelines": {
       "title": "Unsere Richtlinien",
-      "subtitle": "Für uns ist Redefreiheit absolut – mit klaren und fairen Regeln",
+      "subtitle": "Für uns ist Redefreiheit absolut, mit klaren und fairen Regeln",
       "cta": "Zu unseren Richtlinien"
     },
     "faqSection": {
@@ -98,8 +98,8 @@
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "SORRY! SEITE NICHT GEFUNDEN",
+    "title": "Sorry, Seite nicht gefunden",
     "message": "Die Seite, die du suchst, ist leider nicht verfügbar.",
-    "goHome": "ZUR STARTSEITE"
+    "goHome": "Zur Startseite"
   }
 }

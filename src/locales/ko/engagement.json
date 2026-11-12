@@ -11,6 +11,8 @@
       "transferFailed": "송금 실패: {{message}}"
     },
     "heading": "@{{recipient}}님에게 팁 보내기",
+    "pageTitle": "@{{recipient}}님에게 팁 보내기",
+    "pageSub": "방송 오버레이나 링크에서 열림",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "다른 방법",
@@ -23,7 +25,16 @@
     "memoLinkNote": "이 링크가 메모에 추가됩니다: {{link}}",
     "send": "팁 보내기",
     "sendAmount": "{{amount}} {{currency}} 보내기",
+    "paidIn": "{{currency}}로 지급 · 수수료 없음",
+    "forTitle": "“{{title}}”에 대해",
+    "presets": {
+      "coffee": "커피 한 잔",
+      "popular": "가장 인기",
+      "thanks": "큰 감사",
+      "superFan": "슈퍼 팬"
+    },
     "sentEyebrow": "팁 보냄",
+    "sentTo": "@{{recipient}}님에게 {{amount}}",
     "lightning": {
       "amountLabel": "금액(sats):",
       "messageLabel": "메시지(선택):",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "얼마나 자주",
       "once": "한 번",
+      "oneTime": "한 번",
+      "monthly": "매월",
       "until": "매달, {{date}}까지",
       "note": "Hive가 30일마다 자동으로 보내며, 첫 번째는 지금 바로 보냅니다. 언제든 멈출 수 있어요.",
       "replaces": "@{{recipient}} 님에게 이미 보내고 있는 월간 후원이 이것으로 바뀝니다.",
@@ -91,7 +104,8 @@
     "addToPlaylist": "재생목록에 추가",
     "addTag": "태그 추가",
     "notInterested": "관심 없음",
-    "dontShowCreator": "@{{author}}님 표시 안 함"
+    "dontShowCreator": "@{{author}}님 표시 안 함",
+    "saveToPlaylist": "재생목록에 저장"
   },
   "guestList": {
     "loadFailed": "현재 게스트 목록을 불러오지 못했어요",
@@ -132,18 +146,21 @@
     "tagged": "“{{tag}}” 태그를 달았어요.",
     "vote": "투표",
     "tagThisVideo": "이 동영상에 태그 달기",
-    "tagOptional": "— 선택 사항 —",
+    "tagOptional": "선택 사항",
     "pickTopicFirst": "먼저 주제를 선택하세요",
     "taggedNoDot": "“{{tag}}” 태그 추가됨",
     "tagFailed": "태그 실패: {{message}}",
-    "taggedAlreadyVoted": "“{{tag}}” 태그 추가됨 — {{weight}}% 투표는 이미 완료되었어요.",
-    "votingClosed": "투표 마감 — 이 동영상에 태그 달기",
+    "taggedAlreadyVoted": "“{{tag}}” 태그를 달았어요. {{weight}}% 투표는 이미 완료됐어요.",
+    "votingClosed": "투표 마감: 이 동영상에 태그 달기",
     "youTagged": "이 동영상에 <b>{{tag}}</b> 태그를 달았어요.",
-    "pickTopic": "주제 선택(100% 투표로 계산돼요)",
+    "pickTopic": "주제를 고르면 100% 투표로 계산돼요.",
     "submitTag": "태그 제출",
     "tagThisVideoFull": "이 동영상에 태그 달기(100% 투표로 계산돼요)",
     "justTag": "투표 없이 태그만 달기",
-    "addsAbout": "약 {{value}} 추가"
+    "justTagShort": "태그만",
+    "voteAndTag": "투표하고 태그 달기",
+    "addsAbout": "약 {{value}} 추가",
+    "postSoFar_other": "지금까지 {{value}} · 투표 {{count}}개"
   },
   "tagsPicker": {
     "autoTagged": "자동 태그: {{tags}}",
@@ -152,7 +169,7 @@
     "noMatches": "“{{query}}”와 일치하는 주제가 없어요.",
     "allSelected": "{{category}} 전체가 선택되었어요. 범위를 좁히려면 개별 주제만 추가하세요:",
     "orPickTopics": "또는 개별 주제 선택:",
-    "goodEnough": "이대로도 좋아요. 더 구체적으로 고를 수도 있어요(선택):",
+    "goodEnough": "이대로 좋아요. 더 구체적으로 고를 수도 있어요(선택)",
     "moreSpecific": "더 구체적으로:"
   }
 }

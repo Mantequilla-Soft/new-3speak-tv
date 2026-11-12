@@ -98,8 +98,8 @@
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "¡LO SENTIMOS! PÁGINA NO ENCONTRADA",
+    "title": "Lo sentimos, página no encontrada",
     "message": "Lamentablemente, la página que buscas no está disponible.",
-    "goHome": "IR AL INICIO"
+    "goHome": "Ir a la página de inicio"
   }
 }

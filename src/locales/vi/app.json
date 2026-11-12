@@ -5,11 +5,11 @@
   "supportBlock": {
     "banned": {
       "title": "Tài khoản của bạn đã bị cấm",
-      "body": "Tài khoản 3Speak của bạn đã bị cấm, nên bạn không thể đăng nhập. Nếu bạn nghĩ đây là nhầm lẫn, vui lòng liên hệ bộ phận hỗ trợ của 3Speak."
+      "body": "Tài khoản 3Speak của bạn đã bị cấm, nên bạn không thể đăng nhập. Nếu bạn nghĩ đây là nhầm lẫn, hãy liên hệ bộ phận hỗ trợ của 3Speak."
     },
     "upload": {
       "title": "Tính năng tải lên đã bị tắt cho tài khoản của bạn",
-      "body": "Tài khoản 3Speak của bạn hiện không được phép tải lên. Nếu bạn nghĩ đây là nhầm lẫn, vui lòng liên hệ bộ phận hỗ trợ của 3Speak."
+      "body": "Tài khoản của bạn hiện không được phép tải lên. Nếu bạn nghĩ đây là nhầm lẫn, hãy liên hệ bộ phận hỗ trợ của 3Speak."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "Hệ thống của chúng tôi đang gặp sự cố",
-    "body": "Đội ngũ của chúng tôi đang khắc phục để đưa 3Speak hoạt động trở lại ngay. Tham gia Discord của chúng tôi để liên hệ và nhận cập nhật trực tiếp — cảm ơn bạn đã kiên nhẫn.",
+    "body": "Đội ngũ của chúng tôi đang khắc phục để đưa 3Speak hoạt động trở lại. Tham gia Discord của chúng tôi để nhận cập nhật trực tiếp.",
     "joinDiscord": "Tham gia Discord"
   },
   "changelog": {
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Đăng video",
-        "text": "Tải lên video dài vẫn mãi thuộc về bạn, trên một chuỗi khối mà không ai có thể lặng lẽ xóa đi."
+        "text": "Video dài luôn thuộc về bạn"
       },
       "filmShorts": {
         "title": "Quay Shorts",
-        "text": "Nhanh gọn, dọc và dễ chia sẻ. Rất hợp để tìm những người xem đầu tiên."
+        "text": "Nhanh, dọc, dễ chia sẻ"
       },
       "goLive": {
         "title": "Phát trực tiếp",
-        "text": "Phát trực tiếp cho người hâm mộ, mời khách lên sân khấu và giữ lại bản ghi sau đó."
+        "text": "Mời khách lên sân khấu, giữ lại bản ghi"
       },
       "buildCommunity": {
         "title": "Xây dựng cộng đồng",
-        "text": "Tạo một không gian xoay quanh điều bạn quan tâm, hoặc tham gia một cộng đồng đang sôi nổi."
+        "text": "Tạo một không gian hoặc tham gia một nơi có sẵn"
       },
       "makeFriends": {
         "title": "Kết bạn thật sự",
-        "text": "Bình luận, chat và hợp tác với những con người thật luôn ủng hộ lẫn nhau."
+        "text": "Bình luận, chat và hợp tác"
       },
       "getInspired": {
         "title": "Tìm cảm hứng, cùng tham gia",
-        "text": "Khám phá nhà sáng tạo, ủng hộ những người bạn yêu thích, và kiếm thu nhập trong lúc đó."
+        "text": "Ủng hộ nhà sáng tạo và cùng kiếm thu nhập"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Đang tải lên…",
     "interestsHint": "Chúng tôi dùng các mục này để chọn nội dung hiển thị trên trang chủ của bạn. Chọn bao nhiêu tùy thích, hoặc không chọn, và thay đổi bất cứ khi nào bạn muốn.",
     "interestsFineprint": "Được lưu vào tài khoản Hive của bạn, nên mọi ứng dụng Hive đều hiển thị cùng một hồ sơ và cùng sở thích.",
-    "saveAndExplore": "Lưu và bắt đầu khám phá"
+    "saveAndExplore": "Lưu và bắt đầu khám phá",
+    "eyebrow": "Chào mừng",
+    "stepOf": "Bước {{n}}/{{total}}",
+    "profileFineprint": "Lưu vào tài khoản Hive của bạn, nên mọi ứng dụng Hive đều hiện cùng một hồ sơ."
   },
   "profileEdit": {
     "updated": "Đã cập nhật hồ sơ",
@@ -193,7 +196,7 @@
     "uploadBanner": "Tải lên ảnh bìa hồ sơ",
     "changeBanner": "Đổi ảnh bìa",
     "addBanner": "Thêm ảnh bìa",
-    "bannerHint": "Đẹp nhất ở <b>2800 × 684</b> px (hoặc bất kỳ ảnh 4:1 nào). Giữ phần quan trọng ở giữa: hai bên sẽ bị cắt trên màn hình hẹp và tên của bạn nằm ở góc dưới bên trái.",
+    "bannerHint": "Giữ phần quan trọng ở giữa: hai bên bị cắt trên màn hình hẹp và tên của bạn nằm ở góc dưới bên trái.",
     "uploadPicture": "Tải lên ảnh đại diện",
     "pictureLabel": "Ảnh đại diện",
     "pictureHint": "Khuôn mặt hoặc logo là đẹp nhất. Hình vuông, 400 × 400 px trở lên. Tối đa 8MB.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "Chúng tôi nên gọi bạn là gì? (@{{username}})",
     "namePlaceholder": "Chúng tôi nên gọi bạn là gì?",
     "shortBio": "Tiểu sử ngắn",
-    "bioPlaceholder": "Bạn làm nội dung gì, và mọi người có thể mong đợi gì từ bạn?",
+    "bioPlaceholder": "Bạn làm nội dung gì, và mọi người có thể mong đợi gì?",
     "location": "Vị trí",
     "optional": "không bắt buộc",
     "locationPlaceholder": "Bạn đang ở đâu trên thế giới?"

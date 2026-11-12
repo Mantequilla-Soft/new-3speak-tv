@@ -31,7 +31,8 @@
   "gated": {
     "title": "Solo para miembros",
     "checkFailed": "No pudimos confirmar tu suscripción en este momento. Inténtalo de nuevo en un momento.",
-    "preview": "Estás viendo una vista previa gratis. 3Speak Pro desbloquea el video completo.",
+    "preview": "Estás viendo un avance gratuito",
+    "previewSub": "3Speak Pro desbloquea el video completo.",
     "subscribersOnly": "Este video está disponible para suscriptores de 3Speak Pro.",
     "cta": "Obtener 3Speak Pro"
   },
@@ -51,6 +52,8 @@
     "value": "Valor"
   },
   "moreVideos": "Más videos",
+  "nextIn": "Siguiente en {{name}}",
+  "fromCommunity": "De {{name}}",
   "vote": {
     "saveFailed": "No se pudo guardar tu voto"
   },
@@ -79,14 +82,14 @@
     "loginRequired": "Inicia sesión para hacer clips",
     "cancel": "Cancelar clip",
     "clipVideo": "Hacer clip del video",
-    "label": "Hacer clip",
+    "label": "Hacer clip del video",
     "clip": "Clip",
     "seekToStart": "Ir al inicio",
     "setStart": "Marcar inicio",
     "setEnd": "Marcar final",
     "createClip": "Crear clip",
     "barStart": "Ve al inicio de tu clip",
-    "barEnd": "Inicio: {{start}}. Ahora ve al final",
+    "barEnd": "Inicio {{start}} · ahora ve hasta el final",
     "barDone": "Clip: {{start}} – {{end}}"
   },
   "share": {
@@ -104,11 +107,11 @@
   },
   "media": {
     "unavailableTitle": "Este video ya no está disponible",
-    "unavailableBody": "No se encontró en la red el archivo de esta subida antigua. La publicación sigue existiendo en la blockchain, pero el video ya no se puede reproducir.",
+    "unavailableBody": "No se encontró el archivo de esta subida antigua. La publicación sigue existiendo en Hive.",
     "scheduledTitle": "Esta publicación está programada",
     "scheduledBody": "Se publicará el {{date}}. El video se podrá ver a partir de entonces.",
     "blockedTitle": "No se pudo cargar el video ahora",
-    "blockedBody": "Uno de nuestros servidores de video no respondió. El video está bien, así que inténtalo de nuevo."
+    "blockedBody": "Uno de nuestros servidores de video no respondió. El video está bien."
   },
   "tipNudge": {
     "text": "¿Te gustó?<hide> ¡Envíale una propina a <b>@{{author}}</b>!</hide>",
@@ -118,7 +121,9 @@
     "members_one": "{{count}} miembro",
     "members_many": "{{count}} miembros",
     "members_other": "{{count}} miembros",
-    "postedIn": "Publicado en"
+    "postedIn": "Publicado en",
+    "partOf": "Parte de",
+    "position": "{{current}} de {{total}}"
   },
   "tags": {
     "curated": "Seleccionado"
@@ -135,7 +140,8 @@
     "openTagFeed": "Abrir feed de la etiqueta"
   },
   "scheduled": {
-    "notice": "Programado para el <b>{{date}}</b>; aún no se publicó.",
+    "notice": "Programado para el <b>{{date}}</b>",
+    "notPublished": "Aún no publicado.",
     "futureDate": "una fecha futura",
     "edit": "Editar, reprogramar o cancelar",
     "editTitle": "Editar publicación programada (detalles, fecha o cancelar)"
@@ -162,7 +168,8 @@
     "toggleDetails": "Mostrar/ocultar detalles",
     "followCreator": "Seguir al creador",
     "closeMenu": "Cerrar menú",
-    "openActions": "Abrir acciones"
+    "openActions": "Abrir acciones",
+    "support": "Apoyar a {{name}}"
   },
   "description": {
     "hide": "Ocultar descripción",
@@ -179,7 +186,7 @@
     "uploadedTo": "Subido a <b>{{host}}</b>. Presiona Guardar para reemplazarlo.",
     "uploaded": "Subido. Presiona Guardar para reemplazarlo.",
     "cancelUpload": "Cancelar subida",
-    "keepCurrent": "Conservar el video actual",
+    "keepCurrent": "Mantener el video actual",
     "encodeHint": "Después de guardar, todavía necesita unos minutos para codificarse, y el video anterior se sigue reproduciendo hasta que esté listo. Tu miniatura no cambia, así que actualízala arriba si ya no coincide.",
     "thumbnail": "Miniatura",
     "thumbPreviewAlt": "Vista previa de la miniatura",
@@ -202,26 +209,27 @@
     "markdownHint": "Admite markdown.",
     "listed": "Listado",
     "unlistedLabel": "No listado",
-    "listedHint": "Se muestra en feeds, búsquedas y en tu perfil.",
-    "unlistedHint": "Oculto en feeds y búsquedas; se puede ver con el enlace directo y sigue en tu perfil (con distintivo).",
-    "allowRemix": "Permitir remix/clip",
-    "remixOn": "Otros pueden crear remixes/clips; apareces como autor original.",
+    "listedHint": "En los feeds, la búsqueda y tu perfil",
+    "unlistedHint": "Solo con enlace directo, marcado en tu perfil",
+    "allowRemix": "Permitir remix y clip",
+    "remixOn": "Se te acredita como autor original",
     "remixOff": "Otros no pueden hacer remix ni clips de este video.",
     "adsOnVideo": "Anuncios en este video",
     "adsOnHint": "Puede haber anuncios en este video.",
     "adsOffHint": "Sin anuncios en este video.",
     "rollsOnVideo": "Anuncios en video",
     "rollsOnHint": "Pueden aparecer anuncios en video, banners y tickers.",
-    "rollsOffHint": "Solo banners y tickers en este video.",
+    "rollsOffHint": "Si no, solo banners y tickers",
     "trailer": "Tráiler del canal",
     "trailerOn": "Se reproduce automáticamente arriba de la pestaña Resumen de tu perfil y reemplaza cualquier tráiler que hayas configurado antes.",
-    "trailerOff": "Haz que este sea el video que se reproduce automáticamente arriba de la pestaña Resumen de tu perfil.",
+    "trailerOff": "Se reproduce solo en la parte superior de tu perfil",
     "nsfw": "Adultos / NSFW",
     "notNsfw": "No es para adultos",
     "nsfwHint": "Oculto en feeds y búsquedas salvo que el espectador active NSFW; etiquetado como nsfw en Hive.",
     "notNsfwHint": "Contenido normal, visible para todos.",
+    "nsfwOffHint": "Oculto salvo que quien lo vea haya activado NSFW",
     "promoted": "Promocionado",
-    "promote": "Promocionar video",
+    "promote": "Promocionar",
     "saveChanges": "Guardar cambios",
     "noChanges": "No hay cambios que guardar.",
     "thumbUploaded": "Miniatura subida.",
@@ -266,7 +274,8 @@
       "visibility": "Visibilidad",
       "content": "Contenido",
       "ads": "Anuncios",
-      "promotion": "Promoción"
+      "promotion": "Promoción",
+      "contentAds": "Contenido, anuncios y promoción"
     },
     "chaptersNoteAll": "La lista de capítulos se escribe en la descripción al guardar.",
     "editChapters": "Editar capítulos",

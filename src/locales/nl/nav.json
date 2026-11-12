@@ -7,7 +7,8 @@
     "feeds": "Feeds",
     "groups": "Groepen",
     "audio": "Audio",
-    "login": "Inloggen"
+    "login": "Inloggen",
+    "you": "Jij"
   },
   "installApp": "App installeren",
   "iosInstallHint": "Tik op <b>Deel</b> en daarna op <b>Zet op beginscherm</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Korte verticale video's, de een na de ander",
     "audioTooltip": "Podcasts, muziek en andere audio gepubliceerd op 3Speak",
     "groupsTooltip": "Community's waar je lid van kunt worden, en badges die mensen krijgen",
-    "rankingsTooltip": "De makers die op dit moment het meest verdienen en bekeken worden"
+    "rankingsTooltip": "De makers die op dit moment het meest verdienen en bekeken worden",
+    "live": "Live",
+    "liveTooltip": "Streams en ruimtes die nu live zijn"
   },
   "aboutLink": "Over 3Speak",
   "faqLink": "FAQ",
@@ -49,14 +52,20 @@
     "logout": "Uitloggen",
     "onDiscord": "3Speak op Discord",
     "onX": "3Speak op X",
-    "onTelegram": "3Speak op Telegram"
+    "onTelegram": "3Speak op Telegram",
+    "switch": "Wisselen",
+    "tiles": {
+      "channel": "Kanaal",
+      "history": "Geschiedenis"
+    },
+    "darkTheme": "Donker thema"
   },
   "notifications": {
     "pushOff": "Meldingen uitgeschakeld voor dit apparaat",
-    "pushOn": "Je krijgt een melding als makers die je volgt iets posten",
+    "pushOn": "Je krijgt een melding als makers die je volgt iets posten.",
     "pushFailed": "Meldingsinstellingen konden niet worden gewijzigd",
     "ariaUnread": "Meldingen ({{count}} ongelezen)",
-    "pushBlocked": "Meldingen zijn voor deze site geblokkeerd in je browserinstellingen",
+    "pushBlocked": "Meldingen van deze site zijn geblokkeerd in je browserinstellingen.",
     "pushNoWorker": "Deze build heeft geen service worker, dus meldingen kunnen hier niet worden geregistreerd",
     "pushStop": "Geen meldingen meer op dit apparaat",
     "pushStart": "Krijg een melding als makers die je volgt iets posten",
@@ -76,8 +85,8 @@
       "followMany_other": "@{{a}} en {{count}} anderen volgen je nu",
       "other": "{{count}} {{type}}-meldingen",
       "typeCount": "{{count}} × {{type}}",
-      "includesWhale": "Inclusief 🐋 whale-account(s)",
-      "includesOrca": "Inclusief 🐬 orca-account(s)",
+      "includesWhale": "Inclusief 🐋 whale-accounts",
+      "includesOrca": "Inclusief 🐬 orca-accounts",
       "andMore": "en nog {{count}}…"
     },
     "stories": {
@@ -93,6 +102,13 @@
       "heading": "Nieuwe afleveringen van podcasts die je volgt",
       "newEpisode": "Nieuwe aflevering van {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "Alles",
+      "mentions": "Vermeldingen",
+      "follows": "Volgers",
+      "uploads": "Uploads",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -130,6 +146,17 @@
     "views_other": "{{formatted}} weergaven",
     "tags": "Tags",
     "titles": "Titels",
-    "placeholder": "Zoeken..."
-  }
+    "placeholder": "Zoeken...",
+    "recent": "Recent",
+    "allResultsFor": "Alle resultaten voor “{{term}}”",
+    "kinds": {
+      "creator": "Maker",
+      "community": "Community",
+      "video": "Video",
+      "short": "Short",
+      "audio": "Audio",
+      "playlist": "Playlist"
+    }
+  },
+  "create": "Maken"
 }

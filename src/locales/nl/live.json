@@ -5,8 +5,8 @@
     "yourStreamEnded": "Je stream is afgelopen",
     "thisStreamEnded": "Deze stream is afgelopen",
     "noLongerLive": "Hij is niet meer live. Start een nieuwe wanneer je er klaar voor bent.",
-    "recordingProcessing": "Goed gedaan! Je opname wordt verwerkt en verschijnt zo bij de aankondigingspost.",
-    "thanksForLive": "Goed gedaan, bedankt dat je live ging!",
+    "recordingProcessing": "Je opname wordt verwerkt en verschijnt zo in de aankondigingspost.",
+    "thanksForLive": "Top, bedankt dat je live ging",
     "backHome": "Terug naar Home",
     "howWasStream": "Hoe ging je stream?",
     "connecting": "Verbinden met OpenPods…",
@@ -41,13 +41,13 @@
     "slowDown": "Even rustig aan, clip daarna opnieuw.",
     "failed": "Clip maken mislukt. Probeer het over een paar seconden opnieuw.",
     "title": "Clip de laatste 30 seconden",
-    "label": "30 s",
+    "label": "Clip",
     "clipping": "Clippen…"
   },
   "report": {
     "reasons": {
       "harassment": "Intimidatie of haat",
-      "sexual": "Seksuele of expliciete inhoud",
+      "sexual": "Seksueel of expliciet",
       "violence": "Geweld of gevaarlijke acties",
       "selfharm": "Zelfbeschadiging",
       "illegal": "Illegale inhoud",
@@ -58,7 +58,7 @@
     "failed": "Melding versturen mislukt. Probeer het opnieuw.",
     "title": "Deze stream melden",
     "reporting": "Je meldt <b>@{{host}}</b>.",
-    "intro": "Vertel ons wat er mis is. Ons team bekijkt elke melding.",
+    "intro": "Ons team bekijkt elke melding.",
     "detailPlaceholder": "Voeg details toe (optioneel)",
     "sending": "Versturen…",
     "submit": "Melding versturen"
@@ -92,6 +92,7 @@
   "lobby": {
     "descriptionPlaceholder": "Waar gaat deze sessie over? Voeg shownotes, links of een samenvatting toe…",
     "enableHosting": "Hosten en spreken inschakelen",
+    "enableHostingHint": "Vereist posting-autoriteit van @threespeak",
     "handoverFailed": "Hosten kon niet automatisch worden ingeschakeld. OpenPods post namens jou via @threespeak — controleer of je het posting-autoriteit hebt gegeven en probeer het opnieuw.",
     "signInToHost": "Log in met Hive om te hosten of te spreken"
   },
@@ -131,8 +132,8 @@
     },
     "chatBox": {
       "title": "Je chat in OBS",
-      "desc": "Eén link voor al je streams. Voeg hem in OBS toe als dock om nieuwe berichten te lezen terwijl je live bent. De handleiding hieronder laat zien hoe.",
-      "copy": "Chat-URL voor OBS kopiëren",
+      "desc": "toevoegen als aangepast browserdock",
+      "copy": "Chat-URL kopiëren",
       "copied": "Chat-URL gekopieerd"
     },
     "card": {
@@ -143,26 +144,26 @@
       "watch": "Bekijk de stream",
       "notAnnounced": "Deze stream is niet aangekondigd op Hive.",
       "notAnnouncedAuth": "Niet aangekondigd op Hive: 3Speak mag nog niet voor je posten. Bewerk het sjabloon om dit toe te staan.",
-      "stuck": "OBS is verbonden, maar er kwam geen video bij ons aan, dus de stream is niet gestart. Stop het streamen in OBS en start opnieuw.",
-      "dailyLimit": "OBS kon niet live gaan: gratis accounts kunnen één stream per dag starten. Probeer het opnieuw 24 uur nadat je laatste stream begon, of neem 3Speak Pro om zonder daglimiet te streamen.",
+      "stuck": "OBS is verbonden, maar er kwam geen video bij ons aan. Stop met streamen en start opnieuw.",
+      "dailyLimit": "Gratis accounts kunnen één stream per dag starten. Probeer het opnieuw 24 uur na de start van je laatste stream, of neem Pro.",
       "useInStudio": "Gebruiken in Stream Studio",
       "proRequired": "OBS kon niet live gaan: streamen vanuit OBS hoort bij 3Speak Pro."
     },
     "guide": {
       "title": "Zo stel je OBS in",
-      "step1": "Gebruik OBS Studio 30 of nieuwer en open Instellingen, dan Stream.",
-      "step2": "Zet Dienst op \"WHIP\".",
-      "step3": "Server: plak de server-URL van het sjabloon dat je wilt (\"Server-URL kopiëren\" op de kaart). Elk sjabloon heeft een eigen URL.",
-      "step4": "Bearer Token: plak je stream-geheim van bovenaan deze pagina. Het is hetzelfde voor elk sjabloon.",
-      "step5": "Klik in OBS op \"Start Streaming\" en je bent live op 3Speak met dat sjabloon. \"Stop Streaming\" beëindigt de stream.",
-      "outputTitle": "Aanbevolen uitvoerinstellingen",
-      "keyframe": "Keyframe-interval: 1 tot 2 seconden",
-      "bitrate": "Bitratebeheer CBR, 2500 tot 6000 kbps",
-      "encoder": "Encoder: x264 of je hardware-encoder",
-      "audio": "Audio-samplefrequentie: 48 kHz",
-      "bframes": "Geen B-frames (zet ze op 0 als je encoder dat aanbiedt)",
+      "step1": "Gebruik OBS Studio 30 of nieuwer: Instellingen → Stream",
+      "step2": "Zet Dienst op “WHIP”",
+      "step3": "Server: plak de server-URL van het sjabloon",
+      "step4": "Bearer Token: plak je stream-geheim",
+      "step5": "Start het streamen in OBS. Je bent live op 3Speak.",
+      "outputTitle": "Aanbevolen uitvoer",
+      "keyframe": "Keyframe 1–2 s",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / hardware",
+      "audio": "48 kHz-audio",
+      "bframes": "Geen B-frames",
       "chatTitle": "Bekijk de chat in OBS",
-      "chatCopy": "Klik bovenaan deze pagina, onder \"Je chat in OBS\", op \"Chat-URL voor OBS kopiëren\". Het is één link voor al je streams.",
+      "chatCopy": "Klik bovenaan deze pagina, onder “Je chat in OBS”, op “Chat-URL kopiëren”. Het is één link voor al je streams.",
       "chat2": "Open in OBS het menu \"Docks\" en kies \"Custom Browser Docks\". Vul een naam in zoals \"3Speak chat\", plak de URL en klik op \"Apply\". Nieuwe berichten verschijnen in dat paneel zolang je live bent. Kijkers zien het nooit.",
       "chat3": "Kijkers zien de chat al naast je stream, dus je hoeft hem niet in de video te zetten. Alleen als je de stream ook ergens anders deelt: voeg dezelfde URL toe als \"Browser\"-bron en haal \"&dock=1\" van het eind weg. Dan zweven de berichten over de video en verdwijnen ze na 30 seconden.",
       "chatOptions": "Optioneel, zet achter de URL: &max=10 toont minder regels, &size=18 maakt de tekst groter, &fade=0 houdt berichten in beeld.",
@@ -256,5 +257,14 @@
       "desc": "Met 3Speak Pro ga je met je sjablonen rechtstreeks vanuit OBS live. Zonder Pro werken je sjablonen nog steeds in de Stream Studio in je browser.",
       "cta": "3Speak Pro nemen"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_one": "{{count}} luistert",
+    "listening_other": "{{count}} luisteren",
+    "emptySub": "Streams en OpenPods verschijnen hier zodra ze beginnen.",
+    "emptyRooms": "Er zijn nu geen OpenPods open.",
+    "emptyScheduled": "Er staat nu niets gepland.",
+    "emptyScheduledSub": "Ruimtes die open zijn maar nog niet live, verschijnen hier."
   }
 }

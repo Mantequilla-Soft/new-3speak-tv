@@ -18,6 +18,7 @@
     "community": "社区",
     "communityWithSubscribers_other": "社区 · {{formatted}} 位订阅者",
     "commentFallback": "（评论）",
+    "videoKind": "3Speak · 视频",
     "play": "播放 {{title}}"
   },
   "share": {
@@ -31,22 +32,28 @@
     "responsiveSub": "自动适应所在页面的大小",
     "fixedSub": "固定尺寸的 iframe",
     "sendInChat": "通过 3Speak 聊天发送",
-    "sendInChatSub": "发消息给 3Speak 上的某人",
+    "sendInChatSub": "发消息给某人",
     "embedOnWebsite": "嵌入到网站",
-    "embedOnWebsiteSub": "复制 HTML 用于你自己的网站或博客",
+    "embedOnWebsiteSub": "自适应或固定尺寸",
     "forHivePost": "用于 Hive 帖子",
+    "forHivePostSub": "复制链接后粘贴",
     "hivePostCopied": "链接已复制。请粘贴到你的 Hive 帖子中。",
-    "generalShare": "分享 / 复制链接",
-    "generalShareSub": "其他应用，或复制链接"
+    "generalShare": "分享或复制链接",
+    "generalShareSub": "其他应用",
+    "embed": "嵌入",
+    "chat": "聊天",
+    "more": "更多",
+    "startAt": "开始时间",
+    "toFollowers_other": "发给你的 {{n}} 位粉丝"
   },
   "gate": {
     "connectTitle": "连接 3Speak 聊天",
-    "connectBody": "聊天由 Snapie 提供支持。连接时会用你的 Hive posting 密钥签署一次性登录验证（不产生交易，也没有费用）。",
+    "connectBody": "聊天由 Snapie 提供支持。连接时会用你的 posting 密钥签署一次性登录验证。不产生交易，也没有费用。",
     "connecting": "连接中…",
     "connectButton": "连接聊天",
     "cannotSign": "你当前的登录方式无法签署聊天验证。请使用 Keychain、HiveAuth、PeakVault 或 Ledger。",
-    "needsAccountTitle": "聊天需要 Hive 账号",
-    "needsAccountBody": "消息由你自己的账号密钥签名，所以等你的账号准备好后，聊天会和其他功能一起解锁。完成个人主页上的目标，团队会帮你完成剩下的步骤。",
+    "needsAccountTitle": "聊天需要 Hive 账号。",
+    "needsAccountBody": "完成预热后，它会和其他功能一起解锁。",
     "loginTitle": "登录后使用聊天",
     "loginBody": "使用你的 Hive 账号登录，即可收发消息。",
     "connectingToChat": "正在连接聊天…"
@@ -124,7 +131,8 @@
     "quoting": "正在引用 @{{user}}",
     "cancelQuote": "取消引用",
     "removeImage": "移除图片",
-    "placeholder": "输入消息…"
+    "placeholder": "输入消息…",
+    "placeholderTo": "发消息给 {{name}}"
   },
   "page": {
     "chooseTarget": "选择要发送到的聊天。",

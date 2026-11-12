@@ -48,7 +48,7 @@
     "curated": "Curated",
     "noCues": "Walang cues.",
     "clearQueue": "I-clear ang queue",
-    "clearAll": "I-clear lahat",
+    "clearAll": "I-clear",
     "queueMoveUp": "Iakyat ang {{title}}",
     "queueMoveDown": "Ibaba ang {{title}}",
     "queueRemove": "Alisin ang {{title}} sa queue",
@@ -59,7 +59,7 @@
     "collapse": "Paliitin ang player",
     "skipBack": "Bumalik nang {{seconds}} segundo",
     "skipForward": "Umabante nang {{seconds}} segundo",
-    "speed": "Bilis ng playback",
+    "speed": "Bilis",
     "speedValue": "Bilis ng playback: {{speed}}",
     "sleep": "Sleep timer",
     "sleepOff": "Naka-off",
@@ -76,8 +76,8 @@
     "effectsChecking": "Tinitingnan kung suportado ito ng episode na ito…",
     "timeSaved": "Natipid na oras: {{time}}",
     "cast": "I-play sa ibang device",
-    "download": "I-save para sa offline",
-    "downloading": "Sine-save: {{pct}}%",
+    "download": "I-download",
+    "downloading": "Sine-save para sa offline: {{pct}}%",
     "downloaded": "Naka-save para sa offline",
     "downloadDone": "Naka-save para sa offline na pakikinig",
     "downloadFailed": "Hindi ma-save ang episode na ito",
@@ -101,12 +101,17 @@
     "nextChapter": "Susunod na kabanata",
     "chapterLink": "Link ng kabanata",
     "upNext": "Susunod",
-    "hideIdle": "Itago (mananatili ang queue mo)",
+    "hideIdle": "Itago · mananatili ang queue",
     "continueAt": "Ituloy sa {{time}}",
     "position": "{{current}} sa {{total}}",
     "playingFrom": "Nagpe-play mula sa {{name}}",
     "atThisMoment": "Sa sandaling ito",
-    "goTo": "Pumunta sa {{name}}"
+    "goTo": "Pumunta sa {{name}}",
+    "shuffle": "I-shuffle",
+    "repeat": "Ulitin ang track na ito",
+    "sleepMinutesShort": "{{minutes}} min",
+    "swipeUp": "Mag-swipe pataas para sa player",
+    "commentAt": "Mag-comment sa {{time}}…"
   },
   "share": {
     "failed": "Pumalya",
@@ -116,7 +121,16 @@
     "copied3speak": "Nakopya ang 3Speak link!",
     "copyAudioPlayer": "Kopyahin ang link ng audio player",
     "copiedAudioPlayer": "Nakopya ang link ng audio player!",
-    "searchingHive": "Hinahanap sa Hive…"
+    "searchingHive": "Hinahanap sa Hive…",
+    "title": "I-share ang track",
+    "atTime": "Sa {{time}}",
+    "peakd": "PeakD",
+    "player": "Link ng player",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "Email",
+    "qr": "QR",
+    "episode": "Link ng episode"
   },
   "post": {
     "notFound": "Hindi nahanap ang post",
@@ -130,12 +144,14 @@
     "vote": "Vote",
     "signInToTip": "Mag-sign in para mag-tip",
     "tip": "Tip",
+    "albumLabel": "Album",
+    "notes": "Mga tala",
     "stillIndexing": "Ini-index pa ang audio ng post na ito — subukan ulit pagkalipas ng ilang minuto."
   },
   "page": {
     "sections": {
       "popular": "Sikat",
-      "recent": "Mga Bagong Labas",
+      "recent": "Mga bagong labas",
       "podcasts": "Mga Podcast",
       "songs": "Mga Kanta",
       "audiobooks": "Mga Audiobook",
@@ -162,7 +178,7 @@
     "tracks_other": "{{count}} tracks",
     "noTracks": "Walang nahanap na track.",
     "creators": "Mga Creator",
-    "albumsPlaylists": "Mga Album at Playlist",
+    "albumsPlaylists": "Mga audio playlist",
     "noAudioForFilters": "Walang nahanap na audio para sa mga filter na ito.",
     "tabsLabel": "Mga view ng audio",
     "tabExplore": "Mag-explore",
@@ -175,6 +191,25 @@
   "upload": {
     "title": "Mag-upload ng audio",
     "publishing": "Pine-publish…",
+    "nextTo": "Susunod: {{step}}",
+    "publishAlbum_one": "I-publish ang album · {{count}} track",
+    "publishAlbum_other": "I-publish ang album · {{count}} track",
+    "publishWithShorts_one": "I-publish ang audio + {{count}} Short",
+    "publishWithShorts_other": "I-publish ang audio + {{count}} Shorts",
+    "side": {
+      "publishTo": "I-publish sa",
+      "shortsTitle": "Audiogram Shorts",
+      "clips_one": "{{count}} clip",
+      "clips_other": "{{count}} clip",
+      "tracks_one": "{{count}} track",
+      "tracks_other": "{{count}} track",
+      "audio": "Audio",
+      "shorts": "Shorts",
+      "snaps": "Snaps",
+      "community": "Komunidad",
+      "rss": "RSS feed",
+      "clipLabel": "Thumbnail ng Short {{n}}: {{title}}"
+    },
     "failed": "Pumalya",
     "unknown": "hindi alam",
     "unknownError": "hindi kilalang error",
@@ -195,7 +230,7 @@
       "review": "Review"
     },
     "trackTypes": {
-      "voiceSnap": "Boses / Snap"
+      "voiceSnap": "Voice note"
     },
     "toasts": {
       "pickImage": "Pumili ng image file",
@@ -236,8 +271,8 @@
       "discard": "Itapon"
     },
     "source": {
-      "dropHere": "I-drop dito ang mga audio file, o i-click para mag-browse",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (puwede ang marami)",
+      "dropHere": "I-drop ang mga audio file, o mag-browse",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · puwede ang marami nang sabay",
       "stop": "Itigil",
       "orRecord": "O mag-record nang live",
       "recordLimit": "Hanggang {{minutes}} min bawat recording",
@@ -251,7 +286,10 @@
       "trackTitle": "Pamagat ng track",
       "genre": "Genre",
       "bpm": "BPM",
-      "descriptionOptional": "Description (opsyonal)"
+      "descriptionOptional": "Description (opsyonal)",
+      "track": "Track",
+      "category": "Kategorya",
+      "musicGenre": "Genre ng musika"
     },
     "playlist": {
       "helpRequired": "Kailangan — pumili o gumawa ng playlist. Nasa loob ng playlist ang mga album post para manatiling magkakasama ang mga track nito sa isang 3Speak album. Nakakatulong ito sa exposure at mas kitang puwesto sa audio page.",
@@ -265,6 +303,7 @@
       "items_one": "{{count}} item",
       "items_other": "{{count}} items",
       "newPlaylist": "Bagong audio playlist",
+      "newAlbum": "Bagong album",
       "namePlaceholder": "Pangalan ng playlist",
       "public": "Public",
       "private": "Pribado",
@@ -272,6 +311,9 @@
       "creditsPlaceholder": "Credits (opsyonal)",
       "yearPlaceholder": "Taon",
       "labelPlaceholder": "Label (opsyonal)",
+      "fieldYear": "Taon",
+      "fieldLabel": "Label",
+      "fieldCredits": "Credits",
       "thumbAlt": "Thumbnail ng album",
       "removeThumb": "Alisin ang thumbnail",
       "creating": "Ginagawa…",
@@ -295,20 +337,21 @@
       "help_other": "{{count}} tracks ang naidagdag. Piliin kung paano ilalabas ang mga ito.",
       "howPublished": "Paano ito ipa-publish?",
       "snapsTitle": "Snap comments",
-      "snapsDesc": "Bawat audio ay ipo-post bilang reply sa ilalim ng pinakabagong peak.snaps container — lalabas sa Snaps feed (default).",
+      "snapsDesc": "Bawat audio ay reply sa ilalim ng pinakabagong snaps thread. Lalabas sa Snaps feed.",
       "singleTitle": "Standalone na post",
       "singleTitleSingleOnly": "Standalone na post (isang file lang)",
-      "singleDesc": "Isang audio sa sarili nitong top-level na Hive post, may pamagat, komunidad, tags at cover.",
+      "singleDesc": "Isang audio sa sarili nitong post na may pamagat, komunidad, tags at cover.",
       "albumTitle": "Album post",
       "albumTitleNeeds2": "Album post (kailangan ng 2+ file)",
-      "albumDesc": "Isang main post (walang audio) na nagsisilbing landing page; bawat track ay ipa-publish bilang comment reply na may sariling cover, description, payout at mga beneficiary.",
-      "howEarn": "Paano kikita ang audio na ito?",
-      "postRewardsTitle": "Post rewards (isang beses)",
-      "postRewardsDesc": "Matatanggap mo ang normal na Hive author payout — isang beses lang ibabayad, ~7 araw pagkatapos mag-publish.",
-      "pplTitle": "Pay-per-listen (panghabambuhay)",
-      "pplDesc": "Mapupunta kay @{{account}} lahat ng rewards ng audio post. Sa halip na isang beses na payout, babayaran ka ng isang 3Speak program sa bawat pakikinig habang buhay ang track.",
+      "albumDesc": "Isang pangunahing landing post, at bawat track ay reply na may sariling cover at payout.",
+      "howEarn": "Paano ito kikita?",
+      "postRewardsTitle": "Post rewards",
+      "postRewardsDesc": "Normal na Hive payout, isang beses, mga 7 araw pagkatapos mag-publish",
+      "pplTitle": "Pay-per-listen",
+      "pplDesc": "Babayaran ka ng isang 3Speak program sa bawat pakikinig habang buhay ang track. Mapupunta kay @{{account}} ang post rewards.",
       "adsTitle": "Mga ad sa audio na ito",
-      "adsHint": "Puwedeng mag-play ang maikling binibigkas na mensahe ng sponsor habang tumutugtog ang audio na ito, at may bahagi ka. Nagsisimula sa setting ng account mo; baguhin dito para sa upload na ito lang."
+      "adsHint": "Puwedeng mag-play ang maikling binibigkas na mensahe ng sponsor habang tumutugtog ang audio na ito, at may bahagi ka. Nagsisimula sa setting ng account mo; baguhin dito para sa upload na ito lang.",
+      "adsSpoken": "Binibigkas na sponsor message sa audio na ito"
     },
     "reward": {
       "distribution": "Distribusyon ng rewards",
@@ -334,6 +377,8 @@
       "helpAlbum": "Bawat track ay ipa-publish bilang comment sa ilalim ng main post. Itakda nang isang beses ang mga shared value at i-apply sa lahat, tapos baguhin bawat track kung kailangan.",
       "helpSnaps": "Bawat track ay ipa-publish bilang sarili nitong snap. Itakda nang isang beses ang mga shared value at i-apply sa lahat, tapos baguhin bawat track kung kailangan.",
       "applyToAllHeading": "I-apply sa lahat ng track",
+      "applyNote_one": "<b>Ilapat sa lahat ng {{count}} track:</b> iisang description at cover, tapos baguhin ang alinmang track nang hiwalay.",
+      "applyNote_other": "<b>Ilapat sa lahat ng {{count}} track:</b> iisang description at cover, tapos baguhin ang alinmang track nang hiwalay.",
       "sharedDescription": "Shared na description (opsyonal)",
       "sharedCover": "Shared na cover image",
       "applyToAll_one": "I-apply sa {{count}} track",
@@ -434,6 +479,7 @@
   "podcasts": {
     "chip": "Panlabas",
     "chipHint": "Mga podcast mula sa kahit anong RSS feed, labas sa 3Speak",
+    "on3speak": "Sa 3Speak",
     "follow": "I-follow",
     "following": "Fina-follow",
     "unfollow": "I-unfollow",
@@ -479,7 +525,8 @@
     "notifyOff": "Naka-off ang notification",
     "notifyOnDone": "Aabisuhan ka tungkol sa mga bagong episode",
     "notifyOffDone": "Wala nang notification para sa podcast na ito",
-    "notifyHint": "Makatanggap ng notification kapag may bagong episode",
+    "notifyHint": "Makatanggap ng notification kapag may lumabas",
+    "notifyLabel": "Abisuhan tungkol sa mga bagong episode",
     "search": {
       "button": "Maghanap",
       "results_one": "{{count}} podcast ang nakita",
@@ -522,7 +569,8 @@
     },
     "tip": {
       "button": "Suportahan ang podcast na ito",
-      "heading": "Suportahan ang {{show}}",
+      "heading": "Mag-tip sa {{show}}",
+      "support": "Suportahan ang {{show}}",
       "hive": "Hive tip kay @{{account}}",
       "messageLabel": "Mensahe sa podcaster (opsyonal):",
       "messagePlaceholder": "Ang ganda ng episode!",
@@ -620,7 +668,7 @@
     "downloads": {
       "title": "Mga download",
       "download": "I-download para mapakinggan offline",
-      "short": "I-download",
+      "short": "I-save",
       "downloading": "Nagda-download {{pct}}%",
       "cancel": "Kanselahin ang download",
       "saved": "Naka-save offline",
@@ -629,7 +677,7 @@
       "removed": "Naalis ang download",
       "done": "Naka-save para mapakinggan offline",
       "total": "{{size}} ang naka-save",
-      "storage": "gumagamit ang site na ito ng {{used}} sa {{quota}} sa browser na ito",
+      "storage": "gumagamit ng {{used}} sa {{quota}} sa browser na ito",
       "perBrowser": "Nananatili ang mga download sa browser na ito, sino man ang naka-sign in.",
       "errors": {
         "tooLarge": "Masyadong malaki ang episode na ito para i-save.",
@@ -641,7 +689,7 @@
     },
     "autoQueue": {
       "label": "Awtomatikong idagdag sa queue ang mga bagong episode",
-      "hint": "Mapupunta sa dulo ng iyong queue ang mga bagong episode ng show na ito paglabas nila",
+      "hint": "Mapupunta sila sa dulo ng queue mo",
       "onDone": "Mapupunta sa iyong queue ang mga bagong episode ng show na ito",
       "offDone": "Hindi na mapupunta sa iyong queue ang mga bagong episode ng show na ito",
       "added_one": "{{count}} bagong episode ang naidagdag sa iyong queue",
@@ -679,6 +727,7 @@
       "startsAt": "Magsisimula: {{time}}"
     },
     "private": {
+      "title": "Magdagdag ng pribadong feed",
       "toggle": "Pribadong feed ito (kailangan ng login)",
       "username": "Username",
       "password": "Password",

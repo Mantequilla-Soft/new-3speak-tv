@@ -34,7 +34,15 @@
     "fromFollowing": "de personas que sigues",
     "shorts_one": "{{count}} short",
     "shorts_many": "{{count}} shorts",
-    "shorts_other": "{{count}} shorts"
+    "shorts_other": "{{count}} shorts",
+    "show": "Mostrar",
+    "hide": "Ocultar"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} video",
+    "videos_many": "{{num}} videos",
+    "videos_other": "{{num}} videos",
+    "thisWeek": "{{num}} esta semana"
   },
   "firstUploads": {
     "title": "Primeras subidas"
@@ -55,9 +63,13 @@
     "dragToReorder": "Arrastra para reordenar",
     "customize": "Personalizar",
     "customizeTitle": "Personalizar Inicio",
-    "customizeHint": "Mueve las secciones arriba o abajo. Desactiva las que no quieras.",
+    "customizeHint": "Arrastra para reordenar. Desactiva las secciones que no quieras.",
     "surfTitle": "Zapping: elige un tema y míralo como si fuera TV",
-    "zapping": "Zapping"
+    "zapping": "Zapping",
+    "hero": {
+      "spotlightIn": "Destacado en {{community}}"
+    },
+    "tabFollowing": "Siguiendo"
   },
   "surf": {
     "pageTitle": "Zapping",
@@ -83,9 +95,10 @@
     "nextVideoKey": "Siguiente video (→)",
     "zap": "Zap",
     "findingNext": "Buscando el siguiente…",
-    "stop": "Dejar de hacer zapping",
+    "stop": "Detener",
     "stopTitle": "Dejar de hacer zapping (este video sigue reproduciéndose)",
-    "guide": "Guía de canales"
+    "guide": "Guía de canales",
+    "guideShort": "Guía"
   },
   "discover": {
     "searchPlaceholder": "Busca videos, Shorts, audio, comunidades...",
@@ -129,6 +142,34 @@
     "authors_other": "{{count}} autores",
     "views_one": "{{views}} vista",
     "views_many": "{{views}} vistas",
-    "views_other": "{{views}} vistas"
+    "views_other": "{{views}} vistas",
+    "topCreator": "Creador destacado",
+    "creators": "Creadores",
+    "relatedTags": "Etiquetas relacionadas",
+    "trendingTags": "Etiquetas en tendencia",
+    "topCreators": "Creadores destacados",
+    "categories": "Categorías",
+    "show": "Mostrar",
+    "boostRecentHint": "Priorizar videos más nuevos en los resultados",
+    "showResults_one": "Mostrar {{count}} resultado",
+    "showResults_many": "Mostrar {{count}} resultados",
+    "showResults_other": "Mostrar {{count}} resultados",
+    "resultTypes": "Tipos de resultado"
+  },
+  "activity": {
+    "aria": "Actividad en 3Speak",
+    "community": "Comunidad",
+    "verbs": {
+      "snap": "snap",
+      "audio": "nuevo audio",
+      "playlist": "playlist",
+      "live": "está en vivo",
+      "group_one": "{{count}} video nuevo esta semana",
+      "group_many": "{{count}} videos nuevos esta semana",
+      "group_other": "{{count}} videos nuevos esta semana"
+    },
+    "emptyCommunity": "Nada nuevo de la comunidad en los últimos días.",
+    "emptyLive": "Nadie está en vivo ahora mismo.",
+    "emptyGroups": "Aún no hay actividad de grupos esta semana."
   }
 }

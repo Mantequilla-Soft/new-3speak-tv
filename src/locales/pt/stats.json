@@ -16,7 +16,9 @@
     "avgPct": "% média",
     "votes": "Votos",
     "comments": "Comentários",
-    "payout": "Pagamento"
+    "payout": "Pagamento",
+    "followers": "Seguidores",
+    "earned": "Ganho"
   },
   "days": {
     "short": {
@@ -73,7 +75,8 @@
     "cellTitle_one": "{{day}} {{hour}}:00 — {{count}} visualização",
     "cellTitle_many": "{{day}} {{hour}}:00 — {{count}} visualizações",
     "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} visualizações",
-    "hour": "{{hour}}h"
+    "hour": "{{hour}}h",
+    "best": "Melhor horário: <b>{{day}} {{from}}–{{to}} UTC</b>"
   },
   "detail": {
     "summary": "{{votes}} votos · {{comments}} comentários · ${{payout}}"
@@ -86,7 +89,8 @@
     "title": "Comparar vídeos",
     "pickA": "Escolha um vídeo…",
     "vs": "vs.",
-    "pickB": "Escolha outro…"
+    "pickB": "Escolha outro…",
+    "lastPeriod": "Comparar com o período anterior"
   },
   "loadError": "Não foi possível carregar suas estatísticas agora.",
   "emptyRange": "Nenhum dado de visualização neste período ainda — tente “Tudo” ou espere as pessoas assistirem aos seus vídeos.",
@@ -99,7 +103,8 @@
   "sections": {
     "trend": "Tempo assistido ao longo do tempo",
     "best": "Melhor desempenho",
-    "audience": "Seu público"
+    "audience": "Seu público",
+    "top": "Conteúdo em destaque"
   },
   "openInNewTab": "Abrir o vídeo em nova aba",
   "footnote": "As estatísticas vêm do rastreamento de prévia e só você pode vê-las.",
@@ -108,9 +113,9 @@
     "empty": "Nenhum dado de visualização para este vídeo ainda.",
     "uniqueViewers": "Espectadores únicos",
     "avgSpeed": "Velocidade média",
-    "mostDropOff": "📉 A maioria sai em <b>{{time}}</b>",
-    "earlyDrop": "⚡ <b>{{pct}}%</b> saíram nos primeiros 3s",
-    "replayed": "🔁 Reassistido:",
+    "mostDropOff": "A maioria sai em <b>{{time}}</b>",
+    "earlyDrop": "<b>{{pct}}%</b> saíram nos primeiros 3 s",
+    "replayed": "Reassistido:",
     "retentionTitle": "Retenção do público",
     "retentionSub": "parcela dos espectadores ainda assistindo em cada momento",
     "pctWatching": "{{pct}}% assistindo",
@@ -118,5 +123,15 @@
     "replaySub": "trechos que os espectadores mais assistem e reassistem",
     "hotSpot": "ponto quente",
     "notEnoughReplays": "Ainda não há repetições suficientes"
+  },
+  "title": "Estatísticas do canal",
+  "legend": {
+    "current": "Este período",
+    "previous": "Anterior"
+  },
+  "audience": {
+    "title": "Público",
+    "topCountry": "País principal",
+    "topDevice": "Dispositivo principal"
   }
 }

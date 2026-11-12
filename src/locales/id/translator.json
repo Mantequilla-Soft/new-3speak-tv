@@ -8,7 +8,7 @@
     "contribute": "Cara berkontribusi pada terjemahan"
   },
   "verify": {
-    "body": "Konfirmasi akun Hive-mu untuk membuka editor. Dompetmu akan memintamu menyetujui login.",
+    "body": "Diundang? Konfirmasi akun Hive-mu untuk membuka editor.",
     "button": "Konfirmasi akun",
     "failed": "Akunmu tidak dapat dikonfirmasi."
   },
@@ -49,9 +49,9 @@
   "add": {
     "title": "Tambah bahasa",
     "code": "Kode bahasa",
-    "codeHint": "Dua atau tiga huruf kecil (ISO 639), opsional dengan wilayah: nl, fil, pt-BR",
+    "codeHint": "Dua atau tiga huruf kecil (ISO 639), opsional dengan wilayah",
     "native": "Nama dalam bahasa itu sendiri",
-    "nativeHint": "Inilah yang dilihat orang di menu bahasa, mis. Nederlands",
+    "nativeHint": "Yang dilihat orang di menu bahasa",
     "english": "Nama dalam bahasa Inggris",
     "rtl": "Ditulis dari kanan ke kiri (Arab, Ibrani, Persia, Urdu…)",
     "submit": "Tambah bahasa",
@@ -65,6 +65,7 @@
     "checkboxFor": "Tandai {{key}} sudah dicek",
     "checkedBy": "Dicek oleh @{{user}}, {{when}}",
     "notChecked": "Centang setelah kamu memeriksa terjemahan ini",
+    "notCheckedShort": "Belum dicek",
     "noText": "Tidak ada yang perlu dicek: teks ini belum punya terjemahan",
     "saveFirst": "Simpan dulu perubahanmu. Menyimpan akan menandainya sudah dicek.",
     "changed": "berubah sejak dicek",

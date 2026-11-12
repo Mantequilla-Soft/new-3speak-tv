@@ -48,7 +48,7 @@
     "curated": "Geselecteerd",
     "noCues": "Geen cues.",
     "clearQueue": "Wachtrij wissen",
-    "clearAll": "Alles wissen",
+    "clearAll": "Wissen",
     "queueMoveUp": "{{title}} omhoog verplaatsen",
     "queueMoveDown": "{{title}} omlaag verplaatsen",
     "queueRemove": "{{title}} uit de wachtrij verwijderen",
@@ -59,7 +59,7 @@
     "collapse": "Speler verkleinen",
     "skipBack": "{{seconds}} seconden terug",
     "skipForward": "{{seconds}} seconden vooruit",
-    "speed": "Afspeelsnelheid",
+    "speed": "Snelheid",
     "speedValue": "Afspeelsnelheid: {{speed}}",
     "sleep": "Slaaptimer",
     "sleepOff": "Uit",
@@ -76,8 +76,8 @@
     "effectsChecking": "Controleren of deze aflevering dit ondersteunt…",
     "timeSaved": "Tijd bespaard: {{time}}",
     "cast": "Afspelen op een ander apparaat",
-    "download": "Offline bewaren",
-    "downloading": "Bewaren: {{pct}}%",
+    "download": "Downloaden",
+    "downloading": "Offline opslaan: {{pct}}%",
     "downloaded": "Offline bewaard",
     "downloadDone": "Bewaard om offline te luisteren",
     "downloadFailed": "Kan deze aflevering niet bewaren",
@@ -101,12 +101,17 @@
     "nextChapter": "Volgend hoofdstuk",
     "chapterLink": "Link naar hoofdstuk",
     "upNext": "Hierna",
-    "hideIdle": "Verbergen (je wachtrij blijft)",
+    "hideIdle": "Verbergen · wachtrij blijft",
     "continueAt": "Verder bij {{time}}",
     "position": "{{current}} van {{total}}",
     "playingFrom": "Speelt af uit {{name}}",
     "atThisMoment": "Op dit moment",
-    "goTo": "Naar {{name}}"
+    "goTo": "Naar {{name}}",
+    "shuffle": "Shuffle",
+    "repeat": "Deze track herhalen",
+    "sleepMinutesShort": "{{minutes}} min",
+    "swipeUp": "Veeg omhoog voor de speler",
+    "commentAt": "Reageer op {{time}}…"
   },
   "share": {
     "failed": "Mislukt",
@@ -116,7 +121,16 @@
     "copied3speak": "3Speak-link gekopieerd!",
     "copyAudioPlayer": "Link naar audiospeler kopiëren",
     "copiedAudioPlayer": "Link naar audiospeler gekopieerd!",
-    "searchingHive": "Hive doorzoeken…"
+    "searchingHive": "Hive doorzoeken…",
+    "title": "Track delen",
+    "atTime": "Vanaf {{time}}",
+    "peakd": "PeakD",
+    "player": "Spelerlink",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "E-mail",
+    "qr": "QR",
+    "episode": "Afleveringslink"
   },
   "post": {
     "notFound": "Post niet gevonden",
@@ -130,6 +144,8 @@
     "vote": "Voten",
     "signInToTip": "Log in om een fooi te geven",
     "tip": "Fooi",
+    "albumLabel": "Album",
+    "notes": "Notities",
     "stillIndexing": "De audio van deze post wordt nog geïndexeerd — probeer het over een paar minuten opnieuw."
   },
   "page": {
@@ -162,7 +178,7 @@
     "tracks_other": "{{count}} tracks",
     "noTracks": "Geen tracks gevonden.",
     "creators": "Makers",
-    "albumsPlaylists": "Albums & playlists",
+    "albumsPlaylists": "Audioplaylists",
     "noAudioForFilters": "Geen audio gevonden voor deze filters.",
     "tabsLabel": "Audioweergaven",
     "tabExplore": "Verkennen",
@@ -175,6 +191,25 @@
   "upload": {
     "title": "Audio uploaden",
     "publishing": "Publiceren…",
+    "nextTo": "Volgende: {{step}}",
+    "publishAlbum_one": "Album publiceren · {{count}} track",
+    "publishAlbum_other": "Album publiceren · {{count}} tracks",
+    "publishWithShorts_one": "Audio + {{count}} Short publiceren",
+    "publishWithShorts_other": "Audio + {{count}} Shorts publiceren",
+    "side": {
+      "publishTo": "Publiceren naar",
+      "shortsTitle": "Audiogram-Shorts",
+      "clips_one": "{{count}} clip",
+      "clips_other": "{{count}} clips",
+      "tracks_one": "{{count}} track",
+      "tracks_other": "{{count}} tracks",
+      "audio": "Audio",
+      "shorts": "Shorts",
+      "snaps": "Snaps",
+      "community": "Community",
+      "rss": "RSS-feed",
+      "clipLabel": "Miniatuur van Short {{n}}: {{title}}"
+    },
     "failed": "Mislukt",
     "unknown": "onbekend",
     "unknownError": "onbekende fout",
@@ -195,7 +230,7 @@
       "review": "Controleren"
     },
     "trackTypes": {
-      "voiceSnap": "Stem / Snap"
+      "voiceSnap": "Spraakbericht"
     },
     "toasts": {
       "pickImage": "Kies een afbeeldingsbestand",
@@ -236,8 +271,8 @@
       "discard": "Weggooien"
     },
     "source": {
-      "dropHere": "Zet audiobestanden hier neer, of klik om te bladeren",
-      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC (meerdere toegestaan)",
+      "dropHere": "Sleep audiobestanden hierheen of blader",
+      "formats": "MP3, WAV, OGG, WEBM, M4A, FLAC, AAC · meerdere tegelijk",
       "stop": "Stoppen",
       "orRecord": "Of neem live op",
       "recordLimit": "Maximaal {{minutes}} min per opname",
@@ -251,7 +286,10 @@
       "trackTitle": "Titel van de track",
       "genre": "Genre",
       "bpm": "BPM",
-      "descriptionOptional": "Beschrijving (optioneel)"
+      "descriptionOptional": "Beschrijving (optioneel)",
+      "track": "Track",
+      "category": "Categorie",
+      "musicGenre": "Muziekgenre"
     },
     "playlist": {
       "helpRequired": "Verplicht — kies of maak een playlist. Albumposts staan in een playlist, zodat de tracks gegroepeerd blijven in een 3Speak-album. Dat zorgt voor meer zichtbaarheid en een prominentere plek op de audiopagina.",
@@ -265,6 +303,7 @@
       "items_one": "{{count}} item",
       "items_other": "{{count}} items",
       "newPlaylist": "Nieuwe audioplaylist",
+      "newAlbum": "Nieuw album",
       "namePlaceholder": "Naam van de playlist",
       "public": "Openbaar",
       "private": "Privé",
@@ -272,6 +311,9 @@
       "creditsPlaceholder": "Credits (optioneel)",
       "yearPlaceholder": "Jaar",
       "labelPlaceholder": "Label (optioneel)",
+      "fieldYear": "Jaar",
+      "fieldLabel": "Label",
+      "fieldCredits": "Credits",
       "thumbAlt": "Albumthumbnail",
       "removeThumb": "Thumbnail verwijderen",
       "creating": "Aanmaken…",
@@ -295,20 +337,21 @@
       "help_other": "{{count}} tracks toegevoegd. Kies hoe ze gepubliceerd worden.",
       "howPublished": "Hoe moet dit worden gepubliceerd?",
       "snapsTitle": "Snap-reacties",
-      "snapsDesc": "Elke audio wordt geplaatst als reactie onder de nieuwste peak.snaps-container — verschijnt in de Snaps-feed (standaard).",
+      "snapsDesc": "Elke audio is een reactie onder de nieuwste snaps-thread. Verschijnt in de Snaps-feed.",
       "singleTitle": "Losse post",
       "singleTitleSingleOnly": "Losse post (alleen één bestand)",
-      "singleDesc": "Eén audio in een eigen Hive-hoofdpost, met titel, community, tags en cover.",
+      "singleDesc": "Eén audio in een eigen post, met titel, community, tags en cover.",
       "albumTitle": "Albumpost",
       "albumTitleNeeds2": "Albumpost (2+ bestanden nodig)",
-      "albumDesc": "Eén hoofdpost (zonder audio) die als landingspagina dient; elke track wordt gepubliceerd als reactie met een eigen cover, beschrijving, uitbetaling en begunstigden.",
-      "howEarn": "Hoe moet deze audio verdienen?",
-      "postRewardsTitle": "Postbeloningen (eenmalig)",
-      "postRewardsDesc": "Je ontvangt de normale Hive-auteursuitbetaling — eenmalig uitbetaald, ~7 dagen na publicatie.",
-      "pplTitle": "Betalen per luisterbeurt (levenslang)",
-      "pplDesc": "Alle beloningen van de audiopost gaan naar @{{account}}. In plaats van één uitbetaling betaalt een 3Speak-programma je per luisterbeurt, zolang de track bestaat.",
+      "albumDesc": "Eén hoofdpost als landingspagina, elke track als reactie met een eigen cover en uitbetaling.",
+      "howEarn": "Hoe moet het verdienen?",
+      "postRewardsTitle": "Postbeloningen",
+      "postRewardsDesc": "Normale Hive-uitbetaling, eenmalig, ongeveer 7 dagen na publicatie",
+      "pplTitle": "Betalen per luisterbeurt",
+      "pplDesc": "Een 3Speak-programma betaalt je per luisterbeurt, zolang de track bestaat. De postbeloningen gaan naar @{{account}}.",
       "adsTitle": "Advertenties in deze audio",
-      "adsHint": "Een korte gesproken sponsorboodschap kan tijdens deze audio spelen, en je krijgt een deel. Begint bij je accountinstelling; pas het hier aan voor alleen deze upload."
+      "adsHint": "Een korte gesproken sponsorboodschap kan tijdens deze audio spelen, en je krijgt een deel. Begint bij je accountinstelling; pas het hier aan voor alleen deze upload.",
+      "adsSpoken": "Gesproken sponsorbericht in deze audio"
     },
     "reward": {
       "distribution": "Verdeling van beloningen",
@@ -334,6 +377,8 @@
       "helpAlbum": "Elke track wordt gepubliceerd als reactie onder de hoofdpost. Stel gedeelde waarden één keer in en pas ze op alles toe, en pas ze daarna per track aan.",
       "helpSnaps": "Elke track wordt gepubliceerd als een eigen snap. Stel gedeelde waarden één keer in en pas ze op alles toe, en pas ze daarna per track aan.",
       "applyToAllHeading": "Toepassen op alle tracks",
+      "applyNote_one": "<b>Toepassen op {{count}} track:</b> gedeelde beschrijving en cover, daarna kun je elke track apart aanpassen.",
+      "applyNote_other": "<b>Toepassen op alle {{count}} tracks:</b> gedeelde beschrijving en cover, daarna kun je elke track apart aanpassen.",
       "sharedDescription": "Gedeelde beschrijving (optioneel)",
       "sharedCover": "Gedeelde coverafbeelding",
       "applyToAll_one": "Toepassen op {{count}} track",
@@ -434,6 +479,7 @@
   "podcasts": {
     "chip": "Extern",
     "chipHint": "Podcasts uit elke RSS-feed, buiten 3Speak",
+    "on3speak": "Op 3Speak",
     "follow": "Volgen",
     "following": "Volgend",
     "unfollow": "Ontvolgen",
@@ -479,7 +525,8 @@
     "notifyOff": "Meldingen uit",
     "notifyOnDone": "Je krijgt een melding bij nieuwe afleveringen",
     "notifyOffDone": "Geen meldingen meer voor deze podcast",
-    "notifyHint": "Krijg een melding als er een nieuwe aflevering uitkomt",
+    "notifyHint": "Krijg een melding als er een uitkomt",
+    "notifyLabel": "Melding bij nieuwe afleveringen",
     "search": {
       "button": "Zoeken",
       "results_one": "{{count}} podcast gevonden",
@@ -500,8 +547,8 @@
       "export": "OPML exporteren",
       "invalid": "Dit is geen OPML-bestand.",
       "empty": "Geen podcastfeeds gevonden in dit bestand.",
-      "imported_one": "{{count}} podcast gevolgd, niet toegevoegd: {{failed}}. Nieuwe feeds laden in de komende minuten.",
-      "imported_other": "{{count}} podcasts gevolgd, niet toegevoegd: {{failed}}. Nieuwe feeds laden in de komende minuten."
+      "imported_one": "{{count}} podcast gevolgd, {{failed}} konden niet worden toegevoegd. Nieuwe feeds laden in de komende minuten.",
+      "imported_other": "{{count}} podcasts gevolgd, {{failed}} konden niet worden toegevoegd. Nieuwe feeds laden in de komende minuten."
     },
     "errors": {
       "signIn": "Log in om podcasts te volgen.",
@@ -515,14 +562,15 @@
       "internal": "Dat is een 3Speak-kanaal: je vindt het bij de andere audiotypes.",
       "disabled": "Externe podcasts staan op dit moment uit.",
       "generic": "Er ging iets mis. Probeer het opnieuw.",
-      "closedPlatform": "{{platform}} deelt de feeds van zijn programma’s niet. Zoek het programma in plaats daarvan op naam.",
+      "closedPlatform": "{{platform}} deelt de feeds van zijn programma's niet. Zoek het programma in plaats daarvan op naam.",
       "appleOnly": "Dit programma is alleen te beluisteren in Apple Podcasts.",
       "directoryNotFound": "We konden de feed van dat programma niet vinden. Probeer de RSS-feed of zoek op naam.",
       "directoryDown": "Die podcastgids reageert nu niet. Probeer het opnieuw."
     },
     "tip": {
       "button": "Steun deze podcast",
-      "heading": "Steun {{show}}",
+      "heading": "Fooi voor {{show}}",
+      "support": "Steun {{show}}",
       "hive": "Hive-fooi aan @{{account}}",
       "messageLabel": "Bericht aan de podcaster (optioneel):",
       "messagePlaceholder": "Geweldige aflevering!",
@@ -620,7 +668,7 @@
     "downloads": {
       "title": "Downloads",
       "download": "Downloaden om offline te luisteren",
-      "short": "Downloaden",
+      "short": "Opslaan",
       "downloading": "Downloaden {{pct}}%",
       "cancel": "Download annuleren",
       "saved": "Offline opgeslagen",
@@ -629,7 +677,7 @@
       "removed": "Download verwijderd",
       "done": "Opgeslagen om offline te luisteren",
       "total": "{{size}} opgeslagen",
-      "storage": "deze site gebruikt {{used}} van {{quota}} in deze browser",
+      "storage": "gebruikt {{used}} van {{quota}} in deze browser",
       "perBrowser": "Downloads blijven in deze browser, wie er ook is ingelogd.",
       "errors": {
         "tooLarge": "Deze aflevering is te groot om op te slaan.",
@@ -641,7 +689,7 @@
     },
     "autoQueue": {
       "label": "Nieuwe afleveringen automatisch aan de wachtrij toevoegen",
-      "hint": "Nieuwe afleveringen van deze podcast komen achteraan in je wachtrij zodra ze verschijnen",
+      "hint": "Ze komen achteraan in je wachtrij",
       "onDone": "Nieuwe afleveringen van deze podcast gaan naar je wachtrij",
       "offDone": "Nieuwe afleveringen van deze podcast gaan niet meer naar je wachtrij",
       "added_one": "{{count}} nieuwe aflevering aan je wachtrij toegevoegd",
@@ -679,6 +727,7 @@
       "startsAt": "Start: {{time}}"
     },
     "private": {
+      "title": "Privéfeed toevoegen",
       "toggle": "Dit is een privéfeed (inloggen vereist)",
       "username": "Gebruikersnaam",
       "password": "Wachtwoord",

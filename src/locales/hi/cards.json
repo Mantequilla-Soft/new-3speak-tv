@@ -7,7 +7,7 @@
   "watchingNow_other": "{{count}} अभी देख रहे हैं",
   "previewMuted": "प्रीव्यू · म्यूट",
   "badges": {
-    "gatedTitle": "सिर्फ़ सदस्यों के लिए। 3Speak Pro से पूरा वीडियो खुलता है",
+    "gatedTitle": "सिर्फ़ सदस्यों के लिए",
     "pro": "PRO",
     "new": "नया",
     "first": "पहला",
@@ -18,17 +18,17 @@
   "status": {
     "scheduled": "शेड्यूल्ड",
     "mobile": "मोबाइल",
-    "mobileTitle": "मोबाइल ऐप से अपलोड किया गया",
+    "mobileTitle": "मोबाइल ऐप से",
     "processing": "प्रोसेस हो रहा है",
-    "processingTitle": "वीडियो प्रोसेस हो रहा है",
+    "processingTitle": "प्रोसेस हो रहा है",
     "draft": "ड्राफ़्ट",
-    "draftTitle": "ड्राफ़्ट - अभी पब्लिश नहीं हुआ",
+    "draftTitle": "अभी पब्लिश नहीं हुआ",
     "deleted": "डिलीट किया गया",
-    "deletedTitle": "यह वीडियो डिलीट कर दिया गया है",
+    "deletedTitle": "डिलीट कर दिया गया है",
     "failed": "फ़ेल",
-    "failedTitle": "वीडियो प्रोसेसिंग फ़ेल हो गई",
+    "failedTitle": "प्रोसेसिंग फ़ेल हो गई",
     "unlisted": "अनलिस्टेड",
-    "unlistedTitle": "अनलिस्टेड — फ़ीड और सर्च से छिपा है, सिर्फ़ सीधे लिंक से खुलता है"
+    "unlistedTitle": "सिर्फ़ सीधे लिंक से"
   },
   "playlist": {
     "loading": "प्लेलिस्ट लोड हो रही हैं...",
@@ -36,7 +36,11 @@
     "items_other": "{{count}} आइटम",
     "openAria": "प्लेलिस्ट {{name}} खोलें",
     "tag": "प्लेलिस्ट",
-    "updated": "{{when}} अपडेट हुई"
+    "updated": "{{when}} अपडेट हुई",
+    "public": "पब्लिक",
+    "private": "प्राइवेट",
+    "history": "हिस्ट्री",
+    "audio": "ऑडियो"
   },
   "watchLater": {
     "title": "बाद में देखें",
@@ -50,5 +54,13 @@
     "label": "आकार बदलें",
     "small": "छोटा",
     "medium": "मध्यम"
+  },
+  "payout": {
+    "title": "पेआउट",
+    "author": "लेखक",
+    "curators": "क्यूरेटर",
+    "paysOutIn": "पेआउट में बाकी",
+    "days_one": "{{count}} दिन",
+    "days_other": "{{count}} दिन"
   }
 }

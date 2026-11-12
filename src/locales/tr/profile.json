@@ -10,8 +10,8 @@
     "unknownError": "Bilinmeyen hata"
   },
   "authorBadge": {
-    "followers_one": "{{count}} Takipçi",
-    "followers_other": "{{count}} Takipçi"
+    "followers_one": "{{count}} takipçi",
+    "followers_other": "{{count}} takipçi"
   },
   "creators": {
     "loginRequired": "İçerik üreticilerini takip etmek için giriş yap",
@@ -67,7 +67,8 @@
     "tapForSound": "Ses için dokun",
     "views_one": "{{num}} görüntülenme",
     "views_other": "{{num}} görüntülenme",
-    "readMore": "Devamını oku"
+    "readMore": "Devamını oku",
+    "label": "Fragman"
   },
   "snaps": {
     "readMore": "Devamını oku",
@@ -168,7 +169,8 @@
       "text": "Videolarını, insanların sırayla izleyebileceği bir oynatma listesinde topla.",
       "cta": "İlk oynatma listeni oluştur",
       "visitor": "@{{user}} kullanıcısının herkese açık oynatma listesi yok."
-    }
+    },
+    "visitorPreview": "Ziyaretçiler şunu görür: “{{text}}”"
   },
   "links": {
     "button": "Bağlantılar",
@@ -187,7 +189,8 @@
     "shorts": "Shorts",
     "audio": "Ses",
     "community": "Topluluk",
-    "playlists": "Oynatma listeleri"
+    "playlists": "Oynatma listeleri",
+    "latestSnap": "Son snap"
   },
   "streams": {
     "loading": "Yayınlar yükleniyor…",
@@ -301,7 +304,10 @@
     "hiddenToast": "Bahşiş profilinden gizlendi",
     "unhiddenToast": "Bahşiş profilinde yeniden görünüyor",
     "hideFailed": "Bu bahşiş değiştirilemedi. Lütfen tekrar dene.",
-    "hideWalletPrompt": "Profilinde hangi bahşişlerin görüneceğini değiştirmek için imzala"
+    "hideWalletPrompt": "Profilinde hangi bahşişlerin görüneceğini değiştirmek için imzala",
+    "whoTitle": "@{{user}} kimleri destekliyor",
+    "tipped_one": "{{count}}× bahşiş",
+    "tipped_other": "{{count}}× bahşiş"
   },
   "layout": {
     "customize": "Profili özelleştir",
@@ -414,5 +420,13 @@
   },
   "audioTab": {
     "files": "Ses dosyaları"
+  },
+  "search": {
+    "placeholder": "Bu kanalda ara",
+    "clear": "Aramayı temizle",
+    "results_one": "“{{query}}” için {{count}} sonuç",
+    "results_other": "“{{query}}” için {{count}} sonuç",
+    "empty": "Bu kanalda “{{query}}” ile eşleşen bir şey yok.",
+    "older": "Eski yüklemelerde ara"
   }
 }

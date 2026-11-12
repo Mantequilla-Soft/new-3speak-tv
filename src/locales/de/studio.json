@@ -7,13 +7,19 @@
     "createNewDesc": "Lade deine Inhalte hoch und teile sie mit der Welt"
   },
   "preview": {
-    "cannotPreview": "Dein Browser kann dieses Video nicht in der Vorschau zeigen – das ist bei HEVC/H.265-Clips üblich (z. B. iPhone-Aufnahmen mit „Hohe Effizienz“). Kein Problem: Es wird trotzdem hochgeladen und konvertiert, damit es überall abspielbar ist."
+    "cannotPreview": "<b>Vorschau für dieses Video nicht möglich.</b> Üblich bei HEVC/H.265-Clips wie iPhone-Aufnahmen mit „Hohe Effizienz“. Es wird trotzdem hochgeladen und konvertiert, damit es überall läuft."
   },
   "drafts": {
     "untitled": "(ohne Titel)",
     "empty": "Mit dem gewählten Filter wurden keine Videos gefunden.",
     "title": "Studio",
-    "create": "Erstellen"
+    "create": "Erstellen",
+    "views28": "Aufrufe, 28 Tage",
+    "newFollowers": "Neue Follower",
+    "views": "Aufrufe",
+    "stats": "Statistiken",
+    "more": "Mehr",
+    "public": "Öffentlich"
   },
   "schedule": {
     "days": {
@@ -32,6 +38,7 @@
     "am": "AM",
     "pm": "PM",
     "pastWarning": "Dieses Datum und diese Uhrzeit liegen in der Vergangenheit. Bitte wähle einen Zeitpunkt in der Zukunft.",
+    "pickDay": "Tag wählen",
     "publishAt": "Dein Video wird automatisch am {{when}} veröffentlicht"
   },
   "scheduled": {
@@ -39,7 +46,7 @@
     "loadFailed": "Geplanter Post konnte nicht geladen werden",
     "thumbnailUploaded": "Thumbnail hochgeladen",
     "thumbnailFailed": "Thumbnail-Upload fehlgeschlagen",
-    "beneficiariesExceed": "Begünstigte insgesamt {{total}} % – das übersteigt 100 %",
+    "beneficiariesExceed": "Begünstigte insgesamt {{total}} %: Das übersteigt 100 %",
     "updateFailed": "Aktualisierung fehlgeschlagen",
     "updated": "Geplanter Post aktualisiert",
     "cancelConfirm": "Diesen geplanten Post abbrechen? Er wird dann nicht veröffentlicht.",
@@ -101,6 +108,7 @@
     "insertTable": "Tabelle einfügen",
     "spoiler": "Spoiler/versteckter Text",
     "emoji": "Emoji",
+    "gifs": "GIFs",
     "searchEmoji": "Emoji suchen",
     "searchGifs": "GIFs suchen…",
     "noGifs": "Keine GIFs gefunden.",

@@ -78,6 +78,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Publicar uma reação em vídeo",
+    "rec": "REC {{time}}",
+    "mic": "Microfone",
+    "camera": "Câmera",
+    "restart": "Recomeçar",
     "authorized": "@threespeak autorizado — agora você pode publicar sua reação",
     "authFailed": "Falha na autorização. Tente de novo.",
     "webcamDenied": "Não foi possível acessar a webcam",
@@ -91,7 +96,7 @@
     "uploadVideo": "Enviar vídeo",
     "recordVideo": "Gravar vídeo",
     "startRecording": "Começar gravação",
-    "stopRecording": "Parar gravação",
+    "stopRecording": "Parar e revisar",
     "recordedVideo": "Vídeo gravado",
     "descriptionPlaceholder": "Adicione uma descrição à sua reação em vídeo...",
     "showInShorts": "Mostrar nos Shorts do 3Speak",

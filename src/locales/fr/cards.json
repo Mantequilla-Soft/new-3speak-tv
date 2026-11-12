@@ -8,7 +8,7 @@
   "watchingNow_other": "{{count}} spectateurs en ce moment",
   "previewMuted": "Aperçu · son coupé",
   "badges": {
-    "gatedTitle": "Réservé aux membres. 3Speak Pro débloque la vidéo complète",
+    "gatedTitle": "Réservé aux membres",
     "pro": "PRO",
     "new": "NOUVEAU",
     "first": "Première",
@@ -19,17 +19,17 @@
   "status": {
     "scheduled": "Programmée",
     "mobile": "Mobile",
-    "mobileTitle": "Mise en ligne depuis l'app mobile",
+    "mobileTitle": "Via l'app mobile",
     "processing": "En traitement",
-    "processingTitle": "La vidéo est en cours de traitement",
+    "processingTitle": "En cours de traitement",
     "draft": "Brouillon",
-    "draftTitle": "Brouillon - pas encore publié",
+    "draftTitle": "Pas encore publiée",
     "deleted": "Supprimée",
-    "deletedTitle": "Cette vidéo a été supprimée",
+    "deletedTitle": "A été supprimée",
     "failed": "Échec",
-    "failedTitle": "Le traitement de la vidéo a échoué",
+    "failedTitle": "Échec du traitement",
     "unlisted": "Non répertoriée",
-    "unlistedTitle": "Non répertoriée — masquée des fils et de la recherche, accessible uniquement par lien direct"
+    "unlistedTitle": "Lien direct uniquement"
   },
   "playlist": {
     "loading": "Chargement des playlists...",
@@ -38,7 +38,11 @@
     "items_other": "{{count}} éléments",
     "openAria": "Ouvrir la playlist {{name}}",
     "tag": "Playlist",
-    "updated": "Mise à jour {{when}}"
+    "updated": "Mise à jour {{when}}",
+    "public": "publique",
+    "private": "privée",
+    "history": "historique",
+    "audio": "audio"
   },
   "watchLater": {
     "title": "À regarder plus tard",
@@ -52,5 +56,14 @@
     "label": "Changer la taille",
     "small": "Petit",
     "medium": "Moyen"
+  },
+  "payout": {
+    "title": "Gains",
+    "author": "Auteur",
+    "curators": "Curateurs",
+    "paysOutIn": "Versement dans",
+    "days_one": "{{count}} jour",
+    "days_many": "{{count}} jours",
+    "days_other": "{{count}} jours"
   }
 }

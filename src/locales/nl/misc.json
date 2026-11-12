@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 dagen",
-      "30d": "30 dagen",
+      "7d": "Week",
+      "30d": "Maand",
       "365d": "Jaar",
       "all": "Altijd"
     },
@@ -155,9 +155,9 @@
     "audioFull": "Met titel",
     "audioCompact": "Compact",
     "audioMinimal": "Minimaal",
-    "heightSub": "Volle breedte, {{height}} px hoog",
+    "heightSub": "Volledige breedte, {{height}} px hoog · Responsief",
     "podcastTitle": "Deze podcast insluiten",
-    "podcastHint": "Plak dit in een website of blogpost. Het speelt alle afleveringen van de show af, ook nieuwe zodra ze verschijnen."
+    "podcastHint": "Speelt elke aflevering van het programma, ook nieuwe zodra ze verschijnen."
   },
   "incubation": {
     "requestFailed": "Verzoek mislukt ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "Deze pagina is niet geladen",
-    "body": "Een deel van de app kon niet worden gedownload. Dat betekent meestal dat er een nieuwe versie is uitgebracht terwijl dit tabblad openstond. Herladen lost het op.",
+    "body": "Een deel van de app kon niet worden gedownload. Meestal is er een nieuwe versie uitgekomen terwijl dit tabblad open was. Herladen haalt die op.",
     "brokenTitle": "Er ging iets mis op deze pagina",
-    "brokenBody": "Een deel van deze pagina liep tegen een fout aan. Opnieuw laden lost het meestal op, en de details hieronder helpen ons de oorzaak te vinden.",
+    "brokenBody": "Een deel van deze pagina liep tegen een fout aan. Herladen lost het meestal op, en de details helpen ons de oorzaak te vinden.",
     "reload": "Herladen",
     "goHome": "Naar home",
     "details": "Details"
@@ -203,13 +203,13 @@
       "regularVideo": "Klassieke video voor je kanaal",
       "verticalShort": "Verticale clip voor de Shorts-feed",
       "shortsEditor": "Neem een short op en bewerk hem in je browser",
-      "story": "Korte clip die 24 uur zichtbaar blijft",
+      "story": "Blijft 24 uur staan",
       "musicAudio": "Nummers, podcasts en andere audio",
-      "audioEditor": "Podcasts en muziek knippen, opschonen en gelijktrekken",
+      "audioEditor": "Knippen, opschonen en egaliseren",
       "groupChat": "Liveruimte die je host met gasten",
       "goLiveNow": "Stream live voor je volgers",
       "communitySnap": "Snel bericht op je community-tabblad",
-      "playlist": "Verzamel video's in een lijst om te delen"
+      "playlist": "Groepeer video's in een deelbare lijst"
     }
   },
   "chat": {
@@ -219,8 +219,8 @@
   },
   "hiveAuth": {
     "waiting": "Wachten op goedkeuring in HiveAuth...",
-    "title": "Goedkeuring in HiveAuth nodig",
-    "hint": "Kijk in je HiveAuth-app om deze transactie goed te keuren"
+    "title": "Goedkeuring via HiveAuth vereist",
+    "hint": "Kijk in je HiveAuth-app om deze transactie goed te keuren."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain heeft de transactie niet ondertekend",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod gestart, maar de aankondiging op Hive kon niet worden geplaatst."
   },
   "appUpdate": {
-    "updating": "Bijwerken naar de nieuwste versie ({{version}})…",
+    "updating": "Bijwerken naar {{version}}…",
     "reloadingForUpload": "Herladen zodat je upload op de nieuwste build draait."
   },
   "auth": {
@@ -304,6 +304,17 @@
     "moreTag": "Meer #{{tag}}",
     "moreVideos": "Meer video's",
     "hideControls": "Bediening verbergen",
-    "showControls": "Bediening tonen"
+    "showControls": "Bediening tonen",
+    "watching": "{{count}} kijkers",
+    "startedAgo": "Gestart {{when}}",
+    "topSupporters": "Topsupporters",
+    "noSupporters": "Nog geen boosts",
+    "full": "Volledig scherm",
+    "loginToChat": "Log in om te chatten"
+  },
+  "pullToRefresh": {
+    "pull": "Trek om te vernieuwen",
+    "release": "Laat los om te vernieuwen",
+    "refreshing": "Vernieuwen…"
   }
 }

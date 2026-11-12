@@ -11,6 +11,8 @@
       "transferFailed": "Pumalya ang transfer: {{message}}"
     },
     "heading": "Magpadala ng Tip kay @{{recipient}}",
+    "pageTitle": "Mag-tip kay @{{recipient}}",
+    "pageSub": "Binuksan mula sa stream overlay o link",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Iba pang paraan",
@@ -23,7 +25,16 @@
     "memoLinkNote": "Idadagdag ang link na ito sa memo: {{link}}",
     "send": "Ipadala ang Tip",
     "sendAmount": "Ipadala ang {{amount}} {{currency}}",
+    "paidIn": "Bayad sa {{currency}} · walang fee",
+    "forTitle": "para sa “{{title}}”",
+    "presets": {
+      "coffee": "Isang kape",
+      "popular": "Pinakasikat",
+      "thanks": "Maraming salamat",
+      "superFan": "Super fan"
+    },
     "sentEyebrow": "Naipadala ang tip",
+    "sentTo": "{{amount}} kay @{{recipient}}",
     "lightning": {
       "amountLabel": "Halaga (sats):",
       "messageLabel": "Mensahe (opsyonal):",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "Gaano kadalas",
       "once": "Isang beses",
+      "oneTime": "Isang beses",
+      "monthly": "Buwanan",
       "until": "Bawat buwan, hanggang {{date}}",
       "note": "Kusa itong ipinapadala ng Hive tuwing 30 araw, ang una ngayon din. Puwede mo itong ihinto anumang oras.",
       "replaces": "Papalitan nito ang buwanang suporta na ipinapadala mo na kay @{{recipient}}.",
@@ -91,7 +104,8 @@
     "addToPlaylist": "Idagdag sa playlist",
     "addTag": "Magdagdag ng tag",
     "notInterested": "Hindi interesado",
-    "dontShowCreator": "Huwag ipakita si @{{author}}"
+    "dontShowCreator": "Huwag ipakita si @{{author}}",
+    "saveToPlaylist": "I-save sa playlist"
   },
   "guestList": {
     "loadFailed": "Hindi ma-load ang kasalukuyang guest list",
@@ -134,18 +148,22 @@
     "tagged": "Na-tag na “{{tag}}”.",
     "vote": "Vote",
     "tagThisVideo": "I-tag ang video na ito",
-    "tagOptional": "— opsyonal —",
+    "tagOptional": "Opsyonal",
     "pickTopicFirst": "Pumili muna ng paksa",
     "taggedNoDot": "Na-tag na “{{tag}}”",
     "tagFailed": "Pumalya ang tag: {{message}}",
-    "taggedAlreadyVoted": "Na-tag na “{{tag}}” — naibigay mo na ang {{weight}}% vote mo.",
-    "votingClosed": "Sarado na ang voting — i-tag ang video na ito",
+    "taggedAlreadyVoted": "Na-tag na “{{tag}}”. Naibigay mo na ang {{weight}}% vote mo.",
+    "votingClosed": "Sarado na ang voting: i-tag ang video na ito",
     "youTagged": "Na-tag mo ito bilang <b>{{tag}}</b>.",
-    "pickTopic": "Pumili ng paksa (bilang 100% vote)",
+    "pickTopic": "Ang pagpili ng paksa ay bilang 100% vote.",
     "submitTag": "Isumite ang tag",
     "tagThisVideoFull": "I-tag ang video na ito (bilang 100% vote)",
-    "justTag": "Huwag mag-vote — tag lang",
-    "addsAbout": "nagdadagdag ng mga {{value}}"
+    "justTag": "Huwag mag-vote, tag lang",
+    "justTagShort": "Tag lang",
+    "voteAndTag": "Mag-vote at mag-tag",
+    "addsAbout": "nagdadagdag ng mga {{value}}",
+    "postSoFar_one": "{{value}} sa ngayon · {{count}} vote",
+    "postSoFar_other": "{{value}} sa ngayon · {{count}} vote"
   },
   "tagsPicker": {
     "autoTagged": "Auto-tagged: {{tags}}",
@@ -154,7 +172,7 @@
     "noMatches": "Walang paksang tugma sa “{{query}}”.",
     "allSelected": "Napili na lahat ng {{category}}. Magdagdag lang ng isa-isang paksa kung gusto mong mas tiyak:",
     "orPickTopics": "O pumili ng isa-isang paksa:",
-    "goodEnough": "Puwede na — o gawing mas tiyak (opsyonal):",
+    "goodEnough": "Puwede na, o gawing mas tiyak (opsyonal)",
     "moreSpecific": "Mas tiyak:"
   }
 }

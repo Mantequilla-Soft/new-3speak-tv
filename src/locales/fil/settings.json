@@ -6,7 +6,7 @@
     "loading": "naglo-load…",
     "hint": "Piliin ang mga paksang gusto mo. Gagamitin namin ang mga ito para magpakita ng mas maraming content na magugustuhan mo.",
     "loginHint": "Mag-log in para piliin ang mga interes mo.",
-    "save": "I-save ang mga interes"
+    "save": "I-save sa Hive profile ko"
   },
   "ads": {
     "chainNotSaved": "Na-save sa 3Speak, pero hindi sa Hive account mo. Subukan ulit para ma-save din doon.",
@@ -16,18 +16,18 @@
     "rollsOnToast": "Naka-on ang video ad roll sa mga video mo",
     "rollsOffToast": "Banner at ticker na lang ang nasa mga video mo",
     "audio": "Mga ad sa audio mo",
-    "audioDesc": "Puwedeng mag-play ang maikling binibigkas na mensahe mula sa isang sponsor habang pinapakinggan ang audio mo, kasama ang link na mabubuksan ng mga nakikinig. May bahagi ka rito, gaya ng sa mga video ad. Mababago mo ito sa bawat upload sa audio uploader.",
+    "audioDesc": "Maikling binibigkas na sponsor message, may link na mabubuksan ng mga nakikinig.",
     "audioOnToast": "Naka-on ang mga ad sa audio mo",
     "audioOffToast": "Naka-off ang mga ad sa audio mo",
     "splitSaved": "Na-save ang revenue split",
     "title": "Ads sa mga video mo",
     "allow": "Payagan ang ads",
-    "allowDesc": "Puwedeng mag-play ang isang maikling sponsor spot sa loob ng mga video mo. Makakatanggap ka ng bahagi ng kinita nito, pati na ang komunidad kung saan ka nag-post. Kapag in-off mo ito, walang anumang ad ang mga video mo — aalisin din ang mga ito sa iniaalok namin sa mga advertiser, kaya walang maibebentang hindi mo pinayagan.",
+    "allowDesc": "Puwedeng mag-play ang isang maikling sponsor spot sa loob ng mga video mo. Kapag naka-off, aalisin ang mga ito sa ibinebenta namin sa mga advertiser.",
     "allowAria": "Payagan ang ads sa mga video mo",
     "rolls": "Video ad roll",
-    "rollsDesc": "Maiikling video ad na nagpe-play bago o habang pinapanood ang mga video mo. I-off ito para banner at ticker lang ang matira, na lumalabas sa ibabaw ng video nang hindi ito hinihinto.",
+    "rollsDesc": "Kapag naka-off, banner at ticker lang ang matitira.",
     "shareTitle": "Ibahagi sa komunidad",
-    "shareDesc": "Ang {{pool}}% ng kinita ng isang ad ay hinahati sa iyo at sa komunidad kung saan ka nag-post. Piliin kung gaano kalaki ang mapupunta sa komunidad — kung iiwan mo sa zero, sa iyo ang buong {{pool}}%.",
+    "shareDesc": "Ang {{pool}}% ng ad revenue ay hinahati sa iyo at sa komunidad kung saan ka nag-post.",
     "youPct": "Ikaw {{pct}}%",
     "communityPct": "Komunidad {{pct}}%",
     "shareInputLabel": "Bahagi ng komunidad, percent",
@@ -40,14 +40,15 @@
     "saveFailed": "Hindi ma-save ang setting na iyon.",
     "title": "Kumita habang nanonood",
     "rowTitle": "Viewer rewards",
-    "desc": "Kumita ng bahagi ng ad revenue para sa mga pinapanood mo, bayad sa HBD o HIVE. Binabayaran ka batay sa mga video na napanood mo, may ad mang nag-play o wala, kaya ang panonood ang ginagantimpalaan at hindi ang pagtitiis sa ads. Nagpe-play ang ads para sa lahat maliban sa mga 3Speak Pro subscriber. Nire-record namin kung gaano kalaki ng bawat video ang napanood mo, bukod pa sa watch history na itinatago na ng Napanood page, at buburahin namin ito sa sandaling i-off mo ito.",
+    "desc": "Bahagi ng ad revenue para sa mga pinapanood mo, bayad sa HBD o HIVE. Binabayaran ka sa panonood, may ad mang nag-play o wala. Kapag in-off ito, mabubura ang watch data mo.",
     "aria": "Kumita ng bahagi ng ad revenue para sa mga pinapanood mo",
     "titleListen": "Kumita habang nanonood at nakikinig",
-    "listenDesc": "Bilang din ang pakikinig: itinatala namin kung gaano katagal kang nakikinig sa 3Speak audio at mga episode ng podcast sa 3speak.tv. Magsisimula ang gantimpala sa pakikinig kapag nasuri na namin ang mga numero, at bilang ang pinakikinggan mo mula sa araw na i-on mo ito.",
+    "listenDesc": "Audio at mga episode ng podcast sa 3speak.tv",
     "listenAlso": "Bilangin din ang pakikinig ko",
     "listenOnToast": "Bilang na ang pakikinig mo para sa gantimpala sa pakikinig",
     "onToastBoth": "Naka-on ang gantimpala sa panonood at pakikinig",
-    "offToastBoth": "Naka-off ang gantimpala, at nabura na ang data ng panonood at pakikinig mo"
+    "offToastBoth": "Naka-off ang gantimpala, at nabura na ang data ng panonood at pakikinig mo",
+    "listenOffToast": "Hindi na bilang ang pakikinig mo sa gantimpala sa pakikinig"
   },
   "postingAuth": {
     "updateFailed": "Hindi ma-update ang posting authority mo.",
@@ -59,10 +60,16 @@
     "canPost": "Puwedeng mag-post si @threespeak para sa iyo",
     "cannotPost": "Hindi puwedeng mag-post si @threespeak para sa iyo",
     "checkingStatus": "@threespeak …",
-    "desc": "Pinapayagan ang 3Speak na i-publish ang mga upload at naka-schedule mong post para sa iyo, at mag-save ng ilang setting nang hindi ka tinatanong ng wallet sa bawat pagkakataon. Puwede lang itong mag-post, mag-vote at mag-comment; hindi ito kailanman makakapaglipat ng pondo o makakapagpalit ng keys mo. Kung wala ito, hihilingin sa iyo ng mga upload na idagdag ulit ito. Kailangan ng active key mo para baguhin ito.",
+    "desc": "Puwede lang itong mag-post, mag-vote at mag-comment. Hindi ito kailanman makakapaglipat ng pondo o makakapagpalit ng keys mo. Kailangan ang active key mo para baguhin ito.",
     "checking": "Tinitingnan…",
     "removing": "Inaalis…",
-    "adding": "Idinadagdag…"
+    "adding": "Idinadagdag…",
+    "letTitle": "Hayaang mag-post ang 3Speak para sa iyo",
+    "letDesc": "Kailangan para mag-publish ng video at Shorts nang hindi sina-sign ang bawat isa. Puwede mo itong bawiin anumang oras.",
+    "canPublish": "Mag-publish ng mga post at video",
+    "canVote": "Mag-vote at mag-comment",
+    "never": "Hindi kailanman magpapadala ng token o magpapalit ng keys",
+    "grantWith": "Ibigay gamit ang {{wallet}}"
   },
   "notifications": {
     "kinds": {
@@ -95,7 +102,7 @@
         "desc": "Kapag may nag-follow sa iyo."
       },
       "votes": {
-        "title": "Mga Upvote",
+        "title": "Mga upvote (naka-off bilang default)",
         "desc": "Kapag may nag-upvote sa post mo. Naka-off bilang default — maraming buzz ang isang sikat na post."
       },
       "reblogs": {
@@ -117,15 +124,16 @@
     "device": "Abisuhan ang device na ito",
     "deviceBlocked": "Naka-block sa browser settings mo para sa site na ito — payagan muna doon ang mga notification.",
     "deviceNoWorker": "Hindi available sa build na ito.",
-    "deviceDesc": "Makatanggap ng notification kahit hindi bukas ang 3Speak. Sa browser na ito lang.",
-    "whatHint": "Kung tungkol saan ka aabisuhan. Nalalapat ito sa bawat device na in-on mo."
+    "deviceDesc": "Kahit hindi bukas ang 3Speak",
+    "whatHint": "Kung tungkol saan ka aabisuhan. Nalalapat ito sa bawat device na in-on mo.",
+    "iosNote": "Sa iPhone at iPad, gumagana lang ang mga notification kapag naidagdag mo na ang 3Speak sa Home Screen."
   },
   "tabs": {
     "general": "General",
     "content": "Content",
     "connections": "Mga koneksyon",
     "rewards": "Ads at rewards",
-    "about": "Tungkol / Bersyon"
+    "about": "Tungkol"
   },
   "contentTabs": {
     "feed": "Feed",
@@ -142,51 +150,51 @@
     "title": "Itsura",
     "darkMode": {
       "title": "Dark mode",
-      "desc": "Gamitin ang madilim na theme sa buong app."
+      "desc": "Madilim na theme sa buong app"
     },
     "largeCards": {
       "title": "Malalaking card",
-      "desc": "Ipakita ang mas malalaking video card sa home, profile at playlist pages. I-off para sa mas maliliit at mas compact na card."
+      "desc": "Mas malalaking video card sa home, profile at playlist"
     },
     "previews": {
       "title": "Mga video preview",
-      "desc": "Mag-play ng naka-mute na preview kapag nag-hover ka sa video card (at, sa mobile na naka-large mode, kusang magpe-play ang card na nasa gitna habang nag-i-scroll ka)."
+      "desc": "Naka-mute na preview kapag nag-hover; sa mobile, nagpe-play ang card na nasa gitna"
     },
     "simpleFeeds": {
       "title": "Simpleng feeds",
-      "desc": "I-off ang recommendation algorithm — magiging simpleng listahan na pinakabago muna ang Discover, Interests at Trending sa halip na naka-rank."
+      "desc": "Walang recommendations, pinakabago muna sa lahat ng lugar"
     }
   },
   "shorts": {
     "commentBar": {
       "title": "Comment bar sa Shorts",
-      "desc": "Magpakita ng comment input sa ilalim ng isang short. Naka-off bilang default — puwede mong buksan anumang oras ang comments panel gamit ang comment button."
+      "desc": "Comment input sa ilalim ng bawat Short"
     },
     "openOnStart": {
       "title": "Buksan ang Shorts sa simula",
-      "desc": "Diretso sa Shorts kapag binuksan mo ang 3Speak, sa halip na sa home feed."
+      "desc": "Diretso sa Shorts pagbukas mo ng 3Speak"
     },
     "inFeeds": {
       "title": "Shorts sa loob ng feeds",
-      "desc": "Magpakita ng mga hanay ng Shorts sa pagitan ng mga video sa home feeds at sa recommendations sa watch page. I-off para video lang ang laman ng mga listahang iyon."
+      "desc": "Mga hanay ng Shorts sa pagitan ng mga video"
     }
   },
   "feed": {
     "nsfw": {
       "title": "Ipakita ang NSFW content",
-      "desc": "Ipakita ang mga video at audio na naka-mark na not-safe-for-work. Naka-off bilang default."
+      "desc": "Naka-off bilang default"
     },
     "hideWatched": {
       "title": "Itago ang mga napanood na video",
-      "desc": "Huwag isama ang mga video na napanood mo na sa home, trending at recommended feeds."
+      "desc": "Sa home, trending at recommended"
     },
     "hideAi": {
       "title": "Itago ang mga AI-generated na video",
-      "desc": "Huwag isama ang mga video at Shorts na naka-mark na AI-generated, sa bawat feed. Galing sa awtomatikong check ang mark, kaya may ilang puwedeng makalusot."
+      "desc": "Mula sa awtomatikong check, may ilang puwedeng makalusot"
     },
     "privateMode": {
       "title": "Private mode",
-      "desc": "Huwag isama ang bansa mo sa statistics ng mga creator. Hindi namin kailanman sine-save ang IP address mo — para kahit kanino. Ginagawa itong country code sa sandaling pindutin mo ang play at saka itinatapon. Kapag naka-on ito, kahit ang bansang iyon ay hindi nire-record para sa mga view mo."
+      "desc": "Huwag isama ang bansa mo sa stats ng mga creator. Hindi namin kailanman sine-save ang IP mo."
     }
   },
   "about": {
@@ -194,7 +202,8 @@
     "version": "Bersyon ng app",
     "rpcNode": "Hive RPC node",
     "yourData": "Ang data mo",
-    "privacyLink": "Paano hinahawakan ng 3Speak ang data mo"
+    "privacyLink": "Paano hinahawakan ng 3Speak ang data mo",
+    "getOrDelete": "Kunin o burahin"
   },
   "dataRequest": {
     "emailRequired": "Maglagay ng email address para makasagot kami",
@@ -204,13 +213,13 @@
     "dataReceived": "Natanggap ang data request",
     "sendFailed": "Hindi maipadala ang request mo",
     "doneTitle": "Natanggap ang request",
-    "doneBody": "Ang reference mo ay <b>{{ref}}</b>. Sasagot kami sa <b>{{contact}}</b> nang hindi lalampas sa <b>{{dueBy}}</b>.",
+    "doneBody": "Ang reference mo ay <b>{{ref}}</b>. Sasagot kami sa {{contact}} nang hindi lalampas sa {{dueBy}}.",
     "keepRef": "Itago ang reference kung sakaling kailangan mong mag-follow up.",
     "signIn": "Mag-log in para mag-request o magbura ng data mo — nalalapat ang request sa account kung saan ka naka-sign in.",
     "requestFor": "Request para kay <b>@{{username}}</b>",
     "typeAria": "Uri ng request",
-    "getData": "Kunin ang data ko",
-    "deleteData": "Burahin ang data ng account ko",
+    "getData": "I-export ang data ko",
+    "deleteData": "Burahin ang account ko",
     "ledeDelete": "Buburahin namin ang lahat ng sine-save ng 3Speak tungkol sa iyo sa sarili naming database.",
     "ledeExport": "Ipapadala namin sa iyo ang lahat ng sine-save ng 3Speak tungkol sa iyo sa sarili naming database, bilang JSON file.",
     "covers": "Saklaw nito ang:",
@@ -220,13 +229,14 @@
     "cannotExport": "Public na at nababasa ng makina ang on-chain data mo sa pamamagitan ng anumang Hive API — ituturo namin ito sa iyo. Ang ipapadala namin ay ang hawak namin bukod pa roon.",
     "emailLabel": "Email kung saan kami sasagot",
     "emailPlaceholder": "you@example.com",
-    "messageLabel": "May idadagdag ka pa ba? (opsyonal)",
+    "messageLabel": "May dapat ba kaming malaman? (opsyonal)",
     "messagePlaceholder": "Opsyonal na detalye tungkol sa request mo",
     "confirmLabel": "Naiintindihan ko na permanente ang content ko sa Hive blockchain at hindi ito kayang burahin ng 3Speak o ng sinuman.",
     "sending": "Ipinapadala…",
     "requestDeletion": "Mag-request ng pagbura",
-    "requestData": "I-request ang data ko",
-    "foot": "Sasagot kami sa loob ng isang buwan. Puwede ka ring mag-email nang direkta sa <mail>privacy@3speak.tv</mail>."
+    "requestData": "Ipadala ang request",
+    "foot": "Sasagot kami sa loob ng isang buwan. Puwede ka ring mag-email nang direkta sa <mail>privacy@3speak.tv</mail>.",
+    "intro": "Humingi ng kopya ng sine-save ng 3Speak tungkol sa iyo, o ipabura ito. Pampubliko ang mga post sa Hive at hindi mabubura."
   },
   "lightning": {
     "title": "Mga tip sa Lightning",
@@ -240,14 +250,14 @@
     "useV4v": "Gamitin ulit ang v4v.app",
     "savedOwn": "Sa sarili mong address na napupunta ang mga Lightning tip",
     "savedV4v": "Dumadaan ulit sa v4v.app ang mga Lightning tip",
-    "badAddress": "Hindi iyan Lightning address. Ganito ang itsura nito: pangalan@wallet.com.",
+    "badAddress": "Hindi iyan Lightning address. Ganito ang itsura nito: name@wallet.com.",
     "unreachable": "Hindi sumagot ang address na ito bilang Lightning address. Suriin ito at subukan ulit.",
     "saveFailed": "Hindi ito ma-save sa Hive profile mo.",
-    "supportersNote": "Hindi kailanman dumadaan sa Hive ang mga tip sa sarili mong address, kaya hindi sila lumalabas sa Mga Supporter.",
-    "publicNote": "Naka-save ang iyong Lightning address sa iyong Hive account, kung saan makikita ito ng kahit sino."
+    "supportersNote": "Hindi lumalabas sa Supporters ang mga tip sa sarili mong address.",
+    "publicNote": "Naka-save sa Hive account mo, kung saan makikita ito ng kahit sino."
   },
   "supportLinks": {
-    "title": "Iba pang paraan para suportahan ka",
+    "title": "Mga support link",
     "desc": "Ang page mo sa {{sites}}. Makikita ng mga manonood ang mga link na ito sa tip window mo.",
     "placeholder": "https://ko-fi.com/pangalanmo",
     "add": "Idagdag",
@@ -268,12 +278,12 @@
     "shareTip": "Ilagay mo sa bio mo, sa email signature mo, o ipa-print sa T-shirt. Hindi ka namin huhusgahan.",
     "earnTitle": "Ang kikitain mo",
     "bonusValue": "{{pct}}%",
-    "bonusLabel": "ng ad rewards nila",
+    "bonusLabel": "ng ad rewards nila, bilang creator, viewer o listener",
     "bonusDesc": "bilang creator, manonood o tagapakinig",
     "timeValue": "{{months}} buwan",
     "timeLabel": "mula sa araw ng pag-sign up nila",
     "adsValue": "{{pct}}%",
-    "adsLabel": "ng ad campaigns nila",
+    "adsLabel": "ng ad campaigns nila kung mag-book sila ng ads",
     "adsDesc": "kung mag-book sila ng ads",
     "earnOnTop": "Dagdag itong binabayaran ng 3Speak. Buo pa ring natatanggap ng mga inimbita mo ang kinikita nila.",
     "rules": "Mga bagong account lang na nag-sign up gamit ang link mo ang binibilang. Kasama ng karaniwang ad payouts dumarating ang rewards, na may markang referral bonus."

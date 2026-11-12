@@ -11,6 +11,8 @@
       "transferFailed": "ट्रांसफ़र फ़ेल हुआ: {{message}}"
     },
     "heading": "@{{recipient}} को टिप भेजें",
+    "pageTitle": "@{{recipient}} को टिप दें",
+    "pageSub": "स्ट्रीम ओवरले या लिंक से खोला गया",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "और तरीके",
@@ -23,7 +25,16 @@
     "memoLinkNote": "यह लिंक मेमो में जोड़ा जाएगा: {{link}}",
     "send": "टिप भेजें",
     "sendAmount": "{{amount}} {{currency}} भेजें",
+    "paidIn": "{{currency}} में भुगतान · कोई फ़ीस नहीं",
+    "forTitle": "“{{title}}” के लिए",
+    "presets": {
+      "coffee": "एक कॉफ़ी",
+      "popular": "सबसे लोकप्रिय",
+      "thanks": "बहुत धन्यवाद",
+      "superFan": "सुपर फ़ैन"
+    },
     "sentEyebrow": "टिप भेज दी गई",
+    "sentTo": "@{{recipient}} को {{amount}}",
     "lightning": {
       "amountLabel": "राशि (sats):",
       "messageLabel": "संदेश (वैकल्पिक):",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "कितनी बार",
       "once": "एक बार",
+      "oneTime": "एक बार",
+      "monthly": "हर महीने",
       "until": "हर महीने, {{date}} तक",
       "note": "Hive इसे हर 30 दिन में अपने-आप भेजता है, पहला अभी। आप इसे कभी भी रोक सकते हैं।",
       "replaces": "यह उस मासिक सपोर्ट की जगह लेगा जो आप पहले से @{{recipient}} को भेज रहे हैं।",
@@ -91,7 +104,8 @@
     "addToPlaylist": "प्लेलिस्ट में जोड़ें",
     "addTag": "टैग जोड़ें",
     "notInterested": "दिलचस्पी नहीं",
-    "dontShowCreator": "@{{author}} को न दिखाएँ"
+    "dontShowCreator": "@{{author}} को न दिखाएँ",
+    "saveToPlaylist": "प्लेलिस्ट में सेव करें"
   },
   "guestList": {
     "loadFailed": "मौजूदा गेस्ट लिस्ट लोड नहीं हो सकी",
@@ -134,18 +148,22 @@
     "tagged": "“{{tag}}” टैग किया गया।",
     "vote": "वोट करें",
     "tagThisVideo": "इस वीडियो को टैग करें",
-    "tagOptional": "— वैकल्पिक —",
+    "tagOptional": "वैकल्पिक",
     "pickTopicFirst": "पहले कोई विषय चुनें",
     "taggedNoDot": "“{{tag}}” टैग किया गया",
     "tagFailed": "टैग नहीं हो सका: {{message}}",
-    "taggedAlreadyVoted": "“{{tag}}” टैग किया गया — आपका {{weight}}% वोट पहले ही दिया जा चुका था।",
-    "votingClosed": "वोटिंग बंद है — इस वीडियो को टैग करें",
+    "taggedAlreadyVoted": "“{{tag}}” टैग किया गया। आपका {{weight}}% वोट पहले ही दिया जा चुका था।",
+    "votingClosed": "वोटिंग बंद है: इस वीडियो को टैग करें",
     "youTagged": "आपने इसे <b>{{tag}}</b> टैग किया है।",
-    "pickTopic": "कोई विषय चुनें (100% वोट गिना जाता है)",
+    "pickTopic": "विषय चुनना 100% वोट गिना जाता है।",
     "submitTag": "टैग सबमिट करें",
     "tagThisVideoFull": "इस वीडियो को टैग करें (100% वोट गिना जाता है)",
-    "justTag": "वोट न करें — सिर्फ़ टैग करें",
-    "addsAbout": "लगभग {{value}} जोड़ता है"
+    "justTag": "वोट न करें, सिर्फ़ टैग करें",
+    "justTagShort": "सिर्फ़ टैग",
+    "voteAndTag": "वोट और टैग",
+    "addsAbout": "लगभग {{value}} जोड़ता है",
+    "postSoFar_one": "अब तक {{value}} · {{count}} वोट",
+    "postSoFar_other": "अब तक {{value}} · {{count}} वोट"
   },
   "tagsPicker": {
     "autoTagged": "अपने-आप टैग हुआ: {{tags}}",
@@ -154,7 +172,7 @@
     "noMatches": "“{{query}}” से कोई विषय मेल नहीं खाता।",
     "allSelected": "पूरी {{category}} कैटेगरी चुनी गई है। और सटीक होने के लिए ही अलग-अलग विषय जोड़ें:",
     "orPickTopics": "या अलग-अलग विषय चुनें:",
-    "goodEnough": "इतना काफ़ी है — या और सटीक चुनें (वैकल्पिक):",
+    "goodEnough": "इतना काफ़ी है, या और सटीक चुनें (वैकल्पिक)",
     "moreSpecific": "और सटीक:"
   }
 }

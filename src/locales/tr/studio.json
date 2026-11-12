@@ -7,13 +7,19 @@
     "createNewDesc": "İçeriğini yükle ve dünyayla paylaş"
   },
   "preview": {
-    "cannotPreview": "Tarayıcın bu videoyu önizleyemiyor; bu HEVC/H.265 kliplerde (ör. iPhone “Yüksek Verimlilik” kayıtları) sık görülür. Sorun değil: yine de yüklenecek ve herkesin oynatabilmesi için dönüştürülecek."
+    "cannotPreview": "<b>Bu video önizlenemiyor.</b> iPhone Yüksek Verimlilik kayıtları gibi HEVC / H.265 kliplerde sık görülür. Yine de yüklenecek ve herkes oynatabilsin diye dönüştürülecek."
   },
   "drafts": {
     "untitled": "(başlıksız)",
     "empty": "Seçilen filtreyle video bulunamadı.",
     "title": "Stüdyo",
-    "create": "Oluştur"
+    "create": "Oluştur",
+    "views28": "Görüntülenme, 28 gün",
+    "newFollowers": "Yeni takipçiler",
+    "views": "görüntülenme",
+    "stats": "İstatistikler",
+    "more": "Diğer",
+    "public": "Herkese açık"
   },
   "schedule": {
     "days": {
@@ -32,6 +38,7 @@
     "am": "ÖÖ",
     "pm": "ÖS",
     "pastWarning": "Bu tarih ve saat geçmişte. Lütfen ileri bir tarih ve saat seç.",
+    "pickDay": "Bir gün seç",
     "publishAt": "Videon {{when}} tarihinde otomatik olarak yayınlanacak"
   },
   "scheduled": {
@@ -101,6 +108,7 @@
     "insertTable": "Tablo Ekle",
     "spoiler": "Spoiler/Gizli Metin",
     "emoji": "Emoji",
+    "gifs": "GIF'ler",
     "searchEmoji": "Emoji ara",
     "searchGifs": "GIF ara…",
     "noGifs": "GIF bulunamadı.",

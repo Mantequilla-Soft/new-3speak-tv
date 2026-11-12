@@ -7,13 +7,19 @@
     "createNewDesc": "Unggah dan bagikan kontenmu ke seluruh dunia"
   },
   "preview": {
-    "cannotPreview": "Browsermu tidak bisa menampilkan pratinjau video ini — ini umum terjadi pada klip HEVC/H.265 (mis. rekaman iPhone “High Efficiency”). Tidak masalah: video tetap akan diunggah dan dikonversi agar bisa diputar semua orang."
+    "cannotPreview": "<b>Pratinjau video ini tidak bisa ditampilkan.</b> Umum terjadi pada klip HEVC / H.265 seperti rekaman iPhone High Efficiency. Video tetap akan diunggah dan dikonversi agar bisa diputar semua orang."
   },
   "drafts": {
     "untitled": "(tanpa judul)",
     "empty": "Tidak ada video yang cocok dengan filter yang dipilih.",
     "title": "Studio",
-    "create": "Buat"
+    "create": "Buat",
+    "views28": "Tayangan, 28 hari",
+    "newFollowers": "Pengikut baru",
+    "views": "tayangan",
+    "stats": "Statistik",
+    "more": "Lainnya",
+    "public": "Publik"
   },
   "schedule": {
     "days": {
@@ -32,6 +38,7 @@
     "am": "AM",
     "pm": "PM",
     "pastWarning": "Tanggal dan waktu ini sudah lewat. Silakan pilih tanggal dan waktu di masa depan.",
+    "pickDay": "Pilih hari",
     "publishAt": "Videomu akan diterbitkan otomatis pada {{when}}"
   },
   "scheduled": {
@@ -101,6 +108,7 @@
     "insertTable": "Sisipkan Tabel",
     "spoiler": "Spoiler/Teks Tersembunyi",
     "emoji": "Emoji",
+    "gifs": "GIF",
     "searchEmoji": "Cari emoji",
     "searchGifs": "Cari GIF…",
     "noGifs": "GIF tidak ditemukan.",

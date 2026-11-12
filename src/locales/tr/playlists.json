@@ -23,6 +23,9 @@
     "noOtherPlaylists": "Henüz başka oynatma listen yok",
     "createFirst": "Oynatma listesi oluştur",
     "createNew": "Yeni oynatma listesi oluştur",
+    "newPlaylist": "Yeni oynatma listesi",
+    "savedTo_one": "{{count}} oynatma listesine kaydedildi",
+    "savedTo_other": "{{count}} oynatma listesine kaydedildi",
     "name": "Ad",
     "namePlaceholder": "Harika oynatma listem",
     "privacy": "Gizlilik",
@@ -96,12 +99,15 @@
     "description": "Açıklama",
     "descriptionPlaceholder": "Bu albüm hakkında (isteğe bağlı)",
     "filterCount_one": "{{count}} öğeden {{shown}} tanesi",
-    "filterCount_other": "{{count}} öğeden {{shown}} tanesi"
+    "filterCount_other": "{{count}} öğeden {{shown}} tanesi",
+    "shuffle": "Karıştır"
   },
   "type": {
     "label": "Tür",
     "video": "Video",
     "audio": "Ses",
+    "videoSub": "Uzun video",
+    "audioSub": "Parçalar ve podcast'ler",
     "kindLabel": "Ne tür bir ses?",
     "kinds": {
       "podcast": "Podcast",

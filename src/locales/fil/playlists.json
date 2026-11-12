@@ -23,6 +23,9 @@
     "noOtherPlaylists": "Wala ka pang ibang playlist",
     "createFirst": "Gumawa ng playlist",
     "createNew": "Gumawa ng bagong playlist",
+    "newPlaylist": "Bagong playlist",
+    "savedTo_one": "Na-save sa {{count}} playlist",
+    "savedTo_other": "Na-save sa {{count}} playlist",
     "name": "Pangalan",
     "namePlaceholder": "Ang astig kong playlist",
     "privacy": "Privacy",
@@ -96,12 +99,15 @@
     "description": "Description",
     "descriptionPlaceholder": "Tungkol sa album na ito (opsyonal)",
     "filterCount_one": "{{shown}} sa {{count}} item",
-    "filterCount_other": "{{shown}} sa {{count}} items"
+    "filterCount_other": "{{shown}} sa {{count}} items",
+    "shuffle": "I-shuffle"
   },
   "type": {
     "label": "Uri",
     "video": "Video",
     "audio": "Audio",
+    "videoSub": "Long-form",
+    "audioSub": "Mga track at podcast",
     "kindLabel": "Anong uri ng audio?",
     "kinds": {
       "podcast": "Podcast",

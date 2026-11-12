@@ -8,7 +8,7 @@
     "contribute": "Come contribuire alle traduzioni"
   },
   "verify": {
-    "body": "Conferma il tuo account Hive per aprire l'editor. Il tuo wallet ti chiederà di approvare un accesso.",
+    "body": "Sei stato invitato? Conferma il tuo account Hive per aprire l'editor.",
     "button": "Conferma account",
     "failed": "Impossibile confermare il tuo account."
   },
@@ -53,9 +53,9 @@
   "add": {
     "title": "Aggiungi una lingua",
     "code": "Codice lingua",
-    "codeHint": "Due o tre lettere minuscole (ISO 639), facoltativamente con una regione: nl, fil, pt-BR",
+    "codeHint": "Due o tre lettere minuscole (ISO 639), facoltativamente con una regione",
     "native": "Nome nella lingua stessa",
-    "nativeHint": "È ciò che le persone vedono nel menu delle lingue, ad es. Nederlands",
+    "nativeHint": "Ciò che le persone vedono nel menu delle lingue",
     "english": "Nome in inglese",
     "rtl": "Si scrive da destra a sinistra (arabo, ebraico, persiano, urdu…)",
     "submit": "Aggiungi lingua",
@@ -69,6 +69,7 @@
     "checkboxFor": "Segna {{key}} come revisionato",
     "checkedBy": "Revisionato da @{{user}}, {{when}}",
     "notChecked": "Spunta quando hai controllato questa traduzione",
+    "notCheckedShort": "Non controllato",
     "noText": "Niente da revisionare: questo testo non ha ancora una traduzione",
     "saveFirst": "Salva prima la modifica. Salvando viene segnata come revisionata.",
     "changed": "modificato dopo la revisione",

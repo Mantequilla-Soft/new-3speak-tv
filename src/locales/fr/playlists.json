@@ -24,6 +24,10 @@
     "noOtherPlaylists": "Vous n'avez pas encore d'autre playlist",
     "createFirst": "Créer une playlist",
     "createNew": "Créer une nouvelle playlist",
+    "newPlaylist": "Nouvelle playlist",
+    "savedTo_one": "Enregistré dans {{count}} playlist",
+    "savedTo_many": "Enregistré dans {{count}} playlists",
+    "savedTo_other": "Enregistré dans {{count}} playlists",
     "name": "Nom",
     "namePlaceholder": "Ma super playlist",
     "privacy": "Confidentialité",
@@ -101,12 +105,15 @@
     "descriptionPlaceholder": "À propos de cet album (facultatif)",
     "filterCount_one": "{{shown}} sur {{count}} élément",
     "filterCount_many": "{{shown}} sur {{count}} éléments",
-    "filterCount_other": "{{shown}} sur {{count}} éléments"
+    "filterCount_other": "{{shown}} sur {{count}} éléments",
+    "shuffle": "Aléatoire"
   },
   "type": {
     "label": "Type",
     "video": "Vidéo",
     "audio": "Audio",
+    "videoSub": "Format long",
+    "audioSub": "Titres et podcasts",
     "kindLabel": "Quel type d'audio ?",
     "kinds": {
       "podcast": "Podcast",

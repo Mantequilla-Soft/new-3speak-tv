@@ -18,7 +18,8 @@
       "rep": "Rep {{rep}}",
       "repTitle": "Reputazione su Hive",
       "viewProfile": "Vedi profilo"
-    }
+    },
+    "replyTo": "Rispondi a {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Il voto non è disponibile per questo post",
@@ -32,7 +33,7 @@
     "interestsTitle": "Solo Shorts in linea con i tuoi interessi",
     "pickInterestsFirst": "Prima scegli qualche interesse",
     "noInterests": "Non hai ancora scelto nessun interesse — sceglili nelle Impostazioni",
-    "interestsExhausted": "Hai visto tutti gli Shorts sui tuoi interessi — ora ti mostriamo Scopri",
+    "interestsExhausted": "Sono tutti gli Shorts per i tuoi interessi. Ecco Scopri.",
     "noInterestMatches": "Al momento nessuno Short corrisponde ai tuoi interessi.",
     "switchToDiscover": "Passa a Scopri",
     "empty": "Nessuno Short disponibile",
@@ -90,7 +91,7 @@
     "noUrl": "Impossibile trovare l'URL del video per il remix",
     "loadFailed": "Impossibile caricare il video per il remix",
     "chainFull": "Questo video si basa già su {{max}} video precedenti, quindi non può più essere remixato.",
-    "chainNoSlots": "Questa catena di remix paga già così tanti creator che un remix non avrebbe più spazio su Hive. Con 3Speak Pro puoi ancora remixarlo."
+    "chainNoSlots": "Questa catena paga già così tanti creator che un remix non avrebbe spazio su Hive. Con 3Speak Pro puoi comunque remixarla."
   },
   "watchLater": {
     "loginRequired": "Accedi per salvare gli Shorts",
@@ -107,7 +108,7 @@
     "postRemoved": "Il post Hive di questo short è stato rimosso, quindi non può più ricevere commenti o voti.",
     "beFirst": "Commenta per primo!",
     "unavailable": "I commenti non sono disponibili per questo post",
-    "addPlaceholder": "Aggiungi un commento...",
+    "addPlaceholder": "Partecipa alla discussione…",
     "addPlaceholderBar": "Aggiungi un commento…",
     "loginPlaceholder": "Accedi per commentare",
     "send": "Invia commento",
@@ -140,7 +141,7 @@
     "seenNote": "Spettatori che hanno effettuato l’accesso e tengono attiva la cronologia delle visualizzazioni.",
     "seenEmpty": "Non l’ha ancora vista nessuno.",
     "keep": "Tieni come short",
-    "keepHint": "Resta sul tuo canale dopo le 24 ore",
+    "keepHint": "Resta sul tuo canale dopo le 24 ore.",
     "keepConfirm": "Tenerla per sempre?",
     "keepYes": "Tienila",
     "keeping": "Salvataggio…",
@@ -151,5 +152,9 @@
   "audiogram": {
     "fullEpisode": "Episodio completo",
     "listen": "Ascolta l'episodio completo: {{title}}"
+  },
+  "panel": {
+    "discussion": "Discussione",
+    "upNext": "Prossimo"
   }
 }

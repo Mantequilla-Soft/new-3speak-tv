@@ -24,6 +24,10 @@
     "noOtherPlaylists": "Non hai ancora altre playlist",
     "createFirst": "Crea una playlist",
     "createNew": "Crea nuova playlist",
+    "newPlaylist": "Nuova playlist",
+    "savedTo_one": "Salvato in {{count}} playlist",
+    "savedTo_many": "Salvato in {{count}} playlist",
+    "savedTo_other": "Salvato in {{count}} playlist",
     "name": "Nome",
     "namePlaceholder": "La mia fantastica playlist",
     "privacy": "Privacy",
@@ -101,12 +105,15 @@
     "descriptionPlaceholder": "Informazioni su questo album (facoltativo)",
     "filterCount_one": "{{shown}} di {{count}} elemento",
     "filterCount_many": "{{shown}} di {{count}} elementi",
-    "filterCount_other": "{{shown}} di {{count}} elementi"
+    "filterCount_other": "{{shown}} di {{count}} elementi",
+    "shuffle": "Casuale"
   },
   "type": {
     "label": "Tipo",
     "video": "Video",
     "audio": "Audio",
+    "videoSub": "Formato lungo",
+    "audioSub": "Tracce e podcast",
     "kindLabel": "Che tipo di audio?",
     "kinds": {
       "podcast": "Podcast",

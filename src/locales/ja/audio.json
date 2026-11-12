@@ -46,7 +46,7 @@
     "curated": "キュレーション",
     "noCues": "キューポイントはありません。",
     "clearQueue": "キューをクリア",
-    "clearAll": "すべてクリア",
+    "clearAll": "クリア",
     "queueMoveUp": "{{title}} を上へ移動",
     "queueMoveDown": "{{title}} を下へ移動",
     "queueRemove": "{{title}} をキューから削除",
@@ -57,7 +57,7 @@
     "collapse": "プレーヤーを縮小",
     "skipBack": "{{seconds}}秒戻る",
     "skipForward": "{{seconds}}秒進む",
-    "speed": "再生速度",
+    "speed": "速度",
     "speedValue": "再生速度: {{speed}}",
     "sleep": "スリープタイマー",
     "sleepOff": "オフ",
@@ -74,8 +74,8 @@
     "effectsChecking": "このエピソードが対応しているか確認しています…",
     "timeSaved": "短縮した時間: {{time}}",
     "cast": "別のデバイスで再生",
-    "download": "オフライン用に保存",
-    "downloading": "保存中: {{pct}}%",
+    "download": "ダウンロード",
+    "downloading": "オフライン用に保存中: {{pct}}%",
     "downloaded": "オフライン用に保存済み",
     "downloadDone": "オフライン再生用に保存しました",
     "downloadFailed": "このエピソードを保存できませんでした",
@@ -99,12 +99,17 @@
     "nextChapter": "次のチャプター",
     "chapterLink": "チャプターのリンク",
     "upNext": "次に再生",
-    "hideIdle": "非表示 (キューは残ります)",
+    "hideIdle": "非表示 · キューは残ります",
     "continueAt": "{{time}} から再開",
     "position": "{{current}} / {{total}}",
     "playingFrom": "{{name}} から再生中",
     "atThisMoment": "この場面",
-    "goTo": "{{name}} へ移動"
+    "goTo": "{{name}} へ移動",
+    "shuffle": "シャッフル",
+    "repeat": "このトラックをリピート",
+    "sleepMinutesShort": "{{minutes}} 分",
+    "swipeUp": "上にスワイプしてプレーヤーを表示",
+    "commentAt": "{{time}} にコメント…"
   },
   "share": {
     "failed": "失敗しました",
@@ -114,7 +119,16 @@
     "copied3speak": "3Speak のリンクをコピーしました！",
     "copyAudioPlayer": "オーディオプレーヤーのリンクをコピー",
     "copiedAudioPlayer": "オーディオプレーヤーのリンクをコピーしました！",
-    "searchingHive": "Hive を検索中…"
+    "searchingHive": "Hive を検索中…",
+    "title": "トラックを共有",
+    "atTime": "{{time}} から",
+    "peakd": "PeakD",
+    "player": "プレーヤーのリンク",
+    "x": "X",
+    "telegram": "Telegram",
+    "email": "メール",
+    "qr": "QR",
+    "episode": "エピソードのリンク"
   },
   "post": {
     "notFound": "投稿が見つかりません",
@@ -128,6 +142,8 @@
     "vote": "投票",
     "signInToTip": "投げ銭するにはログイン",
     "tip": "投げ銭",
+    "albumLabel": "アルバム",
+    "notes": "ノート",
     "stillIndexing": "この投稿の音声はまだインデックス中です。数分後にもう一度お試しください。"
   },
   "page": {
@@ -159,7 +175,7 @@
     "tracks_other": "{{count}} トラック",
     "noTracks": "トラックが見つかりません。",
     "creators": "クリエイター",
-    "albumsPlaylists": "アルバムと再生リスト",
+    "albumsPlaylists": "音声の再生リスト",
     "noAudioForFilters": "この条件に一致する音声はありません。",
     "tabsLabel": "オーディオの表示",
     "tabExplore": "探す",
@@ -172,6 +188,21 @@
   "upload": {
     "title": "音声をアップロード",
     "publishing": "公開中…",
+    "nextTo": "次へ: {{step}}",
+    "publishAlbum_other": "アルバムを公開 · {{count}} トラック",
+    "publishWithShorts_other": "音声 + ショート {{count}} 本を公開",
+    "side": {
+      "publishTo": "公開先",
+      "shortsTitle": "オーディオグラムのショート",
+      "clips_other": "{{count}} クリップ",
+      "tracks_other": "{{count}} トラック",
+      "audio": "音声",
+      "shorts": "ショート",
+      "snaps": "Snaps",
+      "community": "コミュニティ",
+      "rss": "RSS フィード",
+      "clipLabel": "ショート {{n}} のサムネイル: {{title}}"
+    },
     "failed": "失敗しました",
     "unknown": "不明",
     "unknownError": "不明なエラー",
@@ -192,7 +223,7 @@
       "review": "確認"
     },
     "trackTypes": {
-      "voiceSnap": "ボイス / Snap"
+      "voiceSnap": "ボイスメモ"
     },
     "toasts": {
       "pickImage": "画像ファイルを選んでください",
@@ -230,8 +261,8 @@
       "discard": "破棄"
     },
     "source": {
-      "dropHere": "音声ファイルをここにドロップするか、クリックして選択",
-      "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC（複数可）",
+      "dropHere": "音声ファイルをドロップ、または選択",
+      "formats": "MP3、WAV、OGG、WEBM、M4A、FLAC、AAC · 複数可",
       "stop": "停止",
       "orRecord": "またはその場で録音",
       "recordLimit": "1 回の録音は最大 {{minutes}} 分",
@@ -245,7 +276,10 @@
       "trackTitle": "トラックのタイトル",
       "genre": "ジャンル",
       "bpm": "BPM",
-      "descriptionOptional": "説明（任意）"
+      "descriptionOptional": "説明（任意）",
+      "track": "トラック",
+      "category": "カテゴリー",
+      "musicGenre": "音楽ジャンル"
     },
     "playlist": {
       "helpRequired": "必須 — 再生リストを選ぶか作成してください。アルバム投稿は再生リストの中に置かれ、トラックが 3Speak のアルバムとしてまとまります。露出が増え、音声ページで目立つ位置に表示されやすくなります。",
@@ -258,6 +292,7 @@
       "empty": "まだ再生リストがありません。",
       "items_other": "{{count}} 件",
       "newPlaylist": "新しい音声の再生リスト",
+      "newAlbum": "新しいアルバム",
       "namePlaceholder": "再生リストの名前",
       "public": "公開",
       "private": "非公開",
@@ -265,6 +300,9 @@
       "creditsPlaceholder": "クレジット（任意）",
       "yearPlaceholder": "年",
       "labelPlaceholder": "レーベル（任意）",
+      "fieldYear": "年",
+      "fieldLabel": "レーベル",
+      "fieldCredits": "クレジット",
       "thumbAlt": "アルバムのサムネイル",
       "removeThumb": "サムネイルを削除",
       "creating": "作成中…",
@@ -287,20 +325,21 @@
       "help_other": "{{count}} トラックが追加されています。公開方法を選んでください。",
       "howPublished": "どのように公開しますか？",
       "snapsTitle": "Snap のコメント",
-      "snapsDesc": "各音声を最新の peak.snaps コンテナへの返信として投稿します。Snaps のフィードに表示されます（デフォルト）。",
+      "snapsDesc": "各音声を最新の Snaps スレッドへの返信として投稿します。Snaps のフィードに表示されます。",
       "singleTitle": "単独の投稿",
       "singleTitleSingleOnly": "単独の投稿（ファイル 1 つのみ）",
-      "singleDesc": "1 つの音声を、タイトル、コミュニティ、タグ、カバー付きの独立した Hive 投稿として公開します。",
+      "singleDesc": "1 つの音声を、タイトル、コミュニティ、タグ、カバー付きの独立した投稿にします。",
       "albumTitle": "アルバム投稿",
       "albumTitleNeeds2": "アルバム投稿（ファイル 2 つ以上が必要）",
-      "albumDesc": "音声のないメイン投稿 1 つをランディングページとし、各トラックはそれぞれのカバー、説明、報酬、受益者を持つコメント返信として公開します。",
-      "howEarn": "この音声でどのように報酬を得ますか？",
-      "postRewardsTitle": "投稿の報酬（1 回のみ）",
-      "postRewardsDesc": "通常の Hive の投稿者報酬を受け取ります。公開から約 7 日後に 1 回支払われます。",
-      "pplTitle": "再生ごとの報酬（永続）",
-      "pplDesc": "音声投稿の報酬はすべて @{{account}} に送られます。1 回の支払いの代わりに、3Speak のプログラムがトラックの存続期間中、再生ごとにあなたに支払います。",
+      "albumDesc": "メインのランディング投稿を作り、各トラックはそれぞれのカバーと報酬を持つ返信になります。",
+      "howEarn": "どのように稼ぎますか？",
+      "postRewardsTitle": "投稿の報酬",
+      "postRewardsDesc": "通常の Hive の報酬。公開から約 7 日後に 1 回",
+      "pplTitle": "再生ごとの報酬",
+      "pplDesc": "3Speak のプログラムが、トラックがある限り再生ごとに支払います。投稿の報酬は @{{account}} に送られます。",
       "adsTitle": "この音声への広告",
-      "adsHint": "この音声の再生中に、スポンサーの短い読み上げメッセージが流れることがあり、収益の一部を受け取れます。初期値はアカウントの設定です。このアップロードだけ、ここで変更できます。"
+      "adsHint": "この音声の再生中に、スポンサーの短い読み上げメッセージが流れることがあり、収益の一部を受け取れます。初期値はアカウントの設定です。このアップロードだけ、ここで変更できます。",
+      "adsSpoken": "この音声内のスポンサー読み上げメッセージ"
     },
     "reward": {
       "distribution": "報酬の分配",
@@ -326,6 +365,7 @@
       "helpAlbum": "各トラックはメイン投稿へのコメントとして公開されます。共通の値を一度設定してすべてに適用し、トラックごとに上書きできます。",
       "helpSnaps": "各トラックは独立した Snap として公開されます。共通の値を一度設定してすべてに適用し、トラックごとに上書きできます。",
       "applyToAllHeading": "すべてのトラックに適用",
+      "applyNote_other": "<b>全 {{count}} トラックに適用:</b> 説明とカバーを共通にして、あとで各トラックを個別に変更できます。",
       "sharedDescription": "共通の説明（任意）",
       "sharedCover": "共通のカバー画像",
       "applyToAll_other": "{{count}} トラックすべてに適用",
@@ -419,6 +459,7 @@
   "podcasts": {
     "chip": "外部",
     "chipHint": "3Speak 外の RSS フィードのポッドキャスト",
+    "on3speak": "3Speak 内",
     "follow": "フォロー",
     "following": "フォロー中",
     "unfollow": "フォロー解除",
@@ -461,7 +502,8 @@
     "notifyOff": "通知オフ",
     "notifyOnDone": "新しいエピソードをお知らせします",
     "notifyOffDone": "このポッドキャストの通知を停止しました",
-    "notifyHint": "新しいエピソードが公開されたら通知を受け取る",
+    "notifyHint": "新しいエピソードが出たら通知を受け取る",
+    "notifyLabel": "新しいエピソードを通知",
     "search": {
       "button": "検索",
       "results_other": "{{count}} 件のポッドキャストが見つかりました",
@@ -480,7 +522,7 @@
       "export": "OPML をエクスポート",
       "invalid": "OPML ファイルではありません。",
       "empty": "このファイルにポッドキャストのフィードが見つかりません。",
-      "imported_other": "{{count}} 件のポッドキャストをフォローしました。{{failed}} 件は追加できませんでした。新しいフィードは数分以内に読み込まれます。"
+      "imported_other": "{{count}} 件のポッドキャストをフォローしました。{{failed}} 件は追加できませんでした。新しいフィードは数分で読み込まれます。"
     },
     "errors": {
       "signIn": "ポッドキャストをフォローするにはログインしてください。",
@@ -501,7 +543,8 @@
     },
     "tip": {
       "button": "このポッドキャストを応援",
-      "heading": "{{show}} を応援",
+      "heading": "{{show}} に投げ銭",
+      "support": "{{show}} を応援",
       "hive": "@{{account}} さんに Hive で投げ銭",
       "messageLabel": "ポッドキャスターへのメッセージ（任意）:",
       "messagePlaceholder": "最高のエピソードでした！",
@@ -597,7 +640,7 @@
     "downloads": {
       "title": "ダウンロード",
       "download": "オフライン再生用にダウンロード",
-      "short": "ダウンロード",
+      "short": "保存",
       "downloading": "ダウンロード中 {{pct}}%",
       "cancel": "ダウンロードをキャンセル",
       "saved": "オフライン保存済み",
@@ -606,7 +649,7 @@
       "removed": "ダウンロードを削除しました",
       "done": "オフライン再生用に保存しました",
       "total": "{{size}} 保存済み",
-      "storage": "このサイトはこのブラウザで {{quota}} 中 {{used}} を使用しています",
+      "storage": "このブラウザで {{quota}} 中 {{used}} を使用",
       "perBrowser": "ダウンロードは、誰がログインしていてもこのブラウザに残ります。",
       "errors": {
         "tooLarge": "このエピソードは大きすぎて保存できません。",
@@ -618,7 +661,7 @@
     },
     "autoQueue": {
       "label": "新しいエピソードを自動でキューに追加",
-      "hint": "この番組の新しいエピソードが公開されると、キューの最後に追加されます",
+      "hint": "キューの最後に追加されます",
       "onDone": "この番組の新しいエピソードはキューに追加されます",
       "offDone": "この番組の新しいエピソードはキューに追加されなくなりました",
       "added_other": "新しいエピソード {{count}} 件をキューに追加しました"
@@ -655,6 +698,7 @@
       "startsAt": "開始: {{time}}"
     },
     "private": {
+      "title": "非公開フィードを追加",
       "toggle": "非公開フィード（ログインが必要）",
       "username": "ユーザー名",
       "password": "パスワード",

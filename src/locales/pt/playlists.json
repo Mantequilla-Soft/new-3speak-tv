@@ -24,6 +24,10 @@
     "noOtherPlaylists": "Você ainda não tem outras playlists",
     "createFirst": "Criar uma playlist",
     "createNew": "Criar nova playlist",
+    "newPlaylist": "Nova playlist",
+    "savedTo_one": "Salvo em {{count}} playlist",
+    "savedTo_many": "Salvo em {{count}} playlists",
+    "savedTo_other": "Salvo em {{count}} playlists",
     "name": "Nome",
     "namePlaceholder": "Minha playlist incrível",
     "privacy": "Privacidade",
@@ -101,12 +105,15 @@
     "descriptionPlaceholder": "Sobre este álbum (opcional)",
     "filterCount_one": "{{shown}} de {{count}} item",
     "filterCount_many": "{{shown}} de {{count}} itens",
-    "filterCount_other": "{{shown}} de {{count}} itens"
+    "filterCount_other": "{{shown}} de {{count}} itens",
+    "shuffle": "Aleatório"
   },
   "type": {
     "label": "Tipo",
     "video": "Vídeo",
     "audio": "Áudio",
+    "videoSub": "Vídeos longos",
+    "audioSub": "Faixas e podcasts",
     "kindLabel": "Que tipo de áudio?",
     "kinds": {
       "podcast": "Podcast",

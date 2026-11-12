@@ -98,8 +98,8 @@
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "SPIACENTI! PAGINA NON TROVATA",
+    "title": "Spiacenti, pagina non trovata",
     "message": "Purtroppo la pagina che stai cercando non è disponibile.",
-    "goHome": "VAI ALLA HOME"
+    "goHome": "Vai alla home page"
   }
 }

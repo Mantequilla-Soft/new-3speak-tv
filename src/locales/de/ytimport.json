@@ -22,7 +22,8 @@
     "step1": "Öffne dieses Video in",
     "step2": "Klicke auf das Dreipunktmenü und wähle Herunterladen.",
     "step3": "Wähle unten die heruntergeladene Datei aus.",
-    "pickFile": "Heruntergeladene Datei auswählen"
+    "pickFile": "Heruntergeladene Datei auswählen",
+    "title": "Dieses Video konnte nicht abgerufen werden"
   },
   "errors": {
     "signIn": "Melde dich an, um deine Videos zu importieren.",
@@ -133,7 +134,8 @@
     },
     "stopConfirm": "Diesen Import stoppen? Noch nicht veröffentlichte Videos werden abgebrochen, auch bereits eingeplante. Veröffentlichte Videos bleiben.",
     "stopYes": "Ja, stoppen",
-    "stopKeep": "Weiter importieren"
+    "stopKeep": "Weiter importieren",
+    "countOf": "{{done}} von {{total}}"
   },
   "bitchute": {
     "noLink": "Du hast noch kein BitChute-Konto verknüpft. Verknüpfe und verifiziere es zuerst in deinem Profil und komm dann hierher zurück.",

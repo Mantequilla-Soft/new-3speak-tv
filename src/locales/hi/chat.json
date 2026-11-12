@@ -19,6 +19,7 @@
     "communityWithSubscribers_one": "कम्युनिटी · {{formatted}} सब्सक्राइबर",
     "communityWithSubscribers_other": "कम्युनिटी · {{formatted}} सब्सक्राइबर",
     "commentFallback": "(कमेंट)",
+    "videoKind": "3Speak · वीडियो",
     "play": "{{title}} चलाएँ"
   },
   "share": {
@@ -32,22 +33,29 @@
     "responsiveSub": "जिस पेज पर है उसके हिसाब से साइज़ बदलता है",
     "fixedSub": "फ़िक्स्ड साइज़ iframe",
     "sendInChat": "3Speak चैट में भेजें",
-    "sendInChatSub": "3Speak पर किसी को मैसेज करें",
+    "sendInChatSub": "किसी को मैसेज करें",
     "embedOnWebsite": "वेबसाइट पर एम्बेड करें",
-    "embedOnWebsiteSub": "अपनी साइट या ब्लॉग के लिए HTML कॉपी करें",
+    "embedOnWebsiteSub": "रिस्पॉन्सिव या तय साइज़",
     "forHivePost": "Hive पोस्ट के लिए",
+    "forHivePostSub": "पेस्ट करने के लिए लिंक कॉपी करें",
     "hivePostCopied": "लिंक कॉपी हो गया। इसे अपनी Hive पोस्ट में पेस्ट करें।",
-    "generalShare": "शेयर करें / लिंक कॉपी करें",
-    "generalShareSub": "दूसरे ऐप, या लिंक कॉपी करें"
+    "generalShare": "शेयर करें या लिंक कॉपी करें",
+    "generalShareSub": "दूसरे ऐप",
+    "embed": "एम्बेड",
+    "chat": "चैट",
+    "more": "और",
+    "startAt": "यहाँ से शुरू",
+    "toFollowers_one": "आपके {{n}} फ़ॉलोअर को",
+    "toFollowers_other": "आपके {{n}} फ़ॉलोअर्स को"
   },
   "gate": {
     "connectTitle": "3Speak चैट से कनेक्ट करें",
-    "connectBody": "चैट Snapie से चलती है। कनेक्ट करने पर आपकी Hive पोस्टिंग की से एक बार का लॉगिन चैलेंज साइन होता है (कोई ट्रांज़ैक्शन नहीं, कोई खर्च नहीं)।",
+    "connectBody": "चैट Snapie से चलती है। कनेक्ट करने पर आपकी पोस्टिंग की से एक बार का लॉगिन चैलेंज साइन होता है। कोई ट्रांज़ैक्शन नहीं, कोई खर्च नहीं।",
     "connecting": "कनेक्ट हो रहा है…",
     "connectButton": "चैट कनेक्ट करें",
     "cannotSign": "आपका मौजूदा लॉगिन चैट चैलेंज साइन नहीं कर सकता। Keychain, HiveAuth, PeakVault या Ledger इस्तेमाल करें।",
-    "needsAccountTitle": "चैट के लिए Hive अकाउंट चाहिए",
-    "needsAccountBody": "मैसेज आपके अपने अकाउंट की keys से साइन होते हैं, इसलिए आपका अकाउंट तैयार होते ही बाकी सब के साथ चैट भी खुल जाएगी। अपनी प्रोफ़ाइल पर दिए गोल पूरे करें, टीम आपको वहाँ तक पहुँचा देगी।",
+    "needsAccountTitle": "चैट के लिए Hive अकाउंट चाहिए।",
+    "needsAccountBody": "वार्म-अप पूरा होते ही यह बाकी सब के साथ खुल जाती है।",
     "loginTitle": "चैट इस्तेमाल करने के लिए लॉग इन करें",
     "loginBody": "मैसेज भेजने और पाने के लिए अपने Hive अकाउंट से साइन इन करें।",
     "connectingToChat": "चैट से कनेक्ट हो रहा है…"
@@ -95,8 +103,8 @@
     "serverRejectedServerMap_other": "सर्वर ने सभी {{count}} रिक्वेस्ट अस्वीकार कर दीं (सर्वर के अपने अनपढ़े मैप की IDs)",
     "failed": "सब कुछ पढ़ा हुआ मार्क नहीं हो सका",
     "marking": "पढ़ा हुआ मार्क हो रहा है…",
-    "button": "सभी को पढ़ा हुआ मार्क करें",
-    "buttonCount": "सभी को पढ़ा हुआ मार्क करें ({{count}})"
+    "button": "सब पढ़ा हुआ मार्क करें",
+    "buttonCount": "सब पढ़ा हुआ मार्क करें ({{count}})"
   },
   "list": {
     "chooseTarget": "भेजने के लिए कोई चैट चुनें",
@@ -130,7 +138,8 @@
     "quoting": "@{{user}} को कोट कर रहे हैं",
     "cancelQuote": "कोट रद्द करें",
     "removeImage": "इमेज हटाएँ",
-    "placeholder": "मैसेज लिखें…"
+    "placeholder": "मैसेज लिखें…",
+    "placeholderTo": "{{name}} को मैसेज करें"
   },
   "page": {
     "chooseTarget": "भेजने के लिए कोई चैट चुनें।",

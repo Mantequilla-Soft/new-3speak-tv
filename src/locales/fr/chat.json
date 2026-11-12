@@ -20,6 +20,7 @@
     "communityWithSubscribers_many": "Communauté · {{formatted}} membres",
     "communityWithSubscribers_other": "Communauté · {{formatted}} membres",
     "commentFallback": "(commentaire)",
+    "videoKind": "3Speak · Vidéo",
     "play": "Lire {{title}}"
   },
   "share": {
@@ -33,22 +34,30 @@
     "responsiveSub": "S'adapte à la page qui l'accueille",
     "fixedSub": "Iframe de taille fixe",
     "sendInChat": "Envoyer dans le chat 3Speak",
-    "sendInChatSub": "Envoyez-la à quelqu'un sur 3Speak",
+    "sendInChatSub": "Envoyez-la à quelqu'un",
     "embedOnWebsite": "Intégrer sur un site",
-    "embedOnWebsiteSub": "Copiez le HTML pour votre site ou blog",
-    "forHivePost": "Pour un post Hive",
+    "embedOnWebsiteSub": "Adaptatif ou taille fixe",
+    "forHivePost": "Pour une publication Hive",
+    "forHivePostSub": "Copiez le lien à coller",
     "hivePostCopied": "Lien copié. Colle-le dans ton post Hive.",
-    "generalShare": "Partager / copier le lien",
-    "generalShareSub": "Autres apps, ou copier le lien"
+    "generalShare": "Partager ou copier le lien",
+    "generalShareSub": "Autres apps",
+    "embed": "Intégrer",
+    "chat": "Chat",
+    "more": "Plus",
+    "startAt": "Commencer à",
+    "toFollowers_one": "À votre {{n}} abonné",
+    "toFollowers_many": "À vos {{n}} abonnés",
+    "toFollowers_other": "À vos {{n}} abonnés"
   },
   "gate": {
     "connectTitle": "Se connecter au chat 3Speak",
-    "connectBody": "Le chat est propulsé par Snapie. La connexion signe un défi de connexion unique avec votre clé de publication Hive (aucune transaction, aucun coût).",
+    "connectBody": "Le chat est propulsé par Snapie. La connexion signe un défi de connexion unique avec votre clé de publication. Aucune transaction, aucun coût.",
     "connecting": "Connexion…",
     "connectButton": "Connecter le chat",
     "cannotSign": "Votre connexion actuelle ne peut pas signer le défi du chat. Utilisez Keychain, HiveAuth, PeakVault ou Ledger.",
-    "needsAccountTitle": "Le chat nécessite un compte Hive",
-    "needsAccountBody": "Les messages sont signés avec les clés de votre propre compte : le chat se débloque donc avec tout le reste une fois votre compte prêt. Remplissez les objectifs de votre profil et l'équipe s'occupera du reste.",
+    "needsAccountTitle": "Le chat nécessite un compte Hive.",
+    "needsAccountBody": "Il se débloque avec tout le reste une fois la phase de démarrage terminée.",
     "loginTitle": "Connectez-vous pour utiliser le chat",
     "loginBody": "Connectez-vous avec votre compte Hive pour envoyer et recevoir des messages.",
     "connectingToChat": "Connexion au chat…"
@@ -100,8 +109,8 @@
     "serverRejectedServerMap_other": "Le serveur a rejeté les {{count}} requêtes (identifiants de sa propre liste de non-lus)",
     "failed": "Impossible de tout marquer comme lu",
     "marking": "Marquage comme lu…",
-    "button": "Tout marquer comme lu",
-    "buttonCount": "Tout marquer comme lu ({{count}})"
+    "button": "Tout marquer lu",
+    "buttonCount": "Tout marquer lu ({{count}})"
   },
   "list": {
     "chooseTarget": "Choisissez un chat de destination",
@@ -136,7 +145,8 @@
     "quoting": "Citation de @{{user}}",
     "cancelQuote": "Annuler la citation",
     "removeImage": "Retirer l'image",
-    "placeholder": "Écrivez un message…"
+    "placeholder": "Écrivez un message…",
+    "placeholderTo": "Message à {{name}}"
   },
   "page": {
     "chooseTarget": "Choisissez un chat de destination.",

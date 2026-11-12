@@ -9,7 +9,7 @@
   "watchingNow_other": "{{count}} зрителя сейчас",
   "previewMuted": "Превью · без звука",
   "badges": {
-    "gatedTitle": "Только для участников. 3Speak Pro открывает полное видео",
+    "gatedTitle": "Только для участников",
     "pro": "PRO",
     "new": "НОВОЕ",
     "first": "Первое",
@@ -20,17 +20,17 @@
   "status": {
     "scheduled": "Запланировано",
     "mobile": "Мобильное",
-    "mobileTitle": "Загружено через мобильное приложение",
+    "mobileTitle": "Через мобильное приложение",
     "processing": "Обработка",
-    "processingTitle": "Видео обрабатывается",
+    "processingTitle": "Обрабатывается",
     "draft": "Черновик",
-    "draftTitle": "Черновик, ещё не опубликован",
+    "draftTitle": "Ещё не опубликовано",
     "deleted": "Удалено",
-    "deletedTitle": "Это видео удалено",
+    "deletedTitle": "Удалено",
     "failed": "Ошибка",
-    "failedTitle": "Не удалось обработать видео",
+    "failedTitle": "Ошибка обработки",
     "unlisted": "По ссылке",
-    "unlistedTitle": "Доступ по ссылке: скрыто из лент и поиска, открывается только по прямой ссылке"
+    "unlistedTitle": "Только по прямой ссылке"
   },
   "playlist": {
     "loading": "Загрузка плейлистов...",
@@ -40,7 +40,11 @@
     "items_other": "{{count}} элемента",
     "openAria": "Открыть плейлист {{name}}",
     "tag": "Плейлист",
-    "updated": "Обновлён {{when}}"
+    "updated": "Обновлён {{when}}",
+    "public": "публичный",
+    "private": "приватный",
+    "history": "история",
+    "audio": "аудио"
   },
   "watchLater": {
     "title": "Смотреть позже",
@@ -54,5 +58,15 @@
     "label": "Изменить размер",
     "small": "Маленький",
     "medium": "Средний"
+  },
+  "payout": {
+    "title": "Выплата",
+    "author": "Автор",
+    "curators": "Кураторы",
+    "paysOutIn": "Выплата через",
+    "days_one": "{{count}} день",
+    "days_few": "{{count}} дня",
+    "days_many": "{{count}} дней",
+    "days_other": "{{count}} дня"
   }
 }

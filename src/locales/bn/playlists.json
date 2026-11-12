@@ -23,6 +23,9 @@
     "noOtherPlaylists": "আপনার এখনো অন্য কোনো প্লেলিস্ট নেই",
     "createFirst": "একটি প্লেলিস্ট তৈরি করুন",
     "createNew": "নতুন প্লেলিস্ট তৈরি করুন",
+    "newPlaylist": "নতুন প্লেলিস্ট",
+    "savedTo_one": "{{count}}টি প্লেলিস্টে সেভ হয়েছে",
+    "savedTo_other": "{{count}}টি প্লেলিস্টে সেভ হয়েছে",
     "name": "নাম",
     "namePlaceholder": "আমার দারুণ প্লেলিস্ট",
     "privacy": "প্রাইভেসি",
@@ -96,12 +99,15 @@
     "description": "বিবরণ",
     "descriptionPlaceholder": "এই অ্যালবাম সম্পর্কে (ঐচ্ছিক)",
     "filterCount_one": "{{count}}টির মধ্যে {{shown}}টি আইটেম",
-    "filterCount_other": "{{count}}টির মধ্যে {{shown}}টি আইটেম"
+    "filterCount_other": "{{count}}টির মধ্যে {{shown}}টি আইটেম",
+    "shuffle": "শাফল"
   },
   "type": {
     "label": "ধরন",
     "video": "ভিডিও",
     "audio": "অডিও",
+    "videoSub": "দীর্ঘ ভিডিও",
+    "audioSub": "ট্র্যাক ও পডকাস্ট",
     "kindLabel": "কী ধরনের অডিও?",
     "kinds": {
       "podcast": "পডকাস্ট",

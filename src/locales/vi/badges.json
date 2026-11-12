@@ -31,7 +31,7 @@
   },
   "directory": {
     "title": "Huy hiệu",
-    "intro": "Huy hiệu là phần thưởng <b>do người khác trao cho bạn</b> trên Hive, cho sự kiện, đóng góp và cột mốc. Bạn không thể tự tham gia: phải có người trao cho bạn. Mở một huy hiệu để xem những người nhận đăng gì tại đây.",
+    "intro": "Huy hiệu là phần thưởng <b>do người khác trao cho bạn</b> trên Hive, cho sự kiện, đóng góp và cột mốc. Bạn không thể tự tham gia: phải có người trao.",
     "searchPlaceholder": "Tìm huy hiệu...",
     "sort": {
       "recipients": "Người nhận",
@@ -54,6 +54,7 @@
     "awarding": "Đang trao…",
     "held": "Đã có",
     "award": "Trao",
+    "awardNamed": "Trao “{{title}}”",
     "note": "Huy hiệu sẽ theo dõi họ trên Hive, đó chính là ý nghĩa của việc sở hữu huy hiệu. Bạn có thể thu hồi từ trang của huy hiệu đó."
   },
   "hive": {
@@ -81,6 +82,7 @@
     "otherTopics": "Khác",
     "title": "Bảng xếp hạng",
     "subtitle": "{{blurb}}: các nhà sáng tạo hàng đầu trên 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
     "subtitleTopic": "{{blurb}}: các nhà sáng tạo hàng đầu về {{topic}}.",
     "allTopics": "Tất cả chủ đề",
     "finding": "Đang tìm @{{user}} trên bảng này…",

@@ -22,6 +22,8 @@
     "noOtherPlaylists": "ほかの再生リストはまだありません",
     "createFirst": "再生リストを作成",
     "createNew": "新しい再生リストを作成",
+    "newPlaylist": "新しい再生リスト",
+    "savedTo_other": "{{count}} 件の再生リストに保存済み",
     "name": "名前",
     "namePlaceholder": "お気に入りの再生リスト",
     "privacy": "公開設定",
@@ -91,12 +93,15 @@
     "creditsPlaceholder": "プロデュース…",
     "description": "説明",
     "descriptionPlaceholder": "このアルバムについて（任意）",
-    "filterCount_other": "{{count}} 件中 {{shown}} 件"
+    "filterCount_other": "{{count}} 件中 {{shown}} 件",
+    "shuffle": "シャッフル"
   },
   "type": {
     "label": "種類",
     "video": "動画",
     "audio": "音声",
+    "videoSub": "長尺",
+    "audioSub": "トラックとポッドキャスト",
     "kindLabel": "どんな音声ですか？",
     "kinds": {
       "podcast": "ポッドキャスト",

@@ -76,6 +76,11 @@
     }
   },
   "reactionUpload": {
+    "title": "동영상 리액션 올리기",
+    "rec": "REC {{time}}",
+    "mic": "마이크",
+    "camera": "카메라",
+    "restart": "다시 시작",
     "authorized": "@threespeak 권한 부여 완료 — 이제 리액션을 게시할 수 있어요",
     "authFailed": "권한 부여에 실패했어요. 다시 시도해 주세요.",
     "webcamDenied": "웹캠에 접근할 수 없어요",
@@ -89,7 +94,7 @@
     "uploadVideo": "동영상 업로드",
     "recordVideo": "동영상 녹화",
     "startRecording": "녹화 시작",
-    "stopRecording": "녹화 중지",
+    "stopRecording": "중지하고 검토",
     "recordedVideo": "녹화된 동영상",
     "descriptionPlaceholder": "동영상 리액션에 설명을 추가하세요...",
     "showInShorts": "3Speak 쇼츠에 표시",

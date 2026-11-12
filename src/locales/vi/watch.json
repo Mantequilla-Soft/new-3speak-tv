@@ -31,7 +31,8 @@
   "gated": {
     "title": "Chỉ dành cho thành viên",
     "checkFailed": "Hiện chúng tôi không thể xác nhận gói đăng ký của bạn. Hãy thử lại sau giây lát.",
-    "preview": "Bạn đang xem bản xem trước miễn phí. 3Speak Pro mở khóa toàn bộ video.",
+    "preview": "Bạn đang xem bản xem trước miễn phí",
+    "previewSub": "3Speak Pro mở khóa toàn bộ video.",
     "subscribersOnly": "Video này dành cho người đăng ký 3Speak Pro.",
     "cta": "Nhận 3Speak Pro"
   },
@@ -51,6 +52,8 @@
     "value": "Giá trị"
   },
   "moreVideos": "Thêm video",
+  "nextIn": "Tiếp theo trong {{name}}",
+  "fromCommunity": "Từ {{name}}",
   "vote": {
     "saveFailed": "Không thể lưu lượt vote của bạn"
   },
@@ -86,7 +89,7 @@
     "setEnd": "Đặt điểm cuối",
     "createClip": "Tạo clip",
     "barStart": "Tua đến điểm bắt đầu clip của bạn",
-    "barEnd": "Đầu: {{start}} — Giờ hãy tua đến điểm kết thúc",
+    "barEnd": "Đầu {{start}} · giờ hãy tua đến điểm cuối",
     "barDone": "Clip: {{start}} – {{end}}"
   },
   "share": {
@@ -104,11 +107,11 @@
   },
   "media": {
     "unavailableTitle": "Video này không còn khả dụng",
-    "unavailableBody": "Không tìm thấy tệp phương tiện của video tải lên cũ này trên mạng. Bài đăng vẫn tồn tại trên blockchain, nhưng video không thể phát được nữa.",
+    "unavailableBody": "Không tìm thấy tệp phương tiện của video tải lên cũ này. Bài đăng vẫn tồn tại trên Hive.",
     "scheduledTitle": "Bài đăng này đã được lên lịch",
     "scheduledBody": "Bài sẽ được đăng vào {{date}}. Bạn có thể xem video từ lúc đó.",
     "blockedTitle": "Hiện không thể tải video",
-    "blockedBody": "Một trong các máy chủ video của chúng tôi không phản hồi. Bản thân video không có vấn đề gì, vui lòng thử lại."
+    "blockedBody": "Một trong các máy chủ video của chúng tôi không phản hồi. Bản thân video không có vấn đề gì."
   },
   "tipNudge": {
     "text": "Bạn thích video này?<hide> Gửi tip cho <b>@{{author}}</b> nhé!</hide>",
@@ -116,7 +119,9 @@
   },
   "community": {
     "members_other": "{{count}} thành viên",
-    "postedIn": "Đăng trong"
+    "postedIn": "Đăng trong",
+    "partOf": "Thuộc",
+    "position": "{{current}}/{{total}}"
   },
   "tags": {
     "curated": "Tuyển chọn"
@@ -131,7 +136,8 @@
     "openTagFeed": "Mở bảng tin của thẻ"
   },
   "scheduled": {
-    "notice": "Đã lên lịch vào <b>{{date}}</b> — chưa được xuất bản.",
+    "notice": "Đã lên lịch vào <b>{{date}}</b>",
+    "notPublished": "Chưa được xuất bản.",
     "futureDate": "một ngày trong tương lai",
     "edit": "Chỉnh sửa, đổi lịch hoặc hủy",
     "editTitle": "Chỉnh sửa bài đăng đã lên lịch (thông tin, ngày hoặc hủy)"
@@ -158,7 +164,8 @@
     "toggleDetails": "Ẩn/hiện chi tiết",
     "followCreator": "Theo dõi nhà sáng tạo",
     "closeMenu": "Đóng menu",
-    "openActions": "Mở thao tác"
+    "openActions": "Mở thao tác",
+    "support": "Ủng hộ {{name}}"
   },
   "description": {
     "hide": "Ẩn mô tả",
@@ -194,26 +201,27 @@
     "markdownHint": "Hỗ trợ markdown.",
     "listed": "Công khai",
     "unlistedLabel": "Không công khai",
-    "listedHint": "Hiển thị trong bảng tin, tìm kiếm và trên hồ sơ của bạn.",
-    "unlistedHint": "Ẩn khỏi bảng tin và tìm kiếm — vẫn phát được qua đường liên kết trực tiếp, vẫn nằm trên hồ sơ của bạn (có nhãn).",
-    "allowRemix": "Cho phép Remix/Clip",
-    "remixOn": "Người khác có thể tạo remix/clip; bạn được ghi nhận là tác giả gốc.",
+    "listedHint": "Trong bảng tin, tìm kiếm và hồ sơ của bạn",
+    "unlistedHint": "Chỉ qua liên kết trực tiếp, có nhãn trên hồ sơ của bạn",
+    "allowRemix": "Cho phép remix và clip",
+    "remixOn": "Bạn được ghi nhận là tác giả gốc",
     "remixOff": "Người khác không thể remix hoặc cắt clip video này.",
     "adsOnVideo": "Quảng cáo trên video này",
     "adsOnHint": "Video này có thể phát quảng cáo.",
     "adsOffHint": "Không có quảng cáo trên video này.",
     "rollsOnVideo": "Quảng cáo dạng video",
     "rollsOnHint": "Có thể hiện quảng cáo video, banner và ticker.",
-    "rollsOffHint": "Video này chỉ có banner và ticker.",
+    "rollsOffHint": "Nếu không thì chỉ có banner và ticker",
     "trailer": "Video giới thiệu kênh",
     "trailerOn": "Tự động phát ở đầu tab Tổng quan trên hồ sơ của bạn, thay thế video giới thiệu bạn đã đặt trước đó.",
-    "trailerOff": "Đặt video này làm video tự động phát ở đầu tab Tổng quan trên hồ sơ của bạn.",
+    "trailerOff": "Tự động phát ở đầu hồ sơ của bạn",
     "nsfw": "Người lớn / NSFW",
     "notNsfw": "Không dành cho người lớn",
     "nsfwHint": "Ẩn khỏi bảng tin và tìm kiếm trừ khi người xem bật NSFW; được gắn thẻ nsfw trên Hive.",
     "notNsfwHint": "Nội dung bình thường, hiển thị cho mọi người.",
+    "nsfwOffHint": "Bị ẩn trừ khi người xem bật NSFW",
     "promoted": "Đang quảng bá",
-    "promote": "Quảng bá video",
+    "promote": "Quảng bá",
     "saveChanges": "Lưu thay đổi",
     "noChanges": "Không có thay đổi nào để lưu.",
     "thumbUploaded": "Đã tải hình thu nhỏ lên.",
@@ -258,7 +266,8 @@
       "visibility": "Hiển thị",
       "content": "Nội dung",
       "ads": "Quảng cáo",
-      "promotion": "Quảng bá"
+      "promotion": "Quảng bá",
+      "contentAds": "Nội dung, quảng cáo và quảng bá"
     },
     "chaptersNoteAll": "Danh sách chương sẽ được ghi vào phần mô tả khi lưu.",
     "editChapters": "Sửa chương",

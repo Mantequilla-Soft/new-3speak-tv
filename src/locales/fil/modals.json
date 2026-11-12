@@ -17,7 +17,8 @@
     "loginFailed": "Pumalya ang login: {{error}}",
     "logoAlt": "3Speak Logo",
     "title": "Mag-log in gamit ang username mo",
-    "usernamePlaceholder": "Username"
+    "usernamePlaceholder": "Username",
+    "continueWith": "Magpatuloy gamit ang {{method}}"
   },
   "socialLink": {
     "hashCopied": "Nakopya ang hash",
@@ -55,7 +56,7 @@
   },
   "auth": {
     "title": "I-authorize ang 3Speak",
-    "text": "Para makapag-upload ng video sa 3Speak, kailangan namin ang posting authority mo. Dahil dito, mapa-publish namin sa Hive ang mga in-upload mong video. Isang beses mo lang kailangang ibigay sa amin ang posting authority.",
+    "text": "Para makapag-upload, kailangan namin ang posting authority mo, para ma-publish namin ang mga video mo sa Hive. Isang beses mo lang itong ibibigay.",
     "authorize": "I-authorize"
   },
   "beneficiary": {
@@ -74,6 +75,11 @@
       "maxCount": "Hanggang {{max}} beneficiary lang ang pinapayagan ng Hive sa bawat post."
     },
     "title": "Mga Beneficiary",
+    "shareRewards": "Ibahagi ang rewards",
+    "you": "ikaw",
+    "toYou": "sa iyo",
+    "addCollaborator": "Magdagdag ng collaborator",
+    "saveSplit": "I-save ang hatian",
     "intro": "Magdagdag ng user na awtomatikong makakatanggap ng bahagi ng rewards ng post na ito.",
     "minPercent": "% (min {{percent}}%)",
     "usernamePlaceholder": "Ilagay ang username",
@@ -99,8 +105,8 @@
     "gotIt": "Sige"
   },
   "verifyAuth": {
-    "title": "Vine-verify ang Authorization",
-    "text": "Sandali lang habang vine-verify namin na naibigay ang authorization..."
+    "title": "Vine-verify ang authorization",
+    "text": "Tinitingnan kung naibigay ito…"
   },
   "editor": {
     "confirmLeave": "Bukas pa ang editor. Kapag umalis ka sa page na ito, magsasara ang editor at mawawala ang mga hindi na-save na pagbabago.\n\nOK = Isara ang editor at umalis\nCancel = Manatili sa page na ito",
@@ -176,7 +182,9 @@
     "details": "Karagdagang detalye (opsyonal)",
     "detailsPlaceholder": "Magbigay ng dagdag na konteksto...",
     "submitting": "Isinusumite...",
-    "submit": "Isumite ang Report"
+    "submit": "Isumite ang Report",
+    "intro": "Napupunta sa 3Speak team ang mga report. Hindi makikita ng creator kung sino ang nag-report.",
+    "nextDetails": "Susunod: magdagdag ng detalye"
   },
   "upload": {
     "missingInfo": "Kulang ang impormasyon ng video o thumbnail.",

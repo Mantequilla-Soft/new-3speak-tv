@@ -10,7 +10,7 @@
     "unknownError": "Kesalahan tidak diketahui"
   },
   "authorBadge": {
-    "followers_other": "{{count}} Pengikut"
+    "followers_other": "{{count}} pengikut"
   },
   "creators": {
     "loginRequired": "Silakan masuk untuk mengikuti kreator",
@@ -53,7 +53,8 @@
     "upload": "Unggah trailer channel",
     "tapForSound": "Ketuk untuk suara",
     "views_other": "{{num}} tayangan",
-    "readMore": "Baca selengkapnya"
+    "readMore": "Baca selengkapnya",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Baca selengkapnya",
@@ -150,7 +151,8 @@
       "text": "Kelompokkan videomu ke dalam playlist yang bisa ditonton orang secara berurutan.",
       "cta": "Buat playlist pertamamu",
       "visitor": "@{{user}} tidak punya playlist publik."
-    }
+    },
+    "visitorPreview": "Pengunjung melihat: “{{text}}”"
   },
   "links": {
     "button": "Tautan",
@@ -169,7 +171,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Komunitas",
-    "playlists": "Playlist"
+    "playlists": "Playlist",
+    "latestSnap": "Snap terbaru"
   },
   "streams": {
     "loading": "Memuat siaran…",
@@ -282,7 +285,9 @@
     "hiddenToast": "Tip disembunyikan dari profilmu",
     "unhiddenToast": "Tip kembali ditampilkan di profilmu",
     "hideFailed": "Tidak bisa mengubah tip ini. Silakan coba lagi.",
-    "hideWalletPrompt": "Tanda tangani untuk mengubah tip mana yang tampil di profilmu"
+    "hideWalletPrompt": "Tanda tangani untuk mengubah tip mana yang tampil di profilmu",
+    "whoTitle": "@{{user}} mendukung",
+    "tipped_other": "Memberi tip {{count}}×"
   },
   "layout": {
     "customize": "Sesuaikan profil",
@@ -393,5 +398,12 @@
   },
   "audioTab": {
     "files": "File audio"
+  },
+  "search": {
+    "placeholder": "Cari di channel ini",
+    "clear": "Hapus pencarian",
+    "results_other": "{{count}} hasil untuk “{{query}}”",
+    "empty": "Tidak ada yang cocok dengan “{{query}}” di channel ini.",
+    "older": "Cari unggahan lama"
   }
 }

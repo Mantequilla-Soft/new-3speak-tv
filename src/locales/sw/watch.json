@@ -31,7 +31,8 @@
   "gated": {
     "title": "Kwa wanachama pekee",
     "checkFailed": "Hatukuweza kuthibitisha usajili wako sasa hivi. Jaribu tena baada ya muda mfupi.",
-    "preview": "Unatazama onyesho la bure. 3Speak Pro hufungua video nzima.",
+    "preview": "Unatazama onyesho la bure",
+    "previewSub": "3Speak Pro hufungua video nzima.",
     "subscribersOnly": "Video hii inapatikana kwa wanachama wa 3Speak Pro.",
     "cta": "Pata 3Speak Pro"
   },
@@ -51,6 +52,8 @@
     "value": "Thamani"
   },
   "moreVideos": "Video zaidi",
+  "nextIn": "Inayofuata katika {{name}}",
+  "fromCommunity": "Kutoka {{name}}",
   "vote": {
     "saveFailed": "Imeshindwa kuhifadhi kura yako"
   },
@@ -79,14 +82,14 @@
     "loginRequired": "Ingia ili kukata klipu",
     "cancel": "Ghairi klipu",
     "clipVideo": "Kata klipu ya video",
-    "label": "Kata klipu ya video",
+    "label": "Kata klipu",
     "clip": "Klipu",
     "seekToStart": "Nenda mwanzo",
     "setStart": "Weka mwanzo",
     "setEnd": "Weka mwisho",
     "createClip": "Tengeneza klipu",
     "barStart": "Nenda kwenye mwanzo wa klipu yako",
-    "barEnd": "Mwanzo: {{start}} — Sasa nenda kwenye mwisho",
+    "barEnd": "Mwanzo {{start}} · sasa nenda kwenye mwisho",
     "barDone": "Klipu: {{start}} – {{end}}"
   },
   "share": {
@@ -104,20 +107,22 @@
   },
   "media": {
     "unavailableTitle": "Video hii haipatikani tena",
-    "unavailableBody": "Faili ya upakiaji huu wa zamani haikuweza kupatikana kwenye mtandao. Chapisho bado lipo kwenye blockchain, lakini video haiwezi kuchezwa tena.",
+    "unavailableBody": "Faili ya upakiaji huu wa zamani haikuweza kupatikana. Chapisho bado lipo kwenye Hive.",
     "scheduledTitle": "Chapisho hili limepangwa",
     "scheduledBody": "Litachapishwa {{date}}. Video itaweza kutazamwa kuanzia wakati huo.",
     "blockedTitle": "Imeshindwa kupakia video kwa sasa",
-    "blockedBody": "Mojawapo ya seva zetu za video haikujibu. Video yenyewe iko salama, kwa hivyo tafadhali jaribu tena."
+    "blockedBody": "Mojawapo ya seva zetu za video haikujibu. Video yenyewe iko salama."
   },
   "tipNudge": {
     "text": "Umeifurahia?<hide> Mtumie <b>@{{author}}</b> bakshishi!</hide>",
     "dismiss": "Funga"
   },
   "community": {
-    "members_one": "Mwanachama {{count}}",
-    "members_other": "Wanachama {{count}}",
-    "postedIn": "Imechapishwa katika"
+    "members_one": "mwanachama {{count}}",
+    "members_other": "wanachama {{count}}",
+    "postedIn": "Imechapishwa katika",
+    "partOf": "Sehemu ya",
+    "position": "{{current}} kati ya {{total}}"
   },
   "tags": {
     "curated": "Imeteuliwa"
@@ -133,7 +138,8 @@
     "openTagFeed": "Fungua mlisho wa lebo"
   },
   "scheduled": {
-    "notice": "Imeratibiwa kwa <b>{{date}}</b> — bado haijachapishwa.",
+    "notice": "Imeratibiwa kwa <b>{{date}}</b>",
+    "notPublished": "Bado haijachapishwa.",
     "futureDate": "tarehe ijayo",
     "edit": "Hariri, panga upya au ghairi",
     "editTitle": "Hariri chapisho lililoratibiwa (maelezo, tarehe, au ghairi)"
@@ -160,7 +166,8 @@
     "toggleDetails": "Onyesha/ficha maelezo",
     "followCreator": "Mfuate mtayarishaji",
     "closeMenu": "Funga menyu",
-    "openActions": "Fungua vitendo"
+    "openActions": "Fungua vitendo",
+    "support": "Saidia {{name}}"
   },
   "description": {
     "hide": "Ficha maelezo",
@@ -198,26 +205,27 @@
     "markdownHint": "Inakubali markdown.",
     "listed": "Imeorodheshwa",
     "unlistedLabel": "Haijaorodheshwa",
-    "listedHint": "Inaonyeshwa kwenye milisho, utafutaji na kwenye wasifu wako.",
-    "unlistedHint": "Imefichwa kwenye milisho na utafutaji — bado inacheza kwa kiungo cha moja kwa moja, inabaki kwenye wasifu wako (ikiwa na alama).",
-    "allowRemix": "Ruhusu Remix/Klipu",
-    "remixOn": "Wengine wanaweza kutengeneza remix/klipu; wewe unatajwa kama mwandishi asili.",
+    "listedHint": "Kwenye milisho, utafutaji na wasifu wako",
+    "unlistedHint": "Kwa kiungo cha moja kwa moja tu, ikiwa na alama kwenye wasifu wako",
+    "allowRemix": "Ruhusu remix na klipu",
+    "remixOn": "Unatajwa kama mwandishi asili",
     "remixOff": "Wengine hawawezi kufanya remix wala kukata klipu ya video hii.",
     "adsOnVideo": "Matangazo kwenye video hii",
     "adsOnHint": "Matangazo yanaweza kuchezwa kwenye video hii.",
     "adsOffHint": "Hakuna matangazo kwenye video hii.",
     "rollsOnVideo": "Matangazo ya video",
     "rollsOnHint": "Matangazo ya video, mabango na tika yanaweza kuonekana.",
-    "rollsOffHint": "Mabango na tika pekee kwenye video hii.",
+    "rollsOffHint": "Vinginevyo ni mabango na tika pekee",
     "trailer": "Trela ya chaneli",
     "trailerOn": "Inacheza kiotomatiki juu ya kichupo cha Muhtasari kwenye wasifu wako, ikichukua nafasi ya trela yoyote uliyoweka awali.",
-    "trailerOff": "Ifanye hii kuwa video inayocheza kiotomatiki juu ya kichupo cha Muhtasari kwenye wasifu wako.",
+    "trailerOff": "Inacheza kiotomatiki juu ya wasifu wako",
     "nsfw": "Watu wazima / NSFW",
     "notNsfw": "Si ya watu wazima",
     "nsfwHint": "Imefichwa kwenye milisho na utafutaji isipokuwa mtazamaji amewasha NSFW; imewekwa lebo nsfw kwenye Hive.",
     "notNsfwHint": "Maudhui ya kawaida, yanaonyeshwa kwa kila mtu.",
+    "nsfwOffHint": "Imefichwa isipokuwa mtazamaji amewasha NSFW",
     "promoted": "Imetangazwa",
-    "promote": "Tangaza video",
+    "promote": "Tangaza",
     "saveChanges": "Hifadhi mabadiliko",
     "noChanges": "Hakuna mabadiliko ya kuhifadhi.",
     "thumbUploaded": "Picha ndogo imepakiwa.",
@@ -262,7 +270,8 @@
       "visibility": "Mwonekano",
       "content": "Maudhui",
       "ads": "Matangazo",
-      "promotion": "Utangazaji"
+      "promotion": "Utangazaji",
+      "contentAds": "Maudhui, matangazo na utangazaji"
     },
     "chaptersNoteAll": "Orodha ya sura huandikwa kwenye maelezo unapohifadhi.",
     "editChapters": "Hariri sura",

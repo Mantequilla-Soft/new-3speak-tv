@@ -2,7 +2,7 @@
   "drafts": {
     "title": "Conceptvideo's",
     "filters": {
-      "all": "Alle video's",
+      "all": "Alles",
       "published": "Gepubliceerd",
       "scheduled": "ingepland",
       "failed": "Mislukt"
@@ -30,7 +30,7 @@
   },
   "preview": {
     "playVideo": "Video afspelen",
-    "cannotPreviewHevc": "Je browser kan geen voorbeeld van deze video tonen — dat komt vaak voor bij HEVC/H.265-clips (bijv. iPhone-opnames in “Hoge efficiëntie”). Geen probleem: hij wordt gewoon geüpload en omgezet zodat iedereen hem kan afspelen."
+    "cannotPreviewHevc": "Je browser kan geen voorbeeld van deze HEVC-clip tonen. Hij wordt toch geüpload en speelt voor iedereen."
   },
   "rc": {
     "title": "Niet genoeg Resource Credits",
@@ -58,8 +58,10 @@
   },
   "progress": {
     "uploadedFinishDetails": "Video geüpload — vul je details aan om te publiceren.",
+    "uploaded": "Geüpload",
+    "uploading": "Uploaden",
     "backgroundFailed": "Uploaden op de achtergrond is niet afgerond — het wordt opnieuw geprobeerd als je publiceert.",
-    "uploadingPct": "Je video uploaden… {{pct}}%",
+    "uploadingPct": "Uploaden · {{pct}}%",
     "methodReliable": "Betrouwbare upload",
     "methodResumable": "Hervatbare upload",
     "attempt": "poging {{attempt}}/{{attempts}}",
@@ -70,15 +72,15 @@
     "waitingOn": "Wachten op: {{what}}",
     "uploadServer": "Uploadserver: {{host}}",
     "cancelled": "Upload geannuleerd.",
-    "connectionUnstable": "Verbinding instabiel — opnieuw proberen…",
-    "connectionUnstableAttempt": "Verbinding instabiel — opnieuw proberen… ({{attempt}}/{{attempts}})",
+    "connectionUnstable": "Verbinding instabiel, opnieuw proberen…",
+    "connectionUnstableAttempt": "Verbinding instabiel, opnieuw proberen… ({{attempt}}/{{attempts}})",
     "uploadingVideoPct": "Video uploaden... {{pct}}%",
     "uploadingSinglePct": "Uploaden in één verzoek… {{pct}}%",
     "checkingConnection": "Je verbinding controleren...",
     "startingUpload": "Upload starten…",
     "tryingSingleRequest": "Nog één laatste methode — versturen in één verzoek…",
     "stillStuck": "Zit nog steeds vast — we proberen een laatste uploadmethode.",
-    "patchBlockedSwitching": "Je netwerk blokkeerde de hervatbare upload — we schakelen over naar een methode die beter werkt.",
+    "patchBlockedSwitching": "Je netwerk blokkeerde de hervatbare upload, dus we schakelen over op een compatibelere methode.",
     "switchingMethod": "Uploadmethode wisselen…",
     "uploadingBackground": "Video op de achtergrond uploaden…",
     "phase": {
@@ -107,7 +109,7 @@
       "frame": "Uitsnede",
       "text": "Tekst",
       "pickFrame": "Beeld kiezen",
-      "stickers": "Stickers"
+      "stickers": "Sticker"
     },
     "frame": {
       "zoom": "Zoom",
@@ -161,8 +163,9 @@
     "editor": {
       "open": "Thumbnail-editor",
       "openHint": "Tekst, stickers, zoom, elk beeld",
-      "title": "Thumbnail-editor",
+      "title": "Thumbnail",
       "done": "Klaar",
+      "useThumbnail": "Thumbnail gebruiken",
       "sources": "Afbeeldingen om mee te beginnen",
       "pickPrompt": "Kies een beeld uit je video",
       "download": "Downloaden",
@@ -199,7 +202,7 @@
     "invalidVideo": "Kies een geldig videobestand",
     "tooLarge": "Video is te groot. De maximale grootte is 5 GB.",
     "shortTooLong": "Shorts mogen maximaal {{max}} duren. Je video duurt {{seconds}}s.",
-    "shortNotVertical": "Shorts moeten verticaal (staand) zijn opgenomen. Je video lijkt horizontaal te zijn.",
+    "shortNotVertical": "Shorts moeten verticaal zijn. Deze lijkt horizontaal.",
     "thumbnailGenFailed": "Er kon niet automatisch een thumbnail voor dit bestand worden gemaakt — je kunt in de volgende stap je eigen uploaden.",
     "processFailed": "Video verwerken mislukt.",
     "selectFirst": "Kies eerst een videobestand.",
@@ -215,9 +218,9 @@
     "backgroundInfo": "Info: je video begint op de achtergrond met uploaden zodra je bij de stap met details bent.",
     "noRc": "Je account heeft op dit moment niet genoeg <b>Resource Credits</b> om een post te publiceren.",
     "whyCantUpload": "Waarom kan ik niet uploaden?",
-    "needsAuth": "Sta <b>@threespeak</b> toe om namens jou te posten om te kunnen uploaden.",
+    "needsAuth": "Om te uploaden, sta <b>@threespeak</b> toe namens jou te posten. Dat doe je maar één keer.",
     "authorizing": "Autoriseren…",
-    "authorize": "@threespeak autoriseren",
+    "authorize": "Autoriseren",
     "selectVideo": "Kies een video",
     "selfieTeleprompter": "Selfie-teleprompter",
     "beta": "bèta",
@@ -226,7 +229,7 @@
     "replace": "Video vervangen",
     "editVideo": "Deze video bewerken",
     "asStory": "Plaatsen als story van 24 uur",
-    "asStoryHint": "Hij staat bovenaan de Shorts-feed en je volgers krijgen een melding. Zolang hij live is, kun je hem nog als Short houden."
+    "asStoryHint": "Staat bovenaan de Shorts-feed en geeft je volgers een melding. Zolang hij live is, kun je hem nog als Short houden."
   },
   "details": {
     "guests": {
@@ -282,24 +285,24 @@
       "none": "Geen"
     },
     "remix": {
-      "label": "Remix/clip toestaan",
+      "label": "Remix en clip toestaan",
       "info": "Sta anderen toe om remixes en clips van deze video te maken. Jij wordt vermeld als oorspronkelijke maker en ontvangt minimaal 5% als begunstigde.",
-      "hint": "Laat anderen dit remixen."
+      "hint": "Je krijgt minstens 5% van elke remix"
     },
     "nsfw": {
       "label": "Markeren als NSFW",
       "info": "Markeert deze video als inhoud voor volwassenen. Hij wordt verborgen in feeds en zoekresultaten voor kijkers die NSFW niet hebben ingeschakeld, en op heel Hive getagd als <code>nsfw</code>.",
-      "hint": "Inhoud voor volwassenen."
+      "hint": "Verborgen tenzij de kijker NSFW heeft toegestaan"
     },
     "addToBlog": {
       "label": "Toevoegen aan mijn blog",
-      "hint": "Toon hem op je blog en in de feed van je volgers.",
+      "hint": "Reblogt het zodat volgers het in hun feed zien",
       "info": "3Speak plaatst elke video in een community, en Hive houdt communityposts buiten je blog en de feed van je volgers, tenzij je ze deelt. Met deze optie aan deelt (reblogt) 3Speak de video op je blog direct na het publiceren."
     },
     "ads": {
       "label": "Advertenties in deze video",
       "info": "Je account toont advertenties, dus deze video ook, tenzij je ze hier uitzet. Dit geldt alleen voor deze ene video; je andere video's en je accountinstelling blijven ongewijzigd.",
-      "hintOn": "Er kunnen advertenties in deze video worden getoond.",
+      "hintOn": "Alleen deze video, je account blijft hetzelfde",
       "hintOff": "Geen advertenties in deze video."
     },
     "rolls": {
@@ -313,21 +316,32 @@
       "info": "Versleutelt deze video zodat alleen 3Speak Pro-abonnees hem kunnen afspelen. Er wordt een <b>onversleuteld voorproefje van 10 seconden</b> naast gepubliceerd, zodat de post overal op Hive nog een trailer toont. Je titel, beschrijving en tags zijn gewone inhoud van een Hive-post en worden <b>niet versleuteld</b>: alleen de video. <b>Dit kan na het uploaden niet meer worden gewijzigd.</b>",
       "withGuests_one": "Pro-abonnees + {{count}} gast.",
       "withGuests_other": "Pro-abonnees + {{count}} gasten.",
-      "hint": "Alleen Pro-abonnees."
+      "hint": "Versleuteld voor Pro-abonnees. Niet meer te wijzigen na het uploaden."
     },
     "trailer": {
       "label": "Kanaaltrailer",
       "info": "Speelt automatisch af bovenaan het tabblad <b>Overzicht</b> van je profiel en vervangt een eerder ingestelde trailer.",
-      "hint": "Speelt automatisch af op je profiel."
+      "hint": "Speelt automatisch bovenaan je profiel"
     },
     "schedule": {
       "label": "Deze post inplannen",
       "info": "Zet de post in de wachtrij en publiceert hem automatisch op het tijdstip dat je kiest, minstens 15 minuten vanaf nu en tot 90 dagen vooruit. Hij wordt namens jou verzonden door @threespeak, dus je wordt één keer gevraagd om dat te autoriseren.",
       "immediately": "Meteen publiceren.",
       "changeTime": "Tijd wijzigen",
-      "note": "Minstens 15 minuten vanaf nu, tot 90 dagen. Wordt automatisch namens jou geplaatst door @threespeak — je wordt één keer gevraagd om dit te autoriseren."
+      "note": "Minstens 15 minuten vanaf nu, tot 90 dagen. Wordt automatisch namens jou geplaatst door @threespeak — je wordt één keer gevraagd om dit te autoriseren.",
+      "short": "Inplannen",
+      "publishLater": "Later publiceren",
+      "scheduleFor": "Inplannen voor {{when}}",
+      "publishNow": "Meteen publiceren"
     },
-    "proceed": "Verder"
+    "proceed": "Verder",
+    "nextStep": "Volgende: {{step}}",
+    "tagsCount_one": "{{count}} tag",
+    "tagsCount_other": "{{count}} tags",
+    "shareRewards": "Beloningen delen",
+    "shareRewardsSub": "Verdelen met medewerkers",
+    "advanced": "NSFW / uitbetaling",
+    "advancedSub": "Geavanceerd"
   },
   "review": {
     "payoutDeclined": "Geweigerd (beloningen worden verbrand)",
@@ -344,6 +358,7 @@
     "editPost": "Post bewerken",
     "watchAdToPublish": "Bekijk advertentie om te publiceren",
     "watchSponsorFirst": "Bekijk eerst de sponsorboodschap",
+    "gateNote": "Nieuwe accounts zien een kort sponsorbericht voordat ze publiceren. Dat betaalt je gratis account.",
     "postShort": "Short plaatsen",
     "postStory": "Story plaatsen",
     "postVideo": "Video plaatsen",
@@ -351,13 +366,13 @@
   },
   "publishing": {
     "titleShort": "Short publiceren",
-    "titleStory": "Story wordt geplaatst",
+    "titleStory": "Story publiceren",
     "titleVideo": "Video publiceren",
-    "subtitle": "Even geduld terwijl we je content verwerken...",
+    "subtitle": "Blijf op deze pagina tot het klaar is.",
     "starting": "Starten...",
     "stayOnPage": "Blijf op deze pagina tot het publiceren klaar is.",
     "activityLog": "Activiteitenlog",
-    "support": "Voor support kun je ons bereiken op <discordLink>Discord</discordLink>",
+    "support": "Vastgelopen? Neem contact op via <discordLink>Discord</discordLink>.",
     "finishingUpload": "Video-upload afronden…",
     "preparing": "Publiceren voorbereiden...",
     "finalizing": "Afronden…",
@@ -412,17 +427,17 @@
     }
   },
   "done": {
-    "title": "Upload klaar!",
+    "title": "Upload voltooid!",
     "shortPublished": "Je short is gepubliceerd op 3Speak. Het duurt ongeveer 5 minuten voordat hij op je profiel verschijnt.",
     "storyPublished": "Je story is de komende 24 uur te zien op 3Speak.",
-    "videoPublished": "Je video is gepubliceerd!<br/>Hij wordt nu op de achtergrond geëncodeerd, wat een paar minuten kan duren.",
-    "promote": "Deze video promoten",
-    "goToProfile": "Naar mijn profiel →",
-    "feedback": "Hoe ging je upload"
+    "videoPublished": "Je video is gepubliceerd. Hij wordt op de achtergrond gecodeerd, wat een paar minuten kan duren.",
+    "promote": "Promoten",
+    "goToProfile": "Mijn profiel",
+    "feedback": "Hoe ging je upload?"
   },
   "record": {
     "speechErrors": {
-      "network": "Spraakdienst niet bereikbaar — herkenning heeft een internetverbinding nodig (Chrome stuurt audio naar Google om te transcriberen).",
+      "network": "Spraakgestuurd scrollen heeft internet nodig. Scroll het script met de hand.",
       "audioCapture": "Er kwam geen audio binnen bij de herkenning — de microfoon is misschien bezet. Probeer een headset.",
       "notAllowed": "Microfoontoestemming is geblokkeerd voor spraakherkenning.",
       "generic": "Fout bij spraakherkenning: {{err}}"
@@ -441,9 +456,9 @@
     "layout": "Indeling",
     "presets": {
       "frontcam": "Frontcamera",
-      "frontcamTitle": "Smalle strook onder de selfielens — het minst opvallend dat je voorleest",
+      "frontcamTitle": "Smalle strook onder de lens",
       "max": "Max. grootte",
-      "maxTitle": "Grote letters om van een afstand te lezen",
+      "maxTitle": "Grote letters voor op afstand",
       "top": "Bovenste regels",
       "topTitle": "Meerdere regels bovenaan"
     },
@@ -464,11 +479,11 @@
     "startingMic": "Microfoon starten…",
     "leave": {
       "title": "Camera verlaten?",
-      "sub": "Ga terug naar je script, blijf hier, of sluit af (er wordt niets opgeslagen).",
+      "sub": "Er is nog niets opgeslagen.",
       "backToScript": "Terug naar script",
       "stay": "Blijven"
     },
-    "experimentalTitle": "Experimentele teleprompter",
+    "experimentalTitle": "Teleprompter",
     "scriptPlaceholder": "Schrijf of plak hier je script. Tijdens het opnemen scrollt het automatisch mee terwijl je het hardop voorleest.",
     "orientation": "Oriëntatie",
     "continueToCamera": "Verder naar camera",
@@ -481,14 +496,14 @@
     "cameraN": "Camera {{n}}",
     "flipRotationTitle": "Staat het beeld op zijn kop? Draai de rotatie van 90° om",
     "flipRotation": "Rotatie omdraaien",
-    "stopVoiceTest": "Stemtest stoppen",
+    "stopVoiceTest": "Test stoppen",
     "testVoice": "Stem testen",
     "stopRecording": "Opname stoppen",
     "startRecording": "Opname starten",
     "script": "Script",
     "reRecord": "Opnieuw opnemen",
     "preparing": "Voorbereiden…",
-    "useThisVideo": "Deze video gebruiken"
+    "useThisVideo": "Video gebruiken"
   },
   "errors": {
     "patchBlocked": "PATCH lijkt geblokkeerd (geen enkel deel bevestigd)",
@@ -594,6 +609,7 @@
     "streakOn_other": "Je zit op een storyreeks van {{count}} dagen.",
     "streakNext_one": "Hiermee wordt je storyreeks {{count}} dag.",
     "streakNext_other": "Hiermee wordt je storyreeks {{count}} dagen.",
-    "streakStart": "Plaats elke dag een story om een reeks op te bouwen."
+    "streakStart": "Plaats elke dag een story om een reeks op te bouwen.",
+    "keepGoing": "Plaats elke dag een story om het vol te houden"
   }
 }

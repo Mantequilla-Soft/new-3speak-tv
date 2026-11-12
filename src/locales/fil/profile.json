@@ -10,8 +10,8 @@
     "unknownError": "Hindi kilalang error"
   },
   "authorBadge": {
-    "followers_one": "{{count}} Follower",
-    "followers_other": "{{count}} Followers"
+    "followers_one": "{{count}} follower",
+    "followers_other": "{{count}} follower"
   },
   "creators": {
     "loginRequired": "Mag-log in para mag-follow ng mga creator",
@@ -67,7 +67,8 @@
     "tapForSound": "I-tap para may tunog",
     "views_one": "{{num}} view",
     "views_other": "{{num}} views",
-    "readMore": "Magbasa pa"
+    "readMore": "Magbasa pa",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Magbasa pa",
@@ -168,7 +169,8 @@
       "text": "Pagsama-samahin ang mga video mo sa isang playlist na mapapanood nang sunud-sunod.",
       "cta": "Gawin ang una mong playlist",
       "visitor": "Walang public na playlist si @{{user}}."
-    }
+    },
+    "visitorPreview": "Makikita ng mga bisita: “{{text}}”"
   },
   "links": {
     "button": "Links",
@@ -187,7 +189,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Komunidad",
-    "playlists": "Mga Playlist"
+    "playlists": "Mga Playlist",
+    "latestSnap": "Pinakabagong snap"
   },
   "streams": {
     "loading": "Naglo-load ng streams…",
@@ -301,7 +304,10 @@
     "hiddenToast": "Naitago ang tip sa profile mo",
     "unhiddenToast": "Muling ipinapakita ang tip sa profile mo",
     "hideFailed": "Hindi mabago ang tip na ito. Pakisubukan ulit.",
-    "hideWalletPrompt": "Mag-sign para baguhin kung aling mga tip ang lalabas sa profile mo"
+    "hideWalletPrompt": "Mag-sign para baguhin kung aling mga tip ang lalabas sa profile mo",
+    "whoTitle": "Sinusuportahan ni @{{user}}",
+    "tipped_one": "Nag-tip nang {{count}}×",
+    "tipped_other": "Nag-tip nang {{count}}×"
   },
   "layout": {
     "customize": "I-customize ang profile",
@@ -414,5 +420,13 @@
   },
   "audioTab": {
     "files": "Mga audio file"
+  },
+  "search": {
+    "placeholder": "Maghanap sa channel na ito",
+    "clear": "I-clear ang search",
+    "results_one": "{{count}} resulta para sa “{{query}}”",
+    "results_other": "{{count}} resulta para sa “{{query}}”",
+    "empty": "Walang tumutugma sa “{{query}}” sa channel na ito.",
+    "older": "Maghanap sa mas lumang upload"
   }
 }

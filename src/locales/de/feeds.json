@@ -32,7 +32,14 @@
     "summary_other": "{{count}} neue Videos",
     "fromFollowing": "von Leuten, denen du folgst",
     "shorts_one": "{{count}} Short",
-    "shorts_other": "{{count}} Shorts"
+    "shorts_other": "{{count}} Shorts",
+    "show": "Anzeigen",
+    "hide": "Ausblenden"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} Video",
+    "videos_other": "{{num}} Videos",
+    "thisWeek": "{{num}} diese Woche"
   },
   "firstUploads": {
     "title": "Erste Uploads"
@@ -53,9 +60,13 @@
     "dragToReorder": "Zum Sortieren ziehen",
     "customize": "Anpassen",
     "customizeTitle": "Startseite anpassen",
-    "customizeHint": "Verschiebe Bereiche nach oben oder unten. Schalte die aus, die du nicht willst.",
+    "customizeHint": "Zum Umsortieren ziehen. Schalte die Bereiche aus, die du nicht willst.",
     "surfTitle": "Channel Surfing: Wähl ein Thema und schau es wie Fernsehen",
-    "zapping": "Zappen"
+    "zapping": "Zappen",
+    "hero": {
+      "spotlightIn": "Im Fokus in {{community}}"
+    },
+    "tabFollowing": "Gefolgt"
   },
   "surf": {
     "pageTitle": "Channel Surfing",
@@ -81,9 +92,10 @@
     "nextVideoKey": "Nächstes Video (→)",
     "zap": "Zap",
     "findingNext": "Das nächste wird gesucht…",
-    "stop": "Surfen beenden",
+    "stop": "Stopp",
     "stopTitle": "Surfen beenden (dieses Video läuft weiter)",
-    "guide": "Programmführer"
+    "guide": "Programmführer",
+    "guideShort": "Guide"
   },
   "discover": {
     "searchPlaceholder": "Videos, Shorts, Audio, Communitys suchen...",
@@ -124,6 +136,32 @@
     "authors_one": "{{count}} Autor",
     "authors_other": "{{count}} Autoren",
     "views_one": "{{views}} Aufruf",
-    "views_other": "{{views}} Aufrufe"
+    "views_other": "{{views}} Aufrufe",
+    "topCreator": "Top-Creator",
+    "creators": "Creator",
+    "relatedTags": "Ähnliche Tags",
+    "trendingTags": "Angesagte Tags",
+    "topCreators": "Top-Creator",
+    "categories": "Kategorien",
+    "show": "Anzeigen",
+    "boostRecentHint": "Neuere Videos in den Ergebnissen bevorzugen",
+    "showResults_one": "{{count}} Ergebnis anzeigen",
+    "showResults_other": "{{count}} Ergebnisse anzeigen",
+    "resultTypes": "Ergebnistypen"
+  },
+  "activity": {
+    "aria": "Aktivität auf 3Speak",
+    "community": "Community",
+    "verbs": {
+      "snap": "Snap",
+      "audio": "neues Audio",
+      "playlist": "Playlist",
+      "live": "ist live",
+      "group_one": "{{count}} neues Video diese Woche",
+      "group_other": "{{count}} neue Videos diese Woche"
+    },
+    "emptyCommunity": "Nichts Neues aus der Community in den letzten Tagen.",
+    "emptyLive": "Gerade ist niemand live.",
+    "emptyGroups": "Diese Woche noch keine Gruppenaktivität."
   }
 }

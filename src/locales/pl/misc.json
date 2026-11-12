@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 dni",
-      "30d": "30 dni",
+      "7d": "Tydzień",
+      "30d": "Miesiąc",
       "365d": "Rok",
       "all": "Cały czas"
     },
@@ -155,9 +155,9 @@
     "audioFull": "Z tytułem",
     "audioCompact": "Kompaktowy",
     "audioMinimal": "Minimalny",
-    "heightSub": "Pełna szerokość, {{height}} px wysokości",
+    "heightSub": "Pełna szerokość, {{height}} px wysokości · Responsywnie",
     "podcastTitle": "Osadź ten podcast",
-    "podcastHint": "Wklej to na dowolną stronę lub do wpisu na blogu. Odtwarza wszystkie odcinki audycji, także nowe, gdy tylko się ukażą."
+    "podcastHint": "Odtwarza wszystkie odcinki audycji, także nowe, gdy tylko się ukażą."
   },
   "incubation": {
     "requestFailed": "Żądanie nie powiodło się ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "Ta strona się nie wczytała",
-    "body": "Nie udało się pobrać części aplikacji. Zwykle oznacza to, że podczas gdy ta karta była otwarta, wydano nową wersję. Odświeżenie ją wczyta.",
+    "body": "Nie udało się pobrać części aplikacji. Zwykle oznacza to, że podczas gdy ta karta była otwarta, wyszła nowa wersja. Odświeżenie ją wczyta.",
     "brokenTitle": "Coś poszło nie tak na tej stronie",
-    "brokenBody": "Część tej strony napotkała błąd. Odświeżenie zwykle pomaga, a szczegóły poniżej pomagają nam znaleźć przyczynę.",
+    "brokenBody": "Część tej strony napotkała błąd. Odświeżenie zwykle pomaga, a szczegóły pomagają nam znaleźć przyczynę.",
     "reload": "Odśwież",
     "goHome": "Strona główna",
     "details": "Szczegóły"
@@ -203,9 +203,9 @@
       "regularVideo": "Klasyczny film na Twój kanał",
       "verticalShort": "Pionowy klip do kanału Shorts",
       "shortsEditor": "Nagraj i edytuj shorta w przeglądarce",
-      "story": "Krótki klip widoczny przez 24 godziny",
+      "story": "Widoczna przez 24 godziny",
       "musicAudio": "Piosenki, podcasty i inne audio",
-      "audioEditor": "Tnij, czyść i wyrównuj podcasty i muzykę",
+      "audioEditor": "Tnij, czyść i wyrównuj",
       "groupChat": "Pokój na żywo, który prowadzisz z gośćmi",
       "goLiveNow": "Nadawaj na żywo dla obserwujących",
       "communitySnap": "Szybki wpis w zakładce społeczności",
@@ -220,7 +220,7 @@
   "hiveAuth": {
     "waiting": "Czekam na zatwierdzenie w HiveAuth...",
     "title": "Wymagane zatwierdzenie w HiveAuth",
-    "hint": "Sprawdź aplikację HiveAuth, aby zatwierdzić tę transakcję"
+    "hint": "Sprawdź aplikację HiveAuth, aby zatwierdzić tę transakcję."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain nie podpisał transakcji",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod wystartował, ale nie udało się opublikować ogłoszenia na Hive."
   },
   "appUpdate": {
-    "updating": "Aktualizacja do najnowszej wersji ({{version}})…",
+    "updating": "Aktualizacja do {{version}}…",
     "reloadingForUpload": "Odświeżamy, aby twoje przesyłanie działało na najnowszej wersji."
   },
   "auth": {
@@ -306,6 +306,17 @@
     "moreTag": "Więcej #{{tag}}",
     "moreVideos": "Więcej filmów",
     "hideControls": "Ukryj sterowanie",
-    "showControls": "Pokaż sterowanie"
+    "showControls": "Pokaż sterowanie",
+    "watching": "Oglądający: {{count}}",
+    "startedAgo": "Rozpoczęto {{when}}",
+    "topSupporters": "Najwięksi wspierający",
+    "noSupporters": "Brak boostów",
+    "full": "Pełny ekran",
+    "loginToChat": "Zaloguj się, aby czatować"
+  },
+  "pullToRefresh": {
+    "pull": "Pociągnij, aby odświeżyć",
+    "release": "Puść, aby odświeżyć",
+    "refreshing": "Odświeżanie…"
   }
 }

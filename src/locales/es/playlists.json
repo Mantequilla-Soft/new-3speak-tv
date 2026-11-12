@@ -24,6 +24,10 @@
     "noOtherPlaylists": "Aún no tienes otras playlists",
     "createFirst": "Crear una playlist",
     "createNew": "Crear playlist nueva",
+    "newPlaylist": "Nueva playlist",
+    "savedTo_one": "Guardado en {{count}} playlist",
+    "savedTo_many": "Guardado en {{count}} playlists",
+    "savedTo_other": "Guardado en {{count}} playlists",
     "name": "Nombre",
     "namePlaceholder": "Mi playlist genial",
     "privacy": "Privacidad",
@@ -101,12 +105,15 @@
     "descriptionPlaceholder": "Sobre este álbum (opcional)",
     "filterCount_one": "{{shown}} de {{count}} elemento",
     "filterCount_many": "{{shown}} de {{count}} elementos",
-    "filterCount_other": "{{shown}} de {{count}} elementos"
+    "filterCount_other": "{{shown}} de {{count}} elementos",
+    "shuffle": "Aleatorio"
   },
   "type": {
     "label": "Tipo",
     "video": "Video",
     "audio": "Audio",
+    "videoSub": "Videos largos",
+    "audioSub": "Pistas y podcasts",
     "kindLabel": "¿Qué tipo de audio?",
     "kinds": {
       "podcast": "Podcast",

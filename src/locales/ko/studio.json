@@ -7,13 +7,19 @@
     "createNewDesc": "콘텐츠를 업로드하고 세상과 공유하세요"
   },
   "preview": {
-    "cannotPreview": "브라우저에서 이 동영상을 미리 볼 수 없어요. HEVC/H.265 클립(예: iPhone ‘고효율’ 녹화)에서 흔히 있는 일이에요. 괜찮아요. 그대로 업로드되고 모든 사람이 재생할 수 있도록 변환돼요."
+    "cannotPreview": "<b>이 동영상을 미리 볼 수 없어요.</b> iPhone 고효율 녹화 같은 HEVC / H.265 클립에서 흔히 있는 일이에요. 그래도 업로드되고 모든 사람이 재생할 수 있도록 변환돼요."
   },
   "drafts": {
     "untitled": "(제목 없음)",
     "empty": "선택한 필터에 해당하는 동영상이 없어요.",
     "title": "스튜디오",
-    "create": "만들기"
+    "create": "만들기",
+    "views28": "조회수, 28일",
+    "newFollowers": "새 팔로워",
+    "views": "조회수",
+    "stats": "통계",
+    "more": "더보기",
+    "public": "공개"
   },
   "schedule": {
     "days": {
@@ -32,6 +38,7 @@
     "am": "오전",
     "pm": "오후",
     "pastWarning": "이미 지난 날짜와 시간이에요. 미래의 날짜와 시간을 선택해 주세요.",
+    "pickDay": "날짜 선택",
     "publishAt": "동영상이 {{when}}에 자동으로 게시돼요"
   },
   "scheduled": {
@@ -101,6 +108,7 @@
     "insertTable": "표 삽입",
     "spoiler": "스포일러/숨김 텍스트",
     "emoji": "이모지",
+    "gifs": "GIF",
     "searchEmoji": "이모지 검색",
     "searchGifs": "GIF 검색…",
     "noGifs": "GIF를 찾을 수 없어요.",

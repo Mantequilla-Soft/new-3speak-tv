@@ -5,11 +5,11 @@
   "supportBlock": {
     "banned": {
       "title": "Votre compte est banni",
-      "body": "Votre compte 3Speak a été banni : vous ne pouvez donc pas vous connecter. Si vous pensez qu'il s'agit d'une erreur, contactez le support 3Speak."
+      "body": "Votre compte 3Speak a été banni, vous ne pouvez donc pas vous connecter. Si vous pensez qu'il s'agit d'une erreur, contactez le support 3Speak."
     },
     "upload": {
       "title": "La mise en ligne est désactivée pour votre compte",
-      "body": "Votre compte 3Speak n'est pas autorisé à mettre en ligne pour le moment. Si vous pensez qu'il s'agit d'une erreur, contactez le support 3Speak."
+      "body": "Votre compte n'est pas autorisé à mettre en ligne pour le moment. Si vous pensez qu'il s'agit d'une erreur, contactez le support 3Speak."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "Nous rencontrons des problèmes d'infrastructure",
-    "body": "Notre équipe est dessus et travaille à remettre 3Speak en ligne dès maintenant. Rejoignez notre Discord pour nous contacter et suivre l'évolution en direct — merci de votre patience.",
+    "body": "Notre équipe travaille en ce moment à remettre 3Speak en ligne. Rejoignez notre Discord pour suivre l'évolution en direct.",
     "joinDiscord": "Rejoindre notre Discord"
   },
   "changelog": {
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Publiez des vidéos",
-        "text": "Mettez en ligne des vidéos longues qui restent les vôtres, sur une chaîne d'où personne ne peut les supprimer en douce."
+        "text": "Des vidéos longues qui restent les vôtres"
       },
       "filmShorts": {
         "title": "Tournez des Shorts",
-        "text": "Quelque chose de rapide, vertical et facile à partager. Idéal pour trouver vos premiers spectateurs."
+        "text": "Rapides, verticaux, faciles à partager"
       },
       "goLive": {
         "title": "Passez en live",
-        "text": "Diffusez pour votre public, invitez des participants sur scène et gardez l'enregistrement ensuite."
+        "text": "Invitez des participants sur scène, gardez l'enregistrement"
       },
       "buildCommunity": {
         "title": "Créez une communauté",
-        "text": "Lancez un espace autour de ce qui vous passionne, ou rejoignez-en un qui est déjà animé."
+        "text": "Lancez un espace ou rejoignez-en un"
       },
       "makeFriends": {
         "title": "Faites-vous de vrais amis",
-        "text": "Commentez, discutez et collaborez avec de vraies personnes qui se soutiennent."
+        "text": "Commentez, discutez et collaborez"
       },
       "getInspired": {
         "title": "Inspirez-vous, impliquez-vous",
-        "text": "Découvrez des créateurs, soutenez ceux que vous aimez, et gagnez des récompenses au passage."
+        "text": "Soutenez des créateurs et gagnez aussi"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Envoi…",
     "interestsHint": "Nous les utilisons pour choisir ce qui s'affiche sur votre page d'accueil. Choisissez-en autant que vous voulez, ou aucun, et modifiez-les quand vous le souhaitez.",
     "interestsFineprint": "Enregistré dans votre compte Hive : toutes les apps Hive affichent ainsi le même profil et les mêmes centres d'intérêt.",
-    "saveAndExplore": "Enregistrer et commencer à explorer"
+    "saveAndExplore": "Enregistrer et commencer à explorer",
+    "eyebrow": "Bienvenue",
+    "stepOf": "Étape {{n}} sur {{total}}",
+    "profileFineprint": "Enregistré sur votre compte Hive : toutes les apps Hive affichent le même profil."
   },
   "profileEdit": {
     "updated": "Profil mis à jour",
@@ -193,7 +196,7 @@
     "uploadBanner": "Envoyer une bannière de profil",
     "changeBanner": "Changer la bannière",
     "addBanner": "Ajouter une bannière",
-    "bannerHint": "Idéal en <b>2800 × 684</b> px (ou toute image 4:1). Gardez l'essentiel au centre : les côtés sont rognés sur les écrans étroits et votre nom s'affiche en bas à gauche.",
+    "bannerHint": "Gardez l'essentiel au centre : les côtés sont rognés sur les écrans étroits et votre nom s'affiche en bas à gauche.",
     "uploadPicture": "Envoyer une photo de profil",
     "pictureLabel": "Photo de profil",
     "pictureHint": "Un visage ou un logo fonctionne le mieux. Carrée, 400 × 400 px ou plus. Jusqu'à 8 Mo.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "Comment devons-nous vous appeler ? (@{{username}})",
     "namePlaceholder": "Comment devons-nous vous appeler ?",
     "shortBio": "Courte bio",
-    "bioPlaceholder": "Que créez-vous, et à quoi les gens peuvent-ils s'attendre de votre part ?",
+    "bioPlaceholder": "Que créez-vous, et à quoi le public peut-il s'attendre ?",
     "location": "Localisation",
     "optional": "facultatif",
     "locationPlaceholder": "Où êtes-vous dans le monde ?"

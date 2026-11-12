@@ -11,6 +11,8 @@
       "transferFailed": "Не вдалося виконати переказ: {{message}}"
     },
     "heading": "Надіслати чайові @{{recipient}}",
+    "pageTitle": "Чайові для @{{recipient}}",
+    "pageSub": "Відкрито з оверлею трансляції або за посиланням",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Інші способи",
@@ -23,7 +25,16 @@
     "memoLinkNote": "Це посилання додається до мемо: {{link}}",
     "send": "Надіслати чайові",
     "sendAmount": "Надіслати {{amount}} {{currency}}",
+    "paidIn": "Оплата в {{currency}} · без комісій",
+    "forTitle": "за «{{title}}»",
+    "presets": {
+      "coffee": "На каву",
+      "popular": "Найпопулярніше",
+      "thanks": "Велике дякую",
+      "superFan": "Суперфан"
+    },
     "sentEyebrow": "Чайові надіслано",
+    "sentTo": "{{amount}} для @{{recipient}}",
     "lightning": {
       "amountLabel": "Сума (sats):",
       "messageLabel": "Повідомлення (необов'язково):",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "Як часто",
       "once": "Один раз",
+      "oneTime": "Одноразово",
+      "monthly": "Щомісяця",
       "until": "Щомісяця, до {{date}}",
       "note": "Hive сам надсилає платіж кожні 30 днів, перший іде одразу. Зупинити можна будь-коли.",
       "replaces": "Це замінить щомісячну підтримку, яку ви вже надсилаєте @{{recipient}}.",
@@ -91,7 +104,8 @@
     "addToPlaylist": "Додати до плейлиста",
     "addTag": "Додати тег",
     "notInterested": "Не цікавить",
-    "dontShowCreator": "Не показувати @{{author}}"
+    "dontShowCreator": "Не показувати @{{author}}",
+    "saveToPlaylist": "Зберегти в плейлист"
   },
   "guestList": {
     "loadFailed": "Не вдалося завантажити поточний список гостей",
@@ -138,18 +152,24 @@
     "tagged": "Тег «{{tag}}» додано.",
     "vote": "Голосувати",
     "tagThisVideo": "Додати тег до відео",
-    "tagOptional": "— необов'язково —",
+    "tagOptional": "Необов'язково",
     "pickTopicFirst": "Спочатку виберіть тему",
     "taggedNoDot": "Тег «{{tag}}» додано",
     "tagFailed": "Не вдалося додати тег: {{message}}",
-    "taggedAlreadyVoted": "Тег «{{tag}}» додано — ваш голос на {{weight}}% уже зараховано.",
-    "votingClosed": "Голосування закрито — додайте тег до відео",
+    "taggedAlreadyVoted": "Тег «{{tag}}» додано. Ваш голос на {{weight}}% уже зараховано.",
+    "votingClosed": "Голосування закрито: додайте тег до відео",
     "youTagged": "Ви позначили це як <b>{{tag}}</b>.",
-    "pickTopic": "Виберіть тему (зараховується як голос на 100%)",
+    "pickTopic": "Вибір теми зараховується як голос на 100%.",
     "submitTag": "Надіслати тег",
     "tagThisVideoFull": "Додати тег до відео (зараховується як голос на 100%)",
-    "justTag": "Без голосу — лише тег",
-    "addsAbout": "додасть близько {{value}}"
+    "justTag": "Не голосувати, лише тег",
+    "justTagShort": "Лише тег",
+    "voteAndTag": "Голос і тег",
+    "addsAbout": "додасть близько {{value}}",
+    "postSoFar_one": "{{value}} поки що · {{count}} голос",
+    "postSoFar_few": "{{value}} поки що · {{count}} голоси",
+    "postSoFar_many": "{{value}} поки що · {{count}} голосів",
+    "postSoFar_other": "{{value}} поки що · {{count}} голосу"
   },
   "tagsPicker": {
     "autoTagged": "Автоматичні теги: {{tags}}",
@@ -158,7 +178,7 @@
     "noMatches": "Немає тем за запитом «{{query}}».",
     "allSelected": "Вибрано всю категорію {{category}}. Додавайте окремі теми, лише щоб звузити вибір:",
     "orPickTopics": "Або виберіть окремі теми:",
-    "goodEnough": "Цього достатньо — або уточніть (необов'язково):",
+    "goodEnough": "Цього достатньо, або уточніть (необов'язково)",
     "moreSpecific": "Точніше:"
   }
 }

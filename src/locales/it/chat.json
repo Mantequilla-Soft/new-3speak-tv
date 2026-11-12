@@ -20,6 +20,7 @@
     "communityWithSubscribers_many": "Community · {{formatted}} iscritti",
     "communityWithSubscribers_other": "Community · {{formatted}} iscritti",
     "commentFallback": "(commento)",
+    "videoKind": "3Speak · Video",
     "play": "Riproduci {{title}}"
   },
   "share": {
@@ -33,22 +34,30 @@
     "responsiveSub": "Si adatta alla pagina in cui si trova",
     "fixedSub": "Iframe a dimensione fissa",
     "sendInChat": "Invia nella chat di 3Speak",
-    "sendInChatSub": "Invialo a qualcuno su 3Speak",
+    "sendInChatSub": "Invialo a qualcuno",
     "embedOnWebsite": "Incorpora in un sito web",
-    "embedOnWebsiteSub": "Copia l'HTML per il tuo sito o blog",
-    "forHivePost": "Per post su Hive",
+    "embedOnWebsiteSub": "Responsive o a dimensione fissa",
+    "forHivePost": "Per un post su Hive",
+    "forHivePostSub": "Copia il link da incollare",
     "hivePostCopied": "Link copiato. Incollalo nel tuo post su Hive.",
-    "generalShare": "Condividi / copia link",
-    "generalShareSub": "Altre app, o copia il link"
+    "generalShare": "Condividi o copia link",
+    "generalShareSub": "Altre app",
+    "embed": "Incorpora",
+    "chat": "Chat",
+    "more": "Altro",
+    "startAt": "Inizia da",
+    "toFollowers_one": "Al tuo {{n}} follower",
+    "toFollowers_many": "Ai tuoi {{n}} follower",
+    "toFollowers_other": "Ai tuoi {{n}} follower"
   },
   "gate": {
     "connectTitle": "Collegati alla chat di 3Speak",
-    "connectBody": "La chat è basata su Snapie. Per collegarti firmi una sfida di accesso una tantum con la tua chiave posting Hive (nessuna transazione, nessun costo).",
+    "connectBody": "La chat è basata su Snapie. Per collegarti firmi una sfida di accesso una tantum con la tua chiave posting. Nessuna transazione, nessun costo.",
     "connecting": "Connessione…",
     "connectButton": "Collega la chat",
     "cannotSign": "Il tuo metodo di accesso attuale non può firmare la sfida della chat. Usa Keychain, HiveAuth, PeakVault o Ledger.",
-    "needsAccountTitle": "La chat richiede un account Hive",
-    "needsAccountBody": "I messaggi sono firmati con le chiavi del tuo account, quindi la chat si sblocca insieme a tutto il resto quando il tuo account è pronto. Completa gli obiettivi sul tuo profilo e il team ti porterà fin lì.",
+    "needsAccountTitle": "La chat richiede un account Hive.",
+    "needsAccountBody": "Si sblocca con tutto il resto quando completi il warm-up.",
     "loginTitle": "Accedi per usare la chat",
     "loginBody": "Accedi con il tuo account Hive per inviare e ricevere messaggi.",
     "connectingToChat": "Connessione alla chat…"
@@ -100,8 +109,8 @@
     "serverRejectedServerMap_other": "Il server ha rifiutato tutte le {{count}} richieste (ID dalla mappa dei non letti del server)",
     "failed": "Impossibile segnare tutto come letto",
     "marking": "Segno come letti…",
-    "button": "Segna tutto come letto",
-    "buttonCount": "Segna tutto come letto ({{count}})"
+    "button": "Segna tutto letto",
+    "buttonCount": "Segna tutto letto ({{count}})"
   },
   "list": {
     "chooseTarget": "Scegli una chat a cui inviare",
@@ -136,7 +145,8 @@
     "quoting": "Citazione di @{{user}}",
     "cancelQuote": "Annulla citazione",
     "removeImage": "Rimuovi immagine",
-    "placeholder": "Scrivi un messaggio…"
+    "placeholder": "Scrivi un messaggio…",
+    "placeholderTo": "Messaggio a {{name}}"
   },
   "page": {
     "chooseTarget": "Scegli una chat a cui inviare.",

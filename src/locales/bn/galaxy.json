@@ -74,7 +74,7 @@
     "followers_one": "{{n}} জন ফলোয়ার",
     "followers_other": "{{n}} জন ফলোয়ার",
     "rep": "রেপুটেশন {{rep}}",
-    "videos": "3Speak-এ {{videos}}টি ভিডিও, {{shorts}}টি Shorts",
+    "videos": "3Speak-এ {{videos}}টি ভিডিও, {{shorts}}টি শর্টস",
     "noVideos": "3Speak-এ এখনও কোনো ভিডিও নেই"
   },
   "activeToday": "আজ সক্রিয়",

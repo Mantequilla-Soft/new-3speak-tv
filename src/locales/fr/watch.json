@@ -31,7 +31,8 @@
   "gated": {
     "title": "Réservé aux membres",
     "checkFailed": "Nous n'avons pas pu confirmer votre abonnement pour le moment. Réessayez dans un instant.",
-    "preview": "Vous regardez un aperçu gratuit. 3Speak Pro débloque la vidéo complète.",
+    "preview": "Vous regardez un aperçu gratuit",
+    "previewSub": "3Speak Pro débloque la vidéo complète.",
     "subscribersOnly": "Cette vidéo est réservée aux abonnés 3Speak Pro.",
     "cta": "Obtenir 3Speak Pro"
   },
@@ -51,6 +52,8 @@
     "value": "Valeur"
   },
   "moreVideos": "Plus de vidéos",
+  "nextIn": "Suivant dans {{name}}",
+  "fromCommunity": "De {{name}}",
   "vote": {
     "saveFailed": "Impossible d'enregistrer votre vote"
   },
@@ -86,7 +89,7 @@
     "setEnd": "Définir la fin",
     "createClip": "Créer le clip",
     "barStart": "Placez-vous au début de votre clip",
-    "barEnd": "Début : {{start}} — placez-vous maintenant à la fin",
+    "barEnd": "Début {{start}} · avancez maintenant jusqu'à la fin",
     "barDone": "Clip : {{start}} – {{end}}"
   },
   "share": {
@@ -104,11 +107,11 @@
   },
   "media": {
     "unavailableTitle": "Cette vidéo n'est plus disponible",
-    "unavailableBody": "Le média de cette ancienne mise en ligne est introuvable sur le réseau. La publication existe toujours sur la blockchain, mais la vidéo ne peut plus être lue.",
+    "unavailableBody": "Le média de cette ancienne mise en ligne est introuvable. La publication existe toujours sur Hive.",
     "scheduledTitle": "Cette publication est programmée",
     "scheduledBody": "Elle sera publiée le {{date}}. La vidéo pourra être regardée à partir de ce moment.",
     "blockedTitle": "Impossible de charger la vidéo pour le moment",
-    "blockedBody": "L'un de nos serveurs vidéo n'a pas répondu. La vidéo elle-même n'a rien, réessayez donc."
+    "blockedBody": "L'un de nos serveurs vidéo n'a pas répondu. La vidéo n'a rien."
   },
   "tipNudge": {
     "text": "Ça vous a plu ?<hide> Envoyez un pourboire à <b>@{{author}}</b> !</hide>",
@@ -118,7 +121,9 @@
     "members_one": "{{count}} membre",
     "members_many": "{{count}} membres",
     "members_other": "{{count}} membres",
-    "postedIn": "Publié dans"
+    "postedIn": "Publié dans",
+    "partOf": "Fait partie de",
+    "position": "{{current}} sur {{total}}"
   },
   "tags": {
     "curated": "Sélection"
@@ -135,7 +140,8 @@
     "openTagFeed": "Ouvrir le fil du tag"
   },
   "scheduled": {
-    "notice": "Programmée pour le <b>{{date}}</b> — pas encore publiée.",
+    "notice": "Programmée pour le <b>{{date}}</b>",
+    "notPublished": "Pas encore publiée.",
     "futureDate": "une date future",
     "edit": "Modifier, reprogrammer ou annuler",
     "editTitle": "Modifier la publication programmée (détails, date ou annulation)"
@@ -162,7 +168,8 @@
     "toggleDetails": "Afficher/masquer les détails",
     "followCreator": "Suivre le créateur",
     "closeMenu": "Fermer le menu",
-    "openActions": "Ouvrir les actions"
+    "openActions": "Ouvrir les actions",
+    "support": "Soutenir {{name}}"
   },
   "description": {
     "hide": "Masquer la description",
@@ -202,26 +209,27 @@
     "markdownHint": "Markdown pris en charge.",
     "listed": "Répertoriée",
     "unlistedLabel": "Non répertoriée",
-    "listedHint": "Affichée dans les fils, la recherche et sur votre profil.",
-    "unlistedHint": "Masquée des fils et de la recherche — reste lisible par lien direct et visible sur votre profil (avec un badge).",
-    "allowRemix": "Autoriser remix/clip",
-    "remixOn": "D'autres peuvent créer des remix/clips ; vous êtes crédité comme auteur original.",
+    "listedHint": "Dans les fils, la recherche et votre profil",
+    "unlistedHint": "Uniquement par lien direct, signalée sur votre profil",
+    "allowRemix": "Autoriser remix et clip",
+    "remixOn": "Vous êtes crédité comme auteur original",
     "remixOff": "Personne ne peut remixer ni clipper cette vidéo.",
     "adsOnVideo": "Publicités sur cette vidéo",
     "adsOnHint": "Des publicités peuvent être diffusées sur cette vidéo.",
     "adsOffHint": "Aucune publicité sur cette vidéo.",
     "rollsOnVideo": "Spots vidéo",
     "rollsOnHint": "Spots, bannières et bandeaux peuvent s'afficher.",
-    "rollsOffHint": "Seulement des bannières et des bandeaux sur cette vidéo.",
+    "rollsOffHint": "Sinon, seulement des bannières et des bandeaux",
     "trailer": "Bande-annonce de la chaîne",
     "trailerOn": "Se lance automatiquement en haut de l'onglet Aperçu de votre profil, en remplaçant toute bande-annonce définie auparavant.",
-    "trailerOff": "Faites-en la vidéo lancée automatiquement en haut de l'onglet Aperçu de votre profil.",
+    "trailerOff": "Se lance automatiquement en haut de votre profil",
     "nsfw": "Adulte / NSFW",
     "notNsfw": "Tout public",
     "nsfwHint": "Masquée des fils et de la recherche sauf si le spectateur a activé le NSFW ; taguée nsfw sur Hive.",
     "notNsfwHint": "Contenu normal, visible par tous.",
+    "nsfwOffHint": "Masquée sauf si le spectateur a activé le NSFW",
     "promoted": "Promue",
-    "promote": "Promouvoir la vidéo",
+    "promote": "Promouvoir",
     "saveChanges": "Enregistrer",
     "noChanges": "Aucune modification à enregistrer.",
     "thumbUploaded": "Miniature envoyée.",
@@ -266,7 +274,8 @@
       "visibility": "Visibilité",
       "content": "Contenu",
       "ads": "Publicités",
-      "promotion": "Promotion"
+      "promotion": "Promotion",
+      "contentAds": "Contenu, pubs et promotion"
     },
     "chaptersNoteAll": "La liste des chapitres est écrite dans la description à l'enregistrement.",
     "editChapters": "Modifier les chapitres",

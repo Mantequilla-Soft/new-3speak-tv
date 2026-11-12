@@ -5,8 +5,8 @@
     "yourStreamEnded": "Yayının sona erdi",
     "thisStreamEnded": "Bu yayın sona erdi",
     "noLongerLive": "Artık canlı değil. Hazır olduğunda yeni bir yayın başlat.",
-    "recordingProcessing": "Harikaydı! Kaydın işleniyor ve kısa süre içinde duyuru gönderisinde görünecek.",
-    "thanksForLive": "Harikaydı, canlı yayın yaptığın için teşekkürler!",
+    "recordingProcessing": "Kaydın işleniyor ve kısa süre içinde duyuru gönderisinde görünecek.",
+    "thanksForLive": "Harikaydı, canlı yayın için teşekkürler",
     "backHome": "Ana sayfaya dön",
     "howWasStream": "Yayının nasıl geçti?",
     "connecting": "OpenPods'a bağlanılıyor…",
@@ -41,13 +41,13 @@
     "slowDown": "Biraz bekle, sonra yeniden klip al.",
     "failed": "Klip oluşturulamadı. Birkaç saniye sonra tekrar dene.",
     "title": "Son 30 saniyeyi klip olarak al",
-    "label": "30 sn",
+    "label": "Klip",
     "clipping": "Klip alınıyor…"
   },
   "report": {
     "reasons": {
       "harassment": "Taciz veya nefret",
-      "sexual": "Cinsel veya müstehcen içerik",
+      "sexual": "Cinsel veya müstehcen",
       "violence": "Şiddet veya tehlikeli davranış",
       "selfharm": "Kendine zarar verme",
       "illegal": "Yasa dışı içerik",
@@ -58,7 +58,7 @@
     "failed": "Bildirim gönderilemedi. Lütfen tekrar dene.",
     "title": "Bu yayını bildir",
     "reporting": "<b>@{{host}}</b> bildiriliyor.",
-    "intro": "Sorunun ne olduğunu anlat. Ekibimiz her bildirimi inceler.",
+    "intro": "Ekibimiz her bildirimi inceler.",
     "detailPlaceholder": "Ayrıntı ekle (isteğe bağlı)",
     "sending": "Gönderiliyor…",
     "submit": "Bildirimi gönder"
@@ -74,7 +74,7 @@
     },
     "published": "Kayıt Hive'da yayınlandı!",
     "loginGate": "Kaydını yayınlamak için giriş yap.",
-    "heading": "OpenPod Kaydını Yayınla",
+    "heading": "OpenPod kaydını yayınla",
     "previewLabel": "Kayıt önizlemesi",
     "previewHint": "Yayınlamadan önce sesi kontrol et. Okuyucuların gönderide göreceği oynatıcının aynısı bu.",
     "recordingFallback": "OpenPod Kaydı",
@@ -87,11 +87,12 @@
     "tagsPlaceholder": "Boşlukla ayrılmış etiketler",
     "declinePayout": "Ödemeyi Reddet",
     "publishing": "Yayınlanıyor…",
-    "submit": "Kaydı Yayınla"
+    "submit": "Kaydı yayınla"
   },
   "lobby": {
     "descriptionPlaceholder": "Bu oturum ne hakkında? Program notları, bağlantılar veya bir özet ekle…",
     "enableHosting": "Sunuculuğu ve konuşmayı aç",
+    "enableHostingHint": "@threespeak posting yetkisi gerekir",
     "handoverFailed": "Sunuculuk otomatik açılamadı. OpenPods senin adına @threespeak üzerinden paylaşım yapar; ona paylaşım (posting) yetkisi verdiğini kontrol et ve tekrar dene.",
     "signInToHost": "Sunmak veya konuşmak için Hive ile giriş yap"
   },
@@ -131,8 +132,8 @@
     },
     "chatBox": {
       "title": "OBS'de sohbetin",
-      "desc": "Tüm yayınların için tek bağlantı. Canlıdayken yeni mesajları okumak için onu OBS'ye dock olarak ekle. Aşağıdaki rehber nasıl yapılacağını gösteriyor.",
-      "copy": "OBS için sohbet URL'sini kopyala",
+      "desc": "özel tarayıcı dock'u olarak ekle",
+      "copy": "Sohbet URL'sini kopyala",
       "copied": "Sohbet URL'si kopyalandı"
     },
     "card": {
@@ -143,26 +144,26 @@
       "watch": "Yayını izle",
       "notAnnounced": "Bu yayın Hive'da duyurulmadı.",
       "notAnnouncedAuth": "Hive'da duyurulmadı: 3Speak henüz senin adına paylaşım yapamıyor. İzin vermek için şablonu düzenle.",
-      "stuck": "OBS bağlandı ama bize hiç görüntü ulaşmadı, bu yüzden yayın başlamadı. OBS'de yayını durdur ve yeniden başlat.",
-      "dailyLimit": "OBS yayına başlayamadı: ücretsiz hesaplar günde bir yayın başlatabilir. Son yayınının başlamasından 24 saat sonra tekrar dene ya da günlük sınır olmadan yayın yapmak için 3Speak Pro al.",
+      "stuck": "OBS bağlandı ama bize hiç görüntü ulaşmadı. Yayını durdurup yeniden başlat.",
+      "dailyLimit": "Ücretsiz hesaplar günde bir yayın başlatabilir. Son yayınının başlamasından 24 saat sonra tekrar dene ya da Pro al.",
       "useInStudio": "Stream Studio'da kullan",
       "proRequired": "OBS canlı yayına geçemedi: OBS'ten yayın yapmak 3Speak Pro'nun bir parçasıdır."
     },
     "guide": {
       "title": "OBS nasıl ayarlanır",
-      "step1": "OBS Studio 30 veya daha yenisini kullan, Ayarlar'ı ve ardından Yayın'ı aç.",
-      "step2": "Hizmet'i \"WHIP\" olarak ayarla.",
-      "step3": "Sunucu: istediğin şablonun sunucu URL'sini yapıştır (kartındaki \"Sunucu URL'sini kopyala\"). Her şablonun kendine ait bir URL'si var.",
-      "step4": "Bearer Token: bu sayfanın üstündeki yayın anahtarını yapıştır. Her şablon için aynıdır.",
-      "step5": "OBS'te \"Start Streaming\"e tıkla, o şablonla 3Speak'te canlı yayındasın. \"Stop Streaming\" yayını bitirir.",
-      "outputTitle": "Önerilen çıkış ayarları",
-      "keyframe": "Anahtar kare aralığı: 1 ila 2 saniye",
-      "bitrate": "Hız kontrolü CBR, 2500 ila 6000 kbps",
-      "encoder": "Kodlayıcı: x264 veya donanım kodlayıcın",
-      "audio": "Ses örnekleme hızı: 48 kHz",
-      "bframes": "B-frames yok (kodlayıcın izin veriyorsa 0 yap)",
+      "step1": "OBS Studio 30 veya daha yenisini kullan: Ayarlar → Yayın",
+      "step2": "Hizmet'i \"WHIP\" olarak ayarla",
+      "step3": "Sunucu: şablonun sunucu URL'sini yapıştır",
+      "step4": "Bearer Token: yayın anahtarını yapıştır",
+      "step5": "OBS'te yayını başlat. 3Speak'te canlıdasın.",
+      "outputTitle": "Önerilen çıkış",
+      "keyframe": "Anahtar kare 1–2 sn",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / donanım",
+      "audio": "48 kHz ses",
+      "bframes": "B-frame yok",
       "chatTitle": "Sohbeti OBS'de gör",
-      "chatCopy": "Bu sayfanın üstünde, \"OBS'de sohbetin\" altında \"OBS için sohbet URL'sini kopyala\"ya tıkla. Tüm yayınların için tek bir bağlantıdır.",
+      "chatCopy": "Bu sayfanın üstünde, \"OBS'de sohbetin\" altında \"Sohbet URL'sini kopyala\"ya tıkla. Tüm yayınların için tek bir bağlantıdır.",
       "chat2": "OBS'de \"Docks\" menüsünü aç ve \"Custom Browser Docks\"u seç. \"3Speak sohbet\" gibi bir ad gir, URL'yi yapıştır ve \"Apply\"a tıkla. Canlıdayken yeni mesajlar o panelde görünür. İzleyiciler onu asla görmez.",
       "chat3": "İzleyiciler sohbeti zaten yayınının yanında görüyor, yani onu videoya eklemene gerek yok. Sadece yayını başka bir yerde de paylaşıyorsan: aynı URL'yi \"Browser\" kaynağı olarak ekle ve sonundaki \"&dock=1\"i sil. O zaman mesajlar videonun üzerinde görünür ve 30 saniye sonra kaybolur.",
       "chatOptions": "İsteğe bağlı, URL'nin sonuna ekle: &max=10 daha az satır gösterir, &size=18 yazıyı büyütür, &fade=0 mesajları videoda tutar.",
@@ -256,5 +257,14 @@
       "desc": "3Speak Pro ile şablonlarınızı kullanarak doğrudan OBS'ten canlı yayına geçebilirsiniz. Pro olmadan da şablonlarınız tarayıcınızdaki Stream Studio'da çalışmaya devam eder.",
       "cta": "3Speak Pro edinin"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_one": "{{count}} dinleyici",
+    "listening_other": "{{count}} dinleyici",
+    "emptySub": "Yayınlar ve OpenPods başladıkları anda burada görünür.",
+    "emptyRooms": "Şu an açık OpenPods odası yok.",
+    "emptyScheduled": "Şu an planlanmış bir şey yok.",
+    "emptyScheduledSub": "Açık ama henüz canlı olmayan odalar burada görünür."
   }
 }

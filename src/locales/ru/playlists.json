@@ -25,6 +25,11 @@
     "noOtherPlaylists": "У вас пока нет других плейлистов",
     "createFirst": "Создать плейлист",
     "createNew": "Создать новый плейлист",
+    "newPlaylist": "Новый плейлист",
+    "savedTo_one": "Сохранено в {{count}} плейлист",
+    "savedTo_few": "Сохранено в {{count}} плейлиста",
+    "savedTo_many": "Сохранено в {{count}} плейлистов",
+    "savedTo_other": "Сохранено в {{count}} плейлиста",
     "name": "Название",
     "namePlaceholder": "Мой лучший плейлист",
     "privacy": "Доступ",
@@ -106,12 +111,15 @@
     "filterCount_one": "{{shown}} из {{count}} элемента",
     "filterCount_few": "{{shown}} из {{count}} элементов",
     "filterCount_many": "{{shown}} из {{count}} элементов",
-    "filterCount_other": "{{shown}} из {{count}} элемента"
+    "filterCount_other": "{{shown}} из {{count}} элемента",
+    "shuffle": "Перемешать"
   },
   "type": {
     "label": "Тип",
     "video": "Видео",
     "audio": "Аудио",
+    "videoSub": "Длинные видео",
+    "audioSub": "Треки и подкасты",
     "kindLabel": "Какое это аудио?",
     "kinds": {
       "podcast": "Подкаст",

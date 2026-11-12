@@ -37,7 +37,7 @@
   },
   "directory": {
     "title": "Insignias",
-    "intro": "Las insignias son reconocimientos <b>que otros te otorgan</b> en Hive por eventos, aportes y logros. No puedes unirte a una: alguien te la otorga. Abre una insignia para ver lo que publican aquí quienes la tienen.",
+    "intro": "Las insignias son reconocimientos <b>que otros te otorgan</b> en Hive por eventos, aportes y logros. No puedes unirte a una: alguien te la otorga.",
     "searchPlaceholder": "Buscar insignias...",
     "sort": {
       "recipients": "Receptores",
@@ -62,6 +62,7 @@
     "awarding": "Otorgando…",
     "held": "La tiene",
     "award": "Otorgar",
+    "awardNamed": "Otorgar “{{title}}”",
     "note": "La insignia sigue a la persona en Hive; eso es lo que significa tenerla. Puedes retirarla desde la página de la insignia."
   },
   "hive": {
@@ -91,8 +92,9 @@
     "unclaimed": "Sin reclamar",
     "noActivity": "Aún no hay actividad en este periodo",
     "otherTopics": "Otros",
-    "title": "Rankings",
+    "title": "Clasificación",
     "subtitle": "{{blurb}}: los mejores creadores de 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
     "subtitleTopic": "{{blurb}}: los mejores creadores en {{topic}}.",
     "allTopics": "Todos los temas",
     "finding": "Buscando a @{{user}} en este ranking…",

@@ -18,6 +18,7 @@
     "community": "Cộng đồng",
     "communityWithSubscribers_other": "Cộng đồng · {{formatted}} người đăng ký",
     "commentFallback": "(bình luận)",
+    "videoKind": "3Speak · Video",
     "play": "Phát {{title}}"
   },
   "share": {
@@ -31,22 +32,28 @@
     "responsiveSub": "Tự co giãn vừa với trang chứa nó",
     "fixedSub": "Iframe kích thước cố định",
     "sendInChat": "Gửi qua 3Speak Chat",
-    "sendInChatSub": "Nhắn cho ai đó trên 3Speak",
+    "sendInChatSub": "Nhắn cho ai đó",
     "embedOnWebsite": "Nhúng vào trang web",
-    "embedOnWebsiteSub": "Sao chép mã HTML cho trang web hoặc blog của bạn",
+    "embedOnWebsiteSub": "Tự co giãn hoặc kích thước cố định",
     "forHivePost": "Cho bài đăng Hive",
+    "forHivePostSub": "Sao chép liên kết để dán",
     "hivePostCopied": "Đã sao chép liên kết. Hãy dán vào bài đăng Hive của bạn.",
-    "generalShare": "Chia sẻ / sao chép đường liên kết",
-    "generalShareSub": "Ứng dụng khác, hoặc sao chép đường liên kết"
+    "generalShare": "Chia sẻ hoặc sao chép liên kết",
+    "generalShareSub": "Ứng dụng khác",
+    "embed": "Nhúng",
+    "chat": "Chat",
+    "more": "Thêm",
+    "startAt": "Bắt đầu tại",
+    "toFollowers_other": "Tới {{n}} người theo dõi của bạn"
   },
   "gate": {
     "connectTitle": "Kết nối với 3Speak Chat",
-    "connectBody": "Chat được vận hành bởi Snapie. Khi kết nối, bạn ký một yêu cầu đăng nhập một lần bằng posting key Hive của mình (không có giao dịch, không mất phí).",
+    "connectBody": "Chat được vận hành bởi Snapie. Khi kết nối, bạn ký một yêu cầu đăng nhập một lần bằng posting key. Không có giao dịch, không mất phí.",
     "connecting": "Đang kết nối…",
     "connectButton": "Kết nối chat",
     "cannotSign": "Phương thức đăng nhập hiện tại của bạn không thể ký yêu cầu chat. Hãy dùng Keychain, HiveAuth, PeakVault hoặc Ledger.",
-    "needsAccountTitle": "Chat cần tài khoản Hive",
-    "needsAccountBody": "Tin nhắn được ký bằng khóa tài khoản của chính bạn, nên chat sẽ mở cùng mọi tính năng khác khi tài khoản của bạn sẵn sàng. Hoàn thành các mục tiêu trên hồ sơ và đội ngũ sẽ giúp bạn đạt được điều đó.",
+    "needsAccountTitle": "Chat cần tài khoản Hive.",
+    "needsAccountBody": "Chat sẽ mở cùng mọi tính năng khác khi bạn hoàn thành giai đoạn khởi động.",
     "loginTitle": "Đăng nhập để dùng chat",
     "loginBody": "Đăng nhập bằng tài khoản Hive để gửi và nhận tin nhắn.",
     "connectingToChat": "Đang kết nối với chat…"
@@ -90,8 +97,8 @@
     "serverRejectedServerMap_other": "Máy chủ đã từ chối toàn bộ {{count}} yêu cầu (id từ danh sách chưa đọc của chính máy chủ)",
     "failed": "Không thể đánh dấu tất cả là đã đọc",
     "marking": "Đang đánh dấu đã đọc…",
-    "button": "Đánh dấu tất cả là đã đọc",
-    "buttonCount": "Đánh dấu tất cả là đã đọc ({{count}})"
+    "button": "Đánh dấu tất cả đã đọc",
+    "buttonCount": "Đánh dấu tất cả đã đọc ({{count}})"
   },
   "list": {
     "chooseTarget": "Chọn cuộc trò chuyện để gửi",
@@ -124,7 +131,8 @@
     "quoting": "Đang trích dẫn @{{user}}",
     "cancelQuote": "Hủy trích dẫn",
     "removeImage": "Gỡ ảnh",
-    "placeholder": "Nhập tin nhắn…"
+    "placeholder": "Nhập tin nhắn…",
+    "placeholderTo": "Nhắn cho {{name}}"
   },
   "page": {
     "chooseTarget": "Chọn cuộc trò chuyện để gửi.",

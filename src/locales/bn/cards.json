@@ -7,7 +7,7 @@
   "watchingNow_other": "এখন {{count}} জন দেখছেন",
   "previewMuted": "প্রিভিউ · মিউট",
   "badges": {
-    "gatedTitle": "শুধু সদস্যদের জন্য। 3Speak Pro দিয়ে পুরো ভিডিও দেখা যায়",
+    "gatedTitle": "শুধু সদস্যদের জন্য",
     "pro": "PRO",
     "new": "নতুন",
     "first": "প্রথম",
@@ -18,17 +18,17 @@
   "status": {
     "scheduled": "নির্ধারিত",
     "mobile": "মোবাইল",
-    "mobileTitle": "মোবাইল অ্যাপ থেকে আপলোড করা",
+    "mobileTitle": "মোবাইল অ্যাপ থেকে",
     "processing": "প্রসেস হচ্ছে",
-    "processingTitle": "ভিডিওটি প্রসেস হচ্ছে",
+    "processingTitle": "প্রসেস হচ্ছে",
     "draft": "ড্রাফট",
-    "draftTitle": "ড্রাফট - এখনো প্রকাশিত হয়নি",
+    "draftTitle": "এখনো প্রকাশিত হয়নি",
     "deleted": "মুছে ফেলা",
-    "deletedTitle": "এই ভিডিওটি মুছে ফেলা হয়েছে",
+    "deletedTitle": "মুছে ফেলা হয়েছে",
     "failed": "ব্যর্থ",
-    "failedTitle": "ভিডিও প্রসেসিং ব্যর্থ হয়েছে",
+    "failedTitle": "প্রসেসিং ব্যর্থ",
     "unlisted": "আনলিস্টেড",
-    "unlistedTitle": "আনলিস্টেড — ফিড ও সার্চে লুকানো, শুধু সরাসরি লিংকে দেখা যায়"
+    "unlistedTitle": "শুধু সরাসরি লিংকে"
   },
   "playlist": {
     "loading": "প্লেলিস্ট লোড হচ্ছে...",
@@ -36,7 +36,11 @@
     "items_other": "{{count}}টি আইটেম",
     "openAria": "প্লেলিস্ট {{name}} খুলুন",
     "tag": "প্লেলিস্ট",
-    "updated": "আপডেট হয়েছে {{when}}"
+    "updated": "আপডেট হয়েছে {{when}}",
+    "public": "পাবলিক",
+    "private": "প্রাইভেট",
+    "history": "ইতিহাস",
+    "audio": "অডিও"
   },
   "watchLater": {
     "title": "পরে দেখুন",
@@ -50,5 +54,13 @@
     "label": "আকার পরিবর্তন করুন",
     "small": "ছোট",
     "medium": "মাঝারি"
+  },
+  "payout": {
+    "title": "পেআউট",
+    "author": "লেখক",
+    "curators": "কিউরেটর",
+    "paysOutIn": "পেআউট বাকি",
+    "days_one": "{{count}} দিন",
+    "days_other": "{{count}} দিন"
   }
 }

@@ -7,7 +7,8 @@
     "feeds": "Fils",
     "groups": "Groupes",
     "audio": "Audio",
-    "login": "Connexion"
+    "login": "Connexion",
+    "you": "Vous"
   },
   "installApp": "Installer l'app",
   "iosInstallHint": "Touchez <b>Partager</b> puis <b>Sur l'écran d'accueil</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Des vidéos verticales courtes, l'une après l'autre",
     "audioTooltip": "Podcasts, musique et autres contenus audio publiés sur 3Speak",
     "groupsTooltip": "Les communautés que vous pouvez rejoindre, et les badges décernés aux membres",
-    "rankingsTooltip": "Les créateurs qui gagnent le plus et sont les plus regardés en ce moment"
+    "rankingsTooltip": "Les créateurs qui gagnent le plus et sont les plus regardés en ce moment",
+    "live": "En direct",
+    "liveTooltip": "Lives et salons en direct en ce moment"
   },
   "aboutLink": "À propos de 3Speak",
   "faqLink": "FAQ",
@@ -49,14 +52,20 @@
     "logout": "Se déconnecter",
     "onDiscord": "3Speak sur Discord",
     "onX": "3Speak sur X",
-    "onTelegram": "3Speak sur Telegram"
+    "onTelegram": "3Speak sur Telegram",
+    "switch": "Changer",
+    "tiles": {
+      "channel": "Chaîne",
+      "history": "Historique"
+    },
+    "darkTheme": "Thème sombre"
   },
   "notifications": {
     "pushOff": "Notifications désactivées sur cet appareil",
-    "pushOn": "Vous serez prévenu quand les créateurs que vous suivez publient",
+    "pushOn": "Vous serez averti quand les créateurs que vous suivez publient.",
     "pushFailed": "Impossible de modifier les paramètres de notification",
     "ariaUnread": "Notifications ({{count}} non lues)",
-    "pushBlocked": "Les notifications sont bloquées pour ce site dans les paramètres de votre navigateur",
+    "pushBlocked": "Les notifications de ce site sont bloquées dans les réglages de votre navigateur.",
     "pushNoWorker": "Cette version n'a pas de service worker : les notifications ne peuvent pas être activées ici",
     "pushStop": "Ne plus notifier cet appareil",
     "pushStart": "Être prévenu quand les créateurs que vous suivez publient",
@@ -78,8 +87,8 @@
       "followMany_other": "@{{a}} et {{count}} autres personnes ont commencé à vous suivre",
       "other": "{{count}} notifications {{type}}",
       "typeCount": "{{count}} {{type}}",
-      "includesWhale": "Inclut un ou plusieurs comptes 🐋 baleine",
-      "includesOrca": "Inclut un ou plusieurs comptes 🐬 orque",
+      "includesWhale": "Inclut des comptes 🐋 baleine",
+      "includesOrca": "Inclut des comptes 🐬 orque",
       "andMore": "et {{count}} de plus…"
     },
     "stories": {
@@ -97,6 +106,13 @@
       "heading": "Nouveaux épisodes des podcasts que vous suivez",
       "newEpisode": "Nouvel épisode de {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "Tout",
+      "mentions": "Mentions",
+      "follows": "Abonnés",
+      "uploads": "Mises en ligne",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -137,6 +153,17 @@
     "views_other": "{{formatted}} vues",
     "tags": "Tags",
     "titles": "Titres",
-    "placeholder": "Rechercher..."
-  }
+    "placeholder": "Rechercher...",
+    "recent": "Récents",
+    "allResultsFor": "Tous les résultats pour « {{term}} »",
+    "kinds": {
+      "creator": "Créateur",
+      "community": "Communauté",
+      "video": "Vidéo",
+      "short": "Short",
+      "audio": "Audio",
+      "playlist": "Playlist"
+    }
+  },
+  "create": "Créer"
 }

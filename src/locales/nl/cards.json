@@ -7,7 +7,7 @@
   "watchingNow_other": "{{count}} kijken nu",
   "previewMuted": "Voorbeeld · gedempt",
   "badges": {
-    "gatedTitle": "Alleen voor leden. 3Speak Pro ontgrendelt de volledige video",
+    "gatedTitle": "Alleen voor leden",
     "pro": "PRO",
     "new": "NIEUW",
     "first": "Eerste",
@@ -18,17 +18,17 @@
   "status": {
     "scheduled": "Ingepland",
     "mobile": "Mobiel",
-    "mobileTitle": "Geüpload via de mobiele app",
+    "mobileTitle": "Via de mobiele app",
     "processing": "Verwerken",
-    "processingTitle": "Video wordt verwerkt",
+    "processingTitle": "Wordt verwerkt",
     "draft": "Concept",
-    "draftTitle": "Concept - nog niet gepubliceerd",
+    "draftTitle": "Nog niet gepubliceerd",
     "deleted": "Verwijderd",
-    "deletedTitle": "Deze video is verwijderd",
+    "deletedTitle": "Is verwijderd",
     "failed": "Mislukt",
-    "failedTitle": "Verwerken van de video is mislukt",
+    "failedTitle": "Verwerken mislukt",
     "unlisted": "Verborgen",
-    "unlistedTitle": "Verborgen — niet in feeds en zoekresultaten, alleen te bereiken via een directe link"
+    "unlistedTitle": "Alleen via directe link"
   },
   "playlist": {
     "loading": "Playlists laden...",
@@ -36,7 +36,11 @@
     "items_other": "{{count}} items",
     "openAria": "Playlist {{name}} openen",
     "tag": "Playlist",
-    "updated": "Bijgewerkt {{when}}"
+    "updated": "Bijgewerkt {{when}}",
+    "public": "openbaar",
+    "private": "privé",
+    "history": "geschiedenis",
+    "audio": "audio"
   },
   "watchLater": {
     "title": "Later bekijken",
@@ -50,5 +54,13 @@
     "label": "Grootte wijzigen",
     "small": "Klein",
     "medium": "Middel"
+  },
+  "payout": {
+    "title": "Uitbetaling",
+    "author": "Auteur",
+    "curators": "Curators",
+    "paysOutIn": "Uitbetaling over",
+    "days_one": "{{count}} dag",
+    "days_other": "{{count}} dagen"
   }
 }

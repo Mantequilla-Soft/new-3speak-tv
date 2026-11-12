@@ -81,7 +81,8 @@
     "views_one": "{{num}} visualização",
     "views_many": "{{num}} visualizações",
     "views_other": "{{num}} visualizações",
-    "readMore": "Ler mais"
+    "readMore": "Ler mais",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Ler mais",
@@ -186,7 +187,8 @@
       "text": "Agrupe seus vídeos em uma playlist que as pessoas podem assistir em ordem.",
       "cta": "Criar sua primeira playlist",
       "visitor": "@{{user}} não tem playlists públicas."
-    }
+    },
+    "visitorPreview": "Visitantes veem: “{{text}}”"
   },
   "links": {
     "button": "Links",
@@ -205,7 +207,8 @@
     "shorts": "Shorts",
     "audio": "Áudio",
     "community": "Comunidade",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "latestSnap": "Último snap"
   },
   "streams": {
     "loading": "Carregando transmissões…",
@@ -320,7 +323,11 @@
     "hiddenToast": "Gorjeta ocultada do seu perfil",
     "unhiddenToast": "A gorjeta voltou a aparecer no seu perfil",
     "hideFailed": "Não foi possível alterar esta gorjeta. Tente novamente.",
-    "hideWalletPrompt": "Assine para mudar quais gorjetas aparecem no seu perfil"
+    "hideWalletPrompt": "Assine para mudar quais gorjetas aparecem no seu perfil",
+    "whoTitle": "@{{user}} apoia",
+    "tipped_one": "{{count}} gorjeta",
+    "tipped_many": "{{count}} gorjetas",
+    "tipped_other": "{{count}} gorjetas"
   },
   "layout": {
     "customize": "Personalizar perfil",
@@ -435,5 +442,14 @@
   },
   "audioTab": {
     "files": "Arquivos de áudio"
+  },
+  "search": {
+    "placeholder": "Pesquisar neste canal",
+    "clear": "Limpar pesquisa",
+    "results_one": "{{count}} resultado para “{{query}}”",
+    "results_many": "{{count}} resultados para “{{query}}”",
+    "results_other": "{{count}} resultados para “{{query}}”",
+    "empty": "Nada neste canal corresponde a “{{query}}”.",
+    "older": "Pesquisar envios mais antigos"
   }
 }

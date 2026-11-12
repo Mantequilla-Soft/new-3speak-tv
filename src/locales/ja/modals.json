@@ -17,7 +17,8 @@
     "loginFailed": "ログインに失敗しました: {{error}}",
     "logoAlt": "3Speak ロゴ",
     "title": "ユーザー名でログイン",
-    "usernamePlaceholder": "ユーザー名"
+    "usernamePlaceholder": "ユーザー名",
+    "continueWith": "{{method}} で続行"
   },
   "socialLink": {
     "hashCopied": "ハッシュをコピーしました",
@@ -55,7 +56,7 @@
   },
   "auth": {
     "title": "3Speak を承認",
-    "text": "3Speak に動画をアップロードするには、あなたのポスティング権限が必要です。これにより、アップロードした動画を Hive に公開できます。ポスティング権限の付与は一度だけで済みます。",
+    "text": "アップロードには、あなたのポスティング権限が必要です。これで動画を Hive に公開できます。付与は一度だけで済みます。",
     "authorize": "承認"
   },
   "beneficiary": {
@@ -74,6 +75,11 @@
       "maxCount": "Hive では 1 投稿あたりの受益者は最大 {{max}} 人です。"
     },
     "title": "受益者",
+    "shareRewards": "報酬を分ける",
+    "you": "あなた",
+    "toYou": "あなたへ",
+    "addCollaborator": "共同制作者を追加",
+    "saveSplit": "分配を保存",
     "intro": "この投稿の報酬の一部を自動的に受け取るユーザーを追加します。",
     "minPercent": "%（最小 {{percent}}%）",
     "usernamePlaceholder": "ユーザー名を入力",
@@ -100,7 +106,7 @@
   },
   "verifyAuth": {
     "title": "承認を確認中",
-    "text": "承認が付与されたかを確認しています。しばらくお待ちください..."
+    "text": "付与されたか確認しています…"
   },
   "editor": {
     "confirmLeave": "エディターがまだ開いています。このページを離れるとエディターが閉じ、未保存の変更は失われます。\n\nOK = エディターを閉じて移動\nキャンセル = このページにとどまる",
@@ -176,7 +182,9 @@
     "details": "詳細（任意）",
     "detailsPlaceholder": "詳しい状況を教えてください...",
     "submitting": "送信中...",
-    "submit": "報告を送信"
+    "submit": "報告を送信",
+    "intro": "報告は 3Speak チームに届きます。誰が報告したかはクリエイターにはわかりません。",
+    "nextDetails": "次へ: 詳細を追加"
   },
   "upload": {
     "missingInfo": "動画またはサムネイルの情報がありません。",

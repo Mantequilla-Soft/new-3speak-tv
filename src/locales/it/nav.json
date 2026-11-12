@@ -7,7 +7,8 @@
     "feeds": "Feed",
     "groups": "Gruppi",
     "audio": "Audio",
-    "login": "Accedi"
+    "login": "Accedi",
+    "you": "Tu"
   },
   "installApp": "Installa l'app",
   "iosInstallHint": "Tocca <b>Condividi</b> e poi <b>Aggiungi alla schermata Home</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Brevi video verticali, uno dopo l'altro",
     "audioTooltip": "Podcast, musica e altri audio pubblicati su 3Speak",
     "groupsTooltip": "Community a cui puoi unirti e badge assegnati alle persone",
-    "rankingsTooltip": "I creator che guadagnano e vengono guardati di più in questo momento"
+    "rankingsTooltip": "I creator che guadagnano e vengono guardati di più in questo momento",
+    "live": "Live",
+    "liveTooltip": "Dirette e stanze attive in questo momento"
   },
   "aboutLink": "Informazioni su 3Speak",
   "faqLink": "FAQ",
@@ -49,14 +52,20 @@
     "logout": "Esci",
     "onDiscord": "3Speak su Discord",
     "onX": "3Speak su X",
-    "onTelegram": "3Speak su Telegram"
+    "onTelegram": "3Speak su Telegram",
+    "switch": "Cambia",
+    "tiles": {
+      "channel": "Canale",
+      "history": "Cronologia"
+    },
+    "darkTheme": "Tema scuro"
   },
   "notifications": {
     "pushOff": "Notifiche disattivate su questo dispositivo",
-    "pushOn": "Riceverai una notifica quando i creator che segui pubblicano",
+    "pushOn": "Riceverai una notifica quando pubblicano i creator che segui.",
     "pushFailed": "Impossibile modificare le impostazioni delle notifiche",
     "ariaUnread": "Notifiche ({{count}} non lette)",
-    "pushBlocked": "Le notifiche per questo sito sono bloccate nelle impostazioni del browser",
+    "pushBlocked": "Le notifiche di questo sito sono bloccate nelle impostazioni del browser.",
     "pushNoWorker": "Questa build non ha un service worker, quindi qui non è possibile registrare le notifiche",
     "pushStop": "Non inviare più notifiche a questo dispositivo",
     "pushStart": "Ricevi una notifica quando i creator che segui pubblicano",
@@ -97,6 +106,13 @@
       "heading": "Nuovi episodi dei podcast che segui",
       "newEpisode": "Nuovo episodio di {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "Tutte",
+      "mentions": "Menzioni",
+      "follows": "Follow",
+      "uploads": "Caricamenti",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -137,6 +153,17 @@
     "views_other": "{{formatted}} visualizzazioni",
     "tags": "Tag",
     "titles": "Titoli",
-    "placeholder": "Cerca..."
-  }
+    "placeholder": "Cerca...",
+    "recent": "Recenti",
+    "allResultsFor": "Tutti i risultati per “{{term}}”",
+    "kinds": {
+      "creator": "Creator",
+      "community": "Community",
+      "video": "Video",
+      "short": "Short",
+      "audio": "Audio",
+      "playlist": "Playlist"
+    }
+  },
+  "create": "Crea"
 }

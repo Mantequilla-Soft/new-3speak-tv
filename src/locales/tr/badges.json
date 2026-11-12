@@ -34,7 +34,7 @@
   },
   "directory": {
     "title": "Rozetler",
-    "intro": "Rozetler, etkinlikler, katkılar ve dönüm noktaları için Hive'da <b>başkalarının sana verdiği</b> ödüllerdir. Bir rozete katılamazsın; birinin onu sana vermesi gerekir. Sahiplerinin burada neler yayınladığını görmek için bir rozeti aç.",
+    "intro": "Rozetler, Hive'da etkinlikler, katkılar ve dönüm noktaları için <b>başkalarının sana verdiği</b> ödüllerdir. Bir rozete katılamazsın: biri onu verir.",
     "searchPlaceholder": "Rozet ara...",
     "sort": {
       "recipients": "Sahipler",
@@ -58,6 +58,7 @@
     "awarding": "Veriliyor…",
     "held": "Sahip",
     "award": "Ver",
+    "awardNamed": "\"{{title}}\" rozetini ver",
     "note": "Rozet onu Hive'da takip eder; rozete sahip olmak bu demektir. Rozetin kendi sayfasından geri alabilirsin."
   },
   "hive": {
@@ -85,8 +86,9 @@
     "unclaimed": "Alınmamış",
     "noActivity": "Bu aralıkta henüz etkinlik yok",
     "otherTopics": "Diğer",
-    "title": "Sıralamalar",
+    "title": "Sıralama",
     "subtitle": "{{blurb}}: 3Speak'in en iyi içerik üreticileri.",
+    "explain": "{{label}}: {{blurb}}.",
     "subtitleTopic": "{{blurb}}: {{topic}} alanındaki en iyi içerik üreticileri.",
     "allTopics": "Tüm konular",
     "finding": "@{{user}} bu tabloda aranıyor…",

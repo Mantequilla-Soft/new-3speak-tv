@@ -34,7 +34,7 @@
   },
   "directory": {
     "title": "Mga Badge",
-    "intro": "Ang mga badge ay parangal na <b>ibinibigay sa iyo ng iba</b> sa Hive, para sa mga event, kontribusyon at milestone. Hindi ka puwedeng sumali sa isa: may magbibigay nito sa iyo. Magbukas ng badge para mapanood ang mga pinapublish dito ng mga tumanggap nito.",
+    "intro": "Ang mga badge ay parangal na <b>ibinibigay sa iyo ng iba</b> sa Hive, para sa mga event, kontribusyon at milestone. Hindi ka puwedeng sumali sa isa: may magbibigay nito.",
     "searchPlaceholder": "Maghanap ng badge...",
     "sort": {
       "recipients": "Mga Tumanggap",
@@ -58,6 +58,7 @@
     "awarding": "Ibinibigay…",
     "held": "Hawak na",
     "award": "Ibigay",
+    "awardNamed": "Ibigay ang \"{{title}}\"",
     "note": "Ifo-follow sila ng badge sa Hive, at iyon ang ibig sabihin ng paghawak nito. Puwede mo itong bawiin mula sa sariling page ng badge."
   },
   "hive": {
@@ -85,8 +86,9 @@
     "unclaimed": "Hindi pa na-claim",
     "noActivity": "Wala pang activity sa panahong ito",
     "otherTopics": "Iba pa",
-    "title": "Rankings",
+    "title": "Leaderboard",
     "subtitle": "{{blurb}}: mga top creator sa 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
     "subtitleTopic": "{{blurb}}: mga top creator sa {{topic}}.",
     "allTopics": "Lahat ng paksa",
     "finding": "Hinahanap si @{{user}} sa board na ito…",

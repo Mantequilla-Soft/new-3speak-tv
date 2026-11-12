@@ -11,6 +11,8 @@
       "transferFailed": "Falha na transferência: {{message}}"
     },
     "heading": "Enviar gorjeta para @{{recipient}}",
+    "pageTitle": "Dar gorjeta a @{{recipient}}",
+    "pageSub": "Aberto a partir de um overlay de transmissão ou de um link",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Mais formas",
@@ -23,7 +25,16 @@
     "memoLinkNote": "Este link é adicionado ao memo: {{link}}",
     "send": "Enviar gorjeta",
     "sendAmount": "Enviar {{amount}} {{currency}}",
+    "paidIn": "Pago em {{currency}} · sem taxas",
+    "forTitle": "por “{{title}}”",
+    "presets": {
+      "coffee": "Um café",
+      "popular": "O mais popular",
+      "thanks": "Muito obrigado",
+      "superFan": "Superfã"
+    },
     "sentEyebrow": "Gorjeta enviada",
+    "sentTo": "{{amount}} para @{{recipient}}",
     "lightning": {
       "amountLabel": "Valor (sats):",
       "messageLabel": "Mensagem (opcional):",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "Com que frequência",
       "once": "Uma vez",
+      "oneTime": "Uma vez",
+      "monthly": "Mensal",
       "until": "Todo mês, até {{date}}",
       "note": "A Hive envia sozinha a cada 30 dias, o primeiro agora mesmo. Você pode parar quando quiser.",
       "replaces": "Isto substitui o apoio mensal que você já envia para @{{recipient}}.",
@@ -91,7 +104,8 @@
     "addToPlaylist": "Adicionar à playlist",
     "addTag": "Adicionar tag",
     "notInterested": "Não tenho interesse",
-    "dontShowCreator": "Não mostrar @{{author}}"
+    "dontShowCreator": "Não mostrar @{{author}}",
+    "saveToPlaylist": "Salvar na playlist"
   },
   "guestList": {
     "loadFailed": "Não foi possível carregar a lista de convidados atual",
@@ -136,18 +150,23 @@
     "tagged": "Tag “{{tag}}” adicionada.",
     "vote": "Votar",
     "tagThisVideo": "Marcar este vídeo",
-    "tagOptional": "— opcional —",
+    "tagOptional": "Opcional",
     "pickTopicFirst": "Escolha um tema primeiro",
     "taggedNoDot": "Tag “{{tag}}” adicionada",
     "tagFailed": "Falha ao marcar: {{message}}",
-    "taggedAlreadyVoted": "Tag “{{tag}}” adicionada — seu voto de {{weight}}% já tinha sido dado.",
-    "votingClosed": "Votação encerrada — marque este vídeo",
+    "taggedAlreadyVoted": "Tag “{{tag}}” adicionada. Seu voto de {{weight}}% já tinha sido dado.",
+    "votingClosed": "Votação encerrada: marque este vídeo",
     "youTagged": "Você marcou isto como <b>{{tag}}</b>.",
-    "pickTopic": "Escolha um tema (conta como um voto de 100%)",
+    "pickTopic": "Escolher um tema conta como um voto de 100%.",
     "submitTag": "Enviar tag",
     "tagThisVideoFull": "Marcar este vídeo (conta como um voto de 100%)",
-    "justTag": "Não votar — só marcar",
-    "addsAbout": "adiciona cerca de {{value}}"
+    "justTag": "Não votar, só marcar",
+    "justTagShort": "Só marcar",
+    "voteAndTag": "Votar e marcar",
+    "addsAbout": "adiciona cerca de {{value}}",
+    "postSoFar_one": "{{value}} até agora · {{count}} voto",
+    "postSoFar_many": "{{value}} até agora · {{count}} votos",
+    "postSoFar_other": "{{value}} até agora · {{count}} votos"
   },
   "tagsPicker": {
     "autoTagged": "Tags automáticas: {{tags}}",
@@ -156,7 +175,7 @@
     "noMatches": "Nenhum tema corresponde a “{{query}}”.",
     "allSelected": "Todo o tema {{category}} está selecionado. Adicione temas específicos só se quiser restringir mais:",
     "orPickTopics": "Ou escolha temas específicos:",
-    "goodEnough": "Já está bom — ou seja mais específico (opcional):",
+    "goodEnough": "Já está bom, ou seja mais específico (opcional)",
     "moreSpecific": "Mais específico:"
   }
 }

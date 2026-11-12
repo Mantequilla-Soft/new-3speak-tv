@@ -7,7 +7,8 @@
     "feeds": "ফিড",
     "groups": "গ্রুপ",
     "audio": "অডিও",
-    "login": "লগ ইন"
+    "login": "লগ ইন",
+    "you": "আপনি"
   },
   "installApp": "অ্যাপ ইনস্টল করুন",
   "iosInstallHint": "<b>Share</b> চাপুন, তারপর <b>Add to Home Screen</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "ছোট ভার্টিক্যাল ভিডিও, একটার পর একটা",
     "audioTooltip": "3Speak-এ প্রকাশিত পডকাস্ট, গান ও অন্যান্য অডিও",
     "groupsTooltip": "যেসব কমিউনিটিতে যোগ দিতে পারেন, আর মানুষ যেসব ব্যাজ পায়",
-    "rankingsTooltip": "এই মুহূর্তে সবচেয়ে বেশি আয় করা ও দেখা ক্রিয়েটররা"
+    "rankingsTooltip": "এই মুহূর্তে সবচেয়ে বেশি আয় করা ও দেখা ক্রিয়েটররা",
+    "live": "লাইভ",
+    "liveTooltip": "এই মুহূর্তে লাইভ থাকা স্ট্রিম ও রুম"
   },
   "aboutLink": "3Speak সম্পর্কে",
   "faqLink": "FAQ",
@@ -49,14 +52,20 @@
     "logout": "লগ আউট",
     "onDiscord": "Discord-এ 3Speak",
     "onX": "X-এ 3Speak",
-    "onTelegram": "Telegram-এ 3Speak"
+    "onTelegram": "Telegram-এ 3Speak",
+    "switch": "বদলান",
+    "tiles": {
+      "channel": "চ্যানেল",
+      "history": "ইতিহাস"
+    },
+    "darkTheme": "ডার্ক থিম"
   },
   "notifications": {
     "pushOff": "এই ডিভাইসে নোটিফিকেশন বন্ধ করা হয়েছে",
-    "pushOn": "আপনার ফলো করা ক্রিয়েটররা পোস্ট করলে আপনাকে জানানো হবে",
+    "pushOn": "আপনার ফলো করা ক্রিয়েটররা পোস্ট করলে আপনাকে জানানো হবে।",
     "pushFailed": "নোটিফিকেশন সেটিংস বদলানো যায়নি",
     "ariaUnread": "নোটিফিকেশন ({{count}}টি অপঠিত)",
-    "pushBlocked": "আপনার ব্রাউজার সেটিংসে এই সাইটের নোটিফিকেশন ব্লক করা আছে",
+    "pushBlocked": "আপনার ব্রাউজার সেটিংসে এই সাইটের নোটিফিকেশন ব্লক করা আছে।",
     "pushNoWorker": "এই বিল্ডে কোনো সার্ভিস ওয়ার্কার নেই, তাই এখানে নোটিফিকেশন চালু করা যাবে না",
     "pushStop": "এই ডিভাইসে নোটিফিকেশন বন্ধ করুন",
     "pushStart": "আপনার ফলো করা ক্রিয়েটররা পোস্ট করলে নোটিফিকেশন পান",
@@ -76,7 +85,7 @@
       "followMany_other": "@{{a}} ও আরও {{count}} জন আপনাকে ফলো করেছেন",
       "other": "{{count}}টি {{type}} নোটিফিকেশন",
       "typeCount": "{{count}}টি {{type}}",
-      "includesWhale": "🐋 হোয়েল অ্যাকাউন্টও আছে",
+      "includesWhale": "🐋 তিমি অ্যাকাউন্টও আছে",
       "includesOrca": "🐬 অর্কা অ্যাকাউন্টও আছে",
       "andMore": "আরও {{count}}টি…"
     },
@@ -93,6 +102,13 @@
       "heading": "আপনার ফলো করা পডকাস্টের নতুন এপিসোড",
       "newEpisode": "{{show}}-এর নতুন এপিসোড",
       "type": "পডকাস্ট"
+    },
+    "tabs": {
+      "all": "সব",
+      "mentions": "মেনশন",
+      "follows": "ফলো",
+      "uploads": "আপলোড",
+      "pods": "পডকাস্ট"
     }
   },
   "search": {
@@ -130,6 +146,17 @@
     "views_other": "{{formatted}} ভিউ",
     "tags": "ট্যাগ",
     "titles": "শিরোনাম",
-    "placeholder": "সার্চ করুন..."
-  }
+    "placeholder": "সার্চ করুন...",
+    "recent": "সাম্প্রতিক",
+    "allResultsFor": "“{{term}}”-এর সব ফলাফল",
+    "kinds": {
+      "creator": "ক্রিয়েটর",
+      "community": "কমিউনিটি",
+      "video": "ভিডিও",
+      "short": "শর্ট",
+      "audio": "অডিও",
+      "playlist": "প্লেলিস্ট"
+    }
+  },
+  "create": "তৈরি করুন"
 }

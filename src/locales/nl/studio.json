@@ -7,13 +7,19 @@
     "createNewDesc": "Upload je content en deel hem met de wereld"
   },
   "preview": {
-    "cannotPreview": "Je browser kan geen voorbeeld van deze video tonen — dat komt vaak voor bij HEVC/H.265-clips (bijv. iPhone-opnames in “Hoge efficiëntie”). Geen probleem: hij wordt gewoon geüpload en omgezet zodat iedereen hem kan afspelen."
+    "cannotPreview": "<b>Kan geen voorbeeld van deze video tonen.</b> Gebruikelijk bij HEVC/H.265-clips zoals iPhone-opnames in Hoge efficiëntie. Hij wordt toch geüpload en omgezet, zodat hij voor iedereen speelt."
   },
   "drafts": {
     "untitled": "(zonder titel)",
     "empty": "Geen video's gevonden met dit filter.",
     "title": "Studio",
-    "create": "Maken"
+    "create": "Maken",
+    "views28": "Weergaven, 28 dagen",
+    "newFollowers": "Nieuwe volgers",
+    "views": "weergaven",
+    "stats": "Statistieken",
+    "more": "Meer",
+    "public": "Openbaar"
   },
   "schedule": {
     "days": {
@@ -32,6 +38,7 @@
     "am": "AM",
     "pm": "PM",
     "pastWarning": "Deze datum en tijd liggen in het verleden. Kies een datum en tijd in de toekomst.",
+    "pickDay": "Kies een dag",
     "publishAt": "Je video wordt automatisch gepubliceerd op {{when}}"
   },
   "scheduled": {
@@ -101,6 +108,7 @@
     "insertTable": "Tabel invoegen",
     "spoiler": "Spoiler/verborgen tekst",
     "emoji": "Emoji",
+    "gifs": "GIF's",
     "searchEmoji": "Emoji zoeken",
     "searchGifs": "GIF's zoeken…",
     "noGifs": "Geen GIF's gevonden.",

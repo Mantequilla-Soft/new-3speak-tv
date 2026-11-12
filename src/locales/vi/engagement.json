@@ -11,6 +11,8 @@
       "transferFailed": "Chuyển thất bại: {{message}}"
     },
     "heading": "Gửi tip cho @{{recipient}}",
+    "pageTitle": "Gửi tip cho @{{recipient}}",
+    "pageSub": "Mở từ lớp phủ buổi phát hoặc một liên kết",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Cách khác",
@@ -23,7 +25,16 @@
     "memoLinkNote": "Liên kết này được thêm vào ghi chú: {{link}}",
     "send": "Gửi tip",
     "sendAmount": "Gửi {{amount}} {{currency}}",
+    "paidIn": "Trả bằng {{currency}} · không mất phí",
+    "forTitle": "cho “{{title}}”",
+    "presets": {
+      "coffee": "Một ly cà phê",
+      "popular": "Phổ biến nhất",
+      "thanks": "Cảm ơn nhiều",
+      "superFan": "Siêu fan"
+    },
     "sentEyebrow": "Đã gửi tip",
+    "sentTo": "{{amount}} tới @{{recipient}}",
     "lightning": {
       "amountLabel": "Số tiền (sats):",
       "messageLabel": "Lời nhắn (không bắt buộc):",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "Bao lâu một lần",
       "once": "Một lần",
+      "oneTime": "Một lần",
+      "monthly": "Hằng tháng",
       "until": "Mỗi tháng, đến {{date}}",
       "note": "Hive tự gửi mỗi 30 ngày, lần đầu ngay bây giờ. Bạn có thể dừng bất cứ lúc nào.",
       "replaces": "Khoản này sẽ thay thế khoản ủng hộ hằng tháng bạn đang gửi cho @{{recipient}}.",
@@ -91,7 +104,8 @@
     "addToPlaylist": "Thêm vào danh sách phát",
     "addTag": "Thêm thẻ",
     "notInterested": "Không quan tâm",
-    "dontShowCreator": "Không hiển thị @{{author}}"
+    "dontShowCreator": "Không hiển thị @{{author}}",
+    "saveToPlaylist": "Lưu vào danh sách phát"
   },
   "guestList": {
     "loadFailed": "Không thể tải danh sách khách hiện tại",
@@ -132,18 +146,21 @@
     "tagged": "Đã gắn thẻ “{{tag}}”.",
     "vote": "Vote",
     "tagThisVideo": "Gắn thẻ video này",
-    "tagOptional": "— không bắt buộc —",
+    "tagOptional": "Không bắt buộc",
     "pickTopicFirst": "Hãy chọn một chủ đề trước",
     "taggedNoDot": "Đã gắn thẻ “{{tag}}”",
     "tagFailed": "Gắn thẻ thất bại: {{message}}",
-    "taggedAlreadyVoted": "Đã gắn thẻ “{{tag}}” — lượt vote {{weight}}% của bạn đã được ghi nhận trước đó.",
-    "votingClosed": "Đã hết hạn vote — hãy gắn thẻ video này",
+    "taggedAlreadyVoted": "Đã gắn thẻ “{{tag}}”. Lượt vote {{weight}}% của bạn đã được ghi nhận trước đó.",
+    "votingClosed": "Đã hết hạn vote: hãy gắn thẻ video này",
     "youTagged": "Bạn đã gắn thẻ video này là <b>{{tag}}</b>.",
-    "pickTopic": "Chọn một chủ đề (tính là một lượt vote 100%)",
+    "pickTopic": "Chọn một chủ đề được tính là một lượt vote 100%.",
     "submitTag": "Gửi thẻ",
     "tagThisVideoFull": "Gắn thẻ video này (tính là một lượt vote 100%)",
-    "justTag": "Không vote — chỉ gắn thẻ",
-    "addsAbout": "thêm khoảng {{value}}"
+    "justTag": "Không vote, chỉ gắn thẻ",
+    "justTagShort": "Chỉ gắn thẻ",
+    "voteAndTag": "Vote và gắn thẻ",
+    "addsAbout": "thêm khoảng {{value}}",
+    "postSoFar_other": "{{value}} đến nay · {{count}} lượt vote"
   },
   "tagsPicker": {
     "autoTagged": "Tự động gắn thẻ: {{tags}}",
@@ -152,7 +169,7 @@
     "noMatches": "Không có chủ đề nào khớp với “{{query}}”.",
     "allSelected": "Đã chọn toàn bộ {{category}}. Chỉ thêm từng chủ đề nếu muốn thu hẹp hơn:",
     "orPickTopics": "Hoặc chọn từng chủ đề:",
-    "goodEnough": "Vậy là đủ — hoặc chọn cụ thể hơn (không bắt buộc):",
+    "goodEnough": "Vậy là đủ, hoặc chọn cụ thể hơn (không bắt buộc)",
     "moreSpecific": "Cụ thể hơn:"
   }
 }

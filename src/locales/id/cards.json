@@ -6,7 +6,7 @@
   "watchingNow_other": "{{count}} sedang menonton",
   "previewMuted": "Pratinjau · tanpa suara",
   "badges": {
-    "gatedTitle": "Khusus anggota. 3Speak Pro membuka video lengkapnya",
+    "gatedTitle": "Khusus anggota",
     "pro": "PRO",
     "new": "BARU",
     "first": "Pertama",
@@ -17,24 +17,28 @@
   "status": {
     "scheduled": "Terjadwal",
     "mobile": "Seluler",
-    "mobileTitle": "Diunggah lewat aplikasi seluler",
+    "mobileTitle": "Lewat aplikasi seluler",
     "processing": "Diproses",
-    "processingTitle": "Video sedang diproses",
+    "processingTitle": "Sedang diproses",
     "draft": "Draf",
-    "draftTitle": "Draf - belum diterbitkan",
+    "draftTitle": "Belum diterbitkan",
     "deleted": "Dihapus",
-    "deletedTitle": "Video ini sudah dihapus",
+    "deletedTitle": "Sudah dihapus",
     "failed": "Gagal",
-    "failedTitle": "Pemrosesan video gagal",
+    "failedTitle": "Pemrosesan gagal",
     "unlisted": "Tidak publik",
-    "unlistedTitle": "Tidak publik — tersembunyi dari feed & pencarian, hanya bisa dibuka lewat tautan langsung"
+    "unlistedTitle": "Hanya lewat tautan langsung"
   },
   "playlist": {
     "loading": "Memuat playlist...",
     "items_other": "{{count}} item",
     "openAria": "Buka playlist {{name}}",
     "tag": "Playlist",
-    "updated": "Diperbarui {{when}}"
+    "updated": "Diperbarui {{when}}",
+    "public": "publik",
+    "private": "privat",
+    "history": "riwayat",
+    "audio": "audio"
   },
   "watchLater": {
     "title": "Tonton Nanti",
@@ -48,5 +52,12 @@
     "label": "Ubah ukuran",
     "small": "Kecil",
     "medium": "Sedang"
+  },
+  "payout": {
+    "title": "Payout",
+    "author": "Penulis",
+    "curators": "Kurator",
+    "paysOutIn": "Dibayar dalam",
+    "days_other": "{{count}} hari"
   }
 }

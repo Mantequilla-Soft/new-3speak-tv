@@ -5,8 +5,8 @@
     "yourStreamEnded": "La tua diretta è terminata",
     "thisStreamEnded": "Questa diretta è terminata",
     "noLongerLive": "Non è più in diretta. Avviane una nuova quando vuoi.",
-    "recordingProcessing": "Ottimo lavoro! La tua registrazione è in elaborazione e comparirà a breve nel post di annuncio.",
-    "thanksForLive": "Ottimo lavoro, grazie per essere andato in diretta!",
+    "recordingProcessing": "La tua registrazione è in elaborazione e comparirà a breve nel post di annuncio.",
+    "thanksForLive": "Ottimo, grazie per la diretta",
     "backHome": "Torna alla Home",
     "howWasStream": "Com'è andata la tua diretta?",
     "connecting": "Connessione a OpenPods…",
@@ -42,13 +42,13 @@
     "slowDown": "Aspetta un momento, poi crea di nuovo la clip.",
     "failed": "Impossibile creare la clip. Riprova tra qualche secondo.",
     "title": "Crea una clip degli ultimi 30 secondi",
-    "label": "30 sec",
+    "label": "Clip",
     "clipping": "Creazione clip…"
   },
   "report": {
     "reasons": {
       "harassment": "Molestie o odio",
-      "sexual": "Contenuti sessuali o espliciti",
+      "sexual": "Sessuale o esplicito",
       "violence": "Violenza o atti pericolosi",
       "selfharm": "Autolesionismo",
       "illegal": "Contenuti illegali",
@@ -59,7 +59,7 @@
     "failed": "Impossibile inviare la segnalazione. Riprova.",
     "title": "Segnala questa diretta",
     "reporting": "Stai segnalando <b>@{{host}}</b>.",
-    "intro": "Dicci cosa non va. Il nostro team esamina ogni segnalazione.",
+    "intro": "Il nostro team esamina ogni segnalazione.",
     "detailPlaceholder": "Aggiungi dettagli (facoltativo)",
     "sending": "Invio…",
     "submit": "Invia segnalazione"
@@ -75,7 +75,7 @@
     },
     "published": "Registrazione pubblicata su Hive!",
     "loginGate": "Accedi per pubblicare la tua registrazione.",
-    "heading": "Pubblica la registrazione dell'OpenPod",
+    "heading": "Pubblica la registrazione OpenPod",
     "previewLabel": "Anteprima della registrazione",
     "previewHint": "Ascolta l'audio prima di pubblicarlo. È lo stesso player che vedranno i lettori nel post.",
     "recordingFallback": "Registrazione OpenPod",
@@ -92,7 +92,8 @@
   },
   "lobby": {
     "descriptionPlaceholder": "Di cosa parla questa sessione? Aggiungi note, link o un riassunto…",
-    "enableHosting": "Abilita conduzione e interventi",
+    "enableHosting": "Attiva conduzione e parola",
+    "enableHostingHint": "Richiede l'autorità posting di @threespeak",
     "handoverFailed": "Impossibile abilitare automaticamente la conduzione. OpenPods pubblica per tuo conto tramite @threespeak — verifica di avergli concesso l'autorità posting, poi riprova.",
     "signInToHost": "Accedi con Hive per condurre o intervenire"
   },
@@ -132,8 +133,8 @@
     },
     "chatBox": {
       "title": "La tua chat in OBS",
-      "desc": "Un solo link per tutte le tue dirette. Aggiungilo in OBS come dock per leggere i nuovi messaggi mentre sei in diretta. La guida qui sotto spiega come.",
-      "copy": "Copia URL della chat per OBS",
+      "desc": "aggiungilo come dock del browser personalizzato",
+      "copy": "Copia URL della chat",
       "copied": "URL della chat copiato"
     },
     "card": {
@@ -144,26 +145,26 @@
       "watch": "Guarda la diretta",
       "notAnnounced": "Questa diretta non è stata annunciata su Hive.",
       "notAnnouncedAuth": "Non annunciata su Hive: 3Speak non può ancora pubblicare per te. Modifica il modello per consentirlo.",
-      "stuck": "OBS si è connesso, ma non ci è arrivato alcun video, quindi la diretta non è partita. Interrompi lo streaming in OBS e riavvialo.",
-      "dailyLimit": "OBS non è riuscito ad andare in diretta: gli account gratuiti possono avviare una diretta al giorno. Riprova 24 ore dopo l'inizio della tua ultima diretta, oppure passa a 3Speak Pro per trasmettere senza limite giornaliero.",
+      "stuck": "OBS è collegato, ma non ci è arrivato alcun video. Interrompi lo streaming e riavvialo.",
+      "dailyLimit": "Gli account gratuiti possono avviare una diretta al giorno. Riprova 24 ore dopo l'inizio della tua ultima diretta, o passa a Pro.",
       "useInStudio": "Usa in Stream Studio",
       "proRequired": "OBS non è riuscito ad andare in diretta: trasmettere da OBS fa parte di 3Speak Pro."
     },
     "guide": {
       "title": "Come configurare OBS",
-      "step1": "Usa OBS Studio 30 o successivo e apri Impostazioni, poi Dirette.",
-      "step2": "Imposta Servizio su \"WHIP\".",
-      "step3": "Server: incolla l'URL del server del modello che vuoi (\"Copia URL del server\" sulla sua scheda). Ogni modello ha il suo.",
-      "step4": "Bearer Token: incolla il tuo segreto di diretta dalla parte alta di questa pagina. È lo stesso per ogni modello.",
-      "step5": "Clicca \"Start Streaming\" in OBS e sei in diretta su 3Speak con quel modello. \"Stop Streaming\" termina la diretta.",
-      "outputTitle": "Impostazioni di uscita consigliate",
-      "keyframe": "Intervallo dei fotogrammi chiave: da 1 a 2 secondi",
-      "bitrate": "Controllo frequenza CBR, da 2500 a 6000 kbps",
-      "encoder": "Codificatore: x264 o il tuo codificatore hardware",
-      "audio": "Frequenza di campionamento audio: 48 kHz",
-      "bframes": "Nessun B-frames (impostali su 0 se il codificatore lo consente)",
+      "step1": "Usa OBS Studio 30 o successivo: Impostazioni → Dirette",
+      "step2": "Imposta Servizio su “WHIP”",
+      "step3": "Server: incolla l'URL del server del modello",
+      "step4": "Bearer Token: incolla il tuo segreto di diretta",
+      "step5": "Avvia lo streaming in OBS. Sei in diretta su 3Speak.",
+      "outputTitle": "Uscita consigliata",
+      "keyframe": "Fotogramma chiave 1–2 s",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / hardware",
+      "audio": "Audio a 48 kHz",
+      "bframes": "Nessun B-frame",
       "chatTitle": "Vedi la chat in OBS",
-      "chatCopy": "In cima a questa pagina, sotto \"La tua chat in OBS\", fai clic su \"Copia URL della chat per OBS\". È un solo link per tutte le tue dirette.",
+      "chatCopy": "In cima a questa pagina, sotto “La tua chat in OBS”, fai clic su “Copia URL della chat”. È un solo link per tutte le tue dirette.",
       "chat2": "In OBS, apri il menu \"Docks\" e scegli \"Custom Browser Docks\". Inserisci un nome come \"Chat 3Speak\", incolla l'URL e fai clic su \"Apply\". I nuovi messaggi compaiono in quel pannello mentre sei in diretta. Gli spettatori non lo vedono mai.",
       "chat3": "Gli spettatori vedono già la chat accanto alla tua diretta, quindi non serve inserirla nel video. Solo se condividi la diretta anche altrove: aggiungi lo stesso URL come fonte \"Browser\" e togli \"&dock=1\" dalla fine. Così i messaggi scorrono sopra il video e svaniscono dopo 30 secondi.",
       "chatOptions": "Facoltativo, aggiungi alla fine dell'URL: &max=10 mostra meno righe, &size=18 ingrandisce il testo, &fade=0 lascia i messaggi sul video.",
@@ -257,5 +258,15 @@
       "desc": "Con 3Speak Pro puoi andare in diretta direttamente da OBS usando i tuoi modelli. Senza Pro, i tuoi modelli funzionano comunque nello Stream Studio del tuo browser.",
       "cta": "Ottieni 3Speak Pro"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_one": "{{count}} in ascolto",
+    "listening_many": "{{count}} in ascolto",
+    "listening_other": "{{count}} in ascolto",
+    "emptySub": "Dirette e OpenPods compaiono qui appena iniziano.",
+    "emptyRooms": "Nessun OpenPod è aperto in questo momento.",
+    "emptyScheduled": "Al momento non c'è nulla in programma.",
+    "emptyScheduledSub": "Le stanze aperte ma non ancora in diretta compaiono qui."
   }
 }

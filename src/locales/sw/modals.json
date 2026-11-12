@@ -17,7 +17,8 @@
     "loginFailed": "Kuingia kumeshindwa: {{error}}",
     "logoAlt": "Nembo ya 3Speak",
     "title": "Ingia kwa jina lako la mtumiaji",
-    "usernamePlaceholder": "Jina la mtumiaji"
+    "usernamePlaceholder": "Jina la mtumiaji",
+    "continueWith": "Endelea na {{method}}"
   },
   "socialLink": {
     "hashCopied": "Hash imenakiliwa",
@@ -55,7 +56,7 @@
   },
   "auth": {
     "title": "Idhinisha 3Speak",
-    "text": "Ili kupakia video kwenye 3Speak tunahitaji mamlaka yako ya posting. Hii inaturuhusu kuchapisha video ulizopakia kwenye Hive. Unahitaji kutupa mamlaka ya posting mara moja tu.",
+    "text": "Ili kupakia tunahitaji mamlaka yako ya posting, ili tuchapishe video zako kwenye Hive. Unaitoa mara moja tu.",
     "authorize": "Idhinisha"
   },
   "beneficiary": {
@@ -74,6 +75,11 @@
       "maxCount": "Hive inaruhusu wanufaika wasiozidi {{max}} kwa kila chapisho."
     },
     "title": "Wanufaika",
+    "shareRewards": "Gawana zawadi",
+    "you": "wewe",
+    "toYou": "kwako",
+    "addCollaborator": "Ongeza mshirika",
+    "saveSplit": "Hifadhi mgawanyo",
     "intro": "Ongeza mtumiaji unayetaka apokee kiotomatiki sehemu ya zawadi za chapisho hili.",
     "minPercent": "% (angalau {{percent}}%)",
     "usernamePlaceholder": "Weka jina la mtumiaji",
@@ -100,7 +106,7 @@
   },
   "verifyAuth": {
     "title": "Inathibitisha uidhinishaji",
-    "text": "Tafadhali subiri tunapothibitisha kwamba uidhinishaji ulitolewa..."
+    "text": "Inakagua kwamba ulitolewa…"
   },
   "editor": {
     "confirmLeave": "Kihariri bado kiko wazi. Kuondoka kwenye ukurasa huu kutafunga kihariri na mabadiliko ambayo hayajahifadhiwa yatapotea.\n\nSawa = Funga kihariri na uondoke\nGhairi = Baki kwenye ukurasa huu",
@@ -176,7 +182,9 @@
     "details": "Maelezo zaidi (si lazima)",
     "detailsPlaceholder": "Toa maelezo zaidi...",
     "submitting": "Inawasilisha...",
-    "submit": "Wasilisha ripoti"
+    "submit": "Wasilisha ripoti",
+    "intro": "Ripoti zinaenda kwa timu ya 3Speak. Mtayarishaji hataona aliyeripoti.",
+    "nextDetails": "Inayofuata: ongeza maelezo"
   },
   "upload": {
     "missingInfo": "Taarifa za video au picha ndogo zinakosekana.",

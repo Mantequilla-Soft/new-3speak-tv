@@ -7,7 +7,8 @@
     "feeds": "Feeds",
     "groups": "Grupos",
     "audio": "Audio",
-    "login": "Entrar"
+    "login": "Entrar",
+    "you": "Tú"
   },
   "installApp": "Instalar app",
   "iosInstallHint": "Toca <b>Compartir</b> y luego <b>Agregar a pantalla de inicio</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Videos cortos verticales, uno tras otro",
     "audioTooltip": "Podcasts, música y otros audios publicados en 3Speak",
     "groupsTooltip": "Comunidades a las que puedes unirte e insignias que se otorgan",
-    "rankingsTooltip": "Los creadores que más ganan y más se ven ahora mismo"
+    "rankingsTooltip": "Los creadores que más ganan y más se ven ahora mismo",
+    "live": "En vivo",
+    "liveTooltip": "Transmisiones y salas en vivo ahora mismo"
   },
   "aboutLink": "Acerca de 3Speak",
   "faqLink": "Preguntas frecuentes",
@@ -49,14 +52,20 @@
     "logout": "Cerrar sesión",
     "onDiscord": "3Speak en Discord",
     "onX": "3Speak en X",
-    "onTelegram": "3Speak en Telegram"
+    "onTelegram": "3Speak en Telegram",
+    "switch": "Cambiar",
+    "tiles": {
+      "channel": "Canal",
+      "history": "Historial"
+    },
+    "darkTheme": "Tema oscuro"
   },
   "notifications": {
     "pushOff": "Notificaciones desactivadas en este dispositivo",
-    "pushOn": "Te avisaremos cuando publiquen los creadores que sigues",
+    "pushOn": "Recibirás un aviso cuando publiquen los creadores que sigues.",
     "pushFailed": "No se pudieron cambiar los ajustes de notificaciones",
     "ariaUnread": "Notificaciones ({{count}} sin leer)",
-    "pushBlocked": "Las notificaciones de este sitio están bloqueadas en los ajustes de tu navegador",
+    "pushBlocked": "Las notificaciones de este sitio están bloqueadas en la configuración de tu navegador.",
     "pushNoWorker": "Esta versión no tiene service worker, así que no se pueden registrar notificaciones aquí",
     "pushStop": "Dejar de notificar en este dispositivo",
     "pushStart": "Recibe avisos cuando publiquen los creadores que sigues",
@@ -78,8 +87,8 @@
       "followMany_other": "@{{a}} y {{count}} personas más te siguieron",
       "other": "{{count}} notificaciones de {{type}}",
       "typeCount": "{{count}} {{type}}",
-      "includesWhale": "Incluye cuenta(s) ballena 🐋",
-      "includesOrca": "Incluye cuenta(s) orca 🐬",
+      "includesWhale": "Incluye cuentas ballena 🐋",
+      "includesOrca": "Incluye cuentas orca 🐬",
       "andMore": "y {{count}} más…"
     },
     "stories": {
@@ -97,6 +106,13 @@
       "heading": "Episodios nuevos de los podcasts que sigues",
       "newEpisode": "Nuevo episodio de {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "Todo",
+      "mentions": "Menciones",
+      "follows": "Seguidores",
+      "uploads": "Subidas",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -137,6 +153,17 @@
     "views_other": "{{formatted}} vistas",
     "tags": "Etiquetas",
     "titles": "Títulos",
-    "placeholder": "Buscar..."
-  }
+    "placeholder": "Buscar...",
+    "recent": "Recientes",
+    "allResultsFor": "Todos los resultados de “{{term}}”",
+    "kinds": {
+      "creator": "Creador",
+      "community": "Comunidad",
+      "video": "Video",
+      "short": "Short",
+      "audio": "Audio",
+      "playlist": "Playlist"
+    }
+  },
+  "create": "Crear"
 }

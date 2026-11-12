@@ -29,7 +29,7 @@
     },
     "searchSlash": {
       "title": "Druk op / om te zoeken",
-      "body": "Overal op de site spring je met de slash-toets naar het zoekveld. Het zoekt door video's, makers en community's."
+      "body": "Vanaf elke plek op de site spring je met de slash-toets naar het zoekvak."
     },
     "communities": {
       "title": "Community's brengen mensen samen rond één onderwerp",
@@ -51,7 +51,7 @@
     },
     "timestamps": {
       "title": "Reageer op een exact moment",
-      "body": "Terwijl een video speelt, kan een reactie het tijdstip meekrijgen waar je was. Lezers krijgen een link die precies naar die seconde gaat."
+      "body": "Terwijl een video speelt, kan een reactie het tijdstip bevatten waar je was."
     },
     "badges": {
       "title": "Badges krijg je, die claim je niet",
@@ -65,7 +65,7 @@
     },
     "backlog": {
       "title": "Niets wat je nu plaatst is verspild",
-      "body": "Alles wat je tijdens je warming-up publiceert, kan opnieuw op Hive worden gepubliceerd onder je eigen naam zodra je account er is, en jij kiest wat er meegaat."
+      "body": "Alles wat je tijdens je warming-up publiceert, kan onder je eigen naam opnieuw op Hive worden gepubliceerd."
     }
   },
   "trackChooser": {
@@ -74,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Wat brengt je naar 3Speak?",
-    "intro": "Je weg naar een Hive-account hangt ervan af: kijkers en luisteraars kijken, luisteren en doen mee, makers publiceren video's, muzikanten en podcasters publiceren audio, en adverteerders zetten hun merk op.",
-    "introNoAdvertisers": "Je weg naar een Hive-account hangt ervan af: kijkers en luisteraars kijken, luisteren en doen mee, makers publiceren video's, en muzikanten en podcasters publiceren audio."
+    "intro": "Je weg naar een Hive-account hangt hiervan af.",
+    "introNoAdvertisers": "Je weg naar een Hive-account hangt hiervan af."
   },
   "tipCard": {
     "aria": "Tip",
@@ -98,7 +98,7 @@
       "short": {
         "label_one": "Plaats een short",
         "label_other": "Plaats {{count}} Shorts",
-        "hint": "Doe mee met 3Speak Shorts en upload momenten uit je dagelijks leven of verhalen die je wilt delen.",
+        "hint": "Shorts bereiken mensen die je nog niet volgen.",
         "why": "Shorts zijn de snelste manier om gevonden te worden. Ze spelen in een feed van makers die mensen nog niet volgen, dus een short reikt verder dan je eigen kanaal.",
         "counts": {
           "0": "Verticale video's geplaatst via de Shorts-uploader.",
@@ -109,7 +109,7 @@
       "follow": {
         "label_one": "Volg een maker",
         "label_other": "Volg {{count}} makers",
-        "hint": "Bouw een netwerk op van gelijkgestemden, of van makers die je spannend vindt.",
+        "hint": "Wie je volgt, maakt van de homefeed jouw feed.",
         "why": "Wie je volgt maakt van de home-feed jouw feed. Het gaat met je mee naar Hive als je wordt geüpgraded.",
         "counts": {
           "0": "Makers die je op dit moment volgt.",
@@ -120,7 +120,7 @@
       "comment": {
         "label_one": "Schrijf een reactie",
         "label_other": "Schrijf {{count}} reacties",
-        "why": "Via reacties vinden mensen je voordat je een publiek hebt. Eén echte reactie onder de video van iemand anders doet meer voor je dan een upload die nog niemand heeft gezien.",
+        "why": "Eén echte reactie onder de video van iemand anders doet meer voor je dan een upload die nog niemand heeft gezien.",
         "cta": "Iets zoeken om op te reageren",
         "hint_one": "Reacties tellen mee vanaf {{count}} teken. Een echte gedachte, niet alleen “leuk”.",
         "hint_other": "Reacties tellen mee vanaf {{count}} tekens. Een echte gedachte, niet alleen “leuk”.",
@@ -128,7 +128,7 @@
           "minChars_one": "Minstens {{count}} teken in je eigen woorden.",
           "minChars_other": "Minstens {{count}} tekens in je eigen woorden.",
           "realThought": "Een echte gedachte in plaats van één woord.",
-          "othersPost": "Op de post van iemand anders. Reacties onder je eigen video's, of op je eigen reacties, zijn een gesprek met jezelf en tellen niet mee."
+          "othersPost": "Onder de post van iemand anders. Reacties onder je eigen video's tellen niet."
         }
       },
       "watch": {
@@ -303,23 +303,23 @@
     "unlocks": {
       "earn": {
         "title": "Je posts beginnen te verdienen.",
-        "body": "Video's op Hive kunnen door iedereen die ernaar kijkt worden beloond in HIVE en HBD, en ze kunnen advertenties bevatten waarvan jij een deel krijgt."
+        "body": "In HIVE en HBD, plus een deel van de advertenties."
       },
       "publish": {
         "title": "Publiceer alles wat je hier hebt gemaakt.",
-        "body": "De video's, Shorts en wie je volgt op deze pagina kunnen onder je eigen naam op Hive worden geplaatst, en jij kiest welke."
+        "body": "Jij kiest wat."
       },
       "buttons": {
         "title": "Voten, fooien geven, volgen en playlists maken.",
-        "body": "Alle knoppen die vandaag nog grijs zijn voor jou."
+        "body": "De knoppen die vandaag nog grijs zijn."
       },
       "keys": {
         "title": "Keys die alleen jij hebt.",
-        "body": "Niemand kan je buitensluiten, en dezelfde login werkt in elke Hive-app, niet alleen op 3Speak."
+        "body": "Niemand kan je buitensluiten."
       },
       "ecosystem": {
         "title": "Word deel van het wereldwijde Hive-ecosysteem.",
-        "body": "3Speak is één app in een heel netwerk: blogs, community's, games, marktplaatsen en meer, allemaal met hetzelfde account en dezelfde lijst van wie je volgt."
+        "body": "Eén account voor elke Hive-app."
       }
     },
     "advertiserUnlocks": {
@@ -363,9 +363,9 @@
       "graduated": "Nu op Hive als <userLink>@{{user}}</userLink>. Alles hieronder is daarvoor gemaakt.",
       "advertiser": "Dit is je merkpagina op 3Speak. Rond de stappen hieronder af en het team beoordeelt je merk. Na goedkeuring krijg je een Hive-account: dat is je adverteerdersaccount, waarmee je advertenties boekt en betaalt.",
       "own": "Zo zien anderen je. Je posts staan op 3Speak en nog niet op Hive, dus ze verdienen geen beloningen. Dat verandert als je je account krijgt nadat je alle taken hieronder hebt afgerond.",
-      "ownCreator": "Je posts staan in een warm-upruimte, maar zijn zichtbaar en uitgelicht op het hoofdplatform. Zolang ze daar staan, leveren ze nog geen beloningen op. Dat verandert wanneer je je account krijgt, nadat je alle taken hieronder hebt afgerond en je video's in een paar eenvoudige stappen hebt overgezet.",
+      "ownCreator": "Je posts staan in een warming-upruimte, maar zijn zichtbaar en uitgelicht op het hoofdplatform. Zolang ze daar staan, verdienen ze nog geen beloningen. Dat verandert zodra je je account krijgt.",
       "ownViewer": "Je zit in de warm-up. Je reacties en volgacties staan voorlopig in een warm-upruimte en leveren nog geen beloningen op. Zodra je alle taken hieronder hebt afgerond, krijg je je Hive-account, en vanaf dan gaat alles direct naar het hoofdplatform.",
-      "visitor": "Nieuw hier, nog niet op Hive. Deze posts staan op 3Speak, dus ze verdienen voorlopig geen beloningen. Volg en reageer toch: aanmoediging in het begin helpt iemand door de eerste weken heen. Als diegene een Hive-account krijgt, laten we het je weten, zodat je hem of haar daar ook kunt volgen."
+      "visitor": "Nieuw hier, nog niet op Hive. Deze posts verdienen voorlopig geen beloningen. Volg en reageer toch: vroege aanmoediging helpt iemand door de eerste weken."
     },
     "tabs": {
       "aria": "Profielonderdelen",
@@ -419,8 +419,8 @@
     "caughtUp": "Je Hive-account is klaar, dus dit apparaat is bijgewerkt.",
     "openFailed": "Butter Auth kon niet worden geopend",
     "title": "Verbind je sessie opnieuw",
-    "lede": "Dit apparaat heeft de verbinding met je account verloren, dus 3Speak kan je posts, voortgang en meldingen niet laden totdat die terug is.",
-    "text": "Er is niets verloren. Alles wat je hebt gemaakt staat op je account, niet in deze browser. Opnieuw verbinden duurt meestal een seconde en je hoeft niets te typen.",
+    "lede": "Dit apparaat heeft de verbinding met je account verloren.",
+    "text": "Er is niets verloren. Opnieuw verbinden duurt meestal een seconde, zonder typen.",
     "opening": "Openen…",
     "reconnect": "Opnieuw verbinden"
   },
@@ -461,7 +461,7 @@
   "contact": {
     "savedComplete": "Opgeslagen. Alleen het 3Speak-team kan het zien.",
     "savedIncomplete": "Opgeslagen. Voeg je adres toe, of een website op je profiel, om deze stap af te ronden.",
-    "privateNote": "<b>Privé.</b> Je e-mailadres en adres worden nooit op Hive gepubliceerd en nooit op je profiel of ergens anders getoond. Alleen het 3Speak-team ziet ze, om je te bereiken over je advertenties.",
+    "privateNote": "<b>Privé.</b> Wordt nooit op Hive gepubliceerd of ergens getoond. Alleen het 3Speak-team ziet het, om je te bereiken over je advertenties.",
     "email": "E-mail",
     "required": "verplicht",
     "emailPlaceholder": "jij@jouwmerk.nl",
@@ -490,7 +490,7 @@
     "uploadLogo": "Logo uploaden",
     "logoHint": "Wordt als cirkel naast je advertenties getoond, dus een vierkante afbeelding werkt het best.",
     "website": "Website",
-    "websiteOptional": "optioneel als je ons je adres geeft",
+    "websiteOptional": "optioneel als je een adres opgeeft",
     "websitePlaceholder": "https://jouwmerk.nl",
     "websiteInvalid": "Gebruik een volledig adres dat begint met https://",
     "save": "Merkprofiel opslaan"
@@ -503,7 +503,10 @@
     "approvedAdvertiser": "Het team heeft je merk goedgekeurd. Maak gratis je Hive-account aan om advertenties te boeken en te betalen.",
     "approved": "Het team heeft je goedgekeurd. Maak gratis je Hive-account aan: het is alleen van jou.",
     "createAdvertiser": "Mijn adverteerdersaccount aanmaken",
-    "create": "Mijn Hive-account aanmaken"
+    "create": "Mijn Hive-account aanmaken",
+    "handleLabel": "Handle",
+    "nextLabel": "Volgende",
+    "nextKeys": "Maak een back-up van je keys"
   },
   "graduatedFollows": {
     "message": "@{{handle}} heeft nu een Hive-account als @{{hiveUsername}}.",
@@ -515,8 +518,8 @@
   },
   "backlog": {
     "title": "Je eerdere posts zijn er nog",
-    "lede_one": "Je hebt <b>{{count}} ding</b> gemaakt voordat je een Hive-account had. Het staat alleen op 3Speak. Je kunt het op Hive zetten als <b>@{{user}}</b> wanneer je maar wilt.",
-    "lede_other": "Je hebt <b>{{count}} dingen</b> gemaakt voordat je een Hive-account had. Ze staan alleen op 3Speak. Je kunt ze op Hive zetten als <b>@{{user}}</b> wanneer je maar wilt.",
+    "lede_one": "Je hebt <b>{{count}} ding</b> gemaakt voordat je een Hive-account had. Zet het op Hive als <b>@{{user}}</b> wanneer je wilt.",
+    "lede_other": "Je hebt <b>{{count}} dingen</b> gemaakt voordat je een Hive-account had. Zet ze op Hive als <b>@{{user}}</b> wanneer je wilt.",
     "text": "Jij kiest wat er meegaat, één voor één. Alles wat je laat staan blijft precies zoals het is op 3Speak, en je kunt altijd terugkomen voor de rest.",
     "later": "Later"
   },
@@ -544,7 +547,7 @@
       "watchedListened": "{{time}} gekeken en geluisterd"
     },
     "advertiser": {
-      "lede": "Het team heeft <b>{{name}}</b> beoordeeld. Maak gratis je <b>Hive-account</b> aan: dat wordt je adverteerdersaccount.",
+      "lede": "Het team heeft <b>{{name}}</b> beoordeeld. Maak je adverteerdersaccount aan.",
       "text": "Daarmee boek je advertenties op heel 3Speak, van videospots en banners tot tickers, en betaal je ze rechtstreeks vanuit de wallet, in HBD of HIVE. De key is alleen van jou, dus niemand kan je buitensluiten.",
       "note": "Je merkprofiel gaat met je mee. Je zakelijke e-mailadres en adres blijven privé bij 3Speak en worden nooit op Hive gepubliceerd.",
       "noteMoving": "Je <b>{{moving}}</b> gaan ook mee, geleidelijk gepubliceerd over een paar dagen."
@@ -555,7 +558,7 @@
       "lede": "Maak van <b>@{{handle}}</b> gratis een <b>Hive-account</b> dat van jou is.",
       "text": "Daarmee kun je voten op en fooien geven aan de video's die je leuk vindt, verdienen met je reacties, je aanmelden voor kijkbeloningen voor wat je kijkt, en playlists maken. Dezelfde login en dezelfde gevolgde accounts werken in elke Hive-app, en de key is alleen van jou."
     },
-    "createMyAccount": "Mijn account aanmaken",
+    "createMyAccount": "Mijn Hive-account aanmaken",
     "creator": {
       "title": "Je kunt nu je eigen account aanmaken",
       "lede": "Je hebt gepost als <b>@{{handle}}</b>. Maak daar gratis een echt <b>Hive-account</b> van dat van jou is.",
@@ -573,9 +576,9 @@
   "handleTaken": {
     "openFailed": "De naamkiezer kon niet worden geopend",
     "title": "De naam @{{handle}} is al bezet",
-    "lede": "Iemand heeft hem op <b>Hive</b> geregistreerd, dus hij kan niet je account worden als je er klaar voor bent. Nu een nieuwe kiezen duurt maar even.",
-    "text": "Een naam hier kiezen heeft hem nooit gereserveerd. Hive kan een naam niet vasthouden zonder het account aan te maken, en dat is precies de stap waarvoor je nog niet hebt betaald, wat het hele punt is van beginnen zonder account.",
-    "note": "Niets wat je hebt gemaakt gaat verloren. Je video's, Shorts, reacties en gevolgde accounts blijven bij je en gaan mee onder welke naam je ook kiest.",
+    "lede": "Iemand heeft hem op <b>Hive</b> geregistreerd.",
+    "text": "Een naam hier kiezen heeft hem nooit gereserveerd.",
+    "note": "Niets van wat je hebt gemaakt gaat verloren: het komt mee onder de naam die je kiest.",
     "pick": "Nieuwe naam kiezen"
   },
   "backfill": {
@@ -609,13 +612,13 @@
     "emptyTitle": "Niets meer te publiceren",
     "emptyText": "Alles wat je maakte voordat je een Hive-account had, is gepubliceerd of was niet iets dat opnieuw kan worden gepubliceerd.",
     "title": "Publiceer wat je eerder hebt gemaakt",
-    "intro": "Je hebt deze op 3Speak gemaakt voordat je een Hive-account had, dus ze bestaan alleen hier. Kies wat je in je openbare geschiedenis als <b>@{{user}}</b> wilt hebben en publiceer het. Alles wat je laat staan blijft precies zoals het is op 3Speak.",
-    "note": "<b>Publiceren duurt even, en dat is normaal.</b> Hive staat per account één post per 5 minuten toe, en een gloednieuw account heeft een klein posttegoed dat zich in een paar dagen aanvult. Volgen, likes en je profiel kosten weinig en gaan snel. Publiceer er een paar tegelijk en kom terug.",
+    "intro": "Je hebt dit op 3Speak gemaakt voordat je een Hive-account had. Kies wat je als <b>@{{user}}</b> openbaar wilt hebben. Wat je laat staan, blijft precies zo op 3Speak.",
+    "note": "<b>Publiceren duurt even, en dat is normaal.</b> Hive staat één post per 5 minuten per account toe, en een gloednieuw account heeft een kleine postingruimte die zich in een paar dagen weer aanvult.",
     "groupBy": "Groepeer de lijst op",
     "timeline": "Tijdlijn",
     "byType": "Op soort",
-    "rcBlockedIn": "<b>Je account heeft op dit moment geen Resource Credits meer.</b> Hive geeft elk account een klein tegoed om te posten, en dat vult zich vanzelf aan. Er gaat niets verloren: kom over ongeveer {{wait}} terug en ga verder waar je was gebleven.",
-    "rcBlockedLater": "<b>Je account heeft op dit moment geen Resource Credits meer.</b> Hive geeft elk account een klein tegoed om te posten, en dat vult zich vanzelf aan. Er gaat niets verloren: kom iets later terug en ga verder waar je was gebleven.",
+    "rcBlockedIn": "<b>Je account heeft op dit moment geen Resource Credits meer.</b> Er gaat niets verloren: kom over ongeveer {{wait}} terug en ga verder waar je was gebleven.",
+    "rcBlockedLater": "<b>Je account heeft op dit moment geen Resource Credits meer.</b> Er gaat niets verloren: kom wat later terug en ga verder waar je was gebleven.",
     "selected": "<b>{{count}}</b> geselecteerd",
     "rootPostsTime_one": "{{count}} video, dus dit duurt ongeveer {{minutes}} minuten",
     "rootPostsTime_other": "{{count}} video's, dus dit duurt ongeveer {{minutes}} minuten",
@@ -626,7 +629,7 @@
     "selectItem": "{{label}} selecteren",
     "fiveMin": "5 min",
     "waitingTitle": "Wacht op iemand anders",
-    "waitingText": "Deze worden vanzelf gepubliceerd zodra de post waarnaar ze verwijzen op Hive staat. Ondertussen gaat er niets verloren.",
+    "waitingText": "Deze worden vanzelf gepubliceerd zodra de post waarnaar ze verwijzen op Hive verschijnt.",
     "waitingFor": "<b>{{label}}</b>: wacht op {{target}}",
     "andMore": "en nog {{count}}",
     "excludedTitle": "Gaat niet mee"

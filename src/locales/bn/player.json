@@ -77,6 +77,11 @@
     }
   },
   "reactionUpload": {
+    "title": "একটি ভিডিও রিঅ্যাকশন পোস্ট করুন",
+    "rec": "REC {{time}}",
+    "mic": "মাইক",
+    "camera": "ক্যামেরা",
+    "restart": "আবার শুরু",
     "authorized": "@threespeak অনুমোদিত — এখন আপনি আপনার রিঅ্যাকশন পোস্ট করতে পারবেন",
     "authFailed": "অনুমোদন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
     "webcamDenied": "ওয়েবক্যাম চালু করা যায়নি",
@@ -90,7 +95,7 @@
     "uploadVideo": "ভিডিও আপলোড করুন",
     "recordVideo": "ভিডিও রেকর্ড করুন",
     "startRecording": "রেকর্ডিং শুরু করুন",
-    "stopRecording": "রেকর্ডিং থামান",
+    "stopRecording": "থামিয়ে দেখে নিন",
     "recordedVideo": "রেকর্ড করা ভিডিও",
     "descriptionPlaceholder": "আপনার ভিডিও রিঅ্যাকশনের একটি বিবরণ যোগ করুন...",
     "showInShorts": "3Speak শর্টস-এ দেখান",

@@ -18,6 +18,7 @@
     "community": "ชุมชน",
     "communityWithSubscribers_other": "ชุมชน · สมาชิก {{formatted}} คน",
     "commentFallback": "(ความคิดเห็น)",
+    "videoKind": "3Speak · วิดีโอ",
     "play": "เล่น {{title}}"
   },
   "share": {
@@ -31,22 +32,28 @@
     "responsiveSub": "ปรับขนาดให้พอดีกับหน้าที่วางไว้",
     "fixedSub": "iframe ขนาดคงที่",
     "sendInChat": "ส่งในแชต 3Speak",
-    "sendInChatSub": "ส่งข้อความหาใครสักคนบน 3Speak",
+    "sendInChatSub": "ส่งข้อความหาใครสักคน",
     "embedOnWebsite": "ฝังในเว็บไซต์",
-    "embedOnWebsiteSub": "คัดลอก HTML สำหรับเว็บไซต์หรือบล็อกของคุณ",
+    "embedOnWebsiteSub": "ปรับขนาดอัตโนมัติหรือขนาดคงที่",
     "forHivePost": "สำหรับโพสต์ Hive",
+    "forHivePostSub": "คัดลอกลิงก์ไปวาง",
     "hivePostCopied": "คัดลอกลิงก์แล้ว วางลงในโพสต์ Hive ของคุณได้เลย",
-    "generalShare": "แชร์ / คัดลอกลิงก์",
-    "generalShareSub": "แอปอื่นๆ หรือคัดลอกลิงก์"
+    "generalShare": "แชร์หรือคัดลอกลิงก์",
+    "generalShareSub": "แอปอื่นๆ",
+    "embed": "ฝัง",
+    "chat": "แชต",
+    "more": "เพิ่มเติม",
+    "startAt": "เริ่มที่",
+    "toFollowers_other": "ถึงผู้ติดตาม {{n}} คนของคุณ"
   },
   "gate": {
     "connectTitle": "เชื่อมต่อแชต 3Speak",
-    "connectBody": "แชตขับเคลื่อนโดย Snapie การเชื่อมต่อจะลงนามคำท้าทายเข้าสู่ระบบครั้งเดียวด้วย posting key ของ Hive (ไม่มีธุรกรรม ไม่มีค่าใช้จ่าย)",
+    "connectBody": "แชตขับเคลื่อนโดย Snapie การเชื่อมต่อจะลงนามคำท้าทายเข้าสู่ระบบครั้งเดียวด้วย posting key ของคุณ ไม่มีธุรกรรม ไม่มีค่าใช้จ่าย",
     "connecting": "กำลังเชื่อมต่อ…",
     "connectButton": "เชื่อมต่อแชต",
     "cannotSign": "การเข้าสู่ระบบปัจจุบันของคุณลงนามคำท้าทายของแชตไม่ได้ ใช้ Keychain, HiveAuth, PeakVault หรือ Ledger",
     "needsAccountTitle": "แชตต้องใช้บัญชี Hive",
-    "needsAccountBody": "ข้อความจะถูกลงนามด้วยคีย์บัญชีของคุณเอง แชตจึงปลดล็อกพร้อมกับทุกอย่างเมื่อบัญชีของคุณพร้อม ทำเป้าหมายในโปรไฟล์ให้ครบ แล้วทีมงานจะพาคุณไปถึง",
+    "needsAccountBody": "แชตจะปลดล็อกพร้อมทุกอย่างเมื่อคุณผ่านช่วงวอร์มอัป",
     "loginTitle": "เข้าสู่ระบบเพื่อใช้แชต",
     "loginBody": "เข้าสู่ระบบด้วยบัญชี Hive ของคุณเพื่อส่งและรับข้อความ",
     "connectingToChat": "กำลังเชื่อมต่อแชต…"
@@ -90,8 +97,8 @@
     "serverRejectedServerMap_other": "เซิร์ฟเวอร์ปฏิเสธคำขอทั้งหมด {{count}} รายการ (ID จากรายการที่ยังไม่อ่านของเซิร์ฟเวอร์เอง)",
     "failed": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้วไม่ได้",
     "marking": "กำลังทำเครื่องหมายว่าอ่านแล้ว…",
-    "button": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้ว",
-    "buttonCount": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้ว ({{count}})"
+    "button": "อ่านทั้งหมดแล้ว",
+    "buttonCount": "อ่านทั้งหมดแล้ว ({{count}})"
   },
   "list": {
     "chooseTarget": "เลือกแชตที่จะส่ง",
@@ -124,7 +131,8 @@
     "quoting": "กำลังอ้างอิง @{{user}}",
     "cancelQuote": "ยกเลิกการอ้างอิง",
     "removeImage": "นำรูปภาพออก",
-    "placeholder": "พิมพ์ข้อความ…"
+    "placeholder": "พิมพ์ข้อความ…",
+    "placeholderTo": "ส่งข้อความถึง {{name}}"
   },
   "page": {
     "chooseTarget": "เลือกแชตที่จะส่ง",

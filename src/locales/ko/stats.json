@@ -16,7 +16,9 @@
     "avgPct": "평균 %",
     "votes": "투표",
     "comments": "댓글",
-    "payout": "보상"
+    "payout": "보상",
+    "followers": "팔로워",
+    "earned": "수익"
   },
   "days": {
     "short": {
@@ -67,7 +69,8 @@
     "title": "시청자가 시청하는 시간대",
     "sub": "UTC · 진할수록 조회수 많음",
     "cellTitle_other": "{{day}} {{hour}}:00 — 조회수 {{count}}회",
-    "hour": "{{hour}}시"
+    "hour": "{{hour}}시",
+    "best": "가장 좋은 시간: <b>{{day}} {{from}}~{{to}} UTC</b>"
   },
   "detail": {
     "summary": "투표 {{votes}}개 · 댓글 {{comments}}개 · ${{payout}}"
@@ -80,7 +83,8 @@
     "title": "동영상 비교",
     "pickA": "동영상 선택…",
     "vs": "vs",
-    "pickB": "다른 동영상 선택…"
+    "pickB": "다른 동영상 선택…",
+    "lastPeriod": "이전 기간과 비교"
   },
   "loadError": "지금은 통계를 불러올 수 없어요.",
   "emptyRange": "이 기간에는 아직 시청 데이터가 없어요. “전체”를 선택하거나 시청자가 동영상을 볼 때까지 기다려 주세요.",
@@ -93,7 +97,8 @@
   "sections": {
     "trend": "시간별 시청 시간",
     "best": "실적 상위",
-    "audience": "내 시청자"
+    "audience": "내 시청자",
+    "top": "인기 콘텐츠"
   },
   "openInNewTab": "새 탭에서 동영상 열기",
   "footnote": "시청 통계는 미리보기 추적 데이터이며 나에게만 표시돼요.",
@@ -102,9 +107,9 @@
     "empty": "이 동영상에는 아직 시청 데이터가 없어요.",
     "uniqueViewers": "순 시청자",
     "avgSpeed": "평균 속도",
-    "mostDropOff": "📉 <b>{{time}}</b>에 가장 많이 이탈",
-    "earlyDrop": "⚡ <b>{{pct}}%</b>가 처음 3초 안에 이탈",
-    "replayed": "🔁 다시 본 구간:",
+    "mostDropOff": "<b>{{time}}</b>에 가장 많이 이탈",
+    "earlyDrop": "<b>{{pct}}%</b>가 처음 3초 안에 이탈",
+    "replayed": "다시 본 구간:",
     "retentionTitle": "시청 지속률",
     "retentionSub": "각 시점에 계속 시청 중인 시청자 비율",
     "pctWatching": "{{pct}}% 시청 중",
@@ -112,5 +117,15 @@
     "replaySub": "시청자가 가장 많이 보고 다시 본 구간",
     "hotSpot": "인기 구간",
     "notEnoughReplays": "아직 다시 보기 데이터가 부족해요"
+  },
+  "title": "채널 통계",
+  "legend": {
+    "current": "이번 기간",
+    "previous": "이전 기간"
+  },
+  "audience": {
+    "title": "시청자",
+    "topCountry": "상위 국가",
+    "topDevice": "상위 기기"
   }
 }

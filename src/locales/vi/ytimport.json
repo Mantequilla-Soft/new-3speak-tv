@@ -22,7 +22,8 @@
     "step1": "Mở video này trong",
     "step2": "Nhấp vào menu ba chấm và chọn Tải xuống.",
     "step3": "Chọn tệp đã tải xuống bên dưới.",
-    "pickFile": "Chọn tệp đã tải xuống"
+    "pickFile": "Chọn tệp đã tải xuống",
+    "title": "Không thể lấy video này"
   },
   "errors": {
     "signIn": "Đăng nhập để nhập video của bạn.",
@@ -133,7 +134,8 @@
     },
     "stopConfirm": "Dừng lần nhập này? Các video chưa đăng sẽ bị hủy, kể cả video đã lên lịch. Video đã đăng vẫn giữ nguyên.",
     "stopYes": "Có, dừng lại",
-    "stopKeep": "Tiếp tục nhập"
+    "stopKeep": "Tiếp tục nhập",
+    "countOf": "{{done}}/{{total}}"
   },
   "bitchute": {
     "noLink": "Bạn chưa liên kết tài khoản BitChute. Hãy liên kết và xác minh trong hồ sơ của bạn trước, rồi quay lại đây.",

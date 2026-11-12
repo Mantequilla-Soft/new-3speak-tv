@@ -40,7 +40,7 @@
   },
   "directory": {
     "title": "Odznaki",
-    "intro": "Odznaki to wyróżnienia <b>przyznawane ci przez innych</b> na Hive za wydarzenia, wkład i osiągnięcia. Nie możesz do nich dołączyć: ktoś musi ci je przyznać. Otwórz odznakę, aby zobaczyć, co publikują tu jej odbiorcy.",
+    "intro": "Odznaki to wyróżnienia <b>przyznawane ci przez innych</b> na Hive za wydarzenia, wkład i osiągnięcia. Nie możesz do nich dołączyć: ktoś musi ci je przyznać.",
     "searchPlaceholder": "Szukaj odznak...",
     "sort": {
       "recipients": "Odbiorcy",
@@ -66,7 +66,8 @@
     "awarding": "Przyznawanie…",
     "held": "Posiadana",
     "award": "Przyznaj",
-    "note": "Odznaka zaczyna obserwować tę osobę na Hive — to właśnie oznacza jej posiadanie. Możesz ją odebrać na stronie odznaki."
+    "awardNamed": "Przyznaj „{{title}}”",
+    "note": "Odznaka zaczyna obserwować tę osobę na Hive i to właśnie oznacza jej posiadanie. Możesz ją odebrać na stronie odznaki."
   },
   "hive": {
     "dragToReorder": "Przeciągnij, aby zmienić kolejność",
@@ -97,8 +98,9 @@
     "unclaimed": "Nieodebrane",
     "noActivity": "Brak aktywności w tym okresie",
     "otherTopics": "Inne",
-    "title": "Rankingi",
+    "title": "Ranking",
     "subtitle": "{{blurb}}: najlepsi twórcy na 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
     "subtitleTopic": "{{blurb}}: najlepsi twórcy w kategorii {{topic}}.",
     "allTopics": "Wszystkie tematy",
     "finding": "Szukam @{{user}} w tym rankingu…",

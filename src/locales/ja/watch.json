@@ -31,7 +31,8 @@
   "gated": {
     "title": "メンバー限定",
     "checkFailed": "現在、サブスクリプションを確認できませんでした。少ししてからお試しください。",
-    "preview": "無料プレビューを視聴中です。3Speak Pro で動画全編が見られます。",
+    "preview": "無料プレビューを視聴中です",
+    "previewSub": "3Speak Pro で動画全編が見られます。",
     "subscribersOnly": "この動画は 3Speak Pro 登録者が視聴できます。",
     "cta": "3Speak Pro に登録"
   },
@@ -51,6 +52,8 @@
     "value": "金額"
   },
   "moreVideos": "ほかの動画",
+  "nextIn": "{{name}} の次の動画",
+  "fromCommunity": "{{name}} から",
   "vote": {
     "saveFailed": "投票を保存できませんでした"
   },
@@ -86,7 +89,7 @@
     "setEnd": "終了を設定",
     "createClip": "クリップを作成",
     "barStart": "クリップの開始位置に移動してください",
-    "barEnd": "開始: {{start}} — 次に終了位置に移動してください",
+    "barEnd": "開始 {{start}} · 次に終了位置へ移動",
     "barDone": "クリップ: {{start}} – {{end}}"
   },
   "share": {
@@ -104,11 +107,11 @@
   },
   "media": {
     "unavailableTitle": "この動画は利用できなくなりました",
-    "unavailableBody": "この古いアップロードのメディアがネットワーク上に見つかりませんでした。投稿はブロックチェーン上に残っていますが、動画は再生できなくなっています。",
+    "unavailableBody": "この古いアップロードのメディアが見つかりませんでした。投稿は Hive 上に残っています。",
     "scheduledTitle": "この投稿は予約されています",
     "scheduledBody": "{{date}}に公開されます。公開後に動画を視聴できます。",
     "blockedTitle": "現在動画を読み込めません",
-    "blockedBody": "動画サーバーの 1 つが応答しませんでした。動画自体に問題はないので、もう一度お試しください。"
+    "blockedBody": "動画サーバーの 1 つが応答しませんでした。動画自体に問題はありません。"
   },
   "tipNudge": {
     "text": "楽しめましたか？<hide> <b>@{{author}}</b> さんに投げ銭を送りましょう！</hide>",
@@ -116,7 +119,9 @@
   },
   "community": {
     "members_other": "メンバー {{count}} 人",
-    "postedIn": "投稿先"
+    "postedIn": "投稿先",
+    "partOf": "収録先",
+    "position": "{{current}}/{{total}}"
   },
   "tags": {
     "curated": "キュレーション"
@@ -131,7 +136,8 @@
     "openTagFeed": "タグのフィードを開く"
   },
   "scheduled": {
-    "notice": "<b>{{date}}</b> に公開予定です。まだ公開されていません。",
+    "notice": "<b>{{date}}</b> に公開予定",
+    "notPublished": "まだ公開されていません。",
     "futureDate": "未来の日付",
     "edit": "編集、日時の変更、キャンセル",
     "editTitle": "予約投稿を編集（詳細、日時、キャンセル）"
@@ -158,7 +164,8 @@
     "toggleDetails": "詳細の表示を切り替え",
     "followCreator": "クリエイターをフォロー",
     "closeMenu": "メニューを閉じる",
-    "openActions": "操作を開く"
+    "openActions": "操作を開く",
+    "support": "{{name}} を応援"
   },
   "description": {
     "hide": "説明を隠す",
@@ -194,26 +201,27 @@
     "markdownHint": "Markdown に対応しています。",
     "listed": "公開",
     "unlistedLabel": "限定公開",
-    "listedHint": "フィード、検索、プロフィールに表示されます。",
-    "unlistedHint": "フィードや検索には表示されません。リンクからは再生でき、プロフィールにも（バッジ付きで）残ります。",
-    "allowRemix": "リミックス / クリップを許可",
-    "remixOn": "ほかの人がリミックスやクリップを作れます。あなたは元の作者としてクレジットされます。",
+    "listedHint": "フィード、検索、プロフィールに表示",
+    "unlistedHint": "直接リンクのみ。プロフィールではバッジ付き",
+    "allowRemix": "リミックスとクリップを許可",
+    "remixOn": "あなたは元の作者としてクレジットされます",
     "remixOff": "ほかの人はこの動画をリミックスやクリップできません。",
     "adsOnVideo": "この動画の広告",
     "adsOnHint": "この動画には広告が表示される場合があります。",
     "adsOffHint": "この動画には広告が表示されません。",
     "rollsOnVideo": "動画広告ロール",
     "rollsOnHint": "ロール、バナー、ティッカーが表示されることがあります。",
-    "rollsOffHint": "この動画はバナーとティッカーだけです。",
+    "rollsOffHint": "オフの場合はバナーとティッカーのみ",
     "trailer": "チャンネル予告編",
     "trailerOn": "プロフィールの概要タブの上部で自動再生されます。以前設定した予告編は置き換えられます。",
-    "trailerOff": "プロフィールの概要タブの上部で自動再生される動画に設定します。",
+    "trailerOff": "プロフィールの上部で自動再生",
     "nsfw": "成人向け / NSFW",
     "notNsfw": "成人向けではない",
     "nsfwHint": "視聴者が NSFW を有効にしていない限りフィードや検索には表示されず、Hive では nsfw のタグが付きます。",
     "notNsfwHint": "通常のコンテンツとして、全員に表示されます。",
+    "nsfwOffHint": "視聴者が NSFW をオンにしていない限り非表示",
     "promoted": "プロモーション中",
-    "promote": "動画をプロモーション",
+    "promote": "プロモーション",
     "saveChanges": "変更を保存",
     "noChanges": "保存する変更はありません。",
     "thumbUploaded": "サムネイルをアップロードしました。",
@@ -258,7 +266,8 @@
       "visibility": "公開範囲",
       "content": "コンテンツ",
       "ads": "広告",
-      "promotion": "プロモーション"
+      "promotion": "プロモーション",
+      "contentAds": "コンテンツ、広告、プロモーション"
     },
     "chaptersNoteAll": "保存時にチャプター一覧が説明文に書き込まれます。",
     "editChapters": "チャプターを編集",

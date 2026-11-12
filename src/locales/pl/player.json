@@ -79,6 +79,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Opublikuj reakcję wideo",
+    "rec": "REC {{time}}",
+    "mic": "Mikrofon",
+    "camera": "Kamera",
+    "restart": "Od nowa",
     "authorized": "@threespeak autoryzowany — możesz teraz opublikować reakcję",
     "authFailed": "Autoryzacja nie powiodła się. Spróbuj ponownie.",
     "webcamDenied": "Brak dostępu do kamery",
@@ -92,7 +97,7 @@
     "uploadVideo": "Prześlij film",
     "recordVideo": "Nagraj film",
     "startRecording": "Rozpocznij nagrywanie",
-    "stopRecording": "Zatrzymaj nagrywanie",
+    "stopRecording": "Zatrzymaj i przejrzyj",
     "recordedVideo": "Nagrany film",
     "descriptionPlaceholder": "Dodaj opis do swojej reakcji wideo...",
     "showInShorts": "Pokaż w 3Speak Shorts",

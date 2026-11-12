@@ -30,7 +30,13 @@
     "aria": "你关注的创作者的新内容",
     "summary_other": "{{count}} 个新视频",
     "fromFollowing": "来自你关注的人",
-    "shorts_other": "{{count}} 个短视频"
+    "shorts_other": "{{count}} 个短视频",
+    "show": "显示",
+    "hide": "隐藏"
+  },
+  "tagMeta": {
+    "videos_other": "{{num}} 个视频",
+    "thisWeek": "本周 {{num}} 个"
   },
   "firstUploads": {
     "title": "首次上传"
@@ -51,9 +57,13 @@
     "dragToReorder": "拖动以调整顺序",
     "customize": "自定义",
     "customizeTitle": "自定义首页",
-    "customizeHint": "上下移动各个版块，不想要的可以关闭。",
+    "customizeHint": "拖动以重新排序。关闭你不想要的版块。",
     "surfTitle": "随心换台：选个话题，像看电视一样看",
-    "zapping": "换台中"
+    "zapping": "换台中",
+    "hero": {
+      "spotlightIn": "{{community}} 中的焦点"
+    },
+    "tabFollowing": "关注"
   },
   "surf": {
     "pageTitle": "随心换台",
@@ -79,9 +89,10 @@
     "nextVideoKey": "下一个视频（→）",
     "zap": "换一个",
     "findingNext": "正在找下一个…",
-    "stop": "停止换台",
+    "stop": "停止",
     "stopTitle": "停止换台（当前视频继续播放）",
-    "guide": "频道指南"
+    "guide": "频道指南",
+    "guideShort": "指南"
   },
   "discover": {
     "searchPlaceholder": "搜索视频、短视频、音频、社区...",
@@ -119,6 +130,30 @@
     "groupTitle": "{{label}}（{{count}}）",
     "subscribers_other": "{{count}} 位订阅者",
     "authors_other": "{{count}} 位作者",
-    "views_other": "{{views}} 次观看"
+    "views_other": "{{views}} 次观看",
+    "topCreator": "热门创作者",
+    "creators": "创作者",
+    "relatedTags": "相关标签",
+    "trendingTags": "热门标签",
+    "topCreators": "热门创作者",
+    "categories": "类别",
+    "show": "显示",
+    "boostRecentHint": "在结果中优先显示较新的视频",
+    "showResults_other": "显示 {{count}} 个结果",
+    "resultTypes": "结果类型"
+  },
+  "activity": {
+    "aria": "3Speak 上的动态",
+    "community": "社区",
+    "verbs": {
+      "snap": "发了 Snap",
+      "audio": "发布了新音频",
+      "playlist": "播放列表",
+      "live": "正在直播",
+      "group_other": "本周 {{count}} 个新视频"
+    },
+    "emptyCommunity": "最近几天社区里没有新内容。",
+    "emptyLive": "现在没有人在直播。",
+    "emptyGroups": "本周还没有群组动态。"
   }
 }

@@ -9,7 +9,7 @@
   "watchingNow_other": "{{count}} osoby ogląda teraz",
   "previewMuted": "Podgląd · wyciszony",
   "badges": {
-    "gatedTitle": "Tylko dla członków. 3Speak Pro odblokowuje cały film",
+    "gatedTitle": "Tylko dla członków",
     "pro": "PRO",
     "new": "NOWE",
     "first": "Pierwszy",
@@ -20,17 +20,17 @@
   "status": {
     "scheduled": "Zaplanowany",
     "mobile": "Mobilny",
-    "mobileTitle": "Przesłano z aplikacji mobilnej",
+    "mobileTitle": "Z aplikacji mobilnej",
     "processing": "Przetwarzanie",
-    "processingTitle": "Film jest przetwarzany",
+    "processingTitle": "Przetwarzanie",
     "draft": "Szkic",
-    "draftTitle": "Szkic - jeszcze nieopublikowany",
+    "draftTitle": "Jeszcze nieopublikowany",
     "deleted": "Usunięty",
-    "deletedTitle": "Ten film został usunięty",
+    "deletedTitle": "Został usunięty",
     "failed": "Błąd",
-    "failedTitle": "Przetwarzanie filmu nie powiodło się",
+    "failedTitle": "Przetwarzanie nie powiodło się",
     "unlisted": "Niepubliczny",
-    "unlistedTitle": "Niepubliczny — ukryty w kanałach i wyszukiwaniu, dostępny tylko przez bezpośredni link"
+    "unlistedTitle": "Tylko przez bezpośredni link"
   },
   "playlist": {
     "loading": "Wczytywanie playlist...",
@@ -40,7 +40,11 @@
     "items_other": "{{count}} elementu",
     "openAria": "Otwórz playlistę {{name}}",
     "tag": "Playlista",
-    "updated": "Zaktualizowano {{when}}"
+    "updated": "Zaktualizowano {{when}}",
+    "public": "publiczna",
+    "private": "prywatna",
+    "history": "historia",
+    "audio": "audio"
   },
   "watchLater": {
     "title": "Do obejrzenia",
@@ -54,5 +58,15 @@
     "label": "Zmień rozmiar",
     "small": "Mały",
     "medium": "Średni"
+  },
+  "payout": {
+    "title": "Wypłata",
+    "author": "Autor",
+    "curators": "Kuratorzy",
+    "paysOutIn": "Wypłata za",
+    "days_one": "{{count}} dzień",
+    "days_few": "{{count}} dni",
+    "days_many": "{{count}} dni",
+    "days_other": "{{count}} dnia"
   }
 }

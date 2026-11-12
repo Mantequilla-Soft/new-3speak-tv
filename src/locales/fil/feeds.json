@@ -32,7 +32,14 @@
     "summary_other": "{{count}} bagong video",
     "fromFollowing": "mula sa mga fina-follow mo",
     "shorts_one": "{{count}} short",
-    "shorts_other": "{{count}} shorts"
+    "shorts_other": "{{count}} shorts",
+    "show": "Ipakita",
+    "hide": "Itago"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}} video",
+    "videos_other": "{{num}} video",
+    "thisWeek": "{{num}} ngayong linggo"
   },
   "firstUploads": {
     "title": "Mga Unang Upload"
@@ -53,9 +60,13 @@
     "dragToReorder": "I-drag para ayusin ang pagkakasunod",
     "customize": "I-customize",
     "customizeTitle": "I-customize ang Home",
-    "customizeHint": "Ilipat pataas o pababa ang mga seksyon. I-off ang mga ayaw mo.",
+    "customizeHint": "I-drag para ayusin ang pagkakasunod. I-off ang mga seksyong ayaw mo.",
     "surfTitle": "Channel Surfing: pumili ng paksa at panoorin na parang TV",
-    "zapping": "Zapping"
+    "zapping": "Zapping",
+    "hero": {
+      "spotlightIn": "Tampok sa {{community}}"
+    },
+    "tabFollowing": "Fina-follow"
   },
   "surf": {
     "pageTitle": "Channel Surfing",
@@ -81,9 +92,10 @@
     "nextVideoKey": "Susunod na video (→)",
     "zap": "Zap",
     "findingNext": "Hinahanap ang susunod…",
-    "stop": "Itigil ang surfing",
+    "stop": "Itigil",
     "stopTitle": "Itigil ang surfing (tuloy ang video na ito)",
-    "guide": "Channel guide"
+    "guide": "Channel guide",
+    "guideShort": "Gabay"
   },
   "discover": {
     "searchPlaceholder": "Maghanap ng video, shorts, audio, komunidad...",
@@ -124,6 +136,32 @@
     "authors_one": "{{count}} author",
     "authors_other": "{{count}} authors",
     "views_one": "{{views}} view",
-    "views_other": "{{views}} views"
+    "views_other": "{{views}} views",
+    "topCreator": "Top creator",
+    "creators": "Mga creator",
+    "relatedTags": "Kaugnay na tags",
+    "trendingTags": "Trending na tags",
+    "topCreators": "Mga top creator",
+    "categories": "Mga kategorya",
+    "show": "Ipakita",
+    "boostRecentHint": "Unahin ang mas bagong video sa resulta",
+    "showResults_one": "Ipakita ang {{count}} resulta",
+    "showResults_other": "Ipakita ang {{count}} resulta",
+    "resultTypes": "Uri ng resulta"
+  },
+  "activity": {
+    "aria": "Aktibidad sa 3Speak",
+    "community": "Komunidad",
+    "verbs": {
+      "snap": "snap",
+      "audio": "bagong audio",
+      "playlist": "playlist",
+      "live": "naka-live",
+      "group_one": "{{count}} bagong video ngayong linggo",
+      "group_other": "{{count}} bagong video ngayong linggo"
+    },
+    "emptyCommunity": "Walang bago mula sa komunidad nitong mga nakaraang araw.",
+    "emptyLive": "Walang naka-live ngayon.",
+    "emptyGroups": "Wala pang group activity ngayong linggo."
   }
 }

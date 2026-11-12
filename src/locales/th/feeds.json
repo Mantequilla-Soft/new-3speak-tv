@@ -30,7 +30,13 @@
     "aria": "ใหม่จากครีเอเตอร์ที่คุณติดตาม",
     "summary_other": "วิดีโอใหม่ {{count}} รายการ",
     "fromFollowing": "จากคนที่คุณติดตาม",
-    "shorts_other": "{{count}} Shorts"
+    "shorts_other": "{{count}} Shorts",
+    "show": "แสดง",
+    "hide": "ซ่อน"
+  },
+  "tagMeta": {
+    "videos_other": "{{num}} วิดีโอ",
+    "thisWeek": "{{num}} ในสัปดาห์นี้"
   },
   "firstUploads": {
     "title": "อัปโหลดครั้งแรก"
@@ -51,9 +57,13 @@
     "dragToReorder": "ลากเพื่อจัดลำดับ",
     "customize": "ปรับแต่ง",
     "customizeTitle": "ปรับแต่งหน้าแรก",
-    "customizeHint": "เลื่อนส่วนต่างๆ ขึ้นหรือลง และปิดส่วนที่คุณไม่ต้องการ",
+    "customizeHint": "ลากเพื่อจัดลำดับใหม่ ปิดส่วนที่คุณไม่ต้องการ",
     "surfTitle": "Channel Surfing: เลือกหัวข้อแล้วดูเหมือนดูทีวี",
-    "zapping": "กำลังเปลี่ยนช่อง"
+    "zapping": "กำลังเปลี่ยนช่อง",
+    "hero": {
+      "spotlightIn": "สปอตไลท์ใน {{community}}"
+    },
+    "tabFollowing": "กำลังติดตาม"
   },
   "surf": {
     "pageTitle": "Channel Surfing",
@@ -79,9 +89,10 @@
     "nextVideoKey": "วิดีโอถัดไป (→)",
     "zap": "Zap",
     "findingNext": "กำลังหาวิดีโอถัดไป…",
-    "stop": "หยุดเซิร์ฟ",
+    "stop": "หยุด",
     "stopTitle": "หยุดเซิร์ฟ (วิดีโอนี้จะยังเล่นต่อ)",
-    "guide": "ผังรายการ"
+    "guide": "ผังรายการ",
+    "guideShort": "คู่มือ"
   },
   "discover": {
     "searchPlaceholder": "ค้นหาวิดีโอ, Shorts, เสียง, ชุมชน...",
@@ -119,6 +130,30 @@
     "groupTitle": "{{label}} ({{count}})",
     "subscribers_other": "สมาชิก {{count}} คน",
     "authors_other": "ผู้เขียน {{count}} คน",
-    "views_other": "การดู {{views}} ครั้ง"
+    "views_other": "การดู {{views}} ครั้ง",
+    "topCreator": "ครีเอเตอร์อันดับต้น",
+    "creators": "ครีเอเตอร์",
+    "relatedTags": "แท็กที่เกี่ยวข้อง",
+    "trendingTags": "แท็กมาแรง",
+    "topCreators": "ครีเอเตอร์ยอดนิยม",
+    "categories": "หมวดหมู่",
+    "show": "แสดง",
+    "boostRecentHint": "ให้น้ำหนักกับวิดีโอใหม่ในผลลัพธ์",
+    "showResults_other": "แสดง {{count}} ผลลัพธ์",
+    "resultTypes": "ประเภทผลลัพธ์"
+  },
+  "activity": {
+    "aria": "กิจกรรมบน 3Speak",
+    "community": "ชุมชน",
+    "verbs": {
+      "snap": "โพสต์ Snap",
+      "audio": "เสียงใหม่",
+      "playlist": "เพลย์ลิสต์",
+      "live": "กำลังไลฟ์",
+      "group_other": "{{count}} วิดีโอใหม่ในสัปดาห์นี้"
+    },
+    "emptyCommunity": "ไม่มีอะไรใหม่จากชุมชนในช่วงไม่กี่วันที่ผ่านมา",
+    "emptyLive": "ตอนนี้ไม่มีใครไลฟ์อยู่",
+    "emptyGroups": "ยังไม่มีกิจกรรมกลุ่มในสัปดาห์นี้"
   }
 }

@@ -77,6 +77,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Chapisha video ya mwitikio",
+    "rec": "REC {{time}}",
+    "mic": "Maikrofoni",
+    "camera": "Kamera",
+    "restart": "Anza upya",
     "authorized": "@threespeak imeidhinishwa — sasa unaweza kuchapisha mwitikio wako",
     "authFailed": "Uidhinishaji umeshindwa. Tafadhali jaribu tena.",
     "webcamDenied": "Imeshindwa kufikia kamera ya wavuti",
@@ -90,7 +95,7 @@
     "uploadVideo": "Pakia video",
     "recordVideo": "Rekodi video",
     "startRecording": "Anza kurekodi",
-    "stopRecording": "Acha kurekodi",
+    "stopRecording": "Simamisha na kagua",
     "recordedVideo": "Video iliyorekodiwa",
     "descriptionPlaceholder": "Ongeza maelezo ya mwitikio wako wa video...",
     "showInShorts": "Onyesha kwenye 3Speak Shorts",

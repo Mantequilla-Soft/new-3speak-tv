@@ -17,7 +17,8 @@
     "loginFailed": "Inloggen mislukt: {{error}}",
     "logoAlt": "3Speak-logo",
     "title": "Inloggen met je gebruikersnaam",
-    "usernamePlaceholder": "Gebruikersnaam"
+    "usernamePlaceholder": "Gebruikersnaam",
+    "continueWith": "Doorgaan met {{method}}"
   },
   "socialLink": {
     "hashCopied": "Hash gekopieerd",
@@ -55,7 +56,7 @@
   },
   "auth": {
     "title": "Autoriseer 3Speak",
-    "text": "Om video's op 3Speak te uploaden hebben we je posting-autoriteit nodig. Daarmee kunnen we je geüploade video's op Hive publiceren. Je hoeft ons maar één keer posting-autoriteit te geven.",
+    "text": "Om te uploaden hebben we je posting-autoriteit nodig, zodat we je video's op Hive kunnen publiceren. Je geeft die maar één keer.",
     "authorize": "Autoriseren"
   },
   "beneficiary": {
@@ -74,6 +75,11 @@
       "maxCount": "Hive staat maximaal {{max}} begunstigden per post toe."
     },
     "title": "Begunstigden",
+    "shareRewards": "Beloningen delen",
+    "you": "jij",
+    "toYou": "naar jou",
+    "addCollaborator": "Medewerker toevoegen",
+    "saveSplit": "Verdeling opslaan",
     "intro": "Voeg een gebruiker toe die automatisch een deel van de beloningen van deze post moet krijgen.",
     "minPercent": "% (min. {{percent}}%)",
     "usernamePlaceholder": "Gebruikersnaam invullen",
@@ -100,7 +106,7 @@
   },
   "verifyAuth": {
     "title": "Autorisatie controleren",
-    "text": "Even geduld terwijl we controleren of de autorisatie is gegeven..."
+    "text": "Controleren of die is verleend…"
   },
   "editor": {
     "confirmLeave": "De editor is nog open. Als je deze pagina verlaat, wordt de editor gesloten en gaan niet-opgeslagen wijzigingen verloren.\n\nOK = Editor sluiten & weggaan\nAnnuleren = Op deze pagina blijven",
@@ -176,7 +182,9 @@
     "details": "Extra details (optioneel)",
     "detailsPlaceholder": "Geef meer context...",
     "submitting": "Versturen...",
-    "submit": "Melding versturen"
+    "submit": "Melding versturen",
+    "intro": "Meldingen gaan naar het 3Speak-team. De maker ziet niet wie heeft gemeld.",
+    "nextDetails": "Volgende: details toevoegen"
   },
   "upload": {
     "missingInfo": "Video- of thumbnailgegevens ontbreken.",

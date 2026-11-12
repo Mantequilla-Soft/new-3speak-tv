@@ -23,6 +23,9 @@
     "noOtherPlaylists": "Je hebt nog geen andere playlists",
     "createFirst": "Playlist maken",
     "createNew": "Nieuwe playlist maken",
+    "newPlaylist": "Nieuwe playlist",
+    "savedTo_one": "Opgeslagen in {{count}} playlist",
+    "savedTo_other": "Opgeslagen in {{count}} playlists",
     "name": "Naam",
     "namePlaceholder": "Mijn toffe playlist",
     "privacy": "Privacy",
@@ -96,12 +99,15 @@
     "description": "Beschrijving",
     "descriptionPlaceholder": "Over dit album (optioneel)",
     "filterCount_one": "{{shown}} van {{count}} item",
-    "filterCount_other": "{{shown}} van {{count}} items"
+    "filterCount_other": "{{shown}} van {{count}} items",
+    "shuffle": "Shuffle"
   },
   "type": {
     "label": "Soort",
     "video": "Video",
     "audio": "Audio",
+    "videoSub": "Lange video's",
+    "audioSub": "Tracks en podcasts",
     "kindLabel": "Wat voor audio?",
     "kinds": {
       "podcast": "Podcast",

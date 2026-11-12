@@ -98,8 +98,8 @@
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "XIN LỖI! KHÔNG TÌM THẤY TRANG",
+    "title": "Xin lỗi, không tìm thấy trang",
     "message": "Rất tiếc, trang bạn đang tìm không khả dụng.",
-    "goHome": "VỀ TRANG CHỦ"
+    "goHome": "Về trang chủ"
   }
 }

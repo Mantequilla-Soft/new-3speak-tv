@@ -19,6 +19,7 @@
     "communityWithSubscribers_one": "Community · {{formatted}} Abonnent",
     "communityWithSubscribers_other": "Community · {{formatted}} Abonnenten",
     "commentFallback": "(Kommentar)",
+    "videoKind": "3Speak · Video",
     "play": "{{title}} abspielen"
   },
   "share": {
@@ -32,22 +33,29 @@
     "responsiveSub": "Passt sich an die Seite an, auf der es eingebettet ist",
     "fixedSub": "Iframe mit fester Größe",
     "sendInChat": "Im 3Speak-Chat senden",
-    "sendInChatSub": "Schick es jemandem auf 3Speak",
+    "sendInChatSub": "Schick es jemandem",
     "embedOnWebsite": "Auf einer Website einbetten",
-    "embedOnWebsiteSub": "Kopiere das HTML für deine eigene Website oder deinen Blog",
-    "forHivePost": "Für Hive-Post",
+    "embedOnWebsiteSub": "Responsiv oder feste Größe",
+    "forHivePost": "Für einen Hive-Post",
+    "forHivePostSub": "Link zum Einfügen kopieren",
     "hivePostCopied": "Link kopiert. Füge ihn in deinen Hive-Post ein.",
-    "generalShare": "Teilen / Link kopieren",
-    "generalShareSub": "Andere Apps oder Link kopieren"
+    "generalShare": "Teilen oder Link kopieren",
+    "generalShareSub": "Andere Apps",
+    "embed": "Einbetten",
+    "chat": "Chat",
+    "more": "Mehr",
+    "startAt": "Start bei",
+    "toFollowers_one": "An deinen {{n}} Follower",
+    "toFollowers_other": "An deine {{n}} Follower"
   },
   "gate": {
     "connectTitle": "Mit dem 3Speak-Chat verbinden",
-    "connectBody": "Der Chat läuft über Snapie. Beim Verbinden wird eine einmalige Login-Challenge mit deinem Hive Posting Key signiert (keine Transaktion, keine Kosten).",
+    "connectBody": "Der Chat läuft über Snapie. Beim Verbinden wird eine einmalige Login-Challenge mit deinem Posting Key signiert. Keine Transaktion, keine Kosten.",
     "connecting": "Wird verbunden…",
     "connectButton": "Chat verbinden",
     "cannotSign": "Mit deiner aktuellen Anmeldung kann die Chat-Challenge nicht signiert werden. Nutze Keychain, HiveAuth, PeakVault oder Ledger.",
-    "needsAccountTitle": "Für den Chat brauchst du ein Hive-Konto",
-    "needsAccountBody": "Nachrichten werden mit den Schlüsseln deines eigenen Kontos signiert, daher wird der Chat zusammen mit allem anderen freigeschaltet, sobald dein Konto bereit ist. Erfülle die Ziele in deinem Profil, und das Team bringt dich dorthin.",
+    "needsAccountTitle": "Für den Chat brauchst du ein Hive-Konto.",
+    "needsAccountBody": "Er wird mit allem anderen freigeschaltet, sobald du das Warm-up abschließt.",
     "loginTitle": "Melde dich an, um den Chat zu nutzen",
     "loginBody": "Melde dich mit deinem Hive-Konto an, um Nachrichten zu senden und zu empfangen.",
     "connectingToChat": "Verbindung zum Chat wird hergestellt…"
@@ -95,8 +103,8 @@
     "serverRejectedServerMap_other": "Der Server hat alle {{count}} Anfragen abgelehnt (IDs aus der eigenen Ungelesen-Liste des Servers)",
     "failed": "Es konnte nicht alles als gelesen markiert werden",
     "marking": "Wird als gelesen markiert…",
-    "button": "Alle als gelesen markieren",
-    "buttonCount": "Alle als gelesen markieren ({{count}})"
+    "button": "Alle gelesen",
+    "buttonCount": "Alle gelesen ({{count}})"
   },
   "list": {
     "chooseTarget": "Wähle einen Chat zum Senden",
@@ -130,7 +138,8 @@
     "quoting": "@{{user}} zitieren",
     "cancelQuote": "Zitat abbrechen",
     "removeImage": "Bild entfernen",
-    "placeholder": "Nachricht schreiben…"
+    "placeholder": "Nachricht schreiben…",
+    "placeholderTo": "Nachricht an {{name}}"
   },
   "page": {
     "chooseTarget": "Wähle einen Chat zum Senden.",

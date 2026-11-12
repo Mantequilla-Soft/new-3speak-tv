@@ -32,10 +32,17 @@
     "summary_other": "{{count}}টি নতুন ভিডিও",
     "fromFollowing": "আপনার ফলো করা মানুষদের থেকে",
     "shorts_one": "{{count}}টি শর্ট",
-    "shorts_other": "{{count}}টি শর্টস"
+    "shorts_other": "{{count}}টি শর্টস",
+    "show": "দেখান",
+    "hide": "লুকান"
+  },
+  "tagMeta": {
+    "videos_one": "{{num}}টি ভিডিও",
+    "videos_other": "{{num}}টি ভিডিও",
+    "thisWeek": "এই সপ্তাহে {{num}}টি"
   },
   "firstUploads": {
-    "title": "প্রথমবারের আপলোড"
+    "title": "প্রথম আপলোড"
   },
   "newVideos": {
     "title": "নতুন ভিডিও"
@@ -53,9 +60,13 @@
     "dragToReorder": "ক্রম বদলাতে টেনে আনুন",
     "customize": "কাস্টমাইজ করুন",
     "customizeTitle": "হোম কাস্টমাইজ করুন",
-    "customizeHint": "সেকশনগুলো ওপরে বা নিচে সরান। যেগুলো চান না সেগুলো বন্ধ করুন।",
+    "customizeHint": "সাজাতে টেনে আনুন। যে সেকশনগুলো চান না সেগুলো বন্ধ করুন।",
     "surfTitle": "চ্যানেল সার্ফিং: একটি বিষয় বেছে নিন আর টিভির মতো দেখুন",
-    "zapping": "জ্যাপিং"
+    "zapping": "জ্যাপিং",
+    "hero": {
+      "spotlightIn": "{{community}}-এ স্পটলাইট"
+    },
+    "tabFollowing": "ফলো করছেন"
   },
   "surf": {
     "pageTitle": "চ্যানেল সার্ফিং",
@@ -81,9 +92,10 @@
     "nextVideoKey": "পরের ভিডিও (→)",
     "zap": "Zap",
     "findingNext": "পরেরটা খোঁজা হচ্ছে…",
-    "stop": "সার্ফিং বন্ধ করুন",
+    "stop": "থামান",
     "stopTitle": "সার্ফিং বন্ধ করুন (এই ভিডিওটি চলতে থাকবে)",
-    "guide": "চ্যানেল গাইড"
+    "guide": "চ্যানেল গাইড",
+    "guideShort": "গাইড"
   },
   "discover": {
     "searchPlaceholder": "ভিডিও, শর্টস, অডিও, কমিউনিটি খুঁজুন...",
@@ -124,6 +136,32 @@
     "authors_one": "{{count}} জন লেখক",
     "authors_other": "{{count}} জন লেখক",
     "views_one": "{{views}} ভিউ",
-    "views_other": "{{views}} ভিউ"
+    "views_other": "{{views}} ভিউ",
+    "topCreator": "শীর্ষ ক্রিয়েটর",
+    "creators": "ক্রিয়েটর",
+    "relatedTags": "সম্পর্কিত ট্যাগ",
+    "trendingTags": "ট্রেন্ডিং ট্যাগ",
+    "topCreators": "শীর্ষ ক্রিয়েটর",
+    "categories": "ক্যাটাগরি",
+    "show": "দেখান",
+    "boostRecentHint": "ফলাফলে নতুন ভিডিওকে অগ্রাধিকার দিন",
+    "showResults_one": "{{count}}টি ফলাফল দেখান",
+    "showResults_other": "{{count}}টি ফলাফল দেখান",
+    "resultTypes": "ফলাফলের ধরন"
+  },
+  "activity": {
+    "aria": "3Speak-এ কার্যকলাপ",
+    "community": "কমিউনিটি",
+    "verbs": {
+      "snap": "snap",
+      "audio": "নতুন অডিও",
+      "playlist": "প্লেলিস্ট",
+      "live": "লাইভে আছেন",
+      "group_one": "এই সপ্তাহে {{count}}টি নতুন ভিডিও",
+      "group_other": "এই সপ্তাহে {{count}}টি নতুন ভিডিও"
+    },
+    "emptyCommunity": "গত কয়েক দিনে কমিউনিটি থেকে নতুন কিছু নেই।",
+    "emptyLive": "এই মুহূর্তে কেউ লাইভে নেই।",
+    "emptyGroups": "এই সপ্তাহে এখনো কোনো গ্রুপ কার্যকলাপ নেই।"
   }
 }

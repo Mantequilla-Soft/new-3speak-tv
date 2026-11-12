@@ -98,7 +98,7 @@
   },
   "notFound": {
     "imageAlt": "404",
-    "title": "抱歉！页面不存在",
+    "title": "抱歉，页面不存在",
     "message": "很遗憾，你要找的页面不存在。",
     "goHome": "返回首页"
   }

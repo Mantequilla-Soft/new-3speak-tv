@@ -16,7 +16,9 @@
     "avgPct": "Rata-rata %",
     "votes": "Vote",
     "comments": "Komentar",
-    "payout": "Payout"
+    "payout": "Payout",
+    "followers": "Pengikut",
+    "earned": "Penghasilan"
   },
   "days": {
     "short": {
@@ -67,7 +69,8 @@
     "title": "Kapan penontonmu menonton",
     "sub": "UTC · makin gelap = makin banyak tayangan",
     "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} tayangan",
-    "hour": "{{hour}}j"
+    "hour": "{{hour}}j",
+    "best": "Waktu terbaik: <b>{{day}} {{from}}–{{to}} UTC</b>"
   },
   "detail": {
     "summary": "{{votes}} vote · {{comments}} komentar · ${{payout}}"
@@ -80,7 +83,8 @@
     "title": "Bandingkan video",
     "pickA": "Pilih video…",
     "vs": "vs",
-    "pickB": "Pilih yang lain…"
+    "pickB": "Pilih yang lain…",
+    "lastPeriod": "Bandingkan dengan periode lalu"
   },
   "loadError": "Statistikmu tidak dapat dimuat saat ini.",
   "emptyRange": "Belum ada data tonton di rentang ini — coba “Semua”, atau tunggu orang menonton videomu.",
@@ -93,7 +97,8 @@
   "sections": {
     "trend": "Waktu tonton dari waktu ke waktu",
     "best": "Performa terbaik",
-    "audience": "Penontonmu"
+    "audience": "Penontonmu",
+    "top": "Konten teratas"
   },
   "openInNewTab": "Buka video di tab baru",
   "footnote": "Statistik tonton berasal dari pelacakan pratinjau dan hanya terlihat olehmu.",
@@ -102,9 +107,9 @@
     "empty": "Belum ada data tonton untuk video ini.",
     "uniqueViewers": "Penonton unik",
     "avgSpeed": "Kecepatan rata-rata",
-    "mostDropOff": "📉 Paling banyak berhenti di <b>{{time}}</b>",
-    "earlyDrop": "⚡ <b>{{pct}}%</b> pergi di 3 detik pertama",
-    "replayed": "🔁 Diputar ulang:",
+    "mostDropOff": "Paling banyak berhenti di <b>{{time}}</b>",
+    "earlyDrop": "<b>{{pct}}%</b> pergi di 3 detik pertama",
+    "replayed": "Diputar ulang:",
     "retentionTitle": "Retensi penonton",
     "retentionSub": "persentase penonton yang masih menonton di setiap momen",
     "pctWatching": "{{pct}}% menonton",
@@ -112,5 +117,15 @@
     "replaySub": "bagian yang paling banyak ditonton dan ditonton ulang",
     "hotSpot": "titik panas",
     "notEnoughReplays": "Belum cukup putar ulang"
+  },
+  "title": "Statistik channel",
+  "legend": {
+    "current": "Periode ini",
+    "previous": "Sebelumnya"
+  },
+  "audience": {
+    "title": "Penonton",
+    "topCountry": "Negara teratas",
+    "topDevice": "Perangkat teratas"
   }
 }

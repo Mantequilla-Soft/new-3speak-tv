@@ -7,7 +7,8 @@
     "feeds": "フィード",
     "groups": "グループ",
     "audio": "音声",
-    "login": "ログイン"
+    "login": "ログイン",
+    "you": "マイページ"
   },
   "installApp": "アプリをインストール",
   "iosInstallHint": "<b>共有</b>をタップしてから<b>ホーム画面に追加</b>を選んでください",
@@ -28,7 +29,9 @@
     "shortsTooltip": "縦型の短い動画を次々に",
     "audioTooltip": "3Speak で公開されたポッドキャスト、音楽、その他の音声",
     "groupsTooltip": "参加できるコミュニティと、授与されたバッジ",
-    "rankingsTooltip": "今いちばん稼いでいて、よく見られているクリエイター"
+    "rankingsTooltip": "今いちばん稼いでいて、よく見られているクリエイター",
+    "live": "ライブ",
+    "liveTooltip": "現在ライブ中の配信とルーム"
   },
   "aboutLink": "3Speak について",
   "faqLink": "FAQ",
@@ -49,14 +52,20 @@
     "logout": "ログアウト",
     "onDiscord": "Discord の 3Speak",
     "onX": "X の 3Speak",
-    "onTelegram": "Telegram の 3Speak"
+    "onTelegram": "Telegram の 3Speak",
+    "switch": "切り替え",
+    "tiles": {
+      "channel": "チャンネル",
+      "history": "履歴"
+    },
+    "darkTheme": "ダークテーマ"
   },
   "notifications": {
     "pushOff": "この端末の通知をオフにしました",
-    "pushOn": "フォロー中のクリエイターが投稿すると通知が届きます",
+    "pushOn": "フォロー中のクリエイターが投稿すると通知が届きます。",
     "pushFailed": "通知設定を変更できませんでした",
     "ariaUnread": "通知（未読 {{count}} 件）",
-    "pushBlocked": "ブラウザの設定で、このサイトの通知がブロックされています",
+    "pushBlocked": "ブラウザの設定で、このサイトの通知がブロックされています。",
     "pushNoWorker": "このビルドには Service Worker がないため、ここでは通知を登録できません",
     "pushStop": "この端末への通知をやめる",
     "pushStart": "フォロー中のクリエイターが投稿したら通知を受け取る",
@@ -74,8 +83,8 @@
       "followMany_other": "@{{a}} さんとほか {{count}} 人があなたをフォローしました",
       "other": "{{type}} の通知 {{count}} 件",
       "typeCount": "{{type}} {{count}} 件",
-      "includesWhale": "🐋 クジラアカウントを含みます",
-      "includesOrca": "🐬 シャチアカウントを含みます",
+      "includesWhale": "🐋 クジラアカウントを含む",
+      "includesOrca": "🐬 シャチアカウントを含む",
       "andMore": "ほか {{count}} 件…"
     },
     "stories": {
@@ -89,6 +98,13 @@
       "heading": "フォロー中のポッドキャストの新しいエピソード",
       "newEpisode": "{{show}} の新しいエピソード",
       "type": "ポッドキャスト"
+    },
+    "tabs": {
+      "all": "すべて",
+      "mentions": "メンション",
+      "follows": "フォロー",
+      "uploads": "アップロード",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -123,6 +139,17 @@
     "views_other": "{{formatted}} 回視聴",
     "tags": "タグ",
     "titles": "タイトル",
-    "placeholder": "検索..."
-  }
+    "placeholder": "検索...",
+    "recent": "最近の検索",
+    "allResultsFor": "「{{term}}」のすべての結果",
+    "kinds": {
+      "creator": "クリエイター",
+      "community": "コミュニティ",
+      "video": "動画",
+      "short": "ショート",
+      "audio": "音声",
+      "playlist": "再生リスト"
+    }
+  },
+  "create": "作成"
 }

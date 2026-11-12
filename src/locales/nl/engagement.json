@@ -11,6 +11,8 @@
       "transferFailed": "Overboeking mislukt: {{message}}"
     },
     "heading": "Stuur een fooi naar @{{recipient}}",
+    "pageTitle": "Fooi voor @{{recipient}}",
+    "pageSub": "Geopend via een stream-overlay of een link",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "Meer manieren",
@@ -23,7 +25,16 @@
     "memoLinkNote": "Deze link wordt aan de memo toegevoegd: {{link}}",
     "send": "Fooi sturen",
     "sendAmount": "{{amount}} {{currency}} sturen",
+    "paidIn": "Betaald in {{currency}} · geen kosten",
+    "forTitle": "voor “{{title}}”",
+    "presets": {
+      "coffee": "Een koffie",
+      "popular": "Populairst",
+      "thanks": "Dikke dank",
+      "superFan": "Superfan"
+    },
     "sentEyebrow": "Fooi verstuurd",
+    "sentTo": "{{amount}} aan @{{recipient}}",
     "lightning": {
       "amountLabel": "Bedrag (sats):",
       "messageLabel": "Bericht (optioneel):",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "Hoe vaak",
       "once": "Eenmalig",
+      "oneTime": "Eenmalig",
+      "monthly": "Maandelijks",
       "until": "Elke maand, tot {{date}}",
       "note": "Hive stuurt het elke 30 dagen vanzelf, de eerste meteen. Je kunt het altijd stoppen.",
       "replaces": "Dit vervangt de maandelijkse steun die je @{{recipient}} al stuurt.",
@@ -91,7 +104,8 @@
     "addToPlaylist": "Toevoegen aan playlist",
     "addTag": "Tag toevoegen",
     "notInterested": "Niet geïnteresseerd",
-    "dontShowCreator": "@{{author}} niet tonen"
+    "dontShowCreator": "@{{author}} niet tonen",
+    "saveToPlaylist": "Opslaan in playlist"
   },
   "guestList": {
     "loadFailed": "De huidige gastenlijst kon niet worden geladen",
@@ -134,18 +148,22 @@
     "tagged": "Getagd als “{{tag}}”.",
     "vote": "Voten",
     "tagThisVideo": "Tag deze video",
-    "tagOptional": "— optioneel —",
+    "tagOptional": "Optioneel",
     "pickTopicFirst": "Kies eerst een onderwerp",
     "taggedNoDot": "Getagd als “{{tag}}”",
     "tagFailed": "Taggen mislukt: {{message}}",
-    "taggedAlreadyVoted": "Getagd als “{{tag}}” — je vote van {{weight}}% was al uitgebracht.",
-    "votingClosed": "Voten gesloten — tag deze video",
+    "taggedAlreadyVoted": "Getagd als “{{tag}}”. Je vote van {{weight}}% was al uitgebracht.",
+    "votingClosed": "Voten gesloten: tag deze video",
     "youTagged": "Je hebt dit getagd als <b>{{tag}}</b>.",
-    "pickTopic": "Kies een onderwerp (telt als een vote van 100%)",
+    "pickTopic": "Een onderwerp kiezen telt als een vote van 100%.",
     "submitTag": "Tag versturen",
     "tagThisVideoFull": "Tag deze video (telt als een vote van 100%)",
-    "justTag": "Niet voten — alleen taggen",
-    "addsAbout": "voegt ongeveer {{value}} toe"
+    "justTag": "Niet voten, alleen taggen",
+    "justTagShort": "Alleen taggen",
+    "voteAndTag": "Voten en taggen",
+    "addsAbout": "voegt ongeveer {{value}} toe",
+    "postSoFar_one": "{{value}} tot nu toe · {{count}} vote",
+    "postSoFar_other": "{{value}} tot nu toe · {{count}} votes"
   },
   "tagsPicker": {
     "autoTagged": "Automatisch getagd: {{tags}}",
@@ -154,7 +172,7 @@
     "noMatches": "Geen onderwerpen voor “{{query}}”.",
     "allSelected": "Heel {{category}} is geselecteerd. Voeg alleen losse onderwerpen toe om het smaller te maken:",
     "orPickTopics": "Of kies losse onderwerpen:",
-    "goodEnough": "Goed genoeg — of maak het specifieker (optioneel):",
+    "goodEnough": "Goed genoeg, of maak het specifieker (optioneel)",
     "moreSpecific": "Specifieker:"
   }
 }

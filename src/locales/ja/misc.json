@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 日間",
-      "30d": "30 日間",
+      "7d": "週間",
+      "30d": "月間",
       "365d": "1 年",
       "all": "全期間"
     },
@@ -155,9 +155,9 @@
     "audioFull": "タイトル付き",
     "audioCompact": "コンパクト",
     "audioMinimal": "ミニマル",
-    "heightSub": "幅いっぱい、高さ {{height}} px",
+    "heightSub": "幅いっぱい、高さ {{height}} px · レスポンシブ",
     "podcastTitle": "このポッドキャストを埋め込む",
-    "podcastHint": "ウェブサイトやブログ記事に貼り付けてください。番組のすべてのエピソードを、新しいエピソードも公開され次第再生します。"
+    "podcastHint": "番組のすべてのエピソードを、新しいものも公開され次第再生します。"
   },
   "incubation": {
     "requestFailed": "リクエストに失敗しました（{{status}}）",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "このページを読み込めませんでした",
-    "body": "アプリの一部をダウンロードできませんでした。通常は、このタブを開いている間に新しいバージョンが公開されたことが原因です。再読み込みすると反映されます。",
+    "body": "アプリの一部をダウンロードできませんでした。通常は、このタブを開いている間に新しいバージョンが公開されたためです。再読み込みすると反映されます。",
     "brokenTitle": "このページで問題が発生しました",
-    "brokenBody": "ページの一部でエラーが起きました。再読み込みで直ることがほとんどです。下の詳細は原因の特定に役立ちます。",
+    "brokenBody": "ページの一部でエラーが起きました。再読み込みで直ることがほとんどです。詳細は原因の特定に役立ちます。",
     "reload": "再読み込み",
     "goHome": "ホームへ",
     "details": "詳細"
@@ -203,9 +203,9 @@
       "regularVideo": "チャンネル向けの通常の動画",
       "verticalShort": "ショートフィード向けの縦型クリップ",
       "shortsEditor": "ブラウザでショートを撮影・編集",
-      "story": "24時間だけ公開される短いクリップ",
+      "story": "24 時間公開",
       "musicAudio": "音楽、ポッドキャストなどの音声",
-      "audioEditor": "ポッドキャストや音楽のカット、整音、音量調整",
+      "audioEditor": "カット、整音、音量調整",
       "groupChat": "ゲストと一緒に進行するライブルーム",
       "goLiveNow": "フォロワーに向けてライブ配信",
       "communitySnap": "コミュニティタブに手軽に投稿",
@@ -220,7 +220,7 @@
   "hiveAuth": {
     "waiting": "HiveAuth での承認を待っています...",
     "title": "HiveAuth での承認が必要です",
-    "hint": "HiveAuth アプリでこのトランザクションを承認してください"
+    "hint": "HiveAuth アプリでこのトランザクションを承認してください。"
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain がトランザクションに署名しませんでした",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod は開始しましたが、Hive での告知を投稿できませんでした。"
   },
   "appUpdate": {
-    "updating": "最新バージョン（{{version}}）に更新中…",
+    "updating": "{{version}} に更新中…",
     "reloadingForUpload": "アップロードが最新版で動くように再読み込みしています。"
   },
   "auth": {
@@ -303,6 +303,17 @@
     "moreTag": "#{{tag}} をもっと見る",
     "moreVideos": "ほかの動画",
     "hideControls": "操作を隠す",
-    "showControls": "操作を表示"
+    "showControls": "操作を表示",
+    "watching": "{{count}} 人が視聴中",
+    "startedAgo": "{{when}}に開始",
+    "topSupporters": "トップサポーター",
+    "noSupporters": "まだブーストはありません",
+    "full": "全画面",
+    "loginToChat": "ログインしてチャット"
+  },
+  "pullToRefresh": {
+    "pull": "引っ張って更新",
+    "release": "指を離して更新",
+    "refreshing": "更新中…"
   }
 }

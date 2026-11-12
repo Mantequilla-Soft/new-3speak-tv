@@ -17,7 +17,8 @@
     "loginFailed": "Giriş başarısız: {{error}}",
     "logoAlt": "3Speak Logosu",
     "title": "Kullanıcı adınla giriş yap",
-    "usernamePlaceholder": "Kullanıcı adı"
+    "usernamePlaceholder": "Kullanıcı adı",
+    "continueWith": "{{method}} ile devam et"
   },
   "socialLink": {
     "hashCopied": "Hash kopyalandı",
@@ -55,7 +56,7 @@
   },
   "auth": {
     "title": "3Speak'i yetkilendir",
-    "text": "3Speak'e video yükleyebilmen için posting yetkine ihtiyacımız var. Bu, yüklediğin videoları Hive'da yayınlamamızı sağlar. Posting yetkisini yalnızca bir kez vermen yeterli.",
+    "text": "Yüklemek için posting yetkine ihtiyacımız var, böylece videolarını Hive'da yayınlayabiliriz. Bunu yalnızca bir kez verirsin.",
     "authorize": "Yetkilendir"
   },
   "beneficiary": {
@@ -74,6 +75,11 @@
       "maxCount": "Hive gönderi başına en fazla {{max}} lehtara izin verir."
     },
     "title": "Lehtarlar",
+    "shareRewards": "Ödülleri paylaş",
+    "you": "sen",
+    "toYou": "sana",
+    "addCollaborator": "Ortak çalışan ekle",
+    "saveSplit": "Dağılımı kaydet",
     "intro": "Bu gönderinin ödüllerinden otomatik olarak pay almasını istediğin bir kullanıcı ekle.",
     "minPercent": "% (en az %{{percent}})",
     "usernamePlaceholder": "Kullanıcı adını gir",
@@ -99,8 +105,8 @@
     "gotIt": "Anladım"
   },
   "verifyAuth": {
-    "title": "Yetki Doğrulanıyor",
-    "text": "Yetkinin verildiğini doğrularken lütfen bekle..."
+    "title": "Yetki doğrulanıyor",
+    "text": "Verildiği kontrol ediliyor…"
   },
   "editor": {
     "confirmLeave": "Düzenleyici hâlâ açık. Bu sayfadan ayrılırsan düzenleyici kapanır ve kaydedilmemiş değişiklikler kaybolur.\n\nTamam = Düzenleyiciyi kapat ve ayrıl\nİptal = Bu sayfada kal",
@@ -176,7 +182,9 @@
     "details": "Ek ayrıntılar (isteğe bağlı)",
     "detailsPlaceholder": "Biraz daha bilgi ver...",
     "submitting": "Gönderiliyor...",
-    "submit": "Bildirimi Gönder"
+    "submit": "Bildirimi Gönder",
+    "intro": "Bildirimler 3Speak ekibine gider. İçerik üreticisi kimin bildirdiğini görmez.",
+    "nextDetails": "Sonraki: ayrıntı ekle"
   },
   "upload": {
     "missingInfo": "Video veya küçük resim bilgisi eksik.",

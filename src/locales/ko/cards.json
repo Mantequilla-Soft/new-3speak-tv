@@ -6,7 +6,7 @@
   "watchingNow_other": "{{count}}명 시청 중",
   "previewMuted": "미리보기 · 음소거",
   "badges": {
-    "gatedTitle": "멤버 전용. 3Speak Pro로 전체 동영상을 볼 수 있습니다",
+    "gatedTitle": "멤버 전용",
     "pro": "PRO",
     "new": "NEW",
     "first": "첫 업로드",
@@ -17,24 +17,28 @@
   "status": {
     "scheduled": "예약됨",
     "mobile": "모바일",
-    "mobileTitle": "모바일 앱으로 업로드됨",
+    "mobileTitle": "모바일 앱으로 업로드",
     "processing": "처리 중",
-    "processingTitle": "동영상을 처리하는 중이에요",
+    "processingTitle": "처리 중",
     "draft": "임시저장",
-    "draftTitle": "임시저장 - 아직 게시되지 않음",
+    "draftTitle": "아직 게시되지 않음",
     "deleted": "삭제됨",
-    "deletedTitle": "삭제된 동영상이에요",
+    "deletedTitle": "삭제됨",
     "failed": "실패",
-    "failedTitle": "동영상 처리에 실패했어요",
+    "failedTitle": "처리 실패",
     "unlisted": "일부 공개",
-    "unlistedTitle": "일부 공개 — 피드와 검색에 표시되지 않고 링크로만 볼 수 있어요"
+    "unlistedTitle": "링크로만 볼 수 있음"
   },
   "playlist": {
     "loading": "재생목록 불러오는 중...",
     "items_other": "{{count}}개 항목",
     "openAria": "재생목록 {{name}} 열기",
     "tag": "재생목록",
-    "updated": "{{when}} 업데이트됨"
+    "updated": "{{when}} 업데이트됨",
+    "public": "공개",
+    "private": "비공개",
+    "history": "기록",
+    "audio": "오디오"
   },
   "watchLater": {
     "title": "나중에 볼 동영상",
@@ -48,5 +52,12 @@
     "label": "크기 변경",
     "small": "작게",
     "medium": "보통"
+  },
+  "payout": {
+    "title": "보상",
+    "author": "작성자",
+    "curators": "큐레이터",
+    "paysOutIn": "지급까지",
+    "days_other": "{{count}}일"
   }
 }

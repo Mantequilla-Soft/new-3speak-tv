@@ -53,7 +53,8 @@
     "upload": "채널 트레일러 업로드",
     "tapForSound": "탭해서 소리 켜기",
     "views_other": "조회수 {{num}}회",
-    "readMore": "더보기"
+    "readMore": "더보기",
+    "label": "예고편"
   },
   "snaps": {
     "readMore": "더보기",
@@ -150,7 +151,8 @@
       "text": "동영상을 재생목록으로 묶으면 사람들이 순서대로 볼 수 있어요.",
       "cta": "첫 재생목록 만들기",
       "visitor": "@{{user}}님은 공개 재생목록이 없어요."
-    }
+    },
+    "visitorPreview": "방문자에게 표시: “{{text}}”"
   },
   "links": {
     "button": "링크",
@@ -169,7 +171,8 @@
     "shorts": "쇼츠",
     "audio": "오디오",
     "community": "커뮤니티",
-    "playlists": "재생목록"
+    "playlists": "재생목록",
+    "latestSnap": "최신 Snap"
   },
   "streams": {
     "loading": "방송 불러오는 중…",
@@ -282,7 +285,9 @@
     "hiddenToast": "팁을 내 프로필에서 숨겼습니다",
     "unhiddenToast": "팁이 내 프로필에 다시 표시됩니다",
     "hideFailed": "이 팁을 변경할 수 없습니다. 다시 시도해 주세요.",
-    "hideWalletPrompt": "내 프로필에 표시할 팁을 바꾸려면 서명하세요"
+    "hideWalletPrompt": "내 프로필에 표시할 팁을 바꾸려면 서명하세요",
+    "whoTitle": "@{{user}}님이 후원하는 사람",
+    "tipped_other": "팁 {{count}}회"
   },
   "layout": {
     "customize": "프로필 꾸미기",
@@ -393,5 +398,12 @@
   },
   "audioTab": {
     "files": "오디오 파일"
+  },
+  "search": {
+    "placeholder": "이 채널 검색",
+    "clear": "검색 지우기",
+    "results_other": "“{{query}}” 결과 {{count}}개",
+    "empty": "이 채널에 “{{query}}”와(과) 일치하는 항목이 없어요.",
+    "older": "이전 업로드 검색"
   }
 }

@@ -22,7 +22,8 @@
     "step1": "Buksan ang video na ito sa",
     "step2": "I-click ang menu na may tatlong tuldok at piliin ang Download.",
     "step3": "Piliin sa ibaba ang na-download na file.",
-    "pickFile": "Piliin ang na-download na file"
+    "pickFile": "Piliin ang na-download na file",
+    "title": "Hindi ito makuha"
   },
   "errors": {
     "signIn": "Mag-sign in para i-import ang iyong mga video.",
@@ -133,7 +134,8 @@
     },
     "stopConfirm": "Ihinto ang import na ito? Kakanselahin ang mga video na hindi pa naipo-post, pati ang mga naka-schedule na. Mananatili ang mga naipo-post na.",
     "stopYes": "Oo, ihinto",
-    "stopKeep": "Ituloy ang import"
+    "stopKeep": "Ituloy ang import",
+    "countOf": "{{done}} sa {{total}}"
   },
   "bitchute": {
     "noLink": "Wala ka pang naka-link na BitChute account. I-link at i-verify muna ito sa iyong profile, pagkatapos ay bumalik dito.",

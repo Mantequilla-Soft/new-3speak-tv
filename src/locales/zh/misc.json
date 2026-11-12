@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 天",
-      "30d": "30 天",
+      "7d": "一周",
+      "30d": "一个月",
       "365d": "一年",
       "all": "全部时间"
     },
@@ -155,9 +155,9 @@
     "audioFull": "带标题",
     "audioCompact": "紧凑",
     "audioMinimal": "极简",
-    "heightSub": "全宽，高 {{height}} px",
+    "heightSub": "全宽，高 {{height}} px · 自适应",
     "podcastTitle": "嵌入此播客",
-    "podcastHint": "将其粘贴到任何网站或博客文章中。它会播放节目的所有单集，新单集一发布也会包含在内。"
+    "podcastHint": "播放节目的所有单集，新单集一发布也会包含在内。"
   },
   "incubation": {
     "requestFailed": "请求失败（{{status}}）",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "此页面没有加载出来",
-    "body": "应用的一部分下载失败。这通常是因为在此标签页打开期间发布了新版本。重新加载即可获取新版本。",
+    "body": "应用的一部分下载失败。通常是因为在此标签页打开期间发布了新版本。重新加载即可获取。",
     "brokenTitle": "此页面出了点问题",
-    "brokenBody": "页面的一部分出现了错误。重新加载通常可以解决，下面的详细信息能帮助我们找到原因。",
+    "brokenBody": "页面的一部分出现了错误。重新加载通常可以解决，详细信息能帮助我们找到原因。",
     "reload": "重新加载",
     "goHome": "返回首页",
     "details": "详细信息"
@@ -203,9 +203,9 @@
       "regularVideo": "发布到频道的普通视频",
       "verticalShort": "用于短视频流的竖屏片段",
       "shortsEditor": "在浏览器中录制并剪辑短视频",
-      "story": "展示 24 小时的短片",
+      "story": "保留 24 小时",
       "musicAudio": "歌曲、播客及其他音频",
-      "audioEditor": "剪辑、清理并统一播客和音乐的音量",
+      "audioEditor": "剪辑、清理并统一音量",
       "groupChat": "与嘉宾一起主持的直播间",
       "goLiveNow": "向你的关注者直播",
       "communitySnap": "在社区标签页快速发帖",
@@ -220,7 +220,7 @@
   "hiveAuth": {
     "waiting": "正在等待 HiveAuth 批准...",
     "title": "需要 HiveAuth 批准",
-    "hint": "请在你的 HiveAuth App 中批准这笔交易"
+    "hint": "请在你的 HiveAuth App 中批准这笔交易。"
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain 没有签署这笔交易",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod 已开始，但 Hive 公告未能发布。"
   },
   "appUpdate": {
-    "updating": "正在更新到最新版本（{{version}}）…",
+    "updating": "正在更新到 {{version}}…",
     "reloadingForUpload": "正在重新加载，以便你的上传在最新版本上运行。"
   },
   "auth": {
@@ -303,6 +303,17 @@
     "moreTag": "更多 #{{tag}}",
     "moreVideos": "更多视频",
     "hideControls": "隐藏控件",
-    "showControls": "显示控件"
+    "showControls": "显示控件",
+    "watching": "{{count}} 人在看",
+    "startedAgo": "开播于 {{when}}",
+    "topSupporters": "头号支持者",
+    "noSupporters": "还没有助力",
+    "full": "全屏",
+    "loginToChat": "登录后聊天"
+  },
+  "pullToRefresh": {
+    "pull": "下拉刷新",
+    "release": "释放刷新",
+    "refreshing": "刷新中…"
   }
 }

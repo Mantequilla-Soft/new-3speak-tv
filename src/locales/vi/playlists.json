@@ -22,6 +22,8 @@
     "noOtherPlaylists": "Bạn chưa có danh sách phát nào khác",
     "createFirst": "Tạo danh sách phát",
     "createNew": "Tạo danh sách phát mới",
+    "newPlaylist": "Danh sách phát mới",
+    "savedTo_other": "Đã lưu vào {{count}} danh sách phát",
     "name": "Tên",
     "namePlaceholder": "Danh sách phát tuyệt vời của tôi",
     "privacy": "Quyền riêng tư",
@@ -91,12 +93,15 @@
     "creditsPlaceholder": "Sản xuất bởi…",
     "description": "Mô tả",
     "descriptionPlaceholder": "Giới thiệu album này (không bắt buộc)",
-    "filterCount_other": "{{shown}} / {{count}} mục"
+    "filterCount_other": "{{shown}} / {{count}} mục",
+    "shuffle": "Phát ngẫu nhiên"
   },
   "type": {
     "label": "Loại",
     "video": "Video",
     "audio": "Âm thanh",
+    "videoSub": "Video dài",
+    "audioSub": "Bản nhạc & podcast",
     "kindLabel": "Loại âm thanh nào?",
     "kinds": {
       "podcast": "Podcast",

@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 jours",
-      "30d": "30 jours",
+      "7d": "Semaine",
+      "30d": "Mois",
       "365d": "Année",
       "all": "Depuis toujours"
     },
@@ -155,9 +155,9 @@
     "audioFull": "Avec titre",
     "audioCompact": "Compact",
     "audioMinimal": "Minimal",
-    "heightSub": "Pleine largeur, {{height}} px de haut",
+    "heightSub": "Pleine largeur, {{height}} px de haut · Adaptatif",
     "podcastTitle": "Intégrer ce podcast",
-    "podcastHint": "Collez ceci dans un site web ou un article de blog. Il lit tous les épisodes de l'émission, y compris les nouveaux dès leur sortie."
+    "podcastHint": "Lit tous les épisodes de l'émission, y compris les nouveaux dès leur sortie."
   },
   "incubation": {
     "requestFailed": "Échec de la requête ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "Cette page ne s'est pas chargée",
-    "body": "Une partie de l'app n'a pas pu être téléchargée. Cela signifie généralement qu'une nouvelle version est sortie pendant que cet onglet était ouvert. Recharger la page la récupère.",
+    "body": "Une partie de l'app n'a pas pu être téléchargée. En général, une nouvelle version est sortie pendant que cet onglet était ouvert. Recharger la récupère.",
     "brokenTitle": "Un problème est survenu sur cette page",
-    "brokenBody": "Une partie de cette page a rencontré une erreur. Recharger la page règle généralement le problème, et les détails ci-dessous nous aident à en trouver la cause.",
+    "brokenBody": "Une partie de cette page a rencontré une erreur. Recharger règle généralement le problème, et les détails nous aident à en trouver la cause.",
     "reload": "Recharger",
     "goHome": "Accueil",
     "details": "Détails"
@@ -203,13 +203,13 @@
       "regularVideo": "Vidéo classique pour ta chaîne",
       "verticalShort": "Clip vertical pour le fil Shorts",
       "shortsEditor": "Enregistre et monte un short dans ton navigateur",
-      "story": "Clip court visible pendant 24 heures",
+      "story": "Reste en ligne 24 heures",
       "musicAudio": "Chansons, podcasts et autres audios",
-      "audioEditor": "Coupez, nettoyez et équilibrez podcasts et musique",
+      "audioEditor": "Couper, nettoyer et égaliser",
       "groupChat": "Salon en direct que tu animes avec des invités",
       "goLiveNow": "Diffuse en direct pour tes abonnés",
       "communitySnap": "Publication rapide dans ton onglet communauté",
-      "playlist": "Regroupe des vidéos dans une liste à partager"
+      "playlist": "Regroupez des vidéos dans une liste à partager"
     }
   },
   "chat": {
@@ -219,8 +219,8 @@
   },
   "hiveAuth": {
     "waiting": "En attente de validation sur HiveAuth...",
-    "title": "Validation HiveAuth requise",
-    "hint": "Ouvrez votre app HiveAuth pour approuver cette transaction"
+    "title": "Approbation HiveAuth requise",
+    "hint": "Consultez votre app HiveAuth pour approuver cette transaction."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain n'a pas signé la transaction",
@@ -233,7 +233,7 @@
     "announceFailed": "L'OpenPod a démarré, mais l'annonce sur Hive n'a pas pu être publiée."
   },
   "appUpdate": {
-    "updating": "Mise à jour vers la dernière version ({{version}})…",
+    "updating": "Mise à jour vers {{version}}…",
     "reloadingForUpload": "Rechargement pour que votre mise en ligne utilise la version la plus récente."
   },
   "auth": {
@@ -305,6 +305,17 @@
     "moreTag": "Plus de #{{tag}}",
     "moreVideos": "Plus de vidéos",
     "hideControls": "Masquer les commandes",
-    "showControls": "Afficher les commandes"
+    "showControls": "Afficher les commandes",
+    "watching": "{{count}} spectateurs",
+    "startedAgo": "Commencé {{when}}",
+    "topSupporters": "Meilleurs soutiens",
+    "noSupporters": "Pas encore de boosts",
+    "full": "Plein écran",
+    "loginToChat": "Connectez-vous pour discuter"
+  },
+  "pullToRefresh": {
+    "pull": "Tirez pour actualiser",
+    "release": "Relâchez pour actualiser",
+    "refreshing": "Actualisation…"
   }
 }

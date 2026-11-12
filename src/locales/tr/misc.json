@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 gün",
-      "30d": "30 gün",
+      "7d": "Hafta",
+      "30d": "Ay",
       "365d": "Yıl",
       "all": "Tüm zamanlar"
     },
@@ -155,9 +155,9 @@
     "audioFull": "Başlıklı",
     "audioCompact": "Kompakt",
     "audioMinimal": "Minimal",
-    "heightSub": "Tam genişlik, {{height}} px yükseklik",
+    "heightSub": "Tam genişlik, {{height}} px yükseklik · Duyarlı",
     "podcastTitle": "Bu podcast'i yerleştir",
-    "podcastHint": "Bunu herhangi bir web sitesine veya blog yazısına yapıştırın. Programın tüm bölümlerini, yenileri çıktıkça onları da çalar."
+    "podcastHint": "Programın tüm bölümlerini, yenileri çıktıkça onları da çalar."
   },
   "incubation": {
     "requestFailed": "İstek başarısız ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "Bu sayfa yüklenmedi",
-    "body": "Uygulamanın bir kısmı indirilemedi. Bu genellikle bu sekme açıkken yeni bir sürüm yayınlandığı anlamına gelir. Yeniden yüklemek bunu düzeltir.",
+    "body": "Uygulamanın bir kısmı indirilemedi. Genellikle bu sekme açıkken yeni bir sürüm yayınlanmıştır. Yeniden yüklemek onu getirir.",
     "brokenTitle": "Bu sayfada bir şeyler ters gitti",
-    "brokenBody": "Bu sayfanın bir bölümünde hata oluştu. Yeniden yüklemek genelde düzeltir, aşağıdaki ayrıntılar da sebebi bulmamıza yardımcı olur.",
+    "brokenBody": "Bu sayfanın bir bölümünde hata oluştu. Yeniden yüklemek genelde düzeltir, ayrıntılar da sebebi bulmamıza yardımcı olur.",
     "reload": "Yeniden yükle",
     "goHome": "Ana sayfaya git",
     "details": "Ayrıntılar"
@@ -203,9 +203,9 @@
       "regularVideo": "Kanalın için klasik video",
       "verticalShort": "Shorts akışı için dikey klip",
       "shortsEditor": "Tarayıcında short kaydet ve düzenle",
-      "story": "24 saat yayında kalan kısa klip",
+      "story": "24 saat yayında kalır",
       "musicAudio": "Şarkılar, podcast'ler ve diğer sesler",
-      "audioEditor": "Podcast ve müzikleri kes, temizle ve seviyesini ayarla",
+      "audioEditor": "Kes, temizle ve seviyeyi ayarla",
       "groupChat": "Konuklarla sunduğun canlı oda",
       "goLiveNow": "Takipçilerine canlı yayın yap",
       "communitySnap": "Topluluk sekmende hızlı gönderi",
@@ -219,8 +219,8 @@
   },
   "hiveAuth": {
     "waiting": "HiveAuth'ta onay bekleniyor...",
-    "title": "HiveAuth Onayı Gerekli",
-    "hint": "Bu işlemi onaylamak için lütfen HiveAuth uygulamanı kontrol et"
+    "title": "HiveAuth onayı gerekli",
+    "hint": "Bu işlemi onaylamak için HiveAuth uygulamanı kontrol et."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain işlemi imzalamadı",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod başladı ama Hive duyurusu paylaşılamadı."
   },
   "appUpdate": {
-    "updating": "En son sürüme ({{version}}) güncelleniyor…",
+    "updating": "{{version}} sürümüne güncelleniyor…",
     "reloadingForUpload": "Yüklemenin en yeni sürümde çalışması için yeniden yükleniyor."
   },
   "auth": {
@@ -304,6 +304,17 @@
     "moreTag": "Daha fazla #{{tag}}",
     "moreVideos": "Daha fazla video",
     "hideControls": "Kontrolleri gizle",
-    "showControls": "Kontrolleri göster"
+    "showControls": "Kontrolleri göster",
+    "watching": "{{count}} izleyici",
+    "startedAgo": "{{when}} başladı",
+    "topSupporters": "En çok destekleyenler",
+    "noSupporters": "Henüz boost yok",
+    "full": "Tam ekran",
+    "loginToChat": "Sohbet için giriş yap"
+  },
+  "pullToRefresh": {
+    "pull": "Yenilemek için çek",
+    "release": "Yenilemek için bırak",
+    "refreshing": "Yenileniyor…"
   }
 }

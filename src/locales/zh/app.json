@@ -9,7 +9,7 @@
     },
     "upload": {
       "title": "你的账号已被禁止上传",
-      "body": "你的 3Speak 账号目前不允许上传。如果你认为这是误判，请联系 3Speak 客服。"
+      "body": "你的账号目前不允许上传。如果你认为这是误判，请联系 3Speak 客服。"
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "我们的基础设施出现了一些问题",
-    "body": "我们的团队正在全力处理，尽快恢复 3Speak。加入我们的 Discord 联系我们并获取实时进展——感谢你的耐心。",
+    "body": "我们的团队正在全力恢复 3Speak。加入我们的 Discord 获取实时进展。",
     "joinDiscord": "加入我们的 Discord"
   },
   "changelog": {
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "发布视频",
-        "text": "上传始终属于你的长视频，它存放在一条没有人能悄悄删除内容的链上。"
+        "text": "始终属于你的长视频"
       },
       "filmShorts": {
         "title": "拍短视频",
-        "text": "简短、竖屏、方便分享。非常适合吸引你的第一批观众。"
+        "text": "简短、竖屏、方便分享"
       },
       "goLive": {
         "title": "开直播",
-        "text": "为你的粉丝直播，邀请嘉宾上台，结束后还能保留录像。"
+        "text": "邀请嘉宾上台，保留录像"
       },
       "buildCommunity": {
         "title": "打造社区",
-        "text": "围绕你在乎的事情建立一个空间，或者加入一个已经很热闹的社区。"
+        "text": "创建一个空间，或加入一个"
       },
       "makeFriends": {
         "title": "结交真朋友",
-        "text": "和真正互相支持的真人评论、聊天、合作。"
+        "text": "评论、聊天、合作"
       },
       "getInspired": {
         "title": "获取灵感，参与其中",
-        "text": "发现创作者，支持你喜欢的人，同时还能赚取收益。"
+        "text": "支持创作者，自己也能赚钱"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "上传中…",
     "interestsHint": "我们会根据这些选择你首页显示的内容。想选多少都可以，也可以一个都不选，随时都能修改。",
     "interestsFineprint": "保存到你的 Hive 账号，因此所有 Hive 应用都会显示相同的主页和兴趣。",
-    "saveAndExplore": "保存并开始探索"
+    "saveAndExplore": "保存并开始探索",
+    "eyebrow": "欢迎",
+    "stepOf": "第 {{n}} 步，共 {{total}} 步",
+    "profileFineprint": "保存到你的 Hive 账号，所有 Hive 应用都会显示同样的资料。"
   },
   "profileEdit": {
     "updated": "个人资料已更新",
@@ -193,7 +196,7 @@
     "uploadBanner": "上传主页横幅",
     "changeBanner": "更换横幅",
     "addBanner": "添加横幅",
-    "bannerHint": "最佳尺寸为 <b>2800 × 684</b> 像素（或任意 4:1 的图片）。把重要内容放在中间：窄屏上两侧会被裁掉，你的名字会显示在左下方。",
+    "bannerHint": "把重要内容放在中间：窄屏上两侧会被裁掉，你的名字会显示在左下方。",
     "uploadPicture": "上传头像",
     "pictureLabel": "头像",
     "pictureHint": "人像或 Logo 效果最好。正方形，400 × 400 像素或更大，最大 8MB。",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "我们该怎么称呼你？（@{{username}}）",
     "namePlaceholder": "我们该怎么称呼你？",
     "shortBio": "简介",
-    "bioPlaceholder": "你创作什么内容？大家可以期待你带来什么？",
+    "bioPlaceholder": "你创作什么内容？大家可以期待什么？",
     "location": "所在地",
     "optional": "可选",
     "locationPlaceholder": "你在世界的哪个角落？"

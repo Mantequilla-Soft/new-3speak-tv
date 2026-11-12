@@ -7,7 +7,8 @@
     "feeds": "Akışlar",
     "groups": "Gruplar",
     "audio": "Ses",
-    "login": "Giriş"
+    "login": "Giriş",
+    "you": "Sen"
   },
   "installApp": "Uygulamayı Yükle",
   "iosInstallHint": "<b>Paylaş</b>'a, ardından <b>Ana Ekrana Ekle</b>'ye dokun",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Art arda kısa dikey videolar",
     "audioTooltip": "3Speak'te yayınlanan podcast'ler, müzik ve diğer sesler",
     "groupsTooltip": "Katılabileceğin topluluklar ve insanlara verilen rozetler",
-    "rankingsTooltip": "Şu an en çok kazanan ve en çok izlenen içerik üreticileri"
+    "rankingsTooltip": "Şu an en çok kazanan ve en çok izlenen içerik üreticileri",
+    "live": "Canlı",
+    "liveTooltip": "Şu an canlı olan yayınlar ve odalar"
   },
   "aboutLink": "3Speak Hakkında",
   "faqLink": "SSS",
@@ -49,14 +52,20 @@
     "logout": "Çıkış yap",
     "onDiscord": "Discord'da 3Speak",
     "onX": "X'te 3Speak",
-    "onTelegram": "Telegram'da 3Speak"
+    "onTelegram": "Telegram'da 3Speak",
+    "switch": "Değiştir",
+    "tiles": {
+      "channel": "Kanal",
+      "history": "Geçmiş"
+    },
+    "darkTheme": "Koyu tema"
   },
   "notifications": {
     "pushOff": "Bu cihaz için bildirimler kapatıldı",
-    "pushOn": "Takip ettiğin içerik üreticileri paylaşım yaptığında bildirim alacaksın",
+    "pushOn": "Takip ettiğin içerik üreticileri paylaşım yaptığında bildirim alacaksın.",
     "pushFailed": "Bildirim ayarları değiştirilemedi",
     "ariaUnread": "Bildirimler ({{count}} okunmamış)",
-    "pushBlocked": "Bu site için bildirimler tarayıcı ayarlarında engellenmiş",
+    "pushBlocked": "Bu site için bildirimler tarayıcı ayarlarında engellenmiş.",
     "pushNoWorker": "Bu sürümde service worker yok, bu yüzden burada bildirim kaydedilemez",
     "pushStop": "Bu cihaza bildirim göndermeyi durdur",
     "pushStart": "Takip ettiğin içerik üreticileri paylaşım yaptığında bildirim al",
@@ -76,8 +85,8 @@
       "followMany_other": "@{{a}} ve {{count}} kişi daha seni takip etti",
       "other": "{{count}} {{type}} bildirimi",
       "typeCount": "{{count}} {{type}}",
-      "includesWhale": "🐋 balina hesap(lar) içerir",
-      "includesOrca": "🐬 orka hesap(lar) içerir",
+      "includesWhale": "🐋 balina hesaplar içerir",
+      "includesOrca": "🐬 orka hesaplar içerir",
       "andMore": "ve {{count}} tane daha…"
     },
     "stories": {
@@ -93,6 +102,13 @@
       "heading": "Takip ettiğin podcast'lerin yeni bölümleri",
       "newEpisode": "Yeni bölüm: {{show}}",
       "type": "Podcast"
+    },
+    "tabs": {
+      "all": "Tümü",
+      "mentions": "Bahsetmeler",
+      "follows": "Takipler",
+      "uploads": "Yüklemeler",
+      "pods": "Podcast'ler"
     }
   },
   "search": {
@@ -130,6 +146,17 @@
     "views_other": "{{formatted}} görüntülenme",
     "tags": "Etiketler",
     "titles": "Başlıklar",
-    "placeholder": "Ara..."
-  }
+    "placeholder": "Ara...",
+    "recent": "Son aramalar",
+    "allResultsFor": "“{{term}}” için tüm sonuçlar",
+    "kinds": {
+      "creator": "Üretici",
+      "community": "Topluluk",
+      "video": "Video",
+      "short": "Short",
+      "audio": "Ses",
+      "playlist": "Oynatma listesi"
+    }
+  },
+  "create": "Oluştur"
 }

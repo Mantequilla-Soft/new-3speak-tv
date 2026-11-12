@@ -6,7 +6,7 @@
   "watchingNow_other": "กำลังดูอยู่ {{count}} คน",
   "previewMuted": "ตัวอย่าง · ปิดเสียง",
   "badges": {
-    "gatedTitle": "เฉพาะสมาชิก 3Speak Pro ปลดล็อกวิดีโอฉบับเต็ม",
+    "gatedTitle": "เฉพาะสมาชิก",
     "pro": "PRO",
     "new": "ใหม่",
     "first": "วิดีโอแรก",
@@ -17,24 +17,28 @@
   "status": {
     "scheduled": "ตั้งเวลาไว้",
     "mobile": "มือถือ",
-    "mobileTitle": "อัปโหลดผ่านแอปมือถือ",
+    "mobileTitle": "ผ่านแอปมือถือ",
     "processing": "กำลังประมวลผล",
-    "processingTitle": "วิดีโอกำลังประมวลผล",
+    "processingTitle": "กำลังประมวลผล",
     "draft": "ฉบับร่าง",
-    "draftTitle": "ฉบับร่าง - ยังไม่เผยแพร่",
+    "draftTitle": "ยังไม่เผยแพร่",
     "deleted": "ลบแล้ว",
-    "deletedTitle": "วิดีโอนี้ถูกลบแล้ว",
+    "deletedTitle": "ถูกลบแล้ว",
     "failed": "ล้มเหลว",
-    "failedTitle": "ประมวลผลวิดีโอไม่สำเร็จ",
+    "failedTitle": "ประมวลผลไม่สำเร็จ",
     "unlisted": "ไม่เป็นสาธารณะ",
-    "unlistedTitle": "ไม่เป็นสาธารณะ — ซ่อนจากฟีดและการค้นหา เข้าถึงได้ทางลิงก์โดยตรงเท่านั้น"
+    "unlistedTitle": "ลิงก์โดยตรงเท่านั้น"
   },
   "playlist": {
     "loading": "กำลังโหลดเพลย์ลิสต์...",
     "items_other": "{{count}} รายการ",
     "openAria": "เปิดเพลย์ลิสต์ {{name}}",
     "tag": "เพลย์ลิสต์",
-    "updated": "อัปเดต {{when}}"
+    "updated": "อัปเดต {{when}}",
+    "public": "สาธารณะ",
+    "private": "ส่วนตัว",
+    "history": "ประวัติ",
+    "audio": "เสียง"
   },
   "watchLater": {
     "title": "ดูภายหลัง",
@@ -48,5 +52,12 @@
     "label": "เปลี่ยนขนาด",
     "small": "เล็ก",
     "medium": "กลาง"
+  },
+  "payout": {
+    "title": "รางวัล",
+    "author": "ผู้เขียน",
+    "curators": "ผู้คัดสรร",
+    "paysOutIn": "จ่ายในอีก",
+    "days_other": "{{count}} วัน"
   }
 }

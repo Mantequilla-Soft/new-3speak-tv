@@ -7,7 +7,7 @@
   "watchingNow_other": "{{count}} schauen gerade zu",
   "previewMuted": "Vorschau · stumm",
   "badges": {
-    "gatedTitle": "Nur für Mitglieder. 3Speak Pro schaltet das ganze Video frei",
+    "gatedTitle": "Nur für Mitglieder",
     "pro": "PRO",
     "new": "NEU",
     "first": "Erstes",
@@ -18,17 +18,17 @@
   "status": {
     "scheduled": "Geplant",
     "mobile": "Mobil",
-    "mobileTitle": "Über die mobile App hochgeladen",
+    "mobileTitle": "Über die mobile App",
     "processing": "In Verarbeitung",
-    "processingTitle": "Video wird verarbeitet",
+    "processingTitle": "Wird verarbeitet",
     "draft": "Entwurf",
-    "draftTitle": "Entwurf – noch nicht veröffentlicht",
+    "draftTitle": "Noch nicht veröffentlicht",
     "deleted": "Gelöscht",
-    "deletedTitle": "Dieses Video wurde gelöscht",
+    "deletedTitle": "Wurde gelöscht",
     "failed": "Fehlgeschlagen",
-    "failedTitle": "Videoverarbeitung fehlgeschlagen",
+    "failedTitle": "Verarbeitung fehlgeschlagen",
     "unlisted": "Nicht gelistet",
-    "unlistedTitle": "Nicht gelistet – nicht in Feeds & Suche, nur per Direktlink erreichbar"
+    "unlistedTitle": "Nur per Direktlink"
   },
   "playlist": {
     "loading": "Playlists werden geladen...",
@@ -36,7 +36,11 @@
     "items_other": "{{count}} Einträge",
     "openAria": "Playlist {{name}} öffnen",
     "tag": "Playlist",
-    "updated": "Aktualisiert {{when}}"
+    "updated": "Aktualisiert {{when}}",
+    "public": "öffentlich",
+    "private": "privat",
+    "history": "Verlauf",
+    "audio": "Audio"
   },
   "watchLater": {
     "title": "Später ansehen",
@@ -50,5 +54,13 @@
     "label": "Größe ändern",
     "small": "Klein",
     "medium": "Mittel"
+  },
+  "payout": {
+    "title": "Auszahlung",
+    "author": "Autor",
+    "curators": "Kuratoren",
+    "paysOutIn": "Auszahlung in",
+    "days_one": "{{count}} Tag",
+    "days_other": "{{count}} Tagen"
   }
 }

@@ -22,7 +22,8 @@
     "step1": "Otwórz ten film w",
     "step2": "Kliknij menu z trzema kropkami i wybierz Pobierz.",
     "step3": "Wybierz poniżej pobrany plik.",
-    "pickFile": "Wybierz pobrany plik"
+    "pickFile": "Wybierz pobrany plik",
+    "title": "Nie udało się pobrać tego filmu"
   },
   "errors": {
     "signIn": "Zaloguj się, aby importować swoje filmy.",
@@ -133,7 +134,8 @@
     },
     "stopConfirm": "Zatrzymać ten import? Filmy jeszcze nieopublikowane zostaną anulowane, także te już zaplanowane. Opublikowane filmy zostają.",
     "stopYes": "Tak, zatrzymaj",
-    "stopKeep": "Importuj dalej"
+    "stopKeep": "Importuj dalej",
+    "countOf": "{{done}} z {{total}}"
   },
   "bitchute": {
     "noLink": "Nie połączono jeszcze konta BitChute. Najpierw połącz je i zweryfikuj w swoim profilu, a potem wróć tutaj.",

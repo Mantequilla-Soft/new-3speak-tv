@@ -30,7 +30,13 @@
     "aria": "フォロー中のクリエイターの新着",
     "summary_other": "新着動画 {{count}} 本",
     "fromFollowing": "フォロー中の人から",
-    "shorts_other": "ショート {{count}} 本"
+    "shorts_other": "ショート {{count}} 本",
+    "show": "表示",
+    "hide": "非表示"
+  },
+  "tagMeta": {
+    "videos_other": "動画 {{num}} 本",
+    "thisWeek": "今週 {{num}} 本"
   },
   "firstUploads": {
     "title": "初投稿"
@@ -51,9 +57,13 @@
     "dragToReorder": "ドラッグして並べ替え",
     "customize": "カスタマイズ",
     "customizeTitle": "ホームをカスタマイズ",
-    "customizeHint": "セクションを上下に移動できます。不要なものはオフにしましょう。",
+    "customizeHint": "ドラッグで並べ替え。不要なセクションはオフにできます。",
     "surfTitle": "チャンネルサーフィン: トピックを選んでテレビのように見る",
-    "zapping": "ザッピング"
+    "zapping": "ザッピング",
+    "hero": {
+      "spotlightIn": "{{community}} のスポットライト"
+    },
+    "tabFollowing": "フォロー中"
   },
   "surf": {
     "pageTitle": "チャンネルサーフィン",
@@ -79,9 +89,10 @@
     "nextVideoKey": "次の動画（→）",
     "zap": "ザップ",
     "findingNext": "次の動画を探しています…",
-    "stop": "サーフィンをやめる",
+    "stop": "停止",
     "stopTitle": "サーフィンをやめる（この動画は再生を続けます）",
-    "guide": "番組表"
+    "guide": "番組表",
+    "guideShort": "ガイド"
   },
   "discover": {
     "searchPlaceholder": "動画、ショート、音声、コミュニティを検索...",
@@ -119,6 +130,30 @@
     "groupTitle": "{{label}}（{{count}}）",
     "subscribers_other": "登録者 {{count}} 人",
     "authors_other": "投稿者 {{count}} 人",
-    "views_other": "{{views}} 回視聴"
+    "views_other": "{{views}} 回視聴",
+    "topCreator": "トップクリエイター",
+    "creators": "クリエイター",
+    "relatedTags": "関連タグ",
+    "trendingTags": "トレンドのタグ",
+    "topCreators": "トップクリエイター",
+    "categories": "カテゴリー",
+    "show": "表示",
+    "boostRecentHint": "新しい動画を優先して表示",
+    "showResults_other": "{{count}} 件の結果を表示",
+    "resultTypes": "結果の種類"
+  },
+  "activity": {
+    "aria": "3Speak のアクティビティ",
+    "community": "コミュニティ",
+    "verbs": {
+      "snap": "Snap",
+      "audio": "新しい音声",
+      "playlist": "再生リスト",
+      "live": "ライブ中",
+      "group_other": "今週の新しい動画 {{count}} 本"
+    },
+    "emptyCommunity": "ここ数日、コミュニティに新着はありません。",
+    "emptyLive": "現在ライブ中の人はいません。",
+    "emptyGroups": "今週のグループのアクティビティはまだありません。"
   }
 }

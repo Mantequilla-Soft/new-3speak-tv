@@ -77,6 +77,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Videoreactie plaatsen",
+    "rec": "REC {{time}}",
+    "mic": "Microfoon",
+    "camera": "Camera",
+    "restart": "Opnieuw",
     "authorized": "@threespeak geautoriseerd — je kunt nu je reactie plaatsen",
     "authFailed": "Autorisatie mislukt. Probeer het opnieuw.",
     "webcamDenied": "Geen toegang tot de webcam",
@@ -90,7 +95,7 @@
     "uploadVideo": "Video uploaden",
     "recordVideo": "Video opnemen",
     "startRecording": "Opname starten",
-    "stopRecording": "Opname stoppen",
+    "stopRecording": "Stoppen en bekijken",
     "recordedVideo": "Opgenomen video",
     "descriptionPlaceholder": "Voeg een beschrijving toe aan je video-reactie...",
     "showInShorts": "Tonen in 3Speak Shorts",

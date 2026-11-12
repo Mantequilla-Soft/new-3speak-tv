@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "Siku 7",
-      "30d": "Siku 30",
+      "7d": "Wiki",
+      "30d": "Mwezi",
       "365d": "Mwaka",
       "all": "Muda wote"
     },
@@ -155,9 +155,9 @@
     "audioFull": "Na kichwa",
     "audioCompact": "Fupi",
     "audioMinimal": "Ndogo kabisa",
-    "heightSub": "Upana kamili, urefu {{height}} px",
+    "heightSub": "Upana kamili, urefu {{height}} px · Inayojirekebisha",
     "podcastTitle": "Pachika podikasti hii",
-    "podcastHint": "Bandika hii kwenye tovuti au chapisho lolote la blogu. Inacheza vipindi vyote vya kipindi, pamoja na vipya vinapotoka."
+    "podcastHint": "Inacheza kila kipindi cha podikasti, pamoja na vipya vinapotoka."
   },
   "incubation": {
     "requestFailed": "Ombi limeshindwa ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "Ukurasa huu haukupakia",
-    "body": "Sehemu ya programu imeshindwa kupakuliwa. Kwa kawaida hii inamaanisha toleo jipya lilitolewa wakati kichupo hiki kilikuwa wazi. Kupakia upya kutalileta.",
+    "body": "Sehemu ya programu imeshindwa kupakuliwa. Kwa kawaida toleo jipya lilitolewa wakati kichupo hiki kilikuwa wazi. Kupakia upya kunalileta.",
     "brokenTitle": "Kuna hitilafu kwenye ukurasa huu",
-    "brokenBody": "Sehemu ya ukurasa huu ilipata hitilafu. Kupakia upya kwa kawaida hurekebisha, na maelezo hapa chini yanatusaidia kupata chanzo.",
+    "brokenBody": "Sehemu ya ukurasa huu ilipata hitilafu. Kupakia upya kwa kawaida hurekebisha, na maelezo yanatusaidia kupata chanzo.",
     "reload": "Pakia upya",
     "goHome": "Nenda nyumbani",
     "details": "Maelezo"
@@ -203,9 +203,9 @@
       "regularVideo": "Video ya kawaida kwa chaneli yako",
       "verticalShort": "Klipu wima kwa mlisho wa Shorts",
       "shortsEditor": "Rekodi na uhariri short kwenye kivinjari",
-      "story": "Klipu fupi inayokaa kwa saa 24",
+      "story": "Inakaa kwa saa 24",
       "musicAudio": "Nyimbo, podikasti na sauti nyingine",
-      "audioEditor": "Kata, safisha na sawazisha podikasti na muziki",
+      "audioEditor": "Kata, safisha na sawazisha",
       "groupChat": "Chumba mubashara unachoongoza na wageni",
       "goLiveNow": "Tiririsha mubashara kwa wafuasi wako",
       "communitySnap": "Chapisho la haraka kwenye kichupo cha jumuiya",
@@ -220,7 +220,7 @@
   "hiveAuth": {
     "waiting": "Inasubiri idhini kwenye HiveAuth...",
     "title": "Idhini ya HiveAuth inahitajika",
-    "hint": "Tafadhali angalia programu yako ya HiveAuth ili kuidhinisha muamala huu"
+    "hint": "Angalia programu yako ya HiveAuth ili kuidhinisha muamala huu."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain haikusaini muamala",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod imeanza, lakini tangazo la Hive halikuweza kuchapishwa."
   },
   "appUpdate": {
-    "updating": "Inasasisha kwenda toleo jipya zaidi ({{version}})…",
+    "updating": "Inasasisha kwenda {{version}}…",
     "reloadingForUpload": "Inapakia upya ili upakiaji wako uendeshwe kwenye toleo jipya zaidi."
   },
   "auth": {
@@ -304,6 +304,17 @@
     "moreTag": "Zaidi #{{tag}}",
     "moreVideos": "Video zaidi",
     "hideControls": "Ficha vidhibiti",
-    "showControls": "Onyesha vidhibiti"
+    "showControls": "Onyesha vidhibiti",
+    "watching": "{{count}} wanatazama",
+    "startedAgo": "Ilianza {{when}}",
+    "topSupporters": "Wafadhili wakuu",
+    "noSupporters": "Bado hakuna boosts",
+    "full": "Skrini nzima",
+    "loginToChat": "Ingia ili upige gumzo"
+  },
+  "pullToRefresh": {
+    "pull": "Vuta ili kuonyesha upya",
+    "release": "Achia ili kuonyesha upya",
+    "refreshing": "Inaonyesha upya…"
   }
 }

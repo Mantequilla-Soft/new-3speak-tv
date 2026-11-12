@@ -25,6 +25,11 @@
     "noOtherPlaylists": "Nie masz jeszcze innych playlist",
     "createFirst": "Utwórz playlistę",
     "createNew": "Utwórz nową playlistę",
+    "newPlaylist": "Nowa playlista",
+    "savedTo_one": "Zapisano na {{count}} playliście",
+    "savedTo_few": "Zapisano na {{count}} playlistach",
+    "savedTo_many": "Zapisano na {{count}} playlistach",
+    "savedTo_other": "Zapisano na {{count}} playlisty",
     "name": "Nazwa",
     "namePlaceholder": "Moja świetna playlista",
     "privacy": "Prywatność",
@@ -106,12 +111,15 @@
     "filterCount_one": "{{shown}} z {{count}} elementu",
     "filterCount_few": "{{shown}} z {{count}} elementów",
     "filterCount_many": "{{shown}} z {{count}} elementów",
-    "filterCount_other": "{{shown}} z {{count}} elementu"
+    "filterCount_other": "{{shown}} z {{count}} elementu",
+    "shuffle": "Losowo"
   },
   "type": {
     "label": "Rodzaj",
     "video": "Wideo",
     "audio": "Audio",
+    "videoSub": "Długie formy",
+    "audioSub": "Utwory i podcasty",
     "kindLabel": "Jakie to audio?",
     "kinds": {
       "podcast": "Podcast",

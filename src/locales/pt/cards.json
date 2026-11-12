@@ -8,7 +8,7 @@
   "watchingNow_other": "{{count}} assistindo agora",
   "previewMuted": "Prévia · sem som",
   "badges": {
-    "gatedTitle": "Só para membros. O 3Speak Pro libera o vídeo completo",
+    "gatedTitle": "Só para membros",
     "pro": "PRO",
     "new": "NOVO",
     "first": "Primeiro",
@@ -19,17 +19,17 @@
   "status": {
     "scheduled": "Agendado",
     "mobile": "Celular",
-    "mobileTitle": "Enviado pelo app de celular",
+    "mobileTitle": "Pelo app de celular",
     "processing": "Processando",
-    "processingTitle": "O vídeo está sendo processado",
+    "processingTitle": "Sendo processado",
     "draft": "Rascunho",
-    "draftTitle": "Rascunho - ainda não publicado",
+    "draftTitle": "Ainda não publicado",
     "deleted": "Excluído",
-    "deletedTitle": "Este vídeo foi excluído",
+    "deletedTitle": "Foi excluído",
     "failed": "Falhou",
-    "failedTitle": "Falha no processamento do vídeo",
+    "failedTitle": "Falha no processamento",
     "unlisted": "Não listado",
-    "unlistedTitle": "Não listado — oculto dos feeds e da busca, acessível só pelo link direto"
+    "unlistedTitle": "Só pelo link direto"
   },
   "playlist": {
     "loading": "Carregando playlists...",
@@ -38,7 +38,11 @@
     "items_other": "{{count}} itens",
     "openAria": "Abrir playlist {{name}}",
     "tag": "Playlist",
-    "updated": "Atualizada {{when}}"
+    "updated": "Atualizada {{when}}",
+    "public": "pública",
+    "private": "privada",
+    "history": "histórico",
+    "audio": "áudio"
   },
   "watchLater": {
     "title": "Assistir mais tarde",
@@ -52,5 +56,14 @@
     "label": "Alterar tamanho",
     "small": "Pequeno",
     "medium": "Médio"
+  },
+  "payout": {
+    "title": "Pagamento",
+    "author": "Autor",
+    "curators": "Curadores",
+    "paysOutIn": "Paga em",
+    "days_one": "{{count}} dia",
+    "days_many": "{{count}} dias",
+    "days_other": "{{count}} dias"
   }
 }

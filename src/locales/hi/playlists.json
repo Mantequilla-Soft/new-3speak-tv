@@ -23,6 +23,9 @@
     "noOtherPlaylists": "आपकी अभी कोई और प्लेलिस्ट नहीं है",
     "createFirst": "प्लेलिस्ट बनाएँ",
     "createNew": "नई प्लेलिस्ट बनाएँ",
+    "newPlaylist": "नई प्लेलिस्ट",
+    "savedTo_one": "{{count}} प्लेलिस्ट में सेव किया गया",
+    "savedTo_other": "{{count}} प्लेलिस्ट में सेव किया गया",
     "name": "नाम",
     "namePlaceholder": "मेरी शानदार प्लेलिस्ट",
     "privacy": "प्राइवेसी",
@@ -96,12 +99,15 @@
     "description": "विवरण",
     "descriptionPlaceholder": "इस एल्बम के बारे में (वैकल्पिक)",
     "filterCount_one": "{{count}} में से {{shown}} आइटम",
-    "filterCount_other": "{{count}} में से {{shown}} आइटम"
+    "filterCount_other": "{{count}} में से {{shown}} आइटम",
+    "shuffle": "शफ़ल"
   },
   "type": {
     "label": "प्रकार",
     "video": "वीडियो",
     "audio": "ऑडियो",
+    "videoSub": "लंबे वीडियो",
+    "audioSub": "ट्रैक और पॉडकास्ट",
     "kindLabel": "किस तरह का ऑडियो?",
     "kinds": {
       "podcast": "पॉडकास्ट",

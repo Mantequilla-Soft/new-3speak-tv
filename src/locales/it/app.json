@@ -9,7 +9,7 @@
     },
     "upload": {
       "title": "Il caricamento è disattivato per il tuo account",
-      "body": "Al momento il tuo account 3Speak non può caricare contenuti. Se pensi che sia un errore, contatta l'assistenza di 3Speak."
+      "body": "Al momento il tuo account non può caricare contenuti. Se pensi che sia un errore, contatta l'assistenza di 3Speak."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "Stiamo avendo alcuni problemi di infrastruttura",
-    "body": "Il nostro team ci sta lavorando per rimettere in funzione 3Speak il prima possibile. Unisciti al nostro Discord per contattarci e ricevere aggiornamenti in tempo reale — grazie per la pazienza.",
+    "body": "Il nostro team sta lavorando proprio ora per rimettere in piedi 3Speak. Unisciti al nostro Discord per gli aggiornamenti in tempo reale.",
     "joinDiscord": "Unisciti al nostro Discord"
   },
   "changelog": {
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Pubblica video",
-        "text": "Carica video lunghi che restano tuoi, su una chain da cui nessuno può eliminarli di nascosto."
+        "text": "Video lunghi che restano tuoi"
       },
       "filmShorts": {
         "title": "Gira Shorts",
-        "text": "Qualcosa di veloce, verticale e facile da condividere. Perfetto per trovare i tuoi primi spettatori."
+        "text": "Veloci, verticali, facili da condividere"
       },
       "goLive": {
         "title": "Vai in diretta",
-        "text": "Trasmetti al tuo pubblico, porta ospiti sul palco e conserva la registrazione dopo."
+        "text": "Porta ospiti sul palco, conserva la registrazione"
       },
       "buildCommunity": {
         "title": "Crea una community",
-        "text": "Apri uno spazio dedicato a ciò che ti sta a cuore, o unisciti a uno già pieno di vita."
+        "text": "Apri uno spazio o unisciti a uno"
       },
       "makeFriends": {
         "title": "Fatti amici veri",
-        "text": "Commenta, chatta e collabora con persone vere che si sostengono a vicenda."
+        "text": "Commenta, chatta e collabora"
       },
       "getInspired": {
         "title": "Lasciati ispirare, partecipa",
-        "text": "Scopri creator, sostieni quelli che ami e guadagna nel frattempo."
+        "text": "Sostieni i creator e guadagna anche tu"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Caricamento…",
     "interestsHint": "Li usiamo per scegliere cosa mostrare nella tua home. Scegline quanti vuoi, o nessuno, e cambiali quando vuoi.",
     "interestsFineprint": "Salvati nel tuo account Hive, così ogni app Hive mostra lo stesso profilo e gli stessi interessi.",
-    "saveAndExplore": "Salva e inizia a esplorare"
+    "saveAndExplore": "Salva e inizia a esplorare",
+    "eyebrow": "Benvenuto",
+    "stepOf": "Passo {{n}} di {{total}}",
+    "profileFineprint": "Salvato nel tuo account Hive, così ogni app Hive mostra lo stesso profilo."
   },
   "profileEdit": {
     "updated": "Profilo aggiornato",
@@ -193,7 +196,7 @@
     "uploadBanner": "Carica un banner del profilo",
     "changeBanner": "Cambia banner",
     "addBanner": "Aggiungi un banner",
-    "bannerHint": "Ideale a <b>2800 × 684</b> px (o qualsiasi immagine 4:1). Tieni la parte importante al centro: i lati vengono tagliati sugli schermi stretti e il tuo nome si sovrappone in basso a sinistra.",
+    "bannerHint": "Tieni la parte importante al centro: i lati vengono tagliati sugli schermi stretti e il tuo nome si sovrappone in basso a sinistra.",
     "uploadPicture": "Carica un'immagine del profilo",
     "pictureLabel": "Immagine del profilo",
     "pictureHint": "Un volto o un logo funzionano meglio. Quadrata, 400 × 400 px o più. Fino a 8 MB.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "Come dobbiamo chiamarti? (@{{username}})",
     "namePlaceholder": "Come dobbiamo chiamarti?",
     "shortBio": "Breve bio",
-    "bioPlaceholder": "Cosa crei, e cosa possono aspettarsi le persone da te?",
+    "bioPlaceholder": "Cosa crei, e cosa possono aspettarsi le persone?",
     "location": "Località",
     "optional": "facoltativo",
     "locationPlaceholder": "In che parte del mondo ti trovi?"

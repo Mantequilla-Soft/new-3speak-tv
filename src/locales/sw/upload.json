@@ -2,7 +2,7 @@
   "drafts": {
     "title": "Rasimu za video",
     "filters": {
-      "all": "Video zote",
+      "all": "Zote",
       "published": "Zilizochapishwa",
       "scheduled": "zilizoratibiwa",
       "failed": "Zilizoshindwa"
@@ -30,7 +30,7 @@
   },
   "preview": {
     "playVideo": "Cheza video",
-    "cannotPreviewHevc": "Kivinjari chako hakiwezi kuonyesha video hii — hili ni la kawaida kwa klipu za HEVC/H.265 (k.m. rekodi za iPhone za “High Efficiency”). Hakuna tatizo: bado itapakiwa na kubadilishwa ili icheze kwa kila mtu."
+    "cannotPreviewHevc": "Kivinjari chako hakiwezi kuonyesha klipu hii ya HEVC. Bado itapakiwa na kucheza kwa kila mtu."
   },
   "rc": {
     "title": "Resource Credits hazitoshi",
@@ -58,8 +58,10 @@
   },
   "progress": {
     "uploadedFinishDetails": "Video imepakiwa — kamilisha maelezo yako ili kuchapisha.",
+    "uploaded": "Imepakiwa",
+    "uploading": "Inapakia",
     "backgroundFailed": "Upakiaji wa chinichini haukukamilika — utajaribiwa tena utakapochapisha.",
-    "uploadingPct": "Inapakia video yako… {{pct}}%",
+    "uploadingPct": "Inapakia · {{pct}}%",
     "methodReliable": "Upakiaji wa kuaminika",
     "methodResumable": "Upakiaji unaoweza kuendelezwa",
     "attempt": "jaribio {{attempt}}/{{attempts}}",
@@ -70,15 +72,15 @@
     "waitingOn": "Inasubiri: {{what}}",
     "uploadServer": "Seva ya upakiaji: {{host}}",
     "cancelled": "Upakiaji umeghairiwa.",
-    "connectionUnstable": "Muunganisho si thabiti — inajaribu tena…",
-    "connectionUnstableAttempt": "Muunganisho si thabiti — inajaribu tena… ({{attempt}}/{{attempts}})",
+    "connectionUnstable": "Muunganisho si thabiti, inajaribu tena…",
+    "connectionUnstableAttempt": "Muunganisho si thabiti, inajaribu tena… ({{attempt}}/{{attempts}})",
     "uploadingVideoPct": "Inapakia video... {{pct}}%",
     "uploadingSinglePct": "Inapakia kwa ombi moja… {{pct}}%",
     "checkingConnection": "Inakagua muunganisho wako...",
     "startingUpload": "Inaanza upakiaji…",
     "tryingSingleRequest": "Inajaribu njia moja ya mwisho — inatuma kwa ombi moja…",
     "stillStuck": "Bado imekwama — inajaribu njia moja ya mwisho ya upakiaji.",
-    "patchBlockedSwitching": "Mtandao wako umezuia upakiaji unaoweza kuendelezwa — inabadili kwenda njia inayoendana zaidi.",
+    "patchBlockedSwitching": "Mtandao wako umezuia upakiaji unaoweza kuendelezwa, kwa hivyo tunabadili kwenda njia inayoendana zaidi.",
     "switchingMethod": "Inabadilisha njia ya upakiaji…",
     "uploadingBackground": "Inapakia video chinichini…",
     "phase": {
@@ -107,7 +109,7 @@
       "frame": "Fremu",
       "text": "Maandishi",
       "pickFrame": "Chagua fremu",
-      "stickers": "Vibandiko"
+      "stickers": "Kibandiko"
     },
     "frame": {
       "zoom": "Kuza",
@@ -161,8 +163,9 @@
     "editor": {
       "open": "Kihariri cha picha ndogo",
       "openHint": "Maandishi, vibandiko, kuza, fremu yoyote",
-      "title": "Kihariri cha picha ndogo",
+      "title": "Picha ndogo",
       "done": "Imekamilika",
+      "useThumbnail": "Tumia picha ndogo",
       "sources": "Picha za kuanzia",
       "pickPrompt": "Chagua fremu kutoka video yako",
       "download": "Pakua",
@@ -199,7 +202,7 @@
     "invalidVideo": "Tafadhali chagua faili halali ya video",
     "tooLarge": "Video ni kubwa mno. Ukubwa wa juu unaoruhusiwa ni 5GB.",
     "shortTooLong": "Shorts lazima ziwe {{max}} au chini. Video yako ni sek {{seconds}}.",
-    "shortNotVertical": "Shorts lazima zirekodiwe kwa umbo la wima. Video yako inaonekana kuwa ya mlalo.",
+    "shortNotVertical": "Shorts lazima ziwe wima. Hii inaonekana kuwa ya mlalo.",
     "thumbnailGenFailed": "Imeshindwa kutengeneza picha ndogo kiotomatiki kwa faili hii — unaweza kupakia yako mwenyewe katika hatua inayofuata.",
     "processFailed": "Imeshindwa kuchakata video.",
     "selectFirst": "Tafadhali chagua faili ya video kwanza.",
@@ -215,9 +218,9 @@
     "backgroundInfo": "Taarifa: Video yako inaanza kupakiwa chinichini mara unapofika hatua ya maelezo.",
     "noRc": "Akaunti yako haina <b>Resource Credits</b> za kutosha kuchapisha chapisho kwa sasa.",
     "whyCantUpload": "Kwa nini siwezi kupakia?",
-    "needsAuth": "Ili kupakia, ruhusu <b>@threespeak</b> ichapishe kwa niaba yako.",
+    "needsAuth": "Ili kupakia, ruhusu <b>@threespeak</b> ichapishe kwa niaba yako. Unafanya hivi mara moja tu.",
     "authorizing": "Inaidhinisha…",
-    "authorize": "Idhinisha @threespeak",
+    "authorize": "Idhinisha",
     "selectVideo": "Chagua video",
     "selfieTeleprompter": "Teleprompter ya selfie",
     "beta": "beta",
@@ -226,7 +229,7 @@
     "replace": "Badilisha video",
     "editVideo": "Hariri video hii",
     "asStory": "Chapisha kama hadithi ya saa 24",
-    "asStoryHint": "Inakaa juu kabisa ya mlisho wa Shorts na wafuasi wako hupata arifa. Ikiwa bado hewani, bado unaweza kuibakiza kama short."
+    "asStoryHint": "Inaongoza mlisho wa Shorts na kuwaarifu wafuasi wako. Ikiwa bado hewani, bado unaweza kuibakiza kama Short."
   },
   "details": {
     "guests": {
@@ -282,24 +285,24 @@
       "none": "Hakuna"
     },
     "remix": {
-      "label": "Ruhusu Remix/Klipu",
+      "label": "Ruhusu remix na klipu",
       "info": "Ruhusu wengine kutengeneza remix na klipu kutoka kwa video hii. Utatajwa kama mwandishi asili na utapokea angalau 5% kama mnufaika.",
-      "hint": "Waruhusu wengine wafanye remix."
+      "hint": "Unapata angalau 5% ya kila remix"
     },
     "nsfw": {
       "label": "Weka alama ya NSFW",
       "info": "Inaweka alama kuwa video hii ni maudhui ya watu wazima. Itafichwa kwenye milisho na utafutaji kwa watazamaji ambao hawajawasha NSFW, na itawekwa lebo <code>nsfw</code> kote Hive.",
-      "hint": "Maudhui ya watu wazima."
+      "hint": "Imefichwa isipokuwa mtazamaji ameruhusu NSFW"
     },
     "addToBlog": {
       "label": "Ongeza kwenye blogu yangu",
-      "hint": "Ionyeshe kwenye blogu yako na kwenye mlisho wa wafuasi wako.",
+      "hint": "Inai-reblog ili wafuasi waione kwenye mlisho wao",
       "info": "3Speak huchapisha kila video kwenye jumuiya, na Hive haionyeshi machapisho ya jumuiya kwenye blogu yako wala kwenye mlisho wa wafuasi wako usipoyashiriki. Ukiwasha hili, 3Speak hushiriki (hu-reblog) video kwenye blogu yako mara tu baada ya kuchapisha."
     },
     "ads": {
       "label": "Matangazo kwenye video hii",
       "info": "Akaunti yako inaonyesha matangazo, kwa hivyo video hii pia, isipokuwa ukiyazima hapa. Hii inahusu video hii moja tu; video zako nyingine na mpangilio wa akaunti yako vinabaki vilevile.",
-      "hintOn": "Matangazo yanaweza kuchezwa kwenye video hii.",
+      "hintOn": "Video hii tu, akaunti yako inabaki vile vile",
       "hintOff": "Hakuna matangazo kwenye video hii."
     },
     "rolls": {
@@ -313,21 +316,32 @@
       "info": "Inasimba video hii kwa njia fiche ili wanachama wa 3Speak Pro pekee waweze kuicheza. <b>Onyesho la sekunde 10 lisilosimbwa</b> huchapishwa pamoja nayo, ili chapisho bado lionyeshe trela kila mahali kwenye Hive. Kichwa, maelezo na lebo zako ni maudhui ya kawaida ya chapisho la Hive na <b>hayasimbwi kwa njia fiche</b>: ni video tu inayosimbwa. <b>Hili haliwezi kubadilishwa baada ya kupakia.</b>",
       "withGuests_one": "Wanachama wa Pro + mgeni {{count}}.",
       "withGuests_other": "Wanachama wa Pro + wageni {{count}}.",
-      "hint": "Wanachama wa Pro tu."
+      "hint": "Imesimbwa kwa wanaojisajili Pro. Haiwezi kubadilishwa baada ya kupakia."
     },
     "trailer": {
       "label": "Trela ya chaneli",
       "info": "Inacheza kiotomatiki juu ya kichupo cha <b>Muhtasari</b> kwenye wasifu wako, ikichukua nafasi ya trela yoyote uliyoweka awali.",
-      "hint": "Inacheza kiotomatiki kwenye wasifu wako."
+      "hint": "Inacheza kiotomatiki juu ya wasifu wako"
     },
     "schedule": {
       "label": "Ratibu chapisho hili",
       "info": "Inaweka chapisho kwenye foleni na kulichapisha kiotomatiki wakati unaouchagua, angalau dakika 15 kuanzia sasa na hadi siku 90 mbele. Linatangazwa na @threespeak kwa niaba yako, kwa hivyo utaombwa kuidhinisha hilo mara moja.",
       "immediately": "Chapisha mara moja.",
       "changeTime": "Badilisha muda",
-      "note": "Angalau dakika 15 kuanzia sasa, hadi siku 90. Huchapishwa kiotomatiki na @threespeak kwa niaba yako — utaombwa kuidhinisha hili mara moja."
+      "note": "Angalau dakika 15 kuanzia sasa, hadi siku 90. Huchapishwa kiotomatiki na @threespeak kwa niaba yako — utaombwa kuidhinisha hili mara moja.",
+      "short": "Ratibu",
+      "publishLater": "Chapisha baadaye",
+      "scheduleFor": "Ratibu kwa {{when}}",
+      "publishNow": "Chapisha sasa hivi"
     },
-    "proceed": "Endelea"
+    "proceed": "Endelea",
+    "nextStep": "Inayofuata: {{step}}",
+    "tagsCount_one": "lebo {{count}}",
+    "tagsCount_other": "lebo {{count}}",
+    "shareRewards": "Gawana zawadi",
+    "shareRewardsSub": "Gawana na washirika",
+    "advanced": "NSFW / malipo",
+    "advancedSub": "Ya hali ya juu"
   },
   "review": {
     "payoutDeclined": "Imekataliwa (zawadi zinachomwa)",
@@ -344,20 +358,21 @@
     "editPost": "Hariri chapisho",
     "watchAdToPublish": "Tazama tangazo ili kuchapisha",
     "watchSponsorFirst": "Tazama ujumbe wa mfadhili kwanza",
+    "gateNote": "Akaunti mpya hutazama ujumbe mfupi wa mdhamini kabla ya kuchapisha. Unalipia akaunti yako ya bure.",
     "postShort": "Chapisha short",
     "postStory": "Chapisha Hadithi",
     "postVideo": "Chapisha video",
     "backToTimeline": "Rudi kwenye ratiba ya muda"
   },
   "publishing": {
-    "titleShort": "Inachapisha short",
-    "titleStory": "Inachapisha Hadithi",
+    "titleShort": "Inachapisha Short",
+    "titleStory": "Inachapisha hadithi",
     "titleVideo": "Inachapisha video",
-    "subtitle": "Tafadhali subiri tunapochakata maudhui yako...",
+    "subtitle": "Tafadhali baki kwenye ukurasa huu hadi ikamilike.",
     "starting": "Inaanza...",
     "stayOnPage": "Tafadhali baki kwenye ukurasa huu hadi uchapishaji ukamilike.",
     "activityLog": "Kumbukumbu ya shughuli",
-    "support": "Kwa msaada wasiliana nasi kwenye <discordLink>Discord</discordLink>",
+    "support": "Umekwama? Wasiliana nasi kwenye <discordLink>Discord</discordLink>.",
     "finishingUpload": "Inakamilisha upakiaji wa video…",
     "preparing": "Inaandaa kuchapisha...",
     "finalizing": "Inakamilisha…",
@@ -415,14 +430,14 @@
     "title": "Upakiaji umekamilika!",
     "shortPublished": "Short yako imechapishwa kwenye 3Speak. Itachukua takriban dakika 5 kuonekana kwenye wasifu wako.",
     "storyPublished": "Hadithi yako iko hewani kwenye 3Speak kwa saa 24 zijazo.",
-    "videoPublished": "Video yako imechapishwa!<br/>Sasa inasimbwa chinichini, jambo ambalo linaweza kuchukua dakika chache.",
-    "promote": "Tangaza video hii",
-    "goToProfile": "Nenda kwenye wasifu wangu →",
-    "feedback": "Upakiaji wako ulikuwaje"
+    "videoPublished": "Video yako imechapishwa. Inasimbwa chinichini, jambo linaloweza kuchukua dakika chache.",
+    "promote": "Tangaza",
+    "goToProfile": "Wasifu wangu",
+    "feedback": "Upakiaji wako ulikuwaje?"
   },
   "record": {
     "speechErrors": {
-      "network": "Huduma ya usemi haifikiki — utambuzi unahitaji muunganisho wa intaneti (Chrome hutuma sauti kwa Google ili kuiandika).",
+      "network": "Kusogeza kwa sauti kunahitaji intaneti. Sogeza maandishi kwa mkono.",
       "audioCapture": "Hakuna sauti iliyofika kwenye utambuzi — huenda maikrofoni inatumika. Jaribu headset.",
       "notAllowed": "Ruhusa ya maikrofoni imezuiwa kwa utambuzi wa usemi.",
       "generic": "Hitilafu ya utambuzi wa usemi: {{err}}"
@@ -441,7 +456,7 @@
     "layout": "Mpangilio",
     "presets": {
       "frontcam": "Kamera ya mbele",
-      "frontcamTitle": "Ukanda mdogo chini ya lenzi ya selfie — haionekani sana kwamba unasoma",
+      "frontcamTitle": "Ukanda mdogo chini ya lenzi",
       "max": "Ukubwa wa juu",
       "maxTitle": "Herufi kubwa za kusoma ukiwa mbali",
       "top": "Mistari ya juu",
@@ -464,11 +479,11 @@
     "startingMic": "Inawasha maikrofoni…",
     "leave": {
       "title": "Ondoka kwenye kamera?",
-      "sub": "Rudi kwenye maandishi yako, baki hapa, au funga (hakuna kitakachohifadhiwa).",
+      "sub": "Bado hakuna kilichohifadhiwa.",
       "backToScript": "Rudi kwenye maandishi",
       "stay": "Baki"
     },
-    "experimentalTitle": "Teleprompter ya majaribio",
+    "experimentalTitle": "Teleprompter",
     "scriptPlaceholder": "Andika au bandika maandishi yako hapa. Wakati wa kurekodi yanasogea kiotomatiki unapoyasoma kwa sauti.",
     "orientation": "Mkao",
     "continueToCamera": "Endelea kwenye kamera",
@@ -481,14 +496,14 @@
     "cameraN": "Kamera {{n}}",
     "flipRotationTitle": "Ikiwa picha imepinduka juu chini, geuza mzunguko wa 90°",
     "flipRotation": "Geuza mzunguko",
-    "stopVoiceTest": "Acha jaribio la sauti",
+    "stopVoiceTest": "Acha jaribio",
     "testVoice": "Jaribu sauti",
     "stopRecording": "Acha kurekodi",
     "startRecording": "Anza kurekodi",
     "script": "Maandishi",
     "reRecord": "Rekodi upya",
     "preparing": "Inaandaa…",
-    "useThisVideo": "Tumia video hii"
+    "useThisVideo": "Tumia video"
   },
   "errors": {
     "patchBlocked": "PATCH inaonekana kuzuiwa (hakuna kipande kilichothibitishwa)",
@@ -594,6 +609,7 @@
     "streakOn_other": "Uko kwenye mfululizo wa hadithi wa siku {{count}}.",
     "streakNext_one": "Kwa hii, mfululizo wako wa hadithi unafika siku {{count}}.",
     "streakNext_other": "Kwa hii, mfululizo wako wa hadithi unafika siku {{count}}.",
-    "streakStart": "Chapisha hadithi kila siku ili kujenga mfululizo."
+    "streakStart": "Chapisha hadithi kila siku ili kujenga mfululizo.",
+    "keepGoing": "Chapisha hadithi kila siku ili kuendeleza mfululizo"
   }
 }

@@ -17,7 +17,8 @@
     "loginFailed": "Falló el inicio de sesión: {{error}}",
     "logoAlt": "Logo de 3Speak",
     "title": "Inicia sesión con tu usuario",
-    "usernamePlaceholder": "Usuario"
+    "usernamePlaceholder": "Usuario",
+    "continueWith": "Continuar con {{method}}"
   },
   "socialLink": {
     "hashCopied": "Hash copiado",
@@ -55,7 +56,7 @@
   },
   "auth": {
     "title": "Autoriza a 3Speak",
-    "text": "Para subir videos a 3Speak necesitamos tu autoridad de publicación (posting). Esto nos permite publicar en Hive los videos que subes. Solo tienes que otorgarnos la autoridad de publicación una vez.",
+    "text": "Para subir videos necesitamos tu autoridad de publicación, así podemos publicarlos en Hive. Solo la concedes una vez.",
     "authorize": "Autorizar"
   },
   "beneficiary": {
@@ -74,6 +75,11 @@
       "maxCount": "Hive permite como máximo {{max}} beneficiarios por publicación."
     },
     "title": "Beneficiarios",
+    "shareRewards": "Compartir recompensas",
+    "you": "tú",
+    "toYou": "para ti",
+    "addCollaborator": "Añadir un colaborador",
+    "saveSplit": "Guardar reparto",
     "intro": "Agrega un usuario que quieras que reciba automáticamente una parte de las recompensas de esta publicación.",
     "minPercent": "% (mín. {{percent}}%)",
     "usernamePlaceholder": "Ingresa el usuario",
@@ -99,8 +105,8 @@
     "gotIt": "Entendido"
   },
   "verifyAuth": {
-    "title": "Verificando autorización",
-    "text": "Espera mientras verificamos que se otorgó la autorización..."
+    "title": "Verificando la autorización",
+    "text": "Comprobando que se haya concedido…"
   },
   "editor": {
     "confirmLeave": "El editor sigue abierto. Si sales de esta página, se cerrará el editor y se perderán los cambios no guardados.\n\nAceptar = Cerrar editor y salir\nCancelar = Quedarse en esta página",
@@ -176,7 +182,9 @@
     "details": "Detalles adicionales (opcional)",
     "detailsPlaceholder": "Da más contexto...",
     "submitting": "Enviando...",
-    "submit": "Enviar reporte"
+    "submit": "Enviar reporte",
+    "intro": "Los reportes van al equipo de 3Speak. El creador no verá quién reportó.",
+    "nextDetails": "Siguiente: añadir detalles"
   },
   "upload": {
     "missingInfo": "Falta información del video o de la miniatura.",

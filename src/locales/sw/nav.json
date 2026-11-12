@@ -7,7 +7,8 @@
     "feeds": "Milisho",
     "groups": "Vikundi",
     "audio": "Sauti",
-    "login": "Ingia"
+    "login": "Ingia",
+    "you": "Wewe"
   },
   "installApp": "Sakinisha programu",
   "iosInstallHint": "Gusa <b>Shiriki</b> kisha <b>Ongeza kwenye Skrini ya Nyumbani</b>",
@@ -28,7 +29,9 @@
     "shortsTooltip": "Video fupi wima, moja baada ya nyingine",
     "audioTooltip": "Podikasti, muziki na sauti nyingine zilizochapishwa kwenye 3Speak",
     "groupsTooltip": "Jumuiya unazoweza kujiunga nazo, na beji ambazo watu hutunukiwa",
-    "rankingsTooltip": "Watayarishaji wanaopata zaidi na kutazamwa zaidi kwa sasa"
+    "rankingsTooltip": "Watayarishaji wanaopata zaidi na kutazamwa zaidi kwa sasa",
+    "live": "Mubashara",
+    "liveTooltip": "Mitiririko na vyumba vilivyo mubashara sasa hivi"
   },
   "aboutLink": "Kuhusu 3Speak",
   "faqLink": "Maswali",
@@ -49,14 +52,20 @@
     "logout": "Toka",
     "onDiscord": "3Speak kwenye Discord",
     "onX": "3Speak kwenye X",
-    "onTelegram": "3Speak kwenye Telegram"
+    "onTelegram": "3Speak kwenye Telegram",
+    "switch": "Badili",
+    "tiles": {
+      "channel": "Chaneli",
+      "history": "Historia"
+    },
+    "darkTheme": "Mandhari ya giza"
   },
   "notifications": {
     "pushOff": "Arifa zimezimwa kwa kifaa hiki",
-    "pushOn": "Utaarifiwa watayarishaji unaowafuata wakichapisha",
+    "pushOn": "Utaarifiwa watayarishaji unaowafuata wakichapisha.",
     "pushFailed": "Imeshindwa kubadilisha mipangilio ya arifa",
     "ariaUnread": "Arifa ({{count}} hazijasomwa)",
-    "pushBlocked": "Arifa za tovuti hii zimezuiwa kwenye mipangilio ya kivinjari chako",
+    "pushBlocked": "Arifa zimezuiwa kwa tovuti hii kwenye mipangilio ya kivinjari chako.",
     "pushNoWorker": "Toleo hili halina service worker, kwa hivyo arifa haziwezi kusajiliwa hapa",
     "pushStop": "Acha kuarifu kifaa hiki",
     "pushStart": "Pata arifa watayarishaji unaowafuata wakichapisha",
@@ -76,8 +85,8 @@
       "followMany_other": "@{{a}} na wengine {{count}} wamekufuata",
       "other": "Arifa {{count}} za {{type}}",
       "typeCount": "{{count}} {{type}}",
-      "includesWhale": "Inajumuisha akaunti ya/za 🐋 nyangumi",
-      "includesOrca": "Inajumuisha akaunti ya/za 🐬 orca",
+      "includesWhale": "Inajumuisha akaunti za 🐋 nyangumi",
+      "includesOrca": "Inajumuisha akaunti za 🐬 orca",
       "andMore": "na {{count}} zaidi…"
     },
     "stories": {
@@ -93,6 +102,13 @@
       "heading": "Vipindi vipya vya podikasti unazofuata",
       "newEpisode": "Kipindi kipya cha {{show}}",
       "type": "Podikasti"
+    },
+    "tabs": {
+      "all": "Zote",
+      "mentions": "Kutajwa",
+      "follows": "Ufuatiliaji",
+      "uploads": "Upakiaji",
+      "pods": "Pods"
     }
   },
   "search": {
@@ -130,6 +146,17 @@
     "views_other": "mitazamo {{formatted}}",
     "tags": "Lebo",
     "titles": "Vichwa",
-    "placeholder": "Tafuta..."
-  }
+    "placeholder": "Tafuta...",
+    "recent": "Za hivi karibuni",
+    "allResultsFor": "Matokeo yote ya “{{term}}”",
+    "kinds": {
+      "creator": "Mtayarishaji",
+      "community": "Jumuiya",
+      "video": "Video",
+      "short": "Short",
+      "audio": "Sauti",
+      "playlist": "Orodha ya kucheza"
+    }
+  },
+  "create": "Unda"
 }

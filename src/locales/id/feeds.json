@@ -30,7 +30,13 @@
     "aria": "Baru dari kreator yang kamu ikuti",
     "summary_other": "{{count}} video baru",
     "fromFollowing": "dari orang yang kamu ikuti",
-    "shorts_other": "{{count}} Shorts"
+    "shorts_other": "{{count}} Shorts",
+    "show": "Tampilkan",
+    "hide": "Sembunyikan"
+  },
+  "tagMeta": {
+    "videos_other": "{{num}} video",
+    "thisWeek": "{{num}} minggu ini"
   },
   "firstUploads": {
     "title": "Unggahan Pertama"
@@ -51,9 +57,13 @@
     "dragToReorder": "Seret untuk mengatur urutan",
     "customize": "Sesuaikan",
     "customizeTitle": "Sesuaikan Beranda",
-    "customizeHint": "Pindahkan bagian ke atas atau ke bawah. Matikan yang tidak kamu inginkan.",
+    "customizeHint": "Seret untuk mengatur ulang urutan. Matikan bagian yang tidak kamu inginkan.",
     "surfTitle": "Channel Surfing: pilih topik dan tonton seperti TV",
-    "zapping": "Zapping"
+    "zapping": "Zapping",
+    "hero": {
+      "spotlightIn": "Sorotan di {{community}}"
+    },
+    "tabFollowing": "Mengikuti"
   },
   "surf": {
     "pageTitle": "Channel Surfing",
@@ -79,9 +89,10 @@
     "nextVideoKey": "Video berikutnya (→)",
     "zap": "Zap",
     "findingNext": "Mencari yang berikutnya…",
-    "stop": "Berhenti surfing",
+    "stop": "Berhenti",
     "stopTitle": "Berhenti surfing (video ini tetap diputar)",
-    "guide": "Panduan channel"
+    "guide": "Panduan channel",
+    "guideShort": "Panduan"
   },
   "discover": {
     "searchPlaceholder": "Cari video, Shorts, audio, komunitas...",
@@ -119,6 +130,30 @@
     "groupTitle": "{{label}} ({{count}})",
     "subscribers_other": "{{count}} anggota",
     "authors_other": "{{count}} penulis",
-    "views_other": "{{views}} tayangan"
+    "views_other": "{{views}} tayangan",
+    "topCreator": "Kreator teratas",
+    "creators": "Kreator",
+    "relatedTags": "Tag terkait",
+    "trendingTags": "Tag trending",
+    "topCreators": "Kreator teratas",
+    "categories": "Kategori",
+    "show": "Tampilkan",
+    "boostRecentHint": "Utamakan video yang lebih baru di hasil",
+    "showResults_other": "Tampilkan {{count}} hasil",
+    "resultTypes": "Jenis hasil"
+  },
+  "activity": {
+    "aria": "Aktivitas di 3Speak",
+    "community": "Komunitas",
+    "verbs": {
+      "snap": "snap",
+      "audio": "audio baru",
+      "playlist": "playlist",
+      "live": "sedang live",
+      "group_other": "{{count}} video baru minggu ini"
+    },
+    "emptyCommunity": "Belum ada yang baru dari komunitas dalam beberapa hari terakhir.",
+    "emptyLive": "Tidak ada yang sedang live saat ini.",
+    "emptyGroups": "Belum ada aktivitas grup minggu ini."
   }
 }

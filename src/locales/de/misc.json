@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 Tage",
-      "30d": "30 Tage",
+      "7d": "Woche",
+      "30d": "Monat",
       "365d": "Jahr",
       "all": "Gesamter Zeitraum"
     },
@@ -155,9 +155,9 @@
     "audioFull": "Mit Titel",
     "audioCompact": "Kompakt",
     "audioMinimal": "Minimal",
-    "heightSub": "Volle Breite, {{height}} px hoch",
+    "heightSub": "Volle Breite, {{height}} px hoch · Responsiv",
     "podcastTitle": "Diesen Podcast einbetten",
-    "podcastHint": "Füge das in eine Website oder einen Blogbeitrag ein. Es spielt alle Folgen der Sendung, auch neue, sobald sie erscheinen."
+    "podcastHint": "Spielt alle Folgen der Sendung, auch neue, sobald sie erscheinen."
   },
   "incubation": {
     "requestFailed": "Anfrage fehlgeschlagen ({{status}})",
@@ -169,15 +169,15 @@
   },
   "routeError": {
     "title": "Diese Seite wurde nicht geladen",
-    "body": "Ein Teil der App konnte nicht heruntergeladen werden. Das heißt meist, dass eine neue Version erschienen ist, während dieser Tab offen war. Neu laden holt sie.",
+    "body": "Ein Teil der App konnte nicht heruntergeladen werden. Meist ist eine neue Version erschienen, während dieser Tab offen war. Neu laden holt sie.",
     "brokenTitle": "Auf dieser Seite ist etwas schiefgelaufen",
-    "brokenBody": "Ein Teil dieser Seite hatte einen Fehler. Neu laden hilft meistens, und die Details unten helfen uns, die Ursache zu finden.",
+    "brokenBody": "Ein Teil dieser Seite hatte einen Fehler. Neu laden hilft meistens, und die Details helfen uns, die Ursache zu finden.",
     "reload": "Neu laden",
     "goHome": "Zur Startseite",
     "details": "Details"
   },
   "seo": {
-    "defaultTitle": "3Speak – Dezentrale Videoplattform",
+    "defaultTitle": "3Speak - Dezentrale Videoplattform",
     "homeTitle": "3Speak: die Videoplattform, auf der Creator und Zuschauer verdienen",
     "siteDescription": "3Speak ist die dezentrale YouTube-Alternative, auf der Creator ab ihrem ersten Video verdienen und auch Zuschauer verdienen können. Echte Menschen, echte Geschichten.",
     "pageDescription": "{{page}} auf 3Speak, der dezentralen YouTube-Alternative, auf der Creator und Zuschauer verdienen."
@@ -203,9 +203,9 @@
       "regularVideo": "Klassisches Video für deinen Kanal",
       "verticalShort": "Hochformat-Clip für den Shorts-Feed",
       "shortsEditor": "Short im Browser aufnehmen und schneiden",
-      "story": "Kurzer Clip, der 24 Stunden sichtbar bleibt",
+      "story": "Bleibt 24 Stunden sichtbar",
       "musicAudio": "Songs, Podcasts und anderes Audio",
-      "audioEditor": "Podcasts und Musik schneiden, säubern und angleichen",
+      "audioEditor": "Schneiden, säubern und angleichen",
       "groupChat": "Live-Raum, den du mit Gästen hostest",
       "goLiveNow": "Live für deine Follower streamen",
       "communitySnap": "Kurzer Beitrag im Community-Tab",
@@ -220,7 +220,7 @@
   "hiveAuth": {
     "waiting": "Warte auf Bestätigung in HiveAuth...",
     "title": "HiveAuth-Bestätigung erforderlich",
-    "hint": "Bitte sieh in deiner HiveAuth-App nach, um diese Transaktion zu bestätigen"
+    "hint": "Sieh in deiner HiveAuth-App nach, um diese Transaktion zu bestätigen."
   },
   "hiveApi": {
     "keychainNotSigned": "Keychain hat die Transaktion nicht signiert",
@@ -233,7 +233,7 @@
     "announceFailed": "OpenPod gestartet, aber die Ankündigung auf Hive konnte nicht gepostet werden."
   },
   "appUpdate": {
-    "updating": "Update auf die neueste Version ({{version}})…",
+    "updating": "Update auf {{version}}…",
     "reloadingForUpload": "Wird neu geladen, damit dein Upload mit der neuesten Version läuft."
   },
   "auth": {
@@ -258,7 +258,7 @@
   "groups": {
     "title": "Gruppen",
     "badges": "Badges",
-    "subtitle": "Die Communitys, denen du beitreten kannst, und die Badges, die Leute haben – an einem Ort."
+    "subtitle": "Die Communitys, denen du beitreten kannst, und die Badges, die Leute haben, an einem Ort."
   },
   "watched": {
     "removed": "Aus dem Wiedergabeverlauf entfernt",
@@ -304,6 +304,17 @@
     "moreTag": "Mehr #{{tag}}",
     "moreVideos": "Mehr Videos",
     "hideControls": "Steuerung ausblenden",
-    "showControls": "Steuerung einblenden"
+    "showControls": "Steuerung einblenden",
+    "watching": "{{count}} schauen zu",
+    "startedAgo": "Gestartet {{when}}",
+    "topSupporters": "Top-Unterstützer",
+    "noSupporters": "Noch keine Boosts",
+    "full": "Vollbild",
+    "loginToChat": "Zum Chatten anmelden"
+  },
+  "pullToRefresh": {
+    "pull": "Zum Aktualisieren ziehen",
+    "release": "Zum Aktualisieren loslassen",
+    "refreshing": "Wird aktualisiert…"
   }
 }

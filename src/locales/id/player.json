@@ -76,6 +76,11 @@
     }
   },
   "reactionUpload": {
+    "title": "Posting video reaksi",
+    "rec": "REC {{time}}",
+    "mic": "Mikrofon",
+    "camera": "Kamera",
+    "restart": "Ulangi",
     "authorized": "@threespeak sudah diberi izin — sekarang kamu bisa memposting reaksimu",
     "authFailed": "Otorisasi gagal. Silakan coba lagi.",
     "webcamDenied": "Webcam tidak dapat diakses",
@@ -89,7 +94,7 @@
     "uploadVideo": "Unggah Video",
     "recordVideo": "Rekam Video",
     "startRecording": "Mulai Merekam",
-    "stopRecording": "Berhenti Merekam",
+    "stopRecording": "Berhenti dan tinjau",
     "recordedVideo": "Video rekaman",
     "descriptionPlaceholder": "Tambahkan deskripsi untuk reaksi videomu...",
     "showInShorts": "Tampilkan di 3Speak Shorts",

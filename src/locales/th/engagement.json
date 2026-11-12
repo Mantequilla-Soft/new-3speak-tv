@@ -11,6 +11,8 @@
       "transferFailed": "โอนไม่สำเร็จ: {{message}}"
     },
     "heading": "ส่งทิปให้ @{{recipient}}",
+    "pageTitle": "ทิป @{{recipient}}",
+    "pageSub": "เปิดจากโอเวอร์เลย์ของสตรีมหรือจากลิงก์",
     "methodHive": "HIVE / HBD",
     "methodLightning": "Lightning",
     "methodMore": "วิธีอื่น",
@@ -23,7 +25,16 @@
     "memoLinkNote": "ลิงก์นี้จะถูกเพิ่มในบันทึก: {{link}}",
     "send": "ส่งทิป",
     "sendAmount": "ส่ง {{amount}} {{currency}}",
+    "paidIn": "จ่ายเป็น {{currency}} · ไม่มีค่าธรรมเนียม",
+    "forTitle": "สำหรับ “{{title}}”",
+    "presets": {
+      "coffee": "กาแฟหนึ่งแก้ว",
+      "popular": "ยอดนิยม",
+      "thanks": "ขอบคุณมาก",
+      "superFan": "แฟนตัวยง"
+    },
     "sentEyebrow": "ส่งทิปแล้ว",
+    "sentTo": "{{amount}} ถึง @{{recipient}}",
     "lightning": {
       "amountLabel": "จำนวน (sats):",
       "messageLabel": "ข้อความ (ไม่บังคับ):",
@@ -67,6 +78,8 @@
     "monthly": {
       "label": "บ่อยแค่ไหน",
       "once": "ครั้งเดียว",
+      "oneTime": "ครั้งเดียว",
+      "monthly": "รายเดือน",
       "until": "ทุกเดือน จนถึง {{date}}",
       "note": "Hive จะส่งให้เองทุก 30 วัน ครั้งแรกส่งทันที คุณหยุดได้ทุกเมื่อ",
       "replaces": "รายการนี้จะแทนที่การสนับสนุนรายเดือนที่คุณส่งให้ @{{recipient}} อยู่แล้ว",
@@ -91,7 +104,8 @@
     "addToPlaylist": "เพิ่มลงในเพลย์ลิสต์",
     "addTag": "เพิ่มแท็ก",
     "notInterested": "ไม่สนใจ",
-    "dontShowCreator": "ไม่ต้องแสดง @{{author}}"
+    "dontShowCreator": "ไม่ต้องแสดง @{{author}}",
+    "saveToPlaylist": "บันทึกลงเพลย์ลิสต์"
   },
   "guestList": {
     "loadFailed": "โหลดรายชื่อแขกปัจจุบันไม่ได้",
@@ -132,18 +146,21 @@
     "tagged": "ติดแท็ก “{{tag}}” แล้ว",
     "vote": "โหวต",
     "tagThisVideo": "ติดแท็กวิดีโอนี้",
-    "tagOptional": "— ไม่บังคับ —",
+    "tagOptional": "ไม่บังคับ",
     "pickTopicFirst": "เลือกหัวข้อก่อน",
     "taggedNoDot": "ติดแท็ก “{{tag}}” แล้ว",
     "tagFailed": "ติดแท็กไม่สำเร็จ: {{message}}",
-    "taggedAlreadyVoted": "ติดแท็ก “{{tag}}” แล้ว — คุณโหวต {{weight}}% ไปก่อนหน้านี้แล้ว",
-    "votingClosed": "ปิดโหวตแล้ว — ติดแท็กวิดีโอนี้",
+    "taggedAlreadyVoted": "ติดแท็ก “{{tag}}” แล้ว คุณโหวต {{weight}}% ไปแล้ว",
+    "votingClosed": "ปิดโหวตแล้ว: ติดแท็กวิดีโอนี้",
     "youTagged": "คุณติดแท็กนี้เป็น <b>{{tag}}</b>",
-    "pickTopic": "เลือกหัวข้อ (นับเป็นโหวต 100%)",
+    "pickTopic": "การเลือกหัวข้อนับเป็นโหวต 100%",
     "submitTag": "ส่งแท็ก",
     "tagThisVideoFull": "ติดแท็กวิดีโอนี้ (นับเป็นโหวต 100%)",
-    "justTag": "ไม่โหวต — ติดแท็กอย่างเดียว",
-    "addsAbout": "เพิ่มประมาณ {{value}}"
+    "justTag": "ไม่โหวต แค่ติดแท็ก",
+    "justTagShort": "แค่ติดแท็ก",
+    "voteAndTag": "โหวตและติดแท็ก",
+    "addsAbout": "เพิ่มประมาณ {{value}}",
+    "postSoFar_other": "{{value}} จนถึงตอนนี้ · {{count}} โหวต"
   },
   "tagsPicker": {
     "autoTagged": "ติดแท็กอัตโนมัติ: {{tags}}",
@@ -152,7 +169,7 @@
     "noMatches": "ไม่มีหัวข้อที่ตรงกับ “{{query}}”",
     "allSelected": "เลือก {{category}} ทั้งหมดแล้ว เพิ่มหัวข้อย่อยเฉพาะเมื่อต้องการเจาะจงมากขึ้น:",
     "orPickTopics": "หรือเลือกหัวข้อทีละรายการ:",
-    "goodEnough": "เท่านี้ก็พอ — หรือเจาะจงมากขึ้น (ไม่บังคับ):",
+    "goodEnough": "เท่านี้ก็พอ หรือเจาะจงมากขึ้น (ไม่บังคับ)",
     "moreSpecific": "เจาะจงมากขึ้น:"
   }
 }

@@ -21,6 +21,7 @@
     "communityWithSubscribers_many": "Społeczność · {{formatted}} subskrybentów",
     "communityWithSubscribers_other": "Społeczność · {{formatted}} subskrybenta",
     "commentFallback": "(komentarz)",
+    "videoKind": "3Speak · Film",
     "play": "Odtwórz {{title}}"
   },
   "share": {
@@ -34,22 +35,31 @@
     "responsiveSub": "Dopasowuje się do strony, na której się znajduje",
     "fixedSub": "Iframe o stałym rozmiarze",
     "sendInChat": "Wyślij na czacie 3Speak",
-    "sendInChatSub": "Wyślij to komuś na 3Speak",
+    "sendInChatSub": "Wyślij to komuś",
     "embedOnWebsite": "Osadź na stronie",
-    "embedOnWebsiteSub": "Skopiuj HTML na swoją stronę lub bloga",
+    "embedOnWebsiteSub": "Responsywnie lub w stałym rozmiarze",
     "forHivePost": "Do posta na Hive",
+    "forHivePostSub": "Skopiuj link do wklejenia",
     "hivePostCopied": "Link skopiowany. Wklej go do swojego posta na Hive.",
-    "generalShare": "Udostępnij / kopiuj link",
-    "generalShareSub": "Inne aplikacje lub skopiuj link"
+    "generalShare": "Udostępnij lub kopiuj link",
+    "generalShareSub": "Inne aplikacje",
+    "embed": "Osadź",
+    "chat": "Czat",
+    "more": "Więcej",
+    "startAt": "Zacznij od",
+    "toFollowers_one": "Dla {{n}} obserwującego",
+    "toFollowers_few": "Dla {{n}} obserwujących",
+    "toFollowers_many": "Dla {{n}} obserwujących",
+    "toFollowers_other": "Dla {{n}} obserwującego"
   },
   "gate": {
     "connectTitle": "Połącz z czatem 3Speak",
-    "connectBody": "Czat działa dzięki Snapie. Połączenie podpisuje jednorazowe wyzwanie logowania twoim kluczem posting Hive (bez transakcji i bez kosztów).",
+    "connectBody": "Czat działa dzięki Snapie. Połączenie podpisuje jednorazowe wyzwanie logowania twoim kluczem posting. Bez transakcji, bez kosztów.",
     "connecting": "Łączenie…",
     "connectButton": "Połącz czat",
     "cannotSign": "Twoja obecna metoda logowania nie może podpisać wyzwania czatu. Użyj Keychain, HiveAuth, PeakVault lub Ledger.",
-    "needsAccountTitle": "Czat wymaga konta Hive",
-    "needsAccountBody": "Wiadomości są podpisywane kluczami twojego konta, więc czat odblokuje się razem ze wszystkim innym, gdy twoje konto będzie gotowe. Wykonaj cele na swoim profilu, a zespół zajmie się resztą.",
+    "needsAccountTitle": "Czat wymaga konta Hive.",
+    "needsAccountBody": "Odblokuje się razem ze wszystkim innym, gdy ukończysz rozgrzewkę.",
     "loginTitle": "Zaloguj się, aby korzystać z czatu",
     "loginBody": "Zaloguj się kontem Hive, aby wysyłać i odbierać wiadomości.",
     "connectingToChat": "Łączenie z czatem…"
@@ -105,8 +115,8 @@
     "serverRejectedServerMap_other": "Serwer odrzucił wszystkie {{count}} żądania (ID z serwerowej mapy nieprzeczytanych)",
     "failed": "Nie udało się oznaczyć wszystkiego jako przeczytane",
     "marking": "Oznaczanie jako przeczytane…",
-    "button": "Oznacz wszystko jako przeczytane",
-    "buttonCount": "Oznacz wszystko jako przeczytane ({{count}})"
+    "button": "Oznacz wszystkie",
+    "buttonCount": "Oznacz wszystkie ({{count}})"
   },
   "list": {
     "chooseTarget": "Wybierz czat, do którego chcesz wysłać",
@@ -142,7 +152,8 @@
     "quoting": "Cytujesz @{{user}}",
     "cancelQuote": "Anuluj cytat",
     "removeImage": "Usuń obraz",
-    "placeholder": "Napisz wiadomość…"
+    "placeholder": "Napisz wiadomość…",
+    "placeholderTo": "Wiadomość do {{name}}"
   },
   "page": {
     "chooseTarget": "Wybierz czat, do którego chcesz wysłać.",

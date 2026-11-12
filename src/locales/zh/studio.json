@@ -7,13 +7,19 @@
     "createNewDesc": "上传你的内容，与全世界分享"
   },
   "preview": {
-    "cannotPreview": "你的浏览器无法预览这个视频——这在 HEVC/H.265 视频中很常见（例如 iPhone 的“高效”格式录制）。没关系：它仍然可以上传，并会被转码，让所有人都能播放。"
+    "cannotPreview": "<b>无法预览这个视频。</b>这在 HEVC / H.265 视频中很常见，例如 iPhone 的高效格式录制。它仍然可以上传，并会被转码，让所有人都能播放。"
   },
   "drafts": {
     "untitled": "（无标题）",
     "empty": "没有符合所选筛选条件的视频。",
     "title": "工作室",
-    "create": "创建"
+    "create": "创建",
+    "views28": "观看次数（28 天）",
+    "newFollowers": "新粉丝",
+    "views": "次观看",
+    "stats": "统计",
+    "more": "更多",
+    "public": "公开"
   },
   "schedule": {
     "days": {
@@ -32,6 +38,7 @@
     "am": "上午",
     "pm": "下午",
     "pastWarning": "这个日期和时间已经过去了。请选择一个未来的日期和时间。",
+    "pickDay": "选择日期",
     "publishAt": "你的视频将于 {{when}} 自动发布"
   },
   "scheduled": {
@@ -101,6 +108,7 @@
     "insertTable": "插入表格",
     "spoiler": "剧透/隐藏文字",
     "emoji": "表情",
+    "gifs": "GIF",
     "searchEmoji": "搜索表情",
     "searchGifs": "搜索 GIF…",
     "noGifs": "没有找到 GIF。",

@@ -17,7 +17,8 @@
     "loginFailed": "Falha no login: {{error}}",
     "logoAlt": "Logo do 3Speak",
     "title": "Entre com seu nome de usuário",
-    "usernamePlaceholder": "Nome de usuário"
+    "usernamePlaceholder": "Nome de usuário",
+    "continueWith": "Continuar com {{method}}"
   },
   "socialLink": {
     "hashCopied": "Hash copiado",
@@ -55,7 +56,7 @@
   },
   "auth": {
     "title": "Autorize o 3Speak",
-    "text": "Para enviar vídeos no 3Speak, precisamos da sua autoridade de postagem. Isso nos permite publicar na Hive os vídeos que você envia. Você só precisa conceder a autoridade de postagem uma vez.",
+    "text": "Para enviar, precisamos da sua autoridade de postagem, assim podemos publicar seus vídeos na Hive. Você só concede uma vez.",
     "authorize": "Autorizar"
   },
   "beneficiary": {
@@ -74,6 +75,11 @@
       "maxCount": "A Hive permite no máximo {{max}} beneficiários por post."
     },
     "title": "Beneficiários",
+    "shareRewards": "Dividir recompensas",
+    "you": "você",
+    "toYou": "para você",
+    "addCollaborator": "Adicionar um colaborador",
+    "saveSplit": "Salvar divisão",
     "intro": "Adicione um usuário que deve receber automaticamente parte das recompensas deste post.",
     "minPercent": "% (mín. {{percent}}%)",
     "usernamePlaceholder": "Digite o nome de usuário",
@@ -99,8 +105,8 @@
     "gotIt": "Entendi"
   },
   "verifyAuth": {
-    "title": "Verificando autorização",
-    "text": "Aguarde enquanto verificamos se a autorização foi concedida..."
+    "title": "Verificando a autorização",
+    "text": "Verificando se foi concedida…"
   },
   "editor": {
     "confirmLeave": "O editor ainda está aberto. Sair desta página vai fechar o editor e as alterações não salvas serão perdidas.\n\nOK = Fechar editor e sair\nCancelar = Ficar nesta página",
@@ -176,7 +182,9 @@
     "details": "Detalhes adicionais (opcional)",
     "detailsPlaceholder": "Dê mais contexto...",
     "submitting": "Enviando...",
-    "submit": "Enviar denúncia"
+    "submit": "Enviar denúncia",
+    "intro": "As denúncias vão para a equipe do 3Speak. O criador não vê quem denunciou.",
+    "nextDetails": "Próximo: adicionar detalhes"
   },
   "upload": {
     "missingInfo": "Faltam informações do vídeo ou da miniatura.",

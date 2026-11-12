@@ -22,6 +22,8 @@
     "noOtherPlaylists": "คุณยังไม่มีเพลย์ลิสต์อื่น",
     "createFirst": "สร้างเพลย์ลิสต์",
     "createNew": "สร้างเพลย์ลิสต์ใหม่",
+    "newPlaylist": "เพลย์ลิสต์ใหม่",
+    "savedTo_other": "บันทึกลงใน {{count}} เพลย์ลิสต์แล้ว",
     "name": "ชื่อ",
     "namePlaceholder": "เพลย์ลิสต์สุดเจ๋งของฉัน",
     "privacy": "ความเป็นส่วนตัว",
@@ -91,12 +93,15 @@
     "creditsPlaceholder": "โปรดิวซ์โดย…",
     "description": "คำอธิบาย",
     "descriptionPlaceholder": "เกี่ยวกับอัลบั้มนี้ (ไม่บังคับ)",
-    "filterCount_other": "{{shown}} จาก {{count}} รายการ"
+    "filterCount_other": "{{shown}} จาก {{count}} รายการ",
+    "shuffle": "สุ่มลำดับ"
   },
   "type": {
     "label": "ประเภท",
     "video": "วิดีโอ",
     "audio": "เสียง",
+    "videoSub": "วิดีโอขนาดยาว",
+    "audioSub": "แทร็กและพอดแคสต์",
     "kindLabel": "เสียงประเภทไหน?",
     "kinds": {
       "podcast": "พอดแคสต์",

@@ -1,8 +1,8 @@
 {
   "leaderboard": {
     "windows": {
-      "7d": "7 araw",
-      "30d": "30 araw",
+      "7d": "Linggo",
+      "30d": "Buwan",
       "365d": "Taon",
       "all": "Lahat ng panahon"
     },
@@ -155,9 +155,9 @@
     "audioFull": "May pamagat",
     "audioCompact": "Compact",
     "audioMinimal": "Minimal",
-    "heightSub": "Buong lapad, {{height}} px ang taas",
+    "heightSub": "Buong lapad, {{height}} px ang taas · Responsive",
     "podcastTitle": "I-embed ang podcast na ito",
-    "podcastHint": "I-paste ito sa anumang website o blog post. Pinapatugtog nito ang lahat ng episode ng show, pati ang mga bago sa paglabas nila."
+    "podcastHint": "Pinapatugtog ang bawat episode ng show, pati ang mga bago sa paglabas nila."
   },
   "incubation": {
     "requestFailed": "Pumalya ang request ({{status}})",
@@ -169,9 +169,9 @@
   },
   "routeError": {
     "title": "Hindi nag-load ang page na ito",
-    "body": "Hindi na-download ang isang bahagi ng app. Kadalasan, ibig sabihin nito ay may bagong bersyon na lumabas habang bukas ang tab na ito. Kapag nag-reload ka, makukuha mo ito.",
+    "body": "Hindi na-download ang isang bahagi ng app. Kadalasan, may bagong bersyon na lumabas habang bukas ang tab na ito. Makukuha ito kapag nag-reload ka.",
     "brokenTitle": "May nangyaring mali sa page na ito",
-    "brokenBody": "Nagkaroon ng error ang isang bahagi ng page na ito. Kadalasang naaayos ito sa pag-reload, at nakakatulong sa amin ang mga detalye sa ibaba para mahanap ang sanhi.",
+    "brokenBody": "Nagkaroon ng error ang isang bahagi ng page na ito. Kadalasang naaayos ito sa pag-reload, at nakakatulong sa amin ang mga detalye para mahanap ang sanhi.",
     "reload": "I-reload",
     "goHome": "Pumunta sa Home",
     "details": "Mga detalye"
@@ -203,9 +203,9 @@
       "regularVideo": "Klasikong video para sa channel mo",
       "verticalShort": "Vertical na clip para sa Shorts feed",
       "shortsEditor": "Mag-record at mag-edit ng short sa browser mo",
-      "story": "Maikling clip na nakikita sa loob ng 24 oras",
+      "story": "Nananatili nang 24 oras",
       "musicAudio": "Mga kanta, podcast at iba pang audio",
-      "audioEditor": "Mag-cut, maglinis at magpantay ng podcast at musika",
+      "audioEditor": "Mag-cut, maglinis at magpantay",
       "groupChat": "Live room na hino-host mo kasama ang mga bisita",
       "goLiveNow": "Mag-stream nang live para sa mga follower mo",
       "communitySnap": "Mabilis na post sa community tab mo",
@@ -219,8 +219,8 @@
   },
   "hiveAuth": {
     "waiting": "Hinihintay ang approval sa HiveAuth...",
-    "title": "Kailangan ng HiveAuth Approval",
-    "hint": "Tingnan ang HiveAuth app mo para aprubahan ang transaksyong ito"
+    "title": "Kailangan ng HiveAuth approval",
+    "hint": "Tingnan ang HiveAuth app mo para aprubahan ang transaksyong ito."
   },
   "hiveApi": {
     "keychainNotSigned": "Hindi na-sign ng Keychain ang transaksyon",
@@ -233,7 +233,7 @@
     "announceFailed": "Nagsimula na ang OpenPod, pero hindi ma-post ang announcement sa Hive."
   },
   "appUpdate": {
-    "updating": "Nag-a-update sa pinakabagong bersyon ({{version}})…",
+    "updating": "Nag-a-update sa {{version}}…",
     "reloadingForUpload": "Nagre-reload para tumakbo ang upload mo sa pinakabagong build."
   },
   "auth": {
@@ -304,6 +304,17 @@
     "moreTag": "Iba pang #{{tag}}",
     "moreVideos": "Iba pang video",
     "hideControls": "Itago ang controls",
-    "showControls": "Ipakita ang controls"
+    "showControls": "Ipakita ang controls",
+    "watching": "{{count}} nanonood",
+    "startedAgo": "Nagsimula {{when}}",
+    "topSupporters": "Mga top supporter",
+    "noSupporters": "Wala pang boost",
+    "full": "Buong screen",
+    "loginToChat": "Mag-log in para mag-chat"
+  },
+  "pullToRefresh": {
+    "pull": "Hilahin para mag-refresh",
+    "release": "Bitawan para mag-refresh",
+    "refreshing": "Nire-refresh…"
   }
 }

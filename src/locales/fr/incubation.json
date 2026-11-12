@@ -29,7 +29,7 @@
     },
     "searchSlash": {
       "title": "Appuyez sur / pour rechercher",
-      "body": "Où que vous soyez sur le site, la touche barre oblique ouvre le champ de recherche. Elle parcourt les vidéos, les créateurs et les communautés."
+      "body": "Où que vous soyez sur le site, la touche barre oblique ouvre le champ de recherche."
     },
     "communities": {
       "title": "Les communautés rassemblent autour d'un sujet",
@@ -51,7 +51,7 @@
     },
     "timestamps": {
       "title": "Commentez un moment précis",
-      "body": "Pendant la lecture d'une vidéo, un commentaire peut inclure le moment où vous en étiez. Les lecteurs obtiennent un lien direct vers cette seconde."
+      "body": "Pendant la lecture d'une vidéo, un commentaire peut inclure le moment où vous en étiez."
     },
     "badges": {
       "title": "Les badges se reçoivent, ils ne se réclament pas",
@@ -65,7 +65,7 @@
     },
     "backlog": {
       "title": "Rien de ce que vous publiez maintenant n'est perdu",
-      "body": "Tout ce que vous publiez pendant votre phase de démarrage pourra être republié sur Hive sous votre propre nom une fois votre compte arrivé, et vous choisissez ce que vous emportez."
+      "body": "Tout ce que vous publiez pendant votre phase de démarrage pourra être republié sur Hive sous votre propre nom."
     }
   },
   "trackChooser": {
@@ -74,8 +74,8 @@
   },
   "trackQuestion": {
     "title": "Qu'est-ce qui vous amène sur 3Speak ?",
-    "intro": "Ton chemin vers un compte Hive en dépend : spectateurs et auditeurs regardent, écoutent et participent, les créateurs publient des vidéos, musiciens et podcasteurs publient de l'audio, et les annonceurs préparent leur marque.",
-    "introNoAdvertisers": "Ton chemin vers un compte Hive en dépend : spectateurs et auditeurs regardent, écoutent et participent, les créateurs publient des vidéos, et musiciens et podcasteurs publient de l'audio."
+    "intro": "Votre chemin vers un compte Hive en dépend.",
+    "introNoAdvertisers": "Votre chemin vers un compte Hive en dépend."
   },
   "tipCard": {
     "aria": "Astuce",
@@ -100,7 +100,7 @@
         "label_one": "Publier un Short",
         "label_many": "Publier {{count}} Shorts",
         "label_other": "Publier {{count}} Shorts",
-        "hint": "Participez aux Shorts 3Speak et partagez des moments de votre quotidien ou des histoires que vous voulez raconter.",
+        "hint": "Les Shorts touchent des personnes qui ne vous suivent pas encore.",
         "why": "Les Shorts sont le moyen le plus rapide de vous faire connaître. Ils sont diffusés dans un fil de créateurs que les gens ne suivent pas encore : un Short touche donc bien au-delà de votre propre chaîne.",
         "counts": {
           "0": "Vidéos verticales publiées depuis l'outil de mise en ligne des Shorts.",
@@ -112,7 +112,7 @@
         "label_one": "Suivre un créateur",
         "label_many": "Suivre {{count}} créateurs",
         "label_other": "Suivre {{count}} créateurs",
-        "hint": "Créez un réseau de personnes qui vous ressemblent, ou de créateurs qui vous enthousiasment.",
+        "hint": "Vos abonnements transforment le fil d'accueil en votre fil.",
         "why": "La liste des comptes que vous suivez transforme le fil d'accueil en votre fil. Elle vous suit sur Hive lors de votre passage.",
         "counts": {
           "0": "Les créateurs que vous suivez actuellement.",
@@ -124,7 +124,7 @@
         "label_one": "Écrire un commentaire",
         "label_many": "Écrire {{count}} commentaires",
         "label_other": "Écrire {{count}} commentaires",
-        "why": "Les commentaires sont le moyen pour les gens de vous découvrir avant que vous ayez un public. Une vraie réponse sous la vidéo de quelqu'un d'autre vous apportera plus qu'une vidéo que personne n'a encore vue.",
+        "why": "Une vraie réponse sous la vidéo de quelqu'un d'autre vous apporte plus qu'une vidéo que personne n'a encore vue.",
         "cta": "Trouver quelque chose à commenter",
         "hint_one": "Les commentaires comptent à partir de {{count}} caractère. Une vraie réflexion, pas juste « sympa ».",
         "hint_many": "Les commentaires comptent à partir de {{count}} caractères. Une vraie réflexion, pas juste « sympa ».",
@@ -134,7 +134,7 @@
           "minChars_many": "Au moins {{count}} caractères écrits par vous.",
           "minChars_other": "Au moins {{count}} caractères écrits par vous.",
           "realThought": "Une vraie réflexion plutôt qu'un seul mot.",
-          "othersPost": "Sur la publication de quelqu'un d'autre. Les réponses sous vos propres vidéos, ou à vos propres commentaires, sont une conversation avec vous-même et ne comptent pas."
+          "othersPost": "Sur la publication de quelqu'un d'autre. Les réponses sous vos propres vidéos ne comptent pas."
         }
       },
       "watch": {
@@ -325,23 +325,23 @@
     "unlocks": {
       "earn": {
         "title": "Vos publications commencent à rapporter.",
-        "body": "Les vidéos sur Hive peuvent être récompensées en HIVE et en HBD par quiconque les regarde, et elles peuvent contenir des pubs dont vous touchez une part."
+        "body": "En HIVE et HBD, plus une part des pubs."
       },
       "publish": {
         "title": "Publiez tout ce que vous avez créé ici.",
-        "body": "Les vidéos, Shorts et abonnements de cette page peuvent être publiés sur Hive sous votre propre nom, et vous choisissez lesquels."
+        "body": "Vous choisissez quoi."
       },
       "buttons": {
         "title": "Votez, envoyez des pourboires, suivez et créez des playlists.",
-        "body": "Tous les boutons grisés pour vous aujourd'hui."
+        "body": "Les boutons grisés aujourd'hui."
       },
       "keys": {
         "title": "Des clés que vous seul détenez.",
-        "body": "Personne ne peut vous bloquer l'accès, et le même identifiant fonctionne sur toutes les apps Hive, pas seulement 3Speak."
+        "body": "Personne ne peut vous bloquer l'accès."
       },
       "ecosystem": {
         "title": "Faites partie de l'écosystème Hive mondial.",
-        "body": "3Speak n'est qu'une app parmi tout un réseau : blogs, communautés, jeux, places de marché et plus encore, qui partagent tous le même compte et la même liste d'abonnements."
+        "body": "Un seul compte pour toutes les apps Hive."
       }
     },
     "advertiserUnlocks": {
@@ -388,9 +388,9 @@
       "graduated": "Désormais sur Hive en tant que <userLink>@{{user}}</userLink>. Tout ce qui suit a été créé avant.",
       "advertiser": "Voici la page de votre marque sur 3Speak. Terminez les étapes ci-dessous et l'équipe examinera votre marque. Une fois approuvée, vous obtenez un compte Hive : c'est votre compte annonceur, celui avec lequel vous réservez et payez vos pubs.",
       "own": "Voici comment les autres vous voient. Vos publications vivent sur 3Speak et ne sont pas encore sur Hive : elles ne rapportent donc pas de récompenses. Cela changera quand vous obtiendrez votre compte après avoir terminé toutes les tâches ci-dessous.",
-      "ownCreator": "Vos publications sont conservées dans un espace d'échauffement, mais elles sont visibles et mises en avant sur la plateforme principale. Tant qu'elles s'y trouvent, elles ne rapportent pas encore de récompenses. Cela change quand vous obtenez votre compte, après avoir terminé toutes les tâches ci-dessous et transféré vos vidéos en quelques étapes simples.",
+      "ownCreator": "Vos publications sont conservées dans un espace de démarrage, mais elles sont visibles et mises en avant sur la plateforme principale. Tant qu'elles s'y trouvent, elles ne rapportent pas encore de récompenses. Cela change quand vous obtenez votre compte.",
       "ownViewer": "Vous êtes en phase d'échauffement. Vos commentaires et abonnements sont conservés pour l'instant dans un espace d'échauffement et ne rapportent pas encore de récompenses. Une fois toutes les tâches ci-dessous terminées, vous obtenez votre compte Hive, et dès lors tout arrive directement sur la plateforme principale.",
-      "visitor": "Nouveau ici, pas encore sur Hive. Ces publications vivent sur 3Speak et ne rapportent donc pas de récompenses pour l'instant. Suivez et commentez quand même : les encouragements du début aident à passer les premières semaines. Quand cette personne obtiendra son compte Hive, nous vous préviendrons pour que vous puissiez la suivre là-bas aussi."
+      "visitor": "Nouveau ici, pas encore sur Hive. Ces publications ne rapportent pas de récompenses pour l'instant. Suivez et commentez quand même : les encouragements du début aident à passer les premières semaines."
     },
     "tabs": {
       "aria": "Sections du profil",
@@ -445,8 +445,8 @@
     "caughtUp": "Votre compte Hive est prêt : cet appareil s'est mis à jour.",
     "openFailed": "Impossible d'ouvrir Butter Auth",
     "title": "Reconnectez votre session",
-    "lede": "Cet appareil a perdu la connexion à votre compte : 3Speak ne peut donc pas charger vos publications, votre progression ou vos notifications tant qu'elle n'est pas rétablie.",
-    "text": "Rien n'est perdu. Tout ce que vous avez créé est lié à votre compte, pas à ce navigateur. La reconnexion prend généralement une seconde, sans rien saisir.",
+    "lede": "Cet appareil a perdu la connexion à votre compte.",
+    "text": "Rien n'est perdu. La reconnexion prend généralement une seconde, sans rien saisir.",
     "opening": "Ouverture…",
     "reconnect": "Se reconnecter"
   },
@@ -487,7 +487,7 @@
   "contact": {
     "savedComplete": "Enregistré. Seule l'équipe 3Speak peut le voir.",
     "savedIncomplete": "Enregistré. Ajoutez votre adresse, ou un site web sur votre profil, pour terminer cette étape.",
-    "privateNote": "<b>Privé.</b> Votre e-mail et votre adresse ne sont jamais publiés sur Hive ni affichés sur votre profil ou ailleurs. Seule l'équipe 3Speak les voit, pour vous contacter au sujet de vos pubs.",
+    "privateNote": "<b>Privé.</b> Jamais publié sur Hive ni affiché nulle part. Seule l'équipe 3Speak le voit, pour vous contacter au sujet de vos pubs.",
     "email": "E-mail",
     "required": "obligatoire",
     "emailPlaceholder": "vous@votremarque.com",
@@ -516,7 +516,7 @@
     "uploadLogo": "Envoyer un logo",
     "logoHint": "Affiché en cercle à côté de vos pubs : une image carrée est idéale.",
     "website": "Site web",
-    "websiteOptional": "facultatif si vous nous donnez votre adresse",
+    "websiteOptional": "facultatif si vous indiquez une adresse",
     "websitePlaceholder": "https://votremarque.com",
     "websiteInvalid": "Utilisez une adresse complète commençant par https://",
     "save": "Enregistrer le profil de la marque"
@@ -529,7 +529,10 @@
     "approvedAdvertiser": "L'équipe a approuvé votre marque. Créez gratuitement votre compte Hive pour réserver et payer des pubs.",
     "approved": "L'équipe vous a approuvé. Créez gratuitement votre compte Hive : il n'appartient qu'à vous.",
     "createAdvertiser": "Créer mon compte annonceur",
-    "create": "Créer mon compte Hive"
+    "create": "Créer mon compte Hive",
+    "handleLabel": "Identifiant",
+    "nextLabel": "Suivant",
+    "nextKeys": "Sauvegardez vos clés"
   },
   "graduatedFollows": {
     "message": "@{{handle}} a maintenant un compte Hive : @{{hiveUsername}}.",
@@ -541,9 +544,9 @@
   },
   "backlog": {
     "title": "Vos publications précédentes sont toujours là",
-    "lede_one": "Vous avez créé <b>{{count}} élément</b> avant d'avoir un compte Hive. Il n'existe que sur 3Speak. Vous pouvez le publier sur Hive en tant que <b>@{{user}}</b> quand vous voulez.",
-    "lede_many": "Vous avez créé <b>{{count}} éléments</b> avant d'avoir un compte Hive. Ils n'existent que sur 3Speak. Vous pouvez les publier sur Hive en tant que <b>@{{user}}</b> quand vous voulez.",
-    "lede_other": "Vous avez créé <b>{{count}} éléments</b> avant d'avoir un compte Hive. Ils n'existent que sur 3Speak. Vous pouvez les publier sur Hive en tant que <b>@{{user}}</b> quand vous voulez.",
+    "lede_one": "Vous avez créé <b>{{count}} élément</b> avant d'avoir un compte Hive. Publiez-le sur Hive en tant que <b>@{{user}}</b> quand vous voulez.",
+    "lede_many": "Vous avez créé <b>{{count}} éléments</b> avant d'avoir un compte Hive. Publiez-les sur Hive en tant que <b>@{{user}}</b> quand vous voulez.",
+    "lede_other": "Vous avez créé <b>{{count}} éléments</b> avant d'avoir un compte Hive. Publiez-les sur Hive en tant que <b>@{{user}}</b> quand vous voulez.",
     "text": "Vous choisissez ce qui passe, un par un. Ce que vous laissez reste sur 3Speak tel quel, et vous pouvez revenir au reste à tout moment.",
     "later": "Plus tard"
   },
@@ -577,7 +580,7 @@
       "watchedListened": "regardé et écouté {{time}}"
     },
     "advertiser": {
-      "lede": "L'équipe a examiné <b>{{name}}</b>. Créez gratuitement votre <b>compte Hive</b> : il devient votre compte annonceur.",
+      "lede": "L'équipe a examiné <b>{{name}}</b>. Créez votre compte annonceur.",
       "text": "Avec lui, vous réservez des pubs sur 3Speak, des spots vidéo et bannières aux bandeaux défilants, et vous les payez directement depuis son portefeuille, en HBD ou en HIVE. La clé n'appartient qu'à vous : personne ne peut vous bloquer l'accès.",
       "note": "Le profil de votre marque vous suit. Votre e-mail et votre adresse professionnels restent privés chez 3Speak et ne sont jamais publiés sur Hive.",
       "noteMoving": "Vos <b>{{moving}}</b> vous suivent aussi, publiés progressivement sur quelques jours."
@@ -588,7 +591,7 @@
       "lede": "Transformez <b>@{{handle}}</b> en un <b>compte Hive</b> qui vous appartient, gratuitement.",
       "text": "Avec lui, vous pouvez voter pour les vidéos que vous aimez et leur envoyer des pourboires, gagner des récompenses avec vos commentaires, activer les récompenses spectateur pour ce que vous regardez, et créer des playlists. Le même identifiant et les mêmes abonnements fonctionnent sur toutes les apps Hive, et la clé n'appartient qu'à vous."
     },
-    "createMyAccount": "Créer mon compte",
+    "createMyAccount": "Créer mon compte Hive",
     "creator": {
       "title": "Vous pouvez maintenant créer votre propre compte",
       "lede": "Vous publiez en tant que <b>@{{handle}}</b>. Transformez cela en un vrai <b>compte Hive</b> qui vous appartient, gratuitement.",
@@ -607,9 +610,9 @@
   "handleTaken": {
     "openFailed": "Impossible d'ouvrir le choix du nom",
     "title": "Le nom @{{handle}} a été pris",
-    "lede": "Quelqu'un l'a enregistré sur <b>Hive</b> : il ne pourra donc pas devenir votre compte quand vous serez prêt. En choisir un nouveau maintenant ne prend qu'un instant.",
-    "text": "Choisir un nom ici ne l'a jamais réservé. Hive n'a aucun moyen de réserver un nom sans créer le compte, et c'est justement l'étape que vous n'avez pas encore payée, ce qui est tout l'intérêt de commencer sans.",
-    "note": "Rien de ce que vous avez créé n'est perdu. Vos vidéos, Shorts, commentaires et abonnements restent avec vous et vous suivent sous le nom que vous choisirez.",
+    "lede": "Quelqu'un l'a enregistré sur <b>Hive</b>.",
+    "text": "Choisir un nom ici ne l'a jamais réservé.",
+    "note": "Rien de ce que vous avez créé n'est perdu : tout vous suit sous le nom que vous choisirez.",
     "pick": "Choisir un nouveau nom"
   },
   "backfill": {
@@ -644,13 +647,13 @@
     "emptyTitle": "Plus rien à publier",
     "emptyText": "Tout ce que vous avez créé avant d'avoir un compte Hive a été publié ou ne pouvait pas être republié.",
     "title": "Publiez ce que vous avez créé auparavant",
-    "intro": "Vous avez créé ces éléments sur 3Speak avant d'avoir un compte Hive : ils n'existent donc qu'ici. Choisissez ce que vous voulez dans votre historique public en tant que <b>@{{user}}</b> et publiez-le. Ce que vous laissez reste sur 3Speak tel quel.",
-    "note": "<b>La publication prend du temps, et c'est normal.</b> Hive autorise une publication toutes les 5 minutes par compte, et un compte tout neuf dispose d'une petite capacité de publication qui se recharge sur quelques jours. Les abonnements, les j'aime et votre profil coûtent peu et passent rapidement. Publiez-en quelques-uns à la fois et revenez plus tard.",
+    "intro": "Vous avez créé ces éléments sur 3Speak avant d'avoir un compte Hive. Choisissez ce que vous voulez dans votre historique public en tant que <b>@{{user}}</b>. Ce que vous laissez reste sur 3Speak tel quel.",
+    "note": "<b>La publication prend du temps, et c'est normal.</b> Hive autorise une publication toutes les 5 minutes par compte, et un compte tout neuf dispose d'une petite capacité de publication qui se recharge sur quelques jours.",
     "groupBy": "Regrouper la liste par",
     "timeline": "Chronologie",
     "byType": "Par type",
-    "rcBlockedIn": "<b>Votre compte n'a plus de Resource Credits pour le moment.</b> Hive donne à chaque compte une petite capacité de publication, qui se recharge toute seule. Rien n'est perdu : revenez dans environ {{wait}} et reprenez là où vous en étiez.",
-    "rcBlockedLater": "<b>Votre compte n'a plus de Resource Credits pour le moment.</b> Hive donne à chaque compte une petite capacité de publication, qui se recharge toute seule. Rien n'est perdu : revenez un peu plus tard et reprenez là où vous en étiez.",
+    "rcBlockedIn": "<b>Votre compte n'a plus de Resource Credits pour le moment.</b> Rien n'est perdu : revenez dans environ {{wait}} et reprenez là où vous en étiez.",
+    "rcBlockedLater": "<b>Votre compte n'a plus de Resource Credits pour le moment.</b> Rien n'est perdu : revenez un peu plus tard et reprenez là où vous en étiez.",
     "selected": "<b>{{count}}</b> sélectionné(s)",
     "rootPostsTime_one": "{{count}} vidéo : cela prendra environ {{minutes}} minutes",
     "rootPostsTime_many": "{{count}} vidéos : cela prendra environ {{minutes}} minutes",
@@ -662,7 +665,7 @@
     "selectItem": "Sélectionner {{label}}",
     "fiveMin": "5 min",
     "waitingTitle": "En attente de quelqu'un d'autre",
-    "waitingText": "Ces éléments se publient tout seuls dès que la publication à laquelle ils renvoient est mise sur Hive. Rien n'est perdu en attendant.",
+    "waitingText": "Ces éléments se publient tout seuls dès que la publication à laquelle ils renvoient est mise sur Hive.",
     "waitingFor": "<b>{{label}}</b> : en attente de {{target}}",
     "andMore": "et {{count}} de plus",
     "excludedTitle": "Ne seront pas transférés"

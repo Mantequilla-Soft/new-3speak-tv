@@ -22,7 +22,8 @@
     "step1": "Fungua video hii katika",
     "step2": "Bofya menyu ya nukta tatu kisha uchague Pakua.",
     "step3": "Chagua faili uliyopakua hapa chini.",
-    "pickFile": "Chagua faili iliyopakuliwa"
+    "pickFile": "Chagua faili iliyopakuliwa",
+    "title": "Haikuweza kuleta hii"
   },
   "errors": {
     "signIn": "Ingia ili uleta video zako.",
@@ -133,7 +134,8 @@
     },
     "stopConfirm": "Usimamishe uingizaji huu? Video ambazo bado hazijachapishwa zitaghairiwa, zikiwemo zilizopangwa tayari. Video zilizochapishwa zitabaki.",
     "stopYes": "Ndiyo, simamisha",
-    "stopKeep": "Endelea kuingiza"
+    "stopKeep": "Endelea kuingiza",
+    "countOf": "{{done}} kati ya {{total}}"
   },
   "bitchute": {
     "noLink": "Bado hujaunganisha akaunti ya BitChute. Iunganishe na uithibitishe kwenye wasifu wako kwanza, kisha urudi hapa.",

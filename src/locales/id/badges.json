@@ -31,7 +31,7 @@
   },
   "directory": {
     "title": "Lencana",
-    "intro": "Lencana adalah penghargaan yang <b>diberikan orang lain kepadamu</b> di Hive, untuk acara, kontribusi, dan pencapaian. Kamu tidak bisa bergabung ke lencana: seseorang yang menganugerahkannya. Buka lencana untuk menonton apa yang diterbitkan para penerimanya di sini.",
+    "intro": "Lencana adalah penghargaan yang <b>diberikan orang lain kepadamu</b> di Hive, untuk acara, kontribusi, dan pencapaian. Kamu tidak bisa bergabung: seseorang yang memberikannya.",
     "searchPlaceholder": "Cari lencana...",
     "sort": {
       "recipients": "Penerima",
@@ -54,6 +54,7 @@
     "awarding": "Menganugerahkan…",
     "held": "Dimiliki",
     "award": "Anugerahkan",
+    "awardNamed": "Berikan \"{{title}}\"",
     "note": "Lencana itu akan mengikuti mereka di Hive, dan itulah arti memegangnya. Kamu bisa menariknya kembali dari halaman lencana itu sendiri."
   },
   "hive": {
@@ -79,8 +80,9 @@
     "unclaimed": "Belum diklaim",
     "noActivity": "Belum ada aktivitas di rentang waktu ini",
     "otherTopics": "Lainnya",
-    "title": "Peringkat",
+    "title": "Papan peringkat",
     "subtitle": "{{blurb}}: kreator teratas di 3Speak.",
+    "explain": "{{label}}: {{blurb}}.",
     "subtitleTopic": "{{blurb}}: kreator teratas di {{topic}}.",
     "allTopics": "Semua topik",
     "finding": "Mencari @{{user}} di papan ini…",

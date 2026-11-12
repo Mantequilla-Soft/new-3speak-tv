@@ -5,8 +5,8 @@
     "yourStreamEnded": "Sua transmissão terminou",
     "thisStreamEnded": "Esta transmissão terminou",
     "noLongerLive": "Ela não está mais ao vivo. Comece uma nova quando quiser.",
-    "recordingProcessing": "Mandou bem! Sua gravação está sendo processada e vai aparecer no post de anúncio em breve.",
-    "thanksForLive": "Mandou bem, obrigado por entrar ao vivo!",
+    "recordingProcessing": "Sua gravação está sendo processada e vai aparecer em breve no post de anúncio.",
+    "thanksForLive": "Mandou bem, obrigado por fazer a live",
     "backHome": "Voltar ao início",
     "howWasStream": "Como foi sua transmissão?",
     "connecting": "Conectando ao OpenPods…",
@@ -42,13 +42,13 @@
     "slowDown": "Calma aí, espere um pouco e faça o clipe de novo.",
     "failed": "Não foi possível criar o clipe. Tente de novo em alguns segundos.",
     "title": "Recortar os últimos 30 segundos",
-    "label": "30 s",
+    "label": "Clipe",
     "clipping": "Recortando…"
   },
   "report": {
     "reasons": {
       "harassment": "Assédio ou ódio",
-      "sexual": "Conteúdo sexual ou explícito",
+      "sexual": "Sexual ou explícito",
       "violence": "Violência ou atos perigosos",
       "selfharm": "Automutilação",
       "illegal": "Conteúdo ilegal",
@@ -59,7 +59,7 @@
     "failed": "Não foi possível enviar a denúncia. Tente de novo.",
     "title": "Denunciar esta transmissão",
     "reporting": "Denunciando <b>@{{host}}</b>.",
-    "intro": "Conte o que há de errado. Nossa equipe analisa todas as denúncias.",
+    "intro": "Nossa equipe analisa cada denúncia.",
     "detailPlaceholder": "Adicione detalhes (opcional)",
     "sending": "Enviando…",
     "submit": "Enviar denúncia"
@@ -93,6 +93,7 @@
   "lobby": {
     "descriptionPlaceholder": "Sobre o que é esta sessão? Adicione notas, links ou um resumo…",
     "enableHosting": "Ativar apresentar e falar",
+    "enableHostingHint": "Requer a autoridade de postagem de @threespeak",
     "handoverFailed": "Não foi possível ativar a apresentação automaticamente. O OpenPods publica em seu nome via @threespeak — verifique se você concedeu autoridade de postagem e tente de novo.",
     "signInToHost": "Entre com a Hive para apresentar ou falar"
   },
@@ -132,8 +133,8 @@
     },
     "chatBox": {
       "title": "Seu chat no OBS",
-      "desc": "Um link para todas as suas transmissões. Adicione-o no OBS como dock para ler as mensagens novas enquanto está ao vivo. O guia abaixo mostra como.",
-      "copy": "Copiar URL do chat para o OBS",
+      "desc": "adicione como dock de navegador personalizado",
+      "copy": "Copiar URL do chat",
       "copied": "URL do chat copiada"
     },
     "card": {
@@ -144,26 +145,26 @@
       "watch": "Assistir à transmissão",
       "notAnnounced": "Esta transmissão não foi anunciada na Hive.",
       "notAnnouncedAuth": "Não anunciada na Hive: o 3Speak ainda não pode publicar por você. Edite o modelo para permitir.",
-      "stuck": "O OBS se conectou, mas nenhum vídeo chegou até nós, então a transmissão não começou. Pare a transmissão no OBS e inicie de novo.",
-      "dailyLimit": "O OBS não conseguiu entrar ao vivo: contas gratuitas podem iniciar uma transmissão por dia. Tente de novo 24 horas depois do início da sua última transmissão ou assine o 3Speak Pro para transmitir sem limite diário.",
+      "stuck": "O OBS está conectado, mas nenhum vídeo chegou até nós. Pare a transmissão e inicie de novo.",
+      "dailyLimit": "Contas gratuitas podem iniciar uma transmissão por dia. Tente de novo 24 horas depois do início da sua última transmissão, ou assine o Pro.",
       "useInStudio": "Usar no Stream Studio",
       "proRequired": "O OBS não conseguiu entrar ao vivo: transmitir pelo OBS faz parte do 3Speak Pro."
     },
     "guide": {
       "title": "Como configurar o OBS",
-      "step1": "Use o OBS Studio 30 ou mais recente e abra Configurações e depois Transmissão.",
-      "step2": "Defina Serviço como \"WHIP\".",
-      "step3": "Servidor: cole a URL do servidor do modelo que você quer (\"Copiar URL do servidor\" no cartão dele). Cada modelo tem a sua.",
-      "step4": "Bearer Token: cole seu segredo de transmissão do topo desta página. Ele é o mesmo para todos os modelos.",
-      "step5": "Clique em \"Start Streaming\" no OBS e você estará ao vivo no 3Speak com esse modelo. \"Stop Streaming\" encerra a transmissão.",
-      "outputTitle": "Configurações de saída recomendadas",
-      "keyframe": "Intervalo de quadros-chave: 1 a 2 segundos",
-      "bitrate": "Controle de taxa CBR, 2500 a 6000 kbps",
-      "encoder": "Codificador: x264 ou o codificador de hardware",
-      "audio": "Taxa de amostragem de áudio: 48 kHz",
-      "bframes": "Sem B-frames (defina como 0 se o seu codificador permitir)",
+      "step1": "Use o OBS Studio 30 ou mais recente: Configurações → Transmissão",
+      "step2": "Defina Serviço como “WHIP”",
+      "step3": "Servidor: cole a URL do servidor do modelo",
+      "step4": "Bearer Token: cole seu segredo de transmissão",
+      "step5": "Inicie a transmissão no OBS. Você está ao vivo no 3Speak.",
+      "outputTitle": "Saída recomendada",
+      "keyframe": "Quadro-chave 1–2 s",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / hardware",
+      "audio": "Áudio em 48 kHz",
+      "bframes": "Sem B-frames",
       "chatTitle": "Veja o chat no OBS",
-      "chatCopy": "No topo desta página, em \"Seu chat no OBS\", clique em \"Copiar URL do chat para o OBS\". É um só link para todas as suas transmissões.",
+      "chatCopy": "No topo desta página, em “Seu chat no OBS”, clique em “Copiar URL do chat”. É um só link para todas as suas transmissões.",
       "chat2": "No OBS, abra o menu \"Docks\" e escolha \"Custom Browser Docks\". Digite um nome como \"Chat do 3Speak\", cole a URL e clique em \"Apply\". As mensagens novas aparecem nesse painel enquanto você está ao vivo. Os espectadores nunca o veem.",
       "chat3": "Os espectadores já veem o chat ao lado da sua transmissão, então você não precisa colocá-lo no vídeo. Só se você também compartilhar a transmissão em outro lugar: adicione a mesma URL como fonte \"Browser\" e remova \"&dock=1\" do final. Assim as mensagens flutuam sobre o vídeo e somem depois de 30 segundos.",
       "chatOptions": "Opcional, adicione ao final da URL: &max=10 mostra menos linhas, &size=18 aumenta o texto, &fade=0 mantém as mensagens no vídeo.",
@@ -257,5 +258,15 @@
       "desc": "Com o 3Speak Pro você pode entrar ao vivo direto do OBS usando seus modelos. Sem o Pro, seus modelos continuam funcionando no Stream Studio do seu navegador.",
       "cta": "Obter 3Speak Pro"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_one": "{{count}} ouvindo",
+    "listening_many": "{{count}} ouvindo",
+    "listening_other": "{{count}} ouvindo",
+    "emptySub": "Transmissões e OpenPods aparecem aqui assim que começam.",
+    "emptyRooms": "Nenhum OpenPod está aberto agora.",
+    "emptyScheduled": "Nada está agendado agora.",
+    "emptyScheduledSub": "Salas abertas que ainda não estão ao vivo aparecem aqui."
   }
 }

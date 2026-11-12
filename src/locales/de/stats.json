@@ -16,7 +16,9 @@
     "avgPct": "Ø %",
     "votes": "Votes",
     "comments": "Kommentare",
-    "payout": "Auszahlung"
+    "payout": "Auszahlung",
+    "followers": "Follower",
+    "earned": "Verdient"
   },
   "days": {
     "short": {
@@ -70,7 +72,8 @@
     "sub": "UTC · dunkler = mehr Aufrufe",
     "cellTitle_one": "{{day}} {{hour}}:00 – {{count}} Aufruf",
     "cellTitle_other": "{{day}} {{hour}}:00 – {{count}} Aufrufe",
-    "hour": "{{hour}} Uhr"
+    "hour": "{{hour}} Uhr",
+    "best": "Beste Zeit: <b>{{day}} {{from}}–{{to}} UTC</b>"
   },
   "detail": {
     "summary": "{{votes}} Votes · {{comments}} Kommentare · ${{payout}}"
@@ -83,7 +86,8 @@
     "title": "Videos vergleichen",
     "pickA": "Video auswählen…",
     "vs": "vs.",
-    "pickB": "Weiteres auswählen…"
+    "pickB": "Weiteres auswählen…",
+    "lastPeriod": "Mit dem letzten Zeitraum vergleichen"
   },
   "loadError": "Deine Statistiken konnten gerade nicht geladen werden.",
   "emptyRange": "In diesem Zeitraum noch keine Wiedergabedaten – probier „Alle“ oder warte, bis Leute deine Videos ansehen.",
@@ -96,7 +100,8 @@
   "sections": {
     "trend": "Wiedergabezeit im Verlauf",
     "best": "Beste Leistung",
-    "audience": "Dein Publikum"
+    "audience": "Dein Publikum",
+    "top": "Top-Inhalte"
   },
   "openInNewTab": "Video in neuem Tab öffnen",
   "footnote": "Die Wiedergabestatistiken stammen aus dem Vorschau-Tracking und sind nur für dich sichtbar.",
@@ -105,9 +110,9 @@
     "empty": "Für dieses Video noch keine Wiedergabedaten.",
     "uniqueViewers": "Einzelne Zuschauer",
     "avgSpeed": "Ø Geschwindigkeit",
-    "mostDropOff": "📉 Die meisten steigen bei <b>{{time}}</b> aus",
-    "earlyDrop": "⚡ <b>{{pct}}%</b> sind in den ersten 3 s gegangen",
-    "replayed": "🔁 Wiederholt:",
+    "mostDropOff": "Die meisten steigen bei <b>{{time}}</b> aus",
+    "earlyDrop": "<b>{{pct}} %</b> sind in den ersten 3 s gegangen",
+    "replayed": "Wiederholt:",
     "retentionTitle": "Zuschauerbindung",
     "retentionSub": "Anteil der Zuschauer, die an jeder Stelle noch zuschauen",
     "pctWatching": "{{pct}}% schauen zu",
@@ -115,5 +120,15 @@
     "replaySub": "Abschnitte, die Zuschauer am meisten ansehen und wiederholen",
     "hotSpot": "Hotspot",
     "notEnoughReplays": "Noch nicht genug Wiederholungen"
+  },
+  "title": "Kanalstatistiken",
+  "legend": {
+    "current": "Dieser Zeitraum",
+    "previous": "Vorheriger"
+  },
+  "audience": {
+    "title": "Publikum",
+    "topCountry": "Top-Land",
+    "topDevice": "Top-Gerät"
   }
 }

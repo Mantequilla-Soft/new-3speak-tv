@@ -5,11 +5,11 @@
   "supportBlock": {
     "banned": {
       "title": "Akaunti yako imefungiwa",
-      "body": "Akaunti yako ya 3Speak imefungiwa, kwa hivyo huwezi kuingia. Ikiwa unadhani hili ni kosa, tafadhali wasiliana na huduma kwa wateja ya 3Speak."
+      "body": "Akaunti yako ya 3Speak imefungiwa, kwa hivyo huwezi kuingia. Ukidhani hili ni kosa, wasiliana na huduma kwa wateja ya 3Speak."
     },
     "upload": {
       "title": "Upakiaji umezimwa kwa akaunti yako",
-      "body": "Akaunti yako ya 3Speak hairuhusiwi kupakia kwa sasa. Ikiwa unadhani hili ni kosa, tafadhali wasiliana na huduma kwa wateja ya 3Speak."
+      "body": "Akaunti yako hairuhusiwi kupakia kwa sasa. Ukidhani hili ni kosa, wasiliana na huduma kwa wateja ya 3Speak."
     }
   },
   "uploadBlock": {
@@ -18,7 +18,7 @@
   },
   "emergency": {
     "title": "Tuna matatizo fulani ya miundombinu",
-    "body": "Timu yetu inalishughulikia na inafanya kazi kurejesha 3Speak sasa hivi. Jiunge na Discord yetu ili kutufikia na kupata taarifa mubashara — asante kwa uvumilivu wako.",
+    "body": "Timu yetu inafanya kazi kurejesha 3Speak sasa hivi. Jiunge na Discord yetu kwa taarifa mubashara.",
     "joinDiscord": "Jiunge na Discord yetu"
   },
   "changelog": {
@@ -105,27 +105,27 @@
     "things": {
       "postVideos": {
         "title": "Chapisha video",
-        "text": "Pakia video ndefu zinazobaki kuwa zako, kwenye mnyororo ambao hakuna anayeweza kuzifuta kimya kimya."
+        "text": "Video ndefu zinazobaki kuwa zako"
       },
       "filmShorts": {
         "title": "Rekodi Shorts",
-        "text": "Kitu cha haraka, wima na rahisi kushiriki. Nzuri kwa kupata watazamaji wako wa kwanza."
+        "text": "Za haraka, wima, rahisi kushiriki"
       },
       "goLive": {
         "title": "Nenda mubashara",
-        "text": "Tiririsha kwa watu wako, walete wageni jukwaani, na ubaki na rekodi baadaye."
+        "text": "Walete wageni jukwaani, baki na rekodi"
       },
       "buildCommunity": {
         "title": "Jenga jumuiya",
-        "text": "Anzisha sehemu kuhusu kile unachokijali, au jiunge na iliyokwisha changamka."
+        "text": "Anzisha sehemu yako au jiunge na moja"
       },
       "makeFriends": {
         "title": "Pata marafiki wa kweli",
-        "text": "Toa maoni, chati na shirikiana na binadamu halisi wanaosaidiana."
+        "text": "Toa maoni, piga gumzo na shirikiana"
       },
       "getInspired": {
         "title": "Pata hamasa, shiriki",
-        "text": "Gundua watayarishaji, waunge mkono unaowapenda, na upate mapato ukiwa hapo."
+        "text": "Waunge mkono watayarishaji na upate mapato pia"
       }
     },
     "advertiserThings": {
@@ -174,7 +174,10 @@
     "uploading": "Inapakia…",
     "interestsHint": "Tunatumia haya kuchagua kinachoonekana kwenye ukurasa wako wa nyumbani. Chagua mengi kadiri unavyopenda, au usichague lolote, na uyabadilishe wakati wowote unapotaka.",
     "interestsFineprint": "Huhifadhiwa kwenye akaunti yako ya Hive, kwa hivyo kila programu ya Hive inaonyesha wasifu ule ule na mambo yale yale unayopenda.",
-    "saveAndExplore": "Hifadhi na uanze kuvinjari"
+    "saveAndExplore": "Hifadhi na uanze kuvinjari",
+    "eyebrow": "Karibu",
+    "stepOf": "Hatua {{n}} kati ya {{total}}",
+    "profileFineprint": "Inahifadhiwa kwenye akaunti yako ya Hive, ili kila programu ya Hive ionyeshe wasifu ule ule."
   },
   "profileEdit": {
     "updated": "Wasifu umesasishwa",
@@ -193,7 +196,7 @@
     "uploadBanner": "Pakia bango la wasifu",
     "changeBanner": "Badilisha bango",
     "addBanner": "Ongeza bango",
-    "bannerHint": "Bora kwa <b>2800 × 684</b> px (au picha yoyote ya 4:1). Weka sehemu muhimu katikati: pembeni hukatwa kwenye skrini nyembamba na jina lako hukaa juu ya sehemu ya chini kushoto.",
+    "bannerHint": "Weka sehemu muhimu katikati: pembeni hukatwa kwenye skrini nyembamba na jina lako hukaa juu ya sehemu ya chini kushoto.",
     "uploadPicture": "Pakia picha ya wasifu",
     "pictureLabel": "Picha ya wasifu",
     "pictureHint": "Uso au nembo hufanya kazi vizuri zaidi. Mraba, 400 × 400 px au zaidi. Hadi 8MB.",
@@ -201,7 +204,7 @@
     "namePlaceholderUser": "Tukuiteje? (@{{username}})",
     "namePlaceholder": "Tukuiteje?",
     "shortBio": "Bio fupi",
-    "bioPlaceholder": "Unatengeneza nini, na watu watarajie nini kutoka kwako?",
+    "bioPlaceholder": "Unatengeneza nini, na watu watarajie nini?",
     "location": "Mahali",
     "optional": "si lazima",
     "locationPlaceholder": "Uko wapi duniani?"

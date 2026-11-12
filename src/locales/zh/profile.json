@@ -53,7 +53,8 @@
     "upload": "上传频道预告片",
     "tapForSound": "点击开启声音",
     "views_other": "{{num}} 次观看",
-    "readMore": "阅读更多"
+    "readMore": "阅读更多",
+    "label": "预告片"
   },
   "snaps": {
     "readMore": "阅读更多",
@@ -150,7 +151,8 @@
       "text": "把你的视频整理成播放列表，方便大家按顺序观看。",
       "cta": "创建你的第一个播放列表",
       "visitor": "@{{user}} 没有公开的播放列表。"
-    }
+    },
+    "visitorPreview": "访客会看到：“{{text}}”"
   },
   "links": {
     "button": "链接",
@@ -169,7 +171,8 @@
     "shorts": "短视频",
     "audio": "音频",
     "community": "社区",
-    "playlists": "播放列表"
+    "playlists": "播放列表",
+    "latestSnap": "最新 Snap"
   },
   "streams": {
     "loading": "正在加载直播…",
@@ -282,7 +285,9 @@
     "hiddenToast": "已从你的主页隐藏此打赏",
     "unhiddenToast": "此打赏已重新显示在你的主页",
     "hideFailed": "无法更改此打赏。请重试。",
-    "hideWalletPrompt": "签名以更改你的主页上显示哪些打赏"
+    "hideWalletPrompt": "签名以更改你的主页上显示哪些打赏",
+    "whoTitle": "@{{user}} 支持的人",
+    "tipped_other": "打赏 {{count}} 次"
   },
   "layout": {
     "customize": "自定义主页",
@@ -393,5 +398,12 @@
   },
   "audioTab": {
     "files": "音频文件"
+  },
+  "search": {
+    "placeholder": "搜索此频道",
+    "clear": "清除搜索",
+    "results_other": "“{{query}}”共 {{count}} 个结果",
+    "empty": "此频道中没有与“{{query}}”匹配的内容。",
+    "older": "搜索更早的上传"
   }
 }

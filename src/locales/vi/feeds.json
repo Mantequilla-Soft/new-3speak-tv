@@ -30,7 +30,13 @@
     "aria": "Mới từ các nhà sáng tạo bạn theo dõi",
     "summary_other": "{{count}} video mới",
     "fromFollowing": "từ những người bạn theo dõi",
-    "shorts_other": "{{count}} Shorts"
+    "shorts_other": "{{count}} Shorts",
+    "show": "Hiện",
+    "hide": "Ẩn"
+  },
+  "tagMeta": {
+    "videos_other": "{{num}} video",
+    "thisWeek": "{{num}} tuần này"
   },
   "firstUploads": {
     "title": "Lần đầu tải lên"
@@ -51,9 +57,13 @@
     "dragToReorder": "Kéo để sắp xếp lại",
     "customize": "Tùy chỉnh",
     "customizeTitle": "Tùy chỉnh Trang chủ",
-    "customizeHint": "Di chuyển các mục lên hoặc xuống. Tắt những mục bạn không muốn.",
+    "customizeHint": "Kéo để sắp xếp lại. Tắt những mục bạn không muốn.",
     "surfTitle": "Lướt kênh: chọn một chủ đề và xem như xem TV",
-    "zapping": "Đang chuyển kênh"
+    "zapping": "Đang chuyển kênh",
+    "hero": {
+      "spotlightIn": "Tiêu điểm trong {{community}}"
+    },
+    "tabFollowing": "Đang theo dõi"
   },
   "surf": {
     "pageTitle": "Lướt kênh",
@@ -79,9 +89,10 @@
     "nextVideoKey": "Video tiếp theo (→)",
     "zap": "Chuyển",
     "findingNext": "Đang tìm video tiếp theo…",
-    "stop": "Dừng lướt kênh",
+    "stop": "Dừng",
     "stopTitle": "Dừng lướt kênh (vẫn tiếp tục phát video này)",
-    "guide": "Danh mục kênh"
+    "guide": "Danh mục kênh",
+    "guideShort": "Danh mục"
   },
   "discover": {
     "searchPlaceholder": "Tìm video, Shorts, âm thanh, cộng đồng...",
@@ -119,6 +130,30 @@
     "groupTitle": "{{label}} ({{count}})",
     "subscribers_other": "{{count}} người đăng ký",
     "authors_other": "{{count}} tác giả",
-    "views_other": "{{views}} lượt xem"
+    "views_other": "{{views}} lượt xem",
+    "topCreator": "Nhà sáng tạo hàng đầu",
+    "creators": "Nhà sáng tạo",
+    "relatedTags": "Thẻ liên quan",
+    "trendingTags": "Thẻ thịnh hành",
+    "topCreators": "Nhà sáng tạo hàng đầu",
+    "categories": "Danh mục",
+    "show": "Hiển thị",
+    "boostRecentHint": "Ưu tiên video mới hơn trong kết quả",
+    "showResults_other": "Hiện {{count}} kết quả",
+    "resultTypes": "Loại kết quả"
+  },
+  "activity": {
+    "aria": "Hoạt động trên 3Speak",
+    "community": "Cộng đồng",
+    "verbs": {
+      "snap": "snap",
+      "audio": "âm thanh mới",
+      "playlist": "danh sách phát",
+      "live": "đang phát trực tiếp",
+      "group_other": "{{count}} video mới tuần này"
+    },
+    "emptyCommunity": "Không có gì mới từ cộng đồng trong vài ngày qua.",
+    "emptyLive": "Hiện không ai đang phát trực tiếp.",
+    "emptyGroups": "Tuần này chưa có hoạt động nhóm nào."
   }
 }

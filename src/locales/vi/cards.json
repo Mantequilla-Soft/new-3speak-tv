@@ -6,7 +6,7 @@
   "watchingNow_other": "{{count}} người đang xem",
   "previewMuted": "Xem trước · tắt tiếng",
   "badges": {
-    "gatedTitle": "Chỉ dành cho thành viên. 3Speak Pro mở khóa toàn bộ video",
+    "gatedTitle": "Chỉ dành cho thành viên",
     "pro": "PRO",
     "new": "MỚI",
     "first": "Đầu tay",
@@ -17,24 +17,28 @@
   "status": {
     "scheduled": "Đã lên lịch",
     "mobile": "Di động",
-    "mobileTitle": "Đã tải lên qua ứng dụng di động",
+    "mobileTitle": "Qua ứng dụng di động",
     "processing": "Đang xử lý",
-    "processingTitle": "Video đang được xử lý",
+    "processingTitle": "Đang được xử lý",
     "draft": "Bản nháp",
-    "draftTitle": "Bản nháp - chưa xuất bản",
+    "draftTitle": "Chưa xuất bản",
     "deleted": "Đã xóa",
-    "deletedTitle": "Video này đã bị xóa",
+    "deletedTitle": "Đã bị xóa",
     "failed": "Thất bại",
-    "failedTitle": "Xử lý video thất bại",
+    "failedTitle": "Xử lý thất bại",
     "unlisted": "Không công khai",
-    "unlistedTitle": "Không công khai — ẩn khỏi bảng tin và tìm kiếm, chỉ xem được qua đường liên kết trực tiếp"
+    "unlistedTitle": "Chỉ qua liên kết trực tiếp"
   },
   "playlist": {
     "loading": "Đang tải danh sách phát...",
     "items_other": "{{count}} mục",
     "openAria": "Mở danh sách phát {{name}}",
     "tag": "Danh sách phát",
-    "updated": "Cập nhật {{when}}"
+    "updated": "Cập nhật {{when}}",
+    "public": "công khai",
+    "private": "riêng tư",
+    "history": "lịch sử",
+    "audio": "âm thanh"
   },
   "watchLater": {
     "title": "Xem sau",
@@ -48,5 +52,12 @@
     "label": "Đổi kích thước",
     "small": "Nhỏ",
     "medium": "Vừa"
+  },
+  "payout": {
+    "title": "Phần thưởng",
+    "author": "Tác giả",
+    "curators": "Người curate",
+    "paysOutIn": "Trả thưởng sau",
+    "days_other": "{{count}} ngày"
   }
 }

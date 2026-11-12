@@ -22,7 +22,8 @@
     "step1": "Open deze video in",
     "step2": "Klik op het menu met drie puntjes en kies Downloaden.",
     "step3": "Kies hieronder het gedownloade bestand.",
-    "pickFile": "Kies het gedownloade bestand"
+    "pickFile": "Kies het gedownloade bestand",
+    "title": "Deze kon niet worden opgehaald"
   },
   "errors": {
     "signIn": "Log in om je video's te importeren.",
@@ -133,7 +134,8 @@
     },
     "stopConfirm": "Deze import stoppen? Video's die nog niet gepubliceerd zijn worden geannuleerd, ook als ze al ingepland zijn. Gepubliceerde video's blijven staan.",
     "stopYes": "Ja, stoppen",
-    "stopKeep": "Doorgaan met importeren"
+    "stopKeep": "Doorgaan met importeren",
+    "countOf": "{{done}} van {{total}}"
   },
   "bitchute": {
     "noLink": "Je hebt nog geen BitChute-account gekoppeld. Koppel en verifieer het eerst in je profiel en kom daarna hier terug.",

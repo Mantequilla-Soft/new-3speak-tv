@@ -18,6 +18,7 @@
     "community": "커뮤니티",
     "communityWithSubscribers_other": "커뮤니티 · 구독자 {{formatted}}명",
     "commentFallback": "(댓글)",
+    "videoKind": "3Speak · 동영상",
     "play": "{{title}} 재생"
   },
   "share": {
@@ -31,22 +32,28 @@
     "responsiveSub": "페이지 크기에 맞게 조절돼요",
     "fixedSub": "고정 크기 iframe",
     "sendInChat": "3Speak 채팅으로 보내기",
-    "sendInChatSub": "3Speak의 다른 사용자에게 메시지로 보내기",
+    "sendInChatSub": "메시지로 보내기",
     "embedOnWebsite": "웹사이트에 임베드",
-    "embedOnWebsiteSub": "내 사이트나 블로그용 HTML 복사",
+    "embedOnWebsiteSub": "반응형 또는 고정 크기",
     "forHivePost": "Hive 게시물용",
+    "forHivePostSub": "붙여넣을 링크 복사",
     "hivePostCopied": "링크를 복사했습니다. Hive 게시물에 붙여 넣으세요.",
-    "generalShare": "공유 / 링크 복사",
-    "generalShareSub": "다른 앱으로 공유하거나 링크 복사"
+    "generalShare": "공유 또는 링크 복사",
+    "generalShareSub": "다른 앱",
+    "embed": "임베드",
+    "chat": "채팅",
+    "more": "더보기",
+    "startAt": "시작 시점",
+    "toFollowers_other": "팔로워 {{n}}명에게"
   },
   "gate": {
     "connectTitle": "3Speak 채팅에 연결",
-    "connectBody": "채팅은 Snapie로 운영돼요. 연결하면 Hive 포스팅 키로 일회성 로그인 요청에 서명해요(트랜잭션 없음, 비용 없음).",
+    "connectBody": "채팅은 Snapie로 운영돼요. 연결하면 포스팅 키로 일회성 로그인 요청에 서명해요. 트랜잭션도 비용도 없어요.",
     "connecting": "연결 중…",
     "connectButton": "채팅 연결",
     "cannotSign": "현재 로그인 방식으로는 채팅 요청에 서명할 수 없어요. Keychain, HiveAuth, PeakVault 또는 Ledger를 사용하세요.",
-    "needsAccountTitle": "채팅에는 Hive 계정이 필요해요",
-    "needsAccountBody": "메시지는 내 계정 키로 서명되기 때문에, 계정이 준비되면 다른 기능과 함께 채팅도 사용할 수 있어요. 프로필의 목표를 완료하면 팀이 도와드릴게요.",
+    "needsAccountTitle": "채팅에는 Hive 계정이 필요해요.",
+    "needsAccountBody": "계정을 받으면 다른 기능과 함께 열려요.",
     "loginTitle": "채팅을 사용하려면 로그인하세요",
     "loginBody": "Hive 계정으로 로그인해 메시지를 주고받으세요.",
     "connectingToChat": "채팅에 연결하는 중…"
@@ -90,8 +97,8 @@
     "serverRejectedServerMap_other": "서버가 요청 {{count}}개를 모두 거부했어요(서버 자체의 읽지 않음 목록 ID)",
     "failed": "모두 읽음으로 표시하지 못했어요",
     "marking": "읽음으로 표시하는 중…",
-    "button": "모두 읽음으로 표시",
-    "buttonCount": "모두 읽음으로 표시({{count}})"
+    "button": "모두 읽음",
+    "buttonCount": "모두 읽음 ({{count}})"
   },
   "list": {
     "chooseTarget": "보낼 채팅을 선택하세요",
@@ -124,7 +131,8 @@
     "quoting": "@{{user}}님 인용 중",
     "cancelQuote": "인용 취소",
     "removeImage": "이미지 제거",
-    "placeholder": "메시지 입력…"
+    "placeholder": "메시지 입력…",
+    "placeholderTo": "{{name}}님에게 메시지"
   },
   "page": {
     "chooseTarget": "보낼 채팅을 선택하세요.",

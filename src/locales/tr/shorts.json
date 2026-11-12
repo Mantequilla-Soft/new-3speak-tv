@@ -17,7 +17,8 @@
       "rep": "İtibar {{rep}}",
       "repTitle": "Hive itibarı",
       "viewProfile": "Profili gör"
-    }
+    },
+    "replyTo": "Yanıtla: {{user}}…"
   },
   "errors": {
     "votingUnavailable": "Bu gönderi için oy verme kullanılamıyor",
@@ -31,7 +32,7 @@
     "interestsTitle": "Yalnızca ilgi alanlarına uyan Shorts",
     "pickInterestsFirst": "Önce birkaç ilgi alanı seç",
     "noInterests": "Henüz hiç ilgi alanı seçmedin; Ayarlar'dan seçebilirsin",
-    "interestsExhausted": "İlgi alanlarına uyan Shorts bu kadar; Keşfet gösteriliyor",
+    "interestsExhausted": "İlgi alanlarına uyan Shorts bu kadar. Keşfet gösteriliyor.",
     "noInterestMatches": "Şu an ilgi alanlarına uyan Shorts yok.",
     "switchToDiscover": "Keşfet'e geç",
     "empty": "Shorts yok",
@@ -89,13 +90,13 @@
     "noUrl": "Remix için video URL'si çözümlenemedi",
     "loadFailed": "Remix için video yüklenemedi",
     "chainFull": "Bu video zaten önceki {{max}} videonun üzerine kurulu, bu yüzden artık remix yapılamaz.",
-    "chainNoSlots": "Bu remix zinciri zaten o kadar çok içerik üreticisine ödeme yapıyor ki Hive'da yeni bir remix için yer kalmıyor. 3Speak Pro ile yine de remix yapabilirsin."
+    "chainNoSlots": "Bu zincir zaten o kadar çok içerik üreticisine ödeme yapıyor ki bir remix Hive'da yer bırakmaz. 3Speak Pro ile yine de remix yapabilirsin."
   },
   "watchLater": {
     "loginRequired": "Shorts kaydetmek için giriş yap",
     "cantSave": "Bu Shorts videosu kaydedilemiyor",
     "removed": "Sonra İzle listesinden kaldırıldı",
-    "saved": "Sonra İzle listesine kaydedildi",
+    "saved": "Sonra İzle'ye kaydedildi",
     "failed": "Başarısız: {{message}}"
   },
   "comments": {
@@ -106,7 +107,7 @@
     "postRemoved": "Bu Shorts videosunun arkasındaki Hive gönderisi kaldırıldı, bu yüzden artık yorum veya oy alamaz.",
     "beFirst": "İlk yorumu sen yap!",
     "unavailable": "Bu gönderi için yorumlar kullanılamıyor",
-    "addPlaceholder": "Yorum ekle...",
+    "addPlaceholder": "Tartışmaya katıl…",
     "addPlaceholderBar": "Yorum ekle…",
     "loginPlaceholder": "Yorum yapmak için giriş yap",
     "send": "Yorumu gönder",
@@ -136,7 +137,7 @@
     "seenNote": "Oturum açmış ve izleme geçmişi açık olan izleyiciler.",
     "seenEmpty": "Henüz kimse görmedi.",
     "keep": "Shorts olarak tut",
-    "keepHint": "24 saatten sonra kanalında kalır",
+    "keepHint": "24 saatten sonra da kanalında kalır.",
     "keepConfirm": "Kalıcı olarak tutulsun mu?",
     "keepYes": "Tut",
     "keeping": "Tutuluyor…",
@@ -147,5 +148,9 @@
   "audiogram": {
     "fullEpisode": "Bölümün tamamı",
     "listen": "Bölümün tamamını dinle: {{title}}"
+  },
+  "panel": {
+    "discussion": "Tartışma",
+    "upNext": "Sıradaki"
   }
 }

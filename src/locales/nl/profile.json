@@ -67,7 +67,8 @@
     "tapForSound": "Tik voor geluid",
     "views_one": "{{num}} weergave",
     "views_other": "{{num}} weergaven",
-    "readMore": "Lees meer"
+    "readMore": "Lees meer",
+    "label": "Trailer"
   },
   "snaps": {
     "readMore": "Lees meer",
@@ -168,7 +169,8 @@
       "text": "Groepeer je video's in een playlist die mensen op volgorde kunnen bekijken.",
       "cta": "Maak je eerste playlist",
       "visitor": "@{{user}} heeft geen openbare playlists."
-    }
+    },
+    "visitorPreview": "Bezoekers zien: “{{text}}”"
   },
   "links": {
     "button": "Links",
@@ -187,7 +189,8 @@
     "shorts": "Shorts",
     "audio": "Audio",
     "community": "Community",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "latestSnap": "Nieuwste snap"
   },
   "streams": {
     "loading": "Streams laden…",
@@ -301,7 +304,10 @@
     "hiddenToast": "Fooi verborgen op je profiel",
     "unhiddenToast": "Fooi staat weer op je profiel",
     "hideFailed": "Kon deze fooi niet wijzigen. Probeer het opnieuw.",
-    "hideWalletPrompt": "Onderteken om te kiezen welke fooien op je profiel staan"
+    "hideWalletPrompt": "Onderteken om te kiezen welke fooien op je profiel staan",
+    "whoTitle": "@{{user}} steunt",
+    "tipped_one": "{{count}}× fooi",
+    "tipped_other": "{{count}}× fooi"
   },
   "layout": {
     "customize": "Profiel aanpassen",
@@ -414,5 +420,13 @@
   },
   "audioTab": {
     "files": "Audiobestanden"
+  },
+  "search": {
+    "placeholder": "Dit kanaal doorzoeken",
+    "clear": "Zoekopdracht wissen",
+    "results_one": "{{count}} resultaat voor “{{query}}”",
+    "results_other": "{{count}} resultaten voor “{{query}}”",
+    "empty": "Niets op dit kanaal komt overeen met “{{query}}”.",
+    "older": "Oudere uploads doorzoeken"
   }
 }

@@ -5,8 +5,8 @@
     "yourStreamEnded": "你的直播已结束",
     "thisStreamEnded": "本场直播已结束",
     "noLongerLive": "直播已经结束。准备好后随时可以开始新的直播。",
-    "recordingProcessing": "太棒了！你的录像正在处理中，很快会出现在公告帖子上。",
-    "thanksForLive": "太棒了，感谢你的直播！",
+    "recordingProcessing": "你的录像正在处理中，很快会出现在公告帖子上。",
+    "thanksForLive": "太棒了，感谢你的直播",
     "backHome": "返回首页",
     "howWasStream": "这次直播体验如何？",
     "connecting": "正在连接 OpenPods…",
@@ -40,7 +40,7 @@
     "slowDown": "请稍等片刻再剪辑。",
     "failed": "无法生成片段，请几秒后重试。",
     "title": "剪辑最后 30 秒",
-    "label": "30 秒",
+    "label": "剪辑",
     "clipping": "剪辑中…"
   },
   "report": {
@@ -57,7 +57,7 @@
     "failed": "举报发送失败，请重试。",
     "title": "举报此直播",
     "reporting": "正在举报 <b>@{{host}}</b>。",
-    "intro": "告诉我们哪里有问题。我们的团队会审核每一条举报。",
+    "intro": "我们的团队会审核每一条举报。",
     "detailPlaceholder": "补充详细信息（可选）",
     "sending": "发送中…",
     "submit": "提交举报"
@@ -91,6 +91,7 @@
   "lobby": {
     "descriptionPlaceholder": "这次会话是关于什么的？添加节目笔记、链接或摘要…",
     "enableHosting": "开启主持和发言",
+    "enableHostingHint": "需要 @threespeak 的 posting 权限",
     "handoverFailed": "无法自动开启主持。OpenPods 会通过 @threespeak 代你发帖——请确认你已授予它 posting 权限，然后重试。",
     "signInToHost": "使用 Hive 登录以主持或发言"
   },
@@ -130,8 +131,8 @@
     },
     "chatBox": {
       "title": "你在 OBS 中的聊天",
-      "desc": "一个链接适用于你的所有直播。把它作为停靠窗口添加到 OBS，直播时就能看到新消息。具体步骤见下方指南。",
-      "copy": "复制 OBS 聊天链接",
+      "desc": "作为自定义浏览器停靠窗口添加",
+      "copy": "复制聊天链接",
       "copied": "已复制聊天链接"
     },
     "card": {
@@ -142,26 +143,26 @@
       "watch": "观看直播",
       "notAnnounced": "这场直播没有在 Hive 上发布公告。",
       "notAnnouncedAuth": "未在 Hive 上发布公告：3Speak 还不能代你发帖。编辑模板即可授权。",
-      "stuck": "OBS 已连接，但我们没有收到视频，因此直播没有开始。请在 OBS 中停止推流后重新开始。",
-      "dailyLimit": "OBS 无法开播：免费账户每天只能开播一次。请在上次直播开始 24 小时后再试，或升级 3Speak Pro 即可不受每日次数限制地直播。",
+      "stuck": "OBS 已连接，但我们没有收到视频。请停止推流后重新开始。",
+      "dailyLimit": "免费账号每天只能开播一次。请在上次直播开始 24 小时后再试，或升级 Pro。",
       "useInStudio": "在 Stream Studio 中使用",
       "proRequired": "OBS 无法开播:通过 OBS 直播是 3Speak Pro 的功能。"
     },
     "guide": {
       "title": "如何设置 OBS",
-      "step1": "使用 OBS Studio 30 或更高版本，打开 Settings，然后选择 Stream。",
-      "step2": "将 Service 设为 \"WHIP\"。",
-      "step3": "Server：粘贴你要使用的模板的服务器 URL（卡片上的 \"复制服务器 URL\"）。每个模板都有自己的地址。",
-      "step4": "Bearer Token：粘贴本页顶部的直播密钥。所有模板都相同。",
-      "step5": "在 OBS 中点击 \"Start Streaming\"，即可用该模板在 3Speak 上开播。点击 \"Stop Streaming\" 结束直播。",
+      "step1": "使用 OBS Studio 30 或更高版本：Settings → Stream",
+      "step2": "将 Service 设为 \"WHIP\"",
+      "step3": "Server：粘贴模板的服务器 URL",
+      "step4": "Bearer Token：粘贴你的直播密钥",
+      "step5": "在 OBS 中点击 Start Streaming，你就在 3Speak 上开播了。",
       "outputTitle": "推荐输出设置",
-      "keyframe": "关键帧间隔：1 到 2 秒",
-      "bitrate": "码率控制 CBR，2500 到 6000 kbps",
-      "encoder": "编码器：x264 或你的硬件编码器",
-      "audio": "音频采样率：48 kHz",
-      "bframes": "不使用 B-frames（如编码器有此选项，请设为 0）",
+      "keyframe": "关键帧 1–2 秒",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / 硬件编码",
+      "audio": "48 kHz 音频",
+      "bframes": "不使用 B 帧",
       "chatTitle": "在 OBS 中查看聊天",
-      "chatCopy": "在本页顶部的“你在 OBS 中的聊天”里点击“复制 OBS 聊天链接”。这是适用于你所有直播的同一个链接。",
+      "chatCopy": "在本页顶部的“你在 OBS 中的聊天”下，点击“复制聊天链接”。这是适用于你所有直播的同一个链接。",
       "chat2": "在 OBS 中打开 \"Docks\" 菜单，选择 \"Custom Browser Docks\"。输入名称（例如“3Speak 聊天”），粘贴链接并点击 \"Apply\"。直播时新消息会显示在这个面板里，观众看不到它。",
       "chat3": "观众已经能在直播旁边看到聊天，所以不需要把它放进视频里。只有当你也在其他地方分享直播时：把同一个链接添加为 \"Browser\" 来源，并删掉末尾的 \"&dock=1\"。这样消息会浮在视频上方，30 秒后淡出。",
       "chatOptions": "可选，加在链接末尾：&max=10 显示更少行，&size=18 放大文字，&fade=0 让消息一直留在视频上。",
@@ -255,5 +256,13 @@
       "desc": "有了 3Speak Pro,你可以使用模板直接从 OBS 开播。没有 Pro,你的模板仍可在浏览器中的 Stream Studio 使用。",
       "cta": "获取 3Speak Pro"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_other": "{{count}} 人在听",
+    "emptySub": "直播和 OpenPods 一开始就会显示在这里。",
+    "emptyRooms": "目前没有开放的 OpenPods。",
+    "emptyScheduled": "目前没有已安排的内容。",
+    "emptyScheduledSub": "已开放但尚未开播的房间会显示在这里。"
   }
 }

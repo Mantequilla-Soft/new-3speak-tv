@@ -5,8 +5,8 @@
     "yourStreamEnded": "Buổi phát trực tiếp của bạn đã kết thúc",
     "thisStreamEnded": "Buổi phát trực tiếp này đã kết thúc",
     "noLongerLive": "Buổi phát không còn trực tiếp nữa. Hãy bắt đầu buổi mới bất cứ khi nào bạn sẵn sàng.",
-    "recordingProcessing": "Tuyệt lắm! Bản ghi của bạn đang được xử lý và sẽ sớm xuất hiện trên bài thông báo.",
-    "thanksForLive": "Tuyệt lắm, cảm ơn bạn đã phát trực tiếp!",
+    "recordingProcessing": "Bản ghi của bạn đang được xử lý và sẽ sớm xuất hiện trên bài thông báo.",
+    "thanksForLive": "Tuyệt lắm, cảm ơn bạn đã phát trực tiếp",
     "backHome": "Về trang chủ",
     "howWasStream": "Buổi phát trực tiếp của bạn thế nào?",
     "connecting": "Đang kết nối với OpenPods…",
@@ -40,13 +40,13 @@
     "slowDown": "Chậm lại một chút rồi cắt clip lại.",
     "failed": "Không thể tạo clip. Hãy thử lại sau vài giây.",
     "title": "Cắt clip 30 giây vừa qua",
-    "label": "30 giây",
+    "label": "Clip",
     "clipping": "Đang cắt clip…"
   },
   "report": {
     "reasons": {
       "harassment": "Quấy rối hoặc thù ghét",
-      "sexual": "Nội dung tình dục hoặc khiêu dâm",
+      "sexual": "Tình dục hoặc khiêu dâm",
       "violence": "Bạo lực hoặc hành vi nguy hiểm",
       "selfharm": "Tự gây hại",
       "illegal": "Nội dung bất hợp pháp",
@@ -57,7 +57,7 @@
     "failed": "Không thể gửi báo cáo. Vui lòng thử lại.",
     "title": "Báo cáo buổi phát này",
     "reporting": "Đang báo cáo <b>@{{host}}</b>.",
-    "intro": "Cho chúng tôi biết có vấn đề gì. Đội ngũ của chúng tôi xem xét mọi báo cáo.",
+    "intro": "Đội ngũ của chúng tôi xem xét mọi báo cáo.",
     "detailPlaceholder": "Thêm chi tiết (không bắt buộc)",
     "sending": "Đang gửi…",
     "submit": "Gửi báo cáo"
@@ -91,6 +91,7 @@
   "lobby": {
     "descriptionPlaceholder": "Phiên này nói về điều gì? Thêm ghi chú chương trình, đường liên kết hoặc tóm tắt…",
     "enableHosting": "Bật quyền dẫn và phát biểu",
+    "enableHostingHint": "Cần quyền posting cho @threespeak",
     "handoverFailed": "Không thể tự động bật quyền dẫn. OpenPods đăng bài thay bạn qua @threespeak — hãy kiểm tra xem bạn đã cấp quyền posting cho tài khoản này chưa, rồi thử lại.",
     "signInToHost": "Đăng nhập bằng Hive để dẫn hoặc phát biểu"
   },
@@ -130,8 +131,8 @@
     },
     "chatBox": {
       "title": "Trò chuyện của bạn trong OBS",
-      "desc": "Một liên kết cho mọi buổi phát của bạn. Thêm nó vào OBS dưới dạng dock để đọc tin nhắn mới khi bạn đang phát. Hướng dẫn bên dưới chỉ cách làm.",
-      "copy": "Sao chép URL trò chuyện cho OBS",
+      "desc": "thêm làm dock trình duyệt tùy chỉnh",
+      "copy": "Sao chép URL trò chuyện",
       "copied": "Đã sao chép URL trò chuyện"
     },
     "card": {
@@ -142,26 +143,26 @@
       "watch": "Xem buổi phát",
       "notAnnounced": "Buổi phát này không được thông báo trên Hive.",
       "notAnnouncedAuth": "Chưa thông báo trên Hive: 3Speak chưa được phép đăng bài thay bạn. Hãy sửa mẫu để cho phép.",
-      "stuck": "OBS đã kết nối nhưng không có video nào đến được chỗ chúng tôi, nên buổi phát chưa bắt đầu. Hãy dừng phát trong OBS rồi bắt đầu lại.",
-      "dailyLimit": "OBS không thể phát trực tiếp: tài khoản miễn phí chỉ được bắt đầu một buổi phát mỗi ngày. Hãy thử lại 24 giờ sau khi buổi phát trước bắt đầu, hoặc dùng 3Speak Pro để phát không giới hạn mỗi ngày.",
+      "stuck": "OBS đã kết nối, nhưng không có video nào đến được chỗ chúng tôi. Hãy dừng rồi bắt đầu phát lại.",
+      "dailyLimit": "Tài khoản miễn phí được bắt đầu một buổi phát mỗi ngày. Hãy thử lại 24 giờ sau khi buổi phát trước bắt đầu, hoặc dùng Pro.",
       "useInStudio": "Dùng trong Stream Studio",
       "proRequired": "OBS không thể phát trực tiếp: phát trực tiếp từ OBS là một phần của 3Speak Pro."
     },
     "guide": {
       "title": "Cách thiết lập OBS",
-      "step1": "Dùng OBS Studio 30 trở lên, mở Settings, rồi Stream.",
-      "step2": "Đặt Service thành \"WHIP\".",
-      "step3": "Server: dán URL máy chủ của mẫu bạn muốn dùng (\"Sao chép URL máy chủ\" trên thẻ của mẫu). Mỗi mẫu có URL riêng.",
-      "step4": "Bearer Token: dán mã bí mật phát trực tiếp ở đầu trang này. Mã giống nhau cho mọi mẫu.",
-      "step5": "Nhấn \"Start Streaming\" trong OBS là bạn đang phát trực tiếp trên 3Speak với mẫu đó. \"Stop Streaming\" sẽ kết thúc buổi phát.",
-      "outputTitle": "Cài đặt đầu ra khuyến nghị",
-      "keyframe": "Khoảng cách keyframe: 1 đến 2 giây",
-      "bitrate": "Kiểm soát bitrate CBR, 2500 đến 6000 kbps",
-      "encoder": "Bộ mã hóa: x264 hoặc bộ mã hóa phần cứng của bạn",
-      "audio": "Tần số lấy mẫu âm thanh: 48 kHz",
-      "bframes": "Không dùng B-frames (đặt về 0 nếu bộ mã hóa có tùy chọn này)",
+      "step1": "Dùng OBS Studio 30 trở lên: Settings → Stream",
+      "step2": "Đặt Service thành \"WHIP\"",
+      "step3": "Server: dán URL máy chủ của mẫu",
+      "step4": "Bearer Token: dán mã bí mật phát trực tiếp của bạn",
+      "step5": "Nhấn Start Streaming trong OBS. Bạn đang phát trực tiếp trên 3Speak.",
+      "outputTitle": "Đầu ra khuyến nghị",
+      "keyframe": "Keyframe 1–2 giây",
+      "bitrate": "CBR 2500–6000 kbps",
+      "encoder": "x264 / phần cứng",
+      "audio": "Âm thanh 48 kHz",
+      "bframes": "Không dùng B-frames",
       "chatTitle": "Xem trò chuyện trong OBS",
-      "chatCopy": "Ở đầu trang này, trong mục \"Trò chuyện của bạn trong OBS\", bấm \"Sao chép URL trò chuyện cho OBS\". Đây là một liên kết cho mọi buổi phát của bạn.",
+      "chatCopy": "Ở đầu trang này, trong mục \"Trò chuyện của bạn trong OBS\", bấm \"Sao chép URL trò chuyện\". Đây là một liên kết cho mọi buổi phát của bạn.",
       "chat2": "Trong OBS, mở menu \"Docks\" và chọn \"Custom Browser Docks\". Nhập tên như \"Trò chuyện 3Speak\", dán URL rồi bấm \"Apply\". Tin nhắn mới hiện trong bảng đó khi bạn đang phát. Người xem không bao giờ thấy nó.",
       "chat3": "Người xem đã thấy trò chuyện bên cạnh buổi phát của bạn, nên bạn không cần đưa nó vào video. Chỉ khi bạn chia sẻ buổi phát ở nơi khác nữa: thêm cùng URL đó làm nguồn \"Browser\" và bỏ \"&dock=1\" ở cuối. Khi đó tin nhắn hiện đè lên video và mờ dần sau 30 giây.",
       "chatOptions": "Tùy chọn, thêm vào cuối URL: &max=10 hiện ít dòng hơn, &size=18 làm chữ to hơn, &fade=0 giữ tin nhắn trên video.",
@@ -255,5 +256,13 @@
       "desc": "Với 3Speak Pro, bạn có thể phát trực tiếp ngay từ OBS bằng các mẫu của mình. Không có Pro, các mẫu của bạn vẫn dùng được trong Stream Studio trên trình duyệt.",
       "cta": "Nhận 3Speak Pro"
     }
+  },
+  "grid": {
+    "openpods": "OpenPods",
+    "listening_other": "{{count}} người đang nghe",
+    "emptySub": "Buổi phát và OpenPods hiện ở đây ngay khi bắt đầu.",
+    "emptyRooms": "Hiện không có OpenPods nào đang mở.",
+    "emptyScheduled": "Hiện chưa có gì được lên lịch.",
+    "emptyScheduledSub": "Các phòng đang mở nhưng chưa phát trực tiếp sẽ hiện ở đây."
   }
 }

@@ -17,7 +17,8 @@
     "loginFailed": "登录失败：{{error}}",
     "logoAlt": "3Speak Logo",
     "title": "使用用户名登录",
-    "usernamePlaceholder": "用户名"
+    "usernamePlaceholder": "用户名",
+    "continueWith": "使用 {{method}} 继续"
   },
   "socialLink": {
     "hashCopied": "哈希已复制",
@@ -55,7 +56,7 @@
   },
   "auth": {
     "title": "授权 3Speak",
-    "text": "要在 3Speak 上传视频，我们需要你的 posting 权限，这样我们才能把你上传的视频发布到 Hive。你只需要授予一次 posting 权限。",
+    "text": "要上传视频，我们需要你的 posting 权限，这样才能把你的视频发布到 Hive。你只需授予一次。",
     "authorize": "授权"
   },
   "beneficiary": {
@@ -74,6 +75,11 @@
       "maxCount": "Hive 每篇帖子最多允许 {{max}} 位受益人。"
     },
     "title": "受益人",
+    "shareRewards": "分享奖励",
+    "you": "你",
+    "toYou": "归你",
+    "addCollaborator": "添加合作者",
+    "saveSplit": "保存分配",
     "intro": "添加一位用户，让其自动获得这篇帖子的一部分奖励。",
     "minPercent": "%（最少 {{percent}}%）",
     "usernamePlaceholder": "输入用户名",
@@ -100,7 +106,7 @@
   },
   "verifyAuth": {
     "title": "正在验证授权",
-    "text": "请稍候，我们正在确认授权是否已成功授予..."
+    "text": "正在确认是否已授予…"
   },
   "editor": {
     "confirmLeave": "编辑器仍处于打开状态。离开此页面将关闭编辑器，未保存的更改将会丢失。\n\n确定 = 关闭编辑器并离开\n取消 = 留在此页面",
@@ -176,7 +182,9 @@
     "details": "补充说明（可选）",
     "detailsPlaceholder": "提供更多背景信息...",
     "submitting": "提交中...",
-    "submit": "提交举报"
+    "submit": "提交举报",
+    "intro": "举报会发送给 3Speak 团队。创作者不会看到是谁举报的。",
+    "nextDetails": "下一步：添加详情"
   },
   "upload": {
     "missingInfo": "缺少视频或缩略图信息。",

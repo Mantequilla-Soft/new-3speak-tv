@@ -16,7 +16,9 @@
     "avgPct": "% TB",
     "votes": "Lượt vote",
     "comments": "Bình luận",
-    "payout": "Phần thưởng"
+    "payout": "Phần thưởng",
+    "followers": "Người theo dõi",
+    "earned": "Đã kiếm"
   },
   "days": {
     "short": {
@@ -67,7 +69,8 @@
     "title": "Thời điểm người xem của bạn xem",
     "sub": "UTC · càng đậm = càng nhiều lượt xem",
     "cellTitle_other": "{{day}} {{hour}}:00 — {{count}} lượt xem",
-    "hour": "{{hour}} giờ"
+    "hour": "{{hour}} giờ",
+    "best": "Thời điểm tốt nhất: <b>{{day}} {{from}}–{{to}} UTC</b>"
   },
   "detail": {
     "summary": "{{votes}} lượt vote · {{comments}} bình luận · ${{payout}}"
@@ -80,7 +83,8 @@
     "title": "So sánh video",
     "pickA": "Chọn một video…",
     "vs": "và",
-    "pickB": "Chọn video khác…"
+    "pickB": "Chọn video khác…",
+    "lastPeriod": "So với kỳ trước"
   },
   "loadError": "Hiện không thể tải số liệu thống kê của bạn.",
   "emptyRange": "Chưa có dữ liệu xem trong khoảng này — hãy thử “Tất cả”, hoặc chờ mọi người xem video của bạn.",
@@ -93,7 +97,8 @@
   "sections": {
     "trend": "Thời gian xem theo thời gian",
     "best": "Hiệu quả nhất",
-    "audience": "Khán giả của bạn"
+    "audience": "Khán giả của bạn",
+    "top": "Nội dung hàng đầu"
   },
   "openInNewTab": "Mở video trong tab mới",
   "footnote": "Số liệu xem lấy từ theo dõi bản xem trước và chỉ bạn mới thấy.",
@@ -102,9 +107,9 @@
     "empty": "Video này chưa có dữ liệu xem.",
     "uniqueViewers": "Người xem duy nhất",
     "avgSpeed": "Tốc độ TB",
-    "mostDropOff": "📉 Nhiều người rời đi nhất tại <b>{{time}}</b>",
-    "earlyDrop": "⚡ <b>{{pct}}%</b> rời đi trong 3 giây đầu",
-    "replayed": "🔁 Được xem lại:",
+    "mostDropOff": "Nhiều người rời đi nhất tại <b>{{time}}</b>",
+    "earlyDrop": "<b>{{pct}}%</b> rời đi trong 3 giây đầu",
+    "replayed": "Được xem lại:",
     "retentionTitle": "Tỷ lệ giữ chân khán giả",
     "retentionSub": "tỷ lệ người xem vẫn đang xem tại mỗi thời điểm",
     "pctWatching": "{{pct}}% đang xem",
@@ -112,5 +117,15 @@
     "replaySub": "các đoạn người xem xem đi xem lại nhiều nhất",
     "hotSpot": "điểm nóng",
     "notEnoughReplays": "Chưa đủ lượt xem lại"
+  },
+  "title": "Thống kê kênh",
+  "legend": {
+    "current": "Kỳ này",
+    "previous": "Kỳ trước"
+  },
+  "audience": {
+    "title": "Khán giả",
+    "topCountry": "Quốc gia hàng đầu",
+    "topDevice": "Thiết bị hàng đầu"
   }
 }
