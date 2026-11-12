@@ -167,6 +167,10 @@ export default function HomeHero({ videos = [], pending = false }) {
   const href = watchPath(author, permlink);
   const duration = clock(video.spkvideo?.duration || video.duration);
   const community = post?.community_title || null;
+  // The community's id (hive-123456): the chip opens its page (owner 2026-11-12).
+  const communityId = post?.community || (/^hive-\d+$/.test(post?.category || "") ? post.category : null);
+  const Chip = community && communityId ? Link : "div";
+  const chipProps = Chip === Link ? { to: `/community/${communityId}` } : {};
   const followers = follow?.follower_count;
   const followersLabel = followers != null
     ? t("common.units.followers", { count: followers }).replace(String(followers), formatNumber(followers))
@@ -190,7 +194,7 @@ export default function HomeHero({ videos = [], pending = false }) {
       </div>
 
       <div className="home-hero__body" key={keyOf(video)}>
-        <div className="home-hero__chip">
+        <Chip className="home-hero__chip" {...chipProps}>
           <span className="home-hero__chip-tile" aria-hidden="true">
             {(community || t("cards.badges.spotlight")).slice(0, 1).toUpperCase()}
           </span>
@@ -199,7 +203,7 @@ export default function HomeHero({ videos = [], pending = false }) {
           </span>
           <span className="home-hero__chip-text is-narrow">{community || t("cards.badges.spotlight")}</span>
           {duration && <span className="home-hero__chip-time">· {duration}</span>}
-        </div>
+        </Chip>
 
         <h2 className="home-hero__title">
           <Link to={href}>{video.title}</Link>

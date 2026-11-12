@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { renderWithProviders } from './_render.jsx'
 
-vi.mock('../../../src/hive-api/hiveApi', () => ({ getPostDetails: async () => ({ community_title: 'Test Community' }) }))
+vi.mock('../../../src/hive-api/hiveApi', () => ({ getPostDetails: async () => ({ community_title: 'Test Community', community: 'hive-123456' }) }))
 vi.mock('../../../src/hive-api/api', () => ({ getFollowers: async () => ({ follower_count: 3 }) }))
 vi.mock('../../../src/components/HiveAvatar/HiveAvatar', () => ({ default: () => null }))
 vi.mock('../../../src/components/AddToPlaylistModal/AddToPlaylistModal', () => ({ default: () => null }))
@@ -84,6 +84,12 @@ describe('Spotlight hero slider', () => {
     await user.click(screen.getByRole('button', { name: 'refetch' }))
     expect(title()).toBe('Video 2')
     expect(screen.getByRole('button', { name: 'Spotlight 2 of 3' })).toHaveAttribute('aria-current', 'true')
+  })
+
+  it('links the community chip to the community page', async () => {
+    renderWithProviders(<HomeHero videos={VIDEOS} />)
+    const chip = await screen.findByRole('link', { name: /Test Community/ })
+    expect(chip).toHaveAttribute('href', '/community/hive-123456')
   })
 
   it('shows no slider controls for a single video', () => {
