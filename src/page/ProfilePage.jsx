@@ -22,7 +22,6 @@ import { fetchUserShortsWithDetails } from "../hive-api/hiveApi";
 import useGalaxyFits from "../hooks/useGalaxyFits";
 import SocialLinks from "../components/Userprofilepage/SocialLinks";
 import LeaderboardBadges from "../components/LeaderboardBadges/LeaderboardBadges";
-import SupportersBadges from "../components/Supporters/SupportersBadges";
 import SupportersList from "../components/Supporters/SupportersList";
 import HiveBadges from "../components/HiveBadges/HiveBadges";
 import ProfileStreams, { ProfileLiveNow } from "../components/Userprofilepage/ProfileStreams";
@@ -591,7 +590,6 @@ function ProfilePage() {
             <div className="own-badges">
               <LeaderboardBadges username={user} />
             </div>
-            <SupportersBadges username={user} onOpen={() => selectTab('supports')} />
           </>
         }
         aside={

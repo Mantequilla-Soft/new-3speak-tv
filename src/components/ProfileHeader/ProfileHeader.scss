@@ -205,7 +205,7 @@
     overflow-wrap: anywhere;
   }
 
-  // Hive badges, ours, supporter rings and the linked profiles: one wrapping row.
+  // Hive badges and ours: one wrapping row.
   .user-badges {
     display: flex;
     flex-wrap: wrap;
@@ -219,6 +219,20 @@
       align-items: center;
       gap: 8px;
     }
+  }
+
+  // The stat chips, then the linked channels, on one wrapping line.
+  .profile-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+
+    // The chips and the icons wrap as one run, so on phones the icons follow
+    // the last chip instead of taking a line of their own.
+    > .profile-stats { display: contents; }
+    > .header-aside { display: contents; }
   }
 
   .header-aside {

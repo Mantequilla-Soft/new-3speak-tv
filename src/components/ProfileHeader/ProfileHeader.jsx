@@ -41,8 +41,8 @@ export default function ProfileHeader({
   // Slot between the bio/location and the badge row — user profiles put their
   // stat line here (see ProfileStats); community pages pass nothing.
   meta,
-  // Inside the details panel, on its right edge, stacked in a column on
-  // desktop (a centred row at the bottom on phones): the linked channels.
+  // The linked channels: on the stat line, right after "on Hive since"
+  // (owner 2026-11-12), so the badge row below stays badges only.
   aside,
   avatarBadgeSize = 16,
   refreshKey = 0,
@@ -215,7 +215,12 @@ export default function ProfileHeader({
                 ) : null}
               </p>
             ) : null}
-            {meta}
+            {meta || aside ? (
+              <div className="profile-meta-row">
+                {meta}
+                {aside ? <div className="header-aside">{aside}</div> : null}
+              </div>
+            ) : null}
           </div>
           {nameActions || actions ? (
             <div className="name-actions">
@@ -225,12 +230,7 @@ export default function ProfileHeader({
           ) : null}
         </div>
         {bioText ? <p className="profile-bio">{bioText}</p> : null}
-        {badges || aside ? (
-          <div className="user-badges">
-            {badges}
-            {aside ? <div className="header-aside">{aside}</div> : null}
-          </div>
-        ) : null}
+        {badges ? <div className="user-badges">{badges}</div> : null}
       </div>
     </div>
   );

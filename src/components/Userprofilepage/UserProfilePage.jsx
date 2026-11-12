@@ -38,7 +38,6 @@ import ProfileStreams, { ProfileLiveNow } from './ProfileStreams';
 import { fetchSnaps } from '../../lib/snaps';
 import SocialLinks from './SocialLinks';
 import LeaderboardBadges from '../LeaderboardBadges/LeaderboardBadges';
-import SupportersBadges from '../Supporters/SupportersBadges';
 import SupportersList from '../Supporters/SupportersList';
 import { useSupporters, useSupported } from '../../lib/supports';
 import HiveBadges from '../HiveBadges/HiveBadges';
@@ -667,7 +666,6 @@ const {
             <div className="own-badges">
               <LeaderboardBadges username={user} />
             </div>
-            <SupportersBadges username={user} onOpen={() => selectTab('supports')} />
           </>
         }
         aside={<SocialLinks hiveUsername={user} column />}

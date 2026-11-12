@@ -138,7 +138,8 @@ function SupportCard({ item, person, canHide }) {
 }
 
 // "Who @user supports" (31e): the creators this profile tipped, each once,
-// with a cyan ring, how often and how much. Above the Given list.
+// with a cyan ring, how often and how much. Above the list on both sub-tabs
+// (owner 2026-11-12: it stays when Received is picked).
 function SupportsSummary({ user }) {
   const { t } = useTranslation();
   const { data } = useSupported(user);
@@ -246,7 +247,7 @@ export default function SupportersList({ user, isOwnProfile }) {
 
   return (
     <div className="sp-list">
-      {dir === 'given' ? <SupportsSummary user={user} /> : null}
+      <SupportsSummary user={user} />
       {/* 37a: one card, "Supporters" with Received / Given (each with its
           total) on the right, then a row per tip. */}
       <section className="sp-panel v2-card">
