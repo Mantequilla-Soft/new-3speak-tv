@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.8',
+    category: 'account',
+    date: '2026-11-12',
+    summary: 'Your Receive QR code can now ask for an amount in HIVE or HBD and carry a memo.',
+  },
+  {
+    version: '2.0.7',
+    category: 'account',
+    date: '2026-11-12',
+    summary: 'On phones, tap Scan in the Send window to fill in the recipient from their QR code.',
+  },
+  {
     version: '2.0.6',
     category: 'audio',
     date: '2026-11-12',
