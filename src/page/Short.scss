@@ -49,6 +49,12 @@
 // --shorts-top: where the page starts under the app's top bar. Nav.jsx measures the
 // bar's strip into --nav-height (it floats 16px down from the top on desktop).
 body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(--nav-height, var(--topbar-h)); }
+// Desktop: the page keeps to the top bar's width (owner 2026-11-12): the space
+// left and right of the bar (.nav-bar: content-max minus the page padding,
+// centred, never closer than --page-pad to the window edge).
+@media (min-width: 769px) {
+  body { --shorts-gutter: max(var(--page-pad), calc((100vw - var(--content-max)) / 2 + var(--page-pad))); }
+}
 @media (min-width: 769px) and (max-width: 1024px) {
   // The floating bottom bar (BottomNav.scss): its height, its gap, 8px air.
   body { --shorts-bottom-reserve: calc(var(--bottom-nav-float-h, var(--bottom-nav-height)) + var(--bottom-nav-float-gap, 0px) + 8px); }
@@ -120,10 +126,10 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
     &:not(.ws-shorts) {
       flex-direction: column;
       align-items: stretch;
-      padding: 16px 24px 24px;
+      padding: 16px var(--shorts-gutter) 24px;
     }
 
-    &.with-comments { padding-right: calc(var(--shorts-panel-w) + 24px); }
+    &.with-comments { padding-right: calc(var(--shorts-gutter) + var(--shorts-panel-w) + 24px); }
   }
 
   @include phone {
@@ -1839,6 +1845,19 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
     z-index: 150;
 
     &.open { transform: translateX(0); }
+
+    // Desktop: a card whose right edge lines up with the top bar's, 16px under
+    // it and 16px above the window bottom (or the bottom bar's reserve).
+    @include desk {
+      top: calc(var(--shorts-top) + 16px);
+      right: var(--shorts-gutter);
+      height: calc(100vh - var(--shorts-top) - var(--shorts-bottom-reserve, 0px) - 32px);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      transform: translateX(calc(100% + var(--shorts-gutter) + 2px));
+      &.open { transform: translateX(0); }
+    }
 
     @include phone {
       top: auto;
