@@ -332,6 +332,11 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
             <Link to="/leaderboard" className="pn-item" role="menuitem" onClick={onclose}>
               {row('leaderboard', t('app.routes.rankings'))}
             </Link>
+            {/* Settings in the list, About and FAQ along the bottom (owner
+                2026-11-12: flipped; "Hide pages" removed, the sections always show). */}
+            <button type="button" className="pn-item" role="menuitem" onClick={() => { setSettingsOpen(true); onclose(); }}>
+              {row('settings', t('common.nav.settings'))}
+            </button>
             {/* Phones and tablets only, and only where the app can actually be
                 installed. iOS has no install prompt, so it gets the Share-sheet
                 instructions. */}
@@ -350,13 +355,24 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
               </button>
             )}
           </div>
+        </div>
 
-          {/* Settings here, About and FAQ along the bottom (owner 2026-11-12:
-              flipped; "Hide pages" removed, the bar's sections always show). */}
-          <button type="button" className="pn-item" role="menuitem" onClick={() => { setSettingsOpen(true); onclose(); }}>
-            {row('settings', t('common.nav.settings'))}
-          </button>
-
+        {/* Along the bottom (owner 2026-11-12): About, FAQ (and Log out), then
+            3Speak's channels and the Hive node line under them. */}
+        <div className="pn-footer">
+          <div className="pn-footer-row">
+            <Link to="/about" className="pn-foot-btn" role="menuitem" onClick={onclose}>
+              <Icon name="info" size={20} /><span className="pn-label">{t('nav.aboutLink')}</span>
+            </Link>
+            <Link to="/faq" className="pn-foot-btn" role="menuitem" onClick={onclose}>
+              <Icon name="help" size={20} /><span className="pn-label">{t('nav.faqLink')}</span>
+            </Link>
+            {isManteAuth && (
+              <button type="button" className="pn-foot-btn is-logout" role="menuitem" onClick={() => { LogOut(user); onclose(); navigate('/'); }}>
+                <Icon name="logout" size={20} /><span className="pn-label">{t('nav.profile.logout')}</span>
+              </button>
+            )}
+          </div>
           <div className="pn-socials">
             {/* Brand names, not words to translate; the aria labels say where they go. */}
             <div className="support-wrap">
@@ -375,21 +391,6 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
               <span className="rpc-node-host">{rpcHost}</span>
             </div>
           </div>
-        </div>
-
-        {/* 07d: Settings and Log out along the bottom */}
-        <div className="pn-footer">
-          <Link to="/about" className="pn-foot-btn" role="menuitem" onClick={onclose}>
-            <Icon name="info" size={20} /><span className="pn-label">{t('nav.aboutLink')}</span>
-          </Link>
-          <Link to="/faq" className="pn-foot-btn" role="menuitem" onClick={onclose}>
-            <Icon name="help" size={20} /><span className="pn-label">{t('nav.faqLink')}</span>
-          </Link>
-          {isManteAuth && (
-            <button type="button" className="pn-foot-btn is-logout" role="menuitem" onClick={() => { LogOut(user); onclose(); navigate('/'); }}>
-              <Icon name="logout" size={20} /><span className="pn-label">{t('nav.profile.logout')}</span>
-            </button>
-          )}
         </div>
       </div>
 

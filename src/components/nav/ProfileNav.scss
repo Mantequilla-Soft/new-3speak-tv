@@ -422,13 +422,19 @@
 }
 
 // 07d footer: a 1px line, padding 14/18, Settings left and Log out right, 14 muted.
+// The bottom: About, FAQ (and Log out) on one row of 40px buttons like the
+// list's rows, then the channel links and the node line under them.
 .pn-footer {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 8px;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 8px 10px;
   border-top: 1px solid var(--border);
   flex: none;
+
+  .pn-footer-row { display: flex; align-items: center; gap: 10px; }
+  .pn-foot-btn { min-height: 40px; }
+  .pn-socials { padding-left: 2px; padding-right: 2px; }
 }
 .pn-foot-btn {
   text-decoration: none;   // About and FAQ are links (owner 2026-11-12)
