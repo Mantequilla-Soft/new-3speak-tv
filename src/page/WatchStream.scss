@@ -1,6 +1,10 @@
 @use "../styles/v2" as v2;
 @use "../components/openpods/hangouts-skin" as hh;
 
+// Icons drawn as CSS text (Material Symbols ligatures) carry `/ ""`: the
+// glyph name is decoration, not part of the button's accessible name (screen
+// readers read "close Close modal", "qr_code_2 HiveAuth" before). The plain
+// `content` first is the fallback where `/ alt` is not supported.
 /* The live stream watch page (/watch/:streamId), designs 18c, 30b and 45c.
    Desktop: a live strip, the player with a tile dock under it, and the chat
    always beside it in a fixed-height panel. Phones: the shorts layout (Short.scss
@@ -38,7 +42,7 @@
   animation: v2-drop var(--t-slow) var(--ease);
 
   &::before {
-    content: "volume_up";
+    content: "volume_up"; content: "volume_up" / "";
     font-family: "Material Symbols Rounded";
     font-size: 18px;
     font-weight: 400;
@@ -173,7 +177,7 @@
   color: var(--on-media);
 
   &::before {
-    content: "rocket_launch";
+    content: "rocket_launch"; content: "rocket_launch" / "";
     position: absolute;
     left: 8px;
     top: 8px;

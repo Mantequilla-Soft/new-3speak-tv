@@ -46,14 +46,16 @@ test('a returning user on an older version sees the update popup once', async ({
 test('Log in offers Butter Auth and the Hive wallets', async ({ page }) => {
   await page.goto('/')
   await page.locator('.nav-guest-login:visible').first().click()
-  await expect(page.getByRole('heading', { name: 'Login to 3Speak' })).toBeVisible()
+  // The v2 dialog (2.0.0) is titled "Log in".
+  await expect(page.getByRole('heading', { name: 'Log in', exact: true })).toBeVisible()
   await expect(page.getByRole('button', { name: /Butter Auth/ })).toBeVisible()
   // Keychain is only listed when its browser extension is installed.
   for (const wallet of ['HiveAuth', 'HiveSigner']) {
     await expect(page.getByRole('listitem').filter({ hasText: wallet })).toBeVisible()
   }
-  await page.getByRole('button', { name: 'Close modal' }).click()
-  await expect(page.getByRole('heading', { name: 'Login to 3Speak' })).toBeHidden()
+  // Exact name: the CSS-drawn icon glyphs are not part of it ("close Close modal" before).
+  await page.getByRole('button', { name: 'Close modal', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Log in', exact: true })).toBeHidden()
 })
 
 test.describe('language', () => {

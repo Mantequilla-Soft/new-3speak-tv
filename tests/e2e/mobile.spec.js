@@ -7,7 +7,8 @@ test('the bottom navigation is there and opens Shorts', async ({ page }) => {
   const nav = page.locator('nav.bottom-nav')
   await expect(nav).toBeVisible()
   await expect(nav.locator('a, button')).toHaveCount(5)
-  await nav.locator('.bottom-nav-icon--shorts').click()
+  // By its name: the v2 bar (2.0.0) draws Material Symbols, no per-tab icon class.
+  await nav.getByRole('link', { name: 'Shorts' }).click()
   await expect(page).toHaveURL(/\/shorts/)
 })
 
