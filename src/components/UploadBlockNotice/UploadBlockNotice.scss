@@ -20,9 +20,12 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
+
+  @include v2.mobile { flex-wrap: wrap; }
 }
 
 .ubn-head__text {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -54,32 +57,37 @@
 
 .ubn-note { min-width: 0; }
 
+// The contact buttons: a row on the head's right; their own row under the
+// title on phones, half each.
 .ubn-actions {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  flex: none;
+  display: flex;
   gap: 8px;
+  align-self: center;
 
-  @include v2.mobile { grid-template-columns: 1fr 1fr; }
+  @include v2.mobile {
+    flex-basis: 100%;
+    > .ubn-tile { flex: 1; justify-content: center; }
+  }
 }
 
-// A way forward (23d): surface tile, the icon on top, the label at its foot.
+// A way forward: a 36px surface button, the icon, the name, the out arrow.
 .ubn-tile {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-height: 88px;
-  padding: 12px;
-  border-radius: var(--r-lg);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text);
   text-decoration: none;
   transition: background var(--t-fast) var(--ease);
 
-  b { margin-top: auto; @include v2.text(body-sm); font-weight: 700; }
+  b { @include v2.text(body-sm); font-weight: 700; white-space: nowrap; }
   &:hover { background: color-mix(in srgb, var(--text) 5%, var(--surface)); color: var(--text); }
   &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  .ubn-tile__out { position: absolute; top: 12px; right: 12px; color: var(--muted); }
+  .ubn-tile__out { color: var(--muted); }
 }

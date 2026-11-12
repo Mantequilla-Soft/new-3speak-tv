@@ -85,25 +85,26 @@ export default function UploadBlockNotice({ hidden = false, inline = false }) {
           <h2 className="ubn-title">{t('app.supportBlock.upload.title')}</h2>
           <p className="ubn-body">{t('app.uploadBlock.bannerBody')}</p>
         </div>
+        {/* The ways forward, compact on the head's right (owner 2026-11-12:
+            the 23d tiles took too much height); their own row on phones. */}
+        <div className="ubn-actions">
+          <a className="ubn-tile" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+            <Icon name="forum" size={18} />
+            <b>Discord</b>
+            <Icon name="open_in_new" size={14} className="ubn-tile__out" />
+          </a>
+          <a className="ubn-tile" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
+            <Icon name="send" size={18} />
+            <b>Telegram</b>
+            <Icon name="open_in_new" size={14} className="ubn-tile__out" />
+          </a>
+        </div>
       </div>
       {note && (
         <div className="ubn-note">
           <BlockNote note={note} />
         </div>
       )}
-      {/* 23d: the ways forward as tiles, icon on top and the label at the foot. */}
-      <div className="ubn-actions">
-        <a className="ubn-tile" href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
-          <Icon name="forum" size={24} />
-          <b>Discord</b>
-          <Icon name="open_in_new" size={16} className="ubn-tile__out" />
-        </a>
-        <a className="ubn-tile" href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
-          <Icon name="send" size={24} />
-          <b>Telegram</b>
-          <Icon name="open_in_new" size={16} className="ubn-tile__out" />
-        </a>
-      </div>
     </section>
   );
 }
