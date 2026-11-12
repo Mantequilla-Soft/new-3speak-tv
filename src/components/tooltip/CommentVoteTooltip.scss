@@ -184,35 +184,9 @@
 }
 
 /* The video vote (17b): a side sheet from the right on a wide screen (a bottom
-   sheet on a phone), the video as a card on top, a 64px weight, 48px presets,
-   the voting power in a well above the button. */
-.cvt-post {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px;
-  border-radius: var(--r-xl);
-  background: var(--bg);
-  border: 1px solid var(--border);
-  flex: none;
-
-  &__thumb {
-    width: 88px;
-    aspect-ratio: 16 / 9;
-    border-radius: var(--r-md);
-    overflow: hidden;
-    flex: none;
-    @include v2.thumb-placeholder(6px);
-    img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  }
-  &__text {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    b { @include v2.text(body); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    span { @include v2.text(meta); color: var(--muted); }
-  }
-}
+   sheet on a phone), a 64px weight, 48px presets, the voting power in a well
+   above the button. No card of the video on top (owner 2026-11-12: it made
+   phones scroll to reach Vote). */
 
 .cvt-vp {
   display: flex;

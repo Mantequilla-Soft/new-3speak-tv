@@ -14,7 +14,6 @@ import { getVideoTagsV2, getCachedTagsV2, getTagLabel, getCategoryOf } from '../
 import { getSavedVoteWeight, saveVoteWeight } from '../../utils/voteWeight';
 import TagsV2Picker from './TagsV2Picker';
 import ModalHeader from '../ModalHeader/ModalHeader';
-import { useRewardDisplay } from '../../utils/hivePrice';
 
 // Every toast from this module is headed "Vote"; the message becomes the
 // line under it. See utils/toast.js.
@@ -74,7 +73,6 @@ const CommentVoteTooltip = ({
   post = null,
 }) => {
   const { t } = useTranslation();
-  const { label: moneyLabel } = useRewardDisplay();
   const presets = post ? POST_PRESETS : PRESETS;
   const doc = usePortalDoc();
   const { user, authenticated } = useAppStore();
@@ -545,15 +543,8 @@ const CommentVoteTooltip = ({
               onClose={isLoading ? undefined : close}
             />
 
-            {post && (
-              <div className="cvt-post">
-                <span className="cvt-post__thumb">{post.thumbnail && <img src={post.thumbnail} alt="" loading="lazy" />}</span>
-                <span className="cvt-post__text">
-                  <b>{post.title}</b>
-                  <span>{t('engagement.vote.postSoFar', { value: moneyLabel(post.payout || 0), count: post.votes || 0 })}</span>
-                </span>
-              </div>
-            )}
+            {/* No card of the video here any more (owner 2026-11-12): it pushed the
+                Vote button below the fold of a phone's sheet, so voting took a scroll. */}
 
             {tagOnlyMode ? (
               // ── Payout window closed: no voting, tag-only (one-shot) ──
