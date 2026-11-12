@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.6',
+    category: 'audio',
+    date: '2026-11-12',
+    summary: 'The track that is playing now shows in the queue, and the player closes when the queue is empty.',
+  },
+  {
+    version: '2.0.5',
+    category: 'audio',
+    date: '2026-11-12',
+    summary: 'On phones, swipe the audio player left or right to jump 15 seconds, up to open it and down to close it; in the open player, swipe down to make it small again.',
+  },
+  {
     version: '2.0.4',
     category: 'general',
     date: '2026-11-12',
