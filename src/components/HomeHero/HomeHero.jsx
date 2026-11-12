@@ -7,6 +7,7 @@ import HiveAvatar from "../HiveAvatar/HiveAvatar";
 import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import ShareChooserModal from "../Chat/ShareChooserModal";
 import { fixVideoThumbnail } from "../../utils/fixThumbnails";
+import brandMark from "../../assets/image/3S_mark.svg";
 import { watchPath } from "../../utils/urls";
 import { getPostDetails } from "../../hive-api/hiveApi";
 import { getFollowers } from "../../hive-api/api";
@@ -109,6 +110,24 @@ const clock = (sec) => {
  * tab is hidden. While they
  * are on their way (`pending`) the hero holds its space with the placeholder.
  */
+// Emoji in the title at 0.8em (HomeHero.scss): a full-size emoji on a hidden
+// third line pokes its top over the clamp, which leaves room for descenders.
+const EMOJI = /(\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*)/u;
+const withSmallEmoji = (text) => String(text || "").split(EMOJI).map((part, i) => (
+  i % 2 ? <span key={i} className="home-hero__emoji">{part}</span> : part
+));
+
+// The 3Speak card (the look of the cards' thumbnail fallback, drawn sharp):
+// the mark and the spaced wordmark on the logo's blue.
+function BrandCard() {
+  return (
+    <div className="home-hero__fallback">
+      <img src={brandMark} alt="" />
+      <span>3SPEAK</span>
+    </div>
+  );
+}
+
 export default function HomeHero({ videos = [], pending = false }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -331,7 +350,9 @@ export default function HomeHero({ videos = [], pending = false }) {
   if (!video) {
     return (
       <section className="home-hero is-pending" aria-busy="true">
-        <div className="home-hero__bg" aria-hidden="true" />
+        <div className="home-hero__bg" aria-hidden="true">
+          <BrandCard />
+        </div>
         <div className="home-hero__body">
           <span className="home-hero__ph is-chip" />
           <span className="home-hero__ph is-title" />
@@ -367,6 +388,9 @@ export default function HomeHero({ videos = [], pending = false }) {
       onTouchEnd={onTouchEnd}
     >
       <div className="home-hero__bg" aria-hidden="true">
+        {/* Under everything: the 3Speak card (the cards' thumbnail fallback)
+            until the first picture or video covers it (owner 2026-11-12). */}
+        <BrandCard />
         {showPicture && bg.prev && bg.prev !== thumb && <img key={bg.prev} className="is-prev" src={bg.prev} alt="" decoding="async" />}
         {showPicture && thumb && <img key={thumb} className="is-cur" src={thumb} alt="" decoding="async" fetchPriority="high" />}
         {previewOn && [elA, elB].map((ref, i) => (
@@ -398,7 +422,7 @@ export default function HomeHero({ videos = [], pending = false }) {
         </Chip>
 
         <h2 className="home-hero__title">
-          <Link to={href}>{video.title}</Link>
+          <Link to={href}>{withSmallEmoji(video.title)}</Link>
         </h2>
 
         <div className="home-hero__creator">

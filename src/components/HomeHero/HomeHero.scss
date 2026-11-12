@@ -55,6 +55,43 @@
     transform: scale(1.04);
   }
 
+  // The 3Speak card under it all while the first slide loads (owner
+  // 2026-11-12): the mark and the wordmark on the logo's blue, in the open
+  // right side on desktop, centred on phones. Sharp, it is a logo.
+  .home-hero__fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding-left: min(40vw, 640px);
+    background: var(--brand-indigo);
+    color: var(--on-media);
+
+    img {
+      position: static;
+      width: auto;
+      height: 96px;
+      filter: none;
+      transform: none;
+    }
+
+    span {
+      font-size: 44px;
+      font-weight: 500;
+      letter-spacing: .45em;
+      line-height: 1;
+    }
+
+    @include v2.mobile {
+      padding-left: 0;
+      gap: 14px;
+      img { height: 44px; }
+      span { font-size: 20px; }
+    }
+  }
+
   // The muted previews (HomeHero HERO_PREVIEW): two that take turns, under the
   // wash. The one in front fades in on its first frame over the last one; a
   // slight blur, as the streams are small for this width.
@@ -183,6 +220,10 @@
   text-wrap: balance;
 
   a { color: inherit; text-decoration: none; &:hover { color: inherit; } }
+
+  // Emoji glyphs stand taller than the letters; at 0.8em one on a hidden third
+  // line stays under the clamp (HomeHero withSmallEmoji).
+  .home-hero__emoji { font-size: .8em; }
 
   @include v2.below-wide { font-size: 56px; }
   @include v2.mobile {
