@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.1',
+    category: 'home',
+    date: '2026-11-12',
+    summary: 'The home page loads much faster, on phones most of all: icons, video players, dialogs and the emoji picker now load only when they are needed, and the Spotlight starts fetching its videos right away.',
+  },
+  {
     version: '2.0.0',
     category: 'general',
     date: '2026-11-12',

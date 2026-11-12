@@ -21,6 +21,41 @@
     <link rel="dns-prefetch" href="https://checker.3speak.tv" />
     <link rel="dns-prefetch" href="https://images.hive.blog" />
 
+    <!-- The home page's Spotlight (the big video at the top) needs the newest
+         videos, and could only ask for them once the app's JavaScript had
+         loaded. Ask now instead, in parallel with that download; the app picks
+         the answers up from window.__early (src/lib/earlyFetch.js,
+         src/lib/featuredPages.js). Home page only. 🚨 Same URL as fetchFeatured
+         in src/page/HomeGrouped.jsx: keep the two in step. Any failure here
+         just means the app asks itself, as before. -->
+    <script>
+      (function () {
+        try {
+          if (location.pathname !== '/') return;
+          var host = '%VITE_CHECKER_URL%';
+          if (!/^https?:\/\//.test(host)) host = 'https://checker.3speak.tv';
+          host = host.replace(/\/+$/, '');
+          // The fastest checker this browser measured (src/utils/checkerHost.js).
+          try {
+            var c = JSON.parse(localStorage.getItem('checker-host.v2') || 'null');
+            if (c && c.ranking && /^https:\/\//.test(c.ranking[0]) && Date.now() - c.at < 6 * 3600 * 1000) host = c.ranking[0];
+          } catch (e) { /* storage off */ }
+          var nsfw = false;
+          try { nsfw = !!JSON.parse(localStorage.getItem('user-store') || 'null').state.showNsfw; } catch (e) { /* none saved */ }
+          var early = window.__early = window.__early || {};
+          [1, 2].forEach(function (page) {
+            var url = host + '/feeds/trendingSorted?page=' + page + '&limit=100&chrono=1' + (nsfw ? '&nsfw=true' : '');
+            var p = fetch(url, { credentials: 'omit' }).then(function (r) {
+              if (!r.ok) throw new Error('HTTP ' + r.status);
+              return r.json();
+            });
+            p.catch(function () {});
+            early['featured:' + page + ':' + (nsfw ? 1 : 0)] = p;
+          });
+        } catch (e) { /* the app fetches it itself */ }
+      })();
+    </script>
+
     <!-- Primary Meta Tags. The homepage's, for readers that run no JavaScript.
          Everything marked data-static-seo is removed by RouteTitle once the app
          has written the page's own (React does not merge <meta> tags, so both

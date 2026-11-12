@@ -1,6 +1,6 @@
 import { Icon } from '../v2/Icon';
 import { EmptyState } from '../v2/ui';
-import { useMemo, useState } from 'react';
+import { lazy, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
@@ -19,9 +19,12 @@ import { DownloadButton } from '../Podcasts/PodcastBits';
 import PayoutAmount from '../PayoutAmount/PayoutAmount';
 import CommentVoteTooltip from '../tooltip/CommentVoteTooltip';
 import BlogContent from '../playVideo/BlogContent';
-import TipModal from '../tip-reward/TipModal';
-import AddToPlaylistModal from '../AddToPlaylistModal/AddToPlaylistModal';
+import { LazyBoundary } from '../common/LazyMount';
 import '../Podcasts/PodcastsTab.scss';
+
+// Opened from a card's Tip / Save buttons only: not part of the first download.
+const TipModal = lazy(() => import('../tip-reward/TipModal'));
+const AddToPlaylistModal = lazy(() => import('../AddToPlaylistModal/AddToPlaylistModal'));
 
 /** The audio page's own link to one 3Speak audio: `/audio?play=<owner>/<id>`. */
 export const audioItemPath = (item) => `/audio?play=${item.owner}/${item.permlink}`;
@@ -247,23 +250,23 @@ export default function AudioItemView({ owner, id, onBack }) {
         />
       )}
       {tipping && (
-        <TipModal
+        <LazyBoundary name="tip"><TipModal
           recipient={item.owner}
           permlink={postPermlink}
           memoLink={`https://3speak.tv/audio/${item.owner}/${postPermlink}`}
           isOpen
           onClose={() => setTipping(false)}
-        />
+        /></LazyBoundary>
       )}
       {listing && (
-        <AddToPlaylistModal
+        <LazyBoundary name="add to playlist"><AddToPlaylistModal
           isOpen
           onClose={() => setListing(false)}
           author={item.owner}
           permlink={postPermlink || item.permlink}
           videoTitle={title}
           audioCategory={item.category || ''}
-        />
+        /></LazyBoundary>
       )}
     </div>
   );

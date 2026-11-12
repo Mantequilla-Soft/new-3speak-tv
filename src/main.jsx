@@ -67,7 +67,8 @@ import { resumePendingSupports } from './lib/supports';
 // The v2 design system (tokens, base, .v2-* primitives) loads first; every
 // other stylesheet builds on it. See src/styles/design-system.scss.
 import './styles/design-system.scss';
-import 'material-symbols/rounded.css';
+// Icon font, subset to the icons we use (4.5 MB -> ~110 KB). See the file.
+import './styles/material-symbols.css';
 import './index.css';
 import store from '../src/redux/Store'; // Importing the Redux store (replace with your store file path)
 import { ToastContainer } from 'react-toastify';

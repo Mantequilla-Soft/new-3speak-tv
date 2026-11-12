@@ -1,7 +1,7 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { usePortalDoc } from '../utils/portalDocument';
-import { emojiSuggestions, convertClosedShortcode, insertPickedEmoji } from '../lib/emojiShortcodes';
+import { emojiSuggestions, convertClosedShortcode, insertPickedEmoji, loadEmojiData, emojiDataReady } from '../lib/emojiShortcodes';
 import './useEmojiShortcodes.scss';
 
 const GAP = 6;
@@ -36,9 +36,28 @@ export default function useEmojiShortcodes(ref, value, setValue) {
     });
   }, [ref]);
 
+  // The emoji names load on demand (lib/emojiShortcodes.js): fetch them when the
+  // box gets focus, so they are here before the first ":" is typed.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || emojiDataReady()) return undefined;
+    const go = () => { loadEmojiData().catch(() => {}); };
+    el.addEventListener('focus', go, { once: true });
+    return () => el.removeEventListener('focus', go);
+  }, [ref]);
+
   const change = useCallback((e) => {
     const val = e.target.value;
     const cursor = e.target.selectionStart ?? val.length;
+    if (!emojiDataReady()) {
+      // Typed before the names arrived: show the list for what is in the box then.
+      loadEmojiData().then(() => {
+        const el = ref.current;
+        if (!el) return;
+        const items = emojiSuggestions(el.value, el.selectionStart ?? el.value.length);
+        setTa(items ? { items, index: 0 } : null);
+      }).catch(() => {});
+    }
     const converted = convertClosedShortcode(val, cursor);
     if (converted) {
       setTa(null);
@@ -48,7 +67,7 @@ export default function useEmojiShortcodes(ref, value, setValue) {
     const items = emojiSuggestions(val, cursor);
     setTa(items ? { items, index: 0 } : null);
     return val;
-  }, [placeCaret]);
+  }, [placeCaret, ref]);
 
   const pick = useCallback((emoji) => {
     const el = ref.current;

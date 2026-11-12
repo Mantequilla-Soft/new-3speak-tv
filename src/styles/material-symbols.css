@@ -1,0 +1,38 @@
+/*
+ * Material Symbols Rounded, SUBSET to the icons the app uses (replaces
+ * `material-symbols/rounded.css`, whose full font is 4.5 MB and held back
+ * the first paint of every page; this one is ~110 KB).
+ *
+ * Rebuild after adding an icon: npm run icons:subset (scripts/icons/subset.py).
+ * tests/unit/iconFontSubset.test.js fails while a used icon is missing.
+ * Kept axes: FILL 0..1, wght 400..700. GRAD is pinned to 0 and opsz to 24.
+ *
+ * `block` on purpose: with `swap` the icon names would flash as plain words.
+ * The font is preloaded from index.html (vite.config.js, preloadIconFont), so
+ * the block period is short.
+ */
+@font-face {
+  font-family: "Material Symbols Rounded";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: block;
+  src: url("./fonts/material-symbols-rounded-subset.woff2") format("woff2");
+}
+
+.material-symbols-rounded {
+  font-family: "Material Symbols Rounded";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "liga";
+}

@@ -319,6 +319,9 @@ describe('hovering a card on desktop', () => {
     const r = render(<Grid />)
     act(() => preview.startPreview('badadib/b', 'Swapped'))
     expect(overlay(r).classList.contains('active')).toBe(true)
+    // The player kit loads on demand (first preview on the page): no hover
+    // delay, just the import resolving.
+    await advance(0)
     expect(player.load).toHaveBeenCalledWith('badadib/b')
     expect(subs.prefetch).toHaveBeenCalledWith('badadib', 'b')
     act(() => preview.startPreview('badadib/missing'))

@@ -142,7 +142,8 @@ describe('the top bar for a visitor', () => {
   it('a click on the gear opens the settings window', async () => {
     const { user } = mount()
     await user.click(document.querySelector('.nav-settings-btn'))
-    expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
+    // Settings loads on first open (code-split), so wait for it.
+    expect(await screen.findByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Close settings' }))
     expect(screen.queryByRole('dialog', { name: 'Settings' })).not.toBeInTheDocument()
   })

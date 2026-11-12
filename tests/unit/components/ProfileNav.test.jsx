@@ -131,7 +131,8 @@ describe('the account menu', () => {
   it('Settings opens the settings window', async () => {
     const { user, onclose } = mount()
     await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
-    expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
+    // Settings loads on first open (code-split), so wait for it.
+    expect(await screen.findByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
     expect(onclose).toHaveBeenCalled()
   })
 

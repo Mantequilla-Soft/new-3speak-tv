@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, useEffect, useRef, useState } from 'react'
 import "./ProfileNav.scss"
 import useWarmupProgress, { warmupFigures } from '../../hooks/useWarmupProgress';
 import { useAppStore } from '../../lib/store';
@@ -13,7 +13,7 @@ import { getVotePower } from '../../utils/hiveUtils';
 import { getHiveUrl, ensureHealthyNode } from '../../utils/hiveNode';
 import { adsEnabledFor, VIDEO_IMPORT_ENABLED } from '../../utils/config';
 import useCanImportVideos from '../../hooks/useCanImportVideos';
-import SettingsModal from '../SettingsModal/SettingsModal';
+import MountWhenOpened from '../common/LazyMount';
 import { useAvatarUrl } from '../../utils/avatarCache';
 import { fetchBackfillSummary } from '../../lib/incubation';
 import { fetchMyInviteLinks } from '../../lib/referralLinks';
@@ -21,6 +21,9 @@ import LeaderboardBadges from '../LeaderboardBadges/LeaderboardBadges';
 import { usePwaInstall } from '../../utils/pwaInstall';
 import { toastIn } from '../../utils/toast';
 import { isTranslatorName } from '../../lib/translatorApi';
+
+// Opened from the menu's Settings row: not part of the first download.
+const SettingsModal = lazy(() => import('../SettingsModal/SettingsModal'));
 
 // Headed "Install", the same as the bottom bar's install hint.
 const installToast = toastIn('Install');
@@ -396,7 +399,7 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
 
       {/* Portals to <body>, so it shows even though this container hides once the
           menu row that opened it closes the menu. */}
-      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <MountWhenOpened when={settingsOpen} name="settings"><SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} /></MountWhenOpened>
     </div>
   )
 }

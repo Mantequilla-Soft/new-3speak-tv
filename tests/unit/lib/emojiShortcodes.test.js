@@ -1,7 +1,23 @@
 // `:shortcode:` emoji typing (src/lib/emojiShortcodes.js), shared by the chat
 // composer and the comment boxes.
-import { describe, it, expect } from 'vitest'
-import { emojiSuggestions, convertClosedShortcode, insertPickedEmoji, POPULAR_EMOJIS } from '../../../src/lib/emojiShortcodes.js'
+import { describe, it, expect, beforeAll, vi } from 'vitest'
+import { emojiSuggestions, convertClosedShortcode, insertPickedEmoji, POPULAR_EMOJIS, loadEmojiData } from '../../../src/lib/emojiShortcodes.js'
+
+// The emoji names load on demand (kept out of the first page download).
+beforeAll(() => loadEmojiData())
+
+describe('before the emoji names have loaded', () => {
+  it('nothing is suggested or converted yet, and the load starts', async () => {
+    // A fresh copy of the module: no emoji data yet.
+    vi.resetModules()
+    const fresh = await import('../../../src/lib/emojiShortcodes.js')
+    expect(fresh.emojiDataReady()).toBe(false)
+    expect(fresh.emojiSuggestions('nice :', 6)).toBe(null)
+    expect(fresh.convertClosedShortcode(':fire:', 6)).toBe(null)
+    await fresh.loadEmojiData()
+    expect(fresh.emojiSuggestions('nice :', 6)).toBe(fresh.POPULAR_EMOJIS)
+  })
+})
 
 describe('emojiSuggestions', () => {
   it('a bare ":" offers the popular ones', () => {

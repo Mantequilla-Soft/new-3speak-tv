@@ -10,6 +10,8 @@
     "preview": "vite preview",
     "i18n:check": "node scripts/i18n/check.mjs",
     "i18n:translate": "node scripts/i18n/translate.mjs",
+    "icons:subset": "python3 scripts/icons/subset.py",
+    "icons:check": "node scripts/icons/scan.mjs --check",
     "test": "vitest run",
     "test:unit": "vitest run tests/unit",
     "test:server": "vitest run tests/server",

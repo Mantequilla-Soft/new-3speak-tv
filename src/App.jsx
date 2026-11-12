@@ -1,6 +1,6 @@
 import { Route, Routes, useLocation, useNavigate, useParams, useSearchParams, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { useRef, Suspense } from "react";
+import { useRef, Suspense, lazy } from "react";
 import "./App.css";
 // import Home from './page/Home'
 // import Treanding from './page/Treanding'
@@ -20,7 +20,6 @@ import ReviewFab from "./components/ReviewModal/ReviewFab";
 import { useEffect } from "react";
 import { readAppVersion } from "./utils/appVersion";
 import { captureReferralFromUrl } from "./utils/referral";
-import ChangelogModal from "./components/Changelog/ChangelogModal";
 import AnnouncementModal from "./components/Announcement/AnnouncementModal";
 import EmbedCodeHost from "./components/Embed/EmbedCodeModal";
 import ProfileNav from "./components/nav/ProfileNav";
@@ -36,7 +35,6 @@ import { fetchPlaySource } from "./lib/videoData";
 import { useQueryClient } from "@tanstack/react-query";
 import RouteTitle from "./components/RouteTitle";
 import OpenShortsOnStart from "./components/OpenShortsOnStart";
-import AddAccount_modal from "./components/modal/AddAccount_modal";
 // import TestingLogin from "./page/Login/TestingLogin";
 import { Toaster } from 'sonner';
 import { toastIn } from './utils/toast';
@@ -176,22 +174,13 @@ import InterestsPrompt from "./components/InterestsPrompt/InterestsPrompt";
 import WelcomePrompt from "./components/WelcomePrompt/WelcomePrompt";
 import AdsPrompt from "./components/AdsPrompt/AdsPrompt";
 import ViewerRewardsPrompt from "./components/AdsPrompt/ViewerRewardsPrompt";
-import GraduationPrompt from "./components/Incubation/GraduationPrompt";
-import BacklogPrompt from "./components/Incubation/BacklogPrompt";
 import GraduatedFollowsPrompt from "./components/Incubation/GraduatedFollowsPrompt";
-import IncubationWelcome from "./components/Incubation/IncubationWelcome";
-import IncubationTips from "./components/Incubation/IncubationTips";
-import HandleTakenPrompt from "./components/Incubation/HandleTakenPrompt";
 import IncubationSessionSync from "./components/Incubation/IncubationSessionSync";
 import AvatarSync from "./components/HiveAvatar/AvatarSync";
-import EditorModal from "./components/modal/EditorModal";
 import { useEditorLauncher } from "./hooks/useEditorLauncher";
 import { FEATURE_EDITOR, VIDEO_IMPORT_ENABLED } from "./utils/config";
 import BottomNav from "./components/BottomNav/BottomNav";
-import MiniPlayer from "./components/MiniPlayer/MiniPlayer";
-import GlobalAudioPlayer from "./components/GlobalAudioPlayer/GlobalAudioPlayer";
 import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
-import AudioUploadModal from "./components/AudioUploadModal/AudioUploadModal";
 import { KeyTypes, Providers } from "@aioha/aioha";
 import '@aioha/react-ui/dist/build.css';
 import { LOCAL_STORAGE_USER_ID_KEY } from "./hooks/localStorageKeys";
@@ -199,6 +188,24 @@ import { endWalletSession } from "./hive-api/aioha";
 import { rememberButrauthAccount } from "./utils/butrauthAccounts";
 import useCardSize from "./hooks/useCardSize";
 import useHoverPeek from "./hooks/useHoverPeek";
+import MountWhenOpened, { LazyBoundary } from "./components/common/LazyMount";
+
+// Kept out of the first download so the home page draws as early as it can.
+// Dialogs load when first opened (MountWhenOpened); the rest are always on the
+// page but only matter a moment later (the audio player's bar, the popups that
+// decide for themselves whether to show), so they load right after the first
+// paint (LazyBoundary). See components/common/LazyMount.jsx.
+const MiniPlayer = lazy(() => import("./components/MiniPlayer/MiniPlayer"));
+const GlobalAudioPlayer = lazy(() => import("./components/GlobalAudioPlayer/GlobalAudioPlayer"));
+const AudioUploadModal = lazy(() => import("./components/AudioUploadModal/AudioUploadModal"));
+const AddAccount_modal = lazy(() => import("./components/modal/AddAccount_modal"));
+const EditorModal = lazy(() => import("./components/modal/EditorModal"));
+const ChangelogModal = lazy(() => import("./components/Changelog/ChangelogModal"));
+const GraduationPrompt = lazy(() => import("./components/Incubation/GraduationPrompt"));
+const BacklogPrompt = lazy(() => import("./components/Incubation/BacklogPrompt"));
+const IncubationWelcome = lazy(() => import("./components/Incubation/IncubationWelcome"));
+const IncubationTips = lazy(() => import("./components/Incubation/IncubationTips"));
+const HandleTakenPrompt = lazy(() => import("./components/Incubation/HandleTakenPrompt"));
 
 // Every toast from this module is headed "Sign in"; the message becomes the
 // line under it. See utils/toast.js.
@@ -337,6 +344,7 @@ function App() {
   // The global editor popup: the shorts editor or, in audio mode, the audio
   // editor, with the file it opens with (hooks/useEditorLauncher.js)
   const editor = useEditorLauncher();
+  const miniPlayerOn = useAppStore((s) => Boolean(s.miniPlayer));
   const [audioUploadOpen, setAudioUploadOpen] = useState(false);
   // Carries an in-flight blob handed off from another flow (e.g. an
   // OpenPods recording stop). The AudioUploadModal seeds it as the
@@ -776,7 +784,7 @@ function App() {
         }}
         toastOptions={{ classNames: TOAST_CLASSNAMES }}
       />
-      <ChangelogModal />
+      <LazyBoundary name="changelog"><ChangelogModal /></LazyBoundary>
       <AnnouncementModal />
       <EmbedCodeHost />
       <SupportModal />
@@ -926,16 +934,18 @@ function App() {
         {!hideNavOnMobile && (
           <ProfileNav isVisible={profileMenu.rendered} pinned={profileMenu.open} leaving={profileMenu.leaving} hoverProps={profileMenu.hoverProps} onclose={profileMenu.close} toggleAddAccount={toggleAddAccount} openLoginModal={openLoginModal} />
         )}
-        <MiniPlayer />
-        <GlobalAudioPlayer />
+        <MountWhenOpened when={miniPlayerOn} name="mini player"><MiniPlayer /></MountWhenOpened>
+        <LazyBoundary name="audio player"><GlobalAudioPlayer /></LazyBoundary>
         <OfflineBanner />
-        <AudioUploadModal
-          isOpen={audioUploadOpen}
-          onClose={() => { setAudioUploadOpen(false); setPendingAudioTrack(null); }}
-          initialTrack={pendingAudioTrack}
-        />
+        <MountWhenOpened when={audioUploadOpen} name="audio upload">
+          <AudioUploadModal
+            isOpen={audioUploadOpen}
+            onClose={() => { setAudioUploadOpen(false); setPendingAudioTrack(null); }}
+            initialTrack={pendingAudioTrack}
+          />
+        </MountWhenOpened>
         {!hideNavOnMobile && <BottomNav openLoginModal={openLoginModal} onOpenProfileMenu={toggleProfileNav} profileMenuOpen={profileNavVisible} />}
-        {toggle && <AddAccount_modal close={toggleAddAccount} isOpen={toggle} /> }
+        {toggle && <LazyBoundary name="add account"><AddAccount_modal close={toggleAddAccount} isOpen={toggle} /></LazyBoundary>}
         {/* After a 3speak.tv/invite/<code> link: "@alice invited you" over
             the home page. The code stays for any later sign-up. */}
         <InvitePopup openLoginModal={openLoginModal} />
@@ -961,19 +971,19 @@ function App() {
         {/* Offers an incubating user their own Hive account once BOTH
             butrauth (may they) and our own signal (have they earned it)
             agree. Shares the one-prompt-at-a-time gate with the others. */}
-        <GraduationPrompt />
+        <LazyBoundary name="graduation prompt"><GraduationPrompt /></LazyBoundary>
         {/* The other side of the same journey: once they HAVE an account,
             tell them the things they made earlier are still here. */}
-        <BacklogPrompt />
+        <LazyBoundary name="backlog prompt"><BacklogPrompt /></LazyBoundary>
         {/* Speaks through a toast, so it never competes for the modal slot. */}
         <GraduatedFollowsPrompt />
         {/* Both render nothing for anyone who already has a Hive account. */}
-        <IncubationWelcome />
-        <IncubationTips />
+        <LazyBoundary name="incubation welcome"><IncubationWelcome /></LazyBoundary>
+        <LazyBoundary name="incubation tips"><IncubationTips /></LazyBoundary>
         {/* Last of the incubation prompts, and the only one about something
             being lost rather than gained: it holds the others back while it is
             up (see its setPromptActive). */}
-        <HandleTakenPrompt />
+        <LazyBoundary name="handle taken prompt"><HandleTakenPrompt /></LazyBoundary>
         {/* Before the prompts have anything to say: if this device is
             behind and the account already exists, none of them apply. */}
         <IncubationSessionSync />
@@ -982,14 +992,16 @@ function App() {
         <ChatOverlay />
         <ChatAutoOpen />
         {FEATURE_EDITOR && (
-          <EditorModal
-            isOpen={editor.open}
-            onClose={editor.close}
-            mode={editor.mode}
-            videoFile={editor.mode === 'video' ? editor.file : null}
-            audioFile={editor.mode === 'audio' ? editor.file : null}
-            audioTrackId={editor.audioTrackId}
-          />
+          <MountWhenOpened when={editor.open} name="editor">
+            <EditorModal
+              isOpen={editor.open}
+              onClose={editor.close}
+              mode={editor.mode}
+              videoFile={editor.mode === 'video' ? editor.file : null}
+              audioFile={editor.mode === 'audio' ? editor.file : null}
+              audioTrackId={editor.audioTrackId}
+            />
+          </MountWhenOpened>
         )}
       </div>
     </div>

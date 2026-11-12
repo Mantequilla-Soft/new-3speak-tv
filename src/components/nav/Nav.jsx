@@ -4,7 +4,7 @@ import "./nav.scss";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../lib/store";
-import { useEffect, useRef, useState } from "react";
+import { lazy, useEffect, useRef, useState } from "react";
 import NavSearch from "./NavSearch";
 import { Icon } from "../v2/Icon";
 import { OPEN_CREATE_EVENT, useNavTabsOpen } from "./navTabsPref";
@@ -19,11 +19,14 @@ import NotificationBell from "./NotificationBell";
 import { hideToastLayer, showToastLayer } from "../../utils/toast";
 import ChatButton from "../Chat/ChatButton";
 import PremiumBadge from "../PremiumBadge/PremiumBadge";
-import SettingsModal from "../SettingsModal/SettingsModal";
+import MountWhenOpened, { LazyBoundary } from "../common/LazyMount";
 import { ENABLE_BUTRAUTH } from "../../utils/config";
 import { useAvatarUrl } from "../../utils/avatarCache";
 import { isRememberedAdvertiser, rememberAdvertiserAccount, hasAdvertiserProduct } from "../../utils/advertiserAccount";
 import { isWatchPath } from '../../utils/urls';
+
+// Opened from the gear (click or hover peek): not part of the first download.
+const SettingsModal = lazy(() => import("../SettingsModal/SettingsModal"));
 
 /**
  * "Advertise", left of Share, for advertiser accounts only: one that graduated from
@@ -434,16 +437,18 @@ function Nav({ toggleProfileNav, profileMenuHover, openLoginModal }) {
         )}
       </div>
 
-      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <MountWhenOpened when={settingsOpen} name="settings"><SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} /></MountWhenOpened>
       {!settingsOpen && settingsPeek.rendered && settingsRect && (
-        <SettingsModal
-          isOpen
-          dropdown={{ rect: settingsRect, held: settingsPeek.open }}
-          leaving={settingsPeek.leaving}
-          hoverProps={settingsPeek.hoverProps}
-          typingProps={settingsPeek.typingProps}
-          onClose={settingsPeek.close}
-        />
+        <LazyBoundary name="settings">
+          <SettingsModal
+            isOpen
+            dropdown={{ rect: settingsRect, held: settingsPeek.open }}
+            leaving={settingsPeek.leaving}
+            hoverProps={settingsPeek.hoverProps}
+            typingProps={settingsPeek.typingProps}
+            onClose={settingsPeek.close}
+          />
+        </LazyBoundary>
       )}
     </nav>
   );

@@ -40,6 +40,7 @@ import { useTranslation } from "react-i18next";
 import useCardSize from "../hooks/useCardSize";
 import HomeHero from "../components/HomeHero/HomeHero";
 import HomeActivity from "../components/HomeActivity/HomeActivity";
+import { fetchFeaturedPages } from "../lib/featuredPages";
 
 // Extra feed params for the logged-in user: interests (checker weights the feed
 // toward them), currentuser (needed for BOTH the always-on dismissals and
@@ -114,17 +115,21 @@ const fetchFeatured = async (viewer, hideAi) => {
   const since = Date.now() - FEATURED_WINDOW_MS;
   const createdAt = (v) => new Date(v.created || v.created_at).getTime();
   const rewardOf = (v) => Number(v.stats?.total_hive_reward || 0);
-  // Newest first, until a page reaches back past the window (one is usually 60h+)
-  const all = [];
-  for (let page = 1; page <= FEATURED_MAX_PAGES; page++) {
-    const res = await axios.get(appendNsfw(
+  // Newest first, until a page reaches back past the window. Pages 1 and 2 at
+  // once, page 1 usually already asked for by index.html (lib/featuredPages.js).
+  // 🚨 index.html's early script builds the same URL: keep both in step.
+  const showNsfw = useAppStore.getState().showNsfw;
+  const all = await fetchFeaturedPages({
+    getPage: (page) => axios.get(appendNsfw(
       `${TRENDING_SORTED_URL}?page=${page}&limit=${FEATURED_PAGE}&chrono=1`,
-      useAppStore.getState().showNsfw,
-    ));
-    const vids = res.data?.videos || [];
-    all.push(...vids);
-    if (vids.length < FEATURED_PAGE || createdAt(vids[vids.length - 1]) < since) break;
-  }
+      showNsfw,
+    )).then((res) => res.data),
+    showNsfw,
+    since,
+    pageSize: FEATURED_PAGE,
+    maxPages: FEATURED_MAX_PAGES,
+    createdAt,
+  });
   const authorOf = (v) => v.author?.username || v.author || v.owner;
   // The watched lookup takes 50 at most, and a pool that deep is plenty.
   const recent = all

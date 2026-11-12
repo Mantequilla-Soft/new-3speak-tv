@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { lazy, useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppStore } from "../../lib/store";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../v2/Icon";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
-import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
-import ShareChooserModal from "../Chat/ShareChooserModal";
+import MountWhenOpened from "../common/LazyMount";
 import { fixVideoThumbnail } from "../../utils/fixThumbnails";
 import brandMark from "../../assets/image/3S_mark.svg";
 import brandLogo from "../../assets/image/3S_logo.svg";
@@ -14,11 +13,23 @@ import { watchPath } from "../../utils/urls";
 import { getPostDetails } from "../../hive-api/hiveApi";
 import { getFollowers } from "../../hive-api/api";
 import { formatNumber } from "../../i18n";
-import { Player, ThreeSpeakApi } from "@mantequilla-soft/3speak-player";
 import { holdForHero, releaseHero } from "../../lib/heroPriority";
 import { getPlayerUrl } from "../../utils/playerUrl";
-import { withGatewayFallback } from "../../lib/hlsGatewayFallback.js";
 import "./HomeHero.scss";
+
+// Opened from the hero's Save / Share buttons only: not part of the first download.
+const AddToPlaylistModal = lazy(() => import("../AddToPlaylistModal/AddToPlaylistModal"));
+const ShareChooserModal = lazy(() => import("../Chat/ShareChooserModal"));
+
+// The player SDK + hls.js (heroPlayerKit.js) load on demand: the slide's picture
+// is the first screen, the clip fades in over it once the kit is here. A kit that
+// fails to load (a deploy replaced the chunk) means pictures only, never a broken
+// page; the next page load tries again.
+let kitPromise = null;
+const loadKit = () => {
+  if (!kitPromise) kitPromise = import("./heroPlayerKit.js").catch((err) => { kitPromise = null; throw err; });
+  return kitPromise;
+};
 
 // The picture behind the hero is drawn full width, so it asks for a big crop.
 const HERO_SIZE = { w: 1280, h: 720 };
@@ -61,7 +72,10 @@ let heroApi = null;
 const resolveSource = async (ref) => {
   const hit = cachedSource(ref);
   if (hit) return hit;
-  if (!heroApi) heroApi = new ThreeSpeakApi(getPlayerUrl());
+  if (!heroApi) {
+    const { ThreeSpeakApi } = await loadKit();
+    heroApi = new ThreeSpeakApi(getPlayerUrl());
+  }
   const [author, permlink] = ref.split("/");
   const source = await heroApi.fetchSource(author, permlink);
   if (source?.url) storeSource(ref, source);
@@ -248,6 +262,16 @@ export default function HomeHero({ videos = [], pending = false }) {
   const nextSrcRef = useRef(nextSrc);
   useEffect(() => { nextSrcRef.current = nextSrc; }, [nextSrc]);
 
+  // The player kit, once loaded (see loadKit). Asked for as soon as clips are
+  // allowed; until it is here ensurePlayer returns null and the picture stays.
+  const [kit, setKit] = useState(null);
+  useEffect(() => {
+    if (!previewOn || kit) return undefined;
+    let live = true;
+    loadKit().then((k) => { if (live) setKit(k); }).catch(() => {});
+    return () => { live = false; };
+  }, [previewOn, kit]);
+
   const setSlotOn = useCallback((i, v) => setOnAir((o) => (o[i] === v ? o : (i ? [o[0], v] : [v, o[1]]))), []);
   const ensurePlayer = useCallback((i) => {
     // A player destroyed by an unmount (React's dev double-mount does exactly
@@ -255,7 +279,8 @@ export default function HomeHero({ videos = [], pending = false }) {
     // is replaced, never reused: a destroyed one silently loads nothing.
     if (players.current[i] && !players.current[i].destroyed) return players.current[i];
     const el = (i ? elB : elA).current;
-    if (!el) return null;
+    if (!el || !kit) return null;
+    const { Player, withGatewayFallback } = kit;
     const player = new Player({
       apiBase: getPlayerUrl(),
       muted: true,
@@ -289,7 +314,7 @@ export default function HomeHero({ videos = [], pending = false }) {
     });
     players.current[i] = player;
     return player;
-  }, [setSlotOn]);
+  }, [setSlotOn, kit]);
   const loadInto = useCallback((i, src, autoplay) => {
     const player = ensurePlayer(i);
     if (!player) return;
@@ -566,6 +591,7 @@ export default function HomeHero({ videos = [], pending = false }) {
         </div>
       )}
 
+      <MountWhenOpened when={saveOpen} name="add to playlist">
       <AddToPlaylistModal
         isOpen={saveOpen}
         onClose={() => setSaveOpen(false)}
@@ -574,6 +600,8 @@ export default function HomeHero({ videos = [], pending = false }) {
         videoTitle={video.title}
         thumbnail={thumb}
       />
+      </MountWhenOpened>
+      <MountWhenOpened when={shareOpen} name="share">
       <ShareChooserModal
         open={shareOpen}
         url={`${window.location.origin}/@${author}/${permlink}`}
@@ -587,6 +615,7 @@ export default function HomeHero({ videos = [], pending = false }) {
           else navigator.clipboard?.writeText(url).catch(() => {});
         }}
       />
+      </MountWhenOpened>
     </section>
   );
 }

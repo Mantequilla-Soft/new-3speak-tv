@@ -19,6 +19,8 @@ We are re-skinning `new-3speak-tv` to the v2 design. Behavior, routes, data and 
 - Labels sit flush left. Tabs are segmented tracks, never underlines. Dialogs become bottom sheets under 768px.
 - Never let a tab switch or loaded data change a panel's size. Give the panel a fixed height and scroll inside it.
 - Icons are Material Symbols Rounded via `src/components/v2/Icon.jsx`. Don't mix icon sets on a screen.
+- The icon font is a SUBSET of the icons we use (`src/styles/material-symbols.css`, 4.5 MB -> ~110 KB). Used a new icon? Run `npm run icons:subset` (Python fontTools) and commit the font + list; `tests/unit/iconFontSubset.test.js` fails until you do. A name built at runtime (`replay_${n}`) goes in `EXTRA_ICONS` in `scripts/icons/scan.mjs`.
+- First-load speed: dialogs, pickers and players are code-split (`components/common/LazyMount.jsx`: `MountWhenOpened` / `LazyBoundary`). Don't statically import a dialog, the emoji picker, the player SDK or hls.js into App, Nav or the home page again; use `React.lazy` with those helpers.
 - Both themes: `:root` is light and `[data-theme="dark"]` is dark. Check every screen in both.
 
 ## When something is not designed

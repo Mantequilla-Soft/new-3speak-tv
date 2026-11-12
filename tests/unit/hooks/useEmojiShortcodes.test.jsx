@@ -1,10 +1,14 @@
 // The ":" emoji list in comment boxes (src/hooks/useEmojiShortcodes.jsx), the
 // way the chat does it.
 // @vitest-environment jsdom
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest'
 import { createElement, act, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import useEmojiShortcodes from '../../../src/hooks/useEmojiShortcodes.jsx'
+import { loadEmojiData } from '../../../src/lib/emojiShortcodes.js'
+
+// The emoji names load on demand (kept out of the first page download).
+beforeAll(() => loadEmojiData())
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
 

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import EmojiPicker from 'emoji-picker-react'
+import EmojiPicker from '../common/LazyEmojiPicker'
 import { useAppStore } from '../../lib/store'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '../v2/Icon'

@@ -3,7 +3,6 @@ import { resolveSnapsContainer } from '../utils/snapsContainer';
 import { creatorKey, getCreatorSettings, isUploadBlocked } from '../utils/creatorSettings';
 import { useSupportBlock } from '../lib/supportBlockStore';
 import { useNavigate } from 'react-router-dom';
-import * as tus from 'tus-js-client';
 import { toastIn } from '../utils/toast';
 import { EMBED_UPLOAD_URL, EMBED_API_URL, EMBED_API_KEY, HIVE_API_URL, EMBED_DEBUG, CHECKER_API_KEY } from '../utils/config';
 import { uploadThumbnail } from '../utils/uploadThumbnail';
@@ -564,6 +563,9 @@ export function EmbedUploadProvider({ children }) {
   }, []);
 
   const runTusUpload = useCallback(async (generatedPermlink, uploadEndpoint = EMBED_UPLOAD_URL) => {
+    // The TUS client (~80 KB) is only fetched once someone really uploads, not
+    // with the first page every visitor loads.
+    const tus = await import('tus-js-client');
     // Clear stale TUS fingerprints — embed.3speak.tv can't resume, so a leftover
     // fingerprint causes "invalid or missing length value" errors.
     try {

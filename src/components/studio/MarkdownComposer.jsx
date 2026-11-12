@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Icon } from '../v2/Icon';
-import EmojiPicker from 'emoji-picker-react';
+import EmojiPicker from '../common/LazyEmojiPicker';
 import { uploadImageToHive } from '../Editor/uploadImageToHiv';
 import { toastIn } from '../../utils/toast';
 import './MarkdownComposer.scss';
