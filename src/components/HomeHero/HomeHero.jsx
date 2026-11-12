@@ -228,12 +228,6 @@ export default function HomeHero({ videos = [], pending = false }) {
   const [leaving, setLeaving] = useState(null);  // slot fading out over the new one
   const [onAir, setOnAir] = useState([false, false]);
   const [failed, setFailed] = useState(false);
-  // After a slide whose clip never played, the clip still on top belongs to
-  // an older slide: keep it hidden (the slide's picture shows) until the new
-  // clip is up.
-  const [topStale, setTopStale] = useState(false);
-  const failedRef = useRef(false);
-  useEffect(() => { failedRef.current = failed; }, [failed]);
   // The card goes over the clips once, for the first; after that it stays
   // under everything for good (coming back on top flashed it between slides).
   const [cardDone, setCardDone] = useState(false);
@@ -300,8 +294,9 @@ export default function HomeHero({ videos = [], pending = false }) {
   // there if it was buffered ahead), under the current one.
   useEffect(() => {
     if (!previewSrc) return undefined;
-    if (failedRef.current) setTopStale(true);
-    setFailed(false);
+    // `failed` is NOT reset here: after a slide that fell back to its picture,
+    // the clip on top is an old one; the new slide's picture stays until its
+    // own clip is ready (the reveal below clears it).
     let i = slotSrc.current.indexOf(previewSrc);
     if (i === -1 || (i === topRef.current && !onAirRef.current[i])) {
       i = topRef.current === null ? 0 : 1 - topRef.current;
@@ -310,8 +305,17 @@ export default function HomeHero({ videos = [], pending = false }) {
       players.current[i]?.play().catch(() => {});
     }
     setTarget(i);
-    // Not on screen after a while (no stream, blocked autoplay): the picture.
-    const giveUp = setTimeout(() => { if (!onAirRef.current[i]) setFailed(true); }, 6000);
+    // Not on screen after a while (no stream, a slow line): the slide's
+    // picture instead, but only once it has loaded; until then whatever is up
+    // stays up. A clip that comes later still comes in (below).
+    let tries = 0;
+    const check = () => {
+      if (onAirRef.current[i]) return;
+      const pic = document.querySelector(".home-hero__bg img.is-cur");
+      if (pic?.complete && pic.naturalWidth > 0) { setFailed(true); setCardDone(true); return; }
+      if (++tries < 30) giveUp = setTimeout(check, 1000);
+    };
+    let giveUp = setTimeout(check, 6000);
     return () => clearTimeout(giveUp);
   }, [previewSrc, loadInto]);
 
@@ -320,11 +324,12 @@ export default function HomeHero({ videos = [], pending = false }) {
   const targetOn = target !== null && onAir[target];
   useEffect(() => {
     if (!targetOn || target === top) return undefined;
-    if (top === null || topStale) { setTop(target); setTopStale(false); return undefined; }
+    setFailed(false);
+    if (top === null) { setTop(target); return undefined; }
     setLeaving(top);
     const t = setTimeout(() => { setTop(target); setLeaving(null); }, 850);
     return () => { clearTimeout(t); setLeaving(null); };
-  }, [targetOn, target, top, topStale]);
+  }, [targetOn, target, top]);
 
   useEffect(() => {
     if (top === null || cardDone) return undefined;
@@ -451,7 +456,7 @@ export default function HomeHero({ videos = [], pending = false }) {
         {/* The 3Speak card (the cards' thumbnail fallback) until the first
             picture or clip shows (owner 2026-11-12). With the preview on it
             sits over the clips and fades away when the first one is on top. */}
-        <BrandCard over={previewOn && !failed && !cardDone} gone={top !== null} />
+        <BrandCard over={previewOn && !cardDone && !(failed && top === null)} gone={top !== null} />
         {/* The slide's picture, always drawn: under the clips while the preview
             is on (seen only when a clip will not play, by then loaded). */}
         {bg.prev && bg.prev !== thumb && <img key={bg.prev} className="is-prev" src={bg.prev} alt="" decoding="async" />}
@@ -460,7 +465,7 @@ export default function HomeHero({ videos = [], pending = false }) {
           <video
             key={i}
             ref={ref}
-            className={`home-hero__video${top === i ? " is-top" : ""}${leaving === i || failed || (topStale && top === i) ? " is-off" : ""}`}
+            className={`home-hero__video${top === i ? " is-top" : ""}${leaving === i || (failed && target !== i) ? " is-off" : ""}`}
             muted
             playsInline
             preload="auto"
