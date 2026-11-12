@@ -175,7 +175,8 @@ export default function HomeActivity() {
 
   const tabs = [
     { key: "community", label: t("feeds.activity.community") },
-    { key: "live", label: live.length ? `${t("nav.tabs.live")} ${live.length}` : t("nav.tabs.live") },
+    // Someone is live: a red count beside the label (owner 2026-11-12).
+    { key: "live", label: t("nav.tabs.live"), count: live.length },
     { key: "groups", label: t("nav.bottom.groups") },
   ];
   const seeAll = tab === "live" ? "/live" : tab === "groups" ? "/groups" : null;
@@ -224,6 +225,8 @@ export default function HomeActivity() {
           <button key={x.key} type="button" role="tab" aria-selected={tab === x.key}
             className={cx("home-activity__tab", tab === x.key && "is-on")} onClick={() => setTab(x.key)}>
             {x.label}
+            {x.count > 0 && " "}
+            {x.count > 0 && <span className="home-activity__count">{x.count > 99 ? "99+" : x.count}</span>}
           </button>
         ))}
       </div>

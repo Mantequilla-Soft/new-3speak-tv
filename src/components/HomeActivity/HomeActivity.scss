@@ -25,6 +25,9 @@
 
 .home-activity__tab {
   flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   height: 32px;
   padding: 0 8px;
   border: 0;
@@ -40,6 +43,22 @@
 
   &:hover { color: var(--text); }
   &.is-on { background: var(--surface-2); color: var(--text); }
+}
+
+// How many streams are live: a small brand-red pill after "Live".
+.home-activity__count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
 }
 
 // Fixed height (never set by what is loaded); the rows scroll inside. The
