@@ -21,6 +21,7 @@ import LeaderboardBadges from '../LeaderboardBadges/LeaderboardBadges';
 import { usePwaInstall } from '../../utils/pwaInstall';
 import { toastIn } from '../../utils/toast';
 import { isTranslatorName } from '../../lib/translatorApi';
+import hiveMark from '../../assets/image/hive-mark.png';
 
 // Opened from the menu's Settings row: not part of the first download.
 const SettingsModal = lazy(() => import('../SettingsModal/SettingsModal'));
@@ -394,6 +395,12 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
               <span className="rpc-node-host">{rpcHost}</span>
             </div>
           </div>
+          {/* A plain, followed link to hive.io, as the Hive ecosystem asked
+              (issue #563): no nofollow / ugc / sponsored. */}
+          <a href="https://hive.io" className="pn-powered" target="_blank" rel="noopener">
+            <img src={hiveMark} alt="" width={16} height={14} />
+            {t('pages.about.hive.title')}
+          </a>
         </div>
       </div>
 

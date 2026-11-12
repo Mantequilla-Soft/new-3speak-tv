@@ -201,6 +201,7 @@
 
 /* Powered by Hive */
 .about-hive { gap: 12px; }
+.about-hive__link { align-self: flex-start; } // hive.io, a followed link (issue #563)
 
 .about-hive__logos {
   display: flex;

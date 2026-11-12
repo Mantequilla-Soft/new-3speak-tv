@@ -225,6 +225,9 @@ module.exports = function createPages(h) {
 </head>
 <body>
 ${body}
+  <footer>
+    <p><a href="https://hive.io" target="_blank" rel="noopener">Powered by Hive</a></p>
+  </footer>
 </body>
 </html>`;
   }

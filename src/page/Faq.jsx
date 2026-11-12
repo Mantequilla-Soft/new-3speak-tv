@@ -8,6 +8,7 @@ import { startWelcomeTour } from '../components/WelcomeTour/welcomeState';
 import { Button, Icon, IconButton } from '../components/v2/ui';
 import { cx } from '../components/v2/helpers';
 import './Faq.scss';
+import hiveMark from '../assets/image/hive-mark.png';
 
 const toast = toastIn('3Speak');
 
@@ -152,6 +153,11 @@ export default function Faq() {
             <span><Trans i18nKey="faq.more.text" components={TAGS} /></span>
           </p>
         </section>
+        {/* A plain, followed link to hive.io (issue #563). */}
+        <a href="https://hive.io" className="faq-powered" target="_blank" rel="noopener">
+          <img src={hiveMark} alt="" width={16} height={14} />
+          {t('pages.about.hive.title')}
+        </a>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { useAppStore } from '../../lib/store';
 import { Button, Icon } from '../v2/ui';
 import { cx } from '../v2/helpers';
 import './AboutPage.scss';
+import hiveMark from "../../assets/image/hive-mark.png";
 
 // The quotes are translated; the names stay as they are.
 const QUOTES = [
@@ -119,6 +120,10 @@ const AboutPage = () => {
             </li>
           ))}
         </ul>
+        {/* A plain, followed link to hive.io (issue #563). */}
+        <Button as="a" href="https://hive.io" target="_blank" rel="noopener" variant="secondary" size={44} icon={<img src={hiveMark} alt="" width={18} height={16} />} trailing="open_in_new" className="about-hive__link">
+          hive.io
+        </Button>
       </section>
 
       {/* Features */}

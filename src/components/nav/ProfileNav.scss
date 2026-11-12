@@ -406,6 +406,20 @@
   display: flex;
   gap: 6px;
 }
+// "Powered by Hive", a followed link to hive.io (issue #563): the quietest line
+// of the menu, centred under the socials and the node.
+.pn-powered {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  img { flex: none; display: block; }
+  align-self: center;
+  margin: 2px 14px 0;
+  @include v2.text(meta);
+  color: var(--muted);
+  text-decoration: none;
+  &:hover, &:focus-visible { color: var(--text); text-decoration: underline; }
+}
 .social-link {
   display: inline-grid;
   place-items: center;

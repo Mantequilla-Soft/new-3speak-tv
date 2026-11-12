@@ -241,6 +241,9 @@ ${faqSection}
   </section>
 
   <p>More: <a href="${escapeHtml(`${BASE_URL}/llms.txt`)}">llms.txt</a> · <a href="${escapeHtml(`${BASE_URL}/about`)}">About 3Speak</a> · <a href="${escapeHtml(`${BASE_URL}/`)}">3speak.tv</a></p>
+  <footer>
+    <p><a href="https://hive.io" target="_blank" rel="noopener">Powered by Hive</a></p>
+  </footer>
 </body>
 </html>`;
 }

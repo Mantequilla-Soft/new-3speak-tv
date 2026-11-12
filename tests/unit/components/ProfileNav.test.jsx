@@ -74,6 +74,14 @@ describe('the account menu', () => {
     expect(await screen.findByText('node.example')).toBeInTheDocument()
   })
 
+  // Issue #563: a followed "Powered by Hive" link to hive.io.
+  it('links to hive.io as "Powered by Hive", followed (no nofollow / ugc / sponsored)', () => {
+    mount()
+    const link = screen.getByRole('link', { name: 'Powered by Hive' })
+    expect(link).toHaveAttribute('href', 'https://hive.io')
+    expect(link.getAttribute('rel')).not.toMatch(/nofollow|ugc|sponsored/)
+  })
+
   it('lists the pages every member gets, as menu items', () => {
     const { menu } = mount()
     // The visible label only: the Material Symbols glyph is ligature text.

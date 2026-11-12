@@ -199,6 +199,19 @@
 }
 
 // "Still have a question?": accent wash, one line.
+// "Powered by Hive", a followed link to hive.io (issue #563), under the last card.
+.faq-powered {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  img { flex: none; display: block; }
+  align-self: center;
+  @include v2.text(meta);
+  color: var(--muted);
+  text-decoration: none;
+  &:hover, &:focus-visible { color: var(--text); text-decoration: underline; }
+}
+
 .faq-more {
   display: flex;
   gap: 10px;
