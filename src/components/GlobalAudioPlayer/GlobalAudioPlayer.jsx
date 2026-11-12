@@ -40,6 +40,7 @@ import useAudioComments from './useAudioComments';
 import { recordWatch } from '../../utils/watchHistory';
 import {
   fmt, SPEEDS, SPEED_KEY, normalizeSpeed, formatSpeed, SKIP_BACK, SKIP_FORWARD, skipTarget,
+  SWIPE_SKIP, barSwipe, fullSwipeCollapses,
   SLEEP_OPTIONS, startSleepTimer, sleepRemainingMs, sleepFadeFactor,
   chapterMarkers, chapterJumps, corsKnown, isHlsTrack,
   createSilenceDetector, skipRate, levelDb, savedMs, fmtSaved,
@@ -1123,10 +1124,12 @@ function GlobalAudioPlayer() {
     const el = audioRef.current;
     if (el && el.currentTime > 3 && !audioCurrent?.live) { el.currentTime = 0; return; }
     if (!audioCurrent) return;
-    const fromQueue = audioQueue.length > 0;
-    const list = fromQueue ? audioQueue : audioAutoplayList;
-    const i = list.findIndex(x => x._id === audioCurrent._id);
-    if (i > 0) audioPlay(list[i - 1], fromQueue ? undefined : audioAutoplayList);
+    // The queue holds the playing track too: go back in it when there is
+    // something before, else in the page's list.
+    const qi = audioQueue.findIndex(x => x._id === audioCurrent._id);
+    if (qi > 0) { audioPlay(audioQueue[qi - 1]); return; }
+    const i = audioAutoplayList.findIndex(x => x._id === audioCurrent._id);
+    if (i > 0) audioPlay(audioAutoplayList[i - 1], audioAutoplayList);
   }, [audioCurrent, audioQueue, audioAutoplayList, audioPlay]);
 
   // What the phone's media notification, lock screen, headphones and car show
@@ -1298,8 +1301,30 @@ function GlobalAudioPlayer() {
   const [commentsRefresh, setCommentsRefresh] = useState(0);
   const comments = useAudioComments(audioCurrent?.owner, audioCurrent?.post_permlink, showExpanded && !!audioCurrent?.post_permlink, commentsRefresh);
   const [reportOpen, setReportOpen] = useState(false);
-  // Where a touch on the bar started, for the swipe up that opens the player.
+  // Swipes on the phone player (playerMath barSwipe / fullSwipeCollapses): where
+  // a touch started, on the bar and on the full player.
   const swipeRef = useRef(null);
+  const fullSwipeRef = useRef(null);
+  // "−15 s" / "+15 s" shown on the bar for a moment after a sideways swipe.
+  const [swipeFlash, setSwipeFlash] = useState(null);
+  const flashTimer = useRef(null);
+  useEffect(() => () => clearTimeout(flashTimer.current), []);
+  // The queue always holds the playing track (the audio slice, queueWith), so
+  // a queue that runs empty (Clear, or its last item removed) means nothing is
+  // left to play: the player closes, on phones and desktops alike (owner
+  // 2026-11-12). Only on the change to empty, never on a first render.
+  // closePlayer is defined further down (after the idle bar's early return),
+  // hence the ref.
+  const closePlayerRef = useRef(null);
+  const queueLenRef = useRef(audioQueue.length);
+  useEffect(() => {
+    const before = queueLenRef.current;
+    queueLenRef.current = audioQueue.length;
+    if (before > 0 && audioQueue.length === 0 && audioCurrent) {
+      audioSetShowQueue(false);
+      closePlayerRef.current?.();
+    }
+  }, [audioQueue.length, audioCurrent, audioSetShowQueue]);
   // The full player's Repeat button (27a): the track starts over at its end.
   const [repeat, setRepeat] = useState(false);
   // A phone (< 768): the menus are bottom sheets of rows (27d).
@@ -1391,14 +1416,29 @@ function GlobalAudioPlayer() {
           <div className="audio-queue-actions">
             {idx > 0 && <button type="button" aria-label={t('audio.player.queueMoveUp', { title: titleOf(item) })} title={t('audio.player.queueMoveUp', { title: titleOf(item) })} onClick={() => audioMoveInQueue(idx, idx - 1)}><Icon name="arrow_upward" size={16} /></button>}
             {idx < audioQueue.length - 1 && <button type="button" aria-label={t('audio.player.queueMoveDown', { title: titleOf(item) })} title={t('audio.player.queueMoveDown', { title: titleOf(item) })} onClick={() => audioMoveInQueue(idx, idx + 1)}><Icon name="arrow_downward" size={16} /></button>}
-            <button type="button" aria-label={t('audio.player.queueRemove', { title: titleOf(item) })} title={t('audio.player.queueRemove', { title: titleOf(item) })} onClick={() => audioRemoveFromQueue(item._id)}><Icon name="close" size={16} /></button>
+            <button type="button" aria-label={t('audio.player.queueRemove', { title: titleOf(item) })} title={t('audio.player.queueRemove', { title: titleOf(item) })} onClick={() => removeFromQueue(item._id)}><Icon name="close" size={16} /></button>
           </div>
         </li>
       );
     })}</ul>
   );
+  // Clearing empties the queue, and with it the player closes (see above).
+  const clearQueue = () => audioClearQueue();
+  // Removing the playing track moves on to the next one in the queue (the one
+  // before it if it was last); removing the only one empties the queue, and
+  // the player closes.
+  const removeFromQueue = (id) => {
+    if (audioCurrent?._id === id && audioQueue.length > 1) {
+      const i = audioQueue.findIndex((x) => x._id === id);
+      const to = audioQueue[i + 1] || audioQueue[i - 1];
+      audioRemoveFromQueue(id);
+      if (to) audioPlay(to);
+      return;
+    }
+    audioRemoveFromQueue(id);
+  };
   const queueClear = audioQueue.length > 0 && (
-    <Button size={32} icon="delete_sweep" className="audio-queue-clear" onClick={audioClearQueue} title={t('audio.player.clearQueue')}>
+    <Button size={32} icon="delete_sweep" className="audio-queue-clear" onClick={clearQueue} title={t('audio.player.clearQueue')}>
       {t('audio.player.clearAll')}
     </Button>
   );
@@ -1436,7 +1476,18 @@ function GlobalAudioPlayer() {
     return (
       <PortalDocContext.Provider value={inPip ? hostDoc : null}>
         {audioEl}
-        <div ref={npRef} className="audio-now-playing gap-bar audio-np-idle">
+        <div
+          ref={npRef}
+          className="audio-now-playing gap-bar audio-np-idle"
+          // A swipe down does what its X does: clear the queue, the bar goes.
+          onTouchStart={(e) => { const p = e.touches[0]; swipeRef.current = p ? { x: p.clientX, y: p.clientY } : null; }}
+          onTouchEnd={(e) => {
+            const from = swipeRef.current;
+            swipeRef.current = null;
+            const p = e.changedTouches[0];
+            if (from && p && barSwipe(p.clientX - from.x, p.clientY - from.y) === 'close') { audioClearQueue(); audioSetShowQueue(false); }
+          }}
+        >
           <div className="audio-np-content gap-bar__row">
             <div className="audio-np-art gap-bar__art" onClick={() => audioSetShowQueue(true)}>
               <img className="audio-np-thumb" src={audioThumb(next)} alt="" onError={thumbFallback(next)} />
@@ -1576,6 +1627,7 @@ function GlobalAudioPlayer() {
     if (sleepRef.current) endSleep();
     audioStop();
   };
+  closePlayerRef.current = closePlayer;
   const closeButton = (
     <button
       type="button"
@@ -1719,15 +1771,27 @@ function GlobalAudioPlayer() {
     <div
       ref={npRef}
       className={cx('audio-now-playing gap-bar', isLive && 'is-live', !!transcriptPanel && 'has-panel')}
-      // A swipe up on the bar opens the player (27c, phones).
-      onTouchStart={(e) => { swipeRef.current = e.touches[0]?.clientY ?? null; }}
+      // Phones (27c + owner 2026-11-12): up opens the player, down closes it,
+      // left / right go back / forward 15 s (not on a live stream).
+      onTouchStart={(e) => { const p = e.touches[0]; swipeRef.current = p ? { x: p.clientX, y: p.clientY } : null; }}
       onTouchEnd={(e) => {
         const from = swipeRef.current;
         swipeRef.current = null;
-        const to = e.changedTouches[0]?.clientY;
-        if (from != null && to != null && from - to > 32) toggleExpanded();
+        const p = e.changedTouches[0];
+        if (!from || !p) return;
+        const action = barSwipe(p.clientX - from.x, p.clientY - from.y, { live: isLive });
+        if (action === 'open') toggleExpanded();
+        else if (action === 'close') closePlayer();
+        else if (action === 'back' || action === 'forward') {
+          const delta = action === 'back' ? -SWIPE_SKIP : SWIPE_SKIP;
+          skipBy(delta);
+          clearTimeout(flashTimer.current);
+          setSwipeFlash({ text: `${delta < 0 ? '−' : '+'}${SWIPE_SKIP} s`, key: Date.now() });
+          flashTimer.current = setTimeout(() => setSwipeFlash(null), 800);
+        }
       }}
     >
+      {swipeFlash && <span key={swipeFlash.key} className="gap-swipe-flash num" role="status">{swipeFlash.text}</span>}
       {adStrip}
       {transcriptPanel}
       <div className="audio-np-content gap-bar__row">
@@ -1865,6 +1929,22 @@ function GlobalAudioPlayer() {
       <div
         ref={fullRef}
         className="gap-full__panel audio-np-expanded-area"
+        // Phones: a swipe down collapses the player again, unless the touch
+        // began in something scrolled (a list, the transcript) or on a slider.
+        onTouchStart={overlay ? (e) => {
+          const p = e.touches[0];
+          let el = e.target;
+          let free = !el.closest?.('input, [role="slider"], textarea');
+          for (; free && el && el !== e.currentTarget; el = el.parentElement) if (el.scrollTop > 0) free = false;
+          if (e.currentTarget.scrollTop > 0) free = false;
+          fullSwipeRef.current = p && free ? { x: p.clientX, y: p.clientY } : null;
+        } : undefined}
+        onTouchEnd={overlay ? (e) => {
+          const from = fullSwipeRef.current;
+          fullSwipeRef.current = null;
+          const p = e.changedTouches[0];
+          if (from && p && fullSwipeCollapses(p.clientX - from.x, p.clientY - from.y)) audioSetExpanded(false);
+        } : undefined}
         role={overlay ? 'dialog' : undefined}
         aria-modal={overlay || undefined}
         aria-label={overlay ? titleOf(nowPlaying) : undefined}

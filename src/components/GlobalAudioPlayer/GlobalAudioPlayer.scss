@@ -788,6 +788,14 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
     max-height: min(560px, calc(100vh - var(--audio-np-clearance, 96px) - 96px));
     animation: v2-pop var(--t-base) var(--ease);
   }
+  // Where the centred player bar (620px) ends left of this corner (420px panel
+  // + 16px edge + a 24px gap on each side), the queue sits at the foot of the
+  // screen beside it instead of climbing over it (owner 2026-11-12). Narrower,
+  // it would cover the bar's right-hand buttons, so it stays above the bar.
+  @media (min-width: 1520px) {
+    bottom: 16px;
+    max-height: min(640px, calc(100vh - 96px));
+  }
   @media (max-width: $wide - 1) {
     width: 100%;
     max-height: 88vh;
@@ -1450,4 +1458,26 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
 @keyframes gap-rise { from { opacity: 0; transform: translateY(12px); } }
 @media (prefers-reduced-motion: reduce) {
   .audio-now-playing, .gap-full__panel, .audio-pm, .audio-queue-panel { animation: none !important; }
+}
+
+// "−15 s" / "+15 s" for a moment after a sideways swipe on the phone bar
+// (owner 2026-11-12), centred over it.
+.gap-swipe-flash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  z-index: 3;
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  background: var(--text);
+  color: var(--bg);
+  @include v2.mono(13, 700);
+  pointer-events: none;
+  animation: gap-swipe-flash 800ms var(--ease) forwards;
+}
+@keyframes gap-swipe-flash {
+  0% { opacity: 0; scale: .9; }
+  15%, 70% { opacity: 1; scale: 1; }
+  100% { opacity: 0; }
 }

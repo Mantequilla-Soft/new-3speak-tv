@@ -35,6 +35,18 @@ function readKey(key) {
   return localStorage.getItem(key) ?? sessionStorage.getItem(key);
 }
 
+// The queue is the play order and always holds the playing track (owner
+// 2026-11-12): with nothing else queued it is just that track, and when the
+// queue runs empty the player goes away (GlobalAudioPlayer). A track that is not
+// in the queue yet goes in right after the playing one, else at the end.
+export function queueWith(queue, track, current) {
+  if (!track?._id || queue.some((i) => i._id === track._id)) return queue;
+  const next = [...queue];
+  const at = current ? next.findIndex((i) => i._id === current._id) : -1;
+  if (at >= 0) next.splice(at + 1, 0, track); else next.push(track);
+  return next;
+}
+
 function loadInitial() {
   try {
     const now = readKey(LS_NOW_KEY);
@@ -42,9 +54,13 @@ function loadInitial() {
     const track = now ? JSON.parse(now) : null;
     const pos = track ? JSON.parse(localStorage.getItem(LS_POS_KEY) || 'null') : null;
     const at = pos?.id === track?._id && Number.isFinite(pos?.t) ? pos.t : 0;
+    const saved = q ? JSON.parse(q) : [];
+    // A queue saved by an older build may not hold the playing track: it leads.
+    const queue = track && !saved.some((i) => i._id === track._id) ? [track, ...saved] : saved;
+    if (queue !== saved) persistQueue(queue);
     return {
       audioCurrent: track,
-      audioQueue: q ? JSON.parse(q) : [],
+      audioQueue: queue,
       audioRestoredAt: track ? at : null,
     };
   } catch {
@@ -123,8 +139,12 @@ export const createAudioPlayerSlice = (set, get) => {
     audioPlay: (track, contextItems) => {
       if (!track) return;
       persistNow(track);
+      const { audioQueue, audioCurrent } = get();
+      const queue = queueWith(audioQueue, track, audioCurrent);
+      if (queue !== audioQueue) persistQueue(queue);
       set((s) => ({
         audioCurrent: track,
+        audioQueue: queue,
         audioAutoplayList: Array.isArray(contextItems) ? contextItems : [track],
         audioRestoredAt: null,
         audioStartAt: null,
@@ -150,8 +170,13 @@ export const createAudioPlayerSlice = (set, get) => {
         set({ audioLast: last });
       }
       persistNow(null);
+      // Closing takes the track out of the queue too; what is left stays as
+      // the "Up next" bar.
+      const rest = audioCurrent ? get().audioQueue.filter((i) => i._id !== audioCurrent._id) : get().audioQueue;
+      if (rest.length !== get().audioQueue.length) persistQueue(rest);
       set({
         audioCurrent: null,
+        audioQueue: rest,
         audioIsPlaying: false,
         audioRestoredAt: null,
         audioCurrentTime: 0,
@@ -166,8 +191,12 @@ export const createAudioPlayerSlice = (set, get) => {
     audioLoadPaused: (track, at = 0, list) => {
       if (!track) return;
       persistNow(track);
+      const { audioQueue, audioCurrent } = get();
+      const queue = queueWith(audioQueue, track, audioCurrent);
+      if (queue !== audioQueue) persistQueue(queue);
       set((s) => ({
         audioCurrent: track,
+        audioQueue: queue,
         audioAutoplayList: Array.isArray(list) ? list : [track],
         audioRestoredAt: at || 0,
         audioStartAt: null,

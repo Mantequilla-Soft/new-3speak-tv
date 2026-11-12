@@ -292,6 +292,68 @@ describe('the audio player: playing and pausing', () => {
   })
 })
 
+// Swipes on the phone player (owner 2026-11-12): sideways on the bar moves the
+// track by 15 s, up opens the full player, down closes the player; down on the
+// full player collapses it. Clear queue closes the player once it is collapsed.
+describe('the audio player: swipes on a phone', () => {
+  const swipe = (el, dx, dy) => {
+    fireEvent.touchStart(el, { touches: [{ clientX: 200, clientY: 400 }] })
+    fireEvent.touchEnd(el, { changedTouches: [{ clientX: 200 + dx, clientY: 400 + dy }] })
+  }
+  const bar = () => document.querySelector('.audio-now-playing.gap-bar')
+
+  it('left goes back 15 seconds and right forward, with a short note on the bar', () => {
+    mount()
+    play(A)
+    loaded()
+    at(40)
+    swipe(bar(), -90, 4)
+    expect(audio().currentTime).toBe(25)
+    expect(screen.getByRole('status')).toHaveTextContent('−15 s')
+    at(25)
+    swipe(bar(), 90, -4)
+    expect(audio().currentTime).toBe(40)
+  })
+
+  it('up opens the full player, and down on the full player collapses it', () => {
+    mount()
+    play(A)
+    loaded()
+    swipe(bar(), 0, -80)
+    expect(store().audioExpanded).toBe(true)
+    swipe(document.querySelector('.gap-full__panel'), 5, 40)
+    expect(store().audioExpanded).toBe(true) // too short
+    swipe(document.querySelector('.gap-full__panel'), 5, 140)
+    expect(store().audioExpanded).toBe(false)
+  })
+
+  it('down on the bar closes the player', () => {
+    mount()
+    play(A)
+    loaded()
+    swipe(bar(), 0, 80)
+    expect(store().audioCurrent).toBeNull()
+  })
+
+  it('a live stream does not move sideways', () => {
+    mount()
+    play(track(9, { live: true }))
+    at(40)
+    swipe(bar(), -90, 0)
+    expect(audio().currentTime).toBe(40)
+  })
+
+  it('Clear queue in the full player closes it, on any screen (an empty queue)', async () => {
+    const { user } = mount()
+    play(A)
+    loaded()
+    act(() => useAppStore.setState({ audioQueue: [A, B, C], audioExpanded: true, audioShowQueue: true }))
+    await user.click(screen.getAllByRole('button', { name: /^Clear$/ })[0])
+    expect(store().audioCurrent).toBeNull()
+  })
+
+})
+
 describe('the audio player: previous, next and the end of a track', () => {
   it('Next plays the following track of the page it was started from', async () => {
     const { user } = mount()
@@ -526,19 +588,22 @@ describe('the audio player: the queue', () => {
     const { user } = mount()
     play(A)
     act(() => { store().audioAddToQueue(B); store().audioAddToQueue(C) })
+    // The queue holds the playing track too (owner 2026-11-12).
     const btn = screen.getByRole('button', { name: /^Queue/ })
-    expect(btn).toHaveTextContent('2')
+    expect(btn).toHaveTextContent('3')
     await user.click(btn)
     const panel = screen.getByRole('heading', { name: 'Queue' }).closest('.audio-queue-panel')
+    expect(within(panel).getByText('Track 1').closest('.audio-queue-item')).toHaveClass('current')
     expect(within(panel).getByText('Track 2')).toBeInTheDocument()
     expect(within(panel).getByText('Track 3')).toBeInTheDocument()
   })
 
-  it('says so when the queue is empty', async () => {
+  it('a track playing on its own is the queue, marked as playing', async () => {
     const { user } = mount()
     play(A)
+    expect(store().audioQueue.map((t) => t._id)).toEqual(['id-1'])
     await user.click(screen.getByRole('button', { name: /^Queue/ }))
-    expect(screen.getByText('Queue is empty.')).toBeInTheDocument()
+    expect(document.querySelector('.audio-queue-item.current')).toHaveTextContent('Track 1')
   })
 
   it('plays a queued track when it is picked', async () => {
@@ -555,18 +620,35 @@ describe('the audio player: the queue', () => {
     play(A)
     act(() => { store().audioAddToQueue(B); store().audioAddToQueue(C) })
     await user.click(screen.getByRole('button', { name: /^Queue/ }))
+    // The playing track leads the queue (owner 2026-11-12).
+    expect(store().audioQueue.map((t) => t._id)).toEqual(['id-1', 'id-2', 'id-3'])
     await user.click(screen.getByRole('button', { name: 'Move Track 2 down' }))
-    expect(store().audioQueue.map((t) => t._id)).toEqual(['id-3', 'id-2'])
+    expect(store().audioQueue.map((t) => t._id)).toEqual(['id-1', 'id-3', 'id-2'])
     await user.click(screen.getByRole('button', { name: 'Move Track 3 down' }))
+    expect(store().audioQueue.map((t) => t._id)).toEqual(['id-1', 'id-2', 'id-3'])
+
+    // Removing the playing track goes on with the next one.
+    await user.click(screen.getByRole('button', { name: 'Remove Track 1 from the queue' }))
     expect(store().audioQueue.map((t) => t._id)).toEqual(['id-2', 'id-3'])
+    expect(store().audioCurrent?._id).toBe('id-2')
+    // Removing another just takes it out.
+    await user.click(screen.getByRole('button', { name: 'Remove Track 3 from the queue' }))
+    expect(store().audioQueue.map((t) => t._id)).toEqual(['id-2'])
+    expect(store().audioCurrent?._id).toBe('id-2')
 
-    const rows = document.querySelectorAll('.audio-queue-item')
-    await user.click(rows[0].querySelector('.audio-queue-actions button:last-child'))
-    expect(store().audioQueue.map((t) => t._id)).toEqual(['id-3'])
-
+    // An empty queue: the player goes (owner 2026-11-12).
     await user.click(screen.getByRole('button', { name: /^Clear$/ }))
     expect(store().audioQueue).toEqual([])
-    expect(screen.getByText('Queue is empty.')).toBeInTheDocument()
+    expect(store().audioCurrent).toBeNull()
+    expect(store().audioShowQueue).toBe(false)
+  })
+
+  it('removing the only track empties the queue and closes the player', async () => {
+    const { user } = mount()
+    play(A)
+    await user.click(screen.getByRole('button', { name: /^Queue/ }))
+    await user.click(screen.getByRole('button', { name: 'Remove Track 1 from the queue' }))
+    expect(store().audioCurrent).toBeNull()
   })
 
   it('closes the queue window from its X', async () => {
@@ -895,7 +977,8 @@ describe('the audio player: an outside podcast episode', () => {
     act(() => useAppStore.setState({ audioExpanded: true }))
     const { user } = mount()
     play(ep)
-    await user.click(screen.getByText('A show'))
+    // The first one is the player's own line (the queue panel lists the episode too).
+    await user.click(screen.getAllByText('A show')[0])
     expect(screen.getByTestId('location')).toHaveTextContent('/audio?type=external&podcast=feed-9')
     act(() => useAppStore.setState({ audioExpanded: true }))
     await user.click(screen.getByRole('button', { name: /What this one is about/ }))

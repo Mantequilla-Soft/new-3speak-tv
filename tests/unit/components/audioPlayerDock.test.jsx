@@ -86,7 +86,7 @@ describe('docked audio player', () => {
     act(() => root.unmount())
   })
 
-  it('closing the player keeps the queue, an Up next bar offers it, and its X clears it', () => {
+  it('closing the player keeps the rest of the queue, an Up next bar offers it, and its X clears it', () => {
     const { host, root } = mount()
     const second = { ...track, _id: 'f1:two', title: 'Second' }
     act(() => {
@@ -96,15 +96,16 @@ describe('docked audio player', () => {
     })
     act(() => { host.querySelector('.audio-np-close-btn').click() })
     expect(useAppStore.getState().audioCurrent).toBeNull()
-    expect(useAppStore.getState().audioQueue.map((i) => i._id)).toEqual(['f1:ep', 'f1:two'])
-    expect(JSON.parse(localStorage.getItem('audio-queue')).length).toBe(2)
+    // Closing takes the closed track out of the queue (owner 2026-11-12).
+    expect(useAppStore.getState().audioQueue.map((i) => i._id)).toEqual(['f1:two'])
+    expect(JSON.parse(localStorage.getItem('audio-queue')).length).toBe(1)
 
     const idle = host.querySelector('.audio-np-idle')
     expect(idle).toBeTruthy()
     expect(idle.textContent).toContain('Episode')
     // Its queue button opens the queue as usual.
     act(() => { idle.querySelector('.audio-np-queue-btn').click() })
-    expect(host.querySelectorAll('.audio-queue-item')).toHaveLength(2)
+    expect(host.querySelectorAll('.audio-queue-item')).toHaveLength(1)
     // Play starts the queue from the top.
     act(() => { idle.querySelector('.audio-np-play-btn').click() })
     expect(useAppStore.getState().audioCurrent?._id).toBe('f1:ep')
