@@ -266,14 +266,34 @@
     font-variant-numeric: tabular-nums;
   }
 
-  // Quiet footer: which Hive node is serving you, and where to find 3Speak.
+  // Quiet footer: which Hive node is serving you, where to find 3Speak,
+  // and a dofollow "Powered by Hive" credit.
   .pn-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 16px 8px;
+    border-top: 1px solid var(--divider);
+  }
+  .pn-footer-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 10px 16px 4px;
-    border-top: 1px solid var(--divider);
+  }
+  .pn-powered-by {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-size: 12px;
+    line-height: 1.2;
+    color: var(--text-secondary);
+    text-decoration: none;
+    &:hover {
+      color: var(--text-primary);
+      text-decoration: underline;
+    }
   }
   .rpc-node-line {
     display: flex;

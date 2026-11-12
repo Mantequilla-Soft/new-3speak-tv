@@ -287,21 +287,26 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
         </div>
 
         <div className="pn-footer">
-          <div className="rpc-node-line" title={rpcNode}>
-            <span className="rpc-node-dot" aria-hidden="true" />
-            <span className="rpc-node-host">{rpcHost}</span>
+          <div className="pn-footer-top">
+            <div className="rpc-node-line" title={rpcNode}>
+              <span className="rpc-node-dot" aria-hidden="true" />
+              <span className="rpc-node-host">{rpcHost}</span>
+            </div>
+            <div className="support-wrap">
+              <a href="https://discord.com/invite/NSFS2VGj83" className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onDiscord')}>
+                <FaDiscord />
+              </a>
+              <a href="https://x.com/3speaktv?utm_source=3speak.tv " className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onX')}>
+                <FaSquareXTwitter />
+              </a>
+              <a href="https://t.me/threespeak?utm_source=3speak.tv" className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onTelegram')}>
+                <SiTelegram />
+              </a>
+            </div>
           </div>
-          <div className="support-wrap">
-            <a href="https://discord.com/invite/NSFS2VGj83" className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onDiscord')}>
-              <FaDiscord />
-            </a>
-            <a href="https://x.com/3speaktv?utm_source=3speak.tv " className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onX')}>
-              <FaSquareXTwitter />
-            </a>
-            <a href="https://t.me/threespeak?utm_source=3speak.tv" className="social-link" target="_blank" rel="noopener noreferrer" aria-label={t('nav.profile.onTelegram')}>
-              <SiTelegram />
-            </a>
-          </div>
+          <a href="https://hive.io" className="pn-powered-by" target="_blank" rel="noopener">
+            Powered by Hive
+          </a>
         </div>
       </div>
 
