@@ -267,7 +267,8 @@
       "orRecord": "Atau rekam langsung",
       "recordLimit": "Maksimal {{minutes}} menit per rekaman",
       "record": "Rekam",
-      "added": "Ditambahkan ({{count}})"
+      "added": "Ditambahkan ({{count}})",
+      "filesTitle": "File audio"
     },
     "titles": {
       "help": "Beri judul setiap lagu dan pilih jenisnya. Lagu musik mendapat kolom genre + BPM."

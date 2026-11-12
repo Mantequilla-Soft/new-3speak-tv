@@ -277,7 +277,8 @@
       "orRecord": "O mag-record nang live",
       "recordLimit": "Hanggang {{minutes}} min bawat recording",
       "record": "Mag-record",
-      "added": "Naidagdag ({{count}})"
+      "added": "Naidagdag ({{count}})",
+      "filesTitle": "Mga audio file"
     },
     "titles": {
       "help": "Bigyan ng pamagat ang bawat track at pumili ng uri. May genre + BPM fields ang mga music track."

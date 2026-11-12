@@ -297,7 +297,8 @@
       "orRecord": "Lub nagraj na żywo",
       "recordLimit": "Do {{minutes}} min na nagranie",
       "record": "Nagraj",
-      "added": "Dodane ({{count}})"
+      "added": "Dodane ({{count}})",
+      "filesTitle": "Pliki audio"
     },
     "titles": {
       "help": "Nadaj tytuł każdemu utworowi i wybierz typ. Utwory muzyczne mają pola gatunku i BPM."

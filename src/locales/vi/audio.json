@@ -267,7 +267,8 @@
       "orRecord": "Hoặc ghi âm trực tiếp",
       "recordLimit": "Tối đa {{minutes}} phút mỗi lần ghi",
       "record": "Ghi âm",
-      "added": "Đã thêm ({{count}})"
+      "added": "Đã thêm ({{count}})",
+      "filesTitle": "Tệp âm thanh"
     },
     "titles": {
       "help": "Đặt tiêu đề cho từng bản nhạc và chọn loại. Bản nhạc thuộc loại âm nhạc có thêm trường thể loại + BPM."

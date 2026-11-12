@@ -1954,10 +1954,12 @@ function SourceStep({
 }) {
   const { t } = useTranslation();
   const limit = t('audio.upload.source.recordLimit', { minutes: Math.round(MAX_RECORD_SEC / 60) });
-  // 36a: one Source card: the drop area, "Or record live" under it, then the files.
+  // 36a: one Source card: the drop area, "Or record live" and the teleprompter
+  // (side by side on desktop, owner 2026-11-12), then the files under a heading.
   return (
     <section className="audio-upload-card audio-upload-source">
       <h3 className="audio-upload-card-title">{t('audio.upload.steps.source')}</h3>
+      <div className="audio-upload-source-options">
       <div
         className={`audio-upload-dropzone${isDragging ? ' dragging' : ''}`}
         onClick={onPickFiles}
@@ -2002,6 +2004,10 @@ function SourceStep({
         </button>
       )}
       {teleprompter}
+      </div>
+      {tracks.length > 0 && (
+        <h4 className="audio-upload-files-title">{t('audio.upload.source.filesTitle')}</h4>
+      )}
       {tracks.length > 0 && (
         <div className="audio-upload-track-list" aria-label={t('audio.upload.source.added', { count: tracks.length })}>
           {tracks.map(tr => (

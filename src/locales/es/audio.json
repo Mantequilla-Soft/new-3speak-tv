@@ -287,7 +287,8 @@
       "orRecord": "O graba en vivo",
       "recordLimit": "Hasta {{minutes}} min por grabación",
       "record": "Grabar",
-      "added": "Agregados ({{count}})"
+      "added": "Agregados ({{count}})",
+      "filesTitle": "Archivos de audio"
     },
     "titles": {
       "help": "Ponle título a cada pista y elige un tipo. Las pistas de música tienen campos de género y BPM."

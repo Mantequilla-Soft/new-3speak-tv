@@ -277,7 +277,8 @@
       "orRecord": "Of neem live op",
       "recordLimit": "Maximaal {{minutes}} min per opname",
       "record": "Opnemen",
-      "added": "Toegevoegd ({{count}})"
+      "added": "Toegevoegd ({{count}})",
+      "filesTitle": "Audiobestanden"
     },
     "titles": {
       "help": "Geef elke track een titel en kies een soort. Muziektracks krijgen velden voor genre en BPM."

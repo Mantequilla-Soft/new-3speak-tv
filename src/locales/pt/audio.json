@@ -287,7 +287,8 @@
       "orRecord": "Ou grave ao vivo",
       "recordLimit": "Até {{minutes}} min por gravação",
       "record": "Gravar",
-      "added": "Adicionados ({{count}})"
+      "added": "Adicionados ({{count}})",
+      "filesTitle": "Arquivos de áudio"
     },
     "titles": {
       "help": "Dê um título a cada faixa e escolha um tipo. Faixas de música ganham campos de gênero e BPM."

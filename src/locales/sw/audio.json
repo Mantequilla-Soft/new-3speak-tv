@@ -277,7 +277,8 @@
       "orRecord": "Au rekodi moja kwa moja",
       "recordLimit": "Hadi dakika {{minutes}} kwa kila rekodi",
       "record": "Rekodi",
-      "added": "Zimeongezwa ({{count}})"
+      "added": "Zimeongezwa ({{count}})",
+      "filesTitle": "Faili za sauti"
     },
     "titles": {
       "help": "Ipe kila wimbo kichwa na uchague aina. Nyimbo za muziki zina sehemu za aina ya muziki + BPM."

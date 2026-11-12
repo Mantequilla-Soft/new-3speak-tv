@@ -267,7 +267,8 @@
       "orRecord": "또는 라이브로 녹음",
       "recordLimit": "녹음당 최대 {{minutes}}분",
       "record": "녹음",
-      "added": "추가됨({{count}})"
+      "added": "추가됨({{count}})",
+      "filesTitle": "오디오 파일"
     },
     "titles": {
       "help": "각 트랙에 제목을 붙이고 유형을 고르세요. 음악 트랙에는 장르와 BPM 항목이 추가돼요."

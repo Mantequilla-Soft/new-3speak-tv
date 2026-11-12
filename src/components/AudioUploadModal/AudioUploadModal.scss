@@ -409,6 +409,37 @@
 }
 
 // ─── Source (36a) ───
+// The three ways in: stacked on phones, one row on desktop (owner 2026-11-12).
+// An open or recording teleprompter takes the whole row, its script needs room.
+.audio-upload-source-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @media (min-width: 769px) {
+    // Six tracks: three items of two each, or two of three when the
+    // teleprompter is open and takes a row of its own.
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: stretch;
+
+    > * { grid-column: span 2; }
+    > .audio-upload-recorder { height: 100%; }
+    > .audio-tp { display: flex; flex-direction: column; justify-content: center; }
+    // A third of the row is narrow: the teleprompter's line wraps, not cut off.
+    > .audio-tp .audio-tp-toggle-text small { white-space: normal; }
+    > .audio-tp.recording,
+    > .audio-tp:has(.audio-tp-script) { grid-column: 1 / -1; }
+    &:has(> .audio-tp.recording, > .audio-tp .audio-tp-script) > :not(.audio-tp) { grid-column: span 3; }
+  }
+}
+
+// "Audio files": a heading like the card's own "Source" over the added files.
+.audio-upload-files-title {
+  margin: 8px 0 0;
+  @include v2.text(title-sm);
+}
+
 .audio-upload-dropzone {
   display: flex;
   flex-direction: column;
@@ -513,17 +544,17 @@
 .audio-upload-track-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  min-height: 36px;
-  padding: 4px 4px 4px 8px;
+  gap: 8px;
+  min-height: 52px;
+  padding: 6px 8px 6px 14px;
   box-sizing: border-box;
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
   background: var(--bg);
-  font-size: 12px;
+  font-size: 13px;
 
-  .audio-upload-track-name { flex: 1; min-width: 0; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .audio-upload-track-kind { flex: none; width: 70px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .audio-upload-track-meta { flex: none; min-width: 48px; @include v2.mono(12, 500); color: var(--muted); }
+  .audio-upload-track-name { flex: 1; min-width: 0; font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .audio-upload-track-kind { flex: none; width: 76px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .audio-upload-track-meta { flex: none; min-width: 48px; @include v2.mono(13, 500); color: var(--muted); }
 
   @include v2.mobile {
     flex-wrap: wrap;

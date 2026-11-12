@@ -277,7 +277,8 @@
       "orRecord": "Oder live aufnehmen",
       "recordLimit": "Bis zu {{minutes}} Min. pro Aufnahme",
       "record": "Aufnehmen",
-      "added": "Hinzugefügt ({{count}})"
+      "added": "Hinzugefügt ({{count}})",
+      "filesTitle": "Audiodateien"
     },
     "titles": {
       "help": "Gib jedem Track einen Titel und wähle einen Typ. Musik-Tracks bekommen Felder für Genre + BPM."

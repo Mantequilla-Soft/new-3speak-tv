@@ -267,7 +267,8 @@
       "orRecord": "或者现场录制",
       "recordLimit": "每段录音最长 {{minutes}} 分钟",
       "record": "录制",
-      "added": "已添加（{{count}}）"
+      "added": "已添加（{{count}}）",
+      "filesTitle": "音频文件"
     },
     "titles": {
       "help": "为每首曲目填写标题并选择类型。音乐曲目会有流派和 BPM 字段。"

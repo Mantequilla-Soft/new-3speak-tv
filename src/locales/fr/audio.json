@@ -287,7 +287,8 @@
       "orRecord": "Ou enregistrez en direct",
       "recordLimit": "Jusqu'à {{minutes}} min par enregistrement",
       "record": "Enregistrer",
-      "added": "Ajoutés ({{count}})"
+      "added": "Ajoutés ({{count}})",
+      "filesTitle": "Fichiers audio"
     },
     "titles": {
       "help": "Donnez un titre à chaque piste et choisissez un type. Les morceaux de musique ont des champs genre + BPM."

@@ -277,7 +277,8 @@
       "orRecord": "Or record live",
       "recordLimit": "Up to {{minutes}} min per recording",
       "record": "Record",
-      "added": "Added ({{count}})"
+      "added": "Added ({{count}})",
+      "filesTitle": "Audio files"
     },
     "titles": {
       "help": "Title each track and pick a type. Music tracks get genre + BPM fields."

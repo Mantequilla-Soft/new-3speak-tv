@@ -287,7 +287,8 @@
       "orRecord": "Oppure registra dal vivo",
       "recordLimit": "Fino a {{minutes}} min per registrazione",
       "record": "Registra",
-      "added": "Aggiunti ({{count}})"
+      "added": "Aggiunti ({{count}})",
+      "filesTitle": "File audio"
     },
     "titles": {
       "help": "Dai un titolo a ogni traccia e scegli un tipo. Le tracce musicali hanno i campi genere + BPM."

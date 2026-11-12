@@ -277,7 +277,8 @@
       "orRecord": "Ya da canlı kaydet",
       "recordLimit": "Kayıt başına en fazla {{minutes}} dk",
       "record": "Kaydet",
-      "added": "Eklenenler ({{count}})"
+      "added": "Eklenenler ({{count}})",
+      "filesTitle": "Ses dosyaları"
     },
     "titles": {
       "help": "Her parçaya bir başlık ver ve bir tür seç. Müzik parçalarında tür + BPM alanları olur."

@@ -267,7 +267,8 @@
       "orRecord": "またはその場で録音",
       "recordLimit": "1 回の録音は最大 {{minutes}} 分",
       "record": "録音",
-      "added": "追加済み（{{count}}）"
+      "added": "追加済み（{{count}}）",
+      "filesTitle": "音声ファイル"
     },
     "titles": {
       "help": "各トラックにタイトルを付けて種類を選んでください。音楽トラックにはジャンルと BPM の欄があります。"
