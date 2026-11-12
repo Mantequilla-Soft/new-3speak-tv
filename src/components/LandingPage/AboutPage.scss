@@ -281,13 +281,35 @@
 }
 
 /* Quotes */
+// Voices of freedom: one row that scrolls sideways (owner 2026-11-12), fixed
+// 300px cards (260 on phones), snapping to a card; round prev / next buttons
+// over the edges on desktop, like Who to follow on Home.
+.about-quotes-rail { position: relative; min-width: 0; }
+
 .about-quotes {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
   gap: 10px;
+  @include v2.scroll-x;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.about-quotes-rail__btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-float);
+  &.is-left { left: -8px; }
+  &.is-right { right: -8px; }
+  @include v2.mobile { display: none; }
 }
 
 .about-quote {
+  flex: 0 0 300px;
+  scroll-snap-align: start;
   margin: 0;
   padding: 14px;
   border-radius: var(--r-lg);
@@ -312,6 +334,7 @@
 }
 
 .about-quote__mark { color: var(--accent); }
+.about-quotes .about-quote { @include v2.mobile { flex-basis: 260px; } }
 
 /* Ready to own your content */
 .about-cta {

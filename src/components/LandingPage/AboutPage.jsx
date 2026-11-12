@@ -1,9 +1,10 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import speak from "../../assets/image/3speak.png";
 import hive from "../../assets/image/hive-1.jpeg";
 import { useAppStore } from '../../lib/store';
-import { Button, Icon } from '../v2/ui';
+import { Button, Icon, IconButton } from '../v2/ui';
 import { cx } from '../v2/helpers';
 import './AboutPage.scss';
 import hiveMark from "../../assets/image/hive-mark.png";
@@ -59,6 +60,39 @@ const SectionHead = ({ tone = 'cyan', title, sub, as: El = 'h2' }) => (
     </div>
   </div>
 );
+
+// Voices of freedom as a horizontal scroller: fixed-width quote cards in one
+// row, round prev / next buttons where there is more to see (desktop; phones
+// swipe), the same pattern as Who to follow on Home.
+function QuotesRail({ children }) {
+  const { t } = useTranslation();
+  const ref = useRef(null);
+  const [ends, setEnds] = useState({ left: false, right: false });
+  const update = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    setEnds({ left: el.scrollLeft > 10, right: el.scrollLeft < el.scrollWidth - el.clientWidth - 10 });
+  }, []);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    const frame = requestAnimationFrame(update);
+    el.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => { cancelAnimationFrame(frame); el.removeEventListener('scroll', update); window.removeEventListener('resize', update); };
+  }, [update]);
+  const go = (dir) => {
+    const el = ref.current;
+    if (el) el.scrollBy({ left: dir * Math.max(300, el.clientWidth * 0.8), behavior: 'smooth' });
+  };
+  return (
+    <div className="about-quotes-rail">
+      {ends.left && <IconButton icon="chevron_left" label={t('profile.creators.scrollLeft')} size={36} round className="about-quotes-rail__btn is-left" onClick={() => go(-1)} />}
+      <div className="about-quotes" ref={ref}>{children}</div>
+      {ends.right && <IconButton icon="chevron_right" label={t('profile.creators.scrollRight')} size={36} round className="about-quotes-rail__btn is-right" onClick={() => go(1)} />}
+    </div>
+  );
+}
 
 const AboutPage = () => {
   const { t } = useTranslation();
@@ -155,7 +189,8 @@ const AboutPage = () => {
       {/* Voices of freedom */}
       <section className="about-card about-wide" aria-labelledby="about-quotes-title">
         <SectionHead tone="accent" title={<span id="about-quotes-title">{t('pages.about.quotesTitle')}</span>} />
-        <div className="about-quotes">
+        {/* A sideways scroller (owner 2026-11-12), arrows on desktop, swipe on phones. */}
+        <QuotesRail>
           {QUOTES.map(([key, author]) => (
             <figure key={key} className="about-quote">
               <Icon name="format_quote" size={20} className="about-quote__mark" />
@@ -163,7 +198,7 @@ const AboutPage = () => {
               <figcaption>{author}</figcaption>
             </figure>
           ))}
-        </div>
+        </QuotesRail>
       </section>
 
       {/* Ready to own your content, and where to find us */}
