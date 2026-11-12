@@ -302,6 +302,10 @@ export default function HomeHero({ videos = [], pending = false }) {
             muted
             playsInline
             preload="auto"
+            // A backdrop, not a player: no browser picture-in-picture button
+            // on hover (Firefox draws one at the right edge), like the cards.
+            disablePictureInPicture
+            controlsList="nopictureinpicture nodownload"
           />
         ))}
       </div>
