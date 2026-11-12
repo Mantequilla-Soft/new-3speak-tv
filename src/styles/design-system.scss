@@ -106,13 +106,14 @@
   --topbar-h: 78px;
   --side-panel-w: 380px;
   --bottom-nav-height: 56px;
-  /* The phone bottom bar floats (20a): 68 tall, 10px above the bottom edge.
-     iPhones lift it into the home-indicator area (below). Android browsers
-     keep 10px: Firefox reports the system button bar (48) as a safe area
-     while its address bar shows and 0 once it hides, so the bar sat 36px
-     up and jumped on every scroll. */
+  /* The phone bottom bar: 68 tall, docked on the bottom edge (owner
+     2026-11-12: the 10px gap under the floating bar looked odd). The "gap"
+     is now the room it adds under its tabs for the iPhone home indicator
+     (below); 0 elsewhere. Android browsers stay at 0 on purpose: Firefox
+     reports the system button bar (48) as a safe area while its address bar
+     shows and 0 once it hides, so anything tied to it jumped on scroll. */
   --bottom-nav-float-h: 68px;
-  --bottom-nav-float-gap: 10px;
+  --bottom-nav-float-gap: 0px;
   /* What a fixed element at the bottom of the screen must clear: the bottom
      bar (56 + the iPhone home-indicator area) where it shows, below 1025px;
      0 on desktop and on the mobile Shorts view, which have no bottom bar. */
@@ -202,10 +203,9 @@
 @media (min-width: 768px) and (max-width: 1024px) {
   :root { --topbar-h: 70px; }
 }
-/* iOS only (WebKit touch): 22 above the edge on an iPhone (34 inset - 12),
-   clearing the home indicator as the 20a phone frame draws it. */
+/* iOS only (WebKit touch): the bar grows by the home-indicator area. */
 @supports (-webkit-touch-callout: none) {
-  :root { --bottom-nav-float-gap: max(10px, calc(env(safe-area-inset-bottom, 0px) - 12px)); }
+  :root { --bottom-nav-float-gap: env(safe-area-inset-bottom, 0px); }
 }
 @media (max-width: 1024px) {
   :root { --bottom-bar-clearance: calc(var(--bottom-nav-float-h) + var(--bottom-nav-float-gap) + 8px); }

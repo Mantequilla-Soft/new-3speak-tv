@@ -1,25 +1,29 @@
 @use "../../styles/v2" as v2;
 
-// The bottom bar (20a phone): phones and tablets, below 1025px. A floating
-// card 10px in from the sides, 68 tall, radius 24, a 90% surface wash with a
-// 20px blur and a 1px border. Five equal slots: Home, Shorts, the red "+",
-// Groups, You. Each tab is an icon 24 over a 10/700 label in muted; the
-// current one sits on a 52px surface-2 tile (radius 16) in ink.
+// The bottom bar (20a phone): phones and tablets, below 1025px. Docked on the
+// bottom edge (owner 2026-11-12, was a card floating 10px up): full width on
+// a phone, a phone's width centred on a tablet, 68 tall plus the iPhone
+// home-indicator area (--bottom-nav-float-gap), the top corners rounded 24,
+// a 90% surface wash with a 20px blur, a 1px border on all but the bottom.
+// Five equal slots: Home, Shorts, the red "+", Groups, You. Each tab is an
+// icon 24 over a 10/700 label in muted; the current one sits on a 52px
+// surface-2 tile (radius 16) in ink.
 .bottom-nav {
   display: none;
   position: fixed;
-  // 10px in on a phone; on a tablet it keeps a phone's width, centred.
-  left: max(10px, calc(50% - 280px));
-  right: max(10px, calc(50% - 280px));
-  bottom: var(--bottom-nav-float-gap);
+  left: max(0px, calc(50% - 280px));
+  right: max(0px, calc(50% - 280px));
+  bottom: 0;
   z-index: 100;
-  height: var(--bottom-nav-float-h);
-  padding: 0;
+  box-sizing: border-box;
+  height: calc(var(--bottom-nav-float-h) + var(--bottom-nav-float-gap));
+  padding: 0 0 var(--bottom-nav-float-gap);
   background: color-mix(in srgb, var(--surface) 90%, transparent);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border);
-  border-radius: var(--r-2xl);
+  border-bottom: 0;
+  border-radius: var(--r-2xl) var(--r-2xl) 0 0;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   align-items: center;
   justify-items: center;
