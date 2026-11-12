@@ -95,7 +95,6 @@
   "receive": {
     "title": "받기",
     "sub": "누구나 어떤 Hive 지갑에서든 이 계정 이름으로 HIVE나 HBD를 보낼 수 있어요. 메모는 필요 없어요.",
-    "copy": "계정 이름 복사",
     "amountLabel": "금액 요청하기 (선택)",
     "memoLabel": "메모 (선택)",
     "memoPlaceholder": "용도, 예: 청구서 번호",

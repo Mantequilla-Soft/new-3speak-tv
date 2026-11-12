@@ -96,7 +96,6 @@
   "receive": {
     "title": "Receive",
     "sub": "Anyone can send HIVE or HBD to this account name from any Hive wallet. No memo needed.",
-    "copy": "Copy account name",
     "amountLabel": "Ask for an amount (optional)",
     "memoLabel": "Memo (optional)",
     "memoPlaceholder": "What it is for, like an invoice number",

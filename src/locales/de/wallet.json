@@ -96,7 +96,6 @@
   "receive": {
     "title": "Empfangen",
     "sub": "Jeder kann aus jeder Hive-Wallet HIVE oder HBD an diesen Kontonamen senden. Kein Memo nötig.",
-    "copy": "Kontonamen kopieren",
     "amountLabel": "Einen Betrag anfordern (optional)",
     "memoLabel": "Memo (optional)",
     "memoPlaceholder": "Wofür es ist, zum Beispiel eine Rechnungsnummer",

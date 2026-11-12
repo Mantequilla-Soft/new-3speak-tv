@@ -95,7 +95,6 @@
   "receive": {
     "title": "Terima",
     "sub": "Siapa pun bisa mengirim HIVE atau HBD ke nama akun ini dari dompet Hive mana pun. Tidak perlu memo.",
-    "copy": "Salin nama akun",
     "amountLabel": "Minta jumlah tertentu (opsional)",
     "memoLabel": "Memo (opsional)",
     "memoPlaceholder": "Untuk apa, misalnya nomor tagihan",

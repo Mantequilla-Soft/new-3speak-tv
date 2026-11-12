@@ -96,7 +96,6 @@
   "receive": {
     "title": "Ontvangen",
     "sub": "Iedereen kan vanuit elke Hive-wallet HIVE of HBD naar deze accountnaam sturen. Geen memo nodig.",
-    "copy": "Accountnaam kopiëren",
     "amountLabel": "Om een bedrag vragen (optioneel)",
     "memoLabel": "Memo (optioneel)",
     "memoPlaceholder": "Waarvoor het is, bijvoorbeeld een factuurnummer",

@@ -98,7 +98,6 @@
   "receive": {
     "title": "Odbierz",
     "sub": "Każdy może wysłać HIVE lub HBD na tę nazwę konta z dowolnego portfela Hive. Memo nie jest potrzebne.",
-    "copy": "Kopiuj nazwę konta",
     "amountLabel": "Poproś o kwotę (opcjonalnie)",
     "memoLabel": "Memo (opcjonalnie)",
     "memoPlaceholder": "Na co to jest, np. numer faktury",

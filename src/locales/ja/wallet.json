@@ -95,7 +95,6 @@
   "receive": {
     "title": "受け取る",
     "sub": "どの Hive ウォレットからでも、このアカウント名あてに HIVE や HBD を送れます。メモは不要です。",
-    "copy": "アカウント名をコピー",
     "amountLabel": "金額を指定する（任意）",
     "memoLabel": "メモ（任意）",
     "memoPlaceholder": "用途（例：請求書番号）",

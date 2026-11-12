@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dialog, Field } from '../v2/ui';
+import { Dialog, Field } from '../v2/ui';
 import { cx } from '../v2/helpers';
 import { formatNumber } from '../../i18n';
 import { receiveCode } from '../../lib/scannedRecipient';
-import { toastIn } from '../../utils/toast';
 
-const toast = toastIn('Wallet');
 const COINS = ['HIVE', 'HBD'];
 
 /**
@@ -72,11 +70,6 @@ export default function ReceiveDialog({ open, onClose, user }) {
           maxLength={200}
         />
       </div>
-      <Button variant="primary" size={48} block icon="content_copy" onClick={() => {
-        navigator.clipboard?.writeText(user || '').then(() => toast.success(t('common.actions.copied'))).catch(() => {});
-      }}>
-        {t('wallet.receive.copy')}
-      </Button>
     </Dialog>
   );
 }

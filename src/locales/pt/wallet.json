@@ -97,7 +97,6 @@
   "receive": {
     "title": "Receber",
     "sub": "Qualquer pessoa pode enviar HIVE ou HBD para este nome de conta a partir de qualquer carteira Hive. Não precisa de memo.",
-    "copy": "Copiar nome da conta",
     "amountLabel": "Pedir um valor (opcional)",
     "memoLabel": "Memo (opcional)",
     "memoPlaceholder": "Para que é, por exemplo um número de fatura",

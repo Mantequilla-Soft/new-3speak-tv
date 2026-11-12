@@ -96,7 +96,6 @@
   "receive": {
     "title": "Al",
     "sub": "Herkes herhangi bir Hive cüzdanından bu hesap adına HIVE veya HBD gönderebilir. Memo gerekmez.",
-    "copy": "Hesap adını kopyala",
     "amountLabel": "Bir tutar iste (isteğe bağlı)",
     "memoLabel": "Not (isteğe bağlı)",
     "memoPlaceholder": "Ne için olduğu, örneğin bir fatura numarası",

@@ -97,7 +97,6 @@
   "receive": {
     "title": "Recibir",
     "sub": "Cualquiera puede enviar HIVE o HBD a este nombre de cuenta desde cualquier billetera de Hive. No hace falta memo.",
-    "copy": "Copiar nombre de cuenta",
     "amountLabel": "Pedir una cantidad (opcional)",
     "memoLabel": "Memo (opcional)",
     "memoPlaceholder": "Para qué es, por ejemplo un número de factura",

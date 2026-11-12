@@ -95,7 +95,6 @@
   "receive": {
     "title": "Nhận",
     "sub": "Bất kỳ ai cũng có thể gửi HIVE hoặc HBD đến tên tài khoản này từ bất kỳ ví Hive nào. Không cần ghi chú.",
-    "copy": "Sao chép tên tài khoản",
     "amountLabel": "Yêu cầu một số tiền (không bắt buộc)",
     "memoLabel": "Ghi chú (không bắt buộc)",
     "memoPlaceholder": "Dùng cho việc gì, ví dụ số hóa đơn",
