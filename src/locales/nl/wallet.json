@@ -96,6 +96,11 @@
   "receive": {
     "title": "Ontvangen",
     "sub": "Iedereen kan vanuit elke Hive-wallet HIVE of HBD naar deze accountnaam sturen. Geen memo nodig.",
-    "copy": "Accountnaam kopiëren"
+    "copy": "Accountnaam kopiëren",
+    "amountLabel": "Om een bedrag vragen (optioneel)",
+    "memoLabel": "Memo (optioneel)",
+    "memoPlaceholder": "Waarvoor het is, bijvoorbeeld een factuurnummer",
+    "subRequest": "Wie deze code scant, krijgt een verzoek om {{amount}} {{coin}}. 3Speak en Hive-wallets die betaalcodes lezen vullen het in.",
+    "subMemo": "Wie deze code scant, krijgt je accountnaam en het memo ingevuld, in 3Speak en in Hive-wallets die betaalcodes lezen."
   }
 }

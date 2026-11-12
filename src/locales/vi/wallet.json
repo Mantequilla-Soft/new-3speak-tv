@@ -95,6 +95,11 @@
   "receive": {
     "title": "Nhận",
     "sub": "Bất kỳ ai cũng có thể gửi HIVE hoặc HBD đến tên tài khoản này từ bất kỳ ví Hive nào. Không cần ghi chú.",
-    "copy": "Sao chép tên tài khoản"
+    "copy": "Sao chép tên tài khoản",
+    "amountLabel": "Yêu cầu một số tiền (không bắt buộc)",
+    "memoLabel": "Ghi chú (không bắt buộc)",
+    "memoPlaceholder": "Dùng cho việc gì, ví dụ số hóa đơn",
+    "subRequest": "Quét mã này sẽ yêu cầu {{amount}} {{coin}}. 3Speak và các ví Hive đọc được mã thanh toán sẽ tự điền.",
+    "subMemo": "Quét mã này sẽ điền tên tài khoản của bạn và ghi chú trong 3Speak và trong các ví Hive đọc được mã thanh toán."
   }
 }

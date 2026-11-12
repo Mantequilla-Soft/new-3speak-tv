@@ -97,6 +97,11 @@
   "receive": {
     "title": "Ricevi",
     "sub": "Chiunque può inviare HIVE o HBD a questo nome account da qualsiasi wallet Hive. Nessun memo necessario.",
-    "copy": "Copia nome account"
+    "copy": "Copia nome account",
+    "amountLabel": "Chiedi un importo (facoltativo)",
+    "memoLabel": "Memo (facoltativo)",
+    "memoPlaceholder": "A cosa serve, ad esempio un numero di fattura",
+    "subRequest": "Scansionando questo codice si chiedono {{amount}} {{coin}}. 3Speak e i wallet Hive che leggono i codici di pagamento lo compilano.",
+    "subMemo": "Scansionando questo codice si compilano il tuo nome account e il memo in 3Speak e nei wallet Hive che leggono i codici di pagamento."
   }
 }

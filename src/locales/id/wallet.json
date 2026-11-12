@@ -95,6 +95,11 @@
   "receive": {
     "title": "Terima",
     "sub": "Siapa pun bisa mengirim HIVE atau HBD ke nama akun ini dari dompet Hive mana pun. Tidak perlu memo.",
-    "copy": "Salin nama akun"
+    "copy": "Salin nama akun",
+    "amountLabel": "Minta jumlah tertentu (opsional)",
+    "memoLabel": "Memo (opsional)",
+    "memoPlaceholder": "Untuk apa, misalnya nomor tagihan",
+    "subRequest": "Memindai kode ini meminta {{amount}} {{coin}}. 3Speak dan dompet Hive yang bisa membaca kode pembayaran akan mengisinya.",
+    "subMemo": "Memindai kode ini mengisi nama akunmu dan memonya di 3Speak dan di dompet Hive yang bisa membaca kode pembayaran."
   }
 }

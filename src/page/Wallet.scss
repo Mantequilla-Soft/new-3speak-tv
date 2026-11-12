@@ -266,6 +266,11 @@
     line-height: 0;
   }
   &__receive-name { width: 100%; font-size: 16px; font-weight: 700; }
+  // Ask for an amount, a coin and a memo (owner 2026-11-12): they go into the QR.
+  &__receive-ask { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+  &__receive-row { display: flex; gap: 8px; align-items: center; .v2-input { flex: 1; min-width: 0; } }
+  &__receive-coins { display: flex; gap: 6px; flex: none; }
+  &__receive-memo { width: 100%; }
 }
 
 // The Pro panel is drawn by the hangouts SDK. Point its variables at the v2

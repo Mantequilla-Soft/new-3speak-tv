@@ -47,3 +47,30 @@ describe('parseScannedRecipient', () => {
     expect(isAccountName('ok.no')).toBe(false) // "no" is too short a part
   })
 })
+
+describe('receiveCode (the wallet\'s Receive QR)', async () => {
+  const { receiveCode } = await import('../../../src/lib/scannedRecipient.js')
+
+  it('without an amount: just the account name', () => {
+    expect(receiveCode('badadib')).toBe('badadib')
+    expect(receiveCode('badadib', '')).toBe('badadib')
+    expect(receiveCode('badadib', '0')).toBe('badadib')
+  })
+
+  it('with an amount: a Hive transfer request that Scan reads back', () => {
+    const code = receiveCode('badadib', '5', 'HBD')
+    expect(code.startsWith('hive://sign/op/')).toBe(true)
+    expect(parseScannedRecipient(code)).toEqual({ to: 'badadib', amount: '5.000', coin: 'HBD' })
+    expect(parseScannedRecipient(receiveCode('badadib', '0.1', 'HIVE'))).toEqual({ to: 'badadib', amount: '0.100', coin: 'HIVE' })
+  })
+
+  it('with a memo too, or a memo alone (the sender types the amount)', () => {
+    expect(parseScannedRecipient(receiveCode('badadib', '2', 'HIVE', 'Invoice 42'))).toEqual({ to: 'badadib', amount: '2.000', coin: 'HIVE', memo: 'Invoice 42' })
+    expect(parseScannedRecipient(receiveCode('badadib', '', 'HBD', 'coffee ☕'))).toEqual({ to: 'badadib', memo: 'coffee ☕' })
+    expect(receiveCode('badadib', '', 'HBD', '   ')).toBe('badadib')
+  })
+
+  it('an unknown coin falls back to the account name', () => {
+    expect(receiveCode('badadib', '5', 'BTC')).toBe('badadib')
+  })
+})

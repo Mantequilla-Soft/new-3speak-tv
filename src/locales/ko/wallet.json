@@ -95,6 +95,11 @@
   "receive": {
     "title": "받기",
     "sub": "누구나 어떤 Hive 지갑에서든 이 계정 이름으로 HIVE나 HBD를 보낼 수 있어요. 메모는 필요 없어요.",
-    "copy": "계정 이름 복사"
+    "copy": "계정 이름 복사",
+    "amountLabel": "금액 요청하기 (선택)",
+    "memoLabel": "메모 (선택)",
+    "memoPlaceholder": "용도, 예: 청구서 번호",
+    "subRequest": "이 코드를 스캔하면 {{amount}} {{coin}}을(를) 요청해요. 3Speak와 결제 코드를 읽는 Hive 지갑이 자동으로 채워요.",
+    "subMemo": "이 코드를 스캔하면 3Speak와 결제 코드를 읽는 Hive 지갑에서 계정 이름과 메모가 채워져요."
   }
 }

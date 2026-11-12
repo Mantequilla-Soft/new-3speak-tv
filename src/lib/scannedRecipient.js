@@ -74,3 +74,28 @@ export function parseScannedRecipient(raw) {
   const to = account(text);
   return to ? { to } : null;
 }
+
+// ── The other way round: what the wallet's Receive code holds (Wallet page) ──
+
+function encodeBase64Url(text) {
+  const bytes = new TextEncoder().encode(text);
+  let bin = '';
+  bytes.forEach((b) => { bin += String.fromCharCode(b); });
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+/**
+ * The text of a Receive QR code for `to` (owner 2026-11-12). With neither an
+ * amount nor a memo, just the account name: every Hive wallet reads that. With
+ * either, a Hive transfer request (hive://sign/op/…, `__signer` = whoever scans
+ * it) asking for that amount of HIVE or HBD (0.000 when only a memo is set: the
+ * sender types the amount) with that memo. parseScannedRecipient above reads it
+ * back, as do Hive wallets that understand Hive payment codes.
+ */
+export function receiveCode(to, amount, coin = 'HIVE', memo = '') {
+  const n = Number(amount);
+  const note = String(memo || '').trim();
+  if ((!(n > 0) && !note) || !['HIVE', 'HBD'].includes(coin)) return to || '';
+  const op = ['transfer', { from: '__signer', to, amount: `${(n > 0 ? n : 0).toFixed(3)} ${coin}`, memo: note }];
+  return `hive://sign/op/${encodeBase64Url(JSON.stringify(op))}`;
+}

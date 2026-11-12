@@ -96,6 +96,11 @@
   "receive": {
     "title": "Receive",
     "sub": "Anyone can send HIVE or HBD to this account name from any Hive wallet. No memo needed.",
-    "copy": "Copy account name"
+    "copy": "Copy account name",
+    "amountLabel": "Ask for an amount (optional)",
+    "memoLabel": "Memo (optional)",
+    "memoPlaceholder": "What it is for, like an invoice number",
+    "subRequest": "Scanning this code asks for {{amount}} {{coin}}. 3Speak and Hive wallets that read payment codes fill it in.",
+    "subMemo": "Scanning this code fills in your account name and the memo in 3Speak and in Hive wallets that read payment codes."
   }
 }

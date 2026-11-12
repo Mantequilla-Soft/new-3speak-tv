@@ -98,6 +98,11 @@
   "receive": {
     "title": "Odbierz",
     "sub": "Każdy może wysłać HIVE lub HBD na tę nazwę konta z dowolnego portfela Hive. Memo nie jest potrzebne.",
-    "copy": "Kopiuj nazwę konta"
+    "copy": "Kopiuj nazwę konta",
+    "amountLabel": "Poproś o kwotę (opcjonalnie)",
+    "memoLabel": "Memo (opcjonalnie)",
+    "memoPlaceholder": "Na co to jest, np. numer faktury",
+    "subRequest": "Zeskanowanie tego kodu prosi o {{amount}} {{coin}}. 3Speak i portfele Hive, które czytają kody płatności, uzupełniają to same.",
+    "subMemo": "Zeskanowanie tego kodu uzupełnia nazwę Twojego konta i memo w 3Speak i w portfelach Hive, które czytają kody płatności."
   }
 }

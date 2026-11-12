@@ -6,7 +6,7 @@ import { Client } from '@hiveio/dhive';
 import TransferModal from '../components/Wallet/TransferModal';
 import ProPlansPanel from '../components/Wallet/ProPlansPanel';
 import { useNavigate, useParams } from 'react-router-dom';
-import { QRCodeSVG } from 'qrcode.react';
+import ReceiveDialog from '../components/Wallet/ReceiveDialog';
 import { toastIn } from '../utils/toast';
 import { ENABLE_SUBS } from '../utils/config';
 import { IS_VSC_TESTNET, HIVE_TESTNET_NODES } from '../utils/vscContract';
@@ -344,18 +344,7 @@ function Wallet() {
           fetchBalances={fetchBalances} />
       )}
 
-      <Dialog open={showReceive} onClose={() => setShowReceive(false)} title={t('wallet.receive.title')} closeLabel={t('common.actions.close')} width={400}>
-        <div className="wallet-v2__receive">
-          <div className="wallet-v2__qr"><QRCodeSVG value={user || ''} size={168} bgColor="white" fgColor="black" includeMargin /></div>
-          <div className="v2-well wallet-v2__receive-name num">@{user}</div>
-          <p className="v2-meta">{t('wallet.receive.sub')}</p>
-        </div>
-        <Button variant="primary" size={48} block icon="content_copy" onClick={() => {
-          navigator.clipboard?.writeText(user || '').then(() => toast.success(t('common.actions.copied'))).catch(() => {});
-        }}>
-          {t('wallet.receive.copy')}
-        </Button>
-      </Dialog>
+      <ReceiveDialog open={showReceive} onClose={() => setShowReceive(false)} user={user} />
     </div>
   );
 }

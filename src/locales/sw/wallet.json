@@ -96,6 +96,11 @@
   "receive": {
     "title": "Pokea",
     "sub": "Mtu yeyote anaweza kutuma HIVE au HBD kwa jina hili la akaunti kutoka pochi yoyote ya Hive. Hakuna haja ya memo.",
-    "copy": "Nakili jina la akaunti"
+    "copy": "Nakili jina la akaunti",
+    "amountLabel": "Omba kiasi (si lazima)",
+    "memoLabel": "Memo (si lazima)",
+    "memoPlaceholder": "Ni kwa ajili ya nini, kama namba ya ankara",
+    "subRequest": "Kuchanganua msimbo huu kunaomba {{amount}} {{coin}}. 3Speak na pochi za Hive zinazosoma misimbo ya malipo hujaza hili.",
+    "subMemo": "Kuchanganua msimbo huu kunajaza jina la akaunti yako na memo kwenye 3Speak na kwenye pochi za Hive zinazosoma misimbo ya malipo."
   }
 }

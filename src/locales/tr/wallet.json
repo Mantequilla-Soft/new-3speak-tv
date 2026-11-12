@@ -96,6 +96,11 @@
   "receive": {
     "title": "Al",
     "sub": "Herkes herhangi bir Hive cüzdanından bu hesap adına HIVE veya HBD gönderebilir. Memo gerekmez.",
-    "copy": "Hesap adını kopyala"
+    "copy": "Hesap adını kopyala",
+    "amountLabel": "Bir tutar iste (isteğe bağlı)",
+    "memoLabel": "Not (isteğe bağlı)",
+    "memoPlaceholder": "Ne için olduğu, örneğin bir fatura numarası",
+    "subRequest": "Bu kodu tarayan kişiden {{amount}} {{coin}} istenir. 3Speak ve ödeme kodlarını okuyan Hive cüzdanları bunu doldurur.",
+    "subMemo": "Bu kodu taramak, 3Speak'te ve ödeme kodlarını okuyan Hive cüzdanlarında hesap adını ve notu doldurur."
   }
 }

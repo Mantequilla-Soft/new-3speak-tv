@@ -95,6 +95,11 @@
   "receive": {
     "title": "收款",
     "sub": "任何人都可以用任意 Hive 钱包向这个账号名发送 HIVE 或 HBD，无需备注。",
-    "copy": "复制账号名"
+    "copy": "复制账号名",
+    "amountLabel": "请求一个金额（可选）",
+    "memoLabel": "备注（可选）",
+    "memoPlaceholder": "用途，例如发票编号",
+    "subRequest": "扫描此码会请求 {{amount}} {{coin}}。3Speak 和能读取付款码的 Hive 钱包会自动填写。",
+    "subMemo": "扫描此码会在 3Speak 和能读取付款码的 Hive 钱包中填入你的账户名和备注。"
   }
 }
