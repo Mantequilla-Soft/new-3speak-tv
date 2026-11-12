@@ -550,11 +550,15 @@ describe('settings: Notifications', () => {
     m.pushSupported = () => true
     m.getPushPrefs = vi.fn(async () => ({ kinds: ['videos', 'replies', 'votes'], prefs: { votes: false } }))
     const { user } = mount()
-    await screen.findByRole('switch', { name: 'Upvotes (off by default)' })
+    // Until the server's list arrives every kind shows (Upvotes included), so
+    // wait for the LOADED list, not just for a switch: under load the test
+    // used to look in the gap (CI flake, 2026-11-12).
+    await waitFor(() => {
+      expect(screen.queryByRole('switch', { name: 'New shorts' })).not.toBeInTheDocument()
+      expect(sw('Upvotes (off by default)')).toHaveAttribute('aria-checked', 'false')
+    })
     expect(screen.getByText('From creators you follow')).toBeInTheDocument()
     expect(screen.getByText('About you')).toBeInTheDocument()
-    expect(screen.queryByRole('switch', { name: 'New shorts' })).not.toBeInTheDocument()
-    expect(sw('Upvotes (off by default)')).toHaveAttribute('aria-checked', 'false')
     expect(sw('Replies')).toHaveAttribute('aria-checked', 'true')
 
     m.getPushState = vi.fn(async () => ({ supported: true, worker: true, permission: 'granted', subscribed: true }))

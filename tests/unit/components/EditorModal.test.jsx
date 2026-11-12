@@ -63,6 +63,11 @@ async function open(props) {
     return el
   })
   vi.spyOn(iframe.contentWindow, 'postMessage').mockImplementation((msg) => posted.push(msg))
+  // The iframe shows on render, but the component's message listener is added
+  // in an effect after it. Let React run its pending effects first, or an
+  // "editor-ready" sent at once can land before anyone listens (a flake under
+  // load in CI, 2026-11-12).
+  await act(async () => {})
   return { ...utils, onClose, iframe }
 }
 
