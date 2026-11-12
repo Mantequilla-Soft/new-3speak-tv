@@ -26,9 +26,9 @@ const { default: SupportModal } = await import('../../../src/components/SupportM
 let rows
 const asked = () => get.mock.calls.map(([url]) => decodeURIComponent(url.split('/check/')[1]))
 
-// Any page but Home: there the banner moves between the Spotlight and the feed
-// tabs (HomeGrouped's inline copy), see the Home test at the end.
-const mount = (route = '/audio') => renderWithProviders(<><UploadBlockNotice /><SupportModal /></>, { route })
+// Home as it is built: the app-level copy (the one-time popup) and Home's
+// inline copy (the banner, between the Spotlight and the feed tabs).
+const mount = (route = '/') => renderWithProviders(<><UploadBlockNotice /><UploadBlockNotice inline /><SupportModal /></>, { route })
 const banner = () => document.querySelector('.upload-block-notice')
 const popup = () => document.querySelector('.support-modal')
 
@@ -171,14 +171,19 @@ describe('everyone else', () => {
   })
 })
 
-describe('on Home', () => {
-  it('the app-level copy keeps the popup but leaves the banner to the inline copy under the Spotlight', async () => {
+describe('the banner is on Home only', () => {
+  it('any other page gets the one-time popup but no banner (owner 2026-11-12)', async () => {
     rows['~newbie'] = { canUpload: false, uploadBlockedReason: 'Only post your own videos.', uploadBlockedAt: '2026-11-10T09:00:00.000Z' }
-    renderWithProviders(<><UploadBlockNotice /><div className="home-slot"><UploadBlockNotice inline /></div><SupportModal /></>, { route: '/' })
+    renderWithProviders(<><UploadBlockNotice /><SupportModal /></>, { route: '/shorts' })
     await waitFor(() => expect(popup()).not.toBeNull())
-    const banners = document.querySelectorAll('.upload-block-notice')
-    expect(banners).toHaveLength(1)
-    expect(banners[0].closest('.home-slot')).not.toBeNull()
+    expect(banner()).toBeNull()
+  })
+
+  it('on Home there is exactly one banner and one popup', async () => {
+    rows['~newbie'] = { canUpload: false, uploadBlockedReason: 'Only post your own videos.', uploadBlockedAt: '2026-11-10T09:00:00.000Z' }
+    mount()
+    await waitFor(() => expect(popup()).not.toBeNull())
+    expect(document.querySelectorAll('.upload-block-notice')).toHaveLength(1)
     expect(document.querySelectorAll('.support-modal')).toHaveLength(1)
   })
 })

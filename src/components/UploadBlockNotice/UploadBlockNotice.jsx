@@ -46,9 +46,9 @@ function markSeen(key, id) {
  * account only when the admin left a note: older Hive blocks carry none and keep
  * the click-time popup only.
  */
-// `inline`: the copy Home draws between the Spotlight and the feed tabs (owner
-// 2026-11-12). The app-level copy hides its banner on Home and keeps the
-// one-time popup; the inline one is the banner only.
+// `inline`: the copy Home draws between the Spotlight and the feed tabs; the
+// banner shows THERE ONLY (owner 2026-11-12: not over Shorts or any other
+// page). The app-level copy is the one-time popup and never a banner.
 export default function UploadBlockNotice({ hidden = false, inline = false }) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
@@ -75,8 +75,7 @@ export default function UploadBlockNotice({ hidden = false, inline = false }) {
     });
   }, [inline, key, blockId, note, changelogPending]);
 
-  const onHome = pathname === '/';
-  if (!active || hidden || (onHome && !inline)) return null;
+  if (!active || hidden || !inline) return null;
 
   return (
     <section className="upload-block-notice" role="status">
