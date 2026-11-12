@@ -1,5 +1,5 @@
 /* ─── The app frame (STYLE_GUIDE §4) ───────────────────────────────────────
-   Every route renders inside .container: the content column, max 1280 wide,
+   Every route renders inside .container: the content column, max --content-max wide,
    centred, with the page padding (24 on desktop, 16 under 768). Below 1025px
    the fixed bottom bar (56 + the safe area) sits over the end of the page, so
    the column leaves room for it. The top bar (Nav) is the sticky strip above.

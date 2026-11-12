@@ -3,7 +3,7 @@
 // ─── The app's top bar (STYLE_GUIDE §4, designs 02 / 20a / 28c headers) ──────
 // A sticky, page-coloured strip (.nav-container) holding the bar itself
 // (.nav-bar): a 64px surface card, radius 20, 1px border, lined up with the
-// 1280px content column. Every control in it is 40 tall.
+// content column (--content-max). Every control in it is 40 tall.
 //
 // Below 1025px the bottom bar (BottomNav) carries the sections and the account
 // entry, so the top bar drops to logo + search + icon buttons. Under 768px it

@@ -60,7 +60,7 @@ The allowed sizes are 10 · 11 · 12 · 13 · 14 · 16 · 18 · 20 · 24 · 28 �
 ## 4. Spacing and layout
 - Spacing is on a 4px grid: 4 · 6 · 8 · 10 · 12 · 14 · 16 · 20 · 24 · 32 · 40 · 48.
 - Card padding is 16 (dense boards 12–14, large panels 20). Gaps are 8–12 between cards, 6–8 inside, and 4 between segments.
-- **Desktop app frame:** max content width 1280, page padding 24, top bar 64.
+- **Desktop app frame:** max content width 1280 on the boards, 1600 in the app (`--content-max`, owner 2026-11-12), page padding 24, top bar 64.
   - Watch layout: `grid-template-columns: minmax(0,1fr) 380px`, gap 20.
   - Side panels are 380 wide. Feeds use auto-fill grids with `minmax(240px,1fr)`.
 - **Mobile** (< 768px): one column with 16px side padding, the bottom nav (56 + safe area), and sheets instead of dialogs. Tap targets are at least 44px.

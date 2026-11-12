@@ -94,7 +94,10 @@
   --h-44: 44px; --h-48: 48px; --h-56: 56px; --h-64: 64px;
 
   /* layout */
-  --content-max: 1280px;
+  /* The content frame. The boards draw it at 1280; the owner asked for a wider
+     desktop (2026-11-12) so Home fits four cards beside the activity panel.
+     Pages are fluid up to this, so 1280-wide screens look as on the boards. */
+  --content-max: 1600px;
   --page-pad: 24px;
   /* What the floating top bar takes from the top of the window (20a): 16 above
      it, 10 + 40 + 10 inside, a 1px line top and bottom. Sticky and fixed things
@@ -505,7 +508,7 @@ p { text-wrap: pretty; }
    on desktop, a surface bar, radius 24, a 1px border with 40% of the tone,
    padding 18/20; a 48px tinted icon tile (radius 16), the title 16/700 over a
    13px muted line, then the actions (44 tall). */
-.v2-confirmbar.is-card { left: 24px; right: 24px; transform: none; max-width: 1232px; margin: 0 auto; gap: 16px; padding: 18px 20px; border-radius: var(--r-2xl);
+.v2-confirmbar.is-card { left: 24px; right: 24px; transform: none; max-width: calc(var(--content-max) - 2 * var(--page-pad)); margin: 0 auto; gap: 16px; padding: 18px 20px; border-radius: var(--r-2xl);
   background: var(--surface); color: var(--text); font-weight: 400; border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border)); box-shadow: var(--shadow-sheet); animation-name: v2-rise-card;
   &.is-cyan { border-color: color-mix(in srgb, var(--cyan) 40%, var(--border)); .v2-confirmbar__icon { background: var(--cyan-tint); color: var(--cyan); } }
   .v2-confirmbar__icon { width: 48px; height: 48px; border-radius: var(--r-lg); display: grid; place-items: center; flex: none; background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); }
