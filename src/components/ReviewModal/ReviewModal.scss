@@ -118,13 +118,21 @@
   .material-symbols-rounded { color: var(--accent); }
   &:hover { background: var(--surface-2); }
 
-  // The global audio player publishes its top edge as --audio-np-clearance
-  // (GlobalAudioPlayer.jsx), so stay 12px above it. On desktop the open queue
-  // publishes its own top edge as --audio-queue-clearance; that one wins.
-  bottom: max(18px, calc(var(--audio-queue-clearance, var(--audio-np-clearance, 0px)) + 12px));
+  // The audio player bar is centred (at most 620px wide), so on a wide screen
+  // it never reaches this corner and the button stays down (owner 2026-11-12).
+  // The open queue does sit in this corner on a desktop: it publishes its top
+  // edge as --audio-queue-clearance (GlobalAudioPlayer.jsx), stay 12px above.
+  bottom: max(18px, calc(var(--audio-queue-clearance, 0px) + 12px));
 
   // Lift above the bottom bar wherever it is shown (below 1025px).
   @media (max-width: 1024px) {
+    bottom: calc(var(--bottom-bar-clearance) + 16px);
+    &.review-fab--mini { bottom: 132px; }
+  }
+  // Narrow enough that the centred bar reaches under the button (620px bar +
+  // this button's ~140px): climb above the player, whose top edge is
+  // --audio-np-clearance.
+  @media (max-width: 960px) {
     bottom: max(calc(var(--bottom-bar-clearance) + 16px), calc(var(--audio-np-clearance, 0px) + 12px));
     &.review-fab--mini { bottom: max(132px, calc(var(--audio-np-clearance, 0px) + 12px)); }
   }
