@@ -611,5 +611,11 @@
     "streakNext_other": "Dahil dito, magiging {{count}}-araw ang story streak mo.",
     "streakStart": "Mag-post ng story araw-araw para makabuo ng streak.",
     "keepGoing": "Mag-post ng story araw-araw para tuloy-tuloy ito"
+  },
+  "originalOnly": {
+    "title": "Mag-upload lang ng content na ikaw mismo ang gumawa.",
+    "body": "Para sa orihinal na content ang 3Speak. Hindi dapat kumita ng rewards ang materyal na may copyright, kaya huwag itong i-upload o itakda ang Rewards sa \"Tanggihan ang payout\".",
+    "decline": "Tanggihan ang payout",
+    "declined": "Tinanggihan ang payout"
   }
 }

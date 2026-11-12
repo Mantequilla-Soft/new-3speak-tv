@@ -611,5 +611,11 @@
     "streakNext_other": "This makes it a {{count}}-day story streak.",
     "streakStart": "Post a story every day to build a streak.",
     "keepGoing": "Post a story every day to keep it going"
+  },
+  "originalOnly": {
+    "title": "Only upload content you made.",
+    "body": "3Speak is for original content. Copyrighted material must not earn rewards, so either don't upload it or set Rewards to \"Decline payout\".",
+    "decline": "Decline payout",
+    "declined": "Payout declined"
   }
 }

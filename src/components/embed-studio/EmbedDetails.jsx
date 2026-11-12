@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { toastIn } from '../../utils/toast';
+import OriginalContentNotice from '../OriginalContentNotice/OriginalContentNotice';
 import { StepProgress } from '../legacy-studio/StepProgress';
 import CommunityModal from "../modal/Community_modal";
 import Beneficiary_modal from '../modal/Beneficiary_modal';
@@ -568,6 +569,8 @@ function EmbedDetails() {
         <div className="studio-page-content">
           <div className={`embed-details-layout${fromStories ? ' is-short' : ''}`}>
             <div className="embed-details-main">
+              {/* Original content only: copyrighted material declines its payout. */}
+              <OriginalContentNotice declined={rewardChoice === 'decline'} onDecline={() => handleSelect('decline')} />
               {/* Shorts and stories: optional, posted as a `## Title` line on top of
                   the post and then shown as the short's title on 3Speak
                   (utils/shortTitle.js). */}

@@ -617,5 +617,11 @@
     "streakNext_other": "Com este, sua sequência de stories chega a {{count}} dias.",
     "streakStart": "Publique um story todo dia para criar uma sequência.",
     "keepGoing": "Publique uma story todo dia para manter a sequência"
+  },
+  "originalOnly": {
+    "title": "Envie só conteúdo feito por você.",
+    "body": "O 3Speak é para conteúdo original. Material protegido por direitos autorais não pode gerar recompensas, então não o envie ou defina Recompensas como \"Recusar pagamento\".",
+    "decline": "Recusar pagamento",
+    "declined": "Pagamento recusado"
   }
 }

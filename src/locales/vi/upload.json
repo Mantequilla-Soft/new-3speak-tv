@@ -605,5 +605,11 @@
     "streakNext_other": "Tin này đưa chuỗi đăng tin của bạn lên {{count}} ngày.",
     "streakStart": "Đăng một tin mỗi ngày để tạo chuỗi.",
     "keepGoing": "Đăng một tin mỗi ngày để duy trì chuỗi"
+  },
+  "originalOnly": {
+    "title": "Chỉ tải lên nội dung do bạn tự làm.",
+    "body": "3Speak dành cho nội dung gốc. Nội dung có bản quyền không được nhận phần thưởng, vì vậy đừng tải lên hoặc đặt Phần thưởng thành \"Từ chối phần thưởng\".",
+    "decline": "Từ chối phần thưởng",
+    "declined": "Đã từ chối phần thưởng"
   }
 }

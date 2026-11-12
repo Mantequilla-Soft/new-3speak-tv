@@ -611,5 +611,11 @@
     "streakNext_other": "Kwa hii, mfululizo wako wa hadithi unafika siku {{count}}.",
     "streakStart": "Chapisha hadithi kila siku ili kujenga mfululizo.",
     "keepGoing": "Chapisha hadithi kila siku ili kuendeleza mfululizo"
+  },
+  "originalOnly": {
+    "title": "Pakia tu maudhui uliyotengeneza mwenyewe.",
+    "body": "3Speak ni kwa maudhui asilia. Maudhui yenye hakimiliki hayapaswi kupata zawadi, kwa hivyo usiyapakie au weka Zawadi kuwa \"Kataa malipo\".",
+    "decline": "Kataa malipo",
+    "declined": "Malipo yamekataliwa"
   }
 }

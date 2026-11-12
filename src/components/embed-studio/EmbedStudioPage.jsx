@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { getHiveUrl } from '../../utils/hiveNode';
+import OriginalContentNotice from '../OriginalContentNotice/OriginalContentNotice';
 import "../legacy-studio/StudioPage.scss";
 import EmbedVideoUploadStep1 from "./EmbedVideoUploadStep1";
 import VerifyAuthModal from "../modal/VerifyAuthModal";
@@ -277,6 +278,8 @@ function EmbedStudioPage() {
         {/* The stepper bar, the background upload card (shown after coming
             Back here while it keeps going) and the picker: EmbedVideoUploadStep1. */}
         <div className="studio-page-content">
+          {/* Before a file is picked: original content only (owner 2026-11-12). */}
+          <OriginalContentNotice className="studio-original-notice" />
           <EmbedVideoUploadStep1 />
         </div>
       </div>

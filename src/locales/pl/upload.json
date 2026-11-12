@@ -623,5 +623,11 @@
     "streakNext_other": "Dzięki tej relacji seria wyniesie {{count}} dnia z rzędu.",
     "streakStart": "Dodawaj relację codziennie, by zbudować serię.",
     "keepGoing": "Publikuj relację codziennie, aby utrzymać passę"
+  },
+  "originalOnly": {
+    "title": "Przesyłaj tylko treści, które sam stworzyłeś.",
+    "body": "3Speak jest dla oryginalnych treści. Materiały chronione prawem autorskim nie mogą zarabiać nagród, więc ich nie przesyłaj albo ustaw Nagrody na „Odrzuć wypłatę”.",
+    "decline": "Odrzuć wypłatę",
+    "declined": "Wypłata odrzucona"
   }
 }

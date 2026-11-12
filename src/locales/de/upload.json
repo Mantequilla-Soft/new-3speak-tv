@@ -611,5 +611,11 @@
     "streakNext_other": "Damit wird es eine Story-Serie von {{count}} Tagen.",
     "streakStart": "Poste jeden Tag eine Story, um eine Serie aufzubauen.",
     "keepGoing": "Poste jeden Tag eine Story, um dranzubleiben"
+  },
+  "originalOnly": {
+    "title": "Lade nur Inhalte hoch, die du selbst gemacht hast.",
+    "body": "3Speak ist für eigene Inhalte. Urheberrechtlich geschütztes Material darf keine Belohnungen verdienen: lade es also nicht hoch oder stelle Belohnungen auf „Auszahlung ablehnen“.",
+    "decline": "Auszahlung ablehnen",
+    "declined": "Auszahlung abgelehnt"
   }
 }

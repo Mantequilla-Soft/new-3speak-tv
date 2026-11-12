@@ -1,6 +1,7 @@
 // Live demo of every primitive, in both themes. Mount it on a dev-only route (e.g. /dev/ui)
 // and compare it against the design files. If they don't match, the primitive is wrong, not the design.
 import { useState } from "react";
+import OriginalContentNotice from '../OriginalContentNotice/OriginalContentNotice';
 import { Avatar, Banner, Button, Card, Chip, ChoiceCard, ConfirmBar, Dialog, DockTile, EmptyState, Eyebrow, Field, IconButton, Island, Progress, Segmented, SettingRow, StatTile, StatusPill, Thumb, Toggle } from "./ui";
 
 export default function UiPlayground() {
@@ -38,6 +39,9 @@ export default function UiPlayground() {
         <div style={{ display: "flex", gap: 6 }}><StatusPill tone="live">● LIVE</StatusPill><StatusPill tone="cyan">Approved</StatusPill><StatusPill tone="accent">Failed</StatusPill><StatusPill>Draft</StatusPill></div>
         <Banner tone="info" icon={"info"} title="Heads up.">Watch time is tracked since March.</Banner>
         <Banner tone="warn" icon={"warning"} title="Out of resource credits.">They refill on their own.</Banner>
+        <OriginalContentNotice />
+        <OriginalContentNotice onDecline={() => {}} />
+        <OriginalContentNotice onDecline={() => {}} declined />
         <Progress value={64} label="Upload" />
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6 }}><StatTile label="Views" value="9.2K" /><StatTile label="Watch time" value="312h" /><StatTile label="Payout" value="$6.49" /></div>
       </Card>

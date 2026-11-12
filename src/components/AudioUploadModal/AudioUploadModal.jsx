@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback, useMemo, useId } from 'react';
 import { createPortal } from 'react-dom';
+import OriginalContentNotice from '../OriginalContentNotice/OriginalContentNotice';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation, Trans } from 'react-i18next';
@@ -2805,6 +2806,7 @@ function MainPostStep({
       {/* A warm-up post has no payout and no blog yet: those come with the Hive account. */}
       {!warmup && (
         <section className="audio-upload-card">
+          <OriginalContentNotice declined={payout === 'decline'} onDecline={() => setPayout('decline')} />
           <RewardRow payout={payout} setPayout={setPayout} beneCount={beneCount} onOpenBene={onOpenBene} />
           <SettingRow
             icon="dynamic_feed"
@@ -2902,6 +2904,7 @@ function TracksStep({
           ? t('audio.upload.tracks.helpAlbum')
           : t('audio.upload.tracks.helpSnaps')}
       </p>
+      <OriginalContentNotice />
 
       <div className="audio-upload-title-card">
         <p className="audio-upload-apply-note">

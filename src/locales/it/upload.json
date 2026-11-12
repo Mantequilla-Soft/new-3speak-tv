@@ -617,5 +617,11 @@
     "streakNext_other": "Con questa la tua serie di storie arriva a {{count}} giorni.",
     "streakStart": "Pubblica una storia ogni giorno per creare una serie.",
     "keepGoing": "Pubblica una storia ogni giorno per mantenere la serie"
+  },
+  "originalOnly": {
+    "title": "Carica solo contenuti creati da te.",
+    "body": "3Speak è per contenuti originali. Il materiale protetto da copyright non deve generare ricompense: non caricarlo, oppure imposta Ricompense su «Rifiuta il pagamento».",
+    "decline": "Rifiuta il pagamento",
+    "declined": "Pagamento rifiutato"
   }
 }

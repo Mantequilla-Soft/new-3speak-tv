@@ -605,5 +605,11 @@
     "streakNext_other": "Dengan ini, streak story-mu jadi {{count}} hari.",
     "streakStart": "Posting story setiap hari untuk membangun streak.",
     "keepGoing": "Posting story setiap hari agar tetap berlanjut"
+  },
+  "originalOnly": {
+    "title": "Unggah hanya konten buatanmu sendiri.",
+    "body": "3Speak untuk konten orisinal. Materi berhak cipta tidak boleh mendapat reward, jadi jangan unggah atau atur Reward ke \"Tolak payout\".",
+    "decline": "Tolak payout",
+    "declined": "Payout ditolak"
   }
 }

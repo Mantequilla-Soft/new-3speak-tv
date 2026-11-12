@@ -611,5 +611,11 @@
     "streakNext_other": "Bununla hikâye serin {{count}} güne çıkıyor.",
     "streakStart": "Seri oluşturmak için her gün bir hikâye paylaş.",
     "keepGoing": "Devam ettirmek için her gün bir hikâye paylaş"
+  },
+  "originalOnly": {
+    "title": "Yalnızca kendi ürettiğin içeriği yükle.",
+    "body": "3Speak özgün içerik içindir. Telif hakkıyla korunan içerik ödül kazanmamalı; bu yüzden ya yükleme ya da Ödüller ayarını \"Ödemeyi reddet\" yap.",
+    "decline": "Ödemeyi reddet",
+    "declined": "Ödeme reddedildi"
   }
 }

@@ -605,5 +605,11 @@
     "streakNext_other": "发布这条后，你将连续 {{count}} 天发布快拍。",
     "streakStart": "每天发布一条快拍，打造连续记录。",
     "keepGoing": "每天发一个快拍，保持连续"
+  },
+  "originalOnly": {
+    "title": "只上传你自己创作的内容。",
+    "body": "3Speak 只面向原创内容。受版权保护的内容不得获得奖励，所以请不要上传，或把奖励设为“放弃收益”。",
+    "decline": "放弃收益",
+    "declined": "已放弃收益"
   }
 }

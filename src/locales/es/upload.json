@@ -617,5 +617,11 @@
     "streakNext_other": "Con esta, tu racha de historias llega a {{count}} días.",
     "streakStart": "Publica una historia cada día para crear una racha.",
     "keepGoing": "Publica una historia cada día para mantener la racha"
+  },
+  "originalOnly": {
+    "title": "Sube solo contenido hecho por ti.",
+    "body": "3Speak es para contenido original. El material con derechos de autor no debe generar recompensas, así que no lo subas o pon Recompensas en «Rechazar pago».",
+    "decline": "Rechazar pago",
+    "declined": "Pago rechazado"
   }
 }

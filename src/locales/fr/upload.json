@@ -617,5 +617,11 @@
     "streakNext_other": "Avec celle-ci, votre série de stories passe à {{count}} jours.",
     "streakStart": "Publiez une story chaque jour pour créer une série.",
     "keepGoing": "Publiez une story chaque jour pour garder le rythme"
+  },
+  "originalOnly": {
+    "title": "Ne publie que du contenu que tu as créé.",
+    "body": "3Speak est fait pour le contenu original. Un contenu protégé par le droit d’auteur ne doit pas rapporter de récompenses : ne le publie pas, ou règle Récompenses sur « Refuser les gains ».",
+    "decline": "Refuser les gains",
+    "declined": "Gains refusés"
   }
 }

@@ -611,5 +611,11 @@
     "streakNext_other": "Hiermee wordt je storyreeks {{count}} dagen.",
     "streakStart": "Plaats elke dag een story om een reeks op te bouwen.",
     "keepGoing": "Plaats elke dag een story om het vol te houden"
+  },
+  "originalOnly": {
+    "title": "Upload alleen content die je zelf hebt gemaakt.",
+    "body": "3Speak is voor originele content. Auteursrechtelijk beschermd materiaal mag geen beloningen opleveren: upload het dus niet, of zet Beloningen op \"Uitbetaling weigeren\".",
+    "decline": "Uitbetaling weigeren",
+    "declined": "Uitbetaling geweigerd"
   }
 }
