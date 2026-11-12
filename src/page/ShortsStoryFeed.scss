@@ -22,12 +22,17 @@
     width: 100%;
     box-sizing: border-box;
 
-    // Offset past the fixed sidebar on desktop
+    // Desktop: exactly as wide as the top bar above it (nav.scss .nav-bar:
+    // the content width less the page padding), centred like it (owner
+    // 2026-11-12). The old offset past the v1 sidebar is gone with the sidebar.
     @media (min-width: 1025px) {
-      margin-left: 12vw;
+      width: 100%;
+      // The bar also has the page padding at its sides on narrower screens.
+      max-width: calc(min(var(--content-max), 100%) - 2 * var(--page-pad));
+      margin-left: auto;
+      margin-right: auto;
       padding-left: 10px !important;
       padding-right: 10px !important;
-      width: auto;
     }
   }
 
@@ -155,12 +160,6 @@
   }
 }
 
-// When sidebar is collapsed, use smaller offset
-.large-container > .shorts-story-feed > .shorts-stories {
-  @media (min-width: 1025px) {
-    margin-left: 3vw;
-  }
-}
 
 @keyframes storyFeedSwipeLeft {
   0% { transform: translateX(30%); opacity: .4; }
