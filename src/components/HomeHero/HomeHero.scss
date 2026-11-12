@@ -343,19 +343,26 @@
   right: 0;
   bottom: 0;
   z-index: 1;
-  max-width: 50%;
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
 
-  @include v2.mobile { bottom: -18px; max-width: 60%; }
+  @include v2.mobile { bottom: -18px; width: 60%; }
 }
 
+// Sized from the count (HomeHero sets --segs): the segments are empty, so a
+// shrink-to-fit row would squeeze them to their 4px minimum. The 50% cap of
+// .home-hero__slides still applies, they shrink to fit a long list.
 .home-hero__segs {
   display: flex;
   gap: 4px;
+  width: calc(var(--segs, 1) * 28px - 4px);
+  max-width: 100%;
 }
 
 // A 16px hit area around a 2px bar.
 .home-hero__seg {
-  flex: 0 1 12px;
+  flex: 1 1 24px;   // owner 2026-11-12: a bit longer (was 12)
   min-width: 4px;
   height: 16px;
   padding: 0;

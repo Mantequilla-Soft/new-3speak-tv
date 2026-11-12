@@ -348,7 +348,7 @@ export default function HomeHero({ videos = [], pending = false }) {
 
       {count > 1 && (
         <div className="home-hero__slides">
-          <div className="home-hero__segs">
+          <div className="home-hero__segs" style={{ "--segs": count }}>
             {videos.map((v, i) => (
               <button
                 key={keyOf(v)}
