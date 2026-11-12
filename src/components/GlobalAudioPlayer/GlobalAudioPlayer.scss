@@ -198,8 +198,11 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
   color: var(--text);
   animation: gap-rise var(--t-slow) var(--ease);
 
-  // Above the bottom navigation where it shows.
-  @media (max-width: $wide - 1) { bottom: calc(var(--bottom-bar-clearance) + 12px); }
+  // Docked just above the bottom navigation where it shows (owner 2026-11-12:
+  // the 20px of air read as a gap). The clearance already holds an 8px gap,
+  // so -2px leaves 6px: enough that the rounded corners of the two do not
+  // touch. No bottom bar (mobile Shorts, clearance 0): 12px off the edge.
+  @media (max-width: $wide - 1) { bottom: max(12px, calc(var(--bottom-bar-clearance) - 2px)); }
   @include v2.mobile {
     left: 10px;
     right: 10px;
