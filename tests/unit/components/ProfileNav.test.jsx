@@ -75,7 +75,7 @@ describe('the account menu', () => {
     const items = within(menu()).getAllByRole('menuitem').map(label)
     expect(items).toEqual([
       'Switch', 'Channel', 'Studio', 'Wallet', 'Playlists', 'History', 'Badges',
-      'Analytics', 'Audio', 'Live', 'Chat', 'Rankings', 'About 3Speak', 'FAQ', 'Hide pages', 'Settings',
+      'Analytics', 'Groups', 'Live', 'Chat', 'Rankings', 'About 3Speak', 'FAQ', 'Hide pages', 'Settings',
     ])
   })
 

@@ -27,7 +27,7 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
 
   const isActive = (route) => path === route;
   const isShortsActive = path.startsWith("/shorts");
-  const isGroupsActive = path.startsWith("/groups");
+  const isAudioActive = path === "/audio" || path.startsWith("/audio/");
 
   // PWA install prompt. Shared with the account menu, which offers the same
   // "Install App" row to signed-in users.
@@ -99,9 +99,10 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
           </button>
         </span>
       ) : <span className="bottom-nav-item" aria-hidden="true" />}
-      {/* Groups takes the slot chat used to hold. Chat is in the account menu
-          on phones and in the top bar from tablets up. */}
-      {tab("/groups", "groups", t('nav.bottom.groups'), isGroupsActive)}
+      {/* Audio (owner 2026-11-12; Groups held this slot, it moved into the
+          account menu on phones). Chat is in the account menu on phones and in
+          the top bar from tablets up. */}
+      {tab("/audio", "headphones", t('nav.bottom.audio'), isAudioActive)}
 
       <a href="#" className={`bottom-nav-item${menuOpen || profileMenuOpen ? " active" : ""}`} onClick={handleProfileClick}
         aria-label={authenticated ? t('common.nav.profile') : t('nav.bottom.login')}>

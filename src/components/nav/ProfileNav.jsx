@@ -295,8 +295,8 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
             )}
             {/* Phones and tablets only: the sections the top bar's tabs and the
                 bottom bar do not carry there. */}
-            <Link to="/audio" className="pn-item pn-phone-only" role="menuitem" onClick={onclose}>
-              {row('graphic_eq', t('nav.bottom.audio'))}
+            <Link to="/groups" className="pn-item pn-phone-only" role="menuitem" onClick={onclose}>
+              {row('groups', t('nav.bottom.groups'))}
             </Link>
             <Link to="/live" className="pn-item pn-phone-only" role="menuitem" onClick={onclose}>
               {row('sensors', t('nav.tabs.live'))}

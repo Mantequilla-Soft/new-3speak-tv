@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // The phone's bottom bar (components/BottomNav/BottomNav.jsx, 20a): Home,
-// Shorts, the red "+", Groups and the account button. The page being shown is
+// Shorts, the red "+", Audio and the account button. The page being shown is
 // marked active; the "+" opens the Create menu (or the login dialog for a
 // visitor); signed out, the account button opens the login dialog, signed in it
 // opens the same account menu the desktop avatar does.
@@ -39,7 +39,7 @@ describe('the bottom navigation bar', () => {
     // The visible label only: the Material Symbols glyph is ligature text.
     const label = (a) => (a.querySelector('.bottom-nav-label') || a).textContent
     expect(links.map((a) => [label(a), a.getAttribute('href')])).toEqual([
-      ['Home', '/'], ['Shorts', '/shorts'], ['Groups', '/groups'], ['Login', '#'],
+      ['Home', '/'], ['Shorts', '/shorts'], ['Audio', '/audio'], ['Login', '#'],
     ])
     expect(within(nav()).getByRole('button', { name: 'Create' })).toBeInTheDocument()
   })
@@ -47,7 +47,7 @@ describe('the bottom navigation bar', () => {
   it.each([
     ['/', 'Home'],
     ['/shorts/alice/clip', 'Shorts'],
-    ['/groups/hive-123', 'Groups'],
+    ['/audio/alice/episode-1', 'Audio'],
   ])('on %s marks %s as the current section', (route, name) => {
     const { nav } = mount({ route })
     const active = within(nav()).getAllByRole('link').filter((a) => a.classList.contains('active'))
@@ -61,9 +61,9 @@ describe('the bottom navigation bar', () => {
 
   it('follows a tap to another section', async () => {
     const { user } = mount()
-    await user.click(screen.getByRole('link', { name: 'Groups' }))
-    expect(screen.getByTestId('location')).toHaveTextContent('/groups')
-    expect(screen.getByRole('link', { name: 'Groups' })).toHaveClass('active')
+    await user.click(screen.getByRole('link', { name: 'Audio' }))
+    expect(screen.getByTestId('location')).toHaveTextContent('/audio')
+    expect(screen.getByRole('link', { name: 'Audio' })).toHaveClass('active')
   })
 
   it('the red "+" opens the Create menu for a member, and the login dialog for a visitor', async () => {
