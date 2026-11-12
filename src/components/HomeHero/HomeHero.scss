@@ -32,16 +32,33 @@
   height: var(--hero-h);
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;   // the blurred picture is scaled up a touch
   @include v2.thumb-placeholder(16px);
   @include v2.mobile { @include v2.thumb-placeholder(14px); }
 
-  img {
+  img,
+  video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  // Thumbnails are mostly small, so the full-width picture gets a slight blur
+  // (scaled up a touch so the blurred edges stay off-screen).
+  img {
+    filter: blur(6px);
+    transform: scale(1.04);
+  }
+
+  // The muted preview (HomeHero HERO_PREVIEW): over the picture, under the
+  // wash, faded in on its first frame and out while the slide moves on.
+  .home-hero__video {
+    opacity: 0;
+    transition: opacity var(--t-xfade) ease-in-out;
+    &.is-on { opacity: 1; }
   }
 
   // The slider's cross-fade: the last picture stays under the new one.

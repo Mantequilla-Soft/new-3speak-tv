@@ -11,6 +11,9 @@ import { watchPath } from "../../utils/urls";
 import { getPostDetails } from "../../hive-api/hiveApi";
 import { getFollowers } from "../../hive-api/api";
 import { formatNumber } from "../../i18n";
+import { Player } from "@mantequilla-soft/3speak-player";
+import { getPlayerUrl } from "../../utils/playerUrl";
+import { withGatewayFallback } from "../../lib/hlsGatewayFallback.js";
 import "./HomeHero.scss";
 
 // The picture behind the hero is drawn full width, so it asks for a big crop.
@@ -27,6 +30,16 @@ const SWIPE_PX = 48;
 // text fades in while its picture cross-fades over the last one (--t-xfade).
 const FADE_OUT_MS = 320;
 const reducedMotion = () => !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+// Owner trial 2026-11-12: each slide plays its video, muted, over the (slightly
+// blurred) picture. Set to false to go back to the blurred picture alone.
+const HERO_PREVIEW = true;
+// Desktop only, never on a data saver or with reduced motion: a full-width
+// stream is a lot to pull on a phone plan.
+const previewAllowed = () => HERO_PREVIEW
+  && !!window.matchMedia?.("(min-width: 769px) and (hover: hover)").matches
+  && !navigator.connection?.saveData
+  && !reducedMotion();
 
 const clock = (sec) => {
   const n = Math.floor(Number(sec) || 0);
@@ -129,6 +142,52 @@ export default function HomeHero({ videos = [], pending = false }) {
     setBg((b) => (b.cur === thumb ? b : { cur: thumb, prev: b.cur }));
   }, [thumb]);
 
+  // The video preview (HERO_PREVIEW): one muted, looping player for the hero,
+  // fed the active slide; it fades in over the picture on its first frame and
+  // out again when the slide moves on. ABR is capped to the element's size.
+  const videoRef = useRef(null);
+  const playerRef = useRef(null);
+  const [previewOn] = useState(previewAllowed);
+  const [playing, setPlaying] = useState(false);
+  const previewSrc = video && previewOn ? `${authorOf(video)}/${video.permlink}` : null;
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!previewSrc || !el) return undefined;
+    if (!playerRef.current) {
+      const player = new Player({
+        apiBase: getPlayerUrl(),
+        muted: true,
+        loop: true,
+        poster: false,
+        debug: false,
+        hlsConfig: withGatewayFallback({ maxBufferLength: 12, backBufferLength: 10, capLevelToPlayerSize: true }),
+      });
+      player.attach(el);
+      playerRef.current = player;
+    }
+    const player = playerRef.current;
+    let alive = true;
+    setPlaying(false);
+    const onPlaying = () => { if (alive) setPlaying(true); };
+    el.addEventListener("playing", onPlaying);
+    player.load(previewSrc)
+      .then(() => { if (alive && !player.destroyed) player.play().catch(() => {}); })
+      .catch(() => {});
+    return () => { alive = false; el.removeEventListener("playing", onPlaying); };
+  }, [previewSrc]);
+  // A hidden tab stops it; coming back starts it again.
+  useEffect(() => {
+    if (!previewOn) return undefined;
+    const onVis = () => {
+      const player = playerRef.current;
+      if (!player || player.destroyed) return;
+      if (document.hidden) player.pause(); else player.play().catch(() => {});
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [previewOn]);
+  useEffect(() => () => { try { playerRef.current?.destroy(); } catch { /* ignore */ } }, []);
+
   const touch = useRef(null);
   const onTouchStart = (e) => { const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY }; };
   const onTouchEnd = (e) => {
@@ -191,6 +250,7 @@ export default function HomeHero({ videos = [], pending = false }) {
       <div className="home-hero__bg" aria-hidden="true">
         {bg.prev && bg.prev !== thumb && <img key={bg.prev} className="is-prev" src={bg.prev} alt="" decoding="async" />}
         {thumb && <img key={thumb} className="is-cur" src={thumb} alt="" decoding="async" fetchPriority="high" />}
+        {previewOn && <video ref={videoRef} className={`home-hero__video${playing && !fading ? " is-on" : ""}`} muted playsInline preload="none" />}
       </div>
 
       <div className="home-hero__body" key={keyOf(video)}>
