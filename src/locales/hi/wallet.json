@@ -33,7 +33,11 @@
     "sendAmount": "{{amount}} {{coin}} भेजें",
     "recent": "हाल के",
     "activeKey": "आपकी एक्टिव की चाहिए",
-    "available": "उपलब्ध: {{balance}}"
+    "available": "उपलब्ध: {{balance}}",
+    "scan": "QR कोड स्कैन करें",
+    "scanHint": "कैमरा दूसरे व्यक्ति के QR कोड की ओर करें।",
+    "scanNoAccount": "इस QR कोड में कोई Hive अकाउंट नहीं है। कोई दूसरा आज़माएँ।",
+    "scanNoCamera": "कैमरा नहीं खुल सका। देखें कि 3Speak को कैमरा इस्तेमाल करने की अनुमति है या नहीं।"
   },
   "history": {
     "loadFailed": "ट्रांज़ैक्शन लोड नहीं हो सके",

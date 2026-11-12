@@ -33,7 +33,11 @@
     "sendAmount": "Wyślij {{amount}} {{coin}}",
     "recent": "Ostatnie",
     "activeKey": "Wymaga twojego klucza active",
-    "available": "Dostępne: {{balance}}"
+    "available": "Dostępne: {{balance}}",
+    "scan": "Zeskanuj kod QR",
+    "scanHint": "Skieruj aparat na kod QR drugiej osoby.",
+    "scanNoAccount": "Ten kod QR nie zawiera konta Hive. Spróbuj innego.",
+    "scanNoCamera": "Nie udało się otworzyć aparatu. Sprawdź, czy 3Speak może z niego korzystać."
   },
   "history": {
     "loadFailed": "Nie udało się wczytać transakcji",

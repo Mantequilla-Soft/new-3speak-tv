@@ -33,7 +33,11 @@
     "sendAmount": "Отправить {{amount}} {{coin}}",
     "recent": "Недавние",
     "activeKey": "Нужен ваш active-ключ",
-    "available": "Доступно: {{balance}}"
+    "available": "Доступно: {{balance}}",
+    "scan": "Сканировать QR-код",
+    "scanHint": "Наведите камеру на QR-код другого человека.",
+    "scanNoAccount": "В этом QR-коде нет аккаунта Hive. Попробуйте другой.",
+    "scanNoCamera": "Не удалось открыть камеру. Проверьте, разрешён ли 3Speak доступ к ней."
   },
   "history": {
     "loadFailed": "Не удалось загрузить транзакции",

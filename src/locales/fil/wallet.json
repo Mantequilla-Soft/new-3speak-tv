@@ -33,7 +33,11 @@
     "sendAmount": "Ipadala ang {{amount}} {{coin}}",
     "recent": "Kamakailan",
     "activeKey": "Kailangan ang active key mo",
-    "available": "Magagamit: {{balance}}"
+    "available": "Magagamit: {{balance}}",
+    "scan": "I-scan ang QR code",
+    "scanHint": "Itutok ang camera sa QR code ng ibang tao.",
+    "scanNoAccount": "Walang Hive account sa QR code na ito. Subukan ang iba.",
+    "scanNoCamera": "Hindi mabuksan ang camera. Tingnan kung may pahintulot ang 3Speak na gamitin ito."
   },
   "history": {
     "loadFailed": "Hindi ma-load ang mga transaksyon",

@@ -33,7 +33,11 @@
     "sendAmount": "Gửi {{amount}} {{coin}}",
     "recent": "Gần đây",
     "activeKey": "Cần active key của bạn",
-    "available": "Khả dụng: {{balance}}"
+    "available": "Khả dụng: {{balance}}",
+    "scan": "Quét mã QR",
+    "scanHint": "Hướng camera vào mã QR của người kia.",
+    "scanNoAccount": "Mã QR này không chứa tài khoản Hive nào. Hãy thử mã khác.",
+    "scanNoCamera": "Không mở được camera. Hãy kiểm tra xem 3Speak có được phép dùng camera không."
   },
   "history": {
     "loadFailed": "Không tải được giao dịch",

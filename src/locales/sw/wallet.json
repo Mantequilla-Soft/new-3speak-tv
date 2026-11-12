@@ -33,7 +33,11 @@
     "sendAmount": "Tuma {{amount}} {{coin}}",
     "recent": "Za hivi karibuni",
     "activeKey": "Inahitaji active key yako",
-    "available": "Inapatikana: {{balance}}"
+    "available": "Inapatikana: {{balance}}",
+    "scan": "Changanua msimbo wa QR",
+    "scanHint": "Elekeza kamera kwenye msimbo wa QR wa mtu mwingine.",
+    "scanNoAccount": "Msimbo huu wa QR hauna akaunti ya Hive. Jaribu mwingine.",
+    "scanNoCamera": "Kamera haikuweza kufunguliwa. Hakikisha 3Speak inaruhusiwa kuitumia."
   },
   "history": {
     "loadFailed": "Imeshindwa kupakia miamala",

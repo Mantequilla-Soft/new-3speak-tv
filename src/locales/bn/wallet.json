@@ -33,7 +33,11 @@
     "sendAmount": "{{amount}} {{coin}} পাঠান",
     "recent": "সাম্প্রতিক",
     "activeKey": "আপনার active key লাগবে",
-    "available": "পাওয়া যাচ্ছে: {{balance}}"
+    "available": "পাওয়া যাচ্ছে: {{balance}}",
+    "scan": "QR কোড স্ক্যান করুন",
+    "scanHint": "অন্য ব্যক্তির QR কোডের দিকে ক্যামেরা ধরুন।",
+    "scanNoAccount": "এই QR কোডে কোনো Hive অ্যাকাউন্ট নেই। অন্য একটি চেষ্টা করুন।",
+    "scanNoCamera": "ক্যামেরা খোলা যায়নি। 3Speak ক্যামেরা ব্যবহারের অনুমতি পেয়েছে কি না দেখুন।"
   },
   "history": {
     "loadFailed": "লেনদেন লোড করা যায়নি",

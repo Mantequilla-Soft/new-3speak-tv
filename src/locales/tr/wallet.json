@@ -33,7 +33,11 @@
     "sendAmount": "{{amount}} {{coin}} gönder",
     "recent": "Son kullanılanlar",
     "activeKey": "Active anahtarın gerekiyor",
-    "available": "Kullanılabilir: {{balance}}"
+    "available": "Kullanılabilir: {{balance}}",
+    "scan": "QR kodu tara",
+    "scanHint": "Kamerayı karşı tarafın QR koduna doğrult.",
+    "scanNoAccount": "Bu QR kodunda Hive hesabı yok. Başka birini dene.",
+    "scanNoCamera": "Kamera açılamadı. 3Speak'in kamerayı kullanma izni olup olmadığını kontrol et."
   },
   "history": {
     "loadFailed": "İşlemler yüklenemedi",

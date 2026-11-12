@@ -95,3 +95,12 @@
   // The memo is the only bordered field (17f): a well with an outline.
   .v2-input { border-color: var(--border); border-width: 1px; height: 48px; border-radius: var(--r-lg); &:focus { border-color: var(--accent); } }
 }
+
+// The recipient field with the Scan button beside it (owner 2026-11-12).
+.transfer-v2__to {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  .v2-input { flex: 1; min-width: 0; }
+  .v2-iconbtn { flex: none; }
+}

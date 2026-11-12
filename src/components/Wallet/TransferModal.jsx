@@ -5,7 +5,9 @@ import { transferWithAioha, isLoggedIn } from "../../hive-api/aioha"
 import { toastIn } from '../../utils/toast';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
-import { Button, Field, Icon, Avatar } from '../v2/ui';
+import { Button, Field, Icon, IconButton, Avatar } from '../v2/ui';
+import { parseScannedRecipient } from '../../lib/scannedRecipient';
+import QrScanSheet from './QrScanSheet';
 import { cx } from '../v2/helpers';
 import DialogShell from '../modal/DialogShell';
 
@@ -30,6 +32,24 @@ function TransferModal({showModal, selectedCoin, balances, recent = [], prices})
     const [error, setError] = useState("")
     const [balErr, setBalErr] = useState("")
     const [sending, setSending] = useState(false)
+    // Scan the other person's QR code (owner 2026-11-12): where the browser can
+    // open a camera at all (a secure page with mediaDevices).
+    const canScan = typeof navigator !== 'undefined' && !!navigator.mediaDevices?.getUserMedia;
+    const [scanning, setScanning] = useState(false);
+    const [scanNote, setScanNote] = useState('');
+    const onScanned = (text) => {
+        const found = parseScannedRecipient(text);
+        // Not an account (a link, a Wi-Fi code): say so and keep the camera on.
+        if (!found) { setScanNote(t('wallet.transferModal.scanNoAccount')); return; }
+        setScanning(false);
+        setScanNote('');
+        setRecipient(found.to);
+        setError('');
+        // A Hive transfer request can ask for an amount, a coin and a memo too.
+        if (found.amount) setAmount(found.amount);
+        if (found.coin && COINS.includes(found.coin)) setCoin(found.coin);
+        if (found.memo) setMemo(found.memo);
+    };
 
     const balance = coin === "HIVE" ? balances.hive : balances.hbd;
     const usdPrice = prices?.[coin] ?? (coin === selectedCoin?.name ? selectedCoin?.usdPrice : (coin === 'HBD' ? 1 : null));
@@ -119,16 +139,25 @@ function TransferModal({showModal, selectedCoin, balances, recent = [], prices})
         </div>
       )}
 
-      <Field
-        label={t('wallet.transferModal.recipientLabel')}
-        error={error || undefined}
-        value={recipient}
-        onChange={(e) => setRecipient(e.target.value)}
-        placeholder={t('wallet.transferModal.recipientPlaceholder')}
-        autoComplete="off"
-        autoCapitalize="none"
-        spellCheck={false}
-      />
+      <Field id="transfer-recipient" label={t('wallet.transferModal.recipientLabel')} error={error || undefined}>
+        <div className="transfer-v2__to">
+          <input
+            id="transfer-recipient"
+            className="v2-input"
+            aria-invalid={!!error}
+            value={recipient}
+            onChange={(e) => setRecipient(e.target.value)}
+            placeholder={t('wallet.transferModal.recipientPlaceholder')}
+            autoComplete="off"
+            autoCapitalize="none"
+            spellCheck={false}
+          />
+          {canScan && (
+            <IconButton icon="qr_code_scanner" label={t('wallet.transferModal.scan')} size={44} onClick={() => { setScanNote(''); setScanning(true); }} />
+          )}
+        </div>
+      </Field>
+      {scanning && <QrScanSheet onResult={onScanned} onClose={() => setScanning(false)} note={scanNote} />}
 
       <div className={cx('transfer-v2__amount', balErr && 'is-error')}>
         <label className="v2-eyebrow" htmlFor="transfer-amount">{t('wallet.transferModal.amountLabel', { coin })}</label>

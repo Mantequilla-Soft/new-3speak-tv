@@ -33,7 +33,11 @@
     "sendAmount": "{{amount}} {{coin}} 보내기",
     "recent": "최근",
     "activeKey": "액티브 키가 필요해요",
-    "available": "사용 가능: {{balance}}"
+    "available": "사용 가능: {{balance}}",
+    "scan": "QR 코드 스캔",
+    "scanHint": "상대방의 QR 코드에 카메라를 맞춰 주세요.",
+    "scanNoAccount": "이 QR 코드에는 Hive 계정이 없어요. 다른 코드를 시도해 보세요.",
+    "scanNoCamera": "카메라를 열 수 없어요. 3Speak가 카메라를 사용할 수 있는지 확인해 주세요."
   },
   "history": {
     "loadFailed": "거래 내역을 불러오지 못했어요",

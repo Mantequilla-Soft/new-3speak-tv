@@ -33,7 +33,11 @@
     "sendAmount": "ส่ง {{amount}} {{coin}}",
     "recent": "ล่าสุด",
     "activeKey": "ต้องใช้ active key ของคุณ",
-    "available": "ใช้ได้: {{balance}}"
+    "available": "ใช้ได้: {{balance}}",
+    "scan": "สแกนคิวอาร์โค้ด",
+    "scanHint": "หันกล้องไปที่คิวอาร์โค้ดของอีกฝ่าย",
+    "scanNoAccount": "คิวอาร์โค้ดนี้ไม่มีบัญชี Hive ลองโค้ดอื่น",
+    "scanNoCamera": "เปิดกล้องไม่ได้ ตรวจสอบว่า 3Speak ได้รับอนุญาตให้ใช้กล้องหรือไม่"
   },
   "history": {
     "loadFailed": "โหลดธุรกรรมไม่สำเร็จ",

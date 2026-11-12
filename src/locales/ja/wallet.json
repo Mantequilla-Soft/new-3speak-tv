@@ -33,7 +33,11 @@
     "sendAmount": "{{amount}} {{coin}} を送る",
     "recent": "最近の送金先",
     "activeKey": "アクティブキーが必要です",
-    "available": "利用可能: {{balance}}"
+    "available": "利用可能: {{balance}}",
+    "scan": "QR コードをスキャン",
+    "scanHint": "相手の QR コードにカメラを向けてください。",
+    "scanNoAccount": "この QR コードには Hive アカウントが含まれていません。別のコードを試してください。",
+    "scanNoCamera": "カメラを開けませんでした。3Speak がカメラを使えるか確認してください。"
   },
   "history": {
     "loadFailed": "取引を読み込めませんでした",

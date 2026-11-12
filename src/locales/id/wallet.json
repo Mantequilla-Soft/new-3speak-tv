@@ -33,7 +33,11 @@
     "sendAmount": "Kirim {{amount}} {{coin}}",
     "recent": "Terbaru",
     "activeKey": "Perlu active key-mu",
-    "available": "Tersedia: {{balance}}"
+    "available": "Tersedia: {{balance}}",
+    "scan": "Pindai kode QR",
+    "scanHint": "Arahkan kamera ke kode QR orang lain.",
+    "scanNoAccount": "Kode QR ini tidak berisi akun Hive. Coba yang lain.",
+    "scanNoCamera": "Kamera tidak bisa dibuka. Periksa apakah 3Speak boleh menggunakannya."
   },
   "history": {
     "loadFailed": "Gagal memuat transaksi",

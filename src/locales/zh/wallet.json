@@ -33,7 +33,11 @@
     "sendAmount": "发送 {{amount}} {{coin}}",
     "recent": "最近",
     "activeKey": "需要你的 active 密钥",
-    "available": "可用：{{balance}}"
+    "available": "可用：{{balance}}",
+    "scan": "扫描二维码",
+    "scanHint": "将相机对准对方的二维码。",
+    "scanNoAccount": "这个二维码里没有 Hive 账户。请换一个试试。",
+    "scanNoCamera": "无法打开相机。请检查 3Speak 是否有权使用相机。"
   },
   "history": {
     "loadFailed": "交易记录加载失败",

@@ -33,7 +33,11 @@
     "sendAmount": "Send {{amount}} {{coin}}",
     "recent": "Recent",
     "activeKey": "Needs your active key",
-    "available": "Available: {{balance}}"
+    "available": "Available: {{balance}}",
+    "scan": "Scan a QR code",
+    "scanHint": "Point the camera at the other person's QR code.",
+    "scanNoAccount": "This QR code holds no Hive account. Try another one.",
+    "scanNoCamera": "The camera could not be opened. Check that 3Speak may use it."
   },
   "history": {
     "loadFailed": "Failed to load transactions",
