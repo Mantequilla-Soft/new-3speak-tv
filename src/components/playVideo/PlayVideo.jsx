@@ -87,7 +87,7 @@ dayjs.extend(relativeTime);
 // Stable identity for "no chapters", so memo deps don't change every render.
 const EMPTY_CHAPTERS = [];
 
-const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false, reactionPanel = null, reactionCount = 0, onReact = null, upNext = null, playerOverlay = null }) => {
+const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, mediaBlocked = false, onRetryPlayback = null, mediaLoading = false, playlistData, onClosePlaylist, videoControls, cinemaReactionPanel, videoRef, wrapperRef, onVideoEdited, overrideBody, scheduled = false, scheduledOn = null, mediaScheduledOn = null, onEditScheduled, isLive = false, streamRoom = null, liveChatSlot = null, onLiveChatSent = null, vodAssetPending = false, onStreamRoomMeta = null, belowPlayerSlot = null, sponsorLabel = null, adCountdown = null, bannerHit = null, tickerSlot = null, adSkip = null, adPlaying = false, adLocked = false, timelineLinks = null, timelineResetKey = null, tickerShown = false, surfActive = false, onReact = null, upNext = null, playerOverlay = null }) => {
   const { t } = useTranslation();
   const { user, authenticated } = useAppStore();
   const isPremium = !!usePremiumStatus(user)?.premium;
@@ -1165,12 +1165,10 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
   const chapters = videoControls?.chapters || EMPTY_CHAPTERS;
   const nowSec = videoControls?.currentTime || 0;
   const chapterAt = chapters.findIndex((c) => nowSec >= c.start && nowSec < c.end);
-  const showReactionsTab = reactionCount > 0 && !!reactionPanel && !isLive;
   const sideIds = [
     isLive && 'chat',
     'discussion',
     hasSubtitles && 'transcript',
-    showReactionsTab && 'reactions',
     !wide && chapters.length > 0 && 'chapters',
     !wide && !scheduled && 'supporters',
     !wide && !scheduled && 'voters',
@@ -1501,12 +1499,6 @@ const PlayVideo = ({ videoDetails, author, permlink, mediaUnavailable = false, m
           embedded
         />
       ),
-    },
-    showReactionsTab && {
-      id: 'reactions',
-      label: t('comments.tabs.reactions'),
-      count: reactionCount,
-      content: reactionPanel,
     },
     !wide && chapters.length > 0 && {
       id: 'chapters',

@@ -2194,10 +2194,8 @@ function Watch({ v2 = false, routeV = null }) {
           onHoldControls: holdControls,
           onReleaseControls: releaseControls,
         }}
-        // The reactions on the timeline: a tab of the side panel, or full width
-        // under the description at the cinema size.
-        reactionPanel={reactionSize !== 'cinema' ? reactionPanel : null}
-        reactionCount={reactions.length}
+        // The reactions on the timeline: full width under the description at
+        // the cinema size. No tab in the side panel (owner 2026-11-12).
         onReact={handleReactToMoment}
         upNext={suggestedVideos.slice(0, 10)}
         cinemaReactionPanel={reactionSize === 'cinema' && reactions.length > 0 ? reactionPanel : null}
