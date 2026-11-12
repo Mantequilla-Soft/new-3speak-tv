@@ -244,8 +244,8 @@
 .nav-upload-wrapper {
   position: relative;
 
-  // Wide screens: the columned flyout hangs off the whole bar (its right edge,
-  // 10px under it), not the button, so it never runs off the left at 1025px+.
+  // Wide screens: the columned flyout hangs off .nav-right (the right end of the
+  // bar, 10px under it), not the button, so it never runs off the left at 1025px+.
   @include wide-bar { position: static; }
 
   // 20a: 40 tall, 16/12 padding, radius 12, 14/700, a trailing "+" (20).
@@ -407,7 +407,9 @@
   top: calc(100% + 10px);
   right: 0;
   width: max-content;
-  max-width: 100%;   // the bar it hangs off
+  // It hangs off .nav-right (positioned, only the buttons wide): cap it at the
+  // bar's inner width (the window minus the page padding and the bar's 16px).
+  max-width: calc(100vw - 2 * var(--page-pad) - 32px);
   max-height: calc(100vh - 120px);
   @include v2.scroll-y;
   border-radius: var(--r-2xl);
