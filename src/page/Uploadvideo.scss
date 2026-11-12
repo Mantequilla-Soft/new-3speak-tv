@@ -82,17 +82,3 @@
   @include v2.text(meta);
   color: var(--muted);
 }
-
-.upload-start__note {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin: 6px 0 0;
-  padding: 10px 12px;
-  border-radius: var(--r-md);
-  background: var(--bg);
-  @include v2.text(meta-sm);
-  line-height: 1.45;
-  color: var(--muted);
-  b { color: var(--text); font-weight: 700; }
-}

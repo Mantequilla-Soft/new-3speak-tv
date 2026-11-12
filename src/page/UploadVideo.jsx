@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom"
-import { useTranslation, Trans } from "react-i18next"
+import { useTranslation } from "react-i18next"
 import "./Uploadvideo.scss"
 
 // /upload: the studio start (design 44c). Continue the draft, or start a new
-// video in the uploader; under them the note on files the browser can't
-// preview. The choices are tiles: the new video is the one picked out.
+// video in the uploader. The choices are tiles: the new video is the one
+// picked out. (44c's HEVC note is the studio preview's state: VideoPreview
+// shows it once a picked file can't play, not here before there is a file.)
 function UploadVideo() {
   const { t } = useTranslation()
 
@@ -29,10 +30,6 @@ function UploadVideo() {
             <span>{t("studio.select.createNewDesc")}</span>
           </span>
         </Link>
-
-        <p className="upload-start__note">
-          <span><Trans i18nKey="studio.preview.cannotPreview" components={{ b: <b /> }} /></span>
-        </p>
       </div>
     </div>
   )
