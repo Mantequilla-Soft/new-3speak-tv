@@ -159,10 +159,6 @@
     "previews": {
       "title": "Xem trước video",
       "desc": "Xem trước tắt tiếng khi di chuột; trên di động thẻ ở giữa sẽ tự phát"
-    },
-    "simpleFeeds": {
-      "title": "Bảng tin đơn giản",
-      "desc": "Không có đề xuất, mới nhất trước ở mọi nơi"
     }
   },
   "shorts": {

@@ -159,10 +159,6 @@
     "previews": {
       "title": "Mga video preview",
       "desc": "Naka-mute na preview kapag nag-hover; sa mobile, nagpe-play ang card na nasa gitna"
-    },
-    "simpleFeeds": {
-      "title": "Simpleng feeds",
-      "desc": "Walang recommendations, pinakabago muna sa lahat ng lugar"
     }
   },
   "shorts": {

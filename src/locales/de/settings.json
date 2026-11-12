@@ -159,10 +159,6 @@
     "previews": {
       "title": "Videovorschau",
       "desc": "Stumme Vorschau beim Darüberfahren, auf dem Handy spielt die mittlere Karte"
-    },
-    "simpleFeeds": {
-      "title": "Einfache Feeds",
-      "desc": "Keine Empfehlungen, überall das Neueste zuerst"
     }
   },
   "shorts": {

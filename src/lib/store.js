@@ -80,8 +80,6 @@ export const useAppStore = create(
       setPrivateMode: (val) => a[0]({ privateMode: typeof val === 'function' ? val(a[1]().privateMode) : val }),
       // Simple feeds: when ON, discovery feeds skip the ranking algorithm and are
       // just sorted newest-first (chronological). Default OFF (algo on).
-      simpleFeed: false,
-      setSimpleFeed: (val) => a[0]({ simpleFeed: typeof val === 'function' ? val(a[1]().simpleFeed) : val }),
       // Set on startup to the previous app version when the user upgraded (null = first
       // visit or no change). A future changelog / "what's new" prompt reads this.
       // Deliberately NOT persisted — recomputed each load by checkAppVersion().
@@ -99,11 +97,14 @@ export const useAppStore = create(
       // v3: phone cards default to large (one per row, design 20a). A saved 'small'
       // was the untouched old default for nearly everyone (the switch started off),
       // so it becomes 'large'; a saved 'large' was picked and stays.
-      version: 3,
+      // v4 (owner 2026-11-12): "Simple feeds" is gone; a saved value is dropped,
+      // so everyone is back on the recommended feeds.
+      version: 4,
       migrate: (persistedState, version) => {
         if (version < 1 && persistedState) persistedState.hideWatched = true;
         if (version < 2 && persistedState) persistedState.hideAi = true;
         if (version < 3 && persistedState && persistedState.homeCardSize !== 'large') persistedState.homeCardSize = 'large';
+        if (version < 4 && persistedState) delete persistedState.simpleFeed;
         return persistedState;
       },
       partialize: (state) => ({
@@ -123,7 +124,6 @@ export const useAppStore = create(
         hideWatched: state.hideWatched,
         hideAi: state.hideAi,
         privateMode: state.privateMode,
-        simpleFeed: state.simpleFeed,
       }),
     }
   )

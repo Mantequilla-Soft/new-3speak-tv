@@ -1076,7 +1076,7 @@ const DROPDOWN_WIDTH = 600;
 
 export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps }) {
   const { t } = useTranslation();
-  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, simpleFeed, setSimpleFeed } = useAppStore();
+  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode } = useAppStore();
   const cardSize = useCardSize();
   const cardSizeMobile = useIsCardSizeMobile();
   /* Whether the Ads & rewards page exists at all.
@@ -1263,12 +1263,6 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
               onChange={(v) => setPreviewEnabled(v)}
             />
           )}
-          <Row
-            title={t('settings.appearance.simpleFeeds.title')}
-            desc={t('settings.appearance.simpleFeeds.desc')}
-            checked={!!simpleFeed}
-            onChange={(v) => setSimpleFeed(v)}
-          />
         </Section>
         <Section tone="cyan" title={t('common.language.label')} className="settings-language">
           <LanguagePicker onNavigate={onClose} />

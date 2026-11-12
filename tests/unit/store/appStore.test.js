@@ -36,7 +36,7 @@ describe('first visit defaults', () => {
     const s = (await loadStore()).getState()
     expect(s).toMatchObject({
       theme: 'dark', homeCardSize: 'large', spotlightSize: 'small', previewEnabled: true,
-      hideWatched: true, hideAi: true, inlineShorts: true, privateMode: false, simpleFeed: false,
+      hideWatched: true, hideAi: true, inlineShorts: true, privateMode: false,
       shortsFeedMode: 'discover', shortsCommentBar: false, openShortsOnStart: false,
       watchHistoryEnabled: true, showNsfw: false, interests: [], appUpdatedFrom: null,
     })
@@ -53,7 +53,7 @@ describe('what survives a reload', () => {
     store.getState().setMiniPlayer({ author: 'badadib', permlink: 'p' })
 
     const saved = persisted()
-    expect(saved.version).toBe(3)
+    expect(saved.version).toBe(4)
     expect(saved.state).toMatchObject({ user: 'badadib', privateMode: true, interests: ['music'], theme: 'dark' })
     expect(saved.state).not.toHaveProperty('appUpdatedFrom')
     expect(saved.state).not.toHaveProperty('miniPlayer')
@@ -68,6 +68,13 @@ describe('what survives a reload', () => {
 })
 
 describe('migrating an older saved store', () => {
+  it('drops an old "Simple feeds" choice (the setting is gone)', async () => {
+    localStorage.setItem('user-store', JSON.stringify({ version: 3, state: { simpleFeed: true, theme: 'light' } }))
+    const s = (await loadStore()).getState()
+    expect(s.simpleFeed).toBeUndefined()
+    expect(s.theme).toBe('light')
+  })
+
   it.each([
     [0, { hideWatched: false, hideAi: false }, { hideWatched: true, hideAi: true }],
     [1, { hideWatched: false, hideAi: false }, { hideWatched: false, hideAi: true }],
@@ -101,7 +108,6 @@ describe('the setters', () => {
     ['setInterests', 'interests'],
     ['setHideWatched', 'hideWatched'],
     ['setPrivateMode', 'privateMode'],
-    ['setSimpleFeed', 'simpleFeed'],
   ])('%s takes a value or an updater of the previous value', (setter, key) => {
     store.getState()[setter]('first')
     expect(store.getState()[key]).toBe('first')

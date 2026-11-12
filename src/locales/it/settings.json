@@ -159,10 +159,6 @@
     "previews": {
       "title": "Anteprime video",
       "desc": "Anteprima muta al passaggio del mouse; da mobile parte la scheda al centro"
-    },
-    "simpleFeeds": {
-      "title": "Feed semplici",
-      "desc": "Niente consigli, ovunque prima i più recenti"
     }
   },
   "shorts": {

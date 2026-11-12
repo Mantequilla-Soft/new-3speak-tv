@@ -159,10 +159,6 @@
     "previews": {
       "title": "Video önizlemeleri",
       "desc": "Üzerine gelince sessiz önizleme; mobilde ortadaki kart oynar"
-    },
-    "simpleFeeds": {
-      "title": "Basit akışlar",
-      "desc": "Öneri yok, her yerde en yeniler önce"
     }
   },
   "shorts": {

@@ -159,10 +159,6 @@
     "previews": {
       "title": "Video previews",
       "desc": "Muted preview on hover; on mobile the centred card plays"
-    },
-    "simpleFeeds": {
-      "title": "Simple feeds",
-      "desc": "No recommendations, newest first everywhere"
     }
   },
   "shorts": {

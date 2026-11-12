@@ -29,6 +29,5 @@ export function feedParams() {
     p += `&currentuser=${encodeURIComponent(st.user)}`;
     p += `&hidewatched=${st.hideWatched ? '1' : '0'}`;
   }
-  if (st.simpleFeed) p += '&chrono=1'; // algo off → newest-first
   return p;
 }

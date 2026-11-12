@@ -159,10 +159,6 @@
     "previews": {
       "title": "Pratinjau video",
       "desc": "Pratinjau tanpa suara saat kursor diarahkan; di seluler kartu di tengah yang diputar"
-    },
-    "simpleFeeds": {
-      "title": "Feed sederhana",
-      "desc": "Tanpa rekomendasi, terbaru lebih dulu di mana-mana"
     }
   },
   "shorts": {

@@ -52,7 +52,6 @@ const feedParams = () => {
     p += `&currentuser=${encodeURIComponent(st.user)}`;
     p += `&hidewatched=${st.hideWatched ? '1' : '0'}`;
   }
-  if (st.simpleFeed) p += '&chrono=1'; // algo off → newest-first
   // Pin the shuffle to THIS page load. Without a seed the checker falls back to a
   // 5-minute time bucket, which reshuffled the feed under the user every 5 minutes
   // even if they never navigated or refreshed. One seed per page load means the
@@ -255,7 +254,7 @@ const shortsParams = (mode, sectionKey) => {
     p += `&hidewatched=${st.hideWatched ? '1' : '0'}`;
     if (mode === 'follow') p += `&followedby=${encodeURIComponent(st.user)}`;
   }
-  if (mode === 'chrono' || st.simpleFeed) p += '&chrono=1';
+  if (mode === 'chrono') p += '&chrono=1';
   return p;
 };
 
@@ -603,7 +602,7 @@ function useVisibleKeys(rootRef, sig, count) {
 
 const HomeGrouped = () => {
   const { t } = useTranslation();
-  const { authenticated, user, showNsfw, hideWatched, hideAi, interests, simpleFeed } = useAppStore();
+  const { authenticated, user, showNsfw, hideWatched, hideAi, interests } = useAppStore();
   const navigate = useNavigate();
   const homeCardSize = useCardSize(); // large only on mobile, see hooks/useCardSize
   // Who is looking, for feature gates that are keyed on a name. A warm-up user
@@ -639,7 +638,7 @@ const HomeGrouped = () => {
   const INF = { staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000, initialPageParam: 1 };
 
   const homeQ = useInfiniteQuery({
-    queryKey: authenticated ? ["follow-feed", user, showNsfw, hideWatched, simpleFeed] : ["home-grouped", showNsfw, hideWatched, user, simpleFeed],
+    queryKey: authenticated ? ["follow-feed", user, showNsfw, hideWatched] : ["home-grouped", showNsfw, hideWatched, user],
     queryFn: authenticated ? ({ pageParam }) => fetchFollowFeed(user, pageParam) : ({ pageParam }) => fetchHome(pageParam),
     getNextPageParam: nextPage(),
     ...INF,
@@ -647,7 +646,7 @@ const HomeGrouped = () => {
   const homeData = useMemo(() => deduplicateVideos(homeQ.data?.pages.flat() || []), [homeQ.data]);
 
   const discoverQ = useInfiniteQuery({
-    queryKey: ["discover-grouped", showNsfw, hideWatched, user, simpleFeed],
+    queryKey: ["discover-grouped", showNsfw, hideWatched, user],
     queryFn: ({ pageParam }) => fetchDiscover(pageParam),
     getNextPageParam: nextPage(),
     ...INF,
@@ -660,7 +659,7 @@ const HomeGrouped = () => {
   );
 
   const interestsQ = useInfiniteQuery({
-    queryKey: ["interests-grouped", showNsfw, hideWatched, user, interestsKey, simpleFeed],
+    queryKey: ["interests-grouped", showNsfw, hideWatched, user, interestsKey],
     queryFn: ({ pageParam }) => fetchInterestsFeed(pageParam),
     getNextPageParam: nextPage(),
     enabled: authenticated && hasInterests,

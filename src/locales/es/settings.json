@@ -159,10 +159,6 @@
     "previews": {
       "title": "Vistas previas de video",
       "desc": "Vista previa silenciada al pasar el cursor; en el móvil se reproduce la tarjeta del centro"
-    },
-    "simpleFeeds": {
-      "title": "Feeds simples",
-      "desc": "Sin recomendaciones, lo más nuevo primero en todas partes"
     }
   },
   "shorts": {

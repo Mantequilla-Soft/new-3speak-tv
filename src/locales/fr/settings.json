@@ -159,10 +159,6 @@
     "previews": {
       "title": "Aperçus vidéo",
       "desc": "Aperçu muet au survol ; sur mobile, la carte centrale se lance"
-    },
-    "simpleFeeds": {
-      "title": "Fils simples",
-      "desc": "Pas de recommandations, le plus récent d'abord partout"
     }
   },
   "shorts": {

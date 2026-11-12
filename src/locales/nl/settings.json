@@ -159,10 +159,6 @@
     "previews": {
       "title": "Videovoorbeelden",
       "desc": "Stille preview bij hoveren; op mobiel speelt de middelste kaart"
-    },
-    "simpleFeeds": {
-      "title": "Eenvoudige feeds",
-      "desc": "Geen aanbevelingen, overal het nieuwste eerst"
     }
   },
   "shorts": {

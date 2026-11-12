@@ -159,10 +159,6 @@
     "previews": {
       "title": "Podglądy filmów",
       "desc": "Wyciszony podgląd po najechaniu; na telefonie odtwarza się środkowa karta"
-    },
-    "simpleFeeds": {
-      "title": "Proste kanały",
-      "desc": "Bez rekomendacji, wszędzie najpierw najnowsze"
     }
   },
   "shorts": {

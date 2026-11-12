@@ -159,10 +159,6 @@
     "previews": {
       "title": "Prévias de vídeo",
       "desc": "Prévia sem som ao passar o mouse; no celular, o cartão do centro toca"
-    },
-    "simpleFeeds": {
-      "title": "Feeds simples",
-      "desc": "Sem recomendações, o mais novo primeiro em todo lugar"
     }
   },
   "shorts": {

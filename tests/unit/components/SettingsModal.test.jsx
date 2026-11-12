@@ -110,7 +110,7 @@ beforeEach(() => {
   })
   useAppStore.setState({
     user: null, authenticated: false, theme: 'light', showNsfw: false, hideWatched: true, hideAi: true,
-    privateMode: false, simpleFeed: false, previewEnabled: true, openShortsOnStart: false, inlineShorts: true,
+    privateMode: false, previewEnabled: true, openShortsOnStart: false, inlineShorts: true,
     shortsCommentBar: false, interests: [], homeCardSize: 'small',
   })
 })
@@ -222,10 +222,9 @@ describe('settings: General and Content', () => {
     expect(sw('Dark mode')).toHaveAttribute('aria-checked', 'true')
   })
 
-  it('simple feeds and video previews write to the store', async () => {
+  it('video previews write to the store; there is no Simple feeds switch any more', async () => {
     const { user } = mount()
-    await user.click(sw('Simple feeds'))
-    expect(useAppStore.getState().simpleFeed).toBe(true)
+    expect(screen.queryByRole('switch', { name: /Simple feeds/ })).toBeNull()
     await user.click(sw('Video previews'))
     expect(useAppStore.getState().previewEnabled).toBe(false)
   })
