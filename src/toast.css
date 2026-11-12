@@ -36,9 +36,11 @@
 /* The tone: from the category (utils/toast.js), else from the type. */
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='success'],
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='info'] { --ts-tone: var(--cyan); }
+/* On red the glyph is white like every red fill (--on-accent); elsewhere it
+   is the ground colour. */
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='error'],
-[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='warning'] { --ts-tone: var(--accent); }
-[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-tone-accent { --ts-tone: var(--accent); }
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast[data-type='warning'] { --ts-tone: var(--accent); --ts-ink: var(--on-accent); }
+[data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-tone-accent { --ts-tone: var(--accent); --ts-ink: var(--on-accent); }
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-tone-cyan { --ts-tone: var(--cyan); }
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast.ts-tone-muted { --ts-tone: color-mix(in srgb, var(--bg) 55%, var(--text)); }
 
@@ -52,8 +54,11 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
+  /* Sonner sets justify-content: flex-start on [data-icon], which pinned the
+     grid's one column (and the glyph) to the chip's left edge. */
+  place-content: center;
   background: var(--ts-tone);
-  color: var(--bg);
+  color: var(--ts-ink, var(--bg));
 }
 [data-sonner-toaster] [data-sonner-toast][data-styled].ts-toast [data-icon].ts-toast-icon > * {
   flex: none;
