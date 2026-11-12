@@ -167,8 +167,9 @@
     "searchPlaceholder": "搜索话题…",
     "searchAria": "搜索话题",
     "noMatches": "没有与“{{query}}”匹配的话题。",
-    "allSelected": "已选中整个{{category}}分类。只有想进一步细分时才需要添加单个话题：",
+    "allSelected": "已选择整个“{{category}}”。点按某个主题即可将其排除。",
     "orPickTopics": "或者选择单个话题：",
+    "clear": "清除",
     "goodEnough": "这样就可以，或者更具体一点（可选）",
     "moreSpecific": "更具体："
   }

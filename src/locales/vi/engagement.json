@@ -167,8 +167,9 @@
     "searchPlaceholder": "Tìm chủ đề…",
     "searchAria": "Tìm chủ đề",
     "noMatches": "Không có chủ đề nào khớp với “{{query}}”.",
-    "allSelected": "Đã chọn toàn bộ {{category}}. Chỉ thêm từng chủ đề nếu muốn thu hẹp hơn:",
+    "allSelected": "Đã chọn toàn bộ {{category}}. Chạm vào một chủ đề để bỏ nó ra.",
     "orPickTopics": "Hoặc chọn từng chủ đề:",
+    "clear": "Xóa",
     "goodEnough": "Vậy là đủ, hoặc chọn cụ thể hơn (không bắt buộc)",
     "moreSpecific": "Cụ thể hơn:"
   }

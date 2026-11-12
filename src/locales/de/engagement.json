@@ -170,8 +170,9 @@
     "searchPlaceholder": "Themen suchen…",
     "searchAria": "Themen suchen",
     "noMatches": "Keine Themen passen zu „{{query}}“.",
-    "allSelected": "{{category}} ist komplett ausgewählt. Füge einzelne Themen nur hinzu, um es weiter einzugrenzen:",
+    "allSelected": "Ganz {{category}} ist ausgewählt. Tippe ein Thema an, um es auszulassen.",
     "orPickTopics": "Oder wähle einzelne Themen:",
+    "clear": "Leeren",
     "goodEnough": "Passt so, oder werde genauer (optional)",
     "moreSpecific": "Genauer:"
   }

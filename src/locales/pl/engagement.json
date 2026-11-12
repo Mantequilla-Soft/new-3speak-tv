@@ -176,8 +176,9 @@
     "searchPlaceholder": "Szukaj tematów…",
     "searchAria": "Szukaj tematów",
     "noMatches": "Brak tematów pasujących do „{{query}}”.",
-    "allSelected": "Wybrano całą kategorię {{category}}. Dodaj pojedyncze tematy tylko po to, by zawęzić wybór:",
+    "allSelected": "Wybrano całe {{category}}. Dotknij tematu, aby go pominąć.",
     "orPickTopics": "Albo wybierz pojedyncze tematy:",
+    "clear": "Wyczyść",
     "goodEnough": "Wystarczy albo doprecyzuj (opcjonalnie)",
     "moreSpecific": "Bardziej szczegółowo:"
   }

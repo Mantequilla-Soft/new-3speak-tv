@@ -170,8 +170,9 @@
     "searchPlaceholder": "Maghanap ng paksa…",
     "searchAria": "Maghanap ng paksa",
     "noMatches": "Walang paksang tugma sa “{{query}}”.",
-    "allSelected": "Napili na lahat ng {{category}}. Magdagdag lang ng isa-isang paksa kung gusto mong mas tiyak:",
+    "allSelected": "Napili ang buong {{category}}. I-tap ang isang paksa para alisin ito.",
     "orPickTopics": "O pumili ng isa-isang paksa:",
+    "clear": "I-clear",
     "goodEnough": "Puwede na, o gawing mas tiyak (opsyonal)",
     "moreSpecific": "Mas tiyak:"
   }

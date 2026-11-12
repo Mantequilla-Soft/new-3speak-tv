@@ -178,6 +178,53 @@
     &:active:not(:disabled) { transform: scale(.98); }
     &.open:not(.selected), &.has-selected:not(.selected) { border-color: var(--muted); }
     &.selected { border-color: var(--cyan); background: var(--cyan-tint-strong); }
+
+    // Some of a category picked: the fill grows with the share (--fill, set
+    // inline), under the icon and the name; the corner says "2/4".
+    &.is-partial, &.is-partial.open:not(.selected) {
+      border-color: var(--cyan);
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: var(--fill, 0%);
+        background: var(--cyan-tint-strong);
+        transition: width var(--t-base) var(--ease);
+        pointer-events: none;
+      }
+
+      > * { position: relative; }
+      > .tagsv2-count { position: absolute; }
+    }
     &:disabled { opacity: .45; cursor: not-allowed; }
   }
+}
+
+// Over an open category's topics: the hint, and Clear (everything in it off).
+.tagsv2-topics-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  .tagsv2-hint { margin: 0; }
+}
+
+.tagsv2-clear {
+  flex: none;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--cyan);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover:not(:disabled) { background: var(--bg-hover); }
+  &:disabled { opacity: .45; cursor: not-allowed; }
 }

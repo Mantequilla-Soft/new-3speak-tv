@@ -167,8 +167,9 @@
     "searchPlaceholder": "주제 검색…",
     "searchAria": "주제 검색",
     "noMatches": "“{{query}}”와 일치하는 주제가 없어요.",
-    "allSelected": "{{category}} 전체가 선택되었어요. 범위를 좁히려면 개별 주제만 추가하세요:",
+    "allSelected": "{{category}} 전체가 선택되었어요. 빼고 싶은 주제를 누르세요.",
     "orPickTopics": "또는 개별 주제 선택:",
+    "clear": "지우기",
     "goodEnough": "이대로 좋아요. 더 구체적으로 고를 수도 있어요(선택)",
     "moreSpecific": "더 구체적으로:"
   }

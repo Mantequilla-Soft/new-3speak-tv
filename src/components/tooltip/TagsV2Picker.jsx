@@ -48,7 +48,10 @@ function TagsV2Picker({
   const { t } = useTranslation();
   const selectedArr = multi && Array.isArray(value) ? value : [];
   const selectedSet = useMemo(() => new Set(selectedArr), [selectedArr]);
-  const isSel = (slug) => (multi ? selectedSet.has(slug) : value === slug);
+  // Multi mode: a topic also reads as picked when its whole category is.
+  const isSel = (slug) => (multi
+    ? selectedSet.has(slug) || (getCategoryOf(slug) !== slug && selectedSet.has(getCategoryOf(slug)))
+    : value === slug);
 
   // Which category's topics are shown. Single mode derives it from the selected
   // value; multi mode tracks it locally (there's no single value), opening the
@@ -92,15 +95,42 @@ function TagsV2Picker({
     onChange(selectedSet.has(slug) ? selectedArr.filter((s) => s !== slug) : [...selectedArr, slug]);
   };
 
+  // Multi mode, a category and its topics as one choice (owner 2026-11-12):
+  //  - the whole category is its own slug; some of it is a set of topic slugs;
+  //  - a category with nothing picked is picked whole by a click on it; once
+  //    something in it is picked, a click only opens or closes its topics and
+  //    never takes anything away (Clear does);
+  //  - with the whole category picked, a topic click leaves that topic out (the
+  //    rest stay, as topics); picking every topic one by one makes it whole.
+  const catOf = (slug) => TAG_CATEGORIES.find((c) => c.slug === slug) || null;
+  const picksIn = (cat) => (selectedSet.has(cat.slug)
+    ? cat.topics.length
+    : cat.topics.reduce((n, topic) => n + (selectedSet.has(topic.slug) ? 1 : 0), 0));
+  const withoutCat = (cat, list = selectedArr) => list.filter((s) => s !== cat.slug && !cat.topics.some((topic) => topic.slug === s));
+  const clearCategory = (cat) => { if (!disabled) onChange(withoutCat(cat)); };
+  const toggleTopicMulti = (slug) => {
+    const cat = catOf(getCategoryOf(slug));
+    if (!cat || cat.slug === slug) { toggleMulti(slug); return; }
+    if (selectedSet.has(cat.slug)) {
+      // Whole → all but this one.
+      onChange([...withoutCat(cat), ...cat.topics.map((topic) => topic.slug).filter((s) => s !== slug)]);
+      return;
+    }
+    const next = selectedSet.has(slug) ? selectedArr.filter((s) => s !== slug) : [...selectedArr, slug];
+    const all = cat.topics.every((topic) => next.includes(topic.slug));
+    onChange(all ? [...withoutCat(cat, next), cat.slug] : next);
+  };
+
   const pickCategory = (slug) => {
     if (disabled) return;
     if (multi) {
-      // Clicking a whole area SELECTS it, which is what people expect from a tile
-      // that looks like every other pickable chip. It used to only expand, so a
-      // parent category was browsable but unpickable. It still expands too, so the
-      // topics stay one click away if you want to narrow down instead.
-      toggleMulti(slug);
-      setOpenCatMulti((prev) => (prev === slug ? null : slug));
+      const cat = catOf(slug);
+      if (cat && picksIn(cat) === 0) {
+        onChange([...selectedArr, slug]);
+        setOpenCatMulti(slug);
+      } else {
+        setOpenCatMulti((prev) => (prev === slug ? null : slug));
+      }
     } else {
       onChange(value === slug ? '' : slug);                              // select/clear
     }
@@ -108,17 +138,23 @@ function TagsV2Picker({
 
   const pickTopic = (slug) => {
     if (disabled) return;
-    if (multi) toggleMulti(slug);
+    if (multi) toggleTopicMulti(slug);
     else onChange(value === slug ? getCategoryOf(slug) : slug); // topic → back to category
   };
 
   const pickResult = (m) => {
     if (disabled) return;
-    if (multi) toggleMulti(m.slug);
+    // A category found by search: whole on, or everything in it off.
+    if (multi && m.isCat) {
+      const cat = catOf(m.slug);
+      if (cat && picksIn(cat) > 0) clearCategory(cat); else onChange([...selectedArr, m.slug]);
+      return;
+    }
+    if (multi) toggleTopicMulti(m.slug);
     else onChange(value === m.slug ? '' : m.slug);
   };
 
-  const catCount = (cat) => cat.topics.reduce((n, topic) => n + (selectedSet.has(topic.slug) ? 1 : 0), 0);
+  const catCount = (cat) => picksIn(cat);
 
   const known = suggested.filter(Boolean);
 
@@ -139,23 +175,29 @@ function TagsV2Picker({
     );
   };
 
-  // A 23a tile: icon on top, the name under it; a category shows how many of
-  // its topics are picked.
-  const renderTile = ({ slug, label, isCat, count = 0 }) => (
-    <button
-      type="button"
-      key={slug}
-      className={`tagsv2-tile${isSel(slug) ? ' selected' : ''}${isCat && activeCategory === slug ? ' open' : ''}${count > 0 ? ' has-selected' : ''}`}
-      onClick={() => (isCat ? pickCategory(slug) : pickTopic(slug))}
-      disabled={disabled}
-      aria-pressed={isSel(slug)}
-      aria-expanded={isCat ? activeCategory === slug : undefined}
-    >
-      {tagIcon(slug, 24)}
-      <span className="tagsv2-label">{label}</span>
-      {count > 0 && <span className="tagsv2-count">{count}</span>}
-    </button>
-  );
+  // A 23a tile: icon on top, the name under it. A category shows how much of
+  // it is picked: filled when whole, a fill as wide as its share when only
+  // some topics are (2 of 4 = half), and "2/4" in the corner.
+  const renderTile = ({ slug, label, isCat, count = 0, total = 0 }) => {
+    const partial = isCat && count > 0 && count < total;
+    const whole = isCat ? total > 0 && count >= total : isSel(slug);
+    return (
+      <button
+        type="button"
+        key={slug}
+        className={`tagsv2-tile${whole ? ' selected' : ''}${partial ? ' is-partial' : ''}${isCat && activeCategory === slug ? ' open' : ''}${count > 0 ? ' has-selected' : ''}`}
+        style={partial ? { '--fill': `${Math.round((count / total) * 100)}%` } : undefined}
+        onClick={() => (isCat ? pickCategory(slug) : pickTopic(slug))}
+        disabled={disabled}
+        aria-pressed={isCat ? (partial ? 'mixed' : whole) : isSel(slug)}
+        aria-expanded={isCat ? activeCategory === slug : undefined}
+      >
+        {tagIcon(slug, 24)}
+        <span className="tagsv2-label">{label}</span>
+        {partial && <span className="tagsv2-count">{count}/{total}</span>}
+      </button>
+    );
+  };
 
   const search = searchable && (
     <input
@@ -184,15 +226,22 @@ function TagsV2Picker({
         ) : (
           <>
             <div className="tagsv2-tiles">
-              {TAG_CATEGORIES.map((cat) => renderTile({ slug: cat.slug, label: t(cat.labelKey), isCat: true, count: catCount(cat) }))}
+              {TAG_CATEGORIES.map((cat) => renderTile({ slug: cat.slug, label: t(cat.labelKey), isCat: true, count: catCount(cat), total: cat.topics.length }))}
             </div>
             {openCategory && (
               <div className="tagsv2-topics">
-                <p className="tagsv2-hint">
-                  {isSel(openCategory.slug)
-                    ? t('engagement.tagsPicker.allSelected', { category: t(openCategory.labelKey) })
-                    : t('engagement.tagsPicker.orPickTopics')}
-                </p>
+                <div className="tagsv2-topics-head">
+                  <p className="tagsv2-hint">
+                    {selectedSet.has(openCategory.slug)
+                      ? t('engagement.tagsPicker.allSelected', { category: t(openCategory.labelKey) })
+                      : t('engagement.tagsPicker.orPickTopics')}
+                  </p>
+                  {picksIn(openCategory) > 0 && (
+                    <button type="button" className="tagsv2-clear" onClick={() => clearCategory(openCategory)} disabled={disabled}>
+                      {t('engagement.tagsPicker.clear')}
+                    </button>
+                  )}
+                </div>
                 <div className="tagsv2-tiles">
                   {openCategory.topics.map((topic) => renderTile({ slug: topic.slug, label: t(topic.labelKey), isCat: false }))}
                 </div>
@@ -296,11 +345,18 @@ function TagsV2Picker({
           {openCategory && (
             <div className="tagsv2-topics">
               {multi && (
-                <p className="tagsv2-hint">
-                  {isSel(openCategory.slug)
-                    ? t('engagement.tagsPicker.allSelected', { category: t(openCategory.labelKey) })
-                    : t('engagement.tagsPicker.orPickTopics')}
-                </p>
+                <div className="tagsv2-topics-head">
+                  <p className="tagsv2-hint">
+                    {selectedSet.has(openCategory.slug)
+                      ? t('engagement.tagsPicker.allSelected', { category: t(openCategory.labelKey) })
+                      : t('engagement.tagsPicker.orPickTopics')}
+                  </p>
+                  {picksIn(openCategory) > 0 && (
+                    <button type="button" className="tagsv2-clear" onClick={() => clearCategory(openCategory)} disabled={disabled}>
+                      {t('engagement.tagsPicker.clear')}
+                    </button>
+                  )}
+                </div>
               )}
               <div className="tagsv2-row">
                 {openCategory.topics.map(renderTopic)}

@@ -170,8 +170,9 @@
     "searchPlaceholder": "Tafuta mada…",
     "searchAria": "Tafuta mada",
     "noMatches": "Hakuna mada inayolingana na “{{query}}”.",
-    "allSelected": "{{category}} yote imechaguliwa. Ongeza mada moja moja ili tu kubana zaidi:",
+    "allSelected": "{{category}} yote imechaguliwa. Gusa mada ili kuiondoa.",
     "orPickTopics": "Au chagua mada moja moja:",
+    "clear": "Futa",
     "goodEnough": "Inatosha, au kuwa mahususi zaidi (si lazima)",
     "moreSpecific": "Mahususi zaidi:"
   }

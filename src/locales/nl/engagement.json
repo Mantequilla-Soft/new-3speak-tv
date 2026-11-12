@@ -170,8 +170,9 @@
     "searchPlaceholder": "Onderwerpen zoeken…",
     "searchAria": "Onderwerpen zoeken",
     "noMatches": "Geen onderwerpen voor “{{query}}”.",
-    "allSelected": "Heel {{category}} is geselecteerd. Voeg alleen losse onderwerpen toe om het smaller te maken:",
+    "allSelected": "Heel {{category}} is gekozen. Tik op een onderwerp om het weg te laten.",
     "orPickTopics": "Of kies losse onderwerpen:",
+    "clear": "Wissen",
     "goodEnough": "Goed genoeg, of maak het specifieker (optioneel)",
     "moreSpecific": "Specifieker:"
   }

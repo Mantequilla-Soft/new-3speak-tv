@@ -173,8 +173,9 @@
     "searchPlaceholder": "Cerca argomenti…",
     "searchAria": "Cerca argomenti",
     "noMatches": "Nessun argomento corrisponde a “{{query}}”.",
-    "allSelected": "Tutta la categoria {{category}} è selezionata. Aggiungi singoli argomenti solo per restringere:",
+    "allSelected": "Tutto {{category}} è scelto. Tocca un argomento per escluderlo.",
     "orPickTopics": "Oppure scegli singoli argomenti:",
+    "clear": "Cancella",
     "goodEnough": "Va bene così, oppure sii più specifico (facoltativo)",
     "moreSpecific": "Più specifico:"
   }

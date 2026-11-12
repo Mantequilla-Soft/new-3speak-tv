@@ -173,8 +173,9 @@
     "searchPlaceholder": "Pesquisar temas…",
     "searchAria": "Pesquisar temas",
     "noMatches": "Nenhum tema corresponde a “{{query}}”.",
-    "allSelected": "Todo o tema {{category}} está selecionado. Adicione temas específicos só se quiser restringir mais:",
+    "allSelected": "Todo {{category}} está escolhido. Toque num tema para o deixar de fora.",
     "orPickTopics": "Ou escolha temas específicos:",
+    "clear": "Limpar",
     "goodEnough": "Já está bom, ou seja mais específico (opcional)",
     "moreSpecific": "Mais específico:"
   }

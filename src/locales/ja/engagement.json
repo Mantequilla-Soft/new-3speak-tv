@@ -167,8 +167,9 @@
     "searchPlaceholder": "トピックを検索…",
     "searchAria": "トピックを検索",
     "noMatches": "「{{query}}」に一致するトピックはありません。",
-    "allSelected": "{{category}} のすべてが選択されています。さらに絞り込む場合のみ、個別のトピックを追加してください:",
+    "allSelected": "{{category}}をすべて選択中です。外したいトピックをタップしてください。",
     "orPickTopics": "または個別のトピックを選ぶ:",
+    "clear": "クリア",
     "goodEnough": "これで十分、またはさらに絞り込む（任意）",
     "moreSpecific": "さらに詳しく:"
   }

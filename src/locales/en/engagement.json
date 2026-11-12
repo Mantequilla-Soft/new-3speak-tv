@@ -170,8 +170,9 @@
     "searchPlaceholder": "Search topics…",
     "searchAria": "Search topics",
     "noMatches": "No topics match “{{query}}”.",
-    "allSelected": "All of {{category}} is selected. Add individual topics only to go narrower:",
+    "allSelected": "All of {{category}} is picked. Tap a topic to leave it out.",
     "orPickTopics": "Or pick individual topics:",
+    "clear": "Clear",
     "goodEnough": "Good enough, or get more specific (optional)",
     "moreSpecific": "More specific:"
   }

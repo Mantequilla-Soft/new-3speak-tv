@@ -167,8 +167,9 @@
     "searchPlaceholder": "Cari topik…",
     "searchAria": "Cari topik",
     "noMatches": "Tidak ada topik yang cocok dengan “{{query}}”.",
-    "allSelected": "Semua {{category}} sudah dipilih. Tambahkan topik satuan hanya jika ingin lebih spesifik:",
+    "allSelected": "Semua {{category}} dipilih. Ketuk topik untuk mengecualikannya.",
     "orPickTopics": "Atau pilih topik satuan:",
+    "clear": "Hapus",
     "goodEnough": "Sudah cukup, atau buat lebih spesifik (opsional)",
     "moreSpecific": "Lebih spesifik:"
   }

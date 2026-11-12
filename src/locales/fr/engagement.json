@@ -173,8 +173,9 @@
     "searchPlaceholder": "Rechercher des sujets…",
     "searchAria": "Rechercher des sujets",
     "noMatches": "Aucun sujet ne correspond à « {{query}} ».",
-    "allSelected": "Toute la catégorie {{category}} est sélectionnée. Ajoutez des sujets individuels seulement pour affiner :",
+    "allSelected": "Tout {{category}} est choisi. Touche un sujet pour l’exclure.",
     "orPickTopics": "Ou choisissez des sujets individuels :",
+    "clear": "Effacer",
     "goodEnough": "C'est suffisant, ou soyez plus précis (facultatif)",
     "moreSpecific": "Plus précis :"
   }

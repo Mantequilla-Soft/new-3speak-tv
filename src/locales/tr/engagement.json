@@ -170,8 +170,9 @@
     "searchPlaceholder": "Konu ara…",
     "searchAria": "Konu ara",
     "noMatches": "“{{query}}” ile eşleşen konu yok.",
-    "allSelected": "{{category}} kategorisinin tamamı seçili. Daraltmak için yalnızca tek tek konular ekle:",
+    "allSelected": "{{category}} tümüyle seçili. Çıkarmak istediğin konuya dokun.",
     "orPickTopics": "Ya da tek tek konular seç:",
+    "clear": "Temizle",
     "goodEnough": "Bu kadarı yeterli ya da daha ayrıntılı seç (isteğe bağlı)",
     "moreSpecific": "Daha ayrıntılı:"
   }
