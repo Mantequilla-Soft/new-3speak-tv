@@ -73,12 +73,13 @@ const CARD_FADE_MS = 200;
  * - activeCreator: string | null — username of the currently selected creator (highlighted)
  * - activeStory: boolean — the active creator is being watched as a 24h story
  * - onCreatorSelect: (username: string, { story: boolean }) => void — called when a creator avatar is clicked.
- *                    `story` is true for a 24h-story avatar (the cyan ring).
+ *                    `story` is true for a 24h-story avatar (the countdown ring).
  *                    If not provided, defaults to navigating to the shorts / story viewer
  * - compact: boolean — smaller avatars for the shorts player context
  * - hiddenOnMobile: boolean — hide the entire bar on mobile (for shorts player, where swipe is used instead)
  * - tiles: boolean — the Home row (20a): a dashed "+" tile, then 64px rounded
- *          tiles in cyan rings, names kept for screen readers only
+ *          tiles in rings (accent = followed, ink = others, countdown for 24h
+ *          stories), names kept for screen readers only
  */
 const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, compact = false, hiddenOnMobile = false, tiles = false }) => {
   const { t } = useTranslation();
@@ -98,7 +99,7 @@ const ShortsStories = ({ activeCreator, activeStory = false, onCreatorSelect, co
   const fadeTimer = useRef(null);
 
   const { creators, currentUserHasShort, isLoading } = useShortsStories();
-  // 24h stories go first, with the cyan ring. A creator with a live story shows
+  // 24h stories go first, with the countdown ring. A creator with a live story shows
   // once, as a story; the shorts creators follow (they leave this row over time).
   const { storyCreators, currentUserStreak } = useStoryCreators();
   const now = useStoryClock();

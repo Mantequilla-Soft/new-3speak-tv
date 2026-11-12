@@ -1,10 +1,12 @@
 @use "../../styles/v2" as v2;
 
-// "We shipped an update!" (designs 25e, 44a) on the v2 Dialog: a cyan wash at
-// the top (25e's what's-new card), the version pill and title, then the changes
-// grouped by category as folding rows, and Read the code / Got it at the foot.
+// "We shipped an update!" (designs 25e, 44a) on the v2 Dialog: the version pill
+// and title, then the changes grouped by category as folding rows, and Read the
+// code / Got it at the foot. Kept calm on purpose (owner 2026-11-12: "less
+// colorful"): a flat surface, neutral pill / icons / version numbers, and the
+// red Got it as the one accent.
 .changelog-modal {
-  background: linear-gradient(170deg, color-mix(in srgb, var(--cyan) 18%, var(--surface)), var(--surface) 260px);
+  background: var(--surface);
 }
 
 .changelog-scroll {
@@ -39,8 +41,8 @@
 }
 
 .changelog-version {
-  background: var(--cyan);
-  color: var(--bg);
+  background: var(--surface-2);
+  color: var(--text);
 }
 
 .changelog-subtitle {
@@ -86,8 +88,8 @@
   border-radius: var(--r-md);
   display: grid;
   place-items: center;
-  background: var(--cyan-tint);
-  color: var(--cyan);
+  background: var(--surface-2);
+  color: var(--muted);
 }
 
 .changelog-group-name {
@@ -131,7 +133,7 @@
 .changelog-entry-version {
   @include v2.text(eyebrow);
   letter-spacing: .06em;
-  color: var(--cyan);
+  color: var(--muted);
   font-family: var(--font-mono);
 }
 

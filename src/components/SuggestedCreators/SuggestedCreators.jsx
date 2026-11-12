@@ -17,6 +17,7 @@ import HiveAvatar from '../HiveAvatar/HiveAvatar';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../i18n';
 import './SuggestedCreators.scss';
+import { fixVideoThumbnail } from '../../utils/fixThumbnails';
 
 // Every toast from this module is headed "Following"; the message becomes the
 // line under it. See utils/toast.js.
@@ -224,7 +225,10 @@ export default function SuggestedCreators({ variant = 'discover', perRow = 0 }) 
                 </span>
                 {/* Their latest video (the one the suggestion came with) */}
                 <Link to={c.sample?.permlink ? `/@${c.name}/${c.sample.permlink}` : `/@${c.name}`} className="sc-thumb" tabIndex={-1} aria-hidden="true">
-                  {c.sample?.thumbnail && <img src={c.sample.thumbnail} alt="" loading="lazy" />}
+                  {/* Through the same helper as every card: Ecency pictures come via
+                      our /img/e/ cache (Ecency's Cloudflare blocks some viewers,
+                      which left these tiles empty), our own via /img/t/. */}
+                  {c.sample?.thumbnail && <img src={fixVideoThumbnail({ thumbnail: c.sample.thumbnail })} alt="" loading="lazy" />}
                 </Link>
                 <Button
                   // Not red (owner 2026-11-12): a rail of these drowned the page in

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { t } from '../../i18n';
 import { Icon } from '../v2/Icon';
 import { IconButton } from '../v2/ui';
@@ -14,6 +15,10 @@ import { reloadForUpdate } from '../../utils/checkLatestVersion';
  * .ts-update block at the end of src/toast.css.
  */
 export default function UpdateNotice({ version, onDismiss }) {
+  // Pressed: a spinner instead of the arrow until the page reloads (that can take
+  // a moment, see reloadForUpdate), so it never looks like nothing happened.
+  const [busy, setBusy] = useState(false);
+  const refresh = () => { setBusy(true); reloadForUpdate(); };
   return (
     <div className="ts-update" role="status">
       <Icon name="system_update" size={28} className="ts-update__icon" />
@@ -21,9 +26,9 @@ export default function UpdateNotice({ version, onDismiss }) {
         <b className="ts-update__title">{t('app.update.available', { version })}</b>
         <span className="ts-update__sub">{t('app.update.description')}</span>
       </div>
-      <button type="button" className="v2-btn v2-btn--cyan h40 is-next ts-update__btn" onClick={() => reloadForUpdate()}>
+      <button type="button" className="v2-btn v2-btn--cyan h40 is-next ts-update__btn" onClick={refresh} disabled={busy} aria-busy={busy}>
         <span className="v2-btn__label">{t('common.actions.refresh')}</span>
-        <Icon name="arrow_forward" size={16} />
+        <Icon name={busy ? 'progress_activity' : 'arrow_forward'} size={16} className={busy ? 'v2-spin' : undefined} />
       </button>
       <IconButton icon="close" label={t('common.actions.close')} size={32} variant="ghost" round className="ts-update__close" onClick={onDismiss} />
     </div>

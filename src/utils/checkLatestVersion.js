@@ -64,26 +64,54 @@ export async function fetchNewerVersion() {
   return null;
 }
 
+// Settles when `promise` does or after `ms`, whichever comes first, never rejects.
+const settleWithin = (promise, ms) => Promise.race([
+  Promise.resolve(promise).catch(() => {}),
+  new Promise((resolve) => { setTimeout(resolve, ms); }),
+]);
+
+let reloading = false;
+
 // Drop caches + service workers and reload, so the browser fetches the new build
 // fresh instead of serving the cached (stale) one.
+//
+// 🚨 Never wait on the service worker without a limit. The browser runs a site's
+// service worker jobs one at a time, so unregister() queues behind an update it
+// is already installing, and right after a deploy it often is: the new worker
+// precaches the whole build (~11 MB). Measured 2026-11-12 on a 4 Mbit/s line:
+// Refresh did nothing for 11 s, which on a phone reads as a dead button (the
+// "Refresh doesn't always work" reports). So:
+//  1. The caches go first. That is quick and waits for nothing, and with the old
+//     shell gone, a worker that is still in control has to fetch the page from
+//     the network, so the reload gets the new build anyway.
+//  2. Unregister is started, but given ~1 s at most.
+// A second press while this runs does nothing (it would only start it again).
 export async function reloadForUpdate() {
+  if (reloading) return;
+  reloading = true;
   try {
-    if (typeof caches !== "undefined") {
-      const keys = await caches.keys();
-      await Promise.all(keys.map((k) => caches.delete(k)));
-    }
-    if ("serviceWorker" in navigator) {
-      const regs = await navigator.serviceWorker.getRegistrations();
-      // Same exception as main.jsx: the notifications worker holds the push
-      // subscription and caches nothing, so wiping it here would quietly
-      // unsubscribe someone as a side effect of taking an update.
-      await Promise.all(
-        regs.filter((r) => !r.scope.endsWith("/push-scope/")).map((r) => r.unregister()),
-      );
-    }
-  } catch {
-    // ignore — reload anyway
+    await doReload();
+  } finally {
+    reloading = false;
   }
+}
+
+async function doReload() {
+  await settleWithin((async () => {
+    if (typeof caches === "undefined") return;
+    const keys = await caches.keys();
+    await Promise.all(keys.map((k) => caches.delete(k)));
+  })(), 2000);
+  await settleWithin((async () => {
+    if (!("serviceWorker" in navigator)) return;
+    const regs = await navigator.serviceWorker.getRegistrations();
+    // Same exception as main.jsx: the notifications worker holds the push
+    // subscription and caches nothing, so wiping it here would quietly
+    // unsubscribe someone as a side effect of taking an update.
+    await Promise.all(
+      regs.filter((r) => !r.scope.endsWith("/push-scope/")).map((r) => r.unregister()),
+    );
+  })(), 1000);
   window.location.reload();
 }
 

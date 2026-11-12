@@ -71,8 +71,8 @@
   @include v2.scroll-y;
 }
 
-// One row: a 36px rounded avatar with a 20px cyan badge (what happened) at its
-// corner, the "who did what · when" line (12, muted, the name in ink) and the
+// One row: a 36px rounded avatar (live rows: a 20px accent badge at its
+// corner), the "who did what · when" line (12, muted, the name in ink) and the
 // body (14, 1.4).
 .home-activity__row {
   display: grid;
@@ -107,10 +107,8 @@
   display: grid;
   place-items: center;
   border-radius: var(--r-sm);
-  background: var(--cyan);
-  color: var(--bg);
-
-  &.is-accent { background: var(--accent); color: var(--on-accent); }
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .home-activity__text { min-width: 0; }

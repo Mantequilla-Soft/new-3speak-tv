@@ -274,9 +274,12 @@
 }
 
 // ── The Home row (20a) ──
-// A dashed "+" tile (2px, ink at 30%), then 64px tiles, radius 20: a 2px cyan
-// ring around a 3px ground gap around the picture. Gap 10, no names (they stay
-// for screen readers). A 24h story already watched keeps a quiet ring.
+// A dashed "+" tile (2px, ink at 30%), then 64px tiles, radius 20: a 2px ring
+// around a 3px ground gap around the picture. Gap 10, no names (they stay for
+// screen readers). Ring colours as everywhere else (owner 2026-11-12: no cyan):
+// accent = someone you follow, ink = someone else. A 24h story's ring is its
+// COUNTDOWN (the arc of the 24h still left, see .story-timer above), quieter
+// once all of it was watched.
 .shorts-stories--tiles {
   --story-size: 64px;
   --story-r: 20px;
@@ -312,10 +315,16 @@
   .story-avatar-wrap {
     padding: 2px;
     border: 0;
-    background: var(--cyan);
+    background: color-mix(in srgb, var(--text) 45%, transparent);
 
-    &.story-timer::before { content: none; }
-    &.story-timer--seen { background: color-mix(in srgb, var(--text) 30%, transparent); }
+    &.border-primary { background: var(--accent); }
+
+    // The countdown: the ring is drawn by .story-timer::before in the 2px
+    // padding (the arc for the time left, a faint track for the rest).
+    &.story-timer {
+      background: transparent;
+      &::before { inset: 0; padding: 2px; }
+    }
 
     .hive-avatar {
       border: 3px solid var(--bg);

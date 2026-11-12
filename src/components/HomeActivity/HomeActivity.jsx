@@ -153,12 +153,15 @@ function WarmupGoals({ progress }) {
   );
 }
 
-function Row({ to, avatar, icon, tone = "cyan", who, verb, age, body, children }) {
+// `icon`: a small badge on the avatar corner, only where it says something the
+// line does not (live now). The kind badges on community / group rows are gone
+// (owner 2026-11-12: "remove the little cyan content indicators").
+function Row({ to, avatar, icon, who, verb, age, body, children }) {
   return (
     <div className="home-activity__row">
       <Link to={to} className="home-activity__avatar" tabIndex={-1} aria-hidden="true">
         <img src={avatar} alt="" loading="lazy" />
-        <span className={cx("home-activity__kind", `is-${tone}`)}><Icon name={icon} size={13} /></span>
+        {icon && <span className="home-activity__kind"><Icon name={icon} size={13} /></span>}
       </Link>
       <div className="home-activity__text">
         <div className="home-activity__line">
@@ -249,7 +252,7 @@ export default function HomeActivity() {
     list = community.rows.length ? community.rows.map((r) => {
       if (r.kind === "audio") {
         return (
-          <Row key={r.key} to={audioItemPath(r.data)} avatar={`/img/u/${r.who}/avatar/small`} icon="graphic_eq"
+          <Row key={r.key} to={audioItemPath(r.data)} avatar={`/img/u/${r.who}/avatar/small`}
             who={r.who} verb={t("feeds.activity.verbs.audio")} age={ageOf(r.at)} body={r.data.title || r.data.originalFilename}>
             <InlineAudio item={r.data} queue={community.audio} />
           </Row>
@@ -257,26 +260,26 @@ export default function HomeActivity() {
       }
       if (r.kind === "playlist") {
         return (
-          <Row key={r.key} to={`/playlist/${r.data.id}`} avatar={`/img/u/${r.who}/avatar/small`} icon="playlist_add"
+          <Row key={r.key} to={`/playlist/${r.data.id}`} avatar={`/img/u/${r.who}/avatar/small`}
             who={r.who} verb={t("feeds.activity.verbs.playlist")} age={ageOf(r.at)} body={r.data.name} />
         );
       }
       return (
-        <Row key={r.key} to={`/@${r.who}?tab=community`} avatar={`/img/u/${r.who}/avatar/small`} icon="bolt"
+        <Row key={r.key} to={`/@${r.who}?tab=community`} avatar={`/img/u/${r.who}/avatar/small`}
           who={r.who} verb={t("feeds.activity.verbs.snap")} age={ageOf(r.at)} body={bodyToPlaintext(r.data.body || "")} />
       );
     }) : !community.loading && <p className="home-activity__empty">{t("feeds.activity.emptyCommunity")}</p>;
   } else if (tab === "live") {
     list = live.length ? live.map((s) => (
       <Row key={s.roomName} to={s._openpodRoom ? `/openpods/${s.roomName}` : `/watch/${s.roomName}`}
-        avatar={`/img/u/${s.author}/avatar/small`} icon="sensors" tone="accent"
+        avatar={`/img/u/${s.author}/avatar/small`} icon="sensors"
         who={s.author} verb={t("feeds.activity.verbs.live")} age={ageOf(s.created_at)} body={s.title}>
         <span className="home-activity__watching">{t("cards.watchingNow", { count: s.views || 0 })}</span>
       </Row>
     )) : <p className="home-activity__empty">{t("feeds.activity.emptyLive")}</p>;
   } else {
     list = groups.data?.length ? groups.data.map((g) => (
-      <Row key={g.name} to={`/community/${g.name}`} avatar={`/img/u/${g.name}/avatar/small`} icon="groups"
+      <Row key={g.name} to={`/community/${g.name}`} avatar={`/img/u/${g.name}/avatar/small`}
         who={g.title} verb={t("feeds.activity.verbs.group", { count: g.week })} body={g.latest?.title || ""} />
     )) : !groups.isLoading && <p className="home-activity__empty">{t("feeds.activity.emptyGroups")}</p>;
   }
