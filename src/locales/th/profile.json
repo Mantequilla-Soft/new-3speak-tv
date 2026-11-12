@@ -256,11 +256,7 @@
     "tip": "ทิป",
     "tipCreator": "ส่งทิปให้ครีเอเตอร์",
     "latestVideo": "วิดีโอล่าสุด",
-    "watchLatestVideo": "ดูวิดีโอล่าสุด",
-    "latestShort": "Shorts ล่าสุด",
-    "watchLatestShort": "ดู Shorts ล่าสุด",
-    "closeMenu": "ปิดเมนู",
-    "openActions": "เปิดการทำงาน"
+    "latestShort": "Shorts ล่าสุด"
   },
   "uploads": {
     "processing": "กำลังประมวลผลวิดีโอของคุณ",

@@ -310,11 +310,7 @@
     "tip": "Чаевые",
     "tipCreator": "Чаевые автору",
     "latestVideo": "Последнее видео",
-    "watchLatestVideo": "Смотреть последнее видео",
-    "latestShort": "Последний Shorts",
-    "watchLatestShort": "Смотреть последний ролик Shorts",
-    "closeMenu": "Закрыть меню",
-    "openActions": "Открыть действия"
+    "latestShort": "Последний Shorts"
   },
   "uploads": {
     "processing": "Обработка ваших видео",

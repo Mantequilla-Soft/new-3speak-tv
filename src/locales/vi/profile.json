@@ -256,11 +256,7 @@
     "tip": "Tip",
     "tipCreator": "Gửi tip cho nhà sáng tạo",
     "latestVideo": "Video mới nhất",
-    "watchLatestVideo": "Xem video mới nhất",
-    "latestShort": "Short mới nhất",
-    "watchLatestShort": "Xem Short mới nhất",
-    "closeMenu": "Đóng menu",
-    "openActions": "Mở thao tác"
+    "latestShort": "Short mới nhất"
   },
   "uploads": {
     "processing": "Đang xử lý video của bạn",

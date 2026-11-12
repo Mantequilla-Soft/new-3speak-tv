@@ -256,11 +256,7 @@
     "tip": "Tip",
     "tipCreator": "Beri tip kreator",
     "latestVideo": "Video Terbaru",
-    "watchLatestVideo": "Tonton video terbaru",
-    "latestShort": "Shorts Terbaru",
-    "watchLatestShort": "Tonton Shorts terbaru",
-    "closeMenu": "Tutup menu",
-    "openActions": "Buka aksi"
+    "latestShort": "Shorts Terbaru"
   },
   "uploads": {
     "processing": "Memproses videomu",

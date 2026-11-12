@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-import { createPortal } from 'react-dom';
 import { getFollowers, getRelationshipBetweenAccounts, isAccountValid } from '../../hive-api/api';
 // Aliased: this component already has a local `isCreatorHidden` boolean (the
 // viewer's PERSONAL "not interested" hide state). This one is the moderation check.
 import { isCreatorHidden as isModeratedCreatorHidden } from '../../utils/hiddenCreators';
-import { followWithAioha, isLoggedIn } from '../../hive-api/aioha';
+import { followWithAioha } from '../../hive-api/aioha';
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useOpenChat } from '../../hooks/useOpenChat';
 import "./UserProfilePage.scss"
@@ -133,11 +132,6 @@ function UserProfilePage({ user: userProp }) {
     const [newPlaylistKind, setNewPlaylistKind] = useState('podcast');
     const [isCreating, setIsCreating] = useState(false);
     const [isReportOpen, setIsReportOpen] = useState(false);
-    const [fabOpen, setFabOpen] = useState(false);
-    // The opened audio player covers most of a phone's screen: the FAB steps
-    // out of the way until the player is folded again. (Its open menu's backdrop
-    // covers the player, so the player can't open while the menu is up.)
-    const audioExpanded = useAppStore((st) => st.audioExpanded);
     const [isTipModalOpen, setIsTipModalOpen] = useState(false);
     // "Search this channel" (20b): filters the uploads this page has loaded.
     // Tied to the profile it was typed on, so another channel starts empty.
@@ -382,7 +376,7 @@ const {
                 }
                 return undefined;
               },
-              // Always fetch first page so FAB can show "Latest Short"
+              // Always fetch the first page, so More can offer "Latest short"
               enabled: true,
             });
 
@@ -426,7 +420,7 @@ const {
             // Flatten all pages into a single array
             const videos = useMemo(() => data?.pages.flat() || [], [data?.pages]);
 
-            // Latest video & short for FAB quick-access
+            // Latest video & short for the More menu
             const latestVideo = videos[0];
             const latestShort = shortsVideos[0];
 
@@ -642,6 +636,9 @@ const {
             <ProfileMoreMenu
               title={t('profile.page.moreActions', { user })}
               items={[
+                // From the old floating button (owner 2026-11-12): the newest upload of each kind.
+                latestVideo && { icon: 'smart_display', label: t('profile.fab.latestVideo'), onClick: () => navigate(`/@${latestVideo.author}/${latestVideo.permlink}`) },
+                latestShort && { icon: 'view_day', label: t('profile.fab.latestShort'), onClick: () => navigate(`/shorts?v=${latestShort.author}/${latestShort.permlink}&user=${user}`) },
                 { icon: 'link', label: t('profile.page.copyProfileLink'), onClick: copyProfileLink },
                 // Wallet left the tab row for "Search this channel" (20b).
                 { icon: 'account_balance_wallet', label: t('common.nav.wallet'), onClick: () => handleWalletNavigate(user) },
@@ -841,92 +838,8 @@ const {
         />
       )}
 
-      {/* Mobile action button (37b): a speed-dial for quick actions on other
-          users' profiles. */}
-      {createPortal(
-        <>
-          {fabOpen && (
-            <div className="profile-fab-backdrop" onClick={() => setFabOpen(false)} />
-          )}
-          <div className={`profile-fab-speed-dial${fabOpen ? ' open' : ''}${audioExpanded ? ' is-under-player' : ''}`}>
-            {fabOpen && (
-              <div className="profile-fab-actions">
-                {authenticated && isLoggedIn() && (
-                  <div className="profile-fab-action">
-                    <span className="profile-fab-action-label">
-                      {isFollowing ? t('common.actions.unfollow') : t('common.actions.follow')}
-                    </span>
-                    <button
-                      className={`profile-fab-action-btn${isFollowing ? ' profile-fab-action-btn--active' : ''}`}
-                      onClick={() => { handleFollowToggle(); setFabOpen(false); }}
-                      disabled={followLoading}
-                      aria-label={isFollowing ? t('common.actions.unfollow') : t('common.actions.follow')}
-                    >
-                      <Icon name={isFollowing ? 'person_remove' : 'person_add'} size={24} />
-                    </button>
-                  </div>
-                )}
-
-                {/* Signed out too: the tip window opens on Lightning. */}
-                {!isOwnProfile && (
-                  <div className="profile-fab-action">
-                    <span className="profile-fab-action-label">{t('profile.fab.tipCreator')}</span>
-                    <button
-                      className="profile-fab-action-btn"
-                      onClick={() => { setIsTipModalOpen(true); setFabOpen(false); }}
-                      aria-label={t('profile.fab.tipCreator')}
-                    >
-                      <Icon name="volunteer_activism" size={24} />
-                    </button>
-                  </div>
-                )}
-
-                {latestVideo && (
-                  <div className="profile-fab-action">
-                    <span className="profile-fab-action-label">{t('profile.fab.latestVideo')}</span>
-                    <button
-                      className="profile-fab-action-btn"
-                      onClick={() => {
-                        setFabOpen(false);
-                        navigate(`/@${latestVideo.author}/${latestVideo.permlink}`);
-                      }}
-                      aria-label={t('profile.fab.watchLatestVideo')}
-                    >
-                      <Icon name="smart_display" size={24} />
-                    </button>
-                  </div>
-                )}
-
-                {latestShort && (
-                  <div className="profile-fab-action">
-                    <span className="profile-fab-action-label">{t('profile.fab.latestShort')}</span>
-                    <button
-                      className="profile-fab-action-btn"
-                      onClick={() => {
-                        setFabOpen(false);
-                        navigate(`/shorts?v=${latestShort.author}/${latestShort.permlink}&user=${user}`);
-                      }}
-                      aria-label={t('profile.fab.watchLatestShort')}
-                    >
-                      <Icon name="view_day" size={24} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <button
-              className="profile-fab-main"
-              onClick={() => setFabOpen(prev => !prev)}
-              aria-label={fabOpen ? t('profile.fab.closeMenu') : t('profile.fab.openActions')}
-              aria-expanded={fabOpen}
-            >
-              <Icon name={fabOpen ? 'close' : 'add'} size={32} />
-            </button>
-          </div>
-        </>,
-        document.body
-      )}
+      {/* No floating action button any more (owner 2026-11-12): Follow and Tip
+          are in the header, Latest video / Latest short in its More menu. */}
     <ReportModal
       isOpen={isReportOpen}
       onClose={() => setIsReportOpen(false)}

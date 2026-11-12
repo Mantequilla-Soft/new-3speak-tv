@@ -292,11 +292,7 @@
     "tip": "Mancia",
     "tipCreator": "Manda una mancia al creator",
     "latestVideo": "Ultimo video",
-    "watchLatestVideo": "Guarda l'ultimo video",
-    "latestShort": "Ultimo short",
-    "watchLatestShort": "Guarda l'ultimo short",
-    "closeMenu": "Chiudi menu",
-    "openActions": "Apri azioni"
+    "latestShort": "Ultimo short"
   },
   "uploads": {
     "processing": "Elaborazione dei tuoi video",

@@ -256,11 +256,7 @@
     "tip": "投げ銭",
     "tipCreator": "クリエイターに投げ銭",
     "latestVideo": "最新の動画",
-    "watchLatestVideo": "最新の動画を見る",
-    "latestShort": "最新のショート",
-    "watchLatestShort": "最新のショートを見る",
-    "closeMenu": "メニューを閉じる",
-    "openActions": "操作を開く"
+    "latestShort": "最新のショート"
   },
   "uploads": {
     "processing": "動画を処理しています",

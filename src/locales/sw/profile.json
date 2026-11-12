@@ -274,11 +274,7 @@
     "tip": "Bakshishi",
     "tipCreator": "Mpe mtayarishaji bakshishi",
     "latestVideo": "Video ya karibuni",
-    "watchLatestVideo": "Tazama video ya karibuni",
-    "latestShort": "Short ya karibuni",
-    "watchLatestShort": "Tazama short ya karibuni",
-    "closeMenu": "Funga menyu",
-    "openActions": "Fungua vitendo"
+    "latestShort": "Short ya karibuni"
   },
   "uploads": {
     "processing": "Inachakata video zako",

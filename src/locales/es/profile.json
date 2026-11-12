@@ -292,11 +292,7 @@
     "tip": "Propina",
     "tipCreator": "Dar propina al creador",
     "latestVideo": "Último video",
-    "watchLatestVideo": "Ver el último video",
-    "latestShort": "Último short",
-    "watchLatestShort": "Ver el último short",
-    "closeMenu": "Cerrar menú",
-    "openActions": "Abrir acciones"
+    "latestShort": "Último short"
   },
   "uploads": {
     "processing": "Procesando tus videos",

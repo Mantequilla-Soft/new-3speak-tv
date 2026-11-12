@@ -292,11 +292,7 @@
     "tip": "Gorjeta",
     "tipCreator": "Dar gorjeta ao criador",
     "latestVideo": "Último vídeo",
-    "watchLatestVideo": "Assistir ao último vídeo",
-    "latestShort": "Último Short",
-    "watchLatestShort": "Assistir ao último Short",
-    "closeMenu": "Fechar menu",
-    "openActions": "Abrir ações"
+    "latestShort": "Último Short"
   },
   "uploads": {
     "processing": "Processando seus vídeos",

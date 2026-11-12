@@ -292,11 +292,7 @@
     "tip": "Pourboire",
     "tipCreator": "Pourboire au créateur",
     "latestVideo": "Dernière vidéo",
-    "watchLatestVideo": "Regarder la dernière vidéo",
-    "latestShort": "Dernier Short",
-    "watchLatestShort": "Regarder le dernier Short",
-    "closeMenu": "Fermer le menu",
-    "openActions": "Ouvrir les actions"
+    "latestShort": "Dernier Short"
   },
   "uploads": {
     "processing": "Traitement de vos vidéos",

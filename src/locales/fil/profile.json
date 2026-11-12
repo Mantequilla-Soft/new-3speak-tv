@@ -274,11 +274,7 @@
     "tip": "Tip",
     "tipCreator": "I-tip ang creator",
     "latestVideo": "Pinakabagong Video",
-    "watchLatestVideo": "Panoorin ang pinakabagong video",
-    "latestShort": "Pinakabagong Short",
-    "watchLatestShort": "Panoorin ang pinakabagong short",
-    "closeMenu": "Isara ang menu",
-    "openActions": "Buksan ang mga aksyon"
+    "latestShort": "Pinakabagong Short"
   },
   "uploads": {
     "processing": "Pinoproseso ang mga video mo",

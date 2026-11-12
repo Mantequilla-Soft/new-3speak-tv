@@ -256,11 +256,7 @@
     "tip": "팁",
     "tipCreator": "크리에이터에게 팁",
     "latestVideo": "최신 동영상",
-    "watchLatestVideo": "최신 동영상 보기",
-    "latestShort": "최신 쇼츠",
-    "watchLatestShort": "최신 쇼츠 보기",
-    "closeMenu": "메뉴 닫기",
-    "openActions": "작업 열기"
+    "latestShort": "최신 쇼츠"
   },
   "uploads": {
     "processing": "동영상을 처리하는 중",

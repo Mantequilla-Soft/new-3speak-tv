@@ -256,11 +256,7 @@
     "tip": "打赏",
     "tipCreator": "打赏创作者",
     "latestVideo": "最新视频",
-    "watchLatestVideo": "观看最新视频",
-    "latestShort": "最新短视频",
-    "watchLatestShort": "观看最新短视频",
-    "closeMenu": "关闭菜单",
-    "openActions": "打开操作"
+    "latestShort": "最新短视频"
   },
   "uploads": {
     "processing": "正在处理你的视频",

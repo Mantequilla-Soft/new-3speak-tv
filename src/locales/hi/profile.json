@@ -274,11 +274,7 @@
     "tip": "टिप",
     "tipCreator": "क्रिएटर को टिप दें",
     "latestVideo": "नया वीडियो",
-    "watchLatestVideo": "सबसे नया वीडियो देखें",
-    "latestShort": "नया शॉर्ट",
-    "watchLatestShort": "सबसे नया शॉर्ट देखें",
-    "closeMenu": "मेन्यू बंद करें",
-    "openActions": "एक्शन खोलें"
+    "latestShort": "नया शॉर्ट"
   },
   "uploads": {
     "processing": "आपके वीडियो प्रोसेस हो रहे हैं",

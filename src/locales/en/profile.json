@@ -273,12 +273,8 @@
   "fab": {
     "tip": "Tip",
     "tipCreator": "Tip creator",
-    "latestVideo": "Latest Video",
-    "watchLatestVideo": "Watch latest video",
-    "latestShort": "Latest Short",
-    "watchLatestShort": "Watch latest short",
-    "closeMenu": "Close menu",
-    "openActions": "Open actions"
+    "latestVideo": "Latest video",
+    "latestShort": "Latest short"
   },
   "uploads": {
     "processing": "Processing your videos",

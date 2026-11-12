@@ -274,11 +274,7 @@
     "tip": "টিপ",
     "tipCreator": "ক্রিয়েটরকে টিপ দিন",
     "latestVideo": "সর্বশেষ ভিডিও",
-    "watchLatestVideo": "সর্বশেষ ভিডিও দেখুন",
-    "latestShort": "সর্বশেষ শর্ট",
-    "watchLatestShort": "সর্বশেষ শর্ট দেখুন",
-    "closeMenu": "মেনু বন্ধ করুন",
-    "openActions": "অপশন খুলুন"
+    "latestShort": "সর্বশেষ শর্ট"
   },
   "uploads": {
     "processing": "আপনার ভিডিও প্রসেস হচ্ছে",

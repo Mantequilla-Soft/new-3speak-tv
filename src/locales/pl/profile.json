@@ -310,11 +310,7 @@
     "tip": "Napiwek",
     "tipCreator": "Daj napiwek twórcy",
     "latestVideo": "Najnowszy film",
-    "watchLatestVideo": "Obejrzyj najnowszy film",
-    "latestShort": "Najnowszy short",
-    "watchLatestShort": "Obejrzyj najnowszego shorta",
-    "closeMenu": "Zamknij menu",
-    "openActions": "Otwórz akcje"
+    "latestShort": "Najnowszy short"
   },
   "uploads": {
     "processing": "Przetwarzanie twoich filmów",

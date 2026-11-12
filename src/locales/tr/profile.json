@@ -274,11 +274,7 @@
     "tip": "Bahşiş",
     "tipCreator": "İçerik üreticisine bahşiş",
     "latestVideo": "Son Video",
-    "watchLatestVideo": "Son videoyu izle",
-    "latestShort": "Son Shorts",
-    "watchLatestShort": "Son Shorts videosunu izle",
-    "closeMenu": "Menüyü kapat",
-    "openActions": "İşlemleri aç"
+    "latestShort": "Son Shorts"
   },
   "uploads": {
     "processing": "Videoların işleniyor",

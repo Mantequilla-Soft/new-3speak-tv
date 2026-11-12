@@ -274,11 +274,7 @@
     "tip": "Fooi",
     "tipCreator": "Maker een fooi geven",
     "latestVideo": "Nieuwste video",
-    "watchLatestVideo": "Nieuwste video bekijken",
-    "latestShort": "Nieuwste short",
-    "watchLatestShort": "Nieuwste short bekijken",
-    "closeMenu": "Menu sluiten",
-    "openActions": "Acties openen"
+    "latestShort": "Nieuwste short"
   },
   "uploads": {
     "processing": "Je video's worden verwerkt",

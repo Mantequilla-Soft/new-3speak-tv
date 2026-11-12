@@ -310,11 +310,7 @@
     "tip": "Чайові",
     "tipCreator": "Чайові автору",
     "latestVideo": "Останнє відео",
-    "watchLatestVideo": "Дивитися останнє відео",
-    "latestShort": "Останнє Shorts",
-    "watchLatestShort": "Дивитися останнє Shorts",
-    "closeMenu": "Закрити меню",
-    "openActions": "Відкрити дії"
+    "latestShort": "Останнє Shorts"
   },
   "uploads": {
     "processing": "Обробляємо ваші відео",

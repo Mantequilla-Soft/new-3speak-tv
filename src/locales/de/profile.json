@@ -274,11 +274,7 @@
     "tip": "Trinkgeld",
     "tipCreator": "Creator Trinkgeld geben",
     "latestVideo": "Neuestes Video",
-    "watchLatestVideo": "Neuestes Video ansehen",
-    "latestShort": "Neuester Short",
-    "watchLatestShort": "Neuesten Short ansehen",
-    "closeMenu": "Menü schließen",
-    "openActions": "Aktionen öffnen"
+    "latestShort": "Neuester Short"
   },
   "uploads": {
     "processing": "Deine Videos werden verarbeitet",
