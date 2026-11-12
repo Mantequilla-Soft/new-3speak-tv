@@ -127,6 +127,7 @@
   --t-fast: 120ms;
   --t-base: 200ms;
   --t-slow: 320ms;
+  --t-xfade: 800ms; /* cross-fades between pictures (the Home spotlight) */
 
   /* ─── 2. Legacy aliases (old index.css names → v2). No mounted screen reads
      these any more (only the dead files listed in CLAUDE.md's cleanup step);

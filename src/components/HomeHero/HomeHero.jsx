@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../v2/Icon";
-import { IconButton } from "../v2/ui";
 import HiveAvatar from "../HiveAvatar/HiveAvatar";
 import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import ShareChooserModal from "../Chat/ShareChooserModal";
@@ -24,6 +23,10 @@ const SLIDE_MS = 7000;
 const keyOf = (v) => `${v.author?.username || v.author || v.owner}/${v.permlink}`;
 const authorOf = (v) => (v ? (v.author?.username || v.author || v.owner) : null);
 const SWIPE_PX = 48;
+// Moving on: the text fades out over this (--t-slow), then the next video's
+// text fades in while its picture cross-fades over the last one (--t-xfade).
+const FADE_OUT_MS = 320;
+const reducedMotion = () => !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 const clock = (sec) => {
   const n = Math.floor(Number(sec) || 0);
@@ -41,10 +44,11 @@ const clock = (sec) => {
  * follower count, then Play (an ink slab) and Save / Share tiles.
  *
  * `videos` are the featured videos in order (HomeGrouped picks them). The hero
- * slides through them on its own (owner 2026-11-12): a row of segments under the
- * buttons, like the stories, fills for the active one; a segment jumps to its
- * video, phones swipe, and it holds while the pointer or keyboard focus is on
- * it, a dialog is open, the tab is hidden, or the viewer paused it. While they
+ * slides through them on its own (owner 2026-11-12), fading from one to the
+ * next: a small row of segments at the hero's bottom right, like the stories,
+ * fills for the active one; a segment jumps to its video, phones swipe, and it
+ * holds while the pointer or keyboard focus is on it, a dialog is open or the
+ * tab is hidden. While they
  * are on their way (`pending`) the hero holds its space with the placeholder.
  */
 export default function HomeHero({ videos = [], pending = false }) {
@@ -63,22 +67,31 @@ export default function HomeHero({ videos = [], pending = false }) {
   if (idx < 0) idx = Math.min(lastIdx.current, Math.max(0, count - 1));
   lastIdx.current = idx;
   const video = videos[idx] || null;
+  const [fading, setFading] = useState(false);
+  const fadeTimer = useRef(null);
+  useEffect(() => () => clearTimeout(fadeTimer.current), []);
   const go = useCallback((i) => {
     const next = videos[((i % count) + count) % count];
-    if (next) setActiveKey(keyOf(next));
-  }, [videos, count]);
+    if (!next || next === videos[idx]) return;
+    clearTimeout(fadeTimer.current);
+    if (reducedMotion()) { setActiveKey(keyOf(next)); return; }
+    setFading(true);
+    fadeTimer.current = setTimeout(() => {
+      setActiveKey(keyOf(next));
+      setFading(false);
+    }, FADE_OUT_MS);
+  }, [videos, count, idx]);
 
   // What holds the sliding.
   const [hover, setHover] = useState(false);
   const [focused, setFocused] = useState(false);
-  const [userPaused, setUserPaused] = useState(false);
   const [tabHidden, setTabHidden] = useState(() => typeof document !== "undefined" && document.hidden);
   useEffect(() => {
     const onVis = () => setTabHidden(document.hidden);
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
   }, []);
-  const paused = userPaused || hover || focused || tabHidden || saveOpen || shareOpen;
+  const paused = fading || hover || focused || tabHidden || saveOpen || shareOpen;
 
   const author = authorOf(video);
   const permlink = video?.permlink || null;
@@ -162,7 +175,7 @@ export default function HomeHero({ videos = [], pending = false }) {
 
   return (
     <section
-      className={`home-hero${paused ? " is-paused" : ""}`}
+      className={`home-hero${paused ? " is-paused" : ""}${fading ? " is-fading" : ""}`}
       aria-label={t("cards.badges.spotlight")}
       onPointerEnter={(e) => { if (e.pointerType === "mouse") setHover(true); }}
       onPointerLeave={() => setHover(false)}
@@ -218,16 +231,6 @@ export default function HomeHero({ videos = [], pending = false }) {
 
       {count > 1 && (
         <div className="home-hero__slides">
-          <IconButton
-            icon={userPaused ? "play_arrow" : "pause"}
-            label={userPaused ? t("common.actions.play") : t("common.actions.pause")}
-            size={24}
-            variant="ghost"
-            round
-            fill
-            aria-pressed={userPaused}
-            onClick={() => setUserPaused((p) => !p)}
-          />
           <div className="home-hero__segs">
             {videos.map((v, i) => (
               <button

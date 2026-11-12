@@ -45,7 +45,7 @@
   }
 
   // The slider's cross-fade: the last picture stays under the new one.
-  img.is-cur { animation: home-hero-fade var(--t-slow) var(--ease) both; }
+  img.is-cur { animation: home-hero-fade var(--t-xfade) ease-in-out both; }
 
   &::after {
     content: "";
@@ -287,9 +287,11 @@
   }
 }
 
-// ── The slider (owner 2026-11-12): each video fades in, and a row of segments
-// under the buttons shows where it is, like the stories. The active segment
-// fills over SLIDE_MS (HomeHero.jsx); its animationend steps to the next, so
+// ── The slider (owner 2026-11-12): one video fades into the next. The text
+// fades out (.is-fading, --t-slow), the next one's fades in while its picture
+// cross-fades over the last (--t-xfade). A small row of segments at the
+// hero's bottom right shows where it is, like the stories: the active one
+// fills over SLIDE_MS (HomeHero.jsx) and its animationend moves on, so
 // .is-paused holds both. Reduced motion: nothing fades or fills, so the hero
 // stays put and the segments only jump.
 @keyframes home-hero-fade {
@@ -301,55 +303,53 @@
   to { transform: scaleX(1); }
 }
 
-.home-hero__body { animation: home-hero-fade var(--t-slow) var(--ease) both; }
+.home-hero__body {
+  animation: home-hero-fade var(--t-slow) var(--ease) both;
+  transition: opacity var(--t-slow) var(--ease);
+  .home-hero.is-fading & { opacity: 0; }
+}
 
+// Bottom right, level with the foot of Play; on phones under it, in the gap
+// above the stories.
 .home-hero__slides {
-  position: relative;
+  position: absolute;
+  right: 0;
+  bottom: 0;
   z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  max-width: 656px;
-  margin-top: 24px;
+  max-width: 50%;
 
-  @include v2.mobile { max-width: none; margin-top: 16px; }
-
-  .v2-iconbtn { flex: none; }
+  @include v2.mobile { bottom: -18px; max-width: 60%; }
 }
 
 .home-hero__segs {
-  flex: 1;
-  min-width: 0;
   display: flex;
   gap: 4px;
 }
 
-// A 24px hit area around a 4px bar.
+// A 16px hit area around a 2px bar.
 .home-hero__seg {
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 40px;
-  height: 24px;
+  flex: 0 1 12px;
+  min-width: 4px;
+  height: 16px;
   padding: 0;
   border: 0;
   background: none;
   cursor: pointer;
   display: flex;
   align-items: center;
-
 }
 
 .home-hero__seg-track {
   position: relative;
   display: block;
   width: 100%;
-  height: 4px;
-  border-radius: 2px;
+  height: 2px;
+  border-radius: 1px;
   overflow: hidden;
   background: color-mix(in srgb, var(--text) 24%, transparent);
   transition: background var(--t-fast) var(--ease);
 
-  .home-hero__seg:hover & { background: color-mix(in srgb, var(--text) 40%, transparent); }
+  .home-hero__seg:hover & { background: color-mix(in srgb, var(--text) 48%, transparent); }
   .home-hero__seg.is-done & { background: color-mix(in srgb, var(--text) 64%, transparent); }
 }
 
@@ -367,6 +367,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .home-hero__bg img.is-cur,
-  .home-hero__body { animation: none; }
+  .home-hero__body { animation: none; transition: none; }
   .home-hero__seg-fill { animation: none; transform: none; }
 }

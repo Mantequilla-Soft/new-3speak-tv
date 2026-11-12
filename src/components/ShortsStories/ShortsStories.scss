@@ -285,6 +285,15 @@
   .stories-row,
   .stories-skeleton-row { gap: 10px; padding: 0; }
 
+  // The count, streak and add badges hang 4px past the tile (plus their 2px
+  // ground border); the scroller clips at its padding box, so it gets 6px of
+  // room on the sides and below, taken back by a negative margin: the tiles and
+  // the spacing around the row stay where they were.
+  .stories-scroll-container {
+    padding: 0 6px 6px;
+    margin: 0 -6px -6px;
+  }
+
   .story-item {
     width: var(--story-size);
     gap: 0;
