@@ -8,6 +8,7 @@ import AddToPlaylistModal from "../AddToPlaylistModal/AddToPlaylistModal";
 import ShareChooserModal from "../Chat/ShareChooserModal";
 import { fixVideoThumbnail } from "../../utils/fixThumbnails";
 import brandMark from "../../assets/image/3S_mark.svg";
+import brandLogo from "../../assets/image/3S_logo.svg";
 import { watchPath } from "../../utils/urls";
 import { getPostDetails } from "../../hive-api/hiveApi";
 import { getFollowers } from "../../hive-api/api";
@@ -118,12 +119,15 @@ const withSmallEmoji = (text) => String(text || "").split(EMOJI).map((part, i) =
 ));
 
 // The 3Speak card (the look of the cards' thumbnail fallback, drawn sharp):
-// the mark and the spaced wordmark on the logo's blue.
+// dark theme, the mark and the spaced wordmark on the logo's blue; light
+// theme, just the logo on the page (owner 2026-11-12: the washes turned the
+// blue into a fake gradient there). HomeHero.scss picks one.
 function BrandCard() {
   return (
     <div className="home-hero__fallback">
-      <img src={brandMark} alt="" />
-      <span>3SPEAK</span>
+      <img className="is-light" src={brandLogo} alt="" />
+      <img className="is-dark" src={brandMark} alt="" />
+      <span className="is-dark">3SPEAK</span>
     </div>
   );
 }
@@ -240,7 +244,9 @@ export default function HomeHero({ videos = [], pending = false }) {
       // Start on the smallest rendition (a low first estimate, as the card
       // previews do) so the first frame comes quickly, then climb as far as the
       // hero's size allows; the blur hides the first seconds.
-      hlsConfig: withGatewayFallback({ maxBufferLength: 12, backBufferLength: 10, capLevelToPlayerSize: true, abrEwmaDefaultEstimate: 300000 }),
+      // startLevel -1: the SDK pins level 0, which the embed encoder lists
+      // first as its 1080p; auto lets the low estimate pick the smallest.
+      hlsConfig: withGatewayFallback({ maxBufferLength: 12, backBufferLength: 10, capLevelToPlayerSize: true, abrEwmaDefaultEstimate: 300000, startLevel: -1 }),
     });
     player.attach(el);
     el.addEventListener("playing", () => { setSlotOn(i, true); releaseHero(); });
@@ -268,21 +274,29 @@ export default function HomeHero({ videos = [], pending = false }) {
     } else {
       players.current[i]?.play().catch(() => {});
     }
-    const other = 1 - i;
     frontRef.current = i;
     setFront(i);
-    // The last video plays on under the new one while it fades in; then that
-    // slot stops and buffers the slide after this one.
+    // Not playing after a while (no stream, blocked autoplay): the picture.
+    const el = (i ? elB : elA).current;
+    const giveUp = setTimeout(() => { if (!el || el.paused || el.readyState < 2) setFailed(true); }, 6000);
+    return () => clearTimeout(giveUp);
+  }, [previewSrc, loadInto]);
+
+  // The last video plays on under the new one until that one PLAYS and has
+  // faded in; only then does its slot stop and buffer the slide after this
+  // one. (Swapping on a timer uncovered the 3Speak card whenever the new clip
+  // was slow to start.)
+  const frontOn = onAir[front];
+  useEffect(() => {
+    if (!previewOn || !frontOn) return undefined;
+    const other = 1 - front;
     const swap = setTimeout(() => {
       try { players.current[other]?.pause(); } catch { /* ignore */ }
       const next = nextSrcRef.current;
       if (next && slotSrc.current[other] !== next) loadInto(other, next, false);
     }, 1100);
-    // Not playing after a while (no stream, blocked autoplay): the picture.
-    const el = (i ? elB : elA).current;
-    const giveUp = setTimeout(() => { if (!el || el.paused || el.readyState < 2) setFailed(true); }, 6000);
-    return () => { clearTimeout(swap); clearTimeout(giveUp); };
-  }, [previewSrc, loadInto]);
+    return () => clearTimeout(swap);
+  }, [previewOn, frontOn, front, previewSrc, loadInto]);
 
   // Once a video plays, the rest of the Spotlight's sources are looked up
   // quietly, one at a time, so the next visit starts every slide from the

@@ -56,8 +56,9 @@
   }
 
   // The 3Speak card under it all while the first slide loads (owner
-  // 2026-11-12): the mark and the wordmark on the logo's blue, in the open
-  // right side on desktop, centred on phones. Sharp, it is a logo.
+  // 2026-11-12), in the open right side on desktop, centred on phones. Sharp,
+  // it is a logo. Light theme: the full logo on the page ground. Dark theme:
+  // the mark and the spaced wordmark on the logo's blue.
   .home-hero__fallback {
     position: absolute;
     inset: 0;
@@ -66,7 +67,7 @@
     justify-content: center;
     gap: 28px;
     padding-left: min(40vw, 640px);
-    background: var(--brand-indigo);
+    background: var(--bg);
     color: var(--on-media);
 
     img {
@@ -84,12 +85,20 @@
       line-height: 1;
     }
 
+    .is-dark { display: none; }
+
     @include v2.mobile {
       padding-left: 0;
       gap: 14px;
       img { height: 44px; }
       span { font-size: 20px; }
     }
+  }
+
+  [data-theme="dark"] & .home-hero__fallback {
+    background: var(--brand-indigo);
+    .is-light { display: none; }
+    .is-dark { display: block; }
   }
 
   // The muted previews (HomeHero HERO_PREVIEW): two that take turns, under the
