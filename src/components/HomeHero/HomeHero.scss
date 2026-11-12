@@ -166,6 +166,11 @@
   margin: 16px 0 0;
   font-size: 64px;
   line-height: 1;
+  // At line-height 1 the clamp cut the descenders of line two (g, y, p): a
+  // little room under the clip, taken back by the margin so nothing moves,
+  // and short of the ascenders of a hidden third line.
+  padding-bottom: .065em;
+  margin-bottom: -.065em;
   font-weight: 900;
   letter-spacing: -.035em;
   overflow-wrap: anywhere;
