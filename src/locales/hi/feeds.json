@@ -152,6 +152,7 @@
     "resultTypes": "नतीजों के प्रकार"
   },
   "activity": {
+    "warmup": "वॉर्म-अप",
     "aria": "3Speak पर गतिविधि",
     "community": "कम्युनिटी",
     "verbs": {

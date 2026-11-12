@@ -145,6 +145,7 @@
     "resultTypes": "Jenis hasil"
   },
   "activity": {
+    "warmup": "Pemanasan",
     "aria": "Aktivitas di 3Speak",
     "community": "Komunitas",
     "verbs": {

@@ -145,6 +145,7 @@
     "resultTypes": "Loại kết quả"
   },
   "activity": {
+    "warmup": "Khởi động",
     "aria": "Hoạt động trên 3Speak",
     "community": "Cộng đồng",
     "verbs": {

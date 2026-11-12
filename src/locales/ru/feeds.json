@@ -166,6 +166,7 @@
     "resultTypes": "Типы результатов"
   },
   "activity": {
+    "warmup": "Разминка",
     "aria": "Активность на 3Speak",
     "community": "Сообщество",
     "verbs": {

@@ -152,6 +152,7 @@
     "resultTypes": "Soorten resultaten"
   },
   "activity": {
+    "warmup": "Warming-up",
     "aria": "Activiteit op 3Speak",
     "community": "Community",
     "verbs": {

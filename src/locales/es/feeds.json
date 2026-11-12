@@ -159,6 +159,7 @@
     "resultTypes": "Tipos de resultado"
   },
   "activity": {
+    "warmup": "Calentamiento",
     "aria": "Actividad en 3Speak",
     "community": "Comunidad",
     "verbs": {

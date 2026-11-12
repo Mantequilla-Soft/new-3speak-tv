@@ -223,3 +223,81 @@
   &:hover { color: var(--cyan); text-decoration: underline; }
   &.is-blank { pointer-events: none; }
 }
+
+// The Warm-up tab (warm-up accounts): their goals, compact. Title and count,
+// the bar, then a row per goal (status icon, name, amount, hint); each row
+// goes to the full panel on /profile.
+.home-activity__warmup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 10px;
+}
+
+.home-activity__warmup-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+
+  b { font-size: 14px; font-weight: 700; }
+  .num { @include v2.mono(12, 700); color: var(--accent); white-space: nowrap; }
+}
+
+.home-activity__goals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-activity__goal {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px;
+  border-radius: var(--r-md);
+  color: var(--text);
+  text-decoration: none;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: var(--bg-hover); color: var(--text); }
+
+  .home-activity__goal-icon { flex: none; color: var(--muted); margin-top: 1px; }
+  &.is-done .home-activity__goal-icon { color: var(--cyan); }
+}
+
+.home-activity__goal-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+
+.home-activity__goal-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+
+  b { font-size: 13px; font-weight: 700; }
+  .num { @include v2.mono(11, 700); color: var(--muted); white-space: nowrap; }
+}
+
+.home-activity__goal-hint {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.home-activity__warmup-note { margin: 0; font-size: 12px; line-height: 1.45; color: var(--muted); }
+
+.home-activity__warmup-cta {
+  align-self: flex-start;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cyan);
+  text-decoration: none;
+  &:hover { text-decoration: underline; color: var(--cyan); }
+}

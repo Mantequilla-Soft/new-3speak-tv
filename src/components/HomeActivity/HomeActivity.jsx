@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -15,6 +15,9 @@ import { getSubscriptions, bodyToPlaintext } from "../../hive-api/hiveApi";
 import { getCommunity } from "../../hive-api/api";
 import { formatTimeAgoCompact } from "../../i18n";
 import { audioItemPath } from "../AudioItem/AudioItemView";
+import { fetchIncubationProgress, onIncubationProgress, progressFraction } from "../../lib/incubation";
+import { goalLabel, goalAmount, goalHint } from "../Incubation/IncubationProgressPanel";
+import { Progress } from "../v2/ui";
 import "./HomeActivity.scss";
 
 // Service accounts whose audio and playlists never show in the feed (the same
@@ -102,6 +105,66 @@ function useGroupActivity(user, enabled) {
   });
 }
 
+// A warm-up account's goals (owner 2026-11-12: make them more prominent): the
+// count, the same bar as the nav ring, then each goal with where it stands.
+// The full panel, with its actions, is on their profile (/profile).
+function useWarmupProgress(enabled) {
+  const [progress, setProgress] = useState(null);
+  useEffect(() => {
+    if (!enabled) return undefined;
+    let alive = true;
+    const load = () => fetchIncubationProgress().then((p) => { if (alive) setProgress(p); }).catch(() => {});
+    load();
+    const off = onIncubationProgress(load);
+    return () => { alive = false; off?.(); };
+  }, [enabled]);
+  return progress;
+}
+
+function WarmupGoals({ progress }) {
+  const { t } = useTranslation();
+  if (!progress) return null;
+  if (progress.needsTrack) {
+    return (
+      <div className="home-activity__warmup">
+        <p className="home-activity__warmup-note">{t("incubation.progress.needsTrack")}</p>
+        <Link to="/profile" className="home-activity__warmup-cta">{t("incubation.progress.choosePath")}</Link>
+      </div>
+    );
+  }
+  const tasks = progress.tasks || [];
+  const done = tasks.filter((task) => task.done).length;
+  const filled = progressFraction(tasks);
+  return (
+    <div className="home-activity__warmup">
+      <div className="home-activity__warmup-head">
+        <b>{t("incubation.progress.title")}</b>
+        <span className="num">{t("incubation.progress.doneCount", { done, total: tasks.length })}</span>
+      </div>
+      <Progress value={Math.min(100, filled * 100)} label={t("incubation.progress.overallAria")} />
+      <ul className="home-activity__goals">
+        {tasks.map((task) => (
+          <li key={task.type}>
+            <Link to="/profile" className={cx("home-activity__goal", task.done && "is-done")}>
+              <Icon name={task.done ? "check_circle" : task.type === "time" ? "schedule" : "radio_button_unchecked"} size={20} fill={task.done} className="home-activity__goal-icon" />
+              <span className="home-activity__goal-text">
+                <span className="home-activity__goal-top">
+                  <b>{goalLabel(task, t)}</b>
+                  <span className="num">{goalAmount(task, t)}</span>
+                </span>
+                <span className="home-activity__goal-hint">{task.done ? t("incubation.progress.goalDone") : goalHint(task, progress.minCommentChars, t)}</span>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <p className="home-activity__warmup-note">
+        {done >= tasks.length && tasks.length ? t("incubation.progress.reviewDone") : t("incubation.progress.reviewPending")}
+      </p>
+    </div>
+  );
+}
+
 function Row({ to, avatar, icon, tone = "cyan", who, verb, age, body, children }) {
   return (
     <div className="home-activity__row">
@@ -167,22 +230,37 @@ function InlineAudio({ item, queue }) {
 export default function HomeActivity() {
   const { t } = useTranslation();
   const user = useAppStore((s) => s.user);
-  const [tab, setTab] = useState("community");
+  // Warm-up accounts (a handle, no Hive account yet) get their goals as the
+  // first tab, open by default.
+  const incubationHandle = useAppStore((s) => s.incubationHandle);
+  const isWarmup = !!incubationHandle && !user;
+  const [tab, setTab] = useState(isWarmup ? "warmup" : "community");
+  // The session is known a moment after the first render: open on Warm-up
+  // then, unless a tab was already picked by hand.
+  const [picked, setPicked] = useState(false);
+  useEffect(() => {
+    if (isWarmup && !picked && tab !== "warmup") setTab("warmup");
+    if (!isWarmup && tab === "warmup") setTab("community");
+  }, [isWarmup, picked, tab]);
+  const warmup = useWarmupProgress(isWarmup);
   const community = useCommunityActivity(user);
   const live = useLiveStreams();
   // Only asked once the Groups tab is opened: a handful of Hive reads.
   const groups = useGroupActivity(user, tab === "groups");
 
   const tabs = [
+    ...(isWarmup ? [{ key: "warmup", label: t("feeds.activity.warmup") }] : []),
     { key: "community", label: t("feeds.activity.community") },
     // Someone is live: a red count beside the label (owner 2026-11-12).
     { key: "live", label: t("nav.tabs.live"), count: live.length },
     { key: "groups", label: t("nav.bottom.groups") },
   ];
-  const seeAll = tab === "live" ? "/live" : tab === "groups" ? "/groups" : null;
+  const seeAll = tab === "live" ? "/live" : tab === "groups" ? "/groups" : tab === "warmup" ? "/profile" : null;
 
   let list;
-  if (tab === "community") {
+  if (tab === "warmup") {
+    list = <WarmupGoals progress={warmup} />;
+  } else if (tab === "community") {
     list = community.rows.length ? community.rows.map((r) => {
       if (r.kind === "audio") {
         return (
@@ -223,7 +301,7 @@ export default function HomeActivity() {
       <div className="home-activity__tabs" role="tablist" aria-label={t("feeds.activity.aria")}>
         {tabs.map((x) => (
           <button key={x.key} type="button" role="tab" aria-selected={tab === x.key}
-            className={cx("home-activity__tab", tab === x.key && "is-on")} onClick={() => setTab(x.key)}>
+            className={cx("home-activity__tab", tab === x.key && "is-on")} onClick={() => { setPicked(true); setTab(x.key); }}>
             {x.label}
             {x.count > 0 && " "}
             {x.count > 0 && <span className="home-activity__count">{x.count > 99 ? "99+" : x.count}</span>}

@@ -145,6 +145,7 @@
     "resultTypes": "ประเภทผลลัพธ์"
   },
   "activity": {
+    "warmup": "วอร์มอัพ",
     "aria": "กิจกรรมบน 3Speak",
     "community": "ชุมชน",
     "verbs": {

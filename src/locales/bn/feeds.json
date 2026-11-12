@@ -152,6 +152,7 @@
     "resultTypes": "ফলাফলের ধরন"
   },
   "activity": {
+    "warmup": "ওয়ার্ম-আপ",
     "aria": "3Speak-এ কার্যকলাপ",
     "community": "কমিউনিটি",
     "verbs": {

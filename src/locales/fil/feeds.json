@@ -152,6 +152,7 @@
     "resultTypes": "Uri ng resulta"
   },
   "activity": {
+    "warmup": "Warm-up",
     "aria": "Aktibidad sa 3Speak",
     "community": "Komunidad",
     "verbs": {

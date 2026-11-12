@@ -145,6 +145,7 @@
     "resultTypes": "結果の種類"
   },
   "activity": {
+    "warmup": "ウォームアップ",
     "aria": "3Speak のアクティビティ",
     "community": "コミュニティ",
     "verbs": {

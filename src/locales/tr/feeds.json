@@ -152,6 +152,7 @@
     "resultTypes": "Sonuç türleri"
   },
   "activity": {
+    "warmup": "Isınma",
     "aria": "3Speak'teki etkinlik",
     "community": "Topluluk",
     "verbs": {

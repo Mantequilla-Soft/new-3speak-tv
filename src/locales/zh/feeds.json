@@ -145,6 +145,7 @@
     "resultTypes": "结果类型"
   },
   "activity": {
+    "warmup": "热身",
     "aria": "3Speak 上的动态",
     "community": "社区",
     "verbs": {

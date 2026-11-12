@@ -289,6 +289,10 @@ function readOpen() {
   try { return localStorage.getItem(OPEN_KEY) !== '0'; } catch { return true; }
 }
 
+// The goal wording, shared with the compact goals list in Home's side panel
+// (HomeActivity's Warm-up tab), so both read the same.
+export { labelOf as goalLabel, taskAmount as goalAmount, taskHint as goalHint };
+
 export default function IncubationProgressPanel() {
   const { t } = useTranslation();
   const [progress, setProgress] = useState(null);

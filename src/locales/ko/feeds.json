@@ -145,6 +145,7 @@
     "resultTypes": "결과 유형"
   },
   "activity": {
+    "warmup": "워밍업",
     "aria": "3Speak 활동",
     "community": "커뮤니티",
     "verbs": {
