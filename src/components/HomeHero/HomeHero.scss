@@ -354,7 +354,9 @@
   display: flex;
   justify-content: flex-end;
 
-  @include v2.mobile { bottom: -18px; width: 60%; }
+  // Phones: not shown (owner 2026-11-12), swiping moves on. Hidden, not
+  // removed: the active segment's fill animation is the slide timer.
+  @include v2.mobile { visibility: hidden; pointer-events: none; }
 }
 
 // Sized from the count (HomeHero sets --segs): the segments are empty, so a
