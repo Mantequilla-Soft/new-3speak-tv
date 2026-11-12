@@ -628,16 +628,11 @@ const HomeGrouped = () => {
     saveActiveTab(key);
   };
 
-  // Persisted custom tab order + live drag state (pointer-based so it works on
-  // both mouse and touch). `dragKey` = the tab being dragged, `overKey` = the tab
-  // currently under the pointer (its drop position).
+  // Persisted custom tab order (set in Customize Home).
   const [tabOrder, setTabOrder] = useState(loadTabOrder);
   // Sections turned off in Customize Home, and whether that dialog is open.
   const [hiddenTabs, setHiddenTabs] = useState(loadHiddenTabs);
   const [customizeOpen, setCustomizeOpen] = useState(false);
-  const [drag, setDrag] = useState(null); // { key, overKey } | null
-  const dragRef = useRef(null);           // { key, startX, startY, mode, moved }
-  const tabBarRef = useRef(null);
 
   // Each content feed is an INFINITE query — pages load as the user reaches the
   // end of the active tab's grid (see the sentinel in renderPanel).
@@ -1091,87 +1086,9 @@ const HomeGrouped = () => {
     await refreshHomeFeeds(queryClient, { authenticated, user });
   }, [queryClient, authenticated, user]);
 
-  // ── Drag-to-reorder the tabs (pointer events → works for mouse + touch) ──
-  // DESKTOP (mouse): only the grip handle drags — the tab body just selects, and
-  // the grab cursor lives on the handle. TOUCH: no hover, so a drag anywhere on
-  // the tab (after a few px) reorders. During the drag we PREVIEW the new order
-  // live, hit-testing against the tabs' ORIGINAL midpoints (captured at drag
-  // start) so the reordering DOM can't cause the pointer test to flicker.
-  const rectsRef = useRef([]);
-  const startDrag = (key) => {
-    const bar = tabBarRef.current;
-    rectsRef.current = bar
-      ? [...bar.querySelectorAll('.home-tab')].map((b) => {
-          const r = b.getBoundingClientRect();
-          return { key: b.dataset.tabKey, mid: r.left + r.width / 2 };
-        })
-      : [];
-    setDrag({ key, order: rectsRef.current.map((r) => r.key) });
-  };
-
-  const previewOrder = (draggedKey, clientX) => {
-    const others = rectsRef.current.filter((r) => r.key !== draggedKey);
-    let idx = others.length;
-    for (let i = 0; i < others.length; i++) { if (clientX < others[i].mid) { idx = i; break; } }
-    const order = others.map((r) => r.key);
-    order.splice(idx, 0, draggedKey);
-    return order;
-  };
-
-  const onTabPointerDown = (key) => (e) => {
-    if (e.button != null && e.button !== 0) return;
-    // No grip any more (20a draws plain text tabs): a drag of a few px on the
-    // tab reorders, with a mouse or a finger; anything less is a select.
-    const mode = 'threshold';
-    dragRef.current = { key, startX: e.clientX, startY: e.clientY, mode, moved: false };
-    if (mode === 'immediate') { startDrag(key); e.preventDefault(); }
-  };
-  const onTabPointerMove = (e) => {
-    const d = dragRef.current;
-    if (!d || d.mode === 'select') return;
-    if (!d.moved) {
-      if (Math.hypot(e.clientX - d.startX, e.clientY - d.startY) < 8) return;
-      d.moved = true;
-      if (d.mode === 'threshold') startDrag(d.key);
-    }
-    const order = previewOrder(d.key, e.clientX);
-    setDrag((s) => (s ? { ...s, order } : s));
-  };
-  const onTabPointerUp = () => {
-    const d = dragRef.current;
-    dragRef.current = null;
-    if (!d) return;
-    if (drag?.order && (d.moved || d.mode === 'immediate')) {
-      // Sections turned off keep their place after the ones that were dragged.
-      const order = [...drag.order, ...tabSections.map((s) => s.key).filter((k) => !drag.order.includes(k))];
-      setTabOrder(order);
-      saveTabOrder(order);
-      // The active tab is held by key, so it stays selected wherever it moved to.
-      setDrag(null);
-      return;
-    }
-    setDrag(null);
-    // No real drag → treat as a tab select.
-    if (visibleSections.some((s) => s.key === d.key)) selectTab(d.key);
-  };
-  // Global listeners while a pointer is down on a tab.
-  useEffect(() => {
-    window.addEventListener('pointermove', onTabPointerMove);
-    window.addEventListener('pointerup', onTabPointerUp);
-    return () => {
-      window.removeEventListener('pointermove', onTabPointerMove);
-      window.removeEventListener('pointerup', onTabPointerUp);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [drag, tabSections, visibleSections, activeSection]);
-
-  // Live-previewed tab order during a drag (falls back to the committed order).
-  const displaySections = useMemo(() => {
-    if (!drag?.order) return visibleSections;
-    const byKey = new Map(visibleSections.map((s) => [s.key, s]));
-    const out = drag.order.map((k) => byKey.get(k)).filter(Boolean);
-    return out.length === visibleSections.length ? out : visibleSections;
-  }, [visibleSections, drag]);
+  // The tabs only select (owner 2026-11-12): dragging them to reorder got in
+  // the way of scrolling on phones. The order is set in Customize (the tune
+  // button next to them), which keeps its own drag handles and arrows.
 
   const saveCustomLayout = (order, hidden) => {
     setTabOrder(order);
@@ -1295,17 +1212,17 @@ const HomeGrouped = () => {
       <div className="home-layout">
         <div className="home-main">
           <div className="home-tabs-row">
-            <div className={`home-tabs home-tabs--bar${drag ? ' is-dragging' : ''}`} role="tablist" ref={tabBarRef}>
-              {displaySections.map((s) => (
+            <div className="home-tabs home-tabs--bar" role="tablist">
+              {visibleSections.map((s) => (
                 <button
                   key={s.key}
                   type="button"
                   role="tab"
                   data-tab-key={s.key}
                   aria-selected={s.key === activeSection?.key}
-                  className={`home-tab${s.key === activeSection?.key ? ' active' : ''}${drag?.key === s.key ? ' dragging' : ''}`}
-                  title={`${s.label} · ${t('feeds.home.dragToReorder')}`}
-                  onPointerDown={onTabPointerDown(s.key)}
+                  className={`home-tab${s.key === activeSection?.key ? ' active' : ''}`}
+                  title={s.label}
+                  onClick={() => selectTab(s.key)}
                 >
                   <span className="home-tab-label">{s.tab || s.label}</span>
                 </button>
@@ -1313,8 +1230,7 @@ const HomeGrouped = () => {
             </div>
             <div className="home-tabs-tools">
               {/* Channel Surfing lives here rather than in the top menu. A link, not a
-                  tab: it leaves the page, and the reorder drag only hit-tests
-                  `.home-tab`, so it can never be dragged in among the feeds. */}
+                  tab: it leaves the page. */}
               <Link to="/surf" className="home-tab-tool home-tab-surf" title={t('feeds.home.surfTitle')}>
                 <Icon name="live_tv" size={18} /> <span>{t('feeds.home.zapping')}</span>
               </Link>

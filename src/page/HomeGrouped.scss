@@ -102,7 +102,8 @@
     font-weight: 700;
     white-space: nowrap;
     cursor: pointer;
-    touch-action: pan-y; // vertical swipe scrolls the page; horizontal → reorder
+    // Tap to select only (owner 2026-11-12): no drag to reorder any more, so a
+    // swipe scrolls as usual, sideways along the tabs too.
     user-select: none;
     transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
 
@@ -112,15 +113,7 @@
       background: var(--surface-2);
       color: var(--text);
     }
-    // The tab being dragged
-    &.dragging {
-      background: var(--surface-2);
-      outline: 2px solid var(--cyan);
-      outline-offset: -2px;
-    }
   }
-
-  &.is-dragging, &.is-dragging .home-tab { cursor: grabbing; }
 
   @include v2.mobile {
     flex: 1;
