@@ -53,12 +53,16 @@
     transform: scale(1.04);
   }
 
-  // The muted preview (HomeHero HERO_PREVIEW): over the picture, under the
-  // wash, faded in on its first frame and out while the slide moves on.
+  // The muted previews (HomeHero HERO_PREVIEW): two that take turns, under the
+  // wash. The one in front fades in on its first frame over the last one; a
+  // slight blur, as the streams are small for this width.
   .home-hero__video {
     opacity: 0;
+    filter: blur(3px);
+    transform: scale(1.03);
     transition: opacity var(--t-xfade) ease-in-out;
     &.is-on { opacity: 1; }
+    &.is-front { z-index: 1; }
   }
 
   // The slider's cross-fade: the last picture stays under the new one.

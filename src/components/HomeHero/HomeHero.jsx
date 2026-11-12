@@ -142,51 +142,95 @@ export default function HomeHero({ videos = [], pending = false }) {
     setBg((b) => (b.cur === thumb ? b : { cur: thumb, prev: b.cur }));
   }, [thumb]);
 
-  // The video preview (HERO_PREVIEW): one muted, looping player for the hero,
-  // fed the active slide; it fades in over the picture on its first frame and
-  // out again when the slide moves on. ABR is capped to the element's size.
-  const videoRef = useRef(null);
-  const playerRef = useRef(null);
+  // The video preview (HERO_PREVIEW, owner 2026-11-12): two muted, looping
+  // players take turns. The one in front plays the active slide; once it has
+  // faded in, the other loads the NEXT slide's video and buffers it paused, so
+  // moving on plays at once and cross-fades over the last one. No picture is
+  // shown while the preview is on: it only comes back for a video that will not
+  // play. ABR is capped to the element's size.
   const [previewOn] = useState(previewAllowed);
-  const [playing, setPlaying] = useState(false);
+  const elA = useRef(null);
+  const elB = useRef(null);
+  const players = useRef([null, null]);
+  const slotSrc = useRef([null, null]);
+  const frontRef = useRef(0);
+  const [front, setFront] = useState(0);
+  const [onAir, setOnAir] = useState([false, false]);
+  const [failed, setFailed] = useState(false);
   const previewSrc = video && previewOn ? `${authorOf(video)}/${video.permlink}` : null;
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!previewSrc || !el) return undefined;
-    if (!playerRef.current) {
-      const player = new Player({
-        apiBase: getPlayerUrl(),
-        muted: true,
-        loop: true,
-        poster: false,
-        debug: false,
-        hlsConfig: withGatewayFallback({ maxBufferLength: 12, backBufferLength: 10, capLevelToPlayerSize: true }),
-      });
-      player.attach(el);
-      playerRef.current = player;
-    }
-    const player = playerRef.current;
-    let alive = true;
-    setPlaying(false);
-    const onPlaying = () => { if (alive) setPlaying(true); };
-    el.addEventListener("playing", onPlaying);
-    player.load(previewSrc)
-      .then(() => { if (alive && !player.destroyed) player.play().catch(() => {}); })
+  const nextSrc = nextVideo && previewOn ? `${authorOf(nextVideo)}/${nextVideo.permlink}` : null;
+  const nextSrcRef = useRef(nextSrc);
+  useEffect(() => { nextSrcRef.current = nextSrc; }, [nextSrc]);
+
+  const setSlotOn = useCallback((i, v) => setOnAir((o) => (o[i] === v ? o : (i ? [o[0], v] : [v, o[1]]))), []);
+  const ensurePlayer = useCallback((i) => {
+    if (players.current[i]) return players.current[i];
+    const el = (i ? elB : elA).current;
+    if (!el) return null;
+    const player = new Player({
+      apiBase: getPlayerUrl(),
+      muted: true,
+      loop: true,
+      poster: false,
+      debug: false,
+      hlsConfig: withGatewayFallback({ maxBufferLength: 12, backBufferLength: 10, capLevelToPlayerSize: true }),
+    });
+    player.attach(el);
+    el.addEventListener("playing", () => setSlotOn(i, true));
+    players.current[i] = player;
+    return player;
+  }, [setSlotOn]);
+  const loadInto = useCallback((i, src, autoplay) => {
+    const player = ensurePlayer(i);
+    if (!player) return;
+    slotSrc.current[i] = src;
+    setSlotOn(i, false);
+    player.load(src)
+      .then(() => { if (autoplay && !player.destroyed && slotSrc.current[i] === src) player.play().catch(() => {}); })
       .catch(() => {});
-    return () => { alive = false; el.removeEventListener("playing", onPlaying); };
-  }, [previewSrc]);
-  // A hidden tab stops it; coming back starts it again.
+  }, [ensurePlayer, setSlotOn]);
+
+  useEffect(() => {
+    if (!previewSrc) return undefined;
+    setFailed(false);
+    let i = slotSrc.current.indexOf(previewSrc);
+    if (i === -1) {
+      i = 1 - frontRef.current;
+      loadInto(i, previewSrc, true);
+    } else {
+      players.current[i]?.play().catch(() => {});
+    }
+    const other = 1 - i;
+    frontRef.current = i;
+    setFront(i);
+    // The last video plays on under the new one while it fades in; then that
+    // slot stops and buffers the slide after this one.
+    const swap = setTimeout(() => {
+      try { players.current[other]?.pause(); } catch { /* ignore */ }
+      const next = nextSrcRef.current;
+      if (next && slotSrc.current[other] !== next) loadInto(other, next, false);
+    }, 1100);
+    // Not playing after a while (no stream, blocked autoplay): the picture.
+    const el = (i ? elB : elA).current;
+    const giveUp = setTimeout(() => { if (!el || el.paused || el.readyState < 2) setFailed(true); }, 6000);
+    return () => { clearTimeout(swap); clearTimeout(giveUp); };
+  }, [previewSrc, loadInto]);
+
+  // A hidden tab stops the one in front; coming back starts it again.
   useEffect(() => {
     if (!previewOn) return undefined;
     const onVis = () => {
-      const player = playerRef.current;
+      const player = players.current[frontRef.current];
       if (!player || player.destroyed) return;
       if (document.hidden) player.pause(); else player.play().catch(() => {});
     };
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
   }, [previewOn]);
-  useEffect(() => () => { try { playerRef.current?.destroy(); } catch { /* ignore */ } }, []);
+  useEffect(() => () => {
+    for (const p of players.current) { try { p?.destroy(); } catch { /* ignore */ } }
+  }, []);
+  const showPicture = !previewOn || failed;
 
   const touch = useRef(null);
   const onTouchStart = (e) => { const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY }; };
@@ -248,9 +292,18 @@ export default function HomeHero({ videos = [], pending = false }) {
       onTouchEnd={onTouchEnd}
     >
       <div className="home-hero__bg" aria-hidden="true">
-        {bg.prev && bg.prev !== thumb && <img key={bg.prev} className="is-prev" src={bg.prev} alt="" decoding="async" />}
-        {thumb && <img key={thumb} className="is-cur" src={thumb} alt="" decoding="async" fetchPriority="high" />}
-        {previewOn && <video ref={videoRef} className={`home-hero__video${playing && !fading ? " is-on" : ""}`} muted playsInline preload="none" />}
+        {showPicture && bg.prev && bg.prev !== thumb && <img key={bg.prev} className="is-prev" src={bg.prev} alt="" decoding="async" />}
+        {showPicture && thumb && <img key={thumb} className="is-cur" src={thumb} alt="" decoding="async" fetchPriority="high" />}
+        {previewOn && [elA, elB].map((ref, i) => (
+          <video
+            key={i}
+            ref={ref}
+            className={`home-hero__video${front === i ? " is-front" : ""}${onAir[i] ? " is-on" : ""}`}
+            muted
+            playsInline
+            preload="auto"
+          />
+        ))}
       </div>
 
       <div className="home-hero__body" key={keyOf(video)}>
