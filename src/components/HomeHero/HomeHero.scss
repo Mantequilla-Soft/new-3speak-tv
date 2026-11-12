@@ -24,21 +24,6 @@
     --hero-h: 280px;
     padding-top: calc(var(--nav-height, 52px) + 44px);
   }
-
-  // A notice above the page (the warm-up "Uploading is disabled" box): the
-  // hero starts under it instead of reaching up under the bar, where it slid
-  // over the notice's lower half. Same text position, the picture as tall as
-  // the part of it that was below the bar.
-  :root:has(.upload-block-notice) & {
-    --hero-h: calc(560px - var(--nav-height, 78px) - var(--page-pad));
-    margin-top: 0;
-    padding-top: 72px;
-
-    @include v2.mobile {
-      --hero-h: calc(280px - var(--nav-height, 52px) - var(--page-pad));
-      padding-top: 28px;
-    }
-  }
 }
 
 .home-hero__bg {

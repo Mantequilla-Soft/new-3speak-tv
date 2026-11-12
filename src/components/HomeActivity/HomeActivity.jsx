@@ -234,14 +234,11 @@ export default function HomeActivity() {
   // first tab, open by default.
   const incubationHandle = useAppStore((s) => s.incubationHandle);
   const isWarmup = !!incubationHandle && !user;
-  const [tab, setTab] = useState(isWarmup ? "warmup" : "community");
-  // The session is known a moment after the first render: open on Warm-up
-  // then, unless a tab was already picked by hand.
-  const [picked, setPicked] = useState(false);
-  useEffect(() => {
-    if (isWarmup && !picked && tab !== "warmup") setTab("warmup");
-    if (!isWarmup && tab === "warmup") setTab("community");
-  }, [isWarmup, picked, tab]);
+  // Warm-up is the open tab for them until they pick another one; derived, not
+  // set later, so it is open from the very first frame the session is known.
+  const [picked, setPicked] = useState(null);
+  const tab = picked && (picked !== "warmup" || isWarmup) ? picked : (isWarmup ? "warmup" : "community");
+  const setTab = setPicked;
   const warmup = useWarmupProgress(isWarmup);
   const community = useCommunityActivity(user);
   const live = useLiveStreams();
@@ -301,7 +298,7 @@ export default function HomeActivity() {
       <div className="home-activity__tabs" role="tablist" aria-label={t("feeds.activity.aria")}>
         {tabs.map((x) => (
           <button key={x.key} type="button" role="tab" aria-selected={tab === x.key}
-            className={cx("home-activity__tab", tab === x.key && "is-on")} onClick={() => { setPicked(true); setTab(x.key); }}>
+            className={cx("home-activity__tab", tab === x.key && "is-on")} onClick={() => setTab(x.key)}>
             {x.label}
             {x.count > 0 && " "}
             {x.count > 0 && <span className="home-activity__count">{x.count > 99 ? "99+" : x.count}</span>}

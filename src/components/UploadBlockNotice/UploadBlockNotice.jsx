@@ -46,7 +46,10 @@ function markSeen(key, id) {
  * account only when the admin left a note: older Hive blocks carry none and keep
  * the click-time popup only.
  */
-export default function UploadBlockNotice({ hidden = false }) {
+// `inline`: the copy Home draws between the Spotlight and the feed tabs (owner
+// 2026-11-12). The app-level copy hides its banner on Home and keeps the
+// one-time popup; the inline one is the banner only.
+export default function UploadBlockNotice({ hidden = false, inline = false }) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const authenticated = useAppStore((s) => s.authenticated);
@@ -62,7 +65,7 @@ export default function UploadBlockNotice({ hidden = false }) {
   const blockId = active ? String(settings.uploadBlockedAt || note || 'blocked') : null;
 
   useEffect(() => {
-    if (!blockId || changelogPending) return;
+    if (inline || !blockId || changelogPending) return;
     if (readSeen(key) === blockId) return;
     const support = useSupportBlock.getState();
     if (support.block) return; // another support popup is open; try again on the next page load
@@ -70,9 +73,10 @@ export default function UploadBlockNotice({ hidden = false }) {
       ...(note ? { note } : {}),
       onClose: () => markSeen(key, blockId),
     });
-  }, [key, blockId, note, changelogPending]);
+  }, [inline, key, blockId, note, changelogPending]);
 
-  if (!active || hidden) return null;
+  const onHome = pathname === '/';
+  if (!active || hidden || (onHome && !inline)) return null;
 
   return (
     <section className="upload-block-notice" role="status">

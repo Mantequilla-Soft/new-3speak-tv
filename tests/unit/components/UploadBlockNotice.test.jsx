@@ -26,7 +26,9 @@ const { default: SupportModal } = await import('../../../src/components/SupportM
 let rows
 const asked = () => get.mock.calls.map(([url]) => decodeURIComponent(url.split('/check/')[1]))
 
-const mount = (route = '/') => renderWithProviders(<><UploadBlockNotice /><SupportModal /></>, { route })
+// Any page but Home: there the banner moves between the Spotlight and the feed
+// tabs (HomeGrouped's inline copy), see the Home test at the end.
+const mount = (route = '/audio') => renderWithProviders(<><UploadBlockNotice /><SupportModal /></>, { route })
 const banner = () => document.querySelector('.upload-block-notice')
 const popup = () => document.querySelector('.support-modal')
 
@@ -166,5 +168,17 @@ describe('everyone else', () => {
     await act(async () => {})
     expect(get).not.toHaveBeenCalled()
     expect(banner()).toBeNull()
+  })
+})
+
+describe('on Home', () => {
+  it('the app-level copy keeps the popup but leaves the banner to the inline copy under the Spotlight', async () => {
+    rows['~newbie'] = { canUpload: false, uploadBlockedReason: 'Only post your own videos.', uploadBlockedAt: '2026-11-10T09:00:00.000Z' }
+    renderWithProviders(<><UploadBlockNotice /><div className="home-slot"><UploadBlockNotice inline /></div><SupportModal /></>, { route: '/' })
+    await waitFor(() => expect(popup()).not.toBeNull())
+    const banners = document.querySelectorAll('.upload-block-notice')
+    expect(banners).toHaveLength(1)
+    expect(banners[0].closest('.home-slot')).not.toBeNull()
+    expect(document.querySelectorAll('.support-modal')).toHaveLength(1)
   })
 })

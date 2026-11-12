@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import UploadBlockNotice from "../components/UploadBlockNotice/UploadBlockNotice";
 import { spotlightAllowed } from "../utils/spotlightRules";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -1267,6 +1268,9 @@ const HomeGrouped = () => {
       <ShortsStories tiles />
       {/* Logged-in only, and renders nothing when there's nothing unwatched. */}
       <NewFromFollowing />
+      {/* A creator blocked from uploading: the banner sits here on Home, under
+          the Spotlight and over the feed tabs (the app-level copy hides it). */}
+      <UploadBlockNotice inline />
 
       {/* The feed and, from 1280px up, the activity panel beside it (20a:
           minmax(0,1fr) 340px, gap 32). */}
