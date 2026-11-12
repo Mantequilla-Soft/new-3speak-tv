@@ -77,7 +77,8 @@
 
 // Over the Home hero the phone bar is see-through (HomeGrouped sets the flag).
 @include v2.mobile {
-  :root[data-home-hero] .nav-bar { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  // Not when a notice sits between the bar and the hero (UploadBlockNotice).
+  :root[data-home-hero]:not(:has(.upload-block-notice)) .nav-bar { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 
 // ── Left: the logo (home) ────────────────────────────────────────────────────
@@ -215,7 +216,7 @@
 
 // Over the Home hero on a phone the buttons are media scrims (20a phone).
 @include v2.mobile {
-  :root[data-home-hero] .nav-container {
+  :root[data-home-hero]:not(:has(.upload-block-notice)) .nav-container {
     .nav-icon-btn, .chat-nav-btn, .notif-bell-btn {
       background: var(--media-scrim);
       color: var(--on-media);
