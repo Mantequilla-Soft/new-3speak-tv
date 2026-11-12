@@ -221,6 +221,7 @@
     "messageTitle": "Message @{{user}}",
     "messageLogin": "Please login to send a message",
     "message": "Message",
+    "messageShort": "DM",
     "unhideTitle": "Show @{{user}}'s videos in your feeds again",
     "hideTitle": "Hide @{{user}}'s videos from all your feeds",
     "unhide": "Unhide",

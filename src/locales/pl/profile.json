@@ -257,6 +257,7 @@
     "messageTitle": "Napisz do @{{user}}",
     "messageLogin": "Zaloguj się, aby wysłać wiadomość",
     "message": "Wiadomość",
+    "messageShort": "DM",
     "unhideTitle": "Pokazuj znów filmy @{{user}} w twoich kanałach",
     "hideTitle": "Ukryj filmy @{{user}} we wszystkich twoich kanałach",
     "unhide": "Odkryj",

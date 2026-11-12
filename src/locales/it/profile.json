@@ -239,6 +239,7 @@
     "messageTitle": "Scrivi a @{{user}}",
     "messageLogin": "Accedi per inviare un messaggio",
     "message": "Messaggio",
+    "messageShort": "DM",
     "unhideTitle": "Mostra di nuovo i video di @{{user}} nei tuoi feed",
     "hideTitle": "Nascondi i video di @{{user}} da tutti i tuoi feed",
     "unhide": "Mostra",

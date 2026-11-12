@@ -221,6 +221,7 @@
     "messageTitle": "@{{user}} को मैसेज करें",
     "messageLogin": "मैसेज भेजने के लिए कृपया लॉग इन करें",
     "message": "मैसेज",
+    "messageShort": "DM",
     "unhideTitle": "@{{user}} के वीडियो अपनी फ़ीड में फिर से दिखाएँ",
     "hideTitle": "@{{user}} के वीडियो अपनी सभी फ़ीड से छिपाएँ",
     "unhide": "फिर से दिखाएँ",

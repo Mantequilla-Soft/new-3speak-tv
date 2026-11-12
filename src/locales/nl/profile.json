@@ -221,6 +221,7 @@
     "messageTitle": "@{{user}} een bericht sturen",
     "messageLogin": "Log in om een bericht te sturen",
     "message": "Bericht",
+    "messageShort": "DM",
     "unhideTitle": "Video's van @{{user}} weer in je feeds tonen",
     "hideTitle": "Video's van @{{user}} in al je feeds verbergen",
     "unhide": "Weer tonen",

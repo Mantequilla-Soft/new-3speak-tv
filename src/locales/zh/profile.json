@@ -203,6 +203,7 @@
     "messageTitle": "给 @{{user}} 发消息",
     "messageLogin": "请登录后再发消息",
     "message": "发消息",
+    "messageShort": "私信",
     "unhideTitle": "在你的信息流中重新显示 @{{user}} 的视频",
     "hideTitle": "在你所有的信息流中隐藏 @{{user}} 的视频",
     "unhide": "取消隐藏",

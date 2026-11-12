@@ -14,17 +14,22 @@ import './ProfileActions.scss';
  */
 
 // A 64px action tile (Message, Tip, Share…). `as="a"` for links.
-export function ProfileTile({ icon, label, as: El, className, ...rest }) {
+// `shortLabel` replaces the label on the narrowest phones (≤380px, owner
+// 2026-11-12: Message reads "DM" there); the accessible name stays the label.
+export function ProfileTile({ icon, label, shortLabel, as: El, className, ...rest }) {
+  const shown = shortLabel
+    ? <><span className="ph-tile__long">{label}</span><span className="ph-tile__short">{shortLabel}</span></>
+    : label;
   const content = (
     <>
       <Icon name={icon} size={24} />
-      <span>{label}</span>
+      <span>{shown}</span>
     </>
   );
   if (El) {
     return <El className={cx('v2-dock ph-tile', className)} aria-label={label} {...rest}>{content}</El>;
   }
-  return <DockTile className={cx('ph-tile', className)} icon={<Icon name={icon} size={24} />} label={label} aria-label={label} {...rest} />;
+  return <DockTile className={cx('ph-tile', className)} icon={<Icon name={icon} size={24} />} label={shown} aria-label={label} {...rest} />;
 }
 
 /**

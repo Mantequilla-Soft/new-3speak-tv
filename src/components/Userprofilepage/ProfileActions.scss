@@ -179,3 +179,10 @@
   .pl-type-seg .v2-seg__opt.active { background: var(--surface-2); color: var(--text); }
   .pl-type-seg.playlist-type-kinds { flex-wrap: wrap; }
 }
+
+// A tile's short label (ProfileTile shortLabel) on the narrowest phones only.
+.ph-tile__short { display: none; }
+@media (max-width: 380px) {
+  .ph-tile__long { display: none; }
+  .ph-tile__short { display: inline; }
+}

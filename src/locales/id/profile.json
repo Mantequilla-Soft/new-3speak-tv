@@ -203,6 +203,7 @@
     "messageTitle": "Kirim pesan ke @{{user}}",
     "messageLogin": "Silakan masuk untuk mengirim pesan",
     "message": "Pesan",
+    "messageShort": "DM",
     "unhideTitle": "Tampilkan lagi video @{{user}} di feed-mu",
     "hideTitle": "Sembunyikan video @{{user}} dari semua feed-mu",
     "unhide": "Tampilkan",

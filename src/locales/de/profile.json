@@ -221,6 +221,7 @@
     "messageTitle": "@{{user}} eine Nachricht schreiben",
     "messageLogin": "Bitte melde dich an, um eine Nachricht zu senden",
     "message": "Nachricht",
+    "messageShort": "DM",
     "unhideTitle": "Videos von @{{user}} wieder in deinen Feeds anzeigen",
     "hideTitle": "Videos von @{{user}} in allen deinen Feeds ausblenden",
     "unhide": "Einblenden",

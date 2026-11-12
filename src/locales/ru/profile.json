@@ -257,6 +257,7 @@
     "messageTitle": "Написать @{{user}}",
     "messageLogin": "Войдите, чтобы отправить сообщение",
     "message": "Написать",
+    "messageShort": "ЛС",
     "unhideTitle": "Снова показывать видео @{{user}} в лентах",
     "hideTitle": "Скрыть видео @{{user}} из всех ваших лент",
     "unhide": "Показывать",

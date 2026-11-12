@@ -619,6 +619,7 @@ const {
             <ProfileTile
               icon="chat_bubble"
               label={t('profile.page.message')}
+              shortLabel={t('profile.page.messageShort')}
               title={t('profile.page.messageTitle', { user })}
               onClick={() => {
                 if (!authenticated) { toast.error(t('profile.page.messageLogin')); return; }

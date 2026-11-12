@@ -221,6 +221,7 @@
     "messageTitle": "@{{user}} kullanıcısına mesaj gönder",
     "messageLogin": "Mesaj göndermek için giriş yap",
     "message": "Mesaj",
+    "messageShort": "DM",
     "unhideTitle": "@{{user}} videolarını akışlarında yeniden göster",
     "hideTitle": "@{{user}} videolarını tüm akışlarından gizle",
     "unhide": "Göster",

@@ -203,6 +203,7 @@
     "messageTitle": "Nhắn tin cho @{{user}}",
     "messageLogin": "Vui lòng đăng nhập để gửi tin nhắn",
     "message": "Nhắn tin",
+    "messageShort": "Nhắn",
     "unhideTitle": "Hiện lại video của @{{user}} trong bảng tin của bạn",
     "hideTitle": "Ẩn video của @{{user}} khỏi mọi bảng tin của bạn",
     "unhide": "Bỏ ẩn",

@@ -221,6 +221,7 @@
     "messageTitle": "Mtumie @{{user}} ujumbe",
     "messageLogin": "Tafadhali ingia ili kutuma ujumbe",
     "message": "Ujumbe",
+    "messageShort": "DM",
     "unhideTitle": "Onyesha tena video za @{{user}} kwenye milisho yako",
     "hideTitle": "Ficha video za @{{user}} kwenye milisho yako yote",
     "unhide": "Onyesha",

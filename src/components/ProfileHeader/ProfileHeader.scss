@@ -251,17 +251,29 @@
 
     @include v2.below-wide { flex: 1 1 100%; }
 
-    // Phones: the main button takes its own full-width row and the tiles share
-    // the row under it in equal columns, so nothing gets truncated.
+    // Phones: one row (owner 2026-11-12). The main button (Follow) takes what
+    // the 56px tiles leave, so it stays the widest; with an extra tile (Links)
+    // the tiles give a little (down to 48) before the label does.
     @include v2.mobile {
       width: 100%;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
       gap: 6px;
       padding-bottom: 0;
 
-      > .v2-btn, > .btn-hero-follow, > .btn-hero-following { grid-column: 1 / -1; }
-      .ph-tile.v2-dock, .ph-more, .ph-more .ph-tile.v2-dock { width: 100%; }
+      // The label alone, centred: its trailing icon would cost the room the
+      // label needs ("Following", "Customize profile") in a shared row.
+      > .v2-btn, > .btn-hero-follow, > .btn-hero-following {
+        flex: 1 1 0;
+        min-width: 104px;
+        height: 56px;
+        padding: 0 16px;
+        gap: 0;
+        justify-content: center;
+
+        > :not(.v2-btn__label) { display: none; }
+      }
+      .ph-tile.v2-dock, .ph-more { flex: 0 1 56px; min-width: 48px; }
+      .ph-tile.v2-dock { padding-left: 2px; padding-right: 2px; }
+      .ph-more .ph-tile.v2-dock { width: 100%; min-width: 0; }
     }
 
     .button-group { display: contents; }

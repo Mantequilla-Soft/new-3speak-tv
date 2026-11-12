@@ -239,6 +239,7 @@
     "messageTitle": "Enviar mensaje a @{{user}}",
     "messageLogin": "Inicia sesión para enviar un mensaje",
     "message": "Mensaje",
+    "messageShort": "MD",
     "unhideTitle": "Volver a mostrar los videos de @{{user}} en tus feeds",
     "hideTitle": "Ocultar los videos de @{{user}} en todos tus feeds",
     "unhide": "Mostrar",

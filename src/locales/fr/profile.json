@@ -239,6 +239,7 @@
     "messageTitle": "Envoyer un message à @{{user}}",
     "messageLogin": "Connectez-vous pour envoyer un message",
     "message": "Message",
+    "messageShort": "MP",
     "unhideTitle": "Réafficher les vidéos de @{{user}} dans vos fils",
     "hideTitle": "Masquer les vidéos de @{{user}} de tous vos fils",
     "unhide": "Réafficher",

@@ -221,6 +221,7 @@
     "messageTitle": "I-message si @{{user}}",
     "messageLogin": "Mag-log in para magpadala ng mensahe",
     "message": "Mensahe",
+    "messageShort": "DM",
     "unhideTitle": "Ipakita ulit sa feeds mo ang mga video ni @{{user}}",
     "hideTitle": "Itago sa lahat ng feeds mo ang mga video ni @{{user}}",
     "unhide": "Ipakita ulit",

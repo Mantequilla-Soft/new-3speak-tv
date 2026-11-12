@@ -203,6 +203,7 @@
     "messageTitle": "@{{user}} さんにメッセージ",
     "messageLogin": "メッセージを送るにはログインしてください",
     "message": "メッセージ",
+    "messageShort": "DM",
     "unhideTitle": "@{{user}} さんの動画を再びフィードに表示する",
     "hideTitle": "@{{user}} さんの動画をすべてのフィードから非表示にする",
     "unhide": "再表示",

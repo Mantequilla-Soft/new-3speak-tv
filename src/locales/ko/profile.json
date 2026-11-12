@@ -203,6 +203,7 @@
     "messageTitle": "@{{user}}님에게 메시지 보내기",
     "messageLogin": "메시지를 보내려면 로그인해 주세요",
     "message": "메시지",
+    "messageShort": "DM",
     "unhideTitle": "@{{user}}님의 동영상을 다시 피드에 표시",
     "hideTitle": "모든 피드에서 @{{user}}님의 동영상 숨기기",
     "unhide": "숨기기 해제",

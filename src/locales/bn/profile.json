@@ -221,6 +221,7 @@
     "messageTitle": "@{{user}}-কে মেসেজ করুন",
     "messageLogin": "মেসেজ পাঠাতে লগ ইন করুন",
     "message": "মেসেজ",
+    "messageShort": "DM",
     "unhideTitle": "@{{user}}-এর ভিডিও আবার আপনার ফিডে দেখান",
     "hideTitle": "আপনার সব ফিড থেকে @{{user}}-এর ভিডিও লুকান",
     "unhide": "আবার দেখান",
