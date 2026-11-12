@@ -43,7 +43,6 @@ function Wallet() {
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [showReceive, setShowReceive] = useState(false);
   const [selectedCoin, setSelectedCoin] = useState(null);
-  const [hasKeychain, setHasKeychain] = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [txns, setTxns] = useState(null);
   const [rc, setRc] = useState(null);
@@ -93,19 +92,6 @@ function Wallet() {
     const id = setTimeout(() => document.getElementById('pro')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
     return () => clearTimeout(id);
   }, [isLoading]);
-
-  // Detect Hive Keychain extension presence (poll briefly to catch late installs)
-  useEffect(() => {
-    const check = () => setHasKeychain(typeof window !== 'undefined' && !!window.hive_keychain);
-    check();
-    const id = setInterval(check, 1000);
-    // stop polling after 10s
-    const stopId = setTimeout(() => clearInterval(id), 10000);
-    return () => {
-      clearInterval(id);
-      clearTimeout(stopId);
-    };
-  }, []);
 
   const fetchBalances = async () => {
     try {
@@ -176,11 +162,12 @@ function Wallet() {
     }
   ];
 
+  // Any login can send: TransferModal signs through aioha (Keychain, HiveAuth,
+  // HiveSigner, PeakVault, Ledger), and a Butter Auth login is asked to approve
+  // with one of those wallets (ActiveAuthModal). It used to stop everyone
+  // without the Keychain browser extension here, phones included (owner
+  // 2026-11-12: "that is just not true").
   const handleTransfer = (coinType) => {
-    if (!hasKeychain) {
-      toast.error(t('wallet.errors.needKeychain'));
-      return;
-    }
     const coin = coins.find(c => c.name === coinType);
     setSelectedCoin(coin);
     setShowTransferModal(true);
