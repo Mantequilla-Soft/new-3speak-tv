@@ -46,7 +46,7 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate()
-  const { user, LogOut } = useAppStore();
+  const { user } = useAppStore();
   const effectiveTheme = useAppStore((s) => s.getEffectiveTheme?.() || s.theme);
   const setTheme = useAppStore((s) => s.setTheme);
   const chat = useChat();
@@ -102,7 +102,6 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
   // What to SHOW. Someone incubating has no Hive account, so `user` is null and
   // the panel rendered a blank name over a broken cover.
   const displayName = user || incubationHandle;
-  const isManteAuth = localStorage.getItem("manteauth_login") === "true";
   // Serves a freshly uploaded picture instead of the cached hive proxy copy.
   const myAvatar = useAvatarUrl(user, null);
   const [votingPower, setVotingPower] = useState(0);
@@ -361,21 +360,18 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
           </div>
         </div>
 
-        {/* Along the bottom (owner 2026-11-12): About, FAQ (and Log out), then
-            3Speak's channels and the Hive node line under them. */}
+        {/* Along the bottom (owner 2026-11-12): About and FAQ, side by side and
+            styled like every other row of the menu, then 3Speak's channels and the
+            Hive node line under them. No Log out here (owner 2026-11-12): Switch at
+            the top covers changing account. */}
         <div className="pn-footer">
           <div className="pn-footer-row">
-            <Link to="/about" className="pn-foot-btn" role="menuitem" onClick={onclose}>
-              <Icon name="info" size={20} /><span className="pn-label">{t('nav.aboutLink')}</span>
+            <Link to="/about" className="pn-item pn-foot-btn" role="menuitem" onClick={onclose}>
+              {row('info', t('nav.aboutLink'))}
             </Link>
-            <Link to="/faq" className="pn-foot-btn" role="menuitem" onClick={onclose}>
-              <Icon name="help" size={20} /><span className="pn-label">{t('nav.faqLink')}</span>
+            <Link to="/faq" className="pn-item pn-foot-btn" role="menuitem" onClick={onclose}>
+              {row('help', t('nav.faqLink'))}
             </Link>
-            {isManteAuth && (
-              <button type="button" className="pn-foot-btn is-logout" role="menuitem" onClick={() => { LogOut(user); onclose(); navigate('/'); }}>
-                <Icon name="logout" size={20} /><span className="pn-label">{t('nav.profile.logout')}</span>
-              </button>
-            )}
           </div>
           <div className="pn-socials">
             {/* Brand names, not words to translate; the aria labels say where they go. */}

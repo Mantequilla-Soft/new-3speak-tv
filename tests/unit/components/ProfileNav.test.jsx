@@ -151,13 +151,10 @@ describe('the account menu', () => {
     expect(openLoginModal).toHaveBeenCalledTimes(1)
   })
 
-  it('offers Logout for a Butter Auth login, which signs out and goes home', async () => {
+  it('has no Log out (Switch covers changing account, owner 2026-11-12)', () => {
     localStorage.setItem('manteauth_login', 'true')
-    const { user, onclose } = mount()
-    await user.click(screen.getByRole('menuitem', { name: 'Log out' }))
-    expect(useAppStore.getState().LogOut).toHaveBeenCalledWith('badadib')
-    expect(onclose).toHaveBeenCalled()
-    expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/)
+    mount()
+    expect(screen.queryByRole('menuitem', { name: 'Log out' })).toBeNull()
   })
 
   it('closes on Escape, on the backdrop, and when the page changes, but not on a click inside', async () => {
