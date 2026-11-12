@@ -244,6 +244,10 @@
 .nav-upload-wrapper {
   position: relative;
 
+  // Wide screens: the columned flyout hangs off the whole bar (its right edge,
+  // 10px under it), not the button, so it never runs off the left at 1025px+.
+  @include wide-bar { position: static; }
+
   // 20a: 40 tall, 16/12 padding, radius 12, 14/700, a trailing "+" (20).
   .nav-upload-btn {
     padding: 0 12px 0 16px;
@@ -394,15 +398,16 @@
   }
 }
 
-// Wide screens only (below 1025px it is the sheet, Nav.jsx): one 300px column,
-// a 24-radius menu card with 8 padding (44c).
+// Wide screens only (below 1025px it is the sheet, Nav.jsx): a 24-radius menu
+// card with 8 padding (44c), its groups side by side (owner 2026-11-12: "a
+// horizontal menu again for desktop"), one column each, a hairline between.
 .nav-upload-flyout {
   @include v2.menu;
   position: absolute;
-  top: calc(100% + 20px);
+  top: calc(100% + 10px);
   right: 0;
-  width: 300px;
-  max-width: calc(100vw - 32px);
+  width: max-content;
+  max-width: 100%;   // the bar it hangs off
   max-height: calc(100vh - 120px);
   @include v2.scroll-y;
   border-radius: var(--r-2xl);
@@ -418,6 +423,20 @@
   }
 
   @include share-items;
+
+  .share-menu-layout {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .share-menu-group {
+    flex: 0 1 220px;
+    width: 220px;
+    min-width: 0;
+    padding: 0 4px;
+
+    + .share-menu-group { border-left: 1px solid var(--border); }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
