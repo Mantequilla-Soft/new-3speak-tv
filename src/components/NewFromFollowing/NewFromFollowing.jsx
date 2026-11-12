@@ -124,16 +124,19 @@ export default function NewFromFollowing() {
         <p className="nff-summary">
           <b>{t('feeds.newFromFollowing.summary', { count: total })}</b> {t('feeds.newFromFollowing.fromFollowing')}
         </p>
-        <button
-          type="button"
-          className="nff-seen"
-          onClick={markAllSeen}
-          title={t('feeds.newFromFollowing.markSeen')}
-          aria-label={t('feeds.newFromFollowing.markSeen')}
-        >
-          <Icon name="done_all" size={18} />
-          <span className="nff-seen-label">{t('feeds.newFromFollowing.markSeen')}</span>
-        </button>
+        {/* Only once the strip is open (owner 2026-11-12). */}
+        {open && (
+          <button
+            type="button"
+            className="nff-seen"
+            onClick={markAllSeen}
+            title={t('feeds.newFromFollowing.markSeen')}
+            aria-label={t('feeds.newFromFollowing.markSeen')}
+          >
+            <Icon name="done_all" size={18} />
+            <span className="nff-seen-label">{t('feeds.newFromFollowing.markSeen')}</span>
+          </button>
+        )}
         <button
           type="button"
           className="nff-toggle"

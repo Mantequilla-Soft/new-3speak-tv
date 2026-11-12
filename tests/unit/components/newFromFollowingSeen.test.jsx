@@ -34,6 +34,9 @@ describe('new from following: mark all as seen', () => {
     expect(await screen.findByText('5 new videos')).toBeInTheDocument()
     expect(get.mock.calls[0][1].params.since).toBeUndefined()
 
+    // Only offered once the strip is open.
+    expect(screen.queryByRole('button', { name: 'Mark all as seen' })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'Show' }))
     get.mockResolvedValue({ data: { creators: [] } })
     await user.click(screen.getByRole('button', { name: 'Mark all as seen' }))
 
