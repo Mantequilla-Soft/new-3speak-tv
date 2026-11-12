@@ -4,4 +4,4 @@
 // utils/appVersion.js, which surfaces the previous version via the store's
 // `appUpdatedFrom` so a changelog / "what's new" prompt can be shown later.
 // First-time visitors (no stored version) never trigger that prompt.
-export const APP_VERSION = '2.0.1';
+export const APP_VERSION = '2.0.4';

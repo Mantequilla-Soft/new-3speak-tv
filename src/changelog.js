@@ -18,6 +18,24 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.4',
+    category: 'general',
+    date: '2026-11-12',
+    summary: "The About page's Voices of Freedom quotes now scroll sideways.",
+  },
+  {
+    version: '2.0.3',
+    category: 'home',
+    date: '2026-11-12',
+    summary: "Not interested and Don't show this creator now keep those videos out of every feed right away, also when you come back to a page.",
+  },
+  {
+    version: '2.0.2',
+    category: 'account',
+    date: '2026-11-12',
+    summary: 'A Powered by Hive link to hive.io now sits in the profile menu, on the About page and in the FAQ.',
+  },
+  {
     version: '2.0.1',
     category: 'home',
     date: '2026-11-12',
