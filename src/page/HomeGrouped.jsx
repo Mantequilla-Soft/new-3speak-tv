@@ -41,6 +41,7 @@ import useCardSize from "../hooks/useCardSize";
 import HomeHero from "../components/HomeHero/HomeHero";
 import HomeActivity from "../components/HomeActivity/HomeActivity";
 import { fetchFeaturedPages } from "../lib/featuredPages";
+import { spreadIn } from "../lib/spreadIn";
 
 // Extra feed params for the logged-in user: interests (checker weights the feed
 // toward them), currentuser (needed for BOTH the always-on dismissals and
@@ -308,7 +309,6 @@ const fetchNewContent = async (page = 1) => {
   return res.data?.videos || [];
 };
 
-const EMPTY_VIDEOS = [];
 
 // New 3Speak audio for the Discover community rows: the last 3 days, newest
 // first (the checker reads `from=3` as "3 days ago").
@@ -718,9 +718,11 @@ const HomeGrouped = () => {
   });
 
   // Recent videos from warm-up users (on 3Speak, not on Hive yet). They go in as
-  // ordinary cards right AFTER the promoted ones, in a fixed slot: they have no
-  // votes or views to rank on, and Card3 marks them with a leaf so they read as
-  // new people rather than as something the ranking picked.
+  // ordinary cards: by date in the newest-first feeds (placeByDate), spread
+  // through the ranked ones (spreadIn: after about two rows, then every ~6
+  // cards; owner 2026-11-12, "not at the top"). They have no votes or views to
+  // rank on, and Card3 marks them with a leaf so they read as new people rather
+  // than as something the ranking picked.
   //
   // Gated to the warm-up testers while the feature is still being worked on:
   // everything else here has been through ranking and moderation, so giving
@@ -739,16 +741,20 @@ const HomeGrouped = () => {
   const followedWarmupVideos = useFollowedWarmupVideos(warmupVideos, authenticated ? gateViewer : null);
 
   // Promoted videos LEAD EVERY FEED — they no longer get a tab of their own. Each
-  // section is prefixed with them (then, unless the feed places them by date
-  // itself, the warm-up videos) and deduped, so a promoted video that also shows
-  // up organically further down that feed isn't rendered twice.
+  // section is prefixed with them and deduped, so a promoted video that also
+  // shows up organically further down that feed isn't rendered twice. The
+  // warm-up videos are mixed in by the caller (placeByDate / mixWarmup).
   const leadWithPromoted = useCallback(
-    (videos, warmup = warmupVideos) => {
-      const lead = [...(promotedData || []), ...warmup];
+    (videos) => {
+      const lead = promotedData || [];
       return lead.length ? deduplicateVideos([...lead, ...(videos || [])]) : (videos || []);
     },
-    [promotedData, warmupVideos],
+    [promotedData],
   );
+  // Warm-up videos spread through a ranked feed (lib/spreadIn.js), at spots
+  // that stay put while the page is open (the feed's session seed).
+  const warmupSeed = getFeedSeed();
+  const mixWarmup = (videos, complete) => spreadIn(videos, warmupVideos, { seed: warmupSeed, complete });
 
   // The featured video (see fetchFeatured / orderFeatured): the Spotlight hero
   // at the top of Home (20a), on every width.
@@ -786,13 +792,13 @@ const HomeGrouped = () => {
 
   // ── Build the section list (natural order), then apply the user's saved order ──
   const baseSections = [
-    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), tab: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(discoverData))), isLoading: discoverLoading, priority: true },
-    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), tab: authenticated ? t('feeds.home.tabFollowing') : t('common.nav.trending'), videos: withLive(authenticated ? liveFollowing : liveAll, authenticated ? leadWithPromoted(placeByDate(homeData, followedWarmupVideos, homeQ.hasNextPage === false), EMPTY_VIDEOS) : leadWithPromoted(homeData)), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
-    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), tab: t('common.nav.new'), videos: withLive(liveAll, leadWithPromoted(placeByDate(newContentData, warmupVideos, newQ.hasNextPage === false), EMPTY_VIDEOS)), linkTo: '/new', isLoading: newContentLoading },
+    { key: 'discover', title: 'Discover', label: t('feeds.home.sections.discover'), tab: t('feeds.home.sections.discover'), videos: withFeatured(withLive(liveAll, leadWithPromoted(mixWarmup(discoverData, discoverQ.hasNextPage === false)))), isLoading: discoverLoading, priority: true },
+    { key: 'home', title: authenticated ? 'Follow Feed' : 'Home Feed', label: authenticated ? t('feeds.home.sections.follow') : t('feeds.home.sections.home'), tab: authenticated ? t('feeds.home.tabFollowing') : t('common.nav.trending'), videos: withLive(authenticated ? liveFollowing : liveAll, authenticated ? leadWithPromoted(placeByDate(homeData, followedWarmupVideos, homeQ.hasNextPage === false)) : leadWithPromoted(mixWarmup(homeData, homeQ.hasNextPage === false))), linkTo: authenticated ? '/follow-feed' : '/home-feed', isLoading: homeLoading, priority: true },
+    { key: 'new', title: 'New Content', label: t('feeds.home.sections.new'), tab: t('common.nav.new'), videos: withLive(liveAll, leadWithPromoted(placeByDate(newContentData, warmupVideos, newQ.hasNextPage === false))), linkTo: '/new', isLoading: newContentLoading },
   ];
   // Interests row (logged-in + has interests): between the follow feed and New.
   if (authenticated && hasInterests) {
-    baseSections.splice(2, 0, { key: 'interests', title: 'Interests', label: t('feeds.home.sections.interests'), tab: t('feeds.home.sections.interests'), videos: withLive(liveFollowing, leadWithPromoted(interestsData)), isLoading: interestsLoading, priority: true });
+    baseSections.splice(2, 0, { key: 'interests', title: 'Interests', label: t('feeds.home.sections.interests'), tab: t('feeds.home.sections.interests'), videos: withLive(liveFollowing, leadWithPromoted(mixWarmup(interestsData, interestsQ.hasNextPage === false))), isLoading: interestsLoading, priority: true });
   }
   // A saved tabOrder may still list the retired 'promoted' key — applyTabOrder skips
   // keys with no matching section, so old orders degrade cleanly.
