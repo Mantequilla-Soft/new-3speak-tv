@@ -24,7 +24,7 @@ Use the CSS variables from `code/tokens.css`. Never write a hex value in a compo
 | `--text` | #f1f1f1 | #111111 | primary text; also the "inverse" fill (selected chip, confirm bar, island) |
 | `--muted` | #a3a3a3 | #5a5a5a | secondary text, meta, inactive tabs, placeholders |
 | `--accent` | #ff5252 | #e53935 | primary action, earnings/payout numbers, live, errors, destructive |
-| `--on-accent` | #0a0a0a | #ffffff | text on an accent fill |
+| `--on-accent` | #ffffff | #ffffff | text on an accent fill (white in both themes since 2026-11-12, owner) |
 | `--cyan` | #22d3ee | #0891b2 | community, info, links inside notices, selected choice (secondary), progress |
 | `--avatar` | #2d2d2d | #dcdcdc | avatar placeholder |
 | `--thumb-a/b` | #1c1c1c / #232323 | #ecebe8 / #e4e3df | striped media placeholder |
