@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.0',
+    category: 'general',
+    date: '2026-11-12',
+    summary: '3Speak 2.0: a fresh look on every page with wider layouts. Home gets a sliding Spotlight and a side panel with community posts, live streams and groups, and in your Wallet (/wallet) you can claim rewards with one click.',
+  },
+  {
     version: '1.81.118',
     category: 'podcasts',
     date: '2026-11-10',
