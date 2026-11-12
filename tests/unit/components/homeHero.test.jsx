@@ -15,7 +15,7 @@ vi.mock('../../../src/components/HiveAvatar/HiveAvatar', () => ({ default: () =>
 vi.mock('../../../src/components/AddToPlaylistModal/AddToPlaylistModal', () => ({ default: () => null }))
 vi.mock('../../../src/components/Chat/ShareChooserModal', () => ({ default: () => null }))
 
-const { default: HomeHero } = await import('../../../src/components/HomeHero/HomeHero.jsx')
+const { default: HomeHero, titleWithoutEmoji } = await import('../../../src/components/HomeHero/HomeHero.jsx')
 
 const vid = (n) => ({ author: 'badadib', permlink: `test-${n}`, title: `Video ${n}`, duration: 60 })
 const VIDEOS = [vid(1), vid(2), vid(3)]
@@ -90,6 +90,14 @@ describe('Spotlight hero slider', () => {
     renderWithProviders(<HomeHero videos={VIDEOS} />)
     const chip = await screen.findByRole('link', { name: /Test Community/ })
     expect(chip).toHaveAttribute('href', '/community/hive-123456')
+  })
+
+  it('leaves emoji out of the big title, digits and words stay', () => {
+    expect(titleWithoutEmoji('👊🏻Jugué 🔥"Sky Tower" en 💥"Cur8"')).toBe('Jugué "Sky Tower" en "Cur8"')
+    expect(titleWithoutEmoji('🇩🇪 Hamburg 👨‍👩‍👧 family 1️⃣')).toBe('Hamburg family 1')
+    expect(titleWithoutEmoji('🔥🔥')).toBe('🔥🔥')   // nothing left: the title as it was
+    renderWithProviders(<HomeHero videos={[{ ...vid(1), title: 'Sky 🎯 Tower' }]} />)
+    expect(title()).toBe('Sky Tower')
   })
 
   it('shows no slider controls for a single video', () => {

@@ -111,12 +111,15 @@ const clock = (sec) => {
  * tab is hidden. While they
  * are on their way (`pending`) the hero holds its space with the placeholder.
  */
-// Emoji in the title at 0.8em (HomeHero.scss): a full-size emoji on a hidden
-// third line pokes its top over the clamp, which leaves room for descenders.
-const EMOJI = /(\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*)/u;
-const withSmallEmoji = (text) => String(text || "").split(EMOJI).map((part, i) => (
-  i % 2 ? <span key={i} className="home-hero__emoji">{part}</span> : part
-));
+// No emoji in the big title (owner 2026-11-12): pictographs, skin tones (a
+// tofu box where the font lacks them), flags, keycaps and joiners go; digits
+// and plain symbols stay. Falls back to the raw title if nothing is left.
+const EMOJI = /[\p{Extended_Pictographic}\p{Emoji_Modifier}\p{Regional_Indicator}\u{E0020}-\u{E007F}]|\u200D|\uFE0E|\uFE0F|\u20E3/gu;
+export const titleWithoutEmoji = (text) => {
+  const raw = String(text || "");
+  const clean = raw.replace(EMOJI, "").replace(/\s{2,}/g, " ").trim();
+  return clean || raw;
+};
 
 // The 3Speak card (the look of the cards' thumbnail fallback, drawn sharp):
 // dark theme, the mark and the spaced wordmark on the logo's blue; light
@@ -242,7 +245,10 @@ export default function HomeHero({ videos = [], pending = false }) {
 
   const setSlotOn = useCallback((i, v) => setOnAir((o) => (o[i] === v ? o : (i ? [o[0], v] : [v, o[1]]))), []);
   const ensurePlayer = useCallback((i) => {
-    if (players.current[i]) return players.current[i];
+    // A player destroyed by an unmount (React's dev double-mount does exactly
+    // that on the first render, when the cached pool shows the hero at once)
+    // is replaced, never reused: a destroyed one silently loads nothing.
+    if (players.current[i] && !players.current[i].destroyed) return players.current[i];
     const el = (i ? elB : elA).current;
     if (!el) return null;
     const player = new Player({
@@ -389,6 +395,8 @@ export default function HomeHero({ videos = [], pending = false }) {
   }, [previewOn]);
   useEffect(() => () => {
     for (const p of players.current) { try { p?.destroy(); } catch { /* ignore */ } }
+    players.current = [null, null];
+    slotSrc.current = [null, null];
   }, []);
 
   const touch = useRef(null);
@@ -490,7 +498,7 @@ export default function HomeHero({ videos = [], pending = false }) {
         </Chip>
 
         <h2 className="home-hero__title">
-          <Link to={href}>{withSmallEmoji(video.title)}</Link>
+          <Link to={href}>{titleWithoutEmoji(video.title)}</Link>
         </h2>
 
         <div className="home-hero__creator">
