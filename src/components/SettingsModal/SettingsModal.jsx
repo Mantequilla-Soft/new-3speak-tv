@@ -1082,7 +1082,7 @@ const DROPDOWN_WIDTH = 600;
 
 export default function SettingsModal({ isOpen, onClose, dropdown = null, leaving = false, hoverProps, typingProps }) {
   const { t } = useTranslation();
-  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode } = useAppStore();
+  const { theme, showNsfw, setShowNsfw, toggleTheme, homeCardSize, setHomeCardSize, previewEnabled, setPreviewEnabled, shortsCommentBar, setShortsCommentBar, openShortsOnStart, setOpenShortsOnStart, inlineShorts, setInlineShorts, hideWatched, setHideWatched, hideAi, setHideAi, privateMode, setPrivateMode, heroPreviewEnabled, setHeroPreviewEnabled } = useAppStore();
   const cardSize = useCardSize();
   const cardSizeMobile = useIsCardSizeMobile();
   /* Whether the Ads & rewards page exists at all.
@@ -1209,6 +1209,7 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
   // a touch user has small cards selected (it would have no effect).
   const isTouch = !window.matchMedia('(hover: hover)').matches;
   const showPreviewSetting = !isTouch || cardSize === 'large';
+  const showHeroPreviewSetting = !!window.matchMedia?.('(min-width: 769px) and (hover: hover)').matches;
   // The shorts comment bar is rendered only under 768px (see Short.scss), so its
   // toggle would do nothing on desktop/tablet. Gate it on the SAME breakpoint —
   // `isDesktop` (>=1025px) would wrongly still show it on a tablet.
@@ -1270,6 +1271,15 @@ export default function SettingsModal({ isOpen, onClose, dropdown = null, leavin
               desc={t('settings.appearance.previews.desc')}
               checked={previewEnabled !== false}
               onChange={(v) => setPreviewEnabled(v)}
+            />
+          )}
+          {/* Where the Spotlight can play clips at all: desktop with a mouse. */}
+          {showHeroPreviewSetting && (
+            <Row
+              title={t('settings.appearance.heroPreviews.title')}
+              desc={t('settings.appearance.heroPreviews.desc')}
+              checked={heroPreviewEnabled !== false}
+              onChange={(v) => setHeroPreviewEnabled(v)}
             />
           )}
         </Section>

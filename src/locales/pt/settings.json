@@ -159,6 +159,10 @@
     "previews": {
       "title": "Prévias de vídeo",
       "desc": "Prévia sem som ao passar o mouse; no celular, o cartão do centro toca"
+    },
+    "heroPreviews": {
+      "title": "Prévias de vídeo no Destaque",
+      "desc": "Clipes sem som no Destaque da página inicial. Desligado mostra imagens estáticas."
     }
   },
   "shorts": {

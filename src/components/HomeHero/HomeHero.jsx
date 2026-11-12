@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppStore } from "../../lib/store";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../v2/Icon";
@@ -221,7 +222,11 @@ export default function HomeHero({ videos = [], pending = false }) {
   // stop and buffer the slide after next, paused, still under the top. So the
   // 3Speak card is only ever seen before the first clip. A clip that will not
   // play shows the picture instead. ABR is capped to the element's size.
-  const [previewOn] = useState(previewAllowed);
+  // The device allows it (read once), and the viewer has not switched the
+  // Spotlight's clips off in Settings (live: off stops them at once).
+  const [previewAllowedHere] = useState(previewAllowed);
+  const heroPreviewSetting = useAppStore((s) => s.heroPreviewEnabled !== false);
+  const previewOn = previewAllowedHere && heroPreviewSetting;
   const elA = useRef(null);
   const elB = useRef(null);
   const players = useRef([null, null]);
@@ -392,6 +397,14 @@ export default function HomeHero({ videos = [], pending = false }) {
     };
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
+  }, [previewOn]);
+  // Switched off while showing: let the players go and start clean if it is
+  // switched back on.
+  useEffect(() => {
+    if (previewOn) return;
+    for (const p of players.current) { try { p?.destroy(); } catch { /* ignore */ } }
+    players.current = [null, null];
+    slotSrc.current = [null, null];
   }, [previewOn]);
   useEffect(() => () => {
     for (const p of players.current) { try { p?.destroy(); } catch { /* ignore */ } }

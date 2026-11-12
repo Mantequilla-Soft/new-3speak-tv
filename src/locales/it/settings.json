@@ -159,6 +159,10 @@
     "previews": {
       "title": "Anteprime video",
       "desc": "Anteprima muta al passaggio del mouse; da mobile parte la scheda al centro"
+    },
+    "heroPreviews": {
+      "title": "Anteprime video in primo piano",
+      "desc": "Clip senza audio nel primo piano della Home. Spento mostra immagini statiche."
     }
   },
   "shorts": {

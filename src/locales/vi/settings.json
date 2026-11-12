@@ -159,6 +159,10 @@
     "previews": {
       "title": "Xem trước video",
       "desc": "Xem trước tắt tiếng khi di chuột; trên di động thẻ ở giữa sẽ tự phát"
+    },
+    "heroPreviews": {
+      "title": "Xem trước video trong Spotlight",
+      "desc": "Clip tắt tiếng trong Spotlight ở Trang chủ. Tắt sẽ chỉ hiện ảnh tĩnh."
     }
   },
   "shorts": {

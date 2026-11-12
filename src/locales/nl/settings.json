@@ -159,6 +159,10 @@
     "previews": {
       "title": "Videovoorbeelden",
       "desc": "Stille preview bij hoveren; op mobiel speelt de middelste kaart"
+    },
+    "heroPreviews": {
+      "title": "Videovoorbeelden in de Spotlight",
+      "desc": "Clips zonder geluid in de Spotlight op Home. Uit toont stilstaande beelden."
     }
   },
   "shorts": {

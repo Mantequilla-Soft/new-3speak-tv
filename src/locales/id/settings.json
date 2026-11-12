@@ -159,6 +159,10 @@
     "previews": {
       "title": "Pratinjau video",
       "desc": "Pratinjau tanpa suara saat kursor diarahkan; di seluler kartu di tengah yang diputar"
+    },
+    "heroPreviews": {
+      "title": "Pratinjau video Spotlight",
+      "desc": "Klip tanpa suara di Spotlight Beranda. Mati menampilkan gambar diam."
     }
   },
   "shorts": {

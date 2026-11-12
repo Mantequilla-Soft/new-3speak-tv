@@ -159,6 +159,10 @@
     "previews": {
       "title": "Video previews",
       "desc": "Muted preview on hover; on mobile the centred card plays"
+    },
+    "heroPreviews": {
+      "title": "Spotlight video previews",
+      "desc": "Muted clips in the Spotlight on Home. Off shows still pictures."
     }
   },
   "shorts": {

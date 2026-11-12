@@ -159,6 +159,10 @@
     "previews": {
       "title": "Maonyesho ya video",
       "desc": "Onyesho lisilo na sauti ukielea juu; kwenye simu kadi iliyo katikati hucheza"
+    },
+    "heroPreviews": {
+      "title": "Onyesho la video kwenye Spotlight",
+      "desc": "Klipu zisizo na sauti kwenye Spotlight ya Mwanzo. Ikizimwa, picha tuli huonyeshwa."
     }
   },
   "shorts": {

@@ -278,6 +278,16 @@ describe('settings: General and Content', () => {
 
   // The same tile picker as the interests popup (owner 2026-11-12): categories
   // as tiles, their topics under the open one.
+  it('the Spotlight video previews switch writes to the store (desktop with a mouse)', async () => {
+    const mm = window.matchMedia
+    window.matchMedia = (q) => ({ matches: q.includes('min-width: 769px') && q.includes('hover: hover'), media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} })
+    try {
+      const { user } = mount()
+      await user.click(sw('Spotlight video previews'))
+      expect(useAppStore.getState().heroPreviewEnabled).toBe(false)
+    } finally { window.matchMedia = mm }
+  })
+
   it('Interests: signed out, the tiles are disabled with a hint to log in', async () => {
     const { user } = mount()
     await user.click(screen.getByRole('tab', { name: 'Content' }))

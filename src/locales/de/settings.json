@@ -159,6 +159,10 @@
     "previews": {
       "title": "Videovorschau",
       "desc": "Stumme Vorschau beim Darüberfahren, auf dem Handy spielt die mittlere Karte"
+    },
+    "heroPreviews": {
+      "title": "Videovorschau im Spotlight",
+      "desc": "Stumme Clips im Spotlight auf der Startseite. Aus zeigt Standbilder."
     }
   },
   "shorts": {

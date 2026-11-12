@@ -159,6 +159,10 @@
     "previews": {
       "title": "Video önizlemeleri",
       "desc": "Üzerine gelince sessiz önizleme; mobilde ortadaki kart oynar"
+    },
+    "heroPreviews": {
+      "title": "Spotlight video önizlemeleri",
+      "desc": "Ana sayfadaki Spotlight’ta sessiz klipler. Kapalıyken sabit görseller gösterilir."
     }
   },
   "shorts": {

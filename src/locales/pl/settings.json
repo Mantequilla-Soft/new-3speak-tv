@@ -159,6 +159,10 @@
     "previews": {
       "title": "Podglądy filmów",
       "desc": "Wyciszony podgląd po najechaniu; na telefonie odtwarza się środkowa karta"
+    },
+    "heroPreviews": {
+      "title": "Podgląd wideo w Spotlight",
+      "desc": "Wyciszone klipy w Spotlight na stronie głównej. Wyłączone pokazuje obrazy."
     }
   },
   "shorts": {

@@ -159,6 +159,10 @@
     "previews": {
       "title": "Aperçus vidéo",
       "desc": "Aperçu muet au survol ; sur mobile, la carte centrale se lance"
+    },
+    "heroPreviews": {
+      "title": "Aperçus vidéo à la une",
+      "desc": "Clips muets dans la une de l’accueil. Désactivé affiche des images fixes."
     }
   },
   "shorts": {

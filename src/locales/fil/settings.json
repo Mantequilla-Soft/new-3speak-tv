@@ -159,6 +159,10 @@
     "previews": {
       "title": "Mga video preview",
       "desc": "Naka-mute na preview kapag nag-hover; sa mobile, nagpe-play ang card na nasa gitna"
+    },
+    "heroPreviews": {
+      "title": "Mga video preview sa Spotlight",
+      "desc": "Mga clip na walang tunog sa Spotlight ng Home. Kapag naka-off, mga larawan lang."
     }
   },
   "shorts": {

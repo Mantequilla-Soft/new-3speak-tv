@@ -37,6 +37,9 @@ export const useAppStore = create(
       // Hover/scroll video previews on cards (default on).
       previewEnabled: true,
       setPreviewEnabled: (val) => a[0]({ previewEnabled: typeof val === 'function' ? val(a[1]().previewEnabled) : val }),
+      // The Spotlight's muted clips (owner 2026-11-12); off = pictures only.
+      heroPreviewEnabled: true,
+      setHeroPreviewEnabled: (val) => a[0]({ heroPreviewEnabled: typeof val === 'function' ? val(a[1]().heroPreviewEnabled) : val }),
       // Selected content interests (ids from utils/interests.js). Canonical copy
       // lives in the user's Hive posting_json_metadata; this is a local cache for
       // instant UI, hydrated from Hive on load. Used later to bias served content.
@@ -116,6 +119,7 @@ export const useAppStore = create(
         homeCardSize: state.homeCardSize,
         spotlightSize: state.spotlightSize,
         previewEnabled: state.previewEnabled,
+        heroPreviewEnabled: state.heroPreviewEnabled,
         interests: state.interests,
         shortsFeedMode: state.shortsFeedMode,
         shortsCommentBar: state.shortsCommentBar,
