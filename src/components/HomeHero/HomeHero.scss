@@ -87,6 +87,10 @@
 
     .is-dark { display: none; }
 
+    // Preview on: over the clips until the first one is on top, then gone.
+    &.is-over { z-index: 2; transition: opacity var(--t-xfade) ease-in-out; }
+    &.is-gone { opacity: 0; }
+
     @include v2.mobile {
       padding-left: 0;
       gap: 14px;
@@ -101,16 +105,17 @@
     .is-dark { display: block; }
   }
 
-  // The muted previews (HomeHero HERO_PREVIEW): two that take turns, under the
-  // wash. The one in front fades in on its first frame over the last one; a
-  // slight blur, as the streams are small for this width.
+  // The muted previews (HomeHero HERO_PREVIEW): two that take turns, both
+  // always drawn, under the wash. The top one fades out (.is-off) to reveal
+  // the next clip already playing under it; a slight blur, as the streams are
+  // small for this width.
   .home-hero__video {
-    opacity: 0;
+    z-index: 0;
     filter: blur(3px);
     transform: scale(1.03);
     transition: opacity var(--t-xfade) ease-in-out;
-    &.is-on { opacity: 1; }
-    &.is-front { z-index: 1; }
+    &.is-top { z-index: 1; }
+    &.is-off { opacity: 0; }
   }
 
   // The slider's cross-fade: the last picture stays under the new one.
@@ -120,7 +125,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    z-index: 1;
+    z-index: 3;   // over the clips and the 3Speak card
     background:
       linear-gradient(180deg, color-mix(in srgb, var(--bg) 40%, transparent) 0%, transparent 20%, transparent 50%, var(--bg) 100%),
       linear-gradient(90deg, color-mix(in srgb, var(--bg) 92%, transparent) 0%, color-mix(in srgb, var(--bg) 45%, transparent) 42%, transparent 68%);

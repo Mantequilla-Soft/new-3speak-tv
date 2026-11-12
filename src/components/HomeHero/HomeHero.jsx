@@ -122,9 +122,9 @@ const withSmallEmoji = (text) => String(text || "").split(EMOJI).map((part, i) =
 // dark theme, the mark and the spaced wordmark on the logo's blue; light
 // theme, just the logo on the page (owner 2026-11-12: the washes turned the
 // blue into a fake gradient there). HomeHero.scss picks one.
-function BrandCard() {
+function BrandCard({ over = false, gone = false }) {
   return (
-    <div className="home-hero__fallback">
+    <div className={`home-hero__fallback${over ? " is-over" : ""}${over && gone ? " is-gone" : ""}`}>
       <img className="is-light" src={brandLogo} alt="" />
       <img className="is-dark" src={brandMark} alt="" />
       <span className="is-dark">3SPEAK</span>
@@ -211,20 +211,27 @@ export default function HomeHero({ videos = [], pending = false }) {
   }, [thumb]);
 
   // The video preview (HERO_PREVIEW, owner 2026-11-12): two muted, looping
-  // players take turns. The one in front plays the active slide; once it has
-  // faded in, the other loads the NEXT slide's video and buffers it paused, so
-  // moving on plays at once and cross-fades over the last one. No picture is
-  // shown while the preview is on: it only comes back for a video that will not
-  // play. ABR is capped to the element's size.
+  // players take turns, both always drawn (a hidden video stops decoding in
+  // some browsers, Firefox first, and then comes up empty). The one on TOP is
+  // what you see; the slide's clip plays UNDER it until it really shows frames,
+  // then the top one fades out to reveal it. Only after that does the old slot
+  // stop and buffer the slide after next, paused, still under the top. So the
+  // 3Speak card is only ever seen before the first clip. A clip that will not
+  // play shows the picture instead. ABR is capped to the element's size.
   const [previewOn] = useState(previewAllowed);
   const elA = useRef(null);
   const elB = useRef(null);
   const players = useRef([null, null]);
   const slotSrc = useRef([null, null]);
-  const frontRef = useRef(0);
-  const [front, setFront] = useState(0);
+  const [top, setTop] = useState(null);          // slot on top, null before the first clip
+  const [target, setTarget] = useState(null);    // slot holding this slide's clip
+  const [leaving, setLeaving] = useState(null);  // slot fading out over the new one
   const [onAir, setOnAir] = useState([false, false]);
   const [failed, setFailed] = useState(false);
+  const topRef = useRef(null);
+  const onAirRef = useRef(onAir);
+  useEffect(() => { topRef.current = top; }, [top]);
+  useEffect(() => { onAirRef.current = onAir; }, [onAir]);
   const previewSrc = video && previewOn ? `${authorOf(video)}/${video.permlink}` : null;
   const nextSrc = nextVideo && previewOn ? `${authorOf(nextVideo)}/${nextVideo.permlink}` : null;
   const nextSrcRef = useRef(nextSrc);
@@ -249,7 +256,23 @@ export default function HomeHero({ videos = [], pending = false }) {
       hlsConfig: withGatewayFallback({ maxBufferLength: 12, backBufferLength: 10, capLevelToPlayerSize: true, abrEwmaDefaultEstimate: 300000, startLevel: -1 }),
     });
     player.attach(el);
-    el.addEventListener("playing", () => { setSlotOn(i, true); releaseHero(); });
+    // Ready = a frame is really on screen, not just "playing": the first
+    // presented frame where the browser reports it, else time moving on, and
+    // a short safety net either way.
+    el.addEventListener("playing", () => {
+      const src = slotSrc.current[i];
+      let done = false;
+      const ready = () => {
+        if (done || slotSrc.current[i] !== src) return;
+        done = true;
+        setSlotOn(i, true);
+        releaseHero();
+      };
+      if (typeof el.requestVideoFrameCallback === "function") el.requestVideoFrameCallback(() => ready());
+      const onTime = () => { if (el.currentTime > 0.05) { el.removeEventListener("timeupdate", onTime); ready(); } };
+      el.addEventListener("timeupdate", onTime);
+      setTimeout(ready, 1500);
+    });
     players.current[i] = player;
     return player;
   }, [setSlotOn]);
@@ -264,39 +287,47 @@ export default function HomeHero({ videos = [], pending = false }) {
       .catch(() => {});
   }, [ensurePlayer, setSlotOn]);
 
+  // A new slide: its clip goes into the slot that is not on top (or is played
+  // there if it was buffered ahead), under the current one.
   useEffect(() => {
     if (!previewSrc) return undefined;
     setFailed(false);
     let i = slotSrc.current.indexOf(previewSrc);
-    if (i === -1) {
-      i = 1 - frontRef.current;
+    if (i === -1 || (i === topRef.current && !onAirRef.current[i])) {
+      i = topRef.current === null ? 0 : 1 - topRef.current;
       loadInto(i, previewSrc, true);
     } else {
       players.current[i]?.play().catch(() => {});
     }
-    frontRef.current = i;
-    setFront(i);
-    // Not playing after a while (no stream, blocked autoplay): the picture.
-    const el = (i ? elB : elA).current;
-    const giveUp = setTimeout(() => { if (!el || el.paused || el.readyState < 2) setFailed(true); }, 6000);
+    setTarget(i);
+    // Not on screen after a while (no stream, blocked autoplay): the picture.
+    const giveUp = setTimeout(() => { if (!onAirRef.current[i]) setFailed(true); }, 6000);
     return () => clearTimeout(giveUp);
   }, [previewSrc, loadInto]);
 
-  // The last video plays on under the new one until that one PLAYS and has
-  // faded in; only then does its slot stop and buffer the slide after this
-  // one. (Swapping on a timer uncovered the 3Speak card whenever the new clip
-  // was slow to start.)
-  const frontOn = onAir[front];
+  // The slide's clip shows frames: the first one simply comes up (the card
+  // fades away over it); later ones are revealed by the top one fading out.
+  const targetOn = target !== null && onAir[target];
   useEffect(() => {
-    if (!previewOn || !frontOn) return undefined;
-    const other = 1 - front;
-    const swap = setTimeout(() => {
+    if (!targetOn || target === top) return undefined;
+    if (top === null) { setTop(target); return undefined; }
+    setLeaving(top);
+    const t = setTimeout(() => { setTop(target); setLeaving(null); }, 850);
+    return () => { clearTimeout(t); setLeaving(null); };
+  }, [targetOn, target, top]);
+
+  // Settled (the slide's clip on top): the other slot stops and buffers the
+  // slide after this one, paused, under the top.
+  useEffect(() => {
+    if (top === null || target !== top) return undefined;
+    const other = 1 - top;
+    const t = setTimeout(() => {
       try { players.current[other]?.pause(); } catch { /* ignore */ }
       const next = nextSrcRef.current;
       if (next && slotSrc.current[other] !== next) loadInto(other, next, false);
-    }, 1100);
-    return () => clearTimeout(swap);
-  }, [previewOn, frontOn, front, previewSrc, loadInto]);
+    }, 300);
+    return () => clearTimeout(t);
+  }, [top, target, previewSrc, loadInto]);
 
   // Once a video plays, the rest of the Spotlight's sources are looked up
   // quietly, one at a time, so the next visit starts every slide from the
@@ -328,7 +359,7 @@ export default function HomeHero({ videos = [], pending = false }) {
   useEffect(() => {
     if (!previewOn) return undefined;
     const onVis = () => {
-      const player = players.current[frontRef.current];
+      const player = players.current[topRef.current ?? 0];
       if (!player || player.destroyed) return;
       if (document.hidden) player.pause(); else player.play().catch(() => {});
     };
@@ -402,16 +433,17 @@ export default function HomeHero({ videos = [], pending = false }) {
       onTouchEnd={onTouchEnd}
     >
       <div className="home-hero__bg" aria-hidden="true">
-        {/* Under everything: the 3Speak card (the cards' thumbnail fallback)
-            until the first picture or video covers it (owner 2026-11-12). */}
-        <BrandCard />
+        {/* The 3Speak card (the cards' thumbnail fallback) until the first
+            picture or clip shows (owner 2026-11-12). With the preview on it
+            sits over the clips and fades away when the first one is on top. */}
+        <BrandCard over={previewOn && !failed} gone={top !== null} />
         {showPicture && bg.prev && bg.prev !== thumb && <img key={bg.prev} className="is-prev" src={bg.prev} alt="" decoding="async" />}
         {showPicture && thumb && <img key={thumb} className="is-cur" src={thumb} alt="" decoding="async" fetchPriority="high" />}
         {previewOn && [elA, elB].map((ref, i) => (
           <video
             key={i}
             ref={ref}
-            className={`home-hero__video${front === i ? " is-front" : ""}${onAir[i] ? " is-on" : ""}`}
+            className={`home-hero__video${top === i ? " is-top" : ""}${leaving === i || failed ? " is-off" : ""}`}
             muted
             playsInline
             preload="auto"
