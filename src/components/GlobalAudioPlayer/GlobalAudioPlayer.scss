@@ -182,6 +182,11 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
 // 620 wide (20a): cover, the title over a 4px progress line, previous, play,
 // next, and a "more" tile for the rest (the full player has it all too).
 .audio-now-playing.gap-bar {
+  // The bar takes its own swipes (back / forward 15 s, open, close): a touch
+  // that starts on it must not also scroll the page behind it (owner
+  // 2026-11-12). Taps still work; a scrolling panel inside (the transcript) is
+  // its own scroll container and keeps scrolling.
+  touch-action: none;
   position: fixed;
   z-index: 100;
   left: 50%;
