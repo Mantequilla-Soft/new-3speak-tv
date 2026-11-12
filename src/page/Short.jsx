@@ -103,7 +103,6 @@ import { Icon } from '../components/v2/Icon';
 import { Button, IconButton, EmptyState, MenuRow, Segmented } from '../components/v2/ui';
 import useReblog from '../hooks/useReblog';
 import useLayoutMediaQuery from '../hooks/useLayoutMediaQuery';
-import shortsMark from '../assets/image/3S_mark.svg';
 
 import { soundLabel } from '../utils/soundCredits';
 // Every toast from this module is headed "Shorts"; the message becomes the
@@ -3456,19 +3455,16 @@ const VideoShort = () => {
         className="keyboard-capture"
         aria-hidden="true"
       />
-      {/* Desktop strip over the player (18a): the mark, whose shorts these are,
-          and the feed switch. The stories view has its own bar there instead. */}
+      {/* Desktop row over the player (18a): no bar of its own any more (owner
+          2026-11-12), just whose shorts these are (a creator's feed) and the
+          feed switch on the right. The stories view has its own bar instead. */}
       {isDeskLayout && !isStoriesMode && (
         <div className="shortsStrip">
-          <img className="shortsStrip__mark" src={shortsMark} alt="3Speak" />
-          <span className="shortsStrip__sep" aria-hidden="true" />
-          {feedUser ? (
+          {feedUser && (
             <Link to={`/@${feedUser}`} className="shortsStrip__who">
               <HiveAvatar username={feedUser} size={null} alt="" imgClassName="shortsStrip__avatar" />
               <span><b>@{feedUser}</b> <span className="shortsStrip__muted">· {t('common.nav.shorts')}</span></span>
             </Link>
-          ) : (
-            <b className="shortsStrip__title">{t('common.nav.shorts')}</b>
           )}
           <span className="shortsStrip__space" />
           {feedSwitch}

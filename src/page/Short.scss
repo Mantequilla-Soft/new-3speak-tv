@@ -189,23 +189,16 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
     outline: none;
   }
 
-  /* ─── Strip over the player (desktop, 18a) ─────────────────────────────── */
+  /* ─── Row over the player (desktop, 18a): no bar, the switch on the right ── */
   .shortsStrip {
     flex: none;
     display: flex;
     align-items: center;
     gap: 12px;
     min-width: 0;
-    padding: 10px 12px 10px 10px;
-    border-radius: var(--r-lg);
-    background: color-mix(in srgb, var(--cyan) 9%, var(--bg));
-    border: 1px solid color-mix(in srgb, var(--cyan) 25%, transparent);
     color: var(--text);
     font-size: 14px;
 
-    &__mark { width: 28px; height: auto; flex: none; }
-    &__sep { width: 1px; height: 22px; flex: none; background: var(--border); }
-    &__title { font-weight: 700; }
     &__muted { color: var(--muted); font-weight: 400; }
     &__space { flex: 1; }
 
@@ -229,13 +222,14 @@ body { --shorts-bottom-reserve: 0px; --shorts-panel-w: 400px; --shorts-top: var(
       background: var(--avatar);
     }
 
-    // The feed switch, as a segmented on the page ground (3px track, 8px options)
+    // The feed switch, a segmented on a surface track (3px track, 8px options),
+    // like the Home feed tabs now that there is no bar around it.
     .shortsFeedSwitch {
       position: static;
       padding: 3px;
       gap: 4px;
       border-radius: var(--r-md);
-      background: var(--bg);
+      background: var(--surface);
 
       button {
         height: auto;
