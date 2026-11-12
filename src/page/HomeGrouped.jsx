@@ -11,7 +11,7 @@ import { FEED_URL, TRENDING_SORTED_URL, FOLLOW_FEED_URL, DISCOVER_FEED_URL, INTE
 import { useContentBatch } from "../hooks/useContentBatch";
 import { useWatchHistory } from "../hooks/useWatchHistory";
 import { batchCheckWatched } from "../utils/watchHistory";
-import { getHidden, withViewer } from "../utils/userFilters";
+import { getHidden, withViewer, useDismissals, isDismissed } from "../utils/userFilters";
 import { aiKey, isAiFlagged, loadAiFlags } from "../utils/aiFlags";
 import useViewCounts from "../hooks/useViewCounts";
 import { useAppStore } from "../lib/store";
@@ -775,7 +775,14 @@ const HomeGrouped = () => {
   // The seed is read at render, so pull-to-refresh (which draws a new one) reshuffles.
   const feedSeed = getFeedSeed();
   // The hero slides through all of them (owner 2026-11-12), in this order.
-  const spotlight = useMemo(() => orderFeatured(featuredPool, feedSeed), [featuredPool, feedSeed]);
+  // Minus anything the viewer dismissed during this visit (issue #565): the pool
+  // is cached, so a "Not interested" here would otherwise come back as a slide.
+  const dismissalsVersion = useDismissals(user);
+  const spotlight = useMemo(
+    () => orderFeatured((featuredPool || []).filter((v) => !isDismissed(v)), feedSeed),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- dismissalsVersion: the shared list changed
+    [featuredPool, feedSeed, dismissalsVersion],
+  );
   // The hero's videos are not repeated in the grid below it.
   const spotlightKeys = useMemo(() => new Set(spotlight.map((v) => featuredKeyOf(v).toLowerCase())), [spotlight]);
   const withFeatured = (vids) => (spotlightKeys.size

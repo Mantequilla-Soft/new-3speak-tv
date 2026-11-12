@@ -27,6 +27,7 @@ import { useCardWindowing, useWindowedCard } from "../../hooks/useCardWindowing"
 import { AiPill } from "../AiBadge/AiBadge";
 import { aiKey, isAiFlagged, useAiFlags } from "../../utils/aiFlags";
 import { useAppStore } from "../../lib/store";
+import { useDismissals, isDismissed } from "../../utils/userFilters";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "../../i18n";
 import { watchPath } from '../../utils/urls';
@@ -218,23 +219,12 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
   const navigate = useNavigate();
   const [modalUser, setModalUser] = useState(null);
 
-  // Locally dismissed content ("not interested" / hidden creator). The checker
-  // filters these out server-side, but only from the NEXT feed fetch — so we drop
-  // the cards here immediately, and put them back if the user hits Undo.
-  const [dismissed, setDismissed] = useState({ videos: new Set(), creators: new Set() });
-
-  const handleDismiss = useCallback((kind, { owner, permlink } = {}) => {
-    const key = `${String(owner).toLowerCase()}/${permlink}`;
-    const creator = String(owner).toLowerCase();
-    setDismissed((prev) => {
-      const next = { videos: new Set(prev.videos), creators: new Set(prev.creators) };
-      if (kind === "video") next.videos.add(key);
-      else if (kind === "undo-video") next.videos.delete(key);
-      else if (kind === "creator") next.creators.add(creator);
-      else if (kind === "undo-creator") next.creators.delete(creator);
-      return next;
-    });
-  }, []);
+  // Dismissed content ("not interested" / hidden creator): the viewer's ONE list
+  // for the whole visit (utils/userFilters.js, issue #565). The checker drops
+  // these from the next fetch, but feeds are cached for minutes, so every grid
+  // filters by the shared list too. CardOptionsMenu's hide / undo update it.
+  const viewer = useAppStore((s) => s.user);
+  const dismissalsVersion = useDismissals(viewer);
 
   // Hover-to-play preview (single reused player overlay) — shared with other grids.
   // On hover-capable devices the options menu is rendered INSIDE the preview
@@ -251,12 +241,11 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
           author={author}
           permlink={permlink}
           title={title}
-          onDismiss={handleDismiss}
           onOpenChange={setLock}
         />
       </>
     )
-  ), [handleDismiss, featuredKey, t]);
+  ), [featuredKey, t]);
 
   const { containerProps, getCardProps, overlay, canHover, startPreview } = useHoverPreview({
     renderControls: renderCardControls,
@@ -288,11 +277,10 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
   const processedVideos = useMemo(() => {
     const ownerOf = (v) => String(v.author?.username || v.author || v.owner || "").toLowerCase();
     return videos
-      .filter((v) => !dismissed.creators.has(ownerOf(v)))
-      .filter((v) => !dismissed.videos.has(`${ownerOf(v)}/${v.permlink}`))
+      .filter((v) => !isDismissed(v))
       .filter((v) => !deadVideos.has(`${ownerOf(v)}/${v.permlink}`))
       .filter((v) => !(hideAi && isAiCard(v)))
-      // Already-watched: same reason as `dismissed` above — the checker only drops
+      // Already-watched: same reason as the dismissals above — the checker only drops
       // watched videos from the NEXT feed fetch, so a just-watched one lingers in the
       // cached feed until then. When the caller opts in (feeds with "Hide watched"
       // on), drop it here immediately. Opt-in so profiles/playlists/related — which
@@ -318,7 +306,7 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
       }));
     // aiVersion: isAiFlagged reads a module cache, so the counter is what makes
     // this recompute when answers arrive.
-  }, [videos, shortsGrid, dismissed, deadVideos, hideWatched, isWatched, watchedVersion, hideAi, aiVersion, featuredKey, featuredLayout]);
+  }, [videos, shortsGrid, dismissalsVersion, deadVideos, hideWatched, isWatched, watchedVersion, hideAi, aiVersion, featuredKey, featuredLayout]);
 
   // A mixed grid (shorts beside videos) sizes each card's WIDTH from its content
   // on desktop, so an empty slot would collapse. It is only ever a short profile
@@ -410,7 +398,6 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                 author={cardAuthor}
                 permlink={video.permlink}
                 title={video.title}
-                onDismiss={handleDismiss}
               />
             ) : undefined}
             render={() => {
@@ -467,7 +454,6 @@ function Card3({ videos = [], loading = false, error = null, interleaveEvery = 0
                     author={cardAuthor}
                     permlink={video.permlink}
                     title={video.title}
-                    onDismiss={handleDismiss}
                     className="card-options-btn--spotlight"
                   />
                 </div>

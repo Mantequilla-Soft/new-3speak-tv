@@ -26,18 +26,25 @@ vi.mock('../../../src/components/CommentCount/CommentCount', () => ({ default: (
 vi.mock('../../../src/components/ViewCount/ViewCount', () => ({ default: ({ views, formatViews, watched, title }) => <span title={title}>{formatViews(views)} views{watched ? ' (watched)' : ''}</span> }))
 vi.mock('../../../src/components/TimeAgo/TimeAgo', () => ({ default: () => <span>2d</span> }))
 vi.mock('../../../src/components/modal/ProfileModal', () => ({ default: () => null }))
-// The card menu, reduced to its two dismiss actions and their Undo.
-vi.mock('../../../src/components/CardOptionsMenu/CardOptionsMenu', () => ({
-  default: ({ author, permlink, onDismiss }) => (
-    <span>
-      <button type="button" onClick={() => onDismiss('video', { owner: author, permlink })}>{`Not interested in ${permlink}`}</button>
-      <button type="button" onClick={() => onDismiss('creator', { owner: author })}>{`Hide ${author} from ${permlink}`}</button>
-      <button type="button" onClick={() => onDismiss('undo-creator', { owner: author })}>{`Undo hide from ${permlink}`}</button>
-    </span>
-  ),
-}))
+// The card menu, reduced to its two dismiss actions and their Undo. Like the
+// real menu, they record the dismissal in the viewer's shared list
+// (utils/userFilters.js, issue #565), which every grid filters by.
+vi.mock('../../../src/components/CardOptionsMenu/CardOptionsMenu', async () => {
+  const f = await import('../../../src/utils/userFilters.js')
+  return {
+    default: ({ author, permlink }) => (
+      <span>
+        <button type="button" onClick={() => f.hideVideo('viewer', author, permlink)}>{`Not interested in ${permlink}`}</button>
+        <button type="button" onClick={() => f.hideCreator('viewer', author)}>{`Hide ${author} from ${permlink}`}</button>
+        <button type="button" onClick={() => f.unhideCreator('viewer', author)}>{`Undo hide from ${permlink}`}</button>
+      </span>
+    ),
+  }
+})
 
 const { useAppStore } = await import('../../../src/lib/store')
+const { default: axios } = await import('axios')
+const userFilters = await import('../../../src/utils/userFilters.js')
 const { default: Card3 } = await import('../../../src/components/Cards/Card3.jsx')
 
 const video = (author, permlink, extra = {}) => ({
@@ -56,7 +63,10 @@ beforeEach(() => {
   m.canHover = true
   m.dead = new Set()
   m.ai = new Set()
-  useAppStore.setState({ hideAi: true })
+  useAppStore.setState({ hideAi: true, user: 'viewer' })
+  // The dismissal calls go to the checker: answered here, nothing on the network.
+  for (const k of ['get', 'post', 'delete']) vi.spyOn(axios, k).mockResolvedValue({ data: {} })
+  userFilters._resetDismissals()
 })
 
 describe('a grid of video cards', () => {
@@ -271,6 +281,16 @@ describe('a grid of video cards', () => {
       expect(screen.getByRole('heading', { name: 'Title c' })).toBeInTheDocument()
       await user.click(screen.getByRole('button', { name: 'Undo hide from c' }))
       expect(screen.getByRole('heading', { name: 'Title c' })).toBeInTheDocument()
+    })
+
+    it('a dismissed card stays gone when the grid is drawn again (issue #565)', async () => {
+      const { user, unmount } = mount({ videos: [video('badadib', 'a'), video('badadib', 'b')] })
+      await user.click(screen.getByRole('button', { name: 'Not interested in a' }))
+      unmount()
+      // Back on the page: a fresh grid with the same (cached) feed.
+      mount({ videos: [video('badadib', 'a'), video('badadib', 'b')] })
+      expect(screen.queryByRole('heading', { name: 'Title a' })).not.toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Title b' })).toBeInTheDocument()
     })
 
     it('puts the menu on the card only where there is no hover preview to carry it', () => {
