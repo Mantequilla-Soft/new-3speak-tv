@@ -145,16 +145,35 @@ describe('warming displayed cards', () => {
     expect(dead.report).toHaveBeenCalledWith('badadib', 'a', 'https://cdn.test/a/manifest.m3u8')
   })
 
-  it('a card scrolling away cancels its download, and nothing is reported', async () => {
+  // The lookup starts a tick after the card shows: it waits for the Spotlight
+  // hero's video first (lib/heroPriority.js; nothing held here, so one tick).
+  it('a card scrolling away before its lookup starts looks nothing up', async () => {
+    const r = render(<Grid />)
+    const card = r.getByTestId('badadib/a')
+    observers[0].show(card)
+    observers[0].show(card, false)
+    await advance(0)
+    expect(api.fetchSource).not.toHaveBeenCalled()
+    expect(fetchMock).not.toHaveBeenCalled()
+    // Coming back starts again.
+    observers[0].show(card)
+    await advance(0)
+    expect(api.fetchSource).toHaveBeenCalledTimes(1)
+  })
+
+  it('a card scrolling away mid-lookup cancels its download, and nothing is reported', async () => {
     let resolveSource
     api.fetchSource.mockImplementationOnce(() => new Promise((res) => { resolveSource = res }))
     const r = render(<Grid />)
     const card = r.getByTestId('badadib/a')
     observers[0].show(card)
+    await advance(0)
+    expect(api.fetchSource).toHaveBeenCalledTimes(1)
     observers[0].show(card, false)
     resolveSource({ url: 'https://cdn.test/a/manifest.m3u8' })
     await advance(0)
     expect(fetchMock).not.toHaveBeenCalled()
+    expect(dead.report).not.toHaveBeenCalled()
     // Coming back starts again.
     observers[0].show(card)
     await advance(0)
