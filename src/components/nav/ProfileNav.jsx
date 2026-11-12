@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import "./ProfileNav.scss"
+import useWarmupProgress, { warmupFigures } from '../../hooks/useWarmupProgress';
 import { useAppStore } from '../../lib/store';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -53,6 +54,8 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
   // the advertiser console are all things that read or spend an account that
   // does not exist yet. Showing them was offering a menu of dead ends.
   const isIncubating = !user && !!incubationHandle;
+  const warmup = useWarmupProgress(isIncubating);
+  const warmupNums = warmupFigures(warmup);
   const canImport = useCanImportVideos(VIDEO_IMPORT_ENABLED ? user : null);
 
   // How many off-chain posts are still waiting to be published to Hive.
@@ -196,6 +199,28 @@ function ProfileNav({ isVisible, pinned = true, leaving = false, hoverProps, onc
             <div className="pn-badges" onClick={(e) => { if (e.target.closest('a')) onclose(); }}>
               <LeaderboardBadges username={user} />
             </div>
+          )}
+
+          {/* A warm-up account: their path to a Hive account in the meters'
+              place (owner 2026-11-12), the same numbers as the ring. */}
+          {isIncubating && warmup && !warmup.needsTrack && (
+            <Link to="/profile" className="pn-warmup" onClick={onclose} title={t('incubation.progress.title')}>
+              <div className="pn-meter-head">
+                <span className="pn-meter-label">{t('incubation.progress.title')}</span>
+                <strong className="num">{warmupNums.pct}%</strong>
+              </div>
+              <div className="pn-meter-track"><div className="pn-meter-fill" style={{ width: `${Math.min(100, warmupNums.fraction * 100)}%` }} /></div>
+              <span className="pn-warmup-foot">
+                <span className="num">{t('incubation.progress.doneCount', { done: warmupNums.done, total: warmupNums.total })}</span>
+                <span className="pn-warmup-link">{t('common.actions.seeAll')}</span>
+              </span>
+            </Link>
+          )}
+          {isIncubating && warmup?.needsTrack && (
+            <Link to="/profile" className="pn-warmup is-choose" onClick={onclose}>
+              <span className="pn-meter-label">{t('incubation.progress.needsTrack')}</span>
+              <span className="pn-warmup-link">{t('incubation.progress.choosePath')}</span>
+            </Link>
           )}
 
           {!isIncubating && (

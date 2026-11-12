@@ -113,6 +113,27 @@
 }
 .bottom-nav-item.active .bottom-nav-avatar { box-shadow: 0 0 0 2px var(--cyan); }
 
+// A warm-up account: the progress ring around the avatar (NavProgress' 46a
+// ring: accent arc on a ground track, cyan once every goal is done).
+.bottom-nav-avatar-wrap.has-ring {
+  position: relative;
+
+  .bottom-nav-ring {
+    position: absolute;
+    inset: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    transform: rotate(-90deg);
+    pointer-events: none;
+
+    circle { fill: none; stroke-width: 3; }
+  }
+  .bottom-nav-ring-track { stroke: var(--bg); }
+  .bottom-nav-ring-arc { stroke: var(--accent); stroke-linecap: round; transition: stroke-dasharray var(--t-slow) var(--ease); }
+  .bottom-nav-ring.is-complete .bottom-nav-ring-arc { stroke: var(--cyan); }
+}
+.bottom-nav-item.active .bottom-nav-avatar-wrap.has-ring .bottom-nav-avatar { box-shadow: none; }
+
 .bottom-nav-avatar-premium {
   position: absolute;
   right: -4px;

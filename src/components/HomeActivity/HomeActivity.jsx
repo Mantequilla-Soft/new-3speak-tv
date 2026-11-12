@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -15,7 +15,8 @@ import { getSubscriptions, bodyToPlaintext } from "../../hive-api/hiveApi";
 import { getCommunity } from "../../hive-api/api";
 import { formatTimeAgoCompact } from "../../i18n";
 import { audioItemPath } from "../AudioItem/AudioItemView";
-import { fetchIncubationProgress, onIncubationProgress, progressFraction } from "../../lib/incubation";
+import { progressFraction } from "../../lib/incubation";
+import useWarmupProgress from "../../hooks/useWarmupProgress";
 import { goalLabel, goalAmount, goalHint } from "../Incubation/IncubationProgressPanel";
 import { Progress } from "../v2/ui";
 import "./HomeActivity.scss";
@@ -108,19 +109,6 @@ function useGroupActivity(user, enabled) {
 // A warm-up account's goals (owner 2026-11-12: make them more prominent): the
 // count, the same bar as the nav ring, then each goal with where it stands.
 // The full panel, with its actions, is on their profile (/profile).
-function useWarmupProgress(enabled) {
-  const [progress, setProgress] = useState(null);
-  useEffect(() => {
-    if (!enabled) return undefined;
-    let alive = true;
-    const load = () => fetchIncubationProgress().then((p) => { if (alive) setProgress(p); }).catch(() => {});
-    load();
-    const off = onIncubationProgress(load);
-    return () => { alive = false; off?.(); };
-  }, [enabled]);
-  return progress;
-}
-
 function WarmupGoals({ progress }) {
   const { t } = useTranslation();
   if (!progress) return null;

@@ -1,5 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
+import useWarmupProgress, { warmupFigures } from "../../hooks/useWarmupProgress";
+import { handleAvatar } from "../../lib/incubation";
 import { useAppStore } from "../../lib/store";
 import { Icon } from "../v2/Icon";
 import { useState, useRef, useEffect } from "react";
@@ -20,6 +22,9 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
   // Same rule as the top bar's Create: a warm-up user blocked from uploads gets
   // no "+" (their `~<handle>` row has canUpload: false).
   const warmupKey = !user && incubationHandle ? creatorKey(null, incubationHandle) : null;
+  const warmup = useWarmupProgress(!user && !!incubationHandle);
+  const warmupNums = warmupFigures(warmup);
+  const warmupRing = !!warmup && !warmup.needsTrack && warmupNums.total > 0;
   const createBlocked = isUploadBlocked(useCreatorSettings(warmupKey));
   const path = location.pathname;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -108,10 +113,19 @@ const BottomNav = ({ openLoginModal, onOpenProfileMenu, profileMenuOpen }) => {
         aria-label={authenticated ? t('common.nav.profile') : t('nav.bottom.login')}>
         <span className="bottom-nav-tile">
           {authenticated ? (
-            <span className="bottom-nav-icon-wrap bottom-nav-avatar-wrap">
+            <span className={`bottom-nav-icon-wrap bottom-nav-avatar-wrap${warmupRing ? " has-ring" : ""}`}>
+              {/* A warm-up account's progress ring around the avatar (owner
+                  2026-11-12), as the top bar has it on desktop; on phones and
+                  tablets this is the only one. */}
+              {warmupRing && (
+                <svg className={`bottom-nav-ring${warmupNums.complete ? " is-complete" : ""}`} viewBox="0 0 36 36" aria-hidden="true">
+                  <circle className="bottom-nav-ring-track" cx="18" cy="18" r="15.9155" />
+                  <circle className="bottom-nav-ring-arc" cx="18" cy="18" r="15.9155" strokeDasharray={`${Math.min(100, warmupNums.fraction * 100)} 100`} />
+                </svg>
+              )}
               <img
-                src={`/img/u/${user}/avatar/small`}
-                alt={user}
+                src={user ? `/img/u/${user}/avatar/small` : handleAvatar(incubationHandle)}
+                alt={user || incubationHandle || ""}
                 className="bottom-nav-avatar"
               />
               <PremiumBadge username={user} size={10} className="bottom-nav-avatar-premium" />

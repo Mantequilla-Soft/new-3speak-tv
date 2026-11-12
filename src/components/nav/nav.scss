@@ -314,6 +314,10 @@
   align-items: center;
   gap: 8px;
   flex: none;
+
+  // Phones and tablets: the avatar is in the bottom bar, so the warm-up ring
+  // goes around it there (BottomNav); the "choose your path" prompt stays.
+  @include compact { > .nav-progress:not(.is-choose) { display: none; } }
 }
 @include wide-bar {
   .nav-avatar-group:has(> .nav-progress:not(.is-choose)) {

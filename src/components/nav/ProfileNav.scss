@@ -458,3 +458,34 @@
 @keyframes pn-sheet-up {
   from { transform: translateY(100%); }
 }
+
+// A warm-up account's path to a Hive account, in the meters' place: the meter
+// head, the accent bar, "3 of 6 done" and See all. The whole block links to
+// the goals on /profile.
+.pn-warmup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 14px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+  transition: background var(--t-fast) var(--ease);
+
+  &:hover { background: color-mix(in srgb, var(--text) 6%, var(--surface-2)); color: var(--text); }
+
+  .pn-warmup-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .pn-warmup-link { font-size: 12px; font-weight: 700; color: var(--cyan); }
+
+  &.is-choose .pn-meter-label { white-space: normal; line-height: 1.4; }
+}

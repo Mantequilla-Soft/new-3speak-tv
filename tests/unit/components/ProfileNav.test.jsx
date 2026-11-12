@@ -18,7 +18,13 @@ vi.mock('../../../src/utils/config', async (importOriginal) => ({ ...(await impo
 vi.mock('../../../src/hooks/useCanImportVideos', () => ({ default: () => false }))
 vi.mock('../../../src/hooks/getUserDetails', () => ({ useGetMyQuery: () => ({ data: null }) }))
 vi.mock('../../../src/utils/avatarCache', () => ({ useAvatarUrl: (u) => `/img/u/${u}/avatar` }))
-vi.mock('../../../src/lib/incubation', () => ({ fetchBackfillSummary: async () => ({ pending: m.backlog }) }))
+vi.mock('../../../src/lib/incubation', () => ({
+  fetchBackfillSummary: async () => ({ pending: m.backlog }),
+  // A warm-up account's goals (the menu's path block): 1 of 2 done, half way.
+  fetchIncubationProgress: async () => ({ tasks: [{ type: 'video', done: false, have: 0, need: 3 }, { type: 'follow', done: true, have: 5, need: 5 }] }),
+  onIncubationProgress: () => () => {},
+  progressFraction: (tasks) => tasks.filter((t) => t.done).length / tasks.length,
+}))
 vi.mock('../../../src/lib/referralLinks', () => ({ fetchMyInviteLinks: async () => ({ links: m.invites }) }))
 vi.mock('../../../src/lib/translatorApi', () => ({ isTranslatorName: async () => m.translator }))
 vi.mock('../../../src/components/LeaderboardBadges/LeaderboardBadges', () => ({ default: () => <a href="/leaderboard?board=views">Top 10 views</a> }))
@@ -98,6 +104,20 @@ describe('the account menu', () => {
     expect(within(menu()).queryByRole('menuitem', { name: 'Wallet' })).not.toBeInTheDocument()
     expect(within(menu()).queryByRole('menuitem', { name: 'Analytics' })).not.toBeInTheDocument()
     expect(within(menu()).queryByText('VP')).not.toBeInTheDocument()
+  })
+
+  it('an account still incubating sees its path to a Hive account instead (owner 2026-11-12)', async () => {
+    act(() => useAppStore.setState({ user: null, incubationHandle: 'newbie' }))
+    const { menu } = mount()
+    expect(await within(menu()).findByText('Your path to a Hive account')).toBeInTheDocument()
+    expect(within(menu()).getByText('1 of 2 done')).toBeInTheDocument()
+    expect(within(menu()).getByText('50%')).toBeInTheDocument()
+    expect(within(menu()).getByRole('link', { name: /Your path to a Hive account/ })).toHaveAttribute('href', '/profile')
+  })
+
+  it('a Hive account has no path block', () => {
+    const { menu } = mount()
+    expect(within(menu()).queryByText('Your path to a Hive account')).not.toBeInTheDocument()
   })
 
   it('Wallet opens the member\'s wallet and closes the menu', async () => {
