@@ -227,7 +227,9 @@ export default function SuggestedCreators({ variant = 'discover', perRow = 0 }) 
                   {c.sample?.thumbnail && <img src={c.sample.thumbnail} alt="" loading="lazy" />}
                 </Link>
                 <Button
-                  variant={followed ? 'secondary' : 'primary'}
+                  // Not red (owner 2026-11-12): a rail of these drowned the page in
+                  // accent fills. Followed reads muted (SuggestedCreators.scss).
+                  variant="secondary"
                   size={44}
                   block
                   className={`sc-follow${followed ? ' followed' : ''}`}
