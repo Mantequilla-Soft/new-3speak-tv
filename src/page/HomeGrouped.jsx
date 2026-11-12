@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { spotlightAllowed } from "../utils/spotlightRules";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./HomeGrouped.scss";
@@ -108,6 +109,7 @@ const FEATURED_TOP = 20;
 const FEATURED_MIN_REWARD = 1;
 const FEATURED_PAGE = 100;
 const FEATURED_MAX_PAGES = 3;
+
 const fetchFeatured = async (viewer, hideAi) => {
   const since = Date.now() - FEATURED_WINDOW_MS;
   const createdAt = (v) => new Date(v.created || v.created_at).getTime();
@@ -126,7 +128,7 @@ const fetchFeatured = async (viewer, hideAi) => {
   const authorOf = (v) => v.author?.username || v.author || v.owner;
   // The watched lookup takes 50 at most, and a pool that deep is plenty.
   const recent = all
-    .filter((v) => createdAt(v) >= since && rewardOf(v) >= FEATURED_MIN_REWARD)
+    .filter((v) => createdAt(v) >= since && rewardOf(v) >= FEATURED_MIN_REWARD && spotlightAllowed(v))
     .sort((a, b) => rewardOf(b) - rewardOf(a))
     .slice(0, 50);
   const norm = (x) => String(x || '').toLowerCase();
@@ -176,7 +178,9 @@ const FEATURED_CACHE = "featured-pool-v1";
 const readFeaturedCache = (key) => {
   try {
     const c = JSON.parse(localStorage.getItem(FEATURED_CACHE) || "null");
-    return c && c.key === key && Array.isArray(c.pool) && c.pool.length ? c.pool : undefined;
+    // The rule above applies to a pool cached before it existed, too.
+    const pool = c && c.key === key && Array.isArray(c.pool) ? c.pool.filter(spotlightAllowed) : [];
+    return pool.length ? pool : undefined;
   } catch { return undefined; }
 };
 const writeFeaturedCache = (key, pool) => {
