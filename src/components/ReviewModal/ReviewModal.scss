@@ -115,7 +115,8 @@
   box-shadow: var(--shadow-float);
   transition: transform var(--t-fast) var(--ease), bottom var(--t-base) var(--ease), background var(--t-fast) var(--ease);
 
-  .material-symbols-rounded { color: var(--accent); }
+  // The icon in the regular text colour like the label (owner 2026-11-12), not red.
+  .material-symbols-rounded { color: inherit; }
   &:hover { background: var(--surface-2); }
 
   // The audio player bar is centred (at most 620px wide), so on a wide screen
