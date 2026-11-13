@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.15',
+    category: 'live',
+    date: '2026-11-13',
+    summary: 'The Stream Studio has a fresh look that matches the rest of 3Speak, with a short reminder at the top to keep the browser tab in front.',
+  },
+  {
+    version: '2.0.14',
+    category: 'live',
+    date: '2026-11-13',
+    summary: 'Streamers can now switch Boosts on or off and change the minimum during a live stream, with the 🚀 button in the Stream Studio.',
+  },
+  {
     version: '2.0.13',
     category: 'audio',
     date: '2026-11-13',
