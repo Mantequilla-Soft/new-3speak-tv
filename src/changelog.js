@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.12',
+    category: 'live',
+    date: '2026-11-13',
+    summary: "Stream links copied from the studio now open the watch page for viewers, not the streamer's studio.",
+  },
+  {
     version: '2.0.11',
     category: 'live',
     date: '2026-11-13',
