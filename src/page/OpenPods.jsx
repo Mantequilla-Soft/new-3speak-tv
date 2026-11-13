@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { HangoutsProvider, RoomLobby } from '@snapie/hangouts-react';
 import '@snapie/hangouts-react/src/styles/hangouts.css';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -29,8 +29,60 @@ const IMAGE_KEY = import.meta.env.VITE_IMAGE_SERVER_API_KEY;
 // routes — not (yet) the prod rooms API. Empty ⇒ falls back to apiBaseUrl.
 const PREMIUM_API = (import.meta.env.VITE_HANGOUTS_PREMIUM_API_URL || '').replace(/\/$/, '');
 
+// The SDK create form's text: live.createForm.<key>, named as the SDK's
+// CreateRoomLabels. Each key is read on its own so a missing one falls back
+// to English per key (and the i18n check skips these dynamic lookups).
+const CREATE_FORM_KEYS = [
+  'beta', 'introPhoneTitle', 'introPhoneDesc', 'introStudioTitle', 'introStudioDesc',
+  'introGroupTitle', 'introGroupDesc', 'modeLabel', 'modeRoomTitle', 'modeRoomDesc',
+  'modeStreamTitle', 'modeStreamDesc', 'modeStreamUnavailable',
+  'modeStreamUnavailableHint', 'visibilityLabel', 'publicTitle', 'publicDesc',
+  'hiveOnlyTitle', 'hiveOnlyDesc', 'unlistedTitle', 'unlistedDesc', 'titleLabel',
+  'titlePlaceholder', 'thumbnailLabel', 'thumbnailPreview', 'thumbnailAdd',
+  'thumbnailChange', 'thumbnailRemove', 'uploading', 'uploadFailed',
+  'descriptionLabel', 'tagsLabel', 'tagsPlaceholder', 'tagsPlaceholderMore',
+  'removeTag', 'languageLabel', 'boostToggle', 'minBoost', 'payoutAccount',
+  'payoutPlaceholder', 'announceStream', 'announceSession', 'announceStreamStrong',
+  'announceStreamRest', 'announcePostStrong', 'announcePostRest', 'whenEnds',
+  'autoVod', 'autoVodPro', 'autoVodFree', 'autoDownload', 'autoDownloadPro',
+  'autoDownloadFree', 'clips', 'clipsPro', 'clipsFree', 'unlockPro', 'limitPro',
+  'limitFree', 'freeCap', 'proCap', 'creating', 'openStudio', 'startSession',
+  'dailyLimit', 'whenToday', 'whenTomorrowAt', 'whenTomorrow', 'createFailed',
+  'dailyLimitUpsell', 'upsellGateHeading', 'upsellInfoHeading', 'upsellGateContinue',
+  'upsellInfoContinue', 'upsellSub', 'upsellTrial', 'upsellStarting', 'upsellSeePlans',
+  'upsellClose', 'upsellLoadingPlans',
+];
+// The Pro upsell's stream perks, in the SDK's order, with its icons.
+const STREAM_PERKS = [
+  ['longer', '⏳'], ['replays', '🎬'], ['clips', '✂️'], ['rtmp', '📡'],
+  ['obs', '🎥'], ['quality', '📶'], ['watermark', '🚫'],
+];
+
 export default function OpenPods() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.resolvedLanguage || i18n.language;
+  const createForm = useMemo(() => {
+    const labels = Object.fromEntries(CREATE_FORM_KEYS.map((k) => [k, t(`live.createForm.${k}`)]));
+    Object.assign(labels, {
+      basics: t('live.obs.steps.basics'),
+      details: t('live.obs.steps.details'),
+      sharing: t('live.obs.steps.sharing'),
+      goLive: t('live.obs.steps.goLive'),
+      back: t('common.actions.back'),
+      next: t('common.actions.next'),
+      cancel: t('common.actions.cancel'),
+      titleRequired: t('live.obs.steps.titleRequired'),
+    });
+    const caps = { cap: labels.freeCap, proCap: labels.proCap };
+    const perks = STREAM_PERKS.map(([id, icon]) => ({
+      icon,
+      title: t(`live.createForm.perks.${id}.title`),
+      body: t(`live.createForm.perks.${id}.body`, caps),
+    }));
+    return { labels, perks };
+    // `lang` re-reads the text after a language switch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t, lang]);
   const { openRoom, activeRoom, sessionToken, sessionLoading, hangoutsUser, retryLogin } = useHangout();
   const { authenticated, user } = useAppStore();
   // Follow the 3speak-selected theme (light/dark/system) for the SDK lobby.
@@ -342,16 +394,10 @@ export default function OpenPods() {
           /* Streams go through the form step by step (Basics, Details,
              Boosts & sharing, Go live); group chats keep the single page. */
           stepped={createReq.mode !== 'conference'}
-          stepLabels={{
-            basics: t('live.obs.steps.basics'),
-            details: t('live.obs.steps.details'),
-            sharing: t('live.obs.steps.sharing'),
-            goLive: t('live.obs.steps.goLive'),
-            back: t('common.actions.back'),
-            next: t('common.actions.next'),
-            cancel: t('common.actions.cancel'),
-            titleRequired: t('live.obs.steps.titleRequired'),
-          }}
+          /* The whole form in the site language (live.createForm). */
+          labels={createForm.labels}
+          upsellPerks={createForm.perks}
+          locale={lang}
           renderDescriptionEditor={(value, onChange) => (
             <MarkdownComposer
               value={value}

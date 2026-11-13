@@ -18,6 +18,18 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.10',
+    category: 'live',
+    date: '2026-11-13',
+    summary: 'The Stream Studio setup and its Pro offer now appear in your language.',
+  },
+  {
+    version: '2.0.9',
+    category: 'live',
+    date: '2026-11-13',
+    summary: 'The template picker in the Stream Studio now matches the rest of the site and is easy to read.',
+  },
+  {
     version: '2.0.8',
     category: 'account',
     date: '2026-11-12',

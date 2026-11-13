@@ -15,9 +15,10 @@ import {
 import AnnounceOptions from './AnnounceOptions';
 import MarkdownComposer from '../studio/MarkdownComposer';
 import {
-  Banner, Button, ChoiceCard, Dialog, EmptyState, Icon, IconButton, SettingRow, StatusPill, Toggle,
+  Banner, Button, ChoiceCard, Dialog, EmptyState, Icon, IconButton, Menu, MenuRow, SettingRow, StatusPill, Toggle,
 } from '../v2/ui';
 import { cx } from '../v2/helpers';
+import useLayoutMediaQuery from '../../hooks/useLayoutMediaQuery';
 import './StreamTemplates.scss';
 
 const toast = toastIn('Live');
@@ -991,6 +992,10 @@ export function TemplatePicker({ token, onPick }) {
   const [templates, setTemplates] = useState([]);
   // The template last loaded into the form, named in the bar (39a).
   const [picked, setPicked] = useState('');
+  const [open, setOpen] = useState(false);
+  const isPhone = useLayoutMediaQuery('(max-width: 767px)');
+  const wrapRef = useRef(null);
+  const menuRef = useRef(null);
   useEffect(() => {
     if (!token) return undefined;
     let alive = true;
@@ -999,28 +1004,60 @@ export function TemplatePicker({ token, onPick }) {
       .catch(() => { /* no picker; the form works as before */ });
     return () => { alive = false; };
   }, [token]);
+
+  // Desktop popover: closes on an outside click or Escape, and puts the
+  // keyboard on the first template when it opens.
+  useEffect(() => {
+    if (!open || isPhone) return undefined;
+    menuRef.current?.querySelector('[role="menuitem"]')?.focus();
+    const onDown = (e) => { if (!wrapRef.current?.contains(e.target)) setOpen(false); };
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open, isPhone]);
+
   if (!templates.length) return null;
-  // One 48px bar: the native select covers it (invisible), so it keeps the
-  // keyboard and screen reader behaviour of a select.
+
+  // A native <select> drew its option list in the OS colours (white list,
+  // page text colour = unreadable on dark), so the list is the v2 menu:
+  // a popover on desktop, a bottom sheet on phones.
+  const rows = templates.map((tpl) => (
+    <MenuRow
+      key={tpl.id}
+      icon="bookmark"
+      on={tpl.name === picked}
+      onClick={() => { setOpen(false); setPicked(tpl.name); onPick(tpl); }}
+    >
+      {tpl.name}
+    </MenuRow>
+  ));
+
   return (
-    <label className="st-picker">
-      <Icon name="bookmarks" size={18} className="st-picker__icon" />
-      <span className="st-picker__text">
-        {t('live.obs.pickTemplate')}: <b>{picked || t('live.obs.pickTemplatePlaceholder')}</b>
-      </span>
-      <Icon name="expand_more" size={18} className="st-picker__chev" />
-      <select
-        className="st-picker__select"
-        value=""
-        onChange={(e) => {
-          const tpl = templates.find((x) => x.id === e.target.value);
-          if (tpl) { setPicked(tpl.name); onPick(tpl); }
-        }}
+    <div className="st-picker-wrap" ref={wrapRef}>
+      <button
+        type="button"
+        className={cx('st-picker', open && 'is-open')}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
       >
-        <option value="">{t('live.obs.pickTemplatePlaceholder')}</option>
-        {templates.map((tpl) => <option key={tpl.id} value={tpl.id}>{tpl.name}</option>)}
-      </select>
-    </label>
+        <Icon name="bookmarks" size={18} className="st-picker__icon" />
+        <span className="st-picker__text">
+          {t('live.obs.pickTemplate')}: <b>{picked || t('live.obs.pickTemplatePlaceholder')}</b>
+        </span>
+        <Icon name="expand_more" size={18} className="st-picker__chev" />
+      </button>
+      {open && !isPhone ? <Menu className="st-picker__menu" ref={menuRef}>{rows}</Menu> : null}
+      {isPhone ? (
+        <Dialog open={open} onClose={() => setOpen(false)} title={t('live.obs.pickTemplate')} closeLabel={t('common.actions.close')}>
+          <div className="st-picker__sheet" role="menu">{rows}</div>
+        </Dialog>
+      ) : null}
+    </div>
   );
 }
 
