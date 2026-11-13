@@ -18,6 +18,36 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.15',
+    category: 'live',
+    date: '2026-11-13',
+    summary: 'The Stream Studio has a fresh look that matches the rest of 3Speak, with a short reminder at the top to keep the browser tab in front.',
+  },
+  {
+    version: '2.0.14',
+    category: 'live',
+    date: '2026-11-13',
+    summary: 'Streamers can now switch Boosts on or off and change the minimum during a live stream, with the 🚀 button in the Stream Studio.',
+  },
+  {
+    version: '2.0.13',
+    category: 'audio',
+    date: '2026-11-13',
+    summary: 'The audio player bar has a small x in its top right corner again, so you can close the player on any screen without opening its menu.',
+  },
+  {
+    version: '2.0.12',
+    category: 'live',
+    date: '2026-11-13',
+    summary: "Stream links copied from the studio now open the watch page for viewers, not the streamer's studio.",
+  },
+  {
+    version: '2.0.11',
+    category: 'live',
+    date: '2026-11-13',
+    summary: 'Live chat now opens first on a stream, is easy to read, and sending a message no longer scrolls the page.',
+  },
+  {
     version: '2.0.10',
     category: 'live',
     date: '2026-11-13',

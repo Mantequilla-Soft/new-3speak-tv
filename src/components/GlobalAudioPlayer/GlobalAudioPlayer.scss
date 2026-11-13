@@ -217,12 +217,35 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
 }
 
 .gap-bar__row {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
   height: 66px;
   padding: 0 10px;
   min-width: 0;
+}
+// The playing bar's x (owner 2026-11-13): small, in the top right corner, on
+// every size; the row keeps 32px on its right so it never covers a tile. The
+// idle bar has its own x in the row.
+.gap-bar:not(.audio-np-idle) > .gap-bar__row { padding-right: 32px; }
+.gap-bar__close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 1;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  &:hover { background: var(--surface-2); color: var(--text); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 }
 .gap-bar__art {
   width: 48px;
@@ -352,6 +375,8 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
     border-color: var(--border);
   }
   .gap-bar__row { height: 64px; padding: 0 8px; gap: 10px; }
+  .gap-bar:not(.audio-np-idle) > .gap-bar__row { padding-right: 30px; }
+  .gap-bar__close { top: 4px; right: 4px; }
   .gap-bar__art { width: 48px; height: 48px; }
   .gap-bar__info { flex: 1; }
   .gap-bar__line { display: none; }
@@ -375,7 +400,7 @@ $wide: 1025px;   // the side-by-side full player; the bottom nav shows up to 102
     .audio-np-progress-fill { border-radius: 0; }
   }
   // Cover, title, hype, play (27c): the hype tile sits in the row itself,
-  // before the play button. Closing is in the full player's menu.
+  // before the play button. The small x in the corner closes the player.
   .gap-bar__tools { display: contents; }
   .gap-bar__tools > :not(.gap-bar__hype) { display: none; }
   .gap-bar__hype { order: 1; }

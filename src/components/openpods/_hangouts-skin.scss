@@ -65,6 +65,25 @@
   }
 }
 
+// A glyph centred in a fixed box. The SDK's original symbol stays in the
+// element (hidden at font-size 0) and, as a second grid/flex item, would push
+// a plain glyph() off centre; the absolute ::before ignores it.
+@mixin glyph-box($name, $size: 20px, $box: $size) {
+  @include glyph($name, $size);
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: $box;
+  height: $box;
+  margin: 0;
+  &::before {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+}
+
 // SDK buttons as v2 buttons: flat fills, radius by height, no lift or glow.
 // $sized: false keeps the SDK's own heights (the studio lays out around them).
 @mixin buttons($sized: true) {
@@ -175,6 +194,30 @@
     color: var(--muted);
     font-size: 13px;
     text-align: left;
+  }
+}
+
+// A stream's live chat (watch pages): the chat above, messages as one line (the
+// name in bold cyan, then the text, 18c) and the round 44 accent Send button.
+// Shared by the stream page (WatchStream) and the watch page's Live chat tab.
+@mixin stream-chat {
+  @include chat;
+  .hh-chat__messages { justify-content: flex-start; }
+  .hh-chat__messages > :first-child { margin-top: auto; }
+  .hh-chat__msg { display: block; padding: 0; }
+  .hh-chat__msg-avatar { display: none; }
+  .hh-chat__msg-body { display: inline; }
+  .hh-chat__msg-name { display: inline; margin-right: 4px; color: var(--cyan); font-size: 14px; font-weight: 700; }
+  .hh-chat__msg-name--tappable { padding: 0; border: 0; background: none; cursor: pointer; font: inherit; font-weight: 700; color: var(--cyan); }
+  .hh-chat__msg-text { display: inline; }
+  .hh-chat__empty { padding: 0 0 4px; }
+  .hh-chat__input-row .hh-btn--primary {
+    width: 44px;
+    min-width: 44px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+    @include glyph("send", 20px);
   }
 }
 
@@ -419,16 +462,17 @@
     background: var(--bg);
     font-family: var(--font-sans);
   }
-  .hh-studio__header { gap: 12px; padding: 12px 16px; backdrop-filter: none; }
+  .hh-studio__header { gap: 16px; padding: 16px 20px 12px; border-bottom: 0; backdrop-filter: none; }
+  // Status pill (style guide, Controls): 20 tall, radius 7, 10/900 uppercase.
   .hh-studio__live {
     display: inline-flex;
     align-items: center;
-    height: 22px;
-    padding: 0 9px;
-    border-radius: var(--r-sm);
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 7px;
     background: var(--accent);
     color: var(--on-accent);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 900;
     letter-spacing: .06em;
     box-shadow: none;
@@ -436,14 +480,113 @@
   }
   .hh-studio__live--standby { background: var(--surface-2); color: var(--muted); }
   .hh-studio__live--paused { background: var(--accent-tint-strong); color: var(--accent); }
-  .hh-studio__title { @include v2.text(title-sm); }
-  .hh-studio__warn { color: var(--accent); font-size: 12px; font-weight: 700; }
-  .hh-studio__warn-icon { @include glyph("warning", 20px); color: var(--accent); }
-  .hh-studio__viewers { display: inline-block; @include v2.mono(14, 700); &::first-letter { font-size: 0; } }
-  .hh-studio__close {
-    @include v2.btn(secondary, 32);
+  .hh-studio__title { @include v2.text(title); }
+  // "Keep this window visible": the v2 warn banner (accent wash, accent glyph,
+  // 4px tone bar) instead of red text. Red text read as an error and got
+  // skimmed; the tinted card with a filled red disc stands out by its shape,
+  // and the sentence itself is in the text colour, readable at a glance.
+  .hh-studio__warn {
+    position: relative;
+    gap: 10px;
+    padding: 8px 14px 8px 20px;
+    border-radius: var(--r-md);
+    background: var(--accent-wash);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.35;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 9px;
+      bottom: 9px;
+      width: 4px;
+      border-radius: var(--r-bar);
+      background: var(--accent);
+    }
+    @media (max-width: 1280px) { font-size: 12px; }
+  }
+  .hh-studio__warn-icon {
+    position: relative;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--on-accent);
+    @include glyph("warning", 18px);
+    // The glyph covers the whole disc and centres itself: the span still holds
+    // the SDK's hidden emoji, which as a second grid item pushed it off centre.
+    &::before {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+    }
+  }
+  // Viewers: the eye as a Material glyph, the count in mono.
+  .hh-studio__viewers { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 4px; @include v2.mono(14, 700); }
+  .hh-studio__viewers-icon { color: var(--muted); @include glyph-box("visibility", 20px); }
+  // The status pill's symbol (◌ ● ❚❚) goes on desktop, the word stays; the
+  // phone header shows the symbol only, so it keeps it.
+  // (::first-letter needs a block box: inline-block, not the pill's inline-flex.)
+  .hh-studio__header:not(.hh-studio__header--mobile) .hh-studio__live {
+    display: inline-block;
+    line-height: 20px;
+    &::first-letter { font-size: 0; }
+  }
+
+  // Header actions: one set of v2 controls, 40 tall (radius 12). Labelled
+  // buttons are secondary (surface-2, 20px icon + 14px label); icon-only ones
+  // are square 40 icon buttons; an open panel's button gets the accent tint,
+  // never a solid fill (the one solid accent in the studio is Start stream).
+  // margin-left: auto, the warning no longer sits between title and actions.
+  .hh-studio__header-actions { gap: 8px; align-items: center; margin-left: auto; }
+  // The warning at the top of the scenes card: same banner, compact.
+  .hh-studio__warn--rail {
+    margin: 0 0 8px;
+    padding: 10px 12px 10px 18px;
+    font-size: 13px;
+    &::before { left: 7px; top: 10px; bottom: 10px; }
+    .hh-studio__warn-icon { width: 28px; height: 28px; @include glyph-box("warning", 16px, 28px); }
+  }
+  .hh-studio__header-actions .hh-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    min-height: 40px;
+    padding: 0 14px;
     border: 0;
-    &:hover { color: var(--text); }
+    border-radius: var(--r-md);
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: none;
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
+  }
+  .hh-studio__header-actions .hh-btn--primary { background: var(--accent-tint-strong); color: var(--accent); }
+  .hh-studio__boost-history-btn,
+  .hh-studio__boost-settings-btn:not(.hh-studio__boost-settings-btn--off) { width: 40px; padding: 0; }
+  .hh-studio__share-btn .hh-studio__icon { @include glyph-box("link", 20px); }
+  .hh-studio__boost-history-btn .hh-studio__icon { @include glyph-box("payments", 20px); }
+  .hh-studio__boost-settings-btn .hh-studio__icon { @include glyph-box("rocket_launch", 20px); }
+  .hh-studio__header-actions .hh-studio__boost-settings-btn--off { color: var(--muted); }
+  // Close: the round icon button dialogs use (the label stays as aria-label).
+  .hh-studio__close {
+    @include glyph-box("close", 22px, 40px);
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--surface-2);
+    color: var(--text);
+    cursor: pointer;
+    &:hover { background: color-mix(in srgb, var(--text) 10%, var(--surface-2)); }
   }
 
   // Scenes and sources: 40px rows, the active scene in the accent (22c layout tiles).
@@ -461,13 +604,16 @@
     &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 6%, var(--surface)); }
   }
   .hh-studio__scene--active { border-color: var(--accent); background: var(--accent-tint-strong); box-shadow: none; }
-  // "＋ Add source": the fullwidth plus is dropped (not every font has it).
-  .hh-studio__scene--add { display: block; border: 2px dashed var(--border); background: transparent; line-height: 36px; text-align: center; &::first-letter { font-size: 0; } }
+  // "Add source": a dashed empty-state row with the add glyph.
+  .hh-studio__scene--add { display: flex; align-items: center; justify-content: center; gap: 6px; border: 2px dashed var(--border); background: transparent; }
+  .hh-studio__add-plus { margin: 0; @include glyph("add", 18px); }
   .hh-studio__error { color: var(--accent); font-size: 11px; }
 
   // The preview: a 24-radius frame on black, the tag as a media pill.
   .hh-studio__frame { border: 0; border-radius: var(--r-2xl); box-shadow: none; background: var(--media-black); }
+  // Top right: the free stream's 3Speak mark is drawn top left in the picture.
   .hh-studio__preview-tag {
+    inset: 12px 12px auto auto;
     padding: 4px 9px;
     border: 0;
     border-radius: var(--r-sm);
@@ -527,15 +673,29 @@
     box-shadow: none;
     animation: none;
   }
+  // Primary: label flush left, a trailing arrow (style guide, Controls).
   .hh-studio__go-btn {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background: var(--accent);
     color: var(--on-accent);
-    // "🔴 START STREAM": the leading emoji goes, the words stay.
-    &:not(:disabled)::first-letter { font-size: 0; }
+    .hh-studio__icon { display: none; }
+    &::after {
+      content: "arrow_forward"; content: "arrow_forward" / "";
+      font-family: "Material Symbols Rounded";
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1;
+      font-feature-settings: "liga";
+    }
     &:hover:not(:disabled) { background: var(--accent-hover); filter: none; }
   }
-  .hh-studio__pause-btn { background: var(--surface-2); color: var(--text); }
+  .hh-studio__pause-btn,
+  .hh-studio__end-btn { display: flex; align-items: center; gap: 8px; }
+  .hh-studio__pause-btn { background: var(--surface-2); color: var(--text); .hh-studio__icon { margin: 0; @include glyph("pause", 20px); } }
+  .hh-studio__end-btn .hh-studio__icon { margin: 0; @include glyph("stop", 18px); }
+  .hh-studio__end-btn:disabled .hh-studio__icon { @include glyph("save", 18px); }
   .hh-studio__end-btn {
     min-height: 44px;
     border: 0;
@@ -545,6 +705,372 @@
     font-size: 13px;
     &:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); }
   }
+
+  // Panel chevrons and closes as Material glyphs (the SDK draws ‹ › ▾ ▴ ×).
+  .hh-studio__collapse {
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+  .hh-studio__scenes .hh-studio__collapse { @include glyph-box("chevron_left", 20px, 32px); }
+  .hh-studio__tabs-collapse { @include glyph-box("chevron_right", 20px, 32px); }
+  .hh-studio__mixer .hh-studio__collapse[title="Collapse"] { @include glyph-box("expand_more", 20px, 32px); }
+  .hh-studio__mixer .hh-studio__collapse[title="Expand"] { @include glyph-box("expand_less", 20px, 32px); }
+  .hh-studio__modal-head .hh-studio__collapse { margin-left: auto; @include glyph-box("close", 22px, 36px); border-radius: 50%; }
+  .hh-post__expand {
+    @include glyph-box("open_in_full", 16px, 28px);
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .hh-studio__rbtn-dot { background: var(--accent); box-shadow: none; }
+
+  // Write / Preview: a segmented pair (selected = surface-2), never an outline.
+  .hh-post__desc-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    button {
+      height: 28px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: var(--r-sm);
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      &:hover:not(:disabled) { color: var(--text); }
+      &.is-active { background: var(--surface-2); color: var(--text); }
+    }
+  }
+  .hh-post__desc-hint { margin-left: auto; padding-right: 8px; color: var(--muted); font-size: 12px; font-weight: 400; }
+
+  // Settings tab: card titles with a glyph, the options as choice cards.
+  .hh-settings__group { display: flex; flex-direction: column; gap: 8px; }
+  .hh-settings__group + .hh-settings__group { margin-top: 12px; }
+  .hh-settings__title { display: flex; align-items: center; gap: 8px; @include v2.text(title-sm); color: var(--text); }
+  .hh-settings__icon { margin: 0; color: var(--accent); }
+  .hh-settings__icon--quality { @include glyph("videocam", 20px); }
+  .hh-settings__icon--priority { @include glyph("tune", 20px); }
+  .hh-settings__intro { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+  .hh-optsheet__opt {
+    border: 2px solid transparent;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    padding: 10px 12px;
+    text-align: left;
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+  }
+  .hh-optsheet__opt--on { border-color: var(--accent); background: var(--accent-tint-strong); }
+  .hh-optsheet__opt-label { font-size: 14px; font-weight: 700; color: var(--text); }
+  .hh-optsheet__opt-desc { font-size: 12px; color: var(--muted); }
+
+  // Add source: a v2 dialog (no blur behind it), rows with Material glyphs.
+  .hh-studio__modal-overlay { background: var(--overlay); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  // A v2 dialog: video and sound sources as a 2-column grid of tiles (icon over
+  // label, a state pill in the corner); audio devices as well rows below.
+  .hh-studio__add-popup {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-content: start;
+    gap: 8px;
+    width: min(480px, calc(100vw - 32px));
+    max-height: calc(100dvh - 64px);
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 4px 20px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-3xl);
+    background: var(--surface);
+    box-shadow: var(--shadow-sheet);
+    > :not(.hh-studio__add-item),
+    > .hh-studio__add-item--sub { grid-column: 1 / -1; }
+  }
+  .hh-studio__modal-head {
+    display: flex;
+    align-items: center;
+    padding: 16px 0 4px;
+    @include v2.text(title);
+    color: var(--text);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .hh-studio__add-item:not(.hh-studio__add-item--sub) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 88px;
+    padding: 12px 10px;
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: center;
+    cursor: pointer;
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+    &:disabled { cursor: default; color: var(--muted); }
+    .hh-studio__add-icon { color: var(--text); }
+    &:disabled .hh-studio__add-icon { color: var(--muted); }
+  }
+  .hh-studio__add-icon--camera { @include glyph-box("photo_camera", 24px); }
+  .hh-studio__add-icon--share { @include glyph-box("screen_share", 24px); }
+  .hh-studio__add-icon--obs { @include glyph-box("cast", 24px); }
+  .hh-studio__add-icon--media { @include glyph-box("image", 24px); }
+  .hh-studio__add-icon--mic { @include glyph-box("mic", 24px); }
+  .hh-studio__add-icon--sound { @include glyph-box("music_note", 24px); }
+  .hh-studio__add-icon--aux { @include glyph-box("graphic_eq", 14px); color: var(--muted); }
+  .hh-studio__add-lock { @include glyph-box("lock", 16px); position: absolute; top: 10px; left: 10px; color: var(--muted); }
+  // State in the tile's corner as a status pill (cyan = on / info, muted = busy).
+  .hh-studio__add-state {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    margin: 0;
+    padding: 0 7px;
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--cyan) 16%, transparent);
+    color: var(--cyan);
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 20px;
+    letter-spacing: .04em;
+    white-space: nowrap;
+    &:empty { display: none; }
+  }
+  // Audio devices: rows, the name on up to two lines.
+  .hh-studio__add-item--sub {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.35;
+    text-align: left;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    &:hover { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+  }
+  .hh-studio__add-radio { @include glyph-box("radio_button_unchecked", 18px); color: var(--muted); }
+  .hh-studio__add-radio--on { @include glyph-box("check", 18px); color: var(--accent); }
+  .hh-studio__add-empty { color: var(--muted); font-size: 12px; }
+  .hh-studio__add-sep,
+  .hh-studio__add-sub { display: flex; align-items: center; gap: 6px; padding: 12px 0 0; @include v2.text(eyebrow); color: var(--muted); }
+
+  // ── Layout pass: the studio as cards and tiles (style guide §4, §6, §7) ──
+  // Type in the whole studio is limited to: 10/900 eyebrows and pills ·
+  // 11/700 the scrim pill on the video · 12/400 meta · 12/700 tile labels ·
+  // 13/700 labels and buttons · 14/400 text and fields · 16/700 card titles ·
+  // 16/900 the Start button · 18/700 the studio title.
+  .hh-studio__body { gap: 8px; padding: 4px 20px 20px; }
+  .hh-studio__resizer { width: 8px; margin: 0; }
+
+  // Left: one card. Scenes as a 2-column grid of tiles; everything else spans
+  // both columns. (min-width: the SDK's 180px left no room for a card + tiles.)
+  .hh-studio__scenes {
+    min-width: 232px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: min-content;
+    align-content: start;
+    gap: 8px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-2xl);
+    background: var(--surface);
+    > :not(.hh-studio__scene),
+    > .hh-studio__scene--add,
+    > .hh-studio__scene--media { grid-column: 1 / -1; }
+  }
+  .hh-studio__scenes .hh-studio__panel-head,
+  .hh-studio__mixer .hh-studio__panel-head,
+  .hh-studio__scenes > .hh-studio__rail-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    @include v2.text(title-sm);
+    color: var(--text);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .hh-studio__scenes > .hh-studio__rail-label { margin-top: 8px; }
+  .hh-studio__scene:not(.hh-studio__scene--add):not(.hh-studio__scene--media) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 64px;
+    padding: 8px 6px;
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--bg);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 6%, var(--bg)); color: var(--text); }
+  }
+  .hh-studio__scene--active:not(.hh-studio__scene--add):not(.hh-studio__scene--media) { background: var(--accent-tint-strong); color: var(--accent); }
+  .hh-studio__scene-icon { width: 40px; height: 24px; border-radius: 5px; border-color: currentColor; }
+  .hh-studio__scene--add {
+    min-height: 40px;
+    border-radius: var(--r-md);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    &:hover:not(:disabled) { color: var(--text); background: transparent; border-color: var(--muted); }
+  }
+
+  // Sources: inputs as well rows, sub-lists under an eyebrow.
+  .hh-studio__inputs { gap: 6px; padding-top: 0; margin-top: 0; border-top: 0; }
+  .hh-studio__inputs > .hh-studio__rail-label { padding: 4px 0 0; @include v2.text(eyebrow); color: var(--muted); }
+  .hh-studio__input {
+    gap: 10px;
+    min-height: 40px;
+    padding: 6px 6px 6px 8px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+  }
+  .hh-studio__media-thumb { width: 40px; height: 24px; border-radius: 5px; }
+
+  // Shared tabs and media files: rows like the inputs (they share the scene
+  // button class in the SDK, so they are taken out of the tile look). The
+  // active source gets the accent tint. Rename and remove are 32px buttons.
+  .hh-studio__scene--media {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    min-height: 44px;
+    padding: 6px 4px 6px 8px;
+    border: 0;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
+    &:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 6%, var(--bg)); }
+    .hh-studio__scene-icon { flex: none; color: var(--muted); }
+  }
+  .hh-studio__scene--media.hh-studio__scene--active { background: var(--accent-tint-strong); color: var(--accent); box-shadow: none; }
+  .hh-studio__media-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hh-studio__media-icon,
+  .hh-studio__media-remove {
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+  .hh-studio__media-icon { @include glyph-box("edit", 20px, 32px); }
+  .hh-studio__media-remove { @include glyph-box("close", 20px, 32px); }
+
+  // The microphone row: the mic glyph in a 40x24 slot like the thumbnails,
+  // crossed out while muted; clicking the row mutes, so it reads as one control.
+  .hh-studio__input-main {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .hh-studio__source-glyph {
+    @include glyph-box("mic", 18px, 24px);
+    width: 40px;
+    border-radius: 5px;
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .hh-studio__input.is-muted .hh-studio__source-glyph { @include glyph-box("mic_off", 18px, 24px); width: 40px; color: var(--accent); }
+  .hh-studio__input.is-muted .hh-studio__input-name { color: var(--muted); }
+  .hh-studio__input-name { font-size: 13px; font-weight: 700; }
+  .hh-studio__input-off {
+    @include glyph-box("close", 20px, 32px);
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    &:hover { background: var(--bg-hover); color: var(--text); }
+  }
+  .hh-studio__cam-look { margin: 0; padding-top: 0; border-top: 0; }
+  .hh-studio__cam-toggle {
+    min-height: 40px;
+    padding: 0 6px 0 10px;
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .hh-studio__cam-caret { color: var(--muted); @include glyph-box("chevron_right", 18px, 24px); }
+
+  // Middle: the preview at the top of its column, the mixer as a card.
+  .hh-studio__center { gap: 16px; }
+  // The frame sizes itself from the column width (16:9), so the preview needn't
+  // stretch: the mixer sits right under it instead of at the bottom.
+  .hh-studio__preview { flex: 0 1 auto; align-items: flex-start; }
+  .hh-studio__mixer { padding: 12px 16px 16px; border-radius: var(--r-2xl); }
+  .hh-studio__mixer-empty { padding-top: 4px; color: var(--muted); font-size: 12px; font-weight: 400; }
+
+  // Right: the tab track, then ONE card for whichever tab is open.
+  .hh-studio__chat { gap: 12px; }
+  .hh-studio__tab-body {
+    border: 1px solid var(--border);
+    border-radius: var(--r-2xl);
+    background: var(--surface);
+  }
+  .hh-studio__tab-body > .hh-post { border: 0; border-radius: 0; background: transparent; overflow-y: auto; }
+  .hh-post__head { align-items: center; }
+  .hh-post__title-label { @include v2.text(title-sm); color: var(--text); letter-spacing: 0; text-transform: none; }
+  .hh-post__saved { margin-left: auto; color: var(--muted); font-size: 12px; font-weight: 400; }
+  .hh-post__thumb-add { min-height: 40px; border-radius: var(--r-md); font-size: 13px; }
+  // The chat tab: the same chat as the viewers' stream page (header hidden,
+  // the tab already says Chat; 44 field, round Send, Material emoji toggle).
+  .hh-studio__tab-body { @include stream-chat; }
+  .hh-studio__tab-body .hh-chat { border: 0; border-radius: 0; background: transparent; }
+  .hh-optsheet__opt-label { font-size: 13px; }
+  .hh-studio__go-btn { border-radius: var(--r-xl); }
 }
 
 // The OpenPod audio room (SDK HangoutsRoom, conference), design 22d: Roboto on

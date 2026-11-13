@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { cx } from '../v2/helpers';
 import { Icon } from '../v2/Icon';
 import './WatchTabs.scss';
@@ -29,16 +29,28 @@ export function useWideWatch() {
  * (the transcript tab arrives after the subtitles do, so without that a
  * transcript reader landed on Discussion every time); otherwise the current one
  * stays, else the first.
+ *
+ * A live stream opens on its Live chat instead, whatever was picked on another
+ * video: the chat is what a stream is watched for. The chat tab can arrive late
+ * (once the page knows the stream is live), so it is selected when it appears,
+ * and after that the viewer's own pick on this page stays.
  */
 export function useSideTab(ids) {
   const key = ids.join('|');
   const [active, setActive] = useState(null);
+  const hadChat = useRef(false);
   useEffect(() => {
+    const hasChat = ids.includes('chat');
+    const chatArrived = hasChat && !hadChat.current;
+    hadChat.current = hasChat;
     let pref = null;
     try { pref = localStorage.getItem(WATCH_TAB_KEY); } catch { /* storage off */ }
-    setActive((cur) => (pref && ids.includes(pref)
-      ? pref
-      : (cur && ids.includes(cur) ? cur : ids[0] || null)));
+    setActive((cur) => {
+      if (hasChat) return chatArrived || !cur || !ids.includes(cur) ? 'chat' : cur;
+      return pref && ids.includes(pref)
+        ? pref
+        : (cur && ids.includes(cur) ? cur : ids[0] || null);
+    });
   }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
   const pick = useCallback((id, { remember = true } = {}) => {
     setActive(id);

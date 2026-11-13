@@ -159,3 +159,106 @@
 
 // The SDK portals its OBS Browser Source panel to <body>, outside the modal.
 @include hh.obs-panel;
+
+/* The SDK's Boost settings (BoostSettingsPanel, portalled to <body>), opened
+   from the studio's rocket button mid-stream: the v2 sheet look of the boost
+   dialog (StreamBoostButton.scss), centred on desktop, a bottom sheet on phones. */
+div.hh-boost-settings {
+  @include hh.tokens;
+  @include hh.buttons;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  width: min(420px, calc(100vw - 32px));
+  box-sizing: border-box;
+  border-radius: var(--r-3xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sheet);
+  font-family: var(--font-sans);
+
+  @media (max-width: 767px) {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    border-radius: 28px 28px 0 0;
+    border-bottom: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .hh-boost-settings__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 16px 6px 20px;
+    border: 0;
+    background: transparent;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .hh-boost-settings__close {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text);
+    font-size: 16px;
+    cursor: pointer;
+    &:hover { background: var(--bg-hover); }
+  }
+
+  .hh-boost-settings__body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 6px 20px 12px;
+  }
+
+  .hh-boost-settings__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+
+    input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; }
+  }
+
+  .hh-boost-settings__field { display: flex; flex-direction: column; gap: 4px; }
+  .hh-boost-settings__label { font-size: 14px; font-weight: 700; color: var(--text); }
+  .hh-boost-settings__hint { font-size: 12px; line-height: 1.4; color: var(--muted); }
+
+  .hh-boost-settings__input {
+    @include hh.field(44);
+    height: 44px;
+    margin-top: 4px;
+    background: var(--bg);
+  }
+
+  .hh-boost-settings__error { margin: 0; font-size: 13px; color: var(--accent); }
+  .hh-boost-settings__saved { margin: 0; font-size: 13px; color: var(--cyan); font-weight: 700; }
+
+  .hh-boost-settings__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 8px 20px 18px;
+    border: 0;
+    background: transparent;
+  }
+}

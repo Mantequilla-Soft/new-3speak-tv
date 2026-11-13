@@ -24,3 +24,18 @@ export function buildOpenPodSnapMetadata(roomName) {
     room: roomName,
   };
 }
+
+/**
+ * Where a visitor of `/openpods/<room>` belongs, or null to open the room here.
+ *
+ * `/openpods/<room>` is the streamer's own studio address, so it gets shared by
+ * copying the address bar. A stream's VIEWERS belong on its watch page
+ * (`/watch/<room>`, which hands a stream posted to Hive on to the post's page),
+ * not in the studio. Group chats (conference rooms) have no watch page, and the
+ * host stays in their studio.
+ */
+export function streamViewerPath(room, user) {
+  if (!room || room.mode !== 'standalone' || !room.name || !room.host) return null;
+  if (user && String(user).toLowerCase() === String(room.host).toLowerCase()) return null;
+  return `/watch/${encodeURIComponent(room.name)}`;
+}

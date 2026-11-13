@@ -10,7 +10,8 @@ import { useAppStore } from '../lib/store';
 import { usePremiumStatus } from '../hooks/usePremiumStatus';
 import { providerSignPrompt } from '../utils/aiohaProviderUi';
 import { OPENPODS_STANDALONE, openpodsEnabledFor } from '../utils/config';
-import { defaultEndpoint, pickLeastLoadedEndpoint, fetchAllEndpoints } from '../utils/hangoutsEndpoints';
+import { defaultEndpoint, pickLeastLoadedEndpoint, fetchAllEndpoints, findRoomEndpoint } from '../utils/hangoutsEndpoints';
+import { streamViewerPath } from '../utils/openpodUtils';
 import { postOpenPodAnnouncement, setPendingAnnouncement, setAnnounceConfig, getAnnounceConfig } from '../utils/openpodAnnounce';
 import AnnounceOptions from '../components/openpods/AnnounceOptions';
 import MarkdownComposer from '../components/studio/MarkdownComposer';
@@ -169,13 +170,36 @@ export default function OpenPods() {
   // last-opened name so closing the modal doesn't immediately reopen on the
   // next render (the URL still carries the param). A fresh nav to a different
   // room name re-fires.
+  //
+  // A stream's address here is its STUDIO, and it gets shared by copying the
+  // address bar. So look the room up first: a stream opened by anyone but its
+  // host goes to the stream's watch page (streamViewerPath), which hands a stream
+  // posted to Hive on to the post's page. The host's name is in the persisted
+  // store from the first render, so a host reloading the studio stays in it. A
+  // failed lookup opens the room as before.
   const openedDeepLinkRef = useRef(null);
   useEffect(() => {
     if (!roomNameFromUrl) return;
     if (openedDeepLinkRef.current === roomNameFromUrl) return;
-    openedDeepLinkRef.current = roomNameFromUrl;
-    openRoom(roomNameFromUrl);
-  }, [roomNameFromUrl, openRoom]);
+    const name = roomNameFromUrl;
+    openedDeepLinkRef.current = name;
+    (async () => {
+      let room = null;
+      try {
+        const ep = await findRoomEndpoint(name);
+        const res = await fetch(`${ep.api}/rooms/${encodeURIComponent(name)}`);
+        room = res.ok ? await res.json() : null;
+      } catch { /* open the room as before */ }
+      // A newer deep link took over while we were looking this one up.
+      if (openedDeepLinkRef.current !== name) return;
+      const watchPath = streamViewerPath(room, user);
+      if (watchPath) {
+        navigate(watchPath, { replace: true });
+        return;
+      }
+      openRoom(name);
+    })();
+  }, [roomNameFromUrl, openRoom, user, navigate]);
 
   /**
    * Open a room AND put it in the address bar.

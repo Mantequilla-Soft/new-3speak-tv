@@ -1,4 +1,5 @@
 @use "../../styles/v2" as v2;
+@use "../openpods/hangouts-skin" as hh;
 
 /* ============================================================================
    Watch v2 (design 02, 22a, 33a): the watch page as PlayVideo draws it.
@@ -873,14 +874,13 @@ $wide: 1024px;
   display: flex;
   flex-direction: column;
 
-  .hh-chat { flex: 1; min-height: 0; background: transparent; backdrop-filter: none; border: 0; border-radius: 0; }
-  .hh-chat__header { display: none; }
-  .hh-chat__msg-name { color: var(--text); }
-  .hh-chat__msg-text { color: var(--muted); }
-  .hh-chat__input { color: var(--text); }
-  .hh-chat__input::placeholder { color: var(--muted); }
-  .hh-chat__input-row, .hh-chat__guest-prompt { border-top-color: var(--border); }
-  .hh-chat__guest-prompt, .hh-chat__empty { color: var(--muted); }
+  // The SDK's chat drawn in 3Speak's theme: its own colour tokens defaulted to a
+  // white field, which the light text could not be read on. Same look as the
+  // stream page's chat (hangouts-skin stream-chat).
+  @include hh.tokens;
+  @include hh.buttons;
+  @include hh.stream-chat;
+  .hh-chat__empty { padding: 24px 0; text-align: center; }
 }
 
 /* ============================================================================

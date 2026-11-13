@@ -4,7 +4,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest'
 vi.mock('../../../src/utils/snapsContainer', () => ({ resolveSnapsContainer: vi.fn(async () => ({ author: 'peak.snaps', permlink: 'c' })) }))
 
 import {
-  fetchLatestSnapsPost, buildOpenPodSnapBody, buildOpenPodPermlink, buildOpenPodSnapMetadata,
+  fetchLatestSnapsPost, buildOpenPodSnapBody, buildOpenPodPermlink, buildOpenPodSnapMetadata, streamViewerPath,
 } from '../../../src/utils/openpodUtils.js'
 
 afterEach(() => { vi.useRealTimers() })
@@ -36,5 +36,27 @@ describe('OpenPod snap', () => {
     expect(buildOpenPodSnapMetadata('room-1')).toEqual({
       app: '3speak/openpod', format: 'markdown', tags: ['3speak', 'openpod', 'hive-181335'], type: 'openpod', room: 'room-1',
     })
+  })
+})
+
+// A stream's studio address (/openpods/<room>) shared as a watch link.
+describe('streamViewerPath', () => {
+  const stream = { name: 'buzzer11-2vqz74l', host: 'buzzer11', mode: 'standalone' }
+  it('sends a viewer of a stream to its watch page', () => {
+    expect(streamViewerPath(stream, 'tibfox')).toBe('/watch/buzzer11-2vqz74l')
+  })
+  it('sends a signed-out visitor there too', () => {
+    expect(streamViewerPath(stream, null)).toBe('/watch/buzzer11-2vqz74l')
+  })
+  it('keeps the host in their studio, whatever the case of the name', () => {
+    expect(streamViewerPath(stream, 'buzzer11')).toBeNull()
+    expect(streamViewerPath(stream, 'Buzzer11')).toBeNull()
+  })
+  it('keeps group chats on /openpods (they have no watch page)', () => {
+    expect(streamViewerPath({ ...stream, mode: 'conference' }, 'tibfox')).toBeNull()
+  })
+  it('opens the room as before when the lookup gave nothing', () => {
+    expect(streamViewerPath(null, 'tibfox')).toBeNull()
+    expect(streamViewerPath({ name: 'x', mode: 'standalone' }, 'tibfox')).toBeNull()
   })
 })
