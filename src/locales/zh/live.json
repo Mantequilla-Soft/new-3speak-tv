@@ -10,8 +10,7 @@
     "backHome": "返回首页",
     "howWasStream": "这次直播体验如何？",
     "connecting": "正在连接 OpenPods…",
-    "authenticating": "正在通过 OpenPods 验证…",
-    "postStoryAboutIt": "发布一条相关快拍"
+    "authenticating": "正在通过 OpenPods 验证…"
   },
   "strip": {
     "liveNow_other": "<n>{{count}}</n> 个 OpenPod 正在直播",
@@ -28,7 +27,9 @@
     "rewardDecline": "放弃收益",
     "beneficiaries": "受益人",
     "beneProHint": "你是 3Speak Pro 用户——无平台费用。如有需要可添加分成。",
-    "beneLockedHint": "给 @threespeakfund 的 10% 已锁定。你可以再添加其他分成。"
+    "beneLockedHint": "给 @threespeakfund 的 10% 已锁定。你可以再添加其他分成。",
+    "storyPrompt": "马上要直播了？先用一条 24 小时快拍告诉你的关注者。它会在新标签页中打开，你的直播室保持开启。",
+    "storyButton": "发布快拍"
   },
   "boost": {
     "label": "助力",

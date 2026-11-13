@@ -10,8 +10,7 @@
     "backHome": "На главную",
     "howWasStream": "Как прошёл ваш эфир?",
     "connecting": "Подключение к OpenPods…",
-    "authenticating": "Авторизация в OpenPods…",
-    "postStoryAboutIt": "Опубликовать историю об этом"
+    "authenticating": "Авторизация в OpenPods…"
   },
   "strip": {
     "liveNow_one": "Сейчас в эфире <n>{{count}}</n> OpenPod",
@@ -31,7 +30,9 @@
     "rewardDecline": "Отказаться от выплаты",
     "beneficiaries": "Бенефициары",
     "beneProHint": "У вас 3Speak Pro — без комиссии платформы. При желании добавьте доли.",
-    "beneLockedHint": "10% для @threespeakfund закреплены. Можно добавить ещё."
+    "beneLockedHint": "10% для @threespeakfund закреплены. Можно добавить ещё.",
+    "storyPrompt": "Скоро в эфир? Сначала расскажите подписчикам в 24-часовой истории. Она откроется в новой вкладке, студия останется открытой.",
+    "storyButton": "Опубликовать историю"
   },
   "boost": {
     "label": "Буст",

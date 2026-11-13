@@ -10,8 +10,7 @@
     "backHome": "Kembali ke Beranda",
     "howWasStream": "Bagaimana siaranmu?",
     "connecting": "Menghubungkan ke OpenPods…",
-    "authenticating": "Mengautentikasi dengan OpenPods…",
-    "postStoryAboutIt": "Posting story tentang ini"
+    "authenticating": "Mengautentikasi dengan OpenPods…"
   },
   "strip": {
     "liveNow_other": "<n>{{count}}</n> OpenPods sedang live",
@@ -28,7 +27,9 @@
     "rewardDecline": "Tolak payout",
     "beneficiaries": "Penerima manfaat",
     "beneProHint": "Kamu pakai 3Speak Pro — tanpa biaya platform. Tambahkan pembagian jika mau.",
-    "beneLockedHint": "10% untuk @threespeakfund terkunci. Kamu bisa menambahkan lagi."
+    "beneLockedHint": "10% untuk @threespeakfund terkunci. Kamu bisa menambahkan lagi.",
+    "storyPrompt": "Sebentar lagi live? Beri tahu pengikutmu dulu lewat story 24 jam. Story terbuka di tab baru, jadi studiomu tetap terbuka.",
+    "storyButton": "Posting story"
   },
   "boost": {
     "label": "Boost",

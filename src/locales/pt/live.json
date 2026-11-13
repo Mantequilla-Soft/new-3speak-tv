@@ -10,8 +10,7 @@
     "backHome": "Voltar ao início",
     "howWasStream": "Como foi sua transmissão?",
     "connecting": "Conectando ao OpenPods…",
-    "authenticating": "Autenticando no OpenPods…",
-    "postStoryAboutIt": "Publique um story sobre isso"
+    "authenticating": "Autenticando no OpenPods…"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod ao vivo agora",
@@ -30,7 +29,9 @@
     "rewardDecline": "Recusar pagamento",
     "beneficiaries": "Beneficiários",
     "beneProHint": "Você tem o 3Speak Pro — sem taxa da plataforma. Adicione divisões se quiser.",
-    "beneLockedHint": "10% para @threespeakfund é fixo. Você pode adicionar mais."
+    "beneLockedHint": "10% para @threespeakfund é fixo. Você pode adicionar mais.",
+    "storyPrompt": "Vai entrar ao vivo em breve? Avise primeiro os seus seguidores com um story de 24 h. Ele abre numa nova aba, então o seu estúdio continua aberto.",
+    "storyButton": "Publicar um story"
   },
   "boost": {
     "label": "Boost",

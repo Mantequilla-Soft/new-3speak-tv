@@ -10,8 +10,7 @@
     "backHome": "होम पर वापस",
     "howWasStream": "आपकी स्ट्रीम कैसी रही?",
     "connecting": "OpenPods से कनेक्ट हो रहा है…",
-    "authenticating": "OpenPods के साथ ऑथेंटिकेट हो रहा है…",
-    "postStoryAboutIt": "इसके बारे में स्टोरी पोस्ट करें"
+    "authenticating": "OpenPods के साथ ऑथेंटिकेट हो रहा है…"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod अभी लाइव",
@@ -29,7 +28,9 @@
     "rewardDecline": "पेआउट न लें",
     "beneficiaries": "बेनिफ़िशियरी",
     "beneProHint": "आप 3Speak Pro पर हैं — कोई प्लेटफ़ॉर्म फ़ीस नहीं। चाहें तो हिस्सेदारी जोड़ें।",
-    "beneLockedHint": "10% @threespeakfund को जाना तय है। आप और जोड़ सकते हैं।"
+    "beneLockedHint": "10% @threespeakfund को जाना तय है। आप और जोड़ सकते हैं।",
+    "storyPrompt": "जल्द ही लाइव होने वाले हैं? पहले 24 घंटे की स्टोरी से अपने फ़ॉलोअर्स को बताएं। यह नए टैब में खुलती है, इसलिए आपका स्टूडियो खुला रहता है।",
+    "storyButton": "स्टोरी पोस्ट करें"
   },
   "boost": {
     "label": "बूस्ट",

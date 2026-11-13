@@ -10,8 +10,7 @@
     "backHome": "Rudi Nyumbani",
     "howWasStream": "Mtiririko wako ulikuwaje?",
     "connecting": "Inaunganisha na OpenPods…",
-    "authenticating": "Inathibitisha na OpenPods…",
-    "postStoryAboutIt": "Chapisha hadithi kuhusu hili"
+    "authenticating": "Inathibitisha na OpenPods…"
   },
   "strip": {
     "liveNow_one": "OpenPod <n>{{count}}</n> iko mubashara sasa",
@@ -29,7 +28,9 @@
     "rewardDecline": "Kataa malipo",
     "beneficiaries": "Wanufaika",
     "beneProHint": "Uko kwenye 3Speak Pro — hakuna ada ya jukwaa. Ongeza migawanyo ukipenda.",
-    "beneLockedHint": "10% kwa @threespeakfund imefungwa. Unaweza kuongeza zaidi."
+    "beneLockedHint": "10% kwa @threespeakfund imefungwa. Unaweza kuongeza zaidi.",
+    "storyPrompt": "Unakaribia kwenda live? Waambie wafuasi wako kwanza kwa hadithi ya saa 24. Inafunguka kwenye kichupo kipya, kwa hivyo studio yako inabaki wazi.",
+    "storyButton": "Chapisha hadithi"
   },
   "boost": {
     "label": "Boost",

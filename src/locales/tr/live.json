@@ -10,8 +10,7 @@
     "backHome": "Ana sayfaya dön",
     "howWasStream": "Yayının nasıl geçti?",
     "connecting": "OpenPods'a bağlanılıyor…",
-    "authenticating": "OpenPods ile kimlik doğrulanıyor…",
-    "postStoryAboutIt": "Bununla ilgili bir hikâye paylaş"
+    "authenticating": "OpenPods ile kimlik doğrulanıyor…"
   },
   "strip": {
     "liveNow_one": "Şu an <n>{{count}}</n> OpenPod canlı",
@@ -29,7 +28,9 @@
     "rewardDecline": "Ödemeyi reddet",
     "beneficiaries": "Lehtarlar",
     "beneProHint": "3Speak Pro kullanıyorsun, platform ücreti yok. İstersen paylaşım ekleyebilirsin.",
-    "beneLockedHint": "@threespeakfund için %10 sabittir. Daha fazlasını ekleyebilirsin."
+    "beneLockedHint": "@threespeakfund için %10 sabittir. Daha fazlasını ekleyebilirsin.",
+    "storyPrompt": "Birazdan canlı yayında mısın? Önce takipçilerine 24 saatlik bir hikâyeyle haber ver. Yeni bir sekmede açılır, stüdyon açık kalır.",
+    "storyButton": "Hikâye paylaş"
   },
   "boost": {
     "label": "Boost",

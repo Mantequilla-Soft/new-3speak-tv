@@ -10,8 +10,7 @@
     "backHome": "กลับหน้าแรก",
     "howWasStream": "ไลฟ์ของคุณเป็นอย่างไรบ้าง?",
     "connecting": "กำลังเชื่อมต่อกับ OpenPods…",
-    "authenticating": "กำลังยืนยันตัวตนกับ OpenPods…",
-    "postStoryAboutIt": "โพสต์สตอรี่เกี่ยวกับเรื่องนี้"
+    "authenticating": "กำลังยืนยันตัวตนกับ OpenPods…"
   },
   "strip": {
     "liveNow_other": "OpenPods ไลฟ์อยู่ตอนนี้ <n>{{count}}</n> รายการ",
@@ -28,7 +27,9 @@
     "rewardDecline": "ปฏิเสธการรับรางวัล",
     "beneficiaries": "ผู้รับผลประโยชน์",
     "beneProHint": "คุณใช้ 3Speak Pro อยู่ — ไม่มีค่าธรรมเนียมแพลตฟอร์ม เพิ่มการแบ่งส่วนได้ตามต้องการ",
-    "beneLockedHint": "10% ให้ @threespeakfund ถูกล็อกไว้ คุณเพิ่มได้อีก"
+    "beneLockedHint": "10% ให้ @threespeakfund ถูกล็อกไว้ คุณเพิ่มได้อีก",
+    "storyPrompt": "ใกล้จะไลฟ์แล้วใช่ไหม บอกผู้ติดตามก่อนด้วยสตอรี่ 24 ชั่วโมง สตอรี่จะเปิดในแท็บใหม่ สตูดิโอของคุณจึงยังเปิดอยู่",
+    "storyButton": "โพสต์สตอรี่"
   },
   "boost": {
     "label": "บูสต์",

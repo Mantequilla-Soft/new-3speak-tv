@@ -10,8 +10,7 @@
     "backHome": "ホームに戻る",
     "howWasStream": "配信はいかがでしたか？",
     "connecting": "OpenPods に接続中…",
-    "authenticating": "OpenPods で認証中…",
-    "postStoryAboutIt": "この配信についてストーリーを投稿"
+    "authenticating": "OpenPods で認証中…"
   },
   "strip": {
     "liveNow_other": "<n>{{count}}</n> 件の OpenPod が配信中",
@@ -28,7 +27,9 @@
     "rewardDecline": "報酬を辞退",
     "beneficiaries": "受益者",
     "beneProHint": "3Speak Pro をご利用中なので、プラットフォーム手数料はかかりません。必要なら分配先を追加できます。",
-    "beneLockedHint": "@threespeakfund への 10% は固定です。さらに追加できます。"
+    "beneLockedHint": "@threespeakfund への 10% は固定です。さらに追加できます。",
+    "storyPrompt": "もうすぐライブ配信？まずは24時間ストーリーでフォロワーに知らせましょう。新しいタブで開くので、スタジオは開いたままです。",
+    "storyButton": "ストーリーを投稿"
   },
   "boost": {
     "label": "ブースト",

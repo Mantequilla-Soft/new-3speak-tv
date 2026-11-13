@@ -10,8 +10,7 @@
     "backHome": "Terug naar Home",
     "howWasStream": "Hoe ging je stream?",
     "connecting": "Verbinden met OpenPods…",
-    "authenticating": "Aanmelden bij OpenPods…",
-    "postStoryAboutIt": "Plaats er een story over"
+    "authenticating": "Aanmelden bij OpenPods…"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod nu live",
@@ -29,7 +28,9 @@
     "rewardDecline": "Uitbetaling weigeren",
     "beneficiaries": "Begunstigden",
     "beneProHint": "Je hebt 3Speak Pro — geen platformkosten. Voeg verdelingen toe als je wilt.",
-    "beneLockedHint": "10% naar @threespeakfund staat vast. Je kunt er meer toevoegen."
+    "beneLockedHint": "10% naar @threespeakfund staat vast. Je kunt er meer toevoegen.",
+    "storyPrompt": "Ga je zo live? Laat het je volgers eerst weten met een 24-uursstory. Die opent in een nieuw tabblad, dus je studio blijft open.",
+    "storyButton": "Story plaatsen"
   },
   "boost": {
     "label": "Boost",

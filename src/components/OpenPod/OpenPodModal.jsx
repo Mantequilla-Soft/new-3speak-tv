@@ -14,6 +14,7 @@ import { publishStreamVod } from '../../utils/streamVod';
 import { usePremiumStatus } from '../../hooks/usePremiumStatus';
 import { defaultEndpoint, findRoomEndpoint } from '../../utils/hangoutsEndpoints';
 import { storiesEnabledFor } from '../../utils/config';
+import StreamStoryPrompt from '../openpods/StreamStoryPrompt';
 import AnnounceOptions from '../openpods/AnnounceOptions';
 import { Button, Icon } from '../v2/ui';
 import './OpenPodModal.scss';
@@ -88,7 +89,10 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
   // it forever (the "connecting…" hang) — we detect the 404 and show the ended
   // state instead.
   const [roomStatus, setRoomStatus] = useState('checking');
-  useEffect(() => { if (isOpen) setStreamEnded(false); }, [isOpen, roomName]);
+  // Start Stream was pressed: the "announce it with a story" prompt in the post
+  // tab is for BEFORE going live, so it goes away then.
+  const [streamStarted, setStreamStarted] = useState(false);
+  useEffect(() => { if (isOpen) { setStreamEnded(false); setStreamStarted(false); } }, [isOpen, roomName]);
   const openReview = useReviewModal((s) => s.openReview);
   useEffect(() => {
     if (!roomName) return;
@@ -220,20 +224,6 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
                     {streamEnded ? t('live.modal.recordingProcessing') : t('live.modal.noLongerLive')}
                   </p>
                 )}
-                {/* The host's own stream just ended: the moment to tell followers how
-                    it went, as a 24h story recorded right now. */}
-                {streamEnded && storiesEnabledFor(username) && (
-                  <Button
-                    variant="cyan"
-                    size={48}
-                    block
-                    trailing="add_circle"
-                    className="openpod-ended__btn openpod-ended__btn--story"
-                    onClick={() => { navigate('/embed-studio?from=story'); onClose(); }}
-                  >
-                    {t('live.modal.postStoryAboutIt')}
-                  </Button>
-                )}
                 <Button
                   variant="secondary"
                   size={44}
@@ -260,7 +250,7 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
               onEnded={() => setStreamEnded(true)}
               onVideoHandoff={handleVideoHandoff}
               onAudioHandoff={handleAudioHandoff}
-              onStreamStart={(post) => firePendingAnnouncement(roomName, post)}
+              onStreamStart={(post) => { setStreamStarted(true); firePendingAnnouncement(roomName, post); }}
               // Pro auto-VOD: publish the finished recording as this session's
               // video. Fire-and-forget into a module-level publisher so the
               // upload survives this modal unmounting when the room ends.
@@ -285,6 +275,10 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
               canPublishVod={announceEnabled && !isUnlisted}
               isUnlisted={isUnlisted}
               renderPostExtras={(
+                <>
+                {/* Announce upfront (owner 2026-11-13): a story before going
+                    live, not after. Unlisted streams are link-only, so none. */}
+                {!streamStarted && !isUnlisted && storiesEnabledFor(username) && <StreamStoryPrompt />}
                 <AnnounceOptions
                   announceType="post"
                   isPremium={isPremium}
@@ -292,6 +286,7 @@ export default function OpenPodModal({ isOpen, onClose, roomName, sessionToken, 
                   announceEnabled={announceEnabled}
                   onAnnounceEnabledChange={setAnnounceEnabled}
                 />
+                </>
               )}
               video
               embedded

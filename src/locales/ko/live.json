@@ -10,8 +10,7 @@
     "backHome": "홈으로 돌아가기",
     "howWasStream": "방송은 어떠셨나요?",
     "connecting": "OpenPods에 연결하는 중…",
-    "authenticating": "OpenPods 인증 중…",
-    "postStoryAboutIt": "이 방송에 대한 스토리 올리기"
+    "authenticating": "OpenPods 인증 중…"
   },
   "strip": {
     "liveNow_other": "지금 <n>{{count}}</n>개의 OpenPod 라이브 중",
@@ -28,7 +27,9 @@
     "rewardDecline": "보상 거절",
     "beneficiaries": "수혜자",
     "beneProHint": "3Speak Pro 이용 중이라 플랫폼 수수료가 없어요. 원하면 분배를 추가하세요.",
-    "beneLockedHint": "@threespeakfund에 대한 10%는 고정이에요. 더 추가할 수 있어요."
+    "beneLockedHint": "@threespeakfund에 대한 10%는 고정이에요. 더 추가할 수 있어요.",
+    "storyPrompt": "곧 라이브를 시작하나요? 먼저 24시간 스토리로 팔로워에게 알려 보세요. 새 탭에서 열리므로 스튜디오는 그대로 유지됩니다.",
+    "storyButton": "스토리 올리기"
   },
   "boost": {
     "label": "부스트",

@@ -10,8 +10,7 @@
     "backHome": "Bumalik sa Home",
     "howWasStream": "Kumusta ang stream mo?",
     "connecting": "Kumokonekta sa OpenPods…",
-    "authenticating": "Nag-a-authenticate sa OpenPods…",
-    "postStoryAboutIt": "Mag-post ng story tungkol dito"
+    "authenticating": "Nag-a-authenticate sa OpenPods…"
   },
   "strip": {
     "liveNow_one": "<n>{{count}}</n> OpenPod ang live ngayon",
@@ -29,7 +28,9 @@
     "rewardDecline": "Tanggihan ang payout",
     "beneficiaries": "Mga Beneficiary",
     "beneProHint": "Naka-3Speak Pro ka — walang platform fee. Magdagdag ng split kung gusto mo.",
-    "beneLockedHint": "Naka-lock ang 10% para kay @threespeakfund. Puwede kang magdagdag pa."
+    "beneLockedHint": "Naka-lock ang 10% para kay @threespeakfund. Puwede kang magdagdag pa.",
+    "storyPrompt": "Magla-live ka na ba? Sabihan muna ang mga follower mo gamit ang 24h story. Bubukas ito sa bagong tab, kaya mananatiling bukas ang studio mo.",
+    "storyButton": "Mag-post ng story"
   },
   "boost": {
     "label": "Boost",

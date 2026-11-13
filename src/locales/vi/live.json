@@ -10,8 +10,7 @@
     "backHome": "Về trang chủ",
     "howWasStream": "Buổi phát trực tiếp của bạn thế nào?",
     "connecting": "Đang kết nối với OpenPods…",
-    "authenticating": "Đang xác thực với OpenPods…",
-    "postStoryAboutIt": "Đăng tin về buổi phát này"
+    "authenticating": "Đang xác thực với OpenPods…"
   },
   "strip": {
     "liveNow_other": "<n>{{count}}</n> OpenPod đang trực tiếp",
@@ -28,7 +27,9 @@
     "rewardDecline": "Từ chối phần thưởng",
     "beneficiaries": "Người thụ hưởng",
     "beneProHint": "Bạn đang dùng 3Speak Pro — không mất phí nền tảng. Bạn có thể thêm phần chia nếu muốn.",
-    "beneLockedHint": "10% cho @threespeakfund được khóa cố định. Bạn có thể thêm người khác."
+    "beneLockedHint": "10% cho @threespeakfund được khóa cố định. Bạn có thể thêm người khác.",
+    "storyPrompt": "Sắp phát trực tiếp? Hãy báo trước cho người theo dõi bằng một tin 24 giờ. Tin mở trong thẻ mới nên studio của bạn vẫn mở.",
+    "storyButton": "Đăng tin"
   },
   "boost": {
     "label": "Boost",
