@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.11',
+    category: 'live',
+    date: '2026-11-13',
+    summary: 'Live chat now opens first on a stream, is easy to read, and sending a message no longer scrolls the page.',
+  },
+  {
     version: '2.0.10',
     category: 'live',
     date: '2026-11-13',

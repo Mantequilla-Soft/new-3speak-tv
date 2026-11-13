@@ -178,6 +178,30 @@
   }
 }
 
+// A stream's live chat (watch pages): the chat above, messages as one line (the
+// name in bold cyan, then the text, 18c) and the round 44 accent Send button.
+// Shared by the stream page (WatchStream) and the watch page's Live chat tab.
+@mixin stream-chat {
+  @include chat;
+  .hh-chat__messages { justify-content: flex-start; }
+  .hh-chat__messages > :first-child { margin-top: auto; }
+  .hh-chat__msg { display: block; padding: 0; }
+  .hh-chat__msg-avatar { display: none; }
+  .hh-chat__msg-body { display: inline; }
+  .hh-chat__msg-name { display: inline; margin-right: 4px; color: var(--cyan); font-size: 14px; font-weight: 700; }
+  .hh-chat__msg-name--tappable { padding: 0; border: 0; background: none; cursor: pointer; font: inherit; font-weight: 700; color: var(--cyan); }
+  .hh-chat__msg-text { display: inline; }
+  .hh-chat__empty { padding: 0 0 4px; }
+  .hh-chat__input-row .hh-btn--primary {
+    width: 44px;
+    min-width: 44px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+    @include glyph("send", 20px);
+  }
+}
+
 // The quality <select> (StreamQualityControl): a small filled select.
 @mixin quality-select {
   .hh-stream-quality select {

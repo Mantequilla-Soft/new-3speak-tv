@@ -324,28 +324,8 @@
   border: 1px solid var(--border);
   overflow: hidden;
 
-  @include hh.chat;
-
-  // Messages read as one line: the name in bold cyan, then the text (18c).
-  .hh-chat__messages { justify-content: flex-start; }
-  .hh-chat__messages > :first-child { margin-top: auto; }
-  .hh-chat__msg { display: block; padding: 0; }
-  .hh-chat__msg-avatar { display: none; }
-  .hh-chat__msg-body { display: inline; }
-  .hh-chat__msg-name { display: inline; margin-right: 4px; color: var(--cyan); font-size: 14px; font-weight: 700; }
-  .hh-chat__msg-name--tappable { padding: 0; border: 0; background: none; cursor: pointer; font: inherit; font-weight: 700; color: var(--cyan); }
-  .hh-chat__msg-text { display: inline; }
-  .hh-chat__empty { padding: 0 0 4px; }
-
-  // Send: the round 44 accent button.
-  .hh-chat__input-row .hh-btn--primary {
-    width: 44px;
-    min-width: 44px;
-    padding: 0;
-    justify-content: center;
-    border-radius: 50%;
-    @include hh.glyph("send", 20px);
-  }
+  // Messages as one line, the 44 field and the round Send (shared with the watch page).
+  @include hh.stream-chat;
 }
 
 .ws-chat__tabs {
