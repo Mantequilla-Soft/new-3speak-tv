@@ -1795,6 +1795,14 @@ function GlobalAudioPlayer() {
       {adStrip}
       {transcriptPanel}
       <div className="audio-np-content gap-bar__row">
+        {/* A small x in the bar's top right corner, every size (owner 2026-11-13). */}
+        <button
+          type="button"
+          className="audio-np-close-btn gap-bar__close"
+          onClick={(e) => { e.stopPropagation(); closePlayer(); }}
+          title={t('audio.player.closePlayer')}
+          aria-label={t('audio.player.closePlayer')}
+        ><Icon name="close" size={14} /></button>
         <div className={cx('audio-np-art gap-bar__art', audioIsPlaying && 'is-playing')} onClick={toggleExpanded}>
           <img className="audio-np-thumb" src={audioThumb(nowPlaying)} alt="" onError={thumbFallback(nowPlaying)} />
         </div>
@@ -1861,7 +1869,6 @@ function GlobalAudioPlayer() {
             aria-label={t('audio.player.expand')}
             aria-expanded={false}
           ><Icon name="open_in_full" size={20} /></button>
-          {closeButton}
           {/* Wider screens (20a): the bar is cover, title, previous, play and
               next; everything else is in this menu and the full player. */}
           <button

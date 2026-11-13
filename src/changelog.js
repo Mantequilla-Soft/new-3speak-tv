@@ -18,6 +18,12 @@ export const CHANGELOG_CATEGORIES = [
 
 export const CHANGELOG = [
   {
+    version: '2.0.13',
+    category: 'audio',
+    date: '2026-11-13',
+    summary: 'The audio player bar has a small x in its top right corner again, so you can close the player on any screen without opening its menu.',
+  },
+  {
     version: '2.0.12',
     category: 'live',
     date: '2026-11-13',
